@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[615],{"./src/Assessment/Img/icon-domain-16.svg":function(n,s,o){n.exports=o.p+"public/fonts/icon-domain-16.svg"}}]);

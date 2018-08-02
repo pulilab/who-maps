@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[305],{"./src/MapsToolkit/Resource/template/16-1b-3.html":function(a,n){a.exports="<p>\r\n  <translate>\r\n    iii) Ethical approval has been granted to carry out the planned evaluation study\r\n  </translate>\r\n</p>"}}]);

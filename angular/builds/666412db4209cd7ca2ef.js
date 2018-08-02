@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[248],{"./src/MapsToolkit/Resource/template/5-1a-1.html":function(e,a){e.exports="<p>\r\n  <translate>\r\n    i) We have identified the areas in which champions will be valuable to scaling up\r\n  </translate>\r\n</p>"}}]);

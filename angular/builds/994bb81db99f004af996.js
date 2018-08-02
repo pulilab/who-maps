@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[257],{"./src/MapsToolkit/Resource/template/4-1b-5.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    v) Technology partner(s) (e.g. software developer)\r\n  </translate>\r\n</p>"}}]);

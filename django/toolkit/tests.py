@@ -1,7 +1,7 @@
 from math import ceil
 
-from django.core.urlresolvers import reverse
 from django.core import mail
+from django.urls import reverse
 
 from project.tests import SetupTests
 from user.models import UserProfile

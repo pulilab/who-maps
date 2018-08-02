@@ -1,0 +1,29 @@
+.dash-stat-card {
+  text-align: center; }
+  .dash-stat-card .dash-trendicon {
+    font-size: 32px;
+    height: 32px;
+    width: 32px;
+    margin: 12px auto 4px; }
+    .dash-stat-card .dash-trendicon.dash-trendicon-up {
+      color: #7CB342; }
+    .dash-stat-card .dash-trendicon.dash-trendicon-down {
+      color: #F44336; }
+    .dash-stat-card .dash-trendicon.dash-trendicon-bulb {
+      color: #FF8F00;
+      margin: 3px auto; }
+  .dash-stat-card .dash-stat-nr {
+    font-size: 24px; }
+    .dash-stat-card .dash-stat-nr.dash-stat-nr-version, .dash-stat-card .dash-stat-nr.draft-version {
+      margin-top: 0; }
+  .dash-stat-card .dash-stat-label {
+    display: block;
+    margin: 5px 0 15px;
+    padding: 0 10px;
+    font-size: 12px; }
+  .dash-stat-card .dash-stat-tooltip {
+    font-size: 10px;
+    text-align: left;
+    padding: 0 10px;
+    color: #757575; }
+

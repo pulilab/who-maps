@@ -1,6 +1,6 @@
 import copy
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from country.models import Country
 from project.models import Project

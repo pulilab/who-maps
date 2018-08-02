@@ -10,7 +10,7 @@ API_DESCRIPTION = 'Private API'
 
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
-    url(r"^api/", include("core.urls", namespace='core')),
+    url(r"^api/", include("core.urls")),
     url(r"^api/", include("user.urls")),
     url(r"^api/", include("project.urls")),
     url(r"^api/", include("toolkit.urls")),

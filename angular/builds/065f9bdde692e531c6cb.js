@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[200],{"./src/MapsToolkit/Resource/template/8-1-2.html":function(a,e){a.exports="<p>\r\n  <translate>\r\n    ii) A user-appropriate dashboard allows the data to be accessed and monitored in real time\r\n  </translate>\r\n</p>"}}]);

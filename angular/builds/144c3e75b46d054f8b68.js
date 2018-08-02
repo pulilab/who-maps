@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[353],{"./src/MapsToolkit/Resource/template/11-1-4.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    iv) The roles and responsibilities of all project team members have been defined and communicated for scaling up\r\n  </translate>\r\n</p>"}}]);

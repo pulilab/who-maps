@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[223],{"./src/MapsToolkit/Resource/template/6-1-6.html":function(n,s){n.exports="<p>\r\n  <translate>\r\n    vi) A protocol is in place to regularly revisit and revise budgets as funding, assumptions and/or activities change\r\n  </translate>\r\n</p>"}}]);

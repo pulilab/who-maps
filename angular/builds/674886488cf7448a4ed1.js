@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[241],{"./src/MapsToolkit/Resource/template/5-1b-5.html":function(t,o){t.exports="<p>\r\n  <translate>\r\n    v) Champion(s) have demonstrated their commitment to the product and ability to advocate for it through previous efforts\r\n  </translate>\r\n</p>"}}]);

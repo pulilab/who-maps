@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[49],{"./src/LandingPage/images/bg-welcome-new.jpg":function(a,e,n){a.exports=n.p+"991baa00bcf7031e36a7a6bcfb122c97.jpg"}}]);

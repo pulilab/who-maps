@@ -1,0 +1,325 @@
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+
+.bold {
+  font-weight: 500; }
+
+.unselectable {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                  not supported by any browser */ }
+
+.hidden {
+  display: none !important;
+  visibility: hidden; }
+
+.text-hide {
+  border: 0;
+  background-color: transparent;
+  color: transparent;
+  text-shadow: none;
+  font: "0/0" a; }
+
+.text-nowrap {
+  white-space: nowrap !important; }
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+
+.text-center {
+  text-align: center; }
+
+.text-left {
+  text-align: left !important; }
+
+.text-right {
+  text-align: right !important; }
+
+.text-justify {
+  text-align: justify !important; }
+
+.text-lowercase {
+  text-transform: lowercase !important; }
+
+.text-uppercase {
+  text-transform: uppercase !important; }
+
+.text-capitalize {
+  text-transform: capitalize !important; }
+
+.clickable {
+  cursor: pointer !important; }
+
+.zindex-100 {
+  z-index: 100; }
+
+.zindex-90 {
+  z-index: 90; }
+
+.zindex-80 {
+  z-index: 80; }
+
+.zindex-70 {
+  z-index: 70; }
+
+.zindex-60 {
+  z-index: 60; }
+
+.zindex-50 {
+  z-index: 50; }
+
+.zindex-40 {
+  z-index: 40; }
+
+.zindex-30 {
+  z-index: 30; }
+
+.zindex-20 {
+  z-index: 20; }
+
+.zindex-10 {
+  z-index: 10; }
+
+.center-block {
+  display: block;
+  margin-right: auto;
+  margin-left: auto; }
+
+.clearfix::after {
+  display: table;
+  clear: both;
+  content: ""; }
+
+/*
+// Multi-lang
+@include button-ml($width: 180px);
+//
+*/
+.my-projects {
+  min-width: calc($page-min-width - $navigation-width - 60px) !important;
+  margin: 30px 30px 0 30px;
+  padding: 10px 40px 40px;
+  background: #F5F5F5; }
+  .my-projects .md-title {
+    margin-top: 30px;
+    margin-bottom: 10px; }
+
+project-component {
+  display: block;
+  margin-bottom: 30px; }
+  project-component .show-pointer {
+    cursor: pointer !important; }
+    project-component .show-pointer .upper {
+      cursor: pointer !important; }
+  project-component md-card {
+    position: relative;
+    overflow: hidden;
+    outline: none;
+    margin: 0; }
+    project-component md-card .my-eye,
+    project-component md-card .my-star {
+      position: absolute;
+      top: -6px;
+      right: -19px;
+      background-color: #CD9924;
+      display: block;
+      width: 55px;
+      height: 25px;
+      box-shadow: inset 0 -1px 9px 1px rgba(0, 0, 0, 0.12);
+      transform: rotate(40deg); }
+      project-component md-card .my-eye md-icon,
+      project-component md-card .my-star md-icon {
+        position: absolute;
+        top: 4px;
+        left: 24px !important;
+        font-size: 13px;
+        color: #FFFFFF;
+        transform: rotate(-40deg); }
+    project-component md-card .my-eye {
+      background-color: #53A0CE; }
+    project-component md-card .project-container {
+      width: 100%;
+      height: auto; }
+      project-component md-card .project-container .text-container {
+        width: 100%; }
+        project-component md-card .project-container .text-container .upper {
+          width: 100%;
+          height: 80px;
+          cursor: default; }
+          project-component md-card .project-container .text-container .upper .basic {
+            padding: 15px 20px; }
+            project-component md-card .project-container .text-container .upper .basic .name, project-component md-card .project-container .text-container .upper .basic .org-country {
+              display: block;
+              padding-right: 25px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap; }
+            project-component md-card .project-container .text-container .upper .basic .name {
+              color: #283593;
+              font-size: 20px;
+              font-weight: 500;
+              margin: 2px 0 6px; }
+            project-component md-card .project-container .text-container .upper .basic .org-country {
+              color: #757575;
+              font-size: 14px;
+              text-transform: uppercase; }
+          project-component md-card .project-container .text-container .upper .donors {
+            max-width: 100px;
+            width: 100px;
+            padding: 10px 0;
+            border-left: 1px solid #E0E0E0; }
+            project-component md-card .project-container .text-container .upper .donors .nr {
+              display: block;
+              margin: 4px 0;
+              text-align: center;
+              font-weight: 500;
+              font-size: 20px;
+              line-height: 30px; }
+            project-component md-card .project-container .text-container .upper .donors .static {
+              display: block;
+              padding: 0 10px;
+              color: #757575;
+              text-align: center;
+              font-size: 12px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap; }
+          project-component md-card .project-container .text-container .upper .version {
+            max-width: 100px;
+            width: 100px;
+            padding: 10px 0;
+            border-left: 1px solid #E0E0E0; }
+            project-component md-card .project-container .text-container .upper .version .nr {
+              display: block;
+              margin: 4px 0;
+              text-align: center;
+              font-weight: 500;
+              font-size: 20px;
+              line-height: 30px; }
+              project-component md-card .project-container .text-container .upper .version .nr md-icon {
+                font-size: 18px;
+                transform: translate(0, 1px); }
+                project-component md-card .project-container .text-container .upper .version .nr md-icon.up {
+                  color: #7CB342; }
+                project-component md-card .project-container .text-container .upper .version .nr md-icon.down {
+                  color: #F44336; }
+                project-component md-card .project-container .text-container .upper .version .nr md-icon.flat {
+                  color: #FB8C00; }
+            project-component md-card .project-container .text-container .upper .version .static {
+              display: block;
+              padding: 0 10px;
+              color: #757575;
+              text-align: center;
+              font-size: 12px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap; }
+        project-component md-card .project-container .text-container .lower {
+          height: 60px;
+          padding: 0 20px;
+          border-top: 1px solid #E0E0E0; }
+          project-component md-card .project-container .text-container .lower .badges {
+            display: inline-flex; }
+            project-component md-card .project-container .text-container .lower .badges div {
+              height: 24px;
+              text-transform: uppercase;
+              text-align: center;
+              font-size: 14px;
+              font-weight: 500;
+              line-height: 24px;
+              border-radius: 3px;
+              margin-right: 8px;
+              padding: 0 8px;
+              max-width: 240px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap; }
+            project-component md-card .project-container .text-container .lower .badges .draft {
+              color: #000000;
+              background-color: #FBC02D; }
+            project-component md-card .project-container .text-container .lower .badges .published {
+              color: #FFFFFF;
+              background-color: #558B2F; }
+            project-component md-card .project-container .text-container .lower .badges .country-approved {
+              color: #FFFFFF;
+              background-color: #744E42; }
+          project-component md-card .project-container .text-container .lower .buttons .md-button {
+            margin: 6px 0 6px 16px; }
+            project-component md-card .project-container .text-container .lower .buttons .md-button translate {
+              max-width: 180px;
+              display: inline-flex; }
+              project-component md-card .project-container .text-container .lower .buttons .md-button translate span {
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap; }
+          project-component md-card .project-container .text-container .lower .buttons md-icon {
+            font-size: 20px;
+            width: 20px;
+            min-width: 20px;
+            height: 20px;
+            min-height: 20px; }
+  project-component.compact .project-container .text-container .upper {
+    height: 70px; }
+    project-component.compact .project-container .text-container .upper .basic .name {
+      margin: 0 0 6px;
+      font-size: 16px; }
+    project-component.compact .project-container .text-container .upper .basic .org-country {
+      font-size: 12px; }
+    project-component.compact .project-container .text-container .upper .donors .nr {
+      margin: 3px 0;
+      font-size: 16px;
+      line-height: 24px; }
+    project-component.compact .project-container .text-container .upper .version .nr {
+      margin: 3px 0;
+      font-size: 16px;
+      line-height: 24px; }
+  project-component.compact .project-container .text-container .lower {
+    height: auto;
+    display: block; }
+    project-component.compact .project-container .text-container .lower .badges {
+      padding: 15px 0;
+      width: 100%; }
+      project-component.compact .project-container .text-container .lower .badges div {
+        height: 20px;
+        font-size: 12px;
+        line-height: 20px;
+        padding: 0 6px; }
+    project-component.compact .project-container .text-container .lower .buttons {
+      padding: 0 0 15px;
+      width: 100%; }
+      project-component.compact .project-container .text-container .lower .buttons .md-button {
+        min-height: 30px;
+        line-height: 30px;
+        font-size: 12px;
+        margin: 0 8px 0 0;
+        padding: 0 8px; }
+        project-component.compact .project-container .text-container .lower .buttons .md-button translate {
+          max-width: 160px;
+          display: inline-flex; }
+          project-component.compact .project-container .text-container .lower .buttons .md-button translate span {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap; }
+      project-component.compact .project-container .text-container .lower .buttons md-icon {
+        font-size: 16px;
+        width: 16px;
+        min-width: 16px;
+        height: 18px;
+        min-height: 18px; }
+

@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[204],{"./src/MapsToolkit/Resource/template/7-3-2.html":function(e,a){e.exports="<p>\r\n  <translate>\r\n    ii) We have identified payers and alternative payers at each level of the value chain\r\n  </translate>\r\n</p>"}}]);

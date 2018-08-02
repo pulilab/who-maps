@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[256],{"./src/MapsToolkit/Resource/template/4-1b-6.html":function(e,r){e.exports="<p>\r\n  <translate>\r\n    vi) Service provider(s) (e.g. hardware vendor)\r\n  </translate>\r\n</p>"}}]);

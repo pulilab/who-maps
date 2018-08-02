@@ -1,10 +1,11 @@
 from collections import defaultdict
 from django.conf import settings
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext, override
 
 from core.admin import ArrayFieldMixin
-from django.core import mail, urlresolvers, management
+from django.core import mail, management
 from django.contrib import admin
 from django.template import loader
 from .models import Country, PartnerLogo, CountryField, MapFile
@@ -123,7 +124,7 @@ class CountryAdmin(admin.ModelAdmin):
     @staticmethod
     def _notify_user(country, subject, template_name):
         html_template = loader.get_template(template_name)
-        change_url = urlresolvers.reverse('admin:country_country_change', args=(country.id,))
+        change_url = reverse('admin:country_country_change', args=(country.id,))
 
         email_mapping = defaultdict(list)
         for profile in country.users.all():

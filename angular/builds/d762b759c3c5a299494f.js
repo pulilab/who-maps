@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[243],{"./src/MapsToolkit/Resource/template/5-1b-3.html":function(n,a){n.exports="<p>\r\n  <translate>\r\n    iii) Champion(s) have organizational support and relevant resources (e.g. financial, political, in-kind human resources)\r\n  </translate>\r\n</p>"}}]);

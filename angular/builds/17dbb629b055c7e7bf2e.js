@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[184],{"./src/MapsToolkit/Resource/template/9-1-3.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    iii) We have designed the application with the use of data dictionaries in order to adhere to data standards used by the appropriate systems\r\n  </translate>\r\n</p>"}}]);

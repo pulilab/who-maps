@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[329],{"./src/MapsToolkit/Resource/template/13-1-2.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    ii) Orientation for government representatives has been established through meetings, workshops or other face-to-face mechanisms\r\n  </translate>\r\n</p>"}}]);

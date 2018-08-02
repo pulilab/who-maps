@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[205],{"./src/MapsToolkit/Resource/template/7-3-1.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    i) We have explored diverse funding streams (including opportunities with non-health sectors), and chosen the most strategic option(s) for our project\r\n  </translate>\r\n</p>"}}]);

@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[298],{"./src/MapsToolkit/Resource/template/16-2b-1.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    i) Indicators for measuring the specified outcomes have been defined\r\n  </translate>\r\n</p>"}}]);

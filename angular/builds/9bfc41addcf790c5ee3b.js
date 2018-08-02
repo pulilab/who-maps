@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[325],{"./src/MapsToolkit/Resource/template/14-1-1.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    i) Procedures for addressing lack of/inconsistencies in connectivity have been established (e.g. provision of several SIM cards so health workers can use different networks when necessary)\r\n  </translate>\r\n</p>"}}]);

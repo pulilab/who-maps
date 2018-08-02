@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[319],{"./src/MapsToolkit/Resource/template/15-1a-1.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    i) Sufficient funds are earmarked and applied to general monitoring activities (e.g. 10% of the project budget)\r\n  </translate>\r\n</p>"}}]);

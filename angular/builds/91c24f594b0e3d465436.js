@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[198],{"./src/MapsToolkit/Resource/template/8-2-1.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    i) The processing capacity (i.e. the capacity to handle requests or deliver them through the data centre) is appropriate for the anticipated scope of scale\r\n  </translate>\r\n</p>"}}]);

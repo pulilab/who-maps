@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.utils.dateformat import format
 
-from .models import Country, PartnerLogo, CountryField
+from .models import Country, PartnerLogo, CountryField, MapFile
 
 
 class CountryListSerializer(serializers.ModelSerializer):
@@ -141,6 +141,16 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
 
 
 class CountryMapDataSerializer(serializers.ModelSerializer):
+    map_file = serializers.SerializerMethodField()
+
     class Meta:
         model = Country
-        fields = ("id", "map_data")
+        fields = ("id", "map_data", "map_file")
+
+    @staticmethod
+    def get_map_file(obj):  # pragma: no cover
+        # TODO: refactor this
+        file = MapFile.objects.filter(country=obj.id).first()
+        if file and file.map_file:
+            return file.map_file.url
+        return None

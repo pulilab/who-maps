@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[244],{"./src/MapsToolkit/Resource/template/5-1b-2.html":function(n,t){n.exports="<p>\r\n  <translate>\r\n    ii) Champion(s) have stability in current position\r\n  </translate>\r\n</p>"}}]);

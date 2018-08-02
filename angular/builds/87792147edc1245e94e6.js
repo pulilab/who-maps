@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[233],{"./src/MapsToolkit/Resource/template/5-2a-3.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    iii) Terms of reference have been established to guide the structure and decision-making processes of the committee/board, and these terms are understood by all\r\n  </translate>\r\n</p>"}}]);

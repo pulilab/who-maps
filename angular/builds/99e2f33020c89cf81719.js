@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[227],{"./src/MapsToolkit/Resource/template/6-1-2.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    ii) We have captured costs according to the phases of implementation (i.e. development, pilot, scaling up)\r\n  </translate>\r\n</p>"}}]);

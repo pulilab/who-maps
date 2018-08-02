@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[310],{"./src/MapsToolkit/Resource/template/16-1a-1.html":function(n,o){n.exports="<p>\r\n  <translate>\r\n    i) Sufficient funds are available for designing and conducting rigorous studies of the outcomes of scaling up the product\r\n  </translate>\r\n</p>"}}]);

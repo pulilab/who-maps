@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[309],{"./src/MapsToolkit/Resource/template/16-1a-2.html":function(n,a){n.exports="<p>\r\n  <translate>\r\n    ii) Appropriate internal staff have been identified for managing and supporting evaluation activities\r\n  </translate>\r\n</p>"}}]);

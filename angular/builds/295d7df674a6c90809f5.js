@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[299],{"./src/MapsToolkit/Resource/template/16-2a-4.html":function(t,a){t.exports="<p>\r\n  <translate>\r\n    iv) Population health outcomes/impacts have been articulated\r\n  </translate>\r\n</p>"}}]);

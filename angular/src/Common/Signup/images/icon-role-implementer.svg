@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="41px" height="42px" viewBox="0 0 41 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.2 (28276) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-role-implementer</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Landing-page" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="01---Landing-page" transform="translate(-670.000000, -948.000000)" fill="#212121">
+            <g id="Content" transform="translate(530.000000, 579.000000)">
+                <g id="Sign-up" transform="translate(110.000000, 70.000000)">
+                    <g id="1" transform="translate(0.000000, 212.000000)">
+                        <g id="icon-role-implementer" transform="translate(30.000000, 87.000000)">
+                            <path d="M30.2105263,39 L23.5232105,39 L23.0877474,39 L3.02105263,39 L3.02105263,3 L30.2105263,3 L30.2105263,19.482 L33.2315789,14.1064286 L33.2315789,3.06771429 C33.2315789,1.36928571 32.0361053,0 30.3257579,0 L2.89503158,0 C1.18511579,0 0,1.36928571 0,3.06771429 L0,39.1195714 C0,40.8175714 1.18511579,42 2.89503158,42 L30.3257579,42 C32.0361053,42 33.2315789,40.8175714 33.2315789,39.1195714 L33.2315789,29.2427143 L30.2105263,34.6182857 L30.2105263,39 L30.2105263,39 Z" id="Shape"></path>
+                            <rect id="Rectangle-path" x="5.61052632" y="7.71428571" width="16.8315789" height="2.14285714"></rect>
+                            <rect id="Rectangle-path" x="5.61052632" y="17.5714286" width="16.8315789" height="2.14285714"></rect>
+                            <rect id="Rectangle-path" x="5.61052632" y="12.8571429" width="22.0105263" height="2.14285714"></rect>
+                            <rect id="Rectangle-path" x="5.61052632" y="22.7142857" width="22.0105263" height="2.14285714"></rect>
+                            <rect id="Rectangle-path" x="5.61052632" y="27.4285714" width="16.8315789" height="2.14285714"></rect>
+                            <polygon id="Shape" points="37.8477474 10.8004286 37.0294737 12.2151429 36.6764421 12.8258571 39.7095789 14.5555714 40.0626105 13.9452857 40.8808842 12.5301429"></polygon>
+                            <polygon id="Shape" points="25.0315789 32.3952857 25.0315789 36 28.1493053 34.1254286 38.8865579 15.675 35.8534211 13.9452857"></polygon>
+                            <ellipse id="Oval" cx="7.59751579" cy="34.5527143" rx="2.09574737" ry="2.08114286"></ellipse>
+                            <ellipse id="Oval" cx="14.2464211" cy="34.5784286" rx="2.09574737" ry="2.08114286"></ellipse>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

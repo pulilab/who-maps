@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'rest_auth.registration',
-    'rest_framework_expiring_authtoken',
+    'drf_expiring_tokens',
     'rosetta',
     'allauth',
     'allauth.account',
@@ -55,14 +55,13 @@ INSTALLED_APPS = [
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.ExceptionLoggingMiddleware',
@@ -168,7 +167,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_expiring_authtoken.authentication.ExpiringTokenAuthentication',
+        'drf_expiring_tokens.authentication.ExpiringTokenAuthentication',
     ),
 }
 
@@ -191,7 +190,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=7)
-# EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(minutes=1)
+# ALWAYS_RESET_TOKEN = False
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
@@ -199,13 +198,16 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_ADAPTER = 'user.adapters.DefaultAccountAdapterCustom'
 ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
+ACCOUNT_EMAIL_CONFIRMATION_HMAC = False  # This is for backwards compat, should move to True to not store it in DB
 DEFAULT_FROM_EMAIL = "Digital Health Atlas <noreply@dhatlas.org>"
 
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+REDIS_URL = os.environ.get('REDIS_URL', 'redis')
+
 # Celery settings
-BROKER_URL = 'redis://redis:6379/0'
+BROKER_URL = 'redis://{}:6379/0'.format(REDIS_URL)
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -220,12 +222,11 @@ ODK_SERVER_PROTOCOL = "https"
 ODK_SERVER_HOST = "odk.digitalhealthatlas.org"
 ODK_SERVER_USER = "odk"
 ODK_TABLE_NAME = 'dha_form'
-ODK_SYNC_ENABLED = False
+ODK_SYNC_ENABLED = bool(os.environ.get('ODK_SYNC_ENABLED', False))
 
 
 # PRODUCTION SETTINGS
 if SITE_ID in [3, 4]:
-    ODK_SYNC_ENABLED = True
     CELERYBEAT_SCHEDULE = {
         "send_daily_toolkit_digest": {
             "task": 'send_daily_toolkit_digest',
@@ -248,13 +249,13 @@ if SITE_ID in [3, 4]:
 
     ALLOWED_HOSTS = ['.digitalhealthatlas.org', '.prod.whomaps.pulilab.com',
                      '.qa.whomaps.pulilab.com', '.dhatlas.org',
-                     '.digitalhealthatlas.com']
+                     '.digitalhealthatlas.com', '.v3.dha.pulilab.com', 'nginx:9010', 'nginx']
 
     EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
     REST_FRAMEWORK = {
         'DEFAULT_AUTHENTICATION_CLASSES': (
-            'rest_framework_expiring_authtoken.authentication.ExpiringTokenAuthentication',
+            'drf_expiring_tokens.authentication.ExpiringTokenAuthentication',
         ),
         'DEFAULT_RENDERER_CLASSES': (
             'rest_framework.renderers.JSONRenderer',
@@ -262,11 +263,12 @@ if SITE_ID in [3, 4]:
     }
 
 CACHES = {
-    'default': {
-        'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': [
-            'redis:6379',
-        ],
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://{}:6379/1".format(REDIS_URL),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
 
@@ -348,5 +350,5 @@ else:
 
 
 if CI_RUN:
-    STATIC_ROOT = "/home/ubuntu/who-maps/nginx/site/static/"
-    MEDIA_ROOT = "/home/ubuntu/who-maps/django/media/"
+    STATIC_ROOT = "/root/who-maps/nginx/site/static/"
+    MEDIA_ROOT = "/root/who-maps/django/media/"

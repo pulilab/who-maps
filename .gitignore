@@ -37,3 +37,4 @@ errorShots/
 *.mo
 yarn-error.log
 .vscode/
+/django/.pytest_cache/

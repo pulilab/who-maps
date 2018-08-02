@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[202],{"./src/MapsToolkit/Resource/template/7-3-4.html":function(n,a){n.exports="<p>\r\n  <translate>\r\n    iv) We have identified and mitigated risks for a transition plan for changing from one payer to another\r\n  </translate>\r\n</p>"}}]);

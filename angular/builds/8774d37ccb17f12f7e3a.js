@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[50],{"./src/LandingPage/package.json":function(n){n.exports={name:"LandingPageModule",version:"0.0.0",private:!0,main:"./landingPageModule.js"}}}]);

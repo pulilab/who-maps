@@ -6,7 +6,7 @@ number_of_users = 100
 base_url = "http://192.168.99.100/api"
 
 username_pattern = "test_user{}@example.com"
-user_data = {"email": "", "password1": "123456", "password2": "123456"}
+user_data = {"email": "", "password1": "123456hetNYOLC", "password2": "123456hetNYOLC"}
 
 organisation_pattern = "Test Organisation{}"
 profile_data = {"name": "Test User", "organisation": "Test Organisation", "country": "Test Country"}

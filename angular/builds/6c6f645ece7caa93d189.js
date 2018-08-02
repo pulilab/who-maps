@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[304],{"./src/MapsToolkit/Resource/template/16-1c-1.html":function(e,a){e.exports="<p>\r\n  <translate>\r\n    i) Procedures for accessing system-generated data from the mHealth platform for evaluation and reporting purposes have been established\r\n  </translate>\r\n</p>"}}]);

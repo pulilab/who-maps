@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[306],{"./src/MapsToolkit/Resource/template/16-1b-2.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    ii) A framework (e.g. theory of change, logical framework) describing the links among the product’s inputs, activities, outputs and outcomes, and impacts has been developed\r\n  </translate>\r\n</p>"}}]);

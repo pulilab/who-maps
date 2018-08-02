@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[339],{"./src/MapsToolkit/Resource/template/12-1b-2.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    ii) An appropriate delivery mechanism for training (e.g. internal versus external training; training-of-trainers) based on needs and project resources has been established\r\n  </translate>\r\n</p>"}}]);

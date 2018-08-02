@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[283],{"./src/MapsToolkit/Resource/template/2-2-2.html":function(e,n){e.exports="<p>\n  <translate>\n    ii) We have assessed the reliability of network coverage, and can articulate it in terms of which networks offer needed coverage for which users\n  </translate>\n</p>\n"}}]);

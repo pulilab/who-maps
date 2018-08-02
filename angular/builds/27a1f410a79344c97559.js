@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[270],{"./src/MapsToolkit/Resource/template/3-2-1.html":function(s,e){s.exports="<p>\r\n  <translate>\r\n    i) Formative research has been conducted in this setting to assess needs (e.g. using qualitative methods such as focus group discussions)\r\n  </translate>\r\n</p>"}}]);

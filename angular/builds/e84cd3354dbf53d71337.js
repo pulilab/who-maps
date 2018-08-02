@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[285],{"./src/MapsToolkit/Resource/template/2-1-3.html":function(e,t){e.exports="<p>\n  <translate>\n    iii) We actively participate in existing eHealth/mHealth working groups (e.g. a community of practice) or eHealth/mHealth national-level meetings\n  </translate>\n</p>\n"}}]);

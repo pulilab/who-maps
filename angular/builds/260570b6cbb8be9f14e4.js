@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[585],{"./src/Cms/DashboardWidget/images/icon-domain-16.svg":function(o,n,s){o.exports=s.p+"public/fonts/icon-domain-16.svg"}}]);

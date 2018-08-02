@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[188],{"./src/MapsToolkit/Resource/template/8-3b-1.html":function(t,a){t.exports="<p>\r\n  <translate>\r\ni) The mHealth product meets relevant national eHealth security standards for data collection, transmission and storage\r\n  </translate>\r\n</p>"}}]);

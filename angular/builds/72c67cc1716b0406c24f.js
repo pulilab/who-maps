@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[177],{"./src/MapsToolkit/Scorecard/images/icon-axis2.svg":function(o,s,i){o.exports=i.p+"public/fonts/icon-axis2.svg"}}]);

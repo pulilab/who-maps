@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[281],{"./src/MapsToolkit/Resource/template/2-2-4.html":function(e,t){e.exports="<p>\n  <translate>\n    iv) We have assessed the reliability of electricity, and can articulate it in terms of the offline/online requirements of the users and the server(s)\n  </translate>\n</p>\n"}}]);

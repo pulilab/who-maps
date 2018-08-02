@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/App/appModule-config.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">src/App</a> appModule-config.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>35/35</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">77.27% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>17/22</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>6/6</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>35/35</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { setDateLocaleProvider } from '../plugins/language';
+import _appTemplate from './app.html';
+import * as ProjectsModule from '../store/modules/projects';
+import * as UserModule from '../store/modules/user';
+import * as SystemModule from '../store/modules/system';
+import * as CountriesModule from '../store/modules/countries';
+import Storage from '../Storage';
+import { reducers, middleware } from '../store/index';
+&nbsp;
+const storage = new Storage();
+&nbsp;
+<span class="branch-3 cbranch-no" title="branch not covered" >async function baseUserResolver($ngRedux) {</span>
+    await $ngRedux.dispatch(UserModule.loadProfile());
+    await $ngRedux.dispatch(SystemModule.loadStaticData());
+    const countries = $ngRedux.dispatch(CountriesModule.loadCountries());
+    const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
+    return Promise.all([countries, structure]);
+}
+&nbsp;
+<span class="branch-1 cbranch-no" title="branch not covered" >async function shareUserResolver($ngRedux) {</span>
+    return $ngRedux.dispatch(UserModule.loadProfile());
+}
+&nbsp;
+<span class="branch-3 cbranch-no" title="branch not covered" >async function appDataResolver($ngRedux) {</span>
+    await $ngRedux.dispatch(UserModule.loadProfile());
+    await $ngRedux.dispatch(SystemModule.loadStaticData());
+    const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
+    const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
+    const profiles = $ngRedux.dispatch(SystemModule.loadUserProfiles());
+    const countries = $ngRedux.dispatch(CountriesModule.loadCountries());
+    return Promise.all([projects, profiles, countries, structure]);
+}
+&nbsp;
+<span class="branch-3 cbranch-no" title="branch not covered" >async function publicDataResolver($ngRedux) {</span>
+    await $ngRedux.dispatch(UserModule.loadProfile());
+    await $ngRedux.dispatch(SystemModule.loadStaticData());
+    const projects = $ngRedux.dispatch(ProjectsModule.loadUserProjects());
+    const structure = $ngRedux.dispatch(ProjectsModule.loadProjectStructure());
+    const countries = $ngRedux.dispatch(CountriesModule.loadCountries());
+    return Promise.all([projects, countries, structure]);
+}
+&nbsp;
+function appNameMapper($ngRedux) {
+    const state = $ngRedux.getState();
+    return ProjectsModule.getUserDefaultProject(state);
+}
+&nbsp;
+const config = ($stateProvider, $urlRouterProvider, $locationProvider,
+                $anchorScrollProvider, $ngReduxProvider, $mdDateLocaleProvider) =&gt; {
+&nbsp;
+    setDateLocaleProvider($mdDateLocaleProvider);
+&nbsp;
+    $stateProvider
+        .state('base', {
+            url: '',
+            template: _appTemplate,
+            controller: 'systemController',
+            controllerAs: 'vm',
+            abstract: true,
+            resolve: {
+                user: ['$ngRedux', baseUserResolver]
+            }
+        })
+        .state('share', {
+            url: '/project/:projectUUID',
+            template: '&lt;uuid-load /&gt;',
+            controllerAs: 'vm',
+            resolve: {
+                user: ['$ngRedux', shareUserResolver]
+            }
+        })
+        .state('app', {
+            url: '/app/:appName',
+            template: '&lt;app layout="column" layout-fill&gt;&lt;/app&gt;',
+            resolve: {
+                data: ['$ngRedux', appDataResolver]
+            },
+            params: {
+                appName: {
+                    value: ['$ngRedux', appNameMapper]
+                }
+            }
+        })
+        .state('public', {
+            url: '/public/:appName',
+            template: '&lt;app layout="column" view-mode="true"&gt;&lt;/app&gt;',
+            resolve: {
+                data: ['$ngRedux', publicDataResolver]
+            }
+        })
+        .state('login', {
+            url: '/login',
+            parent: 'base',
+            params: {
+                location: null
+            },
+            forbidAuthenticated: true,
+            views: {
+                main: {
+                    template: '&lt;login&gt;&lt;/login&gt;'
+                }
+            }
+        })
+        .state('reset', {
+            url: '/reset',
+            parent: 'base',
+            forbidAuthenticated: true,
+            views: {
+                main: {
+                    template: '&lt;reset&gt;&lt;/reset&gt;'
+                }
+            }
+        })
+        .state('signup', {
+            url: '/signup',
+            parent: 'base',
+            forbidAuthenticated: true,
+            views: {
+                main: {
+                    template: '&lt;signup&gt;&lt;/signup&gt;'
+                }
+            }
+        })
+        .state('editProfile', {
+            url: '/edit-profile',
+            parent: 'app',
+            views: {
+                main: {
+                    template: '&lt;edit-profile &gt;&lt;/edit-profile&gt;'
+                }
+            }
+        })
+        .state('emailConfirmation', {
+            url: '/email-confirmation/:key',
+            parent: 'base',
+            views: {
+                main: {
+                    template: '&lt;email-confirmation&gt;&lt;/email-confirmation&gt;'
+                }
+            }
+        })
+        .state('terms-of-use', {
+            url: '/terms-of-use',
+            parent: 'base',
+            views: {
+                main: {
+                    template: '&lt;terms-of-use&gt;&lt;/terms-of-use&gt;'
+&nbsp;
+                }
+            }
+        });
+&nbsp;
+    $urlRouterProvider.otherwise('/landing');
+    $locationProvider.html5Mode(true);
+    $anchorScrollProvider.disableAutoScrolling();
+&nbsp;
+    const initialState = {
+        user: {
+            token: storage.get('token') || undefined
+        }
+    };
+    const reduxDevTools = window.__REDUX_DEVTOOLS_EXTENSION__;
+    const storeExtension = reduxDevTools ? <span class="branch-0 cbranch-no" title="branch not covered" >[reduxDevTools()] : undefined;</span>
+    $ngReduxProvider.createStoreWith(reducers, middleware, storeExtension, initialState);
+};
+&nbsp;
+config.$inject = [
+    '$stateProvider',
+    '$urlRouterProvider',
+    '$locationProvider',
+    '$anchorScrollProvider',
+    '$ngReduxProvider',
+    '$mdDateLocaleProvider'
+];
+&nbsp;
+export { baseUserResolver, shareUserResolver, appDataResolver, publicDataResolver, appNameMapper, config };
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Mar 12 2018 10:49:22 GMT+0100 (CET)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

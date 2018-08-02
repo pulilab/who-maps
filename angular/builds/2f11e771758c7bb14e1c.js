@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[197],{"./src/MapsToolkit/Resource/template/8-2-2.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    ii) The latency of the data centre based on its location is appropriate for the anticipated scope of scale\r\n  </translate>\r\n</p>"}}]);

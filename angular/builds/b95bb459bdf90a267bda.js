@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[211],{"./src/MapsToolkit/Resource/template/7-1-3.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    iii) We have quantified the intangible/non-monetary costs and benefits of the status quo (e.g. efficiency, access to care)\r\n  </translate>\r\n</p>"}}]);

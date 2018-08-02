@@ -1,11 +1,12 @@
 import re
 
-from django.core import mail
 from django.conf import settings
+from django.core.mail import send_mail
 from django.template import loader
 from django.utils.translation import ugettext, override
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework.fields import ReadOnlyField
 from rest_framework.validators import UniqueValidator
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -231,11 +232,11 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
 
         # don't allow empty team, so no orphan projects
         if 'team' in validated_data and isinstance(validated_data['team'], list):
-            instance.team = validated_data.get('team') or instance.team.all()
+            instance.team.set(validated_data.get('team') or instance.team.all())
 
         # a project however can exist without viewers
         if 'viewers' in validated_data and isinstance(validated_data['viewers'], list):
-            instance.viewers = validated_data['viewers']
+            instance.viewers.set(validated_data['viewers'])
 
         instance.save()
 
@@ -257,7 +258,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                     "language": profile.language
                 })
 
-            mail.send_mail(
+            send_mail(
                 subject=subject,
                 message="",
                 from_email=settings.FROM_EMAIL,
@@ -275,10 +276,18 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                     "language": profile.language
                 })
 
-            mail.send_mail(
+            send_mail(
                 subject=subject,
                 message="",
                 from_email=settings.FROM_EMAIL,
                 recipient_list=[profile.user.email],
                 html_message=html_message,
                 fail_silently=True)
+
+
+class MapProjectCountrySerializer(serializers.ModelSerializer):
+    country = ReadOnlyField(source='get_country_id')
+
+    class Meta:
+        model = Project
+        fields = ("id", "name", "country")

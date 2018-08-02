@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[348],{"./src/MapsToolkit/Resource/template/11-2-2.html":function(n,e){n.exports="<p>\r\n  <translate>\r\n    ii) A manager for supporting organizational and personnel needs has been appointed\r\n  </translate>\r\n</p>"}}]);

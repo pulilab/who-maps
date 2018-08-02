@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[311],{"./src/MapsToolkit/Resource/template/15-2-4.html":function(o,n){o.exports="<p>\r\n  <translate>\r\n    iv) Protocol for making course corrections for implementation activities based on monitoring data is in place\r\n  </translate>\r\n</p>"}}]);

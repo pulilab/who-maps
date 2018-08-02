@@ -4,7 +4,7 @@ import csv
 from django.db import transaction
 from django.http import HttpResponse
 from rest_framework import status
-from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.mixins import RetrieveModelMixin, ListModelMixin
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
@@ -15,7 +15,8 @@ from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, CountryField
 
-from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES
+from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
+    MapProjectCountrySerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea, ProjectApproval
 
@@ -188,7 +189,7 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
     def _get_permission_based_data(self, project):
         draft = None
 
-        if not self.request.user.is_authenticated():  # ANON
+        if not self.request.user.is_authenticated:  # ANON
             data = project.get_anon_data()
         else:
             is_member = project.is_member(self.request.user)
@@ -427,3 +428,8 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
         [writer.writerow([list(field.values())[0] for field in project]) for project in results]
 
         return response
+
+
+class MapProjectCountryViewSet(ListModelMixin, GenericViewSet):
+    queryset = Project.objects.published_only()
+    serializer_class = MapProjectCountrySerializer

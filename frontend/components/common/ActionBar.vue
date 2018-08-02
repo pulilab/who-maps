@@ -1,0 +1,93 @@
+<template>
+  <div class="ActionBar">
+    <el-row
+      type="flex"
+      justify="space-between"
+      align="middle"
+      class="InnerActionBar">
+
+      <div class="Title">
+        <h3>Digital Health Atlas</h3>
+      </div>
+
+      <el-row
+        v-if="$route.path.includes('/admin/')"
+        type="flex">
+        <nuxt-link
+          :class="['FakeTab', {'active': $route.path.endsWith('/admin/edit-profile')}]"
+          to="/en/admin/edit-profile"
+          tag="div">My profile</nuxt-link>
+        <nuxt-link
+          :class="['FakeTab', {'active': $route.path.endsWith('/admin/country-admin')}]"
+          to="/en/admin/country-admin"
+          tag="div">Country admin</nuxt-link>
+        <nuxt-link
+          :class="['FakeTab', {'active': $route.path.endsWith('/admin/donor')}]"
+          to="/en/admin/donor"
+          tag="div">Donor admin</nuxt-link>
+
+        <span>TODO: Solve links localePath!</span>
+      </el-row>
+
+      <el-col />
+
+      <search-component />
+    </el-row>
+  </div>
+</template>
+
+<script>
+import SearchComponent from '../common/SearchComponent.vue';
+
+export default {
+  components: {
+    SearchComponent
+  }
+};
+</script>
+
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .ActionBar {
+    background-color: @colorBrandPrimary;
+
+    .InnerActionBar {
+      .limitPageWidth();
+      height: 48px;
+    }
+
+    .Title {
+
+      h3 {
+        width: 224px;
+        display: block;
+        margin: 0;
+        font-size: @fontSizeLarge;
+        color: @colorWhite;
+      }
+    }
+
+    .SearchComponent {
+      width: auto;
+    }
+
+    .FakeTab {
+      height: 48px;
+      line-height: 48px;
+      white-space: nowrap;
+      color: white;
+      margin: 0 12px;
+      padding: 0 10px;
+      cursor: pointer;
+      color: gray;
+      transition: border .5s, color .5s;
+
+      &.active {
+        border-bottom: 5px solid white;
+        color: white;
+      }
+    }
+  }
+</style>

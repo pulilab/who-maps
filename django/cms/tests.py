@@ -3,7 +3,7 @@ import tempfile
 from allauth.account.models import EmailConfirmation
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
-from django.core import urlresolvers, mail
+from django.core import mail
 from django.test import TestCase, Client
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
@@ -129,12 +129,30 @@ class CmsTest(TestCase):
         self.assertEqual(self.post.comments.flagged().count(), 1)
         self.assertEqual(self.post.comments.banned().count(), 1)
 
+    def test_sentinel_user_on_deleted_post(self):
+        self.post.author.delete()
+        self.post.refresh_from_db()
+        self.post.author.refresh_from_db()
+        self.assertNotEqual(self.post.author, self.userprofile)
+        self.assertEqual(self.post.author.name, 'Deleted user')
+
+    def test_sentinel_user_on_deleted_comment(self):
+        comment = self.post.comments.create(user=self.userprofile, text="Test Comment 1")
+        comment.user.delete()
+        comment.refresh_from_db()
+        self.assertNotEqual(comment.user, self.userprofile)
+        self.assertEqual(comment.user.name, 'Deleted user')
+
+        self.post.refresh_from_db()
+        self.post.author.refresh_from_db()
+        self.assertEqual(comment.user, self.post.author)
+
 
 class CmsApiTest(APITestCase):
     def setUp(self):
         # Create a test user with profile.
         url = reverse("rest_register")
-        data = {"email": "test_user@gmail.com", "password1": "123456", "password2": "123456"}
+        data = {"email": "test_user@gmail.com", "password1": "123456hetNYOLC", "password2": "123456hetNYOLC"}
         self.client.post(url, data)
 
         # Validate the account.
@@ -147,7 +165,7 @@ class CmsApiTest(APITestCase):
 
         # Log in the user.
         url = reverse("api_token_auth")
-        data = {"username": "test_user@gmail.com", "password": "123456"}
+        data = {"username": "test_user@gmail.com", "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
@@ -966,7 +984,7 @@ class CmsAdminTests(TestCase):
         self.assertEqual(Comment.objects.flagged().count(), 2)
         self.assertEqual(Comment.objects.banned().count(), 0)
 
-        change_url = urlresolvers.reverse('admin:cms_comment_changelist')
+        change_url = reverse('admin:cms_comment_changelist')
         data = {
             'action': 'ban',
             '_selected_action': Comment.objects.filter(state=State.FLAGGED).values_list('pk', flat=True)

@@ -1,6 +1,8 @@
 import copy
 import csv
 from datetime import datetime
+
+from django.urls import reverse
 from mock import patch
 from io import StringIO
 
@@ -8,7 +10,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.template.response import TemplateResponse
 from django.utils.translation import override
 from django.core import mail
-from django.core.urlresolvers import reverse
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -42,8 +43,8 @@ class SetupTests(APITestCase):
         url = reverse("rest_register")
         data = {
             "email": "test_user@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
 
@@ -60,7 +61,7 @@ class SetupTests(APITestCase):
         url = reverse("api_token_auth")
         data = {
             "username": "test_user@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200, response.json())
         self.test_user_key = response.json().get("token")
@@ -272,14 +273,14 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(len(response.json().keys()), 8)
-        self.assertEqual(response.json()['implementing_partners'][0], 'Not a valid string.')
-        self.assertEqual(response.json()['health_focus_areas'][0], 'A valid integer is required.')
-        self.assertEqual(response.json()['licenses'][0], 'A valid integer is required.')
-        self.assertEqual(response.json()['donors'][0], 'Not a valid string.')
-        self.assertEqual(response.json()['his_bucket'][0], 'A valid integer is required.')
-        self.assertEqual(response.json()['hsc_challenges'][0], 'A valid integer is required.')
-        self.assertEqual(response.json()['interoperability_links'][0], {'id': ['This field is required.']})
-        self.assertEqual(response.json()['interoperability_standards'][0], 'A valid integer is required.')
+        self.assertEqual(response.json()['implementing_partners']['0'], ['Not a valid string.'])
+        self.assertEqual(response.json()['health_focus_areas']['0'], ['A valid integer is required.'])
+        self.assertEqual(response.json()['licenses']['0'], ['A valid integer is required.'])
+        self.assertEqual(response.json()['donors']['0'], ['Not a valid string.'])
+        self.assertEqual(response.json()['his_bucket']['0'], ['A valid integer is required.'])
+        self.assertEqual(response.json()['hsc_challenges']['0'], ['A valid integer is required.'])
+        self.assertEqual(response.json()['interoperability_links'], [{'id': ['This field is required.']}])
+        self.assertEqual(response.json()['interoperability_standards']['0'], ['A valid integer is required.'])
 
     def test_create_new_project_with_platform_name_missing(self):
         url = reverse("project-create")
@@ -656,15 +657,15 @@ class ProjectTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -708,15 +709,15 @@ class ProjectTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -1070,15 +1071,15 @@ class ProjectTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -1138,15 +1139,15 @@ class ProjectTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -1241,6 +1242,14 @@ class ProjectTests(SetupTests):
                          ['facility_district1_1', 'facility_district1_2', 'facility_district1_3'])
         self.assertEqual(response.json()['published']['coverage_second_level'][1]['facilities_list'],
                          ['facility_ward2_1', 'facility_ward2_2', 'facility_ward2_3'])
+
+    def test_map_project_country_view(self):
+        url = reverse("project-map")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0]['id'], self.project_id)
+        self.assertEqual(response.json()[0]['name'], self.project_data['name'])
+        self.assertEqual(response.json()[0]['country'], self.country_id)
 
 
 class ProjectDraftTests(SetupTests):
@@ -1507,15 +1516,15 @@ class PermissionTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -1554,15 +1563,15 @@ class PermissionTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -1615,15 +1624,15 @@ class PermissionTests(SetupTests):
         url = reverse("rest_register")
         data = {
             "email": "test_user2@gmail.com",
-            "password1": "123456",
-            "password2": "123456"}
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
         self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
             "username": "test_user2@gmail.com",
-            "password": "123456"}
+            "password": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
         test_user_key = response.json().get("token")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
@@ -1838,8 +1847,8 @@ class TestAdmin(TestCase):
 
         url = reverse('rest_register')
         data = {'email': 'test_user@gmail.com',
-                'password1': '123456',
-                'password2': '123456'}
+                'password1': '123456hetNYOLC',
+                'password2': '123456hetNYOLC'}
         self.client.post(url, data)
 
         key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
@@ -2295,8 +2304,8 @@ class TestModelTranslations(TestCase):
         url = reverse('rest_register')
         data = {
             'email': 'test_user@gmail.com',
-            'password1': '123456',
-            'password2': '123456'}
+            'password1': '123456hetNYOLC',
+            'password2': '123456hetNYOLC'}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201)
 
@@ -2320,7 +2329,7 @@ class TestModelTranslations(TestCase):
         # Log in the user.
         data = {
             'username': 'test_user@gmail.com',
-            'password': '123456'}
+            'password': '123456hetNYOLC'}
         response = self.client.post(reverse('api_token_auth'), data)
         self.assertEqual(response.status_code, 200)
         self.test_user_key = response.json().get('token')

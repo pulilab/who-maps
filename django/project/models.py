@@ -60,13 +60,12 @@ class Project(SoftDeleteModel, ExtendedModel):
     def __str__(self):  # pragma: no cover
         return self.name
 
+    def get_country_id(self, draft_mode=False):
+        return self.draft.get('country') if draft_mode else self.data.get('country')
+
     def get_country(self, draft_mode=False):
-        try:
-            country_id = self.draft.get('country') if draft_mode else self.data.get('country')
-            country_id = int(country_id)
-        except TypeError:  # pragma: no cover
-            return None
-        return Country.objects.get(id=country_id)
+        country_id = self.get_country_id(draft_mode)
+        return Country.objects.get(id=int(country_id)) if country_id else None
 
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
@@ -166,8 +165,9 @@ class Project(SoftDeleteModel, ExtendedModel):
 
 
 class ProjectApproval(ExtendedModel):
-    project = models.OneToOneField('Project', related_name='approval')
-    user = models.ForeignKey(UserProfile, blank=True, null=True, help_text="Administrator who approved the project")
+    project = models.OneToOneField('Project', related_name='approval', on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, blank=True, null=True,
+                             help_text="Administrator who approved the project", on_delete=models.CASCADE)
     approved = models.NullBooleanField(blank=True, null=True)
     reason = models.TextField(blank=True, null=True)
 
@@ -176,13 +176,13 @@ class ProjectApproval(ExtendedModel):
 
 
 class CoverageVersion(ExtendedModel):
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     version = models.IntegerField()
     data = JSONField()
 
 
 class File(ExtendedModel):
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     type = models.CharField(max_length=255)
     filename = models.CharField(max_length=255)
     data = models.BinaryField()
@@ -196,7 +196,8 @@ class DigitalStrategy(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel)
         ('Data service', _('Data service'))
     )
     group = models.CharField(max_length=255, choices=GROUP_CHOICES)
-    parent = models.ForeignKey('DigitalStrategy', related_name='strategies', blank=True, null=True)
+    parent = models.ForeignKey('DigitalStrategy', related_name='strategies',
+                               blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         parent = ' [{}]'.format(self.parent.name) if self.parent else ''
@@ -239,7 +240,7 @@ class HealthCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
 
 class HealthFocusArea(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas')
+    health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas', on_delete=models.CASCADE)
 
     def __str__(self):
         return '[{}] {}'.format(self.health_category.name, self.name)
@@ -269,7 +270,7 @@ class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
 
 class ProjectImport(ExtendedModel):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     csv = models.FileField()
     headers = ArrayField(models.CharField(max_length=512), blank=True, null=True)
     mapping = JSONField(default=dict)

@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[274],{"./src/MapsToolkit/Resource/template/3-1a-3.html":function(e,t){e.exports="<p>\r\n  <translate>\r\n    iii) The efficacy of the mHealth product has been demonstrated (Does the mHealth product have the effect that was intended in an ideal/controlled setting?)\r\n  </translate>\r\n</p>"}}]);

@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[196],{"./src/MapsToolkit/Resource/template/8-2-3.html":function(n,t){n.exports="<p>\r\n  <translate>\r\n    iii) The bandwidth for data transmission is sufficient for the anticipated scope of scale\r\n  </translate>\r\n</p>"}}]);

@@ -1,0 +1,422 @@
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+
+.bold {
+  font-weight: 500; }
+
+.unselectable {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                  not supported by any browser */ }
+
+.hidden {
+  display: none !important;
+  visibility: hidden; }
+
+.text-hide {
+  border: 0;
+  background-color: transparent;
+  color: transparent;
+  text-shadow: none;
+  font: "0/0" a; }
+
+.text-nowrap {
+  white-space: nowrap !important; }
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+
+.text-center {
+  text-align: center; }
+
+.text-left {
+  text-align: left !important; }
+
+.text-right {
+  text-align: right !important; }
+
+.text-justify {
+  text-align: justify !important; }
+
+.text-lowercase {
+  text-transform: lowercase !important; }
+
+.text-uppercase {
+  text-transform: uppercase !important; }
+
+.text-capitalize {
+  text-transform: capitalize !important; }
+
+.clickable {
+  cursor: pointer !important; }
+
+.zindex-100 {
+  z-index: 100; }
+
+.zindex-90 {
+  z-index: 90; }
+
+.zindex-80 {
+  z-index: 80; }
+
+.zindex-70 {
+  z-index: 70; }
+
+.zindex-60 {
+  z-index: 60; }
+
+.zindex-50 {
+  z-index: 50; }
+
+.zindex-40 {
+  z-index: 40; }
+
+.zindex-30 {
+  z-index: 30; }
+
+.zindex-20 {
+  z-index: 20; }
+
+.zindex-10 {
+  z-index: 10; }
+
+.center-block {
+  display: block;
+  margin-right: auto;
+  margin-left: auto; }
+
+.clearfix::after {
+  display: table;
+  clear: both;
+  content: ""; }
+
+/*
+// Multi-lang
+@include button-ml($width: 180px);
+//
+*/
+.assesment-container {
+  margin: 0 auto;
+  padding: 20px 30px 0 30px;
+  max-width: 1440px; }
+  .assesment-container .dashrow.dashrow-upper {
+    height: 505px;
+    margin-bottom: 15px; }
+  .assesment-container .dashrow .dashsection.dashsection-left {
+    margin-right: 20px; }
+  .assesment-container .dashrow .dashsection#dashsection-stats {
+    width: 100px; }
+  .assesment-container .dashrow .dash-emptyleft {
+    height: 454px;
+    background: #FFFFFF url(public/fonts/squares.svg) center 0px no-repeat; }
+    .assesment-container .dashrow .dash-emptyleft .emptychild {
+      height: 454px;
+      background: url(public/fonts/icons-all.svg) center 63px no-repeat;
+      padding-top: 230px;
+      padding-left: 145px;
+      padding-right: 145px; }
+      .assesment-container .dashrow .dash-emptyleft .emptychild a.md-button {
+        background-color: #283593 !important;
+        padding-top: 4px;
+        padding-left: 25px;
+        padding-right: 25px;
+        height: 42px; }
+        .assesment-container .dashrow .dash-emptyleft .emptychild a.md-button span {
+          color: white !important;
+          font-size: 16px; }
+      .assesment-container .dashrow .dash-emptyleft .emptychild p {
+        font-size: 12px;
+        color: #757575;
+        text-align: center; }
+  .assesment-container .dashrow .dash-cardholder .dash-subhead {
+    display: block;
+    text-align: center;
+    margin: 15px 0 25px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #212121;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; }
+  .assesment-container .dashrow .dash-cardholder .dash-stat-column {
+    cursor: default; }
+    .assesment-container .dashrow .dash-cardholder .dash-stat-column .shorter, .assesment-container .dashrow .dash-cardholder .dash-stat-column .longer {
+      margin-bottom: 10px; }
+    .assesment-container .dashrow .dash-cardholder .dash-stat-column .longer .gray {
+      padding: 10px 8px;
+      border-top: 1px solid #E0E0E0;
+      background-color: #F5F5F5;
+      border-bottom-right-radius: 3px;
+      border-bottom-left-radius: 3px; }
+      .assesment-container .dashrow .dash-cardholder .dash-stat-column .longer .gray .desc {
+        font-size: 10px;
+        line-height: 12px;
+        color: #757575;
+        margin-bottom: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
+        height: auto;
+        max-height: 60px; }
+    .assesment-container .dashrow .dash-cardholder .dash-stat-column .snapshot-button {
+      height: 60px;
+      padding: 5px;
+      margin: 0;
+      min-width: 50px;
+      background-color: #7CB342; }
+      .assesment-container .dashrow .dash-cardholder .dash-stat-column .snapshot-button .text {
+        color: #FFFFFF;
+        font-size: 12px;
+        line-height: 20px;
+        font-weight: 500;
+        display: block; }
+        .assesment-container .dashrow .dash-cardholder .dash-stat-column .snapshot-button .text translate {
+          max-width: 100%;
+          display: inline-flex; }
+          .assesment-container .dashrow .dash-cardholder .dash-stat-column .snapshot-button .text translate span {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap; }
+        .assesment-container .dashrow .dash-cardholder .dash-stat-column .snapshot-button .text.plus {
+          font-size: 36px;
+          line-height: 28px;
+          font-weight: 300; }
+      .assesment-container .dashrow .dash-cardholder .dash-stat-column .snapshot-button.draft {
+        background-color: #FBC02D; }
+        .assesment-container .dashrow .dash-cardholder .dash-stat-column .snapshot-button.draft .text {
+          color: #212121; }
+          .assesment-container .dashrow .dash-cardholder .dash-stat-column .snapshot-button.draft .text translate {
+            display: block; }
+            .assesment-container .dashrow .dash-cardholder .dash-stat-column .snapshot-button.draft .text translate br {
+              display: none; }
+  .assesment-container .dashrow .dash-cardholder md-card {
+    margin: 0;
+    overflow: hidden; }
+    .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-wrapper md-tabs-canvas {
+      height: 40px; }
+      .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper {
+        height: 40px; }
+        .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item {
+          padding-top: 8px;
+          padding-bottom: 8px;
+          font-size: 12px;
+          max-width: 240px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap; }
+        .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-ink-bar {
+          background-color: #283593; }
+    .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent {
+      height: 413px;
+      padding: 10px;
+      border-bottom-right-radius: 5px;
+      border-bottom-left-radius: 5px;
+      background-color: #F5F5F5; }
+      .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent.infoview {
+        background-color: initial;
+        padding: 0; }
+        .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent.infoview .roww {
+          height: 55px;
+          margin: 0 30px;
+          border-bottom: 1px solid #E0E0E0; }
+          .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent.infoview .roww.borderless {
+            border-bottom-width: 0; }
+        .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent.infoview .label {
+          font-size: 12px;
+          font-weight: 500;
+          color: #757575; }
+        .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent.infoview .data {
+          font-size: 14px;
+          font-weight: 500;
+          color: #212121; }
+        .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent.infoview .data2 {
+          font-weight: 400; }
+        .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent.infoview .gray {
+          background-color: #F5F5F5; }
+          .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent.infoview .gray .labelobj {
+            margin: 20px 30px; }
+          .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent.infoview .gray .data {
+            margin: 0 30px; }
+        .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent.infoview a {
+          margin-left: 20px;
+          text-decoration: none;
+          color: #283593;
+          font-weight: 400; }
+      .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent .dash-overview-tooltips {
+        justify-content: space-between;
+        padding: 0 10px 0 5px; }
+        .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent .dash-overview-tooltips .dash-overview-tooltip {
+          position: relative; }
+          .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent .dash-overview-tooltips .dash-overview-tooltip img {
+            display: inline;
+            height: 10px;
+            width: auto;
+            transform: translate(0, 2px); }
+          .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent .dash-overview-tooltips .dash-overview-tooltip md-icon {
+            float: left;
+            font-size: 10px;
+            height: 10px;
+            width: 10px;
+            transform: translate(8px, 6px); }
+            .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent .dash-overview-tooltips .dash-overview-tooltip md-icon.dash-overw-toolkit-ball1 {
+              color: #F44336; }
+            .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent .dash-overview-tooltips .dash-overview-tooltip md-icon.dash-overw-toolkit-ball2 {
+              color: #FB8C00; }
+            .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent .dash-overview-tooltips .dash-overview-tooltip md-icon.dash-overw-toolkit-ball3 {
+              color: #7CB342; }
+          .assesment-container .dashrow .dash-cardholder md-card md-tabs md-tabs-content-wrapper md-tab-content .dash-cardcontent .dash-overview-tooltips .dash-overview-tooltip span {
+            font-size: 10px;
+            text-align: center;
+            color: #757575; }
+    .assesment-container .dashrow .dash-cardholder md-card .dash-cardcontent {
+      background-color: #F5F5F5; }
+  .assesment-container .dashrow .dash-cardholder .dash-tech .upper {
+    padding: 10px 25px; }
+    .assesment-container .dashrow .dash-cardholder .dash-tech .upper div:not(:last-child) {
+      border-bottom: 1px solid #E0E0E0; }
+    .assesment-container .dashrow .dash-cardholder .dash-tech .upper div md-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+      color: #212121;
+      margin-right: 5px; }
+    .assesment-container .dashrow .dash-cardholder .dash-tech .upper div span {
+      font-size: 14px;
+      color: #212121;
+      font-weight: 500;
+      margin: 10px 0; }
+    .assesment-container .dashrow .dash-cardholder .dash-tech .upper div md-chips {
+      margin: 2px 0 8px; }
+      .assesment-container .dashrow .dash-cardholder .dash-tech .upper div md-chips md-chips-wrap {
+        box-shadow: none; }
+        .assesment-container .dashrow .dash-cardholder .dash-tech .upper div md-chips md-chips-wrap md-chip {
+          height: 24px; }
+          .assesment-container .dashrow .dash-cardholder .dash-tech .upper div md-chips md-chips-wrap md-chip .md-chip-content {
+            line-height: 22px; }
+            .assesment-container .dashrow .dash-cardholder .dash-tech .upper div md-chips md-chips-wrap md-chip .md-chip-content span {
+              font-size: 12px; }
+  .assesment-container .dashrow .dash-cardholder .dash-tech .lower {
+    background-color: #F5F5F5;
+    padding: 20px 25px;
+    min-height: 283px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px; }
+    .assesment-container .dashrow .dash-cardholder .dash-tech .lower span {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      font-size: 14px;
+      font-weight: 500; }
+    .assesment-container .dashrow .dash-cardholder .dash-tech .lower a {
+      display: block;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #283593;
+      text-decoration: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap; }
+  .assesment-container .dashrow .dash-cardholder .dash-res {
+    background-color: #F6F6F6;
+    height: 413px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    padding: 0 20px; }
+    .assesment-container .dashrow .dash-cardholder .dash-res h3 {
+      font-size: 12px;
+      font-weight: 500;
+      margin: 20px 0;
+      color: #212121;
+      text-transform: uppercase; }
+    .assesment-container .dashrow .dash-cardholder .dash-res .resource {
+      height: 60px;
+      overflow: hidden;
+      margin: 12px 0; }
+      .assesment-container .dashrow .dash-cardholder .dash-res .resource .res-title {
+        font-size: 14px;
+        padding-top: 3px;
+        padding-left: 12px; }
+      .assesment-container .dashrow .dash-cardholder .dash-res .resource .res-text {
+        padding: 3px 0 7px 12px; }
+        .assesment-container .dashrow .dash-cardholder .dash-res .resource .res-text h4, .assesment-container .dashrow .dash-cardholder .dash-res .resource .res-text p {
+          margin: 0; }
+        .assesment-container .dashrow .dash-cardholder .dash-res .resource .res-text h4 {
+          display: block;
+          font-size: 14px;
+          font-weight: 500;
+          color: #283593;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap; }
+        .assesment-container .dashrow .dash-cardholder .dash-res .resource .res-text p {
+          font-size: 12px;
+          color: #757575; }
+      .assesment-container .dashrow .dash-cardholder .dash-res .resource a {
+        margin: 0 30px;
+        max-width: 24px;
+        text-decoration: none; }
+      .assesment-container .dashrow .dash-cardholder .dash-res .resource md-icon {
+        color: #283593;
+        font-size: 24px;
+        outline: none;
+        cursor: pointer; }
+  .assesment-container .dashrow .dash-cardholder .emptyright {
+    background: #F5F5F5 url(public/fonts/wmap.svg) center 135px no-repeat;
+    background-size: 140% auto; }
+    .assesment-container .dashrow .dash-cardholder .emptyright p.afteri {
+      margin-top: 35px;
+      margin-left: 20px;
+      margin-bottom: 0;
+      color: #212121;
+      font-size: 14px;
+      font-weight: 500; }
+      .assesment-container .dashrow .dash-cardholder .emptyright p.afteri md-icon {
+        color: #212121;
+        height: 20px;
+        width: 20px;
+        margin-right: 5px;
+        transform: translate(-2px, -2px); }
+    .assesment-container .dashrow .dash-cardholder .emptyright p.detail {
+      margin-left: 50px;
+      margin-right: 50px;
+      color: #888888;
+      font-size: 12px; }
+  .assesment-container .dashrow .dash-cardholder .dash-perf .perfloggedout {
+    background: #F5F5F5 url(public/fonts/wmap.svg) center center no-repeat;
+    background-size: 140% auto; }
+    .assesment-container .dashrow .dash-cardholder .dash-perf .perfloggedout p.loggedout {
+      padding: 30px 11% 0 11%;
+      text-align: center;
+      font-size: 14px;
+      color: #212121;
+      line-height: 20px; }
+    .assesment-container .dashrow .dash-cardholder .dash-perf .perfloggedout a.md-button {
+      background-color: #283593; }
+      .assesment-container .dashrow .dash-cardholder .dash-perf .perfloggedout a.md-button span {
+        color: white; }
+  .assesment-container .dashrow .dash-cardholder .perf-tab {
+    height: 449px; }
+    .assesment-container .dashrow .dash-cardholder .perf-tab md-tabs-content-wrapper {
+      top: 41px; }
+    .assesment-container .dashrow .dash-cardholder .perf-tab md-tabs-content-wrapper, .assesment-container .dashrow .dash-cardholder .perf-tab md-tab-content {
+      overflow: hidden; }
+    .assesment-container .dashrow .dash-cardholder .perf-tab .countrychart-tooltip md-tabs-content-wrapper {
+      top: 0px; }
+

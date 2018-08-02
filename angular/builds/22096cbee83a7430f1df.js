@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[314],{"./src/MapsToolkit/Resource/template/15-2-1.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    i) Processes for regular analysis and interpretation of monitoring data have been defined (including frequency of meetings, who will participate, etc.)\r\n  </translate>\r\n</p>"}}]);

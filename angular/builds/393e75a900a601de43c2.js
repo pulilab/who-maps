@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[337],{"./src/MapsToolkit/Resource/template/12-1b-4.html":function(n,e){n.exports="<p>\r\n  <translate>\r\n    iv) Mechanisms are in place for quality assurance of the training programme (e.g. checkpoints for competency and certification)\r\n  </translate>\r\n</p>"}}]);

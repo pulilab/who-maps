@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/CountryView/CountryViewModuleController.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">src/CountryView</a> CountryViewModuleController.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">58.48% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>100/171</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">49.35% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>38/77</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">60% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>18/30</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">56.38% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>84/149</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import cloneDeep from 'lodash/cloneDeep';
+import forEach from 'lodash/forEach';
+import isEmpty from 'lodash/isEmpty';
+import map from 'lodash/map';
+&nbsp;
+import moment from 'moment';
+import PDFExportController from './PDFExport/PDFExportController';
+import * as CountryModule from '../store/modules/countries';
+import * as UserModule from '../store/modules/user';
+&nbsp;
+class CountryViewModuleController {
+&nbsp;
+    constructor($scope, $filter, $state, $ngRedux, gettextCatalog) {
+        this.scope = $scope;
+        this.filter = $filter;
+        this.state = $state;
+        this.gettextCatalog = gettextCatalog;
+        this.pdfExport = new PDFExportController(gettextCatalog);
+        this.$onInit = this.onInit.bind(this);
+        this.$onDestroy = this.onDestroy.bind(this);
+        this.generateFilters = this.generateFilters.bind(this);
+        this.prepareFiltersCheckboxes = this.prepareFiltersCheckboxes.bind(this);
+        this.watchers = this.watchers.bind(this);
+        this.mapState = this.mapState.bind(this);
+        this.checkIfFilterIsApplied = this.checkIfFilterIsApplied.bind(this);
+        this.unsubscribe = $ngRedux.connect(this.mapState, CountryModule)(this);
+    }
+&nbsp;
+    mapState(state) {
+        const mapData = <span class="cstat-no" title="statement not covered" >CountryModule.getCurrentCountryMapData(state);</span>
+        const districtProjects = <span class="cstat-no" title="statement not covered" >CountryModule.getCurrentCountryDistrictProjects(state);</span>
+        const selectedCountry = <span class="cstat-no" title="statement not covered" >!isEmpty(this.selectedCountry) ?</span>
+            this.selectedCountry : CountryModule.getCurrentCountry(state);
+        const projectsData = <span class="cstat-no" title="statement not covered" >CountryModule.getCurrentCountryProjects(state);</span>
+        const countryProjects = <span class="cstat-no" title="statement not covered" >cloneDeep(projectsData);</span>
+        const nationalLevelCoverage = <span class="cstat-no" title="statement not covered" >this.filterNLDProjects(projectsData, districtProjects);</span>
+<span class="cstat-no" title="statement not covered" >        return {</span>
+            countryDistrictProjects: districtProjects,
+            userProfile: UserModule.getProfile(state),
+            countries: CountryModule.getCountriesList(state),
+            countriesLib: CountryModule.getCountriesLib(state),
+            selectedCountry,
+            mapData,
+            districtProjects,
+            projectsData,
+            countryProjects,
+            nationalLevelCoverage
+        };
+    }
+&nbsp;
+&nbsp;
+    onInit() {
+        this.header = this.generateHeader();
+        this.lastFilter = null;
+        this.showOnlyApproved = false;
+        this.filterBit = 0;
+        this.watchers();
+        this.showAllCountries = { id: false, name: 'Show all countries' };
+    }
+&nbsp;
+    onDestroy() {
+<span class="cstat-no" title="statement not covered" >        this.unsubscribe();</span>
+    }
+&nbsp;
+    watchers() {
+        this.scope.$watchCollection(s =&gt; s.vm.countryProjects, this.generateFilters);
+        this.scope.$watch(s =&gt; s.vm.filters, this.checkIfFilterIsApplied, true);
+        this.scope.$watch(s =&gt; s.vm.selectedCountry, this.updateCountry.bind(this), true);
+        this.scope.$watchGroup([s =&gt; s.vm.showOnlyApproved, s =&gt; s.vm.filterBit], this.applyFilters.bind(this));
+        this.scope.$watch(s =&gt; s.vm.currentTab, this.handleTabSwitch.bind(this));
+    }
+&nbsp;
+    checkIfFilterIsApplied(filters, oldValue) {
+        if (!filters || !oldValue) {
+            return;
+        }
+        const oldOpen = oldValue.map(c =&gt; c.open);
+        const newOpen = filters.map(c =&gt; c.open);
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (oldOpen.every((v, i) =&gt; v === newOpen[i]) &amp;&amp; Array.isArray(this.countryProjects)) {
+            //  this was not triggered by an open-close of the filter but by an actual selection, so we can filter here
+<span class="cstat-no" title="statement not covered" >            this.filterBit += 1;</span>
+        }
+    }
+&nbsp;
+    handleTabSwitch(tabIndex, oldIndex) {
+        if (tabIndex === 0 &amp;&amp; oldIndex === 1 &amp;&amp; this.selectedCountry.id === false) {
+            // we need to reset the project to the one from the country and not show all.
+            this.loadCountryProjectsOrAll(this.mapData.id);
+        }
+    }
+&nbsp;
+    applyFilters([showOnlyApproved]) {
+        showOnlyApproved = this.selectedCountry.project_approval &amp;&amp; showOnlyApproved;
+        const preFilter = showOnlyApproved ? <span class="branch-0 cbranch-no" title="branch not covered" >this.countryProjects.filter(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >p =&gt; p.approved) : this.countryProjects;</span></span></span>
+        const filtered = [];
+        let globalSelected = [];
+        for (const cat of this.filters) {
+            const selected = cat.items.filter(i =&gt; i.value).map(s =&gt; s.name);
+            globalSelected = [...globalSelected, ...selected];
+            const inArray = inp =&gt; {
+                return selected.indexOf(inp) &gt; -1;
+            };
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (selected &amp;&amp; selected.length &gt; 0) {
+                for (const p of preFilter) {
+                    const inProject = cat.filterMappingFn(p);
+                    if (inProject.some(inArray)) {
+                        <span class="missing-if-branch" title="else path not taken" >E</span>if (!filtered.includes(p)) {
+                            filtered.push(p);
+                        }
+                    }
+                }
+            }
+        }
+        this.scope.$evalAsync(() =&gt; {
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (globalSelected &amp;&amp; globalSelected.length &gt; 0) {
+                this.projectsData = filtered;
+            }
+            else {
+<span class="cstat-no" title="statement not covered" >                this.projectsData = preFilter;</span>
+            }
+            this.nationalLevelCoverage = this.filterNLDProjects(this.projectsData);
+            this.districtProjects = this.filterDLDProjects(this.projectsData);
+        });
+    }
+&nbsp;
+&nbsp;
+    generateHeader() {
+        return {
+            name: { up: false, down: false },
+            country: { up: false, down: false },
+            organisation_name: { up: false, down: false },
+            donors: { up: false, down: false },
+            contact_name: { up: false, down: false },
+            implementation_overview: { up: false, down: false },
+            implementing_partners: { up: false, down: false },
+            geographic_scope: { up: false, down: false },
+            health_focus_areas: { up: false, down: false }
+        };
+    }
+&nbsp;
+    prepareFiltersCheckboxes(mapper) <span class="cstat-no" title="statement not covered" >{</span>
+        // Set guarantee uniqueness;
+        let structure = <span class="cstat-no" title="statement not covered" >new Set();</span>
+<span class="cstat-no" title="statement not covered" >        for (const item of this.countryProjects) <span class="cstat-no" title="statement not covered" >{</span></span>
+            let inner = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >            if (mapper instanceof Function) {</span>
+<span class="cstat-no" title="statement not covered" >                inner = mapper(item);</span>
+            }
+            else {
+<span class="cstat-no" title="statement not covered" >                inner = item[mapper];</span>
+            }
+<span class="cstat-no" title="statement not covered" >            inner = inner ? inner : [];</span>
+<span class="cstat-no" title="statement not covered" >            for (const s of inner) <span class="cstat-no" title="statement not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >                structure.add(s);</span>
+            }
+        }
+<span class="cstat-no" title="statement not covered" >        structure = Array.from(structure);</span>
+<span class="cstat-no" title="statement not covered" >        return structure.map(<span class="fstat-no" title="function not covered" >s =&gt; </span>{</span>
+<span class="cstat-no" title="statement not covered" >            return {</span>
+                value: false,
+                name: s
+            };
+        });
+    }
+&nbsp;
+    generateFilters(countryProjects) {
+<span class="cstat-no" title="statement not covered" >        if (!countryProjects || !Array.isArray(countryProjects)) {</span>
+<span class="cstat-no" title="statement not covered" >            return;</span>
+        }
+        const gettextCatalog = <span class="cstat-no" title="statement not covered" >this.gettextCatalog;</span>
+        // whenever using the translation module in js the string must always be call from gettextCatalog.getString
+        // otherwise the string extractor does not pick it up
+        // the translations still works if the sting is present in the po file
+        const digitalHealthInterventions = <span class="cstat-no" title="statement not covered" >{</span>
+            name: gettextCatalog.getString('Digital Health Interventions'),
+            filterMappingFn: <span class="fstat-no" title="function not covered" >p =&gt; </span>{
+<span class="cstat-no" title="statement not covered" >                return Array.isArray(p.digital_strategies) ? p.digital_strategies : [];</span>
+            },
+            open: false,
+            items: this.prepareFiltersCheckboxes('digital_strategies')
+        };
+&nbsp;
+        const healthInterventions = <span class="cstat-no" title="statement not covered" >{</span>
+            name: gettextCatalog.getString('Health Focus Areas'),
+            filterMappingFn: <span class="fstat-no" title="function not covered" >p =&gt; </span>{
+<span class="cstat-no" title="statement not covered" >                return Array.isArray(p.health_focus_areas) ? p.health_focus_areas : [];</span>
+            },
+            open: false,
+            items: this.prepareFiltersCheckboxes('health_focus_areas')
+        };
+        const healthInformationSystems = <span class="cstat-no" title="statement not covered" >{</span>
+            name: gettextCatalog.getString('Health Information Systems'),
+            filterMappingFn: <span class="fstat-no" title="function not covered" >p =&gt; </span>{
+<span class="cstat-no" title="statement not covered" >                return Array.isArray(p.his_bucket) ? p.his_bucket : [];</span>
+            },
+            open: false,
+            items: this.prepareFiltersCheckboxes('his_bucket')
+        };
+&nbsp;
+        const healthSystemChallenges = <span class="cstat-no" title="statement not covered" >{</span>
+            name: gettextCatalog.getString('Health System Challenges'),
+            filterMappingFn: <span class="fstat-no" title="function not covered" >p =&gt; </span>{
+<span class="cstat-no" title="statement not covered" >                return Array.isArray(p.hsc_challenges) ? p.hsc_challenges : [];</span>
+            },
+            open: false,
+            items: this.prepareFiltersCheckboxes('hsc_challenges')
+        };
+&nbsp;
+        const software = <span class="cstat-no" title="statement not covered" >{</span>
+            name: gettextCatalog.getString('Software'),
+            filterMappingFn: <span class="fstat-no" title="function not covered" >p =&gt; </span>{
+<span class="cstat-no" title="statement not covered" >                return Array.isArray(p.platforms) ? p.platforms : [];</span>
+            },
+            open: false,
+            items: this.prepareFiltersCheckboxes('platforms')
+        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.filters = [digitalHealthInterventions, healthInterventions,</span>
+            healthInformationSystems, healthSystemChallenges, software];
+    }
+&nbsp;
+    filterNLDProjects(allProjects) {
+        let districtsIds = [];
+        for (const d in this.countryDistrictProjects) {
+<span class="cstat-no" title="statement not covered" >            districtsIds = districtsIds.concat(this.countryDistrictProjects[d]);</span>
+        }
+        districtsIds = Array.from(new Set(districtsIds));
+        districtsIds = districtsIds.map(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >d =&gt;  d.id);</span></span>
+        return allProjects.filter(p =&gt; districtsIds.indexOf(p.id) === -1);
+    }
+&nbsp;
+    filterDLDProjects(allProjects) {
+        const newDistrictCoverage = {};
+        const projectsId = allProjects.map(p=&gt; p.id);
+        for (const d in this.countryDistrictProjects) {
+            const districtProjects =
+<span class="cstat-no" title="statement not covered" >              this.countryDistrictProjects[d].filter(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >p =&gt; projectsId.indexOf(p.id) &gt; -1);</span></span></span>
+<span class="cstat-no" title="statement not covered" >            if (districtProjects &amp;&amp; districtProjects.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >                newDistrictCoverage[d] = districtProjects;</span>
+            }
+        }
+        return newDistrictCoverage;
+    }
+&nbsp;
+&nbsp;
+    updateCountry(newVal, oldVal) {
+        if (oldVal &amp;&amp; (newVal.id !== oldVal.id)) {
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (newVal.id) {
+                this.setCurrentCountry(newVal.id);
+            }
+            else {
+<span class="cstat-no" title="statement not covered" >                this.setCurrentCountry(null);</span>
+            }
+            this.loadCountryProjectsOrAll(newVal.id);
+        }
+&nbsp;
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (this.projectsData.length === 0) {
+            this.loadCountryProjectsOrAll(newVal.id);
+        }
+&nbsp;
+        // if we have stale global project but the country is set refresh the list
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (newVal.id &amp;&amp; this.projectsData.some(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >p =&gt; p.country !== newVal.id)) {</span></span>
+<span class="cstat-no" title="statement not covered" >            this.loadCountryProjectsOrAll(newVal.id);</span>
+        }
+&nbsp;
+    }
+&nbsp;
+    exportPDF() {
+<span class="cstat-no" title="statement not covered" >        this.pdfExport.setData(this.projectsData, this.selectedCountry);</span>
+<span class="cstat-no" title="statement not covered" >        this.pdfExport.makePDF();</span>
+    }
+&nbsp;
+    async exportCSV() {
+        const ids = map(this.projectsData, <span class="fstat-no" title="function not covered" >p =&gt; </span>{
+<span class="cstat-no" title="statement not covered" >            return p.id;</span>
+        });
+        const response = await CountryModule.csvExport(ids);
+&nbsp;
+        const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${response}`);
+        const link = document.createElement('a');
+<span class="cstat-no" title="statement not covered" >        link.setAttribute('href', encodedUri);</span>
+<span class="cstat-no" title="statement not covered" >        link.setAttribute('download', `clv-export-${moment().format('MMMM-Do-YYYY-h-mm-ss ')}.csv`);</span>
+<span class="cstat-no" title="statement not covered" >        link.setAttribute('target', '_blank');</span>
+<span class="cstat-no" title="statement not covered" >        document.body.appendChild(link);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        link.click();</span>
+    }
+&nbsp;
+    orderTable(name) {
+<span class="cstat-no" title="statement not covered" >        forEach(this.header, <span class="fstat-no" title="function not covered" >h =&gt; </span>{</span>
+<span class="cstat-no" title="statement not covered" >            h.up = false;</span>
+<span class="cstat-no" title="statement not covered" >            h.down = false;</span>
+        });
+<span class="cstat-no" title="statement not covered" >        this.header[name].down = true;</span>
+        let lastFilter = <span class="cstat-no" title="statement not covered" >null;</span>
+        let <span class="cstat-no" title="statement not covered" >orderKey = `-${name}`;</span>
+<span class="cstat-no" title="statement not covered" >        if (name !== this.lastFilter) {</span>
+<span class="cstat-no" title="statement not covered" >            lastFilter = name;</span>
+<span class="cstat-no" title="statement not covered" >            orderKey = name;</span>
+<span class="cstat-no" title="statement not covered" >            this.header[name].down = false;</span>
+<span class="cstat-no" title="statement not covered" >            this.header[name].up = true;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        this.lastFilter = lastFilter;</span>
+<span class="cstat-no" title="statement not covered" >        this.projectsData = this.filter('orderBy')(this.projectsData, orderKey);</span>
+    }
+&nbsp;
+    printImplementingPartners({ implementing_partners }) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (implementing_partners.length &gt; 0) {
+            return implementing_partners.join(', ').trim();
+        }
+<span class="cstat-no" title="statement not covered" >        return '';</span>
+    }
+&nbsp;
+    static countryControllerFactory() {
+        function countryController($scope, $filter, $state, $ngRedux, gettextCatalog) {
+            return new CountryViewModuleController($scope, $filter, $state, $ngRedux, gettextCatalog);
+        }
+&nbsp;
+        countryController.$inject = ['$scope', '$filter', '$state', '$ngRedux', 'gettextCatalog'];
+&nbsp;
+        return countryController;
+    }
+&nbsp;
+}
+&nbsp;
+export default CountryViewModuleController;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Mar 12 2018 15:45:45 GMT+0100 (CET)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

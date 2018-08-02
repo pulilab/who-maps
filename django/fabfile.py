@@ -11,7 +11,7 @@ def dev():
     env.host_string = 'whomaps@dev.whomaps.pulilab.com'
     env.name = 'dev'
     env.port = 22
-    env.branch = "master"
+    env.branch = "development"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -151,13 +151,6 @@ def deploy():
             _migrate_db()
             time.sleep(1)
             # _import_geodata()
-
-        # handle frontend
-        with cd(env.frontend_root):
-            run('yarn')
-            run('yarn dist{}'.format(env.webpack_options))
-            run('yarn clean-server-folder')
-            run('yarn copy-to-server')
 
     tear_down()
 

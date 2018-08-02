@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[237],{"./src/MapsToolkit/Resource/template/5-1c-4.html":function(e,n){e.exports="<p>\r\n  <translate>\r\niv) Champion(s) are aware of their responsibilities and scope of work during the scaling-up process\r\n  </translate>\r\n</p>"}}]);

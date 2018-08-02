@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[251],{"./src/MapsToolkit/Resource/template/4-2-2.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    ii) We have communicated the ways in which the mHealth product is aligned with partner priorities (e.g. evidence, cost-effectiveness, financial returns, brand equity)\r\n  </translate>\r\n</p>"}}]);

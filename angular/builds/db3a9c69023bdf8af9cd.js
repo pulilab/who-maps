@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[365],{"./src/MapsToolkit/Resource/template/10-1-1.html":function(e,n){e.exports="<p>\r\n  <translate>\r\n    i) Processes for updating and replicating the application with new user groups have been defined\r\n  </translate>\r\n</p>"}}]);
