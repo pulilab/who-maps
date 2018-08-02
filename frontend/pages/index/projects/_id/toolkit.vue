@@ -1,6 +1,7 @@
 <template>
-
-  <div id="toolkitjs"/>
+  <div class="Toolkit" >
+    <nuxt-child />
+  </div>
 </template>
 
 <script>
@@ -10,10 +11,6 @@ export default {
   },
   async fetch ({store}) {
     await store.dispatch('projects/loadUserProjects');
-  },
-  mounted () {
-    const mapsToolkitFactory = require('../../../../angular/MapsToolkit/mapsToolkitFactory');
-    mapsToolkitFactory.factory();
   }
 };
 </script>
