@@ -52,6 +52,7 @@
     "topojson": "^3.0.2",
     "trix": "^0.11.4",
     "vee-validate": "^2.0.6",
+    "vue-click-outside": "^1.0.7",
     "vue-django-feedback": "^1.5.1",
     "vue-no-ssr": "^0.2.2",
     "vue2-leaflet": "git+https://github.com/pulilab/Vue2Leaflet.git#c805285",
