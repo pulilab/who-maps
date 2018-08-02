@@ -150,12 +150,11 @@ export const actions = {
   },
   async setCurrentProject ({commit, dispatch}, id) {
     id = parseInt(id, 10);
-    commit('SET_CURRENT_PROJECT', id);
     await dispatch('loadProjectDetails', id);
+    commit('SET_CURRENT_PROJECT', id);
   },
-  async loadProjectDetails ({commit, state}, id) {
+  async loadProjectDetails ({commit, state}, projectId) {
     try {
-      const projectId = state.currentProject;
       if (projectId) {
         const [toolkitVersions, coverageVersions, teamViewers] =
                   await Promise.all([
