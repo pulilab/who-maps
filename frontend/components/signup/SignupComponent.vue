@@ -58,25 +58,37 @@
           <div class="Legend">2. Fill out the form below</div>
 
           <el-form
+            ref="signupForm"
             :model="signupForm"
+            :rules="rules"
             @submit.native.prevent>
 
-            <el-form-item label="Email address">
+            <el-form-item
+              label="Email address"
+              prop="email">
               <el-input
                 v-model="signupForm.email"
                 type="email" />
             </el-form-item>
 
-            <el-form-item label="Password">
+            <el-form-item
+              label="Password"
+              prop="password1">
               <el-input
-                v-model="signupForm.password"
+                v-model="signupForm.password1"
                 type="password" />
             </el-form-item>
 
-            <el-form-item label="Password (Again)">
+            <el-form-item
+              label="Password (Again)"
+              prop="password2">
               <el-input
                 v-model="signupForm.password2"
                 type="password" />
+              <div
+                v-if="nonFieldErrors"
+                class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
+              </div>
             </el-form-item>
           </el-form>
         </fieldset>
@@ -95,7 +107,6 @@
             :span="6"
             class="primaryAction">
             <el-button
-              :disabled="!inputsFilledOkay"
               type="primary"
               size="medium"
               @click="signup">
