@@ -1,11 +1,5 @@
 <template>
   <div class="LandingPage">
-    <top-bar />
-    <!-- <top-bar
-      country-specific
-      country-logo-url="/placeholder-sl.png" /> For countries -->
-    <action-bar />
-
     <div class="MapBoxContainer">
       <landing-map />
       <welcome-box />
@@ -27,8 +21,6 @@
 </template>
 
 <script>
-import TopBar from '../../components/common/TopBar.vue';
-import ActionBar from '../../components/common/ActionBar.vue';
 
 import LandingMap from '../../components/landing/LandingMap.vue';
 import WelcomeBox from '../../components/landing/WelcomeBox.vue';
@@ -38,8 +30,6 @@ import AboutSection from '../../components/landing/AboutSection.vue';
 
 export default {
   components: {
-    TopBar,
-    ActionBar,
     LandingMap,
     WelcomeBox,
     InfoBox,
