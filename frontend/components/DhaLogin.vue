@@ -9,7 +9,9 @@
         ref="loginForm"
         :rules="rules"
         :model="{ username, password }"
-        status-icon>
+        status-icon
+        @submit.native.prevent="loginLocal"
+      >
         <fieldset>
           <el-form-item
             label="E-mail"
@@ -49,7 +51,8 @@
             <el-button
               type="primary"
               size="medium"
-              @click="loginLocal">
+              native-type="submit"
+            >
               Log in
             </el-button>
           </el-col>
@@ -72,12 +75,12 @@ export default {
       password: '',
       rules: {
         username: [
-          { required: true, message: 'This field is required' },
-          { type: 'email', message: 'Has to be a valid email address' },
+          { required: true, message: 'This field is required', trigger: 'blur' },
+          { type: 'email', message: 'Has to be a valid email address', trigger: 'blur' },
           { validator: this.validatorGenerator('username') }
         ],
         password: [
-          { required: true, message: 'This field is required' },
+          { required: true, message: 'This field is required', trigger: 'blur' },
           { validator: this.validatorGenerator('password') }
         ]
       }
