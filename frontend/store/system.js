@@ -33,6 +33,10 @@ export const getters = {
     return state.languages.map(l => ({ ...l, flag: `/static/flags/${l.flag}` }));
   },
 
+  getLanguageDetails: (state, getters) => code => {
+    return getters.getLanguages.find(l => l.code === code);
+  },
+
   getSearchFilters: state => {
     return [...state.search_filters];
   },
