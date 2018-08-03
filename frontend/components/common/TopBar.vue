@@ -1,7 +1,7 @@
 <template>
-  <!-- TODO -->
-  <!-- Add toggle class '.TopBarMin' if user scrolled down more than 180px -->
-  <div class="TopBar">
+  <div
+    v-scroll-class:TopBarMin="180"
+    class="TopBar">
     <el-row
       type="flex"
       justify="space-between"
@@ -69,7 +69,12 @@
 
 <script>
 import LanguageSelector from './LanguageSelector';
+import VueScrollClass from 'vue-scroll-class';
+
 export default {
+  directives: {
+    'scroll-class': VueScrollClass
+  },
   components: {
     LanguageSelector
   },
