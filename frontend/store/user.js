@@ -16,8 +16,8 @@ export const getters = {
     if (state.profile) {
       return { ...state.profile };
     }
+    return null;
   },
-
   getUser: state => state.user
 };
 
