@@ -8530,6 +8530,10 @@ vue-router@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.1.tgz#d9b05ad9c7420ba0f626d6500d693e60092cc1e9"
 
+vue-scroll-class@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/vue-scroll-class/-/vue-scroll-class-1.2.3.tgz#cbacca002555ae6debf672e148d53cca00786cc6"
+
 vue-server-renderer@^2.5.13:
   version "2.5.16"
   resolved "https://registry.yarnpkg.com/vue-server-renderer/-/vue-server-renderer-2.5.16.tgz#279ef8e37e502a0de3a9ae30758cc04a472eaac0"
