@@ -243,6 +243,7 @@ class UserProfileTests(APITestCase):
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('id'), user_profile_id)
+        self.assertEqual(response.json().get('email'), "test_user2@gmail.com")
         self.assertIn('language', response.json())
 
     def test_update_user_profile(self):
