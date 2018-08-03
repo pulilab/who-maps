@@ -330,7 +330,10 @@ export const getCurrentPublishedProjectForEditing = state => {
 
 export const getCurrentEdits = state => {
   const edited = state.projects.editedProject;
-  return { ...edited, forceSetCoverage: !!edited.coverageType };
+  if (edited) {
+    return { ...edited, forceSetCoverage: !!edited.coverageType };
+  }
+  return {};
 };
 
 export const getCurrentDraftProjectForEditing = state => {
