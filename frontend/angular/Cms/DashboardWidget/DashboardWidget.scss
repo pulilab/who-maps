@@ -5,7 +5,7 @@ cms-dashboard-widget {
 }
 
 .cms-widget-wrapper {
-  background-color: $color-gray-lightest;
+  background-color: $color-white;
 
   .cms-widget-header {
     width: 100%;
@@ -144,12 +144,11 @@ cms-dashboard-widget {
 
   .layout-wrap {
     width: 100%;
-    padding: 0 5px;
+    padding: 0;
   }
 
   .empty-card {
     background-color: #fff;
-    margin-top: 5px;
     padding: 12px;
     min-height: 50px;
     font-size: 12px;
@@ -157,7 +156,6 @@ cms-dashboard-widget {
   }
 
   .category-header {
-    margin-bottom: 5px;
     min-height: 50px;
     background-color: $color-white;
     background-repeat: no-repeat;
@@ -189,9 +187,7 @@ cms-dashboard-widget {
   }
 
   .md-button.goto-cms {
-    margin: 20px auto 10px;
-    padding-left: 12px;
-    padding-right: 12px;
+    margin: 10px auto;
 
     // Multi-lang
     @include button-ml($width: 300px);
@@ -200,7 +196,7 @@ cms-dashboard-widget {
 
   // Resize cms-list-element
   .cms-list-element {
-    margin: 5px 0;
+    margin: 0 0 10px;
 
     .cover-img,
     .avatar-img {

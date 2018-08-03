@@ -11,7 +11,6 @@
   .dashrow {
     &.dashrow-upper {
       height: 505px;
-      margin-bottom: 10px;
     }
 
     &.dashrow-lower {
@@ -41,7 +40,7 @@
         padding-right: 145px;
 
         a.md-button {
-          background-color: $color-primary!important;
+          background-color: $color-primary !important;
           padding-top: 4px;
           padding-left: 25px;
           padding-right: 25px;
@@ -64,10 +63,10 @@
       .dash-subhead {
         display: block;
         text-align: center;
-        margin: 15px 0 25px;
-        font-size: 14px;
-        font-weight: 500;
-        color: $text-primary;
+        margin: 20px 0;
+        font-size: 11px;
+        font-weight: 700;
+        color: $text-secondary;
         @include text-truncate();
       }
 
@@ -75,7 +74,28 @@
         // justify-content: space-between;
         cursor: default;
 
-        .shorter, .longer {
+        .dash-trendicon {
+          margin: 12px auto 4px;
+          color: $text-disabled;
+        }
+
+        .dash-stat-nr {
+          font-size: 24px;
+          color: $text-primary;
+          font-weight: 700;
+          text-align: center;
+          transform: translateX(3px);
+        }
+
+        .dash-stat-label {
+          margin-bottom: 10px;
+          font-size: 12px;
+          color: $text-secondary;
+          text-align: center;
+        }
+
+        .shorter,
+        .longer {
           margin-bottom: 10px;
         }
 
@@ -86,15 +106,14 @@
             // height: 137px;
             padding: 10px 8px;
             border-top: 1px solid $color-gray-lighter;
-            background-color: $color-gray-lightest;
-            border-bottom-right-radius: 3px;
-            border-bottom-left-radius: 3px;
+            background-color: $color-lightblue;
 
             .desc {
+              margin-bottom: 10px;
               font-size: 10px;
               line-height: 12px;
               color: $color-gray;
-              margin-bottom: 10px;
+              text-align: center;
 
               // Multi-lang
               overflow: hidden;
@@ -119,16 +138,16 @@
 
         .snapshot-button {
           height: 60px;
-          padding: 5px;
+          padding: 6px 5px 10px;
           margin: 0;
           min-width: 50px;
-          background-color: $color-green;
+          background-color: $color-accent;
 
           .text {
             color: $color-white;
-            font-size: 12px;
-            line-height: 20px;
-            font-weight: 500;
+            font-size: 14px;
+            line-height: 16px;
+            font-weight: 700;
             display: block;
 
             // Multi-lang
@@ -176,10 +195,9 @@
                 height: 40px;
 
                 md-tab-item {
-                  // color: $text-secondary;
-                  padding-top: 8px;
-                  padding-bottom: 8px;
-                  font-size: 12px;
+                  padding: 8px 16px;
+                  font-size: 11px;
+                  font-weight: 700;
 
                   // Multi-lang
                   max-width: 240px;
@@ -187,7 +205,7 @@
                   //
 
                   &.md-active {
-                    // color: $color-primary;
+                    color: $color-primary;
                   }
                 }
 
@@ -203,9 +221,6 @@
               .dash-cardcontent {
                 height: 413px;
                 padding: 10px;
-                border-bottom-right-radius: 5px;
-                border-bottom-left-radius: 5px;
-                background-color: $color-gray-lightest;
 
                 &.infoview {
                   background-color: initial;
@@ -223,13 +238,13 @@
 
                   .label {
                     font-size: 12px;
-                    font-weight: 500;
+                    font-weight: 700;
                     color: $text-secondary;
                   }
 
                   .data {
                     font-size: 14px;
-                    font-weight: 500;
+                    font-weight: 700;
                     color: $text-primary;
                   }
 
@@ -268,7 +283,7 @@
                       display: inline;
                       height: 10px;
                       width: auto;
-                      transform: translate(0, 2px);
+                      transform: translate(0, 1px);
                     }
 
                     md-icon {
@@ -276,7 +291,7 @@
                       font-size: 10px;
                       height: 10px;
                       width: 10px;
-                      transform: translate(8px, 6px);
+                      transform: translate(10px, 5px);
 
                       &.dash-overw-toolkit-ball1 {
                         color: $color-red;
@@ -292,7 +307,7 @@
                     }
 
                     span {
-                      font-size: 10px;
+                      font-size: 11px;
                       text-align: center;
                       color: $text-secondary;
                     }
@@ -301,10 +316,6 @@
               }
             }
           }
-        }
-
-        .dash-cardcontent {
-          background-color: $color-gray-lightest;
         }
       }
 
@@ -329,7 +340,7 @@
             span {
               font-size: 14px;
               color: $text-primary;
-              font-weight: 500;
+              font-weight: 700;
               margin: 10px 0;
             }
 
@@ -367,7 +378,7 @@
             margin-top: 10px;
             margin-bottom: 5px;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 700;
           }
 
           a {
@@ -390,7 +401,7 @@
 
         h3 {
           font-size: 12px;
-          font-weight: 500;
+          font-weight: 700;
           margin: 20px 0;
           color: $text-primary;
           text-transform: uppercase;
@@ -418,7 +429,7 @@
             h4 {
               display: block;
               font-size: 14px;
-              font-weight: 500;
+              font-weight: 700;
               color: $color-primary;
               @include text-truncate();
             }
@@ -452,12 +463,12 @@
           margin-top: 35px;
           margin-left: 20px;
           margin-bottom: 0;
-          color: #212121;
+          color: $text-primary;
           font-size: 14px;
-          font-weight: 500;
+          font-weight: 700;
 
           md-icon {
-            color: #212121;
+            color: $text-primary;
             height: 20px;
             width: 20px;
             margin-right: 5px;
@@ -487,7 +498,7 @@
 
           a.md-button {
             background-color: $color-primary;
-            
+
             span {
               color: white;
             }
@@ -506,11 +517,10 @@
           overflow: hidden;
         }
 
-        .countrychart-tooltip md-tabs-content-wrapper{
+        .countrychart-tooltip md-tabs-content-wrapper {
           top: 0px;
         }
       }
     }
   }
-
 }
