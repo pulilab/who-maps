@@ -84,7 +84,7 @@
         <el-col>
           <el-button
             icon="el-icon-close"
-            @click="clearSearch"
+            @click.prevent.stop="clearSearch"
           />
         </el-col>
       </el-row>
