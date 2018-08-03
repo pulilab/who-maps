@@ -56,6 +56,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='user.email')
     member = serializers.SerializerMethodField()
     viewer = serializers.SerializerMethodField()
     organisation_name = serializers.SerializerMethodField()
