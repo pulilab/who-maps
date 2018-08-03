@@ -39,7 +39,7 @@
           </el-col>
         </el-row>
 
-        <el-row v-show="!hasResults || !showList">
+        <el-row v-show="!hasResults">
           <el-col >
             <p class="TipText">
               Short tip text about advenacd seacrh lorem ipsum dolor sit ametncidunt ut labore et dolore magna aliqua.
@@ -48,7 +48,7 @@
         </el-row>
         <el-row
           v-for="project in results"
-          v-show="hasResults && showList"
+          v-show="hasResults"
           :key="project"
         >
           <el-col>
@@ -107,8 +107,7 @@ export default {
     return {
       shown: false,
       searchString: null,
-      results: [],
-      showList: false
+      results: []
     };
   },
   computed: {
@@ -117,12 +116,6 @@ export default {
     }
   },
   methods: {
-    hideSearchHandler () {
-      this.showList = false;
-    },
-    afterEnterHandler () {
-      this.showList = true;
-    },
     clearSearch () {
       this.searchString = null;
       this.results = [];
