@@ -50,7 +50,6 @@ class CountryAdminSerializer(serializers.ModelSerializer):
             "users",
             "partner_logos",
             "project_approval",
-            "region",
             "map_data",
             "map_activated_on",
         )

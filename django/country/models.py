@@ -1,22 +1,12 @@
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 
 from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel
 from user.models import UserProfile
 
 
 class Country(NameByIDMixin, ExtendedMultilingualModel):
-    REGIONS = [
-        (0, _('African Region')),
-        (1, _('Region of the Americas')),
-        (2, _('South-East Asia Region')),
-        (3, _('European Region')),
-        (4, _('Eastern Mediterranean Region')),
-        (5, _('Western Pacific Region'))
-    ]
-
     name = models.CharField(max_length=255, unique=True)
     code = models.CharField(max_length=4, default="NULL", help_text="ISO3166-1 country code", unique=True)
     logo = models.ImageField(blank=True, null=True)
@@ -28,7 +18,6 @@ class Country(NameByIDMixin, ExtendedMultilingualModel):
                                    related_name='country_admins',
                                    limit_choices_to={'user__groups__name': 'Country Admin'})
     project_approval = models.BooleanField(default=False)
-    region = models.IntegerField(choices=REGIONS, null=True, blank=True)
     map_data = JSONField(default=dict(), blank=True)
     map_activated_on = models.DateTimeField(blank=True, null=True,
                                             help_text="WARNING: this field is for developers only")

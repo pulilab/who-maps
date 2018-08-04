@@ -110,15 +110,6 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()["cover_text"], data["cover_text"])
         self.assertEqual(response.json()["footer_text"], data["footer_text"])
 
-    def test_country_admin_update_region(self):
-        url = reverse("country-admin-detail", kwargs={"pk": self.country.id})
-        data = {
-            "region": Country.REGIONS[0][0]
-        }
-        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["region"], Country.REGIONS[0][0])
-
     def test_country_admin_update_images(self):
         url = reverse("country-admin-detail", kwargs={"pk": self.country.id})
         cover = get_temp_image("cover")
