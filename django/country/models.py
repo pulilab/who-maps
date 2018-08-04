@@ -6,18 +6,24 @@ from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel
 from user.models import UserProfile
 
 
-class Country(NameByIDMixin, ExtendedMultilingualModel):
+class AbstractCountry(NameByIDMixin, ExtendedMultilingualModel):
     name = models.CharField(max_length=255, unique=True)
-    code = models.CharField(max_length=4, default="NULL", help_text="ISO3166-1 country code", unique=True)
     logo = models.ImageField(blank=True, null=True)
     cover = models.ImageField(blank=True, null=True)
     cover_text = models.TextField(blank=True, null=True)
     footer_title = models.CharField(max_length=128, blank=True, null=True)
     footer_text = models.CharField(max_length=128, blank=True, null=True)
+    project_approval = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
+class Country(AbstractCountry):
+    code = models.CharField(max_length=4, default="NULL", help_text="ISO3166-1 country code", unique=True)
     users = models.ManyToManyField(UserProfile, help_text="User who can update the country", blank=True,
                                    related_name='country_admins',
                                    limit_choices_to={'user__groups__name': 'Country Admin'})
-    project_approval = models.BooleanField(default=False)
     map_data = JSONField(default=dict(), blank=True)
     map_activated_on = models.DateTimeField(blank=True, null=True,
                                             help_text="WARNING: this field is for developers only")
@@ -30,8 +36,31 @@ class Country(NameByIDMixin, ExtendedMultilingualModel):
         return self.name
 
 
+class Donor(AbstractCountry):
+    # TODO change limit_choices_to after permission system upgrade
+    users = models.ManyToManyField(UserProfile, help_text="User who can update the donor", blank=True,
+                                   related_name='donor_admins',
+                                   limit_choices_to={'user__groups__name': 'Country Admin'})
+
+    class Meta:
+        verbose_name_plural = "Donors"
+        ordering = ('id',)
+
+    def __str__(self):
+        return self.name
+
+
 class PartnerLogo(ExtendedModel):
     country = models.ForeignKey(Country, related_name="partner_logos", on_delete=models.CASCADE)
+    image = models.ImageField(null=True)
+
+    @property
+    def image_url(self):
+        return self.image.url if self.image else None
+
+
+class DonorPartnerLogo(ExtendedModel):
+    donor = models.ForeignKey(Donor, related_name="partner_logos", on_delete=models.CASCADE)
     image = models.ImageField(null=True)
 
     @property

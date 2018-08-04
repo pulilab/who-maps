@@ -16,7 +16,7 @@ from rest_framework.test import APITestCase
 
 from core.tests import get_temp_image
 from country.admin import CountryAdmin
-from country.models import Country, PartnerLogo, CountryField
+from country.models import Country, PartnerLogo, CountryField, Donor, DonorPartnerLogo
 from project.models import Project
 from user.models import UserProfile
 from django.utils.six import StringIO
@@ -758,6 +758,141 @@ class CountryTests(APITestCase):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[-1]['map_data'], self.map_data['map_data'])
+
+
+class DonorTests(APITestCase):
+    def setUp(self):
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {"email": "test_user@gmail.com", "password1": "123456hetNYOLC", "password2": "123456hetNYOLC"}
+        response = self.client.post(url, data)
+
+        # Validate the account.
+        key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
+        url = reverse("rest_verify_email")
+        data = {
+            "key": key,
+        }
+        response = self.client.post(url, data)
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {"username": "test_user@gmail.com", "password": "123456hetNYOLC"}
+        response = self.client.post(url, data)
+        self.test_user = response.json()
+        self.test_user_key = response.json().get("token")
+        self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
+
+        self.donor = Donor.objects.create(name="donor1")
+        self.donor.name_en = 'Donor Group'
+        self.donor.name_fr = 'Doner Grup'
+        self.donor.save()
+        DonorPartnerLogo.objects.create(donor=self.donor)
+
+    def test_donor_model(self):
+        with override('en'):
+            self.assertEqual(self.donor.name, 'Donor Group')
+
+        with override('fr'):
+            self.assertEqual(self.donor.name, 'Doner Grup')
+
+    def test_donor_model_str(self):
+        self.assertEqual(str(self.donor), 'Donor Group')
+
+    def test_donor_admin_retrieve(self):
+        url = reverse("donor-admin-detail", kwargs={"pk": self.donor.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['name'], 'Donor Group')
+        response_keys = response.json().keys()
+        self.assertIn("name", response_keys)
+        self.assertIn("logo", response_keys)
+        self.assertIn("cover", response_keys)
+        self.assertIn("cover_text", response_keys)
+        self.assertIn("footer_text", response_keys)
+        self.assertIn("users", response_keys)
+
+    def test_donor_admin_update(self):
+        url = reverse("donor-admin-detail", kwargs={"pk": self.donor.id})
+        data = {
+            "cover_text": "blah",
+            "footer_text": "foo"
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["cover_text"], data["cover_text"])
+        self.assertEqual(response.json()["footer_text"], data["footer_text"])
+
+    def test_donor_admin_update_images(self):
+        url = reverse("donor-admin-detail", kwargs={"pk": self.donor.id})
+        cover = get_temp_image("cover")
+        logo = get_temp_image("logo")
+        data = {
+            "cover": cover,
+            "logo": logo
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+
+    def test_donor_admin_update_users(self):
+        url = reverse("donor-admin-detail", kwargs={"pk": self.donor.id})
+        data = {
+            "users": [self.test_user['user_profile_id']]
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['users'], [self.test_user['user_profile_id']])
+
+    def test_donor_partner_logos_create(self):
+        url = reverse("donor-partner-logo-list")
+        logo = get_temp_image("logo")
+        data = {
+            "donor": self.donor.id,
+            "image": logo
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+    def test_donor_partner_logos_list(self):
+        url = reverse("donor-partner-logo-list")
+        logo1 = get_temp_image("donorlogo1")
+        data = {
+            "donor": self.donor.id,
+            "image": logo1
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+        logo2 = get_temp_image("donorlogo2")
+        data = {
+            "donor": self.donor.id,
+            "image": logo2
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+        url = reverse("donor-admin-detail", kwargs={"pk": self.donor.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['partner_logos']), 3)
+        self.assertEqual(response.json()['partner_logos'][1]['donor'], self.donor.id)
+        self.assertEqual(response.json()['partner_logos'][1]['image'], 'http://testserver/media/donorlogo1.png')
+        self.assertEqual(response.json()['partner_logos'][2]['donor'], self.donor.id)
+        self.assertEqual(response.json()['partner_logos'][2]['image'], 'http://testserver/media/donorlogo2.png')
+
+    def test_donor_partner_logos_delete(self):
+        url = reverse("donor-partner-logo-list")
+        logo = get_temp_image("logo")
+        data = {
+            "donor": self.donor.id,
+            "image": logo
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+        url = reverse("donor-partner-logo-detail", kwargs={"pk": response.json()["id"]})
+        response = self.test_user_client.delete(url)
+        self.assertEqual(response.status_code, 204)
 
 
 class MockRequest:

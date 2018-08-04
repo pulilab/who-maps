@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.utils.dateformat import format
 
-from .models import Country, PartnerLogo, CountryField, MapFile
+from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, CountryField, MapFile
 
 
 class CountryListSerializer(serializers.ModelSerializer):
@@ -33,6 +33,13 @@ class PartnerLogoSerializer(serializers.ModelSerializer):
         read_only_fields = ("image_url",)
 
 
+class DonorPartnerLogoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DonorPartnerLogo
+        fields = ("id", "donor", "image", "image_url",)
+        read_only_fields = ("image_url",)
+
+
 class CountryAdminSerializer(serializers.ModelSerializer):
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
 
@@ -54,6 +61,26 @@ class CountryAdminSerializer(serializers.ModelSerializer):
             "map_activated_on",
         )
         read_only_fields = ("name", "code", "project_approval", "map_data", "map_activated_on")
+
+
+class DonorAdminSerializer(serializers.ModelSerializer):
+    partner_logos = DonorPartnerLogoSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Donor
+        fields = (
+            "id",
+            "name",
+            "logo",
+            "cover",
+            "cover_text",
+            "footer_title",
+            "footer_text",
+            "users",
+            "partner_logos",
+            "project_approval",
+        )
+        read_only_fields = ("name", "project_approval",)
 
 
 class LandingPageSerializer(serializers.ModelSerializer):

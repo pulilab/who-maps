@@ -1,13 +1,16 @@
 from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
-from country.views import RetrieveLandingPageViewSet, CountryMapDataViewSet, CountryAdminViewSet, PartnerLogoViewSet
+from country.views import RetrieveLandingPageViewSet, CountryMapDataViewSet, CountryAdminViewSet, PartnerLogoViewSet, \
+    DonorAdminViewSet, DonorPartnerLogoViewSet
 from . import views
 
 router = DefaultRouter()
 router.register(r'landing', RetrieveLandingPageViewSet)
 router.register(r'country-map-data', CountryMapDataViewSet)
 router.register(r'country-admin', CountryAdminViewSet, base_name='country-admin')
+router.register(r'donor-admin', DonorAdminViewSet, base_name='donor-admin')
 router.register(r'partner-logos', PartnerLogoViewSet, base_name='partner-logo')
+router.register(r'donor-partner-logos', DonorPartnerLogoViewSet, base_name='donor-partner-logo')
 urlpatterns = router.urls
 
 urlpatterns += [

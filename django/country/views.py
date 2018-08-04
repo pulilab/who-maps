@@ -4,9 +4,10 @@ from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
-from .models import Country, CountryField, PartnerLogo
+from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo
 from .serializers import CountryListSerializer, LandingPageSerializer, CountryFieldsListSerializer, \
-    CountryFieldsWriteSerializer, CountryMapDataSerializer, CountryAdminSerializer, PartnerLogoSerializer
+    CountryFieldsWriteSerializer, CountryMapDataSerializer, CountryAdminSerializer, PartnerLogoSerializer, \
+    DonorAdminSerializer, DonorPartnerLogoSerializer
 
 
 class CountryListAPIView(generics.ListAPIView):
@@ -20,10 +21,23 @@ class CountryAdminViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, vi
     parser_classes = (MultiPartParser, FormParser)
 
 
+class DonorAdminViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    queryset = Donor.objects.all()
+    serializer_class = DonorAdminSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+
 class PartnerLogoViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin,
                          viewsets.GenericViewSet):
     queryset = PartnerLogo.objects.all()
     serializer_class = PartnerLogoSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class DonorPartnerLogoViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin,
+                              viewsets.GenericViewSet):
+    queryset = DonorPartnerLogo.objects.all()
+    serializer_class = DonorPartnerLogoSerializer
     parser_classes = (MultiPartParser, FormParser)
 
 
