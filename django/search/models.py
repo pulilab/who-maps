@@ -63,6 +63,8 @@ class ProjectSearch(ExtendedModel):
     )
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
+    country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
+    organisation = models.ForeignKey(Organisation, null=True, on_delete=models.SET_NULL)
     @classmethod
     def search(cls, **kwargs):
         """
