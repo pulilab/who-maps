@@ -239,7 +239,7 @@ class HealthCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
         verbose_name_plural = 'Health Categories'
 
 
-class HealthFocusArea(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+class HealthFocusArea(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas', on_delete=models.CASCADE)
 
     def __str__(self):
