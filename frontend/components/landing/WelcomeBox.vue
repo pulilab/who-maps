@@ -1,11 +1,11 @@
 <template>
   <div class="WelcomeBox-holder">
     <div
-      v-show="visible"
+      v-show="showWelcomeBox"
       class="WelcomeBox">
 
       <h2>Welcome!</h2>
-      <h6>{{ $store.state.system.landing_page_defaults.cover_text }}</h6>
+      <h6>{{ landingPageDefaults.cover_text }}</h6>
 
       <el-button
         icon="el-icon-close"
@@ -17,11 +17,21 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   data () {
     return {
       visible: true
     };
+  },
+  computed: {
+    ...mapGetters({
+      landingPageDefaults: 'system/getLandingPageDefaults',
+      activeCountry: 'landing/getActiveCountry'
+    }),
+    showWelcomeBox () {
+      return this.visible && !this.activeCountry;
+    }
   },
   methods: {
     closeWelcomeBox () {
