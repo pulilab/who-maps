@@ -16,3 +16,10 @@ def search_project(request):
         return Response(results)
     else:
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SearchView(generics.ListAPIView):
+    queryset = ProjectSearch.objects.all()
+    serializer_class = SearchSerializer
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('project_name', 'contact_name')
