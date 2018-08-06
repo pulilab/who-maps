@@ -19,6 +19,13 @@ class GetObjectOrNoneMixin(object):
             return None
 
 
+class NameByIDMixin:
+    @classmethod
+    def get_name_by_id(cls, id=None):
+        if not id:
+            return ""
+
+        obj = cls.objects.get_object_or_none(id=id)
 class GetObjectOrNoneQueryset(GetObjectOrNoneMixin, QuerySet):
     pass
 
@@ -47,16 +54,6 @@ class ExtendedMultilingualModel(ExtendedModel):
 
     class Meta:
         abstract = True
-
-
-class NameByIDMixin(object):
-    @classmethod
-    def get_name_by_id(cls, id=None):
-        if not id:
-            return ""
-
-        obj = cls.objects.get_object_or_none(id=id)
-        return obj.name if obj else ""
 
 
 class ActiveQuerySet(GetObjectOrNoneMixin, QuerySet):
