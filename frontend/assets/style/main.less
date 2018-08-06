@@ -62,7 +62,9 @@ body {
 // Icon
 
 i[class*="el-icon-"] {
-  font-weight: 700;
+  &.bold {
+    font-weight: 700;
+  }
 }
 
 // Card
@@ -91,7 +93,7 @@ i[class*="el-icon-"] {
   .cardActions {
     padding: 12px;
     border-top: 1px solid @colorGrayLight;
-    background-color: @colorGrayLightest;
+    background-color: @colorBrandBlueLight;
 
     button, .el-button {
       margin: 0;
@@ -132,14 +134,21 @@ fieldset {
 }
 
 .el-form {
-  .el-form-item__label {
-    color: @colorTextSecondary;
-  }
+  .el-form-item {
+    &.is-required {
+      .el-form-item__label {
+        &::before {
+          display: none;
+        }
+        &::after {
+          content: '*';
+          margin-left: 4px;
+          color: @colorDanger;
+        }
+      }
+    }
 
-  .el-input {
-    font-family: Arial, sans-serif;
-
-    .el-input__inner {
+    .el-form-item__label {
       font-weight: 700;
     }
   }
