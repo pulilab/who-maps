@@ -143,6 +143,10 @@ class ProjectSearch(ExtendedModel):
             self.hfa_categories = list(set(filter(None.__ne__,
                                               [HealthFocusArea.get_parent_id(int(id), 'health_category') for
                                                id in project.data.get("health_focus_areas", [])])))
+
+            self.save()
+
+
 @receiver(post_save, sender=Project)
 def create_search_objects(sender, instance, created, **kwargs):
     if created:
