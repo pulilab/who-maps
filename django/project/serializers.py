@@ -84,9 +84,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
     coverage = CoverageSerializer(many=True, required=False, allow_null=True)
     coverage_second_level = CoverageSerializer(many=True, required=False, allow_null=True)
     national_level_deployment = NDPSerializer(required=False, allow_null=True)
-    government_investor = serializers.ChoiceField(choices=[(0, 'No, they have not yet contributed'), (
-        1, 'Yes, they are contributing in-kind people or time'), (
-            2, 'Yes, there is a financial contribution through MOH budget')])
+    government_investor = serializers.ChoiceField(choices=INVESTOR_CHOICES)
     implementing_partners = serializers.ListField(
         child=serializers.CharField(max_length=64), max_length=50, min_length=0, required=False)
     donors = serializers.ListField(child=serializers.CharField(max_length=64), max_length=32)
