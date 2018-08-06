@@ -1,6 +1,6 @@
 <template>
-  <div class="ProjectDraftView">
-    Project DRAFT VIEW
+  <div class="ProjectEditDraft">
+    DRAFT EDIT
   </div>
 </template>
 
