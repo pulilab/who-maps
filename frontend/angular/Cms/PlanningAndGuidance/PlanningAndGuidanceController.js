@@ -179,7 +179,7 @@ class PlanningAndGuidanceController {
   }
 
   static factory () {
-    require('./PlanningAndGuidance.scss');
+    require('../cms.scss');
     function planningAndGuidance ($scope, $state, $ngRedux) {
       return new PlanningAndGuidanceController($scope, $state, $ngRedux);
     }

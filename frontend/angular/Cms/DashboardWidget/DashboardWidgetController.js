@@ -16,15 +16,15 @@ class DashboardWidgetController {
     this.resources = [];
     this.experiences = [];
     this.watchers();
-    this.unsubscribe = this.$ngRedux.connect(this.mapState, CmsModule)(this);
+    this.unsubscribe = this.$ngRedux.connect(this.mapState, actions)(this);
   }
 
   mapState (state) {
-    const domains = SystemModule.getDomains(state);
+    const domains = window.$nuxt.$store.getters['system/getDomains'];
     const currentDomain = domains[Math.floor(Math.random() * domains.length)];
     return {
-      axes: CmsModule.getters.getDomainStructureForCms(state),
-      all: CmsModule.getters.getCmsData(state),
+      axes: getters.getDomainStructureForCms(state),
+      all: getters.getCmsData(state),
       domains,
       currentDomain
     };
