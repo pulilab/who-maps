@@ -7,7 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from core.models import ExtendedModel
-from project.models import Project, HealthFocusArea, TechnologyPlatform
+from project.models import Project, HealthFocusArea, TechnologyPlatform, HSCChallenge, DigitalStrategy
 from country.models import Country
 from user.models import Organisation
 
