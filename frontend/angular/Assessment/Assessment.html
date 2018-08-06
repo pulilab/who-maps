@@ -1,4 +1,4 @@
-<div class="assesment-container" layout="column">
+<div class="assessment-container" layout="column">
 
   <div layout="row" class="dashrow dashrow-upper">
 
@@ -19,12 +19,9 @@
           <translate>PROJECT DETAILS</translate>
         </div>
 
-        <md-card md-whiteframe="2" flex>
-
-          <md-tabs md-border-bottom md-dynamic-height>
-
+        <md-card flex>
+          <md-tabs md-border-bottom md-dynamic-height md-no-pagination md-center-tabs md-no-ink>
             <md-tab label="{{'overview' | translate}}">
-
               <div class="dash-cardcontent" layout="column" ng-if="!vm.viewMode">
 
                 <axis flex ng-repeat="axis in vm.rawToolkitData" axis-index="$index"></axis>
@@ -117,9 +114,7 @@
                   </div>
                   <div class="data data2">{{vm.projectData.goals_to_scale}}</div>
                 </div>
-
               </div>
-
             </md-tab>
 
             <md-tab label="{{'axis' | translate}}" ng-if="!vm.viewMode">
@@ -193,8 +188,6 @@
 
             <md-tab label="{{'interoperability' | translate}}">
               <md-content class="dash-res">
-
-
                 <h3>
                   <translate>Health Information System Links</translate>
                 </h3>
@@ -229,23 +222,18 @@
                     <h4>{{standard.name}}</h4>
                   </div>
                 </md-card>
-
-
               </md-content>
             </md-tab>
-
           </md-tabs>
-
         </md-card>
       </div>
-
     </div>
 
     <div flex="40" class="dashsection dash-cardholder" layout="column">
       <div class="dash-subhead">
         <translate>PROJECT PERFORMANCE</translate>
       </div>
-      <md-card md-whiteframe="2" flex class="dash-perf">
+      <md-card flex class="dash-perf">
 
         <div flex class="emptyright" layout="column" ng-show="vm.showEmpty">
           <p class="afteri">
@@ -259,7 +247,7 @@
           </p>
         </div>
 
-        <md-tabs ng-if="!vm.showEmpty && vm.profile.name" md-border-bottom class="perf-tab">
+        <md-tabs ng-if="!vm.showEmpty && vm.profile.name" md-border-bottom md-no-pagination md-center-tabs md-no-ink class="perf-tab">
 
           <md-tab label="{{'geographical view' | translate}}">
             <countrymap

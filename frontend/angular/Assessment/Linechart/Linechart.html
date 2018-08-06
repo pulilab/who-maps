@@ -32,7 +32,8 @@
         aria-label="select axis to view in the chart"
         class="axischooser"
         ng-model="vm.chartConfig.activeAxis"
-        ng-change="vm.axisChange(vm.chartConfig.activeAxis)">
+        ng-change="vm.axisChange(vm.chartConfig.activeAxis)"
+        md-container-class="md-small">
 
         <md-option
           ng-repeat="label in vm.chartConfig.labels" value="{{label}}">

@@ -1,12 +1,10 @@
 @import '../../variables';
 
 .relative {
-
   position: relative;
   height: 100%;
 
   .countrychart-tooltip {
-
     position: absolute;
     top: 10px;
     left: 10px;
@@ -15,17 +13,21 @@
     line-height: 16px;
     white-space: nowrap;
     min-width: 160px;
+    background-color: $color-white;
+    box-shadow: 0 6px 12px 0 rgba(0,0,0,0.2);
+    border-radius: 2px;
+    opacity: .9;
 
     .colorednr {
       color: white;
-      min-width: 42px;
-      padding-left: 2px;
-      padding-right: 2px;
+      // min-width: 42px;
+      padding: 0 5px;
       margin-left: 8px !important;
-      font-weight: 500;
+      font-weight: 700;
       text-align: center;
       border-radius: 3px;
     }
+
     .color0 { background-color: #7CB342; }
     .color1 { background-color: #039BE5; }
     .color2 { background-color: #FB8C00; }
@@ -37,17 +39,16 @@
     .color8 { background-color: #C0CA33; }
 
     .countrychart-tooltip-header {
-
-      background-color: white;
       padding: 10px;
-      border-bottom: 1px solid #BDBDBD;
+      background-color: $color-white;
+      border-bottom: 1px solid $color-gray-lighter;
+      font-weight: 700;
 
       p {
         margin: 0;
       }
 
       .tooltip-flag {
-
         height: 16px;
         width: auto;
         float: right;
@@ -59,6 +60,10 @@
       display: none;
     }
 
+    md-tabs {
+      border-radius: 0;
+    }
+
     md-tabs-wrapper {
       border: none;
       height: 34px;
@@ -67,23 +72,24 @@
     md-tab-item {
       height: 34px;
       background-color: #E0E0E0;
-      border-bottom: 1px solid #D4D4D4;
+      border-bottom: 1px solid $color-gray-lighter;
       padding: 0;
-      padding-bottom: 4px!important;
-      padding-top: 4px!important;
+      padding-bottom: 4px !important;
+      padding-top: 4px !important;
 
       span {
         color: $color-gray;
         text-transform: none;
-        font-weight: 500;
+        font-weight: 700;
         font-size: 12px;
       }
 
       &.md-active {
-        background-color: white;
+        background-color: $color-white;
         border: none;
+
         span {
-          color: $text-primary;
+          color: $color-primary;
         }
       }
     }
@@ -105,15 +111,16 @@
       }
 
       &.main2 {
-        border-top: 1px solid #D4D4D4;
+        border-top: 1px solid $color-gray-lighter;
       }
 
       .activename {
+        font-weight: 700;
         color: $color-primary;
       }
 
       .lh {
-        margin: 5px 0;
+        margin: 4px 0;
         line-height: 20px;
 
         &.no-projects {
@@ -135,7 +142,7 @@
         .projectname {
           color: $color-primary;
           font-size: 14px;
-          font-weight: 500;
+          font-weight: 700;
         }
 
         .projectorg {
@@ -182,7 +189,6 @@
           background-color: #53A0CE;
         }
       }
-
     }
 
     .cap {
@@ -263,10 +269,7 @@
 }
 
 .countrymapcontainer {
-  background-color: $color-gray-lightest;
   overflow: hidden;
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
 
   .countrymap {
     shape-rendering: optimizeSpeed;

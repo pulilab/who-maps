@@ -79,12 +79,14 @@ planning-and-guidance {
         > div {
           display: none;
           padding-left: 40px;
+
           > div {
             position: relative;
             &:last-child {
               height: 180px;
               background-repeat: no-repeat;
             }
+
             p {
               position: relative;
               top: -10px;
@@ -245,5 +247,4 @@ planning-and-guidance {
       }
     }
   }
-
 }

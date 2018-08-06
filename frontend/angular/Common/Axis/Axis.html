@@ -1,4 +1,4 @@
-<md-card md-whiteframe="2" layout="row" ng-class="{'showCurrent': vm.showCurrent}">
+<md-card layout="row" ng-class="{'showCurrent': vm.showCurrent}" class="md-card-noborder">
 
     <!-- Colored Background & axis logo -->
     <div
@@ -13,7 +13,6 @@
     </div>
 
     <div layout="row" class="axis-domains">
-
         <!-- Axis column -->
         <div
             flex="20"
@@ -27,29 +26,21 @@
                 </div>
 
                 <div class="scores" layout="row" flex="40">
-
                     <div flex="45" layout="row" layout-align="start center">
-
                         <span flex="nogrow" layout-padding class="label ps">P</span>
-
                         <div flex="grow" class="line" layout="row">
                             <div flex="nogrow" ng-class="vm.axisCompletionClass"></div>
                         </div>
-
                     </div>
 
                     <div flex="45" layout="row" layout-align="start center">
-
                         <span flex="nogrow" layout-padding class="label ps" >S</span>
                         <div flex="grow" class="line" layout="row" >
                             <div flex="nogrow" ng-class="vm.axisScoreClass"></div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
-
         </div>
 
         <!-- Domain columns -->
@@ -62,31 +53,18 @@
             ng-class="{'gotdata': domain.domain_sum > 0, 'nodata': domain.domain_sum === 0, 'active': vm.setDomainActive(domain.index)}">
 
             <div class="vert-divider" layout="column">
-
                 <div class="md-block label" flex="60">
                     <span class="cap">{{domain.name}}</span>
                 </div>
-
                 <div class="scores" layout="row" ng-if="domain.domain_completion > 0" flex="40">
-
                     <div flex="50" layout="row" layout-align="start center">
-
                         <span layout-padding class="label ps" >S</span>
-
                         <div class="line">
-
                             <div ng-class="vm.advanceClassGenerator(domain.domain_completion)"></div>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </md-card>
