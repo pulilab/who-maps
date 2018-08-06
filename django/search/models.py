@@ -62,6 +62,7 @@ class ProjectSearch(ExtendedModel):
         "project__data__donors"  # TODO: will be refactored
     )
 
+    project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
     @classmethod
     def search(cls, **kwargs):
         """
