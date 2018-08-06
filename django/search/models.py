@@ -155,7 +155,4 @@ def create_search_objects(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Project)
 def update_with_project_data(sender, instance, **kwargs):
-    """
-    Updates relevant ProjectSearch data on every Project model save.
-    """
     instance.search.update(instance)
