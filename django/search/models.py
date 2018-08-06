@@ -137,6 +137,12 @@ class ProjectSearch(ExtendedModel):
                                                   *[platform['strategies'] for platform in
                                                     project.data.get("platforms", []) if
                                                     platform.get('strategies')]))])))
+            self.hsc_categories = list(set(filter(None.__ne__,
+                                              [HSCChallenge.get_parent_id(int(id), 'group') for id in
+                                               project.data.get("hsc_challenges", [])])))
+            self.hfa_categories = list(set(filter(None.__ne__,
+                                              [HealthFocusArea.get_parent_id(int(id), 'health_category') for
+                                               id in project.data.get("health_focus_areas", [])])))
 @receiver(post_save, sender=Project)
 def create_search_objects(sender, instance, created, **kwargs):
     if created:
