@@ -13,6 +13,17 @@ from user.models import Organisation
 
 
 class ProjectSearch(ExtendedModel):
+    MAP_VALUES = (
+        "project_id",
+        "project__name",
+        "organisation_id",
+        "country_id",
+        "project__data__coverage",
+        "project__data__national_level_deployment",
+        "project__data__government_investor",
+        "project__approval__approved",
+        "found_in"  # TODO: compute this
+    )
 
     @classmethod
     def search(cls, **kwargs):
