@@ -52,6 +52,16 @@ class ProjectSearch(ExtendedModel):
         "project__data__government_investor"
     )
 
+    SEARCH_BY = (
+        "project__name",
+        "organisation__name",
+        "country__name",
+        "project__data__implementation_overview",
+        "coverage",
+        "project__data__implementing_partners",  # TODO: will be refactored
+        "project__data__donors"  # TODO: will be refactored
+    )
+
     @classmethod
     def search(cls, **kwargs):
         """
