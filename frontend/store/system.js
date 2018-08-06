@@ -84,6 +84,11 @@ export const getters = {
 
   getOrganisations: state => {
     return [...state.organisations.map(o => ({...o}))];
+  },
+
+  getOrganisationDetails: (state, getters) => id => {
+    const o = getters.getOrganisations.find(org => org.id === id);
+    return o ? { ...o } : undefined;
   }
 };
 
