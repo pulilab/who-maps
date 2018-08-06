@@ -1,9 +1,11 @@
+import itertools
 import operator
 import functools
 
 from django.db import models
 from django.db.models import Q
 from django.db.models.signals import post_save
+from django.contrib.postgres.fields import ArrayField
 from django.dispatch import receiver
 
 from core.models import ExtendedModel
