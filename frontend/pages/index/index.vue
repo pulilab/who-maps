@@ -3,6 +3,7 @@
     <div class="MapBoxContainer">
       <landing-map />
       <welcome-box />
+      <country-projects-box />
     </div>
 
     <div class="InfoSignupContainer">
@@ -24,6 +25,7 @@
 
 import LandingMap from '../../components/landing/LandingMap.vue';
 import WelcomeBox from '../../components/landing/WelcomeBox.vue';
+import CountryProjectsBox from '../../components/landing/CountryProjectsBox.vue';
 import InfoBox from '../../components/landing/InfoBox.vue';
 import CentralBox from '../../components/landing/CentralBox.vue';
 import AboutSection from '../../components/landing/AboutSection.vue';
@@ -34,7 +36,8 @@ export default {
     WelcomeBox,
     InfoBox,
     CentralBox,
-    AboutSection
+    AboutSection,
+    CountryProjectsBox
   }
 };
 </script>
