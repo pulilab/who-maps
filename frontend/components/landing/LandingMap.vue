@@ -1,5 +1,7 @@
 <template>
   <div class="LandingMap">
+    <!-- TODO for Nico -->
+    <!-- Exit 'Country view' mode when user zooms out at least 2 lvls?! -->
     <no-ssr>
       <l-map
         ref="mainMap"
