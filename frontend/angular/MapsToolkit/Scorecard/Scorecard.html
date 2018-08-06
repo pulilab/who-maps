@@ -2,7 +2,7 @@
   <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
 </div>
 
-<div class="wrapper" layout="column" ng-if="vm.dataLoaded && !vm.summary" md-whiteframe="2">
+<md-card class="wrapper md-card-nomargin" layout="column" ng-if="vm.dataLoaded && !vm.summary">
   <div layout="row" class="axis-buttons top">
     <div layout="row" flex="auto" layout-align="start">
       <md-button class="md-primary" ng-click="vm.goToAxis()">
@@ -132,7 +132,8 @@
       </md-button>
     </div>
   </div>
-</div>
+</md-card>
+
 <axis-footer ng-if="vm.dataLoaded && !vm.summary" axes="vm.rawData"></axis-footer>
 
 <div ng-if="vm.dataLoaded && vm.summary" layout="column" class="axes-scorecard">

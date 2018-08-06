@@ -3,7 +3,7 @@
 </div>
 
 <div class="maps-toolkit" layout="column" ng-if="vm.dataLoaded" >
-  <div layout="row" flex="100" md-whiteframe="2" class="axis-row">
+  <md-card layout="row" flex="100" class="axis-row md-card-nomargin">
     <axis flex="auto" show-current="true" domain-index="vm.domainId" axis-index="vm.axisId"></axis>
     <div flex="auto" layout="row" layout-align="end center">
       <md-button class="md-primary" ng-click="vm.goToScorecard()">
@@ -11,9 +11,9 @@
         <translate>Scorecard</translate>
       </md-button>
     </div>
-  </div>
+  </md-card>
 
-  <div layout="column" layout-align="start start" md-whiteframe="2" class="domain-questions domain-block">
+  <md-card layout="column" layout-align="start start" class="domain-questions domain-block md-card-nomargin">
 
     <div layout="column" class="full-width">
       <div class="domain-header" layout="row">
@@ -101,9 +101,12 @@
         </md-button>
       </div>
     </div>
-  </div>
+  </md-card>
+
   <cms-static-info-widget></cms-static-info-widget>
+
   <cms-experiences-list domain-id="vm.domainId" axis-id="vm.axisId"></cms-experiences-list>
+
   <axis-footer axes="vm.rawData"></axis-footer>
 </div>
 
