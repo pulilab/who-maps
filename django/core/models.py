@@ -26,6 +26,7 @@ class NameByIDMixin:
             return ""
 
         obj = cls.objects.get_object_or_none(id=id)
+        return getattr(obj, 'name', "")
 class GetObjectOrNoneQueryset(GetObjectOrNoneMixin, QuerySet):
     pass
 
