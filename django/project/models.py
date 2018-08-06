@@ -7,7 +7,8 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField, ArrayField
 from django.utils.translation import ugettext_lazy as _
 
-from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel
+from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
+    ParentByIDMixin
 from country.models import Country, CountryField
 from project.cache import InvalidateCacheMixin
 from user.models import UserProfile, Organisation
