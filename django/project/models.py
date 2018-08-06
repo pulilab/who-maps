@@ -188,7 +188,7 @@ class File(ExtendedModel):
     data = models.BinaryField()
 
 
-class DigitalStrategy(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+class DigitalStrategy(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     GROUP_CHOICES = (
         ('Client', _('Client')),
         ('Provider', _('Provider')),
