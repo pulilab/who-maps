@@ -129,6 +129,8 @@ class ProjectSearch(ExtendedModel):
             self.country_id = int(project.data["country"])
             self.organisation_id = int(project.data["organisation"])
 
+            self.software = [int(x['id']) for x in project.data.get("platforms", [])]
+            self.coverage = [x.get('district', "") for x in project.data.get("coverage", [])]
 @receiver(post_save, sender=Project)
 def create_search_objects(sender, instance, created, **kwargs):
     if created:
