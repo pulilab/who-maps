@@ -130,11 +130,15 @@ class AssessmentModuleController {
   }
 
   handleChangeDomain (axisId, domainId) {
-    this.state.go('maps', { axisId, domainId });
+    const {id} = window.$nuxt.$route.params;
+    const path = window.$nuxt.$root.localePath({name: 'index-projects-id-toolkit', params: {id}, query: {axisId, domainId}});
+    window.$nuxt.$router.push(path);
   }
 
-  handleChangeAxis (id) {
-    this.state.go('maps', { 'axisId': id, 'domainId': 0 });
+  handleChangeAxis (axisId) {
+    const {id} = window.$nuxt.$route.params;
+    const path = window.$nuxt.$root.localePath({name: 'index-projects-id-toolkit', params: {id}, query: {axisId, domainId: 0}});
+    window.$nuxt.$router.push(path);
   }
 
   static factory () {

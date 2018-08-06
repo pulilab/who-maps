@@ -24,7 +24,7 @@ export const getters = {
     }));
   },
   getDomainStructure: (state, getters) => (axis, domain) => {
-    const structure = getters.getStructure(state);
+    const structure = getters.getStructure;
     return structure && structure[axis] && structure[axis].domains[domain] ? structure[axis].domains[domain] : {};
   },
   getAxisDetail: (state, getters, rootState, rootGetters) => axisId => {
