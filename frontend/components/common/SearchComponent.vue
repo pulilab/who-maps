@@ -13,9 +13,9 @@
             <el-input
               v-model="searchString"
               placeholder="Type something">
-              <i
+              <fa
                 slot="prepend"
-                class="el-icon-search"
+                icon="search"
               />
               <template slot="append">
                 <el-button
@@ -59,9 +59,10 @@
     </div>
     <el-button
       v-show="!shown && !searchString"
-      icon="el-icon-search"
       @click="show"
-    />
+    >
+      <fa icon="search" />
+    </el-button>
     <div
       v-show="searchString && !shown"
       class="SearchShadow"
@@ -69,7 +70,7 @@
     >
       <el-row type="flex">
         <el-col>
-          <i class="el-icon-search" />
+          <fa icon="search" />
         </el-col>
         <el-col>
           <span class="SearchText">
