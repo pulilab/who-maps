@@ -33,7 +33,7 @@
           <language-item :code="user.language" />
         </el-dropdown-item>
         <el-dropdown-item divided>
-          <nuxt-link :to="localePath('index-profile')">
+          <nuxt-link :to="localePath('index-edit-profile')">
             <i class="el-icon-settings" />
             Edit my profile
           </nuxt-link >
