@@ -4,7 +4,7 @@
       type="flex">
       <el-col v-if="showViewDraft">
         <nuxt-link :to="localePath({name: 'index-projects-id', params: {id: project.id}})">
-          <i class="el-icon-arrow-right" />
+          <fa icon="arrow-right" />
           View Draft
         </nuxt-link>
       </el-col>
