@@ -1,12 +1,10 @@
 @import '../../variables';
 
 linechart {
-
     margin-bottom: -65px;
     position: relative;
 
     .linechart-labels {
-
         color: $color-gray;
         background-color: $color-gray-lightest;
         font-size: 12px;
@@ -42,7 +40,6 @@ linechart {
                 }
 
                 .material-icons {
-
                     font-size: 12px;
                     transform: translate(0, 2px);
 
@@ -101,7 +98,6 @@ linechart {
         min-width: 500px;
 
         .visualization {
-
             &.activelabel1 {
                 .line-axis, .dot-axis {
                     opacity: 0.2;
@@ -152,7 +148,6 @@ linechart {
             }
 
             .axis {
-
                 path {
                     fill: none;
                     stroke: #777;
@@ -160,7 +155,7 @@ linechart {
                 }
 
                 text {
-                    font-family: Roboto, 'Helvetica Neue', sans-serif;
+                    font-family: Arial, 'Helvetica Neue', sans-serif;
                     fill: #9D9D9D;
                     font-size: 12px;
                 }
@@ -175,14 +170,12 @@ linechart {
             }
 
             .linechart-ruler {
-
                 stroke: #9D9D9D;
                 stroke-width: 0.4px;
                 fill: none;
             }
 
             .line-axis {
-
                 opacity: 1;
                 transition: opacity 0.2s ease-in;
                 cursor: default;
@@ -215,7 +208,6 @@ linechart {
             }
 
             .dot-axis {
-
                 stroke-width: 1px;
                 stroke: white;
                 opacity: 1;
@@ -281,7 +273,6 @@ linechart {
 }
 
 .chart-tooltip {
-
     position: fixed;
     min-width: 80px;
     padding: 4px;
@@ -290,11 +281,9 @@ linechart {
     opacity: 0;
     transition: opacity .25s ease-in-out;
     -webkit-transform: translateZ(0);
-
     z-index: 300;
-
     pointer-events: none;
     border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.541176);
+    background-color: rgba(0, 0, 0, 0.54);
     color: #FFF;
 }

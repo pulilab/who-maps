@@ -6,7 +6,7 @@
     </div>
     <div flex></div>
     <div class="domain-selector">
-      <md-select aria-label="domain-selector" ng-model="vm.currentDomain" md-selected-text="'Select a domain' | translate" class="">
+      <md-select aria-label="domain-selector" ng-model="vm.currentDomain" md-selected-text="'Select a domain' | translate" class="md-small" md-container-class="md-small">
         <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
           <md-option ng-value="domain" ng-repeat="domain in axis.domains">{{domain.name}}</md-option>
         </md-optgroup>

@@ -382,9 +382,37 @@ md-checkbox.small {
 // Md-select
 
 md-select {
+  &.md-small {
+    .md-select-value {
+      font-size: 12px;
+    }
+  }
+
   &.no-border {
     .md-select-value {
       border: none !important;
+    }
+  }
+}
+
+.md-select-menu-container {
+  &.md-small {
+    md-option {
+      height: 32px;
+      padding: 0 12px;
+    }
+
+    md-optgroup {
+      label {
+        font-size: 11px !important;
+        font-weight: 700;
+        color: $color-gray-light;
+        border: 1px solid $color-gray-lighter;
+        border-width: 0 0 1px;
+      }
+      md-option {
+        padding: 0 24px;
+      }
     }
   }
 }
