@@ -126,6 +126,9 @@ class ProjectSearch(ExtendedModel):
 
     def update(self, project):
         if project.public_id:
+            self.country_id = int(project.data["country"])
+            self.organisation_id = int(project.data["organisation"])
+
 @receiver(post_save, sender=Project)
 def create_search_objects(sender, instance, created, **kwargs):
     if created:
