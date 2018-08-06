@@ -97,12 +97,7 @@
               </nuxt-link>
             </div>
             <div>
-              <el-button
-                type="text"
-                class="HeaderBtn"
-              >
-                Toolkit
-              </el-button>
+              <toolkit-dialog-wrapper />
             </div>
             <div>
               <nuxt-link
@@ -126,6 +121,7 @@ import { mapGetters } from 'vuex';
 
 import LanguageSelector from './LanguageSelector';
 import UserDropdown from './UserDropdown';
+import ToolkitDialogWrapper from './ToolkitDialogWrapper';
 
 export default {
   directives: {
@@ -133,7 +129,8 @@ export default {
   },
   components: {
     LanguageSelector,
-    UserDropdown
+    UserDropdown,
+    ToolkitDialogWrapper
   },
   props: {
     countrySpecific: {

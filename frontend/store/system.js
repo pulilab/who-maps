@@ -59,7 +59,7 @@ export const getters = {
 
   getThematicOverview: state => {
     const th = state.thematic_overview;
-    return th.catergories
+    return th.categories
       ? th.categories.map(cat => ({ ...cat, domains: th.sub_categories.filter(sb => sb.category === cat.id) }))
       : [];
   },
@@ -68,6 +68,7 @@ export const getters = {
     const axis = getters.getAxis;
     const domains = getters.getDomains;
     const thematic_specific = getters.getThematicOverview;
+    console.log(thematic_specific)
     return [
       ...thematic_specific.map(t => ({ name: t.name, domains: t.domains })),
       ...axis.map(a => ({
