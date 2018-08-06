@@ -124,6 +124,8 @@ class ProjectSearch(ExtendedModel):
             })
         return results
 
+    def update(self, project):
+        if project.public_id:
 @receiver(post_save, sender=Project)
 def create_search_objects(sender, instance, created, **kwargs):
     if created:
