@@ -220,7 +220,7 @@ class HSCChallengeQuerySet(ActiveQuerySet):
                 for l in self.filter(id__in=ids).select_related('group')]
 
 
-class HSCChallenge(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+class HSCChallenge(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     group = models.ForeignKey(HSCGroup, on_delete=models.CASCADE, related_name='challenges')
 
     def __str__(self):
