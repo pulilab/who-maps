@@ -75,6 +75,7 @@ scorecard {
         padding-right: 15px;
         height: 55px;
         border-bottom: 1px solid $text-disabled;
+        color: $text-primary;
     }
 
     .question {
@@ -92,13 +93,13 @@ scorecard {
     .domain-total {
         height:50px;
         font-size: 14px;
-        background: #FAFAFA;
         border-bottom: 1px solid $color-gray-lighter;
-        padding-left: 50px;
+        padding-left: 20px;
         padding-right: 30px;
+        color: $text-primary;
 
         strong {
-            margin-right: 5px;
+            margin-right: 10px;
         }
     }
 
@@ -106,8 +107,9 @@ scorecard {
         height:50px;
         font-size: 14px;
         background: $color-lightblue;
-        padding-left: 50px;
+        padding-left: 20px;
         padding-right: 30px;
+        color: $text-primary;
     }
 
     .axis-buttons {
