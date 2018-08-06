@@ -6,6 +6,7 @@
       :lat-lng="pin.latlng"
       :icon="icon"
       class="MapMarker"
+      @click="markerClickHandler"
     >
       <l-popup
         ref="tooltip"
@@ -77,10 +78,11 @@ export default {
   },
   methods: {
     ...mapActions({
-      toggleCountry: 'landing/toggleCountry'
+      toggleCountry: 'landing/toggleCountry',
+      setActiveCountry: 'landing/setActiveCountry'
     }),
-    emitMarkerClick () {
-      this.$emit('marker-click');
+    markerClickHandler () {
+      this.setActiveCountry(this.pin.id);
     },
     openCountryView () {
       this.toggleCountry(this.pin.id);
