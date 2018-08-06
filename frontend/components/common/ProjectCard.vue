@@ -20,7 +20,9 @@
               eHealth Africa
             </el-col>
           </el-row>
-          <el-row type="flex">
+          <el-row
+            v-if="searchChild"
+            type="flex">
             <el-col>
               <i class="el-icon-search" />
               <span>Found in "ProjectName"</span>
@@ -41,6 +43,12 @@
 
 <script>
 export default {
+  props: {
+    searchChild: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       hovered: false
