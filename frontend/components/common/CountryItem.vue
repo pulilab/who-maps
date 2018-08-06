@@ -1,6 +1,7 @@
 <template>
   <div class="CountryItem">
     <country-flag
+      v-show="showFlag"
       :code="country.code"
       small />
     {{ country.name }}
@@ -10,6 +11,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import CountryFlag from './CountryFlag';
+
 export default {
   components: {
     CountryFlag
@@ -18,6 +20,10 @@ export default {
     id: {
       type: Number,
       required: true
+    },
+    showFlag: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
