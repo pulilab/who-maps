@@ -10,8 +10,8 @@
         <el-col class="InfoBoxWrapper">
           <info-box />
         </el-col>
-        <el-col class="SignupBoxWrapper">
-          <signup-box />
+        <el-col class="CentralBoxWrapper">
+          <central-box />
         </el-col>
       </el-row>
     </div>
@@ -25,7 +25,7 @@
 import LandingMap from '../../components/landing/LandingMap.vue';
 import WelcomeBox from '../../components/landing/WelcomeBox.vue';
 import InfoBox from '../../components/landing/InfoBox.vue';
-import SignupBox from '../../components/landing/SignupBox.vue';
+import CentralBox from '../../components/landing/CentralBox.vue';
 import AboutSection from '../../components/landing/AboutSection.vue';
 
 export default {
@@ -33,7 +33,7 @@ export default {
     LandingMap,
     WelcomeBox,
     InfoBox,
-    SignupBox,
+    CentralBox,
     AboutSection
   }
 };
@@ -63,7 +63,7 @@ export default {
         background-color: @colorWhite;
       }
 
-      .SignupBoxWrapper {
+      .CentralBoxWrapper {
         background-color: @colorBrandPrimary;
       }
 
