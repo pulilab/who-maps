@@ -147,15 +147,9 @@ export default {
       }
     }
   },
-
-  async created () {
-    await this.loadOrganisations();
-  },
-
   methods: {
     ...mapActions({
       addOrganisation: 'system/addOrganisation',
-      loadOrganisations: 'system/loadOrganisations',
       updateUserProfile: 'user/updateUserProfile'
     }),
 
