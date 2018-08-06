@@ -195,7 +195,7 @@ axis {
     }
 
     .domains.gotdata {
-      background-color: $color-gray-lighter;
+      background-color: #E0E0E0;
 
       &:not(:nth-child(5))::after {
         content: "";

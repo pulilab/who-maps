@@ -49,7 +49,7 @@ scorecard {
         height:75px;
         color: $color-white;
         font-size: 20px;
-        font-weight: 500;
+        font-weight: 700;
         padding-left: 60px;
         padding-right: 60px;
         margin-bottom: 40px;
@@ -70,17 +70,17 @@ scorecard {
     }
 
     .domain-header {
-        background-color: #EEEEEE;
+        background-color: $color-gray-lightest;
         padding-left: 20px;
         padding-right: 15px;
-        height:55px;
-        border-bottom: 1px solid $color-gray-light;;
+        height: 55px;
+        border-bottom: 1px solid $text-disabled;
     }
 
     .question {
-        border-bottom: 1px solid #E0E0E0;
+        border-bottom: 1px solid $color-gray-lighter;
         font-size: 14px;
-        color: #212121;
+        color: $text-primary;
         height:50px;
         padding-left: 50px;
         padding-right: 30px;
@@ -93,7 +93,7 @@ scorecard {
         height:50px;
         font-size: 14px;
         background: #FAFAFA;
-        border-bottom: 1px solid #E0E0E0;
+        border-bottom: 1px solid $color-gray-lighter;
         padding-left: 50px;
         padding-right: 30px;
 
@@ -105,8 +105,7 @@ scorecard {
     .domain-percentage {
         height:50px;
         font-size: 14px;
-        background: #FFF9C4;
-        border-bottom: 1px solid #E0E0E0;
+        background: $color-lightblue;
         padding-left: 50px;
         padding-right: 30px;
     }
@@ -135,8 +134,9 @@ scorecard {
         }
 
         .axis-header {
-            font-size:20px;
-            color:$color-white;
+            font-size: 20px;
+            font-weight: 700;
+            color: $color-white;
             padding-left: 11px;
             padding-right:20px;
             margin-bottom:0;
@@ -147,22 +147,22 @@ scorecard {
             margin-bottom:0;
             border-bottom:1px solid $color-gray-lighter;
             font-size:16px;
-            font-weight:500;
+            font-weight:700;
             height:50px;
             padding-right:20px;
 
             .md-button {
-                color: $color-gray-light;
-                height: 15px;
-                width: auto;
+              color: $color-gray-light;
+              height: 15px;
+              width: auto;
             }
 
             h4 {
-                font-weight: 500;
+              font-weight: 700;
             }
 
             .percentage {
-                text-align: right;
+              text-align: right;
             }
         }
 
