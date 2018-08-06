@@ -44,6 +44,14 @@ class ProjectSearch(ExtendedModel):
         "project__approval__approved"
     )
 
+    ORDER_BY = (
+        "project__name",
+        "country__name",
+        "country__region",
+        "organisation__name",
+        "project__data__government_investor"
+    )
+
     @classmethod
     def search(cls, **kwargs):
         """
