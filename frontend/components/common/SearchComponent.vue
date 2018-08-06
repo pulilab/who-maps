@@ -52,7 +52,7 @@
           :key="project"
         >
           <el-col>
-            <project-card />
+            <project-card search-child/>
           </el-col>
         </el-row>
       </el-card>
