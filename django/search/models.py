@@ -131,6 +131,12 @@ class ProjectSearch(ExtendedModel):
 
             self.software = [int(x['id']) for x in project.data.get("platforms", [])]
             self.coverage = [x.get('district', "") for x in project.data.get("coverage", [])]
+            self.dhi_categories = list(set(filter(None.__ne__,
+                                              [DigitalStrategy.get_parent_id(int(strategy_id), 'parent') for
+                                               strategy_id in list(itertools.chain(
+                                                  *[platform['strategies'] for platform in
+                                                    project.data.get("platforms", []) if
+                                                    platform.get('strategies')]))])))
 @receiver(post_save, sender=Project)
 def create_search_objects(sender, instance, created, **kwargs):
     if created:
