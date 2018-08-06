@@ -32,6 +32,14 @@ class NameByIDMixin:
 class ParentByIDMixin:
     @classmethod
     def get_parent_id(cls, object_id, parent_field):
+        try:
+            instance = cls.objects.get(id=object_id)
+        except cls.DoesNotExist:
+            return None
+        else:
+            return getattr(instance, '{}_id'.format(parent_field), None)
+
+
 class GetObjectOrNoneQueryset(GetObjectOrNoneMixin, QuerySet):
     pass
 
