@@ -57,6 +57,11 @@ class DraftInteroperabilityLinksSerializer(InteroperabilityLinksSerializer):
         return value
 
 
+INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
+                    (1, 'Yes, they are contributing in-kind people or time'),
+                    (2, 'Yes, there is a financial contribution through MOH budget')]
+
+
 class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
@@ -130,10 +135,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
     @staticmethod
     def validate_repository(value):
         return url_validator(value)
-
-
-INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'), (1, 'Yes, they are contributing in-kind people or time'),
-                    (2, 'Yes, there is a financial contribution through MOH budget')]
 
 
 class ProjectDraftSerializer(ProjectPublishedSerializer):
