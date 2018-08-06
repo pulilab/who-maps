@@ -102,7 +102,7 @@ export default {
     },
     zoomAt (zoom) {
       if (this.$refs.mainMap && this.$refs.mainMap.mapObject) {
-        this.$refs.mainMap.mapObject.setZoom(zoom)
+        this.$refs.mainMap.mapObject.setZoom(zoom);
       }
     },
     zoomChangeHandler (event) {
