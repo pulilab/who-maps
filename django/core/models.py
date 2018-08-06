@@ -27,6 +27,11 @@ class NameByIDMixin:
 
         obj = cls.objects.get_object_or_none(id=id)
         return getattr(obj, 'name', "")
+
+
+class ParentByIDMixin:
+    @classmethod
+    def get_parent_id(cls, object_id, parent_field):
 class GetObjectOrNoneQueryset(GetObjectOrNoneMixin, QuerySet):
     pass
 
