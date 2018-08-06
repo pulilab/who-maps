@@ -65,6 +65,13 @@ class ProjectSearch(ExtendedModel):
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
     organisation = models.ForeignKey(Organisation, null=True, on_delete=models.SET_NULL)
+
+    software = ArrayField(models.IntegerField(), default=list)
+    coverage = ArrayField(models.CharField(max_length=64), default=list)
+    dhi_categories = ArrayField(models.IntegerField(), default=list)
+    hsc_categories = ArrayField(models.IntegerField(), default=list)
+    hfa_categories = ArrayField(models.IntegerField(), default=list)
+
     @classmethod
     def search(cls, **kwargs):
         """
