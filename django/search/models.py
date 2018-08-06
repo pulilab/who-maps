@@ -13,22 +13,6 @@ from user.models import Organisation
 
 
 class ProjectSearch(ExtendedModel):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    location = models.TextField(blank=True)
-    project_name = models.TextField(blank=True)
-    organisation = models.TextField(blank=True)
-    contact_name = models.TextField(blank=True)
-    contact_email = models.TextField(blank=True)
-    implementation_overview = models.TextField(blank=True)
-    implementing_partners = models.TextField(blank=True)
-    implementation_dates = models.TextField(blank=True)
-    health_focus_areas = models.TextField(blank=True)
-    geographic_scope = models.TextField(blank=True)
-    repository = models.TextField(blank=True)
-    mobile_application = models.TextField(blank=True)
-    wiki = models.TextField(blank=True)
-    platforms = models.TextField(blank=True)
-    public_id = models.TextField(blank=True)
 
     @classmethod
     def search(cls, **kwargs):
