@@ -3,78 +3,85 @@
     v-click-outside="hide"
     class="SearchComponent"
   >
-    <div
-      v-show="shown"
-      class="SearchPopper"
-    >
-      <el-card :body-style="{ padding: '0px' }">
-        <el-row
-          type="flex"
-          class="SearchBig"
-        >
-          <el-col :span="24">
-            <el-input
-              v-model="searchString"
-              placeholder="Type something">
-              <fa
-                slot="prepend"
-                icon="search" />
-              <template slot="append">
-                <el-button
-                  class="SearchClear"
-                  @click="clearSearch"
-                >
-                  <fa icon="times" />
-                </el-button>
-                <el-button
-                  class="SearchSubmit"
-                  @click="search"
-                >
-                  <fa icon="arrow-right" />
-                </el-button>
-              </template>
-            </el-input>
-          </el-col>
-        </el-row>
+    <transition name="el-fade-in">
+      <div
+        v-show="shown"
+        class="SearchPopper"
+      >
+        <el-card :body-style="{ padding: '0px' }">
+          <el-row
+            type="flex"
+            class="SearchBig"
+          >
+            <el-col :span="24">
+              <el-input
+                v-model="searchString"
+                placeholder="Type something">
+                <fa
+                  slot="prepend"
+                  icon="search" />
+                <template slot="append">
+                  <el-button
+                    class="SearchClear"
+                    @click="clearSearch"
+                  >
+                    <fa icon="times" />
+                  </el-button>
+                  <el-button
+                    class="SearchSubmit"
+                    @click="search"
+                  >
+                    <fa icon="arrow-right" />
+                  </el-button>
+                </template>
+              </el-input>
+            </el-col>
+          </el-row>
 
-        <el-row
-          type="flex"
-          class="SearchResults"
-        >
-          <el-col v-show="hasResults">
-            {{ results.length }} result(s)
-          </el-col>
-          <el-col>
-            <nuxt-link
-              class="NuxtLink IconRight"
-              to="dashboard"
-            ><span>Advanced search</span><fa icon="angle-right" />
-            </nuxt-link>
-          </el-col>
-        </el-row>
+          <el-row
+            type="flex"
+            align="middle"
+            class="SearchResultsHeader"
+          >
+            <el-col
+              v-show="hasResults"
+              class="SearchResultsCounter"
+            >
+              {{ results.length }} result(s):
+            </el-col>
+            <el-col class="AdvancedSearch">
+              <nuxt-link
+                class="NuxtLink IconRight"
+                to="dashboard"
+              ><span>Advanced search</span><fa icon="angle-right" />
+              </nuxt-link>
+            </el-col>
+          </el-row>
 
-        <el-row v-show="!hasResults">
-          <el-col class="SearchResultsNope">
-            <p class="TipText">
-              <fa
-                icon="info-circle"
-                size="lg" />
-              <span>Short tip text about advenacd seacrh lorem ipsum dolor sit ametncidunt ut labore et dolore magna aliqua.</span>
-            </p>
-          </el-col>
-        </el-row>
+          <el-row v-show="!hasResults">
+            <el-col class="SearchResultsNope">
+              <p class="TipText">
+                <fa
+                  icon="info-circle"
+                  size="lg" />
+                <span>Short tip text about advenacd seacrh lorem ipsum dolor sit ametncidunt ut labore et dolore magna aliqua.</span>
+              </p>
+            </el-col>
+          </el-row>
 
-        <el-row
-          v-for="project in results"
-          v-show="hasResults"
-          :key="project"
-        >
-          <el-col>
-            <project-card search-child />
-          </el-col>
-        </el-row>
-      </el-card>
-    </div>
+          <el-row
+            v-for="project in results"
+            v-show="hasResults"
+            :key="project"
+            class="SearchResultItem"
+          >
+            <el-col>
+              <project-card search-child />
+            </el-col>
+          </el-row>
+        </el-card>
+      </div>
+    </transition>
 
     <el-button
       v-show="!shown && !searchString"
@@ -200,7 +207,7 @@ export default {
       .el-input__inner {
         width: 100%;
         height: @actionBarHeight;
-        font-size: @fontSizeMedium;
+        font-size: @fontSizeBase;
         font-weight: 700;
       }
 
@@ -264,13 +271,26 @@ export default {
       }
     }
 
-    .SearchResults {
-      padding: 20px 20px 0;
+    .SearchResultsHeader {
+      height: 56px;
+      padding: 0 20px;
       border-top: 1px solid @colorTextMuted;
+
+      .SearchResultsCounter {
+        width: 100%;
+        font-size: @fontSizeSmall;
+        font-weight: 700;
+        color: @colorTextSecondary;
+        text-transform: uppercase;
+      }
+
+      .AdvancedSearch {
+        width: auto;
+      }
     }
 
     .SearchResultsNope {
-      padding: 20px 20px 30px;
+      padding: 0 20px 30px;
 
       .TipText {
         display: inline-flex;
@@ -284,6 +304,15 @@ export default {
           margin-right: 6px;
           color: @colorTextMuted;
         }
+      }
+    }
+
+    .SearchResultItem {
+      margin: 0 20px 12px;
+      cursor: pointer;
+
+      &:last-child {
+        margin-bottom: 20px;
       }
     }
   }
@@ -316,6 +345,7 @@ export default {
 
         .SearchText {
           color: @colorTextPrimary;
+          font-size: @fontSizeBase;
           font-weight: 700;
           line-height: @actionBarHeight;
           padding: 0 15px;
@@ -329,6 +359,7 @@ export default {
         .SearchResultsCounter {
           padding: 0 15px;
           color: @colorTextMuted;
+          font-size: @fontSizeBase;
           font-weight: 700;
           line-height: @actionBarHeight;
           white-space: nowrap;
