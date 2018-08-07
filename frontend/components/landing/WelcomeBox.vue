@@ -8,10 +8,12 @@
       <h6>{{ landingPageDefaults.cover_text }}</h6>
 
       <el-button
-        icon="el-icon-close"
         circle
         class="CloseWelcomeBox"
-        @click="closeWelcomeBox" />
+        @click="closeWelcomeBox"
+      >
+        <fa icon="times" />
+      </el-button>
     </div>
   </div>
 </template>
@@ -72,6 +74,8 @@ export default {
         position: absolute;
         top: 16px;
         right: 16px;
+        width: 40px;
+        height: 40px;
       }
     }
   }

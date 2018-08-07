@@ -158,7 +158,6 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .TopBar {
-
     .TopBarInner {
       .limitPageWidth();
       height: 130px;
@@ -177,6 +176,7 @@ export default {
 
     .RightPart {
       padding: 16px 0;
+      transform: translateX(10px);
 
       > .el-row > .el-col {
         width: auto;
@@ -199,6 +199,7 @@ export default {
       line-height: 24px;
       color: @colorBrandPrimary;
       text-decoration: none;
+      transition: @transitionAll;
 
       &::before {
         content: "";
@@ -214,8 +215,10 @@ export default {
       }
 
       &:hover {
+        color: @colorBrandPrimaryLight;
+
         &::before {
-          background-color: @colorBrandPrimary;
+          background-color: @colorBrandPrimaryLight;
           transform: translateY(0);
         }
       }
