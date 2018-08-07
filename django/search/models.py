@@ -67,17 +67,20 @@ class ProjectSearch(ExtendedModel):
     hfa_categories = ArrayField(models.IntegerField(), default=list)
 
     @classmethod
-    def search(cls, **kwargs):
+    def search(cls, queryset, search_term, search_in):
         """
-        Search based on search term in given fields.
+        Search in QuerySet
+        search_term: <INPUT> -- search term
+        search_in: <name,org,country,overview,loc,donor,partner> -- default is all
+        :return: QuerySet
         """
+        kwargs = {}
         q_objects = []
         results = []
         query = kwargs["query"]
 
         selectable_fields = {"location", "project_name", "technology_platform", "organisation"}
-        query_keys = set([k for k, v in kwargs.items() if v is True])
-        intersect = selectable_fields & query_keys
+        intersect = selectable_fields
 
         if intersect:
             if kwargs.get("location"):
