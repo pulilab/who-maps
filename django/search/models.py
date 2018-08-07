@@ -123,6 +123,22 @@ class ProjectSearch(ExtendedModel):
         :return: QuerySet
         """
         return queryset
+
+    @classmethod
+    def order(cls, queryset):
+        """
+        Order QuerySet by order keywords
+        :return: QuerySet
+        """
+        ORDER_BY = (
+            "project__name",
+            "country__name",
+            "country__region",
+            "organisation__name",
+            "project__data__government_investor"
+        )
+        return queryset
+
     def update(self, project):
         """
         Update search object from project object
