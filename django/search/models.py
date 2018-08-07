@@ -116,6 +116,13 @@ class ProjectSearch(ExtendedModel):
             })
         return results
 
+    @classmethod
+    def filter(cls, queryset):
+        """
+        Filter QuerySet by various filter terms
+        :return: QuerySet
+        """
+        return queryset
     def update(self, project):
         if project.public_id:
             self.country_id = int(project.data["country"])
