@@ -5,17 +5,6 @@ from .models import ProjectSearch
 from .serializers import SearchSerializer
 
 
-@api_view(['POST'])
-def search_project(request):
-    """
-    View for providing search functionality for projects.
-    """
-    serializer = SearchSerializer(data=request.data)
-    if serializer.is_valid():
-        results = ProjectSearch.search(**serializer.validated_data)
-        return Response(results)
-    else:
-        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SearchView(generics.ListAPIView):
