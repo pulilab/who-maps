@@ -24,8 +24,10 @@ export default {
   computed: {
     showActionBar () {
       const hiddenOn = ['index-login', 'index-signup'];
-      const pureRoute = this.$route.name.split('___')[0];
-      return !hiddenOn.includes(pureRoute);
+      if (this.$route && this.$route.name) {
+        const pureRoute = this.$route.name.split('___')[0];
+        return !hiddenOn.includes(pureRoute);
+      }
     }
   }
 
