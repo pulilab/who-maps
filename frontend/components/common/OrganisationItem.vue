@@ -1,5 +1,7 @@
 <template>
-  <div class="OrganisationItem">
+  <div
+    v-if="organisation"
+    class="OrganisationItem">
     {{ organisation.name }}
   </div>
 </template>
@@ -11,7 +13,7 @@ export default {
   components: {},
   props: {
     id: {
-      type: String,
+      type: [String, Number],
       required: true
     }
   },

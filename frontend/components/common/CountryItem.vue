@@ -1,5 +1,7 @@
 <template>
-  <div class="CountryItem">
+  <div
+    v-if="country"
+    class="CountryItem">
     <country-flag
       v-show="showFlag"
       :code="country.code"
