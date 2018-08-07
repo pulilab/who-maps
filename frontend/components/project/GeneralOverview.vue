@@ -56,36 +56,21 @@
             Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
           </span>
         </el-form-item>
-        <el-row
-          :gutter="10"
-          type="flex">
-          <el-col :span="12">
-            <el-form-item
-              label="Project start date"
-              prop="start_date"
-            >
-              <el-date-picker
-                v-model="general.start_date"
-                type="date"
-                class="Date"
-                placeholder="Pick a day"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item
-              label="Project end date"
-              prop="end_date"
-            >
-              <el-date-picker
-                v-model="general.end_date"
-                type="date"
-                class="Date"
-                placeholder="Pick a day"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <el-form-item
+          label="Project start and end date"
+          prop="start_end_date"
+        >
+          <el-date-picker
+            v-model="general.start_end_date"
+            type="daterange"
+            class="Date"
+            align="center"
+            unlink-panels
+            range-separator="To"
+            start-placeholder="Start date"
+            end-placeholder="End date"
+          />
+        </el-form-item>
         <el-row
           :gutter="10"
           type="flex">
@@ -150,8 +135,7 @@ export default {
         country: null,
         geographic_scope: null,
         implementation_overview: null,
-        start_date: null,
-        end_date: null,
+        start_end_date: null,
         contact_name: null,
         contact_email: null,
         team: [],
