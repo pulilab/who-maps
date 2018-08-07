@@ -124,6 +124,9 @@ class ProjectSearch(ExtendedModel):
         """
         return queryset
     def update(self, project):
+        """
+        Update search object from project object
+        """
         if project.public_id:
             self.country_id = int(project.data["country"])
             self.organisation_id = int(project.data["organisation"])
