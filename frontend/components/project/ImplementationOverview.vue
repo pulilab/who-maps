@@ -17,7 +17,9 @@
             label="Software"
           >
             <el-col :span="12">
-              <software-selector v-model="platform.id" />
+              <software-selector
+                v-model="platform.id"
+                :selected="implementation.platforms" />
               <el-form-item
                 v-if="platform.id"
                 label="Digital Health Interventions">

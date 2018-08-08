@@ -3,11 +3,12 @@
     :value="value"
     popper-class="SoftwareSelectorDropdown"
     class="SoftwareSelector"
+    value-key="id"
     placeholder="Select from list"
     @change="changeHandler">
 
     <el-option
-      v-for="paltform in technologyPlatforms"
+      v-for="paltform in availablePlatforms"
       :key="paltform.id"
       :label="paltform.name"
       :value="paltform.id"/>
@@ -25,12 +26,19 @@ export default {
     value: {
       type: Number,
       default: null
+    },
+    selected: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {
     ...mapGetters({
       technologyPlatforms: 'projects/getTechnologyPlatforms'
-    })
+    }),
+    availablePlatforms () {
+      return this.technologyPlatforms.filter(tp => !this.selected.some(s => s.id === tp.id) || tp.id === this.value);
+    }
   },
   methods: {
     changeHandler (value) {
