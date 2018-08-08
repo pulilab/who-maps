@@ -90,11 +90,11 @@ export default {
       height: auto;
       max-height: 420px;
       color: @colorWhite;
-      background: fade(@colorWhite, 90%);
+      background: fade(@colorGrayLightest, 90%);
       box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.15);
 
       .CountryHeader {
-        padding: 15px 12px 0;
+        padding: 20px 20px 0;
         background-color: @colorWhite;
       }
 
@@ -104,26 +104,26 @@ export default {
           background-color: @colorWhite;
 
           .el-tabs__nav-wrap {
-            padding: 0 12px;
-          }
-
-          .el-tabs__item {
-            font-size: @fontSizeSmall;
+            padding: 0 20px;
           }
         }
         .el-tabs__content {
-          padding: 12px;
+          padding: 20px;
 
           .ProjectCard {
-            margin: 0 0 12px;
+            margin: 0 0 8px;
+
+            &:last-child {
+              margin: 0;
+            }
           }
         }
       }
 
       .CloseBox {
         position: absolute;
-        top: 4px;
-        right: 4px;
+        top: 8px;
+        right: 8px;
         width: 40px;
         height: 40px;
         color: @colorTextSecondary;

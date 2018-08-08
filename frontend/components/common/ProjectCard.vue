@@ -110,7 +110,7 @@ export default {
     }
 
     .ProjectCountryOrg {
-      margin: 6px 0;
+      margin-top: 6px;
       font-size: @fontSizeSmall;
       color: @colorTextSecondary;
       white-space: nowrap;
@@ -140,6 +140,7 @@ export default {
     }
 
     .FoundIn {
+      margin-top: 6px;
       font-size: @fontSizeSmall;
       color: @colorTextMuted;
 

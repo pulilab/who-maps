@@ -52,9 +52,10 @@ export default {
     .Flag {
       width: auto;
     }
+
     .Name {
-      padding: 0 50px 0 8px;
-      font-size: @fontSizeBase;
+      padding: 0 50px 0 10px;
+      font-size: @fontSizeMedium;
       font-weight: 700;
       color: @colorTextPrimary;
     }

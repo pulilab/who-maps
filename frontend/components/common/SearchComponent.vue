@@ -307,7 +307,7 @@ export default {
     }
 
     .SearchResultItem {
-      margin: 0 20px 12px;
+      margin: 0 20px 8px;
       cursor: pointer;
 
       &:last-child {
