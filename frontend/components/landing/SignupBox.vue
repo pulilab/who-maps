@@ -93,6 +93,15 @@ export default {
           .el-form-item__label {
             color: @colorWhite;
           }
+
+          .el-form-item__label ,
+          .el-input__inner {
+            font-size: @fontSizeMedium;
+          }
+
+          .el-input__inner {
+            height: 50px;
+          }
         }
 
         .CardActionsBottom {
@@ -104,8 +113,22 @@ export default {
             justify-content: center;
           }
 
-          .secondaryAction {
+          .SecondaryAction {
             display: none;
+          }
+
+          .PrimaryAction {
+            width: 100%;
+
+            .el-button {
+              height: 50px;
+            }
+
+            .el-button {
+              float: none;
+              width: 200px;
+              font-size: @fontSizeLarge;
+            }
           }
         }
       }

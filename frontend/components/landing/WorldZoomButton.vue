@@ -29,14 +29,14 @@ export default {
     display: inline-block;
     width: 30px;
     height: 30px;
-    background-color: @colorWhite;
+    background-color: rgba(255,255,255,.9);
     border-radius: 2px;
     box-shadow: 0 0 20px 5px rgba(0,0,0,.15);
     cursor: pointer;
     transition: @transitionAll;
 
     &:hover {
-      background-color: #F4F4F4;
+      background-color: fade(@colorGrayLightest, 90%);
 
       .svg-inline--fa {
         color: @colorBrandPrimary;
@@ -48,7 +48,7 @@ export default {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 20px;
+      font-size: 18px;
       color: @colorTextSecondary;
       transition: @transitionAll;
     }

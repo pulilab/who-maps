@@ -89,6 +89,7 @@ export default {
     cursor: pointer;
 
     &.hovered {
+      border-color: @colorTextMuted;
       .ProjectName {
         color: @colorBrandPrimary;
       }

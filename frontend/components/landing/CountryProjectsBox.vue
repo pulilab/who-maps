@@ -1,40 +1,48 @@
 <template>
-  <div
-    v-if="activeCountry"
-    class="CountryProjectsBox">
-    <el-row type="flex">
-      <el-col>
-        <country-item :id="activeCountry"/>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col>
-        <el-tabs
-          v-model="activeTab"
-        >
-          <el-tab-pane
-            label="Sub-National"
-            name="subNational">
-            <project-card />
-            <project-card />
-            <project-card />
-          </el-tab-pane>
-          <el-tab-pane
-            label="National"
-            name="National">
-            <project-card />
-            <project-card />
-          </el-tab-pane>
-        </el-tabs>
-      </el-col>
-    </el-row>
-    <el-button
-      class="CloseBox"
-      circle
-      icon="el-icon-close"
-      @click="closeCountryProjextBox"
-    />
-  </div>
+  <transition name="el-zoom-in-top">
+    <div
+      v-if="activeCountry"
+      class="CountryProjectsBox">
+      <el-row
+        type="flex"
+        class="CountryHeader"
+      >
+        <el-col>
+          <country-item :id="activeCountry"/>
+        </el-col>
+      </el-row>
+      <el-row class="ProjectsList">
+        <el-col>
+          <el-tabs
+            v-model="activeTab"
+          >
+            <!-- TODO -->
+            <!-- Are we able to change the calculation of '.el-tabs__item .is-top' width as the '.el-tabs__item' has 'padding: 0 12px'? -->
+            <el-tab-pane
+              label="Sub-National"
+              name="subNational">
+              <project-card />
+              <project-card />
+              <project-card />
+            </el-tab-pane>
+            <el-tab-pane
+              label="National"
+              name="National">
+              <project-card />
+              <project-card />
+            </el-tab-pane>
+          </el-tabs>
+        </el-col>
+      </el-row>
+      <el-button
+        circle
+        class="CloseBox"
+        @click="closeCountryProjextBox"
+      >
+        <fa icon="times" />
+      </el-button>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -75,21 +83,56 @@ export default {
   .CountryProjectsBox {
       z-index: 400;
       position: absolute;
-      bottom: 40px;
+      top: 40px;
       left: 40px;
       box-sizing: border-box;
       width: 360px;
       height: auto;
       max-height: 420px;
-      padding: 20px 40px;
       color: @colorWhite;
-      background: fade(@colorBrandPrimary, 90%);
-      box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.12);
+      background: fade(@colorWhite, 90%);
+      box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.15);
+
+      .CountryHeader {
+        padding: 15px 12px 0;
+        background-color: @colorWhite;
+      }
+
+      .ProjectsList {
+        .el-tabs__header {
+          margin: 0;
+          background-color: @colorWhite;
+
+          .el-tabs__nav-wrap {
+            padding: 0 12px;
+          }
+
+          .el-tabs__item {
+            font-size: @fontSizeSmall;
+          }
+        }
+        .el-tabs__content {
+          padding: 12px;
+
+          .ProjectCard {
+            margin: 0 0 12px;
+          }
+        }
+      }
 
       .CloseBox {
         position: absolute;
-        top: 16px;
-        right: 16px;
+        top: 4px;
+        right: 4px;
+        width: 40px;
+        height: 40px;
+        color: @colorTextSecondary;
+        border: none !important;
+        background-color: @colorWhite !important;
+
+        &:hover {
+          color: @colorTextPrimary;
+        }
       }
     }
 

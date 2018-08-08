@@ -62,7 +62,7 @@ export default {
       padding: 20px 40px;
       color: @colorWhite;
       background: fade(@colorBrandPrimary, 90%);
-      box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.12);
+      box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.15);
 
       h2 {
         margin: 20px 0;

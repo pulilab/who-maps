@@ -32,7 +32,7 @@
           </el-form-item>
 
           <el-form-item
-            label="Password (Again)"
+            label="Password (again)"
             prop="password2">
             <el-input
               v-model="signupForm.password2"
@@ -52,7 +52,7 @@
           align="middle"
         >
           <el-col
-            :span="6"
+            :span="12"
             class="SecondaryAction LoginLink">
             <h6>Already signed up?</h6>
             <nuxt-link
@@ -63,7 +63,7 @@
             </nuxt-link>
           </el-col>
           <el-col
-            :span="6"
+            :span="12"
             class="PrimaryAction">
             <el-button
               type="primary"

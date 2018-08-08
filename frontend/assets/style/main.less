@@ -110,11 +110,9 @@ a {
     position: relative;
     overflow: hidden;
     text-indent: -9999px;
+    background-color: rgba(255,255,255,.9);
     transition: @transitionAll;
-  }
 
-  .leaflet-control-zoom-in,
-  .leaflet-control-zoom-out {
     &::before, &::after {
       content: "";
       position: absolute;
@@ -134,6 +132,8 @@ a {
     }
 
     &:hover {
+      background-color: fade(@colorGrayLightest, 90%);
+
       &::before, &::after {
         background-color: @colorBrandPrimary;
       }
@@ -146,8 +146,6 @@ a {
     }
   }
 }
-
-
 
 
 
@@ -166,9 +164,10 @@ i[class*="el-icon-"] {
 // Card
 
 .el-card {
-  border: 1px solid  @colorGrayLight;
+  border: solid @colorGrayLight;
+  border-width: 1px 1px 2px;
   border-radius: 0;
-  box-shadow: 0 1px 0 @colorGrayLight !important;
+  box-shadow: none !important;
 
   &.rounded {
     border-radius: 3px;
@@ -269,5 +268,16 @@ fieldset {
         transform: translate(0, 14px);
       }
     }
+  }
+}
+
+// Tabs
+
+.el-tabs__header {
+  .el-tabs__active-bar {}
+
+  .el-tabs__item {
+    font-weight: 700;
+    transition: @transitionAll;
   }
 }
