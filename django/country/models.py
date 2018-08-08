@@ -14,7 +14,6 @@ class LandingPageCommon(NameByIDMixin, ExtendedMultilingualModel):
     cover_text = models.TextField(blank=True, null=True)
     footer_title = models.CharField(max_length=128, blank=True, null=True)
     footer_text = models.CharField(max_length=128, blank=True, null=True)
-    project_approval = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
