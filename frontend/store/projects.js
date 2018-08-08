@@ -32,7 +32,7 @@ export const getters = {
   getDigitalHealthInterventionDetails: (state, getters) => id => {
     for (let category of getters.getDigitalHealthInterventions) {
       for (let group of category.subGroups) {
-        const result = group.strategies.find(s => s.id == id);
+        const result = group.strategies.find(s => s.id === id);
         if (result) {
           return result;
         }
