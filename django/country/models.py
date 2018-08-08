@@ -19,8 +19,11 @@ class LandingPageCommon(NameByIDMixin, ExtendedMultilingualModel):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return self.name
 
-class Country(AbstractCountry):
+
+class Country(LandingPageCommon):
     REGIONS = [
         (0, _('African Region')),
         (1, _('Region of the Americas')),
@@ -43,11 +46,8 @@ class Country(AbstractCountry):
         verbose_name_plural = "Countries"
         ordering = ('id',)
 
-    def __str__(self):
-        return self.name
 
-
-class Donor(AbstractCountry):
+class Donor(LandingPageCommon):
     # TODO change limit_choices_to after permission system upgrade
     users = models.ManyToManyField(UserProfile, help_text="User who can update the donor", blank=True,
                                    related_name='donor_admins',
@@ -56,9 +56,6 @@ class Donor(AbstractCountry):
     class Meta:
         verbose_name_plural = "Donors"
         ordering = ('id',)
-
-    def __str__(self):
-        return self.name
 
 
 class PartnerLogo(ExtendedModel):
