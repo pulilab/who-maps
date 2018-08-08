@@ -32,6 +32,9 @@ class UserManagement(models.Model):
 
     class Meta:
         abstract = True
+
+
+class Country(UserManagement, LandingPageCommon):
     REGIONS = [
         (0, _('African Region')),
         (1, _('Region of the Americas')),
@@ -42,24 +45,18 @@ class UserManagement(models.Model):
     ]
 
     code = models.CharField(max_length=4, default="NULL", help_text="ISO3166-1 country code", unique=True)
-    users = models.ManyToManyField(UserProfile, help_text="User who can update the country", blank=True,
-                                   related_name='country_admins',
-                                   limit_choices_to={'user__groups__name': 'Country Admin'})
     region = models.IntegerField(choices=REGIONS, null=True, blank=True)
     map_data = JSONField(default=dict, blank=True)
     map_activated_on = models.DateTimeField(blank=True, null=True,
                                             help_text="WARNING: this field is for developers only")
+    project_approval = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "Countries"
         ordering = ('id',)
 
 
-class Donor(LandingPageCommon):
-    # TODO change limit_choices_to after permission system upgrade
-    users = models.ManyToManyField(UserProfile, help_text="User who can update the donor", blank=True,
-                                   related_name='donor_admins',
-                                   limit_choices_to={'user__groups__name': 'Country Admin'})
+class Donor(UserManagement, LandingPageCommon):
 
     class Meta:
         verbose_name_plural = "Donors"
