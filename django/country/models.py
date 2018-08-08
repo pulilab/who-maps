@@ -22,7 +22,16 @@ class LandingPageCommon(NameByIDMixin, ExtendedMultilingualModel):
         return self.name
 
 
-class Country(LandingPageCommon):
+class UserManagement(models.Model):
+    users = models.ManyToManyField(UserProfile, help_text="User/viewer who can read confidential answers", blank=True,
+                                   related_name='%(class)s_viewers')
+    admins = models.ManyToManyField(UserProfile, help_text="User who can write questionnaire", blank=True,
+                                    related_name='%(class)s_admins')
+    super_admins = models.ManyToManyField(UserProfile, help_text="User who can update landing and all above",
+                                          blank=True, related_name='%(class)s_super_admins')
+
+    class Meta:
+        abstract = True
     REGIONS = [
         (0, _('African Region')),
         (1, _('Region of the Americas')),
