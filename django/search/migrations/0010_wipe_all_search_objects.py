@@ -14,5 +14,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(wipe_all_search_objects)
+        migrations.RunPython(wipe_all_search_objects, reverse_code=migrations.RunPython.noop)
     ]

@@ -17,5 +17,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(regenerate_search_objects)
+        migrations.RunPython(regenerate_search_objects, reverse_code=migrations.RunPython.noop)
     ]
