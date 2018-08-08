@@ -55,6 +55,8 @@ class CountryAdminSerializer(serializers.ModelSerializer):
             "footer_title",
             "footer_text",
             "users",
+            "admins",
+            "super_admins",
             "partner_logos",
             "project_approval",
             "map_data",
@@ -77,10 +79,11 @@ class DonorAdminSerializer(serializers.ModelSerializer):
             "footer_title",
             "footer_text",
             "users",
+            "admins",
+            "super_admins",
             "partner_logos",
-            "project_approval",
         )
-        read_only_fields = ("name", "project_approval",)
+        read_only_fields = ("name",)
 
 
 class LandingPageSerializer(serializers.ModelSerializer):
