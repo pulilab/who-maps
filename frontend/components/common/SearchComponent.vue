@@ -110,7 +110,7 @@
         </el-col>
         <el-col>
           <span class="SearchResultsCounter">
-            {{ results.length }} results
+            {{ results.length }} result(s)
           </span>
         </el-col>
         <el-col>
