@@ -89,7 +89,12 @@ export default {
     cursor: pointer;
 
     &.hovered {
-      color: @colorBrandPrimary;
+      .ProjectName {
+        color: @colorBrandPrimary;
+      }
+      .ProjectCountryOrg {
+        color: @colorTextPrimary;
+      }
     }
 
     .el-col {
@@ -99,6 +104,8 @@ export default {
     .ProjectName {
       font-size: @fontSizeBase;
       font-weight: 700;
+      color: @colorTextPrimary;
+      transition: @transitionAll;
     }
 
     .ProjectCountryOrg {
@@ -106,6 +113,7 @@ export default {
       font-size: @fontSizeSmall;
       color: @colorTextSecondary;
       white-space: nowrap;
+      transition: @transitionAll;
 
       .Country {
         width: auto;
@@ -144,7 +152,7 @@ export default {
     .fa-arrow-right {
       position: absolute;
       top: 50%;
-      right: 0;
+      right: 4px;
       transform: translateY(-50%);
       color: @colorBrandPrimary;
     }

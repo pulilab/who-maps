@@ -68,28 +68,46 @@ export default {
         margin: 0;
       }
     }
+
     .SingupComponent {
-      .Header {
-        display: none;
-      }
-
-      .Legend {
-        display: none;
-      }
-
+      .el-card__header,
+      .FieldsetLegend,
       .LoginLink {
         display: none;
       }
+
       .el-card {
         border: 0;
         border-radius: 0;
         box-shadow: none !important;
+
         .el-card__body {
           background-color: @colorBrandPrimary;
         }
-      }
-      .CardActions {
-        justify-content: space-around;
+
+        .el-form {
+          fieldset {
+            padding: 0;
+          }
+
+          .el-form-item__label {
+            color: @colorWhite;
+          }
+        }
+
+        .CardActionsBottom {
+          padding: 30px 0 0;
+          border: 0;
+          background-color: transparent;
+
+          .el-row {
+            justify-content: center;
+          }
+
+          .secondaryAction {
+            display: none;
+          }
+        }
       }
     }
   }

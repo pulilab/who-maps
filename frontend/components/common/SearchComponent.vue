@@ -281,7 +281,6 @@ export default {
         font-size: @fontSizeSmall;
         font-weight: 700;
         color: @colorTextSecondary;
-        text-transform: uppercase;
       }
 
       .AdvancedSearch {

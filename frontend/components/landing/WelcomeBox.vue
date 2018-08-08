@@ -1,20 +1,22 @@
 <template>
   <div class="WelcomeBox-holder">
-    <div
-      v-show="showWelcomeBox"
-      class="WelcomeBox">
+    <transition name="el-zoom-in-top">
+      <div
+        v-show="showWelcomeBox"
+        class="WelcomeBox">
 
-      <h2>Welcome!</h2>
-      <h6>{{ landingPageDefaults.cover_text }}</h6>
+        <h2>Welcome!</h2>
+        <h6>{{ landingPageDefaults.cover_text }}</h6>
 
-      <el-button
-        circle
-        class="CloseWelcomeBox"
-        @click="closeWelcomeBox"
-      >
-        <fa icon="times" />
-      </el-button>
-    </div>
+        <el-button
+          circle
+          class="CloseWelcomeBox"
+          @click="closeWelcomeBox"
+        >
+          <fa icon="times" />
+        </el-button>
+      </div>
+    </transition>
   </div>
 </template>
 

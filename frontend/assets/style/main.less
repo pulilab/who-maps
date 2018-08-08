@@ -61,6 +61,10 @@ a {
       color: @colorBrandPrimaryLight;
     }
 
+    &.Small {
+      font-size: @fontSizeSmall;
+    }
+
     &.IconRight {
       .svg-inline--fa {
         margin-left: 6px;
@@ -126,8 +130,8 @@ i[class*="el-icon-"] {
     background-color: @colorBrandPrimary;
   }
 
-  .cardActions {
-    padding: 12px;
+  .CardActionsBottom {
+    padding: 12px 20px;
     border-top: 1px solid @colorGrayLight;
     background-color: @colorBrandBlueLight;
 
@@ -135,8 +139,16 @@ i[class*="el-icon-"] {
       margin: 0;
     }
 
-    .primaryAction .el-button {
-      float: right;
+    .secondaryAction {
+      width: 100%;
+    }
+
+    .primaryAction {
+      width: auto;
+
+      .el-button {
+        float: right;
+      }
     }
   }
 }
@@ -162,12 +174,11 @@ fieldset {
   padding: 0;
   border: 0;
 
-  .Legend {
+  .FieldsetLegend {
     margin: 0 0 20px;
     font-size: @fontSizeBase;
     font-weight: 700;
     color: @colorTextMuted;
-    text-transform: uppercase;
   }
 }
 
@@ -194,6 +205,13 @@ fieldset {
 
     .el-form-item__label {
       font-weight: 700;
+    }
+
+    .el-form-item__error {
+      // Form error for last form element
+      .ModifiedFormError {
+        transform: translate(0, 14px);
+      }
     }
   }
 }

@@ -27,16 +27,15 @@
             <el-input
               v-model="password"
               type="password" />
-
-            <!-- General form error for last form element
-              (transformed down 14px to fit next to client error) -->
             <div
               v-if="nonFieldErrors"
               class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
             </div>
           </el-form-item>
         </fieldset>
+      </el-form>
 
+      <div class="CardActionsBottom">
         <el-row
           type="flex"
           justify="space-between"
@@ -57,7 +56,7 @@
             </el-button>
           </el-col>
         </el-row>
-      </el-form>
+      </div>
     </el-card>
   </div>
 </template>
@@ -119,14 +118,10 @@ export default {
 
   .LoginComponent {
     width: @cardSizeSmall;
-    margin: 0 auto;
+    margin: 80px auto;
 
     fieldset {
       padding: 40px 80px;
-    }
-
-    .ModifiedFormError {
-      transform: translate(0, 14px);
     }
   }
 </style>
