@@ -4,7 +4,7 @@
 .cms-experience-list {
   margin-top: 20px;
   padding: 0 60px;
-  background-color: #fff;
+  background-color: $color-white;
 
   > div {
     padding: 40px 0 60px;
@@ -25,6 +25,7 @@
 
   .empty-card {
     margin-bottom: 30px;
+    color: $text-primary;
   }
 
 
@@ -49,8 +50,7 @@
 
   .cms-list-element {
     margin: 0 60px 24px 0;
-    padding-bottom: 24px;
-    box-shadow: none;
+    padding: 20px;
     border-bottom: 1px solid $color-gray-lighter;
 
     .cover-img,
@@ -62,10 +62,9 @@
       padding: 0;
 
       h3.md-title {
-        font-size: 18px;
-        line-height: 27px;
-        margin-bottom: 0 !important;
-        margin-top: 5px;
+        font-size: 16px;
+        line-height: 24px;
+        margin: 0 !important;
         padding: 0;
       }
 

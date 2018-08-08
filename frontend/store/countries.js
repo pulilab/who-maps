@@ -10,7 +10,24 @@ export const getters = {
     return state.geoJsonLibrary;
   },
   getCountryDetails: (state, getters) => id => {
-    return getters.getCountries.find(c => c.id === id);
+    const country = getters.getCountries.find(c => c.id === id);
+    return {
+      ...country,
+      geoJson: getters.getCountryGeoJson(id),
+      districts: getters.getCountryFirstSubLevel(id)
+    };
+  },
+  getCountryGeoJson: (state, getters) => id => {
+    return getters.getGeoJsonLibrary[id];
+  },
+  getCountryFirstSubLevel: (state, getters) => id => {
+    const ln = 'en';
+    const country = getters.getCountries.find(c => c.id === id);
+    if (country && country.map_data && country.map_data.first_sub_level) {
+      return country.map_data.first_sub_level.elements
+        .map(ccd => ({ id: ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
+    }
+    return [];
   }
 };
 

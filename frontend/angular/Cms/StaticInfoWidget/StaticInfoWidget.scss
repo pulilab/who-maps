@@ -5,9 +5,10 @@ cms-static-info-widget {
 }
 
 .cms-static-info-wrapper {
-  margin-top: 20px;
+  margin: 20px 0;
   padding: 0 60px;
-  background-color: #fff;
+  background-color: $color-white;
+  color: $text-primary;
 
   > div {
     padding: 40px 0;
@@ -46,11 +47,12 @@ cms-static-info-widget {
       line-height: 20px;
       margin: 12px 0;
       padding-left: 30px;
+      color: $text-primary;
 
       &::before {
         content: "check";
         @include md-icon($font-size: 20px);
-        color: #CD9923;
+        color: $color-green;
         position: absolute;
         left: 0;
         top: 0;

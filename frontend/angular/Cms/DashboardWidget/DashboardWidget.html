@@ -1,5 +1,4 @@
-<div md-whiteframe="2" class="cms-widget-wrapper" layout="column"  layout-align="start center">
-
+<md-card class="cms-widget-wrapper" layout="column"  layout-align="start center">
   <div class="cms-widget-header" ng-class="vm.axisColor" layout="row">
     <div class="domain-icon" ng-class="vm.domainIcon"></div>
     <div class="domain-score">
@@ -7,7 +6,7 @@
     </div>
     <div flex></div>
     <div class="domain-selector">
-      <md-select aria-label="domain-selector" ng-model="vm.currentDomain" md-selected-text="'Select a domain' | translate" class="">
+      <md-select aria-label="domain-selector" ng-model="vm.currentDomain" md-selected-text="'Select a domain' | translate" class="md-small" md-container-class="md-small">
         <md-optgroup label="{{axis.name}}" ng-repeat="axis in vm.axes">
           <md-option ng-value="domain" ng-repeat="domain in axis.domains">{{domain.name}}</md-option>
         </md-optgroup>
@@ -23,47 +22,43 @@
     </div>
   </div>
 
-  <div layout="row" layout-margin="10" layout-wrap>
+  <div layout="row" layout-wrap>
     <div class="category-column" layout="column" flex>
-      <div md-whiteframe="2" class="category-header lessons-tips" layout="row"  layout-align="start center">
+      <div class="category-header lessons-tips" layout="row"  layout-align="start center">
         <h4>
           <translate>Tips and Considerations</translate>
         </h4>
       </div>
       <cms-list-element ng-repeat="item in vm.lessons | orderBy:'id':true | limitTo:3" item="item"></cms-list-element>
-      <div md-whiteframe="2"
-           layout="row"
+      <md-card layout="row"
            layout-align="start center"
            ng-show="vm.lessons.length === 0"
-           class="empty-card">
+           class="empty-card md-card-rounded">
         <translate>No lessons have been added yet...</translate>
-      </div>
-
+      </md-card>
       <md-button md-no-ink ui-sref="cms({'#': 'lessons'})" class="md-primary md-small goto-cms">
         <translate>More Tips &amp; Considerations</translate>
       </md-button>
     </div>
     <div class="category-column" layout="column" flex>
-      <div md-whiteframe="2" class="category-header resources" layout="row"  layout-align="start center">
+      <div class="category-header resources" layout="row"  layout-align="start center">
         <h4>
           <translate>Resources</translate>
         </h4>
       </div>
       <cms-list-element ng-repeat="item in vm.resources | orderBy:'id':true | limitTo:3" item="item"></cms-list-element>
-      <div md-whiteframe="2"
-           layout="row"
+      <md-card layout="row"
            layout-align="start center"
            ng-show="vm.resources.length === 0"
-           class="empty-card">
+           class="empty-card md-card-rounded">
         <translate>No resources have been added yet...</translate>
-      </div>
+      </md-card>
       <md-button md-no-ink ui-sref="cms({'#': 'resources'})" class="md-primary md-small goto-cms">
         <translate>More Resources</translate>
       </md-button>
     </div>
     <div class="category-column" layout="column" flex>
-      <div md-whiteframe="2"
-           class="category-header experiences"
+      <div class="category-header experiences"
            layout="row"
            layout-align="start center">
         <h4>
@@ -71,17 +66,15 @@
         </h4>
       </div>
       <cms-list-element ng-repeat="item in vm.experiences | orderBy:'id':true | limitTo:3" item="item"></cms-list-element>
-      <div md-whiteframe="2"
-           layout="row"
+      <md-card layout="row"
            layout-align="start center"
            ng-show="vm.experiences.length === 0"
-           class="empty-card">
+           class="empty-card md-card-rounded">
         <translate>No experiences have been added yet...</translate>
-      </div>
+      </md-card>
       <md-button md-no-ink ui-sref="cms({'#': 'experiences'})" class="md-primary md-small goto-cms">
         <translate>More Experiences</translate>
       </md-button>
     </div>
   </div>
-
-</div>
+</md-card>

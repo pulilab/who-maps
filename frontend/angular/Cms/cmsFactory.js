@@ -18,20 +18,17 @@ import reportButton from './ReportDeleteButton/reportDeleteButtonComponent';
 import planningAndGuidanceComponent from './PlanningAndGuidance/planningAndGuidanceComponent';
 import trixComponent from '../Common/TrixComponent/trixComponent';
 
-const moduleName = 'cms';
-
 function config ($stateProvider, $locationProvider, $ngReduxProvider) {
   $stateProvider
-    .state(moduleName,
-      {
-        url: '/:lng/cms',
-        template: '<planning-and-guidance></planning-and-guidance>',
-        resolve: {
-          cms: ['$ngRedux', ($ngRedux) => {
-            return $ngRedux.dispatch(actions.loadCmsData());
-          }]
-        }
-      });
+    .state('cms', {
+      url: '/:lng/cms',
+      template: '<planning-and-guidance></planning-and-guidance>',
+      resolve: {
+        cms: ['$ngRedux', ($ngRedux) => {
+          return $ngRedux.dispatch(actions.loadCmsData());
+        }]
+      }
+    });
   $locationProvider.html5Mode(true);
 
   const reduxDevTools = window.__REDUX_DEVTOOLS_EXTENSION__;
