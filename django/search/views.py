@@ -10,7 +10,10 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
     # filter_backends = (filters.OrderingFilter,)
     # ordering_fields = ('project_name', 'contact_name')
 
-    def get(self, request, *args, **kwargs):
+    def get_serializer_class(self):
+        return None
+
+    def list(self, request, *args, **kwargs):
         queryset = ProjectSearch.search(self.get_queryset())
 
         queryset = self.filter_queryset(queryset)
