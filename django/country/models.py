@@ -38,7 +38,7 @@ class Country(LandingPageCommon):
                                    related_name='country_admins',
                                    limit_choices_to={'user__groups__name': 'Country Admin'})
     region = models.IntegerField(choices=REGIONS, null=True, blank=True)
-    map_data = JSONField(default=dict(), blank=True)
+    map_data = JSONField(default=dict, blank=True)
     map_activated_on = models.DateTimeField(blank=True, null=True,
                                             help_text="WARNING: this field is for developers only")
 
