@@ -1,7 +1,8 @@
-from django.conf.urls import url
+from rest_framework.routers import SimpleRouter
 
-from . import views
+from .views import SearchViewSet
 
-urlpatterns = [
-    # url(r"^search/projects/$", view=views.search_project, name="search-project"),
-]
+router = SimpleRouter()
+router.register(r'search', SearchViewSet)
+
+urlpatterns = router.urls
