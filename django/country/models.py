@@ -7,7 +7,7 @@ from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel
 from user.models import UserProfile
 
 
-class AbstractCountry(NameByIDMixin, ExtendedMultilingualModel):
+class LandingPageCommon(NameByIDMixin, ExtendedMultilingualModel):
     name = models.CharField(max_length=255, unique=True)
     logo = models.ImageField(blank=True, null=True)
     cover = models.ImageField(blank=True, null=True)
