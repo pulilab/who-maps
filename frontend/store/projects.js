@@ -7,7 +7,8 @@ export const state = () => ({
   projectStructure: null,
   currentProjectToolkitVersions: [],
   currentProjectCoverageVersions: [],
-  currentProjectTeamViewers: null
+  currentProjectTeamViewers: null,
+  currentProjectDHI: []
 });
 
 const getTodayString = () => {
@@ -20,8 +21,25 @@ const getTodayString = () => {
 };
 
 export const getters = {
-  getUserProjectList: state => [...state.userProjects.map(p => ({...p}))],
-  getProjectStructure: state => state.projectStructure,
+  getUserProjectList: state => [...state.userProjects.map(p => ({ ...p }))],
+  getHealthFocusAreas: state => state.projectStructure.health_focus_areas ? [...state.projectStructure.health_focus_areas] : [],
+  getHisBucket: state => state.projectStructure.his_bucket ? [...state.projectStructure.his_bucket] : [],
+  getHscChallenges: state => state.projectStructure.hsc_challenges ? [...state.projectStructure.hsc_challenges] : [],
+  getInteroperabilityLinks: state => state.projectStructure.interoperability_links ? [...state.projectStructure.interoperability_links] : [],
+  getInteroperabilityStandards: state => state.projectStructure.interoperability_standards ? [...state.projectStructure.interoperability_standards] : [],
+  getLicenses: state => state.projectStructure.licenses ? [...state.projectStructure.licenses] : [],
+  getDigitalHealthInterventions: state => state.projectStructure.strategies ? [...state.projectStructure.strategies] : [],
+  getDigitalHealthInterventionDetails: (state, getters) => id => {
+    for (let category of getters.getDigitalHealthInterventions) {
+      for (let group of category.subGroups) {
+        const result = group.strategies.find(s => s.id == id);
+        if (result) {
+          return result;
+        }
+      }
+    }
+  },
+  getTechnologyPlatforms: state => state.projectStructure.technology_platforms ? [...state.projectStructure.technology_platforms] : [],
   getToolkitVersions: state => [...state.currentProjectToolkitVersions],
   getCoverageVersions: state => [...state.currentProjectCoverageVersions],
   getTeamViewers: state => state.currentProjectTeamViewers,
@@ -143,7 +161,8 @@ export const getters = {
         return ret;
       }, { labels: [], data: [] });
     }
-  }
+  },
+  getCurrentProjectDHI: state => [...state.currentProjectDHI]
 };
 
 export const actions = {
@@ -188,12 +207,15 @@ export const actions = {
     await this.$axios.post(`/api/projects/${id}/version/`);
     return dispatch('loadProjectDetails', id);
   },
-  async loadProjectStructure ({getters, commit}) {
-    const structure = getters.getProjectStructure;
+  async loadProjectStructure ({ state, commit }) {
+    const structure = state.projectStructure;
     if (isEmpty(structure)) {
       const { data } = await this.$axios.get('/api/projects/structure/');
       commit('SET_PROJECT_STRUCTURE', data);
     }
+  },
+  setCurrentProjectDHI ({commit}, value) {
+    commit('SET_CURRENT_PROJECT_DHI', value);
   }
 };
 
@@ -215,5 +237,8 @@ export const mutations = {
   },
   SET_CURRENT_PROJECT_TEAM_VIEWERS: (state, teamViewers) => {
     state.currentProjectTeamViewers = teamViewers;
+  },
+  SET_CURRENT_PROJECT_DHI: (state, dhi) => {
+    state.currentProjectDHI = dhi;
   }
 };
