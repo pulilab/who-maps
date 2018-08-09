@@ -97,18 +97,19 @@
               </nuxt-link>
             </div>
             <div>
-              <el-button
-                type="text"
+              <!-- TODO -->
+              <nuxt-link
+                :to="localePath('toolkit')"
                 class="HeaderBtn"
               >
                 Toolkit
-              </el-button>
+              </nuxt-link>
             </div>
             <div>
               <nuxt-link
                 :to="localePath('index-projects-create')"
                 class="HeaderBtn">
-                <i class="el-icon-plus" />
+                <fa icon="plus-circle" />
                 New Project
               </nuxt-link>
             </div>
@@ -230,6 +231,10 @@ export default {
           background-color: @colorBrandAccent;
           transform: translateY(0);
         }
+      }
+
+      .svg-inline--fa {
+        margin-right: 2px;
       }
     }
 
