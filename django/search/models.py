@@ -1,9 +1,10 @@
 import itertools
 import operator
 import functools
+from typing import Set
 
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.db.models.signals import post_save
 from django.contrib.postgres.fields import ArrayField
 from django.dispatch import receiver
@@ -26,7 +27,7 @@ class ProjectSearch(ExtendedModel):
     hfa_categories = ArrayField(models.IntegerField(), default=list)
 
     @classmethod
-    def search(cls, queryset, search_term, search_in):
+    def search(cls, queryset: QuerySet, search_term: str, search_in: Set[str]) -> QuerySet:
         """
         Search in QuerySet
         search_term: STRING -- search term
