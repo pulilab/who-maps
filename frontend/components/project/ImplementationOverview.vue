@@ -31,19 +31,12 @@
             <el-col
               v-show="platform.id"
               :span="12">
-              <el-button
-                type="text"
-                @click="addDhi">
-                <fa icon="plus" />
-                Add more
-              </el-button>
-              <el-button
-                v-show="implementation.platforms.length > 1"
-                type="text"
-                @click="rmDhi(index, platform.id)">
-                <fa icon="minus" />
-                remove
-              </el-button>
+              <add-rm-buttons
+                :show-add="!!platform.id"
+                :show-rm="implementation.platforms.length > 1"
+                @add="addDhi"
+                @rm="rmDhi(index, platform.id)"
+              />
             </el-col>
           </el-form-item>
         </el-form-item>
@@ -62,6 +55,31 @@
           prop="his_bucket">
           <his-bucket-selector v-model="implementation.his_bucket" />
         </el-form-item>
+        <div class="CoverageArea">
+          <el-form-item label="What kind of coverage does your project have?">
+            <el-radio-group v-model="implementation.coverageType">
+              <el-radio :label="1">Sub-national</el-radio>
+              <el-radio :label="2">National</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <sub-national-level-deployment
+            v-show="implementation.coverageType == 1"
+            :coverage.sync="implementation.coverage"
+            :coverage-data.sync="implementation.coverageData"
+            :coverage-second-level.sync="implementation.coverage_second_level"/>
+          <div
+            v-show="implementation.coverageType == 2"
+            class="NationalLevelDeployment">
+            <fa icon="flag" />
+            National level deployment
+            <coverage-fieldset
+              :health-workers.sync="implementation.national_level_deployment.health_workers"
+              :clients.sync="implementation.national_level_deployment.clients"
+              :facilities.sync="implementation.national_level_deployment.facilities"
+            />
+          </div>
+        </div>
+
       </el-form>
     </collapsible-card>
   </div>
@@ -74,6 +92,10 @@ import HealthFocusAreasSelector from './HealthFocusAreasSelector';
 import HisBucketSelector from './HisBucketSelector';
 import SoftwareSelector from './SoftwareSelector';
 import DigitalHealthInterventionsSelector from './DigitalHealthInterventionsSelector';
+import SubNationalLevelDeployment from './SubNationalLevelDeployment';
+import AddRmButtons from './AddRmButtons';
+import CoverageFieldset from './CoverageFieldset';
+
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
@@ -83,7 +105,10 @@ export default {
     HisBucketSelector,
     HealthFocusAreasSelector,
     SoftwareSelector,
-    DigitalHealthInterventionsSelector
+    DigitalHealthInterventionsSelector,
+    SubNationalLevelDeployment,
+    AddRmButtons,
+    CoverageFieldset
   },
   data () {
     return {
@@ -91,7 +116,16 @@ export default {
         platforms: [{}],
         health_focus_areas: [],
         hsc_challenges: [],
-        his_bucket: []
+        his_bucket: [],
+        coverageType: 1,
+        coverage: [{}],
+        coverageData: {},
+        coverage_second_level: [{}],
+        national_level_deployment: {
+          health_workers: 0,
+          clients: 0,
+          facilities: 0
+        }
       },
       rules: {}
     };
