@@ -44,9 +44,10 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         return None
 
     def list(self, request, *args, **kwargs):
-        queryset = ProjectSearch.search(self.get_queryset())
+        query_params = request.query_params
 
-        queryset = self.filter_queryset(queryset)
+        search_term = query_params.get('q')
+        search_in = {x.strip() for x in query_params.get('in').split(',')}
 
         page = self.paginate_queryset(queryset)
 
