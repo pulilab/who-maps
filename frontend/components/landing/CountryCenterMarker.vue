@@ -21,9 +21,12 @@
             class="CountryViewBtn"
             @click="openCountryView">
             <fa icon="search-plus" />
-            <!-- TODO -->
-            <!-- Pls remove the relevant js code... -->
-            <span class="Text">Country view</span>
+            <span
+              v-show="popUpHover"
+              class="Text"
+            >
+              Country view
+            </span>
           </el-button>
         </div>
       </l-popup>
@@ -148,30 +151,26 @@ export default {
       box-shadow: 0 0 5px rgba(0,0,0,.12), 0 5px 5px rgba(0,0,0,.24);
       transition: @transitionAll;
 
+      > span {
+        display: inline-flex;
+        height: 100%;
+        align-items: center;
+      }
+
       .svg-inline--fa {
         font-size: 16px;
-        position: relative;
-        top: 2px;
-        left: -1px;
+        margin-left: -1px;
       }
 
       .Text {
-        display: inline-block;
-        width: 0;
-        opacity: 0;
-        font-size: 13px;
+        font-size: 12px;
         line-height: 36px;
-        transition: @transitionAll;
+        padding-left: 4px;
       }
 
       &:hover {
         width: auto;
         background-color: @colorBrandAccent;
-
-        .Text {
-          width: auto;
-          opacity: 1;
-        }
       }
     }
   }
