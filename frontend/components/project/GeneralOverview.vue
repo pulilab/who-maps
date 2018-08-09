@@ -119,6 +119,7 @@ import CollapsibleCard from './CollapsibleCard';
 import TeamSelector from './TeamSelector';
 import CountrySelect from '../common/CountrySelect';
 import OrganisationSelect from '../common/OrganisationSelect';
+import { mapActions } from 'vuex';
 
 export default {
   components: {
@@ -132,7 +133,6 @@ export default {
       general: {
         name: null,
         organisation: null,
-        country: null,
         geographic_scope: null,
         implementation_overview: null,
         start_end_date: null,
@@ -147,6 +147,19 @@ export default {
         ]
       }
     };
+  },
+  watch: {
+    'general.country': {
+      immediate: true,
+      handler (value) {
+        this.setCurrentProjectCountry(value);
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      setCurrentProjectCountry: 'projects/setCurrentProjectCountry'
+    })
   }
 };
 </script>
