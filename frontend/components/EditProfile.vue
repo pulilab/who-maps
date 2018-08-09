@@ -19,7 +19,7 @@
 
         <el-form-item label="My email address">
           <el-input
-            v-model="email"
+            v-model="profile.email"
             disabled
             type="text" />
         </el-form-item>
@@ -69,7 +69,6 @@
 
     <h3>TODO</h3>
     <ul>
-      <li>E-mail binding</li>
       <li>Validations / requireds</li>
       <li>Strings mapping to the already translated ones</li>
     </ul>
@@ -83,7 +82,6 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
   data () {
     return {
-      email: 'TODO: get it!',
       innerProfile: {
         name: '', // 'Takacs Andras Tamas'
         organisation: '', // code
