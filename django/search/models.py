@@ -29,8 +29,8 @@ class ProjectSearch(ExtendedModel):
     def search(cls, queryset, search_term, search_in):
         """
         Search in QuerySet
-        search_term: <INPUT> -- search term
-        search_in: <name,org,country,overview,loc,donor,partner> -- default is all
+        search_term: STRING -- search term
+        search_in: LIST <name,org,country,overview,loc,donor,partner> -- default is all
         :return: QuerySet
         """
         kwargs = {}
