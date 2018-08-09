@@ -15,47 +15,6 @@ from user.models import Organisation
 
 
 class ProjectSearch(ExtendedModel):
-    MAP_VALUES = (
-        "project_id",
-        "project__name",
-        "organisation_id",
-        "country_id",
-        "project__data__coverage",
-        "project__data__national_level_deployment",
-        "project__data__government_investor",
-        "project__approval__approved",
-        "found_in"  # TODO: compute this
-    )
-
-    LIST_VALUES = (
-        "project_id",
-        "project__name",
-        "organisation_id",
-        "country_id",
-        "project__data__geographic_scope",
-        "project__data__implementation_overview",
-        "project__data__contact_name",
-        "project__data__contact_email",
-        "project__data__platforms",
-        "project__data__health_focus_areas",
-        "project__data__hsc_challenges",
-        "project__data__his_bucket",
-        "country__region",
-        "project__data__government_investor",
-        "project__data__donors",  # TODO: will be refactored
-        "project__approval__approved"
-    )
-
-    SEARCH_BY = (
-        "project__name",
-        "organisation__name",
-        "country__name",
-        "project__data__implementation_overview",
-        "coverage",
-        "project__data__implementing_partners",  # TODO: will be refactored
-        "project__data__donors"  # TODO: will be refactored
-    )
-
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
     organisation = models.ForeignKey(Organisation, null=True, on_delete=models.SET_NULL)
