@@ -1,7 +1,8 @@
 export const state = () => ({
   projects: [],
   selectedCountries: [],
-  currentZoom: 3
+  currentZoom: 3,
+  activeCountry: null
 });
 
 export const getters = {
@@ -32,6 +33,9 @@ export const getters = {
   },
   getCurrentZoom (state) {
     return state.currentZoom;
+  },
+  getActiveCountry (state) {
+    return state.activeCountry;
   }
 };
 
@@ -51,6 +55,9 @@ export const actions = {
   },
   setCurrentZoom ({commit}, value) {
     commit('SET_CURRENT_ZOOM', value);
+  },
+  setActiveCountry ({commit}, value) {
+    commit('SET_ACTIVE_COUNTRY', value);
   }
 };
 export const mutations = {
@@ -65,5 +72,8 @@ export const mutations = {
   },
   SET_CURRENT_ZOOM: (state, value) => {
     state.currentZoom = value;
+  },
+  SET_ACTIVE_COUNTRY: (state, value) => {
+    state.activeCountry = value;
   }
 };

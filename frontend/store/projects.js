@@ -38,6 +38,18 @@ export const getters = {
     }
     return undefined;
   },
+  getUserProjectDetails: (state, getters, rootState, rootGetters) => id => {
+    const p = getters.getUserProjectList.find(p => p.id === id);
+    if (p) {
+      const user = rootGetters['user/getProfile'];
+      return {
+        ...p,
+        isMember: user ? user.member.includes(p.id) : undefined,
+        isViewer: user ? user.viewer.includes(p.id) : undefined,
+        isPublished: !!(p.published.name)
+      };
+    }
+  },
   getMapsAxisData: (state, getters, rootState, rootGetters) => {
     const axis = rootGetters['system/getAxis'];
     const chartAxis = { labels: axis.map(a => a.name), data: [] };
@@ -150,12 +162,11 @@ export const actions = {
   },
   async setCurrentProject ({commit, dispatch}, id) {
     id = parseInt(id, 10);
-    commit('SET_CURRENT_PROJECT', id);
     await dispatch('loadProjectDetails', id);
+    commit('SET_CURRENT_PROJECT', id);
   },
-  async loadProjectDetails ({commit, state}, id) {
+  async loadProjectDetails ({commit, state}, projectId) {
     try {
-      const projectId = state.currentProject;
       if (projectId) {
         const [toolkitVersions, coverageVersions, teamViewers] =
                   await Promise.all([

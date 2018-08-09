@@ -1,7 +1,7 @@
 <template>
-  <!-- TODO -->
-  <!-- Add toggle class '.TopBarMin' if user scrolled down more than 180px -->
-  <div class="TopBar">
+  <div
+    v-scroll-class:TopBarMin="180"
+    class="TopBar">
     <el-row
       type="flex"
       justify="space-between"
@@ -9,16 +9,19 @@
     >
 
       <el-col class="LogoHolder">
-        <div>
+        <nuxt-link :to="localePath('index')">
           <img
             :src="countrySpecific ? countryLogoURL : '/logo-who-blue.svg'"
             :alt="countrySpecific ? 'Country logo' : 'WHO logo'"
             class="Logo">
-        </div>
+        </nuxt-link>
       </el-col>
 
       <el-col class="RightPart">
+        <!-- ANON MODE -->
         <el-row
+          v-if="!user"
+          class="AnonView"
           type="flex"
           justify="end">
           <el-col
@@ -40,13 +43,13 @@
             <div>
               <nuxt-link
                 :to="localePath('index-signup')"
-                class="HeaderBtn">Signup</nuxt-link>
+                class="HeaderBtn HideOnActive">Signup</nuxt-link>
             </div>
 
             <div>
               <nuxt-link
                 :to="localePath('index-login')"
-                class="HeaderBtn">Login</nuxt-link>
+                class="HeaderBtn HideOnActive">Login</nuxt-link>
             </div>
           </el-col>
 
@@ -62,16 +65,75 @@
             </div>
           </el-col>
         </el-row>
+        <!-- LOGGED IN MODE -->
+        <el-row
+          v-if="user"
+          class="LoggedInView"
+          type="flex"
+          justify="end">
+          <el-col class="AuthLinks">
+            <div>
+              <nuxt-link
+                :to="localePath('index-dashboard')"
+                class="HeaderBtn"
+              >
+                Dashboard
+              </nuxt-link>
+            </div>
+            <div>
+              <nuxt-link
+                :to="localePath('index-projects')"
+                class="HeaderBtn"
+              >
+                My Projects
+              </nuxt-link>
+            </div>
+            <div>
+              <nuxt-link
+                :to="localePath('index-cms')"
+                class="HeaderBtn"
+              >
+                Planning and Guidance
+              </nuxt-link>
+            </div>
+            <div>
+              <el-button
+                type="text"
+                class="HeaderBtn"
+              >
+                Toolkit
+              </el-button>
+            </div>
+            <div>
+              <nuxt-link
+                :to="localePath('index-projects-create')"
+                class="HeaderBtn">
+                <i class="el-icon-plus" />
+                New Project
+              </nuxt-link>
+            </div>
+            <user-dropdown class="HeaderBtn" />
+          </el-col>
+        </el-row>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+import VueScrollClass from 'vue-scroll-class';
+import { mapGetters } from 'vuex';
+
 import LanguageSelector from './LanguageSelector';
+import UserDropdown from './UserDropdown';
+
 export default {
+  directives: {
+    'scroll-class': VueScrollClass
+  },
   components: {
-    LanguageSelector
+    LanguageSelector,
+    UserDropdown
   },
   props: {
     countrySpecific: {
@@ -82,6 +144,11 @@ export default {
       type: String,
       default: '/mock/placeholder-sl.png'
     }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'user/getProfile'
+    })
   }
 };
 </script>
@@ -91,7 +158,6 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .TopBar {
-
     .TopBarInner {
       .limitPageWidth();
       height: 130px;
@@ -110,9 +176,16 @@ export default {
 
     .RightPart {
       padding: 16px 0;
+      transform: translateX(10px);
 
       > .el-row > .el-col {
         width: auto;
+      }
+    }
+
+    .HideOnActive {
+      &.nuxt-link-active {
+        display: none;
       }
     }
 
@@ -126,6 +199,7 @@ export default {
       line-height: 24px;
       color: @colorBrandPrimary;
       text-decoration: none;
+      transition: @transitionAll;
 
       &::before {
         content: "";
@@ -141,8 +215,10 @@ export default {
       }
 
       &:hover {
+        color: @colorBrandPrimaryLight;
+
         &::before {
-          background-color: @colorBrandPrimary;
+          background-color: @colorBrandPrimaryLight;
           transform: translateY(0);
         }
       }

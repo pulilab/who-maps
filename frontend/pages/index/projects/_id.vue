@@ -7,8 +7,8 @@
 <script>
 export default {
   async fetch ({ store, params }) {
+    await store.dispatch('projects/setCurrentProject', params.id);
     await Promise.all([
-      store.dispatch('projects/setCurrentProject', params.id),
       store.dispatch('projects/loadProjectStructure'),
       store.dispatch('toolkit/loadToolkitData')
     ]);

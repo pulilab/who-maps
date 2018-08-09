@@ -9,7 +9,9 @@
         ref="loginForm"
         :rules="rules"
         :model="{ username, password }"
-        status-icon>
+        status-icon
+        @submit.native.prevent="loginLocal"
+      >
         <fieldset>
           <el-form-item
             label="E-mail"
@@ -25,15 +27,15 @@
             <el-input
               v-model="password"
               type="password" />
-
-            <!-- General form error for last form element
-              (transformed down 14px to fit next to client error) -->
             <div
               v-if="nonFieldErrors"
-              class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}</div>
+              class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
+            </div>
           </el-form-item>
         </fieldset>
+      </el-form>
 
+      <div class="CardActionsBottom">
         <el-row
           type="flex"
           justify="space-between"
@@ -48,12 +50,13 @@
             <el-button
               type="primary"
               size="medium"
-              @click="loginLocal">
+              native-type="submit"
+            >
               Log in
             </el-button>
           </el-col>
         </el-row>
-      </el-form>
+      </div>
     </el-card>
   </div>
 </template>
@@ -71,12 +74,12 @@ export default {
       password: '',
       rules: {
         username: [
-          { required: true, message: 'This field is required' },
-          { type: 'email', message: 'Has to be a valid email address' },
+          { required: true, message: 'This field is required', trigger: 'blur' },
+          { type: 'email', message: 'Has to be a valid email address', trigger: 'blur' },
           { validator: this.validatorGenerator('username') }
         ],
         password: [
-          { required: true, message: 'This field is required' },
+          { required: true, message: 'This field is required', trigger: 'blur' },
           { validator: this.validatorGenerator('password') }
         ]
       }
@@ -115,14 +118,10 @@ export default {
 
   .LoginComponent {
     width: @cardSizeSmall;
-    margin: 0 auto;
+    margin: 80px auto;
 
     fieldset {
       padding: 40px 80px;
-    }
-
-    .ModifiedFormError {
-      transform: translate(0, 14px);
     }
   }
 </style>
