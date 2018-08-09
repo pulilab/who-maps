@@ -83,10 +83,10 @@ export default {
 };
 </script>
 
-<style lang="scss">
-    .CountryViewBtn {
-    }
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
+    .CountryViewBtn {}
     .MouseEventSpy {}
-
 </style>

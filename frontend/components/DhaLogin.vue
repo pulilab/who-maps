@@ -33,30 +33,30 @@
             </div>
           </el-form-item>
         </fieldset>
-      </el-form>
 
-      <div class="CardActionsBottom">
-        <el-row
-          type="flex"
-          justify="space-between"
-          align="middle"
-          class="cardActions">
-          <el-col
-            :span="6"
-            class="secondaryAction" />
-          <el-col
-            :span="6"
-            class="primaryAction">
-            <el-button
-              type="primary"
-              size="medium"
-              native-type="submit"
-            >
-              Log in
-            </el-button>
-          </el-col>
-        </el-row>
-      </div>
+        <div class="CardActionsBottom">
+          <el-row
+            type="flex"
+            justify="space-between"
+            align="middle"
+            class="cardActions">
+            <el-col
+              :span="6"
+              class="SecondaryAction" />
+            <el-col
+              :span="6"
+              class="PrimaryAction">
+              <el-button
+                type="primary"
+                size="medium"
+                native-type="submit"
+              >
+                Log in
+              </el-button>
+            </el-col>
+          </el-row>
+        </div>
+      </el-form>
     </el-card>
   </div>
 </template>

@@ -19,11 +19,11 @@
         >
           <el-button
             class="CountryViewBtn"
-            icon="el-icon-search"
             @click="openCountryView">
-            <span v-show="popUpHover">
-              Country View
-            </span>
+            <fa icon="search-plus" />
+            <!-- TODO -->
+            <!-- Pls remove the relevant js code... -->
+            <span class="Text">Country view</span>
           </el-button>
         </div>
       </l-popup>
@@ -62,7 +62,7 @@ export default {
     return {
       popUpHover: false,
       popupOptions: {
-        className: `DetailsPopup ${this.additionalTooltipClass}`,
+        className: `CountryViewPopup`,
         closeButton: false
       }
     };
@@ -104,10 +104,76 @@ export default {
 };
 </script>
 
-<style lang="scss">
-    .CountryViewBtn {
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .CountryViewPopup {
+    bottom: 0;
+    margin-bottom: 18px;
+
+    .leaflet-popup-content-wrapper {
+      background-color: transparent;
+      box-shadow: none;
+
+      .leaflet-popup-content {
+        width: 36px !important;
+        margin: 0;
+      }
     }
 
-    .MouseEventSpy {}
+    .leaflet-popup-tip-container {
+      display: none;
+    }
+
+    .MouseEventSpy {
+      position: relative;
+      width: 36px;
+      height: 36px;
+    }
+
+    .CountryViewBtn {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 36px;
+      height: 36px;
+      margin: 0;
+      padding: 0 12px;
+      overflow: hidden;
+      border: 0;
+      border-radius: 36px;
+      background-color: fade(@colorBrandAccent, 90%);
+      box-shadow: 0 0 5px rgba(0,0,0,.12), 0 5px 5px rgba(0,0,0,.24);
+      transition: @transitionAll;
+
+      .svg-inline--fa {
+        font-size: 16px;
+        position: relative;
+        top: 2px;
+        left: -1px;
+      }
+
+      .Text {
+        display: inline-block;
+        width: 0;
+        opacity: 0;
+        font-size: 13px;
+        line-height: 36px;
+        transition: @transitionAll;
+      }
+
+      &:hover {
+        width: auto;
+        background-color: @colorBrandAccent;
+
+        .Text {
+          width: auto;
+          opacity: 1;
+        }
+      }
+    }
+  }
 
 </style>

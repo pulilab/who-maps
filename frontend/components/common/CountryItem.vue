@@ -54,6 +54,7 @@ export default {
     }
 
     .Name {
+      width: 100%;
       padding: 0 50px 0 10px;
       font-size: @fontSizeMedium;
       font-weight: 700;
