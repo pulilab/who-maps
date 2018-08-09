@@ -4,7 +4,7 @@ import forOwn from 'lodash/forOwn';
 export const state = () => ({
   userProjects: [],
   currentProject: null,
-  projectStructure: null,
+  projectStructure: {},
   currentProjectToolkitVersions: [],
   currentProjectCoverageVersions: [],
   currentProjectTeamViewers: null,
