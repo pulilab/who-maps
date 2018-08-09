@@ -49,9 +49,15 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         search_term = query_params.get('q')
         search_in = {x.strip() for x in query_params.get('in').split(',')}
 
-        page = self.paginate_queryset(queryset)
+        qs = self.get_queryset()
+        qs = self.filter_queryset(qs)
 
-        data = {}  # TODO: make this
+        qs = self.search(queryset=qs, search_term=search_term, search_in=search_in)
+
+        page = self.paginate_queryset(qs)
+
+        data = {'results': qs.values(*self.MAP_VALUES), 'search_term': search_term, 'search_in': search_in}
+
 
         if page is not None:
             return self.get_paginated_response(data)
