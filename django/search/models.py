@@ -46,7 +46,7 @@ class ProjectSearch(ExtendedModel):
         }
 
         selectable_fields = set(SEARCH_BY.keys())
-        selected_fields = selectable_fields & search_in
+        selected_fields = selectable_fields & search_in if search_in else selectable_fields
 
         q_objects = [Q(**{"{}__icontains".format(SEARCH_BY[field]): search_term}) for field in selected_fields]
 
