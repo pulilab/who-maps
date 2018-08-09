@@ -30,8 +30,8 @@ class ProjectSearch(ExtendedModel):
     def search(cls, queryset: QuerySet, search_term: str, search_in: Set[str]) -> QuerySet:
         """
         Search in QuerySet
-        search_term: STRING -- search term
-        search_in: LIST <name,org,country,overview,loc,donor,partner> -- default is all
+        search_term: search term
+        search_in: Available options: <name,org,country,overview,loc,donor,partner> -- default is all
         :return: QuerySet
         """
 
