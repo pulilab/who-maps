@@ -36,18 +36,6 @@
           v-if="newOrganisation"
           @click="addOrganisation(organisation)">Make new organisation: {{ organisation }}</el-button>
 
-        <el-form-item label="Country">
-          <el-select
-            v-model="country"
-            class="full-width">
-            <el-option
-              v-for="ctr in countries"
-              :key="ctr.id"
-              :label="ctr.name"
-              :value="ctr.id" />
-          </el-select>
-        </el-form-item>
-
         <el-form-item label="Site language">
           <el-select
             v-model="language"
@@ -57,6 +45,18 @@
               :key="lng.name"
               :label="lng.name"
               :value="lng.code" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="Country">
+          <el-select
+            v-model="country"
+            class="full-width">
+            <el-option
+              v-for="ctr in countries"
+              :key="ctr.id"
+              :label="ctr.name"
+              :value="ctr.id" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -205,6 +205,8 @@ export default {
 @import "../assets/style/main.less";
 
 .EditProfile {
+  max-width: 560px;
+  margin: 0 auto;
 
   .Heading {
     text-align: center;
