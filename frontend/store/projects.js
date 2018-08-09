@@ -8,7 +8,9 @@ export const state = () => ({
   currentProjectToolkitVersions: [],
   currentProjectCoverageVersions: [],
   currentProjectTeamViewers: null,
-  currentProjectDHI: []
+  currentProjectDHI: [],
+  currentProjectCountry: null,
+  currentProjectCoverage: {}
 });
 
 const getTodayString = () => {
@@ -162,7 +164,9 @@ export const getters = {
       }, { labels: [], data: [] });
     }
   },
-  getCurrentProjectDHI: state => [...state.currentProjectDHI]
+  getCurrentProjectDHI: state => [...state.currentProjectDHI],
+  getCurrentProjectCountry: state => state.currentProjectCountry,
+  getCurrentProjectCoverage: state => state.currentProjectCoverage
 };
 
 export const actions = {
@@ -194,7 +198,7 @@ export const actions = {
                     this.$axios.get(`/api/projects/${projectId}/groups/`)
                   ]);
         commit('SET_CURRENT_PROJECT_TOOLKIT', toolkitVersions.data);
-        commit('SET_CURRENT_PROJECT_COVERAGE', coverageVersions.data);
+        commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', coverageVersions.data);
         commit('SET_CURRENT_PROJECT_TEAM_VIEWERS', teamViewers.data);
       }
     } catch (error) {
@@ -216,6 +220,12 @@ export const actions = {
   },
   setCurrentProjectDHI ({commit}, value) {
     commit('SET_CURRENT_PROJECT_DHI', value);
+  },
+  setCurrentProjectCountry ({commit}, value) {
+    commit('SET_CURRENT_PROJECT_COUNTRY', value);
+  },
+  setCurrentProjectCoverage ({commit}, value) {
+    commit('SET_CURRENT_PROJECT_COVERAGE', value);
   }
 };
 
@@ -232,7 +242,7 @@ export const mutations = {
   SET_CURRENT_PROJECT_TOOLKIT: (state, toolkit) => {
     state.currentProjectToolkitVersions = toolkit;
   },
-  SET_CURRENT_PROJECT_COVERAGE: (state, coverage) => {
+  SET_CURRENT_PROJECT_COVERAGE_VERSIONS: (state, coverage) => {
     state.currentProjectCoverageVersions = coverage;
   },
   SET_CURRENT_PROJECT_TEAM_VIEWERS: (state, teamViewers) => {
@@ -240,5 +250,11 @@ export const mutations = {
   },
   SET_CURRENT_PROJECT_DHI: (state, dhi) => {
     state.currentProjectDHI = dhi;
+  },
+  SET_CURRENT_PROJECT_COUNTRY: (state, country) => {
+    state.currentProjectCountry = country;
+  },
+  SET_CURRENT_PROJECT_COVERAGE: (state, {coverage, district}) => {
+    state.currentProjectCoverage[district] = {...state.currentProjectCoverage[district], ...coverage};
   }
 };
