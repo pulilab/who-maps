@@ -11,7 +11,7 @@
       </div>
 
       <el-row
-        v-if="$route.path.includes('/admin/')"
+        v-if="$route.path.includes('/admin/') || $route.path.endsWith('/edit-profile')"
         type="flex">
         <nuxt-link
           :to="localePath({name: 'index-edit-profile'})"
