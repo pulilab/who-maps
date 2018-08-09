@@ -79,7 +79,25 @@
             />
           </div>
         </div>
-
+        <el-form-item
+          label="Has the government financially invested in the project?"
+          prop="government_investor">
+          <el-radio-group v-model="implementation.government_investor">
+            <el-radio :label="1">No, they have not yet contributed</el-radio>
+            <el-radio :label="2">Yes, they are contributing in-kind people or time</el-radio>
+            <el-radio :label="3">Yes, there is a financial contribution through MOH budget</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="Implementing partners">
+          <el-row
+            v-for="(partner, index) in implementation.implementing_partners"
+            :key="index"
+          >
+            <el-col>
+              <el-input />
+            </el-col>
+          </el-row>
+        </el-form-item>
       </el-form>
     </collapsible-card>
   </div>
@@ -125,7 +143,9 @@ export default {
           health_workers: 0,
           clients: 0,
           facilities: 0
-        }
+        },
+        government_investor: null,
+        implementing_partners: [{}]
       },
       rules: {}
     };
