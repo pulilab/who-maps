@@ -43,37 +43,36 @@
             </div>
           </el-form-item>
         </fieldset>
+        <div class="CardActionsBottom">
+          <el-row
+            type="flex"
+            justify="space-between"
+            align="middle"
+          >
+            <el-col
+              :span="12"
+              class="SecondaryAction LoginLink">
+              <h6>Already signed up?</h6>
+              <nuxt-link
+                :to="localePath('index-login')"
+                class="NuxtLink Small IconRight"
+              >
+                <span>Login here</span><fa icon="angle-right" />
+              </nuxt-link>
+            </el-col>
+            <el-col
+              :span="12"
+              class="PrimaryAction">
+              <el-button
+                type="primary"
+                size="medium"
+                native-type="submit">
+                Sign up now
+              </el-button>
+            </el-col>
+          </el-row>
+        </div>
       </el-form>
-
-      <div class="CardActionsBottom">
-        <el-row
-          type="flex"
-          justify="space-between"
-          align="middle"
-        >
-          <el-col
-            :span="12"
-            class="SecondaryAction LoginLink">
-            <h6>Already signed up?</h6>
-            <nuxt-link
-              :to="localePath('index-login')"
-              class="NuxtLink Small IconRight"
-            >
-              <span>Login here</span><fa icon="angle-right" />
-            </nuxt-link>
-          </el-col>
-          <el-col
-            :span="12"
-            class="PrimaryAction">
-            <el-button
-              type="primary"
-              size="medium"
-              native-type="submit">
-              Sign up now
-            </el-button>
-          </el-col>
-        </el-row>
-      </div>
     </el-card>
   </div>
 </template>

@@ -19,7 +19,7 @@
             <!-- TODO -->
             <!-- Are we able to change the calculation of '.el-tabs__item .is-top' width as the '.el-tabs__item' has 'padding: 0 12px'? -->
             <el-tab-pane
-              label="Sub-National"
+              label="Sub-national"
               name="subNational">
               <project-card />
               <project-card />
