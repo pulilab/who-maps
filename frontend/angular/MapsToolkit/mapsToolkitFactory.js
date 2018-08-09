@@ -18,6 +18,7 @@ import detailElementComponent from '../Cms/DetailElement/detailElementComponent'
 import commentWidgetComponent from '../Cms/CommentWidget/commentWidgetComponent';
 import axisComponent from '../Common/Axis/axisComponent';
 import trixComponent from '../Common/TrixComponent/trixComponent';
+import thematicComponent from '../Thematic/thematicComponent';
 
 const config = ($stateProvider, $locationProvider, $ngReduxProvider) => {
   $stateProvider
@@ -96,6 +97,7 @@ export const factory = () => {
     .component(commentWidgetComponent.name, commentWidgetComponent)
     .component(trixComponent.name, trixComponent)
     .component(axisComponent.name, axisComponent)
+    .component(thematicComponent.name, thematicComponent)
     .config(config);
 
   const toolkitjs = document.querySelector('#toolkitjs');

@@ -4,15 +4,7 @@
     justify="center"
     class="AdminCountryChooser">
     <el-col :span="8">
-      <el-select
-        v-model="selectedCountry"
-        placeholder="Select">
-        <el-option
-          v-for="country in countries"
-          :key="country.id"
-          :label="country.name"
-          :value="country.id"/>
-      </el-select>
+      <country-select v-model="selectedCountry" />
     </el-col>
     <el-col :span="8">
       <h2> Country Admin </h2>
@@ -22,9 +14,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import CountrySelect from '../common/CountrySelect';
 export default {
-  data () {
-    return {};
+  components: {
+    CountrySelect
   },
   computed: {
     ...mapGetters({

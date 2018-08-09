@@ -20,12 +20,12 @@ export default {
       store.dispatch('system/loadStaticData'),
       store.dispatch('countries/loadMapData'),
       store.dispatch('landing/loadPublicProjectList')
-      // store.dispatch('system/loadUserProfiles')
     ]);
     if (store.getters['user/getProfile']) {
       await Promise.all([
         store.dispatch('projects/loadUserProjects'),
-        store.dispatch('system/loadOrganisations')
+        store.dispatch('system/loadOrganisations'),
+        store.dispatch('system/loadUserProfiles')
       ]);
     }
   }

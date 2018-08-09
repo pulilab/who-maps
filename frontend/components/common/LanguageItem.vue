@@ -1,5 +1,7 @@
 <template>
-  <div class="LanguageItem">
+  <div
+    v-if="language"
+    class="LanguageItem">
     <img :src="language.flag" >
     <span> {{ language.name }} </span>
   </div>

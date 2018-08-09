@@ -1,5 +1,6 @@
 <template>
   <el-row
+    v-if="country"
     type="flex"
     class="CountryItem"
   >
