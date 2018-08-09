@@ -20,11 +20,33 @@ export const getters = {
   getCountryGeoJson: (state, getters) => id => {
     return getters.getGeoJsonLibrary[id];
   },
+  getCountrySubLevelNames: (state, getters, rootState, rootGetters) => id => {
+    const c = getters.getCountries.find(c => c.id === id);
+    const types = rootGetters['system/getSubLevelTypes'];
+    try {
+      let first = types.find(t => t.name === c.map_data.first_sub_level.name);
+      let second = types.find(t => t.name === c.map_data.second_sub_level.name);
+      first = first ? first.displayName : c.map_data.first_sub_level.name;
+      second = second ? second.displayName : c.map_data.second_sub_level.name;
+      return {first, second};
+    } catch (e) {
+      return {};
+    }
+  },
   getCountryFirstSubLevel: (state, getters) => id => {
     const ln = 'en';
     const country = getters.getCountries.find(c => c.id === id);
     if (country && country.map_data && country.map_data.first_sub_level) {
       return country.map_data.first_sub_level.elements
+        .map(ccd => ({ id: ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
+    }
+    return [];
+  },
+  getCountrySecondSubLevel: (state, getters) => id => {
+    const ln = 'en';
+    const country = getters.getCountries.find(c => c.id === id);
+    if (country && country.map_data && country.map_data.second_sub_level) {
+      return country.map_data.second_sub_level.elements
         .map(ccd => ({ id: ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
     }
     return [];
