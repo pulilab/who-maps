@@ -36,14 +36,7 @@ class ProjectSearch(ExtendedModel):
 
         filter_exp = functools.reduce(operator.or_, q_objects)
 
-        for ps in cls.objects.filter(filter_exp):
-            results.append({
-                "id": ps.project.id,
-                "name": ps.project_name,
-                "organisation_name": ps.project.get_organisation().name,
-                "country": Country.objects.only('id').get(id=ps.project.data.get('country')).id
-            })
-        return results
+        return queryset
 
     @classmethod
     def filter(cls, queryset):
