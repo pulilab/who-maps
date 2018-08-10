@@ -6,11 +6,7 @@ export const state = () => ({
   currentProject: null,
   projectStructure: {},
   currentProjectToolkitVersions: [],
-  currentProjectCoverageVersions: [],
-  currentProjectTeamViewers: null,
-  currentProjectDHI: [],
-  currentProjectCountry: null,
-  currentProjectCoverage: {}
+  currentProjectCoverageVersions: []
 });
 
 const getTodayString = () => {
@@ -163,10 +159,7 @@ export const getters = {
         return ret;
       }, { labels: [], data: [] });
     }
-  },
-  getCurrentProjectDHI: state => [...state.currentProjectDHI],
-  getCurrentProjectCountry: state => state.currentProjectCountry,
-  getCurrentProjectCoverage: state => state.currentProjectCoverage
+  }
 };
 
 export const actions = {
@@ -191,15 +184,13 @@ export const actions = {
   async loadProjectDetails ({commit, state}, projectId) {
     try {
       if (projectId) {
-        const [toolkitVersions, coverageVersions, teamViewers] =
+        const [toolkitVersions, coverageVersions] =
                   await Promise.all([
                     this.$axios.get(`/api/projects/${projectId}/toolkit/versions/`),
-                    this.$axios.get(`/api/projects/${projectId}/coverage/versions/`),
-                    this.$axios.get(`/api/projects/${projectId}/groups/`)
+                    this.$axios.get(`/api/projects/${projectId}/coverage/versions/`)
                   ]);
         commit('SET_CURRENT_PROJECT_TOOLKIT', toolkitVersions.data);
         commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', coverageVersions.data);
-        commit('SET_CURRENT_PROJECT_TEAM_VIEWERS', teamViewers.data);
       }
     } catch (error) {
       console.log(error);
@@ -217,15 +208,6 @@ export const actions = {
       const { data } = await this.$axios.get('/api/projects/structure/');
       commit('SET_PROJECT_STRUCTURE', data);
     }
-  },
-  setCurrentProjectDHI ({commit}, value) {
-    commit('SET_CURRENT_PROJECT_DHI', value);
-  },
-  setCurrentProjectCountry ({commit}, value) {
-    commit('SET_CURRENT_PROJECT_COUNTRY', value);
-  },
-  setCurrentProjectCoverage ({commit}, value) {
-    commit('SET_CURRENT_PROJECT_COVERAGE', value);
   }
 };
 
@@ -244,17 +226,5 @@ export const mutations = {
   },
   SET_CURRENT_PROJECT_COVERAGE_VERSIONS: (state, coverage) => {
     state.currentProjectCoverageVersions = coverage;
-  },
-  SET_CURRENT_PROJECT_TEAM_VIEWERS: (state, teamViewers) => {
-    state.currentProjectTeamViewers = teamViewers;
-  },
-  SET_CURRENT_PROJECT_DHI: (state, dhi) => {
-    state.currentProjectDHI = dhi;
-  },
-  SET_CURRENT_PROJECT_COUNTRY: (state, country) => {
-    state.currentProjectCountry = country;
-  },
-  SET_CURRENT_PROJECT_COVERAGE: (state, {coverage, district}) => {
-    state.currentProjectCoverage[district] = {...state.currentProjectCoverage[district], ...coverage};
   }
 };
