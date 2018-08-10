@@ -3,113 +3,107 @@
     id="general"
     class="GeneralOverview">
     <collapsible-card title="General Overview">
-      <el-form
-        :model="general"
-        :rules="rules"
-        label-position="top"
-        @submit.native.prevent>
+      <el-form-item
+        label="Project name"
+        prop="name">
+        <el-input v-model="name"/>
+      </el-form-item>
+      <el-form-item
+        label="Organisation"
+        prop="organisation">
+        <organisation-select v-model="organisation"/>
+      </el-form-item>
+      <el-form-item
+        label="Project country"
+        prop="country">
+        <country-select v-model="country"/>
+      </el-form-item>
+      <el-form-item
+        label="Geographic Scope"
+        prop="country">
+        <el-input
+          v-model="geographic_scope"
+          type="textarea"
+        />
+        <span class="Hint">
+          Please describe where your implementation is currently taking place
+        </span>
+      </el-form-item>
+      <el-form-item
+        label="Overview of the digital health implementation"
+        prop="country">
+        <el-input
+          v-model="implementation_overview"
+          type="textarea"
+        />
+        <span class="Hint">
+          Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
+        </span>
+      </el-form-item>
+      <el-form-item
+        label="Overview of the digital health implementation"
+        prop="country">
+        <el-input
+          v-model="implementation_overview"
+          type="textarea"
+        />
+        <span class="Hint">
+          Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
+        </span>
+      </el-form-item>
+      <el-form-item
+        label="Project start and end date"
+        prop="start_end_date"
+      >
+        <el-date-picker
+          v-model="start_end_date"
+          type="daterange"
+          class="Date"
+          align="center"
+          unlink-panels
+          range-separator="To"
+          start-placeholder="Start date"
+          end-placeholder="End date"
+        />
+      </el-form-item>
+      <el-row
+        :gutter="10"
+        type="flex">
+        <el-col :span="12">
+          <el-form-item
+            label="Contact name"
+            prop="contact_name"
+          >
+            <el-input
+              v-model="contact_name"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item
+            label="Contact email"
+            prop="contact_email"
+          >
+            <el-input
+              v-model="contact_email"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <div class="TeamArea">
         <el-form-item
-          label="Project name"
-          prop="name">
-          <el-input v-model="general.name"/>
-        </el-form-item>
-        <el-form-item
-          label="Organisation"
-          prop="organisation">
-          <organisation-select v-model="general.organisation"/>
-        </el-form-item>
-        <el-form-item
-          label="Project country"
-          prop="country">
-          <country-select v-model="general.country"/>
-        </el-form-item>
-        <el-form-item
-          label="Geographic Scope"
-          prop="country">
-          <el-input
-            v-model="general.geographic_scope"
-            type="textarea"
-          />
-          <span class="Hint">
-            Please describe where your implementation is currently taking place
-          </span>
-        </el-form-item>
-        <el-form-item
-          label="Overview of the digital health implementation"
-          prop="country">
-          <el-input
-            v-model="general.implementation_overview"
-            type="textarea"
-          />
-          <span class="Hint">
-            Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
-          </span>
-        </el-form-item>
-        <el-form-item
-          label="Overview of the digital health implementation"
-          prop="country">
-          <el-input
-            v-model="general.implementation_overview"
-            type="textarea"
-          />
-          <span class="Hint">
-            Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
-          </span>
-        </el-form-item>
-        <el-form-item
-          label="Project start and end date"
-          prop="start_end_date"
+          label="Add Team members (Editor role)"
+          prop="team"
         >
-          <el-date-picker
-            v-model="general.start_end_date"
-            type="daterange"
-            class="Date"
-            align="center"
-            unlink-panels
-            range-separator="To"
-            start-placeholder="Start date"
-            end-placeholder="End date"
-          />
+          <team-selector v-model="team" />
         </el-form-item>
-        <el-row
-          :gutter="10"
-          type="flex">
-          <el-col :span="12">
-            <el-form-item
-              label="Contact name"
-              prop="contact_name"
-            >
-              <el-input
-                v-model="general.contact_name"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item
-              label="Contact email"
-              prop="contact_email"
-            >
-              <el-input
-                v-model="general.contact_email"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <div class="TeamArea">
-          <el-form-item
-            label="Add Team members (Editor role)"
-            prop="team"
-          >
-            <team-selector v-model="general.team" />
-          </el-form-item>
-          <el-form-item
-            label="Add Viewers (only Viewer role)"
-            prop="viewers"
-          >
-            <team-selector v-model="general.viewers" />
-          </el-form-item>
-        </div>
-      </el-form>
+        <el-form-item
+          label="Add Viewers (only Viewer role)"
+          prop="viewers"
+        >
+          <team-selector v-model="viewers" />
+        </el-form-item>
+      </div>
     </collapsible-card>
   </div>
 </template>
@@ -119,7 +113,7 @@ import CollapsibleCard from './CollapsibleCard';
 import TeamSelector from './TeamSelector';
 import CountrySelect from '../common/CountrySelect';
 import OrganisationSelect from '../common/OrganisationSelect';
-import { mapActions } from 'vuex';
+import { mapGettersActions } from '../../utilities/form';
 
 export default {
   components: {
@@ -128,39 +122,22 @@ export default {
     TeamSelector,
     OrganisationSelect
   },
-  data () {
-    return {
-      general: {
-        name: null,
-        organisation: null,
-        geographic_scope: null,
-        implementation_overview: null,
-        start_end_date: null,
-        contact_name: null,
-        contact_email: null,
-        team: [],
-        viewers: []
-      },
-      rules: {
-        name: [
-          { required: true, trigger: 'blur' }
-        ]
-      }
-    };
-  },
-  watch: {
-    'general.country': {
-      immediate: true,
-      handler (value) {
-        this.setCurrentProjectCountry(value);
-      }
-    }
-  },
-  methods: {
-    ...mapActions({
-      setCurrentProjectCountry: 'projects/setCurrentProjectCountry'
+  computed: {
+    ...mapGettersActions({
+      name: ['project', 'getName', 'setName'],
+      organisation: ['project', 'getOrganisation', 'setOrganisation'],
+      country: ['project', 'getCountry', 'setCountry'],
+      geographic_scope: ['project', 'getGeographicScope', 'setGeographicScope'],
+      implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview'],
+      start_end_date: ['project', 'getStartEndDate', 'setStartEndDate'],
+      contact_name: ['project', 'getContactName', 'setContactName'],
+      contact_email: ['project', 'getContactEmail', 'setContactEmail'],
+      team: ['project', 'getTeam', 'setTeam'],
+      viewers: ['project', 'getViewers', 'setViewers']
     })
-  }
+  },
+
+  methods: {}
 };
 </script>
 
