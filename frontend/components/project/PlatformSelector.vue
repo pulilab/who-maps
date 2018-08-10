@@ -1,8 +1,8 @@
 <template>
   <el-select
-    :value="value"
-    popper-class="SoftwareSelectorDropdown"
-    class="SoftwareSelector"
+    :value="platform"
+    popper-class="PlatformSelectorDropdown"
+    class="PlatformSelector"
     value-key="id"
     placeholder="Select from list"
     @change="changeHandler">
@@ -18,16 +18,12 @@
 <script>
 import { mapGetters } from 'vuex';
 export default {
-  model: {
-    prop: 'value',
-    event: 'change'
-  },
   props: {
-    value: {
+    index: {
       type: Number,
-      default: null
+      default: 0
     },
-    selected: {
+    platforms: {
       type: Array,
       default: () => []
     }
@@ -36,23 +32,28 @@ export default {
     ...mapGetters({
       technologyPlatforms: 'projects/getTechnologyPlatforms'
     }),
+    platform () {
+      return this.platforms[this.index];
+    },
     availablePlatforms () {
-      return this.technologyPlatforms.filter(tp => !this.selected.some(s => s.id === tp.id) || tp.id === this.value);
+      return this.technologyPlatforms.filter(tp => !this.platforms.some(s => s === tp.id) || tp.id === this.platform);
     }
   },
   methods: {
     changeHandler (value) {
-      this.$emit('change', value);
+      const p = [...this.platforms];
+      p[this.index] = value;
+      this.$emit('update:platforms', p);
     }
   }
 };
 </script>
 
 <style lang="less">
-.SoftwareSelector {
+.PlatformSelector {
   width: 50%;
 }
-.SoftwareSelectorDropdown {
+.PlatformSelectorDropdown {
 
 }
 </style>
