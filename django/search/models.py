@@ -55,6 +55,23 @@ class ProjectSearch(ExtendedModel):
         return qs
 
     @classmethod
+    def found_in(cls, queryset: QuerySet, search_term: str) -> dict:
+        """
+        Returns what projects are found in which search field
+        {
+            field: [project_id(s)]
+        }
+        """
+        found_in = {}
+
+        for field, exp in cls.SEARCH_BY.items():
+            project_ids = queryset.filter(**{"{}__icontains".format(exp): search_term})\
+                .values_list('project_id', flat=True)
+            found_in[field] = project_ids
+
+        return found_in
+
+    @classmethod
     def filter(cls, queryset):
         """
         Filter QuerySet by various filter terms
