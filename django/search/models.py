@@ -42,28 +42,17 @@ class ProjectSearch(ExtendedModel):
         Search in QuerySet
         search_term: search term
         search_in: Available options: <name,org,country,overview,loc,donor,partner> -- default is all
-        :return: QuerySet
         """
 
-        SEARCH_BY = {
-            "name": "project__name",
-            "org": "organisation__name",
-            "country": "country__name",
-            "overview": "project__data__implementation_overview",
-            "loc": "coverage",
-            "partner": "project__data__implementing_partners",  # TODO: will be refactored
-            "donor": "project__data__donors"  # TODO: will be refactored
-        }
-
-        selectable_fields = set(SEARCH_BY.keys())
+        selectable_fields = set(cls.SEARCH_BY.keys())
         selected_fields = selectable_fields & search_in if search_in else selectable_fields
 
-        q_objects = [Q(**{"{}__icontains".format(SEARCH_BY[field]): search_term}) for field in selected_fields]
+        q_objects = [Q(**{"{}__icontains".format(cls.SEARCH_BY[field]): search_term}) for field in selected_fields]
 
         filter_exp = functools.reduce(operator.or_, q_objects)
-        queryset = queryset.filter(filter_exp)
+        qs = queryset.filter(filter_exp)
 
-        return queryset
+        return qs
 
     @classmethod
     def filter(cls, queryset):
