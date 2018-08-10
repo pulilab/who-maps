@@ -72,8 +72,6 @@ export default {
         background-color: @colorBrandPrimary;
       }
 
-      // .InfoBox {}
-
       .SignupBox {
         padding: 0 40px;
       }

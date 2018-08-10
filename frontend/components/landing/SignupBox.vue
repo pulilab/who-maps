@@ -35,13 +35,14 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .SingupBox {
-    height: 172px;
-    text-align: center;
-    background-color: @colorWhite;
+    height: 100%;
+    background-color: @colorBrandPrimary;
 
     .SignupBoxHeadline {
       position: relative;
-      height: 100%;
+      height: 172px;
+      background-color: @colorWhite;
+      text-align: center;
 
       &::after {
         content: "";
@@ -53,14 +54,14 @@ export default {
         display: block;
         width: 0;
         height: 0;
-        border-left: 36px solid transparent;
-        border-right: 36px solid transparent;
-        border-top: 36px solid @colorWhite;
+        border-left: 24px solid transparent;
+        border-right: 24px solid transparent;
+        border-top: 24px solid @colorWhite;
       }
 
       h2 {
         color: @colorBrandPrimary;
-        margin: 0 0 20px;
+        margin: 0 0 16px;
       }
 
       h6 {
@@ -119,6 +120,7 @@ export default {
 
           .PrimaryAction {
             width: 100%;
+            text-align: center;
 
             .el-button {
               height: 50px;
