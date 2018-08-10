@@ -1,7 +1,7 @@
 <template>
   <div class="AddRmButtons">
     <el-button
-      v-show="showAdd"
+      :disabled="!showAdd"
       type="text"
       @click="$emit('add')">
       <fa icon="plus" />
