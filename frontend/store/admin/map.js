@@ -188,6 +188,9 @@ export const actions = {
     const index = current.findIndex(c => c.name === name);
     commit('UPDATE_SUB_LEVELS_POLYCENTERS', { index, data: { name, latlng } });
   },
+  setFacilities ({commit}, list) {
+    commit('SET_FACILITIES', list);
+  },
   async saveMapData ({getters}) {
     const first = getters.getFirstSubLevelList.map(f => {
       return {
