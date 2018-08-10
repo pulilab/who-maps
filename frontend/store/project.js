@@ -1,10 +1,11 @@
 export const state = () => ({
   name: null,
   organisation: null,
-  country: null,
+  country: 58,
   geographic_scope: null,
   implementation_overview: null,
-  start_end_date: null,
+  start_date: null,
+  end_date: null,
   contact_name: null,
   contact_email: null,
   team: [],
@@ -33,7 +34,8 @@ export const getters = {
   getCountry: state => state.country,
   getGeographicScope: state => state.geographic_scope,
   getImplementationOverview: state => state.implementation_overview,
-  getStartEndDate: state => state.start_end_date,
+  getStartDate: state => state.start_date,
+  getEndDate: state => state.end_date,
   getContactName: state => state.contact_name,
   getContactEmail: state => state.contact_email,
   getTeam: state => state.team,
@@ -74,8 +76,11 @@ export const actions = {
   setImplementationOverview ({commit}, value) {
     commit('SET_IMPLEMENTATION_OVERVIEW', value);
   },
-  setStartEndDate ({commit}, value) {
-    commit('SET_START_END_DATE', value);
+  setStartDate ({commit}, value) {
+    commit('SET_START_DATE', value);
+  },
+  setEndDate ({commit}, value) {
+    commit('SET_END_DATE', value);
   },
   setContactName ({commit}, value) {
     commit('SET_CONTACT_NAME', value);
@@ -111,7 +116,11 @@ export const actions = {
     commit('SET_COVERAGE', value);
   },
   setCoverageData ({commit}, value) {
-    commit('SET_COVERAGE_DATA', value);
+    if (value.coverage) {
+      commit('SET_COVERAGE_DATA', value);
+    } else {
+      commit('DELETE_COVERAGE_DATA', value.subLevel);
+    }
   },
   setCoverageSecondLevel ({commit}, value) {
     commit('SET_COVERAGE_SECOND_LEVEL', value);
@@ -143,8 +152,11 @@ export const mutations = {
   SET_IMPLEMENTATION_OVERVIEW: (state, implementation_overview) => {
     state.implementation_overview = implementation_overview;
   },
-  SET_START_END_DATE: (state, start_end_date) => {
-    state.start_end_date = start_end_date;
+  SET_START_DATE: (state, start_date) => {
+    state.start_date = start_date;
+  },
+  SET_END_DATE: (state, end_date) => {
+    state.end_date = end_date;
   },
   SET_CONTACT_NAME: (state, contact_name) => {
     state.contact_name = contact_name;
@@ -180,7 +192,10 @@ export const mutations = {
     state.coverage = coverage;
   },
   SET_COVERAGE_DATA: (state, {coverage, subLevel}) => {
-    state.coverageData[subLevel] = {...state.currentProjectCoverage[subLevel], ...coverage};
+    state.coverageData[subLevel] = {...state.coverageData[subLevel], ...coverage};
+  },
+  DELETE_COVERAGE_DATA: (state, subLevel) => {
+    state.coverageData[subLevel] = undefined;
   },
   SET_COVERAGE_SECOND_LEVEL: (state, coverage_second_level) => {
     state.coverage_second_level = coverage_second_level;
