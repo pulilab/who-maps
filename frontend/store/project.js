@@ -25,7 +25,9 @@ export const state = () => ({
     facilities: 0
   },
   government_investor: null,
-  implementing_partners: [null]
+  implementing_partners: [null],
+  implementation_dates: null,
+  licenses: []
 });
 
 export const getters = {
@@ -51,7 +53,9 @@ export const getters = {
   getCoverageSecondLevel: state => state.coverage_second_level,
   getNationalLevelDeployment: state => state.national_level_deployment,
   getGovernmentInvestor: state => state.government_investor,
-  getImplementingPartners: state => state.implementing_partners
+  getImplementingPartners: state => state.implementing_partners,
+  getImplementationDates: state => state.implementation_dates,
+  getLicenses: state => state.licenses
 };
 
 export const actions = {
@@ -133,7 +137,14 @@ export const actions = {
   },
   setImplementingPartners ({commit}, value) {
     commit('SET_IMPLEMENTING_PARTNERS', value);
+  },
+  setImplementationDates ({commit}, value) {
+    commit('SET_IMPLEMENTATION_DATES', value);
+  },
+  setLicenses ({commit}, value) {
+    commit('SET_LICENSES', value);
   }
+
 };
 
 export const mutations = {
@@ -210,5 +221,11 @@ export const mutations = {
   },
   SET_IMPLEMENTING_PARTNERS: (state, implementing_partners) => {
     state.implementing_partners = implementing_partners;
+  },
+  SET_IMPLEMENTATION_DATES: (state, implementation_dates) => {
+    state.implementation_dates = implementation_dates;
+  },
+  SET_LICENSES: (state, licenses) => {
+    state.licenses = licenses;
   }
 };
