@@ -51,21 +51,37 @@
           Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
         </span>
       </el-form-item>
-      <el-form-item
-        label="Project start and end date"
-        prop="start_end_date"
-      >
-        <el-date-picker
-          v-model="start_end_date"
-          type="daterange"
-          class="Date"
-          align="center"
-          unlink-panels
-          range-separator="To"
-          start-placeholder="Start date"
-          end-placeholder="End date"
-        />
-      </el-form-item>
+      <el-row
+        :gutter="10"
+        type="flex">
+        <el-col :span="12">
+          <el-form-item
+            label="Project start date"
+            prop="start_date"
+          >
+            <el-date-picker
+              v-model="start_date"
+              class="Date"
+              align="center"
+              placeholder="Start date"
+            />
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="12">
+          <el-form-item
+            label="Project end date"
+            prop="end_date"
+          >
+            <el-date-picker
+              v-model="start_date"
+              class="Date"
+              align="center"
+              placeholder="End date"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-row
         :gutter="10"
         type="flex">
@@ -129,7 +145,8 @@ export default {
       country: ['project', 'getCountry', 'setCountry'],
       geographic_scope: ['project', 'getGeographicScope', 'setGeographicScope'],
       implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview'],
-      start_end_date: ['project', 'getStartEndDate', 'setStartEndDate'],
+      start_date: ['project', 'getStartDate', 'setStartDate'],
+      end_date: ['project', 'getEndDate', 'setEndDate'],
       contact_name: ['project', 'getContactName', 'setContactName'],
       contact_email: ['project', 'getContactEmail', 'setContactEmail'],
       team: ['project', 'getTeam', 'setTeam'],
