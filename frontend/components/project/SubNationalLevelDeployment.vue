@@ -91,20 +91,20 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentCountry: 'projects/getCurrentProjectCountry',
+      country: 'project/getCountry',
       getCountrySubLevelNames: 'countries/getCountrySubLevelNames',
       getCountryFirstSubLevel: 'countries/getCountryFirstSubLevel',
       getCountrySecondSubLevel: 'countries/getCountrySecondSubLevel'
     }),
     countrySubLevelNames () {
-      return this.getCountrySubLevelNames(this.currentCountry);
+      return this.getCountrySubLevelNames(this.country);
     },
     countryFirstSubLevel () {
-      const result = this.getCountryFirstSubLevel(this.currentCountry);
+      const result = this.getCountryFirstSubLevel(this.country);
       return result || [];
     },
     countrySecondSubLevel () {
-      const result = this.getCountrySecondSubLevel(this.currentCountry);
+      const result = this.getCountrySecondSubLevel(this.country);
       return result || [];
     }
   },

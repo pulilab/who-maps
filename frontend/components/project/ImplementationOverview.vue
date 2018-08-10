@@ -3,102 +3,108 @@
     id="implementation"
     class="ImplementationOverview">
     <collapsible-card title="Implementation Overview">
-      <el-form
-        :model="implementation"
-        :rules="rules"
-        label-position="top"
-        @submit.native.prevent>
+
+      <el-form-item
+        label="Add one or more Software and related Digital Health Interventions (DHI):"
+      >
         <el-form-item
-          label="Add one or more Software and related Digital Health Interventions (DHI):"
+          v-for="(platform, index) in platforms"
+          :key="platform"
+          label="Software"
         >
-          <el-form-item
-            v-for="(platform, index) in implementation.platforms"
-            :key="platform.id"
-            label="Software"
-          >
-            <el-col :span="12">
-              <software-selector
-                v-model="platform.id"
-                :selected="implementation.platforms" />
-              <el-form-item
-                v-if="platform.id"
-                label="Digital Health Interventions">
-                <digital-health-interventions-selector
-                  :platform-id="platform.id"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col
-              v-show="platform.id"
-              :span="12">
-              <add-rm-buttons
-                :show-add="!!platform.id"
-                :show-rm="implementation.platforms.length > 1"
-                @add="addDhi"
-                @rm="rmDhi(index, platform.id)"
-              />
-            </el-col>
-          </el-form-item>
-        </el-form-item>
-        <el-form-item
-          label="Health focus area(s) - select all that apply:"
-          prop="health_focus_areas">
-          <health-focus-areas-selector v-model="implementation.health_focus_areas" />
-        </el-form-item>
-        <el-form-item
-          label="What are the Health System Challenges (HSC) your project addresses?"
-          prop="hsc_challenges">
-          <health-system-challenges-selector v-model="implementation.hsc_challenges" />
-        </el-form-item>
-        <el-form-item
-          label="What part(s) of the Health Information System (HIS) does this project support?"
-          prop="his_bucket">
-          <his-bucket-selector v-model="implementation.his_bucket" />
-        </el-form-item>
-        <div class="CoverageArea">
-          <el-form-item label="What kind of coverage does your project have?">
-            <el-radio-group v-model="implementation.coverageType">
-              <el-radio :label="1">Sub-national</el-radio>
-              <el-radio :label="2">National</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <sub-national-level-deployment
-            v-show="implementation.coverageType == 1"
-            :coverage.sync="implementation.coverage"
-            :coverage-data.sync="implementation.coverageData"
-            :coverage-second-level.sync="implementation.coverage_second_level"/>
-          <div
-            v-show="implementation.coverageType == 2"
-            class="NationalLevelDeployment">
-            <fa icon="flag" />
-            National level deployment
-            <coverage-fieldset
-              :health-workers.sync="implementation.national_level_deployment.health_workers"
-              :clients.sync="implementation.national_level_deployment.clients"
-              :facilities.sync="implementation.national_level_deployment.facilities"
+          <el-col :span="12">
+            <platform-selector
+              :platforms.sync="platforms"
+              :index="index"
             />
-          </div>
-        </div>
-        <el-form-item
-          label="Has the government financially invested in the project?"
-          prop="government_investor">
-          <el-radio-group v-model="implementation.government_investor">
-            <el-radio :label="1">No, they have not yet contributed</el-radio>
-            <el-radio :label="2">Yes, they are contributing in-kind people or time</el-radio>
-            <el-radio :label="3">Yes, there is a financial contribution through MOH budget</el-radio>
+            <el-form-item
+              v-show="platform"
+              label="Digital Health Interventions">
+              <digital-health-interventions-selector
+                :platform-id="platform"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col
+            :span="12">
+            <add-rm-buttons
+              :show-add="!!platform"
+              :show-rm="platforms.length > 1"
+              @add="addDhi"
+              @rm="rmDhi(index, platform)"
+            />
+          </el-col>
+        </el-form-item>
+      </el-form-item>
+      <el-form-item
+        label="Health focus area(s) - select all that apply:"
+        prop="health_focus_areas">
+        <health-focus-areas-selector v-model="health_focus_areas" />
+      </el-form-item>
+      <el-form-item
+        label="What are the Health System Challenges (HSC) your project addresses?"
+        prop="hsc_challenges">
+        <health-system-challenges-selector v-model="hsc_challenges" />
+      </el-form-item>
+      <el-form-item
+        label="What part(s) of the Health Information System (HIS) does this project support?"
+        prop="his_bucket">
+        <his-bucket-selector v-model="his_bucket" />
+      </el-form-item>
+      <div class="CoverageArea">
+        <el-form-item label="What kind of coverage does your project have?">
+          <el-radio-group v-model="coverageType">
+            <el-radio :label="1">Sub-national</el-radio>
+            <el-radio :label="2">National</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="Implementing partners">
-          <el-row
-            v-for="(partner, index) in implementation.implementing_partners"
-            :key="index"
-          >
-            <el-col>
-              <el-input />
-            </el-col>
-          </el-row>
-        </el-form-item>
-      </el-form>
+        <sub-national-level-deployment
+          v-show="coverageType == 1"
+          :coverage.sync="coverage"
+          :coverage-data.sync="coverageData"
+          :coverage-second-level.sync="coverage_second_level"/>
+        <div
+          v-show="coverageType == 2"
+          class="NationalLevelDeployment">
+          <fa icon="flag" />
+          National level deployment
+          <coverage-fieldset
+            :health-workers.sync="national_level_deployment.health_workers"
+            :clients.sync="national_level_deployment.clients"
+            :facilities.sync="national_level_deployment.facilities"
+          />
+        </div>
+      </div>
+      <el-form-item
+        label="Has the government financially invested in the project?"
+        prop="government_investor">
+        <el-radio-group v-model="government_investor">
+          <el-radio :label="1">No, they have not yet contributed</el-radio>
+          <el-radio :label="2">Yes, they are contributing in-kind people or time</el-radio>
+          <el-radio :label="3">Yes, there is a financial contribution through MOH budget</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="Implementing partners">
+        <el-row
+          v-for="(partner, index) in implementing_partners"
+          :key="index"
+        >
+          <el-col :span="18">
+            <el-input
+              :value="partner"
+              @change="updateImplmeentingPartners($event, index)"
+            />
+          </el-col>
+          <el-col :span="6">
+            <add-rm-buttons
+              :show-add="!!partner"
+              :show-rm="implementing_partners.length > 1"
+              @add="addImplementingPartners"
+              @rm="rmImplementingPartners(index)"
+            />
+          </el-col>
+        </el-row>
+      </el-form-item>
     </collapsible-card>
   </div>
 </template>
@@ -108,13 +114,13 @@ import CollapsibleCard from './CollapsibleCard';
 import HealthSystemChallengesSelector from './HealthSystemChallengesSelector';
 import HealthFocusAreasSelector from './HealthFocusAreasSelector';
 import HisBucketSelector from './HisBucketSelector';
-import SoftwareSelector from './SoftwareSelector';
+import PlatformSelector from './PlatformSelector';
 import DigitalHealthInterventionsSelector from './DigitalHealthInterventionsSelector';
 import SubNationalLevelDeployment from './SubNationalLevelDeployment';
 import AddRmButtons from './AddRmButtons';
 import CoverageFieldset from './CoverageFieldset';
 
-import { mapActions, mapGetters } from 'vuex';
+import { mapGettersActions } from '../../utilities/form';
 
 export default {
   components: {
@@ -122,52 +128,49 @@ export default {
     HealthSystemChallengesSelector,
     HisBucketSelector,
     HealthFocusAreasSelector,
-    SoftwareSelector,
+    PlatformSelector,
     DigitalHealthInterventionsSelector,
     SubNationalLevelDeployment,
     AddRmButtons,
     CoverageFieldset
   },
-  data () {
-    return {
-      implementation: {
-        platforms: [{}],
-        health_focus_areas: [],
-        hsc_challenges: [],
-        his_bucket: [],
-        coverageType: 1,
-        coverage: [{}],
-        coverageData: {},
-        coverage_second_level: [{}],
-        national_level_deployment: {
-          health_workers: 0,
-          clients: 0,
-          facilities: 0
-        },
-        government_investor: null,
-        implementing_partners: [{}]
-      },
-      rules: {}
-    };
-  },
   computed: {
-    ...mapGetters({
-      selectedDHi: 'projects/getCurrentProjectDHI'
+    ...mapGettersActions({
+      platforms: ['project', 'getPlatforms', 'setPlatforms'],
+      digitalHealthInterventions: ['project', 'getDigitalHealthInterventions', 'setDigitalHealthInterventions'],
+      health_focus_areas: ['project', 'getHealthFocusAreas', 'setHealthFocusAreas'],
+      hsc_challenges: ['project', 'getHscChallenges', 'setHscChallenges'],
+      his_bucket: ['project', 'getHisBucket', 'setHisBucket'],
+      coverageType: ['project', 'getCoverageType', 'setCoverageType'],
+      coverage: ['project', 'getCoverage', 'setCoverage'],
+      coverageData: ['project', 'getCoverageData', 'setCoverageData'],
+      coverage_second_level: ['project', 'getCoverageSecondLevel', 'setCoverageSecondLevel'],
+      national_level_deployment: ['project', 'getNationalLevelDeployment', 'setNationalLevelDeployment'],
+      government_investor: ['project', 'getGovernmentInvestor', 'setGovernmentInvestor'],
+      implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners']
     })
   },
   methods: {
-    ...mapActions({
-      setCurrentProjectDHI: 'projects/setCurrentProjectDHI'
-    }),
     addDhi () {
-      this.implementation.platforms.push({});
+      this.platforms = [...this.platforms, null];
     },
     rmDhi (index, platformId) {
       if (platformId) {
-        const filtered = this.selectedDHi.filter(dhi => dhi.platform !== platformId);
-        this.setCurrentProjectDHI(filtered);
+        const filtered = this.digitalHealthInterventions.filter(dhi => dhi.platform !== platformId);
+        this.digitalHealthInterventions = filtered;
       }
-      this.implementation.platforms.splice(index, 1);
+      this.platforms = this.platforms.filter((p, i) => i !== index);
+    },
+    updateImplmeentingPartners (value, index) {
+      const ip = [...this.implementing_partners];
+      ip[index] = value;
+      this.implementing_partners = ip;
+    },
+    addImplementingPartners () {
+      this.implementing_partners = [...this.implementing_partners, null];
+    },
+    rmImplementingPartners (index) {
+      this.implementing_partners = this.implementing_partners.filter((ip, i) => i !== index);
     }
   }
 };
