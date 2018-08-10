@@ -14,6 +14,17 @@
     </el-row>
 
     <user-projects-list />
+
+    <el-row
+      type="flex"
+      class="SeeAllMyProjects"
+    >
+      <el-col>
+        <el-button size="medium">
+          See all my projects
+        </el-button>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -67,7 +78,11 @@ export default {
     }
 
     .UserProjectsList {
-      padding: 40px;
+      padding: 40px 40px 20px;
+    }
+
+    .SeeAllMyProjects {
+      text-align: center;
     }
   }
 
