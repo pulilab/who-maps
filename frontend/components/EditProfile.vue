@@ -8,23 +8,32 @@
       class="ProfileCard">
 
       <el-form
+        ref="editProfileForm"
+        :rules="rules"
+        :model="{ name, organisation, language, country }"
         label-position="top"
         class="FormPart"
         @submit.native.prevent>
-        <el-form-item label="My name">
+        <el-form-item
+          label="My name"
+          prop="name">
           <el-input
             v-model="name"
             type="text" />
         </el-form-item>
 
-        <el-form-item label="My email address">
+        <el-form-item
+          label="My email address"
+          class="is-required">
           <el-input
             v-model="profile.email"
             disabled
             type="text" />
         </el-form-item>
 
-        <el-form-item label="Organisation name">
+        <el-form-item
+          label="Organisation name"
+          prop="organisation">
           <el-autocomplete
             v-model="organisation"
             :fetch-suggestions="orgSuggestions"
@@ -36,7 +45,9 @@
           v-if="newOrganisation"
           @click="addOrganisation(organisation)">Make new organisation: {{ organisation }}</el-button>
 
-        <el-form-item label="Site language">
+        <el-form-item
+          label="Site language"
+          prop="language">
           <el-select
             v-model="language"
             class="full-width">
@@ -48,7 +59,9 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="Country">
+        <el-form-item
+          label="Country"
+          prop="country">
           <el-select
             v-model="country"
             class="full-width">
@@ -58,35 +71,54 @@
               :label="ctr.name"
               :value="ctr.id" />
           </el-select>
+          <div
+            v-if="nonFieldErrors"
+            class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
+          </div>
         </el-form-item>
       </el-form>
 
       <div class="Actions">
         <el-button @click="dismissChanges">Dismiss changes</el-button>
-        <el-button @click="updateProfile">Save</el-button>
+        <el-button @click="validateSubmitAndMapApiErrors">Save</el-button>
       </div>
     </el-card>
-
-    <h3>TODO</h3>
-    <ul>
-      <li>Validations / requireds</li>
-      <li>Strings mapping to the already translated ones</li>
-    </ul>
 
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import FormAPIErrorsMixin from './mixins/FormAPIErrorsMixin';
 
 export default {
+  mixins: [FormAPIErrorsMixin],
+
   data () {
     return {
       innerProfile: {
-        name: '', // 'Takacs Andras Tamas'
-        organisation: '', // code
-        country: '', // code
-        language: '' // string like 'en'
+        name: null, // 'Takacs Andras Tamas'
+        organisation: null, // code
+        language: null, // string like 'en'
+        country: null // code
+      },
+      rules: {
+        name: [
+          { required: true, message: 'This field is required', trigger: 'change' },
+          { validator: this.validatorGenerator('name') }
+        ],
+        organisation: [
+          { required: true, message: 'This field is required', trigger: 'change' },
+          { validator: this.validatorGenerator('organisation') }
+        ],
+        language: [
+          { required: true, message: 'This field is required', trigger: 'change' },
+          { validator: this.validatorGenerator('language') }
+        ],
+        country: [
+          { required: true, message: 'This field is required', trigger: 'change' },
+          { validator: this.validatorGenerator('country') }
+        ]
       }
     };
   },
@@ -115,7 +147,7 @@ export default {
 
     organisation: {
       get () {
-        if (this.innerProfile.organisation) {
+        if (this.innerProfile.organisation !== null) {
           return this.innerProfile.organisation;
         } else {
           const mappedOrg = this.organisations.find(org => +org.id === +this.profile.organisation);
@@ -129,7 +161,7 @@ export default {
 
     country: {
       get () {
-        return this.innerProfile.country || this.profile.country;
+        return this.innerProfile.country !== null ? this.innerProfile.country : this.profile.country;
       },
       set (value) {
         this.innerProfile.country = value;
@@ -138,13 +170,14 @@ export default {
 
     language: {
       get () {
-        return this.innerProfile.language || this.profile.language;
+        return this.innerProfile.language !== null ? this.innerProfile.language : this.profile.language;
       },
       set (value) {
         this.innerProfile.language = value;
       }
     }
   },
+
   methods: {
     ...mapActions({
       addOrganisation: 'system/addOrganisation',
@@ -152,10 +185,10 @@ export default {
     }),
 
     dismissChanges () {
-      this.innerProfile.name = '';
-      this.innerProfile.organisation = '';
-      this.innerProfile.country = '';
-      this.innerProfile.language = '';
+      this.innerProfile.name = null;
+      this.innerProfile.organisation = null;
+      this.innerProfile.country = null;
+      this.innerProfile.language = null;
     },
 
     orgSuggestions (queryStr, cb) {
@@ -170,32 +203,40 @@ export default {
       }
     },
 
-    updateProfile () {
-      const put = {};
+    async mapDataAndUpdate () {
+      const putObj = ['name', 'country', 'language'].reduce((ret, key) => {
+        if (this.innerProfile[key] !== null && this.innerProfile[key] !== this.profile.key) {
+          ret[key] = this.innerProfile[key];
+        } else {
+          ret[key] = this.profile[key];
+        }
+        return ret;
+      }, {});
 
-      put.name = this.innerProfile.name || this.profile.name;
-      put.country = this.innerProfile.country || this.profile.country;
-
-      if (this.innerProfile.organisation) {
-        put.organisation = this.organisations.find(org => {
-          return org.name === this.innerProfile.organisation;
-        }).id;
+      if (this.innerProfile.organisation === null) {
+        putObj.organisation = this.profile.organisation;
       } else {
-        put.organisation = this.profile.organisation;
+        putObj.organisation = this.organisations.find(el => el.name === this.innerProfile.organisation).id;
       }
 
-      if (this.innerProfile.language) {
-        put.language = this.innerProfile.language;
-      }
+      await this.updateUserProfile(putObj);
+    },
 
-      if (Object.keys(put).length) {
-        console.log('Updating profile with:', put);
-        this.updateUserProfile(put);
-      }
+    validateSubmitAndMapApiErrors () {
+      this.deleteFormAPIErrors();
+      this.$refs.editProfileForm.validate(async valid => {
+        if (valid) {
+          try {
+            await this.mapDataAndUpdate();
+          } catch (err) {
+            console.log('ERR:', err);
+            this.setFormAPIErrors(err);
+            this.$refs.editProfileForm.validate(() => {});
+          }
+        }
+      });
     }
-
   }
-
 };
 </script>
 
