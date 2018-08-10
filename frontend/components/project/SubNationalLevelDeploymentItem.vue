@@ -15,6 +15,10 @@
           :label="sub.name"
           :value="sub.id"/>
       </el-select>
+      <facility-selector
+        v-model="facilitiesList"
+        :disabled="!subLevel"
+      />
       <coverage-fieldset
         :health-workers.sync="healthWorkers"
         :clients.sync="clients"
@@ -28,12 +32,14 @@
 <script>
 
 import CoverageFieldset from './CoverageFieldset';
+import FacilitySelector from './FacilitySelector';
 
 import { mapGettersActions } from '../../utilities/form';
 
 export default {
   components: {
-    CoverageFieldset
+    CoverageFieldset,
+    FacilitySelector
   },
   props: {
     index: {
@@ -65,6 +71,15 @@ export default {
     },
     localCoverageData () {
       return this.coverageData[this.subLevel];
+    },
+    facilitiesList: {
+      get () {
+        return this.localCoverageData ? this.localCoverageData.facilities_list : [];
+      },
+      set (value) {
+        const coverage = {facilities_list: [...value]};
+        this.coverageData = {coverage, subLevel: this.subLevel};
+      }
     },
     healthWorkers: {
       get () {
