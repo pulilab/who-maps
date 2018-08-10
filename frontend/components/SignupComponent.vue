@@ -1,67 +1,77 @@
 <template>
   <div class="SingupComponent">
-    <el-card :shadow="shadow">
-      <div class="Header">
+    <el-card
+      :shadow="shadow"
+      :body-style="{ padding: '0px' }"
+    >
+      <div slot="header">
         Sign up for Digital Health Atlas
       </div>
-      <div class="Legend">Fill out the form below</div>
       <el-form
         ref="signupForm"
         :model="signupForm"
         :rules="rules"
         @submit.native.prevent="signup"
       >
+        <fieldset>
+          <div class="FieldsetLegend">Please fill out the form below:</div>
+          <el-form-item
+            label="Email address"
+            prop="email">
+            <el-input
+              v-model="signupForm.email"
+              type="email" />
+          </el-form-item>
 
-        <el-form-item
-          label="Email address"
-          prop="email">
-          <el-input
-            v-model="signupForm.email"
-            type="email" />
-        </el-form-item>
+          <el-form-item
+            label="Password"
+            prop="password1">
+            <el-input
+              v-model="signupForm.password1"
+              type="password" />
+          </el-form-item>
 
-        <el-form-item
-          label="Password"
-          prop="password1">
-          <el-input
-            v-model="signupForm.password1"
-            type="password" />
-        </el-form-item>
-
-        <el-form-item
-          label="Password (Again)"
-          prop="password2">
-          <el-input
-            v-model="signupForm.password2"
-            type="password" />
-          <div
-            v-if="nonFieldErrors"
-            class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
-          </div>
-        </el-form-item>
-        <el-row
-          type="flex"
-          align="middle"
-          class="CardActions">
-          <el-col
-            :span="6"
-            class="SecondaryAction LoginLink">
-            <h6>Already signed up?</h6>
-            <nuxt-link :to="localePath('index-login')">
-              Login here
-            </nuxt-link>
-          </el-col>
-          <el-col
-            :span="6"
-            class="PrimaryAction">
-            <el-button
-              type="primary"
-              size="medium"
-              native-type="submit">
-              Sign up now
-            </el-button>
-          </el-col>
-        </el-row>
+          <el-form-item
+            label="Password (again)"
+            prop="password2">
+            <el-input
+              v-model="signupForm.password2"
+              type="password" />
+            <div
+              v-if="nonFieldErrors"
+              class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
+            </div>
+          </el-form-item>
+        </fieldset>
+        <div class="CardActionsBottom">
+          <el-row
+            type="flex"
+            justify="space-between"
+            align="middle"
+          >
+            <el-col
+              :span="12"
+              class="SecondaryAction LoginLink">
+              <h6>Already signed up?</h6>
+              <nuxt-link
+                :to="localePath('index-login')"
+                class="NuxtLink Small IconRight"
+              >
+                <span>Login here</span><fa icon="angle-right" />
+              </nuxt-link>
+            </el-col>
+            <el-col
+              :span="12"
+              class="PrimaryAction">
+              <el-button
+                type="primary"
+                size="medium"
+                native-type="submit">
+                Sign up now
+              </el-button>
+            </el-col>
+          </el-row>
+        </div>
       </el-form>
     </el-card>
   </div>
@@ -141,23 +151,18 @@ export default {
 
   .SingupComponent {
     width: @cardSizeSmall;
-    margin: 0 auto;
+    margin: 80px auto;
 
-    .CardActions {
-      justify-content: space-between;
-      .SecondaryAction {
-        h6 {
-          margin: 0 0 2px;
-          font-size: @fontSizeSmall;
-          font-weight: 400;
-          color: @colorTextSecondary;
-        }
+    fieldset {
+      padding: 40px 80px;
+    }
 
-        a {
-          font-size: @fontSizeSmall;
-          font-weight: 700;
-          color: @colorBrandPrimary;
-        }
+    .SecondaryAction {
+      h6 {
+        margin: 0 0 2px;
+        font-size: @fontSizeSmall;
+        font-weight: 400;
+        color: @colorTextSecondary;
       }
     }
   }

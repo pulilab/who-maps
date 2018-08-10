@@ -103,7 +103,7 @@
               <nuxt-link
                 :to="localePath('index-projects-create')"
                 class="HeaderBtn">
-                <i class="el-icon-plus" />
+                <fa icon="plus-circle" />
                 New Project
               </nuxt-link>
             </div>
@@ -155,7 +155,6 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .TopBar {
-
     .TopBarInner {
       .limitPageWidth();
       height: 130px;
@@ -174,6 +173,7 @@ export default {
 
     .RightPart {
       padding: 16px 0;
+      transform: translateX(10px);
 
       > .el-row > .el-col {
         width: auto;
@@ -196,6 +196,7 @@ export default {
       line-height: 24px;
       color: @colorBrandPrimary;
       text-decoration: none;
+      transition: @transitionAll;
 
       &::before {
         content: "";
@@ -211,8 +212,10 @@ export default {
       }
 
       &:hover {
+        color: @colorBrandPrimaryLight;
+
         &::before {
-          background-color: @colorBrandPrimary;
+          background-color: @colorBrandPrimaryLight;
           transform: translateY(0);
         }
       }
@@ -224,6 +227,10 @@ export default {
           background-color: @colorBrandAccent;
           transform: translateY(0);
         }
+      }
+
+      .svg-inline--fa {
+        margin-right: 2px;
       }
     }
 

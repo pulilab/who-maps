@@ -1,43 +1,55 @@
 <template>
   <div class="UserDropdown">
+    <!-- TODO -->
+    <!-- Rewrite menu to be able to add custom class for dropdown menu... popover? -->
     <el-dropdown>
       <el-button
         type="text"
-        icon="el-icon-info">
+      >
+        <fa icon="user-circle" />
         {{ user.name }}
-        <i class="el-icon-arrow-down" />
+        <fa icon="angle-down" />
       </el-button>
+
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>
-          <div class="ItemTitle">
-            Email
+        <!-- User info block -->
+        <div class="UserInfoSection">
+          <div>
+            <div class="ItemTitle">
+              Email
+            </div>
+            {{ user.email }}
           </div>
-          {{ user.email }}
-        </el-dropdown-item>
-        <el-dropdown-item>
-          <div class="ItemTitle">
-            Role
+
+          <div>
+            <div class="ItemTitle">
+              Role
+            </div>
+            Role Name
           </div>
-          Role Name
-        </el-dropdown-item>
-        <el-dropdown-item>
-          <div class="ItemTitle">
-            Country
+
+          <div>
+            <div class="ItemTitle">
+              Country
+            </div>
+            <country-item :id="user.country" />
           </div>
-          <country-item :id="user.country" />
-        </el-dropdown-item>
-        <el-dropdown-item>
-          <div class="ItemTitle">
-            Site Language
+
+          <div>
+            <div class="ItemTitle">
+              Site Language
+            </div>
+            <language-item :code="user.language" />
           </div>
-          <language-item :code="user.language" />
-        </el-dropdown-item>
+        </div>
+        <!-- User links block -->
         <el-dropdown-item divided>
           <nuxt-link :to="localePath('index-edit-profile')">
             <i class="el-icon-settings" />
             Edit my profile
           </nuxt-link >
         </el-dropdown-item>
+
         <el-dropdown-item>
           <el-button
             type="text"
@@ -49,7 +61,6 @@
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-
   </div>
 </template>
 
@@ -81,10 +92,28 @@ export default {
 </script>
 
 <style lang="less">
-.UserDropdown {
-  .el-button {
-    padding: 0;
-  }
-}
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+  .UserDropdown {
+    .UserInfoSection {
+      background-color: @colorGrayLightest;
+    }
 
+    .el-dropdown-menu {
+      padding: 0;
+      margin: 0;
+    }
+
+    .el-button {
+      padding: 0;
+
+      .svg-inline--fa {
+        margin-right: 2px;
+
+        &.fa-angle-down {
+          margin: 0 0 0 4px;
+        }
+      }
+    }
+  }
 </style>

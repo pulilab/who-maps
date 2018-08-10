@@ -53,11 +53,10 @@ export default {
 
     .InnerActionBar {
       .limitPageWidth();
-      height: 48px;
+      height: @actionBarHeight;
     }
 
     .Title {
-
       h3 {
         width: 224px;
         display: block;

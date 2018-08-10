@@ -1,6 +1,7 @@
 <template>
-
-  <div id="toolkitjs"/>
+  <div class="angularjs">
+    <div id="toolkitjs"/>
+  </div>
 </template>
 
 <script>

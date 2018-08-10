@@ -1,11 +1,13 @@
 <template>
   <div class="ProjectLegend">
-    <i
+    <fa
       v-show="showStar"
-      class="el-icon-star-on" />
-    <i
+      icon="star"
+      class="Owner" />
+    <fa
       v-show="showEye"
-      class="el-icon-view" />
+      icon="eye"
+      class="Viewer" />
   </div>
 </template>
 
@@ -47,6 +49,18 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .ProjectLegend {
+    .Owner {
+      color: @colorOwner;
+    }
+
+    .Viewer {
+      color: @colorViewer;
+    }
+  }
 
 </style>
