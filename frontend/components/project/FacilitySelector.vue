@@ -1,25 +1,28 @@
 <template>
-  <el-select
+  <el-form-item
     v-if="facilities.length > 0"
-    :value="value"
-    :remote-method="search"
-    :loading="loading"
-    :disabled="disabled"
-    multiple
-    filterable
-    remote
-    class="FacilitySelector"
-    popper-class="FacilitySelectorDropdown"
-    placeholder="Type and select a name"
-    @change="changeHandler"
-  >
-    <el-option
-      v-for="facility in result"
-      :key="facility.name"
-      :label="facility.name"
-      :value="facility.name"
-    />
-  </el-select>
+    label="Facilities">
+    <el-select
+      :value="value"
+      :remote-method="search"
+      :loading="loading"
+      :disabled="disabled"
+      multiple
+      filterable
+      remote
+      class="FacilitySelector"
+      popper-class="FacilitySelectorDropdown"
+      placeholder="Type and select a name"
+      @change="changeHandler"
+    >
+      <el-option
+        v-for="facility in result"
+        :key="facility.name"
+        :label="facility.name"
+        :value="facility.name"
+      />
+    </el-select>
+  </el-form-item>
 </template>
 
 <script>
