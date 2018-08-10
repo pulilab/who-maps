@@ -50,6 +50,13 @@ export const getters = {
         .map(ccd => ({ id: ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
     }
     return [];
+  },
+  getCountryFacilityList: (state, getters) => id => {
+    const country = getters.getCountries.find(c => c.id === id);
+    if (country && country.map_data && country.map_data.facilities) {
+      return country.map_data.facilities;
+    }
+    return [];
   }
 };
 
@@ -57,7 +64,8 @@ export const actions = {
   async loadMapData ({commit}) {
     const { data } = await this.$axios.get('/api/countries/');
     data.sort((a, b) => a.name.localeCompare(b.name));
-    commit('SET_COUNTRY_LIST', data);
+    const frozen = data.map(cd => ({...cd, map_data: {...cd.map_data, facilities: Object.freeze(cd.map_data.facilities)}}));
+    commit('SET_COUNTRY_LIST', frozen);
   },
   async loadGeoJSON ({commit, getters}, id) {
     if (!getters.getGeoJsonLibrary[id]) {
