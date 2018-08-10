@@ -4,7 +4,7 @@
     <!-- Following A is just a placeholder to avoid a flash of content -->
     <a
       v-if="!initialised"
-      class="HeaderBtn"
+      class="HeaderBtn ToolkitBtn"
       href="#">
       Toolkit
     </a>
@@ -26,6 +26,10 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .ToolkitBtn {}
 
 </style>
