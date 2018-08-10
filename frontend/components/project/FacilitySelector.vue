@@ -1,5 +1,6 @@
 <template>
   <el-select
+    v-if="facilities.length > 0"
     :value="value"
     :remote-method="search"
     :loading="loading"
