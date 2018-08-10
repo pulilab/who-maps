@@ -10,25 +10,25 @@
       </div>
       <el-row
         v-for="(cov, index) in coverage"
-        :key="cov.id"
+        :key="cov"
         type="flex"
       >
         <el-col :span="12">
           <sub-national-level-deployment-item
-            v-model="cov.id"
+            :index="index"
             :level-name="countrySubLevelNames.first"
             :sub-levels="countryFirstSubLevel"
-            :selected="coverage"
+            :coverage.sync="coverage"
           />
         </el-col>
         <el-col
           :span="12"
         >
           <add-rm-buttons
-            :show-add="!!cov.id"
+            :show-add="!!cov"
             :show-rm="coverage.length > 1"
             @add="addCoverage"
-            @rm="rmCoverage(index, cov.id)"
+            @rm="rmCoverage(index, cov)"
           />
         </el-col>
       </el-row>
@@ -43,25 +43,25 @@
       </div>
       <el-row
         v-for="(cov, index) in coverageSecondLevel"
-        :key="cov.id"
+        :key="cov"
         type="flex"
       >
         <el-col :span="12">
           <sub-national-level-deployment-item
-            v-model="cov.id"
+            :index="index"
             :level-name="countrySubLevelNames.second"
             :sub-levels="countrySecondSubLevel"
-            :selected="coverageSecondLevel"
+            :coverage.sync="coverageSecondLevel"
           />
         </el-col>
         <el-col
           :span="12"
         >
           <add-rm-buttons
-            :show-add="!!cov.id"
-            :show-rm="coverage.length > 1"
+            :show-add="!!cov"
+            :show-rm="coverageSecondLevel.length > 1"
             @add="addCoverageSecondLevel"
-            @rm="rmCoverageSecondLevel(index, cov.id)"
+            @rm="rmCoverageSecondLevel(index, cov)"
           />
         </el-col>
       </el-row>
@@ -70,7 +70,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
+import { mapGettersActions } from '../../utilities/form';
+
 import SubNationalLevelDeploymentItem from './SubNationalLevelDeploymentItem';
 import AddRmButtons from './AddRmButtons';
 
@@ -79,22 +81,17 @@ export default {
     SubNationalLevelDeploymentItem,
     AddRmButtons
   },
-  props: {
-    coverage: {
-      type: Array,
-      default: () => []
-    },
-    coverageSecondLevel: {
-      type: Array,
-      default: () => []
-    }
-  },
   computed: {
     ...mapGetters({
       country: 'project/getCountry',
       getCountrySubLevelNames: 'countries/getCountrySubLevelNames',
       getCountryFirstSubLevel: 'countries/getCountryFirstSubLevel',
       getCountrySecondSubLevel: 'countries/getCountrySecondSubLevel'
+    }),
+    ...mapGettersActions({
+      coverage: ['project', 'getCoverage', 'setCoverage'],
+      coverageData: ['project', 'getCoverageData', 'setCoverageData'],
+      coverageSecondLevel: ['project', 'getCoverageSecondLevel', 'setCoverageSecondLevel']
     }),
     countrySubLevelNames () {
       return this.getCountrySubLevelNames(this.country);
@@ -109,25 +106,22 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      setCurrentProjectCoverage: 'projects/setCurrentProjectCoverage'
-    }),
     addCoverage () {
-      this.$emit('update:coverage', [...this.coverage, {}]);
+      this.coverage = [...this.coverage, null];
     },
     rmCoverage (index, id) {
-      this.$emit('update:coverage', this.coverage.filter((c, i) => i !== index));
+      this.coverage = this.coverage.filter((c, i) => i !== index);
       if (id) {
-        this.setCurrentProjectCoverage({district: id, coverage: undefined});
+        this.coverageData = {subLevel: id, coverage: undefined};
       }
     },
     addCoverageSecondLevel () {
-      this.$emit('update:coverageSecondLevel', [...this.coverageSecondLevel, {}]);
+      this.coverageSecondLevel = [...this.coverageSecondLevel, null];
     },
     rmCoverageSecondLevel (index, id) {
-      this.$emit('update:coverageSecondLevel', this.coverageSecondLevel.filter((c, i) => i !== index));
+      this.coverageSecondLevel = this.coverageSecondLevel.filter((c, i) => i !== index);
       if (id) {
-        this.setCurrentProjectCoverage({district: id, coverage: undefined});
+        this.coverageData = {subLevel: id, coverage: undefined};
       }
     }
   }

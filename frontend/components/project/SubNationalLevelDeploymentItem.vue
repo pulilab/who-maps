@@ -2,7 +2,7 @@
   <div class="SubNationalLevelDeploymentItem">
     <el-form-item :label="levelName">
       <el-select
-        :value="value"
+        :value="subLevel"
         filterable
         popper-class="SubNationalLevelDeploymentItemDropdown"
         class="SubNationalLevelDeploymentItem"
@@ -10,16 +10,16 @@
         @change="changeHandler">
 
         <el-option
-          v-for="subLevel in availableSubLevels"
-          :key="subLevel.id"
-          :label="subLevel.name"
-          :value="subLevel.id"/>
+          v-for="sub in availableSubLevels"
+          :key="sub.id"
+          :label="sub.name"
+          :value="sub.id"/>
       </el-select>
       <coverage-fieldset
         :health-workers.sync="healthWorkers"
         :clients.sync="clients"
         :facilities.sync="facilities"
-        :disabled="!value"
+        :disabled="!subLevel"
       />
     </el-form-item>
   </div>
@@ -28,19 +28,16 @@
 <script>
 
 import CoverageFieldset from './CoverageFieldset';
-import { mapGetters, mapActions } from 'vuex';
+
+import { mapGettersActions } from '../../utilities/form';
 
 export default {
   components: {
     CoverageFieldset
   },
-  model: {
-    prop: 'value',
-    event: 'change'
-  },
   props: {
-    value: {
-      type: [Number, String],
+    index: {
+      type: [Number],
       default: null
     },
     levelName: {
@@ -51,55 +48,57 @@ export default {
       type: Array,
       required: true
     },
-    selected: {
+    coverage: {
       type: Array,
       default: () => []
     }
   },
   computed: {
-    ...mapGetters({
-      getCurrentProjectCoverage: 'projects/getCurrentProjectCoverage'
+    ...mapGettersActions({
+      coverageData: ['project', 'getCoverageData', 'setCoverageData']
     }),
-    availableSubLevels () {
-      return this.subLevels.filter(tp => !this.selected.some(s => s.id === tp.id) || tp.id === this.value);
+    subLevel () {
+      return this.coverage[this.index];
     },
-    coverage () {
-      return this.getCurrentProjectCoverage[this.value];
+    availableSubLevels () {
+      return this.subLevels.filter(tp => !this.coverage.some(s => s === tp.id) || tp.id === this.subLevel);
+    },
+    localCoverageData () {
+      return this.coverageData[this.subLevel];
     },
     healthWorkers: {
       get () {
-        return this.coverage ? this.coverage.healthWorkers : null;
+        return this.localCoverageData ? this.localCoverageData.healthWorkers : null;
       },
       set (value) {
         const coverage = {healthWorkers: value};
-        this.setCurrentProjectCoverage({coverage, district: this.value});
+        this.coverageData = {coverage, subLevel: this.subLevel};
       }
     },
     clients: {
       get () {
-        return this.coverage ? this.coverage.clients : null;
+        return this.localCoverageData ? this.localCoverageData.clients : null;
       },
       set (value) {
         const coverage = {clients: value};
-        this.setCurrentProjectCoverage({coverage, district: this.value});
+        this.coverageData = {coverage, subLevel: this.subLevel};
       }
     },
     facilities: {
       get () {
-        return this.coverage ? this.coverage.facilities : null;
+        return this.localCoverageData ? this.localCoverageData.facilities : null;
       },
       set (value) {
         const coverage = {facilities: value};
-        this.setCurrentProjectCoverage({coverage, district: this.value});
+        this.coverageData = {coverage, subLevel: this.subLevel};
       }
     }
   },
   methods: {
-    ...mapActions({
-      setCurrentProjectCoverage: 'projects/setCurrentProjectCoverage'
-    }),
     changeHandler (value) {
-      this.$emit('change', value);
+      const cov = [...this.coverage];
+      cov[this.index] = value;
+      this.$emit('update:coverage', cov);
     }
   }
 };

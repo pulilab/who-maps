@@ -60,9 +60,7 @@
         </el-form-item>
         <sub-national-level-deployment
           v-show="coverageType == 1"
-          :coverage.sync="coverage"
-          :coverage-data.sync="coverageData"
-          :coverage-second-level.sync="coverage_second_level"/>
+        />
         <div
           v-show="coverageType == 2"
           class="NationalLevelDeployment">
@@ -142,9 +140,6 @@ export default {
       hsc_challenges: ['project', 'getHscChallenges', 'setHscChallenges'],
       his_bucket: ['project', 'getHisBucket', 'setHisBucket'],
       coverageType: ['project', 'getCoverageType', 'setCoverageType'],
-      coverage: ['project', 'getCoverage', 'setCoverage'],
-      coverageData: ['project', 'getCoverageData', 'setCoverageData'],
-      coverage_second_level: ['project', 'getCoverageSecondLevel', 'setCoverageSecondLevel'],
       national_level_deployment: ['project', 'getNationalLevelDeployment', 'setNationalLevelDeployment'],
       government_investor: ['project', 'getGovernmentInvestor', 'setGovernmentInvestor'],
       implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners']
