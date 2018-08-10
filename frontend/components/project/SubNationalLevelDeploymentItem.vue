@@ -24,6 +24,7 @@
         :clients.sync="clients"
         :facilities.sync="facilities"
         :disabled="!subLevel"
+        :selected-facilities="facilitiesList"
       />
     </el-form-item>
   </div>
