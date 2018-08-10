@@ -192,7 +192,9 @@ export const mutations = {
     state.coverage = coverage;
   },
   SET_COVERAGE_DATA: (state, {coverage, subLevel}) => {
-    state.coverageData[subLevel] = {...state.coverageData[subLevel], ...coverage};
+    const cov = { ...state.coverageData };
+    cov[subLevel] = {...state.coverageData[subLevel], ...coverage};
+    state.coverageData = cov;
   },
   DELETE_COVERAGE_DATA: (state, subLevel) => {
     state.coverageData[subLevel] = undefined;
