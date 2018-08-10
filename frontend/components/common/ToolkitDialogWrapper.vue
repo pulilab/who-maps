@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="angularjs">
     <div id="thematicjs"/>
     <!-- Following A is just a placeholder to avoid a flash of content -->
     <a
