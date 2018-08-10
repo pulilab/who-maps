@@ -1,27 +1,41 @@
 <template>
   <div class="WelcomeBox-holder">
-    <div
-      v-show="visible"
-      class="WelcomeBox">
+    <transition name="el-zoom-in-top">
+      <div
+        v-show="showWelcomeBox"
+        class="WelcomeBox">
 
-      <h2>Welcome!</h2>
-      <h6>{{ $store.state.system.landing_page_defaults.cover_text }}</h6>
+        <h2>Welcome!</h2>
+        <h6>{{ landingPageDefaults.cover_text }}</h6>
 
-      <el-button
-        icon="el-icon-close"
-        circle
-        class="CloseWelcomeBox"
-        @click="closeWelcomeBox" />
-    </div>
+        <el-button
+          circle
+          class="CloseWelcomeBox"
+          @click="closeWelcomeBox"
+        >
+          <fa icon="times" />
+        </el-button>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   data () {
     return {
       visible: true
     };
+  },
+  computed: {
+    ...mapGetters({
+      landingPageDefaults: 'system/getLandingPageDefaults',
+      activeCountry: 'landing/getActiveCountry'
+    }),
+    showWelcomeBox () {
+      return this.visible && !this.activeCountry;
+    }
   },
   methods: {
     closeWelcomeBox () {
@@ -48,7 +62,7 @@ export default {
       padding: 20px 40px;
       color: @colorWhite;
       background: fade(@colorBrandPrimary, 90%);
-      box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.12);
+      box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.15);
 
       h2 {
         margin: 20px 0;
@@ -62,6 +76,8 @@ export default {
         position: absolute;
         top: 16px;
         right: 16px;
+        width: 40px;
+        height: 40px;
       }
     }
   }

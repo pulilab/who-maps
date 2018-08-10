@@ -1,5 +1,11 @@
 <template>
   <div class="LandingMap">
+    <!-- TODO for Nico 1. -->
+    <!-- Exit 'Country view' mode when user zooms out at least 2 lvls?! -->
+
+    <!-- TODO for Nico 2. -->
+    <!-- Make map's height align to viewport's height — for ex. 70vh -->
+    <!-- I'm not sure about this, but we should handle different screen sizes somehow... we can follow up on this later. -->
     <no-ssr>
       <l-map
         ref="mainMap"
@@ -26,6 +32,8 @@
 
         <country-details-overlay />
 
+        <world-zoom-button />
+
         <l-control-zoom
           position="bottomright"
         />
@@ -40,12 +48,14 @@ import { mapGetters, mapActions } from 'vuex';
 import NoSSR from 'vue-no-ssr';
 import CountryCenterMarker from './CountryCenterMarker';
 import CountryDetailsOverlay from './CountryDetailsOverlay';
+import WorldZoomButton from './WorldZoomButton';
 
 export default {
   components: {
     'no-ssr': NoSSR,
     CountryCenterMarker,
-    CountryDetailsOverlay
+    CountryDetailsOverlay,
+    WorldZoomButton
   },
   data () {
     return {
@@ -76,6 +86,7 @@ export default {
   mounted () {
     this.$root.$on('map:center-on', this.centerOn);
     this.$root.$on('map:fit-on', this.fitOn);
+    this.$root.$on('map:zoom-at', this.zoomAt);
   },
   beforeDestroy () {
     this.$root.$off(['map:center-on', 'map:fit-on']);
@@ -93,6 +104,11 @@ export default {
     fitOn (bounds) {
       if (this.$refs.mainMap && this.$refs.mainMap.mapObject) {
         this.$refs.mainMap.mapObject.fitBounds(bounds);
+      }
+    },
+    zoomAt (zoom) {
+      if (this.$refs.mainMap && this.$refs.mainMap.mapObject) {
+        this.$refs.mainMap.mapObject.setZoom(zoom);
       }
     },
     zoomChangeHandler (event) {

@@ -1,0 +1,162 @@
+<template>
+  <el-card
+    :body-style="{ padding: '12px' }"
+    :class="['ProjectCard', 'rounded', {hovered}]"
+  >
+    <div
+      @click="goToProject"
+      @mouseenter="mouseEnterHandler"
+      @mouseleave="mouseLeaveHandler">
+      <el-row type="flex">
+        <el-col :span="22">
+          <el-row class="ProjectName">
+            <el-col>
+              Hello Mama
+            </el-col>
+          </el-row>
+
+          <el-row
+            type="flex"
+            class="ProjectCountryOrg"
+          >
+            <el-col class="Country">
+              Sierra Leone
+            </el-col>
+            <el-col class="Organisation">
+              eHealth Africa
+            </el-col>
+          </el-row>
+
+          <el-row
+            v-if="searchChild"
+            type="flex"
+            class="FoundIn"
+          >
+            <el-col>
+              <fa
+                icon="search"
+                size="xs" />
+              <span>Found in "ProjectName"</span>
+            </el-col>
+          </el-row>
+        </el-col>
+
+        <el-col :span="2">
+          <transition name="el-fade-in">
+            <fa
+              v-show="hovered"
+              icon="arrow-right" />
+          </transition>
+        </el-col>
+      </el-row>
+    </div>
+  </el-card>
+</template>
+
+<script>
+export default {
+  props: {
+    searchChild: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      hovered: false
+    };
+  },
+  methods: {
+    goToProject () {
+      const path = this.localePath({name: 'index-projects-id', params: {id: 1}});
+      this.$router.push(path);
+    },
+    mouseEnterHandler () {
+      this.hovered = true;
+    },
+    mouseLeaveHandler () {
+      this.hovered = false;
+    }
+  }
+};
+</script>
+
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .ProjectCard {
+    cursor: pointer;
+
+    &.hovered {
+      border-color: @colorTextMuted;
+      .ProjectName {
+        color: @colorBrandPrimary;
+      }
+      .ProjectCountryOrg {
+        color: @colorTextPrimary;
+      }
+    }
+
+    .el-col {
+      position: relative;
+    }
+
+    .ProjectName {
+      font-size: @fontSizeBase;
+      font-weight: 700;
+      color: @colorTextPrimary;
+      transition: @transitionAll;
+    }
+
+    .ProjectCountryOrg {
+      margin-top: 6px;
+      font-size: @fontSizeSmall;
+      color: @colorTextSecondary;
+      white-space: nowrap;
+      transition: @transitionAll;
+
+      .Country {
+        width: auto;
+      }
+
+      .Organisation {
+        position: relative;
+        width: 100%;
+        padding-left: 25px;
+
+        &::before {
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 12px;
+          transform: translateY(-50%);
+          display: inline-block;
+          width: 1px;
+          height: 12px;
+          background-color: @colorTextSecondary;
+        }
+      }
+    }
+
+    .FoundIn {
+      margin-top: 6px;
+      font-size: @fontSizeSmall;
+      color: @colorTextMuted;
+
+      .svg-inline--fa {
+        position: relative;
+        top: -1px;
+        margin-right: 4px;
+      }
+    }
+
+    .fa-arrow-right {
+      position: absolute;
+      top: 50%;
+      right: 4px;
+      transform: translateY(-50%);
+      color: @colorBrandPrimary;
+    }
+  }
+</style>

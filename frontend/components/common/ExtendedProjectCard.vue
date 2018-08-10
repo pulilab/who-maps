@@ -1,0 +1,258 @@
+<template>
+  <el-card
+    :body-style="{ padding: '0px' }"
+    class="ExtendedProjectCard rounded"
+  >
+    <div>
+      <el-row
+        type="flex"
+        align="center"
+        class="FirstRow">
+        <el-col :span="15">
+          <el-row class="FirstSubRow">
+            <el-col>
+              {{ projectData.name }}
+            </el-col>
+          </el-row>
+          <el-row
+            type="flex"
+            justify="start"
+            class="SecondSubRow">
+            <el-col>
+              <country-item
+                :id="projectData.country"
+                :show-flag="true" />
+            </el-col>
+            <el-col>
+              <organisation-item :id="projectData.organisation" />
+            </el-col>
+          </el-row>
+        </el-col>
+        <el-col
+          :span="4"
+          class="ProjectMeta"
+        >
+          <div class="Donors">
+            <div>
+              {{ donors }}
+            </div>
+            <span>Donor(s)</span>
+          </div>
+        </el-col>
+        <el-col
+          :span="4"
+          class="ProjectMeta"
+        >
+          <div class="LastChange">
+            <div>
+              {{ lastChange }}
+            </div>
+            <span>Updated on</span>
+          </div>
+          <project-legend :id="id" />
+        </el-col>
+      </el-row>
+
+      <el-row
+        type="flex"
+        justify="space-between"
+        align="center"
+        class="SecondRow"
+      >
+        <el-col>
+          <div
+            v-if="!project.isPublished"
+            class="ProjectStatus Draft">
+            Draft
+          </div>
+          <div
+            v-if="project.isPublished"
+            class="ProjectStatus Published">
+            Published
+          </div>
+          <div
+            v-if="project.isPublished"
+            class="ProjectStatus ApprovedByCountry">
+            Approved by country
+          </div>
+        </el-col>
+        <el-col>
+          <project-card-actions
+            :project="project"
+            :force-show="true" />
+        </el-col>
+      </el-row>
+    </div>
+  </el-card>
+</template>
+
+<script>
+import { mapGetters } from 'vuex';
+import { format } from 'date-fns';
+
+import CountryItem from './CountryItem';
+import OrganisationItem from './OrganisationItem';
+import ProjectCardActions from './ProjectCardActions';
+import ProjectLegend from './ProjectLegend';
+
+export default {
+  components: {
+    CountryItem,
+    OrganisationItem,
+    ProjectCardActions,
+    ProjectLegend
+  },
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getUserProjectDetails: 'projects/getUserProjectDetails'
+    }),
+    project () {
+      return this.getUserProjectDetails(this.id);
+    },
+    projectData () {
+      return this.project.isPublished ? this.project.published : this.project.draft;
+    },
+    donors () {
+      return this.projectData && this.projectData.donors ? this.projectData.donors.length : 0;
+    },
+    lastChange () {
+      return format(Date.now(), 'DD/MM/YYYY');
+    }
+  },
+  methods: {}
+};
+</script>
+
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+.ExtendedProjectCard {
+  margin-bottom: 20px;
+
+  .FirstRow {
+    position: relative;
+    padding: 16px 30px;
+
+    .FirstSubRow {
+      margin-bottom: 10px;
+      font-size: @fontSizeLarger;
+      font-weight: 700;
+      color: @colorTextPrimary;
+    }
+
+    .SecondSubRow {
+      .el-col {
+        &:first-child {
+          width: auto;
+        }
+        &:last-child {
+          width: 100%;
+        }
+      }
+
+      .CountryItem {
+        .Flag {
+          img {
+            height: 14px;
+            width: auto;
+            margin: 1px 0;
+          }
+        }
+
+        .Name {
+          width: auto;
+          padding: 0 0 0 8px;
+          font-size: @fontSizeBase;
+          font-weight: 400;
+        }
+      }
+
+      .OrganisationItem {
+        position: relative;
+        padding-left: 25px;
+        font-size: @fontSizeBase;
+        font-weight: 400;
+
+        &::before {
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 12px;
+          transform: translateY(-50%);
+          display: inline-block;
+          width: 1px;
+          height: 12px;
+          background-color: @colorTextSecondary;
+        }
+      }
+    }
+
+    .ProjectMeta {
+      border-left: 1px solid @colorGrayLight;
+      text-align: center;
+
+      .Donors,
+      .LastChange {
+        > div {
+          margin: 4px 0 10px;
+          font-size: @fontSizeMedium;
+          font-weight: 700;
+          color: @colorTextPrimary;
+        }
+
+        > span {
+          font-size: @fontSizeSmall;
+          color: @colorTextSecondary;
+        }
+      }
+    }
+
+    .ProjectLegend {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+  }
+
+  .SecondRow {
+    padding: 16px 30px;
+    background-color: @colorBrandBlueLight;
+
+    .ProjectStatus {
+      display: inline-block;
+      height: 24px;
+      margin-right: 10px;
+      padding: 0 10px;
+      font-size: @fontSizeSmall - 1;
+      font-weight: 700;
+      line-height: 24px;
+      text-transform: uppercase;
+      color: @colorWhite;
+      border-radius: 12px;
+
+      &.Draft {
+        background-color: @colorDraft;
+        color: @colorTextPrimary;
+      }
+
+      &.Published {
+        background-color: @colorPublished;
+      }
+
+      &.ApprovedByCountry {
+        background-color: @colorApproved;
+      }
+    }
+
+    .ProjectCardActions {}
+  }
+}
+
+</style>

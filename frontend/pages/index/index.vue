@@ -1,14 +1,9 @@
 <template>
   <div class="LandingPage">
-    <top-bar />
-    <!-- <top-bar
-      country-specific
-      country-logo-url="/placeholder-sl.png" /> For countries -->
-    <action-bar />
-
     <div class="MapBoxContainer">
       <landing-map />
       <welcome-box />
+      <country-projects-box />
     </div>
 
     <div class="InfoSignupContainer">
@@ -16,8 +11,8 @@
         <el-col class="InfoBoxWrapper">
           <info-box />
         </el-col>
-        <el-col class="SignupBoxWrapper">
-          <signup-box />
+        <el-col class="CentralBoxWrapper">
+          <central-box />
         </el-col>
       </el-row>
     </div>
@@ -27,24 +22,22 @@
 </template>
 
 <script>
-import TopBar from '../../components/common/TopBar.vue';
-import ActionBar from '../../components/common/ActionBar.vue';
 
 import LandingMap from '../../components/landing/LandingMap.vue';
 import WelcomeBox from '../../components/landing/WelcomeBox.vue';
+import CountryProjectsBox from '../../components/landing/CountryProjectsBox.vue';
 import InfoBox from '../../components/landing/InfoBox.vue';
-import SignupBox from '../../components/landing/SignupBox.vue';
+import CentralBox from '../../components/landing/CentralBox.vue';
 import AboutSection from '../../components/landing/AboutSection.vue';
 
 export default {
   components: {
-    TopBar,
-    ActionBar,
     LandingMap,
     WelcomeBox,
     InfoBox,
-    SignupBox,
-    AboutSection
+    CentralBox,
+    AboutSection,
+    CountryProjectsBox
   }
 };
 </script>
@@ -54,12 +47,12 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .LandingPage {
+
     .MapBoxContainer {
       position: relative;
     }
 
     .InfoSignupContainer {
-      .limitPageWidth();
       margin: 40px 0;
 
       > .el-row {
@@ -69,15 +62,15 @@ export default {
       .InfoBoxWrapper {
         min-width: 360px;
         max-width: 360px;
+        margin-left: 40px;
         margin-right: 30px;
         background-color: @colorWhite;
       }
 
-      .SignupBoxWrapper {
+      .CentralBoxWrapper {
+        margin-right: 40px;
         background-color: @colorBrandPrimary;
       }
-
-      // .InfoBox {}
 
       .SignupBox {
         padding: 0 40px;
