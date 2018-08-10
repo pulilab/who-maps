@@ -1,17 +1,23 @@
 <template>
   <div class="NewProjectForm">
+    <el-form
+      :model="project"
+      :rules="rules"
+      label-position="top"
+      @submit.native.prevent>
+      <el-row type="flex">
 
-    <el-row type="flex">
-      <el-col :span="18">
-        <general-overview />
-        <implementation-overview />
-        <technology-overview />
-        <interoperability-and-standards />
-      </el-col>
-      <el-col :span="6">
-        <project-navigation />
-      </el-col>
-    </el-row>
+        <el-col :span="18">
+          <general-overview />
+          <implementation-overview />
+          <technology-overview />
+          <interoperability-and-standards />
+        </el-col>
+        <el-col :span="6">
+          <project-navigation />
+        </el-col>
+      </el-row>
+    </el-form>
 
   </div>
 </template>
@@ -30,6 +36,14 @@ export default {
     ImplementationOverview,
     TechnologyOverview,
     InteroperabilityAndStandards
+  },
+  computed: {
+    project () {
+      return {};
+    },
+    rules () {
+      return {};
+    }
   },
   methods: {
   }
