@@ -1,7 +1,11 @@
 <template>
   <div class="LandingMap">
-    <!-- TODO for Nico -->
+    <!-- TODO for Nico 1. -->
     <!-- Exit 'Country view' mode when user zooms out at least 2 lvls?! -->
+
+    <!-- TODO for Nico 2. -->
+    <!-- Make map's height align to viewport's height — for ex. 70vh -->
+    <!-- I'm not sure about this, but we should handle different screen sizes somehow... we can follow up on this later. -->
     <no-ssr>
       <l-map
         ref="mainMap"
