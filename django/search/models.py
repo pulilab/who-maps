@@ -16,6 +16,16 @@ from user.models import Organisation
 
 
 class ProjectSearch(ExtendedModel):
+    SEARCH_BY = {
+        "name": "project__name",
+        "org": "organisation__name",
+        "country": "country__name",
+        "overview": "project__data__implementation_overview",
+        "loc": "coverage",
+        "partner": "project__data__implementing_partners",  # TODO: will be refactored
+        "donor": "project__data__donors"  # TODO: will be refactored
+    }
+
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
     organisation = models.ForeignKey(Organisation, null=True, on_delete=models.SET_NULL)
