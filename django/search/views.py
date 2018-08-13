@@ -46,7 +46,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
 
     def list(self, request, *args, **kwargs):
         """
-        Search in projects, works by query params
+        Search in projects, works by the following query params:
         q: search term
         in: search in [optional, defaults to all: in=name&in=org&in=country&in=overview&in=loc&in=partner&in=donor]
         country: eg: country=1&country=2
@@ -59,6 +59,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         gov: gov=0 (for false), gov=1&gov=2 (for true values, since there's two types of true)
         donor: ???
         approved: approved=0 (for not approved), approved=1 (for approved)
+        results: map | list (defaults to map)
         """
 
         search_fields = set()
