@@ -66,6 +66,9 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         search_fields = set()
         query_params = request.query_params
 
+        qs = self.get_queryset()
+        qs = self.filter_queryset(qs)
+
         search_type = query_params.get('type', 'basic')
         search_term = query_params.get('q')
         if search_term:
