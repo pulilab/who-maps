@@ -26,6 +26,20 @@ class ProjectSearch(ExtendedModel):
         "donor": "project__data__donors"  # TODO: will be refactored
     }
 
+    FILTER_BY = {
+        # query_param: QuerySet param
+        "country": "country_id",  # eg: country=1&country=2
+        "sw": "software",  # eg: sw=1&sw=2
+        "dhi": "dhi_categories",  # eg: dhi=1&dhi=2
+        "hfa": "hfa_categories",  # eg: hfa=1&hfa=2
+        "hsc": "hsc_categories",  # eg: hsc=1&hsc=2
+        "his": "his",  # eg: his=1&his=2
+        "region": "country__region",  # eg: region=3
+        "gov": "project__data__government_investor",  # false=> gov=0 ; true=> gov=1&gov=2
+        "donor": "project__data__donors",  # TODO: will be refactored
+        "approved": "project__approval__approved"  # false=> approved=0 ; true=> approved=1
+    }
+
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
     organisation = models.ForeignKey(Organisation, null=True, on_delete=models.SET_NULL)
