@@ -96,6 +96,7 @@ class ProjectSearch(ExtendedModel):
 
         selectable_fields = set(cls.FILTER_BY.keys())
         selected_fields = set(query_params.keys()) & selectable_fields
+        lookup = lookup_param = None
 
         def lookup_cleanup(values: list) -> List[int]:  # keep ints only
             lookup = []
@@ -118,8 +119,6 @@ class ProjectSearch(ExtendedModel):
                     elif field == "approved":
                         lookup_param = "exact"
                         lookup = query_params.get(field) == '1'
-                    else:
-                        continue
 
                     queryset &= queryset.filter(Q(**{"{field}__{param}".format(
                         field=cls.FILTER_BY[field], param=lookup_param): lookup}))
