@@ -60,6 +60,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         donor: ???
         approved: approved=0 (for not approved), approved=1 (for approved)
         results: map | list (defaults to map)
+        found: include | anything else won't include (defaults to exclude)
         """
         results = {}
         search_fields = set()
