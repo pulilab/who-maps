@@ -1,4 +1,4 @@
-export const state = () => ({
+const cleanState = () => ({
   name: null,
   organisation: null,
   country: 58,
@@ -30,10 +30,17 @@ export const state = () => ({
   licenses: [],
   repository: null,
   mobile_application: null,
-  wiki: null
+  wiki: null,
+  interoperability_links: {},
+  interoperability_standards: []
+});
+
+export const state = () => ({
+  ...cleanState()
 });
 
 export const getters = {
+  getProjectData: state => ({...state}),
   getName: state => state.name,
   getOrganisation: state => state.organisation,
   getCountry: state => state.country,
@@ -61,7 +68,9 @@ export const getters = {
   getLicenses: state => state.licenses,
   getRepository: state => state.repository,
   getMobileApplication: state => state.mobile_application,
-  getWiki: state => state.wiki
+  getWiki: state => state.wiki,
+  getInteroperabilityLinks: state => state.interoperability_links,
+  getInteroperabilityStandards: state => state.interoperability_standards
 };
 
 export const actions = {
@@ -70,6 +79,9 @@ export const actions = {
     console.log(data);
     // commit('SET_TEAM', value);
     // commit('SET_VIEWERS', value);
+  },
+  resetProjectState ({commit}) {
+    commit('SET_PROJECT_STATE', cleanState());
   },
   setName ({commit}, value) {
     commit('SET_NAME', value);
@@ -158,11 +170,20 @@ export const actions = {
   },
   setWiki ({commit}, value) {
     commit('SET_WIKI', value);
+  },
+  setInteroperabilityLinks ({commit}, value) {
+    commit('SET_INTEROPERABILITY_LINKS', value);
+  },
+  setInteroperabilityStandards ({commit}, value) {
+    commit('SET_INTEROPERABILITY_STANDARDS', value);
   }
 
 };
 
 export const mutations = {
+  SET_PROJECT_STATE: (state, value) => {
+    state = value;
+  },
   SET_NAME: (state, name) => {
     state.name = name;
   },
@@ -251,5 +272,11 @@ export const mutations = {
   },
   SET_WIKI: (state, wiki) => {
     state.wiki = wiki;
+  },
+  SET_INTEROPERABILITY_LINKS: (state, interoperability_links) => {
+    state.interoperability_links = interoperability_links;
+  },
+  SET_INTEROPERABILITY_STANDARDS: (state, interoperability_standards) => {
+    state.interoperability_standards = interoperability_standards;
   }
 };
