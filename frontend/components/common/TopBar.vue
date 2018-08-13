@@ -97,13 +97,7 @@
               </nuxt-link>
             </div>
             <div>
-              <!-- TODO -->
-              <nuxt-link
-                :to="localePath('toolkit')"
-                class="HeaderBtn"
-              >
-                Toolkit
-              </nuxt-link>
+              <toolkit-dialog-wrapper />
             </div>
             <div>
               <nuxt-link
@@ -127,6 +121,7 @@ import { mapGetters } from 'vuex';
 
 import LanguageSelector from './LanguageSelector';
 import UserDropdown from './UserDropdown';
+import ToolkitDialogWrapper from './ToolkitDialogWrapper';
 
 export default {
   directives: {
@@ -134,7 +129,8 @@ export default {
   },
   components: {
     LanguageSelector,
-    UserDropdown
+    UserDropdown,
+    ToolkitDialogWrapper
   },
   props: {
     countrySpecific: {
@@ -190,7 +186,12 @@ export default {
       }
     }
 
-    .HeaderBtn {
+    .HeaderBtn
+    // TODO: Remove Angular Material
+    // hacking Toolkit md-button :(
+    ,.HeaderBtn.md-button
+    //
+    {
       position: relative;
       height: 24px;
       margin: 0 10px;
@@ -201,6 +202,27 @@ export default {
       color: @colorBrandPrimary;
       text-decoration: none;
       transition: @transitionAll;
+
+      // hacking Toolkit md-button :(
+      min-height: auto;
+      min-width: auto;
+      overflow: visible;
+      background-color: transparent !important;
+
+      &.md-ink-ripple {
+        > span {
+          letter-spacing: 0 !important;
+        }
+
+        &::before {
+          top: -16px !important;
+        }
+      }
+
+      > .md-ripple-container {
+        display: none;
+      }
+      //
 
       &::before {
         content: "";

@@ -59,7 +59,7 @@ export const getters = {
 
   getThematicOverview: state => {
     const th = state.thematic_overview;
-    return th.catergories
+    return th.categories
       ? th.categories.map(cat => ({ ...cat, domains: th.sub_categories.filter(sb => sb.category === cat.id) }))
       : [];
   },

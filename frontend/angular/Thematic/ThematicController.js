@@ -1,24 +1,16 @@
 import angular from 'angular';
 import SkeletonController from './SkeletonController.js';
-import * as SystemModule from '../../store/modules/system';
 
 class ThematicController {
-  constructor ($mdDialog, $scope, $ngRedux) {
+  constructor ($mdDialog, $scope) {
     this.modal = $mdDialog;
     this.scope = $scope;
-    this.$ngRedux = $ngRedux;
     this.$onInit = this.onInit.bind(this);
   }
-  mapState (state) {
-    const data = SystemModule.getDomainsForThematic(state);
-    const icons = data.map((el, i) => require('./images/icon-axis' + (i - 1) + '.svg'));
-    return {
-      icons,
-      data
-    };
-  }
+
   onInit () {
-    this.$ngRedux.connect(this.mapState, null)(this);
+    this.data = window.$nuxt.$store.getters['system/getDomainsForThematic'];
+    this.icons = this.data.map((el, i) => require('./images/icon-axis' + (i - 1) + '.svg'));
   }
 
   showModal () {
@@ -35,11 +27,11 @@ class ThematicController {
   }
 
   static thematicFactory () {
-    const thematic = ($mdDialog, $scope, $ngRedux) => {
+    const thematic = ($mdDialog, $scope) => {
       require('./Thematic.scss');
-      return new ThematicController($mdDialog, $scope, $ngRedux);
+      return new ThematicController($mdDialog, $scope);
     };
-    thematic.$inject = ['$mdDialog', '$scope', '$ngRedux'];
+    thematic.$inject = ['$mdDialog', '$scope'];
     return thematic;
   }
 }
