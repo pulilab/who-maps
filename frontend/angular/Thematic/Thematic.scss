@@ -24,7 +24,6 @@ md-dialog.thematic-overview {
 }
 
 md-dialog {
-
   md-dialog-content {
     height: 100vh;
 
@@ -35,8 +34,8 @@ md-dialog {
 
       .headline {
         display: block;
-        padding: 20px;
-        border-bottom: 1px solid #BDBDBD;
+        padding: 20px 20px 30px;
+        // border-bottom: 1px solid #B9B9B9;
 
         h6 {
           margin: 0;
@@ -53,10 +52,10 @@ md-dialog {
       }
 
       .axes {
-        border-bottom: 1px solid #D5D5D5;
+        border-bottom: 1px solid #D6D6D6;
 
         &:first-of-type {
-          border-top: 1px solid #D5D5D5;
+          border-top: 1px solid #D6D6D6;
         }
 
         &:nth-of-type(2),
@@ -332,6 +331,7 @@ md-dialog {
             dt {
               font-weight: 700;
             }
+
             dd {
               margin: 0 0 20px 0;
             }
@@ -343,10 +343,12 @@ md-dialog {
               float: right;
               margin: 10px -25px 25px 50px;
             }
+
             &.float-left {
               float: left;
               margin: 10px 50px 25px -25px;
             }
+
             &.center-block {
               margin: 30px auto 10px;
               width: 100%;
