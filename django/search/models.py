@@ -105,6 +105,10 @@ class ProjectSearch(ExtendedModel):
                 except ValueError:
                     pass
             return lookup
+
+        if selected_fields:
+            for field in selected_fields:
+                if query_params[field]:
         return queryset
 
     @classmethod
