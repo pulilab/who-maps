@@ -87,20 +87,26 @@ export default {
     markerClickHandler () {
       this.setActiveCountry(this.pin.id);
     },
+    safeMapObjectFunctionCall (ref, functionName) {
+      if (this.$refs[ref] && this.$refs[ref].mapObject) {
+        this.$refs[ref].mapObject[functionName]();
+      }
+    },
+
     openCountryView () {
       this.setCountry(this.pin.id);
-      this.$refs.countryMarker.mapObject.closePopup();
+      this.safeMapObjectFunctionCall('countryMarker', 'closePopup');
     },
     mouseEnterHandler (event) {
       this.popUpHover = true;
       this.$nextTick(() => {
-        this.$refs.tooltip.mapObject.update();
+        this.safeMapObjectFunctionCall('tooltip', 'update');
       });
     },
     mouseLeaveHandler (event) {
       this.popUpHover = false;
       this.$nextTick(() => {
-        this.$refs.tooltip.mapObject.update();
+        this.safeMapObjectFunctionCall('tooltip', 'update');
       });
     }
   }
