@@ -53,7 +53,7 @@ class ProjectSearch(ExtendedModel):
     his = ArrayField(models.IntegerField(), default=list)
 
     @classmethod
-    def search(cls, queryset: QuerySet, search_term: str, search_in: Set[str]) -> QuerySet:
+    def search(cls, queryset: QuerySet, search_term: str, search_in: List[str]) -> QuerySet:
         """
         Search in QuerySet
         search_term: search term
