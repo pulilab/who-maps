@@ -96,6 +96,15 @@ class ProjectSearch(ExtendedModel):
 
         selectable_fields = set(cls.FILTER_BY.keys())
         selected_fields = set(query_params.keys()) & selectable_fields
+
+        def lookup_cleanup(values: list) -> List[int]:  # keep ints only
+            lookup = []
+            for value in values:
+                try:
+                    lookup.append(int(value))
+                except ValueError:
+                    pass
+            return lookup
         return queryset
 
     @classmethod
