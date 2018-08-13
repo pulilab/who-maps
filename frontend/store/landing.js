@@ -7,7 +7,7 @@ export const state = () => ({
 
 export const getters = {
   getLandingPagePins (state, getters, rootState, rootGetters) {
-    const polyLabeled = rootGetters['countries/getCountries'].filter(c => c.map_data.polylabel);
+    const polyLabeled = rootGetters['countries/getCountries'].filter(c => c.map_data.polylabel && c.id !== state.selectedCountry);
     return polyLabeled.map(c => ({
       id: c.id,
       latlng: {...c.map_data.polylabel}
@@ -55,7 +55,10 @@ export const actions = {
       commit('SET_ACTIVE_COUNTRY', null);
     }
   },
-  setActiveCountry ({commit}, value) {
+  setActiveCountry ({commit, getters, dispatch}, value) {
+    if (getters.getSelectedCountry && getters.getSelectedCountry !== value) {
+      dispatch('setCountry', value)
+    }
     commit('SET_ACTIVE_COUNTRY', value);
   }
 };
