@@ -14,16 +14,24 @@
           placeholder="Pick a day"
         />
       </el-form-item>
-      <el-form-item label="Under what license is the project governed?">
+      <el-form-item
+        label="Under what license is the project governed?"
+        prop="licenses">
         <license-selector v-model="licenses" />
       </el-form-item>
-      <el-form-item label="Code documentation or download link">
+      <el-form-item
+        label="Code documentation or download link"
+        prop="repository">
         <link-field v-model="repository" />
       </el-form-item>
-      <el-form-item label="Link to the application">
+      <el-form-item
+        label="Link to the application"
+        prop="mobile_application">
         <link-field v-model="mobile_application" />
       </el-form-item>
-      <el-form-item label="Link to the wiki page">
+      <el-form-item
+        label="Link to the wiki page"
+        prop="wiki">
         <link-field v-model="wiki" />
       </el-form-item>
     </collapsible-card>

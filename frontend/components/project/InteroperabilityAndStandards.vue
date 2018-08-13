@@ -3,7 +3,9 @@
     id="interoperability"
     class="InteroperabilityAndStandards">
     <collapsible-card title="Interoperability &amp; Standards">
-      <el-form-item label="Does your digital health project link to a digital HIS?">
+      <el-form-item
+        label="Does your digital health project link to a digital HIS?"
+        prop="interoperability_links">
         <interoperability-link-component
           v-for="ir in interopearilbityLinksStructure"
           :key="ir.id"
@@ -11,7 +13,9 @@
           :interoperability-links.sync="interoperability_links"
         />
       </el-form-item>
-      <el-form-item label="What data standards does your digital health project use?" >
+      <el-form-item
+        label="What data standards does your digital health project use?"
+        prop="interoperability_standards">
         <standards-selector v-model="interoperability_standards" />
       </el-form-item>
     </collapsible-card>

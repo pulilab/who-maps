@@ -14,12 +14,14 @@
         type="flex"
       >
         <el-col :span="12">
-          <sub-national-level-deployment-item
-            :index="index"
-            :level-name="countrySubLevelNames.first"
-            :sub-levels="countryFirstSubLevel"
-            :coverage.sync="coverage"
-          />
+          <el-form-item prop="coverage">
+            <sub-national-level-deployment-item
+              :index="index"
+              :level-name="countrySubLevelNames.first"
+              :sub-levels="countryFirstSubLevel"
+              :coverage.sync="coverage"
+            />
+          </el-form-item>
         </el-col>
         <el-col
           :span="12"
@@ -47,12 +49,14 @@
         type="flex"
       >
         <el-col :span="12">
-          <sub-national-level-deployment-item
-            :index="index"
-            :level-name="countrySubLevelNames.second"
-            :sub-levels="countrySecondSubLevel"
-            :coverage.sync="coverageSecondLevel"
-          />
+          <el-form-item prop="coverageSecondLevel">
+            <sub-national-level-deployment-item
+              :index="index"
+              :level-name="countrySubLevelNames.second"
+              :sub-levels="countrySecondSubLevel"
+              :coverage.sync="coverageSecondLevel"
+            />
+          </el-form-item>
         </el-col>
         <el-col
           :span="12"

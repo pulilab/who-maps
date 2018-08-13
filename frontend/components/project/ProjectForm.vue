@@ -42,6 +42,13 @@ export default {
     ...mapGetters({
       project: 'project/getProjectData'
     }),
+    draftRules () {
+      return {
+        name: [
+          {required: true, message: 'This is required', trigger: 'blur'}
+        ]
+      };
+    },
     rules () {
       return {
         name: [

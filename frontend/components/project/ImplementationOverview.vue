@@ -11,6 +11,7 @@
           v-for="(platform, index) in platforms"
           :key="platform"
           label="Software"
+          prop="platforms"
         >
           <el-col :span="12">
             <platform-selector
@@ -19,7 +20,9 @@
             />
             <el-form-item
               v-show="platform"
-              label="Digital Health Interventions">
+              label="Digital Health Interventions"
+              prop="digitalHealthInterventions"
+            >
               <digital-health-interventions-selector
                 :platform-id="platform"
               />
@@ -52,7 +55,10 @@
         <his-bucket-selector v-model="his_bucket" />
       </el-form-item>
       <div class="CoverageArea">
-        <el-form-item label="What kind of coverage does your project have?">
+        <el-form-item
+          label="What kind of coverage does your project have?"
+          prop="coverageType"
+        >
           <el-radio-group v-model="coverageType">
             <el-radio :label="1">Sub-national</el-radio>
             <el-radio :label="2">National</el-radio>
@@ -63,7 +69,9 @@
         />
         <div
           v-show="coverageType == 2"
-          class="NationalLevelDeployment">
+          class="NationalLevelDeployment"
+          prop="national_level_deployment"
+        >
           <fa icon="flag" />
           National level deployment
           <coverage-fieldset
@@ -82,7 +90,9 @@
           <el-radio :label="3">Yes, there is a financial contribution through MOH budget</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="Implementing partners">
+      <el-form-item
+        label="Implementing partners"
+        prop="implementing_partners">
         <el-row
           v-for="(partner, index) in implementing_partners"
           :key="index"
