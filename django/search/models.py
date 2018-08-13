@@ -70,7 +70,7 @@ class ProjectSearch(ExtendedModel):
         return qs
 
     @classmethod
-    def found_in(cls, queryset: QuerySet, search_term: str) -> dict:
+    def found_in(cls, queryset: QuerySet, search_term: str) -> Dict[str, list]:
         """
         Returns what projects are found in which search field
         {
