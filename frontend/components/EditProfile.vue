@@ -78,6 +78,14 @@
         </el-form-item>
       </el-form>
 
+      <div>
+        <h4>I request to be a:</h4>
+        <el-checkbox v-model="checked">Government user</el-checkbox>
+        <p>Add question-icon, also => Lorem ipsum copy original!!</p>
+        <el-checkbox v-model="checked">Financial investor</el-checkbox>
+        <p>Add question-icon, also => Lorem ipsum copy original!!</p>
+      </div>
+
       <div class="Actions">
         <el-button @click="dismissChanges">Dismiss changes</el-button>
         <el-button @click="validateSubmitAndMapApiErrors">Save</el-button>
