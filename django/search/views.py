@@ -61,7 +61,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         approved: approved=0 (for not approved), approved=1 (for approved)
         results: map | list (defaults to map)
         """
-
+        results = {}
         search_fields = set()
         query_params = request.query_params
 
@@ -75,7 +75,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
             search_in = query_params.getlist('in')
             qs = self.search(queryset=qs, search_term=search_term, search_in=search_in)
             if search_type == 'basic':
-                found_in = self.found_in(queryset=qs, search_term=search_term)
+                results.update(found_in=self.found_in(queryset=qs, search_term=search_term))
 
         qs = self.filter(queryset=qs, query_params=query_params)
         data = {'found_in': None, 'results': qs.values_list('project__data', 'project__approval__approved'), 'search_term': search_term, 'search_in': search_fields}
