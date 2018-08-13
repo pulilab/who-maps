@@ -6,7 +6,7 @@ from .models import ProjectSearch
 
 
 class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
-    queryset = ProjectSearch.objects.all()
+    queryset = ProjectSearch.objects.all().select_related('project', 'project__approval', 'organisation', 'country')
     search = ProjectSearch.search
     MAP_VALUES = (
         "project_id",
