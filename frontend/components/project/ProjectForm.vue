@@ -28,6 +28,7 @@ import GeneralOverview from './GeneralOverview';
 import ImplementationOverview from './ImplementationOverview';
 import TechnologyOverview from './TechnologyOverview';
 import InteroperabilityAndStandards from './InteroperabilityAndStandards';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -38,11 +39,15 @@ export default {
     InteroperabilityAndStandards
   },
   computed: {
-    project () {
-      return {};
-    },
+    ...mapGetters({
+      project: 'project/getProjectData'
+    }),
     rules () {
-      return {};
+      return {
+        name: [
+          {required: true, message: 'This is required', trigger: 'blur'}
+        ]
+      };
     }
   },
   methods: {
