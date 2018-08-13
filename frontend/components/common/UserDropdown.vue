@@ -1,8 +1,6 @@
 <template>
   <div class="UserDropdown">
-    <!-- TODO -->
-    <!-- Rewrite menu to be able to add custom class for dropdown menu... popover? -->
-    <el-dropdown>
+    <el-dropdown trigger="click">
       <el-button
         type="text"
       >
@@ -14,28 +12,28 @@
       <el-dropdown-menu slot="dropdown">
         <!-- User info block -->
         <div class="UserInfoSection">
-          <div>
+          <div class="Item">
             <div class="ItemTitle">
               Email
             </div>
             {{ user.email }}
           </div>
 
-          <div>
+          <div class="Item">
             <div class="ItemTitle">
               Role
             </div>
             Role Name
           </div>
 
-          <div>
+          <div class="Item">
             <div class="ItemTitle">
               Country
             </div>
             <country-item :id="user.country" />
           </div>
 
-          <div>
+          <div class="Item">
             <div class="ItemTitle">
               Site Language
             </div>
@@ -45,7 +43,9 @@
         <!-- User links block -->
         <el-dropdown-item divided>
           <nuxt-link :to="localePath('index-edit-profile')">
-            <i class="el-icon-settings" />
+            <span class="MenuIcon">
+              <fa icon="user-edit" />
+            </span>
             Edit my profile
           </nuxt-link >
         </el-dropdown-item>
@@ -53,11 +53,14 @@
         <el-dropdown-item>
           <el-button
             type="text"
+            style="padding: 0"
             @click="logout"
           >
-            <i class="el-icon-edit" />
+            <span class="MenuIcon">
+              <fa icon="power-off" />
+            </span>
             Logout
-          </el-button >
+          </el-button>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -95,15 +98,6 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
   .UserDropdown {
-    .UserInfoSection {
-      background-color: @colorGrayLightest;
-    }
-
-    .el-dropdown-menu {
-      padding: 0;
-      margin: 0;
-    }
-
     .el-button {
       padding: 0;
 
@@ -113,6 +107,31 @@ export default {
         &.fa-angle-down {
           margin: 0 0 0 4px;
         }
+      }
+    }
+  }
+
+  .UserInfoSection {
+    padding: 8px 20px 4px;
+    font-size: @fontSizeBase;
+
+    .Item {
+      display: block;
+      margin-bottom: 12px;
+
+      .ItemTitle {
+        margin-bottom: 8px;
+        font-size: @fontSizeSmall - 1;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: @colorTextMuted;
+      }
+
+      .CountryName,
+      .LanguageName {
+        margin-left: 8px;
+        font-size: @fontSizeBase;
+        font-weight: 400;
       }
     }
   }

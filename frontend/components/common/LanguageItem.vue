@@ -1,8 +1,15 @@
 <template>
-  <div class="LanguageItem">
-    <img :src="language.flag" >
-    <span> {{ language.name }} </span>
-  </div>
+  <el-row
+    type="flex"
+    class="LanguageItem"
+  >
+    <el-col class="LanguageFlag">
+      <img :src="language.flag" >
+    </el-col>
+    <el-col class="LanguageName">
+      {{ language.name }}
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -26,10 +33,26 @@ export default {
 </script>
 
 <style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
   .LanguageItem {
-    img {
-      height: 14px;
-      width: 20px;
+    .LanguageFlag {
+      width: auto;
+
+      img {
+        width: 24px;
+        height: 14px;
+      }
+    }
+
+    .LanguageName {
+      width: 100%;
+      margin-left: 10px;
+      font-size: @fontSizeMedium;
+      font-weight: 700;
+      line-height: 16px;
+      color: @colorTextPrimary;
     }
   }
 </style>
