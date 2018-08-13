@@ -78,7 +78,12 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
                 results.update(found_in=self.found_in(queryset=qs, search_term=search_term))
 
         qs = self.filter(queryset=qs, query_params=query_params)
-        data = {'found_in': None, 'results': qs.values_list('project__data', 'project__approval__approved'), 'search_term': search_term, 'search_in': search_fields}
+
+        if query_params.get('type') == 'list':
+            data = ListResultSerializer(qs.values(*self.list_values), many=True).data
+        else:
+            data = MapResultSerializer(qs.values(*self.map_values), many=True).data
+        results.update(projects=data, search_term=search_term, search_in=search_fields)
 
         # page = self.paginate_queryset(qs)
         # if page is not None:
