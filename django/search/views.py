@@ -59,8 +59,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         gov: gov=0 (for false), gov=1&gov=2 (for true values, since there's two types of true)
         donor: ???
         approved: approved=0 (for not approved), approved=1 (for approved)
-        results: map | list (defaults to map)
         found: include | anything else won't include (defaults to exclude)
+        type: map | list (defaults to map)
         """
         results = {}
         search_fields = set()
