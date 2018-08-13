@@ -2,7 +2,8 @@ export const state = () => ({
   projects: [],
   selectedCountry: null,
   currentZoom: 3,
-  activeCountry: null
+  activeCountry: null,
+  mapReady: false
 });
 
 export const getters = {
@@ -36,7 +37,11 @@ export const getters = {
   },
   getActiveCountry (state) {
     return state.activeCountry;
-  }
+  },
+  getCountryProjects: state => id => {
+    return state.projects.filter(p => p.country === id);
+  },
+  getMapReady: state => state.mapReady
 };
 
 export const actions = {
@@ -57,9 +62,12 @@ export const actions = {
   },
   setActiveCountry ({commit, getters, dispatch}, value) {
     if (getters.getSelectedCountry && getters.getSelectedCountry !== value) {
-      dispatch('setCountry', value)
+      dispatch('setCountry', value);
     }
     commit('SET_ACTIVE_COUNTRY', value);
+  },
+  setMapReady ({commit}, value) {
+    commit('SET_MAP_READY', value);
   }
 };
 export const mutations = {
@@ -74,5 +82,8 @@ export const mutations = {
   },
   SET_ACTIVE_COUNTRY: (state, value) => {
     state.activeCountry = value;
+  },
+  SET_MAP_READY: (state, value) => {
+    state.mapReady = value;
   }
 };

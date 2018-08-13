@@ -7,10 +7,10 @@
         :world-copy-jump="true"
         :options="mapOptions"
         @zoomend="zoomChangeHandler"
+        @load="setMapReady(true)"
       >
         <l-tilelayer
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
-          @loading="mapReady"
         />
 
         <v-marker-cluster
@@ -19,6 +19,7 @@
         >
           <country-center-marker
             v-for="pin in countriesPin"
+            :icon="countryCenterIcons[pin.id]"
             :key="pin.id"
             :pin="pin"
           />
@@ -54,6 +55,7 @@ export default {
   data () {
     return {
       zoom: 3,
+      countryCenterIcons: {},
       mapOptions: {
         zoomControl: false,
         attributionControl: false,
@@ -64,8 +66,15 @@ export default {
   computed: {
     ...mapGetters({
       countriesPin: 'landing/getLandingPagePins',
-      selectedCountries: 'landing/getSelectedCountries'
+      activeCountry: 'landing/getActiveCountry',
+      getCountryProjects: 'landing/getCountryProjects',
+      mapReady: 'landing/getMapReady'
     }),
+    activeCountryAndMapReady () {
+      if (this.activeCountry && this.mapReady) {
+        return this.activeCountry;
+      }
+    },
     clusterOptions () {
       return {
         disableClusteringAtZoom: 8,
@@ -73,23 +82,46 @@ export default {
         polygonOptions: {
           stroke: false,
           fillColor: '#42B883'
+        },
+        iconCreateFunction: (cluster) => {
+          const html = `<span>${cluster.getChildCount()}</span>`;
+          return L.divIcon({
+            className: `CountryClusterIcon`,
+            html,
+            iconSize: [40, 40],
+            iconAnchor: [20, 40]
+          });
         }
       };
+    }
+  },
+  watch: {
+    activeCountryAndMapReady: {
+      immediate: true,
+      handler (id, old) {
+        if (old) {
+          this.countryCenterIcons[old] = this.iconGenerator(old, false);
+        }
+        if (id) {
+          this.countryCenterIcons[id] = this.iconGenerator(id, true);
+        }
+      }
     }
   },
   mounted () {
     this.$root.$on('map:center-on', this.centerOn);
     this.$root.$on('map:fit-on', this.fitOn);
     this.$root.$on('map:zoom-at', this.zoomAt);
+    this.iconsGenerator();
   },
   beforeDestroy () {
     this.$root.$off(['map:center-on', 'map:fit-on', 'map:zoom-at']);
   },
   methods: {
     ...mapActions({
-      setCurrentZoom: 'landing/setCurrentZoom'
+      setCurrentZoom: 'landing/setCurrentZoom',
+      setMapReady: 'landing/setMapReady'
     }),
-    mapReady () {},
     centerOn (latlng, zoom = 13) {
       if (this.$refs.mainMap && this.$refs.mainMap.mapObject) {
         this.$refs.mainMap.mapObject.flyTo(latlng, zoom);
@@ -107,6 +139,23 @@ export default {
     },
     zoomChangeHandler (event) {
       this.setCurrentZoom(event.target.getZoom());
+    },
+    iconGenerator (id, isActive) {
+      const additionaClass = isActive ? 'ActiveCountry' : '';
+      const html = `<span>${this.getCountryProjects(id).length}</span>`;
+      return L.divIcon({
+        className: `CountryCenterIcon ${additionaClass}`,
+        html,
+        iconSize: [27, 44],
+        iconAnchor: [13.5, 44]
+      });
+    },
+    iconsGenerator () {
+      const icons = {};
+      this.countriesPin.forEach(cp => {
+        icons[cp.id] = this.iconGenerator(cp.id);
+      });
+      this.countryCenterIcons = icons;
     }
   }
 };
@@ -120,5 +169,35 @@ export default {
     display: block;
     height: 60vh;
     background-color: @colorGrayLight;
+
+    .CountryClusterIcon {
+      background-image: url('~/assets/img/pins/pin-cluster.svg');
+
+       span {
+        display: inline-block;
+        width: 40px;
+        margin-top: 10px;
+        line-height: 20px;
+        color: white;
+        font-weight: 800;
+        text-align: center;
+      }
+    }
+    .CountryCenterIcon {
+      background-image: url('~/assets/img/pins/pin-with-counter.svg');
+
+      &.ActiveCountry {
+        background-image: url('~/assets/img/pins/pin-with-counter-active.svg');
+      }
+
+       span {
+        display: inline-block;
+        width: 27px;
+        margin-top: 5px;
+        color: white;
+        font-weight: 800;
+        text-align: center;
+      }
+    }
   }
 </style>

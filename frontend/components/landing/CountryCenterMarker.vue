@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 import GeoJsonLayer from './GeoJsonLayer';
 
 export default {
@@ -71,10 +71,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      geoJson: 'countries/getGeoJsonLibrary'
-
-    }),
     paintTooltip () {
       return this.$slots.default && (this.hovered || this.forceHovered);
     }
@@ -119,7 +115,7 @@ export default {
 
   .CountryViewPopup {
     bottom: 0;
-    margin-bottom: 18px;
+    margin-bottom: 55px;
 
     .leaflet-popup-content-wrapper {
       background-color: transparent;
