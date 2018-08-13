@@ -115,6 +115,9 @@ class ProjectSearch(ExtendedModel):
                     elif field in ["software", "dhi", "hfa", "hsc", "his"]:
                         lookup_param = "overlap"
                         lookup = lookup_cleanup(query_params.getlist(field))
+                    elif field == "approved":
+                        lookup_param = "exact"
+                        lookup = query_params.get(field) == '1'
         return queryset
 
     @classmethod
