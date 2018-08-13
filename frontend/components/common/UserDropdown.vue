@@ -1,9 +1,12 @@
 <template>
   <div class="UserDropdown">
-    <!-- TODO -->
-    <!-- Rewrite menu to be able to add custom class for dropdown menu... popover? -->
-    <el-dropdown>
+    <el-popover
+      v-model="shown"
+      placement="bottom"
+      popper-class="UserDropdownPopper"
+    >
       <el-button
+        slot="reference"
         type="text"
       >
         <fa icon="user-circle" />
@@ -11,7 +14,7 @@
         <fa icon="angle-down" />
       </el-button>
 
-      <el-dropdown-menu slot="dropdown">
+      <div class="DropdownContent">
         <!-- User info block -->
         <div class="UserInfoSection">
           <div>
@@ -42,15 +45,20 @@
             <language-item :code="user.language" />
           </div>
         </div>
+
         <!-- User links block -->
-        <el-dropdown-item divided>
-          <nuxt-link :to="localePath('index-edit-profile')">
+        <div class="Divider" />
+        <div class="DropdownLink" >
+          <nuxt-link
+            :to="localePath('index-edit-profile')"
+            @click.native="closePopover"
+          >
             <i class="el-icon-settings" />
             Edit my profile
           </nuxt-link >
-        </el-dropdown-item>
+        </div>
 
-        <el-dropdown-item>
+        <div class="DropdownLink">
           <el-button
             type="text"
             @click="logout"
@@ -58,9 +66,9 @@
             <i class="el-icon-edit" />
             Logout
           </el-button >
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+        </div>
+      </div>
+    </el-popover>
   </div>
 </template>
 
@@ -74,6 +82,11 @@ export default {
     LanguageItem,
     CountryItem
   },
+  data () {
+    return {
+      shown: false
+    };
+  },
   computed: {
     ...mapGetters({
       user: 'user/getProfile'
@@ -83,7 +96,11 @@ export default {
     ...mapActions({
       doLogout: 'user/doLogout'
     }),
+    closePopover () {
+      this.shown = false;
+    },
     logout () {
+      this.closePopover();
       this.doLogout();
       this.$router.push(this.localePath('index'));
     }
