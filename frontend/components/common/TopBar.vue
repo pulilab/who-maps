@@ -186,7 +186,12 @@ export default {
       }
     }
 
-    .HeaderBtn {
+    .HeaderBtn
+    // TODO: Remove Angular Material
+    // hacking Toolkit md-button :(
+    ,.HeaderBtn.md-button
+    //
+    {
       position: relative;
       height: 24px;
       margin: 0 10px;
@@ -197,6 +202,27 @@ export default {
       color: @colorBrandPrimary;
       text-decoration: none;
       transition: @transitionAll;
+
+      // hacking Toolkit md-button :(
+      min-height: auto;
+      min-width: auto;
+      overflow: visible;
+      background-color: transparent !important;
+
+      &.md-ink-ripple {
+        > span {
+          letter-spacing: 0 !important;
+        }
+
+        &::before {
+          top: -16px !important;
+        }
+      }
+
+      > .md-ripple-container {
+        display: none;
+      }
+      //
 
       &::before {
         content: "";

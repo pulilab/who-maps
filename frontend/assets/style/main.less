@@ -25,18 +25,30 @@ html {
   min-width: 100%;
   min-height: 100%;
   background-color: @colorWhite;
+
+  // TODO: Remove Angular Material
+  height: auto !important;
+  font-family: Arial, sans-serif !important;
+  -webkit-tap-highlight-color: transparent;
+  //
 }
 
 body {
   .limitPageWidth();
   min-height: 100%;
+  margin: 0 auto !important;
   padding: 0;
   background-color: @colorGrayLightest;
   box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
   // Brand typo
-  font-family: Arial, sans-serif;
+  font-family: Arial, sans-serif !important;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+
+  // TODO: Remove Angular Material
+  height: auto !important;
+  -webkit-tap-highlight-color: transparent;
+  //
 }
 
 a {
