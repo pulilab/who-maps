@@ -44,11 +44,11 @@ export default {
   },
   computed: {
     ...mapGettersActions({
-      implementation_dates: ['project', 'getImplementationDates', 'setImplementationDates'],
-      licenses: ['project', 'getLicenses', 'setLicenses'],
-      repository: ['project', 'getRepository', 'setRepository'],
-      mobile_application: ['project', 'getMobileApplication', 'setMobileApplication'],
-      wiki: ['project', 'getWiki', 'setWiki']
+      implementation_dates: ['project', 'getImplementationDates', 'setImplementationDates', 0],
+      licenses: ['project', 'getLicenses', 'setLicenses', 0],
+      repository: ['project', 'getRepository', 'setRepository', 300],
+      mobile_application: ['project', 'getMobileApplication', 'setMobileApplication', 300],
+      wiki: ['project', 'getWiki', 'setWiki', 300]
     })
   }
 };

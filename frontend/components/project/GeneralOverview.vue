@@ -74,7 +74,7 @@
             prop="end_date"
           >
             <el-date-picker
-              v-model="start_date"
+              v-model="end_date"
               class="Date"
               align="center"
               placeholder="End date"
@@ -140,17 +140,17 @@ export default {
   },
   computed: {
     ...mapGettersActions({
-      name: ['project', 'getName', 'setName'],
-      organisation: ['project', 'getOrganisation', 'setOrganisation'],
-      country: ['project', 'getCountry', 'setCountry'],
-      geographic_scope: ['project', 'getGeographicScope', 'setGeographicScope'],
-      implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview'],
-      start_date: ['project', 'getStartDate', 'setStartDate'],
-      end_date: ['project', 'getEndDate', 'setEndDate'],
-      contact_name: ['project', 'getContactName', 'setContactName'],
-      contact_email: ['project', 'getContactEmail', 'setContactEmail'],
-      team: ['project', 'getTeam', 'setTeam'],
-      viewers: ['project', 'getViewers', 'setViewers']
+      name: ['project', 'getName', 'setName', 300],
+      organisation: ['project', 'getOrganisation', 'setOrganisation', 0],
+      country: ['project', 'getCountry', 'setCountry', 0],
+      geographic_scope: ['project', 'getGeographicScope', 'setGeographicScope', 300],
+      implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 300],
+      start_date: ['project', 'getStartDate', 'setStartDate', 0],
+      end_date: ['project', 'getEndDate', 'setEndDate', 0],
+      contact_name: ['project', 'getContactName', 'setContactName', 300],
+      contact_email: ['project', 'getContactEmail', 'setContactEmail', 300],
+      team: ['project', 'getTeam', 'setTeam', 0],
+      viewers: ['project', 'getViewers', 'setViewers', 0]
     })
   },
 

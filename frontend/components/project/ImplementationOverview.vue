@@ -134,15 +134,15 @@ export default {
   },
   computed: {
     ...mapGettersActions({
-      platforms: ['project', 'getPlatforms', 'setPlatforms'],
-      digitalHealthInterventions: ['project', 'getDigitalHealthInterventions', 'setDigitalHealthInterventions'],
-      health_focus_areas: ['project', 'getHealthFocusAreas', 'setHealthFocusAreas'],
-      hsc_challenges: ['project', 'getHscChallenges', 'setHscChallenges'],
-      his_bucket: ['project', 'getHisBucket', 'setHisBucket'],
-      coverageType: ['project', 'getCoverageType', 'setCoverageType'],
-      national_level_deployment: ['project', 'getNationalLevelDeployment', 'setNationalLevelDeployment'],
-      government_investor: ['project', 'getGovernmentInvestor', 'setGovernmentInvestor'],
-      implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners']
+      platforms: ['project', 'getPlatforms', 'setPlatforms', 0],
+      digitalHealthInterventions: ['project', 'getDigitalHealthInterventions', 'setDigitalHealthInterventions', 0],
+      health_focus_areas: ['project', 'getHealthFocusAreas', 'setHealthFocusAreas', 0],
+      hsc_challenges: ['project', 'getHscChallenges', 'setHscChallenges', 0],
+      his_bucket: ['project', 'getHisBucket', 'setHisBucket', 0],
+      coverageType: ['project', 'getCoverageType', 'setCoverageType', 0],
+      national_level_deployment: ['project', 'getNationalLevelDeployment', 'setNationalLevelDeployment', 0],
+      government_investor: ['project', 'getGovernmentInvestor', 'setGovernmentInvestor', 0],
+      implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners', 300]
     })
   },
   methods: {
