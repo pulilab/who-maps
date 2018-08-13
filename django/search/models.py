@@ -17,6 +17,7 @@ from user.models import Organisation
 
 class ProjectSearch(ExtendedModel):
     SEARCH_BY = {
+        # query_param: QuerySet param | eg: in=name&in=org
         "name": "project__name",
         "org": "organisation__name",
         "country": "country__name",
