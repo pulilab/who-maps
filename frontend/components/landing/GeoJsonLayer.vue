@@ -26,14 +26,35 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      id: null
+    };
+  },
   computed: {
     geoJson () {
-      const topo = this.collection[this.country];
+      const topo = this.collection[this.id];
       if (topo) {
         const subKey = Object.keys(topo.objects)[0];
         const geo = topojson.feature(topo, topo.objects[subKey]);
-        geo.id = this.country;
+        geo.id = this.id;
         return geo;
+      }
+      return null;
+    }
+  },
+  watch: {
+    country: {
+      immediate: true,
+      handler (id) {
+        if (this.id) {
+          this.id = null;
+          this.$nextTick(() => {
+            this.id = id;
+          });
+        } else {
+          this.id = id;
+        }
       }
     }
   },
