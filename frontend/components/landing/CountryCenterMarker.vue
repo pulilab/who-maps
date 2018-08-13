@@ -81,14 +81,14 @@ export default {
   },
   methods: {
     ...mapActions({
-      toggleCountry: 'landing/toggleCountry',
+      setCountry: 'landing/setCountry',
       setActiveCountry: 'landing/setActiveCountry'
     }),
     markerClickHandler () {
       this.setActiveCountry(this.pin.id);
     },
     openCountryView () {
-      this.toggleCountry(this.pin.id);
+      this.setCountry(this.pin.id);
       this.$refs.countryMarker.mapObject.closePopup();
     },
     mouseEnterHandler (event) {

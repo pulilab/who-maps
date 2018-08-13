@@ -1,6 +1,6 @@
 export const state = () => ({
   projects: [],
-  selectedCountries: [],
+  selectedCountry: null,
   currentZoom: 3,
   activeCountry: null
 });
@@ -14,7 +14,7 @@ export const getters = {
     }));
   },
   getDistrictPins (state, getters, rootState, rootGetters) {
-    const selectedPolyLabeled = rootGetters['countries/getCountries'].filter(c => c.map_data.polylabel && state.selectedCountries.includes(c.id));
+    const selectedPolyLabeled = rootGetters['countries/getCountries'].filter(c => c.map_data.polylabel && c.id === state.selectedCountry);
     const pins = [];
     selectedPolyLabeled.forEach(sp => {
       if (sp.map_data && sp.map_data.first_sub_level && sp.map_data.first_sub_level.elements) {
@@ -28,8 +28,8 @@ export const getters = {
     });
     return pins;
   },
-  getSelectedCountries (state) {
-    return state.selectedCountries;
+  getSelectedCountry (state) {
+    return state.selectedCountry;
   },
   getCurrentZoom (state) {
     return state.currentZoom;
@@ -44,17 +44,16 @@ export const actions = {
     const { data } = await this.$axios.get('/api/projects/map/');
     commit('SET_PROJECT_LIST', data);
   },
-  async toggleCountry ({commit, dispatch, getters}, id) {
-    const index = getters.getSelectedCountries.indexOf(id);
-    if (index === -1) {
-      await dispatch('countries/loadGeoJSON', id, {root: true});
-      commit('ADD_SELECTED_COUNTRY', id);
-    } else {
-      commit('RM_SELECTED_COUNTRY', index);
-    }
+  async setCountry ({commit, dispatch}, id) {
+    await dispatch('countries/loadGeoJSON', id, {root: true});
+    commit('SET_SELECTED_COUNTRY', id);
   },
   setCurrentZoom ({commit}, value) {
     commit('SET_CURRENT_ZOOM', value);
+    if (value < 6) {
+      commit('SET_SELECTED_COUNTRY', null);
+      commit('SET_ACTIVE_COUNTRY', null);
+    }
   },
   setActiveCountry ({commit}, value) {
     commit('SET_ACTIVE_COUNTRY', value);
@@ -64,11 +63,8 @@ export const mutations = {
   SET_PROJECT_LIST: (state, list) => {
     state.projects = list;
   },
-  ADD_SELECTED_COUNTRY: (state, c) => {
-    state.selectedCountries.push(c);
-  },
-  RM_SELECTED_COUNTRY: (state, index) => {
-    state.selectedCountries.splice(index, 1);
+  SET_SELECTED_COUNTRY: (state, value) => {
+    state.selectedCountry = value;
   },
   SET_CURRENT_ZOOM: (state, value) => {
     state.currentZoom = value;
