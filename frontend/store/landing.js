@@ -3,7 +3,8 @@ export const state = () => ({
   selectedCountry: null,
   currentZoom: 3,
   activeCountry: null,
-  mapReady: false
+  mapReady: false,
+  projectBoxActiveTab: 'subNational'
 });
 
 export const getters = {
@@ -41,7 +42,8 @@ export const getters = {
   getCountryProjects: state => id => {
     return state.projects.filter(p => p.country === id);
   },
-  getMapReady: state => state.mapReady
+  getMapReady: state => state.mapReady,
+  getProjectBoxActiveTab: state => state.projectBoxActiveTab
 };
 
 export const actions = {
@@ -68,6 +70,9 @@ export const actions = {
   },
   setMapReady ({commit}, value) {
     commit('SET_MAP_READY', value);
+  },
+  setProjectBoxActiveTab ({commit}, value) {
+    commit('SET_PROJECT_BOX_ACTIVE_TAB', value);
   }
 };
 export const mutations = {
@@ -85,5 +90,8 @@ export const mutations = {
   },
   SET_MAP_READY: (state, value) => {
     state.mapReady = value;
+  },
+  SET_PROJECT_BOX_ACTIVE_TAB: (state, value) => {
+    state.projectBoxActiveTab = value;
   }
 };
