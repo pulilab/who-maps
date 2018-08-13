@@ -112,6 +112,9 @@ class ProjectSearch(ExtendedModel):
                     if field in ["country", "region", "gov"]:
                         lookup_param = "in"
                         lookup = lookup_cleanup(query_params.getlist(field))
+                    elif field in ["software", "dhi", "hfa", "hsc", "his"]:
+                        lookup_param = "overlap"
+                        lookup = lookup_cleanup(query_params.getlist(field))
         return queryset
 
     @classmethod
