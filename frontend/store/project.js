@@ -27,7 +27,10 @@ export const state = () => ({
   government_investor: null,
   implementing_partners: [null],
   implementation_dates: null,
-  licenses: []
+  licenses: [],
+  repository: null,
+  mobile_application: null,
+  wiki: null
 });
 
 export const getters = {
@@ -55,7 +58,10 @@ export const getters = {
   getGovernmentInvestor: state => state.government_investor,
   getImplementingPartners: state => state.implementing_partners,
   getImplementationDates: state => state.implementation_dates,
-  getLicenses: state => state.licenses
+  getLicenses: state => state.licenses,
+  getRepository: state => state.repository,
+  getMobileApplication: state => state.mobile_application,
+  getWiki: state => state.wiki
 };
 
 export const actions = {
@@ -143,6 +149,15 @@ export const actions = {
   },
   setLicenses ({commit}, value) {
     commit('SET_LICENSES', value);
+  },
+  setRepository ({commit}, value) {
+    commit('SET_REPOSITORY', value);
+  },
+  setMobileApplication ({commit}, value) {
+    commit('SET_MOBILE_APPLICATION', value);
+  },
+  setWiki ({commit}, value) {
+    commit('SET_WIKI', value);
   }
 
 };
@@ -227,5 +242,14 @@ export const mutations = {
   },
   SET_LICENSES: (state, licenses) => {
     state.licenses = licenses;
+  },
+  SET_REPOSITORY: (state, repository) => {
+    state.repository = repository;
+  },
+  SET_MOBILE_APPLICATION: (state, mobile_application) => {
+    state.mobile_application = mobile_application;
+  },
+  SET_WIKI: (state, wiki) => {
+    state.wiki = wiki;
   }
 };
