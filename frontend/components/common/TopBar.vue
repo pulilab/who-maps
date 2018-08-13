@@ -186,9 +186,10 @@ export default {
       }
     }
 
-    .HeaderBtn,
+    .HeaderBtn
+    // TODO: Remove Angular Material
     // hacking Toolkit md-button :(
-    .HeaderBtn.md-button
+    ,.HeaderBtn.md-button
     //
     {
       position: relative;

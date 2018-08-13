@@ -32,4 +32,32 @@ export default {
 
   .ToolkitBtn {}
 
+  // TODO: Remove Angular Material
+  body.md-dialog-is-showing {
+    overflow: hidden;
+  }
+
+  md-backdrop.md-opaque {
+    opacity: .5 !important;
+  }
+
+  md-backdrop.md-dialog-backdrop {
+    z-index: 5000 !important;
+  }
+
+  .md-dialog-container {
+    height: 100vh !important;
+
+    .thematic-overview {
+      margin: 0 !important;
+      box-shadow: 0 6px 12px 4px rgba(0,0,0,0.24);
+
+      .left {}
+
+      .right {
+        box-shadow: none !important;
+      }
+    }
+  }
+
 </style>
