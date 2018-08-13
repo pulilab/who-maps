@@ -49,6 +49,7 @@ class ProjectSearch(ExtendedModel):
     dhi_categories = ArrayField(models.IntegerField(), default=list)
     hsc_categories = ArrayField(models.IntegerField(), default=list)
     hfa_categories = ArrayField(models.IntegerField(), default=list)
+    his = ArrayField(models.IntegerField(), default=list)
 
     @classmethod
     def search(cls, queryset: QuerySet, search_term: str, search_in: Set[str]) -> QuerySet:
