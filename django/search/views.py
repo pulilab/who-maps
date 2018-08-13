@@ -10,8 +10,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
     search = ProjectSearch.search
     filter = ProjectSearch.filter
     found_in = ProjectSearch.found_in
-
-    MAP_VALUES = (
+    map_values = (
         "project_id",
         "project__name",
         "organisation_id",
@@ -20,9 +19,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__national_level_deployment",
         "project__data__government_investor",
         "project__approval__approved",
-        # "found_in"  # TODO: compute this
     )
-    LIST_VALUES = (
+    list_values = (
         "project_id",
         "project__name",
         "organisation_id",
@@ -35,7 +33,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__health_focus_areas",
         "project__data__hsc_challenges",
         "project__data__his_bucket",
-        "country__region",
+        # "country__region",
         "project__data__government_investor",
         "project__data__donors",  # TODO: will be refactored
         "project__approval__approved"
