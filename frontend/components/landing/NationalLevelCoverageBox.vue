@@ -2,9 +2,7 @@
 
   <div class="NationalLevelCoverageBox">
     <div class="wrapper">
-      <el-row
-        v-for="country in selectedCountries"
-        :key="country">
+      <el-row>
         <el-col :span="12">
           <national-level-coverage-element :id="country" />
         </el-col>
@@ -22,7 +20,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      selectedCountries: 'landing/getSelectedCountries'
+      country: 'landing/getSelectedCountry'
     })
   }
 };

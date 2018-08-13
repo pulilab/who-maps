@@ -1,15 +1,22 @@
 <template>
   <div class="UserDropdown">
-    <el-dropdown trigger="click">
+    <el-popover
+      v-model="shown"
+      placement="bottom-end"
+      popper-class="UserDropdownPopper"
+    >
+
       <el-button
+        slot="reference"
         type="text"
+        class="ButtonPopper"
       >
         <fa icon="user-circle" />
         {{ user.name }}
         <fa icon="angle-down" />
       </el-button>
 
-      <el-dropdown-menu slot="dropdown">
+      <div class="DropdownContent">
         <!-- User info block -->
         <div class="UserInfoSection">
           <div class="Item">
@@ -40,17 +47,22 @@
             <language-item :code="user.language" />
           </div>
         </div>
+
         <!-- User links block -->
-        <el-dropdown-item divided>
-          <nuxt-link :to="localePath('index-edit-profile')">
+        <div class="Divider" />
+        <div class="DropdownLink" >
+          <nuxt-link
+            :to="localePath('index-edit-profile')"
+            @click.native="closePopover"
+          >
             <span class="MenuIcon">
               <fa icon="user-edit" />
             </span>
             Edit my profile
-          </nuxt-link >
-        </el-dropdown-item>
+          </nuxt-link>
+        </div>
 
-        <el-dropdown-item>
+        <div class="DropdownLink">
           <el-button
             type="text"
             style="padding: 0"
@@ -61,9 +73,9 @@
             </span>
             Logout
           </el-button>
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+        </div>
+      </div>
+    </el-popover>
   </div>
 </template>
 
@@ -77,6 +89,11 @@ export default {
     LanguageItem,
     CountryItem
   },
+  data () {
+    return {
+      shown: false
+    };
+  },
   computed: {
     ...mapGetters({
       user: 'user/getProfile'
@@ -86,7 +103,11 @@ export default {
     ...mapActions({
       doLogout: 'user/doLogout'
     }),
+    closePopover () {
+      this.shown = false;
+    },
     logout () {
+      this.closePopover();
       this.doLogout();
       this.$router.push(this.localePath('index'));
     }
@@ -97,41 +118,88 @@ export default {
 <style lang="less">
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
-  .UserDropdown {
-    .el-button {
-      padding: 0;
 
-      .svg-inline--fa {
-        margin-right: 2px;
+  .ButtonPopper {
+    height: 24px;
+    margin: 0 10px;
+    padding: 0 10px;
+    border: 0;
+    font-size: @fontSizeBase;
+    font-weight: 700;
+    line-height: 24px;
+    color: @colorBrandPrimary;
+    text-decoration: none;
 
-        &.fa-angle-down {
-          margin: 0 0 0 4px;
-        }
+    .svg-inline--fa {
+      margin-right: 2px;
+
+      &.fa-angle-down {
+        margin: 0 0 0 4px;
       }
     }
   }
 
-  .UserInfoSection {
-    padding: 8px 20px 4px;
-    font-size: @fontSizeBase;
+  .UserDropdownPopper {
+    padding: 0;
+  }
 
-    .Item {
+  .DropdownContent {
+    padding: 0 0 10px;
+
+    .UserInfoSection {
+      padding: 16px 20px 4px;
+      font-size: @fontSizeBase;
+
+      .Item {
+        display: block;
+        margin-bottom: 12px;
+
+        .ItemTitle {
+          margin-bottom: 6px;
+          font-size: @fontSizeSmall - 1;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: @colorTextMuted;
+        }
+
+        .CountryName,
+        .LanguageName {
+          margin-left: 8px;
+          font-size: @fontSizeBase;
+          font-weight: 400;
+        }
+      }
+    }
+
+    .Divider {
+      .SeparatorStyleHorizontal();
+      margin: 0 0 10px;
+    }
+
+    .DropdownLink {
       display: block;
-      margin-bottom: 12px;
+      min-height: 36px;
+      padding: 0 20px;
+      line-height: 36px;
+      cursor: pointer;
+      transition: @transitionAll;
 
-      .ItemTitle {
-        margin-bottom: 8px;
-        font-size: @fontSizeSmall - 1;
-        font-weight: 700;
-        text-transform: uppercase;
-        color: @colorTextMuted;
+      &:hover {
+        background-color: #D9ECFF;
       }
 
-      .CountryName,
-      .LanguageName {
-        margin-left: 8px;
-        font-size: @fontSizeBase;
-        font-weight: 400;
+      a,
+      .el-button {
+        color: @colorBrandPrimary !important;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .MenuIcon {
+        display: inline-block;
+        width: 24px;
+        height: 100%;
+        text-align: left;
       }
     }
   }

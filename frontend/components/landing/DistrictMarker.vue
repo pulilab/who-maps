@@ -1,7 +1,6 @@
 <template>
   <div>
     <l-marker
-      v-if="currentZoom > 5"
       :options="pin.options"
       :lat-lng="pin.latlng"
       :icon="icon"
@@ -55,8 +54,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      geoJson: 'countries/getGeoJsonLibrary',
-      currentZoom: 'landing/getCurrentZoom'
+      geoJson: 'countries/getGeoJsonLibrary'
     }),
     paintTooltip () {
       return this.$slots.default && (this.hovered || this.forceHovered);

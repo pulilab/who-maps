@@ -5,9 +5,8 @@
       @layeradd="layerAddHandler"
     >
       <l-geo-json
-        v-for="geojson in geojsonList"
-        :key="geojson.id"
-        :geojson="geojson"
+        v-if="geoJson"
+        :geojson="geoJson"
       />
     </l-feature-group>
   </div>
@@ -15,43 +14,47 @@
 
 <script>
 import * as topojson from 'topojson';
-import { mapGetters } from 'vuex';
 
 export default {
   props: {
-    list: {
-      type: Array,
-      required: true
+    country: {
+      type: Number,
+      default: null
     },
     collection: {
       type: Object,
       required: true
     }
   },
+  data () {
+    return {
+      id: null
+    };
+  },
   computed: {
-    ...mapGetters({
-      currentZoom: 'landing/getCurrentZoom'
-    }),
-    geojsonList () {
-      return this.list.map(id => {
-        const topo = this.collection[id];
-        if (topo) {
-          const subKey = Object.keys(topo.objects)[0];
-          const geo = topojson.feature(topo, topo.objects[subKey]);
-          geo.id = id;
-          return geo;
-        }
-      });
-    },
-    showGeoJsonLayer () {
-      return this.currentZoom > 5;
+    geoJson () {
+      const topo = this.collection[this.id];
+      if (topo) {
+        const subKey = Object.keys(topo.objects)[0];
+        const geo = topojson.feature(topo, topo.objects[subKey]);
+        geo.id = this.id;
+        return geo;
+      }
+      return null;
     }
   },
   watch: {
-    showGeoJsonLayer: {
-      immediate: false,
-      handler (show) {
-        this.computeGeoJsonLayerStyle(show);
+    country: {
+      immediate: true,
+      handler (id) {
+        if (this.id) {
+          this.id = null;
+          this.$nextTick(() => {
+            this.id = id;
+          });
+        } else {
+          this.id = id;
+        }
       }
     }
   },
@@ -60,11 +63,6 @@ export default {
       if (event && event.layer) {
         this.$root.$emit('map:fit-on', event.layer.getBounds());
       }
-    },
-    computeGeoJsonLayerStyle (show) {
-      const fill = show;
-      const stroke = show;
-      this.$refs.geoJsonGroup.mapObject.setStyle(() => ({fill, stroke}));
     }
   }
 };

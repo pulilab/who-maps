@@ -1,6 +1,6 @@
 <template>
   <div class="CountryDetailsOverlay">
-    <national-level-coverage-box v-if="selectedCountries.length > 0" />
+    <national-level-coverage-box v-if="selectedCountry" />
     <district-marker
       v-for="pin in districtPins"
       :key="pin.id"
@@ -8,7 +8,7 @@
     />
 
     <geo-json-layer
-      :list="selectedCountries"
+      :country="selectedCountry"
       :collection="geoJson"
     />
   </div>
@@ -30,7 +30,7 @@ export default {
     ...mapGetters({
       countriesPin: 'landing/getLandingPagePins',
       geoJson: 'countries/getGeoJsonLibrary',
-      selectedCountries: 'landing/getSelectedCountries',
+      selectedCountry: 'landing/getSelectedCountry',
       districtPins: 'landing/getDistrictPins'
     })
   }

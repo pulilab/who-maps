@@ -15,9 +15,8 @@
         <el-col>
           <el-tabs
             v-model="activeTab"
+            @tab-click="tabChangeHandler"
           >
-            <!-- TODO -->
-            <!-- Are we able to change the calculation of '.el-tabs__item .is-top' width as the '.el-tabs__item' has 'padding: 0 12px'? -->
             <el-tab-pane
               label="Sub-national"
               name="subNational">
@@ -65,12 +64,33 @@ export default {
       activeCountry: 'landing/getActiveCountry'
     })
   },
+  watch: {
+    activeCountry: {
+      immediate: true,
+      handler (value) {
+        if (value) {
+          this.tabChangeHandler();
+        }
+      }
+    }
+  },
   methods: {
     ...mapActions({
       setActiveCountry: 'landing/setActiveCountry'
     }),
     closeCountryProjextBox () {
       this.setActiveCountry(null);
+    },
+    tabChangeHandler () {
+      this.$nextTick(() => {
+        const stripe = this.$el.querySelector('.el-tabs__active-bar');
+        const tabNameBox = this.$el.querySelector('.el-tabs__item.is-active').getBoundingClientRect();
+        const componentBox = this.$el.getBoundingClientRect();
+        const stripeWidth = tabNameBox.width - 12;
+        const stripeTranslate = tabNameBox.left === 60 ? 0 : Math.ceil(tabNameBox.left - componentBox.left) - 9;
+        stripe.style.width = `${stripeWidth}px`;
+        stripe.style.transform = `translate(${stripeTranslate}px)`;
+      });
     }
   }
 };
@@ -106,6 +126,11 @@ export default {
           .el-tabs__nav-wrap {
             padding: 0 20px;
           }
+        }
+
+        .el-tabs__item {
+          // Changes to this padding value will require a change on the JS too.
+          padding: 0 12px;
         }
         .el-tabs__content {
           padding: 20px;
