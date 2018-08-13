@@ -36,7 +36,7 @@ export default {
 
   // TODO: Remove Angular Material
   body.md-dialog-is-showing {
-    overflow: hidden;
+    overflow-y: hidden;
   }
 
   md-backdrop.md-opaque {
@@ -51,10 +51,11 @@ export default {
     height: 100vh !important;
 
     .thematic-overview {
+      width: 100%;
+      max-width: 1280px;
+      max-height: calc(100vh - 120px);
       margin: 0 !important;
       box-shadow: 0 6px 12px 4px rgba(0,0,0,0.24);
-
-      .left {}
 
       .right {
         box-shadow: none !important;
