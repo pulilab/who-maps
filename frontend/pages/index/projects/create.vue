@@ -15,6 +15,9 @@ import ProjectForm from '../../../components/project/ProjectForm';
 export default {
   components: {
     ProjectForm
+  },
+  fetc ({store}) {
+    store.dispatch('project/resetProjectState');
   }
 };
 </script>
