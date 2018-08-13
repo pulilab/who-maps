@@ -93,6 +93,9 @@ class ProjectSearch(ExtendedModel):
         Filter QuerySet by various filter terms
         :return: QuerySet
         """
+
+        selectable_fields = set(cls.FILTER_BY.keys())
+        selected_fields = set(query_params.keys()) & selectable_fields
         return queryset
 
     @classmethod
