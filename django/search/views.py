@@ -84,4 +84,4 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         # if page is not None:
         #     return self.get_paginated_response(data)
 
-        return Response(data)
+        return Response(results)
