@@ -120,17 +120,18 @@ class ProjectSearch(ExtendedModel):
             self.software = [int(x['id']) for x in project.data.get("platforms", [])]
             self.coverage = [x.get('district', "") for x in project.data.get("coverage", [])]
             self.dhi_categories = list(set(filter(None.__ne__,
-                                              [DigitalStrategy.get_parent_id(int(strategy_id), 'parent') for
-                                               strategy_id in list(itertools.chain(
-                                                  *[platform['strategies'] for platform in
-                                                    project.data.get("platforms", []) if
-                                                    platform.get('strategies')]))])))
+                                                  [DigitalStrategy.get_parent_id(int(strategy_id), 'parent') for
+                                                   strategy_id in list(itertools.chain(
+                                                      *[platform['strategies'] for platform in
+                                                        project.data.get("platforms", []) if
+                                                        platform.get('strategies')]))])))
             self.hsc_categories = list(set(filter(None.__ne__,
-                                              [HSCChallenge.get_parent_id(int(id), 'group') for id in
-                                               project.data.get("hsc_challenges", [])])))
+                                                  [HSCChallenge.get_parent_id(int(id), 'group') for id in
+                                                   project.data.get("hsc_challenges", [])])))
             self.hfa_categories = list(set(filter(None.__ne__,
-                                              [HealthFocusArea.get_parent_id(int(id), 'health_category') for
-                                               id in project.data.get("health_focus_areas", [])])))
+                                                  [HealthFocusArea.get_parent_id(int(id), 'health_category') for
+                                                   id in project.data.get("health_focus_areas", [])])))
+            self.his = project.data.get('his_bucket')
 
             self.save()
 
