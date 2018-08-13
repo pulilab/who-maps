@@ -1,6 +1,6 @@
 <template>
   <div class="CountryDetailsOverlay">
-    <switch-view-box v-if="selectedCountry" />
+    <landing-switch-view-box v-if="selectedCountry" />
     <district-marker
       v-for="pin in districtPins"
       :key="pin.id"
@@ -19,13 +19,13 @@
 import { mapGetters } from 'vuex';
 import DistrictMarker from './DistrictMarker';
 import GeoJsonLayer from './GeoJsonLayer';
-import SwitchViewBox from './SwitchViewBox';
+import LandingSwitchViewBox from './LandingSwitchViewBox';
 
 export default {
   components: {
     DistrictMarker,
     GeoJsonLayer,
-    SwitchViewBox
+    LandingSwitchViewBox
   },
   data () {
     return {
