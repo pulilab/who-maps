@@ -88,7 +88,7 @@ class ProjectSearch(ExtendedModel):
         return found_in
 
     @classmethod
-    def filter(cls, queryset):
+    def filter(cls, queryset: QuerySet, query_params: QueryDict) -> QuerySet:
         """
         Filter QuerySet by various filter terms
         :return: QuerySet
