@@ -91,7 +91,6 @@ class ProjectSearch(ExtendedModel):
     def filter(cls, queryset: QuerySet, query_params: QueryDict) -> QuerySet:
         """
         Filter QuerySet by various filter terms
-        :return: QuerySet
         """
 
         selectable_fields = set(cls.FILTER_BY.keys())
