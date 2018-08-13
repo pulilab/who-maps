@@ -75,6 +75,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         if search_term:
             search_in = query_params.getlist('in')
             qs = self.search(queryset=qs, search_term=search_term, search_in=search_in)
+            if search_type == 'basic':
+                found_in = self.found_in(queryset=qs, search_term=search_term)
 
         qs = self.get_queryset()
         qs = self.filter_queryset(qs)
