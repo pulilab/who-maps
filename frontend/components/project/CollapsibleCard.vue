@@ -1,10 +1,10 @@
 <template>
   <div class="CollapsibleCard">
-    <el-card>
+    <el-card :body-style="{ padding: '0px' }">
       <div
         slot="header"
         class="CollapsibleHeader">
-        <span>{{ title }}</span>
+        <span class="CardTitle">{{ title }}</span>
         <el-button
           type="text"
           class="CollapseToggle"
@@ -58,41 +58,58 @@ export default {
 </script>
 
 <style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
 .CollapsibleCard {
+  margin: 0 0 20px;
 
-  margin: 0 0 20px 0;
+  .el-card__body {}
 
-  .el-card__body {
-    padding: 0;
+  .el-card__header {
+    padding: 0 20px 0 40px;
+    height: 58px;
+    line-height: 58px;
+    background-color: @colorBrandPrimaryDark;
+    font-size: @fontSizeLarger;
   }
 
   .CollapsibleHeader {
+    .clearfix();
 
-    span {
-      float:left;
+    .CardTitle {
+      float: left;
     }
 
     .CollapseToggle {
-      position: relative;
-      float:right;
-      color: white;
+      width: 58px;
+      height: 58px;
+      float: right;
+      color: @colorWhite;
+      transition: @transitionFadeLinear;
+
+      &:hover {
+        opacity: .8;
+      }
     }
   }
 
   .ContentContainer {
-    padding: 20px;
+    padding: 40px 80px 60px 40px;
   }
 
   .slide-fade-enter-active {
-    transition: all .3s ease;
+    transition: @transitionAll;
   }
+
   .slide-fade-leave-active {
-    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    transition: @transitionAll;
   }
-  .slide-fade-enter, .slide-fade-leave-to
+
+  .slide-fade-enter,
+  .slide-fade-leave-to
   /* .slide-fade-leave-active below version 2.1.8 */ {
-    transform: translateX(10px);
+    transform: translateY(-20px);
     opacity: 0;
   }
 }

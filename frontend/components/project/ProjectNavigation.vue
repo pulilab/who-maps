@@ -89,7 +89,7 @@
           class="CancelButton"
         >
           Cancel
-          <span class="Hint">Go back to Dashboard</span>
+          <span class="ButtonHint">Go back to Dashboard</span>
         </el-button>
       </div>
     </el-card>
