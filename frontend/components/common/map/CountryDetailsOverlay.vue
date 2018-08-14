@@ -104,22 +104,26 @@ export default {
 </script>
 
 <style lang="less">
-.CountryDetailsOverlay {
-}
-.DistrictCenterIcon {
-      background-image: url('~/assets/img/pins/pin-with-counter.svg');
+  @import "../../../assets/style/variables.less";
+  @import "../../../assets/style/mixins.less";
 
-      &.ActiveDistrict {
-        background-image: url('~/assets/img/pins/pin-with-counter-active.svg');
-      }
+  .CountryDetailsOverlay {}
 
-       span {
-        display: inline-block;
-        width: 27px;
-        margin-top: 5px;
-        color: white;
-        font-weight: 800;
-        text-align: center;
-      }
+  .DistrictCenterIcon {
+    background-image: url('~/assets/img/pins/pin-with-counter.svg');
+
+    &.ActiveDistrict {
+      background-image: url('~/assets/img/pins/pin-with-counter-active.svg');
     }
+
+     span {
+      display: inline-block;
+      width: 27px;
+      margin-top: 4px;
+      color: @colorWhite;
+      font-size: @fontSizeSmall;
+      font-weight: 700;
+      text-align: center;
+    }
+  }
 </style>

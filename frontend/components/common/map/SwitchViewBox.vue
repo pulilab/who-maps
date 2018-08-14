@@ -1,7 +1,7 @@
 <template>
 
   <div class="SwitchViewBox">
-    <div class="wrapper">
+    <div class="SwitchViewWrapper">
       <el-switch
         :value="activeTab"
         active-text="National"
@@ -31,14 +31,25 @@ export default {
 </script>
 
 <style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
+
   .SwitchViewBox {
     z-index: 1010;
-    position:relative;
+    position: relative;
 
-    .wrapper {
+    .SwitchViewWrapper {
       position: absolute;
-      right: 20px;
-      top: 20px;
+      right: 40px;
+      top: 40px;
+      padding: 10px 16px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 2px;
+      box-shadow: 0 5px 5px 0 rgba(0,0,0,0.12);
+
+      .el-switch {
+
+      }
     }
   }
 </style>

@@ -21,8 +21,8 @@ export default {
     };
   },
   mounted () {
-    const factory = require('../../angular/Thematic/thematicFactory');
-    factory.factory(0, 0, 'MAPS Toolkit', 'HeaderBtn', 'Toolkit');
+    // const factory = require('../../angular/Thematic/thematicFactory');
+    // factory.factory(0, 0, 'MAPS Toolkit', 'HeaderBtn', 'Toolkit');
     this.initialised = true;
   }
 };

@@ -103,7 +103,7 @@ const config = {
     middleware: ['auth'],
     base: '/'
   },
-  loading: { color: '#3B8070' },
+  loading: { color: '#D86422' },
   build: {
     extractCSS: true,
     extend (config, { isDev, isClient }) {

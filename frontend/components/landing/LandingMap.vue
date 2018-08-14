@@ -1,6 +1,11 @@
 <template>
   <div class="LandingMap">
     <no-ssr>
+      <!-- TODO -->
+      <!-- Add selected state for pins -->
+
+      <!--TODO -->
+      <!-- Use only one centered pin when in national view mode -->
       <l-map
         ref="mainMap"
         :zoom="zoom"
@@ -86,13 +91,14 @@ export default {
        span {
         display: inline-block;
         width: 40px;
-        margin-top: 10px;
-        line-height: 20px;
-        color: white;
-        font-weight: 800;
+        line-height: 40px;
+        color: @colorWhite;
+        font-size: @fontSizeSmall;
+        font-weight: 700;
         text-align: center;
       }
     }
+
     .CountryCenterIcon {
       background-image: url('~/assets/img/pins/pin-with-counter.svg');
 
@@ -100,12 +106,13 @@ export default {
         background-image: url('~/assets/img/pins/pin-with-counter-active.svg');
       }
 
-       span {
+      span {
         display: inline-block;
         width: 27px;
-        margin-top: 5px;
-        color: white;
-        font-weight: 800;
+        margin-top: 4px;
+        color: @colorWhite;
+        font-size: @fontSizeSmall;
+        font-weight: 700;
         text-align: center;
       }
     }

@@ -48,6 +48,9 @@
             <project-card />
             <project-card />
           </div>
+          <div class="HintText">
+            Select a pin blablabla...
+          </div>
         </el-col>
       </el-row>
 
