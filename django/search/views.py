@@ -8,6 +8,12 @@ from search.serializers import MapResultSerializer, ListResultSerializer
 from .models import ProjectSearch
 
 
+class FastCountPaginator(Paginator):
+    @cached_property
+    def count(self):
+        return len(self.object_list)
+
+
 class ResultsSetPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
