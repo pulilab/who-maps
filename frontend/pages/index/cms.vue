@@ -1,6 +1,7 @@
 <template>
-
-  <div id="cmsjs"/>
+  <div class="angularjs">
+    <div id="cmsjs"/>
+  </div>
 </template>
 
 <script>

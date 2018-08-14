@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      selectedDHI: 'projects/getCurrentProjectDHI'
+      selectedDHI: 'project/getDigitalHealthInterventions'
     }),
     dhi () {
       return this.selectedDHI.filter(dhi => dhi.platform === this.platformId);

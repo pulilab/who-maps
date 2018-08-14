@@ -21,9 +21,12 @@
             class="CountryViewBtn"
             @click="openCountryView">
             <fa icon="search-plus" />
-            <!-- TODO -->
-            <!-- Pls remove the relevant js code... -->
-            <span class="Text">Country view</span>
+            <span
+              v-show="popUpHover"
+              class="Text"
+            >
+              Country view
+            </span>
           </el-button>
         </div>
       </l-popup>
@@ -78,26 +81,32 @@ export default {
   },
   methods: {
     ...mapActions({
-      toggleCountry: 'landing/toggleCountry',
+      setCountry: 'landing/setCountry',
       setActiveCountry: 'landing/setActiveCountry'
     }),
     markerClickHandler () {
       this.setActiveCountry(this.pin.id);
     },
+    safeMapObjectFunctionCall (ref, functionName) {
+      if (this.$refs[ref] && this.$refs[ref].mapObject) {
+        this.$refs[ref].mapObject[functionName]();
+      }
+    },
+
     openCountryView () {
-      this.toggleCountry(this.pin.id);
-      this.$refs.countryMarker.mapObject.closePopup();
+      this.setCountry(this.pin.id);
+      this.safeMapObjectFunctionCall('countryMarker', 'closePopup');
     },
     mouseEnterHandler (event) {
       this.popUpHover = true;
       this.$nextTick(() => {
-        this.$refs.tooltip.mapObject.update();
+        this.safeMapObjectFunctionCall('tooltip', 'update');
       });
     },
     mouseLeaveHandler (event) {
       this.popUpHover = false;
       this.$nextTick(() => {
-        this.$refs.tooltip.mapObject.update();
+        this.safeMapObjectFunctionCall('tooltip', 'update');
       });
     }
   }
@@ -148,30 +157,26 @@ export default {
       box-shadow: 0 0 5px rgba(0,0,0,.12), 0 5px 5px rgba(0,0,0,.24);
       transition: @transitionAll;
 
+      > span {
+        display: inline-flex;
+        height: 100%;
+        align-items: center;
+      }
+
       .svg-inline--fa {
         font-size: 16px;
-        position: relative;
-        top: 2px;
-        left: -1px;
+        margin-left: -1px;
       }
 
       .Text {
-        display: inline-block;
-        width: 0;
-        opacity: 0;
-        font-size: 13px;
+        font-size: 12px;
         line-height: 36px;
-        transition: @transitionAll;
+        padding-left: 4px;
       }
 
       &:hover {
         width: auto;
         background-color: @colorBrandAccent;
-
-        .Text {
-          width: auto;
-          opacity: 1;
-        }
       }
     }
   }

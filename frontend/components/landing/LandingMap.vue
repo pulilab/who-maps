@@ -1,11 +1,5 @@
 <template>
   <div class="LandingMap">
-    <!-- TODO for Nico 1. -->
-    <!-- Exit 'Country view' mode when user zooms out at least 2 lvls?! -->
-
-    <!-- TODO for Nico 2. -->
-    <!-- Make map's height align to viewport's height — for ex. 70vh -->
-    <!-- I'm not sure about this, but we should handle different screen sizes somehow... we can follow up on this later. -->
     <no-ssr>
       <l-map
         ref="mainMap"
@@ -89,7 +83,7 @@ export default {
     this.$root.$on('map:zoom-at', this.zoomAt);
   },
   beforeDestroy () {
-    this.$root.$off(['map:center-on', 'map:fit-on']);
+    this.$root.$off(['map:center-on', 'map:fit-on', 'map:zoom-at']);
   },
   methods: {
     ...mapActions({
@@ -124,7 +118,7 @@ export default {
 
   .LandingMap {
     display: block;
-    height: 500px;
+    height: 60vh;
     background-color: @colorGrayLight;
   }
 </style>

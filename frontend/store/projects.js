@@ -6,9 +6,7 @@ export const state = () => ({
   currentProject: null,
   projectStructure: {},
   currentProjectToolkitVersions: [],
-  currentProjectCoverageVersions: [],
-  currentProjectTeamViewers: null,
-  currentProjectDHI: []
+  currentProjectCoverageVersions: []
 });
 
 const getTodayString = () => {
@@ -161,8 +159,7 @@ export const getters = {
         return ret;
       }, { labels: [], data: [] });
     }
-  },
-  getCurrentProjectDHI: state => [...state.currentProjectDHI]
+  }
 };
 
 export const actions = {
@@ -187,15 +184,13 @@ export const actions = {
   async loadProjectDetails ({commit, state}, projectId) {
     try {
       if (projectId) {
-        const [toolkitVersions, coverageVersions, teamViewers] =
+        const [toolkitVersions, coverageVersions] =
                   await Promise.all([
                     this.$axios.get(`/api/projects/${projectId}/toolkit/versions/`),
-                    this.$axios.get(`/api/projects/${projectId}/coverage/versions/`),
-                    this.$axios.get(`/api/projects/${projectId}/groups/`)
+                    this.$axios.get(`/api/projects/${projectId}/coverage/versions/`)
                   ]);
         commit('SET_CURRENT_PROJECT_TOOLKIT', toolkitVersions.data);
-        commit('SET_CURRENT_PROJECT_COVERAGE', coverageVersions.data);
-        commit('SET_CURRENT_PROJECT_TEAM_VIEWERS', teamViewers.data);
+        commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', coverageVersions.data);
       }
     } catch (error) {
       console.log(error);
@@ -213,9 +208,6 @@ export const actions = {
       const { data } = await this.$axios.get('/api/projects/structure/');
       commit('SET_PROJECT_STRUCTURE', data);
     }
-  },
-  setCurrentProjectDHI ({commit}, value) {
-    commit('SET_CURRENT_PROJECT_DHI', value);
   }
 };
 
@@ -232,13 +224,7 @@ export const mutations = {
   SET_CURRENT_PROJECT_TOOLKIT: (state, toolkit) => {
     state.currentProjectToolkitVersions = toolkit;
   },
-  SET_CURRENT_PROJECT_COVERAGE: (state, coverage) => {
+  SET_CURRENT_PROJECT_COVERAGE_VERSIONS: (state, coverage) => {
     state.currentProjectCoverageVersions = coverage;
-  },
-  SET_CURRENT_PROJECT_TEAM_VIEWERS: (state, teamViewers) => {
-    state.currentProjectTeamViewers = teamViewers;
-  },
-  SET_CURRENT_PROJECT_DHI: (state, dhi) => {
-    state.currentProjectDHI = dhi;
   }
 };

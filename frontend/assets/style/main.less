@@ -25,18 +25,30 @@ html {
   min-width: 100%;
   min-height: 100%;
   background-color: @colorWhite;
+
+  // TODO: Remove Angular Material
+  height: auto !important;
+  font-family: Arial, sans-serif !important;
+  -webkit-tap-highlight-color: transparent;
+  //
 }
 
 body {
   .limitPageWidth();
   min-height: 100%;
+  margin: 0 auto !important;
   padding: 0;
   background-color: @colorGrayLightest;
   box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
   // Brand typo
-  font-family: Arial, sans-serif;
+  font-family: Arial, sans-serif !important;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+
+  // TODO: Remove Angular Material
+  height: auto !important;
+  -webkit-tap-highlight-color: transparent;
+  //
 }
 
 a {
@@ -78,6 +90,29 @@ a {
     }
   }
 }
+
+.PageTitle {
+  .limitPageWidth();
+  padding: 40px;
+  text-align: center;
+
+  h2 {
+    font-size: @fontSizeHeading;
+    color: @colorTextPrimary;
+    letter-spacing: -1px;
+    margin: 0 0 20px;
+  }
+
+  p {
+    font-size: @fontSizeMedium;
+    color: @colorTextSecondary;
+    line-height: 24px;
+    margin: 0;
+    padding: 0 120px;
+  }
+
+}
+
 
 
 
@@ -220,6 +255,33 @@ i[class*="el-icon-"] {
       background-color: @colorBrandPrimaryLight;
     }
   }
+
+  // SAMPLE MARKUP:
+  //
+  // <el-button
+  //   type="text"
+  //   class="Cancel ShowHint"
+  // >
+  &.CancelButton {
+    color: @colorTextSecondary;
+
+    &:hover {
+      color: @colorTextPrimary;
+
+      .ButtonHint {
+        color: @colorGray;
+      }
+    }
+
+    .ButtonHint {
+      display: block;
+      margin: 10px 0 0;
+      color: @colorTextMuted;
+      font-size: smaller;
+      font-weight: 400;
+      transition: @transitionAll;
+    }
+  }
 }
 
 // Form
@@ -279,4 +341,10 @@ fieldset {
     // padding: 0 10px;
     transition: @transitionAll;
   }
+}
+
+// Dropdown
+
+.el-dropdown-menu {
+  .el-dropdown-menu__item {}
 }

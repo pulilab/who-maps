@@ -27,6 +27,7 @@
 
 <script>
 import Papa from 'papaparse';
+import { mapGettersActions } from '../../utilities/form';
 
 export default {
   name: 'FacilityImport',
@@ -44,11 +45,13 @@ export default {
     return {
       showMatched: false,
       showNotMatched: true,
-      facilities: [],
       csvProcessing: false
     };
   },
   computed: {
+    ...mapGettersActions({
+      facilities: ['admin/map', 'getFacilities', 'setFacilities']
+    }),
     dataReady () {
       return this.facilities && this.facilities.length > 0;
     },

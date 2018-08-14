@@ -1,6 +1,7 @@
 <template>
-
-  <div id="assessmentjs"/>
+  <div class="angularjs">
+    <div id="assessmentjs"/>
+  </div>
 </template>
 
 <script>

@@ -47,12 +47,12 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .LandingPage {
+
     .MapBoxContainer {
       position: relative;
     }
 
     .InfoSignupContainer {
-      .limitPageWidth();
       margin: 40px 0;
 
       > .el-row {
@@ -62,15 +62,15 @@ export default {
       .InfoBoxWrapper {
         min-width: 360px;
         max-width: 360px;
+        margin-left: 40px;
         margin-right: 30px;
         background-color: @colorWhite;
       }
 
       .CentralBoxWrapper {
+        margin-right: 40px;
         background-color: @colorBrandPrimary;
       }
-
-      // .InfoBox {}
 
       .SignupBox {
         padding: 0 40px;

@@ -123,18 +123,18 @@ export default {
       .Organisation {
         position: relative;
         width: 100%;
-        padding-left: 15px;
+        padding-left: 25px;
 
         &::before {
           content: "";
           position: absolute;
           top: 50%;
-          left: 7px;
+          left: 12px;
           transform: translateY(-50%);
           display: inline-block;
           width: 1px;
           height: 12px;
-          background-color: @colorTextMuted;
+          background-color: @colorTextSecondary;
         }
       }
     }

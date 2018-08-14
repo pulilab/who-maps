@@ -23,6 +23,7 @@
 }
 
 .limitPageWidth() {
+  box-sizing: border-box;
   min-width: @appWidthMinLimit;
   max-width: @appWidthMaxLimit;
   margin: 0 auto;
@@ -32,5 +33,11 @@
 .SeparatorStyle() {
   width: 1px;
   height: 24px;
+  background-color: @colorGrayLight;
+}
+
+.SeparatorStyleHorizontal() {
+  width: 100%;
+  height: 1px;
   background-color: @colorGrayLight;
 }

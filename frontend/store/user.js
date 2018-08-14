@@ -32,7 +32,7 @@ export const actions = {
     await Promise.all([
       dispatch('system/loadOrganisations', {}, {root: true}),
       dispatch('projects/loadUserProjects', {}, {root: true}),
-      dispatch('system/loadUserProfiles')
+      dispatch('system/loadUserProfiles', {}, {root: true})
     ]);
   },
 
