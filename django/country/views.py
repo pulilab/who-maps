@@ -5,25 +5,21 @@ from rest_framework.parsers import FormParser, MultiPartParser
 
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
 from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo
-from .serializers import CountryListSerializer, LandingPageSerializer, CountryFieldsListSerializer, \
-    CountryFieldsWriteSerializer, CountryMapDataSerializer, CountryAdminSerializer, PartnerLogoSerializer, \
-    DonorAdminSerializer, DonorPartnerLogoSerializer
+from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountryMapDataSerializer, \
+    CountrySerializer, PartnerLogoSerializer, DonorSerializer, DonorPartnerLogoSerializer
 
 
-class CountryListAPIView(generics.ListAPIView):
+class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
+                     viewsets.GenericViewSet):
     queryset = Country.objects.all()
-    serializer_class = CountryListSerializer
-
-
-class CountryAdminViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    queryset = Country.objects.all()
-    serializer_class = CountryAdminSerializer
+    serializer_class = CountrySerializer
     parser_classes = (MultiPartParser, FormParser)
+    lookup_field = "code"
 
 
-class DonorAdminViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class DonorViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Donor.objects.all()
-    serializer_class = DonorAdminSerializer
+    serializer_class = DonorSerializer
     parser_classes = (MultiPartParser, FormParser)
 
 
@@ -39,12 +35,6 @@ class DonorPartnerLogoViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin
     queryset = DonorPartnerLogo.objects.all()
     serializer_class = DonorPartnerLogoSerializer
     parser_classes = (MultiPartParser, FormParser)
-
-
-class RetrieveLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    queryset = Country.objects.all()
-    serializer_class = LandingPageSerializer
-    lookup_field = "code"
 
 
 class CountryFieldsListView(generics.ListAPIView):

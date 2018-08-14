@@ -5,27 +5,6 @@ from django.utils.dateformat import format
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, CountryField, MapFile
 
 
-class CountryListSerializer(serializers.ModelSerializer):
-    map_version = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Country
-        fields = (
-            "id",
-            "name",
-            "code",
-            "project_approval",
-            "map_data",
-            "map_version"
-        )
-
-    @staticmethod
-    def get_map_version(obj):
-        if obj.map_activated_on:
-            return format(obj.map_activated_on, 'U')
-        return 0
-
-
 class PartnerLogoSerializer(serializers.ModelSerializer):
     class Meta:
         model = PartnerLogo
@@ -40,8 +19,9 @@ class DonorPartnerLogoSerializer(serializers.ModelSerializer):
         read_only_fields = ("image_url",)
 
 
-class CountryAdminSerializer(serializers.ModelSerializer):
+class CountrySerializer(serializers.ModelSerializer):
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
+    map_version = serializers.SerializerMethodField()
 
     class Meta:
         model = Country
@@ -60,12 +40,19 @@ class CountryAdminSerializer(serializers.ModelSerializer):
             "partner_logos",
             "project_approval",
             "map_data",
+            "map_version",
             "map_activated_on",
         )
-        read_only_fields = ("name", "code", "project_approval", "map_data", "map_activated_on")
+        read_only_fields = ("name", "code", "project_approval", "map_data", "map_version", "map_activated_on",)
+
+    @staticmethod
+    def get_map_version(obj):
+        if obj.map_activated_on:
+            return format(obj.map_activated_on, 'U')
+        return 0
 
 
-class DonorAdminSerializer(serializers.ModelSerializer):
+class DonorSerializer(serializers.ModelSerializer):
     partner_logos = DonorPartnerLogoSerializer(many=True, read_only=True)
 
     class Meta:
@@ -84,18 +71,6 @@ class DonorAdminSerializer(serializers.ModelSerializer):
             "partner_logos",
         )
         read_only_fields = ("name",)
-
-
-class LandingPageSerializer(serializers.ModelSerializer):
-    partner_logos = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Country
-        fields = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos")
-
-    @staticmethod
-    def get_partner_logos(obj):
-        return [p.image_url for p in PartnerLogo.objects.filter(country=obj)]
 
 
 class CountryFieldsListSerializer(serializers.ModelSerializer):

@@ -85,7 +85,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()[0]['name'], 'Hongrie')
 
     def test_country_admin_retrieve(self):
-        url = reverse("country-admin-detail", kwargs={"pk": self.country.id})
+        url = reverse("country-detail", kwargs={"code": self.country.code})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['name'], 'Hungary')
@@ -100,7 +100,7 @@ class CountryTests(APITestCase):
         self.assertIn("map_data", response_keys)
 
     def test_country_admin_update(self):
-        url = reverse("country-admin-detail", kwargs={"pk": self.country.id})
+        url = reverse("country-detail", kwargs={"code": self.country.code})
         data = {
             "cover_text": "blah",
             "footer_text": "foo"
@@ -111,7 +111,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()["footer_text"], data["footer_text"])
 
     def test_country_admin_update_images(self):
-        url = reverse("country-admin-detail", kwargs={"pk": self.country.id})
+        url = reverse("country-detail", kwargs={"code": self.country.code})
         cover = get_temp_image("cover")
         logo = get_temp_image("logo")
         data = {
@@ -122,7 +122,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_country_admin_update_users(self):
-        url = reverse("country-admin-detail", kwargs={"pk": self.country.id})
+        url = reverse("country-detail", kwargs={"code": self.country.code})
         data = {
             "users": [self.test_user['user_profile_id']]
         }
@@ -131,7 +131,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['users'], [self.test_user['user_profile_id']])
 
     def test_country_partner_logos_create(self):
-        url = reverse("partner-logo-list")
+        url = reverse("country-partner-logo-list")
         logo = get_temp_image("logo")
         data = {
             "country": self.country.id,
@@ -141,7 +141,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 201)
 
     def test_country_partner_logos_list(self):
-        url = reverse("partner-logo-list")
+        url = reverse("country-partner-logo-list")
         logo1 = get_temp_image("logo1")
         data = {
             "country": self.country.id,
@@ -157,7 +157,7 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 201)
 
-        url = reverse("country-admin-detail", kwargs={"pk": self.country.id})
+        url = reverse("country-detail", kwargs={"code": self.country.code})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
 
         self.assertEqual(response.status_code, 200)
@@ -168,7 +168,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['partner_logos'][2]['image'], 'http://testserver/media/logo2.png')
 
     def test_country_partner_logos_delete(self):
-        url = reverse("partner-logo-list")
+        url = reverse("country-partner-logo-list")
         logo = get_temp_image("logo")
         data = {
             "country": self.country.id,
@@ -177,21 +177,9 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 201)
 
-        url = reverse("partner-logo-detail", kwargs={"pk": response.json()["id"]})
+        url = reverse("country-partner-logo-detail", kwargs={"pk": response.json()["id"]})
         response = self.test_user_client.delete(url)
         self.assertEqual(response.status_code, 204)
-
-    def test_retrieve_landing_detail(self):
-        url = reverse("country-detail", kwargs={"code": self.country.code})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        response_keys = response.json().keys()
-        self.assertIn("name", response_keys)
-        self.assertIn("code", response_keys)
-        self.assertIn("logo", response_keys)
-        self.assertIn("cover", response_keys)
-        self.assertIn("cover_text", response_keys)
-        self.assertIn("footer_text", response_keys)
 
     def test_retrieve_partnerlogos_list(self):
         url = reverse("country-detail", kwargs={"code": self.country.code})
@@ -740,7 +728,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.data[-1], expected_data)
 
     def test_update_and_list_country_map_data(self):
-        url = reverse("country-detail", kwargs={"pk": Country.objects.last().id})
+        url = reverse("country-map-data-detail", kwargs={"pk": Country.objects.last().id})
         self.map_data = {"map_data": {
             "sub_level_name": "District",
             "sub_levels": [{
@@ -800,7 +788,7 @@ class DonorTests(APITestCase):
         self.assertEqual(str(self.donor), 'Donor Group')
 
     def test_donor_admin_retrieve(self):
-        url = reverse("donor-admin-detail", kwargs={"pk": self.donor.id})
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['name'], 'Donor Group')
@@ -813,7 +801,7 @@ class DonorTests(APITestCase):
         self.assertIn("users", response_keys)
 
     def test_donor_admin_update(self):
-        url = reverse("donor-admin-detail", kwargs={"pk": self.donor.id})
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
         data = {
             "cover_text": "blah",
             "footer_text": "foo"
@@ -824,7 +812,7 @@ class DonorTests(APITestCase):
         self.assertEqual(response.json()["footer_text"], data["footer_text"])
 
     def test_donor_admin_update_images(self):
-        url = reverse("donor-admin-detail", kwargs={"pk": self.donor.id})
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
         cover = get_temp_image("cover")
         logo = get_temp_image("logo")
         data = {
@@ -835,7 +823,7 @@ class DonorTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_donor_admin_update_users(self):
-        url = reverse("donor-admin-detail", kwargs={"pk": self.donor.id})
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
         data = {
             "users": [self.test_user['user_profile_id']]
         }
@@ -870,7 +858,7 @@ class DonorTests(APITestCase):
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 201)
 
-        url = reverse("donor-admin-detail", kwargs={"pk": self.donor.id})
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
 
         self.assertEqual(response.status_code, 200)

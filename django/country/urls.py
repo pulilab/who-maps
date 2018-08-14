@@ -1,20 +1,18 @@
 from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
-from country.views import RetrieveLandingPageViewSet, CountryMapDataViewSet, CountryAdminViewSet, PartnerLogoViewSet, \
-    DonorAdminViewSet, DonorPartnerLogoViewSet
+from country.views import CountryMapDataViewSet, CountryViewSet, PartnerLogoViewSet, DonorViewSet, \
+    DonorPartnerLogoViewSet
 from . import views
 
 router = DefaultRouter()
-router.register(r'landing', RetrieveLandingPageViewSet)
-router.register(r'country-map-data', CountryMapDataViewSet)
-router.register(r'country-admin', CountryAdminViewSet, base_name='country-admin')
-router.register(r'donor-admin', DonorAdminViewSet, base_name='donor-admin')
-router.register(r'partner-logos', PartnerLogoViewSet, base_name='partner-logo')
+router.register(r'country', CountryViewSet, base_name='country')
+router.register(r'donor', DonorViewSet, base_name='donor')
+router.register(r'country-partner-logos', PartnerLogoViewSet, base_name='country-partner-logo')
 router.register(r'donor-partner-logos', DonorPartnerLogoViewSet, base_name='donor-partner-logo')
+router.register(r'country-map-data', CountryMapDataViewSet, base_name='country-map-data')
 urlpatterns = router.urls
 
 urlpatterns += [
-    url(r"^countries/$", view=views.CountryListAPIView.as_view(), name="country-list"),
     url(r'^countries/export/$', view=views.CountryExportView.as_view(), name='country-export'),
     url(r"^country-fields/(?P<country_id>\d+)/$",
         view=views.CountryFieldsListView.as_view(),
