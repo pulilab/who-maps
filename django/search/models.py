@@ -101,8 +101,7 @@ class ProjectSearch(ExtendedModel):
                         lookup_param = "exact"
                         lookup = query_params.get(field) == '1'
 
-                    queryset &= queryset.filter(**{"{field}__{param}".format(
-                        field=cls.FILTER_BY[field], param=lookup_param): lookup})
+                    queryset &= queryset.filter(**{"{}__{}".format(cls.FILTER_BY[field], lookup_param): lookup})
 
         return queryset
 
