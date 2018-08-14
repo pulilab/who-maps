@@ -40,20 +40,6 @@ export const getters = {
   getTechnologyPlatforms: state => state.projectStructure.technology_platforms ? [...state.projectStructure.technology_platforms] : [],
   getToolkitVersions: state => [...state.currentProjectToolkitVersions],
   getCoverageVersions: state => [...state.currentProjectCoverageVersions],
-  getTeamViewers: state => state.currentProjectTeamViewers,
-  getCurrentProject: (state, getters, rootState, rootGetters) => {
-    const p = getters.getUserProjectList.find(p => p.id === state.currentProject);
-    if (p) {
-      const user = rootGetters['user/getProfile'];
-      return {
-        ...p,
-        isMember: user ? getters.getTeamViewers.team.includes(user.id) : undefined,
-        isViewer: user ? getters.getTeamViewers.viewers.includes(user.id) : undefined,
-        isPublished: !!(p.published.name)
-      };
-    }
-    return undefined;
-  },
   getUserProjectDetails: (state, getters, rootState, rootGetters) => id => {
     const p = getters.getUserProjectList.find(p => p.id === id);
     if (p) {
@@ -65,6 +51,9 @@ export const getters = {
         isPublished: !!(p.published.name)
       };
     }
+  },
+  getCurrentProject: (state, getters) => {
+    return getters.getUserProjectDetails(state.currentProject);
   },
   getMapsAxisData: (state, getters, rootState, rootGetters) => {
     const axis = rootGetters['system/getAxis'];
