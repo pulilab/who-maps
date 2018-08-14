@@ -7,7 +7,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import SwitchViewBox from '../common/SwitchViewBox';
+import SwitchViewBox from '../common/map/SwitchViewBox';
 
 export default {
   components: {

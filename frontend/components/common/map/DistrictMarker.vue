@@ -11,12 +11,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import GeoJsonLayer from './GeoJsonLayer';
 
 export default {
   components: {
-    GeoJsonLayer
   },
   props: {
     pin: {
@@ -32,23 +29,17 @@ export default {
   data () {
     return {};
   },
-  computed: {
-    ...mapGetters({
-      geoJson: 'countries/getGeoJsonLibrary'
-    })
-  },
   methods: {
-    ...mapActions({}),
     emitMarkerClick () {
-      this.$emit('marker-click');
+      this.$emit('marker-click', this.pin.id);
     }
   }
 };
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
     .CountryViewBtn {}
     .MouseEventSpy {}

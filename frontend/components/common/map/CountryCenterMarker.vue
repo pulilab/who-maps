@@ -35,13 +35,9 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import GeoJsonLayer from './GeoJsonLayer';
 
 export default {
-  components: {
-    GeoJsonLayer
-  },
+  components: {},
   props: {
     pin: {
       type: Object,
@@ -59,6 +55,14 @@ export default {
     additionalTooltipClass: {
       type: String,
       default: ''
+    },
+    selectedCountry: {
+      type: Number,
+      default: null
+    },
+    activeCountry: {
+      type: Number,
+      default: null
     }
   },
   data () {
@@ -76,12 +80,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      setCountry: 'landing/setCountry',
-      setActiveCountry: 'landing/setActiveCountry'
-    }),
     markerClickHandler () {
-      this.setActiveCountry(this.pin.id);
+      this.$emit('update:activeCountry', this.pin.id);
     },
     safeMapObjectFunctionCall (ref, functionName) {
       if (this.$refs[ref] && this.$refs[ref].mapObject) {
@@ -90,7 +90,7 @@ export default {
     },
 
     openCountryView () {
-      this.setCountry(this.pin.id);
+      this.$emit('update:selectedCountry', this.pin.id);
       this.safeMapObjectFunctionCall('countryMarker', 'closePopup');
     },
     mouseEnterHandler (event) {
@@ -110,8 +110,8 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
   .CountryViewPopup {
     bottom: 0;

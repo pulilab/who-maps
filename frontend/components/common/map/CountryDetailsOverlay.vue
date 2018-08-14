@@ -1,11 +1,11 @@
 <template>
   <div class="CountryDetailsOverlay">
-    <landing-switch-view-box v-if="selectedCountry" />
     <district-marker
       v-for="pin in districtPins"
       :key="pin.id"
       :icon="markerIcons[pin.id]"
       :pin="pin"
+      @marker-click="markerClickHandler"
     />
 
     <geo-json-layer
@@ -16,16 +16,31 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import DistrictMarker from './DistrictMarker';
 import GeoJsonLayer from './GeoJsonLayer';
-import LandingSwitchViewBox from './LandingSwitchViewBox';
 
 export default {
   components: {
     DistrictMarker,
-    GeoJsonLayer,
-    LandingSwitchViewBox
+    GeoJsonLayer
+  },
+  props: {
+    selectedCountry: {
+      type: Number,
+      default: null
+    },
+    geoJson: {
+      type: Object,
+      default: () => ({})
+    },
+    districtPins: {
+      type: Array,
+      default: () => []
+    },
+    mapReady: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
@@ -33,12 +48,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      geoJson: 'countries/getGeoJsonLibrary',
-      selectedCountry: 'landing/getSelectedCountry',
-      districtPins: 'landing/getDistrictPins',
-      mapReady: 'landing/getMapReady'
-    }),
     districtPinsAndMapReady () {
       if (this.districtPins && this.mapReady) {
         return this.districtPins;
@@ -70,6 +79,9 @@ export default {
         icons[cp.id] = this.iconGenerator(cp.id);
       });
       this.markerIcons = icons;
+    },
+    markerClickHandler (id) {
+
     }
   }
 };
