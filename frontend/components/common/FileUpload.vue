@@ -7,7 +7,7 @@
     class="upload-demo"
     action="doing it manually, so this prop isnt used, still needed">
     <el-row
-      v-if="files.length < limit && limit === 1"
+      v-if="!files.length && limit === 1"
       type="flex">
       <el-button
         icon="el-icon-plus"
@@ -39,5 +39,4 @@ export default {
 </script>
 
 <style lang="less">
-
 </style>

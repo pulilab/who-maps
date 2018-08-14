@@ -3,6 +3,9 @@
 
     <div class="AdminHeading">Country admin</div>
 
+    <!-- <p>{{ country }}</p>
+    <p>partnerLogos {{ partnerLogos.length }}</p> -->
+
     <collapsible-card title="Country information">
 
       <el-form
@@ -17,20 +20,27 @@
 
         <el-form-item label="Cover image">
           <file-upload
-            :files.sync="coverImage"
+            :files.sync="cover"
             :limit="1"/>
         </el-form-item>
 
         <el-form-item label="Cover text">
-          <h3>Cover text</h3>
+          <el-input
+            v-model="coverText"
+            type="textarea"
+            rows="5"/>
         </el-form-item>
 
         <el-form-item label="Footer title">
-          <h3>Footer title</h3>
+          <el-input
+            v-model="footerTitle"
+            type="text"/>
         </el-form-item>
 
         <el-form-item label="Footer text">
-          <h3>Footer text</h3>
+          <el-input
+            v-model="footerText"
+            type="text"/>
         </el-form-item>
 
         <el-form-item label="Partner logo">
@@ -68,11 +78,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import CollapsibleCard from '../project/CollapsibleCard';
 import VueMapCustomizer from '../admin/VueMapCustomizer';
 import DhaQuestionaire from '../admin/DhaQuestionaire';
 import FileUpload from '../common/FileUpload';
+import { mapGettersActions } from '../../utilities/form';
 
 export default {
 
@@ -87,19 +98,52 @@ export default {
 
   data () {
     return {
-      logo: [], // make setters and getters for it...
-      coverImage: [], // make setters and getters for it...
-      partnerLogos: [{
-        name: 'baszod.jpg',
-        url: 'https://digitalhealthatlas.org/static/partners/who-logo.png'
-      }] // make setters and getters for it...
-      // https://digitalhealthatlas.org/static/partners/who-logo.png
+      // partnerLogos: []
     };
   },
 
   computed: {
+    ...mapGettersActions({
+      coverText: ['admin/country', 'getCoverText', 'setCoverText'],
+      footerTitle: ['admin/country', 'getFooterTitle', 'setFooterTitle'],
+      footerText: ['admin/country', 'getFooterText', 'setFooterText']
+    }),
+
     ...mapGetters({
       country: 'admin/country/getCountry'
+    }),
+
+    logo: {
+      get () {
+        return this.country.logo ? [this.country.logo] : [];
+      },
+      set ([value]) {
+        this.setCountryField({field: 'logo', data: value});
+      }
+    },
+
+    cover: {
+      get () {
+        return this.country.cover ? [this.country.cover] : [];
+      },
+      set ([value]) {
+        this.setCountryField({field: 'cover', data: value});
+      }
+    },
+
+    partnerLogos: {
+      get () {
+        return this.country.partner_logos || [];
+      },
+      set (value) {
+        this.setCountryField({field: 'partner_logos', data: value});
+      }
+    }
+  },
+
+  methods: {
+    ...mapActions({
+      setCountryField: 'admin/country/setCountryField'
     })
   }
 };
