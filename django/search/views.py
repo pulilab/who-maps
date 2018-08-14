@@ -60,7 +60,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         his: eg: his=1&his=2
         region: eg: region=3
         gov: gov=0 (for false), gov=1&gov=2 (for true values, since there's two types of true)
-        donor: ???
+        donor: TODO: implement
         approved: approved=0 (for not approved), approved=1 (for approved)
         found: include | anything else won't include (defaults to exclude)
         type: map | list (defaults to map)
@@ -70,9 +70,9 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         query_params = request.query_params
 
         qs = self.get_queryset()
-        qs = self.filter_queryset(qs)
 
         search_term = query_params.get('q')
+        # TODO: query length checking
 
         if search_term:
             search_in = query_params.getlist('in')
@@ -81,6 +81,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
                 results.update(found_in=self.found_in(queryset=qs, search_term=search_term))
 
         qs = self.filter(queryset=qs, query_params=query_params)
+        qs = self.filter_queryset(qs)  # rest framework filtering, ordering
 
         if query_params.get('type') == 'list':
             data = ListResultSerializer(qs.values(*self.list_values), many=True).data
