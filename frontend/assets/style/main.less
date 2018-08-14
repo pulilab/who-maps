@@ -91,6 +91,29 @@ a {
   }
 }
 
+.PageTitle {
+  .limitPageWidth();
+  padding: 40px;
+  text-align: center;
+
+  h2 {
+    font-size: @fontSizeHeading;
+    color: @colorTextPrimary;
+    letter-spacing: -1px;
+    margin: 0 0 20px;
+  }
+
+  p {
+    font-size: @fontSizeMedium;
+    color: @colorTextSecondary;
+    line-height: 24px;
+    margin: 0;
+    padding: 0 120px;
+  }
+
+}
+
+
 
 
 // --------------------------------------------------
@@ -230,6 +253,33 @@ i[class*="el-icon-"] {
       color: @colorWhite;
       border-color: @colorBrandPrimaryLight;
       background-color: @colorBrandPrimaryLight;
+    }
+  }
+
+  // SAMPLE MARKUP:
+  //
+  // <el-button
+  //   type="text"
+  //   class="Cancel ShowHint"
+  // >
+  &.CancelButton {
+    color: @colorTextSecondary;
+
+    &:hover {
+      color: @colorTextPrimary;
+
+      .Hint {
+        color: @colorGray;
+      }
+    }
+
+    .Hint {
+      display: block;
+      margin: 10px 0 0;
+      color: @colorTextMuted;
+      font-size: smaller;
+      font-weight: 400;
+      transition: @transitionAll;
     }
   }
 }

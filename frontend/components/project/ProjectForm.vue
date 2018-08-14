@@ -4,9 +4,9 @@
       :model="project"
       :rules="rules"
       label-position="top"
-      @submit.native.prevent>
+      @submit.native.prevent
+    >
       <el-row type="flex">
-
         <el-col :span="18">
           <general-overview />
           <implementation-overview />
@@ -18,7 +18,6 @@
         </el-col>
       </el-row>
     </el-form>
-
   </div>
 </template>
 
@@ -63,6 +62,25 @@ export default {
 </script>
 
 <style lang="less">
-.NewProjectForm {
-}
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .NewProjectForm {
+    .limitPageWidth();
+
+    > .el-form {
+      > .el-row > .el-col {
+        // form fieldsets
+        &:first-child {
+          width: calc(100% - @projectAsideNavWidth - 20px);
+          margin-right: 20px;
+        }
+
+        // aside navigation
+        &:last-child {
+          width: @projectAsideNavWidth;
+        }
+      }
+    }
+  }
 </style>
