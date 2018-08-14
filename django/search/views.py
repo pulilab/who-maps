@@ -1,10 +1,11 @@
-import logging
+from django.core.paginator import Paginator
+from django.utils.functional import cached_property
 
 from rest_framework import filters, mixins
-from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import GenericViewSet
 
-from search.serializers import MapResultSerializer, ListResultSerializer
+from .serializers import MapResultSerializer, ListResultSerializer
 from .models import ProjectSearch
 
 
