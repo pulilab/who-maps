@@ -59,9 +59,8 @@ class ProjectSearch(ExtendedModel):
         """
         Search in QuerySet
         search_term: search term
-        search_in: Available options: <name,org,country,overview,loc,donor,partner> -- default is all
+        search_in: what field to search in
         """
-
         selectable_fields = set(cls.SEARCH_BY.keys())
         selected_fields = selectable_fields & set(search_in) if search_in else selectable_fields
 
@@ -94,7 +93,6 @@ class ProjectSearch(ExtendedModel):
         """
         Filter QuerySet by various filter terms
         """
-
         selectable_fields = set(cls.FILTER_BY.keys())
         selected_fields = set(query_params.keys()) & selectable_fields
         lookup = lookup_param = None
@@ -121,8 +119,8 @@ class ProjectSearch(ExtendedModel):
                         lookup_param = "exact"
                         lookup = query_params.get(field) == '1'
 
-                    queryset &= queryset.filter(Q(**{"{field}__{param}".format(
-                        field=cls.FILTER_BY[field], param=lookup_param): lookup}))
+                    queryset &= queryset.filter(**{"{field}__{param}".format(
+                        field=cls.FILTER_BY[field], param=lookup_param): lookup})
 
         return queryset
 
