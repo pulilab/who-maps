@@ -1,15 +1,37 @@
 <template>
-  <div class="ProjectEditDraft">
-    DRAFT EDIT
+  <div class="EditProject">
+    <div class="PageTitle">
+      <h2>Edit Project Info</h2>
+      <p>
+        You are viewing the
+        <span class="DrafBit">
+          Draft
+        </span>
+        version of the project.
+      </p>
+    </div>
+    <project-form />
   </div>
 </template>
 
 <script>
-export default {
+import ProjectForm from '../../../../../components/project/ProjectForm';
 
+export default {
+  components: {
+    ProjectForm
+  },
+  fetch ({store, params}) {
+    store.dispatch('project/loadProject', params.id);
+  }
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
+  .EditProject {
+
+  }
 </style>
