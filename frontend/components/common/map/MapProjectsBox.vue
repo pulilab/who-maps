@@ -45,8 +45,8 @@
 </template>
 
 <script>
-import CountryItem from '../common/CountryItem';
-import ProjectCard from '../common/ProjectCard';
+import CountryItem from '../CountryItem';
+import ProjectCard from '../ProjectCard';
 
 export default {
   components: {
@@ -97,8 +97,8 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
   .MapProjectBox {
       z-index: 400;
