@@ -49,7 +49,7 @@ export default {
     height: 100vh !important;
 
     .thematic-overview {
-      width: 100%;
+      width: calc(100vw - 120px);
       max-width: @appWidthMinLimit;
       max-height: calc(100vh - 120px);
       margin: 0 !important;

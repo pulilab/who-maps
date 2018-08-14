@@ -107,7 +107,7 @@
                 New Project
               </nuxt-link>
             </div>
-            <user-dropdown class="HeaderBtn" />
+            <user-dropdown />
           </el-col>
         </el-row>
       </el-col>

@@ -81,26 +81,32 @@ export default {
   },
   methods: {
     ...mapActions({
-      toggleCountry: 'landing/toggleCountry',
+      setCountry: 'landing/setCountry',
       setActiveCountry: 'landing/setActiveCountry'
     }),
     markerClickHandler () {
       this.setActiveCountry(this.pin.id);
     },
+    safeMapObjectFunctionCall (ref, functionName) {
+      if (this.$refs[ref] && this.$refs[ref].mapObject) {
+        this.$refs[ref].mapObject[functionName]();
+      }
+    },
+
     openCountryView () {
-      this.toggleCountry(this.pin.id);
-      this.$refs.countryMarker.mapObject.closePopup();
+      this.setCountry(this.pin.id);
+      this.safeMapObjectFunctionCall('countryMarker', 'closePopup');
     },
     mouseEnterHandler (event) {
       this.popUpHover = true;
       this.$nextTick(() => {
-        this.$refs.tooltip.mapObject.update();
+        this.safeMapObjectFunctionCall('tooltip', 'update');
       });
     },
     mouseLeaveHandler (event) {
       this.popUpHover = false;
       this.$nextTick(() => {
-        this.$refs.tooltip.mapObject.update();
+        this.safeMapObjectFunctionCall('tooltip', 'update');
       });
     }
   }
