@@ -44,9 +44,6 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('project__name', 'organisation__name', 'country__name', 'project__data__government_investor', )  # TODO: add country__region
 
-    def get_serializer_class(self):
-        return None
-
     def list(self, request, *args, **kwargs):
         """
         Search in projects, works by the following query params:
