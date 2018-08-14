@@ -63,12 +63,12 @@ class ProjectSearch(ExtendedModel):
         """
         selectable_fields = set(cls.SEARCH_BY.keys())
         selected_fields = selectable_fields & set(search_in) if search_in else selectable_fields
+        q_objects = None
 
-        q_objects = [Q(**{"{}__icontains".format(cls.SEARCH_BY[field]): search_term}) for field in selected_fields]
+        for field in selected_fields:
+            q_objects |= Q(**{"{}__icontains".format(cls.SEARCH_BY[field]): search_term})
 
-        filter_exp = functools.reduce(operator.or_, q_objects)
-
-        return queryset.filter(filter_exp)
+        return queryset.filter(q_objects) if selected_fields else queryset
 
     @classmethod
     def filter(cls, queryset: QuerySet, query_params: QueryDict) -> QuerySet:
