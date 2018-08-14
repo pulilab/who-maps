@@ -43,12 +43,16 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
     )
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('project__name', 'organisation__name', 'country__name', 'project__data__government_investor', )  # TODO: add country__region
+    pagination_class = ResultsSetPagination
 
     def list(self, request, *args, **kwargs):
         """
         Search in projects, works by the following query params:
+        ** SEARCH PARAMETERS **
         q: search term
         in: search in [optional, defaults to all: in=name&in=org&in=country&in=overview&in=loc&in=partner&in=donor]
+
+        ** FILTER PARAMETERS **
         country: eg: country=1&country=2
         sw: eg: sw=1&sw=2
         dhi: eg: dhi=1&dhi=2
@@ -59,8 +63,17 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         gov: gov=0 (for false), gov=1&gov=2 (for true values, since there's two types of true)
         donor: TODO: implement
         approved: approved=0 (for not approved), approved=1 (for approved)
+
+        ** FOUND IN FEATURE **
         found: include | anything else won't include (defaults to exclude)
+
+        ** TYPE AND ORDERING **
         type: map | list (defaults to map)
+        ordering: project__name | organisation__name | country__name | project__data__government_investor | country__region
+
+        ** PAGINATION**
+        page: 1...n
+        page_size: eg: 20
         """
         results = {}
         search_fields = set()
