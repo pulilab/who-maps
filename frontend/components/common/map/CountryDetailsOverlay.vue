@@ -11,6 +11,9 @@
     <geo-json-layer
       :country="selectedCountry"
       :collection="geoJson"
+      :active-sub-level="activeSubLevel"
+      :map-ready="mapReady"
+      :national-level-coverage="nationalLevelCoverage"
     />
   </div>
 </template>
@@ -42,8 +45,12 @@ export default {
       default: false
     },
     activeSubLevel: {
-      type: Number,
+      type: String,
       default: null
+    },
+    nationalLevelCoverage: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -64,6 +71,11 @@ export default {
       handler (pins) {
         this.iconsGenerator();
       }
+    }
+  },
+  mounted () {
+    if (this.mapReady) {
+      this.iconsGenerator();
     }
   },
   methods: {
