@@ -4,7 +4,8 @@ export const state = () => ({
   currentZoom: 3,
   activeCountry: null,
   mapReady: false,
-  projectBoxActiveTab: 'subNational'
+  projectBoxActiveTab: 'subNational',
+  activeSubLevel: null
 });
 
 export const getters = {
@@ -43,7 +44,8 @@ export const getters = {
     return state.projects.filter(p => p.country === id);
   },
   getMapReady: state => state.mapReady,
-  getProjectBoxActiveTab: state => state.projectBoxActiveTab
+  getProjectBoxActiveTab: state => state.projectBoxActiveTab,
+  getActiveSubLevel: state => state.activeSubLevel
 };
 
 export const actions = {
@@ -51,7 +53,7 @@ export const actions = {
     const { data } = await this.$axios.get('/api/projects/map/');
     commit('SET_PROJECT_LIST', data);
   },
-  async setCountry ({commit, dispatch}, id) {
+  async setSelectedCountry ({commit, dispatch}, id) {
     await dispatch('countries/loadGeoJSON', id, {root: true});
     commit('SET_SELECTED_COUNTRY', id);
   },
@@ -64,7 +66,7 @@ export const actions = {
   },
   setActiveCountry ({commit, getters, dispatch}, value) {
     if (getters.getSelectedCountry && getters.getSelectedCountry !== value) {
-      dispatch('setCountry', value);
+      dispatch('setSelectedCountry', value);
     }
     commit('SET_ACTIVE_COUNTRY', value);
   },
@@ -73,6 +75,9 @@ export const actions = {
   },
   setProjectBoxActiveTab ({commit}, value) {
     commit('SET_PROJECT_BOX_ACTIVE_TAB', value);
+  },
+  setActiveSubLevel ({commit}, value) {
+    commit('SET_ACTIVE_SUB_LEVEL', value);
   }
 };
 export const mutations = {
@@ -93,5 +98,8 @@ export const mutations = {
   },
   SET_PROJECT_BOX_ACTIVE_TAB: (state, value) => {
     state.projectBoxActiveTab = value;
+  },
+  SET_ACTIVE_SUB_LEVEL: (state, value) => {
+    state.activeSubLevel = value;
   }
 };
