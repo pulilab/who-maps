@@ -94,13 +94,11 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         qs = self.filter_queryset(qs)  # rest framework filtering, ordering
 
         if query_params.get('type') == 'list':
-            data = ListResultSerializer(qs.values(*self.list_values), many=True).data
+            page = self.paginate_queryset(qs.values(*self.list_values))
+            data = ListResultSerializer(page, many=True).data
         else:
-            data = MapResultSerializer(qs.values(*self.map_values), many=True).data
+            page = self.paginate_queryset(qs.values(*self.map_values))
+            data = MapResultSerializer(page, many=True).data
+
         results.update(projects=data, search_term=search_term, search_in=search_fields)
-
-        # page = self.paginate_queryset(qs)
-        # if page is not None:
-        #     return self.get_paginated_response(data)
-
-        return Response(results)
+        return self.get_paginated_response(results)
