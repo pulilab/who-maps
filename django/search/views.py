@@ -56,7 +56,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__approval__approved"
     )
     filter_backends = (filters.OrderingFilter,)
-    ordering_fields = ('project__name', 'organisation__name', 'country__name', 'project__data__government_investor', )  # TODO: add country__region
+    # TODO: add country__region
+    ordering_fields = ('project__name', 'organisation__name', 'country__name', 'project__data__government_investor', )
     pagination_class = ResultsSetPagination
 
     def list(self, request, *args, **kwargs):
@@ -84,7 +85,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
 
         ** TYPE AND ORDERING **
         type: map | list (defaults to map)
-        ordering: project__name | organisation__name | country__name | project__data__government_investor | country__region
+        ordering: project__name | organisation__name | country__name |
+                  project__data__government_investor | country__region
 
         ** PAGINATION**
         page: 1...n
