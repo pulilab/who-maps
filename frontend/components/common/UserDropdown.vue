@@ -2,12 +2,14 @@
   <div class="UserDropdown">
     <el-popover
       v-model="shown"
-      placement="bottom"
+      placement="bottom-end"
       popper-class="UserDropdownPopper"
     >
+
       <el-button
         slot="reference"
         type="text"
+        class="ButtonPopper"
       >
         <fa icon="user-circle" />
         {{ user.name }}
@@ -17,28 +19,28 @@
       <div class="DropdownContent">
         <!-- User info block -->
         <div class="UserInfoSection">
-          <div>
+          <div class="Item">
             <div class="ItemTitle">
               Email
             </div>
             {{ user.email }}
           </div>
 
-          <div>
+          <div class="Item">
             <div class="ItemTitle">
               Role
             </div>
             Role Name
           </div>
 
-          <div>
+          <div class="Item">
             <div class="ItemTitle">
               Country
             </div>
             <country-item :id="user.country" />
           </div>
 
-          <div>
+          <div class="Item">
             <div class="ItemTitle">
               Site Language
             </div>
@@ -53,19 +55,24 @@
             :to="localePath('index-edit-profile')"
             @click.native="closePopover"
           >
-            <i class="el-icon-settings" />
+            <span class="MenuIcon">
+              <fa icon="user-edit" />
+            </span>
             Edit my profile
-          </nuxt-link >
+          </nuxt-link>
         </div>
 
         <div class="DropdownLink">
           <el-button
             type="text"
+            style="padding: 0"
             @click="logout"
           >
-            <i class="el-icon-edit" />
+            <span class="MenuIcon">
+              <fa icon="power-off" />
+            </span>
             Logout
-          </el-button >
+          </el-button>
         </div>
       </div>
     </el-popover>
@@ -111,25 +118,88 @@ export default {
 <style lang="less">
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
-  .UserDropdown {
+
+  .ButtonPopper {
+    height: 24px;
+    margin: 0 10px;
+    padding: 0 10px;
+    border: 0;
+    font-size: @fontSizeBase;
+    font-weight: 700;
+    line-height: 24px;
+    color: @colorBrandPrimary;
+    text-decoration: none;
+
+    .svg-inline--fa {
+      margin-right: 2px;
+
+      &.fa-angle-down {
+        margin: 0 0 0 4px;
+      }
+    }
+  }
+
+  .UserDropdownPopper {
+    padding: 0;
+  }
+
+  .DropdownContent {
+    padding: 0 0 10px;
+
     .UserInfoSection {
-      background-color: @colorGrayLightest;
-    }
+      padding: 16px 20px 4px;
+      font-size: @fontSizeBase;
 
-    .el-dropdown-menu {
-      padding: 0;
-      margin: 0;
-    }
+      .Item {
+        display: block;
+        margin-bottom: 12px;
 
-    .el-button {
-      padding: 0;
-
-      .svg-inline--fa {
-        margin-right: 2px;
-
-        &.fa-angle-down {
-          margin: 0 0 0 4px;
+        .ItemTitle {
+          margin-bottom: 6px;
+          font-size: @fontSizeSmall - 1;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: @colorTextMuted;
         }
+
+        .CountryName,
+        .LanguageName {
+          margin-left: 8px;
+          font-size: @fontSizeBase;
+          font-weight: 400;
+        }
+      }
+    }
+
+    .Divider {
+      .SeparatorStyleHorizontal();
+      margin: 0 0 10px;
+    }
+
+    .DropdownLink {
+      display: block;
+      min-height: 36px;
+      padding: 0 20px;
+      line-height: 36px;
+      cursor: pointer;
+      transition: @transitionAll;
+
+      &:hover {
+        background-color: #D9ECFF;
+      }
+
+      a,
+      .el-button {
+        color: @colorBrandPrimary !important;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .MenuIcon {
+        display: inline-block;
+        width: 24px;
+        height: 100%;
+        text-align: left;
       }
     }
   }

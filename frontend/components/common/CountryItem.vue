@@ -3,13 +3,12 @@
     type="flex"
     class="CountryItem"
   >
-    <el-col class="Flag">
+    <el-col class="CountryFlag">
       <country-flag
         v-show="showFlag"
-        :code="country.code"
-        small />
+        :code="country.code" />
     </el-col>
-    <el-col class="Name">
+    <el-col class="CountryName">
       {{ country.name }}
     </el-col>
   </el-row>
@@ -49,15 +48,21 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .CountryItem {
-    .Flag {
+    .CountryFlag {
       width: auto;
+
+      img {
+        width: 24px;
+        height: 14px;
+      }
     }
 
-    .Name {
+    .CountryName {
       width: 100%;
-      padding: 0 50px 0 10px;
+      margin-left: 10px;
       font-size: @fontSizeMedium;
       font-weight: 700;
+      line-height: 16px;
       color: @colorTextPrimary;
     }
   }
