@@ -3,6 +3,8 @@
     <map-projects-box
       :active-country.sync="activeCountry"
       :active-tab.sync="activeTab"
+      :active-sub-level="activeSubLevel"
+      :selected-country="selectedCountry"
     />
   </div>
 </template>
@@ -21,7 +23,9 @@ export default {
   computed: {
     ...mapGetters({
       getActiveCountry: 'landing/getActiveCountry',
-      getActiveTab: `landing/getProjectBoxActiveTab`
+      selectedCountry: 'landing/getSelectedCountry',
+      getActiveTab: 'landing/getProjectBoxActiveTab',
+      activeSubLevel: 'landing/getActiveSubLevel'
     }),
     activeCountry: {
       get () {

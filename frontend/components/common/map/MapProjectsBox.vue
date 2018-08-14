@@ -1,7 +1,7 @@
 <template>
   <transition name="el-zoom-in-top">
     <div
-      v-if="activeCountry"
+      v-if="showMapProjectBox"
       class="MapProjectBox">
       <el-row
         type="flex"
@@ -11,28 +11,46 @@
           <country-item :id="activeCountry"/>
         </el-col>
       </el-row>
+      <el-row class="CountrySubHeader">
+        <div v-if="showSubNational">
+          <sub-level-item
+            :id="activeSubLevel"
+          />
+          (5 projects)
+        </div>
+        <div v-if="showNational" >
+          National (3 projects)
+        </div>
+      </el-row>
+      <el-row />
       <el-row class="ProjectsList">
         <el-col>
-          <el-tabs
-            :value="activeTab"
-            @tab-click="tabChangeHandler"
+          <tabbed-card-project-list
+            v-if="showTabbedView"
+            :active-tab="activeTab"
+            @change="tabChangeHandler"
+          />
+          <div
+            v-if="showSubNational"
+            class="PlainList SubNational"
           >
-            <el-tab-pane
-              label="Sub-national"
-              name="subNational">
-              <project-card />
-              <project-card />
-              <project-card />
-            </el-tab-pane>
-            <el-tab-pane
-              label="National"
-              name="national">
-              <project-card />
-              <project-card />
-            </el-tab-pane>
-          </el-tabs>
+            <project-card />
+            <project-card />
+            <project-card />
+            <project-card />
+            <project-card />
+          </div>
+          <div
+            v-if="showNational"
+            class="PlainList NAtional"
+          >
+            <project-card />
+            <project-card />
+            <project-card />
+          </div>
         </el-col>
       </el-row>
+
       <el-button
         circle
         class="CloseBox"
@@ -48,12 +66,21 @@
 import CountryItem from '../CountryItem';
 import ProjectCard from '../ProjectCard';
 
+import TabbedCardProjectList from './TabbedCardProjectList';
+import SubLevelItem from '../SubLevelItem';
+
 export default {
   components: {
     CountryItem,
+    TabbedCardProjectList,
+    SubLevelItem,
     ProjectCard
   },
   props: {
+    selectedCountry: {
+      type: Number,
+      default: null
+    },
     activeCountry: {
       type: Number,
       default: null
@@ -61,16 +88,27 @@ export default {
     activeTab: {
       type: String,
       required: true
+    },
+    activeSubLevel: {
+      type: String,
+      default: null
     }
   },
-  watch: {
-    activeCountry: {
-      immediate: true,
-      handler (value) {
-        if (value) {
-          this.setStripeSize();
-        }
-      }
+  computed: {
+    showTabbedView () {
+      return this.activeCountry && !this.selectedCountry;
+    },
+    showSubNational () {
+      return !this.showTabbedView &&
+      this.activeTab === 'subNational' &&
+      this.activeSubLevel;
+    },
+    showNational () {
+      return !this.showTabbedView &&
+      this.activeTab === 'national';
+    },
+    showMapProjectBox () {
+      return this.activeCountry;
     }
   },
   methods: {
@@ -79,18 +117,6 @@ export default {
     },
     tabChangeHandler (tab) {
       this.$emit('update:activeTab', tab.name);
-      this.setStripeSize();
-    },
-    setStripeSize () {
-      this.$nextTick(() => {
-        const stripe = this.$el.querySelector('.el-tabs__active-bar');
-        const tabNameBox = this.$el.querySelector('.el-tabs__item.is-active').getBoundingClientRect();
-        const componentBox = this.$el.getBoundingClientRect();
-        const stripeWidth = tabNameBox.width - 12;
-        const stripeTranslate = tabNameBox.left === 60 ? 0 : Math.ceil(tabNameBox.left - componentBox.left) - 9;
-        stripe.style.width = `${stripeWidth}px`;
-        stripe.style.transform = `translate(${stripeTranslate}px)`;
-      });
     }
   }
 };
