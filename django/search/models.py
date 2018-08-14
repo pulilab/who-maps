@@ -106,21 +106,6 @@ class ProjectSearch(ExtendedModel):
         return queryset
 
     @classmethod
-    def order(cls, queryset):
-        """
-        Order QuerySet by order keywords
-        :return: QuerySet
-        """
-        ORDER_BY = (
-            "project__name",
-            "country__name",
-            "country__region",
-            "organisation__name",
-            "project__data__government_investor"
-        )
-        return queryset
-
-    @classmethod
     def found_in(cls, queryset: QuerySet, search_term: str) -> Dict[str, list]:
         """
         Returns what projects are found in which search field
