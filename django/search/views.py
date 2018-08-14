@@ -41,8 +41,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__donors",  # TODO: will be refactored
         "project__approval__approved"
     )
-    # filter_backends = (filters.OrderingFilter,)
-    # ordering_fields = ('project_name', 'contact_name')
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('project__name', 'country__name', 'project__data__government_investor', )  # TODO: add country__region
 
     def get_serializer_class(self):
         return None
