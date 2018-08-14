@@ -10,7 +10,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
-import MapProjectsBox from '../common/MapProjectsBox';
+import MapProjectsBox from '../common/map/MapProjectsBox';
 
 export default {
   components: {
