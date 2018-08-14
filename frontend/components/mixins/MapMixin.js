@@ -21,7 +21,8 @@ const MapMixin = {
       districtPins: 'landing/getDistrictPins',
       getCountryProjects: 'landing/getCountryProjects',
       mapReady: 'landing/getMapReady',
-      getActiveTab: 'landing/getProjectBoxActiveTab'
+      getActiveTab: 'landing/getProjectBoxActiveTab',
+      getActiveSubLevel: 'landing/getActiveSubLevel'
     }),
     activeCountry: {
       get () {
@@ -45,6 +46,14 @@ const MapMixin = {
       },
       set (value) {
         this.setActiveTab(value);
+      }
+    },
+    activeSubLevel: {
+      get () {
+        return this.getActiveSubLevel;
+      },
+      set (value) {
+        this.setActiveSubLevel(value);
       }
     },
     activeCountryAndMapReady () {
@@ -100,7 +109,8 @@ const MapMixin = {
       setMapReady: 'landing/setMapReady',
       setSelectedCountry: 'landing/setSelectedCountry',
       setActiveCountry: 'landing/setActiveCountry',
-      setActiveTab: 'landing/setProjectBoxActiveTab'
+      setActiveTab: 'landing/setProjectBoxActiveTab',
+      setActiveSubLevel: 'landing/setActiveSubLevel'
     }),
     centerOn (latlng, zoom = 13) {
       if (this.$refs.mainMap && this.$refs.mainMap.mapObject) {
@@ -121,10 +131,10 @@ const MapMixin = {
       this.setCurrentZoom(event.target.getZoom());
     },
     iconGenerator (id, isActive) {
-      const additionaClass = isActive ? 'ActiveCountry' : '';
+      const additionalClass = isActive ? 'ActiveCountry' : '';
       const html = `<span>${this.getCountryProjects(id).length}</span>`;
       return L.divIcon({
-        className: `CountryCenterIcon ${additionaClass}`,
+        className: `CountryCenterIcon ${additionalClass}`,
         html,
         iconSize: [27, 44],
         iconAnchor: [13.5, 44]

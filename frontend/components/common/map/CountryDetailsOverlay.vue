@@ -40,6 +40,10 @@ export default {
     mapReady: {
       type: Boolean,
       default: false
+    },
+    activeSubLevel: {
+      type: Number,
+      default: null
     }
   },
   data () {
@@ -81,7 +85,7 @@ export default {
       this.markerIcons = icons;
     },
     markerClickHandler (id) {
-
+      this.$emit('update:activeSubLevel', id);
     }
   }
 };
