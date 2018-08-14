@@ -33,6 +33,8 @@
           :geo-json="geoJson"
           :district-pins="districtPins"
           :map-ready="mapReady"
+          :active-sub-level.sync="activeSubLevel"
+          :national-level-coverage="activeTab ==='national'"
         />
         <switch-view-box
           v-if="activeCountry"
