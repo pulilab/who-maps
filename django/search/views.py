@@ -8,6 +8,13 @@ from search.serializers import MapResultSerializer, ListResultSerializer
 from .models import ProjectSearch
 
 
+class ResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+    django_paginator_class = FastCountPaginator
+
+
 class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
     queryset = ProjectSearch.objects.all().select_related('project', 'project__approval', 'organisation', 'country')
     search = ProjectSearch.search
