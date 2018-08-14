@@ -62,6 +62,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
     def list(self, request, *args, **kwargs):
         """
         Search in projects, works by the following query params:
+
         ** SEARCH PARAMETERS **
         q: search term
         in: search in [optional, defaults to all: in=name&in=org&in=country&in=overview&in=loc&in=partner&in=donor]
@@ -105,7 +106,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
                 results.update(found_in=self.found_in(queryset=qs, search_term=search_term))
 
         qs = self.filter(queryset=qs, query_params=query_params)
-        qs = self.filter_queryset(qs)  # rest framework filtering, ordering
+        qs = self.filter_queryset(qs)
 
         if query_params.get('type') == 'list':
             page = self.paginate_queryset(qs.values(*self.list_values))
