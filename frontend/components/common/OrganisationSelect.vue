@@ -1,6 +1,6 @@
 <template>
   <el-select
-    :value="value"
+    :value="org"
     :allow-create="true"
     filterable
     reserve-keyword
@@ -39,7 +39,13 @@ export default {
   computed: {
     ...mapGetters({
       organisations: 'system/getOrganisations'
-    })
+    }),
+    org () {
+      if (isNaN(this.value)) {
+        return this.value;
+      }
+      return +this.value;
+    }
   },
   methods: {
     changeHandler (value) {
