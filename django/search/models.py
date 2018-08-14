@@ -1,8 +1,5 @@
 import itertools
-import logging
-import operator
-import functools
-from typing import Set, Union, Dict, List
+from typing import Dict, List
 
 from django.db import models
 from django.db.models import Q, QuerySet
