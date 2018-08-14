@@ -21,9 +21,9 @@ export const getters = {
     const pins = [];
     selectedPolyLabeled.forEach(sp => {
       if (sp.map_data && sp.map_data.first_sub_level && sp.map_data.first_sub_level.elements) {
-        sp.map_data.first_sub_level.elements.forEach((e, index) => {
+        sp.map_data.first_sub_level.elements.forEach((e) => {
           if (e && e.polyCenter) {
-            const id = `${sp.id}-${index}`;
+            const id = e.id;
             pins.push({latlng: e.polyCenter, id});
           }
         });
