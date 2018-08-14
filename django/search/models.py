@@ -67,26 +67,8 @@ class ProjectSearch(ExtendedModel):
         q_objects = [Q(**{"{}__icontains".format(cls.SEARCH_BY[field]): search_term}) for field in selected_fields]
 
         filter_exp = functools.reduce(operator.or_, q_objects)
-        qs = queryset.filter(filter_exp)
 
-        return qs
-
-    @classmethod
-    def found_in(cls, queryset: QuerySet, search_term: str) -> Dict[str, list]:
-        """
-        Returns what projects are found in which search field
-        {
-            field: [project_id(s)]
-        }
-        """
-        found_in = {}
-
-        for field, exp in cls.SEARCH_BY.items():
-            project_ids = queryset.filter(**{"{}__icontains".format(exp): search_term})\
-                .values_list('project_id', flat=True)
-            found_in[field] = project_ids
-
-        return found_in
+        return queryset.filter(filter_exp)
 
     @classmethod
     def filter(cls, queryset: QuerySet, query_params: QueryDict) -> QuerySet:
@@ -139,7 +121,24 @@ class ProjectSearch(ExtendedModel):
         )
         return queryset
 
-    def update(self, project):
+    @classmethod
+    def found_in(cls, queryset: QuerySet, search_term: str) -> Dict[str, list]:
+        """
+        Returns what projects are found in which search field
+        {
+            field: [project_id(s)]
+        }
+        """
+        found_in = {}
+
+        for field, exp in cls.SEARCH_BY.items():
+            project_ids = queryset.filter(**{"{}__icontains".format(exp): search_term})\
+                .values_list('project_id', flat=True)
+            found_in[field] = project_ids
+
+        return found_in
+
+    def update(self, project: Project):
         """
         Update search object from project object
         """
