@@ -25,6 +25,7 @@
             :selected-country.sync="selectedCountry"
             :active-country.sync="activeCountry"
           />
+
         </v-marker-cluster>
 
         <country-details-overlay
@@ -34,7 +35,7 @@
           :map-ready="mapReady"
         />
         <switch-view-box
-          v-if="selectedCountry"
+          v-if="activeCountry"
           :active-tab.sync="activeTab" />
         <world-zoom-button />
 
