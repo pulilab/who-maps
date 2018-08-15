@@ -23,7 +23,6 @@ class ResultsSetPagination(PageNumberPagination):
 
 
 class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
-    queryset = ProjectSearch.objects.all().select_related('project', 'project__approval', 'organisation', 'country')
     search = ProjectSearch.search
     filter = ProjectSearch.filter
     found_in = ProjectSearch.found_in
@@ -59,6 +58,10 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
     # TODO: add country__region
     ordering_fields = ('project__name', 'organisation__name', 'country__name', 'project__data__government_investor', )
     pagination_class = ResultsSetPagination
+
+    def get_queryset(self):
+        return ProjectSearch.objects.exclude(project__public_id='')\
+            .select_related('project', 'project__approval', 'organisation', 'country')
 
     def list(self, request, *args, **kwargs):
         """
