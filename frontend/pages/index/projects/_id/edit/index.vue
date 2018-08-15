@@ -21,8 +21,8 @@ export default {
   components: {
     ProjectForm
   },
-  fetch ({store, params}) {
-    store.dispatch('project/loadProject', params.id);
+  async fetch ({store, params}) {
+    await store.dispatch('project/loadProject', params.id);
   }
 };
 </script>
