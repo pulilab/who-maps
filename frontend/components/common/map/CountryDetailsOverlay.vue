@@ -1,13 +1,22 @@
 <template>
   <div class="CountryDetailsOverlay">
-    <district-marker
-      v-for="pin in districtPins"
-      :key="pin.id"
-      :icon="markerIcons[pin.id]"
-      :pin="pin"
-      @marker-click="markerClickHandler"
-    />
+    <template v-if="!nationalLevelCoverage" >
+      <sub-level-marker
+        v-for="pin in subLevelPins"
+        :key="pin.id"
+        :icon="markerIcons[pin.id]"
+        :pin="pin"
+        @marker-click="markerClickHandler"
+      />
+    </template>
 
+    <country-center-marker
+      v-if="nationalLevelCoverage && selectedCountryPin"
+      :icon="countryCenterIcon"
+      :pin="selectedCountryPin"
+      disable-tooltip
+      @update:activeCountry="activeCountryUpdateHanlder"
+    />
     <geo-json-layer
       :country="selectedCountry"
       :collection="geoJson"
@@ -19,12 +28,14 @@
 </template>
 
 <script>
-import DistrictMarker from './DistrictMarker';
+import SubLevelMarker from './SubLevelMarker';
+import CountryCenterMarker from './CountryCenterMarker';
 import GeoJsonLayer from './GeoJsonLayer';
 
 export default {
   components: {
-    DistrictMarker,
+    CountryCenterMarker,
+    SubLevelMarker,
     GeoJsonLayer
   },
   props: {
@@ -36,7 +47,7 @@ export default {
       type: Object,
       default: () => ({})
     },
-    districtPins: {
+    subLevelPins: {
       type: Array,
       default: () => []
     },
@@ -51,34 +62,64 @@ export default {
     nationalLevelCoverage: {
       type: Boolean,
       default: false
+    },
+    countryProjects: {
+      type: Array,
+      default: () => []
+    },
+    selectedCountryPin: {
+      type: Object,
+      default: null
     }
   },
   data () {
     return {
-      markerIcons: {}
+      markerIcons: {},
+      countryCenterIcon: {}
     };
   },
   computed: {
-    districtPinsAndMapReady () {
-      if (this.districtPins && this.mapReady) {
-        return this.districtPins;
+    subLevelPinsAndMapReady () {
+      if (this.subLevelPins && this.mapReady) {
+        return this.subLevelPins;
+      }
+    },
+    activeSubLevelPinsAndMapReady () {
+      if (this.activeSubLevel && this.mapReady) {
+        return this.activeSubLevel;
       }
     }
   },
   watch: {
-    districtPinsAndMapReady: {
+    subLevelPinsAndMapReady: {
       immdieate: true,
       handler (pins) {
         this.iconsGenerator();
+        this.countryCenterIcon = this.countryCenterIconGenerator();
+      }
+    },
+    activeSubLevelPinsAndMapReady: {
+      immdieate: true,
+      handler (subLevel, old) {
+        if (old) {
+          this.markerIcons[old] = this.iconGenerator(old, false);
+        }
+        if (subLevel) {
+          this.markerIcons[subLevel] = this.iconGenerator(subLevel, true);
+        }
       }
     }
   },
   mounted () {
     if (this.mapReady) {
       this.iconsGenerator();
+      this.countryCenterIcon = this.countryCenterIconGenerator();
     }
   },
   methods: {
+    activeCountryUpdateHanlder (country) {
+      this.$emit('update:activeCountry', country);
+    },
     iconGenerator (id, isActive) {
       const additionaClass = isActive ? 'ActiveDistrict' : '';
       const html = `<span>${Math.round(Math.random(10) * 10)}</span>`;
@@ -91,12 +132,22 @@ export default {
     },
     iconsGenerator () {
       const icons = {};
-      this.districtPins.forEach(cp => {
+      this.subLevelPins.forEach(cp => {
         icons[cp.id] = this.iconGenerator(cp.id);
       });
       this.markerIcons = icons;
     },
+    countryCenterIconGenerator () {
+      const html = `<span>${this.countryProjects.length}</span>`;
+      return L.divIcon({
+        className: 'CountryCenterIcon ActiveCountry',
+        html,
+        iconSize: [27, 44],
+        iconAnchor: [13.5, 44]
+      });
+    },
     markerClickHandler (id) {
+      this.$emit('update:activeCountry', this.selectedCountry);
       this.$emit('update:activeSubLevel', id);
     }
   }
