@@ -20,9 +20,6 @@ import ProjectForm from '../../../../../components/project/ProjectForm';
 export default {
   components: {
     ProjectForm
-  },
-  async fetch ({store, params}) {
-    await store.dispatch('project/loadProject', params.id);
   }
 };
 </script>
