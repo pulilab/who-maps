@@ -77,10 +77,6 @@ export default {
       }
     }
 
-    .UserProjectsList {
-      padding: 40px 40px 20px;
-    }
-
     .SeeAllMyProjects {
       text-align: center;
     }
