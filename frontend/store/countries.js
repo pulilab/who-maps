@@ -28,6 +28,15 @@ export const getters = {
         .map(ccd => ({ id: ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
     }
     return [];
+  },
+  getSubLevelDetails: (state, getters) => id => {
+    const allSubLevels = [];
+    getters.getCountries.forEach(c => {
+      if (c && c.map_data && c.map_data.first_sub_level) {
+        allSubLevels.push(...c.map_data.first_sub_level.elements);
+      }
+    });
+    return {...allSubLevels.find(sb => sb.id === id)};
   }
 };
 

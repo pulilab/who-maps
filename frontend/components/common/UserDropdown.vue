@@ -144,7 +144,7 @@ export default {
   }
 
   .DropdownContent {
-    padding: 0 0 10px;
+    padding: 0 0 10px 0;
 
     .UserInfoSection {
       padding: 16px 20px 4px;
@@ -153,6 +153,7 @@ export default {
       .Item {
         display: block;
         margin-bottom: 12px;
+        padding-right: 5px;
 
         .ItemTitle {
           margin-bottom: 6px;
@@ -164,9 +165,17 @@ export default {
 
         .CountryName,
         .LanguageName {
+          margin-top: 1px;
           margin-left: 8px;
           font-size: @fontSizeBase;
           font-weight: 400;
+        }
+
+        .CountryFlag,
+        .LanguageFlag {
+          img {
+            margin-top: 2px;
+          }
         }
       }
     }
@@ -179,13 +188,14 @@ export default {
     .DropdownLink {
       display: block;
       min-height: 36px;
-      padding: 0 20px;
+      padding: 0 25px 0 20px;
       line-height: 36px;
       cursor: pointer;
       transition: @transitionAll;
 
       &:hover {
-        background-color: #D9ECFF;
+        /* $--color-primary-light-9 */
+        background-color: #ECF5FF;
       }
 
       a,

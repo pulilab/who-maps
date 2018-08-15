@@ -1,8 +1,6 @@
 <template>
   <div class="angularjs">
     <div id="thematicjs"/>
-    <!-- TODO -->
-    <!-- Left side link anchor bug -->
     <!-- Following A is just a placeholder to avoid a flash of content -->
     <a
       v-if="!initialised"
