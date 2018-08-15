@@ -57,7 +57,7 @@ export const actions = {
   },
   setActiveCountry ({commit, getters, dispatch}, value) {
     if (getters.getSelectedCountry && getters.getSelectedCountry !== value) {
-      dispatch('setCountry', value)
+      dispatch('setCountry', value);
     }
     commit('SET_ACTIVE_COUNTRY', value);
   }
