@@ -37,14 +37,18 @@
             <div class="ItemTitle">
               Country
             </div>
-            <country-item :id="user.country" />
+            <country-item
+              v-if="user.country"
+              :id="user.country" />
           </div>
 
           <div class="Item">
             <div class="ItemTitle">
               Site Language
             </div>
-            <language-item :code="user.language" />
+            <language-item
+              v-if="user.language"
+              :code="user.language" />
           </div>
         </div>
 
