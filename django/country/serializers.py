@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.utils.dateformat import format
+from django.db.transaction import atomic
 
+from user.models import UserProfile
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, CountryField, MapFile
 
 
@@ -22,6 +24,9 @@ class DonorPartnerLogoSerializer(serializers.ModelSerializer):
 class CountrySerializer(serializers.ModelSerializer):
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
     map_version = serializers.SerializerMethodField()
+    user_requests = serializers.SerializerMethodField()
+    admin_requests = serializers.SerializerMethodField()
+    super_admin_requests = serializers.SerializerMethodField()
 
     class Meta:
         model = Country
@@ -42,6 +47,9 @@ class CountrySerializer(serializers.ModelSerializer):
             "map_data",
             "map_version",
             "map_activated_on",
+            "user_requests",
+            "admin_requests",
+            "super_admin_requests",
         )
         read_only_fields = ("name", "code", "project_approval", "map_data", "map_version", "map_activated_on",)
 
@@ -50,6 +58,51 @@ class CountrySerializer(serializers.ModelSerializer):
         if obj.map_activated_on:
             return format(obj.map_activated_on, 'U')
         return 0
+
+    def get_user_requests(self, obj):
+        # figure out not yet assigned users
+        return UserProfile.objects.filter(country=obj, account_type=UserProfile.GOVERNMENT) \
+            .difference(obj.users.all()).values_list('id', flat=True)
+
+    def get_admin_requests(self, obj):
+        # figure out not yet assigned users
+        return UserProfile.objects.filter(country=obj, account_type=UserProfile.COUNTRY_ADMIN) \
+            .difference(obj.admins.all()).values_list('id', flat=True)
+
+    def get_super_admin_requests(self, obj):
+        # figure out not yet assigned users
+        return UserProfile.objects.filter(country=obj, account_type=UserProfile.SUPER_COUNTRY_ADMIN) \
+            .difference(obj.super_admins.all()).values_list('id', flat=True)
+
+    @atomic
+    def update(self, instance, validated_data):
+        # keep original lists for comparison
+        original_users = set(instance.users.all())
+        original_admins = set(instance.admins.all())
+        original_super_admins = set(instance.super_admins.all())
+
+        # perform update
+        instance = super().update(instance, validated_data)
+
+        # figure out the new entities
+        new_users = set(instance.users.all()) - original_users
+        new_admins = set(instance.admins.all()) - original_admins
+        new_super_admins = set(instance.super_admins.all()) - original_super_admins
+
+        # remove new additions from any other user group
+        if new_users:
+            instance.admins.remove(*new_users)
+            instance.super_admins.remove(*new_users)
+
+        if new_admins:
+            instance.users.remove(*new_admins)
+            instance.super_admins.remove(*new_admins)
+
+        if new_super_admins:
+            instance.users.remove(*new_super_admins)
+            instance.admins.remove(*new_super_admins)
+
+        return instance
 
 
 class DonorSerializer(serializers.ModelSerializer):

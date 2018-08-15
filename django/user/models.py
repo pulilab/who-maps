@@ -31,17 +31,25 @@ class Organisation(NameByIDMixin, ExtendedModel):
 class UserProfile(ExtendedModel):
     IMPLEMENTER = 'I'
     DONOR = 'D'
+    DONOR_ADMIN = 'DA'
+    SUPER_DONOR_ADMIN = 'SDA'
     GOVERNMENT = 'G'
+    COUNTRY_ADMIN = 'CA'
+    SUPER_COUNTRY_ADMIN = 'SCA'
     INVENTORY = 'Y'
     ACCOUNT_TYPE_CHOICES = (
         (IMPLEMENTER, _('Implementer')),
         (DONOR, _('Financial Investor')),
+        (DONOR_ADMIN, _('Donor Admin')),
+        (SUPER_DONOR_ADMIN, _('Super Donor Admin')),
         (GOVERNMENT, _('Government')),
+        (COUNTRY_ADMIN, _('Country Admin')),
+        (SUPER_COUNTRY_ADMIN, _('Super Country Admin')),
         (INVENTORY, _('Inventory User')),
     )
 
     account_type = models.CharField(
-        max_length=1,
+        max_length=3,
         choices=ACCOUNT_TYPE_CHOICES,
         default=IMPLEMENTER,
     )

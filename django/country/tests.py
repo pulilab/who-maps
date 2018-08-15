@@ -121,6 +121,24 @@ class CountryTests(APITestCase):
         response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
 
+    def test_country_admin_retrieve_user_requests(self):
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
+                                                  account_type=UserProfile.GOVERNMENT)
+        user2 = User.objects.create(username="test2", password="12345678")
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
+                                                  account_type=UserProfile.COUNTRY_ADMIN)
+        user3 = User.objects.create(username="test3", password="12345678")
+        userprofile3 = UserProfile.objects.create(user=user3, name="test3", country=self.country,
+                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+
+        url = reverse("country-detail", kwargs={"code": self.country.code})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["user_requests"], [userprofile1.id])
+        self.assertEqual(response.json()["admin_requests"], [userprofile2.id])
+        self.assertEqual(response.json()["super_admin_requests"], [userprofile3.id])
+
     def test_country_admin_update_users(self):
         url = reverse("country-detail", kwargs={"code": self.country.code})
         data = {
@@ -129,6 +147,23 @@ class CountryTests(APITestCase):
         response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['users'], [self.test_user['user_profile_id']])
+
+        data = {
+            "admins": [self.test_user['user_profile_id']]
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['users'], [])
+        self.assertEqual(response.json()['admins'], [self.test_user['user_profile_id']])
+
+        data = {
+            "super_admins": [self.test_user['user_profile_id']]
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['users'], [])
+        self.assertEqual(response.json()['admins'], [])
+        self.assertEqual(response.json()['super_admins'], [self.test_user['user_profile_id']])
 
     def test_country_partner_logos_create(self):
         url = reverse("country-partner-logo-list")
