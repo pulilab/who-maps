@@ -113,7 +113,7 @@ export default {
       immediate: true,
       handler (nationalLevelCoverage) {
         if (nationalLevelCoverage !== undefined) {
-          this.updateGeoJsonStyle(nationalLevelCoverage);
+          this.updateGeoJsonStyle(nationalLevelCoverage, this.activeSubLevel);
         }
       }
     }
