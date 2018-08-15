@@ -1,6 +1,7 @@
 <template>
   <el-checkbox-group
     :value="value"
+    class="ThreePerRow"
     @input="changeHandler">
     <el-checkbox
       v-for="standard in standards"
@@ -38,6 +39,8 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
 </style>

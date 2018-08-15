@@ -26,6 +26,7 @@
           type="textarea"
         />
         <span class="Hint">
+          <fa icon="info-circle" />
           Please describe where your implementation is currently taking place
         </span>
       </el-form-item>
@@ -37,6 +38,7 @@
           type="textarea"
         />
         <span class="Hint">
+          <fa icon="info-circle" />
           Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
         </span>
       </el-form-item>
@@ -48,6 +50,7 @@
           type="textarea"
         />
         <span class="Hint">
+          <fa icon="info-circle" />
           Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
         </span>
       </el-form-item>
@@ -62,7 +65,7 @@
             <el-date-picker
               v-model="start_date"
               class="Date"
-              align="center"
+              align="left"
               placeholder="Start date"
             />
           </el-form-item>
@@ -76,7 +79,7 @@
             <el-date-picker
               v-model="end_date"
               class="Date"
-              align="center"
+              align="left"
               placeholder="End date"
             />
           </el-form-item>

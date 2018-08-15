@@ -2,7 +2,7 @@
   <div
     id="technology"
     class="TechnologyOverview">
-    <collapsible-card title="Thecnology Overview">
+    <collapsible-card title="Technology Overview">
       <el-form-item
         label="Technology deployment date"
         prop="implementation_dates"
@@ -10,7 +10,7 @@
         <el-date-picker
           v-model="implementation_dates"
           class="Date"
-          align="center"
+          align="left"
           placeholder="Pick a day"
         />
       </el-form-item>
@@ -65,6 +65,14 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .TechnologyOverview {
+    .el-date-editor {
+      width: 50%;
+    }
+  }
 
 </style>

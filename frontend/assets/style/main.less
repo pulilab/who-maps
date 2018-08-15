@@ -292,6 +292,18 @@ i[class*="el-icon-"] {
     }
   }
 
+  &.IconLeft {
+    .svg-inline--fa {
+      margin-right: 2px;
+    }
+  }
+
+  &.IconRight {
+    .svg-inline--fa {
+      margin-left: 2px;
+    }
+  }
+
   // SAMPLE MARKUP:
   //
   // <el-button
@@ -366,6 +378,12 @@ fieldset {
 
 .el-form {
   .el-form-item {
+    margin-bottom: 30px;
+
+    &.ExtraMarginBottom {
+      margin-bottom: 50px;
+    }
+
     &.is-required {
       .el-form-item__label {
         &::before {
@@ -382,6 +400,8 @@ fieldset {
     .el-form-item__label {
       font-weight: 700;
     }
+
+    .el-form-item__content {}
 
     .el-form-item__error {
       // Form error for last form element
@@ -400,6 +420,62 @@ fieldset {
         .el-tag__close {
           right: -6px;
           top: -1px;
+        }
+      }
+    }
+
+    .el-checkbox {
+      .el-checkbox__label {
+        font-weight: 400;
+      }
+    }
+
+    .el-checkbox-group {
+      &.OnePerRow {
+        > .el-checkbox {
+          display: block;
+          margin-left: 30px;
+        }
+      }
+
+      &.ThreePerRow {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        white-space: normal;
+
+        > .el-checkbox {
+          width: 33%;
+          margin: 0;
+          padding-right: 30px;
+          box-sizing: border-box;
+          line-height: 19px;
+          padding: 10px 0;
+
+          .el-checkbox__input {
+            vertical-align: top;
+            top: 2px;
+          }
+
+          .el-checkbox__label {
+            white-space: normal;
+            padding-right: 30px;
+          }
+        }
+      }
+    }
+
+    .el-radio {
+      .el-radio__label {
+        font-weight: 400;
+      }
+    }
+
+    .el-radio-group {
+      &.OnePerRow {
+        > .el-radio {
+          display: block;
+          margin-left: 30px;
         }
       }
     }
