@@ -1,7 +1,6 @@
 <template>
   <div class="NewProjectForm">
     <el-form
-      v-loading.fullscreen.lock="!showForm"
       :model="project"
       :rules="rules"
       label-position="top"
@@ -39,18 +38,12 @@ export default {
     InteroperabilityAndStandards
   },
   data () {
-    return {
-      readyElements: 0,
-      maxElements: 4
-    };
+    return {};
   },
   computed: {
     ...mapGetters({
       project: 'project/getProjectData'
     }),
-    showForm () {
-      return this.readyElements === this.maxElements;
-    },
     draftRules () {
       return {
         name: [
@@ -64,13 +57,6 @@ export default {
           {required: true, message: 'This is required', trigger: 'blur'}
         ]
       };
-    }
-  },
-  methods: {
-    mountedHandler () {
-      setTimeout(() => {
-        this.readyElements += 1;
-      }, 300);
     }
   }
 };
