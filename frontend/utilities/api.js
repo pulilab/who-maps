@@ -1,4 +1,4 @@
-export const apiReaParser = p => {
+export const apiReadParser = p => {
   const [ coverage, coverageDataFirstLevel ] = coverageMapper(p.coverage);
   const [ coverage_second_level, coverageDataSecondLevelLevel ] = coverageMapper(p.coverage_second_level);
   const coverageData = {...coverageDataFirstLevel, ...coverageDataSecondLevelLevel};

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { apiReaParser } from '../utilities/api';
+import { apiReadParser } from '../utilities/api';
 
 const cleanState = () => ({
   name: null,
@@ -40,8 +40,7 @@ const cleanState = () => ({
 });
 
 export const state = () => ({
-  ...cleanState(),
-  loading: false
+  ...cleanState()
 });
 
 export const getters = {
@@ -83,8 +82,8 @@ export const actions = {
   async loadProject ({commit, dispatch}, id) {
     const { data } = await this.$axios.get(`/api/projects/${id}/`);
     const clean = cleanState();
-    const published = {...clean, ...apiReaParser(data.published)};
-    const draft = {...clean, ...apiReaParser(data.draft)};
+    const published = {...clean, ...apiReadParser(data.published)};
+    const draft = {...clean, ...apiReadParser(data.draft)};
     commit('SET_PUBLISHED', Object.freeze(published));
     await dispatch('setProjectState', draft);
     await dispatch('loadTeamViewers', id);
