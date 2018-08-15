@@ -1,6 +1,6 @@
 <template>
   <div
-    v-scroll-class:FixedNavigation="360"
+    v-scroll-class:FixedNavigation="340"
     class="ProjectNavigation"
   >
     <el-card :body-style="{ padding: '0px' }">
@@ -123,7 +123,7 @@ export default {
     &.FixedNavigation {
       // TODO: check browser compatibility for older browsers which do not support 'sticky'!
       position: sticky;
-      top: 0;
+      top: 20px;
       left: 0;
     }
 

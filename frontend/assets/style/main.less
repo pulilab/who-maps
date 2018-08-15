@@ -152,7 +152,6 @@ a {
 
 
 
-
 // --------------------------------------------------
 // Leaflet plugin customisation
 // --------------------------------------------------
@@ -340,6 +339,29 @@ fieldset {
   .el-input__inner {
     font-family: Arial, sans-serif;
   }
+
+  // custom select caret
+  .el-select__caret {
+    &.el-icon-arrow-up {
+      transform: translateX(4px) !important;
+      width: 37px;
+      height: calc(100% - 2px);
+      margin: 1px 0;
+      background-color: #EDEDED;
+      border-left: 1px solid #B9B9B9;
+
+      &::before {
+        content: "\E60B";
+        color: @colorTextSecondary;
+      }
+
+      &.is-reverse {
+        &::before {
+          content: "\E60C";
+        }
+      }
+    }
+  }
 }
 
 .el-form {
@@ -367,6 +389,28 @@ fieldset {
         transform: translate(0, 14px);
       }
     }
+
+    .el-select {
+      .el-select__tags {
+        .el-select__tags-text {
+          color: @colorTextPrimary;
+          font-size: @fontSizeBase;
+        }
+
+        .el-tag__close {
+          right: -6px;
+          top: -1px;
+        }
+      }
+    }
+
+    .Hint {
+      display: block;
+      margin: 10px 0 0;
+      font-size: @fontSizeSmall;
+      line-height: 14px;
+      color: @colorTextMuted;
+    }
   }
 }
 
@@ -384,4 +428,13 @@ fieldset {
 
 .el-dropdown-menu {
   .el-dropdown-menu__item {}
+}
+
+.el-select-dropdown {
+  .el-select-group__title {
+    font-size: @fontSizeSmall - 1;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: @colorGray;
+  }
 }

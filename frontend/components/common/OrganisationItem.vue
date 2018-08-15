@@ -1,9 +1,7 @@
 <template>
   <div
     v-if="organisation"
-    class="OrganisationItem">
-    {{ organisation.name }}
-  </div>
+    class="OrganisationItem">{{ organisation.name }}</div>
 </template>
 
 <script>
@@ -29,6 +27,8 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
 </style>

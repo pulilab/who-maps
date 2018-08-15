@@ -52,7 +52,7 @@
         </span>
       </el-form-item>
       <el-row
-        :gutter="10"
+        :gutter="20"
         type="flex">
         <el-col :span="12">
           <el-form-item
@@ -83,7 +83,7 @@
         </el-col>
       </el-row>
       <el-row
-        :gutter="10"
+        :gutter="20"
         type="flex">
         <el-col :span="12">
           <el-form-item
@@ -160,9 +160,12 @@ export default {
 </script>
 
 <style lang="less">
-.GeneralOverview {
-  .Date {
-    width: 100%;
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .GeneralOverview {
+    .Date {
+      width: 100%;
+    }
   }
-}
 </style>
