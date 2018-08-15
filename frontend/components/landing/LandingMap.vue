@@ -1,11 +1,6 @@
 <template>
   <div class="LandingMap">
     <no-ssr>
-      <!-- TODO -->
-      <!-- Add selected state for pins -->
-
-      <!--TODO -->
-      <!-- Use only one centered pin when in national view mode -->
       <l-map
         ref="mainMap"
         :zoom="zoom"
@@ -35,9 +30,11 @@
 
         <country-details-overlay
           :selected-country="selectedCountry"
+          :active-country.sync="activeCountry"
           :geo-json="geoJson"
-          :district-pins="districtPins"
+          :sub-level-pins="subLevelPins"
           :map-ready="mapReady"
+          :selected-country-pin="selectedCountryPin"
           :active-sub-level.sync="activeSubLevel"
           :national-level-coverage="activeTab ==='national'"
         />
