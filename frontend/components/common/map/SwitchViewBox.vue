@@ -6,8 +6,10 @@
         :value="activeTab"
         active-text="National"
         active-value="national"
+        active-color="#FB7E37"
         inactive-value="subNational"
         inactive-text="Sub-national"
+        inactive-color="#FBC02D"
         @change="setActiveTab($event)"
       />
     </div>
@@ -45,10 +47,17 @@ export default {
       padding: 10px 16px;
       background: rgba(255,255,255,0.9);
       border-radius: 2px;
-      box-shadow: 0 5px 5px 0 rgba(0,0,0,0.12);
+      box-shadow: 0 0 20px 5px rgba(0,0,0,.15);
 
       .el-switch {
+        .el-switch__label {
+          color: @colorGray;
+          font-weight: 700;
 
+          &.is-active {
+            color: @colorTextPrimary;
+          }
+        }
       }
     }
   }

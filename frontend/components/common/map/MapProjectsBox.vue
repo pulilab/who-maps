@@ -11,18 +11,21 @@
           <country-item :id="activeCountry"/>
         </el-col>
       </el-row>
+      <!-- TODO -->
+      <!-- Show only if map is in country view mode -->
       <el-row class="CountrySubHeader">
         <div v-if="showSubNational">
           <sub-level-item
             :id="activeSubLevel"
           />
-          (5 projects)
+          <span class="SubLevelCounter">(5 projects)</span>
         </div>
-        <div v-if="showNational" >
-          National (3 projects)
+        <div v-if="showNational">
+          <div class="SubLevelItem">National</div>
+          <span class="SubLevelCounter">(3 projects)</span>
         </div>
       </el-row>
-      <el-row />
+      <!-- -->
       <el-row class="ProjectsList">
         <el-col>
           <tabbed-card-project-list
@@ -30,6 +33,15 @@
             :active-tab="activeTab"
             @change="tabChangeHandler"
           />
+          <!-- TODO -->
+          <!--
+          <div class="HintText">
+            <fa
+              icon="info-circle"
+              size="lg" />
+            Select a pin blablabla...
+          </div>
+          -->
           <div
             v-if="showSubNational"
             class="PlainList SubNational"
@@ -42,14 +54,11 @@
           </div>
           <div
             v-if="showNational"
-            class="PlainList NAtional"
+            class="PlainList National"
           >
             <project-card />
             <project-card />
             <project-card />
-          </div>
-          <div class="HintText">
-            Select a pin blablabla...
           </div>
         </el-col>
       </el-row>
@@ -137,7 +146,8 @@ export default {
       box-sizing: border-box;
       width: 360px;
       height: auto;
-      max-height: 420px;
+      // TODO
+      // max-height: 420px;
       color: @colorWhite;
       background: fade(@colorGrayLightest, 90%);
       box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.15);
@@ -145,6 +155,25 @@ export default {
       .CountryHeader {
         padding: 20px 20px 0;
         background-color: @colorWhite;
+      }
+
+      .CountrySubHeader {
+        background-color: @colorWhite;
+        padding: 12px 20px;
+        border-bottom: 2px solid @colorGrayLight;
+
+        .SubLevelItem {
+          display: inline;
+          font-size: @fontSizeBase;
+          font-weight: 700;
+          color: @colorTextPrimary;
+        }
+
+        .SubLevelCounter {
+          font-size: @fontSizeSmall;
+          font-weight: 400;
+          color: @colorTextMuted;
+        }
       }
 
       .ProjectsList {
@@ -161,7 +190,9 @@ export default {
           // Changes to this padding value will require a change on the JS too.
           padding: 0 12px;
         }
-        .el-tabs__content {
+
+        .el-tabs__content,
+        .PlainList {
           padding: 20px;
 
           .ProjectCard {
@@ -171,6 +202,24 @@ export default {
               margin: 0;
             }
           }
+        }
+      }
+
+      .HintText {
+        display: inline-flex;
+        align-items: flex-start;
+        box-sizing: border-box;
+        width: 100%;
+        margin: 0;
+        padding: 16px 20px;
+        background-color: @colorWhite;
+        font-size: @fontSizeSmall;
+        line-height: 18px;
+        color: @colorTextSecondary;
+
+        .svg-inline--fa {
+          margin-right: 6px;
+          color: @colorTextMuted;
         }
       }
 
