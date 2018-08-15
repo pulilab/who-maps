@@ -10,13 +10,13 @@ export const state = () => ({
 
 export const getters = {
   getLandingPagePins (state, getters, rootState, rootGetters) {
-    const polyLabeled = rootGetters['countries/getCountries'].filter(c => c.map_data.polylabel && c.id !== state.selectedCountry);
+    const polyLabeled = rootGetters['countries/getCountries'].filter(c => c.map_data.polylabel);
     return polyLabeled.map(c => ({
       id: c.id,
       latlng: {...c.map_data.polylabel}
     }));
   },
-  getDistrictPins (state, getters, rootState, rootGetters) {
+  getSubLevelPins (state, getters, rootState, rootGetters) {
     const selectedPolyLabeled = rootGetters['countries/getCountries'].filter(c => c.map_data.polylabel && c.id === state.selectedCountry);
     const pins = [];
     selectedPolyLabeled.forEach(sp => {
@@ -65,7 +65,7 @@ export const actions = {
     }
   },
   setActiveCountry ({commit, getters, dispatch}, value) {
-    if (getters.getSelectedCountry && getters.getSelectedCountry !== value) {
+    if (value && getters.getSelectedCountry && getters.getSelectedCountry !== value) {
       dispatch('setSelectedCountry', value);
     }
     commit('SET_ACTIVE_COUNTRY', value);

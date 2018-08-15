@@ -14,11 +14,11 @@ const MapMixin = {
   },
   computed: {
     ...mapGetters({
-      countriesPin: 'landing/getLandingPagePins',
+      allCountriesPin: 'landing/getLandingPagePins',
       getActiveCountry: 'landing/getActiveCountry',
       geoJson: 'countries/getGeoJsonLibrary',
       getSelectedCountry: 'landing/getSelectedCountry',
-      districtPins: 'landing/getDistrictPins',
+      subLevelPins: 'landing/getSubLevelPins',
       getCountryProjects: 'landing/getCountryProjects',
       mapReady: 'landing/getMapReady',
       getActiveTab: 'landing/getProjectBoxActiveTab',
@@ -55,6 +55,12 @@ const MapMixin = {
       set (value) {
         this.setActiveSubLevel(value);
       }
+    },
+    countriesPin () {
+      return this.allCountriesPin.filter(cp => cp.id !== this.selectedCountry);
+    },
+    selectedCountryPin () {
+      return this.allCountriesPin.find(cp => cp.id === this.selectedCountry);
     },
     activeCountryAndMapReady () {
       if (this.activeCountry && this.mapReady) {
