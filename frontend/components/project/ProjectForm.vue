@@ -1,12 +1,19 @@
 <template>
   <div class="NewProjectForm">
+    <div
+      v-show="!showForm"
+      class="Loader">
+      LOADER
+    </div>
     <el-form
       :model="project"
       :rules="rules"
       label-position="top"
       @submit.native.prevent
     >
-      <el-row type="flex">
+      <el-row
+        v-show="showForm"
+        type="flex">
         <el-col :span="18">
           <general-overview @mounted="mountedHandler" />
           <implementation-overview @mounted="mountedHandler" />
@@ -38,12 +45,18 @@ export default {
     InteroperabilityAndStandards
   },
   data () {
-    return {};
+    return {
+      readyElements: 0,
+      maxElements: 4
+    };
   },
   computed: {
     ...mapGetters({
       project: 'project/getProjectData'
     }),
+    showForm () {
+      return this.readyElements === this.maxElements;
+    },
     draftRules () {
       return {
         name: [
@@ -58,7 +71,15 @@ export default {
         ]
       };
     }
+  },
+  methods: {
+    mountedHandler () {
+      setTimeout(() => {
+        this.readyElements += 1;
+      }, 300);
+    }
   }
+
 };
 </script>
 
