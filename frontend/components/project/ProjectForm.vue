@@ -3,7 +3,8 @@
     <div
       v-show="!showForm"
       class="Loader">
-      LOADER
+      <div />
+      <span>Loading</span>
     </div>
     <el-form
       :model="project"
@@ -89,6 +90,11 @@ export default {
 
   .NewProjectForm {
     .limitPageWidth();
+
+    .Loader {
+      display: block;
+      margin: 0 auto 80px;
+    }
 
     > .el-form {
       > .el-row > .el-col {

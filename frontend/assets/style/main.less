@@ -113,6 +113,43 @@ a {
 
 }
 
+.Loader {
+  display: inline-block;
+  text-align: center;
+
+  div {
+    display: inline-block;
+    margin: 0 auto;
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 6px solid @colorGrayLight;
+    border-top-color: @colorBrandAccent;
+    -webkit-animation: loading 1s infinite linear;
+    animation: loading 1s infinite linear
+  }
+
+  span {
+    display: block;
+    margin-top: 5px;
+    color: @colorTextSecondary;
+    font-size: @fontSizeSmall;
+  }
+
+  @-webkit-keyframes loading {
+    100% {
+      transform: rotate(360deg) translate3d(0,0,0);
+    }
+  }
+
+  @keyframes loading {
+    100% {
+      transform: rotate(360deg) translate3d(0,0,0);
+    }
+  }
+}
+
 
 
 
