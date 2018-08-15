@@ -11,9 +11,9 @@
           <country-item :id="activeCountry"/>
         </el-col>
       </el-row>
-      <!-- TODO -->
-      <!-- Show only if map is in country view mode -->
-      <el-row class="CountrySubHeader">
+      <el-row
+        v-show="!showTabbedView"
+        class="CountrySubHeader">
         <div v-if="showSubNational">
           <sub-level-item
             :id="activeSubLevel"
@@ -33,15 +33,15 @@
             :active-tab="activeTab"
             @change="tabChangeHandler"
           />
-          <!-- TODO -->
-          <!--
-          <div class="HintText">
+          <div
+            v-show="showSubLevelHint"
+            class="HintText"
+          >
             <fa
               icon="info-circle"
               size="lg" />
             Select a pin blablabla...
           </div>
-          -->
           <div
             v-if="showSubNational"
             class="PlainList SubNational"
@@ -119,13 +119,16 @@ export default {
       return !this.showTabbedView &&
       this.activeTab === 'national';
     },
+    showSubLevelHint () {
+      return this.selectedCountry && !this.activeSubLevel && this.activeTab === 'subNational';
+    },
     showMapProjectBox () {
       return this.activeCountry;
     }
   },
   methods: {
     closeCountryProjextBox () {
-      this.$emit('update:ActiveCountry', null);
+      this.$emit('update:activeCountry', null);
     },
     tabChangeHandler (tab) {
       this.$emit('update:activeTab', tab.name);
