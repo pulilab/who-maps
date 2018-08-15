@@ -34,12 +34,18 @@ export default {
       required: true
     }
   },
-  mounted () {
-    this.setStripeSize();
+  watch: {
+    activeTab: {
+      immediate: true,
+      handler (value) {
+        if (value) {
+          this.setStripeSize();
+        }
+      }
+    }
   },
   methods: {
     tabChangeHandler (value) {
-      this.setStripeSize();
       this.$emit('change', value);
     },
     setStripeSize () {
