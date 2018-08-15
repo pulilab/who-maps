@@ -1,0 +1,64 @@
+<template>
+  <div class="PlatformList">
+    <ul>
+      <li
+        v-for="p in selected"
+        :key="p.id"
+      >
+        <simple-field header="Software">
+          <div>
+            <span>
+              {{ p.name }}
+            </span>
+            <simple-field header="Digital Health Intervention">
+              <digital-health-interventions-list
+                :dhi="dhi"
+                :platform="p.id"
+              />
+            </simple-field>
+          </div>
+        </simple-field>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+import { mapGetters } from 'vuex';
+import DigitalHealthInterventionsList from './DigitalHealthInterventionsList';
+import SimpleField from './SimpleField';
+
+export default {
+  components: {
+    SimpleField,
+    DigitalHealthInterventionsList
+  },
+  props: {
+    dhi: {
+      type: Array,
+      default: () => []
+    },
+    platforms: {
+      type: Array,
+      default: () => []
+    }
+  },
+  computed: {
+    ...mapGetters({
+      technologyPlatforms: 'projects/getTechnologyPlatforms'
+    }),
+    selected () {
+      return this.technologyPlatforms.filter(tp => this.platforms.includes(tp.id));
+    },
+    availablePlatforms () {
+      return this.technologyPlatforms.filter(tp => !this.platforms.some(s => s === tp.id) || tp.id === this.platform);
+    }
+  }
+};
+</script>
+
+<style lang="less">
+.PlatformList {
+  width: 100%;
+}
+</style>
