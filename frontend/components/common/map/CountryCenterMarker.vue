@@ -9,6 +9,7 @@
       @click="markerClickHandler"
     >
       <l-popup
+        v-if="!disableTooltip"
         ref="tooltip"
         :options="popupOptions"
       >
@@ -48,14 +49,6 @@ export default {
       required: false,
       default: () => null
     },
-    forceHovered: {
-      type: Boolean,
-      default: false
-    },
-    additionalTooltipClass: {
-      type: String,
-      default: ''
-    },
     selectedCountry: {
       type: Number,
       default: null
@@ -63,6 +56,10 @@ export default {
     activeCountry: {
       type: Number,
       default: null
+    },
+    disableTooltip: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -73,11 +70,6 @@ export default {
         closeButton: false
       }
     };
-  },
-  computed: {
-    paintTooltip () {
-      return this.$slots.default && (this.hovered || this.forceHovered);
-    }
   },
   methods: {
     markerClickHandler () {
