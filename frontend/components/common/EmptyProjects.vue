@@ -9,12 +9,13 @@
     </el-row>
     <el-row type="flex">
       <el-col>
-        <el-button
-          type="primary"
-          size="medium"
+        <nuxt-link
+          :to="localePath('index-projects-create')"
+          tag="button"
+          class="el-button el-button--primary el-button--medium"
         >
           Add new project
-        </el-button>
+        </nuxt-link>
       </el-col>
     </el-row>
     <el-row type="flex">
