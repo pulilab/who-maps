@@ -84,10 +84,10 @@ export default {
     },
     healthWorkers: {
       get () {
-        return this.localCoverageData ? this.localCoverageData.healthWorkers : null;
+        return this.localCoverageData ? this.localCoverageData.health_workers : null;
       },
       set (value) {
-        const coverage = {healthWorkers: value};
+        const coverage = {health_workers: value};
         this.coverageData = {coverage, subLevel: this.subLevel};
       }
     },
