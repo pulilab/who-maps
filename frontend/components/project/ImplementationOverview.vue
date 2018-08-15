@@ -155,6 +155,9 @@ export default {
       implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners', 300]
     })
   },
+  mounted () {
+    this.$emit('mounted');
+  },
   methods: {
     addDhi () {
       this.platforms = [...this.platforms, null];

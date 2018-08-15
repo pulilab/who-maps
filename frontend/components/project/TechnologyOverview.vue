@@ -58,6 +58,9 @@ export default {
       mobile_application: ['project', 'getMobileApplication', 'setMobileApplication', 300],
       wiki: ['project', 'getWiki', 'setWiki', 300]
     })
+  },
+  mounted () {
+    this.$emit('mounted');
   }
 };
 </script>

@@ -153,8 +153,9 @@ export default {
       viewers: ['project', 'getViewers', 'setViewers', 0]
     })
   },
-
-  methods: {}
+  mounted () {
+    this.$emit('mounted');
+  }
 };
 </script>
 

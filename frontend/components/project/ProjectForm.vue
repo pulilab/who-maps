@@ -1,6 +1,7 @@
 <template>
   <div class="NewProjectForm">
     <el-form
+      v-loading.fullscreen.lock="!showForm"
       :model="project"
       :rules="rules"
       label-position="top"
@@ -8,10 +9,10 @@
     >
       <el-row type="flex">
         <el-col :span="18">
-          <general-overview />
-          <implementation-overview />
-          <technology-overview />
-          <interoperability-and-standards />
+          <general-overview @mounted="mountedHandler" />
+          <implementation-overview @mounted="mountedHandler" />
+          <technology-overview @mounted="mountedHandler"/>
+          <interoperability-and-standards @mounted="mountedHandler"/>
         </el-col>
         <el-col :span="6">
           <project-navigation />
@@ -37,10 +38,19 @@ export default {
     TechnologyOverview,
     InteroperabilityAndStandards
   },
+  data () {
+    return {
+      readyElements: 0,
+      maxElements: 4
+    };
+  },
   computed: {
     ...mapGetters({
       project: 'project/getProjectData'
     }),
+    showForm () {
+      return this.readyElements === this.maxElements;
+    },
     draftRules () {
       return {
         name: [
@@ -57,6 +67,11 @@ export default {
     }
   },
   methods: {
+    mountedHandler () {
+      setTimeout(() => {
+        this.readyElements += 1;
+      }, 300);
+    }
   }
 };
 </script>
