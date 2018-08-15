@@ -1,6 +1,4 @@
 <template>
-  <!-- TODO -->
-  <!-- Switching breaks tabs nav's bottom border calc -->
   <el-tabs
     :value="activeTab"
     @tab-click="tabChangeHandler"
