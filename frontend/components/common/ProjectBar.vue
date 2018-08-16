@@ -3,7 +3,7 @@
     <el-row type="flex">
       <el-col :span="12">
         <div class="ProjectName">
-          ProjectName
+          {{ project.name }}
         </div>
       </el-col>
       <el-col :span="4">
@@ -19,7 +19,7 @@
           Organisation
         </div>
         <div>
-          WHO
+          <organisation-item :id="project.organisation" />
         </div>
       </el-col>
       <el-col :span="4">
@@ -27,7 +27,7 @@
           Contact person
         </div>
         <div>
-          <a href="mailto:jhon@doe.com">Jhon Doe</a>
+          <a :href="`mailto:${project.contact_email}`">{{ project.contact_name }}</a>
         </div>
       </el-col>
     </el-row>
@@ -49,8 +49,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import OrganisationItem from './OrganisationItem';
+
 export default {
+  components: {
+    OrganisationItem
+  },
   computed: {
+    ...mapGetters({
+      currentProject: 'projects/getCurrentProject'
+    }),
+    project () {
+      return this.currentProject.isPublished ? this.currentProject.published : this.currentProject.draft;
+    },
     id () {
       return this.$route.params.id;
     }
