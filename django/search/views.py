@@ -124,12 +124,13 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         qs = self.filter(queryset=qs, query_params=query_params)
         qs = self.filter_queryset(qs)
 
-        if query_params.get('type') == 'list':
+        results_type = 'list' if query_params.get('type') == 'list' else 'map'
+        if results_type == 'list':
             page = self.paginate_queryset(qs.values(*self.list_values))
             data = ListResultSerializer(page, many=True).data
         else:
             page = self.paginate_queryset(qs.values(*self.map_values))
             data = MapResultSerializer(page, many=True).data
 
-        results.update(projects=data, search_term=search_term, search_in=search_fields)
+        results.update(projects=data, type=results_type, search_term=search_term, search_in=search_fields)
         return self.get_paginated_response(results)
