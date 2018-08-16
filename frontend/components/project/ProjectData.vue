@@ -246,10 +246,20 @@ export default {
     StandardsList,
     InteroperabilityLinksList
   },
+  props: {
+    showDraft: {
+      type: Boolean,
+      default: null
+    }
+  },
   computed: {
     ...mapGetters({
-      project: 'project/getProjectData'
-    })
+      draft: 'project/getProjectData',
+      published: 'project/getPublished'
+    }),
+    project () {
+      return this.showDraft ? this.draft : this.published;
+    }
   },
   methods: {
   }
