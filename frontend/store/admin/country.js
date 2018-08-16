@@ -6,9 +6,9 @@ export const state = () => ({
 export const getters = {
   getStableCountry: state => state.country,
   getCountry: state => state.editableCountry,
-  getCoverText: state => state.editableCountry.cover_text,
-  getFooterTitle: state => state.editableCountry.footer_title,
-  getFooterText: state => state.editableCountry.footer_text
+  getCoverText: state => state.editableCountry && state.editableCountry.cover_text,
+  getFooterTitle: state => state.editableCountry && state.editableCountry.footer_title,
+  getFooterText: state => state.editableCountry && state.editableCountry.footer_text
 };
 
 export const actions = {
