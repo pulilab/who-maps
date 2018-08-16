@@ -21,7 +21,7 @@
         <el-form-item label="# Facilities">
           <el-input
             :disabled="disableFacilities"
-            :value="facilitiesOrCount"
+            :value="facilities"
             type="number"
             min="0"
             max="10000000"
@@ -74,12 +74,6 @@ export default {
   computed: {
     disableFacilities () {
       return !!(this.disabled || this.selectedFacilities);
-    },
-    facilitiesOrCount () {
-      if (this.selectedFacilities) {
-        return this.selectedFacilities.length;
-      }
-      return this.facilities;
     }
   },
   methods: {
