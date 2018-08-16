@@ -10,7 +10,7 @@
         version of the project.
       </p>
     </div>
-    <project-data draft />>
+    <project-data show-draft />>
   </div>
 </template>
 
