@@ -101,7 +101,8 @@
       </el-form-item>
       <el-form-item
         label="Implementing partners"
-        prop="implementing_partners">
+        prop="implementing_partners"
+        class="ImplementingPartners">
         <el-row
           v-for="(partner, index) in implementing_partners"
           :key="index"
@@ -212,6 +213,16 @@ export default {
           position: absolute;
           top: 0;
           left: 0;
+        }
+      }
+    }
+
+    .ImplementingPartners {
+      .el-row {
+        margin-top: 20px;
+
+        &:first-child {
+          margin: 0;
         }
       }
     }
