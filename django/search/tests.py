@@ -39,3 +39,39 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], Project.objects.published_only().count())
 
+    def test_only_search_term_without_search_in(self):
+        url = reverse("search-project-list")
+        data = {"q": "phrase3"}  # PROJECT NAME
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] >= 1)
+
+        data = {"q": "org1"}  # ORGANISATION
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] >= 1)
+
+        data = {"q": "Hungary"}  # COUNTRY
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] >= 1)
+
+        data = {"q": "overview"}  # OVERVIEW
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] >= 1)
+
+        data = {"q": "dist1"}  # LOCATION
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] >= 1)
+
+        data = {"q": "partner1"}  # PARTNER
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] >= 1)
+
+        data = {"q": "donor1"}  # DONOR
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] >= 1)
