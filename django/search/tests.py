@@ -2,27 +2,17 @@ import copy
 
 from django.urls import reverse
 
-from country.models import Country
-from project.models import Project
 from project.tests import SetupTests
 
 
 class SearchTests(SetupTests):
     def setUp(self):
         super(SearchTests, self).setUp()
-        project = Project.objects.get(id=self.project_id)
-        country = Country.objects.create(name="phrase2", code="PP2")
-
-        project.name = "phrase1 phrase2"
-        project.data['implementation_overview'] = "overview"
-        project.data['country'] = country.id
-        project.save()
-
         # create draft
         url = reverse("project-create")
         project_data2 = copy.deepcopy(self.project_data)
         project_data2.update(name="phrase3 phrase5")
-        project_data2.update(country=country.id)
+        project_data2.update(country=self.country_id)
         response = self.test_user_client.post(url, project_data2, format="json")
         self.assertEqual(response.status_code, 201)
         project_id = response.json()['id']
