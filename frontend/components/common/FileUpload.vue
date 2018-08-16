@@ -3,11 +3,12 @@
     :auto-upload="false"
     :on-remove="handleChange"
     :on-change="handleChange"
-    :list-type="limit === 1 ? 'picture' : 'picture-card'"
+    :list-type="'picture'"
+    :file-list="files"
     class="upload-demo"
     action="doing it manually, so this prop isnt used, still needed">
     <el-row
-      v-if="!files.length && limit === 1"
+      v-if="files.length < limit"
       type="flex">
       <el-button
         icon="el-icon-plus"

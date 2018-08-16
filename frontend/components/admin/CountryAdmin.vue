@@ -3,8 +3,8 @@
 
     <div class="AdminHeading">Country admin</div>
 
-    <!-- <p>{{ country }}</p>
-    <p>partnerLogos {{ partnerLogos.length }}</p> -->
+    <!-- <p>country.logo {{ country.logo }}</p>
+    <p>logo {{ logo }}</p> -->
 
     <collapsible-card title="Country information">
 
@@ -71,7 +71,7 @@
       type="flex"
       justify="space-between">
       <el-button>Dismiss changes</el-button>
-      <el-button>Save changes</el-button>
+      <el-button @click="saveChanges">Save changes</el-button>
     </el-row>
 
   </div>
@@ -96,12 +96,6 @@ export default {
     FileUpload
   },
 
-  data () {
-    return {
-      // partnerLogos: []
-    };
-  },
-
   computed: {
     ...mapGettersActions({
       coverText: ['admin/country', 'getCoverText', 'setCoverText'],
@@ -115,7 +109,16 @@ export default {
 
     logo: {
       get () {
-        return this.country.logo ? [this.country.logo] : [];
+        if (typeof this.country.logo === 'string') {
+          return [{
+            url: this.country.logo,
+            name: this.country.logo.split('/').pop()
+          }];
+        } else if (!this.country.logo) {
+          return [];
+        } else {
+          return [this.country.logo];
+        }
       },
       set ([value]) {
         this.setCountryField({field: 'logo', data: value});
@@ -124,7 +127,16 @@ export default {
 
     cover: {
       get () {
-        return this.country.cover ? [this.country.cover] : [];
+        if (typeof this.country.cover === 'string') {
+          return [{
+            url: this.country.cover,
+            name: this.country.cover.split('/').pop()
+          }];
+        } else if (!this.country.cover) {
+          return [];
+        } else {
+          return [this.country.cover];
+        }
       },
       set ([value]) {
         this.setCountryField({field: 'cover', data: value});
@@ -143,7 +155,8 @@ export default {
 
   methods: {
     ...mapActions({
-      setCountryField: 'admin/country/setCountryField'
+      setCountryField: 'admin/country/setCountryField',
+      saveChanges: 'admin/country/saveChanges'
     })
   }
 };
