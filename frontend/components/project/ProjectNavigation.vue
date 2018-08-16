@@ -4,11 +4,31 @@
     class="ProjectNavigation"
   >
     <el-card :body-style="{ padding: '0px' }">
+      <div
+        v-if="!readonly && !newProject"
+        class="Switch"
+      >
+        Switch view:
+        <el-button-group>
+          <el-button
+            :class="['DraftButton', {'Active': draft}]"
+            :disabled="draft"
+            @click="goToDraft"
+          >
+            Draft
+          </el-button>
+          <el-button
+            :class="['PublishedButton', {'Active': published}]"
+            :disabled="published"
+            @click="goToPublished"
+          >
+            Published
+          </el-button>
+        </el-button-group>
+      </div>
       <div class="Stepper">
         <ul>
-          <!-- TODO -->
-          <!-- Add '.active' class -->
-          <li>
+          <li :class="{active: active === 'general'}">
             <el-button
               type="text"
               @click="scrollTo('general')"
@@ -19,7 +39,7 @@
               General
             </el-button>
           </li>
-          <li>
+          <li :class="{active: active === 'implementation'}">
             <el-button
               type="text"
               @click="scrollTo('implementation')"
@@ -30,7 +50,7 @@
               Implementation
             </el-button>
           </li>
-          <li>
+          <li :class="{active: active === 'technology'}">
             <el-button
               type="text"
               @click="scrollTo('technology')"
@@ -41,7 +61,7 @@
               Technology
             </el-button>
           </li>
-          <li>
+          <li :class="{active: active === 'interoperability'}">
             <el-button
               type="text"
               @click="scrollTo('interoperability')"
@@ -52,7 +72,7 @@
               Interoperability
             </el-button>
           </li>
-          <li>
+          <li :class="{active: active === 'country'}">
             <el-button
               type="text"
               @click="scrollTo('country')"
@@ -63,7 +83,7 @@
               Country Fields
             </el-button>
           </li>
-          <li>
+          <li :class="{active: active === 'donor'}">
             <el-button
               type="text"
               @click="scrollTo('donor')"
@@ -77,14 +97,45 @@
         </ul>
       </div>
 
-      <div class="NavigationActions">
+      <div
+        v-if="!readonly"
+        class="NavigationActions"
+      >
         <el-button
+          v-if="draft"
           type="primary"
           size="medium"
         >
+          Publish
+        </el-button>
+
+        <el-button
+          v-if="newProject || draft"
+          :type="newProject ? 'primary' : 'text'"
+          :size="newProject ? 'medium' : ''"
+          :class="['SaveDraft', {'NewProject': newProject, 'Draft':draft }]"
+        >
           Save draft
         </el-button>
+
         <el-button
+          v-if="draft"
+          type="text"
+          class="DiscardDraft"
+        >
+          Discard draft
+        </el-button>
+
+        <el-button
+          v-if="published"
+          type="text"
+          class="GoToDashboard"
+        >
+          Go to Dashboard
+        </el-button>
+
+        <el-button
+          v-if="newProject"
           type="text"
           class="CancelButton"
         >
@@ -102,12 +153,44 @@ export default {
   directives: {
     'scroll-class': VueScrollClass
   },
+  props: {
+    readonly: {
+      type: Boolean,
+      default: false
+    },
+    newProject: {
+      type: Boolean,
+      default: false
+    },
+    draft: {
+      type: Boolean,
+      default: false
+    },
+    published: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    active () {
+      const hash = this.$route.hash;
+      return hash ? hash.replace('#', '') : 'general';
+    }
+  },
   methods: {
     scrollTo (where) {
       window.location.hash = '';
       this.$nextTick(() => {
         this.$router.replace(`#${where}`);
       });
+    },
+    goToDraft () {
+      const localised = this.localePath({name: 'index-projects-id-edit', params: {...this.$route.params}})
+      this.$router.push(localised);
+    },
+    goToPublished () {
+      const localised = this.localePath({name: 'index-projects-id-published', params: {...this.$route.params}})
+      this.$router.push(localised);
     }
   }
 };
@@ -240,6 +323,10 @@ export default {
       .el-button--primary {
         width: 100%;
         margin: 0 0 20px;
+      }
+
+      .el-button--text {
+        width: 100%;
       }
 
       .CancelButton {
