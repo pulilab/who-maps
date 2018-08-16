@@ -26,9 +26,6 @@ export const coverageMapper = collection => {
       facilities_list: c.facilities_list
     };
   });
-  if (coverage.length === 0) {
-    coverage.push(null);
-  }
   return [coverage, coverageData];
 };
 
@@ -50,8 +47,5 @@ export const platformsMapper = collection => {
     platforms.push(p.id);
     digitalHealthInterventions.push(...p.strategies.map(s => ({id: s, platform: p.id})));
   });
-  if (platforms.length === 0) {
-    platforms.push(null);
-  }
   return [platforms, digitalHealthInterventions];
 };

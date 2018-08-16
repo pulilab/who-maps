@@ -18,7 +18,7 @@ export default {
   components: {
     ProjectForm
   },
-  fetc ({store}) {
+  fetch ({store}) {
     store.dispatch('project/resetProjectState');
   }
 };
