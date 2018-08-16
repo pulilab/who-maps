@@ -13,7 +13,7 @@
           label="Software"
           prop="platforms"
         >
-          <el-col :span="12">
+          <el-col :span="16">
             <platform-selector
               :platforms.sync="platforms"
               :index="index"
@@ -28,8 +28,7 @@
               />
             </el-form-item>
           </el-col>
-          <el-col
-            :span="12">
+          <el-col :span="8">
             <add-rm-buttons
               :show-add="!!platform"
               :show-rm="platforms.length > 1"
@@ -75,7 +74,7 @@
 
         <div
           v-show="coverageType == 2"
-          class="NationalLevelDeployment"
+          class="NationalLevelDeployment ItemIndent"
           prop="national_level_deployment"
         >
           <div class="CoverageSubtitle">
@@ -103,18 +102,19 @@
       </el-form-item>
       <el-form-item
         label="Implementing partners"
-        prop="implementing_partners">
+        prop="implementing_partners"
+        class="ImplementingPartners">
         <el-row
           v-for="(partner, index) in implementing_partners"
           :key="index"
         >
-          <el-col :span="18">
+          <el-col :span="16">
             <el-input
               :value="partner"
               @change="updateImplmeentingPartners($event, index)"
             />
           </el-col>
-          <el-col :span="6">
+          <el-col :span="8">
             <add-rm-buttons
               :show-add="!!partner"
               :show-rm="implementing_partners.length > 1"
@@ -230,16 +230,27 @@ export default {
     .CoverageArea {
       .CoverageSubtitle {
         position: relative;
-        margin-bottom: 20px;
-        padding-left: 24px;
-        font-size: @fontSizeBase;
+        margin-bottom : 20px;
+        padding-left: 20px;
+        font-size: @fontSizeSmall;
         font-weight: 700;
         color: @colorGray;
+        text-transform: uppercase;
 
         .svg-inline--fa {
           position: absolute;
           top: 0;
           left: 0;
+        }
+      }
+    }
+
+    .ImplementingPartners {
+      .el-row {
+        margin-top: 20px;
+
+        &:first-child {
+          margin: 0;
         }
       }
     }

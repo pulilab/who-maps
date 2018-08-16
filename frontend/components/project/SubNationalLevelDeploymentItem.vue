@@ -4,8 +4,8 @@
       <el-select
         :value="subLevel"
         filterable
-        popper-class="SubNationalLevelDeploymentItemDropdown"
-        class="SubNationalLevelDeploymentItem"
+        popper-class="SubNationalLevelDeploymentRegionDropdown"
+        class="SubNationalLevelDeployementRegion"
         placeholder="Select from list"
         @change="changeHandler">
 
@@ -124,9 +124,8 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-  .SubNationalLevelDeploymentItem {
+  .SubNationalLevelDeployementRegion {
     width: 100%;
+    margin-bottom: 20px;
   }
-
-  .SubNationalLevelDeploymentItemDropdown {}
 </style>

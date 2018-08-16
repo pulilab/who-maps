@@ -1,5 +1,5 @@
 <template>
-  <div class="SubNationalLevelDeployment">
+  <div class="SubNationalLevelDeployment ItemIndent">
     <div
       v-if="countrySubLevelNames.first"
       class="FirstSubLevel"
@@ -12,8 +12,9 @@
         v-for="(cov, index) in coverage"
         :key="cov"
         type="flex"
+        class="CoverageWrapper"
       >
-        <el-col :span="12">
+        <el-col :span="16">
           <el-form-item prop="coverage">
             <sub-national-level-deployment-item
               :index="index"
@@ -23,9 +24,7 @@
             />
           </el-form-item>
         </el-col>
-        <el-col
-          :span="12"
-        >
+        <el-col :span="8">
           <add-rm-buttons
             :show-add="!!cov"
             :show-rm="coverage.length > 1"
@@ -48,7 +47,7 @@
         :key="cov"
         type="flex"
       >
-        <el-col :span="12">
+        <el-col :span="16">
           <el-form-item prop="coverageSecondLevel">
             <sub-national-level-deployment-item
               :index="index"
@@ -58,9 +57,7 @@
             />
           </el-form-item>
         </el-col>
-        <el-col
-          :span="12"
-        >
+        <el-col :span="8">
           <add-rm-buttons
             :show-add="!!cov"
             :show-rm="coverageSecondLevel.length > 1"
@@ -138,5 +135,21 @@ export default {
 
   .SubNationalLevelDeployment {
     width: 100%;
+
+    .CoverageWrapper {
+      margin-top: 30px;
+      padding-top: 15px;
+      border-top: 1px solid @colorGrayLight;
+    }
+
+    .CoverageSubtitle + .CoverageWrapper {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    .AddRmButtons {
+      margin-top: 49px;
+    }
   }
 </style>
