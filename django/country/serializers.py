@@ -1,29 +1,10 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.utils.dateformat import format
+from django.db.transaction import atomic
 
+from user.models import UserProfile
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, CountryField, MapFile
-
-
-class CountryListSerializer(serializers.ModelSerializer):
-    map_version = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Country
-        fields = (
-            "id",
-            "name",
-            "code",
-            "project_approval",
-            "map_data",
-            "map_version"
-        )
-
-    @staticmethod
-    def get_map_version(obj):
-        if obj.map_activated_on:
-            return format(obj.map_activated_on, 'U')
-        return 0
 
 
 class PartnerLogoSerializer(serializers.ModelSerializer):
@@ -40,32 +21,91 @@ class DonorPartnerLogoSerializer(serializers.ModelSerializer):
         read_only_fields = ("image_url",)
 
 
-class CountryAdminSerializer(serializers.ModelSerializer):
+COUNTRY_FIELDS = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",
+                  "project_approval", "map_data", "map_version", "map_activated_on",)
+
+
+class SuperAdminCountrySerializer(serializers.ModelSerializer):
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
+    map_version = serializers.SerializerMethodField()
+    user_requests = serializers.SerializerMethodField()
+    admin_requests = serializers.SerializerMethodField()
+    super_admin_requests = serializers.SerializerMethodField()
 
     class Meta:
         model = Country
-        fields = (
-            "id",
-            "name",
-            "code",
-            "logo",
-            "cover",
-            "cover_text",
-            "footer_title",
-            "footer_text",
-            "users",
-            "admins",
-            "super_admins",
-            "partner_logos",
-            "project_approval",
-            "map_data",
-            "map_activated_on",
-        )
-        read_only_fields = ("name", "code", "project_approval", "map_data", "map_activated_on")
+        fields = COUNTRY_FIELDS + ('users', 'admins', 'super_admins', 'user_requests', 'admin_requests',
+                                   'super_admin_requests',)
+        read_only_fields = ("name", "code", "project_approval", "map_data", "map_version", "map_activated_on",)
+
+    @staticmethod
+    def get_map_version(obj):
+        if obj.map_activated_on:
+            return format(obj.map_activated_on, 'U')
+        return 0
+
+    def get_user_requests(self, obj):
+        # figure out not yet assigned users
+        return UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.GOVERNMENT) \
+            .difference(obj.users.all()).values_list('id', flat=True)
+
+    def get_admin_requests(self, obj):
+        # figure out not yet assigned users
+        return UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.COUNTRY_ADMIN) \
+            .difference(obj.admins.all()).values_list('id', flat=True)
+
+    def get_super_admin_requests(self, obj):
+        # figure out not yet assigned users
+        return UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.SUPER_COUNTRY_ADMIN) \
+            .difference(obj.super_admins.all()).values_list('id', flat=True)
+
+    @atomic
+    def update(self, instance, validated_data):
+        # keep original lists for comparison
+        original_users = set(instance.users.all().only('id'))
+        original_admins = set(instance.admins.all().only('id'))
+        original_super_admins = set(instance.super_admins.all().only('id'))
+
+        # perform update
+        instance = super().update(instance, validated_data)
+
+        # figure out the new entities
+        new_users = set(instance.users.all().only('id')) - original_users
+        new_admins = set(instance.admins.all().only('id')) - original_admins
+        new_super_admins = set(instance.super_admins.all().only('id')) - original_super_admins
+
+        # remove new additions from any other user group
+        if new_users:
+            instance.admins.remove(*new_users)
+            instance.super_admins.remove(*new_users)
+
+        if new_admins:
+            instance.users.remove(*new_admins)
+            instance.super_admins.remove(*new_admins)
+
+        if new_super_admins:
+            instance.users.remove(*new_super_admins)
+            instance.admins.remove(*new_super_admins)
+
+        return instance
 
 
-class DonorAdminSerializer(serializers.ModelSerializer):
+class AdminCountrySerializer(SuperAdminCountrySerializer):
+    class Meta(SuperAdminCountrySerializer.Meta):
+        fields = COUNTRY_FIELDS + ('users', 'admins', 'user_requests', 'admin_requests',)
+
+
+class UserCountrySerializer(SuperAdminCountrySerializer):
+    class Meta(SuperAdminCountrySerializer.Meta):
+        fields = COUNTRY_FIELDS + ('users', 'user_requests',)
+
+
+class CountrySerializer(SuperAdminCountrySerializer):
+    class Meta(SuperAdminCountrySerializer.Meta):
+        fields = COUNTRY_FIELDS
+
+
+class DonorSerializer(serializers.ModelSerializer):
     partner_logos = DonorPartnerLogoSerializer(many=True, read_only=True)
 
     class Meta:
@@ -84,18 +124,6 @@ class DonorAdminSerializer(serializers.ModelSerializer):
             "partner_logos",
         )
         read_only_fields = ("name",)
-
-
-class LandingPageSerializer(serializers.ModelSerializer):
-    partner_logos = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Country
-        fields = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos")
-
-    @staticmethod
-    def get_partner_logos(obj):
-        return [p.image_url for p in PartnerLogo.objects.filter(country=obj)]
 
 
 class CountryFieldsListSerializer(serializers.ModelSerializer):

@@ -3,27 +3,37 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 
+from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
 from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo
-from .serializers import CountryListSerializer, LandingPageSerializer, CountryFieldsListSerializer, \
-    CountryFieldsWriteSerializer, CountryMapDataSerializer, CountryAdminSerializer, PartnerLogoSerializer, \
-    DonorAdminSerializer, DonorPartnerLogoSerializer
+from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountryMapDataSerializer, \
+    CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, UserCountrySerializer, \
+    PartnerLogoSerializer, DonorSerializer, DonorPartnerLogoSerializer
 
 
-class CountryListAPIView(generics.ListAPIView):
+class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
+                     viewsets.GenericViewSet):
     queryset = Country.objects.all()
-    serializer_class = CountryListSerializer
-
-
-class CountryAdminViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    queryset = Country.objects.all()
-    serializer_class = CountryAdminSerializer
+    serializer_class = CountrySerializer
     parser_classes = (MultiPartParser, FormParser)
+    lookup_field = "code"
+
+    def get_serializer_class(self):
+        if self.action in ['update', 'retrieve', 'partial_update']:
+            country = self.get_object()
+            profile = self.request.user.userprofile
+            if profile.account_type == UserProfile.GOVERNMENT and profile in country.users.all():
+                return UserCountrySerializer
+            if profile.account_type == UserProfile.COUNTRY_ADMIN and profile in country.admins.all():
+                return AdminCountrySerializer
+            if profile.account_type == UserProfile.SUPER_COUNTRY_ADMIN and profile in country.super_admins.all():
+                return SuperAdminCountrySerializer
+        return super().get_serializer_class()
 
 
-class DonorAdminViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class DonorViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Donor.objects.all()
-    serializer_class = DonorAdminSerializer
+    serializer_class = DonorSerializer
     parser_classes = (MultiPartParser, FormParser)
 
 
@@ -39,12 +49,6 @@ class DonorPartnerLogoViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin
     queryset = DonorPartnerLogo.objects.all()
     serializer_class = DonorPartnerLogoSerializer
     parser_classes = (MultiPartParser, FormParser)
-
-
-class RetrieveLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    queryset = Country.objects.all()
-    serializer_class = LandingPageSerializer
-    lookup_field = "code"
 
 
 class CountryFieldsListView(generics.ListAPIView):
