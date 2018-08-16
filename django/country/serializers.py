@@ -21,50 +21,22 @@ class DonorPartnerLogoSerializer(serializers.ModelSerializer):
         read_only_fields = ("image_url",)
 
 
-class CountrySerializer(serializers.ModelSerializer):
+COUNTRY_FIELDS = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",
+                  "project_approval", "map_data", "map_version", "map_activated_on",)
+
+
+class SuperAdminCountrySerializer(serializers.ModelSerializer):
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
     map_version = serializers.SerializerMethodField()
     user_requests = serializers.SerializerMethodField()
     admin_requests = serializers.SerializerMethodField()
     super_admin_requests = serializers.SerializerMethodField()
 
-    USER_ONLY_FIELDS = ("user_requests", "users",)
-    ADMIN_ONLY_FIELDS = ("admin_requests", "admins",)
-    SUPER_ADMIN_ONLY_FIELDS = ("super_admin_requests", "super_admins",)
-    NON_LIST_FIELDS = USER_ONLY_FIELDS + ADMIN_ONLY_FIELDS + SUPER_ADMIN_ONLY_FIELDS
-
     class Meta:
         model = Country
-        fields = (
-            "id",
-            "name",
-            "code",
-            "logo",
-            "cover",
-            "cover_text",
-            "footer_title",
-            "footer_text",
-            "users",
-            "admins",
-            "super_admins",
-            "partner_logos",
-            "project_approval",
-            "map_data",
-            "map_version",
-            "map_activated_on",
-            "user_requests",
-            "admin_requests",
-            "super_admin_requests",
-        )
+        fields = COUNTRY_FIELDS + ('users', 'admins', 'super_admins', 'user_requests', 'admin_requests',
+                                   'super_admin_requests',)
         read_only_fields = ("name", "code", "project_approval", "map_data", "map_version", "map_activated_on",)
-
-    def __init__(self, *args, **kwargs):
-        # ability to hide fields for different account types and http methods
-        exclude = kwargs.pop('exclude', None)
-        super().__init__(*args, **kwargs)
-        if exclude:
-            for field in exclude:
-                self.fields.pop(field)
 
     @staticmethod
     def get_map_version(obj):
@@ -116,6 +88,21 @@ class CountrySerializer(serializers.ModelSerializer):
             instance.admins.remove(*new_super_admins)
 
         return instance
+
+
+class AdminCountrySerializer(SuperAdminCountrySerializer):
+    class Meta(SuperAdminCountrySerializer.Meta):
+        fields = COUNTRY_FIELDS + ('users', 'admins', 'user_requests', 'admin_requests',)
+
+
+class UserCountrySerializer(SuperAdminCountrySerializer):
+    class Meta(SuperAdminCountrySerializer.Meta):
+        fields = COUNTRY_FIELDS + ('users', 'user_requests',)
+
+
+class CountrySerializer(SuperAdminCountrySerializer):
+    class Meta(SuperAdminCountrySerializer.Meta):
+        fields = COUNTRY_FIELDS
 
 
 class DonorSerializer(serializers.ModelSerializer):

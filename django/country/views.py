@@ -3,10 +3,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 
+from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
 from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo
 from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountryMapDataSerializer, \
-    CountrySerializer, PartnerLogoSerializer, DonorSerializer, DonorPartnerLogoSerializer
+    CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, UserCountrySerializer, \
+    PartnerLogoSerializer, DonorSerializer, DonorPartnerLogoSerializer
 
 
 class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
@@ -17,14 +19,15 @@ class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Retr
     lookup_field = "code"
 
     def get_serializer_class(self):
-        account_type = self.request.user.userprofile.account_type
-        if account_type = UserProfile.IMPLEMENTER:
-            exclude = CountrySerializer.ADMIN_ONLY_FIELDS + CountrySerializer.SUPER_ADMIN_ONLY_FIELDS
-            return super().get_serializer(*args, **kwargs, exclude=exclude)
-        if account_type = UserProfile.COUNTRY_ADMIN:
-            return super().get_serializer(*args, **kwargs, exclude=CountrySerializer.SUPER_ADMIN_ONLY_FIELDS)
-        if account_type = UserProfile.SUPER_COUNTRY_ADMIN:
-            return super().get_serializer(*args, **kwargs)
+        if self.action in ['update', 'retrieve', 'partial_update']:
+            country = self.get_object()
+            profile = self.request.user.userprofile
+            if profile.account_type == UserProfile.GOVERNMENT and profile in country.users.all():
+                return UserCountrySerializer
+            if profile.account_type == UserProfile.COUNTRY_ADMIN and profile in country.admins.all():
+                return AdminCountrySerializer
+            if profile.account_type == UserProfile.SUPER_COUNTRY_ADMIN and profile in country.super_admins.all():
+                return SuperAdminCountrySerializer
         return super().get_serializer_class()
 
 

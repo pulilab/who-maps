@@ -96,7 +96,6 @@ class CountryTests(APITestCase):
         self.assertIn("cover", response_keys)
         self.assertIn("cover_text", response_keys)
         self.assertIn("footer_text", response_keys)
-        self.assertIn("users", response_keys)
         self.assertIn("map_data", response_keys)
 
     def test_country_admin_update(self):
@@ -122,6 +121,45 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_country_admin_retrieve_user_requests(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(account_type=UserProfile.GOVERNMENT,
+                                                                                country=self.country)
+        self.country.users.add(self.test_user['user_profile_id'])
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
+                                                  account_type=UserProfile.GOVERNMENT)
+
+        url = reverse("country-detail", kwargs={"code": self.country.code})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["user_requests"], [userprofile1.id])
+        self.assertTrue("admin_requests" not in response.json().keys())
+        self.assertTrue("super_admin_requests" not in response.json().keys())
+
+    def test_country_admin_retrieve_admin_requests(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(account_type=UserProfile.COUNTRY_ADMIN,
+                                                                                country=self.country)
+        self.country.admins.add(self.test_user['user_profile_id'])
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
+                                                  account_type=UserProfile.GOVERNMENT)
+        user2 = User.objects.create(username="test2", password="12345678")
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
+                                                  account_type=UserProfile.COUNTRY_ADMIN)
+
+        url = reverse("country-detail", kwargs={"code": self.country.code})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["user_requests"], [userprofile1.id])
+        self.assertEqual(response.json()["admin_requests"], [userprofile2.id])
+        self.assertTrue("super_admin_requests" not in response.json().keys())
+
+    def test_country_admin_retrieve_super_admin_requests(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
         user1 = User.objects.create(username="test1", password="12345678")
         userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
                                                   account_type=UserProfile.GOVERNMENT)
@@ -139,31 +177,61 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()["admin_requests"], [userprofile2.id])
         self.assertEqual(response.json()["super_admin_requests"], [userprofile3.id])
 
-    def test_country_admin_update_users(self):
+    def test_country_admin_update_users_remove_from_other_group(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
         url = reverse("country-detail", kwargs={"code": self.country.code})
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
+                                                  account_type=UserProfile.GOVERNMENT)
         data = {
-            "users": [self.test_user['user_profile_id']]
+            "users": [userprofile1.id]
         }
         response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['users'], [self.test_user['user_profile_id']])
+        self.assertEqual(response.json()['users'], [userprofile1.id])
 
+        UserProfile.objects.filter(id=userprofile1.id).update(
+            account_type=UserProfile.COUNTRY_ADMIN, country=self.country)
         data = {
-            "admins": [self.test_user['user_profile_id']]
+            "admins": [userprofile1.id]
         }
         response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['users'], [])
-        self.assertEqual(response.json()['admins'], [self.test_user['user_profile_id']])
+        self.assertEqual(response.json()['admins'], [userprofile1.id])
 
+        UserProfile.objects.filter(id=userprofile1.id).update(
+            account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
         data = {
-            "super_admins": [self.test_user['user_profile_id']]
+            "super_admins": [userprofile1.id]
         }
         response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['users'], [])
         self.assertEqual(response.json()['admins'], [])
-        self.assertEqual(response.json()['super_admins'], [self.test_user['user_profile_id']])
+        self.assertEqual(response.json()['super_admins'], [userprofile1.id])
+
+    # def test_country_admin_update_admin_without_perm(self):
+    #     UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+    #         account_type=UserProfile.GOVERNMENT, country=self.country)
+    #     self.country.users.add(self.test_user['user_profile_id'])
+    #
+    #     url = reverse("country-detail", kwargs={"code": self.country.code})
+    #
+    #     user1 = User.objects.create(username="test1", password="12345678")
+    #     userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
+    #                                               account_type=UserProfile.COUNTRY_ADMIN)
+    #     data = {
+    #         "admins": [userprofile1.id]
+    #     }
+    #     response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+    #     print(response.json())
+    #     print(response.status_code)
+    #     self.assertEqual(response.status_code, 400)
 
     def test_country_partner_logos_create(self):
         url = reverse("country-partner-logo-list")
