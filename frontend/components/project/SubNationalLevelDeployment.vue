@@ -4,8 +4,8 @@
       v-if="countrySubLevelNames.first"
       class="FirstSubLevel"
     >
-      <div class="Header">
-        <fa icon="map-marker" />
+      <div class="CoverageSubtitle">
+        <fa icon="map-marker-alt" />
         {{ countrySubLevelNames.first }} level deployment
       </div>
       <el-row
@@ -39,8 +39,8 @@
       v-if="countrySubLevelNames.second"
       class="SecondSubLevel"
     >
-      <div class="Header">
-        <fa icon="map-marker" />
+      <div class="CoverageSubtitle">
+        <fa icon="map-marker-alt" />
         {{ countrySubLevelNames.second }} level deployment
       </div>
       <el-row
@@ -133,8 +133,10 @@ export default {
 </script>
 
 <style lang="less">
-.SubNationalLevelDeployment {
-  width: 100%;
-}
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
+  .SubNationalLevelDeployment {
+    width: 100%;
+  }
 </style>

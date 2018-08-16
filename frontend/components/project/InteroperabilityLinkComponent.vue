@@ -1,5 +1,5 @@
 <template>
-  <el-row>
+  <el-row class="CheckboxAndLink">
     <el-col :span="12">
       <el-checkbox
         :value="selected"
@@ -60,6 +60,28 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
+  .CheckboxAndLink {
+    margin-bottom: 20px;
+
+    .el-checkbox {
+      padding-right: 30px;
+      box-sizing: border-box;
+      line-height: 19px;
+      padding: 10px 0;
+
+      .el-checkbox__input {
+        vertical-align: top;
+        top: 2px;
+      }
+
+      .el-checkbox__label {
+        white-space: normal;
+        padding-right: 30px;
+      }
+    }
+  }
 </style>

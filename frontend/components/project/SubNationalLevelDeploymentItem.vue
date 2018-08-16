@@ -121,10 +121,12 @@ export default {
 </script>
 
 <style lang="less">
-.SubNationalLevelDeploymentItem {
-  width: 100%;
-}
-.SubNationalLevelDeploymentItemDropdown {
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
-}
+  .SubNationalLevelDeploymentItem {
+    width: 100%;
+  }
+
+  .SubNationalLevelDeploymentItemDropdown {}
 </style>

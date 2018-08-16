@@ -434,7 +434,7 @@ fieldset {
       &.OnePerRow {
         > .el-checkbox {
           display: block;
-          margin-left: 30px;
+          margin: 0;
         }
       }
 
@@ -472,10 +472,14 @@ fieldset {
     }
 
     .el-radio-group {
+      .el-radio {
+        line-height: 40px;
+      }
+
       &.OnePerRow {
         > .el-radio {
           display: block;
-          margin-left: 30px;
+          margin: 0;
         }
       }
     }
@@ -487,6 +491,12 @@ fieldset {
       line-height: 14px;
       color: @colorTextMuted;
     }
+  }
+
+  .ItemIndent {
+    margin: 30px 0 30px 2px;
+    padding-left: 30px;
+    border-left: 5px solid @colorGrayLight;
   }
 }
 

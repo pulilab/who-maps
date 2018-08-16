@@ -39,21 +39,25 @@
           </el-col>
         </el-form-item>
       </el-form-item>
+
       <el-form-item
         label="Health focus area(s) - select all that apply:"
         prop="health_focus_areas">
         <health-focus-areas-selector v-model="health_focus_areas" />
       </el-form-item>
+
       <el-form-item
         label="What are the Health System Challenges (HSC) your project addresses?"
         prop="hsc_challenges">
         <health-system-challenges-selector v-model="hsc_challenges" />
       </el-form-item>
+
       <el-form-item
         label="What part(s) of the Health Information System (HIS) does this project support?"
         prop="his_bucket">
         <his-bucket-selector v-model="his_bucket" />
       </el-form-item>
+
       <div class="CoverageArea">
         <el-form-item
           label="What kind of coverage does your project have?"
@@ -64,16 +68,20 @@
             <el-radio :label="2">National</el-radio>
           </el-radio-group>
         </el-form-item>
+
         <sub-national-level-deployment
           v-show="coverageType == 1"
         />
+
         <div
           v-show="coverageType == 2"
           class="NationalLevelDeployment"
           prop="national_level_deployment"
         >
-          <fa icon="flag" />
-          National level deployment
+          <div class="CoverageSubtitle">
+            <fa icon="flag" />
+            National level deployment
+          </div>
           <coverage-fieldset
             :health-workers.sync="national_level_deployment.health_workers"
             :clients.sync="national_level_deployment.clients"
@@ -84,7 +92,9 @@
       <el-form-item
         label="Has the government financially invested in the project?"
         prop="government_investor">
-        <el-radio-group v-model="government_investor">
+        <el-radio-group
+          v-model="government_investor"
+          class="OnePerRow">
           <el-radio :label="1">No, they have not yet contributed</el-radio>
           <el-radio :label="2">Yes, they are contributing in-kind people or time</el-radio>
           <el-radio :label="3">Yes, there is a financial contribution through MOH budget</el-radio>
@@ -188,5 +198,22 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-  .ImplementationOverview {}
+  .ImplementationOverview {
+    .CoverageArea {
+      .CoverageSubtitle {
+        position: relative;
+        margin-bottom: 20px;
+        padding-left: 24px;
+        font-size: @fontSizeBase;
+        font-weight: 700;
+        color: @colorGray;
+
+        .svg-inline--fa {
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      }
+    }
+  }
 </style>
