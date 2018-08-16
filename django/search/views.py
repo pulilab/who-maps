@@ -1,8 +1,11 @@
+from collections import OrderedDict
+
 from django.core.paginator import Paginator
 from django.utils.functional import cached_property
 
 from rest_framework import filters, mixins
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from .serializers import MapResultSerializer, ListResultSerializer
@@ -21,6 +24,13 @@ class ResultsSetPagination(PageNumberPagination):
     max_page_size = 1000
     django_paginator_class = FastCountPaginator
 
+    def get_paginated_response(self, data):
+        return Response(OrderedDict([
+            ('count', self.page.paginator.count),
+            ('next', self.page.next_page_number() if self.page.has_next() else None),
+            ('previous', self.page.previous_page_number() if self.page.has_previous() else None),
+            ('results', data)
+        ]))
 
 class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
     search = ProjectSearch.search
