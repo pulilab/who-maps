@@ -2,6 +2,7 @@ import copy
 
 from django.urls import reverse
 
+from project.models import Project
 from project.tests import SetupTests
 
 
@@ -31,3 +32,10 @@ class SearchTests(SetupTests):
         self.assertEqual(response.json()['count'], 0)
         self.assertEqual(response.json()['results'],
                          {'projects': [], 'search_term': 'phrase2', 'search_in': [], 'type': 'map'})
+
+    def test_no_query_params_returns_all_published_projects(self):
+        url = reverse("search-project-list")
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], Project.objects.published_only().count())
+
