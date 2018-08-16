@@ -68,6 +68,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
     filter_backends = (filters.OrderingFilter,)
     # TODO: add country__region
     ordering_fields = ('project__name', 'organisation__name', 'country__name', 'project__data__government_investor', )
+    ordering = ('project_id',)
     pagination_class = ResultsSetPagination
 
     def get_queryset(self):
