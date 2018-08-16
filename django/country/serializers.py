@@ -28,6 +28,11 @@ class CountrySerializer(serializers.ModelSerializer):
     admin_requests = serializers.SerializerMethodField()
     super_admin_requests = serializers.SerializerMethodField()
 
+    USER_ONLY_FIELDS = ("user_requests", "users",)
+    ADMIN_ONLY_FIELDS = ("admin_requests", "admins",)
+    SUPER_ADMIN_ONLY_FIELDS = ("super_admin_requests", "super_admins",)
+    NON_LIST_FIELDS = USER_ONLY_FIELDS + ADMIN_ONLY_FIELDS + SUPER_ADMIN_ONLY_FIELDS
+
     class Meta:
         model = Country
         fields = (
@@ -53,6 +58,14 @@ class CountrySerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("name", "code", "project_approval", "map_data", "map_version", "map_activated_on",)
 
+    def __init__(self, *args, **kwargs):
+        # ability to hide fields for different account types and http methods
+        exclude = kwargs.pop('exclude', None)
+        super().__init__(*args, **kwargs)
+        if exclude:
+            for field in exclude:
+                self.fields.pop(field)
+
     @staticmethod
     def get_map_version(obj):
         if obj.map_activated_on:
@@ -61,33 +74,33 @@ class CountrySerializer(serializers.ModelSerializer):
 
     def get_user_requests(self, obj):
         # figure out not yet assigned users
-        return UserProfile.objects.filter(country=obj, account_type=UserProfile.GOVERNMENT) \
+        return UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.GOVERNMENT) \
             .difference(obj.users.all()).values_list('id', flat=True)
 
     def get_admin_requests(self, obj):
         # figure out not yet assigned users
-        return UserProfile.objects.filter(country=obj, account_type=UserProfile.COUNTRY_ADMIN) \
+        return UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.COUNTRY_ADMIN) \
             .difference(obj.admins.all()).values_list('id', flat=True)
 
     def get_super_admin_requests(self, obj):
         # figure out not yet assigned users
-        return UserProfile.objects.filter(country=obj, account_type=UserProfile.SUPER_COUNTRY_ADMIN) \
+        return UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.SUPER_COUNTRY_ADMIN) \
             .difference(obj.super_admins.all()).values_list('id', flat=True)
 
     @atomic
     def update(self, instance, validated_data):
         # keep original lists for comparison
-        original_users = set(instance.users.all())
-        original_admins = set(instance.admins.all())
-        original_super_admins = set(instance.super_admins.all())
+        original_users = set(instance.users.all().only('id'))
+        original_admins = set(instance.admins.all().only('id'))
+        original_super_admins = set(instance.super_admins.all().only('id'))
 
         # perform update
         instance = super().update(instance, validated_data)
 
         # figure out the new entities
-        new_users = set(instance.users.all()) - original_users
-        new_admins = set(instance.admins.all()) - original_admins
-        new_super_admins = set(instance.super_admins.all()) - original_super_admins
+        new_users = set(instance.users.all().only('id')) - original_users
+        new_admins = set(instance.admins.all().only('id')) - original_admins
+        new_super_admins = set(instance.super_admins.all().only('id')) - original_super_admins
 
         # remove new additions from any other user group
         if new_users:

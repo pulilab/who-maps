@@ -16,6 +16,17 @@ class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Retr
     parser_classes = (MultiPartParser, FormParser)
     lookup_field = "code"
 
+    def get_serializer_class(self):
+        account_type = self.request.user.userprofile.account_type
+        if account_type = UserProfile.IMPLEMENTER:
+            exclude = CountrySerializer.ADMIN_ONLY_FIELDS + CountrySerializer.SUPER_ADMIN_ONLY_FIELDS
+            return super().get_serializer(*args, **kwargs, exclude=exclude)
+        if account_type = UserProfile.COUNTRY_ADMIN:
+            return super().get_serializer(*args, **kwargs, exclude=CountrySerializer.SUPER_ADMIN_ONLY_FIELDS)
+        if account_type = UserProfile.SUPER_COUNTRY_ADMIN:
+            return super().get_serializer(*args, **kwargs)
+        return super().get_serializer_class()
+
 
 class DonorViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Donor.objects.all()
