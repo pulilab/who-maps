@@ -197,12 +197,25 @@ export const actions = {
       const { data } = await this.$axios.get('/api/projects/structure/');
       commit('SET_PROJECT_STRUCTURE', data);
     }
+  },
+  addProjectToList ({commit}, project) {
+    commit('ADD_USER_PROJECT', project);
+  },
+  updateProject ({commit}, project) {
+    commit('EDIT_USER_PROJECT', project);
   }
 };
 
 export const mutations = {
   SET_USER_PROJECT_LIST: (state, projects) => {
     state.userProjects = projects;
+  },
+  ADD_USER_PROJECT: (state, project) => {
+    state.userProjects.push(project);
+  },
+  EDIT_USER_PROJECT: (state, project) => {
+    const index = state.userProjects.findIndex(p => p.id === project.id);
+    state.userProjects.splice(0, index, project);
   },
   SET_CURRENT_PROJECT: (state, project) => {
     state.currentProject = project;
