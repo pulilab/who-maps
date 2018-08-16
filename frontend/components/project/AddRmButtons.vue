@@ -6,15 +6,15 @@
       class="AddButton IconLeft"
       @click="$emit('add')">
       <fa icon="plus" />
-      Add more
+      Add
     </el-button>
     <el-button
       v-show="showRm"
       type="text"
-      class="RemoveButton IViewert"
+      class="DeleteButton IViewert"
       @click="$emit('rm')">
       <fa icon="minus" />
-      Remove
+      Delete
     </el-button>
   </div>
 </template>
@@ -39,11 +39,14 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .AddRmButtons {
-    padding: 0 30px;
+    padding-left: 30px;
 
-    .RemoveButton {
+    .DeleteButton {
       margin-left: 30px;
-      color: @colorDanger;
+    }
+
+    .svg-inline--fa {
+      width: 16px;
     }
   }
 

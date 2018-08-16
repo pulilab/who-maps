@@ -1,9 +1,8 @@
 <template>
-  <div class="CoverageFieldset ItemIndent">
+  <div class="CoverageFieldset">
     <el-row
       :gutter="20"
       type="flex"
-      class="ItemIndent"
     >
       <el-col :span="8">
         <el-form-item label="# Health workers">
@@ -96,6 +95,9 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
+  .CoverageFieldset {}
 </style>

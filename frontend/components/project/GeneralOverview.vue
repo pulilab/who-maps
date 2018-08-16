@@ -27,7 +27,7 @@
         />
         <span class="Hint">
           <fa icon="info-circle" />
-          Please describe where your implementation is currently taking place
+          <p>Please describe where your implementation is currently taking place</p>
         </span>
       </el-form-item>
       <el-form-item
@@ -39,7 +39,7 @@
         />
         <span class="Hint">
           <fa icon="info-circle" />
-          Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
+          <p>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.</p>
         </span>
       </el-form-item>
       <el-form-item
@@ -51,7 +51,7 @@
         />
         <span class="Hint">
           <fa icon="info-circle" />
-          Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
+          <p>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.</p>
         </span>
       </el-form-item>
       <el-row
