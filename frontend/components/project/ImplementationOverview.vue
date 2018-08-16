@@ -83,9 +83,10 @@
             National level deployment
           </div>
           <coverage-fieldset
-            :health-workers.sync="national_level_deployment.health_workers"
-            :clients.sync="national_level_deployment.clients"
-            :facilities.sync="national_level_deployment.facilities"
+            :disabled="false"
+            :health-workers.sync="healthWorkers"
+            :clients.sync="clients"
+            :facilities.sync="facilities"
           />
         </div>
       </div>
@@ -95,9 +96,9 @@
         <el-radio-group
           v-model="government_investor"
           class="OnePerRow">
-          <el-radio :label="1">No, they have not yet contributed</el-radio>
-          <el-radio :label="2">Yes, they are contributing in-kind people or time</el-radio>
-          <el-radio :label="3">Yes, there is a financial contribution through MOH budget</el-radio>
+          <el-radio :label="0">No, they have not yet contributed</el-radio>
+          <el-radio :label="1">Yes, they are contributing in-kind people or time</el-radio>
+          <el-radio :label="2">Yes, there is a financial contribution through MOH budget</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item
@@ -163,7 +164,34 @@ export default {
       national_level_deployment: ['project', 'getNationalLevelDeployment', 'setNationalLevelDeployment', 0],
       government_investor: ['project', 'getGovernmentInvestor', 'setGovernmentInvestor', 0],
       implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners', 300]
-    })
+    }),
+    healthWorkers: {
+      get () {
+        return this.national_level_deployment ? this.national_level_deployment.health_workers : null;
+      },
+      set (value) {
+        const coverage = {...this.national_level_deployment, health_workers: value};
+        this.national_level_deployment = coverage;
+      }
+    },
+    clients: {
+      get () {
+        return this.national_level_deployment ? this.national_level_deployment.clients : null;
+      },
+      set (value) {
+        const coverage = {...this.national_level_deployment, clients: value};
+        this.national_level_deployment = coverage;
+      }
+    },
+    facilities: {
+      get () {
+        return this.national_level_deployment ? this.national_level_deployment.facilities : null;
+      },
+      set (value) {
+        const coverage = {...this.national_level_deployment, facilities: value};
+        this.national_level_deployment = coverage;
+      }
+    }
   },
   mounted () {
     this.$emit('mounted');
