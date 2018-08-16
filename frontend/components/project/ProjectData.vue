@@ -3,7 +3,9 @@
     <el-row
       type="flex">
       <el-col :span="18">
-        <collapsible-card title="1. General Overview">
+        <collapsible-card
+          id="general"
+          title="1. General Overview">
 
           <simple-field
             :content="project.name"
@@ -36,12 +38,14 @@
             <el-col :span="12">
               <simple-field
                 :content="project.start_date"
+                date
                 header="Project start date"
               />
             </el-col>
             <el-col :span="12">
               <simple-field
                 :content="project.end_date"
+                date
                 header="Project end date"
               />
             </el-col>
@@ -74,7 +78,9 @@
           </div>
         </collapsible-card>
 
-        <collapsible-card title="1. Implementation Overview">
+        <collapsible-card
+          id="implementation"
+          title="2. Implementation Overview">
 
           <simple-field
             header="Software and related Digital Health Interventions (DHI)"
@@ -118,12 +124,95 @@
                 :list="['Sub National', 'National']"
               />
             </simple-field>
+            <simple-field class="NationalLevelDeployment">
+              <div slot="header">
+                <fa icon="flag" />
+                National Level Deployment
+              </div>
+              <coverage-field :coverage="project.national_level_deployment" />
+            </simple-field>
+            <sub-level-coverage-field
+              :coverage="project.coverage"
+              :coverage-data="project.coverageData"
+              :coverage-second-level="project.coverageSecondLevel"
+            />
           </div>
+
+          <simple-field header="Has the government financially invested in the project?">
+            <type-field
+              :value="project.government_investor"
+              :list="['No, they have not yet contributed', 'Yes, they are contributing in-kind people or time', 'Yes, there is a financial contribution through MOH budget']"
+            />
+          </simple-field>
+
+          <simple-field header="Implementing partner(s)">
+            <ul>
+              <li
+                v-for="(partner, index) in project.implementing_partners"
+                :key="index">
+                {{ partner }}
+              </li>
+            </ul>
+          </simple-field>
+        </collapsible-card>
+
+        <collapsible-card
+          id="technology"
+          title="3. Techonology overview">
+          <simple-field
+            :content="project.implementation_dates"
+            date
+            header="Technology deployment date"
+          />
+
+          <simple-field
+            header="Under what license is the project governed"
+          >
+            <licenses-list :value="project.licenses" />
+          </simple-field>
+
+          <simple-field
+            :content="project.repository"
+            link
+            header="Code documentation or dowlonad link"
+          />
+
+          <simple-field
+            :content="project.mobile_application"
+            link
+            header="Link to the application"
+          />
+
+          <simple-field
+            :content="project.wiki"
+            link
+            header="Link to wiki or project webside"
+          />
+
+        </collapsible-card>
+
+        <collapsible-card
+          id="interoperability"
+          title="4. Interoperability &amp; standards">
+          <simple-field
+            header="What other system do you interoperate with ?"
+          >
+            <interoperability-links-list :value="project.interoperability_links" />
+          </simple-field>
+
+          <simple-field
+            header="What data standards does your digital health project use?"
+          >
+            <standards-list :value="project.interoperability_standards" />
+          </simple-field>
 
         </collapsible-card>
       </el-col>
       <el-col :span="6">
-        <project-navigation />
+        <project-navigation
+          :readonly="readOnly"
+          :published="!showDraft && !readOnly"
+        />
       </el-col>
     </el-row>
   </div>
@@ -141,6 +230,12 @@ import HealthFocusAreasList from './HealthFocusAreasList';
 import HealthSystemChallengesList from './HealthSystemChallengesList';
 import HisBucketList from './HisBucketList';
 import TypeField from './TypeField';
+import CoverageField from './CoverageField';
+import SubLevelCoverageField from './SubLevelCoverageField';
+import LicensesList from './LicensesList';
+import StandardsList from './StandardsList';
+import InteroperabilityLinksList from './InteroperabilityLinksList';
+
 import { mapGetters } from 'vuex';
 
 export default {
@@ -155,12 +250,35 @@ export default {
     HealthFocusAreasList,
     HealthSystemChallengesList,
     HisBucketList,
-    TypeField
+    TypeField,
+    CoverageField,
+    SubLevelCoverageField,
+    LicensesList,
+    StandardsList,
+    InteroperabilityLinksList
+  },
+  props: {
+    showDraft: {
+      type: Boolean,
+      default: null
+    }
   },
   computed: {
     ...mapGetters({
-      project: 'project/getProjectData'
-    })
+      draft: 'project/getProjectData',
+      published: 'project/getPublished',
+      user: 'user/getProfile'
+    }),
+    project () {
+      return this.showDraft ? this.draft : this.published;
+    },
+    readOnly () {
+      if (this.user) {
+        const all = [...this.user.member, ...this.user.viewer];
+        return !all.includes(+this.$route.params.id);
+      }
+      return true;
+    }
   },
   methods: {
   }

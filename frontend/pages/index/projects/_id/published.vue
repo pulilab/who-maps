@@ -1,10 +1,10 @@
 <template>
   <div class="ProjectPublishedView">
     <div class="PageTitle">
-      <h2>Edit Project Info</h2>
+      <h2>View Project Info</h2>
       <p>
         You are viewing the
-        <span class="DrafBit">
+        <span class="PublishedLabel">
           Published
         </span>
         version of the project.
