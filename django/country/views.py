@@ -7,8 +7,8 @@ from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
 from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo
 from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountryMapDataSerializer, \
-    CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, UserCountrySerializer, \
-    PartnerLogoSerializer, DonorSerializer, DonorPartnerLogoSerializer
+    CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, PartnerLogoSerializer, DonorSerializer, \
+    DonorPartnerLogoSerializer
 
 
 class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
@@ -23,8 +23,6 @@ class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Retr
                 and self.request.user.is_authenticated:
             country = self.get_object()
             profile = self.request.user.userprofile
-            if profile.account_type == UserProfile.GOVERNMENT and profile in country.users.all():
-                return UserCountrySerializer
             if profile.account_type == UserProfile.COUNTRY_ADMIN and profile in country.admins.all():
                 return AdminCountrySerializer
             if profile.account_type == UserProfile.SUPER_COUNTRY_ADMIN and profile in country.super_admins.all():
