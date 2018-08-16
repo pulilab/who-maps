@@ -19,7 +19,7 @@ class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Retr
     lookup_field = "code"
 
     def get_serializer_class(self):
-        if self.action in ['update', 'retrieve', 'partial_update']:
+        if self.action in ['update', 'retrieve', 'partial_update'] and self.request.user.is_authenticated:
             country = self.get_object()
             profile = self.request.user.userprofile
             if profile.account_type == UserProfile.GOVERNMENT and profile in country.users.all():
