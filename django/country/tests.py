@@ -120,6 +120,25 @@ class CountryTests(APITestCase):
         response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
 
+    def test_country_admin_delete_images(self):
+        url = reverse("country-detail", kwargs={"code": self.country.code})
+        cover = get_temp_image("cover")
+        logo = get_temp_image("logo")
+        data = {
+            "cover": cover,
+            "logo": logo
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        data = {
+            "cover": "",
+            "logo": ""
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["logo"], None)
+        self.assertEqual(response.json()["cover"], None)
+
     def test_country_admin_retrieve_user_requests(self):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(account_type=UserProfile.GOVERNMENT,
                                                                                 country=self.country)
