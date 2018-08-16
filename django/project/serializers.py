@@ -227,6 +227,8 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         read_only_fields = ("id",)
 
     def update(self, instance, validated_data):
+        self._send_notification(instance, validated_data)
+
         # don't allow empty team, so no orphan projects
         if 'team' in validated_data and isinstance(validated_data['team'], list):
             instance.team.set(validated_data.get('team') or instance.team.all())
@@ -234,8 +236,6 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         # a project however can exist without viewers
         if 'viewers' in validated_data and isinstance(validated_data['viewers'], list):
             instance.viewers.set(validated_data['viewers'])
-
-        self._send_notification(instance, validated_data)
 
         instance.save()
 
