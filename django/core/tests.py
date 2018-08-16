@@ -55,27 +55,18 @@ class TestAdminWidgets(TestCase):
 
     def test_render_empty(self):
         rendered_output = self.widget.render('test', [])
-        self.assertEqual(rendered_output,
-                         '<ul id="test" data-element-counter="1" class="arrayfield-list"style="padding: 0; margin: 0; '
-                         'display: none;"><input type="text" name="test_0" class="vTextField" />'
-                         '<li style="list-style-type: none;"><a href="#" '
-                         'class="add-arraywidget-item">Add new entry</a></li></ul>')
+        self.assertIn('class="add-arraywidget-item">', rendered_output)
 
     def test_render_values(self):
         rendered_output = self.widget.render('test', ['first value'])
-        self.assertEqual(rendered_output,
-                         '<ul id="test" data-element-counter="1" class="arrayfield-list"style="padding: 0; margin: 0; '
-                         'display: none;"><input type="text" name="test_0" value="first value" class="vTextField" />'
-                         '<li style="list-style-type: none;"><a href="#" '
-                         'class="add-arraywidget-item">Add new entry</a></li></ul>')
+        self.assertIn('class="arrayfield-list"', rendered_output)
+        self.assertIn('value="first value"', rendered_output)
 
     def test_format_output(self):
         formatted_output = self.widget.format_output(['First widget', 'Second widget'])
-        self.assertEqual(formatted_output,
-                         '<li style="list-style-type: none;">First widget<a href="#" class="delete-arraywidget-item" '
-                         'style="color: #CC3434; padding-left: 8px">Delete</a></li>\n'
-                         '<li style="list-style-type: none;">Second widget<a href="#" class="delete-arraywidget-item" '
-                         'style="color: #CC3434; padding-left: 8px">Delete</a></li>')
+        self.assertIn('class="delete-arraywidget-item"', formatted_output)
+        self.assertIn('First widget', formatted_output)
+        self.assertIn('Second widget', formatted_output)
 
     def test_values_from_datadict(self):
         data = {'country_0': '0',
