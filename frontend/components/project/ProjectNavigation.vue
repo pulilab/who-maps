@@ -114,6 +114,7 @@
           :type="newProject ? 'primary' : 'text'"
           :size="newProject ? 'medium' : ''"
           :class="['SaveDraft', {'NewProject': newProject, 'Draft':draft }]"
+          @click="$emit('saveDraft')"
         >
           Save draft
         </el-button>
