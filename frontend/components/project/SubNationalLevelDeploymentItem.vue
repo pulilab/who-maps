@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     ...mapGettersActions({
-      coverageData: ['project', 'getCoverageData', 'setCoverageData']
+      coverageData: ['project', 'getCoverageData', 'setCoverageData', 0]
     }),
     subLevel () {
       return this.coverage[this.index];
@@ -78,7 +78,7 @@ export default {
         return this.localCoverageData ? this.localCoverageData.facilities_list : [];
       },
       set (value) {
-        const coverage = {facilities_list: [...value]};
+        const coverage = {facilities_list: [...value], facilities: value.length};
         this.coverageData = {coverage, subLevel: this.subLevel};
       }
     },
