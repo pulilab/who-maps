@@ -91,7 +91,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         ordering: project__name | organisation__name | country__name |
                   project__data__government_investor | country__region
 
-        ** PAGINATION**
+        ** PAGINATION **
         page: 1...n
         page_size: eg: 20
         """
