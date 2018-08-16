@@ -22,7 +22,9 @@
           <interoperability-and-standards @mounted="mountedHandler"/>
         </el-col>
         <el-col :span="6">
-          <project-navigation :draft="isDraft" />
+          <project-navigation
+            :draft="isDraft"
+            :new-project="isNewProject" />
         </el-col>
       </el-row>
     </el-form>
@@ -57,6 +59,9 @@ export default {
     }),
     isDraft () {
       return this.$route.name.includes('index-projects-id-edit');
+    },
+    isNewProject () {
+      return this.$route.name.includes('index-projects-create');
     },
     showForm () {
       return this.readyElements === this.maxElements;
