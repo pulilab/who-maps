@@ -102,7 +102,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
                   project__data__government_investor | country__region
 
         ** PAGINATION **
-        page: 1...n
+        page: 1...n | last (will show the last page no matter the number)
         page_size: eg: 20
         """
         results = {}
