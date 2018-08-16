@@ -32,6 +32,7 @@ class ResultsSetPagination(PageNumberPagination):
             ('results', data)
         ]))
 
+
 class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
     search = ProjectSearch.search
     filter = ProjectSearch.filter
