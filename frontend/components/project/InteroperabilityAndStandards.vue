@@ -5,8 +5,7 @@
     <collapsible-card title="Interoperability &amp; Standards">
       <el-form-item
         label="Does your digital health project link to a digital HIS?"
-        prop="interoperability_links"
-        class="ExtraMarginBottom">
+        prop="interoperability_links">
         <interoperability-link-component
           v-for="ir in interopearilbityLinksStructure"
           :key="ir.id"

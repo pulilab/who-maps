@@ -1,8 +1,9 @@
 <template>
-  <div class="CoverageFieldset">
+  <div class="CoverageFieldset ItemIndent">
     <el-row
       :gutter="20"
       type="flex"
+      class="ItemIndent"
     >
       <el-col :span="8">
         <el-form-item label="# Health workers">
