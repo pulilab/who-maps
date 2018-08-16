@@ -3,7 +3,9 @@
     <el-row
       type="flex">
       <el-col :span="18">
-        <collapsible-card title="1. General Overview">
+        <collapsible-card
+          id="general"
+          title="1. General Overview">
 
           <simple-field
             :content="project.name"
@@ -76,7 +78,9 @@
           </div>
         </collapsible-card>
 
-        <collapsible-card title="2. Implementation Overview">
+        <collapsible-card
+          id="implementation"
+          title="2. Implementation Overview">
 
           <simple-field
             header="Software and related Digital Health Interventions (DHI)"
@@ -152,7 +156,9 @@
           </simple-field>
         </collapsible-card>
 
-        <collapsible-card title="3. Techonology overview">
+        <collapsible-card
+          id="technology"
+          title="3. Techonology overview">
           <simple-field
             :content="project.implementation_dates"
             date
@@ -185,7 +191,9 @@
 
         </collapsible-card>
 
-        <collapsible-card title="4. Interoperability &amp; standards">
+        <collapsible-card
+          id="interoperability"
+          title="4. Interoperability &amp; standards">
           <simple-field
             header="What other system do you interoperate with ?"
           >
@@ -201,7 +209,10 @@
         </collapsible-card>
       </el-col>
       <el-col :span="6">
-        <project-navigation />
+        <project-navigation
+          :readonly="readOnly"
+          :published="!showDraft && !readOnly"
+        />
       </el-col>
     </el-row>
   </div>
@@ -255,10 +266,18 @@ export default {
   computed: {
     ...mapGetters({
       draft: 'project/getProjectData',
-      published: 'project/getPublished'
+      published: 'project/getPublished',
+      user: 'user/getProfile'
     }),
     project () {
       return this.showDraft ? this.draft : this.published;
+    },
+    readOnly () {
+      if (this.user) {
+        const all = [...this.user.member, ...this.user.viewer];
+        return !all.includes(+this.$route.params.id);
+      }
+      return true;
     }
   },
   methods: {
