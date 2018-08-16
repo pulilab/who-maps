@@ -44,7 +44,7 @@ export default {
       if (isNaN(this.value)) {
         return this.value;
       }
-      return +this.value;
+      return this.value ? +this.value : null;
     }
   },
   methods: {
