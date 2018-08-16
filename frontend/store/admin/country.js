@@ -13,10 +13,8 @@ export const getters = {
 
 export const actions = {
   async fetchData ({ commit, rootGetters }) {
-    const countryId = rootGetters['admin/map/getCountry'].id;
+    const countryId = rootGetters['user/getProfile'].country;
     const { data } = await this.$axios.get(`/api/countries/${countryId}/`);
-    // console.log('DATAAAA:');
-    // console.log(data);
     commit('SET_COUNTRY_DATA', data);
     commit('SET_EDITABLE_COUNTRY_DATA', data);
   },
@@ -33,7 +31,7 @@ export const actions = {
     });
 
     if (isThereChange) {
-      const countryId = rootGetters['admin/map/getCountry'].id;
+      const countryId = rootGetters['user/getProfile'].country;
 
       const formData = new FormData();
       ['cover_text', 'footer_title', 'footer_text'].forEach(key => {
@@ -56,22 +54,20 @@ export const actions = {
   async patchCountryImg ({ getters, rootGetters }, key) {
     const oldFilePath = getters.getStableCountry[key];
 
-    console.log('key', key);
-    console.log('getters.getCountry[key]', getters.getCountry[key]);
     const uploadNew = (oldFilePath === null) && getters.getCountry[key] && getters.getCountry[key].raw;
     const changeOld = !!oldFilePath && typeof getters.getCountry[key] !== 'string';
 
     if (uploadNew || changeOld) {
-      const countryId = rootGetters['admin/map/getCountry'].id;
+      const countryId = rootGetters['user/getProfile'].country;
       const formData = new FormData();
-      formData.append(`${key}`, getters.getCountry[key] && getters.getCountry[key].raw);
+      formData.append(key, (getters.getCountry[key] || '') && getters.getCountry[key].raw);
       await this.$axios.patch(`/api/countries/${countryId}/`, formData, {
         headers: {
           'content-type': 'multipart/form-data'
         }
       });
     } else {
-      console.log(`No change in country${key}`);
+      // console.log(`No change in country ${key}`);
       return Promise.resolve();
     }
   },
