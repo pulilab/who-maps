@@ -14,7 +14,7 @@ export const getters = {
 export const actions = {
   async fetchData ({ commit, rootGetters }) {
     const countryId = rootGetters['admin/map/getCountry'].id;
-    const { data } = await this.$axios.get(`/api/country-admin/${countryId}/`);
+    const { data } = await this.$axios.get(`/api/countries/${countryId}/`);
     // console.log('DATAAAA:');
     // console.log(data);
     commit('SET_COUNTRY_DATA', data);
@@ -46,7 +46,7 @@ export const actions = {
         'content-type': 'multipart/form-data'
       }};
 
-      await this.$axios.patch(`/api/country-admin/${countryId}/`, formData, config);
+      await this.$axios.patch(`/api/countries/${countryId}/`, formData, config);
     } else {
       // console.log('No change in country info strings');
       return Promise.resolve();
@@ -65,7 +65,7 @@ export const actions = {
       const countryId = rootGetters['admin/map/getCountry'].id;
       const formData = new FormData();
       formData.append(`${key}`, getters.getCountry[key] && getters.getCountry[key].raw);
-      await this.$axios.patch(`/api/country-admin/${countryId}/`, formData, {
+      await this.$axios.patch(`/api/countries/${countryId}/`, formData, {
         headers: {
           'content-type': 'multipart/form-data'
         }
