@@ -23,6 +23,8 @@ class DonorPartnerLogoSerializer(serializers.ModelSerializer):
 
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",
                   "project_approval", "map_data", "map_version", "map_activated_on",)
+READ_ONLY_COUNTRY_FIELDS = ("name", "code", "project_approval", "map_data", "map_version", "map_activated_on",)
+COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 
 
 class SuperAdminCountrySerializer(serializers.ModelSerializer):
@@ -34,9 +36,8 @@ class SuperAdminCountrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Country
-        fields = COUNTRY_FIELDS + ('users', 'admins', 'super_admins', 'user_requests', 'admin_requests',
-                                   'super_admin_requests',)
-        read_only_fields = ("name", "code", "project_approval", "map_data", "map_version", "map_activated_on",)
+        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
+        read_only_fields = READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS
 
     @staticmethod
     def get_map_version(obj):
@@ -92,17 +93,13 @@ class SuperAdminCountrySerializer(serializers.ModelSerializer):
 
 class AdminCountrySerializer(SuperAdminCountrySerializer):
     class Meta(SuperAdminCountrySerializer.Meta):
-        fields = COUNTRY_FIELDS + ('users', 'admins', 'user_requests', 'admin_requests',)
-
-
-class UserCountrySerializer(SuperAdminCountrySerializer):
-    class Meta(SuperAdminCountrySerializer.Meta):
-        fields = COUNTRY_FIELDS + ('users', 'user_requests',)
+        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins',)
 
 
 class CountrySerializer(SuperAdminCountrySerializer):
     class Meta(SuperAdminCountrySerializer.Meta):
         fields = COUNTRY_FIELDS
+        read_only_fields = READ_ONLY_COUNTRY_FIELDS
 
 
 class DonorSerializer(serializers.ModelSerializer):
