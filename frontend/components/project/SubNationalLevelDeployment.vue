@@ -93,9 +93,9 @@ export default {
       getCountrySecondSubLevel: 'countries/getCountrySecondSubLevel'
     }),
     ...mapGettersActions({
-      coverage: ['project', 'getCoverage', 'setCoverage'],
-      coverageData: ['project', 'getCoverageData', 'setCoverageData'],
-      coverageSecondLevel: ['project', 'getCoverageSecondLevel', 'setCoverageSecondLevel']
+      coverage: ['project', 'getCoverage', 'setCoverage', 0],
+      coverageData: ['project', 'getCoverageData', 'setCoverageData', 0],
+      coverageSecondLevel: ['project', 'getCoverageSecondLevel', 'setCoverageSecondLevel', 0]
     }),
     countrySubLevelNames () {
       return this.getCountrySubLevelNames(this.country);
