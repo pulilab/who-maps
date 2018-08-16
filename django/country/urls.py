@@ -5,8 +5,8 @@ from country.views import CountryMapDataViewSet, CountryViewSet, PartnerLogoView
 from . import views
 
 router = DefaultRouter()
-router.register(r'country', CountryViewSet, base_name='country')
-router.register(r'donor', DonorViewSet, base_name='donor')
+router.register(r'countries', CountryViewSet, base_name='country')
+router.register(r'donors', DonorViewSet, base_name='donor')
 router.register(r'country-partner-logos', PartnerLogoViewSet, base_name='country-partner-logo')
 router.register(r'donor-partner-logos', DonorPartnerLogoViewSet, base_name='donor-partner-logo')
 router.register(r'country-map-data', CountryMapDataViewSet, base_name='country-map-data')
