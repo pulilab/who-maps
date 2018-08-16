@@ -12,7 +12,7 @@ export default {
   props: {
     id: {
       type: [String, Number],
-      required: true
+      default: null
     }
   },
   computed: {
@@ -20,8 +20,10 @@ export default {
       getOrganisationDetails: 'system/getOrganisationDetails'
     }),
     organisation () {
-      const id = parseInt(this.id, 10);
-      return this.getOrganisationDetails(id);
+      if (this.id) {
+        const id = parseInt(this.id, 10);
+        return this.getOrganisationDetails(id);
+      }
     }
   }
 };
