@@ -16,7 +16,6 @@ class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Retr
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
     parser_classes = (MultiPartParser, FormParser)
-    lookup_field = "code"
 
     def get_serializer_class(self):
         if self.request and self.action in ['update', 'retrieve', 'partial_update'] \

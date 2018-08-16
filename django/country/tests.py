@@ -85,7 +85,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()[0]['name'], 'Hongrie')
 
     def test_country_admin_retrieve(self):
-        url = reverse("country-detail", kwargs={"code": self.country.code})
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['name'], 'Hungary')
@@ -99,7 +99,7 @@ class CountryTests(APITestCase):
         self.assertIn("map_data", response_keys)
 
     def test_country_admin_update(self):
-        url = reverse("country-detail", kwargs={"code": self.country.code})
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
         data = {
             "cover_text": "blah",
             "footer_text": "foo"
@@ -110,7 +110,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()["footer_text"], data["footer_text"])
 
     def test_country_admin_update_images(self):
-        url = reverse("country-detail", kwargs={"code": self.country.code})
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
         cover = get_temp_image("cover")
         logo = get_temp_image("logo")
         data = {
@@ -121,7 +121,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_country_admin_delete_images(self):
-        url = reverse("country-detail", kwargs={"code": self.country.code})
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
         cover = get_temp_image("cover")
         logo = get_temp_image("logo")
         data = {
@@ -151,7 +151,7 @@ class CountryTests(APITestCase):
         userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
                                                   account_type=UserProfile.COUNTRY_ADMIN)
 
-        url = reverse("country-detail", kwargs={"code": self.country.code})
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["user_requests"], [userprofile1.id])
@@ -173,7 +173,7 @@ class CountryTests(APITestCase):
         userprofile3 = UserProfile.objects.create(user=user3, name="test3", country=self.country,
                                                   account_type=UserProfile.SUPER_COUNTRY_ADMIN)
 
-        url = reverse("country-detail", kwargs={"code": self.country.code})
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["user_requests"], [userprofile1.id])
@@ -185,7 +185,7 @@ class CountryTests(APITestCase):
             account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
         self.country.super_admins.add(self.test_user['user_profile_id'])
 
-        url = reverse("country-detail", kwargs={"code": self.country.code})
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
 
         user1 = User.objects.create(username="test1", password="12345678")
         userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
@@ -223,7 +223,7 @@ class CountryTests(APITestCase):
             account_type=UserProfile.COUNTRY_ADMIN, country=self.country)
         self.country.admins.add(self.test_user['user_profile_id'])
 
-        url = reverse("country-detail", kwargs={"code": self.country.code})
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
 
         user1 = User.objects.create(username="test1", password="12345678")
         userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
@@ -264,7 +264,7 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 201)
 
-        url = reverse("country-detail", kwargs={"code": self.country.code})
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
 
         self.assertEqual(response.status_code, 200)
@@ -289,7 +289,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 204)
 
     def test_retrieve_partnerlogos_list(self):
-        url = reverse("country-detail", kwargs={"code": self.country.code})
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertIn("partner_logos", response.json().keys())
