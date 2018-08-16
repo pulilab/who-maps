@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { apiReadParser } from '../utilities/api';
+import { apiReadParser, apiWriteParser } from '../utilities/api';
 
 const cleanState = () => ({
   name: null,
@@ -44,7 +44,7 @@ export const state = () => ({
 });
 
 export const getters = {
-  getProjectData: state => ({...state}),
+  getProjectData: state => ({...state, published: undefined}),
   getName: state => state.name,
   getOrganisation: state => state.organisation,
   getCountry: state => state.country,
@@ -65,7 +65,7 @@ export const getters = {
   getCoverage: state => state.coverage.length === 0 ? [null] : state.coverage,
   getCoverageData: state => state.coverageData,
   getCoverageSecondLevel: state => state.coverage_second_level.length === 0 ? [null] : state.coverage_second_level,
-  getNationalLevelDeployment: state => state.national_level_deployment,
+  getNationalLevelDeployment: state => ({...state.national_level_deployment}),
   getGovernmentInvestor: state => state.government_investor,
   getImplementingPartners: state => state.implementing_partners.length === 0 ? [null] : state.implementing_partners,
   getImplementationDates: state => state.implementation_dates,
@@ -227,6 +227,21 @@ export const actions = {
   },
   setPublished ({commit}, value) {
     commit('SET_PUBLISHED', value);
+  },
+  async createProject ({getters, dispatch}) {
+    const draft = getters.getProjectData;
+    const parsed = apiWriteParser(draft);
+    console.log(parsed);
+    const { data } = await this.$axios.post('api/projects/draft/', parsed);
+    dispatch('projects/addProjectToList', data, {root: true});
+    return data.id;
+  },
+  async saveDraft ({getters, dispatch}, id) {
+    const draft = getters.getProjectData;
+    const parsed = apiWriteParser(draft);
+    console.log(parsed);
+    const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
+    dispatch('projects/updateProject', data, {root: true});
   }
 };
 
