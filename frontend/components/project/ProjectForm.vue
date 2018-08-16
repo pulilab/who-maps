@@ -7,6 +7,7 @@
       <span>Loading</span>
     </div>
     <el-form
+      ref="projectForm"
       :model="project"
       :rules="rules"
       label-position="top"
@@ -24,7 +25,9 @@
         <el-col :span="6">
           <project-navigation
             :draft="isDraft"
-            :new-project="isNewProject" />
+            :new-project="isNewProject"
+            @saveDraft="doSaveDraft"
+          />
         </el-col>
       </el-row>
     </el-form>
@@ -37,7 +40,7 @@ import GeneralOverview from './GeneralOverview';
 import ImplementationOverview from './ImplementationOverview';
 import TechnologyOverview from './TechnologyOverview';
 import InteroperabilityAndStandards from './InteroperabilityAndStandards';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -50,7 +53,8 @@ export default {
   data () {
     return {
       readyElements: 0,
-      maxElements: 4
+      maxElements: 4,
+      usePublishRueles: false
     };
   },
   computed: {
@@ -70,22 +74,43 @@ export default {
       return {
         name: [
           {required: true, message: 'This is required', trigger: 'blur'}
+        ],
+        contact_email: [
+          {type: 'email', message: 'Please insert a valid email', trigger: 'blur'}
         ]
       };
     },
-    rules () {
+    publishRules () {
       return {
         name: [
           {required: true, message: 'This is required', trigger: 'blur'}
         ]
       };
+    },
+    rules () {
+      return this.usePublishRueles ? this.publishRules : this.draftRules;
     }
   },
   methods: {
+    ...mapActions({
+      createProject: 'project/createProject',
+      saveDraft: 'project/saveDraft'
+    }),
     mountedHandler () {
       setTimeout(() => {
         this.readyElements += 1;
       }, 300);
+    },
+    doSaveDraft () {
+      this.$refs.projectForm.validate(async valid => {
+        if (this.isNewProject) {
+          const id = await this.createProject();
+          const localised = this.localePath({name: 'index-projects-id-edit', params: {id}});
+          this.$router.push(localised);
+        } else if (this.isDraft) {
+          await this.saveDraft(this.$route.params.id);
+        }
+      });
     }
   }
 
