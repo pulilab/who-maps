@@ -75,3 +75,40 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['count'] >= 1)
+
+    def test_only_search_term_with_search_in(self):
+        url = reverse("search-project-list")
+        data = {"q": "phrase3", "in": "name"}  # PROJECT NAME
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] >= 1)
+
+        data = {"q": "org1", "in": "name"}  # ORGANISATION
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] == 0)
+
+        data = {"q": "Hungary", "in": "name"}  # COUNTRY
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] == 0)
+
+        data = {"q": "overview", "in": "name"}  # OVERVIEW
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] == 0)
+
+        data = {"q": "dist1", "in": "name"}  # LOCATION
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] == 0)
+
+        data = {"q": "partner1", "in": "name"}  # PARTNER
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] == 0)
+
+        data = {"q": "donor1", "in": "name"}  # DONOR
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] == 0)
