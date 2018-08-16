@@ -20,7 +20,7 @@
       </el-form-item>
       <el-form-item
         label="Geographic Scope"
-        prop="country">
+        prop="geographic_scope">
         <el-input
           v-model="geographic_scope"
           type="textarea"
@@ -32,19 +32,7 @@
       </el-form-item>
       <el-form-item
         label="Overview of the digital health implementation"
-        prop="country">
-        <el-input
-          v-model="implementation_overview"
-          type="textarea"
-        />
-        <span class="Hint">
-          <fa icon="info-circle" />
-          Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
-        </span>
-      </el-form-item>
-      <el-form-item
-        label="Overview of the digital health implementation"
-        prop="country">
+        prop="implementation_overview">
         <el-input
           v-model="implementation_overview"
           type="textarea"
