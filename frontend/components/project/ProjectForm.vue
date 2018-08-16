@@ -22,7 +22,7 @@
           <interoperability-and-standards @mounted="mountedHandler"/>
         </el-col>
         <el-col :span="6">
-          <project-navigation />
+          <project-navigation :draft="isDraft" />
         </el-col>
       </el-row>
     </el-form>
@@ -55,6 +55,9 @@ export default {
     ...mapGetters({
       project: 'project/getProjectData'
     }),
+    isDraft () {
+      return this.$route.name.includes('index-projects-id-edit');
+    },
     showForm () {
       return this.readyElements === this.maxElements;
     },
