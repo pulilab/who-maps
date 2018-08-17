@@ -120,3 +120,10 @@ class SearchTests(SetupTests):
         self.assertTrue(self.project2_id in response.json()['results']['found_in']['name'])
         self.assertTrue(self.project2_id in response.json()['results']['found_in']['overview'])
         self.assertTrue(self.project_id in response.json()['results']['found_in']['overview'])
+
+    def test_query_length(self):
+        url = reverse("search-project-list")
+        data = {"q": "o"}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.json()['error'], "Search term must be at least two characters long")
