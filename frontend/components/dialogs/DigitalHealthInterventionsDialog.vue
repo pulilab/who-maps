@@ -83,8 +83,9 @@ export default {
       this.setDigitalHealthInterventionsDialogState(null);
     },
     apply () {
-      const dhi = this.currentSelection.map(id => ({ platform: this.selectedPlatform, id }));
-      this.setDigitalHealthInterventions(dhi);
+      const selected = this.currentSelection.map(id => ({ platform: this.selectedPlatform, id }));
+      const filtered = this.selectedDHi.filter(dhi => dhi.platform !== this.selectedPlatform);
+      this.setDigitalHealthInterventions([...filtered, ...selected]);
       this.setDigitalHealthInterventionsDialogState(null);
     }
   }
