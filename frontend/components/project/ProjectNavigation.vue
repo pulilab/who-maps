@@ -6,7 +6,7 @@
     <el-card :body-style="{ padding: '0px' }">
       <div
         v-if="!readonly && !newProject"
-        class="Switch"
+        class="SwitchProjectStatus"
       >
         Switch view:
         <el-button-group>
@@ -26,6 +26,7 @@
           </el-button>
         </el-button-group>
       </div>
+
       <div class="Stepper">
         <ul>
           <li :class="{active: active === 'general'}">
@@ -123,7 +124,7 @@
         <el-button
           v-if="draft"
           type="text"
-          class="DiscardDraft"
+          class="DiscardDraft DeleteButton"
           @click="$emit('discardDraft')"
         >
           Discard draft
@@ -330,9 +331,6 @@ export default {
 
       .el-button--text {
         width: 100%;
-      }
-
-      .CancelButton {
         margin: 0;
       }
 

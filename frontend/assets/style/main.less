@@ -132,9 +132,11 @@ a {
 
   span {
     display: block;
-    margin-top: 5px;
-    color: @colorTextSecondary;
-    font-size: @fontSizeSmall;
+    margin-top: 8px;
+    color: @colorGray;
+    font-size: @fontSizeSmall - 1;
+    font-weight: 700;
+    text-transform: uppercase;
   }
 
   @-webkit-keyframes loading {
@@ -418,102 +420,124 @@ fieldset {
       }
     }
 
-    .el-select {
-      .el-select__tags {
-        .el-select__tags-text {
-          color: @colorTextPrimary;
-          font-size: @fontSizeBase;
-        }
-
-        .el-tag__close {
-          right: -6px;
-          top: -1px;
-        }
-      }
-    }
-
-    .el-checkbox {
-      .el-checkbox__label {
-        font-weight: 400;
-      }
-    }
-
-    .el-checkbox-group {
-      &.OnePerRow {
-        > .el-checkbox {
-          display: block;
-          margin: 0;
-        }
-      }
-
-      &.ThreePerRow {
-        display: flex;
-        flex-wrap: wrap;
-        align-content: flex-start;
-        white-space: normal;
-
-        > .el-checkbox {
-          width: 33%;
-          margin: 0;
-          padding-right: 30px;
-          box-sizing: border-box;
-          line-height: 19px;
-          padding: 10px 0;
-
-          .el-checkbox__input {
-            vertical-align: top;
-            top: 2px;
-          }
-
-          .el-checkbox__label {
-            white-space: normal;
-            padding-right: 30px;
-          }
-        }
-      }
-    }
-
-    .el-radio {
-      .el-radio__label {
-        font-weight: 400;
-      }
-    }
-
-    .el-radio-group {
-      .el-radio {
-        line-height: 40px;
-      }
-
-      &.OnePerRow {
-        > .el-radio {
-          display: block;
-          margin: 0;
-        }
-      }
-    }
-
     .Hint {
       display: inline-flex;
       margin: 10px 0 0;
       padding-right: 40px;
       font-size: @fontSizeSmall;
-      line-height: 14px;
+      line-height: 16px;
       color: @colorTextMuted;
 
+      .svg-inline--fa {
+        margin: 1px 5px 0 0;
+      }
+
       p {
-        margin: 0 0 0 5px;
+        margin: 0;
       }
     }
   }
 
   .ItemIndent {
     box-sizing: border-box;
-    margin: 30px 0 30px 2px;
-    padding-left: 30px;
+    margin: 20px 0 30px 2px;
+    padding: 0 0 10px 30px;
     border-left: 5px solid @colorGrayLight;
 
     .el-form-item {
       margin-bottom: 0;
+    }
+  }
+}
+
+.el-select {
+  .el-select__tags {
+    .el-select__tags-text {
+      color: @colorTextPrimary;
+      font-size: @fontSizeBase;
+    }
+
+    .el-tag__close {
+      right: -6px;
+      top: -1px;
+    }
+  }
+}
+
+.el-checkbox {
+  &.CheckboxSmall {
+    font-size: @fontSizeSmall;
+    line-height: 16px;
+  }
+
+  .el-checkbox__input {
+    top: 0 !important;
+  }
+
+  .el-checkbox__label {
+    font-weight: 400;
+  }
+}
+
+.el-checkbox-group {
+  &.OnePerRow {
+    > .el-checkbox {
+      display: block;
+      margin: 0;
+
+      .el-checkbox__input {
+        vertical-align: top;
+        top: 2px;
+      }
+
+      .el-checkbox__label {
+        white-space: normal;
+      }
+    }
+  }
+
+  &.ThreePerRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    white-space: normal;
+
+    > .el-checkbox {
+      width: 33%;
+      margin: 0;
+      padding-right: 30px;
+      box-sizing: border-box;
+      line-height: 19px;
+      padding: 10px 0;
+
+      .el-checkbox__input {
+        vertical-align: top;
+        top: 2px;
+      }
+
+      .el-checkbox__label {
+        white-space: normal;
+        padding-right: 30px;
+      }
+    }
+  }
+}
+
+.el-radio {
+  .el-radio__label {
+    font-weight: 400;
+  }
+}
+
+.el-radio-group {
+  .el-radio {
+    line-height: 40px;
+  }
+
+  &.OnePerRow {
+    > .el-radio {
+      display: block;
+      margin: 0;
     }
   }
 }
@@ -540,5 +564,78 @@ fieldset {
     font-weight: 700;
     text-transform: uppercase;
     color: @colorGray;
+  }
+}
+
+// Dialog modal
+
+.v-modal {
+  opacity: .8;
+  background-color: darken(@colorBrandPrimaryDark, 25%);
+}
+
+.el-dialog {
+  box-shadow: 0 6px 24px 4px rgba(0,0,0,0.22);
+
+  .el-dialog__header {
+    position: relative;
+    height: @dialogHeaderFooterHeight;
+    padding: 0 30px;
+    background-color: @colorBrandPrimary;
+    font-weight: 700;
+
+    .el-dialog__title {
+      line-height: @dialogHeaderFooterHeight;
+      font-size: @fontSizeLarger;
+      color: @colorWhite;
+    }
+
+    .el-dialog__headerbtn {
+      top: 50%;
+      right: 30px;
+      transform: translateY(-50%);
+
+      &:hover {
+        i {
+          opacity: .8;
+        }
+      }
+
+      i {
+        font-size: @fontSizeLarger;
+        color: @colorWhite;
+        font-weight: 700;
+        transition: @transitionFadeLinear;
+      }
+    }
+  }
+
+  .el-dialog__body {
+    padding: 30px;
+  }
+
+  .el-dialog__footer {
+    height: @dialogHeaderFooterHeight;
+    padding: 12px;
+    border-top: 1px solid @colorGrayLight;
+    background-color: @colorBrandBlueLight;
+
+    .el-button {
+      font-size: @fontSizeMedium;
+    }
+
+    .PrimaryButtons {
+      .el-button {
+        margin-left: 20px;
+      }
+    }
+
+    .SecondaryButtons {
+      text-align: left;
+
+      .el-button {
+        margin: 0 15px;
+      }
+    }
   }
 }

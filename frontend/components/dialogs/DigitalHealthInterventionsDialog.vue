@@ -1,12 +1,15 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    title="Health focus area"
+    title="Select Health Focus Area(s)"
     modal
     width="90%"
+    custom-class="SelectHfaDialog"
     @open="loadCurrentSelection"
   >
-    <el-row type="flex">
+    <el-row
+      type="flex"
+      class="HfaMainCategories">
       <el-col
         v-for="category in digitalHealthInterventions"
         :key="category.name"
@@ -21,17 +24,33 @@
         />
       </el-col>
     </el-row>
-    <span
-      slot="footer"
-      class="dialog-footer">
-      <el-button @click="cancel">Cancel</el-button>
-      <el-button @click="clearAll">Clear All</el-button>
-      <el-button
-        type="primary"
-        @click="apply"
-      >
-        Confirm
-      </el-button>
+    <span slot="footer">
+      <el-row
+        type="flex"
+        align="center">
+        <el-col class="SecondaryButtons">
+          <el-button
+            type="text"
+            class="CancelButton"
+            @click="cancel">
+            Cancel
+          </el-button>
+          <el-button
+            type="text"
+            class="DeleteButton"
+            @click="clearAll">
+            Clear All
+          </el-button>
+        </el-col>
+        <el-col class="PrimaryButtons">
+          <el-button
+            type="primary"
+            @click="apply"
+          >
+            Confirm
+          </el-button>
+        </el-col>
+      </el-row>
     </span>
   </el-dialog>
 </template>
@@ -92,6 +111,23 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
+  .SelectHfaDialog {
+    .el-dialog__body {
+      padding: 0;
+    }
+
+    .HfaMainCategories {
+      > .el-col {
+        border-right: 1px solid @colorGrayLight;
+
+        &:last-child {
+          border: 0;
+        }
+      }
+    }
+  }
 </style>

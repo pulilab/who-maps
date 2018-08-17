@@ -7,7 +7,6 @@
         <digital-health-intervention-item :id="item.id" />
       </li>
     </ul>
-
   </div>
 </template>
 
@@ -36,6 +35,8 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
 </style>

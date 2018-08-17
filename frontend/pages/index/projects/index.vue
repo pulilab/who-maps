@@ -41,7 +41,7 @@ export default {
   .MyProjects {
     .PageTitle {
       .svg-inline--fa {
-        margin: 0 4px 0 4px;
+        margin: 0 4px;
         width: 16px;
         height: 16px;
       }
