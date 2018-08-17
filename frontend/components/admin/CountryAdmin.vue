@@ -60,25 +60,42 @@
             class="Persona"
             @click="selectPersona('G')">
             <div class="PersonaName">Users/viewers</div>
-            <div class="RequestCount">{{ country.user_requests.length }} new request{{ country.user_requests.length === 1 ? '' : 's' }}</div>
+            <div class="RequestCount">{{ userSelection.length - users.length }} new request{{ country.user_requests.length === 1 ? '' : 's' }}</div>
           </div>
           <div
             class="Persona"
             @click="selectPersona('CA')">
             <div class="PersonaName">Admins</div>
-            <div class="RequestCount">{{ country.admin_requests.length }} new request{{ country.admin_requests.length === 1 ? '' : 's' }}</div>
+            <div class="RequestCount">{{ adminSelection.length - admins.length }} new request{{ country.admin_requests.length === 1 ? '' : 's' }}</div>
           </div>
           <div
             class="Persona"
             @click="selectPersona('SCA')">
             <div class="PersonaName">Superadmins</div>
-            <div class="RequestCount">{{ country.super_admin_requests.length }} new request{{ country.super_admin_requests.length === 1 ? '' : 's' }}</div>
+            <div class="RequestCount">{{ superadminSelection.length - superAdmins.length }} new request{{ country.super_admin_requests.length === 1 ? '' : 's' }}</div>
           </div>
         </el-col>
         <el-col>
-          Privileges for {{ selectedPersona }}<br>
-          New requests<br>
-          Approved
+          Privileges for {{ selectedPersona }}
+
+          <el-transfer
+            v-if="selectedPersona === 'G'"
+            :titles="['New requests', 'Approved']"
+            v-model="users"
+            :data="userSelection" />
+
+          <el-transfer
+            v-if="selectedPersona === 'CA'"
+            :titles="['New requests', 'Approved']"
+            v-model="admins"
+            :data="adminSelection" />
+
+          <el-transfer
+            v-if="selectedPersona === 'SCA'"
+            :titles="['New requests', 'Approved']"
+            v-model="superAdmins"
+            :data="superadminSelection" />
+
         </el-col>
       </el-row>
     </collapsible-card>
@@ -125,7 +142,7 @@ export default {
 
   data () {
     return {
-      selectedPersona: 'G'
+      selectedPersona: 'SCA'
     };
   },
 
@@ -137,7 +154,13 @@ export default {
     }),
 
     ...mapGetters({
-      country: 'admin/country/getCountry'
+      country: 'admin/country/getCountry',
+      userSelection: 'admin/country/getUserSelection',
+      adminSelection: 'admin/country/getAdminSelection',
+      superadminSelection: 'admin/country/getSuperadminSelection',
+      getUsers: 'admin/country/getUsers',
+      getAdmins: 'admin/country/getAdmins',
+      getSuperadmins: 'admin/country/getSuperadmins'
     }),
 
     logo: {
@@ -192,7 +215,35 @@ export default {
       set (value) {
         this.setCountryField({field: 'partner_logos', data: value});
       }
+    },
+
+    users: {
+      get () {
+        return this.country.users;
+      },
+      set (value) {
+        this.setCountryField({field: 'users', data: value});
+      }
+    },
+
+    admins: {
+      get () {
+        return this.country.admins;
+      },
+      set (value) {
+        this.setCountryField({field: 'admins', data: value});
+      }
+    },
+
+    superAdmins: {
+      get () {
+        return this.country.super_admins;
+      },
+      set (value) {
+        this.setCountryField({field: 'super_admins', data: value});
+      }
     }
+
   },
 
   methods: {

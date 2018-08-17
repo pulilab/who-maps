@@ -9,7 +9,10 @@ export default {
   components: { CountryAdmin },
 
   async fetch ({store}) {
-    await store.dispatch('admin/map/loadMapData');
+    await Promise.all([
+      store.dispatch('system/loadUserProfiles'),
+      store.dispatch('admin/map/loadMapData')
+    ]);
     await store.dispatch('admin/country/fetchData');
     // store.dispatch('admin/questions/setQuestionaireId', 'country');
     // store.dispatch('admin/questions/fetchQuestions');

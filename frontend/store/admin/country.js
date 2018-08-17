@@ -1,6 +1,9 @@
 export const state = () => ({
   country: null,
-  editableCountry: null
+  editableCountry: null,
+  userSelection: [],
+  adminSelection: [],
+  superadminSelection: []
 });
 
 export const getters = {
@@ -8,15 +11,43 @@ export const getters = {
   getCountry: state => state.editableCountry,
   getCoverText: state => state.editableCountry && state.editableCountry.cover_text,
   getFooterTitle: state => state.editableCountry && state.editableCountry.footer_title,
-  getFooterText: state => state.editableCountry && state.editableCountry.footer_text
+  getFooterText: state => state.editableCountry && state.editableCountry.footer_text,
+  getUserSelection: state => state.userSelection,
+  getAdminSelection: state => state.adminSelection,
+  getSuperadminSelection: state => state.superadminSelection,
+
+  getUsers: state => state.country.users,
+  getAdmins: state => state.country.admins,
+  getSuperadmins: state => state.country.super_admins
 };
 
 export const actions = {
-  async fetchData ({ commit, rootGetters }) {
+  async fetchData ({ commit, rootGetters, dispatch }) {
     const countryId = rootGetters['user/getProfile'].country;
     const { data } = await this.$axios.get(`/api/countries/${countryId}/`);
+    // console.dir(data);
     commit('SET_COUNTRY_DATA', data);
     commit('SET_EDITABLE_COUNTRY_DATA', data);
+    dispatch('mapAdminSelections', data);
+  },
+
+  mapAdminSelections ({ commit, rootGetters }, data) {
+    const profiles = rootGetters['system/getUserProfiles'];
+    const userId = rootGetters['user/getProfile'].id;
+
+    const userIdMapping = id => {
+      const profile = profiles.find(prof => prof.id === id);
+      const label = `${profile.name} <todo_bind@user.email!>`;
+      return {
+        key: id,
+        label,
+        disabled: id === userId
+      };
+    };
+
+    commit('SET_USER_SELECTION', [...data.user_requests, ...data.users].map(userIdMapping));
+    commit('SET_ADMIN_SELECTION', [...data.admin_requests, ...data.admins].map(userIdMapping));
+    commit('SET_SUPER_ADMIN_SELECTION', [...data.super_admin_requests, ...data.super_admins].map(userIdMapping));
   },
 
   async saveChanges ({ dispatch }) {
@@ -121,6 +152,7 @@ export const actions = {
   setFooterText ({ commit }, txt) {
     commit('SET_COUNTRY_FIELD', {field: 'footer_text', data: txt});
   }
+
 };
 
 export const mutations = {
@@ -133,8 +165,20 @@ export const mutations = {
   },
 
   SET_COUNTRY_FIELD: (state, {field, data}) => {
-    // console.log(`Filling ${field} with ${data}`);
     const valueToFill = typeof data === 'undefined' ? null : data;
     state.editableCountry[field] = valueToFill;
+  },
+
+  SET_USER_SELECTION: (state, data) => {
+    state.userSelection = data;
+  },
+
+  SET_ADMIN_SELECTION: (state, data) => {
+    state.adminSelection = data;
+  },
+
+  SET_SUPER_ADMIN_SELECTION: (state, data) => {
+    state.superadminSelection = data;
   }
+
 };
