@@ -162,3 +162,20 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
+
+    def test_filter_dhis(self):
+        url = reverse("search-project-list")
+        dhi_child = DigitalStrategy.objects.get(id=118)
+        data = {"dhi": dhi_child.id}
+
+        # Shouldn't find any, because we are filtering by parent categories only
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 0)
+
+        dhi_child = DigitalStrategy.objects.get(id=118)
+        data = {"dhi": dhi_child.parent.id}
+
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
