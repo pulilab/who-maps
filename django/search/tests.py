@@ -2,7 +2,7 @@ import copy
 
 from django.urls import reverse
 
-from project.models import Project
+from project.models import Project, TechnologyPlatform, DigitalStrategy, HealthFocusArea, HSCChallenge
 from project.tests import SetupTests
 
 
