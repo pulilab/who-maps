@@ -21,6 +21,14 @@ class DonorPartnerLogoSerializer(serializers.ModelSerializer):
         read_only_fields = ("image_url",)
 
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='user.email')
+
+    class Meta:
+        model = UserProfile
+        fields = ('id', 'email', 'name')
+
+
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",
                   "project_approval", "map_data", "map_version", "map_activated_on",)
 READ_ONLY_COUNTRY_FIELDS = ("name", "code", "project_approval", "map_data", "map_version", "map_activated_on",)
@@ -47,18 +55,21 @@ class SuperAdminCountrySerializer(serializers.ModelSerializer):
 
     def get_user_requests(self, obj):
         # figure out not yet assigned users
-        return UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.GOVERNMENT) \
-            .difference(obj.users.all()).values_list('id', flat=True)
+        data = UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.GOVERNMENT) \
+            .difference(obj.users.all())
+        return UserProfileSerializer(data, many=True).data
 
     def get_admin_requests(self, obj):
         # figure out not yet assigned users
-        return UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.COUNTRY_ADMIN) \
-            .difference(obj.admins.all()).values_list('id', flat=True)
+        data = UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.COUNTRY_ADMIN) \
+            .difference(obj.admins.all())
+        return UserProfileSerializer(data, many=True).data
 
     def get_super_admin_requests(self, obj):
         # figure out not yet assigned users
-        return UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.SUPER_COUNTRY_ADMIN) \
-            .difference(obj.super_admins.all()).values_list('id', flat=True)
+        data = UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.SUPER_COUNTRY_ADMIN) \
+            .difference(obj.super_admins.all())
+        return UserProfileSerializer(data, many=True).data
 
     @atomic
     def update(self, instance, validated_data):

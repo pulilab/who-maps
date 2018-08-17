@@ -166,8 +166,8 @@ class CountryTests(APITestCase):
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["user_requests"], [userprofile1.id])
-        self.assertEqual(response.json()["admin_requests"], [userprofile2.id])
+        self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
         self.assertEqual(response.json()["super_admin_requests"], [])
 
     def test_country_admin_retrieve_super_admin_requests(self):
@@ -188,9 +188,9 @@ class CountryTests(APITestCase):
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["user_requests"], [userprofile1.id])
-        self.assertEqual(response.json()["admin_requests"], [userprofile2.id])
-        self.assertEqual(response.json()["super_admin_requests"], [userprofile3.id])
+        self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
+        self.assertEqual(response.json()["super_admin_requests"][0]['id'], userprofile3.id)
 
     def test_country_admin_update_users_remove_from_other_group(self):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
