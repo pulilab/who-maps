@@ -3,6 +3,7 @@
     :visible.sync="visible"
     title="Select Health Focus Area(s)"
     modal
+    top="10vh"
     width="90%"
     custom-class="SelectHfaDialog"
     @open="loadCurrentSelection"

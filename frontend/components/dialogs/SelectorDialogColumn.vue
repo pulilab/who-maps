@@ -91,7 +91,7 @@ export default {
     }
 
     .Main {
-      padding: 20px 20px 20px 30px;
+      padding: 20px 20px 40px 30px;
     }
   }
 </style>
