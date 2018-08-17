@@ -179,3 +179,24 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
+
+    def test_filter_hfa(self):
+        url = reverse("search-project-list")
+        data = {"hfa": HealthFocusArea.objects.get(id=1).health_category.id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
+
+    def test_filter_hsc(self):
+        url = reverse("search-project-list")
+        data = {"hsc": HSCChallenge.objects.get(id=1).group.id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
+
+    def test_filter_his(self):
+        url = reverse("search-project-list")
+        data = {"his": 1}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
