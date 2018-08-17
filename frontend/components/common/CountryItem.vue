@@ -26,7 +26,7 @@ export default {
   props: {
     id: {
       type: Number,
-      required: true
+      default: null
     },
     showFlag: {
       type: Boolean,
@@ -38,7 +38,9 @@ export default {
       getCountryDetails: 'countries/getCountryDetails'
     }),
     country () {
-      return this.getCountryDetails(this.id);
+      if (this.id) {
+        return this.getCountryDetails(this.id);
+      }
     }
   }
 };
