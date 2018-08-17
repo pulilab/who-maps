@@ -66,6 +66,18 @@ class CountryTests(APITestCase):
     def test_country_model_str(self):
         self.assertEqual(str(self.country), 'Hungary')
 
+    def test_retrieve_landing_detail(self):
+        url = reverse("landing-detail", kwargs={"code": self.country.code})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        response_keys = response.json().keys()
+        self.assertIn("name", response_keys)
+        self.assertIn("code", response_keys)
+        self.assertIn("logo", response_keys)
+        self.assertIn("cover", response_keys)
+        self.assertIn("cover_text", response_keys)
+        self.assertIn("footer_text", response_keys)
+
     def test_get_countries(self):
         Country.objects.exclude(id=self.country.id).delete()
 
@@ -154,8 +166,8 @@ class CountryTests(APITestCase):
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["user_requests"], [userprofile1.id])
-        self.assertEqual(response.json()["admin_requests"], [userprofile2.id])
+        self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
         self.assertEqual(response.json()["super_admin_requests"], [])
 
     def test_country_admin_retrieve_super_admin_requests(self):
@@ -176,9 +188,9 @@ class CountryTests(APITestCase):
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["user_requests"], [userprofile1.id])
-        self.assertEqual(response.json()["admin_requests"], [userprofile2.id])
-        self.assertEqual(response.json()["super_admin_requests"], [userprofile3.id])
+        self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
+        self.assertEqual(response.json()["super_admin_requests"][0]['id'], userprofile3.id)
 
     def test_country_admin_update_users_remove_from_other_group(self):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
