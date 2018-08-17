@@ -12,8 +12,10 @@ class SearchTests(SetupTests):
         # create draft
         url = reverse("project-create")
         project_data2 = copy.deepcopy(self.project_data)
-        project_data2.update(name="phrase3 phrase5")
-        project_data2.update(country=self.country_id)
+        project_data2.update(name="phrase3 phrase5 overview")
+        project_data2.update(country=self.country_id, government_investor=2)
+        project_data2.update(platforms=[dict(id=1, strategies=[119, 118]),
+                                        dict(id=2, strategies=[119, 171])])
         response = self.test_user_client.post(url, project_data2, format="json")
         self.assertEqual(response.status_code, 201)
         project_id = response.json()['id']
