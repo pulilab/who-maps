@@ -127,3 +127,15 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 406)
         self.assertEqual(response.json()['error'], "Search term must be at least two characters long")
+
+    def test_filter_country(self):
+        url = reverse("search-project-list")
+        data = {"country": self.country_id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
+
+        data = {"country": self.country_id + 999}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 0)
