@@ -88,29 +88,24 @@ class SearchTests(SetupTests):
         data = {"q": "org1", "in": "name"}  # ORGANISATION
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['count'] == 0)
+        self.assertEqual(response.json()['count'], 0)
 
         data = {"q": "Hungary", "in": "name"}  # COUNTRY
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['count'] == 0)
-
-        data = {"q": "overview", "in": "name"}  # OVERVIEW
-        response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['count'] == 0)
+        self.assertEqual(response.json()['count'], 0)
 
         data = {"q": "dist1", "in": "name"}  # LOCATION
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['count'] == 0)
+        self.assertEqual(response.json()['count'], 0)
 
         data = {"q": "partner1", "in": "name"}  # PARTNER
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['count'] == 0)
+        self.assertEqual(response.json()['count'], 0)
 
         data = {"q": "donor1", "in": "name"}  # DONOR
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['count'] == 0)
+        self.assertEqual(response.json()['count'], 0)
