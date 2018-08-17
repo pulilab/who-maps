@@ -27,6 +27,7 @@
             :draft="isDraft"
             :new-project="isNewProject"
             @saveDraft="doSaveDraft"
+            @discardDraft="doDiscardDraft"
           />
         </el-col>
       </el-row>
@@ -94,7 +95,8 @@ export default {
   methods: {
     ...mapActions({
       createProject: 'project/createProject',
-      saveDraft: 'project/saveDraft'
+      saveDraft: 'project/saveDraft',
+      discardDraft: 'project/discardDraft'
     }),
     mountedHandler () {
       setTimeout(() => {
@@ -110,7 +112,29 @@ export default {
         } else if (this.isDraft) {
           await this.saveDraft(this.$route.params.id);
         }
+        this.$alert('Your draft has been saved successfully', 'Congratulation', {
+          confirmButtonText: 'Close'
+        });
       });
+    },
+    async doDiscardDraft () {
+      try {
+        await this.$confirm('The current draft will be overwritten by the published version', 'Attention', {
+          confirmButtonText: 'Ok',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        });
+        await this.discardDraft(this.$route.params.id);
+        this.$message({
+          type: 'success',
+          message: 'Draft overriden with published version'
+        });
+      } catch (e) {
+        this.$message({
+          type: 'info',
+          message: 'Action cancelled'
+        });
+      }
     }
   }
 
