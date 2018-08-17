@@ -332,6 +332,7 @@ export default {
       .el-button--text {
         width: 100%;
         margin: 0;
+        font-size: @fontSizeMedium;
       }
 
     }

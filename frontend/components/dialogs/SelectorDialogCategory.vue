@@ -142,7 +142,7 @@ export default {
 
   .Items {
     margin-bottom: 20px;
-    padding-left: 40px;
+    padding: 0 20px 0 50px;
 
     .Item {
       display: block;
