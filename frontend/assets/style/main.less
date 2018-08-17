@@ -420,80 +420,6 @@ fieldset {
       }
     }
 
-    .el-select {
-      .el-select__tags {
-        .el-select__tags-text {
-          color: @colorTextPrimary;
-          font-size: @fontSizeBase;
-        }
-
-        .el-tag__close {
-          right: -6px;
-          top: -1px;
-        }
-      }
-    }
-
-    .el-checkbox {
-      .el-checkbox__label {
-        font-weight: 400;
-      }
-    }
-
-    .el-checkbox-group {
-      &.OnePerRow {
-        > .el-checkbox {
-          display: block;
-          margin: 0;
-        }
-      }
-
-      &.ThreePerRow {
-        display: flex;
-        flex-wrap: wrap;
-        align-content: flex-start;
-        white-space: normal;
-
-        > .el-checkbox {
-          width: 33%;
-          margin: 0;
-          padding-right: 30px;
-          box-sizing: border-box;
-          line-height: 19px;
-          padding: 10px 0;
-
-          .el-checkbox__input {
-            vertical-align: top;
-            top: 2px;
-          }
-
-          .el-checkbox__label {
-            white-space: normal;
-            padding-right: 30px;
-          }
-        }
-      }
-    }
-
-    .el-radio {
-      .el-radio__label {
-        font-weight: 400;
-      }
-    }
-
-    .el-radio-group {
-      .el-radio {
-        line-height: 40px;
-      }
-
-      &.OnePerRow {
-        > .el-radio {
-          display: block;
-          margin: 0;
-        }
-      }
-    }
-
     .Hint {
       display: inline-flex;
       margin: 10px 0 0;
@@ -520,6 +446,98 @@ fieldset {
 
     .el-form-item {
       margin-bottom: 0;
+    }
+  }
+}
+
+.el-select {
+  .el-select__tags {
+    .el-select__tags-text {
+      color: @colorTextPrimary;
+      font-size: @fontSizeBase;
+    }
+
+    .el-tag__close {
+      right: -6px;
+      top: -1px;
+    }
+  }
+}
+
+.el-checkbox {
+  &.CheckboxSmall {
+    font-size: @fontSizeSmall;
+    line-height: 16px;
+  }
+
+  .el-checkbox__input {
+    top: 0 !important;
+  }
+
+  .el-checkbox__label {
+    font-weight: 400;
+  }
+}
+
+.el-checkbox-group {
+  &.OnePerRow {
+    > .el-checkbox {
+      display: block;
+      margin: 0;
+
+      .el-checkbox__input {
+        vertical-align: top;
+        top: 2px;
+      }
+
+      .el-checkbox__label {
+        white-space: normal;
+      }
+    }
+  }
+
+  &.ThreePerRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    white-space: normal;
+
+    > .el-checkbox {
+      width: 33%;
+      margin: 0;
+      padding-right: 30px;
+      box-sizing: border-box;
+      line-height: 19px;
+      padding: 10px 0;
+
+      .el-checkbox__input {
+        vertical-align: top;
+        top: 2px;
+      }
+
+      .el-checkbox__label {
+        white-space: normal;
+        padding-right: 30px;
+      }
+    }
+  }
+}
+
+.el-radio {
+  .el-radio__label {
+    font-weight: 400;
+  }
+}
+
+.el-radio-group {
+  .el-radio {
+    line-height: 40px;
+  }
+
+  &.OnePerRow {
+    > .el-radio {
+      display: block;
+      margin: 0;
     }
   }
 }
@@ -601,6 +619,10 @@ fieldset {
     padding: 12px;
     border-top: 1px solid @colorGrayLight;
     background-color: @colorBrandBlueLight;
+
+    .el-button {
+      font-size: @fontSizeMedium;
+    }
 
     .PrimaryButtons {
       .el-button {

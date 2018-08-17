@@ -18,22 +18,22 @@
         />
         <span>{{ category.name }}</span>
       </el-button>
-
     </div>
+
     <transition name="slide-fade">
-      <div
+      <el-checkbox-group
         v-show="categoryShown"
-        class="Items">
+        class="Items OnePerRow">
         <el-checkbox
           v-for="item in items"
           :key="item.id"
           :value="values.includes(item.id)"
-          class="Item"
+          class="Item CheckboxSmall"
           @change="filterChange(item.id)"
         >
           {{ item.name }}
         </el-checkbox>
-      </div>
+      </el-checkbox-group>
     </transition>
   </div>
 </template>
@@ -102,24 +102,70 @@ export default {
 </script>
 
 <style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
 .SelectorDialogCategory {
+  .CategoryName {
+    .el-button {
+      line-height: 19px;
+      text-align: left;
+      color: @colorTextSecondary;
+
+      > span {
+        display: inline-flex;
+      }
+
+      &:hover {
+        color: @colorTextPrimary;
+      }
+
+      .svg-inline--fa {
+        margin-top: 2px;
+      }
+
+      .el-checkbox {
+        margin: 0 10px 0 15px;
+
+        &.is-checked {
+          + span {
+            color: @colorBrandPrimary;
+          }
+        }
+
+        + span {
+          white-space: normal;
+        }
+      }
+    }
+  }
 
   .Items {
+    margin-bottom: 20px;
+    padding-left: 40px;
 
-    .Item{
-      width: 100%;
+    .Item {
+      display: block;
+      margin: 0 0 10px;
+
+      .el-checkbox__label {
+        font-size: @fontSizeSmall;
+        line-height: 15px;
+      }
     }
   }
 
   .slide-fade-enter-active {
-    transition: all .3s ease;
+    transition: all .1s ease;
   }
+
   .slide-fade-leave-active {
-    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
   }
+
   .slide-fade-enter, .slide-fade-leave-to
   /* .slide-fade-leave-active below version 2.1.8 */ {
-    transform: translateX(10px);
+    transform: translateY(-10px);
     opacity: 0;
   }
 }

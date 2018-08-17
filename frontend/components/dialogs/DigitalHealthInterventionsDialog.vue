@@ -1,12 +1,15 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    title="Health focus area"
+    title="Select Health Focus Area(s)"
     modal
     width="90%"
+    custom-class="SelectHfaDialog"
     @open="loadCurrentSelection"
   >
-    <el-row type="flex">
+    <el-row
+      type="flex"
+      class="HfaMainCategories">
       <el-col
         v-for="category in digitalHealthInterventions"
         :key="category.name"
@@ -107,6 +110,23 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
+  .SelectHfaDialog {
+    .el-dialog__body {
+      padding: 0;
+    }
+
+    .HfaMainCategories {
+      > .el-col {
+        border-right: 1px solid @colorGrayLight;
+
+        &:last-child {
+          border: 0;
+        }
+      }
+    }
+  }
 </style>
