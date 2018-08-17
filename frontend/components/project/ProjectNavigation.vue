@@ -123,6 +123,7 @@
           v-if="draft"
           type="text"
           class="DiscardDraft"
+          @click="$emit('discardDraft')"
         >
           Discard draft
         </el-button>
