@@ -3,10 +3,9 @@
 
     <div class="AdminHeading">Country admin</div>
 
-    <!-- <p>country.logo {{ country.logo }}</p>
-    <p>country.partner_logos {{ country.partner_logos }}</p> -->
-
-    <collapsible-card title="Country information">
+    <collapsible-card
+      title="Country information"
+      class="CountryInformation">
 
       <el-form
         label-width="215px"
@@ -52,8 +51,36 @@
 
     </collapsible-card>
 
-    <collapsible-card title="User management">
-      <h1>User management</h1>
+    <collapsible-card
+      title="User management"
+      class="UserManagement">
+      <el-row type="flex">
+        <el-col class="AdminPersonaChooser">
+          <div
+            class="Persona"
+            @click="selectPersona('G')">
+            <div class="PersonaName">Users/viewers</div>
+            <div class="RequestCount">{{ country.user_requests.length }} new request{{ country.user_requests.length === 1 ? '' : 's' }}</div>
+          </div>
+          <div
+            class="Persona"
+            @click="selectPersona('CA')">
+            <div class="PersonaName">Admins</div>
+            <div class="RequestCount">{{ country.admin_requests.length }} new request{{ country.admin_requests.length === 1 ? '' : 's' }}</div>
+          </div>
+          <div
+            class="Persona"
+            @click="selectPersona('SCA')">
+            <div class="PersonaName">Superadmins</div>
+            <div class="RequestCount">{{ country.super_admin_requests.length }} new request{{ country.super_admin_requests.length === 1 ? '' : 's' }}</div>
+          </div>
+        </el-col>
+        <el-col>
+          Privileges for {{ selectedPersona }}<br>
+          New requests<br>
+          Approved
+        </el-col>
+      </el-row>
     </collapsible-card>
 
     <collapsible-card title="Country specific questionaire">
@@ -94,6 +121,12 @@ export default {
     VueMapCustomizer,
     DhaQuestionaire,
     FileUpload
+  },
+
+  data () {
+    return {
+      selectedPersona: 'G'
+    };
   },
 
   computed: {
@@ -166,13 +199,19 @@ export default {
     ...mapActions({
       setCountryField: 'admin/country/setCountryField',
       saveChanges: 'admin/country/saveChanges'
-    })
+    }),
+
+    selectPersona (selected) {
+      this.selectedPersona = selected;
+    }
   }
 };
 </script>
 
 <style lang="less">
   .CountryAdmin {
+    padding-bottom: 80px;
+
     .AdminHeading {
       color: #474747;
       font-size: 32px;
@@ -183,6 +222,35 @@ export default {
       margin: 40px 0;
     }
 
-    padding-bottom: 80px;
+    .CountryInformation {
+      .ContentContainer {
+        padding: 30px;
+      }
+    }
+
+    .UserManagement {
+      .ContentContainer {
+        padding: 0 0;
+      }
+      .AdminPersonaChooser {
+        width: 161px;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5), 2px 0 8px 0 rgba(0,0,0,0.16);
+
+        .Persona {
+          width: 160px;
+          height: 66px;
+          // .PersonaName {}
+          // .RequestCount {}
+
+          &.active {
+            background-color: lightblue;
+            // .PersonaName {}
+            // .RequestCount {}
+          }
+
+        }
+      }
+    }
+
   }
 </style>
