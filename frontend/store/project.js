@@ -242,6 +242,15 @@ export const actions = {
     console.log(parsed);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
     dispatch('projects/updateProject', data, {root: true});
+  },
+  async discardDraft ({getters, dispatch}, id) {
+    const published = getters.getPublished;
+    const parsed = apiWriteParser(published);
+    console.log(parsed);
+    const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
+    const parsedResponse = apiReadParser(data.draft);
+    await dispatch('setProjectState', parsedResponse);
+    dispatch('projects/updateProject', data, {root: true});
   }
 };
 
