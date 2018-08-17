@@ -146,3 +146,12 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
+
+    def test_filter_list_results(self):
+        url = reverse("search-project-list")
+        data = {"country": self.country_id, "type": "list"}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
+        self.assertEqual(response.json()['results']['type'], 'list')
+        self.assertTrue("his_bucket" in response.json()['results']['projects'][0])
