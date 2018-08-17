@@ -139,3 +139,10 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 0)
+
+    def test_filter_and_search(self):
+        url = reverse("search-project-list")
+        data = {"q": "overview", "in": "name", "country": self.country_id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
