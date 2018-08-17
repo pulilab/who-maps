@@ -11,6 +11,12 @@ from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializ
     DonorPartnerLogoSerializer
 
 
+class LandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+    lookup_field = "code"
+
+
 class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
     queryset = Country.objects.all()
