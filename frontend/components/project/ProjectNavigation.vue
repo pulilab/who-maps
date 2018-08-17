@@ -123,7 +123,7 @@
         <el-button
           v-if="draft"
           type="text"
-          class="DiscardDraft"
+          class="DiscardDraft DeleteButton"
           @click="$emit('discardDraft')"
         >
           Discard draft
@@ -330,9 +330,6 @@ export default {
 
       .el-button--text {
         width: 100%;
-      }
-
-      .CancelButton {
         margin: 0;
       }
 

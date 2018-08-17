@@ -21,17 +21,33 @@
         />
       </el-col>
     </el-row>
-    <span
-      slot="footer"
-      class="dialog-footer">
-      <el-button @click="cancel">Cancel</el-button>
-      <el-button @click="clearAll">Clear All</el-button>
-      <el-button
-        type="primary"
-        @click="apply"
-      >
-        Confirm
-      </el-button>
+    <span slot="footer">
+      <el-row
+        type="flex"
+        align="center">
+        <el-col class="SecondaryButtons">
+          <el-button
+            type="text"
+            class="CancelButton"
+            @click="cancel">
+            Cancel
+          </el-button>
+          <el-button
+            type="text"
+            class="DeleteButton"
+            @click="clearAll">
+            Clear All
+          </el-button>
+        </el-col>
+        <el-col class="PrimaryButtons">
+          <el-button
+            type="primary"
+            @click="apply"
+          >
+            Confirm
+          </el-button>
+        </el-col>
+      </el-row>
     </span>
   </el-dialog>
 </template>
