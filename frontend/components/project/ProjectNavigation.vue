@@ -6,7 +6,7 @@
     <el-card :body-style="{ padding: '0px' }">
       <div
         v-if="!readonly && !newProject"
-        class="Switch"
+        class="SwitchProjectStatus"
       >
         Switch view:
         <el-button-group>
@@ -26,6 +26,7 @@
           </el-button>
         </el-button-group>
       </div>
+
       <div class="Stepper">
         <ul>
           <li :class="{active: active === 'general'}">

@@ -2,6 +2,7 @@
   <div class="DigitalHealthInterventionsSelector">
     <el-button
       v-show="dhi.length === 0"
+      class="IconLeft"
       @click="openDialog"
     >
       <fa icon="plus"/>
@@ -14,15 +15,18 @@
         <li
           v-for="item in dhi"
           :key="item.id">
-          <fa icon="check" />
+          <fa
+            icon="check"
+            size="xs"/>
           <digital-health-intervention-item :id="item.id" />
         </li>
       </ul>
       <el-button
+        class="IconLeft"
         @click="openDialog"
       >
         <fa icon="edit"/>
-        Edit Selection
+        Edit selection
       </el-button>
     </div>
   </div>
@@ -61,6 +65,30 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
+  .DigitalHealthInterventionsSelector {
+    ul.SelectedDigitalHealthInterventions {
+      list-style-type: none;
+      display: block;
+      margin: 0 0 30px;
+      padding: 0;
+
+      li {
+        position: relative;
+        margin-bottom: 20px;
+        padding-left: 22px;
+        line-height: 19px;
+        color: @colorBrandPrimary;
+
+        .svg-inline--fa {
+          position: absolute;
+          top: 4px;
+          left: 0;
+        }
+      }
+    }
+  }
 </style>

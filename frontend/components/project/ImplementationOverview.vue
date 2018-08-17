@@ -12,6 +12,7 @@
           :key="platform"
           label="Software"
           prop="platforms"
+          class="ItemIndent"
         >
           <el-col :span="16">
             <platform-selector
@@ -22,6 +23,7 @@
               v-show="platform"
               label="Digital Health Interventions"
               prop="digitalHealthInterventions"
+              class="DigitalHealthIntervention"
             >
               <digital-health-interventions-selector
                 :platform-id="platform"
@@ -227,11 +229,16 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .ImplementationOverview {
+    .DigitalHealthIntervention {
+      margin-top: 30px;
+    }
+
     .CoverageArea {
       .CoverageSubtitle {
         position: relative;
-        margin-bottom : 20px;
-        padding-left: 20px;
+        display: block;
+        margin: 10px 0 20px;
+        padding: 0 0 0 20px;
         font-size: @fontSizeSmall;
         font-weight: 700;
         color: @colorGray;
