@@ -1,6 +1,9 @@
 <template>
   <div class="SubNationalLevelDeploymentItem">
-    <el-form-item :label="levelName">
+    <el-form-item
+      :label="levelName"
+      :prop="propPrefix +'.' + index"
+    >
       <el-select
         :value="subLevel"
         filterable
@@ -24,7 +27,6 @@
         :clients.sync="clients"
         :facilities.sync="facilities"
         :disabled="!subLevel"
-        :selected-facilities="facilitiesList"
       />
     </el-form-item>
   </div>
@@ -58,6 +60,10 @@ export default {
     coverage: {
       type: Array,
       default: () => []
+    },
+    propPrefix: {
+      type: String,
+      required: true
     }
   },
   computed: {
@@ -75,7 +81,8 @@ export default {
     },
     facilitiesList: {
       get () {
-        return this.localCoverageData ? this.localCoverageData.facilities_list : [];
+        const facilitiesList = this.localCoverageData ? this.localCoverageData.facilities_list : [];
+        return facilitiesList || [];
       },
       set (value) {
         const coverage = {facilities_list: [...value], facilities: value.length};

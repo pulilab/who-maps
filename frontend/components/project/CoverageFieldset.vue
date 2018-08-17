@@ -5,7 +5,9 @@
       type="flex"
     >
       <el-col :span="8">
-        <el-form-item label="# Health workers">
+        <el-form-item
+          :prop="healthWorkersProp"
+          label="# Health workers">
           <el-input
             :disabled="disabled"
             :value="healthWorkers"
@@ -17,7 +19,9 @@
         </el-form-item>
       </el-col>
       <el-col :span="8">
-        <el-form-item label="# Facilities">
+        <el-form-item
+          :prop="facilitiesProp"
+          label="# Facilities">
           <el-input
             :disabled="disableFacilities"
             :value="facilities"
@@ -30,7 +34,9 @@
         </el-form-item>
       </el-col>
       <el-col :span="8">
-        <el-form-item label="# Clients">
+        <el-form-item
+          :prop="clientsProp"
+          label="# Clients">
           <el-input
             :disabled="disabled"
             :value="clients"
@@ -47,6 +53,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   props: {
     disabled: {
@@ -65,14 +73,36 @@ export default {
       type: [Number, String],
       default: null
     },
-    selectedFacilities: {
-      type: Array,
-      default: null
+    isNlc: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
+    ...mapGetters({
+      country: 'project/getCountry',
+      getFacilities: 'countries/getCountryFacilityList'
+    }),
+    hasFacilityList () {
+      return !!this.getFacilities(this.country).length;
+    },
     disableFacilities () {
-      return !!(this.disabled || this.selectedFacilities);
+      return !!(this.disabled || this.hasFacilityList);
+    },
+    healthWorkersProp () {
+      if (this.isNlc) {
+        return 'national_level_deployment.health_workers';
+      }
+    },
+    clientsProp () {
+      if (this.isNlc) {
+        return 'national_level_deployment.clients';
+      }
+    },
+    facilitiesProp () {
+      if (this.isNlc) {
+        return 'national_level_deployment.facilities';
+      }
     }
   },
   methods: {

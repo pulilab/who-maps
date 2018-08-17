@@ -10,8 +10,8 @@
         <el-form-item
           v-for="(platform, index) in platforms"
           :key="platform"
+          :prop="'platforms.' + index"
           label="Software"
-          prop="platforms"
           class="ItemIndent"
         >
           <el-col :span="16">
@@ -22,7 +22,6 @@
             <el-form-item
               v-show="platform"
               label="Digital Health Interventions"
-              prop="digitalHealthInterventions"
               class="DigitalHealthIntervention"
             >
               <digital-health-interventions-selector
@@ -77,13 +76,13 @@
         <div
           v-show="coverageType == 2"
           class="NationalLevelDeployment ItemIndent"
-          prop="national_level_deployment"
         >
           <div class="CoverageSubtitle">
             <fa icon="flag" />
             National level deployment
           </div>
           <coverage-fieldset
+            :is-nlc="true"
             :disabled="false"
             :health-workers.sync="healthWorkers"
             :clients.sync="clients"
@@ -104,17 +103,18 @@
       </el-form-item>
       <el-form-item
         label="Implementing partners"
-        prop="implementing_partners"
         class="ImplementingPartners">
         <el-row
           v-for="(partner, index) in implementing_partners"
           :key="index"
         >
           <el-col :span="16">
-            <el-input
-              :value="partner"
-              @change="updateImplmeentingPartners($event, index)"
-            />
+            <el-form-item :prop="'implementing_partners.' + index">
+              <el-input
+                :value="partner"
+                @change="updateImplmeentingPartners($event, index)"
+              />
+            </el-form-item>
           </el-col>
           <el-col :span="8">
             <add-rm-buttons

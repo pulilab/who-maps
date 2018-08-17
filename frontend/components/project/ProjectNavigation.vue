@@ -106,6 +106,7 @@
           v-if="draft"
           type="primary"
           size="medium"
+          @click="$emit('publishProject')"
         >
           Publish
         </el-button>
