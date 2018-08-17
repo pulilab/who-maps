@@ -20,9 +20,13 @@ export const actions = {
   },
 
   async saveChanges ({ dispatch }) {
-    await dispatch('patchInfoStrings');
-    await dispatch('patchCountryImg', 'logo');
-    await dispatch('patchCountryImg', 'cover');
+    await Promise.all([
+      dispatch('patchInfoStrings'),
+      dispatch('patchCountryImg', 'logo'),
+      dispatch('patchCountryImg', 'cover'),
+      dispatch('synchPartnerLogos')
+    ]);
+    await dispatch('fetchData');
   },
 
   async patchInfoStrings ({ getters, rootGetters }) {
@@ -67,9 +71,39 @@ export const actions = {
         }
       });
     } else {
-      // console.log(`No change in country ${key}`);
       return Promise.resolve();
     }
+  },
+
+  synchPartnerLogos ({ getters, dispatch }) {
+    getters.getCountry.partner_logos.forEach(async logo => {
+      if (logo.raw) {
+        await dispatch('postPartnerLogo', logo.raw);
+      }
+    });
+
+    getters.getStableCountry.partner_logos.forEach(async logo => {
+      const isStillThere = !!getters.getCountry.partner_logos.find(newLogo => newLogo.id === logo.id);
+      if (!isStillThere) {
+        await dispatch('delPartnerLogo', logo.id);
+      }
+    });
+  },
+
+  async postPartnerLogo ({ rootGetters }, img) {
+    const countryId = rootGetters['user/getProfile'].country;
+    const formData = new FormData();
+    formData.append('country', countryId);
+    formData.append('image', img);
+    await this.$axios.post(`/api/country-partner-logos/`, formData, {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    });
+  },
+
+  async delPartnerLogo (ctx, id) {
+    await this.$axios.delete(`/api/country-partner-logos/${id}/`);
   },
 
   setCountryField ({ commit }, { field, data }) {

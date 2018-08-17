@@ -4,7 +4,7 @@
     <div class="AdminHeading">Country admin</div>
 
     <!-- <p>country.logo {{ country.logo }}</p>
-    <p>logo {{ logo }}</p> -->
+    <p>country.partner_logos {{ country.partner_logos }}</p> -->
 
     <collapsible-card title="Country information">
 
@@ -112,7 +112,7 @@ export default {
         if (typeof this.country.logo === 'string') {
           return [{
             url: this.country.logo,
-            name: this.country.logo.split('/').pop()
+            name: ('' + this.country.logo).split('/').pop()
           }];
         } else if (!this.country.logo) {
           return [];
@@ -130,7 +130,7 @@ export default {
         if (typeof this.country.cover === 'string') {
           return [{
             url: this.country.cover,
-            name: this.country.cover.split('/').pop()
+            name: ('' + this.country.cover).split('/').pop()
           }];
         } else if (!this.country.cover) {
           return [];
@@ -145,7 +145,16 @@ export default {
 
     partnerLogos: {
       get () {
-        return this.country.partner_logos || [];
+        return this.country.partner_logos.map(rawLogo => {
+          if (rawLogo.raw || rawLogo.uid) {
+            return rawLogo;
+          } else if (rawLogo.image) {
+            return ({
+              url: rawLogo.image,
+              name: ('' + rawLogo.image).split('/').pop()
+            });
+          }
+        });
       },
       set (value) {
         this.setCountryField({field: 'partner_logos', data: value});
