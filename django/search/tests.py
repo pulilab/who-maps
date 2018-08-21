@@ -19,15 +19,15 @@ class SearchTests(SetupTests):
         response = self.test_user_client.post(url, project_data2, format="json")
         self.assertEqual(response.status_code, 201)
         project_id = response.json()['id']
-        self.project = Project.objects.get(id=project_id)
-        self.project.approval.approved = True
-        self.project.approval.save()
-        self.project2_id = project_id
 
         # publish it
         url = reverse("project-publish", kwargs=dict(pk=project_id))
         response = self.test_user_client.put(url, project_data2, format="json")
         self.assertEqual(response.status_code, 200)
+
+        self.project2 = Project.objects.get(id=project_id)
+        self.project2.approve()
+        self.project2_id = project_id
 
     def test_search_no_results(self):
         url = reverse("search-project-list")
@@ -246,8 +246,8 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 0)
 
-        self.project.approval.approved = False
-        self.project.approval.save()
+        self.project2.approval.approved = False
+        self.project2.approval.save()
 
         data = {"approved": 0}
         response = self.test_user_client.get(url, data, format="json")
