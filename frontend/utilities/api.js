@@ -57,14 +57,21 @@ export const isNullUndefinedOrEmptyString = value => value === null || value ===
 
 export const isEmpty = (value) => {
   if (Array.isArray(value)) {
-    const filtered = value.filter(v => !isNullUndefinedOrEmptyString(v));
-    return filtered.length === 0;
+    return false;
   } else if (value instanceof Date) {
     return false;
   } else if (value instanceof Object && value !== null) {
     return Object.keys(value).length === 0;
   }
   return isNullUndefinedOrEmptyString(value);
+};
+
+export const dataCleaner = value => {
+  if (Array.isArray(value)) {
+    const result = value.filter(v => !isNullUndefinedOrEmptyString(v));
+    return result;
+  }
+  return value;
 };
 
 export const interoperabilityLinkWriteParser = links => {
@@ -98,8 +105,7 @@ export const coverageWriteParser = (coverage, coverageData) => {
 export const apiWriteParser = p => {
   const result = {};
   for (let key in p) {
-    const value = p[key];
-    console.log(key, value);
+    const value = dataCleaner(p[key]);
     result[key] = isEmpty(value) ? undefined : value;
   }
   const interoperability_links = interoperabilityLinkWriteParser(p.interoperability_links);
