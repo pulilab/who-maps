@@ -237,8 +237,8 @@ export default {
       .CoverageSubtitle {
         position: relative;
         display: block;
-        margin: 10px 0 20px;
-        padding: 0 0 0 20px;
+        margin: 0 0 20px;
+        padding: 10px 0 0 20px;
         font-size: @fontSizeSmall;
         font-weight: 700;
         color: @colorGray;
@@ -246,7 +246,7 @@ export default {
 
         .svg-inline--fa {
           position: absolute;
-          top: 0;
+          top: 10px;
           left: 0;
         }
       }

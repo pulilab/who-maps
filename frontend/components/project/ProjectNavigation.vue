@@ -108,6 +108,11 @@
           size="medium"
           @click="$emit('publishProject')"
         >
+          <!-- TODO -->
+          <!-- Show spinner while form is being published -->
+          <!-- <fa
+            icon="spinner"
+            spin /> -->
           Publish
         </el-button>
 
@@ -118,6 +123,11 @@
           :class="['SaveDraft', {'NewProject': newProject, 'Draft':draft }]"
           @click="$emit('saveDraft')"
         >
+          <!-- TODO -->
+          <!-- Show spinner while form is being saved -->
+          <!-- <fa
+            icon="spinner"
+            spin /> -->
           Save draft
         </el-button>
 
@@ -335,6 +345,9 @@ export default {
         font-size: @fontSizeMedium;
       }
 
+      .fa-spin {
+        margin-right: 2px;
+      }
     }
   }
 </style>
