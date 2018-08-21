@@ -55,7 +55,8 @@ export const actions = {
       dispatch('patchInfoStrings'),
       dispatch('patchCountryImg', 'logo'),
       dispatch('patchCountryImg', 'cover'),
-      dispatch('synchPartnerLogos')
+      dispatch('synchPartnerLogos'),
+      dispatch('synchAdminUserArrays')
     ]);
     await dispatch('fetchData');
   },
@@ -135,6 +136,51 @@ export const actions = {
 
   async delPartnerLogo (ctx, id) {
     await this.$axios.delete(`/api/country-partner-logos/${id}/`);
+  },
+
+  async synchAdminUserArrays ({ rootGetters, getters, state }, id) {
+    const oldUsersStr = JSON.stringify([...state.country.users].sort());
+    const newUsersStr = JSON.stringify([...state.editableCountry.users].sort());
+    const oldAdminsStr = JSON.stringify([...state.country.admins].sort());
+    const newAdminsStr = JSON.stringify([...state.editableCountry.admins].sort());
+    const oldSuperAdminsStr = JSON.stringify([...state.country.super_admins].sort());
+    const newSuperAdminsStr = JSON.stringify([...state.editableCountry.super_admins].sort());
+
+    const diff = {};
+
+    if (oldUsersStr !== newUsersStr) {
+      diff.users = getters.getCountry.users || [];
+    }
+    if (oldAdminsStr !== newAdminsStr) {
+      diff.admins = getters.getCountry.admins;
+    }
+    if (oldSuperAdminsStr !== newSuperAdminsStr) {
+      diff.super_admins = getters.getCountry.super_admins;
+    }
+
+    if (diff.users || diff.admins || diff.super_admins) {
+      const countryId = rootGetters['user/getProfile'].country;
+      const formData = new FormData();
+      console.log(diff);
+      for (let key in diff) {
+        diff[key].forEach(id => {
+          // console.log(`appending ${key}[]: id`);
+          formData.append(`${key}[]`, id);
+        });
+        if (!diff[key].length) {
+          // console.log(`appending ${key}: null`);
+          formData.append(`${key}[]`, undefined);
+        }
+        // Another approach
+        // console.log(`appending ${key}: ${JSON.stringify(diff[key])} which is ${typeof diff[key]}`);
+        // formData.append(key, diff[key]);
+      }
+      await this.$axios.patch(`/api/countries/${countryId}/`, formData, {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      });
+    }
   },
 
   setCountryField ({ commit }, { field, data }) {
