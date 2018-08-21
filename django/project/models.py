@@ -164,6 +164,10 @@ class Project(SoftDeleteModel, ExtendedModel):
         self.approval.approved = True
         self.approval.save()
 
+    def disapprove(self):
+        self.approval.approved = False
+        self.approval.save()
+
 
 @receiver(post_save, sender=Project)
 def on_create_init(sender, instance, created, **kwargs):
