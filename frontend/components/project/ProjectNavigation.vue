@@ -218,10 +218,10 @@ export default {
       ul {
         position: relative;
         list-style: none;
-        margin: 20px 0;
+        margin: 20px 0 25px;
         padding: 0;
 
-        @media only screen and (max-height: 700px) {
+        @media only screen and (max-height: 1024px) {
           margin: 20px 0;
         }
 
@@ -280,7 +280,7 @@ export default {
         text-decoration: none;
         transition: color 200ms ease;
 
-        @media only screen and (max-height: 720px) {
+        @media only screen and (max-height: 1024px) {
           height: 48px;
           line-height: 48px;
         }
@@ -299,7 +299,7 @@ export default {
           color: @colorWhite;
           transition: all 200ms ease;
 
-          @media only screen and (max-height: 720px) {
+          @media only screen and (max-height: 1024px) {
             top: 8px;
           }
 
