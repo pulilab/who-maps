@@ -302,16 +302,23 @@ export default {
         this.deleteFormAPIErrors();
         this.$refs.projectForm.validate(async valid => {
           if (valid) {
-            if (this.isNewProject) {
-              const id = await this.createProject();
-              const localised = this.localePath({name: 'index-projects-id-edit', params: {id}});
-              this.$router.push(localised);
-            } else if (this.isDraft) {
-              await this.saveDraft(this.$route.params.id);
+            try {
+              if (this.isNewProject) {
+                const id = await this.createProject();
+                const localised = this.localePath({name: 'index-projects-id-edit', params: {id}});
+                this.$router.push(localised);
+              } else if (this.isDraft) {
+                await this.saveDraft(this.$route.params.id);
+              }
+              this.$alert('Your draft has been saved successfully', 'Congratulation', {
+                confirmButtonText: 'Close'
+              });
+            } catch (e) {
+              this.setFormAPIErrors(e);
+              this.$refs.projectForm.validate(() => {
+                this.scrollToError();
+              });
             }
-            this.$alert('Your draft has been saved successfully', 'Congratulation', {
-              confirmButtonText: 'Close'
-            });
           } else {
             this.scrollToError();
           }
