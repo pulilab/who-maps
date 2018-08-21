@@ -31,6 +31,13 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
+  .UserProjectsList {
+    padding: 40px 40px 20px;
+    background: url('~assets/img/squares.svg') no-repeat;
+    background-position: center 0px;
+  }
 </style>

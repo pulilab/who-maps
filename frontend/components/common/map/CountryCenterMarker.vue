@@ -9,6 +9,7 @@
       @click="markerClickHandler"
     >
       <l-popup
+        v-if="!disableTooltip"
         ref="tooltip"
         :options="popupOptions"
       >
@@ -35,13 +36,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import GeoJsonLayer from './GeoJsonLayer';
 
 export default {
-  components: {
-    GeoJsonLayer
-  },
+  components: {},
   props: {
     pin: {
       type: Object,
@@ -52,13 +49,17 @@ export default {
       required: false,
       default: () => null
     },
-    forceHovered: {
+    selectedCountry: {
+      type: Number,
+      default: null
+    },
+    activeCountry: {
+      type: Number,
+      default: null
+    },
+    disableTooltip: {
       type: Boolean,
       default: false
-    },
-    additionalTooltipClass: {
-      type: String,
-      default: ''
     }
   },
   data () {
@@ -70,22 +71,9 @@ export default {
       }
     };
   },
-  computed: {
-    ...mapGetters({
-      geoJson: 'countries/getGeoJsonLibrary'
-
-    }),
-    paintTooltip () {
-      return this.$slots.default && (this.hovered || this.forceHovered);
-    }
-  },
   methods: {
-    ...mapActions({
-      setCountry: 'landing/setCountry',
-      setActiveCountry: 'landing/setActiveCountry'
-    }),
     markerClickHandler () {
-      this.setActiveCountry(this.pin.id);
+      this.$emit('update:activeCountry', this.pin.id);
     },
     safeMapObjectFunctionCall (ref, functionName) {
       if (this.$refs[ref] && this.$refs[ref].mapObject) {
@@ -94,7 +82,7 @@ export default {
     },
 
     openCountryView () {
-      this.setCountry(this.pin.id);
+      this.$emit('update:selectedCountry', this.pin.id);
       this.safeMapObjectFunctionCall('countryMarker', 'closePopup');
     },
     mouseEnterHandler (event) {
@@ -114,12 +102,12 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
   .CountryViewPopup {
     bottom: 0;
-    margin-bottom: 18px;
+    margin-bottom: 55px;
 
     .leaflet-popup-content-wrapper {
       background-color: transparent;
