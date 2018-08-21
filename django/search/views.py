@@ -3,7 +3,7 @@ from collections import OrderedDict
 from django.core.paginator import Paginator
 from django.utils.functional import cached_property
 
-from rest_framework import filters, mixins
+from rest_framework import filters, mixins, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -114,9 +114,12 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         qs = self.get_queryset()
 
         search_term = query_params.get('q')
-        # TODO: query length checking
 
         if search_term:
+            if len(search_term) < 2:
+                return Response(data=dict(error="Search term must be at least two characters long"),
+                                status=status.HTTP_406_NOT_ACCEPTABLE)
+
             search_in = query_params.getlist('in')
             qs = self.search(queryset=qs, search_term=search_term, search_in=search_in)
             if 'found' in query_params:
