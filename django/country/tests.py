@@ -941,19 +941,16 @@ class DonorTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_donor_admin_retrieve_admin_requests(self):
-        userprofile = UserProfile.objects.get(id=self.test_user['user_profile_id'])
-        userprofile.account_type = UserProfile.DONOR_ADMIN
-        userprofile.save()
-        userprofile.donor.add(self.donor)
-        self.donor.admins.add(userprofile)
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.DONOR_ADMIN, donor=self.donor)
+        self.donor.admins.add(self.test_user['user_profile_id'])
 
         user1 = User.objects.create(username="test1", password="12345678")
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", account_type=UserProfile.DONOR)
-        userprofile1.donor.add(self.donor)
-
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.DONOR)
         user2 = User.objects.create(username="test2", password="12345678")
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", account_type=UserProfile.DONOR_ADMIN)
-        userprofile2.donor.add(self.donor)
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
+                                                  account_type=UserProfile.DONOR_ADMIN)
 
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
@@ -962,24 +959,20 @@ class DonorTests(APITestCase):
         self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
         self.assertEqual(response.json()["super_admin_requests"], [])
 
-    def test_country_admin_retrieve_super_admin_requests(self):
-        userprofile = UserProfile.objects.get(id=self.test_user['user_profile_id'])
-        userprofile.account_type = UserProfile.SUPER_DONOR_ADMIN
-        userprofile.save()
-        userprofile.donor.add(self.donor)
-        self.donor.super_admins.add(userprofile)
+    def test_donor_admin_retrieve_super_admin_requests(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
+        self.donor.super_admins.add(self.test_user['user_profile_id'])
 
         user1 = User.objects.create(username="test1", password="12345678")
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", account_type=UserProfile.DONOR)
-        userprofile1.donor.add(self.donor)
-
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.DONOR)
         user2 = User.objects.create(username="test2", password="12345678")
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", account_type=UserProfile.DONOR_ADMIN)
-        userprofile2.donor.add(self.donor)
-
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
+                                                  account_type=UserProfile.DONOR_ADMIN)
         user3 = User.objects.create(username="test3", password="12345678")
-        userprofile3 = UserProfile.objects.create(user=user3, name="test3", account_type=UserProfile.SUPER_DONOR_ADMIN)
-        userprofile3.donor.add(self.donor)
+        userprofile3 = UserProfile.objects.create(user=user3, name="test3", donor=self.donor,
+                                                  account_type=UserProfile.SUPER_DONOR_ADMIN)
 
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
@@ -988,19 +981,16 @@ class DonorTests(APITestCase):
         self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
         self.assertEqual(response.json()["super_admin_requests"][0]['id'], userprofile3.id)
 
-    def test_country_admin_update_users_remove_from_other_group(self):
-        userprofile = UserProfile.objects.get(id=self.test_user['user_profile_id'])
-        userprofile.account_type = UserProfile.SUPER_DONOR_ADMIN
-        userprofile.save()
-        userprofile.donor.add(self.donor)
-        self.donor.super_admins.add(userprofile)
+    def test_donor_admin_update_users_remove_from_other_group(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
+        self.donor.super_admins.add(self.test_user['user_profile_id'])
 
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
 
         user1 = User.objects.create(username="test1", password="12345678")
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", account_type=UserProfile.DONOR)
-        userprofile1.donor.add(self.donor)
-
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.DONOR)
         data = {
             "users": [userprofile1.id]
         }
@@ -1028,18 +1018,15 @@ class DonorTests(APITestCase):
         self.assertEqual(response.json()['super_admins'], [userprofile1.id])
 
     def test_country_admin_update_super_admin_without_perm(self):
-        userprofile = UserProfile.objects.get(id=self.test_user['user_profile_id'])
-        userprofile.account_type = UserProfile.DONOR_ADMIN
-        userprofile.save()
-        userprofile.donor.add(self.donor)
-        self.donor.admins.add(userprofile)
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.DONOR_ADMIN, donor=self.donor)
+        self.donor.admins.add(self.test_user['user_profile_id'])
 
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
 
-        user1 = User.objects.create(username="test3", password="12345678")
-        userprofile1 = UserProfile.objects.create(user=user1, name="test3", account_type=UserProfile.SUPER_DONOR_ADMIN)
-        userprofile1.donor.add(self.donor)
-
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.SUPER_DONOR_ADMIN)
         data = {
             "super_admins": [userprofile1.id],
         }

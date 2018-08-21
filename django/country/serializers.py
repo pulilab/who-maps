@@ -133,19 +133,19 @@ class SuperAdminDonorSerializer(UpdateAdminMixin, serializers.ModelSerializer):
 
     def get_user_requests(self, obj):
         # figure out not yet assigned users
-        data = UserProfile.objects.filter(donor__id__in=[obj.id], account_type=UserProfile.DONOR) \
+        data = UserProfile.objects.filter(donor_id=obj.id, account_type=UserProfile.DONOR) \
             .difference(obj.users.all())
         return UserProfileSerializer(data, many=True).data
 
     def get_admin_requests(self, obj):
         # figure out not yet assigned users
-        data = UserProfile.objects.filter(donor__id__in=[obj.id], account_type=UserProfile.DONOR_ADMIN) \
+        data = UserProfile.objects.filter(donor_id=obj.id, account_type=UserProfile.DONOR_ADMIN) \
             .difference(obj.admins.all())
         return UserProfileSerializer(data, many=True).data
 
     def get_super_admin_requests(self, obj):
         # figure out not yet assigned users
-        data = UserProfile.objects.filter(donor__id__in=[obj.id], account_type=UserProfile.SUPER_DONOR_ADMIN) \
+        data = UserProfile.objects.filter(donor_id=obj.id, account_type=UserProfile.SUPER_DONOR_ADMIN) \
             .difference(obj.super_admins.all())
         return UserProfileSerializer(data, many=True).data
 
