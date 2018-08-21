@@ -272,7 +272,7 @@ class SearchTests(SetupTests):
         # all the filters are AND relations, within the same filter there's an OR relation
         project_data = self.project_data.copy()
         project_data.update(platforms=[dict(id=1, strategies=[206]),
-                                        dict(id=2, strategies=[223])])
+                                       dict(id=2, strategies=[223])])
 
         url = reverse("project-publish", kwargs=dict(pk=self.project_id))
         response = self.test_user_client.put(url, project_data, format="json")
