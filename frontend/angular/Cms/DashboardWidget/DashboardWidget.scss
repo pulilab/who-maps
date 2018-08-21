@@ -5,7 +5,7 @@ cms-dashboard-widget {
 }
 
 .cms-widget-wrapper {
-  background-color: $color-gray-lightest;
+  background-color: $color-white;
 
   .cms-widget-header {
     width: 100%;
@@ -33,10 +33,9 @@ cms-dashboard-widget {
     }
 
     .domain-icon {
-      width: 40px;
-      height: 40px;
-      margin-left: 6px;
-      margin-right: 2px;
+      width: 32px;
+      height: 32px;
+      margin: 3px 2px 5px 6px;
       background-repeat: no-repeat;
       background-size: 80% 80%;
       background-position: center center;
@@ -92,15 +91,14 @@ cms-dashboard-widget {
     }
 
     .domain-score {
-      font-size: 14px;
+      font-size: 12px;
       line-height: 40px;
-      font-weight: 500;
+      font-weight: 700;
       @include text-truncate();
     }
 
     .domain-selector {
       margin: 7px 30px 0 0;
-
 
       md-select {
         float: right;
@@ -110,8 +108,8 @@ cms-dashboard-widget {
 
         md-select-value {
           padding: 0 !important;
-          font-size: 14px;
           color: $color-white !important;
+          font-weight: 700;
           border-bottom-width: 0 !important;
 
           .md-select-icon {
@@ -140,34 +138,44 @@ cms-dashboard-widget {
     }
   }
 
-  .category-column {}
+  .category-column {
+    border-right: 1px solid $color-gray-lighter;
+
+    &:last-child {
+      border-right: 0;
+    }
+
+    md-card {
+      margin: 10px 10px 0 !important;
+    }
+  }
 
   .layout-wrap {
     width: 100%;
-    padding: 0 5px;
+    padding: 0;
   }
 
   .empty-card {
-    background-color: #fff;
-    margin-top: 5px;
-    padding: 12px;
     min-height: 50px;
+    padding: 12px;
+    background-color: $color-white;
     font-size: 12px;
     color: $text-secondary;
   }
 
   .category-header {
-    margin-bottom: 5px;
-    min-height: 50px;
+    height: 60px;
+    min-height: 60px;
+    border-bottom: 1px solid $color-gray-lighter;
     background-color: $color-white;
     background-repeat: no-repeat;
 
     h4 {
-      font-size: 14px;
-      font-weight: 500;
-      text-transform: uppercase;
       max-width: 60%;
       margin-left: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: $text-primary;
       @include text-truncate();
     }
 
@@ -189,9 +197,7 @@ cms-dashboard-widget {
   }
 
   .md-button.goto-cms {
-    margin: 20px auto 10px;
-    padding-left: 12px;
-    padding-right: 12px;
+    margin: 10px auto;
 
     // Multi-lang
     @include button-ml($width: 300px);
@@ -200,8 +206,6 @@ cms-dashboard-widget {
 
   // Resize cms-list-element
   .cms-list-element {
-    margin: 5px 0;
-
     .cover-img,
     .avatar-img {
       padding: 10px;
@@ -227,8 +231,8 @@ cms-dashboard-widget {
       padding: 10px;
 
       h3.md-title {
-        font-size: 14px;
-        line-height: 20px;
+        font-size: 12px;
+        line-height: 18px;
         margin-bottom: 0;
         padding: 0 10px 0 0;
         word-break: normal;
@@ -241,13 +245,13 @@ cms-dashboard-widget {
         display: none;
       }
 
-      .body {
+      .md-body-1 {
         -webkit-line-clamp: 2;
-        font-size: 12px;
-        line-height: 16px;
-        max-height: 32px;
-        min-height: 32px;
-        margin: 8px 0 0;
+        font-size: 11px;
+        line-height: 15px;
+        max-height: 30px;
+        min-height: 30px;
+        margin: 8px 0;
       }
     }
 
@@ -265,8 +269,6 @@ cms-dashboard-widget {
       }
     }
 
-    &.experience {
-
-    }
+    &.experience {}
   }
 }

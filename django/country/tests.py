@@ -6,6 +6,9 @@ from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.translation import override
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.utils import timezone
+from django.utils.dateformat import format
 
 from django.core import mail
 from django.core.management import call_command
@@ -14,8 +17,9 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
+from core.tests import get_temp_image
 from country.admin import CountryAdmin
-from country.models import Country, PartnerLogo, CountryField
+from country.models import Country, PartnerLogo, CountryField, Donor, DonorPartnerLogo
 from project.models import Project
 from user.models import UserProfile
 from django.utils.six import StringIO
@@ -42,10 +46,11 @@ class CountryTests(APITestCase):
         url = reverse("api_token_auth")
         data = {"username": "test_user@gmail.com", "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
+        self.test_user = response.json()
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
 
-        self.country = Country.objects.create(name="country1", code="CC")
+        self.country = Country.objects.create(name="country1", code="CC", map_activated_on=timezone.now())
         self.country.name_en = 'Hungary'
         self.country.name_fr = 'Hongrie'
         self.country.save()
@@ -63,6 +68,18 @@ class CountryTests(APITestCase):
 
     def test_country_model_str(self):
         self.assertEqual(str(self.country), 'Hungary')
+
+    def test_retrieve_landing_detail(self):
+        url = reverse("landing-detail", kwargs={"code": self.country.code})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        response_keys = response.json().keys()
+        self.assertIn("name", response_keys)
+        self.assertIn("code", response_keys)
+        self.assertIn("logo", response_keys)
+        self.assertIn("cover", response_keys)
+        self.assertIn("cover_text", response_keys)
+        self.assertIn("footer_text", response_keys)
 
     def test_get_countries(self):
         Country.objects.exclude(id=self.country.id).delete()
@@ -82,10 +99,12 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0]['name'], 'Hongrie')
 
-    def test_retrieve_landing_detail(self):
-        url = reverse("country-detail", kwargs={"code": self.country.code})
-        response = self.test_user_client.get(url)
+    def test_country_admin_retrieve(self):
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['name'], 'Hungary')
+        self.assertEqual(response.json()['map_version'], format(self.country.map_activated_on, 'U'))
         response_keys = response.json().keys()
         self.assertIn("name", response_keys)
         self.assertIn("code", response_keys)
@@ -93,9 +112,200 @@ class CountryTests(APITestCase):
         self.assertIn("cover", response_keys)
         self.assertIn("cover_text", response_keys)
         self.assertIn("footer_text", response_keys)
+        self.assertIn("map_data", response_keys)
+
+    def test_country_admin_update(self):
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        data = {
+            "cover_text": "blah",
+            "footer_text": "foo"
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["cover_text"], data["cover_text"])
+        self.assertEqual(response.json()["footer_text"], data["footer_text"])
+
+    def test_country_admin_update_images(self):
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        cover = get_temp_image("cover")
+        logo = get_temp_image("logo")
+        data = {
+            "cover": cover,
+            "logo": logo
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+
+    def test_country_admin_delete_images(self):
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        cover = get_temp_image("cover")
+        logo = get_temp_image("logo")
+        data = {
+            "cover": cover,
+            "logo": logo
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        data = {
+            "cover": "",
+            "logo": ""
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["logo"], None)
+        self.assertEqual(response.json()["cover"], None)
+
+    def test_country_admin_retrieve_admin_requests(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(account_type=UserProfile.COUNTRY_ADMIN,
+                                                                                country=self.country)
+        self.country.admins.add(self.test_user['user_profile_id'])
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
+                                                  account_type=UserProfile.GOVERNMENT)
+        user2 = User.objects.create(username="test2", password="12345678")
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
+                                                  account_type=UserProfile.COUNTRY_ADMIN)
+
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
+        self.assertEqual(response.json()["super_admin_requests"], [])
+
+    def test_country_admin_retrieve_super_admin_requests(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
+                                                  account_type=UserProfile.GOVERNMENT)
+        user2 = User.objects.create(username="test2", password="12345678")
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
+                                                  account_type=UserProfile.COUNTRY_ADMIN)
+        user3 = User.objects.create(username="test3", password="12345678")
+        userprofile3 = UserProfile.objects.create(user=user3, name="test3", country=self.country,
+                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
+        self.assertEqual(response.json()["super_admin_requests"][0]['id'], userprofile3.id)
+
+    def test_country_admin_update_users_remove_from_other_group(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
+                                                  account_type=UserProfile.GOVERNMENT)
+        data = {
+            "users": [userprofile1.id]
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['users'], [userprofile1.id])
+
+        UserProfile.objects.filter(id=userprofile1.id).update(
+            account_type=UserProfile.COUNTRY_ADMIN, country=self.country)
+        data = {
+            "admins": [userprofile1.id]
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['users'], [])
+        self.assertEqual(response.json()['admins'], [userprofile1.id])
+
+        UserProfile.objects.filter(id=userprofile1.id).update(
+            account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
+        data = {
+            "super_admins": [userprofile1.id]
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['users'], [])
+        self.assertEqual(response.json()['admins'], [])
+        self.assertEqual(response.json()['super_admins'], [userprofile1.id])
+
+    def test_country_admin_update_super_admin_without_perm(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.COUNTRY_ADMIN, country=self.country)
+        self.country.admins.add(self.test_user['user_profile_id'])
+
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
+                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+        data = {
+            "super_admins": [userprofile1.id],
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("super_admins" not in response.json().keys())
+        self.country.refresh_from_db()
+        self.assertTrue(userprofile1.id not in self.country.super_admins.all())
+
+    def test_country_partner_logos_create(self):
+        url = reverse("country-partner-logo-list")
+        logo = get_temp_image("logo")
+        data = {
+            "country": self.country.id,
+            "image": logo
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+    def test_country_partner_logos_list(self):
+        url = reverse("country-partner-logo-list")
+        logo1 = get_temp_image("logo1")
+        data = {
+            "country": self.country.id,
+            "image": logo1
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+        logo2 = get_temp_image("logo2")
+        data = {
+            "country": self.country.id,
+            "image": logo2
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['partner_logos']), 3)
+        self.assertEqual(response.json()['partner_logos'][1]['country'], self.country.id)
+        self.assertEqual(response.json()['partner_logos'][1]['image'], 'http://testserver/media/logo1.png')
+        self.assertEqual(response.json()['partner_logos'][2]['country'], self.country.id)
+        self.assertEqual(response.json()['partner_logos'][2]['image'], 'http://testserver/media/logo2.png')
+
+    def test_country_partner_logos_delete(self):
+        url = reverse("country-partner-logo-list")
+        logo = get_temp_image("logo")
+        data = {
+            "country": self.country.id,
+            "image": logo
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+        url = reverse("country-partner-logo-detail", kwargs={"pk": response.json()["id"]})
+        response = self.test_user_client.delete(url)
+        self.assertEqual(response.status_code, 204)
 
     def test_retrieve_partnerlogos_list(self):
-        url = reverse("country-detail", kwargs={"code": self.country.code})
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertIn("partner_logos", response.json().keys())
@@ -640,25 +850,269 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[-1], expected_data)
 
-    def test_update_and_list_country_map_data(self):
-        url = reverse("country-detail", kwargs={"pk": Country.objects.last().id})
-        self.map_data = {"map_data": {
-            "sub_level_name": "District",
-            "sub_levels": [{
-                "name_en": "District 1",
-                "name_es": "Districto Uno"
-            }, {
-                "name_en": "Disctrict 9"
-            }]
-        }}
-        response = self.test_user_client.put(url, data=self.map_data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['map_data'], self.map_data['map_data'])
+    def test_create_retrieve_update_mapfile(self):
+        url = reverse('map-file-list')
+        map_file = SimpleUploadedFile("file.txt", b"file_content")
+        data = {
+            'country': self.country.id,
+            'map_file': map_file
+        }
+        response = self.test_user_client.post(url, data=data, format="multipart")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['country'], self.country.id)
 
-        url = reverse("country-list")
+        url = reverse('map-file-detail', kwargs={'pk': response.json()['id']})
+        map_file2 = SimpleUploadedFile("file2.txt", b"file_content2")
+        data = {
+            'country': self.country.id,
+            'map_file': map_file2
+        }
+        response = self.test_user_client.put(url, data=data, format="multipart")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['country'], self.country.id)
+
+        url = reverse('map-file-detail', kwargs={'pk': response.json()['id']})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()[-1]['map_data'], self.map_data['map_data'])
+        self.assertEqual(response.json()['country'], self.country.id)
+
+    def test_country_admin_update_map_data(self):
+        url = reverse("map-data-detail", kwargs={"pk": self.country.id})
+        data = {
+            "map_data": {
+                "sub_level_name": "District",
+                "sub_levels": [{
+                    "name_en": "District 1",
+                    "name_es": "Districto Uno"
+                }, {
+                    "name_en": "Disctrict 9"
+                }]
+            }
+        }
+        response = self.test_user_client.patch(url, data=data, format='json', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["map_data"], data["map_data"])
+
+
+class DonorTests(APITestCase):
+    def setUp(self):
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {"email": "test_user@gmail.com", "password1": "123456hetNYOLC", "password2": "123456hetNYOLC"}
+        response = self.client.post(url, data)
+
+        # Validate the account.
+        key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
+        url = reverse("rest_verify_email")
+        data = {
+            "key": key,
+        }
+        response = self.client.post(url, data)
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {"username": "test_user@gmail.com", "password": "123456hetNYOLC"}
+        response = self.client.post(url, data)
+        self.test_user = response.json()
+        self.test_user_key = response.json().get("token")
+        self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
+
+        self.donor = Donor.objects.create(name="donor1")
+        self.donor.name_en = 'Donor Group'
+        self.donor.name_fr = 'Doner Grup'
+        self.donor.save()
+        DonorPartnerLogo.objects.create(donor=self.donor)
+
+    def test_donor_model(self):
+        with override('en'):
+            self.assertEqual(self.donor.name, 'Donor Group')
+
+        with override('fr'):
+            self.assertEqual(self.donor.name, 'Doner Grup')
+
+    def test_donor_model_str(self):
+        self.assertEqual(str(self.donor), 'Donor Group')
+
+    def test_donor_admin_retrieve(self):
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['name'], 'Donor Group')
+        response_keys = response.json().keys()
+        self.assertIn("name", response_keys)
+        self.assertIn("logo", response_keys)
+        self.assertIn("cover", response_keys)
+        self.assertIn("cover_text", response_keys)
+        self.assertIn("footer_text", response_keys)
+
+    def test_donor_admin_update(self):
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        data = {
+            "cover_text": "blah",
+            "footer_text": "foo"
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["cover_text"], data["cover_text"])
+        self.assertEqual(response.json()["footer_text"], data["footer_text"])
+
+    def test_donor_admin_update_images(self):
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        cover = get_temp_image("cover")
+        logo = get_temp_image("logo")
+        data = {
+            "cover": cover,
+            "logo": logo
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+
+    def test_donor_admin_retrieve_admin_requests(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.DONOR_ADMIN, donor=self.donor)
+        self.donor.admins.add(self.test_user['user_profile_id'])
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.DONOR)
+        user2 = User.objects.create(username="test2", password="12345678")
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
+                                                  account_type=UserProfile.DONOR_ADMIN)
+
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
+        self.assertEqual(response.json()["super_admin_requests"], [])
+
+    def test_donor_admin_retrieve_super_admin_requests(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
+        self.donor.super_admins.add(self.test_user['user_profile_id'])
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.DONOR)
+        user2 = User.objects.create(username="test2", password="12345678")
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
+                                                  account_type=UserProfile.DONOR_ADMIN)
+        user3 = User.objects.create(username="test3", password="12345678")
+        userprofile3 = UserProfile.objects.create(user=user3, name="test3", donor=self.donor,
+                                                  account_type=UserProfile.SUPER_DONOR_ADMIN)
+
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
+        self.assertEqual(response.json()["super_admin_requests"][0]['id'], userprofile3.id)
+
+    def test_donor_admin_update_users_remove_from_other_group(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
+        self.donor.super_admins.add(self.test_user['user_profile_id'])
+
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.DONOR)
+        data = {
+            "users": [userprofile1.id]
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['users'], [userprofile1.id])
+
+        UserProfile.objects.filter(id=userprofile1.id).update(account_type=UserProfile.DONOR_ADMIN)
+        data = {
+            "admins": [userprofile1.id]
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['users'], [])
+        self.assertEqual(response.json()['admins'], [userprofile1.id])
+
+        UserProfile.objects.filter(id=userprofile1.id).update(account_type=UserProfile.SUPER_DONOR_ADMIN)
+        data = {
+            "super_admins": [userprofile1.id]
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['users'], [])
+        self.assertEqual(response.json()['admins'], [])
+        self.assertEqual(response.json()['super_admins'], [userprofile1.id])
+
+    def test_country_admin_update_super_admin_without_perm(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.DONOR_ADMIN, donor=self.donor)
+        self.donor.admins.add(self.test_user['user_profile_id'])
+
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.SUPER_DONOR_ADMIN)
+        data = {
+            "super_admins": [userprofile1.id],
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("super_admins" not in response.json().keys())
+        self.donor.refresh_from_db()
+        self.assertTrue(userprofile1.id not in self.donor.super_admins.all())
+
+    def test_donor_partner_logos_create(self):
+        url = reverse("donor-partner-logo-list")
+        logo = get_temp_image("logo")
+        data = {
+            "donor": self.donor.id,
+            "image": logo
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+    def test_donor_partner_logos_list(self):
+        url = reverse("donor-partner-logo-list")
+        logo1 = get_temp_image("donorlogo1")
+        data = {
+            "donor": self.donor.id,
+            "image": logo1
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+        logo2 = get_temp_image("donorlogo2")
+        data = {
+            "donor": self.donor.id,
+            "image": logo2
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['partner_logos']), 3)
+        self.assertEqual(response.json()['partner_logos'][1]['donor'], self.donor.id)
+        self.assertEqual(response.json()['partner_logos'][1]['image'], 'http://testserver/media/donorlogo1.png')
+        self.assertEqual(response.json()['partner_logos'][2]['donor'], self.donor.id)
+        self.assertEqual(response.json()['partner_logos'][2]['image'], 'http://testserver/media/donorlogo2.png')
+
+    def test_donor_partner_logos_delete(self):
+        url = reverse("donor-partner-logo-list")
+        logo = get_temp_image("logo")
+        data = {
+            "donor": self.donor.id,
+            "image": logo
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+        url = reverse("donor-partner-logo-detail", kwargs={"pk": response.json()["id"]})
+        response = self.test_user_client.delete(url)
+        self.assertEqual(response.status_code, 204)
 
 
 class MockRequest:

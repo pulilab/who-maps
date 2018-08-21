@@ -31,17 +31,25 @@ class Organisation(NameByIDMixin, ExtendedModel):
 class UserProfile(ExtendedModel):
     IMPLEMENTER = 'I'
     DONOR = 'D'
+    DONOR_ADMIN = 'DA'
+    SUPER_DONOR_ADMIN = 'SDA'
     GOVERNMENT = 'G'
+    COUNTRY_ADMIN = 'CA'
+    SUPER_COUNTRY_ADMIN = 'SCA'
     INVENTORY = 'Y'
     ACCOUNT_TYPE_CHOICES = (
         (IMPLEMENTER, _('Implementer')),
         (DONOR, _('Financial Investor')),
+        (DONOR_ADMIN, _('Donor Admin')),
+        (SUPER_DONOR_ADMIN, _('Super Donor Admin')),
         (GOVERNMENT, _('Government')),
+        (COUNTRY_ADMIN, _('Country Admin')),
+        (SUPER_COUNTRY_ADMIN, _('Super Country Admin')),
         (INVENTORY, _('Inventory User')),
     )
 
     account_type = models.CharField(
-        max_length=1,
+        max_length=3,
         choices=ACCOUNT_TYPE_CHOICES,
         default=IMPLEMENTER,
     )
@@ -49,6 +57,7 @@ class UserProfile(ExtendedModel):
     name = models.CharField(max_length=100, blank=True, null=True)
     organisation = models.ForeignKey(Organisation, blank=True, null=True, on_delete=models.SET_NULL)
     country = models.ForeignKey('country.Country', null=True, on_delete=models.SET_NULL)
+    donor = models.ForeignKey('country.Donor', related_name='userprofiles', null=True, on_delete=models.SET_NULL)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
 
