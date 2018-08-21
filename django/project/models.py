@@ -5,6 +5,8 @@ from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField, ArrayField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
@@ -158,6 +160,12 @@ class Project(SoftDeleteModel, ExtendedModel):
         if project_country:
             self.public_id = project_country.code + str(uuid.uuid1()).split('-')[0]
 
+@receiver(post_save, sender=Project)
+def on_create_init(sender, instance, created, **kwargs):
+    if created:
+        from toolkit.models import Toolkit
+        Toolkit.objects.get_or_create(project_id=instance.id, defaults=dict(data=toolkit_default))
+        ProjectApproval.objects.get_or_create(project_id=instance.id)
 
 
 class ProjectApproval(ExtendedModel):
