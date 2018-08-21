@@ -5,10 +5,11 @@ from rest_framework.parsers import FormParser, MultiPartParser
 
 from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
-from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo
-from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountryMapDataSerializer, \
-    CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, PartnerLogoSerializer, DonorSerializer, \
-    SuperAdminDonorSerializer, AdminDonorSerializer, DonorPartnerLogoSerializer
+from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo, MapFile
+from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountrySerializer, \
+    SuperAdminCountrySerializer, AdminCountrySerializer, PartnerLogoSerializer, DonorSerializer, \
+    SuperAdminDonorSerializer, AdminDonorSerializer, DonorPartnerLogoSerializer, MapFileSerializer, \
+    CountryMapDataSerializer
 
 
 class LandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -113,6 +114,13 @@ class CountryExportView(APIView):
         return Response(data)
 
 
-class CountryMapDataViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class MapFileViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
+                     viewsets.GenericViewSet):
+    queryset = MapFile.objects.all()
+    serializer_class = MapFileSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class CountryMapDataViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.all()
     serializer_class = CountryMapDataSerializer

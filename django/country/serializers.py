@@ -29,6 +29,18 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ('id', 'email', 'name')
 
 
+class MapFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MapFile
+        fields = ('id', 'country', 'map_file',)
+
+
+class CountryMapDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ('id', 'map_data',)
+
+
 class UpdateAdminMixin:
     @atomic
     def update(self, instance, validated_data):
@@ -62,13 +74,15 @@ class UpdateAdminMixin:
 
 
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",
-                  "project_approval", "map_data", "map_version", "map_activated_on",)
-READ_ONLY_COUNTRY_FIELDS = ("name", "code", "project_approval", "map_data", "map_version", "map_activated_on",)
+                  "project_approval", "map_data", "map_version", "map_files", "map_activated_on",)
+READ_ONLY_COUNTRY_FIELDS = ("name", "code", "project_approval", "map_data", "map_version", "map_files",
+                            "map_activated_on",)
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 
 
 class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer):
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
+    map_files = MapFileSerializer(many=True, read_only=True)
     map_version = serializers.SerializerMethodField()
     user_requests = serializers.SerializerMethodField()
     admin_requests = serializers.SerializerMethodField()
@@ -79,8 +93,7 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
         fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
         read_only_fields = READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS
 
-    @staticmethod
-    def get_map_version(obj):
+    def get_map_version(self, obj):
         if obj.map_activated_on:
             return format(obj.map_activated_on, 'U')
         return 0
@@ -230,19 +243,3 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
                 if field.required and not len(list(filter(lambda a, f=field: a['question'] == f.question, value))):
                     raise ValidationError("All required answers need to be given")
             return value
-
-
-class CountryMapDataSerializer(serializers.ModelSerializer):
-    map_file = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Country
-        fields = ("id", "map_data", "map_file")
-
-    @staticmethod
-    def get_map_file(obj):  # pragma: no cover
-        # TODO: refactor this
-        file = MapFile.objects.filter(country=obj.id).first()
-        if file and file.map_file:
-            return file.map_file.url
-        return None

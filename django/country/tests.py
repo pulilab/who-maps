@@ -6,6 +6,9 @@ from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.translation import override
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.utils import timezone
+from django.utils.dateformat import format
 
 from django.core import mail
 from django.core.management import call_command
@@ -47,7 +50,7 @@ class CountryTests(APITestCase):
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
 
-        self.country = Country.objects.create(name="country1", code="CC")
+        self.country = Country.objects.create(name="country1", code="CC", map_activated_on=timezone.now())
         self.country.name_en = 'Hungary'
         self.country.name_fr = 'Hongrie'
         self.country.save()
@@ -101,6 +104,7 @@ class CountryTests(APITestCase):
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['name'], 'Hungary')
+        self.assertEqual(response.json()['map_version'], format(self.country.map_activated_on, 'U'))
         response_keys = response.json().keys()
         self.assertIn("name", response_keys)
         self.assertIn("code", response_keys)
@@ -846,25 +850,48 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[-1], expected_data)
 
-    def test_update_and_list_country_map_data(self):
-        url = reverse("country-map-data-detail", kwargs={"pk": Country.objects.last().id})
-        self.map_data = {"map_data": {
-            "sub_level_name": "District",
-            "sub_levels": [{
-                "name_en": "District 1",
-                "name_es": "Districto Uno"
-            }, {
-                "name_en": "Disctrict 9"
-            }]
-        }}
-        response = self.test_user_client.put(url, data=self.map_data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['map_data'], self.map_data['map_data'])
+    def test_create_retrieve_update_mapfile(self):
+        url = reverse('map-file-list')
+        map_file = SimpleUploadedFile("file.txt", b"file_content")
+        data = {
+            'country': self.country.id,
+            'map_file': map_file
+        }
+        response = self.test_user_client.post(url, data=data, format="multipart")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['country'], self.country.id)
 
-        url = reverse("country-list")
+        url = reverse('map-file-detail', kwargs={'pk': response.json()['id']})
+        map_file2 = SimpleUploadedFile("file2.txt", b"file_content2")
+        data = {
+            'country': self.country.id,
+            'map_file': map_file2
+        }
+        response = self.test_user_client.put(url, data=data, format="multipart")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['country'], self.country.id)
+
+        url = reverse('map-file-detail', kwargs={'pk': response.json()['id']})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()[-1]['map_data'], self.map_data['map_data'])
+        self.assertEqual(response.json()['country'], self.country.id)
+
+    def test_country_admin_update_map_data(self):
+        url = reverse("map-data-detail", kwargs={"pk": self.country.id})
+        data = {
+            "map_data": {
+                "sub_level_name": "District",
+                "sub_levels": [{
+                    "name_en": "District 1",
+                    "name_es": "Districto Uno"
+                }, {
+                    "name_en": "Disctrict 9"
+                }]
+            }
+        }
+        response = self.test_user_client.patch(url, data=data, format='json', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["map_data"], data["map_data"])
 
 
 class DonorTests(APITestCase):
