@@ -2,7 +2,7 @@ import copy
 
 from django.urls import reverse
 
-from project.models import Project, TechnologyPlatform, DigitalStrategy, HealthFocusArea, HSCChallenge
+from project.models import Project, DigitalStrategy, HealthFocusArea, HSCChallenge
 from project.tests import SetupTests
 
 
@@ -212,7 +212,7 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
 
-        data = {"gov": [1,2]}
+        data = {"gov": [1, 2]}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
