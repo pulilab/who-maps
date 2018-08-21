@@ -123,8 +123,13 @@ export const actions = {
     dispatch('setInteroperabilityLinks', project.interoperability_links);
     dispatch('setInteroperabilityStandards', project.interoperability_standards);
   },
-  resetProjectState ({dispatch, commit}) {
+  resetProjectState ({dispatch, commit, rootGetters}) {
     const clean = cleanState();
+    const profile = rootGetters['user/getProfile'];
+    if (profile) {
+      clean.country = profile.country;
+      clean.team = [profile.id];
+    }
     dispatch('setProjectState', clean);
     commit('SET_TEAM', clean.team);
     commit('SET_VIEWERS', clean.viewers);
@@ -228,6 +233,15 @@ export const actions = {
   setPublished ({commit}, value) {
     commit('SET_PUBLISHED', value);
   },
+  async saveTeamViewers ({getters, commit}, id) {
+    const teamViewers = {
+      team: getters.getTeam,
+      viewers: getters.getViewers
+    };
+    const { data } = await this.$axios.put(`/api/projects/${id}/groups/`, teamViewers);
+    commit('SET_TEAM', data.team);
+    commit('SET_VIEWERS', data.viewers);
+  },
   async createProject ({getters, dispatch}) {
     const draft = getters.getProjectData;
     const parsed = apiWriteParser(draft);
@@ -239,6 +253,7 @@ export const actions = {
     const draft = getters.getProjectData;
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
+    await dispatch('saveTeamViewers', id);
     dispatch('projects/updateProject', data, {root: true});
   },
   async publishProject ({getters, dispatch, commit}, id) {
@@ -246,7 +261,7 @@ export const actions = {
     const parsed = apiWriteParser(draft);
     // TODO: Remove this on donor feature creation
     parsed.donors = ['FakeDonor for API TEST'];
-    const { data } = await this.$axios.put(`/api/projects/publish/${id}/`, parsed)
+    const { data } = await this.$axios.put(`/api/projects/publish/${id}/`, parsed);
     const parsedResponse = apiReadParser(data.draft);
     commit('SET_PUBLISHED', Object.freeze(parsedResponse));
     dispatch('projects/updateProject', data, {root: true});
