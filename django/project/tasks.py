@@ -19,7 +19,6 @@ from rest_framework.exceptions import ValidationError
 
 from user.models import Organisation
 from country.models import Country
-from toolkit.models import Toolkit
 
 from .models import Project, InteroperabilityLink
 from .serializers import ProjectDraftSerializer
