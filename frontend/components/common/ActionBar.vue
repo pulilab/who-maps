@@ -71,19 +71,23 @@ export default {
     }
 
     .FakeTab {
-      height: 48px;
+      height: 43px;
       line-height: 48px;
       white-space: nowrap;
       color: white;
       margin: 0 12px;
       padding: 0 10px;
       cursor: pointer;
-      color: gray;
-      transition: border .5s, color .5s;
+      font-family: Arial;
+      font-size: 14px;
+      font-weight: bold;
+      border-bottom: 5px solid @colorBrandPrimary;
+      opacity: 0.6;
+      transition: border-bottom-color .5s, opacity .5s;
 
       &.nuxt-link-exact-active {
-        border-bottom: 5px solid white;
-        color: white;
+        border-bottom-color: white;
+        opacity: 1;
       }
     }
   }
