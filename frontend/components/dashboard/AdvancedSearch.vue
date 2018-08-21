@@ -23,52 +23,47 @@
         <filter-item
           :selected="selectedDHI.length > 0"
           label="Digital Health Interventions" >
-          <div
-            v-for="dhi in selectedDHI"
-            :key="dhi" >
-            <fa icon="check"/>
-            <digital-health-intervention-item :id="dhi" />
-          </div>
+          <digital-health-interventions-list
+            :value="selectedDHI"
+            actions
+            @delete="deleteDhiHandler"
+          />
         </filter-item>
         <filter-item
           :selected="selectedHFA.length > 0"
           label="Health Focus Area" >
-          <div
-            v-for="hfa in selectedHFA"
-            :key="hfa" >
-            <fa icon="check"/>
-            <digital-health-intervention-item :id="hfa" />
-          </div>
+          <health-focus-areas-list
+            :value="selectedHFA"
+            actions
+            @delete="deleteHfaHandler"
+          />
         </filter-item>
         <filter-item
           :selected="selectedHSC.length > 0"
           label="Health System Challenges" >
-          <div
-            v-for="hsc in selectedHSC"
-            :key="hsc" >
-            <fa icon="check"/>
-            <digital-health-intervention-item :id="hsc" />
-          </div>
+          <health-system-challenges-list
+            :value="selectedHSC"
+            actions
+            @delete="deleteHscHandler"
+          />
         </filter-item>
         <filter-item
           :selected="selectedHIS.length > 0"
           label="Health Information System" >
-          <div
-            v-for="his in selectedHIS"
-            :key="his" >
-            <fa icon="check"/>
-            <digital-health-intervention-item :id="his" />
-          </div>
+          <his-bucket-list
+            :value="selectedHIS"
+            actions
+            @delete="deleteHisHandler"
+          />
         </filter-item>
         <filter-item
-          :selected="software.length > 0"
+          :selected="selectedPlatforms.length > 0"
           label="Software" >
-          <div
-            v-for="s in software"
-            :key="s" >
-            <fa icon="check"/>
-            <digital-health-intervention-item :id="s" />
-          </div>
+          <simple-platform-list
+            :value="selectedPlatforms"
+            actions
+            @delete="deletePlatformsHandler"
+          />
         </filter-item>
       </div>
     </div>
@@ -81,7 +76,11 @@ import SearchBox from './SearchBox';
 import CountryFilters from './CountryFilters';
 import FilterSwitch from './FilterSwitch';
 import FilterItem from './FilterItem';
-import DigitalHealthInterventionItem from '../common/DigitalHealthInterventionItem';
+import DigitalHealthInterventionsList from '../common/list/DigitalHealthInterventionsList';
+import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
+import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList';
+import HisBucketList from '../common/list/HisBucketList';
+import SimplePlatformList from '../common/list/SimplePlatformList';
 export default {
   components: {
     FilterPresetsActions,
@@ -89,7 +88,11 @@ export default {
     CountryFilters,
     FilterSwitch,
     FilterItem,
-    DigitalHealthInterventionItem
+    DigitalHealthInterventionsList,
+    HealthFocusAreasList,
+    HealthSystemChallengesList,
+    HisBucketList,
+    SimplePlatformList
   },
   data () {
     return {
@@ -97,13 +100,31 @@ export default {
       governamentFinanced: false,
       onlyMyDonor: false,
       selectedDHI: [113, 114],
-      selectedHFA: [],
-      selectedHSC: [],
-      selectedHIS: [],
-      software: []
+      selectedHFA: [31],
+      selectedHSC: [18],
+      selectedHIS: [1],
+      selectedPlatforms: [4]
     };
+  },
+  methods: {
+    deleteDhiHandler (id) {
+      this.selectedDHI = this.selectedDHI.filter(dhi => dhi !== id);
+    },
+    deleteHfaHandler (id) {
+      this.selectedHFA = this.selectedHFA.filter(hfa => hfa !== id);
+    },
+    deleteHscHandler (id) {
+      this.selectedHSC = this.selectedHSC.filter(hsc => hsc !== id);
+    },
+    deleteHisHandler (id) {
+      this.selectedHIS = this.selectedHIS.filter(his => his !== id);
+    },
+    deletePlatformsHandler (id) {
+      this.selectedPlatforms = this.selectedPlatforms.filter(p => p !== id);
+    }
   }
 };
+
 </script>
 
 <style lang="less">
