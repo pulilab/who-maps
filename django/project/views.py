@@ -256,7 +256,6 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         data_serializer = ProjectDraftSerializer(data=request.data)
         data_serializer.is_valid(raise_exception=True)
         project = data_serializer.save(owner=request.user.userprofile)
-        project.post_save_initializations(Toolkit)
         data = project.to_representation(draft_mode=True)
 
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)

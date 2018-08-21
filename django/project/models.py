@@ -158,11 +158,6 @@ class Project(SoftDeleteModel, ExtendedModel):
         if project_country:
             self.public_id = project_country.code + str(uuid.uuid1()).split('-')[0]
 
-    def post_save_initializations(self, Toolkit):
-        # Add default Toolkit structure for the new project.
-        Toolkit.objects.get_or_create(project_id=self.id, defaults=dict(data=toolkit_default))
-        # Add approval
-        ProjectApproval.objects.create(project=self)
 
 
 class ProjectApproval(ExtendedModel):
