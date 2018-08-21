@@ -21,9 +21,10 @@
     </div>
 
     <transition name="slide-fade">
-      <el-checkbox-group
+      <div
         v-show="categoryShown"
-        class="Items OnePerRow">
+        role="group"
+        class="el-checkbox-group Items OnePerRow">
         <el-checkbox
           v-for="item in items"
           :key="item.id"
@@ -33,7 +34,7 @@
         >
           {{ item.name }}
         </el-checkbox>
-      </el-checkbox-group>
+      </div>
     </transition>
   </div>
 </template>
