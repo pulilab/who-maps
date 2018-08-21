@@ -57,44 +57,67 @@
       <el-row type="flex">
         <el-col class="AdminPersonaChooser">
           <div
-            class="Persona"
+            :class="['Persona', { 'active': selectedPersona === 'G'}]"
             @click="selectPersona('G')">
             <div class="PersonaName">Users/viewers</div>
             <div class="RequestCount">{{ userSelection.length - users.length }} new request{{ country.user_requests.length === 1 ? '' : 's' }}</div>
           </div>
           <div
-            class="Persona"
+            :class="['Persona', { 'active': selectedPersona === 'CA'}]"
             @click="selectPersona('CA')">
             <div class="PersonaName">Admins</div>
             <div class="RequestCount">{{ adminSelection.length - admins.length }} new request{{ country.admin_requests.length === 1 ? '' : 's' }}</div>
           </div>
           <div
-            class="Persona"
+            :class="['Persona', { 'active': selectedPersona === 'SCA'}]"
             @click="selectPersona('SCA')">
             <div class="PersonaName">Superadmins</div>
             <div class="RequestCount">{{ superadminSelection.length - superAdmins.length }} new request{{ country.super_admin_requests.length === 1 ? '' : 's' }}</div>
           </div>
         </el-col>
-        <el-col>
-          Privileges for {{ selectedPersona }}
 
+        <el-col class="UserTransfers">
+
+          <div
+            v-if="selectedPersona === 'G'"
+            class="Privileges">
+            Privileges for {{ selectedPersona }}
+          </div>
           <el-transfer
             v-if="selectedPersona === 'G'"
             :titles="['New requests', 'Approved']"
             v-model="users"
-            :data="userSelection" />
+            :data="userSelection"
+            filterable
+            filter-placeholder="Type to filter users..." />
 
+          <div
+            v-if="selectedPersona === 'CA'"
+            class="Privileges">
+            Privileges for {{ selectedPersona }}
+            Asdf
+          </div>
           <el-transfer
             v-if="selectedPersona === 'CA'"
             :titles="['New requests', 'Approved']"
             v-model="admins"
-            :data="adminSelection" />
+            :data="adminSelection"
+            filterable
+            filter-placeholder="Type to filter users..." />
 
+          <div
+            v-if="selectedPersona === 'SCA'"
+            class="Privileges">
+            Privileges for {{ selectedPersona }}
+            Lorem ipsum this and that
+          </div>
           <el-transfer
             v-if="selectedPersona === 'SCA'"
             :titles="['New requests', 'Approved']"
             v-model="superAdmins"
-            :data="superadminSelection" />
+            :data="superadminSelection"
+            filterable
+            filter-placeholder="Type to filter users..." />
 
         </el-col>
       </el-row>
@@ -260,12 +283,14 @@ export default {
 </script>
 
 <style lang="less">
+  @import "../../assets/style/variables.less";
+
   .CountryAdmin {
     padding-bottom: 80px;
 
     .AdminHeading {
-      color: #474747;
-      font-size: 32px;
+      color: @colorTextPrimary;
+      font-size: @fontSizeHeading;
       font-weight: bold;
       letter-spacing: -1px;
       line-height: 24px;
@@ -283,25 +308,59 @@ export default {
       .ContentContainer {
         padding: 0 0;
       }
+
       .AdminPersonaChooser {
         width: 161px;
-        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5), 2px 0 8px 0 rgba(0,0,0,0.16);
+        height: 600px;
+        box-shadow: 2px 0 8px 0 rgba(0,0,0,0.16);
 
         .Persona {
+          padding: 14px 20px;
           width: 160px;
           height: 66px;
-          // .PersonaName {}
-          // .RequestCount {}
+          box-sizing: border-box;
+          cursor: pointer;
 
-          &.active {
-            background-color: lightblue;
-            // .PersonaName {}
-            // .RequestCount {}
+          .PersonaName {
+            color: @colorTextPrimary;
+            font-family: Arial;
+            font-size: @fontSizeBase;
+            line-height: 16px;
+            margin-bottom: 8px;
+          }
+          .RequestCount {
+            color: @colorTextMuted;
+            font-family: Arial;
+            font-size: @fontSizeSmall;
+            line-height: 14px;
           }
 
+          &.active {
+            background-color: @colorBrandBlueLight;
+            box-shadow: 0 1px 0 0 rgba(0,141,201,0.25);
+
+            .PersonaName {
+              color: @colorBrandPrimary;
+              font-weight: bold;
+            }
+            .RequestCount {
+              color: @colorTextSecondary;
+            }
+          }
+        }
+      }
+
+      .UserTransfers {
+        .el-transfer {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+        }
+        .el-transfer-panel {
+          width: 300px;
         }
       }
     }
-
   }
 </style>
