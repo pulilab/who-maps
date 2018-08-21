@@ -44,11 +44,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
                                                       allow_null=False)
     name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
     user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    user_email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
         model = UserProfile
-        fields = ("id", "name", "country", "account_type", "organisation", "user", "created", "organisation_name",
-                  "language")
+        fields = ("id", "name", "user_email", "country", "account_type", "organisation", "user", "created",
+                  "organisation_name", "language")
 
     @staticmethod
     def get_organisation_name(obj):

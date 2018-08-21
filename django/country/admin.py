@@ -1,21 +1,24 @@
+import pycountry
+
 from collections import defaultdict
 from django.conf import settings
+
+from django.core.mail import send_mail
+from django.contrib import admin
+from django.core import management
 from django.urls import reverse
+from django.template import loader
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext, override
 
+from core.utils import lazyJSONDumps
 from core.admin import ArrayFieldMixin
-from django.core import mail, management
-from django.contrib import admin
-from django.template import loader
+from core.data.sub_level_types import SUB_LEVEL_TYPES
 from .models import Country, PartnerLogo, CountryField, MapFile
 from .forms import CountryFieldAdminForm, CountryFieldAdminFormNoneReadOnlyOptions
-from core.data.sub_level_types import SUB_LEVEL_TYPES
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
-import scheduler.celery # noqa
-import pycountry
-from core.utils import lazyJSONDumps
+import scheduler.celery  # noqa
 
 
 class CountryFieldInline(admin.TabularInline):
@@ -137,7 +140,7 @@ class CountryAdmin(admin.ModelAdmin):
                                                      'country_name': country.name,
                                                      'language': language})
 
-            mail.send_mail(
+            send_mail(
                 subject=subject.format(country_name=country.name),
                 message="",
                 from_email=settings.FROM_EMAIL,

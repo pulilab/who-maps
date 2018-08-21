@@ -1,41 +1,177 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.utils.dateformat import format
+from django.db.transaction import atomic
 
-from .models import Country, PartnerLogo, CountryField, MapFile
+from user.models import UserProfile
+from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, CountryField, MapFile
 
 
-class CountryListSerializer(serializers.ModelSerializer):
+class PartnerLogoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PartnerLogo
+        fields = ("id", "country", "image", "image_url",)
+        read_only_fields = ("image_url",)
+
+
+class DonorPartnerLogoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DonorPartnerLogo
+        fields = ("id", "donor", "image", "image_url",)
+        read_only_fields = ("image_url",)
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='user.email')
+
+    class Meta:
+        model = UserProfile
+        fields = ('id', 'email', 'name')
+
+
+class MapFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MapFile
+        fields = ('id', 'country', 'map_file',)
+
+
+class CountryMapDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ('id', 'map_data',)
+
+
+class UpdateAdminMixin:
+    @atomic
+    def update(self, instance, validated_data):
+        # keep original lists for comparison
+        original_users = set(instance.users.all().only('id'))
+        original_admins = set(instance.admins.all().only('id'))
+        original_super_admins = set(instance.super_admins.all().only('id'))
+
+        # perform update
+        instance = super().update(instance, validated_data)
+
+        # figure out the new entities
+        new_users = set(instance.users.all().only('id')) - original_users
+        new_admins = set(instance.admins.all().only('id')) - original_admins
+        new_super_admins = set(instance.super_admins.all().only('id')) - original_super_admins
+
+        # remove new additions from any other user group
+        if new_users:
+            instance.admins.remove(*new_users)
+            instance.super_admins.remove(*new_users)
+
+        if new_admins:
+            instance.users.remove(*new_admins)
+            instance.super_admins.remove(*new_admins)
+
+        if new_super_admins:
+            instance.users.remove(*new_super_admins)
+            instance.admins.remove(*new_super_admins)
+
+        return instance
+
+
+COUNTRY_FIELDS = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",
+                  "project_approval", "map_data", "map_version", "map_files", "map_activated_on",)
+READ_ONLY_COUNTRY_FIELDS = ("name", "code", "project_approval", "map_data", "map_version", "map_files",
+                            "map_activated_on",)
+COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
+
+
+class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer):
+    partner_logos = PartnerLogoSerializer(many=True, read_only=True)
+    map_files = MapFileSerializer(many=True, read_only=True)
     map_version = serializers.SerializerMethodField()
+    user_requests = serializers.SerializerMethodField()
+    admin_requests = serializers.SerializerMethodField()
+    super_admin_requests = serializers.SerializerMethodField()
 
     class Meta:
         model = Country
-        fields = (
-            "id",
-            "name",
-            "code",
-            "project_approval",
-            "map_data",
-            "map_version"
-        )
+        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
+        read_only_fields = READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS
 
-    @staticmethod
-    def get_map_version(obj):
+    def get_map_version(self, obj):
         if obj.map_activated_on:
             return format(obj.map_activated_on, 'U')
         return 0
 
+    def get_user_requests(self, obj):
+        # figure out not yet assigned users
+        data = UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.GOVERNMENT) \
+            .difference(obj.users.all())
+        return UserProfileSerializer(data, many=True).data
 
-class LandingPageSerializer(serializers.ModelSerializer):
-    partner_logos = serializers.SerializerMethodField()
+    def get_admin_requests(self, obj):
+        # figure out not yet assigned users
+        data = UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.COUNTRY_ADMIN) \
+            .difference(obj.admins.all())
+        return UserProfileSerializer(data, many=True).data
+
+    def get_super_admin_requests(self, obj):
+        # figure out not yet assigned users
+        data = UserProfile.objects.filter(country_id=obj.id, account_type=UserProfile.SUPER_COUNTRY_ADMIN) \
+            .difference(obj.super_admins.all())
+        return UserProfileSerializer(data, many=True).data
+
+
+class AdminCountrySerializer(SuperAdminCountrySerializer):
+    class Meta(SuperAdminCountrySerializer.Meta):
+        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins',)
+
+
+class CountrySerializer(SuperAdminCountrySerializer):
+    class Meta(SuperAdminCountrySerializer.Meta):
+        fields = COUNTRY_FIELDS
+        read_only_fields = READ_ONLY_COUNTRY_FIELDS
+
+
+DONOR_FIELDS = ("id", "name", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",)
+READ_ONLY_DONOR_FIELDS = ("name",)
+DONOR_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
+
+
+class SuperAdminDonorSerializer(UpdateAdminMixin, serializers.ModelSerializer):
+    partner_logos = DonorPartnerLogoSerializer(many=True, read_only=True)
+    user_requests = serializers.SerializerMethodField()
+    admin_requests = serializers.SerializerMethodField()
+    super_admin_requests = serializers.SerializerMethodField()
 
     class Meta:
-        model = Country
-        fields = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos")
+        model = Donor
+        fields = DONOR_FIELDS + DONOR_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
+        read_only_fields = READ_ONLY_DONOR_FIELDS + DONOR_ADMIN_FIELDS
 
-    @staticmethod
-    def get_partner_logos(obj):
-        return [p.image_url for p in PartnerLogo.objects.filter(country=obj)]
+    def get_user_requests(self, obj):
+        # figure out not yet assigned users
+        data = UserProfile.objects.filter(donor_id=obj.id, account_type=UserProfile.DONOR) \
+            .difference(obj.users.all())
+        return UserProfileSerializer(data, many=True).data
+
+    def get_admin_requests(self, obj):
+        # figure out not yet assigned users
+        data = UserProfile.objects.filter(donor_id=obj.id, account_type=UserProfile.DONOR_ADMIN) \
+            .difference(obj.admins.all())
+        return UserProfileSerializer(data, many=True).data
+
+    def get_super_admin_requests(self, obj):
+        # figure out not yet assigned users
+        data = UserProfile.objects.filter(donor_id=obj.id, account_type=UserProfile.SUPER_DONOR_ADMIN) \
+            .difference(obj.super_admins.all())
+        return UserProfileSerializer(data, many=True).data
+
+
+class AdminDonorSerializer(SuperAdminDonorSerializer):
+    class Meta(SuperAdminDonorSerializer.Meta):
+        fields = DONOR_FIELDS + DONOR_ADMIN_FIELDS + ('users', 'admins',)
+
+
+class DonorSerializer(SuperAdminDonorSerializer):
+    class Meta(SuperAdminDonorSerializer.Meta):
+        fields = DONOR_FIELDS
+        read_only_fields = READ_ONLY_DONOR_FIELDS
 
 
 class CountryFieldsListSerializer(serializers.ModelSerializer):
@@ -107,19 +243,3 @@ class CountryFieldsWriteSerializer(serializers.Serializer):
                 if field.required and not len(list(filter(lambda a, f=field: a['question'] == f.question, value))):
                     raise ValidationError("All required answers need to be given")
             return value
-
-
-class CountryMapDataSerializer(serializers.ModelSerializer):
-    map_file = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Country
-        fields = ("id", "map_data", "map_file")
-
-    @staticmethod
-    def get_map_file(obj):  # pragma: no cover
-        # TODO: refactor this
-        file = MapFile.objects.filter(country=obj.id).first()
-        if file and file.map_file:
-            return file.map_file.url
-        return None
