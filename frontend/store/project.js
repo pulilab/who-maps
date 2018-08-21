@@ -231,7 +231,6 @@ export const actions = {
   async createProject ({getters, dispatch}) {
     const draft = getters.getProjectData;
     const parsed = apiWriteParser(draft);
-    console.log(parsed);
     const { data } = await this.$axios.post('api/projects/draft/', parsed);
     dispatch('projects/addProjectToList', data, {root: true});
     return data.id;
@@ -239,14 +238,22 @@ export const actions = {
   async saveDraft ({getters, dispatch}, id) {
     const draft = getters.getProjectData;
     const parsed = apiWriteParser(draft);
-    console.log(parsed);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
+    dispatch('projects/updateProject', data, {root: true});
+  },
+  async publishProject ({getters, dispatch, commit}, id) {
+    const draft = getters.getProjectData;
+    const parsed = apiWriteParser(draft);
+    // TODO: Remove this on donor feature creation
+    parsed.donors = ['FakeDonor for API TEST'];
+    const { data } = await this.$axios.put(`/api/projects/publish/${id}/`, parsed)
+    const parsedResponse = apiReadParser(data.draft);
+    commit('SET_PUBLISHED', Object.freeze(parsedResponse));
     dispatch('projects/updateProject', data, {root: true});
   },
   async discardDraft ({getters, dispatch}, id) {
     const published = getters.getPublished;
     const parsed = apiWriteParser(published);
-    console.log(parsed);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
     const parsedResponse = apiReadParser(data.draft);
     await dispatch('setProjectState', parsedResponse);
