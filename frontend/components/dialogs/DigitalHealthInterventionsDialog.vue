@@ -4,7 +4,7 @@
     title="Select Digital Health Intervention(s)"
     modal
     top="10vh"
-    width="90%"
+    width="90vw"
     custom-class="SelectHfaDialog"
     @open="loadCurrentSelection"
   >
@@ -117,16 +117,28 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .SelectHfaDialog {
+    height: 80vh;
+    margin-top: 0;
+    margin-bottom: 0;
+
     .el-dialog__body {
       padding: 0;
+      height: calc(80vh - (@dialogHeaderFooterHeight*2));
     }
 
     .HfaMainCategories {
+      height: calc(80vh - (@dialogHeaderFooterHeight*2));
+
       > .el-col {
+        overflow: hidden;
         border-right: 1px solid @colorGrayLight;
 
         &:last-child {
-          border: 0;
+          .SelectorDialogColumn {
+            .Header {
+              width: calc(90vw / 4);
+            }
+          }
         }
       }
     }

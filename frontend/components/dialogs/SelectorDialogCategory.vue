@@ -131,6 +131,7 @@ export default {
       }
 
       .svg-inline--fa {
+        width: 12px;
         margin-top: 2px;
       }
 
