@@ -204,6 +204,13 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
+
+    def test_filter_region(self):
+        pass
+
+    def test_filter_donor(self):
+        pass
+
     def test_filter_gov(self):
         url = reverse("search-project-list")
         data = {"gov": 1}
@@ -251,3 +258,9 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 0)
+
+    def test_multi_filter(self):
+        pass
+
+    def test_multi_filter_same_filter(self):
+        pass
