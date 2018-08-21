@@ -234,6 +234,7 @@ export default {
       height: 58px;
       padding: 0 14px;
       border-bottom: 1px solid @colorGrayLight;
+      box-sizing: border-box;
 
       .el-row {
         height: 100%;
@@ -248,13 +249,13 @@ export default {
       .SwitchButtons {
         .el-button {
           margin: 0 !important;
-          padding: 0 12px;
-          height: 30px;
-          line-height: 30px;
+          padding: 0 10px;
+          height: 29px;
+          line-height: 29px;
           border: 0 !important;
           background-color: @colorGrayLighter;
           color: @colorTextSecondary;
-          font-size: @fontSizeSmall;
+          font-size: @fontSizeSmall + 1;
           text-transform: uppercase;
 
           &:not(.Active) {

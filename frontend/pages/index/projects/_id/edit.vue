@@ -12,6 +12,37 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
+  .ProjectEdit {
+    .CollapsibleCard {
+      .el-card__header {
+        background-color: @colorDraft !important;
+        color: @colorTextPrimary !important;
+      }
+
+      .CollapsibleHeader {
+        .CollapseToggle {
+          color: @colorTextPrimary !important;
+        }
+      }
+    }
+
+    .Stepper {
+      li {
+        &.active,
+        &:hover,
+        &:active {
+          .el-button {
+            .Step {
+              background-color: @colorDraft !important;
+              color: @colorTextPrimary;
+            }
+          }
+        }
+      }
+    }
+  }
 </style>
