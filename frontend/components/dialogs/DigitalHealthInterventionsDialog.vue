@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    title="Select Health Focus Area(s)"
+    title="Select Digital Health Intervention(s)"
     modal
     top="10vh"
     width="90%"
