@@ -917,7 +917,6 @@ class DonorTests(APITestCase):
         self.assertIn("cover", response_keys)
         self.assertIn("cover_text", response_keys)
         self.assertIn("footer_text", response_keys)
-        self.assertIn("users", response_keys)
 
     def test_donor_admin_update(self):
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
@@ -941,14 +940,101 @@ class DonorTests(APITestCase):
         response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
 
-    def test_donor_admin_update_users(self):
+    def test_donor_admin_retrieve_admin_requests(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.DONOR_ADMIN, donor=self.donor)
+        self.donor.admins.add(self.test_user['user_profile_id'])
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.DONOR)
+        user2 = User.objects.create(username="test2", password="12345678")
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
+                                                  account_type=UserProfile.DONOR_ADMIN)
+
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
+        self.assertEqual(response.json()["super_admin_requests"], [])
+
+    def test_donor_admin_retrieve_super_admin_requests(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
+        self.donor.super_admins.add(self.test_user['user_profile_id'])
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.DONOR)
+        user2 = User.objects.create(username="test2", password="12345678")
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
+                                                  account_type=UserProfile.DONOR_ADMIN)
+        user3 = User.objects.create(username="test3", password="12345678")
+        userprofile3 = UserProfile.objects.create(user=user3, name="test3", donor=self.donor,
+                                                  account_type=UserProfile.SUPER_DONOR_ADMIN)
+
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
+        self.assertEqual(response.json()["super_admin_requests"][0]['id'], userprofile3.id)
+
+    def test_donor_admin_update_users_remove_from_other_group(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
+        self.donor.super_admins.add(self.test_user['user_profile_id'])
+
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.DONOR)
         data = {
-            "users": [self.test_user['user_profile_id']]
+            "users": [userprofile1.id]
         }
         response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['users'], [self.test_user['user_profile_id']])
+        self.assertEqual(response.json()['users'], [userprofile1.id])
+
+        UserProfile.objects.filter(id=userprofile1.id).update(account_type=UserProfile.DONOR_ADMIN)
+        data = {
+            "admins": [userprofile1.id]
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['users'], [])
+        self.assertEqual(response.json()['admins'], [userprofile1.id])
+
+        UserProfile.objects.filter(id=userprofile1.id).update(account_type=UserProfile.SUPER_DONOR_ADMIN)
+        data = {
+            "super_admins": [userprofile1.id]
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['users'], [])
+        self.assertEqual(response.json()['admins'], [])
+        self.assertEqual(response.json()['super_admins'], [userprofile1.id])
+
+    def test_country_admin_update_super_admin_without_perm(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.DONOR_ADMIN, donor=self.donor)
+        self.donor.admins.add(self.test_user['user_profile_id'])
+
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.SUPER_DONOR_ADMIN)
+        data = {
+            "super_admins": [userprofile1.id],
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("super_admins" not in response.json().keys())
+        self.donor.refresh_from_db()
+        self.assertTrue(userprofile1.id not in self.donor.super_admins.all())
 
     def test_donor_partner_logos_create(self):
         url = reverse("donor-partner-logo-list")
