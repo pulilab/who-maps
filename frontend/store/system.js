@@ -17,7 +17,7 @@ export const state = () => ({
 
 export const getters = {
   getUserProfiles: state => {
-    return state.profiles ? state.profiles.slice() : [];
+    return state.profiles ? [ ...state.profiles.filter(p => p.name) ] : [];
   },
 
   getSearchResult: state => {

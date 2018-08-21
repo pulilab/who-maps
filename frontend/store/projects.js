@@ -4,10 +4,9 @@ import forOwn from 'lodash/forOwn';
 export const state = () => ({
   userProjects: [],
   currentProject: null,
-  projectStructure: null,
+  projectStructure: {},
   currentProjectToolkitVersions: [],
-  currentProjectCoverageVersions: [],
-  currentProjectTeamViewers: null
+  currentProjectCoverageVersions: []
 });
 
 const getTodayString = () => {
@@ -20,24 +19,27 @@ const getTodayString = () => {
 };
 
 export const getters = {
-  getUserProjectList: state => [...state.userProjects.map(p => ({...p}))],
-  getProjectStructure: state => state.projectStructure,
+  getUserProjectList: state => [...state.userProjects.map(p => ({ ...p }))],
+  getHealthFocusAreas: state => state.projectStructure.health_focus_areas ? [...state.projectStructure.health_focus_areas] : [],
+  getHisBucket: state => state.projectStructure.his_bucket ? [...state.projectStructure.his_bucket] : [],
+  getHscChallenges: state => state.projectStructure.hsc_challenges ? [...state.projectStructure.hsc_challenges] : [],
+  getInteroperabilityLinks: state => state.projectStructure.interoperability_links ? [...state.projectStructure.interoperability_links] : [],
+  getInteroperabilityStandards: state => state.projectStructure.interoperability_standards ? [...state.projectStructure.interoperability_standards] : [],
+  getLicenses: state => state.projectStructure.licenses ? [...state.projectStructure.licenses] : [],
+  getDigitalHealthInterventions: state => state.projectStructure.strategies ? [...state.projectStructure.strategies] : [],
+  getDigitalHealthInterventionDetails: (state, getters) => id => {
+    for (let category of getters.getDigitalHealthInterventions) {
+      for (let group of category.subGroups) {
+        const result = group.strategies.find(s => s.id === id);
+        if (result) {
+          return result;
+        }
+      }
+    }
+  },
+  getTechnologyPlatforms: state => state.projectStructure.technology_platforms ? [...state.projectStructure.technology_platforms] : [],
   getToolkitVersions: state => [...state.currentProjectToolkitVersions],
   getCoverageVersions: state => [...state.currentProjectCoverageVersions],
-  getTeamViewers: state => state.currentProjectTeamViewers,
-  getCurrentProject: (state, getters, rootState, rootGetters) => {
-    const p = getters.getUserProjectList.find(p => p.id === state.currentProject);
-    if (p) {
-      const user = rootGetters['user/getProfile'];
-      return {
-        ...p,
-        isMember: user ? getters.getTeamViewers.team.includes(user.id) : undefined,
-        isViewer: user ? getters.getTeamViewers.viewers.includes(user.id) : undefined,
-        isPublished: !!(p.published.name)
-      };
-    }
-    return undefined;
-  },
   getUserProjectDetails: (state, getters, rootState, rootGetters) => id => {
     const p = getters.getUserProjectList.find(p => p.id === id);
     if (p) {
@@ -49,6 +51,9 @@ export const getters = {
         isPublished: !!(p.published.name)
       };
     }
+  },
+  getCurrentProject: (state, getters) => {
+    return getters.getUserProjectDetails(state.currentProject);
   },
   getMapsAxisData: (state, getters, rootState, rootGetters) => {
     const axis = rootGetters['system/getAxis'];
@@ -168,15 +173,13 @@ export const actions = {
   async loadProjectDetails ({commit, state}, projectId) {
     try {
       if (projectId) {
-        const [toolkitVersions, coverageVersions, teamViewers] =
+        const [toolkitVersions, coverageVersions] =
                   await Promise.all([
                     this.$axios.get(`/api/projects/${projectId}/toolkit/versions/`),
-                    this.$axios.get(`/api/projects/${projectId}/coverage/versions/`),
-                    this.$axios.get(`/api/projects/${projectId}/groups/`)
+                    this.$axios.get(`/api/projects/${projectId}/coverage/versions/`)
                   ]);
         commit('SET_CURRENT_PROJECT_TOOLKIT', toolkitVersions.data);
-        commit('SET_CURRENT_PROJECT_COVERAGE', coverageVersions.data);
-        commit('SET_CURRENT_PROJECT_TEAM_VIEWERS', teamViewers.data);
+        commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', coverageVersions.data);
       }
     } catch (error) {
       console.log(error);
@@ -188,18 +191,31 @@ export const actions = {
     await this.$axios.post(`/api/projects/${id}/version/`);
     return dispatch('loadProjectDetails', id);
   },
-  async loadProjectStructure ({getters, commit}) {
-    const structure = getters.getProjectStructure;
+  async loadProjectStructure ({ state, commit }) {
+    const structure = state.projectStructure;
     if (isEmpty(structure)) {
       const { data } = await this.$axios.get('/api/projects/structure/');
       commit('SET_PROJECT_STRUCTURE', data);
     }
+  },
+  addProjectToList ({commit}, project) {
+    commit('ADD_USER_PROJECT', project);
+  },
+  updateProject ({commit}, project) {
+    commit('EDIT_USER_PROJECT', project);
   }
 };
 
 export const mutations = {
   SET_USER_PROJECT_LIST: (state, projects) => {
     state.userProjects = projects;
+  },
+  ADD_USER_PROJECT: (state, project) => {
+    state.userProjects.push(project);
+  },
+  EDIT_USER_PROJECT: (state, project) => {
+    const index = state.userProjects.findIndex(p => p.id === project.id);
+    state.userProjects.splice(index, 1, project);
   },
   SET_CURRENT_PROJECT: (state, project) => {
     state.currentProject = project;
@@ -210,10 +226,7 @@ export const mutations = {
   SET_CURRENT_PROJECT_TOOLKIT: (state, toolkit) => {
     state.currentProjectToolkitVersions = toolkit;
   },
-  SET_CURRENT_PROJECT_COVERAGE: (state, coverage) => {
+  SET_CURRENT_PROJECT_COVERAGE_VERSIONS: (state, coverage) => {
     state.currentProjectCoverageVersions = coverage;
-  },
-  SET_CURRENT_PROJECT_TEAM_VIEWERS: (state, teamViewers) => {
-    state.currentProjectTeamViewers = teamViewers;
   }
 };

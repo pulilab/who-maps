@@ -1,13 +1,12 @@
 import { loadSkeletonImages, loadSkeletonStatic } from '../webpackRequires';
 class SkeletonController {
-  constructor ($scope, $interpolate, $anchorScroll, data, axis, domain, icons) {
+  constructor ($scope, $interpolate, data, axis, domain, icons) {
     this.scope = $scope;
     this.interpolate = $interpolate;
     this.axis = axis;
     this.domain = domain;
     this.data = data;
     this.icons = icons;
-    this.scroll = $anchorScroll;
 
     this.domainActivationSetter(this.axis, this.domain, true);
     this.images = this.importImages();
@@ -54,8 +53,7 @@ class SkeletonController {
     this.axis = axisId;
     this.domain = domainId;
     this.domainActivationSetter(this.axis, this.domain, true);
-
-    this.scroll('help-anchor');
+    window.document.querySelectorAll('.right-content')[0].scrollTop = 0;
   }
 
   domainActivationSetter (axisId, domainId, state) {
@@ -63,10 +61,10 @@ class SkeletonController {
   }
 
   static factory (data, axis, domain, icons) {
-    const skeleton = ($scope, $interpolate, $anchorScroll) => {
-      return new SkeletonController($scope, $interpolate, $anchorScroll, data, axis, domain, icons);
+    const skeleton = ($scope, $interpolate) => {
+      return new SkeletonController($scope, $interpolate, data, axis, domain, icons);
     };
-    skeleton.$inject = ['$scope', '$interpolate', '$anchorScroll'];
+    skeleton.$inject = ['$scope', '$interpolate'];
     return skeleton;
   }
 }

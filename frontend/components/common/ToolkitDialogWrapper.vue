@@ -5,7 +5,7 @@
     <a
       v-if="!initialised"
       class="HeaderBtn ToolkitBtn"
-      href="#">
+    >
       Toolkit
     </a>
   </div>

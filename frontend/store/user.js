@@ -31,7 +31,8 @@ export const actions = {
     await dispatch('loadProfile', data.user_profile_id);
     await Promise.all([
       dispatch('system/loadOrganisations', {}, {root: true}),
-      dispatch('projects/loadUserProjects', {}, {root: true})
+      dispatch('projects/loadUserProjects', {}, {root: true}),
+      dispatch('system/loadUserProfiles', {}, {root: true})
     ]);
   },
 

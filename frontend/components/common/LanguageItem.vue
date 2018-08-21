@@ -1,5 +1,6 @@
 <template>
   <el-row
+    v-if="language"
     type="flex"
     class="LanguageItem"
   >

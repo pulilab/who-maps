@@ -10,7 +10,11 @@ export default {
   },
   middleware: ['isLoggedIn'],
   async fetch ({store}) {
-    await store.dispatch('projects/loadUserProjects');
+    await Promise.all([
+      store.dispatch('projects/loadUserProjects'),
+      store.dispatch('projects/loadProjectStructure')
+
+    ]);
   }
 };
 </script>
@@ -20,5 +24,10 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .ProjectsArea {
+    margin-bottom: 60px;
+
+    .UserProjectsList {
+      .limitPageWidth();
+    }
   }
 </style>

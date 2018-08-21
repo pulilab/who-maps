@@ -1,0 +1,47 @@
+<template>
+  <div class="TeamList">
+    <ul v-show="team.length > 0">
+      <li
+        v-for="p in team"
+        :key="p.id"
+      >
+        {{ p.name }}
+      </li>
+    </ul>
+    <span v-show="team.length === 0">
+      N/A
+    </span>
+  </div>
+</template>
+
+<script>
+import { mapGetters } from 'vuex';
+
+export default {
+  components: {
+  },
+  props: {
+    value: {
+      type: Array,
+      default: null
+    }
+  },
+  computed: {
+    ...mapGetters({
+      profiles: 'system/getUserProfiles'
+    }),
+    team () {
+      return this.profiles.filter(p => this.value.includes(p.id));
+    }
+  }
+};
+</script>
+
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .TeamList {
+    width: 100%;
+  }
+</style>

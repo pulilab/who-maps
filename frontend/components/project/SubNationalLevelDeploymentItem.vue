@@ -1,0 +1,138 @@
+<template>
+  <div class="SubNationalLevelDeploymentItem">
+    <el-form-item
+      :label="levelName"
+      :prop="propPrefix +'.' + index"
+    >
+      <el-select
+        :value="subLevel"
+        filterable
+        popper-class="SubNationalLevelDeploymentRegionDropdown"
+        class="SubNationalLevelDeployementRegion"
+        placeholder="Select from list"
+        @change="changeHandler">
+
+        <el-option
+          v-for="sub in availableSubLevels"
+          :key="sub.id"
+          :label="sub.name"
+          :value="sub.id"/>
+      </el-select>
+      <facility-selector
+        v-model="facilitiesList"
+        :disabled="!subLevel"
+      />
+      <coverage-fieldset
+        :health-workers.sync="healthWorkers"
+        :clients.sync="clients"
+        :facilities.sync="facilities"
+        :disabled="!subLevel"
+      />
+    </el-form-item>
+  </div>
+</template>
+
+<script>
+
+import CoverageFieldset from './CoverageFieldset';
+import FacilitySelector from './FacilitySelector';
+
+import { mapGettersActions } from '../../utilities/form';
+
+export default {
+  components: {
+    CoverageFieldset,
+    FacilitySelector
+  },
+  props: {
+    index: {
+      type: [Number],
+      default: null
+    },
+    levelName: {
+      type: String,
+      required: true
+    },
+    subLevels: {
+      type: Array,
+      required: true
+    },
+    coverage: {
+      type: Array,
+      default: () => []
+    },
+    propPrefix: {
+      type: String,
+      required: true
+    }
+  },
+  computed: {
+    ...mapGettersActions({
+      coverageData: ['project', 'getCoverageData', 'setCoverageData', 0]
+    }),
+    subLevel () {
+      return this.coverage[this.index];
+    },
+    availableSubLevels () {
+      return this.subLevels.filter(tp => !this.coverage.some(s => s === tp.id) || tp.id === this.subLevel);
+    },
+    localCoverageData () {
+      return this.coverageData[this.subLevel];
+    },
+    facilitiesList: {
+      get () {
+        const facilitiesList = this.localCoverageData ? this.localCoverageData.facilities_list : [];
+        return facilitiesList || [];
+      },
+      set (value) {
+        const coverage = {facilities_list: [...value], facilities: value.length};
+        this.coverageData = {coverage, subLevel: this.subLevel};
+      }
+    },
+    healthWorkers: {
+      get () {
+        return this.localCoverageData ? this.localCoverageData.health_workers : null;
+      },
+      set (value) {
+        const coverage = {health_workers: value};
+        this.coverageData = {coverage, subLevel: this.subLevel};
+      }
+    },
+    clients: {
+      get () {
+        return this.localCoverageData ? this.localCoverageData.clients : null;
+      },
+      set (value) {
+        const coverage = {clients: value};
+        this.coverageData = {coverage, subLevel: this.subLevel};
+      }
+    },
+    facilities: {
+      get () {
+        return this.localCoverageData ? this.localCoverageData.facilities : null;
+      },
+      set (value) {
+        const coverage = {facilities: value};
+        this.coverageData = {coverage, subLevel: this.subLevel};
+      }
+    }
+  },
+  methods: {
+    changeHandler (value) {
+      const cov = [...this.coverage];
+      cov[this.index] = value;
+      this.$emit('update:coverage', cov);
+    }
+  }
+};
+</script>
+
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .SubNationalLevelDeployementRegion {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+</style>
