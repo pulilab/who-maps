@@ -1,4 +1,5 @@
 import copy
+import itertools
 
 from django.urls import reverse
 
@@ -259,8 +260,59 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 0)
 
-    def test_multi_filter(self):
-        pass
+    def test_multi_filter_different_filter(self):
+        # all the filters are AND relations, within the same filter there's an OR relation
+        url = reverse("search-project-list")
+        data = {"country": self.country_id, "approved": 1}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
 
     def test_multi_filter_same_filter(self):
-        pass
+        # all the filters are AND relations, within the same filter there's an OR relation
+        project_data = self.project_data.copy()
+        project_data.update(platforms=[dict(id=1, strategies=[206]),
+                                        dict(id=2, strategies=[223])])
+
+        url = reverse("project-publish", kwargs=dict(pk=self.project_id))
+        response = self.test_user_client.put(url, project_data, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        p1 = Project.objects.first()
+        p2 = Project.objects.last()
+
+        p1_dhis = list(itertools.chain(*[platform['strategies'] for platform in p1.data.get('platforms')]))
+        p2_dhis = list(itertools.chain(*[platform['strategies'] for platform in p2.data.get('platforms')]))
+
+        dhi1 = p1_dhis[0]
+        dhi2 = p2_dhis[0]
+
+        self.assertNotEqual(dhi1, dhi2)
+
+        dhi1_parent = DigitalStrategy.objects.get(id=dhi1).parent
+        dhi2_parent = DigitalStrategy.objects.get(id=dhi2).parent
+
+        self.assertNotEqual(dhi1_parent, dhi2_parent)
+
+        data = {"dhi": dhi1_parent.id}
+
+        url = reverse("search-project-list")
+
+        # Should find only one
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
+
+        data = {"dhi": dhi2_parent.id}
+
+        # Should find only one
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
+
+        data = {"dhi": [dhi1_parent.id, dhi2_parent.id]}
+
+        # Should find two, because same-filter clauses are OR
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
