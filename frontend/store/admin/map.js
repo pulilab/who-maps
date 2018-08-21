@@ -188,16 +188,21 @@ export const actions = {
     const index = current.findIndex(c => c.name === name);
     commit('UPDATE_SUB_LEVELS_POLYCENTERS', { index, data: { name, latlng } });
   },
+  setFacilities ({commit}, list) {
+    commit('SET_FACILITIES', list);
+  },
   async saveMapData ({getters}) {
-    const first = getters.getFirstSubLevelList.map(f => {
+    const first = getters.getFirstSubLevelList.map((f, index) => {
       return {
+        id: f.id || index,
         name: f.name,
         polyCenter: f.polyCenter,
         ...parseNames(f.alltags)
       };
     });
-    const second = getters.getSecondSubLevelList.map(s => {
+    const second = getters.getSecondSubLevelList.map((s, index) => {
       return {
+        id: s.id || index,
         name: s.name,
         ...parseNames(s.alltags)
       };

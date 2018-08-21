@@ -14,19 +14,17 @@
         v-if="$route.path.includes('/admin/')"
         type="flex">
         <nuxt-link
-          :class="['FakeTab', {'active': $route.path.endsWith('/admin/edit-profile')}]"
-          to="/en/admin/edit-profile"
+          :to="localePath({name: 'index-edit-profile'})"
+          class="FakeTab"
           tag="div">My profile</nuxt-link>
         <nuxt-link
-          :class="['FakeTab', {'active': $route.path.endsWith('/admin/country-admin')}]"
-          to="/en/admin/country-admin"
+          :to="localePath({name: 'index-admin-country'})"
+          class="FakeTab"
           tag="div">Country admin</nuxt-link>
         <nuxt-link
-          :class="['FakeTab', {'active': $route.path.endsWith('/admin/donor')}]"
-          to="/en/admin/donor"
+          :to="localePath({name: 'index-admin-donor'})"
+          class="FakeTab"
           tag="div">Donor admin</nuxt-link>
-
-        <span>TODO: Solve links localePath!</span>
       </el-row>
 
       <el-col />
@@ -55,11 +53,10 @@ export default {
 
     .InnerActionBar {
       .limitPageWidth();
-      height: 48px;
+      height: @actionBarHeight;
     }
 
     .Title {
-
       h3 {
         width: 224px;
         display: block;
@@ -84,7 +81,7 @@ export default {
       color: gray;
       transition: border .5s, color .5s;
 
-      &.active {
+      &.nuxt-link-exact-active {
         border-bottom: 5px solid white;
         color: white;
       }

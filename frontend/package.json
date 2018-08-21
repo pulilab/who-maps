@@ -5,7 +5,7 @@
   "author": "info@pulilab.com",
   "private": true,
   "scripts": {
-    "dev": "HOST=0.0.0.0 nuxt",
+    "dev": "NODE_OPTIONS=--max-old-space-size=4096 HOST=0.0.0.0 nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
@@ -16,6 +16,9 @@
     "cypress:open": "cypress open"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.2",
+    "@fortawesome/free-regular-svg-icons": "^5.2.0",
+    "@fortawesome/free-solid-svg-icons": "^5.2.0",
     "@mapbox/polylabel": "^1.0.2",
     "@nuxtjs/axios": "^5.1.1",
     "@nuxtjs/google-analytics": "^2.0.2",
@@ -43,6 +46,7 @@
     "ng-file-upload": "^12.2.13",
     "ng-redux": "^4.0.3",
     "nuxt": "^1.0.0",
+    "nuxt-fontawesome": "^0.3.0",
     "nuxt-i18n": "^4.1.0",
     "papaparse": "^4.5.0",
     "redux": "^4.0.0",
@@ -52,8 +56,10 @@
     "topojson": "^3.0.2",
     "trix": "^0.11.4",
     "vee-validate": "^2.0.6",
+    "vue-click-outside": "^1.0.7",
     "vue-django-feedback": "^1.5.1",
     "vue-no-ssr": "^0.2.2",
+    "vue-scroll-class": "^1.2.3",
     "vue2-leaflet": "git+https://github.com/pulilab/Vue2Leaflet.git#c805285",
     "vue2-leaflet-markercluster": "^2.0.0",
     "vuedraggable": "^2.16.0",

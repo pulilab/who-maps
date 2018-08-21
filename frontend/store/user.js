@@ -16,8 +16,8 @@ export const getters = {
     if (state.profile) {
       return { ...state.profile };
     }
+    return null;
   },
-
   getUser: state => state.user
 };
 
@@ -29,7 +29,11 @@ export const actions = {
     commit('SET_TOKEN', data.token);
     saveToken(data.token, data.user_profile_id);
     await dispatch('loadProfile', data.user_profile_id);
-    await dispatch('system/loadOrganisations', {}, {root: true});
+    await Promise.all([
+      dispatch('system/loadOrganisations', {}, {root: true}),
+      dispatch('projects/loadUserProjects', {}, {root: true}),
+      dispatch('system/loadUserProfiles', {}, {root: true})
+    ]);
   },
 
   async doSignup ({ commit, dispatch }, { account_type, password1, password2, email }) {

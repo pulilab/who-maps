@@ -6,8 +6,8 @@ export const loadScorecardImages = () => {
 };
 
 export const loadSkeletonImages = () => {
-  return require.context('./Common/Thematic/images/', true, /\.svg$/);
+  return require.context('./Thematic/images/', true, /\.svg$/);
 };
 export const loadSkeletonStatic = () => {
-  return require.context('./Common/Thematic/static/', true, /\.html$/);
+  return require.context('./Thematic/static/', true, /\.html$/);
 };

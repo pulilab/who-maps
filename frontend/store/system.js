@@ -17,7 +17,7 @@ export const state = () => ({
 
 export const getters = {
   getUserProfiles: state => {
-    return state.profiles ? state.profiles.slice() : [];
+    return state.profiles ? [ ...state.profiles.filter(p => p.name) ] : [];
   },
 
   getSearchResult: state => {
@@ -31,6 +31,10 @@ export const getters = {
 
   getLanguages: state => {
     return state.languages.map(l => ({ ...l, flag: `/static/flags/${l.flag}` }));
+  },
+
+  getLanguageDetails: (state, getters) => code => {
+    return getters.getLanguages.find(l => l.code === code);
   },
 
   getSearchFilters: state => {
@@ -55,7 +59,7 @@ export const getters = {
 
   getThematicOverview: state => {
     const th = state.thematic_overview;
-    return th.catergories
+    return th.categories
       ? th.categories.map(cat => ({ ...cat, domains: th.sub_categories.filter(sb => sb.category === cat.id) }))
       : [];
   },
@@ -80,6 +84,11 @@ export const getters = {
 
   getOrganisations: state => {
     return [...state.organisations.map(o => ({...o}))];
+  },
+
+  getOrganisationDetails: (state, getters) => id => {
+    const o = getters.getOrganisations.find(org => org.id === id);
+    return o ? { ...o } : undefined;
   }
 };
 

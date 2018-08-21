@@ -35,6 +35,7 @@ const config = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
+    'nuxt-fontawesome',
     ['nuxt-i18n', {
       locales: [
         {
@@ -78,6 +79,19 @@ const config = {
       }
     }]
   ],
+  fontawesome: {
+    component: 'fa',
+    imports: [
+      {
+        set: '@fortawesome/free-solid-svg-icons',
+        icons: ['fas']
+      },
+      {
+        set: '@fortawesome/free-regular-svg-icons',
+        icons: ['far']
+      }
+    ]
+  },
   proxy: {},
   axios: {
     baseURL: 'http://nginx:9010/',
@@ -87,9 +101,25 @@ const config = {
   },
   router: {
     middleware: ['auth'],
-    base: '/'
+    base: '/',
+    scrollBehavior (to, from, savedPosition) {
+      if (savedPosition) {
+        return savedPosition;
+      } else {
+        let position = {};
+        if (to.matched.length < 2) {
+          position = { x: 0, y: 0 };
+        } else if (to.matched.some(r => r.components.default.options.scrollToTop)) {
+          position = { x: 0, y: 0 };
+        }
+        if (to.hash) {
+          position = { selector: to.hash };
+        }
+        return position;
+      }
+    }
   },
-  loading: { color: '#3B8070' },
+  loading: { color: '#D86422' },
   build: {
     extractCSS: true,
     extend (config, { isDev, isClient }) {

@@ -1,0 +1,59 @@
+<template>
+  <div class="EmptyProjectList">
+    <el-row type="flex">
+      <el-col>
+        <div class="SquareWrapper">
+          <img src="~assets/img/icons-all.svg" >
+        </div>
+      </el-col>
+    </el-row>
+    <el-row type="flex">
+      <el-col>
+        <nuxt-link
+          :to="localePath('index-projects-create')"
+          tag="button"
+          class="el-button el-button--primary el-button--medium"
+        >
+          Add new project
+        </nuxt-link>
+      </el-col>
+    </el-row>
+    <el-row type="flex">
+      <el-col>
+        <p>
+          to include your project in the inventory<br>
+          and begin tracking your performance
+        </p>
+      </el-col>
+    </el-row>
+
+  </div>
+</template>
+
+<script>
+export default {
+
+};
+</script>
+
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .EmptyProjectList {
+    text-align: center;
+
+    img {
+      margin: 20px 0 40px;
+    }
+
+    p {
+      margin: 20px 0 60px;
+      font-size: @fontSizeSmall;
+      line-height: 18px;
+      font-weight: 700;
+      color: @colorTextSecondary;
+    }
+  }
+
+</style>

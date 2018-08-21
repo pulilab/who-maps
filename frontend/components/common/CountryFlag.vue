@@ -18,13 +18,18 @@ export default {
   },
   computed: {
     countryFlagUrl () {
-      return `/static/flags/${this.code.toLowerCase()}.png`;
+      if (this.code) {
+        return `/static/flags/${this.code.toLowerCase()}.png`;
+      }
     }
   }
 };
 </script>
 
 <style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
   .CountryFlag {
     &.small {
       height: 16px;
