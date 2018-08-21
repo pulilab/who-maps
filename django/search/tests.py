@@ -19,6 +19,10 @@ class SearchTests(SetupTests):
         response = self.test_user_client.post(url, project_data2, format="json")
         self.assertEqual(response.status_code, 201)
         project_id = response.json()['id']
+        self.project = Project.objects.get(id=project_id)
+        self.project.approval.approved = True
+        self.project.approval.save()
+        self.project2_id = project_id
 
         # publish it
         url = reverse("project-publish", kwargs=dict(pk=project_id))
