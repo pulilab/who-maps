@@ -5,19 +5,31 @@
         v-for="hfa in selected"
         :key="hfa.id"
       >
-        {{ hfa.name }}
+        <list-action
+          v-if="actions"
+          @click="$emit('delete', hfa.id)"
+        />
+        <span> {{ hfa.name }} </span>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import ListAction from './ListAction';
 import { mapGetters } from 'vuex';
 export default {
+  components: {
+    ListAction
+  },
   props: {
     value: {
       type: Array,
       default: null
+    },
+    actions: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
