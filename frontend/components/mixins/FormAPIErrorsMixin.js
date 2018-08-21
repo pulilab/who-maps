@@ -12,13 +12,21 @@ const formAPIErrorsMixin = {
     },
 
     setFormAPIErrors (error) {
-      this.formAPIErrors = error.response.data;
+      if (error.response && error.response.data) {
+        this.formAPIErrors = error.response.data;
+      } else {
+        console.error('Failed to associate API error: ', error);
+      }
     },
 
     validatorGenerator (prop) {
       return (rule, value, callback) => {
         if (this.formAPIErrors[prop] && this.formAPIErrors[prop].length) {
-          callback(new Error(this.formAPIErrors[prop][0]));
+          const error = {
+            message: this.formAPIErrors[prop][0],
+            field: rule.fullField
+          };
+          callback(error);
         } else {
           callback();
         }

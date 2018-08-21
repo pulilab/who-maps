@@ -215,7 +215,7 @@ export const mutations = {
   },
   EDIT_USER_PROJECT: (state, project) => {
     const index = state.userProjects.findIndex(p => p.id === project.id);
-    state.userProjects.splice(0, index, project);
+    state.userProjects.splice(index, 1, project);
   },
   SET_CURRENT_PROJECT: (state, project) => {
     state.currentProject = project;

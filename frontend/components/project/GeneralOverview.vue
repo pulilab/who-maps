@@ -42,18 +42,6 @@
           <p>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.</p>
         </span>
       </el-form-item>
-      <el-form-item
-        label="Overview of the digital health implementation"
-        prop="country">
-        <el-input
-          v-model="implementation_overview"
-          type="textarea"
-        />
-        <span class="Hint">
-          <fa icon="info-circle" />
-          <p>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.</p>
-        </span>
-      </el-form-item>
       <el-row
         :gutter="20"
         type="flex">
