@@ -8,7 +8,7 @@ from project.models import Project, DigitalStrategy, TechnologyPlatform, Interop
 from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo
 from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountryMapDataSerializer, \
     CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, PartnerLogoSerializer, DonorSerializer, \
-    DonorPartnerLogoSerializer
+    SuperAdminDonorSerializer, AdminDonorSerializer, DonorPartnerLogoSerializer
 
 
 class LandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -35,10 +35,22 @@ class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Retr
         return super().get_serializer_class()
 
 
-class DonorViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class DonorViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
+                   viewsets.GenericViewSet):
     queryset = Donor.objects.all()
     serializer_class = DonorSerializer
     parser_classes = (MultiPartParser, FormParser)
+
+    def get_serializer_class(self):
+        if self.request and self.action in ['update', 'retrieve', 'partial_update'] \
+                and self.request.user.is_authenticated:
+            donor = self.get_object()
+            profile = self.request.user.userprofile
+            if profile.account_type == UserProfile.DONOR_ADMIN and profile in donor.admins.all():
+                return AdminDonorSerializer
+            if profile.account_type == UserProfile.SUPER_DONOR_ADMIN and profile in donor.super_admins.all():
+                return SuperAdminDonorSerializer
+        return super().get_serializer_class()
 
 
 class PartnerLogoViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin,

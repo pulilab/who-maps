@@ -29,13 +29,45 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ('id', 'email', 'name')
 
 
+class UpdateAdminMixin:
+    @atomic
+    def update(self, instance, validated_data):
+        # keep original lists for comparison
+        original_users = set(instance.users.all().only('id'))
+        original_admins = set(instance.admins.all().only('id'))
+        original_super_admins = set(instance.super_admins.all().only('id'))
+
+        # perform update
+        instance = super().update(instance, validated_data)
+
+        # figure out the new entities
+        new_users = set(instance.users.all().only('id')) - original_users
+        new_admins = set(instance.admins.all().only('id')) - original_admins
+        new_super_admins = set(instance.super_admins.all().only('id')) - original_super_admins
+
+        # remove new additions from any other user group
+        if new_users:
+            instance.admins.remove(*new_users)
+            instance.super_admins.remove(*new_users)
+
+        if new_admins:
+            instance.users.remove(*new_admins)
+            instance.super_admins.remove(*new_admins)
+
+        if new_super_admins:
+            instance.users.remove(*new_super_admins)
+            instance.admins.remove(*new_super_admins)
+
+        return instance
+
+
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",
                   "project_approval", "map_data", "map_version", "map_activated_on",)
 READ_ONLY_COUNTRY_FIELDS = ("name", "code", "project_approval", "map_data", "map_version", "map_activated_on",)
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 
 
-class SuperAdminCountrySerializer(serializers.ModelSerializer):
+class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer):
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
     map_version = serializers.SerializerMethodField()
     user_requests = serializers.SerializerMethodField()
@@ -71,36 +103,6 @@ class SuperAdminCountrySerializer(serializers.ModelSerializer):
             .difference(obj.super_admins.all())
         return UserProfileSerializer(data, many=True).data
 
-    @atomic
-    def update(self, instance, validated_data):
-        # keep original lists for comparison
-        original_users = set(instance.users.all().only('id'))
-        original_admins = set(instance.admins.all().only('id'))
-        original_super_admins = set(instance.super_admins.all().only('id'))
-
-        # perform update
-        instance = super().update(instance, validated_data)
-
-        # figure out the new entities
-        new_users = set(instance.users.all().only('id')) - original_users
-        new_admins = set(instance.admins.all().only('id')) - original_admins
-        new_super_admins = set(instance.super_admins.all().only('id')) - original_super_admins
-
-        # remove new additions from any other user group
-        if new_users:
-            instance.admins.remove(*new_users)
-            instance.super_admins.remove(*new_users)
-
-        if new_admins:
-            instance.users.remove(*new_admins)
-            instance.super_admins.remove(*new_admins)
-
-        if new_super_admins:
-            instance.users.remove(*new_super_admins)
-            instance.admins.remove(*new_super_admins)
-
-        return instance
-
 
 class AdminCountrySerializer(SuperAdminCountrySerializer):
     class Meta(SuperAdminCountrySerializer.Meta):
@@ -113,25 +115,50 @@ class CountrySerializer(SuperAdminCountrySerializer):
         read_only_fields = READ_ONLY_COUNTRY_FIELDS
 
 
-class DonorSerializer(serializers.ModelSerializer):
+DONOR_FIELDS = ("id", "name", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",)
+READ_ONLY_DONOR_FIELDS = ("name",)
+DONOR_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
+
+
+class SuperAdminDonorSerializer(UpdateAdminMixin, serializers.ModelSerializer):
     partner_logos = DonorPartnerLogoSerializer(many=True, read_only=True)
+    user_requests = serializers.SerializerMethodField()
+    admin_requests = serializers.SerializerMethodField()
+    super_admin_requests = serializers.SerializerMethodField()
 
     class Meta:
         model = Donor
-        fields = (
-            "id",
-            "name",
-            "logo",
-            "cover",
-            "cover_text",
-            "footer_title",
-            "footer_text",
-            "users",
-            "admins",
-            "super_admins",
-            "partner_logos",
-        )
-        read_only_fields = ("name",)
+        fields = DONOR_FIELDS + DONOR_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
+        read_only_fields = READ_ONLY_DONOR_FIELDS + DONOR_ADMIN_FIELDS
+
+    def get_user_requests(self, obj):
+        # figure out not yet assigned users
+        data = UserProfile.objects.filter(donor__id__in=[obj.id], account_type=UserProfile.DONOR) \
+            .difference(obj.users.all())
+        return UserProfileSerializer(data, many=True).data
+
+    def get_admin_requests(self, obj):
+        # figure out not yet assigned users
+        data = UserProfile.objects.filter(donor__id__in=[obj.id], account_type=UserProfile.DONOR_ADMIN) \
+            .difference(obj.admins.all())
+        return UserProfileSerializer(data, many=True).data
+
+    def get_super_admin_requests(self, obj):
+        # figure out not yet assigned users
+        data = UserProfile.objects.filter(donor__id__in=[obj.id], account_type=UserProfile.SUPER_DONOR_ADMIN) \
+            .difference(obj.super_admins.all())
+        return UserProfileSerializer(data, many=True).data
+
+
+class AdminDonorSerializer(SuperAdminDonorSerializer):
+    class Meta(SuperAdminDonorSerializer.Meta):
+        fields = DONOR_FIELDS + DONOR_ADMIN_FIELDS + ('users', 'admins',)
+
+
+class DonorSerializer(SuperAdminDonorSerializer):
+    class Meta(SuperAdminDonorSerializer.Meta):
+        fields = DONOR_FIELDS
+        read_only_fields = READ_ONLY_DONOR_FIELDS
 
 
 class CountryFieldsListSerializer(serializers.ModelSerializer):
