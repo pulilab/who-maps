@@ -79,8 +79,14 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .SelectorDialogColumn {
+    position: relative;
+
     .Header {
+      position: fixed;
+      z-index: 10000;
+      box-sizing: border-box;
       padding: 0 30px;
+      width: calc((90vw / 4) - 1px);
       height: @dialogHeaderFooterHeight;
       line-height: @dialogHeaderFooterHeight;
       border-bottom: 1px solid @colorGrayLight;
@@ -88,10 +94,15 @@ export default {
       font-size: @fontSizeBase;
       font-weight: 700;
       text-transform: uppercase;
+      box-shadow: 0 1px 3px rgba(0,0,0,.1);
     }
 
     .Main {
+      position: relative;
+      top: @dialogHeaderFooterHeight;
       padding: 20px 20px 40px 30px;
+      height: calc(80vh - (@dialogHeaderFooterHeight*4) + 6px);
+      overflow-y: scroll;
     }
   }
 </style>

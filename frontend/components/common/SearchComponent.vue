@@ -190,7 +190,7 @@ export default {
     position: absolute;
     right: 40px;
     top: 0;
-    z-index: 1010;
+    z-index: 2010;
     width: 400px;
     box-shadow: 5px 5px 20px 10px rgba(0,0,0,.15);
 

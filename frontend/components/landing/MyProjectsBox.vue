@@ -16,23 +16,34 @@
     <user-projects-list />
 
     <el-row
+      v-if="userProjecList.length > 0"
       type="flex"
       class="SeeAllMyProjects"
     >
       <el-col>
-        <el-button size="medium">
+        <nuxt-link
+          :to="localePath('index-projects')"
+          tag="button"
+          class="el-button el-button--default el-button--medium">
           See all my projects
-        </el-button>
+        </nuxt-link>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import UserProjectsList from '../common/UserProjectsList';
 export default {
   components: {
     UserProjectsList
+  },
+  computed: {
+    ...mapGetters({
+      userProjecList: 'projects/getUserProjectList'
+    })
   }
 };
 </script>
@@ -75,10 +86,6 @@ export default {
         color: @colorWhite;
         margin: 0;
       }
-    }
-
-    .UserProjectsList {
-      padding: 40px 40px 20px;
     }
 
     .SeeAllMyProjects {

@@ -548,12 +548,19 @@ fieldset {
 
 // Tabs
 
-.el-tabs__header {
-  .el-tabs__item {
-    // box-sizing: content-box;
-    // padding: 0 10px;
-    transition: @transitionAll;
+.el-tabs {
+  .el-tabs__header {
+    .el-tabs__nav-wrap {
+      &::after {
+        background-color: @colorGrayLight;
+      }
+    }
+
+    .el-tabs__item {
+      transition: @transitionAll;
+    }
   }
+
 }
 
 // Dropdown
@@ -597,7 +604,7 @@ fieldset {
     .el-dialog__headerbtn {
       top: 50%;
       right: 30px;
-      transform: translateY(-50%);
+      margin-top: -10px;
 
       &:hover {
         i {

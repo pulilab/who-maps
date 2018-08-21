@@ -59,6 +59,15 @@ export const getters = {
       return country.map_data.facilities;
     }
     return [];
+  },
+  getSubLevelDetails: (state, getters) => id => {
+    const allSubLevels = [];
+    getters.getCountries.forEach(c => {
+      if (c && c.map_data && c.map_data.first_sub_level) {
+        allSubLevels.push(...c.map_data.first_sub_level.elements);
+      }
+    });
+    return {...allSubLevels.find(sb => sb.id === id)};
   }
 };
 
