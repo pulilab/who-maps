@@ -160,6 +160,11 @@ class Project(SoftDeleteModel, ExtendedModel):
         if project_country:
             self.public_id = project_country.code + str(uuid.uuid1()).split('-')[0]
 
+    def approve(self):
+        self.approval.approved = True
+        self.approval.save()
+
+
 @receiver(post_save, sender=Project)
 def on_create_init(sender, instance, created, **kwargs):
     if created:
