@@ -322,8 +322,8 @@ export default {
     .CollapsibleCard {
       .SimpleField {
         margin-bottom: 40px;
-        font-size: @fontSizeMedium;
-        line-height: 24px;
+        font-size: @fontSizeBase;
+        line-height: 20px;
 
         .Header {
           margin-bottom: 10px;
@@ -370,7 +370,7 @@ export default {
 
       .GrayArea {
         .svg-inline--fa {
-          margin-right: 4px;
+          margin-right: 8px;
         }
       }
     }
