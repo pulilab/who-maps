@@ -8,23 +8,29 @@
         v-if="!readonly && !newProject"
         class="SwitchProjectStatus"
       >
-        Switch view:
-        <el-button-group>
-          <el-button
-            :class="['DraftButton', {'Active': draft}]"
-            :disabled="draft"
-            @click="goToDraft"
-          >
-            Draft
-          </el-button>
-          <el-button
-            :class="['PublishedButton', {'Active': published}]"
-            :disabled="published"
-            @click="goToPublished"
-          >
-            Published
-          </el-button>
-        </el-button-group>
+        <el-row
+          type="flex"
+          justify="space-between"
+          align="middle"
+        >
+          <div class="SwitchLabel">Switch view:</div>
+          <el-button-group class="SwitchButtons">
+            <el-button
+              :class="['DraftButton', {'Active': draft}]"
+              :disabled="draft"
+              @click="goToDraft"
+            >
+              Draft
+            </el-button>
+            <el-button
+              :class="['PublishedButton', {'Active': published}]"
+              :disabled="published"
+              @click="goToPublished"
+            >
+              Published
+            </el-button>
+          </el-button-group>
+        </el-row>
       </div>
 
       <div class="Stepper">
@@ -222,6 +228,57 @@ export default {
       position: sticky;
       top: 20px;
       left: 0;
+    }
+
+    .SwitchProjectStatus {
+      height: 58px;
+      padding: 0 14px;
+      border-bottom: 1px solid @colorGrayLight;
+
+      .el-row {
+        height: 100%;
+      }
+
+      .SwitchLabel {
+        padding-right: 12px;
+        font-size: @fontSizeBase;
+        color: @colorTextPrimary;
+      }
+
+      .SwitchButtons {
+        .el-button {
+          margin: 0 !important;
+          padding: 0 12px;
+          height: 30px;
+          line-height: 30px;
+          border: 0 !important;
+          background-color: @colorGrayLighter;
+          color: @colorTextSecondary;
+          font-size: @fontSizeSmall;
+          text-transform: uppercase;
+
+          &:not(.Active) {
+            &:hover {
+              background-color: darken(@colorGrayLighter, 5%);
+              color: @colorTextPrimary;
+            }
+          }
+        }
+
+        .DraftButton {
+          &.Active {
+            color: @colorTextPrimary;
+            background-color: @colorDraft;
+          }
+        }
+
+        .PublishedButton {
+          &.Active {
+            color: @colorWhite;
+            background-color: @colorPublished;
+          }
+        }
+      }
     }
 
     .Stepper {
