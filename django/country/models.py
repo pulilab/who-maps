@@ -82,7 +82,7 @@ class DonorPartnerLogo(ExtendedModel):
 
 
 class MapFile(ExtendedModel):
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='map_files')
     map_file = models.FileField(null=True, upload_to='uploaded_maps/')
 
 
