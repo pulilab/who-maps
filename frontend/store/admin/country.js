@@ -37,7 +37,7 @@ export const actions = {
 
     const userIdMapping = id => {
       const profile = profiles.find(prof => prof.id === id);
-      const label = `${profile.name} <todo_bind@user.email!>`;
+      const label = `${profile.name} <${profile.user_email}>`;
       return {
         key: id,
         label,
