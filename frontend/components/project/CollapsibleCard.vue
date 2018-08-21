@@ -61,7 +61,7 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-.CollapsibleCard {
+  .CollapsibleCard {
   margin: 0 0 20px;
 
   .el-card__body {}

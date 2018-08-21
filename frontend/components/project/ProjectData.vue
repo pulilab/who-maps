@@ -124,18 +124,20 @@
                 :list="['Sub National', 'National']"
               />
             </simple-field>
-            <simple-field class="NationalLevelDeployment">
+            <simple-field>
               <div slot="header">
                 <fa icon="flag" />
                 National Level Deployment
               </div>
+
               <coverage-field :coverage="project.national_level_deployment" />
+
+              <sub-level-coverage-field
+                :coverage="project.coverage"
+                :coverage-data="project.coverageData"
+                :coverage-second-level="project.coverageSecondLevel"
+              />
             </simple-field>
-            <sub-level-coverage-field
-              :coverage="project.coverage"
-              :coverage-data="project.coverageData"
-              :coverage-second-level="project.coverageSecondLevel"
-            />
           </div>
 
           <simple-field header="Has the government financially invested in the project?">
@@ -290,7 +292,7 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-  .NewProjectForm {
+  .ProjectData {
     .limitPageWidth();
 
     .Loader {
@@ -298,8 +300,8 @@ export default {
       margin: 0 auto 80px;
     }
 
-    > .el-form {
-      > .el-row > .el-col {
+    > .el-row {
+      > .el-col {
         // form fieldsets
         &:first-child {
           width: calc(100% - @projectAsideNavWidth - 20px);
@@ -309,6 +311,66 @@ export default {
         // aside navigation
         &:last-child {
           width: @projectAsideNavWidth;
+        }
+      }
+    }
+
+    .ContentContainer {
+      padding-bottom: 20px;
+    }
+
+    .CollapsibleCard {
+      .SimpleField {
+        margin-bottom: 40px;
+        font-size: @fontSizeMedium;
+        line-height: 24px;
+
+        .Header {
+          margin-bottom: 10px;
+          font-weight: 700;
+        }
+
+        .Content {}
+
+        .CountryItem {
+          .CountryFlag {
+            display: none;
+          }
+
+          .CountryName {
+            margin: 0;
+            font-weight: 400;
+          }
+        }
+
+        .PlatformList {
+          .Content {
+            .SimpleField {
+              margin-top: 20px;
+              font-size: @fontSizeBase;
+              line-height: 20px;
+            }
+          }
+        }
+
+        .StandardsList {
+          li {
+            margin-bottom: 20px;
+
+            &:last-child {
+              margin: 0;
+            }
+          }
+        }
+
+        a {
+          color: @colorBrandPrimary;
+        }
+      }
+
+      .GrayArea {
+        .svg-inline--fa {
+          margin-right: 4px;
         }
       }
     }

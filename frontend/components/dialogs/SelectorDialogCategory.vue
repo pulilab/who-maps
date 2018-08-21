@@ -1,5 +1,7 @@
 <template>
   <div class="SelectorDialogCategory">
+    <!-- TODO -->
+    <!-- Pls add '.Openen' class when subcategory is visible -->
     <div class="CategoryName">
       <el-button
         type="text"
@@ -108,6 +110,13 @@ export default {
 
 .SelectorDialogCategory {
   .CategoryName {
+
+    &.Opened {
+      .el-button {
+        color: @colorTextPrimary;
+      }
+    }
+
     .el-button {
       line-height: 19px;
       text-align: left;
@@ -142,12 +151,12 @@ export default {
   }
 
   .Items {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding: 0 20px 0 50px;
 
     .Item {
       display: block;
-      margin: 0 0 10px;
+      margin: 0;
 
       .el-checkbox__label {
         font-size: @fontSizeSmall;

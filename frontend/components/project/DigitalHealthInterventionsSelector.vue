@@ -89,6 +89,10 @@ export default {
           left: 0;
         }
       }
+
+      + .el-button {
+        margin-bottom: 10px;
+      }
     }
   }
 </style>

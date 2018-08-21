@@ -8,23 +8,29 @@
         v-if="!readonly && !newProject"
         class="SwitchProjectStatus"
       >
-        Switch view:
-        <el-button-group>
-          <el-button
-            :class="['DraftButton', {'Active': draft}]"
-            :disabled="draft"
-            @click="goToDraft"
-          >
-            Draft
-          </el-button>
-          <el-button
-            :class="['PublishedButton', {'Active': published}]"
-            :disabled="published"
-            @click="goToPublished"
-          >
-            Published
-          </el-button>
-        </el-button-group>
+        <el-row
+          type="flex"
+          justify="space-between"
+          align="middle"
+        >
+          <div class="SwitchLabel">Switch view:</div>
+          <el-button-group class="SwitchButtons">
+            <el-button
+              :class="['DraftButton', {'Active': draft}]"
+              :disabled="draft"
+              @click="goToDraft"
+            >
+              Draft
+            </el-button>
+            <el-button
+              :class="['PublishedButton', {'Active': published}]"
+              :disabled="published"
+              @click="goToPublished"
+            >
+              Published
+            </el-button>
+          </el-button-group>
+        </el-row>
       </div>
 
       <div class="Stepper">
@@ -108,6 +114,11 @@
           size="medium"
           @click="$emit('publishProject')"
         >
+          <!-- TODO -->
+          <!-- Show spinner while form is being published -->
+          <!-- <fa
+            icon="spinner"
+            spin /> -->
           Publish
         </el-button>
 
@@ -118,6 +129,11 @@
           :class="['SaveDraft', {'NewProject': newProject, 'Draft':draft }]"
           @click="$emit('saveDraft')"
         >
+          <!-- TODO -->
+          <!-- Show spinner while form is being saved -->
+          <!-- <fa
+            icon="spinner"
+            spin /> -->
           Save draft
         </el-button>
 
@@ -214,14 +230,66 @@ export default {
       left: 0;
     }
 
+    .SwitchProjectStatus {
+      height: 58px;
+      padding: 0 14px;
+      border-bottom: 1px solid @colorGrayLight;
+      box-sizing: border-box;
+
+      .el-row {
+        height: 100%;
+      }
+
+      .SwitchLabel {
+        padding-right: 12px;
+        font-size: @fontSizeBase;
+        color: @colorTextPrimary;
+      }
+
+      .SwitchButtons {
+        .el-button {
+          margin: 0 !important;
+          padding: 0 10px;
+          height: 29px;
+          line-height: 29px;
+          border: 0 !important;
+          background-color: @colorGrayLighter;
+          color: @colorTextSecondary;
+          font-size: @fontSizeSmall + 1;
+          text-transform: uppercase;
+
+          &:not(.Active) {
+            &:hover {
+              background-color: darken(@colorGrayLighter, 5%);
+              color: @colorTextPrimary;
+            }
+          }
+        }
+
+        .DraftButton {
+          &.Active {
+            color: @colorTextPrimary;
+            background-color: @colorDraft;
+          }
+        }
+
+        .PublishedButton {
+          &.Active {
+            color: @colorWhite;
+            background-color: @colorPublished;
+          }
+        }
+      }
+    }
+
     .Stepper {
       ul {
         position: relative;
         list-style: none;
-        margin: 20px 0;
+        margin: 20px 0 25px;
         padding: 0;
 
-        @media only screen and (max-height: 700px) {
+        @media only screen and (max-height: 1024px) {
           margin: 20px 0;
         }
 
@@ -280,7 +348,7 @@ export default {
         text-decoration: none;
         transition: color 200ms ease;
 
-        @media only screen and (max-height: 720px) {
+        @media only screen and (max-height: 1024px) {
           height: 48px;
           line-height: 48px;
         }
@@ -299,7 +367,7 @@ export default {
           color: @colorWhite;
           transition: all 200ms ease;
 
-          @media only screen and (max-height: 720px) {
+          @media only screen and (max-height: 1024px) {
             top: 8px;
           }
 
@@ -335,6 +403,9 @@ export default {
         font-size: @fontSizeMedium;
       }
 
+      .fa-spin {
+        margin-right: 2px;
+      }
     }
   }
 </style>

@@ -26,6 +26,43 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
+  .ProjectPublishedView {
+    .CollapsibleCard {
+      .el-card__header {
+        background-color: @colorPublished !important;
+      }
+    }
+
+    .Stepper {
+      li {
+        &.active,
+        &:hover,
+        &:active {
+          .el-button {
+            .Step {
+              background-color: @colorPublished !important;
+            }
+          }
+        }
+      }
+    }
+
+    .PublishedLabel {
+      display: inline-block;
+      height: 24px;
+      margin: 0 2px;
+      padding: 0 10px;
+      font-size: @fontSizeSmall;
+      font-weight: 700;
+      line-height: 24px;
+      text-transform: uppercase;
+      border-radius: 12px;
+      background-color: @colorPublished;
+      color: @colorWhite;
+    }
+  }
 </style>
