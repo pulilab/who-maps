@@ -10,8 +10,8 @@ export default {
 
   async fetch ({store}) {
     await Promise.all([
-      store.dispatch('system/loadUserProfiles'),
-      store.dispatch('admin/map/loadMapData')
+      store.dispatch('system/loadUserProfiles')
+      // store.dispatch('admin/map/loadMapData')
     ]);
     await store.dispatch('admin/country/fetchData');
     // store.dispatch('admin/questions/setQuestionaireId', 'country');
