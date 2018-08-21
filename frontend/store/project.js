@@ -262,6 +262,7 @@ export const actions = {
     // TODO: Remove this on donor feature creation
     parsed.donors = ['FakeDonor for API TEST'];
     const { data } = await this.$axios.put(`/api/projects/publish/${id}/`, parsed);
+    await dispatch('saveTeamViewers', id);
     const parsedResponse = apiReadParser(data.draft);
     commit('SET_PUBLISHED', Object.freeze(parsedResponse));
     dispatch('projects/updateProject', data, {root: true});
