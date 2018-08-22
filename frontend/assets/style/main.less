@@ -285,6 +285,7 @@ i[class*="el-icon-"] {
 
 .el-button {
   font-family: Arial, sans-serif;
+  border: 0 !important;
 
   &.el-button--default {
     &:hover {
@@ -646,6 +647,65 @@ fieldset {
 
       .el-button {
         margin: 0 15px;
+      }
+    }
+  }
+}
+
+// Message Box
+
+.el-message-box__wrapper {
+  .el-message-box {
+    padding: 0;
+    border-radius: 0;
+    box-shadow: 0 6px 24px 4px rgba(0,0,0,0.22);
+
+    .el-message-box__header {
+      padding: 20px 20px 10px;
+
+      .el-message-box__title {
+        font-weight: 700;
+      }
+
+      .el-message-box__headerbtn {
+        top: 18px;
+        right: 20px;
+
+        .el-message-box__close {
+          font-weight: 700;
+          color: @colorGray;
+          transition: @transitionAll;
+        }
+
+        &:hover {
+          .el-message-box__close {
+            color: @colorTextPrimary;
+          }
+        }
+      }
+    }
+
+    .el-message-box__content {
+      padding: 10px 20px;
+
+      .el-message-box__message {
+        line-height: 21px;
+      }
+
+      .el-message-box__input {}
+    }
+
+    .el-message-box__btns {
+      padding: 10px 20px 20px;
+
+      .el-button {
+        margin-left: 20px;
+
+        &.el-button--primary {
+          &:hover {
+            background-color: @colorBrandAccentLight;
+          }
+        }
       }
     }
   }
