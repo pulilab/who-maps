@@ -124,6 +124,7 @@ class CountryImageViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     serializer_class = CountryImageSerializer
     parser_classes = (MultiPartParser, FormParser)
 
+
 class DonorImageViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Donor.objects.all()
     serializer_class = DonorImageSerializer
