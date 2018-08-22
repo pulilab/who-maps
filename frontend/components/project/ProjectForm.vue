@@ -101,6 +101,7 @@ export default {
       return this.readyElements === this.maxElements;
     },
     draftRules () {
+      const {listProps} = this.generateCollectionRules([], [], []);
       const rules = {
         name: [
           required()
@@ -109,11 +110,20 @@ export default {
           {type: 'email', message: 'Please insert a valid email', trigger: 'blur'}
         ]
       };
+      const exclude = ['platforms', 'coverage', 'implementing_partners', 'coverage_second_level'];
       for (let item in this.model) {
+        if (!listProps.includes(item) && !exclude.includes(item)) {
+          if (!rules[item]) {
+            rules[item] = [];
+          }
+          rules[item].push({ validator: this.validatorGenerator(item), trigger: 'blur' });
+        }
+      }
+      for (let item of listProps) {
         if (!rules[item]) {
           rules[item] = [];
         }
-        rules[item].push({ validator: this.validatorGenerator(item), trigger: 'blur' });
+        rules[item].push({ validator: this.collectionValidatorGenerator(item), trigger: 'blur' });
       }
       return rules;
     },
@@ -122,26 +132,13 @@ export default {
         {type: 'number', required: true, message: 'This is requried'},
         {validator: this.digitalHealthInterventionsValidator}
       ];
-      const platforms = this.project.platforms.reduce((a, c, index) => {
-        return { ...a, [`platforms.${index}`]: platformRules };
-      }, {});
-
-      const implementing_partners = this.project.implementing_partners.reduce((a, c, index) => {
-        return { ...a, [`implementing_partners.${index}`]: [max(64)] };
-      }, {});
 
       const coverageRules = [
         {type: 'string', required: true, message: 'This is requried'},
         {validator: this.coverageDataValidator}
       ];
 
-      const coverage = this.project.coverage.reduce((a, c, index) => {
-        return { ...a, [`coverage.${index}`]: coverageRules };
-      }, {});
-
-      const coverage_second_level = this.project.coverage_second_level.reduce((a, c, index) => {
-        return { ...a, [`coverage_second_level.${index}`]: coverageRules };
-      }, {});
+      const {collectionRules, listProps} = this.generateCollectionRules(platformRules, [max(64)], coverageRules);
 
       const rules = {
         name: [
@@ -156,7 +153,7 @@ export default {
         ],
         geographic_scope: [],
         implementation_overview: [
-          // required(),
+          required(),
           max(512)
         ],
         start_date: [
@@ -173,7 +170,7 @@ export default {
           {type: 'email', message: 'Please insert a valid email', trigger: 'blur'},
           required()
         ],
-        ...platforms,
+        ...collectionRules.platforms,
         digitalHealthInterventions: [], // Validated inside platforms
         health_focus_areas: [],
         hsc_challenges: [
@@ -182,9 +179,9 @@ export default {
         his_bucket: [
           requiredList()
         ],
-        ...coverage,
+        ...collectionRules.coverage,
         coverageData: [],
-        ...coverage_second_level,
+        ...collectionRules.coverage_second_level,
         'national_level_deployment.health_workers': [
           this.project.coverageType === 2 ? required() : {type: 'number'}
         ],
@@ -197,7 +194,7 @@ export default {
         government_investor: [
           required('number')
         ],
-        ...implementing_partners,
+        ...collectionRules.implementing_partners,
         implementation_dates: [
           required()
         ],
@@ -217,11 +214,13 @@ export default {
         interoperability_links: [],
         interoperability_standards: []
       };
-      for (let item in this.model) {
-        if (!rules[item]) {
-          rules[item] = [];
+
+      for (let item in rules) {
+        if (!listProps.includes(item)) {
+          rules[item].push({ validator: this.validatorGenerator(item), trigger: 'blur' });
+        } else {
+          rules[item].push({ validator: this.collectionValidatorGenerator(item), trigger: 'blur' });
         }
-        rules[item].push({ validator: this.validatorGenerator(item), trigger: 'blur' });
       }
       return rules;
     },
@@ -236,6 +235,40 @@ export default {
       discardDraft: 'project/discardDraft',
       publishProject: 'project/publishProject'
     }),
+    generateCollectionRules (platformRules, implementingPartnersRules, coverageRules) {
+      const platforms = this.project.platforms.reduce((a, c, index) => {
+        return { ...a, [`platforms.${index}`]: platformRules };
+      }, {});
+
+      const implementing_partners = this.project.implementing_partners.reduce((a, c, index) => {
+        return { ...a, [`implementing_partners.${index}`]: implementingPartnersRules };
+      }, {});
+
+      const coverage = this.project.coverage.reduce((a, c, index) => {
+        return { ...a, [`coverage.${index}`]: coverageRules };
+      }, {});
+
+      const coverage_second_level = this.project.coverage_second_level.reduce((a, c, index) => {
+        return { ...a, [`coverage_second_level.${index}`]: coverageRules };
+      }, {});
+
+      const listProps = [
+        ...Object.keys(platforms),
+        ...Object.keys(implementing_partners),
+        ...Object.keys(coverage),
+        ...Object.keys(coverage_second_level)
+      ];
+
+      return {
+        collectionRules: {
+          platforms,
+          implementing_partners,
+          coverage,
+          coverage_second_level
+        },
+        listProps
+      };
+    },
     digitalHealthInterventionsValidator (rule, value, callback) {
       const ownDhi = this.project.digitalHealthInterventions.filter(dhi => dhi.platform === value && dhi.id);
       if (ownDhi.length === 0) {
@@ -298,8 +331,8 @@ export default {
     },
     async doSaveDraft () {
       this.usePublishRules = false;
+      this.deleteFormAPIErrors();
       this.$nextTick(() => {
-        this.deleteFormAPIErrors();
         this.$refs.projectForm.validate(async valid => {
           if (valid) {
             try {
@@ -346,8 +379,8 @@ export default {
     },
     async doPublishProject () {
       this.usePublishRules = true;
+      this.deleteFormAPIErrors();
       this.$nextTick(() => {
-        this.deleteFormAPIErrors();
         this.$refs.projectForm.validate(async (valid) => {
           if (valid) {
             try {

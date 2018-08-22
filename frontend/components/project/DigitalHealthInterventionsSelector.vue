@@ -70,6 +70,10 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .DigitalHealthInterventionsSelector {
+    .el-button {
+      margin-bottom: 10px;
+    }
+
     ul.SelectedDigitalHealthInterventions {
       list-style-type: none;
       display: block;
@@ -88,10 +92,6 @@ export default {
           top: 4px;
           left: 0;
         }
-      }
-
-      + .el-button {
-        margin-bottom: 10px;
       }
     }
   }

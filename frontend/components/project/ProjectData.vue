@@ -339,6 +339,7 @@ export default {
 
           .CountryName {
             margin: 0;
+            font-size: @fontSizeBase;
             font-weight: 400;
           }
         }
