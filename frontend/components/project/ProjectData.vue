@@ -356,10 +356,15 @@ export default {
 
         .StandardsList {
           li {
-            margin-bottom: 20px;
+            a {
+              display: block;
+              margin-bottom: 20px;
+            }
 
             &:last-child {
-              margin: 0;
+              a {
+                margin: 0;
+              }
             }
           }
         }
