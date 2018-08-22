@@ -1261,6 +1261,7 @@ class ProjectDraftTests(SetupTests):
         self.project_draft_data = {
             'name': 'Draft Proj 1',
             'country': self.country_id,
+            'health_focus_areas': []
         }
 
         url = reverse("project-create")
@@ -1278,7 +1279,8 @@ class ProjectDraftTests(SetupTests):
         self.project_draft_data = {
             'name': 'Draft Proj 2',
             'country': self.country_id,
-            'organisation': self.org.id
+            'organisation': self.org.id,
+            'health_focus_areas': []
         }
 
         url = reverse("project-create")
