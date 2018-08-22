@@ -58,6 +58,7 @@
     "vee-validate": "^2.0.6",
     "vue-click-outside": "^1.0.7",
     "vue-django-feedback": "^1.5.1",
+    "vue-good-table": "^2.13.0",
     "vue-no-ssr": "^0.2.2",
     "vue-scroll-class": "^1.2.3",
     "vue2-leaflet": "git+https://github.com/pulilab/Vue2Leaflet.git#c805285",
