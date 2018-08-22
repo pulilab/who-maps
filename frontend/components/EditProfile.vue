@@ -79,12 +79,59 @@
       </el-form>
 
       <div>
-        <h4>I request to be a:</h4>
-        <el-checkbox v-model="checked">Government user</el-checkbox>
-        <p>Add question-icon, also => Lorem ipsum copy original!!</p>
-        <el-checkbox v-model="checked">Financial investor</el-checkbox>
-        <p>Add question-icon, also => Lorem ipsum copy original!!</p>
+        <h4 v-if="!userTypeRequested">I request to be a:</h4>
+        <h4 v-if="userTypeRequested">User role requested:</h4>
+
+        <el-checkbox v-model="isCountryUser">Government user</el-checkbox>
+        <p class="UserArchTypeText">Lorem ipsum dolor sit amet</p>
+        <el-radio-group
+          v-if="isCountryUser"
+          v-model="accountType"
+          :disabled="!isCountryUser">
+          <el-radio :label="'G'">Country user</el-radio>
+          <p
+            v-if="accountType === 'G'"
+            class="UserTypeText">Lorem ipsum dolor sit amet</p>
+          <br v-else>
+          <el-radio :label="'CA'">Administrator of this country</el-radio>
+          <p
+            v-if="accountType === 'CA'"
+            class="UserTypeText">Lorem ipsum dolor sit amet</p>
+          <br v-else>
+          <el-radio :label="'SCA'">Super country administrator</el-radio>
+          <p
+            v-if="accountType === 'SCA'"
+            class="UserTypeText">Lorem ipsum dolor sit amet</p>
+          <br v-else>
+        </el-radio-group>
+
+        <br>
+
+        <el-checkbox v-model="isDonorUser">Financial investor</el-checkbox>
+        <p class="UserArchTypeText">Lorem ipsum dolor sit amet</p>
+        <el-radio-group
+          v-if="isDonorUser"
+          v-model="accountType"
+          :disabled="!isDonorUser">
+          <el-radio :label="'D'">D</el-radio>
+          <p
+            v-if="accountType === 'D'"
+            class="UserTypeText">Lorem ipsum dolor sit amet</p>
+          <br v-else>
+          <el-radio :label="'DA'">DA</el-radio>
+          <p
+            v-if="accountType === 'DA'"
+            class="UserTypeText">Lorem ipsum dolor sit amet</p>
+          <br v-else>
+          <el-radio :label="'SDA'">Super donor administrator</el-radio>
+          <p
+            v-if="accountType === 'SDA'"
+            class="UserTypeText">Lorem ipsum dolor sit amet</p>
+          <br v-else>
+        </el-radio-group>
       </div>
+
+      <p>TODO: accepted states</p>
 
       <div class="Actions">
         <el-button @click="dismissChanges">Dismiss changes</el-button>
@@ -108,8 +155,11 @@ export default {
         name: null, // 'Takacs Andras Tamas'
         organisation: null, // code
         language: null, // string like 'en'
-        country: null // code
+        country: null, // code
+        accountType: null // 1 from ['G', 'CA', 'SCA', 'D', 'DA', 'SDA']
       },
+      isCountryUser: false,
+      isDonorUser: false,
       rules: {
         name: [
           { required: true, message: 'This field is required', trigger: 'change' },
@@ -183,7 +233,51 @@ export default {
       set (value) {
         this.innerProfile.language = value;
       }
+    },
+
+    accountType: {
+      get () {
+        return this.innerProfile.accountType !== null ? this.innerProfile.accountType : this.profile.account_type;
+      },
+      set (value) {
+        this.innerProfile.accountType = value;
+      }
+    },
+
+    userTypeRequested () {
+      return this.profile.account_type && (
+        this.innerProfile.accountType === null ||
+        this.innerProfile.accountType === this.profile.account_type
+      );
     }
+  },
+
+  watch: {
+    isCountryUser: function (newVal, oldVal) {
+      if (newVal && !oldVal) {
+        this.isDonorUser = false;
+        if (!['G', 'CA', 'SCA'].includes(this.accountType)) {
+          this.innerProfile.accountType = 'G';
+        }
+      } else if (!newVal && !this.isDonorUser) {
+        this.innerProfile.accountType = 'I';
+      }
+    },
+    isDonorUser: function (newVal, oldVal) {
+      if (newVal && !oldVal) {
+        this.isCountryUser = false;
+        if (!['D', 'DA', 'SDA'].includes(this.accountType)) {
+          this.innerProfile.accountType = 'D';
+        }
+      } else if (!newVal && !this.isCountryUser) {
+        this.innerProfile.accountType = 'I';
+      }
+    }
+  },
+
+  mounted () {
+    this.isCountryUser = ['G', 'CA', 'SCA'].includes(this.profile.account_type);
+    this.isDonorUser = ['D', 'DA', 'SDA'].includes(this.profile.account_type);
   },
 
   methods: {
@@ -225,6 +319,12 @@ export default {
         putObj.organisation = this.profile.organisation;
       } else {
         putObj.organisation = this.organisations.find(el => el.name === this.innerProfile.organisation).id;
+      }
+
+      if (this.innerProfile.accountType === null) {
+        putObj.account_type = this.profile.account_type;
+      } else {
+        putObj.account_type = this.innerProfile.accountType;
       }
 
       await this.updateUserProfile(putObj);
@@ -280,6 +380,11 @@ export default {
     height: 40px;
     padding: 15px;
     background-color: gray;
+  }
+
+  .UserTypeText {
+    height: 15px;
+    font-size: 12px;
   }
 }
 </style>
