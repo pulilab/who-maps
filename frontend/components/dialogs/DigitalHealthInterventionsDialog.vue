@@ -5,12 +5,12 @@
     modal
     top="10vh"
     width="90vw"
-    custom-class="SelectHfaDialog"
+    custom-class="SelectDHIDialog"
     @open="loadCurrentSelection"
   >
     <el-row
       type="flex"
-      class="HfaMainCategories">
+      class="DHIMainCategories">
       <el-col
         v-for="category in digitalHealthInterventions"
         :key="category.name"
@@ -116,7 +116,7 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-  .SelectHfaDialog {
+  .SelectDHIDialog {
     height: 80vh;
     margin-top: 0;
     margin-bottom: 0;
@@ -126,7 +126,7 @@ export default {
       height: calc(80vh - (@dialogHeaderFooterHeight*2));
     }
 
-    .HfaMainCategories {
+    .DHIMainCategories {
       height: calc(80vh - (@dialogHeaderFooterHeight*2));
 
       > .el-col {
