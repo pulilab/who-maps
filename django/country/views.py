@@ -122,8 +122,9 @@ class MapFileViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Re
 class CountryImageViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.all()
     serializer_class = CountryImageSerializer
-
+    parser_classes = (MultiPartParser, FormParser)
 
 class DonorImageViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Donor.objects.all()
     serializer_class = DonorImageSerializer
+    parser_classes = (MultiPartParser, FormParser)
