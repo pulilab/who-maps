@@ -35,10 +35,16 @@ class MapFileSerializer(serializers.ModelSerializer):
         fields = ('id', 'country', 'map_file',)
 
 
-class CountryMapDataSerializer(serializers.ModelSerializer):
+class CountryImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
-        fields = ('id', 'map_data',)
+        fields = ('id', 'logo', 'cover',)
+
+
+class DonorImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Donor
+        fields = ('id', 'logo', 'cover',)
 
 
 class UpdateAdminMixin:
@@ -75,7 +81,7 @@ class UpdateAdminMixin:
 
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",
                   "project_approval", "map_data", "map_version", "map_files", "map_activated_on",)
-READ_ONLY_COUNTRY_FIELDS = ("name", "code", "project_approval", "map_data", "map_version", "map_files",
+READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "cover", "project_approval", "map_version", "map_files",
                             "map_activated_on",)
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 
@@ -129,7 +135,7 @@ class CountrySerializer(SuperAdminCountrySerializer):
 
 
 DONOR_FIELDS = ("id", "name", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",)
-READ_ONLY_DONOR_FIELDS = ("name",)
+READ_ONLY_DONOR_FIELDS = ("logo", "cover", "name",)
 DONOR_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 
 
