@@ -15,7 +15,7 @@
         class="CoverageWrapper"
       >
         <el-col :span="16">
-          <el-form-item prop="coverage">
+          <el-form-item>
             <sub-national-level-deployment-item
               :index="index"
               :level-name="countrySubLevelNames.first"
