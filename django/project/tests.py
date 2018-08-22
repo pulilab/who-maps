@@ -1986,8 +1986,8 @@ class TestAdmin(TestCase):
         p2 = Project.objects.create(name="Test2")
         p3 = Project.objects.create(name="Test3")
         ProjectApproval.objects.filter(project=p1).update(approved=None)
-        ProjectApproval.objects.filter(project=p2).update(approved=True)
-        ProjectApproval.objects.filter(project=p3).update(approved=False)
+        p2.approve()
+        p3.disapprove()
 
         approvals = approval_filter_obj.queryset(self.request, ProjectApproval.objects.all())
 
