@@ -26,6 +26,18 @@
           class="FakeTab"
           tag="div">Donor admin</nuxt-link>
       </el-row>
+      <el-row
+        v-if="$route.path.includes('/dashboard/')"
+        type="flex">
+        <nuxt-link
+          :to="localePath({name: 'index-dashboard'})"
+          class="FakeTab"
+          tag="div">Map view</nuxt-link>
+        <nuxt-link
+          :to="localePath({name: 'index-dashboard-list'})"
+          class="FakeTab"
+          tag="div">List view</nuxt-link>
+      </el-row>
 
       <el-col />
 
