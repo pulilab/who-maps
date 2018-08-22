@@ -76,7 +76,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
 
     # SECTION 2 Implementation Overview
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
-    # TODO: fix the tests here
     health_focus_areas = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
     hsc_challenges = serializers.ListField(
