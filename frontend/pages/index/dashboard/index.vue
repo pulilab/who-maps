@@ -1,12 +1,16 @@
 <template>
   <div class="DashboardMapView">
-    MAP VIEW
+    <dashboard-map />
   </div>
 </template>
 
 <script>
-export default {
+import DashboardMap from '../../../components/dashboard/DashboardMap';
 
+export default {
+  components: {
+    DashboardMap
+  }
 };
 </script>
 

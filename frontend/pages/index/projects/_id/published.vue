@@ -44,6 +44,7 @@ export default {
         &:active {
           .el-button {
             .Step {
+              color: @colorWhite;
               background-color: @colorPublished !important;
             }
           }

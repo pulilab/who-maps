@@ -2,7 +2,7 @@
   <div
     id="general"
     class="GeneralOverview">
-    <collapsible-card title="General Overview">
+    <collapsible-card title="General overview">
       <el-form-item
         label="Project name"
         prop="name">
