@@ -7,6 +7,7 @@ from django.db.transaction import atomic
 from django.urls import reverse
 from django.template import loader
 from django.core.mail import send_mail
+from django.core import management
 from django.utils.translation import ugettext, override
 from django.conf import settings
 
@@ -135,6 +136,13 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
         model = Country
         fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
         read_only_fields = READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS
+
+    def update(self, instance, validated_data):
+        map_changed = 'map_data' in validated_data and instance.map_data != validated_data['map_data']
+        instance = super().update(instance, validated_data)
+        if map_changed:
+            management.call_command('clean_maps', instance.code)
+        return instance
 
     def get_map_version(self, obj):
         if obj.map_activated_on:
