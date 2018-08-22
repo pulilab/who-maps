@@ -6,6 +6,8 @@
           :span="15"
           class="ProjectName">
           <div>
+            <!-- TODO -->
+            <!-- Please add the "member/view" icon right after the name if it's necessary -->
             {{ project.name }}
           </div>
         </el-col>
@@ -115,7 +117,7 @@ export default {
       white-space: nowrap;
       margin: 12px 0 0;
       padding: 2px 20px;
-      border-left: 1px solid @colorGrayLight;
+      border-left: 1px solid @colorGrayLighter;
 
       &:last-of-type {
         padding-right: 10px;
@@ -143,7 +145,7 @@ export default {
         padding: 0 10px;
         font-size: @fontSizeBase;
         font-weight: 700;
-        color: @colorGray;
+        color: @colorTextSecondary;
         text-decoration: none;
         transform: translateY(-4px);
         transition: @transitionAll;

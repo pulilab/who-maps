@@ -2,7 +2,7 @@
   <div
     id="implementation"
     class="ImplementationOverview">
-    <collapsible-card title="Implementation Overview">
+    <collapsible-card title="Implementation overview">
 
       <el-form-item
         label="Add one or more Software and related Digital Health Interventions (DHI):"

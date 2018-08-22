@@ -87,7 +87,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              Country Fields
+              Country fields
             </el-button>
           </li>
           <li :class="{active: active === 'donor'}">
@@ -98,7 +98,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              Donor Fields
+              Donor fields
             </el-button>
           </li>
         </ul>
@@ -319,12 +319,14 @@ export default {
 
             .Step {
               background-color: @colorBrandPrimaryDark;
-              border-width: 2px;
+              border-width: 4px;
+              color: @colorWhite;
+              transform: scale(1.2);
             }
 
             .svg-inline--fa {
               opacity: 1;
-              transform: translate3d(-50%, -50%, 0) scale(1) rotate(0deg);
+              transform: translate(-50%, -50%);
             }
           }
         }
@@ -336,7 +338,7 @@ export default {
         }
       }
 
-      .el-button  {
+      .el-button {
         position: relative;
         display: block;
         padding: 0 20px 0 70px;
@@ -357,14 +359,15 @@ export default {
           position: absolute;
           top: 15px;
           left: 30px;
+          overflow: hidden;
           box-sizing: border-box;
           display: inline-block;
-          width: 29px;
-          height: 29px;
+          width: 30px;
+          height: 30px;
           border: 6px solid @colorWhite;
           background-color: @colorGrayLight;
-          border-radius: 29px;
-          color: @colorWhite;
+          border-radius: 30px;
+          color: @colorGrayLight;
           transition: all 200ms ease;
 
           @media only screen and (max-height: 1024px) {
@@ -375,12 +378,12 @@ export default {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate3d(-50%, -50%, 0) scale(0.5) rotate(-90deg);
+            transform: translate(-100%, -50%);
             display: inline-block;
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             opacity: 0;
-            transition: all 300ms ease;
+            transition: @transitionFadeMd;
           }
         }
       }

@@ -2,7 +2,7 @@
   <div
     id="technology"
     class="TechnologyOverview">
-    <collapsible-card title="Technology Overview">
+    <collapsible-card title="Technology overview">
       <el-form-item
         label="Technology deployment date"
         prop="implementation_dates"
