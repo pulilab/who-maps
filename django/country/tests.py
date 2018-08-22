@@ -196,6 +196,64 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
         self.assertEqual(response.json()["super_admin_requests"][0]['id'], userprofile3.id)
 
+    def test_country_admin_assign_users_send_email(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
+        user1 = User.objects.create(username="test1", password="12345678", email="test1@foo.com")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
+                                                  account_type=UserProfile.GOVERNMENT)
+        user2 = User.objects.create(username="test2", password="12345678", email="test2@foo.com")
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
+                                                  account_type=UserProfile.COUNTRY_ADMIN)
+        user3 = User.objects.create(username="test3", password="12345678", email="test3@foo.com")
+        userprofile3 = UserProfile.objects.create(user=user3, name="test3", country=self.country,
+                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+        user4 = User.objects.create(username="test4", password="12345678", email="test4@foo.com")
+        userprofile4 = UserProfile.objects.create(user=user4, name="test4", country=self.country,
+                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN, language='fr')
+
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        data = {
+            "users": [userprofile1.id],
+            "admins": [userprofile2.id],
+            "super_admins": [userprofile3.id, userprofile4.id]
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+
+        outgoing_emails = [m.message() for m in mail.outbox if 'You have been selected' in m.message().as_string()]
+
+        self.assertEqual(len(outgoing_emails), 4)
+
+        outgoing_en_email_text = outgoing_emails[0].as_string()
+        self.assertTrue("test1@foo.com" in outgoing_emails[0].values())
+        self.assertTrue('You have been selected as User for {}'.format(self.country.name) in outgoing_en_email_text)
+        self.assertTrue('/admin/country/country/{}/change/'.format(self.country.id) in outgoing_en_email_text)
+        self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+        self.assertNotIn('{{', outgoing_en_email_text)
+
+        outgoing_en_email_text = outgoing_emails[1].as_string()
+        self.assertTrue("test2@foo.com" in outgoing_emails[1].values())
+        self.assertTrue('You have been selected as Admin for {}'.format(self.country.name) in outgoing_en_email_text)
+        self.assertTrue('/admin/country/country/{}/change/'.format(self.country.id) in outgoing_en_email_text)
+        self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+        self.assertNotIn('{{', outgoing_en_email_text)
+
+        outgoing_en_email_text = outgoing_emails[2].as_string()
+        self.assertTrue("test3@foo.com" in outgoing_emails[2].values())
+        self.assertTrue('You have been selected as Super Admin for {}'.format(self.country.name)
+                        in outgoing_en_email_text)
+        self.assertTrue('/admin/country/country/{}/change/'.format(self.country.id) in outgoing_en_email_text)
+        self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+        self.assertNotIn('{{', outgoing_en_email_text)
+
+        outgoing_fr_email_text = outgoing_emails[3].as_string()
+        self.assertTrue("test4@foo.com" in outgoing_emails[3].values())
+        self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
+        self.assertNotIn('{{', outgoing_fr_email_text)
+
     def test_country_admin_update_users_remove_from_other_group(self):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
             account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
@@ -1007,6 +1065,64 @@ class DonorTests(APITestCase):
         self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
         self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
         self.assertEqual(response.json()["super_admin_requests"][0]['id'], userprofile3.id)
+
+    def test_country_admin_assign_users_send_email(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
+        self.donor.super_admins.add(self.test_user['user_profile_id'])
+
+        user1 = User.objects.create(username="test1", password="12345678", email="test1@foo.com")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.DONOR)
+        user2 = User.objects.create(username="test2", password="12345678", email="test2@foo.com")
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
+                                                  account_type=UserProfile.DONOR_ADMIN)
+        user3 = User.objects.create(username="test3", password="12345678", email="test3@foo.com")
+        userprofile3 = UserProfile.objects.create(user=user3, name="test3", donor=self.donor,
+                                                  account_type=UserProfile.SUPER_DONOR_ADMIN)
+        user4 = User.objects.create(username="test4", password="12345678", email="test4@foo.com")
+        userprofile4 = UserProfile.objects.create(user=user4, name="test4", donor=self.donor,
+                                                  account_type=UserProfile.SUPER_DONOR_ADMIN, language='fr')
+
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        data = {
+            "users": [userprofile1.id],
+            "admins": [userprofile2.id],
+            "super_admins": [userprofile3.id, userprofile4.id]
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+
+        outgoing_emails = [m.message() for m in mail.outbox if 'You have been selected' in m.message().as_string()]
+
+        self.assertEqual(len(outgoing_emails), 4)
+
+        outgoing_en_email_text = outgoing_emails[0].as_string()
+        self.assertTrue("test1@foo.com" in outgoing_emails[0].values())
+        self.assertTrue('You have been selected as User for {}'.format(self.donor.name) in outgoing_en_email_text)
+        self.assertTrue('/admin/country/country/{}/change/'.format(self.donor.id) in outgoing_en_email_text)
+        self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+        self.assertNotIn('{{', outgoing_en_email_text)
+
+        outgoing_en_email_text = outgoing_emails[1].as_string()
+        self.assertTrue("test2@foo.com" in outgoing_emails[1].values())
+        self.assertTrue('You have been selected as Admin for {}'.format(self.donor.name) in outgoing_en_email_text)
+        self.assertTrue('/admin/country/country/{}/change/'.format(self.donor.id) in outgoing_en_email_text)
+        self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+        self.assertNotIn('{{', outgoing_en_email_text)
+
+        outgoing_en_email_text = outgoing_emails[2].as_string()
+        self.assertTrue("test3@foo.com" in outgoing_emails[2].values())
+        self.assertTrue('You have been selected as Super Admin for {}'.format(self.donor.name)
+                        in outgoing_en_email_text)
+        self.assertTrue('/admin/country/country/{}/change/'.format(self.donor.id) in outgoing_en_email_text)
+        self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
+        self.assertNotIn('{{', outgoing_en_email_text)
+
+        outgoing_fr_email_text = outgoing_emails[3].as_string()
+        self.assertTrue("test4@foo.com" in outgoing_emails[3].values())
+        self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
+        self.assertNotIn('{{', outgoing_fr_email_text)
 
     def test_donor_admin_update_users_remove_from_other_group(self):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
