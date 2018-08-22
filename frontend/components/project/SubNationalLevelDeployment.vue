@@ -1,31 +1,31 @@
 <template>
-  <div class="SubNationalLevelDeployment">
+  <div class="SubNationalLevelDeployment ItemIndent">
     <div
       v-if="countrySubLevelNames.first"
       class="FirstSubLevel"
     >
-      <div class="Header">
-        <fa icon="map-marker" />
+      <div class="CoverageSubtitle">
+        <fa icon="map-marker-alt" />
         {{ countrySubLevelNames.first }} level deployment
       </div>
       <el-row
         v-for="(cov, index) in coverage"
         :key="cov"
         type="flex"
+        class="CoverageWrapper"
       >
-        <el-col :span="12">
+        <el-col :span="16">
           <el-form-item prop="coverage">
             <sub-national-level-deployment-item
               :index="index"
               :level-name="countrySubLevelNames.first"
               :sub-levels="countryFirstSubLevel"
               :coverage.sync="coverage"
+              prop-prefix="coverage"
             />
           </el-form-item>
         </el-col>
-        <el-col
-          :span="12"
-        >
+        <el-col :span="8">
           <add-rm-buttons
             :show-add="!!cov"
             :show-rm="coverage.length > 1"
@@ -39,8 +39,8 @@
       v-if="countrySubLevelNames.second"
       class="SecondSubLevel"
     >
-      <div class="Header">
-        <fa icon="map-marker" />
+      <div class="CoverageSubtitle">
+        <fa icon="map-marker-alt" />
         {{ countrySubLevelNames.second }} level deployment
       </div>
       <el-row
@@ -48,19 +48,18 @@
         :key="cov"
         type="flex"
       >
-        <el-col :span="12">
+        <el-col :span="16">
           <el-form-item prop="coverageSecondLevel">
             <sub-national-level-deployment-item
               :index="index"
               :level-name="countrySubLevelNames.second"
               :sub-levels="countrySecondSubLevel"
               :coverage.sync="coverageSecondLevel"
+              prop-prefix="coverage_second_level"
             />
           </el-form-item>
         </el-col>
-        <el-col
-          :span="12"
-        >
+        <el-col :span="8">
           <add-rm-buttons
             :show-add="!!cov"
             :show-rm="coverageSecondLevel.length > 1"
@@ -93,9 +92,9 @@ export default {
       getCountrySecondSubLevel: 'countries/getCountrySecondSubLevel'
     }),
     ...mapGettersActions({
-      coverage: ['project', 'getCoverage', 'setCoverage'],
-      coverageData: ['project', 'getCoverageData', 'setCoverageData'],
-      coverageSecondLevel: ['project', 'getCoverageSecondLevel', 'setCoverageSecondLevel']
+      coverage: ['project', 'getCoverage', 'setCoverage', 0],
+      coverageData: ['project', 'getCoverageData', 'setCoverageData', 0],
+      coverageSecondLevel: ['project', 'getCoverageSecondLevel', 'setCoverageSecondLevel', 0]
     }),
     countrySubLevelNames () {
       return this.getCountrySubLevelNames(this.country);
@@ -133,8 +132,26 @@ export default {
 </script>
 
 <style lang="less">
-.SubNationalLevelDeployment {
-  width: 100%;
-}
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
+  .SubNationalLevelDeployment {
+    width: 100%;
+
+    .CoverageWrapper {
+      margin-top: 30px;
+      padding-top: 15px;
+      border-top: 1px solid @colorGrayLight;
+    }
+
+    .CoverageSubtitle + .CoverageWrapper {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    .AddRmButtons {
+      margin-top: 49px;
+    }
+  }
 </style>

@@ -40,20 +40,6 @@ export const getters = {
   getTechnologyPlatforms: state => state.projectStructure.technology_platforms ? [...state.projectStructure.technology_platforms] : [],
   getToolkitVersions: state => [...state.currentProjectToolkitVersions],
   getCoverageVersions: state => [...state.currentProjectCoverageVersions],
-  getTeamViewers: state => state.currentProjectTeamViewers,
-  getCurrentProject: (state, getters, rootState, rootGetters) => {
-    const p = getters.getUserProjectList.find(p => p.id === state.currentProject);
-    if (p) {
-      const user = rootGetters['user/getProfile'];
-      return {
-        ...p,
-        isMember: user ? getters.getTeamViewers.team.includes(user.id) : undefined,
-        isViewer: user ? getters.getTeamViewers.viewers.includes(user.id) : undefined,
-        isPublished: !!(p.published.name)
-      };
-    }
-    return undefined;
-  },
   getUserProjectDetails: (state, getters, rootState, rootGetters) => id => {
     const p = getters.getUserProjectList.find(p => p.id === id);
     if (p) {
@@ -65,6 +51,9 @@ export const getters = {
         isPublished: !!(p.published.name)
       };
     }
+  },
+  getCurrentProject: (state, getters) => {
+    return getters.getUserProjectDetails(state.currentProject);
   },
   getMapsAxisData: (state, getters, rootState, rootGetters) => {
     const axis = rootGetters['system/getAxis'];
@@ -208,12 +197,25 @@ export const actions = {
       const { data } = await this.$axios.get('/api/projects/structure/');
       commit('SET_PROJECT_STRUCTURE', data);
     }
+  },
+  addProjectToList ({commit}, project) {
+    commit('ADD_USER_PROJECT', project);
+  },
+  updateProject ({commit}, project) {
+    commit('EDIT_USER_PROJECT', project);
   }
 };
 
 export const mutations = {
   SET_USER_PROJECT_LIST: (state, projects) => {
     state.userProjects = projects;
+  },
+  ADD_USER_PROJECT: (state, project) => {
+    state.userProjects.push(project);
+  },
+  EDIT_USER_PROJECT: (state, project) => {
+    const index = state.userProjects.findIndex(p => p.id === project.id);
+    state.userProjects.splice(index, 1, project);
   },
   SET_CURRENT_PROJECT: (state, project) => {
     state.currentProject = project;

@@ -9,15 +9,20 @@
     </el-row>
     <el-row type="flex">
       <el-col>
-        <el-button>
-          add new project
-        </el-button>
+        <nuxt-link
+          :to="localePath('index-projects-create')"
+          tag="button"
+          class="el-button el-button--primary el-button--medium"
+        >
+          Add new project
+        </nuxt-link>
       </el-col>
     </el-row>
     <el-row type="flex">
       <el-col>
         <p>
-          to include your project in the inventory and begin tracking your performance
+          to include your project in the inventory<br>
+          and begin tracking your performance
         </p>
       </el-col>
     </el-row>
@@ -31,6 +36,24 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .EmptyProjectList {
+    text-align: center;
+
+    img {
+      margin: 20px 0 40px;
+    }
+
+    p {
+      margin: 20px 0 60px;
+      font-size: @fontSizeSmall;
+      line-height: 18px;
+      font-weight: 700;
+      color: @colorTextSecondary;
+    }
+  }
 
 </style>

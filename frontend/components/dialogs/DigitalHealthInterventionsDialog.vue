@@ -1,12 +1,16 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    title="Health focus area"
+    title="Select Digital Health Intervention(s)"
     modal
-    width="90%"
+    top="10vh"
+    width="90vw"
+    custom-class="SelectHfaDialog"
     @open="loadCurrentSelection"
   >
-    <el-row type="flex">
+    <el-row
+      type="flex"
+      class="HfaMainCategories">
       <el-col
         v-for="category in digitalHealthInterventions"
         :key="category.name"
@@ -21,17 +25,33 @@
         />
       </el-col>
     </el-row>
-    <span
-      slot="footer"
-      class="dialog-footer">
-      <el-button @click="cancel">Cancel</el-button>
-      <el-button @click="clearAll">Clear All</el-button>
-      <el-button
-        type="primary"
-        @click="apply"
-      >
-        Confirm
-      </el-button>
+    <span slot="footer">
+      <el-row
+        type="flex"
+        align="center">
+        <el-col class="SecondaryButtons">
+          <el-button
+            type="text"
+            class="CancelButton"
+            @click="cancel">
+            Cancel
+          </el-button>
+          <el-button
+            type="text"
+            class="DeleteButton"
+            @click="clearAll">
+            Clear All
+          </el-button>
+        </el-col>
+        <el-col class="PrimaryButtons">
+          <el-button
+            type="primary"
+            @click="apply"
+          >
+            Confirm
+          </el-button>
+        </el-col>
+      </el-row>
     </span>
   </el-dialog>
 </template>
@@ -83,14 +103,44 @@ export default {
       this.setDigitalHealthInterventionsDialogState(null);
     },
     apply () {
-      const dhi = this.currentSelection.map(id => ({ platform: this.selectedPlatform, id }));
-      this.setDigitalHealthInterventions(dhi);
+      const selected = this.currentSelection.map(id => ({ platform: this.selectedPlatform, id }));
+      const filtered = this.selectedDHi.filter(dhi => dhi.platform !== this.selectedPlatform);
+      this.setDigitalHealthInterventions([...filtered, ...selected]);
       this.setDigitalHealthInterventionsDialogState(null);
     }
   }
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
+  .SelectHfaDialog {
+    height: 80vh;
+    margin-top: 0;
+    margin-bottom: 0;
+
+    .el-dialog__body {
+      padding: 0;
+      height: calc(80vh - (@dialogHeaderFooterHeight*2));
+    }
+
+    .HfaMainCategories {
+      height: calc(80vh - (@dialogHeaderFooterHeight*2));
+
+      > .el-col {
+        overflow: hidden;
+        border-right: 1px solid @colorGrayLight;
+
+        &:last-child {
+          .SelectorDialogColumn {
+            .Header {
+              width: calc(90vw / 4);
+            }
+          }
+        }
+      }
+    }
+  }
 </style>

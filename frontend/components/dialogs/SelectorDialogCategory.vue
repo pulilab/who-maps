@@ -1,5 +1,7 @@
 <template>
   <div class="SelectorDialogCategory">
+    <!-- TODO -->
+    <!-- Pls add '.Openen' class when subcategory is visible -->
     <div class="CategoryName">
       <el-button
         type="text"
@@ -18,17 +20,18 @@
         />
         <span>{{ category.name }}</span>
       </el-button>
-
     </div>
+
     <transition name="slide-fade">
       <div
         v-show="categoryShown"
-        class="Items">
+        role="group"
+        class="el-checkbox-group Items OnePerRow">
         <el-checkbox
           v-for="item in items"
           :key="item.id"
           :value="values.includes(item.id)"
-          class="Item"
+          class="Item CheckboxSmall"
           @change="filterChange(item.id)"
         >
           {{ item.name }}
@@ -102,24 +105,78 @@ export default {
 </script>
 
 <style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
 .SelectorDialogCategory {
+  .CategoryName {
+
+    &.Opened {
+      .el-button {
+        color: @colorTextPrimary;
+      }
+    }
+
+    .el-button {
+      line-height: 19px;
+      text-align: left;
+      color: @colorTextSecondary;
+
+      > span {
+        display: inline-flex;
+      }
+
+      &:hover {
+        color: @colorTextPrimary;
+      }
+
+      .svg-inline--fa {
+        width: 12px;
+        margin-top: 2px;
+      }
+
+      .el-checkbox {
+        margin: 0 10px 0 15px;
+
+        &.is-checked {
+          + span {
+            color: @colorBrandPrimary;
+          }
+        }
+
+        + span {
+          white-space: normal;
+        }
+      }
+    }
+  }
 
   .Items {
+    margin-bottom: 10px;
+    padding: 0 20px 0 50px;
 
-    .Item{
-      width: 100%;
+    .Item {
+      display: block;
+      margin: 0;
+
+      .el-checkbox__label {
+        font-size: @fontSizeSmall;
+        line-height: 15px;
+      }
     }
   }
 
   .slide-fade-enter-active {
-    transition: all .3s ease;
+    transition: all .1s ease;
   }
+
   .slide-fade-leave-active {
-    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
   }
+
   .slide-fade-enter, .slide-fade-leave-to
   /* .slide-fade-leave-active below version 2.1.8 */ {
-    transform: translateX(10px);
+    transform: translateY(-10px);
     opacity: 0;
   }
 }

@@ -1,11 +1,14 @@
 <template>
   <div class="SubNationalLevelDeploymentItem">
-    <el-form-item :label="levelName">
+    <el-form-item
+      :label="levelName"
+      :prop="propPrefix +'.' + index"
+    >
       <el-select
         :value="subLevel"
         filterable
-        popper-class="SubNationalLevelDeploymentItemDropdown"
-        class="SubNationalLevelDeploymentItem"
+        popper-class="SubNationalLevelDeploymentRegionDropdown"
+        class="SubNationalLevelDeployementRegion"
         placeholder="Select from list"
         @change="changeHandler">
 
@@ -24,7 +27,6 @@
         :clients.sync="clients"
         :facilities.sync="facilities"
         :disabled="!subLevel"
-        :selected-facilities="facilitiesList"
       />
     </el-form-item>
   </div>
@@ -58,11 +60,15 @@ export default {
     coverage: {
       type: Array,
       default: () => []
+    },
+    propPrefix: {
+      type: String,
+      required: true
     }
   },
   computed: {
     ...mapGettersActions({
-      coverageData: ['project', 'getCoverageData', 'setCoverageData']
+      coverageData: ['project', 'getCoverageData', 'setCoverageData', 0]
     }),
     subLevel () {
       return this.coverage[this.index];
@@ -75,19 +81,20 @@ export default {
     },
     facilitiesList: {
       get () {
-        return this.localCoverageData ? this.localCoverageData.facilities_list : [];
+        const facilitiesList = this.localCoverageData ? this.localCoverageData.facilities_list : [];
+        return facilitiesList || [];
       },
       set (value) {
-        const coverage = {facilities_list: [...value]};
+        const coverage = {facilities_list: [...value], facilities: value.length};
         this.coverageData = {coverage, subLevel: this.subLevel};
       }
     },
     healthWorkers: {
       get () {
-        return this.localCoverageData ? this.localCoverageData.healthWorkers : null;
+        return this.localCoverageData ? this.localCoverageData.health_workers : null;
       },
       set (value) {
-        const coverage = {healthWorkers: value};
+        const coverage = {health_workers: value};
         this.coverageData = {coverage, subLevel: this.subLevel};
       }
     },
@@ -121,10 +128,11 @@ export default {
 </script>
 
 <style lang="less">
-.SubNationalLevelDeploymentItem {
-  width: 100%;
-}
-.SubNationalLevelDeploymentItemDropdown {
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
-}
+  .SubNationalLevelDeployementRegion {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 </style>

@@ -126,7 +126,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()["footer_text"], data["footer_text"])
 
     def test_country_admin_update_images(self):
-        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        url = reverse("country-image-detail", kwargs={"pk": self.country.id})
         cover = get_temp_image("cover")
         logo = get_temp_image("logo")
         data = {
@@ -137,7 +137,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_country_admin_delete_images(self):
-        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        url = reverse("country-image-detail", kwargs={"pk": self.country.id})
         cover = get_temp_image("cover")
         logo = get_temp_image("logo")
         data = {
@@ -877,7 +877,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['country'], self.country.id)
 
     def test_country_admin_update_map_data(self):
-        url = reverse("map-data-detail", kwargs={"pk": self.country.id})
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
         data = {
             "map_data": {
                 "sub_level_name": "District",
@@ -957,7 +957,7 @@ class DonorTests(APITestCase):
         self.assertEqual(response.json()["footer_text"], data["footer_text"])
 
     def test_donor_admin_update_images(self):
-        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        url = reverse("donor-image-detail", kwargs={"pk": self.donor.id})
         cover = get_temp_image("cover")
         logo = get_temp_image("logo")
         data = {

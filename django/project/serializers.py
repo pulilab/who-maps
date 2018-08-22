@@ -57,6 +57,11 @@ class DraftInteroperabilityLinksSerializer(InteroperabilityLinksSerializer):
         return value
 
 
+INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
+                    (1, 'Yes, they are contributing in-kind people or time'),
+                    (2, 'Yes, there is a financial contribution through MOH budget')]
+
+
 class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
@@ -72,16 +77,14 @@ class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 2 Implementation Overview
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
     health_focus_areas = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, required=False)
-    hsc_challenges = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+    hsc_challenges = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=1)
     his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64)
     coverage = CoverageSerializer(many=True, required=False, allow_null=True)
     coverage_second_level = CoverageSerializer(many=True, required=False, allow_null=True)
     national_level_deployment = NDPSerializer(required=False, allow_null=True)
-    government_investor = serializers.ChoiceField(choices=[(0, 'No, they have not yet contributed'), (
-        1, 'Yes, they are contributing in-kind people or time'), (
-            2, 'Yes, there is a financial contribution through MOH budget')])
+    government_investor = serializers.ChoiceField(choices=INVESTOR_CHOICES)
     implementing_partners = serializers.ListField(
         child=serializers.CharField(max_length=64), max_length=50, min_length=0, required=False)
     donors = serializers.ListField(child=serializers.CharField(max_length=64), max_length=32)
@@ -130,10 +133,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
     @staticmethod
     def validate_repository(value):
         return url_validator(value)
-
-
-INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'), (1, 'Yes, they are contributing in-kind people or time'),
-                    (2, 'Yes, there is a financial contribution through MOH budget')]
 
 
 class ProjectDraftSerializer(ProjectPublishedSerializer):

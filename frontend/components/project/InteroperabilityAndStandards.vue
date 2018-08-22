@@ -44,10 +44,17 @@ export default {
       interoperability_links: ['project', 'getInteroperabilityLinks', 'setInteroperabilityLinks', 200],
       interoperability_standards: ['project', 'getInteroperabilityStandards', 'setInteroperabilityStandards', 0]
     })
+  },
+  mounted () {
+    this.$emit('mounted');
   }
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .InteroperabilityAndStandards {}
 
 </style>

@@ -1,9 +1,7 @@
 <template>
   <div
     v-if="organisation"
-    class="OrganisationItem">
-    {{ organisation.name }}
-  </div>
+    class="OrganisationItem">{{ organisation.name }}</div>
 </template>
 
 <script>
@@ -14,7 +12,7 @@ export default {
   props: {
     id: {
       type: [String, Number],
-      required: true
+      default: null
     }
   },
   computed: {
@@ -22,13 +20,17 @@ export default {
       getOrganisationDetails: 'system/getOrganisationDetails'
     }),
     organisation () {
-      const id = parseInt(this.id, 10);
-      return this.getOrganisationDetails(id);
+      if (this.id) {
+        const id = parseInt(this.id, 10);
+        return this.getOrganisationDetails(id);
+      }
     }
   }
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
 </style>

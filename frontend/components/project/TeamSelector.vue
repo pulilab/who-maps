@@ -17,7 +17,7 @@
     >
       <span>{{ person.name }}</span>
       <template v-if="person.organisation">
-        | <organisation-item :id="person.organisation" />
+        <organisation-item :id="person.organisation" />
       </template>
     </el-option>
   </el-select>
@@ -55,12 +55,27 @@ export default {
 </script>
 
 <style lang="less">
-.TeamSelector {
-  width: 100%;
-}
-.TeamSelectorDropdown {
-   .OrganisationItem {
-    display: inline;
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .TeamSelector {
+    width: 100%;
   }
-}
+
+  .TeamSelectorDropdown {
+     .OrganisationItem {
+      display: inline-block;
+      margin-left: 6px;
+      font-weight: 400;
+      color: @colorGray;
+
+      &::before {
+        content: "(";
+      }
+
+      &::after {
+        content: ")";
+      }
+    }
+  }
 </style>

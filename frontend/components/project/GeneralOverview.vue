@@ -20,39 +20,30 @@
       </el-form-item>
       <el-form-item
         label="Geographic Scope"
-        prop="country">
+        prop="geographic_scope">
         <el-input
           v-model="geographic_scope"
           type="textarea"
         />
         <span class="Hint">
-          Please describe where your implementation is currently taking place
+          <fa icon="info-circle" />
+          <p>Please describe where your implementation is currently taking place</p>
         </span>
       </el-form-item>
       <el-form-item
         label="Overview of the digital health implementation"
-        prop="country">
+        prop="implementation_overview">
         <el-input
           v-model="implementation_overview"
           type="textarea"
         />
         <span class="Hint">
-          Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
-        </span>
-      </el-form-item>
-      <el-form-item
-        label="Overview of the digital health implementation"
-        prop="country">
-        <el-input
-          v-model="implementation_overview"
-          type="textarea"
-        />
-        <span class="Hint">
-          Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.
+          <fa icon="info-circle" />
+          <p>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.</p>
         </span>
       </el-form-item>
       <el-row
-        :gutter="10"
+        :gutter="20"
         type="flex">
         <el-col :span="12">
           <el-form-item
@@ -62,7 +53,7 @@
             <el-date-picker
               v-model="start_date"
               class="Date"
-              align="center"
+              align="left"
               placeholder="Start date"
             />
           </el-form-item>
@@ -76,14 +67,14 @@
             <el-date-picker
               v-model="end_date"
               class="Date"
-              align="center"
+              align="left"
               placeholder="End date"
             />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row
-        :gutter="10"
+        :gutter="20"
         type="flex">
         <el-col :span="12">
           <el-form-item
@@ -153,15 +144,19 @@ export default {
       viewers: ['project', 'getViewers', 'setViewers', 0]
     })
   },
-
-  methods: {}
+  mounted () {
+    this.$emit('mounted');
+  }
 };
 </script>
 
 <style lang="less">
-.GeneralOverview {
-  .Date {
-    width: 100%;
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .GeneralOverview {
+    .Date {
+      width: 100%;
+    }
   }
-}
 </style>

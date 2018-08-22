@@ -19,7 +19,10 @@
             type="flex"
             class="ProjectCountryOrg"
           >
-            <el-col class="Country">
+            <el-col
+              v-show="searchChild"
+              class="Country"
+            >
               Sierra Leone
             </el-col>
             <el-col class="Organisation">
@@ -118,24 +121,25 @@ export default {
 
       .Country {
         width: auto;
-      }
+        padding-right: 25px;
 
-      .Organisation {
-        position: relative;
-        width: 100%;
-        padding-left: 25px;
-
-        &::before {
+        &::after {
           content: "";
           position: absolute;
           top: 50%;
-          left: 12px;
+          right: 12px;
           transform: translateY(-50%);
           display: inline-block;
           width: 1px;
           height: 12px;
           background-color: @colorTextSecondary;
         }
+      }
+
+      .Organisation {
+        position: relative;
+        width: 100%;
+
       }
     }
 

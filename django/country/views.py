@@ -9,7 +9,7 @@ from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo,
 from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountrySerializer, \
     SuperAdminCountrySerializer, AdminCountrySerializer, PartnerLogoSerializer, DonorSerializer, \
     SuperAdminDonorSerializer, AdminDonorSerializer, DonorPartnerLogoSerializer, MapFileSerializer, \
-    CountryMapDataSerializer
+    CountryImageSerializer, DonorImageSerializer
 
 
 class LandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -22,7 +22,6 @@ class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Retr
                      viewsets.GenericViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
-    parser_classes = (MultiPartParser, FormParser)
 
     def get_serializer_class(self):
         if self.request and self.action in ['update', 'retrieve', 'partial_update'] \
@@ -40,7 +39,6 @@ class DonorViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Retrie
                    viewsets.GenericViewSet):
     queryset = Donor.objects.all()
     serializer_class = DonorSerializer
-    parser_classes = (MultiPartParser, FormParser)
 
     def get_serializer_class(self):
         if self.request and self.action in ['update', 'retrieve', 'partial_update'] \
@@ -121,6 +119,12 @@ class MapFileViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Re
     parser_classes = (MultiPartParser, FormParser)
 
 
-class CountryMapDataViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class CountryImageViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.all()
-    serializer_class = CountryMapDataSerializer
+    serializer_class = CountryImageSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+class DonorImageViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    queryset = Donor.objects.all()
+    serializer_class = DonorImageSerializer
+    parser_classes = (MultiPartParser, FormParser)

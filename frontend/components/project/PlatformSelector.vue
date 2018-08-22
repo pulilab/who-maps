@@ -50,10 +50,12 @@ export default {
 </script>
 
 <style lang="less">
-.PlatformSelector {
-  width: 50%;
-}
-.PlatformSelectorDropdown {
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
-}
+  .PlatformSelector {
+    width: 100%;
+  }
+
+  .PlatformSelectorDropdown {}
 </style>

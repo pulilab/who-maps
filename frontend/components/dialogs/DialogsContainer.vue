@@ -14,6 +14,9 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
+  .DialogsContainer {}
 </style>

@@ -7,10 +7,10 @@
         :world-copy-jump="true"
         :options="mapOptions"
         @zoomend="zoomChangeHandler"
+        @load="setMapReady(true)"
       >
         <l-tilelayer
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
-          @loading="mapReady"
         />
 
         <v-marker-cluster
@@ -19,13 +19,28 @@
         >
           <country-center-marker
             v-for="pin in countriesPin"
+            :icon="countryCenterIcons[pin.id]"
             :key="pin.id"
             :pin="pin"
+            :selected-country.sync="selectedCountry"
+            :active-country.sync="activeCountry"
           />
+
         </v-marker-cluster>
 
-        <country-details-overlay />
-
+        <country-details-overlay
+          :selected-country="selectedCountry"
+          :active-country.sync="activeCountry"
+          :geo-json="geoJson"
+          :sub-level-pins="subLevelPins"
+          :map-ready="mapReady"
+          :selected-country-pin="selectedCountryPin"
+          :active-sub-level.sync="activeSubLevel"
+          :national-level-coverage="activeTab ==='national'"
+        />
+        <switch-view-box
+          v-if="activeCountry"
+          :active-tab.sync="activeTab" />
         <world-zoom-button />
 
         <l-control-zoom
@@ -37,78 +52,24 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+
+import MapMixin from '../mixins/MapMixin';
 
 import NoSSR from 'vue-no-ssr';
-import CountryCenterMarker from './CountryCenterMarker';
-import CountryDetailsOverlay from './CountryDetailsOverlay';
-import WorldZoomButton from './WorldZoomButton';
+import CountryCenterMarker from '../common/map/CountryCenterMarker';
+import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay';
+import WorldZoomButton from '../common/map/WorldZoomButton';
+import SwitchViewBox from '../common/map/SwitchViewBox';
 
 export default {
   components: {
     'no-ssr': NoSSR,
     CountryCenterMarker,
     CountryDetailsOverlay,
-    WorldZoomButton
+    WorldZoomButton,
+    SwitchViewBox
   },
-  data () {
-    return {
-      zoom: 3,
-      mapOptions: {
-        zoomControl: false,
-        attributionControl: false,
-        scrollWheelZoom: false
-      }
-    };
-  },
-  computed: {
-    ...mapGetters({
-      countriesPin: 'landing/getLandingPagePins',
-      selectedCountries: 'landing/getSelectedCountries'
-    }),
-    clusterOptions () {
-      return {
-        disableClusteringAtZoom: 8,
-        spiderfyOnMaxZoom: false,
-        polygonOptions: {
-          stroke: false,
-          fillColor: '#42B883'
-        }
-      };
-    }
-  },
-  mounted () {
-    this.$root.$on('map:center-on', this.centerOn);
-    this.$root.$on('map:fit-on', this.fitOn);
-    this.$root.$on('map:zoom-at', this.zoomAt);
-  },
-  beforeDestroy () {
-    this.$root.$off(['map:center-on', 'map:fit-on', 'map:zoom-at']);
-  },
-  methods: {
-    ...mapActions({
-      setCurrentZoom: 'landing/setCurrentZoom'
-    }),
-    mapReady () {},
-    centerOn (latlng, zoom = 13) {
-      if (this.$refs.mainMap && this.$refs.mainMap.mapObject) {
-        this.$refs.mainMap.mapObject.flyTo(latlng, zoom);
-      }
-    },
-    fitOn (bounds) {
-      if (this.$refs.mainMap && this.$refs.mainMap.mapObject) {
-        this.$refs.mainMap.mapObject.fitBounds(bounds);
-      }
-    },
-    zoomAt (zoom) {
-      if (this.$refs.mainMap && this.$refs.mainMap.mapObject) {
-        this.$refs.mainMap.mapObject.setZoom(zoom);
-      }
-    },
-    zoomChangeHandler (event) {
-      this.setCurrentZoom(event.target.getZoom());
-    }
-  }
+  mixins: [MapMixin]
 };
 </script>
 
@@ -120,5 +81,37 @@ export default {
     display: block;
     height: 60vh;
     background-color: @colorGrayLight;
+
+    .CountryClusterIcon {
+      background-image: url('~/assets/img/pins/pin-cluster.svg');
+
+       span {
+        display: inline-block;
+        width: 40px;
+        line-height: 40px;
+        color: @colorWhite;
+        font-size: @fontSizeSmall;
+        font-weight: 700;
+        text-align: center;
+      }
+    }
+
+    .CountryCenterIcon {
+      background-image: url('~/assets/img/pins/pin-with-counter.svg');
+
+      &.ActiveCountry {
+        background-image: url('~/assets/img/pins/pin-with-counter-active.svg');
+      }
+
+      span {
+        display: inline-block;
+        width: 27px;
+        margin-top: 4px;
+        color: @colorWhite;
+        font-size: @fontSizeSmall;
+        font-weight: 700;
+        text-align: center;
+      }
+    }
   }
 </style>

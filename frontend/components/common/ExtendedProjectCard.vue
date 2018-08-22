@@ -138,10 +138,10 @@ export default {
 
   .FirstRow {
     position: relative;
-    padding: 16px 30px;
+    padding: 20px 30px;
 
     .FirstSubRow {
-      margin-bottom: 10px;
+      margin-bottom: 16px;
       font-size: @fontSizeLarger;
       font-weight: 700;
       color: @colorTextPrimary;
@@ -152,13 +152,14 @@ export default {
         &:first-child {
           width: auto;
         }
+
         &:last-child {
           width: 100%;
         }
       }
 
       .CountryItem {
-        .Flag {
+        .CountryFlag {
           img {
             height: 14px;
             width: auto;
@@ -166,9 +167,8 @@ export default {
           }
         }
 
-        .Name {
+        .CountryName {
           width: auto;
-          padding: 0 0 0 8px;
           font-size: @fontSizeBase;
           font-weight: 400;
         }
@@ -176,7 +176,7 @@ export default {
 
       .OrganisationItem {
         position: relative;
-        padding-left: 25px;
+        padding-left: 21px;
         font-size: @fontSizeBase;
         font-weight: 400;
 
@@ -184,11 +184,11 @@ export default {
           content: "";
           position: absolute;
           top: 50%;
-          left: 12px;
+          left: 10px;
           transform: translateY(-50%);
           display: inline-block;
           width: 1px;
-          height: 12px;
+          height: 10px;
           background-color: @colorTextSecondary;
         }
       }
@@ -201,7 +201,7 @@ export default {
       .Donors,
       .LastChange {
         > div {
-          margin: 4px 0 10px;
+          margin: 8px 0 12px;
           font-size: @fontSizeMedium;
           font-weight: 700;
           color: @colorTextPrimary;
@@ -216,8 +216,8 @@ export default {
 
     .ProjectLegend {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 26px;
+      right: 26px;
     }
   }
 

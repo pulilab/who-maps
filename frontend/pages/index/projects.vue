@@ -24,5 +24,10 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .ProjectsArea {
+    margin-bottom: 60px;
+
+    .UserProjectsList {
+      .limitPageWidth();
+    }
   }
 </style>

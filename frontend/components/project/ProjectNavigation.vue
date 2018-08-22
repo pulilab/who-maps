@@ -1,14 +1,41 @@
 <template>
   <div
-    v-scroll-class:FixedNavigation="360"
+    v-scroll-class:FixedNavigation="340"
     class="ProjectNavigation"
   >
     <el-card :body-style="{ padding: '0px' }">
+      <div
+        v-if="!readonly && !newProject"
+        class="SwitchProjectStatus"
+      >
+        <el-row
+          type="flex"
+          justify="space-between"
+          align="middle"
+        >
+          <div class="SwitchLabel">Switch view:</div>
+          <el-button-group class="SwitchButtons">
+            <el-button
+              :class="['DraftButton', {'Active': draft}]"
+              :disabled="draft"
+              @click="goToDraft"
+            >
+              Draft
+            </el-button>
+            <el-button
+              :class="['PublishedButton', {'Active': published}]"
+              :disabled="published"
+              @click="goToPublished"
+            >
+              Published
+            </el-button>
+          </el-button-group>
+        </el-row>
+      </div>
+
       <div class="Stepper">
         <ul>
-          <!-- TODO -->
-          <!-- Add '.active' class -->
-          <li>
+          <li :class="{active: active === 'general'}">
             <el-button
               type="text"
               @click="scrollTo('general')"
@@ -19,7 +46,7 @@
               General
             </el-button>
           </li>
-          <li>
+          <li :class="{active: active === 'implementation'}">
             <el-button
               type="text"
               @click="scrollTo('implementation')"
@@ -30,7 +57,7 @@
               Implementation
             </el-button>
           </li>
-          <li>
+          <li :class="{active: active === 'technology'}">
             <el-button
               type="text"
               @click="scrollTo('technology')"
@@ -41,7 +68,7 @@
               Technology
             </el-button>
           </li>
-          <li>
+          <li :class="{active: active === 'interoperability'}">
             <el-button
               type="text"
               @click="scrollTo('interoperability')"
@@ -52,7 +79,7 @@
               Interoperability
             </el-button>
           </li>
-          <li>
+          <li :class="{active: active === 'country'}">
             <el-button
               type="text"
               @click="scrollTo('country')"
@@ -63,7 +90,7 @@
               Country Fields
             </el-button>
           </li>
-          <li>
+          <li :class="{active: active === 'donor'}">
             <el-button
               type="text"
               @click="scrollTo('donor')"
@@ -77,14 +104,58 @@
         </ul>
       </div>
 
-      <div class="NavigationActions">
+      <div
+        v-if="!readonly"
+        class="NavigationActions"
+      >
         <el-button
+          v-if="draft"
           type="primary"
           size="medium"
+          @click="$emit('publishProject')"
         >
+          <!-- TODO -->
+          <!-- Show spinner while form is being published -->
+          <!-- <fa
+            icon="spinner"
+            spin /> -->
+          Publish
+        </el-button>
+
+        <el-button
+          v-if="newProject || draft"
+          :type="newProject ? 'primary' : 'text'"
+          :size="newProject ? 'medium' : ''"
+          :class="['SaveDraft', {'NewProject': newProject, 'Draft':draft }]"
+          @click="$emit('saveDraft')"
+        >
+          <!-- TODO -->
+          <!-- Show spinner while form is being saved -->
+          <!-- <fa
+            icon="spinner"
+            spin /> -->
           Save draft
         </el-button>
+
         <el-button
+          v-if="draft"
+          type="text"
+          class="DiscardDraft DeleteButton"
+          @click="$emit('discardDraft')"
+        >
+          Discard draft
+        </el-button>
+
+        <el-button
+          v-if="published"
+          type="text"
+          class="GoToDashboard"
+        >
+          Go to Dashboard
+        </el-button>
+
+        <el-button
+          v-if="newProject"
           type="text"
           class="CancelButton"
         >
@@ -102,12 +173,44 @@ export default {
   directives: {
     'scroll-class': VueScrollClass
   },
+  props: {
+    readonly: {
+      type: Boolean,
+      default: false
+    },
+    newProject: {
+      type: Boolean,
+      default: false
+    },
+    draft: {
+      type: Boolean,
+      default: false
+    },
+    published: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    active () {
+      const hash = this.$route.hash;
+      return hash ? hash.replace('#', '') : 'general';
+    }
+  },
   methods: {
     scrollTo (where) {
       window.location.hash = '';
       this.$nextTick(() => {
         this.$router.replace(`#${where}`);
       });
+    },
+    goToDraft () {
+      const localised = this.localePath({name: 'index-projects-id-edit', params: {...this.$route.params}});
+      this.$router.push(localised);
+    },
+    goToPublished () {
+      const localised = this.localePath({name: 'index-projects-id-published', params: {...this.$route.params}});
+      this.$router.push(localised);
     }
   }
 };
@@ -123,18 +226,70 @@ export default {
     &.FixedNavigation {
       // TODO: check browser compatibility for older browsers which do not support 'sticky'!
       position: sticky;
-      top: 0;
+      top: 20px;
       left: 0;
+    }
+
+    .SwitchProjectStatus {
+      height: 58px;
+      padding: 0 14px;
+      border-bottom: 1px solid @colorGrayLight;
+      box-sizing: border-box;
+
+      .el-row {
+        height: 100%;
+      }
+
+      .SwitchLabel {
+        padding-right: 12px;
+        font-size: @fontSizeBase;
+        color: @colorTextPrimary;
+      }
+
+      .SwitchButtons {
+        .el-button {
+          margin: 0 !important;
+          padding: 0 10px;
+          height: 29px;
+          line-height: 29px;
+          border: 0 !important;
+          background-color: @colorGrayLighter;
+          color: @colorTextSecondary;
+          font-size: @fontSizeSmall + 1;
+          text-transform: uppercase;
+
+          &:not(.Active) {
+            &:hover {
+              background-color: darken(@colorGrayLighter, 5%);
+              color: @colorTextPrimary;
+            }
+          }
+        }
+
+        .DraftButton {
+          &.Active {
+            color: @colorTextPrimary;
+            background-color: @colorDraft;
+          }
+        }
+
+        .PublishedButton {
+          &.Active {
+            color: @colorWhite;
+            background-color: @colorPublished;
+          }
+        }
+      }
     }
 
     .Stepper {
       ul {
         position: relative;
         list-style: none;
-        margin: 20px 0;
+        margin: 20px 0 25px;
         padding: 0;
 
-        @media only screen and (max-height: 700px) {
+        @media only screen and (max-height: 1024px) {
           margin: 20px 0;
         }
 
@@ -193,7 +348,7 @@ export default {
         text-decoration: none;
         transition: color 200ms ease;
 
-        @media only screen and (max-height: 720px) {
+        @media only screen and (max-height: 1024px) {
           height: 48px;
           line-height: 48px;
         }
@@ -212,7 +367,7 @@ export default {
           color: @colorWhite;
           transition: all 200ms ease;
 
-          @media only screen and (max-height: 720px) {
+          @media only screen and (max-height: 1024px) {
             top: 8px;
           }
 
@@ -242,10 +397,15 @@ export default {
         margin: 0 0 20px;
       }
 
-      .CancelButton {
+      .el-button--text {
+        width: 100%;
         margin: 0;
+        font-size: @fontSizeMedium;
       }
 
+      .fa-spin {
+        margin-right: 2px;
+      }
     }
   }
 </style>
