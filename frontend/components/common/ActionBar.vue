@@ -6,42 +6,54 @@
       align="middle"
       class="InnerActionBar">
 
-      <div class="Title">
+      <el-col class="Title">
         <h3>Digital Health Atlas</h3>
-      </div>
+      </el-col>
 
-      <el-row
-        v-if="$route.path.includes('/admin/')"
-        type="flex">
-        <nuxt-link
-          :to="localePath({name: 'index-edit-profile'})"
-          class="FakeTab"
-          tag="div">My profile</nuxt-link>
-        <nuxt-link
-          :to="localePath({name: 'index-admin-country'})"
-          class="FakeTab"
-          tag="div">Country admin</nuxt-link>
-        <nuxt-link
-          :to="localePath({name: 'index-admin-donor'})"
-          class="FakeTab"
-          tag="div">Donor admin</nuxt-link>
-      </el-row>
-      <el-row
-        v-if="$route.path.includes('/dashboard/')"
-        type="flex">
-        <nuxt-link
-          :to="localePath({name: 'index-dashboard'})"
-          class="FakeTab"
-          tag="div">Map view</nuxt-link>
-        <nuxt-link
-          :to="localePath({name: 'index-dashboard-list'})"
-          class="FakeTab"
-          tag="div">List view</nuxt-link>
-      </el-row>
+      <el-col class="ActionBarMenu">
+        <el-row
+          v-if="$route.path.includes('/admin/')"
+          type="flex">
+          <el-col class="ActionBarTab">
+            <nuxt-link
+              :to="localePath({name: 'index-edit-profile'})"
+              class="ActionBarLink"
+              tag="div">My profile</nuxt-link>
+          </el-col>
+          <el-col class="ActionBarTab">
+            <nuxt-link
+              :to="localePath({name: 'index-admin-country'})"
+              class="ActionBarLink"
+              tag="div">Country admin</nuxt-link>
+          </el-col>
+          <el-col class="ActionBarTab">
+            <nuxt-link
+              :to="localePath({name: 'index-admin-donor'})"
+              class="ActionBarLink"
+              tag="div">Donor admin</nuxt-link>
+          </el-col>
+        </el-row>
+        <el-row
+          v-if="$route.path.includes('/dashboard/')"
+          type="flex">
+          <el-col class="ActionBarTab">
+            <nuxt-link
+              :to="localePath({name: 'index-dashboard'})"
+              class="ActionBarLink"
+              tag="div">Map view</nuxt-link>
+          </el-col>
+          <el-col class="ActionBarTab">
+            <nuxt-link
+              :to="localePath({name: 'index-dashboard-list'})"
+              class="ActionBarLink"
+              tag="div">List view</nuxt-link>
+          </el-col>
+        </el-row>
+      </el-col>
 
-      <el-col />
-
-      <search-component />
+      <el-col class="SearchComponentWrapper">
+        <search-component />
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -69,33 +81,76 @@ export default {
     }
 
     .Title {
+      width: auto;
+
       h3 {
-        width: 224px;
-        display: block;
+        display: inline-block;
         margin: 0;
         font-size: @fontSizeLarge;
         color: @colorWhite;
+        white-space: nowrap;
       }
     }
 
-    .SearchComponent {
+    .SearchComponentWrapper {
       width: auto;
     }
 
-    .FakeTab {
-      height: 48px;
-      line-height: 48px;
-      white-space: nowrap;
-      color: white;
-      margin: 0 12px;
+    .ActionBarMenu {
+      width: 100%;
+      height: @actionBarHeight;
+      padding-left: 70px;
+      overflow: hidden;
+
+      .ActionBarTab {
+        width: auto;
+      }
+    }
+
+    .ActionBarLink {
+      position: relative;
+      width: auto;
+      height: 100%;
+      margin-right: 10px;
       padding: 0 10px;
+      font-size: @fontSizeBase;
+      line-height: @actionBarHeight;
+      font-weight: 700;
+      color: @colorWhite;
+      text-decoration: none;
       cursor: pointer;
-      color: gray;
-      transition: border .5s, color .5s;
+      white-space: nowrap;
+      opacity: .6;
+      transition: @transitionAll;
 
       &.nuxt-link-exact-active {
-        border-bottom: 5px solid white;
-        color: white;
+        opacity: 1;
+
+        &::before {
+          background-color: @colorWhite;
+          transform: translateY(0);
+        }
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        display: inline-block;
+        width: 100%;
+        height: 4px;
+        background-color: @colorWhite;
+        transform: translateY(4px);
+        transition: @transitionAll;
+      }
+
+      &:hover {
+        opacity: 1;
+
+        &::before {
+          transform: translateY(0);
+        }
       }
     }
   }

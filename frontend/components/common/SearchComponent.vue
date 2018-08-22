@@ -244,7 +244,6 @@ export default {
       }
 
       .SearchClear {
-        border: 0;
         background-color: @colorGrayLightest;
 
         .svg-inline--fa {
@@ -372,7 +371,7 @@ export default {
         .el-button {
           width: @actionBarHeight;
           height: @actionBarHeight;
-          border: 0;
+          padding: 0;
           background-color: @colorGrayLightest;
           color: @colorTextMuted;
 
