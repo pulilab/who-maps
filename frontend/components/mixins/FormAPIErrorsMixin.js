@@ -31,6 +31,27 @@ const formAPIErrorsMixin = {
           callback();
         }
       };
+    },
+    collectionValidatorGenerator (prop) {
+      return (rule, value, callback) => {
+        const parts = rule.field.split('.');
+        prop = parts[0];
+        const index = +parts[1];
+        console.log(prop, index)
+        console.log(this.formAPIErrors)
+        if (this.formAPIErrors[prop] && this.formAPIErrors[prop][index]) {
+          const firstError = this.formAPIErrors[prop][index][Object.keys(this.formAPIErrors[prop][index])[0]];
+          if (firstError && firstError.length) {
+            const error = {
+              message: firstError[0],
+              field: rule.fullField
+            };
+            callback(error);
+            return;
+          }
+        }
+        callback();
+      };
     }
   },
 
