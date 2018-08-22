@@ -1,13 +1,17 @@
 <template>
   <div class="ProjectLegend">
-    <fa
-      v-show="showStar"
-      icon="star"
-      class="Owner" />
-    <fa
-      v-show="showEye"
-      icon="eye"
-      class="Viewer" />
+    <template v-if="showStar">
+      <fa
+        icon="star"
+        class="Owner" />
+      <span v-show="showLabel"> Team Member</span>
+    </template>
+    <template v-if="showEye">
+      <fa
+        icon="eye"
+        class="Viewer" />
+      <span v-show="showLabel"> Viewer</span>
+    </template>
   </div>
 </template>
 
@@ -18,13 +22,17 @@ export default {
   props: {
     id: {
       type: Number,
-      required: true
+      default: null
     },
     forceStar: {
       type: Boolean,
       default: false
     },
     forceEye: {
+      type: Boolean,
+      default: false
+    },
+    showLabel: {
       type: Boolean,
       default: false
     }
@@ -34,10 +42,14 @@ export default {
       userProfile: 'user/getProfile'
     }),
     isMember () {
-      return this.userProfile.member.includes(this.id);
+      if (this.id) {
+        return this.userProfile.member.includes(this.id);
+      }
     },
     isViewer () {
-      return this.userProfile.viewer.includes(this.id);
+      if (this.id) {
+        return this.userProfile.viewer.includes(this.id);
+      }
     },
     showStar () {
       return this.forceStar || this.isMember;
