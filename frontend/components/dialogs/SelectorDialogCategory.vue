@@ -1,17 +1,18 @@
 <template>
-  <div class="SelectorDialogCategory">
-    <!-- TODO -->
-    <!-- Pls add '.Openen' class when subcategory is visible -->
-    <div class="CategoryName">
+  <div :class="['SelectorDialogCategory', {'NoParent': !hideHeader}]">
+    <div
+      v-show="!hideHeader"
+      :class="['CategoryName', {'Opened': toggleCategory}]"
+    >
       <el-button
         type="text"
         @click="toggleCategory"
       >
         <fa
-          v-show="!categoryShown"
+          v-show="!categoryToggled"
           icon="angle-down" />
         <fa
-          v-show="categoryShown"
+          v-show="categoryToggled"
           icon="angle-up" />
         <el-checkbox
           v-show="categorySelectable"
@@ -34,7 +35,7 @@
           class="Item CheckboxSmall"
           @change="filterChange(item.id)"
         >
-          {{ item.name }}
+          {{ getItemName(item) }}
         </el-checkbox>
       </div>
     </transition>
@@ -55,26 +56,40 @@ export default {
       default: false
     },
     category: {
-      type: Object,
+      type: [Object, Array],
       required: true
     },
     childName: {
       type: String,
-      required: true
+      default: null
     },
     values: {
       type: Array,
       required: true
+    },
+    nameProp: {
+      type: String,
+      default: 'name'
+    },
+    hideHeader: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
-      categoryShown: false
+      categoryToggled: false
     };
   },
   computed: {
+    categoryShown () {
+      return this.hideHeader || this.categoryToggled;
+    },
     items () {
-      return this.category[this.childName];
+      if (this.childName) {
+        return this.category[this.childName];
+      }
+      return this.category;
     },
     headerChecked () {
       return this.items.reduce((c, n) => {
@@ -91,14 +106,23 @@ export default {
       }
     },
     toggleCategory () {
-      this.categoryShown = !this.categoryShown;
+      this.categoryToggled = !this.categoryToggled;
+    },
+    selectAll () {
+      this.$emit('change', [...this.values, ...this.items.map(i => i.id)]);
+    },
+    deSelectAll () {
+      this.$emit('change', this.values.filter(v => !this.items.map(i => i.id).includes(v)));
     },
     selectAllCategory () {
       if (!this.headerChecked) {
-        this.$emit('change', [...this.values, ...this.items.map(i => i.id)]);
+        this.selectAll();
       } else {
-        this.$emit('change', this.values.filter(v => !this.items.map(i => i.id).includes(v)));
+        this.deSelectAll();
       }
+    },
+    getItemName (item) {
+      return item[this.nameProp];
     }
   }
 };
