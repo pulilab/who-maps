@@ -317,7 +317,7 @@ i[class*="el-icon-"] {
     color: @colorTextSecondary;
 
     &:hover {
-      color: @colorTextPrimary;
+      color: darken(@colorTextSecondary, 10%);
 
       .ButtonHint {
         color: @colorGray;
@@ -339,6 +339,14 @@ i[class*="el-icon-"] {
 
     &:hover {
       color: lighten(@colorDanger, 10%);
+    }
+  }
+
+  &.MutedButton {
+    color: @colorGray;
+
+    &:hover {
+      color: darken(@colorGray, 10%);
     }
   }
 }
@@ -367,11 +375,11 @@ fieldset {
   .el-select__caret {
     &.el-icon-arrow-up {
       transform: translateX(4px) !important;
-      width: 37px;
+      width: 39px;
       height: calc(100% - 2px);
       margin: 1px 0;
       background-color: #EDEDED;
-      border-left: 1px solid #B9B9B9;
+      border-left: 1px solid @colorGray;
 
       &::before {
         content: "\E60B";
@@ -383,6 +391,14 @@ fieldset {
           content: "\E60C";
         }
       }
+    }
+  }
+
+  &.el-input-group {
+    .el-input-group__append,
+    .el-input-group__prepend {
+      padding: 0 12px;
+      color: @colorGray;
     }
   }
 }
@@ -468,17 +484,27 @@ fieldset {
 }
 
 .el-checkbox {
-  &.CheckboxSmall {
-    font-size: @fontSizeSmall;
-    line-height: 16px;
-
-    .el-checkbox__input {
-      top: 0 !important;
+  .el-checkbox__inner {
+    // bolder tick
+    &::after {
+      top: 1px;
+      left: 4px;
+      width: 3px;
+      height: 7px;
+      border-width: 2px;
     }
   }
 
   .el-checkbox__label {
     font-weight: 400;
+  }
+
+  &.CheckboxSmall {
+    .el-checkbox__input {}
+    .el-checkbox__label {
+      font-size: @fontSizeSmall;
+      line-height: 16px;
+    }
   }
 }
 
@@ -708,5 +734,21 @@ fieldset {
         }
       }
     }
+  }
+}
+
+// Tooltip
+
+.el-tooltip__popper {
+  border: 0 !important;
+  opacity: .9;
+  filter: drop-shadow(0 3px 5px rgba(0,0,0,.35));
+
+  &.is-light {
+    color: @colorTextPrimary;
+  }
+
+  .popper__arrow {
+    border: 0;
   }
 }

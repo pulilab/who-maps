@@ -1,5 +1,7 @@
 <template>
   <div class="CountryFilters">
+    <!-- TODO -->
+    <!-- Please add popper-class="CountrySelectPopper" only for this component -->
     <country-select v-model="selectedCountry" />
     <region-select v-model="selectedRegion" />
   </div>
@@ -22,6 +24,21 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
+  .CountryFilters {
+    .el-select {
+      width: 100%;
+
+      &:first-child {
+        margin-bottom: 10px;
+      }
+    }
+
+    .CountrySelectPopper {
+      max-width: 100%;
+    }
+  }
 </style>

@@ -82,7 +82,7 @@ export default {
     }
 
     .NuxtLink {
-      margin-left: 30px;
+      margin-left: 40px;
       line-height: 24px;
     }
   }

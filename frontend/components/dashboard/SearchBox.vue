@@ -1,10 +1,12 @@
 <template>
   <div class="SearchBox">
-    <el-row type="flex">
+    <el-row
+      type="flex"
+      class="SearchInput">
       <el-col>
         <el-input
           v-model="searchString"
-          placeholder="Type something">
+          placeholder="Type something...">
           <fa
             slot="prepend"
             icon="search"
@@ -12,54 +14,72 @@
         </el-input>
       </el-col>
     </el-row>
-    <el-row>
-      <div class="SearchOptions">
-        <div class="SearchOptionsHeader">
+    <el-row
+      type="flex"
+      class="SearchOptions">
+      <el-col class="SearchOptionsHeader">
+        <el-button
+          type="text"
+          size="small"
+          class="MutedButton IconRight"
+          @click="toggleOptionsVisibility"
+        >
+          Where to search in
+          <fa
+            v-show="optionsVisible"
+            icon="caret-up"
+          />
+          <fa
+            v-show="!optionsVisible"
+            icon="caret-down"
+          />
+        </el-button>
+        <el-tooltip
+          v-model="showSearchBoxTooltip"
+          effect="dark"
+          content="Lorem Ipsum dolor sit"
+          placement="left"
+          manual
+        >
           <el-button
             type="text"
-            @click="toggleOptionsVisibility"
+            class="MutedButton"
+            @click="showSearchBoxTooltip = !showSearchBoxTooltip"
           >
-            Where to search in
-            <fa
-              v-show="optionsVisible"
-              icon="arrow-up"
-            />
-            <fa
-              v-show="!optionsVisible"
-              icon="arrow-down"
-            />
+            <fa icon="question-circle" />
           </el-button>
-          <el-tooltip
-            v-model="showSearchBoxTooltip"
-            effect="dark"
-            content="LoremIpsu"
-            placement="top"
-            manual
-          >
-            <el-button
-              type="text"
-              @click="showSearchBoxTooltip = !showSearchBoxTooltip"
-            >
-              <fa icon="question-circle" />
-            </el-button>
-          </el-tooltip>
-        </div>
-        <transition name="slide-fade">
-          <div
-            v-show="optionsVisible"
-            class="SearchOptionsBody"
-          >
-            <el-checkbox-group v-model="selectedOptions">
-              <el-checkbox label="name"> Project Name </el-checkbox>
-              <el-checkbox label="organisation"> Organisation Name </el-checkbox>
-              <el-checkbox label="country"> Project Country </el-checkbox>
-              <el-checkbox label="overview"> Overview of the digital health </el-checkbox>
-              <el-checkbox label="partners"> Implementing Partners </el-checkbox>
-              <el-checkbox label="donors"> Donors </el-checkbox>
-            </el-checkbox-group>
-          </div>
-        </transition>
-      </div>
+        </el-tooltip>
+      </el-col>
+
+      <transition name="slide-fade">
+        <el-col
+          v-show="optionsVisible"
+          class="SearchOptionsBody"
+        >
+          <el-checkbox-group
+            v-model="selectedOptions"
+            class="OnePerRow CheckboxSmall">
+            <el-checkbox
+              label="name"
+              class="CheckboxSmall">Project Name</el-checkbox>
+            <el-checkbox
+              label="organisation"
+              class="CheckboxSmall">Organisation Name</el-checkbox>
+            <el-checkbox
+              label="country"
+              class="CheckboxSmall">Project Country</el-checkbox>
+            <el-checkbox
+              label="overview"
+              class="CheckboxSmall">Overview of the digital health</el-checkbox>
+            <el-checkbox
+              label="partners"
+              class="CheckboxSmall">Implementing Partners</el-checkbox>
+            <el-checkbox
+              label="donors"
+              class="CheckboxSmall">Donors</el-checkbox>
+          </el-checkbox-group>
+        </el-col>
+      </transition>
     </el-row>
   </div>
 </template>
@@ -83,23 +103,50 @@ export default {
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
-.SearchBox {
-  .slide-fade-enter-active {
-    transition: @transitionAll;
-  }
+  .SearchBox {
+    .SearchInput {}
 
-  .slide-fade-leave-active {
-    transition: @transitionAll;
-  }
+    .SearchOptions {
+      flex-direction: column;
 
-  .slide-fade-enter,
-  .slide-fade-leave-to
-  /* .slide-fade-leave-active below version 2.1.8 */ {
-    transform: translateY(-20px);
-    opacity: 0;
+      .SearchOptionsHeader {
+        margin: 10px 0 0;
+
+        .el-button--text {
+          padding: 0;
+        }
+
+        .el-tooltip {
+          float: right;
+        }
+      }
+
+      .SearchOptionsBody {
+        margin-top: 5px;
+
+        .el-checkbox {
+          margin: 5px 0 0;
+          padding: 0;
+        }
+      }
+    }
+
+    .slide-fade-enter-active {
+      transition: @transitionAll;
+    }
+
+    .slide-fade-leave-active {
+      transition: @transitionAll;
+    }
+
+    .slide-fade-enter,
+    .slide-fade-leave-to
+    /* .slide-fade-leave-active below version 2.1.8 */ {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
   }
-}
 </style>
