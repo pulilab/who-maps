@@ -17,12 +17,17 @@
         :span="6"
       >
         <selector-dialog-column
-          :items="category.subGroups"
-          v-model="currentSelection"
-          :category-selectable="true"
           :header="category.name"
-          child-name="strategies"
-        />
+        >
+          <selector-dialog-category
+            v-for="category in category.subGroups"
+            v-model="currentSelection"
+            :key="category.id"
+            :category-selectable="true"
+            :category="category"
+            child-name="strategies"
+          />
+        </selector-dialog-column>
       </el-col>
     </el-row>
     <span slot="footer">
@@ -59,10 +64,12 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import SelectorDialogColumn from './SelectorDialogColumn';
+import SelectorDialogCategory from './SelectorDialogCategory';
 
 export default {
   components: {
-    SelectorDialogColumn
+    SelectorDialogColumn,
+    SelectorDialogCategory
   },
   data () {
     return {
