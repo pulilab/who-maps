@@ -28,18 +28,19 @@
     <div class="FilterItemSelected">
       <slot/>
     </div>
+
     <div
       v-show="showLimit"
       class="ShowMore"
     >
       <el-button
         type="text"
+        size="small"
         @click="openDialog"
       >
-        Show all selected
+        Show all selected...
       </el-button>
     </div>
-
   </div>
 </template>
 
@@ -117,25 +118,36 @@ export default {
         li {
           position: relative;
           max-width: 80%;
-          margin: 0;
-          padding: 0 10px 0 22px;
+          margin: 0 0 2px;
+          padding: 0 10px 0 28px;
           line-height: 20px;
           .textTruncate();
+
+          &:hover {
+            .ListActionButton {
+              + span,
+              .svg-inline--fa.fa-check {
+                color: @colorTextPrimary;
+              }
+            }
+          }
 
           .ListActionButton {
             position: absolute;
             top: 2px;
-            left: 2px;
+            left: 8px;
             padding: 0;
             width: 16px;
             height: 16px;
 
             .svg-inline--fa {
               width: 10px;
+              transition: @transitionAll;
 
               &.fa-check {
                 color: @colorGray;
               }
+
               &.fa-times {
                 color: @colorDanger;
               }
@@ -143,9 +155,21 @@ export default {
 
             + span {
               color: @colorTextSecondary;
+              transition: @transitionAll;
             }
           }
         }
+      }
+    }
+
+    .ShowMore {
+
+      .el-button {
+        position: relative;
+        top: -15px;
+        margin: 0 0 0 28px;
+        padding: 0;
+        font-weight: 400;
       }
     }
   }
