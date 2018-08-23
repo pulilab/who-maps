@@ -24,7 +24,6 @@ from project.models import Project
 from user.models import UserProfile
 from django.utils.six import StringIO
 from django.conf import settings
-from mock import patch
 
 
 class CountryTests(APITestCase):
@@ -1381,21 +1380,7 @@ class CountryAdminTests(TestCase):
         self.request.user = self.user
 
         formsets_and_inlines = list(ma.get_formsets_with_inlines(self.request))
-        mapfile_formset_and_inline = formsets_and_inlines[0]
-        mapfile_inline = mapfile_formset_and_inline[1]
-
-        class MockMap:
-            class MockMapFile:
-                url = 'test_url'
-            map_file = MockMapFile()
-            country_id = 0
-        with patch('country.admin.lazyJSONDumps', return_value=[{"name": "a", "displayName": "b"}]):
-            self.assertEqual(mapfile_inline.print_map_customizer(MockMap()),
-                             '<div id="app"><vue-map-customizer map-url="test_url" flag-base-url="/static/flags/"'
-                             ':country-id="0" api-url="/api/country-map-data/"'
-                             ' :sub-level-types=\'[{\'name\': \'a\', \'displayName\': \'b\'}]\'>'
-                             '</vue-map-customizer></div>'
-                             '<script src="/static/vue-map-customiser-entrypoint.js"></script>')
+        self.assertTrue(len(formsets_and_inlines), 2)
 
     def test_country_get_fields(self):
         ma = CountryAdmin(Country, self.site)
