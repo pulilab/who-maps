@@ -62,6 +62,7 @@ class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
     viewer = serializers.SerializerMethodField()
     organisation_name = serializers.SerializerMethodField()
     is_superuser = serializers.SerializerMethodField()
+    account_type_approved = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProfile
@@ -83,6 +84,22 @@ class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
     def get_is_superuser(obj):
         if hasattr(obj, 'user'):
             return obj.user.is_superuser
+
+    @staticmethod
+    def get_account_type_approved(obj):
+        if obj.account_type == UserProfile.DONOR and obj.donor:
+            return obj in obj.donor.users.all()
+        if obj.account_type == UserProfile.DONOR_ADMIN and obj.donor:
+            return obj in obj.donor.admins.all()
+        if obj.account_type == UserProfile.SUPER_DONOR_ADMIN and obj.donor:
+            return obj in obj.donor.super_admins.all()
+        if obj.account_type == UserProfile.GOVERNMENT and obj.country:
+            return obj in obj.country.users.all()
+        if obj.account_type == UserProfile.COUNTRY_ADMIN and obj.country:
+            return obj in obj.country.admins.all()
+        if obj.account_type == UserProfile.SUPER_COUNTRY_ADMIN and obj.country:
+            return obj in obj.country.super_admins.all()
+        return False
 
 
 class OrganisationSerializer(serializers.ModelSerializer):
