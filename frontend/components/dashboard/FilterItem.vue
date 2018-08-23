@@ -123,6 +123,15 @@ export default {
           line-height: 20px;
           .textTruncate();
 
+          &:hover {
+            .ListActionButton {
+              + span,
+              .svg-inline--fa.fa-check {
+                color: @colorTextPrimary;
+              }
+            }
+          }
+
           .ListActionButton {
             position: absolute;
             top: 2px;
@@ -133,10 +142,12 @@ export default {
 
             .svg-inline--fa {
               width: 10px;
+              transition: @transitionAll;
 
               &.fa-check {
                 color: @colorGray;
               }
+
               &.fa-times {
                 color: @colorDanger;
               }
@@ -144,6 +155,7 @@ export default {
 
             + span {
               color: @colorTextSecondary;
+              transition: @transitionAll;
             }
           }
         }
