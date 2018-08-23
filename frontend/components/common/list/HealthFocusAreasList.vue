@@ -30,6 +30,10 @@ export default {
     actions: {
       type: Boolean,
       default: false
+    },
+    limit: {
+      type: Number,
+      default: null
     }
   },
   computed: {
@@ -38,7 +42,8 @@ export default {
     }),
     selected () {
       const hfas = this.healthFocusAreas.reduce((a, c) => [...a, ...c.health_focus_areas], []);
-      return hfas.filter(hfa => this.value.includes(hfa.id));
+      const result = hfas.filter(hfa => this.value.includes(hfa.id));
+      return this.limit ? result.slice(0, this.limit) : result;
     }
   }
 };

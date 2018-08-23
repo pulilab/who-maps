@@ -30,6 +30,10 @@ export default {
     actions: {
       type: Boolean,
       default: false
+    },
+    limit: {
+      type: Number,
+      default: null
     }
   },
   computed: {
@@ -38,7 +42,8 @@ export default {
     }),
     selected () {
       const hscs = this.healthSystemChallenges.reduce((a, c) => [...a, ...c.challenges], []);
-      return hscs.filter(hfa => this.value.includes(hfa.id));
+      const result = hscs.filter(hfa => this.value.includes(hfa.id));
+      return this.limit ? result.slice(0, this.limit) : result;
     }
   }
 };

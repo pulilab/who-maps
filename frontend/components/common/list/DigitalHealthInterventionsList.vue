@@ -35,14 +35,19 @@ export default {
     actions: {
       type: Boolean,
       default: false
+    },
+    limit: {
+      type: Number,
+      default: null
     }
   },
   computed: {
     selected () {
       if (this.platform) {
-        return this.value.filter(dhi => dhi.platform === this.platform).map(dhi => dhi.id);
+        const result = this.value.filter(dhi => dhi.platform === this.platform).map(dhi => dhi.id);
+        return this.limit ? result.slice(0, this.limit) : result;
       }
-      return this.value;
+      return this.limit ? this.value.slice(0, this.limit) : this.value;
     }
   }
 };

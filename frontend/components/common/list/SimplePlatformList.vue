@@ -31,6 +31,10 @@ export default {
     actions: {
       type: Boolean,
       default: false
+    },
+    limit: {
+      type: Number,
+      default: null
     }
   },
   computed: {
@@ -38,7 +42,8 @@ export default {
       platforms: 'projects/getTechnologyPlatforms'
     }),
     selected () {
-      return this.platforms.filter(p => this.value.includes(p.id));
+      const result = this.platforms.filter(p => this.value.includes(p.id));
+      return this.limit ? result.slice(0, this.limit) : result;
     }
   }
 };
