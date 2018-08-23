@@ -1,28 +1,21 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    title="Select Digital Health Intervention(s)"
+    title="Applying specific filter to map/list"
     modal
     top="10vh"
     width="90vw"
-    custom-class="SelectDHIDialog"
+    custom-class="FilterDialog"
     @open="loadCurrentSelection"
   >
     <el-row
       type="flex"
-      class="DHIMainCategories">
-      <el-col
-        v-for="category in digitalHealthInterventions"
-        :key="category.name"
-        :span="6"
-      >
-        <selector-dialog-column
-          :items="category.subGroups"
-          v-model="currentSelection"
-          :category-selectable="true"
-          :header="category.name"
-          child-name="strategies"
-        />
+      class="HfaMainCategories">
+      <el-col :span="6">
+        <filter-selector />
+      </el-col>
+      <el-col :span="18">
+        <filter-area />
       </el-col>
     </el-row>
     <span slot="footer">
@@ -48,7 +41,7 @@
             type="primary"
             @click="apply"
           >
-            Confirm
+            Apply filters
           </el-button>
         </el-col>
       </el-row>
@@ -58,55 +51,41 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import SelectorDialogColumn from './SelectorDialogColumn';
+import FilterSelector from './FilterSelector';
+import FilterArea from './FilterArea';
 
 export default {
   components: {
-    SelectorDialogColumn
-  },
-  data () {
-    return {
-      currentSelection: []
-    };
+    FilterSelector,
+    FilterArea
   },
   computed: {
     ...mapGetters({
-      selectedPlatform: 'layout/getDigitalHealthInterventionsDialogState',
-      digitalHealthInterventions: 'projects/getDigitalHealthInterventions',
-      selectedDHi: 'project/getDigitalHealthInterventions'
+      selectedFilter: 'layout/getDashboardFiltersDialogState'
     }),
-    savedSelection () {
-      return this.selectedDHi.filter(dhi => dhi.platform === this.selectedPlatform).map(dhi => dhi.id);
-    },
     visible: {
       get () {
-        return this.selectedPlatform !== null;
+        return this.selectedFilter !== null;
       },
       set () {
-        this.setDigitalHealthInterventionsDialogState(null);
+        this.setDashboardFiltersDialogState(null);
       }
     }
   },
   methods: {
     ...mapActions({
-      setDigitalHealthInterventionsDialogState: 'layout/setDigitalHealthInterventionsDialogState',
-      setDigitalHealthInterventions: 'project/setDigitalHealthInterventions'
+      setDashboardFiltersDialogState: 'layout/setDashboardFiltersDialogState'
     }),
-
     loadCurrentSelection () {
-      this.currentSelection = [...this.savedSelection];
     },
     clearAll () {
       this.currentSelection = [];
     },
     cancel () {
-      this.setDigitalHealthInterventionsDialogState(null);
+      this.setDashboardFiltersDialogState(null);
     },
     apply () {
-      const selected = this.currentSelection.map(id => ({ platform: this.selectedPlatform, id }));
-      const filtered = this.selectedDHi.filter(dhi => dhi.platform !== this.selectedPlatform);
-      this.setDigitalHealthInterventions([...filtered, ...selected]);
-      this.setDigitalHealthInterventionsDialogState(null);
+      this.setDashboardFiltersDialogState(null);
     }
   }
 };
@@ -116,7 +95,7 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-  .SelectDHIDialog {
+  .SelectHfaDialog {
     height: 80vh;
     margin-top: 0;
     margin-bottom: 0;
@@ -126,7 +105,7 @@ export default {
       height: calc(80vh - (@dialogHeaderFooterHeight*2));
     }
 
-    .DHIMainCategories {
+    .HfaMainCategories {
       height: calc(80vh - (@dialogHeaderFooterHeight*2));
 
       > .el-col {
