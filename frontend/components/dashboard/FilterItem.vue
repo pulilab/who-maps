@@ -10,12 +10,14 @@
         <el-button
           type="text"
           size="small"
-          class="IconLeft">
-          <span v-show="!selected">
+          class="IconLeft"
+          @click="openDialog"
+        >
+          <span v-show="!isSelected">
             <fa icon="plus" />
             Add
           </span>
-          <span v-show="selected">
+          <span v-show="isSelected">
             <fa icon="pencil-alt" />
             Edit
           </span>
@@ -26,10 +28,23 @@
     <div class="FilterItemSelected">
       <slot/>
     </div>
+    <div
+      v-show="showLimit"
+      class="ShowMore"
+    >
+      <el-button
+        type="text"
+        @click="openDialog"
+      >
+        Show all selected
+      </el-button>
+    </div>
+
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   props: {
     label: {
@@ -37,8 +52,32 @@ export default {
       required: true
     },
     selected: {
-      type: Boolean,
-      default: false
+      type: Array,
+      default: () => []
+    },
+    item: {
+      type: String,
+      required: true
+    },
+    limit: {
+      type: Number,
+      default: null
+    }
+  },
+  computed: {
+    isSelected () {
+      return this.selected.length > 0;
+    },
+    showLimit () {
+      return this.limit ? this.selected.length > this.limit : false;
+    }
+  },
+  methods: {
+    ...mapActions({
+      setDashboardFiltersDialogState: 'layout/setDashboardFiltersDialogState'
+    }),
+    openDialog () {
+      this.setDashboardFiltersDialogState(this.item);
     }
   }
 };
