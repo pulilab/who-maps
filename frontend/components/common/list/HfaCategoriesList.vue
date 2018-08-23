@@ -1,24 +1,23 @@
-
 <template>
-  <div class="SimplePlatformList">
+  <div class="HealthFocusAreasList">
     <ul>
       <li
-        v-for="p in selected"
-        :key="p.id"
+        v-for="hfa in selected"
+        :key="hfa.id"
       >
         <list-action
           v-if="actions"
-          @click="$emit('delete', p.id)"
+          @click="$emit('delete', hfa.id)"
         />
-        <span>{{ p.name }}</span>
+        <span> {{ hfa.name }} </span>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import ListAction from './ListAction';
+import { mapGetters } from 'vuex';
 export default {
   components: {
     ListAction
@@ -26,7 +25,7 @@ export default {
   props: {
     value: {
       type: Array,
-      default: null
+      default: () => []
     },
     actions: {
       type: Boolean,
@@ -39,10 +38,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      platforms: 'projects/getTechnologyPlatforms'
+      healthFocusAreas: 'projects/getHealthFocusAreas'
     }),
     selected () {
-      const result = this.platforms.filter(p => this.value.includes(p.id));
+      const result = this.healthFocusAreas.filter(h => this.value.includes(h.id));
       return this.limit ? result.slice(0, this.limit) : result;
     }
   }
@@ -50,7 +49,10 @@ export default {
 </script>
 
 <style lang="less">
-.SimplePlatformList {
+.HealthFocusAreasList {
   width: 100%;
+}
+.HealthFocusAreasSelectorDropdown {
+
 }
 </style>

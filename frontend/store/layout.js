@@ -1,6 +1,6 @@
 export const state = () => ({
   digitalHealthInterventionsDialogState: null,
-  dashboardFiltersDialogState: true
+  dashboardFiltersDialogState: null
 });
 
 export const getters = {

@@ -15,7 +15,7 @@
         <filter-selector />
       </el-col>
       <el-col :span="18">
-        <filter-area />
+        <filter-area ref="filterArea" />
       </el-col>
     </el-row>
     <span slot="footer">
@@ -79,13 +79,16 @@ export default {
     loadCurrentSelection () {
     },
     clearAll () {
-      this.currentSelection = [];
+      this.$refs.filterArea.clearAll();
     },
     cancel () {
       this.setDashboardFiltersDialogState(null);
     },
     apply () {
-      this.setDashboardFiltersDialogState(null);
+      this.$refs.filterArea.applyFilters();
+      this.$nextTick(() => {
+        this.setDashboardFiltersDialogState(null);
+      });
     }
   }
 };

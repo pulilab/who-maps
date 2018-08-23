@@ -22,46 +22,61 @@
     </div>
     <div class="FilterItems">
       <filter-item
-        :selected="selectedDHI.length > 0"
+        :selected="selectedDHI"
+        :limit="4"
+        item="dhi"
         label="Digital Health Interventions">
-        <digital-health-interventions-list
+        <dhi-categories-list
           :value="selectedDHI"
+          :limit="4"
           actions
           @delete="deleteDhiHandler"
         />
       </filter-item>
       <filter-item
-        :selected="selectedHFA.length > 0"
+        :selected="selectedHFA"
+        :limit="4"
+        item="hfa"
         label="Health Focus Area">
-        <health-focus-areas-list
+        <hfa-categories-list
           :value="selectedHFA"
+          :limit="4"
           actions
           @delete="deleteHfaHandler"
         />
       </filter-item>
       <filter-item
-        :selected="selectedHSC.length > 0"
+        :selected="selectedHSC"
+        :limit="4"
+        item="hsc"
         label="Health System Challenges">
         <health-system-challenges-list
           :value="selectedHSC"
+          :limit="4"
           actions
           @delete="deleteHscHandler"
         />
       </filter-item>
       <filter-item
-        :selected="selectedHIS.length > 0"
+        :selected="selectedHIS"
+        :limit="4"
+        item="his"
         label="Health Information System">
         <his-bucket-list
           :value="selectedHIS"
+          :limit="4"
           actions
           @delete="deleteHisHandler"
         />
       </filter-item>
       <filter-item
-        :selected="selectedPlatforms.length > 0"
+        :selected="selectedPlatforms"
+        :limit="4"
+        item="platform"
         label="Software" >
         <simple-platform-list
           :value="selectedPlatforms"
+          :limit="4"
           actions
           @delete="deletePlatformsHandler"
         />
@@ -71,13 +86,15 @@
 </template>
 
 <script>
+import { mapGettersActions } from '../../utilities/form';
+
 import FilterPresetsActions from './FilterPresetsActions';
 import SearchBox from './SearchBox';
 import CountryFilters from './CountryFilters';
 import FilterSwitch from './FilterSwitch';
 import FilterItem from './FilterItem';
-import DigitalHealthInterventionsList from '../common/list/DigitalHealthInterventionsList';
-import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
+import DhiCategoriesList from '../common/list/DhiCategoriesList';
+import HfaCategoriesList from '../common/list/HfaCategoriesList';
 import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList';
 import HisBucketList from '../common/list/HisBucketList';
 import SimplePlatformList from '../common/list/SimplePlatformList';
@@ -88,8 +105,8 @@ export default {
     CountryFilters,
     FilterSwitch,
     FilterItem,
-    DigitalHealthInterventionsList,
-    HealthFocusAreasList,
+    DhiCategoriesList,
+    HfaCategoriesList,
     HealthSystemChallengesList,
     HisBucketList,
     SimplePlatformList
@@ -98,13 +115,17 @@ export default {
     return {
       governamentApproved: false,
       governamentFinanced: false,
-      onlyMyDonor: false,
-      selectedDHI: [113, 114],
-      selectedHFA: [31],
-      selectedHSC: [18],
-      selectedHIS: [1],
-      selectedPlatforms: [4]
+      onlyMyDonor: false
     };
+  },
+  computed: {
+    ...mapGettersActions({
+      selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0],
+      selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
+      selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
+      selectedHIS: ['dashboard', 'getSelectedHIS', 'setSelectedHIS', 0],
+      selectedPlatforms: ['dashboard', 'getSelectedPlatforms', 'setSelectedPlatforms', 0]
+    })
   },
   methods: {
     deleteDhiHandler (id) {

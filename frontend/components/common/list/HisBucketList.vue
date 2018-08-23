@@ -30,6 +30,10 @@ export default {
     actions: {
       type: Boolean,
       default: false
+    },
+    limit: {
+      type: Number,
+      default: null
     }
   },
   computed: {
@@ -37,7 +41,8 @@ export default {
       hisBucket: 'projects/getHisBucket'
     }),
     selected () {
-      return this.hisBucket.filter(his => this.value.includes(his.id));
+      const result = this.hisBucket.filter(his => this.value.includes(his.id));
+      return this.limit ? result.slice(0, this.limit) : result;
     }
   }
 };

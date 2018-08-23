@@ -1,6 +1,8 @@
 <template>
-  <div class="FilterItem">
-    <el-row>
+  <div
+    class="FilterItem"
+    @click="setActiveItem">
+    <el-row >
       <el-col :span="18">
         <div class="Header">
           {{ header }}
@@ -28,6 +30,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   props: {
     header: {
@@ -41,6 +44,18 @@ export default {
     selected: {
       type: Array,
       default: null
+    },
+    item: {
+      type: String,
+      required: true
+    }
+  },
+  methods: {
+    ...mapActions({
+      setDashboardFiltersDialogState: 'layout/setDashboardFiltersDialogState'
+    }),
+    setActiveItem () {
+      this.setDashboardFiltersDialogState(this.item);
     }
   }
 };

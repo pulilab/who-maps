@@ -1,33 +1,28 @@
 <template>
-  <div class="DigitalHealthInterventionsList">
-    <ul class="SelectedDigitalHealthInterventions">
+  <div class="DHICategoriesList">
+    <ul class="SelectedDHICategories">
       <li
         v-for="item in selected"
-        :key="item">
+        :key="item.id">
         <list-action
           v-if="actions"
           @click="$emit('delete', item)"
         />
-        <digital-health-intervention-item :id="item" />
+        {{ item.name }}
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import DigitalHealthInterventionItem from '../DigitalHealthInterventionItem';
 import ListAction from './ListAction';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
-    DigitalHealthInterventionItem,
     ListAction
   },
   props: {
-    platform: {
-      type: Number,
-      default: null
-    },
     value: {
       type: Array,
       default: () => []
@@ -42,12 +37,13 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      digitalHealthInterventions: 'projects/getDigitalHealthInterventions'
+    }),
     selected () {
-      if (this.platform) {
-        const result = this.value.filter(dhi => dhi.platform === this.platform).map(dhi => dhi.id);
-        return this.limit ? result.slice(0, this.limit) : result;
-      }
-      return this.limit ? this.value.slice(0, this.limit) : this.value;
+      const subGroups = this.digitalHealthInterventions.reduce((a, c) => [...a, ...c.subGroups], []);
+      const result = subGroups.filter(sb => this.value.includes(sb.id));
+      return this.limit ? result.slice(0, this.limit) : result;
     }
   }
 };
