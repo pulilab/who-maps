@@ -5,8 +5,7 @@
         <el-popover
           placement="bottom-center"
           title="My filters presets"
-          width="200"
-          popper-class="AdvancedSearchPresetsDropdown"
+          popper-class="CustomPopover AdvancedSearchPresetsDropdown"
           trigger="click"
         >
           <el-button
@@ -17,9 +16,19 @@
             Load filters
             <fa icon="caret-down" />
           </el-button>
-          <div class="FilterList">
-            <div>Filter One</div>
-            <div>Filter Two</div>
+          <div class="CustomPopoverList">
+            <ul>
+              <!-- TODO -->
+              <!-- Add '.Selected' class to active item -->
+              <li class="Active">
+                <fa icon="check" />
+                Filter One
+              </li>
+              <li>
+                <fa icon="check" />
+                Filter One
+              </li>
+            </ul>
           </div>
         </el-popover>
       </el-col>
@@ -58,11 +67,13 @@ export default {
       &:nth-child(1) {
         width: 100%;
       }
+
       // Save
       &:nth-child(2) {
         width: auto;
         padding-left: 20px;
       }
+
       // Clear
       &:nth-child(3) {
         width: auto;
@@ -72,6 +83,10 @@ export default {
 
     .el-button--text {
       padding: 0;
+    }
+
+    .AdvancedSearchPresetsDropdown {
+      width: @advancedSearchWidth - 40px;
     }
   }
 </style>

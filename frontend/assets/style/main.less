@@ -752,3 +752,74 @@ fieldset {
     border: 0;
   }
 }
+
+// Popover
+
+.el-popover {
+  &.CustomPopover {
+    box-sizing: border-box;
+    padding: 0;
+
+    .el-popover__title {
+      margin: 0;
+      padding: 0 12px;
+      border-bottom: 1px solid @colorGrayLight;
+      font-size: @fontSizeSmall - 1;
+      font-weight: 700;
+      color: @colorGray;
+      line-height: 30px;
+      text-transform: uppercase;
+      .textTruncate();
+    }
+
+    .CustomPopoverList {
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          position: relative;
+          padding: 0 20px 0 12px;
+          height: 30px;
+          font-size: @fontSizeSmall;
+          line-height: 30px;
+          color: @colorTextSecondary;
+          cursor: pointer;
+          transition: @transitionAll;
+          .textTruncate();
+
+          &:hover {
+            background-color: @colorGrayLightest;
+            color: @colorTextPrimary;
+
+            .svg-inline--fa {
+              opacity: .5;
+            }
+          }
+
+          &.Active {
+            color: @colorBrandPrimary;
+            font-weight: 700;
+
+            .svg-inline--fa {
+              opacity: 1;
+            }
+          }
+
+          .svg-inline--fa {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            margin-right: 2px;
+            opacity: 0;
+            transition: @transitionFadeLinear;
+          }
+        }
+      }
+    }
+  }
+}

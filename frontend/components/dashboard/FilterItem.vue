@@ -79,14 +79,14 @@ export default {
           position: relative;
           max-width: 80%;
           margin: 0;
-          padding: 0 10px 0 22px;
+          padding: 0 10px 0 28px;
           line-height: 20px;
           .textTruncate();
 
           .ListActionButton {
             position: absolute;
             top: 2px;
-            left: 2px;
+            left: 8px;
             padding: 0;
             width: 16px;
             height: 16px;
