@@ -53,8 +53,7 @@ export const actions = {
   async saveChanges ({ dispatch }) {
     await Promise.all([
       dispatch('patchInfoStrings'),
-      dispatch('patchCountryImg', 'logo'),
-      dispatch('patchCountryImg', 'cover'),
+      dispatch('patchCountryImages'),
       dispatch('synchPartnerLogos'),
       dispatch('synchAdminUserArrays')
     ]);
@@ -87,17 +86,22 @@ export const actions = {
     }
   },
 
-  async patchCountryImg ({ getters, rootGetters }, key) {
-    const oldFilePath = getters.getStableCountry[key];
+  async patchCountryImages ({ getters, rootGetters }) {
+    const oldFilePathLogo = getters.getStableCountry.logo;
+    const oldFilePathCover = getters.getStableCountry.cover;
 
-    const uploadNew = (oldFilePath === null) && getters.getCountry[key] && getters.getCountry[key].raw;
-    const changeOld = !!oldFilePath && typeof getters.getCountry[key] !== 'string';
+    const uploadNewLogo = (oldFilePathLogo === null) && getters.getCountry.logo && getters.getCountry.logo.raw;
+    const changeOldLogo = !!oldFilePathLogo && typeof getters.getCountry.logo !== 'string';
+    const uploadNewCover = (oldFilePathCover === null) && getters.getCountry.cover && getters.getCountry.cover.raw;
+    const changeOldCover = !!oldFilePathCover && typeof getters.getCountry.cover !== 'string';
 
-    if (uploadNew || changeOld) {
+    const formData = new FormData();
+    if (uploadNewLogo || changeOldLogo || uploadNewCover || changeOldCover) {
       const countryId = rootGetters['user/getProfile'].country;
-      const formData = new FormData();
-      formData.append(key, (getters.getCountry[key] || '') && getters.getCountry[key].raw);
-      await this.$axios.patch(`/api/countries/${countryId}/`, formData, {
+      if (uploadNewLogo || changeOldLogo) { formData.append('logo', (getters.getCountry.logo || '') && getters.getCountry.logo.raw); }
+      if (uploadNewCover || changeOldCover) { formData.append('cover', (getters.getCountry.cover || '') && getters.getCountry.cover.raw); }
+
+      await this.$axios.patch(`/api/country-images/${countryId}/`, formData, {
         headers: {
           'content-type': 'multipart/form-data'
         }
