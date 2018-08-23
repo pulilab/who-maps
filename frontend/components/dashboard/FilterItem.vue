@@ -1,20 +1,29 @@
 <template>
   <div class="FilterItem">
-    <div class="FilterItemHeader">
-      <div class="Label">
+    <el-row
+      type="flex"
+      class="FilterItemHeader">
+      <el-col class="Label">
         {{ label }}
-      </div>
-      <el-button type="text">
-        <span v-show="!selected">
-          All
-        </span>
-        <span v-show="selected">
-          Filtered
-        </span>
-        <fa icon="pencil-alt" />
-      </el-button>
-    </div>
-    <div class="Selected">
+      </el-col>
+      <el-col class="Setup">
+        <el-button
+          type="text"
+          size="small"
+          class="IconLeft">
+          <span v-show="!selected">
+            <fa icon="plus" />
+            Add
+          </span>
+          <span v-show="selected">
+            <fa icon="pencil-alt" />
+            Edit
+          </span>
+        </el-button>
+      </el-col>
+    </el-row>
+
+    <div class="FilterItemSelected">
       <slot/>
     </div>
   </div>
@@ -36,8 +45,26 @@ export default {
 </script>
 
 <style lang="less">
-.FilterItemHeader {
-  display: flex;
-}
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
+
+  .FilterItem {
+    .FilterItemHeader {
+      .Label {
+        width: 100%;
+        font-size: @fontSizeBase;
+        color: @colorTextPrimary;
+      }
+
+      .Setup {
+        width: auto;
+        padding-left: 10px;
+
+        .el-button {
+          padding: 0;
+        }
+      }
+    }
+  }
 
 </style>

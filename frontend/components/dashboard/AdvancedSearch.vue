@@ -19,53 +19,53 @@
         label="Government financed"
         tooltip="Lorem ipsum something else"
       />
-      <div class="FilterItems">
-        <filter-item
-          :selected="selectedDHI.length > 0"
-          label="Digital Health Interventions" >
-          <digital-health-interventions-list
-            :value="selectedDHI"
-            actions
-            @delete="deleteDhiHandler"
-          />
-        </filter-item>
-        <filter-item
-          :selected="selectedHFA.length > 0"
-          label="Health Focus Area" >
-          <health-focus-areas-list
-            :value="selectedHFA"
-            actions
-            @delete="deleteHfaHandler"
-          />
-        </filter-item>
-        <filter-item
-          :selected="selectedHSC.length > 0"
-          label="Health System Challenges" >
-          <health-system-challenges-list
-            :value="selectedHSC"
-            actions
-            @delete="deleteHscHandler"
-          />
-        </filter-item>
-        <filter-item
-          :selected="selectedHIS.length > 0"
-          label="Health Information System" >
-          <his-bucket-list
-            :value="selectedHIS"
-            actions
-            @delete="deleteHisHandler"
-          />
-        </filter-item>
-        <filter-item
-          :selected="selectedPlatforms.length > 0"
-          label="Software" >
-          <simple-platform-list
-            :value="selectedPlatforms"
-            actions
-            @delete="deletePlatformsHandler"
-          />
-        </filter-item>
-      </div>
+    </div>
+    <div class="FilterItems">
+      <filter-item
+        :selected="selectedDHI.length > 0"
+        label="Digital Health Interventions">
+        <digital-health-interventions-list
+          :value="selectedDHI"
+          actions
+          @delete="deleteDhiHandler"
+        />
+      </filter-item>
+      <filter-item
+        :selected="selectedHFA.length > 0"
+        label="Health Focus Area">
+        <health-focus-areas-list
+          :value="selectedHFA"
+          actions
+          @delete="deleteHfaHandler"
+        />
+      </filter-item>
+      <filter-item
+        :selected="selectedHSC.length > 0"
+        label="Health System Challenges">
+        <health-system-challenges-list
+          :value="selectedHSC"
+          actions
+          @delete="deleteHscHandler"
+        />
+      </filter-item>
+      <filter-item
+        :selected="selectedHIS.length > 0"
+        label="Health Information System">
+        <his-bucket-list
+          :value="selectedHIS"
+          actions
+          @delete="deleteHisHandler"
+        />
+      </filter-item>
+      <filter-item
+        :selected="selectedPlatforms.length > 0"
+        label="Software" >
+        <simple-platform-list
+          :value="selectedPlatforms"
+          actions
+          @delete="deletePlatformsHandler"
+        />
+      </filter-item>
     </div>
   </div>
 </template>
@@ -128,7 +128,27 @@ export default {
 </script>
 
 <style lang="less">
-.AdvancedSearch {
-}
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
+  .AdvancedSearch {
+    box-sizing: border-box;
+    width: @advancedSearchWidth;
+    // TODO
+    // height: fixed???;
+    border-left: 1px solid @colorGrayLight;
+    background-color: @colorWhite;
+
+    // search filters blocks
+    > div {
+      padding: 20px;
+      border-bottom: 1px solid @colorGrayLight;
+
+      &:last-child {
+        border: 0;
+      }
+    }
+
+    .FilterSwitches {}
+  }
 </style>

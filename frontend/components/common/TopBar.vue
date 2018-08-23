@@ -157,7 +157,7 @@ export default {
   .TopBar {
     .TopBarInner {
       .limitPageWidth();
-      height: 130px;
+      height: @topBarHeight;
       background-color: @colorWhite;
       align-items: stretch;
     }

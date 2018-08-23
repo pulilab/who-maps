@@ -1,7 +1,7 @@
 <template>
   <el-select
     :value="value"
-    placeholder="Select from list"
+    placeholder="Select region"
     @change="changeHandler">
     <el-option
       v-for="region in regions"

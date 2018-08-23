@@ -1,26 +1,42 @@
 <template>
-  <div class="FilterSwitchs">
-
-    <el-switch
-      :value="value"
-      @change="switchChangeHandler"
-    />
-    {{ label }}
-    <el-tooltip
-      v-model="showTooltip"
-      :content="tooltip"
-      effect="dark"
-      placement="top"
-      manual
-    >
-      <el-button
-        type="text"
-        @click="showTooltip = !showTooltip"
+  <el-row
+    type="flex"
+    justify="space-between"
+    align="middle"
+    class="FilterSwitch">
+    <el-col class="SwitchComponent">
+      <el-row
+        type="flex"
+        align="middle">
+        <el-col class="SwitchHandler">
+          <el-switch
+            :value="value"
+            @change="switchChangeHandler"
+          />
+        </el-col>
+        <el-col class="SwitchLabel">
+          {{ label }}
+        </el-col>
+      </el-row>
+    </el-col>
+    <el-col class="SwitchTooltip">
+      <el-tooltip
+        v-model="showTooltip"
+        :content="tooltip"
+        effect="dark"
+        placement="left"
+        manual
       >
-        <fa icon="question-circle" />
-      </el-button>
-    </el-tooltip>
-  </div>
+        <el-button
+          type="text"
+          class="MutedButton"
+          @click="showTooltip = !showTooltip"
+        >
+          <fa icon="question-circle" />
+        </el-button>
+      </el-tooltip>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -57,6 +73,40 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
+
+  .FilterSwitch {
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin: 0;
+    }
+
+    .SwitchComponent {
+      width: 100%;
+
+      .SwitchHandler {
+        width: auto;
+        padding-right: 10px;
+      }
+
+      .SwitchLabel {
+        font-size: @fontSizeBase;
+        line-height: 19px;
+        color: @colorTextPrimary;
+      }
+    }
+
+    .SwitchTooltip {
+      width: auto;
+      padding-left: 10px;
+
+      .el-button {
+        padding: 0;
+      }
+    }
+  }
 
 </style>

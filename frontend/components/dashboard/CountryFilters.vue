@@ -22,6 +22,17 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
+  .CountryFilters {
+    .el-select {
+      width: 100%;
+
+      &:first-child {
+        margin-bottom: 10px;
+      }
+    }
+  }
 </style>
