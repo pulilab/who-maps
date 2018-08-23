@@ -8,13 +8,14 @@
     >
       <selector-dialog-category
         v-for="hsc in healthSystemChallenges"
-        v-model="selected"
+        :values="selected"
         :key="hsc.id"
         :category-selectable="true"
         :category="hsc"
         child-name="challenges"
         name-prop="challenge"
         hide-header
+        @change="filterChange"
       />
     </selector-dialog-column>
   </div>
@@ -25,24 +26,21 @@ import difference from 'lodash/difference';
 import SelectorDialogColumn from '../SelectorDialogColumn';
 import SelectorDialogCategory from '../SelectorDialogCategory';
 import { mapGetters } from 'vuex';
-import { mapGettersActions } from '../../../utilities/form.js';
 
 export default {
   components: {
     SelectorDialogColumn,
     SelectorDialogCategory
   },
-  data () {
-    return {
-      selected: []
-    };
+  props: {
+    selected: {
+      type: Array,
+      default: () => []
+    }
   },
   computed: {
     ...mapGetters({
       healthSystemChallenges: 'projects/getHscChallenges'
-    }),
-    ...mapGettersActions({
-      selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0]
     }),
     allIds () {
       return this.healthSystemChallenges.reduce((a, c) => {
@@ -53,22 +51,15 @@ export default {
       return difference(this.allIds, this.selected).length === 0;
     }
   },
-  mounted () {
-    this.selected = [...this.selectedHSC];
-  },
   methods: {
-
-    save () {
-      this.selectedHSC = [...this.selected];
-    },
-    clear () {
-      this.selected = [];
+    filterChange (value) {
+      this.$emit('update:selected', [...value]);
     },
     toggleAll (value) {
       if (value) {
-        this.selected = [...this.allIds];
+        this.$emit('update:selected', [...this.allIds]);
       } else {
-        this.selected = [];
+        this.$emit('update:selected', []);
       }
     }
   }

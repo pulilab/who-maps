@@ -12,10 +12,66 @@
       type="flex"
       class="HfaMainCategories">
       <el-col :span="6">
-        <filter-selector />
+        <div class="FilterSelector">
+          <filter-item
+            :active="selectedFilter === 'dhi'"
+            :selected="dhi"
+            item="dhi"
+            header="Digital Health Interventions"
+            @clear="dhi=[]"
+          />
+          <filter-item
+            :active="selectedFilter === 'hfa'"
+            :selected="hfa"
+            item="hfa"
+            header="Health focus areas"
+            @clear="hfa=[]"
+          />
+          <filter-item
+            :active="selectedFilter === 'hsc'"
+            :selected="hsc"
+            item="hsc"
+            header="Health system challenges"
+            @clear="hsc=[]"
+          />
+          <filter-item
+            :active="selectedFilter === 'his'"
+            :selected="his"
+            item="his"
+            header="Health Information System"
+            @clear="his=[]"
+          />
+          <filter-item
+            :active="selectedFilter === 'platform'"
+            :selected="platforms"
+            item="platform"
+            header="Software"
+            @clear="platforms=[]"
+          />
+        </div>
       </el-col>
       <el-col :span="18">
-        <filter-area ref="filterArea" />
+        <div class="FilterArea">
+          <digital-health-interventions-filter
+            v-show="selectedFilter === 'dhi'"
+            :selected.sync="dhi" />
+          <health-focus-areas-filter
+            v-show="selectedFilter === 'hfa'"
+            :selected.sync="hfa"
+          />
+          <health-system-challenges-filter
+            v-show="selectedFilter === 'hsc'"
+            :selected.sync="hsc"
+          />
+          <health-information-system-filter
+            v-show="selectedFilter === 'his'"
+            :selected.sync="his"
+          />
+          <platform-filter
+            v-show="selectedFilter === 'platform'"
+            :selected.sync="platforms"
+          />
+        </div>
       </el-col>
     </el-row>
     <span slot="footer">
@@ -51,17 +107,42 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import FilterSelector from './FilterSelector';
-import FilterArea from './FilterArea';
+import { mapGettersActions } from '../../utilities/form.js';
+import FilterItem from './FilterItem';
+import HealthFocusAreasFilter from './filters/HealthFocusAreaFilter';
+import DigitalHealthInterventionsFilter from './filters/DigitalHealthInterventionsFilter';
+import HealthInformationSystemFilter from './filters/HealthInformationSystemFilter';
+import HealthSystemChallengesFilter from './filters/HealthSystemChallengesFilter';
+import PlatformFilter from './filters/PlatformFilter';
 
 export default {
   components: {
-    FilterSelector,
-    FilterArea
+    FilterItem,
+    HealthFocusAreasFilter,
+    DigitalHealthInterventionsFilter,
+    HealthInformationSystemFilter,
+    HealthSystemChallengesFilter,
+    PlatformFilter
+  },
+  data () {
+    return {
+      dhi: [],
+      hfa: [],
+      hsc: [],
+      his: [],
+      platforms: []
+    };
   },
   computed: {
     ...mapGetters({
       selectedFilter: 'layout/getDashboardFiltersDialogState'
+    }),
+    ...mapGettersActions({
+      selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0],
+      selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
+      selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
+      selectedHIS: ['dashboard', 'getSelectedHIS', 'setSelectedHIS', 0],
+      selectedPlatforms: ['dashboard', 'getSelectedPlatforms', 'setSelectedPlatforms', 0]
     }),
     visible: {
       get () {
@@ -77,15 +158,28 @@ export default {
       setDashboardFiltersDialogState: 'layout/setDashboardFiltersDialogState'
     }),
     loadCurrentSelection () {
+      this.dhi = [...this.selectedDHI];
+      this.hfa = [...this.selectedHFA];
+      this.hsc = [...this.selectedHSC];
+      this.his = [...this.selectedHIS];
+      this.platforms = [...this.selectedPlatforms];
     },
     clearAll () {
-      this.$refs.filterArea.clearAll();
+      this.dhi = [];
+      this.hfa = [];
+      this.hsc = [];
+      this.his = [];
+      this.platforms = [];
     },
     cancel () {
       this.setDashboardFiltersDialogState(null);
     },
     apply () {
-      this.$refs.filterArea.applyFilters();
+      this.selectedDHI = this.dhi;
+      this.selectedHFA = this.hfa;
+      this.selectedHSC = this.hsc;
+      this.selectedHIS = this.his;
+      this.selectedPlatforms = this.platforms;
       this.$nextTick(() => {
         this.setDashboardFiltersDialogState(null);
       });

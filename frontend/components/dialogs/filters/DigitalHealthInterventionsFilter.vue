@@ -15,10 +15,11 @@
           @headerSelected="toggleAll($event, category)"
         >
           <selector-dialog-category
-            v-model="selected"
+            :values="selected"
             :category-selectable="true"
             :category="category.subGroups"
             hide-header
+            @change="filterChange"
           />
         </selector-dialog-column>
       </el-col>
@@ -31,49 +32,41 @@ import difference from 'lodash/difference';
 import SelectorDialogColumn from '../SelectorDialogColumn';
 import SelectorDialogCategory from '../SelectorDialogCategory';
 import { mapGetters } from 'vuex';
-import { mapGettersActions } from '../../../utilities/form.js';
 
 export default {
   components: {
     SelectorDialogColumn,
     SelectorDialogCategory
   },
-  data () {
-    return {
-      selected: []
-    };
+  props: {
+    selected: {
+      type: Array,
+      default: () => []
+    }
   },
   computed: {
     ...mapGetters({
       digitalHealthInterventions: 'projects/getDigitalHealthInterventions'
-    }),
-    ...mapGettersActions({
-      selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0]
     })
-  },
-  mounted () {
-    this.selected = [...this.selectedDHI];
   },
   methods: {
     catSelected (category) {
       const ids = this.categoryIds(category);
       return difference(ids, this.selected).length === 0;
     },
-    save () {
-      this.selectedDHI = [...this.selected];
-    },
-    clear () {
-      this.selected = [];
-    },
     categoryIds (category) {
       return category.subGroups.map(s => s.id);
     },
+    filterChange (value) {
+      this.$emit('update:selected', [...value]);
+    },
     toggleAll (value, category) {
       const categoryIds = this.categoryIds(category);
+      const filtered = this.selected.filter(s => !categoryIds.includes(s));
       if (value) {
-        this.selected = [...this.selected, ...categoryIds];
+        this.$emit('update:selected', [...filtered, ...categoryIds]);
       } else {
-        this.selected = this.selected.filter(s => !categoryIds.includes(s));
+        this.$emit('update:selected', filtered);
       }
     }
   }

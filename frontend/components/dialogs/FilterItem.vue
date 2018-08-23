@@ -8,14 +8,17 @@
           {{ header }}
         </div>
         <div class="Bottom">
-          <el-button
-            v-show="!selected"
-            type="text">
+          <span v-show="!selected">
             Show all
-          </el-button>
+          </span>
           <template v-if="selected">
-            <span> {{ selected.length }} filter(s) selected </span>
-            <el-button type="text">Clear</el-button>
+            <span> {{ selected.length }} item(s) selected </span>
+            <el-button
+              type="text"
+              @click="$emit('clear')"
+            >
+              Clear
+            </el-button>
           </template>
         </div>
       </el-col>

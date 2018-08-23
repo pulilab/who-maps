@@ -7,9 +7,10 @@
       @headerSelected="toggleAll"
     >
       <selector-dialog-category
-        v-model="selected"
+        :values="selected"
         :category="healthInformationSystems"
         hide-header
+        @change="filterChange"
       />
     </selector-dialog-column>
   </div>
@@ -20,45 +21,36 @@ import difference from 'lodash/difference';
 import SelectorDialogColumn from '../SelectorDialogColumn';
 import SelectorDialogCategory from '../SelectorDialogCategory';
 import { mapGetters } from 'vuex';
-import { mapGettersActions } from '../../../utilities/form.js';
 
 export default {
   components: {
     SelectorDialogColumn,
     SelectorDialogCategory
   },
-  data () {
-    return {
-      selected: []
-    };
+  props: {
+    selected: {
+      type: Array,
+      default: () => []
+    }
   },
   computed: {
     ...mapGetters({
       healthInformationSystems: 'projects/getHisBucket'
-    }),
-    ...mapGettersActions({
-      selectedHIS: ['dashboard', 'getSelectedHIS', 'setSelectedHIS', 0]
     }),
     catSelected () {
       const ids = this.healthInformationSystems.map(s => s.id);
       return difference(ids, this.selected).length === 0;
     }
   },
-  mounted () {
-    this.selected = [...this.selectedHIS];
-  },
   methods: {
-    save () {
-      this.selectedHIS = [...this.selected];
-    },
-    clear () {
-      this.selected = [];
+    filterChange (value) {
+      this.$emit('update:selected', [...value]);
     },
     toggleAll (value) {
       if (value) {
-        this.selected = [...this.healthInformationSystems.map(s => s.id)];
+        this.$emit('update:selected', [...this.healthInformationSystems.map(s => s.id)]);
       } else {
-        this.selected = [];
+        this.$emit('update:selected', []);
       }
     }
   }
