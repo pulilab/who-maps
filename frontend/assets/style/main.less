@@ -379,7 +379,7 @@ fieldset {
       height: calc(100% - 2px);
       margin: 1px 0;
       background-color: #EDEDED;
-      border-left: 1px solid #B9B9B9;
+      border-left: 1px solid @colorGray;
 
       &::before {
         content: "\E60B";
@@ -398,6 +398,7 @@ fieldset {
     .el-input-group__append,
     .el-input-group__prepend {
       padding: 0 12px;
+      color: @colorGray;
     }
   }
 }

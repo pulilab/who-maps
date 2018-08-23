@@ -2,7 +2,6 @@
   <el-select
     :value="value"
     placeholder="Select country"
-    popper-class="CountrySelectPopper"
     @change="changeHandler">
     <el-option
       v-for="country in countries"
@@ -41,9 +40,4 @@ export default {
 <style lang="less">
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
-
-  .CountrySelectPopper {
-    max-width: @advancedSearchWidth - 40px;
-  }
-
 </style>

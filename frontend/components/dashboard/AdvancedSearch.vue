@@ -135,7 +135,7 @@ export default {
     box-sizing: border-box;
     width: @advancedSearchWidth;
     // TODO
-    // height: fixed???;
+    min-height: 100%;
     border-left: 1px solid @colorGrayLight;
     background-color: @colorWhite;
 

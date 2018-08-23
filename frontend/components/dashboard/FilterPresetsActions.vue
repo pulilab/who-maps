@@ -24,13 +24,16 @@
         </el-popover>
       </el-col>
       <el-col :span="6">
-        <el-button type="text">
+        <el-button
+          type="text"
+          size="small">
           Save
         </el-button>
       </el-col>
       <el-col :span="6">
         <el-button
           type="text"
+          size="small"
           class="DeleteButton">
           Clear
         </el-button>

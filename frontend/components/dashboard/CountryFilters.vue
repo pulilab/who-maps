@@ -1,5 +1,7 @@
 <template>
   <div class="CountryFilters">
+    <!-- TODO -->
+    <!-- Please add popper-class="CountrySelectPopper" only for this component -->
     <country-select v-model="selectedCountry" />
     <region-select v-model="selectedRegion" />
   </div>
@@ -33,6 +35,10 @@ export default {
       &:first-child {
         margin-bottom: 10px;
       }
+    }
+
+    .CountrySelectPopper {
+      max-width: 100%;
     }
   }
 </style>

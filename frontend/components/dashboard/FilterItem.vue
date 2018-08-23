@@ -50,6 +50,8 @@ export default {
 
   .FilterItem {
     .FilterItemHeader {
+      padding: 0 0 5px;
+
       .Label {
         width: 100%;
         font-size: @fontSizeBase;
@@ -65,6 +67,47 @@ export default {
         }
       }
     }
-  }
 
+    .FilterItemSelected {
+      ul {
+        list-style-type: none;
+        margin: 2px 0 15px;
+        padding: 0;
+        font-size: @fontSizeSmall;
+
+        li {
+          position: relative;
+          max-width: 80%;
+          margin: 0;
+          padding: 0 10px 0 22px;
+          line-height: 20px;
+          .textTruncate();
+
+          .ListActionButton {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            padding: 0;
+            width: 16px;
+            height: 16px;
+
+            .svg-inline--fa {
+              width: 10px;
+
+              &.fa-check {
+                color: @colorGray;
+              }
+              &.fa-times {
+                color: @colorDanger;
+              }
+            }
+
+            + span {
+              color: @colorTextSecondary;
+            }
+          }
+        }
+      }
+    }
+  }
 </style>
