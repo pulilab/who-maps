@@ -1,6 +1,7 @@
 <template>
   <el-select
     :value="value"
+    :popper-class="popperAdditionalClass"
     placeholder="Select country"
     @change="changeHandler">
     <el-option
@@ -21,6 +22,10 @@ export default {
   props: {
     value: {
       type: Number,
+      default: null
+    },
+    popperAdditionalClass: {
+      type: String,
       default: null
     }
   },

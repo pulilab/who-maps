@@ -1,8 +1,9 @@
 <template>
   <div class="CountryFilters">
-    <!-- TODO -->
-    <!-- Please add popper-class="CountrySelectPopper" only for this component -->
-    <country-select v-model="selectedCountry" />
+    <country-select
+      v-model="selectedCountry"
+      popper-additional-class="CountrySelectPopper"
+    />
     <region-select v-model="selectedRegion" />
   </div>
 </template>
