@@ -9,7 +9,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from allauth.account.models import EmailConfirmation
 
-from country.models import Country
+from country.models import Country, Donor
 from .models import Organisation, UserProfile
 
 
@@ -203,11 +203,13 @@ class UserProfileTests(APITestCase):
         # Update profile.
         self.org = Organisation.objects.create(name="org1")
         self.country = Country.objects.all()[0]
+        self.donor = Donor.objects.create(name="Donor1")
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
             "name": "Test Name",
             "organisation": self.org.id,
-            "country": self.country.id}
+            "country": self.country.id,
+            "donor": self.donor.id}
         response = self.client.put(url, data)
 
     def test_obtain_user_profile_returns_id(self):
@@ -244,6 +246,7 @@ class UserProfileTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get('id'), user_profile_id)
         self.assertEqual(response.json().get('email'), "test_user2@gmail.com")
+        self.assertEqual(response.json().get('donor'), self.donor.id)
         self.assertIn('language', response.json())
 
     def test_update_user_profile(self):

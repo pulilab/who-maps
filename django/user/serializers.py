@@ -48,7 +48,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ("id", "name", "user_email", "country", "account_type", "organisation", "user", "created",
+        fields = ("id", "name", "user_email", "country", "donor", "account_type", "organisation", "user", "created",
                   "organisation_name", "language")
 
     @staticmethod
