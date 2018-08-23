@@ -8,7 +8,7 @@
           v-if="actions"
           @click="$emit('delete', item)"
         />
-        {{ item.name }}
+        <span>{{ item.name }}</span>
       </li>
     </ul>
   </div>

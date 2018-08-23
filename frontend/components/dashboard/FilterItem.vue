@@ -28,18 +28,19 @@
     <div class="FilterItemSelected">
       <slot/>
     </div>
+
     <div
       v-show="showLimit"
       class="ShowMore"
     >
       <el-button
         type="text"
+        size="small"
         @click="openDialog"
       >
-        Show all selected
+        Show all selected...
       </el-button>
     </div>
-
   </div>
 </template>
 
@@ -117,7 +118,7 @@ export default {
         li {
           position: relative;
           max-width: 80%;
-          margin: 0;
+          margin: 0 0 2px;
           padding: 0 10px 0 28px;
           line-height: 20px;
           .textTruncate();
@@ -146,6 +147,17 @@ export default {
             }
           }
         }
+      }
+    }
+
+    .ShowMore {
+
+      .el-button {
+        position: relative;
+        top: -15px;
+        margin: 0 0 0 28px;
+        padding: 0;
+        font-weight: 400;
       }
     }
   }
