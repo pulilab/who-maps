@@ -79,7 +79,7 @@ export default {
       position: relative;
       top: @dialogHeaderFooterHeight;
       padding: 20px 20px 50px 30px;
-      height: calc(80vh - (@dialogHeaderFooterHeight * 4) + 6px);
+      height: calc(80vh - (@dialogHeaderFooterHeight * 4) - 4px);
       overflow-y: scroll;
     }
   }

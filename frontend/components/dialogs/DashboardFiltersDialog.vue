@@ -240,8 +240,6 @@ export default {
             }
 
             .Main {
-              height: calc(80vh - (@dialogHeaderFooterHeight * 4) + 6px);
-
               .Item {
                 .el-checkbox__label {
                   font-size: @fontSizeSmall;
@@ -272,6 +270,12 @@ export default {
           .Header {
             width: calc(90vw - @filterSelectorWidth);
             max-width: calc((@appWidthMaxLimit * 0.9) - @filterSelectorWidth);
+          }
+        }
+
+        .Main {
+          .Items {
+            margin: 0;
           }
         }
       }

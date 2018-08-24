@@ -133,8 +133,12 @@ export default {
       line-height: 20px;
       color: @colorTextMuted;
 
-      .Filtered {
-        color: @colorTextSecondary;
+      > span {
+        transition: @transitionAll;
+
+        &.Filtered {
+          color: @colorTextSecondary;
+        }
       }
 
       .el-button {
