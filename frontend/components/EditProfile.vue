@@ -202,35 +202,34 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/style/main.less";
 
-.EditProfile {
+  .EditProfile {
 
-  .Heading {
-    text-align: center;
-    font-size: 32px;
-    margin: 48px 0;
+    .Heading {
+      text-align: center;
+      font-size: 32px;
+      margin: 48px 0;
+    }
+
+    .ProfileCard {
+      margin-bottom: 48px;
+    }
+
+    .FormPart {
+      padding: 60px 100px;
+    }
+
+    .full-width {
+      width: 100%;
+    }
+
+    .Actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 40px;
+      padding: 15px;
+      background-color: gray;
+    }
   }
-
-  .ProfileCard {
-    margin-bottom: 48px;
-  }
-
-  .FormPart {
-    padding: 60px 100px;
-  }
-
-  .full-width {
-    width: 100%;
-  }
-
-  .Actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 40px;
-    padding: 15px;
-    background-color: gray;
-  }
-}
 </style>
