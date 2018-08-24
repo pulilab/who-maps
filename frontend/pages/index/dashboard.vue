@@ -40,6 +40,7 @@ export default {
 
     .ChildContainer {
       width: calc(100vw - @advancedSearchWidth);
+      min-width: @appWidthMinLimit - @advancedSearchWidth;
       max-width: @appWidthMaxLimit - @advancedSearchWidth;
       height: 100%;
 
