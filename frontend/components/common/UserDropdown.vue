@@ -164,7 +164,7 @@ export default {
           font-size: @fontSizeSmall - 1;
           font-weight: 700;
           text-transform: uppercase;
-          color: @colorTextMuted;
+          color: @colorGray;
         }
 
         .CountryName,

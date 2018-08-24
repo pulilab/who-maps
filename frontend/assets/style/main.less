@@ -398,7 +398,7 @@ fieldset {
     .el-input-group__append,
     .el-input-group__prepend {
       padding: 0 12px;
-      color: @colorGray;
+      color: @colorTextSecondary;
     }
   }
 }
@@ -578,6 +578,15 @@ fieldset {
       display: block;
       margin: 0;
     }
+  }
+}
+
+// Switch
+
+.el-switch {
+  .el-switch__core {
+    border-color: @colorTextMuted;
+    background-color: @colorTextMuted;
   }
 }
 
@@ -772,7 +781,7 @@ fieldset {
       margin: 0;
       padding: 0 12px;
       border-bottom: 1px solid @colorGrayLight;
-      font-size: @fontSizeSmall;
+      font-size: @fontSizeSmall - 1;
       font-weight: 700;
       color: @colorGray;
       line-height: 40px;
