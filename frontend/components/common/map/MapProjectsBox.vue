@@ -46,19 +46,43 @@
             v-if="showSubNational"
             class="PlainList SubNational"
           >
-            <project-card />
-            <project-card />
-            <project-card />
-            <project-card />
-            <project-card />
+            <project-card
+              show-organisation
+              show-arrow-on-over
+            />
+            <project-card
+              show-organisation
+              show-arrow-on-over
+            />
+            <project-card
+              show-organisation
+              show-arrow-on-over
+            />
+            <project-card
+              show-organisation
+              show-arrow-on-over
+            />
+            <project-card
+              show-organisation
+              show-arrow-on-over
+            />
           </div>
           <div
             v-if="showNational"
             class="PlainList National"
           >
-            <project-card />
-            <project-card />
-            <project-card />
+            <project-card
+              show-organisation
+              show-arrow-on-over
+            />
+            <project-card
+              show-organisation
+              show-arrow-on-over
+            />
+            <project-card
+              show-organisation
+              show-arrow-on-over
+            />
           </div>
         </el-col>
       </el-row>
