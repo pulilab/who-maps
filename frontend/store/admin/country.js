@@ -150,40 +150,21 @@ export const actions = {
     const oldSuperAdminsStr = JSON.stringify([...state.country.super_admins].sort());
     const newSuperAdminsStr = JSON.stringify([...state.editableCountry.super_admins].sort());
 
-    const diff = {};
+    const patchObj = {};
 
     if (oldUsersStr !== newUsersStr) {
-      diff.users = getters.getCountry.users || [];
+      patchObj.users = getters.getCountry.users || [];
     }
     if (oldAdminsStr !== newAdminsStr) {
-      diff.admins = getters.getCountry.admins;
+      patchObj.admins = getters.getCountry.admins || [];
     }
     if (oldSuperAdminsStr !== newSuperAdminsStr) {
-      diff.super_admins = getters.getCountry.super_admins;
+      patchObj.super_admins = getters.getCountry.super_admins || [];
     }
 
-    if (diff.users || diff.admins || diff.super_admins) {
+    if (patchObj.users || patchObj.admins || patchObj.super_admins) {
       const countryId = rootGetters['user/getProfile'].country;
-      const formData = new FormData();
-      console.log(diff);
-      for (let key in diff) {
-        diff[key].forEach(id => {
-          // console.log(`appending ${key}[]: id`);
-          formData.append(`${key}[]`, id);
-        });
-        if (!diff[key].length) {
-          // console.log(`appending ${key}: null`);
-          formData.append(`${key}[]`, undefined);
-        }
-        // Another approach
-        // console.log(`appending ${key}: ${JSON.stringify(diff[key])} which is ${typeof diff[key]}`);
-        // formData.append(key, diff[key]);
-      }
-      await this.$axios.patch(`/api/countries/${countryId}/`, formData, {
-        headers: {
-          'content-type': 'multipart/form-data'
-        }
-      });
+      await this.$axios.patch(`/api/countries/${countryId}/`, patchObj);
     }
   },
 
