@@ -71,13 +71,13 @@ export default {
       // Save
       &:nth-child(2) {
         width: auto;
-        padding-left: 20px;
+        padding-left: 15px;
       }
 
       // Clear
       &:nth-child(3) {
         width: auto;
-        padding-left: 20px;
+        padding-left: 15px;
       }
     }
 

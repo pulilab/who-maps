@@ -10,68 +10,64 @@
   >
     <el-row
       type="flex"
-      class="HfaMainCategories">
-      <el-col :span="6">
-        <div class="FilterSelector">
-          <filter-item
-            :active="selectedFilter === 'dhi'"
-            :selected="dhi"
-            item="dhi"
-            header="Digital Health Interventions"
-            @clear="dhi=[]"
-          />
-          <filter-item
-            :active="selectedFilter === 'hfa'"
-            :selected="hfa"
-            item="hfa"
-            header="Health focus areas"
-            @clear="hfa=[]"
-          />
-          <filter-item
-            :active="selectedFilter === 'hsc'"
-            :selected="hsc"
-            item="hsc"
-            header="Health system challenges"
-            @clear="hsc=[]"
-          />
-          <filter-item
-            :active="selectedFilter === 'his'"
-            :selected="his"
-            item="his"
-            header="Health Information System"
-            @clear="his=[]"
-          />
-          <filter-item
-            :active="selectedFilter === 'platform'"
-            :selected="platforms"
-            item="platform"
-            header="Software"
-            @clear="platforms=[]"
-          />
-        </div>
+      class="FilterDialogWrapper">
+      <el-col class="FilterSelector">
+        <filter-item
+          :active="selectedFilter === 'dhi'"
+          :selected="dhi"
+          item="dhi"
+          header="Digital Health Interventions"
+          @clear="dhi=[]"
+        />
+        <filter-item
+          :active="selectedFilter === 'hfa'"
+          :selected="hfa"
+          item="hfa"
+          header="Health focus areas"
+          @clear="hfa=[]"
+        />
+        <filter-item
+          :active="selectedFilter === 'hsc'"
+          :selected="hsc"
+          item="hsc"
+          header="Health system challenges"
+          @clear="hsc=[]"
+        />
+        <filter-item
+          :active="selectedFilter === 'his'"
+          :selected="his"
+          item="his"
+          header="Health Information System"
+          @clear="his=[]"
+        />
+        <filter-item
+          :active="selectedFilter === 'platform'"
+          :selected="platforms"
+          item="platform"
+          header="Software"
+          @clear="platforms=[]"
+        />
       </el-col>
-      <el-col :span="18">
-        <div class="FilterArea">
-          <digital-health-interventions-filter
-            v-show="selectedFilter === 'dhi'"
-            :selected.sync="dhi" />
-          <health-focus-areas-filter
-            v-show="selectedFilter === 'hfa'"
-            :selected.sync="hfa"
-          />
-          <health-system-challenges-filter
-            v-show="selectedFilter === 'hsc'"
-            :selected.sync="hsc"
-          />
-          <health-information-system-filter
-            v-show="selectedFilter === 'his'"
-            :selected.sync="his"
-          />
-          <platform-filter
-            v-show="selectedFilter === 'platform'"
-            :selected.sync="platforms"
-          />
-        </div>
+      <el-col class="FilterArea">
+        <digital-health-interventions-filter
+          v-show="selectedFilter === 'dhi'"
+          :selected.sync="dhi" />
+        <health-focus-areas-filter
+          v-show="selectedFilter === 'hfa'"
+          :selected.sync="hfa"
+        />
+        <health-system-challenges-filter
+          v-show="selectedFilter === 'hsc'"
+          :selected.sync="hsc"
+        />
+        <health-information-system-filter
+          v-show="selectedFilter === 'his'"
+          :selected.sync="his"
+        />
+        <platform-filter
+          v-show="selectedFilter === 'platform'"
+          :selected.sync="platforms"
+        />
       </el-col>
     </el-row>
     <span slot="footer">
@@ -192,7 +188,8 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-  .SelectHfaDialog {
+  .FilterDialog {
+    max-width: @appWidthMaxLimit * 0.9;
     height: 80vh;
     margin-top: 0;
     margin-bottom: 0;
@@ -202,18 +199,79 @@ export default {
       height: calc(80vh - (@dialogHeaderFooterHeight*2));
     }
 
-    .HfaMainCategories {
+    .FilterDialogWrapper {
       height: calc(80vh - (@dialogHeaderFooterHeight*2));
 
-      > .el-col {
-        overflow: hidden;
+      .FilterSelector {
+        position: relative;
+        z-index: 2002;
+        box-sizing: border-box;
+        min-width: @filterSelectorWidth;
+        max-width: @filterSelectorWidth;
+        background-color: @colorWhite;
         border-right: 1px solid @colorGrayLight;
+        box-shadow: 1px 0 3px rgba(0,0,0,.1);
+      }
 
-        &:last-child {
+      .FilterArea {
+        width: 100%;
+
+        .Main {
+          .SelectorDialogCategory {
+            .Items {
+              padding-left: 0;
+            }
+          }
+        }
+      }
+
+      // Special case for DHI items
+      // OMG, this is a real mess!! :(
+      .DigitalHealthInterventionsFilter {
+        .el-col-6 {
+          overflow: hidden;
+          height: calc(80vh - (@dialogHeaderFooterHeight * 2));
+          border-right: 1px solid @colorGrayLight;
+
           .SelectorDialogColumn {
             .Header {
-              width: calc(90vw / 4);
+              width: calc((90vw - @filterSelectorWidth) / 4 - 1px);
+              max-width: calc(((@appWidthMaxLimit * 0.9) - @filterSelectorWidth) / 4 - 1px);
             }
+
+            .Main {
+              height: calc(80vh - (@dialogHeaderFooterHeight * 4) + 6px);
+
+              .Item {
+                .el-checkbox__label {
+                  font-size: @fontSizeSmall;
+                  line-height: 16px;
+                }
+              }
+            }
+          }
+
+          &:last-child {
+            border: 0;
+
+            .SelectorDialogColumn {
+              .Header {
+                width: calc((90vw - @filterSelectorWidth) / 4);
+                max-width: calc(((@appWidthMaxLimit * 0.9) - @filterSelectorWidth) / 4);
+              }
+            }
+          }
+        }
+      }
+
+      .HealthFocusAreaFilter,
+      .HealthSystemChallengesFilter,
+      .HealthInformationSystem,
+      .PlatformFilter {
+        .SelectorDialogColumn {
+          .Header {
+            width: calc(90vw - @filterSelectorWidth);
+            max-width: calc((@appWidthMaxLimit * 0.9) - @filterSelectorWidth);
           }
         }
       }
