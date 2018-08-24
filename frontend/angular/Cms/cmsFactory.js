@@ -21,7 +21,7 @@ import trixComponent from '../Common/TrixComponent/trixComponent';
 function config ($stateProvider, $locationProvider, $ngReduxProvider) {
   $stateProvider
     .state('cms', {
-      url: '/:lng/cms',
+      url: '/:lng/:org/cms',
       template: '<planning-and-guidance></planning-and-guidance>',
       resolve: {
         cms: ['$ngRedux', ($ngRedux) => {

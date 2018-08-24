@@ -9,9 +9,10 @@
 export default {
   components: {
   },
-  async fetch ({store}) {
+  async fetch ({store, params}) {
     await store.dispatch('projects/loadUserProjects');
-    const project = store.getters['projects/getCurrentProject'];
+    const project = store.getters['projects/getUserProjectDetails'](+params.id);
+    await store.dispatch('countries/loadMapData');
     await store.dispatch('countries/loadGeoJSON', project.published.country);
   },
   mounted () {

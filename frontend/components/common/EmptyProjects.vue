@@ -10,7 +10,7 @@
     <el-row type="flex">
       <el-col>
         <nuxt-link
-          :to="localePath('index-projects-create')"
+          :to="localePath({name: 'organisation-projects-create', params: $route.params})"
           tag="button"
           class="el-button el-button--primary el-button--medium"
         >

@@ -60,7 +60,7 @@ const config = {
         }
       ],
       strategy: 'prefix',
-      rootRedirect: 'en',
+      rootRedirect: '/en/who/',
       defaultLocale: 'en',
       vueI18n: {
         fallbackLocale: 'en',

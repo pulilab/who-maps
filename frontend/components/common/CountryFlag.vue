@@ -9,7 +9,7 @@ export default {
   props: {
     code: {
       type: String,
-      required: true
+      default: null
     },
     small: {
       type: Boolean,

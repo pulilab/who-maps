@@ -56,7 +56,7 @@
         <div class="Divider" />
         <div class="DropdownLink" >
           <nuxt-link
-            :to="localePath('index-edit-profile')"
+            :to="localePath({name: 'organisation-edit-profile', params: $route.params})"
             @click.native="closePopover"
           >
             <span class="MenuIcon">
@@ -113,7 +113,7 @@ export default {
     logout () {
       this.closePopover();
       this.doLogout();
-      this.$router.push(this.localePath('index'));
+      this.$router.push(this.localePath('organisation'));
     }
   }
 };

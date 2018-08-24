@@ -205,11 +205,11 @@ export default {
       });
     },
     goToDraft () {
-      const localised = this.localePath({name: 'index-projects-id-edit', params: {...this.$route.params}});
+      const localised = this.localePath({name: 'organisation-projects-id-edit', params: {...this.$route.params}});
       this.$router.push(localised);
     },
     goToPublished () {
-      const localised = this.localePath({name: 'index-projects-id-published', params: {...this.$route.params}});
+      const localised = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params}});
       this.$router.push(localised);
     }
   }

@@ -54,7 +54,7 @@
               class="SecondaryAction LoginLink">
               <h6>Already signed up?</h6>
               <nuxt-link
-                :to="localePath('index-login')"
+                :to="localePath({name: 'organisation-login', params: $route.params})"
                 class="NuxtLink Small IconRight"
               >
                 <span>Login here</span><fa icon="angle-right" />
@@ -134,7 +134,7 @@ export default {
         });
         this.showSuccess = true;
         setTimeout(() => {
-          this.$router.push(this.localePath('index-edit-profile'));
+          this.$router.push(this.localePath({name: 'organisation-edit-profile', params: this.$route.params}));
         }, 5000);
       } catch (e) {
         this.setFormAPIErrors(e);

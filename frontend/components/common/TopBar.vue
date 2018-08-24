@@ -9,7 +9,7 @@
     >
 
       <el-col class="LogoHolder">
-        <nuxt-link :to="localePath('index')">
+        <nuxt-link :to="localePath({name: 'organisation', params: $route.params})">
           <img
             :src="countrySpecific ? countryLogoURL : '/logo-who-blue.svg'"
             :alt="countrySpecific ? 'Country logo' : 'WHO logo'"
@@ -42,13 +42,13 @@
             <div class="Separator" />
             <div>
               <nuxt-link
-                :to="localePath('index-signup')"
+                :to="localePath({name: 'organisation-signup', params: $route.params})"
                 class="HeaderBtn HideOnActive">Signup</nuxt-link>
             </div>
 
             <div>
               <nuxt-link
-                :to="localePath('index-login')"
+                :to="localePath({name: 'organisation-login', params: $route.params})"
                 class="HeaderBtn HideOnActive">Login</nuxt-link>
             </div>
           </el-col>
@@ -74,7 +74,7 @@
           <el-col class="AuthLinks">
             <div>
               <nuxt-link
-                :to="localePath('index-dashboard')"
+                :to="localePath({name: 'organisation-dashboard', params: $route.params})"
                 class="HeaderBtn"
               >
                 Dashboard
@@ -82,7 +82,7 @@
             </div>
             <div>
               <nuxt-link
-                :to="localePath('index-projects')"
+                :to="localePath({name: 'organisation-projects', params: $route.params})"
                 class="HeaderBtn"
               >
                 My Projects
@@ -90,7 +90,7 @@
             </div>
             <div>
               <nuxt-link
-                :to="localePath('index-cms')"
+                :to="localePath({name: 'organisation-cms', params: $route.params})"
                 class="HeaderBtn"
               >
                 Planning and Guidance
@@ -101,7 +101,7 @@
             </div>
             <div>
               <nuxt-link
-                :to="localePath('index-projects-create')"
+                :to="localePath({name: 'organisation-projects-create', params: $route.params})"
                 class="HeaderBtn">
                 <fa icon="plus-circle" />
                 New Project
