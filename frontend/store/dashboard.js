@@ -1,70 +1,73 @@
+import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator } from '../utilities/map';
 export const state = () => ({
+  ...stateGenerator(),
   columns: [
     {
       id: 1,
       label: 'Project name',
-      field: 'name',
-      thClass: 'ThName',
-      tdClass: 'TdName'
+      field: 'id',
+      thClass: 'CustomTH NameColumn',
+      tdClass: 'CustomTD NameColumn'
     },
     {
       id: 2,
       label: 'Country',
       field: 'country',
-      thClass: 'ThCountry',
-      tdClass: 'TdCountry'
+      thClass: 'ThCCustomTH CountryColumn',
+      tdClass: 'CustomTD CountryColumn'
+
     },
     {
       id: 3,
       label: 'Organisation Name',
-      field: 'organisation_name',
-      thClass: 'ThOrganisationName',
-      tdClass: 'TdOrganisationName'
+      field: 'organisation',
+      thClass: 'ThOrganisatiCustomTH OrganisationNameColumn',
+      tdClass: 'CustomTD OrganisationNameColumn'
     },
     {
       id: 4,
       label: 'Donors',
       field: 'donors',
-      thClass: 'ThDonors',
-      tdClass: 'TdDonors'
+      thClass: 'ThCustomTH DonorsColumn',
+      tdClass: 'CustomTD DonorsColumn'
     },
     {
       id: 5,
       label: 'Contact Name',
       field: 'contact_name',
-      thClass: 'ThContact_name',
-      tdClass: 'TdContact_name'
+      thClass: 'ThContacCustomTH Contact_nameColumn',
+      tdClass: 'CustomTD Contact_nameColumn'
     },
     {
       id: 6,
       label: 'Overview of digital health implementation',
       field: 'implementation_overview',
-      thClass: 'ThImplementationOverview',
-      tdClass: 'TdImplementationOverview'
+      thClass: 'ThImplementationOvCustomTH ImplementationOverviewColumn',
+      tdClass: 'CustomTD ImplementationOverviewColumn'
     },
     {
       id: 7,
       label: 'Geographic scope',
       field: 'geographic_scope',
-      thClass: 'ThGeographicScope',
-      tdClass: 'TdGeographicScope'
+      thClass: 'ThGeographiCustomTH GeographicScopeColumn',
+      tdClass: 'CustomTD GeographicScopeColumn'
     },
     {
       id: 8,
       label: 'Health Focus Areas',
       field: 'health_focus_areas',
-      thClass: 'ThHealthFocusAreas',
-      tdClass: 'TdHealthFocusAreas'
+      thClass: 'ThHealthFocuCustomTH HealthFocusAreasColumn',
+      tdClass: 'CustomTD HealthFocusAreasColumn'
     }
   ],
-  selectedColumns: [1, 2, 3],
-  rows: [
-    { id: 1, name: 'John', country: 'Sierra Leone', organisation_name: 'Pulilab', donors: ['Donor1, donor2'], contact_name: 'Torben', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
-    { id: 2, name: 'Jane', country: 'Sierra Leone', organisation_name: 'Pulilab', donors: ['Donor1, donor2'], contact_name: 'Torben', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
-    { id: 3, name: 'Susan', country: 'Sierra Leone', organisation_name: 'Pulilab', donors: ['Donor1, donor2'], contact_name: 'Torben', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
-    { id: 4, name: 'Chris', country: 'Sierra Leone', organisation_name: 'Pulilab', donors: ['Donor1, donor2'], contact_name: 'Torben', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
-    { id: 5, name: 'Dan', country: 'Sierra Leone', organisation_name: 'Pulilab', donors: ['Donor1, donor2'], contact_name: 'Torben', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
-    { id: 6, name: 'John', country: 'Sierra Leone', organisation_name: 'Pulilab', donors: ['Donor1, donor2'], contact_name: 'Torben', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] }
+  selectedColumns: [1, 2, 3, 4, 5, 6, 7, 8],
+  projects: [
+    { id: 1, country: 1, organisation: 1, donors: ['Donor1', 'donor2'], contact_name: 'Torben', contact_email: 't@pulilab.com', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
+    { id: 2, country: 2, organisation: 1, donors: ['Donor1', 'donor2'], contact_name: 'Torben', contact_email: 't@pulilab.com', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
+    { id: 3, country: 3, organisation: 1, donors: ['Donor1', 'donor2'], contact_name: 'Torben', contact_email: 't@pulilab.com', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
+    { id: 4, country: 4, organisation: 1, donors: ['Donor1', 'donor2'], contact_name: 'Torben', contact_email: 't@pulilab.com', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
+    { id: 5, country: 5, organisation: 1, donors: ['Donor1', 'donor2'], contact_name: 'Torben', contact_email: 't@pulilab.com', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
+    { id: 6, country: 6, organisation: 1, donors: ['Donor1', 'donor2'], contact_name: 'Torben', contact_email: 't@pulilab.com', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] }
   ],
   selectedDHI: [],
   selectedHFA: [],
@@ -73,16 +76,19 @@ export const state = () => ({
   selectedPlatforms: []
 });
 export const getters = {
+  ...gettersGenerator(),
   getAvailableColumns: state => [...state.columns.map(c => ({...c, selected: state.selectedColumns.includes(c.id)}))],
   getSelectedColumns: state => [...state.columns.filter(c => state.selectedColumns.includes(c.id)).map(c => ({...c}))],
-  getRows: state => [...state.rows.map(r => ({...r}))],
+  getProjects: state => [...state.projects.map(r => ({...r}))],
   getSelectedDHI: state => state.selectedDHI,
   getSelectedHFA: state => state.selectedHFA,
   getSelectedHSC: state => state.selectedHSC,
   getSelectedHIS: state => state.selectedHIS,
   getSelectedPlatforms: state => state.selectedPlatforms
 };
+
 export const actions = {
+  ...actionsGenerator(),
   setSelectedColumns ({commit}, columns) {
     commit('SET_SELECTED_COLUMNS', columns);
   },
@@ -103,6 +109,7 @@ export const actions = {
   }
 };
 export const mutations = {
+  ...mutationsGenerator(),
   SET_SELECTED_COLUMNS: (state, columns) => {
     state.selectedColumns = columns;
   },
