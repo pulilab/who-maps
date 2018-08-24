@@ -52,7 +52,7 @@
 </template>
 
 <script>
-
+import { mapGetters, mapActions } from 'vuex';
 import MapMixin from '../mixins/MapMixin';
 
 import NoSSR from 'vue-no-ssr';
@@ -69,7 +69,30 @@ export default {
     WorldZoomButton,
     SwitchViewBox
   },
-  mixins: [MapMixin]
+  mixins: [MapMixin],
+  computed: {
+    ...mapGetters({
+      allCountriesPin: 'dashboard/getCountryPins',
+      getActiveCountry: 'dashboard/getActiveCountry',
+      geoJson: 'countries/getGeoJsonLibrary',
+      getSelectedCountry: 'dashboard/getSelectedCountry',
+      subLevelPins: 'dashboard/getSubLevelPins',
+      getCountryProjects: 'dashboard/getCountryProjects',
+      mapReady: 'dashboard/getMapReady',
+      getActiveTab: 'dashboard/getProjectBoxActiveTab',
+      getActiveSubLevel: 'dashboard/getActiveSubLevel'
+    })
+  },
+  methods: {
+    ...mapActions({
+      setCurrentZoom: 'dashboard/setCurrentZoom',
+      setMapReady: 'dashboard/setMapReady',
+      setSelectedCountry: 'dashboard/setSelectedCountry',
+      setActiveCountry: 'dashboard/setActiveCountry',
+      setActiveTab: 'dashboard/setProjectBoxActiveTab',
+      setActiveSubLevel: 'dashboard/setActiveSubLevel'
+    })
+  }
 };
 </script>
 
