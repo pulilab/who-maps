@@ -1,7 +1,8 @@
 <template>
   <el-card
-    :body-style="{ padding: '12px' }"
-    :class="['ProjectCard', 'rounded', {hovered}]"
+    :body-style="{ padding: hideBorders ? '0px' : '12px' }"
+    :class="['ProjectCard', 'rounded', {hovered, 'HideBorders': hideBorders}]"
+    :shadow="cardShadow"
   >
     <div
       @click="goToProject"
@@ -20,18 +21,27 @@
             class="ProjectCountryOrg"
           >
             <el-col
-              v-show="searchChild"
+              v-show="showCountry"
               class="Country"
             >
               Sierra Leone
             </el-col>
-            <el-col class="Organisation">
+            <el-col
+              v-show="showOrganisation"
+              class="Organisation"
+            >
               eHealth Africa
+            </el-col>
+            <el-col
+              v-show="showVerified"
+              class="Verified"
+            >
+              Verified by country
             </el-col>
           </el-row>
 
           <el-row
-            v-if="searchChild"
+            v-if="showFoundIn"
             type="flex"
             class="FoundIn"
           >
@@ -47,9 +57,10 @@
         <el-col :span="2">
           <transition name="el-fade-in">
             <fa
-              v-show="hovered"
+              v-show="showArrow"
               icon="arrow-right" />
           </transition>
+          <project-legend :id="id" />
         </el-col>
       </el-row>
     </div>
@@ -57,9 +68,38 @@
 </template>
 
 <script>
+import ProjectLegend from './ProjectLegend';
+
 export default {
+  components: {
+    ProjectLegend
+  },
   props: {
-    searchChild: {
+    id: {
+      type: Number,
+      default: null
+    },
+    showCountry: {
+      type: Boolean,
+      default: false
+    },
+    showOrganisation: {
+      type: Boolean,
+      default: false
+    },
+    showFoundIn: {
+      type: Boolean,
+      default: false
+    },
+    showVerified: {
+      type: Boolean,
+      default: false
+    },
+    hideBorders: {
+      type: Boolean,
+      default: false
+    },
+    showArrowOnOver: {
       type: Boolean,
       default: false
     }
@@ -68,6 +108,14 @@ export default {
     return {
       hovered: false
     };
+  },
+  computed: {
+    cardShadow () {
+      return this.hideBorders ? 'never' : 'always';
+    },
+    showArrow () {
+      return this.hovered && this.showArrowOnOver;
+    }
   },
   methods: {
     goToProject () {
@@ -90,6 +138,10 @@ export default {
 
   .ProjectCard {
     cursor: pointer;
+
+    &.HideBorders {
+      border: none;
+    }
 
     &.hovered {
       border-color: @colorTextMuted;

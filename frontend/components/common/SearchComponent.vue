@@ -49,7 +49,7 @@
             >
               {{ results.length }} result(s):
             </el-col>
-            <el-col class="AdvancedSearch">
+            <el-col class="AdvancedSearchLink">
               <nuxt-link
                 class="NuxtLink IconRight"
                 to="dashboard"
@@ -76,7 +76,12 @@
             class="SearchResultItem"
           >
             <el-col>
-              <project-card search-child />
+              <project-card
+                show-found-in
+                show-country
+                show-organisation
+                show-arrow-on-over
+              />
             </el-col>
           </el-row>
         </el-card>
@@ -282,7 +287,7 @@ export default {
         color: @colorTextSecondary;
       }
 
-      .AdvancedSearch {
+      .AdvancedSearchLink {
         width: auto;
       }
     }

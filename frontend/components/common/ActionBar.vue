@@ -12,7 +12,7 @@
 
       <el-col class="ActionBarMenu">
         <el-row
-          v-if="$route.path.includes('/admin/')"
+          v-if="isAdmin"
           type="flex">
           <el-col class="ActionBarTab">
             <nuxt-link
@@ -34,7 +34,7 @@
           </el-col>
         </el-row>
         <el-row
-          v-if="$route.path.includes('/dashboard/')"
+          v-if="isDashboard"
           type="flex">
           <el-col class="ActionBarTab">
             <nuxt-link
@@ -51,19 +51,41 @@
         </el-row>
       </el-col>
 
-      <el-col class="SearchComponentWrapper">
+      <el-col
+        v-if="!isDashboard"
+        class="SearchComponentWrapper">
         <search-component />
       </el-col>
+      <template v-if="isDashboard">
+        <el-col class="PersonaSelectorWrapper">
+          <persona-selector/>
+        </el-col>
+        <el-col class="DashboardFiltersHeaderWrapper">
+          <dashboard-filters-header/>
+        </el-col>
+      </template>
     </el-row>
   </div>
 </template>
 
 <script>
 import SearchComponent from '../common/SearchComponent.vue';
+import PersonaSelector from '../dashboard/PersonaSelector';
+import DashboardFiltersHeader from '../dashboard/DashboardFiltersHeader';
 
 export default {
   components: {
-    SearchComponent
+    SearchComponent,
+    PersonaSelector,
+    DashboardFiltersHeader
+  },
+  computed: {
+    isAdmin () {
+      return this.$route.path.includes('/admin');
+    },
+    isDashboard () {
+      return this.$route.path.includes('/dashboard');
+    }
   }
 };
 </script>
