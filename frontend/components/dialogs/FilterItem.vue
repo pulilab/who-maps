@@ -80,7 +80,7 @@ export default {
   .FilterNavItem {
     display: block;
     padding: 20px;
-    border-bottom: 1px solid @colorGrayLight;
+    border-bottom: 1px solid @colorGrayLighter;
     cursor: pointer;
     transition: @transitionAll;
 

@@ -209,8 +209,7 @@ export default {
         min-width: @filterSelectorWidth;
         max-width: @filterSelectorWidth;
         background-color: @colorWhite;
-        border-right: 1px solid @colorGrayLight;
-        box-shadow: 1px 0 3px rgba(0,0,0,.1);
+        border-right: 2px solid @colorGrayLight;
       }
 
       .FilterArea {

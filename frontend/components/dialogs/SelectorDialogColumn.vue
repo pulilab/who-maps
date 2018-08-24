@@ -66,7 +66,6 @@ export default {
       font-size: @fontSizeBase;
       font-weight: 700;
       text-transform: uppercase;
-      box-shadow: 0 1px 3px rgba(0,0,0,.1);
 
       .el-checkbox {
         .el-checkbox__label {
@@ -78,8 +77,9 @@ export default {
     .Main {
       position: relative;
       top: @dialogHeaderFooterHeight;
-      padding: 20px 20px 50px 30px;
-      height: calc(80vh - (@dialogHeaderFooterHeight * 4) - 4px);
+      box-sizing: border-box;
+      padding: 10px 20px 50px 30px;
+      height: calc(80vh - (@dialogHeaderFooterHeight * 3));
       overflow-y: scroll;
     }
   }
