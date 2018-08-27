@@ -1,8 +1,10 @@
 <template>
   <div class="MainTable">
     <el-table
+      ref="mainTable"
       :data="projects"
       :max-height="tableMaxHeight"
+      :row-class-name="rowClassCalculator"
       border
       stripe
       style="width: 100%"
@@ -15,8 +17,8 @@
       />
       <el-table-column
         v-if="selectedColumns.includes(1)"
-        sortable
         fixed
+        sortable
         label="Project Name"
         width="180">
         <template slot-scope="scope">
@@ -116,6 +118,7 @@
       </el-pagination>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -138,21 +141,17 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 450,
-      pageSizeOption: [10, 20, 50, 100]
+      pageSizeOption: [10, 20, 50, 100],
+      tableMaxHeight: 500
     };
   },
   computed: {
     ...mapGetters({
       projects: 'dashboard/getProjects',
-      selectedColumns: 'dashboard/getSelectedColumns'
+      selectedColumns: 'dashboard/getSelectedColumns',
+      selectedRows: 'dashboard/getSelectedRows',
+      selectAll: 'dashboard/getSelectAll'
     }),
-    tableMaxHeight () {
-      // TODO fix this to work on resizes
-      if (this.$el) {
-        return window.getComputedStyle(this.$el).getPropertyValue('max-height');
-      }
-      return '500';
-    },
     min () {
       return 1 + this.pageSize * (this.currentPage - 1);
     },
@@ -160,12 +159,31 @@ export default {
       return this.pageSize * this.currentPage;
     }
   },
+  watch: {
+    selectAll: {
+      immediate: true,
+      handler (value) {
+        if (value) {
+          this.$refs.mainTable.toggleAllSelection();
+        }
+      }
+    }
+  },
+  mounted () {
+    // TODO: fix this
+    // const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height');
+    // this.tableMaxHeight = +maxHeight.replace('px', '');
+    // this.$refs.mainTable.doLayout();
+  },
   methods: {
     ...mapActions({
       setSelectedRows: 'dashboard/setSelectedRows'
     }),
     selectHandler (selection) {
       this.setSelectedRows(selection.map(s => s.id));
+    },
+    rowClassCalculator ({row}) {
+      return this.selectedRows.includes(row.id) ? 'Selected' : 'NotSelected';
     }
   }
 };

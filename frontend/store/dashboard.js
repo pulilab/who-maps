@@ -50,7 +50,8 @@ export const state = () => ({
   selectedHSC: [],
   selectedHIS: [],
   selectedPlatforms: [],
-  selectedRows: []
+  selectedRows: [],
+  selectAll: false
 });
 export const getters = {
   ...gettersGenerator(),
@@ -62,7 +63,8 @@ export const getters = {
   getSelectedHSC: state => state.selectedHSC,
   getSelectedHIS: state => state.selectedHIS,
   getSelectedPlatforms: state => state.selectedPlatforms,
-  getSelectedRows: state => state.selectedRows
+  getSelectedRows: state => state.selectedRows,
+  getSelectAll: state => state.selectAll
 };
 
 export const actions = {
@@ -87,6 +89,10 @@ export const actions = {
   },
   setSelectedRows ({commit}, rows) {
     commit('SET_SELECTED_ROWS', rows);
+    commit('SET_SELECT_ALL', false);
+  },
+  setSelectAll ({commit}, all) {
+    commit('SET_SELECT_ALL', all);
   }
 };
 export const mutations = {
@@ -111,5 +117,8 @@ export const mutations = {
   },
   SET_SELECTED_ROWS: (state, rows) => {
     state.selectedRows = rows;
+  },
+  SET_SELECT_ALL: (state, all) => {
+    state.selectAll = all;
   }
 };

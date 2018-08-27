@@ -28,6 +28,10 @@
             label="PDF"
             value="PDF"/>
         </el-select>
+        <template v-if="selectedRows.length > 0">
+          <div class="Separator"/>
+          <span @click="selectAll"> Select All 450 rows</span>
+        </template>
       </el-row>
     </el-col>
 
@@ -128,7 +132,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSelectedColumns: 'dashboard/setSelectedColumns'
+      setSelectedColumns: 'dashboard/setSelectedColumns',
+      setSelectAll: 'dashboard/setSelectAll'
     }),
     popperOpenHandler () {
       this.selectedColumns = [...this.columns.map(s => ({...s}))];
@@ -136,6 +141,9 @@ export default {
     updateColumns () {
       this.setSelectedColumns(this.selectedColumns.filter(s => s.selected).map(s => s.id));
       this.columnSelectorOpen = false;
+    },
+    selectAll () {
+      this.setSelectAll(true);
     }
   }
 };
