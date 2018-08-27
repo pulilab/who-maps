@@ -70,7 +70,8 @@ class SetupTests(APITestCase):
 
         # Update profile.
         self.org = Organisation.objects.create(name="org1")
-        self.country = Country.objects.create(name="country1", code='CTR1', project_approval=True)
+        self.country = Country.objects.create(name="country1", code='CTR1', project_approval=True,
+                                              region=Country.REGIONS[0][0])
         self.country_id = self.country.id
         self.country.name_en = 'Hungary'
         self.country.name_fr = 'Hongrie'

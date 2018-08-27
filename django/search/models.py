@@ -20,6 +20,7 @@ class ProjectSearch(ExtendedModel):
         "name": "project__name",
         "org": "organisation__name",
         "country": "country__name",
+        "region": "country__region",
         "overview": "project__data__implementation_overview",
         "loc": "coverage",
         "partner": "project__data__implementing_partners",  # TODO: will be refactored

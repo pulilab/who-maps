@@ -2,7 +2,6 @@ import pycountry
 
 from collections import defaultdict
 from django.conf import settings
-
 from django.core.mail import send_mail
 from django.contrib import admin
 from django.core import management
@@ -11,10 +10,8 @@ from django.template import loader
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext, override
 
-from core.utils import lazyJSONDumps
 from core.admin import ArrayFieldMixin
-from core.data.sub_level_types import SUB_LEVEL_TYPES
-from .models import Country, PartnerLogo, CountryField, MapFile
+from .models import Country, CountryField
 from .forms import CountryFieldAdminForm, CountryFieldAdminFormNoneReadOnlyOptions
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -46,41 +43,11 @@ class AddCountryFieldInline(ArrayFieldMixin, admin.TabularInline):
         return super(AddCountryFieldInline, self).get_queryset(request).none()
 
 
-class PartnerLogoInline(admin.TabularInline):
-    model = PartnerLogo
-    extra = 0
-    max_num = 4
-
-
-class MapFileInline(admin.StackedInline):
-    model = MapFile
-    extra = 0
-    max_num = 1
-    can_delete = False
-    readonly_fields = ('print_map_customizer',)
-
-    class Media:
-        js = ('https://unpkg.com/vue', 'vue-map-customizer.umd.min.js', )
-        css = {
-            'all': ('vue-map-customizer.css',)
-        }
-
-    def print_map_customizer(self, obj):
-        sub_level_types = lazyJSONDumps(SUB_LEVEL_TYPES)
-        markup = ('<div id="app"><vue-map-customizer map-url="{}" flag-base-url="/static/flags/"'
-                  ':country-id="{}" api-url="/api/country-map-data/" :sub-level-types=\'{}\'>'
-                  '</vue-map-customizer></div>'
-                  '<script src="/static/vue-map-customiser-entrypoint.js">'
-                  '</script>').format(obj.map_file.url, obj.country_id, sub_level_types)
-        return mark_safe(markup)
-    print_map_customizer.short_description = 'Map'
-
-
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
     list_display = ('name', 'code', 'project_approval')
     ordering = ('name',)
-    inlines = (MapFileInline, PartnerLogoInline, AddCountryFieldInline, CountryFieldInline)
+    inlines = (AddCountryFieldInline, CountryFieldInline)
     filter_horizontal = ('users',)
     readonly_fields = ('code', 'name', 'map_download')
 
@@ -118,7 +85,7 @@ class CountryAdmin(admin.ModelAdmin):
         super(CountryAdmin, self).save_model(request, obj, form, change)
         if change and 'users' in form.changed_data and obj.users:
             self._notify_user(obj, subject="You have been selected as the Country Admin for {country_name}",
-                              template_name="email/country_admin.html")
+                              template_name="email/added_to_group.html")
         if change and 'map_activated_on' in form.changed_data and obj.users:
             management.call_command('clean_maps', obj.code)
             self._notify_user(obj, subject="A new map for {country_name} has been activated",

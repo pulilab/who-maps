@@ -223,7 +223,16 @@ class SearchTests(SetupTests):
         self.assertEqual(response.json()['count'], 2)
 
     def test_filter_region(self):
-        pass
+        url = reverse("search-project-list")
+        data = {"region": 0}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
+
+        data = {"region": 1}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 0)
 
     def test_filter_donor(self):
         pass

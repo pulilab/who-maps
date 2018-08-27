@@ -1,7 +1,15 @@
+from collections import defaultdict
+
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.utils.dateformat import format
 from django.db.transaction import atomic
+from django.urls import reverse
+from django.template import loader
+from django.core.mail import send_mail
+from django.core import management
+from django.utils.translation import ugettext, override
+from django.conf import settings
 
 from user.models import UserProfile
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, CountryField, MapFile
@@ -64,19 +72,49 @@ class UpdateAdminMixin:
         new_super_admins = set(instance.super_admins.all().only('id')) - original_super_admins
 
         # remove new additions from any other user group
+        # TODO: check email template wording
         if new_users:
             instance.admins.remove(*new_users)
             instance.super_admins.remove(*new_users)
+            self.notify_users(new_users, instance, 'User', 'email/added_to_group.html')
 
         if new_admins:
             instance.users.remove(*new_admins)
             instance.super_admins.remove(*new_admins)
+            self.notify_users(new_admins, instance, 'Admin', 'email/added_to_group.html')
 
         if new_super_admins:
             instance.users.remove(*new_super_admins)
             instance.admins.remove(*new_super_admins)
+            self.notify_users(new_super_admins, instance, 'Super Admin', 'email/added_to_group.html')
 
         return instance
+
+    def notify_users(self, user_profiles, instance, group, template_name):
+        html_template = loader.get_template(template_name)
+        # TODO: replace this for frontend URLs for Country and Donor
+        change_url = reverse('admin:country_country_change', args=(instance.id,))
+
+        email_mapping = defaultdict(list)
+        for profile in user_profiles:
+            email_mapping[profile.language].append(profile.user.email)
+
+        for language, email_list in email_mapping.items():
+            with override(language):
+                subject = "You have been selected as {} for {}".format(group, instance.name)
+                subject = ugettext(subject)
+                html_message = html_template.render({'change_url': change_url,
+                                                     'group': group,
+                                                     'name': instance.name,
+                                                     'language': language})
+
+            send_mail(
+                subject=subject,
+                message="",
+                from_email=settings.FROM_EMAIL,
+                recipient_list=email_list,
+                html_message=html_message,
+                fail_silently=True)
 
 
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",
@@ -98,6 +136,13 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
         model = Country
         fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
         read_only_fields = READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS
+
+    def update(self, instance, validated_data):
+        map_changed = 'map_data' in validated_data and instance.map_data != validated_data['map_data']
+        instance = super().update(instance, validated_data)
+        if map_changed:
+            management.call_command('clean_maps', instance.code)
+        return instance
 
     def get_map_version(self, obj):
         if obj.map_activated_on:
