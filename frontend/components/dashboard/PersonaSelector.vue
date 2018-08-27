@@ -74,7 +74,7 @@ export default {
       return 'Me';
     },
     personaIcon () {
-      return 'user';
+      return 'user-circle';
     },
     donors () {
       return ['Path', 'WHO'];

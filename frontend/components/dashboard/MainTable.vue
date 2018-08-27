@@ -95,10 +95,22 @@ export default {
 </script>
 
 <style lang="less">
-@import 'vue-good-table/dist/vue-good-table.css';
-.MainTable {
-  .NameColumn {
-    min-width: 250px;
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
+  @import 'vue-good-table/dist/vue-good-table.css';
+
+  .MainTable {
+    margin: 0 40px;
+
+    .vgt-responsive {
+      min-width: calc(100vw - @advancedSearchWidth - 80px);
+      max-width: calc(100vw - @advancedSearchWidth - 80px);
+      min-height: calc(100vh - @topBarHeight - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
+      max-height: calc(100vh - @topBarHeight - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
+    }
+
+    .NameColumn {
+      min-width: 250px;
+    }
   }
-}
 </style>
