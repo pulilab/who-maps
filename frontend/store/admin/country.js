@@ -1,6 +1,6 @@
 export const state = () => ({
-  country: null,
-  editableCountry: null,
+  country: {},
+  editableCountry: {},
   userSelection: [],
   adminSelection: [],
   superadminSelection: []
