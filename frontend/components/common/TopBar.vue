@@ -22,17 +22,8 @@
         <el-row
           :class="{'AnonView': !user, 'LoggedInView': user}"
           type="flex"
-          justify="end">
-
-          <el-col
-            v-if="countrySpecific"
-            class="CountryHolder">
-            <img
-              :src="countryFlag"
-              alt="country flag"
-              class="CountryFlag">
-            <div class="CountryName">{{ countryData.name }}</div>
-          </el-col>
+          justify="end"
+          align="middle">
 
           <template v-if="!user">
             <el-col v-if="!countrySpecific">
@@ -40,7 +31,6 @@
             </el-col>
 
             <el-col class="AuthLinks">
-              <div class="Separator" />
               <div>
                 <nuxt-link
                   :to="localePath({name: 'organisation-signup', params: $route.params})"
@@ -94,6 +84,25 @@
               <user-dropdown />
             </el-col>
           </template>
+
+          <el-col
+            v-if="countrySpecific"
+            class="CountryHolder">
+            <el-row type="flex">
+              <el-col>
+                <div class="Separator" />
+              </el-col>
+              <el-col>
+                <img
+                  :src="countryFlag"
+                  alt="country flag"
+                  class="CountryFlag">
+              </el-col>
+              <el-col>
+                <div class="CountryName">{{ countryData.name }}</div>
+              </el-col>
+            </el-row>
+          </el-col>
 
           <el-col
             v-if="countrySpecific"
@@ -176,8 +185,7 @@ export default {
     }
 
     .RightPart {
-      padding: 16px 0;
-      transform: translateX(10px);
+      padding: 15px 0;
 
       > .el-row > .el-col {
         width: auto;
@@ -266,12 +274,23 @@ export default {
 
     .Separator {
       .SeparatorStyle();
-      margin: 0 10px;
+      display: inline-block;
+      margin: 0 20px;
     }
 
     .CountryHolder {
+      height: 24px;
+
       .CountryFlag {
-        height: 20px;
+        height: 14px;
+        margin-right: 6px;
+        padding: 5px 0;
+      }
+
+      .CountryName {
+        font-size: @fontSizeBase;
+        color: @colorTextSecondary;
+        line-height: 24px;
       }
     }
 
@@ -281,14 +300,14 @@ export default {
 
       > div {
         float: left;
+        height: 24px;
       }
     }
 
-    .LogoSmall {
-      position: relative;
-      top: -3px;
-      height: 30px;
-      margin-left: 20px;
+    .CountrySpecificMenu {
+      .LogoSmall {
+        height: 24px;
+      }
     }
   }
 </style>

@@ -1,19 +1,15 @@
 <template>
   <div class="LandingPage">
-    <welcome-box />
-    <div
-      v-if="!showCoverImage"
-      class="MapBoxContainer"
-    >
-      <landing-map />
+    <div class="MapBoxContainer">
+      <welcome-box />
+      <landing-map v-if="!showCoverImage" />
       <country-projects-box />
-    </div>
 
-    <img
-      v-if="showCoverImage"
-      :src="countryData.cover"
-      class="CoverImage"
-    >
+      <div
+        v-if="showCoverImage"
+        :style="{backgroundImage: `url(${countryData.cover})`}"
+        class="CoverImageBg" />
+    </div>
 
     <div class="InfoSignupContainer">
       <el-row type="flex">
@@ -98,6 +94,14 @@ export default {
       .SignupBox {
         padding: 0 40px;
       }
+    }
+
+    .CoverImageBg {
+      display: block;
+      height: 60vh;
+      background-color: @colorGrayLight;
+      background-size: cover;
+      background-repeat: no-repeat;
     }
 
     h2 {

@@ -60,9 +60,10 @@ export default {
       bottom: 40px;
       left: 40px;
       box-sizing: border-box;
+      overflow: hidden;
       width: 360px;
-      height: auto;
-      max-height: 420px;
+      // TODO
+      // max-height: ???
       padding: 20px 40px;
       color: @colorWhite;
       background: fade(@colorBrandPrimary, 90%);
@@ -74,6 +75,12 @@ export default {
 
       h6 {
         margin: 10px 0 20px;
+        // TODO
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 10;
+        -webkit-box-orient: vertical;
+        //
       }
 
       .CloseWelcomeBox {
