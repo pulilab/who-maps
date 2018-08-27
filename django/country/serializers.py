@@ -126,7 +126,6 @@ COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests
 
 class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer):
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
-    map_files = MapFileSerializer(many=True, read_only=True)
     map_version = serializers.SerializerMethodField()
     user_requests = serializers.SerializerMethodField()
     admin_requests = serializers.SerializerMethodField()

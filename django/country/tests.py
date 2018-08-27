@@ -960,7 +960,9 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['country'], self.country.id)
 
-        url = reverse('map-file-detail', kwargs={'pk': response.json()['id']})
+        map_file_id = response.json()['id']
+
+        url = reverse('map-file-detail', kwargs={'pk': map_file_id})
         map_file2 = SimpleUploadedFile("file2.txt", b"file_content2")
         data = {
             'country': self.country.id,
@@ -970,10 +972,17 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['country'], self.country.id)
 
-        url = reverse('map-file-detail', kwargs={'pk': response.json()['id']})
+        url = reverse('map-file-detail', kwargs={'pk': map_file_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['country'], self.country.id)
+
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        response = self.test_user_client.get(url)
+        print(response.json())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['map_files']), 1)
+        self.assertEqual(response.json()['map_files'][0], map_file_id)
 
     def test_country_admin_update_map_data(self):
         url = reverse("country-detail", kwargs={"pk": self.country.id})
