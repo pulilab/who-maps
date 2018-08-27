@@ -134,13 +134,19 @@
       </el-row>
     </collapsible-card>
 
-    <collapsible-card title="Country specific questionaire">
+    <!-- <collapsible-card title="Country specific questionaire">
       <h1>Country specific questionaire</h1>
       <dha-questionaire :label="'Country specific questionaire'"/>
-    </collapsible-card>
+    </collapsible-card> -->
 
     <collapsible-card title="Country map">
-      <vue-map-customizer/>
+      <div v-if="!country.map_files.length || forceMapFileChange">
+        TODO: File uploader
+      </div>
+      <div v-if="country.map_files.length && !forceMapFileChange">
+        <vue-map-customizer/>
+        <el-button @click="forceMapFileChange = true">Change map file</el-button>
+      </div>
     </collapsible-card>
 
     <hr>
@@ -209,7 +215,8 @@ export default {
             }
           }}
         ]
-      }
+      },
+      forceMapFileChange: false
     };
   },
 
