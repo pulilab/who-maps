@@ -101,6 +101,7 @@ export default {
       height: 60vh;
       background-color: @colorGrayLight;
       background-size: cover;
+      background-position: center center;
       background-repeat: no-repeat;
     }
 
