@@ -312,6 +312,14 @@ i[class*="el-icon-"] {
     }
   }
 
+  &.PrimaryButton {
+    color: @colorBrandAccent;
+
+    &:hover {
+      color: lighten(@colorBrandAccent, 10%);
+    }
+  }
+
   // SAMPLE MARKUP:
   //
   // <el-button
@@ -322,7 +330,7 @@ i[class*="el-icon-"] {
     color: @colorTextSecondary;
 
     &:hover {
-      color: darken(@colorTextSecondary, 10%);
+      color: lighten(@colorTextSecondary, 10%);
 
       .ButtonHint {
         color: @colorGray;
@@ -351,7 +359,7 @@ i[class*="el-icon-"] {
     color: @colorGray;
 
     &:hover {
-      color: darken(@colorGray, 10%);
+      color: lighten(@colorGray, 10%);
     }
   }
 }
@@ -374,29 +382,6 @@ fieldset {
 .el-input {
   .el-input__inner {
     font-family: Arial, sans-serif;
-  }
-
-  // custom select caret
-  .el-select__caret {
-    &.el-icon-arrow-up {
-      transform: translateX(4px) !important;
-      width: 39px;
-      height: calc(100% - 2px);
-      margin: 1px 0;
-      background-color: #EDEDED;
-      border-left: 1px solid @colorGray;
-
-      &::before {
-        content: "\E60B";
-        color: @colorTextSecondary;
-      }
-
-      &.is-reverse {
-        &::before {
-          content: "\E60C";
-        }
-      }
-    }
   }
 
   &.el-input-group {
@@ -475,6 +460,40 @@ fieldset {
 }
 
 .el-select {
+
+  // small
+  &.el-select--small {
+    .el-select__caret {
+      &.el-icon-arrow-up {
+        width: 31px;
+      }
+    }
+  }
+
+  // custom select caret
+  .el-select__caret {
+    &.el-icon-arrow-up {
+      transform: translateX(4px) !important;
+      width: 39px;
+      height: calc(100% - 2px);
+      margin: 1px 0;
+      background-color: #EDEDED;
+      border-left: 1px solid @colorGray;
+
+      &::before {
+        content: "\E60B";
+        color: @colorTextSecondary;
+      }
+
+      &.is-reverse {
+        &::before {
+          content: "\E60C";
+        }
+      }
+    }
+  }
+
+  // inner tags
   .el-select__tags {
     .el-select__tags-text {
       color: @colorTextPrimary;
@@ -789,9 +808,13 @@ fieldset {
       font-size: @fontSizeSmall - 1;
       font-weight: 700;
       color: @colorGray;
-      line-height: 40px;
+      line-height: 30px;
       text-transform: uppercase;
       .textTruncate();
+
+      .svg-inline--fa {
+        margin-right: 2px;
+      }
     }
 
     .CustomPopoverList {
@@ -802,7 +825,7 @@ fieldset {
 
         li {
           position: relative;
-          padding: 0 20px 0 12px;
+          padding: 0 28px 0 12px;
           height: 40px;
           font-size: @fontSizeBase;
           line-height: 40px;
@@ -820,7 +843,8 @@ fieldset {
             }
           }
 
-          &.Active {
+          &.Active,
+          &.Selected {
             background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
             color: @colorBrandPrimary;
             font-weight: 700;
@@ -842,6 +866,30 @@ fieldset {
             transition: @transitionFadeLinear;
           }
         }
+      }
+
+      &.Small {
+        li {
+          height: 30px;
+          font-size: @fontSizeSmall;
+          line-height: 30px;
+        }
+      }
+    }
+
+    .CustomPopoverActions {
+      height: 40px;
+      margin: 0;
+      padding: 0 12px;
+      border-top: 1px solid @colorGrayLight;
+      // background-color: @colorGrayLightest;
+
+      .el-row {
+        height: 100%;
+      }
+
+      .PrimaryButton {
+        float: right;
       }
     }
   }

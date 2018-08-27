@@ -1,7 +1,7 @@
 <template>
   <div class="PersonaSelector">
     <el-popover
-      placement="bottom-center"
+      placement="bottom-end"
       popper-class="CustomPopover PersonaSelectorPopover"
       trigger="click"
     >
@@ -12,44 +12,45 @@
       >
         View as:
         <div :class="['PersonaBox', personaClass]">
-          <fa :icon="personaIcon" />
+          <fa
+            :icon="personaIcon"
+            class="PersonaIcon" />
           {{ persona }}
         </div>
         <fa icon="caret-down" />
       </el-button>
       <div class="CustomPopoverList">
         <ul>
-          <li class="Header">
+          <div class="el-popover__title">
             <fa icon="user" />
             Normal View
-          </li>
+          </div>
           <li class="Active">
+            <fa icon="check" />
             {{ user.name }} (me)
           </li>
-        </ul>
-        <ul>
-          <li class="Header">
+
+          <div class="el-popover__title">
             <fa icon="handshake" />
             Donor View
-          </li>
+          </div>
           <li
             v-for="donor in donors"
             :key="donor"
-            class="Active"
           >
+            <fa icon="check" />
             {{ donor }}
           </li>
-        </ul>
-        <ul>
-          <li class="Header">
+
+          <div class="el-popover__title">
             <fa icon="globe" />
             Country View
-          </li>
+          </div>
           <li
             v-for="moh in ministeryOfHealth"
             :key="moh"
-            class="Active"
           >
+            <fa icon="check" />
             {{ moh }} MoH
           </li>
         </ul>
@@ -73,7 +74,7 @@ export default {
       return 'Me';
     },
     personaIcon () {
-      return 'user';
+      return 'user-circle';
     },
     donors () {
       return ['Path', 'WHO'];
@@ -90,14 +91,20 @@ export default {
   @import "~assets/style/mixins.less";
 
   .PersonaSelector {
+    text-align: right;
 
     .PersonaBox {
       display: inline;
+      line-height: @actionBarHeight - 12px;
+
+      .PersonaIcon {
+        margin: 0 2px 0 8px;
+      }
     }
 
     .el-button--text {
       padding: 0;
-      color: white;
+      color: @colorWhite;
     }
 
     .PersonaSelectorPopover {
