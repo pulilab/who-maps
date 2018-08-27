@@ -118,6 +118,15 @@ export default {
       width: auto;
     }
 
+    .PersonaSelectorWrapper {
+      width: auto;
+    }
+
+    .DashboardFiltersHeaderWrapper {
+      min-width: @advancedSearchWidth;
+      max-width: @advancedSearchWidth;
+    }
+
     .ActionBarMenu {
       width: 100%;
       height: @actionBarHeight;
