@@ -37,9 +37,5 @@ export default {
         margin-bottom: 10px;
       }
     }
-
-    .CountrySelectPopper {
-      max-width: 100%;
-    }
   }
 </style>

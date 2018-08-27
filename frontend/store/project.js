@@ -40,11 +40,12 @@ const cleanState = () => ({
 });
 
 export const state = () => ({
-  ...cleanState()
+  ...cleanState(),
+  loading: false
 });
 
 export const getters = {
-  getProjectData: state => ({...state, published: undefined}),
+  getProjectData: state => ({...state, published: undefined, loading: undefined}),
   getName: state => state.name,
   getOrganisation: state => state.organisation,
   getCountry: state => state.country,
@@ -75,7 +76,8 @@ export const getters = {
   getWiki: state => state.wiki,
   getInteroperabilityLinks: state => state.interoperability_links,
   getInteroperabilityStandards: state => state.interoperability_standards,
-  getPublished: state => state.published
+  getPublished: state => state.published,
+  getLoading: state => state.loading
 };
 
 export const actions = {
@@ -242,21 +244,26 @@ export const actions = {
     commit('SET_TEAM', data.team);
     commit('SET_VIEWERS', data.viewers);
   },
-  async createProject ({getters, dispatch}) {
+  async createProject ({getters, dispatch, commit}) {
+    commit('SET_LOADING', 'draft');
     const draft = getters.getProjectData;
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.post('api/projects/draft/', parsed);
     dispatch('projects/addProjectToList', data, {root: true});
+    commit('SET_LOADING', false);
     return data.id;
   },
-  async saveDraft ({getters, dispatch}, id) {
+  async saveDraft ({getters, dispatch, commit}, id) {
+    commit('SET_LOADING', 'draft');
     const draft = getters.getProjectData;
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
     await dispatch('saveTeamViewers', id);
     dispatch('projects/updateProject', data, {root: true});
+    commit('SET_LOADING', false);
   },
   async publishProject ({getters, dispatch, commit}, id) {
+    commit('SET_LOADING', 'publish');
     const draft = getters.getProjectData;
     const parsed = apiWriteParser(draft);
     // TODO: Remove this on donor feature creation
@@ -266,14 +273,17 @@ export const actions = {
     const parsedResponse = apiReadParser(data.draft);
     commit('SET_PUBLISHED', Object.freeze(parsedResponse));
     dispatch('projects/updateProject', data, {root: true});
+    commit('SET_LOADING', false);
   },
-  async discardDraft ({getters, dispatch}, id) {
+  async discardDraft ({getters, dispatch, commit}, id) {
+    commit('SET_LOADING', 'discard');
     const published = getters.getPublished;
     const parsed = apiWriteParser(published);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
     const parsedResponse = apiReadParser(data.draft);
     await dispatch('setProjectState', parsedResponse);
     dispatch('projects/updateProject', data, {root: true});
+    commit('SET_LOADING', false);
   }
 };
 
@@ -376,6 +386,9 @@ export const mutations = {
   },
   SET_PUBLISHED: (state, published) => {
     Vue.set(state, 'published', {...published});
+  },
+  SET_LOADING: (state, loading) => {
+    state.loading = loading;
   }
 
 };

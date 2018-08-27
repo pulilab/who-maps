@@ -164,7 +164,7 @@ export default {
           font-size: @fontSizeSmall - 1;
           font-weight: 700;
           text-transform: uppercase;
-          color: @colorTextMuted;
+          color: @colorGray;
         }
 
         .CountryName,
@@ -199,7 +199,7 @@ export default {
 
       &:hover {
         /* $--color-primary-light-9 */
-        background-color: #ECF5FF;
+        background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
       }
 
       a,
@@ -207,6 +207,7 @@ export default {
         color: @colorBrandPrimary !important;
         font-weight: 700;
         text-decoration: none;
+        white-space: nowrap;
       }
 
       .MenuIcon {

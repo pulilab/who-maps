@@ -45,4 +45,8 @@ export default {
 <style lang="less">
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
+
+  .CountrySelectPopper {
+    max-width: @advancedSearchWidth - 40px;
+  }
 </style>

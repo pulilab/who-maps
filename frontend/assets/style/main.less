@@ -34,12 +34,9 @@ html {
 }
 
 body {
-  .limitPageWidth();
   min-height: 100%;
-  margin: 0 auto !important;
+  margin: 0 ;
   padding: 0;
-  background-color: @colorGrayLightest;
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
   // Brand typo
   font-family: Arial, sans-serif !important;
   text-rendering: optimizeLegibility;
@@ -49,6 +46,14 @@ body {
   height: auto !important;
   -webkit-tap-highlight-color: transparent;
   //
+
+  > div {
+    .limitPageWidth();
+    margin: 0 auto !important;
+    padding: 0;
+    background-color: @colorGrayLightest;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
+  }
 }
 
 a {
@@ -398,7 +403,7 @@ fieldset {
     .el-input-group__append,
     .el-input-group__prepend {
       padding: 0 12px;
-      color: @colorGray;
+      color: @colorTextSecondary;
     }
   }
 }
@@ -516,6 +521,10 @@ fieldset {
       padding: 10px 0;
       line-height: 19px;
 
+      &.CheckboxSmall {
+        padding: 5px 0;
+      }
+
       .el-checkbox__input {
         vertical-align: top;
         top: 2px;
@@ -540,6 +549,10 @@ fieldset {
       box-sizing: border-box;
       line-height: 19px;
       padding: 10px 0;
+
+      &.CheckboxSmall {
+        padding: 5px 0;
+      }
 
       .el-checkbox__input {
         vertical-align: top;
@@ -570,6 +583,15 @@ fieldset {
       display: block;
       margin: 0;
     }
+  }
+}
+
+// Switch
+
+.el-switch {
+  .el-switch__core {
+    border-color: @colorTextMuted;
+    background-color: @colorTextMuted;
   }
 }
 
@@ -672,7 +694,7 @@ fieldset {
       text-align: left;
 
       .el-button {
-        margin: 0 15px;
+        margin: 0 18px;
       }
     }
   }
@@ -767,7 +789,7 @@ fieldset {
       font-size: @fontSizeSmall - 1;
       font-weight: 700;
       color: @colorGray;
-      line-height: 30px;
+      line-height: 40px;
       text-transform: uppercase;
       .textTruncate();
     }
@@ -781,9 +803,9 @@ fieldset {
         li {
           position: relative;
           padding: 0 20px 0 12px;
-          height: 30px;
-          font-size: @fontSizeSmall;
-          line-height: 30px;
+          height: 40px;
+          font-size: @fontSizeBase;
+          line-height: 40px;
           color: @colorTextSecondary;
           cursor: pointer;
           transition: @transitionAll;
@@ -799,6 +821,7 @@ fieldset {
           }
 
           &.Active {
+            background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
             color: @colorBrandPrimary;
             font-weight: 700;
 

@@ -58,6 +58,7 @@ export default {
       box-sizing: border-box;
       padding: 0 30px;
       width: calc((90vw / 4) - 1px);
+      max-width: calc((@appWidthMaxLimit * 0.9) / 4 - 1px);
       height: @dialogHeaderFooterHeight;
       line-height: @dialogHeaderFooterHeight;
       border-bottom: 1px solid @colorGrayLight;
@@ -65,14 +66,20 @@ export default {
       font-size: @fontSizeBase;
       font-weight: 700;
       text-transform: uppercase;
-      box-shadow: 0 1px 3px rgba(0,0,0,.1);
+
+      .el-checkbox {
+        .el-checkbox__label {
+          font-weight: 700;
+        }
+      }
     }
 
     .Main {
       position: relative;
       top: @dialogHeaderFooterHeight;
-      padding: 20px 20px 40px 30px;
-      height: calc(80vh - (@dialogHeaderFooterHeight*4) + 6px);
+      box-sizing: border-box;
+      padding: 10px 20px 50px 30px;
+      height: calc(80vh - (@dialogHeaderFooterHeight * 3));
       overflow-y: scroll;
     }
   }

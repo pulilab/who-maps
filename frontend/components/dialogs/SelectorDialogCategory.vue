@@ -1,5 +1,7 @@
 <template>
   <div :class="['SelectorDialogCategory', {'NoParent': !hideHeader}]">
+    <!-- TODO -->
+    <!-- Something is wrong with the '.Opened' toggler class... -->
     <div
       v-show="!hideHeader"
       :class="['CategoryName', {'Opened': toggleCategory}]"
@@ -32,7 +34,7 @@
           v-for="item in items"
           :key="item.id"
           :value="values.includes(item.id)"
-          class="Item CheckboxSmall"
+          class="Item"
           @change="filterChange(item.id)"
         >
           {{ getItemName(item) }}
@@ -182,11 +184,6 @@ export default {
     .Item {
       display: block;
       margin: 0;
-
-      .el-checkbox__label {
-        font-size: @fontSizeSmall;
-        line-height: 15px;
-      }
     }
   }
 

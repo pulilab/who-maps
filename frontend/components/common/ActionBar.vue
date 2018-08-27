@@ -133,7 +133,7 @@ export default {
       position: relative;
       width: auto;
       height: 100%;
-      margin-right: 10px;
+      margin-right: 20px;
       padding: 0 10px;
       font-size: @fontSizeBase;
       line-height: @actionBarHeight;
