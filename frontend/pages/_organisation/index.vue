@@ -1,10 +1,19 @@
 <template>
   <div class="LandingPage">
-    <div class="MapBoxContainer">
+    <div
+      v-if="!showCoverImage"
+      class="MapBoxContainer"
+    >
       <landing-map />
       <welcome-box />
       <country-projects-box />
     </div>
+
+    <img
+      v-if="showCoverImage"
+      :src="countryData.cover"
+      class="CoverImage"
+    >
 
     <div class="InfoSignupContainer">
       <el-row type="flex">
@@ -29,6 +38,7 @@ import CountryProjectsBox from '../../components/landing/CountryProjectsBox.vue'
 import InfoBox from '../../components/landing/InfoBox.vue';
 import CentralBox from '../../components/landing/CentralBox.vue';
 import AboutSection from '../../components/landing/AboutSection.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -38,6 +48,14 @@ export default {
     CentralBox,
     AboutSection,
     CountryProjectsBox
+  },
+  computed: {
+    ...mapGetters({
+      countryData: 'landing/getCountryData'
+    }),
+    showCoverImage () {
+      return this.countryData && this.countryData.cover;
+    }
   }
 };
 </script>
@@ -50,6 +68,11 @@ export default {
 
     .MapBoxContainer {
       position: relative;
+    }
+
+    .CoverImage {
+      width: 100%;
+      height: auto;
     }
 
     .InfoSignupContainer {
