@@ -6,13 +6,15 @@
       border
       stripe
       style="width: 100%"
+      @select="selectHandler"
+      @select-all="selectHandler"
     >
       <el-table-column
         type="selection"
         width="55"
-        fixed
       />
       <el-table-column
+        v-if="selectedColumns.includes(1)"
         sortable
         fixed
         label="Project Name"
@@ -26,6 +28,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(2)"
         sortable
         label="Country"
         width="180">
@@ -37,6 +40,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(3)"
         sortable
         label="Organisation Name"
         width="180">
@@ -47,6 +51,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(4)"
         sortable
         label="Donors"
         width="180">
@@ -60,6 +65,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(5)"
         sortable
         label="Contact Name"
         width="180">
@@ -69,6 +75,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(6)"
         sortable
         label="Implementation Overview"
         width="180">
@@ -77,6 +84,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(7)"
         sortable
         label="Geographic Scope"
         width="180">
@@ -85,6 +93,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(8)"
         sortable
         label="Health Focus Areas"
         width="180">
@@ -110,7 +119,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 import ProjectCard from '../common/ProjectCard';
 import CountryItem from '../common/CountryItem';
@@ -134,7 +143,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projects: 'dashboard/getProjects'
+      projects: 'dashboard/getProjects',
+      selectedColumns: 'dashboard/getSelectedColumns'
     }),
     tableMaxHeight () {
       // TODO fix this to work on resizes
@@ -148,6 +158,14 @@ export default {
     },
     max () {
       return this.pageSize * this.currentPage;
+    }
+  },
+  methods: {
+    ...mapActions({
+      setSelectedRows: 'dashboard/setSelectedRows'
+    }),
+    selectHandler (selection) {
+      this.setSelectedRows(selection.map(s => s.id));
     }
   }
 };

@@ -11,7 +11,12 @@
           size="small"
           class="IconLeft">
           <fa icon="download"/>
-          Export selected
+          <span v-show="selectedRows.length === 0">
+            Export selected
+          </span>
+          <span v-show="selectedRows.length > 0">
+            Export {{ selectedRows.length }} project(s)
+          </span>
         </el-button>
         <el-select
           v-model="exportType"
@@ -114,7 +119,8 @@ export default {
   computed: {
     ...mapGetters({
       columns: 'dashboard/getAvailableColumns',
-      selected: 'dashboard/getSelectedColumns'
+      selected: 'dashboard/getSelectedColumns',
+      selectedRows: 'dashboard/getSelectedRows'
     }),
     settingsTitle () {
       return `main fields (${this.selected.length}/${this.columns.length})`;
