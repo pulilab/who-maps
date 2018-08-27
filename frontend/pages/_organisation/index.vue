@@ -1,11 +1,11 @@
 <template>
   <div class="LandingPage">
+    <welcome-box />
     <div
       v-if="!showCoverImage"
       class="MapBoxContainer"
     >
       <landing-map />
-      <welcome-box />
       <country-projects-box />
     </div>
 
