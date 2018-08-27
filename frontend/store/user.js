@@ -63,10 +63,10 @@ export const actions = {
     }
   },
 
-  async updateUserProfile ({ getters, dispatch }, putObj) {
+  async updateUserProfile ({ getters, commit }, putObj) {
     const userId = getters.getProfile.id;
-    await this.$axios.put(`/api/userprofiles/${userId}/`, putObj);
-    await dispatch('loadProfile');
+    const { data } = await this.$axios.put(`/api/userprofiles/${userId}/`, putObj);
+    commit('SET_PROFILE', data);
   },
 
   async setToken ({ commit, dispatch }, tokens) {
