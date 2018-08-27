@@ -281,7 +281,8 @@ export default {
           } else if (rawLogo.image) {
             return ({
               url: rawLogo.image,
-              name: ('' + rawLogo.image).split('/').pop()
+              name: ('' + rawLogo.image).split('/').pop(),
+              id: rawLogo.id
             });
           }
         });

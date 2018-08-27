@@ -121,19 +121,23 @@ export const actions = {
     }
   },
 
-  synchPartnerLogos ({ getters, dispatch }) {
+  async synchPartnerLogos ({ getters, dispatch }) {
+    const promArr = [];
+
     getters.getCountry.partner_logos.forEach(async logo => {
       if (logo.raw) {
-        await dispatch('postPartnerLogo', logo.raw);
+        promArr.push({action: 'postPartnerLogo', data: logo.raw});
       }
     });
 
     getters.getStableCountry.partner_logos.forEach(async logo => {
       const isStillThere = !!getters.getCountry.partner_logos.find(newLogo => newLogo.id === logo.id);
       if (!isStillThere) {
-        await dispatch('delPartnerLogo', logo.id);
+        promArr.push({action: 'delPartnerLogo', data: logo.id});
       }
     });
+
+    return Promise.all(promArr.map(promObj => dispatch(promObj.action, promObj.data)));
   },
 
   async postPartnerLogo ({ rootGetters }, img) {
@@ -221,5 +225,4 @@ export const mutations = {
   SET_SUPER_ADMIN_SELECTION: (state, data) => {
     state.superadminSelection = data;
   }
-
 };
