@@ -1,8 +1,6 @@
 <template>
-  <!-- TODO -->
-  <!-- Pls add '.Active' class to selected menu -->
   <div
-    class="FilterNavItem"
+    :class="['FilterNavItem', {'Active': active}]"
     @click="setActiveItem">
     <el-row
       type="flex"
@@ -12,18 +10,15 @@
           {{ header }}
         </div>
         <div class="Bottom">
-          <!-- TODO -->
-          <!-- This is not working... -->
-          <span v-show="!selected">
+          <span v-show="selected.length === 0">
             Show all
           </span>
-          <template v-if="selected">
-            <!-- TODO -->
-            <!-- Only show button when at least one item is selected -->
+          <template v-if="selected.length > 0">
             <span class="Filtered">
               {{ selected.length }} item(s) selected
             </span>
             <el-button
+              v-show="selected.lenght > 0"
               type="text"
               size="small"
               class="DeleteButton"
