@@ -233,9 +233,6 @@ export default {
       userSelection: 'admin/country/getUserSelection',
       adminSelection: 'admin/country/getAdminSelection',
       superadminSelection: 'admin/country/getSuperadminSelection',
-      getUsers: 'admin/country/getUsers',
-      getAdmins: 'admin/country/getAdmins',
-      getSuperadmins: 'admin/country/getSuperadmins',
       userProfile: 'user/getProfile'
     }),
 
@@ -363,7 +360,7 @@ export default {
     },
 
     partnerLogos (newArr, oldArr) {
-      // This handles error message placing for wrong image formats
+      // Handles error message placing for wrong image formats
       const filteredArray = [...this.partnerLogos.filter(image => {
         return !image.raw || (image.raw && image.raw.name.endsWith('.jpg')) || (image.raw && image.raw.name.endsWith('.jpeg')) || (image.raw && image.raw.name.endsWith('.png'));
       })];

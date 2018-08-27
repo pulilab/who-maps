@@ -11,16 +11,14 @@ export const state = () => ({
 export const getters = {
   getStableCountry: state => state.country,
   getCountry: state => state.editableCountry,
+
   getCoverText: state => state.editableCountry && state.editableCountry.cover_text,
   getFooterTitle: state => state.editableCountry && state.editableCountry.footer_title,
   getFooterText: state => state.editableCountry && state.editableCountry.footer_text,
+
   getUserSelection: state => state.userSelection,
   getAdminSelection: state => state.adminSelection,
-  getSuperadminSelection: state => state.superadminSelection,
-
-  getUsers: state => state.country.users,
-  getAdmins: state => state.country.admins,
-  getSuperadmins: state => state.country.super_admins
+  getSuperadminSelection: state => state.superadminSelection
 };
 
 export const actions = {
@@ -174,30 +172,17 @@ export const actions = {
     await this.$axios.delete(`/api/country-partner-logos/${id}/`);
   },
 
-  async synchAdminUserArrays ({ rootGetters, getters, state }, id) {
-    const oldUsersStr = JSON.stringify([...state.country.users].sort());
-    const newUsersStr = JSON.stringify([...state.editableCountry.users].sort());
-    const oldAdminsStr = JSON.stringify([...state.country.admins].sort());
-    const newAdminsStr = JSON.stringify([...state.editableCountry.admins].sort());
-    const oldSuperAdminsStr = JSON.stringify([...(state.country.super_admins || [])].sort());
-    const newSuperAdminsStr = JSON.stringify([...(state.editableCountry.super_admins || [])].sort());
-
-    const patchObj = {};
-
-    if (oldUsersStr !== newUsersStr) {
-      patchObj.users = getters.getCountry.users || [];
+  async synchAdminUserArrays ({ rootGetters, getters }) {
+    const countryId = rootGetters['user/getProfile'].country;
+    const patchObj = {
+      users: getters.getCountry.users,
+      admins: getters.getCountry.admins
+    };
+    const userProfile = rootGetters['user/getProfile'];
+    if (userProfile.account_type === 'SCA' || userProfile.is_superuser) {
+      patchObj.super_admins = getters.getCountry.super_admins;
     }
-    if (oldAdminsStr !== newAdminsStr) {
-      patchObj.admins = getters.getCountry.admins || [];
-    }
-    if (oldSuperAdminsStr !== newSuperAdminsStr) {
-      patchObj.super_admins = getters.getCountry.super_admins || [];
-    }
-
-    if (patchObj.users || patchObj.admins || patchObj.super_admins) {
-      const countryId = rootGetters['user/getProfile'].country;
-      await this.$axios.patch(`/api/countries/${countryId}/`, patchObj);
-    }
+    await this.$axios.patch(`/api/countries/${countryId}/`, patchObj);
   },
 
   setCountryField ({ commit }, { field, data }) {
