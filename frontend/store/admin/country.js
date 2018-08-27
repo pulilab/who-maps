@@ -1,3 +1,5 @@
+import { Message } from 'element-ui';
+
 export const state = () => ({
   country: {},
   editableCountry: {},
@@ -62,13 +64,28 @@ export const actions = {
   },
 
   async saveChanges ({ dispatch }) {
-    await Promise.all([
-      dispatch('patchInfoStrings'),
-      dispatch('patchCountryImages'),
-      dispatch('synchPartnerLogos'),
-      dispatch('synchAdminUserArrays')
-    ]);
-    await dispatch('fetchData');
+    try {
+      await Promise.all([
+        dispatch('patchInfoStrings'),
+        dispatch('patchCountryImages'),
+        dispatch('synchPartnerLogos'),
+        dispatch('synchAdminUserArrays')
+      ]);
+      await dispatch('fetchData');
+      window.scrollTo(0, 0);
+      Message({
+        message: 'Country data succesfully updated',
+        type: 'success',
+        showClose: true
+      });
+    } catch (e) {
+      console.error(e);
+      Message({
+        message: 'Country data update error',
+        type: 'error',
+        showClose: true
+      });
+    }
   },
 
   async patchInfoStrings ({ getters, rootGetters }) {

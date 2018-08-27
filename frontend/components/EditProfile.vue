@@ -364,7 +364,22 @@ export default {
         putObj.account_type = this.innerProfile.accountType;
       }
 
-      await this.updateUserProfile(putObj);
+      try {
+        await this.updateUserProfile(putObj);
+        window.scrollTo(0, 0);
+        this.$message({
+          message: 'Profile succesfully updated',
+          type: 'success',
+          showClose: true
+        });
+      } catch (e) {
+        console.error(e);
+        this.$message({
+          message: 'Profile update error',
+          type: 'error',
+          showClose: true
+        });
+      }
     },
 
     validateSubmitAndMapApiErrors () {
