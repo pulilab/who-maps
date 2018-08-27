@@ -18,10 +18,12 @@
           class="FakeTab"
           tag="div">My profile</nuxt-link>
         <nuxt-link
+          v-if="['CA', 'SCA'].includes(userProfile.account_type) || userProfile.is_superuser"
           :to="localePath({name: 'index-admin-country'})"
           class="FakeTab"
           tag="div">Country admin</nuxt-link>
         <nuxt-link
+          v-if="['DA', 'SDA'].includes(userProfile.account_type) || userProfile.is_superuser"
           :to="localePath({name: 'index-admin-donor'})"
           class="FakeTab"
           tag="div">Donor admin</nuxt-link>
@@ -36,10 +38,17 @@
 
 <script>
 import SearchComponent from '../common/SearchComponent.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
     SearchComponent
+  },
+
+  computed: {
+    ...mapGetters({
+      userProfile: 'user/getProfile'
+    })
   }
 };
 </script>

@@ -25,6 +25,7 @@ export const actions = {
   async fetchData ({ commit, rootGetters, dispatch }) {
     const countryId = rootGetters['user/getProfile'].country;
     const { data } = await this.$axios.get(`/api/countries/${countryId}/`);
+    // console.log('COUNTRY DATA:');
     // console.dir(data);
     commit('SET_COUNTRY_DATA', data);
     commit('SET_EDITABLE_COUNTRY_DATA', data);
@@ -50,14 +51,14 @@ export const actions = {
         return {
           key: val.id,
           label: `${val.name} <${val.email}>`,
-          disable: val.id === userId
+          disabled: val.id === userId
         };
       }
     };
 
-    commit('SET_USER_SELECTION', [...data.user_requests, ...data.users].map(userIdMapping));
-    commit('SET_ADMIN_SELECTION', [...data.admin_requests, ...data.admins].map(userIdMapping));
-    commit('SET_SUPER_ADMIN_SELECTION', [...data.super_admin_requests, ...data.super_admins].map(userIdMapping));
+    commit('SET_USER_SELECTION', [...(data.user_requests || []), ...(data.users || [])].map(userIdMapping));
+    commit('SET_ADMIN_SELECTION', [...(data.admin_requests || []), ...(data.admins || [])].map(userIdMapping));
+    commit('SET_SUPER_ADMIN_SELECTION', [...(data.super_admin_requests || []), ...(data.super_admins || [])].map(userIdMapping));
   },
 
   async saveChanges ({ dispatch }) {
@@ -161,8 +162,8 @@ export const actions = {
     const newUsersStr = JSON.stringify([...state.editableCountry.users].sort());
     const oldAdminsStr = JSON.stringify([...state.country.admins].sort());
     const newAdminsStr = JSON.stringify([...state.editableCountry.admins].sort());
-    const oldSuperAdminsStr = JSON.stringify([...state.country.super_admins].sort());
-    const newSuperAdminsStr = JSON.stringify([...state.editableCountry.super_admins].sort());
+    const oldSuperAdminsStr = JSON.stringify([...(state.country.super_admins || [])].sort());
+    const newSuperAdminsStr = JSON.stringify([...(state.editableCountry.super_admins || [])].sort());
 
     const patchObj = {};
 

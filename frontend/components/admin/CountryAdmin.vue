@@ -71,19 +71,20 @@
             :class="['Persona', { 'active': selectedPersona === 'G'}]"
             @click="selectPersona('G')">
             <div class="PersonaName">Users/viewers</div>
-            <div class="RequestCount">{{ userSelection.length - users.length }} new request{{ country.user_requests.length === 1 ? '' : 's' }}</div>
+            <div class="RequestCount">{{ userSelection.length - users.length }} new request{{ (country.user_requests && country.user_requests.length) === 1 ? '' : 's' }}</div>
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'CA'}]"
             @click="selectPersona('CA')">
             <div class="PersonaName">Admins</div>
-            <div class="RequestCount">{{ adminSelection.length - admins.length }} new request{{ country.admin_requests.length === 1 ? '' : 's' }}</div>
+            <div class="RequestCount">{{ adminSelection.length - admins.length }} new request{{ (country.admin_requests && country.admin_requests.length) === 1 ? '' : 's' }}</div>
           </div>
           <div
+            v-if="userProfile.account_type === 'SCA' || userProfile.is_superuser"
             :class="['Persona', { 'active': selectedPersona === 'SCA'}]"
             @click="selectPersona('SCA')">
             <div class="PersonaName">Superadmins</div>
-            <div class="RequestCount">{{ superadminSelection.length - superAdmins.length }} new request{{ country.super_admin_requests.length === 1 ? '' : 's' }}</div>
+            <div class="RequestCount">{{ superadminSelection.length - superAdmins.length }} new request{{ (country.super_admin_requests && country.super_admin_requests.length) === 1 ? '' : 's' }}</div>
           </div>
         </el-col>
 
@@ -182,7 +183,7 @@ export default {
 
   data () {
     return {
-      selectedPersona: 'SCA',
+      selectedPersona: 'G',
       logoError: '',
       coverError: '',
       flagForKeepingPartnerLogosError: false,
@@ -234,7 +235,8 @@ export default {
       superadminSelection: 'admin/country/getSuperadminSelection',
       getUsers: 'admin/country/getUsers',
       getAdmins: 'admin/country/getAdmins',
-      getSuperadmins: 'admin/country/getSuperadmins'
+      getSuperadmins: 'admin/country/getSuperadmins',
+      userProfile: 'user/getProfile'
     }),
 
     logo: {
@@ -294,7 +296,7 @@ export default {
 
     users: {
       get () {
-        return this.country.users;
+        return this.country.users || [];
       },
       set (value) {
         this.setCountryField({field: 'users', data: value});
@@ -303,7 +305,7 @@ export default {
 
     admins: {
       get () {
-        return this.country.admins;
+        return this.country.admins || [];
       },
       set (value) {
         this.setCountryField({field: 'admins', data: value});
@@ -312,7 +314,7 @@ export default {
 
     superAdmins: {
       get () {
-        return this.country.super_admins;
+        return this.country.super_admins || [];
       },
       set (value) {
         this.setCountryField({field: 'super_admins', data: value});
