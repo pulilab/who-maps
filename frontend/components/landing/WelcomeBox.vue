@@ -6,7 +6,7 @@
         class="WelcomeBox">
 
         <h2>Welcome!</h2>
-        <h6>{{ landingPageDefaults.cover_text }}</h6>
+        <h6>{{ welcomeText }}</h6>
 
         <el-button
           circle
@@ -31,10 +31,14 @@ export default {
   computed: {
     ...mapGetters({
       landingPageDefaults: 'system/getLandingPageDefaults',
-      activeCountry: 'landing/getActiveCountry'
+      activeCountry: 'landing/getActiveCountry',
+      countryData: 'landing/getCountryData'
     }),
     showWelcomeBox () {
       return this.visible && !this.activeCountry;
+    },
+    welcomeText () {
+      return this.countryData ? this.countryData.cover_text : this.landingPageDefaults.cover_text;
     }
   },
   methods: {
