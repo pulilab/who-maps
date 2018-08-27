@@ -15,12 +15,17 @@ export default {
     ...mapGetters({
     })
   },
-  async fetch ({ store }) {
+  async fetch ({ store, params }) {
     await Promise.all([
       store.dispatch('system/loadStaticData'),
       store.dispatch('countries/loadMapData'),
       store.dispatch('landing/loadPublicProjectList')
     ]);
+    if (params.organisation !== 'who') {
+      await store.dispatch('landing/loadCountryData', params.organisation);
+    } else {
+      store.dispatch('landing/clearCountryData');
+    }
     if (store.getters['user/getProfile']) {
       await Promise.all([
         store.dispatch('projects/loadUserProjects'),
