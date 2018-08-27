@@ -253,6 +253,48 @@ class CountryTests(APITestCase):
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
         self.assertNotIn('{{', outgoing_fr_email_text)
 
+    def test_country_admin_update_remove_ser_puts_back_to_requested(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
+                                                  account_type=UserProfile.COUNTRY_ADMIN)
+
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+
+        # Check requests - it's there
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile1.id)
+
+        # Add
+        data = {
+            "admins": [userprofile1.id]
+        }
+        response = self.test_user_client.patch(url, data=data,  format='json', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['admins'], [userprofile1.id])
+
+        # Check requests - removed
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["admin_requests"], [])
+
+        # Remove
+        data = {
+            "admins": []
+        }
+        response = self.test_user_client.patch(url, data=data, format='json', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['admins'], [])
+
+        # Check requests - should be there
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile1.id)
+
     def test_country_admin_update_users_remove_from_other_group(self):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
             account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
