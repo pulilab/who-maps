@@ -1107,7 +1107,7 @@ class DonorTests(APITestCase):
         self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
         self.assertEqual(response.json()["super_admin_requests"][0]['id'], userprofile3.id)
 
-    def test_country_admin_assign_users_send_email(self):
+    def test_donor_admin_assign_users_send_email(self):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
             account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
         self.donor.super_admins.add(self.test_user['user_profile_id'])
@@ -1131,7 +1131,7 @@ class DonorTests(APITestCase):
             "admins": [userprofile2.id],
             "super_admins": [userprofile3.id, userprofile4.id]
         }
-        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        response = self.test_user_client.patch(url, data=data, format='json', HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
 
         outgoing_emails = [m.message() for m in mail.outbox if 'You have been selected' in m.message().as_string()]
