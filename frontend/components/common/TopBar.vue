@@ -20,94 +20,93 @@
       <el-col class="RightPart">
         <!-- ANON MODE -->
         <el-row
-          v-if="!user"
-          class="AnonView"
+          :class="{'AnonView': !user, 'LoggedInView': user}"
           type="flex"
           justify="end">
+
           <el-col
             v-if="countrySpecific"
             class="CountryHolder">
             <img
-              src="/static/flags/sl.png"
+              :src="countryFlag"
               alt="country flag"
               class="CountryFlag">
-            <div class="CountryName">Sierra Leone</div>
+            <div class="CountryName">{{ countryData.name }}</div>
           </el-col>
 
-          <el-col v-if="!countrySpecific">
-            <language-selector />
-          </el-col>
+          <template v-if="!user">
+            <el-col v-if="!countrySpecific">
+              <language-selector />
+            </el-col>
 
-          <el-col class="AuthLinks">
-            <div class="Separator" />
-            <div>
-              <nuxt-link
-                :to="localePath({name: 'organisation-signup', params: $route.params})"
-                class="HeaderBtn HideOnActive">Signup</nuxt-link>
-            </div>
+            <el-col class="AuthLinks">
+              <div class="Separator" />
+              <div>
+                <nuxt-link
+                  :to="localePath({name: 'organisation-signup', params: $route.params})"
+                  class="HeaderBtn HideOnActive">Signup</nuxt-link>
+              </div>
 
-            <div>
-              <nuxt-link
-                :to="localePath({name: 'organisation-login', params: $route.params})"
-                class="HeaderBtn HideOnActive">Login</nuxt-link>
-            </div>
-          </el-col>
+              <div>
+                <nuxt-link
+                  :to="localePath({name: 'organisation-login', params: $route.params})"
+                  class="HeaderBtn HideOnActive">Login</nuxt-link>
+              </div>
+            </el-col>
+          </template>
+          <template v-if="user">
+            <el-col class="AuthLinks">
+              <div>
+                <nuxt-link
+                  :to="localePath({name: 'organisation-dashboard', params: $route.params})"
+                  class="HeaderBtn"
+                >
+                  Dashboard
+                </nuxt-link>
+              </div>
+              <div>
+                <nuxt-link
+                  :to="localePath({name: 'organisation-projects', params: $route.params})"
+                  class="HeaderBtn"
+                >
+                  My Projects
+                </nuxt-link>
+              </div>
+              <div>
+                <nuxt-link
+                  :to="localePath({name: 'organisation-cms', params: $route.params})"
+                  class="HeaderBtn"
+                >
+                  Planning and Guidance
+                </nuxt-link>
+              </div>
+              <div>
+                <toolkit-dialog-wrapper />
+              </div>
+              <div>
+                <nuxt-link
+                  :to="localePath({name: 'organisation-projects-create', params: $route.params})"
+                  class="HeaderBtn">
+                  <fa icon="plus-circle" />
+                  New Project
+                </nuxt-link>
+              </div>
+              <user-dropdown />
+            </el-col>
+          </template>
 
           <el-col
             v-if="countrySpecific"
             class="CountrySpecificMenu">
             <div class="Separator" />
             <div>
-              <img
-                class="LogoSmall"
-                alt="WHO logo small"
-                src="/logo-who-blue.svg">
-            </div>
-          </el-col>
-        </el-row>
-        <!-- LOGGED IN MODE -->
-        <el-row
-          v-if="user"
-          class="LoggedInView"
-          type="flex"
-          justify="end">
-          <el-col class="AuthLinks">
-            <div>
-              <nuxt-link
-                :to="localePath({name: 'organisation-dashboard', params: $route.params})"
-                class="HeaderBtn"
-              >
-                Dashboard
+              <nuxt-link :to="localePath({name: 'organisation', params: {organisation: 'who'}})">
+                <img
+                  class="LogoSmall"
+                  alt="WHO logo small"
+                  src="/logo-who-blue.svg">
               </nuxt-link>
             </div>
-            <div>
-              <nuxt-link
-                :to="localePath({name: 'organisation-projects', params: $route.params})"
-                class="HeaderBtn"
-              >
-                My Projects
-              </nuxt-link>
-            </div>
-            <div>
-              <nuxt-link
-                :to="localePath({name: 'organisation-cms', params: $route.params})"
-                class="HeaderBtn"
-              >
-                Planning and Guidance
-              </nuxt-link>
-            </div>
-            <div>
-              <toolkit-dialog-wrapper />
-            </div>
-            <div>
-              <nuxt-link
-                :to="localePath({name: 'organisation-projects-create', params: $route.params})"
-                class="HeaderBtn">
-                <fa icon="plus-circle" />
-                New Project
-              </nuxt-link>
-            </div>
-            <user-dropdown />
           </el-col>
         </el-row>
       </el-col>
@@ -132,20 +131,25 @@ export default {
     UserDropdown,
     ToolkitDialogWrapper
   },
-  props: {
-    countrySpecific: {
-      type: Boolean,
-      default: false
-    },
-    countryLogoURL: {
-      type: String,
-      default: '/mock/placeholder-sl.png'
-    }
-  },
   computed: {
     ...mapGetters({
-      user: 'user/getProfile'
-    })
+      user: 'user/getProfile',
+      countryData: 'landing/getCountryData'
+    }),
+    countrySpecific () {
+      return this.countryData !== null;
+    },
+    countryLogoURL () {
+      if (this.countryData) {
+        return this.countryData.logo;
+      }
+    },
+    countryFlag () {
+      if (this.countryData) {
+        return `/static/flags/${this.countryData.code.toLowerCase()}.png`;
+      }
+    }
+
   }
 };
 </script>
