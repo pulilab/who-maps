@@ -35,14 +35,24 @@ export const actions = {
     const profiles = rootGetters['system/getUserProfiles'];
     const userId = rootGetters['user/getProfile'].id;
 
-    const userIdMapping = id => {
-      const profile = profiles.find(prof => prof.id === id);
-      const label = `${profile.name} <${profile.user_email}>`;
-      return {
-        key: id,
-        label,
-        disabled: id === userId
-      };
+    const userIdMapping = val => {
+      if (typeof val !== 'object') {
+        // In case of `id`
+        const profile = profiles.find(prof => prof.id === val);
+        const label = `${profile.name} <${profile.user_email}>`;
+        return {
+          key: val,
+          label,
+          disabled: val === userId
+        };
+      } else {
+        // In case of { id, name, email }
+        return {
+          key: val.id,
+          label: `${val.name} <${val.email}>`,
+          disable: val.id === userId
+        };
+      }
     };
 
     commit('SET_USER_SELECTION', [...data.user_requests, ...data.users].map(userIdMapping));
