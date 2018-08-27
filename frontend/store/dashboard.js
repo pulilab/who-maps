@@ -4,60 +4,36 @@ export const state = () => ({
   columns: [
     {
       id: 1,
-      label: 'Project name',
-      field: 'id',
-      thClass: 'CustomTH NameColumn',
-      tdClass: 'CustomTD NameColumn'
+      label: 'Project name'
     },
     {
       id: 2,
-      label: 'Country',
-      field: 'country',
-      thClass: 'CustomTH CountryColumn',
-      tdClass: 'CustomTD CountryColumn'
+      label: 'Country'
 
     },
     {
       id: 3,
-      label: 'Organisation Name',
-      field: 'organisation',
-      thClass: 'CustomTH OrganisationNameColumn',
-      tdClass: 'CustomTD OrganisationNameColumn'
+      label: 'Organisation Name'
     },
     {
       id: 4,
-      label: 'Donors',
-      field: 'donors',
-      thClass: 'CustomTH DonorsColumn',
-      tdClass: 'CustomTD DonorsColumn'
+      label: 'Donors'
     },
     {
       id: 5,
-      label: 'Contact Name',
-      field: 'contact_name',
-      thClass: 'CustomTH Contact_nameColumn',
-      tdClass: 'CustomTD Contact_nameColumn'
+      label: 'Contact Name'
     },
     {
       id: 6,
-      label: 'Overview of digital health implementation',
-      field: 'implementation_overview',
-      thClass: 'CustomTH ImplementationOverviewColumn',
-      tdClass: 'CustomTD ImplementationOverviewColumn'
+      label: 'Overview of digital health implementation'
     },
     {
       id: 7,
-      label: 'Geographic scope',
-      field: 'geographic_scope',
-      thClass: 'CustomTH GeographicScopeColumn',
-      tdClass: 'CustomTD GeographicScopeColumn'
+      label: 'Geographic scope'
     },
     {
       id: 8,
-      label: 'Health Focus Areas',
-      field: 'health_focus_areas',
-      thClass: 'CustomTH HealthFocusAreasColumn',
-      tdClass: 'CustomTD HealthFocusAreasColumn'
+      label: 'Health Focus Areas'
     }
   ],
   selectedColumns: [1, 2, 3, 4, 5, 6, 7, 8],
