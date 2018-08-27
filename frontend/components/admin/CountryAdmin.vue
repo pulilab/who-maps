@@ -8,16 +8,25 @@
       class="CountryInformation">
 
       <el-form
+        ref="countryInfo"
+        :rules="rules"
+        :model="{ logo, cover }"
         label-width="215px"
-        label-position="left">
+        label-position="left"
+        @submit.native.prevent>
 
-        <el-form-item label="Logo">
+        <el-form-item
+          label="Logo"
+          prop="logo">
           <file-upload
+            :auto-upload="false"
             :files.sync="logo"
             :limit="1"/>
         </el-form-item>
 
-        <el-form-item label="Cover image">
+        <el-form-item
+          label="Cover image"
+          prop="cover">
           <file-upload
             :files.sync="cover"
             :limit="1"/>
@@ -42,7 +51,9 @@
             type="text"/>
         </el-form-item>
 
-        <el-form-item label="Partner logo">
+        <el-form-item
+          label="Partner logos"
+          prop="partnerLogos">
           <file-upload
             :files.sync="partnerLogos"
             :limit="10"/>
@@ -165,7 +176,40 @@ export default {
 
   data () {
     return {
-      selectedPersona: 'SCA'
+      selectedPersona: 'SCA',
+      logoError: '',
+      coverError: '',
+      flagForKeepingPartnerLogosError: false,
+      partnerLogosError: '',
+      rules: {
+        logo: [
+          { validator: (rule, value, callback) => {
+            if (this.logoError) {
+              callback(new Error(this.logoError));
+            } else {
+              callback();
+            }
+          }}
+        ],
+        cover: [
+          { validator: (rule, value, callback) => {
+            if (this.coverError) {
+              callback(new Error(this.coverError));
+            } else {
+              callback();
+            }
+          }}
+        ],
+        partnerLogos: [
+          { validator: (rule, value, callback) => {
+            if (this.partnerLogosError) {
+              callback(new Error(this.partnerLogosError));
+            } else {
+              callback();
+            }
+          }}
+        ]
+      }
     };
   },
 
@@ -267,6 +311,65 @@ export default {
       }
     }
 
+  },
+
+  watch: {
+    logo (newArr, oldArr) {
+      // Handles error message placing for wrong image formats
+      if (!newArr.length) {
+        return;
+      }
+
+      const filteredArray = [...this.logo.filter(image => {
+        return !image.raw || (image.raw && image.raw.name.endsWith('.jpg')) || (image.raw && image.raw.name.endsWith('.jpeg')) || (image.raw && image.raw.name.endsWith('.png'));
+      })];
+
+      if (newArr.length !== filteredArray.length) {
+        this.logo = filteredArray;
+        this.logoError = 'Wrong image format, you can only upload .jpg and .png files';
+      } else {
+        this.logoError = '';
+      }
+      this.$refs.countryInfo.validate(() => {});
+    },
+
+    cover (newArr, oldArr) {
+      // Handles error message placing for wrong image formats
+      if (!newArr.length) {
+        return;
+      }
+
+      const filteredArray = [...this.cover.filter(image => {
+        return !image.raw || (image.raw && image.raw.name.endsWith('.jpg')) || (image.raw && image.raw.name.endsWith('.jpeg')) || (image.raw && image.raw.name.endsWith('.png'));
+      })];
+
+      if (newArr.length !== filteredArray.length) {
+        this.cover = filteredArray;
+        this.coverError = 'Wrong image format, you can only upload .jpg and .png files';
+      } else {
+        this.coverError = '';
+      }
+      this.$refs.countryInfo.validate(() => {});
+    },
+
+    partnerLogos (newArr, oldArr) {
+      // This handles error message placing for wrong image formats
+      const filteredArray = [...this.partnerLogos.filter(image => {
+        return !image.raw || (image.raw && image.raw.name.endsWith('.jpg')) || (image.raw && image.raw.name.endsWith('.jpeg')) || (image.raw && image.raw.name.endsWith('.png'));
+      })];
+
+      if (newArr.length !== filteredArray.length) {
+        this.partnerLogos = filteredArray;
+        this.partnerLogosError = 'Wrong image format, you can only upload .jpg and .png files';
+        this.flagForKeepingPartnerLogosError = true;
+      } else if (this.flagForKeepingPartnerLogosError) {
+        this.flagForKeepingPartnerLogosError = false;
+        return;
+      } else {
+        this.partnerLogosError = '';
+      }
+      this.$refs.countryInfo.validate(() => {});
+    }
   },
 
   methods: {
