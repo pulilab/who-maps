@@ -288,7 +288,7 @@ export default {
       }
 
       .CountryName {
-        font-size: @fontSizeBase;
+        font-size: @fontSizeSmall;
         color: @colorTextSecondary;
         line-height: 24px;
       }
