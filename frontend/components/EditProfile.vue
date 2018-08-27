@@ -78,7 +78,7 @@
         </el-form-item>
       </el-form>
 
-      <div>
+      <div v-if="!userTypeApproved || changeApprovedUserRole || !['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(accountType)">
         <h4 v-if="!userTypeRequested">I request to be a:</h4>
         <h4 v-if="userTypeRequested">User role requested:</h4>
 
@@ -131,7 +131,39 @@
         </el-radio-group>
       </div>
 
-      <p>TODO: accepted states</p>
+      <div v-if="userTypeApproved && ['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(accountType) && !changeApprovedUserRole">
+        <div>✔ Your user role request has been accepted!</div>
+
+        <div v-if="accountType === 'G'">
+          Country User description box
+          <el-button @click="changingUserRole">Change</el-button>
+        </div>
+
+        <div v-if="accountType === 'CA'">
+          Country User Admin description box
+          <el-button @click="changingUserRole">Change</el-button>
+        </div>
+
+        <div v-if="accountType === 'SCA'">
+          Super Country User Admin description box
+          <el-button @click="changingUserRole">Change</el-button>
+        </div>
+
+        <div v-if="accountType === 'D'">
+          Donor description box
+          <el-button @click="changingUserRole">Change</el-button>
+        </div>
+
+        <div v-if="accountType === 'DA'">
+          Donor Admin description box
+          <el-button @click="changingUserRole">Change</el-button>
+        </div>
+
+        <div v-if="accountType === 'SDA'">
+          Super Donor Admin description box
+          <el-button @click="changingUserRole">Change</el-button>
+        </div>
+      </div>
 
       <div class="Actions">
         <el-button @click="dismissChanges">Dismiss changes</el-button>
@@ -152,14 +184,15 @@ export default {
   data () {
     return {
       innerProfile: {
-        name: null, // 'Takacs Andras Tamas'
-        organisation: null, // code
-        language: null, // string like 'en'
-        country: null, // code
-        accountType: null // 1 from ['G', 'CA', 'SCA', 'D', 'DA', 'SDA']
+        name: null,
+        organisation: null,
+        language: null,
+        country: null,
+        accountType: null
       },
       isCountryUser: false,
       isDonorUser: false,
+      changeApprovedUserRole: false,
       rules: {
         name: [
           { required: true, message: 'This field is required', trigger: 'change' },
@@ -249,6 +282,10 @@ export default {
         this.innerProfile.accountType === null ||
         this.innerProfile.accountType === this.profile.account_type
       );
+    },
+
+    userTypeApproved () {
+      return this.profile && this.profile.account_type_approved;
     }
   },
 
@@ -332,6 +369,7 @@ export default {
 
     validateSubmitAndMapApiErrors () {
       this.deleteFormAPIErrors();
+      this.changeApprovedUserRole = false;
       this.$refs.editProfileForm.validate(async valid => {
         if (valid) {
           try {
@@ -343,6 +381,10 @@ export default {
           }
         }
       });
+    },
+
+    changingUserRole () {
+      this.changeApprovedUserRole = true;
     }
   }
 };
