@@ -54,7 +54,7 @@
               class="SecondaryAction LoginLink">
               <h6>Already signed up?</h6>
               <nuxt-link
-                :to="localePath('index-login')"
+                :to="localePath({name: 'organisation-login', params: $route.params})"
                 class="NuxtLink Small IconRight"
               >
                 <span>Login here</span><fa icon="angle-right" />
@@ -130,7 +130,7 @@ export default {
           password2: this.signupForm.password2,
           email: this.signupForm.email
         });
-        this.$router.push(this.localePath('index-edit-profile'));
+        this.$router.push(this.localePath({name: 'organisation-edit-profile', params: this.$route.params}));
         this.$message({
           message: 'User created succesfully',
           type: 'success',

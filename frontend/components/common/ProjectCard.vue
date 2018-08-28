@@ -120,7 +120,7 @@ export default {
   },
   methods: {
     goToProject () {
-      const path = this.localePath({name: 'index-projects-id', params: {id: 1}});
+      const path = this.localePath({name: 'organisation-projects-id', params: {...this.$route.params, id: 1}});
       this.$router.push(path);
     },
     mouseEnterHandler () {

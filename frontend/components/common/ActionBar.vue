@@ -16,21 +16,21 @@
           type="flex">
           <el-col class="ActionBarTab">
             <nuxt-link
-              :to="localePath({name: 'index-edit-profile'})"
+              :to="localePath({name: 'organisation-edit-profile', params: $route.params})"
               class="ActionBarLink"
               tag="div">My profile</nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
               v-if="allowCountryAdmin"
-              :to="localePath({name: 'index-admin-country'})"
+              :to="localePath({name: 'organisation-admin-country', params: $route.params})"
               class="ActionBarLink"
               tag="div">Country admin</nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
               v-if="allowDonorAdmin"
-              :to="localePath({name: 'index-admin-donor'})"
+              :to="localePath({name: 'organisation-admin-donor', params: $route.params})"
               class="ActionBarLink"
               tag="div">Donor admin</nuxt-link>
           </el-col>
@@ -40,13 +40,13 @@
           type="flex">
           <el-col class="ActionBarTab">
             <nuxt-link
-              :to="localePath({name: 'index-dashboard'})"
+              :to="localePath({name: 'organisation-dashboard', params: $route.params})"
               class="ActionBarLink"
               tag="div">Map view</nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
-              :to="localePath({name: 'index-dashboard-list'})"
+              :to="localePath({name: 'organisation-dashboard-list', params: $route.params})"
               class="ActionBarLink"
               tag="div">List view</nuxt-link>
           </el-col>

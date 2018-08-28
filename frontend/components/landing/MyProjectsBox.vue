@@ -22,7 +22,7 @@
     >
       <el-col>
         <nuxt-link
-          :to="localePath('index-projects')"
+          :to="localePath({name: 'organisation-projects', params: $route.params })"
           tag="button"
           class="el-button el-button--default el-button--medium">
           See all my projects

@@ -19,9 +19,11 @@ export default {
     };
   },
   mounted () {
-    const factory = require('../../angular/Thematic/thematicFactory');
-    factory.factory(0, 0, 'MAPS Toolkit', 'HeaderBtn', 'Toolkit');
-    this.initialised = true;
+    this.$nextTick(() => {
+      const factory = require('../../angular/Thematic/thematicFactory');
+      factory.factory(0, 0, 'MAPS Toolkit', 'HeaderBtn', 'Toolkit');
+      this.initialised = true;
+    });
   }
 };
 </script>

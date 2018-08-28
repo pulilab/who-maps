@@ -100,7 +100,7 @@ export default {
               username: this.username,
               password: this.password
             });
-            this.$router.push(this.localePath('/'));
+            this.$router.push(this.localePath({name: 'organisation', params: this.$route.params}));
           } catch (err) {
             this.setFormAPIErrors(err);
             this.$refs.loginForm.validate(() => {});

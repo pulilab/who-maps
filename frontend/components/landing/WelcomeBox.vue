@@ -6,7 +6,7 @@
         class="WelcomeBox">
 
         <h2>Welcome!</h2>
-        <h6>{{ landingPageDefaults.cover_text }}</h6>
+        <h6>{{ welcomeText }}</h6>
 
         <el-button
           circle
@@ -31,10 +31,14 @@ export default {
   computed: {
     ...mapGetters({
       landingPageDefaults: 'system/getLandingPageDefaults',
-      activeCountry: 'landing/getActiveCountry'
+      activeCountry: 'landing/getActiveCountry',
+      countryData: 'landing/getCountryData'
     }),
     showWelcomeBox () {
       return this.visible && !this.activeCountry;
+    },
+    welcomeText () {
+      return this.countryData ? this.countryData.cover_text : this.landingPageDefaults.cover_text;
     }
   },
   methods: {
@@ -56,9 +60,10 @@ export default {
       bottom: 40px;
       left: 40px;
       box-sizing: border-box;
+      overflow: hidden;
       width: 360px;
-      height: auto;
-      max-height: 420px;
+      // TODO
+      // max-height: ???
       padding: 20px 40px;
       color: @colorWhite;
       background: fade(@colorBrandPrimary, 90%);
@@ -70,6 +75,12 @@ export default {
 
       h6 {
         margin: 10px 0 20px;
+        // TODO
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 10;
+        -webkit-box-orient: vertical;
+        //
       }
 
       .CloseWelcomeBox {
