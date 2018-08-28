@@ -55,14 +55,6 @@ class CountryAdmin(admin.ModelAdmin):
         fields = super(CountryAdmin, self).get_fields(request, obj)
         return list(self.readonly_fields) + [f for f in fields if f not in ['name', 'code', 'map_data', 'map_download']]
 
-    def get_queryset(self, request):
-        qs = super(CountryAdmin, self).get_queryset(request)
-
-        if request.user.is_staff and not request.user.is_superuser:
-            qs = qs.filter(users__user=request.user)
-
-        return qs
-
     def map_download(self, obj):
         complete_country = pycountry.countries.get(alpha_2=obj.code)
         #  clikey should be a private value but at the moment is not that
