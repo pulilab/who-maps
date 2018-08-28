@@ -23,12 +23,13 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .FooterBg {
+    display: flex;
+    align-items: center;
+    height: @appFooterHeight;
     background-color: @colorBrandGrayDark;
-    align-items: flex-end;
 
     .Footer {
-      // .limitPageWidth();
-      padding: 40px 160px;
+      padding: 0 160px;
       font-size: @fontSizeSmall;
       line-height: 18px;
       text-align: center;

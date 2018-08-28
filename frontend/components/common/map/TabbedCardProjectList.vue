@@ -6,15 +6,30 @@
     <el-tab-pane
       label="Sub-national"
       name="subNational">
-      <project-card />
-      <project-card />
-      <project-card />
+      <project-card
+        show-organisation
+        show-arrow-on-over
+      />
+      <project-card
+        show-organisation
+        show-arrow-on-over
+      />
+      <project-card
+        show-organisation
+        show-arrow-on-over
+      />
     </el-tab-pane>
     <el-tab-pane
       label="National"
       name="national">
-      <project-card />
-      <project-card />
+      <project-card
+        show-organisation
+        show-arrow-on-over
+      />
+      <project-card
+        show-organisation
+        show-arrow-on-over
+      />
     </el-tab-pane>
   </el-tabs>
 </template>

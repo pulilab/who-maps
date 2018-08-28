@@ -228,9 +228,9 @@ import OrganisationItem from '../common/OrganisationItem';
 import CountryItem from '../common/CountryItem';
 import TeamList from './TeamList';
 import PlatformsList from './PlatformsList';
-import HealthFocusAreasList from './HealthFocusAreasList';
-import HealthSystemChallengesList from './HealthSystemChallengesList';
-import HisBucketList from './HisBucketList';
+import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
+import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList';
+import HisBucketList from '../common/list/HisBucketList';
 import TypeField from './TypeField';
 import CoverageField from './CoverageField';
 import SubLevelCoverageField from './SubLevelCoverageField';
@@ -358,19 +358,23 @@ export default {
           li {
             a {
               display: block;
-              margin-bottom: 20px;
+              margin: 5px 0 20px;
+              color: @colorBrandPrimary;
+              text-decoration: none;
+              transition: @transitionAll;
+
+              &:hover {
+                color: @colorBrandPrimaryLight;
+                text-decoration: underline;
+              }
             }
 
             &:last-child {
               a {
-                margin: 0;
+                margin-bottom: 0;
               }
             }
           }
-        }
-
-        a {
-          color: @colorBrandPrimary;
         }
       }
 

@@ -88,6 +88,13 @@ export default {
       }
     }
 
+    .UserProjectsList {
+      .NuxtLink {
+        margin-left: 30px;
+        font-size: @fontSizeSmall;
+      }
+    }
+
     .SeeAllMyProjects {
       text-align: center;
     }

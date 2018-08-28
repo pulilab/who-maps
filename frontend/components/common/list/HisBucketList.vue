@@ -5,7 +5,11 @@
         v-for="his in selected"
         :key="his.id"
       >
-        {{ his.name }}
+        <list-action
+          v-if="actions"
+          @click="$emit('delete', his.id)"
+        />
+        <span>{{ his.name }}</span>
       </li>
     </ul>
   </div>
@@ -13,10 +17,22 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import ListAction from './ListAction';
 export default {
+  components: {
+    ListAction
+  },
   props: {
     value: {
       type: Array,
+      default: null
+    },
+    actions: {
+      type: Boolean,
+      default: false
+    },
+    limit: {
+      type: Number,
       default: null
     }
   },
@@ -25,7 +41,8 @@ export default {
       hisBucket: 'projects/getHisBucket'
     }),
     selected () {
-      return this.hisBucket.filter(his => this.value.includes(his.id));
+      const result = this.hisBucket.filter(his => this.value.includes(his.id));
+      return this.limit ? result.slice(0, this.limit) : result;
     }
   }
 };
