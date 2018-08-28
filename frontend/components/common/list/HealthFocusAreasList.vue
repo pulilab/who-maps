@@ -9,7 +9,12 @@
           v-if="actions"
           @click="$emit('delete', hfa.id)"
         />
-        <span> {{ hfa.name }} </span>
+        <span>
+          <fa
+            icon="check"
+            size="xs" />
+        </span>
+        <span>{{ hfa.name }}</span>
       </li>
     </ul>
   </div>
@@ -50,10 +55,14 @@ export default {
 </script>
 
 <style lang="less">
-.HealthFocusAreasList {
-  width: 100%;
-}
-.HealthFocusAreasSelectorDropdown {
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
-}
+  .HealthFocusAreasList {
+    width: 100%;
+
+    .svg-inline--fa {
+      display: none;
+    }
+  }
 </style>

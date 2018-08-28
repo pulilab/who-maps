@@ -141,11 +141,14 @@ export default {
     cursor: pointer;
 
     // for MainTable
+    // TODO
+    // we might need a better name for this... 'InlineTableData'
     &.HideBorders {
       border: none;
       background-color: transparent;
 
       .ProjectName {
+        color: @colorBrandPrimary;
         font-size: @fontSizeSmall;
         line-height: inherit;
       }
@@ -210,6 +213,10 @@ export default {
         font-size: @fontSizeSmall - 2;
         font-weight: 700;
         text-transform: uppercase;
+
+        .svg-inline--fa {
+          margin-right: 1px;
+        }
       }
     }
 

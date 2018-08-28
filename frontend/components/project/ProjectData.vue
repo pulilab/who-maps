@@ -358,19 +358,23 @@ export default {
           li {
             a {
               display: block;
-              margin-bottom: 20px;
+              margin: 5px 0 20px;
+              color: @colorBrandPrimary;
+              text-decoration: none;
+              transition: @transitionAll;
+
+              &:hover {
+                color: @colorBrandPrimaryLight;
+                text-decoration: underline;
+              }
             }
 
             &:last-child {
               a {
-                margin: 0;
+                margin-bottom: 0;
               }
             }
           }
-        }
-
-        a {
-          color: @colorBrandPrimary;
         }
       }
 

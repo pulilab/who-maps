@@ -32,7 +32,10 @@ export default {
 </script>
 
 <style lang="less">
-.StandardsList {
-  width: 100%;
-}
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .StandardsList {
+    width: 100%;
+  }
 </style>

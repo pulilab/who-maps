@@ -94,6 +94,17 @@ a {
       }
     }
   }
+
+  &.TextLink {
+    color: @colorBrandPrimary;
+    text-decoration: none;
+    transition: @transitionAll;
+
+    &:hover {
+      color: @colorBrandPrimaryLight;
+      text-decoration: underline;
+    }
+  }
 }
 
 .PageTitle {
@@ -381,6 +392,7 @@ fieldset {
 
 .el-input {
   .el-input__inner {
+    border-radius: 0 !important;
     font-family: Arial, sans-serif;
   }
 
@@ -460,12 +472,20 @@ fieldset {
 }
 
 .el-select {
-
   // small
   &.el-select--small {
     .el-select__caret {
       &.el-icon-arrow-up {
         width: 31px;
+      }
+    }
+  }
+
+  // mini
+  &.el-select--mini {
+    .el-select__caret {
+      &.el-icon-arrow-up {
+        width: 27px;
       }
     }
   }
@@ -891,6 +911,32 @@ fieldset {
       .PrimaryButton {
         float: right;
       }
+    }
+  }
+}
+
+// Table
+
+.el-table {}
+
+// Pagination
+
+.el-pagination {
+  .el-pagination__sizes {
+    .el-select {
+      .el-input {
+        margin: 0;
+
+        .el-input__inner {
+          padding-right: 35px;
+          font-size: @fontSizeSmall;
+        }
+      }
+    }
+
+    .el-input__suffix {
+      right: 5px;
+      transform: none;
     }
   }
 }

@@ -62,8 +62,14 @@
           <span
             v-for="(donor, index) in scope.row.donors"
             :key="index"
+            class="DonorItem"
           >
-            {{ donor }}
+            <span>
+              <fa
+                icon="user-tie"
+                size="xs" />
+            </span>
+            <span>{{ donor }}</span>
           </span>
         </template>
       </el-table-column>
@@ -73,8 +79,11 @@
         label="Contact Name"
         width="240">
         <template slot-scope="scope">
-          <span> {{ scope.row.contact_name }}</span>
-          <a :href="`mailto:${scope.row.contact_email}`"> {{ scope.row.contact_email }}</a>
+          <span>{{ scope.row.contact_name }}</span>
+          <a
+            :href="`mailto:${scope.row.contact_email}`"
+            :rel="`email`"
+            class="TextLink">{{ scope.row.contact_email }}</a>
         </template>
       </el-table-column>
       <el-table-column
@@ -83,7 +92,7 @@
         label="Implementation Overview"
         width="240">
         <template slot-scope="scope">
-          <p> {{ scope.row.implementation_overview }}</p>
+          <p>{{ scope.row.implementation_overview }}</p>
         </template>
       </el-table-column>
       <el-table-column
@@ -92,7 +101,7 @@
         label="Geographic Scope"
         width="240">
         <template slot-scope="scope">
-          <p> {{ scope.row.geographic_scope }}</p>
+          <p>{{ scope.row.geographic_scope }}</p>
         </template>
       </el-table-column>
       <el-table-column
@@ -208,6 +217,7 @@ export default {
     margin: 0 40px;
     max-height: calc(100vh - @topBarHeight - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
 
+    // Custom table template
     .el-table {
       th, td {
         vertical-align: top;
@@ -223,12 +233,37 @@ export default {
         }
       }
 
-      td {}
+      td {
+        > .cell {
+          p {
+            margin: 0 0 10px;
+          }
+
+          a {
+            &[rel="email"] {
+              display: block;
+            }
+          }
+        }
+      }
+
+      // selected table row
+      .el-table__row {
+        &.Selected {
+          > td {
+            background-color: #FFFBDC;
+
+            &.el-table-column--selection {
+              box-shadow: inset 2px 0 0 #FBC02D;
+            }
+          }
+        }
+      }
 
       .caret-wrapper {
         position: absolute;
         top: -2px;
-        right: 0;
+        right: 2px;
         vertical-align: top;
         height: 30px;
 
@@ -246,6 +281,86 @@ export default {
           margin: 0;
           font-size: @fontSizeSmall;
           line-height: inherit;
+        }
+      }
+
+      .DonorItem {
+        display: inline-flex;
+        align-items: flex-start;
+        width: 100%;
+
+        .svg-inline--fa {
+          position: relative;
+          top: -1px;
+          margin-right: 5px;
+        }
+      }
+
+      .HealthFocusAreasList {
+        ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+
+          li {
+            display: inline-flex;
+            align-items: flex-start;
+            width: 100%;
+
+            .svg-inline--fa {
+              position: relative;
+              top: -1px;
+              display: inline-block;
+              margin-right: 5px;
+            }
+          }
+        }
+      }
+    }
+
+    .Pagination {
+      z-index: 5;
+      position: relative;
+      top: -1px;
+      width: 100%;
+      // don't forget to calculate this into max-height of MainTable
+      height: 53px;
+      //
+      box-sizing: border-box;
+      border: solid @colorGrayLight;
+      border-width: 1px 1px 2px;
+      background-color: @colorBrandBlueLight;
+      text-align: right;
+
+      .el-pagination {
+        padding: 11px 20px;
+        font-weight: 400;
+
+        .el-pagination__sizes {
+          float: left;
+          margin: 0;
+        }
+
+        .PageCounter {
+          display: inline-block;
+          margin: 0 10px;
+          font-size: @fontSizeSmall;
+          color: @colorTextSecondary;
+        }
+
+        button {
+          padding: 0;
+          background-color: transparent;
+          transition: @transitionAll;
+
+          &:hover {
+            background-color: lighten(@colorBrandBlueLight, 3%);
+          }
+
+          i {
+            font-size: @fontSizeLarge;
+            font-weight: 700;
+          }
         }
       }
     }

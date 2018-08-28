@@ -19,6 +19,7 @@
           v-if="link"
           :href="content"
           target="_blank"
+          class="TextLink"
         >
           {{ content }}
         </a>
