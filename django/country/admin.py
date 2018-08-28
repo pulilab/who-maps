@@ -1,14 +1,7 @@
 import pycountry
 
-from collections import defaultdict
-from django.conf import settings
-from django.core.mail import send_mail
 from django.contrib import admin
-from django.core import management
-from django.urls import reverse
-from django.template import loader
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext, override
 
 from core.admin import ArrayFieldMixin
 from .models import Country, CountryField, Donor
