@@ -6,21 +6,22 @@
       :max-height="tableMaxHeight"
       :row-class-name="rowClassCalculator"
       :stripe="false"
-      border
+      :border="true"
+      size="mini"
       style="width: 100%"
       @select="selectHandler"
       @select-all="selectHandler"
     >
       <el-table-column
         type="selection"
-        width="55"
+        width="35"
       />
       <el-table-column
         v-if="selectedColumns.includes(1)"
         fixed
         sortable
         label="Project Name"
-        width="180">
+        width="240">
         <template slot-scope="scope">
           <project-card
             :id="scope.row.id"
@@ -45,7 +46,7 @@
         v-if="selectedColumns.includes(3)"
         sortable
         label="Organisation Name"
-        width="180">
+        width="240">
         <template slot-scope="scope">
           <organisation-item
             :id="scope.row.organisation"
@@ -56,7 +57,7 @@
         v-if="selectedColumns.includes(4)"
         sortable
         label="Donors"
-        width="180">
+        width="240">
         <template slot-scope="scope">
           <span
             v-for="(donor, index) in scope.row.donors"
@@ -70,7 +71,7 @@
         v-if="selectedColumns.includes(5)"
         sortable
         label="Contact Name"
-        width="180">
+        width="240">
         <template slot-scope="scope">
           <span> {{ scope.row.contact_name }}</span>
           <a :href="`mailto:${scope.row.contact_email}`"> {{ scope.row.contact_email }}</a>
@@ -80,7 +81,7 @@
         v-if="selectedColumns.includes(6)"
         sortable
         label="Implementation Overview"
-        width="180">
+        width="240">
         <template slot-scope="scope">
           <p> {{ scope.row.implementation_overview }}</p>
         </template>
@@ -89,7 +90,7 @@
         v-if="selectedColumns.includes(7)"
         sortable
         label="Geographic Scope"
-        width="180">
+        width="240">
         <template slot-scope="scope">
           <p> {{ scope.row.geographic_scope }}</p>
         </template>
@@ -98,7 +99,7 @@
         v-if="selectedColumns.includes(8)"
         sortable
         label="Health Focus Areas"
-        width="180">
+        width="240">
         <template slot-scope="scope">
           <health-focus-areas-list :value="scope.row.health_focus_areas" />
         </template>
@@ -207,5 +208,46 @@ export default {
     margin: 0 40px;
     max-height: calc(100vh - @topBarHeight - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
 
+    .el-table {
+      th, td {
+        vertical-align: top;
+      }
+
+      th {
+        > .cell {
+          line-height: 24px;
+        }
+
+        &.is-leaf {
+          border-bottom-color: @colorTextMuted;
+        }
+      }
+
+      td {}
+
+      .caret-wrapper {
+        position: absolute;
+        top: -2px;
+        right: 0;
+        vertical-align: top;
+        height: 30px;
+
+        i {
+          border-width: 4px;
+        }
+      }
+
+      .CountryItem {
+        .CountryFlag {
+          display: none;
+        }
+
+        .CountryName {
+          margin: 0;
+          font-size: @fontSizeSmall;
+          line-height: inherit;
+        }
+      }
+    }
   }
 </style>
