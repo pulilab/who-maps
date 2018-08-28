@@ -31,7 +31,6 @@ export default {
       box-sizing: border-box;
       padding-left: 20px;
       width: @advancedSearchWidth - @actionBarHeight;
-      border-right: 1px solid lighten(@colorBrandPrimaryDark, 5%);
       color: @colorWhite;
       font-size: @fontSizeBase;
       font-weight: 700;
@@ -50,7 +49,7 @@ export default {
       background-color: @colorBrandPrimaryDark;
 
       &:hover {
-        background-color: darken(@colorBrandPrimaryDark, 5%);
+        background-color: lighten(@colorBrandPrimaryDark, 10%);
       }
     }
   }
