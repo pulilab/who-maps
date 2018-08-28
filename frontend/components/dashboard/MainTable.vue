@@ -5,8 +5,8 @@
       :data="projects"
       :max-height="tableMaxHeight"
       :row-class-name="rowClassCalculator"
+      :stripe="false"
       border
-      stripe="false"
       style="width: 100%"
       @select="selectHandler"
       @select-all="selectHandler"
