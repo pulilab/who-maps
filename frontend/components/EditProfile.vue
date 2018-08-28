@@ -91,17 +91,17 @@
           <el-radio :label="'G'">Country user</el-radio>
           <p
             v-if="accountType === 'G'"
-            class="UserTypeText">Lorem ipsum dolor sit amet</p>
+            class="UserTypeText">Government user explanatory text...</p>
           <br v-else>
           <el-radio :label="'CA'">Administrator of this country</el-radio>
           <p
             v-if="accountType === 'CA'"
-            class="UserTypeText">Lorem ipsum dolor sit amet</p>
+            class="UserTypeText">Country admin user explanatory text...</p>
           <br v-else>
           <el-radio :label="'SCA'">Super country administrator</el-radio>
           <p
             v-if="accountType === 'SCA'"
-            class="UserTypeText">Lorem ipsum dolor sit amet</p>
+            class="UserTypeText">Super country administrator explanatory text...</p>
           <br v-else>
         </el-radio-group>
 
@@ -113,22 +113,37 @@
           v-if="isDonorUser"
           v-model="accountType"
           :disabled="!isDonorUser">
-          <el-radio :label="'D'">D</el-radio>
+          <el-radio :label="'D'">Donor</el-radio>
           <p
             v-if="accountType === 'D'"
-            class="UserTypeText">Lorem ipsum dolor sit amet</p>
+            class="UserTypeText">Donor user explanatory text...</p>
           <br v-else>
-          <el-radio :label="'DA'">DA</el-radio>
+          <el-radio :label="'DA'">Donor administrator</el-radio>
           <p
             v-if="accountType === 'DA'"
-            class="UserTypeText">Lorem ipsum dolor sit amet</p>
+            class="UserTypeText">Donor administrator explanatory text...</p>
           <br v-else>
           <el-radio :label="'SDA'">Super donor administrator</el-radio>
           <p
             v-if="accountType === 'SDA'"
-            class="UserTypeText">Lorem ipsum dolor sit amet</p>
+            class="UserTypeText">Super donor administrator explanatory text...</p>
           <br v-else>
         </el-radio-group>
+
+        <el-form @submit.native.prevent>
+          <el-form-item label="Select donor">
+            <el-select
+              v-if="isDonorUser"
+              v-model="donor">
+              <el-option
+                v-for="don in donors"
+                :key="don.value"
+                :label="don.label"
+                :value="don.value"/>
+            </el-select>
+          </el-form-item>
+        </el-form>
+
       </div>
 
       <div v-if="userTypeApproved && ['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(accountType) && !changeApprovedUserRole">
@@ -220,7 +235,8 @@ export default {
       user: 'user/getUser',
       organisations: 'system/getOrganisations',
       languages: 'system/getLanguages',
-      countries: 'countries/getCountries'
+      countries: 'countries/getCountries',
+      donors: 'user/getDonors'
     }),
 
     newOrganisation () {
@@ -274,6 +290,15 @@ export default {
       },
       set (value) {
         this.innerProfile.accountType = value;
+      }
+    },
+
+    donor: {
+      get () {
+        return this.innerProfile.donor !== null ? this.innerProfile.donor : this.profile.donor;
+      },
+      set (value) {
+        this.innerProfile.donor = value;
       }
     },
 
@@ -343,7 +368,7 @@ export default {
     },
 
     async mapDataAndUpdate () {
-      const putObj = ['name', 'country', 'language'].reduce((ret, key) => {
+      const putObj = ['name', 'country', 'language', 'donor'].reduce((ret, key) => {
         if (this.innerProfile[key] !== null && this.innerProfile[key] !== this.profile.key) {
           ret[key] = this.innerProfile[key];
         } else {
