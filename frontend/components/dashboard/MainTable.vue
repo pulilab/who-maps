@@ -5,8 +5,8 @@
       :data="projects"
       :max-height="tableMaxHeight"
       :row-class-name="rowClassCalculator"
+      :stripe="false"
       border
-      stripe="false"
       style="width: 100%"
       @select="selectHandler"
       @select-all="selectHandler"
@@ -143,7 +143,7 @@ export default {
       pageSize: 10,
       total: 450,
       pageSizeOption: [10, 20, 50, 100],
-      tableMaxHeight: 500
+      tableMaxHeight: 200
     };
   },
   computed: {
@@ -168,13 +168,22 @@ export default {
           this.$refs.mainTable.toggleAllSelection();
         }
       }
+    },
+    selectedColumns: {
+      immediate: false,
+      handler (columns) {
+        this.$nextTick(() => {
+          this.$refs.mainTable.doLayout();
+        });
+      }
     }
   },
   mounted () {
-    // TODO: fix this
-    // const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height');
-    // this.tableMaxHeight = +maxHeight.replace('px', '');
-    // this.$refs.mainTable.doLayout();
+    setTimeout(() => {
+      const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height');
+      this.tableMaxHeight = +maxHeight.replace('px', '');
+      this.$refs.mainTable.doLayout();
+    }, 500);
   },
   methods: {
     ...mapActions({
