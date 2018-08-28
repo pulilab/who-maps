@@ -167,6 +167,14 @@ export default {
           this.$refs.mainTable.toggleAllSelection();
         }
       }
+    },
+    selectedColumns: {
+      immediate: false,
+      handler (columns) {
+        this.$nextTick(() => {
+          this.$refs.mainTable.doLayout();
+        });
+      }
     }
   },
   mounted () {
