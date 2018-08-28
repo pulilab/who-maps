@@ -960,20 +960,28 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['country'], self.country.id)
 
-        url = reverse('map-file-detail', kwargs={'pk': response.json()['id']})
+        map_file_id = response.json()['id']
+
+        url = reverse('map-file-detail', kwargs={'pk': map_file_id})
         map_file2 = SimpleUploadedFile("file2.txt", b"file_content2")
         data = {
-            'country': self.country.id,
             'map_file': map_file2
         }
-        response = self.test_user_client.put(url, data=data, format="multipart")
+        response = self.test_user_client.patch(url, data=data, format="multipart")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['country'], self.country.id)
 
-        url = reverse('map-file-detail', kwargs={'pk': response.json()['id']})
+        url = reverse('map-file-detail', kwargs={'pk': map_file_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['country'], self.country.id)
+
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        response = self.test_user_client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['map_files']), 1)
+        self.assertEqual(response.json()['map_files'][0], map_file_id)
 
     def test_country_admin_update_map_data(self):
         url = reverse("country-detail", kwargs={"pk": self.country.id})
@@ -1291,42 +1299,6 @@ class CountryAdminTests(TestCase):
         self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'project_approval'))
         self.assertEqual(ma.get_queryset(self.request).count(), Country.objects.all().count())
 
-    def test_staff_can_see_no_country_if_no_user_assigned_to_country(self):
-        ma = CountryAdmin(Country, self.site)
-        self.user.is_superuser = False
-        self.user.is_staff = True
-        self.user.save()
-        self.request.user = self.user
-        self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'project_approval'))
-        self.assertEqual(ma.get_queryset(self.request).count(), 0)
-
-    def test_staff_only_sees_the_country_he_is_assigned_to(self):
-        ma = CountryAdmin(Country, self.site)
-        self.user.is_superuser = False
-        self.user.is_staff = True
-        self.user.save()
-        self.request.user = self.user
-        user_profile = UserProfile.objects.create(user=self.user)
-        country = Country.objects.create(name="Country1", code="CC1")
-        country.users.add(user_profile)
-        self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'project_approval'))
-        self.assertEqual(ma.get_queryset(self.request).count(), 1)
-        self.assertEqual(ma.get_queryset(self.request)[0].name, "Country1")
-        self.assertEqual(ma.get_queryset(self.request)[0].code, "CC1")
-
-    def test_staff_has_some_readonly_fields(self):
-        ma = CountryAdmin(Country, self.site)
-        self.user.is_superuser = False
-        self.user.is_staff = True
-        self.user.save()
-        self.request.user = self.user
-        self.assertEqual(ma.get_readonly_fields(self.request), (
-            'code',
-            'name',
-            'map_download',
-            'users'
-        ))
-
     def test_superuser_readonlies(self):
         ma = CountryAdmin(Country, self.site)
         self.user.is_superuser = True
@@ -1364,66 +1336,6 @@ class CountryAdminTests(TestCase):
         self.assertEqual(addcountryfield_inline.get_readonly_fields(self.request), ())
         self.assertEqual(addcountryfield_inline.get_queryset(self.request).count(), 0)
 
-    def test_assign_user_will_send_email(self):
-        user_profile = UserProfile.objects.create(user=self.user)
-        country = Country.objects.create(name="Country1", code="CC1")
-        ma = CountryAdmin(Country, self.site)
-        self.user.is_superuser = True
-        self.user.is_staff = True
-        self.user.save()
-        self.request.user = self.user
-
-        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
-        user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
-
-        class MockForm:
-            changed_data = ['users', 'map_activated_on']
-
-        country.users.add(user_profile, user_2_profile)
-        ma.save_model(self.request, country, MockForm(), True)
-
-        outgoing_en_email = [m for m in mail.outbox
-                             if '<meta http-equiv="content-language" content="en">' in m.message().as_string()
-                             and 'You have been selected as the Country Admin' in m.message().as_string()][0].message()
-        outgoing_en_email_text = outgoing_en_email.as_string()
-
-        self.assertTrue(
-            "You have been selected as the Country Admin for {}".format(country.name) in outgoing_en_email.values())
-        self.assertTrue("test@test.com" in outgoing_en_email.values())
-        self.assertTrue('You have been selected as the Country Admin' in outgoing_en_email_text)
-        self.assertTrue('/admin/country/country/{}/change/'.format(country.id) in outgoing_en_email_text)
-        self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
-        self.assertNotIn('{{', outgoing_en_email_text)
-
-        outgoing_fr_email = [m for m in mail.outbox
-                             if '<meta http-equiv="content-language" content="fr">' in m.message().as_string()
-                             and 'You have been selected as the Country Admin' in m.message().as_string()][0].message()
-        outgoing_fr_email_text = outgoing_fr_email.as_string()
-
-        self.assertTrue("test2@test.test" in outgoing_fr_email.values())
-        self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
-        self.assertNotIn('{{', outgoing_fr_email_text)
-
-        outgoing_map_email = [m for m in mail.outbox
-                              if '<meta http-equiv="content-language" content="en">' in m.message().as_string()
-                              and 'A new map for' in m.message().as_string()][0].message()
-        outgoing_map_email_text = outgoing_map_email.as_string()
-        self.assertTrue("test@test.com" in outgoing_map_email.values())
-        self.assertTrue("A new map for {} has been activated".format(country.name) in outgoing_map_email_text)
-
-    def test_country_map_inline(self):
-        user_profile = UserProfile.objects.create(user=self.user)
-        country = Country.objects.create(name="Country1", code="CC1")
-        country.users.add(user_profile)
-        ma = CountryAdmin(Country, self.site)
-        self.user.is_superuser = True
-        self.user.is_staff = True
-        self.user.save()
-        self.request.user = self.user
-
-        formsets_and_inlines = list(ma.get_formsets_with_inlines(self.request))
-        self.assertTrue(len(formsets_and_inlines), 2)
-
     def test_country_get_fields(self):
         ma = CountryAdmin(Country, self.site)
         self.user.is_superuser = True
@@ -1431,23 +1343,6 @@ class CountryAdminTests(TestCase):
         self.user.save()
         self.request.user = self.user
         self.assertTrue('map_data' not in ma.get_fields(self.request))
-
-    def test_country_map_download(self):
-        ma = CountryAdmin(Country, self.site)
-        self.user.is_superuser = True
-        self.user.is_staff = True
-        self.user.save()
-        self.request.user = self.user
-
-        class MockCountry:
-            code = "SL"
-            name = "Sierra Leone"
-
-        self.assertEqual(ma.map_download(MockCountry),
-                         "<a href='https://wambachers-osm.website/boundaries/exportBoundaries?cliVersion=1.0"
-                         "&cliKey=a9ea45b5-ab37-4323-8263-767aa5896113&exportFormat=json&exportLayout=single"
-                         "&exportAreas=land&union=false&from_AL=2&to_AL=6&selected=SLE'>"
-                         " Sierra Leone map download </a>")
 
 
 class CountryManagementCommandTest(TestCase):
