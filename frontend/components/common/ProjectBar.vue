@@ -49,8 +49,6 @@
       </el-row>
 
       <div class="ProjectMenu">
-        <!-- TODO -->
-        <!-- Please add '.Active' class -->
         <nuxt-link :to="localePath({name: 'organisation-projects-id-edit', params: {id, organisation: $route.params.organisation}})">
           Project
         </nuxt-link>
@@ -150,7 +148,7 @@ export default {
         transform: translateY(-4px);
         transition: @transitionAll;
 
-        &.Active {
+        &.Active, &.nuxt-link-exact-active {
           color: @colorBrandPrimary !important;
 
           &::before {
