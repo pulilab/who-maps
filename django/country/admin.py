@@ -11,7 +11,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext, override
 
 from core.admin import ArrayFieldMixin
-from .models import Country, CountryField
+from .models import Country, CountryField, Donor
 from .forms import CountryFieldAdminForm, CountryFieldAdminFormNoneReadOnlyOptions
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -48,7 +48,7 @@ class CountryAdmin(admin.ModelAdmin):
     list_display = ('name', 'code', 'project_approval')
     ordering = ('name',)
     inlines = (AddCountryFieldInline, CountryFieldInline)
-    filter_horizontal = ('users',)
+    filter_horizontal = ('users', 'admins', 'super_admins')
     readonly_fields = ('code', 'name', 'map_download')
 
     def get_fields(self, request, obj=None):
