@@ -51,6 +51,10 @@
             type="text"/>
         </el-form-item>
 
+        <el-form-item label="Project approval process">
+          <el-checkbox v-model="projectApproval">{{ (projectApproval ? 'U' : 'Not u') + 'sed for project in country' }}</el-checkbox>
+        </el-form-item>
+
         <el-form-item
           label="Partner logos"
           prop="partnerLogos">
@@ -253,7 +257,8 @@ export default {
     ...mapGettersActions({
       coverText: ['admin/country', 'getCoverText', 'setCoverText'],
       footerTitle: ['admin/country', 'getFooterTitle', 'setFooterTitle'],
-      footerText: ['admin/country', 'getFooterText', 'setFooterText']
+      footerText: ['admin/country', 'getFooterText', 'setFooterText'],
+      projectApproval: ['admin/country', 'getProjectApproval', 'setProjectApproval']
     }),
 
     ...mapGetters({

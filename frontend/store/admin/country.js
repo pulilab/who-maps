@@ -15,6 +15,7 @@ export const getters = {
   getCoverText: state => state.editableCountry && state.editableCountry.cover_text,
   getFooterTitle: state => state.editableCountry && state.editableCountry.footer_title,
   getFooterText: state => state.editableCountry && state.editableCountry.footer_text,
+  getProjectApproval: state => state.editableCountry && state.editableCountry.project_approval,
 
   getUserSelection: state => state.userSelection,
   getAdminSelection: state => state.adminSelection,
@@ -73,7 +74,7 @@ export const actions = {
   async saveChanges ({ dispatch }) {
     try {
       await Promise.all([
-        dispatch('patchInfoStrings'),
+        dispatch('patchSimpleKeys'),
         dispatch('patchCountryImages'),
         dispatch('synchPartnerLogos'),
         dispatch('synchAdminUserArrays'),
@@ -97,26 +98,23 @@ export const actions = {
     }
   },
 
-  async patchInfoStrings ({ getters, rootGetters }) {
-    const isThereChange = ['cover_text', 'footer_title', 'footer_text'].some(key => {
+  async patchSimpleKeys ({ getters, rootGetters }) {
+    const simpleKeys = ['cover_text', 'footer_title', 'footer_text', 'project_approval'];
+    const isThereChange = simpleKeys.some(key => {
       return getters.getCountry[key] !== getters.getStableCountry[key];
     });
 
     if (isThereChange) {
       const countryId = rootGetters['user/getProfile'].country;
+      const patchObj = {};
 
-      const formData = new FormData();
-      ['cover_text', 'footer_title', 'footer_text'].forEach(key => {
+      simpleKeys.forEach(key => {
         if (getters.getCountry[key] !== getters.getStableCountry[key]) {
-          formData.append(key, getters.getCountry[key]);
+          patchObj[key] = getters.getCountry[key];
         }
       });
 
-      const config = { headers: {
-        'content-type': 'multipart/form-data'
-      }};
-
-      await this.$axios.patch(`/api/countries/${countryId}/`, formData, config);
+      await this.$axios.patch(`/api/countries/${countryId}/`, patchObj);
     } else {
       // console.log('No change in country info strings');
       return Promise.resolve();
@@ -225,6 +223,10 @@ export const actions = {
 
   setFooterText ({ commit }, txt) {
     commit('SET_COUNTRY_FIELD', {field: 'footer_text', data: txt});
+  },
+
+  setProjectApproval ({ commit }, bool) {
+    commit('SET_COUNTRY_FIELD', {field: 'project_approval', data: bool});
   }
 
 };
