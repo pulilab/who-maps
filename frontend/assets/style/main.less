@@ -34,12 +34,9 @@ html {
 }
 
 body {
-  .limitPageWidth();
   min-height: 100%;
-  margin: 0 auto !important;
+  margin: 0 ;
   padding: 0;
-  background-color: @colorGrayLightest;
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
   // Brand typo
   font-family: Arial, sans-serif !important;
   text-rendering: optimizeLegibility;
@@ -49,6 +46,14 @@ body {
   height: auto !important;
   -webkit-tap-highlight-color: transparent;
   //
+
+  > div {
+    .limitPageWidth();
+    margin: 0 auto !important;
+    padding: 0;
+    background-color: @colorGrayLightest;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
+  }
 }
 
 a {
@@ -307,6 +312,14 @@ i[class*="el-icon-"] {
     }
   }
 
+  &.PrimaryButton {
+    color: @colorBrandAccent;
+
+    &:hover {
+      color: lighten(@colorBrandAccent, 10%);
+    }
+  }
+
   // SAMPLE MARKUP:
   //
   // <el-button
@@ -317,7 +330,7 @@ i[class*="el-icon-"] {
     color: @colorTextSecondary;
 
     &:hover {
-      color: @colorTextPrimary;
+      color: lighten(@colorTextSecondary, 10%);
 
       .ButtonHint {
         color: @colorGray;
@@ -339,6 +352,14 @@ i[class*="el-icon-"] {
 
     &:hover {
       color: lighten(@colorDanger, 10%);
+    }
+  }
+
+  &.MutedButton {
+    color: @colorGray;
+
+    &:hover {
+      color: lighten(@colorGray, 10%);
     }
   }
 }
@@ -363,26 +384,11 @@ fieldset {
     font-family: Arial, sans-serif;
   }
 
-  // custom select caret
-  .el-select__caret {
-    &.el-icon-arrow-up {
-      transform: translateX(4px) !important;
-      width: 37px;
-      height: calc(100% - 2px);
-      margin: 1px 0;
-      background-color: #EDEDED;
-      border-left: 1px solid #B9B9B9;
-
-      &::before {
-        content: "\E60B";
-        color: @colorTextSecondary;
-      }
-
-      &.is-reverse {
-        &::before {
-          content: "\E60C";
-        }
-      }
+  &.el-input-group {
+    .el-input-group__append,
+    .el-input-group__prepend {
+      padding: 0 12px;
+      color: @colorTextSecondary;
     }
   }
 }
@@ -454,6 +460,40 @@ fieldset {
 }
 
 .el-select {
+
+  // small
+  &.el-select--small {
+    .el-select__caret {
+      &.el-icon-arrow-up {
+        width: 31px;
+      }
+    }
+  }
+
+  // custom select caret
+  .el-select__caret {
+    &.el-icon-arrow-up {
+      transform: translateX(4px) !important;
+      width: 39px;
+      height: calc(100% - 2px);
+      margin: 1px 0;
+      background-color: #EDEDED;
+      border-left: 1px solid @colorGray;
+
+      &::before {
+        content: "\E60B";
+        color: @colorTextSecondary;
+      }
+
+      &.is-reverse {
+        &::before {
+          content: "\E60C";
+        }
+      }
+    }
+  }
+
+  // inner tags
   .el-select__tags {
     .el-select__tags-text {
       color: @colorTextPrimary;
@@ -468,17 +508,27 @@ fieldset {
 }
 
 .el-checkbox {
-  &.CheckboxSmall {
-    font-size: @fontSizeSmall;
-    line-height: 16px;
-
-    .el-checkbox__input {
-      top: 0 !important;
+  .el-checkbox__inner {
+    // bolder tick
+    &::after {
+      top: 1px;
+      left: 4px;
+      width: 3px;
+      height: 7px;
+      border-width: 2px;
     }
   }
 
   .el-checkbox__label {
     font-weight: 400;
+  }
+
+  &.CheckboxSmall {
+    .el-checkbox__input {}
+    .el-checkbox__label {
+      font-size: @fontSizeSmall;
+      line-height: 16px;
+    }
   }
 }
 
@@ -489,6 +539,10 @@ fieldset {
       margin: 0;
       padding: 10px 0;
       line-height: 19px;
+
+      &.CheckboxSmall {
+        padding: 5px 0;
+      }
 
       .el-checkbox__input {
         vertical-align: top;
@@ -514,6 +568,10 @@ fieldset {
       box-sizing: border-box;
       line-height: 19px;
       padding: 10px 0;
+
+      &.CheckboxSmall {
+        padding: 5px 0;
+      }
 
       .el-checkbox__input {
         vertical-align: top;
@@ -544,6 +602,15 @@ fieldset {
       display: block;
       margin: 0;
     }
+  }
+}
+
+// Switch
+
+.el-switch {
+  .el-switch__core {
+    border-color: @colorTextMuted;
+    background-color: @colorTextMuted;
   }
 }
 
@@ -646,7 +713,7 @@ fieldset {
       text-align: left;
 
       .el-button {
-        margin: 0 15px;
+        margin: 0 18px;
       }
     }
   }
@@ -706,6 +773,123 @@ fieldset {
             background-color: @colorBrandAccentLight;
           }
         }
+      }
+    }
+  }
+}
+
+// Tooltip
+
+.el-tooltip__popper {
+  border: 0 !important;
+  opacity: .9;
+  filter: drop-shadow(0 3px 5px rgba(0,0,0,.35));
+
+  &.is-light {
+    color: @colorTextPrimary;
+  }
+
+  .popper__arrow {
+    border: 0;
+  }
+}
+
+// Popover
+
+.el-popover {
+  &.CustomPopover {
+    box-sizing: border-box;
+    padding: 0;
+
+    .el-popover__title {
+      margin: 0;
+      padding: 0 12px;
+      border-bottom: 1px solid @colorGrayLight;
+      font-size: @fontSizeSmall - 1;
+      font-weight: 700;
+      color: @colorGray;
+      line-height: 30px;
+      text-transform: uppercase;
+      .textTruncate();
+
+      .svg-inline--fa {
+        margin-right: 2px;
+      }
+    }
+
+    .CustomPopoverList {
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          position: relative;
+          padding: 0 28px 0 12px;
+          height: 40px;
+          font-size: @fontSizeBase;
+          line-height: 40px;
+          color: @colorTextSecondary;
+          cursor: pointer;
+          transition: @transitionAll;
+          .textTruncate();
+
+          &:hover {
+            background-color: @colorGrayLightest;
+            color: @colorTextPrimary;
+
+            .svg-inline--fa {
+              opacity: .5;
+            }
+          }
+
+          &.Active,
+          &.Selected {
+            background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
+            color: @colorBrandPrimary;
+            font-weight: 700;
+
+            .svg-inline--fa {
+              opacity: 1;
+            }
+          }
+
+          .svg-inline--fa {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            margin-right: 2px;
+            opacity: 0;
+            transition: @transitionFadeLinear;
+          }
+        }
+      }
+
+      &.Small {
+        li {
+          height: 30px;
+          font-size: @fontSizeSmall;
+          line-height: 30px;
+        }
+      }
+    }
+
+    .CustomPopoverActions {
+      height: 40px;
+      margin: 0;
+      padding: 0 12px;
+      border-top: 1px solid @colorGrayLight;
+      // background-color: @colorGrayLightest;
+
+      .el-row {
+        height: 100%;
+      }
+
+      .PrimaryButton {
+        float: right;
       }
     }
   }

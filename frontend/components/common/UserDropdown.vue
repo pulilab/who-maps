@@ -56,7 +56,7 @@
         <div class="Divider" />
         <div class="DropdownLink" >
           <nuxt-link
-            :to="localePath('index-edit-profile')"
+            :to="localePath({name: 'organisation-edit-profile', params: $route.params})"
             @click.native="closePopover"
           >
             <span class="MenuIcon">
@@ -113,7 +113,7 @@ export default {
     logout () {
       this.closePopover();
       this.doLogout();
-      this.$router.push(this.localePath('index'));
+      this.$router.push(this.localePath({name: 'organisation', params: this.$route.params}));
     }
   }
 };
@@ -164,7 +164,7 @@ export default {
           font-size: @fontSizeSmall - 1;
           font-weight: 700;
           text-transform: uppercase;
-          color: @colorTextMuted;
+          color: @colorGray;
         }
 
         .CountryName,
@@ -199,7 +199,7 @@ export default {
 
       &:hover {
         /* $--color-primary-light-9 */
-        background-color: #ECF5FF;
+        background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
       }
 
       a,
@@ -207,6 +207,7 @@ export default {
         color: @colorBrandPrimary !important;
         font-weight: 700;
         text-decoration: none;
+        white-space: nowrap;
       }
 
       .MenuIcon {

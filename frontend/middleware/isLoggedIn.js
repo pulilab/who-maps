@@ -1,8 +1,9 @@
 import auth from './auth.js';
 
-export default async function ({ store, req, redirect, app }) {
+export default async function ({ store, req, redirect, app, route }) {
   const authOkay = await auth({ store, req });
   if (!authOkay) {
-    redirect('/en/login');
+    const path = app.localePath({name: 'organisation-login', params: route.params});
+    redirect(path);
   }
 }

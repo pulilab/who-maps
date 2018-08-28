@@ -14,7 +14,7 @@ const MapMixin = {
   },
   computed: {
     ...mapGetters({
-      allCountriesPin: 'landing/getLandingPagePins',
+      allCountriesPin: 'landing/getCountryPins',
       getActiveCountry: 'landing/getActiveCountry',
       geoJson: 'countries/getGeoJsonLibrary',
       getSelectedCountry: 'landing/getSelectedCountry',

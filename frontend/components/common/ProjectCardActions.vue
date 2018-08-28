@@ -6,7 +6,7 @@
     >
       <el-col v-if="showViewDraft">
         <nuxt-link
-          :to="localePath({name: 'index-projects-id', params: {id: project.id}})"
+          :to="localePath({name: 'organisation-projects-id', params: {id: project.id, organisation: $route.params.organisation}})"
           class="NuxtLink IconLeft"
         >
           <fa icon="arrow-right" />
@@ -15,7 +15,7 @@
       </el-col>
       <el-col v-if="showViewPublished">
         <nuxt-link
-          :to="localePath({name: 'index-projects-id-published', params: {id: project.id}})"
+          :to="localePath({name: 'organisation-projects-id-published', params: {id: project.id, organisation: $route.params.organisation}})"
           class="NuxtLink IconLeft"
         >
           <fa icon="arrow-right" />
@@ -24,7 +24,7 @@
       </el-col>
       <el-col v-if="showEditDraft">
         <nuxt-link
-          :to="localePath({name: 'index-projects-id-edit', params: {id: project.id}})"
+          :to="localePath({name: 'organisation-projects-id-edit', params: {id: project.id, organisation: $route.params.organisation}})"
           class="NuxtLink IconLeft"
         >
           <fa icon="edit" />
@@ -33,7 +33,7 @@
       </el-col>
       <el-col>
         <nuxt-link
-          :to="localePath({name: 'index-projects-id-assessment', params: {id: project.id}})"
+          :to="localePath({name: 'organisation-projects-id-assessment', params: {id: project.id, organisation: $route.params.organisation}})"
           class="NuxtLink IconLeft"
         >
           <fa icon="tachometer-alt" />
@@ -82,7 +82,7 @@ export default {
     }
 
     .NuxtLink {
-      margin-left: 30px;
+      margin-left: 40px;
       line-height: 24px;
     }
   }

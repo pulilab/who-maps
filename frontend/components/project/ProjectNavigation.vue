@@ -110,15 +110,15 @@
       >
         <el-button
           v-if="draft"
+          :disabled="!!loading"
           type="primary"
           size="medium"
           @click="$emit('publishProject')"
         >
-          <!-- TODO -->
-          <!-- Show spinner while form is being published -->
-          <!-- <fa
+          <fa
+            v-show="loading === 'publish'"
             icon="spinner"
-            spin /> -->
+            spin />
           Publish
         </el-button>
 
@@ -127,22 +127,27 @@
           :type="newProject ? 'primary' : 'text'"
           :size="newProject ? 'medium' : ''"
           :class="['SaveDraft', {'NewProject': newProject, 'Draft':draft }]"
+          :disabled="!!loading"
           @click="$emit('saveDraft')"
         >
-          <!-- TODO -->
-          <!-- Show spinner while form is being saved -->
-          <!-- <fa
+          <fa
+            v-show="loading === 'draft'"
             icon="spinner"
-            spin /> -->
+            spin />
           Save draft
         </el-button>
 
         <el-button
           v-if="draft"
+          :disabled="!!loading"
           type="text"
           class="DiscardDraft DeleteButton"
           @click="$emit('discardDraft')"
         >
+          <fa
+            v-show="loading === 'discard'"
+            icon="spinner"
+            spin />
           Discard draft
         </el-button>
 
@@ -169,6 +174,8 @@
 
 <script>
 import VueScrollClass from 'vue-scroll-class';
+import { mapGetters } from 'vuex';
+
 export default {
   directives: {
     'scroll-class': VueScrollClass
@@ -192,6 +199,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      loading: 'project/getLoading'
+    }),
     active () {
       const hash = this.$route.hash;
       return hash ? hash.replace('#', '') : 'general';
@@ -205,11 +215,11 @@ export default {
       });
     },
     goToDraft () {
-      const localised = this.localePath({name: 'index-projects-id-edit', params: {...this.$route.params}});
+      const localised = this.localePath({name: 'organisation-projects-id-edit', params: {...this.$route.params}});
       this.$router.push(localised);
     },
     goToPublished () {
-      const localised = this.localePath({name: 'index-projects-id-published', params: {...this.$route.params}});
+      const localised = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params}});
       this.$router.push(localised);
     }
   }

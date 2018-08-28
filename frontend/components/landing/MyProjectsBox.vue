@@ -22,7 +22,7 @@
     >
       <el-col>
         <nuxt-link
-          :to="localePath('index-projects')"
+          :to="localePath({name: 'organisation-projects', params: $route.params })"
           tag="button"
           class="el-button el-button--default el-button--medium">
           See all my projects
@@ -85,6 +85,13 @@ export default {
       h6 {
         color: @colorWhite;
         margin: 0;
+      }
+    }
+
+    .UserProjectsList {
+      .NuxtLink {
+        margin-left: 30px;
+        font-size: @fontSizeSmall;
       }
     }
 

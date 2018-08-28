@@ -4,34 +4,22 @@
       <span v-show="!headerSelectable">{{ header }}</span>
       <el-checkbox
         v-show="headerSelectable"
-        v-model="headerChecked"
+        :value="selected"
+        @change="headerSelected"
       >
         {{ header }}
       </el-checkbox>
     </div>
     <div class="Main">
-      <selector-dialog-category
-        v-for="category in items"
-        :values="values"
-        :key="category.id"
-        :child-name="childName"
-        :category-selectable="categorySelectable"
-        :category="category"
-        @change="emitChange"
-      />
+      <slot/>
     </div>
   </div>
 </template>
 
 <script>
-import SelectorDialogCategory from './SelectorDialogCategory';
+
 export default {
   components: {
-    SelectorDialogCategory
-  },
-  model: {
-    prop: 'values',
-    event: 'change'
   },
   props: {
     header: {
@@ -40,35 +28,18 @@ export default {
     },
     headerSelectable: {
       type: Boolean,
-      required: false,
       default: false
     },
-    categorySelectable: {
+    selected: {
       type: Boolean,
-      required: false,
       default: false
-    },
-    childName: {
-      type: String,
-      required: true
-    },
-    items: {
-      type: Array,
-      required: true
-    },
-    values: {
-      type: Array,
-      required: true
     }
   },
-  data () {
-    return {
-      headerChecked: false
-    };
+  computed: {
   },
   methods: {
-    emitChange (value) {
-      this.$emit('change', value);
+    headerSelected (value) {
+      this.$emit('headerSelected', value);
     }
   }
 };
@@ -87,6 +58,7 @@ export default {
       box-sizing: border-box;
       padding: 0 30px;
       width: calc((90vw / 4) - 1px);
+      max-width: calc((@appWidthMaxLimit * 0.9) / 4 - 1px);
       height: @dialogHeaderFooterHeight;
       line-height: @dialogHeaderFooterHeight;
       border-bottom: 1px solid @colorGrayLight;
@@ -94,14 +66,20 @@ export default {
       font-size: @fontSizeBase;
       font-weight: 700;
       text-transform: uppercase;
-      box-shadow: 0 1px 3px rgba(0,0,0,.1);
+
+      .el-checkbox {
+        .el-checkbox__label {
+          font-weight: 700;
+        }
+      }
     }
 
     .Main {
       position: relative;
       top: @dialogHeaderFooterHeight;
-      padding: 20px 20px 40px 30px;
-      height: calc(80vh - (@dialogHeaderFooterHeight*4) + 6px);
+      box-sizing: border-box;
+      padding: 10px 20px 50px 30px;
+      height: calc(80vh - (@dialogHeaderFooterHeight * 3));
       overflow-y: scroll;
     }
   }

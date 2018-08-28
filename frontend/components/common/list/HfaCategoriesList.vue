@@ -5,18 +5,34 @@
         v-for="hfa in selected"
         :key="hfa.id"
       >
-        {{ hfa.name }}
+        <list-action
+          v-if="actions"
+          @click="$emit('delete', hfa.id)"
+        />
+        <span> {{ hfa.name }} </span>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import ListAction from './ListAction';
 import { mapGetters } from 'vuex';
 export default {
+  components: {
+    ListAction
+  },
   props: {
     value: {
       type: Array,
+      default: () => []
+    },
+    actions: {
+      type: Boolean,
+      default: false
+    },
+    limit: {
+      type: Number,
       default: null
     }
   },
@@ -25,8 +41,8 @@ export default {
       healthFocusAreas: 'projects/getHealthFocusAreas'
     }),
     selected () {
-      const hfas = this.healthFocusAreas.reduce((a, c) => [...a, ...c.health_focus_areas], []);
-      return hfas.filter(hfa => this.value.includes(hfa.id));
+      const result = this.healthFocusAreas.filter(h => this.value.includes(h.id));
+      return this.limit ? result.slice(0, this.limit) : result;
     }
   }
 };

@@ -1,9 +1,9 @@
 <template>
-  <div
+  <span
     v-if="dhi"
     class="DhiItem">
     {{ dhi.name }}
-  </div>
+  </span>
 </template>
 
 <script>
