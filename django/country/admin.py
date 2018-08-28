@@ -120,3 +120,8 @@ class CountryAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):  # pragma: no cover
         return False
+
+
+@admin.register(Donor)
+class DonorAdmin(admin.ModelAdmin):
+    filter_horizontal = ('users', 'admins', 'super_admins')
