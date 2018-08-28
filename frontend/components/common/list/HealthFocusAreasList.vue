@@ -11,7 +11,7 @@
         />
         <span>
           <fa
-            icon="check"
+            icon="arrow-alt-circle-right"
             size="xs" />
         </span>
         <span>{{ hfa.name }}</span>

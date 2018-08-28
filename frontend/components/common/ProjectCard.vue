@@ -160,9 +160,11 @@ export default {
 
     &.hovered {
       border-color: @colorTextMuted;
+
       .ProjectName {
         color: @colorBrandPrimary;
       }
+
       .ProjectCountryOrg {
         color: @colorTextPrimary;
       }
@@ -215,6 +217,8 @@ export default {
         text-transform: uppercase;
 
         .svg-inline--fa {
+          position: relative;
+          top: 1px;
           margin-right: 1px;
         }
       }
