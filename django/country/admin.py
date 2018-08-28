@@ -65,48 +65,6 @@ class CountryAdmin(admin.ModelAdmin):
         markup = "<a href='{}'> {} map download </a>".format(url, obj.name)
         return mark_safe(markup)
 
-    def get_readonly_fields(self, request, obj=None):
-        fields = super(CountryAdmin, self).get_readonly_fields(request, obj)
-        if request.user.is_staff and not request.user.is_superuser:
-            fields += (
-                'users',
-            )
-        return fields
-
-    def save_model(self, request, obj, form, change):
-        super(CountryAdmin, self).save_model(request, obj, form, change)
-        if change and 'users' in form.changed_data and obj.users:
-            self._notify_user(obj, subject="You have been selected as the Country Admin for {country_name}",
-                              template_name="email/added_to_group.html")
-        if change and 'map_activated_on' in form.changed_data and obj.users:
-            management.call_command('clean_maps', obj.code)
-            self._notify_user(obj, subject="A new map for {country_name} has been activated",
-                              template_name="email/country_map_activated.html")
-
-    @staticmethod
-    def _notify_user(country, subject, template_name):
-        html_template = loader.get_template(template_name)
-        change_url = reverse('admin:country_country_change', args=(country.id,))
-
-        email_mapping = defaultdict(list)
-        for profile in country.users.all():
-            email_mapping[profile.language].append(profile.user.email)
-
-        for language, email_list in email_mapping.items():
-            with override(language):
-                subject = ugettext(subject)
-                html_message = html_template.render({'change_url': change_url,
-                                                     'country_name': country.name,
-                                                     'language': language})
-
-            send_mail(
-                subject=subject.format(country_name=country.name),
-                message="",
-                from_email=settings.FROM_EMAIL,
-                recipient_list=email_list,
-                html_message=html_message,
-                fail_silently=True)
-
     def has_add_permission(self, request):  # pragma: no cover
         return False
 
