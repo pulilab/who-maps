@@ -16,13 +16,6 @@
         >
           Set / Reset Markers
         </el-button>
-        <el-button
-          v-show="showSaveButton"
-          type="primary"
-          @click.prevent="save"
-        >
-          Save
-        </el-button>
       </el-card>
 
     </el-header>
@@ -283,9 +276,7 @@ export default {
       setSecondSubLevelType: 'admin/map/setSecondSubLevelType',
       setCountryCenter: 'admin/map/setCountryCenter',
       setSubLevelsPolyCenters: 'admin/map/setSubLevelsPolyCenters',
-      updateSubLevelPolyCenter: 'admin/map/updateSubLevelPolyCenter',
-      save: 'admin/map/saveMapData'
-
+      updateSubLevelPolyCenter: 'admin/map/updateSubLevelPolyCenter'
     }),
     geoJsonLoadHandler () {
       this.$refs.mainMap.mapObject.fitBounds(this.$refs.geoJsonLayer.mapObject.getBounds());
