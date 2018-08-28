@@ -11,7 +11,12 @@
           size="small"
           class="IconLeft">
           <fa icon="download"/>
-          Export selected
+          <span v-show="selectedRows.length === 0">
+            Export selected
+          </span>
+          <span v-show="selectedRows.length > 0">
+            Export {{ selectedRows.length }} project(s)
+          </span>
         </el-button>
         <el-select
           v-model="exportType"
@@ -23,6 +28,10 @@
             label="PDF"
             value="PDF"/>
         </el-select>
+        <template v-if="selectedRows.length > 0">
+          <div class="Separator"/>
+          <span @click="selectAll"> Select All 450 rows</span>
+        </template>
       </el-row>
     </el-col>
 
@@ -114,7 +123,8 @@ export default {
   computed: {
     ...mapGetters({
       columns: 'dashboard/getAvailableColumns',
-      selected: 'dashboard/getSelectedColumns'
+      selected: 'dashboard/getSelectedColumns',
+      selectedRows: 'dashboard/getSelectedRows'
     }),
     settingsTitle () {
       return `main fields (${this.selected.length}/${this.columns.length})`;
@@ -122,7 +132,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSelectedColumns: 'dashboard/setSelectedColumns'
+      setSelectedColumns: 'dashboard/setSelectedColumns',
+      setSelectAll: 'dashboard/setSelectAll'
     }),
     popperOpenHandler () {
       this.selectedColumns = [...this.columns.map(s => ({...s}))];
@@ -130,6 +141,9 @@ export default {
     updateColumns () {
       this.setSelectedColumns(this.selectedColumns.filter(s => s.selected).map(s => s.id));
       this.columnSelectorOpen = false;
+    },
+    selectAll () {
+      this.setSelectAll(true);
     }
   }
 };

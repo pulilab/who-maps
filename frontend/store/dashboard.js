@@ -4,60 +4,36 @@ export const state = () => ({
   columns: [
     {
       id: 1,
-      label: 'Project name',
-      field: 'id',
-      thClass: 'CustomTH NameColumn',
-      tdClass: 'CustomTD NameColumn'
+      label: 'Project name'
     },
     {
       id: 2,
-      label: 'Country',
-      field: 'country',
-      thClass: 'ThCCustomTH CountryColumn',
-      tdClass: 'CustomTD CountryColumn'
+      label: 'Country'
 
     },
     {
       id: 3,
-      label: 'Organisation Name',
-      field: 'organisation',
-      thClass: 'ThOrganisatiCustomTH OrganisationNameColumn',
-      tdClass: 'CustomTD OrganisationNameColumn'
+      label: 'Organisation Name'
     },
     {
       id: 4,
-      label: 'Donors',
-      field: 'donors',
-      thClass: 'ThCustomTH DonorsColumn',
-      tdClass: 'CustomTD DonorsColumn'
+      label: 'Donors'
     },
     {
       id: 5,
-      label: 'Contact Name',
-      field: 'contact_name',
-      thClass: 'ThContacCustomTH Contact_nameColumn',
-      tdClass: 'CustomTD Contact_nameColumn'
+      label: 'Contact Name'
     },
     {
       id: 6,
-      label: 'Overview of digital health implementation',
-      field: 'implementation_overview',
-      thClass: 'ThImplementationOvCustomTH ImplementationOverviewColumn',
-      tdClass: 'CustomTD ImplementationOverviewColumn'
+      label: 'Overview of digital health implementation'
     },
     {
       id: 7,
-      label: 'Geographic scope',
-      field: 'geographic_scope',
-      thClass: 'ThGeographiCustomTH GeographicScopeColumn',
-      tdClass: 'CustomTD GeographicScopeColumn'
+      label: 'Geographic scope'
     },
     {
       id: 8,
-      label: 'Health Focus Areas',
-      field: 'health_focus_areas',
-      thClass: 'ThHealthFocuCustomTH HealthFocusAreasColumn',
-      tdClass: 'CustomTD HealthFocusAreasColumn'
+      label: 'Health Focus Areas'
     }
   ],
   selectedColumns: [1, 2, 3, 4, 5, 6, 7, 8],
@@ -73,18 +49,22 @@ export const state = () => ({
   selectedHFA: [],
   selectedHSC: [],
   selectedHIS: [],
-  selectedPlatforms: []
+  selectedPlatforms: [],
+  selectedRows: [],
+  selectAll: false
 });
 export const getters = {
   ...gettersGenerator(),
   getAvailableColumns: state => [...state.columns.map(c => ({...c, selected: state.selectedColumns.includes(c.id)}))],
-  getSelectedColumns: state => [...state.columns.filter(c => state.selectedColumns.includes(c.id)).map(c => ({...c}))],
+  getSelectedColumns: state => state.selectedColumns,
   getProjects: state => [...state.projects.map(r => ({...r}))],
   getSelectedDHI: state => state.selectedDHI,
   getSelectedHFA: state => state.selectedHFA,
   getSelectedHSC: state => state.selectedHSC,
   getSelectedHIS: state => state.selectedHIS,
-  getSelectedPlatforms: state => state.selectedPlatforms
+  getSelectedPlatforms: state => state.selectedPlatforms,
+  getSelectedRows: state => state.selectedRows,
+  getSelectAll: state => state.selectAll
 };
 
 export const actions = {
@@ -106,6 +86,13 @@ export const actions = {
   },
   setSelectedPlatforms ({commit}, columns) {
     commit('SET_SELECTED_PLATFORMS', columns);
+  },
+  setSelectedRows ({commit}, rows) {
+    commit('SET_SELECTED_ROWS', rows);
+    commit('SET_SELECT_ALL', false);
+  },
+  setSelectAll ({commit}, all) {
+    commit('SET_SELECT_ALL', all);
   }
 };
 export const mutations = {
@@ -127,5 +114,11 @@ export const mutations = {
   },
   SET_SELECTED_PLATFORMS: (state, platforms) => {
     state.selectedPlatforms = platforms;
+  },
+  SET_SELECTED_ROWS: (state, rows) => {
+    state.selectedRows = rows;
+  },
+  SET_SELECT_ALL: (state, all) => {
+    state.selectAll = all;
   }
 };
