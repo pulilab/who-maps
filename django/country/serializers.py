@@ -63,6 +63,9 @@ class UpdateAdminMixin:
         original_admins = set(instance.admins.all().only('id'))
         original_super_admins = set(instance.super_admins.all().only('id'))
 
+        # Select for update to avoid race conditions caused by partial update
+        # https://github.com/encode/django-rest-framework/issues/4675
+        instance = self.Meta.model.objects.select_for_update().get(pk=instance.id)
         # perform update
         instance = super().update(instance, validated_data)
 
