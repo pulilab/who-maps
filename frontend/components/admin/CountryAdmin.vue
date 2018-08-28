@@ -142,13 +142,25 @@
 
     <collapsible-card title="Country map">
       <div v-if="!country.map_files.length || forceMapFileChange">
-        TODO: File uploader
+        <el-form
+          label-width="215px"
+          label-position="left"
+          @submit.native.prevent>
+          <el-form-item label="Country file">
+            <file-upload
+              :auto-upload="false"
+              :files.sync="mapFiles"
+              :limit="1"/>
+          </el-form-item>
+        </el-form>
       </div>
       <div v-if="country.map_files.length && !forceMapFileChange">
         <vue-map-customizer/>
         <el-button @click="forceMapFileChange = true">Change map file</el-button>
       </div>
     </collapsible-card>
+
+    <!-- <p>country.map_files: {{ country.map_files }}</p> -->
 
     <hr>
 
@@ -315,6 +327,25 @@ export default {
       },
       set (value) {
         this.setCountryField({field: 'super_admins', data: value});
+      }
+    },
+
+    mapFiles: {
+      get () {
+        return this.country.map_files.map(file => {
+          if (file.raw || file.uid) {
+            return file;
+          } else if (file.image) {
+            return ({
+              url: file.image,
+              name: ('' + file.image).split('/').pop(),
+              id: file.id
+            });
+          }
+        });
+      },
+      set ([value]) {
+        this.setCountryField({field: 'map_files', data: [value]});
       }
     }
 

@@ -67,7 +67,8 @@ export const actions = {
         dispatch('patchInfoStrings'),
         dispatch('patchCountryImages'),
         dispatch('synchPartnerLogos'),
-        dispatch('synchAdminUserArrays')
+        dispatch('synchAdminUserArrays'),
+        dispatch('synchMapFile')
       ]);
       await dispatch('fetchData');
       window.scrollTo(0, 0);
@@ -183,6 +184,21 @@ export const actions = {
       patchObj.super_admins = getters.getCountry.super_admins;
     }
     await this.$axios.patch(`/api/countries/${countryId}/`, patchObj);
+  },
+
+  async synchMapFile ({ rootGetters, getters }) {
+    const mapFile = getters.getCountry.map_files[0];
+    if (mapFile.raw) {
+      const countryId = rootGetters['user/getProfile'].country;
+      const formData = new FormData();
+      formData.append('country', countryId);
+      formData.append('map_file', mapFile.raw);
+      await this.$axios.post(`/api/map-files/`, formData, {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      });
+    }
   },
 
   setCountryField ({ commit }, { field, data }) {
