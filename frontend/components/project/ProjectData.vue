@@ -330,7 +330,15 @@ export default {
           font-weight: 700;
         }
 
-        .Content {}
+        .Content {
+          ul {
+            li {
+              .svg-inline--fa {
+                display: none;
+              }
+            }
+          }
+        }
 
         .CountryItem {
           .CountryFlag {

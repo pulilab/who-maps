@@ -60,9 +60,5 @@ export default {
 
   .HealthFocusAreasList {
     width: 100%;
-
-    .svg-inline--fa {
-      display: none;
-    }
   }
 </style>
