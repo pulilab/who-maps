@@ -49,18 +49,22 @@ export const state = () => ({
   selectedHFA: [],
   selectedHSC: [],
   selectedHIS: [],
-  selectedPlatforms: []
+  selectedPlatforms: [],
+  selectedRows: [],
+  selectAll: false
 });
 export const getters = {
   ...gettersGenerator(),
   getAvailableColumns: state => [...state.columns.map(c => ({...c, selected: state.selectedColumns.includes(c.id)}))],
-  getSelectedColumns: state => [...state.columns.filter(c => state.selectedColumns.includes(c.id)).map(c => ({...c}))],
+  getSelectedColumns: state => state.selectedColumns,
   getProjects: state => [...state.projects.map(r => ({...r}))],
   getSelectedDHI: state => state.selectedDHI,
   getSelectedHFA: state => state.selectedHFA,
   getSelectedHSC: state => state.selectedHSC,
   getSelectedHIS: state => state.selectedHIS,
-  getSelectedPlatforms: state => state.selectedPlatforms
+  getSelectedPlatforms: state => state.selectedPlatforms,
+  getSelectedRows: state => state.selectedRows,
+  getSelectAll: state => state.selectAll
 };
 
 export const actions = {
@@ -82,6 +86,13 @@ export const actions = {
   },
   setSelectedPlatforms ({commit}, columns) {
     commit('SET_SELECTED_PLATFORMS', columns);
+  },
+  setSelectedRows ({commit}, rows) {
+    commit('SET_SELECTED_ROWS', rows);
+    commit('SET_SELECT_ALL', false);
+  },
+  setSelectAll ({commit}, all) {
+    commit('SET_SELECT_ALL', all);
   }
 };
 export const mutations = {
@@ -103,5 +114,11 @@ export const mutations = {
   },
   SET_SELECTED_PLATFORMS: (state, platforms) => {
     state.selectedPlatforms = platforms;
+  },
+  SET_SELECTED_ROWS: (state, rows) => {
+    state.selectedRows = rows;
+  },
+  SET_SELECT_ALL: (state, all) => {
+    state.selectAll = all;
   }
 };

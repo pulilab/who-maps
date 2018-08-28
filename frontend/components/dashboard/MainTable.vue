@@ -1,20 +1,24 @@
 <template>
   <div class="MainTable">
     <el-table
+      ref="mainTable"
       :data="projects"
       :max-height="tableMaxHeight"
+      :row-class-name="rowClassCalculator"
       border
       stripe
       style="width: 100%"
+      @select="selectHandler"
+      @select-all="selectHandler"
     >
       <el-table-column
         type="selection"
         width="55"
-        fixed
       />
       <el-table-column
-        sortable
+        v-if="selectedColumns.includes(1)"
         fixed
+        sortable
         label="Project Name"
         width="180">
         <template slot-scope="scope">
@@ -26,6 +30,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(2)"
         sortable
         label="Country"
         width="180">
@@ -37,6 +42,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(3)"
         sortable
         label="Organisation Name"
         width="180">
@@ -47,6 +53,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(4)"
         sortable
         label="Donors"
         width="180">
@@ -60,6 +67,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(5)"
         sortable
         label="Contact Name"
         width="180">
@@ -69,6 +77,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(6)"
         sortable
         label="Implementation Overview"
         width="180">
@@ -77,6 +86,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(7)"
         sortable
         label="Geographic Scope"
         width="180">
@@ -85,6 +95,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes(8)"
         sortable
         label="Health Focus Areas"
         width="180">
@@ -107,10 +118,11 @@
       </el-pagination>
     </div>
   </div>
+
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 import ProjectCard from '../common/ProjectCard';
 import CountryItem from '../common/CountryItem';
@@ -129,25 +141,49 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 450,
-      pageSizeOption: [10, 20, 50, 100]
+      pageSizeOption: [10, 20, 50, 100],
+      tableMaxHeight: 500
     };
   },
   computed: {
     ...mapGetters({
-      projects: 'dashboard/getProjects'
+      projects: 'dashboard/getProjects',
+      selectedColumns: 'dashboard/getSelectedColumns',
+      selectedRows: 'dashboard/getSelectedRows',
+      selectAll: 'dashboard/getSelectAll'
     }),
-    tableMaxHeight () {
-      // TODO fix this to work on resizes
-      if (this.$el) {
-        return window.getComputedStyle(this.$el).getPropertyValue('max-height');
-      }
-      return '500';
-    },
     min () {
       return 1 + this.pageSize * (this.currentPage - 1);
     },
     max () {
       return this.pageSize * this.currentPage;
+    }
+  },
+  watch: {
+    selectAll: {
+      immediate: true,
+      handler (value) {
+        if (value) {
+          this.$refs.mainTable.toggleAllSelection();
+        }
+      }
+    }
+  },
+  mounted () {
+    // TODO: fix this
+    // const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height');
+    // this.tableMaxHeight = +maxHeight.replace('px', '');
+    // this.$refs.mainTable.doLayout();
+  },
+  methods: {
+    ...mapActions({
+      setSelectedRows: 'dashboard/setSelectedRows'
+    }),
+    selectHandler (selection) {
+      this.setSelectedRows(selection.map(s => s.id));
+    },
+    rowClassCalculator ({row}) {
+      return this.selectedRows.includes(row.id) ? 'Selected' : 'NotSelected';
     }
   }
 };
