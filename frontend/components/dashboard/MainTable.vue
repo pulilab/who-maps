@@ -6,7 +6,7 @@
       :max-height="tableMaxHeight"
       :row-class-name="rowClassCalculator"
       border
-      stripe
+      stripe="false"
       style="width: 100%"
       @select="selectHandler"
       @select-all="selectHandler"
@@ -104,6 +104,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <div class="Pagination">
       <el-pagination
         :current-page.sync="currentPage"
@@ -112,7 +113,7 @@
         :total="total"
         layout="sizes, prev, slot, next"
       >
-        <span class="Counter">
+        <span class="PageCounter">
           {{ min }}-{{ max }} of {{ total }}
         </span>
       </el-pagination>
