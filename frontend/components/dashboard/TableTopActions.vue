@@ -167,7 +167,7 @@ export default {
         white-space: nowrap;
 
         .svg-inline--fa {
-          margin-left: 10px;
+          margin-left: 20px;
           color: @colorTextSecondary;
         }
       }
@@ -181,7 +181,5 @@ export default {
     }
   }
 
-  .TableSettingsDropdown {
-
-  }
+  .TableSettingsDropdown {}
 </style>
