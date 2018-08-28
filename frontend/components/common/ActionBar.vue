@@ -91,10 +91,10 @@ export default {
       return this.$route.path.includes('/admin') || this.$route.path.endsWith('/edit-profile');
     },
     allowCountryAdmin () {
-      return ['CA', 'SCA'].includes(this.userProfile.account_type) || this.userProfile.is_superuser
+      return ['CA', 'SCA'].includes(this.userProfile.account_type) || this.userProfile.is_superuser;
     },
     allowDonorAdmin () {
-      return ['DA', 'SDA'].includes(this.userProfile.account_type) || this.userProfile.is_superuser
+      return ['DA', 'SDA'].includes(this.userProfile.account_type) || this.userProfile.is_superuser;
     },
 
     isDashboard () {
@@ -105,20 +105,17 @@ export default {
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
   .ActionBar {
     background-color: @colorBrandPrimary;
-
     .InnerActionBar {
       .limitPageWidth();
       height: @actionBarHeight;
     }
-
     .Title {
       width: auto;
-
       h3 {
         display: inline-block;
         margin: 0;
@@ -127,49 +124,47 @@ export default {
         white-space: nowrap;
       }
     }
-
     .SearchComponentWrapper {
       width: auto;
     }
     .PersonaSelectorWrapper {
       width: auto;
     }
-
     .DashboardFiltersHeaderWrapper {
       min-width: @advancedSearchWidth;
       max-width: @advancedSearchWidth;
     }
-
     .ActionBarMenu {
       width: 100%;
       height: @actionBarHeight;
       padding-left: 70px;
       overflow: hidden;
-
       .ActionBarTab {
         width: auto;
       }
     }
-
     .ActionBarLink {
       position: relative;
       width: auto;
       height: 100%;
       margin-right: 20px;
-
+      padding: 0 10px;
+      font-size: @fontSizeBase;
+      line-height: @actionBarHeight;
+      font-weight: 700;
+      color: @colorWhite;
+      text-decoration: none;
+      cursor: pointer;
       white-space: nowrap;
       opacity: .6;
       transition: @transitionAll;
-
       &.nuxt-link-exact-active {
         opacity: 1;
-
         &::before {
           background-color: @colorWhite;
           transform: translateY(0);
         }
       }
-
       &::before {
         content: "";
         position: absolute;
@@ -182,14 +177,11 @@ export default {
         transform: translateY(4px);
         transition: @transitionAll;
       }
-
       &:hover {
         opacity: 1;
-
         &::before {
           transform: translateY(0);
         }
-
       }
     }
   }
