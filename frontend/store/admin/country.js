@@ -73,14 +73,14 @@ export const actions = {
 
   async saveChanges ({ dispatch }) {
     try {
-      await Promise.all([
-        dispatch('patchSimpleKeys'),
-        dispatch('patchCountryImages'),
-        dispatch('synchPartnerLogos'),
-        dispatch('synchAdminUserArrays'),
-        dispatch('synchMapFile'),
-        dispatch('admin/map/saveMapData', {}, { root: true })
-      ]);
+      // await Promise.all([
+      await dispatch('patchSimpleKeys');
+      await dispatch('patchCountryImages');
+      await dispatch('synchPartnerLogos');
+      await dispatch('synchAdminUserArrays');
+      await dispatch('synchMapFile');
+      await dispatch('admin/map/saveMapData', {}, { root: true });
+      // ]);
       await dispatch('fetchData');
       window.scrollTo(0, 0);
       Message({
