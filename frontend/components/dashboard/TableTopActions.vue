@@ -29,8 +29,12 @@
             value="PDF"/>
         </el-select>
         <template v-if="selectedRows.length > 0">
-          <div class="Separator"/>
-          <span @click="selectAll"> Select All 450 rows</span>
+          <div class="Separator" />
+          <el-button
+            type="text"
+            size="small"
+            class="PrimaryButton"
+            @click="selectAll">Select All 450 rows</el-button>
         </template>
       </el-row>
     </el-col>
@@ -160,6 +164,12 @@ export default {
     height: @tableTopActionsHeight;
     padding: 0 40px;
 
+    .Separator {
+      .SeparatorStyle();
+      height: 32px;
+      margin: 0 20px;
+    }
+
     .TableExportOptions {
       width: 100%;
 
@@ -174,6 +184,7 @@ export default {
 
     .TableLegend {
       width: auto;
+      height: 32px;
 
       .ProjectLegend {
         font-size: @fontSizeSmall;
@@ -187,11 +198,6 @@ export default {
       }
 
       .TableSettingsButton {}
-
-      .Separator {
-        margin: 0 20px;
-        .SeparatorStyle();
-      }
     }
   }
 

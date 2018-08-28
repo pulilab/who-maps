@@ -36,6 +36,7 @@
               v-show="showVerified"
               class="Verified"
             >
+              <fa icon="check-circle" />
               Verified by country
             </el-col>
           </el-row>
@@ -139,8 +140,19 @@ export default {
   .ProjectCard {
     cursor: pointer;
 
+    // for MainTable
     &.HideBorders {
       border: none;
+      background-color: transparent;
+
+      .ProjectName {
+        font-size: @fontSizeSmall;
+        line-height: inherit;
+      }
+
+      .ProjectCountryOrg {
+        margin: 0;
+      }
     }
 
     &.hovered {
@@ -191,7 +203,13 @@ export default {
       .Organisation {
         position: relative;
         width: 100%;
+      }
 
+      .Verified {
+        color: @colorApproved;
+        font-size: @fontSizeSmall - 2;
+        font-weight: 700;
+        text-transform: uppercase;
       }
     }
 
