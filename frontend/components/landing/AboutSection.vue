@@ -44,7 +44,7 @@
               class="Partner"
             >
               <img
-                :src="logo"
+                :src="logo.image_url"
                 alt="PartnerLogo">
             </div>
           </div>
