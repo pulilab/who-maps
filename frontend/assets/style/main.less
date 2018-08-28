@@ -342,19 +342,25 @@ i[class*="el-icon-"] {
 
     &:hover {
       color: lighten(@colorTextSecondary, 10%);
-
-      .ButtonHint {
-        color: @colorGray;
-      }
     }
 
-    .ButtonHint {
-      display: block;
-      margin: 10px 0 0;
-      color: @colorTextMuted;
-      font-size: smaller;
-      font-weight: 400;
-      transition: @transitionAll;
+    &.WithHint {
+      &:hover {
+        color: darken(@colorTextSecondary, 10%);
+
+        .ButtonHint {
+          color: @colorGray;
+        }
+      }
+
+      .ButtonHint {
+        display: block;
+        margin: 10px 0 0;
+        color: @colorTextMuted;
+        font-size: smaller;
+        font-weight: 400;
+        transition: @transitionAll;
+      }
     }
   }
 

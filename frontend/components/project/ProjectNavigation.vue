@@ -162,7 +162,7 @@
         <el-button
           v-if="newProject"
           type="text"
-          class="CancelButton"
+          class="CancelButton WithHint"
         >
           Cancel
           <span class="ButtonHint">Go back to Dashboard</span>
