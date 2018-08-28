@@ -5,26 +5,32 @@
     modal
     top="10vh"
     width="90vw"
-    custom-class="SelectHfaDialog"
+    custom-class="SelectDHIDialog"
     @open="loadCurrentSelection"
   >
     <el-row
       type="flex"
-      class="HfaMainCategories">
+      class="DHIMainCategories">
       <el-col
         v-for="category in digitalHealthInterventions"
         :key="category.name"
         :span="6"
       >
         <selector-dialog-column
-          :items="category.subGroups"
-          v-model="currentSelection"
-          :category-selectable="true"
           :header="category.name"
-          child-name="strategies"
-        />
+        >
+          <selector-dialog-category
+            v-for="category in category.subGroups"
+            v-model="currentSelection"
+            :key="category.id"
+            :category-selectable="true"
+            :category="category"
+            child-name="strategies"
+          />
+        </selector-dialog-column>
       </el-col>
     </el-row>
+
     <span slot="footer">
       <el-row
         type="flex"
@@ -59,10 +65,12 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import SelectorDialogColumn from './SelectorDialogColumn';
+import SelectorDialogCategory from './SelectorDialogCategory';
 
 export default {
   components: {
-    SelectorDialogColumn
+    SelectorDialogColumn,
+    SelectorDialogCategory
   },
   data () {
     return {
@@ -116,7 +124,8 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-  .SelectHfaDialog {
+  .SelectDHIDialog {
+    max-width: @appWidthMaxLimit * 0.9;
     height: 80vh;
     margin-top: 0;
     margin-bottom: 0;
@@ -126,17 +135,29 @@ export default {
       height: calc(80vh - (@dialogHeaderFooterHeight*2));
     }
 
-    .HfaMainCategories {
+    .DHIMainCategories {
       height: calc(80vh - (@dialogHeaderFooterHeight*2));
 
       > .el-col {
         overflow: hidden;
         border-right: 1px solid @colorGrayLight;
 
+        .Main {
+          .Item {
+            .el-checkbox__label {
+              font-size: @fontSizeSmall;
+              line-height: 16px;
+            }
+          }
+        }
+
         &:last-child {
+          border: 0;
+
           .SelectorDialogColumn {
             .Header {
               width: calc(90vw / 4);
+              max-width: calc((@appWidthMaxLimit * 0.9) / 4);
             }
           }
         }

@@ -70,7 +70,8 @@ class SetupTests(APITestCase):
 
         # Update profile.
         self.org = Organisation.objects.create(name="org1")
-        self.country = Country.objects.create(name="country1", code='CTR1', project_approval=True)
+        self.country = Country.objects.create(name="country1", code='CTR1', project_approval=True,
+                                              region=Country.REGIONS[0][0])
         self.country_id = self.country.id
         self.country.name_en = 'Hungary'
         self.country.name_fr = 'Hongrie'
@@ -1261,6 +1262,7 @@ class ProjectDraftTests(SetupTests):
         self.project_draft_data = {
             'name': 'Draft Proj 1',
             'country': self.country_id,
+            'health_focus_areas': []
         }
 
         url = reverse("project-create")
@@ -1278,7 +1280,8 @@ class ProjectDraftTests(SetupTests):
         self.project_draft_data = {
             'name': 'Draft Proj 2',
             'country': self.country_id,
-            'organisation': self.org.id
+            'organisation': self.org.id,
+            'health_focus_areas': []
         }
 
         url = reverse("project-create")
@@ -1956,7 +1959,7 @@ class TestAdmin(TestCase):
                                                    codename='change_{}'.format(ProjectApproval._meta.model_name))
 
         p = Project.objects.create(name="test change view")
-        pa = ProjectApproval.objects.create(project=p)
+        pa = ProjectApproval.objects.get(project=p)
         self.user.user_permissions.add(change_permission)
         self.user.is_superuser = True
         self.user.is_staff = True
@@ -1983,9 +1986,9 @@ class TestAdmin(TestCase):
         p1 = Project.objects.create(name="Test1")
         p2 = Project.objects.create(name="Test2")
         p3 = Project.objects.create(name="Test3")
-        ProjectApproval.objects.create(project=p1, approved=None)
-        ProjectApproval.objects.create(project=p2, approved=True)
-        ProjectApproval.objects.create(project=p3, approved=False)
+        ProjectApproval.objects.filter(project=p1).update(approved=None)
+        p2.approve()
+        p3.disapprove()
 
         approvals = approval_filter_obj.queryset(self.request, ProjectApproval.objects.all())
 
@@ -2012,7 +2015,7 @@ class TestAdmin(TestCase):
         self.user.save()
         self.request.user = self.user
         p = Project.objects.create(name="test change view", data=dict(country=Country.objects.get(id=1).id))
-        pa = ProjectApproval.objects.create(project=p)
+        pa = ProjectApproval.objects.get(project=p)
         self.assertEqual(ma.get_country(pa), Country.objects.get(id=1))
 
     def test_approval_admin_save_model(self):
@@ -2023,7 +2026,7 @@ class TestAdmin(TestCase):
         self.request.user = self.user
 
         p = Project.objects.create(name="test change view", data=dict(country=Country.objects.get(id=1).id))
-        pa = ProjectApproval.objects.create(project=p)
+        pa = ProjectApproval.objects.get(project=p)
 
         mf = ma.get_form(self.request, pa)
         data = {'project': pa.project.id,

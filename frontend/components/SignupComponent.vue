@@ -54,7 +54,7 @@
               class="SecondaryAction LoginLink">
               <h6>Already signed up?</h6>
               <nuxt-link
-                :to="localePath('index-login')"
+                :to="localePath({name: 'organisation-login', params: $route.params})"
                 class="NuxtLink Small IconRight"
               >
                 <span>Login here</span><fa icon="angle-right" />
@@ -122,20 +122,20 @@ export default {
       value === this.signupForm.password1 ? callback() : callback(Error('The password must match'));
     },
     async signup () {
-      console.log('signup');
       this.deleteFormAPIErrors();
       try {
         await this.doSignup({
-          // TODO remove this when backend is ready
           account_type: 'I',
           password1: this.signupForm.password1,
           password2: this.signupForm.password2,
           email: this.signupForm.email
         });
-        this.showSuccess = true;
-        setTimeout(() => {
-          this.$router.push(this.localePath('index-edit-profile'));
-        }, 5000);
+        this.$router.push(this.localePath({name: 'organisation-edit-profile', params: this.$route.params}));
+        this.$message({
+          message: 'User created succesfully',
+          type: 'success',
+          showClose: true
+        });
       } catch (e) {
         this.setFormAPIErrors(e);
         this.$refs.signupForm.validate(() => {});

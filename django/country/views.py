@@ -1,22 +1,69 @@
 from rest_framework import generics, mixins, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import FormParser, MultiPartParser
 
+from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
-from .models import Country, CountryField
-from .serializers import CountryListSerializer, LandingPageSerializer, CountryFieldsListSerializer, \
-    CountryFieldsWriteSerializer, CountryMapDataSerializer
+from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo, MapFile
+from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountrySerializer, \
+    SuperAdminCountrySerializer, AdminCountrySerializer, PartnerLogoSerializer, DonorSerializer, \
+    SuperAdminDonorSerializer, AdminDonorSerializer, DonorPartnerLogoSerializer, MapFileSerializer, \
+    CountryImageSerializer, DonorImageSerializer
 
 
-class CountryListAPIView(generics.ListAPIView):
+class LandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.all()
-    serializer_class = CountryListSerializer
-
-
-class RetrieveLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    queryset = Country.objects.all()
-    serializer_class = LandingPageSerializer
+    serializer_class = CountrySerializer
     lookup_field = "code"
+
+
+class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
+                     viewsets.GenericViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+
+    def get_serializer_class(self):
+        if self.request and self.action in ['update', 'retrieve', 'partial_update'] \
+                and self.request.user.is_authenticated:
+            country = self.get_object()
+            profile = self.request.user.userprofile
+            if profile.account_type == UserProfile.COUNTRY_ADMIN and profile in country.admins.all():
+                return AdminCountrySerializer
+            if profile.account_type == UserProfile.SUPER_COUNTRY_ADMIN and profile in country.super_admins.all():
+                return SuperAdminCountrySerializer
+        return super().get_serializer_class()
+
+
+class DonorViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
+                   viewsets.GenericViewSet):
+    queryset = Donor.objects.all()
+    serializer_class = DonorSerializer
+
+    def get_serializer_class(self):
+        if self.request and self.action in ['update', 'retrieve', 'partial_update'] \
+                and self.request.user.is_authenticated:
+            donor = self.get_object()
+            profile = self.request.user.userprofile
+            if profile.account_type == UserProfile.DONOR_ADMIN and profile in donor.admins.all():
+                return AdminDonorSerializer
+            if profile.account_type == UserProfile.SUPER_DONOR_ADMIN and profile in donor.super_admins.all():
+                return SuperAdminDonorSerializer
+        return super().get_serializer_class()
+
+
+class PartnerLogoViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin,
+                         viewsets.GenericViewSet):
+    queryset = PartnerLogo.objects.all()
+    serializer_class = PartnerLogoSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class DonorPartnerLogoViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin,
+                              viewsets.GenericViewSet):
+    queryset = DonorPartnerLogo.objects.all()
+    serializer_class = DonorPartnerLogoSerializer
+    parser_classes = (MultiPartParser, FormParser)
 
 
 class CountryFieldsListView(generics.ListAPIView):
@@ -65,6 +112,20 @@ class CountryExportView(APIView):
         return Response(data)
 
 
-class CountryMapDataViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class MapFileViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
+                     viewsets.GenericViewSet):
+    queryset = MapFile.objects.all()
+    serializer_class = MapFileSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class CountryImageViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.all()
-    serializer_class = CountryMapDataSerializer
+    serializer_class = CountryImageSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class DonorImageViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    queryset = Donor.objects.all()
+    serializer_class = DonorImageSerializer
+    parser_classes = (MultiPartParser, FormParser)

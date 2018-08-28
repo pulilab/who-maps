@@ -27,7 +27,6 @@ export default {
     .clearfix();
 
     .LanguageLink {
-      display: inline-block;
       float: left;
     }
   }

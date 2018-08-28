@@ -23,7 +23,7 @@ import thematicComponent from '../Thematic/thematicComponent';
 const config = ($stateProvider, $locationProvider, $ngReduxProvider) => {
   $stateProvider
     .state('mapsToolkit', {
-      url: '/:lng/projects/:id/toolkit/?:axisId&:domainId',
+      url: '/:lng/:org/projects/:id/toolkit/?:axisId&:domainId',
       params: {
         axisId: '0',
         domainId: '0',
@@ -38,7 +38,7 @@ const config = ($stateProvider, $locationProvider, $ngReduxProvider) => {
       }
     })
     .state('scorecard', {
-      url: '/:lng/projects/:id/toolkit/scorecard?:axisId',
+      url: '/:lng/:org/projects/:id/toolkit/scorecard?:axisId',
       params: {
         axisId: '0',
         lng: window.$nuxt.$i18n.locale,
@@ -47,7 +47,7 @@ const config = ($stateProvider, $locationProvider, $ngReduxProvider) => {
       template: '<scorecard ></scorecard>'
     })
     .state('summary', {
-      url: '/:lng/projects/:id/toolkit/summary',
+      url: '/:lng/:org/projects/:id/toolkit/summary',
       params: {
         lng: window.$nuxt.$i18n.locale,
         id: window.$nuxt.$route.params.id

@@ -49,18 +49,16 @@
       </el-row>
 
       <div class="ProjectMenu">
-        <!-- TODO -->
-        <!-- Please add '.Active' class -->
-        <nuxt-link :to="localePath({name: 'index-projects-id-edit', params: {id}})">
+        <nuxt-link :to="localePath({name: 'organisation-projects-id-edit', params: {id, organisation: $route.params.organisation}})">
           Project
         </nuxt-link>
-        <nuxt-link :to="localePath({name: 'index-projects-id-assessment', params: {id}})">
+        <nuxt-link :to="localePath({name: 'organisation-projects-id-assessment', params: {id, organisation: $route.params.organisation}})">
           Assessment
         </nuxt-link>
-        <nuxt-link :to="localePath({name: 'index-projects-id-toolkit', params: {id}})">
+        <nuxt-link :to="localePath({name: 'organisation-projects-id-toolkit', params: {id, organisation: $route.params.organisation}})">
           Update score
         </nuxt-link>
-        <nuxt-link :to="localePath({name: 'index-projects-id-toolkit-scorecard', params: {id}})">
+        <nuxt-link :to="localePath({name: 'organisation-projects-id-toolkit-scorecard', params: {id, organisation: $route.params.organisation}})">
           Summary score
         </nuxt-link>
       </div>
@@ -150,7 +148,7 @@ export default {
         transform: translateY(-4px);
         transition: @transitionAll;
 
-        &.Active {
+        &.Active, &.nuxt-link-exact-active {
           color: @colorBrandPrimary !important;
 
           &::before {

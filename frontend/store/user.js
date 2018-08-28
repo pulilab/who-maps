@@ -3,22 +3,21 @@ import { saveToken, deleteToken } from '../utilities/auth';
 export const state = () => ({
   token: null,
   user: null,
-  profile: null
+  profile: null,
+  donors: null
 });
 
 export const getters = {
-
-  getToken: state => {
-    return state.token;
-  },
+  getToken: state => state.token,
+  getUser: state => state.user,
+  getDonors: state => state.donors,
 
   getProfile: state => {
     if (state.profile) {
       return { ...state.profile };
     }
     return null;
-  },
-  getUser: state => state.user
+  }
 };
 
 export const actions = {
@@ -54,17 +53,24 @@ export const actions = {
     deleteToken();
   },
 
+  async fetchDonors ({ commit }) {
+    const { data } = await this.$axios.get(`/api/donors/`);
+    commit('SET_DONORS', data);
+  },
+
   async loadProfile ({ commit, getters }, profileId) {
     if (getters.getToken && !getters.getProfile) {
       let { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`);
+      // console.log('USER PROFILE:');
+      // console.dir(data);
       commit('SET_PROFILE', data);
     }
   },
 
-  async updateUserProfile ({ getters, dispatch }, putObj) {
+  async updateUserProfile ({ getters, commit }, putObj) {
     const userId = getters.getProfile.id;
-    await this.$axios.put(`/api/userprofiles/${userId}/`, putObj);
-    await dispatch('loadProfile');
+    const { data } = await this.$axios.put(`/api/userprofiles/${userId}/`, putObj);
+    commit('SET_PROFILE', data);
   },
 
   async setToken ({ commit, dispatch }, tokens) {
@@ -85,6 +91,10 @@ export const mutations = {
 
   SET_PROFILE: (state, profile) => {
     state.profile = profile;
+  },
+
+  SET_DONORS: (state, donors) => {
+    state.donors = donors;
   }
 };
 

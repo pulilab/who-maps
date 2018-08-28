@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 
 
-class EmailBackend(object):
+class EmailBackend:
     def authenticate(self, username=None, password=None, **kwargs):
         UserModel = get_user_model()
         try:

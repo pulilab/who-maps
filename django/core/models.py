@@ -19,6 +19,27 @@ class GetObjectOrNoneMixin(object):
             return None
 
 
+class NameByIDMixin:
+    @classmethod
+    def get_name_by_id(cls, id=None):
+        if not id:
+            return ""
+
+        obj = cls.objects.get_object_or_none(id=id)
+        return getattr(obj, 'name', "")
+
+
+class ParentByIDMixin:
+    @classmethod
+    def get_parent_id(cls, object_id, parent_field):
+        try:
+            instance = cls.objects.get(id=object_id)
+        except cls.DoesNotExist:
+            return None
+        else:
+            return getattr(instance, '{}_id'.format(parent_field), None)
+
+
 class GetObjectOrNoneQueryset(GetObjectOrNoneMixin, QuerySet):
     pass
 
@@ -47,16 +68,6 @@ class ExtendedMultilingualModel(ExtendedModel):
 
     class Meta:
         abstract = True
-
-
-class NameByIDMixin(object):
-    @classmethod
-    def get_name_by_id(cls, id=None):
-        if not id:
-            return ""
-
-        obj = cls.objects.get_object_or_none(id=id)
-        return obj.name if obj else ""
 
 
 class ActiveQuerySet(GetObjectOrNoneMixin, QuerySet):

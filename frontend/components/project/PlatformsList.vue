@@ -12,7 +12,7 @@
             </span>
             <simple-field header="Digital Health Intervention">
               <digital-health-interventions-list
-                :dhi="dhi"
+                :value="dhi"
                 :platform="p.id"
               />
             </simple-field>
@@ -25,7 +25,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import DigitalHealthInterventionsList from './DigitalHealthInterventionsList';
+import DigitalHealthInterventionsList from '../common/list/DigitalHealthInterventionsList';
 import SimpleField from './SimpleField';
 
 export default {
@@ -58,8 +58,8 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
   .PlatformList {
     width: 100%;

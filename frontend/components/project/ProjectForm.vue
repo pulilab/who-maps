@@ -92,10 +92,10 @@ export default {
       };
     },
     isDraft () {
-      return this.$route.name.includes('index-projects-id-edit');
+      return this.$route.name.includes('organisation-projects-id-edit');
     },
     isNewProject () {
-      return this.$route.name.includes('index-projects-create');
+      return this.$route.name.includes('organisation-projects-create');
     },
     showForm () {
       return this.readyElements === this.maxElements;
@@ -338,7 +338,7 @@ export default {
             try {
               if (this.isNewProject) {
                 const id = await this.createProject();
-                const localised = this.localePath({name: 'index-projects-id-edit', params: {id}});
+                const localised = this.localePath({name: 'organisation-projects-id-edit', params: {...this.$route.params, id}});
                 this.$router.push(localised);
               } else if (this.isDraft) {
                 await this.saveDraft(this.$route.params.id);
@@ -385,7 +385,7 @@ export default {
           if (valid) {
             try {
               await this.publishProject(this.$route.params.id);
-              const localised = this.localePath({name: 'index-projects-id-published', params: {...this.$route.params}});
+              const localised = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params}});
               this.$router.push(localised);
               this.$alert('Your draft has been published successfully', 'Congratulation', {
                 confirmButtonText: 'Close'

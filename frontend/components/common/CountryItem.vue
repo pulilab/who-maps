@@ -57,6 +57,7 @@ export default {
       img {
         width: 24px;
         height: 14px;
+        box-shadow: 0 0 1px 1px @colorGrayLighter;
       }
     }
 

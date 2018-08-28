@@ -1,75 +1,64 @@
 <template>
-  <el-card class="questionaire-container">
-    <el-collapse
-      v-model="opened"
-      accordion
-      class="asdf">
-      <el-collapse-item
-        :title="label"
-        name="opened">
+  <div>
+    <div class="question-conatiner">
+      <draggable v-model="questions">
+        <dha-question
+          v-for="(question, index) in questions"
+          :key="index"
+          :question-id="question.id" />
+      </draggable>
+    </div>
 
-        <div class="question-conatiner">
-          <draggable v-model="questions">
-            <dha-question
-              v-for="(question, index) in questions"
-              :key="index"
-              :question-id="question.id" />
-          </draggable>
-        </div>
+    <div class="action-container">
+      <el-button
+        type="primary"
+        plain
+        size="small"
+        icon="el-icon-plus"
+        @click="addQuestion"
+      >
+        Add new
+      </el-button>
 
-        <div class="action-container">
-          <el-button
-            type="primary"
-            plain
-            size="small"
-            icon="el-icon-plus"
-            @click="addQuestion"
-          >
-            Add new
-          </el-button>
+      <el-button
+        type="warning"
+        plain
+        size="small"
+        icon="el-icon-delete"
+        @click="eraseChanges"
+      >
+        Erase change
+      </el-button>
 
-          <el-button
-            type="warning"
-            plain
-            size="small"
-            icon="el-icon-delete"
-            @click="eraseChanges"
-          >
-            Erase change
-          </el-button>
+      <el-button
+        :disabled="!allValid"
+        type="success"
+        plain
+        size="small"
+        icon="el-icon-check"
+        @click="saveChanges"
+      >
+        Save changes
+      </el-button>
 
-          <el-button
-            :disabled="!allValid"
-            type="success"
-            plain
-            size="small"
-            icon="el-icon-check"
-            @click="saveChanges"
-          >
-            Save changes
-          </el-button>
-
-          <span class="badge-container">
-            <span
-              v-if="reordered"
-              class="badge"
-            >
-              <i class="el-icon-sort badge"/>
-              reordered
-            </span>
-            <span
-              v-if="!allValid"
-              class="badge"
-            >
-              <i class="el-icon-error badge"/>
-              contains invalid element
-            </span>
-          </span>
-        </div>
-
-      </el-collapse-item>
-    </el-collapse>
-  </el-card>
+      <span class="badge-container">
+        <span
+          v-if="reordered"
+          class="badge"
+        >
+          <i class="el-icon-sort badge"/>
+          reordered
+        </span>
+        <span
+          v-if="!allValid"
+          class="badge"
+        >
+          <i class="el-icon-error badge"/>
+          contains invalid element
+        </span>
+      </span>
+    </div>
+  </div>
 </template>
 
 <script>

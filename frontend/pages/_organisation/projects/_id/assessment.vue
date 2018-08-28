@@ -1,0 +1,28 @@
+<template>
+  <div class="angularjs">
+    <div id="assessmentjs"/>
+  </div>
+</template>
+
+<script>
+
+export default {
+  components: {
+  },
+  async fetch ({store, params}) {
+    await store.dispatch('projects/loadUserProjects');
+    const project = store.getters['projects/getUserProjectDetails'](+params.id);
+    const country = project.published && project.published.country ? project.published.country : project.draft.country;
+    await store.dispatch('countries/loadMapData');
+    await store.dispatch('countries/loadGeoJSON', country);
+  },
+  mounted () {
+    const assesmentFactory = require('../../../../angular/Assessment/assessmentFactory');
+    assesmentFactory.assesmentFactory();
+  }
+};
+</script>
+
+<style>
+
+</style>

@@ -1,112 +1,158 @@
-import operator
-import functools
+import itertools
+from typing import Dict, List
 
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.db.models.signals import post_save
+from django.contrib.postgres.fields import ArrayField
 from django.dispatch import receiver
+from django.http import QueryDict
 
 from core.models import ExtendedModel
-from project.models import Project, HealthFocusArea, TechnologyPlatform
+from project.models import Project, HealthFocusArea, HSCChallenge, DigitalStrategy
 from country.models import Country
 from user.models import Organisation
 
 
 class ProjectSearch(ExtendedModel):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    location = models.TextField(blank=True)
-    project_name = models.TextField(blank=True)
-    organisation = models.TextField(blank=True)
-    contact_name = models.TextField(blank=True)
-    contact_email = models.TextField(blank=True)
-    implementation_overview = models.TextField(blank=True)
-    implementing_partners = models.TextField(blank=True)
-    implementation_dates = models.TextField(blank=True)
-    health_focus_areas = models.TextField(blank=True)
-    geographic_scope = models.TextField(blank=True)
-    repository = models.TextField(blank=True)
-    mobile_application = models.TextField(blank=True)
-    wiki = models.TextField(blank=True)
-    platforms = models.TextField(blank=True)
-    public_id = models.TextField(blank=True)
+    SEARCH_BY = {
+        # query_param: QuerySet param | eg: in=name&in=org
+        "name": "project__name",
+        "org": "organisation__name",
+        "country": "country__name",
+        "region": "country__region",
+        "overview": "project__data__implementation_overview",
+        "loc": "coverage",
+        "partner": "project__data__implementing_partners",  # TODO: will be refactored
+        "donor": "project__data__donors"  # TODO: will be refactored
+    }
+
+    FILTER_BY = {
+        # query_param: QuerySet param
+        "country": "country_id",  # eg: country=1&country=2
+        "sw": "software",  # eg: sw=1&sw=2
+        "dhi": "dhi_categories",  # eg: dhi=1&dhi=2
+        "hfa": "hfa_categories",  # eg: hfa=1&hfa=2
+        "hsc": "hsc_categories",  # eg: hsc=1&hsc=2
+        "his": "his",  # eg: his=1&his=2
+        "region": "country__region",  # eg: region=3
+        "gov": "project__data__government_investor",  # false=> gov=0 ; true=> gov=1&gov=2
+        "donor": "project__data__donors",  # TODO: will be refactored
+        "approved": "project__approval__approved"  # false=> approved=0 ; true=> approved=1
+    }
+
+    project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
+    country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
+    organisation = models.ForeignKey(Organisation, null=True, on_delete=models.SET_NULL)
+
+    software = ArrayField(models.IntegerField(), default=list)
+    coverage = ArrayField(models.CharField(max_length=64), default=list)
+    dhi_categories = ArrayField(models.IntegerField(), default=list)
+    hsc_categories = ArrayField(models.IntegerField(), default=list)
+    hfa_categories = ArrayField(models.IntegerField(), default=list)
+    his = ArrayField(models.IntegerField(), default=list)
 
     @classmethod
-    def search(cls, **kwargs):
+    def search(cls, queryset: QuerySet, search_term: str, search_in: List[str]) -> QuerySet:
         """
-        Search based on search term in given fields.
+        Search in QuerySet
+        search_term: search term
+        search_in: what field to search in
         """
-        q_objects = []
-        results = []
-        query = kwargs["query"]
+        selectable_fields = set(cls.SEARCH_BY.keys())
+        selected_fields = selectable_fields & set(search_in) if search_in else selectable_fields
+        q = Q()
 
-        selectable_fields = {"location", "project_name", "technology_platform", "organisation"}
-        query_keys = set([k for k, v in kwargs.items() if v is True])
-        intersect = selectable_fields & query_keys
+        for field in selected_fields:
+            q |= Q(**{"{}__icontains".format(cls.SEARCH_BY[field]): search_term})
 
-        if intersect:
-            if kwargs.get("location"):
-                q_objects.append(Q(location__icontains=query))
-            if kwargs.get("project_name"):
-                q_objects.append(Q(project_name__icontains=query))
-            if kwargs.get("technology_platform"):
-                q_objects.append(Q(platforms__icontains=query))
-            if kwargs.get("organisation"):
-                q_objects.append(Q(organisation__icontains=query))
-        else:
-            q_objects.append(Q(location__icontains=query))
-            q_objects.append(Q(project_name__icontains=query))
-            q_objects.append(Q(platforms__icontains=query))
-            q_objects.append(Q(organisation__icontains=query))
-            q_objects.append(Q(contact_name__icontains=query))
-            q_objects.append(Q(contact_email__icontains=query))
-            q_objects.append(Q(implementation_overview__icontains=query))
-            q_objects.append(Q(implementing_partners__icontains=query))
-            q_objects.append(Q(implementation_dates__icontains=query))
-            q_objects.append(Q(geographic_scope__icontains=query))
-            q_objects.append(Q(health_focus_areas__icontains=query))
-            q_objects.append(Q(repository__icontains=query))
-            q_objects.append(Q(mobile_application__icontains=query))
-            q_objects.append(Q(wiki__icontains=query))
-            q_objects.append(Q(public_id__icontains=query))
+        return queryset.filter(q) if selected_fields else queryset
 
-        filter_exp = functools.reduce(operator.or_, q_objects)
+    @classmethod
+    def filter(cls, queryset: QuerySet, query_params: QueryDict) -> QuerySet:
+        """
+        Filter QuerySet by various filter terms
+        """
+        selectable_fields = set(cls.FILTER_BY.keys())
+        selected_fields = set(query_params.keys()) & selectable_fields
+        lookup = lookup_param = None
 
-        for ps in cls.objects.filter(filter_exp):
-            results.append({
-                "id": ps.project.id,
-                "name": ps.project_name,
-                "organisation_name": ps.project.get_organisation().name,
-                "country": Country.objects.only('id').get(id=ps.project.data.get('country')).id
-            })
-        return results
+        def lookup_cleanup(values: list) -> List[int]:  # keep ints only
+            lookup = []
+            for value in values:
+                try:
+                    lookup.append(int(value))
+                except ValueError:
+                    pass
+            return lookup
+
+        if selected_fields:
+            for field in selected_fields:
+                if query_params[field]:
+                    if field in ["country", "region", "gov"]:
+                        lookup_param = "in"
+                        lookup = lookup_cleanup(query_params.getlist(field))
+                    elif field in ["sw", "dhi", "hfa", "hsc", "his"]:
+                        lookup_param = "overlap"  # This is the OR clause here
+                        lookup = lookup_cleanup(query_params.getlist(field))
+                    elif field == "approved":
+                        lookup_param = "exact"
+                        lookup = query_params.get(field) == '1'
+
+                    queryset &= queryset.filter(**{"{}__{}".format(cls.FILTER_BY[field], lookup_param): lookup})
+
+        return queryset
+
+    @classmethod
+    def found_in(cls, queryset: QuerySet, search_term: str) -> Dict[str, list]:
+        """
+        Returns what projects are found in which search field
+        {
+            field: [project_id(s)]
+        }
+        """
+        found_in = {}
+
+        for field, exp in cls.SEARCH_BY.items():
+            project_ids = queryset.filter(**{"{}__icontains".format(exp): search_term})\
+                .values_list('project_id', flat=True)
+            found_in[field] = project_ids
+
+        return found_in
+
+    def update(self, project: Project):
+        """
+        Update search object from project object
+        """
+        if project.public_id:
+            self.country_id = int(project.data["country"])
+            self.organisation_id = int(project.data["organisation"])
+
+            self.software = [int(x['id']) for x in project.data.get("platforms", [])]
+            self.coverage = [x.get('district', "") for x in project.data.get("coverage", [])]
+            self.dhi_categories = list(set(filter(None.__ne__,
+                                                  [DigitalStrategy.get_parent_id(int(strategy_id), 'parent') for
+                                                   strategy_id in list(itertools.chain(
+                                                      *[platform['strategies'] for platform in
+                                                        project.data.get("platforms", []) if
+                                                        platform.get('strategies')]))])))
+            self.hsc_categories = list(set(filter(None.__ne__,
+                                                  [HSCChallenge.get_parent_id(int(id), 'group') for id in
+                                                   project.data.get("hsc_challenges", [])])))
+            self.hfa_categories = list(set(filter(None.__ne__,
+                                                  [HealthFocusArea.get_parent_id(int(id), 'health_category') for
+                                                   id in project.data.get("health_focus_areas", [])])))
+            self.his = project.data.get('his_bucket')
+
+            self.save()
+
+
+@receiver(post_save, sender=Project)
+def create_search_objects(sender, instance, created, **kwargs):
+    if created:
+        ProjectSearch.objects.get_or_create(project_id=instance.id)
 
 
 @receiver(post_save, sender=Project)
 def update_with_project_data(sender, instance, **kwargs):
-    """
-    Updates relevant ProjectSearch data on every Project model save.
-    """
-    if instance.public_id:
-        project_search, created = ProjectSearch.objects.get_or_create(project_id=instance.id)
-        project_search.location = Country.objects.get(id=instance.data["country"]).name
-        project_search.project_name = instance.name
-        project_search.organisation = Organisation.get_name_by_id(instance.data.get("organisation"))
-        project_search.contact_name = instance.data.get("contact_name", "")
-        project_search.contact_email = instance.data.get("contact_email", "")
-        project_search.implementation_overview = instance.data.get("implementation_overview", "")
-        project_search.implementing_partners = ", ".join([x for x in instance.data.get("implementing_partners", "")])
-        project_search.implementation_dates = instance.data.get("implementation_dates", "")
-        project_search.geographic_scope = instance.data.get("geographic_scope", "")
-        project_search.repository = instance.data.get("repository", "")
-        project_search.mobile_application = instance.data.get("mobile_application", "")
-        project_search.wiki = instance.data.get("wiki", "")
-        project_search.public_id = instance.public_id
-
-        project_search.health_focus_areas = ", ".join(
-            [x.name for x in HealthFocusArea.objects.get_names_for_ids(instance.data.get("health_focus_areas", []))])
-
-        platform_ids = [x['id'] for x in instance.data.get("platforms", [])]
-        project_search.platforms = ", ".join([x.name for x in TechnologyPlatform.objects.filter(
-            id__in=platform_ids).only('name')])
-
-        project_search.save()
+    instance.search.update(instance)

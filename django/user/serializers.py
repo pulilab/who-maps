@@ -44,11 +44,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
                                                       allow_null=False)
     name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
     user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    user_email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
         model = UserProfile
-        fields = ("id", "name", "country", "account_type", "organisation", "user", "created", "organisation_name",
-                  "language")
+        fields = ("id", "name", "user_email", "country", "donor", "account_type", "organisation", "user", "created",
+                  "organisation_name", "language")
 
     @staticmethod
     def get_organisation_name(obj):
@@ -61,6 +62,7 @@ class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
     viewer = serializers.SerializerMethodField()
     organisation_name = serializers.SerializerMethodField()
     is_superuser = serializers.SerializerMethodField()
+    account_type_approved = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProfile
@@ -82,6 +84,22 @@ class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
     def get_is_superuser(obj):
         if hasattr(obj, 'user'):
             return obj.user.is_superuser
+
+    @staticmethod
+    def get_account_type_approved(obj):
+        if obj.account_type == UserProfile.DONOR and obj.donor:
+            return obj in obj.donor.users.all()
+        if obj.account_type == UserProfile.DONOR_ADMIN and obj.donor:
+            return obj in obj.donor.admins.all()
+        if obj.account_type == UserProfile.SUPER_DONOR_ADMIN and obj.donor:
+            return obj in obj.donor.super_admins.all()
+        if obj.account_type == UserProfile.GOVERNMENT and obj.country:
+            return obj in obj.country.users.all()
+        if obj.account_type == UserProfile.COUNTRY_ADMIN and obj.country:
+            return obj in obj.country.admins.all()
+        if obj.account_type == UserProfile.SUPER_COUNTRY_ADMIN and obj.country:
+            return obj in obj.country.super_admins.all()
+        return False
 
 
 class OrganisationSerializer(serializers.ModelSerializer):
