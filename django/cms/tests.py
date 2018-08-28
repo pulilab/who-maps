@@ -1,7 +1,5 @@
 import tempfile
-from io import BytesIO
 
-from PIL import Image
 from allauth.account.models import EmailConfirmation
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
@@ -10,6 +8,7 @@ from django.test import TestCase, Client
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 
+from core.tests import get_temp_image
 from cms.admin import PostAdmin, CommentAdmin
 from cms.models import Post, Comment, State
 from country.models import Country
@@ -462,11 +461,7 @@ class CmsApiTest(APITestCase):
         self.assertEqual(response.json()['comments'][0]['state'], Comment.NORMAL)
 
     def test_cover_upload(self):
-        cover = BytesIO()
-        image = Image.new('RGBA', size=(100, 100))
-        image.save(cover, 'png')
-        cover.name = 'test.png'
-        cover.seek(0)
+        cover = get_temp_image()
 
         self.post_data = {
             "name": "Test Post 1",

@@ -22,12 +22,14 @@
           </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
+              v-if="allowCountryAdmin"
               :to="localePath({name: 'index-admin-country'})"
               class="ActionBarLink"
               tag="div">Country admin</nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
+              v-if="allowDonorAdmin"
               :to="localePath({name: 'index-admin-donor'})"
               class="ActionBarLink"
               tag="div">Donor admin</nuxt-link>
@@ -64,11 +66,13 @@
           <dashboard-filters-header/>
         </el-col>
       </template>
+
     </el-row>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import SearchComponent from '../common/SearchComponent.vue';
 import PersonaSelector from '../dashboard/PersonaSelector';
 import DashboardFiltersHeader from '../dashboard/DashboardFiltersHeader';
@@ -80,9 +84,19 @@ export default {
     DashboardFiltersHeader
   },
   computed: {
+    ...mapGetters({
+      userProfile: 'user/getProfile'
+    }),
     isAdmin () {
-      return this.$route.path.includes('/admin');
+      return this.$route.path.includes('/admin') || this.$route.path.endsWith('/edit-profile');
     },
+    allowCountryAdmin () {
+      return ['CA', 'SCA'].includes(this.userProfile.account_type) || this.userProfile.is_superuser
+    },
+    allowDonorAdmin () {
+      return ['DA', 'SDA'].includes(this.userProfile.account_type) || this.userProfile.is_superuser
+    },
+
     isDashboard () {
       return this.$route.path.includes('/dashboard');
     }
@@ -117,7 +131,6 @@ export default {
     .SearchComponentWrapper {
       width: auto;
     }
-
     .PersonaSelectorWrapper {
       width: auto;
     }
@@ -143,13 +156,7 @@ export default {
       width: auto;
       height: 100%;
       margin-right: 20px;
-      padding: 0 10px;
-      font-size: @fontSizeBase;
-      line-height: @actionBarHeight;
-      font-weight: 700;
-      color: @colorWhite;
-      text-decoration: none;
-      cursor: pointer;
+
       white-space: nowrap;
       opacity: .6;
       transition: @transitionAll;
@@ -182,6 +189,7 @@ export default {
         &::before {
           transform: translateY(0);
         }
+
       }
     }
   }

@@ -6,15 +6,7 @@
 
 <script>
 // NOTE: This is only a router view wrapper, for common fetches
-import { mapGetters } from 'vuex';
-
 export default {
-  components: {
-  },
-  computed: {
-    ...mapGetters({
-    })
-  },
   async fetch ({ store }) {
     await Promise.all([
       store.dispatch('system/loadStaticData'),
@@ -31,6 +23,3 @@ export default {
   }
 };
 </script>
-
-<style lang="sass">
-</style>

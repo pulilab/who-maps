@@ -5,9 +5,12 @@ from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField, ArrayField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
-from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel
+from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
+    ParentByIDMixin
 from country.models import Country, CountryField
 from project.cache import InvalidateCacheMixin
 from user.models import UserProfile, Organisation
@@ -157,11 +160,21 @@ class Project(SoftDeleteModel, ExtendedModel):
         if project_country:
             self.public_id = project_country.code + str(uuid.uuid1()).split('-')[0]
 
-    def post_save_initializations(self, Toolkit):
-        # Add default Toolkit structure for the new project.
-        Toolkit.objects.get_or_create(project_id=self.id, defaults=dict(data=toolkit_default))
-        # Add approval
-        ProjectApproval.objects.create(project=self)
+    def approve(self):
+        self.approval.approved = True
+        self.approval.save()
+
+    def disapprove(self):
+        self.approval.approved = False
+        self.approval.save()
+
+
+@receiver(post_save, sender=Project)
+def on_create_init(sender, instance, created, **kwargs):
+    if created:
+        from toolkit.models import Toolkit
+        Toolkit.objects.get_or_create(project_id=instance.id, defaults=dict(data=toolkit_default))
+        ProjectApproval.objects.get_or_create(project_id=instance.id)
 
 
 class ProjectApproval(ExtendedModel):
@@ -188,7 +201,7 @@ class File(ExtendedModel):
     data = models.BinaryField()
 
 
-class DigitalStrategy(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+class DigitalStrategy(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     GROUP_CHOICES = (
         ('Client', _('Client')),
         ('Provider', _('Provider')),
@@ -220,7 +233,7 @@ class HSCChallengeQuerySet(ActiveQuerySet):
                 for l in self.filter(id__in=ids).select_related('group')]
 
 
-class HSCChallenge(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+class HSCChallenge(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     group = models.ForeignKey(HSCGroup, on_delete=models.CASCADE, related_name='challenges')
 
     def __str__(self):
@@ -239,7 +252,7 @@ class HealthCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
         verbose_name_plural = 'Health Categories'
 
 
-class HealthFocusArea(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+class HealthFocusArea(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas', on_delete=models.CASCADE)
 
     def __str__(self):

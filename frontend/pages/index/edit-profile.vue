@@ -10,6 +10,9 @@ import EditProfile from '../../components/EditProfile.vue';
 export default {
   components: {
     EditProfile
+  },
+  async fetch ({ store }) {
+    store.dispatch('user/fetchDonors');
   }
 };
 </script>

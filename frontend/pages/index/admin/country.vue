@@ -1,32 +1,21 @@
 <template>
-  <div class="CountryAdmin">
-    <country-chooser />
-    <dha-questionaire :label="'Country specific questionaire'"/>
-
-    <vue-map-customizer/>
-
-  </div>
+  <country-admin />
 </template>
 
 <script>
-import VueMapCustomizer from '../../../components/admin/VueMapCustomizer';
-import DhaQuestionaire from '../../../components/admin/DhaQuestionaire';
-import CountryChooser from '../../../components/admin/CountryChooser';
-
+import CountryAdmin from '../../../components/admin/CountryAdmin';
 export default {
 
-  name: 'CountryAdministrator',
-  components: {
-    VueMapCustomizer,
-    DhaQuestionaire,
-    CountryChooser
-  },
+  components: { CountryAdmin },
 
   async fetch ({store}) {
-    await store.dispatch('admin/map/loadMapData');
-    store.dispatch('admin/questions/setQuestionaireId', 'country');
-    store.dispatch('admin/questions/fetchQuestions');
+    await Promise.all([
+      store.dispatch('system/loadUserProfiles')
+      // store.dispatch('admin/map/loadMapData')
+    ]);
+    await store.dispatch('admin/country/fetchData');
+    // store.dispatch('admin/questions/setQuestionaireId', 'country');
+    // store.dispatch('admin/questions/fetchQuestions');
   }
-
 };
 </script>

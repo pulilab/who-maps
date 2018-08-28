@@ -19,7 +19,6 @@ from rest_framework.exceptions import ValidationError
 
 from user.models import Organisation
 from country.models import Country
-from toolkit.models import Toolkit
 
 from .models import Project, InteroperabilityLink
 from .serializers import ProjectDraftSerializer
@@ -262,7 +261,6 @@ def sync_project_from_odk():  # pragma: no cover
             else:
                 u = User.objects.get(email=user_email)
                 project = serialized.save(owner=u.userprofile)
-                project.post_save_initializations(Toolkit)
                 send_imported_email(project, u)
         except ObjectDoesNotExist:
             logging.error('No user with following email: {}'.format(user_email))

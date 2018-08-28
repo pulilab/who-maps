@@ -21,7 +21,7 @@ class AdminArrayFieldWidget(MultiWidget):
         self.widget = input_widget
         super(AdminArrayFieldWidget, self).__init__([], attrs)
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if value:
             widget_count = len(value)
         else:
@@ -85,7 +85,7 @@ class AdminArrayField(SimpleArrayField):
 
 
 class NoneReadOnlyAdminArrayFieldWidget(AdminArrayFieldWidget):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if value is None:
             return mark_safe('-')
         return super(NoneReadOnlyAdminArrayFieldWidget, self).render(name, value, attrs)
