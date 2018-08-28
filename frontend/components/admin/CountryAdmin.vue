@@ -147,17 +147,31 @@
           label-position="left"
           @submit.native.prevent>
           <el-form-item label="Country file">
-            <file-upload
-              :auto-upload="false"
-              :files.sync="mapFiles"
-              :limit="1"/>
+            <el-upload
+              :show-file-list="false"
+              :limit="1"
+              :multiple="false"
+              :data="{country: country.id}"
+              :on-success="successHandler"
+              :before-upload="beforeMapUpload"
+              name="map_file"
+              action="/api/map-files/">
+              <el-button
+                :disalbed="uploadMapFile"
+                :loading="uploadMapFile"
+                icon="el-icon-plus"
+                type="text">Upload file</el-button>
+            </el-upload>
           </el-form-item>
         </el-form>
       </div>
       <div v-if="country.map_files.length && !forceMapFileChange">
         <vue-map-customizer/>
-        <el-button @click="forceMapFileChange = true">Change map file</el-button>
       </div>
+      <el-button @click="showMapUploader">
+        <span v-show="forceMapFileChange">Cancel</span>
+        <span v-show="!forceMapFileChange">Change map file</span>
+      </el-button>
     </collapsible-card>
 
     <!-- <p>country.map_files: {{ country.map_files }}</p> -->
@@ -229,7 +243,9 @@ export default {
           }}
         ]
       },
-      forceMapFileChange: false
+      forceMapFileChange: false,
+      mapFile: {},
+      uploadMapFile: false
     };
   },
 
@@ -328,27 +344,7 @@ export default {
       set (value) {
         this.setCountryField({field: 'super_admins', data: value});
       }
-    },
-
-    mapFiles: {
-      get () {
-        return this.country.map_files.map(file => {
-          if (file.raw || file.uid) {
-            return file;
-          } else if (file.image) {
-            return ({
-              url: file.image,
-              name: ('' + file.image).split('/').pop(),
-              id: file.id
-            });
-          }
-        });
-      },
-      set ([value]) {
-        this.setCountryField({field: 'map_files', data: [value]});
-      }
     }
-
   },
 
   watch: {
@@ -413,11 +409,26 @@ export default {
   methods: {
     ...mapActions({
       setCountryField: 'admin/country/setCountryField',
-      saveChanges: 'admin/country/saveChanges'
+      saveChanges: 'admin/country/saveChanges',
+      loadGeoJSON: 'admin/map/loadGeoJSON'
     }),
 
     selectPersona (selected) {
       this.selectedPersona = selected;
+    },
+    showMapUploader () {
+      this.forceMapFileChange = !this.forceMapFileChange;
+    },
+    beforeMapUpload () {
+      this.uploadMapFile = true;
+    },
+    successHandler (response) {
+      this.setCountryField({field: 'map_files', data: [response]});
+      setTimeout(async () => {
+        await this.loadGeoJSON();
+        this.forceMapFileChange = false;
+        this.uploadMapFile = false;
+      });
     }
   }
 };

@@ -1,7 +1,4 @@
 export const state = () => ({
-  id: null,
-  country: null,
-  geoJson: null,
   countryCenter: null,
   firstSubLevel: '',
   firstSubLevelType: null,
@@ -13,19 +10,6 @@ export const state = () => ({
 });
 
 export const getters = {
-  getSelectedCountry (state, getters, rootState, rootGetters) {
-    const user = rootGetters['user/getProfile'];
-    if (!user) {
-      return undefined;
-    }
-    if (user.is_superuser) {
-      return state.id ? state.id : user.country;
-    }
-    return user.country;
-  },
-  getCountry (state) {
-    return state.country;
-  },
   getGeoJson (state) {
     return state.geoJson;
   },
@@ -131,32 +115,12 @@ const parseNames = (collection) => {
 };
 
 export const actions = {
-  async setSelectedCountry ({commit, dispatch}, id) {
-    commit('SET_SELECTED_COUNTRY', id);
-    await dispatch('loadMapData');
-  },
-  async loadMapData ({commit, dispatch, getters}) {
-    const id = getters.getSelectedCountry;
-    const { data } = await this.$axios.get(`/api/country-map-data/${id}/`);
-    commit('SET_COUNTRY_DATA', data);
-    try {
-      dispatch('setCountryCenter', data.map_data.polylabel);
-      dispatch('parseSubLevelsPolyCenters', data.map_data.first_sub_level);
-      commit('SET_FACILITIES', data.map_data.facilities);
-      commit('SET_FIRST_SUB_LEVEL', data.map_data.first_sub_level.admin_level);
-      commit('SET_FIRST_SUB_LEVEL_TYPE', data.map_data.first_sub_level.name);
-      commit('SET_SECOND_SUB_LEVEL', data.map_data.second_sub_level.admin_level);
-      commit('SET_SECOND_SUB_LEVEL_TYPE', data.map_data.second_sub_level.name);
-    } catch (e) {
-      console.log('Saved data is corrupted or missing');
-    }
-    if (data.map_file) {
-      await dispatch('loadGeoJSON');
-    }
-  },
-  async loadGeoJSON ({commit, getters}) {
-    const country = getters.getCountry;
-    const { data } = await this.$axios.get(country.map_file);
+  async loadGeoJSON ({commit, rootGetters}) {
+    const country = rootGetters['admin/country/getStableCountry'];
+    const url = country.map_files.slice(-1)[0].map_file;
+    const mediaIndex = url.indexOf('/media/');
+    const proper = url.slice(mediaIndex);
+    const { data } = await this.$axios.get(proper);
     Object.freeze(data);
     commit('UPDATE_GEO_JSON', data);
   },
@@ -191,7 +155,7 @@ export const actions = {
   setFacilities ({commit}, list) {
     commit('SET_FACILITIES', list);
   },
-  async saveMapData ({getters}) {
+  async saveMapData ({getters, rootGetters}) {
     const first = getters.getFirstSubLevelList.map((f, index) => {
       return {
         id: f.id || index,
@@ -223,8 +187,8 @@ export const actions = {
     };
 
     try {
-      const id = getters.getSelectedCountry;
-      await this.$axios.put(`/api/country-map-data/${id}/`, { map_data: mapData });
+      const id = rootGetters['admin/country/getCountry'].id;
+      await this.$axios.patch(`/api/countries/${id}/`, { map_data: mapData });
     } catch (e) {
       console.error(e);
     }
