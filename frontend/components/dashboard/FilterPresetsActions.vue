@@ -84,9 +84,10 @@ export default {
     .el-button--text {
       padding: 0;
     }
+  }
 
-    .AdvancedSearchPresetsDropdown {
-      width: @advancedSearchWidth - 40px;
-    }
+  .AdvancedSearchPresetsDropdown {
+    transform: translate(-10px, -5px);
+    width: @advancedSearchWidth - 30px;
   }
 </style>

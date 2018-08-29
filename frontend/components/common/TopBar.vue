@@ -31,12 +31,12 @@
             </el-col>
 
             <el-col class="AuthLinks">
+              <div class="Separator" />
               <div>
                 <nuxt-link
                   :to="localePath({name: 'organisation-signup', params: $route.params})"
                   class="HeaderBtn HideOnActive">Signup</nuxt-link>
               </div>
-
               <div>
                 <nuxt-link
                   :to="localePath({name: 'organisation-login', params: $route.params})"

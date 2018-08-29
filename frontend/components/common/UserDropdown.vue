@@ -3,7 +3,8 @@
     <el-popover
       v-model="shown"
       placement="bottom-end"
-      popper-class="UserDropdownPopper"
+      visible-arrow="false"
+      popper-class="CustomPopover UserDropdownPopper"
     >
 
       <el-button
@@ -122,6 +123,10 @@ export default {
 <style lang="less">
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
+
+  .UserDropdownPopper {
+    transform: translate(0, -35px);
+  }
 
   .ButtonPopper {
     height: 24px;
