@@ -118,11 +118,13 @@ export const actions = {
   async loadGeoJSON ({commit, rootGetters}) {
     const country = rootGetters['admin/country/getStableCountry'];
     const url = country.map_files.slice(-1)[0].map_file;
-    const mediaIndex = url.indexOf('/media/');
-    const proper = url.slice(mediaIndex);
-    const { data } = await this.$axios.get(proper);
-    Object.freeze(data);
-    commit('UPDATE_GEO_JSON', data);
+    if (url) {
+      const mediaIndex = url.indexOf('/media/');
+      const proper = url.slice(mediaIndex);
+      const { data } = await this.$axios.get(proper);
+      Object.freeze(data);
+      commit('UPDATE_GEO_JSON', data);
+    }
   },
   setCountryCenter ({commit}, value) {
     value = value ? { ...value } : null;
