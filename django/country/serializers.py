@@ -63,6 +63,9 @@ class UpdateAdminMixin:
         original_admins = set(instance.admins.all().only('id'))
         original_super_admins = set(instance.super_admins.all().only('id'))
 
+        # Select for update to avoid race conditions caused by partial update
+        # https://github.com/encode/django-rest-framework/issues/4675
+        instance = self.Meta.model.objects.select_for_update().get(pk=instance.id)
         # perform update
         instance = super().update(instance, validated_data)
 
@@ -119,8 +122,7 @@ class UpdateAdminMixin:
 
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",
                   "project_approval", "map_data", "map_version", "map_files", "map_activated_on",)
-READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "cover", "project_approval", "map_version", "map_files",
-                            "map_activated_on",)
+READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "cover", "map_version", "map_files", "map_activated_on",)
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 
 

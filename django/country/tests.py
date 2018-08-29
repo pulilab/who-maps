@@ -117,12 +117,14 @@ class CountryTests(APITestCase):
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         data = {
             "cover_text": "blah",
-            "footer_text": "foo"
+            "footer_text": "foo",
+            "project_approval": True
         }
         response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["cover_text"], data["cover_text"])
         self.assertEqual(response.json()["footer_text"], data["footer_text"])
+        self.assertEqual(response.json()["project_approval"], data["project_approval"])
 
     def test_country_admin_update_images(self):
         url = reverse("country-image-detail", kwargs={"pk": self.country.id})
