@@ -116,14 +116,14 @@ a {
     font-size: @fontSizeHeading;
     color: @colorTextPrimary;
     letter-spacing: -1px;
-    margin: 0 0 20px;
+    margin: 0;
   }
 
   p {
     font-size: @fontSizeMedium;
     color: @colorTextSecondary;
     line-height: 24px;
-    margin: 0;
+    margin: 20px 0 0;
     padding: 0 120px;
   }
 
@@ -424,6 +424,7 @@ fieldset {
         &::before {
           display: none;
         }
+
         &::after {
           content: '*';
           margin-left: 4px;
@@ -535,7 +536,7 @@ fieldset {
 
 .el-checkbox {
   .el-checkbox__inner {
-    // bolder tick
+    // thicker tick
     &::after {
       top: 1px;
       left: 4px;
@@ -558,24 +559,50 @@ fieldset {
   }
 }
 
-.el-checkbox-group {
+
+.el-radio {
+  .el-radio__label {
+    font-weight: 400;
+  }
+
+  &.RadioSmall {
+    .el-radio__input {}
+    .el-radio__label {
+      font-size: @fontSizeSmall;
+      line-height: 16px;
+    }
+  }
+}
+
+.el-radio-group {
+  .el-radio {
+    line-height: 40px;
+  }
+}
+
+.el-checkbox-group,
+.el-radio-group {
   &.OnePerRow {
-    > .el-checkbox {
+    > .el-checkbox,
+    > .el-radio {
       display: block;
       margin: 0;
       padding: 10px 0;
       line-height: 19px;
 
-      &.CheckboxSmall {
+      &.CheckboxSmall,
+      &.RadioSmall {
         padding: 5px 0;
       }
 
-      .el-checkbox__input {
+      .el-checkbox__input,
+      .el-radio__input {
         vertical-align: top;
         top: 2px;
       }
 
-      .el-checkbox__label {
+      .el-checkbox__label,
+      .el-radio__label {
         white-space: normal;
       }
     }
@@ -587,7 +614,8 @@ fieldset {
     align-content: flex-start;
     white-space: normal;
 
-    > .el-checkbox {
+    > .el-checkbox,
+    > .el-radio {
       width: 33%;
       margin: 0;
       padding-right: 30px;
@@ -595,38 +623,22 @@ fieldset {
       line-height: 19px;
       padding: 10px 0;
 
-      &.CheckboxSmall {
+      &.CheckboxSmall,
+      &.RadioSmall {
         padding: 5px 0;
       }
 
-      .el-checkbox__input {
+      .el-checkbox__input ,
+      .el-radio__input {
         vertical-align: top;
         top: 2px;
       }
 
-      .el-checkbox__label {
+      .el-checkbox__label,
+      .el-radio__label  {
         white-space: normal;
         padding-right: 30px;
       }
-    }
-  }
-}
-
-.el-radio {
-  .el-radio__label {
-    font-weight: 400;
-  }
-}
-
-.el-radio-group {
-  .el-radio {
-    line-height: 40px;
-  }
-
-  &.OnePerRow {
-    > .el-radio {
-      display: block;
-      margin: 0;
     }
   }
 }
