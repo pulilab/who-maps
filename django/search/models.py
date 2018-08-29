@@ -131,6 +131,9 @@ class ProjectSearch(ExtendedModel):
             self.country_id = int(project.data["country"])
             self.organisation_id = int(project.data["organisation"])
 
+            self.donors = [int(x) for x in project.data.get("donors", [])]
+            self.donor_names = [Donor.objects.get(id=int(x)).name for x in project.data.get("donors", [])]
+
             self.software = [int(x['id']) for x in project.data.get("platforms", [])]
             self.coverage = [x.get('district', "") for x in project.data.get("coverage", [])]
             self.dhi_categories = list(set(filter(None.__ne__,
