@@ -10,7 +10,7 @@ from django.http import QueryDict
 
 from core.models import ExtendedModel
 from project.models import Project, HealthFocusArea, HSCChallenge, DigitalStrategy
-from country.models import Country
+from country.models import Country, Donor
 from user.models import Organisation
 
 
@@ -37,7 +37,7 @@ class ProjectSearch(ExtendedModel):
         "his": "his",  # eg: his=1&his=2
         "region": "country__region",  # eg: region=3
         "gov": "project__data__government_investor",  # false=> gov=0 ; true=> gov=1&gov=2
-        "donor": "project__data__donors",  # TODO: will be refactored
+        "donor": "donors",
         "approved": "project__approval__approved"  # false=> approved=0 ; true=> approved=1
     }
 
@@ -95,7 +95,7 @@ class ProjectSearch(ExtendedModel):
                     if field in ["country", "region", "gov"]:
                         lookup_param = "in"
                         lookup = lookup_cleanup(query_params.getlist(field))
-                    elif field in ["sw", "dhi", "hfa", "hsc", "his"]:
+                    elif field in ["donor", "sw", "dhi", "hfa", "hsc", "his"]:
                         lookup_param = "overlap"  # This is the OR clause here
                         lookup = lookup_cleanup(query_params.getlist(field))
                     elif field == "approved":
