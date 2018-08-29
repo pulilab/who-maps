@@ -117,12 +117,14 @@ class CountryTests(APITestCase):
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         data = {
             "cover_text": "blah",
-            "footer_text": "foo"
+            "footer_text": "foo",
+            "project_approval": True
         }
         response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["cover_text"], data["cover_text"])
         self.assertEqual(response.json()["footer_text"], data["footer_text"])
+        self.assertEqual(response.json()["project_approval"], data["project_approval"])
 
     def test_country_admin_update_images(self):
         url = reverse("country-image-detail", kwargs={"pk": self.country.id})
@@ -999,6 +1001,25 @@ class CountryTests(APITestCase):
         response = self.test_user_client.patch(url, data=data, format='json', HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["map_data"], data["map_data"])
+
+    def test_country_map_download_success(self):
+        url = reverse("country-map-download", kwargs={"country_id": Country.objects.all()[0].id})
+        response = self.test_user_client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(response.get('Content-Disposition'),
+                          'attachment; filename="{}"'.format('exportBoundaries.zip'))
+
+    def test_country_map_download_wrong_country(self):
+        url = reverse("country-map-download", kwargs={"country_id": self.country.id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.content, b'Download failed')
+
+    def test_country_map_download_country_doesnt_exist(self):
+        url = reverse("country-map-download", kwargs={"country_id": 999})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 404)
 
 
 class DonorTests(APITestCase):

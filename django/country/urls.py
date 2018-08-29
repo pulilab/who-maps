@@ -15,11 +15,16 @@ router.register(r'country-images', CountryImageViewSet, base_name='country-image
 router.register(r'donor-images', DonorImageViewSet, base_name='donor-image')
 
 urlpatterns = [
-    url(r'^countries/export/$', view=views.CountryExportView.as_view(), name='country-export'),
-    url(r"^country-fields/(?P<country_id>\d+)/$",
-        view=views.CountryFieldsListView.as_view(),
-        name="country-fields-list"),
-    url(r"^country-fields/(?P<country_id>\d+)/(?P<project_id>\d+)/(?P<mode>draft|publish)/$",
-        view=views.CountryFieldsCreateUpdateView.as_view(),
-        name="country-fields"),
-] + router.urls
+                  url(r'^countries/export/$',
+                      view=views.CountryExportView.as_view(),
+                      name='country-export'),
+                  url(r"^countries/map-download/(?P<country_id>\d+)/$",
+                      view=views.MapDownloadViewSet.as_view({'get': 'map_download'}),
+                      name="country-map-download"),
+                  url(r"^country-fields/(?P<country_id>\d+)/$",
+                      view=views.CountryFieldsListView.as_view(),
+                      name="country-fields-list"),
+                  url(r"^country-fields/(?P<country_id>\d+)/(?P<project_id>\d+)/(?P<mode>draft|publish)/$",
+                      view=views.CountryFieldsCreateUpdateView.as_view(),
+                      name="country-fields"),
+              ] + router.urls

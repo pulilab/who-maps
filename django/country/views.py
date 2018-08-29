@@ -1,4 +1,11 @@
+import pycountry
+import requests
+
+from requests import RequestException
+from django.conf import settings
+from django.http import HttpResponse
 from rest_framework import generics, mixins, viewsets
+from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -117,6 +124,27 @@ class MapFileViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Re
     queryset = MapFile.objects.all()
     serializer_class = MapFileSerializer
     parser_classes = (MultiPartParser, FormParser)
+
+
+class MapDownloadViewSet(viewsets.ViewSet):
+    @staticmethod
+    def map_download(request, country_id):
+        obj = get_object_or_404(Country.objects.all(), id=country_id)
+        country = pycountry.countries.get(alpha_2=obj.code)
+        url = ("https://wambachers-osm.website/boundaries/exportBoundaries?"
+               "cliVersion=1.0&cliKey={}&exportFormat=json&exportLayout=single"
+               "&exportAreas=land&union=false&from_AL=2&to_AL=6&selected={}").format(
+            settings.OSM_MAP_CLI_KEY, country.alpha_3)
+
+        osm_request = requests.get(url, stream=True)
+        try:
+            osm_request.raise_for_status()
+        except RequestException:
+            return HttpResponse(status=osm_request.status_code, content='Download failed', content_type='text/plain')
+        else:
+            response = HttpResponse(osm_request.content, content_type='application/zip')
+            response['Content-Disposition'] = 'attachment; filename="{}"'.format('exportBoundaries.zip')
+            return response
 
 
 class CountryImageViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
