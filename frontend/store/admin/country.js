@@ -73,14 +73,13 @@ export const actions = {
 
   async saveChanges ({ dispatch }) {
     try {
-      // await Promise.all([
-      await dispatch('patchSimpleKeys');
-      await dispatch('patchCountryImages');
-      await dispatch('synchPartnerLogos');
-      await dispatch('synchAdminUserArrays');
-      await dispatch('synchMapFile');
-      await dispatch('admin/map/saveMapData', {}, { root: true });
-      // ]);
+      await Promise.all([
+        dispatch('patchInfoAndArrays'),
+        dispatch('patchCountryImages'),
+        dispatch('synchPartnerLogos'),
+        dispatch('synchMapFile'),
+        dispatch('admin/map/saveMapData', {}, { root: true })
+      ]);
       await dispatch('fetchData');
       window.scrollTo(0, 0);
       Message({
@@ -98,27 +97,22 @@ export const actions = {
     }
   },
 
-  async patchSimpleKeys ({ getters, rootGetters }) {
-    const simpleKeys = ['cover_text', 'footer_title', 'footer_text', 'project_approval'];
-    const isThereChange = simpleKeys.some(key => {
-      return getters.getCountry[key] !== getters.getStableCountry[key];
-    });
+  async patchInfoAndArrays ({ getters, rootGetters }) {
+    const userProfile = rootGetters['user/getProfile'];
+    const keys = ['cover_text', 'footer_title', 'footer_text', 'project_approval', 'users', 'admins'];
+    if (userProfile.account_type === 'SCA' || userProfile.is_superuser) keys.push('super_admins');
 
-    if (isThereChange) {
+    const patchObj = keys.reduce((prev, key) => {
+      if (JSON.stringify(getters.getCountry[key]) !== JSON.stringify(getters.getStableCountry[key])) {
+        prev[key] = getters.getCountry[key];
+      }
+      return prev;
+    }, {});
+
+    if (Object.keys(patchObj).length) {
       const countryId = rootGetters['user/getProfile'].country;
-      const patchObj = {};
-
-      simpleKeys.forEach(key => {
-        if (getters.getCountry[key] !== getters.getStableCountry[key]) {
-          patchObj[key] = getters.getCountry[key];
-        }
-      });
-
       await this.$axios.patch(`/api/countries/${countryId}/`, patchObj);
-    } else {
-      // console.log('No change in country info strings');
-      return Promise.resolve();
-    }
+    } else return Promise.resolve();
   },
 
   async patchCountryImages ({ getters, rootGetters }) {
@@ -179,19 +173,6 @@ export const actions = {
 
   async delPartnerLogo (ctx, id) {
     await this.$axios.delete(`/api/country-partner-logos/${id}/`);
-  },
-
-  async synchAdminUserArrays ({ rootGetters, getters }) {
-    const countryId = rootGetters['user/getProfile'].country;
-    const patchObj = {
-      users: getters.getCountry.users,
-      admins: getters.getCountry.admins
-    };
-    const userProfile = rootGetters['user/getProfile'];
-    if (userProfile.account_type === 'SCA' || userProfile.is_superuser) {
-      patchObj.super_admins = getters.getCountry.super_admins;
-    }
-    await this.$axios.patch(`/api/countries/${countryId}/`, patchObj);
   },
 
   async synchMapFile ({ rootGetters, getters }) {
