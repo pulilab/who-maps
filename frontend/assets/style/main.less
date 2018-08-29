@@ -823,18 +823,30 @@ fieldset {
 // Popover
 
 .el-popover {
+  // disable arrow
+  margin: 0 !important;
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0 4px 12px 4px rgba(0,0,0,.22);
+
+  .popper__arrow {
+    display: none;
+  }
+
   &.CustomPopover {
     box-sizing: border-box;
     padding: 0;
 
     .el-popover__title {
+      height: 24px;
       margin: 0;
       padding: 0 12px;
       border-bottom: 1px solid @colorGrayLight;
-      font-size: @fontSizeSmall - 1;
+      background-color: @colorGrayLightest;
+      font-size: @fontSizeSmall - 2;
       font-weight: 700;
       color: @colorGray;
-      line-height: 30px;
+      line-height: 26px;
       text-transform: uppercase;
       .textTruncate();
 
@@ -851,7 +863,7 @@ fieldset {
 
         li {
           position: relative;
-          padding: 0 28px 0 12px;
+          padding: 0 36px 0 12px;
           height: 40px;
           font-size: @fontSizeBase;
           line-height: 40px;
@@ -861,7 +873,7 @@ fieldset {
           .textTruncate();
 
           &:hover {
-            background-color: @colorGrayLightest;
+            background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
             color: @colorTextPrimary;
 
             .svg-inline--fa {
@@ -871,7 +883,7 @@ fieldset {
 
           &.Active,
           &.Selected {
-            background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
+            // background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
             color: @colorBrandPrimary;
             font-weight: 700;
 
@@ -908,7 +920,7 @@ fieldset {
       margin: 0;
       padding: 0 12px;
       border-top: 1px solid @colorGrayLight;
-      // background-color: @colorGrayLightest;
+      background-color: @colorGrayLightest;
 
       .el-row {
         height: 100%;
@@ -919,6 +931,12 @@ fieldset {
       }
     }
   }
+
+  // &[x-placement^="bottom"] {
+  //   .popper__arrow::after {
+  //     border-bottom-color: @colorGrayLightest;
+  //   }
+  // }
 }
 
 // Table

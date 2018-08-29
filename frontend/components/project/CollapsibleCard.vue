@@ -86,10 +86,16 @@ export default {
       height: 58px;
       float: right;
       color: @colorWhite;
-      transition: @transitionFadeLinear;
+
+      .svg-inline--fa {
+        transition: @transitionAll;
+      }
 
       &:hover {
-        opacity: .8;
+        .svg-inline--fa {
+          opacity: .8;
+          transform: rotateX(180deg);
+        }
       }
     }
   }

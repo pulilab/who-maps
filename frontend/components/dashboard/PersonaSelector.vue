@@ -95,7 +95,7 @@ export default {
 
     .PersonaBox {
       display: inline;
-      line-height: @actionBarHeight - 12px;
+      line-height: @actionBarHeight;
 
       .PersonaIcon {
         margin: 0 2px 0 8px;
@@ -106,9 +106,9 @@ export default {
       padding: 0;
       color: @colorWhite;
     }
+  }
 
-    .PersonaSelectorPopover {
-      width: @advancedSearchWidth - 40px;
-    }
+  .PersonaSelectorPopover {
+    transform: translate(10px, -35px);
   }
 </style>

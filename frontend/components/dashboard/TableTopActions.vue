@@ -201,5 +201,7 @@ export default {
     }
   }
 
-  .TableSettingsDropdown {}
+  .TableSettingsDropdown {
+    transform: translate(10px, -30px);
+  }
 </style>
