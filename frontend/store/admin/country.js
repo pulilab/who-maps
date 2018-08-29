@@ -233,11 +233,11 @@ export const actions = {
 
 export const mutations = {
   SET_COUNTRY_DATA: (state, data) => {
-    state.country = data;
+    state.country = {...data};
   },
 
   SET_EDITABLE_COUNTRY_DATA: (state, data) => {
-    state.editableCountry = data;
+    state.editableCountry = {...data};
   },
 
   SET_COUNTRY_FIELD: (state, {field, data}) => {
