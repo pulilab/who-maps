@@ -88,6 +88,6 @@ export default {
 
   .AdvancedSearchPresetsDropdown {
     transform: translate(-10px, -5px);
-    width: @advancedSearchWidth - 30px;
+    max-width: @advancedSearchWidth - 30px;
   }
 </style>
