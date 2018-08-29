@@ -45,6 +45,9 @@ class ProjectSearch(ExtendedModel):
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
     organisation = models.ForeignKey(Organisation, null=True, on_delete=models.SET_NULL)
 
+    donors = ArrayField(models.IntegerField(), default=list)
+    donor_names = ArrayField(models.CharField(max_length=128), default=list)
+
     software = ArrayField(models.IntegerField(), default=list)
     coverage = ArrayField(models.CharField(max_length=64), default=list)
     dhi_categories = ArrayField(models.IntegerField(), default=list)
