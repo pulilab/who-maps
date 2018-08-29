@@ -61,15 +61,17 @@ export const actions = {
   async loadProfile ({ commit, getters }, profileId) {
     if (getters.getToken && !getters.getProfile) {
       let { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`);
-      // console.log('USER PROFILE:');
-      // console.dir(data);
       commit('SET_PROFILE', data);
     }
   },
 
-  async updateUserProfile ({ getters, commit }, putObj) {
-    const userId = getters.getProfile.id;
-    const { data } = await this.$axios.put(`/api/userprofiles/${userId}/`, putObj);
+  async updateUserProfile ({ commit, dispatch }, profile) {
+    if (isNaN(profile.organisation)) {
+      const organisation = await dispatch('system/addOrganisation', profile.organisation, { root: true });
+      profile.organisation = organisation.id;
+    }
+    const { data } = await this.$axios.put(`/api/userprofiles/${profile.id}/`, profile);
+    data.email = data.email || data.user_email;
     commit('SET_PROFILE', data);
   },
 
