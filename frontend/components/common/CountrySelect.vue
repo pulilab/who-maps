@@ -1,7 +1,8 @@
 <template>
   <el-select
     :value="value"
-    :popper-class="popperAdditionalClass"
+    popper-class="CountrySelectorPopper"
+    class="CountrySelector"
     placeholder="Select country"
     @change="changeHandler">
     <el-option
@@ -23,10 +24,6 @@ export default {
     value: {
       type: Number,
       default: null
-    },
-    popperAdditionalClass: {
-      type: String,
-      default: null
     }
   },
   computed: {
@@ -46,7 +43,7 @@ export default {
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
 
-  .CountrySelectPopper {
+  .CountrySelectorPopper {
     max-width: @advancedSearchWidth - 40px;
   }
 </style>
