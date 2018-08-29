@@ -62,7 +62,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__his_bucket",
         "country__region",
         "project__data__government_investor",
-        "project__data__donors",  # TODO: will be refactored
+        "donors",
         "project__approval__approved"
     )
     filter_backends = (filters.OrderingFilter,)
