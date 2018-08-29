@@ -28,13 +28,6 @@
 
           <div class="Item">
             <div class="ItemTitle">
-              Role
-            </div>
-            Role Name
-          </div>
-
-          <div class="Item">
-            <div class="ItemTitle">
               Country
             </div>
             <country-item
@@ -63,6 +56,34 @@
               <fa icon="user-edit" />
             </span>
             Edit my profile
+          </nuxt-link>
+        </div>
+
+        <div
+          v-if="isUserCA"
+          class="DropdownLink">
+          <nuxt-link
+            :to="localePath({name: 'organisation-admin-country', params: $route.params})"
+            @click.native="closePopover"
+          >
+            <span class="MenuIcon">
+              <fa icon="atlas" />
+            </span>
+            Edit my country
+          </nuxt-link>
+        </div>
+
+        <div
+          v-if="isUserDA"
+          class="DropdownLink">
+          <nuxt-link
+            :to="localePath({name: 'organisation-admin-donor', params: $route.params})"
+            @click.native="closePopover"
+          >
+            <span class="MenuIcon">
+              <fa icon="hand-holding-usd" />
+            </span>
+            Edit my donor
           </nuxt-link>
         </div>
 
@@ -101,7 +122,14 @@ export default {
   computed: {
     ...mapGetters({
       user: 'user/getProfile'
-    })
+    }),
+    isUserCA () {
+      return (this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)) || this.user.is_superuser;
+    },
+    isUserDA () {
+      return (this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)) || this.user.is_superuser;
+    }
+
   },
   methods: {
     ...mapActions({
