@@ -23,8 +23,8 @@ class ProjectSearch(ExtendedModel):
         "region": "country__region",
         "overview": "project__data__implementation_overview",
         "loc": "coverage",
-        "partner": "project__data__implementing_partners",  # TODO: will be refactored
-        "donor": "project__data__donors"  # TODO: will be refactored
+        "partner": "project__data__implementing_partners",
+        "donor": "donor_names"
     }
 
     FILTER_BY = {
