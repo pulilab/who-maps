@@ -4,8 +4,8 @@
     :allow-create="true"
     filterable
     reserve-keyword
-    class="Organisationelector"
-    popper-class="OrganisationelectorDropdown"
+    class="OrganisationSelector"
+    popper-class="OrganisationSelectorDropdown"
     placeholder="Type and select a name"
     @change="changeHandler"
   >
@@ -56,10 +56,10 @@ export default {
 </script>
 
 <style lang="less">
-.Organisationelector {
+.OrganisationSelector {
   width: 100%;
 }
-.OrganisationelectorDropdown {
+.OrganisationSelectorDropdown {
    .OrganisationItem {
     display: inline;
   }
