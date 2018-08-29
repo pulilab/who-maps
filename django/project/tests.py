@@ -22,7 +22,7 @@ from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
-from country.models import Country, CountryField
+from country.models import Country, CountryField, Donor
 from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
@@ -89,6 +89,9 @@ class SetupTests(APITestCase):
         self.userprofile = UserProfile.objects.get(id=self.user_profile_id)
         self.country.users.add(self.userprofile)
 
+        self.d1 = Donor.objects.create(name="Donor1")
+        self.d2 = Donor.objects.create(name="Donor2")
+
         self.project_data = {
             "date": datetime.utcnow(),
             "name": "Test Project1",
@@ -119,7 +122,7 @@ class SetupTests(APITestCase):
             "national_level_deployment":
                 {"clients": 20000, "health_workers": 0, "facilities": 0,
                  "facilities_list": ['facility1', 'facility2', 'facility3']},
-            "donors": ["donor1", "donor2"],
+            "donors": [self.d1.id, self.d2.id],
             "his_bucket": [1, 2],
             "hsc_challenges": [1, 2],
             "government_investor": 0,
@@ -875,7 +878,7 @@ class ProjectTests(SetupTests):
             ],
             "national_level_deployment":
                 {"clients": 20000, "health_workers": 0, "facilities": 0},
-            "donors": ["donor1", "donor2"],
+            "donors": [self.d1.id, self.d2.id],
             "his_bucket": [1, 2],
             "hsc_challenges": [1, 2],
             "government_investor": 0,
