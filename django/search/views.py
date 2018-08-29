@@ -92,7 +92,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         his: eg: his=1&his=2
         region: eg: region=3
         gov: gov=0 (for false), gov=1&gov=2 (for true values, since there's two types of true)
-        donor: TODO: implement
+        donor: eg: donor=1&donor=2
         approved: approved=0 (for not approved), approved=1 (for approved)
 
         ** FOUND IN FEATURE **
