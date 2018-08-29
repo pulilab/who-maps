@@ -27,5 +27,5 @@ class ListResultSerializer(serializers.Serializer):
     his_bucket = serializers.ReadOnlyField(source="project__data__his_bucket")
     region = serializers.ReadOnlyField(source="country__region")
     government_investor = serializers.ReadOnlyField(source="project__data__government_investor")
-    donors = serializers.ReadOnlyField(source="project__data__donors")  # TODO: will be refactored
+    donors = serializers.ReadOnlyField()
     approved = serializers.ReadOnlyField(source="project__approval__approved")
