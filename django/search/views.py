@@ -73,7 +73,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
 
     def get_queryset(self):
         return ProjectSearch.objects.exclude(project__public_id='')\
-            .select_related('project', 'project__approval', 'organisation', 'country')
+            .select_related('project', 'project__approval', 'organisation', 'country', 'donor')
 
     def list(self, request, *args, **kwargs):
         """
