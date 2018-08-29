@@ -146,8 +146,7 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
     def get_map_version(self, obj):
         if obj.map_activated_on:
             return format(obj.map_activated_on, 'U')
-        # TODO: cover this
-        return 0  # pragma: no cover
+        return 0
 
     def get_user_requests(self, obj):
         # figure out not yet assigned users
