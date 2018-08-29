@@ -1,6 +1,7 @@
 <template>
   <el-upload
     :auto-upload="false"
+    :disabled="disabled"
     :on-remove="handleChange"
     :on-change="handleChange"
     :list-type="'picture'"
@@ -11,6 +12,7 @@
       v-if="files.length < limit"
       type="flex">
       <el-button
+        v-if="!disabled"
         icon="el-icon-plus"
         type="text">Upload file</el-button>
       <div v-if="files.length === 0">No file chosen</div>
@@ -28,6 +30,10 @@ export default {
     limit: {
       type: Number,
       default: 1
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
 

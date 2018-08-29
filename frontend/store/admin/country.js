@@ -47,6 +47,7 @@ export const actions = {
   mapAdminSelections ({ commit, rootGetters }, data) {
     const profiles = rootGetters['system/getUserProfiles'];
     const userId = rootGetters['user/getProfile'].id;
+    let defaultDisable = false;
 
     const userIdMapping = val => {
       if (typeof val !== 'object') {
@@ -56,20 +57,21 @@ export const actions = {
         return {
           key: val,
           label,
-          disabled: val === userId
+          disabled: defaultDisable || val === userId
         };
       } else {
         // In case of { id, name, email }
         return {
           key: val.id,
           label: `${val.name} <${val.email}>`,
-          disabled: val.id === userId
+          disabled: defaultDisable || val.id === userId
         };
       }
     };
 
     commit('SET_USER_SELECTION', [...(data.user_requests || []), ...(data.users || [])].map(userIdMapping));
     commit('SET_ADMIN_SELECTION', [...(data.admin_requests || []), ...(data.admins || [])].map(userIdMapping));
+    defaultDisable = rootGetters['user/getProfile'].account_type === 'CA' && !rootGetters['user/getProfile'].is_superuser;
     commit('SET_SUPER_ADMIN_SELECTION', [...(data.super_admin_requests || []), ...(data.super_admins || [])].map(userIdMapping));
   },
 

@@ -19,6 +19,7 @@
           label="Logo"
           prop="logo">
           <file-upload
+            :disabled="notSCA"
             :auto-upload="false"
             :files.sync="logo"
             :limit="1"/>
@@ -28,12 +29,14 @@
           label="Cover image"
           prop="cover">
           <file-upload
+            :disabled="notSCA"
             :files.sync="cover"
             :limit="1"/>
         </el-form-item>
 
         <el-form-item label="Cover text">
           <el-input
+            :disabled="notSCA"
             v-model="coverText"
             type="textarea"
             rows="5"/>
@@ -41,24 +44,31 @@
 
         <el-form-item label="Footer title">
           <el-input
+            :disabled="notSCA"
             v-model="footerTitle"
             type="text"/>
         </el-form-item>
 
         <el-form-item label="Footer text">
           <el-input
+            :disabled="notSCA"
             v-model="footerText"
             type="text"/>
         </el-form-item>
 
         <el-form-item label="Project approval process">
-          <el-checkbox v-model="projectApproval">{{ (projectApproval ? 'U' : 'Not u') + 'sed for project in country' }}</el-checkbox>
+          <el-checkbox
+            :disabled="notSCA"
+            v-model="projectApproval">
+            {{ (projectApproval ? 'U' : 'Not u') + 'sed for project in country' }}
+          </el-checkbox>
         </el-form-item>
 
         <el-form-item
           label="Partner logos"
           prop="partnerLogos">
           <file-upload
+            :disabled="notSCA"
             :files.sync="partnerLogos"
             :limit="10"/>
         </el-form-item>
@@ -84,7 +94,6 @@
             <div class="RequestCount">{{ adminSelection.length - admins.length }} new request{{ (country.admin_requests && country.admin_requests.length) === 1 ? '' : 's' }}</div>
           </div>
           <div
-            v-if="userProfile.account_type === 'SCA' || userProfile.is_superuser"
             :class="['Persona', { 'active': selectedPersona === 'SCA'}]"
             @click="selectPersona('SCA')">
             <div class="PersonaName">Superadmins</div>
@@ -178,8 +187,6 @@
       </el-button>
     </collapsible-card>
 
-    <!-- <p>country.map_files: {{ country.map_files }}</p> -->
-
     <hr>
 
     <el-row
@@ -268,6 +275,10 @@ export default {
       superadminSelection: 'admin/country/getSuperadminSelection',
       userProfile: 'user/getProfile'
     }),
+
+    notSCA () {
+      return this.userProfile.account_type === 'CA' && !this.userProfile.is_superuser;
+    },
 
     logo: {
       get () {
