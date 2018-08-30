@@ -87,7 +87,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
     government_investor = serializers.ChoiceField(choices=INVESTOR_CHOICES)
     implementing_partners = serializers.ListField(
         child=serializers.CharField(max_length=64), max_length=50, min_length=0, required=False)
-    donors = serializers.ListField(child=serializers.CharField(max_length=64), max_length=32)
+    donors = serializers.ListField(child=serializers.IntegerField(), max_length=32)
 
     # SECTION 3 Technology Overview
     implementation_dates = serializers.CharField(max_length=128)
@@ -153,7 +153,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64, required=False)
     government_investor = serializers.ChoiceField(choices=INVESTOR_CHOICES, required=False)
-    donors = serializers.ListField(child=serializers.CharField(max_length=64), max_length=32, required=False)
+    donors = serializers.ListField(child=serializers.IntegerField(), max_length=32, required=False)
 
     # SECTION 3 Technology Overview
     implementation_dates = serializers.CharField(max_length=128, required=False)
