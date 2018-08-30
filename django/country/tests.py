@@ -113,6 +113,21 @@ class CountryTests(APITestCase):
         self.assertIn("footer_text", response_keys)
         self.assertIn("map_data", response_keys)
 
+    def test_country_admin_retrieve_without_map_version(self):
+        country2 = Country.objects.create(name="country2", code="CC2")
+        url = reverse("country-detail", kwargs={"pk": country2.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['map_version'], 0)
+        response_keys = response.json().keys()
+        self.assertIn("name", response_keys)
+        self.assertIn("code", response_keys)
+        self.assertIn("logo", response_keys)
+        self.assertIn("cover", response_keys)
+        self.assertIn("cover_text", response_keys)
+        self.assertIn("footer_text", response_keys)
+        self.assertIn("map_data", response_keys)
+
     def test_country_admin_update(self):
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         data = {
