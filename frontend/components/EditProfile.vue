@@ -179,11 +179,12 @@
               <el-form
                 v-if="isDonorUser"
                 label-position="top"
+                class="DonorSelector"
                 @submit.native.prevent>
                 <el-form-item label="I want to be a part of this donor group:">
                   <el-select
                     v-model="innerProfile.donor"
-                    class="DonorSelector">
+                    size="small">
                     <el-option
                       v-for="don in donors"
                       :key="don.value"
@@ -605,6 +606,15 @@ export default {
 
         .DonorSelector {
           width: 100%;
+
+          .el-form-item__label {
+            font-size: @fontSizeSmall;
+          }
+
+          .el-select {
+            min-width: 75%;
+            max-width: 100%;
+          }
         }
 
         .UserRoleDescription {
