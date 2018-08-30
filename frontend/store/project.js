@@ -235,6 +235,9 @@ export const actions = {
   setPublished ({commit}, value) {
     commit('SET_PUBLISHED', value);
   },
+  setLoading ({commit}, value) {
+    commit('SET_LOADING', value);
+  },
   async saveTeamViewers ({getters, commit}, id) {
     const teamViewers = {
       team: getters.getTeam,
@@ -244,26 +247,27 @@ export const actions = {
     commit('SET_TEAM', data.team);
     commit('SET_VIEWERS', data.viewers);
   },
-  async createProject ({getters, dispatch, commit}) {
-    commit('SET_LOADING', 'draft');
+  async createProject ({getters, dispatch}) {
+    dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.post('api/projects/draft/', parsed);
     dispatch('projects/addProjectToList', data, {root: true});
-    commit('SET_LOADING', false);
+    await dispatch('saveTeamViewers', data.id);
+    dispatch('setLoading', false);
     return data.id;
   },
-  async saveDraft ({getters, dispatch, commit}, id) {
-    commit('SET_LOADING', 'draft');
+  async saveDraft ({getters, dispatch}, id) {
+    dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
     await dispatch('saveTeamViewers', id);
     dispatch('projects/updateProject', data, {root: true});
-    commit('SET_LOADING', false);
+    dispatch('setLoading', false);
   },
   async publishProject ({getters, dispatch, commit}, id) {
-    commit('SET_LOADING', 'publish');
+    dispatch('setLoading', 'publish');
     const draft = getters.getProjectData;
     const parsed = apiWriteParser(draft);
     // TODO: Remove this on donor feature creation
@@ -273,17 +277,17 @@ export const actions = {
     const parsedResponse = apiReadParser(data.draft);
     commit('SET_PUBLISHED', Object.freeze(parsedResponse));
     dispatch('projects/updateProject', data, {root: true});
-    commit('SET_LOADING', false);
+    dispatch('setLoading', false);
   },
-  async discardDraft ({getters, dispatch, commit}, id) {
-    commit('SET_LOADING', 'discard');
+  async discardDraft ({getters, dispatch}, id) {
+    dispatch('setLoading', 'discard');
     const published = getters.getPublished;
     const parsed = apiWriteParser(published);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
     const parsedResponse = apiReadParser(data.draft);
     await dispatch('setProjectState', parsedResponse);
     dispatch('projects/updateProject', data, {root: true});
-    commit('SET_LOADING', false);
+    dispatch('setLoading', false);
   }
 };
 
