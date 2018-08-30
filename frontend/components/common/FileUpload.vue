@@ -6,16 +6,21 @@
     :on-change="handleChange"
     :list-type="'picture'"
     :file-list="files"
-    class="upload-demo"
+    class="FileUpload"
     action="doing it manually, so this prop isnt used, still needed">
     <el-row
       v-if="files.length < limit"
-      type="flex">
+      type="flex"
+      align="middle">
       <el-button
         v-if="!disabled"
-        icon="el-icon-plus"
-        type="text">Upload file</el-button>
-      <div v-if="files.length === 0">No file chosen</div>
+        type="text"
+        class="IconLeft">
+        <fa icon="plus" /> Upload file
+      </el-button>
+      <div
+        v-if="files.length === 0"
+        class="NoFile">No file chosen</div>
     </el-row>
   </el-upload>
 </template>
@@ -46,4 +51,17 @@ export default {
 </script>
 
 <style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
+
+  .FileUpload {
+    .el-upload {
+      margin-bottom: 10px;
+    }
+
+    .NoFile {
+      padding-left: 30px;
+      color: @colorTextMuted;
+    }
+  }
 </style>

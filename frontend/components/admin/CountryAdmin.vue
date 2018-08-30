@@ -1,7 +1,8 @@
 <template>
   <div class="CountryAdmin">
-
-    <div class="AdminHeading">Country admin</div>
+    <div class="PageTitle">
+      <h2>Edit my profile</h2>
+    </div>
 
     <collapsible-card
       title="Country information"
@@ -11,7 +12,7 @@
         ref="countryInfo"
         :rules="rules"
         :model="{ logo, cover }"
-        label-width="215px"
+        label-width="220px"
         label-position="left"
         @submit.native.prevent>
 
@@ -187,14 +188,14 @@
       </el-button>
     </collapsible-card>
 
-    <hr>
-
-    <el-row
-      type="flex"
-      justify="space-between">
-      <el-button>Dismiss changes</el-button>
-      <el-button @click="saveChanges">Save changes</el-button>
-    </el-row>
+    <div class="AdminActionBarBottom">
+      <el-row
+        type="flex"
+        justify="space-between">
+        <el-button>Dismiss changes</el-button>
+        <el-button @click="saveChanges">Save changes</el-button>
+      </el-row>
+    </div>
 
   </div>
 </template>
@@ -451,30 +452,26 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
   .CountryAdmin {
-    padding-bottom: 80px;
+    margin-bottom: 60px;
 
-    .AdminHeading {
-      color: @colorTextPrimary;
-      font-size: @fontSizeHeading;
-      font-weight: bold;
-      letter-spacing: -1px;
-      line-height: 24px;
-      text-align: center;
-      margin: 40px 0;
+    .CollapsibleCard {
+      width: @cardSizeMedium;
+      margin: 0 auto 20px;
     }
 
     .CountryInformation {
       .ContentContainer {
-        padding: 30px;
+        padding: 40px;
       }
     }
 
     .UserManagement {
       .ContentContainer {
-        padding: 0 0;
+        padding: 0;
       }
 
       .AdminPersonaChooser {

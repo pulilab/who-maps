@@ -977,3 +977,39 @@ fieldset {
     }
   }
 }
+
+// Upload
+
+.el-upload {}
+
+.el-upload-list--picture {
+  .el-upload-list__item {
+    margin: 0 0 10px;
+    height: 72px;
+    border: 1px solid @colorGray;
+    border-radius: 0;
+
+    .el-upload-list__item-status-label {
+      box-shadow: none;
+
+      i {
+        font-weight: 700;
+      }
+    }
+
+    .el-icon-close {
+      color: @colorDanger;
+      font-weight: 700;
+    }
+
+    img {
+      width: auto;
+      height: 50px;
+    }
+
+    .el-upload-list__item-name {
+      padding-left: 20px;
+      line-height: 50px !important;
+    }
+  }
+}

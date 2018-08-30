@@ -56,7 +56,7 @@
             <span class="MenuIcon">
               <fa icon="user-edit" />
             </span>
-            Edit my profile
+            My profile
           </nuxt-link>
         </div>
 
@@ -68,9 +68,9 @@
             @click.native="closePopover"
           >
             <span class="MenuIcon">
-              <fa icon="atlas" />
+              <fa icon="globe" />
             </span>
-            Edit my country
+            Country admin
           </nuxt-link>
         </div>
 
@@ -84,7 +84,7 @@
             <span class="MenuIcon">
               <fa icon="hand-holding-usd" />
             </span>
-            Edit my donor
+            Donor admin
           </nuxt-link>
         </div>
 
@@ -153,7 +153,7 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .UserDropdownPopper {
-    transform: translate(0, -35px);
+    transform: translate(0, -30px);
   }
 
   .ButtonPopper {

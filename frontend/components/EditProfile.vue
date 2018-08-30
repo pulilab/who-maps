@@ -522,7 +522,7 @@ export default {
   @import "~assets/style/mixins.less";
 
   .EditProfile {
-    margin-bottom: 60px;
+    margin-bottom: 80px;
 
     .ProfileCard {
       width: @cardSizeMedium;
