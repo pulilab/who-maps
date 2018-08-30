@@ -173,12 +173,14 @@
                   <li>List item 3</li>
                 </ul>
               </el-radio-group>
+            </el-collapse-transition>
 
+            <el-collapse-transition>
               <el-form
                 v-if="isDonorUser"
                 label-position="top"
                 @submit.native.prevent>
-                <el-form-item label="Select donor">
+                <el-form-item label="I want to be a part of this donor group:">
                   <el-select
                     v-model="innerProfile.donor"
                     class="DonorSelector">
