@@ -280,7 +280,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['implementing_partners']['0'], ['Not a valid string.'])
         self.assertEqual(response.json()['health_focus_areas']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['licenses']['0'], ['A valid integer is required.'])
-        self.assertEqual(response.json()['donors']['0'], ['Not a valid string.'])
+        self.assertEqual(response.json()['donors']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['his_bucket']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['hsc_challenges']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['interoperability_links'], [{'id': ['This field is required.']}])
@@ -1701,6 +1701,7 @@ class PermissionTests(SetupTests):
                                       "District: dist2 [Clients: 10, Health Workers: 2, Facilities: 8]")
         self.assertContains(response, "District: ward1 [Clients: 209, Health Workers: 59, Facilities: 49], "
                                       "District: ward2 [Clients: 109, Health Workers: 29, Facilities: 89]")
+        self.assertContains(response, "Donor1, Donor2")
 
     def test_csv_export_success_without_coverage(self):
         url = reverse("csv-export")
