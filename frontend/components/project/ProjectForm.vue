@@ -19,21 +19,25 @@
             ref="generalOverview"
             :use-publish-rules="usePublishRules"
             :rules="rules"
+            :api-errors="apiErrors"
             @mounted="mountedHandler"
           />
           <implementation-overview
             ref="implementationOverview"
             :rules="rules"
+            :api-errors="apiErrors"
             @mounted="mountedHandler"
           />
           <technology-overview
             ref="technologyOverview"
             :rules="rules"
+            :api-errors="apiErrors"
             @mounted="mountedHandler"
           />
           <interoperability-and-standards
             ref="interoperabilityAndStandards"
             :rules="rules"
+            :api-errors="apiErrors"
             @mounted="mountedHandler"
           />
         </el-col>
@@ -73,7 +77,8 @@ export default {
     return {
       readyElements: 0,
       maxElements: 4,
-      usePublishRules: false
+      usePublishRules: false,
+      apiErrors: {}
     };
   },
   computed: {
@@ -104,6 +109,7 @@ export default {
       return {
         name: {
           required: true,
+          min: 1,
           max: 128
         },
         organisation: {
@@ -268,6 +274,7 @@ export default {
     },
     async doSaveDraft () {
       this.usePublishRules = false;
+      this.apiErrors = {};
       this.$nextTick(async () => {
         const valid = await this.validate();
         if (valid) {
@@ -283,13 +290,8 @@ export default {
               confirmButtonText: 'Close'
             });
           } catch (e) {
-            console.log(e.response.data);
+            this.apiErrors = e.response.data;
             this.setLoading(false);
-            // TODO: backend validation
-            // this.setFormAPIErrors(e);
-            // this.$refs.projectForm.validate(() => {
-            //   this.scrollToError();
-            // });
           }
         } else {
           this.scrollToError();
@@ -317,6 +319,7 @@ export default {
       }
     },
     async doPublishProject () {
+      this.apiErrors = {};
       this.usePublishRules = true;
       this.$nextTick(async () => {
         const valid = await this.validate();
@@ -330,12 +333,7 @@ export default {
             });
           } catch (e) {
             this.setLoading(false);
-            console.log(e.response.data);
-            // TODO: Backend validation
-            // this.setFormAPIErrors(e);
-            // this.$refs.projectForm.validate(() => {
-            //   this.scrollToError();
-            // });
+            this.apiErrors = e.response.data;
           }
         } else {
           this.scrollToError();
