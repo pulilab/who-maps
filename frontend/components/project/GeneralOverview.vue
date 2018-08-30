@@ -160,6 +160,7 @@
 
 <script>
 import { isAfter } from 'date-fns';
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
 import CollapsibleCard from './CollapsibleCard';
 import TeamSelector from './TeamSelector';
 import CountrySelect from '../common/CountrySelect';
@@ -173,11 +174,8 @@ export default {
     TeamSelector,
     OrganisationSelect
   },
+  mixins: [VeeValidationMixin],
   props: {
-    rules: {
-      type: Object,
-      default: () => ({})
-    },
     usePublishRules: {
       type: Boolean,
       default: false
