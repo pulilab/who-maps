@@ -1,6 +1,5 @@
 <template>
   <div class="EditProfile">
-
     <div class="PageTitle">
       <h2>Edit my profile</h2>
     </div>
@@ -184,7 +183,8 @@
                 <el-form-item label="I want to be a part of this donor group:">
                   <el-select
                     v-model="innerProfile.donor"
-                    size="small">
+                    size="small"
+                    placeholder="Select from list">
                     <el-option
                       v-for="don in donors"
                       :key="don.value"
@@ -335,7 +335,6 @@
         </el-row>
       </div>
     </el-card>
-
   </div>
 </template>
 
