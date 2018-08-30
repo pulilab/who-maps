@@ -79,7 +79,7 @@
 
             <el-checkbox
               v-model="isCountryUser"
-              border>Government user</el-checkbox>
+              border><span class="IconRole IconGovernmentUser" />Government user</el-checkbox>
 
             <p class="UserArchTypeText">Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore aliqua.</p>
 
@@ -130,7 +130,7 @@
 
             <el-checkbox
               v-model="isDonorUser"
-              border>Financial investor</el-checkbox>
+              border><span class="IconRole IconInvestorUser" />Financial investor</el-checkbox>
 
             <p class="UserArchTypeText">Sed eiusmod tempor incidunt ut labore et dolore aliqua. Morbi fringilla convallis sapien, id pulvinar odio volutpat.</p>
 
@@ -194,39 +194,108 @@
           </div>
 
           <div v-if="innerProfile.account_type_approved && ['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(innerProfile.account_type) && !changeApprovedUserRole">
+
             <h5 class="RoleAccepted">
               <fa icon="check-circle" />
               Your user role request has been accepted!
             </h5>
 
-            <div v-if="innerProfile.account_type === 'G'">
-              Country User description box
-              <el-button @click="changingUserRole">Change</el-button>
-            </div>
+            <div class="UserRoleDescription">
+              <el-button
+                size="mini"
+                @click="changingUserRole">Change</el-button>
 
-            <div v-if="innerProfile.account_type === 'CA'">
-              Country User Admin description box
-              <el-button @click="changingUserRole">Change</el-button>
-            </div>
+              <div v-if="innerProfile.account_type === 'G'">
+                <el-row
+                  type="flex"
+                  align="middle">
+                  <el-col>
+                    <span class="IconRole IconGovernmentUser" />
+                  </el-col>
+                  <el-col>
+                    <h5>Government user</h5>
+                    <span>Country user</span>
+                  </el-col>
+                </el-row>
+                <div class="MyPrivileges">
+                  <span>My Privileges are:</span>
+                  <ul class="UserTypeTextList">
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                  </ul>
+                </div>
+              </div>
 
-            <div v-if="innerProfile.account_type === 'SCA'">
-              Super Country User Admin description box
-              <el-button @click="changingUserRole">Change</el-button>
-            </div>
+              <div v-if="innerProfile.account_type === 'CA'">
+                <span class="IconRole IconGovernmentUser" />
+                <h5>Government user</h5>
+                <span>Country user admin</span>
+                <div class="MyPrivileges">
+                  <span>My Privileges are:</span>
+                  <ul class="UserTypeTextList">
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                  </ul>
+                </div>
+              </div>
 
-            <div v-if="innerProfile.account_type === 'D'">
-              Donor description box
-              <el-button @click="changingUserRole">Change</el-button>
-            </div>
+              <div v-if="innerProfile.account_type === 'SCA'">
+                <span class="IconRole IconGovernmentUser" />
+                <h5>Government user</h5>
+                <span>Super Country User Admin</span>
+                <div class="MyPrivileges">
+                  <span>My Privileges are:</span>
+                  <ul class="UserTypeTextList">
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                  </ul>
+                </div>
+              </div>
 
-            <div v-if="innerProfile.account_type === 'DA'">
-              Donor Admin description box
-              <el-button @click="changingUserRole">Change</el-button>
-            </div>
+              <div v-if="innerProfile.account_type === 'D'">
+                <span class="IconRole IconInvestorUser" />
+                <h5>Financial investor</h5>
+                <span>Donor</span>
+                <div class="MyPrivileges">
+                  <span>My Privileges are:</span>
+                  <ul class="UserTypeTextList">
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                  </ul>
+                </div>
+              </div>
 
-            <div v-if="innerProfile.account_type === 'SDA'">
-              Super Donor Admin description box
-              <el-button @click="changingUserRole">Change</el-button>
+              <div v-if="innerProfile.account_type === 'DA'">
+                <span class="IconRole IconInvestorUser" />
+                <h5>Financial investor</h5>
+                <span>Donor admin</span>
+                <div class="MyPrivileges">
+                  <span>My Privileges are:</span>
+                  <ul class="UserTypeTextList">
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div v-if="innerProfile.account_type === 'SDA'">
+                <span class="IconRole IconInvestorUser" />
+                <h5>Financial investor</h5>
+                <span>Super donor admin</span>
+                <div class="MyPrivileges">
+                  <span>My Privileges are:</span>
+                  <ul class="UserTypeTextList">
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </el-col>
@@ -437,6 +506,15 @@ export default {
           font-size: @fontSizeBase;
           font-weight: 700;
           line-height: 40px;
+
+          &.RoleAccepted {
+            font-weight: 400;
+
+            .svg-inline--fa {
+              margin-right: 5px;
+              color: #67C23A;
+            }
+          }
         }
 
         .Separator {
@@ -446,7 +524,29 @@ export default {
 
         .el-checkbox {
           &.is-bordered {
+            position: relative;
             width: 100%;
+            height: auto;
+            padding: 15px;
+            transition: @transitionAll;
+
+            &:hover {
+              .IconRole {
+                filter: grayscale(0);
+                opacity: 1;
+              }
+            }
+
+            &:hover,
+            &.is-checked {
+              border-color: @colorBrandPrimary;
+              background-color: @colorBrandBlueLight;
+
+              .IconRole {
+                filter: grayscale(0);
+                opacity: 1;
+              }
+            }
           }
         }
 
@@ -456,6 +556,31 @@ export default {
 
           + .el-form {
             margin-top: 10px;
+          }
+        }
+
+        .IconRole {
+          position: absolute;
+          top: 50%;
+          right: 15px;
+          transform: translateY(-50%);
+          display: inline-block;
+          width: 36px;
+          height: 24px;
+          background-position: right center;
+          background-size: contain;
+          background-repeat: no-repeat;
+          filter: grayscale(1);
+          opacity: .6;
+          transition: @transitionAll;
+
+          &.IconGovernmentUser {
+            top: 46%;
+            background-image: url("~static/icon-role-government.svg");
+          }
+
+          &.IconInvestorUser {
+            background-image: url("~static/icon-role-investor.svg");
           }
         }
 
@@ -478,6 +603,73 @@ export default {
 
         .DonorSelector {
           width: 100%;
+        }
+
+        .UserRoleDescription {
+          position: relative;
+          width: 100%;
+          border: 1px solid @colorGray;
+
+          .el-row {
+            .el-col {
+              padding: 10px 10px 15px;
+
+              &:nth-child(1) {
+                width: auto;
+              }
+
+              &:nth-child(2) {
+                width: 100%;
+              }
+            }
+          }
+
+          .el-button {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+          }
+
+          .IconRole {
+            position: relative;
+            top: 3px;
+            right: auto;
+            transform: none;
+            filter: grayscale(0);
+            opacity: 1;
+            width: 32px;
+            height: 48px;
+            margin-left: 10px;
+          }
+
+          h5 {
+            margin: 0;
+            line-height: 24px;
+
+            + span {
+              font-size: @fontSizeBase - 1;
+              color: @colorTextSecondary;
+            }
+          }
+
+          .MyPrivileges {
+            background-color: @colorGrayLightest;
+            padding: 20px 20px 15px;
+
+            > span {
+              font-size: @fontSizeSmall;
+            }
+
+            ul {
+              margin: 10px 30px;
+              padding: 0;
+
+              li {
+                margin-bottom: 5px;
+                font-size: @fontSizeSmall;
+              }
+            }
+          }
         }
       }
     }
