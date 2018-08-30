@@ -10,22 +10,30 @@
         <el-form-item
           v-for="(platform, index) in platforms"
           :key="platform"
-          :prop="'platforms.' + index"
+          :error="errors.first('platform_' + index)"
           label="Software"
           class="ItemIndent"
         >
           <el-col :span="16">
             <platform-selector
-              :platforms.sync="platforms"
+              v-validate="rules.platforms"
+              :key="platform"
+              :data-vv-name="'platform_' + index"
+              v-model="platforms"
               :index="index"
+              data-vv-as="Software"
             />
             <el-form-item
               v-show="platform"
+              :error="errors.first('digitalHealthInterventions')"
               label="Digital Health Interventions"
               class="DigitalHealthIntervention"
             >
               <digital-health-interventions-selector
+                v-validate="rules.digitalHealthInterventions"
                 :platform-id="platform"
+                data-vv-name="digitalHealthInterventions"
+                data-vv-as="Digital health interventions"
               />
             </el-form-item>
           </el-col>
@@ -41,21 +49,40 @@
       </el-form-item>
 
       <el-form-item
-        label="Health focus area(s) - select all that apply:"
-        prop="health_focus_areas">
-        <health-focus-areas-selector v-model="health_focus_areas" />
+        :error="errors.first('health_focus_areas')"
+        label="Health focus area(s) - select all that apply:">
+        <health-focus-areas-selector
+          v-validate="rules.health_focus_areas"
+          v-model="health_focus_areas"
+          data-vv-name="health_focus_areas"
+          data-vv-validate-on="change"
+          data-vv-as="Health focus areas"
+        />
       </el-form-item>
 
       <el-form-item
-        label="What are the Health System Challenges (HSC) your project addresses?"
-        prop="hsc_challenges">
-        <health-system-challenges-selector v-model="hsc_challenges" />
+        :error="errors.first('hsc_challenges')"
+        label="What are the Health System Challenges (HSC) your project addresses?">
+        <health-system-challenges-selector
+          v-validate="rules.hsc_challenges"
+          v-model="hsc_challenges"
+          data-vv-name="hsc_challenges"
+          data-vv-validate-on="change"
+          data-vv-as="Health system challenges"
+        />
       </el-form-item>
 
       <el-form-item
+        :error="errors.first('his_bucket')"
         label="What part(s) of the Health Information System (HIS) does this project support?"
-        prop="his_bucket">
-        <his-bucket-selector v-model="his_bucket" />
+      >
+        <his-bucket-selector
+          v-validate="rules.his_bucket"
+          v-model="his_bucket"
+          data-vv-name="his_bucket"
+          data-vv-validate-on="change"
+          data-vv-as="Health information system"
+        />
       </el-form-item>
 
       <div class="CoverageArea">
@@ -71,6 +98,8 @@
 
         <sub-national-level-deployment
           v-show="coverageType == 1"
+          ref="subNationalLevelDeployment"
+          :rules="rules"
         />
 
         <div
@@ -82,8 +111,10 @@
             National level deployment
           </div>
           <coverage-fieldset
+            ref="nationalLevelDeployment"
             :is-nlc="true"
             :disabled="false"
+            :rules="rules.national_level_deployment"
             :health-workers.sync="healthWorkers"
             :clients.sync="clients"
             :facilities.sync="facilities"
@@ -91,10 +122,13 @@
         </div>
       </div>
       <el-form-item
-        label="Has the government financially invested in the project?"
-        prop="government_investor">
+        :error="errors.first('government_investor')"
+        label="Has the government financially invested in the project?">
         <el-radio-group
+          v-validate="rules.government_investor"
           v-model="government_investor"
+          data-vv-name="government_investor"
+          data-vv-as="Government investor"
           class="OnePerRow">
           <el-radio :label="0">No, they have not yet contributed</el-radio>
           <el-radio :label="1">Yes, they are contributing in-kind people or time</el-radio>
@@ -109,9 +143,13 @@
           :key="index"
         >
           <el-col :span="16">
-            <el-form-item :prop="'implementing_partners.' + index">
+            <el-form-item :error="errors.first('implementing_partners_' + index)">
               <el-input
+                v-validate="rules.implementing_partners"
                 :value="partner"
+                :data-vv-name="'implementing_partners_' + index"
+                data-vv-validate-on="change"
+                data-vv-as="Implementing partners"
                 @change="updateImplmeentingPartners($event, index)"
               />
             </el-form-item>
@@ -154,6 +192,12 @@ export default {
     SubNationalLevelDeployment,
     AddRmButtons,
     CoverageFieldset
+  },
+  props: {
+    rules: {
+      type: Object,
+      default: () => ({})
+    }
   },
   computed: {
     ...mapGettersActions({
@@ -219,6 +263,14 @@ export default {
     },
     rmImplementingPartners (index) {
       this.implementing_partners = this.implementing_partners.filter((ip, i) => i !== index);
+    },
+    async validate () {
+      const validations = await Promise.all([
+        this.$validator.validateAll(),
+        this.$refs.nationalLevelDeployment.validate(),
+        this.$refs.subNationalLevelDeployment.validate()
+      ]);
+      return validations.reduce((a, c) => a && c, true);
     }
   }
 };

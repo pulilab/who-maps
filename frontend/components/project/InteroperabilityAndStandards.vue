@@ -47,6 +47,14 @@ export default {
   },
   mounted () {
     this.$emit('mounted');
+  },
+  methods: {
+    async validate () {
+      const validations = await Promise.all([
+        this.$validator.validateAll()
+      ]);
+      return validations.reduce((a, c) => a && c, true);
+    }
   }
 };
 </script>

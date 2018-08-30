@@ -4,35 +4,58 @@
     class="TechnologyOverview">
     <collapsible-card title="Technology overview">
       <el-form-item
+        :error="errors.first('implementation_dates')"
         label="Technology deployment date"
-        prop="implementation_dates"
       >
         <el-date-picker
+          v-validate="rules.implementation_dates"
           v-model="implementation_dates"
+          data-vv-name="implementation_dates"
+          data-vv-as="Implementation dates"
           class="Date"
           align="left"
           placeholder="Pick a day"
         />
       </el-form-item>
       <el-form-item
-        label="Under what license is the project governed?"
-        prop="licenses">
-        <license-selector v-model="licenses" />
+        :error="errors.first('licenses')"
+        label="Under what license is the project governed?">
+        <license-selector
+          v-validate="rules.licenses"
+          v-model="licenses"
+          data-vv-name="licenses"
+          data-vv-as="License"
+        />
       </el-form-item>
       <el-form-item
-        label="Code documentation or download link"
-        prop="repository">
-        <link-field v-model="repository" />
+        :error="errors.first('repository')"
+        label="Code documentation or download link">
+        <link-field
+          v-validate="rules.repository"
+          v-model="repository"
+          data-vv-name="repository"
+          data-vv-as="Repository"
+        />
       </el-form-item>
       <el-form-item
-        label="Link to the application"
-        prop="mobile_application">
-        <link-field v-model="mobile_application" />
+        :error="errors.first('mobile_application')"
+        label="Link to the application">
+        <link-field
+          v-validate="rules.mobile_application"
+          v-model="mobile_application"
+          data-vv-name="mobile_application"
+          data-vv-as="Mobile application"
+        />
       </el-form-item>
       <el-form-item
-        label="Link to the wiki page"
-        prop="wiki">
-        <link-field v-model="wiki" />
+        :error="errors.first('wiki')"
+        label="Link to the wiki page">
+        <link-field
+          v-validate="rules.wiki"
+          v-model="wiki"
+          data-vv-name="wiki"
+          data-vv-as="Wiki"
+        />
       </el-form-item>
     </collapsible-card>
   </div>
@@ -50,6 +73,12 @@ export default {
     LicenseSelector,
     LinkField
   },
+  props: {
+    rules: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   computed: {
     ...mapGettersActions({
       implementation_dates: ['project', 'getImplementationDates', 'setImplementationDates', 0],
@@ -61,6 +90,14 @@ export default {
   },
   mounted () {
     this.$emit('mounted');
+  },
+  methods: {
+    async validate () {
+      const validations = await Promise.all([
+        this.$validator.validateAll()
+      ]);
+      return validations.reduce((a, c) => a && c, true);
+    }
   }
 };
 </script>

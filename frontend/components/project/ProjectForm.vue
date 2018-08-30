@@ -8,8 +8,6 @@
     </div>
     <el-form
       ref="projectForm"
-      :model="model"
-      :rules="rules"
       label-position="top"
       @submit.native.prevent
     >
@@ -17,10 +15,27 @@
         v-show="showForm"
         type="flex">
         <el-col :span="18">
-          <general-overview @mounted="mountedHandler" />
-          <implementation-overview @mounted="mountedHandler" />
-          <technology-overview @mounted="mountedHandler"/>
-          <interoperability-and-standards @mounted="mountedHandler"/>
+          <general-overview
+            ref="generalOverview"
+            :use-publish-rules="usePublishRules"
+            :rules="rules"
+            @mounted="mountedHandler"
+          />
+          <implementation-overview
+            ref="implementationOverview"
+            :rules="rules"
+            @mounted="mountedHandler"
+          />
+          <technology-overview
+            ref="technologyOverview"
+            :rules="rules"
+            @mounted="mountedHandler"
+          />
+          <interoperability-and-standards
+            ref="interoperabilityAndStandards"
+            :rules="rules"
+            @mounted="mountedHandler"
+          />
         </el-col>
         <el-col :span="6">
           <project-navigation
@@ -43,7 +58,6 @@ import ImplementationOverview from './ImplementationOverview';
 import TechnologyOverview from './TechnologyOverview';
 import InteroperabilityAndStandards from './InteroperabilityAndStandards';
 import { mapGetters, mapActions } from 'vuex';
-import { max, required, requiredList, url, notEmpty } from '../../utilities/form.js';
 import FormAPIErrorsMixin from '../mixins/FormAPIErrorsMixin.js';
 
 export default {
@@ -66,31 +80,6 @@ export default {
     ...mapGetters({
       project: 'project/getProjectData'
     }),
-    model () {
-      const platforms = this.project.platforms.reduce((a, c, index) => {
-        return { ...a, [`platforms.${index}`]: c };
-      }, {});
-
-      const implementing_partners = this.project.implementing_partners.reduce((a, c, index) => {
-        return { ...a, [`implementing_partners.${index}`]: c };
-      }, {});
-
-      const coverage = this.project.coverage.reduce((a, c, index) => {
-        return { ...a, [`coverage.${index}`]: c };
-      }, {});
-
-      const coverage_second_level = this.project.coverage_second_level.reduce((a, c, index) => {
-        return { ...a, [`coverage_second_level.${index}`]: c };
-      }, {});
-
-      return {
-        ...this.project,
-        ...platforms,
-        ...implementing_partners,
-        ...coverage,
-        ...coverage_second_level
-      };
-    },
     isDraft () {
       return this.$route.name.includes('organisation-projects-id-edit');
     },
@@ -101,128 +90,135 @@ export default {
       return this.readyElements === this.maxElements;
     },
     draftRules () {
-      const {listProps} = this.generateCollectionRules([], [], []);
-      const rules = {
-        name: [
-          required()
-        ],
-        contact_email: [
-          {type: 'email', message: 'Please insert a valid email', trigger: 'blur'}
-        ]
+      return {
+        name: {
+          required: true,
+          min: 1
+        },
+        contact_email: {
+          email: true
+        }
       };
-      const exclude = ['platforms', 'coverage', 'implementing_partners', 'coverage_second_level'];
-      for (let item in this.model) {
-        if (!listProps.includes(item) && !exclude.includes(item)) {
-          if (!rules[item]) {
-            rules[item] = [];
-          }
-          rules[item].push({ validator: this.validatorGenerator(item), trigger: 'blur' });
-        }
-      }
-      for (let item of listProps) {
-        if (!rules[item]) {
-          rules[item] = [];
-        }
-        rules[item].push({ validator: this.collectionValidatorGenerator(item), trigger: 'blur' });
-      }
-      return rules;
     },
     publishRules () {
-      const platformRules = [
-        {type: 'number', required: true, message: 'This is requried'},
-        {validator: this.digitalHealthInterventionsValidator}
-      ];
-
-      const coverageRules = [
-        {type: 'string', required: true, message: 'This is requried'},
-        {validator: this.coverageDataValidator}
-      ];
-
-      const {collectionRules, listProps} = this.generateCollectionRules(platformRules, [max(64)], coverageRules);
-
-      const rules = {
-        name: [
-          required(),
-          max(128)
-        ],
-        organisation: [
-          required()
-        ],
-        country: [
-          required('number')
-        ],
-        geographic_scope: [],
-        implementation_overview: [
-          required(),
-          max(512)
-        ],
-        start_date: [
-          {validator: this.dateValidator, trigger: 'blur'}
-        ],
-        end_date: [
-          {validator: this.dateValidator, trigger: 'blur'}
-        ],
-        contact_name: [
-          required(),
-          max(256)
-        ],
-        contact_email: [
-          {type: 'email', message: 'Please insert a valid email', trigger: 'blur'},
-          required()
-        ],
-        ...collectionRules.platforms,
-        digitalHealthInterventions: [], // Validated inside platforms
-        health_focus_areas: [],
-        hsc_challenges: [
-          requiredList()
-        ],
-        his_bucket: [
-          requiredList()
-        ],
-        ...collectionRules.coverage,
-        coverageData: [],
-        ...collectionRules.coverage_second_level,
-        'national_level_deployment.health_workers': [
-          this.project.coverageType === 2 ? required() : {type: 'number'}
-        ],
-        'national_level_deployment.clients': [
-          this.project.coverageType === 2 ? required() : {type: 'number'}
-        ],
-        'national_level_deployment.facilities': [
-          this.project.coverageType === 2 ? required() : {type: 'number'}
-        ],
-        government_investor: [
-          required('number')
-        ],
-        ...collectionRules.implementing_partners,
-        implementation_dates: [
-          required()
-        ],
-        licenses: [],
-        repository: [
-          max(256),
-          url()
-        ],
-        mobile_application: [
-          max(256),
-          url()
-        ],
-        wiki: [
-          max(256),
-          url()
-        ],
-        interoperability_links: [],
-        interoperability_standards: []
+      return {
+        name: {
+          required: true,
+          max: 128
+        },
+        organisation: {
+          required: true
+        },
+        country: {
+          required: true
+        },
+        geographic_scope: {},
+        implementation_overview: {
+          required: true,
+          max: 512
+        },
+        start_date: {
+          required: true
+        },
+        end_date: {
+          required: true
+        },
+        contact_name: {
+          required: true,
+          max: 256
+        },
+        contact_email: {
+          email: true,
+          required: true
+        },
+        platforms: {
+          required: true
+        },
+        digitalHealthInterventions: {
+          required: true,
+          min: 1
+        },
+        health_focus_areas: {
+        },
+        hsc_challenges: {
+          required: true,
+          min: 1
+        },
+        his_bucket: {
+          required: true,
+          min: 1
+        },
+        coverage: {
+          subLevel: {
+            required: true
+          },
+          health_workers: {
+            required: this.project.coverageType === 1
+          },
+          clients: {
+            required: this.project.coverageType === 1
+          },
+          facilities: {
+            required: this.project.coverageType === 1
+          },
+          facilities_list: {
+            required: true
+          }
+        },
+        coverage_second_level: {
+          subLevel: {
+            required: false
+          },
+          health_workers: {
+            required: false
+          },
+          clients: {
+            required: false
+          },
+          facilities: {
+            required: false
+          },
+          facilities_list: {
+            required: false,
+            min: 1
+          }
+        },
+        national_level_deployment: {
+          health_workers: {
+            required: this.project.coverageType === 2
+          },
+          clients: {
+            required: this.project.coverageType === 2
+          },
+          facilities: {
+            required: this.project.coverageType === 2
+          }
+        },
+        government_investor: {
+          required: true
+        },
+        implementing_partners: {
+          required: true
+        },
+        implementation_dates: {
+          required: true
+        },
+        licenses: {},
+        repository: {
+          max: 256,
+          url: true
+        },
+        mobile_application: {
+          max: 256,
+          url: true
+        },
+        wiki: {
+          max: 256,
+          url: true
+        },
+        interoperability_links: {},
+        interoperability_standards: {}
       };
-
-      for (let item in rules) {
-        if (!listProps.includes(item)) {
-          rules[item].push({ validator: this.validatorGenerator(item), trigger: 'blur' });
-        } else {
-          rules[item].push({ validator: this.collectionValidatorGenerator(item), trigger: 'blur' });
-        }
-      }
-      return rules;
     },
     rules () {
       return this.usePublishRules ? this.publishRules : this.draftRules;
@@ -233,42 +229,9 @@ export default {
       createProject: 'project/createProject',
       saveDraft: 'project/saveDraft',
       discardDraft: 'project/discardDraft',
-      publishProject: 'project/publishProject'
+      publishProject: 'project/publishProject',
+      setLoading: 'project/setLoading'
     }),
-    generateCollectionRules (platformRules, implementingPartnersRules, coverageRules) {
-      const platforms = this.project.platforms.reduce((a, c, index) => {
-        return { ...a, [`platforms.${index}`]: platformRules };
-      }, {});
-
-      const implementing_partners = this.project.implementing_partners.reduce((a, c, index) => {
-        return { ...a, [`implementing_partners.${index}`]: implementingPartnersRules };
-      }, {});
-
-      const coverage = this.project.coverage.reduce((a, c, index) => {
-        return { ...a, [`coverage.${index}`]: coverageRules };
-      }, {});
-
-      const coverage_second_level = this.project.coverage_second_level.reduce((a, c, index) => {
-        return { ...a, [`coverage_second_level.${index}`]: coverageRules };
-      }, {});
-
-      const listProps = [
-        ...Object.keys(platforms),
-        ...Object.keys(implementing_partners),
-        ...Object.keys(coverage),
-        ...Object.keys(coverage_second_level)
-      ];
-
-      return {
-        collectionRules: {
-          platforms,
-          implementing_partners,
-          coverage,
-          coverage_second_level
-        },
-        listProps
-      };
-    },
     digitalHealthInterventionsValidator (rule, value, callback) {
       const ownDhi = this.project.digitalHealthInterventions.filter(dhi => dhi.platform === value && dhi.id);
       if (ownDhi.length === 0) {
@@ -279,41 +242,6 @@ export default {
         callback(error);
       } else {
         callback();
-      }
-    },
-    coverageDataValidator (rule, value, callback) {
-      if (this.project.coverageType === 1) {
-        const cov = this.project.coverageData[value];
-        if (cov && notEmpty(cov.facilities) && notEmpty(cov.health_workers) && notEmpty(cov.clients)) {
-          callback();
-        } else {
-          const error = {
-            message: 'Health workers facilities or clients value missing or malformed',
-            field: rule.fullField
-          };
-          callback(error);
-        }
-      }
-    },
-    dateValidator (rule, value, callback) {
-      if (this.project.start_date && this.project.end_date) {
-        const start = new Date(this.project.start_date);
-        const end = new Date(this.project.end_date);
-        if (start.getTime() > end.getTime()) {
-          const error = {
-            message: 'End Date must be greater than Start Date',
-            field: rule.fullField
-          };
-          callback(error);
-        } else {
-          callback();
-        }
-      } else {
-        const error = {
-          message: 'This field is required',
-          field: rule.fullField
-        };
-        callback(error);
       }
     },
     mountedHandler () {
@@ -329,33 +257,43 @@ export default {
         }
       });
     },
+    async validate () {
+      const validations = await Promise.all([
+        this.$refs.generalOverview.validate(),
+        this.$refs.implementationOverview.validate(),
+        this.$refs.technologyOverview.validate(),
+        this.$refs.interoperabilityAndStandards.validate()
+      ]);
+      return validations.reduce((a, c) => a && c, true);
+    },
     async doSaveDraft () {
       this.usePublishRules = false;
-      this.deleteFormAPIErrors();
-      this.$nextTick(() => {
-        this.$refs.projectForm.validate(async valid => {
-          if (valid) {
-            try {
-              if (this.isNewProject) {
-                const id = await this.createProject();
-                const localised = this.localePath({name: 'organisation-projects-id-edit', params: {...this.$route.params, id}});
-                this.$router.push(localised);
-              } else if (this.isDraft) {
-                await this.saveDraft(this.$route.params.id);
-              }
-              this.$alert('Your draft has been saved successfully', 'Congratulation', {
-                confirmButtonText: 'Close'
-              });
-            } catch (e) {
-              this.setFormAPIErrors(e);
-              this.$refs.projectForm.validate(() => {
-                this.scrollToError();
-              });
+      this.$nextTick(async () => {
+        const valid = await this.validate();
+        if (valid) {
+          try {
+            if (this.isNewProject) {
+              const id = await this.createProject();
+              const localised = this.localePath({name: 'organisation-projects-id-edit', params: {...this.$route.params, id}});
+              this.$router.push(localised);
+            } else if (this.isDraft) {
+              await this.saveDraft(this.$route.params.id);
             }
-          } else {
-            this.scrollToError();
+            this.$alert('Your draft has been saved successfully', 'Congratulation', {
+              confirmButtonText: 'Close'
+            });
+          } catch (e) {
+            console.log(e.response.data);
+            this.setLoading(false);
+            // TODO: backend validation
+            // this.setFormAPIErrors(e);
+            // this.$refs.projectForm.validate(() => {
+            //   this.scrollToError();
+            // });
           }
-        });
+        } else {
+          this.scrollToError();
+        }
       });
     },
     async doDiscardDraft () {
@@ -371,6 +309,7 @@ export default {
           message: 'Draft overriden with published version'
         });
       } catch (e) {
+        this.setLoading(false);
         this.$message({
           type: 'info',
           message: 'Action cancelled'
@@ -379,27 +318,28 @@ export default {
     },
     async doPublishProject () {
       this.usePublishRules = true;
-      this.deleteFormAPIErrors();
-      this.$nextTick(() => {
-        this.$refs.projectForm.validate(async (valid) => {
-          if (valid) {
-            try {
-              await this.publishProject(this.$route.params.id);
-              const localised = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params}});
-              this.$router.push(localised);
-              this.$alert('Your draft has been published successfully', 'Congratulation', {
-                confirmButtonText: 'Close'
-              });
-            } catch (e) {
-              this.setFormAPIErrors(e);
-              this.$refs.projectForm.validate(() => {
-                this.scrollToError();
-              });
-            }
-          } else {
-            this.scrollToError();
+      this.$nextTick(async () => {
+        const valid = await this.validate();
+        if (valid) {
+          try {
+            await this.publishProject(this.$route.params.id);
+            const localised = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params}});
+            this.$router.push(localised);
+            this.$alert('Your draft has been published successfully', 'Congratulation', {
+              confirmButtonText: 'Close'
+            });
+          } catch (e) {
+            this.setLoading(false);
+            console.log(e.response.data);
+            // TODO: Backend validation
+            // this.setFormAPIErrors(e);
+            // this.$refs.projectForm.validate(() => {
+            //   this.scrollToError();
+            // });
           }
-        });
+        } else {
+          this.scrollToError();
+        }
       });
     }
   }
