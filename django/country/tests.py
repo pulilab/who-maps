@@ -1328,8 +1328,7 @@ class CountryAdminTests(TestCase):
         self.request.user = self.user
         self.assertEqual(ma.get_readonly_fields(self.request), (
             'code',
-            'name',
-            'map_download'
+            'name'
         ))
 
     def test_country_field_inlines(self):
