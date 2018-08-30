@@ -5,7 +5,9 @@
     class="PlatformSelector"
     value-key="id"
     placeholder="Select from list"
-    @change="changeHandler">
+    @change="changeHandler"
+    @blur="$emit('blur')"
+  >
 
     <el-option
       v-for="paltform in availablePlatforms"
@@ -18,6 +20,15 @@
 <script>
 import { mapGetters } from 'vuex';
 export default {
+  model: {
+    prop: 'platforms',
+    event: 'change'
+  },
+  $_veeValidate: {
+    value () {
+      return this.platform;
+    }
+  },
   props: {
     index: {
       type: Number,
@@ -43,7 +54,7 @@ export default {
     changeHandler (value) {
       const p = [...this.platforms];
       p[this.index] = value;
-      this.$emit('update:platforms', p);
+      this.$emit('change', p);
     }
   }
 };
