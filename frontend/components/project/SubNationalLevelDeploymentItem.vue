@@ -2,15 +2,18 @@
   <div class="SubNationalLevelDeploymentItem">
     <el-form-item
       :label="levelName"
-      :prop="propPrefix +'.' + index"
+      :error="errors.first('subLevel')"
     >
       <el-select
-        :value="subLevel"
+        v-validate="rules.subLevel"
+        v-model="subLevel"
+        :data-vv-as="levelName"
+        data-vv-name="subLevel"
         filterable
         popper-class="SubNationalLevelDeploymentRegionDropdown"
         class="SubNationalLevelDeployementRegion"
         placeholder="Select from list"
-        @change="changeHandler">
+      >
 
         <el-option
           v-for="sub in availableSubLevels"
@@ -19,10 +22,14 @@
           :value="sub.id"/>
       </el-select>
       <facility-selector
+        ref="facilitySelector"
+        :rules="rules"
         v-model="facilitiesList"
         :disabled="!subLevel"
       />
       <coverage-fieldset
+        ref="coverageFieldset"
+        :rules="rules"
         :health-workers.sync="healthWorkers"
         :clients.sync="clients"
         :facilities.sync="facilities"
@@ -61,6 +68,10 @@ export default {
       type: Array,
       default: () => []
     },
+    rules: {
+      type: Object,
+      default: () => ({})
+    },
     propPrefix: {
       type: String,
       required: true
@@ -70,8 +81,15 @@ export default {
     ...mapGettersActions({
       coverageData: ['project', 'getCoverageData', 'setCoverageData', 0]
     }),
-    subLevel () {
-      return this.coverage[this.index];
+    subLevel: {
+      get () {
+        return this.coverage[this.index];
+      },
+      set (value) {
+        const cov = [...this.coverage];
+        cov[this.index] = value;
+        this.$emit('update:coverage', cov);
+      }
     },
     availableSubLevels () {
       return this.subLevels.filter(tp => !this.coverage.some(s => s === tp.id) || tp.id === this.subLevel);
@@ -118,10 +136,13 @@ export default {
     }
   },
   methods: {
-    changeHandler (value) {
-      const cov = [...this.coverage];
-      cov[this.index] = value;
-      this.$emit('update:coverage', cov);
+    async validate () {
+      const validations = await Promise.all([
+        this.$validator.validateAll(),
+        this.$refs.coverageFieldset.validate(),
+        this.$refs.facilitySelector.validate()
+      ]);
+      return validations.reduce((a, c) => a && c, true);
     }
   }
 };

@@ -17,6 +17,8 @@
         <el-col :span="16">
           <el-form-item>
             <sub-national-level-deployment-item
+              ref="firstSubLevel"
+              :rules="rules.coverage"
               :index="index"
               :level-name="countrySubLevelNames.first"
               :sub-levels="countryFirstSubLevel"
@@ -51,6 +53,8 @@
         <el-col :span="16">
           <el-form-item prop="coverageSecondLevel">
             <sub-national-level-deployment-item
+              ref="secondSubLevel"
+              :rules="rules.coverage_second_level"
               :index="index"
               :level-name="countrySubLevelNames.second"
               :sub-levels="countrySecondSubLevel"
@@ -84,6 +88,12 @@ export default {
     SubNationalLevelDeploymentItem,
     AddRmButtons
   },
+  props: {
+    rules: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   computed: {
     ...mapGetters({
       country: 'project/getCountry',
@@ -109,6 +119,13 @@ export default {
     }
   },
   methods: {
+    async validate () {
+      const validators = await Promise.all(this.$refs.firstSubLevel.map(s => s.validate()));
+      if (this.countrySubLevelNames.second) {
+        validators.push(...await Promise.all(this.$refs.secondSubLevel.map(s => s.validate())));
+      }
+      return validators.reduce((a, c) => a && c, true);
+    },
     addCoverage () {
       this.coverage = [...this.coverage, null];
     },
