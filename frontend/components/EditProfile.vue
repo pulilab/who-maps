@@ -42,29 +42,21 @@
               <organisation-select v-model="innerProfile.organisation" />
             </el-form-item>
 
-            <el-row
-              :gutter="30"
-              type="flex">
-              <el-col>
-                <el-form-item
-                  label="Site language"
-                  prop="language">
-                  <language-select v-model="innerProfile.language" />
-                </el-form-item>
-              </el-col>
+            <el-form-item
+              label="Country"
+              prop="country">
+              <country-select v-model="innerProfile.country" />
+              <div
+                v-if="nonFieldErrors"
+                class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
+              </div>
+            </el-form-item>
 
-              <el-col>
-                <el-form-item
-                  label="Country"
-                  prop="country">
-                  <country-select v-model="innerProfile.country" />
-                  <div
-                    v-if="nonFieldErrors"
-                    class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <el-form-item
+              label="Site language"
+              prop="language">
+              <language-select v-model="innerProfile.language" />
+            </el-form-item>
           </el-form>
         </el-col>
 
@@ -74,7 +66,14 @@
           <div v-if="!innerProfile.account_type_approved || changeApprovedUserRole || !['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(innerProfile.account_type)">
 
             <h5 v-if="!userTypeRequested">I request to be a:</h5>
-            <h5 v-if="userTypeRequested">User role requested:</h5>
+
+            <h5
+              v-if="userTypeRequested"
+              class="RoleRequested"><fa
+                icon="sync-alt"
+                spin />User role requested!</h5>
+
+            <p v-if="userTypeRequested">Waiting for admin approval — you're still able to change your request by selecting an other role and saving your settings!</p>
 
             <el-checkbox
               v-model="isCountryUser"
@@ -231,9 +230,17 @@
               </div>
 
               <div v-if="innerProfile.account_type === 'CA'">
-                <span class="IconRole IconGovernmentUser" />
-                <h5>Government user</h5>
-                <span>Country user admin</span>
+                <el-row
+                  type="flex"
+                  align="middle">
+                  <el-col>
+                    <span class="IconRole IconGovernmentUser" />
+                  </el-col>
+                  <el-col>
+                    <h5>Government user</h5>
+                    <span>Country user admin</span>
+                  </el-col>
+                </el-row>
                 <div class="MyPrivileges">
                   <span>My Privileges are:</span>
                   <ul class="UserTypeTextList">
@@ -245,9 +252,17 @@
               </div>
 
               <div v-if="innerProfile.account_type === 'SCA'">
-                <span class="IconRole IconGovernmentUser" />
-                <h5>Government user</h5>
-                <span>Super Country User Admin</span>
+                <el-row
+                  type="flex"
+                  align="middle">
+                  <el-col>
+                    <span class="IconRole IconGovernmentUser" />
+                  </el-col>
+                  <el-col>
+                    <h5>Government user</h5>
+                    <span>Super Country User Admin</span>
+                  </el-col>
+                </el-row>
                 <div class="MyPrivileges">
                   <span>My Privileges are:</span>
                   <ul class="UserTypeTextList">
@@ -259,9 +274,17 @@
               </div>
 
               <div v-if="innerProfile.account_type === 'D'">
-                <span class="IconRole IconInvestorUser" />
-                <h5>Financial investor</h5>
-                <span>Donor</span>
+                <el-row
+                  type="flex"
+                  align="middle">
+                  <el-col>
+                    <span class="IconRole IconInvestorUser" />
+                  </el-col>
+                  <el-col>
+                    <h5>Financial investor</h5>
+                    <span>Donor</span>
+                  </el-col>
+                </el-row>
                 <div class="MyPrivileges">
                   <span>My Privileges are:</span>
                   <ul class="UserTypeTextList">
@@ -273,9 +296,17 @@
               </div>
 
               <div v-if="innerProfile.account_type === 'DA'">
-                <span class="IconRole IconInvestorUser" />
-                <h5>Financial investor</h5>
-                <span>Donor admin</span>
+                <el-row
+                  type="flex"
+                  align="middle">
+                  <el-col>
+                    <span class="IconRole IconInvestorUser" />
+                  </el-col>
+                  <el-col>
+                    <h5>Financial investor</h5>
+                    <span>Donor admin</span>
+                  </el-col>
+                </el-row>
                 <div class="MyPrivileges">
                   <span>My Privileges are:</span>
                   <ul class="UserTypeTextList">
@@ -287,9 +318,17 @@
               </div>
 
               <div v-if="innerProfile.account_type === 'SDA'">
-                <span class="IconRole IconInvestorUser" />
-                <h5>Financial investor</h5>
-                <span>Super donor admin</span>
+                <el-row
+                  type="flex"
+                  align="middle">
+                  <el-col>
+                    <span class="IconRole IconInvestorUser" />
+                  </el-col>
+                  <el-col>
+                    <h5>Financial investor</h5>
+                    <span>Super donor admin</span>
+                  </el-col>
+                </el-row>
                 <div class="MyPrivileges">
                   <span>My Privileges are:</span>
                   <ul class="UserTypeTextList">
@@ -492,7 +531,6 @@ export default {
       .UserForm {
         padding: 40px 80px;
 
-        .LanguageSelector,
         .CountrySelector {
           width: 100%;
         }
@@ -509,11 +547,27 @@ export default {
           font-weight: 700;
           line-height: 40px;
 
+          &.RoleRequested {
+            margin: 0;
+
+            .svg-inline--fa {
+              margin-right: 8px;
+              color: @colorBrandAccent;
+            }
+
+            + p {
+              margin: 0 0 30px;
+              color: @colorTextMuted;
+              font-size: @fontSizeSmall;
+              line-height: 18px;
+            }
+          }
+
           &.RoleAccepted {
             font-weight: 400;
 
             .svg-inline--fa {
-              margin-right: 5px;
+              margin-right: 8px;
               color: #67C23A;
             }
           }

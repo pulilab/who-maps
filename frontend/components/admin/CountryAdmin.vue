@@ -148,10 +148,10 @@
       </el-row>
     </collapsible-card>
 
-    <!-- <collapsible-card title="Country specific questionaire">
+    <collapsible-card title="Country specific questionaire">
       <h1>Country specific questionaire</h1>
       <dha-questionaire :label="'Country specific questionaire'"/>
-    </collapsible-card> -->
+    </collapsible-card>
 
     <collapsible-card title="Country map">
       <div v-if="!country.map_files.length || forceMapFileChange">
