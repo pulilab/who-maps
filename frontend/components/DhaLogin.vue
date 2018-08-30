@@ -9,6 +9,7 @@
         ref="loginForm"
         :rules="rules"
         :model="{ username, password }"
+        label-position="top"
         status-icon
         @submit.native.prevent="loginLocal"
       >

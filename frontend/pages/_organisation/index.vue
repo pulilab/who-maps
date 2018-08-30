@@ -61,7 +61,6 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .LandingPage {
-
     .MapBoxContainer {
       position: relative;
     }

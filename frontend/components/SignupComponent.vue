@@ -11,6 +11,7 @@
         ref="signupForm"
         :model="signupForm"
         :rules="rules"
+        label-position="top"
         @submit.native.prevent="signup"
       >
         <fieldset>
