@@ -31,6 +31,12 @@ export default {
   components: {
     OrganisationItem
   },
+  $_veeValidate: {
+    value () {
+      return this.value;
+    },
+    events: 'change|blur'
+  },
   model: {
     prop: 'value',
     event: 'change'
