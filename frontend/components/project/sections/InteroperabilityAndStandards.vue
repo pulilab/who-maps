@@ -24,12 +24,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { mapGettersActions } from '../../utilities/form';
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import { mapGettersActions } from '../../../utilities/form';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
 
-import CollapsibleCard from './CollapsibleCard';
-import InteroperabilityLinkComponent from './InteroperabilityLinkComponent';
-import StandardsSelector from './StandardsSelector';
+import CollapsibleCard from '../CollapsibleCard';
+import InteroperabilityLinkComponent from '../InteroperabilityLinkComponent';
+import StandardsSelector from '../StandardsSelector';
 
 export default {
   components: {
@@ -62,8 +62,8 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+ @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
   .InteroperabilityAndStandards {}
 

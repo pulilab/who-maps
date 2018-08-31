@@ -62,12 +62,12 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
 
-import { mapGettersActions } from '../../utilities/form';
-import CollapsibleCard from './CollapsibleCard';
-import LicenseSelector from './LicenseSelector';
-import LinkField from './LinkField';
+import { mapGettersActions } from '../../../utilities/form';
+import CollapsibleCard from '../CollapsibleCard';
+import LicenseSelector from '../LicenseSelector';
+import LinkField from '../LinkField';
 
 export default {
   components: {
@@ -100,8 +100,8 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+ @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
   .TechnologyOverview {
     .el-date-editor {

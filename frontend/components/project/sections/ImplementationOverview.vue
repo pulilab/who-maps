@@ -185,20 +185,20 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
 
-import CollapsibleCard from './CollapsibleCard';
-import HealthSystemChallengesSelector from './HealthSystemChallengesSelector';
-import HealthFocusAreasSelector from './HealthFocusAreasSelector';
-import HisBucketSelector from './HisBucketSelector';
-import PlatformSelector from './PlatformSelector';
-import DigitalHealthInterventionsSelector from './DigitalHealthInterventionsSelector';
-import SubNationalLevelDeployment from './SubNationalLevelDeployment';
-import AddRmButtons from './AddRmButtons';
-import CoverageFieldset from './CoverageFieldset';
-import DonorSelector from './DonorSelector';
+import CollapsibleCard from '../CollapsibleCard';
+import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector';
+import HealthFocusAreasSelector from '../HealthFocusAreasSelector';
+import HisBucketSelector from '../HisBucketSelector';
+import PlatformSelector from '../PlatformSelector';
+import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector';
+import SubNationalLevelDeployment from '../SubNationalLevelDeployment';
+import AddRmButtons from '../AddRmButtons';
+import CoverageFieldset from '../CoverageFieldset';
+import DonorSelector from '../DonorSelector';
 
-import { mapGettersActions } from '../../utilities/form';
+import { mapGettersActions } from '../../../utilities/form';
 
 export default {
   components: {
@@ -299,8 +299,8 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
   .ImplementationOverview {
     .DigitalHealthIntervention {

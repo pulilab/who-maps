@@ -57,10 +57,10 @@
 
 <script>
 import ProjectNavigation from './ProjectNavigation';
-import GeneralOverview from './GeneralOverview';
-import ImplementationOverview from './ImplementationOverview';
-import TechnologyOverview from './TechnologyOverview';
-import InteroperabilityAndStandards from './InteroperabilityAndStandards';
+import GeneralOverview from './sections/GeneralOverview';
+import ImplementationOverview from './sections/ImplementationOverview';
+import TechnologyOverview from './sections/TechnologyOverview';
+import InteroperabilityAndStandards from './sections/InteroperabilityAndStandards';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {

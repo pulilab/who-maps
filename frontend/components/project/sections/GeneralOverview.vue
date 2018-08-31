@@ -160,12 +160,12 @@
 
 <script>
 import { isAfter } from 'date-fns';
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
-import CollapsibleCard from './CollapsibleCard';
-import TeamSelector from './TeamSelector';
-import CountrySelect from '../common/CountrySelect';
-import OrganisationSelect from '../common/OrganisationSelect';
-import { mapGettersActions } from '../../utilities/form';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
+import CollapsibleCard from '../CollapsibleCard';
+import TeamSelector from '../TeamSelector';
+import CountrySelect from '../../common/CountrySelect';
+import OrganisationSelect from '../../common/OrganisationSelect';
+import { mapGettersActions } from '../../../utilities/form';
 
 export default {
   components: {
@@ -226,8 +226,8 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
   .GeneralOverview {
     .Date {
