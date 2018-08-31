@@ -243,6 +243,13 @@ export const actions = {
   setLoading ({commit}, value) {
     commit('SET_LOADING', value);
   },
+  async verifyOrganisation ({dispatch}, organisation) {
+    if (organisation && isNaN(organisation)) {
+      const org = await dispatch('system/addOrganisation', organisation, { root: true });
+      return org.id;
+    }
+    return organisation;
+  },
   async saveTeamViewers ({getters, commit, dispatch}, id) {
     const teamViewers = {
       team: getters.getTeam,
@@ -256,6 +263,7 @@ export const actions = {
   async createProject ({getters, dispatch}) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
+    draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.post('api/projects/draft/', parsed);
     dispatch('projects/addProjectToList', data, {root: true});
@@ -266,6 +274,7 @@ export const actions = {
   async saveDraft ({getters, dispatch}, id) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
+    draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
     await dispatch('saveTeamViewers', id);
@@ -275,6 +284,7 @@ export const actions = {
   async publishProject ({getters, dispatch, commit}, id) {
     dispatch('setLoading', 'publish');
     const draft = getters.getProjectData;
+    draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.put(`/api/projects/publish/${id}/`, parsed);
     await dispatch('saveTeamViewers', id);
