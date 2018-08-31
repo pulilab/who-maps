@@ -13,7 +13,7 @@ from project.cache import cache_structure
 from project.models import HSCGroup
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
-from country.models import Country, CountryField
+from country.models import Country, CountryField, Donor
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
     MapProjectCountrySerializer
@@ -383,7 +383,7 @@ class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
                 {'Start Date': p.data.get('start_date')},
                 {'End Date': p.data.get('end_date')},
                 {'Organisation Name': Organisation.get_name_by_id(p.data.get('organisation'))},
-                {'Donors': ", ".join(p.data.get('donors'))},
+                {'Donors': ", ".join([Donor.objects.get(id=int(x)).name for x in p.data.get('donors', [])])},
                 {"Implementing Partners": ", ".join(p.data.get('implementing_partners', []))},
                 {"Point of Contact": ", ".join((p.data.get('contact_name'), p.data.get('contact_email')))},
                 {"Overview of digital health implementation": p.data.get('implementation_overview')},

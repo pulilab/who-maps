@@ -10,7 +10,7 @@ from django.http import QueryDict
 
 from core.models import ExtendedModel
 from project.models import Project, HealthFocusArea, HSCChallenge, DigitalStrategy
-from country.models import Country
+from country.models import Country, Donor
 from user.models import Organisation
 
 
@@ -23,8 +23,8 @@ class ProjectSearch(ExtendedModel):
         "region": "country__region",
         "overview": "project__data__implementation_overview",
         "loc": "coverage",
-        "partner": "project__data__implementing_partners",  # TODO: will be refactored
-        "donor": "project__data__donors"  # TODO: will be refactored
+        "partner": "project__data__implementing_partners",
+        "donor": "donor_names"
     }
 
     FILTER_BY = {
@@ -37,13 +37,16 @@ class ProjectSearch(ExtendedModel):
         "his": "his",  # eg: his=1&his=2
         "region": "country__region",  # eg: region=3
         "gov": "project__data__government_investor",  # false=> gov=0 ; true=> gov=1&gov=2
-        "donor": "project__data__donors",  # TODO: will be refactored
+        "donor": "donors",
         "approved": "project__approval__approved"  # false=> approved=0 ; true=> approved=1
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
     organisation = models.ForeignKey(Organisation, null=True, on_delete=models.SET_NULL)
+
+    donors = ArrayField(models.IntegerField(), default=list)
+    donor_names = ArrayField(models.CharField(max_length=128), default=list)
 
     software = ArrayField(models.IntegerField(), default=list)
     coverage = ArrayField(models.CharField(max_length=64), default=list)
@@ -92,7 +95,7 @@ class ProjectSearch(ExtendedModel):
                     if field in ["country", "region", "gov"]:
                         lookup_param = "in"
                         lookup = lookup_cleanup(query_params.getlist(field))
-                    elif field in ["sw", "dhi", "hfa", "hsc", "his"]:
+                    elif field in ["donor", "sw", "dhi", "hfa", "hsc", "his"]:
                         lookup_param = "overlap"  # This is the OR clause here
                         lookup = lookup_cleanup(query_params.getlist(field))
                     elif field == "approved":
@@ -127,6 +130,9 @@ class ProjectSearch(ExtendedModel):
         if project.public_id:
             self.country_id = int(project.data["country"])
             self.organisation_id = int(project.data["organisation"])
+
+            self.donors = [int(x) for x in project.data.get("donors", [])]
+            self.donor_names = [Donor.objects.get(id=int(x)).name for x in project.data.get("donors", [])]
 
             self.software = [int(x['id']) for x in project.data.get("platforms", [])]
             self.coverage = [x.get('district', "") for x in project.data.get("coverage", [])]

@@ -174,7 +174,6 @@ REST_FRAMEWORK = {
 # django-allauth and rest-auth settings
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
-    'core.auth.EmailBackend',
     # 'django.contrib.auth.backends.ModelBackend',
     # `allauth` specific authentication methods
     'allauth.account.auth_backends.AuthenticationBackend',
@@ -352,3 +351,5 @@ else:
 if CI_RUN:
     STATIC_ROOT = "/root/who-maps/nginx/site/static/"
     MEDIA_ROOT = "/root/who-maps/django/media/"
+
+OSM_MAP_CLI_KEY = 'a9ea45b5-ab37-4323-8263-767aa5896113'

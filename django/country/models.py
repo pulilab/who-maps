@@ -60,7 +60,7 @@ class Donor(UserManagement, LandingPageCommon):
 
     class Meta:
         verbose_name_plural = "Donors"
-        ordering = ('id',)
+        ordering = ('name',)
 
 
 class PartnerLogo(ExtendedModel):
