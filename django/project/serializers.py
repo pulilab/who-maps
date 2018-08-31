@@ -38,7 +38,7 @@ class CoverageSerializer(NDPSerializer):
 class PlatformSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=True)
     strategies = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=1)
 
 
 class InteroperabilityLinksSerializer(serializers.Serializer):
@@ -55,6 +55,12 @@ class DraftInteroperabilityLinksSerializer(InteroperabilityLinksSerializer):
     @staticmethod
     def validate_link(value):
         return value
+
+
+class DraftPlatformSerializer(serializers.Serializer):
+    id = serializers.IntegerField(required=True)
+    strategies = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
 
 
 INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
@@ -148,7 +154,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     contact_email = serializers.EmailField(required=False)
 
     # SECTION 2 Implementation Overview
-    platforms = PlatformSerializer(many=True, required=False)
+    platforms = DraftPlatformSerializer(many=True, required=False)
     hsc_challenges = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64, required=False)
