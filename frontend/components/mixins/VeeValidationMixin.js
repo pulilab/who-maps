@@ -1,3 +1,9 @@
+const errorLibrary = {
+  platforms: 'platform_',
+  coverage: 'coverage_',
+  coverage_second_level: 'coverage_second_level_'
+};
+
 export default {
   props: {
     rules: {
@@ -9,23 +15,46 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      scopes: []
+    };
+  },
   watch: {
     apiErrors: {
       immediate: true,
       handler (errors) {
         this.errors.clear();
+        this.scopes.forEach(s => this.errors.clear(s));
+        this.scopes = [];
         for (let field in errors) {
-          if (Array.isArray(errors[field])) {
-            this.errors.add({
-              field,
-              msg: errors[field][0]
-            });
+          const item = errors[field];
+          if (Array.isArray(item)) {
+            const first = item[0];
+            if (first.constructor === Object) {
+              item.forEach((innerError, key) => {
+                const scope = errorLibrary[key] + key;
+                this.scopes.push(scope);
+                for (let innerField in innerError) {
+                  this.errors.add({
+                    field: innerField,
+                    msg: innerError[innerField][0],
+                    scope
+                  });
+                }
+              });
+            } else {
+              this.errors.add({
+                field,
+                msg: first
+              });
+            }
           } else {
-            for (let inner in errors[field]) {
+            for (let inner in item) {
               if (inner === 'non_field_errors') {
                 this.errors.add({
                   field,
-                  msg: errors[field].non_field_errors[0]
+                  msg: item.non_field_errors[0]
                 });
               }
             }
