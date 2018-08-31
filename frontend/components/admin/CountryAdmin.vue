@@ -113,15 +113,24 @@
             :data="userSelection"
             filterable
             filter-placeholder="Type to filter users..." />
+
           <div
             v-if="selectedPersona === 'G'"
             class="PersonaPrivileges">
-            <h5>Privileges for {{ selectedPersona }}:</h5>
-            <ul>
-              <li>List item 1</li>
-              <li>List item 2</li>
-              <li>List item 3</li>
-            </ul>
+            <el-collapse accordion>
+              <el-collapse-item>
+                <template slot="title">
+                  <fa icon="info-circle" /> Show privileges for {{ selectedPersona }}
+                </template>
+                <div>
+                  <ul>
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                  </ul>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
           </div>
 
           <el-transfer
@@ -134,12 +143,20 @@
           <div
             v-if="selectedPersona === 'CA'"
             class="PersonaPrivileges">
-            <h5>Privileges for {{ selectedPersona }}:</h5>
-            <ul>
-              <li>List item 1</li>
-              <li>List item 2</li>
-              <li>List item 3</li>
-            </ul>
+            <el-collapse accordion>
+              <el-collapse-item>
+                <template slot="title">
+                  <fa icon="info-circle" /> Show privileges for {{ selectedPersona }}
+                </template>
+                <div>
+                  <ul>
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                  </ul>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
           </div>
 
           <el-transfer
@@ -152,12 +169,20 @@
           <div
             v-if="selectedPersona === 'SCA'"
             class="PersonaPrivileges">
-            <h5>Privileges for {{ selectedPersona }}:</h5>
-            <ul>
-              <li>List item 1</li>
-              <li>List item 2</li>
-              <li>List item 3</li>
-            </ul>
+            <el-collapse accordion>
+              <el-collapse-item>
+                <template slot="title">
+                  <fa icon="info-circle" /> Show privileges for {{ selectedPersona }}
+                </template>
+                <div>
+                  <ul>
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                  </ul>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
           </div>
         </el-col>
       </el-row>
@@ -218,7 +243,6 @@
         <el-button @click="saveChanges">Save changes</el-button>
       </el-row>
     </div>
-
   </div>
 </template>
 
@@ -575,13 +599,10 @@ export default {
         padding: 30px 40px;
 
         .PersonaPrivileges {
-          margin: 10px 0;
-          padding: 16px 20px;
-          background-color: @colorGrayLightest;
+          padding: 10px 0;
 
-          h5 {
-            margin: 0 0 10px;
-            font-size: @fontSizeSmall;
+          .el-collapse-item__header {
+            color: @colorBrandPrimary;
           }
 
           ul {
@@ -606,6 +627,7 @@ export default {
 
         .el-transfer-panel {
           width: 100%;
+          // max-height: 50vh;
         }
 
         .el-transfer-buttons {}

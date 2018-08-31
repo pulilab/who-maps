@@ -988,10 +988,14 @@ fieldset {
 
 .el-upload-list--picture {
   .el-upload-list__item {
-    margin: 0 0 10px;
+    margin: 0;
     height: 72px;
     border: 1px solid @colorGray;
     border-radius: 0;
+
+    + .el-upload-list__item {
+      margin-top: 10px;
+    }
 
     &.is-ready {
       background-image: none;
@@ -1045,11 +1049,7 @@ fieldset {
 
 .el-transfer {
   .el-transfer-panel {
-    border-color: @colorGray;
-
     .el-transfer-panel__header {
-      border-bottom-color: @colorGray;
-
       .el-checkbox__inner {
         border-radius: 0;
       }
@@ -1066,6 +1066,22 @@ fieldset {
 
     i {
       font-weight: 700;
+    }
+  }
+
+  .el-transfer-panel__empty {
+    color: @colorTextMuted;
+  }
+}
+
+// Collapse
+
+.el-collapse {
+  .el-collapse-item__header {
+    font-weight: 700;
+
+    .svg-inline--fa {
+      margin-right: 2px;
     }
   }
 }
