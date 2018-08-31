@@ -6,11 +6,12 @@
     >
       <el-col :span="8">
         <el-form-item
-          :error="errors.first('health_workers')"
+          :error="errors.first('health_workers', scope)"
           label="# Health workers">
           <el-input
             v-validate="rules.health_workers"
             :disabled="disabled"
+            :data-vv-scope="scope"
             v-model="localHealthWorkers"
             data-vv-name="health_workers"
             data-vv-as="Health workers"
@@ -23,11 +24,12 @@
       </el-col>
       <el-col :span="8">
         <el-form-item
-          :error="errors.first('facilities')"
+          :error="errors.first('facilities', scope)"
           label="# Facilities">
           <el-input
             v-validate="rules.facilities"
             :disabled="disableFacilities"
+            :data-vv-scope="scope"
             v-model="localFacilities"
             data-vv-name="facilities"
             data-vv-as="Facilities"
@@ -40,11 +42,12 @@
       </el-col>
       <el-col :span="8">
         <el-form-item
-          :error="errors.first('clients')"
+          :error="errors.first('clients', scope)"
           label="# Clients">
           <el-input
             v-validate="rules.clients"
             :disabled="disabled"
+            :data-vv-scope="scope"
             v-model="localClients"
             data-vv-name="clients"
             data-vv-as="Clients"
@@ -85,6 +88,10 @@ export default {
     isNlc: {
       type: Boolean,
       default: false
+    },
+    scope: {
+      type: String,
+      default: null
     }
   },
   computed: {
@@ -128,7 +135,7 @@ export default {
   },
   methods: {
     async validate () {
-      return this.$validator.validateAll();
+      return this.$validator.validate();
     }
   }
 };

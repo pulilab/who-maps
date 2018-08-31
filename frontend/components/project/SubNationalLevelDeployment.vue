@@ -24,7 +24,7 @@
               :level-name="countrySubLevelNames.first"
               :sub-levels="countryFirstSubLevel"
               :coverage.sync="coverage"
-              prop-prefix="coverage"
+              scope="coverage"
             />
           </el-form-item>
         </el-col>
@@ -61,7 +61,7 @@
               :level-name="countrySubLevelNames.second"
               :sub-levels="countrySecondSubLevel"
               :coverage.sync="coverageSecondLevel"
-              prop-prefix="coverage_second_level"
+              scope="coverage_second_level"
             />
           </el-form-item>
         </el-col>

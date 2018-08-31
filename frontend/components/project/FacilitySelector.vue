@@ -1,7 +1,7 @@
 <template>
   <el-form-item
     v-if="facilities.length > 0"
-    :error="errors.first('facilities_list')"
+    :error="errors.first('facilities_list', scope)"
     label="Facilities">
     <el-select
       v-validate="rules.facilities_list"
@@ -9,6 +9,7 @@
       :remote-method="search"
       :loading="loading"
       :disabled="disabled"
+      :data-vv-scope="scope"
       data-vv-name="facilities_list"
       data-vv-as="Facilitiy list"
       multiple
@@ -47,6 +48,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    scope: {
+      type: String,
+      default: null
     }
   },
   data () {
@@ -81,7 +86,7 @@ export default {
       }
     },
     async validate () {
-      return this.$validator.validateAll();
+      return this.$validator.validate();
     }
   }
 };

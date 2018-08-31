@@ -11,7 +11,7 @@
         <el-form-item
           v-for="(platform, index) in platforms"
           :key="platform"
-          :error="errors.first('platform_' + index)"
+          :error="errors.first('id', 'platform_' + index)"
           label="Software"
           class="ItemIndent"
         >
@@ -19,21 +19,23 @@
             <platform-selector
               v-validate="rules.platforms"
               :key="platform"
-              :data-vv-name="'platform_' + index"
+              :data-vv-scope="'platform_' + index"
               v-model="platforms"
               :index="index"
+              data-vv-name="id"
               data-vv-as="Software"
             />
             <el-form-item
               v-show="platform"
-              :error="errors.first('digitalHealthInterventions')"
+              :error="errors.first('strategies', 'platform_' + index)"
               label="Digital Health Interventions"
               class="DigitalHealthIntervention"
             >
               <digital-health-interventions-selector
-                v-validate="rules.digitalHealthInterventions"
+                v-validate="rules.strategies"
                 :platform-id="platform"
-                data-vv-name="digitalHealthInterventions"
+                :data-vv-scope="'platform_' + index"
+                data-vv-name="strategies"
                 data-vv-as="Digital health interventions"
               />
             </el-form-item>
@@ -272,7 +274,7 @@ export default {
     },
     async validate () {
       const validations = await Promise.all([
-        this.$validator.validateAll(),
+        this.$validator.validate(),
         this.$refs.nationalLevelDeployment.validate(),
         this.$refs.subNationalLevelDeployment.validate()
       ]);

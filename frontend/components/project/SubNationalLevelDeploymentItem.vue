@@ -2,13 +2,14 @@
   <div class="SubNationalLevelDeploymentItem">
     <el-form-item
       :label="levelName"
-      :error="errors.first('subLevel')"
+      :error="errors.first('district', scope + '_' + index)"
     >
       <el-select
-        v-validate="rules.subLevel"
+        v-validate="rules.district"
         v-model="subLevel"
         :data-vv-as="levelName"
-        data-vv-name="subLevel"
+        :data-vv-scope="scope + '_' + index"
+        data-vv-name="district"
         filterable
         popper-class="SubNationalLevelDeploymentRegionDropdown"
         class="SubNationalLevelDeployementRegion"
@@ -27,6 +28,7 @@
         :api-errors="apiErrors"
         v-model="facilitiesList"
         :disabled="!subLevel"
+        :scope="scope + '_' + index"
       />
       <coverage-fieldset
         ref="coverageFieldset"
@@ -36,6 +38,7 @@
         :clients.sync="clients"
         :facilities.sync="facilities"
         :disabled="!subLevel"
+        :scope="scope + '_' + index"
       />
     </el-form-item>
   </div>
@@ -71,6 +74,10 @@ export default {
     coverage: {
       type: Array,
       default: () => []
+    },
+    scope: {
+      type: String,
+      required: true
     }
   },
   computed: {
@@ -140,7 +147,7 @@ export default {
     },
     async validate () {
       const validations = await Promise.all([
-        this.$validator.validateAll(),
+        this.$validator.validate(),
         this.$refs.coverageFieldset.validate(),
         this.$refs.facilitySelector.validate()
       ]);
