@@ -207,7 +207,7 @@ export default {
   methods: {
     async validate () {
       const validations = await Promise.all([
-        this.$validator.validateAll(),
+        this.$validator.validate(),
         Promise.resolve(this.endDateError === undefined)
       ]);
       return validations.reduce((a, c) => a && c, true);
@@ -216,7 +216,8 @@ export default {
       const validations = await Promise.all([
         this.$validator.validate('name'),
         this.$validator.validate('country'),
-        this.$validator.validate('email', {silent: true})
+        this.$validator.validate('email'),
+        this.$validator.validate('team')
       ]);
       return validations.reduce((a, c) => a && c, true);
     }
