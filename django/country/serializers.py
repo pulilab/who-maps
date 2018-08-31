@@ -46,13 +46,15 @@ class MapFileSerializer(serializers.ModelSerializer):
 class CountryImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
-        fields = ('id', 'logo', 'cover',)
+        fields = ('id', 'logo', 'logo_url', 'cover', 'cover_url')
+        read_only_fields = ('logo_url', "cover_url")
 
 
 class DonorImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Donor
-        fields = ('id', 'logo', 'cover',)
+        fields = ('id', 'logo', 'logo_url', 'cover', 'cover_url')
+        read_only_fields = ('logo_url', "cover_url")
 
 
 class UpdateAdminMixin:
@@ -120,9 +122,11 @@ class UpdateAdminMixin:
                 fail_silently=True)
 
 
-COUNTRY_FIELDS = ("id", "name", "code", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",
-                  "project_approval", "map_data", "map_version", "map_files", "map_activated_on",)
-READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "cover", "map_version", "map_files", "map_activated_on",)
+COUNTRY_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
+                  "footer_text", "partner_logos", "project_approval", "map_data", "map_version", "map_files",
+                  "map_activated_on",)
+READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "logo_url", "cover", "cover_url", "map_version", "map_files",
+                            "map_activated_on",)
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos", "project_approval",)
 
@@ -183,8 +187,9 @@ class CountrySerializer(SuperAdminCountrySerializer):
         read_only_fields = READ_ONLY_COUNTRY_FIELDS
 
 
-DONOR_FIELDS = ("id", "name", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",)
-READ_ONLY_DONOR_FIELDS = ("logo", "cover", "name",)
+DONOR_FIELDS = ("id", "name", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title", "footer_text",
+                "partner_logos")
+READ_ONLY_DONOR_FIELDS = ("logo_url", "cover_url", "logo", "cover", "name",)
 DONOR_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 READ_ONLY_DONOR_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos",)
 
