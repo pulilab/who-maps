@@ -6,19 +6,30 @@ export default {
     },
     apiErrors: {
       type: Object,
-      default: () => ({})
+      required: true
     }
   },
   watch: {
     apiErrors: {
       immediate: true,
       handler (errors) {
-        this.clear();
+        this.errors.clear();
         for (let field in errors) {
-          this.errors.add({
-            field,
-            msg: errors[field][0]
-          });
+          if (Array.isArray(errors[field])) {
+            this.errors.add({
+              field,
+              msg: errors[field][0]
+            });
+          } else {
+            for (let inner in errors[field]) {
+              if (inner === 'non_field_errors') {
+                this.errors.add({
+                  field,
+                  msg: errors[field].non_field_errors[0]
+                });
+              }
+            }
+          }
         }
       }
     }
