@@ -19,7 +19,7 @@ export default {
   .ProjectEdit {
     .CollapsibleCard {
       .el-card__header {
-        background-color: @colorDraft !important;
+        background-color: lighten(@colorDraft, 10%) !important;
         color: @colorTextPrimary !important;
       }
 
@@ -37,7 +37,7 @@ export default {
         &:active {
           .el-button {
             .Step {
-              background-color: @colorDraft !important;
+              background-color: lighten(@colorDraft, 10%) !important;
               color: @colorTextPrimary;
             }
           }
