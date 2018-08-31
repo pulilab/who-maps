@@ -5,6 +5,7 @@
     <collapsible-card title="Implementation overview">
 
       <el-form-item
+        :error="errors.first('platforms')"
         label="Add one or more Software and related Digital Health Interventions (DHI):"
       >
         <el-form-item
@@ -99,6 +100,7 @@
         <sub-national-level-deployment
           v-show="coverageType == 1"
           ref="subNationalLevelDeployment"
+          :api-errors="apiErrors"
           :rules="rules"
         />
 
@@ -115,6 +117,7 @@
             :is-nlc="true"
             :disabled="false"
             :rules="rules.national_level_deployment"
+            :api-errors="apiErrors"
             :health-workers.sync="healthWorkers"
             :clients.sync="clients"
             :facilities.sync="facilities"
@@ -169,6 +172,8 @@
 </template>
 
 <script>
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+
 import CollapsibleCard from './CollapsibleCard';
 import HealthSystemChallengesSelector from './HealthSystemChallengesSelector';
 import HealthFocusAreasSelector from './HealthFocusAreasSelector';
@@ -193,6 +198,7 @@ export default {
     AddRmButtons,
     CoverageFieldset
   },
+  mixins: [VeeValidationMixin],
   props: {
     rules: {
       type: Object,
