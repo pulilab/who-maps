@@ -215,10 +215,10 @@ export default {
     async validateDraft () {
       const validations = await Promise.all([
         this.$validator.validate('name'),
-        this.$validator.validate('organisation')
+        this.$validator.validate('country'),
+        this.$validator.validate('email', {silent: true})
       ]);
-      console.log(validations);
-      return false;
+      return validations.reduce((a, c) => a && c, true);
     }
   }
 };
