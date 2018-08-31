@@ -63,6 +63,7 @@
         <el-col
           :span="12"
           class="UserRole">
+          <!-- SELECT ACCOUNT TYPE -->
           <div v-if="!innerProfile.account_type_approved || changeApprovedUserRole || !['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(innerProfile.account_type)">
 
             <h5 v-if="!userTypeRequested">I request to be a:</h5>
@@ -199,6 +200,7 @@
             </el-collapse-transition>
           </div>
 
+          <!-- APPROVED ACCOUNT TYPE -->
           <div v-if="innerProfile.account_type_approved && ['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(innerProfile.account_type) && !changeApprovedUserRole">
 
             <h5 class="RoleAccepted">
@@ -211,7 +213,9 @@
                 size="mini"
                 @click="changingUserRole">Change</el-button>
 
-              <div v-if="innerProfile.account_type === 'G'">
+              <div
+                v-if="innerProfile.account_type === 'G'"
+                class="ClickThrough">
                 <el-row
                   type="flex"
                   align="middle">
@@ -233,7 +237,9 @@
                 </div>
               </div>
 
-              <div v-if="innerProfile.account_type === 'CA'">
+              <div
+                v-if="innerProfile.account_type === 'CA'"
+                class="ClickThrough">
                 <el-row
                   type="flex"
                   align="middle">
@@ -255,7 +261,9 @@
                 </div>
               </div>
 
-              <div v-if="innerProfile.account_type === 'SCA'">
+              <div
+                v-if="innerProfile.account_type === 'SCA'"
+                class="ClickThrough">
                 <el-row
                   type="flex"
                   align="middle">
@@ -277,7 +285,9 @@
                 </div>
               </div>
 
-              <div v-if="innerProfile.account_type === 'D'">
+              <div
+                v-if="innerProfile.account_type === 'D'"
+                class="ClickThrough">
                 <el-row
                   type="flex"
                   align="middle">
@@ -299,7 +309,9 @@
                 </div>
               </div>
 
-              <div v-if="innerProfile.account_type === 'DA'">
+              <div
+                v-if="innerProfile.account_type === 'DA'"
+                class="ClickThrough">
                 <el-row
                   type="flex"
                   align="middle">
@@ -321,7 +333,9 @@
                 </div>
               </div>
 
-              <div v-if="innerProfile.account_type === 'SDA'">
+              <div
+                v-if="innerProfile.account_type === 'SDA'"
+                class="ClickThrough">
                 <el-row
                   type="flex"
                   align="middle">
@@ -433,7 +447,7 @@ export default {
     ...mapGetters({
       profile: 'user/getProfile',
       user: 'user/getUser',
-      donors: 'user/getDonors'
+      donors: 'user/getDonorsForDropdown'
     }),
 
     userTypeRequested () {
@@ -678,6 +692,10 @@ export default {
           position: relative;
           width: 100%;
           border: 1px solid @colorGray;
+
+          .ClickThrough {
+            pointer-events: none;
+          }
 
           .el-row {
             .el-col {
