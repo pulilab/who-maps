@@ -29,6 +29,7 @@ const cleanState = () => ({
   },
   government_investor: null,
   implementing_partners: [],
+  donors: [],
   implementation_dates: null,
   licenses: [],
   repository: null,
@@ -69,6 +70,7 @@ export const getters = {
   getNationalLevelDeployment: state => ({...state.national_level_deployment}),
   getGovernmentInvestor: state => state.government_investor,
   getImplementingPartners: state => state.implementing_partners.length === 0 ? [null] : state.implementing_partners,
+  getDonors: state => state.donors,
   getImplementationDates: state => state.implementation_dates,
   getLicenses: state => state.licenses,
   getRepository: state => state.repository,
@@ -211,6 +213,9 @@ export const actions = {
   setImplementingPartners ({commit}, value) {
     commit('SET_IMPLEMENTING_PARTNERS', value);
   },
+  setDonors ({commit}, value) {
+    commit('SET_DONORS', value);
+  },
   setImplementationDates ({commit}, value) {
     commit('SET_IMPLEMENTATION_DATES', value);
   },
@@ -270,8 +275,6 @@ export const actions = {
     dispatch('setLoading', 'publish');
     const draft = getters.getProjectData;
     const parsed = apiWriteParser(draft);
-    // TODO: Remove this on donor feature creation
-    parsed.donors = ['FakeDonor for API TEST'];
     const { data } = await this.$axios.put(`/api/projects/publish/${id}/`, parsed);
     await dispatch('saveTeamViewers', id);
     const parsedResponse = apiReadParser(data.draft);
@@ -366,6 +369,9 @@ export const mutations = {
   },
   SET_IMPLEMENTING_PARTNERS: (state, implementing_partners) => {
     Vue.set(state, 'implementing_partners', [...implementing_partners]);
+  },
+  SET_DONORS: (state, donors) => {
+    Vue.set(state, 'donors', [...donors]);
   },
   SET_IMPLEMENTATION_DATES: (state, implementation_dates) => {
     state.implementation_dates = implementation_dates;
