@@ -182,6 +182,14 @@
       <div v-if="country.map_files.length && !forceMapFileChange">
         <vue-map-customizer/>
       </div>
+      <a
+        ref="hiddenMapDownload"
+        :href="`/api/countries/map-download/${country.id}/`"
+        style="display: none"
+        download>Hidden but needed element!</a>
+      <el-button @click="$refs.hiddenMapDownload.click()">
+        Download map file
+      </el-button>
       <el-button @click="showMapUploader">
         <span v-show="forceMapFileChange">Cancel</span>
         <span v-show="!forceMapFileChange">Change map file</span>
