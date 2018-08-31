@@ -13,7 +13,18 @@ export default {
   },
   computed: {
     ...mapGetters({
+      userProfile: 'user/getProfile'
     })
+  },
+  watch: {
+    userProfile: {
+      immediate: true,
+      handler (profile) {
+        if (this.$raven) {
+          this.$raven.setUserContext(profile);
+        }
+      }
+    }
   },
   async fetch ({ store, params }) {
     await Promise.all([
