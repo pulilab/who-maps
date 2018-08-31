@@ -415,7 +415,6 @@ class CountryTests(APITestCase):
         }
         response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue("super_admins" not in response.json().keys())
         self.country.refresh_from_db()
         self.assertTrue(userprofile1.id not in self.country.super_admins.all())
 
@@ -1393,7 +1392,6 @@ class DonorTests(APITestCase):
         }
         response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue("super_admins" not in response.json().keys())
         self.donor.refresh_from_db()
         self.assertTrue(userprofile1.id not in self.donor.super_admins.all())
 

@@ -172,8 +172,9 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
 
 class AdminCountrySerializer(SuperAdminCountrySerializer):
     class Meta(SuperAdminCountrySerializer.Meta):
-        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins',)
-        read_only_fields = READ_ONLY_COUNTRY_ADMIN_FIELDS + READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS
+        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
+        read_only_fields = READ_ONLY_COUNTRY_ADMIN_FIELDS + READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS \
+            + ('super_admins',)
 
 
 class CountrySerializer(SuperAdminCountrySerializer):
@@ -220,8 +221,9 @@ class SuperAdminDonorSerializer(UpdateAdminMixin, serializers.ModelSerializer):
 
 class AdminDonorSerializer(SuperAdminDonorSerializer):
     class Meta(SuperAdminDonorSerializer.Meta):
-        fields = DONOR_FIELDS + DONOR_ADMIN_FIELDS + ('users', 'admins',)
-        read_only_fields = READ_ONLY_DONOR_ADMIN_FIELDS + READ_ONLY_DONOR_FIELDS + DONOR_ADMIN_FIELDS
+        fields = DONOR_FIELDS + DONOR_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
+        read_only_fields = READ_ONLY_DONOR_ADMIN_FIELDS + READ_ONLY_DONOR_FIELDS + DONOR_ADMIN_FIELDS \
+            + ('super_admins',)
 
 
 class DonorSerializer(SuperAdminDonorSerializer):
