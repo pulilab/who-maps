@@ -5,7 +5,11 @@ from django.db import migrations
 def in_place_migrate_donors(apps, schema_editor):
     Donor = apps.get_model('country', 'Donor')
     Project = apps.get_model('project', 'Project')
-    for p in Project.projects.all():
+    try:
+        pp = Project.projects.all()
+    except AttributeError:
+        pp = Project.objects.all()
+    for p in pp:
         if p.data and 'donors' in p.data:
             published_donors = []
             for donor in p.data.get('donors', []):
