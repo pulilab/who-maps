@@ -62,7 +62,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__his_bucket",
         "country__region",
         "project__data__government_investor",
-        "project__data__donors",  # TODO: will be refactored
+        "donors",
         "project__approval__approved"
     )
     filter_backends = (filters.OrderingFilter,)
@@ -73,7 +73,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
 
     def get_queryset(self):
         return ProjectSearch.objects.exclude(project__public_id='')\
-            .select_related('project', 'project__approval', 'organisation', 'country')
+            .select_related('project', 'project__approval', 'organisation', 'country', 'donor')
 
     def list(self, request, *args, **kwargs):
         """
@@ -92,7 +92,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         his: eg: his=1&his=2
         region: eg: region=3
         gov: gov=0 (for false), gov=1&gov=2 (for true values, since there's two types of true)
-        donor: TODO: implement
+        donor: eg: donor=1&donor=2
         approved: approved=0 (for not approved), approved=1 (for approved)
 
         ** FOUND IN FEATURE **

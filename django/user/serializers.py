@@ -37,6 +37,7 @@ class ProfileTokenSerializer(TokenSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='user.email', read_only=True)
     organisation_name = serializers.SerializerMethodField()
     country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all(), required=True,
                                                  allow_null=False)
@@ -44,11 +45,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
                                                       allow_null=False)
     name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
     user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
-    user_email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
         model = UserProfile
-        fields = ("id", "name", "user_email", "country", "donor", "account_type", "organisation", "user", "created",
+        fields = ("id", "name", "email", "country", "donor", "account_type", "organisation", "user", "created",
                   "organisation_name", "language")
 
     @staticmethod

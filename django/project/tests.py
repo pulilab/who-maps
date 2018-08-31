@@ -22,7 +22,7 @@ from allauth.account.models import EmailConfirmation
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
-from country.models import Country, CountryField
+from country.models import Country, CountryField, Donor
 from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
 from .models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
@@ -89,6 +89,9 @@ class SetupTests(APITestCase):
         self.userprofile = UserProfile.objects.get(id=self.user_profile_id)
         self.country.users.add(self.userprofile)
 
+        self.d1 = Donor.objects.create(name="Donor1")
+        self.d2 = Donor.objects.create(name="Donor2")
+
         self.project_data = {
             "date": datetime.utcnow(),
             "name": "Test Project1",
@@ -119,7 +122,7 @@ class SetupTests(APITestCase):
             "national_level_deployment":
                 {"clients": 20000, "health_workers": 0, "facilities": 0,
                  "facilities_list": ['facility1', 'facility2', 'facility3']},
-            "donors": ["donor1", "donor2"],
+            "donors": [self.d1.id, self.d2.id],
             "his_bucket": [1, 2],
             "hsc_challenges": [1, 2],
             "government_investor": 0,
@@ -277,7 +280,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['implementing_partners']['0'], ['Not a valid string.'])
         self.assertEqual(response.json()['health_focus_areas']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['licenses']['0'], ['A valid integer is required.'])
-        self.assertEqual(response.json()['donors']['0'], ['Not a valid string.'])
+        self.assertEqual(response.json()['donors']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['his_bucket']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['hsc_challenges']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['interoperability_links'], [{'id': ['This field is required.']}])
@@ -875,7 +878,7 @@ class ProjectTests(SetupTests):
             ],
             "national_level_deployment":
                 {"clients": 20000, "health_workers": 0, "facilities": 0},
-            "donors": ["donor1", "donor2"],
+            "donors": [self.d1.id, self.d2.id],
             "his_bucket": [1, 2],
             "hsc_challenges": [1, 2],
             "government_investor": 0,
@@ -1698,6 +1701,7 @@ class PermissionTests(SetupTests):
                                       "District: dist2 [Clients: 10, Health Workers: 2, Facilities: 8]")
         self.assertContains(response, "District: ward1 [Clients: 209, Health Workers: 59, Facilities: 49], "
                                       "District: ward2 [Clients: 109, Health Workers: 29, Facilities: 89]")
+        self.assertContains(response, "Donor1, Donor2")
 
     def test_csv_export_success_without_coverage(self):
         url = reverse("csv-export")
