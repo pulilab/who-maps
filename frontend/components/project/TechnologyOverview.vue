@@ -62,6 +62,8 @@
 </template>
 
 <script>
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+
 import { mapGettersActions } from '../../utilities/form';
 import CollapsibleCard from './CollapsibleCard';
 import LicenseSelector from './LicenseSelector';
@@ -73,12 +75,7 @@ export default {
     LicenseSelector,
     LinkField
   },
-  props: {
-    rules: {
-      type: Object,
-      default: () => ({})
-    }
-  },
+  mixins: [VeeValidationMixin],
   computed: {
     ...mapGettersActions({
       implementation_dates: ['project', 'getImplementationDates', 'setImplementationDates', 0],

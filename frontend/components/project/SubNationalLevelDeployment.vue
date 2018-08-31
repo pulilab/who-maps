@@ -19,6 +19,7 @@
             <sub-national-level-deployment-item
               ref="firstSubLevel"
               :rules="rules.coverage"
+              :api-errors="apiErrors"
               :index="index"
               :level-name="countrySubLevelNames.first"
               :sub-levels="countryFirstSubLevel"
@@ -55,6 +56,7 @@
             <sub-national-level-deployment-item
               ref="secondSubLevel"
               :rules="rules.coverage_second_level"
+              :api-errors="apiErrors"
               :index="index"
               :level-name="countrySubLevelNames.second"
               :sub-levels="countrySecondSubLevel"
@@ -79,6 +81,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { mapGettersActions } from '../../utilities/form';
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
 
 import SubNationalLevelDeploymentItem from './SubNationalLevelDeploymentItem';
 import AddRmButtons from './AddRmButtons';
@@ -88,12 +91,7 @@ export default {
     SubNationalLevelDeploymentItem,
     AddRmButtons
   },
-  props: {
-    rules: {
-      type: Object,
-      default: () => ({})
-    }
-  },
+  mixins: [VeeValidationMixin],
   computed: {
     ...mapGetters({
       country: 'project/getCountry',
@@ -125,6 +123,13 @@ export default {
         validators.push(...await Promise.all(this.$refs.secondSubLevel.map(s => s.validate())));
       }
       return validators.reduce((a, c) => a && c, true);
+    },
+    clear () {
+      this.errors.clear();
+      this.$refs.firstSubLevel.clear();
+      if (this.countrySubLevelNames.second) {
+        this.$refs.secondSubLeve.clear();
+      }
     },
     addCoverage () {
       this.coverage = [...this.coverage, null];

@@ -30,9 +30,11 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
 
 export default {
   components: {},
+  mixins: [VeeValidationMixin],
   model: {
     prop: 'value',
     event: 'change'
@@ -45,10 +47,6 @@ export default {
     disabled: {
       type: Boolean,
       default: false
-    },
-    rules: {
-      type: Object,
-      default: () => ({})
     }
   },
   data () {

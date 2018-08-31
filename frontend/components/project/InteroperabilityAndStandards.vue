@@ -25,6 +25,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { mapGettersActions } from '../../utilities/form';
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
 
 import CollapsibleCard from './CollapsibleCard';
 import InteroperabilityLinkComponent from './InteroperabilityLinkComponent';
@@ -36,6 +37,7 @@ export default {
     InteroperabilityLinkComponent,
     StandardsSelector
   },
+  mixins: [VeeValidationMixin],
   computed: {
     ...mapGetters({
       interopearilbityLinksStructure: 'projects/getInteroperabilityLinks'

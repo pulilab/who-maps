@@ -24,12 +24,14 @@
       <facility-selector
         ref="facilitySelector"
         :rules="rules"
+        :api-errors="apiErrors"
         v-model="facilitiesList"
         :disabled="!subLevel"
       />
       <coverage-fieldset
         ref="coverageFieldset"
         :rules="rules"
+        :api-errors="apiErrors"
         :health-workers.sync="healthWorkers"
         :clients.sync="clients"
         :facilities.sync="facilities"
@@ -40,6 +42,7 @@
 </template>
 
 <script>
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
 
 import CoverageFieldset from './CoverageFieldset';
 import FacilitySelector from './FacilitySelector';
@@ -51,6 +54,7 @@ export default {
     CoverageFieldset,
     FacilitySelector
   },
+  mixins: [VeeValidationMixin],
   props: {
     index: {
       type: [Number],
@@ -67,14 +71,6 @@ export default {
     coverage: {
       type: Array,
       default: () => []
-    },
-    rules: {
-      type: Object,
-      default: () => ({})
-    },
-    propPrefix: {
-      type: String,
-      required: true
     }
   },
   computed: {
@@ -136,6 +132,12 @@ export default {
     }
   },
   methods: {
+    clear () {
+      this.errors.clear();
+      this.$validator.clear();
+      this.$refs.coverageFieldset.clear();
+      this.$refs.facilitySelector.clear();
+    },
     async validate () {
       const validations = await Promise.all([
         this.$validator.validateAll(),

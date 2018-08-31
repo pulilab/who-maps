@@ -61,8 +61,10 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
 
 export default {
+  mixins: [VeeValidationMixin],
   props: {
     disabled: {
       type: Boolean,
@@ -83,10 +85,6 @@ export default {
     isNlc: {
       type: Boolean,
       default: false
-    },
-    rules: {
-      type: Object,
-      default: () => ({})
     }
   },
   computed: {
