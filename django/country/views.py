@@ -9,9 +9,12 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.permissions import IsAuthenticated
 
 from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
+from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
+    InCountrySuperAdmin, InDonorSuperAdmin
 from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo, MapFile
 from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountrySerializer, \
     SuperAdminCountrySerializer, AdminCountrySerializer, PartnerLogoSerializer, DonorSerializer, \
@@ -25,7 +28,27 @@ class LandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     lookup_field = "code"
 
 
-class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
+class AdminPermissionMixin:
+    permission_classes = (IsAuthenticated, InAdminOrReadOnly,)
+
+
+class SuperAdminPermissionMixin:
+    permission_classes = (IsAuthenticated, InSuperAdmin,)
+
+
+class CountryAdminPermissionMixin:
+    permission_classes = (IsAuthenticated, InCountryAdminOrReadOnly,)
+
+
+class CountrySuperAdminPermissionMixin:
+    permission_classes = (IsAuthenticated, InCountrySuperAdmin,)
+
+
+class DonorSuperAdminPermissionMixin:
+    permission_classes = (IsAuthenticated, InDonorSuperAdmin,)
+
+
+class CountryViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
@@ -42,7 +65,7 @@ class CountryViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Retr
         return super().get_serializer_class()
 
 
-class DonorViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
+class DonorViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
                    viewsets.GenericViewSet):
     queryset = Donor.objects.all()
     serializer_class = DonorSerializer
@@ -59,15 +82,15 @@ class DonorViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Retrie
         return super().get_serializer_class()
 
 
-class PartnerLogoViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin,
-                         viewsets.GenericViewSet):
+class PartnerLogoViewSet(CountrySuperAdminPermissionMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin,
+                         mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = PartnerLogo.objects.all()
     serializer_class = PartnerLogoSerializer
     parser_classes = (MultiPartParser, FormParser)
 
 
-class DonorPartnerLogoViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin,
-                              viewsets.GenericViewSet):
+class DonorPartnerLogoViewSet(DonorSuperAdminPermissionMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin,
+                              mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = DonorPartnerLogo.objects.all()
     serializer_class = DonorPartnerLogoSerializer
     parser_classes = (MultiPartParser, FormParser)
@@ -119,8 +142,8 @@ class CountryExportView(APIView):
         return Response(data)
 
 
-class MapFileViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
-                     viewsets.GenericViewSet):
+class MapFileViewSet(CountryAdminPermissionMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
+                     mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = MapFile.objects.all()
     serializer_class = MapFileSerializer
     parser_classes = (MultiPartParser, FormParser)
@@ -147,13 +170,13 @@ class MapDownloadViewSet(viewsets.ViewSet):
             return response
 
 
-class CountryImageViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class CountryImageViewSet(SuperAdminPermissionMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.all()
     serializer_class = CountryImageSerializer
     parser_classes = (MultiPartParser, FormParser)
 
 
-class DonorImageViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class DonorImageViewSet(SuperAdminPermissionMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Donor.objects.all()
     serializer_class = DonorImageSerializer
     parser_classes = (MultiPartParser, FormParser)
