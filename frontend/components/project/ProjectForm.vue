@@ -275,36 +275,33 @@ export default {
     clearValidation () {
       this.apiErrors = {};
       this.$refs.generalOverview.clear();
-      // this.$refs.implementationOverview.clear();
-      // this.$refs.technologyOverview.clear();
-      // this.$refs.interoperabilityAndStandards.clear();
+      this.$refs.implementationOverview.clear();
+      this.$refs.technologyOverview.clear();
+      this.$refs.interoperabilityAndStandards.clear();
     },
     async doSaveDraft () {
       this.usePublishRules = false;
       this.clearValidation();
-      this.$nextTick(async () => {
-        // const valid = await this.validate();
-        const valid = await this.$refs.generalOverview.validateDraft();
-        if (valid) {
-          try {
-            if (this.isNewProject) {
-              const id = await this.createProject();
-              const localised = this.localePath({name: 'organisation-projects-id-edit', params: {...this.$route.params, id}});
-              this.$router.push(localised);
-            } else if (this.isDraft) {
-              await this.saveDraft(this.$route.params.id);
-            }
-            this.$alert('Your draft has been saved successfully', 'Congratulation', {
-              confirmButtonText: 'Close'
-            });
-          } catch (e) {
-            this.apiErrors = e.response.data;
-            this.setLoading(false);
+      const valid = await this.$refs.generalOverview.validateDraft();
+      if (valid) {
+        try {
+          if (this.isNewProject) {
+            const id = await this.createProject();
+            const localised = this.localePath({name: 'organisation-projects-id-edit', params: {...this.$route.params, id}});
+            this.$router.push(localised);
+          } else if (this.isDraft) {
+            await this.saveDraft(this.$route.params.id);
           }
-        } else {
-          this.scrollToError();
+          this.$alert('Your draft has been saved successfully', 'Congratulation', {
+            confirmButtonText: 'Close'
+          });
+        } catch (e) {
+          this.apiErrors = e.response.data;
+          this.setLoading(false);
         }
-      });
+      } else {
+        this.scrollToError();
+      }
     },
     async doDiscardDraft () {
       try {
