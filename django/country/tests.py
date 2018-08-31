@@ -1,9 +1,8 @@
 import json
 import os
 from fnmatch import fnmatch
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 
-import requests
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -1123,7 +1122,7 @@ class CountryTests(APITestCase):
                 def raise_for_status(self):
                     pass
 
-            return [MockResponse(args[0]),]
+            return [MockResponse(args[0]), ]
 
         with patch('requests.get', side_effect=mocked_request_get(200)):
             response = self.test_user_client.get(url)
@@ -1142,7 +1141,7 @@ class CountryTests(APITestCase):
                 def raise_for_status(self):
                     raise RequestException
 
-            return [MockResponse(args[0]),]
+            return [MockResponse(args[0]), ]
 
         with patch('requests.get', side_effect=mocked_request_get(400)):
             response = self.test_user_client.get(url)
