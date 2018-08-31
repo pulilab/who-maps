@@ -164,7 +164,7 @@ export const actions = {
     (getters.getStableData.partner_logos || []).forEach(async logo => {
       const isStillThere = !!getters.getData.partner_logos.find(newLogo => newLogo.id === logo.id);
       if (!isStillThere) {
-        promArr.push({action: 'delPartnerLogo', data: logo.id});
+        promArr.push({action: 'delPartnerLogo', id: logo.id});
       }
     });
 
