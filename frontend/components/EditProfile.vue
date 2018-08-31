@@ -207,7 +207,9 @@
                 size="mini"
                 @click="changingUserRole">Change</el-button>
 
-              <div v-if="innerProfile.account_type === 'G'">
+              <div
+                v-if="innerProfile.account_type === 'G'"
+                class="ClickThrough">
                 <el-row
                   type="flex"
                   align="middle">
@@ -229,7 +231,9 @@
                 </div>
               </div>
 
-              <div v-if="innerProfile.account_type === 'CA'">
+              <div
+                v-if="innerProfile.account_type === 'CA'"
+                class="ClickThrough">
                 <el-row
                   type="flex"
                   align="middle">
@@ -251,7 +255,9 @@
                 </div>
               </div>
 
-              <div v-if="innerProfile.account_type === 'SCA'">
+              <div
+                v-if="innerProfile.account_type === 'SCA'"
+                class="ClickThrough">
                 <el-row
                   type="flex"
                   align="middle">
@@ -273,7 +279,9 @@
                 </div>
               </div>
 
-              <div v-if="innerProfile.account_type === 'D'">
+              <div
+                v-if="innerProfile.account_type === 'D'"
+                class="ClickThrough">
                 <el-row
                   type="flex"
                   align="middle">
@@ -295,7 +303,9 @@
                 </div>
               </div>
 
-              <div v-if="innerProfile.account_type === 'DA'">
+              <div
+                v-if="innerProfile.account_type === 'DA'"
+                class="ClickThrough">
                 <el-row
                   type="flex"
                   align="middle">
@@ -317,7 +327,9 @@
                 </div>
               </div>
 
-              <div v-if="innerProfile.account_type === 'SDA'">
+              <div
+                v-if="innerProfile.account_type === 'SDA'"
+                class="ClickThrough">
                 <el-row
                   type="flex"
                   align="middle">
@@ -674,6 +686,10 @@ export default {
           position: relative;
           width: 100%;
           border: 1px solid @colorGray;
+
+          .ClickThrough {
+            pointer-events: none;
+          }
 
           .el-row {
             .el-col {
