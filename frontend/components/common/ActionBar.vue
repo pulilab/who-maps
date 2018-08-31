@@ -179,9 +179,9 @@ export default {
       }
       &:hover {
         opacity: 1;
-        &::before {
-          transform: translateY(0);
-        }
+        // &::before {
+        //   transform: translateY(0);
+        // }
       }
     }
   }

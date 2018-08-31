@@ -87,28 +87,25 @@
             @click="selectPersona('G')">
             <div class="PersonaName">Users/viewers</div>
             <div class="RequestCount">{{ userSelection.length - users.length }} new request{{ (country.user_requests && country.user_requests.length) === 1 ? '' : 's' }}</div>
+            <fa icon="chevron-right" />
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'CA'}]"
             @click="selectPersona('CA')">
             <div class="PersonaName">Admins</div>
             <div class="RequestCount">{{ adminSelection.length - admins.length }} new request{{ (country.admin_requests && country.admin_requests.length) === 1 ? '' : 's' }}</div>
+            <fa icon="chevron-right" />
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'SCA'}]"
             @click="selectPersona('SCA')">
             <div class="PersonaName">Superadmins</div>
             <div class="RequestCount">{{ superadminSelection.length - superAdmins.length }} new request{{ (country.super_admin_requests && country.super_admin_requests.length) === 1 ? '' : 's' }}</div>
+            <fa icon="chevron-right" />
           </div>
         </el-col>
 
         <el-col class="UserTransfers">
-
-          <div
-            v-if="selectedPersona === 'G'"
-            class="Privileges">
-            Privileges for {{ selectedPersona }}
-          </div>
           <el-transfer
             v-if="selectedPersona === 'G'"
             :titles="['New requests', 'Approved']"
@@ -116,13 +113,17 @@
             :data="userSelection"
             filterable
             filter-placeholder="Type to filter users..." />
-
           <div
-            v-if="selectedPersona === 'CA'"
-            class="Privileges">
-            Privileges for {{ selectedPersona }}
-            Asdf
+            v-if="selectedPersona === 'G'"
+            class="PersonaPrivileges">
+            <h5>Privileges for {{ selectedPersona }}:</h5>
+            <ul>
+              <li>List item 1</li>
+              <li>List item 2</li>
+              <li>List item 3</li>
+            </ul>
           </div>
+
           <el-transfer
             v-if="selectedPersona === 'CA'"
             :titles="['New requests', 'Approved']"
@@ -130,13 +131,17 @@
             :data="adminSelection"
             filterable
             filter-placeholder="Type to filter users..." />
-
           <div
-            v-if="selectedPersona === 'SCA'"
-            class="Privileges">
-            Privileges for {{ selectedPersona }}
-            Lorem ipsum this and that
+            v-if="selectedPersona === 'CA'"
+            class="PersonaPrivileges">
+            <h5>Privileges for {{ selectedPersona }}:</h5>
+            <ul>
+              <li>List item 1</li>
+              <li>List item 2</li>
+              <li>List item 3</li>
+            </ul>
           </div>
+
           <el-transfer
             v-if="selectedPersona === 'SCA'"
             :titles="['New requests', 'Approved']"
@@ -144,7 +149,16 @@
             :data="superadminSelection"
             filterable
             filter-placeholder="Type to filter users..." />
-
+          <div
+            v-if="selectedPersona === 'SCA'"
+            class="PersonaPrivileges">
+            <h5>Privileges for {{ selectedPersona }}:</h5>
+            <ul>
+              <li>List item 1</li>
+              <li>List item 2</li>
+              <li>List item 3</li>
+            </ul>
+          </div>
         </el-col>
       </el-row>
     </collapsible-card>
@@ -467,6 +481,10 @@ export default {
       .ContentContainer {
         padding: 40px;
       }
+
+      .el-checkbox {
+        line-height: 40px;
+      }
     }
 
     .UserManagement {
@@ -475,56 +493,114 @@ export default {
       }
 
       .AdminPersonaChooser {
-        width: 161px;
-        height: 600px;
-        box-shadow: 2px 0 8px 0 rgba(0,0,0,0.16);
+        width: 200px;
+        border-right: 2px solid @colorGrayLighter;
 
         .Persona {
-          padding: 14px 20px;
-          width: 160px;
-          height: 66px;
-          box-sizing: border-box;
+          position: relative;
+          display: block;
+          padding: 16px 20px;
+          border-bottom: 1px solid @colorGrayLighter;
           cursor: pointer;
+          transition: @transitionAll;
 
           .PersonaName {
-            color: @colorTextPrimary;
-            font-family: Arial;
+            color: @colorTextSecondary;
             font-size: @fontSizeBase;
             line-height: 16px;
             margin-bottom: 8px;
           }
+
           .RequestCount {
             color: @colorTextMuted;
-            font-family: Arial;
             font-size: @fontSizeSmall;
-            line-height: 14px;
+          }
+
+          .svg-inline--fa {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            height: 14px;
+            opacity: 0;
+            transition: @transitionAll;
+          }
+
+          &:hover {
+            background-color: @colorGrayLightest;
+
+            .PersonaName {
+              color: @colorTextPrimary;
+            }
+
+            .RequestCount {
+              color: @colorGray;
+            }
+
+            .svg-inline--fa {
+              opacity: .5;
+            }
           }
 
           &.active {
-            background-color: @colorBrandBlueLight;
-            box-shadow: 0 1px 0 0 rgba(0,141,201,0.25);
+            background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
+            border-color: mix(@colorWhite, @colorBrandPrimary, 70%);
 
             .PersonaName {
+              font-weight: 700;
               color: @colorBrandPrimary;
-              font-weight: bold;
             }
+
             .RequestCount {
               color: @colorTextSecondary;
+            }
+
+            .svg-inline--fa {
+              color: @colorBrandPrimary;
+              opacity: 1;
             }
           }
         }
       }
 
       .UserTransfers {
+        padding: 30px 40px;
+
+        .PersonaPrivileges {
+          margin: 10px 0;
+          padding: 16px 20px;
+          background-color: @colorGrayLightest;
+
+          h5 {
+            margin: 0 0 10px;
+            font-size: @fontSizeSmall;
+          }
+
+          ul {
+            margin: 0;
+            padding: 0 0 0 20px;
+
+            li {
+              font-size: @fontSizeSmall;
+              line-height: 18px;
+              color: @colorTextSecondary;
+            }
+          }
+        }
+
         .el-transfer {
           display: flex;
           flex-direction: row;
           justify-content: center;
           align-items: center;
+          margin: 0 0 20px;
         }
+
         .el-transfer-panel {
-          width: 300px;
+          width: 100%;
         }
+
+        .el-transfer-buttons {}
       }
     }
   }

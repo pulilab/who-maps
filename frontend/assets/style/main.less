@@ -244,7 +244,10 @@ a {
 
 // Icon
 
-i[class*="el-icon-"] {
+[class^="el-icon-"],
+[class*=" el-icon-"] {
+  // -webkit-font-smoothing: auto;
+
   &.bold {
     font-weight: 700;
   }
@@ -537,6 +540,7 @@ fieldset {
 
 .el-checkbox {
   .el-checkbox__inner {
+
     // thicker tick
     &::after {
       top: 1px;
@@ -989,6 +993,14 @@ fieldset {
     border: 1px solid @colorGray;
     border-radius: 0;
 
+    &.is-ready {
+      background-image: none;
+    }
+
+    &.focusing {
+      outline: 0;
+    }
+
     .el-upload-list__item-status-label {
       box-shadow: none;
 
@@ -1000,16 +1012,60 @@ fieldset {
     .el-icon-close {
       color: @colorDanger;
       font-weight: 700;
+      opacity: 1;
+
+      &:hover {
+        color: lighten(@colorDanger, 10%);
+      }
+    }
+
+    .el-icon-close-tip {
+      display: none !important;
     }
 
     img {
       width: auto;
-      height: 50px;
+      height: 48px;
+      border: 1px solid @colorGrayLighter;
     }
 
     .el-upload-list__item-name {
+      margin: 0 !important;
       padding-left: 20px;
       line-height: 50px !important;
+
+      i {
+        display: none;
+      }
+    }
+  }
+}
+
+// Transfer panel
+
+.el-transfer {
+  .el-transfer-panel {
+    border-color: @colorGray;
+
+    .el-transfer-panel__header {
+      border-bottom-color: @colorGray;
+
+      .el-checkbox__inner {
+        border-radius: 0;
+      }
+
+      .el-checkbox__label {
+        font-size: @fontSizeBase;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .el-transfer__buttons {
+    padding: 0 12px;
+
+    i {
+      font-weight: 700;
     }
   }
 }

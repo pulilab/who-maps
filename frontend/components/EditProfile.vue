@@ -75,6 +75,10 @@
 
             <p v-if="userTypeRequested">Waiting for admin approval — you're still able to change your request by selecting an other role and saving your settings!</p>
 
+            <div
+              v-if="userTypeRequested"
+              class="Separator" />
+
             <el-checkbox
               v-model="isCountryUser"
               border><span class="IconRole IconGovernmentUser" />Government user</el-checkbox>
@@ -556,8 +560,8 @@ export default {
             }
 
             + p {
-              margin: 0 0 30px;
-              color: @colorTextMuted;
+              margin: 0;
+              color: @colorTextSecondary;
               font-size: @fontSizeSmall;
               line-height: 18px;
             }

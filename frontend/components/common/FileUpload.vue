@@ -56,6 +56,7 @@ export default {
 
   .FileUpload {
     .el-upload {
+      float: left;
       margin-bottom: 10px;
     }
 
