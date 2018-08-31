@@ -169,6 +169,17 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item
+        :error="errors.first('donors')"
+        label="Donor(s) supporting the project (Add one at least)"
+      >
+        <donor-selector
+          v-validate="rules.donors"
+          v-model="donors"
+          data-vv-name="donors"
+          data-vv-as="Donors"
+        />
+      </el-form-item>
     </collapsible-card>
   </div>
 </template>
@@ -185,6 +196,7 @@ import DigitalHealthInterventionsSelector from './DigitalHealthInterventionsSele
 import SubNationalLevelDeployment from './SubNationalLevelDeployment';
 import AddRmButtons from './AddRmButtons';
 import CoverageFieldset from './CoverageFieldset';
+import DonorSelector from './DonorSelector';
 
 import { mapGettersActions } from '../../utilities/form';
 
@@ -198,7 +210,8 @@ export default {
     DigitalHealthInterventionsSelector,
     SubNationalLevelDeployment,
     AddRmButtons,
-    CoverageFieldset
+    CoverageFieldset,
+    DonorSelector
   },
   mixins: [VeeValidationMixin],
   props: {
@@ -217,7 +230,8 @@ export default {
       coverageType: ['project', 'getCoverageType', 'setCoverageType', 0],
       national_level_deployment: ['project', 'getNationalLevelDeployment', 'setNationalLevelDeployment', 0],
       government_investor: ['project', 'getGovernmentInvestor', 'setGovernmentInvestor', 0],
-      implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners', 0]
+      implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners', 0],
+      donors: ['project', 'getDonors', 'setDonors', 0]
     }),
     healthWorkers: {
       get () {
