@@ -62,7 +62,6 @@ import ImplementationOverview from './ImplementationOverview';
 import TechnologyOverview from './TechnologyOverview';
 import InteroperabilityAndStandards from './InteroperabilityAndStandards';
 import { mapGetters, mapActions } from 'vuex';
-import FormAPIErrorsMixin from '../mixins/FormAPIErrorsMixin.js';
 
 export default {
   components: {
@@ -72,7 +71,6 @@ export default {
     TechnologyOverview,
     InteroperabilityAndStandards
   },
-  mixins: [FormAPIErrorsMixin],
   data () {
     return {
       readyElements: 0,
@@ -102,6 +100,10 @@ export default {
         },
         contact_email: {
           email: true
+        },
+        team: {
+          required: true,
+          min: 1
         }
       };
     },
@@ -137,10 +139,13 @@ export default {
           email: true,
           required: true
         },
+        team: {
+          required: true
+        },
         platforms: {
           required: true
         },
-        digitalHealthInterventions: {
+        strategies: {
           required: true,
           min: 1
         },
@@ -155,7 +160,7 @@ export default {
           min: 1
         },
         coverage: {
-          subLevel: {
+          district: {
             required: true
           },
           health_workers: {
@@ -168,11 +173,12 @@ export default {
             required: this.project.coverageType === 1
           },
           facilities_list: {
-            required: true
+            required: true,
+            min: 1
           }
         },
         coverage_second_level: {
-          subLevel: {
+          district: {
             required: false
           },
           health_workers: {
@@ -255,11 +261,21 @@ export default {
         this.readyElements += 1;
       }, 300);
     },
-    scrollToError () {
+    handleErrorMessages () {
       this.$nextTick(() => {
         const errors = this.$el.querySelectorAll('.is-error');
-        if (errors[0]) {
+        if (errors && errors.length > 0) {
           errors[0].scrollIntoView();
+        } else {
+          this.$alert('There was an un-caught validation error an automatic report has been submitted', 'Warning', {
+            confirmButtonText: 'Close'
+          });
+          this.$raven.captureMessage('Un-caught validation error in project page', {
+            level: 'warning',
+            extra: {
+              apiErrors: this.apiErrors
+            }
+          });
         }
       });
     },
@@ -280,28 +296,30 @@ export default {
       this.$refs.interoperabilityAndStandards.clear();
     },
     async doSaveDraft () {
-      this.usePublishRules = false;
       this.clearValidation();
-      const valid = await this.$refs.generalOverview.validateDraft();
-      if (valid) {
-        try {
-          if (this.isNewProject) {
-            const id = await this.createProject();
-            const localised = this.localePath({name: 'organisation-projects-id-edit', params: {...this.$route.params, id}});
-            this.$router.push(localised);
-          } else if (this.isDraft) {
-            await this.saveDraft(this.$route.params.id);
+      this.usePublishRules = false;
+      this.$nextTick(async () => {
+        const valid = await this.$refs.generalOverview.validateDraft();
+        if (valid) {
+          try {
+            if (this.isNewProject) {
+              const id = await this.createProject();
+              const localised = this.localePath({name: 'organisation-projects-id-edit', params: {...this.$route.params, id}});
+              this.$router.push(localised);
+            } else if (this.isDraft) {
+              await this.saveDraft(this.$route.params.id);
+            }
+            this.$alert('Your draft has been saved successfully', 'Congratulation', {
+              confirmButtonText: 'Close'
+            });
+            return;
+          } catch (e) {
+            this.apiErrors = e.response.data;
+            this.setLoading(false);
           }
-          this.$alert('Your draft has been saved successfully', 'Congratulation', {
-            confirmButtonText: 'Close'
-          });
-        } catch (e) {
-          this.apiErrors = e.response.data;
-          this.setLoading(false);
         }
-      } else {
-        this.scrollToError();
-      }
+        this.handleErrorMessages();
+      });
     },
     async doDiscardDraft () {
       try {
@@ -324,7 +342,7 @@ export default {
       }
     },
     async doPublishProject () {
-      this.apiErrors = {};
+      this.clearValidation();
       this.usePublishRules = true;
       this.$nextTick(async () => {
         const valid = await this.validate();
@@ -336,13 +354,13 @@ export default {
             this.$alert('Your draft has been published successfully', 'Congratulation', {
               confirmButtonText: 'Close'
             });
+            return;
           } catch (e) {
             this.setLoading(false);
             this.apiErrors = e.response.data;
           }
-        } else {
-          this.scrollToError();
         }
+        this.handleErrorMessages();
       });
     }
   }
