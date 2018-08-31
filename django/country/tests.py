@@ -237,7 +237,9 @@ class CountryTests(APITestCase):
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["user_requests"][0]['email'], userprofile1.user.email)
         self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
+        self.assertEqual(response.json()["admin_requests"][0]['email'], userprofile2.user.email)
         self.assertEqual(response.json()["super_admin_requests"], [])
 
     def test_country_admin_retrieve_super_admin_requests(self):
