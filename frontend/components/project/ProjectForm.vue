@@ -212,6 +212,9 @@ export default {
         implementing_partners: {
           required: true
         },
+        donors: {
+          required: true
+        },
         implementation_dates: {
           required: true
         },
