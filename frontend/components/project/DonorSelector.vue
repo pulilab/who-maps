@@ -1,0 +1,80 @@
+<template>
+  <el-select
+    :value="value"
+    multiple
+    filterable
+    reserve-keyword
+    class="DonorSelector"
+    popper-class="DonorSelectorDropdown"
+    placeholder="Type and select a name"
+    @change="changeHandler"
+  >
+    <el-option
+      v-for="donor in donors"
+      :key="donor.id"
+      :label="donor.name"
+      :value="donor.id"
+    />
+  </el-select>
+</template>
+
+<script>
+import { mapGetters } from 'vuex';
+
+export default {
+  components: {
+  },
+  $_veeValidate: {
+    value () {
+      return this.value;
+    },
+    events: 'change|blur'
+  },
+  model: {
+    prop: 'value',
+    event: 'change'
+  },
+  props: {
+    value: {
+      type: Array,
+      default: null
+    }
+  },
+  computed: {
+    ...mapGetters({
+      donors: 'system/getDonors'
+    })
+  },
+  methods: {
+    changeHandler (value) {
+      this.$emit('change', value);
+    }
+  }
+};
+</script>
+
+<style lang="less">
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
+
+  .DonorSelector {
+    width: 100%;
+  }
+
+  .DonorSelectorDropdown {
+     .OrganisationItem {
+      display: inline-block;
+      margin-left: 6px;
+      font-weight: 400;
+      color: @colorGray;
+
+      &::before {
+        content: "(";
+      }
+
+      &::after {
+        content: ")";
+      }
+    }
+  }
+</style>
