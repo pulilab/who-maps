@@ -243,7 +243,7 @@ export const actions = {
   setLoading ({commit}, value) {
     commit('SET_LOADING', value);
   },
-  async saveTeamViewers ({getters, commit}, id) {
+  async saveTeamViewers ({getters, commit, dispatch}, id) {
     const teamViewers = {
       team: getters.getTeam,
       viewers: getters.getViewers
@@ -251,6 +251,7 @@ export const actions = {
     const { data } = await this.$axios.put(`/api/projects/${id}/groups/`, teamViewers);
     commit('SET_TEAM', data.team);
     commit('SET_VIEWERS', data.viewers);
+    dispatch('user/updateTeamViewers', {...data, id}, {root: true});
   },
   async createProject ({getters, dispatch}) {
     dispatch('setLoading', 'draft');

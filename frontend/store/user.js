@@ -1,3 +1,4 @@
+import union from 'lodash/union';
 import { saveToken, deleteToken } from '../utilities/auth';
 
 export const state = () => ({
@@ -78,7 +79,16 @@ export const actions = {
   async setToken ({ commit, dispatch }, tokens) {
     commit('SET_TOKEN', tokens.jwt);
     await dispatch('loadProfile', tokens.profileId);
+  },
+  updateTeamViewers ({commit, getters}, {team, viewers, id}) {
+    const user = getters.getProfile.id;
+    const originalTeam = getters.getProfile.member;
+    const originalViewer = getters.getProfile.viewer;
+    const member = team.includes(user) ? union(originalTeam, [id]) : originalTeam;
+    const viewer = viewers.includes(user) ? union(originalViewer, [id]) : originalViewer;
+    commit('UPDATE_TEAM_VIEWER', {member, viewer});
   }
+
 };
 
 export const mutations = {
@@ -93,6 +103,12 @@ export const mutations = {
 
   SET_PROFILE: (state, profile) => {
     state.profile = profile;
+  },
+
+  UPDATE_TEAM_VIEWER: (state, {member, viewer}) => {
+    console.log(member, viewer);
+    state.profile = {...state.profile, member, viewer};
+    console.log(state.profile);
   },
 
   SET_DONORS: (state, donors) => {
@@ -163,18 +179,6 @@ export const mutations = {
 //     dispatch({ type: 'SET_PROFILE', profile: data });
 //     dispatch(SystemModule.loadStaticData());
 //     dispatch(ProjectModule.loadProjectStructure(true));
-//   };
-// }
-
-// export function updateTeamViewers (team, viewer) {
-//   return (dispatch, getState) => {
-//     const originalTeam = getState().user.profile.member;
-//     const originalViewer = getState().user.profile.viewer;
-//     const newTeam = union(originalTeam, team);
-//     const newViewer = union(originalViewer, viewer);
-//     if (newTeam.length !== originalTeam.length || newViewer.length !== originalViewer.length) {
-//       dispatch({ type: 'UPDATE_TEAM_VIEWER', member: newTeam, viewer: newViewer });
-//     }
 //   };
 // }
 
