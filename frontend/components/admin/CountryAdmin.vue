@@ -106,6 +106,24 @@
         </el-col>
 
         <el-col class="UserTransfers">
+          <div
+            v-if="selectedPersona === 'G'"
+            class="PersonaPrivileges">
+            <el-collapse accordion>
+              <el-collapse-item>
+                <template slot="title">
+                  <fa icon="info-circle" /> Show privileges for {{ selectedPersona }}
+                </template>
+                <div>
+                  <ul>
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                  </ul>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+          </div>
           <el-transfer
             v-if="selectedPersona === 'G'"
             :titles="['New requests', 'Approved']"
@@ -115,7 +133,7 @@
             filter-placeholder="Type to filter users..." />
 
           <div
-            v-if="selectedPersona === 'G'"
+            v-if="selectedPersona === 'CA'"
             class="PersonaPrivileges">
             <el-collapse accordion>
               <el-collapse-item>
@@ -132,7 +150,6 @@
               </el-collapse-item>
             </el-collapse>
           </div>
-
           <el-transfer
             v-if="selectedPersona === 'CA'"
             :titles="['New requests', 'Approved']"
@@ -140,8 +157,9 @@
             :data="adminSelection"
             filterable
             filter-placeholder="Type to filter users..." />
+
           <div
-            v-if="selectedPersona === 'CA'"
+            v-if="selectedPersona === 'SCA'"
             class="PersonaPrivileges">
             <el-collapse accordion>
               <el-collapse-item>
@@ -158,7 +176,6 @@
               </el-collapse-item>
             </el-collapse>
           </div>
-
           <el-transfer
             v-if="selectedPersona === 'SCA'"
             :titles="['New requests', 'Approved']"
@@ -166,24 +183,6 @@
             :data="superadminSelection"
             filterable
             filter-placeholder="Type to filter users..." />
-          <div
-            v-if="selectedPersona === 'SCA'"
-            class="PersonaPrivileges">
-            <el-collapse accordion>
-              <el-collapse-item>
-                <template slot="title">
-                  <fa icon="info-circle" /> Show privileges for {{ selectedPersona }}
-                </template>
-                <div>
-                  <ul>
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
-                  </ul>
-                </div>
-              </el-collapse-item>
-            </el-collapse>
-          </div>
         </el-col>
       </el-row>
     </collapsible-card>
@@ -596,18 +595,14 @@ export default {
       }
 
       .UserTransfers {
-        padding: 30px 40px;
+        padding: 20px 40px;
 
         .PersonaPrivileges {
-          padding: 10px 0;
-
-          .el-collapse-item__header {
-            color: @colorBrandPrimary;
-          }
+          margin: 0 0 20px;
 
           ul {
             margin: 0;
-            padding: 0 0 0 20px;
+            padding: 0 0 0 40px;
 
             li {
               font-size: @fontSizeSmall;
