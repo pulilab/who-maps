@@ -13,7 +13,7 @@ export default {
     apiErrors: {
       immediate: true,
       handler (errors) {
-        this.errors.clear();
+        this.clear();
         for (let field in errors) {
           this.errors.add({
             field,
@@ -27,6 +27,9 @@ export default {
     async validate () {
       console.error('Validation is going to fail because this method was not overridden');
       return false;
+    },
+    clear () {
+      this.errors.clear();
     }
   }
 };

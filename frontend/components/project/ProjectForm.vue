@@ -272,11 +272,19 @@ export default {
       ]);
       return validations.reduce((a, c) => a && c, true);
     },
+    clearValidation () {
+      this.apiErrors = {};
+      this.$refs.generalOverview.clear();
+      // this.$refs.implementationOverview.clear();
+      // this.$refs.technologyOverview.clear();
+      // this.$refs.interoperabilityAndStandards.clear();
+    },
     async doSaveDraft () {
       this.usePublishRules = false;
-      this.apiErrors = {};
+      this.clearValidation();
       this.$nextTick(async () => {
-        const valid = await this.validate();
+        // const valid = await this.validate();
+        const valid = await this.$refs.generalOverview.validateDraft();
         if (valid) {
           try {
             if (this.isNewProject) {
