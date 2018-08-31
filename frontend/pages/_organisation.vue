@@ -29,6 +29,7 @@ export default {
   async fetch ({ store, params }) {
     await Promise.all([
       store.dispatch('system/loadStaticData'),
+      store.dispatch('system/loadDonors'),
       store.dispatch('countries/loadMapData'),
       store.dispatch('landing/loadPublicProjectList')
     ]);
