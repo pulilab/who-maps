@@ -63,6 +63,7 @@
         <el-col
           :span="12"
           class="UserRole">
+          <!-- SELECT ACCOUNT TYPE -->
           <div v-if="!innerProfile.account_type_approved || changeApprovedUserRole || !['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(innerProfile.account_type)">
 
             <h5 v-if="!userTypeRequested">I request to be a:</h5>
@@ -195,6 +196,7 @@
             </el-collapse-transition>
           </div>
 
+          <!-- APPROVED ACCOUNT TYPE -->
           <div v-if="innerProfile.account_type_approved && ['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(innerProfile.account_type) && !changeApprovedUserRole">
 
             <h5 class="RoleAccepted">
@@ -441,7 +443,7 @@ export default {
     ...mapGetters({
       profile: 'user/getProfile',
       user: 'user/getUser',
-      donors: 'user/getDonors'
+      donors: 'user/getDonorsForDropdown'
     }),
 
     userTypeRequested () {

@@ -11,6 +11,10 @@ export const getters = {
   getToken: state => state.token,
   getUser: state => state.user,
   getDonors: state => state.donors,
+  getDonorsForDropdown: state => state.donors.map(donor => ({
+    value: donor.id,
+    label: donor.name
+  })),
 
   getProfile: state => {
     if (state.profile) {
