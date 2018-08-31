@@ -124,6 +124,7 @@ COUNTRY_FIELDS = ("id", "name", "code", "logo", "cover", "cover_text", "footer_t
                   "project_approval", "map_data", "map_version", "map_files", "map_activated_on",)
 READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "cover", "map_version", "map_files", "map_activated_on",)
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
+READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos", "project_approval",)
 
 
 class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer):
@@ -172,6 +173,7 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
 class AdminCountrySerializer(SuperAdminCountrySerializer):
     class Meta(SuperAdminCountrySerializer.Meta):
         fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins',)
+        read_only_fields = READ_ONLY_COUNTRY_ADMIN_FIELDS + READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS
 
 
 class CountrySerializer(SuperAdminCountrySerializer):
@@ -183,6 +185,7 @@ class CountrySerializer(SuperAdminCountrySerializer):
 DONOR_FIELDS = ("id", "name", "logo", "cover", "cover_text", "footer_title", "footer_text", "partner_logos",)
 READ_ONLY_DONOR_FIELDS = ("logo", "cover", "name",)
 DONOR_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
+READ_ONLY_DONOR_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos",)
 
 
 class SuperAdminDonorSerializer(UpdateAdminMixin, serializers.ModelSerializer):
@@ -218,6 +221,7 @@ class SuperAdminDonorSerializer(UpdateAdminMixin, serializers.ModelSerializer):
 class AdminDonorSerializer(SuperAdminDonorSerializer):
     class Meta(SuperAdminDonorSerializer.Meta):
         fields = DONOR_FIELDS + DONOR_ADMIN_FIELDS + ('users', 'admins',)
+        read_only_fields = READ_ONLY_DONOR_ADMIN_FIELDS + READ_ONLY_DONOR_FIELDS + DONOR_ADMIN_FIELDS
 
 
 class DonorSerializer(SuperAdminDonorSerializer):
