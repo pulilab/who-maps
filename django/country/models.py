@@ -21,6 +21,14 @@ class LandingPageCommon(NameByIDMixin, ExtendedMultilingualModel):
     def __str__(self):
         return self.name
 
+    @property
+    def cover_url(self):
+        return self.cover.url if self.cover else None
+
+    @property
+    def logo_url(self):
+        return self.logo.url if self.logo else None
+
 
 class UserManagement(models.Model):
     users = models.ManyToManyField(UserProfile, help_text="User/viewer who can read confidential answers", blank=True,
