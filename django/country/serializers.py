@@ -43,14 +43,24 @@ class MapFileSerializer(serializers.ModelSerializer):
         fields = ('id', 'country', 'map_file',)
 
 
-class CountryImageSerializer(serializers.ModelSerializer):
+class AtomicUpdate:
+    @atomic
+    def update(self, instance, validated_data):
+        # Select for update to avoid race conditions caused by partial update
+        # https://github.com/encode/django-rest-framework/issues/4675
+        instance = self.Meta.model.objects.select_for_update().get(pk=instance.id)
+        # perform update
+        return super().update(instance, validated_data)
+
+
+class CountryImageSerializer(AtomicUpdate, serializers.ModelSerializer):
     class Meta:
         model = Country
         fields = ('id', 'logo', 'logo_url', 'cover', 'cover_url')
         read_only_fields = ('logo_url', "cover_url")
 
 
-class DonorImageSerializer(serializers.ModelSerializer):
+class DonorImageSerializer(AtomicUpdate, serializers.ModelSerializer):
     class Meta:
         model = Donor
         fields = ('id', 'logo', 'logo_url', 'cover', 'cover_url')
