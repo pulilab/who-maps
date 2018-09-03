@@ -1,6 +1,7 @@
 import json
 import os
 from fnmatch import fnmatch
+from unittest.mock import patch
 
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
@@ -9,6 +10,7 @@ from django.utils.translation import override
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
 from django.utils.dateformat import format
+from requests import RequestException
 
 from django.core import mail
 from django.core.management import call_command
@@ -1110,17 +1112,42 @@ class CountryTests(APITestCase):
 
     def test_country_map_download_success(self):
         url = reverse("country-map-download", kwargs={"country_id": Country.objects.all()[0].id})
-        response = self.test_user_client.get(url)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEquals(response.get('Content-Disposition'),
-                          'attachment; filename="{}"'.format('exportBoundaries.zip'))
+        def mocked_request_get(*args, **kwargs):
+            class MockResponse:
+                def __init__(self, status_code):
+                    self.status_code = status_code
+                    self.content = None
+
+                def raise_for_status(self):
+                    pass
+
+            return [MockResponse(args[0]), ]
+
+        with patch('requests.get', side_effect=mocked_request_get(200)):
+            response = self.test_user_client.get(url)
+
+            self.assertEqual(response.status_code, 200)
 
     def test_country_map_download_wrong_country(self):
-        url = reverse("country-map-download", kwargs={"country_id": self.country.id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.content, b'Download failed')
+        url = reverse("country-map-download", kwargs={"country_id": Country.objects.all()[0].id})
+
+        def mocked_request_get(*args, **kwargs):
+            class MockResponse:
+                def __init__(self, status_code):
+                    self.status_code = status_code
+                    self.content = b'Download failed'
+
+                def raise_for_status(self):
+                    raise RequestException
+
+            return [MockResponse(args[0]), ]
+
+        with patch('requests.get', side_effect=mocked_request_get(400)):
+            response = self.test_user_client.get(url)
+
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.content, b'Download failed')
 
     def test_country_map_download_country_doesnt_exist(self):
         url = reverse("country-map-download", kwargs={"country_id": 999})
