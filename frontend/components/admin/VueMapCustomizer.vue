@@ -365,7 +365,7 @@ export default {
         height: calc(50vh + 58px + 88px);
         min-height: calc(50vh + 58px + 88px);
         max-height: calc(500px + 58px + 88px);
-        overflow-y: scroll;
+        overflow-y: auto;
         padding: 0;
         border-left: 1px solid @colorGrayLight;
         background-color: @colorBrandBlueLight;
@@ -465,7 +465,7 @@ export default {
         }
 
         .PinSwitch {
-          padding: 5px 0;
+          padding: 4px 0;
 
           > span {
             position: relative;

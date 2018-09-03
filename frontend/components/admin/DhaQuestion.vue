@@ -1,5 +1,5 @@
 <template>
-  <div :class="['q-container', thisQuestion.meta, {'inactive': !thisQuestion.active, 'invalid': !valid}]">
+  <el-card :class="['QuestionContainer rounded', thisQuestion.meta, {'inactive': !thisQuestion.active, 'invalid': !valid}]">
     <!-- Type -->
     <el-select
       v-model="type"
@@ -30,31 +30,38 @@
       autosize
       size="small"/>
 
-    <!-- Required -->
-    <el-switch
-      v-model="required"
-      size="small"
-      active-text="Required" />
+    <div class="QSwitches">
+      <!-- Required -->
+      <el-switch
+        v-model="required"
+        size="small"
+        active-text="Required" />
 
-    <!-- Active -->
-    <el-switch
-      v-model="active"
-      size="small"
-      active-text="Active" />
+      <!-- Active -->
+      <!-- <el-switch
+        v-model="active"
+        size="small"
+        active-text="Active" /> -->
 
-    <el-switch
-      v-model="active"
-      size="small"
-      active-text="TODO: private" />
+      <!-- TODO -->
+      <el-switch
+        v-model="active"
+        size="small"
+        active-text="Private" />
+    </div>
 
     <!-- Valid -->
-    <span>{{ valid ? '' : 'INVALID' }}</span>
+    <!-- <span>{{ valid ? '' : 'INVALID' }}</span> -->
 
     <!-- Options -->
     <dha-question-options
       v-if="thisQuestion.type.includes('choice')"
       :question-id="questionId" />
-  </div>
+
+    <span class="DDHandler">
+      <fa icon="bars" />
+    </span>
+  </el-card>
 </template>
 
 <script>
@@ -112,28 +119,77 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.q-container {
-  border: 1px solid lightgray;
-  background-color: rgba(0,0,0,.1);
-  margin-top: 4px;
-  margin-bottom: 4px;
-  padding: 3px 10px;
-}
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
-.added {
-  background-color: rgba(0,255,0,.4);
-}
+  .QuestionContainer {
+    position: relative;
+    margin-bottom: 20px;
+    padding-left: 24px;
 
-.edited {
-  background-color: rgba(0,0,255,.3);
-}
+    &.added {
+      // background-color: lighten(@colorPublished, 50%);
+    }
 
-.inactive {
-  background-color: rgba(255,125,0,.4);
-}
+    &.edited {
+      background-color: @colorBrandBlueLight;
+    }
 
-.invalid {
-  border: 1px solid red;
-}
+    &.inactive {
+      // background-color: @colorGrayLightest;
+    }
+
+    &.invalid {
+      border-color: @colorDanger;
+      background-color: #FEECEB;
+    }
+
+    .el-card__body {
+      > div {
+        margin-bottom: 20px;
+
+        &:last-child {
+          margin: 0;
+        }
+      }
+    }
+
+    .QSwitches {
+      .el-switch {
+        margin-right: 30px;
+      }
+    }
+
+    .DDHandler {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 24px;
+      height: 100%;
+      background-color: @colorGrayLighter;
+      border-radius: 3px 0 0 3px;
+      cursor: move;
+      transition: @transitionAll;
+
+      &:hover,
+      &:active {
+        background-color: @colorBrandBlueLight;
+
+        .svg-inline--fa {
+          color: @colorBrandPrimary;
+        }
+      }
+
+      .svg-inline--fa {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: @colorGray;
+        transition: @transitionAll;
+      }
+    }
+  }
+
 </style>

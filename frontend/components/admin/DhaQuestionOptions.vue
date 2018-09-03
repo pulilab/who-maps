@@ -67,9 +67,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-span.red {
-  color: red;
-  cursor: pointer;
-}
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
+
 </style>

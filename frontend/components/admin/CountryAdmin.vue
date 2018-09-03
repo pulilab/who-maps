@@ -188,9 +188,8 @@
     </collapsible-card>
 
     <collapsible-card
-      title="Country specific questionaire"
-      class="CountryQuestionaire">
-      <h1>Country specific questionaire</h1>
+      title="Country specific questionnaire"
+      class="CountryQuestionnaire">
       <dha-questionaire :label="'Country specific questionaire'"/>
     </collapsible-card>
 
@@ -621,7 +620,12 @@ export default {
 
         .el-transfer-panel {
           width: 100%;
-          // max-height: 50vh;
+
+          .el-transfer-panel__body {
+            min-height: 250px;
+            max-height: 40vh;
+            overflow-y: auto;
+          }
 
           // &:first-child {
           //   .el-transfer-panel__header {
@@ -640,7 +644,7 @@ export default {
       }
     }
 
-    .CountryQuestionaire {
+    .CountryQuestionnaire {
       .ContentContainer {
         padding: 20px;
       }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="question-conatiner">
+    <div class="QuestionnaireWrapper">
       <draggable v-model="questions">
         <dha-question
           v-for="(question, index) in questions"
@@ -9,55 +9,55 @@
       </draggable>
     </div>
 
-    <div class="action-container">
-      <el-button
-        type="primary"
-        plain
-        size="small"
-        icon="el-icon-plus"
-        @click="addQuestion"
-      >
-        Add new
-      </el-button>
+    <el-row
+      type="flex"
+      align="middle"
+      class="QActionContainer">
+      <el-col class="QActionsButtons">
+        <el-button
+          type="text"
+          class="IconLeft"
+          @click="addQuestion"
+        >
+          <fa icon="plus" />
+          Add new question
+        </el-button>
 
-      <el-button
-        type="warning"
-        plain
-        size="small"
-        icon="el-icon-delete"
-        @click="eraseChanges"
-      >
-        Erase change
-      </el-button>
+        <!-- <el-button
+          type="warning"
+          plain
+          size="small"
+          icon="el-icon-delete"
+          @click="eraseChanges"
+        >
+          Erase change
+        </el-button> -->
 
-      <el-button
-        :disabled="!allValid"
-        type="success"
-        plain
-        size="small"
-        icon="el-icon-check"
-        @click="saveChanges"
-      >
-        Save changes
-      </el-button>
+        <!-- <el-button
+          :disabled="!allValid"
+          type="success"
+          plain
+          size="small"
+          icon="el-icon-check"
+          @click="saveChanges"
+        >
+          Save changes
+        </el-button> -->
+      </el-col>
 
-      <span class="badge-container">
-        <span
+      <el-col class="QAlerts">
+        <el-alert
           v-if="reordered"
-          class="badge"
-        >
-          <i class="el-icon-sort badge"/>
-          reordered
-        </span>
-        <span
+          title="warning alert"
+          type="Questions are reordered!"
+          show-icon />
+        <el-alert
           v-if="!allValid"
-          class="badge"
-        >
-          <i class="el-icon-error badge"/>
-          contains invalid element
-        </span>
-      </span>
-    </div>
+          title="Contains invalid element!"
+          type="error"
+          show-icon />
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -131,25 +131,32 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.questionaire-container {
-  margin: 20px;
-  padding-bottom: 0px;
-}
-.asdf {
-  border-bottom-width: 0px;
-  border-top-width: 0px;
-}
-.action-container {
-  margin-top: 20px;
-}
-.badge-container {
-  float: right;
-  line-height: 18px;
-  i.badge {
-    margin-left: 6px;
-    font-size: 18px;
-    transform: translate(0, 2px);
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
+
+  .QuestionnaireWrapper {}
+
+  .QActionContainer {
+    .QActionsButtons {
+      width: 100%;
+
+      .el-button {
+        margin: 0 20px;
+      }
+    }
+
+    .QAlerts {
+      width: auto;
+      text-align: right;
+
+      .el-alert {
+        .el-alert__title {
+          padding-right: 20px;
+          font-size: @fontSizeSmall;
+          white-space: nowrap;
+        }
+      }
+    }
   }
-}
 </style>
