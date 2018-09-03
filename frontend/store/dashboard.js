@@ -37,21 +37,16 @@ export const state = () => ({
     }
   ],
   selectedColumns: [1, 2, 3, 4, 5, 6, 7, 8],
-  projects: [
-    { id: 1, country: 1, organisation: 1, donors: ['Donor1', 'donor2'], contact_name: 'Torben', contact_email: 't@pulilab.com', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
-    { id: 2, country: 2, organisation: 1, donors: ['Donor1', 'donor2'], contact_name: 'Torben', contact_email: 't@pulilab.com', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
-    { id: 3, country: 3, organisation: 1, donors: ['Donor1', 'donor2'], contact_name: 'Torben', contact_email: 't@pulilab.com', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
-    { id: 4, country: 4, organisation: 1, donors: ['Donor1', 'donor2'], contact_name: 'Torben', contact_email: 't@pulilab.com', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
-    { id: 5, country: 5, organisation: 1, donors: ['Donor1', 'donor2'], contact_name: 'Torben', contact_email: 't@pulilab.com', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] },
-    { id: 6, country: 6, organisation: 1, donors: ['Donor1', 'donor2'], contact_name: 'Torben', contact_email: 't@pulilab.com', implementation_overview: 'Implementation', geographic_scope: 'Geo Scope', health_focus_areas: [1, 2, 3] }
-  ],
+  projects: [],
   selectedDHI: [],
   selectedHFA: [],
   selectedHSC: [],
   selectedHIS: [],
   selectedPlatforms: [],
   selectedRows: [],
-  selectAll: false
+  selectAll: false,
+  loading: false,
+  pageSize: 10
 });
 export const getters = {
   ...gettersGenerator(),
@@ -64,11 +59,33 @@ export const getters = {
   getSelectedHIS: state => state.selectedHIS,
   getSelectedPlatforms: state => state.selectedPlatforms,
   getSelectedRows: state => state.selectedRows,
-  getSelectAll: state => state.selectAll
+  getSelectAll: state => state.selectAll,
+  getLoading: state => state.loading,
+  getPageSize: state => state.pageSize,
+  getSearchParameters: state => {
+    return {
+      page_size: state.pageSize,
+      type: 'list'
+    };
+  }
 };
 
 export const actions = {
   ...actionsGenerator(),
+  async loadProjectList ({commit, getters}) {
+    commit('SET_LOADING', true);
+    try {
+      const { data } = await this.$axios({
+        method: 'get',
+        url: '/api/search/',
+        params: getters.getSearchParameters
+      });
+      commit('SET_PROJECT_LIST', data.results.projects);
+    } catch (e) {
+      console.error(e);
+    }
+    commit('SET_LOADING', false);
+  },
   setSelectedColumns ({commit}, columns) {
     commit('SET_SELECTED_COLUMNS', columns);
   },
@@ -93,10 +110,16 @@ export const actions = {
   },
   setSelectAll ({commit}, all) {
     commit('SET_SELECT_ALL', all);
+  },
+  setPageSize ({commit}, size) {
+    commit('SET_PAGE_SIZE', size);
   }
 };
 export const mutations = {
   ...mutationsGenerator(),
+  SET_PROJECT_LIST: (state, projects) => {
+    state.projects = projects;
+  },
   SET_SELECTED_COLUMNS: (state, columns) => {
     state.selectedColumns = columns;
   },
@@ -120,5 +143,11 @@ export const mutations = {
   },
   SET_SELECT_ALL: (state, all) => {
     state.selectAll = all;
+  },
+  SET_LOADING: (state, loading) => {
+    state.loading = loading;
+  },
+  SET_PAGE_SIZE: (state, size) => {
+    state.pageSize = size;
   }
 };
