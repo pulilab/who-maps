@@ -71,10 +71,22 @@ class CountryTests(APITestCase):
         self.assertEqual(str(self.country), 'Hungary')
 
     def test_retrieve_landing_detail(self):
-        url = reverse("landing-detail", kwargs={"code": self.country.code})
-        response = self.test_user_client.get(url)
+        url = reverse("landing-country-detail", kwargs={"code": self.country.code})
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         response_keys = response.json().keys()
+        self.assertIn("name", response_keys)
+        self.assertIn("code", response_keys)
+        self.assertIn("logo", response_keys)
+        self.assertIn("cover", response_keys)
+        self.assertIn("cover_text", response_keys)
+        self.assertIn("footer_text", response_keys)
+
+    def test_retrieve_landing_list(self):
+        url = reverse("landing-country-list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        response_keys = response.json()[0].keys()
         self.assertIn("name", response_keys)
         self.assertIn("code", response_keys)
         self.assertIn("logo", response_keys)
@@ -1279,6 +1291,28 @@ class DonorTests(APITestCase):
 
     def test_donor_model_str(self):
         self.assertEqual(str(self.donor), 'Donor Group')
+
+    def test_retrieve_landing_detail(self):
+        url = reverse("landing-donor-detail", kwargs={"pk": self.donor.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        response_keys = response.json().keys()
+        self.assertIn("name", response_keys)
+        self.assertIn("logo", response_keys)
+        self.assertIn("cover", response_keys)
+        self.assertIn("cover_text", response_keys)
+        self.assertIn("footer_text", response_keys)
+
+    def test_retrieve_landing_list(self):
+        url = reverse("landing-donor-list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        response_keys = response.json()[0].keys()
+        self.assertIn("name", response_keys)
+        self.assertIn("logo", response_keys)
+        self.assertIn("cover", response_keys)
+        self.assertIn("cover_text", response_keys)
+        self.assertIn("footer_text", response_keys)
 
     def test_donor_admin_retrieve(self):
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
