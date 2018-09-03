@@ -43,10 +43,12 @@ export const apiReadParser = p => {
   const coverageData = {...coverageDataFirstLevel, ...coverageDataSecondLevelLevel};
   const interoperability_links = interoperabilityLinksMapper(p.interoperability_links);
   const [ platforms, digitalHealthInterventions ] = platformsMapper(p.platforms);
+  const coverageType = coverage === undefined || coverage.length === 0 ? 2 : 1;
   return {...p,
     coverage,
     coverage_second_level,
     coverageData,
+    coverageType,
     interoperability_links,
     platforms,
     digitalHealthInterventions
@@ -95,10 +97,16 @@ export const platformsWriteParser = (platforms, digitalHealthInterventions) => {
   });
 };
 
+const baseCoverage = {
+  clients: 0,
+  facilities: 0,
+  health_workers: 0
+};
+
 export const coverageWriteParser = (coverage, coverageData) => {
   return coverage.map(district => {
     const data = coverageData[district];
-    return {district, ...data};
+    return {district, ...baseCoverage, ...data};
   });
 };
 
@@ -110,14 +118,23 @@ export const apiWriteParser = p => {
   }
   const interoperability_links = interoperabilityLinkWriteParser(p.interoperability_links);
   const platforms = platformsWriteParser(p.platforms, p.digitalHealthInterventions);
-  const coverage = coverageWriteParser(p.coverage, p.coverageData);
-  const coverage_second_level = coverageWriteParser(p.coverage_second_level, p.coverageData);
+  let coverage = [];
+  let coverage_second_level = [];
+  let national_level_deployment = null;
+  if (p.coverageType === 1) {
+    coverage = coverageWriteParser(p.coverage, p.coverageData);
+    coverage_second_level = coverageWriteParser(p.coverage_second_level, p.coverageData);
+  } else {
+    national_level_deployment = {...baseCoverage, ...p.national_level_deployment};
+  }
+
   return {
     ...result,
     interoperability_links,
     platforms,
     coverage,
     coverage_second_level,
+    national_level_deployment,
     digitalHealthInterventions: undefined,
     coverageData: undefined
   };

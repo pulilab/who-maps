@@ -16,7 +16,7 @@
         :key="hsc.id"
         :label="hsc.challenge"
         :value="hsc.id"/>
-    </el-option-group>\
+    </el-option-group>
   </el-select>
 </template>
 

@@ -7,6 +7,9 @@
       >
         {{ standard.name }}
       </li>
+      <li v-show="selected.length === 0">
+        N/A
+      </li>
     </ul>
   </div>
 </template>

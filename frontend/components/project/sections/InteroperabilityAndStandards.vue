@@ -24,11 +24,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { mapGettersActions } from '../../utilities/form';
+import { mapGettersActions } from '../../../utilities/form';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
 
-import CollapsibleCard from './CollapsibleCard';
-import InteroperabilityLinkComponent from './InteroperabilityLinkComponent';
-import StandardsSelector from './StandardsSelector';
+import CollapsibleCard from '../CollapsibleCard';
+import InteroperabilityLinkComponent from '../InteroperabilityLinkComponent';
+import StandardsSelector from '../StandardsSelector';
 
 export default {
   components: {
@@ -36,6 +37,7 @@ export default {
     InteroperabilityLinkComponent,
     StandardsSelector
   },
+  mixins: [VeeValidationMixin],
   computed: {
     ...mapGetters({
       interopearilbityLinksStructure: 'projects/getInteroperabilityLinks'
@@ -47,13 +49,21 @@ export default {
   },
   mounted () {
     this.$emit('mounted');
+  },
+  methods: {
+    async validate () {
+      const validations = await Promise.all([
+        this.$validator.validate()
+      ]);
+      return validations.reduce((a, c) => a && c, true);
+    }
   }
 };
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+ @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
   .InteroperabilityAndStandards {}
 

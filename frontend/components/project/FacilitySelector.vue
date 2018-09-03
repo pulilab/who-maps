@@ -1,19 +1,23 @@
 <template>
   <el-form-item
     v-if="facilities.length > 0"
+    :error="errors.first('facilities_list', scope)"
     label="Facilities">
     <el-select
-      :value="value"
+      v-validate="rules.facilities_list"
+      v-model="innerValue"
       :remote-method="search"
       :loading="loading"
       :disabled="disabled"
+      :data-vv-scope="scope"
+      data-vv-name="facilities_list"
+      data-vv-as="Facilitiy list"
       multiple
       filterable
       remote
       class="FacilitySelector"
       popper-class="FacilitySelectorDropdown"
       placeholder="Type and select a name"
-      @change="changeHandler"
     >
       <el-option
         v-for="facility in result"
@@ -27,9 +31,11 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
 
 export default {
   components: {},
+  mixins: [VeeValidationMixin],
   model: {
     prop: 'value',
     event: 'change'
@@ -42,6 +48,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    scope: {
+      type: String,
+      default: null
     }
   },
   data () {
@@ -57,6 +67,14 @@ export default {
     }),
     facilities () {
       return this.getFacilities(this.country);
+    },
+    innerValue: {
+      get () {
+        return this.value;
+      },
+      set (value) {
+        this.$emit('change', value);
+      }
     }
   },
   methods: {
@@ -67,8 +85,8 @@ export default {
         this.loading = false;
       }
     },
-    changeHandler (value) {
-      this.$emit('change', value);
+    async validate () {
+      return this.$validator.validate();
     }
   }
 };

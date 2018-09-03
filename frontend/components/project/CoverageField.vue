@@ -3,17 +3,17 @@
     <el-row>
       <el-col :span="8">
         <simple-field
-          :content="coverage.health_workers"
+          :content="cov.health_workers"
           header="# Health Workers" />
       </el-col>
       <el-col :span="8">
         <simple-field
-          :content="coverage.facilities"
+          :content="cov.facilities"
           header="# Facilities" />
       </el-col>
       <el-col :span="8">
         <simple-field
-          :content="coverage.clients"
+          :content="cov.clients"
           header="# Clients" />
       </el-col>
     </el-row>
@@ -30,6 +30,11 @@ export default {
     coverage: {
       type: Object,
       default: () => ({})
+    }
+  },
+  computed: {
+    cov () {
+      return this.coverage || {};
     }
   }
 };

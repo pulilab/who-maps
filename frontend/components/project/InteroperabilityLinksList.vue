@@ -8,12 +8,9 @@
         <div class="Label">
           {{ link.label }}
         </div>
-        <a
-          :href="link.link"
-          target="_blank"
-        >
-          {{ link.link }}
-        </a>
+        <simple-field
+          :content="link.link"
+          link />
       </li>
     </ul>
   </div>
@@ -21,7 +18,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import SimpleField from './SimpleField';
+
 export default {
+  components: {
+    SimpleField
+  },
   props: {
     value: {
       type: Object,

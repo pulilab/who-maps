@@ -1,15 +1,15 @@
 <template>
   <el-select
     :value="value"
-    popper-class="CountrySelectorPopper"
-    class="CountrySelector"
-    placeholder="Select country"
+    class="LanguageSelector"
+    popper-class="LanguageSelectorPopper"
+    placeholder="Select language"
     @change="changeHandler">
     <el-option
-      v-for="country in countries"
-      :key="country.id"
-      :label="country.name"
-      :value="country.id"/>
+      v-for="language in languages"
+      :key="language.code"
+      :label="language.name"
+      :value="language.code"/>
   </el-select>
 </template>
 
@@ -22,13 +22,13 @@ export default {
   },
   props: {
     value: {
-      type: Number,
+      type: String,
       default: null
     }
   },
   computed: {
     ...mapGetters({
-      countries: 'countries/getCountries'
+      languages: 'system/getLanguages'
     })
   },
   methods: {
@@ -43,7 +43,7 @@ export default {
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
 
-  .CountrySelectorPopper {
+  .LanguageSelectorPopper {
     max-width: @advancedSearchWidth - 40px;
   }
 </style>

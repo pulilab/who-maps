@@ -29,6 +29,7 @@ const cleanState = () => ({
   },
   government_investor: null,
   implementing_partners: [],
+  donors: [],
   implementation_dates: null,
   licenses: [],
   repository: null,
@@ -69,6 +70,7 @@ export const getters = {
   getNationalLevelDeployment: state => ({...state.national_level_deployment}),
   getGovernmentInvestor: state => state.government_investor,
   getImplementingPartners: state => state.implementing_partners.length === 0 ? [null] : state.implementing_partners,
+  getDonors: state => state.donors,
   getImplementationDates: state => state.implementation_dates,
   getLicenses: state => state.licenses,
   getRepository: state => state.repository,
@@ -117,6 +119,7 @@ export const actions = {
     dispatch('setNationalLevelDeployment', project.national_level_deployment);
     dispatch('setGovernmentInvestor', project.government_investor);
     dispatch('setImplementingPartners', project.implementing_partners);
+    dispatch('setDonors', project.donors);
     dispatch('setImplementationDates', project.implementation_dates);
     dispatch('setLicenses', project.licenses);
     dispatch('setRepository', project.repository);
@@ -211,6 +214,9 @@ export const actions = {
   setImplementingPartners ({commit}, value) {
     commit('SET_IMPLEMENTING_PARTNERS', value);
   },
+  setDonors ({commit}, value) {
+    commit('SET_DONORS', value);
+  },
   setImplementationDates ({commit}, value) {
     commit('SET_IMPLEMENTATION_DATES', value);
   },
@@ -235,7 +241,17 @@ export const actions = {
   setPublished ({commit}, value) {
     commit('SET_PUBLISHED', value);
   },
-  async saveTeamViewers ({getters, commit}, id) {
+  setLoading ({commit}, value) {
+    commit('SET_LOADING', value);
+  },
+  async verifyOrganisation ({dispatch}, organisation) {
+    if (organisation && isNaN(organisation)) {
+      const org = await dispatch('system/addOrganisation', organisation, { root: true });
+      return org.id;
+    }
+    return organisation;
+  },
+  async saveTeamViewers ({getters, commit, dispatch}, id) {
     const teamViewers = {
       team: getters.getTeam,
       viewers: getters.getViewers
@@ -243,47 +259,50 @@ export const actions = {
     const { data } = await this.$axios.put(`/api/projects/${id}/groups/`, teamViewers);
     commit('SET_TEAM', data.team);
     commit('SET_VIEWERS', data.viewers);
+    dispatch('user/updateTeamViewers', {...data, id}, {root: true});
   },
-  async createProject ({getters, dispatch, commit}) {
-    commit('SET_LOADING', 'draft');
+  async createProject ({getters, dispatch}) {
+    dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
+    draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.post('api/projects/draft/', parsed);
     dispatch('projects/addProjectToList', data, {root: true});
-    commit('SET_LOADING', false);
+    await dispatch('saveTeamViewers', data.id);
+    dispatch('setLoading', false);
     return data.id;
   },
-  async saveDraft ({getters, dispatch, commit}, id) {
-    commit('SET_LOADING', 'draft');
+  async saveDraft ({getters, dispatch}, id) {
+    dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
+    draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
     await dispatch('saveTeamViewers', id);
     dispatch('projects/updateProject', data, {root: true});
-    commit('SET_LOADING', false);
+    dispatch('setLoading', false);
   },
   async publishProject ({getters, dispatch, commit}, id) {
-    commit('SET_LOADING', 'publish');
+    dispatch('setLoading', 'publish');
     const draft = getters.getProjectData;
+    draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft);
-    // TODO: Remove this on donor feature creation
-    parsed.donors = ['FakeDonor for API TEST'];
     const { data } = await this.$axios.put(`/api/projects/publish/${id}/`, parsed);
     await dispatch('saveTeamViewers', id);
     const parsedResponse = apiReadParser(data.draft);
     commit('SET_PUBLISHED', Object.freeze(parsedResponse));
     dispatch('projects/updateProject', data, {root: true});
-    commit('SET_LOADING', false);
+    dispatch('setLoading', false);
   },
-  async discardDraft ({getters, dispatch, commit}, id) {
-    commit('SET_LOADING', 'discard');
+  async discardDraft ({getters, dispatch}, id) {
+    dispatch('setLoading', 'discard');
     const published = getters.getPublished;
     const parsed = apiWriteParser(published);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
     const parsedResponse = apiReadParser(data.draft);
     await dispatch('setProjectState', parsedResponse);
     dispatch('projects/updateProject', data, {root: true});
-    commit('SET_LOADING', false);
+    dispatch('setLoading', false);
   }
 };
 
@@ -362,6 +381,9 @@ export const mutations = {
   },
   SET_IMPLEMENTING_PARTNERS: (state, implementing_partners) => {
     Vue.set(state, 'implementing_partners', [...implementing_partners]);
+  },
+  SET_DONORS: (state, donors) => {
+    Vue.set(state, 'donors', [...donors]);
   },
   SET_IMPLEMENTATION_DATES: (state, implementation_dates) => {
     state.implementation_dates = implementation_dates;

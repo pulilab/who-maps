@@ -121,23 +121,28 @@
             >
               <type-field
                 :value="project.coverageType"
-                :list="['Sub National', 'National']"
+                :list="['', 'Sub National', 'National']"
               />
             </simple-field>
-            <simple-field>
+            <simple-field v-if="project.coverageType === 2">
               <div slot="header">
                 <fa icon="flag" />
                 National Level Deployment
               </div>
 
-              <coverage-field :coverage="project.national_level_deployment" />
+              <coverage-field
 
-              <sub-level-coverage-field
-                :coverage="project.coverage"
-                :coverage-data="project.coverageData"
-                :coverage-second-level="project.coverageSecondLevel"
+                :coverage="project.national_level_deployment"
               />
             </simple-field>
+
+            <sub-level-coverage-field
+              v-if="project.coverageType === 1"
+              :coverage="project.coverage"
+              :coverage-data="project.coverageData"
+              :coverage-second-level="project.coverageSecondLevel"
+            />
+
           </div>
 
           <simple-field header="Has the government financially invested in the project?">
@@ -155,6 +160,10 @@
                 {{ partner }}
               </li>
             </ul>
+          </simple-field>
+
+          <simple-field header="Donor(s)">
+            <donors-list :value="project.donors" />
           </simple-field>
         </collapsible-card>
 
@@ -237,6 +246,7 @@ import SubLevelCoverageField from './SubLevelCoverageField';
 import LicensesList from './LicensesList';
 import StandardsList from './StandardsList';
 import InteroperabilityLinksList from './InteroperabilityLinksList';
+import DonorsList from '../common/list/DonorsList';
 
 import { mapGetters } from 'vuex';
 
@@ -257,7 +267,8 @@ export default {
     SubLevelCoverageField,
     LicensesList,
     StandardsList,
-    InteroperabilityLinksList
+    InteroperabilityLinksList,
+    DonorsList
   },
   props: {
     showDraft: {

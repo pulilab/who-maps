@@ -46,12 +46,27 @@ export default {
       default: null
     }
   },
+  $_veeValidate: {
+    value () {
+      return this.dhi;
+    },
+    events: 'change'
+  },
   computed: {
     ...mapGetters({
       selectedDHI: 'project/getDigitalHealthInterventions'
     }),
     dhi () {
       return this.selectedDHI.filter(dhi => dhi.platform === this.platformId);
+    }
+  },
+  watch: {
+    dhi: {
+      immediate: true,
+      deep: true,
+      handler () {
+        this.$emit('change');
+      }
     }
   },
   methods: {

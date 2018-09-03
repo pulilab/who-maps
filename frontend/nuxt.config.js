@@ -36,6 +36,7 @@ const config = {
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
     'nuxt-fontawesome',
+    '@nuxtjs/sentry',
     ['nuxt-i18n', {
       locales: [
         {
@@ -79,6 +80,12 @@ const config = {
       }
     }]
   ],
+  sentry: {
+    dsn: 'https://cea32567f8aa4eefa4d2051848d37dea:a884ff71e8ae444c8a40af705699a19c@sentry.vidzor.com/12',
+    public_dsn: 'https://cea32567f8aa4eefa4d2051848d37dea@sentry.vidzor.com/12',
+    config: {
+    }
+  },
   fontawesome: {
     component: 'fa',
     imports: [

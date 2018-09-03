@@ -6,45 +6,55 @@
     >
       <el-col :span="8">
         <el-form-item
-          :prop="healthWorkersProp"
+          :error="errors.first('health_workers', scope)"
           label="# Health workers">
           <el-input
+            v-validate="rules.health_workers"
             :disabled="disabled"
-            :value="healthWorkers"
+            :data-vv-scope="scope"
+            v-model="localHealthWorkers"
+            data-vv-name="health_workers"
+            data-vv-as="Health workers"
             type="number"
             min="0"
             max="10000000"
             step="1"
-            @change="emitHealthWorkersChange" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="8">
-        <el-form-item
-          :prop="facilitiesProp"
-          label="# Facilities">
-          <el-input
-            :disabled="disableFacilities"
-            :value="facilities"
-            type="number"
-            min="0"
-            max="10000000"
-            step="1"
-            @change="emitFacilitiesChange"
           />
         </el-form-item>
       </el-col>
       <el-col :span="8">
         <el-form-item
-          :prop="clientsProp"
-          label="# Clients">
+          :error="errors.first('facilities', scope)"
+          label="# Facilities">
           <el-input
-            :disabled="disabled"
-            :value="clients"
+            v-validate="rules.facilities"
+            :disabled="disableFacilities"
+            :data-vv-scope="scope"
+            v-model="localFacilities"
+            data-vv-name="facilities"
+            data-vv-as="Facilities"
             type="number"
             min="0"
             max="10000000"
             step="1"
-            @change="emitClientsChange"
+          />
+        </el-form-item>
+      </el-col>
+      <el-col :span="8">
+        <el-form-item
+          :error="errors.first('clients', scope)"
+          label="# Clients">
+          <el-input
+            v-validate="rules.clients"
+            :disabled="disabled"
+            :data-vv-scope="scope"
+            v-model="localClients"
+            data-vv-name="clients"
+            data-vv-as="Clients"
+            type="number"
+            min="0"
+            max="10000000"
+            step="1"
           />
         </el-form-item>
       </el-col>
@@ -54,8 +64,10 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
 
 export default {
+  mixins: [VeeValidationMixin],
   props: {
     disabled: {
       type: Boolean,
@@ -76,6 +88,10 @@ export default {
     isNlc: {
       type: Boolean,
       default: false
+    },
+    scope: {
+      type: String,
+      default: null
     }
   },
   computed: {
@@ -87,33 +103,39 @@ export default {
       return !!this.getFacilities(this.country).length;
     },
     disableFacilities () {
+      if (this.isNlc) {
+        return false;
+      }
       return !!(this.disabled || this.hasFacilityList);
     },
-    healthWorkersProp () {
-      if (this.isNlc) {
-        return 'national_level_deployment.health_workers';
+    localHealthWorkers: {
+      get () {
+        return this.healthWorkers;
+      },
+      set (value) {
+        this.$emit('update:healthWorkers', value);
       }
     },
-    clientsProp () {
-      if (this.isNlc) {
-        return 'national_level_deployment.clients';
+    localClients: {
+      get () {
+        return this.clients;
+      },
+      set (value) {
+        this.$emit('update:clients', value);
       }
     },
-    facilitiesProp () {
-      if (this.isNlc) {
-        return 'national_level_deployment.facilities';
+    localFacilities: {
+      get () {
+        return this.facilities;
+      },
+      set (value) {
+        this.$emit('update:facilities', value);
       }
     }
   },
   methods: {
-    emitHealthWorkersChange (value) {
-      this.$emit('update:healthWorkers', value);
-    },
-    emitFacilitiesChange (value) {
-      this.$emit('update:facilities', value);
-    },
-    emitClientsChange (value) {
-      this.$emit('update:clients', value);
+    async validate () {
+      return this.$validator.validate();
     }
   }
 };

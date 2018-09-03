@@ -20,6 +20,12 @@ export default {
       default: null
     }
   },
+  $_veeValidate: {
+    value () {
+      return this.value;
+    },
+    events: 'input|blur|change'
+  },
   methods: {
     changeHandler (value) {
       this.$emit('change', value);
