@@ -119,6 +119,7 @@ export const actions = {
     dispatch('setNationalLevelDeployment', project.national_level_deployment);
     dispatch('setGovernmentInvestor', project.government_investor);
     dispatch('setImplementingPartners', project.implementing_partners);
+    dispatch('setDonors', project.donors);
     dispatch('setImplementationDates', project.implementation_dates);
     dispatch('setLicenses', project.licenses);
     dispatch('setRepository', project.repository);
