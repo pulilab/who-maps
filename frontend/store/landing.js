@@ -14,8 +14,8 @@ export const getters = {
 export const actions = {
   ...actionsGenerator(),
   async loadPublicProjectList ({commit}) {
-    const { data } = await this.$axios.get('/api/projects/map/');
-    commit('SET_PROJECT_LIST', data);
+    const { data } = await this.$axios.get('/api/search/?page_size=10000');
+    commit('SET_PROJECT_LIST', data.results.projects);
   },
   async loadCountryData ({commit, dispatch}, code) {
     const { data } = await this.$axios.get(`/api/landing/${code.toUpperCase()}/`);
