@@ -1,8 +1,76 @@
 <template>
-  <el-container class="main-container">
+  <el-row
+    type="flex"
+    class="CountryMapCustomizer"
+  >
 
-    <el-header :span="24">
-      <el-card class="box-card title-bar">
+    <el-col>
+      <div class="CountryMapHeader">
+        <div class="CountryMapTitle">Country name</div>
+        <div class="CountryMapFile">
+          <!-- TODO -->
+          <!-- Wire these buttons here, danke schön -->
+          <!-- <a
+            ref="hiddenMapDownload"
+            :href="`/api/countries/map-download/${country.id}/`"
+            style="display: none"
+            download>Hidden but needed element!</a>
+          <el-button @click="$refs.hiddenMapDownload.click()">
+            Download map file
+          </el-button>
+          <el-button @click="showMapUploader">
+            <span v-show="forceMapFileChange">Cancel</span>
+            <span v-show="!forceMapFileChange">Change map file</span>
+          </el-button> -->
+        </div>
+      </div>
+
+      <div class="CountryMapDemo">
+        <no-ssr>
+          <l-map
+            ref="mainMap"
+            :zoom="zoom"
+            :world-copy-jump="true"
+            :options="mapOptions"
+            class="MapContainer"
+          >
+            <l-tilelayer
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
+            />
+
+            <l-feature-group @layeradd="geoJsonLoadHandler">
+              <l-geo-json
+                v-if="firstSubLevelMap && firstSubLevelMap.length > 0"
+                ref="geoJsonLayer"
+                :geojson="firstSubLevelMap"
+              />
+            </l-feature-group>
+
+            <l-marker
+              v-if="showCenterPin && countryCenter"
+              :lat-lng="countryCenter"
+              :draggable="true"
+              @moveend="countryCenterMoveHandler"
+            >
+              <l-tooltip> Country Central Pin </l-tooltip>
+            </l-marker>
+
+            <l-feature-group v-if="showSubLevelsPins">
+              <l-marker
+                v-for="pin in subLevelsPolyCenters"
+                :key="pin.name"
+                :lat-lng="pin.latlng"
+                :draggable="true"
+                @moveend="subLevelsPinsMoveHandler($event, pin.name)"
+              >
+                <l-tooltip> {{ pin.name }} </l-tooltip>
+              </l-marker>
+            </l-feature-group>
+          </l-map>
+        </no-ssr>
+      </div>
+
+      <div class="CountryMapSettings">
         <el-switch
           v-model="showCenterPin"
           active-text="Show country center pin"
@@ -12,169 +80,109 @@
           active-text="Show districts center pin"
           inactive-text="Hide districts center pin"/>
         <el-button
+          type="text"
           @click.prevent="polycenterCalculation"
         >
           Set / Reset Markers
         </el-button>
-      </el-card>
+      </div>
+    </el-col>
 
-    </el-header>
+    <el-col>
+      <div class="MapSettingSection">
+        <h5>Sub Level I (Displayed on the map)</h5>
+        <div>
+          <el-select
+            v-model="firstSubLevel"
+            placeholder="Admin level">
+            <el-option
+              v-for="level in subLevels"
+              :key="level"
+              :label="`admin-level-${level}`"
+              :value="level"/>
+          </el-select>
+          <el-select
+            v-model="firstSubLevelType"
+            placeholder="Sub level name">
+            <el-option
+              v-for="name in firstSubLevelTypes"
+              :key="name.name"
+              :label="name.displayName"
+              :value="name.name"/>
+          </el-select>
+        </div>
 
-    <el-main>
-      <el-row :gutter="20">
-        <el-col :span="16">
-          <el-card class="box-card">
-            <no-ssr>
-              <l-map
-                ref="mainMap"
-                :zoom="zoom"
-                :world-copy-jump="true"
-                :options="mapOptions"
-                class="MapContainer"
-              >
-                <l-tilelayer
-                  url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
-                />
-
-                <l-feature-group @layeradd="geoJsonLoadHandler">
-                  <l-geo-json
-                    v-if="firstSubLevelMap && firstSubLevelMap.length > 0"
-                    ref="geoJsonLayer"
-                    :geojson="firstSubLevelMap"
-                  />
-                </l-feature-group>
-
-                <l-marker
-                  v-if="showCenterPin && countryCenter"
-                  :lat-lng="countryCenter"
-                  :draggable="true"
-                  @moveend="countryCenterMoveHandler"
-                >
-                  <l-tooltip> Country Central Pin </l-tooltip>
-                </l-marker>
-
-                <l-feature-group v-if="showSubLevelsPins">
-                  <l-marker
-                    v-for="pin in subLevelsPolyCenters"
-                    :key="pin.name"
-                    :lat-lng="pin.latlng"
-                    :draggable="true"
-                    @moveend="subLevelsPinsMoveHandler($event, pin.name)"
-                  >
-                    <l-tooltip> {{ pin.name }} </l-tooltip>
-                  </l-marker>
-                </l-feature-group>
-              </l-map>
-            </no-ssr>
-          </el-card>
-        </el-col>
-
-        <el-col
-          :span="8"
-          class="side-selector">
-          <el-card class="box-card">
-            <div
-              slot="header"
-              class="">
-              <span>Sub Level I (Displayed on the map) </span>
-            </div>
-            <div class="input-container">
-              <el-select
-                v-model="firstSubLevel"
-                placeholder="Admin level">
-                <el-option
-                  v-for="level in subLevels"
-                  :key="level"
-                  :label="`admin-level-${level}`"
-                  :value="level"/>
-              </el-select>
-              <el-select
-                v-model="firstSubLevelType"
-                placeholder="Sub level name">
-                <el-option
-                  v-for="name in firstSubLevelTypes"
-                  :key="name.name"
-                  :label="name.displayName"
-                  :value="name.name"/>
-              </el-select>
-            </div>
-            <div
-              v-show="showFirstSubLevelList"
-              class="sub-level-list"
+        <div
+          v-show="showFirstSubLevelList"
+          class="sub-level-list"
+        >
+          <h5>List of {{ firstSubLevelType }}</h5>
+          <ul>
+            <li
+              v-for="item in firstSubLevelList"
+              :key="item.id"
             >
-              <h5> List of {{ firstSubLevelType }}</h5>
-              <ul>
-                <li
-                  v-for="item in firstSubLevelList"
-                  :key="item.id"
-                >
-                  {{ item.name }}
-                </li>
-              </ul>
-            </div>
-          </el-card>
-          <el-card
-            v-show="showFirstSubLevelList"
-            class="box-card"
-          >
-            <div
-              slot="header"
-              class="clearfix">
-              <span>Sub Level II (Only for selection) </span>
-            </div>
-            <div class="input-container">
-              <el-select
-                v-model="secondSubLevel"
-                placeholder="Admin Level"
-                clearable>
-                <el-option
-                  v-for="level in availableSubLevels"
-                  :key="level"
-                  :label="`admin-level-${level}`"
-                  :value="level"/>
-              </el-select>
-              <el-select
-                v-model="secondSubLevelType"
-                placeholder="Sub level name"
-                clearable>
-                <el-option
-                  v-for="name in secondSubLevelTypes"
-                  :key="name.name"
-                  :label="name.displayName"
-                  :value="name.name"/>
-              </el-select>
-            </div>
-            <div
-              v-show="showSecondSubLevelList"
-              class="sub-level-list"
-            >
-              <h5> List of {{ secondSubLevelType }}</h5>
-              <ul>
-                <li
-                  v-for="item in secondSubLevelList"
-                  :key="item.id"
-                >
-                  {{ item.name }}
-                </li>
-              </ul>
-            </div>
-          </el-card>
-          <el-card class="box-card">
-            <div slot="header">
-              <span>Facility Import</span>
-            </div>
-            <facility-import
-              v-show="showFirstSubLevelList"
-              ref="facilityImporter"
-              :places="places"
-            />
-            <div v-show="!showFirstSubLevelList"> Select at least one level to use the facility import </div>
-          </el-card>
+              {{ item.name }}
+            </li>
+          </ul>
+        </div>
+      </div>
 
-        </el-col>
-      </el-row>
-    </el-main>
-  </el-container>
+      <div
+        v-show="showFirstSubLevelList"
+        class="MapSettingSection">
+        <h5>Sub Level II (Only for selection)</h5>
+        <p>Hover on a district name to see the name on the map.</p>
+        <div>
+          <el-select
+            v-model="secondSubLevel"
+            placeholder="Admin Level"
+            clearable>
+            <el-option
+              v-for="level in availableSubLevels"
+              :key="level"
+              :label="`admin-level-${level}`"
+              :value="level"/>
+          </el-select>
+          <el-select
+            v-model="secondSubLevelType"
+            placeholder="Sub level name"
+            clearable>
+            <el-option
+              v-for="name in secondSubLevelTypes"
+              :key="name.name"
+              :label="name.displayName"
+              :value="name.name"/>
+          </el-select>
+        </div>
+
+        <div
+          v-show="showSecondSubLevelList"
+          class="sub-level-list"
+        >
+          <h5> List of {{ secondSubLevelType }}</h5>
+          <ul>
+            <li
+              v-for="item in secondSubLevelList"
+              :key="item.id"
+            >
+              {{ item.name }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="MapSettingSection">
+        <h5>Facility Import</h5>
+        <facility-import
+          v-show="showFirstSubLevelList"
+          ref="facilityImporter"
+          :places="places"
+        />
+        <p v-show="!showFirstSubLevelList">Select at least one level to use the facility import</p>
+      </div>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -304,95 +312,120 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.main-container {
-  position: relative;
-  max-height: 750px;
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
-  .el-header {
-    position: absolute;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-  .title-bar {
-    .el-card__body {
-      display: flex;
-      justify-content: space-between;
-    }
-    .page-title {
-      display: inline-flex;
-      line-height: 2em;
-      span {
-        margin-right: 1em;
+  .CountryMapCustomizer {
+    align-items: stretch;
+
+    > .el-col {
+      // Left side - Vue map
+      &:first-child {}
+
+      // Right side - Levels & Facilities
+      &:last-child {
+        // sbackground-color: red;
       }
-      img {
-        height: 2em;
-        margin-right: 1em;
+
+      .CountryMapHeader,
+      .CountryMapSettings {
+        height: @dialogHeaderFooterHeight;
+        padding: 0 40px;
+        background-color: @colorWhite;
       }
-    }
-  }
 
-  .selected-country {
-    h5,
-    h6 {
-      padding: 0;
-      margin: 0;
-    }
-
-    img {
-      width: 24px;
-      height: 12px;
-    }
-  }
-
-  .el-main {
-    margin-top: 70px;
-  }
-
-  .MapContainer {
-    height: 500px;
-  }
-  .map-container {
-    height: 500px;
-
-    .country {
-      fill: #e3e5ee;
-    }
-
-    .first-sub-level {
-      fill: #e3e5ee;
-      stroke: #9b9da8;
-      stroke-width: 2px;
-    }
-
-    .second-sub-level {
-      fill: #e3e5ee;
-      stroke: #283593;
-      stroke-width: 1px;
-    }
-
-    .label {
-      &.hidden {
-        display: none;
+      .MapContainer {
+        height: 500px;
       }
-    }
-  }
 
-  .side-selector {
-    height: 600px;
-    overflow-y: scroll;
+      .map-container {
+        height: 500px;
 
-    .sub-level-list {
-      ul {
-        margin-left: 10px;
-        padding-left: 0px;
-        li {
-          cursor: zoom-in;
+        .country {
+          fill: #e3e5ee;
+        }
+
+        .first-sub-level {
+          fill: #e3e5ee;
+          stroke: #9b9da8;
+          stroke-width: 2px;
+        }
+
+        .second-sub-level {
+          fill: #e3e5ee;
+          stroke: #283593;
+          stroke-width: 1px;
+        }
+
+        .label {
+          &.hidden {
+            display: none;
+          }
         }
       }
     }
   }
-}
+
+  .main-container {
+    position: relative;
+    max-height: 750px;
+
+    .el-header {
+      position: absolute;
+      z-index: 10;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+    .title-bar {
+      .el-card__body {
+        display: flex;
+        justify-content: space-between;
+      }
+      .page-title {
+        display: inline-flex;
+        line-height: 2em;
+        span {
+          margin-right: 1em;
+        }
+        img {
+          height: 2em;
+          margin-right: 1em;
+        }
+      }
+    }
+
+    .selected-country {
+      h5,
+      h6 {
+        padding: 0;
+        margin: 0;
+      }
+
+      img {
+        width: 24px;
+        height: 12px;
+      }
+    }
+
+    .el-main {
+      margin-top: 70px;
+    }
+
+    .side-selector {
+      height: 600px;
+      overflow-y: scroll;
+
+      .sub-level-list {
+        ul {
+          margin-left: 10px;
+          padding-left: 0px;
+          li {
+            cursor: zoom-in;
+          }
+        }
+      }
+    }
+  }
 </style>

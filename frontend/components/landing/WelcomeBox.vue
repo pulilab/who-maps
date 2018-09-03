@@ -55,7 +55,7 @@ export default {
 
   .WelcomeBox-holder {
     .WelcomeBox {
-      z-index: 400;
+      z-index: 410;
       position: absolute;
       bottom: 40px;
       left: 40px;

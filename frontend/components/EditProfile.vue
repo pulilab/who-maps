@@ -71,7 +71,7 @@
             <h5
               v-if="userTypeRequested"
               class="RoleRequested"><fa
-                icon="sync-alt"
+                icon="circle-notch"
                 spin />User role requested!</h5>
 
             <p v-if="userTypeRequested">Waiting for admin approval — you're still able to change your request by selecting an other role and saving your settings!</p>
@@ -569,8 +569,8 @@ export default {
             margin: 0;
 
             .svg-inline--fa {
-              margin-right: 8px;
-              color: @colorBrandAccent;
+              margin-right: 6px;
+              color: darken(@colorDraft, 15%);
             }
 
             + p {
@@ -585,7 +585,7 @@ export default {
             font-weight: 400;
 
             .svg-inline--fa {
-              margin-right: 8px;
+              margin-right: 6px;
               color: #67C23A;
             }
           }

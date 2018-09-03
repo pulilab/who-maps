@@ -187,12 +187,16 @@
       </el-row>
     </collapsible-card>
 
-    <collapsible-card title="Country specific questionaire">
+    <collapsible-card
+      title="Country specific questionaire"
+      class="CountryQuestionaire">
       <h1>Country specific questionaire</h1>
       <dha-questionaire :label="'Country specific questionaire'"/>
     </collapsible-card>
 
-    <collapsible-card title="Country map">
+    <collapsible-card
+      title="Country map"
+      class="CountryMap">
       <div v-if="!country.map_files.length || forceMapFileChange">
         <el-form
           label-width="215px"
@@ -217,29 +221,24 @@
           </el-form-item>
         </el-form>
       </div>
+
       <div v-if="country.map_files.length && !forceMapFileChange">
         <vue-map-customizer/>
       </div>
-      <a
-        ref="hiddenMapDownload"
-        :href="`/api/countries/map-download/${country.id}/`"
-        style="display: none"
-        download>Hidden but needed element!</a>
-      <el-button @click="$refs.hiddenMapDownload.click()">
-        Download map file
-      </el-button>
-      <el-button @click="showMapUploader">
-        <span v-show="forceMapFileChange">Cancel</span>
-        <span v-show="!forceMapFileChange">Change map file</span>
-      </el-button>
     </collapsible-card>
 
     <div class="AdminActionBarBottom">
       <el-row
         type="flex"
+        align="middle"
         justify="space-between">
-        <el-button>Dismiss changes</el-button>
-        <el-button @click="saveChanges">Save changes</el-button>
+        <el-button
+          type="text"
+          class="CancelButton">Dismiss changes</el-button>
+        <el-button
+          type="primary"
+          size="medium"
+          @click="saveChanges">Save changes</el-button>
       </el-row>
     </div>
   </div>
@@ -623,10 +622,43 @@ export default {
         .el-transfer-panel {
           width: 100%;
           // max-height: 50vh;
+
+          // &:first-child {
+          //   .el-transfer-panel__header {
+          //     background-color: lighten(@colorDraft, 33%);
+          //   }
+          // }
+          //
+          // &:last-child {
+          //   .el-transfer-panel__header {
+          //     background-color: lighten(@colorPublished, 52%);
+          //   }
+          // }
         }
 
         .el-transfer-buttons {}
       }
+    }
+
+    .CountryQuestionaire {
+      .ContentContainer {
+        padding: 20px;
+      }
+    }
+
+    .CountryMap {
+      .ContentContainer {
+        padding: 0;
+      }
+    }
+
+    .AdminActionBarBottom {
+      box-sizing: border-box;
+      min-width: @cardSizeMedium;
+      max-width: @cardSizeMedium;
+      margin: 40px auto;
+      padding: 40px 0;
+      border-top: 1px solid @colorGrayLight;
     }
   }
 </style>
