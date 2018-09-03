@@ -161,6 +161,10 @@
               </li>
             </ul>
           </simple-field>
+
+          <simple-field header="Donor(s)">
+            <donors-list :value="project.donors" />
+          </simple-field>
         </collapsible-card>
 
         <collapsible-card
@@ -242,6 +246,7 @@ import SubLevelCoverageField from './SubLevelCoverageField';
 import LicensesList from './LicensesList';
 import StandardsList from './StandardsList';
 import InteroperabilityLinksList from './InteroperabilityLinksList';
+import DonorsList from '../common/list/DonorsList';
 
 import { mapGetters } from 'vuex';
 
@@ -262,7 +267,8 @@ export default {
     SubLevelCoverageField,
     LicensesList,
     StandardsList,
-    InteroperabilityLinksList
+    InteroperabilityLinksList,
+    DonorsList
   },
   props: {
     showDraft: {
