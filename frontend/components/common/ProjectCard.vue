@@ -12,7 +12,7 @@
         <el-col :span="22">
           <el-row class="ProjectName">
             <el-col>
-              Hello Mama
+              {{ project.name }}
             </el-col>
           </el-row>
 
@@ -24,16 +24,16 @@
               v-show="showCountry"
               class="Country"
             >
-              Sierra Leone
+              <country-item :id="project.country" />
             </el-col>
             <el-col
               v-show="showOrganisation"
               class="Organisation"
             >
-              eHealth Africa
+              <organisation-item :id="project.organisation" />
             </el-col>
             <el-col
-              v-show="showVerified"
+              v-show="verified"
               class="Verified"
             >
               <fa icon="check-circle" />
@@ -61,7 +61,7 @@
               v-show="showArrow"
               icon="arrow-right" />
           </transition>
-          <project-legend :id="id" />
+          <project-legend :id="project.id" />
         </el-col>
       </el-row>
     </div>
@@ -70,15 +70,19 @@
 
 <script>
 import ProjectLegend from './ProjectLegend';
+import CountryItem from './CountryItem';
+import OrganisationItem from './OrganisationItem';
 
 export default {
   components: {
-    ProjectLegend
+    ProjectLegend,
+    CountryItem,
+    OrganisationItem
   },
   props: {
-    id: {
-      type: Number,
-      default: null
+    project: {
+      type: Object,
+      default: () => ({})
     },
     showCountry: {
       type: Boolean,
@@ -116,11 +120,14 @@ export default {
     },
     showArrow () {
       return this.hovered && this.showArrowOnOver;
+    },
+    verified () {
+      return this.showVerified && this.project.approved;
     }
   },
   methods: {
     goToProject () {
-      const path = this.localePath({name: 'organisation-projects-id', params: {...this.$route.params, id: 1}});
+      const path = this.localePath({name: 'organisation-projects-id', params: {...this.$route.params, id: this.project.id}});
       this.$router.push(path);
     },
     mouseEnterHandler () {
