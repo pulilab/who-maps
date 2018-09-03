@@ -17,11 +17,11 @@
         </span>
         <a
           v-if="link"
-          :href="content"
+          :href="formattedLink"
           target="_blank"
           class="TextLink"
         >
-          {{ content }}
+          {{ formattedLink }}
         </a>
       </template>
       <template v-if="!showContent">
@@ -70,6 +70,14 @@ export default {
         return format(this.content, 'DD/MM/YYYY');
       }
       return this.content;
+    },
+    formattedLink () {
+      if (this.content) {
+        if (!this.content.match(/^[a-zA-Z]+:\/\//)) {
+          return 'http://' + this.content;
+        }
+        return this.content;
+      }
     }
   }
 };
