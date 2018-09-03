@@ -1,6 +1,3 @@
-// import * as ProjectModule from './projects';
-// import * as CountriesModule from './countries';
-
 export const state = () => ({
   profiles: [],
   search_filters: [],
