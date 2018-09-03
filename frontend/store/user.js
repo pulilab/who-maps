@@ -106,9 +106,7 @@ export const mutations = {
   },
 
   UPDATE_TEAM_VIEWER: (state, {member, viewer}) => {
-    console.log(member, viewer);
     state.profile = {...state.profile, member, viewer};
-    console.log(state.profile);
   },
 
   SET_DONORS: (state, donors) => {
