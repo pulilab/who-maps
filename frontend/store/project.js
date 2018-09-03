@@ -89,16 +89,13 @@ export const actions = {
     const published = {...clean, ...apiReadParser(data.published)};
     const draft = {...clean, ...apiReadParser(data.draft)};
     commit('SET_PUBLISHED', Object.freeze(published));
-    await dispatch('setProjectState', draft);
+    commit('INIT_PROJECT', draft);
     await dispatch('loadTeamViewers', id);
   },
   async loadTeamViewers ({commit}, projectId) {
     const { data } = await this.$axios.get(`/api/projects/${projectId}/groups/`);
     commit('SET_TEAM', data.team);
     commit('SET_VIEWERS', data.viewers);
-  },
-  async setProjectState ({commit}, project) {
-    commit('INIT_PROJECT', project);
   },
   resetProjectState ({dispatch, commit, rootGetters}) {
     const clean = cleanState();
@@ -107,7 +104,7 @@ export const actions = {
       clean.country = profile.country;
       clean.team = [profile.id];
     }
-    dispatch('setProjectState', clean);
+    commit('INIT_PROJECT', clean);
     commit('SET_TEAM', clean.team);
     commit('SET_VIEWERS', clean.viewers);
   },
