@@ -147,6 +147,23 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()["footer_text"], data["footer_text"])
         self.assertEqual(response.json()["project_approval"], data["project_approval"])
 
+    def test_superuser_country_admin_update(self):
+        user = UserProfile.objects.get(id=self.test_user['user_profile_id']).user
+        user.is_superuser = True
+        user.save()
+
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        data = {
+            "cover_text": "blah",
+            "footer_text": "foo",
+            "project_approval": True
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["cover_text"], data["cover_text"])
+        self.assertEqual(response.json()["footer_text"], data["footer_text"])
+        self.assertEqual(response.json()["project_approval"], data["project_approval"])
+
     def test_country_admin_update_noperm_fails(self):
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         data = {
@@ -178,6 +195,21 @@ class CountryTests(APITestCase):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
             account_type=UserProfile.SUPER_DONOR_ADMIN, country=self.country)
         self.country.super_admins.add(self.test_user['user_profile_id'])
+
+        url = reverse("country-image-detail", kwargs={"pk": self.country.id})
+        cover = get_temp_image("cover")
+        logo = get_temp_image("logo")
+        data = {
+            "cover": cover,
+            "logo": logo
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+
+    def test_country_superuser_update_images(self):
+        user = UserProfile.objects.get(id=self.test_user['user_profile_id']).user
+        user.is_superuser = True
+        user.save()
 
         url = reverse("country-image-detail", kwargs={"pk": self.country.id})
         cover = get_temp_image("cover")
@@ -248,6 +280,28 @@ class CountryTests(APITestCase):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
             account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
         self.country.super_admins.add(self.test_user['user_profile_id'])
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
+                                                  account_type=UserProfile.GOVERNMENT)
+        user2 = User.objects.create(username="test2", password="12345678")
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
+                                                  account_type=UserProfile.COUNTRY_ADMIN)
+        user3 = User.objects.create(username="test3", password="12345678")
+        userprofile3 = UserProfile.objects.create(user=user3, name="test3", country=self.country,
+                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
+        self.assertEqual(response.json()["super_admin_requests"][0]['id'], userprofile3.id)
+
+    def test_country_superuser_retrieve_super_admin_requests(self):
+        user = UserProfile.objects.get(id=self.test_user['user_profile_id']).user
+        user.is_superuser = True
+        user.save()
 
         user1 = User.objects.create(username="test1", password="12345678")
         userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
@@ -446,6 +500,20 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 201)
 
+    def test_country_superuser_partner_logos_create(self):
+        user = UserProfile.objects.get(id=self.test_user['user_profile_id']).user
+        user.is_superuser = True
+        user.save()
+
+        url = reverse("country-partner-logo-list")
+        logo = get_temp_image("logo")
+        data = {
+            "country": self.country.id,
+            "image": logo
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
     def test_country_partner_logos_list(self):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
             account_type=UserProfile.SUPER_DONOR_ADMIN, country=self.country)
@@ -481,6 +549,24 @@ class CountryTests(APITestCase):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
             account_type=UserProfile.SUPER_DONOR_ADMIN, country=self.country)
         self.country.super_admins.add(self.test_user['user_profile_id'])
+
+        url = reverse("country-partner-logo-list")
+        logo = get_temp_image("logo")
+        data = {
+            "country": self.country.id,
+            "image": logo
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+        url = reverse("country-partner-logo-detail", kwargs={"pk": response.json()["id"]})
+        response = self.test_user_client.delete(url)
+        self.assertEqual(response.status_code, 204)
+
+    def test_country_superuser_partner_logos_delete(self):
+        user = UserProfile.objects.get(id=self.test_user['user_profile_id']).user
+        user.is_superuser = True
+        user.save()
 
         url = reverse("country-partner-logo-list")
         logo = get_temp_image("logo")
@@ -1221,6 +1307,21 @@ class DonorTests(APITestCase):
         self.assertEqual(response.json()["cover_text"], data["cover_text"])
         self.assertEqual(response.json()["footer_text"], data["footer_text"])
 
+    def test_superuser_donor_admin_update(self):
+        user = UserProfile.objects.get(id=self.test_user['user_profile_id']).user
+        user.is_superuser = True
+        user.save()
+
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        data = {
+            "cover_text": "blah",
+            "footer_text": "foo"
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["cover_text"], data["cover_text"])
+        self.assertEqual(response.json()["footer_text"], data["footer_text"])
+
     def test_donor_admin_update_fields_fails(self):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
             account_type=UserProfile.DONOR_ADMIN, donor=self.donor)
@@ -1271,6 +1372,21 @@ class DonorTests(APITestCase):
         response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
 
+    def test_donor_superuser_update_images(self):
+        user = UserProfile.objects.get(id=self.test_user['user_profile_id']).user
+        user.is_superuser = True
+        user.save()
+
+        url = reverse("donor-image-detail", kwargs={"pk": self.donor.id})
+        cover = get_temp_image("cover")
+        logo = get_temp_image("logo")
+        data = {
+            "cover": cover,
+            "logo": logo
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+
     def test_donor_admin_retrieve_admin_requests(self):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
             account_type=UserProfile.DONOR_ADMIN, donor=self.donor)
@@ -1294,6 +1410,28 @@ class DonorTests(APITestCase):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
             account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
         self.donor.super_admins.add(self.test_user['user_profile_id'])
+
+        user1 = User.objects.create(username="test1", password="12345678")
+        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
+                                                  account_type=UserProfile.DONOR)
+        user2 = User.objects.create(username="test2", password="12345678")
+        userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
+                                                  account_type=UserProfile.DONOR_ADMIN)
+        user3 = User.objects.create(username="test3", password="12345678")
+        userprofile3 = UserProfile.objects.create(user=user3, name="test3", donor=self.donor,
+                                                  account_type=UserProfile.SUPER_DONOR_ADMIN)
+
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
+        self.assertEqual(response.json()["super_admin_requests"][0]['id'], userprofile3.id)
+
+    def test_donor_superuser_retrieve_super_admin_requests(self):
+        user = UserProfile.objects.get(id=self.test_user['user_profile_id']).user
+        user.is_superuser = True
+        user.save()
 
         user1 = User.objects.create(username="test1", password="12345678")
         userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
@@ -1437,6 +1575,38 @@ class DonorTests(APITestCase):
         }
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, 201)
+
+    def test_donor_superuser_partner_logos_create_get(self):
+        user = UserProfile.objects.get(id=self.test_user['user_profile_id']).user
+        user.is_superuser = True
+        user.save()
+
+        url = reverse("donor-partner-logo-list")
+        logo = get_temp_image("logo")
+        data = {
+            "donor": self.donor.id,
+            "image": logo
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+    def test_donor_superuser_partner_logos_delete(self):
+        user = UserProfile.objects.get(id=self.test_user['user_profile_id']).user
+        user.is_superuser = True
+        user.save()
+
+        url = reverse("donor-partner-logo-list")
+        logo = get_temp_image("logo")
+        data = {
+            "donor": self.donor.id,
+            "image": logo
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+
+        url = reverse("donor-partner-logo-detail", kwargs={"pk": response.json()["id"]})
+        response = self.test_user_client.delete(url)
+        self.assertEqual(response.status_code, 204)
 
     def test_donor_partner_logos_list(self):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(

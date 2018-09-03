@@ -60,7 +60,8 @@ class CountryViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateM
             profile = self.request.user.userprofile
             if profile.account_type == UserProfile.COUNTRY_ADMIN and profile in country.admins.all():
                 return AdminCountrySerializer
-            if profile.account_type == UserProfile.SUPER_COUNTRY_ADMIN and profile in country.super_admins.all():
+            if profile.account_type == UserProfile.SUPER_COUNTRY_ADMIN and profile in country.super_admins.all() \
+                    or self.request.user.is_superuser:
                 return SuperAdminCountrySerializer
         return super().get_serializer_class()
 
@@ -77,7 +78,8 @@ class DonorViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateMod
             profile = self.request.user.userprofile
             if profile.account_type == UserProfile.DONOR_ADMIN and profile in donor.admins.all():
                 return AdminDonorSerializer
-            if profile.account_type == UserProfile.SUPER_DONOR_ADMIN and profile in donor.super_admins.all():
+            if profile.account_type == UserProfile.SUPER_DONOR_ADMIN and profile in donor.super_admins.all() \
+                    or self.request.user.is_superuser:
                 return SuperAdminDonorSerializer
         return super().get_serializer_class()
 
