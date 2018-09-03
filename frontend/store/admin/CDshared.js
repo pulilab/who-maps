@@ -152,9 +152,9 @@ export const actions = {
   async synchPartnerLogos ({ getters, dispatch }) {
     const promArr = [];
 
-    console.log('DDAATTAA');
-    console.log(getters.getData);
-    console.log(getters.getData.partner_logos);
+    // console.log('DDAATTAA');
+    // console.log(getters.getData);
+    // console.log(getters.getData.partner_logos);
     (getters.getData.partner_logos || []).forEach(async logo => {
       if (logo.raw) {
         promArr.push({action: 'postPartnerLogo', data: logo.raw});
