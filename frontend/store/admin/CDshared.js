@@ -152,26 +152,23 @@ export const actions = {
   async synchPartnerLogos ({ getters, dispatch }) {
     const promArr = [];
 
-    console.log('DDAATTAA');
-    console.log(getters.getData);
-    console.log(getters.getData.partner_logos);
     (getters.getData.partner_logos || []).forEach(async logo => {
       if (logo.raw) {
-        promArr.push({action: 'postPartnerLogo', data: logo.raw});
+        promArr.push({action: 'postPartnerLogo', data: {img: logo.raw}});
       }
     });
 
     (getters.getStableData.partner_logos || []).forEach(async logo => {
       const isStillThere = !!getters.getData.partner_logos.find(newLogo => newLogo.id === logo.id);
       if (!isStillThere) {
-        promArr.push({action: 'delPartnerLogo', id: logo.id});
+        promArr.push({action: 'delPartnerLogo', data: {id: logo.id}});
       }
     });
 
     return Promise.all(promArr.map(promObj => dispatch(promObj.action, promObj.data)));
   },
 
-  async postPartnerLogo ({ state, rootGetters }, img) {
+  async postPartnerLogo ({ state, rootGetters }, { img }) {
     const id = rootGetters['user/getProfile'][state.type];
     const formData = new FormData();
     formData.append(state.type, id);
@@ -183,7 +180,7 @@ export const actions = {
     });
   },
 
-  async delPartnerLogo ({ state }, id) {
+  async delPartnerLogo ({ state }, { id }) {
     await this.$axios.delete(`/api/${state.type}-partner-logos/${id}/`);
   },
 
