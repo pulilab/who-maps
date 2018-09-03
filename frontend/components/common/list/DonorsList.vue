@@ -5,7 +5,13 @@
       <li
         v-for="p in selected"
         :key="p.id"
+        class="DonorItem"
       >
+        <span v-show="showIcon">
+          <fa
+            icon="user-tie"
+            size="xs" />
+        </span>
         <span>{{ p.name }}</span>
       </li>
     </ul>
@@ -25,6 +31,10 @@ export default {
     limit: {
       type: Number,
       default: null
+    },
+    showIcon: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
