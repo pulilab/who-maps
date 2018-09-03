@@ -164,13 +164,13 @@ export default {
             required: true
           },
           health_workers: {
-            required: this.project.coverageType === 1
+            required: true
           },
           clients: {
-            required: this.project.coverageType === 1
+            required: true
           },
           facilities: {
-            required: this.project.coverageType === 1
+            required: true
           },
           facilities_list: {
             required: true,
@@ -191,19 +191,18 @@ export default {
             required: false
           },
           facilities_list: {
-            required: false,
-            min: 1
+            required: false
           }
         },
         national_level_deployment: {
           health_workers: {
-            required: this.project.coverageType === 2
+            required: true
           },
           clients: {
-            required: this.project.coverageType === 2
+            required: true
           },
           facilities: {
-            required: this.project.coverageType === 2
+            required: true
           }
         },
         government_investor: {
@@ -266,9 +265,10 @@ export default {
     },
     handleErrorMessages () {
       this.$nextTick(() => {
-        const errors = this.$el.querySelectorAll('.is-error');
-        if (errors && errors.length > 0) {
-          errors[0].scrollIntoView();
+        const errors = [...this.$el.querySelectorAll('.is-error')];
+        const visibleErrors = errors.filter(e => e.offsetParent !== null);
+        if (visibleErrors && visibleErrors.length > 0) {
+          visibleErrors[0].scrollIntoView();
         } else {
           this.$alert('There was an un-caught validation error an automatic report has been submitted', 'Warning', {
             confirmButtonText: 'Close'
@@ -276,7 +276,8 @@ export default {
           this.$raven.captureMessage('Un-caught validation error in project page', {
             level: 'warning',
             extra: {
-              apiErrors: this.apiErrors
+              apiErrors: this.apiErrors,
+              errors
             }
           });
         }
@@ -289,6 +290,7 @@ export default {
         this.$refs.technologyOverview.validate(),
         this.$refs.interoperabilityAndStandards.validate()
       ]);
+      console.log('root validations', validations);
       return validations.reduce((a, c) => a && c, true);
     },
     clearValidation () {
