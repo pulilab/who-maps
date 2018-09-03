@@ -164,13 +164,16 @@ export default {
             required: true
           },
           health_workers: {
-            required: true
+            required: true,
+            integer: true
           },
           clients: {
-            required: true
+            required: true,
+            integer: true
           },
           facilities: {
-            required: true
+            required: true,
+            integer: true
           },
           facilities_list: {
             required: true,
@@ -182,13 +185,16 @@ export default {
             required: false
           },
           health_workers: {
-            required: false
+            required: false,
+            integer: true
           },
           clients: {
-            required: false
+            required: false,
+            integer: true
           },
           facilities: {
-            required: false
+            required: false,
+            integer: true
           },
           facilities_list: {
             required: false
