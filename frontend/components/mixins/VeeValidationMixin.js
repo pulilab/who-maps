@@ -33,7 +33,7 @@ export default {
             const first = item[0];
             if (first.constructor === Object) {
               item.forEach((innerError, key) => {
-                const scope = errorLibrary[key] + key;
+                const scope = errorLibrary[field] + key;
                 this.scopes.push(scope);
                 for (let innerField in innerError) {
                   this.errors.add({
