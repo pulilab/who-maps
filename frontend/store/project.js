@@ -97,36 +97,8 @@ export const actions = {
     commit('SET_TEAM', data.team);
     commit('SET_VIEWERS', data.viewers);
   },
-  async setProjectState ({dispatch, commit}, project) {
-    dispatch('setName', project.name);
-    dispatch('setOrganisation', project.organisation);
-    dispatch('setCountry', project.country);
-    dispatch('setGeographicScope', project.geographic_scope);
-    dispatch('setImplementationOverview', project.implementation_overview);
-    dispatch('setStartDate', project.start_date);
-    dispatch('setEndDate', project.end_date);
-    dispatch('setContactName', project.contact_name);
-    dispatch('setContactEmail', project.contact_email);
-    dispatch('setPlatforms', project.platforms);
-    dispatch('setDigitalHealthInterventions', project.digitalHealthInterventions);
-    dispatch('setHealthFocusAreas', project.health_focus_areas);
-    dispatch('setHscChallenges', project.hsc_challenges);
-    dispatch('setHisBucket', project.his_bucket);
-    dispatch('setCoverageType', project.coverageType);
-    dispatch('setCoverage', project.coverage);
-    commit('SET_COVERAGE_DATA', project.coverageData);
-    dispatch('setCoverageSecondLevel', project.coverage_second_level);
-    dispatch('setNationalLevelDeployment', project.national_level_deployment);
-    dispatch('setGovernmentInvestor', project.government_investor);
-    dispatch('setImplementingPartners', project.implementing_partners);
-    dispatch('setDonors', project.donors);
-    dispatch('setImplementationDates', project.implementation_dates);
-    dispatch('setLicenses', project.licenses);
-    dispatch('setRepository', project.repository);
-    dispatch('setMobileApplication', project.mobile_application);
-    dispatch('setWiki', project.wiki);
-    dispatch('setInteroperabilityLinks', project.interoperability_links);
-    dispatch('setInteroperabilityStandards', project.interoperability_standards);
+  async setProjectState ({commit}, project) {
+    commit('INIT_PROJECT', project);
   },
   resetProjectState ({dispatch, commit, rootGetters}) {
     const clean = cleanState();
@@ -307,9 +279,6 @@ export const actions = {
 };
 
 export const mutations = {
-  SET_PROJECT_STATE: (state, value) => {
-    state = value;
-  },
   SET_NAME: (state, name) => {
     state.name = name;
   },
@@ -411,6 +380,39 @@ export const mutations = {
   },
   SET_LOADING: (state, loading) => {
     state.loading = loading;
+  },
+  INIT_PROJECT: (state, project) => {
+    state.name = project.name;
+    state.organisation = project.organisation;
+    state.country = project.country;
+    state.geographic_scope = project.geographic_scope;
+    state.implementation_overview = project.implementation_overview;
+    state.start_date = project.start_date;
+    state.end_date = project.end_date;
+    state.contact_name = project.contact_name;
+    state.contact_email = project.contact_email;
+    state.team = project.team;
+    state.viewers = project.viewers;
+    state.platforms = project.platforms;
+    state.digitalHealthInterventions = project.digitalHealthInterventions;
+    state.health_focus_areas = project.health_focus_areas;
+    state.hsc_challenges = project.hsc_challenges;
+    state.his_bucket = project.his_bucket;
+    state.coverageType = project.coverageType;
+    state.coverage = project.coverage;
+    state.coverageData = project.coverageData;
+    state.coverage_second_level = project.coverage_second_level;
+    state.national_level_deployment = project.national_level_deployment;
+    state.government_investor = project.government_investor;
+    state.implementing_partners = project.implementing_partners;
+    state.donors = project.donors;
+    state.implementation_dates = project.implementation_dates;
+    state.licenses = project.licenses;
+    state.repository = project.repository;
+    state.mobile_application = project.mobile_application;
+    state.wiki = project.wiki;
+    state.interoperability_links = project.interoperability_links;
+    state.interoperability_standards = project.interoperability_standards;
   }
 
 };
