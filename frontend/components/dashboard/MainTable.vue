@@ -24,7 +24,7 @@
         width="240">
         <template slot-scope="scope">
           <project-card
-            :id="scope.row.id"
+            :project="scope.row"
             hide-borders
             show-verified
           />
@@ -59,18 +59,9 @@
         label="Donors"
         width="240">
         <template slot-scope="scope">
-          <span
-            v-for="(donor, index) in scope.row.donors"
-            :key="index"
-            class="DonorItem"
-          >
-            <span>
-              <fa
-                icon="user-tie"
-                size="xs" />
-            </span>
-            <span>{{ donor }}</span>
-          </span>
+          <donors-list
+            :value="scope.row.donors"
+            show-icon />
         </template>
       </el-table-column>
       <el-table-column
@@ -118,7 +109,7 @@
     <div class="Pagination">
       <el-pagination
         :current-page.sync="currentPage"
-        :page-size="pageSize"
+        :page-size.sync="pageSize"
         :page-sizes="pageSizeOption"
         :total="total"
         layout="sizes, prev, slot, next"
@@ -134,23 +125,25 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { mapGettersActions } from '../../utilities/form.js';
 
 import ProjectCard from '../common/ProjectCard';
 import CountryItem from '../common/CountryItem';
 import OrganisationItem from '../common/OrganisationItem';
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
+import DonorsList from '../common/list/DonorsList';
 
 export default {
   components: {
     ProjectCard,
     CountryItem,
     OrganisationItem,
-    HealthFocusAreasList
+    HealthFocusAreasList,
+    DonorsList
   },
   data () {
     return {
       currentPage: 1,
-      pageSize: 10,
       total: 450,
       pageSizeOption: [10, 20, 50, 100],
       tableMaxHeight: 200
@@ -162,6 +155,9 @@ export default {
       selectedColumns: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
       selectAll: 'dashboard/getSelectAll'
+    }),
+    ...mapGettersActions({
+      pageSize: ['dashboard', 'getPageSize', 'setPageSize', 0]
     }),
     min () {
       return 1 + this.pageSize * (this.currentPage - 1);
@@ -291,16 +287,21 @@ export default {
           line-height: inherit;
         }
       }
+      .DonorList {
+        ul {
+          padding: 0;
+          margin: 0;
+        }
+        .DonorItem {
+          display: inline-flex;
+          align-items: flex-start;
+          width: 100%;
 
-      .DonorItem {
-        display: inline-flex;
-        align-items: flex-start;
-        width: 100%;
-
-        .svg-inline--fa {
-          position: relative;
-          top: -1px;
-          margin-right: 5px;
+          .svg-inline--fa {
+            position: relative;
+            top: -1px;
+            margin-right: 5px;
+          }
         }
       }
 
