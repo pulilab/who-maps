@@ -116,14 +116,22 @@ export const actions = {
   async loadOrganisations ({ commit, rootGetters }) {
     const profile = rootGetters['user/getProfile'];
     if (profile) {
-      const { data } = await this.$axios.get(`/api/organisations/`);
-      commit('SET_SYSTEM_ORGANISATIONS', data);
+      try {
+        const { data } = await this.$axios.get(`/api/organisations/`);
+        commit('SET_SYSTEM_ORGANISATIONS', data);
+      } catch (e) {
+        console.error('failed to load organisation');
+      }
     }
   },
 
   async loadDonors ({ commit }) {
-    const { data } = await this.$axios.get(`/api/donors/`);
-    commit('SET_DONORS', data);
+    try {
+      const { data } = await this.$axios.get(`/api/donors/`);
+      commit('SET_DONORS', data);
+    } catch (e) {
+      console.error('failed to load donors');
+    }
   },
 
   async addOrganisation ({ commit, dispatch }, name) {
