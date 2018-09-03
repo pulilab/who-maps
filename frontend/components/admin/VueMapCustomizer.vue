@@ -27,6 +27,17 @@
             <span v-show="forceMapFileChange">Cancel</span>
             <span v-show="!forceMapFileChange">Change map file</span>
           </el-button> -->
+          <el-button
+            type="text"
+            class="">
+            Download map file
+          </el-button>
+          <el-button
+            type="text"
+            class="">
+            <span v-show="forceMapFileChange">Cancel</span>
+            <span v-show="!forceMapFileChange">Change map file</span>
+          </el-button>
         </el-col>
       </el-row>
 
@@ -398,13 +409,20 @@ export default {
         background-color: @colorWhite;
 
         .CountryMapTitle {
-          width: 100%;
+          // width: 100%;
           font-size: @fontSizeMedium;
           font-weight: 700;
+          .textTruncate();
         }
 
         .CountryMapFile {
-          width: auto;
+          // width: auto;
+          text-align: right;
+
+          .el-button {
+            margin-left: 20px;
+            padding: 0;
+          }
         }
       }
 
