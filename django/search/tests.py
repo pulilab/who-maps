@@ -3,6 +3,7 @@ import itertools
 
 from django.urls import reverse
 
+from country.models import Donor
 from project.models import Project, DigitalStrategy, HealthFocusArea, HSCChallenge
 from project.tests import SetupTests
 
@@ -235,7 +236,11 @@ class SearchTests(SetupTests):
         self.assertEqual(response.json()['count'], 0)
 
     def test_filter_donor(self):
-        pass
+        url = reverse("search-project-list")
+        data = {"donor": Donor.objects.all()[0].id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
 
     def test_filter_gov(self):
         url = reverse("search-project-list")

@@ -65,6 +65,8 @@ export const actions = {
   async loadProfile ({ commit, getters }, profileId) {
     if (getters.getToken && !getters.getProfile) {
       let { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`);
+      // console.log('userProfile');
+      // console.log(data);
       commit('SET_PROFILE', data);
     }
   },

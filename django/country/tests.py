@@ -113,7 +113,26 @@ class CountryTests(APITestCase):
         self.assertIn("footer_text", response_keys)
         self.assertIn("map_data", response_keys)
 
-    def test_country_admin_update(self):
+    def test_country_admin_retrieve_without_map_version(self):
+        country2 = Country.objects.create(name="country2", code="CC2")
+        url = reverse("country-detail", kwargs={"pk": country2.id})
+        response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['map_version'], 0)
+        response_keys = response.json().keys()
+        self.assertIn("name", response_keys)
+        self.assertIn("code", response_keys)
+        self.assertIn("logo", response_keys)
+        self.assertIn("cover", response_keys)
+        self.assertIn("cover_text", response_keys)
+        self.assertIn("footer_text", response_keys)
+        self.assertIn("map_data", response_keys)
+
+    def test_super_country_admin_update(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']) \
+            .update(account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         data = {
             "cover_text": "blah",
@@ -126,7 +145,38 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()["footer_text"], data["footer_text"])
         self.assertEqual(response.json()["project_approval"], data["project_approval"])
 
+    def test_country_admin_update_noperm_fails(self):
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        data = {
+            "cover_text": "blah",
+            "footer_text": "foo",
+            "project_approval": True
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 403)
+
+    def test_country_admin_update_info_fails(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']) \
+            .update(account_type=UserProfile.COUNTRY_ADMIN, country=self.country)
+        self.country.admins.add(self.test_user['user_profile_id'])
+
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        data = {
+            "cover_text": "blah",
+            "footer_text": "foo",
+            "project_approval": True
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(response.json()["cover_text"], data["cover_text"])
+        self.assertNotEqual(response.json()["footer_text"], data["footer_text"])
+        self.assertNotEqual(response.json()["project_approval"], data["project_approval"])
+
     def test_country_admin_update_images(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
         url = reverse("country-image-detail", kwargs={"pk": self.country.id})
         cover = get_temp_image("cover")
         logo = get_temp_image("logo")
@@ -137,7 +187,22 @@ class CountryTests(APITestCase):
         response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
 
+    def test_country_admin_update_images_noperm_fail(self):
+        url = reverse("country-image-detail", kwargs={"pk": self.country.id})
+        cover = get_temp_image("cover")
+        logo = get_temp_image("logo")
+        data = {
+            "cover": cover,
+            "logo": logo
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 403)
+
     def test_country_admin_delete_images(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
         url = reverse("country-image-detail", kwargs={"pk": self.country.id})
         cover = get_temp_image("cover")
         logo = get_temp_image("logo")
@@ -172,7 +237,9 @@ class CountryTests(APITestCase):
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
+        self.assertEqual(response.json()["user_requests"][0]['email'], userprofile1.user.email)
         self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
+        self.assertEqual(response.json()["admin_requests"][0]['email'], userprofile2.user.email)
         self.assertEqual(response.json()["super_admin_requests"], [])
 
     def test_country_admin_retrieve_super_admin_requests(self):
@@ -350,11 +417,24 @@ class CountryTests(APITestCase):
         }
         response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue("super_admins" not in response.json().keys())
         self.country.refresh_from_db()
         self.assertTrue(userprofile1.id not in self.country.super_admins.all())
 
+    def test_country_partner_logos_create_noperm_fail(self):
+        url = reverse("country-partner-logo-list")
+        logo = get_temp_image("logo")
+        data = {
+            "country": self.country.id,
+            "image": logo
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, 403)
+
     def test_country_partner_logos_create(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
         url = reverse("country-partner-logo-list")
         logo = get_temp_image("logo")
         data = {
@@ -365,6 +445,10 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 201)
 
     def test_country_partner_logos_list(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
         url = reverse("country-partner-logo-list")
         logo1 = get_temp_image("logo1")
         data = {
@@ -392,6 +476,10 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['partner_logos'][2]['image'], 'http://testserver/media/logo2.png')
 
     def test_country_partner_logos_delete(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
         url = reverse("country-partner-logo-list")
         logo = get_temp_image("logo")
         data = {
@@ -951,7 +1039,21 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[-1], expected_data)
 
+    def test_create_retrieve_update_mapfile_noperm_fail(self):
+        url = reverse('map-file-list')
+        map_file = SimpleUploadedFile("file.txt", b"file_content")
+        data = {
+            'country': self.country.id,
+            'map_file': map_file
+        }
+        response = self.test_user_client.post(url, data=data, format="multipart")
+        self.assertEqual(response.status_code, 403)
+
     def test_create_retrieve_update_mapfile(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']) \
+            .update(account_type=UserProfile.COUNTRY_ADMIN, country=self.country)
+        self.country.admins.add(self.test_user['user_profile_id'])
+
         url = reverse('map-file-list')
         map_file = SimpleUploadedFile("file.txt", b"file_content")
         data = {
@@ -986,6 +1088,10 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['map_files'][0], map_file_id)
 
     def test_country_admin_update_map_data(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']) \
+            .update(account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         data = {
             "map_data": {
@@ -1073,7 +1179,11 @@ class DonorTests(APITestCase):
         self.assertIn("cover_text", response_keys)
         self.assertIn("footer_text", response_keys)
 
-    def test_donor_admin_update(self):
+    def test_super_donor_admin_update(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
+        self.donor.super_admins.add(self.test_user['user_profile_id'])
+
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
         data = {
             "cover_text": "blah",
@@ -1084,7 +1194,46 @@ class DonorTests(APITestCase):
         self.assertEqual(response.json()["cover_text"], data["cover_text"])
         self.assertEqual(response.json()["footer_text"], data["footer_text"])
 
+    def test_donor_admin_update_fields_fails(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.DONOR_ADMIN, donor=self.donor)
+        self.donor.admins.add(self.test_user['user_profile_id'])
+
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        data = {
+            "cover_text": "blah",
+            "footer_text": "foo"
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(response.json()["cover_text"], data["cover_text"])
+        self.assertNotEqual(response.json()["footer_text"], data["footer_text"])
+
+    def test_donor_admin_update_noperm_fails(self):
+        url = reverse("donor-detail", kwargs={"pk": self.donor.id})
+        data = {
+            "cover_text": "blah",
+            "footer_text": "foo"
+        }
+        response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 403)
+
+    def test_donor_admin_update_images_noperm_fail(self):
+        url = reverse("donor-image-detail", kwargs={"pk": self.donor.id})
+        cover = get_temp_image("cover")
+        logo = get_temp_image("logo")
+        data = {
+            "cover": cover,
+            "logo": logo
+        }
+        response = self.test_user_client.patch(url, data=data, format='multipart', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 403)
+
     def test_donor_admin_update_images(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
+        self.donor.super_admins.add(self.test_user['user_profile_id'])
+
         url = reverse("donor-image-detail", kwargs={"pk": self.donor.id})
         cover = get_temp_image("cover")
         logo = get_temp_image("logo")
@@ -1245,11 +1394,14 @@ class DonorTests(APITestCase):
         }
         response = self.test_user_client.patch(url, data=data, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue("super_admins" not in response.json().keys())
         self.donor.refresh_from_db()
         self.assertTrue(userprofile1.id not in self.donor.super_admins.all())
 
-    def test_donor_partner_logos_create(self):
+    def test_donor_partner_logos_create_get(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
+        self.donor.super_admins.add(self.test_user['user_profile_id'])
+
         url = reverse("donor-partner-logo-list")
         logo = get_temp_image("logo")
         data = {
@@ -1260,6 +1412,10 @@ class DonorTests(APITestCase):
         self.assertEqual(response.status_code, 201)
 
     def test_donor_partner_logos_list(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
+        self.donor.super_admins.add(self.test_user['user_profile_id'])
+
         url = reverse("donor-partner-logo-list")
         logo1 = get_temp_image("donorlogo1")
         data = {
@@ -1287,6 +1443,10 @@ class DonorTests(APITestCase):
         self.assertEqual(response.json()['partner_logos'][2]['image'], 'http://testserver/media/donorlogo2.png')
 
     def test_donor_partner_logos_delete(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']).update(
+            account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
+        self.donor.super_admins.add(self.test_user['user_profile_id'])
+
         url = reverse("donor-partner-logo-list")
         logo = get_temp_image("logo")
         data = {
@@ -1328,8 +1488,7 @@ class CountryAdminTests(TestCase):
         self.request.user = self.user
         self.assertEqual(ma.get_readonly_fields(self.request), (
             'code',
-            'name',
-            'map_download'
+            'name'
         ))
 
     def test_country_field_inlines(self):

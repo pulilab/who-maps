@@ -213,6 +213,41 @@ class UserProfileTests(APITestCase):
             "account_type": UserProfile.GOVERNMENT}
         response = self.client.put(url, data)
 
+    def test_donor_is_not_reqired(self):
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user33@gmail.com",
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
+        response = self.client.post(url, data)
+
+        key = EmailConfirmation.objects.get(email_address__email="test_user33@gmail.com").key
+        url = reverse("rest_verify_email")
+        data = {
+            "key": key,
+        }
+        response = self.client.post(url, data)
+
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user33@gmail.com",
+            "password": "123456hetNYOLC"}
+        response = self.client.post(url, data)
+        user_profile_id = response.json().get('user_profile_id')
+        client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
+
+        org = Organisation.objects.create(name="org33")
+        country = Country.objects.all()[0]
+        url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
+        data = {
+            "name": "Test Name",
+            "organisation": org.id,
+            "country": country.id,
+            "account_type": UserProfile.GOVERNMENT}
+        response = client.put(url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['donor'], None)
+
     def test_obtain_user_profile_returns_id(self):
         url = reverse("api_token_auth")
         data = {

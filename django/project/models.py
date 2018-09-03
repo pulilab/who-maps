@@ -47,15 +47,15 @@ class Project(SoftDeleteModel, ExtendedModel):
     FIELDS_FOR_LOGGED_IN = ("coverage",)
 
     name = models.CharField(max_length=255)
-    data = JSONField(default=dict())
-    draft = JSONField(default=dict())
+    data = JSONField(default=dict)
+    draft = JSONField(default=dict)
     team = models.ManyToManyField(UserProfile, related_name="team", blank=True)
     viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
     public_id = models.CharField(
         max_length=64, default="", help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
     odk_etag = models.CharField(null=True, blank=True, max_length=64)
     odk_id = models.CharField(null=True, blank=True, max_length=64)
-    odk_extra_data = JSONField(default=dict())
+    odk_extra_data = JSONField(default=dict)
 
     projects = ProjectManager  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
