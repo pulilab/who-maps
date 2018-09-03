@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <input
       v-show="false"
       ref="fileInput"
@@ -7,18 +7,18 @@
       @change="setCsv">
     <el-button
       :loading="csvProcessing"
-      type="primary"
-      @click="triggerFile">Select Facility List</el-button>
+      type="text"
+      class="IconLeft"
+      @click="triggerFile"><fa icon="plus" /> Select Facility List</el-button>
 
     <template v-if="dataReady">
-
-      <div class="facility-list">
-        <h4>Imported Facilities ({{ simpleFacilities.length }}):</h4>
+      <div class="FacilityList">
+        <h5>Imported Facilities ({{ simpleFacilities.length }}):</h5>
         <ul
           v-for="facility in simpleFacilities"
           :key="facility"
         >
-          <li class="name">{{ facility }}</li>
+          <li class="FacilityName">{{ facility }}</li>
         </ul>
       </div>
     </template>

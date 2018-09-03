@@ -5,9 +5,14 @@
   >
 
     <el-col>
-      <div class="CountryMapHeader">
-        <div class="CountryMapTitle">Country name</div>
-        <div class="CountryMapFile">
+      <el-row
+        type="flex"
+        align="middle"
+        class="CountryMapHeader">
+        <el-col class="CountryMapTitle">
+          <div>Country name</div>
+        </el-col>
+        <el-col class="CountryMapFile">
           <!-- TODO -->
           <!-- Wire these buttons here, danke schön -->
           <!-- <a
@@ -22,8 +27,8 @@
             <span v-show="forceMapFileChange">Cancel</span>
             <span v-show="!forceMapFileChange">Change map file</span>
           </el-button> -->
-        </div>
-      </div>
+        </el-col>
+      </el-row>
 
       <div class="CountryMapDemo">
         <no-ssr>
@@ -71,26 +76,41 @@
       </div>
 
       <div class="CountryMapSettings">
-        <el-switch
-          v-model="showCenterPin"
-          active-text="Show country center pin"
-          inactive-text="Hide country center pin"/>
-        <el-switch
-          v-model="showSubLevelsPins"
-          active-text="Show districts center pin"
-          inactive-text="Hide districts center pin"/>
-        <el-button
-          type="text"
-          @click.prevent="polycenterCalculation"
-        >
-          Set / Reset Markers
-        </el-button>
+        <el-row
+          type="flex"
+          align="middle">
+          <el-col>
+            <div class="PinSwitch">
+              <span>Country center pin</span>
+              <el-switch
+                v-model="showCenterPin"
+                active-text="Show"
+                inactive-text="Hide "/>
+            </div>
+            <div class="PinSwitch">
+              <span>Districts center pin</span>
+              <el-switch
+                v-model="showSubLevelsPins"
+                active-text="Show"
+                inactive-text="Hide"/>
+            </div>
+          </el-col>
+          <el-col>
+            <el-button
+              type="text"
+              class="IconLeft"
+              @click.prevent="polycenterCalculation"
+            >
+              <fa icon="sync-alt" /> Set / Reset Markers
+            </el-button>
+          </el-col>
+        </el-row>
       </div>
     </el-col>
 
     <el-col>
       <div class="MapSettingSection">
-        <h5>Sub Level I (Displayed on the map)</h5>
+        <h5>Sub Level I <span>(Displayed on the map)</span></h5>
         <div>
           <el-select
             v-model="firstSubLevel"
@@ -131,8 +151,8 @@
       <div
         v-show="showFirstSubLevelList"
         class="MapSettingSection">
-        <h5>Sub Level II (Only for selection)</h5>
-        <p>Hover on a district name to see the name on the map.</p>
+        <h5>Sub Level II <span>(Only for selection)</span></h5>
+        <p>Hover on a district name to highlight it on the country map.</p>
         <div>
           <el-select
             v-model="secondSubLevel"
@@ -321,26 +341,115 @@ export default {
 
     > .el-col {
       // Left side - Vue map
-      &:first-child {}
+      &:first-child {
+        width: 100%;
+        min-width: calc(100% - 340px);
+      }
 
       // Right side - Levels & Facilities
       &:last-child {
-        // sbackground-color: red;
+        min-width: 340px;
+        max-width: 340px;
+        // MapContainer + CountryMapHeader + CountryMapSettings
+        height: calc(50vh + 58px + 88px);
+        min-height: calc(50vh + 58px + 88px);
+        max-height: calc(500px + 58px + 88px);
+        overflow-y: scroll;
+        padding: 0;
+        border-left: 1px solid @colorGrayLight;
+        background-color: @colorBrandBlueLight;
+
+        .MapSettingSection {
+          padding: 20px 40px;
+          border-bottom: 1px solid @colorGrayLight;
+
+          &:last-child {
+            padding-bottom: 40px;
+            border: 0;
+          }
+
+          h5 {
+            margin: 10px 0 20px;
+            font-size: @fontSizeBase;
+
+            span {
+              font-weight: 400;
+              color: @colorGray;
+            }
+          }
+
+          p {
+            margin: 0 0 20px;
+            font-size: @fontSizeSmall;
+            line-height: 18px;
+            color: @colorGray;
+          }
+
+          .el-select {
+            width: 100%;
+            margin-bottom: 20px;
+          }
+        }
       }
 
-      .CountryMapHeader,
-      .CountryMapSettings {
-        height: @dialogHeaderFooterHeight;
+      .CountryMapHeader {
+        height: 58px;
         padding: 0 40px;
         background-color: @colorWhite;
+
+        .CountryMapTitle {
+          width: 100%;
+          font-size: @fontSizeMedium;
+          font-weight: 700;
+        }
+
+        .CountryMapFile {
+          width: auto;
+        }
+      }
+
+      .CountryMapSettings {
+        height: 88px;
+        padding: 0 40px;
+        background-color: @colorWhite;
+
+        > .el-row {
+          height: 100%;
+        }
+
+        .PinSwitch {
+          padding: 5px 0;
+
+          > span {
+            position: relative;
+            top: 4px;
+            display: inline-block;
+            width: 160px;
+            font-size: @fontSizeBase;
+            font-weight: 700;
+            line-height: 16px;
+            .textTruncate();
+          }
+        }
+
+        .el-button {
+          float: right;
+        }
       }
 
       .MapContainer {
-        height: 500px;
+        box-sizing: border-box;
+        height: 50vh;
+        min-height: 50vh;
+        max-height: 500px;
+        border: 1px solid @colorGrayLight;
+        border-width: 1px 0;
       }
 
+      // vue map custom styling
       .map-container {
-        height: 500px;
+        height: 15vh;
+        max-height: 500px;
 
         .country {
           fill: #e3e5ee;
@@ -361,68 +470,6 @@ export default {
         .label {
           &.hidden {
             display: none;
-          }
-        }
-      }
-    }
-  }
-
-  .main-container {
-    position: relative;
-    max-height: 750px;
-
-    .el-header {
-      position: absolute;
-      z-index: 10;
-      top: 0;
-      left: 0;
-      right: 0;
-    }
-    .title-bar {
-      .el-card__body {
-        display: flex;
-        justify-content: space-between;
-      }
-      .page-title {
-        display: inline-flex;
-        line-height: 2em;
-        span {
-          margin-right: 1em;
-        }
-        img {
-          height: 2em;
-          margin-right: 1em;
-        }
-      }
-    }
-
-    .selected-country {
-      h5,
-      h6 {
-        padding: 0;
-        margin: 0;
-      }
-
-      img {
-        width: 24px;
-        height: 12px;
-      }
-    }
-
-    .el-main {
-      margin-top: 70px;
-    }
-
-    .side-selector {
-      height: 600px;
-      overflow-y: scroll;
-
-      .sub-level-list {
-        ul {
-          margin-left: 10px;
-          padding-left: 0px;
-          li {
-            cursor: zoom-in;
           }
         }
       }
