@@ -1,5 +1,12 @@
 <template>
   <div class="DashboardArea">
+    <div
+      v-show="loading"
+      class="Loader"
+    >
+      <div />
+      <span>Updating filters and datapoints</span>
+    </div>
     <div class="ChildContainer">
       <nuxt-child />
     </div>
@@ -11,6 +18,7 @@
 
 <script>
 import AdvancedSearch from '../../components/dashboard/AdvancedSearch';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -20,8 +28,28 @@ export default {
   async fetch ({store}) {
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),
-      store.dispatch('projects/loadProjectStructure')
+      store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('dashboard/loadProjectList')
     ]);
+  },
+  computed: {
+    ...mapGetters({
+      searchParameters: 'dashboard/getSearchParameters',
+      loading: 'dashboard/getLoading'
+    })
+  },
+  watch: {
+    searchParameters: {
+      immediate: false,
+      handler (params) {
+        this.loadProjectList();
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      loadProjectList: 'dashboard/loadProjectList'
+    })
   }
 };
 </script>
