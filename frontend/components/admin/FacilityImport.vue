@@ -18,7 +18,10 @@
           v-for="facility in simpleFacilities"
           :key="facility"
         >
-          <li class="FacilityName">{{ facility }}</li>
+          <li>
+            <fa icon="building" />
+            {{ facility }}
+          </li>
         </ul>
       </div>
     </template>
@@ -91,9 +94,36 @@ export default {
 };
 </script>
 
-<style>
-.facility-list {
-  max-height: 300px;
-  overflow: scroll;
-}
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
+
+  .FacilityList {
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        position: relative;
+        font-size: @fontSizeBase;
+        margin: 0 0 10px;
+        padding: 0 20px;
+        color: @colorBrandPrimary;
+        cursor: pointer;
+        transition: @transitionAll;
+
+        &:hover {
+          color: @colorBrandPrimaryLight;
+        }
+
+        .svg-inline--fa {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 14px;
+        }
+      }
+    }
+  }
 </style>

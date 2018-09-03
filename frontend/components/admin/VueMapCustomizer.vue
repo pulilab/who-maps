@@ -144,7 +144,7 @@
 
         <div
           v-show="showFirstSubLevelList"
-          class="sub-level-list"
+          class="SubLevelList"
         >
           <h5>List of {{ firstSubLevelType }}</h5>
           <ul>
@@ -152,6 +152,7 @@
               v-for="item in firstSubLevelList"
               :key="item.id"
             >
+              <fa icon="map-pin" />
               {{ item.name }}
             </li>
           </ul>
@@ -188,7 +189,7 @@
 
         <div
           v-show="showSecondSubLevelList"
-          class="sub-level-list"
+          class="SubLevelList"
         >
           <h5> List of {{ secondSubLevelType }}</h5>
           <ul>
@@ -399,6 +400,35 @@ export default {
             width: 100%;
             margin-bottom: 20px;
           }
+
+          .SubLevelList {
+            ul {
+              list-style-type: none;
+              margin: 0;
+              padding: 0;
+
+              li {
+                position: relative;
+                font-size: @fontSizeBase;
+                margin: 0 0 10px;
+                padding: 0 20px;
+                color: @colorBrandPrimary;
+                cursor: pointer;
+                transition: @transitionAll;
+
+                &:hover {
+                  color: @colorBrandPrimaryLight;
+                }
+
+                .svg-inline--fa {
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 14px;
+                }
+              }
+            }
+          }
         }
       }
 
@@ -408,7 +438,6 @@ export default {
         background-color: @colorWhite;
 
         .CountryMapTitle {
-          // width: 100%;
           padding-right: 20px;
           font-size: @fontSizeMedium;
           font-weight: 700;
@@ -416,7 +445,6 @@ export default {
         }
 
         .CountryMapFile {
-          // width: auto;
           font-size: @fontSizeBase;
           text-align: right;
 
