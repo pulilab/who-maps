@@ -175,6 +175,7 @@ export default {
       immediate: true,
       handler (value) {
         if (value) {
+          this.$refs.mainTable.clearSelection();
           this.$refs.mainTable.toggleAllSelection();
         }
       }
