@@ -100,14 +100,14 @@
         </el-form-item>
 
         <sub-national-level-deployment
-          v-show="coverageType == 1"
+          v-if="coverageType == 1"
           ref="subNationalLevelDeployment"
           :api-errors="apiErrors"
           :rules="rules"
         />
 
         <div
-          v-show="coverageType == 2"
+          v-if="coverageType == 2"
           class="NationalLevelDeployment ItemIndent"
         >
           <div class="CoverageSubtitle">
@@ -289,9 +289,11 @@ export default {
     async validate () {
       const validations = await Promise.all([
         this.$validator.validate(),
-        this.$refs.nationalLevelDeployment.validate(),
-        this.$refs.subNationalLevelDeployment.validate()
+        this.coverageType === 2
+          ? this.$refs.nationalLevelDeployment.validate()
+          : this.$refs.subNationalLevelDeployment.validate()
       ]);
+      console.log('Implementation overview validaitons', validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }

@@ -151,6 +151,7 @@ export default {
         this.$refs.coverageFieldset.validate(),
         this.$refs.facilitySelector.validate()
       ]);
+      console.log(`sub national level deployment item ${this.scope}`, validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }

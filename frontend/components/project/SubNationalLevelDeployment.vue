@@ -122,6 +122,7 @@ export default {
       if (this.countrySubLevelNames.second) {
         validators.push(...await Promise.all(this.$refs.secondSubLevel.map(s => s.validate())));
       }
+      console.log('sub natioal level deployment', validators);
       return validators.reduce((a, c) => a && c, true);
     },
     clear () {
