@@ -1,8 +1,7 @@
 <template>
   <el-row
     type="flex"
-    class="CountryMapCustomizer"
-  >
+    class="CountryMapCustomizer">
 
     <el-col>
       <el-row
@@ -10,33 +9,36 @@
         align="middle"
         class="CountryMapHeader">
         <el-col class="CountryMapTitle">
-          <div>Country name</div>
+          <div>{{ country.name }}</div>
         </el-col>
         <el-col class="CountryMapFile">
-          <!-- TODO -->
-          <!-- Wire these buttons here, danke schön -->
-          <!-- <a
+          <a
             ref="hiddenMapDownload"
             :href="`/api/countries/map-download/${country.id}/`"
             style="display: none"
             download>Hidden but needed element!</a>
-          <el-button @click="$refs.hiddenMapDownload.click()">
-            Download map file
-          </el-button>
-          <el-button @click="showMapUploader">
-            <span v-show="forceMapFileChange">Cancel</span>
-            <span v-show="!forceMapFileChange">Change map file</span>
-          </el-button> -->
-          <span>Map file:</span>
-          <el-button type="text">
-            Download
-          </el-button>
           <el-button
             type="text"
-            class="DeleteButton">
-            <span v-show="forceMapFileChange">Cancel</span>
-            <span v-show="!forceMapFileChange">Change</span>
+            @click="$refs.hiddenMapDownload.click()">
+            Download map file
           </el-button>
+          <el-upload
+            ref="mapUploadBtn"
+            :show-file-list="false"
+            :limit="1"
+            :multiple="false"
+            :data="{country: country.id}"
+            :on-success="successHandler"
+            :before-upload="beforeMapUpload"
+            class="UploadComp"
+            name="map_file"
+            action="/api/map-files/">
+            <el-button
+              :disabled="uploadMapFile"
+              :loading="uploadMapFile"
+              class="DeleteButton"
+              type="text">Change map file</el-button>
+          </el-upload>
         </el-col>
       </el-row>
 
@@ -233,11 +235,15 @@ export default {
       zoom: 3,
       mapOptions: { zoomControl: false, attributionControl: false },
       showCenterPin: true,
-      showSubLevelsPins: true
+      showSubLevelsPins: true,
+      forceMapFileChange: false,
+      mapFile: {},
+      uploadMapFile: false
     };
   },
   computed: {
     ...mapGetters({
+      country: 'admin/country/getData',
       subLevelTypes: 'system/getSubLevelTypes',
       firstSubLevelList: 'admin/map/getFirstSubLevelList',
       secondSubLevelList: 'admin/map/getSecondSubLevelList',
@@ -309,6 +315,8 @@ export default {
   },
   methods: {
     ...mapActions({
+      loadGeoJSON: 'admin/map/loadGeoJSON',
+      setCountryDataField: 'admin/country/setDataField',
       setFirstSubLevel: 'admin/map/setFirstSubLevel',
       setFirstSubLevelType: 'admin/map/setFirstSubLevelType',
       setSecondSubLevel: 'admin/map/setSecondSubLevel',
@@ -317,13 +325,16 @@ export default {
       setSubLevelsPolyCenters: 'admin/map/setSubLevelsPolyCenters',
       updateSubLevelPolyCenter: 'admin/map/updateSubLevelPolyCenter'
     }),
+
     geoJsonLoadHandler () {
       this.$refs.mainMap.mapObject.fitBounds(this.$refs.geoJsonLayer.mapObject.getBounds());
     },
+
     countryCenterMoveHandler (event) {
       const newLatLng = event.target.getLatLng();
       this.setCountryCenter(newLatLng);
     },
+
     polycenterCalculation () {
       const countryCenter = calculatePolyCenter(this.countryBorder.geometry);
       this.setCountryCenter(countryCenter);
@@ -335,9 +346,23 @@ export default {
       });
       this.setSubLevelsPolyCenters(subLevelsPolycenter);
     },
+
     subLevelsPinsMoveHandler (event, name) {
       const latlng = event.target.getLatLng();
       this.updateSubLevelPolyCenter({name, latlng});
+    },
+
+    beforeMapUpload () {
+      this.uploadMapFile = true;
+    },
+
+    successHandler (response) {
+      this.setCountryDataField({field: 'map_files', data: [response]});
+      setTimeout(async () => {
+        await this.loadGeoJSON();
+        this.forceMapFileChange = false;
+        this.uploadMapFile = false;
+      });
     }
   }
 };
@@ -451,6 +476,10 @@ export default {
           .el-button {
             margin-left: 20px;
             padding: 0;
+          }
+
+          .UploadComp {
+            display: inline-block;
           }
         }
       }

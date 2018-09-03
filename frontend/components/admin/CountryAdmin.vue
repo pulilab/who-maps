@@ -1,7 +1,7 @@
 <template>
   <div class="CountryAdmin">
     <div class="PageTitle">
-      <h2>Country admin</h2>
+      <h2>Country admin for {{ country.name }}</h2>
     </div>
 
     <collapsible-card
@@ -196,7 +196,8 @@
     <collapsible-card
       title="Country map"
       class="CountryMap">
-      <div v-if="!country.map_files.length || forceMapFileChange">
+      <vue-map-customizer />
+      <!-- <div v-if="!country.map_files.length || forceMapFileChange">
         <el-form
           label-width="215px"
           label-position="left"
@@ -223,7 +224,7 @@
 
       <div v-if="country.map_files.length && !forceMapFileChange">
         <vue-map-customizer/>
-      </div>
+      </div> -->
     </collapsible-card>
 
     <div class="AdminActionBarBottom">
@@ -297,10 +298,7 @@ export default {
             }
           }}
         ]
-      },
-      forceMapFileChange: false,
-      mapFile: {},
-      uploadMapFile: false
+      }
     };
   },
 
@@ -469,26 +467,11 @@ export default {
   methods: {
     ...mapActions({
       setDataField: 'admin/country/setDataField',
-      saveChanges: 'admin/country/saveChanges',
-      loadGeoJSON: 'admin/map/loadGeoJSON'
+      saveChanges: 'admin/country/saveChanges'
     }),
 
     selectPersona (selected) {
       this.selectedPersona = selected;
-    },
-    showMapUploader () {
-      this.forceMapFileChange = !this.forceMapFileChange;
-    },
-    beforeMapUpload () {
-      this.uploadMapFile = true;
-    },
-    successHandler (response) {
-      this.setDataField({field: 'map_files', data: [response]});
-      setTimeout(async () => {
-        await this.loadGeoJSON();
-        this.forceMapFileChange = false;
-        this.uploadMapFile = false;
-      });
     }
   }
 };
