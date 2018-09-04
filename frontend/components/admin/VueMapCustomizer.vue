@@ -362,9 +362,9 @@ export default {
         min-width: 340px;
         max-width: 340px;
         // MapContainer + CountryMapHeader + CountryMapSettings
-        height: calc(50vh + 58px + 88px);
-        min-height: calc(50vh + 58px + 88px);
-        max-height: calc(500px + 58px + 88px);
+        height: calc(50vh + 58px + 90px);
+        min-height: calc(50vh + 58px + 90px);
+        max-height: calc(500px + 58px + 90px);
         overflow-y: auto;
         padding: 0;
         border-left: 1px solid @colorGrayLight;
@@ -456,7 +456,7 @@ export default {
       }
 
       .CountryMapSettings {
-        height: 88px;
+        height: 90px;
         padding: 0 40px;
         background-color: @colorWhite;
 
@@ -465,7 +465,7 @@ export default {
         }
 
         .PinSwitch {
-          padding: 4px 0;
+          padding: 2px 0 6px;
 
           > span {
             position: relative;

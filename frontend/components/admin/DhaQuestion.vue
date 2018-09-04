@@ -3,8 +3,7 @@
     <!-- Type -->
     <el-select
       v-model="type"
-      placeholder="Type"
-      size="small">
+      placeholder="Type">
       <el-option
         label="Text field"
         value="Text field" />
@@ -25,16 +24,12 @@
     <!-- Question -->
     <el-input
       v-model="question"
-      placeholder="Question text"
-      type="textarea"
-      autosize
-      size="small"/>
+      placeholder="Question text" />
 
     <div class="QSwitches">
       <!-- Required -->
       <el-switch
         v-model="required"
-        size="small"
         active-text="Required" />
 
       <!-- Active -->
@@ -46,7 +41,6 @@
       <!-- TODO -->
       <el-switch
         v-model="active"
-        size="small"
         active-text="Private" />
     </div>
 
