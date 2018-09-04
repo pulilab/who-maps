@@ -17,28 +17,33 @@
             :href="`/api/countries/map-download/${country.id}/`"
             style="display: none"
             download>Hidden but needed element!</a>
-          <el-button
-            type="text"
-            @click="$refs.hiddenMapDownload.click()">
-            Download map file
-          </el-button>
-          <el-upload
-            ref="mapUploadBtn"
-            :show-file-list="false"
-            :limit="1"
-            :multiple="false"
-            :data="{country: country.id}"
-            :on-success="successHandler"
-            :before-upload="beforeMapUpload"
-            class="UploadComp"
-            name="map_file"
-            action="/api/map-files/">
+          <el-row
+            type="flex"
+            align="middle">
+            <span>Map file:</span>
             <el-button
-              :disabled="uploadMapFile"
-              :loading="uploadMapFile"
-              class="DeleteButton"
-              type="text">Change map file</el-button>
-          </el-upload>
+              type="text"
+              @click="$refs.hiddenMapDownload.click()">
+              Download
+            </el-button>
+            <el-upload
+              ref="mapUploadBtn"
+              :show-file-list="false"
+              :limit="1"
+              :multiple="false"
+              :data="{country: country.id}"
+              :on-success="successHandler"
+              :before-upload="beforeMapUpload"
+              class="UploadComp"
+              name="map_file"
+              action="/api/map-files/">
+              <el-button
+                :disabled="uploadMapFile"
+                :loading="uploadMapFile"
+                class="DeleteButton"
+                type="text">Change</el-button>
+            </el-upload>
+          </el-row>
         </el-col>
       </el-row>
 
@@ -387,9 +392,9 @@ export default {
         min-width: 340px;
         max-width: 340px;
         // MapContainer + CountryMapHeader + CountryMapSettings
-        height: calc(50vh + 58px + 88px);
-        min-height: calc(50vh + 58px + 88px);
-        max-height: calc(500px + 58px + 88px);
+        height: calc(50vh + 58px + 90px);
+        min-height: calc(50vh + 58px + 90px);
+        max-height: calc(500px + 58px + 90px);
         overflow-y: auto;
         padding: 0;
         border-left: 1px solid @colorGrayLight;
@@ -463,6 +468,7 @@ export default {
         background-color: @colorWhite;
 
         .CountryMapTitle {
+          width: 100%;
           padding-right: 20px;
           font-size: @fontSizeMedium;
           font-weight: 700;
@@ -470,22 +476,22 @@ export default {
         }
 
         .CountryMapFile {
+          width: auto;
           font-size: @fontSizeBase;
           text-align: right;
+          white-space: nowrap;
 
           .el-button {
             margin-left: 20px;
             padding: 0;
           }
 
-          .UploadComp {
-            display: inline-block;
-          }
+          .UploadComp {}
         }
       }
 
       .CountryMapSettings {
-        height: 88px;
+        height: 90px;
         padding: 0 40px;
         background-color: @colorWhite;
 
@@ -494,7 +500,7 @@ export default {
         }
 
         .PinSwitch {
-          padding: 4px 0;
+          padding: 2px 0 6px;
 
           > span {
             position: relative;
