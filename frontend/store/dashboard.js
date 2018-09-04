@@ -1,5 +1,3 @@
-import qs from 'qs';
-
 import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator } from '../utilities/map';
 export const state = () => ({
   ...stateGenerator(),
@@ -19,26 +17,35 @@ export const state = () => ({
     },
     {
       id: 4,
-      label: 'Donors'
+      label: 'Government Investor'
     },
     {
       id: 5,
-      label: 'Contact Name'
+      label: 'Region'
     },
+
     {
       id: 6,
-      label: 'Overview of digital health implementation'
+      label: 'Donors'
     },
     {
       id: 7,
-      label: 'Geographic scope'
+      label: 'Contact Name'
     },
     {
       id: 8,
+      label: 'Overview of digital health implementation'
+    },
+    {
+      id: 9,
+      label: 'Geographic scope'
+    },
+    {
+      id: 10,
       label: 'Health Focus Areas'
     }
   ],
-  selectedColumns: [1, 2, 3, 4, 5, 6, 7, 8],
+  selectedColumns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   projects: [],
   selectedDHI: [],
   selectedHFA: [],
@@ -46,13 +53,11 @@ export const state = () => ({
   selectedHIS: [],
   selectedPlatforms: [],
   selectedRows: [],
-  searchString: '',
-  searchIn: ['name', 'org', 'country', 'overview', 'partner', 'donor'],
   filteredCountries: [],
   filteredRegion: null,
   governmentApproved: null,
+  governmentFinanced: null,
   selectAll: false,
-  loading: false,
   pageSize: 10,
   page: 1,
   total: 0,
@@ -63,20 +68,17 @@ export const getters = {
   ...gettersGenerator(),
   getAvailableColumns: state => [...state.columns.map(c => ({...c, selected: state.selectedColumns.includes(c.id)}))],
   getSelectedColumns: state => state.selectedColumns,
-  getProjects: state => [...state.projects.map(r => ({...r}))],
   getSelectedDHI: state => state.selectedDHI,
   getSelectedHFA: state => state.selectedHFA,
   getSelectedHSC: state => state.selectedHSC,
   getSelectedHIS: state => state.selectedHIS,
   getSelectedPlatforms: state => state.selectedPlatforms,
   getSelectedRows: state => state.selectedRows,
-  getSearchString: state => state.searchString,
-  getSearchIn: state => state.searchIn,
   getFilteredCountries: state => state.filteredCountries,
   getFilteredRegion: state => state.filteredRegion,
   getGovernmentApproved: state => state.governmentApproved,
+  getGovernmentFinanced: state => state.governmentFinanced,
   getSelectAll: state => state.selectAll,
-  getLoading: state => state.loading,
   getPageSize: state => state.pageSize,
   getTotal: state => state.total,
   getNextPage: state => state.nextPage,
@@ -91,6 +93,7 @@ export const getters = {
       in: q ? state.searchIn : undefined,
       country: state.filteredCountries,
       region: state.filteredRegion,
+      gov: state.governmentFinanced ? [1, 2] : 0,
       approved: state.governmentApproved ? 1 : undefined,
       sw: state.selectedPlatforms,
       dhi: state.selectedDHI,
@@ -104,21 +107,9 @@ export const getters = {
 
 export const actions = {
   ...actionsGenerator(),
-  async loadProjectList ({commit, getters}) {
-    commit('SET_LOADING', true);
-    try {
-      const { data } = await this.$axios({
-        method: 'get',
-        url: '/api/search/',
-        params: getters.getSearchParameters,
-        paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'})
-      });
-      commit('SET_PROJECT_LIST', data.results.projects);
-      commit('SET_SEARCH_STATUS', data);
-    } catch (e) {
-      console.error(e);
-    }
-    commit('SET_LOADING', false);
+  async loadProjectList ({commit, dispatch}) {
+    const data = await dispatch('loadProjects');
+    commit('SET_SEARCH_STATUS', data);
   },
   setSelectedColumns ({commit}, columns) {
     commit('SET_SELECTED_COLUMNS', columns);
@@ -142,12 +133,6 @@ export const actions = {
     commit('SET_SELECTED_ROWS', rows);
     commit('SET_SELECT_ALL', false);
   },
-  setSearchString ({commit}, value) {
-    commit('SET_SEARCH_STRING', value);
-  },
-  setSearchIn ({commit}, value) {
-    commit('SET_SEARCH_IN', value);
-  },
   setFilteredCountries ({commit}, value) {
     commit('SET_FILTERED_COUNTRIES', value);
   },
@@ -156,6 +141,9 @@ export const actions = {
   },
   setGovernmentApproved ({commit}, value) {
     commit('SET_GOVERNMENT_APPROVED', value);
+  },
+  setGovernmentFinanced ({commit}, value) {
+    commit('SET_GOVERNMENT_FINANCED', value);
   },
   setSelectAll ({commit}, all) {
     commit('SET_SELECT_ALL', all);
@@ -169,9 +157,6 @@ export const actions = {
 };
 export const mutations = {
   ...mutationsGenerator(),
-  SET_PROJECT_LIST: (state, projects) => {
-    state.projects = projects;
-  },
   SET_SELECTED_COLUMNS: (state, columns) => {
     state.selectedColumns = columns;
   },
@@ -193,12 +178,6 @@ export const mutations = {
   SET_SELECTED_ROWS: (state, rows) => {
     state.selectedRows = rows;
   },
-  SET_SEARCH_STRING: (state, value) => {
-    state.searchString = value;
-  },
-  SET_SEARCH_IN: (state, value) => {
-    state.searchIn = value;
-  },
   SET_FILTERED_COUNTRIES: (state, value) => {
     state.filteredCountries = value;
   },
@@ -208,11 +187,11 @@ export const mutations = {
   SET_GOVERNMENT_APPROVED: (state, value) => {
     state.governmentApproved = value;
   },
+  SET_GOVERNMENT_FINANCED: (state, value) => {
+    state.governmentFinanced = value;
+  },
   SET_SELECT_ALL: (state, all) => {
     state.selectAll = all;
-  },
-  SET_LOADING: (state, loading) => {
-    state.loading = loading;
   },
   SET_PAGE_SIZE: (state, size) => {
     state.pageSize = size;

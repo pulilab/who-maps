@@ -1,3 +1,4 @@
+import qs from 'qs';
 export const stateGenerator = () => ({
   projects: [],
   selectedCountry: null,
@@ -5,10 +6,14 @@ export const stateGenerator = () => ({
   activeCountry: null,
   mapReady: false,
   projectBoxActiveTab: 'subNational',
-  activeSubLevel: null
+  activeSubLevel: null,
+  searchString: '',
+  searchIn: ['name', 'org', 'country', 'overview', 'partner', 'donor'],
+  loading: false
 });
 
 export const gettersGenerator = () => ({
+  getProjects: state => [...state.projects.map(r => ({...r}))],
   getCountryPins (state, getters, rootState, rootGetters) {
     const polyLabeled = rootGetters['countries/getCountries'].filter(c => c.map_data.polylabel);
     return polyLabeled.map(c => ({
@@ -37,13 +42,43 @@ export const gettersGenerator = () => ({
   getCountryProjects: state => id => state.projects.filter(p => p.country === id),
   getMapReady: state => state.mapReady,
   getProjectBoxActiveTab: state => state.projectBoxActiveTab,
-  getActiveSubLevel: state => state.activeSubLevel
+  getActiveSubLevel: state => state.activeSubLevel,
+  getSearchString: state => state.searchString,
+  getSearchIn: state => state.searchIn,
+  getLoading: state => state.loading,
+  getSearchParameters: state => {
+    const q = state.searchString && state.searchString.length > 1 ? state.searchString : undefined;
+    return {
+      page_size: 100000,
+      q,
+      found: true,
+      in: q ? state.searchIn : undefined,
+      type: 'map'
+    };
+  }
 });
 
 export const actionsGenerator = () => ({
   async setSelectedCountry ({commit, dispatch}, id) {
     await dispatch('countries/loadGeoJSON', id, {root: true});
     commit('SET_SELECTED_COUNTRY', id);
+  },
+  async loadProjects ({commit, getters}) {
+    commit('SET_LOADING', true);
+    try {
+      const { data } = await this.$axios({
+        method: 'get',
+        url: '/api/search/',
+        params: getters.getSearchParameters,
+        paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'})
+      });
+      commit('SET_PROJECT_LIST', data.results.projects);
+      commit('SET_LOADING', false);
+      return data;
+    } catch (e) {
+      console.error(e);
+    }
+    commit('SET_LOADING', false);
   },
   setCurrentZoom ({commit}, value) {
     commit('SET_CURRENT_ZOOM', value);
@@ -66,10 +101,19 @@ export const actionsGenerator = () => ({
   },
   setActiveSubLevel ({commit}, value) {
     commit('SET_ACTIVE_SUB_LEVEL', value);
+  },
+  setSearchString ({commit}, value) {
+    commit('SET_SEARCH_STRING', value);
+  },
+  setSearchIn ({commit}, value) {
+    commit('SET_SEARCH_IN', value);
   }
 });
 
 export const mutationsGenerator = () => ({
+  SET_PROJECT_LIST: (state, projects) => {
+    state.projects = projects;
+  },
   SET_SELECTED_COUNTRY: (state, value) => {
     state.selectedCountry = value;
   },
@@ -87,5 +131,14 @@ export const mutationsGenerator = () => ({
   },
   SET_ACTIVE_SUB_LEVEL: (state, value) => {
     state.activeSubLevel = value;
+  },
+  SET_SEARCH_STRING: (state, value) => {
+    state.searchString = value;
+  },
+  SET_SEARCH_IN: (state, value) => {
+    state.searchIn = value;
+  },
+  SET_LOADING: (state, loading) => {
+    state.loading = loading;
   }
 });
