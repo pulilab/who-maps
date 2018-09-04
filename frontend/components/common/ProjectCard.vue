@@ -146,7 +146,7 @@ export default {
   },
   methods: {
     goToProject () {
-      const path = this.localePath({name: 'organisation-projects-id', params: {...this.$route.params, id: this.project.id}});
+      const path = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params, id: this.project.id}});
       this.$router.push(path);
     },
     mouseEnterHandler () {
