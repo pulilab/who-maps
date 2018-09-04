@@ -91,10 +91,10 @@ export default {
       return this.$route.path.includes('/admin') || this.$route.path.endsWith('/edit-profile');
     },
     allowCountryAdmin () {
-      return ['CA', 'SCA'].includes(this.userProfile.account_type) || this.userProfile.is_superuser;
+      return (['CA', 'SCA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
     },
     allowDonorAdmin () {
-      return ['DA', 'SDA'].includes(this.userProfile.account_type) || this.userProfile.is_superuser;
+      return (['DA', 'SDA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
     },
 
     isDashboard () {
@@ -179,9 +179,9 @@ export default {
       }
       &:hover {
         opacity: 1;
-        &::before {
-          transform: translateY(0);
-        }
+        // &::before {
+        //   transform: translateY(0);
+        // }
       }
     }
   }
