@@ -40,8 +40,7 @@ export const getters = {
   getTechnologyPlatforms: state => state.projectStructure.technology_platforms ? [...state.projectStructure.technology_platforms] : [],
   getToolkitVersions: state => [...state.currentProjectToolkitVersions],
   getCoverageVersions: state => [...state.currentProjectCoverageVersions],
-  getUserProjectDetails: (state, getters, rootState, rootGetters) => id => {
-    const p = getters.getUserProjectList.find(p => p.id === id);
+  getProjectDetails: (state, getters, rootState, rootGetters) => p => {
     if (p) {
       const user = rootGetters['user/getProfile'];
       return {
@@ -51,9 +50,15 @@ export const getters = {
         isPublished: !!(p.published.name)
       };
     }
+    return {};
   },
-  getCurrentProject: (state, getters) => {
-    return getters.getUserProjectDetails(state.currentProject);
+  getUserProjectDetails: (state, getters, rootState, rootGetters) => id => {
+    const p = getters.getUserProjectList.find(p => p.id === id);
+    return getters.getProjectDetails(p);
+  },
+  getCurrentProject: (state, getters, rootState, rootGetters) => {
+    const p = state.currentProjectData;
+    return getters.getProjectDetails(p);
   },
   getMapsAxisData: (state, getters, rootState, rootGetters) => {
     const axis = rootGetters['system/getAxis'];
@@ -170,14 +175,20 @@ export const actions = {
     await dispatch('loadProjectDetails', id);
     commit('SET_CURRENT_PROJECT', id);
   },
-  async loadProjectDetails ({commit, state}, projectId) {
+  async loadProjectDetails ({commit, getters}, projectId) {
     try {
       if (projectId) {
-        const [toolkitVersions, coverageVersions] =
+        const userProject = getters.getUserProjectList.find(p => p.id === projectId);
+        const projectPromise = userProject && userProject.id
+          ? Promise.resolve(userProject)
+          : this.$axios.get(`/api/projects/${projectId}/`);
+        const [project, toolkitVersions, coverageVersions] =
                   await Promise.all([
+                    projectPromise,
                     this.$axios.get(`/api/projects/${projectId}/toolkit/versions/`),
                     this.$axios.get(`/api/projects/${projectId}/coverage/versions/`)
                   ]);
+        commit('SET_CURRENT_PROJECT_DATA', project.data);
         commit('SET_CURRENT_PROJECT_TOOLKIT', toolkitVersions.data);
         commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', coverageVersions.data);
       }
@@ -222,6 +233,9 @@ export const mutations = {
   },
   SET_PROJECT_STRUCTURE: (state, structure) => {
     state.projectStructure = structure;
+  },
+  SET_CURRENT_PROJECT_DATA: (state, project) => {
+    state.currentProjectData = project;
   },
   SET_CURRENT_PROJECT_TOOLKIT: (state, toolkit) => {
     state.currentProjectToolkitVersions = toolkit;
