@@ -13,7 +13,8 @@ export const state = () => ({
   toolkit_questions: [],
   sub_level_types: [],
   organisations: [],
-  donors: []
+  donors: [],
+  regions: []
 });
 
 export const getters = {
@@ -92,7 +93,9 @@ export const getters = {
     return o ? { ...o } : undefined;
   },
   getDonors: state => state.donors,
-  getDonorDetails: state => id => ({...state.donors.find(d => d.id === id)})
+  getDonorDetails: state => id => ({...state.donors.find(d => d.id === id)}),
+  getRegions: state => state.regions,
+  getRegionDetails: state => id => ({...state.regions.find(r => r.id === id)})
 };
 
 export const actions = {
@@ -111,6 +114,7 @@ export const actions = {
     commit('SET_THEMATIC_OVERVIEW', data.thematic_overview);
     commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
     commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
+    commit('SET_REGIONS', data.regions);
   },
 
   async loadOrganisations ({ commit, rootGetters }) {
@@ -179,5 +183,8 @@ export const mutations = {
   },
   SET_DONORS: (state, donors) => {
     state.donors = donors;
+  },
+  SET_REGIONS: (state, regions) => {
+    state.regions = regions;
   }
 };
