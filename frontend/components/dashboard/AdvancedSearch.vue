@@ -5,6 +5,7 @@
     <country-filters />
     <div class="FilterSwitches">
       <filter-switch
+        v-if="donorView"
         v-model="onlyMyDonor"
         label="Only my Donor Projects"
         tooltip="Lorem ipsum something else"
@@ -113,13 +114,14 @@ export default {
   },
   data () {
     return {
-      governamentFinanced: false,
+      donorView: false,
       onlyMyDonor: false
     };
   },
   computed: {
     ...mapGettersActions({
       governamentApproved: ['dashboard', 'getGovernmentApproved', 'setGovernmentApproved', 0],
+      governamentFinanced: ['dashboard', 'getGovernmentFinanced', 'setGovernmentFinanced', 0],
       selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0],
       selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
       selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
