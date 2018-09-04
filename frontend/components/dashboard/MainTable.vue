@@ -2,7 +2,7 @@
   <div class="MainTable">
     <el-table
       ref="mainTable"
-      :data="projects"
+      :data="projectsList"
       :max-height="tableMaxHeight"
       :row-class-name="rowClassCalculator"
       :stripe="false"
@@ -173,7 +173,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      projects: 'dashboard/getProjects',
+      projectsList: 'dashboard/getProjectsList',
       selectedColumns: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
       selectAll: 'dashboard/getSelectAll',
