@@ -71,7 +71,7 @@ class CountryTests(APITestCase):
         self.assertEqual(str(self.country), 'Hungary')
 
     def test_retrieve_landing_detail(self):
-        url = reverse("landing-country-detail", kwargs={"code": self.country.code})
+        url = reverse("landing-country-detail", kwargs={"pk": self.country.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         response_keys = response.json().keys()
@@ -1276,7 +1276,7 @@ class DonorTests(APITestCase):
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
 
-        self.donor = Donor.objects.create(name="donor1")
+        self.donor = Donor.objects.create(name="donor1", code="donor1")
         self.donor.name_en = 'Donor Group'
         self.donor.name_fr = 'Doner Grup'
         self.donor.save()
@@ -1298,6 +1298,7 @@ class DonorTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         response_keys = response.json().keys()
         self.assertIn("name", response_keys)
+        self.assertIn("code", response_keys)
         self.assertIn("logo", response_keys)
         self.assertIn("cover", response_keys)
         self.assertIn("cover_text", response_keys)
@@ -1309,6 +1310,7 @@ class DonorTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         response_keys = response.json()[0].keys()
         self.assertIn("name", response_keys)
+        self.assertIn("code", response_keys)
         self.assertIn("logo", response_keys)
         self.assertIn("cover", response_keys)
         self.assertIn("cover_text", response_keys)

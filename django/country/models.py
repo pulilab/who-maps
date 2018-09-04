@@ -65,6 +65,7 @@ class Country(UserManagement, LandingPageCommon):
 
 
 class Donor(UserManagement, LandingPageCommon):
+    code = models.CharField(max_length=10, default="NULL", help_text="Acronym for Donor", unique=True)
 
     class Meta:
         verbose_name_plural = "Donors"

@@ -203,7 +203,7 @@ class UserProfileTests(APITestCase):
         # Update profile.
         self.org = Organisation.objects.create(name="org1")
         self.country = Country.objects.all()[0]
-        self.donor = Donor.objects.create(name="Donor1")
+        self.donor = Donor.objects.create(name="Donor1", code="donor1")
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
             "name": "Test Name",

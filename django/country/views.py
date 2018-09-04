@@ -25,7 +25,6 @@ from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializ
 class CountryLandingPageViewSet(mixins.RetrieveModelMixin,  mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
-    lookup_field = "code"
 
 
 class DonorLandingPageViewSet(mixins.RetrieveModelMixin,  mixins.ListModelMixin, viewsets.GenericViewSet):
