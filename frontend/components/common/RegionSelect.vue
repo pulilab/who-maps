@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      regions: 'countries/getRegions'
+      regions: 'system/getRegions'
     }),
     innerValue: {
       get () {
