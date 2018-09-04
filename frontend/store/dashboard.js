@@ -1,3 +1,5 @@
+import qs from 'qs';
+
 import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator } from '../utilities/map';
 export const state = () => ({
   ...stateGenerator(),
@@ -44,9 +46,18 @@ export const state = () => ({
   selectedHIS: [],
   selectedPlatforms: [],
   selectedRows: [],
+  searchString: '',
+  searchIn: ['name', 'org', 'country', 'overview', 'partner', 'donor'],
+  filteredCountries: [],
+  filteredRegion: null,
+  governmentApproved: null,
   selectAll: false,
   loading: false,
-  pageSize: 10
+  pageSize: 10,
+  page: 1,
+  total: 0,
+  nextPage: 0,
+  previousPage: 0
 });
 export const getters = {
   ...gettersGenerator(),
@@ -59,12 +70,33 @@ export const getters = {
   getSelectedHIS: state => state.selectedHIS,
   getSelectedPlatforms: state => state.selectedPlatforms,
   getSelectedRows: state => state.selectedRows,
+  getSearchString: state => state.searchString,
+  getSearchIn: state => state.searchIn,
+  getFilteredCountries: state => state.filteredCountries,
+  getFilteredRegion: state => state.filteredRegion,
+  getGovernmentApproved: state => state.governmentApproved,
   getSelectAll: state => state.selectAll,
   getLoading: state => state.loading,
   getPageSize: state => state.pageSize,
+  getTotal: state => state.total,
+  getNextPage: state => state.nextPage,
+  getPreviousPage: state => state.previousPage,
+  getCurrentPage: state => state.page,
   getSearchParameters: state => {
+    const q = state.searchString && state.searchString.length > 1 ? state.searchString : undefined;
     return {
       page_size: state.pageSize,
+      page: state.page,
+      q,
+      in: q ? state.searchIn : undefined,
+      country: state.filteredCountries,
+      region: state.filteredRegion,
+      approved: state.governmentApproved ? 1 : undefined,
+      sw: state.selectedPlatforms,
+      dhi: state.selectedDHI,
+      hfa: state.selectedHFA,
+      hsc: state.selectedHSC,
+      his: state.selectedHIS,
       type: 'list'
     };
   }
@@ -78,9 +110,11 @@ export const actions = {
       const { data } = await this.$axios({
         method: 'get',
         url: '/api/search/',
-        params: getters.getSearchParameters
+        params: getters.getSearchParameters,
+        paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'})
       });
       commit('SET_PROJECT_LIST', data.results.projects);
+      commit('SET_SEARCH_STATUS', data);
     } catch (e) {
       console.error(e);
     }
@@ -108,11 +142,29 @@ export const actions = {
     commit('SET_SELECTED_ROWS', rows);
     commit('SET_SELECT_ALL', false);
   },
+  setSearchString ({commit}, value) {
+    commit('SET_SEARCH_STRING', value);
+  },
+  setSearchIn ({commit}, value) {
+    commit('SET_SEARCH_IN', value);
+  },
+  setFilteredCountries ({commit}, value) {
+    commit('SET_FILTERED_COUNTRIES', value);
+  },
+  setFilteredRegion ({commit}, value) {
+    commit('SET_FILTERED_REGION', value);
+  },
+  setGovernmentApproved ({commit}, value) {
+    commit('SET_GOVERNMENT_APPROVED', value);
+  },
   setSelectAll ({commit}, all) {
     commit('SET_SELECT_ALL', all);
   },
   setPageSize ({commit}, size) {
     commit('SET_PAGE_SIZE', size);
+  },
+  setCurrentPage ({commit}, page) {
+    commit('SET_CURRENT_PAGE', page);
   }
 };
 export const mutations = {
@@ -141,6 +193,21 @@ export const mutations = {
   SET_SELECTED_ROWS: (state, rows) => {
     state.selectedRows = rows;
   },
+  SET_SEARCH_STRING: (state, value) => {
+    state.searchString = value;
+  },
+  SET_SEARCH_IN: (state, value) => {
+    state.searchIn = value;
+  },
+  SET_FILTERED_COUNTRIES: (state, value) => {
+    state.filteredCountries = value;
+  },
+  SET_FILTERED_REGION: (state, value) => {
+    state.filteredRegion = value;
+  },
+  SET_GOVERNMENT_APPROVED: (state, value) => {
+    state.governmentApproved = value;
+  },
   SET_SELECT_ALL: (state, all) => {
     state.selectAll = all;
   },
@@ -149,5 +216,13 @@ export const mutations = {
   },
   SET_PAGE_SIZE: (state, size) => {
     state.pageSize = size;
+  },
+  SET_CURRENT_PAGE: (state, page) => {
+    state.page = page;
+  },
+  SET_SEARCH_STATUS: (state, status) => {
+    state.total = status.count;
+    state.nextPage = status.next;
+    state.previousPage = status.previous;
   }
 };
