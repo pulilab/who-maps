@@ -139,3 +139,7 @@ export const apiWriteParser = p => {
     coverageData: undefined
   };
 };
+
+export const intArrayFromQs = item => {
+  return item ? Array.isArray(item) ? item.map(i => +i) : [+item] : [];
+};
