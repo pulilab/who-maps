@@ -3,6 +3,7 @@
     v-model="innerValue"
     :multiple="multiple"
     :disabled="disabled"
+    filterable
     popper-class="CountrySelectorPopper"
     class="CountrySelector"
     placeholder="Select country"
