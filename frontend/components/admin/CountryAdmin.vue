@@ -17,6 +17,14 @@
         @submit.native.prevent>
 
         <el-form-item
+          v-if="userProfile.is_superuser"
+          label="Choose country">
+          <country-select
+            :value="countryId"
+            @change="setCountryId"/>
+        </el-form-item>
+
+        <el-form-item
           label="Logo"
           prop="logo">
           <file-upload
@@ -197,34 +205,6 @@
       title="Country map"
       class="CountryMap">
       <vue-map-customizer />
-      <!-- <div v-if="!country.map_files.length || forceMapFileChange">
-        <el-form
-          label-width="215px"
-          label-position="left"
-          @submit.native.prevent>
-          <el-form-item label="Country file">
-            <el-upload
-              :show-file-list="false"
-              :limit="1"
-              :multiple="false"
-              :data="{country: country.id}"
-              :on-success="successHandler"
-              :before-upload="beforeMapUpload"
-              name="map_file"
-              action="/api/map-files/">
-              <el-button
-                :disalbed="uploadMapFile"
-                :loading="uploadMapFile"
-                icon="el-icon-plus"
-                type="text">Upload file</el-button>
-            </el-upload>
-          </el-form-item>
-        </el-form>
-      </div>
-
-      <div v-if="country.map_files.length && !forceMapFileChange">
-        <vue-map-customizer/>
-      </div> -->
     </collapsible-card>
 
     <div class="AdminActionBarBottom">
@@ -250,6 +230,7 @@ import CollapsibleCard from '../project/CollapsibleCard';
 import VueMapCustomizer from '../admin/VueMapCustomizer';
 import DhaQuestionaire from '../admin/DhaQuestionaire';
 import FileUpload from '../common/FileUpload';
+import CountrySelect from '../common/CountrySelect';
 import { mapGettersActions } from '../../utilities/form';
 
 export default {
@@ -260,7 +241,8 @@ export default {
     CollapsibleCard,
     VueMapCustomizer,
     DhaQuestionaire,
-    FileUpload
+    FileUpload,
+    CountrySelect
   },
 
   data () {
@@ -402,6 +384,17 @@ export default {
       set (value) {
         this.setDataField({field: 'super_admins', data: value});
       }
+    },
+
+    countryId: {
+      get () {
+        return this.country.id;
+      },
+      async set (value) {
+        this.setId(value);
+        await this.fetchData();
+        await this.loadGeoJSON();
+      }
     }
   },
 
@@ -467,11 +460,18 @@ export default {
   methods: {
     ...mapActions({
       setDataField: 'admin/country/setDataField',
-      saveChanges: 'admin/country/saveChanges'
+      saveChanges: 'admin/country/saveChanges',
+      setId: 'admin/country/setId',
+      fetchData: 'admin/country/fetchData',
+      loadGeoJSON: 'admin/map/loadGeoJSON'
     }),
 
     selectPersona (selected) {
       this.selectedPersona = selected;
+    },
+
+    setCountryId (selected) {
+      this.countryId = selected;
     }
   }
 };

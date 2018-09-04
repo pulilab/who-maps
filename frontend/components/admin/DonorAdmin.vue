@@ -17,6 +17,14 @@
         @submit.native.prevent>
 
         <el-form-item
+          v-if="userProfile.is_superuser"
+          label="Choose donor">
+          <donor-select
+            :value="donorId"
+            @change="setDonorId"/>
+        </el-form-item>
+
+        <el-form-item
           label="Logo"
           prop="logo">
           <file-upload
@@ -141,10 +149,10 @@
       </el-row>
     </collapsible-card>
 
-    <!-- <collapsible-card title="Country specific questionaire">
+    <collapsible-card title="Country specific questionaire">
       <h1>Country specific questionaire</h1>
       <dha-questionaire :label="'Country specific questionaire'"/>
-    </collapsible-card> -->
+    </collapsible-card>
 
     <div class="AdminActionBarBottom">
       <el-row
@@ -164,6 +172,7 @@ import CollapsibleCard from '../project/CollapsibleCard';
 import VueMapCustomizer from '../admin/VueMapCustomizer';
 import DhaQuestionaire from '../admin/DhaQuestionaire';
 import FileUpload from '../common/FileUpload';
+import DonorSelect from '../common/DonorSelect';
 import { mapGettersActions } from '../../utilities/form';
 
 export default {
@@ -174,7 +183,8 @@ export default {
     CollapsibleCard,
     VueMapCustomizer,
     DhaQuestionaire,
-    FileUpload
+    FileUpload,
+    DonorSelect
   },
 
   data () {
@@ -315,6 +325,17 @@ export default {
       set (value) {
         this.setDataField({field: 'super_admins', data: value});
       }
+    },
+
+    donorId: {
+      get () {
+        return this.donor.id || this.userProfile.donor;
+      },
+      async set (value) {
+        console.log('New donor set to:', value);
+        this.setId(value);
+        await this.fetchData();
+      }
     }
   },
 
@@ -380,11 +401,17 @@ export default {
   methods: {
     ...mapActions({
       setDataField: 'admin/donor/setDataField',
-      saveChanges: 'admin/donor/saveChanges'
+      saveChanges: 'admin/donor/saveChanges',
+      setId: 'admin/donor/setId',
+      fetchData: 'admin/donor/fetchData'
     }),
 
     selectPersona (selected) {
       this.selectedPersona = selected;
+    },
+
+    setDonorId (value) {
+      this.donorId = value;
     }
   }
 };

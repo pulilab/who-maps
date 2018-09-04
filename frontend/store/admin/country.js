@@ -1,6 +1,7 @@
 import * as sharedStoreModule from './CDshared.js';
 
 export const state = () => ({
+  id: null,
   type: 'country',
   data: {},
   editableData: {},
@@ -16,10 +17,10 @@ export const getters = {
 export const actions = {
   ...sharedStoreModule.actions,
 
-  async synchMapFile ({ rootGetters, getters }) {
+  async synchMapFile ({ state, rootGetters, getters }) {
     const mapFile = getters.getData.map_files[0];
     if (mapFile.raw) {
-      const countryId = rootGetters['user/getProfile'].country;
+      const countryId = state.id || rootGetters['user/getProfile'].country;
       const formData = new FormData();
       formData.append('country', countryId);
       formData.append('map_file', mapFile.raw);

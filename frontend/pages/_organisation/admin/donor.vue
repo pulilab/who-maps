@@ -11,9 +11,13 @@ export default {
   components: {
     DonorAdmin
   },
+
   async fetch ({store}) {
-    await store.dispatch('system/loadUserProfiles');
-    await store.dispatch('admin/donor/fetchData');
+    await Promise.all([
+      store.dispatch('system/loadUserProfiles'),
+      store.dispatch('admin/donor/fetchData'),
+      store.dispatch('user/fetchDonors')
+    ]);
   }
 };
 </script>

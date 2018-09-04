@@ -1,6 +1,7 @@
 import { Message } from 'element-ui';
 
 // export const state = () => ({
+//   id: Number // countryId || donorId
 //   type: '', // 'country' || 'donor'
 //   data: {},
 //   editableData: {},
@@ -24,11 +25,15 @@ export const getters = {
 };
 
 export const actions = {
+  setId ({ commit }, id) {
+    commit('SET_ID', id);
+  },
+
   async fetchData ({ state, commit, rootGetters, dispatch }) {
     const type = state.type === 'country' ? 'countries' : 'donors';
-    const id = rootGetters['user/getProfile'][state.type];
+    const id = state.id || rootGetters['user/getProfile'][state.type];
     const { data } = await this.$axios.get(`/api/${type}/${id}/`);
-    // console.log(`${state.type} DATA:`);
+    // console.log(`${state.type} DATA for #${id}`);
     // console.dir(data);
     commit('SET_DATA', data);
     commit('SET_EDITABLE_DATA', data);
@@ -119,7 +124,7 @@ export const actions = {
 
     if (Object.keys(patchObj).length) {
       const type = state.type === 'country' ? 'countries' : 'donors';
-      const id = rootGetters['user/getProfile'][state.type];
+      const id = state.id || rootGetters['user/getProfile'][state.type];
       await this.$axios.patch(`/api/${type}/${id}/`, patchObj);
     } else return Promise.resolve();
   },
@@ -135,7 +140,7 @@ export const actions = {
 
     const formData = new FormData();
     if (uploadNewLogo || changeOldLogo || uploadNewCover || changeOldCover) {
-      const id = rootGetters['user/getProfile'][state.type];
+      const id = state.id || rootGetters['user/getProfile'][state.type];
       if (uploadNewLogo || changeOldLogo) { formData.append('logo', (getters.getData.logo || '') && getters.getData.logo.raw); }
       if (uploadNewCover || changeOldCover) { formData.append('cover', (getters.getData.cover || '') && getters.getData.cover.raw); }
 
@@ -169,7 +174,7 @@ export const actions = {
   },
 
   async postPartnerLogo ({ state, rootGetters }, { img }) {
-    const id = rootGetters['user/getProfile'][state.type];
+    const id = state.id || rootGetters['user/getProfile'][state.type];
     const formData = new FormData();
     formData.append(state.type, id);
     formData.append('image', img);
@@ -202,6 +207,10 @@ export const actions = {
 };
 
 export const mutations = {
+  SET_ID: (state, id) => {
+    state.id = id;
+  },
+
   SET_DATA: (state, data) => {
     state.data = {...data};
   },

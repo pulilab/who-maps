@@ -1,6 +1,7 @@
 import * as sharedStoreModule from './CDshared.js';
 
 export const state = () => ({
+  id: null,
   type: 'donor',
   data: {},
   editableData: {},

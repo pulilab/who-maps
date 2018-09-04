@@ -1,4 +1,5 @@
 export const state = () => ({
+  geoJson: null,
   countryCenter: null,
   firstSubLevel: '',
   firstSubLevelType: null,
@@ -116,7 +117,7 @@ const parseNames = (collection) => {
 export const actions = {
   async loadGeoJSON ({commit, rootGetters}) {
     const country = rootGetters['admin/country/getStableData'];
-    const url = country.map_files.slice(-1)[0].map_file;
+    const url = country.map_files.length && country.map_files.slice(-1)[0].map_file;
     if (url) {
       const mediaIndex = url.indexOf('/media/');
       const proper = url.slice(mediaIndex);
