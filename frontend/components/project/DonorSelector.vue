@@ -4,32 +4,25 @@
     multiple
     filterable
     reserve-keyword
-    class="TeamSelector"
-    popper-class="TeamSelectorDropdown"
+    class="DonorSelector"
+    popper-class="DonorSelectorDropdown"
     placeholder="Type and select a name"
     @change="changeHandler"
   >
     <el-option
-      v-for="person in profiles"
-      :key="person.id"
-      :label="person.name"
-      :value="person.id"
-    >
-      <span>{{ person.name }}</span>
-      <template v-if="person.organisation">
-        <organisation-item :id="person.organisation" />
-      </template>
-    </el-option>
+      v-for="donor in donors"
+      :key="donor.id"
+      :label="donor.name"
+      :value="donor.id"
+    />
   </el-select>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import OrganisationItem from '../common/OrganisationItem';
 
 export default {
   components: {
-    OrganisationItem
   },
   $_veeValidate: {
     value () {
@@ -49,7 +42,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      profiles: 'system/getUserProfiles'
+      donors: 'system/getDonors'
     })
   },
   methods: {
@@ -64,11 +57,11 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-  .TeamSelector {
+  .DonorSelector {
     width: 100%;
   }
 
-  .TeamSelectorDropdown {
+  .DonorSelectorDropdown {
      .OrganisationItem {
       display: inline-block;
       margin-left: 6px;

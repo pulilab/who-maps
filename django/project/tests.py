@@ -89,8 +89,8 @@ class SetupTests(APITestCase):
         self.userprofile = UserProfile.objects.get(id=self.user_profile_id)
         self.country.users.add(self.userprofile)
 
-        self.d1 = Donor.objects.create(name="Donor1")
-        self.d2 = Donor.objects.create(name="Donor2")
+        self.d1 = Donor.objects.create(name="Donor1", code="donor1")
+        self.d2 = Donor.objects.create(name="Donor2", code="donor2")
 
         self.project_data = {
             "date": datetime.utcnow(),

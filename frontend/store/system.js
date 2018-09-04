@@ -1,6 +1,3 @@
-// import * as ProjectModule from './projects';
-// import * as CountriesModule from './countries';
-
 export const state = () => ({
   profiles: [],
   search_filters: [],
@@ -12,7 +9,8 @@ export const state = () => ({
   landing_page_defaults: {},
   toolkit_questions: [],
   sub_level_types: [],
-  organisations: []
+  organisations: [],
+  donors: []
 });
 
 export const getters = {
@@ -89,7 +87,9 @@ export const getters = {
   getOrganisationDetails: (state, getters) => id => {
     const o = getters.getOrganisations.find(org => org.id === id);
     return o ? { ...o } : undefined;
-  }
+  },
+  getDonors: state => state.donors,
+  getDonorDetails: state => id => ({...state.donors.find(d => d.id === id)})
 };
 
 export const actions = {
@@ -116,6 +116,11 @@ export const actions = {
       const { data } = await this.$axios.get(`/api/organisations/`);
       commit('SET_SYSTEM_ORGANISATIONS', data);
     }
+  },
+
+  async loadDonors ({ commit }) {
+    const { data } = await this.$axios.get(`/api/donors/`);
+    commit('SET_DONORS', data);
   },
 
   async addOrganisation ({ commit, dispatch }, name) {
@@ -160,5 +165,8 @@ export const mutations = {
 
   SET_SYSTEM_ORGANISATIONS: (state, value) => {
     state.organisations = value;
+  },
+  SET_DONORS: (state, donors) => {
+    state.donors = donors;
   }
 };

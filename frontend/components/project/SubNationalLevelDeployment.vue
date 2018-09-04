@@ -17,11 +17,14 @@
         <el-col :span="16">
           <el-form-item>
             <sub-national-level-deployment-item
+              ref="firstSubLevel"
+              :rules="rules.coverage"
+              :api-errors="apiErrors"
               :index="index"
               :level-name="countrySubLevelNames.first"
               :sub-levels="countryFirstSubLevel"
               :coverage.sync="coverage"
-              prop-prefix="coverage"
+              scope="coverage"
             />
           </el-form-item>
         </el-col>
@@ -51,11 +54,14 @@
         <el-col :span="16">
           <el-form-item prop="coverageSecondLevel">
             <sub-national-level-deployment-item
+              ref="secondSubLevel"
+              :rules="rules.coverage_second_level"
+              :api-errors="apiErrors"
               :index="index"
               :level-name="countrySubLevelNames.second"
               :sub-levels="countrySecondSubLevel"
               :coverage.sync="coverageSecondLevel"
-              prop-prefix="coverage_second_level"
+              scope="coverage_second_level"
             />
           </el-form-item>
         </el-col>
@@ -75,6 +81,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { mapGettersActions } from '../../utilities/form';
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
 
 import SubNationalLevelDeploymentItem from './SubNationalLevelDeploymentItem';
 import AddRmButtons from './AddRmButtons';
@@ -84,6 +91,7 @@ export default {
     SubNationalLevelDeploymentItem,
     AddRmButtons
   },
+  mixins: [VeeValidationMixin],
   computed: {
     ...mapGetters({
       country: 'project/getCountry',
@@ -109,6 +117,21 @@ export default {
     }
   },
   methods: {
+    async validate () {
+      const validators = await Promise.all(this.$refs.firstSubLevel.map(s => s.validate()));
+      if (this.countrySubLevelNames.second) {
+        validators.push(...await Promise.all(this.$refs.secondSubLevel.map(s => s.validate())));
+      }
+      console.log('sub natioal level deployment', validators);
+      return validators.reduce((a, c) => a && c, true);
+    },
+    clear () {
+      this.errors.clear();
+      this.$refs.firstSubLevel.clear();
+      if (this.countrySubLevelNames.second) {
+        this.$refs.secondSubLeve.clear();
+      }
+    },
     addCoverage () {
       this.coverage = [...this.coverage, null];
     },

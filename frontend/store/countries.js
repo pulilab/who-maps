@@ -1,3 +1,5 @@
+import uniqBy from 'lodash/uniqBy';
+
 export const state = () => ({
   countries: [],
   geoJsonLibrary: {},
@@ -39,8 +41,9 @@ export const getters = {
     const ln = 'en';
     const country = getters.getCountries.find(c => c.id === id);
     if (country && country.map_data && country.map_data.first_sub_level) {
-      return country.map_data.first_sub_level.elements
+      const mapped = country.map_data.first_sub_level.elements
         .map(ccd => ({ id: ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
+      return uniqBy(mapped, 'id');
     }
     return [];
   },
@@ -48,8 +51,9 @@ export const getters = {
     const ln = 'en';
     const country = getters.getCountries.find(c => c.id === id);
     if (country && country.map_data && country.map_data.second_sub_level) {
-      return country.map_data.second_sub_level.elements
+      const mapped = country.map_data.second_sub_level.elements
         .map(ccd => ({ id: ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
+      return uniqBy(mapped, 'id');
     }
     return [];
   },

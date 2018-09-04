@@ -2,15 +2,19 @@
   <div class="SubNationalLevelDeploymentItem">
     <el-form-item
       :label="levelName"
-      :prop="propPrefix +'.' + index"
+      :error="errors.first('district', scope + '_' + index)"
     >
       <el-select
-        :value="subLevel"
+        v-validate="rules.district"
+        v-model="subLevel"
+        :data-vv-as="levelName"
+        :data-vv-scope="scope + '_' + index"
+        data-vv-name="district"
         filterable
         popper-class="SubNationalLevelDeploymentRegionDropdown"
         class="SubNationalLevelDeployementRegion"
         placeholder="Select from list"
-        @change="changeHandler">
+      >
 
         <el-option
           v-for="sub in availableSubLevels"
@@ -19,20 +23,29 @@
           :value="sub.id"/>
       </el-select>
       <facility-selector
+        ref="facilitySelector"
+        :rules="rules"
+        :api-errors="apiErrors"
         v-model="facilitiesList"
         :disabled="!subLevel"
+        :scope="scope + '_' + index"
       />
       <coverage-fieldset
+        ref="coverageFieldset"
+        :rules="rules"
+        :api-errors="apiErrors"
         :health-workers.sync="healthWorkers"
         :clients.sync="clients"
         :facilities.sync="facilities"
         :disabled="!subLevel"
+        :scope="scope + '_' + index"
       />
     </el-form-item>
   </div>
 </template>
 
 <script>
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
 
 import CoverageFieldset from './CoverageFieldset';
 import FacilitySelector from './FacilitySelector';
@@ -44,6 +57,7 @@ export default {
     CoverageFieldset,
     FacilitySelector
   },
+  mixins: [VeeValidationMixin],
   props: {
     index: {
       type: [Number],
@@ -61,7 +75,7 @@ export default {
       type: Array,
       default: () => []
     },
-    propPrefix: {
+    scope: {
       type: String,
       required: true
     }
@@ -70,8 +84,15 @@ export default {
     ...mapGettersActions({
       coverageData: ['project', 'getCoverageData', 'setCoverageData', 0]
     }),
-    subLevel () {
-      return this.coverage[this.index];
+    subLevel: {
+      get () {
+        return this.coverage[this.index];
+      },
+      set (value) {
+        const cov = [...this.coverage];
+        cov[this.index] = value;
+        this.$emit('update:coverage', cov);
+      }
     },
     availableSubLevels () {
       return this.subLevels.filter(tp => !this.coverage.some(s => s === tp.id) || tp.id === this.subLevel);
@@ -118,10 +139,20 @@ export default {
     }
   },
   methods: {
-    changeHandler (value) {
-      const cov = [...this.coverage];
-      cov[this.index] = value;
-      this.$emit('update:coverage', cov);
+    clear () {
+      this.errors.clear();
+      this.$validator.clear();
+      this.$refs.coverageFieldset.clear();
+      this.$refs.facilitySelector.clear();
+    },
+    async validate () {
+      const validations = await Promise.all([
+        this.$validator.validate(),
+        this.$refs.coverageFieldset.validate(),
+        this.$refs.facilitySelector.validate()
+      ]);
+      console.log(`sub national level deployment item ${this.scope}`, validations);
+      return validations.reduce((a, c) => a && c, true);
     }
   }
 };

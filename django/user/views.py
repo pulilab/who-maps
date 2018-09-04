@@ -1,30 +1,16 @@
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.response import Response
 from rest_auth.models import TokenModel
 from drf_expiring_tokens.views import ObtainExpiringAuthToken
 
 from core.views import TokenAuthMixin
-from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileWithGroupsSerializer
+from .serializers import UserProfileSerializer, OrganisationSerializer
 from .models import UserProfile, Organisation
 
 
 class UserProfileViewSet(TokenAuthMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
-
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
-
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = UserProfileWithGroupsSerializer(instance)
-        return Response(serializer.data)
-
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
 
 
 class ExpiringAuthTokenWithUserProfile(ObtainExpiringAuthToken):

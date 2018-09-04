@@ -25,12 +25,13 @@ class AssessmentModuleController {
   onInit () {
     this.isPublic = false;
     this.profile = window.$nuxt.$store.getters['user/getProfile'];
-    this.projectData = window.$nuxt.$store.getters['projects/getCurrentProject'];
+    const project = window.$nuxt.$store.getters['projects/getCurrentProject'];
+    this.projectData = project.isPublished ? project.published : project.draft;
     this.structure = window.$nuxt.$store.getters['projects/getStructure'];
     this.toolkitVersion = window.$nuxt.$store.getters['projects/getToolkitVersions'];
     this.coverageVersion = window.$nuxt.$store.getters['projects/getCoverageVersions'];
     this.rawToolkitData = window.$nuxt.$store.getters['toolkit/getToolkitData'];
-    this.mapData = window.$nuxt.$store.getters['countries/getCountryDetails'](this.projectData.published.country);
+    this.mapData = window.$nuxt.$store.getters['countries/getCountryDetails'](this.projectData.country);
     this.watchers();
     this.projectId = this.state.params.appName;
     this.resizeEvent();

@@ -33,7 +33,7 @@ export default {
   .ProjectPublishedView {
     .CollapsibleCard {
       .el-card__header {
-        background-color: @colorPublished !important;
+        background-color: lighten(@colorPublished, 10%) !important;
       }
     }
 
@@ -45,7 +45,7 @@ export default {
           .el-button {
             .Step {
               color: @colorWhite;
-              background-color: @colorPublished !important;
+              background-color: lighten(@colorPublished, 10%) !important;
             }
           }
         }
