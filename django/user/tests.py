@@ -408,16 +408,11 @@ class UserProfileTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)
 
-    def test_user_profile_api_should_return_organisation_name_id(self):
+    def test_user_profile_api_should_return_organisation(self):
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue("organisation_name" in response.json())
         self.assertTrue("organisation" in response.json())
-
-    def test_organisation_returns_empty_string_when_no_org_id(self):
-        name = Organisation.get_name_by_id("")
-        self.assertEqual(name, "")
 
     def test_user_profile_has_account_type_information(self):
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
