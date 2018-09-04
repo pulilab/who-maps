@@ -1,10 +1,12 @@
 <template>
   <el-select
-    :value="value"
+    v-model="innerValue"
+    :multiple="multiple"
+    :disabled="disabled"
     popper-class="CountrySelectorPopper"
     class="CountrySelector"
     placeholder="Select country"
-    @change="changeHandler">
+  >
     <el-option
       v-for="country in countries"
       :key="country.id"
@@ -22,18 +24,28 @@ export default {
   },
   props: {
     value: {
-      type: Number,
+      type: [Number, Array],
       default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     ...mapGetters({
       countries: 'countries/getCountries'
-    })
-  },
-  methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
+    }),
+    innerValue: {
+      get () {
+        return this.value;
+      },
+      set (value) {
+        this.$emit('change', value);
+      }
+    },
+    multiple () {
+      return Array.isArray(this.value);
     }
   }
 };
