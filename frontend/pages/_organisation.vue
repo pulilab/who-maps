@@ -31,7 +31,7 @@ export default {
       store.dispatch('system/loadStaticData'),
       store.dispatch('system/loadDonors'),
       store.dispatch('countries/loadMapData'),
-      store.dispatch('landing/loadProjects')
+      store.dispatch('landing/search')
     ]);
     if (params.organisation !== 'who') {
       await store.dispatch('landing/loadCountryData', params.organisation);
