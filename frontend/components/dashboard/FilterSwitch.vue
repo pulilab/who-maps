@@ -66,7 +66,6 @@ export default {
   },
   methods: {
     switchChangeHandler (value) {
-      console.log(value);
       this.$emit('change', value);
     }
   }
