@@ -42,7 +42,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
     country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all(), required=True,
                                                  allow_null=False)
-    organisation_name = serializers.SerializerMethodField()
     organisation = serializers.PrimaryKeyRelatedField(queryset=Organisation.objects.all(), required=True,
                                                       allow_null=False)
     member = serializers.SerializerMethodField()
@@ -53,10 +52,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = '__all__'
-
-    @staticmethod
-    def get_organisation_name(obj):
-        return obj.organisation.name if obj.organisation else None
 
     @staticmethod
     def get_member(obj):
