@@ -2,6 +2,7 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import MinLengthValidator
 
 from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel
 from user.models import UserProfile
@@ -65,7 +66,8 @@ class Country(UserManagement, LandingPageCommon):
 
 
 class Donor(UserManagement, LandingPageCommon):
-    code = models.CharField(max_length=10, default="NULL", help_text="Acronym for Donor", unique=True)
+    code = models.CharField(max_length=10, default="NULL", help_text="Acronym for Donor", unique=True,
+                            validators=[MinLengthValidator(3)])
 
     class Meta:
         verbose_name_plural = "Donors"
