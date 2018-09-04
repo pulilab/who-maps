@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import isEmpty from 'lodash/isEmpty';
 import AdvancedSearch from '../../components/dashboard/AdvancedSearch';
 import { mapGetters, mapActions } from 'vuex';
 
@@ -25,12 +26,10 @@ export default {
     AdvancedSearch
   },
   middleware: ['isLoggedIn'],
-  async fetch ({store}) {
-    await Promise.all([
-      store.dispatch('projects/loadUserProjects'),
-      store.dispatch('projects/loadProjectStructure'),
-      store.dispatch('dashboard/loadProjectList')
-    ]);
+  fetch ({query, store}) {
+    if (!isEmpty(query)) {
+      store.dispatch('dashboard/setSearchOptions', query);
+    }
   },
   computed: {
     ...mapGetters({
@@ -41,14 +40,25 @@ export default {
   watch: {
     searchParameters: {
       immediate: false,
-      handler (params) {
-        this.loadProjectList();
+      handler (query) {
+        this.$router.replace({...this.$route, query});
+      }
+    }
+  },
+  mounted () {
+    if (isEmpty(this.$route.query)) {
+      this.$router.replace({...this.$route, query: this.searchParameters});
+    }
+    if (window) {
+      const savedFilters = window.localStorage.getItem('savedFilters');
+      if (savedFilters) {
+        this.setSavedFilters(JSON.parse(savedFilters));
       }
     }
   },
   methods: {
     ...mapActions({
-      loadProjectList: 'dashboard/loadProjectList'
+      setSavedFilters: 'dashboard/setSavedFilters'
     })
   }
 };
@@ -59,6 +69,10 @@ export default {
   @import "~assets/style/mixins.less";
 
   .DashboardArea {
+
+    .Loader {
+      // posit
+    }
     display: flex;
     overflow: hidden;
     width: 100vw;
