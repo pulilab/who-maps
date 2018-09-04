@@ -31,7 +31,12 @@ export const actions = {
 
   async fetchData ({ state, commit, rootGetters, dispatch }) {
     const type = state.type === 'country' ? 'countries' : 'donors';
-    const id = state.id || rootGetters['user/getProfile'][state.type];
+
+    const superUserSpecifiedId = state.id;
+    const idFromProfile = rootGetters['user/getProfile'][state.type];
+    const firstDonorId = rootGetters['system/getDonors'][0].id; // fallback for superuser w/o donor
+
+    const id = superUserSpecifiedId || idFromProfile || firstDonorId;
     const { data } = await this.$axios.get(`/api/${type}/${id}/`);
     // console.log(`${state.type} DATA for #${id}`);
     // console.dir(data);

@@ -15,9 +15,9 @@ export default {
   async fetch ({store}) {
     await Promise.all([
       store.dispatch('system/loadUserProfiles'),
-      store.dispatch('admin/donor/fetchData'),
-      store.dispatch('user/fetchDonors')
+      store.dispatch('system/loadDonors')
     ]);
+    await store.dispatch('admin/donor/fetchData');
   }
 };
 </script>

@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      donors: 'user/getDonors'
+      donors: 'system/getDonors'
     })
   },
   methods: {

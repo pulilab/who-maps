@@ -12,7 +12,7 @@ export default {
     EditProfile
   },
   async fetch ({ store }) {
-    store.dispatch('user/fetchDonors');
+    store.dispatch('system/loadDonors');
   }
 };
 </script>

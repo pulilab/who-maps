@@ -185,16 +185,9 @@
                 class="DonorSelector"
                 @submit.native.prevent>
                 <el-form-item label="I want to be a part of this donor group:">
-                  <el-select
-                    v-model="innerProfile.donor"
-                    size="small"
-                    placeholder="Select from list">
-                    <el-option
-                      v-for="don in donors"
-                      :key="don.value"
-                      :label="don.label"
-                      :value="don.value" />
-                  </el-select>
+                  <donor-select
+                    :value="innerProfile.donor"
+                    @change="setDonor"/>
                 </el-form-item>
               </el-form>
             </el-collapse-transition>
@@ -401,12 +394,14 @@ import FormAPIErrorsMixin from './mixins/FormAPIErrorsMixin';
 import OrganisationSelect from './common/OrganisationSelect';
 import LanguageSelect from './common/LanguageSelect';
 import CountrySelect from './common/CountrySelect';
+import DonorSelect from './common/DonorSelect';
 
 export default {
   components: {
     OrganisationSelect,
     LanguageSelect,
-    CountrySelect
+    CountrySelect,
+    DonorSelect
   },
   mixins: [FormAPIErrorsMixin],
   data () {
@@ -447,7 +442,7 @@ export default {
     ...mapGetters({
       profile: 'user/getProfile',
       user: 'user/getUser',
-      donors: 'user/getDonorsForDropdown'
+      donors: 'system/getDonors'
     }),
 
     userTypeRequested () {
@@ -455,6 +450,16 @@ export default {
         this.innerProfile.account_type === null ||
         this.innerProfile.account_type === this.profile.account_type
       );
+    },
+
+    donorId: {
+      get () {
+        return this.donor.id || this.userProfile.donor;
+      },
+      async set (value) {
+        this.setId(value);
+        await this.fetchData();
+      }
     }
   },
 
@@ -530,6 +535,10 @@ export default {
 
     changingUserRole () {
       this.changeApprovedUserRole = true;
+    },
+
+    setDonor (value) {
+      this.innerProfile.donor = value;
     }
   }
 };

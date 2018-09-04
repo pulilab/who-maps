@@ -332,7 +332,6 @@ export default {
         return this.donor.id || this.userProfile.donor;
       },
       async set (value) {
-        console.log('New donor set to:', value);
         this.setId(value);
         await this.fetchData();
       }

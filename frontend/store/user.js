@@ -4,18 +4,12 @@ import { saveToken, deleteToken } from '../utilities/auth';
 export const state = () => ({
   token: null,
   user: null,
-  profile: null,
-  donors: null
+  profile: null
 });
 
 export const getters = {
   getToken: state => state.token,
   getUser: state => state.user,
-  getDonors: state => state.donors,
-  getDonorsForDropdown: state => state.donors.map(donor => ({
-    value: donor.id,
-    label: donor.name
-  })),
 
   getProfile: state => {
     if (state.profile) {
@@ -56,11 +50,6 @@ export const actions = {
     commit('SET_PROFILE', null);
     commit('SET_TOKEN', null);
     deleteToken();
-  },
-
-  async fetchDonors ({ commit }) {
-    const { data } = await this.$axios.get(`/api/donors/`);
-    commit('SET_DONORS', data);
   },
 
   async loadProfile ({ commit, getters }, profileId) {
@@ -113,10 +102,6 @@ export const mutations = {
 
   UPDATE_TEAM_VIEWER: (state, {member, viewer}) => {
     state.profile = {...state.profile, member, viewer};
-  },
-
-  SET_DONORS: (state, donors) => {
-    state.donors = donors;
   }
 };
 
