@@ -40,13 +40,13 @@
           type="flex">
           <el-col class="ActionBarTab">
             <nuxt-link
-              :to="localePath({name: 'organisation-dashboard', params: $route.params})"
+              :to="localePath({name: 'organisation-dashboard', params: $route.params, query: $route.query})"
               class="ActionBarLink"
               tag="div">Map view</nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
-              :to="localePath({name: 'organisation-dashboard-list', params: $route.params})"
+              :to="localePath({name: 'organisation-dashboard-list', params: $route.params, query: $route.query})"
               class="ActionBarLink"
               tag="div">List view</nuxt-link>
           </el-col>
