@@ -63,7 +63,7 @@
               label="name"
               class="CheckboxSmall">Project Name</el-checkbox>
             <el-checkbox
-              label="organisation"
+              label="org"
               class="CheckboxSmall">Organisation Name</el-checkbox>
             <el-checkbox
               label="country"
@@ -72,10 +72,10 @@
               label="overview"
               class="CheckboxSmall">Overview of the digital health</el-checkbox>
             <el-checkbox
-              label="partners"
+              label="partner"
               class="CheckboxSmall">Implementing Partners</el-checkbox>
             <el-checkbox
-              label="donors"
+              label="donor"
               class="CheckboxSmall">Donors</el-checkbox>
           </el-checkbox-group>
         </el-col>
@@ -85,14 +85,20 @@
 </template>
 
 <script>
+import { mapGettersActions } from '../../utilities/form.js';
+
 export default {
   data () {
     return {
-      searchString: '',
       optionsVisible: false,
-      selectedOptions: [],
       showSearchBoxTooltip: false
     };
+  },
+  computed: {
+    ...mapGettersActions({
+      searchString: ['dashboard', 'getSearchString', 'setSearchString', 300],
+      selectedOptions: ['dashboard', 'getSearchIn', 'setSearchIn', 0]
+    })
   },
   methods: {
     toggleOptionsVisibility () {
