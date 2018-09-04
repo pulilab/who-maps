@@ -1,4 +1,6 @@
-import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator } from '../utilities/map';
+import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator, searchIn } from '../utilities/map';
+import { intArrayFromQs } from '../utilities/api';
+
 export const state = () => ({
   ...stateGenerator(),
   columns: [
@@ -46,7 +48,7 @@ export const state = () => ({
     }
   ],
   selectedColumns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-  projects: [],
+  projectsList: [],
   selectedDHI: [],
   selectedHFA: [],
   selectedHSC: [],
@@ -63,10 +65,13 @@ export const state = () => ({
   total: 0,
   nextPage: 0,
   previousPage: 0,
-  sorting: null
+  sorting: null,
+  savedFilters: [],
+  dashboardType: 'user'
 });
 export const getters = {
   ...gettersGenerator(),
+  getProjectsList: state => [...state.projectsList.map(r => ({...r}))],
   getAvailableColumns: state => [...state.columns.map(c => ({...c, selected: state.selectedColumns.includes(c.id)}))],
   getSelectedColumns: state => state.selectedColumns,
   getSelectedDHI: state => state.selectedDHI,
@@ -86,6 +91,8 @@ export const getters = {
   getPreviousPage: state => state.previousPage,
   getCurrentPage: state => state.page,
   getSorting: state => state.sorting,
+  getSavedFilters: state => state.savedFilters,
+  getDashboardType: state => state.dashboardType,
   getSearchParameters: state => {
     const q = state.searchString && state.searchString.length > 1 ? state.searchString : undefined;
     return {
@@ -102,8 +109,7 @@ export const getters = {
       dhi: state.selectedDHI,
       hfa: state.selectedHFA,
       hsc: state.selectedHSC,
-      his: state.selectedHIS,
-      type: 'list'
+      his: state.selectedHIS
     };
   }
 };
@@ -111,8 +117,17 @@ export const getters = {
 export const actions = {
   ...actionsGenerator(),
   async loadProjectList ({commit, dispatch}) {
-    const data = await dispatch('loadProjects');
+    const data = await dispatch('loadProjects', {type: 'list'});
+    commit('SET_PROJECT_LIST', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
+  },
+  async loadProjectsMap ({commit, dispatch}) {
+    const data = await dispatch('loadProjects', {type: 'map'});
+    commit('SET_PROJECT_MAP', data.results.projects);
+    commit('SET_SEARCH_STATUS', data);
+  },
+  setSearchOptions ({commit}, options) {
+    commit('SET_SEARCH_OPTIONS', options);
   },
   setSelectedColumns ({commit}, columns) {
     commit('SET_SELECTED_COLUMNS', columns);
@@ -159,10 +174,32 @@ export const actions = {
   },
   setSorting ({commit}, value) {
     commit('SET_SORTING', value);
+  },
+  setSavedFilters ({commit}, filters) {
+    commit('SET_SAVED_FILTERS', filters);
   }
 };
 export const mutations = {
   ...mutationsGenerator(),
+  SET_PROJECT_LIST: (state, projects) => {
+    state.projectsList = projects;
+  },
+  SET_SEARCH_OPTIONS: (state, options) => {
+    state.pageSize = options.page_size ? +options.page_size : 10;
+    state.page = options.page ? +options.page : 1;
+    state.sorting = options.sorting ? options.sorting : null;
+    state.searchString = options.q ? options.q : '';
+    state.searchIn = options.in ? options.in : searchIn();
+    state.filteredCountries = intArrayFromQs(options.country);
+    state.filteredRegion = options.region ? +options.region : null;
+    state.governmentFinanced = options.gov ? true : null;
+    state.governmentApproved = options.approved ? true : null;
+    state.selectedPlatforms = intArrayFromQs(options.sw);
+    state.selectedDHI = intArrayFromQs(options.dhi);
+    state.selectedHFA = intArrayFromQs(options.hfa);
+    state.selectedHSC = intArrayFromQs(options.hsc);
+    state.selectedHIS = intArrayFromQs(options.his);
+  },
   SET_SELECTED_COLUMNS: (state, columns) => {
     state.selectedColumns = columns;
   },
@@ -212,5 +249,8 @@ export const mutations = {
     state.total = status.count;
     state.nextPage = status.next;
     state.previousPage = status.previous;
+  },
+  SET_SAVED_FILTERS: (state, filters) => {
+    state.savedFilters = filters;
   }
 };
