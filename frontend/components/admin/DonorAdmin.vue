@@ -380,26 +380,11 @@ export default {
   methods: {
     ...mapActions({
       setDataField: 'admin/donor/setDataField',
-      saveChanges: 'admin/donor/saveChanges',
-      loadGeoJSON: 'admin/map/loadGeoJSON'
+      saveChanges: 'admin/donor/saveChanges'
     }),
 
     selectPersona (selected) {
       this.selectedPersona = selected;
-    },
-    showMapUploader () {
-      this.forceMapFileChange = !this.forceMapFileChange;
-    },
-    beforeMapUpload () {
-      this.uploadMapFile = true;
-    },
-    successHandler (response) {
-      this.setDataField({field: 'map_files', data: [response]});
-      setTimeout(async () => {
-        await this.loadGeoJSON();
-        this.forceMapFileChange = false;
-        this.uploadMapFile = false;
-      });
     }
   }
 };
