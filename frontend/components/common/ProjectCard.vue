@@ -50,7 +50,7 @@
               <fa
                 icon="search"
                 size="xs" />
-              <span>Found in "ProjectName"</span>
+              <span>Found in "{{ found }}"</span>
             </el-col>
           </el-row>
         </el-col>
@@ -83,6 +83,10 @@ export default {
     project: {
       type: Object,
       default: () => ({})
+    },
+    foundIn: {
+      type: Array,
+      default: () => []
     },
     showCountry: {
       type: Boolean,
@@ -123,6 +127,21 @@ export default {
     },
     verified () {
       return this.showVerified && this.project.approved;
+    },
+    found () {
+      const nameMApping = {
+        country: 'Country',
+        donor: 'Donors',
+        loc: 'Location',
+        name: 'Name',
+        org: 'Organisation',
+        overview: 'Implementation Overview',
+        partner: 'Partners',
+        region: 'Rgion'
+      };
+      if (this.foundIn && this.showFoundIn) {
+        return this.foundIn.map(f => nameMApping[f]).join(',');
+      }
     }
   },
   methods: {
