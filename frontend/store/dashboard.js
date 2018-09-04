@@ -62,7 +62,8 @@ export const state = () => ({
   page: 1,
   total: 0,
   nextPage: 0,
-  previousPage: 0
+  previousPage: 0,
+  sorting: null
 });
 export const getters = {
   ...gettersGenerator(),
@@ -84,16 +85,18 @@ export const getters = {
   getNextPage: state => state.nextPage,
   getPreviousPage: state => state.previousPage,
   getCurrentPage: state => state.page,
+  getSorting: state => state.sorting,
   getSearchParameters: state => {
     const q = state.searchString && state.searchString.length > 1 ? state.searchString : undefined;
     return {
       page_size: state.pageSize,
       page: state.page,
+      ordering: state.sorting,
       q,
       in: q ? state.searchIn : undefined,
       country: state.filteredCountries,
       region: state.filteredRegion,
-      gov: state.governmentFinanced ? [1, 2] : 0,
+      gov: state.governmentFinanced ? [1, 2] : undefined,
       approved: state.governmentApproved ? 1 : undefined,
       sw: state.selectedPlatforms,
       dhi: state.selectedDHI,
@@ -153,6 +156,9 @@ export const actions = {
   },
   setCurrentPage ({commit}, page) {
     commit('SET_CURRENT_PAGE', page);
+  },
+  setSorting ({commit}, value) {
+    commit('SET_SORTING', value);
   }
 };
 export const mutations = {
@@ -198,6 +204,9 @@ export const mutations = {
   },
   SET_CURRENT_PAGE: (state, page) => {
     state.page = page;
+  },
+  SET_SORTING: (state, value) => {
+    state.sorting = value;
   },
   SET_SEARCH_STATUS: (state, status) => {
     state.total = status.count;

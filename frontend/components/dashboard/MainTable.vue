@@ -11,6 +11,7 @@
       style="width: 100%"
       @select="selectHandler"
       @select-all="selectHandler"
+      @sort-change="sortChanged"
     >
       <el-table-column
         type="selection"
@@ -19,7 +20,8 @@
       <el-table-column
         v-if="selectedColumns.includes(1)"
         fixed
-        sortable
+        sortable="custom"
+        prop="project__name"
         label="Project Name"
         width="240">
         <template slot-scope="scope">
@@ -32,7 +34,8 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(2)"
-        sortable
+        sortable="custom"
+        prop="country__name"
         label="Country"
         width="180">
         <template slot-scope="scope">
@@ -44,7 +47,8 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(3)"
-        sortable
+        sortable="custom"
+        prop="organisation__name"
         label="Organisation Name"
         width="240">
         <template slot-scope="scope">
@@ -55,7 +59,8 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(4)"
-        sortable
+        sortable="custom"
+        prop="project__data__government_investor"
         label="Government Investor"
         width="180">
         <template slot-scope="scope">
@@ -65,7 +70,8 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(5)"
-        sortable
+        sortable="custom"
+        prop="country__region"
         label="Region"
         width="180">
         <template slot-scope="scope">
@@ -175,7 +181,8 @@ export default {
     }),
     ...mapGettersActions({
       pageSize: ['dashboard', 'getPageSize', 'setPageSize', 0],
-      currentPage: ['dashboard', 'getCurrentPage', 'setCurrentPage', 0]
+      currentPage: ['dashboard', 'getCurrentPage', 'setCurrentPage', 0],
+      sorting: ['dashboard', 'getSorting', 'setSorting', 0]
     }),
     min () {
       return 1 + this.pageSize * (this.currentPage - 1);
@@ -219,6 +226,13 @@ export default {
     },
     rowClassCalculator ({row}) {
       return this.selectedRows.includes(row.id) ? 'Selected' : 'NotSelected';
+    },
+    sortChanged ({prop, order}) {
+      if (order === 'descending') {
+        this.sorting = '-' + prop;
+      } else {
+        this.sorting = prop;
+      }
     }
   }
 };
