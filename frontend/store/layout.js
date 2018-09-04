@@ -1,11 +1,13 @@
 export const state = () => ({
   digitalHealthInterventionsDialogState: null,
-  dashboardFiltersDialogState: null
+  dashboardFiltersDialogState: null,
+  saveFiltersDialogState: null
 });
 
 export const getters = {
   getDigitalHealthInterventionsDialogState: state => state.digitalHealthInterventionsDialogState,
-  getDashboardFiltersDialogState: state => state.dashboardFiltersDialogState
+  getDashboardFiltersDialogState: state => state.dashboardFiltersDialogState,
+  getSaveFiltersDialogState: state => state.saveFiltersDialogState
 };
 
 export const actions = {
@@ -14,6 +16,9 @@ export const actions = {
   },
   setDashboardFiltersDialogState ({commit}, value) {
     commit('SET_DASHBOARD_FILTERS_DIALOG_STATE', value);
+  },
+  setSaveFiltersDialogState ({commit}, value) {
+    commit('SET_SAVE_FILTERS_DIALOG_STATE', value);
   }
 };
 
@@ -23,5 +28,8 @@ export const mutations = {
   },
   SET_DASHBOARD_FILTERS_DIALOG_STATE: (state, value) => {
     state.dashboardFiltersDialogState = value;
+  },
+  SET_SAVE_FILTERS_DIALOG_STATE: (state, value) => {
+    state.saveFiltersDialogState = value;
   }
 };
