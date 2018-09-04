@@ -113,13 +113,13 @@ export default {
   },
   data () {
     return {
-      governamentApproved: false,
       governamentFinanced: false,
       onlyMyDonor: false
     };
   },
   computed: {
     ...mapGettersActions({
+      governamentApproved: ['dashboard', 'getGovernmentApproved', 'setGovernmentApproved', 0],
       selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0],
       selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
       selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
