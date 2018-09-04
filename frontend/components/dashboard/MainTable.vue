@@ -143,8 +143,6 @@ export default {
   },
   data () {
     return {
-      currentPage: 1,
-      total: 450,
       pageSizeOption: [10, 20, 50, 100],
       tableMaxHeight: 200
     };
@@ -154,16 +152,19 @@ export default {
       projects: 'dashboard/getProjects',
       selectedColumns: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
-      selectAll: 'dashboard/getSelectAll'
+      selectAll: 'dashboard/getSelectAll',
+      total: 'dashboard/getTotal'
     }),
     ...mapGettersActions({
-      pageSize: ['dashboard', 'getPageSize', 'setPageSize', 0]
+      pageSize: ['dashboard', 'getPageSize', 'setPageSize', 0],
+      currentPage: ['dashboard', 'getCurrentPage', 'setCurrentPage', 0]
     }),
     min () {
       return 1 + this.pageSize * (this.currentPage - 1);
     },
     max () {
-      return this.pageSize * this.currentPage;
+      const max = this.pageSize * this.currentPage;
+      return max < this.total ? max : this.total;
     }
   },
   watch: {
