@@ -1,8 +1,10 @@
 <template>
   <el-select
-    :value="value"
+    v-model="innerValue"
+    :disabled="disabled"
+    clearable
     placeholder="Select region"
-    @change="changeHandler">
+  >
     <el-option
       v-for="region in regions"
       :key="region.id"
@@ -20,18 +22,25 @@ export default {
   },
   props: {
     value: {
-      type: Number,
+      type: [Number, String],
       default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     ...mapGetters({
       regions: 'countries/getRegions'
-    })
-  },
-  methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
+    }),
+    innerValue: {
+      get () {
+        return this.value;
+      },
+      set (value) {
+        this.$emit('change', value);
+      }
     }
   }
 };
