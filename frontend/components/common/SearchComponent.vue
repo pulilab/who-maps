@@ -15,8 +15,9 @@
           >
             <el-col :span="24">
               <el-input
-                v-model="searchString"
-                placeholder="Type something">
+                v-model="localSearchString"
+                placeholder="Type something"
+                @keyup.enter.native="search">
                 <fa
                   slot="prepend"
                   icon="search" />
@@ -72,11 +73,13 @@
           <el-row
             v-for="project in results"
             v-show="hasResults"
-            :key="project"
+            :key="project.id"
             class="SearchResultItem"
           >
             <el-col>
               <project-card
+                :project="project"
+                :found-in="getFoundIn(project.id)"
                 show-found-in
                 show-country
                 show-organisation
@@ -131,8 +134,10 @@
 </template>
 
 <script>
+import { mapGettersActions } from '../../utilities/form.js';
 import ProjectCard from './ProjectCard';
 import ClickOutside from 'vue-click-outside';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   directives: {
@@ -143,23 +148,40 @@ export default {
   },
   data () {
     return {
-      shown: false,
-      searchString: null,
-      results: []
+      localSearchString: '',
+      shown: false
     };
   },
   computed: {
+    ...mapGetters({
+      searchParameters: 'landing/getSearchParameters',
+      results: 'landing/getSearchResult',
+      getFoundIn: 'landing/getFoundIn'
+    }),
+    ...mapGettersActions({
+      searchString: ['landing', 'getSearchString', 'setSearchString', 0]
+    }),
     hasResults () {
       return this.results.length > 0;
     }
   },
+  watch: {
+    searchParameters: {
+      immediate: false,
+      handler (params) {
+        this.doSearch();
+      }
+    }
+  },
   methods: {
+    ...mapActions({
+      doSearch: 'landing/search'
+    }),
     clearSearch () {
       this.searchString = null;
-      this.results = [];
     },
     search () {
-      this.results = [1, 2, 3];
+      this.searchString = this.localSearchString;
     },
     show () {
       this.shown = true;
