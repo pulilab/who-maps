@@ -56,6 +56,26 @@
       <el-table-column
         v-if="selectedColumns.includes(4)"
         sortable
+        label="Government Investor"
+        width="180">
+        <template slot-scope="scope">
+          <span v-show="scope.row.government_investor">Yes</span>
+          <span v-show="!scope.row.government_investor">No</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="selectedColumns.includes(5)"
+        sortable
+        label="Region"
+        width="180">
+        <template slot-scope="scope">
+          <region-item
+            :id="scope.row.region"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="selectedColumns.includes(6)"
         label="Donors"
         width="240">
         <template slot-scope="scope">
@@ -65,8 +85,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(5)"
-        sortable
+        v-if="selectedColumns.includes(7)"
         label="Contact Name"
         width="240">
         <template slot-scope="scope">
@@ -78,8 +97,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(6)"
-        sortable
+        v-if="selectedColumns.includes(8)"
         label="Implementation Overview"
         width="240">
         <template slot-scope="scope">
@@ -87,8 +105,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(7)"
-        sortable
+        v-if="selectedColumns.includes(9)"
         label="Geographic Scope"
         width="240">
         <template slot-scope="scope">
@@ -96,8 +113,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(8)"
-        sortable
+        v-if="selectedColumns.includes(10)"
         label="Health Focus Areas"
         width="240">
         <template slot-scope="scope">
@@ -132,6 +148,7 @@ import CountryItem from '../common/CountryItem';
 import OrganisationItem from '../common/OrganisationItem';
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
 import DonorsList from '../common/list/DonorsList';
+import RegionItem from '../common/RegionItem';
 
 export default {
   components: {
@@ -139,7 +156,8 @@ export default {
     CountryItem,
     OrganisationItem,
     HealthFocusAreasList,
-    DonorsList
+    DonorsList,
+    RegionItem
   },
   data () {
     return {
