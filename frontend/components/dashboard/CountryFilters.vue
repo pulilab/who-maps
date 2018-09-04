@@ -1,14 +1,19 @@
 <template>
   <div class="CountryFilters">
     <country-select
-      v-model="selectedCountry"
-      popper-additional-class="CountrySelectPopper"
+      v-model="selectedCounties"
+      :disabled="disableCountries"
     />
-    <region-select v-model="selectedRegion" />
+    <region-select
+      v-model="selectedRegion"
+      :disabled="disableRegions"
+    />
   </div>
 </template>
 
 <script>
+import { mapGettersActions } from '../../utilities/form.js';
+
 import CountrySelect from '../common/CountrySelect';
 import RegionSelect from '../common/RegionSelect';
 export default {
@@ -16,11 +21,17 @@ export default {
     CountrySelect,
     RegionSelect
   },
-  data () {
-    return {
-      selectedCountry: null,
-      selectedRegion: null
-    };
+  computed: {
+    ...mapGettersActions({
+      selectedCounties: ['dashboard', 'getFilteredCountries', 'setFilteredCountries'],
+      selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion']
+    }),
+    disableCountries () {
+      return !!this.selectedRegion;
+    },
+    disableRegions () {
+      return this.selectedCounties.length > 0;
+    }
   }
 };
 </script>
