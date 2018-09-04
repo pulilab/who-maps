@@ -86,6 +86,8 @@ export default {
   @import "~assets/style/mixins.less";
 
   .ListOfOptions {
+    margin-bottom: 10px;
+
     h6 {
       font-size: @fontSizeBase;
       margin: 30px 0 10px;
@@ -113,7 +115,7 @@ export default {
       list-style-type: none;
       display: block;
       margin: 20px 0;
-      padding: 0 20px;
+      padding: 0 15px;
 
       li {
         display: flex;

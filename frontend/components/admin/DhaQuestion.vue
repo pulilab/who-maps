@@ -141,9 +141,9 @@ export default {
 
     .el-card__body {
       > div {
-        margin-bottom: 20px;
+        margin-top: 20px;
 
-        &:last-child {
+        &:first-child {
           margin: 0;
         }
       }
