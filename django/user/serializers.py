@@ -38,29 +38,15 @@ class ProfileTokenSerializer(TokenSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email', read_only=True)
-    organisation_name = serializers.SerializerMethodField()
-    country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all(), required=True,
-                                                 allow_null=False)
-    organisation = serializers.PrimaryKeyRelatedField(queryset=Organisation.objects.all(), required=True,
-                                                      allow_null=False)
     name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
     user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
-
-    class Meta:
-        model = UserProfile
-        fields = ("id", "name", "email", "country", "donor", "account_type", "organisation", "user", "created",
-                  "organisation_name", "language")
-
-    @staticmethod
-    def get_organisation_name(obj):
-        return obj.organisation.name if obj.organisation else None
-
-
-class UserProfileWithGroupsSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(source='user.email')
+    country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all(), required=True,
+                                                 allow_null=False)
+    organisation_name = serializers.SerializerMethodField()
+    organisation = serializers.PrimaryKeyRelatedField(queryset=Organisation.objects.all(), required=True,
+                                                      allow_null=False)
     member = serializers.SerializerMethodField()
     viewer = serializers.SerializerMethodField()
-    organisation_name = serializers.SerializerMethodField()
     is_superuser = serializers.SerializerMethodField()
     account_type_approved = serializers.SerializerMethodField()
 
