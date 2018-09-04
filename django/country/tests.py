@@ -71,10 +71,22 @@ class CountryTests(APITestCase):
         self.assertEqual(str(self.country), 'Hungary')
 
     def test_retrieve_landing_detail(self):
-        url = reverse("landing-detail", kwargs={"code": self.country.code})
-        response = self.test_user_client.get(url)
+        url = reverse("landing-country-detail", kwargs={"pk": self.country.id})
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         response_keys = response.json().keys()
+        self.assertIn("name", response_keys)
+        self.assertIn("code", response_keys)
+        self.assertIn("logo", response_keys)
+        self.assertIn("cover", response_keys)
+        self.assertIn("cover_text", response_keys)
+        self.assertIn("footer_text", response_keys)
+
+    def test_retrieve_landing_list(self):
+        url = reverse("landing-country-list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        response_keys = response.json()[0].keys()
         self.assertIn("name", response_keys)
         self.assertIn("code", response_keys)
         self.assertIn("logo", response_keys)
@@ -1264,7 +1276,7 @@ class DonorTests(APITestCase):
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
 
-        self.donor = Donor.objects.create(name="donor1")
+        self.donor = Donor.objects.create(name="donor1", code="donor1")
         self.donor.name_en = 'Donor Group'
         self.donor.name_fr = 'Doner Grup'
         self.donor.save()
@@ -1279,6 +1291,30 @@ class DonorTests(APITestCase):
 
     def test_donor_model_str(self):
         self.assertEqual(str(self.donor), 'Donor Group')
+
+    def test_retrieve_landing_detail(self):
+        url = reverse("landing-donor-detail", kwargs={"pk": self.donor.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        response_keys = response.json().keys()
+        self.assertIn("name", response_keys)
+        self.assertIn("code", response_keys)
+        self.assertIn("logo", response_keys)
+        self.assertIn("cover", response_keys)
+        self.assertIn("cover_text", response_keys)
+        self.assertIn("footer_text", response_keys)
+
+    def test_retrieve_landing_list(self):
+        url = reverse("landing-donor-list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        response_keys = response.json()[0].keys()
+        self.assertIn("name", response_keys)
+        self.assertIn("code", response_keys)
+        self.assertIn("logo", response_keys)
+        self.assertIn("cover", response_keys)
+        self.assertIn("cover_text", response_keys)
+        self.assertIn("footer_text", response_keys)
 
     def test_donor_admin_retrieve(self):
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
@@ -1660,6 +1696,23 @@ class DonorTests(APITestCase):
 
 class MockRequest:
     pass
+
+
+class DonorAdminTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(username="alma", email="test@test.com", is_staff=True, is_superuser=True)
+        self.user.set_password('korte')
+        self.user.save()
+
+    def test_donor_code_min_length(self):
+        self.assertTrue(self.client.login(username='test@test.com', password='korte'))
+        url = reverse('admin:country_donor_add')
+        data = {
+            'name': 'Some donor',
+            'code': 'aa',
+        }
+        response = self.client.post(url, data, follow=True)
+        self.assertContains(response, "Ensure this value has at least 3 characters")
 
 
 class CountryAdminTests(TestCase):

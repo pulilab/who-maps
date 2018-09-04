@@ -22,10 +22,14 @@ from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializ
     CountryImageSerializer, DonorImageSerializer
 
 
-class LandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class CountryLandingPageViewSet(mixins.RetrieveModelMixin,  mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
-    lookup_field = "code"
+
+
+class DonorLandingPageViewSet(mixins.RetrieveModelMixin,  mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Donor.objects.all()
+    serializer_class = DonorSerializer
 
 
 class AdminPermissionMixin:

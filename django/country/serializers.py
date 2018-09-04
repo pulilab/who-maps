@@ -197,9 +197,9 @@ class CountrySerializer(SuperAdminCountrySerializer):
         read_only_fields = READ_ONLY_COUNTRY_FIELDS
 
 
-DONOR_FIELDS = ("id", "name", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title", "footer_text",
-                "partner_logos")
-READ_ONLY_DONOR_FIELDS = ("logo_url", "cover_url", "logo", "cover", "name",)
+DONOR_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
+                "footer_text", "partner_logos")
+READ_ONLY_DONOR_FIELDS = ("logo_url", "cover_url", "logo", "cover", "name", "code",)
 DONOR_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 READ_ONLY_DONOR_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos",)
 
