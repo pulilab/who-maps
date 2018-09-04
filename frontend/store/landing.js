@@ -12,7 +12,7 @@ export const getters = {
   getCountryData: state => state.countryData,
   getSearchResult: (state, getters) => {
     if (state.searched && state.searched === state.searchString) {
-      return getters.getProjects;
+      return getters.getProjectsMap;
     }
     return [];
   },
@@ -32,6 +32,7 @@ export const actions = {
   async search ({commit, dispatch}) {
     commit('SET_SEARCHED', null);
     const { results } = await dispatch('loadProjects');
+    commit('SET_PROJECT_MAP', results.projects);
     commit('SET_SEARCHED', results.search_term);
     commit('SET_FOUND_IN', results.found_in);
   },
