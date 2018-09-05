@@ -37,7 +37,8 @@ const cleanState = () => ({
   wiki: null,
   interoperability_links: {},
   interoperability_standards: [],
-  published: null
+  published: null,
+  original: null
 });
 
 export const state = () => ({
@@ -79,12 +80,15 @@ export const getters = {
   getInteroperabilityLinks: state => state.interoperability_links,
   getInteroperabilityStandards: state => state.interoperability_standards,
   getPublished: state => state.published,
-  getLoading: state => state.loading
+  getLoading: state => state.loading,
+  getOriginal: state => state.original
 };
 
 export const actions = {
-  async loadProject ({commit, dispatch}, id) {
-    const { data } = await this.$axios.get(`/api/projects/${id}/`);
+  async loadProject ({commit, dispatch, rootGetters}, id) {
+    const userProject = rootGetters['projects/getUserProjectList'].find(p => p.id === id);
+    const { data } = userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`);
+    commit('SET_ORIGINAL', Object.freeze(data));
     const clean = cleanState();
     const published = {...clean, ...apiReadParser(data.published)};
     const draft = {...clean, ...apiReadParser(data.draft)};
@@ -410,6 +414,9 @@ export const mutations = {
     state.wiki = project.wiki;
     state.interoperability_links = project.interoperability_links;
     state.interoperability_standards = project.interoperability_standards;
+  },
+  SET_ORIGINAL: (state, project) => {
+    state.original = project;
   }
 
 };

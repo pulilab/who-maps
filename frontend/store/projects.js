@@ -47,7 +47,7 @@ export const getters = {
         ...p,
         isMember: user ? user.member.includes(p.id) : undefined,
         isViewer: user ? user.viewer.includes(p.id) : undefined,
-        isPublished: !!(p.published.name)
+        isPublished: !!(p.published && p.published.name)
       };
     }
     return {};
@@ -57,7 +57,8 @@ export const getters = {
     return getters.getProjectDetails(p);
   },
   getCurrentProject: (state, getters, rootState, rootGetters) => {
-    const p = state.currentProjectData;
+    // Utility method for retro-compatibility
+    const p = rootGetters['project/getOriginal'];
     return getters.getProjectDetails(p);
   },
   getMapsAxisData: (state, getters, rootState, rootGetters) => {
@@ -175,20 +176,14 @@ export const actions = {
     await dispatch('loadProjectDetails', id);
     commit('SET_CURRENT_PROJECT', id);
   },
-  async loadProjectDetails ({commit, getters}, projectId) {
+  async loadProjectDetails ({commit}, projectId) {
     try {
       if (projectId) {
-        const userProject = getters.getUserProjectList.find(p => p.id === projectId);
-        const projectPromise = userProject && userProject.id
-          ? Promise.resolve(userProject)
-          : this.$axios.get(`/api/projects/${projectId}/`);
-        const [project, toolkitVersions, coverageVersions] =
+        const [toolkitVersions, coverageVersions] =
                   await Promise.all([
-                    projectPromise,
                     this.$axios.get(`/api/projects/${projectId}/toolkit/versions/`),
                     this.$axios.get(`/api/projects/${projectId}/coverage/versions/`)
                   ]);
-        commit('SET_CURRENT_PROJECT_DATA', project.data);
         commit('SET_CURRENT_PROJECT_TOOLKIT', toolkitVersions.data);
         commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', coverageVersions.data);
       }
@@ -233,9 +228,6 @@ export const mutations = {
   },
   SET_PROJECT_STRUCTURE: (state, structure) => {
     state.projectStructure = structure;
-  },
-  SET_CURRENT_PROJECT_DATA: (state, project) => {
-    state.currentProjectData = project;
   },
   SET_CURRENT_PROJECT_TOOLKIT: (state, toolkit) => {
     state.currentProjectToolkitVersions = toolkit;
