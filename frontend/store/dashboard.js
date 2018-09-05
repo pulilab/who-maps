@@ -132,20 +132,33 @@ export const actions = {
   setSelectedColumns ({commit}, columns) {
     commit('SET_SELECTED_COLUMNS', columns);
   },
+  setSearchString ({commit}, value) {
+    commit('SET_SEARCH_STRING', value);
+    commit('SET_CURRENT_PAGE', 1);
+  },
+  setSearchIn ({commit}, value) {
+    commit('SET_SEARCH_IN', value);
+    commit('SET_CURRENT_PAGE', 1);
+  },
   setSelectedDHI ({commit}, columns) {
     commit('SET_SELECTED_DHI', columns);
+    commit('SET_CURRENT_PAGE', 1);
   },
   setSelectedHFA ({commit}, columns) {
     commit('SET_SELECTED_HFA', columns);
+    commit('SET_CURRENT_PAGE', 1);
   },
   setSelectedHSC ({commit}, columns) {
     commit('SET_SELECTED_HSC', columns);
+    commit('SET_CURRENT_PAGE', 1);
   },
   setSelectedHIS ({commit}, columns) {
     commit('SET_SELECTED_HIS', columns);
+    commit('SET_CURRENT_PAGE', 1);
   },
   setSelectedPlatforms ({commit}, columns) {
     commit('SET_SELECTED_PLATFORMS', columns);
+    commit('SET_CURRENT_PAGE', 1);
   },
   setSelectedRows ({commit}, rows) {
     commit('SET_SELECTED_ROWS', rows);
@@ -153,15 +166,19 @@ export const actions = {
   },
   setFilteredCountries ({commit}, value) {
     commit('SET_FILTERED_COUNTRIES', value);
+    commit('SET_CURRENT_PAGE', 1);
   },
   setFilteredRegion ({commit}, value) {
     commit('SET_FILTERED_REGION', value);
+    commit('SET_CURRENT_PAGE', 1);
   },
   setGovernmentApproved ({commit}, value) {
     commit('SET_GOVERNMENT_APPROVED', value);
+    commit('SET_CURRENT_PAGE', 1);
   },
   setGovernmentFinanced ({commit}, value) {
     commit('SET_GOVERNMENT_FINANCED', value);
+    commit('SET_CURRENT_PAGE', 1);
   },
   setSelectAll ({commit}, all) {
     commit('SET_SELECT_ALL', all);
@@ -174,6 +191,7 @@ export const actions = {
   },
   setSorting ({commit}, value) {
     commit('SET_SORTING', value);
+    commit('SET_CURRENT_PAGE', 1);
   },
   setSavedFilters ({commit}, filters) {
     commit('SET_SAVED_FILTERS', filters);
