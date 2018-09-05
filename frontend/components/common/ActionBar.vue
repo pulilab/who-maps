@@ -41,13 +41,13 @@
           <el-col class="ActionBarTab">
             <nuxt-link
               :to="localePath({name: 'organisation-dashboard', params: $route.params, query: $route.query})"
-              class="ActionBarLink"
+              :class="['ActionBarLink', {'Active': isMapSubRoute}]"
               tag="div">Map view</nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
               :to="localePath({name: 'organisation-dashboard-list', params: $route.params, query: $route.query})"
-              class="ActionBarLink"
+              :class="['ActionBarLink', {'Active': isListSubRoute}]"
               tag="div">List view</nuxt-link>
           </el-col>
         </el-row>
@@ -96,9 +96,14 @@ export default {
     allowDonorAdmin () {
       return (['DA', 'SDA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
     },
-
     isDashboard () {
       return this.$route.path.includes('/dashboard');
+    },
+    isMapSubRoute () {
+      return this.$route.name.includes('organisation-dashboard___');
+    },
+    isListSubRoute () {
+      return this.$route.name.includes('organisation-dashboard-list___');
     }
   }
 };
@@ -158,7 +163,7 @@ export default {
       white-space: nowrap;
       opacity: .6;
       transition: @transitionAll;
-      &.nuxt-link-exact-active {
+      &.Active {
         opacity: 1;
         &::before {
           background-color: @colorWhite;
