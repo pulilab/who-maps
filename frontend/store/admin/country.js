@@ -1,4 +1,4 @@
-import * as sharedStoreModule from './CDshared.js';
+import * as sharedStoreModule from '../../utilities/CountryDonorSharedStore.js';
 
 export const state = () => ({
   id: null,
@@ -11,11 +11,11 @@ export const state = () => ({
 });
 
 export const getters = {
-  ...sharedStoreModule.getters
+  ...sharedStoreModule.getters()
 };
 
 export const actions = {
-  ...sharedStoreModule.actions,
+  ...sharedStoreModule.actions(),
 
   async synchMapFile ({ state, rootGetters, getters }) {
     const mapFile = getters.getData.map_files[0];
@@ -34,5 +34,5 @@ export const actions = {
 };
 
 export const mutations = {
-  ...sharedStoreModule.mutations
+  ...sharedStoreModule.mutations()
 };

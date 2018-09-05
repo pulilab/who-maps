@@ -10,7 +10,7 @@ import { Message } from 'element-ui';
 //   superadminSelection: []
 // });
 
-export const getters = {
+export const getters = () => ({
   getStableData: state => state.data,
   getData: state => state.editableData,
 
@@ -22,9 +22,9 @@ export const getters = {
   getUserSelection: state => state.userSelection,
   getAdminSelection: state => state.adminSelection,
   getSuperadminSelection: state => state.superadminSelection
-};
+});
 
-export const actions = {
+export const actions = () => ({
   setId ({ commit }, id) {
     commit('SET_ID', id);
   },
@@ -210,9 +210,9 @@ export const actions = {
   setFooterText ({ commit }, txt) {
     commit('SET_DATA_FIELD', {field: 'footer_text', data: txt});
   }
-};
+});
 
-export const mutations = {
+export const mutations = () => ({
   SET_ID: (state, id) => {
     state.id = id;
   },
@@ -241,4 +241,4 @@ export const mutations = {
   SET_SUPER_ADMIN_SELECTION: (state, data) => {
     state.superadminSelection = data;
   }
-};
+});

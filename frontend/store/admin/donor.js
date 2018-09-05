@@ -1,4 +1,4 @@
-import * as sharedStoreModule from './CDshared.js';
+import * as sharedStoreModule from '../../utilities/CountryDonorSharedStore.js';
 
 export const state = () => ({
   id: null,
@@ -11,13 +11,13 @@ export const state = () => ({
 });
 
 export const getters = {
-  ...sharedStoreModule.getters
+  ...sharedStoreModule.getters()
 };
 
 export const actions = {
-  ...sharedStoreModule.actions
+  ...sharedStoreModule.actions()
 };
 
 export const mutations = {
-  ...sharedStoreModule.mutations
+  ...sharedStoreModule.mutations()
 };
