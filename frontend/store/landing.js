@@ -17,8 +17,9 @@ export const actions = {
     const { data } = await this.$axios.get('/api/projects/map/');
     commit('SET_PROJECT_LIST', data);
   },
-  async loadCountryData ({commit, dispatch}, code) {
-    const { data } = await this.$axios.get(`/api/landing/${code.toUpperCase()}/`);
+  async loadCountryData ({commit, dispatch, rootGetters}, code) {
+    const country = rootGetters['countries/getCountries'].find(c => c.code.toLowerCase() === code.toLowerCase());
+    const { data } = await this.$axios.get(`/api/landing-country/${country.id}/`);
     await dispatch('setSelectedCountry', data.id);
     commit('SET_COUNTRY_LANDING_DATA', Object.freeze(data));
   },
