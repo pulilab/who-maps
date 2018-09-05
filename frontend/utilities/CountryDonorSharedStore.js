@@ -10,7 +10,7 @@ import { Message } from 'element-ui';
 //   superadminSelection: []
 // });
 
-export const getters = {
+export const getters = () => ({
   getStableData: state => state.data,
   getData: state => state.editableData,
 
@@ -22,9 +22,9 @@ export const getters = {
   getUserSelection: state => state.userSelection,
   getAdminSelection: state => state.adminSelection,
   getSuperadminSelection: state => state.superadminSelection
-};
+});
 
-export const actions = {
+export const actions = () => ({
   setId ({ commit }, id) {
     commit('SET_ID', id);
   },
@@ -34,9 +34,10 @@ export const actions = {
 
     const superUserSpecifiedId = state.id;
     const idFromProfile = rootGetters['user/getProfile'][state.type];
-    const firstDonorId = rootGetters['system/getDonors'][0].id; // fallback for superuser w/o donor
+    const firstDonorId = rootGetters['system/getDonors'].length && rootGetters['system/getDonors'][0].id; // fallback for superuser w/o donor
 
     const id = superUserSpecifiedId || idFromProfile || firstDonorId;
+    if (!id) throw new Error('No donor found in the database to be loaded or modified, make one first!');
     const { data } = await this.$axios.get(`/api/${type}/${id}/`);
     // console.log(`${state.type} DATA for #${id}`);
     // console.dir(data);
@@ -209,9 +210,9 @@ export const actions = {
   setFooterText ({ commit }, txt) {
     commit('SET_DATA_FIELD', {field: 'footer_text', data: txt});
   }
-};
+});
 
-export const mutations = {
+export const mutations = () => ({
   SET_ID: (state, id) => {
     state.id = id;
   },
@@ -240,4 +241,4 @@ export const mutations = {
   SET_SUPER_ADMIN_SELECTION: (state, data) => {
     state.superadminSelection = data;
   }
-};
+});
