@@ -14,6 +14,14 @@
         </span>
         <span>{{ p.name }}</span>
       </li>
+      <li v-show="excluded">
+        <span>
+          <fa
+            icon="arrow-alt-circle-right"
+            size="xs" />
+        </span>
+        <span>... {{ excluded }} more</span>
+      </li>
     </ul>
   </div>
 </template>
@@ -26,7 +34,7 @@ export default {
   props: {
     value: {
       type: Array,
-      default: null
+      default: () => []
     },
     limit: {
       type: Number,
@@ -44,6 +52,12 @@ export default {
     selected () {
       const result = this.donors.filter(p => this.value.includes(p.id));
       return this.limit ? result.slice(0, this.limit) : result;
+    },
+    limited () {
+      return this.limit ? this.selected.slice(0, this.limit) : this.selected;
+    },
+    excluded () {
+      return this.selected.length - this.limited.length;
     }
   }
 };
