@@ -143,3 +143,18 @@ export const apiWriteParser = p => {
 export const intArrayFromQs = item => {
   return item ? Array.isArray(item) ? item.map(i => +i) : [+item] : [];
 };
+
+export const queryStringComparisonParser = collection => {
+  const result = {};
+  for (let key in collection) {
+    const item = collection[key];
+    if (item === null) {
+      result[key] = null;
+    } else if (item && !Array.isArray(item)) {
+      result[key] = '' + item;
+    } else if (item && Array.isArray(item) && item.length > 0) {
+      result[key] = item;
+    }
+  }
+  return result;
+};

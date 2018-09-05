@@ -55,7 +55,10 @@
 </template>
 
 <script>
+import isEqual from 'lodash/isEqual';
 import { mapActions, mapGetters } from 'vuex';
+import { queryStringComparisonParser } from '../../utilities/api.js';
+
 export default {
   computed: {
     ...mapGetters({
@@ -75,14 +78,12 @@ export default {
       this.setSaveFiltersDialogState(this.dashboardType);
     },
     isActive (query) {
-      const current = JSON.stringify(this.$route.query);
-      query = JSON.stringify(query);
-      console.log(query, current);
-      return query === current;
+      const fromRoute = queryStringComparisonParser(this.$route.query);
+      const fromItem = queryStringComparisonParser(query);
+      return isEqual(fromRoute, fromItem);
     },
     applyPreset (query) {
       this.setSearchOptions(query);
-      // this.$router.replace({...this.$route, query});
     }
   }
 };
