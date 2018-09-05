@@ -1,21 +1,23 @@
 <template>
-  <div>
-    <dha-questionaire :label="'Donor questionaire'"/>
-  </div>
+  <donor-admin />
 </template>
 
 <script>
-import DhaQuestionaire from '../../../components/admin/DhaQuestionaire.vue';
+import DonorAdmin from '../../../components/admin/DonorAdmin';
 
 export default {
   name: 'Donor',
 
   components: {
-    DhaQuestionaire
+    DonorAdmin
   },
+
   async fetch ({store}) {
-    store.dispatch('admin/questions/setQuestionaireId', 'donor');
-    store.dispatch('admin/questions/fetchQuestions');
+    await Promise.all([
+      store.dispatch('system/loadUserProfiles'),
+      store.dispatch('system/loadDonors')
+    ]);
+    await store.dispatch('admin/donor/fetchData');
   }
 };
 </script>

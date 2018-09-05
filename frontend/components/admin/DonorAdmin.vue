@@ -1,11 +1,11 @@
 <template>
   <div class="CountryAdmin">
     <div class="PageTitle">
-      <h2>Country admin for {{ country.name }}</h2>
+      <h2>Donor admin for {{ donor.name }}</h2>
     </div>
 
     <collapsible-card
-      title="Country information"
+      title="Donor information"
       class="CountryInformation">
 
       <el-form
@@ -18,17 +18,17 @@
 
         <el-form-item
           v-if="userProfile.is_superuser"
-          label="Choose country">
-          <country-select
-            :value="countryId"
-            @change="setCountryId"/>
+          label="Choose donor">
+          <donor-select
+            :value="donorId"
+            @change="setDonorId"/>
         </el-form-item>
 
         <el-form-item
           label="Logo"
           prop="logo">
           <file-upload
-            :disabled="notSCA"
+            :disabled="notSDA"
             :auto-upload="false"
             :files.sync="logo"
             :limit="1"/>
@@ -38,14 +38,14 @@
           label="Cover image"
           prop="cover">
           <file-upload
-            :disabled="notSCA"
+            :disabled="notSDA"
             :files.sync="cover"
             :limit="1"/>
         </el-form-item>
 
         <el-form-item label="Cover text">
           <el-input
-            :disabled="notSCA"
+            :disabled="notSDA"
             v-model="coverText"
             type="textarea"
             rows="5"/>
@@ -53,31 +53,23 @@
 
         <el-form-item label="Footer title">
           <el-input
-            :disabled="notSCA"
+            :disabled="notSDA"
             v-model="footerTitle"
             type="text"/>
         </el-form-item>
 
         <el-form-item label="Footer text">
           <el-input
-            :disabled="notSCA"
+            :disabled="notSDA"
             v-model="footerText"
             type="text"/>
-        </el-form-item>
-
-        <el-form-item label="Project approval process">
-          <el-checkbox
-            :disabled="notSCA"
-            v-model="projectApproval">
-            {{ (projectApproval ? 'U' : 'Not u') + 'sed for projects in country' }}
-          </el-checkbox>
         </el-form-item>
 
         <el-form-item
           label="Partner logos"
           prop="partnerLogos">
           <file-upload
-            :disabled="notSCA"
+            :disabled="notSDA"
             :files.sync="partnerLogos"
             :limit="10"/>
         </el-form-item>
@@ -91,49 +83,34 @@
       <el-row type="flex">
         <el-col class="AdminPersonaChooser">
           <div
-            :class="['Persona', { 'active': selectedPersona === 'G'}]"
-            @click="selectPersona('G')">
+            :class="['Persona', { 'active': selectedPersona === 'D'}]"
+            @click="selectPersona('D')">
             <div class="PersonaName">Users/viewers</div>
-            <div class="RequestCount">{{ userSelection.length - users.length }} new request{{ (country.user_requests && country.user_requests.length) === 1 ? '' : 's' }}</div>
-            <fa icon="chevron-right" />
+            <div class="RequestCount">{{ userSelection.length - users.length }} new request{{ (donor.user_requests && donor.user_requests.length) === 1 ? '' : 's' }}</div>
           </div>
           <div
-            :class="['Persona', { 'active': selectedPersona === 'CA'}]"
-            @click="selectPersona('CA')">
+            :class="['Persona', { 'active': selectedPersona === 'DA'}]"
+            @click="selectPersona('DA')">
             <div class="PersonaName">Admins</div>
-            <div class="RequestCount">{{ adminSelection.length - admins.length }} new request{{ (country.admin_requests && country.admin_requests.length) === 1 ? '' : 's' }}</div>
-            <fa icon="chevron-right" />
+            <div class="RequestCount">{{ adminSelection.length - admins.length }} new request{{ (donor.admin_requests && donor.admin_requests.length) === 1 ? '' : 's' }}</div>
           </div>
           <div
-            :class="['Persona', { 'active': selectedPersona === 'SCA'}]"
-            @click="selectPersona('SCA')">
+            :class="['Persona', { 'active': selectedPersona === 'SDA'}]"
+            @click="selectPersona('SDA')">
             <div class="PersonaName">Superadmins</div>
-            <div class="RequestCount">{{ superadminSelection.length - superAdmins.length }} new request{{ (country.super_admin_requests && country.super_admin_requests.length) === 1 ? '' : 's' }}</div>
-            <fa icon="chevron-right" />
+            <div class="RequestCount">{{ superadminSelection.length - superAdmins.length }} new request{{ (donor.super_admin_requests && donor.super_admin_requests.length) === 1 ? '' : 's' }}</div>
           </div>
         </el-col>
 
         <el-col class="UserTransfers">
+
           <div
-            v-if="selectedPersona === 'G'"
-            class="PersonaPrivileges">
-            <el-collapse accordion>
-              <el-collapse-item>
-                <template slot="title">
-                  <fa icon="info-circle" /> Show privileges for {{ selectedPersona }}
-                </template>
-                <div>
-                  <ul>
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
-                  </ul>
-                </div>
-              </el-collapse-item>
-            </el-collapse>
+            v-if="selectedPersona === 'D'"
+            class="Privileges">
+            Privileges for {{ selectedPersona }}
           </div>
           <el-transfer
-            v-if="selectedPersona === 'G'"
+            v-if="selectedPersona === 'D'"
             :titles="['New requests', 'Approved']"
             v-model="users"
             :data="userSelection"
@@ -141,25 +118,13 @@
             filter-placeholder="Type to filter users..." />
 
           <div
-            v-if="selectedPersona === 'CA'"
-            class="PersonaPrivileges">
-            <el-collapse accordion>
-              <el-collapse-item>
-                <template slot="title">
-                  <fa icon="info-circle" /> Show privileges for {{ selectedPersona }}
-                </template>
-                <div>
-                  <ul>
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
-                  </ul>
-                </div>
-              </el-collapse-item>
-            </el-collapse>
+            v-if="selectedPersona === 'DA'"
+            class="Privileges">
+            Privileges for {{ selectedPersona }}
+            Asdf
           </div>
           <el-transfer
-            v-if="selectedPersona === 'CA'"
+            v-if="selectedPersona === 'DA'"
             :titles="['New requests', 'Approved']"
             v-model="admins"
             :data="adminSelection"
@@ -167,60 +132,37 @@
             filter-placeholder="Type to filter users..." />
 
           <div
-            v-if="selectedPersona === 'SCA'"
-            class="PersonaPrivileges">
-            <el-collapse accordion>
-              <el-collapse-item>
-                <template slot="title">
-                  <fa icon="info-circle" /> Show privileges for {{ selectedPersona }}
-                </template>
-                <div>
-                  <ul>
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
-                  </ul>
-                </div>
-              </el-collapse-item>
-            </el-collapse>
+            v-if="selectedPersona === 'SDA'"
+            class="Privileges">
+            Privileges for {{ selectedPersona }}
+            Lorem ipsum this and that
           </div>
           <el-transfer
-            v-if="selectedPersona === 'SCA'"
+            v-if="selectedPersona === 'SDA'"
             :titles="['New requests', 'Approved']"
             v-model="superAdmins"
             :data="superadminSelection"
             filterable
             filter-placeholder="Type to filter users..." />
+
         </el-col>
       </el-row>
     </collapsible-card>
 
-    <collapsible-card
-      title="Country specific questionnaire"
-      class="CountryQuestionnaire">
+    <collapsible-card title="Country specific questionaire">
+      <h1>Country specific questionaire</h1>
       <dha-questionaire :label="'Country specific questionaire'"/>
-    </collapsible-card>
-
-    <collapsible-card
-      title="Country map"
-      class="CountryMap">
-      <vue-map-customizer />
     </collapsible-card>
 
     <div class="AdminActionBarBottom">
       <el-row
         type="flex"
-        align="middle"
         justify="space-between">
-        <el-button
-          type="text"
-          class="CancelButton">Dismiss changes</el-button>
-        <el-button
-          type="primary"
-          size="medium"
-          @click="saveChanges">Save changes</el-button>
+        <el-button>Dismiss changes</el-button>
+        <el-button @click="saveChanges">Save changes</el-button>
       </el-row>
     </div>
+
   </div>
 </template>
 
@@ -230,7 +172,7 @@ import CollapsibleCard from '../project/CollapsibleCard';
 import VueMapCustomizer from '../admin/VueMapCustomizer';
 import DhaQuestionaire from '../admin/DhaQuestionaire';
 import FileUpload from '../common/FileUpload';
-import CountrySelect from '../common/CountrySelect';
+import DonorSelect from '../common/DonorSelect';
 import { mapGettersActions } from '../../utilities/form';
 
 export default {
@@ -242,12 +184,12 @@ export default {
     VueMapCustomizer,
     DhaQuestionaire,
     FileUpload,
-    CountrySelect
+    DonorSelect
   },
 
   data () {
     return {
-      selectedPersona: 'G',
+      selectedPersona: 'D',
       logoError: '',
       coverError: '',
       flagForKeepingPartnerLogosError: false,
@@ -286,35 +228,34 @@ export default {
 
   computed: {
     ...mapGettersActions({
-      coverText: ['admin/country', 'getCoverText', 'setCoverText'],
-      footerTitle: ['admin/country', 'getFooterTitle', 'setFooterTitle'],
-      footerText: ['admin/country', 'getFooterText', 'setFooterText'],
-      projectApproval: ['admin/country', 'getProjectApproval', 'setProjectApproval']
+      coverText: ['admin/donor', 'getCoverText', 'setCoverText'],
+      footerTitle: ['admin/donor', 'getFooterTitle', 'setFooterTitle'],
+      footerText: ['admin/donor', 'getFooterText', 'setFooterText']
     }),
 
     ...mapGetters({
-      country: 'admin/country/getData',
-      userSelection: 'admin/country/getUserSelection',
-      adminSelection: 'admin/country/getAdminSelection',
-      superadminSelection: 'admin/country/getSuperadminSelection',
+      donor: 'admin/donor/getData',
+      userSelection: 'admin/donor/getUserSelection',
+      adminSelection: 'admin/donor/getAdminSelection',
+      superadminSelection: 'admin/donor/getSuperadminSelection',
       userProfile: 'user/getProfile'
     }),
 
-    notSCA () {
-      return this.userProfile.account_type === 'CA' && !this.userProfile.is_superuser;
+    notSDA () {
+      return this.userProfile.account_type === 'DA' && !this.userProfile.is_superuser;
     },
 
     logo: {
       get () {
-        if (typeof this.country.logo === 'string') {
+        if (typeof this.donor.logo === 'string') {
           return [{
-            url: this.country.logo,
-            name: ('' + this.country.logo).split('/').pop()
+            url: this.donor.logo,
+            name: ('' + this.donor.logo).split('/').pop()
           }];
-        } else if (!this.country.logo) {
+        } else if (!this.donor.logo) {
           return [];
         } else {
-          return [this.country.logo];
+          return [this.donor.logo];
         }
       },
       set ([value]) {
@@ -324,15 +265,15 @@ export default {
 
     cover: {
       get () {
-        if (typeof this.country.cover === 'string') {
+        if (typeof this.donor.cover === 'string') {
           return [{
-            url: this.country.cover,
-            name: ('' + this.country.cover).split('/').pop()
+            url: this.donor.cover,
+            name: ('' + this.donor.cover).split('/').pop()
           }];
-        } else if (!this.country.cover) {
+        } else if (!this.donor.cover) {
           return [];
         } else {
-          return [this.country.cover];
+          return [this.donor.cover];
         }
       },
       set ([value]) {
@@ -342,7 +283,7 @@ export default {
 
     partnerLogos: {
       get () {
-        return this.country.partner_logos.map(rawLogo => {
+        return this.donor.partner_logos.map(rawLogo => {
           if (rawLogo.raw || rawLogo.uid) {
             return rawLogo;
           } else if (rawLogo.image) {
@@ -361,7 +302,7 @@ export default {
 
     users: {
       get () {
-        return this.country.users || [];
+        return this.donor.users || [];
       },
       set (value) {
         this.setDataField({field: 'users', data: value});
@@ -370,7 +311,7 @@ export default {
 
     admins: {
       get () {
-        return this.country.admins || [];
+        return this.donor.admins || [];
       },
       set (value) {
         this.setDataField({field: 'admins', data: value});
@@ -379,21 +320,20 @@ export default {
 
     superAdmins: {
       get () {
-        return this.country.super_admins || [];
+        return this.donor.super_admins || [];
       },
       set (value) {
         this.setDataField({field: 'super_admins', data: value});
       }
     },
 
-    countryId: {
+    donorId: {
       get () {
-        return this.country.id;
+        return this.donor.id || this.userProfile.donor;
       },
       async set (value) {
         this.setId(value);
         await this.fetchData();
-        await this.loadGeoJSON();
       }
     }
   },
@@ -459,19 +399,18 @@ export default {
 
   methods: {
     ...mapActions({
-      setDataField: 'admin/country/setDataField',
-      saveChanges: 'admin/country/saveChanges',
-      setId: 'admin/country/setId',
-      fetchData: 'admin/country/fetchData',
-      loadGeoJSON: 'admin/map/loadGeoJSON'
+      setDataField: 'admin/donor/setDataField',
+      saveChanges: 'admin/donor/saveChanges',
+      setId: 'admin/donor/setId',
+      fetchData: 'admin/donor/fetchData'
     }),
 
     selectPersona (selected) {
       this.selectedPersona = selected;
     },
 
-    setCountryId (selected) {
-      this.countryId = selected;
+    setDonorId (value) {
+      this.donorId = value;
     }
   }
 };
@@ -493,10 +432,6 @@ export default {
       .ContentContainer {
         padding: 40px;
       }
-
-      .el-checkbox {
-        line-height: 40px;
-      }
     }
 
     .UserManagement {
@@ -505,147 +440,57 @@ export default {
       }
 
       .AdminPersonaChooser {
-        width: 200px;
-        border-right: 2px solid @colorGrayLighter;
+        width: 161px;
+        height: 600px;
+        box-shadow: 2px 0 8px 0 rgba(0,0,0,0.16);
 
         .Persona {
-          position: relative;
-          display: block;
-          padding: 16px 20px;
-          border-bottom: 1px solid @colorGrayLighter;
+          padding: 14px 20px;
+          width: 160px;
+          height: 66px;
+          box-sizing: border-box;
           cursor: pointer;
-          transition: @transitionAll;
 
           .PersonaName {
-            color: @colorTextSecondary;
+            color: @colorTextPrimary;
+            font-family: Arial;
             font-size: @fontSizeBase;
             line-height: 16px;
             margin-bottom: 8px;
           }
-
           .RequestCount {
             color: @colorTextMuted;
+            font-family: Arial;
             font-size: @fontSizeSmall;
-          }
-
-          .svg-inline--fa {
-            position: absolute;
-            top: 50%;
-            right: 12px;
-            transform: translateY(-50%);
-            height: 14px;
-            opacity: 0;
-            transition: @transitionAll;
-          }
-
-          &:hover {
-            background-color: @colorGrayLightest;
-
-            .PersonaName {
-              color: @colorTextPrimary;
-            }
-
-            .RequestCount {
-              color: @colorGray;
-            }
-
-            .svg-inline--fa {
-              opacity: .5;
-            }
+            line-height: 14px;
           }
 
           &.active {
-            background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
-            border-color: mix(@colorWhite, @colorBrandPrimary, 70%);
+            background-color: @colorBrandBlueLight;
+            box-shadow: 0 1px 0 0 rgba(0,141,201,0.25);
 
             .PersonaName {
-              font-weight: 700;
               color: @colorBrandPrimary;
+              font-weight: bold;
             }
-
             .RequestCount {
               color: @colorTextSecondary;
-            }
-
-            .svg-inline--fa {
-              color: @colorBrandPrimary;
-              opacity: 1;
             }
           }
         }
       }
 
       .UserTransfers {
-        padding: 20px 40px;
-
-        .PersonaPrivileges {
-          margin: 0 0 20px;
-
-          ul {
-            margin: 0;
-            padding: 0 0 0 40px;
-
-            li {
-              font-size: @fontSizeSmall;
-              line-height: 18px;
-              color: @colorTextSecondary;
-            }
-          }
-        }
-
         .el-transfer {
           display: flex;
           flex-direction: row;
           justify-content: center;
           align-items: center;
-          margin: 0 0 20px;
         }
-
         .el-transfer-panel {
-          width: 100%;
-
-          .el-transfer-panel__body {
-            min-height: 250px;
-            max-height: 40vh;
-            overflow-y: auto;
-          }
-
-          // &:first-child {
-          //   .el-transfer-panel__header {
-          //     background-color: lighten(@colorDraft, 33%);
-          //   }
-          // }
-          //
-          // &:last-child {
-          //   .el-transfer-panel__header {
-          //     background-color: lighten(@colorPublished, 52%);
-          //   }
-          // }
+          width: 300px;
         }
-
-        // .el-transfer-buttons {}
       }
-    }
-
-    .CountryQuestionnaire {
-      .ContentContainer {
-        padding: 20px;
-      }
-    }
-
-    .CountryMap {
-      .ContentContainer {
-        padding: 0;
-      }
-    }
-
-    .AdminActionBarBottom {
-      box-sizing: border-box;
-      min-width: @cardSizeMedium;
-      max-width: @cardSizeMedium;
-      margin: 40px auto;
-      padding: 40px 0;
-      border-top: 1px solid @colorGrayLight;
     }
   }
 </style>

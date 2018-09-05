@@ -4,14 +4,12 @@ import { saveToken, deleteToken } from '../utilities/auth';
 export const state = () => ({
   token: null,
   user: null,
-  profile: null,
-  donors: null
+  profile: null
 });
 
 export const getters = {
   getToken: state => state.token,
   getUser: state => state.user,
-  getDonors: state => state.donors,
 
   getProfile: state => {
     if (state.profile) {
@@ -54,14 +52,11 @@ export const actions = {
     deleteToken();
   },
 
-  async fetchDonors ({ commit }) {
-    const { data } = await this.$axios.get(`/api/donors/`);
-    commit('SET_DONORS', data);
-  },
-
   async loadProfile ({ commit, getters }, profileId) {
     if (getters.getToken && !getters.getProfile) {
       let { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`);
+      // console.log('userProfile');
+      // console.log(data);
       commit('SET_PROFILE', data);
     }
   },
@@ -107,10 +102,6 @@ export const mutations = {
 
   UPDATE_TEAM_VIEWER: (state, {member, viewer}) => {
     state.profile = {...state.profile, member, viewer};
-  },
-
-  SET_DONORS: (state, donors) => {
-    state.donors = donors;
   }
 };
 

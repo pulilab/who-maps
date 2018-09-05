@@ -79,7 +79,7 @@ class CountryMapController {
   }
 
   checkIfDistrictDataChanged (newDistrictData) {
-    if (newDistrictData && this.drawnMap) {
+    if (newDistrictData) {
       this.boundNrs = reduce(newDistrictData, (ret, value, key) => {
         if (key === 'date') {
           return ret;

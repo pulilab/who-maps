@@ -173,9 +173,9 @@ export default {
         &:hover {
           color: @colorTextPrimary;
 
-          &::before {
-            transform: translateY(3px);
-          }
+          // &::before {
+          //   transform: translateY(3px);
+          // }
         }
       }
     }

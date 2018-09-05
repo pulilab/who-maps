@@ -1,15 +1,18 @@
 <template>
   <div class="DashboardMapView">
     <dashboard-map />
+    <dashboard-project-box />
   </div>
 </template>
 
 <script>
 import DashboardMap from '../../../components/dashboard/DashboardMap';
+import DashboardProjectBox from '../../../components/dashboard/DashboardProjectBox';
 import { mapGetters, mapActions } from 'vuex';
 export default {
   components: {
-    DashboardMap
+    DashboardMap,
+    DashboardProjectBox
   },
   async fetch ({store}) {
     await Promise.all([
@@ -39,6 +42,9 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  .DashboardMapView {
+    position: relative;
+  }
 
 </style>

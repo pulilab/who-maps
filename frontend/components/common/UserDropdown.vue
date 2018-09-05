@@ -29,13 +29,6 @@
 
           <div class="Item">
             <div class="ItemTitle">
-              Role
-            </div>
-            Role Name
-          </div>
-
-          <div class="Item">
-            <div class="ItemTitle">
               Country
             </div>
             <country-item
@@ -63,7 +56,35 @@
             <span class="MenuIcon">
               <fa icon="user-edit" />
             </span>
-            Edit my profile
+            My profile
+          </nuxt-link>
+        </div>
+
+        <div
+          v-if="isUserCA"
+          class="DropdownLink">
+          <nuxt-link
+            :to="localePath({name: 'organisation-admin-country', params: $route.params})"
+            @click.native="closePopover"
+          >
+            <span class="MenuIcon">
+              <fa icon="globe" />
+            </span>
+            Country admin
+          </nuxt-link>
+        </div>
+
+        <div
+          v-if="isUserDA"
+          class="DropdownLink">
+          <nuxt-link
+            :to="localePath({name: 'organisation-admin-donor', params: $route.params})"
+            @click.native="closePopover"
+          >
+            <span class="MenuIcon">
+              <fa icon="hand-holding-usd" />
+            </span>
+            Donor admin
           </nuxt-link>
         </div>
 
@@ -102,7 +123,14 @@ export default {
   computed: {
     ...mapGetters({
       user: 'user/getProfile'
-    })
+    }),
+    isUserCA () {
+      return (this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)) || this.user.is_superuser;
+    },
+    isUserDA () {
+      return (this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)) || this.user.is_superuser;
+    }
+
   },
   methods: {
     ...mapActions({
@@ -125,7 +153,7 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .UserDropdownPopper {
-    transform: translate(0, -35px);
+    transform: translate(0, -30px);
   }
 
   .ButtonPopper {

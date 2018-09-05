@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div :class="['Narrower', {'ForProfile': $route.path.split('/')[3] === 'edit-profile'} ]">
-      <nuxt-child />
-    </div>
+    <nuxt-child />
   </div>
 </template>
 
@@ -23,12 +21,4 @@ export default {
 </script>
 
 <style lang="less">
-.Narrower {
-  width: 900px;
-  margin: 0 auto;
-
-  &.ForProfile {
-    width: 560px;
-  }
-}
 </style>

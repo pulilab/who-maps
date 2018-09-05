@@ -1,25 +1,39 @@
 <template>
-  <div>
+  <div class="ListOfOptions">
+    <h6>List of selectable options:</h6>
     <p v-if="!options.length">No options added yet</p>
     <ul>
       <li
         v-for="(option, index) in options"
         :key="index">
-        {{ option }}
-        <span
-          class="red"
-          @click="removeOption({questionId, index})">X</span>
+        <fa icon="caret-right" />
+        <span class="Option">{{ option }}</span>
+        <el-button
+          type="text"
+          size="mini"
+          class="DeleteButton IconLeft RemoveOption"
+          @click="removeOption({questionId, index})"><fa icon="times" /></el-button>
       </li>
     </ul>
-    <input
-      ref="input"
-      v-model="inputField"
-      placeholder="Add a new option here"
-      type="text"
-      @keyup.enter="addLocalOption">
-    <button
-      :disabled="!inputField"
-      @click="addLocalOption">Add</button>
+    <el-row
+      type="flex"
+      align="middle">
+      <el-col :span="16">
+        <el-input
+          ref="input"
+          v-model="inputField"
+          placeholder="Add a new option here"
+          type="text"
+          @keyup.enter="addLocalOption" />
+      </el-col>
+      <el-col :span="8">
+        <el-button
+          :disabled="!inputField"
+          type="text"
+          class="IconLeft AddOption"
+          @click="addLocalOption"><fa icon="plus" /> Add</el-button>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -67,9 +81,55 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-span.red {
-  color: red;
-  cursor: pointer;
-}
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
+
+  .ListOfOptions {
+    margin-bottom: 10px;
+
+    h6 {
+      font-size: @fontSizeBase;
+      margin: 30px 0 10px;
+
+      + p {
+        font-size: @fontSizeBase;
+        color: @colorGray;
+        margin: 20px 0;
+      }
+    }
+
+    .AddOption {
+      margin-left: 20px;
+    }
+
+    .RemoveOption {
+      padding: 0;
+    }
+
+    .Option {
+      margin: 0 10px 0 5px;
+    }
+
+    ul {
+      list-style-type: none;
+      display: block;
+      margin: 20px 0;
+      padding: 0 15px;
+
+      li {
+        display: flex;
+        align-items: center;
+        margin: 0 0 10px;
+        font-size: @fontSizeBase;
+      }
+
+      .svg-inline--fa {
+        width: 14px;
+        height: 14px;
+        padding: 1px;
+      }
+    }
+  }
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <input
       v-show="false"
       ref="fileInput"
@@ -7,18 +7,21 @@
       @change="setCsv">
     <el-button
       :loading="csvProcessing"
-      type="primary"
-      @click="triggerFile">Select Facility List</el-button>
+      type="text"
+      class="IconLeft"
+      @click="triggerFile"><fa icon="plus" /> Select Facility List</el-button>
 
     <template v-if="dataReady">
-
-      <div class="facility-list">
-        <h4>Imported Facilities ({{ simpleFacilities.length }}):</h4>
+      <div class="FacilityList">
+        <h5>Imported Facilities ({{ simpleFacilities.length }}):</h5>
         <ul
           v-for="facility in simpleFacilities"
           :key="facility"
         >
-          <li class="name">{{ facility }}</li>
+          <li>
+            <fa icon="building" />
+            {{ facility }}
+          </li>
         </ul>
       </div>
     </template>
@@ -91,9 +94,36 @@ export default {
 };
 </script>
 
-<style>
-.facility-list {
-  max-height: 300px;
-  overflow: scroll;
-}
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
+
+  .FacilityList {
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        position: relative;
+        font-size: @fontSizeBase;
+        margin: 0 0 10px;
+        padding: 0 20px;
+        color: @colorBrandPrimary;
+        cursor: pointer;
+        transition: @transitionAll;
+
+        &:hover {
+          color: @colorBrandPrimaryLight;
+        }
+
+        .svg-inline--fa {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 14px;
+        }
+      }
+    }
+  }
 </style>

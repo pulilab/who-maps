@@ -91,11 +91,11 @@ maps-toolkit {
 
   .axis-row {
     height: 52px;
-    margin: 10px 0;
+    margin: 10px 0 20px !important;
     background-color: $color-white;
 
     md-card {
-      margin: 0;
+      margin: 0 0 ;
       box-shadow: none;
     }
   }

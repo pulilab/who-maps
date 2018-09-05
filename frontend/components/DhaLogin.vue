@@ -9,6 +9,7 @@
         ref="loginForm"
         :rules="rules"
         :model="{ username, password }"
+        label-position="top"
         status-icon
         @submit.native.prevent="loginLocal"
       >
@@ -62,7 +63,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import FormAPIErrorsMixin from './mixins/FormAPIErrorsMixin.js';
 
 export default {
@@ -85,10 +86,15 @@ export default {
       }
     };
   },
-
+  computed: {
+    ...mapGetters({
+      profile: 'user/getProfile'
+    })
+  },
   methods: {
     ...mapActions({
-      login: 'user/doLogin'
+      login: 'user/doLogin',
+      setSelectedCountry: 'dashboard/setSelectedCountry'
     }),
 
     loginLocal () {
@@ -100,7 +106,10 @@ export default {
               username: this.username,
               password: this.password
             });
-            this.$router.push(this.localePath({name: 'organisation', params: this.$route.params}));
+            if (this.profile.country) {
+              this.setSelectedCountry(this.profile.country);
+            }
+            this.$router.push(this.localePath({name: 'organisation-dashboard', params: this.$route.params}));
           } catch (err) {
             this.setFormAPIErrors(err);
             this.$refs.loginForm.validate(() => {});
