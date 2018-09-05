@@ -120,7 +120,7 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> Show privileges for {{ selectedPersona }}
+                  <fa icon="info-circle" /> Show privileges for government users
                 </template>
                 <div>
                   <ul>
@@ -146,7 +146,7 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> Show privileges for {{ selectedPersona }}
+                  <fa icon="info-circle" /> Show privileges for country administrators
                 </template>
                 <div>
                   <ul>
@@ -172,7 +172,7 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> Show privileges for {{ selectedPersona }}
+                  <fa icon="info-circle" /> Show privileges for super country administrators
                 </template>
                 <div>
                   <ul>
@@ -197,8 +197,8 @@
 
     <collapsible-card
       title="Country specific questionnaire"
-      class="CountryQuestionnaire">
-      <dha-questionaire :label="'Country specific questionaire'"/>
+      class="Questionnaire">
+      <dha-questionaire/>
     </collapsible-card>
 
     <collapsible-card
@@ -627,7 +627,7 @@ export default {
       }
     }
 
-    .CountryQuestionnaire {
+    .Questionnaire {
       .ContentContainer {
         padding: 20px;
       }

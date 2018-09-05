@@ -73,13 +73,6 @@ export default {
     draggable
   },
 
-  props: {
-    label: {
-      type: String,
-      required: true
-    }
-  },
-
   data () {
     return {
       opened: 'opened'
@@ -135,7 +128,7 @@ export default {
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
 
-  .QuestionnaireWrapper {}
+  // .QuestionnaireWrapper {}
 
   .QActionContainer {
     .QActionsButtons {

@@ -106,8 +106,21 @@
 
           <div
             v-if="selectedPersona === 'D'"
-            class="Privileges">
-            Privileges for {{ selectedPersona }}
+            class="PersonaPrivileges">
+            <el-collapse accordion>
+              <el-collapse-item>
+                <template slot="title">
+                  <fa icon="info-circle" /> Show privileges for donor users
+                </template>
+                <div>
+                  <ul>
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                  </ul>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
           </div>
           <el-transfer
             v-if="selectedPersona === 'D'"
@@ -119,9 +132,21 @@
 
           <div
             v-if="selectedPersona === 'DA'"
-            class="Privileges">
-            Privileges for {{ selectedPersona }}
-            Asdf
+            class="PersonaPrivileges">
+            <el-collapse accordion>
+              <el-collapse-item>
+                <template slot="title">
+                  <fa icon="info-circle" /> Show privileges for donor administrators
+                </template>
+                <div>
+                  <ul>
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                  </ul>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
           </div>
           <el-transfer
             v-if="selectedPersona === 'DA'"
@@ -133,9 +158,21 @@
 
           <div
             v-if="selectedPersona === 'SDA'"
-            class="Privileges">
-            Privileges for {{ selectedPersona }}
-            Lorem ipsum this and that
+            class="PersonaPrivileges">
+            <el-collapse accordion>
+              <el-collapse-item>
+                <template slot="title">
+                  <fa icon="info-circle" /> Show privileges for super donor administrators
+                </template>
+                <div>
+                  <ul>
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                  </ul>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
           </div>
           <el-transfer
             v-if="selectedPersona === 'SDA'"
@@ -149,9 +186,10 @@
       </el-row>
     </collapsible-card>
 
-    <collapsible-card title="Country specific questionaire">
-      <h1>Country specific questionaire</h1>
-      <dha-questionaire :label="'Country specific questionaire'"/>
+    <collapsible-card
+      title="Country specific questionaire"
+      class="Questionnaire">
+      <dha-questionaire/>
     </collapsible-card>
 
     <div class="AdminActionBarBottom">
@@ -432,6 +470,10 @@ export default {
       .ContentContainer {
         padding: 40px;
       }
+
+      .el-checkbox {
+        line-height: 40px;
+      }
     }
 
     .UserManagement {
@@ -440,57 +482,141 @@ export default {
       }
 
       .AdminPersonaChooser {
-        width: 161px;
-        height: 600px;
-        box-shadow: 2px 0 8px 0 rgba(0,0,0,0.16);
+        width: 200px;
+        border-right: 2px solid @colorGrayLighter;
 
         .Persona {
-          padding: 14px 20px;
-          width: 160px;
-          height: 66px;
-          box-sizing: border-box;
+          position: relative;
+          display: block;
+          padding: 16px 20px;
+          border-bottom: 1px solid @colorGrayLighter;
           cursor: pointer;
+          transition: @transitionAll;
 
           .PersonaName {
-            color: @colorTextPrimary;
-            font-family: Arial;
+            color: @colorTextSecondary;
             font-size: @fontSizeBase;
             line-height: 16px;
             margin-bottom: 8px;
           }
+
           .RequestCount {
             color: @colorTextMuted;
-            font-family: Arial;
             font-size: @fontSizeSmall;
-            line-height: 14px;
+          }
+
+          .svg-inline--fa {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            height: 14px;
+            opacity: 0;
+            transition: @transitionAll;
+          }
+
+          &:hover {
+            background-color: @colorGrayLightest;
+
+            .PersonaName {
+              color: @colorTextPrimary;
+            }
+
+            .RequestCount {
+              color: @colorGray;
+            }
+
+            .svg-inline--fa {
+              opacity: .5;
+            }
           }
 
           &.active {
-            background-color: @colorBrandBlueLight;
-            box-shadow: 0 1px 0 0 rgba(0,141,201,0.25);
+            background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
+            border-color: mix(@colorWhite, @colorBrandPrimary, 70%);
 
             .PersonaName {
+              font-weight: 700;
               color: @colorBrandPrimary;
-              font-weight: bold;
             }
+
             .RequestCount {
               color: @colorTextSecondary;
+            }
+
+            .svg-inline--fa {
+              color: @colorBrandPrimary;
+              opacity: 1;
             }
           }
         }
       }
 
       .UserTransfers {
+        padding: 20px 40px;
+
+        .PersonaPrivileges {
+          margin: 0 0 20px;
+
+          ul {
+            margin: 0;
+            padding: 0 0 0 40px;
+
+            li {
+              font-size: @fontSizeSmall;
+              line-height: 18px;
+              color: @colorTextSecondary;
+            }
+          }
+        }
+
         .el-transfer {
           display: flex;
           flex-direction: row;
           justify-content: center;
           align-items: center;
+          margin: 0 0 20px;
         }
+
         .el-transfer-panel {
-          width: 300px;
+          width: 100%;
+
+          .el-transfer-panel__body {
+            min-height: 250px;
+            max-height: 40vh;
+            overflow-y: auto;
+          }
+
+          // &:first-child {
+          //   .el-transfer-panel__header {
+          //     background-color: lighten(@colorDraft, 33%);
+          //   }
+          // }
+          //
+          // &:last-child {
+          //   .el-transfer-panel__header {
+          //     background-color: lighten(@colorPublished, 52%);
+          //   }
+          // }
         }
+
+        // .el-transfer-buttons {}
       }
+    }
+
+    .Questionnaire {
+      .ContentContainer {
+        padding: 20px;
+      }
+    }
+
+    .AdminActionBarBottom {
+      box-sizing: border-box;
+      min-width: @cardSizeMedium;
+      max-width: @cardSizeMedium;
+      margin: 40px auto;
+      padding: 40px 0;
+      border-top: 1px solid @colorGrayLight;
     }
   }
 </style>
