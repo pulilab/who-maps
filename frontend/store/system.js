@@ -128,7 +128,7 @@ export const actions = {
 
   async loadDonors ({ commit }) {
     try {
-      const { data } = await this.$axios.get(`/api/donors/`);
+      const { data } = await this.$axios.get(`/api/landing-donor/`);
       commit('SET_DONORS', data);
     } catch (e) {
       console.error('failed to load donors');

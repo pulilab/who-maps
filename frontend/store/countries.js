@@ -77,7 +77,7 @@ export const actions = {
   async loadMapData ({commit, state}) {
     if (state.countries.length === 0) {
       try {
-        const { data } = await this.$axios.get('/api/countries/');
+        const { data } = await this.$axios.get('/api/landing-country/');
         data.sort((a, b) => a.name.localeCompare(b.name));
         const frozen = data.map(cd => ({...cd, map_data: {...cd.map_data, facilities: Object.freeze(cd.map_data.facilities)}}));
         commit('SET_COUNTRY_LIST', frozen);
