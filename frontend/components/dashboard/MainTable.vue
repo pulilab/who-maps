@@ -168,7 +168,8 @@ export default {
   data () {
     return {
       pageSizeOption: [10, 20, 50, 100],
-      tableMaxHeight: 200
+      tableMaxHeight: 200,
+      localSort: null
     };
   },
   computed: {
@@ -209,13 +210,21 @@ export default {
           this.$refs.mainTable.doLayout();
         });
       }
+    },
+    sorting: {
+      immediate: false,
+      handler (current) {
+        console.log(current, this.localSort);
+        if (current !== this.localSort) {
+          this.fixSorting(current);
+        }
+      }
     }
   },
   mounted () {
     setTimeout(() => {
-      const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height');
-      this.tableMaxHeight = +maxHeight.replace('px', '');
-      this.$refs.mainTable.doLayout();
+      this.fixTableHeight();
+      this.fixSorting(this.$route.query.ordering);
     }, 500);
   },
   methods: {
@@ -231,8 +240,25 @@ export default {
     sortChanged ({prop, order}) {
       if (order === 'descending') {
         this.sorting = '-' + prop;
+        this.localSort = '-' + prop;
       } else {
         this.sorting = prop;
+        this.localSort = prop;
+      }
+    },
+    fixTableHeight () {
+      const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height');
+      this.tableMaxHeight = +maxHeight.replace('px', '');
+      this.$refs.mainTable.doLayout();
+    },
+    fixSorting (prop) {
+      if (prop) {
+        let direction = 'ascending';
+        if (prop.startsWith('-')) {
+          direction = 'descending';
+          prop = prop.replace('-', '');
+        }
+        this.$refs.mainTable.sort(prop, direction);
       }
     }
   }
