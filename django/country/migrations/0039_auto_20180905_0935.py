@@ -5,7 +5,9 @@ import uuid
 
 def fill_code(apps, schema_editor):
     Donor = apps.get_model('country', 'Donor')
-    Donor.objects.all().update(code=uuid.uuid4().hex[:10])
+    for donor in Donor.objects.all():
+        donor.code = uuid.uuid4().hex[:10]
+        donor.save()
 
 
 class Migration(migrations.Migration):
