@@ -66,7 +66,7 @@ export const actionsGenerator = () => ({
     await dispatch('countries/loadGeoJSON', id, {root: true});
     commit('SET_SELECTED_COUNTRY', id);
   },
-  async loadProjects ({commit, getters}, paramsOverride) {
+  async loadProjects ({commit, getters, dispatch}, paramsOverride) {
     commit('SET_LOADING', true);
     try {
       const { data } = await this.$axios({
@@ -75,12 +75,17 @@ export const actionsGenerator = () => ({
         params: {...getters.getSearchParameters, ...paramsOverride},
         paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'})
       });
-      commit('SET_LOADING', false);
+      dispatch('unsetLoading');
       return data;
     } catch (e) {
       console.error(e);
     }
-    commit('SET_LOADING', false);
+    dispatch('unsetLoading');
+  },
+  unsetLoading ({commit}) {
+    setTimeout(() => {
+      commit('SET_LOADING', false);
+    }, 500);
   },
   setCurrentZoom ({commit}, value) {
     commit('SET_CURRENT_ZOOM', value);
