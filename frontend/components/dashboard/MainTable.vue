@@ -87,6 +87,7 @@
         <template slot-scope="scope">
           <donors-list
             :value="scope.row.donors"
+            :limit="3"
             show-icon />
         </template>
       </el-table-column>
@@ -123,7 +124,9 @@
         label="Health Focus Areas"
         width="240">
         <template slot-scope="scope">
-          <health-focus-areas-list :value="scope.row.health_focus_areas" />
+          <health-focus-areas-list
+            :value="scope.row.health_focus_areas"
+            :limit="3" />
         </template>
       </el-table-column>
     </el-table>
