@@ -49,16 +49,27 @@
       </el-row>
 
       <div class="ProjectMenu">
-        <nuxt-link :to="localePath({name: 'organisation-projects-id-edit', params: {id, organisation: $route.params.organisation}})">
+        <nuxt-link
+          v-if="!readOnly"
+          :to="localePath({name: 'organisation-projects-id-edit', params: {id, organisation: $route.params.organisation}})">
+          Project
+        </nuxt-link>
+        <nuxt-link
+          v-if="readOnly"
+          :to="localePath({name: 'organisation-projects-id-published', params: {id, organisation: $route.params.organisation}})">
           Project
         </nuxt-link>
         <nuxt-link :to="localePath({name: 'organisation-projects-id-assessment', params: {id, organisation: $route.params.organisation}})">
           Assessment
         </nuxt-link>
-        <nuxt-link :to="localePath({name: 'organisation-projects-id-toolkit', params: {id, organisation: $route.params.organisation}})">
+        <nuxt-link
+          v-if="!readOnly"
+          :to="localePath({name: 'organisation-projects-id-toolkit', params: {id, organisation: $route.params.organisation}})">
           Update score
         </nuxt-link>
-        <nuxt-link :to="localePath({name: 'organisation-projects-id-toolkit-scorecard', params: {id, organisation: $route.params.organisation}})">
+        <nuxt-link
+          v-if="!readOnly"
+          :to="localePath({name: 'organisation-projects-id-toolkit-scorecard', params: {id, organisation: $route.params.organisation}})">
           Summary score
         </nuxt-link>
       </div>
@@ -76,13 +87,22 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentProject: 'projects/getCurrentProject'
+      draft: 'project/getProjectData',
+      published: 'project/getPublished',
+      user: 'user/getProfile'
     }),
     project () {
-      return this.currentProject.isPublished ? this.currentProject.published : this.currentProject.draft;
+      return this.published && this.published.name ? this.published : this.draft;
     },
     id () {
-      return this.$route.params.id;
+      return +this.$route.params.id;
+    },
+    readOnly () {
+      if (this.user) {
+        const all = [...this.user.member, ...this.user.viewer];
+        return !all.includes(this.id);
+      }
+      return true;
     }
   }
 };
