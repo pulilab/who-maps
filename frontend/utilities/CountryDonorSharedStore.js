@@ -37,7 +37,9 @@ export const actions = () => ({
     const firstDonorId = rootGetters['system/getDonors'].length && rootGetters['system/getDonors'][0].id; // fallback for superuser w/o donor
 
     const id = superUserSpecifiedId || idFromProfile || firstDonorId;
-    if (!id) throw new Error('No donor found in the database to be loaded or modified, make one first!');
+    if (!id) {
+      return Promise.reject(new Error('No donor found in the database to be loaded or modified, make one first!'));
+    }
     const { data } = await this.$axios.get(`/api/${type}/${id}/`);
     // console.log(`${state.type} DATA for #${id}`);
     // console.dir(data);
