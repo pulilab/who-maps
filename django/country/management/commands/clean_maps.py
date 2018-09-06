@@ -29,9 +29,13 @@ class Command(BaseCommand):
 
         try:
             c = Country.objects.get(code=country_code.upper())
-            map_file = MapFile.objects.get(country_id=c.id)
         except ObjectDoesNotExist:
-            self.stdout.write('Selected country does not exist or it does not have an associated MapFile')
+            self.stdout.write('Selected country does not exist')
+            return
+
+        map_file = MapFile.objects.filter(country_id=c.id).order_by('created').last()
+        if not map_file:
+            self.stdout.write('Selected country does not have an associated MapFile')
             return
 
         self.stdout.write('Removing unused features from {} geojson'.format(c.name))
