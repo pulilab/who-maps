@@ -92,3 +92,29 @@ donor to the one that you want to keep for all projects:
 
 After migrating all projects, you can delete the typo / duplicate donor objects from the admin (don't forget to issue
 the `remove_stale_donors` after that.)
+
+
+## Translations command:
+
+To scrape the code and extract translations:
+`yarn translation:extract`
+
+To Update the translations files in the backend:
+```bash
+cd django
+fab update_translations
+```
+
+To see the new string and modify translations:
+`http://localhost/translation`
+
+(click on Save and Translate next block to save them)
+
+To have translation appear in the frontend (after saving them at the previous step):
+`docker-compose restart django`
+
+### Quirks:
+translations are picked up from `<translate></translate>` blocks this block is declared as a global vue component so it can be used without importing it
+If translations are needed in the JS code a method called `$gettext` must be implemented see :`frontend/components/ToolkitDialogWrapper.vue`
+(this is a trick to have the tool that extract the string pick up the right strings)
+
