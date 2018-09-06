@@ -22,14 +22,14 @@
         <div class="UserInfoSection">
           <div class="Item">
             <div class="ItemTitle">
-              Email
+              <translate>Email</translate>
             </div>
             {{ user.email }}
           </div>
 
           <div class="Item">
             <div class="ItemTitle">
-              Country
+              <translate>Country</translate>
             </div>
             <country-item
               v-if="user.country"
@@ -38,7 +38,7 @@
 
           <div class="Item">
             <div class="ItemTitle">
-              Site Language
+              <translate> Site Language</translate>
             </div>
             <language-item
               v-if="user.language"
@@ -56,7 +56,7 @@
             <span class="MenuIcon">
               <fa icon="user-edit" />
             </span>
-            My profile
+            <translate>My profile</translate>
           </nuxt-link>
         </div>
 
@@ -70,7 +70,7 @@
             <span class="MenuIcon">
               <fa icon="globe" />
             </span>
-            Country admin
+            <translate>Country admin</translate>
           </nuxt-link>
         </div>
 
@@ -84,7 +84,7 @@
             <span class="MenuIcon">
               <fa icon="hand-holding-usd" />
             </span>
-            Donor admin
+            <translate>Donor admin</translate>
           </nuxt-link>
         </div>
 
@@ -97,7 +97,7 @@
             <span class="MenuIcon">
               <fa icon="power-off" />
             </span>
-            Logout
+            <translate> Logout</translate>
           </el-button>
         </div>
       </div>
