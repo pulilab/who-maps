@@ -1,3 +1,7 @@
+import Vue from 'vue';
+import TranslateWrapper from '../components/TranslateWrapper';
+
+Vue.component('translate', TranslateWrapper);
 
 export default function ({ app, store, $axios }) {
   const loadLocales = async (ln) => {
