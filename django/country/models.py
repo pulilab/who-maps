@@ -205,3 +205,5 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel):
     question = models.CharField(max_length=256, blank=False)
     options = ArrayField(models.CharField(max_length=256), blank=True, null=True)
 
+    private = models.BooleanField(default=False)
+    required = models.BooleanField(default=False)
