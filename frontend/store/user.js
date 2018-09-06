@@ -34,6 +34,11 @@ export const actions = {
     ]);
   },
 
+  async resetPassword (ctx, { email }) {
+    const { data } = await this.$axios.post('/api/rest-auth/password/reset/', { email });
+    return data;
+  },
+
   async doSignup ({ commit, dispatch }, { account_type, password1, password2, email }) {
     const { data } = await this.$axios.post('/api/rest-auth/registration/',
       { account_type, password1, password2, email });
