@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinLengthValidator
 
-from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel
+from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
 from user.models import UserProfile
 
 
@@ -181,3 +181,19 @@ class CountryField(models.Model):
 
     def to_csv(self):
         return {self.schema_instance.question: self.answer}
+
+
+class CustomQuestion(SoftDeleteModel, ExtendedModel):
+    TEXT = 1
+    NUMBER = 2
+    YESNO = 3
+    SINGLE = 4
+    MULTI = 5
+
+    TYPE_CHOICES = (
+        (TEXT, _("Text answer")),
+        (NUMBER, _("Numeric answer")),
+        (YESNO, _("Yes/No answer")),
+        (SINGLE, _("Single choice")),
+        (MULTI, _("Multiple choice")),
+    )
