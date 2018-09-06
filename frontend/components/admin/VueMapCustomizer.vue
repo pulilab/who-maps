@@ -29,11 +29,12 @@
             <el-upload
               ref="mapUploadBtn"
               :show-file-list="false"
+              :file-list="mapFileList"
               :limit="1"
               :multiple="false"
               :data="{country: country.id}"
               :headers="uploadHeaders"
-              :on-success="successHandler"
+              :on-success="mapFileChangeSuccessHandler"
               :before-upload="beforeMapUpload"
               class="UploadComp"
               name="map_file"
@@ -78,7 +79,7 @@
               <l-tooltip> Country Central Pin </l-tooltip>
             </l-marker>
 
-            <!-- <l-feature-group v-if="showSubLevelsPins">
+            <l-feature-group v-if="showSubLevelsPins">
               <l-marker
                 v-for="pin in subLevelsPolyCenters"
                 :key="pin.name"
@@ -88,7 +89,7 @@
               >
                 <l-tooltip> {{ pin.name }} </l-tooltip>
               </l-marker>
-            </l-feature-group> -->
+            </l-feature-group>
           </l-map>
         </no-ssr>
       </div>
@@ -244,7 +245,8 @@ export default {
       showSubLevelsPins: true,
       forceMapFileChange: false,
       mapFile: {},
-      uploadMapFile: false
+      uploadMapFile: false,
+      mapFileList: []
     };
   },
   computed: {
@@ -368,12 +370,14 @@ export default {
       this.uploadMapFile = true;
     },
 
-    successHandler (response) {
+    mapFileChangeSuccessHandler (response) {
       this.setCountryDataField({field: 'map_files', data: [response]});
       setTimeout(async () => {
         await this.loadGeoJSON();
+        this.polycenterCalculation();
         this.forceMapFileChange = false;
         this.uploadMapFile = false;
+        this.mapFileList = [];
       });
     }
   }
@@ -493,7 +497,7 @@ export default {
             padding: 0;
           }
 
-          .UploadComp {}
+          // .UploadComp {}
         }
       }
 

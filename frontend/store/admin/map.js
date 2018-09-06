@@ -116,7 +116,7 @@ const parseNames = (collection) => {
 
 export const actions = {
   async loadGeoJSON ({commit, rootGetters}) {
-    const country = rootGetters['admin/country/getStableData'];
+    const country = rootGetters['admin/country/getData'];
     const url = country.map_files.length && country.map_files.slice(-1)[0].map_file;
     if (url) {
       const mediaIndex = url.indexOf('/media/');
