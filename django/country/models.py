@@ -197,3 +197,7 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel):
         (SINGLE, _("Single choice")),
         (MULTI, _("Multiple choice")),
     )
+
+    country = models.ForeignKey(Country, null=True, related_name='country_questions', on_delete=models.CASCADE)
+    donor = models.ForeignKey(Country, null=True, related_name='donor_questions', on_delete=models.CASCADE)
+
