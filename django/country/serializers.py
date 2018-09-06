@@ -144,6 +144,7 @@ READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "
 class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer):
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
     map_version = serializers.SerializerMethodField()
+    map_files = MapFileSerializer(many=True, read_only=True)
     user_requests = serializers.SerializerMethodField()
     admin_requests = serializers.SerializerMethodField()
     super_admin_requests = serializers.SerializerMethodField()
