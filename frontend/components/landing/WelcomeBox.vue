@@ -5,7 +5,7 @@
         v-show="showWelcomeBox"
         class="WelcomeBox">
 
-        <h2>Welcome!</h2>
+        <h2><translate>Welcome!</translate></h2>
         <h6>{{ welcomeText }}</h6>
 
         <el-button
