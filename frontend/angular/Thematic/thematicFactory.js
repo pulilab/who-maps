@@ -19,6 +19,14 @@ angular.module('ngHtmlCompile', [])
     };
   }]);
 
+function run (gettextCatalog) {
+  const ln = window.$nuxt.$i18n.locale;
+  gettextCatalog.setCurrentLanguage(ln);
+  gettextCatalog.setStrings(ln, window.$nuxt.$i18n.messages[ln]);
+};
+
+run.$inject = ['gettextCatalog'];
+
 export const factory = (axis, domain, buttontitle, buttonclass, buttontext) => {
   angular.module('thematic', [
     'ngMaterial',
@@ -26,7 +34,8 @@ export const factory = (axis, domain, buttontitle, buttonclass, buttontext) => {
     ngSanitize,
     'ngHtmlCompile'
   ])
-    .component(thematicComponent.name, thematicComponent);
+    .component(thematicComponent.name, thematicComponent)
+    .run(run);
 
   const thematicjs = document.querySelector('#thematicjs');
   const component = document.createElement('thematic');

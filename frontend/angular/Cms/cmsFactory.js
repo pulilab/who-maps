@@ -38,6 +38,14 @@ function config ($stateProvider, $locationProvider, $ngReduxProvider) {
 
 config.$inject = ['$stateProvider', '$locationProvider', '$ngReduxProvider'];
 
+const run = (gettextCatalog) => {
+  const ln = window.$nuxt.$i18n.locale;
+  gettextCatalog.setCurrentLanguage(ln);
+  gettextCatalog.setStrings(ln, window.$nuxt.$i18n.messages[ln]);
+};
+
+run.$inject = ['gettextCatalog'];
+
 export const cmsFactory = () => {
   angular.module('cms', [
     'ui.router',
@@ -55,7 +63,8 @@ export const cmsFactory = () => {
     .component(reportButton.name, reportButton)
     .component(planningAndGuidanceComponent.name, planningAndGuidanceComponent)
     .component(trixComponent.name, trixComponent)
-    .config(config);
+    .config(config)
+    .run(run);
 
   const cmsjs = document.querySelector('#cmsjs');
   const uiView = document.createElement('ui-view');

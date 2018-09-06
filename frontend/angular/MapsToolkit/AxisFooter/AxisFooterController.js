@@ -10,11 +10,11 @@ class AxisFooterController {
   onInit () {
     this.activeAxis = this.state.params.axisId;
     this.processedAxis = this.axes.map((axis, index) => {
-      axis = Object.assign({}, axis);
+      const stored = window.$nuxt.$store.getters['toolkit/getAxisDetail'](axis.id);
+      axis = Object.assign({}, axis, stored);
       axis.axisId = axis.axis.split('.')[0];
       axis.id = index;
       axis.isActive = this.activeAxis === '' + index;
-      axis.axisName = axis.axis.split('.')[1].replace(' ', '');
       return axis;
     });
   }
