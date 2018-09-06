@@ -1153,6 +1153,21 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data=data, format="multipart")
         self.assertEqual(response.status_code, 403)
 
+    def test_create_retrieve_update_mapfile_as_superuser(self):
+        user = UserProfile.objects.get(id=self.test_user['user_profile_id']).user
+        user.is_superuser = True
+        user.save()
+
+        url = reverse('map-file-list')
+        map_file = SimpleUploadedFile("file.txt", b"file_content")
+        data = {
+            'country': self.country.id,
+            'map_file': map_file
+        }
+        response = self.test_user_client.post(url, data=data, format="multipart")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['country'], self.country.id)
+
     def test_create_retrieve_update_mapfile(self):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']) \
             .update(account_type=UserProfile.COUNTRY_ADMIN, country=self.country)
