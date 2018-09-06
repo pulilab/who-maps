@@ -1807,7 +1807,7 @@ class CountryManagementCommandTest(TestCase):
         out = StringIO()
         call_command('clean_maps', 'something', stdout=out)
         output = out.getvalue().strip()
-        self.assertEqual(output, 'Selected country does not exist or it does not have an associated MapFile')
+        self.assertEqual(output, 'Selected country does not exist')
 
         out = StringIO()
         call_command('clean_maps', 'NULL', stdout=out)
