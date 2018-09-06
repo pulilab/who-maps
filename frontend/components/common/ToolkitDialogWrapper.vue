@@ -21,9 +21,14 @@ export default {
   mounted () {
     this.$nextTick(() => {
       const factory = require('../../angular/Thematic/thematicFactory');
-      factory.factory(0, 0, 'MAPS Toolkit', 'HeaderBtn', 'Toolkit');
+      factory.factory(0, 0, this.$gettext('MAPS Toolkit'), 'HeaderBtn', this.$gettext('Toolkit'));
       this.initialised = true;
     });
+  },
+  methods: {
+    $gettext (word) {
+      return this.$t(word);
+    }
   }
 };
 </script>
