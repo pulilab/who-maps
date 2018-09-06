@@ -51,15 +51,16 @@
                   :to="localePath({name: 'organisation-dashboard', params: $route.params})"
                   class="HeaderBtn"
                 >
-                  Dashboard
+                  <translate>Dashboard</translate>
                 </nuxt-link>
               </div>
               <div>
                 <nuxt-link
                   :to="localePath({name: 'organisation-projects', params: $route.params})"
+                  exact
                   class="HeaderBtn"
                 >
-                  My Projects
+                  <translate>My Projects</translate>
                 </nuxt-link>
               </div>
               <div>
@@ -67,7 +68,7 @@
                   :to="localePath({name: 'organisation-cms', params: $route.params})"
                   class="HeaderBtn"
                 >
-                  Planning and Guidance
+                  <translate>Planning and Guidance</translate>
                 </nuxt-link>
               </div>
               <div>
@@ -78,7 +79,7 @@
                   :to="localePath({name: 'organisation-projects-create', params: $route.params})"
                   class="HeaderBtn">
                   <fa icon="plus-circle" />
-                  New Project
+                  <translate> New Project</translate>
                 </nuxt-link>
               </div>
               <user-dropdown />

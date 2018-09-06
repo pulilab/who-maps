@@ -6,7 +6,7 @@
       v-if="!initialised"
       class="HeaderBtn ToolkitBtn"
     >
-      Toolkit
+      <translate>Toolkit</translate>
     </a>
   </div>
 </template>
