@@ -14,7 +14,7 @@
     "test": "jest",
     "test:w": "jest --watch",
     "cypress:open": "cypress open",
-    "translation:extract": "gettext-extract --output ../django/translations/master.pot $(find ./components -type f -name '*.vue')"
+    "translation:extract": "gettext-extract --output ../django/translations/master.pot $(find ./components ./pages ./angular ./layouts -type f -name '*.vue' -o -name '*.js' -o -name '*.html')"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.2",
