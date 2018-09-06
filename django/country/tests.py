@@ -1189,7 +1189,7 @@ class CountryTests(APITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()['map_files']), 1)
-        self.assertEqual(response.json()['map_files'][0], map_file_id)
+        self.assertEqual(response.json()['map_files'][0]['id'], map_file_id)
 
     def test_country_admin_update_map_data(self):
         UserProfile.objects.filter(id=self.test_user['user_profile_id']) \
