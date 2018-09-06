@@ -18,21 +18,27 @@
             <nuxt-link
               :to="localePath({name: 'organisation-edit-profile', params: $route.params})"
               class="ActionBarLink"
-              tag="div">My profile</nuxt-link>
+              tag="div">
+              <translate>My profile</translate>
+            </nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
               v-if="allowCountryAdmin"
               :to="localePath({name: 'organisation-admin-country', params: $route.params})"
               class="ActionBarLink"
-              tag="div">Country admin</nuxt-link>
+              tag="div">
+              <translate>Country admin</translate>
+            </nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
               v-if="allowDonorAdmin"
               :to="localePath({name: 'organisation-admin-donor', params: $route.params})"
               class="ActionBarLink"
-              tag="div">Donor admin</nuxt-link>
+              tag="div">
+              <translate>Donor admin</translate>
+            </nuxt-link>
           </el-col>
         </el-row>
         <el-row
@@ -42,13 +48,17 @@
             <nuxt-link
               :to="localePath({name: 'organisation-dashboard', params: $route.params, query: $route.query})"
               :class="['ActionBarLink', {'Active': isMapSubRoute}]"
-              tag="div">Map view</nuxt-link>
+              tag="div">
+              <translate>Map view</translate>
+            </nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
               :to="localePath({name: 'organisation-dashboard-list', params: $route.params, query: $route.query})"
               :class="['ActionBarLink', {'Active': isListSubRoute}]"
-              tag="div">List view</nuxt-link>
+              tag="div">
+              <translate>List view</translate>
+            </nuxt-link>
           </el-col>
         </el-row>
       </el-col>
@@ -163,7 +173,7 @@ export default {
       white-space: nowrap;
       opacity: .6;
       transition: @transitionAll;
-      &.Active {
+      &.Active, &.nuxt-link-exact-active {
         opacity: 1;
         &::before {
           background-color: @colorWhite;
