@@ -64,6 +64,14 @@ const config = ($stateProvider, $locationProvider, $ngReduxProvider) => {
 
 config.$inject = ['$stateProvider', '$locationProvider', '$ngReduxProvider'];
 
+const run = (gettextCatalog) => {
+  const ln = window.$nuxt.$i18n.locale;
+  gettextCatalog.setCurrentLanguage(ln);
+  gettextCatalog.setStrings(ln, window.$nuxt.$i18n.messages[ln]);
+};
+
+run.$inject = ['gettextCatalog'];
+
 export const factory = () => {
   angular.module('ngHtmlCompile', [])
     .directive('ngHtmlCompile', ['$compile', ($compile) => {
@@ -98,7 +106,8 @@ export const factory = () => {
     .component(trixComponent.name, trixComponent)
     .component(axisComponent.name, axisComponent)
     .component(thematicComponent.name, thematicComponent)
-    .config(config);
+    .config(config)
+    .run(run);
 
   const toolkitjs = document.querySelector('#toolkitjs');
   const uiView = document.createElement('ui-view');
