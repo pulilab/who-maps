@@ -24,6 +24,8 @@ class InSuperAdmin(permissions.BasePermission):
 class InCountryAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method == 'POST':
+            if request.user.is_superuser:
+                return True
             country = request.data.get('country')
             return Country.objects.get(pk=country).admins.filter(id=request.user.userprofile.id).exists()
         return True
@@ -32,7 +34,8 @@ class InCountryAdminOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        return obj.country.admins.filter(id=request.user.userprofile.id).exists()
+        return request.user.is_superuser \
+            or obj.country.admins.filter(id=request.user.userprofile.id).exists()
 
 
 class InCountrySuperAdmin(permissions.BasePermission):
