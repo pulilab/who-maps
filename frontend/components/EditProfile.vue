@@ -519,6 +519,7 @@ export default {
               type: 'success',
               showClose: true
             });
+            this.changeLocale(this.innerProfile.language);
           } catch (err) {
             console.log('ERR:', err);
             this.setFormAPIErrors(err);
@@ -532,7 +533,13 @@ export default {
         }
       });
     },
-
+    changeLocale (locale) {
+      if (locale !== this.$i18n.locale) {
+        const name = this.$route.name.split('___')[0];
+        const path = this.localePath({...this.$route, name}, locale);
+        this.$router.replace(path);
+      }
+    },
     changingUserRole () {
       this.changeApprovedUserRole = true;
     },
