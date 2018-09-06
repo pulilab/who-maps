@@ -2,7 +2,7 @@
   <div class="MainTable">
     <el-table
       ref="mainTable"
-      :data="projects"
+      :data="projectsList"
       :max-height="tableMaxHeight"
       :row-class-name="rowClassCalculator"
       :stripe="false"
@@ -11,6 +11,7 @@
       style="width: 100%"
       @select="selectHandler"
       @select-all="selectHandler"
+      @sort-change="sortChanged"
     >
       <el-table-column
         type="selection"
@@ -19,12 +20,13 @@
       <el-table-column
         v-if="selectedColumns.includes(1)"
         fixed
-        sortable
+        sortable="custom"
+        prop="project__name"
         label="Project Name"
         width="240">
         <template slot-scope="scope">
           <project-card
-            :id="scope.row.id"
+            :project="scope.row"
             hide-borders
             show-verified
           />
@@ -32,7 +34,8 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(2)"
-        sortable
+        sortable="custom"
+        prop="country__name"
         label="Country"
         width="180">
         <template slot-scope="scope">
@@ -44,7 +47,8 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(3)"
-        sortable
+        sortable="custom"
+        prop="organisation__name"
         label="Organisation Name"
         width="240">
         <template slot-scope="scope">
@@ -55,27 +59,40 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(4)"
-        sortable
-        label="Donors"
-        width="240">
+        sortable="custom"
+        prop="project__data__government_investor"
+        label="Government Investor"
+        width="180">
         <template slot-scope="scope">
-          <span
-            v-for="(donor, index) in scope.row.donors"
-            :key="index"
-            class="DonorItem"
-          >
-            <span>
-              <fa
-                icon="user-tie"
-                size="xs" />
-            </span>
-            <span>{{ donor }}</span>
-          </span>
+          <span v-show="scope.row.government_investor">Yes</span>
+          <span v-show="!scope.row.government_investor">No</span>
         </template>
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(5)"
-        sortable
+        sortable="custom"
+        prop="country__region"
+        label="Region"
+        width="180">
+        <template slot-scope="scope">
+          <region-item
+            :id="scope.row.region"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="selectedColumns.includes(6)"
+        label="Donors"
+        width="240">
+        <template slot-scope="scope">
+          <donors-list
+            :value="scope.row.donors"
+            :limit="3"
+            show-icon />
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="selectedColumns.includes(7)"
         label="Contact Name"
         width="240">
         <template slot-scope="scope">
@@ -87,8 +104,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(6)"
-        sortable
+        v-if="selectedColumns.includes(8)"
         label="Implementation Overview"
         width="240">
         <template slot-scope="scope">
@@ -96,8 +112,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(7)"
-        sortable
+        v-if="selectedColumns.includes(9)"
         label="Geographic Scope"
         width="240">
         <template slot-scope="scope">
@@ -105,12 +120,13 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(8)"
-        sortable
+        v-if="selectedColumns.includes(10)"
         label="Health Focus Areas"
         width="240">
         <template slot-scope="scope">
-          <health-focus-areas-list :value="scope.row.health_focus_areas" />
+          <health-focus-areas-list
+            :value="scope.row.health_focus_areas"
+            :limit="3" />
         </template>
       </el-table-column>
     </el-table>
@@ -118,7 +134,7 @@
     <div class="Pagination">
       <el-pagination
         :current-page.sync="currentPage"
-        :page-size="pageSize"
+        :page-size.sync="pageSize"
         :page-sizes="pageSizeOption"
         :total="total"
         layout="sizes, prev, slot, next"
@@ -134,40 +150,50 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { mapGettersActions } from '../../utilities/form.js';
 
 import ProjectCard from '../common/ProjectCard';
 import CountryItem from '../common/CountryItem';
 import OrganisationItem from '../common/OrganisationItem';
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
+import DonorsList from '../common/list/DonorsList';
+import RegionItem from '../common/RegionItem';
 
 export default {
   components: {
     ProjectCard,
     CountryItem,
     OrganisationItem,
-    HealthFocusAreasList
+    HealthFocusAreasList,
+    DonorsList,
+    RegionItem
   },
   data () {
     return {
-      currentPage: 1,
-      pageSize: 10,
-      total: 450,
       pageSizeOption: [10, 20, 50, 100],
-      tableMaxHeight: 200
+      tableMaxHeight: 200,
+      localSort: null
     };
   },
   computed: {
     ...mapGetters({
-      projects: 'dashboard/getProjects',
+      projectsList: 'dashboard/getProjectsList',
       selectedColumns: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
-      selectAll: 'dashboard/getSelectAll'
+      selectAll: 'dashboard/getSelectAll',
+      total: 'dashboard/getTotal'
+    }),
+    ...mapGettersActions({
+      pageSize: ['dashboard', 'getPageSize', 'setPageSize', 0],
+      currentPage: ['dashboard', 'getCurrentPage', 'setCurrentPage', 0],
+      sorting: ['dashboard', 'getSorting', 'setSorting', 0]
     }),
     min () {
       return 1 + this.pageSize * (this.currentPage - 1);
     },
     max () {
-      return this.pageSize * this.currentPage;
+      const max = this.pageSize * this.currentPage;
+      return max < this.total ? max : this.total;
     }
   },
   watch: {
@@ -187,13 +213,21 @@ export default {
           this.$refs.mainTable.doLayout();
         });
       }
+    },
+    sorting: {
+      immediate: false,
+      handler (current) {
+        console.log(current, this.localSort);
+        if (current !== this.localSort) {
+          this.fixSorting(current);
+        }
+      }
     }
   },
   mounted () {
     setTimeout(() => {
-      const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height');
-      this.tableMaxHeight = +maxHeight.replace('px', '');
-      this.$refs.mainTable.doLayout();
+      this.fixTableHeight();
+      this.fixSorting(this.$route.query.ordering);
     }, 500);
   },
   methods: {
@@ -205,6 +239,30 @@ export default {
     },
     rowClassCalculator ({row}) {
       return this.selectedRows.includes(row.id) ? 'Selected' : 'NotSelected';
+    },
+    sortChanged ({prop, order}) {
+      if (order === 'descending') {
+        this.sorting = '-' + prop;
+        this.localSort = '-' + prop;
+      } else {
+        this.sorting = prop;
+        this.localSort = prop;
+      }
+    },
+    fixTableHeight () {
+      const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height');
+      this.tableMaxHeight = +maxHeight.replace('px', '');
+      this.$refs.mainTable.doLayout();
+    },
+    fixSorting (prop) {
+      if (prop) {
+        let direction = 'ascending';
+        if (prop.startsWith('-')) {
+          direction = 'descending';
+          prop = prop.replace('-', '');
+        }
+        this.$refs.mainTable.sort(prop, direction);
+      }
     }
   }
 };
@@ -292,16 +350,21 @@ export default {
           line-height: inherit;
         }
       }
+      .DonorList {
+        ul {
+          padding: 0;
+          margin: 0;
+        }
+        .DonorItem {
+          display: inline-flex;
+          align-items: flex-start;
+          width: 100%;
 
-      .DonorItem {
-        display: inline-flex;
-        align-items: flex-start;
-        width: 100%;
-
-        .svg-inline--fa {
-          position: relative;
-          top: -1px;
-          margin-right: 5px;
+          .svg-inline--fa {
+            position: relative;
+            top: -1px;
+            margin-right: 5px;
+          }
         }
       }
 

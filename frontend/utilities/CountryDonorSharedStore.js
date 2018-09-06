@@ -56,6 +56,10 @@ export const actions = () => ({
       dispatch('admin/map/parseSubLevelsPolyCenters', data.map_data.first_sub_level, { root: true });
     }
 
+    if (state.type === 'country') {
+      await dispatch('admin/map/loadGeoJSON', null, {root: true});
+    }
+
     dispatch('mapAdminSelections', data);
   },
 

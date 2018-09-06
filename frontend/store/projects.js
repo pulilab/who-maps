@@ -40,20 +40,26 @@ export const getters = {
   getTechnologyPlatforms: state => state.projectStructure.technology_platforms ? [...state.projectStructure.technology_platforms] : [],
   getToolkitVersions: state => [...state.currentProjectToolkitVersions],
   getCoverageVersions: state => [...state.currentProjectCoverageVersions],
-  getUserProjectDetails: (state, getters, rootState, rootGetters) => id => {
-    const p = getters.getUserProjectList.find(p => p.id === id);
+  getProjectDetails: (state, getters, rootState, rootGetters) => p => {
     if (p) {
       const user = rootGetters['user/getProfile'];
       return {
         ...p,
         isMember: user ? user.member.includes(p.id) : undefined,
         isViewer: user ? user.viewer.includes(p.id) : undefined,
-        isPublished: !!(p.published.name)
+        isPublished: !!(p.published && p.published.name)
       };
     }
+    return {};
   },
-  getCurrentProject: (state, getters) => {
-    return getters.getUserProjectDetails(state.currentProject);
+  getUserProjectDetails: (state, getters, rootState, rootGetters) => id => {
+    const p = getters.getUserProjectList.find(p => p.id === id);
+    return getters.getProjectDetails(p);
+  },
+  getCurrentProject: (state, getters, rootState, rootGetters) => {
+    // Utility method for retro-compatibility
+    const p = rootGetters['project/getOriginal'];
+    return getters.getProjectDetails(p);
   },
   getMapsAxisData: (state, getters, rootState, rootGetters) => {
     const axis = rootGetters['system/getAxis'];
@@ -170,7 +176,7 @@ export const actions = {
     await dispatch('loadProjectDetails', id);
     commit('SET_CURRENT_PROJECT', id);
   },
-  async loadProjectDetails ({commit, state}, projectId) {
+  async loadProjectDetails ({commit}, projectId) {
     try {
       if (projectId) {
         const [toolkitVersions, coverageVersions] =

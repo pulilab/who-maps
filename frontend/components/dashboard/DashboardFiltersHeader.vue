@@ -1,10 +1,8 @@
 <template>
   <div class="DashboardFiltersHeader">
-    <!-- TODO -->
-    <!-- Could we display here the num of filtered projects? -->
     <span class="ProjectToShow">
       <fa icon="list-ul" />
-      23 project(s) to show
+      {{ total }} project(s) to show
     </span>
     <el-button class="ToggleFiltersButton">
       <fa icon="chevron-right" />
@@ -13,8 +11,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
-
+  computed: {
+    ...mapGetters({
+      total: 'dashboard/getTotal'
+    })
+  }
 };
 </script>
 

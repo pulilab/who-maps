@@ -18,15 +18,14 @@
           </el-button>
           <div class="CustomPopoverList">
             <ul>
-              <!-- TODO -->
-              <!-- Add '.Selected' class to active item -->
-              <li class="Active">
+              <li
+                v-for="filter in savedFilters"
+                :key="filter.name"
+                :class="{'Active': isActive(filter.query)}"
+                @click="applyPreset(filter.query)"
+              >
                 <fa icon="check" />
-                Filter One
-              </li>
-              <li>
-                <fa icon="check" />
-                Filter One
+                {{ filter.name }}
               </li>
             </ul>
           </div>
@@ -35,7 +34,9 @@
       <el-col :span="6">
         <el-button
           type="text"
-          size="small">
+          size="small"
+          @click="openSaveFilter"
+        >
           Save
         </el-button>
       </el-col>
@@ -43,7 +44,9 @@
         <el-button
           type="text"
           size="small"
-          class="DeleteButton">
+          class="DeleteButton"
+          @click="clear"
+        >
           Clear
         </el-button>
       </el-col>
@@ -52,8 +55,37 @@
 </template>
 
 <script>
-export default {
+import isEqual from 'lodash/isEqual';
+import { mapActions, mapGetters } from 'vuex';
+import { queryStringComparisonParser } from '../../utilities/api.js';
 
+export default {
+  computed: {
+    ...mapGetters({
+      dashboardType: 'dashboard/getDashboardType',
+      savedFilters: 'dashboard/getSavedFilters'
+    })
+  },
+  methods: {
+    ...mapActions({
+      setSearchOptions: 'dashboard/setSearchOptions',
+      setSaveFiltersDialogState: 'layout/setSaveFiltersDialogState'
+    }),
+    clear () {
+      this.setSearchOptions({});
+    },
+    openSaveFilter () {
+      this.setSaveFiltersDialogState(this.dashboardType);
+    },
+    isActive (query) {
+      const fromRoute = queryStringComparisonParser(this.$route.query);
+      const fromItem = queryStringComparisonParser(query);
+      return isEqual(fromRoute, fromItem);
+    },
+    applyPreset (query) {
+      this.setSearchOptions(query);
+    }
+  }
 };
 </script>
 

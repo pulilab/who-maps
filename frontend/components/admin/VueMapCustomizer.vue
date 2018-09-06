@@ -32,6 +32,7 @@
               :limit="1"
               :multiple="false"
               :data="{country: country.id}"
+              :headers="uploadHeaders"
               :on-success="successHandler"
               :before-upload="beforeMapUpload"
               class="UploadComp"
@@ -77,7 +78,7 @@
               <l-tooltip> Country Central Pin </l-tooltip>
             </l-marker>
 
-            <l-feature-group v-if="showSubLevelsPins">
+            <!-- <l-feature-group v-if="showSubLevelsPins">
               <l-marker
                 v-for="pin in subLevelsPolyCenters"
                 :key="pin.name"
@@ -87,7 +88,7 @@
               >
                 <l-tooltip> {{ pin.name }} </l-tooltip>
               </l-marker>
-            </l-feature-group>
+            </l-feature-group> -->
           </l-map>
         </no-ssr>
       </div>
@@ -248,6 +249,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      token: 'user/getToken',
       country: 'admin/country/getData',
       subLevelTypes: 'system/getSubLevelTypes',
       firstSubLevelList: 'admin/map/getFirstSubLevelList',
@@ -262,6 +264,11 @@ export default {
       countryBorder: 'admin/map/getCountryBorder',
       subLevelsPolyCenters: 'admin/map/getSubLevelsPolyCenters'
     }),
+    uploadHeaders () {
+      return {
+        'Authorization': `Token ${this.token}`
+      };
+    },
     firstSubLevelTypes () {
       return this.subLevelTypes.filter(n => n.name !== this.secondSubLevelType);
     },

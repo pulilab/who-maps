@@ -33,7 +33,7 @@ class AssessmentModuleController {
     this.rawToolkitData = window.$nuxt.$store.getters['toolkit/getToolkitData'];
     this.mapData = window.$nuxt.$store.getters['countries/getCountryDetails'](this.projectData.country);
     this.watchers();
-    this.projectId = this.state.params.appName;
+    this.projectId = this.state.params.id;
     this.resizeEvent();
     this.eventBinding();
   }

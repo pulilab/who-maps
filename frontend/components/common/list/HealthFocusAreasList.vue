@@ -2,7 +2,7 @@
   <div class="HealthFocusAreasList">
     <ul>
       <li
-        v-for="hfa in selected"
+        v-for="hfa in limited"
         :key="hfa.id"
       >
         <list-action
@@ -15,6 +15,14 @@
             size="xs" />
         </span>
         <span>{{ hfa.name }}</span>
+      </li>
+      <li v-show="excluded">
+        <span>
+          <fa
+            icon="arrow-alt-circle-right"
+            size="xs" />
+        </span>
+        <span>... {{ excluded }} more</span>
       </li>
     </ul>
   </div>
@@ -30,7 +38,7 @@ export default {
   props: {
     value: {
       type: Array,
-      default: null
+      default: () => []
     },
     actions: {
       type: Boolean,
@@ -47,8 +55,13 @@ export default {
     }),
     selected () {
       const hfas = this.healthFocusAreas.reduce((a, c) => [...a, ...c.health_focus_areas], []);
-      const result = hfas.filter(hfa => this.value.includes(hfa.id));
-      return this.limit ? result.slice(0, this.limit) : result;
+      return hfas.filter(hfa => this.value.includes(hfa.id));
+    },
+    limited () {
+      return this.limit ? this.selected.slice(0, this.limit) : this.selected;
+    },
+    excluded () {
+      return this.selected.length - this.limited.length;
     }
   }
 };

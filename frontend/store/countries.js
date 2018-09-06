@@ -2,14 +2,12 @@ import uniqBy from 'lodash/uniqBy';
 
 export const state = () => ({
   countries: [],
-  geoJsonLibrary: {},
-  regions: [{id: 1, name: 'Afro'}, {id: 2, name: 'Europe'}]
+  geoJsonLibrary: {}
 });
 export const getters = {
   getCountries (state) {
     return [...state.countries.map(c => ({...c}))];
   },
-  getRegions: state => state.regions,
   getGeoJsonLibrary (state) {
     return state.geoJsonLibrary;
   },

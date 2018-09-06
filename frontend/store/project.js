@@ -37,7 +37,8 @@ const cleanState = () => ({
   wiki: null,
   interoperability_links: {},
   interoperability_standards: [],
-  published: null
+  published: null,
+  original: null
 });
 
 export const state = () => ({
@@ -79,54 +80,26 @@ export const getters = {
   getInteroperabilityLinks: state => state.interoperability_links,
   getInteroperabilityStandards: state => state.interoperability_standards,
   getPublished: state => state.published,
-  getLoading: state => state.loading
+  getLoading: state => state.loading,
+  getOriginal: state => state.original
 };
 
 export const actions = {
-  async loadProject ({commit, dispatch}, id) {
-    const { data } = await this.$axios.get(`/api/projects/${id}/`);
+  async loadProject ({commit, dispatch, rootGetters}, id) {
+    const userProject = rootGetters['projects/getUserProjectList'].find(p => p.id === id);
+    const { data } = userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`);
+    commit('SET_ORIGINAL', Object.freeze(data));
     const clean = cleanState();
     const published = {...clean, ...apiReadParser(data.published)};
     const draft = {...clean, ...apiReadParser(data.draft)};
     commit('SET_PUBLISHED', Object.freeze(published));
-    await dispatch('setProjectState', draft);
+    commit('INIT_PROJECT', draft);
     await dispatch('loadTeamViewers', id);
   },
   async loadTeamViewers ({commit}, projectId) {
     const { data } = await this.$axios.get(`/api/projects/${projectId}/groups/`);
     commit('SET_TEAM', data.team);
     commit('SET_VIEWERS', data.viewers);
-  },
-  async setProjectState ({dispatch, commit}, project) {
-    dispatch('setName', project.name);
-    dispatch('setOrganisation', project.organisation);
-    dispatch('setCountry', project.country);
-    dispatch('setGeographicScope', project.geographic_scope);
-    dispatch('setImplementationOverview', project.implementation_overview);
-    dispatch('setStartDate', project.start_date);
-    dispatch('setEndDate', project.end_date);
-    dispatch('setContactName', project.contact_name);
-    dispatch('setContactEmail', project.contact_email);
-    dispatch('setPlatforms', project.platforms);
-    dispatch('setDigitalHealthInterventions', project.digitalHealthInterventions);
-    dispatch('setHealthFocusAreas', project.health_focus_areas);
-    dispatch('setHscChallenges', project.hsc_challenges);
-    dispatch('setHisBucket', project.his_bucket);
-    dispatch('setCoverageType', project.coverageType);
-    dispatch('setCoverage', project.coverage);
-    commit('SET_COVERAGE_DATA', project.coverageData);
-    dispatch('setCoverageSecondLevel', project.coverage_second_level);
-    dispatch('setNationalLevelDeployment', project.national_level_deployment);
-    dispatch('setGovernmentInvestor', project.government_investor);
-    dispatch('setImplementingPartners', project.implementing_partners);
-    dispatch('setDonors', project.donors);
-    dispatch('setImplementationDates', project.implementation_dates);
-    dispatch('setLicenses', project.licenses);
-    dispatch('setRepository', project.repository);
-    dispatch('setMobileApplication', project.mobile_application);
-    dispatch('setWiki', project.wiki);
-    dispatch('setInteroperabilityLinks', project.interoperability_links);
-    dispatch('setInteroperabilityStandards', project.interoperability_standards);
   },
   resetProjectState ({dispatch, commit, rootGetters}) {
     const clean = cleanState();
@@ -135,7 +108,7 @@ export const actions = {
       clean.country = profile.country;
       clean.team = [profile.id];
     }
-    dispatch('setProjectState', clean);
+    commit('INIT_PROJECT', clean);
     commit('SET_TEAM', clean.team);
     commit('SET_VIEWERS', clean.viewers);
   },
@@ -307,9 +280,6 @@ export const actions = {
 };
 
 export const mutations = {
-  SET_PROJECT_STATE: (state, value) => {
-    state = value;
-  },
   SET_NAME: (state, name) => {
     state.name = name;
   },
@@ -411,6 +381,42 @@ export const mutations = {
   },
   SET_LOADING: (state, loading) => {
     state.loading = loading;
+  },
+  INIT_PROJECT: (state, project) => {
+    state.name = project.name;
+    state.organisation = project.organisation;
+    state.country = project.country;
+    state.geographic_scope = project.geographic_scope;
+    state.implementation_overview = project.implementation_overview;
+    state.start_date = project.start_date;
+    state.end_date = project.end_date;
+    state.contact_name = project.contact_name;
+    state.contact_email = project.contact_email;
+    state.team = project.team;
+    state.viewers = project.viewers;
+    state.platforms = project.platforms;
+    state.digitalHealthInterventions = project.digitalHealthInterventions;
+    state.health_focus_areas = project.health_focus_areas;
+    state.hsc_challenges = project.hsc_challenges;
+    state.his_bucket = project.his_bucket;
+    state.coverageType = project.coverageType;
+    state.coverage = project.coverage;
+    state.coverageData = project.coverageData;
+    state.coverage_second_level = project.coverage_second_level;
+    state.national_level_deployment = project.national_level_deployment;
+    state.government_investor = project.government_investor;
+    state.implementing_partners = project.implementing_partners;
+    state.donors = project.donors;
+    state.implementation_dates = project.implementation_dates;
+    state.licenses = project.licenses;
+    state.repository = project.repository;
+    state.mobile_application = project.mobile_application;
+    state.wiki = project.wiki;
+    state.interoperability_links = project.interoperability_links;
+    state.interoperability_standards = project.interoperability_standards;
+  },
+  SET_ORIGINAL: (state, project) => {
+    state.original = project;
   }
 
 };

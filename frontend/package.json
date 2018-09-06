@@ -50,6 +50,7 @@
     "nuxt-fontawesome": "^0.3.0",
     "nuxt-i18n": "^4.1.0",
     "papaparse": "^4.5.0",
+    "qs": "^6.5.2",
     "redux": "^4.0.0",
     "redux-async-thunk": "^1.0.5",
     "reselect": "^3.0.1",

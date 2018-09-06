@@ -1,5 +1,12 @@
 <template>
   <div class="DashboardArea">
+    <div
+      v-show="loading"
+      class="Loader"
+    >
+      <div />
+      <span>Updating filters and datapoints</span>
+    </div>
     <div class="ChildContainer">
       <nuxt-child />
     </div>
@@ -10,18 +17,49 @@
 </template>
 
 <script>
+import isEmpty from 'lodash/isEmpty';
 import AdvancedSearch from '../../components/dashboard/AdvancedSearch';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
     AdvancedSearch
   },
   middleware: ['isLoggedIn'],
-  async fetch ({store}) {
-    await Promise.all([
-      store.dispatch('projects/loadUserProjects'),
-      store.dispatch('projects/loadProjectStructure')
-    ]);
+  fetch ({query, store}) {
+    if (!isEmpty(query)) {
+      store.dispatch('dashboard/setSearchOptions', query);
+    }
+  },
+  computed: {
+    ...mapGetters({
+      searchParameters: 'dashboard/getSearchParameters',
+      loading: 'dashboard/getLoading'
+    })
+  },
+  watch: {
+    searchParameters: {
+      immediate: false,
+      handler (query) {
+        this.$router.replace({...this.$route, query});
+      }
+    }
+  },
+  mounted () {
+    if (isEmpty(this.$route.query)) {
+      this.$router.replace({...this.$route, query: this.searchParameters});
+    }
+    if (window) {
+      const savedFilters = window.localStorage.getItem('savedFilters');
+      if (savedFilters) {
+        this.setSavedFilters(JSON.parse(savedFilters));
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      setSavedFilters: 'dashboard/setSavedFilters'
+    })
   }
 };
 </script>
@@ -31,6 +69,10 @@ export default {
   @import "~assets/style/mixins.less";
 
   .DashboardArea {
+
+    .Loader {
+      // posit
+    }
     display: flex;
     overflow: hidden;
     width: 100vw;
