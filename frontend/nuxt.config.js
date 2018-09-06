@@ -30,7 +30,7 @@ const config = {
     { src: '~plugins/vue-leaflet.js', ssr: false },
     { src: '~plugins/vue-django-feedback.js', ssr: false },
     { src: '~plugins/element.js', ssr: true },
-    { src: '~plugins/i18n.js', ssr: false }
+    { src: '~plugins/i18n.js', ssr: true }
   ],
   modules: [
     '@nuxtjs/axios',
