@@ -37,7 +37,7 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-  .ToolkitBtn {}
+  // .ToolkitBtn {}
 
   // TODO: Remove Angular Material
   body.md-dialog-is-showing {

@@ -1,5 +1,3 @@
-<md-icon class="md-icons back-icon">close</md-icon>
-
 <md-dialog
   flex-offset="10"
   flex="80"
@@ -68,6 +66,7 @@
     <div class="right" layout="column" flex md-whiteframe="24">
 
       <div class="right-header" ng-class="'axis' + (+vm.axis + 1)">
+        <md-icon class="md-icons back-icon" ng-click="vm.hideDialog()">close</md-icon>
         <div class="right-title">
 
           <img ng-src="{{vm.icons[+vm.axis + 2]}}">

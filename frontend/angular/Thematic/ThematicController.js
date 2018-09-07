@@ -19,7 +19,7 @@ class ThematicController {
     this.modal.show({
       parent: angular.element(document.body),
       template: require('./modal-skeleton.html'),
-      controller: SkeletonController.factory(this.data, this.axis, this.domain, this.icons),
+      controller: SkeletonController.factory(this.data, this.axis, this.domain, this.icons, this.modal),
       controllerAs: 'vm',
       clickOutsideToClose: true,
       fullScreen: true
