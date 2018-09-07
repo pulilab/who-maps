@@ -47,9 +47,10 @@
               class="SecondaryAction">
               <el-button
                 type="text"
-                size="medium"
+                size="small"
+                class="CancelButton"
                 @click="toForgotten">
-                Forgot password
+                Forgot password?
               </el-button>
             </el-col>
             <el-col
