@@ -4,8 +4,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinLengthValidator
 
-from ordered_model.models import OrderedModel
-
 from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
 from user.models import UserProfile
 
@@ -185,7 +183,7 @@ class CountryField(models.Model):
         return {self.schema_instance.question: self.answer}
 
 
-class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
+class CustomQuestion(SoftDeleteModel, ExtendedModel):
     TEXT = 1
     NUMBER = 2
     YESNO = 3
@@ -199,6 +197,8 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
         (SINGLE, _("Single choice")),
         (MULTI, _("Multiple choice")),
     )
+
+    order = models.PositiveIntegerField(unique=True, db_index=True)
 
     country = models.ForeignKey(Country, null=True, related_name='country_questions', on_delete=models.CASCADE)
     donor = models.ForeignKey(Country, null=True, related_name='donor_questions', on_delete=models.CASCADE)
