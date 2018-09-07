@@ -80,6 +80,7 @@ export const actions = {
     commit('SET_TOKEN', tokens.jwt);
     await dispatch('loadProfile', tokens.profileId);
   },
+
   updateTeamViewers ({commit, getters}, {team, viewers, id}) {
     const user = getters.getProfile.id;
     const originalTeam = getters.getProfile.member;
@@ -87,6 +88,10 @@ export const actions = {
     const member = team.includes(user) ? union(originalTeam, [id]) : originalTeam;
     const viewer = viewers.includes(user) ? union(originalViewer, [id]) : originalViewer;
     commit('UPDATE_TEAM_VIEWER', {member, viewer});
+  },
+
+  async verifyEmail (ctx, key) {
+    return this.$axios.post('/api/rest-auth/registration/verify-email/', { key });
   }
 
 };
