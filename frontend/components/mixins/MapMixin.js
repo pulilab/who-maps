@@ -22,7 +22,9 @@ const MapMixin = {
       getCountryProjects: 'landing/getCountryProjects',
       mapReady: 'landing/getMapReady',
       getActiveTab: 'landing/getProjectBoxActiveTab',
-      getActiveSubLevel: 'landing/getActiveSubLevel'
+      getActiveSubLevel: 'landing/getActiveSubLevel',
+      getActiveCountrySubLevelProjects: 'landing/getActiveCountrySubLevelProjects',
+      nationalProjects: 'landing/getActiveCountryNationalProjects'
     }),
     activeCountry: {
       get () {
