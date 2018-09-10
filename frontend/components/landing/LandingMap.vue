@@ -37,6 +37,8 @@
           :selected-country-pin="selectedCountryPin"
           :active-sub-level.sync="activeSubLevel"
           :national-level-coverage="activeTab ==='national'"
+          :get-sub-level-projects="getActiveCountrySubLevelProjects"
+          :national-projects="nationalProjects"
         />
         <switch-view-box
           v-if="activeCountry"
