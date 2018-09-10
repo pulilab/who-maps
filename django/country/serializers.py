@@ -208,7 +208,13 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
         return UserProfileSerializer(data, many=True).data
 
     def get_country_questions(self, obj):
-        queryset = CountryCustomQuestion.objects.all()
+        request = self.context['request']
+
+        if request.user and hasattr(request.user, 'userprofile') and can_read_private_questions(obj, request):
+            queryset = CountryCustomQuestion.objects.all()
+        else:
+            queryset = CountryCustomQuestion.objects.exclude(private=True)
+
         return CountryCustomQuestionSerializer(instance=queryset, many=True, read_only=True).data
 
 
@@ -263,7 +269,13 @@ class SuperAdminDonorSerializer(UpdateAdminMixin, serializers.ModelSerializer):
         return UserProfileSerializer(data, many=True).data
 
     def get_donor_questions(self, obj):
-        queryset = DonorCustomQuestion.objects.all()
+        request = self.context['request']
+
+        if request.user and hasattr(request.user, 'userprofile') and can_read_private_questions(obj, request):
+            queryset = DonorCustomQuestion.objects.all()
+        else:
+            queryset = DonorCustomQuestion.objects.exclude(private=True)
+
         return DonorCustomQuestionSerializer(instance=queryset, many=True, read_only=True).data
 
 
