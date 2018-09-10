@@ -58,7 +58,13 @@ export const gettersGenerator = () => ({
       in: q ? state.searchIn : undefined,
       type: 'map'
     };
-  }
+  },
+  getActiveCountryProjects: state => state.projectsMap.filter(p => p.country === state.activeCountry),
+  getActiveTabProjects: (state, getters) => state.projectBoxActiveTab === 'subNational' ? getters.getActiveCountrySubNationalsProjects : getters.getActiveCountryNationalProjects,
+  getActiveCountrySubNationalsProjects: (state, getters) => getters.getActiveCountryProjects.filter(cp => cp.coverage && cp.coverage.length > 0),
+  getActiveCountryNationalProjects: (state, getters) => getters.getActiveCountryProjects.filter(cp => cp.national_level_deployment && Object.keys(cp.national_level_deployment).length > 0),
+  getActiveCountrySubLevelProjects: (state, getters) => id => getters.getActiveCountrySubNationalsProjects.filter(snp => snp.coverage.some(c => c.district === id)),
+  getActiveCountryCurrentSubLevelProjects: (state, getters) => getters.getActiveCountrySubLevelProjects(state.activeSubLevel)
 });
 
 export const actionsGenerator = () => ({
