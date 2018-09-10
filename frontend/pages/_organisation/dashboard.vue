@@ -2,12 +2,10 @@
   <div class="DashboardArea">
     <div
       v-show="loading"
-      class="LoaderContainer">
-      <div class="Overlay"/>
-      <div class="Loader">
-        <div />
-        <span>Updating filters and datapoints</span>
-      </div>
+      class="Loader"
+    >
+      <div />
+      <span>Updating filters and datapoints</span>
     </div>
     <div class="ChildContainer">
       <nuxt-child />
@@ -71,30 +69,10 @@ export default {
   @import "~assets/style/mixins.less";
 
   .DashboardArea {
-    .LoaderContainer {
-      position: absolute;
-      top: @topBarHeight;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 5000;
-    }
+
     .Loader {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      // posit
     }
-    .Overlay {
-      display: block;
-      position: absolute;
-      opacity: 0.8;
-      background-color: #414C52;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      }
     display: flex;
     overflow: hidden;
     width: 100vw;
