@@ -199,12 +199,7 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
         (MULTI, _("Multiple choice")),
     )
 
-    order = models.PositiveIntegerField(unique=True, db_index=True)
-
-    country = models.ForeignKey(Country, null=True, related_name='country_questions', on_delete=models.CASCADE)
-    donor = models.ForeignKey(Country, null=True, related_name='donor_questions', on_delete=models.CASCADE)
-
-    type = models.IntegerField(choices=TYPE_CHOICES)
+    type = models.IntegerField(choices=TYPE_CHOICES, default=TEXT)
     question = models.CharField(max_length=256, blank=False)
     options = ArrayField(models.CharField(max_length=256), blank=True, null=True)
 
