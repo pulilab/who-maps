@@ -15,11 +15,12 @@ from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
-from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo, MapFile
+from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo, MapFile, CustomQuestion, \
+    CountryCustomQuestion, DonorCustomQuestion
 from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountrySerializer, \
     SuperAdminCountrySerializer, AdminCountrySerializer, PartnerLogoSerializer, DonorSerializer, \
     SuperAdminDonorSerializer, AdminDonorSerializer, DonorPartnerLogoSerializer, MapFileSerializer, \
-    CountryImageSerializer, DonorImageSerializer
+    CountryImageSerializer, DonorImageSerializer, DonorCustomQuestionSerializer, CountryCustomQuestionSerializer
 
 
 class CountryLandingPageViewSet(mixins.RetrieveModelMixin,  mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -186,3 +187,15 @@ class DonorImageViewSet(SuperAdminPermissionMixin, mixins.UpdateModelMixin, view
     queryset = Donor.objects.all()
     serializer_class = DonorImageSerializer
     parser_classes = (MultiPartParser, FormParser)
+
+
+class CountryCustomQuestionViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                                   viewsets.GenericViewSet):
+    queryset = CountryCustomQuestion.objects.all()
+    serializer_class = CountryCustomQuestionSerializer
+
+
+class DonorCustomQuestionViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                                   viewsets.GenericViewSet):
+    queryset = DonorCustomQuestion.objects.all()
+    serializer_class = DonorCustomQuestionSerializer
