@@ -23,6 +23,7 @@
       :active-sub-level="activeSubLevel"
       :map-ready="mapReady"
       :national-level-coverage="nationalLevelCoverage"
+      @geo-json:click="markerClickHandler"
     />
   </div>
 </template>
