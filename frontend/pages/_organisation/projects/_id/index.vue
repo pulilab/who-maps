@@ -1,13 +1,13 @@
 <template>
   <div class="ProjectDraftView">
     <div class="PageTitle">
-      <h2>View Project Info</h2>
+      <h2><translate>View Project Info</translate></h2>
       <p>
-        You are viewing the
-        <span class="DraftLabel">
-          Draft
-        </span>
-        version of the project.
+        <translate>You are viewing the
+          <span class="DraftLabel">
+            Draft
+          </span>
+          version of the project.</translate>
       </p>
     </div>
     <project-data show-draft />

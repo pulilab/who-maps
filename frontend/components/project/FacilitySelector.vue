@@ -2,7 +2,7 @@
   <el-form-item
     v-if="facilities.length > 0"
     :error="errors.first('facilities_list', scope)"
-    label="Facilities">
+    :label="$gettext('Facilities')">
     <el-select
       v-validate="rules.facilities_list"
       v-model="innerValue"
@@ -10,6 +10,7 @@
       :loading="loading"
       :disabled="disabled"
       :data-vv-scope="scope"
+      :placeholder="$gettext('Type and select a name')"
       data-vv-name="facilities_list"
       data-vv-as="Facilitiy list"
       multiple
@@ -17,7 +18,6 @@
       remote
       class="FacilitySelector"
       popper-class="FacilitySelectorDropdown"
-      placeholder="Type and select a name"
     >
       <el-option
         v-for="facility in result"

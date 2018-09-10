@@ -2,10 +2,10 @@
   <div class="LoginComponent">
     <el-card :body-style="{ padding: '0px' }">
       <div slot="header">
-        Email confirmation
+        <translate>Email confirmation</translate>
       </div>
 
-      <p class="Instruction">Congratulations your email address is verified, you can now <span @click="toLogin">login</span> and use the system</p>
+      <p class="Instruction"><translate>Congratulations your email address is verified, you can now <span @click="toLogin">login</span> and use the system</translate></p>
     </el-card>
   </div>
 </template>

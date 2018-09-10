@@ -26,7 +26,7 @@
               v-show="popUpHover"
               class="Text"
             >
-              Country view
+              <translate>Country view</translate>
             </span>
           </el-button>
         </div>

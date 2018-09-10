@@ -18,11 +18,11 @@
           <sub-level-item
             :id="activeSubLevel"
           />
-          <span class="SubLevelCounter">(5 projects)</span>
+          <span class="SubLevelCounter"><translate>(5 projects)</translate></span>
         </div>
         <div v-if="showNational">
-          <div class="SubLevelItem">National</div>
-          <span class="SubLevelCounter">(3 projects)</span>
+          <div class="SubLevelItem"><translate>National</translate></div>
+          <span class="SubLevelCounter"><translate>(3 projects)</translate></span>
         </div>
       </el-row>
       <!-- -->
@@ -40,7 +40,7 @@
             <fa
               icon="info-circle"
               size="lg" />
-            Select a pin blablabla...
+            <translate>Select a pin blablabla...</translate>
           </div>
           <div
             v-if="showSubNational"

@@ -5,7 +5,7 @@
       class="Loader"
     >
       <div />
-      <span>Updating filters and datapoints</span>
+      <span><translate>Updating filters and datapoints</translate></span>
     </div>
     <div class="ChildContainer">
       <nuxt-child />

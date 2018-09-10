@@ -7,26 +7,26 @@
       <filter-switch
         v-if="donorView"
         v-model="onlyMyDonor"
-        label="Only my Donor Projects"
-        tooltip="Lorem ipsum something else"
+        :label="$gettext('Only my Donor Projects')"
+        :tooltip="$gettext('Lorem ipsum something else')"
       />
       <filter-switch
         v-model="governamentApproved"
-        label="Only MOH Verified Projects"
-        tooltip="Lorem ipsum something else"
+        :label="$gettext('Only MOH Verified Projects')"
+        :tooltip="$gettext('Lorem ipsum something else')"
       />
       <filter-switch
         v-model="governamentFinanced"
-        label="Government financed"
-        tooltip="Lorem ipsum something else"
+        :label="$gettext('Government financed')"
+        :tooltip="$gettext('Lorem ipsum something else')"
       />
     </div>
     <div class="FilterItems">
       <filter-item
         :selected="selectedDHI"
         :limit="4"
-        item="dhi"
-        label="Digital Health Interventions">
+        :label="$gettext('Digital Health Interventions')"
+        item="dhi">
         <dhi-categories-list
           :value="selectedDHI"
           :limit="4"
@@ -37,8 +37,8 @@
       <filter-item
         :selected="selectedHFA"
         :limit="4"
-        item="hfa"
-        label="Health Focus Area">
+        :label="$gettext('Health Focus Area')"
+        item="hfa">
         <hfa-categories-list
           :value="selectedHFA"
           :limit="4"
@@ -49,8 +49,8 @@
       <filter-item
         :selected="selectedHSC"
         :limit="4"
-        item="hsc"
-        label="Health System Challenges">
+        :label="$gettext('Health System Challenges')"
+        item="hsc">
         <health-system-challenges-list
           :value="selectedHSC"
           :limit="4"
@@ -61,8 +61,8 @@
       <filter-item
         :selected="selectedHIS"
         :limit="4"
-        item="his"
-        label="Health Information System">
+        :label="$gettext('Health Information System')"
+        item="his">
         <his-bucket-list
           :value="selectedHIS"
           :limit="4"
@@ -73,8 +73,8 @@
       <filter-item
         :selected="selectedPlatforms"
         :limit="4"
-        item="platform"
-        label="Software" >
+        :label="$gettext('Software')"
+        item="platform" >
         <simple-platform-list
           :value="selectedPlatforms"
           :limit="4"

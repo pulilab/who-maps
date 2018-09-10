@@ -9,11 +9,11 @@
       :loading="csvProcessing"
       type="text"
       class="IconLeft"
-      @click="triggerFile"><fa icon="plus" /> Select Facility List</el-button>
+      @click="triggerFile"><fa icon="plus" /> <translate>Select Facility List</translate></el-button>
 
     <template v-if="dataReady">
       <div class="FacilityList">
-        <h5>Imported Facilities ({{ simpleFacilities.length }}):</h5>
+        <h5><translate>Imported Facilities ({{ simpleFacilities.length }}):</translate></h5>
         <ul
           v-for="facility in simpleFacilities"
           :key="facility"

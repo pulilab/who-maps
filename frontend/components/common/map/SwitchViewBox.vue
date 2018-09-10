@@ -4,11 +4,11 @@
     <div class="SwitchViewWrapper">
       <el-switch
         :value="activeTab"
-        active-text="National"
+        :active-text="$gettext('National')"
+        :inactive-text="$gettext('Sub-national')"
         active-value="national"
         active-color="#FB7E37"
         inactive-value="subNational"
-        inactive-text="Sub-national"
         inactive-color="#FBC02D"
         @change="setActiveTab($event)"
       />

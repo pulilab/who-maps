@@ -12,10 +12,10 @@
           class="IconLeft">
           <fa icon="download"/>
           <span v-show="selectedRows.length === 0">
-            Export selected
+            <translate>Export selected</translate>
           </span>
           <span v-show="selectedRows.length > 0">
-            Export {{ selectedRows.length }} project(s)
+            <translate>Export {{ selectedRows.length }} project(s)</translate>
           </span>
         </el-button>
         <el-select
@@ -34,7 +34,7 @@
             type="text"
             size="small"
             class="PrimaryButton"
-            @click="selectAll">Select All 450 rows</el-button>
+            @click="selectAll"><translate>Select All 450 rows</translate></el-button>
         </template>
       </el-row>
     </el-col>
@@ -67,7 +67,7 @@
             class="TableSettingsButton IconLeft"
           >
             <fa icon="cog" />
-            Settings
+            <translate>Settings</translate>
           </el-button>
 
           <div class="CustomPopoverList Small ColumnSelector">
@@ -91,14 +91,14 @@
                     type="text"
                     size="small"
                     class="CancelButton"
-                    @click="columnSelectorOpen = false">Cancel</el-button>
+                    @click="columnSelectorOpen = false"><translate>Cancel</translate></el-button>
                 </el-col>
                 <el-col>
                   <el-button
                     type="text"
                     size="small"
                     class="PrimaryButton"
-                    @click="updateColumns">Update</el-button>
+                    @click="updateColumns"><translate>Update</translate></el-button>
                 </el-col>
               </el-row>
             </div>
@@ -131,7 +131,7 @@ export default {
       selectedRows: 'dashboard/getSelectedRows'
     }),
     settingsTitle () {
-      return `main fields (${this.selected.length}/${this.columns.length})`;
+      return `${this.$gettext('main fields')} (${this.selected.length}/${this.columns.length})`;
     }
   },
   methods: {

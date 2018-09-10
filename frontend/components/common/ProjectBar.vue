@@ -15,17 +15,17 @@
           :span="3"
           class="ProjectInfo">
           <div class="Label">
-            Last Updated
+            <translate>Last Updated</translate>
           </div>
           <div class="Info">
-            1/12/2018
+            1/12/2018!!
           </div>
         </el-col>
         <el-col
           :span="3"
           class="ProjectInfo">
           <div class="Label">
-            Organisation
+            <translate>Organisation</translate>
           </div>
           <div class="Info">
             <organisation-item :id="project.organisation" />
@@ -35,7 +35,7 @@
           :span="3"
           class="ProjectInfo">
           <div class="Label">
-            Contact person
+            <translate>Contact person</translate>
           </div>
           <div class="Info">
             <a
@@ -52,12 +52,12 @@
         <nuxt-link
           v-if="!readOnly"
           :to="localePath({name: 'organisation-projects-id-edit', params: {id, organisation: $route.params.organisation}})">
-          Project
+          <translate>Project</translate>
         </nuxt-link>
         <nuxt-link
           v-if="readOnly"
           :to="localePath({name: 'organisation-projects-id-published', params: {id, organisation: $route.params.organisation}})">
-          Project
+          <translate>Project</translate>
         </nuxt-link>
         <nuxt-link :to="localePath({name: 'organisation-projects-id-assessment', params: {id, organisation: $route.params.organisation}})">
           Assessment
@@ -65,12 +65,12 @@
         <nuxt-link
           v-if="!readOnly"
           :to="localePath({name: 'organisation-projects-id-toolkit', params: {id, organisation: $route.params.organisation}})">
-          Update score
+          <translate>Update score</translate>
         </nuxt-link>
         <nuxt-link
           v-if="!readOnly"
           :to="localePath({name: 'organisation-projects-id-toolkit-scorecard', params: {id, organisation: $route.params.organisation}})">
-          Summary score
+          <translate>Summary score</translate>
         </nuxt-link>
       </div>
     </div>

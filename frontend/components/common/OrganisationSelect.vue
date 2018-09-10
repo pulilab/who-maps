@@ -2,11 +2,11 @@
   <el-select
     :value="org"
     :allow-create="true"
+    :placeholder="$gettext('Type and select a name')"
     filterable
     reserve-keyword
     class="OrganisationSelector"
     popper-class="OrganisationSelectorDropdown"
-    placeholder="Type and select a name"
     @change="changeHandler"
   >
     <el-option

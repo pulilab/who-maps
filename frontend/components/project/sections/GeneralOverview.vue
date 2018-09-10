@@ -2,10 +2,10 @@
   <div
     id="general"
     class="GeneralOverview">
-    <collapsible-card title="General overview">
+    <collapsible-card :title="$gettext('General overview')">
       <el-form-item
         :error="errors.first('name')"
-        label="Project name"
+        :label="$gettext('Project name')"
       >
         <el-input
           v-validate="rules.name"
@@ -15,7 +15,7 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('organisation')"
-        label="Organisation"
+        :label="$gettext('Organisation')"
       >
         <organisation-select
           v-validate="rules.organisation"
@@ -25,7 +25,7 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('country')"
-        label="Project country">
+        :label="$gettext('Project country')">
         <country-select
           v-validate="rules.country"
           v-model="country"
@@ -34,7 +34,7 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('geographic_scope')"
-        label="Geographic Scope">
+        :label="$gettext('Geographic Scope')">
 
         <el-input
           v-validate="rules.geographic_scope"
@@ -45,12 +45,12 @@
         />
         <span class="Hint">
           <fa icon="info-circle" />
-          <p>Please describe where your implementation is currently taking place</p>
+          <p><translate>Please describe where your implementation is currently taking place</translate></p>
         </span>
       </el-form-item>
       <el-form-item
         :error="errors.first('implementation_overview')"
-        label="Overview of the digital health implementation">
+        :label="$gettext('Overview of the digital health implementation')">
 
         <el-input
           v-validate="rules.implementation_overview"
@@ -61,7 +61,7 @@
         />
         <span class="Hint">
           <fa icon="info-circle" />
-          <p>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.</p>
+          <p><translate>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.</translate></p>
         </span>
       </el-form-item>
       <el-row
@@ -70,17 +70,17 @@
         <el-col :span="12">
           <el-form-item
             :error="errors.first('start_date')"
-            label="Project start date"
+            :label="$gettext('Project start date')"
           >
             <el-date-picker
               v-validate="rules.start_date"
               ref="Start date"
               v-model="start_date"
+              :placeholder="$gettext('Start date')"
               data-vv-name="start_date"
               data-vv-as="Start date"
               class="Date"
               align="left"
-              placeholder="Start date"
             />
           </el-form-item>
         </el-col>
@@ -88,16 +88,16 @@
         <el-col :span="12">
           <el-form-item
             :error="errors.first('end_date') || endDateError"
-            label="Project end date"
+            :label="$gettext('Project end date')"
           >
             <el-date-picker
               v-validate="rules.end_date"
               v-model="end_date"
+              :placeholder="$gettext('End date')"
               data-vv-name="end_date"
               data-vv-as="End date"
               class="Date"
               align="left"
-              placeholder="End date"
             />
           </el-form-item>
         </el-col>
@@ -108,7 +108,7 @@
         <el-col :span="12">
           <el-form-item
             :error="errors.first('contact_name')"
-            label="Contact name"
+            :label="$gettext('Contact name')"
           >
             <el-input
               v-validate="rules.contact_name"
@@ -121,7 +121,7 @@
         <el-col :span="12">
           <el-form-item
             :error="errors.first('contact_email')"
-            label="Contact email"
+            :label="$gettext('Contact email')"
           >
             <el-input
               v-validate="rules.contact_email"
@@ -135,7 +135,7 @@
       <div class="TeamArea">
         <el-form-item
           :error="errors.first('team')"
-          label="Add Team members (Editor role)"
+          :label="$gettext('Add Team members (Editor role)')"
         >
           <team-selector
             v-validate="rules.team"
@@ -145,7 +145,7 @@
         </el-form-item>
         <el-form-item
           :error="errors.first('viewers')"
-          label="Add Viewers (only Viewer role)"
+          :label="$gettext('Add Viewers (only Viewer role)')"
         >
           <team-selector
             v-validate="rules.viewers"
@@ -197,7 +197,7 @@ export default {
     }),
     endDateError () {
       if (this.usePublishRules && this.start_date && this.end_date && isAfter(this.start_date, this.end_date)) {
-        return 'End date must be after Start date';
+        return this.$gettext('End date must be after Start date');
       }
     }
   },
