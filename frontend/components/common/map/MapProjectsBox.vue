@@ -18,11 +18,11 @@
           <sub-level-item
             :id="activeSubLevel"
           />
-          <span class="SubLevelCounter">(5 projects)</span>
+          <span class="SubLevelCounter">&nbsp; {{ currentSubLevelProjects.length }} project(s)</span>
         </div>
         <div v-if="showNational">
           <div class="SubLevelItem">National</div>
-          <span class="SubLevelCounter">(3 projects)</span>
+          <span class="SubLevelCounter">&nbsp; {{ nationalProjects.length }} project(s)</span>
         </div>
       </el-row>
       <!-- -->
@@ -30,6 +30,7 @@
         <el-col>
           <tabbed-card-project-list
             v-if="showTabbedView"
+            :projects="filteredProjects"
             :active-tab="activeTab"
             @change="tabChangeHandler"
           />
@@ -47,22 +48,9 @@
             class="PlainList SubNational"
           >
             <project-card
-              show-organisation
-              show-arrow-on-over
-            />
-            <project-card
-              show-organisation
-              show-arrow-on-over
-            />
-            <project-card
-              show-organisation
-              show-arrow-on-over
-            />
-            <project-card
-              show-organisation
-              show-arrow-on-over
-            />
-            <project-card
+              v-for="p in currentSubLevelProjects"
+              :key="p.id"
+              :project="p"
               show-organisation
               show-arrow-on-over
             />
@@ -72,14 +60,9 @@
             class="PlainList National"
           >
             <project-card
-              show-organisation
-              show-arrow-on-over
-            />
-            <project-card
-              show-organisation
-              show-arrow-on-over
-            />
-            <project-card
+              v-for="p in nationalProjects"
+              :key="p.id"
+              :project="p"
               show-organisation
               show-arrow-on-over
             />
@@ -128,6 +111,18 @@ export default {
     activeSubLevel: {
       type: String,
       default: null
+    },
+    currentSubLevelProjects: {
+      type: Array,
+      default: () => []
+    },
+    filteredProjects: {
+      type: Array,
+      default: () => []
+    },
+    nationalProjects: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {
