@@ -24,11 +24,6 @@ export default {
       factory.factory(0, 0, this.$gettext('MAPS Toolkit'), 'HeaderBtn', this.$gettext('Toolkit'));
       this.initialised = true;
     });
-  },
-  methods: {
-    $gettext (word) {
-      return this.$t(word);
-    }
   }
 };
 </script>

@@ -3,6 +3,14 @@ import TranslateWrapper from '../components/TranslateWrapper';
 
 Vue.component('translate', TranslateWrapper);
 
+Vue.mixin({
+  methods: {
+    $gettext (word) {
+      return this.$t(word);
+    }
+  }
+});
+
 export default function ({ app, store, $axios }) {
   const loadLocales = async (ln) => {
     if (!app.i18n.messages[ln]) {
@@ -20,4 +28,4 @@ export default function ({ app, store, $axios }) {
   // onLanguageSwitched called right after a new locale has been set
   app.i18n.onLanguageSwitched = (oldLocale, newLocale) => {
   };
-}
+};
