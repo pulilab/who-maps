@@ -81,11 +81,11 @@ You can rebuild search any time you want or if you realise there's some data mis
 `manage.py rebuild_search`
 
 ## Donor tools
-When you delete a Donor from Django admin (as a superuser) and want to sync the donors in all projects: 
+When you delete a Donor from Django admin (as a superuser) and want to sync the donors in all projects:
 
 `manage.py remove_stale_donors`
 
-When you want to eg. remove a duplicate donor or a typo, you can migrate the project that use the typo or duplicate 
+When you want to eg. remove a duplicate donor or a typo, you can migrate the project that use the typo or duplicate
 donor to the one that you want to keep for all projects:
 
 `manage.py switch_donor_form_to <DONOR_ID_YOU_WANT_TO_MIGRATE_FROM> <TO_DONOR_ID>`
