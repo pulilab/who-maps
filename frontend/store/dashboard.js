@@ -122,7 +122,7 @@ export const actions = {
     commit('SET_SEARCH_STATUS', data);
   },
   async loadProjectsMap ({commit, dispatch}) {
-    const data = await dispatch('loadProjects', {type: 'map'});
+    const data = await dispatch('loadProjects', {type: 'map', page_size: 10000});
     commit('SET_PROJECT_MAP', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
   },

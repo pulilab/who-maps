@@ -31,6 +31,7 @@
 import SubLevelMarker from './SubLevelMarker';
 import CountryCenterMarker from './CountryCenterMarker';
 import GeoJsonLayer from './GeoJsonLayer';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -71,9 +72,9 @@ export default {
       type: Object,
       default: null
     },
-    getSubLevelProjects: {
-      type: Function,
-      default: null
+    subNationalProjects: {
+      type: Array,
+      default: () => []
     }
   },
   data () {
@@ -83,6 +84,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      getSubLevelDetails: 'countries/getSubLevelDetails'
+    }),
     subLevelPinsAndMapReady () {
       if (this.subLevelPins && this.mapReady) {
         return this.subLevelPins;
@@ -112,6 +116,22 @@ export default {
           this.markerIcons[subLevel] = this.iconGenerator(subLevel, true);
         }
       }
+    },
+    subNationalProjects: {
+      immediate: false,
+      handler () {
+        if (!this.nationalLevelCoverage) {
+          this.iconsGenerator();
+        }
+      }
+    },
+    nationalProjects: {
+      immediate: false,
+      handler () {
+        if (this.nationalLevelCoverage) {
+          this.countryCenterIcon = this.countryCenterIconGenerator();
+        }
+      }
     }
   },
   mounted () {
@@ -126,7 +146,12 @@ export default {
     },
     iconGenerator (id, isActive) {
       const additionaClass = isActive ? 'ActiveDistrict' : '';
-      const amount = this.getSubLevelProjects && this.getSubLevelProjects(id) ? this.getSubLevelProjects(id).length : 0;
+      const subLevel = this.getSubLevelDetails(id);
+      let amount = 0;
+      if (this.subNationalProjects && subLevel) {
+        const filtered = this.subNationalProjects.filter(sn => sn.coverage.some(c => c.district === id || c.district === subLevel.name));
+        amount = filtered ? filtered.length : 0;
+      }
       const html = `<span>${amount}</span>`;
       return L.divIcon({
         className: `DistrictCenterIcon ${additionaClass}`,
