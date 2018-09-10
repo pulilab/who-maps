@@ -3,6 +3,7 @@ from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinLengthValidator
+from ordered_model.models import OrderedModel
 
 from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
 from user.models import UserProfile
@@ -183,7 +184,7 @@ class CountryField(models.Model):
         return {self.schema_instance.question: self.answer}
 
 
-class CustomQuestion(SoftDeleteModel, ExtendedModel):
+class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
     TEXT = 1
     NUMBER = 2
     YESNO = 3
