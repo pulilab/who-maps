@@ -212,4 +212,4 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
     required = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ('order',)
+        abstract = True
