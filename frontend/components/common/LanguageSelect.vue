@@ -1,6 +1,7 @@
 <template>
   <el-select
     :value="value"
+    size="small"
     class="LanguageSelector"
     popper-class="LanguageSelectorPopper"
     placeholder="Select language"
@@ -43,7 +44,10 @@ export default {
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
 
-  .LanguageSelectorPopper {
-    max-width: @advancedSearchWidth - 40px;
+  .LanguageSelector {
+    width: auto;
+    margin: 4px 0 8px;
   }
+
+  .LanguageSelectorPopper {}
 </style>
