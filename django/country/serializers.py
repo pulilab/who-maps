@@ -12,7 +12,20 @@ from django.utils.translation import ugettext, override
 from django.conf import settings
 
 from user.models import UserProfile
-from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, CountryField, MapFile
+from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, CountryField, MapFile, \
+    DonorCustomQuestion, CountryCustomQuestion
+
+
+class CountryCustomQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CountryCustomQuestion
+        fields = "__all__"
+
+
+class DonorCustomQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DonorCustomQuestion
+        fields = "__all__"
 
 
 class PartnerLogoSerializer(serializers.ModelSerializer):
