@@ -63,12 +63,16 @@ export default {
       type: Boolean,
       default: false
     },
-    countryProjects: {
+    nationalProjects: {
       type: Array,
       default: () => []
     },
     selectedCountryPin: {
       type: Object,
+      default: null
+    },
+    getSubLevelProjects: {
+      type: Function,
       default: null
     }
   },
@@ -122,7 +126,8 @@ export default {
     },
     iconGenerator (id, isActive) {
       const additionaClass = isActive ? 'ActiveDistrict' : '';
-      const html = `<span>${Math.round(Math.random(10) * 10)}</span>`;
+      const amount = this.getSubLevelProjects && this.getSubLevelProjects(id) ? this.getSubLevelProjects(id).length : 0;
+      const html = `<span>${amount}</span>`;
       return L.divIcon({
         className: `DistrictCenterIcon ${additionaClass}`,
         html,
@@ -138,7 +143,7 @@ export default {
       this.markerIcons = icons;
     },
     countryCenterIconGenerator () {
-      const html = `<span>${this.countryProjects.length}</span>`;
+      const html = `<span>${this.nationalProjects.length}</span>`;
       return L.divIcon({
         className: 'CountryCenterIcon ActiveCountry',
         html,
