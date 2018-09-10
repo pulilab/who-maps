@@ -208,3 +208,19 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
 
     class Meta:
         abstract = True
+
+
+class DonorCustomQuestion(CustomQuestion):
+    donor = models.ForeignKey(Donor, related_name='donor_questions', on_delete=models.CASCADE)
+    order_with_respect_to = 'donor'
+
+    class Meta(OrderedModel.Meta):
+        pass
+
+
+class CountryCustomQuestion(CustomQuestion):
+    country = models.ForeignKey(Country, related_name='country_questions', on_delete=models.CASCADE)
+    order_with_respect_to = 'country'
+
+    class Meta(OrderedModel.Meta):
+        pass
