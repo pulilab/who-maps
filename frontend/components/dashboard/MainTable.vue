@@ -294,8 +294,28 @@ export default {
 
       td {
         > .cell {
+          line-height: 17px;
+          word-break: normal;
+
           p {
-            margin: 0 0 10px;
+            position: relative;
+            margin: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            max-height: calc(17px * 4);
+
+            // &::after {
+            //   content: "";
+            //   text-align: right;
+            //   position: absolute;
+            //   bottom: 0;
+            //   right: 0;
+            //   width: 20%;
+            //   height: 17px;
+            //   background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+            // }
+
           }
 
           a {
@@ -339,6 +359,16 @@ export default {
         }
       }
 
+      .ProjectCard {
+        .ProjectName {
+          padding-right: 12px;
+        }
+
+        .ProjectCountryOrg {
+          margin-top: 4px;
+        }
+      }
+
       .CountryItem {
         .CountryFlag {
           display: none;
@@ -350,11 +380,13 @@ export default {
           line-height: inherit;
         }
       }
+
       .DonorList {
         ul {
           padding: 0;
           margin: 0;
         }
+
         .DonorItem {
           display: inline-flex;
           align-items: flex-start;

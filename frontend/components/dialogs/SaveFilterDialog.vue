@@ -10,7 +10,8 @@
     <el-form
       :model="form"
       :rules="rules"
-      label-width="120px"
+      label-position="left"
+      label-width="160px"
       @submit.native.prevent
     >
       <el-form-item
@@ -111,44 +112,10 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-  .SelectDHIDialog {
-    max-width: @appWidthMaxLimit * 0.9;
-    height: 80vh;
-    margin-top: 0;
-    margin-bottom: 0;
-
-    .el-dialog__body {
-      padding: 0;
-      height: calc(80vh - (@dialogHeaderFooterHeight*2));
-    }
-
-    .DHIMainCategories {
-      height: calc(80vh - (@dialogHeaderFooterHeight*2));
-
-      > .el-col {
-        overflow: hidden;
-        border-right: 1px solid @colorGrayLight;
-
-        .Main {
-          .Item {
-            .el-checkbox__label {
-              font-size: @fontSizeSmall;
-              line-height: 16px;
-            }
-          }
-        }
-
-        &:last-child {
-          border: 0;
-
-          .SelectorDialogColumn {
-            .Header {
-              width: calc(90vw / 4);
-              max-width: calc((@appWidthMaxLimit * 0.9) / 4);
-            }
-          }
-        }
-      }
+  .SaveFiltersDialog {
+    .el-form,
+    .el-form-item {
+      margin: 20px 0;
     }
   }
 </style>
