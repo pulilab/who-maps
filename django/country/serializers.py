@@ -146,12 +146,10 @@ class UpdateAdminMixin:
 
 
 def can_read_private_questions(obj, request):
-    if request.user.is_superuser or \
-            obj.admins.filter(id=request.user.userprofile.id).exists() or \
-            obj.super_admins.filter(id=request.user.userprofile.id).exists() or \
-            obj.users.filter(id=request.user.userprofile.id).exists():
-        return True
-    return False
+    return request.user.is_superuser or \
+           obj.admins.filter(id=request.user.userprofile.id).exists() or \
+           obj.super_admins.filter(id=request.user.userprofile.id).exists() or \
+           obj.users.filter(id=request.user.userprofile.id).exists()
 
 
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
