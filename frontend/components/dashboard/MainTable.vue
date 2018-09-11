@@ -217,7 +217,6 @@ export default {
     sorting: {
       immediate: false,
       handler (current) {
-        console.log(current, this.localSort);
         if (current !== this.localSort) {
           this.fixSorting(current);
         }
