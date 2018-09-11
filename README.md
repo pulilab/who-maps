@@ -115,6 +115,7 @@ To have translation appear in the frontend (after saving them at the previous st
 
 ### Quirks:
 Translations are picked up from `<translate></translate>` blocks this block is declared as a global vue component so it can be used without importing it.
-
+If a translation string needs parameters (ie: {{userProfile.name}} hello!) the syntax is `<translate :parameters="{name: userProfile.name}"> {name} hello </translate>`
 Also, `$gettext('english/base string')` method is available in every Vue component via a mixin in the i18n plugin.
-It can be used like in: `frontend/components/ToolkitDialogWrapper.vue`. (This is a trick to have the tool that extract the string pick up the right strings.)
+
+
