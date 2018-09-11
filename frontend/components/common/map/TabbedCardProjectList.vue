@@ -7,14 +7,9 @@
       :label="$gettext('Sub-national')"
       name="subNational">
       <project-card
-        show-organisation
-        show-arrow-on-over
-      />
-      <project-card
-        show-organisation
-        show-arrow-on-over
-      />
-      <project-card
+        v-for="p in projects"
+        :key="p.id"
+        :project="p"
         show-organisation
         show-arrow-on-over
       />
@@ -23,10 +18,9 @@
       :label="$gettext('National')"
       name="national">
       <project-card
-        show-organisation
-        show-arrow-on-over
-      />
-      <project-card
+        v-for="p in projects"
+        :key="p.id"
+        :project="p"
         show-organisation
         show-arrow-on-over
       />
@@ -45,6 +39,10 @@ export default {
     activeTab: {
       type: String,
       required: true
+    },
+    projects: {
+      type: Array,
+      default: () => []
     }
   },
   watch: {

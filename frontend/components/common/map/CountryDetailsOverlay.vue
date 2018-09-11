@@ -23,6 +23,7 @@
       :active-sub-level="activeSubLevel"
       :map-ready="mapReady"
       :national-level-coverage="nationalLevelCoverage"
+      @geo-json:click="markerClickHandler"
     />
   </div>
 </template>
@@ -31,6 +32,7 @@
 import SubLevelMarker from './SubLevelMarker';
 import CountryCenterMarker from './CountryCenterMarker';
 import GeoJsonLayer from './GeoJsonLayer';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -63,13 +65,17 @@ export default {
       type: Boolean,
       default: false
     },
-    countryProjects: {
+    nationalProjects: {
       type: Array,
       default: () => []
     },
     selectedCountryPin: {
       type: Object,
       default: null
+    },
+    subNationalProjects: {
+      type: Array,
+      default: () => []
     }
   },
   data () {
@@ -79,6 +85,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      getSubLevelDetails: 'countries/getSubLevelDetails'
+    }),
     subLevelPinsAndMapReady () {
       if (this.subLevelPins && this.mapReady) {
         return this.subLevelPins;
@@ -108,6 +117,22 @@ export default {
           this.markerIcons[subLevel] = this.iconGenerator(subLevel, true);
         }
       }
+    },
+    subNationalProjects: {
+      immediate: false,
+      handler () {
+        if (!this.nationalLevelCoverage) {
+          this.iconsGenerator();
+        }
+      }
+    },
+    nationalProjects: {
+      immediate: false,
+      handler () {
+        if (this.nationalLevelCoverage) {
+          this.countryCenterIcon = this.countryCenterIconGenerator();
+        }
+      }
     }
   },
   mounted () {
@@ -122,7 +147,13 @@ export default {
     },
     iconGenerator (id, isActive) {
       const additionaClass = isActive ? 'ActiveDistrict' : '';
-      const html = `<span>${Math.round(Math.random(10) * 10)}</span>`;
+      const subLevel = this.getSubLevelDetails(id);
+      let amount = 0;
+      if (this.subNationalProjects && subLevel) {
+        const filtered = this.subNationalProjects.filter(sn => sn.coverage.some(c => c.district === id || c.district === subLevel.name));
+        amount = filtered ? filtered.length : 0;
+      }
+      const html = `<span>${amount}</span>`;
       return L.divIcon({
         className: `DistrictCenterIcon ${additionaClass}`,
         html,
@@ -138,7 +169,7 @@ export default {
       this.markerIcons = icons;
     },
     countryCenterIconGenerator () {
-      const html = `<span>${this.countryProjects.length}</span>`;
+      const html = `<span>${this.nationalProjects.length}</span>`;
       return L.divIcon({
         className: 'CountryCenterIcon ActiveCountry',
         html,

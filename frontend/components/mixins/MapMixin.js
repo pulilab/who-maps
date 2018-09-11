@@ -22,7 +22,10 @@ const MapMixin = {
       getCountryProjects: 'landing/getCountryProjects',
       mapReady: 'landing/getMapReady',
       getActiveTab: 'landing/getProjectBoxActiveTab',
-      getActiveSubLevel: 'landing/getActiveSubLevel'
+      getActiveSubLevel: 'landing/getActiveSubLevel',
+      activeCountrySubNationalProjects: 'landing/getActiveCountrySubNationalProjects',
+      nationalProjects: 'landing/getActiveCountryNationalProjects',
+      mapProjects: 'landing/getProjectsMap'
     }),
     activeCountry: {
       get () {
@@ -97,6 +100,12 @@ const MapMixin = {
         if (id) {
           this.countryCenterIcons[id] = this.iconGenerator(id, true);
         }
+      }
+    },
+    mapProjects: {
+      immediate: false,
+      handler () {
+        this.iconsGenerator();
       }
     }
   },

@@ -58,6 +58,15 @@ export const gettersGenerator = () => ({
       in: q ? state.searchIn : undefined,
       type: 'map'
     };
+  },
+  getActiveCountryProjects: state => state.projectsMap.filter(p => p.country === state.activeCountry),
+  getActiveTabProjects: (state, getters) => state.projectBoxActiveTab === 'subNational' ? getters.getActiveCountrySubNationalProjects : getters.getActiveCountryNationalProjects,
+  getActiveCountrySubNationalProjects: (state, getters) => getters.getActiveCountryProjects.filter(cp => cp.coverage && cp.coverage.length > 0),
+  getActiveCountryNationalProjects: (state, getters) => getters.getActiveCountryProjects.filter(cp => cp.national_level_deployment && Object.keys(cp.national_level_deployment).length > 0),
+  getActiveCountryCurrentSubLevelProjects: (state, getters, rootState, rootGetters) => {
+    const id = state.activeSubLevel;
+    const subLevel = rootGetters['countries/getSubLevelDetails'](id);
+    return getters.getActiveCountrySubNationalProjects.filter(snp => snp.coverage.some(c => c.district === id || c.district === subLevel.name));
   }
 });
 
