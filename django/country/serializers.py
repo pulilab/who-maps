@@ -209,11 +209,11 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
         request = self.context['request']
 
         if request.user and hasattr(request.user, 'userprofile') and can_read_private_questions(obj, request):
-            queryset = CountryCustomQuestion.objects.all()
+            queryset = CountryCustomQuestion.objects.filter(country_id=obj.id)
         else:
-            queryset = CountryCustomQuestion.objects.exclude(private=True)
+            queryset = CountryCustomQuestion.objects.filter(country_id=obj.id).exclude(private=True)
 
-        return CountryCustomQuestionSerializer(instance=queryset, many=True, read_only=True).data
+        return CountryCustomQuestionSerializer(queryset, many=True, read_only=True).data
 
 
 class AdminCountrySerializer(SuperAdminCountrySerializer):
@@ -270,11 +270,11 @@ class SuperAdminDonorSerializer(UpdateAdminMixin, serializers.ModelSerializer):
         request = self.context['request']
 
         if request.user and hasattr(request.user, 'userprofile') and can_read_private_questions(obj, request):
-            queryset = DonorCustomQuestion.objects.all()
+            queryset = DonorCustomQuestion.objects.filter(donor_id=obj.id)
         else:
-            queryset = DonorCustomQuestion.objects.exclude(private=True)
+            queryset = DonorCustomQuestion.objects.filter(donor_id=obj.id).exclude(private=True)
 
-        return DonorCustomQuestionSerializer(instance=queryset, many=True, read_only=True).data
+        return DonorCustomQuestionSerializer(queryset, many=True, read_only=True).data
 
 
 class AdminDonorSerializer(SuperAdminDonorSerializer):
