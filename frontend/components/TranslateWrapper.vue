@@ -1,11 +1,30 @@
 <template>
-  <span v-if="$slots.default && $slots.default[0].text">
-    {{ $t($slots.default[0].text.trim()) }}
+  <span>
+    {{ $t(message, parameters) }}
   </span>
 </template>
 
 <script>
 export default {
+  props: {
+    parameters: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  computed: {
+    message () {
+      if (this.$slots.default && this.$slots.default[0]) {
+        return this.$slots.default[0].text.trim();
+      }
+    }
+  },
+  created () {
+    if (this.message && !this.$i18n.te(this.message)) {
+      this.$i18n.mergeLocaleMessage('en', {[this.message]: this.message});
+    }
+  }
+
 };
 </script>
 
