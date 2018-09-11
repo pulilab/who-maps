@@ -19,7 +19,7 @@ export const actions = {
 
   async synchMapFile ({ state, rootGetters, getters }) {
     const mapFile = getters.getData.map_files[0];
-    if (mapFile.raw) {
+    if (mapFile && mapFile.raw) {
       const countryId = state.id || rootGetters['user/getProfile'].country;
       const formData = new FormData();
       formData.append('country', countryId);

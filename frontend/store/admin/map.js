@@ -124,6 +124,8 @@ export const actions = {
       const { data } = await this.$axios.get(proper);
       Object.freeze(data);
       commit('UPDATE_GEO_JSON', data);
+    } else {
+      commit('RESET_MAP_STATE');
     }
   },
   setCountryCenter ({commit}, value) {
@@ -236,5 +238,15 @@ export const mutations = {
   },
   UPDATE_SUB_LEVELS_POLYCENTERS: (state, {index, data}) => {
     state.subLevelsPolyCenters.splice(index, 1, data);
+  },
+  RESET_MAP_STATE: state => {
+    state.geoJson = null;
+    state.countryCenter = null;
+    state.firstSubLevel = '';
+    state.firstSubLevelType = null;
+    state.secondSubLevel = '';
+    state.secondSubLevelType = null;
+    state.facilities = [];
+    state.subLevelsPolyCenters = [];
   }
 };
