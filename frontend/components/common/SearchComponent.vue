@@ -48,7 +48,7 @@
               v-show="hasResults"
               class="SearchResultsCounter"
             >
-              <translate>{{ results.length }} result(s):</translate>
+              <translate :parameters="{num: results.length}">{num} result(s):</translate>
             </el-col>
             <el-col class="AdvancedSearchLink">
               <nuxt-link
@@ -118,7 +118,7 @@
         </el-col>
         <el-col>
           <span class="SearchResultsCounter">
-            <translate>{{ results.length }} result(s)</translate>
+            <translate :parameters="{num: results.length}">{num} result(s)</translate>
           </span>
         </el-col>
         <el-col>

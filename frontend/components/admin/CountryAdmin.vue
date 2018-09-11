@@ -94,21 +94,21 @@
             :class="['Persona', { 'active': selectedPersona === 'G'}]"
             @click="selectPersona('G')">
             <div class="PersonaName"><translate>Users/viewers</translate></div>
-            <div class="RequestCount"><translate>{{ userSelection.length - users.length }} new request(s) }}</translate></div>
+            <div class="RequestCount"><translate :parameters="{num: userSelection.length - users.length}">{num} new request(s)</translate></div>
             <fa icon="chevron-right" />
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'CA'}]"
             @click="selectPersona('CA')">
             <div class="PersonaName"><translate>Admins</translate></div>
-            <div class="RequestCount"><translate>{{ adminSelection.length - admins.length }} new request(s) }}</translate></div>
+            <div class="RequestCount"><translate :parameters="{num: adminSelection.length - admins.length}">{num} new request(s)</translate></div>
             <fa icon="chevron-right" />
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'SCA'}]"
             @click="selectPersona('SCA')">
             <div class="PersonaName"><translate>Superadmins</translate></div>
-            <div class="RequestCount"><translate>{{ superadminSelection.length - superAdmins.length }} new request(s) }}</translate></div>
+            <div class="RequestCount"><translate :parameters="{num: superadminSelection.length - superAdmins.length}"> {num} new request(s)</translate></div>
             <fa icon="chevron-right" />
           </div>
         </el-col>

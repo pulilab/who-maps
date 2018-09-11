@@ -2,7 +2,7 @@
   <div class="DashboardFiltersHeader">
     <span class="ProjectToShow">
       <fa icon="list-ul" />
-      <translate>{{ total }} project(s) to show</translate>
+      <translate :paremeters="{total}">{total} project(s) to show</translate>
     </span>
     <el-button class="ToggleFiltersButton">
       <fa icon="chevron-right" />

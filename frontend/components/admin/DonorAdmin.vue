@@ -86,19 +86,19 @@
             :class="['Persona', { 'active': selectedPersona === 'D'}]"
             @click="selectPersona('D')">
             <div class="PersonaName"><translate>Users/viewers</translate></div>
-            <div class="RequestCount"><translate>{{ userSelection.length - users.length }} new request(s) }}</translate></div>
+            <div class="RequestCount"><translate :parameters="{num: userSelection.length - users.length}">{num} new request(s)</translate></div>
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'DA'}]"
             @click="selectPersona('DA')">
             <div class="PersonaName"><translate>Admins</translate></div>
-            <div class="RequestCount"><translate>{{ adminSelection.length - admins.length }} new request(s) }}</translate></div>
+            <div class="RequestCount"><translate :parameters="{num: adminSelection.length - admins.length}">{num} new request(s)</translate></div>
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'SDA'}]"
             @click="selectPersona('SDA')">
             <div class="PersonaName"><translate>Superadmins</translate></div>
-            <div class="RequestCount"><translate>{{ superadminSelection.length - superAdmins.length }} new request(s) }}</translate></div>
+            <div class="RequestCount"><translate :parameters="{num: superadminSelection.length - superAdmins.length}">{num} new request(s)</translate></div>
           </div>
         </el-col>
 

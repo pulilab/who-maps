@@ -27,7 +27,7 @@
           </div>
           <li class="Active">
             <fa icon="check" />
-            <translate>{{ user.name }} (me)</translate>
+            <translate :parameters="{name: user.name}">{name} (me)</translate>
           </li>
 
           <div class="el-popover__title">
@@ -51,7 +51,7 @@
             :key="moh"
           >
             <fa icon="check" />
-            <translate>{{ moh }} MoH</translate>
+            <translate :parameters="{moh}">{moh} MoH</translate>
           </li>
         </ul>
       </div>

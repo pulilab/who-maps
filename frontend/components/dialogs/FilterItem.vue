@@ -15,7 +15,7 @@
           </span>
           <template v-if="selected.length > 0">
             <span class="Filtered">
-              <translate>{{ selected.length }} item(s) selected</translate>
+              <translate :parameters="{selected: selected.length}">{selected} item(s) selected</translate>
             </span>
             <el-button
               v-show="selected.lenght > 0"
