@@ -116,13 +116,13 @@ export const getters = {
 
 export const actions = {
   ...actionsGenerator(),
-  async loadProjectList ({commit, dispatch}) {
-    const data = await dispatch('loadProjects', {type: 'list'});
+  async loadProjectList ({commit, dispatch}, page_size) {
+    const data = await dispatch('loadProjects', {type: 'list', page_size});
     commit('SET_PROJECT_LIST', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
   },
   async loadProjectsMap ({commit, dispatch}) {
-    const data = await dispatch('loadProjects', {type: 'map', page_size: 10000});
+    const data = await dispatch('loadProjects', {type: 'map', page_size: 999999});
     commit('SET_PROJECT_MAP', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
   },
