@@ -140,7 +140,7 @@
         layout="sizes, prev, slot, next"
       >
         <span class="PageCounter">
-          <translate>{{ min }}-{{ max }} of {{ total }}</translate>
+          <translate :parameters="{min, max, total}">{min}-{max} of {total}</translate>
         </span>
       </el-pagination>
     </div>
