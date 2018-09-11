@@ -7,16 +7,18 @@
     <el-col class="TableExportOptions">
       <el-row type="flex">
         <el-button
+          :disabled="selectedRows.length === 0"
           type="primary"
           size="small"
-          class="IconLeft">
+          class="IconLeft"
+          @click="exportRows"
+        >
           <fa icon="download"/>
           <span v-show="selectedRows.length === 0">
             <translate>Export selected</translate>
           </span>
           <span v-show="selected">
-            Export {{ selected }} project(s)
-            <translate>Export {{ selected }} project(s)</translate>
+            <translate :parameters="{selected}">Export {selected} project(s)</translate>
           </span>
         </el-button>
         <el-select
@@ -38,6 +40,7 @@
             class="PrimaryButton"
             @click="selectAll"><translate>Select All {{ total }} rows</translate></el-button>
         </template>
+        <pdf-export ref="pdfExport" />
       </el-row>
     </el-col>
 
@@ -113,11 +116,14 @@
 
 <script>
 import ProjectLegend from '../common/ProjectLegend';
+import PdfExport from './PdfExport';
+
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
-    ProjectLegend
+    ProjectLegend,
+    PdfExport
   },
   data () {
     return {
@@ -155,6 +161,11 @@ export default {
     },
     selectAll () {
       this.setSelectAll(true);
+    },
+    exportRows () {
+      if (this.exportType === 'PDF') {
+        this.$refs.pdfExport.printPdf();
+      }
     }
   }
 };
