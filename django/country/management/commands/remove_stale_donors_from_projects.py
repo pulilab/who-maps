@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
 
-from country.models import Donor
 from project.models import Project
 
 
