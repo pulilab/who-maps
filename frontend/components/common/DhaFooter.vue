@@ -2,12 +2,12 @@
   <div class="FooterBg">
     <div class="Footer">
       <b>
-        <span>Disclaimer:</span>
+        <span><translate>Disclaimer:</translate></span>
       </b>
       <span>
-        All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.
+        <translate>All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.</translate>
       </span>
-      <nuxt-link :to="localePath({name: 'organisation-terms', params: $route.params})">Terms of use</nuxt-link>
+      <nuxt-link :to="localePath({name: 'organisation-terms', params: $route.params})"><translate>Terms of use</translate></nuxt-link>
     </div>
   </div>
 </template>

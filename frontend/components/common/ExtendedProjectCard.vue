@@ -36,7 +36,7 @@
             <div>
               {{ donors }}
             </div>
-            <span>Donor(s)</span>
+            <span><translate>Donor(s)</translate></span>
           </div>
         </el-col>
         <el-col
@@ -47,7 +47,7 @@
             <div>
               {{ lastChange }}
             </div>
-            <span>Updated on</span>
+            <span><translate>Updated on</translate></span>
           </div>
           <project-legend :id="id" />
         </el-col>

@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    title="Select Digital Health Intervention(s)"
+    :title="$gettext('Select Digital Health Intervention(s)')"
     modal
     top="10vh"
     width="90vw"
@@ -40,13 +40,13 @@
             type="text"
             class="CancelButton"
             @click="cancel">
-            Cancel
+            <translate>Cancel</translate>
           </el-button>
           <el-button
             type="text"
             class="DeleteButton"
             @click="clearAll">
-            Clear All
+            <translate>Clear All</translate>
           </el-button>
         </el-col>
         <el-col class="PrimaryButtons">
@@ -54,7 +54,7 @@
             type="primary"
             @click="apply"
           >
-            Confirm
+            <translate>Confirm</translate>
           </el-button>
         </el-col>
       </el-row>

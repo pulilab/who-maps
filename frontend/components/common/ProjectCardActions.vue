@@ -10,7 +10,7 @@
           class="NuxtLink IconLeft"
         >
           <fa icon="arrow-right" />
-          View Draft
+          <translate>View Draft</translate>
         </nuxt-link>
       </el-col>
       <el-col v-if="showViewPublished">
@@ -19,7 +19,7 @@
           class="NuxtLink IconLeft"
         >
           <fa icon="arrow-right" />
-          View Published
+          <translate>View Published</translate>
         </nuxt-link>
       </el-col>
       <el-col v-if="showEditDraft">
@@ -28,7 +28,7 @@
           class="NuxtLink IconLeft"
         >
           <fa icon="edit" />
-          Edit Draft
+          <translate>Edit Draft</translate>
         </nuxt-link>
       </el-col>
       <el-col>
@@ -37,7 +37,7 @@
           class="NuxtLink IconLeft"
         >
           <fa icon="tachometer-alt" />
-          Assessment
+          <translate>Assessment</translate>
         </nuxt-link>
       </el-col>
     </el-row>

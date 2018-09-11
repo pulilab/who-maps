@@ -20,14 +20,14 @@
               :disabled="draft"
               @click="goToDraft"
             >
-              Draft
+              <translate>Draft</translate>
             </el-button>
             <el-button
               :class="['PublishedButton', {'Active': published}]"
               :disabled="published"
               @click="goToPublished"
             >
-              Published
+              <translate>Published</translate>
             </el-button>
           </el-button-group>
         </el-row>
@@ -43,7 +43,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              General
+              <translate>General</translate>
             </el-button>
           </li>
           <li :class="{active: active === 'implementation'}">
@@ -54,7 +54,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              Implementation
+              <translate>Implementation</translate>
             </el-button>
           </li>
           <li :class="{active: active === 'technology'}">
@@ -65,7 +65,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              Technology
+              <translate>Technology</translate>
             </el-button>
           </li>
           <li :class="{active: active === 'interoperability'}">
@@ -76,7 +76,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              Interoperability
+              <translate>Interoperability</translate>
             </el-button>
           </li>
           <li :class="{active: active === 'country'}">
@@ -87,7 +87,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              Country fields
+              <translate>Country fields</translate>
             </el-button>
           </li>
           <li :class="{active: active === 'donor'}">
@@ -98,7 +98,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              Donor fields
+              <translate>Donor fields</translate>
             </el-button>
           </li>
         </ul>
@@ -119,7 +119,7 @@
             v-show="loading === 'publish'"
             icon="spinner"
             spin />
-          Publish
+          <translate>Publish</translate>
         </el-button>
 
         <el-button
@@ -134,7 +134,7 @@
             v-show="loading === 'draft'"
             icon="spinner"
             spin />
-          Save draft
+          <translate>Save draft</translate>
         </el-button>
 
         <el-button
@@ -148,7 +148,7 @@
             v-show="loading === 'discard'"
             icon="spinner"
             spin />
-          Discard draft
+          <translate>Discard draft</translate>
         </el-button>
 
         <el-button
@@ -156,7 +156,7 @@
           type="text"
           class="GoToDashboard"
         >
-          Go to Dashboard
+          <translate>Go to Dashboard</translate>
         </el-button>
 
         <el-button
@@ -164,8 +164,8 @@
           type="text"
           class="CancelButton WithHint"
         >
-          Cancel
-          <span class="ButtonHint">Go back to Dashboard</span>
+          <translate>Cancel</translate>
+          <span class="ButtonHint"><translate>Go back to Dashboard</translate></span>
         </el-button>
       </div>
     </el-card>

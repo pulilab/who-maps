@@ -31,7 +31,7 @@
     <div
       v-show="missingContent"
       class="Empty">
-      N/A
+      <translate>N/A</translate>
     </div>
   </div>
 </template>

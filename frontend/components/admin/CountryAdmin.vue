@@ -1,11 +1,11 @@
 <template>
   <div class="CountryAdmin">
     <div class="PageTitle">
-      <h2>Country admin for {{ country.name }}</h2>
+      <h2><translate>Country admin for {{ country.name }}</translate></h2>
     </div>
 
     <collapsible-card
-      title="Country information"
+      :title="$gettext('Country information')"
       class="CountryInformation">
 
       <el-form
@@ -18,14 +18,14 @@
 
         <el-form-item
           v-if="userProfile.is_superuser"
-          label="Choose country">
+          :label="$gettext('Choose country')">
           <country-select
             :value="countryId"
             @change="setCountryId"/>
         </el-form-item>
 
         <el-form-item
-          label="Logo"
+          :label="$gettext('Logo')"
           prop="logo">
           <file-upload
             :disabled="notSCA"
@@ -35,7 +35,7 @@
         </el-form-item>
 
         <el-form-item
-          label="Cover image"
+          :label="$gettext('Cover image')"
           prop="cover">
           <file-upload
             :disabled="notSCA"
@@ -43,7 +43,7 @@
             :limit="1"/>
         </el-form-item>
 
-        <el-form-item label="Cover text">
+        <el-form-item :label="$gettext('Cover text')">
           <el-input
             :disabled="notSCA"
             v-model="coverText"
@@ -51,30 +51,30 @@
             rows="5"/>
         </el-form-item>
 
-        <el-form-item label="Footer title">
+        <el-form-item :label="$gettext('Footer title')">
           <el-input
             :disabled="notSCA"
             v-model="footerTitle"
             type="text"/>
         </el-form-item>
 
-        <el-form-item label="Footer text">
+        <el-form-item :label="$gettext('Footer text')">
           <el-input
             :disabled="notSCA"
             v-model="footerText"
             type="text"/>
         </el-form-item>
 
-        <el-form-item label="Project approval process">
+        <el-form-item :label="$gettext('Project approval process')">
           <el-checkbox
             :disabled="notSCA"
             v-model="projectApproval">
-            {{ (projectApproval ? 'U' : 'Not u') + 'sed for projects in country' }}
+            {{ projectApproval ? $gettext('Used for projects in country') : $gettext('Not used for projects in country') }}
           </el-checkbox>
         </el-form-item>
 
         <el-form-item
-          label="Partner logos"
+          :label="$gettext('Partner logos')"
           prop="partnerLogos">
           <file-upload
             :disabled="notSCA"
@@ -86,29 +86,29 @@
     </collapsible-card>
 
     <collapsible-card
-      title="User management"
+      :title="$gettext('User management')"
       class="UserManagement">
       <el-row type="flex">
         <el-col class="AdminPersonaChooser">
           <div
             :class="['Persona', { 'active': selectedPersona === 'G'}]"
             @click="selectPersona('G')">
-            <div class="PersonaName">Users/viewers</div>
-            <div class="RequestCount">{{ userSelection.length - users.length }} new request{{ (country.user_requests && country.user_requests.length) === 1 ? '' : 's' }}</div>
+            <div class="PersonaName"><translate>Users/viewers</translate></div>
+            <div class="RequestCount"><translate>{{ userSelection.length - users.length }} new request(s) }}</translate></div>
             <fa icon="chevron-right" />
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'CA'}]"
             @click="selectPersona('CA')">
-            <div class="PersonaName">Admins</div>
-            <div class="RequestCount">{{ adminSelection.length - admins.length }} new request{{ (country.admin_requests && country.admin_requests.length) === 1 ? '' : 's' }}</div>
+            <div class="PersonaName"><translate>Admins</translate></div>
+            <div class="RequestCount"><translate>{{ adminSelection.length - admins.length }} new request(s) }}</translate></div>
             <fa icon="chevron-right" />
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'SCA'}]"
             @click="selectPersona('SCA')">
-            <div class="PersonaName">Superadmins</div>
-            <div class="RequestCount">{{ superadminSelection.length - superAdmins.length }} new request{{ (country.super_admin_requests && country.super_admin_requests.length) === 1 ? '' : 's' }}</div>
+            <div class="PersonaName"><translate>Superadmins</translate></div>
+            <div class="RequestCount"><translate>{{ superadminSelection.length - superAdmins.length }} new request(s) }}</translate></div>
             <fa icon="chevron-right" />
           </div>
         </el-col>
@@ -120,13 +120,13 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> Show privileges for government users
+                  <fa icon="info-circle" /> <translate>Show privileges for government users</translate>
                 </template>
                 <div>
                   <ul>
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -134,11 +134,11 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'G'"
-            :titles="['New requests', 'Approved']"
+            :titles="[$gettext('New requests'), $gettext('Approved')]"
             v-model="users"
             :data="userSelection"
-            filterable
-            filter-placeholder="Type to filter users..." />
+            :filter-placeholder="$gettext('Type to filter users...')"
+            filterable />
 
           <div
             v-if="selectedPersona === 'CA'"
@@ -146,13 +146,13 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> Show privileges for country administrators
+                  <fa icon="info-circle" /> <translate>Show privileges for country administrators</translate>
                 </template>
                 <div>
                   <ul>
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -160,11 +160,11 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'CA'"
-            :titles="['New requests', 'Approved']"
+            :titles="[$gettext('New requests'), $gettext('Approved')]"
             v-model="admins"
             :data="adminSelection"
-            filterable
-            filter-placeholder="Type to filter users..." />
+            :filter-placeholder="$gettext('Type to filter users...')"
+            filterable />
 
           <div
             v-if="selectedPersona === 'SCA'"
@@ -172,13 +172,13 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> Show privileges for super country administrators
+                  <fa icon="info-circle" /> <translate>Show privileges for super country administrators</translate>
                 </template>
                 <div>
                   <ul>
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -186,23 +186,23 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'SCA'"
-            :titles="['New requests', 'Approved']"
+            :titles="[$gettext('New requests'), $gettext('Approved')]"
             v-model="superAdmins"
             :data="superadminSelection"
-            filterable
-            filter-placeholder="Type to filter users..." />
+            :filter-placeholder="$gettext('Type to filter users...')"
+            filterable />
         </el-col>
       </el-row>
     </collapsible-card>
 
     <collapsible-card
-      title="Country specific questionnaire"
+      :title="$gettext('Country specific questionnaire')"
       class="Questionnaire">
       <dha-questionaire/>
     </collapsible-card>
 
     <collapsible-card
-      title="Country map"
+      :title="$gettext('Country map')"
       class="CountryMap">
       <vue-map-customizer />
     </collapsible-card>
@@ -214,11 +214,11 @@
         justify="space-between">
         <el-button
           type="text"
-          class="CancelButton">Dismiss changes</el-button>
+          class="CancelButton"><translate>Dismiss changes</translate></el-button>
         <el-button
           type="primary"
           size="medium"
-          @click="saveChanges">Save changes</el-button>
+          @click="saveChanges"><translate>Save changes</translate></el-button>
       </el-row>
     </div>
   </div>
@@ -411,7 +411,7 @@ export default {
 
       if (newArr.length !== filteredArray.length) {
         this.logo = filteredArray;
-        this.logoError = 'Wrong image format, you can only upload .jpg and .png files';
+        this.logoError = this.$gettext('Wrong image format, you can only upload .jpg and .png files');
       } else {
         this.logoError = '';
       }
@@ -430,7 +430,7 @@ export default {
 
       if (newArr.length !== filteredArray.length) {
         this.cover = filteredArray;
-        this.coverError = 'Wrong image format, you can only upload .jpg and .png files';
+        this.coverError = this.$gettext('Wrong image format, you can only upload .jpg and .png files');
       } else {
         this.coverError = '';
       }
@@ -445,7 +445,7 @@ export default {
 
       if (newArr.length !== filteredArray.length) {
         this.partnerLogos = filteredArray;
-        this.partnerLogosError = 'Wrong image format, you can only upload .jpg and .png files';
+        this.partnerLogosError = this.$gettext('Wrong image format, you can only upload .jpg and .png files');
         this.flagForKeepingPartnerLogosError = true;
       } else if (this.flagForKeepingPartnerLogosError) {
         this.flagForKeepingPartnerLogosError = false;

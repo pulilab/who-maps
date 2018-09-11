@@ -6,7 +6,7 @@
       <el-col>
         <el-input
           v-model="searchString"
-          placeholder="Type something...">
+          :placeholder="$gettext('Type something...')">
           <fa
             slot="prepend"
             icon="search"

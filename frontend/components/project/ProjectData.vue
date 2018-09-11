@@ -9,70 +9,57 @@
 
           <simple-field
             :content="project.name"
-            header="Project Name"
-          />
+            :header="$gettext('Project Name')" />
 
-          <simple-field header="Organisation">
-            <organisation-item
-              :id="project.organisation"
-            />
+          <simple-field :header="$gettext('Organisation')">
+            <organisation-item :id="project.organisation" />
           </simple-field>
 
-          <simple-field header="Project country">
+          <simple-field :header="$gettext('Project country')">
             <country-item
               :id="project.country"
-              :show-flag="false"
-            />
+              :show-flag="false" />
           </simple-field>
 
           <simple-field
             :content="project.geographic_scope"
-            header="Geographic scope"
-          />
+            :header="$gettext('Geographic scope')" />
 
           <simple-field
             :content="project.implementation_overview"
-            header="Overview of the digital health implementation"
-          />
+            :header="$gettext('Overview of the digital health implementation')" />
+
           <el-row>
             <el-col :span="12">
               <simple-field
                 :content="project.start_date"
-                date
-                header="Project start date"
-              />
+                :header="$gettext('Project start date')"
+                date />
             </el-col>
             <el-col :span="12">
               <simple-field
                 :content="project.end_date"
-                date
-                header="Project end date"
-              />
+                :header="$gettext('Project end date')"
+                date />
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <simple-field
                 :content="project.contact_name"
-                header="Contact name"
-              />
+                :header="$gettext('Contact name')" />
             </el-col>
             <el-col :span="12">
               <simple-field
                 :content="project.contact_email"
-                header="Contact email"
-              />
+                :header="$gettext('Contact email')" />
             </el-col>
           </el-row>
           <div class="GrayArea">
-            <simple-field
-              header="Team members"
-            >
+            <simple-field :header="$gettext('Team members')">
               <team-list :value="project.team" />
             </simple-field>
-            <simple-field
-              header="Viewers "
-            >
+            <simple-field :header="$gettext('Viewers')">
               <team-list :value="project.viewers" />
             </simple-field>
           </div>
@@ -80,79 +67,55 @@
 
         <collapsible-card
           id="implementation"
-          title="2. Implementation Overview">
+          :title="$gettext('2. Implementation Overview')">
 
-          <simple-field
-            header="Software and related Digital Health Interventions (DHI)"
-          >
+          <simple-field :header="$gettext('Software and related Digital Health Interventions (DHI)')">
             <platforms-list
               :platforms="project.platforms"
-              :dhi="project.digitalHealthInterventions"
-            />
+              :dhi="project.digitalHealthInterventions" />
           </simple-field>
 
-          <simple-field
-            header="Health focus area(s)"
-          >
-            <health-focus-areas-list
-              :value="project.health_focus_areas"
-            />
+          <simple-field :header="$gettext('Health focus area(s)')">
+            <health-focus-areas-list :value="project.health_focus_areas" />
           </simple-field>
 
-          <simple-field
-            header="Health System Challenges (HSC)"
-          >
-            <health-system-challenges-list
-              :value="project.hsc_challenges"
-            />
+          <simple-field :header="$gettext('Health System Challenges (HSC)')">
+            <health-system-challenges-list :value="project.hsc_challenges" />
           </simple-field>
 
-          <simple-field
-            header="Health Information System (HIS)"
-          >
-            <his-bucket-list
-              :value="project.his_bucket"
-            />
+          <simple-field :header="$gettext('Health Information System (HIS)')">
+            <his-bucket-list :value="project.his_bucket" />
           </simple-field>
 
           <div class="GrayArea">
-            <simple-field
-              header="Coverage type"
-            >
+            <simple-field :header="$gettext('Coverage type')">
               <type-field
                 :value="project.coverageType"
-                :list="['', 'Sub National', 'National']"
-              />
+                :list="['', $gettext('Sub National'), $gettext('National')]" />
             </simple-field>
             <simple-field v-if="project.coverageType === 2">
               <div slot="header">
                 <fa icon="flag" />
-                National Level Deployment
+                <translate>National Level Deployment</translate>
               </div>
 
-              <coverage-field
-
-                :coverage="project.national_level_deployment"
-              />
+              <coverage-field :coverage="project.national_level_deployment" />
             </simple-field>
 
             <sub-level-coverage-field
               v-if="project.coverageType === 1"
               :coverage="project.coverage"
               :coverage-data="project.coverageData"
-              :coverage-second-level="project.coverageSecondLevel"
-            />
-
+              :coverage-second-level="project.coverageSecondLevel" />
           </div>
 
-          <simple-field header="Has the government financially invested in the project?">
+          <simple-field :header="$gettext('Has the government financially invested in the project?')">
             <type-field
               :value="project.government_investor"
-              :list="['No, they have not yet contributed', 'Yes, they are contributing in-kind people or time', 'Yes, there is a financial contribution through MOH budget']"
-            />
+              :list="[$gettext('No, they have not yet contributed'), $gettext('Yes, they are contributing in-kind people or time'), $gettext('Yes, there is a financial contribution through MOH budget')]" />
           </simple-field>
 
-          <simple-field header="Implementing partner(s)">
+          <simple-field :header="$gettext('Implementing partner(s)')">
             <ul>
               <li
                 v-for="(partner, index) in project.implementing_partners"
@@ -162,7 +125,7 @@
             </ul>
           </simple-field>
 
-          <simple-field header="Donor(s)">
+          <simple-field :header="$gettext('Donor(s)')">
             <donors-list :value="project.donors" />
           </simple-field>
         </collapsible-card>
@@ -172,48 +135,39 @@
           title="3. Techonology overview">
           <simple-field
             :content="project.implementation_dates"
-            date
-            header="Technology deployment date"
-          />
+            :header="$gettext('Technology deployment date')"
+            date />
 
-          <simple-field
-            header="Under what license is the project governed"
-          >
+          <simple-field :header="$gettext('Under what license is the project governed')">
             <licenses-list :value="project.licenses" />
           </simple-field>
 
           <simple-field
             :content="project.repository"
-            link
-            header="Code documentation or dowlonad link"
-          />
+            :header="$gettext('Code documentation or dowlonad link')"
+            link />
 
           <simple-field
             :content="project.mobile_application"
-            link
-            header="Link to the application"
-          />
+            :header="$gettext('Link to the application')"
+            link />
 
           <simple-field
             :content="project.wiki"
-            link
-            header="Link to wiki or project webside"
-          />
+            :header="$gettext('Link to wiki or project webside')"
+            link />
 
         </collapsible-card>
 
         <collapsible-card
           id="interoperability"
-          title="4. Interoperability &amp; standards">
-          <simple-field
-            header="What other system do you interoperate with ?"
-          >
+          :title="$gettext('4. Interoperability &amp; standards')">
+
+          <simple-field :header="$gettext('What other system do you interoperate with ?')">
             <interoperability-links-list :value="project.interoperability_links" />
           </simple-field>
 
-          <simple-field
-            header="What data standards does your digital health project use?"
-          >
+          <simple-field :header="$gettext('What data standards does your digital health project use?')">
             <standards-list :value="project.interoperability_standards" />
           </simple-field>
 

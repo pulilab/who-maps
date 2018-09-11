@@ -16,7 +16,7 @@
             <el-col :span="24">
               <el-input
                 v-model="localSearchString"
-                placeholder="Type something"
+                :placeholder="$gettext('Type something')"
                 @keyup.enter.native="search">
                 <fa
                   slot="prepend"
@@ -48,13 +48,13 @@
               v-show="hasResults"
               class="SearchResultsCounter"
             >
-              {{ results.length }} result(s):
+              <translate>{{ results.length }} result(s):</translate>
             </el-col>
             <el-col class="AdvancedSearchLink">
               <nuxt-link
                 :to="localePath({name : 'organisation-dashboard', params: $route.params})"
                 class="NuxtLink IconRight"
-              ><span>Advanced search</span><fa icon="angle-right" />
+              ><span><translate>Advanced search</translate></span><fa icon="angle-right" />
               </nuxt-link>
             </el-col>
           </el-row>
@@ -65,7 +65,7 @@
                 <fa
                   icon="info-circle"
                   size="lg" />
-                <span>Short tip text about advenacd seacrh lorem ipsum dolor sit ametncidunt ut labore et dolore magna aliqua.</span>
+                <span><translate>Short tip text about advenced search lorem ipsum dolor sit ametncidunt ut labore et dolore magna aliqua.</translate></span>
               </p>
             </el-col>
           </el-row>
@@ -118,7 +118,7 @@
         </el-col>
         <el-col>
           <span class="SearchResultsCounter">
-            {{ results.length }} result(s)
+            <translate>{{ results.length }} result(s)</translate>
           </span>
         </el-col>
         <el-col>

@@ -16,11 +16,11 @@
         v-if="!disabled"
         type="text"
         class="IconLeft">
-        <fa icon="plus" /> Upload file
+        <fa icon="plus" /> <translate>Upload file</translate>
       </el-button>
       <div
         v-if="files.length === 0"
-        class="NoFile">No file chosen</div>
+        class="NoFile"><translate>No file chosen</translate></div>
     </el-row>
   </el-upload>
 </template>

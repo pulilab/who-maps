@@ -12,10 +12,11 @@
           class="IconLeft">
           <fa icon="download"/>
           <span v-show="selectedRows.length === 0">
-            Export selected
+            <translate>Export selected</translate>
           </span>
           <span v-show="selected">
             Export {{ selected }} project(s)
+            <translate>Export {{ selected }} project(s)</translate>
           </span>
         </el-button>
         <el-select
@@ -35,7 +36,7 @@
             type="text"
             size="small"
             class="PrimaryButton"
-            @click="selectAll">Select All {{ total }} rows</el-button>
+            @click="selectAll"><translate>Select All {{ total }} rows</translate></el-button>
         </template>
       </el-row>
     </el-col>
@@ -68,7 +69,7 @@
             class="TableSettingsButton IconLeft"
           >
             <fa icon="cog" />
-            Settings
+            <translate>Settings</translate>
           </el-button>
 
           <div class="CustomPopoverList Small ColumnSelector">
@@ -92,14 +93,14 @@
                     type="text"
                     size="small"
                     class="CancelButton"
-                    @click="columnSelectorOpen = false">Cancel</el-button>
+                    @click="columnSelectorOpen = false"><translate>Cancel</translate></el-button>
                 </el-col>
                 <el-col>
                   <el-button
                     type="text"
                     size="small"
                     class="PrimaryButton"
-                    @click="updateColumns">Update</el-button>
+                    @click="updateColumns"><translate>Update</translate></el-button>
                 </el-col>
               </el-row>
             </div>
@@ -134,7 +135,7 @@ export default {
       total: 'dashboard/getTotal'
     }),
     settingsTitle () {
-      return `main fields (${this.selected.length}/${this.columns.length})`;
+      return `${this.$gettext('main fields')} (${this.selected.length}/${this.columns.length})`;
     },
     selected () {
       return this.allSelected ? this.total : this.selectedRows.length;

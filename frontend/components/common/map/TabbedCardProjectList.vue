@@ -4,7 +4,7 @@
     @tab-click="tabChangeHandler"
   >
     <el-tab-pane
-      label="Sub-national"
+      :label="$gettext('Sub-national')"
       name="subNational">
       <project-card
         v-for="p in projects"
@@ -15,7 +15,7 @@
       />
     </el-tab-pane>
     <el-tab-pane
-      label="National"
+      :label="$gettext('National')"
       name="national">
       <project-card
         v-for="p in projects"

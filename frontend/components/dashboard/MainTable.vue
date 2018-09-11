@@ -19,10 +19,10 @@
       />
       <el-table-column
         v-if="selectedColumns.includes(1)"
+        :label="$gettext('Project Name')"
         fixed
         sortable="custom"
         prop="project__name"
-        label="Project Name"
         width="240">
         <template slot-scope="scope">
           <project-card
@@ -34,9 +34,9 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(2)"
+        :label="$gettext('Country')"
         sortable="custom"
         prop="country__name"
-        label="Country"
         width="180">
         <template slot-scope="scope">
           <country-item
@@ -47,9 +47,9 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(3)"
+        :label="$gettext('Organisation Name')"
         sortable="custom"
         prop="organisation__name"
-        label="Organisation Name"
         width="240">
         <template slot-scope="scope">
           <organisation-item
@@ -59,20 +59,20 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(4)"
+        :label="$gettext('Government Investor')"
         sortable="custom"
         prop="project__data__government_investor"
-        label="Government Investor"
         width="180">
         <template slot-scope="scope">
-          <span v-show="scope.row.government_investor">Yes</span>
-          <span v-show="!scope.row.government_investor">No</span>
+          <span v-show="scope.row.government_investor"><translate>Yes</translate></span>
+          <span v-show="!scope.row.government_investor"><translate>No</translate></span>
         </template>
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(5)"
+        :label="$gettext('Region')"
         sortable="custom"
         prop="country__region"
-        label="Region"
         width="180">
         <template slot-scope="scope">
           <region-item
@@ -82,7 +82,7 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(6)"
-        label="Donors"
+        :label="$gettext('Donors')"
         width="240">
         <template slot-scope="scope">
           <donors-list
@@ -93,7 +93,7 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(7)"
-        label="Contact Name"
+        :label="$gettext('Contact Name')"
         width="240">
         <template slot-scope="scope">
           <span>{{ scope.row.contact_name }}</span>
@@ -105,7 +105,7 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(8)"
-        label="Implementation Overview"
+        :label="$gettext('Implementation Overview')"
         width="240">
         <template slot-scope="scope">
           <p>{{ scope.row.implementation_overview }}</p>
@@ -113,7 +113,7 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(9)"
-        label="Geographic Scope"
+        :label="$gettext('Geographic Scope')"
         width="240">
         <template slot-scope="scope">
           <p>{{ scope.row.geographic_scope }}</p>
@@ -121,7 +121,7 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes(10)"
-        label="Health Focus Areas"
+        :label="$gettext('Health Focus Areas')"
         width="240">
         <template slot-scope="scope">
           <health-focus-areas-list
@@ -140,7 +140,7 @@
         layout="sizes, prev, slot, next"
       >
         <span class="PageCounter">
-          {{ min }}-{{ max }} of {{ total }}
+          <translate>{{ min }}-{{ max }} of {{ total }}</translate>
         </span>
       </el-pagination>
     </div>

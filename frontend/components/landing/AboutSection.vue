@@ -8,7 +8,7 @@
       </el-col>
       <el-col class="AboutSectionRight">
         <div class="WhoSupporter">
-          <h4>Global Support to DHA</h4>
+          <h4><translate>Global Support to DHA</translate></h4>
           <div class="SupporterLogos">
             <div class="Partner">
               <img
@@ -36,7 +36,7 @@
           v-if="partnerLogos"
           class="CountrySupporter"
         >
-          <h4>In-country support to DHA</h4>
+          <h4><translate>In-country support to DHA</translate></h4>
           <div class="SupporterLogos">
             <div
               v-for="(logo, index) in partnerLogos"

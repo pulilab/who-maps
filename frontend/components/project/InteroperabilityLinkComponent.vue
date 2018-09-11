@@ -11,7 +11,7 @@
       <el-input
         :disabled="!selected"
         :value="link"
-        placeholder="Specify URL"
+        :placeholder="$gettext('Specify URL')"
         type="text"
         @change="linkChangeHandler"
       />

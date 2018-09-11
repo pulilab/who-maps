@@ -5,7 +5,7 @@
       :body-style="{ padding: '0px' }"
     >
       <div slot="header">
-        Sign up for Digital Health Atlas
+        <translate>Sign up for Digital Health Atlas</translate>
       </div>
       <el-form
         ref="signupForm"
@@ -15,9 +15,9 @@
         @submit.native.prevent="signup"
       >
         <fieldset>
-          <div class="FieldsetLegend">Please fill out the form below:</div>
+          <div class="FieldsetLegend"><translate>Please fill out the form below:</translate></div>
           <el-form-item
-            label="Email address"
+            :label="$gettext('Email address')"
             prop="email">
             <el-input
               v-model="signupForm.email"
@@ -25,7 +25,7 @@
           </el-form-item>
 
           <el-form-item
-            label="Password"
+            :label="$gettext('Password')"
             prop="password1">
             <el-input
               v-model="signupForm.password1"
@@ -33,7 +33,7 @@
           </el-form-item>
 
           <el-form-item
-            label="Password (again)"
+            :label="$gettext('Password (again)')"
             prop="password2">
             <el-input
               v-model="signupForm.password2"
@@ -53,12 +53,12 @@
             <el-col
               :span="12"
               class="SecondaryAction LoginLink">
-              <h6>Already signed up?</h6>
+              <h6><translate>Already signed up?</translate></h6>
               <nuxt-link
                 :to="localePath({name: 'organisation-login', params: $route.params})"
                 class="NuxtLink Small IconRight"
               >
-                <span>Login here</span><fa icon="angle-right" />
+                <span><translate>Login here</translate></span><fa icon="angle-right" />
               </nuxt-link>
             </el-col>
             <el-col
@@ -68,7 +68,7 @@
                 type="primary"
                 size="medium"
                 native-type="submit">
-                Sign up now
+                <translate>Sign up now</translate>
               </el-button>
             </el-col>
           </el-row>
@@ -99,17 +99,17 @@ export default {
       },
       rules: {
         email: [
-          { required: true, message: 'This field is required', trigger: 'blur' },
-          { type: 'email', message: 'Has to be a valid email address', trigger: 'blur' },
+          { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
+          { type: 'email', message: this.$gettext('Has to be a valid email address'), trigger: 'blur' },
           { validator: this.validatorGenerator('email'), trigger: 'blur' }
         ],
         password1: [
-          { required: true, message: 'This field is required', trigger: 'blur' },
-          { min: 8, message: 'This field should be at least 8 characters', trigger: 'blur' },
+          { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
+          { min: 8, message: this.$gettext('This field should be at least 8 characters'), trigger: 'blur' },
           { validator: this.validatorGenerator('password1'), trigger: 'blur' }
         ],
         password2: [
-          { required: true, message: 'This field is required', trigger: 'blur' },
+          { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
           { validator: this.passwordMatching, trigger: 'blur' }
         ]
       }
@@ -120,7 +120,7 @@ export default {
       'doSignup': 'user/doSignup'
     }),
     passwordMatching (rule, value, callback) {
-      value === this.signupForm.password1 ? callback() : callback(Error('The password must match'));
+      value === this.signupForm.password1 ? callback() : callback(Error(this.$gettext('The password must match')));
     },
     async signup () {
       this.deleteFormAPIErrors();
@@ -133,7 +133,7 @@ export default {
         });
         this.$router.push(this.localePath({name: 'organisation-edit-profile', params: this.$route.params}));
         this.$message({
-          message: 'User created succesfully',
+          message: this.$gettext('User created succesfully'),
           type: 'success',
           showClose: true
         });

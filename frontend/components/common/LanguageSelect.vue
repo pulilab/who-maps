@@ -1,10 +1,10 @@
 <template>
   <el-select
     :value="value"
+    :placeholder="$gettext('Select language')"
     size="small"
     class="LanguageSelector"
     popper-class="LanguageSelectorPopper"
-    placeholder="Select language"
     @change="changeHandler">
     <el-option
       v-for="language in languages"

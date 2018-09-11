@@ -15,11 +15,11 @@
         >
           <span v-show="!isSelected">
             <fa icon="plus" />
-            Add
+            <translate>Add</translate>
           </span>
           <span v-show="isSelected">
             <fa icon="pencil-alt" />
-            Edit
+            <translate>Edit</translate>
           </span>
         </el-button>
       </el-col>
@@ -38,7 +38,7 @@
         size="small"
         @click="openDialog"
       >
-        Show all selected...
+        <translate>Show all selected...</translate>
       </el-button>
     </div>
   </div>

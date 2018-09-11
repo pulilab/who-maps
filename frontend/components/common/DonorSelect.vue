@@ -1,9 +1,9 @@
 <template>
   <el-select
     :value="value"
+    :placeholder="$gettext('Select donor')"
     popper-class="DonorSelectorPopper"
     class="DonorSelector"
-    placeholder="Select donor"
     @change="changeHandler">
     <el-option
       v-for="donor in donors"

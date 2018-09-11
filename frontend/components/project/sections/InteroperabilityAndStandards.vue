@@ -4,7 +4,7 @@
     class="InteroperabilityAndStandards">
     <collapsible-card title="Interoperability &amp; Standards">
       <el-form-item
-        label="Does your digital health project link to a digital HIS?"
+        :label="$gettext('Does your digital health project link to a digital HIS?')"
         prop="interoperability_links">
         <interoperability-link-component
           v-for="ir in interopearilbityLinksStructure"
@@ -14,7 +14,7 @@
         />
       </el-form-item>
       <el-form-item
-        label="What data standards does your digital health project use?"
+        :label="$gettext('What data standards does your digital health project use?')"
         prop="interoperability_standards">
         <standards-selector v-model="interoperability_standards" />
       </el-form-item>

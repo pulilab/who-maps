@@ -107,7 +107,7 @@
       multi-line
     >
       <v-icon class="mr-3">pin_drop</v-icon>
-      <span class="body-2">Click on the map anywhere to select your position</span>
+      <span class="body-2"><translate>Click on the map anywhere to select your position</translate></span>
     </v-snackbar>
 
     <v-snackbar
@@ -120,7 +120,7 @@
     >
       <div>
         <v-icon class="mr-3">my_location</v-icon>
-        <span class="body-2">...waiting for location</span>
+        <span class="body-2">.<translate>..waiting for location</translate></span>
       </div>
     </v-snackbar>
 
