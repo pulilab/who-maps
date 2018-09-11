@@ -14,8 +14,8 @@
           <span v-show="selectedRows.length === 0">
             Export selected
           </span>
-          <span v-show="selectedRows.length > 0">
-            Export {{ selectedRows.length }} project(s)
+          <span v-show="selected">
+            Export {{ selected }} project(s)
           </span>
         </el-button>
         <el-select
@@ -31,10 +31,11 @@
         <template v-if="selectedRows.length > 0">
           <div class="Separator" />
           <el-button
+            :disabled="allSelected"
             type="text"
             size="small"
             class="PrimaryButton"
-            @click="selectAll">Select All 450 rows</el-button>
+            @click="selectAll">Select All {{ total }} rows</el-button>
         </template>
       </el-row>
     </el-col>
@@ -128,10 +129,15 @@ export default {
     ...mapGetters({
       columns: 'dashboard/getAvailableColumns',
       selected: 'dashboard/getSelectedColumns',
-      selectedRows: 'dashboard/getSelectedRows'
+      selectedRows: 'dashboard/getSelectedRows',
+      allSelected: 'dashboard/getSelectAll',
+      total: 'dashboard/getTotal'
     }),
     settingsTitle () {
       return `main fields (${this.selected.length}/${this.columns.length})`;
+    },
+    selected () {
+      return this.allSelected ? this.total : this.selectedRows.length;
     }
   },
   methods: {
