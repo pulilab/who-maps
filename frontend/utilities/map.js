@@ -52,7 +52,7 @@ export const gettersGenerator = () => ({
   getSearchParameters: state => {
     const q = state.searchString && state.searchString.length > 1 ? state.searchString : undefined;
     return {
-      page_size: 100000,
+      page_size: 999999,
       q,
       found: true,
       in: q ? state.searchIn : undefined,
