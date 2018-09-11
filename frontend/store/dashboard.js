@@ -160,9 +160,11 @@ export const actions = {
     commit('SET_SELECTED_PLATFORMS', columns);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setSelectedRows ({commit}, rows) {
+  setSelectedRows ({commit, state}, rows) {
+    if (state.selectAll && state.selectedRows.length > rows.length) {
+      commit('SET_SELECT_ALL', false);
+    }
     commit('SET_SELECTED_ROWS', rows);
-    commit('SET_SELECT_ALL', false);
   },
   setFilteredCountries ({commit}, value) {
     commit('SET_FILTERED_COUNTRIES', value);
