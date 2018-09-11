@@ -42,7 +42,12 @@ export default {
   },
   computed: {
     subLevel () {
-      return this.subLevels.find(s => s.id === this.coverage);
+      const level = this.subLevels.find(s => s.id === this.coverage || s.name === this.coverage);
+      if (level) {
+        return level;
+      }
+      console.error('Misisng sub level, probable corrupt map data');
+      return {};
     },
     localCoverageData () {
       return this.coverageData[this.coverage];
