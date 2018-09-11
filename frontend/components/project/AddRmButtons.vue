@@ -6,7 +6,7 @@
       class="AddButton IconLeft"
       @click="$emit('add')">
       <fa icon="plus" />
-      Add
+      <translate>Add</translate>
     </el-button>
     <el-button
       v-show="showRm"
@@ -14,7 +14,7 @@
       class="DeleteButton IViewert"
       @click="$emit('rm')">
       <fa icon="minus" />
-      Delete
+      <translate>Delete</translate>
     </el-button>
   </div>
 </template>

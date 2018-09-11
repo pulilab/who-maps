@@ -1,8 +1,8 @@
 <template>
   <div class="MyProjects">
     <div class="PageTitle">
-      <h2>My Projects</h2>
-      <p>
+      <h2><translate>My Projects</translate></h2>
+      <p><translate>
         List of all the projects you are a
         <fa
           icon="star"
@@ -12,7 +12,7 @@
           icon="eye"
           class="Viewer" />
         <b>Viewer</b> of.
-      </p>
+      </translate></p>
     </div>
     <user-project-list />
   </div>

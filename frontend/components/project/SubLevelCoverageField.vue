@@ -6,7 +6,7 @@
       class="FirstSubLevel">
       <div slot="header">
         <fa icon="map-marker" />
-        {{ countrySubLevelNames.first }} level deployment
+        <translate>{{ countrySubLevelNames.first }} level deployment</translate>
       </div>
       <el-row
         v-for="(cov) in coverage"
@@ -30,7 +30,7 @@
     >
       <div slot="header">
         <fa icon="map-marker" />
-        {{ countrySubLevelNames.second }} level deployment
+        <translate>{{ countrySubLevelNames.second }} level deployment</translate>
       </div>
       <el-row
         v-for="(cov) in coverageSecondLevel"

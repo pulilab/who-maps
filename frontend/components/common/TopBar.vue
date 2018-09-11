@@ -12,7 +12,7 @@
         <nuxt-link :to="localePath({name: 'organisation', params: $route.params})">
           <img
             :src="countrySpecific ? countryLogoURL : '/logo-who-blue.svg'"
-            :alt="countrySpecific ? 'Country logo' : 'WHO logo'"
+            :alt="countrySpecific ? $gettext('Country logo') : $gettext('WHO logo')"
             class="Logo">
         </nuxt-link>
       </el-col>
@@ -35,12 +35,12 @@
               <div>
                 <nuxt-link
                   :to="localePath({name: 'organisation-signup', params: $route.params})"
-                  class="HeaderBtn HideOnActive">Signup</nuxt-link>
+                  class="HeaderBtn HideOnActive"><translate>Signup</translate></nuxt-link>
               </div>
               <div>
                 <nuxt-link
                   :to="localePath({name: 'organisation-login', params: $route.params})"
-                  class="HeaderBtn HideOnActive">Login</nuxt-link>
+                  class="HeaderBtn HideOnActive"><translate>Login</translate></nuxt-link>
               </div>
             </el-col>
           </template>
@@ -79,7 +79,7 @@
                   :to="localePath({name: 'organisation-projects-create', params: $route.params})"
                   class="HeaderBtn">
                   <fa icon="plus-circle" />
-                  <translate> New Project</translate>
+                  <translate>New Project</translate>
                 </nuxt-link>
               </div>
               <user-dropdown />

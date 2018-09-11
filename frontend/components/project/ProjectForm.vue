@@ -256,7 +256,7 @@ export default {
       const ownDhi = this.project.digitalHealthInterventions.filter(dhi => dhi.platform === value && dhi.id);
       if (ownDhi.length === 0) {
         const error = {
-          message: 'Please select one or more Digital Health Intervetions for this Software',
+          message: this.$gettext('Please select one or more Digital Health Intervetions for this Software'),
           field: rule.fullField
         };
         callback(error);
@@ -276,8 +276,8 @@ export default {
         if (visibleErrors && visibleErrors.length > 0) {
           visibleErrors[0].scrollIntoView();
         } else {
-          this.$alert('There was an un-caught validation error an automatic report has been submitted', 'Warning', {
-            confirmButtonText: 'Close'
+          this.$alert(this.$gettext('There was an un-caught validation error an automatic report has been submitted'), this.$gettext('Warning'), {
+            confirmButtonText: this.$gettext('Close')
           });
           this.$raven.captureMessage('Un-caught validation error in project page', {
             level: 'warning',
@@ -320,8 +320,8 @@ export default {
             } else if (this.isDraft) {
               await this.saveDraft(this.$route.params.id);
             }
-            this.$alert('Your draft has been saved successfully', 'Congratulation', {
-              confirmButtonText: 'Close'
+            this.$alert(this.$gettext('Your draft has been saved successfully'), this.$gettext('Congratulation'), {
+              confirmButtonText: this.$gettext('Close')
             });
             return;
           } catch (e) {
@@ -334,21 +334,21 @@ export default {
     },
     async doDiscardDraft () {
       try {
-        await this.$confirm('The current draft will be overwritten by the published version', 'Attention', {
-          confirmButtonText: 'Ok',
-          cancelButtonText: 'Cancel',
+        await this.$confirm(this.$gettext('The current draft will be overwritten by the published version'), this.$gettext('Attention'), {
+          confirmButtonText: this.$gettext('Ok'),
+          cancelButtonText: this.$gettext('Cancel'),
           type: 'warning'
         });
         await this.discardDraft(this.$route.params.id);
         this.$message({
           type: 'success',
-          message: 'Draft overriden with published version'
+          message: this.$gettext('Draft overriden with published version')
         });
       } catch (e) {
         this.setLoading(false);
         this.$message({
           type: 'info',
-          message: 'Action cancelled'
+          message: this.$gettext('Action cancelled')
         });
       }
     },
@@ -362,8 +362,8 @@ export default {
             await this.publishProject(this.$route.params.id);
             const localised = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params}});
             this.$router.push(localised);
-            this.$alert('Your draft has been published successfully', 'Congratulation', {
-              confirmButtonText: 'Close'
+            this.$alert(this.$gettext('Your draft has been published successfully'), this.$gettext('Congratulation'), {
+              confirmButtonText: this.$gettext('Close')
             });
             return;
           } catch (e) {

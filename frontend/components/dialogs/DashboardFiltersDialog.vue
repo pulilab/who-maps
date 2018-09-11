@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    title="Applying specific filter to map/list"
+    :title="$gettext('Applying specific filter to map/list')"
     modal
     top="10vh"
     width="90vw"
@@ -15,36 +15,36 @@
         <filter-item
           :active="selectedFilter === 'dhi'"
           :selected="dhi"
+          :header="$gettext('Digital Health Interventions')"
           item="dhi"
-          header="Digital Health Interventions"
           @clear="dhi=[]"
         />
         <filter-item
           :active="selectedFilter === 'hfa'"
           :selected="hfa"
+          :header="$gettext('Health focus areas')"
           item="hfa"
-          header="Health focus areas"
           @clear="hfa=[]"
         />
         <filter-item
           :active="selectedFilter === 'hsc'"
           :selected="hsc"
+          :header="$gettext('Health system challenges')"
           item="hsc"
-          header="Health system challenges"
           @clear="hsc=[]"
         />
         <filter-item
           :active="selectedFilter === 'his'"
           :selected="his"
+          :header="$gettext('Health Information System')"
           item="his"
-          header="Health Information System"
           @clear="his=[]"
         />
         <filter-item
           :active="selectedFilter === 'platform'"
           :selected="platforms"
+          :header="$gettext('Software')"
           item="platform"
-          header="Software"
           @clear="platforms=[]"
         />
       </el-col>
@@ -79,13 +79,13 @@
             type="text"
             class="CancelButton"
             @click="cancel">
-            Cancel
+            <translate>Cancel</translate>
           </el-button>
           <el-button
             type="text"
             class="DeleteButton"
             @click="clearAll">
-            Clear All
+            <translate>Clear All</translate>
           </el-button>
         </el-col>
         <el-col class="PrimaryButtons">
@@ -93,7 +93,7 @@
             type="primary"
             @click="apply"
           >
-            Apply filters
+            <translate>Apply filters</translate>
           </el-button>
         </el-col>
       </el-row>

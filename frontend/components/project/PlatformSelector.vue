@@ -1,10 +1,10 @@
 <template>
   <el-select
     :value="platform"
+    :placeholder="$gettext('Select from list')"
     popper-class="PlatformSelectorDropdown"
     class="PlatformSelector"
     value-key="id"
-    placeholder="Select from list"
     @change="changeHandler"
     @blur="$emit('blur')"
   >

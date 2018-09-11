@@ -20,11 +20,11 @@
           <el-row
             type="flex"
             align="middle">
-            <span>Map file:</span>
+            <span><translate>Map file:</translate></span>
             <el-button
               type="text"
               @click="$refs.hiddenMapDownload.click()">
-              Download
+              <translate>Download</translate>
             </el-button>
             <el-upload
               ref="mapUploadBtn"
@@ -43,7 +43,7 @@
                 :disabled="uploadMapFile"
                 :loading="uploadMapFile"
                 class="DeleteButton"
-                type="text">Change</el-button>
+                type="text"><translate>Change</translate></el-button>
             </el-upload>
           </el-row>
         </el-col>
@@ -100,18 +100,18 @@
           align="middle">
           <el-col>
             <div class="PinSwitch">
-              <span>Country center pin</span>
+              <span><translate>Country center pin</translate></span>
               <el-switch
                 v-model="showCenterPin"
-                active-text="Show"
-                inactive-text="Hide "/>
+                :active-text="$gettext('Show')"
+                :inactive-text="$gettext('Hide') "/>
             </div>
             <div class="PinSwitch">
-              <span>Districts center pin</span>
+              <span><translate>Districts center pin</translate></span>
               <el-switch
                 v-model="showSubLevelsPins"
-                active-text="Show"
-                inactive-text="Hide"/>
+                :active-text="$gettext('Show')"
+                :inactive-text="$gettext('Hide')"/>
             </div>
           </el-col>
           <el-col>
@@ -120,7 +120,7 @@
               class="IconLeft"
               @click.prevent="polycenterCalculation"
             >
-              <fa icon="sync-alt" /> Set / Reset Markers
+              <fa icon="sync-alt" /> <translate>Set / Reset Markers</translate>
             </el-button>
           </el-col>
         </el-row>

@@ -3,8 +3,8 @@
     <el-row type="flex">
       <el-col :span="12">
         <el-popover
+          :title="$gettext('My filters presets')"
           placement="bottom-center"
-          title="My filters presets"
           popper-class="CustomPopover AdvancedSearchPresetsDropdown"
           trigger="click"
         >
@@ -13,7 +13,7 @@
             type="text"
             class="IconRight"
           >
-            Load filters
+            <translate>Load filters</translate>
             <fa icon="caret-down" />
           </el-button>
           <div class="CustomPopoverList">
@@ -37,7 +37,7 @@
           size="small"
           @click="openSaveFilter"
         >
-          Save
+          <translate>Save</translate>
         </el-button>
       </el-col>
       <el-col :span="6">
@@ -47,7 +47,7 @@
           class="DeleteButton"
           @click="clear"
         >
-          Clear
+          <translate>Clear</translate>
         </el-button>
       </el-col>
     </el-row>

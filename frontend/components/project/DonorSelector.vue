@@ -1,12 +1,12 @@
 <template>
   <el-select
     :value="value"
+    :placeholder="$gettext('Type and select a name')"
     multiple
     filterable
     reserve-keyword
     class="DonorSelector"
     popper-class="DonorSelectorDropdown"
-    placeholder="Type and select a name"
     @change="changeHandler"
   >
     <el-option

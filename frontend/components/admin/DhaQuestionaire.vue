@@ -20,7 +20,7 @@
           @click="addQuestion"
         >
           <fa icon="plus" />
-          Add new question
+          <translate>Add new question</translate>
         </el-button>
 
         <!-- <el-button
@@ -48,12 +48,12 @@
       <el-col class="QAlerts">
         <el-alert
           v-if="reordered"
-          title="warning alert"
-          type="Questions are reordered!"
+          :title="$gettext('Questions are reordered!')"
+          type="warning alert"
           show-icon />
         <el-alert
           v-if="!allValid"
-          title="Contains invalid element!"
+          :title="$gettext('Contains invalid element!')"
           type="error"
           show-icon />
       </el-col>

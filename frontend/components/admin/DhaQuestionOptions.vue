@@ -1,7 +1,7 @@
 <template>
   <div class="ListOfOptions">
-    <h6>List of selectable options:</h6>
-    <p v-if="!options.length">No options added yet</p>
+    <h6><translate>List of selectable options:</translate></h6>
+    <p v-if="!options.length"><translate>No options added yet</translate></p>
     <ul>
       <li
         v-for="(option, index) in options"
@@ -22,7 +22,7 @@
         <el-input
           ref="input"
           v-model="inputField"
-          placeholder="Add a new option here"
+          :placeholder="$gettext('Add a new option here')"
           type="text"
           @keyup.enter="addLocalOption" />
       </el-col>
@@ -31,7 +31,7 @@
           :disabled="!inputField"
           type="text"
           class="IconLeft AddOption"
-          @click="addLocalOption"><fa icon="plus" /> Add</el-button>
+          @click="addLocalOption"><fa icon="plus" /> <translate>Add</translate></el-button>
       </el-col>
     </el-row>
   </div>

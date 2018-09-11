@@ -4,7 +4,7 @@
       v-if="!showForgotten && !successfulReset"
       :body-style="{ padding: '0px' }">
       <div slot="header">
-        Log in to Digital Health Atlas
+        <translate>Log in to Digital Health Atlas</translate>
       </div>
 
       <el-form
@@ -16,7 +16,7 @@
         @submit.native.prevent="loginLocal">
         <fieldset>
           <el-form-item
-            label="E-mail"
+            :label="$gettext('E-mail')"
             prop="username">
             <el-input
               v-model="username"
@@ -24,7 +24,7 @@
           </el-form-item>
 
           <el-form-item
-            label="Password"
+            :label="$gettext('Password')"
             prop="password">
             <el-input
               v-model="password"
@@ -50,7 +50,7 @@
                 size="small"
                 class="CancelButton"
                 @click="toForgotten">
-                Forgot password?
+                <translate>Forgot password?</translate>
               </el-button>
             </el-col>
             <el-col
@@ -60,7 +60,7 @@
                 type="primary"
                 size="medium"
                 native-type="submit">
-                Log in
+                <translate>Log in</translate>
               </el-button>
             </el-col>
           </el-row>
@@ -72,10 +72,10 @@
       v-if="showForgotten"
       :body-style="{ padding: '0px' }">
       <div slot="header">
-        Reset forgotten password
+        <translate>Reset forgotten password</translate>
       </div>
 
-      <p class="Instruction">Enter your email address and follow the instructions you will get by email.</p>
+      <p class="Instruction"><translate>Enter your email address and follow the instructions you will get by email.</translate></p>
 
       <el-form
         ref="forgotForm"
@@ -86,7 +86,7 @@
         @submit.native.prevent="forgotEmail">
         <fieldset>
           <el-form-item
-            label="E-mail"
+            :label="$gettext('E-mail')"
             prop="email">
             <el-input
               v-model="email"
@@ -107,7 +107,7 @@
                 type="text"
                 size="medium"
                 @click="showForgotten = false">
-                Go back to login
+                <translate>Go back to login</translate>
               </el-button>
             </el-col>
             <el-col
@@ -117,7 +117,7 @@
                 type="primary"
                 size="medium"
                 native-type="submit">
-                Reset
+                <translate>Reset</translate>
               </el-button>
             </el-col>
           </el-row>
@@ -129,10 +129,10 @@
       v-if="successfulReset"
       :body-style="{ padding: '0px' }">
       <div slot="header">
-        Congratulations!
+        <translate>Congratulations!</translate>
       </div>
 
-      <p class="Instruction">An email with instructions to reset your password have been sent.</p>
+      <p class="Instruction"><translate>An email with instructions to reset your password have been sent.</translate></p>
 
       <div class="CardActionsBottom">
         <el-row
@@ -150,7 +150,7 @@
               type="primary"
               size="medium"
               @click="successfulReset = false">
-              Go back to login
+              <translate>Go back to login</translate>
             </el-button>
           </el-col>
         </el-row>
@@ -176,19 +176,19 @@ export default {
       successfulReset: false,
       rules: {
         username: [
-          { required: true, message: 'This field is required', trigger: 'blur' },
-          { type: 'email', message: 'Has to be a valid email address', trigger: 'blur' },
+          { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
+          { type: 'email', message: this.$gettext('Has to be a valid email address'), trigger: 'blur' },
           { validator: this.validatorGenerator('username') }
         ],
         password: [
-          { required: true, message: 'This field is required', trigger: 'blur' },
+          { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
           { validator: this.validatorGenerator('password') }
         ]
       },
       rules2: {
         email: [
-          { required: true, message: 'This field is required', trigger: 'blur' },
-          { type: 'email', message: 'Has to be a valid email address', trigger: 'blur' },
+          { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
+          { type: 'email', message: this.$gettext('Has to be a valid email address'), trigger: 'blur' },
           { validator: this.validatorGenerator('email') }
         ]
       }

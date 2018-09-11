@@ -1,11 +1,11 @@
 <template>
   <div class="CountryAdmin">
     <div class="PageTitle">
-      <h2>Donor admin for {{ donor.name }}</h2>
+      <h2><translate>Donor admin for {{ donor.name }}</translate></h2>
     </div>
 
     <collapsible-card
-      title="Donor information"
+      :title="$gettext('Donor information')"
       class="CountryInformation">
 
       <el-form
@@ -18,14 +18,14 @@
 
         <el-form-item
           v-if="userProfile.is_superuser"
-          label="Choose donor">
+          :label="$gettext('Choose donor')">
           <donor-select
             :value="donorId"
             @change="setDonorId"/>
         </el-form-item>
 
         <el-form-item
-          label="Logo"
+          :label="$gettext('Logo')"
           prop="logo">
           <file-upload
             :disabled="notSDA"
@@ -35,7 +35,7 @@
         </el-form-item>
 
         <el-form-item
-          label="Cover image"
+          :label="$gettext('Cover image')"
           prop="cover">
           <file-upload
             :disabled="notSDA"
@@ -43,7 +43,7 @@
             :limit="1"/>
         </el-form-item>
 
-        <el-form-item label="Cover text">
+        <el-form-item :label="$gettext('Cover text')">
           <el-input
             :disabled="notSDA"
             v-model="coverText"
@@ -51,14 +51,14 @@
             rows="5"/>
         </el-form-item>
 
-        <el-form-item label="Footer title">
+        <el-form-item :label="$gettext('Footer title')">
           <el-input
             :disabled="notSDA"
             v-model="footerTitle"
             type="text"/>
         </el-form-item>
 
-        <el-form-item label="Footer text">
+        <el-form-item :label="$gettext('Footer text')">
           <el-input
             :disabled="notSDA"
             v-model="footerText"
@@ -66,7 +66,7 @@
         </el-form-item>
 
         <el-form-item
-          label="Partner logos"
+          :label="$gettext('Partner logos')"
           prop="partnerLogos">
           <file-upload
             :disabled="notSDA"
@@ -78,27 +78,27 @@
     </collapsible-card>
 
     <collapsible-card
-      title="User management"
+      :title="$gettext('User management')"
       class="UserManagement">
       <el-row type="flex">
         <el-col class="AdminPersonaChooser">
           <div
             :class="['Persona', { 'active': selectedPersona === 'D'}]"
             @click="selectPersona('D')">
-            <div class="PersonaName">Users/viewers</div>
-            <div class="RequestCount">{{ userSelection.length - users.length }} new request{{ (donor.user_requests && donor.user_requests.length) === 1 ? '' : 's' }}</div>
+            <div class="PersonaName"><translate>Users/viewers</translate></div>
+            <div class="RequestCount"><translate>{{ userSelection.length - users.length }} new request(s) }}</translate></div>
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'DA'}]"
             @click="selectPersona('DA')">
-            <div class="PersonaName">Admins</div>
-            <div class="RequestCount">{{ adminSelection.length - admins.length }} new request{{ (donor.admin_requests && donor.admin_requests.length) === 1 ? '' : 's' }}</div>
+            <div class="PersonaName"><translate>Admins</translate></div>
+            <div class="RequestCount"><translate>{{ adminSelection.length - admins.length }} new request(s) }}</translate></div>
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'SDA'}]"
             @click="selectPersona('SDA')">
-            <div class="PersonaName">Superadmins</div>
-            <div class="RequestCount">{{ superadminSelection.length - superAdmins.length }} new request{{ (donor.super_admin_requests && donor.super_admin_requests.length) === 1 ? '' : 's' }}</div>
+            <div class="PersonaName"><translate>Superadmins</translate></div>
+            <div class="RequestCount"><translate>{{ superadminSelection.length - superAdmins.length }} new request(s) }}</translate></div>
           </div>
         </el-col>
 
@@ -110,13 +110,13 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> Show privileges for donor users
+                  <fa icon="info-circle" /> <translate>Show privileges for donor users</translate>
                 </template>
                 <div>
                   <ul>
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -124,11 +124,11 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'D'"
-            :titles="['New requests', 'Approved']"
+            :titles="[$gettext('New requests'), $gettext('Approved')]"
             v-model="users"
             :data="userSelection"
-            filterable
-            filter-placeholder="Type to filter users..." />
+            :filter-placeholder="$gettext('Type to filter users...')"
+            filterable />
 
           <div
             v-if="selectedPersona === 'DA'"
@@ -136,13 +136,13 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> Show privileges for donor administrators
+                  <fa icon="info-circle" /> <translate>Show privileges for donor administrators</translate>
                 </template>
                 <div>
                   <ul>
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -150,11 +150,11 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'DA'"
-            :titles="['New requests', 'Approved']"
+            :titles="[$gettext('New requests'), $gettext('Approved')]"
             v-model="admins"
             :data="adminSelection"
-            filterable
-            filter-placeholder="Type to filter users..." />
+            :filter-placeholder="$gettext('Type to filter users...')"
+            filterable />
 
           <div
             v-if="selectedPersona === 'SDA'"
@@ -162,13 +162,13 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> Show privileges for super donor administrators
+                  <fa icon="info-circle" /> <translate>Show privileges for super donor administrators</translate>
                 </template>
                 <div>
                   <ul>
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -176,18 +176,18 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'SDA'"
-            :titles="['New requests', 'Approved']"
+            :titles="[$gettext('New requests'), $gettext('Approved')]"
             v-model="superAdmins"
             :data="superadminSelection"
-            filterable
-            filter-placeholder="Type to filter users..." />
+            :filter-placeholder="$gettext('Type to filter users...')"
+            filterable />
 
         </el-col>
       </el-row>
     </collapsible-card>
 
     <collapsible-card
-      title="Country specific questionaire"
+      :title="$gettext('Country specific questionaire')"
       class="Questionnaire">
       <dha-questionaire/>
     </collapsible-card>
@@ -196,8 +196,8 @@
       <el-row
         type="flex"
         justify="space-between">
-        <el-button>Dismiss changes</el-button>
-        <el-button @click="saveChanges">Save changes</el-button>
+        <el-button><translate>Dismiss changes</translate></el-button>
+        <el-button @click="saveChanges"><translate>Save changes</translate></el-button>
       </el-row>
     </div>
 

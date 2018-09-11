@@ -11,11 +11,11 @@
         </div>
         <div class="Bottom">
           <span v-show="selected.length === 0">
-            Show all
+            <translate>Show all</translate>
           </span>
           <template v-if="selected.length > 0">
             <span class="Filtered">
-              {{ selected.length }} item(s) selected
+              <translate>{{ selected.length }} item(s) selected</translate>
             </span>
             <el-button
               v-show="selected.lenght > 0"
@@ -24,7 +24,7 @@
               class="DeleteButton"
               @click="$emit('clear')"
             >
-              Clear
+              <translate>Clear</translate>
             </el-button>
           </template>
         </div>

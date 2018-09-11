@@ -4,13 +4,13 @@
       <fa
         icon="star"
         class="Owner" />
-      <span v-show="showLabel"> Team Member</span>
+      <span v-show="showLabel"> <translate>Team Member</translate></span>
     </template>
     <template v-if="showEye">
       <fa
         icon="eye"
         class="Viewer" />
-      <span v-show="showLabel"> Viewer</span>
+      <span v-show="showLabel"> <translate>Viewer</translate></span>
     </template>
   </div>
 </template>

@@ -1,11 +1,11 @@
 <template>
   <el-select
     :value="value"
+    :placeholder="$gettext('Select from list')"
     multiple
     filterable
     popper-class="HealthFocusAreasSelectorDropdown"
     class="HealthFocusAreasSelector"
-    placeholder="Select from list"
     @change="changeHandler">
     <el-option-group
       v-for="group in healthFocusAreas"

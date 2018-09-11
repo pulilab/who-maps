@@ -5,21 +5,21 @@
     <collapsible-card title="Technology overview">
       <el-form-item
         :error="errors.first('implementation_dates')"
-        label="Technology deployment date"
+        :label="$gettext('Technology deployment date')"
       >
         <el-date-picker
           v-validate="rules.implementation_dates"
           v-model="implementation_dates"
+          :placeholder="$gettext('Pick a day')"
           data-vv-name="implementation_dates"
           data-vv-as="Implementation dates"
           class="Date"
           align="left"
-          placeholder="Pick a day"
         />
       </el-form-item>
       <el-form-item
         :error="errors.first('licenses')"
-        label="Under what license is the project governed?">
+        :label="$gettext('Under what license is the project governed?')">
         <license-selector
           v-validate="rules.licenses"
           v-model="licenses"
@@ -29,7 +29,7 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('repository')"
-        label="Code documentation or download link">
+        :label="$gettext('Code documentation or download link')">
         <link-field
           v-validate="rules.repository"
           v-model="repository"
@@ -39,7 +39,7 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('mobile_application')"
-        label="Link to the application">
+        :label="$gettext('Link to the application')">
         <link-field
           v-validate="rules.mobile_application"
           v-model="mobile_application"
@@ -49,7 +49,7 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('wiki')"
-        label="Link to the wiki page">
+        :label="$gettext('Link to the wiki page')">
         <link-field
           v-validate="rules.wiki"
           v-model="wiki"

@@ -1,13 +1,13 @@
 <template>
   <div class="EditProject">
     <div class="PageTitle">
-      <h2>Edit Project Info</h2>
+      <h2><translate>Edit Project Info</translate></h2>
       <p>
-        You are viewing the
-        <span class="DraftLabel">
-          Draft
-        </span>
-        version of the project.
+        <translate>You are viewing the
+          <span class="DraftLabel">
+            Draft
+          </span>
+          version of the project.</translate>
       </p>
     </div>
     <project-form />
