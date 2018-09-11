@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from country.models import Donor
 from project.models import Project, DigitalStrategy, HealthFocusArea, HSCChallenge
-from project.tests import SetupTests
+from project.tests.setup import SetupTests
 
 
 class SearchTests(SetupTests):
