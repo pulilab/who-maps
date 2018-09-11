@@ -16,7 +16,7 @@ from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
-from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo, MapFile, CustomQuestion, \
+from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
     CountryCustomQuestion, DonorCustomQuestion
 from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountrySerializer, \
     SuperAdminCountrySerializer, AdminCountrySerializer, PartnerLogoSerializer, DonorSerializer, \
