@@ -6,9 +6,6 @@
 
 <script>
 export default {
-  async fetch ({store, params}) {
-    await store.dispatch('project/loadProject', params.id);
-  }
 };
 </script>
 

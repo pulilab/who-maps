@@ -19,9 +19,6 @@ import ProjectData from '../../../../components/project/ProjectData';
 export default {
   components: {
     ProjectData
-  },
-  async fetch ({store, params}) {
-    await store.dispatch('project/loadProject', params.id);
   }
 };
 </script>
