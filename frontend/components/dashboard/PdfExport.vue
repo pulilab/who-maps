@@ -4,12 +4,12 @@
 
 <script>
 import moment from 'moment';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   computed: {
     ...mapGetters({
-      projects: 'dashboard/getProjectsList',
+      projects: 'dashboard/getProjectsBucket',
       selectedRows: 'dashboard/getSelectedRows',
       selectAll: 'dashboard/getSelectAll',
       getCountryDetails: 'countries/getCountryDetails',
@@ -101,17 +101,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      loadProjectList: 'dashboard/loadProjectList'
-    }),
     printDate (dateString) {
       const mom = moment(dateString);
       return mom.format('Do MMM, YYYY');
     },
     async printPdf () {
-      if (this.selectAll) {
-        await this.loadProjectList(999999);
-      }
       this.base64Images = require('../../utilities/exportBase64Images.js');
       this.pdfMake = require('pdfmake/build/pdfmake');
       const pdfFonts = require('pdfmake/build/vfs_fonts.js');
