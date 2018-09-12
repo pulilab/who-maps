@@ -40,6 +40,23 @@
             class="PrimaryButton"
             @click="selectAll"><translate>Select All {{ total }} rows</translate></el-button>
         </template>
+
+        <div class="Separator" />
+        <el-button
+          :disabled="selectedRows.length === 0"
+          type="primary"
+          size="small"
+          class="IconLeft"
+          @click="openMailDialog"
+        >
+          <fa icon="envelope"/>
+          <translate v-show="selected === 0">Contact Selected</translate>
+          <translate
+            v-show="selected > 0"
+            :parameters="{selected}">
+            Contact {selected} project(s)
+          </translate>
+        </el-button>
         <pdf-export ref="pdfExport" />
       </el-row>
     </el-col>
@@ -150,7 +167,9 @@ export default {
   methods: {
     ...mapActions({
       setSelectedColumns: 'dashboard/setSelectedColumns',
-      setSelectAll: 'dashboard/setSelectAll'
+      setSelectAll: 'dashboard/setSelectAll',
+      setSendEmailDialogState: 'layout/setSendEmailDialogState',
+      loadProjectsBucket: 'dashboard/loadProjectsBucket'
     }),
     popperOpenHandler () {
       this.selectedColumns = [...this.columns.map(s => ({...s}))];
@@ -159,13 +178,20 @@ export default {
       this.setSelectedColumns(this.selectedColumns.filter(s => s.selected).map(s => s.id));
       this.columnSelectorOpen = false;
     },
-    selectAll () {
+    async selectAll () {
+      await this.loadProjectsBucket();
       this.setSelectAll(true);
     },
     exportRows () {
       if (this.exportType === 'PDF') {
         this.$refs.pdfExport.printPdf();
       }
+    },
+    async openMailDialog () {
+      if (this.allSelected) {
+        await this.loadProjectsBucket();
+      }
+      this.setSendEmailDialogState(true);
     }
   }
 };
