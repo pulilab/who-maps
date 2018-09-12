@@ -3,14 +3,16 @@
     :value="org"
     :allow-create="true"
     :placeholder="$gettext('Type and select a name')"
+    :remote-method="filterList"
     filterable
+    remote
     reserve-keyword
     class="OrganisationSelector"
     popper-class="OrganisationSelectorDropdown"
     @change="changeHandler"
   >
     <el-option
-      v-for="organisation in organisations"
+      v-for="organisation in optionsAndValues"
       :key="organisation.id"
       :label="organisation.name"
       :value="organisation.id"
@@ -20,12 +22,14 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import LightSelectMixin from '../mixins/LightSelectMixin.js';
 import OrganisationItem from '../common/OrganisationItem';
 
 export default {
   components: {
     OrganisationItem
   },
+  mixins: [LightSelectMixin],
   model: {
     prop: 'value',
     event: 'change'
@@ -38,7 +42,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      organisations: 'system/getOrganisations'
+      items: 'system/getOrganisations'
     }),
     org () {
       if (isNaN(this.value)) {
