@@ -67,6 +67,14 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
     question_id = serializers.IntegerField(required=True)
     answer = serializers.CharField(max_length=2048)
     draft = serializers.BooleanField(required=True)
+
+    def create(self, validated_data) -> Project:
+        instance = self.context['project']
+        custom_answers = instance.data.get('country_custom_answers', {})
+        custom_answers[validated_data['question_id']] = validated_data['answer']
+        instance.data['country_custom_answers'] = custom_answers
+        instance.save()
+        return instance
 INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
                     (1, 'Yes, they are contributing in-kind people or time'),
                     (2, 'Yes, there is a financial contribution through MOH budget')]
