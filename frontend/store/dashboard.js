@@ -122,16 +122,20 @@ export const actions = {
     const data = await dispatch('loadProjects', {type: 'list'});
     commit('SET_PROJECT_LIST', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
+    commit('SET_SELECT_ALL', false);
+    commit('SET_SELECTED_ROWS', []);
   },
   async loadProjectsMap ({commit, dispatch}) {
     const data = await dispatch('loadProjects', {type: 'map', page_size: 999999});
     commit('SET_PROJECT_MAP', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
   },
-  async loadProjectsBucket ({commit, dispatch}) {
-    const data = await dispatch('loadProjects', {type: 'list', page_size: 999999});
-    commit('SET_PROJECT_BUCKET', data.results.projects);
-    commit('SET_SEARCH_STATUS', data);
+  async loadProjectsBucket ({commit, dispatch, state}) {
+    if (state.projectsBucket.length === 0) {
+      const data = await dispatch('loadProjects', {type: 'list', page_size: 999999});
+      commit('SET_PROJECT_BUCKET', data.results.projects);
+      commit('SET_SEARCH_STATUS', data);
+    }
   },
   setSearchOptions ({commit}, options) {
     commit('SET_SEARCH_OPTIONS', options);
