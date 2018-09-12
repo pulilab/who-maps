@@ -222,3 +222,14 @@ class DonorCustomQuestionViewSet(SetOrderToMixin, mixins.CreateModelMixin, mixin
 
 class CountryCustomAnswerViewSet(TeamTokenAuthMixin, viewsets.ViewSet):
 
+    def save_answers(self, request, country_id, project_id):
+        project = None
+        errors = {}
+
+        if not Country.objects.filter(id=country_id).exists():
+            errors['country_id'] = ['Wrong country_id']
+        try:
+            project = Project.objects.get(id=project_id)
+        except Project.DoesNotExist:
+            errors['project_id'] = ['Wrong project_id']
+
