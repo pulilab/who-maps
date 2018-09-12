@@ -79,7 +79,7 @@ export const getters = {
   getWiki: state => state.wiki,
   getInteroperabilityLinks: state => state.interoperability_links,
   getInteroperabilityStandards: state => state.interoperability_standards,
-  getPublished: state => state.published,
+  getPublished: state => ({...state.published, team: state.team, viewers: state.viewers}),
   getLoading: state => state.loading,
   getOriginal: state => state.original
 };
