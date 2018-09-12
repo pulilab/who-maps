@@ -63,6 +63,10 @@ class DraftPlatformSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
 
 
+class CountryCustomAnswerSerializer(serializers.Serializer):
+    question_id = serializers.IntegerField(required=True)
+    answer = serializers.CharField(max_length=2048)
+    draft = serializers.BooleanField(required=True)
 INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
                     (1, 'Yes, they are contributing in-kind people or time'),
                     (2, 'Yes, there is a financial contribution through MOH budget')]
