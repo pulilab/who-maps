@@ -49,6 +49,7 @@ export const state = () => ({
   ],
   selectedColumns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   projectsList: [],
+  projectsBucket: [],
   selectedDHI: [],
   selectedHFA: [],
   selectedHSC: [],
@@ -72,6 +73,7 @@ export const state = () => ({
 export const getters = {
   ...gettersGenerator(),
   getProjectsList: state => [...state.projectsList.map(r => ({...r}))],
+  getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => ({...r}))] : getters.getProjectsList,
   getAvailableColumns: state => [...state.columns.map(c => ({...c, selected: state.selectedColumns.includes(c.id)}))],
   getSelectedColumns: state => state.selectedColumns,
   getSelectedDHI: state => state.selectedDHI,
@@ -116,14 +118,19 @@ export const getters = {
 
 export const actions = {
   ...actionsGenerator(),
-  async loadProjectList ({commit, dispatch}, page_size) {
-    const data = await dispatch('loadProjects', {type: 'list', page_size});
+  async loadProjectList ({commit, dispatch}) {
+    const data = await dispatch('loadProjects', {type: 'list'});
     commit('SET_PROJECT_LIST', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
   },
   async loadProjectsMap ({commit, dispatch}) {
     const data = await dispatch('loadProjects', {type: 'map', page_size: 999999});
     commit('SET_PROJECT_MAP', data.results.projects);
+    commit('SET_SEARCH_STATUS', data);
+  },
+  async loadProjectsBucket ({commit, dispatch}) {
+    const data = await dispatch('loadProjects', {type: 'list', page_size: 999999});
+    commit('SET_PROJECT_BUCKET', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
   },
   setSearchOptions ({commit}, options) {
@@ -203,6 +210,9 @@ export const mutations = {
   ...mutationsGenerator(),
   SET_PROJECT_LIST: (state, projects) => {
     state.projectsList = projects;
+  },
+  SET_PROJECT_BUCKET: (state, projects) => {
+    state.projectsBucket = projects;
   },
   SET_SEARCH_OPTIONS: (state, options) => {
     state.pageSize = options.page_size ? +options.page_size : 10;
