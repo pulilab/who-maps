@@ -233,3 +233,5 @@ class CountryCustomAnswerViewSet(TeamTokenAuthMixin, viewsets.ViewSet):
         except Project.DoesNotExist:
             errors['project_id'] = ['Wrong project_id']
 
+        self.check_object_permissions(self.request, project)
+
