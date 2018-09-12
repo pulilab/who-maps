@@ -200,7 +200,7 @@ export default {
     selectAll: {
       immediate: true,
       handler (value) {
-        if (value) {
+        if (value && this.$refs.mainTable) {
           this.$refs.mainTable.clearSelection();
           this.$refs.mainTable.toggleAllSelection();
         }
@@ -227,6 +227,10 @@ export default {
     setTimeout(() => {
       this.fixTableHeight();
       this.fixSorting(this.$route.query.ordering);
+      if (this.selectAll) {
+        this.$refs.mainTable.clearSelection();
+        this.$refs.mainTable.toggleAllSelection();
+      }
     }, 500);
   },
   methods: {
