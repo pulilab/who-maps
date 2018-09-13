@@ -43,8 +43,6 @@
         </el-col>
         <el-col :span="6">
           <project-navigation
-            :draft="isDraft"
-            :new-project="isNewProject"
             @saveDraft="doSaveDraft"
             @discardDraft="doDiscardDraft"
             @publishProject="doPublishProject"

@@ -174,10 +174,7 @@
         </collapsible-card>
       </el-col>
       <el-col :span="6">
-        <project-navigation
-          :readonly="readOnly"
-          :published="!showDraft && !readOnly"
-        />
+        <project-navigation/>
       </el-col>
     </el-row>
   </div>
@@ -224,30 +221,20 @@ export default {
     InteroperabilityLinksList,
     DonorsList
   },
-  props: {
-    showDraft: {
-      type: Boolean,
-      default: null
-    }
-  },
   computed: {
     ...mapGetters({
       draft: 'project/getProjectData',
-      published: 'project/getPublished',
-      user: 'user/getProfile'
+      published: 'project/getPublished'
     }),
-    project () {
-      return this.showDraft ? this.draft : this.published;
+    route () {
+      return this.$route.name.split('__')[0];
     },
-    readOnly () {
-      if (this.user) {
-        const all = [...this.user.member, ...this.user.viewer];
-        return !all.includes(+this.$route.params.id);
-      }
-      return true;
+    isDraft () {
+      return this.route === 'organisation-projects-id';
+    },
+    project () {
+      return this.isDraft ? this.draft : this.published;
     }
-  },
-  methods: {
   }
 
 };

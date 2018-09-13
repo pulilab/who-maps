@@ -5,7 +5,7 @@
   >
     <el-card :body-style="{ padding: '0px' }">
       <div
-        v-if="!readonly && !newProject"
+        v-if="!isNewProject"
         class="SwitchProjectStatus"
       >
         <el-row
@@ -16,15 +16,15 @@
           <div class="SwitchLabel">Switch view:</div>
           <el-button-group class="SwitchButtons">
             <el-button
-              :class="['DraftButton', {'Active': draft}]"
-              :disabled="draft"
+              :class="['DraftButton', {'Active': isDraft}]"
+              :disabled="isDraft || anon"
               @click="goToDraft"
             >
               <translate>Draft</translate>
             </el-button>
             <el-button
-              :class="['PublishedButton', {'Active': published}]"
-              :disabled="published"
+              :class="['PublishedButton', {'Active': isPublished}]"
+              :disabled="isPublished"
               @click="goToPublished"
             >
               <translate>Published</translate>
@@ -105,11 +105,11 @@
       </div>
 
       <div
-        v-if="!readonly"
+        v-if="!isTeam"
         class="NavigationActions"
       >
         <el-button
-          v-if="draft"
+          v-if="isDraft"
           :disabled="!!loading"
           type="primary"
           size="medium"
@@ -123,10 +123,10 @@
         </el-button>
 
         <el-button
-          v-if="newProject || draft"
-          :type="newProject ? 'primary' : 'text'"
-          :size="newProject ? 'medium' : ''"
-          :class="['SaveDraft', {'NewProject': newProject, 'Draft':draft }]"
+          v-if="isNewProject || isDraft"
+          :type="isNewProject ? 'primary' : 'text'"
+          :size="isNewProject ? 'medium' : ''"
+          :class="['SaveDraft', {'NewProject': isNewProject, 'Draft': isDraft }]"
           :disabled="!!loading"
           @click="$emit('saveDraft')"
         >
@@ -138,7 +138,7 @@
         </el-button>
 
         <el-button
-          v-if="draft"
+          v-if="isDraft"
           :disabled="!!loading"
           type="text"
           class="DiscardDraft DeleteButton"
@@ -152,7 +152,7 @@
         </el-button>
 
         <el-button
-          v-if="published"
+          v-if="isPublished"
           type="text"
           class="GoToDashboard"
         >
@@ -160,7 +160,7 @@
         </el-button>
 
         <el-button
-          v-if="newProject"
+          v-if="isNewProject"
           type="text"
           class="CancelButton WithHint"
         >
@@ -180,31 +180,38 @@ export default {
   directives: {
     'scroll-class': VueScrollClass
   },
-  props: {
-    readonly: {
-      type: Boolean,
-      default: false
-    },
-    newProject: {
-      type: Boolean,
-      default: false
-    },
-    draft: {
-      type: Boolean,
-      default: false
-    },
-    published: {
-      type: Boolean,
-      default: false
-    }
-  },
   computed: {
     ...mapGetters({
-      loading: 'project/getLoading'
+      loading: 'project/getLoading',
+      user: 'user/getProfile'
     }),
     active () {
       const hash = this.$route.hash;
       return hash ? hash.replace('#', '') : 'general';
+    },
+    route () {
+      return this.$route.name.split('__')[0];
+    },
+    isNewProject () {
+      return this.route === 'organisation-projects-create';
+    },
+    isPublished () {
+      return this.route === 'organisation-projects-id-published';
+    },
+    isDraft () {
+      return this.route === 'organisation-projects-id' || this.route === 'organisation-projects-id-edit';
+    },
+    anon () {
+      if (this.user) {
+        return ![...this.user.member, ...this.user.viewer].includes(+this.$route.params.id);
+      }
+      return true;
+    },
+    isTeam () {
+      if (this.user && this.route !== 'organisation-projects-id') {
+        return !this.user.member.includes(+this.$route.params.id);
+      }
+      return true;
     }
   },
   methods: {
