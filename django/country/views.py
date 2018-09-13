@@ -241,7 +241,8 @@ class CountryCustomAnswerViewSet(TeamTokenAuthMixin, viewsets.ViewSet):
         self.check_object_permissions(self.request, project)
 
         if project:
-            answers = CountryCustomAnswerSerializer(data=request.data, many=True, context=dict(project=project))
+            answers = CountryCustomAnswerSerializer(data=request.data, many=True,
+                                                    context=dict(project=project, country=country))
 
             if answers.is_valid():
                 answers.save()
