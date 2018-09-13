@@ -244,8 +244,6 @@ class CountryCustomAnswerViewSet(TeamTokenAuthMixin, viewsets.ViewSet):
             answers = CountryCustomAnswerSerializer(data=request.data, many=True,
                                                     context=dict(project=project, country=country))
 
-            if answers.is_valid():
+            if answers.is_valid(raise_exception=True):
                 answers.save()
                 return Response(answers.validated_data, status=status.HTTP_200_OK)
-            else:
-                errors.update(answers.errors)
