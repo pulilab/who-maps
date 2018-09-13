@@ -223,15 +223,20 @@ class DonorCustomQuestionViewSet(SetOrderToMixin, mixins.CreateModelMixin, mixin
 class CountryCustomAnswerViewSet(TeamTokenAuthMixin, viewsets.ViewSet):
 
     def save_answers(self, request, country_id, project_id):
-        project = None
+        project = country = None
         errors = {}
 
-        if not Country.objects.filter(id=country_id).exists():
+        try:
+            country = Country.objects.get(id=country_id)
+        except Country.DoesNotExist:
             errors['country_id'] = ['Wrong country_id']
         try:
             project = Project.objects.get(id=project_id)
         except Project.DoesNotExist:
             errors['project_id'] = ['Wrong project_id']
+
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
         self.check_object_permissions(self.request, project)
 
