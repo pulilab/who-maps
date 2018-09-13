@@ -25,8 +25,8 @@ class AssessmentModuleController {
   onInit () {
     this.isPublic = false;
     this.profile = window.$nuxt.$store.getters['user/getProfile'];
-    const project = window.$nuxt.$store.getters['projects/getCurrentProject'];
-    this.projectData = project.isPublished ? project.published : project.draft;
+    this.project = window.$nuxt.$store.getters['projects/getCurrentProject'];
+    this.projectData = this.project.isPublished ? this.project.published : this.project.draft;
     this.structure = window.$nuxt.$store.getters['projects/getStructure'];
     this.toolkitVersion = window.$nuxt.$store.getters['projects/getToolkitVersions'];
     this.coverageVersion = window.$nuxt.$store.getters['projects/getCoverageVersions'];
@@ -131,15 +131,17 @@ class AssessmentModuleController {
   }
 
   handleChangeDomain (axisId, domainId) {
-    const {id} = window.$nuxt.$route.params;
-    const path = window.$nuxt.$root.localePath({name: 'index-projects-id-toolkit', params: {id}, query: {axisId, domainId}});
-    window.$nuxt.$router.push(path);
+    if (this.project.isMember || this.project.isViewer) {
+      const path = window.$nuxt.$root.localePath({name: 'organisation-projects-id-toolkit', params: window.$nuxt.$route.params, query: {axisId, domainId}});
+      window.$nuxt.$router.push(path);
+    }
   }
 
   handleChangeAxis (axisId) {
-    const {id} = window.$nuxt.$route.params;
-    const path = window.$nuxt.$root.localePath({name: 'index-projects-id-toolkit', params: {id}, query: {axisId, domainId: 0}});
-    window.$nuxt.$router.push(path);
+    if (this.project.isMember || this.project.isViewer) {
+      const path = window.$nuxt.$root.localePath({name: 'organisation-projects-id-toolkit', params: window.$nuxt.$route.params, query: {axisId, domainId: 0}});
+      window.$nuxt.$router.push(path);
+    }
   }
 
   static factory () {
