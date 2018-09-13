@@ -71,11 +71,13 @@
         </nuxt-link>
         <nuxt-link
           v-if="isTeam"
+          :class="{'Active': isUpdateScoreActive}"
           :to="localePath({name: 'organisation-projects-id-toolkit', params: {id, organisation: $route.params.organisation}})">
           <translate>Update score</translate>
         </nuxt-link>
         <nuxt-link
           v-if="isTeam"
+          :class="{'Active': isScorecardActive}"
           :to="localePath({name: 'organisation-projects-id-toolkit-scorecard', params: {id, organisation: $route.params.organisation}})">
           <translate>Summary score</translate>
         </nuxt-link>
@@ -113,6 +115,12 @@ export default {
       return this.route === 'organisation-projects-id-published' ||
       this.route === 'organisation-projects-id-edit' ||
       this.route === 'organisation-projects-id';
+    },
+    isUpdateScoreActive () {
+      return this.route === 'organisation-projects-id-toolkit';
+    },
+    isScorecardActive () {
+      return this.route === 'organisation-projects-id-toolkit-scorecard';
     },
     isTeam () {
       if (this.user) {
