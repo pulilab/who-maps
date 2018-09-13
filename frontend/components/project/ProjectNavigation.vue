@@ -105,7 +105,7 @@
       </div>
 
       <div
-        v-if="!isTeam"
+        v-if="isTeam"
         class="NavigationActions"
       >
         <el-button
@@ -208,10 +208,10 @@ export default {
       return true;
     },
     isTeam () {
-      if (this.user && this.route !== 'organisation-projects-id') {
-        return !this.user.member.includes(+this.$route.params.id);
+      if (this.user) {
+        return this.user.member.includes(+this.$route.params.id);
       }
-      return true;
+      return false;
     }
   },
   methods: {
