@@ -44,11 +44,17 @@ class MapsToolkitController {
     this.unsubscribe();
   }
 
-  handleChangeAxis (id) {
-    this.state.go(this.state.current.name, { 'axisId': id, 'domainId': 0 });
+  handleChangeAxis (axisId) {
+    const path = window.$nuxt.$root.localePath({name: 'organisation-projects-id-toolkit', params: window.$nuxt.$route.params, query: {axisId, domainId: 0}});
+    window.$nuxt.$router.push(path, () => {
+      this.scope.$digest();
+    });
   }
   handleChangeDomain (axisId, domainId) {
-    this.state.go(this.state.current.name, { axisId, domainId });
+    const path = window.$nuxt.$root.localePath({name: 'organisation-projects-id-toolkit', params: window.$nuxt.$route.params, query: {axisId, domainId}});
+    window.$nuxt.$router.push(path, () => {
+      this.scope.$digest();
+    });
   }
 
   importHtmlTemplates () {
@@ -148,7 +154,10 @@ class MapsToolkitController {
 
   goToScorecard () {
     const axisId = this.axisId;
-    this.state.go('scorecard', { axisId });
+    const path = window.$nuxt.$root.localePath({name: 'organisation-projects-id-toolkit-scorecard', params: window.$nuxt.$route.params, query: {axisId}});
+    window.$nuxt.$router.push(path, () => {
+      this.scope.$digest();
+    });
   }
 
   static mapsControllerFactory () {
