@@ -2,17 +2,18 @@
   <div class="MyProjects">
     <div class="PageTitle">
       <h2><translate>My Projects</translate></h2>
-      <p><translate>
-        List of all the projects you are a
+      <p>
+        <translate>List of all the projects you are a</translate>
         <fa
           icon="star"
           class="Owner" />
-        <b>Member</b> or
+        <b><translate>Member</translate></b>
+        <translate>or</translate>
         <fa
           icon="eye"
           class="Viewer" />
-        <b>Viewer</b> of.
-      </translate></p>
+        <b><translate>Viewer</translate></b> <translate>of.</translate>
+      </p>
     </div>
     <user-project-list />
   </div>

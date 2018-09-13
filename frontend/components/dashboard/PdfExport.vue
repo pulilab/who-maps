@@ -48,7 +48,7 @@ export default {
                     margin: [5, 0, 0, 0]
                   },
                   {
-                    text: this.$gettext(`List exported on ${this.exportDate}`),
+                    text: this.$gettext('List exported on ') + this.exportDate,
                     fillColor: '#EEEEEE',
                     color: '#000000',
                     style: 'headerSecondRowRight',
@@ -130,9 +130,9 @@ export default {
                   text: `${index + 1}. ${project.name || ''}`,
                   fillColor: '#EEEEEE',
                   style: 'tableHeader',
-                  colSpan: this.isAllCountry ? 4 : 5
+                  colSpan: 4
                 }, '', '', '',
-                { text: this.$gettext(`UUID: ${project.id}`), style: 'subHeader' },
+                { text: this.$gettext('UUID:') + project.id, style: 'subHeader' },
                 country_name
               ],
               [

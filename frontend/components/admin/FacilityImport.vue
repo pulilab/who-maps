@@ -13,7 +13,7 @@
 
     <template v-if="dataReady">
       <div class="FacilityList">
-        <h5><translate>Imported Facilities ({{ simpleFacilities.length }}):</translate></h5>
+        <h5><translate :parameters="{num: simpleFacilities.length}">Imported Facilities ({num}):</translate></h5>
         <ul
           v-for="facility in simpleFacilities"
           :key="facility"

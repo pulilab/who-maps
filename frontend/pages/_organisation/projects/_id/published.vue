@@ -3,11 +3,11 @@
     <div class="PageTitle">
       <h2><translate>View Project Info</translate></h2>
       <p>
-        <translate>You are viewing the
-          <span class="PublishedLabel">
-            Published
-          </span>
-          version of the project.</translate>
+        <translate>You are viewing the</translate>
+        <span class="PublishedLabel">
+          <translate>Published</translate>
+        </span>
+        <translate>version of the project.</translate>
       </p>
     </div>
     <project-data />

@@ -2,10 +2,9 @@
   <div class="CreateProject">
     <div class="PageTitle">
       <h2><translate>Add New Digital Health Project</translate></h2>
-      <p><translate>
-        Please complete the following information before beginning the self-assessment process.
-        These questions may be used as a baseline document recording the current features of your project and your goals for the process of scaling up.
-      </translate></p>
+      <p>
+        <translate>Please complete the following information before beginning the self-assessment process. These questions may be used as a baseline document recording the current features of your project and your goals for the process of scaling up.</translate>
+      </p>
     </div>
     <project-form />
   </div>

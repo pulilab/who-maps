@@ -18,11 +18,11 @@
           <sub-level-item
             :id="activeSubLevel"
           />
-          <span class="SubLevelCounter"><translate>&nbsp; {{ currentSubLevelProjects.length }} project(s)</translate></span>
+          <span class="SubLevelCounter"><translate :parameters="{count: currentSubLevelProjects.length }">&nbsp; {count} project(s)</translate></span>
         </div>
         <div v-if="showNational">
           <div class="SubLevelItem"><translate>National</translate></div>
-          <span class="SubLevelCounter"><translate>&nbsp; {{ nationalProjects.length }} project(s)</translate></span>
+          <span class="SubLevelCounter"><translate :parameters="{count: nationalProjects.length} ">&nbsp; {count} project(s)</translate></span>
         </div>
       </el-row>
       <!-- -->

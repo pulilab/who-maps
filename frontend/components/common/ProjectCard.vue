@@ -50,7 +50,7 @@
               <fa
                 icon="search"
                 size="xs" />
-              <span><translate>Found in "{{ found }}"</translate></span>
+              <span><translate :parameters="{found}">Found in "{found}"</translate></span>
             </el-col>
           </el-row>
         </el-col>

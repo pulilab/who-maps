@@ -7,10 +7,9 @@
       <el-col>
         <h2><translate>My Projects</translate></h2>
         <h6>
-          <translate>
-            Here you can find a list of the last 3 projects<br>
-            which have been updated recently:
-          </translate>
+          <translate>Here you can find a list of the last 3 projects</translate>
+          <br>
+          <translate>which have been updated recently:</translate>
         </h6>
       </el-col>
     </el-row>

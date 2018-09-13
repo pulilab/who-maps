@@ -7,10 +7,9 @@
       <el-col>
         <h2>Sign up</h2>
         <h6>
-          <translate>
-            Whether you are an implementer, government, or financial investor,<br>
-            or technologist, sign up below.
-          </translate>
+          <translate>Whether you are an implementer, government, or financial investor,</translate>
+          <br>
+          <translate>or technologist, sign up below.</translate>
         </h6>
       </el-col>
     </el-row>

@@ -21,10 +21,9 @@
     <el-row type="flex">
       <el-col>
         <p>
-          <translate>
-            to include your project in the inventory<br>
-            and begin tracking your performance
-          </translate>
+          <translate>to include your project in the inventory</translate>
+          <br>
+          <translate>and begin tracking your performance</translate>
         </p>
       </el-col>
     </el-row>

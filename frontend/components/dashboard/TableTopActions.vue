@@ -38,7 +38,7 @@
             type="text"
             size="small"
             class="PrimaryButton"
-            @click="selectAll"><translate>Select All {{ total }} rows</translate></el-button>
+            @click="selectAll"><translate :parameters="{total}">Select All {total} rows</translate></el-button>
         </template>
 
         <div class="Separator" />

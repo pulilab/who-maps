@@ -22,7 +22,7 @@
             icon="arrow-alt-circle-right"
             size="xs" />
         </span>
-        <span><translate>... {{ excluded }} more</translate></span>
+        <span><translate :parameters="{excluded}">... {excluded} more</translate></span>
       </li>
     </ul>
   </div>

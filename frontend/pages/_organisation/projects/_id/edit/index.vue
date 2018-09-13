@@ -3,11 +3,11 @@
     <div class="PageTitle">
       <h2><translate>Edit Project Info</translate></h2>
       <p>
-        <translate>You are viewing the
-          <span class="DraftLabel">
-            Draft
-          </span>
-          version of the project.</translate>
+        <translate>You are viewing the</translate>
+        <span class="DraftLabel">
+          <translate>Draft></translate>
+        </span>
+        <translate>version of the project.</translate>
       </p>
     </div>
     <project-form />
