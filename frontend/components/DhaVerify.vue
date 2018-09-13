@@ -1,0 +1,50 @@
+<template>
+  <div class="LoginComponent">
+    <el-card :body-style="{ padding: '0px' }">
+      <div slot="header">
+        <translate>Email confirmation</translate>
+      </div>
+
+      <p class="Instruction">
+        <translate>Congratulations your email address is verified, you can now </translate>
+        <span @click="toLogin">
+          <translate>login</translate>
+        </span>
+        <translate>and use the system</translate>
+      </p>
+    </el-card>
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    toLogin () {
+      this.$router.push(this.localePath({name: 'organisation-login', params: this.$route.params}));
+    }
+  }
+};
+</script>
+
+<style lang="less">
+  @import "../assets/style/variables.less";
+  @import "../assets/style/mixins.less";
+
+  .LoginComponent {
+    width: @cardSizeSmall;
+    margin: 80px auto;
+
+    .Instruction {
+      font-size: 16px;
+      line-height: 20px;
+      text-align: center;
+      color: #6D6D6D;
+      padding: 0 80px;
+
+      span {
+        cursor: pointer;
+        color: @colorBrandPrimary;
+      }
+    }
+  }
+</style>

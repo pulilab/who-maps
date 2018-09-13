@@ -2,17 +2,17 @@
   <div
     id="implementation"
     class="ImplementationOverview">
-    <collapsible-card title="Implementation overview">
+    <collapsible-card :title="$gettext('Implementation overview')">
 
       <el-form-item
         :error="errors.first('platforms')"
-        label="Add one or more Software and related Digital Health Interventions (DHI):"
+        :label="$gettext('Add one or more Software and related Digital Health Interventions (DHI):')"
       >
         <el-form-item
           v-for="(platform, index) in platforms"
           :key="platform"
           :error="errors.first('id', 'platform_' + index)"
-          label="Software"
+          :label="$gettext('Software')"
           class="ItemIndent"
         >
           <el-col :span="16">
@@ -28,7 +28,7 @@
             <el-form-item
               v-show="platform"
               :error="errors.first('strategies', 'platform_' + index)"
-              label="Digital Health Interventions"
+              :label="$gettext('Digital Health Interventions')"
               class="DigitalHealthIntervention"
             >
               <digital-health-interventions-selector
@@ -53,7 +53,7 @@
 
       <el-form-item
         :error="errors.first('health_focus_areas')"
-        label="Health focus area(s) - select all that apply:">
+        :label="$gettext('Health focus area(s) - select all that apply:')">
         <health-focus-areas-selector
           v-validate="rules.health_focus_areas"
           v-model="health_focus_areas"
@@ -65,7 +65,7 @@
 
       <el-form-item
         :error="errors.first('hsc_challenges')"
-        label="What are the Health System Challenges (HSC) your project addresses?">
+        :label="$gettext('What are the Health System Challenges (HSC) your project addresses?')">
         <health-system-challenges-selector
           v-validate="rules.hsc_challenges"
           v-model="hsc_challenges"
@@ -77,7 +77,7 @@
 
       <el-form-item
         :error="errors.first('his_bucket')"
-        label="What part(s) of the Health Information System (HIS) does this project support?"
+        :label="$gettext('What part(s) of the Health Information System (HIS) does this project support?')"
       >
         <his-bucket-selector
           v-validate="rules.his_bucket"
@@ -90,12 +90,12 @@
 
       <div class="CoverageArea">
         <el-form-item
-          label="What kind of coverage does your project have?"
+          :label="$gettext('What kind of coverage does your project have?')"
           prop="coverageType"
         >
           <el-radio-group v-model="coverageType">
-            <el-radio :label="1">Sub-national</el-radio>
-            <el-radio :label="2">National</el-radio>
+            <el-radio :label="1"><translate>Sub-national</translate></el-radio>
+            <el-radio :label="2"><translate>National</translate></el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -112,7 +112,7 @@
         >
           <div class="CoverageSubtitle">
             <fa icon="flag" />
-            National level deployment
+            <translate>National level deployment</translate>
           </div>
           <coverage-fieldset
             ref="nationalLevelDeployment"
@@ -128,20 +128,20 @@
       </div>
       <el-form-item
         :error="errors.first('government_investor')"
-        label="Has the government financially invested in the project?">
+        :label="$gettext('Has the government financially invested in the project?')">
         <el-radio-group
           v-validate="rules.government_investor"
           v-model="government_investor"
           data-vv-name="government_investor"
           data-vv-as="Government investor"
           class="OnePerRow">
-          <el-radio :label="0">No, they have not yet contributed</el-radio>
-          <el-radio :label="1">Yes, they are contributing in-kind people or time</el-radio>
-          <el-radio :label="2">Yes, there is a financial contribution through MOH budget</el-radio>
+          <el-radio :label="0"><translate>No, they have not yet contributed</translate></el-radio>
+          <el-radio :label="1"><translate>Yes, they are contributing in-kind people or time</translate></el-radio>
+          <el-radio :label="2"><translate>Yes, there is a financial contribution through MOH budget</translate></el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item
-        label="Implementing partners"
+        :label="$gettext('Implementing partners')"
         class="ImplementingPartners">
         <el-row
           v-for="(partner, index) in implementing_partners"
@@ -171,7 +171,7 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('donors')"
-        label="Donor(s) supporting the project (Add one at least)"
+        :label="$gettext('Donor(s) supporting the project (Add one at least)')"
       >
         <donor-selector
           v-validate="rules.donors"
@@ -293,7 +293,7 @@ export default {
           ? this.$refs.nationalLevelDeployment.validate()
           : this.$refs.subNationalLevelDeployment.validate()
       ]);
-      console.log('Implementation overview validaitons', validations);
+      console.log('Implementation overview validations', validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }

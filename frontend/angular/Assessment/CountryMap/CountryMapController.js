@@ -160,8 +160,8 @@ class CountryMapController {
       const path = d3.geo.path().projection(projection);
       geoData.features.forEach((feature) => {
         try {
-          const mapName = feature.properties.name || feature.properties['en:name'] || feature.properties['wof:name'];
-          const districtsName = countryMapData.districts.find(dn => dn.id === mapName);
+          const mapName = feature.properties.id || feature.properties.name || feature.properties['en:name'] || feature.properties['wof:name'];
+          const districtsName = countryMapData.districts.find(dn => dn.id === mapName || dn.name === feature.properties.name);
           this.svgLib[districtsName.id] = this.mapDOMElement
             .append('path')
             .datum({
@@ -182,6 +182,8 @@ class CountryMapController {
               });
             });
         } catch (e) {
+          console.log(feature.properties);
+          console.log(countryMapData);
           this.showMapErrorDialog = true;
           console.error(e);
         }

@@ -1,16 +1,18 @@
 <template>
   <el-select
     :value="value"
+    :placeholder="$gettext('Type and select a name')"
+    :remote-method="filterList"
     multiple
     filterable
     reserve-keyword
+    remote
     class="TeamSelector"
     popper-class="TeamSelectorDropdown"
-    placeholder="Type and select a name"
     @change="changeHandler"
   >
     <el-option
-      v-for="person in profiles"
+      v-for="person in optionsAndValues"
       :key="person.id"
       :label="person.name"
       :value="person.id"
@@ -25,12 +27,15 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import LightSelectMixin from '../mixins/LightSelectMixin.js';
+
 import OrganisationItem from '../common/OrganisationItem';
 
 export default {
   components: {
     OrganisationItem
   },
+  mixins: [LightSelectMixin],
   $_veeValidate: {
     value () {
       return this.value;
@@ -49,7 +54,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      profiles: 'system/getUserProfiles'
+      items: 'system/getUserProfiles'
     })
   },
   methods: {

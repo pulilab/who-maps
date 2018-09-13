@@ -42,7 +42,7 @@ export const getters = {
     return levels;
   },
   getSubLevelsPolyCenters (state) {
-    return [ ...state.subLevelsPolyCenters.map(pc => ({name: pc.name, latlng: {...pc.latlng}})) ];
+    return [ ...state.subLevelsPolyCenters.filter(p => p.latlng).map(pc => ({name: pc.name, latlng: {...pc.latlng}})) ];
   },
   getFirstSubLevelMap (state, getters) {
     const features = getters.getSubLevelFeatures;
@@ -124,6 +124,8 @@ export const actions = {
       const { data } = await this.$axios.get(proper);
       Object.freeze(data);
       commit('UPDATE_GEO_JSON', data);
+    } else {
+      commit('RESET_MAP_STATE');
     }
   },
   setCountryCenter ({commit}, value) {
@@ -131,15 +133,19 @@ export const actions = {
     commit('SET_COUNTRY_CENTER', value);
   },
   setFirstSubLevel ({commit}, value) {
+    value = value || null;
     commit('SET_FIRST_SUB_LEVEL', value);
   },
   setFirstSubLevelType ({commit}, value) {
+    value = value || null;
     commit('SET_FIRST_SUB_LEVEL_TYPE', value);
   },
   setSecondSubLevel ({commit}, value) {
+    value = value || null;
     commit('SET_SECOND_SUB_LEVEL', value);
   },
   setSecondSubLevelType ({commit}, value) {
+    value = value || null;
     commit('SET_SECOND_SUB_LEVEL_TYPE', value);
   },
   parseSubLevelsPolyCenters ({dispatch}, value) {
@@ -147,6 +153,7 @@ export const actions = {
     dispatch('setSubLevelsPolyCenters', polyCenters);
   },
   setSubLevelsPolyCenters ({commit}, value) {
+    value = value || [];
     commit('SET_SUB_LEVELS_POLYCENTERS', value);
   },
   updateSubLevelPolyCenter ({commit, getters}, {name, latlng}) {
@@ -155,6 +162,7 @@ export const actions = {
     commit('UPDATE_SUB_LEVELS_POLYCENTERS', { index, data: { name, latlng } });
   },
   setFacilities ({commit}, list) {
+    list = list || [];
     commit('SET_FACILITIES', list);
   },
   async saveMapData ({getters, rootGetters}) {
@@ -230,5 +238,15 @@ export const mutations = {
   },
   UPDATE_SUB_LEVELS_POLYCENTERS: (state, {index, data}) => {
     state.subLevelsPolyCenters.splice(index, 1, data);
+  },
+  RESET_MAP_STATE: state => {
+    state.geoJson = null;
+    state.countryCenter = null;
+    state.firstSubLevel = '';
+    state.firstSubLevelType = null;
+    state.secondSubLevel = '';
+    state.secondSubLevelType = null;
+    state.facilities = [];
+    state.subLevelsPolyCenters = [];
   }
 };

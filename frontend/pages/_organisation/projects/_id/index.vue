@@ -1,13 +1,13 @@
 <template>
   <div class="ProjectDraftView">
     <div class="PageTitle">
-      <h2>View Project Info</h2>
+      <h2><translate>View Project Info</translate></h2>
       <p>
-        You are viewing the
+        <translate>You are viewing the</translate>
         <span class="DraftLabel">
-          Draft
+          <translate>Draft</translate>
         </span>
-        version of the project.
+        <translate>version of the project.</translate>
       </p>
     </div>
     <project-data show-draft />
@@ -19,9 +19,6 @@ import ProjectData from '../../../../components/project/ProjectData';
 export default {
   components: {
     ProjectData
-  },
-  async fetch ({store, params}) {
-    await store.dispatch('project/loadProject', params.id);
   }
 };
 </script>

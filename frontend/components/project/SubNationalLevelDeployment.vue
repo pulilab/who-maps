@@ -6,7 +6,7 @@
     >
       <div class="CoverageSubtitle">
         <fa icon="map-marker-alt" />
-        {{ countrySubLevelNames.first }} level deployment
+        <translate :parameters="{name: countrySubLevelNames.first}">{name} level deployment</translate>
       </div>
       <el-row
         v-for="(cov, index) in coverage"
@@ -44,7 +44,7 @@
     >
       <div class="CoverageSubtitle">
         <fa icon="map-marker-alt" />
-        {{ countrySubLevelNames.second }} level deployment
+        <translate :parameters="{name: countrySubLevelNames.first}">{name} level deployment</translate>
       </div>
       <el-row
         v-for="(cov, index) in coverageSecondLevel"

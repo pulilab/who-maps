@@ -9,7 +9,7 @@
       </li>
     </ul>
     <span v-show="team.length === 0">
-      N/A
+      <translate>N/A</translate>
     </span>
   </div>
 </template>
@@ -31,7 +31,10 @@ export default {
       profiles: 'system/getUserProfiles'
     }),
     team () {
-      return this.profiles.filter(p => this.value.includes(p.id));
+      if (this.value) {
+        return this.profiles.filter(p => this.value.includes(p.id));
+      }
+      return [];
     }
   }
 };

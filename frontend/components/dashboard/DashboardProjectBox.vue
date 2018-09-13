@@ -5,6 +5,9 @@
       :active-tab.sync="activeTab"
       :active-sub-level="activeSubLevel"
       :selected-country="selectedCountry"
+      :current-sub-level-projects="currentSubNationalProjects"
+      :filtered-projects="filteredProjects"
+      :national-projects="nationalProjects"
     />
   </div>
 </template>
@@ -25,7 +28,10 @@ export default {
       getActiveCountry: 'dashboard/getActiveCountry',
       selectedCountry: 'dashboard/getSelectedCountry',
       getActiveTab: 'dashboard/getProjectBoxActiveTab',
-      activeSubLevel: 'dashboard/getActiveSubLevel'
+      activeSubLevel: 'dashboard/getActiveSubLevel',
+      currentSubNationalProjects: 'dashboard/getActiveCountryCurrentSubLevelProjects',
+      filteredProjects: 'dashboard/getActiveTabProjects',
+      nationalProjects: 'dashboard/getActiveCountryNationalProjects'
     }),
     activeCountry: {
       get () {

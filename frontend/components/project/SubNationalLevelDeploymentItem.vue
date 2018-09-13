@@ -9,11 +9,11 @@
         v-model="subLevel"
         :data-vv-as="levelName"
         :data-vv-scope="scope + '_' + index"
+        :placeholder="$gettext('Select from list')"
         data-vv-name="district"
         filterable
         popper-class="SubNationalLevelDeploymentRegionDropdown"
         class="SubNationalLevelDeployementRegion"
-        placeholder="Select from list"
       >
 
         <el-option

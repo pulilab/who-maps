@@ -1,7 +1,7 @@
 <template>
   <div class="EditProfile">
     <div class="PageTitle">
-      <h2>Edit my profile</h2>
+      <h2><translate>Edit my profile</translate></h2>
     </div>
 
     <el-card
@@ -20,7 +20,7 @@
             class="FormPart"
             @submit.native.prevent>
             <el-form-item
-              label="My name"
+              :label="$gettext('My name')"
               prop="name">
               <el-input
                 v-model="innerProfile.name"
@@ -28,7 +28,7 @@
             </el-form-item>
 
             <el-form-item
-              label="My email address"
+              :label="$gettext('My email address')"
               class="is-required">
               <el-input
                 v-model="innerProfile.email"
@@ -37,13 +37,13 @@
             </el-form-item>
 
             <el-form-item
-              label="Organisation name"
+              :label="$gettext('Organisation name')"
               prop="organisation">
               <organisation-select v-model="innerProfile.organisation" />
             </el-form-item>
 
             <el-form-item
-              label="Country"
+              :label="$gettext('Country')"
               prop="country">
               <country-select v-model="innerProfile.country" />
               <div
@@ -53,7 +53,7 @@
             </el-form-item>
 
             <el-form-item
-              label="Site language"
+              :label="$gettext('Site language')"
               prop="language">
               <language-select v-model="innerProfile.language" />
             </el-form-item>
@@ -66,15 +66,15 @@
           <!-- SELECT ACCOUNT TYPE -->
           <div v-if="!innerProfile.account_type_approved || changeApprovedUserRole || !['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(innerProfile.account_type)">
 
-            <h5 v-if="!userTypeRequested">I request to be a:</h5>
+            <h5 v-if="!userTypeRequested"><translate>I request to be a:</translate></h5>
 
             <h5
               v-if="userTypeRequested"
               class="RoleRequested"><fa
                 icon="circle-notch"
-                spin />User role requested!</h5>
+                spin /><translate>User role requested!</translate></h5>
 
-            <p v-if="userTypeRequested">Waiting for admin approval — you're still able to change your request by selecting an other role and saving your settings!</p>
+            <p v-if="userTypeRequested"><translate>Waiting for admin approval — you're still able to change your request by selecting an other role and saving your settings!</translate></p>
 
             <div
               v-if="userTypeRequested"
@@ -82,9 +82,9 @@
 
             <el-checkbox
               v-model="isCountryUser"
-              border><span class="IconRole IconGovernmentUser" />Government user</el-checkbox>
+              border><span class="IconRole IconGovernmentUser" /><translate>Government user</translate></el-checkbox>
 
-            <p class="UserArchTypeText">Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore aliqua.</p>
+            <p class="UserArchTypeText"><translate>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore aliqua.</translate></p>
 
             <el-collapse-transition>
               <el-radio-group
@@ -94,13 +94,13 @@
                 class="OnePerRow">
                 <el-radio
                   label="G"
-                  class="RadioSmall">Country user</el-radio>
+                  class="RadioSmall"><translate>Country user</translate></el-radio>
                 <ul
                   v-if="innerProfile.account_type === 'G'"
                   class="UserTypeTextList">
-                  <li>List item 1</li>
-                  <li>List item 2</li>
-                  <li>List item 3</li>
+                  <li><translate>List item 1</translate></li>
+                  <li><translate>List item 2</translate></li>
+                  <li><translate>List item 3</translate></li>
                 </ul>
 
                 <el-radio
@@ -109,9 +109,9 @@
                 <ul
                   v-if="innerProfile.account_type === 'CA'"
                   class="UserTypeTextList">
-                  <li>List item 1</li>
-                  <li>List item 2</li>
-                  <li>List item 3</li>
+                  <li><translate>List item 1</translate></li>
+                  <li><translate>List item 2</translate></li>
+                  <li><translate>List item 3</translate></li>
                 </ul>
 
                 <el-radio
@@ -120,22 +120,22 @@
                 <ul
                   v-if="innerProfile.account_type === 'SCA'"
                   class="UserTypeTextList">
-                  <li>List item 1</li>
-                  <li>List item 2</li>
-                  <li>List item 3</li>
+                  <li><translate>List item 1</translate></li>
+                  <li><translate>List item 2</translate></li>
+                  <li><translate>List item 3</translate></li>
                 </ul>
               </el-radio-group>
             </el-collapse-transition>
 
             <div class="Separator Or">
-              <span>or</span>
+              <span><translate>or</translate></span>
             </div>
 
             <el-checkbox
               v-model="isDonorUser"
-              border><span class="IconRole IconInvestorUser" />Financial investor</el-checkbox>
+              border><span class="IconRole IconInvestorUser" /><translate>Financial investor</translate></el-checkbox>
 
-            <p class="UserArchTypeText">Sed eiusmod tempor incidunt ut labore et dolore aliqua. Morbi fringilla convallis sapien, id pulvinar odio volutpat.</p>
+            <p class="UserArchTypeText"><translate>Sed eiusmod tempor incidunt ut labore et dolore aliqua. Morbi fringilla convallis sapien, id pulvinar odio volutpat.</translate></p>
 
             <el-collapse-transition>
               <el-radio-group
@@ -145,35 +145,35 @@
                 class="OnePerRow">
                 <el-radio
                   :label="'D'"
-                  class="RadioSmall">Donor</el-radio>
+                  class="RadioSmall"><translate>Donor</translate></el-radio>
                 <ul
                   v-if="innerProfile.account_type === 'D'"
                   class="UserTypeTextList">
-                  <li>List item 1</li>
-                  <li>List item 2</li>
-                  <li>List item 3</li>
+                  <li><translate>List item 1</translate></li>
+                  <li><translate>List item 2</translate></li>
+                  <li><translate>List item 3</translate></li>
                 </ul>
 
                 <el-radio
                   :label="'DA'"
-                  class="RadioSmall">Donor administrator</el-radio>
+                  class="RadioSmall"><translate>Donor administrator</translate></el-radio>
                 <ul
                   v-if="innerProfile.account_type === 'DA'"
                   class="UserTypeTextList">
-                  <li>List item 1</li>
-                  <li>List item 2</li>
-                  <li>List item 3</li>
+                  <li><translate>List item 1</translate></li>
+                  <li><translate>List item 2</translate></li>
+                  <li><translate>List item 3</translate></li>
                 </ul>
 
                 <el-radio
                   :label="'SDA'"
-                  class="RadioSmall">Super donor administrator</el-radio>
+                  class="RadioSmall"><translate>Super donor administrator</translate></el-radio>
                 <ul
                   v-if="innerProfile.account_type === 'SDA'"
                   class="UserTypeTextList">
-                  <li>List item 1</li>
-                  <li>List item 2</li>
-                  <li>List item 3</li>
+                  <li><translate>List item 1</translate></li>
+                  <li><translate>List item 2</translate></li>
+                  <li><translate>List item 3</translate></li>
                 </ul>
               </el-radio-group>
             </el-collapse-transition>
@@ -184,7 +184,7 @@
                 label-position="top"
                 class="DonorSelector"
                 @submit.native.prevent>
-                <el-form-item label="I want to be a part of this donor group:">
+                <el-form-item :label="$gettext('I want to be a part of this donor group:')">
                   <donor-select
                     :value="innerProfile.donor"
                     @change="setDonor"/>
@@ -198,7 +198,7 @@
 
             <h5 class="RoleAccepted">
               <fa icon="check-circle" />
-              Your user role request has been accepted!
+              <translate>Your user role request has been accepted!</translate>
             </h5>
 
             <div class="UserRoleDescription">
@@ -216,16 +216,16 @@
                     <span class="IconRole IconGovernmentUser" />
                   </el-col>
                   <el-col>
-                    <h5>Government user</h5>
-                    <span>Country user</span>
+                    <h5><translate>Government user</translate></h5>
+                    <span><translate>Country user</translate></span>
                   </el-col>
                 </el-row>
                 <div class="MyPrivileges">
-                  <span>My Privileges are:</span>
+                  <span><translate>My Privileges are:</translate></span>
                   <ul class="UserTypeTextList">
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
                   </ul>
                 </div>
               </div>
@@ -240,16 +240,16 @@
                     <span class="IconRole IconGovernmentUser" />
                   </el-col>
                   <el-col>
-                    <h5>Government user</h5>
-                    <span>Country user admin</span>
+                    <h5><translate>Government user</translate></h5>
+                    <span><translate>Country user admin</translate></span>
                   </el-col>
                 </el-row>
                 <div class="MyPrivileges">
-                  <span>My Privileges are:</span>
+                  <span><translate>My Privileges are:</translate></span>
                   <ul class="UserTypeTextList">
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
                   </ul>
                 </div>
               </div>
@@ -264,16 +264,16 @@
                     <span class="IconRole IconGovernmentUser" />
                   </el-col>
                   <el-col>
-                    <h5>Government user</h5>
-                    <span>Super Country User Admin</span>
+                    <h5><translate>Government user</translate></h5>
+                    <span><translate>Super Country User Admin</translate></span>
                   </el-col>
                 </el-row>
                 <div class="MyPrivileges">
-                  <span>My Privileges are:</span>
+                  <span><translate>My Privileges are:</translate></span>
                   <ul class="UserTypeTextList">
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
                   </ul>
                 </div>
               </div>
@@ -288,16 +288,16 @@
                     <span class="IconRole IconInvestorUser" />
                   </el-col>
                   <el-col>
-                    <h5>Financial investor</h5>
-                    <span>Donor</span>
+                    <h5><translate>Financial investor</translate></h5>
+                    <span><translate>Donor</translate></span>
                   </el-col>
                 </el-row>
                 <div class="MyPrivileges">
-                  <span>My Privileges are:</span>
+                  <span><translate>My Privileges are:</translate></span>
                   <ul class="UserTypeTextList">
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
                   </ul>
                 </div>
               </div>
@@ -312,16 +312,16 @@
                     <span class="IconRole IconInvestorUser" />
                   </el-col>
                   <el-col>
-                    <h5>Financial investor</h5>
-                    <span>Donor admin</span>
+                    <h5><translate>Financial investor</translate></h5>
+                    <span><translate>Donor admin</translate></span>
                   </el-col>
                 </el-row>
                 <div class="MyPrivileges">
-                  <span>My Privileges are:</span>
+                  <span><translate>My Privileges are:</translate></span>
                   <ul class="UserTypeTextList">
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
                   </ul>
                 </div>
               </div>
@@ -336,16 +336,16 @@
                     <span class="IconRole IconInvestorUser" />
                   </el-col>
                   <el-col>
-                    <h5>Financial investor</h5>
-                    <span>Super donor admin</span>
+                    <h5><translate>Financial investor</translate></h5>
+                    <span><translate>Super donor admin</translate></span>
                   </el-col>
                 </el-row>
                 <div class="MyPrivileges">
-                  <span>My Privileges are:</span>
+                  <span><translate>My Privileges are:</translate></span>
                   <ul class="UserTypeTextList">
-                    <li>List item 1</li>
-                    <li>List item 2</li>
-                    <li>List item 3</li>
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
                   </ul>
                 </div>
               </div>
@@ -367,7 +367,7 @@
               type="text"
               class="CancelButton"
               @click="dismissChanges">
-              Dismiss changes
+              <translate>Dismiss changes</translate>
             </el-button>
           </el-col>
           <el-col
@@ -379,7 +379,7 @@
               native-type="submit"
               @click="submit"
             >
-              Save settings
+              <translate>Save settings</translate>
             </el-button>
           </el-col>
         </el-row>
@@ -419,19 +419,19 @@ export default {
       changeApprovedUserRole: false,
       rules: {
         name: [
-          { required: true, message: 'This field is required', trigger: 'change' },
+          { required: true, message: this.$gettext('This field is required'), trigger: 'change' },
           { validator: this.validatorGenerator('name') }
         ],
         organisation: [
-          { required: true, message: 'This field is required', trigger: 'change' },
+          { required: true, message: this.$gettext('This field is required'), trigger: 'change' },
           { validator: this.validatorGenerator('organisation') }
         ],
         language: [
-          { required: true, message: 'This field is required', trigger: 'change' },
+          { required: true, message: this.$gettext('This field is required'), trigger: 'change' },
           { validator: this.validatorGenerator('language') }
         ],
         country: [
-          { required: true, message: 'This field is required', trigger: 'change' },
+          { required: true, message: this.$gettext('This field is required'), trigger: 'change' },
           { validator: this.validatorGenerator('country') }
         ]
       }
@@ -515,16 +515,17 @@ export default {
             await this.updateUserProfile(this.innerProfile);
             window.scrollTo(0, 0);
             this.$message({
-              message: 'Profile succesfully updated',
+              message: this.$gettext('Profile succesfully updated'),
               type: 'success',
               showClose: true
             });
+            this.changeLocale(this.innerProfile.language);
           } catch (err) {
             console.log('ERR:', err);
             this.setFormAPIErrors(err);
             this.$refs.editProfileForm.validate(() => {});
             this.$message({
-              message: 'Profile update error',
+              message: this.$gettext('Profile update error'),
               type: 'error',
               showClose: true
             });
@@ -532,7 +533,13 @@ export default {
         }
       });
     },
-
+    changeLocale (locale) {
+      if (locale !== this.$i18n.locale) {
+        const name = this.$route.name.split('___')[0];
+        const path = this.localePath({...this.$route, name}, locale);
+        this.$router.replace(path);
+      }
+    },
     changingUserRole () {
       this.changeApprovedUserRole = true;
     },

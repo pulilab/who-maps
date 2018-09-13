@@ -1,12 +1,13 @@
 import { loadSkeletonImages, loadSkeletonStatic } from '../webpackRequires';
 class SkeletonController {
-  constructor ($scope, $interpolate, data, axis, domain, icons) {
+  constructor ($scope, $interpolate, data, axis, domain, icons, $mdDialog) {
     this.scope = $scope;
     this.interpolate = $interpolate;
     this.axis = axis;
     this.domain = domain;
     this.data = data;
     this.icons = icons;
+    this.modal = $mdDialog;
 
     this.domainActivationSetter(this.axis, this.domain, true);
     this.images = this.importImages();
@@ -16,6 +17,10 @@ class SkeletonController {
       a.expand = (aInd - 2) === this.axis;
       return a;
     });
+  }
+
+  hideDialog () {
+    this.modal.hide();
   }
 
   importImages () {
@@ -60,9 +65,9 @@ class SkeletonController {
     this.data[axisId + 2].domains[domainId].active = state;
   }
 
-  static factory (data, axis, domain, icons) {
+  static factory (data, axis, domain, icons, modal) {
     const skeleton = ($scope, $interpolate) => {
-      return new SkeletonController($scope, $interpolate, data, axis, domain, icons);
+      return new SkeletonController($scope, $interpolate, data, axis, domain, icons, modal);
     };
     skeleton.$inject = ['$scope', '$interpolate'];
     return skeleton;

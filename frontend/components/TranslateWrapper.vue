@@ -1,20 +1,33 @@
 <template>
   <span>
-    {{ $t(text) }}
+    {{ $t(message, parameters) }}
   </span>
 </template>
 
 <script>
 export default {
+  props: {
+    parameters: {
+      type: Object,
+      default: () => {}
+    }
+  },
   computed: {
-    text () {
-      if (this.$slots && this.$slots.default && this.$slots.default[0] && this.$slots.default[0]) {
+    message () {
+      if (this.$slots.default && this.$slots.default[0]) {
+        if (this.$slots.default.length > 1) {
+          console.warn('Multiple node inside translate tag', this.$slots.default);
+        }
         return this.$slots.default[0].text.trim();
-      } else {
-        console.error('Empty translate block');
       }
     }
+  },
+  created () {
+    if (this.message && !this.$i18n.te(this.message)) {
+      this.$i18n.mergeLocaleMessage('en', {[this.message]: this.message});
+    }
   }
+
 };
 </script>
 

@@ -14,15 +14,16 @@
           tag="button"
           class="el-button el-button--primary el-button--medium"
         >
-          Add new project
+          <translate>Add new project</translate>
         </nuxt-link>
       </el-col>
     </el-row>
     <el-row type="flex">
       <el-col>
         <p>
-          to include your project in the inventory<br>
-          and begin tracking your performance
+          <translate>to include your project in the inventory</translate>
+          <br>
+          <translate>and begin tracking your performance</translate>
         </p>
       </el-col>
     </el-row>

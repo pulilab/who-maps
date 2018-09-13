@@ -5,7 +5,7 @@
   >
     <el-card :body-style="{ padding: '0px' }">
       <div
-        v-if="!readonly && !newProject"
+        v-if="!isNewProject"
         class="SwitchProjectStatus"
       >
         <el-row
@@ -16,18 +16,18 @@
           <div class="SwitchLabel">Switch view:</div>
           <el-button-group class="SwitchButtons">
             <el-button
-              :class="['DraftButton', {'Active': draft}]"
-              :disabled="draft"
+              :class="['DraftButton', {'Active': isDraft}]"
+              :disabled="isDraft || anon"
               @click="goToDraft"
             >
-              Draft
+              <translate>Draft</translate>
             </el-button>
             <el-button
-              :class="['PublishedButton', {'Active': published}]"
-              :disabled="published"
+              :class="['PublishedButton', {'Active': isPublished}]"
+              :disabled="isPublished"
               @click="goToPublished"
             >
-              Published
+              <translate>Published</translate>
             </el-button>
           </el-button-group>
         </el-row>
@@ -43,7 +43,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              General
+              <translate>General</translate>
             </el-button>
           </li>
           <li :class="{active: active === 'implementation'}">
@@ -54,7 +54,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              Implementation
+              <translate>Implementation</translate>
             </el-button>
           </li>
           <li :class="{active: active === 'technology'}">
@@ -65,7 +65,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              Technology
+              <translate>Technology</translate>
             </el-button>
           </li>
           <li :class="{active: active === 'interoperability'}">
@@ -76,7 +76,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              Interoperability
+              <translate>Interoperability</translate>
             </el-button>
           </li>
           <li :class="{active: active === 'country'}">
@@ -87,7 +87,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              Country fields
+              <translate>Country fields</translate>
             </el-button>
           </li>
           <li :class="{active: active === 'donor'}">
@@ -98,18 +98,18 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              Donor fields
+              <translate>Donor fields</translate>
             </el-button>
           </li>
         </ul>
       </div>
 
       <div
-        v-if="!readonly"
+        v-if="isTeam"
         class="NavigationActions"
       >
         <el-button
-          v-if="draft"
+          v-if="isDraft"
           :disabled="!!loading"
           type="primary"
           size="medium"
@@ -119,14 +119,14 @@
             v-show="loading === 'publish'"
             icon="spinner"
             spin />
-          Publish
+          <translate>Publish</translate>
         </el-button>
 
         <el-button
-          v-if="newProject || draft"
-          :type="newProject ? 'primary' : 'text'"
-          :size="newProject ? 'medium' : ''"
-          :class="['SaveDraft', {'NewProject': newProject, 'Draft':draft }]"
+          v-if="isNewProject || isDraft"
+          :type="isNewProject ? 'primary' : 'text'"
+          :size="isNewProject ? 'medium' : ''"
+          :class="['SaveDraft', {'NewProject': isNewProject, 'Draft': isDraft }]"
           :disabled="!!loading"
           @click="$emit('saveDraft')"
         >
@@ -134,11 +134,11 @@
             v-show="loading === 'draft'"
             icon="spinner"
             spin />
-          Save draft
+          <translate>Save draft</translate>
         </el-button>
 
         <el-button
-          v-if="draft"
+          v-if="isDraft"
           :disabled="!!loading"
           type="text"
           class="DiscardDraft DeleteButton"
@@ -148,24 +148,24 @@
             v-show="loading === 'discard'"
             icon="spinner"
             spin />
-          Discard draft
+          <translate>Discard draft</translate>
         </el-button>
 
         <el-button
-          v-if="published"
+          v-if="isPublished"
           type="text"
           class="GoToDashboard"
         >
-          Go to Dashboard
+          <translate>Go to Dashboard</translate>
         </el-button>
 
         <el-button
-          v-if="newProject"
+          v-if="isNewProject"
           type="text"
           class="CancelButton WithHint"
         >
-          Cancel
-          <span class="ButtonHint">Go back to Dashboard</span>
+          <translate>Cancel</translate>
+          <span class="ButtonHint"><translate>Go back to Dashboard</translate></span>
         </el-button>
       </div>
     </el-card>
@@ -180,31 +180,38 @@ export default {
   directives: {
     'scroll-class': VueScrollClass
   },
-  props: {
-    readonly: {
-      type: Boolean,
-      default: false
-    },
-    newProject: {
-      type: Boolean,
-      default: false
-    },
-    draft: {
-      type: Boolean,
-      default: false
-    },
-    published: {
-      type: Boolean,
-      default: false
-    }
-  },
   computed: {
     ...mapGetters({
-      loading: 'project/getLoading'
+      loading: 'project/getLoading',
+      user: 'user/getProfile'
     }),
     active () {
       const hash = this.$route.hash;
       return hash ? hash.replace('#', '') : 'general';
+    },
+    route () {
+      return this.$route.name.split('__')[0];
+    },
+    isNewProject () {
+      return this.route === 'organisation-projects-create';
+    },
+    isPublished () {
+      return this.route === 'organisation-projects-id-published';
+    },
+    isDraft () {
+      return this.route === 'organisation-projects-id' || this.route === 'organisation-projects-id-edit';
+    },
+    anon () {
+      if (this.user) {
+        return ![...this.user.member, ...this.user.viewer].includes(+this.$route.params.id);
+      }
+      return true;
+    },
+    isTeam () {
+      if (this.user) {
+        return this.user.member.includes(+this.$route.params.id);
+      }
+      return false;
     }
   },
   methods: {

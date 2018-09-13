@@ -3,11 +3,10 @@
     v-model="innerValue"
     :multiple="multiple"
     :disabled="disabled"
+    :placeholder="$gettext('Select country')"
     filterable
     popper-class="CountrySelectorPopper"
-    class="CountrySelector"
-    placeholder="Select country"
-  >
+    class="CountrySelector">
     <el-option
       v-for="country in countries"
       :key="country.id"

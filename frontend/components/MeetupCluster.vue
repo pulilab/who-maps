@@ -130,7 +130,7 @@ export default {
         const date = format(pin.event.local_parsed_time + this.timeZoneOffset, 'dddd, MMMM DD, YYYY');
         return `${date} - ${pin.event.local_time}`;
       }
-      return pin.has_event_with_coords ? 'Time not specificed' : 'No upcoming event';
+      return pin.has_event_with_coords ? this.$gettext('Time not specificed') : this.$gettext('No upcoming event');
     }
   }
 };

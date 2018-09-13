@@ -7,15 +7,18 @@
     <el-col class="TableExportOptions">
       <el-row type="flex">
         <el-button
+          :disabled="selectedRows.length === 0"
           type="primary"
           size="small"
-          class="IconLeft">
+          class="IconLeft"
+          @click="exportRows"
+        >
           <fa icon="download"/>
           <span v-show="selectedRows.length === 0">
-            Export selected
+            <translate>Export selected</translate>
           </span>
-          <span v-show="selectedRows.length > 0">
-            Export {{ selectedRows.length }} project(s)
+          <span v-show="selected">
+            <translate :parameters="{selected}">Export {selected} project(s)</translate>
           </span>
         </el-button>
         <el-select
@@ -31,11 +34,30 @@
         <template v-if="selectedRows.length > 0">
           <div class="Separator" />
           <el-button
+            :disabled="allSelected"
             type="text"
             size="small"
             class="PrimaryButton"
-            @click="selectAll">Select All 450 rows</el-button>
+            @click="selectAll"><translate :parameters="{total}">Select All {total} rows</translate></el-button>
         </template>
+
+        <div class="Separator" />
+        <el-button
+          :disabled="selectedRows.length === 0"
+          type="primary"
+          size="small"
+          class="IconLeft"
+          @click="openMailDialog"
+        >
+          <fa icon="envelope"/>
+          <translate v-show="selected === 0">Contact Selected</translate>
+          <translate
+            v-show="selected > 0"
+            :parameters="{selected}">
+            Contact {selected} project(s)
+          </translate>
+        </el-button>
+        <pdf-export ref="pdfExport" />
       </el-row>
     </el-col>
 
@@ -67,7 +89,7 @@
             class="TableSettingsButton IconLeft"
           >
             <fa icon="cog" />
-            Settings
+            <translate>Settings</translate>
           </el-button>
 
           <div class="CustomPopoverList Small ColumnSelector">
@@ -91,14 +113,14 @@
                     type="text"
                     size="small"
                     class="CancelButton"
-                    @click="columnSelectorOpen = false">Cancel</el-button>
+                    @click="columnSelectorOpen = false"><translate>Cancel</translate></el-button>
                 </el-col>
                 <el-col>
                   <el-button
                     type="text"
                     size="small"
                     class="PrimaryButton"
-                    @click="updateColumns">Update</el-button>
+                    @click="updateColumns"><translate>Update</translate></el-button>
                 </el-col>
               </el-row>
             </div>
@@ -111,11 +133,14 @@
 
 <script>
 import ProjectLegend from '../common/ProjectLegend';
+import PdfExport from './PdfExport';
+
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
-    ProjectLegend
+    ProjectLegend,
+    PdfExport
   },
   data () {
     return {
@@ -128,16 +153,23 @@ export default {
     ...mapGetters({
       columns: 'dashboard/getAvailableColumns',
       selected: 'dashboard/getSelectedColumns',
-      selectedRows: 'dashboard/getSelectedRows'
+      selectedRows: 'dashboard/getSelectedRows',
+      allSelected: 'dashboard/getSelectAll',
+      total: 'dashboard/getTotal'
     }),
     settingsTitle () {
-      return `main fields (${this.selected.length}/${this.columns.length})`;
+      return `${this.$gettext('main fields')} (${this.selected.length}/${this.columns.length})`;
+    },
+    selected () {
+      return this.allSelected ? this.total : this.selectedRows.length;
     }
   },
   methods: {
     ...mapActions({
       setSelectedColumns: 'dashboard/setSelectedColumns',
-      setSelectAll: 'dashboard/setSelectAll'
+      setSelectAll: 'dashboard/setSelectAll',
+      setSendEmailDialogState: 'layout/setSendEmailDialogState',
+      loadProjectsBucket: 'dashboard/loadProjectsBucket'
     }),
     popperOpenHandler () {
       this.selectedColumns = [...this.columns.map(s => ({...s}))];
@@ -146,8 +178,20 @@ export default {
       this.setSelectedColumns(this.selectedColumns.filter(s => s.selected).map(s => s.id));
       this.columnSelectorOpen = false;
     },
-    selectAll () {
+    async selectAll () {
+      await this.loadProjectsBucket();
       this.setSelectAll(true);
+    },
+    exportRows () {
+      if (this.exportType === 'PDF') {
+        this.$refs.pdfExport.printPdf();
+      }
+    },
+    async openMailDialog () {
+      if (this.allSelected) {
+        await this.loadProjectsBucket();
+      }
+      this.setSendEmailDialogState(true);
     }
   }
 };

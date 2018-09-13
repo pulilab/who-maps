@@ -6,26 +6,25 @@
           :span="15"
           class="ProjectName">
           <div>
-            <!-- TODO -->
-            <!-- Please add the "member/view" icon right after the name if it's necessary -->
             {{ project.name }}
+            <project-legend :id="project.id" />
           </div>
         </el-col>
         <el-col
           :span="3"
           class="ProjectInfo">
           <div class="Label">
-            Last Updated
+            <translate>Last Updated</translate>
           </div>
           <div class="Info">
-            1/12/2018
+            1/12/2018!!
           </div>
         </el-col>
         <el-col
           :span="3"
           class="ProjectInfo">
           <div class="Label">
-            Organisation
+            <translate>Organisation</translate>
           </div>
           <div class="Info">
             <organisation-item :id="project.organisation" />
@@ -35,7 +34,7 @@
           :span="3"
           class="ProjectInfo">
           <div class="Label">
-            Contact person
+            <translate>Contact person</translate>
           </div>
           <div class="Info">
             <a
@@ -50,27 +49,37 @@
 
       <div class="ProjectMenu">
         <nuxt-link
-          v-if="!readOnly"
+          v-if="isTeam"
+          :class="{'Active': isProjectActive}"
           :to="localePath({name: 'organisation-projects-id-edit', params: {id, organisation: $route.params.organisation}})">
-          Project
+          <translate>Project</translate>
         </nuxt-link>
         <nuxt-link
-          v-if="readOnly"
+          v-if="isViewer && !isTeam"
+          :class="{'Active': isProjectActive}"
+          :to="localePath({name: 'organisation-projects-id', params: {id, organisation: $route.params.organisation}})">
+          <translate>Project</translate>
+        </nuxt-link>
+        <nuxt-link
+          v-if="anon"
+          :class="{'Active': isProjectActive}"
           :to="localePath({name: 'organisation-projects-id-published', params: {id, organisation: $route.params.organisation}})">
-          Project
+          <translate>Project</translate>
         </nuxt-link>
         <nuxt-link :to="localePath({name: 'organisation-projects-id-assessment', params: {id, organisation: $route.params.organisation}})">
           Assessment
         </nuxt-link>
         <nuxt-link
-          v-if="!readOnly"
+          v-if="isTeam"
+          :class="{'Active': isUpdateScoreActive}"
           :to="localePath({name: 'organisation-projects-id-toolkit', params: {id, organisation: $route.params.organisation}})">
-          Update score
+          <translate>Update score</translate>
         </nuxt-link>
         <nuxt-link
-          v-if="!readOnly"
+          v-if="isTeam"
+          :class="{'Active': isScorecardActive}"
           :to="localePath({name: 'organisation-projects-id-toolkit-scorecard', params: {id, organisation: $route.params.organisation}})">
-          Summary score
+          <translate>Summary score</translate>
         </nuxt-link>
       </div>
     </div>
@@ -80,10 +89,12 @@
 <script>
 import { mapGetters } from 'vuex';
 import OrganisationItem from './OrganisationItem';
+import ProjectLegend from './ProjectLegend';
 
 export default {
   components: {
-    OrganisationItem
+    OrganisationItem,
+    ProjectLegend
   },
   computed: {
     ...mapGetters({
@@ -97,12 +108,34 @@ export default {
     id () {
       return +this.$route.params.id;
     },
-    readOnly () {
+    route () {
+      return this.$route.name.split('__')[0];
+    },
+    isProjectActive () {
+      return this.route === 'organisation-projects-id-published' ||
+      this.route === 'organisation-projects-id-edit' ||
+      this.route === 'organisation-projects-id';
+    },
+    isUpdateScoreActive () {
+      return this.route === 'organisation-projects-id-toolkit';
+    },
+    isScorecardActive () {
+      return this.route === 'organisation-projects-id-toolkit-scorecard';
+    },
+    isTeam () {
       if (this.user) {
-        const all = [...this.user.member, ...this.user.viewer];
-        return !all.includes(this.id);
+        return this.user.member.includes(+this.$route.params.id);
+      }
+      return false;
+    },
+    isViewer () {
+      if (this.user) {
+        return this.user.viewer.includes(+this.$route.params.id);
       }
       return true;
+    },
+    anon () {
+      return !this.isViewer && !this.isTeam;
     }
   }
 };
@@ -128,6 +161,10 @@ export default {
       font-size: @fontSizeLarge;
       line-height: @fontSizeLarge;
       font-weight: 700;
+
+      .ProjectLegend {
+        display: inline;
+      }
     }
 
     .ProjectInfo {

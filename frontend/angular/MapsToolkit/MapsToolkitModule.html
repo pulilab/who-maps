@@ -95,7 +95,7 @@
           <translate>Go to next domain</translate>
           <md-icon>arrow_forward</md-icon>
         </md-button>
-        <md-button class="md-primary md-raised" ng-show="vm.isLastDomainInAxis()" ui-sref="scorecard({axisId: vm.axisId})">
+        <md-button class="md-primary md-raised" ng-show="vm.isLastDomainInAxis()" ng-click="vm.goToScorecard()"">
           <translate>Show scorecard</translate>
           <md-icon>insert_chart</md-icon>
         </md-button>

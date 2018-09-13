@@ -3,6 +3,7 @@
     <l-feature-group
       ref="geoJsonGroup"
       @layeradd="layerAddHandler"
+      @click="clickHandler"
     >
       <l-geo-json
         v-if="geoJson"
@@ -123,6 +124,11 @@ export default {
       if (event && event.layer) {
         this.geoJsonLoaded = true;
         this.$root.$emit('map:fit-on', event.layer.getBounds());
+      }
+    },
+    clickHandler (event) {
+      if (!this.nationalLevelCoverage && event && event.layer && event.layer.feature && event.layer.feature.properties) {
+        this.$emit('geo-json:click', event.layer.feature.properties.id);
       }
     },
     updateGeoJsonStyle (nationalLevelCoverage, subLevel) {

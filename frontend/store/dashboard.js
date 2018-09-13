@@ -49,6 +49,7 @@ export const state = () => ({
   ],
   selectedColumns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   projectsList: [],
+  projectsBucket: [],
   selectedDHI: [],
   selectedHFA: [],
   selectedHSC: [],
@@ -72,6 +73,7 @@ export const state = () => ({
 export const getters = {
   ...gettersGenerator(),
   getProjectsList: state => [...state.projectsList.map(r => ({...r}))],
+  getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => ({...r}))] : getters.getProjectsList,
   getAvailableColumns: state => [...state.columns.map(c => ({...c, selected: state.selectedColumns.includes(c.id)}))],
   getSelectedColumns: state => state.selectedColumns,
   getSelectedDHI: state => state.selectedDHI,
@@ -120,11 +122,20 @@ export const actions = {
     const data = await dispatch('loadProjects', {type: 'list'});
     commit('SET_PROJECT_LIST', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
+    commit('SET_SELECT_ALL', false);
+    commit('SET_SELECTED_ROWS', []);
   },
   async loadProjectsMap ({commit, dispatch}) {
-    const data = await dispatch('loadProjects', {type: 'map'});
+    const data = await dispatch('loadProjects', {type: 'map', page_size: 999999});
     commit('SET_PROJECT_MAP', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
+  },
+  async loadProjectsBucket ({commit, dispatch, state}) {
+    if (state.projectsBucket.length === 0) {
+      const data = await dispatch('loadProjects', {type: 'list', page_size: 999999});
+      commit('SET_PROJECT_BUCKET', data.results.projects);
+      commit('SET_SEARCH_STATUS', data);
+    }
   },
   setSearchOptions ({commit}, options) {
     commit('SET_SEARCH_OPTIONS', options);
@@ -160,9 +171,11 @@ export const actions = {
     commit('SET_SELECTED_PLATFORMS', columns);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setSelectedRows ({commit}, rows) {
+  setSelectedRows ({commit, state}, rows) {
+    if (state.selectAll && state.selectedRows.length > rows.length) {
+      commit('SET_SELECT_ALL', false);
+    }
     commit('SET_SELECTED_ROWS', rows);
-    commit('SET_SELECT_ALL', false);
   },
   setFilteredCountries ({commit}, value) {
     commit('SET_FILTERED_COUNTRIES', value);
@@ -201,6 +214,9 @@ export const mutations = {
   ...mutationsGenerator(),
   SET_PROJECT_LIST: (state, projects) => {
     state.projectsList = projects;
+  },
+  SET_PROJECT_BUCKET: (state, projects) => {
+    state.projectsBucket = projects;
   },
   SET_SEARCH_OPTIONS: (state, options) => {
     state.pageSize = options.page_size ? +options.page_size : 10;

@@ -7,14 +7,11 @@
   right: 0;
   width: 60px;
   height: 60px;
-  background-color: $text-primary;
   color: $color-white;
   text-align: center;
-  // text-shadow: 0 0 30px rgba(0,0,0,.5);
   font-size: 32px;
   line-height: 60px;
-  cursor: pointer !important;
-  pointer-events: none;
+  cursor: pointer;
 }
 
 md-dialog.thematic-overview {

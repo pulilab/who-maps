@@ -2,8 +2,8 @@
   <el-select
     v-model="innerValue"
     :disabled="disabled"
+    :placeholder="$gettext('Select region')"
     clearable
-    placeholder="Select region"
   >
     <el-option
       v-for="region in regions"

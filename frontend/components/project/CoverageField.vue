@@ -4,17 +4,17 @@
       <el-col :span="8">
         <simple-field
           :content="cov.health_workers"
-          header="# Health Workers" />
+          :header="$gettext('# Health Workers')" />
       </el-col>
       <el-col :span="8">
         <simple-field
           :content="cov.facilities"
-          header="# Facilities" />
+          :header="$gettext('# Facilities')" />
       </el-col>
       <el-col :span="8">
         <simple-field
           :content="cov.clients"
-          header="# Clients" />
+          :header="$gettext('# Clients')" />
       </el-col>
     </el-row>
   </div>

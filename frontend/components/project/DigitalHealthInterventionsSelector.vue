@@ -6,7 +6,7 @@
       @click="openDialog"
     >
       <fa icon="plus"/>
-      Add Digital Health Interventions
+      <translate>Add Digital Health Interventions</translate>
     </el-button>
     <div
       v-show="dhi.length > 0"
@@ -26,7 +26,7 @@
         @click="openDialog"
       >
         <fa icon="edit"/>
-        Edit selection
+        <translate>Edit selection</translate>
       </el-button>
     </div>
   </div>

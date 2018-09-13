@@ -81,14 +81,41 @@ You can rebuild search any time you want or if you realise there's some data mis
 `manage.py rebuild_search`
 
 ## Donor tools
-When you delete a Donor from Django admin (as a superuser) and want to sync the donors in all projects: 
+When you delete a Donor from Django admin (as a superuser) and want to sync the donors in all projects:
 
 `manage.py remove_stale_donors`
 
-When you want to eg. remove a duplicate donor or a typo, you can migrate the project that use the typo or duplicate 
+When you want to eg. remove a duplicate donor or a typo, you can migrate the project that use the typo or duplicate
 donor to the one that you want to keep for all projects:
 
 `manage.py switch_donor_form_to <DONOR_ID_YOU_WANT_TO_MIGRATE_FROM> <TO_DONOR_ID>`
 
 After migrating all projects, you can delete the typo / duplicate donor objects from the admin (don't forget to issue
 the `remove_stale_donors` after that.)
+
+
+## Translations command:
+
+To scrape the code and extract translations:
+`yarn translation:extract`
+
+To Update the translations files in the backend:
+```bash
+cd django
+fab update_translations
+```
+
+To see the new string and modify translations:
+`http://localhost/translation`
+
+(click on Save and Translate next block to save them)
+
+To have translation appear in the frontend (after saving them at the previous step):
+`docker-compose restart django`
+
+### Quirks:
+Translations are picked up from `<translate></translate>` blocks this block is declared as a global vue component so it can be used without importing it.
+If a translation string needs parameters (ie: {{userProfile.name}} hello!) the syntax is `<translate :parameters="{name: userProfile.name}"> {name} hello </translate>`
+Also, `$gettext('english/base string')` method is available in every Vue component via a mixin in the i18n plugin.
+
+

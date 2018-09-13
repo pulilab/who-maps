@@ -1,11 +1,11 @@
 <template>
   <el-select
     :value="value"
+    :placeholder="$gettext('Select from list')"
     multiple
     filterable
     popper-class="HisBucketSelectorSelectorDropdown"
     class="HisBucketSelector"
-    placeholder="Select from list"
     @change="changeHandler">
 
     <el-option

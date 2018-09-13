@@ -23,16 +23,16 @@
         <ul>
           <div class="el-popover__title">
             <fa icon="user" />
-            Normal View
+            <translate>Normal View</translate>
           </div>
           <li class="Active">
             <fa icon="check" />
-            {{ user.name }} (me)
+            <translate :parameters="{name: user.name}">{name} (me)</translate>
           </li>
 
           <div class="el-popover__title">
             <fa icon="handshake" />
-            Donor View
+            <translate>Donor View</translate>
           </div>
           <li
             v-for="donor in donors"
@@ -44,14 +44,14 @@
 
           <div class="el-popover__title">
             <fa icon="globe" />
-            Country View
+            <translate>Country View</translate>
           </div>
           <li
             v-for="moh in ministeryOfHealth"
             :key="moh"
           >
             <fa icon="check" />
-            {{ moh }} MoH
+            <translate :parameters="{moh}">{moh} MoH</translate>
           </li>
         </ul>
       </div>
@@ -68,7 +68,7 @@ export default {
       user: 'user/getProfile'
     }),
     persona () {
-      return 'Me';
+      return this.$gettext('Me');
     },
     personaClass () {
       return 'Me';

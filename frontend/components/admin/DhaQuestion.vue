@@ -5,32 +5,32 @@
       v-model="type"
       placeholder="Type">
       <el-option
-        label="Text field"
-        value="Text field" />
+        :label="$gettext('Text field')"
+        :value="$gettext('Text field')" />
       <el-option
-        label="Numeric field"
-        value="Numeric field" />
+        :label="$gettext('Numeric field')"
+        :value="$gettext('Numeric field')" />
       <el-option
-        label="Yes - no field"
-        value="Yes - no field" />
+        :label="$gettext('Yes - no field')"
+        :value="$gettext('Yes - no field')" />
       <el-option
-        label="Single choice"
-        value="Single choice" />
+        :label="$gettext('Single choice')"
+        :value="$gettext('Single choice')" />
       <el-option
-        label="Multiple choice"
-        value="Multiple choice" />
+        :label="$gettext('Multiple choice')"
+        :value="$gettext('Multiple choice')" />
     </el-select>
 
     <!-- Question -->
     <el-input
       v-model="question"
-      placeholder="Question text" />
+      :placeholder="$gettext('Question text')" />
 
     <div class="QSwitches">
       <!-- Required -->
       <el-switch
         v-model="required"
-        active-text="Required" />
+        :active-text="$gettext('Required')" />
 
       <!-- Active -->
       <!-- <el-switch
@@ -41,7 +41,7 @@
       <!-- TODO -->
       <el-switch
         v-model="active"
-        active-text="Private" />
+        :active-text="$gettext('Private')" />
     </div>
 
     <!-- Valid -->

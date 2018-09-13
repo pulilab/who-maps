@@ -1,18 +1,27 @@
 <template>
   <div class="DashboardArea">
-    <div
-      v-show="loading"
-      class="Loader"
-    >
-      <div />
-      <span>Updating filters and datapoints</span>
-    </div>
+
+    <transition name="el-fade-in">
+      <div
+        v-show="loading"
+        class="DashboardLoader">
+        <div>
+          <div class="Loader">
+            <div />
+            <span><translate>Updating filters and datapoints</translate></span>
+          </div>
+        </div>
+      </div>
+    </transition>
+
     <div class="ChildContainer">
       <nuxt-child />
     </div>
+
     <div class="FilterArea">
       <advanced-search />
     </div>
+
   </div>
 </template>
 
@@ -69,10 +78,7 @@ export default {
   @import "~assets/style/mixins.less";
 
   .DashboardArea {
-
-    .Loader {
-      // posit
-    }
+    position: relative;
     display: flex;
     overflow: hidden;
     width: 100vw;
@@ -80,7 +86,30 @@ export default {
     max-width: @appWidthMaxLimit;
     height: calc(100vh - @topBarHeight - @actionBarHeight - @appFooterHeight);
 
+    .DashboardLoader {
+      z-index: 3;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255,255,255,.5);
+
+      > div {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        background-color: rgba(255,255,255,.9);
+        border-radius: 5px;
+        box-shadow: 0 4px 12px 0 rgba(0,0,0,.12);
+      }
+    }
+
     .ChildContainer {
+      z-index: 1;
+      position: relative;
       width: calc(100vw - @advancedSearchWidth);
       min-width: @appWidthMinLimit - @advancedSearchWidth;
       max-width: @appWidthMaxLimit - @advancedSearchWidth;
@@ -92,6 +121,8 @@ export default {
     }
 
     .FilterArea {
+      z-index: 2;
+      position: relative;
       width: @advancedSearchWidth;
       height: 100%;
       overflow-x: hidden;

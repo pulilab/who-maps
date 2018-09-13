@@ -40,9 +40,10 @@
             <div class="ItemTitle">
               <translate> Site Language</translate>
             </div>
-            <language-item
-              v-if="user.language"
-              :code="user.language" />
+
+            <language-select
+              v-model="currentLanguage"
+            />
           </div>
         </div>
 
@@ -107,12 +108,12 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import LanguageItem from './LanguageItem';
+import LanguageSelect from './LanguageSelect';
 import CountryItem from './CountryItem';
 
 export default {
   components: {
-    LanguageItem,
+    LanguageSelect,
     CountryItem
   },
   data () {
@@ -129,6 +130,17 @@ export default {
     },
     isUserDA () {
       return (this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)) || this.user.is_superuser;
+    },
+    currentLanguage: {
+      get () {
+        return this.$i18n.locale;
+      },
+      set (value) {
+        const name = this.$route.name.split('___')[0];
+        const path = this.localePath({...this.$route, name}, value);
+        this.$router.replace(path);
+        this.shown = false;
+      }
     }
 
   },

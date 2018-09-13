@@ -3,6 +3,7 @@
     <digital-health-interventions-dialog />
     <dashboard-filters-dialog />
     <save-filter-dialog />
+    <send-email-dialog />
   </div>
 </template>
 
@@ -10,12 +11,14 @@
 import DigitalHealthInterventionsDialog from './DigitalHealthInterventionsDialog';
 import DashboardFiltersDialog from './DashboardFiltersDialog';
 import SaveFilterDialog from './SaveFilterDialog';
+import SendEmailDialog from './SendEmailDialog';
 
 export default {
   components: {
     DigitalHealthInterventionsDialog,
     DashboardFiltersDialog,
-    SaveFilterDialog
+    SaveFilterDialog,
+    SendEmailDialog
   }
 };
 </script>

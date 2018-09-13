@@ -28,7 +28,8 @@ const config = ($stateProvider, $locationProvider, $ngReduxProvider) => {
         axisId: '0',
         domainId: '0',
         lng: window.$nuxt.$i18n.locale,
-        id: window.$nuxt.$route.params.id
+        id: window.$nuxt.$route.params.id,
+        org: window.$nuxt.$route.params.organisation
       },
       template: '<maps-toolkit layout="column" layout-fill></maps-toolkit>',
       resolve: {
@@ -42,7 +43,8 @@ const config = ($stateProvider, $locationProvider, $ngReduxProvider) => {
       params: {
         axisId: '0',
         lng: window.$nuxt.$i18n.locale,
-        id: window.$nuxt.$route.params.id
+        id: window.$nuxt.$route.params.id,
+        org: window.$nuxt.$route.params.organisation
       },
       template: '<scorecard ></scorecard>'
     })
@@ -50,7 +52,8 @@ const config = ($stateProvider, $locationProvider, $ngReduxProvider) => {
       url: '/:lng/:org/projects/:id/toolkit/summary',
       params: {
         lng: window.$nuxt.$i18n.locale,
-        id: window.$nuxt.$route.params.id
+        id: window.$nuxt.$route.params.id,
+        org: window.$nuxt.$route.params.organisation
       },
       template: '<scorecard layout-fill layout="column" summary="true"></scorecard>'
     });

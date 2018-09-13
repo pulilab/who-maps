@@ -37,7 +37,7 @@
               class="Verified"
             >
               <fa icon="check-circle" />
-              Verified by country
+              <translate>Verified by country</translate>
             </el-col>
           </el-row>
 
@@ -50,7 +50,7 @@
               <fa
                 icon="search"
                 size="xs" />
-              <span>Found in "{{ found }}"</span>
+              <span><translate :parameters="{found}">Found in "{found}"</translate></span>
             </el-col>
           </el-row>
         </el-col>
@@ -130,14 +130,14 @@ export default {
     },
     found () {
       const nameMApping = {
-        country: 'Country',
-        donor: 'Donors',
-        loc: 'Location',
-        name: 'Name',
-        org: 'Organisation',
-        overview: 'Implementation Overview',
-        partner: 'Partners',
-        region: 'Rgion'
+        country: this.$gettext('Country'),
+        donor: this.$gettext('Donors'),
+        loc: this.$gettext('Location'),
+        name: this.$gettext('Name'),
+        org: this.$gettext('Organisation'),
+        overview: this.$gettext('Implementation Overview'),
+        partner: this.$gettext('Partners'),
+        region: this.$gettext('Region')
       };
       if (this.foundIn && this.showFoundIn) {
         return this.foundIn.map(f => nameMApping[f]).join(',');

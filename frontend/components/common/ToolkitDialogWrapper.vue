@@ -24,11 +24,6 @@ export default {
       factory.factory(0, 0, this.$gettext('MAPS Toolkit'), 'HeaderBtn', this.$gettext('Toolkit'));
       this.initialised = true;
     });
-  },
-  methods: {
-    $gettext (word) {
-      return this.$t(word);
-    }
   }
 };
 </script>
@@ -37,7 +32,7 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-  .ToolkitBtn {}
+  // .ToolkitBtn {}
 
   // TODO: Remove Angular Material
   body.md-dialog-is-showing {

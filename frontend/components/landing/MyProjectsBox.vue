@@ -5,10 +5,11 @@
       align="middle"
       class="ProjectsBoxHeadline">
       <el-col>
-        <h2>My Projects</h2>
+        <h2><translate>My Projects</translate></h2>
         <h6>
-          Here you can find a list of the last 3 projects<br>
-          which have been updated recently:
+          <translate>Here you can find a list of the last 3 projects</translate>
+          <br>
+          <translate>which have been updated recently:</translate>
         </h6>
       </el-col>
     </el-row>
@@ -25,7 +26,7 @@
           :to="localePath({name: 'organisation-projects', params: $route.params })"
           tag="button"
           class="el-button el-button--default el-button--medium">
-          See all my projects
+          <translate>See all my projects</translate>
         </nuxt-link>
       </el-col>
     </el-row>
