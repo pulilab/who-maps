@@ -13,7 +13,6 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 
 from core.views import TeamTokenAuthMixin
-from project.permissions import InTeamOrReadOnly
 from project.serializers import CountryCustomAnswerSerializer
 from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
