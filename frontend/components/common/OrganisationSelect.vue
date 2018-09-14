@@ -46,7 +46,10 @@ export default {
     }),
     innerValue: {
       get () {
-        return this.value;
+        if (isNaN(this.value)) {
+          return this.value;
+        }
+        return this.value ? +this.value : null;
       },
       set (value) {
         this.$emit('change', value);
