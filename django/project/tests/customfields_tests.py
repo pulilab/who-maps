@@ -143,7 +143,7 @@ def test_country_answer_new_question(self):
     project = Project.objects.last()
     self.assertEqual(project.data['country_custom_answers'], {str(q1.id): 'lol1', str(q2.id): 'lol2'})
     self.assertEqual(project.draft['country_custom_answers'], {str(q1.id): 'lol1', str(q2.id): 'lol2'})
-    
+
 def test_reorder_country_questions_unsuccessful(self):
     q = CountryCustomQuestion.objects.create(question="test3", country_id=self.country_id)
 
@@ -158,3 +158,35 @@ def test_reorder_country_questions_unsuccessful(self):
     response = self.test_user_client.post(url, format='json')
     self.assertEqual(response.status_code, 404)
     self.assertEqual(response.json(), {'detail': 'Not found.'})
+
+def test_reorder_country_questions_success(self):
+    q1 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
+    q2 = CountryCustomQuestion.objects.create(question="test2", country_id=self.country_id)
+    q3 = CountryCustomQuestion.objects.create(question="test3", country_id=self.country_id)
+
+    url = reverse("country-detail", kwargs={"pk": self.country_id})
+    response = self.test_user_client.get(url, format='json')
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(len(response.json()['country_questions']), 3)
+    self.assertTrue(response.json()['country_questions'][0]['id'] <
+                    response.json()['country_questions'][1]['id'] <
+                    response.json()['country_questions'][2]['id'])
+    self.assertTrue(response.json()['country_questions'][0]['order'] <
+                    response.json()['country_questions'][1]['order'] <
+                    response.json()['country_questions'][2]['order'])
+
+    url = reverse("country-custom-questions-set-order-to", kwargs={"pk": q3.id})
+    response = self.test_user_client.post(url, data={'to': str(response.json()['country_questions'][0]['order'])},
+                                          format='json')
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response.json(), {'status': 'order set'})
+
+    url = reverse("country-detail", kwargs={"pk": self.country_id})
+    response = self.test_user_client.get(url, format='json')
+    self.assertEqual(response.status_code, 200)
+    self.assertTrue(response.json()['country_questions'][1]['id'] <
+                    response.json()['country_questions'][2]['id'] <
+                    response.json()['country_questions'][0]['id'])
+    self.assertTrue(response.json()['country_questions'][0]['order'] <
+                    response.json()['country_questions'][1]['order'] <
+                    response.json()['country_questions'][2]['order'])
