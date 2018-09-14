@@ -446,10 +446,7 @@ export default {
     }),
 
     userTypeRequested () {
-      return this.profile.account_type && (
-        this.innerProfile.account_type === null ||
-        this.innerProfile.account_type === this.profile.account_type
-      );
+      return this.profile.account_type !== 'I' && !this.profile.account_type_approved;
     },
 
     donorId: {
