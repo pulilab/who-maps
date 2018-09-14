@@ -33,7 +33,7 @@ export default {
       store.dispatch('countries/loadMapData'),
       store.dispatch('landing/search')
     ]);
-    if (params.organisation !== 'who') {
+    if (params.organisation !== '-') {
       await store.dispatch('landing/loadCountryData', params.organisation);
     } else {
       store.dispatch('landing/clearCountryData');
