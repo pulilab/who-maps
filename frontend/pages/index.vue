@@ -4,6 +4,7 @@
 
 <script>
 export default {
+  middleware: ['defaultOrg']
 };
 </script>
 
