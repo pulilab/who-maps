@@ -14,7 +14,7 @@ from django.http import HttpResponse
 from django.utils.encoding import force_text
 from rest_framework.test import APIClient
 
-from country.models import Country
+from country.models import Country, Donor
 from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
 from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
@@ -1128,3 +1128,12 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()[0]['id'], self.project_id)
         self.assertEqual(response.json()[0]['name'], self.project_data['name'])
         self.assertEqual(response.json()[0]['country'], self.country_id)
+
+    def test_remove_stale_donors_from_projects(self):
+        project = Project.objects.last()
+        self.assertEqual(project.data['donors'], [self.d1.id, self.d2.id])
+
+        Donor.objects.get(id=self.d2.id).delete()
+        Project.remove_stale_donors()
+        project.refresh_from_db()
+        self.assertEqual(project.data['donors'], [self.d1.id])
