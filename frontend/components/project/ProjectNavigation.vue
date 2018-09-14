@@ -155,6 +155,7 @@
           v-if="isPublished"
           type="text"
           class="GoToDashboard"
+          @click="goToDashboard"
         >
           <translate>Go to Dashboard</translate>
         </el-button>
@@ -163,6 +164,7 @@
           v-if="isNewProject"
           type="text"
           class="CancelButton WithHint"
+          @click="goToDashboard"
         >
           <translate>Cancel</translate>
           <span class="ButtonHint"><translate>Go back to Dashboard</translate></span>
@@ -228,6 +230,10 @@ export default {
     },
     goToPublished () {
       const localised = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params}});
+      this.$router.push(localised);
+    },
+    goToDashboard () {
+      const localised = this.localePath({name: 'organisation-dashboard', params: {...this.$route.params}});
       this.$router.push(localised);
     }
   }
