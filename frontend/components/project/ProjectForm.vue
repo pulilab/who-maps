@@ -387,6 +387,9 @@ export default {
     .Loader {
       display: block;
       margin: 0 auto 80px;
+       span {
+         margin: 0 auto;
+       }
     }
 
     > .el-form {
