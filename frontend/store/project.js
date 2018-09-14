@@ -90,10 +90,14 @@ export const actions = {
     const { data } = userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`);
     commit('SET_ORIGINAL', Object.freeze(data));
     const clean = cleanState();
-    const published = {...clean, ...apiReadParser(data.published)};
-    const draft = {...clean, ...apiReadParser(data.draft)};
-    commit('SET_PUBLISHED', Object.freeze(published));
-    commit('INIT_PROJECT', draft);
+    if (data.draft) {
+      const draft = {...clean, ...apiReadParser(data.draft)};
+      commit('INIT_PROJECT', draft);
+    }
+    if (data.published) {
+      const published = {...clean, ...apiReadParser(data.published)};
+      commit('SET_PUBLISHED', Object.freeze(published));
+    }
     await dispatch('loadTeamViewers', id);
   },
   async loadTeamViewers ({commit}, projectId) {
