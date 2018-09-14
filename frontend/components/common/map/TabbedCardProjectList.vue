@@ -61,13 +61,20 @@ export default {
     },
     setStripeSize () {
       this.$nextTick(() => {
-        const stripe = this.$el.querySelector('.el-tabs__active-bar');
-        const tabNameBox = this.$el.querySelector('.el-tabs__item.is-active').getBoundingClientRect();
-        const componentBox = this.$el.getBoundingClientRect();
-        const stripeWidth = tabNameBox.width - 12;
-        const stripeTranslate = tabNameBox.left === 60 ? 0 : Math.ceil(tabNameBox.left - componentBox.left) - 9;
-        stripe.style.width = `${stripeWidth}px`;
-        stripe.style.transform = `translate(${stripeTranslate}px)`;
+        try {
+          const stripe = this.$el.querySelector('.el-tabs__active-bar');
+          const tabName = this.$el.querySelector('.el-tabs__item.is-active');
+          const tabNameBox = tabName.getBoundingClientRect();
+          const tabsContainer = this.$el.querySelector('.el-tabs__nav-scroll').getBoundingClientRect();
+          const stripeLeftCorner = tabNameBox.left - tabsContainer.left;
+          const paddingLeft = parseInt(getComputedStyle(tabName).paddingLeft, 10);
+          const stripeWidth = tabNameBox.width - paddingLeft;
+          const stripeTranslate = stripeLeftCorner === 0 ? 0 : stripeLeftCorner + paddingLeft;
+          stripe.style.width = `${stripeWidth}px`;
+          stripe.style.transform = `translate(${stripeTranslate}px)`;
+        } catch (e) {
+          console.error('Failed to calculate strip lenght', e);
+        }
       });
     }
   }
