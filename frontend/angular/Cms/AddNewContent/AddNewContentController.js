@@ -79,7 +79,10 @@ class AddNewContentController {
   }
 
   showAddNewContentDialog (event) {
+    const self = this;
     const content = this.toEdit ? Object.assign({}, this.toEdit) : {};
+    self.scrollTop = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
+    document.documentElement.scrollTop = 0;
 
     this.dialog.show({
       controller: AddNewContentDialog.factory(content),
@@ -88,6 +91,8 @@ class AddNewContentController {
       parent: angular.element(document.body),
       targetEvent: event,
       clickOutsideToClose: true
+    }).finally(() => {
+      document.documentElement.scrollTop = self.scrollTop;
     });
   }
 
