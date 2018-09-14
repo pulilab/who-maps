@@ -27,4 +27,20 @@ export default {
   @import "../../../../assets/style/variables.less";
   @import "../../../../assets/style/mixins.less";
 
+  .ProjectDraftView {
+    .DraftLabel {
+      display: inline-block;
+      height: 24px;
+      margin: 0 2px;
+      padding: 0 10px;
+      font-size: @fontSizeSmall;
+      font-weight: 700;
+      line-height: 24px;
+      text-transform: uppercase;
+      border-radius: 12px;
+      background-color: @colorDraft;
+      color: @colorTextPrimary;
+    }
+  }
+
 </style>
