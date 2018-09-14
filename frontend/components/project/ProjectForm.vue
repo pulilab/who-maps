@@ -127,7 +127,7 @@ export default {
           required: true
         },
         end_date: {
-          required: true
+          required: false
         },
         contact_name: {
           required: true,
