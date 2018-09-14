@@ -29,7 +29,7 @@ export default {
     currentProject: {
       immediate: true,
       handler (project) {
-        if (!project.name && !this.profile.is_superuser && this.route !== 'organisation-projects-id-published') {
+        if (!project.name && this.profile && !this.profile.is_superuser && this.route !== 'organisation-projects-id-published') {
           this.$alert(this.$gettext('You are not authorized to access this view'), this.$gettext('Warning'), {
             confirmButtonText: 'OK',
             callback: () => {
