@@ -101,10 +101,14 @@ export default {
       return this.$route.path.includes('/admin') || this.$route.path.endsWith('/edit-profile');
     },
     allowCountryAdmin () {
-      return (['CA', 'SCA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
+      if (this.userProfile) {
+        return (['CA', 'SCA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
+      }
     },
     allowDonorAdmin () {
-      return (['DA', 'SDA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
+      if (this.userProfile) {
+        return (['DA', 'SDA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
+      }
     },
     isDashboard () {
       return this.$route.path.includes('/dashboard');
