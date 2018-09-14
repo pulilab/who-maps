@@ -119,3 +119,27 @@ def test_country_answer_update_existing_answer(self):
     project = Project.objects.last()
     self.assertEqual(project.data['country_custom_answers'], {str(q.id): 'lol2'})
     self.assertEqual(project.draft['country_custom_answers'], {str(q.id): 'lol2'})
+
+def test_country_answer_new_question(self):
+    q1 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
+    q2 = CountryCustomQuestion.objects.create(question="test2", country_id=self.country_id)
+    url = reverse("country-custom-answer",
+                  kwargs={
+                      "country_id": self.country_id,
+                      "project_id": self.project_id
+                  })
+    data = [dict(question_id=q1.id, answer="lol1", draft=False)]
+
+    response = self.test_user_client.post(url, data=data, format='json')
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response.json(), [{'question_id': q1.id, 'answer': 'lol1', 'draft': False}])
+
+    data = [dict(question_id=q2.id, answer="lol2", draft=False)]
+
+    response = self.test_user_client.post(url, data=data, format='json')
+    self.assertEqual(response.status_code, 200)
+    self.assertEqual(response.json(), [{'question_id': q2.id, 'answer': 'lol2', 'draft': False}])
+
+    project = Project.objects.last()
+    self.assertEqual(project.data['country_custom_answers'], {str(q1.id): 'lol1', str(q2.id): 'lol2'})
+    self.assertEqual(project.draft['country_custom_answers'], {str(q1.id): 'lol1', str(q2.id): 'lol2'})
