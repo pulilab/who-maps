@@ -71,7 +71,6 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
     def create(self, validated_data) -> Project:
         instance = self.context['project']
         data_key = 'draft' if validated_data['draft'] else 'data'
-        validated_data.pop('draft', None) # TODO: do we need?
 
         custom_answers = getattr(instance, data_key).get('country_custom_answers', {})
         custom_answers[validated_data['question_id']] = validated_data['answer']
