@@ -75,6 +75,8 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
         custom_answers = getattr(instance, data_key).get('country_custom_answers', {})
         custom_answers[validated_data['question_id']] = validated_data['answer']
         getattr(instance, data_key)['country_custom_answers'] = custom_answers
+        if data_key != 'draft':
+            instance.draft['country_custom_answers'] = custom_answers
         instance.save()
         return instance
 
