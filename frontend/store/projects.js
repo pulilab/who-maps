@@ -209,6 +209,9 @@ export const actions = {
   },
   updateProject ({commit}, project) {
     commit('EDIT_USER_PROJECT', project);
+  },
+  removeProject ({commit}, id) {
+    commit('RM_USER_PROJECT', id);
   }
 };
 
@@ -222,6 +225,9 @@ export const mutations = {
   EDIT_USER_PROJECT: (state, project) => {
     const index = state.userProjects.findIndex(p => p.id === project.id);
     state.userProjects.splice(index, 1, project);
+  },
+  RM_USER_PROJECT: (state, id) => {
+    state.userProjects = state.userProjects.filter(p => p.id !== id);
   },
   SET_CURRENT_PROJECT: (state, project) => {
     state.currentProject = project;
