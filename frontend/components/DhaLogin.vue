@@ -211,6 +211,7 @@ export default {
       this.$refs.loginForm.validate(async valid => {
         if (valid) {
           try {
+            this.$nuxt.$loading.start();
             await this.login({
               username: this.username,
               password: this.password
@@ -222,6 +223,7 @@ export default {
           } catch (err) {
             this.setFormAPIErrors(err);
             this.$refs.loginForm.validate(() => {});
+            this.$nuxt.$loading.finish();
           }
         }
       });
