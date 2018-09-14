@@ -29,9 +29,9 @@ export default {
       selectedCountry: 'landing/getSelectedCountry',
       getActiveTab: 'landing/getProjectBoxActiveTab',
       activeSubLevel: 'landing/getActiveSubLevel',
-      currentSubLevelProjects: 'landing/getActiveCountryCurrentSubLevelProjects',
+      currentSubLevelProjects: 'landing/getSelectedCountryCurrentSubLevelProjects',
       filteredProjects: 'landing/getActiveTabProjects',
-      nationalProjects: 'landing/getActiveCountryNationalProjects'
+      nationalProjects: 'landing/getSelectedCountryNationalProjects'
     }),
     activeCountry: {
       get () {
