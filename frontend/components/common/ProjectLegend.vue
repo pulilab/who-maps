@@ -42,12 +42,12 @@ export default {
       userProfile: 'user/getProfile'
     }),
     isMember () {
-      if (this.id) {
+      if (this.id && this.userProfile) {
         return this.userProfile.member.includes(this.id);
       }
     },
     isViewer () {
-      if (this.id) {
+      if (this.id && this.userProfile) {
         return this.userProfile.viewer.includes(this.id);
       }
     },
