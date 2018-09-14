@@ -512,6 +512,7 @@ export default {
       this.$refs.editProfileForm.validate(async valid => {
         if (valid) {
           try {
+            const isFirstSave = !this.profile.country;
             await this.updateUserProfile(this.innerProfile);
             window.scrollTo(0, 0);
             this.$message({
@@ -519,7 +520,11 @@ export default {
               type: 'success',
               showClose: true
             });
-            this.changeLocale(this.innerProfile.language);
+            if (isFirstSave) {
+              this.routeToDashboard(this.innerProfile.language);
+            } else {
+              this.changeLocale(this.innerProfile.language);
+            }
           } catch (err) {
             console.log('ERR:', err);
             this.setFormAPIErrors(err);
@@ -539,6 +544,10 @@ export default {
         const path = this.localePath({...this.$route, name}, locale);
         this.$router.replace(path);
       }
+    },
+    routeToDashboard (locale) {
+      const path = this.localePath({name: 'organisation-dashboard', params: this.$route.params}, locale);
+      this.$router.push(path);
     },
     changingUserRole () {
       this.changeApprovedUserRole = true;
