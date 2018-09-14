@@ -126,7 +126,7 @@ const config = {
       }
     }
   },
-  loading: { color: '#D86422' },
+  loading: '~/components/DhaLoader.vue',
   build: {
     extractCSS: true,
     extend (config, { isDev, isClient }) {
