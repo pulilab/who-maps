@@ -30,8 +30,13 @@ export default {
       immediate: true,
       handler (project) {
         if (!project.name && !this.profile.is_superuser && this.route !== 'organisation-projects-id-published') {
-          const path = this.localePath({name: 'organisation-dashboard', params: this.$route.params});
-          this.$router.replace(path);
+          this.$alert(this.$gettext('You are not authorized to access this view'), this.$gettext('Warning'), {
+            confirmButtonText: 'OK',
+            callback: () => {
+              const path = this.localePath({name: 'organisation-projects-id-published', params: this.$route.params});
+              this.$router.replace(path);
+            }
+          });
         }
       }
     }
