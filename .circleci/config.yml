@@ -102,7 +102,7 @@ jobs:
           working_directory: ~/who-maps/django
           command: |
             fab dev deploy
-
+          no_output_timeout: "20m"
 
 workflows:
   version: 2
