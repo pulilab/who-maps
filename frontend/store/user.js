@@ -85,9 +85,10 @@ export const actions = {
     const user = getters.getProfile.id;
     const originalTeam = getters.getProfile.member;
     const originalViewer = getters.getProfile.viewer;
-    const member = team.includes(user) ? union(originalTeam, [id]) : originalTeam;
-    const viewer = viewers.includes(user) ? union(originalViewer, [id]) : originalViewer;
+    const member = team.includes(user) ? union(originalTeam, [id]) : originalTeam.filter(o => o !== id);
+    const viewer = viewers.includes(user) ? union(originalViewer, [id]) : originalViewer.filter(o => o !== id);
     commit('UPDATE_TEAM_VIEWER', {member, viewer});
+    return team.includes(user) || viewers.includes(user);
   },
 
   async verifyEmail (ctx, key) {
