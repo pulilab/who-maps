@@ -130,7 +130,7 @@ export default {
     },
     isViewer () {
       if (this.user) {
-        return this.user.viewer.includes(+this.$route.params.id);
+        return this.user.is_superuser || this.user.viewer.includes(+this.$route.params.id);
       }
       return true;
     },

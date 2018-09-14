@@ -203,7 +203,7 @@ export default {
     },
     anon () {
       if (this.user) {
-        return ![...this.user.member, ...this.user.viewer].includes(+this.$route.params.id);
+        return !this.user.is_superuser && ![...this.user.member, ...this.user.viewer].includes(+this.$route.params.id);
       }
       return true;
     },
@@ -222,7 +222,8 @@ export default {
       });
     },
     goToDraft () {
-      const localised = this.localePath({name: 'organisation-projects-id-edit', params: {...this.$route.params}});
+      const name = this.isTeam ? 'organisation-projects-id-edit' : 'organisation-projects-id';
+      const localised = this.localePath({name, params: {...this.$route.params}});
       this.$router.push(localised);
     },
     goToPublished () {
