@@ -133,17 +133,19 @@ export default {
     },
     updateGeoJsonStyle (nationalLevelCoverage, subLevel) {
       this.$nextTick(() => {
-        this.$refs.geoJson.mapObject.eachLayer((layer) => {
-          if (nationalLevelCoverage) {
-            layer.setStyle(this.nationalLevelCoverageStyle);
-          } else if (subLevel === layer.feature.properties.id) {
-            layer.setStyle(this.activelSubLevelStyle);
-            layer.bringToFront();
-          } else {
-            layer.setStyle(this.defaultlSubLevelStyle);
-            layer.bringToBack();
-          }
-        });
+        if (this.$refs.geoJson && this.$refs.geoJson.mapObject) {
+          this.$refs.geoJson.mapObject.eachLayer((layer) => {
+            if (nationalLevelCoverage) {
+              layer.setStyle(this.nationalLevelCoverageStyle);
+            } else if (subLevel === layer.feature.properties.id) {
+              layer.setStyle(this.activelSubLevelStyle);
+              layer.bringToFront();
+            } else {
+              layer.setStyle(this.defaultlSubLevelStyle);
+              layer.bringToBack();
+            }
+          });
+        }
       });
     }
   }
