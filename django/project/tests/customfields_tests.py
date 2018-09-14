@@ -143,3 +143,18 @@ def test_country_answer_new_question(self):
     project = Project.objects.last()
     self.assertEqual(project.data['country_custom_answers'], {str(q1.id): 'lol1', str(q2.id): 'lol2'})
     self.assertEqual(project.draft['country_custom_answers'], {str(q1.id): 'lol1', str(q2.id): 'lol2'})
+    
+def test_reorder_country_questions_unsuccessful(self):
+    q = CountryCustomQuestion.objects.create(question="test3", country_id=self.country_id)
+
+    url = reverse("country-custom-questions-set-order-to", kwargs={"pk": q.id})
+    response = self.test_user_client.post(url, format='json')
+    self.assertEqual(response.status_code, 400)
+
+    response = self.test_user_client.post(url, data={'to': 'a'}, format='json')
+    self.assertEqual(response.status_code, 400)
+
+    url = reverse("country-custom-questions-set-order-to", kwargs={"pk": 999})
+    response = self.test_user_client.post(url, format='json')
+    self.assertEqual(response.status_code, 404)
+    self.assertEqual(response.json(), {'detail': 'Not found.'})
