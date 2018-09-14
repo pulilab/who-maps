@@ -1,5 +1,7 @@
 <template>
-  <div class="PersonaSelector">
+  <div
+    v-if="user"
+    class="PersonaSelector">
     <el-popover
       placement="bottom-end"
       popper-class="CustomPopover PersonaSelectorPopover"
