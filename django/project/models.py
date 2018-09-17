@@ -73,9 +73,8 @@ class Project(SoftDeleteModel, ExtendedModel):
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
 
-    def is_country_admin(self, user):
-        # Country admin has permissions only for the published project
-        return user.userprofile in self.get_country().users.all() if self.get_country() else False
+    def is_country_user_or_admin(self, user):
+        return self.get_country().user_in_groups(user.userprofile) if self.get_country() else False
 
     def get_member_data(self):
         return self.data
