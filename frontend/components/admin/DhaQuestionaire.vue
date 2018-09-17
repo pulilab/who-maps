@@ -1,11 +1,16 @@
 <template>
   <div>
     <div class="QuestionnaireWrapper">
-      <draggable v-model="questions">
+      <draggable
+        v-model="questions"
+        :options="draggableOptions"
+        :move="moveHandler">
         <dha-question
           v-for="(question, index) in questions"
           :key="index"
-          :question-id="question.id" />
+          :id="question.id"
+          :draggable="allSaved"
+        />
       </draggable>
     </div>
 
@@ -14,48 +19,22 @@
       align="middle"
       class="QActionContainer">
       <el-col class="QActionsButtons">
-        <el-button
-          type="text"
-          class="IconLeft"
-          @click="addQuestion"
-        >
-          <fa icon="plus" />
-          <translate>Add new question</translate>
-        </el-button>
-
-        <!-- <el-button
-          type="warning"
-          plain
-          size="small"
-          icon="el-icon-delete"
-          @click="eraseChanges"
-        >
-          Erase change
-        </el-button> -->
-
-        <!-- <el-button
-          :disabled="!allValid"
-          type="success"
-          plain
-          size="small"
-          icon="el-icon-check"
-          @click="saveChanges"
-        >
-          Save changes
-        </el-button> -->
-      </el-col>
-
-      <el-col class="QAlerts">
-        <el-alert
-          v-if="reordered"
-          :title="$gettext('Questions are reordered!')"
-          type="warning alert"
-          show-icon />
-        <el-alert
-          v-if="!allValid"
-          :title="$gettext('Contains invalid element!')"
-          type="error"
-          show-icon />
+        <el-tooltip
+          :disabled="allSaved"
+          :content="$gettext('Before adding another question please save the previous one')"
+          placement="top">
+          <span>
+            <el-button
+              :disabled="!allSaved"
+              type="text"
+              class="IconLeft"
+              @click="addQuestion"
+            >
+              <fa icon="plus" />
+              <translate>Add new question</translate>
+            </el-button>
+          </span>
+        </el-tooltip>
       </el-col>
     </el-row>
   </div>
@@ -75,50 +54,52 @@ export default {
 
   data () {
     return {
-      opened: 'opened'
+      from: null,
+      to: null
     };
   },
 
   computed: {
-
     ...mapGetters({
-      getQuestions: 'admin/questions/getQuestions',
-      reordered: 'admin/questions/getReordered'
+      getQuestions: 'admin/questions/getQuestions'
     }),
-
-    allValid () {
-      return this.questions.every(q => Boolean(q.type && q.question.length && (!q.type.includes('choice') || q.options.length)));
+    allSaved () {
+      return !!this.questions.reduce((a, c) => a && c.id, true);
     },
-
+    draggableOptions () {
+      return {
+        disabled: !this.allSaved,
+        handle: '.DDHandler'
+      };
+    },
     questions: {
       get () {
         return this.getQuestions;
       },
-      set (val) {
-        this.draggedQuestions(val);
+      async set (newOrder) {
+        this.$nuxt.$loading.start();
+        try {
+          await this.processReOrder({from: this.from, to: this.to, newOrder});
+          this.$message({message: this.$gettext('New order saved'), type: 'success'});
+        } catch (e) {
+          this.$message.error(this.$gettext('An error occured while processing your request'));
+        }
+        setTimeout(() => {
+          this.$nuxt.$loading.finish();
+        }, 500);
       }
     }
   },
 
   methods: {
-
     ...mapActions({
-      restoreQuestions: 'admin/questions/restoreQuestions',
       addQuestion: 'admin/questions/addQuestion',
-      patchQuestions: 'admin/questions/patchQuestions',
-      draggedQuestions: 'admin/questions/draggedQuestions'
+      processReOrder: 'admin/questions/processReOrder'
     }),
-
-    eraseChanges () {
-      if (confirm('Do you really want to delete all the changes you\'ve made?')) {
-        this.restoreQuestions();
-      }
-    },
-
-    saveChanges () {
-      console.log('TODO: button only clickable if everything is valid');
-      this.patchQuestions();
-      console.log('TODO: state handling (froze this part of UI) while action takes place');
+    moveHandler (evt, originalEvt) {
+      this.from = evt.draggedContext.index;
+      this.to = evt.draggedContext.futureIndex;
+      return true;
     }
   }
 };

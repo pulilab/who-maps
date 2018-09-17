@@ -158,3 +158,15 @@ export const queryStringComparisonParser = collection => {
   }
   return result;
 };
+
+export const questionWriteParser = (question, type, parent) => {
+  return {
+    is_active: question.is_active,
+    type: +question.type,
+    question: question.question,
+    options: question.type > 3 ? question.options : [],
+    private: question.is_private,
+    required: question.required,
+    [type]: parent.id
+  };
+};

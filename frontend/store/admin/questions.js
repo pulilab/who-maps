@@ -1,134 +1,78 @@
+import { questionWriteParser } from '../../utilities/api';
 
 export const state = () => ({
-  questionaireId: null,
+  questionnaireType: 'country',
   questions: [],
-  rawQuestions: [],
   reordered: false
 });
 
 export const getters = {
   getQuestions: state => state.questions,
   getQuestionById: state => id => state.questions.find(q => q.id === id),
-  getQuestionOptionsById: state => id => state.questions.find(q => q.id === id).options,
   getReordered: state => state.reordered
 };
 
 export const actions = {
-  async fetchQuestions ({ state, commit }) {
-    commit('storeQuestions', []);
-    commit('storeRawQuestions', []);
-    const { data } = await this.$axios.get(`/questions/${state.questionaireId}`);
-    commit('storeQuestions', data);
-    commit('storeRawQuestions', data);
+  setQuestionnaireType ({commit}, type) {
+    commit('SET_QUESTIONNAIRE_TYPE', type);
+    commit('SET_QUESTIONS', []);
   },
-
-  restoreQuestions ({ state, commit }) {
-    commit('storeQuestions', JSON.parse(JSON.stringify(state.rawQuestions)));
-  },
-
-  alterLocalQuestion ({ commit }, diffObj) {
-    commit('storeLocalQuestionChanges', diffObj);
+  setQuestions ({ commit, state }, data) {
+    data = data[`${state.questionnaireType}_questions`];
+    commit('SET_QUESTIONS', data);
   },
 
   addQuestion ({ commit }) {
-    commit('storeNewQuestion');
+    commit('ADD_NEW_QUESTION');
   },
 
-  async patchQuestions ({ state, dispatch }) {
-    const patchData = state.questions
-      .map(el => {
-        const ret = {
-          type: el.type,
-          question: el.question,
-          options: el.type.includes('choice') ? el.options : [],
-          required: el.required,
-          active: el.active
-        };
-        if (el.meta !== 'added') {
-          ret.id = el.id;
-        }
-        return ret;
-      });
-    await this.$axios.patch(`/questions/${state.questionaireId}`, patchData);
-    dispatch('fetchQuestions');
+  async createQuestion ({ state, rootGetters, commit }, question) {
+    const type = state.questionnaireType;
+    const parent = rootGetters[`admin/${type}/getData`];
+    const parsed = questionWriteParser(question, type, parent);
+    const { data } = await this.$axios.post(`/api/${state.questionnaireType}-custom-questions/`, parsed);
+    commit('UPDATE_QUESTION', {question: data, id: undefined});
   },
 
-  removeOption ({ commit }, { questionId, index }) {
-    commit('storeRemoveOption', { questionId, index });
+  async updateQuestion ({ state, rootGetters, commit }, {question, id}) {
+    const type = state.questionnaireType;
+    const parent = rootGetters[`admin/${type}/getData`];
+    const parsed = questionWriteParser(question, type, parent);
+    const { data } = await this.$axios.patch(`/api/${state.questionnaireType}-custom-questions/${id}/`, parsed);
+    commit('UPDATE_QUESTION', {question: data, id});
   },
 
-  addOption ({ commit }, { questionId, optionStr }) {
-    commit('storeAddOption', { questionId, optionStr });
+  async deleteQuestion ({ commit, state }, id) {
+    if (id) {
+      await this.$axios.delete(`/api/${state.questionnaireType}-custom-questions/${id}/`);
+    }
+    commit('DELETE_QUESTION', id || undefined);
   },
 
-  draggedQuestions ({ state, commit }, newQuestionsArray) {
-    commit('storeQuestionsWithMeta', newQuestionsArray);
-    const originalOrder = state.rawQuestions
-      .every(({ id }, i) => id === newQuestionsArray[i].id);
-
-    commit('storeReordered', !originalOrder);
-  },
-
-  setQuestionaireId ({ commit }, id) {
-    commit('storeQuestionaireId', id);
+  async processReOrder ({state, commit}, {from, to, newOrder}) {
+    from = state.questions[from];
+    to = state.questions[to];
+    await this.$axios.post(`/api/${state.questionnaireType}-custom-questions/${from.id}/set_order_to/`, {to: to.order});
+    commit('SET_QUESTIONS', newOrder);
   }
 
 };
 
 export const mutations = {
-  storeQuestions (state, questions) {
-    state.questions = questions.map(el => ({...el, meta: 'synched', valid: null}));
+  SET_QUESTIONNAIRE_TYPE (state, type) {
+    state.questionnaireType = type;
   },
-
-  storeQuestionsWithMeta (state, questions) {
-    state.questions = questions;
+  SET_QUESTIONS (state, questions) {
+    state.questions = [...questions];
   },
-
-  storeRawQuestions (state, questions) {
-    state.rawQuestions = JSON.parse(JSON.stringify(questions));
+  ADD_NEW_QUESTION (state) {
+    state.questions.push({});
   },
-
-  storeLocalQuestionChanges (state, diffObj) {
-    const q = state.questions.find(q => q.id === diffObj.id);
-    Object.assign(q, diffObj);
-    if (q.meta !== 'added') {
-      q.meta = 'edited';
-    }
+  UPDATE_QUESTION (state, {question, id}) {
+    const index = state.questions.findIndex(q => q.id === id);
+    state.questions.splice(index, 1, question);
   },
-
-  storeNewQuestion (state) {
-    state.questions.push({
-      type: '',
-      question: '',
-      options: [],
-      required: false,
-      active: true,
-      meta: 'added',
-      id: `untracked-${Date.now()}`
-    });
-  },
-
-  storeRemoveOption (state, { questionId, index }) {
-    const q = state.questions.find(q => q.id === questionId);
-    q.options.splice(index, 1);
-    if (q.meta !== 'added') {
-      q.meta = 'edited';
-    }
-  },
-
-  storeAddOption (state, { questionId, optionStr }) {
-    const q = state.questions.find(q => q.id === questionId);
-    q.options.push(optionStr);
-    if (q.meta !== 'added') {
-      q.meta = 'edited';
-    }
-  },
-
-  storeReordered (state, bool) {
-    state.reordered = bool;
-  },
-
-  storeQuestionaireId (state, id) {
-    state.questionaireId = id;
+  DELETE_QUESTION (state, id) {
+    state.questions = state.questions.filter(q => q.id !== id);
   }
 };
