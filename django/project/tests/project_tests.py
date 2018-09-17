@@ -261,7 +261,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published']["platforms"][0]["id"], 999)
         self.assertEqual(response.json()['published']["platforms"][0]["strategies"][0], 998)
-        self.assertEqual(response.json()['published'].get("organisation_name"), self.org.name)
 
     def test_update_project_errors(self):
         url = reverse("project-publish", kwargs={"pk": self.project_id})
@@ -289,16 +288,13 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
-        self.assertEqual(response.json()['published'].get("organisation_name"), self.org.name)
         self.assertEqual(response.json()['published'].get("national_level_deployment")["clients"], 20000)
         self.assertEqual(response.json()['published'].get("platforms")[0]["id"],
                          self.project_data['platforms'][0]['id'])
         self.assertEqual(response.json()['published'].get("country"), self.country_id)
-        self.assertEqual(response.json()['published'].get("country_name"), 'Hungary')
 
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['published'].get("country_name"), 'Hongrie')
 
     def test_retrieve_project_government_details(self):
         url = reverse("project-retrieve", kwargs={"pk": self.project_id})

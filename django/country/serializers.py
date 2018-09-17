@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Union
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -13,16 +14,27 @@ from django.conf import settings
 
 from user.models import UserProfile
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, CountryField, MapFile, \
-    DonorCustomQuestion, CountryCustomQuestion
+    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion
 
 
-class CountryCustomQuestionSerializer(serializers.ModelSerializer):
+class OptionsValidatorMixin:
+    def validate_options_for_choice_fields(self, value):
+        if not len(value) > 0:
+            raise ValidationError('Ensure options field has at least 1 elements.')
+
+    def validate(self, attrs):
+        if attrs.get('type', CustomQuestion.TEXT) in (CustomQuestion.SINGLE, CustomQuestion.MULTI):
+            self.validate_options_for_choice_fields(attrs['options'])
+        return attrs
+
+
+class CountryCustomQuestionSerializer(OptionsValidatorMixin, serializers.ModelSerializer):
     class Meta:
         model = CountryCustomQuestion
         fields = "__all__"
 
 
-class DonorCustomQuestionSerializer(serializers.ModelSerializer):
+class DonorCustomQuestionSerializer(OptionsValidatorMixin, serializers.ModelSerializer):
     class Meta:
         model = DonorCustomQuestion
         fields = "__all__"
@@ -145,11 +157,8 @@ class UpdateAdminMixin:
                 fail_silently=True)
 
 
-def can_read_private_questions(obj, request):
-    return request.user.is_superuser or \
-           obj.admins.filter(id=request.user.userprofile.id).exists() or \
-           obj.super_admins.filter(id=request.user.userprofile.id).exists() or \
-           obj.users.filter(id=request.user.userprofile.id).exists()
+def can_read_private_questions(obj: Union[Country, Donor], request) -> bool:
+    return request.user.is_superuser or obj.user_in_groups(request.user.userprofile)
 
 
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",

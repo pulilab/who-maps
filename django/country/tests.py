@@ -21,7 +21,7 @@ from rest_framework.test import APITestCase
 
 from core.tests import get_temp_image
 from country.admin import CountryAdmin
-from country.models import Country, PartnerLogo, CountryField, Donor, DonorPartnerLogo
+from country.models import Country, PartnerLogo, CountryField, Donor, DonorPartnerLogo, CustomQuestion
 from project.models import Project
 from user.models import UserProfile
 from django.utils.six import StringIO
@@ -1271,6 +1271,38 @@ class CountryTests(APITestCase):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 404)
 
+    def test_country_custom_question_options_validation(self):
+        url = reverse("country-custom-questions-list")
+
+        data = {
+            "country": self.country.id,
+            "type": CustomQuestion.TEXT,
+            "question": "waddup?"
+        }
+        response = self.test_user_client.post(url, data=data)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['options'], [])
+
+        data = {
+            "country": self.country.id,
+            "type": CustomQuestion.SINGLE,
+            "question": "waddup?",
+            "options": []
+        }
+        response = self.test_user_client.post(url, data=data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'non_field_errors': ['Ensure options field has at least 1 elements.']})
+
+        data = {
+            "country": self.country.id,
+            "type": CustomQuestion.SINGLE,
+            "question": "waddup?",
+            "options": ['yes', 'maybe']
+        }
+        response = self.test_user_client.post(url, data=data)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['options'], ['yes', 'maybe'])
+
 
 class DonorTests(APITestCase):
     def setUp(self):
@@ -1813,7 +1845,6 @@ class CountryManagementCommandTest(TestCase):
                 os.remove(os.path.join(self.backup_folder, file))
 
     def test_country_management_command_clean_maps(self):
-
         out = StringIO()
         call_command('clean_maps', stdout=out)
         output = out.getvalue().strip()
