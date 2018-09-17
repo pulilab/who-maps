@@ -189,7 +189,7 @@
     <collapsible-card
       :title="$gettext('Country specific questionaire')"
       class="Questionnaire">
-      <dha-questionaire/>
+      <dha-questionaire ref="customQuestions" />
     </collapsible-card>
 
     <div class="AdminActionBarBottom">
@@ -197,7 +197,7 @@
         type="flex"
         justify="space-between">
         <el-button><translate>Dismiss changes</translate></el-button>
-        <el-button @click="saveChanges"><translate>Save changes</translate></el-button>
+        <el-button @click="save"><translate>Save changes</translate></el-button>
       </el-row>
     </div>
 
@@ -449,6 +449,15 @@ export default {
 
     setDonorId (value) {
       this.donorId = value;
+    },
+    save () {
+      if (this.$refs.customQuestions.allSaved) {
+        this.saveChanges();
+      } else {
+        this.$alert('Your questionnaire is not completely saved', 'Warning', {
+          confirmButtonText: 'Ok'
+        });
+      }
     }
   }
 };
