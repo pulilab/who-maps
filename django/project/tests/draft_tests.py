@@ -51,9 +51,7 @@ class ProjectDraftTests(SetupTests):
         self.assertEqual(response.json()['draft']['name'], 'Draft Proj 3')
         self.assertEqual(response.json()['draft']['implementation_overview'], 'Test overview')
         self.assertEqual(int(response.json()['draft']['organisation']), self.org.id)
-        self.assertEqual(response.json()['draft']['organisation_name'], self.org.name)
         self.assertEqual(int(response.json()['draft']['country']), self.country_id)
-        self.assertEqual(response.json()['draft']['country_name'], self.country.name)
         self.assertEqual(response.json()['published'], {})
         self.assertFalse(response.json()['public_id'])
 
