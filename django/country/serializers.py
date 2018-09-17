@@ -139,7 +139,7 @@ class UpdateAdminMixin:
         for profile in user_profiles:
             email_mapping[profile.language].append(profile.user.email)
 
-        for language, email_list in email_mapping.items():
+        for language in sorted(email_mapping.keys()):
             with override(language):
                 subject = "You have been selected as {} for {}".format(group, instance.name)
                 subject = ugettext(subject)
@@ -152,7 +152,7 @@ class UpdateAdminMixin:
                 subject=subject,
                 message="",
                 from_email=settings.FROM_EMAIL,
-                recipient_list=email_list,
+                recipient_list=email_mapping[language],
                 html_message=html_message,
                 fail_silently=True)
 
