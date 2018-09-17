@@ -29,9 +29,9 @@ export default {
       selectedCountry: 'dashboard/getSelectedCountry',
       getActiveTab: 'dashboard/getProjectBoxActiveTab',
       activeSubLevel: 'dashboard/getActiveSubLevel',
-      currentSubNationalProjects: 'dashboard/getActiveCountryCurrentSubLevelProjects',
+      currentSubNationalProjects: 'dashboard/getSelectedCountryCurrentSubLevelProjects',
       filteredProjects: 'dashboard/getActiveTabProjects',
-      nationalProjects: 'dashboard/getActiveCountryNationalProjects'
+      nationalProjects: 'dashboard/getSelectedCountryNationalProjects'
     }),
     activeCountry: {
       get () {

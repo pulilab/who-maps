@@ -89,11 +89,13 @@
           </nuxt-link>
         </div>
 
-        <div class="DropdownLink">
+        <div
+          class="DropdownLink"
+          @click="logout"
+        >
           <el-button
             type="text"
             style="padding: 0"
-            @click="logout"
           >
             <span class="MenuIcon">
               <fa icon="power-off" />
@@ -253,6 +255,10 @@ export default {
         font-weight: 700;
         text-decoration: none;
         white-space: nowrap;
+      }
+
+      a {
+        display: flex;
       }
 
       .MenuIcon {

@@ -127,7 +127,7 @@ export default {
           required: true
         },
         end_date: {
-          required: true
+          required: false
         },
         contact_name: {
           required: true,
@@ -387,6 +387,9 @@ export default {
     .Loader {
       display: block;
       margin: 0 auto 80px;
+       span {
+         margin: 0 auto;
+       }
     }
 
     > .el-form {

@@ -1,15 +1,14 @@
 <template>
   <el-select
-    :value="org"
+    v-model="innerValue"
     :allow-create="true"
     :placeholder="$gettext('Type and select a name')"
     :remote-method="filterList"
+    :default-first-option="true"
     filterable
     remote
-    reserve-keyword
     class="OrganisationSelector"
     popper-class="OrganisationSelectorDropdown"
-    @change="changeHandler"
   >
     <el-option
       v-for="organisation in optionsAndValues"
@@ -18,6 +17,7 @@
       :value="organisation.id"
     />
   </el-select>
+
 </template>
 
 <script>
@@ -44,16 +44,16 @@ export default {
     ...mapGetters({
       items: 'system/getOrganisations'
     }),
-    org () {
-      if (isNaN(this.value)) {
-        return this.value;
+    innerValue: {
+      get () {
+        if (isNaN(this.value)) {
+          return this.value;
+        }
+        return this.value ? +this.value : null;
+      },
+      set (value) {
+        this.$emit('change', value);
       }
-      return this.value ? +this.value : null;
-    }
-  },
-  methods: {
-    changeHandler (value) {
-      this.$emit('change', value);
     }
   }
 };

@@ -90,10 +90,14 @@ export const actions = {
     const { data } = userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`);
     commit('SET_ORIGINAL', Object.freeze(data));
     const clean = cleanState();
-    const published = {...clean, ...apiReadParser(data.published)};
-    const draft = {...clean, ...apiReadParser(data.draft)};
-    commit('SET_PUBLISHED', Object.freeze(published));
-    commit('INIT_PROJECT', draft);
+    if (data.draft) {
+      const draft = {...clean, ...apiReadParser(data.draft)};
+      commit('INIT_PROJECT', draft);
+    }
+    if (data.published) {
+      const published = {...clean, ...apiReadParser(data.published)};
+      commit('SET_PUBLISHED', Object.freeze(published));
+    }
     await dispatch('loadTeamViewers', id);
   },
   async loadTeamViewers ({commit}, projectId) {
@@ -232,7 +236,7 @@ export const actions = {
     const { data } = await this.$axios.put(`/api/projects/${id}/groups/`, teamViewers);
     commit('SET_TEAM', data.team);
     commit('SET_VIEWERS', data.viewers);
-    dispatch('user/updateTeamViewers', {...data, id}, {root: true});
+    return dispatch('user/updateTeamViewers', {...data, id}, {root: true});
   },
   async createProject ({getters, dispatch}) {
     dispatch('setLoading', 'draft');
@@ -251,8 +255,12 @@ export const actions = {
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
-    await dispatch('saveTeamViewers', id);
-    dispatch('projects/updateProject', data, {root: true});
+    const isUserProject = await dispatch('saveTeamViewers', id);
+    if (isUserProject) {
+      dispatch('projects/updateProject', data, {root: true});
+    } else {
+      dispatch('projects/removeProject', data.id, {root: true});
+    }
     dispatch('setLoading', false);
   },
   async publishProject ({getters, dispatch, commit}, id) {
@@ -261,10 +269,14 @@ export const actions = {
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.put(`/api/projects/publish/${id}/`, parsed);
-    await dispatch('saveTeamViewers', id);
+    const isUserProject = await dispatch('saveTeamViewers', id);
     const parsedResponse = apiReadParser(data.draft);
     commit('SET_PUBLISHED', Object.freeze(parsedResponse));
-    dispatch('projects/updateProject', data, {root: true});
+    if (isUserProject) {
+      dispatch('projects/updateProject', data, {root: true});
+    } else {
+      dispatch('projects/removeProject', data.id, {root: true});
+    }
     dispatch('setLoading', false);
   },
   async discardDraft ({getters, dispatch}, id) {

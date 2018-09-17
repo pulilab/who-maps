@@ -125,6 +125,7 @@ export default {
     async signup () {
       this.deleteFormAPIErrors();
       try {
+        this.$nuxt.$loading.start();
         await this.doSignup({
           account_type: 'I',
           password1: this.signupForm.password1,
@@ -138,6 +139,7 @@ export default {
           showClose: true
         });
       } catch (e) {
+        this.$nuxt.$loading.finish();
         this.setFormAPIErrors(e);
         this.$refs.signupForm.validate(() => {});
       }

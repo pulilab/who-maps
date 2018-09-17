@@ -5,7 +5,7 @@
       <p>
         <translate>You are viewing the</translate>
         <span class="DraftLabel">
-          <translate>Draft></translate>
+          <translate>Draft</translate>
         </span>
         <translate>version of the project.</translate>
       </p>

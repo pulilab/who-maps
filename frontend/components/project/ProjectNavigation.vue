@@ -155,6 +155,7 @@
           v-if="isPublished"
           type="text"
           class="GoToDashboard"
+          @click="goToDashboard"
         >
           <translate>Go to Dashboard</translate>
         </el-button>
@@ -163,6 +164,7 @@
           v-if="isNewProject"
           type="text"
           class="CancelButton WithHint"
+          @click="goToDashboard"
         >
           <translate>Cancel</translate>
           <span class="ButtonHint"><translate>Go back to Dashboard</translate></span>
@@ -203,7 +205,7 @@ export default {
     },
     anon () {
       if (this.user) {
-        return ![...this.user.member, ...this.user.viewer].includes(+this.$route.params.id);
+        return !this.user.is_superuser && ![...this.user.member, ...this.user.viewer].includes(+this.$route.params.id);
       }
       return true;
     },
@@ -222,11 +224,16 @@ export default {
       });
     },
     goToDraft () {
-      const localised = this.localePath({name: 'organisation-projects-id-edit', params: {...this.$route.params}});
+      const name = this.isTeam ? 'organisation-projects-id-edit' : 'organisation-projects-id';
+      const localised = this.localePath({name, params: {...this.$route.params}});
       this.$router.push(localised);
     },
     goToPublished () {
       const localised = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params}});
+      this.$router.push(localised);
+    },
+    goToDashboard () {
+      const localised = this.localePath({name: 'organisation-dashboard', params: {...this.$route.params}});
       this.$router.push(localised);
     }
   }

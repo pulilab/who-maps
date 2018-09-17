@@ -19,7 +19,7 @@
               :to="localePath({name: 'organisation-edit-profile', params: $route.params})"
               class="ActionBarLink"
               tag="div">
-              <translate>My profile</translate>
+              <translate key="my-profile">My profile</translate>
             </nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
@@ -28,7 +28,7 @@
               :to="localePath({name: 'organisation-admin-country', params: $route.params})"
               class="ActionBarLink"
               tag="div">
-              <translate>Country admin</translate>
+              <translate key="country-admin">Country admin</translate>
             </nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
@@ -37,7 +37,7 @@
               :to="localePath({name: 'organisation-admin-donor', params: $route.params})"
               class="ActionBarLink"
               tag="div">
-              <translate>Donor admin</translate>
+              <translate key="donor-admin">Donor admin</translate>
             </nuxt-link>
           </el-col>
         </el-row>
@@ -49,7 +49,7 @@
               :to="localePath({name: 'organisation-dashboard', params: $route.params, query: $route.query})"
               :class="['ActionBarLink', {'Active': isMapSubRoute}]"
               tag="div">
-              <translate>Map view</translate>
+              <translate key="map-view">Map view</translate>
             </nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
@@ -57,7 +57,7 @@
               :to="localePath({name: 'organisation-dashboard-list', params: $route.params, query: $route.query})"
               :class="['ActionBarLink', {'Active': isListSubRoute}]"
               tag="div">
-              <translate>List view</translate>
+              <translate key="list-view">List view</translate>
             </nuxt-link>
           </el-col>
         </el-row>
@@ -101,10 +101,14 @@ export default {
       return this.$route.path.includes('/admin') || this.$route.path.endsWith('/edit-profile');
     },
     allowCountryAdmin () {
-      return (['CA', 'SCA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
+      if (this.userProfile) {
+        return (['CA', 'SCA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
+      }
     },
     allowDonorAdmin () {
-      return (['DA', 'SDA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
+      if (this.userProfile) {
+        return (['DA', 'SDA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
+      }
     },
     isDashboard () {
       return this.$route.path.includes('/dashboard');

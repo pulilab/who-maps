@@ -37,7 +37,7 @@
           :selected-country-pin="selectedCountryPin"
           :active-sub-level.sync="activeSubLevel"
           :national-level-coverage="activeTab ==='national'"
-          :sub-national-projects="activeCountrySubNationalProjects"
+          :sub-national-projects="subNationalProjects"
           :national-projects="nationalProjects"
         />
         <switch-view-box
@@ -83,8 +83,8 @@ export default {
       mapReady: 'dashboard/getMapReady',
       getActiveTab: 'dashboard/getProjectBoxActiveTab',
       getActiveSubLevel: 'dashboard/getActiveSubLevel',
-      activeCountrySubNationalProjects: 'dashboard/getActiveCountrySubNationalProjects',
-      nationalProjects: 'dashboard/getActiveCountryNationalProjects',
+      subNationalProjects: 'dashboard/getSelectedCountrySubNationalProjects',
+      nationalProjects: 'dashboard/getSelectedCountryNationalProjects',
       mapProjects: 'dashboard/getProjectsMap'
     })
   },

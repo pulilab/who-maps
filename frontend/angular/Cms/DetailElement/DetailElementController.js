@@ -96,11 +96,14 @@ class DetailElementController {
   scrollToAddNewComment (scrollToComment) {
     if (scrollToComment) {
       window.document.querySelector('#add-new-comment').scrollIntoView();
+      document.documentElement.scrollTop = 0;
     }
   }
 
   showDetailDialog (event, scrollToComment) {
     const self = this;
+    self.scrollTop = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
+    document.documentElement.scrollTop = 0;
     this.dialog.show({
       controller: DetailElementDialog.factory(self.item),
       controllerAs: 'vm',
@@ -109,6 +112,8 @@ class DetailElementController {
       targetEvent: event,
       clickOutsideToClose: true,
       onComplete: () => self.scrollToAddNewComment(scrollToComment)
+    }).finally(() => {
+      document.documentElement.scrollTop = self.scrollTop;
     });
   }
 
