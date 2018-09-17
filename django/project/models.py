@@ -133,8 +133,6 @@ class Project(SoftDeleteModel, ExtendedModel):
         extra_data = dict(
             id=self.pk,
             name=self.draft.get('name', '') if draft_mode else self.name,
-            organisation_name=self.get_organisation(draft_mode).name if self.get_organisation(draft_mode) else '',
-            country_name=self.get_country(draft_mode).name if self.get_country(draft_mode) else None,
             approved=self.approval.approved if hasattr(self, 'approval') else None,
             fields=[field.to_representation(draft_mode) for field in CountryField.get_for_project(self, draft_mode)],
         )
