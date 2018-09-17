@@ -145,11 +145,8 @@ class UpdateAdminMixin:
                 fail_silently=True)
 
 
-def can_read_private_questions(obj, request):
-    return request.user.is_superuser or \
-           obj.admins.filter(id=request.user.userprofile.id).exists() or \
-           obj.super_admins.filter(id=request.user.userprofile.id).exists() or \
-           obj.users.filter(id=request.user.userprofile.id).exists()
+def can_read_private_questions(obj: Union[Country, Donor], request) -> bool:
+    return request.user.is_superuser or obj.user_in_groups(request.user.userprofile)
 
 
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
