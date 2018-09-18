@@ -179,7 +179,7 @@ class CustomFieldTests(SetupTests):
                           "project_id": self.project_id
                       })
         data = [dict(question_id=q1.id, answer=['1'], draft=False),
-                dict(question_id=q1.id, answer=['2'], draft=True)]
+                dict(question_id=q2.id, answer=['2'], draft=True)]
 
         response = self.test_user_client.post(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
