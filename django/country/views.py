@@ -6,6 +6,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from rest_framework import generics, mixins, viewsets, status
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -251,10 +252,11 @@ class CountryCustomAnswerViewSet(TeamTokenAuthMixin, viewsets.ViewSet):
 
         self.check_object_permissions(self.request, project)
 
-        if project:
-            answers = CountryCustomAnswerSerializer(data=request.data, many=True,
-                                                    context=dict(project=project, country=country))
+        answers = CountryCustomAnswerSerializer(data=request.data, many=True,
+                                                context=dict(project=project, country=country))
 
-            if answers.is_valid(raise_exception=True):
-                answers.save()
-                return Response(answers.validated_data, status=status.HTTP_200_OK)
+        if answers.is_valid(raise_exception=True):
+            self.type_match(answers.validated_data)
+            self.check_required(country, answers.validated_data)
+            answers.save()
+            return Response(answers.validated_data, status=status.HTTP_200_OK)
