@@ -105,7 +105,7 @@
       </div>
 
       <div
-        v-if="isTeam"
+        v-if="isTeam || isNewProject"
         class="NavigationActions"
       >
         <el-button
