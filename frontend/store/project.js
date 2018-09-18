@@ -83,6 +83,7 @@ export const getters = {
   getInteroperabilityStandards: state => state.interoperability_standards,
   getCountryAnswers: state => state.country_answers ? [...state.country_answers] : [],
   getCountryAnswerDetails: (state, getters) => id => getters.getCountryAnswers.find(ca => ca.question_id === id),
+  getPublishedCountryAnswerDetails: (state, getters) => id => getters.getPublished.country_custom_answers.find(ca => ca.question_id === id),
   getPublished: state => ({...state.published, team: state.team, viewers: state.viewers}),
   getLoading: state => state.loading,
   getOriginal: state => state.original
