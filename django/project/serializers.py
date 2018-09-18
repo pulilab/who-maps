@@ -83,7 +83,8 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
         return instance
 
     def validate_question_id(self, value):
-        if not self.context['country'].country_questions.filter(id=int(value)).exists():
+        self.context['question'] = self.context['country'].country_questions.filter(id=int(value)).first()
+        if not self.context['question']:
             raise ValidationError('Wrong question_id')
         return value
 
