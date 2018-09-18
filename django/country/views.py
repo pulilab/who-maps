@@ -220,6 +220,13 @@ class DonorCustomQuestionViewSet(SetOrderToMixin, mixins.CreateModelMixin, mixin
 
 
 class CountryCustomAnswerViewSet(TeamTokenAuthMixin, viewsets.ViewSet):
+    def check_required(self, country, answers):
+        required_ids = set(country.country_questions.filter(required=True).values_list('id', flat=True))
+        present_ids = {answer['question_id'] for answer in answers}
+        missing_ids = required_ids - present_ids
+        if missing_ids:
+            raise ValidationError('Required answer(s) are missing for question(s): {}'.format(
+                ', '.join(map(str, missing_ids))))
 
     def save_answers(self, request, country_id, project_id):
         project = country = None
