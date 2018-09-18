@@ -247,7 +247,7 @@ class CountryCustomAnswerViewSet(TeamTokenAuthMixin, viewsets.ViewSet):
             errors['project_id'] = ['Wrong project_id']
 
         if errors:
-            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+            raise ValidationError(errors)
 
         self.check_object_permissions(self.request, project)
 
