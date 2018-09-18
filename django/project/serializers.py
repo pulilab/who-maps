@@ -88,6 +88,10 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
             raise ValidationError('Wrong question_id')
         return value
 
+    def validate_required_answer(self, value):
+        if not value:
+            raise ValidationError('Answer is required.')
+
     def validate(self, attrs):
         if not attrs['draft']:
             if self.context['question'].required:
