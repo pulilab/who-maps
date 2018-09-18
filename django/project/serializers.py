@@ -85,20 +85,20 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
     def validate_question_id(self, value):
         self.context['question'] = self.context['country'].country_questions.filter(id=int(value)).first()
         if not self.context['question']:
-            raise ValidationError('Wrong question_id')
+            raise ValidationError('This question_id does not exist.')
         return value
 
     def validate_required_answer(self, value):
         if not value:
-            raise ValidationError('Answer is required.')
+            raise ValidationError({'answer': 'This field is required.'})
 
     def validate_numeric_answer(self, value):
         if isinstance(value[0], str) and not value[0].isnumeric():
-            raise ValidationError('Answer must be numeric.')
+            raise ValidationError({'answer': 'This field must be numeric.'})
 
     def validate_answer_length(self, value):
         if len(value) > 1:
-            raise ValidationError('There must be 1 answer only.')
+            raise ValidationError({'answer': 'There must be 1 answer only.'})
 
     def validate(self, attrs):
         if not attrs['draft']:
