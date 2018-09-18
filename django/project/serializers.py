@@ -74,12 +74,15 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
         instance = self.context['project']
         data_key = 'draft' if validated_data['draft'] else 'data'
 
-        custom_answers = getattr(instance, data_key).get('country_custom_answers', {})
+        custom_answers = instance.draft.get('country_custom_answers', {})
         custom_answers[validated_data['question_id']] = validated_data['answer']
-        getattr(instance, data_key)['country_custom_answers'] = custom_answers
         if data_key != 'draft':
-            instance.draft['country_custom_answers'] = custom_answers
-        instance.save()
+            instance.data.setdefault('country_custom_answers', {})
+            instance.data['country_custom_answers'] = custom_answers
+        instance.draft.setdefault('country_custom_answers', {})
+        instance.draft['country_custom_answers'] = custom_answers
+
+        instance.save(update_fields=['draft', 'data'])
         return instance
 
     def validate_question_id(self, value):
