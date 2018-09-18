@@ -74,7 +74,7 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
         data_key = 'draft' if validated_data['draft'] else 'data'
 
         custom_answers = getattr(instance, data_key).get('country_custom_answers', {})
-        custom_answers[validated_data['question_id']] = validated_data['answer'][0]
+        custom_answers[validated_data['question_id']] = validated_data['answer']
         getattr(instance, data_key)['country_custom_answers'] = custom_answers
         if data_key != 'draft':
             instance.draft['country_custom_answers'] = custom_answers
