@@ -129,27 +129,27 @@ export default {
     async doDelete (id) {
       try {
         if (this.id) {
-          await this.$confirm('This will permanently delete the question?', 'Warning', {
-            confirmButtonText: 'OK',
-            cancelButtonText: 'Cancel',
+          await this.$confirm(this.$gettext('This will permanently delete the question?'), this.$gettext('Warning'), {
+            confirmButtonText: this.$gettext('OK'),
+            cancelButtonText: this.$gettext('Cancel'),
             type: 'warning'
           });
         }
         await this.deleteQuestion(id);
         this.$message({
           type: 'success',
-          message: 'Question successfully deleted'
+          message: this.$gettext('Question successfully deleted')
         });
       } catch (e) {
         if (e === 'cancel') {
           this.$message({
             type: 'info',
-            message: 'Question deletion canceled'
+            message: this.$gettext('Question deletion canceled')
           });
         } else {
           this.$message({
             type: 'error',
-            message: 'An error occured while deleting the question'
+            message: this.$gettext('An error occured while deleting the question')
           });
         }
       }
@@ -159,28 +159,28 @@ export default {
         if (this.id) {
           await this.updateQuestion({question: this.question, id: this.id});
         } else {
-          await this.$confirm('This will save the question, type and options will not be editable anymore', 'Attention', {
-            confirmButtonText: 'OK',
-            cancelButtonText: 'Cancel',
-            type: 'info'
+          await this.$confirm(this.$gettext('This will save the question, type and options will not be editable anymore'), this.$gettext('Warning'), {
+            confirmButtonText: this.$gettext('OK'),
+            cancelButtonText: this.$gettext('Cancel'),
+            type: 'warning'
           });
           await this.createQuestion(this.question);
         }
         this.$message({
           type: 'success',
-          message: 'Question successfully saved'
+          message: this.$gettext('Question successfully saved')
         });
       } catch (e) {
         if (e === 'cancel') {
           this.$message({
             type: 'info',
-            message: 'Question saving canceled'
+            message: this.$gettext('Question saving canceled')
           });
         } else {
           console.error(e);
           this.$message({
             type: 'error',
-            message: 'An error occured while saving the question'
+            message: this.$gettext('An error occured while saving the question')
           });
         }
       }
