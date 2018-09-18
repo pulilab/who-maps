@@ -88,7 +88,8 @@ class Project(SoftDeleteModel, ExtendedModel):
     def get_anon_data(self):
         return self.remove_keys(self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
 
-    def get_organisation(self, draft_mode=False):
+    # TODO: deprecate
+    def get_organisation(self, draft_mode=False):  # pragma: no cover
         try:
             organisation_id = self.draft.get('organisation') if draft_mode else self.data.get('organisation')
             organisation_id = int(organisation_id)
