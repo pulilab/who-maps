@@ -1291,7 +1291,7 @@ class CountryTests(APITestCase):
         }
         response = self.test_user_client.post(url, data=data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'non_field_errors': ['Ensure options field has at least 1 elements.']})
+        self.assertEqual(response.json(), {'options': ['Ensure options field has at least 1 elements.']})
 
         data = {
             "country": self.country.id,
