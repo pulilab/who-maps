@@ -81,7 +81,7 @@ export const getters = {
   getWiki: state => state.wiki,
   getInteroperabilityLinks: state => state.interoperability_links,
   getInteroperabilityStandards: state => state.interoperability_standards,
-  getCountryAnswers: state => [...state.country_answers],
+  getCountryAnswers: state => state.country_answers ? [...state.country_answers] : [],
   getCountryAnswerDetails: (state, getters) => id => getters.getCountryAnswers.find(ca => ca.question_id === id),
   getPublished: state => ({...state.published, team: state.team, viewers: state.viewers}),
   getLoading: state => state.loading,
@@ -250,6 +250,11 @@ export const actions = {
     commit('SET_VIEWERS', data.viewers);
     return dispatch('user/updateTeamViewers', {...data, id}, {root: true});
   },
+  async saveCountryAnswers ({getters}, {draft, id, country}) {
+    const answers = getters.getCountryAnswers.map(a => ({...a, draft}));
+    const { data } = await this.$axios.post(`api/country-custom-answer/${country}/${id}/`, answers);
+    return data;
+  },
   async createProject ({getters, dispatch}) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
@@ -268,6 +273,7 @@ export const actions = {
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
     const isUserProject = await dispatch('saveTeamViewers', id);
+    await dispatch('saveCountryAnswers', {draft: true, id: data.id, country: data.draft.country});
     if (isUserProject) {
       dispatch('projects/updateProject', data, {root: true});
     } else {
@@ -282,7 +288,9 @@ export const actions = {
     const parsed = apiWriteParser(draft);
     const { data } = await this.$axios.put(`/api/projects/publish/${id}/`, parsed);
     const isUserProject = await dispatch('saveTeamViewers', id);
-    const parsedResponse = apiReadParser(data.draft);
+    const country_answers = await dispatch('saveCountryAnswers', {draft: false, id: data.id, country: data.draft.country});
+    const toStore = {...data.draft, country_answers};
+    const parsedResponse = apiReadParser(toStore);
     commit('SET_PUBLISHED', Object.freeze(parsedResponse));
     if (isUserProject) {
       dispatch('projects/updateProject', data, {root: true});
@@ -444,6 +452,7 @@ export const mutations = {
     state.wiki = project.wiki;
     state.interoperability_links = project.interoperability_links;
     state.interoperability_standards = project.interoperability_standards;
+    state.country_answers = project.country_custom_answers;
   },
   SET_ORIGINAL: (state, project) => {
     state.original = project;
