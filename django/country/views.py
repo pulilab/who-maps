@@ -230,7 +230,7 @@ class CountryCustomAnswerViewSet(TeamTokenAuthMixin, viewsets.ViewSet):
         except Country.DoesNotExist:
             errors['country_id'] = ['Wrong country_id']
         try:
-            project = Project.objects.get(id=project_id)
+            project = Project.objects.only('draft', 'data').get(id=project_id)
         except Project.DoesNotExist:
             errors['project_id'] = ['Wrong project_id']
 
