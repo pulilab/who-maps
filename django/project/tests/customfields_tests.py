@@ -156,7 +156,7 @@ class CustomFieldTests(SetupTests):
 
         response = self.test_user_client.post(url, data=data, format='json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), [{'question_id': 2, 'answer': ['1', '2'], 'draft': False}])
+        self.assertEqual(response.json(), [{'question_id': q2.id, 'answer': ['1', '2'], 'draft': False}])
 
     def test_country_answer_update_existing_answer(self):
         q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
