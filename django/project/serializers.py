@@ -88,6 +88,16 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
             raise ValidationError('Wrong question_id')
         return value
 
+    def validate(self, attrs):
+        if not attrs['draft']:
+            if self.context['question'].required:
+                self.validate_required_answer(attrs['answer'])
+        if self.context['question'].type != CustomQuestion.MULTI:
+            self.validate_answer_length(attrs['answer'])
+        if self.context['question'].type == CustomQuestion.NUMBER:
+            self.validate_numeric_answer(attrs['answer'])
+        return attrs
+
 
 INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
                     (1, 'Yes, they are contributing in-kind people or time'),
