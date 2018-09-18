@@ -172,6 +172,19 @@
           </simple-field>
 
         </collapsible-card>
+
+        <collapsible-card
+          id="customcountry"
+          :title="$gettext('Custom country fields')"
+        >
+          <custom-readonly-field
+            v-for="question in countryQuestions"
+            :key="question.id"
+            :id="question.id"
+            :question="question.question"
+            :type="question.type"
+          />
+        </collapsible-card>
       </el-col>
       <el-col :span="6">
         <project-navigation/>
@@ -198,6 +211,7 @@ import LicensesList from './LicensesList';
 import StandardsList from './StandardsList';
 import InteroperabilityLinksList from './InteroperabilityLinksList';
 import DonorsList from '../common/list/DonorsList';
+import CustomReadonlyField from './CustomReadonlyField';
 
 import { mapGetters } from 'vuex';
 
@@ -219,12 +233,14 @@ export default {
     LicensesList,
     StandardsList,
     InteroperabilityLinksList,
-    DonorsList
+    DonorsList,
+    CustomReadonlyField
   },
   computed: {
     ...mapGetters({
       draft: 'project/getProjectData',
-      published: 'project/getPublished'
+      published: 'project/getPublished',
+      getCountryDetails: 'countries/getCountryDetails'
     }),
     route () {
       return this.$route.name.split('__')[0];
@@ -234,6 +250,15 @@ export default {
     },
     project () {
       return this.isDraft ? this.draft : this.published;
+    },
+    countryQuestions () {
+      if (this.project.country) {
+        const country = this.getCountryDetails(this.project.country);
+        if (country) {
+          return country.country_questions;
+        }
+      }
+      return [];
     }
   }
 
