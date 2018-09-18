@@ -8,12 +8,15 @@
       v-validate="localRules"
       v-if="type < 3"
       v-model="innerValue"
-      data-as-name="Answer"
+      :data-vv-as="question"
       data-vv-name="answer"/>
 
     <el-radio-group
+      v-validate="localRules"
       v-if="type === 3"
       v-model="innerValue"
+      :data-vv-as="question"
+      data-vv-name="answer"
     >
       <el-radio label="yes"><translate>Yes</translate></el-radio>
       <el-radio label="no"><translate>No</translate></el-radio>
@@ -21,10 +24,13 @@
 
     <template v-if="type > 3 && options">
       <el-select
+        v-validate="localRules"
         v-model="innerValue"
         :placeholder="$gettext('Select from list')"
         :multiple="type === 5"
+        :data-vv-as="question"
         filterable
+        data-vv-name="answer"
         popper-class="CustomFieldSelectorDropdown"
         class="CustomFieldSelector"
       >
