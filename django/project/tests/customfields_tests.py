@@ -60,6 +60,7 @@ class CustomFieldTests(SetupTests):
         response = self.test_user_client.post(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), [{'question_id': ['This field is required.'],
+                                            'answer': ['This field is required.'],
                                             'draft': ['This field is required.']}])
 
     def test_country_answer_for_draft(self):
