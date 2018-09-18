@@ -40,6 +40,12 @@
             :api-errors="apiErrors"
             @mounted="mountedHandler"
           />
+          <country-custom
+            ref="countryCustom"
+            :rules="rules"
+            :api-errors="apiErrors"
+            @mounted="mountedHandler"
+          />
         </el-col>
         <el-col :span="6">
           <project-navigation
@@ -59,6 +65,7 @@ import GeneralOverview from './sections/GeneralOverview';
 import ImplementationOverview from './sections/ImplementationOverview';
 import TechnologyOverview from './sections/TechnologyOverview';
 import InteroperabilityAndStandards from './sections/InteroperabilityAndStandards';
+import CountryCustom from './sections/CountryCustom';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -67,7 +74,8 @@ export default {
     GeneralOverview,
     ImplementationOverview,
     TechnologyOverview,
-    InteroperabilityAndStandards
+    InteroperabilityAndStandards,
+    CountryCustom
   },
   data () {
     return {
@@ -88,7 +96,7 @@ export default {
       return this.$route.name.includes('organisation-projects-create');
     },
     showForm () {
-      return this.readyElements === this.maxElements;
+      return this.readyElements > this.maxElements;
     },
     draftRules () {
       return {
