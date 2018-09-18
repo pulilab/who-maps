@@ -229,6 +229,10 @@ class CountryCustomAnswerViewSet(TeamTokenAuthMixin, viewsets.ViewSet):
                 raise ValidationError('Required answer(s) are missing for question(s): {}'.format(
                     ', '.join(map(str, missing_ids))))
 
+    def type_match(self, answers):
+        if len({answer['draft'] for answer in answers}) > 1:
+            raise ValidationError("Draft/Published type mismatch.")
+
     def save_answers(self, request, country_id, project_id):
         project = country = None
         errors = {}
