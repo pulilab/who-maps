@@ -20,7 +20,7 @@ from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, CountryField,
 class OptionsValidatorMixin:
     def validate_options_for_choice_fields(self, value):
         if not len(value) > 0:
-            raise ValidationError('Ensure options field has at least 1 elements.')
+            raise ValidationError({'options': 'Ensure options field has at least 1 elements.'})
 
     def validate(self, attrs):
         if attrs.get('type', CustomQuestion.TEXT) in (CustomQuestion.SINGLE, CustomQuestion.MULTI):

@@ -12,6 +12,7 @@ from rest_framework.validators import UniqueValidator
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
 
+from country.models import CustomQuestion
 from .models import Project
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
@@ -66,7 +67,7 @@ class DraftPlatformSerializer(serializers.Serializer):
 class CountryCustomAnswerSerializer(serializers.Serializer):
     question_id = serializers.IntegerField(required=True)
     answer = serializers.ListField(
-        child=serializers.CharField(max_length=512), max_length=50, min_length=0, required=False)
+        child=serializers.CharField(max_length=512), max_length=50, min_length=0, required=True)
     draft = serializers.BooleanField(required=True)
 
     def create(self, validated_data) -> Project:
@@ -82,9 +83,32 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
         return instance
 
     def validate_question_id(self, value):
-        if not self.context['country'].country_questions.filter(id=int(value)).exists():
-            raise ValidationError('Wrong question_id')
+        self.context['question'] = self.context['country'].country_questions.filter(id=int(value)).first()
+        if not self.context['question']:
+            raise ValidationError('This question_id does not exist.')
         return value
+
+    def validate_required_answer(self, value):
+        if not value:
+            raise ValidationError({'answer': 'This field is required.'})
+
+    def validate_numeric_answer(self, value):
+        if isinstance(value[0], str) and not value[0].isnumeric():
+            raise ValidationError({'answer': 'This field must be numeric.'})
+
+    def validate_answer_length(self, value):
+        if len(value) > 1:
+            raise ValidationError({'answer': 'There must be 1 answer only.'})
+
+    def validate(self, attrs):
+        if not attrs['draft']:
+            if self.context['question'].required:
+                self.validate_required_answer(attrs['answer'])
+        if self.context['question'].type != CustomQuestion.MULTI:
+            self.validate_answer_length(attrs['answer'])
+        if self.context['question'].type == CustomQuestion.NUMBER:
+            self.validate_numeric_answer(attrs['answer'])
+        return attrs
 
 
 INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
