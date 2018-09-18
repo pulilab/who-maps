@@ -82,7 +82,7 @@
           <li :class="{active: active === 'country'}">
             <el-button
               type="text"
-              @click="scrollTo('country')"
+              @click="scrollTo('countrycustom')"
             >
               <span class="Step">
                 <fa icon="arrow-right" />
