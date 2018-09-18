@@ -9,31 +9,41 @@
         <fa icon="caret-right" />
         <span class="Option">{{ option }}</span>
         <el-button
+          v-if="!disabled"
+          :disabled="disabled"
           type="text"
           size="mini"
           class="DeleteButton IconLeft RemoveOption"
           @click="removeOption(index)"><fa icon="times" /></el-button>
       </li>
     </ul>
-    <el-row
-      type="flex"
-      align="middle">
-      <el-col :span="16">
-        <el-input
-          ref="input"
-          v-model="inputField"
-          :placeholder="$gettext('Add a new option here')"
-          type="text"
-          @keyup.enter.native="addOption" />
-      </el-col>
-      <el-col :span="8">
-        <el-button
-          :disabled="!inputField"
-          type="text"
-          class="IconLeft AddOption"
-          @click="addOption"><fa icon="plus" /> <translate>Add</translate></el-button>
-      </el-col>
-    </el-row>
+    <el-tooltip
+      :disabled="!disabled"
+      :content="$gettext('Unable to add or remove options on saved questions')"
+      placement="top">
+      <el-row
+        type="flex"
+        align="middle">
+
+        <el-col :span="16">
+          <el-input
+            ref="input"
+            v-model="inputField"
+            :disabled="disabled"
+            :placeholder="$gettext('Add a new option here')"
+            type="text"
+            @keyup.enter.native="addOption" />
+        </el-col>
+        <el-col :span="8">
+          <el-button
+            :disabled="!inputField || disabled"
+            type="text"
+            class="IconLeft AddOption"
+            @click="addOption"><fa icon="plus" /> <translate>Add</translate></el-button>
+        </el-col>
+
+      </el-row>
+    </el-tooltip>
   </div>
 </template>
 
@@ -45,6 +55,10 @@ export default {
     options: {
       type: Array,
       default: () => []
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
 

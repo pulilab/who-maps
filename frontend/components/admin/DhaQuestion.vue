@@ -17,6 +17,7 @@
     <!-- Type -->
     <el-select
       v-model="question.type"
+      :disabled="saved"
       placeholder="Type">
       <el-option
         :label="$gettext('Text field')"
@@ -47,16 +48,12 @@
         :active-text="$gettext('Required')" />
 
       <el-switch
-        v-model="question.is_active"
-        size="small"
-        active-text="Active" />
-
-      <el-switch
         v-model="question.is_private"
         :active-text="$gettext('Private')" />
     </div>
     <dha-question-options
       v-if="question.type > 3"
+      :disabled="saved"
       :options.sync="question.options" />
 
     <span :class="['DDHandler', {'DraggingDisabled': !draggable}]">
