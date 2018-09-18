@@ -159,6 +159,11 @@ export default {
         if (this.id) {
           await this.updateQuestion({question: this.question, id: this.id});
         } else {
+          await this.$confirm('This will save the question, type and options will not be editable anymore', 'Attention', {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'info'
+          });
           await this.createQuestion(this.question);
         }
         this.$message({
@@ -166,11 +171,18 @@ export default {
           message: 'Question successfully saved'
         });
       } catch (e) {
-        console.error(e);
-        this.$message({
-          type: 'error',
-          message: 'An error occured while saving the question'
-        });
+        if (e === 'cancel') {
+          this.$message({
+            type: 'info',
+            message: 'Question saving canceled'
+          });
+        } else {
+          console.error(e);
+          this.$message({
+            type: 'error',
+            message: 'An error occured while saving the question'
+          });
+        }
       }
     }
   }
