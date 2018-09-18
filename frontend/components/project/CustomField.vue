@@ -1,19 +1,19 @@
 <template>
   <el-form-item
-    :error="errors.first('name')"
+    :error="errors.first('answer')"
     :label="question"
     class="CustomField"
   >
     <el-input
       v-validate="localRules"
       v-if="type < 3"
-      v-model="value"
-      :data-as-name="question"
-      data-vv-name="name"/>
+      v-model="innerValue"
+      data-as-name="Answer"
+      data-vv-name="answer"/>
 
     <el-radio-group
       v-if="type === 3"
-      v-model="value"
+      v-model="innerValue"
     >
       <el-radio label="yes"><translate>Yes</translate></el-radio>
       <el-radio label="no"><translate>No</translate></el-radio>
@@ -21,7 +21,7 @@
 
     <template v-if="type > 3 && options">
       <el-select
-        v-model="value"
+        v-model="innerValue"
         :placeholder="$gettext('Select from list')"
         :multiple="type === 5"
         filterable
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 export default {
   props: {
     type: {
@@ -60,19 +61,55 @@ export default {
     isRequired: {
       type: Boolean,
       default: false
+    },
+    doValidation: {
+      type: Boolean,
+      default: false
+    },
+    module: {
+      type: String,
+      default: 'country'
     }
   },
-  data () {
-    return {
-      value: ''
-    };
-  },
   computed: {
+    ...mapGetters({
+      getCountryAnswerDetails: 'project/getCountryAnswerDetails'
+    }),
+    answer () {
+      const saved = this.module === 'country' ? this.getCountryAnswerDetails(this.id) : null;
+      return saved || {
+        question_id: this.id,
+        answer: null
+      };
+    },
+    value () {
+      return this.answer.answer;
+    },
+    innerValue: {
+      get () {
+        if (this.value && Array.isArray(this.value) && this.value.length > 0) {
+          return this.type === 5 ? this.value : this.value[0];
+        }
+        return this.type === 5 ? [] : null;
+      },
+      set (answer) {
+        answer = Array.isArray(answer) ? answer : [answer];
+        this.setCountryAnswer({...this.answer, answer});
+      }
+    },
     localRules () {
       return {
-        required: this.isRequired,
-        numeric: this.type === 2
+        required: this.isRequired && this.doValidation,
+        numeric: this.type === 2 && this.doValidation
       };
+    }
+  },
+  methods: {
+    ...mapActions({
+      setCountryAnswer: 'project/setCountryAnswer'
+    }),
+    validate () {
+      return this.$validator.validate();
     }
   }
 };
