@@ -37,6 +37,14 @@ export const platformsMapper = collection => {
   return [platforms, digitalHealthInterventions];
 };
 
+export const customFieldMapper = collection => {
+  const customAnswers = [];
+  for (let key in collection) {
+    customAnswers.push({question_id: +key, answer: collection[key]});
+  }
+  return customAnswers;
+};
+
 export const apiReadParser = p => {
   const [ coverage, coverageDataFirstLevel ] = coverageMapper(p.coverage);
   const [ coverage_second_level, coverageDataSecondLevelLevel ] = coverageMapper(p.coverage_second_level);
@@ -44,6 +52,7 @@ export const apiReadParser = p => {
   const interoperability_links = interoperabilityLinksMapper(p.interoperability_links);
   const [ platforms, digitalHealthInterventions ] = platformsMapper(p.platforms);
   const coverageType = coverage === undefined || coverage.length === 0 ? 2 : 1;
+  const country_custom_answers = customFieldMapper(p.country_custom_answers);
   return {...p,
     coverage,
     coverage_second_level,
@@ -51,7 +60,8 @@ export const apiReadParser = p => {
     coverageType,
     interoperability_links,
     platforms,
-    digitalHealthInterventions
+    digitalHealthInterventions,
+    country_custom_answers
   };
 };
 
