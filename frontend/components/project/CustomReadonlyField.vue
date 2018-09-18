@@ -43,14 +43,23 @@ export default {
     module: {
       type: String,
       default: 'country'
+    },
+    isDraft: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     ...mapGetters({
+      getPublishedCountryAnswerDetails: 'project/getPublishedCountryAnswerDetails',
       getCountryAnswerDetails: 'project/getCountryAnswerDetails'
     }),
     answer () {
-      const saved = this.module === 'country' ? this.getCountryAnswerDetails(this.id) : null;
+      let detailsFunction = () => null;
+      if (this.module === 'country') {
+        detailsFunction = this.isDraft ? this.getCountryAnswerDetails : this.getPublishedCountryAnswerDetails;
+      }
+      const saved = detailsFunction(this.id);
       return saved || {
         question_id: this.id,
         answer: []

@@ -174,7 +174,7 @@
         </collapsible-card>
 
         <collapsible-card
-          id="customcountry"
+          id="countrycustom"
           :title="$gettext('Custom country fields')"
         >
           <custom-readonly-field
@@ -182,6 +182,7 @@
             :key="question.id"
             :id="question.id"
             :question="question.question"
+            :is-draft="isDraft"
             :type="question.type"
           />
         </collapsible-card>
