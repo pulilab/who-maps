@@ -96,6 +96,10 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
         if isinstance(value[0], str) and not value[0].isnumeric():
             raise ValidationError('Answer must be numeric.')
 
+    def validate_answer_length(self, value):
+        if len(value) > 1:
+            raise ValidationError('There must be 1 answer only.')
+
     def validate(self, attrs):
         if not attrs['draft']:
             if self.context['question'].required:
