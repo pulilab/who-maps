@@ -4,13 +4,15 @@
     class="CountryCustom">
     <collapsible-card title="Custom Country">
       <custom-field
-        v-for="field in countryQuestions"
+        v-for="(field) in countryQuestions"
+        ref="customQuestion"
         :key="field.id"
         :id="field.id"
         :type="field.type"
         :question="field.question"
-        :is-required="field.require"
+        :is-required="field.required"
         :options="field.options"
+        :do-validation="usePublishRules"
       />
     </collapsible-card>
   </div>
@@ -19,7 +21,6 @@
 <script>
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
 import { mapGetters } from 'vuex';
-import { mapGettersActions } from '../../../utilities/form';
 import CollapsibleCard from '../CollapsibleCard';
 import CustomField from '../CustomField';
 
@@ -29,12 +30,16 @@ export default {
     CustomField
   },
   mixins: [VeeValidationMixin],
+  props: {
+    usePublishRules: {
+      type: Boolean,
+      default: false
+    }
+  },
   computed: {
     ...mapGetters({
       getCountryDetails: 'countries/getCountryDetails',
       projectCountry: 'project/getCountry'
-    }),
-    ...mapGettersActions({
     }),
     countryQuestions () {
       if (this.projectCountry) {
@@ -51,9 +56,8 @@ export default {
   },
   methods: {
     async validate () {
-      const validations = await Promise.all([
-        this.$validator.validate()
-      ]);
+      const validations = await Promise.all(this.$refs.customQuestion.map(r => r.validate()));
+      console.log('Custom country questions validators', validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }

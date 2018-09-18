@@ -42,7 +42,7 @@
           />
           <country-custom
             ref="countryCustom"
-            :rules="rules"
+            :use-publish-rules="usePublishRules"
             :api-errors="apiErrors"
             @mounted="mountedHandler"
           />
@@ -300,7 +300,8 @@ export default {
         this.$refs.generalOverview.validate(),
         this.$refs.implementationOverview.validate(),
         this.$refs.technologyOverview.validate(),
-        this.$refs.interoperabilityAndStandards.validate()
+        this.$refs.interoperabilityAndStandards.validate(),
+        this.$refs.countryCustom.validate()
       ]);
       console.log('root validations', validations);
       return validations.reduce((a, c) => a && c, true);

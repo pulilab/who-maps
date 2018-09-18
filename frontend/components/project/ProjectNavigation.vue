@@ -79,7 +79,7 @@
               <translate>Interoperability</translate>
             </el-button>
           </li>
-          <li :class="{active: active === 'country'}">
+          <li :class="{active: active === 'countrycustom'}">
             <el-button
               type="text"
               @click="scrollTo('countrycustom')"

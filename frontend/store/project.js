@@ -37,6 +37,8 @@ const cleanState = () => ({
   wiki: null,
   interoperability_links: {},
   interoperability_standards: [],
+  country_answers: [],
+  donor_answers: [],
   published: null,
   original: null
 });
@@ -47,7 +49,7 @@ export const state = () => ({
 });
 
 export const getters = {
-  getProjectData: state => ({...state, published: undefined, loading: undefined}),
+  getProjectData: state => ({...state, published: undefined, loading: undefined, country_answers: undefined, donor_answers: undefined}),
   getName: state => state.name,
   getOrganisation: state => state.organisation,
   getCountry: state => state.country,
@@ -79,6 +81,8 @@ export const getters = {
   getWiki: state => state.wiki,
   getInteroperabilityLinks: state => state.interoperability_links,
   getInteroperabilityStandards: state => state.interoperability_standards,
+  getCountryAnswers: state => [...state.country_answers],
+  getCountryAnswerDetails: (state, getters) => id => getters.getCountryAnswers.find(ca => ca.question_id === id),
   getPublished: state => ({...state.published, team: state.team, viewers: state.viewers}),
   getLoading: state => state.loading,
   getOriginal: state => state.original
@@ -220,6 +224,14 @@ export const actions = {
   },
   setLoading ({commit}, value) {
     commit('SET_LOADING', value);
+  },
+  setCountryAnswer ({commit, getters}, answer) {
+    const index = getters.getCountryAnswers.findIndex(ca => ca.question_id === answer.question_id);
+    if (index > -1) {
+      commit('UPDATE_COUNTRY_ANSWER', {answer, index});
+    } else {
+      commit('ADD_COUNTRY_ANSWER', answer);
+    }
   },
   async verifyOrganisation ({dispatch}, organisation) {
     if (organisation && isNaN(organisation)) {
@@ -387,6 +399,12 @@ export const mutations = {
   },
   SET_INTEROPERABILITY_STANDARDS: (state, interoperability_standards) => {
     Vue.set(state, 'interoperability_standards', [...interoperability_standards]);
+  },
+  ADD_COUNTRY_ANSWER: (state, answer) => {
+    state.country_answers.push(answer);
+  },
+  UPDATE_COUNTRY_ANSWER: (state, {answer, index}) => {
+    state.country_answers.splice(index, 1, answer);
   },
   SET_PUBLISHED: (state, published) => {
     Vue.set(state, 'published', {...published});
