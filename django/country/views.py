@@ -1,10 +1,9 @@
-from collections import OrderedDict
-
 import pycountry
 import requests
-from django.db.models import QuerySet
 
+from collections import OrderedDict
 from requests import RequestException
+from django.db.models import QuerySet
 from django.conf import settings
 from django.http import HttpResponse
 from rest_framework import generics, mixins, viewsets, status
