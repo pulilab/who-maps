@@ -16,7 +16,7 @@
           <div class="SwitchLabel">Switch view:</div>
           <el-button-group class="SwitchButtons">
             <el-button
-              :class="['DraftButton', {'Active': isDraft}]"
+              :class="['DraftButton', {'Active': isDraft || isReadOnlyDraft}]"
               :disabled="isDraft || anon"
               @click="goToDraft"
             >
@@ -152,7 +152,7 @@
         </el-button>
 
         <el-button
-          v-if="isPublished"
+          v-if="isPublished || isReadOnlyDraft"
           type="text"
           class="GoToDashboard"
           @click="goToDashboard"
@@ -201,7 +201,10 @@ export default {
       return this.route === 'organisation-projects-id-published';
     },
     isDraft () {
-      return this.route === 'organisation-projects-id' || this.route === 'organisation-projects-id-edit';
+      return this.route === 'organisation-projects-id-edit';
+    },
+    isReadOnlyDraft () {
+      return this.route === 'organisation-projects-id';
     },
     anon () {
       if (this.user) {
