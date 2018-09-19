@@ -1,3 +1,5 @@
+from copy import copy
+
 from django.urls import reverse
 
 from country.models import CountryField
@@ -196,6 +198,70 @@ class PermissionTests(SetupTests):
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY:
             self.assertNotIn(key, response.json())
+
+    def test_non_member_doesnt_see_private_answers(self):
+        data = copy(self.project_data)
+        data.update({"name": "Test private"})
+
+        # Create project draft
+        url = reverse("project-create")
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201, response.json())
+
+        project_id = response.json().get("id")
+
+        # Publish
+        url = reverse("project-publish", kwargs={"pk": project_id})
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        # Manually add answers since we don't want to go through the standard process
+        project = Project.objects.get(id=project_id)
+        project.data.update({"country_custom_answers": {1: ["1"], 2: ["2"]}})
+        project.data.update({"country_custom_answers_private": {3: ["3"], 4: ["4"]}})
+        project.save()
+
+        # Member can see private fields
+        url = reverse("project-retrieve", kwargs={"pk": project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']['country_custom_answers'], {'1': ['1'], '2': ['2']})
+        self.assertEqual(response.json()['published']['country_custom_answers_private'],
+                         {'3': ['3'], '4': ['4']})
+
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user2@gmail.com",
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
+        self.client.post(url, data, format="json")
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456hetNYOLC"}
+        response = self.client.post(url, data, format="json")
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+        user_profile_id = response.json().get('user_profile_id')
+
+        # update profile.
+        org = Organisation.objects.create(name="org2")
+        url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
+        data = {
+            "name": "Test Name 2",
+            "organisation": org.id,
+            "country": "test_country"}
+        test_user_client.put(url, data, format="json")
+
+        # Non member can only see the public answers
+        url = reverse("project-retrieve", kwargs={"pk": project_id})
+        response = test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']['country_custom_answers'], {'1': ['1'], '2': ['2']})
+        self.assertFalse('country_custom_answers_private' in response.json()['published'])
 
     def test_members_receive_last_version_info(self):
         url = reverse("project-retrieve", kwargs={"pk": self.project_id})
