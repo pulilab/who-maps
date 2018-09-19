@@ -5,6 +5,7 @@ const MapMixin = {
     return {
       zoom: 3,
       countryCenterIcons: {},
+      countryCenterOptions: {},
       mapOptions: {
         zoomControl: false,
         attributionControl: false,
@@ -79,7 +80,8 @@ const MapMixin = {
           fillColor: '#42B883'
         },
         iconCreateFunction: (cluster) => {
-          const html = `<span>${cluster.getChildCount()}</span>`;
+          const projects = cluster.getAllChildMarkers().reduce((a, c) => a + c.options.projects, 0);
+          const html = `<span>${projects}</span>`;
           return L.divIcon({
             className: `CountryClusterIcon`,
             html,
@@ -95,10 +97,10 @@ const MapMixin = {
       immediate: true,
       handler (id, old) {
         if (old) {
-          this.countryCenterIcons[old] = this.iconGenerator(old, false);
+          [this.countryCenterIcons[old], this.countryCenterOptions[old]] = this.pinOptionsAndIconGenerator(old, false);
         }
         if (id) {
-          this.countryCenterIcons[id] = this.iconGenerator(id, true);
+          [this.countryCenterIcons[id], this.countryCenterOptions[id]] = this.pinOptionsAndIconGenerator(id, true);
         }
       }
     },
@@ -106,6 +108,7 @@ const MapMixin = {
       immediate: false,
       handler () {
         this.iconsGenerator();
+        this.$refs.markerCluster.mapObject.refreshClusters();
       }
     }
   },
@@ -145,22 +148,27 @@ const MapMixin = {
     zoomChangeHandler (event) {
       this.setCurrentZoom(event.target.getZoom());
     },
-    iconGenerator (id, isActive) {
+    pinOptionsAndIconGenerator (id, isActive) {
       const additionalClass = isActive ? 'ActiveCountry' : '';
-      const html = `<span>${this.getCountryProjects(id).length}</span>`;
-      return L.divIcon({
+      const projects = this.getCountryProjects(id).length;
+      const html = `<span>${projects}</span>`;
+      const icon = L.divIcon({
         className: `CountryCenterIcon ${additionalClass}`,
         html,
         iconSize: [27, 44],
         iconAnchor: [13.5, 44]
       });
+      const option = {projects};
+      return [icon, option];
     },
     iconsGenerator () {
       const icons = {};
+      const options = {};
       this.countriesPin.forEach(cp => {
-        icons[cp.id] = this.iconGenerator(cp.id);
+        [icons[cp.id], options[cp.id]] = this.pinOptionsAndIconGenerator(cp.id);
       });
       this.countryCenterIcons = icons;
+      this.countryCenterOptions = options;
     }
   }
 };
