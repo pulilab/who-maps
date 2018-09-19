@@ -1,5 +1,8 @@
+from collections import OrderedDict
+
 import pycountry
 import requests
+from django.db.models import QuerySet
 
 from requests import RequestException
 from django.conf import settings
@@ -235,6 +238,8 @@ class TypeMatchMixin:
         if len({answer['draft'] for answer in answers}) > 1:
             raise ValidationError("Draft/Published type mismatch.")
 
+
+class CountryCustomAnswerViewSet(TypeMatchMixin, CheckRequiredMixin, TeamTokenAuthMixin, viewsets.ViewSet):
     def separate_private_answers(self, country, project):
         private_ids = country.country_questions.filter(private=True).values_list('id', flat=True)
         if private_ids:
@@ -271,7 +276,7 @@ class TypeMatchMixin:
             is_draft = answers.validated_data and answers.validated_data[0]['draft']
 
             if not is_draft:
-                self.check_required(country, answers.validated_data)
+                self.check_required(country.country_questions, answers.validated_data)
 
             answers.save()
 
