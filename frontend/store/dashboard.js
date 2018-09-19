@@ -207,6 +207,9 @@ export const actions = {
     commit('SET_CURRENT_PAGE', 1);
   },
   setSavedFilters ({commit}, filters) {
+    if (window && window.localStorage) {
+      window.localStorage.setItem('savedFilters', JSON.stringify(filters));
+    }
     commit('SET_SAVED_FILTERS', filters);
   }
 };

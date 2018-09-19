@@ -24,7 +24,14 @@
                 :class="{'Active': isActive(filter.query)}"
                 @click="applyPreset(filter.query)"
               >
-                <fa icon="check" />
+                <!-- TODO: Zoli please can u fix the allignment of this ? -->
+                <!-- <fa icon="check" /> -->
+                <el-button
+                  type="text"
+                  @click.stop="deleteFilter(filter)"
+                >
+                  <fa icon="times" />
+                </el-button>
                 {{ filter.name }}
               </li>
             </ul>
@@ -69,7 +76,8 @@ export default {
   methods: {
     ...mapActions({
       setSearchOptions: 'dashboard/setSearchOptions',
-      setSaveFiltersDialogState: 'layout/setSaveFiltersDialogState'
+      setSaveFiltersDialogState: 'layout/setSaveFiltersDialogState',
+      setSavedFilters: 'dashboard/setSavedFilters'
     }),
     clear () {
       this.setSearchOptions({});
@@ -84,6 +92,19 @@ export default {
     },
     applyPreset (query) {
       this.setSearchOptions(query);
+    },
+    async deleteFilter (filter) {
+      try {
+        await this.$confirm(this.$gettext('This will permanently delete this saved configuration. Continue?'), this.$gettext('Warning'), {
+          confirmButtonText: this.$gettext('OK'),
+          cancelButtonText: this.$gettext('Cancel'),
+          type: 'warning'
+        });
+        const filtered = this.savedFilters.filter(f => !(f.name === filter.name && f.category === filter.category));
+        this.setSavedFilters(filtered);
+      } catch (e) {
+        this.$message(this.$gettext('Operation successfully aborted'));
+      }
     }
   }
 };
