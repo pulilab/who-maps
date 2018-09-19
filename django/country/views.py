@@ -229,7 +229,9 @@ class CheckRequiredMixin:
             raise ValidationError('Required answer(s) are missing for question(s): {}'.format(
                 ', '.join(map(str, missing_ids))))
 
-    def type_match(self, answers):
+
+class TypeMatchMixin:
+    def type_match(self, answers: OrderedDict):
         if len({answer['draft'] for answer in answers}) > 1:
             raise ValidationError("Draft/Published type mismatch.")
 
