@@ -61,22 +61,25 @@
             class="OnePerRow CheckboxSmall">
             <el-checkbox
               label="name"
-              class="CheckboxSmall">Project Name</el-checkbox>
+              class="CheckboxSmall"><translate>Project Name</translate></el-checkbox>
             <el-checkbox
               label="org"
-              class="CheckboxSmall">Organisation Name</el-checkbox>
+              class="CheckboxSmall"><translate>Organisation Name</translate></el-checkbox>
             <el-checkbox
               label="country"
-              class="CheckboxSmall">Project Country</el-checkbox>
+              class="CheckboxSmall"><translate>Project Country</translate></el-checkbox>
+            <el-checkbox
+              label="loc"
+              class="CheckboxSmall"><translate>Location</translate></el-checkbox>
             <el-checkbox
               label="overview"
-              class="CheckboxSmall">Overview of the digital health</el-checkbox>
+              class="CheckboxSmall">Overview of the <translate>digital health</translate></el-checkbox>
             <el-checkbox
               label="partner"
-              class="CheckboxSmall">Implementing Partners</el-checkbox>
+              class="CheckboxSmall"><translate>Implementing Partners</translate></el-checkbox>
             <el-checkbox
               label="donor"
-              class="CheckboxSmall">Donors</el-checkbox>
+              class="CheckboxSmall"><translate>Donors</translate></el-checkbox>
           </el-checkbox-group>
         </el-col>
       </transition>
