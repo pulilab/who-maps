@@ -22,6 +22,7 @@
             :icon="countryCenterIcons[pin.id]"
             :key="pin.id"
             :pin="pin"
+            :options="countryCenterOptions[pin.id]"
             :selected-country.sync="selectedCountry"
             :active-country.sync="activeCountry"
           />

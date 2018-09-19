@@ -20,6 +20,7 @@
           <country-center-marker
             v-for="pin in countriesPin"
             :icon="countryCenterIcons[pin.id]"
+            :options="countryCenterOptions[pin.id]"
             :key="pin.id"
             :pin="pin"
             :selected-country.sync="selectedCountry"
