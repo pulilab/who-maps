@@ -235,11 +235,12 @@ class CountryCustomAnswerViewSet(TeamTokenAuthMixin, viewsets.ViewSet):
 
     def separate_private_answers(self, country, project):
         private_ids = country.country_questions.filter(private=True).values_list('id', flat=True)
-        private_answers = {k:v for k,v in project.data['country_custom_answers'].items() if k in private_ids}
-        project.data['country_custom_answers_private'] = private_answers
-        project.data['country_custom_answers'] = project.remove_keys(data_dict=project.data['country_custom_answers'],
-                                                                     keys=private_ids)
-        project.save(update_fields=['data'])
+        if private_ids:
+            private_answers = {k:v for k,v in project.data['country_custom_answers'].items() if k in private_ids}
+            project.data['country_custom_answers_private'] = private_answers
+            project.data['country_custom_answers'] = project.remove_keys(
+                data_dict=project.data['country_custom_answers'], keys=private_ids)
+            project.save(update_fields=['data'])
 
     def save_answers(self, request, country_id, project_id):
         project = country = None
