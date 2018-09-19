@@ -1,6 +1,6 @@
 <template>
   <div class="Project">
-    <project-bar />
+    <project-bar v-if="profile" />
     <nuxt-child />
   </div>
 </template>
