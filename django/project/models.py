@@ -83,10 +83,10 @@ class Project(SoftDeleteModel, ExtendedModel):
         return self.draft
 
     def get_non_member_data(self):
-        return self.remove_keys(self.FIELDS_FOR_MEMBERS_ONLY)
+        return self.remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY)
 
     def get_anon_data(self):
-        return self.remove_keys(self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
+        return self.remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
 
     # TODO: deprecate
     def get_organisation(self, draft_mode=False):  # pragma: no cover
