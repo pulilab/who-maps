@@ -10,11 +10,10 @@
         v-for="hsc in healthSystemChallenges"
         :values="selected"
         :key="hsc.id"
-        :category-selectable="true"
         :category="hsc"
         child-name="challenges"
         name-prop="challenge"
-        hide-header
+        always-expand-category
         @change="filterChange"
       />
     </selector-dialog-column>
