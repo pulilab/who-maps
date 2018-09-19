@@ -149,11 +149,17 @@ const MapMixin = {
       this.setCurrentZoom(event.target.getZoom());
     },
     pinOptionsAndIconGenerator (id, isActive) {
-      const additionalClass = isActive ? 'ActiveCountry' : '';
       const projects = this.getCountryProjects(id).length;
+      const markerClasses = ['CountryCenterIcon'];
+      if (isActive) {
+        markerClasses.push('ActiveCountry');
+      }
+      if (projects === 0) {
+        markerClasses.push('EmptyMarker');
+      }
       const html = `<span>${projects}</span>`;
       const icon = L.divIcon({
-        className: `CountryCenterIcon ${additionalClass}`,
+        className: markerClasses.join(' '),
         html,
         iconSize: [27, 44],
         iconAnchor: [13.5, 44]

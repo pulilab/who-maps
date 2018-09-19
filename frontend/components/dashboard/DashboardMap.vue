@@ -132,6 +132,10 @@ export default {
         background-image: url('~/assets/img/pins/pin-with-counter-active.svg');
       }
 
+      &.EmptyMarker {
+        opacity: 0.6;
+      }
+
       span {
         display: inline-block;
         width: 27px;
