@@ -17,6 +17,7 @@
 <script>
 import ProjectData from '../../../../components/project/ProjectData';
 export default {
+  middleware: ['isLoggedIn'],
   components: {
     ProjectData
   }

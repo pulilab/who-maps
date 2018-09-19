@@ -97,9 +97,6 @@ export default {
     },
     apply () {
       const filters = [...this.savedFilters, {category: this.filterCategory, name: this.form.name, query: this.$route.query}];
-      if (window && window.localStorage) {
-        window.localStorage.setItem('savedFilters', JSON.stringify(filters));
-      }
       this.setSavedFilters(filters);
       this.setSaveFiltersDialogState(null);
       this.form.name = '';

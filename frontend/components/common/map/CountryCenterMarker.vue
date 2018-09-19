@@ -2,7 +2,7 @@
   <div>
     <l-marker
       ref="countryMarker"
-      :options="pin.options"
+      :options="options"
       :lat-lng="pin.latlng"
       :icon="icon"
       class="MapMarker"
@@ -48,6 +48,10 @@ export default {
       type: Object,
       required: false,
       default: () => null
+    },
+    options: {
+      type: Object,
+      default: () => ({})
     },
     selectedCountry: {
       type: Number,

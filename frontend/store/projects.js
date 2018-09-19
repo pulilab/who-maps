@@ -176,9 +176,10 @@ export const actions = {
     await dispatch('loadProjectDetails', id);
     commit('SET_CURRENT_PROJECT', id);
   },
-  async loadProjectDetails ({commit}, projectId) {
+  async loadProjectDetails ({commit, rootGetters}, projectId) {
+    const profile = rootGetters['user/getProfile'];
     try {
-      if (projectId) {
+      if (projectId && profile) {
         const [toolkitVersions, coverageVersions] =
                   await Promise.all([
                     this.$axios.get(`/api/projects/${projectId}/toolkit/versions/`),
@@ -189,7 +190,7 @@ export const actions = {
       }
     } catch (error) {
       console.log(error);
-      return Promise.reject(error);
+      // return Promise.reject(error);
     }
   },
   async snapShotProject ({state, dispatch}) {

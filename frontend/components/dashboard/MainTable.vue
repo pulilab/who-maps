@@ -306,7 +306,8 @@ export default {
             display: -webkit-box;
             -webkit-line-clamp: 4;
             -webkit-box-orient: vertical;
-            max-height: calc(17px * 4);
+            // With 17 in the calc the fixed columns and the rest of the table go out of sync
+            max-height: calc(16.5px * 4);
 
             // &::after {
             //   content: "";

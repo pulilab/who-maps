@@ -20,6 +20,7 @@
           <country-center-marker
             v-for="pin in countriesPin"
             :icon="countryCenterIcons[pin.id]"
+            :options="countryCenterOptions[pin.id]"
             :key="pin.id"
             :pin="pin"
             :selected-country.sync="selectedCountry"
@@ -129,6 +130,10 @@ export default {
 
       &.ActiveCountry {
         background-image: url('~/assets/img/pins/pin-with-counter-active.svg');
+      }
+
+      &.EmptyMarker {
+        opacity: 0.6 !important; // Important needed to ovveride auto js style
       }
 
       span {

@@ -9,6 +9,7 @@
 export default {
   components: {
   },
+  middleware: ['isLoggedIn'],
   async fetch ({store, params}) {
     await store.dispatch('projects/setCurrentProject', params.id);
     await Promise.all([

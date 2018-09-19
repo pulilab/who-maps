@@ -1,20 +1,18 @@
 <template>
-  <div :class="['SelectorDialogCategory', {'NoParent': !hideHeader}]">
-    <!-- TODO -->
-    <!-- Something is wrong with the '.Opened' toggler class... -->
+  <div :class="['SelectorDialogCategory', {'NoParent': !hideHeader && !alwaysExpandCategory}]">
     <div
       v-show="!hideHeader"
-      :class="['CategoryName', {'Opened': toggleCategory}]"
+      :class="['CategoryName', {'Opened': categoryToggled}]"
     >
       <el-button
         type="text"
         @click="toggleCategory"
       >
         <fa
-          v-show="!categoryToggled"
+          v-show="!categoryToggled && !alwaysExpandCategory"
           icon="angle-down" />
         <fa
-          v-show="categoryToggled"
+          v-show="categoryToggled && !alwaysExpandCategory"
           icon="angle-up" />
         <el-checkbox
           v-show="categorySelectable"
@@ -76,6 +74,10 @@ export default {
     hideHeader: {
       type: Boolean,
       default: false
+    },
+    alwaysExpandCategory: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -85,7 +87,7 @@ export default {
   },
   computed: {
     categoryShown () {
-      return this.hideHeader || this.categoryToggled;
+      return this.hideHeader || this.categoryToggled || this.alwaysExpandCategory;
     },
     items () {
       if (this.childName) {

@@ -110,7 +110,7 @@
             class="CountrySpecificMenu">
             <div class="Separator" />
             <div>
-              <nuxt-link :to="localePath({name: 'organisation', params: {organisation: 'who'}})">
+              <nuxt-link :to="localePath({name: 'organisation', params: {organisation: '-'}})">
                 <img
                   class="LogoSmall"
                   alt="WHO logo small"
@@ -151,7 +151,7 @@ export default {
     },
     countryLogoURL () {
       if (this.countryData) {
-        return this.countryData.logo;
+        return this.countryData.logo_url;
       }
     },
     countryFlag () {

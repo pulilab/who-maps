@@ -146,17 +146,23 @@ export default {
       this.$emit('update:activeCountry', country);
     },
     iconGenerator (id, isActive) {
-      const additionaClass = isActive ? 'ActiveDistrict' : '';
       const subLevel = this.getSubLevelDetails(id);
       let amount = 0;
       if (this.subNationalProjects && subLevel) {
         const filtered = this.subNationalProjects.filter(sn => sn.coverage.some(c => c.district === id || c.district === subLevel.name));
         amount = filtered ? filtered.length : 0;
       }
-      const html = `<span>${amount}</span>`;
+
+      const markerClasses = ['DistrictCenterIcon'];
+      if (isActive) {
+        markerClasses.push('ActiveDistrict');
+      }
+      if (amount === 0) {
+        markerClasses.push('EmptyMarker');
+      }
       return L.divIcon({
-        className: `DistrictCenterIcon ${additionaClass}`,
-        html,
+        className: markerClasses.join(' '),
+        html: `<span>${amount}</span>`,
         iconSize: [27, 44],
         iconAnchor: [13.5, 44]
       });
@@ -169,10 +175,14 @@ export default {
       this.markerIcons = icons;
     },
     countryCenterIconGenerator () {
-      const html = `<span>${this.nationalProjects.length}</span>`;
+      const projects = this.nationalProjects.length;
+      const markerClasses = ['CountryCenterIcon', 'ActiveCountry'];
+      if (projects === 0) {
+        markerClasses.push('EmptyMarker');
+      }
       return L.divIcon({
-        className: 'CountryCenterIcon ActiveCountry',
-        html,
+        className: markerClasses.join(' '),
+        html: `<span>${projects}</span>`,
         iconSize: [27, 44],
         iconAnchor: [13.5, 44]
       });
@@ -197,6 +207,10 @@ export default {
     &.ActiveDistrict {
       background-image: url('~/assets/img/pins/pin-with-counter-active.svg');
     }
+
+     &.EmptyMarker {
+        opacity: 0.6 !important;
+      }
 
      span {
       display: inline-block;

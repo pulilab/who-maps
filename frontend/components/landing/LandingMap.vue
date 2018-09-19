@@ -22,6 +22,7 @@
             :icon="countryCenterIcons[pin.id]"
             :key="pin.id"
             :pin="pin"
+            :options="countryCenterOptions[pin.id]"
             :selected-country.sync="selectedCountry"
             :active-country.sync="activeCountry"
           />
@@ -103,6 +104,10 @@ export default {
 
       &.ActiveCountry {
         background-image: url('~/assets/img/pins/pin-with-counter-active.svg');
+      }
+
+      &.EmptyMarker {
+        opacity: 0.6 !important;
       }
 
       span {
