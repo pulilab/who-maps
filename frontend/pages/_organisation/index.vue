@@ -7,7 +7,7 @@
 
       <div
         v-if="showCoverImage"
-        :style="{backgroundImage: `url(${countryData.cover})`}"
+        :style="{backgroundImage: `url(${countryData.cover_url})`}"
         class="CoverImageBg" />
     </div>
 
