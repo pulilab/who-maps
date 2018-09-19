@@ -100,10 +100,13 @@ export const actions = {
     }
     await dispatch('loadTeamViewers', id);
   },
-  async loadTeamViewers ({commit}, projectId) {
-    const { data } = await this.$axios.get(`/api/projects/${projectId}/groups/`);
-    commit('SET_TEAM', data.team);
-    commit('SET_VIEWERS', data.viewers);
+  async loadTeamViewers ({commit, rootGetters}, projectId) {
+    const profile = rootGetters['user/getProfile'];
+    if (profile) {
+      const { data } = await this.$axios.get(`/api/projects/${projectId}/groups/`);
+      commit('SET_TEAM', data.team);
+      commit('SET_VIEWERS', data.viewers);
+    }
   },
   resetProjectState ({dispatch, commit, rootGetters}) {
     const clean = cleanState();
