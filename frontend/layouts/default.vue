@@ -5,6 +5,7 @@
     <action-bar v-if="showActionBar" />
     <nuxt/>
     <dha-footer />
+    <django-feedback />
   </div>
 </template>
 
@@ -13,13 +14,15 @@ import DhaFooter from '../components/common/DhaFooter.vue';
 import TopBar from '../components/common/TopBar.vue';
 import ActionBar from '../components/common/ActionBar.vue';
 import DialogsContainer from '../components/dialogs/DialogsContainer.vue';
+import DjangoFeedback from '../components/DjangoFeedback';
 
 export default {
   components: {
     DhaFooter,
     TopBar,
     ActionBar,
-    DialogsContainer
+    DialogsContainer,
+    DjangoFeedback
   },
   computed: {
     showActionBar () {
