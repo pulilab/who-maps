@@ -133,7 +133,7 @@ export default {
       }
 
       &.EmptyMarker {
-        opacity: 0.6;
+        opacity: 0.6 !important; // Important needed to ovveride auto js style
       }
 
       span {
