@@ -264,9 +264,14 @@ class CountryCustomAnswerViewSet(TeamTokenAuthMixin, viewsets.ViewSet):
 
         if answers.is_valid(raise_exception=True):
             self.type_match(answers.validated_data)
-            self.check_required(country, answers.validated_data)
 
             is_draft = answers.validated_data and answers.validated_data[0]['draft']
 
+            if not is_draft:
+                self.check_required(country, answers.validated_data)
+
             answers.save()
+
+            if not is_draft:
+                self.separate_private_answers(country, project)
             return Response(answers.validated_data, status=status.HTTP_200_OK)
