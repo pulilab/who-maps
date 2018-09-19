@@ -17,6 +17,7 @@ export default {
   components: {
     ProjectForm
   },
+  middleware: ['isLoggedIn'],
   fetch ({store}) {
     store.dispatch('project/resetProjectState');
   }

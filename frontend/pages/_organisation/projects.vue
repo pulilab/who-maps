@@ -8,7 +8,6 @@
 export default {
   components: {
   },
-  middleware: ['isLoggedIn'],
   async fetch ({store}) {
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),

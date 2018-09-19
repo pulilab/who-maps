@@ -9,6 +9,7 @@
 export default {
   components: {
   },
+  middleware: ['isLoggedIn'],
   async fetch ({store}) {
     await store.dispatch('projects/loadUserProjects');
     await store.dispatch('toolkit/loadToolkitData');
