@@ -373,6 +373,7 @@ export default {
         }
 
         .ProjectLegend {
+          top: -1px;
           right: 0;
           opacity: 1 !important;
         }

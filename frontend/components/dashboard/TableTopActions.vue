@@ -6,6 +6,14 @@
     class="TableTopActions">
     <el-col class="TableExportOptions">
       <el-row type="flex">
+        <template v-if="selectedRows.length > 0">
+          <el-button
+            :disabled="allSelected"
+            size="small"
+            @click="selectAll"><translate :parameters="{total}">Select all {total} rows</translate>
+          </el-button>
+          <div class="Separator" />
+        </template>
         <el-button
           :disabled="selectedRows.length === 0"
           type="primary"
@@ -31,15 +39,6 @@
             label="PDF"
             value="PDF"/>
         </el-select>
-        <template v-if="selectedRows.length > 0">
-          <div class="Separator" />
-          <el-button
-            :disabled="allSelected"
-            type="text"
-            size="small"
-            class="PrimaryButton"
-            @click="selectAll"><translate :parameters="{total}">Select All {total} rows</translate></el-button>
-        </template>
 
         <div class="Separator" />
         <el-button
@@ -218,11 +217,11 @@ export default {
       width: 100%;
 
       .el-button {
-        margin-right: 10px;
       }
 
       .el-select {
         width: 100px;
+        margin-left: 10px;
       }
     }
 
@@ -237,7 +236,9 @@ export default {
 
         .svg-inline--fa {
           margin-left: 20px;
+          margin-right: 2px;
           color: @colorTextSecondary;
+          vertical-align: middle;
         }
       }
 
