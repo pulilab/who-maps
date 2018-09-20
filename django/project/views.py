@@ -251,6 +251,9 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
             .append(UniqueValidator(queryset=project.__class__.objects.all().exclude(id=project.id)))
 
         self.check_object_permissions(self.request, project)
+        data_serializer.is_valid()
+        if data_serializer.errors:
+            errors['project'] = data_serializer.errors
 
         data_serializer.is_valid(raise_exception=True)
 
