@@ -228,8 +228,7 @@ class CheckRequiredMixin:
         present_ids = {answer['question_id'] for answer in answers}
         missing_ids = required_ids - present_ids
         if missing_ids:
-            raise ValidationError('Required answer(s) are missing for question(s): {}'.format(
-                ', '.join(map(str, missing_ids))))
+            return {i: ['This field is required'] for i in missing_ids}
 
 
 class TypeMatchMixin:
