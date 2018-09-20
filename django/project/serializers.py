@@ -13,6 +13,7 @@ from rest_framework.validators import UniqueValidator
 import scheduler.celery # noqa
 
 from country.models import CustomQuestion
+from project.utils import remove_keys
 from .models import Project
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
@@ -68,21 +69,21 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
     question_id = serializers.IntegerField(required=True)
     answer = serializers.ListField(
         child=serializers.CharField(max_length=512), max_length=50, min_length=0, required=True)
-    draft = serializers.BooleanField(required=True)
 
     def create(self, validated_data) -> Project:
-        instance = self.context['project']
-        data_key = 'draft' if validated_data['draft'] else 'data'
+        instance = validated_data.pop('project', None)
 
-        custom_answers = instance.draft.get('country_custom_answers', {})
-        custom_answers[validated_data['question_id']] = validated_data['answer']
-        if data_key != 'draft':
-            instance.data.setdefault('country_custom_answers', {})
-            instance.data['country_custom_answers'] = custom_answers
-        instance.draft.setdefault('country_custom_answers', {})
+        custom_answers = {k['question_id']: k['answer'] for k in validated_data}
         instance.draft['country_custom_answers'] = custom_answers
-
-        instance.save(update_fields=['draft', 'data'])
+        if not self.context['is_draft']:
+            private_ids = self.context['country'].country_questions.filter(private=True).values_list('id', flat=True)
+            if private_ids:
+                private_answers = {k: custom_answers[k] for k in custom_answers if k in private_ids}
+                instance.data['country_custom_answers_private'] = private_answers
+                instance.data['country_custom_answers'] = remove_keys(data_dict=custom_answers, keys=private_ids)
+            else:
+                instance.data['country_custom_answers'] = custom_answers
+        instance.save()
         return instance
 
     def validate_question_id(self, value):
