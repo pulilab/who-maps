@@ -1,7 +1,7 @@
 <template>
   <div class="DjangoFeedback">
     <vue-django-feedback
-      v-if="token"
+      v-if="token && profile"
       :name="profile.name"
       :email="profile.email"
       :csrf-token="token" />
