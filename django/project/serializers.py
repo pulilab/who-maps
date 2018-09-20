@@ -105,13 +105,13 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
             raise ValidationError({'answer': 'There must be 1 answer only.'})
 
     def validate(self, attrs):
-        if not attrs['draft']:
+        if not self.context['is_draft']:
             if self.context['question'].required:
                 self.validate_required_answer(attrs['answer'])
-        if self.context['question'].type != CustomQuestion.MULTI:
-            self.validate_answer_length(attrs['answer'])
-        if self.context['question'].type == CustomQuestion.NUMBER:
-            self.validate_numeric_answer(attrs['answer'])
+            if self.context['question'].type != CustomQuestion.MULTI:
+                self.validate_answer_length(attrs['answer'])
+            if self.context['question'].type == CustomQuestion.NUMBER:
+                self.validate_numeric_answer(attrs['answer'])
         return attrs
 
 
