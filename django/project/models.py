@@ -161,6 +161,11 @@ class Project(SoftDeleteModel, ExtendedModel):
         self.approval.approved = False
         self.approval.save()
 
+    def reset_approval(self):
+        if self.approval.approved:
+            self.approval.delete()
+            ProjectApproval.objects.create(project=self)
+
     @classmethod
     def remove_stale_donors(cls):
         from country.models import Donor
