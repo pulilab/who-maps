@@ -269,11 +269,8 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                 else:
                     errors['country_custom_answers'] = country_answers.errors
 
-        # Remove approval if already approved, so country admin can approve again because project has changed
-        # TODO: refactor
-        if hasattr(project, 'approval') and project.approval.approved:
-            project.approval.delete()
-            ProjectApproval.objects.create(project=project)
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
