@@ -231,9 +231,11 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
     def update(self, request, project_id, country_id):
         """
-        Updates a project.
+        Publish a project
+        Takes project data and custom question-answers in one go.
         """
-        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
+        country = get_object_or_400(Country, error_message="No such country", id=country_id)
 
         data_serializer = ProjectPublishedSerializer(project, data=request.data)
 
