@@ -118,13 +118,6 @@ class Project(SoftDeleteModel, ExtendedModel):
                                                                                      c.get('facilities'))
                          for c in coverage])
 
-    @staticmethod
-    def remove_keys(data_dict, keys):
-        for key in keys:
-            if key in data_dict:
-                data_dict.pop(key, None)
-        return data_dict
-
     def to_representation(self, data=None, draft_mode=False):
         if data is None:
             data = self.get_member_draft() if draft_mode else self.get_member_data()
