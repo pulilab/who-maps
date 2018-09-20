@@ -21,7 +21,7 @@ from country.models import Country, CountryField, Donor
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea, ProjectApproval
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
 
 
 class ProjectPublicViewSet(ViewSet):

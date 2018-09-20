@@ -10,10 +10,10 @@ urlpatterns = [
         }),
         name="project-retrieve"),
     path(r'projects/publish/<int:project_id>/<int:country_id>/',
-        view=views.ProjectPublishViewSet.as_view({
-            'put': 'update'
-        }),
-        name="project-publish"),
+         view=views.ProjectPublishViewSet.as_view({
+             'put': 'update'
+         }),
+         name="project-publish"),
     url(r"^projects/draft/$",
         view=views.ProjectDraftViewSet.as_view({
             'post': 'create'

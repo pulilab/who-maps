@@ -1,22 +1,17 @@
 import pycountry
 import requests
 
-from collections import OrderedDict
 from requests import RequestException
-from django.db.models import QuerySet
 from django.conf import settings
 from django.http import HttpResponse
 from rest_framework import generics, mixins, viewsets, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 
-from core.views import TeamTokenAuthMixin
-from project.serializers import CountryCustomAnswerSerializer
 from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
