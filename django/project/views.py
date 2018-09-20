@@ -226,8 +226,10 @@ class CheckRequiredMixin:
         if missing_ids:
             return {i: ['This field is required'] for i in missing_ids}
 
+
+class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
-    def update(self, request, *args, **kwargs):
+    def update(self, request, country_id, project_id):
         """
         Updates a project.
         """
