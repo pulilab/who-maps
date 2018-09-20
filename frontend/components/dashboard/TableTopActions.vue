@@ -6,14 +6,24 @@
     class="TableTopActions">
     <el-col class="TableExportOptions">
       <el-row type="flex">
-        <template v-if="selectedRows.length > 0">
+        <!-- <template v-if="selectedRows.length > 0">
           <el-button
             :disabled="allSelected"
             size="small"
             @click="selectAll"><translate :parameters="{total}">Select all {total} rows</translate>
           </el-button>
           <div class="Separator" />
-        </template>
+        </template> -->
+
+        <!-- TODO -->
+        <!-- Please make it as a toggle button: Select/Deselect all -->
+        <el-button
+          size="small"
+          @click="selectAll"><translate :parameters="{total}">Select all {total} projects</translate>
+        </el-button>
+
+        <div class="Separator" />
+
         <el-button
           :disabled="selectedRows.length === 0"
           type="primary"
@@ -26,7 +36,7 @@
             <translate>Export selected</translate>
           </span>
           <span v-show="selected">
-            <translate :parameters="{selected}">Export {selected} project(s)</translate>
+            <translate :parameters="{selected}">Export {selected} selected</translate>
           </span>
         </el-button>
         <el-select
@@ -49,11 +59,11 @@
           @click="openMailDialog"
         >
           <fa icon="envelope"/>
-          <translate v-show="selected === 0">Contact Selected</translate>
+          <translate v-show="selected === 0">Contact selected</translate>
           <translate
             v-show="selected > 0"
             :parameters="{selected}">
-            Contact {selected} project(s)
+            Contact {selected} selected
           </translate>
         </el-button>
         <pdf-export ref="pdfExport" />

@@ -293,6 +293,13 @@ export default {
         &.is-leaf {
           border-bottom-color: @colorTextMuted;
         }
+
+        // Disable select-all-row
+        &.el-table-column--selection {
+          .el-checkbox {
+            display: none;
+          }
+        }
       }
 
       td {
