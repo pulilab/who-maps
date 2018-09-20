@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.urls import path
 
 from . import views
 
@@ -8,7 +9,7 @@ urlpatterns = [
             'get': 'retrieve',
         }),
         name="project-retrieve"),
-    url(r"^projects/publish/(?P<pk>\d+)/$",
+    path(r'projects/publish/<int:country_id>/<int:project_id>/',
         view=views.ProjectPublishViewSet.as_view({
             'put': 'update'
         }),
