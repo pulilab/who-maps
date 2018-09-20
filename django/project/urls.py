@@ -9,7 +9,7 @@ urlpatterns = [
             'get': 'retrieve',
         }),
         name="project-retrieve"),
-    path(r'projects/publish/<int:country_id>/<int:project_id>/',
+    path(r'projects/publish/<int:project_id>/<int:country_id>/',
         view=views.ProjectPublishViewSet.as_view({
             'put': 'update'
         }),

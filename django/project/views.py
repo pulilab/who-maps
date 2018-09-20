@@ -229,7 +229,7 @@ class CheckRequiredMixin:
 
 class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
-    def update(self, request, country_id, project_id):
+    def update(self, request, project_id, country_id):
         """
         Updates a project.
         """
