@@ -271,6 +271,11 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
 
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            instance = data_serializer.save()
+            if country_answers:
+                instance = country_answers.save(project=instance)
+
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
