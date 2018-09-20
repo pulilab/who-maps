@@ -371,6 +371,11 @@ export default {
         .ProjectCountryOrg {
           margin-top: 4px;
         }
+
+        .ProjectLegend {
+          right: 0;
+          opacity: 1 !important;
+        }
       }
 
       .CountryItem {

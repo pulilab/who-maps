@@ -3,12 +3,14 @@
     <template v-if="showStar">
       <fa
         icon="star"
+        size="xs"
         class="Owner" />
       <span v-show="showLabel"> <translate>Team Member</translate></span>
     </template>
     <template v-if="showEye">
       <fa
         icon="eye"
+        size="xs"
         class="Viewer" />
       <span v-show="showLabel"> <translate>Viewer</translate></span>
     </template>
@@ -66,6 +68,9 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .ProjectLegend {
+    opacity: 1;
+    transition: @transitionFade;
+
     .Owner {
       color: @colorOwner;
     }

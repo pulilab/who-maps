@@ -93,14 +93,11 @@
           class="DropdownLink"
           @click="logout"
         >
-          <el-button
-            type="text"
-            style="padding: 0"
-          >
+          <el-button type="text">
             <span class="MenuIcon">
               <fa icon="power-off" />
             </span>
-            <translate> Logout</translate>
+            <translate>Logout</translate>
           </el-button>
         </div>
       </div>
@@ -257,13 +254,18 @@ export default {
         white-space: nowrap;
       }
 
-      a {
+      a,
+      .el-button > span {
         display: flex;
+      }
+
+      .el-button {
+        width: 100%;
       }
 
       .MenuIcon {
         display: inline-block;
-        width: 24px;
+        width: 32px;
         height: 100%;
         text-align: left;
       }
