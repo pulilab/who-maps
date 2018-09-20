@@ -258,6 +258,16 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         if country.country_questions.exists():
             if 'country_custom_answers' not in request.data:
                 raise ValidationError({'non_field_errors': 'Country answers are missing'})
+            else:
+                country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
+                                                                context=dict(country=country, is_draft=False))
+
+                if country_answers.is_valid():
+                    required_errors = self.check_required(country.country_questions, country_answers.validated_data)
+                    if required_errors:
+                        errors['country_custom_answers'] = required_errors
+                else:
+                    errors['country_custom_answers'] = country_answers.errors
 
         # Remove approval if already approved, so country admin can approve again because project has changed
         # TODO: refactor
