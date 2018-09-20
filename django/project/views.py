@@ -237,7 +237,12 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
         country = get_object_or_400(Country, error_message="No such country", id=country_id)
 
-        data_serializer = ProjectPublishedSerializer(project, data=request.data)
+        country_answers = None
+        errors = {}
+
+        if 'project' not in request.data:
+            raise ValidationError({'non_field_errors': 'Project data is missing'})
+
 
         data_serializer.fields.get('name').validators = \
             [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
