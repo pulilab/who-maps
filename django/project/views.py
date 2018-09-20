@@ -301,7 +301,10 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         if data_serializer.errors:
             errors['project'] = data_serializer.errors
 
-        return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
+        try:
+            country = Country.objects.get(id=data_serializer.validated_data['country'])
+        except Country.DoesNotExist:
+            raise ValidationError({'non_field_errors': 'Country does not exist'})
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
