@@ -315,6 +315,14 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
                 if not country_answers.is_valid():
                     errors['country_custom_answers'] = country_answers.errors
+
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            instance.save()
+            instance.team.add(request.user.userprofile)
+            if country_answers:
+                instance = country_answers.save(project=instance)
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         """
