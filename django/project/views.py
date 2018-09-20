@@ -288,10 +288,18 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         """
         Creates a Draft project.
         """
-        data_serializer = ProjectDraftSerializer(data=request.data)
-        data_serializer.is_valid(raise_exception=True)
-        project = data_serializer.save(owner=request.user.userprofile)
-        data = project.to_representation(draft_mode=True)
+        country_answers = None
+        errors = {}
+
+        if 'project' not in request.data:
+            raise ValidationError({'non_field_errors': 'Project data is missing'})
+
+        data_serializer = ProjectDraftSerializer(data=request.data['project'])
+        data_serializer.is_valid()
+        instance = data_serializer.save()
+
+        if data_serializer.errors:
+            errors['project'] = data_serializer.errors
 
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
 
