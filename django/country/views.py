@@ -231,11 +231,6 @@ class CheckRequiredMixin:
             return {i: ['This field is required'] for i in missing_ids}
 
 
-class TypeMatchMixin:
-    def type_match(self, answers: OrderedDict):
-        if len({answer['draft'] for answer in answers}) > 1:
-            raise ValidationError("Draft/Published type mismatch.")
-
 
 class CountryCustomAnswerViewSet(TypeMatchMixin, CheckRequiredMixin, TeamTokenAuthMixin, viewsets.ViewSet):
     def separate_private_answers(self, country, project):
