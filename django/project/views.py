@@ -334,17 +334,42 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         """
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
 
-        data_serializer = ProjectDraftSerializer(project, data=request.data)
+        country_answers = None
+        errors = {}
 
+        if 'project' not in request.data:
+            raise ValidationError({'non_field_errors': 'Project data is missing'})
+
+        data_serializer = ProjectDraftSerializer(project, data=request.data['project'])
         self.check_object_permissions(self.request, project)
+        data_serializer.is_valid()
+        if data_serializer.errors:
+            errors['project'] = data_serializer.errors
 
-        data_serializer.is_valid(raise_exception=True)
+        try:
+            country = Country.objects.get(id=data_serializer.validated_data['country'])
+        except Country.DoesNotExist:
+            raise ValidationError({'non_field_errors': 'Country does not exist'})
 
-        instance = data_serializer.save()
+        if country.country_questions.exists():
+            if 'country_custom_answers' not in request.data:
+                raise ValidationError({'non_field_errors': 'Country answers are missing'})
+            else:
+                country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
+                                                                context=dict(country=country, is_draft=True))
+
+                if not country_answers.is_valid():
+                    errors['country_custom_answers'] = country_answers.errors
+
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            instance = data_serializer.save()
+            if country_answers:
+                instance = country_answers.save(project=instance)
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
-
         return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
 
 
