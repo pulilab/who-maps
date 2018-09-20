@@ -232,20 +232,16 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
         return value
 
     def create(self, validated_data):
-        owner = validated_data.pop('owner')
         odk_etag = validated_data.pop('odk_etag', None)
         odk_id = validated_data.pop('odk_id', None)
         odk_extra_data = validated_data.pop('odk_extra_data', dict())
-        instance = self.Meta.model.objects.create(
+        return self.Meta.model(
             name=validated_data["name"],
             draft=validated_data,
             odk_etag=odk_etag,
             odk_id=odk_id,
             odk_extra_data=odk_extra_data
         )
-        instance.team.add(owner)
-
-        return instance
 
     def update(self, instance, validated_data):
         odk_etag = validated_data.pop('odk_etag', None)
