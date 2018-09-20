@@ -276,11 +276,11 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
             if country_answers:
                 instance = country_answers.save(project=instance)
 
+        project.reset_approval()
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
-
-        return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
+        return Response(instance.to_response_dict(published=published, draft=draft))
 
 
 class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
