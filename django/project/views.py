@@ -323,6 +323,10 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
             instance.team.add(request.user.userprofile)
             if country_answers:
                 instance = country_answers.save(project=instance)
+
+        data = instance.to_representation(draft_mode=True)
+        return Response(instance.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
+
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         """
