@@ -1,9 +1,12 @@
 import functools
 import csv
+from collections import OrderedDict
 
 from django.db import transaction
+from django.db.models import QuerySet
 from django.http import HttpResponse
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
@@ -16,7 +19,7 @@ from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, CountryField, Donor
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
-    MapProjectCountrySerializer
+    MapProjectCountrySerializer, CountryCustomAnswerSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea, ProjectApproval
 
@@ -215,7 +218,14 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         return Response(self._get_permission_based_data(project))
 
 
-class ProjectPublishViewSet(TeamTokenAuthMixin, ViewSet):
+class CheckRequiredMixin:
+    def check_required(self, queryset: QuerySet, answers: OrderedDict):
+        required_ids = set(queryset.filter(required=True).values_list('id', flat=True))
+        present_ids = {answer['question_id'] for answer in answers}
+        missing_ids = required_ids - present_ids
+        if missing_ids:
+            return {i: ['This field is required'] for i in missing_ids}
+
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         """
