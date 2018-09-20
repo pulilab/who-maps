@@ -255,9 +255,9 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         if data_serializer.errors:
             errors['project'] = data_serializer.errors
 
-        data_serializer.is_valid(raise_exception=True)
-
-        instance = data_serializer.save()
+        if country.country_questions.exists():
+            if 'country_custom_answers' not in request.data:
+                raise ValidationError({'non_field_errors': 'Country answers are missing'})
 
         # Remove approval if already approved, so country admin can approve again because project has changed
         # TODO: refactor
