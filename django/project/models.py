@@ -13,6 +13,7 @@ from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, Acti
     ParentByIDMixin
 from country.models import Country, CountryField
 from project.cache import InvalidateCacheMixin
+from project.utils import remove_keys
 from user.models import UserProfile, Organisation
 from toolkit.toolkit_data import toolkit_default
 
@@ -84,10 +85,10 @@ class Project(SoftDeleteModel, ExtendedModel):
         return self.draft
 
     def get_non_member_data(self):
-        return self.remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY)
+        return remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY)
 
     def get_anon_data(self):
-        return self.remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
+        return remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
 
     # TODO: deprecate
     def get_organisation(self, draft_mode=False):  # pragma: no cover
