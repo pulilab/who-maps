@@ -243,6 +243,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         if 'project' not in request.data:
             raise ValidationError({'non_field_errors': 'Project data is missing'})
 
+        data_serializer = ProjectPublishedSerializer(project, data=request.data['project'])
 
         data_serializer.fields.get('name').validators = \
             [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
