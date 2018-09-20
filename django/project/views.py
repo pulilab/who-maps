@@ -306,6 +306,15 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         except Country.DoesNotExist:
             raise ValidationError({'non_field_errors': 'Country does not exist'})
 
+        if country.country_questions.exists():
+            if 'country_custom_answers' not in request.data:
+                raise ValidationError({'non_field_errors': 'Country answers are missing'})
+            else:
+                country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
+                                                                context=dict(country=country, is_draft=True))
+
+                if not country_answers.is_valid():
+                    errors['country_custom_answers'] = country_answers.errors
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         """
