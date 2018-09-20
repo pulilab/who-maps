@@ -1,19 +1,5 @@
 <template>
   <div class="DashboardArea">
-
-    <transition name="el-fade-in">
-      <div
-        v-show="loading"
-        class="DashboardLoader">
-        <div>
-          <div class="Loader">
-            <div />
-            <span><translate>Updating filters and datapoints</translate></span>
-          </div>
-        </div>
-      </div>
-    </transition>
-
     <div class="ChildContainer">
       <nuxt-child />
     </div>
@@ -42,8 +28,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      searchParameters: 'dashboard/getSearchParameters',
-      loading: 'dashboard/getLoading'
+      searchParameters: 'dashboard/getSearchParameters'
     })
   },
   watch: {
@@ -85,27 +70,6 @@ export default {
     min-width: @appWidthMinLimit;
     max-width: @appWidthMaxLimit;
     height: calc(100vh - @topBarHeight - @actionBarHeight - @appFooterHeight);
-
-    .DashboardLoader {
-      z-index: 3;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(255,255,255,.5);
-
-      > div {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 20px;
-        background-color: rgba(255,255,255,.9);
-        border-radius: 5px;
-        box-shadow: 0 4px 12px 0 rgba(0,0,0,.12);
-      }
-    }
 
     .ChildContainer {
       z-index: 1;

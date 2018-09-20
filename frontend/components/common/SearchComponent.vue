@@ -169,7 +169,7 @@ export default {
     searchParameters: {
       immediate: false,
       handler (params) {
-        this.doSearch();
+        this.updateSearch();
       }
     }
   },
@@ -177,6 +177,11 @@ export default {
     ...mapActions({
       doSearch: 'landing/search'
     }),
+    async updateSearch () {
+      this.$nuxt.$loading.start();
+      await this.doSearch();
+      this.$nuxt.$loading.finish();
+    },
     clearSearch () {
       this.searchString = null;
     },

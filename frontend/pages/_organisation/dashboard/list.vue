@@ -35,14 +35,19 @@ export default {
     searchParameters: {
       immediate: false,
       handler (params) {
-        this.loadProjectList();
+        this.load();
       }
     }
   },
   methods: {
     ...mapActions({
       loadProjectList: 'dashboard/loadProjectList'
-    })
+    }),
+    async load () {
+      this.$nuxt.$loading.start();
+      await this.loadProjectList();
+      this.$nuxt.$loading.finish();
+    }
   }
 };
 </script>
