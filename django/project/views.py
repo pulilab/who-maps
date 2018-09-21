@@ -273,6 +273,8 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
             if 'donor_custom_answers' not in request.data:
                 raise ValidationError({'non_field_errors': 'Donor answers are missing'})
             for donor_id in data_serializer.validated_data['donors']:
+                if donor_id not in request.data['donor_custom_answers']:
+                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
                 donor = Donor.objects.get(id=donor_id)
                 if donor and donor.donor_questions.exists():
                     donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][donor_id], many=True,
@@ -340,6 +342,8 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
             if 'donor_custom_answers' not in request.data:
                 raise ValidationError({'non_field_errors': 'Donor answers are missing'})
             for donor_id in data_serializer.validated_data['donors']:
+                if donor_id not in request.data['donor_custom_answers']:
+                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
                 donor = Donor.objects.get(id=donor_id)
                 if donor and donor.donor_questions.exists():
                     donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][donor_id], many=True,
@@ -403,6 +407,8 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
             if 'donor_custom_answers' not in request.data:
                 raise ValidationError({'non_field_errors': 'Donor answers are missing'})
             for donor_id in data_serializer.validated_data['donors']:
+                if donor_id not in request.data['donor_custom_answers']:
+                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
                 donor = Donor.objects.get(id=donor_id)
                 if donor and donor.donor_questions.exists():
                     donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][donor_id], many=True,
