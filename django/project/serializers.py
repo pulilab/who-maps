@@ -65,60 +65,6 @@ class DraftPlatformSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
 
 
-class CountryCustomAnswerListSerializer(serializers.ListSerializer):
-    def create(self, validated_data):
-        instance = self.context['project']
-        custom_answers = {k['question_id']: k['answer'] for k in validated_data}
-        instance.draft['country_custom_answers'] = custom_answers
-        if not self.context['is_draft']:
-            private_ids = self.context['country'].country_questions.filter(private=True).values_list('id', flat=True)
-            if private_ids:
-                private_answers = {k: custom_answers[k] for k in custom_answers if k in private_ids}
-                instance.data['country_custom_answers_private'] = private_answers
-                instance.data['country_custom_answers'] = remove_keys(data_dict=custom_answers, keys=private_ids)
-            else:
-                instance.data['country_custom_answers'] = custom_answers
-        instance.save()
-        return instance
-
-
-class CountryCustomAnswerSerializer(serializers.Serializer):
-    question_id = serializers.IntegerField(required=True)
-    answer = serializers.ListField(
-        child=serializers.CharField(max_length=512, allow_blank=True), max_length=50, min_length=0, required=True)
-
-    class Meta:
-        list_serializer_class = CountryCustomAnswerListSerializer
-
-    def validate_question_id(self, value):
-        self.context['question'] = self.context['country'].country_questions.filter(id=int(value)).first()
-        if not self.context['question']:
-            raise ValidationError('This question_id does not exist.')
-        return value
-
-    def validate_required_answer(self, value):
-        if not value:
-            raise ValidationError({'answer': 'This field is required.'})
-
-    def validate_numeric_answer(self, value):
-        if value and isinstance(value[0], str) and not value[0].isnumeric():
-            raise ValidationError({'answer': 'This field must be numeric.'})
-
-    def validate_answer_length(self, value):
-        if len(value) > 1:
-            raise ValidationError({'answer': 'There must be 1 answer only.'})
-
-    def validate(self, attrs):
-        if not self.context['is_draft']:
-            if self.context['question'].required:
-                self.validate_required_answer(attrs['answer'])
-            if self.context['question'].type != CustomQuestion.MULTI:
-                self.validate_answer_length(attrs['answer'])
-            if self.context['question'].type == CustomQuestion.NUMBER:
-                self.validate_numeric_answer(attrs['answer'])
-        return attrs
-
-
 INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
                     (1, 'Yes, they are contributing in-kind people or time'),
                     (2, 'Yes, there is a financial contribution through MOH budget')]
