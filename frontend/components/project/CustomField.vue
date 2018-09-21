@@ -17,6 +17,7 @@
       v-if="type === 3"
       v-model="innerValue"
       :data-vv-as="question"
+      :data-vv-scope="'country_custom_question_' + id"
       data-vv-name="answer"
     >
       <el-radio label="yes"><translate>Yes</translate></el-radio>
@@ -30,6 +31,7 @@
         :placeholder="$gettext('Select from list')"
         :multiple="type === 5"
         :data-vv-as="question"
+        :data-vv-scope="'country_custom_question_' + id"
         filterable
         data-vv-name="answer"
         popper-class="CustomFieldSelectorDropdown"
