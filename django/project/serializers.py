@@ -65,14 +65,9 @@ class DraftPlatformSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
 
 
-class CountryCustomAnswerSerializer(serializers.Serializer):
-    question_id = serializers.IntegerField(required=True)
-    answer = serializers.ListField(
-        child=serializers.CharField(max_length=512), max_length=50, min_length=0, required=True)
-
-    def create(self, validated_data) -> Project:
-        instance = validated_data.pop('project', None)
-
+class CountryCustomAnswerListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        instance = validated_data[0]['project']
         custom_answers = {k['question_id']: k['answer'] for k in validated_data}
         instance.draft['country_custom_answers'] = custom_answers
         if not self.context['is_draft']:
