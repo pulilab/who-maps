@@ -46,6 +46,12 @@
             :api-errors="apiErrors"
             @mounted="mountedHandler"
           />
+          <donor-custom
+            ref="donorCustom"
+            :use-publish-rules="usePublishRules"
+            :api-errors="apiErrors"
+            @mounted="mountedHandler"
+          />
         </el-col>
         <el-col :span="6">
           <project-navigation
@@ -66,6 +72,7 @@ import ImplementationOverview from './sections/ImplementationOverview';
 import TechnologyOverview from './sections/TechnologyOverview';
 import InteroperabilityAndStandards from './sections/InteroperabilityAndStandards';
 import CountryCustom from './sections/CountryCustom';
+import DonorCustom from './sections/DonorCustom';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -75,7 +82,8 @@ export default {
     ImplementationOverview,
     TechnologyOverview,
     InteroperabilityAndStandards,
-    CountryCustom
+    CountryCustom,
+    DonorCustom
   },
   data () {
     return {
@@ -301,7 +309,8 @@ export default {
         this.$refs.implementationOverview.validate(),
         this.$refs.technologyOverview.validate(),
         this.$refs.interoperabilityAndStandards.validate(),
-        this.$refs.countryCustom.validate()
+        this.$refs.countryCustom.validate(),
+        this.$refs.donorCustom.validate()
       ]);
       console.log('root validations', validations);
       return validations.reduce((a, c) => a && c, true);
@@ -312,6 +321,8 @@ export default {
       this.$refs.implementationOverview.clear();
       this.$refs.technologyOverview.clear();
       this.$refs.interoperabilityAndStandards.clear();
+      this.$refs.countryCustom.clear();
+      this.$refs.donorCustom.clear();
     },
     async doSaveDraft () {
       this.clearValidation();
