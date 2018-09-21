@@ -284,10 +284,12 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
 
 
 class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
-    def create(self, request, *args, **kwargs):
+    def create(self, request, country_id):
         """
         Creates a Draft project.
         """
+        country = get_object_or_400(Country, error_message="No such country", id=country_id)
+
         country_answers = None
         errors = {}
 
@@ -300,11 +302,6 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
         if data_serializer.errors:
             errors['project'] = data_serializer.errors
-
-        try:
-            country = Country.objects.get(id=data_serializer.validated_data['country'])
-        except Country.DoesNotExist:
-            raise ValidationError({'non_field_errors': 'Country does not exist'})
 
         if country.country_questions.exists():
             if 'country_custom_answers' not in request.data:
@@ -329,11 +326,12 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         return Response(instance.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
 
     @transaction.atomic
-    def update(self, request, *args, **kwargs):
+    def update(self, request, project_id, country_id):
         """
         Updates a draft project.
         """
-        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
+        country = get_object_or_400(Country, error_message="No such country", id=country_id)
 
         country_answers = None
         errors = {}
@@ -346,11 +344,6 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         data_serializer.is_valid()
         if data_serializer.errors:
             errors['project'] = data_serializer.errors
-
-        try:
-            country = Country.objects.get(id=data_serializer.validated_data['country'])
-        except Country.DoesNotExist:
-            raise ValidationError({'non_field_errors': 'Country does not exist'})
 
         if country.country_questions.exists():
             if 'country_custom_answers' not in request.data:
