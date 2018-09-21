@@ -150,8 +150,7 @@ export default {
       }
     },
     validate () {
-      // return this.$validator.validate();
-      return Promise.resolve(true);
+      return this.$validator.validate();
     }
   }
 };
