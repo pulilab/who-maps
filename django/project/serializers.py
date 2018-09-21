@@ -349,6 +349,7 @@ class DonorCustomAnswerListSerializer(serializers.ListSerializer):
         instance = self.context['project']
 
         custom_answers = {k['question_id']: k['answer'] for k in validated_data}
+        instance.draft.setdefault('donor_custom_answers', {})
         instance.draft['donor_custom_answers'].setdefault(self.context['donor_id'], {})
         instance.draft['donor_custom_answers'][self.context['donor_id']] = custom_answers
 
@@ -361,6 +362,7 @@ class DonorCustomAnswerListSerializer(serializers.ListSerializer):
                 instance.data['donor_custom_answers'][self.context['donor_id']] = remove_keys(data_dict=custom_answers,
                                                                                               keys=private_ids)
             else:
+                instance.data.setdefault('donor_custom_answers', {})
                 instance.data['donor_custom_answers'].setdefault(self.context['donor_id'], {})
                 instance.data['donor_custom_answers'][self.context['donor_id']] = custom_answers
         return instance
