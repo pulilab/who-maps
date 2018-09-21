@@ -19,7 +19,7 @@ from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, CountryField, Donor
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
-    MapProjectCountrySerializer, CountryCustomAnswerSerializer
+    MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
 
@@ -237,6 +237,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         country = get_object_or_400(Country, error_message="No such country", id=country_id)
 
         country_answers = None
+        all_donor_answers = []
         errors = {}
 
         if 'project' not in request.data:
