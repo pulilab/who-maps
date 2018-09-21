@@ -30,14 +30,19 @@ export default {
     searchParameters: {
       immediate: false,
       handler (params) {
-        this.loadProjectsMap();
+        this.load();
       }
     }
   },
   methods: {
     ...mapActions({
       loadProjectsMap: 'dashboard/loadProjectsMap'
-    })
+    }),
+    async load () {
+      this.$nuxt.$loading.start();
+      await this.loadProjectsMap();
+      this.$nuxt.$loading.finish();
+    }
   }
 };
 </script>

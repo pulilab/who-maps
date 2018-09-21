@@ -219,6 +219,13 @@ export default {
       return false;
     }
   },
+  mounted () {
+    window.addEventListener('resize', this.setFlyingBoxLeft);
+    this.setFlyingBoxLeft();
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.setFlyingBoxLeft);
+  },
   methods: {
     scrollTo (where) {
       window.location.hash = '';
@@ -238,6 +245,12 @@ export default {
     goToDashboard () {
       const localised = this.localePath({name: 'organisation-dashboard', params: {...this.$route.params}});
       this.$router.push(localised);
+    },
+    setFlyingBoxLeft () {
+      setTimeout(() => {
+        const box = this.$el.getBoundingClientRect();
+        this.$el.style.left = `${box.left}px`;
+      }, 300);
     }
   }
 };
@@ -251,10 +264,9 @@ export default {
     width: @projectAsideNavWidth;
 
     &.FixedNavigation {
-      // TODO: check browser compatibility for older browsers which do not support 'sticky'!
-      position: sticky;
+      position: fixed;
       top: 20px;
-      left: 0;
+      // left specified inline via computed js
     }
 
     .SwitchProjectStatus {

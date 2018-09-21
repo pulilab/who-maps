@@ -129,6 +129,9 @@ const config = {
   loading: '~/components/DhaLoader.vue',
   build: {
     extractCSS: true,
+    vendor: [
+      'babel-polyfill'
+    ],
     extend (config, { isDev, isClient }) {
       config.module.rules.push({
         test: /\.html$/,
