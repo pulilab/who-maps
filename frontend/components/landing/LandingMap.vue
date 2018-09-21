@@ -1,5 +1,5 @@
 <template>
-  <div class="LandingMap">
+  <div class="DhaMap LandingMap">
     <no-ssr>
       <l-map
         ref="mainMap"
@@ -81,44 +81,6 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .LandingMap {
-    display: block;
     height: 60vh;
-    background-color: @colorGrayLight;
-
-    .CountryClusterIcon {
-      background-image: url('~/assets/img/pins/pin-cluster.svg');
-
-       span {
-        display: inline-block;
-        width: 40px;
-        line-height: 40px;
-        color: @colorWhite;
-        font-size: @fontSizeSmall;
-        font-weight: 700;
-        text-align: center;
-      }
-    }
-
-    .CountryCenterIcon {
-      background-image: url('~/assets/img/pins/pin-with-counter.svg');
-
-      &.ActiveCountry {
-        background-image: url('~/assets/img/pins/pin-with-counter-active.svg');
-      }
-
-      &.EmptyMarker {
-        opacity: 0.6 !important;
-      }
-
-      span {
-        display: inline-block;
-        width: 27px;
-        margin-top: 4px;
-        color: @colorWhite;
-        font-size: @fontSizeSmall;
-        font-weight: 700;
-        text-align: center;
-      }
-    }
   }
 </style>

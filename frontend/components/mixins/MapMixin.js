@@ -108,7 +108,9 @@ const MapMixin = {
       immediate: false,
       handler () {
         this.iconsGenerator();
-        this.$refs.markerCluster.mapObject.refreshClusters();
+        this.$nextTick(() => {
+          this.$refs.markerCluster.mapObject.refreshClusters();
+        });
       }
     }
   },

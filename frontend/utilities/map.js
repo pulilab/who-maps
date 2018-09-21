@@ -11,7 +11,6 @@ export const stateGenerator = () => ({
   activeSubLevel: null,
   searchString: '',
   searchIn: searchIn(),
-  loading: false,
   projectsMap: []
 });
 
@@ -76,7 +75,6 @@ export const actionsGenerator = () => ({
     commit('SET_SELECTED_COUNTRY', id);
   },
   async loadProjects ({commit, getters, dispatch}, paramsOverride) {
-    commit('SET_LOADING', true);
     try {
       const { data } = await this.$axios({
         method: 'get',
@@ -84,17 +82,10 @@ export const actionsGenerator = () => ({
         params: {...getters.getSearchParameters, ...paramsOverride},
         paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'})
       });
-      dispatch('unsetLoading');
       return data;
     } catch (e) {
       console.error(e);
     }
-    dispatch('unsetLoading');
-  },
-  unsetLoading ({commit}) {
-    setTimeout(() => {
-      commit('SET_LOADING', false);
-    }, 500);
   },
   setCurrentZoom ({commit}, value) {
     commit('SET_CURRENT_ZOOM', value);
@@ -153,8 +144,5 @@ export const mutationsGenerator = () => ({
   },
   SET_SEARCH_IN: (state, value) => {
     state.searchIn = value;
-  },
-  SET_LOADING: (state, loading) => {
-    state.loading = loading;
   }
 });

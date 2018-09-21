@@ -1,6 +1,7 @@
 <template>
   <div
     v-scroll-class:FixedNavigation="340"
+    ref="projNav"
     class="ProjectNavigation"
   >
     <el-card :body-style="{ padding: '0px' }">
@@ -219,6 +220,13 @@ export default {
       return false;
     }
   },
+  mounted () {
+    window.addEventListener('resize', this.setFlyingBoxLeft);
+    this.setFlyingBoxLeft();
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.setFlyingBoxLeft);
+  },
   methods: {
     scrollTo (where) {
       window.location.hash = '';
@@ -238,6 +246,13 @@ export default {
     goToDashboard () {
       const localised = this.localePath({name: 'organisation-dashboard', params: {...this.$route.params}});
       this.$router.push(localised);
+    },
+    setFlyingBoxLeft () {
+      if (window.innerWidth <= 1280) {
+        this.$refs.projNav.style.left = '940px';
+      } else {
+        this.$refs.projNav.style.left = (Math.max(0, window.innerWidth - 1680) / 2) + 40 + document.getElementById('general').offsetWidth + 20 + 'px';
+      }
     }
   }
 };
@@ -251,10 +266,9 @@ export default {
     width: @projectAsideNavWidth;
 
     &.FixedNavigation {
-      // TODO: check browser compatibility for older browsers which do not support 'sticky'!
-      position: sticky;
+      position: fixed;
       top: 20px;
-      left: 0;
+      // left specified inline via computed js
     }
 
     .SwitchProjectStatus {

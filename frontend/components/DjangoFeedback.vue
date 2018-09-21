@@ -2,8 +2,8 @@
   <div class="DjangoFeedback">
     <vue-django-feedback
       v-if="token"
-      :name="profile.name"
-      :email="profile.email"
+      :name="name"
+      :email="email"
       :csrf-token="token" />
   </div>
 </template>
@@ -15,7 +15,17 @@ export default {
     ...mapGetters({
       profile: 'user/getProfile',
       token: 'user/getToken'
-    })
+    }),
+    name () {
+      if (this.profile) {
+        return this.profile.name;
+      }
+    },
+    email () {
+      if (this.profile) {
+        return this.profile.email;
+      }
+    }
   }
 };
 </script>

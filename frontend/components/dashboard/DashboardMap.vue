@@ -1,5 +1,5 @@
 <template>
-  <div class="DashboardMap">
+  <div class="DhaMap DashboardMap">
     <no-ssr>
       <l-map
         ref="mainMap"
@@ -107,44 +107,6 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .DashboardMap {
-    display: block;
     height: 80vh;
-    background-color: @colorGrayLight;
-
-    .CountryClusterIcon {
-      background-image: url('~/assets/img/pins/pin-cluster.svg');
-
-       span {
-        display: inline-block;
-        width: 40px;
-        line-height: 40px;
-        color: @colorWhite;
-        font-size: @fontSizeSmall;
-        font-weight: 700;
-        text-align: center;
-      }
-    }
-
-    .CountryCenterIcon {
-      background-image: url('~/assets/img/pins/pin-with-counter.svg');
-
-      &.ActiveCountry {
-        background-image: url('~/assets/img/pins/pin-with-counter-active.svg');
-      }
-
-      &.EmptyMarker {
-        opacity: 0.6 !important; // Important needed to ovveride auto js style
-      }
-
-      span {
-        display: inline-block;
-        width: 27px;
-        margin-top: 4px;
-        color: @colorWhite;
-        font-size: @fontSizeSmall;
-        font-weight: 700;
-        text-align: center;
-      }
-    }
   }
 </style>
