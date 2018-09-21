@@ -69,7 +69,7 @@ class SetupTests(APITestCase):
         self.d1 = Donor.objects.create(name="Donor1", code="donor1")
         self.d2 = Donor.objects.create(name="Donor2", code="donor2")
 
-        self.project_data = {
+        self.project_data = {"project": {
             "date": datetime.utcnow(),
             "name": "Test Project1",
             "organisation": self.org.id,
@@ -113,7 +113,7 @@ class SetupTests(APITestCase):
             "interoperability_standards": [1],
             "start_date": str(datetime.today().date()),
             "end_date": str(datetime.today().date())
-        }
+        }}
 
         # Create project draft
         url = reverse("project-create")
@@ -123,6 +123,6 @@ class SetupTests(APITestCase):
         self.project_id = response.json().get("id")
 
         # Publish
-        url = reverse("project-publish", kwargs={"pk": self.project_id})
+        url = reverse("project-publish", kwargs={"project_id": self.project_id, "country_id": self.country_id})
         response = self.test_user_client.put(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 200)
