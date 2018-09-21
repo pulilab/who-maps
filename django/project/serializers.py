@@ -207,8 +207,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
             instance.odk_extra_data = odk_extra_data
 
         instance.draft = validated_data
-        instance.save()
-
         return instance
 
     @staticmethod
