@@ -14,11 +14,11 @@ urlpatterns = [
              'put': 'update'
          }),
          name="project-publish"),
-    url(r"^projects/draft/$",
+    path(r'projects/draft/<int:country_id>/',
         view=views.ProjectDraftViewSet.as_view({
             'post': 'create'
         }), name="project-create"),
-    url(r"^projects/draft/(?P<pk>\d+)/$",
+    path(r'projects/draft/<int:project_id>/<int:country_id>/',
         view=views.ProjectDraftViewSet.as_view({
             'put': 'update'
         }),
