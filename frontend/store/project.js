@@ -269,7 +269,7 @@ export const actions = {
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const payload = { project: draft, country_custom_answers: getters.getAllCountryAnswers };
     const parsed = apiWriteParser(payload);
-    const { data } = await this.$axios.post('api/projects/draft/', parsed);
+    const { data } = await this.$axios.post(`api/projects/draft/${draft.country}/`, parsed);
     dispatch('projects/addProjectToList', data, {root: true});
     await dispatch('saveTeamViewers', data.id);
     dispatch('setLoading', false);
@@ -281,7 +281,7 @@ export const actions = {
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const payload = { project: draft, country_custom_answers: getters.getAllCountryAnswers };
     const parsed = apiWriteParser(payload);
-    const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
+    const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country}/`, parsed);
     const isUserProject = await dispatch('saveTeamViewers', id);
     if (isUserProject) {
       dispatch('projects/updateProject', data, {root: true});
