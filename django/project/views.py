@@ -259,7 +259,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                 raise ValidationError({'non_field_errors': 'Country answers are missing'})
             else:
                 country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
-                                                                context=dict(country=country, is_draft=False))
+                                                                context=dict(question_queryset=country.country_questions, is_draft=False))
 
                 if country_answers.is_valid():
                     required_errors = self.check_required(country.country_questions, country_answers.validated_data)
@@ -308,7 +308,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                 raise ValidationError({'non_field_errors': 'Country answers are missing'})
             else:
                 country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
-                                                                context=dict(country=country, is_draft=True))
+                                                                context=dict(question_queryset=country.country_questions, is_draft=True))
 
                 if not country_answers.is_valid():
                     errors['country_custom_answers'] = country_answers.errors
@@ -350,7 +350,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                 raise ValidationError({'non_field_errors': 'Country answers are missing'})
             else:
                 country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
-                                                                context=dict(country=country, is_draft=True))
+                                                                context=dict(question_queryset=country.country_questions, is_draft=True))
 
                 if not country_answers.is_valid():
                     errors['country_custom_answers'] = country_answers.errors
