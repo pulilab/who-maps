@@ -345,3 +345,17 @@ class CountryCustomAnswerListSerializer(serializers.ListSerializer):
                 instance.data['country_custom_answers'] = custom_answers
         instance.save()
         return instance
+
+
+class DonorCustomAnswerListSerializer(serializers.ListSerializer):
+    pass
+
+
+class CountryCustomAnswerSerializer(CustomAnswerSerializer):
+    class Meta:
+        list_serializer_class = CountryCustomAnswerListSerializer
+
+
+class DonorCustomAnswerSerializer(CustomAnswerSerializer):
+    class Meta:
+        list_serializer_class = DonorCustomAnswerListSerializer
