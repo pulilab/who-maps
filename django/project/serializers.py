@@ -345,7 +345,25 @@ class CountryCustomAnswerListSerializer(serializers.ListSerializer):
 
 
 class DonorCustomAnswerListSerializer(serializers.ListSerializer):
-    pass
+    def create(self, validated_data):
+        instance = self.context['project']
+
+        custom_answers = {k['question_id']: k['answer'] for k in validated_data}
+        instance.draft['donor_custom_answers'].setdefault(self.context['donor_id'], {})
+        instance.draft['donor_custom_answers'][self.context['donor_id']] = custom_answers
+
+        if not self.context['is_draft']:
+            private_ids = self.context['question_queryset'].filter(private=True).values_list('id', flat=True)
+            if private_ids:
+                private_answers = {k: custom_answers[k] for k in custom_answers if k in private_ids}
+                instance.data['donor_custom_answers_private'].setdefault(self.context['donor_id'], {})
+                instance.data['donor_custom_answers_private'][self.context['donor_id']] = private_answers
+                instance.data['donor_custom_answers'][self.context['donor_id']] = remove_keys(data_dict=custom_answers,
+                                                                                              keys=private_ids)
+            else:
+                instance.data['donor_custom_answers'].setdefault(self.context['donor_id'], {})
+                instance.data['donor_custom_answers'][self.context['donor_id']] = custom_answers
+        return instance
 
 
 class CountryCustomAnswerSerializer(CustomAnswerSerializer):
