@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     async validate () {
-      const validations = await Promise.all(this.$refs.customDonors.map(r => r.validate()));
+      const validations = await Promise.all(this.$refs.customQuestion.map(r => r.validate()));
       console.log('Custom donoros validators', validations);
       return validations.reduce((a, c) => a && c, true);
     }
