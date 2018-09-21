@@ -101,7 +101,7 @@ export const getters = {
       return donors.reduce((a, c) => {
         a.push(...c.donor_questions.map(dq => {
           const answer = getters.getDonorsAnswerDetails(dq.id);
-          return { question_id: dq.id, answer: answer ? answer.answer : [] };
+          return { question_id: dq.id, answer: answer ? answer.answer : [], donor_id: c.id };
         }));
         return a;
       }, []);
