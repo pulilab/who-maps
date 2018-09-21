@@ -273,7 +273,8 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         else:
             instance = data_serializer.save()
             if country_answers:
-                instance = country_answers.save(project=instance)
+                country_answers.context['project'] = instance
+                instance = country_answers.save()
 
         project.reset_approval()
 
@@ -321,7 +322,8 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
             instance.save()
             instance.team.add(request.user.userprofile)
             if country_answers:
-                instance = country_answers.save(project=instance)
+                country_answers.context['project'] = instance
+                instance = country_answers.save()
 
         data = instance.to_representation(draft_mode=True)
         return Response(instance.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
@@ -365,7 +367,8 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         else:
             instance = data_serializer.save()
             if country_answers:
-                instance = country_answers.save(project=instance)
+                country_answers.context['project'] = instance
+                instance = country_answers.save()
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
