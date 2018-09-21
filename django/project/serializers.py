@@ -67,7 +67,7 @@ class DraftPlatformSerializer(serializers.Serializer):
 
 class CountryCustomAnswerListSerializer(serializers.ListSerializer):
     def create(self, validated_data):
-        instance = validated_data[0]['project']
+        instance = self.context['project']
         custom_answers = {k['question_id']: k['answer'] for k in validated_data}
         instance.draft['country_custom_answers'] = custom_answers
         if not self.context['is_draft']:
