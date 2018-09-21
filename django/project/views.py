@@ -293,8 +293,8 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                 country_answers.context['project'] = instance
                 instance = country_answers.save()
             for donor_id, donor_answers in all_donor_answers:
-                donor_answers.context['project'] = donor_id
-                donor_answers.context['donor_id'] = instance
+                donor_answers.context['project'] = instance
+                donor_answers.context['donor_id'] = donor_id
                 instance = donor_answers.save()
             instance.save()
 
