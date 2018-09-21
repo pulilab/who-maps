@@ -86,6 +86,15 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
         instance.save()
         return instance
 
+
+class CountryCustomAnswerSerializer(serializers.Serializer):
+    question_id = serializers.IntegerField(required=True)
+    answer = serializers.ListField(
+        child=serializers.CharField(max_length=512), max_length=50, min_length=0, required=True)
+
+    class Meta:
+        list_serializer_class = CountryCustomAnswerListSerializer
+
     def validate_question_id(self, value):
         self.context['question'] = self.context['country'].country_questions.filter(id=int(value)).first()
         if not self.context['question']:
