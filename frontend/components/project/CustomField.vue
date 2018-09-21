@@ -112,11 +112,10 @@ export default {
       }
     },
     localRules () {
-      // return {
-      //   required: this.isRequired && this.doValidation,
-      //   numeric: this.type === 2 && this.doValidation
-      // };
-      return {};
+      return {
+        required: this.isRequired && this.doValidation,
+        numeric: this.type === 2 && this.doValidation
+      };
     }
   },
   watch: {
