@@ -294,3 +294,38 @@ class MapProjectCountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ("id", "name", "country")
+
+
+class CustomAnswerSerializer(serializers.Serializer):
+    question_id = serializers.IntegerField(required=True)
+    answer = serializers.ListField(
+        child=serializers.CharField(max_length=512, allow_blank=True), max_length=50, min_length=0, required=True)
+
+    def validate_question_id(self, value):
+        self.context['question'] = self.context['question_queryset'].filter(id=int(value)).first()
+        if not self.context['question']:
+            raise ValidationError('This question_id does not exist.')
+        return value
+
+    def validate_required_answer(self, value):
+        if not value:
+            raise ValidationError({'answer': 'This field is required.'})
+
+    def validate_numeric_answer(self, value):
+        if value and isinstance(value[0], str) and not value[0].isnumeric():
+            raise ValidationError({'answer': 'This field must be numeric.'})
+
+    def validate_answer_length(self, value):
+        if len(value) > 1:
+            raise ValidationError({'answer': 'There must be 1 answer only.'})
+
+    def validate(self, attrs):
+        if not self.context['is_draft']:
+            if self.context['question'].required:
+                self.validate_required_answer(attrs['answer'])
+            if self.context['question'].type != CustomQuestion.MULTI:
+                self.validate_answer_length(attrs['answer'])
+            if self.context['question'].type == CustomQuestion.NUMBER:
+                self.validate_numeric_answer(attrs['answer'])
+        return attrs
+
