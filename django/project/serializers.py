@@ -334,7 +334,7 @@ class CountryCustomAnswerListSerializer(serializers.ListSerializer):
         custom_answers = {k['question_id']: k['answer'] for k in validated_data}
         instance.draft['country_custom_answers'] = custom_answers
         if not self.context['is_draft']:
-            private_ids = self.context['country'].country_questions.filter(private=True).values_list('id', flat=True)
+            private_ids = self.context['question_queryset'].filter(private=True).values_list('id', flat=True)
             if private_ids:
                 private_answers = {k: custom_answers[k] for k in custom_answers if k in private_ids}
                 instance.data['country_custom_answers_private'] = private_answers
