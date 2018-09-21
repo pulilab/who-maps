@@ -297,7 +297,7 @@ class MapProjectCountrySerializer(serializers.ModelSerializer):
 class CustomAnswerSerializer(serializers.Serializer):
     question_id = serializers.IntegerField(required=True)
     answer = serializers.ListField(
-        child=serializers.CharField(max_length=512, allow_blank=True), max_length=50, min_length=0, required=True)
+        child=serializers.CharField(max_length=512), max_length=50, min_length=0, required=True)
 
     def validate_question_id(self, value):
         self.context['question'] = self.context['question_queryset'].filter(id=int(value)).first()
