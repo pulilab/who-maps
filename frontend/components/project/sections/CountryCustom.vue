@@ -4,9 +4,11 @@
     class="CountryCustom">
     <collapsible-card title="Custom Country">
       <custom-field
-        v-for="(field) in countryQuestions"
+        v-for="(field, index) in countryQuestions"
         ref="customQuestion"
         :key="field.id"
+        :index="index"
+        :api-errors="apiErrors"
         :id="field.id"
         :type="field.type"
         :question="field.question"

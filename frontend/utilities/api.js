@@ -120,8 +120,16 @@ export const coverageWriteParser = (coverage, coverageData) => {
   });
 };
 
-export const apiWriteParser = p => {
+export const customAnswerParser = (customAnswers) => {
+  return customAnswers.map(c => ({
+    ...c,
+    answer: c.answer[0] ? c.answer : []
+  }));
+};
+
+export const apiWriteParser = payload => {
   const result = {};
+  const p = payload.project;
   for (let key in p) {
     const value = dataCleaner(p[key]);
     result[key] = isEmpty(value) ? undefined : value;
@@ -137,16 +145,19 @@ export const apiWriteParser = p => {
   } else {
     national_level_deployment = {...baseCoverage, ...p.national_level_deployment};
   }
-
+  const country_custom_answers = customAnswerParser(payload.country_custom_answers);
   return {
-    ...result,
-    interoperability_links,
-    platforms,
-    coverage,
-    coverage_second_level,
-    national_level_deployment,
-    digitalHealthInterventions: undefined,
-    coverageData: undefined
+    project: {
+      ...result,
+      interoperability_links,
+      platforms,
+      coverage,
+      coverage_second_level,
+      national_level_deployment,
+      digitalHealthInterventions: undefined,
+      coverageData: undefined
+    },
+    country_custom_answers
   };
 };
 

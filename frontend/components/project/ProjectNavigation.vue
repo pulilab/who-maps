@@ -90,10 +90,10 @@
               <translate>Country fields</translate>
             </el-button>
           </li>
-          <li :class="{active: active === 'donor'}">
+          <li :class="{active: active === 'donorcustom'}">
             <el-button
               type="text"
-              @click="scrollTo('donor')"
+              @click="scrollTo('donorcustom')"
             >
               <span class="Step">
                 <fa icon="arrow-right" />
@@ -248,8 +248,9 @@ export default {
     },
     setFlyingBoxLeft () {
       setTimeout(() => {
-        const box = this.$el.getBoundingClientRect();
-        this.$el.style.left = `${box.left}px`;
+        const leftSide = document.querySelector('#general');
+        const leftWidth = leftSide.getBoundingClientRect().right;
+        this.$el.style.left = `${leftWidth + 20}px`;
       }, 300);
     }
   }

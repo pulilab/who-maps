@@ -83,6 +83,15 @@ export const getters = {
   getInteroperabilityStandards: state => state.interoperability_standards,
   getCountryAnswers: state => state.country_answers ? [...state.country_answers] : [],
   getCountryAnswerDetails: (state, getters) => id => getters.getCountryAnswers.find(ca => ca.question_id === id),
+  getAllCountryAnswers: (state, getters, rootState, rootGetters) => {
+    const country = rootGetters['countries/getCountryDetails'](getters.getCountry);
+    if (country) {
+      return country.country_questions.map(cq => {
+        const answer = getters.getCountryAnswerDetails(cq.id);
+        return { question_id: cq.id, answer: answer ? answer.answer : [] };
+      });
+    }
+  },
   getPublishedCountryAnswerDetails: (state, getters) => id => getters.getPublished.country_custom_answers.find(ca => ca.question_id === id),
   getPublished: state => ({...state.published, team: state.team, viewers: state.viewers}),
   getLoading: state => state.loading,
@@ -254,17 +263,13 @@ export const actions = {
     commit('SET_VIEWERS', data.viewers);
     return dispatch('user/updateTeamViewers', {...data, id}, {root: true});
   },
-  async saveCountryAnswers ({getters}, {draft, id, country}) {
-    const answers = getters.getCountryAnswers.map(a => ({...a, draft}));
-    const { data } = await this.$axios.post(`api/country-custom-answer/${country}/${id}/`, answers);
-    return data;
-  },
   async createProject ({getters, dispatch}) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
-    const parsed = apiWriteParser(draft);
-    const { data } = await this.$axios.post('api/projects/draft/', parsed);
+    const payload = { project: draft, country_custom_answers: getters.getAllCountryAnswers };
+    const parsed = apiWriteParser(payload);
+    const { data } = await this.$axios.post(`api/projects/draft/${draft.country}/`, parsed);
     dispatch('projects/addProjectToList', data, {root: true});
     await dispatch('saveTeamViewers', data.id);
     dispatch('setLoading', false);
@@ -274,10 +279,10 @@ export const actions = {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
-    const parsed = apiWriteParser(draft);
-    const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
+    const payload = { project: draft, country_custom_answers: getters.getAllCountryAnswers };
+    const parsed = apiWriteParser(payload);
+    const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country}/`, parsed);
     const isUserProject = await dispatch('saveTeamViewers', id);
-    await dispatch('saveCountryAnswers', {draft: true, id: data.id, country: data.draft.country});
     if (isUserProject) {
       dispatch('projects/updateProject', data, {root: true});
     } else {
@@ -289,12 +294,11 @@ export const actions = {
     dispatch('setLoading', 'publish');
     const draft = getters.getProjectData;
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
-    const parsed = apiWriteParser(draft);
-    const { data } = await this.$axios.put(`/api/projects/publish/${id}/`, parsed);
+    const payload = { project: draft, country_custom_answers: getters.getAllCountryAnswers };
+    const parsed = apiWriteParser(payload);
+    const { data } = await this.$axios.put(`/api/projects/publish/${id}/${draft.country}/`, parsed);
     const isUserProject = await dispatch('saveTeamViewers', id);
-    const country_answers = await dispatch('saveCountryAnswers', {draft: false, id: data.id, country: data.draft.country});
-    const toStore = {...data.draft, country_answers};
-    const parsedResponse = apiReadParser(toStore);
+    const parsedResponse = apiReadParser(data.draft);
     commit('SET_PUBLISHED', Object.freeze(parsedResponse));
     if (isUserProject) {
       dispatch('projects/updateProject', data, {root: true});
