@@ -38,7 +38,7 @@ const cleanState = () => ({
   interoperability_links: {},
   interoperability_standards: [],
   country_answers: [],
-  donor_answers: [],
+  donors_answers: [],
   published: null,
   original: null
 });
@@ -93,6 +93,21 @@ export const getters = {
     }
   },
   getPublishedCountryAnswerDetails: (state, getters) => id => getters.getPublished.country_custom_answers.find(ca => ca.question_id === id),
+  getDonorsAnswers: state => state.donors_answers ? [...state.donors_answers] : [],
+  getDonorsAnswerDetails: (state, getters) => id => getters.getDonorsAnswers.find(da => da.question_id === id),
+  getAllDonorsAnswers: (state, getters, rootState, rootGetters) => {
+    const donors = getters.getDonors.map(d => rootGetters['system/getDonorDetails'](d));
+    if (donors) {
+      return donors.reduce((a, c) => {
+        a.push(...c.donor_questions.map(dq => {
+          const answer = getters.getDonorsAnswerDetails(dq.id);
+          return { question_id: dq.id, answer: answer ? answer.answer : [], donor_id: c.id };
+        }));
+        return a;
+      }, []);
+    }
+  },
+  getPublishedDonorsAnswerDetails: (state, getters) => id => getters.getPublished.donor_custom_answers.find(ca => ca.question_id === id),
   getPublished: state => ({...state.published, team: state.team, viewers: state.viewers}),
   getLoading: state => state.loading,
   getOriginal: state => state.original
@@ -246,6 +261,14 @@ export const actions = {
       commit('ADD_COUNTRY_ANSWER', answer);
     }
   },
+  setDonorAnswer ({commit, getters}, answer) {
+    const index = getters.getDonorsAnswers.findIndex(da => da.question_id === answer.question_id);
+    if (index > -1) {
+      commit('UPDATE_DONOR_ANSWER', {answer, index});
+    } else {
+      commit('ADD_DONOR_ANSWER', answer);
+    }
+  },
   async verifyOrganisation ({dispatch}, organisation) {
     if (organisation && isNaN(organisation)) {
       const org = await dispatch('system/addOrganisation', organisation, { root: true });
@@ -267,8 +290,7 @@ export const actions = {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
-    const payload = { project: draft, country_custom_answers: getters.getAllCountryAnswers };
-    const parsed = apiWriteParser(payload);
+    const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.post(`api/projects/draft/${draft.country}/`, parsed);
     dispatch('projects/addProjectToList', data, {root: true});
     await dispatch('saveTeamViewers', data.id);
@@ -279,8 +301,7 @@ export const actions = {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
-    const payload = { project: draft, country_custom_answers: getters.getAllCountryAnswers };
-    const parsed = apiWriteParser(payload);
+    const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country}/`, parsed);
     const isUserProject = await dispatch('saveTeamViewers', id);
     if (isUserProject) {
@@ -294,8 +315,7 @@ export const actions = {
     dispatch('setLoading', 'publish');
     const draft = getters.getProjectData;
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
-    const payload = { project: draft, country_custom_answers: getters.getAllCountryAnswers };
-    const parsed = apiWriteParser(payload);
+    const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.put(`/api/projects/publish/${id}/${draft.country}/`, parsed);
     const isUserProject = await dispatch('saveTeamViewers', id);
     const parsedResponse = apiReadParser(data.draft);
@@ -422,6 +442,12 @@ export const mutations = {
   UPDATE_COUNTRY_ANSWER: (state, {answer, index}) => {
     state.country_answers.splice(index, 1, answer);
   },
+  ADD_DONOR_ANSWER: (state, answer) => {
+    state.donors_answers.push(answer);
+  },
+  UPDATE_DONOR_ANSWER: (state, {answer, index}) => {
+    state.donors_answers.splice(index, 1, answer);
+  },
   SET_PUBLISHED: (state, published) => {
     Vue.set(state, 'published', {...published});
   },
@@ -460,7 +486,8 @@ export const mutations = {
     state.wiki = project.wiki;
     state.interoperability_links = project.interoperability_links;
     state.interoperability_standards = project.interoperability_standards;
-    state.country_answers = project.country_custom_answers;
+    state.country_answers = project.country_custom_answers ? project.country_custom_answers : [];
+    state.donors_answers = project.donor_custom_answers ? project.donor_custom_answers : [];
   },
   SET_ORIGINAL: (state, project) => {
     state.original = project;

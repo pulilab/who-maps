@@ -37,10 +37,20 @@ export const platformsMapper = collection => {
   return [platforms, digitalHealthInterventions];
 };
 
-export const customFieldMapper = collection => {
+export const countryCustomFieldMapper = collection => {
   const customAnswers = [];
   for (let key in collection) {
     customAnswers.push({question_id: +key, answer: collection[key]});
+  }
+  return customAnswers;
+};
+
+export const donorCustomFieldMapper = collection => {
+  const customAnswers = [];
+  for (let donor in collection) {
+    for (let key in collection[donor]) {
+      customAnswers.push({question_id: +key, answer: collection[donor][key], donor_id: donor});
+    }
   }
   return customAnswers;
 };
@@ -52,7 +62,8 @@ export const apiReadParser = p => {
   const interoperability_links = interoperabilityLinksMapper(p.interoperability_links);
   const [ platforms, digitalHealthInterventions ] = platformsMapper(p.platforms);
   const coverageType = coverage === undefined || coverage.length === 0 ? 2 : 1;
-  const country_custom_answers = customFieldMapper(p.country_custom_answers);
+  const country_custom_answers = countryCustomFieldMapper(p.country_custom_answers);
+  const donor_custom_answers = donorCustomFieldMapper(p.donor_custom_answers);
   return {...p,
     coverage,
     coverage_second_level,
@@ -61,7 +72,8 @@ export const apiReadParser = p => {
     interoperability_links,
     platforms,
     digitalHealthInterventions,
-    country_custom_answers
+    country_custom_answers,
+    donor_custom_answers
   };
 };
 
@@ -120,16 +132,30 @@ export const coverageWriteParser = (coverage, coverageData) => {
   });
 };
 
-export const customAnswerParser = (customAnswers) => {
+export const customCountryAnswerParser = (customAnswers) => {
   return customAnswers.map(c => ({
     ...c,
     answer: c.answer[0] ? c.answer : []
   }));
 };
 
-export const apiWriteParser = payload => {
+export const customDonorAnswerParser = customAnswers => {
   const result = {};
-  const p = payload.project;
+  customAnswers.forEach(a => {
+    const donor = a.donor_id;
+    if (!result[donor]) {
+      result[donor] = [];
+    }
+    result[donor].push({
+      ...a,
+      answer: a.answer[0] ? a.answer : [],
+      donor_id: undefined});
+  });
+  return result;
+};
+
+export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => {
+  const result = {};
   for (let key in p) {
     const value = dataCleaner(p[key]);
     result[key] = isEmpty(value) ? undefined : value;
@@ -145,7 +171,8 @@ export const apiWriteParser = payload => {
   } else {
     national_level_deployment = {...baseCoverage, ...p.national_level_deployment};
   }
-  const country_custom_answers = customAnswerParser(payload.country_custom_answers);
+  const country_custom_answers = customCountryAnswerParser(countryCustomAnswers);
+  const donor_custom_answers = customDonorAnswerParser(donorsCustomAnswers);
   return {
     project: {
       ...result,
@@ -155,9 +182,12 @@ export const apiWriteParser = payload => {
       coverage_second_level,
       national_level_deployment,
       digitalHealthInterventions: undefined,
-      coverageData: undefined
+      coverageData: undefined,
+      country_answers: undefined,
+      donors_answers: undefined
     },
-    country_custom_answers
+    country_custom_answers,
+    donor_custom_answers
   };
 };
 
