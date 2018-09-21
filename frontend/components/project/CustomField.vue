@@ -1,6 +1,6 @@
 <template>
   <el-form-item
-    :error="errors.first('answer')"
+    :error="errors.first('answer', 'country_custom_question_' + id)"
     :label="question"
     class="CustomField"
   >
@@ -9,6 +9,7 @@
       v-if="type < 3"
       v-model="innerValue"
       :data-vv-as="question"
+      :data-vv-scope="'country_custom_question_' + id"
       data-vv-name="answer"/>
 
     <el-radio-group
@@ -46,7 +47,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+
 export default {
+  mixins: [VeeValidationMixin],
   props: {
     type: {
       type: Number,
@@ -75,6 +79,10 @@ export default {
     module: {
       type: String,
       default: 'country'
+    },
+    index: {
+      type: Number,
+      required: true
     }
   },
   computed: {
@@ -104,18 +112,46 @@ export default {
       }
     },
     localRules () {
-      return {
-        required: this.isRequired && this.doValidation,
-        numeric: this.type === 2 && this.doValidation
-      };
+      // return {
+      //   required: this.isRequired && this.doValidation,
+      //   numeric: this.type === 2 && this.doValidation
+      // };
+      return {};
+    }
+  },
+  watch: {
+    customCountryErrors: {
+      immediate: true,
+      handler (errors) {
+        if (this.module === 'country') {
+          this.findError(errors);
+        }
+      }
     }
   },
   methods: {
     ...mapActions({
       setCountryAnswer: 'project/setCountryAnswer'
     }),
+    findError (errors) {
+      if (errors && errors.length > this.index - 1) {
+        const error = errors[this.index];
+        if (error) {
+          const firsElement = error[Object.keys(error)[0]];
+          const msg = firsElement ? firsElement[0] : null;
+          if (msg) {
+            this.errors.add({
+              field: 'answer',
+              scope: 'country_custom_question_' + this.id,
+              msg
+            });
+          }
+        }
+      }
+    },
     validate () {
-      return this.$validator.validate();
+      // return this.$validator.validate();
+      return Promise.resolve(true);
     }
   }
 };
