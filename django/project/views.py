@@ -281,7 +281,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                     if not donor_answers.is_valid():
                         errors.setdefault('donor_custom_answers', {})
                         errors['donor_custom_answers'].setdefault(donor_id, {})
-                        errors['donor_custom_answers'][donor_id].update(donor_answers.errors)
+                        errors['donor_custom_answers'][donor_id] = donor_answers.errors
                     else:
                         all_donor_answers.append((donor_id, donor_answers))
 
@@ -348,7 +348,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                     if not donor_answers.is_valid():
                         errors.setdefault('donor_custom_answers', {})
                         errors['donor_custom_answers'].setdefault(donor_id, {})
-                        errors['donor_custom_answers'][donor_id].update(donor_answers.errors)
+                        errors['donor_custom_answers'][donor_id] = donor_answers.errors
                     else:
                         all_donor_answers.append((donor_id, donor_answers))
 
@@ -411,7 +411,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                     if not donor_answers.is_valid():
                         errors.setdefault('donor_custom_answers', {})
                         errors['donor_custom_answers'].setdefault(donor_id, {})
-                        errors['donor_custom_answers'][donor_id].update(donor_answers.errors)
+                        errors['donor_custom_answers'][donor_id] = donor_answers.errors
                     else:
                         all_donor_answers.append((donor_id, donor_answers))
 
