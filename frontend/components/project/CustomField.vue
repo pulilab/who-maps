@@ -89,10 +89,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getCountryAnswerDetails: 'project/getCountryAnswerDetails'
+      getCountryAnswerDetails: 'project/getCountryAnswerDetails',
+      getDonorsAnswerDetails: 'project/getDonorsAnswerDetails'
     }),
     answer () {
-      const saved = this.module === 'country' ? this.getCountryAnswerDetails(this.id) : null;
+      const saved = this.module === 'country' ? this.getCountryAnswerDetails(this.id) : this.getDonorsAnswerDetails(this.id);
       return saved || {
         question_id: this.id,
         answer: null
@@ -110,7 +111,11 @@ export default {
       },
       set (answer) {
         answer = Array.isArray(answer) ? answer : [answer];
-        this.setCountryAnswer({...this.answer, answer});
+        if (this.module === 'country') {
+          this.setCountryAnswer({...this.answer, answer});
+        } else {
+          this.setDonorAnswer({...this.answer, answer});
+        }
       }
     },
     localRules () {
@@ -132,7 +137,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setCountryAnswer: 'project/setCountryAnswer'
+      setCountryAnswer: 'project/setCountryAnswer',
+      setDonorAnswer: 'project/setDonorAnswer'
     }),
     findError (errors) {
       if (errors && errors.length > this.index - 1) {
