@@ -53,6 +53,7 @@ export const apiReadParser = p => {
   const [ platforms, digitalHealthInterventions ] = platformsMapper(p.platforms);
   const coverageType = coverage === undefined || coverage.length === 0 ? 2 : 1;
   const country_custom_answers = customFieldMapper(p.country_custom_answers);
+  const donor_custom_answers = customFieldMapper(p.donor_custom_answers);
   return {...p,
     coverage,
     coverage_second_level,
@@ -61,7 +62,8 @@ export const apiReadParser = p => {
     interoperability_links,
     platforms,
     digitalHealthInterventions,
-    country_custom_answers
+    country_custom_answers,
+    donor_custom_answers
   };
 };
 
@@ -127,9 +129,8 @@ export const customAnswerParser = (customAnswers) => {
   }));
 };
 
-export const apiWriteParser = payload => {
+export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => {
   const result = {};
-  const p = payload.project;
   for (let key in p) {
     const value = dataCleaner(p[key]);
     result[key] = isEmpty(value) ? undefined : value;
@@ -145,7 +146,8 @@ export const apiWriteParser = payload => {
   } else {
     national_level_deployment = {...baseCoverage, ...p.national_level_deployment};
   }
-  const country_custom_answers = customAnswerParser(payload.country_custom_answers);
+  const country_custom_answers = customAnswerParser(countryCustomAnswers);
+  const donor_custom_answers = customAnswerParser(donorsCustomAnswers);
   return {
     project: {
       ...result,
@@ -155,9 +157,12 @@ export const apiWriteParser = payload => {
       coverage_second_level,
       national_level_deployment,
       digitalHealthInterventions: undefined,
-      coverageData: undefined
+      coverageData: undefined,
+      country_answers: undefined,
+      donors_answers: undefined
     },
-    country_custom_answers
+    country_custom_answers,
+    donor_custom_answers
   };
 };
 
