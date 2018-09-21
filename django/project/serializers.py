@@ -329,3 +329,19 @@ class CustomAnswerSerializer(serializers.Serializer):
                 self.validate_numeric_answer(attrs['answer'])
         return attrs
 
+
+class CountryCustomAnswerListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        instance = self.context['project']
+        custom_answers = {k['question_id']: k['answer'] for k in validated_data}
+        instance.draft['country_custom_answers'] = custom_answers
+        if not self.context['is_draft']:
+            private_ids = self.context['country'].country_questions.filter(private=True).values_list('id', flat=True)
+            if private_ids:
+                private_answers = {k: custom_answers[k] for k in custom_answers if k in private_ids}
+                instance.data['country_custom_answers_private'] = private_answers
+                instance.data['country_custom_answers'] = remove_keys(data_dict=custom_answers, keys=private_ids)
+            else:
+                instance.data['country_custom_answers'] = custom_answers
+        instance.save()
+        return instance
