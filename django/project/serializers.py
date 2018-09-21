@@ -85,7 +85,7 @@ class CountryCustomAnswerListSerializer(serializers.ListSerializer):
 class CountryCustomAnswerSerializer(serializers.Serializer):
     question_id = serializers.IntegerField(required=True)
     answer = serializers.ListField(
-        child=serializers.CharField(max_length=512), max_length=50, min_length=0, required=True)
+        child=serializers.CharField(max_length=512, allow_blank=True), max_length=50, min_length=0, required=True)
 
     class Meta:
         list_serializer_class = CountryCustomAnswerListSerializer
