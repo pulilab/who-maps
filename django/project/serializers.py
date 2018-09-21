@@ -316,7 +316,7 @@ class CustomAnswerSerializer(serializers.Serializer):
             raise ValidationError({'answer': 'This field must be numeric.'})
 
     def validate_answer_length(self, value):
-        if len(value) > 1:
+        if value and len(value) > 1:
             raise ValidationError({'answer': 'There must be 1 answer only.'})
 
     def validate(self, attrs):
