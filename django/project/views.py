@@ -269,6 +269,9 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                 else:
                     errors['country_custom_answers'] = country_answers.errors
 
+        if data_serializer.validated_data.get('donors'):
+            if 'donor_custom_answers' not in request.data:
+                raise ValidationError({'non_field_errors': 'Donor answers are missing'})
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         else:
