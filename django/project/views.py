@@ -275,7 +275,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
             for donor_id in data_serializer.validated_data['donors']:
                 donor = Donor.objects.get(id=donor_id)
                 if donor and donor.donor_questions.exists():
-                    donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'], many=True,
+                    donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][donor_id], many=True,
                                                                 context=dict(question_queryset=donor.donor_questions, is_draft=True))
 
                     if not donor_answers.is_valid():
@@ -342,7 +342,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
             for donor_id in data_serializer.validated_data['donors']:
                 donor = Donor.objects.get(id=donor_id)
                 if donor and donor.donor_questions.exists():
-                    donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'], many=True,
+                    donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][donor_id], many=True,
                                                                 context=dict(question_queryset=donor.donor_questions, is_draft=True))
 
                     if not donor_answers.is_valid():
@@ -405,7 +405,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
             for donor_id in data_serializer.validated_data['donors']:
                 donor = Donor.objects.get(id=donor_id)
                 if donor and donor.donor_questions.exists():
-                    donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'], many=True,
+                    donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][donor_id], many=True,
                                                                 context=dict(question_queryset=donor.donor_questions, is_draft=True))
 
                     if not donor_answers.is_valid():
