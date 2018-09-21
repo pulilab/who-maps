@@ -292,6 +292,11 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
             if country_answers:
                 country_answers.context['project'] = instance
                 instance = country_answers.save()
+            for donor_id, donor_answers in all_donor_answers:
+                donor_answers.context['project'] = donor_id
+                donor_answers.context['donor_id'] = instance
+                instance = donor_answers.save()
+            instance.save()
 
         project.reset_approval()
 
