@@ -101,7 +101,7 @@ class CountryCustomAnswerSerializer(serializers.Serializer):
             raise ValidationError({'answer': 'This field is required.'})
 
     def validate_numeric_answer(self, value):
-        if isinstance(value[0], str) and not value[0].isnumeric():
+        if value and isinstance(value[0], str) and not value[0].isnumeric():
             raise ValidationError({'answer': 'This field must be numeric.'})
 
     def validate_answer_length(self, value):
