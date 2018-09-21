@@ -546,8 +546,17 @@ fieldset {
     }
   }
 
+  // disabled
+  .is-disabled {
+    .el-select__caret {
+      opacity: .5;
+    }
+  }
+
   // custom select caret
   .el-select__caret {
+    transition: none !important;
+
     &.el-icon-arrow-up {
       transform: translateX(4px) !important;
       width: 39px;
