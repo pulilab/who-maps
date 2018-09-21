@@ -122,8 +122,7 @@ class ProjectPublicViewSet(ViewSet):
                     id=parent.id,
                     name=parent.name,
                     strategies=parent.strategies.filter(is_active=True).values('id', 'name')
-                )
-                )
+                ))
             strategies.append(dict(
                 name=group_name,
                 subGroups=sub_groups
