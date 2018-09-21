@@ -313,6 +313,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         country = get_object_or_400(Country, error_message="No such country", id=country_id)
 
         country_answers = None
+        all_donor_answers = []
         errors = {}
 
         if 'project' not in request.data:
@@ -335,14 +336,34 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                 if not country_answers.is_valid():
                     errors['country_custom_answers'] = country_answers.errors
 
+        if data_serializer.validated_data.get('donors'):
+            if 'donor_custom_answers' not in request.data:
+                raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+            for donor_id in data_serializer.validated_data['donors']:
+                donor = Donor.objects.get(id=donor_id)
+                if donor and donor.donor_questions.exists():
+                    donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'], many=True,
+                                                                context=dict(question_queryset=donor.donor_questions, is_draft=True))
+
+                    if not donor_answers.is_valid():
+                        errors.setdefault('donor_custom_answers', dict)
+                        errors['donor_custom_answers'].setdefault(donor_id, dict)
+                        errors['donor_custom_answers'][donor_id].update(donor_answers.errors)
+                    else:
+                        all_donor_answers.append((donor_id, donor_answers))
+
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            instance.save()
-            instance.team.add(request.user.userprofile)
             if country_answers:
                 country_answers.context['project'] = instance
                 instance = country_answers.save()
+            for donor_id, donor_answers in all_donor_answers:
+                donor_answers.context['project'] = donor_id
+                donor_answers.context['donor_id'] = instance
+                instance = donor_answers.save()
+            instance.save()
+            instance.team.add(request.user.userprofile)
 
         data = instance.to_representation(draft_mode=True)
         return Response(instance.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
@@ -356,6 +377,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         country = get_object_or_400(Country, error_message="No such country", id=country_id)
 
         country_answers = None
+        all_donor_answers = []
         errors = {}
 
         if 'project' not in request.data:
@@ -377,6 +399,22 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                 if not country_answers.is_valid():
                     errors['country_custom_answers'] = country_answers.errors
 
+        if data_serializer.validated_data.get('donors'):
+            if 'donor_custom_answers' not in request.data:
+                raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+            for donor_id in data_serializer.validated_data['donors']:
+                donor = Donor.objects.get(id=donor_id)
+                if donor and donor.donor_questions.exists():
+                    donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'], many=True,
+                                                                context=dict(question_queryset=donor.donor_questions, is_draft=True))
+
+                    if not donor_answers.is_valid():
+                        errors.setdefault('donor_custom_answers', dict)
+                        errors['donor_custom_answers'].setdefault(donor_id, dict)
+                        errors['donor_custom_answers'][donor_id].update(donor_answers.errors)
+                    else:
+                        all_donor_answers.append((donor_id, donor_answers))
+
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -384,6 +422,11 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
             if country_answers:
                 country_answers.context['project'] = instance
                 instance = country_answers.save()
+            for donor_id, donor_answers in all_donor_answers:
+                donor_answers.context['project'] = donor_id
+                donor_answers.context['donor_id'] = instance
+                instance = donor_answers.save()
+            instance.save()
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
