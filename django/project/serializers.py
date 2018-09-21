@@ -341,7 +341,6 @@ class CountryCustomAnswerListSerializer(serializers.ListSerializer):
                 instance.data['country_custom_answers'] = remove_keys(data_dict=custom_answers, keys=private_ids)
             else:
                 instance.data['country_custom_answers'] = custom_answers
-        instance.save()
         return instance
 
 
