@@ -198,7 +198,8 @@
         justify="space-between">
         <el-button
           type="text"
-          class="CancelButton">
+          class="CancelButton IconLeft">
+          <fa icon="reply" />
           <translate>Dismiss changes</translate>
         </el-button>
         <el-button
