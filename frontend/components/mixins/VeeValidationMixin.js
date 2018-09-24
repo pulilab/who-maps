@@ -5,6 +5,7 @@ const errorLibrary = {
 };
 
 export default {
+  inject: ['$validator'],
   props: {
     rules: {
       type: Object,
@@ -21,6 +22,11 @@ export default {
       customCountryErrors: [],
       customDonorsErrors: []
     };
+  },
+  computed: {
+    lang () {
+      return this.$i18n.locale;
+    }
   },
   watch: {
     apiErrors: {
@@ -40,9 +46,26 @@ export default {
           this.donorCustomAnswersErrorHandling(errors.donor_custom_answers);
         }
       }
+    },
+    lang: {
+      immediate: true,
+      handler (lang) {
+        this.changeLocale(lang);
+      }
     }
   },
   methods: {
+    changeLocale (localeName) {
+      if (this.$validator.dictionary.hasLocale(localeName)) {
+        this.$validator.localize(localeName);
+        this.currentLocale = localeName;
+      } else {
+        import(`vee-validate/dist/locale/${localeName}`).then(locale => {
+          this.$validator.localize(localeName, locale);
+          this.currentLocale = localeName;
+        });
+      }
+    },
     async validate () {
       console.error('Validation is going to fail because this method was not overridden');
       return false;
