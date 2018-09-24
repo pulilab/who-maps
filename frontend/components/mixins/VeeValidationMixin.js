@@ -18,7 +18,8 @@ export default {
   data () {
     return {
       scopes: [],
-      customCountryErrors: []
+      customCountryErrors: [],
+      customDonorsErrors: []
     };
   },
   watch: {
@@ -34,6 +35,9 @@ export default {
         }
         if (errors && errors.country_custom_answers) {
           this.countryCustomAnswersErrorHandling(errors.country_custom_answers);
+        }
+        if (errors && errors.donor_custom_answers) {
+          this.donorCustomAnswersErrorHandling(errors.donor_custom_answers);
         }
       }
     }
@@ -53,11 +57,22 @@ export default {
         for (let key in errors) {
           this.errors.add({
             field: 'answer',
-            scope: 'country_custom_question_' + key,
+            scope: 'custom_question_' + key,
             msg: errors[key][0]
           });
         }
       }
+    },
+    donorCustomAnswersErrorHandling (errors) {
+      const result = [];
+      for (let key in errors) {
+        result.push(...errors[key].map((e, index) => ({
+          error: e,
+          index,
+          donor_id: +key
+        })));
+      }
+      this.customDonorsErrors = result;
     },
     coreProjectErrorHandling (errors) {
       for (let field in errors) {
