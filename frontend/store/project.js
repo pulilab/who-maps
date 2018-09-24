@@ -85,7 +85,7 @@ export const getters = {
   getCountryAnswerDetails: (state, getters) => id => getters.getCountryAnswers.find(ca => ca.question_id === id),
   getAllCountryAnswers: (state, getters, rootState, rootGetters) => {
     const country = rootGetters['countries/getCountryDetails'](getters.getCountry);
-    if (country) {
+    if (country && country.country_questions) {
       return country.country_questions.map(cq => {
         const answer = getters.getCountryAnswerDetails(cq.id);
         return { question_id: cq.id, answer: answer ? answer.answer : [] };
