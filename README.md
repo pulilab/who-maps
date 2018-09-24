@@ -96,6 +96,15 @@ the `remove_stale_donors` after that.)
 
 ## Translations command:
 
+On Osx prerequisite is:
+
+`brew install gettext`
+
+after this command completes:
+
+`brew link --overwrite --force gettext` may be needed
+
+
 To scrape the code and extract translations:
 `yarn translation:extract`
 
