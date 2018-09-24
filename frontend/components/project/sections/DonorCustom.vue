@@ -19,7 +19,7 @@
         :is-required="field.required"
         :options="field.options"
         :do-validation="usePublishRules"
-        module="donor"
+        :donor-id="donor.id"
       />
     </collapsible-card>
   </div>
