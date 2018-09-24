@@ -49,7 +49,9 @@ export default {
       projectDonors: 'project/getDonors'
     }),
     donors () {
-      return this.projectDonors.map(d => this.getDonorDetails(d));
+      if (this.projectDonors) {
+        return this.projectDonors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
+      }
     }
   },
   mounted () {
