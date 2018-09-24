@@ -1,6 +1,6 @@
 <template>
   <el-form-item
-    :error="errors.first('answer', 'country_custom_question_' + id)"
+    :error="errors.first('answer', 'custom_question_' + id)"
     :label="question"
     class="CustomField"
   >
@@ -9,7 +9,7 @@
       v-if="type < 3"
       v-model="innerValue"
       :data-vv-as="question"
-      :data-vv-scope="'country_custom_question_' + id"
+      :data-vv-scope="'custom_question_' + id"
       data-vv-name="answer"/>
 
     <el-radio-group
@@ -17,7 +17,7 @@
       v-if="type === 3"
       v-model="innerValue"
       :data-vv-as="question"
-      :data-vv-scope="'country_custom_question_' + id"
+      :data-vv-scope="'custom_question_' + id"
       data-vv-name="answer"
     >
       <el-radio label="yes"><translate>Yes</translate></el-radio>
@@ -31,7 +31,7 @@
         :placeholder="$gettext('Select from list')"
         :multiple="type === 5"
         :data-vv-as="question"
-        :data-vv-scope="'country_custom_question_' + id"
+        :data-vv-scope="'custom_question_' + id"
         filterable
         data-vv-name="answer"
         popper-class="CustomFieldSelectorDropdown"
@@ -78,9 +78,9 @@ export default {
       type: Boolean,
       default: false
     },
-    module: {
-      type: String,
-      default: 'country'
+    donorId: {
+      type: Number,
+      default: null
     },
     index: {
       type: Number,
@@ -93,7 +93,7 @@ export default {
       getDonorsAnswerDetails: 'project/getDonorsAnswerDetails'
     }),
     answer () {
-      const saved = this.module === 'country' ? this.getCountryAnswerDetails(this.id) : this.getDonorsAnswerDetails(this.id);
+      const saved = !this.donorId ? this.getCountryAnswerDetails(this.id) : this.getDonorsAnswerDetails(this.id);
       return saved || {
         question_id: this.id,
         answer: null
@@ -111,7 +111,7 @@ export default {
       },
       set (answer) {
         answer = Array.isArray(answer) ? answer : [answer];
-        if (this.module === 'country') {
+        if (!this.donorId) {
           this.setCountryAnswer({...this.answer, answer});
         } else {
           this.setDonorAnswer({...this.answer, answer});
@@ -129,8 +129,16 @@ export default {
     customCountryErrors: {
       immediate: true,
       handler (errors) {
-        if (this.module === 'country') {
-          this.findError(errors);
+        if (!this.donorId) {
+          this.findCountryError(errors);
+        }
+      }
+    },
+    customDonorsErrors: {
+      immediate: true,
+      handler (errors) {
+        if (this.donorId) {
+          this.findDonorError(errors);
         }
       }
     }
@@ -140,20 +148,29 @@ export default {
       setCountryAnswer: 'project/setCountryAnswer',
       setDonorAnswer: 'project/setDonorAnswer'
     }),
-    findError (errors) {
+    addErrorToBag (error) {
+      const firsElement = error[Object.keys(error)[0]];
+      const msg = firsElement ? firsElement[0] : null;
+      if (msg) {
+        this.errors.add({
+          field: 'answer',
+          scope: 'custom_question_' + this.id,
+          msg
+        });
+      }
+    },
+    findCountryError (errors) {
       if (errors && errors.length > this.index - 1) {
         const error = errors[this.index];
         if (error) {
-          const firsElement = error[Object.keys(error)[0]];
-          const msg = firsElement ? firsElement[0] : null;
-          if (msg) {
-            this.errors.add({
-              field: 'answer',
-              scope: 'country_custom_question_' + this.id,
-              msg
-            });
-          }
+          this.addErrorToBag(error);
         }
+      }
+    },
+    findDonorError (errors) {
+      const error = errors.find(e => e.index === this.index && e.donor_id === this.donorId);
+      if (error) {
+        this.addErrorToBag(error.error);
       }
     },
     validate () {
