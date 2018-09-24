@@ -1,19 +1,24 @@
 <template>
   <el-card :class="['QuestionContainer rounded', {'Inactive': !question.is_active, 'Invalid': !valid, 'Edited': !saved}]">
-    <el-row class="Actions">
+
+    <!-- Actions -->
+    <div class="Actions">
       <el-button
         :disabled="!valid || saved"
         type="text"
+        class="IconLeft"
         @click="saveQuestion"
       >
-        <fa icon="save" />
+        <fa icon="save" /> Save
       </el-button>
       <el-button
         type="text"
+        class="DeleteButton IconLeft"
         @click="doDelete(id)">
-        <fa icon="trash" />
+        <fa icon="trash" /> Delete
       </el-button>
-    </el-row>
+    </div>
+
     <!-- Type -->
     <el-select
       v-model="question.type"
@@ -202,14 +207,20 @@ export default {
     .Actions {
       position: absolute;
       right: 20px;
-      top: 0;
+      top: 10px;
+
+      .el-button {
+        margin-left: 20px;
+      }
     }
 
     &.Inactive {
+      opacity: .8;
       background-color: @colorGrayLightest;
     }
 
     &.Edited {
+      border-color: darken(@colorBrandBlueLight, 15%);
       background-color: @colorBrandBlueLight;
     }
 
@@ -220,9 +231,9 @@ export default {
 
     .el-card__body {
       > div {
-        margin-top: 20px;
+        margin-bottom: 20px;
 
-        &:first-child {
+        &:last-of-type {
           margin: 0;
         }
       }
