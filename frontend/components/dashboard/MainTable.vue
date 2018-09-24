@@ -293,6 +293,13 @@ export default {
         &.is-leaf {
           border-bottom-color: @colorTextMuted;
         }
+
+        // Disable select-all-row
+        &.el-table-column--selection {
+          .el-checkbox {
+            display: none;
+          }
+        }
       }
 
       td {
@@ -370,6 +377,12 @@ export default {
 
         .ProjectCountryOrg {
           margin-top: 4px;
+        }
+
+        .ProjectLegend {
+          top: -1px;
+          right: 0;
+          opacity: 1 !important;
         }
       }
 

@@ -546,8 +546,17 @@ fieldset {
     }
   }
 
+  // disabled
+  .is-disabled {
+    .el-select__caret {
+      opacity: .5;
+    }
+  }
+
   // custom select caret
   .el-select__caret {
+    transition: none !important;
+
     &.el-icon-arrow-up {
       transform: translateX(4px) !important;
       width: 39px;
@@ -929,7 +938,7 @@ fieldset {
 
         li {
           position: relative;
-          padding: 0 36px 0 12px;
+          padding: 0 52px 0 12px;
           height: 40px;
           font-size: @fontSizeBase;
           line-height: 40px;
@@ -942,7 +951,7 @@ fieldset {
             background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
             color: @colorTextPrimary;
 
-            .svg-inline--fa {
+            .fa-check {
               opacity: .5;
             }
           }
@@ -953,12 +962,12 @@ fieldset {
             color: @colorBrandPrimary;
             font-weight: 700;
 
-            .svg-inline--fa {
+            .fa-check {
               opacity: 1;
             }
           }
 
-          .svg-inline--fa {
+          .fa-check {
             position: absolute;
             top: 50%;
             right: 12px;
@@ -968,6 +977,20 @@ fieldset {
             margin-right: 2px;
             opacity: 0;
             transition: @transitionFadeLinear;
+          }
+
+          .DeleteButton {
+
+            position: absolute;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            margin-top: -1px;
+
+            .svg-inline--fa {
+              width: 12px;
+              height: 12px;
+            }
           }
         }
       }

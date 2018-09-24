@@ -196,8 +196,16 @@
       <el-row
         type="flex"
         justify="space-between">
-        <el-button><translate>Dismiss changes</translate></el-button>
-        <el-button @click="saveChanges"><translate>Save changes</translate></el-button>
+        <el-button
+          type="text"
+          class="CancelButton">
+          <translate>Dismiss changes</translate>
+        </el-button>
+        <el-button
+          type="primary"
+          size="medium"
+          @click="saveChanges"><translate>Save changes</translate>
+        </el-button>
       </el-row>
     </div>
 

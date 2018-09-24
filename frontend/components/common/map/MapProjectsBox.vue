@@ -181,17 +181,19 @@ export default {
 
       .CountrySubHeader {
         background-color: @colorWhite;
-        padding: 12px 20px;
+        padding: 12px 20px 4px;
         border-bottom: 2px solid @colorGrayLight;
 
         .SubLevelItem {
-          display: inline;
+          display: inline-block;
+          padding-bottom: 8px;
           font-size: @fontSizeBase;
           font-weight: 700;
           color: @colorTextPrimary;
         }
 
         .SubLevelCounter {
+          margin-left: 5px;
           font-size: @fontSizeSmall;
           font-weight: 400;
           color: @colorTextMuted;
@@ -254,6 +256,7 @@ export default {
         color: @colorTextSecondary;
         border: none !important;
         background-color: @colorWhite !important;
+        transition: @transitionAll;
 
         &:hover {
           color: @colorTextPrimary;

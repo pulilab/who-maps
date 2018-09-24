@@ -1,9 +1,10 @@
 <template>
+  <!-- TODO -->
+  <!-- Please add 'size="small"' attribute to selector if it's included in UserDropdown -->
   <el-select
     :value="value"
     :placeholder="$gettext('Select language')"
-    size="small"
-    class="LanguageSelector"
+    class="LanguageSelectorDropdown"
     popper-class="LanguageSelectorPopper"
     @change="changeHandler">
     <el-option
@@ -44,7 +45,7 @@ export default {
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
 
-  .LanguageSelector {
+  .LanguageSelectorDropdown {
     width: auto;
     margin: 4px 0 8px;
   }

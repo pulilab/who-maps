@@ -194,6 +194,10 @@ export default {
       .ProjectCountryOrg {
         color: @colorTextPrimary;
       }
+
+      .ProjectLegend {
+        opacity: 0;
+      }
     }
 
     .el-col {
@@ -201,14 +205,16 @@ export default {
     }
 
     .ProjectName {
+      padding-right: 12px;
       font-size: @fontSizeBase;
+      line-height: 20px;
       font-weight: 700;
       color: @colorTextPrimary;
       transition: @transitionAll;
     }
 
     .ProjectCountryOrg {
-      margin-top: 6px;
+      margin-top: 8px;
       font-size: @fontSizeSmall;
       color: @colorTextSecondary;
       white-space: nowrap;
@@ -216,17 +222,35 @@ export default {
 
       .Country {
         width: auto;
-        padding-right: 25px;
+        padding-right: 21px;
+
+        .CountryItem {
+          .CountryFlag {
+            img {
+              height: 12px;
+              width: auto;
+            }
+          }
+
+          .CountryName {
+            width: auto;
+            margin-left: 6px;
+            font-size: @fontSizeSmall;
+            line-height: 14px;
+            font-weight: 400;
+          }
+        }
 
         &::after {
           content: "";
           position: absolute;
           top: 50%;
-          right: 12px;
+          right: 10px;
           transform: translateY(-50%);
           display: inline-block;
           width: 1px;
           height: 12px;
+          margin-top: -1px;
           background-color: @colorTextSecondary;
         }
       }
@@ -262,10 +286,16 @@ export default {
       }
     }
 
+    .ProjectLegend {
+      position: absolute;
+      top: 0;
+      right: 6px;
+    }
+
     .fa-arrow-right {
       position: absolute;
       top: 50%;
-      right: 4px;
+      right: 6px;
       transform: translateY(-50%);
       color: @colorBrandPrimary;
     }
