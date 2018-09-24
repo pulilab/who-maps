@@ -188,7 +188,7 @@ export default {
           transform: translateY(-50%);
           display: inline-block;
           width: 1px;
-          height: 10px;
+          height: 14px;
           background-color: @colorTextSecondary;
         }
       }
@@ -218,6 +218,10 @@ export default {
       position: absolute;
       top: 26px;
       right: 26px;
+
+      .svg-inline--fa {
+        font-size: 14px;
+      }
     }
   }
 

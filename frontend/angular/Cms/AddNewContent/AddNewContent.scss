@@ -37,8 +37,7 @@
 
     .md-button {
       margin: 0 40px 0 0;
-      padding-left: 0;
-      padding-right: 0;
+      padding: 0 !important;
       line-height: 42px;
       color: $color-primary;
       background-color: transparent !important;

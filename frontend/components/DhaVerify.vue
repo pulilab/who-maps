@@ -7,7 +7,9 @@
 
       <p class="Instruction">
         <translate>Congratulations your email address is verified, you can now </translate>
-        <span @click="toLogin">
+        <span
+          class="TextLink"
+          @click="toLogin">
           <translate>login</translate>
         </span>
         <translate>and use the system</translate>
@@ -35,10 +37,10 @@ export default {
     margin: 80px auto;
 
     .Instruction {
-      font-size: 16px;
-      line-height: 20px;
+      font-size: @fontSizeMedium;
+      line-height: 24px;
       text-align: center;
-      color: #6D6D6D;
+      color: @colorTextPrimary;
       padding: 0 80px;
 
       span {

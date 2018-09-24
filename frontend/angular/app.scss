@@ -4,7 +4,8 @@
 
 /* GENERAL
    ============================= */
-.angularjs {
+.angularjs,
+.md-dialog-is-showing {
 
   button, select, html, textarea, input {
     font-family: Arial, sans-serif;
@@ -542,6 +543,7 @@
       }
     }
   }
+
   // Md-card
 
   md-card {
@@ -582,131 +584,131 @@
 
 .md-primary {
 
-// Button
-&.md-button {
-  color: $color-primary;
+  // Button
+  &.md-button {
+    color: $color-primary;
 
-  md-icon {
-    color: $color-primary !important;
-  }
+    md-icon {
+      color: $color-primary !important;
+    }
 
-&.md-raised {
-  color: $color-white;
-  background-color: $color-accent !important;
+  &.md-raised {
+    color: $color-white;
+    background-color: $color-accent !important;
 
-  &[disabled] {
-    background-color: $text-disabled !important;
-  }
+    &[disabled] {
+      background-color: $text-disabled !important;
+    }
 
-  md-icon {
-    color: $color-white !important;
+    md-icon {
+      color: $color-white !important;
+      }
     }
   }
-}
 
-// Checkbox
-&.md-checked {
-  .md-icon {
-    border-color: $color-primary!important;
-    background-color: $color-primary !important;
+  // Checkbox
+  &.md-checked {
+    .md-icon {
+      border-color: $color-primary!important;
+      background-color: $color-primary !important;
+    }
+    .md-ink-ripple {
+      color: $color-primary !important;
+    }
   }
-  .md-ink-ripple {
-    color: $color-primary !important;
-  }
-}
 }
 
 
 .md-gray {
 
-// Progress Circular
-.md-left .md-half-circle {
-  border-top-color: $color-gray-light !important;
-  border-left-color: $color-gray-light !important;
-}
-.md-right .md-half-circle {
-  border-top-color: $color-gray-light !important;
-  border-right-color: $color-gray-light !important;
-}
-
-// Button
-&.md-button,
-&.md-button:not([disabled]):hover {
-  color: $color-white !important;
-  background-color: $text-disabled !important;
-}
-
-&.md-button.md-no-ink {
-  color: $text-secondary !important;
-  background-color: transparent !important;
-  &:hover {
-    color: $text-secondary !important;
-    background-color: rgba(158, 158, 158, 0.2) !important;
+  // Progress Circular
+  .md-left .md-half-circle {
+    border-top-color: $color-gray-light !important;
+    border-left-color: $color-gray-light !important;
   }
-}
+  .md-right .md-half-circle {
+    border-top-color: $color-gray-light !important;
+    border-right-color: $color-gray-light !important;
+  }
+
+  // Button
+  &.md-button,
+  &.md-button:not([disabled]):hover {
+    color: $color-white !important;
+    background-color: $text-disabled !important;
+  }
+
+  &.md-button.md-no-ink {
+    color: $text-secondary !important;
+    background-color: transparent !important;
+    &:hover {
+      color: $text-secondary !important;
+      background-color: rgba(158, 158, 158, 0.2) !important;
+    }
+  }
 }
 
 .md-green {
 
-// Switch
-&.md-checked .md-bar {
-  background-color: rgba($color-green, 0.49) !important;
-}
-&.md-checked .md-thumb {
-  background-color: $color-green !important;
-}
-&.md-checked .md-thumb::before {
-  background-color: rgba($color-green, 0.26) !important;
-}
-&.md-checked .md-ink-ripple,
-&.md-checked .md-ripple-container {
-  color: $color-green !important;
-}
+  // Switch
+  &.md-checked .md-bar {
+    background-color: rgba($color-green, 0.49) !important;
+  }
+  &.md-checked .md-thumb {
+    background-color: $color-green !important;
+  }
+  &.md-checked .md-thumb::before {
+    background-color: rgba($color-green, 0.26) !important;
+  }
+  &.md-checked .md-ink-ripple,
+  &.md-checked .md-ripple-container {
+    color: $color-green !important;
+  }
 }
 
 .md-black {
 
-// Checkbox
-&.md-checked {
-  .md-icon {
-    border-color: $text-primary !important;
-    background-color: $text-primary !important;
+  // Checkbox
+  &.md-checked {
+    .md-icon {
+      border-color: $text-primary !important;
+      background-color: $text-primary !important;
+    }
+    .md-ink-ripple {
+      color: $text-primary !important;
+    }
   }
-  .md-ink-ripple {
-    color: $text-primary !important;
+
+  // FAB
+  &.md-fab,
+  &.md-fab:not([disabled]):hover {
+    background-color: $text-primary;
   }
-}
 
-// FAB
-&.md-fab,
-&.md-fab:not([disabled]):hover {
-  background-color: $text-primary;
-}
+  // Button
+  &.md-button,
+  &.md-button:not([disabled]):hover {
+    background-color: $text-primary;
+    color: $color-white;
+  }
+  }
 
-// Button
-&.md-button,
-&.md-button:not([disabled]):hover {
-  background-color: $text-primary;
-  color: $color-white;
-}
-}
+  .md-blue {
+  // Button
+  &.md-button,
+  &.md-button:not([disabled]):hover {
+    color: $color-white !important;
+    background-color: $color-primary !important;
+  }
+  }
 
-.md-blue {
-// Button
-&.md-button,
-&.md-button:not([disabled]):hover {
-  color: $color-white !important;
-  background-color: $color-primary !important;
-}
-}
+  .md-cancel {
 
-.md-cancel {
-
-// Button
-&.md-button,
-&.md-button:not([disabled]):hover {
-  color: $text-secondary !important;
-}
+  // Button
+  &.md-button,
+  &.md-button:not([disabled]):hover {
+    color: $text-secondary !important;
+  }
 }
 
 // Md-dialog

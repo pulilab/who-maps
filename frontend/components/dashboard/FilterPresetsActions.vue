@@ -24,10 +24,10 @@
                 :class="{'Active': isActive(filter.query)}"
                 @click="applyPreset(filter.query)"
               >
-                <!-- TODO: Zoli please can u fix the allignment of this ? -->
-                <!-- <fa icon="check" /> -->
+                <fa icon="check" />
                 <el-button
                   type="text"
+                  class="DeleteButton"
                   @click.stop="deleteFilter(filter)"
                 >
                   <fa icon="times" />

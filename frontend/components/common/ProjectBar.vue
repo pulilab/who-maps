@@ -1,50 +1,62 @@
 <template>
   <div class="ProjectBar">
     <div class="ProjectBarWrapper">
-      <el-row type="flex">
+      <el-row
+        type="flex"
+        justify="space-between">
         <el-col
-          :span="15"
+          :span="12"
           class="ProjectName">
           <div>
             {{ project.name }}
             <project-legend :id="project.id" />
           </div>
         </el-col>
+
         <el-col
-          :span="3"
+          :span="12"
           class="ProjectInfo">
-          <div class="Label">
-            <translate>Last Updated</translate>
-          </div>
-          <div class="Info">
-            1/12/2018!!
-          </div>
+          <el-row
+            type="flex"
+            justify="end">
+            <el-col
+              :span="8"
+              class="InfoSection">
+              <div class="Label">
+                <translate>Last Updated</translate>
+              </div>
+              <div class="Info">
+                1/12/2018!!
+              </div>
+            </el-col>
+            <el-col
+              :span="8"
+              class="InfoSection">
+              <div class="Label">
+                <translate>Organisation</translate>
+              </div>
+              <div class="Info">
+                <organisation-item :id="project.organisation" />
+              </div>
+            </el-col>
+            <el-col
+              :span="8"
+              class="InfoSection">
+              <div class="Label">
+                <translate>Contact person</translate>
+              </div>
+              <div class="Info">
+                <a
+                  :href="`mailto:${project.contact_email}`"
+                  class="NuxtLink Small IconRight">
+                  {{ project.contact_name }}
+                  <fa icon="envelope" />
+                </a>
+              </div>
+            </el-col>
+          </el-row>
         </el-col>
-        <el-col
-          :span="3"
-          class="ProjectInfo">
-          <div class="Label">
-            <translate>Organisation</translate>
-          </div>
-          <div class="Info">
-            <organisation-item :id="project.organisation" />
-          </div>
-        </el-col>
-        <el-col
-          :span="3"
-          class="ProjectInfo">
-          <div class="Label">
-            <translate>Contact person</translate>
-          </div>
-          <div class="Info">
-            <a
-              :href="`mailto:${project.contact_email}`"
-              class="NuxtLink Small IconRight">
-              {{ project.contact_name }}
-              <fa icon="envelope" />
-            </a>
-          </div>
-        </el-col>
+
       </el-row>
 
       <div class="ProjectMenu">
@@ -155,39 +167,51 @@ export default {
     }
 
     .ProjectName {
-      width: 100%;
       margin: 16px 0 0;
-      padding-right: 50px;
       font-size: @fontSizeLarge;
       line-height: @fontSizeLarge;
       font-weight: 700;
 
+      > div {
+        position: relative;
+        display: inline-block;
+        max-width: 100%;
+        padding-right: 50px;
+        .textTruncate();
+      }
+
       .ProjectLegend {
-        display: inline;
+        position: absolute;
+        top: -2px;
+        right: 25px;
       }
     }
 
     .ProjectInfo {
       width: auto;
-      white-space: nowrap;
-      margin: 12px 0 0;
-      padding: 2px 20px;
-      border-left: 1px solid @colorGrayLighter;
 
-      &:last-of-type {
-        padding-right: 10px;
-      }
+      .InfoSection {
+        width: auto;
+        white-space: nowrap;
+        margin: 10px 0 0;
+        padding: 2px 20px;
+        border-left: 1px solid @colorGrayLighter;
 
-      .Label {
-        margin: 0 0 4px;
-        font-size: @fontSizeSmall - 1;
-        color: @colorGray;
-      }
+        &:last-of-type {
+          padding-right: 10px;
+        }
 
-      .Info {
-        font-size: @fontSizeSmall;
-        font-weight: 700;
-        color: @colorTextPrimary;
+        .Label {
+          margin: 0 0 4px;
+          font-size: @fontSizeSmall - 1;
+          color: @colorGray;
+        }
+
+        .Info {
+          font-size: @fontSizeSmall;
+          font-weight: 700;
+          color: @colorTextPrimary;
+        }
       }
     }
 
