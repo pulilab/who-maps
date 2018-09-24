@@ -6,20 +6,17 @@
     class="TableTopActions">
     <el-col class="TableExportOptions">
       <el-row type="flex">
-        <!-- <template v-if="selectedRows.length > 0">
-          <el-button
-            :disabled="allSelected"
-            size="small"
-            @click="selectAll"><translate :parameters="{total}">Select all {total} rows</translate>
-          </el-button>
-          <div class="Separator" />
-        </template> -->
-
-        <!-- TODO -->
-        <!-- Please make it as a toggle button: Select/Deselect all -->
         <el-button
           size="small"
-          @click="selectAll"><translate :parameters="{total}">Select all {total} projects</translate>
+          @click="toggleSelectAll">
+          <translate
+            v-show="!allSelected"
+            :parameters="{total}">Select all {total} projects
+          </translate>
+          <translate
+            v-show="allSelected"
+            :parameters="{total}">Deselect all {total} projects
+          </translate>
         </el-button>
 
         <div class="Separator" />
@@ -178,7 +175,8 @@ export default {
       setSelectedColumns: 'dashboard/setSelectedColumns',
       setSelectAll: 'dashboard/setSelectAll',
       setSendEmailDialogState: 'layout/setSendEmailDialogState',
-      loadProjectsBucket: 'dashboard/loadProjectsBucket'
+      loadProjectsBucket: 'dashboard/loadProjectsBucket',
+      setSelectedRows: 'dashboard/setSelectedRows'
     }),
     popperOpenHandler () {
       this.selectedColumns = [...this.columns.map(s => ({...s}))];
@@ -187,9 +185,14 @@ export default {
       this.setSelectedColumns(this.selectedColumns.filter(s => s.selected).map(s => s.id));
       this.columnSelectorOpen = false;
     },
-    async selectAll () {
-      await this.loadProjectsBucket();
-      this.setSelectAll(true);
+    async toggleSelectAll () {
+      if (!this.allSelected) {
+        await this.loadProjectsBucket();
+        this.setSelectAll(true);
+      } else {
+        this.setSelectAll(false);
+        this.setSelectedRows([])
+      }
     },
     exportRows () {
       if (this.exportType === 'PDF') {

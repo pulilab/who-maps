@@ -200,9 +200,11 @@ export default {
     selectAll: {
       immediate: true,
       handler (value) {
-        if (value && this.$refs.mainTable) {
+        if (this.$refs.mainTable) {
           this.$refs.mainTable.clearSelection();
-          this.$refs.mainTable.toggleAllSelection();
+          if (value) {
+            this.$refs.mainTable.toggleAllSelection();
+          }
         }
       }
     },
