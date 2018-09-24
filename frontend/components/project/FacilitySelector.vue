@@ -2,7 +2,9 @@
   <el-form-item
     v-if="facilities.length > 0"
     :error="errors.first('facilities_list', scope)"
-    :label="$gettext('Facilities')">
+    :label="$gettext('Facilities')"
+    :required="rules.facilities_list && rules.facilities_list.required"
+  >
     <el-select
       v-validate="rules.facilities_list"
       v-model="innerValue"
