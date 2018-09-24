@@ -14,7 +14,7 @@
     "test": "jest",
     "test:w": "jest --watch",
     "cypress:open": "cypress open",
-    "translation:extract": "gettext-extract --output ../django/translations/master.pot $(find ./components ./pages ./angular ./layouts -type f -name '*.vue' -o -name '*.js' -o -name '*.html')"
+    "translation:extract": "bash gettext.sh"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.2",
@@ -71,6 +71,7 @@
     "vuex-geolocation": "^1.1.0"
   },
   "devDependencies": {
+    "angular-gettext-cli": "^1.2.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
     "babel-jest": "^22.4.3",
