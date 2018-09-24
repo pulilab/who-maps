@@ -40,9 +40,9 @@ export default {
       type: String,
       required: true
     },
-    module: {
-      type: String,
-      default: 'country'
+    donorId: {
+      type: Number,
+      default: null
     },
     isDraft: {
       type: Boolean,
@@ -52,12 +52,16 @@ export default {
   computed: {
     ...mapGetters({
       getPublishedCountryAnswerDetails: 'project/getPublishedCountryAnswerDetails',
-      getCountryAnswerDetails: 'project/getCountryAnswerDetails'
+      getCountryAnswerDetails: 'project/getCountryAnswerDetails',
+      getDonorsAnswerDetails: 'project/getDonorsAnswerDetails',
+      getPublishedDonorsAnswerDetails: 'project/getPublishedDonorsAnswerDetails'
     }),
     answer () {
       let detailsFunction = () => null;
-      if (this.module === 'country') {
+      if (!this.donorId) {
         detailsFunction = this.isDraft ? this.getCountryAnswerDetails : this.getPublishedCountryAnswerDetails;
+      } else {
+        detailsFunction = this.isDraft ? this.getPublishedDonorsAnswerDetails : this.getPublishedDonorsAnswerDetails;
       }
       const saved = detailsFunction(this.id);
       return saved || {
