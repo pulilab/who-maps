@@ -139,8 +139,11 @@ export const customCountryAnswerParser = (customAnswers) => {
   }));
 };
 
-export const customDonorAnswerParser = customAnswers => {
-  const result = {};
+export const customDonorAnswerParser = (customAnswers, donors) => {
+  const result = donors.reduce((a, c) => {
+    a[c] = [];
+    return a;
+  }, {});
   customAnswers.forEach(a => {
     const donor = a.donor_id;
     if (!result[donor]) {
@@ -172,7 +175,7 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
     national_level_deployment = {...baseCoverage, ...p.national_level_deployment};
   }
   const country_custom_answers = customCountryAnswerParser(countryCustomAnswers);
-  const donor_custom_answers = customDonorAnswerParser(donorsCustomAnswers);
+  const donor_custom_answers = customDonorAnswerParser(donorsCustomAnswers, p.donors);
   return {
     project: {
       ...result,
