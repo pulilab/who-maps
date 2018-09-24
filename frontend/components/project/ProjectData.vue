@@ -186,6 +186,26 @@
             :type="question.type"
           />
         </collapsible-card>
+
+        <div
+          id="donorcustom">
+          <collapsible-card
+            v-for="donor in donors"
+            :key="donor.id"
+            :title="donor.name + ' custom fields'"
+          >
+            <custom-readonly-field
+              v-for="question in donor.donor_questions"
+              :key="question.id"
+              :id="question.id"
+              :question="question.question"
+              :is-draft="isDraft"
+              :type="question.type"
+              :donor-id="donor.id"
+            />
+          </collapsible-card>
+        </div>
+
       </el-col>
       <el-col :span="6">
         <project-navigation/>
@@ -241,7 +261,8 @@ export default {
     ...mapGetters({
       draft: 'project/getProjectData',
       published: 'project/getPublished',
-      getCountryDetails: 'countries/getCountryDetails'
+      getCountryDetails: 'countries/getCountryDetails',
+      getDonorDetails: 'system/getDonorDetails'
     }),
     route () {
       return this.$route.name.split('__')[0];
@@ -260,6 +281,9 @@ export default {
         }
       }
       return [];
+    },
+    donors () {
+      return this.project.donors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
     }
   }
 
