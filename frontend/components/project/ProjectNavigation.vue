@@ -79,7 +79,10 @@
               <translate>Interoperability</translate>
             </el-button>
           </li>
-          <li :class="{active: active === 'countrycustom'}">
+          <li
+            v-show="showCountryFieldsLink"
+            :class="{active: active === 'countrycustom'}"
+          >
             <el-button
               type="text"
               @click="scrollTo('countrycustom')"
@@ -90,7 +93,10 @@
               <translate>Country fields</translate>
             </el-button>
           </li>
-          <li :class="{active: active === 'donorcustom'}">
+          <li
+            v-show="showDonorFieldsLink"
+            :class="{active: active === 'donorcustom'}"
+          >
             <el-button
               type="text"
               @click="scrollTo('donorcustom')"
@@ -185,7 +191,11 @@ export default {
   computed: {
     ...mapGetters({
       loading: 'project/getLoading',
-      user: 'user/getProfile'
+      user: 'user/getProfile',
+      getCountryDetails: 'countries/getCountryDetails',
+      getDonorDetails: 'system/getDonorDetails',
+      draft: 'project/getProjectData',
+      published: 'project/getPublished'
     }),
     active () {
       const hash = this.$route.hash;
@@ -215,6 +225,27 @@ export default {
     isTeam () {
       if (this.user) {
         return this.user.member.includes(+this.$route.params.id);
+      }
+      return false;
+    },
+    project () {
+      return this.isDraft || this.isReadOnlyDraft || this.isNewProject ? this.draft : this.published;
+    },
+    showCountryFieldsLink  () {
+      const country = this.getCountryDetails(this.project.country);
+      if (country) {
+        return country.country_questions && country.country_questions.length > 0;
+      }
+      return false;
+    },
+    showDonorFieldsLink () {
+      if (this.project && this.project.donors) {
+        for (let donor of this.project.donors) {
+          const details = this.getDonorDetails(donor);
+          if (details && details.donor_questions && details.donor_questions.length > 0) {
+            return true;
+          }
+        }
       }
       return false;
     }
