@@ -91,15 +91,9 @@ export default {
     },
     mouseEnterHandler (event) {
       this.popUpHover = true;
-      this.$nextTick(() => {
-        this.safeMapObjectFunctionCall('tooltip', 'update');
-      });
     },
     mouseLeaveHandler (event) {
       this.popUpHover = false;
-      this.$nextTick(() => {
-        this.safeMapObjectFunctionCall('tooltip', 'update');
-      });
     }
   }
 };
