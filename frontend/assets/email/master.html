@@ -1,9 +1,15 @@
+<!-- {% load utils %}
+{% load staticfiles %}
+{% load i18n %} -->
+
 <!doctype html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Email Template</title>
+    <meta http-equiv="content-language" content="{{ language }}">
+    <meta name="viewport" content="width=device-width" />
+    <title>Email templates</title>
+
     <style>
       /* -------------------------------------
           GLOBAL RESETS
@@ -42,7 +48,6 @@
       /* -------------------------------------
           BODY & CONTAINER
       ------------------------------------- */
-
       .body {
         background-color: #F2F2F2;
         width: 100%; }
@@ -107,6 +112,18 @@
         .footer-links a + span {
           color: #B9B9B9; }
 
+      .project-list {}
+        .list-header td {
+          padding: 5px 10px;
+          background-color: #9B9B9B;
+          font-size: 12px;
+          color: #FFFFFF; }
+        .list-header td b {
+          text-transform: uppercase; }
+        .list-content td {
+          padding-top: 20px; }
+
+
       /* -------------------------------------
           TYPOGRAPHY
       ------------------------------------- */
@@ -119,14 +136,14 @@
         line-height: 1.4;
         margin: 0;
         margin-top: 10px;
-        margin-bottom: 10px; }
+        margin-bottom: 20px; }
 
       h1 {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 700; }
 
       h2 {
-        font-size: 20px; }
+        font-size: 16px; }
 
       p,
       ul,
@@ -135,12 +152,14 @@
         font-size: 14px;
         font-weight: normal;
         margin: 0;
-        margin-bottom: 20px; }
+        margin-bottom: 20px;
+        padding: 0; }
         p li,
         ul li,
         ol li {
           list-style-position: inside;
-          margin-left: 10px; }
+          margin-left: 10px;
+          margin-bottom: 10px; }
 
       a {
         color: #008DC9;
@@ -153,7 +172,8 @@
         box-sizing: border-box;
         width: 100%; }
         .btn > tbody > tr > td {
-          padding-bottom: 15px; }
+          padding-top: 10px;
+          padding-bottom: 20px; }
         .btn table {
           width: auto; }
         .btn table td {
@@ -169,7 +189,7 @@
           font-size: 14px;
           font-weight: bold;
           margin: 0;
-          padding: 12px 25px;
+          padding: 10px 20px;
           text-decoration: none; }
 
       .btn-primary table td {
@@ -291,10 +311,11 @@
           background-color: #008DC9 !important;
           border-color: #008DC9 !important; }
         }
-
     </style>
   </head>
-  <body class="">
+
+
+  <body>
     <table border="0" cellpadding="0" cellspacing="0" class="body">
       <tr>
         <td class="container">
@@ -310,17 +331,27 @@
                   <table border="0" cellpadding="0" cellspacing="0">
                     <tr class="header">
                       <td>
+                        <!-- TODO: Replace image link with global path -->
                         <img src="logo.png" width="154" height="60" alt="WHO x DHA loog">
                       </td>
                       <td class="align-right">
-                        <a href="http://" class="visit-link nowrap">Visit website</a>
+                        <!-- TODO: Add Website link -->
+                        <a href="http://" class="visit-link nowrap">{% trans "Visit website" %}</a>
                       </td>
                     </tr>
                     <tr>
                       <td colspan="2">
-                        <h1>Thank you!</h1>
-                        <h2>Notification</h2>
-                        <p>You have been added to project {{ project_name }} as a {{ role }}.</p>
+
+
+
+                        <!-- TEMPLATES -->
+
+
+
+                        <!-- TEMPLATE: NEW MEMBER -->
+                        <h1>{% trans "Thank you!" %}</h1>
+                        <h2>{% trans "Notification" %}</h2>
+                        <p>{% blocktrans %}You have been added to project {{ project_name }} as a {{ role }}.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -328,7 +359,7 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td> <a href="http://" target="_blank">Go to project</a> </td>
+                                      <td> <a href="{% site_url %}/app/{{ project_id }}/dashboard" target="_blank">{% trans "Go to project" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -336,6 +367,242 @@
                             </tr>
                           </tbody>
                         </table>
+                        <!-- /TEMPLATE: NEW MEMBER -->
+
+
+                        <!-- TEMPLATE: COUNTRY ADMIN -->
+                        <!-- <h1>{% trans "Country admin" %}</h1>
+                        <h2>{% trans "Notification" %}</h2>
+                        <p>{% blocktrans %}You have been selected as the Country Admin for {{ country_name }}. Please log in to the admin platform to see your country specific options.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}{{ change_url }}" target="_blank">{% trans "Go to country admin" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table> -->
+                        <!-- /TEMPLATE: COUNTRY ADMIN -->
+
+
+                        <!-- TEMPLATE: COUNTRY ADMIN - ACTIVATED -->
+                        <!-- <h1>{% trans "Country admin" %}</h1>
+                        <h2>{% trans "Notification" %}</h2>
+                        <p>{% blocktrans %}A new map for {{ country_name }} has been activated. Please log in to the admin platform to see your map or go straight to DHA and see it in action.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}{{ change_url }}" target="_blank">{% trans "Go to country admin" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table> -->
+                        <!-- /TEMPLATE: COUNTRY ADMIN - ACTIVATED -->
+
+
+                        <!-- TEMPLATE: EMAIL CONFIRAMTION SIGNUP MESSAGE -->
+                        <!-- <h1>{% trans "Thank you!" %}</h1>
+                        <h2>{% trans "Your account has been created!" %}</h2>
+                        <p>{% blocktrans %}Your e-mail needs to be confirmed to finalize your registration.{% endblocktrans %}</p>
+                        <p><b>{% blocktrans %}Please visit this link below to confim your e-mail address:{% endblocktrans %}</b></p>
+                        <p>
+                          <a href="{{ activate_url }}" target="_blank ">{{ activate_url }}</a>
+                        </p> -->
+                        <!-- /TEMPLATE: EMAIL CONFIRAMTION SIGNUP MESSAGE  -->
+
+
+                        <!-- TEMPLATE: FLAG CONTENT -->
+                        <!-- <h1>{% trans "Reported content!" %}</h1>
+                        <h2>{% trans "Notification" %}</h2>
+                        <p>{% trans "Content has been flagged as inappropriate. Please take action." %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}{{ change_url }}" target="_blank">{% trans "Go to see content" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table> -->
+                        <!-- /TEMPLATE: FLAG CONTENT -->
+
+
+                        <!-- TEMPLATE: PASSWORD RESET -->
+                        <!-- <h1>{% trans "Password Reset" %}</h1>
+                        <p>{% trans "CYou requested your password to be reset." %}</p>
+                        <p><b>Please visit this link below to create a new password:</b></p>
+                        <p>
+                          <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}" target="_blank">{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}</a>
+                        </p> -->
+                        <!-- /TEMPLATE: PASSWORD RESET -->
+
+
+                        <!-- TEMPLATE: TOOLKIT DIGEST -->
+                        <!-- <h1>{% trans "Notification" %}</h1>
+                        <p>{% trans "MAPS Toolkit has been updated lately on your project!" %}</p>
+                        <p><b>{% trans "Check the MAPS Toolkit on the link below:" %}</b></p>
+                        <p>
+                          <a href="{% site_url %}/app/{{ project_id }}/maps/0/0" target="_blank">{% site_url %}/app/{{ project_id }}/maps/0/0</a>
+                        </p> -->
+                        <!-- /TEMPLATE: TOOLKIT DIGEST -->
+
+
+                        <!-- TEMPLATE: STATUS REPORT -->
+                        <!-- <h1>{% trans "Status report" %}</h1>
+                        <h2>{% trans "Dear Admin! " %}</h2>
+                        <p>{% trans "The projects listed below are waiting for your approval:" %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left">
+                                <b>{% trans "Today" %}</b>
+                              </td>
+                              <td align="right">
+                                {{ projects_today.count }} {% trans "project(s)" %}
+                              </td>
+                            </tr>
+                            <tr class="list-content">
+                              <td colspan="2">
+                                <ul>
+                                  {% for project in projects_today %}
+                                  <li>
+                                    <a href="{% site_url %}/admin/project/projectapproval/{{project.approval.id}}/change" target="_blank"><b>{{ project.name }}</b></a>
+                                  </li>
+                                  {% endfor %}
+                                </ul>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left">
+                                <b>{% trans "Earlier" %}</b>
+                              </td>
+                              <td align="right">
+                                {{ projects_earlier.count }} {% trans "project(s)" %}
+                              </td>
+                            </tr>
+                            <tr class="list-content">
+                              <td colspan="2">
+                                <ul>
+                                  {% for project in projects_earlier %}
+                                  <li>
+                                    <a href="{% site_url %}/admin/project/projectapproval/{{project.approval.id}}/change" target="_blank"><b>{{ project.name }}</b></a>
+                                  </li>
+                                  {% endfor %}
+                                </ul>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/admin" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table> -->
+                        <!-- /TEMPLATE: STATUS REPORT -->
+
+
+                        <!-- TEMPLATE: PROJECT IMPORT LIST -->
+                        <!-- <h1>{% trans "Status report" %}</h1>
+                        <h2>{% trans "Dear Admin! " %}</h2>
+                        <p>{% trans "The following projects have been imported:" %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left">
+                                <b>{% trans "Imported projects" %}</b>
+                              </td>
+                              <td align="right">
+                                {{ projects|length }} {% trans "project(s)" %}
+                              </td>
+                            </tr>
+                            <tr class="list-content">
+                              <td colspan="2">
+                                <ul>
+                                  {% for project in projects %}
+                                  <li>
+                                    <a href="{% site_url %}/admin/project/project/{{project.id}}/change" target="_blank"><b>{{ project.name }}</b></a>
+                                  </li>
+                                  {% endfor %}
+                                </ul>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/admin" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table> -->
+                        <!-- /TEMPLATE: PROJECT IMPORT LIST -->
+
+
+                        <!-- TEMPLATE: IMPORT PROJECTS -->
+                        <!-- <h1>{% trans "Notification" %}</h1>
+                        <h2>{% trans "Your were added to the following projects: " %}</h2>
+                        {% if data.password %}
+                        <ul>
+                          {% for project in data.projects %}
+                          <li><a href="{{ SITE_URL }}/app/{{ project.id }}/edit-project"><b>{{ project.name }}</b></a></li>
+                          {% endfor %}
+                        </ul>
+                        <p>
+                          <b>Your login credentials are:</b><br>
+                          <em>Username: {{ email }}</em><br>
+                          <em>Password: {{ data.password }}</em>
+                        </p>
+                        {% endif %} -->
+                        <!-- /TEMPLATE: IMPORT PROJECTS -->
+
+
+
+                      <!-- END TEMPLATES -->
+
+
+
                       </td>
                     </tr>
                   </table>
@@ -345,17 +612,25 @@
             <!-- END MAIN CONTENT AREA -->
             </table>
 
+
             <!-- START FOOTER -->
             <div class="footer">
               <table border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <tr>
                     <td class="content-block footer-links">
-                      <a href="http://">Visit website</a> <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span> <a href="http://">Terms of use</a> <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span> <a href="mailto:">Contact us</a>
+                      <!-- TODO: Update footer links -->
+                      <a href="http://">{% trans "Go to website" %}</a>
+                      <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                      <a href="http://">{% trans "Terms of use" %}</a>
+                      <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                      <a href="mailto:">{% trans "Contact us" %}</a>
                     </td>
                   </tr>
                   <td class="content-block">
-                    <span class="disclaimer">Disclaimer: All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use</a>.
+                    <span class="disclaimer">
+                      {% trans "All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use." %}
+                    </span>
                   </td>
                 </tr>
               </table>
