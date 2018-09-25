@@ -220,11 +220,12 @@ export default {
     }
   },
   mounted () {
-    window.addEventListener('resize', this.setFlyingBoxLeft);
-    this.setFlyingBoxLeft();
+    window.addEventListener('resize', this.setNavigationBoxLeftStyle);
+    window.addEventListener('scroll', this.setLeftValue);
   },
   beforeDestroy () {
-    window.removeEventListener('resize', this.setFlyingBoxLeft);
+    window.removeEventListener('resize', this.setNavigationBoxLeftStyle);
+    window.removeEventListener('scroll', this.setLeftValue);
   },
   methods: {
     scrollTo (where) {
@@ -246,12 +247,16 @@ export default {
       const localised = this.localePath({name: 'organisation-dashboard', params: {...this.$route.params}});
       this.$router.push(localised);
     },
-    setFlyingBoxLeft () {
-      setTimeout(() => {
-        const leftSide = document.querySelector('#general');
-        const leftWidth = leftSide.getBoundingClientRect().right;
-        this.$el.style.left = `${leftWidth + 20}px`;
-      }, 300);
+    setLeftValue () {
+      const leftSide = document.querySelector('#general');
+      if (leftSide) {
+        this.leftWidth = leftSide.getBoundingClientRect().right;
+      }
+    },
+    setNavigationBoxLeftStyle () {
+      if (this.leftWidth) {
+        this.$el.style.left = `${this.leftWidth + 20}px`;
+      }
     }
   }
 };
