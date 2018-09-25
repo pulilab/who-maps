@@ -197,15 +197,15 @@ export default {
   },
   computed: {
     ...mapGettersActions({
-      name: ['project', 'getName', 'setName', 300],
+      name: ['project', 'getName', 'setName', 0],
       organisation: ['project', 'getOrganisation', 'setOrganisation', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
-      geographic_scope: ['project', 'getGeographicScope', 'setGeographicScope', 300],
-      implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 300],
+      geographic_scope: ['project', 'getGeographicScope', 'setGeographicScope', 0],
+      implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
       start_date: ['project', 'getStartDate', 'setStartDate', 0],
       end_date: ['project', 'getEndDate', 'setEndDate', 0],
-      contact_name: ['project', 'getContactName', 'setContactName', 300],
-      contact_email: ['project', 'getContactEmail', 'setContactEmail', 300],
+      contact_name: ['project', 'getContactName', 'setContactName', 0],
+      contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
       team: ['project', 'getTeam', 'setTeam', 0],
       viewers: ['project', 'getViewers', 'setViewers', 0]
     }),

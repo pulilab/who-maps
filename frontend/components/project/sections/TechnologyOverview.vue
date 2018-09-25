@@ -89,9 +89,9 @@ export default {
     ...mapGettersActions({
       implementation_dates: ['project', 'getImplementationDates', 'setImplementationDates', 0],
       licenses: ['project', 'getLicenses', 'setLicenses', 0],
-      repository: ['project', 'getRepository', 'setRepository', 300],
-      mobile_application: ['project', 'getMobileApplication', 'setMobileApplication', 300],
-      wiki: ['project', 'getWiki', 'setWiki', 300]
+      repository: ['project', 'getRepository', 'setRepository', 0],
+      mobile_application: ['project', 'getMobileApplication', 'setMobileApplication', 0],
+      wiki: ['project', 'getWiki', 'setWiki', 0]
     })
   },
   mounted () {

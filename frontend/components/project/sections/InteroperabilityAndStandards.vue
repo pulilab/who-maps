@@ -43,7 +43,7 @@ export default {
       interopearilbityLinksStructure: 'projects/getInteroperabilityLinks'
     }),
     ...mapGettersActions({
-      interoperability_links: ['project', 'getInteroperabilityLinks', 'setInteroperabilityLinks', 200],
+      interoperability_links: ['project', 'getInteroperabilityLinks', 'setInteroperabilityLinks', 0],
       interoperability_standards: ['project', 'getInteroperabilityStandards', 'setInteroperabilityStandards', 0]
     })
   },
