@@ -347,24 +347,25 @@ class CountryCustomAnswerListSerializer(serializers.ListSerializer):
 class DonorCustomAnswerListSerializer(serializers.ListSerializer):
     def create(self, validated_data):
         instance = self.context['project']
+        donor_id = self.context['donor_id']
 
         custom_answers = {k['question_id']: k['answer'] for k in validated_data}
         instance.draft.setdefault('donor_custom_answers', {})
-        instance.draft['donor_custom_answers'].setdefault(self.context['donor_id'], {})
-        instance.draft['donor_custom_answers'][self.context['donor_id']] = custom_answers
+        instance.draft['donor_custom_answers'].setdefault(donor_id, {})
+        instance.draft['donor_custom_answers'][donor_id] = custom_answers
 
         if not self.context['is_draft']:
             private_ids = self.context['question_queryset'].filter(private=True).values_list('id', flat=True)
             if private_ids:
                 private_answers = {k: custom_answers[k] for k in custom_answers if k in private_ids}
-                instance.data['donor_custom_answers_private'].setdefault(self.context['donor_id'], {})
-                instance.data['donor_custom_answers_private'][self.context['donor_id']] = private_answers
-                instance.data['donor_custom_answers'][self.context['donor_id']] = remove_keys(data_dict=custom_answers,
-                                                                                              keys=private_ids)
+                instance.data['donor_custom_answers_private'].setdefault(donor_id, {})
+                instance.data['donor_custom_answers_private'][donor_id] = private_answers
+                instance.data['donor_custom_answers'][donor_id] = remove_keys(data_dict=custom_answers,
+                                                                              keys=private_ids)
             else:
                 instance.data.setdefault('donor_custom_answers', {})
-                instance.data['donor_custom_answers'].setdefault(self.context['donor_id'], {})
-                instance.data['donor_custom_answers'][self.context['donor_id']] = custom_answers
+                instance.data['donor_custom_answers'].setdefault(donor_id, {})
+                instance.data['donor_custom_answers'][donor_id] = custom_answers
         return instance
 
 
