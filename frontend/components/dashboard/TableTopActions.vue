@@ -191,7 +191,7 @@ export default {
         this.setSelectAll(true);
       } else {
         this.setSelectAll(false);
-        this.setSelectedRows([])
+        this.setSelectedRows([]);
       }
     },
     exportRows () {
