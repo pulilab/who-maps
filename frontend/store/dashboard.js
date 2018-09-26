@@ -1,5 +1,7 @@
-import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator, searchIn } from '../utilities/map';
+import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator } from '../utilities/map';
 import { intArrayFromQs } from '../utilities/api';
+
+export const searchIn = () => ['name', 'org', 'overview', 'partner', 'donor', 'loc'];
 
 export const state = () => ({
   ...stateGenerator(),
