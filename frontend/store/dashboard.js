@@ -141,7 +141,11 @@ export const actions = {
       commit('SET_SEARCH_STATUS', data);
     }
   },
-  setSearchOptions ({commit}, options) {
+  async setSearchOptions ({commit, dispatch}, options) {
+    if (options.country && !Array.isArray(options.country)) {
+      await dispatch('setSelectedCountry', +options.country);
+      commit('SET_ACTIVE_COUNTRY', +options.country);
+    }
     commit('SET_SEARCH_OPTIONS', options);
   },
   setSelectedColumns ({commit}, columns) {
@@ -181,7 +185,14 @@ export const actions = {
     }
     commit('SET_SELECTED_ROWS', rows);
   },
-  setFilteredCountries ({commit}, value) {
+  async setFilteredCountries ({commit, dispatch}, value) {
+    if (value && value.length === 1) {
+      await dispatch('setSelectedCountry', value[0]);
+      commit('SET_ACTIVE_COUNTRY', value[0]);
+    } else if (value && value.length > 0) {
+      commit('SET_SELECTED_COUNTRY', null);
+      commit('SET_ACTIVE_COUNTRY', null);
+    }
     commit('SET_FILTERED_COUNTRIES', value);
     commit('SET_CURRENT_PAGE', 1);
   },

@@ -86,7 +86,8 @@ export default {
       getActiveSubLevel: 'dashboard/getActiveSubLevel',
       subNationalProjects: 'dashboard/getSelectedCountrySubNationalProjects',
       nationalProjects: 'dashboard/getSelectedCountryNationalProjects',
-      mapProjects: 'dashboard/getProjectsMap'
+      mapProjects: 'dashboard/getProjectsMap',
+      currentZoom: 'dashboard/getCurrentZoom'
     })
   },
   methods: {
