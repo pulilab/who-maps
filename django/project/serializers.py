@@ -358,6 +358,7 @@ class DonorCustomAnswerListSerializer(serializers.ListSerializer):
             private_ids = self.context['question_queryset'].filter(private=True).values_list('id', flat=True)
             if private_ids:
                 private_answers = {k: custom_answers[k] for k in custom_answers if k in private_ids}
+                instance.data.setdefault('donor_custom_answers_private', {})
                 instance.data['donor_custom_answers_private'].setdefault(donor_id, {})
                 instance.data['donor_custom_answers_private'][donor_id] = private_answers
                 instance.data['donor_custom_answers'][donor_id] = remove_keys(data_dict=custom_answers,
