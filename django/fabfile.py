@@ -260,5 +260,5 @@ def single_coverage(folder, test_to_run):
           " '{}' --cov-config .lcoveragerc".format(test_to_run))
 
 def send_test_email(type, email):
-    local("docker exec -it whomaps_django_1 python manage.py send_html_email {} {} ".format(type, email) + \
+    local("docker-compose exec django python manage.py send_html_email {} {} ".format(type, email) + \
           "--settings=who_maps.settings_email_test")
