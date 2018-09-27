@@ -120,6 +120,10 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         search_term = query_params.get('q')
         view_as = query_params.get('view_as')
 
+        if view_as and view_as == 'donor':
+            if not request.user.is_authenticated:
+                raise ValidationError("You must be authenticated for viewing as.")
+
 
         if search_term:
             if len(search_term) < 2:
