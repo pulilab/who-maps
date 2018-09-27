@@ -108,6 +108,9 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         ** PAGINATION **
         page: 1...n | last (will show the last page no matter the number)
         page_size: eg: 20
+
+        ** VIEW AS **
+        view_as: donor | country
         """
         results = {}
         search_fields = set()
