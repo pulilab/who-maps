@@ -130,6 +130,10 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
             elif len(donor_list) > 1:
                 raise ValidationError("View as can only work with one donor selected.")
 
+            try:
+                donor = Donor.objects.get(id=int(donor_list[0]))
+            except ValueError:
+                raise ValidationError("No such donor.")
         if search_term:
             if len(search_term) < 2:
                 return Response(data=dict(error="Search term must be at least two characters long"),
