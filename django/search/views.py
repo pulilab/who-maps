@@ -118,6 +118,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         qs = self.get_queryset()
 
         search_term = query_params.get('q')
+        view_as = query_params.get('view_as')
+
 
         if search_term:
             if len(search_term) < 2:
