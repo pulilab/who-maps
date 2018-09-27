@@ -32,3 +32,10 @@ class ListResultSerializer(serializers.Serializer):
     country_custom_answers = serializers.ReadOnlyField(source="project__data__country_custom_answers")
     country_custom_answers_private = serializers.ReadOnlyField(source="project__data__country_custom_answers_private")
     donor_custom_answers = serializers.ReadOnlyField(source="project__data__donor_custom_answers")
+    donor_custom_answers_private = serializers.SerializerMethodField()
+
+    def get_donor_custom_answers_private(self, obj):
+        private_fields = obj.get("project__data__donor_custom_answers_private")
+        if private_fields and self.context['donor']:
+            return {donor_id: private_fields[donor_id]
+                    for donor_id in private_fields if donor_id == str(self.context['donor'].id)}
