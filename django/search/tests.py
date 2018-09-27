@@ -18,6 +18,10 @@ class SearchTests(SetupTests):
         project_data2['project'].update(country=self.country_id, government_investor=2)
         project_data2['project'].update(platforms=[dict(id=1, strategies=[119, 118]),
                                                    dict(id=2, strategies=[119, 171])])
+        self.d1cq = DonorCustomQuestion.objects.create(question="test 1", private=True, donor_id=self.d1.id)
+        self.d2cq = DonorCustomQuestion.objects.create(question="test 2", private=True, donor_id=self.d2.id)
+        project_data2['donor_custom_answers'] = {self.d1.id: [{"question_id": self.d1cq.id, "answer": ["answer1"]}],
+                                                 self.d2.id: [{"question_id": self.d2cq.id, "answer": ["answer2"]}]}
         response = self.test_user_client.post(url, project_data2, format="json")
         self.assertEqual(response.status_code, 201)
         project_id = response.json()['id']
