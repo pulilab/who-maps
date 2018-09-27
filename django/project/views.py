@@ -290,13 +290,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                         errors['donor_custom_answers'].setdefault(donor_id, {})
                         errors['donor_custom_answers'][donor_id] = required_errors
                     else:
-                        required_errors = self.check_required(donor.donor_questions, donor_answers.validated_data)
-                        if required_errors:
-                            errors.setdefault('donor_custom_answers', {})
-                            errors['donor_custom_answers'].setdefault(donor_id, {})
-                            errors['donor_custom_answers'][donor_id] = required_errors
-                        else:
-                            all_donor_answers.append((donor_id, donor_answers))
+                        all_donor_answers.append((donor_id, donor_answers))
 
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
