@@ -145,6 +145,11 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
             if not request.user.is_authenticated:
                 raise ValidationError("You must be authenticated for viewing as.")
 
+            country_list = query_params.getlist('country')
+            if not country_list:
+                raise ValidationError("No country selected for view as.")
+            elif len(country_list) > 1:
+                raise ValidationError("View as can only work with one country selected.")
         if search_term:
             if len(search_term) < 2:
                 return Response(data=dict(error="Search term must be at least two characters long"),
