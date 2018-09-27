@@ -354,3 +354,18 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
+
+    def test_filter_view_as_donor_list_results_success(self):
+        # add user to donor access
+        self.d1.admins.add(self.userprofile)
+
+        url = reverse("search-project-list")
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "donor", "donor": self.d1.id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
+        self.assertEqual(response.json()['results']['type'], 'list')
+        self.assertEqual(response.json()['results']['projects'][0]['donor_custom_answers'],
+                         {str(self.d1cq.id): {}, str(self.d2cq.id): {}})
+        self.assertEqual(response.json()['results']['projects'][0]['donor_custom_answers_private'],
+                         {str(self.d1.id): {str(self.d1cq.id): ['answer1']}})
