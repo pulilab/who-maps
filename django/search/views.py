@@ -109,6 +109,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         """
         results = {}
         search_fields = set()
+        donor = country = None
+
         query_params = request.query_params
 
         qs = self.get_queryset()
