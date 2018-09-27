@@ -3,7 +3,7 @@ import itertools
 
 from django.urls import reverse
 
-from country.models import Donor
+from country.models import Donor, DonorCustomQuestion, CountryCustomQuestion
 from project.models import Project, DigitalStrategy, HealthFocusArea, HSCChallenge
 from project.tests.setup import SetupTests
 
