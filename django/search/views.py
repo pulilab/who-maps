@@ -132,7 +132,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
 
             try:
                 donor = Donor.objects.get(id=int(donor_list[0]))
-            except ValueError:
+            except (Donor.DoesNotExist, ValueError):
                 raise ValidationError("No such donor.")
         if search_term:
             if len(search_term) < 2:
