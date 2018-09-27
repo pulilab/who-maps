@@ -31,7 +31,7 @@ class SearchTests(SetupTests):
         project_id = response.json()['id']
 
         # publish it
-        url = reverse("project-publish", kwargs=dict(pk=project_id))
+        url = reverse("project-publish", kwargs=dict(project_id=project_id, country_id=self.country_id))
         response = self.test_user_client.put(url, project_data2, format="json")
         self.assertEqual(response.status_code, 200)
 
