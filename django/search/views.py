@@ -140,6 +140,11 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
                 list_values.append('project__data__donor_custom_answers_private')
             else:
                 raise ValidationError("No access to donor.")
+
+        elif view_as and view_as == 'country':
+            if not request.user.is_authenticated:
+                raise ValidationError("You must be authenticated for viewing as.")
+
         if search_term:
             if len(search_term) < 2:
                 return Response(data=dict(error="Search term must be at least two characters long"),
