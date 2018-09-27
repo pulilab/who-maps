@@ -15,14 +15,14 @@ urlpatterns = [
          }),
          name="project-publish"),
     path(r'projects/draft/<int:country_id>/',
-        view=views.ProjectDraftViewSet.as_view({
-            'post': 'create'
-        }), name="project-create"),
+         view=views.ProjectDraftViewSet.as_view({
+             'post': 'create'
+         }), name="project-create"),
     path(r'projects/draft/<int:project_id>/<int:country_id>/',
-        view=views.ProjectDraftViewSet.as_view({
-            'put': 'update'
-        }),
-        name="project-draft"),
+         view=views.ProjectDraftViewSet.as_view({
+             'put': 'update'
+         }),
+         name="project-draft"),
     url(r"^projects/member-of/$",
         view=views.ProjectListViewSet.as_view({
             'get': 'list'

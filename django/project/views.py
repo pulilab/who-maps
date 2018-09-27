@@ -260,7 +260,9 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                 raise ValidationError({'non_field_errors': 'Country answers are missing'})
             else:
                 country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
-                                                                context=dict(question_queryset=country.country_questions, is_draft=False))
+                                                                context=dict(
+                                                                    question_queryset=country.country_questions,
+                                                                    is_draft=False))
 
                 if country_answers.is_valid():
                     required_errors = self.check_required(country.country_questions, country_answers.validated_data)
@@ -276,8 +278,10 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                     raise ValidationError({'non_field_errors': 'Donor answers are missing'})
                 if str(donor_id) not in request.data['donor_custom_answers']:
                     raise ValidationError({'non_field_errors': 'Donor answers are missing'})
-                donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)], many=True,
-                                                            context=dict(question_queryset=donor.donor_questions, is_draft=False))
+                donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
+                                                            many=True,
+                                                            context=dict(question_queryset=donor.donor_questions,
+                                                                         is_draft=False))
 
                 if not donor_answers.is_valid():
                     errors.setdefault('donor_custom_answers', {})
@@ -338,7 +342,9 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                 raise ValidationError({'non_field_errors': 'Country answers are missing'})
             else:
                 country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
-                                                                context=dict(question_queryset=country.country_questions, is_draft=True))
+                                                                context=dict(
+                                                                    question_queryset=country.country_questions,
+                                                                    is_draft=True))
 
                 if not country_answers.is_valid():
                     errors['country_custom_answers'] = country_answers.errors
@@ -350,8 +356,10 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                     raise ValidationError({'non_field_errors': 'Donor answers are missing'})
                 if str(donor_id) not in request.data['donor_custom_answers']:
                     raise ValidationError({'non_field_errors': 'Donor answers are missing'})
-                donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)], many=True,
-                                                            context=dict(question_queryset=donor.donor_questions, is_draft=True))
+                donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
+                                                            many=True,
+                                                            context=dict(question_queryset=donor.donor_questions,
+                                                                         is_draft=True))
 
                 if not donor_answers.is_valid():
                     errors.setdefault('donor_custom_answers', {})
@@ -402,7 +410,9 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                 raise ValidationError({'non_field_errors': 'Country answers are missing'})
             else:
                 country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
-                                                                context=dict(question_queryset=country.country_questions, is_draft=True))
+                                                                context=dict(
+                                                                    question_queryset=country.country_questions,
+                                                                    is_draft=True))
 
                 if not country_answers.is_valid():
                     errors['country_custom_answers'] = country_answers.errors
@@ -415,8 +425,10 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                 if str(donor_id) not in request.data['donor_custom_answers']:
                     raise ValidationError({'non_field_errors': 'Donor answers are missing'})
 
-                donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)], many=True,
-                                                            context=dict(question_queryset=donor.donor_questions, is_draft=True))
+                donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
+                                                            many=True,
+                                                            context=dict(question_queryset=donor.donor_questions,
+                                                                         is_draft=True))
 
                 if not donor_answers.is_valid():
                     errors.setdefault('donor_custom_answers', {})
