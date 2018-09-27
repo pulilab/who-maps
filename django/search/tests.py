@@ -369,3 +369,17 @@ class SearchTests(SetupTests):
                          {str(self.d1cq.id): {}, str(self.d2cq.id): {}})
         self.assertEqual(response.json()['results']['projects'][0]['donor_custom_answers_private'],
                          {str(self.d1.id): {str(self.d1cq.id): ['answer1']}})
+
+    def test_filter_view_as_country_list_results_success(self):
+        # add user to country access
+        self.country.admins.add(self.userprofile)
+
+        url = reverse("search-project-list")
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": self.country_id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
+        self.assertEqual(response.json()['results']['projects'][0]['country_custom_answers'],
+                         {})
+        self.assertEqual(response.json()['results']['projects'][0]['country_custom_answers_private'],
+                         {str(self.ccq1.id): ['answer country 1'], str(self.ccq2.id): ['answer country 2']})
