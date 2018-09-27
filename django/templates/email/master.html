@@ -349,6 +349,7 @@
 
 
                         <!-- TEMPLATE: NEW MEMBER -->
+                        {% if type == "new_member" %}
                         <h1>{% trans "Thank you!" %}</h1>
                         <h2>{% trans "Notification" %}</h2>
                         <p>{% blocktrans %}You have been added to project {{ project_name }} as a {{ role }}.{% endblocktrans %}</p>
@@ -367,11 +368,13 @@
                             </tr>
                           </tbody>
                         </table>
+                        {% endif %}
                         <!-- /TEMPLATE: NEW MEMBER -->
 
 
                         <!-- TEMPLATE: COUNTRY ADMIN -->
-                        <!-- <h1>{% trans "Country admin" %}</h1>
+                        {% if type == "country_admin" %}
+                        <h1>{% trans "Country admin" %}</h1>
                         <h2>{% trans "Notification" %}</h2>
                         <p>{% blocktrans %}You have been selected as the Country Admin for {{ country_name }}. Please log in to the admin platform to see your country specific options.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
@@ -388,12 +391,14 @@
                               </td>
                             </tr>
                           </tbody>
-                        </table> -->
+                        </table>
+                        {% endif %}
                         <!-- /TEMPLATE: COUNTRY ADMIN -->
 
 
                         <!-- TEMPLATE: COUNTRY ADMIN - ACTIVATED -->
-                        <!-- <h1>{% trans "Country admin" %}</h1>
+                        {% if type == "country_admin_activated" %}
+                        <h1>{% trans "Country admin" %}</h1>
                         <h2>{% trans "Notification" %}</h2>
                         <p>{% blocktrans %}A new map for {{ country_name }} has been activated. Please log in to the admin platform to see your map or go straight to DHA and see it in action.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
@@ -410,23 +415,27 @@
                               </td>
                             </tr>
                           </tbody>
-                        </table> -->
+                        </table>
+                        {% endif %}
                         <!-- /TEMPLATE: COUNTRY ADMIN - ACTIVATED -->
 
 
                         <!-- TEMPLATE: EMAIL CONFIRAMTION SIGNUP MESSAGE -->
-                        <!-- <h1>{% trans "Thank you!" %}</h1>
+                        {% if type == "email_confirmation_signup_message" %}
+                        <h1>{% trans "Thank you!" %}</h1>
                         <h2>{% trans "Your account has been created!" %}</h2>
                         <p>{% blocktrans %}Your e-mail needs to be confirmed to finalize your registration.{% endblocktrans %}</p>
                         <p><b>{% blocktrans %}Please visit this link below to confim your e-mail address:{% endblocktrans %}</b></p>
                         <p>
                           <a href="{{ activate_url }}" target="_blank ">{{ activate_url }}</a>
-                        </p> -->
+                        </p>
+                        {% endif %}
                         <!-- /TEMPLATE: EMAIL CONFIRAMTION SIGNUP MESSAGE  -->
 
 
                         <!-- TEMPLATE: FLAG CONTENT -->
-                        <!-- <h1>{% trans "Reported content!" %}</h1>
+                        {% if type == "flag_content" %}
+                        <h1>{% trans "Reported content!" %}</h1>
                         <h2>{% trans "Notification" %}</h2>
                         <p>{% trans "Content has been flagged as inappropriate. Please take action." %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
@@ -443,32 +452,38 @@
                               </td>
                             </tr>
                           </tbody>
-                        </table> -->
+                        </table>
+                        {% endif %}
                         <!-- /TEMPLATE: FLAG CONTENT -->
 
 
                         <!-- TEMPLATE: PASSWORD RESET -->
-                        <!-- <h1>{% trans "Password Reset" %}</h1>
+                        {% if type == "password_reset" %}
+                        <h1>{% trans "Password Reset" %}</h1>
                         <p>{% trans "CYou requested your password to be reset." %}</p>
                         <p><b>Please visit this link below to create a new password:</b></p>
                         <p>
-                          <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}" target="_blank">{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}</a>
-                        </p> -->
+                        <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank">{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
+                        </p>
+                        {% endif %}
                         <!-- /TEMPLATE: PASSWORD RESET -->
 
 
                         <!-- TEMPLATE: TOOLKIT DIGEST -->
-                        <!-- <h1>{% trans "Notification" %}</h1>
+                        {% if type == "toolkit_digest" %}
+                        <h1>{% trans "Notification" %}</h1>
                         <p>{% trans "MAPS Toolkit has been updated lately on your project!" %}</p>
                         <p><b>{% trans "Check the MAPS Toolkit on the link below:" %}</b></p>
                         <p>
                           <a href="{% site_url %}/app/{{ project_id }}/maps/0/0" target="_blank">{% site_url %}/app/{{ project_id }}/maps/0/0</a>
-                        </p> -->
+                        </p>
+                        {% endif %}
                         <!-- /TEMPLATE: TOOLKIT DIGEST -->
 
 
                         <!-- TEMPLATE: STATUS REPORT -->
-                        <!-- <h1>{% trans "Status report" %}</h1>
+                        {% if type == "status_report" %}
+                        <h1>{% trans "Status report" %}</h1>
                         <h2>{% trans "Dear Admin! " %}</h2>
                         <p>{% trans "The projects listed below are waiting for your approval:" %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="project-list">
@@ -531,12 +546,14 @@
                               </td>
                             </tr>
                           </tbody>
-                        </table> -->
+                        </table>
+                        {% endif %}
                         <!-- /TEMPLATE: STATUS REPORT -->
 
 
                         <!-- TEMPLATE: PROJECT IMPORT LIST -->
-                        <!-- <h1>{% trans "Status report" %}</h1>
+                        {% if type == "project_import_list" %}
+                        <h1>{% trans "Status report" %}</h1>
                         <h2>{% trans "Dear Admin! " %}</h2>
                         <p>{% trans "The following projects have been imported:" %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="project-list">
@@ -576,12 +593,14 @@
                               </td>
                             </tr>
                           </tbody>
-                        </table> -->
+                        </table>
+                        {% endif %}
                         <!-- /TEMPLATE: PROJECT IMPORT LIST -->
 
 
                         <!-- TEMPLATE: IMPORT PROJECTS -->
-                        <!-- <h1>{% trans "Notification" %}</h1>
+                        {% if type == "import_projects" %}
+                        <h1>{% trans "Notification" %}</h1>
                         <h2>{% trans "Your were added to the following projects: " %}</h2>
                         {% if data.password %}
                         <ul>
@@ -594,7 +613,8 @@
                           <em>Username: {{ email }}</em><br>
                           <em>Password: {{ data.password }}</em>
                         </p>
-                        {% endif %} -->
+                        {% endif %}
+                        {% endif %}
                         <!-- /TEMPLATE: IMPORT PROJECTS -->
 
 
