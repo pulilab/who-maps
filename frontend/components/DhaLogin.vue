@@ -203,7 +203,8 @@ export default {
     ...mapActions({
       login: 'user/doLogin',
       resetPassword: 'user/resetPassword',
-      setSelectedCountry: 'dashboard/setSelectedCountry'
+      setSelectedCountry: 'dashboard/setSelectedCountry',
+      setFilteredCountries: 'dashboard/setFilteredCountries'
     }),
 
     loginLocal () {
@@ -219,7 +220,7 @@ export default {
             if (this.profile.country) {
               this.setSelectedCountry(this.profile.country);
             }
-            this.$router.push(this.localePath({name: 'organisation-dashboard', params: this.$route.params}));
+            this.$router.push(this.localePath({name: 'organisation-dashboard', params: this.$route.params, query: {country: [this.profile.country]}}));
           } catch (err) {
             this.setFormAPIErrors(err);
             this.$refs.loginForm.validate(() => {});
