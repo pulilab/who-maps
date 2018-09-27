@@ -29,3 +29,5 @@ class ListResultSerializer(serializers.Serializer):
     government_investor = serializers.ReadOnlyField(source="project__data__government_investor")
     donors = serializers.ReadOnlyField()
     approved = serializers.ReadOnlyField(source="project__approval__approved")
+    country_custom_answers = serializers.ReadOnlyField(source="project__data__country_custom_answers")
+    country_custom_answers_private = serializers.ReadOnlyField(source="project__data__country_custom_answers_private")
