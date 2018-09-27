@@ -2,9 +2,11 @@ import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator 
 import { intArrayFromQs } from '../utilities/api';
 
 export const searchIn = () => ['name', 'org', 'overview', 'partner', 'donor', 'loc'];
+export const defaultSelectedColumns = () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 export const state = () => ({
   ...stateGenerator(),
+  searchIn: searchIn(),
   columns: [
     {
       id: 1,
@@ -49,7 +51,7 @@ export const state = () => ({
       label: 'Health Focus Areas'
     }
   ],
-  selectedColumns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  selectedColumns: defaultSelectedColumns(),
   projectsList: [],
   projectsBucket: [],
   selectedDHI: [],
@@ -213,6 +215,11 @@ export const actions = {
       window.localStorage.setItem('savedFilters', JSON.stringify(filters));
     }
     commit('SET_SAVED_FILTERS', filters);
+  },
+  resetUserInput ({commit}) {
+    commit('RESET_USER_INPUT');
+    commit('SET_SEARCH_OPTIONS', {});
+    commit('SET_SELECTED_COLUMNS', defaultSelectedColumns());
   }
 };
 export const mutations = {
