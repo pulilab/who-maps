@@ -134,6 +134,12 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
                 donor = Donor.objects.get(id=int(donor_list[0]))
             except (Donor.DoesNotExist, ValueError):
                 raise ValidationError("No such donor.")
+
+            if donor.user_in_groups(request.user.userprofile):
+                list_values.append('project__data__donor_custom_answers')
+                list_values.append('project__data__donor_custom_answers_private')
+            else:
+                raise ValidationError("No access to donor.")
         if search_term:
             if len(search_term) < 2:
                 return Response(data=dict(error="Search term must be at least two characters long"),
