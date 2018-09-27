@@ -116,7 +116,7 @@ class SetupTests(APITestCase):
         }}
 
         # Create project draft
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
 
