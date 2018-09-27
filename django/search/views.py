@@ -156,6 +156,11 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
             except (Country.DoesNotExist, ValueError):
                 raise ValidationError("No such country.")
 
+            if country.user_in_groups(request.user.userprofile):
+                list_values.append('project__data__country_custom_answers')
+                list_values.append('project__data__country_custom_answers_private')
+            else:
+                raise ValidationError("No access to country.")
         if search_term:
             if len(search_term) < 2:
                 return Response(data=dict(error="Search term must be at least two characters long"),
