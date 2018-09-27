@@ -183,7 +183,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
             page = self.paginate_queryset(qs.values(*list_values))
             data = ListResultSerializer(page, many=True, context={"donor": donor, "country": country}).data
         else:
-            page = self.paginate_queryset(qs.values(*self.map_values))
+            page = self.paginate_queryset(qs.values(*map_values))
             data = MapResultSerializer(page, many=True).data
 
         results.update(projects=data, type=results_type, search_term=search_term, search_in=search_fields)
