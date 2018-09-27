@@ -269,10 +269,11 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                 else:
                     errors['country_custom_answers'] = country_answers.errors
 
-        if data_serializer.validated_data.get('donors'):
-            if 'donor_custom_answers' not in request.data:
-                raise ValidationError({'non_field_errors': 'Donor answers are missing'})
-            for donor_id in data_serializer.validated_data['donors']:
+        for donor_id in data_serializer.validated_data.get('donors'):
+            donor = Donor.objects.get(id=donor_id)
+            if donor and donor.donor_questions.exists():
+                if 'donor_custom_answers' not in request.data:
+                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
                 if str(donor_id) not in request.data['donor_custom_answers']:
                     raise ValidationError({'non_field_errors': 'Donor answers are missing'})
                 donor = Donor.objects.get(id=donor_id)
