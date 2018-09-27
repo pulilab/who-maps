@@ -352,7 +352,7 @@
                         {% if type == "new_member" %}
                         <h1>{% trans "Thank you!" %}</h1>
                         <h2>{% trans "Notification" %}</h2>
-                        <p>{% blocktrans %}You have been added to project {{ project_name }} as a {{ role }}.{% endblocktrans %}</p>
+                        <p>{% blocktrans %}You have been added to project <b>{{ project_name }}</b> as a <b>{{ role }}</b>.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -376,7 +376,7 @@
                         {% if type == "country_admin" %}
                         <h1>{% trans "Country admin" %}</h1>
                         <h2>{% trans "Notification" %}</h2>
-                        <p>{% blocktrans %}You have been selected as the Country Admin for {{ country_name }}. Please log in to the admin platform to see your country specific options.{% endblocktrans %}</p>
+                        <p>{% blocktrans %}You have been selected as the Country Admin for <b>{{ country_name }}</b>. Please log in to the admin platform to see your country specific options.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -400,7 +400,7 @@
                         {% if type == "country_admin_activated" %}
                         <h1>{% trans "Country admin" %}</h1>
                         <h2>{% trans "Notification" %}</h2>
-                        <p>{% blocktrans %}A new map for {{ country_name }} has been activated. Please log in to the admin platform to see your map or go straight to DHA and see it in action.{% endblocktrans %}</p>
+                        <p>{% blocktrans %}A new map for <b>{{ country_name }}</b> has been activated. Please log in to the admin platform to see your map or go straight to DHA and see it in action.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -460,7 +460,7 @@
                         <!-- TEMPLATE: PASSWORD RESET -->
                         {% if type == "password_reset" %}
                         <h1>{% trans "Password Reset" %}</h1>
-                        <p>{% trans "CYou requested your password to be reset." %}</p>
+                        <p>{% trans "You requested your password to be reset." %}</p>
                         <p><b>Please visit this link below to create a new password:</b></p>
                         <p>
                         <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank">{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
