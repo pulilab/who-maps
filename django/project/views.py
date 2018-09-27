@@ -279,7 +279,10 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                 donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)], many=True,
                                                             context=dict(question_queryset=donor.donor_questions, is_draft=False))
 
-                    if not donor_answers.is_valid():
+                if not donor_answers.is_valid():
+                    errors.setdefault('donor_custom_answers', {})
+                    errors['donor_custom_answers'].setdefault(donor_id, {})
+                    errors['donor_custom_answers'][donor_id] = donor_answers.errors
                         errors.setdefault('donor_custom_answers', {})
                         errors['donor_custom_answers'].setdefault(donor_id, {})
                         errors['donor_custom_answers'][donor_id] = donor_answers.errors
