@@ -22,7 +22,7 @@ class Command(BaseCommand):
         self.stdout.write("-- Trying to send an email")
         type = options['type']
         email = options['email']
-        html_template = loader.get_template("email/master.html")
+        html_template = loader.get_template("email/master-inline.html")
         html_message = html_template.render({"type": type})
         send_mail(
             subject="Test HTML templates",
