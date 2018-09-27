@@ -31,3 +31,4 @@ class ListResultSerializer(serializers.Serializer):
     approved = serializers.ReadOnlyField(source="project__approval__approved")
     country_custom_answers = serializers.ReadOnlyField(source="project__data__country_custom_answers")
     country_custom_answers_private = serializers.ReadOnlyField(source="project__data__country_custom_answers_private")
+    donor_custom_answers = serializers.ReadOnlyField(source="project__data__donor_custom_answers")
