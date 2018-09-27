@@ -112,6 +112,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         donor = country = None
 
         query_params = request.query_params
+        list_values = list(self.list_values)
+        map_values = list(self.map_values)
 
         qs = self.get_queryset()
 
