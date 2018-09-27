@@ -180,8 +180,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
 
         results_type = 'list' if query_params.get('type') == 'list' else 'map'
         if results_type == 'list':
-            page = self.paginate_queryset(qs.values(*self.list_values))
-            data = ListResultSerializer(page, many=True).data
+            page = self.paginate_queryset(qs.values(*list_values))
+            data = ListResultSerializer(page, many=True, context={"donor": donor, "country": country}).data
         else:
             page = self.paginate_queryset(qs.values(*self.map_values))
             data = MapResultSerializer(page, many=True).data
