@@ -22,6 +22,10 @@ class SearchTests(SetupTests):
         self.d2cq = DonorCustomQuestion.objects.create(question="test 2", private=True, donor_id=self.d2.id)
         project_data2['donor_custom_answers'] = {self.d1.id: [{"question_id": self.d1cq.id, "answer": ["answer1"]}],
                                                  self.d2.id: [{"question_id": self.d2cq.id, "answer": ["answer2"]}]}
+        self.ccq1 = CountryCustomQuestion.objects.create(question="ctest q 1", private=True, country_id=self.country_id)
+        self.ccq2 = CountryCustomQuestion.objects.create(question="ctest q 2", private=True, country_id=self.country_id)
+        project_data2['country_custom_answers'] = [{"question_id": self.ccq1.id, "answer": ["answer country 1"]},
+                                                   {"question_id": self.ccq2.id, "answer": ["answer country 2"]}]
         response = self.test_user_client.post(url, project_data2, format="json")
         self.assertEqual(response.status_code, 201)
         project_id = response.json()['id']
