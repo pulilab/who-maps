@@ -124,6 +124,11 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
             if not request.user.is_authenticated:
                 raise ValidationError("You must be authenticated for viewing as.")
 
+            donor_list = query_params.getlist('donor')
+            if not donor_list:
+                raise ValidationError("No donor selected for view as.")
+            elif len(donor_list) > 1:
+                raise ValidationError("View as can only work with one donor selected.")
 
         if search_term:
             if len(search_term) < 2:
