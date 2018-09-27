@@ -283,6 +283,8 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                     errors.setdefault('donor_custom_answers', {})
                     errors['donor_custom_answers'].setdefault(donor_id, {})
                     errors['donor_custom_answers'][donor_id] = donor_answers.errors
+                else:
+                    required_errors = self.check_required(donor.donor_questions, donor_answers.validated_data)
                         errors.setdefault('donor_custom_answers', {})
                         errors['donor_custom_answers'].setdefault(donor_id, {})
                         errors['donor_custom_answers'][donor_id] = donor_answers.errors
