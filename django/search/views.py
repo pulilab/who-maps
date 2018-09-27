@@ -150,6 +150,12 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
                 raise ValidationError("No country selected for view as.")
             elif len(country_list) > 1:
                 raise ValidationError("View as can only work with one country selected.")
+
+            try:
+                country = Country.objects.get(id=int(country_list[0]))
+            except (Country.DoesNotExist, ValueError):
+                raise ValidationError("No such country.")
+
         if search_term:
             if len(search_term) < 2:
                 return Response(data=dict(error="Search term must be at least two characters long"),
