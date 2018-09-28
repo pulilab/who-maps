@@ -102,14 +102,12 @@ export const interoperabilityLinkWriteParser = links => {
   const result = [];
   for (let link in links) {
     const value = {...links[link]};
-    value.link = isNullUndefinedOrEmptyString(value.link) ? undefined : value.link;
     value.selected = value.selected ? true : undefined;
-    if (value.link || value.selected) {
-      const item = {id: link, ...value};
-      result.push(item);
-    }
+    value.link = !value.selected || isNullUndefinedOrEmptyString(value.link) ? undefined : value.link;
+    const item = {id: link, ...value};
+    result.push(item);
   }
-  return result;
+  return result.sort((a, b) => a.index - b.index).map(r => ({...r, index: undefined}));
 };
 
 export const platformsWriteParser = (platforms, digitalHealthInterventions) => {

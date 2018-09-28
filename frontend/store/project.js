@@ -49,7 +49,14 @@ export const state = () => ({
 });
 
 export const getters = {
-  getProjectData: state => ({...state, published: undefined, loading: undefined, country_answers: undefined, donor_answers: undefined}),
+  getProjectData: (state, getters) => ({
+    ...state,
+    interoperability_links: getters.getInteroperabilityLinks,
+    published: undefined,
+    loading: undefined,
+    country_answers: undefined,
+    donor_answers: undefined
+  }),
   getName: state => state.name,
   getOrganisation: state => state.organisation,
   getCountry: state => state.country,
@@ -79,7 +86,13 @@ export const getters = {
   getRepository: state => state.repository,
   getMobileApplication: state => state.mobile_application,
   getWiki: state => state.wiki,
-  getInteroperabilityLinks: state => state.interoperability_links,
+  getInteroperabilityLinks: (state, getters, rootState, rootGetters) => {
+    const result = {};
+    rootGetters['projects/getInteroperabilityLinks'].forEach((ir, index) => {
+      result[ir.id] = {...state.interoperability_links[ir.id], index};
+    });
+    return result;
+  },
   getInteroperabilityStandards: state => state.interoperability_standards,
   getCountryAnswers: state => state.country_answers ? [...state.country_answers] : [],
   getCountryAnswerDetails: (state, getters) => id => getters.getCountryAnswers.find(ca => ca.question_id === id),
