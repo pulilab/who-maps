@@ -60,6 +60,8 @@ export const actions = () => ({
       await dispatch('admin/map/loadGeoJSON', null, {root: true});
     }
 
+    dispatch('admin/questions/setQuestions', data, {root: true});
+
     dispatch('mapAdminSelections', data);
   },
 

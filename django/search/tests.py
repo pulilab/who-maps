@@ -3,27 +3,35 @@ import itertools
 
 from django.urls import reverse
 
-from country.models import Donor
+from country.models import Donor, DonorCustomQuestion, CountryCustomQuestion
 from project.models import Project, DigitalStrategy, HealthFocusArea, HSCChallenge
-from project.tests import SetupTests
+from project.tests.setup import SetupTests
 
 
 class SearchTests(SetupTests):
     def setUp(self):
         super(SearchTests, self).setUp()
         # create draft
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs=dict(country_id=self.country_id))
         project_data2 = copy.deepcopy(self.project_data)
-        project_data2.update(name="phrase3 phrase5 overview")
-        project_data2.update(country=self.country_id, government_investor=2)
-        project_data2.update(platforms=[dict(id=1, strategies=[119, 118]),
-                                        dict(id=2, strategies=[119, 171])])
+        project_data2['project'].update(name="phrase3 phrase5 overview")
+        project_data2['project'].update(country=self.country_id, government_investor=2)
+        project_data2['project'].update(platforms=[dict(id=1, strategies=[119, 118]),
+                                                   dict(id=2, strategies=[119, 171])])
+        self.d1cq = DonorCustomQuestion.objects.create(question="test 1", private=True, donor_id=self.d1.id)
+        self.d2cq = DonorCustomQuestion.objects.create(question="test 2", private=True, donor_id=self.d2.id)
+        project_data2['donor_custom_answers'] = {self.d1.id: [{"question_id": self.d1cq.id, "answer": ["answer1"]}],
+                                                 self.d2.id: [{"question_id": self.d2cq.id, "answer": ["answer2"]}]}
+        self.ccq1 = CountryCustomQuestion.objects.create(question="ctest q 1", private=True, country_id=self.country_id)
+        self.ccq2 = CountryCustomQuestion.objects.create(question="ctest q 2", private=True, country_id=self.country_id)
+        project_data2['country_custom_answers'] = [{"question_id": self.ccq1.id, "answer": ["answer country 1"]},
+                                                   {"question_id": self.ccq2.id, "answer": ["answer country 2"]}]
         response = self.test_user_client.post(url, project_data2, format="json")
         self.assertEqual(response.status_code, 201)
         project_id = response.json()['id']
 
         # publish it
-        url = reverse("project-publish", kwargs=dict(pk=project_id))
+        url = reverse("project-publish", kwargs=dict(project_id=project_id, country_id=self.country_id))
         response = self.test_user_client.put(url, project_data2, format="json")
         self.assertEqual(response.status_code, 200)
 
@@ -131,8 +139,8 @@ class SearchTests(SetupTests):
         url = reverse("search-project-list")
         data = {"q": "o"}
         response = self.test_user_client.get(url, data, format="json")
-        self.assertEqual(response.status_code, 406)
-        self.assertEqual(response.json()['error'], "Search term must be at least two characters long")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ["Search term must be at least two characters long."])
 
     def test_filter_country(self):
         url = reverse("search-project-list")
@@ -346,3 +354,32 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
+
+    def test_filter_view_as_donor_list_results_success(self):
+        # add user to donor access
+        self.d1.admins.add(self.userprofile)
+
+        url = reverse("search-project-list")
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "donor", "donor": self.d1.id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
+        self.assertEqual(response.json()['results']['type'], 'list')
+        self.assertEqual(response.json()['results']['projects'][0]['donor_custom_answers'],
+                         {str(self.d1cq.id): {}, str(self.d2cq.id): {}})
+        self.assertEqual(response.json()['results']['projects'][0]['donor_custom_answers_private'],
+                         {str(self.d1.id): {str(self.d1cq.id): ['answer1']}})
+
+    def test_filter_view_as_country_list_results_success(self):
+        # add user to country access
+        self.country.admins.add(self.userprofile)
+
+        url = reverse("search-project-list")
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": self.country_id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
+        self.assertEqual(response.json()['results']['projects'][0]['country_custom_answers'],
+                         {})
+        self.assertEqual(response.json()['results']['projects'][0]['country_custom_answers_private'],
+                         {str(self.ccq1.id): ['answer country 1'], str(self.ccq2.id): ['answer country 2']})

@@ -198,7 +198,7 @@
     <collapsible-card
       :title="$gettext('Country specific questionnaire')"
       class="Questionnaire">
-      <dha-questionaire/>
+      <dha-questionaire ref="customQuestions" />
     </collapsible-card>
 
     <collapsible-card
@@ -214,11 +214,14 @@
         justify="space-between">
         <el-button
           type="text"
-          class="CancelButton"><translate>Dismiss changes</translate></el-button>
+          class="CancelButton IconLeft">
+          <fa icon="reply" />
+          <translate>Dismiss changes</translate>
+        </el-button>
         <el-button
           type="primary"
           size="medium"
-          @click="saveChanges"><translate>Save changes</translate></el-button>
+          @click="save"><translate>Save changes</translate></el-button>
       </el-row>
     </div>
   </div>
@@ -472,6 +475,18 @@ export default {
 
     setCountryId (selected) {
       this.countryId = selected;
+    },
+    save () {
+      if (this.$refs.customQuestions.allSaved) {
+        this.saveChanges();
+      } else {
+        this.$alert('Your questionnaire is not completely saved', 'Warning', {
+          confirmButtonText: 'Ok',
+          callback: () => {
+            this.$refs.customQuestions.$el.scrollIntoView();
+          }
+        });
+      }
     }
   }
 };

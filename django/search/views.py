@@ -3,11 +3,13 @@ from collections import OrderedDict
 from django.core.paginator import Paginator
 from django.utils.functional import cached_property
 
-from rest_framework import filters, mixins, status
+from rest_framework import filters, mixins
+from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from country.models import Donor, Country
 from .serializers import MapResultSerializer, ListResultSerializer
 from .models import ProjectSearch
 
@@ -106,19 +108,70 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         ** PAGINATION **
         page: 1...n | last (will show the last page no matter the number)
         page_size: eg: 20
+
+        ** VIEW AS **
+        view_as: donor | country
         """
         results = {}
         search_fields = set()
+        donor = country = None
+
         query_params = request.query_params
+        list_values = list(self.list_values)
+        map_values = list(self.map_values)
 
         qs = self.get_queryset()
 
         search_term = query_params.get('q')
+        view_as = query_params.get('view_as')
+
+        if view_as and view_as == 'donor':
+            if not request.user.is_authenticated:
+                raise ValidationError("You must be authenticated for viewing as.")
+
+            donor_list = query_params.getlist('donor')
+            if not donor_list:
+                raise ValidationError("No donor selected for view as.")
+            elif len(donor_list) > 1:
+                raise ValidationError("View as can only work with one donor selected.")
+
+            try:
+                donor = Donor.objects.get(id=int(donor_list[0]))
+            except (Donor.DoesNotExist, ValueError):
+                raise ValidationError("No such donor.")
+
+            if request.user.is_superuser or donor.user_in_groups(request.user.userprofile):
+                list_values.append('project__data__donor_custom_answers')
+                list_values.append('project__data__donor_custom_answers_private')
+            else:
+                raise ValidationError("No access to donor.")
+
+        elif view_as and view_as == 'country':
+            if not request.user.is_authenticated:
+                raise ValidationError("You must be authenticated for viewing as.")
+
+            country_list = query_params.getlist('country')
+            if not country_list:
+                raise ValidationError("No country selected for view as.")
+            elif len(country_list) > 1:
+                raise ValidationError("View as can only work with one country selected.")
+
+            try:
+                country = Country.objects.get(id=int(country_list[0]))
+            except (Country.DoesNotExist, ValueError):
+                raise ValidationError("No such country.")
+
+            if request.user.is_superuser or country.user_in_groups(request.user.userprofile):
+                list_values.append('project__data__country_custom_answers')
+                list_values.append('project__data__country_custom_answers_private')
+            else:
+                raise ValidationError("No access to country.")
+        elif view_as:
+            raise ValidationError("You can only view as country or donor.")
 
         if search_term:
             if len(search_term) < 2:
-                return Response(data=dict(error="Search term must be at least two characters long"),
-                                status=status.HTTP_406_NOT_ACCEPTABLE)
+                raise ValidationError("Search term must be at least two characters long.")
 
             search_in = query_params.getlist('in')
             qs = self.search(queryset=qs, search_term=search_term, search_in=search_in)
@@ -130,10 +183,10 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
 
         results_type = 'list' if query_params.get('type') == 'list' else 'map'
         if results_type == 'list':
-            page = self.paginate_queryset(qs.values(*self.list_values))
-            data = ListResultSerializer(page, many=True).data
+            page = self.paginate_queryset(qs.values(*list_values))
+            data = ListResultSerializer(page, many=True, context={"donor": donor, "country": country}).data
         else:
-            page = self.paginate_queryset(qs.values(*self.map_values))
+            page = self.paginate_queryset(qs.values(*map_values))
             data = MapResultSerializer(page, many=True).data
 
         results.update(projects=data, type=results_type, search_term=search_term, search_in=search_fields)

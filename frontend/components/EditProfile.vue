@@ -365,8 +365,9 @@
             class="SecondaryAction">
             <el-button
               type="text"
-              class="CancelButton"
+              class="CancelButton IconLeft"
               @click="dismissChanges">
+              <fa icon="reply" />
               <translate>Dismiss changes</translate>
             </el-button>
           </el-col>

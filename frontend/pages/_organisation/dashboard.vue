@@ -20,10 +20,6 @@ export default {
     AdvancedSearch
   },
   middleware: ['isLoggedIn'],
-  async fetch ({query, store}) {
-    await store.dispatch('countries/loadMapData');
-    await store.dispatch('dashboard/setSearchOptions', query);
-  },
   computed: {
     ...mapGetters({
       searchParameters: 'dashboard/getSearchParameters'

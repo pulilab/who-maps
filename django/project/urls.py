@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.urls import path
 
 from . import views
 
@@ -8,20 +9,20 @@ urlpatterns = [
             'get': 'retrieve',
         }),
         name="project-retrieve"),
-    url(r"^projects/publish/(?P<pk>\d+)/$",
-        view=views.ProjectPublishViewSet.as_view({
-            'put': 'update'
-        }),
-        name="project-publish"),
-    url(r"^projects/draft/$",
-        view=views.ProjectDraftViewSet.as_view({
-            'post': 'create'
-        }), name="project-create"),
-    url(r"^projects/draft/(?P<pk>\d+)/$",
-        view=views.ProjectDraftViewSet.as_view({
-            'put': 'update'
-        }),
-        name="project-draft"),
+    path(r'projects/publish/<int:project_id>/<int:country_id>/',
+         view=views.ProjectPublishViewSet.as_view({
+             'put': 'update'
+         }),
+         name="project-publish"),
+    path(r'projects/draft/<int:country_id>/',
+         view=views.ProjectDraftViewSet.as_view({
+             'post': 'create'
+         }), name="project-create"),
+    path(r'projects/draft/<int:project_id>/<int:country_id>/',
+         view=views.ProjectDraftViewSet.as_view({
+             'put': 'update'
+         }),
+         name="project-draft"),
     url(r"^projects/member-of/$",
         view=views.ProjectListViewSet.as_view({
             'get': 'list'

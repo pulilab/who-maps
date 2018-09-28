@@ -8,19 +8,28 @@
       </el-checkbox>
     </el-col>
     <el-col :span="12">
-      <el-input
-        :disabled="!selected"
-        :value="link"
-        :placeholder="$gettext('Specify URL')"
-        type="text"
-        @change="linkChangeHandler"
-      />
+      <el-form-item :error="errors.first('link', 'interoperability_link_' + index)">
+        <el-input
+          v-validate="rules.interoperability_links"
+          :disabled="!selected"
+          v-model="innerLinkValue"
+          :placeholder="$gettext('Specify URL')"
+          :data-as-name="item.pre + item.name"
+          :data-vv-scope="'interoperability_link_' + index"
+          data-vv-name="link"
+          type="text"
+        />
+      </el-form-item>
     </el-col>
   </el-row>
+
 </template>
 
 <script>
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+
 export default {
+  mixins: [VeeValidationMixin],
   props: {
     item: {
       type: Object,
@@ -29,6 +38,10 @@ export default {
     interoperabilityLinks: {
       type: Object,
       required: true
+    },
+    index: {
+      type: Number,
+      default: null
     }
   },
   computed: {
@@ -43,6 +56,16 @@ export default {
     },
     link () {
       return this.interoperabilityLink.link;
+    },
+    innerLinkValue: {
+      get () {
+        return this.link;
+      },
+      set (link) {
+        const ir = { ...this.interoperabilityLinks };
+        ir[this.item.id] = {...this.interoperabilityLink, link};
+        this.$emit('update:interoperabilityLinks', ir);
+      }
     }
   },
   methods: {
@@ -51,10 +74,8 @@ export default {
       ir[this.item.id] = {...this.interoperabilityLink, selected};
       this.$emit('update:interoperabilityLinks', ir);
     },
-    linkChangeHandler (link) {
-      const ir = { ...this.interoperabilityLinks };
-      ir[this.item.id] = {...this.interoperabilityLink, link};
-      this.$emit('update:interoperabilityLinks', ir);
+    async validate () {
+      return this.$validator.validate();
     }
   }
 };

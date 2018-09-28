@@ -12,6 +12,8 @@ from rest_framework.validators import UniqueValidator
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
 
+from country.models import CustomQuestion
+from project.utils import remove_keys
 from .models import Project
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
@@ -180,20 +182,16 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
         return value
 
     def create(self, validated_data):
-        owner = validated_data.pop('owner')
         odk_etag = validated_data.pop('odk_etag', None)
         odk_id = validated_data.pop('odk_id', None)
         odk_extra_data = validated_data.pop('odk_extra_data', dict())
-        instance = self.Meta.model.objects.create(
+        return self.Meta.model(
             name=validated_data["name"],
             draft=validated_data,
             odk_etag=odk_etag,
             odk_id=odk_id,
             odk_extra_data=odk_extra_data
         )
-        instance.team.add(owner)
-
-        return instance
 
     def update(self, instance, validated_data):
         odk_etag = validated_data.pop('odk_etag', None)
@@ -209,8 +207,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
             instance.odk_extra_data = odk_extra_data
 
         instance.draft = validated_data
-        instance.save()
-
         return instance
 
     @staticmethod
@@ -296,3 +292,89 @@ class MapProjectCountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ("id", "name", "country")
+
+
+class CustomAnswerSerializer(serializers.Serializer):
+    question_id = serializers.IntegerField(required=True)
+    answer = serializers.ListField(
+        child=serializers.CharField(max_length=512), max_length=50, min_length=0, required=True)
+
+    def validate_question_id(self, value):
+        self.context['question'] = self.context['question_queryset'].filter(id=int(value)).first()
+        if not self.context['question']:
+            raise ValidationError('This question_id does not exist.')
+        return value
+
+    def validate_required_answer(self, value):
+        if not value:
+            raise ValidationError({'answer': 'This field is required.'})
+
+    def validate_numeric_answer(self, value):
+        if value and isinstance(value[0], str) and not value[0].isnumeric():
+            raise ValidationError({'answer': 'This field must be numeric.'})
+
+    def validate_answer_length(self, value):
+        if value and len(value) > 1:
+            raise ValidationError({'answer': 'There must be 1 answer only.'})
+
+    def validate(self, attrs):
+        if not self.context['is_draft']:
+            if self.context['question'].required:
+                self.validate_required_answer(attrs['answer'])
+            if self.context['question'].type != CustomQuestion.MULTI:
+                self.validate_answer_length(attrs['answer'])
+            if self.context['question'].type == CustomQuestion.NUMBER:
+                self.validate_numeric_answer(attrs['answer'])
+        return attrs
+
+
+class CountryCustomAnswerListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        instance = self.context['project']
+        custom_answers = {k['question_id']: k['answer'] for k in validated_data}
+        instance.draft['country_custom_answers'] = custom_answers
+        if not self.context['is_draft']:
+            private_ids = self.context['question_queryset'].filter(private=True).values_list('id', flat=True)
+            if private_ids:
+                private_answers = {k: custom_answers[k] for k in custom_answers if k in private_ids}
+                instance.data['country_custom_answers_private'] = private_answers
+                instance.data['country_custom_answers'] = remove_keys(data_dict=custom_answers, keys=private_ids)
+            else:
+                instance.data['country_custom_answers'] = custom_answers
+        return instance
+
+
+class DonorCustomAnswerListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        instance = self.context['project']
+        donor_id = self.context['donor_id']
+
+        custom_answers = {k['question_id']: k['answer'] for k in validated_data}
+        instance.draft.setdefault('donor_custom_answers', {})
+        instance.draft['donor_custom_answers'].setdefault(donor_id, {})
+        instance.draft['donor_custom_answers'][donor_id] = custom_answers
+
+        if not self.context['is_draft']:
+            private_ids = self.context['question_queryset'].filter(private=True).values_list('id', flat=True)
+            if private_ids:
+                private_answers = {k: custom_answers[k] for k in custom_answers if k in private_ids}
+                instance.data.setdefault('donor_custom_answers_private', {})
+                instance.data['donor_custom_answers_private'].setdefault(donor_id, {})
+                instance.data['donor_custom_answers_private'][donor_id] = private_answers
+                instance.data['donor_custom_answers'][donor_id] = remove_keys(data_dict=custom_answers,
+                                                                              keys=private_ids)
+            else:
+                instance.data.setdefault('donor_custom_answers', {})
+                instance.data['donor_custom_answers'].setdefault(donor_id, {})
+                instance.data['donor_custom_answers'][donor_id] = custom_answers
+        return instance
+
+
+class CountryCustomAnswerSerializer(CustomAnswerSerializer):
+    class Meta:
+        list_serializer_class = CountryCustomAnswerListSerializer
+
+
+class DonorCustomAnswerSerializer(CustomAnswerSerializer):
+    class Meta:
+        list_serializer_class = DonorCustomAnswerListSerializer

@@ -19,12 +19,22 @@ export default {
     MainTable,
     TableTopActions
   },
-  async fetch ({store}) {
+  async fetch ({store, query, error}) {
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),
       store.dispatch('projects/loadProjectStructure'),
-      store.dispatch('dashboard/loadProjectList')
+      store.dispatch('countries/loadMapData')
     ]);
+    await store.dispatch('dashboard/setSearchOptions', query);
+    try {
+      await store.dispatch('dashboard/loadProjectList');
+    } catch (e) {
+      console.log(e);
+      error({
+        statusCode: 404,
+        message: 'Unable to process the search with the current parameters'
+      });
+    }
   },
   computed: {
     ...mapGetters({

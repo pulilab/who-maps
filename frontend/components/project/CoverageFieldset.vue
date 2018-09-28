@@ -7,7 +7,9 @@
       <el-col :span="8">
         <el-form-item
           :error="errors.first('health_workers', scope)"
-          :label="$gettext('# Health workers')">
+          :label="$gettext('# Health workers')"
+          :required="rules.health_workers && rules.health_workers.required"
+        >
           <el-input
             v-validate="rules.health_workers"
             :disabled="disabled"
@@ -25,7 +27,9 @@
       <el-col :span="8">
         <el-form-item
           :error="errors.first('facilities', scope)"
-          :label="$gettext('# Facilities')">
+          :label="$gettext('# Facilities')"
+          :required="rules.facilities && rules.facilities.required"
+        >
           <el-input
             v-validate="rules.facilities"
             :disabled="disableFacilities"
@@ -43,7 +47,9 @@
       <el-col :span="8">
         <el-form-item
           :error="errors.first('clients', scope)"
-          :label="$gettext('# Clients')">
+          :label="$gettext('# Clients')"
+          :required="rules.clients && rules.clients.required"
+        >
           <el-input
             v-validate="rules.clients"
             :disabled="disabled"

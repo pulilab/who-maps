@@ -6,20 +6,17 @@
     class="TableTopActions">
     <el-col class="TableExportOptions">
       <el-row type="flex">
-        <!-- <template v-if="selectedRows.length > 0">
-          <el-button
-            :disabled="allSelected"
-            size="small"
-            @click="selectAll"><translate :parameters="{total}">Select all {total} rows</translate>
-          </el-button>
-          <div class="Separator" />
-        </template> -->
-
-        <!-- TODO -->
-        <!-- Please make it as a toggle button: Select/Deselect all -->
         <el-button
           size="small"
-          @click="selectAll"><translate :parameters="{total}">Select all {total} projects</translate>
+          @click="toggleSelectAll">
+          <translate
+            v-show="!allSelected"
+            :parameters="{total}">Select all {total} projects
+          </translate>
+          <translate
+            v-show="allSelected"
+            :parameters="{total}">Deselect all {total} projects
+          </translate>
         </el-button>
 
         <div class="Separator" />
@@ -50,23 +47,25 @@
             value="PDF"/>
         </el-select>
 
-        <div class="Separator" />
-        <el-button
-          :disabled="selectedRows.length === 0"
-          type="primary"
-          size="small"
-          class="IconLeft"
-          @click="openMailDialog"
-        >
-          <fa icon="envelope"/>
-          <translate v-show="selected === 0">Contact selected</translate>
-          <translate
-            v-show="selected > 0"
-            :parameters="{selected}">
-            Contact {selected} selected
-          </translate>
-        </el-button>
-        <pdf-export ref="pdfExport" />
+        <template v-if="showEmailButton">
+          <div class="Separator" />
+          <el-button
+            :disabled="selectedRows.length === 0"
+            type="primary"
+            size="small"
+            class="IconLeft"
+            @click="openMailDialog"
+          >
+            <fa icon="envelope"/>
+            <translate v-show="selected === 0">Contact selected</translate>
+            <translate
+              v-show="selected > 0"
+              :parameters="{selected}">
+              Contact {selected} selected
+            </translate>
+          </el-button>
+          <pdf-export ref="pdfExport" />
+        </template>
       </el-row>
     </el-col>
 
@@ -164,13 +163,21 @@ export default {
       selected: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
       allSelected: 'dashboard/getSelectAll',
-      total: 'dashboard/getTotal'
+      total: 'dashboard/getTotal',
+      user: 'user/getProfile'
     }),
     settingsTitle () {
       return `${this.$gettext('main fields')} (${this.selected.length}/${this.columns.length})`;
     },
     selected () {
       return this.allSelected ? this.total : this.selectedRows.length;
+    },
+    showEmailButton () {
+      const allowed = ['CA', 'SCA', 'D', 'DA', 'SDA'];
+      if (this.user) {
+        return allowed.includes(this.user.account_type) || this.user.is_superuser;
+      }
+      return false;
     }
   },
   methods: {
@@ -178,7 +185,8 @@ export default {
       setSelectedColumns: 'dashboard/setSelectedColumns',
       setSelectAll: 'dashboard/setSelectAll',
       setSendEmailDialogState: 'layout/setSendEmailDialogState',
-      loadProjectsBucket: 'dashboard/loadProjectsBucket'
+      loadProjectsBucket: 'dashboard/loadProjectsBucket',
+      setSelectedRows: 'dashboard/setSelectedRows'
     }),
     popperOpenHandler () {
       this.selectedColumns = [...this.columns.map(s => ({...s}))];
@@ -187,9 +195,14 @@ export default {
       this.setSelectedColumns(this.selectedColumns.filter(s => s.selected).map(s => s.id));
       this.columnSelectorOpen = false;
     },
-    async selectAll () {
-      await this.loadProjectsBucket();
-      this.setSelectAll(true);
+    async toggleSelectAll () {
+      if (!this.allSelected) {
+        await this.loadProjectsBucket();
+        this.setSelectAll(true);
+      } else {
+        this.setSelectAll(false);
+        this.setSelectedRows([]);
+      }
     },
     exportRows () {
       if (this.exportType === 'PDF') {

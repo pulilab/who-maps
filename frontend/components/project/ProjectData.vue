@@ -172,6 +172,40 @@
           </simple-field>
 
         </collapsible-card>
+
+        <collapsible-card
+          id="countrycustom"
+          :title="$gettext('Custom country fields')"
+        >
+          <custom-readonly-field
+            v-for="question in countryQuestions"
+            :key="question.id"
+            :id="question.id"
+            :question="question.question"
+            :is-draft="isDraft"
+            :type="question.type"
+          />
+        </collapsible-card>
+
+        <div
+          id="donorcustom">
+          <collapsible-card
+            v-for="donor in donors"
+            :key="donor.id"
+            :title="donor.name + ' custom fields'"
+          >
+            <custom-readonly-field
+              v-for="question in donor.donor_questions"
+              :key="question.id"
+              :id="question.id"
+              :question="question.question"
+              :is-draft="isDraft"
+              :type="question.type"
+              :donor-id="donor.id"
+            />
+          </collapsible-card>
+        </div>
+
       </el-col>
       <el-col :span="6">
         <project-navigation/>
@@ -198,6 +232,7 @@ import LicensesList from './LicensesList';
 import StandardsList from './StandardsList';
 import InteroperabilityLinksList from './InteroperabilityLinksList';
 import DonorsList from '../common/list/DonorsList';
+import CustomReadonlyField from './CustomReadonlyField';
 
 import { mapGetters } from 'vuex';
 
@@ -219,12 +254,15 @@ export default {
     LicensesList,
     StandardsList,
     InteroperabilityLinksList,
-    DonorsList
+    DonorsList,
+    CustomReadonlyField
   },
   computed: {
     ...mapGetters({
       draft: 'project/getProjectData',
-      published: 'project/getPublished'
+      published: 'project/getPublished',
+      getCountryDetails: 'countries/getCountryDetails',
+      getDonorDetails: 'system/getDonorDetails'
     }),
     route () {
       return this.$route.name.split('__')[0];
@@ -234,6 +272,18 @@ export default {
     },
     project () {
       return this.isDraft ? this.draft : this.published;
+    },
+    countryQuestions () {
+      if (this.project.country) {
+        const country = this.getCountryDetails(this.project.country);
+        if (country) {
+          return country.country_questions;
+        }
+      }
+      return [];
+    },
+    donors () {
+      return this.project.donors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
     }
   }
 

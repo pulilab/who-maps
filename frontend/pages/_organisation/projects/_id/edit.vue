@@ -36,7 +36,7 @@ export default {
           .el-button {
             .Step {
               background-color: lighten(@colorDraft, 10%) !important;
-              color: @colorTextPrimary;
+              color: @colorTextPrimary !important;
             }
           }
         }

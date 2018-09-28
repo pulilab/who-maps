@@ -37,6 +37,24 @@ export const platformsMapper = collection => {
   return [platforms, digitalHealthInterventions];
 };
 
+export const countryCustomFieldMapper = collection => {
+  const customAnswers = [];
+  for (let key in collection) {
+    customAnswers.push({question_id: +key, answer: collection[key]});
+  }
+  return customAnswers;
+};
+
+export const donorCustomFieldMapper = collection => {
+  const customAnswers = [];
+  for (let donor in collection) {
+    for (let key in collection[donor]) {
+      customAnswers.push({question_id: +key, answer: collection[donor][key], donor_id: donor});
+    }
+  }
+  return customAnswers;
+};
+
 export const apiReadParser = p => {
   const [ coverage, coverageDataFirstLevel ] = coverageMapper(p.coverage);
   const [ coverage_second_level, coverageDataSecondLevelLevel ] = coverageMapper(p.coverage_second_level);
@@ -44,6 +62,8 @@ export const apiReadParser = p => {
   const interoperability_links = interoperabilityLinksMapper(p.interoperability_links);
   const [ platforms, digitalHealthInterventions ] = platformsMapper(p.platforms);
   const coverageType = coverage === undefined || coverage.length === 0 ? 2 : 1;
+  const country_custom_answers = countryCustomFieldMapper(p.country_custom_answers);
+  const donor_custom_answers = donorCustomFieldMapper(p.donor_custom_answers);
   return {...p,
     coverage,
     coverage_second_level,
@@ -51,7 +71,9 @@ export const apiReadParser = p => {
     coverageType,
     interoperability_links,
     platforms,
-    digitalHealthInterventions
+    digitalHealthInterventions,
+    country_custom_answers,
+    donor_custom_answers
   };
 };
 
@@ -80,14 +102,12 @@ export const interoperabilityLinkWriteParser = links => {
   const result = [];
   for (let link in links) {
     const value = {...links[link]};
-    value.link = isNullUndefinedOrEmptyString(value.link) ? undefined : value.link;
     value.selected = value.selected ? true : undefined;
-    if (value.link || value.selected) {
-      const item = {id: link, ...value};
-      result.push(item);
-    }
+    value.link = !value.selected || isNullUndefinedOrEmptyString(value.link) ? undefined : value.link;
+    const item = {id: link, ...value};
+    result.push(item);
   }
-  return result;
+  return result.sort((a, b) => a.index - b.index).map(r => ({...r, index: undefined}));
 };
 
 export const platformsWriteParser = (platforms, digitalHealthInterventions) => {
@@ -110,7 +130,32 @@ export const coverageWriteParser = (coverage, coverageData) => {
   });
 };
 
-export const apiWriteParser = p => {
+export const customCountryAnswerParser = (customAnswers) => {
+  return customAnswers.map(c => ({
+    ...c,
+    answer: c.answer[0] ? c.answer : []
+  }));
+};
+
+export const customDonorAnswerParser = (customAnswers, donors) => {
+  const result = donors.reduce((a, c) => {
+    a[c] = [];
+    return a;
+  }, {});
+  customAnswers.forEach(a => {
+    const donor = a.donor_id;
+    if (!result[donor]) {
+      result[donor] = [];
+    }
+    result[donor].push({
+      ...a,
+      answer: a.answer[0] ? a.answer : [],
+      donor_id: undefined});
+  });
+  return result;
+};
+
+export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => {
   const result = {};
   for (let key in p) {
     const value = dataCleaner(p[key]);
@@ -127,21 +172,32 @@ export const apiWriteParser = p => {
   } else {
     national_level_deployment = {...baseCoverage, ...p.national_level_deployment};
   }
-
+  const country_custom_answers = customCountryAnswerParser(countryCustomAnswers);
+  const donor_custom_answers = customDonorAnswerParser(donorsCustomAnswers, p.donors);
   return {
-    ...result,
-    interoperability_links,
-    platforms,
-    coverage,
-    coverage_second_level,
-    national_level_deployment,
-    digitalHealthInterventions: undefined,
-    coverageData: undefined
+    project: {
+      ...result,
+      interoperability_links,
+      platforms,
+      coverage,
+      coverage_second_level,
+      national_level_deployment,
+      digitalHealthInterventions: undefined,
+      coverageData: undefined,
+      country_answers: undefined,
+      donors_answers: undefined
+    },
+    country_custom_answers,
+    donor_custom_answers
   };
 };
 
 export const intArrayFromQs = item => {
   return item ? Array.isArray(item) ? item.map(i => +i) : [+item] : [];
+};
+
+export const strArrayFromQs = item => {
+  return item ? Array.isArray(item) ? item : [item] : [];
 };
 
 export const queryStringComparisonParser = collection => {
@@ -158,3 +214,41 @@ export const queryStringComparisonParser = collection => {
   }
   return result;
 };
+
+export const questionWriteParser = (question, type, parent) => {
+  return {
+    is_active: question.is_active,
+    type: +question.type,
+    question: question.question,
+    options: question.type > 3 ? question.options : [],
+    private: question.is_private,
+    required: question.required,
+    [type]: parent.id
+  };
+};
+
+export const customColumnsMapper = (columns, prefix) => {
+  return columns.map(c => ({
+    originalId: c.id,
+    id: `${prefix}_${c.id}`,
+    label: c.question,
+    type: c.type,
+    donorId: c.donor
+  }));
+};
+
+export const parseSearchResult = r => ({
+  ...r,
+  country_answers: {
+    ...r.country_custom_answers,
+    ...r.country_custom_answers_private
+  },
+  donor_answers: {
+    ...r.donor_custom_answers,
+    ...r.donor_custom_answers_private
+  },
+  country_custom_answers: undefined,
+  country_custom_answers_private: undefined,
+  donor_custom_answers: undefined,
+  donor_custom_answers_private: undefined
+});

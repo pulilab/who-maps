@@ -40,6 +40,18 @@
             :api-errors="apiErrors"
             @mounted="mountedHandler"
           />
+          <country-custom
+            ref="countryCustom"
+            :use-publish-rules="usePublishRules"
+            :api-errors="apiErrors"
+            @mounted="mountedHandler"
+          />
+          <donor-custom
+            ref="donorCustom"
+            :use-publish-rules="usePublishRules"
+            :api-errors="apiErrors"
+            @mounted="mountedHandler"
+          />
         </el-col>
         <el-col :span="6">
           <project-navigation
@@ -59,6 +71,8 @@ import GeneralOverview from './sections/GeneralOverview';
 import ImplementationOverview from './sections/ImplementationOverview';
 import TechnologyOverview from './sections/TechnologyOverview';
 import InteroperabilityAndStandards from './sections/InteroperabilityAndStandards';
+import CountryCustom from './sections/CountryCustom';
+import DonorCustom from './sections/DonorCustom';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -67,7 +81,12 @@ export default {
     GeneralOverview,
     ImplementationOverview,
     TechnologyOverview,
-    InteroperabilityAndStandards
+    InteroperabilityAndStandards,
+    CountryCustom,
+    DonorCustom
+  },
+  $_veeValidate: {
+    validator: 'new'
   },
   data () {
     return {
@@ -88,7 +107,7 @@ export default {
       return this.$route.name.includes('organisation-projects-create');
     },
     showForm () {
-      return this.readyElements === this.maxElements;
+      return this.readyElements > this.maxElements;
     },
     draftRules () {
       return {
@@ -234,7 +253,11 @@ export default {
           max: 256,
           url: true
         },
-        interoperability_links: {},
+        interoperability_links: {
+          url: {
+            require_protocol: true
+          }
+        },
         interoperability_standards: {}
       };
     },
@@ -292,7 +315,9 @@ export default {
         this.$refs.generalOverview.validate(),
         this.$refs.implementationOverview.validate(),
         this.$refs.technologyOverview.validate(),
-        this.$refs.interoperabilityAndStandards.validate()
+        this.$refs.interoperabilityAndStandards.validate(),
+        this.$refs.countryCustom.validate(),
+        this.$refs.donorCustom.validate()
       ]);
       console.log('root validations', validations);
       return validations.reduce((a, c) => a && c, true);
@@ -303,6 +328,8 @@ export default {
       this.$refs.implementationOverview.clear();
       this.$refs.technologyOverview.clear();
       this.$refs.interoperabilityAndStandards.clear();
+      this.$refs.countryCustom.clear();
+      this.$refs.donorCustom.clear();
     },
     async doSaveDraft () {
       this.clearValidation();
@@ -365,6 +392,7 @@ export default {
             });
             return;
           } catch (e) {
+            console.log(e);
             this.setLoading(false);
             this.apiErrors = e.response.data;
           }

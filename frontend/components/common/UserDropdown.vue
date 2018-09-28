@@ -43,6 +43,7 @@
 
             <language-select
               v-model="currentLanguage"
+              size="small"
             />
           </div>
         </div>

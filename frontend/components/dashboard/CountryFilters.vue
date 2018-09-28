@@ -16,21 +16,25 @@ import { mapGettersActions } from '../../utilities/form.js';
 
 import CountrySelect from '../common/CountrySelect';
 import RegionSelect from '../common/RegionSelect';
+import { mapGetters } from 'vuex';
 export default {
   components: {
     CountrySelect,
     RegionSelect
   },
   computed: {
+    ...mapGetters({
+      dashboardType: 'dashboard/getDashboardType'
+    }),
     ...mapGettersActions({
       selectedCounties: ['dashboard', 'getFilteredCountries', 'setFilteredCountries'],
       selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion']
     }),
     disableCountries () {
-      return !!this.selectedRegion;
+      return !!this.selectedRegion || this.dashboardType === 'country';
     },
     disableRegions () {
-      return this.selectedCounties.length > 0;
+      return this.selectedCounties.length > 0 || this.dashboardType === 'country';
     }
   }
 };

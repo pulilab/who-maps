@@ -6,6 +6,7 @@
       <el-form-item
         :error="errors.first('name')"
         :label="$gettext('Project name')"
+        :required="rules.name && rules.name.required"
       >
         <el-input
           v-validate="rules.name"
@@ -16,6 +17,7 @@
       <el-form-item
         :error="errors.first('organisation')"
         :label="$gettext('Organisation')"
+        :required="rules.organisation && rules.organisation.required"
       >
         <organisation-select
           v-validate="rules.organisation"
@@ -25,7 +27,9 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('country')"
-        :label="$gettext('Project country')">
+        :label="$gettext('Project country')"
+        :required="rules.country && rules.country.required"
+      >
         <country-select
           v-validate="rules.country"
           v-model="country"
@@ -34,7 +38,9 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('geographic_scope')"
-        :label="$gettext('Geographic Scope')">
+        :label="$gettext('Geographic Scope')"
+        :required="rules.geographic_scope && rules.geographic_scope.required"
+      >
 
         <el-input
           v-validate="rules.geographic_scope"
@@ -50,7 +56,9 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('implementation_overview')"
-        :label="$gettext('Overview of the digital health implementation')">
+        :label="$gettext('Overview of the digital health implementation')"
+        :required="rules.implementation_overview && rules.implementation_overview.required"
+      >
 
         <el-input
           v-validate="rules.implementation_overview"
@@ -71,6 +79,7 @@
           <el-form-item
             :error="errors.first('start_date')"
             :label="$gettext('Project start date')"
+            :required="rules.start_date && rules.start_date.required"
           >
             <el-date-picker
               v-validate="rules.start_date"
@@ -89,6 +98,7 @@
           <el-form-item
             :error="errors.first('end_date') || endDateError"
             :label="$gettext('Project end date')"
+            :required="rules.end_date && rules.end_date.required"
           >
             <el-date-picker
               v-validate="rules.end_date"
@@ -109,6 +119,7 @@
           <el-form-item
             :error="errors.first('contact_name')"
             :label="$gettext('Contact name')"
+            :required="rules.contact_name && rules.contact_name.required"
           >
             <el-input
               v-validate="rules.contact_name"
@@ -122,6 +133,7 @@
           <el-form-item
             :error="errors.first('contact_email')"
             :label="$gettext('Contact email')"
+            :required="rules.contact_email && rules.contact_email.required"
           >
             <el-input
               v-validate="rules.contact_email"
@@ -136,6 +148,7 @@
         <el-form-item
           :error="errors.first('team')"
           :label="$gettext('Add Team members (Editor role)')"
+          :required="rules.team && rules.team.required"
         >
           <team-selector
             v-validate="rules.team"
@@ -146,6 +159,7 @@
         <el-form-item
           :error="errors.first('viewers')"
           :label="$gettext('Add Viewers (only Viewer role)')"
+          :required="rules.viewers && rules.viewers.required"
         >
           <team-selector
             v-validate="rules.viewers"

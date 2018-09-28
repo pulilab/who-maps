@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'rest_auth.registration',
     'drf_expiring_tokens',
+    'ordered_model',
     'rosetta',
     'allauth',
     'allauth.account',

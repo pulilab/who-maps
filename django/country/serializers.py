@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Union
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -12,7 +13,31 @@ from django.utils.translation import ugettext, override
 from django.conf import settings
 
 from user.models import UserProfile
-from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, CountryField, MapFile
+from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, CountryField, MapFile, \
+    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion
+
+
+class OptionsValidatorMixin:
+    def validate_options_for_choice_fields(self, value):
+        if not len(value) > 0:
+            raise ValidationError({'options': 'Ensure options field has at least 1 elements.'})
+
+    def validate(self, attrs):
+        if attrs.get('type', CustomQuestion.TEXT) in (CustomQuestion.SINGLE, CustomQuestion.MULTI):
+            self.validate_options_for_choice_fields(attrs['options'])
+        return attrs
+
+
+class CountryCustomQuestionSerializer(OptionsValidatorMixin, serializers.ModelSerializer):
+    class Meta:
+        model = CountryCustomQuestion
+        fields = "__all__"
+
+
+class DonorCustomQuestionSerializer(OptionsValidatorMixin, serializers.ModelSerializer):
+    class Meta:
+        model = DonorCustomQuestion
+        fields = "__all__"
 
 
 class PartnerLogoSerializer(serializers.ModelSerializer):
@@ -114,7 +139,7 @@ class UpdateAdminMixin:
         for profile in user_profiles:
             email_mapping[profile.language].append(profile.user.email)
 
-        for language, email_list in email_mapping.items():
+        for language in sorted(email_mapping.keys()):
             with override(language):
                 subject = "You have been selected as {} for {}".format(group, instance.name)
                 subject = ugettext(subject)
@@ -127,22 +152,27 @@ class UpdateAdminMixin:
                 subject=subject,
                 message="",
                 from_email=settings.FROM_EMAIL,
-                recipient_list=email_list,
+                recipient_list=email_mapping[language],
                 html_message=html_message,
                 fail_silently=True)
 
 
+def can_read_private_questions(obj: Union[Country, Donor], request) -> bool:
+    return request.user.is_superuser or obj.user_in_groups(request.user.userprofile)
+
+
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
                   "footer_text", "partner_logos", "project_approval", "map_data", "map_version", "map_files",
-                  "map_activated_on",)
+                  "map_activated_on", "country_questions")
 READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "logo_url", "cover", "cover_url", "map_version", "map_files",
-                            "map_activated_on",)
+                            "map_activated_on", "country_questions")
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos", "project_approval",)
 
 
 class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer):
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
+    country_questions = serializers.SerializerMethodField()
     map_version = serializers.SerializerMethodField()
     map_files = MapFileSerializer(many=True, read_only=True)
     user_requests = serializers.SerializerMethodField()
@@ -184,6 +214,16 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
             .difference(obj.super_admins.all())
         return UserProfileSerializer(data, many=True).data
 
+    def get_country_questions(self, obj):
+        request = self.context['request']
+
+        if request.user and hasattr(request.user, 'userprofile') and can_read_private_questions(obj, request):
+            queryset = CountryCustomQuestion.objects.filter(country_id=obj.id)
+        else:
+            queryset = CountryCustomQuestion.objects.filter(country_id=obj.id).exclude(private=True)
+
+        return CountryCustomQuestionSerializer(queryset, many=True, read_only=True).data
+
 
 class AdminCountrySerializer(SuperAdminCountrySerializer):
     class Meta(SuperAdminCountrySerializer.Meta):
@@ -199,14 +239,15 @@ class CountrySerializer(SuperAdminCountrySerializer):
 
 
 DONOR_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
-                "footer_text", "partner_logos")
-READ_ONLY_DONOR_FIELDS = ("logo_url", "cover_url", "logo", "cover", "name", "code",)
+                "footer_text", "partner_logos", "donor_questions")
+READ_ONLY_DONOR_FIELDS = ("logo_url", "cover_url", "logo", "cover", "name", "code", "donor_questions")
 DONOR_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 READ_ONLY_DONOR_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos",)
 
 
 class SuperAdminDonorSerializer(UpdateAdminMixin, serializers.ModelSerializer):
     partner_logos = DonorPartnerLogoSerializer(many=True, read_only=True)
+    donor_questions = serializers.SerializerMethodField()
     user_requests = serializers.SerializerMethodField()
     admin_requests = serializers.SerializerMethodField()
     super_admin_requests = serializers.SerializerMethodField()
@@ -233,6 +274,16 @@ class SuperAdminDonorSerializer(UpdateAdminMixin, serializers.ModelSerializer):
         data = UserProfile.objects.filter(donor_id=obj.id, account_type=UserProfile.SUPER_DONOR_ADMIN) \
             .difference(obj.super_admins.all())
         return UserProfileSerializer(data, many=True).data
+
+    def get_donor_questions(self, obj):
+        request = self.context['request']
+
+        if request.user and hasattr(request.user, 'userprofile') and can_read_private_questions(obj, request):
+            queryset = DonorCustomQuestion.objects.filter(donor_id=obj.id)
+        else:
+            queryset = DonorCustomQuestion.objects.filter(donor_id=obj.id).exclude(private=True)
+
+        return DonorCustomQuestionSerializer(queryset, many=True, read_only=True).data
 
 
 class AdminDonorSerializer(SuperAdminDonorSerializer):

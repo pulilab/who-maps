@@ -18,7 +18,7 @@
         width="38"
       />
       <el-table-column
-        v-if="selectedColumns.includes(1)"
+        v-if="selectedColumns.includes('1')"
         :label="$gettext('Project Name')"
         fixed
         sortable="custom"
@@ -33,7 +33,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(2)"
+        v-if="selectedColumns.includes('2')"
         :label="$gettext('Country')"
         sortable="custom"
         prop="country__name"
@@ -46,7 +46,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(3)"
+        v-if="selectedColumns.includes('3')"
         :label="$gettext('Organisation Name')"
         sortable="custom"
         prop="organisation__name"
@@ -58,7 +58,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(4)"
+        v-if="selectedColumns.includes('4')"
         :label="$gettext('Government Investor')"
         sortable="custom"
         prop="project__data__government_investor"
@@ -69,7 +69,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(5)"
+        v-if="selectedColumns.includes('5')"
         :label="$gettext('Region')"
         sortable="custom"
         prop="country__region"
@@ -81,7 +81,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(6)"
+        v-if="selectedColumns.includes('6')"
         :label="$gettext('Donors')"
         width="240">
         <template slot-scope="scope">
@@ -92,7 +92,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(7)"
+        v-if="selectedColumns.includes('7')"
         :label="$gettext('Contact Name')"
         width="240">
         <template slot-scope="scope">
@@ -104,7 +104,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(8)"
+        v-if="selectedColumns.includes('8')"
         :label="$gettext('Implementation Overview')"
         width="240">
         <template slot-scope="scope">
@@ -112,23 +112,44 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(9)"
+        v-if="selectedColumns.includes('9')"
         :label="$gettext('Geographic Scope')"
         width="240">
         <template slot-scope="scope">
           <p>{{ scope.row.geographic_scope }}</p>
         </template>
       </el-table-column>
+
       <el-table-column
-        v-if="selectedColumns.includes(10)"
-        :label="$gettext('Health Focus Areas')"
+        v-for="col in countryColumns"
+        :key="col.id"
+        :label="col.label"
         width="240">
         <template slot-scope="scope">
-          <health-focus-areas-list
-            :value="scope.row.health_focus_areas"
-            :limit="3" />
+          <custom-answers-cell
+            :row="scope.row"
+            :id="col.originalId"
+            :type="col.type"
+            module="country"
+          />
         </template>
       </el-table-column>
+
+      <el-table-column
+        v-for="col in donorColumns"
+        :key="col.id"
+        :label="col.label"
+        width="240">
+        <template slot-scope="scope">
+          <custom-answers-cell
+            :row="scope.row"
+            :id="col.originalId"
+            :type="col.type"
+            :donor-id="col.donorId"
+          />
+        </template>
+      </el-table-column>
+
     </el-table>
 
     <div class="Pagination">
@@ -158,6 +179,7 @@ import OrganisationItem from '../common/OrganisationItem';
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
 import DonorsList from '../common/list/DonorsList';
 import RegionItem from '../common/RegionItem';
+import CustomAnswersCell from './CustomAnswersCell';
 
 export default {
   components: {
@@ -166,7 +188,8 @@ export default {
     OrganisationItem,
     HealthFocusAreasList,
     DonorsList,
-    RegionItem
+    RegionItem,
+    CustomAnswersCell
   },
   data () {
     return {
@@ -181,7 +204,9 @@ export default {
       selectedColumns: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
       selectAll: 'dashboard/getSelectAll',
-      total: 'dashboard/getTotal'
+      total: 'dashboard/getTotal',
+      countryColumns: 'dashboard/getCountryColumns',
+      donorColumns: 'dashboard/getDonorColumns'
     }),
     ...mapGettersActions({
       pageSize: ['dashboard', 'getPageSize', 'setPageSize', 0],
@@ -200,9 +225,11 @@ export default {
     selectAll: {
       immediate: true,
       handler (value) {
-        if (value && this.$refs.mainTable) {
+        if (this.$refs.mainTable) {
           this.$refs.mainTable.clearSelection();
-          this.$refs.mainTable.toggleAllSelection();
+          if (value) {
+            this.$refs.mainTable.toggleAllSelection();
+          }
         }
       }
     },
@@ -241,7 +268,7 @@ export default {
       this.setSelectedRows(selection.map(s => s.id));
     },
     rowClassCalculator ({row}) {
-      return this.selectedRows.includes(row.id) ? 'Selected' : 'NotSelected';
+      return this.selectedRows.includes('row'.id) ? 'Selected' : 'NotSelected';
     },
     sortChanged ({prop, order}) {
       if (order === 'descending') {

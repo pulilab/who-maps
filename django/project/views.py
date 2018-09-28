@@ -1,9 +1,12 @@
 import functools
 import csv
+from collections import OrderedDict
 
 from django.db import transaction
+from django.db.models import QuerySet
 from django.http import HttpResponse
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
@@ -16,9 +19,9 @@ from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, CountryField, Donor
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
-    MapProjectCountrySerializer
+    MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea, ProjectApproval
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -119,8 +122,7 @@ class ProjectPublicViewSet(ViewSet):
                     id=parent.id,
                     name=parent.name,
                     strategies=parent.strategies.filter(is_active=True).values('id', 'name')
-                )
-                )
+                ))
             strategies.append(dict(
                 name=group_name,
                 subGroups=sub_groups
@@ -191,13 +193,13 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
 
         if not self.request.user.is_authenticated:  # ANON
             data = project.get_anon_data()
-        else:
+        else:  # LOGGED IN
             is_member = project.is_member(self.request.user)
-            is_country_admin = project.is_country_admin(self.request.user)
-            if is_member or is_country_admin or self.request.user.is_superuser:  # MEMBER or Country Admin or Admin
+            is_country_user_or_admin = project.is_country_user_or_admin(self.request.user)
+            if is_member or is_country_user_or_admin or self.request.user.is_superuser:
                 data = project.get_member_data()
                 draft = project.get_member_draft()
-            else:  # LOGGED IN
+            else:
                 data = project.get_non_member_data()
 
         if draft:
@@ -215,15 +217,33 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         return Response(self._get_permission_based_data(project))
 
 
-class ProjectPublishViewSet(TeamTokenAuthMixin, ViewSet):
-    @transaction.atomic
-    def update(self, request, *args, **kwargs):
-        """
-        Updates a project.
-        """
-        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+class CheckRequiredMixin:
+    def check_required(self, queryset: QuerySet, answers: OrderedDict):
+        required_ids = set(queryset.filter(required=True).values_list('id', flat=True))
+        present_ids = {answer['question_id'] for answer in answers}
+        missing_ids = required_ids - present_ids
+        if missing_ids:
+            return {i: ['This field is required'] for i in missing_ids}
 
-        data_serializer = ProjectPublishedSerializer(project, data=request.data)
+
+class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
+    @transaction.atomic
+    def update(self, request, project_id, country_id):
+        """
+        Publish a project
+        Takes project data and custom question-answers in one go.
+        """
+        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
+        country = get_object_or_400(Country, error_message="No such country", id=country_id)
+
+        country_answers = None
+        all_donor_answers = []
+        errors = {}
+
+        if 'project' not in request.data:
+            raise ValidationError({'non_field_errors': 'Project data is missing'})
+
+        data_serializer = ProjectPublishedSerializer(project, data=request.data['project'])
 
         data_serializer.fields.get('name').validators = \
             [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
@@ -231,53 +251,207 @@ class ProjectPublishViewSet(TeamTokenAuthMixin, ViewSet):
             .append(UniqueValidator(queryset=project.__class__.objects.all().exclude(id=project.id)))
 
         self.check_object_permissions(self.request, project)
+        data_serializer.is_valid()
+        if data_serializer.errors:
+            errors['project'] = data_serializer.errors
 
-        data_serializer.is_valid(raise_exception=True)
+        if country.country_questions.exists():
+            if 'country_custom_answers' not in request.data:
+                raise ValidationError({'non_field_errors': 'Country answers are missing'})
+            else:
+                country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
+                                                                context=dict(
+                                                                    question_queryset=country.country_questions,
+                                                                    is_draft=False))
 
-        instance = data_serializer.save()
+                if country_answers.is_valid():
+                    required_errors = self.check_required(country.country_questions, country_answers.validated_data)
+                    if required_errors:
+                        errors['country_custom_answers'] = required_errors
+                else:
+                    errors['country_custom_answers'] = country_answers.errors
 
-        # Remove approval if already approved, so country admin can approve again because project has changed
-        # TODO: refactor
-        if hasattr(project, 'approval') and project.approval.approved:
-            project.approval.delete()
-            ProjectApproval.objects.create(project=project)
+        for donor_id in data_serializer.validated_data.get('donors', []):
+            donor = Donor.objects.get(id=donor_id)
+            if donor and donor.donor_questions.exists():
+                if 'donor_custom_answers' not in request.data:
+                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+                if str(donor_id) not in request.data['donor_custom_answers']:
+                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+                donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
+                                                            many=True,
+                                                            context=dict(question_queryset=donor.donor_questions,
+                                                                         is_draft=False))
+
+                if not donor_answers.is_valid():
+                    errors.setdefault('donor_custom_answers', {})
+                    errors['donor_custom_answers'].setdefault(donor_id, {})
+                    errors['donor_custom_answers'][donor_id] = donor_answers.errors
+                else:
+                    required_errors = self.check_required(donor.donor_questions, donor_answers.validated_data)
+                    if required_errors:
+                        errors.setdefault('donor_custom_answers', {})
+                        errors['donor_custom_answers'].setdefault(donor_id, {})
+                        errors['donor_custom_answers'][donor_id] = required_errors
+                    else:
+                        all_donor_answers.append((donor_id, donor_answers))
+
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            instance = data_serializer.save()
+            if country_answers:
+                country_answers.context['project'] = instance
+                instance = country_answers.save()
+            for donor_id, donor_answers in all_donor_answers:
+                donor_answers.context['project'] = instance
+                donor_answers.context['donor_id'] = donor_id
+                instance = donor_answers.save()
+            instance.save()
+
+        project.reset_approval()
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
-
-        return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
+        return Response(instance.to_response_dict(published=published, draft=draft))
 
 
 class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
-    def create(self, request, *args, **kwargs):
+    def create(self, request, country_id):
         """
         Creates a Draft project.
         """
-        data_serializer = ProjectDraftSerializer(data=request.data)
-        data_serializer.is_valid(raise_exception=True)
-        project = data_serializer.save(owner=request.user.userprofile)
-        data = project.to_representation(draft_mode=True)
+        country = get_object_or_400(Country, error_message="No such country", id=country_id)
 
-        return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
+        country_answers = None
+        all_donor_answers = []
+        errors = {}
+
+        if 'project' not in request.data:
+            raise ValidationError({'non_field_errors': 'Project data is missing'})
+
+        data_serializer = ProjectDraftSerializer(data=request.data['project'])
+        data_serializer.is_valid()
+        instance = data_serializer.save()
+
+        if data_serializer.errors:
+            errors['project'] = data_serializer.errors
+
+        if country.country_questions.exists():
+            if 'country_custom_answers' not in request.data:
+                raise ValidationError({'non_field_errors': 'Country answers are missing'})
+            else:
+                country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
+                                                                context=dict(
+                                                                    question_queryset=country.country_questions,
+                                                                    is_draft=True))
+
+                if not country_answers.is_valid():
+                    errors['country_custom_answers'] = country_answers.errors
+
+        for donor_id in data_serializer.validated_data.get('donors', []):
+            donor = Donor.objects.filter(id=donor_id).first()
+            if donor and donor.donor_questions.exists():
+                if 'donor_custom_answers' not in request.data:
+                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+                if str(donor_id) not in request.data['donor_custom_answers']:
+                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+                donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
+                                                            many=True,
+                                                            context=dict(question_queryset=donor.donor_questions,
+                                                                         is_draft=True))
+
+                if not donor_answers.is_valid():
+                    errors.setdefault('donor_custom_answers', {})
+                    errors['donor_custom_answers'].setdefault(donor_id, {})
+                    errors['donor_custom_answers'][donor_id] = donor_answers.errors
+                else:
+                    all_donor_answers.append((donor_id, donor_answers))
+
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            if country_answers:
+                country_answers.context['project'] = instance
+                instance = country_answers.save()
+            for donor_id, donor_answers in all_donor_answers:
+                donor_answers.context['project'] = instance
+                donor_answers.context['donor_id'] = donor_id
+                instance = donor_answers.save()
+            instance.save()
+            instance.team.add(request.user.userprofile)
+
+        data = instance.to_representation(draft_mode=True)
+        return Response(instance.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
 
     @transaction.atomic
-    def update(self, request, *args, **kwargs):
+    def update(self, request, project_id, country_id):
         """
         Updates a draft project.
         """
-        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
+        country = get_object_or_400(Country, error_message="No such country", id=country_id)
 
-        data_serializer = ProjectDraftSerializer(project, data=request.data)
+        country_answers = None
+        all_donor_answers = []
+        errors = {}
 
+        if 'project' not in request.data:
+            raise ValidationError({'non_field_errors': 'Project data is missing'})
+
+        data_serializer = ProjectDraftSerializer(project, data=request.data['project'])
         self.check_object_permissions(self.request, project)
+        data_serializer.is_valid()
+        if data_serializer.errors:
+            errors['project'] = data_serializer.errors
 
-        data_serializer.is_valid(raise_exception=True)
+        if country.country_questions.exists():
+            if 'country_custom_answers' not in request.data:
+                raise ValidationError({'non_field_errors': 'Country answers are missing'})
+            else:
+                country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
+                                                                context=dict(
+                                                                    question_queryset=country.country_questions,
+                                                                    is_draft=True))
 
-        instance = data_serializer.save()
+                if not country_answers.is_valid():
+                    errors['country_custom_answers'] = country_answers.errors
+
+        for donor_id in data_serializer.validated_data.get('donors', []):
+            donor = Donor.objects.get(id=donor_id)
+            if donor and donor.donor_questions.exists():
+                if 'donor_custom_answers' not in request.data:
+                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+                if str(donor_id) not in request.data['donor_custom_answers']:
+                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+
+                donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
+                                                            many=True,
+                                                            context=dict(question_queryset=donor.donor_questions,
+                                                                         is_draft=True))
+
+                if not donor_answers.is_valid():
+                    errors.setdefault('donor_custom_answers', {})
+                    errors['donor_custom_answers'].setdefault(donor_id, {})
+                    errors['donor_custom_answers'][donor_id] = donor_answers.errors
+                else:
+                    all_donor_answers.append((donor_id, donor_answers))
+
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            instance = data_serializer.save()
+            if country_answers:
+                country_answers.context['project'] = instance
+                instance = country_answers.save()
+            for donor_id, donor_answers in all_donor_answers:
+                donor_answers.context['project'] = instance
+                donor_answers.context['donor_id'] = donor_id
+                instance = donor_answers.save()
+            instance.save()
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
-
         return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
 
 

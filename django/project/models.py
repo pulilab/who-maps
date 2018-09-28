@@ -13,6 +13,7 @@ from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, Acti
     ParentByIDMixin
 from country.models import Country, CountryField
 from project.cache import InvalidateCacheMixin
+from project.utils import remove_keys
 from user.models import UserProfile, Organisation
 from toolkit.toolkit_data import toolkit_default
 
@@ -43,7 +44,8 @@ class ProjectQuerySet(ActiveQuerySet, ProjectManager):
 
 
 class Project(SoftDeleteModel, ExtendedModel):
-    FIELDS_FOR_MEMBERS_ONLY = ("last_version", "last_version_date", "start_date", "end_date")
+    FIELDS_FOR_MEMBERS_ONLY = ("country_custom_answers_private",
+                               "last_version", "last_version_date", "start_date", "end_date")
     FIELDS_FOR_LOGGED_IN = ("coverage",)
 
     name = models.CharField(max_length=255)
@@ -73,9 +75,8 @@ class Project(SoftDeleteModel, ExtendedModel):
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
 
-    def is_country_admin(self, user):
-        # Country admin has permissions only for the published project
-        return user.userprofile in self.get_country().users.all() if self.get_country() else False
+    def is_country_user_or_admin(self, user):
+        return self.get_country().user_in_groups(user.userprofile) if self.get_country() else False
 
     def get_member_data(self):
         return self.data
@@ -84,12 +85,13 @@ class Project(SoftDeleteModel, ExtendedModel):
         return self.draft
 
     def get_non_member_data(self):
-        return self.remove_keys(self.FIELDS_FOR_MEMBERS_ONLY)
+        return remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY)
 
     def get_anon_data(self):
-        return self.remove_keys(self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
+        return remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
 
-    def get_organisation(self, draft_mode=False):
+    # TODO: deprecate
+    def get_organisation(self, draft_mode=False):  # pragma: no cover
         try:
             organisation_id = self.draft.get('organisation') if draft_mode else self.data.get('organisation')
             organisation_id = int(organisation_id)
@@ -117,13 +119,6 @@ class Project(SoftDeleteModel, ExtendedModel):
                                                                                      c.get('facilities'))
                          for c in coverage])
 
-    def remove_keys(self, keys):
-        d = self.data
-        for key in keys:
-            if key in d:
-                d.pop(key, None)
-        return d
-
     def to_representation(self, data=None, draft_mode=False):
         if data is None:
             data = self.get_member_draft() if draft_mode else self.get_member_data()
@@ -134,8 +129,6 @@ class Project(SoftDeleteModel, ExtendedModel):
         extra_data = dict(
             id=self.pk,
             name=self.draft.get('name', '') if draft_mode else self.name,
-            organisation_name=self.get_organisation(draft_mode).name if self.get_organisation(draft_mode) else '',
-            country_name=self.get_country(draft_mode).name if self.get_country(draft_mode) else None,
             approved=self.approval.approved if hasattr(self, 'approval') else None,
             fields=[field.to_representation(draft_mode) for field in CountryField.get_for_project(self, draft_mode)],
         )
@@ -167,6 +160,30 @@ class Project(SoftDeleteModel, ExtendedModel):
     def disapprove(self):
         self.approval.approved = False
         self.approval.save()
+
+    def reset_approval(self):
+        if self.approval.approved:
+            self.approval.delete()
+            ProjectApproval.objects.create(project=self)
+
+    @classmethod
+    def remove_stale_donors(cls):
+        from country.models import Donor
+
+        stale_ids = []
+        donor_ids = set(Donor.objects.values_list('id', flat=True))
+
+        for p in Project.objects.all():
+            if p.data and 'donors' in p.data:
+                published_donors = set(p.data.get('donors', []))
+                stale_ids.extend(list(published_donors - donor_ids))
+                p.data['donors'] = list(published_donors & donor_ids)
+            if p.draft and 'donors' in p.draft:
+                draft_donors = set(p.draft.get('donors', []))
+                stale_ids.extend(list(draft_donors - donor_ids))
+                p.draft['donors'] = list(draft_donors & donor_ids)
+            p.save()
+        return stale_ids
 
 
 @receiver(post_save, sender=Project)

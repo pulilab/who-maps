@@ -4,7 +4,8 @@ import requests
 from requests import RequestException
 from django.conf import settings
 from django.http import HttpResponse
-from rest_framework import generics, mixins, viewsets
+from rest_framework import generics, mixins, viewsets, status
+from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,11 +16,12 @@ from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
-from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo, MapFile
+from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
+    CountryCustomQuestion, DonorCustomQuestion
 from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountrySerializer, \
     SuperAdminCountrySerializer, AdminCountrySerializer, PartnerLogoSerializer, DonorSerializer, \
     SuperAdminDonorSerializer, AdminDonorSerializer, DonorPartnerLogoSerializer, MapFileSerializer, \
-    CountryImageSerializer, DonorImageSerializer
+    CountryImageSerializer, DonorImageSerializer, DonorCustomQuestionSerializer, CountryCustomQuestionSerializer
 
 
 class CountryLandingPageViewSet(mixins.RetrieveModelMixin,  mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -186,3 +188,30 @@ class DonorImageViewSet(SuperAdminPermissionMixin, mixins.UpdateModelMixin, view
     queryset = Donor.objects.all()
     serializer_class = DonorImageSerializer
     parser_classes = (MultiPartParser, FormParser)
+
+
+class SetOrderToMixin:
+    @action(methods=['post'], detail=True)
+    def set_order_to(self, request, pk=None):
+        custom_question = self.get_object()
+        to_id = request.data.get('to')
+
+        if to_id:
+            try:
+                custom_question.to(int(to_id))
+                return Response({'status': 'order set'})
+            except (ValueError, TypeError):
+                pass
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class CountryCustomQuestionViewSet(SetOrderToMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
+                                   mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    queryset = CountryCustomQuestion.objects.all()
+    serializer_class = CountryCustomQuestionSerializer
+
+
+class DonorCustomQuestionViewSet(SetOrderToMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
+                                 mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    queryset = DonorCustomQuestion.objects.all()
+    serializer_class = DonorCustomQuestionSerializer

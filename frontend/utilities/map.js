@@ -79,7 +79,7 @@ export const actionsGenerator = () => ({
       const { data } = await this.$axios({
         method: 'get',
         url: '/api/search/',
-        params: {...getters.getSearchParameters, ...paramsOverride},
+        params: {...getters.getSearchParameters, ...paramsOverride, sc: undefined, dashboardType: undefined, dashboardId: undefined},
         paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'})
       });
       return data;

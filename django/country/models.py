@@ -3,8 +3,9 @@ from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinLengthValidator
+from ordered_model.models import OrderedModel
 
-from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel
+from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
 from user.models import UserProfile
 
 
@@ -41,6 +42,11 @@ class UserManagement(models.Model):
 
     class Meta:
         abstract = True
+
+    def user_in_groups(self, profile):
+        return self.admins.filter(id=profile.id).exists() or \
+               self.super_admins.filter(id=profile.id).exists() or \
+               self.users.filter(id=profile.id).exists()
 
 
 class Country(UserManagement, LandingPageCommon):
@@ -181,3 +187,45 @@ class CountryField(models.Model):
 
     def to_csv(self):
         return {self.schema_instance.question: self.answer}
+
+
+class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
+    TEXT = 1
+    NUMBER = 2
+    YESNO = 3
+    SINGLE = 4
+    MULTI = 5
+
+    TYPE_CHOICES = (
+        (TEXT, _("Text answer")),
+        (NUMBER, _("Numeric answer")),
+        (YESNO, _("Yes/No answer")),
+        (SINGLE, _("Single choice")),
+        (MULTI, _("Multiple choice")),
+    )
+
+    type = models.IntegerField(choices=TYPE_CHOICES, default=TEXT)
+    question = models.CharField(max_length=256, blank=False)
+    options = ArrayField(models.CharField(max_length=256), blank=True, null=True)
+
+    private = models.BooleanField(default=False)
+    required = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
+class DonorCustomQuestion(CustomQuestion):
+    donor = models.ForeignKey(Donor, related_name='donor_questions', on_delete=models.CASCADE)
+    order_with_respect_to = 'donor'
+
+    class Meta(OrderedModel.Meta):
+        pass
+
+
+class CountryCustomQuestion(CustomQuestion):
+    country = models.ForeignKey(Country, related_name='country_questions', on_delete=models.CASCADE)
+    order_with_respect_to = 'country'
+
+    class Meta(OrderedModel.Meta):
+        pass

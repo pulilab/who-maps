@@ -3,6 +3,7 @@
     <el-form-item
       :label="levelName"
       :error="errors.first('district', scope + '_' + index)"
+      :required="rules.district && rules.district.required"
     >
       <el-select
         v-validate="rules.district"

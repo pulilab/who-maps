@@ -79,10 +79,13 @@
               <translate>Interoperability</translate>
             </el-button>
           </li>
-          <li :class="{active: active === 'country'}">
+          <li
+            v-show="showCountryFieldsLink"
+            :class="{active: active === 'countrycustom'}"
+          >
             <el-button
               type="text"
-              @click="scrollTo('country')"
+              @click="scrollTo('countrycustom')"
             >
               <span class="Step">
                 <fa icon="arrow-right" />
@@ -90,10 +93,13 @@
               <translate>Country fields</translate>
             </el-button>
           </li>
-          <li :class="{active: active === 'donor'}">
+          <li
+            v-show="showDonorFieldsLink"
+            :class="{active: active === 'donorcustom'}"
+          >
             <el-button
               type="text"
-              @click="scrollTo('donor')"
+              @click="scrollTo('donorcustom')"
             >
               <span class="Step">
                 <fa icon="arrow-right" />
@@ -185,7 +191,11 @@ export default {
   computed: {
     ...mapGetters({
       loading: 'project/getLoading',
-      user: 'user/getProfile'
+      user: 'user/getProfile',
+      getCountryDetails: 'countries/getCountryDetails',
+      getDonorDetails: 'system/getDonorDetails',
+      draft: 'project/getProjectData',
+      published: 'project/getPublished'
     }),
     active () {
       const hash = this.$route.hash;
@@ -217,14 +227,36 @@ export default {
         return this.user.member.includes(+this.$route.params.id);
       }
       return false;
+    },
+    project () {
+      return this.isDraft || this.isReadOnlyDraft || this.isNewProject ? this.draft : this.published;
+    },
+    showCountryFieldsLink  () {
+      const country = this.getCountryDetails(this.project.country);
+      if (country) {
+        return country.country_questions && country.country_questions.length > 0;
+      }
+      return false;
+    },
+    showDonorFieldsLink () {
+      if (this.project && this.project.donors) {
+        for (let donor of this.project.donors) {
+          const details = this.getDonorDetails(donor);
+          if (details && details.donor_questions && details.donor_questions.length > 0) {
+            return true;
+          }
+        }
+      }
+      return false;
     }
   },
   mounted () {
-    window.addEventListener('resize', this.setFlyingBoxLeft);
-    this.setFlyingBoxLeft();
+    window.addEventListener('resize', this.setNavigationBoxLeftStyle);
+    window.addEventListener('scroll', this.setLeftValue);
   },
   beforeDestroy () {
-    window.removeEventListener('resize', this.setFlyingBoxLeft);
+    window.removeEventListener('resize', this.setNavigationBoxLeftStyle);
+    window.removeEventListener('scroll', this.setLeftValue);
   },
   methods: {
     scrollTo (where) {
@@ -246,11 +278,16 @@ export default {
       const localised = this.localePath({name: 'organisation-dashboard', params: {...this.$route.params}});
       this.$router.push(localised);
     },
-    setFlyingBoxLeft () {
-      setTimeout(() => {
-        const box = this.$el.getBoundingClientRect();
-        this.$el.style.left = `${box.left}px`;
-      }, 300);
+    setLeftValue () {
+      const leftSide = document.querySelector('#general');
+      if (leftSide) {
+        this.leftWidth = leftSide.getBoundingClientRect().right;
+      }
+    },
+    setNavigationBoxLeftStyle () {
+      if (this.leftWidth) {
+        this.$el.style.left = `${this.leftWidth + 20}px`;
+      }
     }
   }
 };
