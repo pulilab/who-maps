@@ -35,30 +35,32 @@
             <fa icon="check" />
             <translate :parameters="{name: user.name}">{name} (me)</translate>
           </li>
-
-          <div class="el-popover__title">
-            <fa icon="handshake" />
-            <translate>Donor View</translate>
-          </div>
-          <li
-            :class="{'Active': donorActive}"
-            @click="setPersona('donor')"
-          >
-            <fa icon="check" />
-            {{ donor }}
-          </li>
-
-          <div class="el-popover__title">
-            <fa icon="globe" />
-            <translate>Country View</translate>
-          </div>
-          <li
-            :class="{'Active': countryActive}"
-            @click="setPersona('country')"
-          >
-            <fa icon="check" />
-            <translate :parameters="{country}">{country} MoH</translate>
-          </li>
+          <template v-if="showDonor">
+            <div class="el-popover__title">
+              <fa icon="handshake" />
+              <translate>Donor View</translate>
+            </div>
+            <li
+              :class="{'Active': donorActive}"
+              @click="setPersona('donor')"
+            >
+              <fa icon="check" />
+              {{ donor }}
+            </li>
+          </template>
+          <template v-if="showCountry">
+            <div class="el-popover__title">
+              <fa icon="globe" />
+              <translate>Country View</translate>
+            </div>
+            <li
+              :class="{'Active': countryActive}"
+              @click="setPersona('country')"
+            >
+              <fa icon="check" />
+              <translate :parameters="{country}">{country} MoH</translate>
+            </li>
+          </template>
         </ul>
       </div>
     </el-popover>
@@ -110,6 +112,18 @@ export default {
       if (this.user && this.user.country) {
         const country = this.getCountryDetails(this.user.country);
         return country ? country.name : null;
+      }
+    },
+    showDonor () {
+      const donorTypes = ['D', 'DA', 'SDA'];
+      if (this.user) {
+        return donorTypes.includes(this.user.account_type) || this.user.is_superuser;
+      }
+    },
+    showCountry () {
+      const countryTypes = ['G', 'CA', 'SCA'];
+      if (this.user) {
+        return countryTypes.includes(this.user.account_type) || this.user.is_superuser;
       }
     }
   },
