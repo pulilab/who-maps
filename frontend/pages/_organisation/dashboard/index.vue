@@ -14,7 +14,9 @@ export default {
     DashboardMap,
     DashboardProjectBox
   },
-  async fetch ({store}) {
+  async fetch ({store, query}) {
+    await store.dispatch('countries/loadMapData');
+    await store.dispatch('dashboard/setSearchOptions', query);
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),
       store.dispatch('projects/loadProjectStructure'),
