@@ -54,4 +54,4 @@ class CountryAdmin(admin.ModelAdmin):
 
 @admin.register(Donor)
 class DonorAdmin(admin.ModelAdmin):
-    filter_horizontal = ('users', 'admins', 'super_admins')
+    fields = list_display = ('name', 'code')

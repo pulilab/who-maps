@@ -140,7 +140,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
             except (Donor.DoesNotExist, ValueError):
                 raise ValidationError("No such donor.")
 
-            if donor.user_in_groups(request.user.userprofile):
+            if request.user.is_superuser or donor.user_in_groups(request.user.userprofile):
                 list_values.append('project__data__donor_custom_answers')
                 list_values.append('project__data__donor_custom_answers_private')
             else:
@@ -161,7 +161,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
             except (Country.DoesNotExist, ValueError):
                 raise ValidationError("No such country.")
 
-            if country.user_in_groups(request.user.userprofile):
+            if request.user.is_superuser or country.user_in_groups(request.user.userprofile):
                 list_values.append('project__data__country_custom_answers')
                 list_values.append('project__data__country_custom_answers_private')
             else:
