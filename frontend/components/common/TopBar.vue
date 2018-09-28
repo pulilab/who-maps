@@ -48,7 +48,7 @@
             <el-col class="AuthLinks">
               <div>
                 <nuxt-link
-                  :to="localePath({name: 'organisation-dashboard', params: $route.params})"
+                  :to="localePath({name: 'organisation-dashboard', params: $route.params, query: {}})"
                   class="HeaderBtn"
                 >
                   <translate>Dashboard</translate>

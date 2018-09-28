@@ -46,7 +46,7 @@
           type="flex">
           <el-col class="ActionBarTab">
             <nuxt-link
-              :to="localePath({name: 'organisation-dashboard', params: $route.params, query: $route.query})"
+              :to="localePath({name: 'organisation-dashboard', params: $route.params})"
               :class="['ActionBarLink', {'Active': isMapSubRoute}]"
               tag="div">
               <translate key="map-view">Map view</translate>
@@ -54,7 +54,7 @@
           </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
-              :to="localePath({name: 'organisation-dashboard-list', params: $route.params, query: $route.query})"
+              :to="localePath({name: 'organisation-dashboard-list', params: $route.params})"
               :class="['ActionBarLink', {'Active': isListSubRoute}]"
               tag="div">
               <translate key="list-view">List view</translate>

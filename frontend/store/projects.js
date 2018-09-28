@@ -213,6 +213,9 @@ export const actions = {
   },
   removeProject ({commit}, id) {
     commit('RM_USER_PROJECT', id);
+  },
+  resetProjectsData ({commit}) {
+    commit('RESET_PROJECTS_DATA');
   }
 };
 
@@ -241,5 +244,12 @@ export const mutations = {
   },
   SET_CURRENT_PROJECT_COVERAGE_VERSIONS: (state, coverage) => {
     state.currentProjectCoverageVersions = coverage;
+  },
+  RESET_PROJECTS_DATA: state => {
+    state.userProjects = [];
+    state.currentProject = null;
+    state.projectStructure = {};
+    state.currentProjectToolkitVersions = [];
+    state.currentProjectCoverageVersions = [];
   }
 };

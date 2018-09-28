@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import isEmpty from 'lodash/isEmpty';
 import AdvancedSearch from '../../components/dashboard/AdvancedSearch';
 import { mapGetters, mapActions } from 'vuex';
 
@@ -21,10 +20,9 @@ export default {
     AdvancedSearch
   },
   middleware: ['isLoggedIn'],
-  fetch ({query, store}) {
-    if (!isEmpty(query)) {
-      store.dispatch('dashboard/setSearchOptions', query);
-    }
+  async fetch ({query, store}) {
+    await store.dispatch('countries/loadMapData');
+    await store.dispatch('dashboard/setSearchOptions', query);
   },
   computed: {
     ...mapGetters({
@@ -40,9 +38,6 @@ export default {
     }
   },
   mounted () {
-    if (isEmpty(this.$route.query)) {
-      this.$router.replace({...this.$route, query: this.searchParameters});
-    }
     if (window) {
       const savedFilters = window.localStorage.getItem('savedFilters');
       if (savedFilters) {
