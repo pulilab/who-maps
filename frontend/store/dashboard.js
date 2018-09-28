@@ -1,5 +1,5 @@
 import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator } from '../utilities/map';
-import { intArrayFromQs } from '../utilities/api';
+import { intArrayFromQs, customColumnsMapper, strArrayFromQs, parseSearchResult } from '../utilities/api';
 
 export const searchIn = () => ['name', 'org', 'overview', 'partner', 'donor', 'loc'];
 export const defaultSelectedColumns = () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -72,21 +72,39 @@ export const state = () => ({
   previousPage: 0,
   sorting: null,
   savedFilters: [],
-  dashboardType: 'user'
+  dashboardType: 'user',
+  dashboardId: null
 });
 export const getters = {
   ...gettersGenerator(),
-  getProjectsList: state => [...state.projectsList.map(r => ({...r}))],
+  getProjectsList: state => [...state.projectsList.map(r => parseSearchResult(r))],
   getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => ({...r}))] : getters.getProjectsList,
-  getAvailableColumns: state => [...state.columns.map(c => ({...c, selected: state.selectedColumns.includes(c.id)}))],
-  getSelectedColumns: state => state.selectedColumns,
+  getCountryColumns: (state, getters, rootState, rootGetters) => {
+    if (state.dashboardId && state.dashboardType === 'country') {
+      const country = rootGetters['countries/getCountryDetails'](state.dashboardId);
+      return country && country.country_questions ? customColumnsMapper(country.country_questions, 'c') : [];
+    }
+    return [];
+  },
+  getDonorColumns: (state, getters, rootState, rootGetters) => {
+    if (state.dashboardId && state.dashboardType === 'donor') {
+      const donor = rootGetters['system/getDonorDetails'](state.dashboardId);
+      return donor && donor.donor_questions ? customColumnsMapper(donor.donor_questions, 'd') : [];
+    }
+    return [];
+  },
+  getAllColumns: (state, getters) => [...state.columns, ...getters.getCountryColumns, ...getters.getDonorColumns],
+  getAvailableColumns: (state, getters) => [...getters.getAllColumns.map(c => ({...c, id: `${c.id}`, selected: state.selectedColumns.includes(`${c.id}`)}))],
+  getSelectedColumns: state => state.selectedColumns.map(s => `${s}`),
   getSelectedDHI: state => state.selectedDHI,
   getSelectedHFA: state => state.selectedHFA,
   getSelectedHSC: state => state.selectedHSC,
   getSelectedHIS: state => state.selectedHIS,
   getSelectedPlatforms: state => state.selectedPlatforms,
   getSelectedRows: state => state.selectedRows,
-  getFilteredCountries: state => state.filteredCountries,
+  getFilteredCountries: state => {
+    return state.dashboardType === 'country' && state.dashboardId ? [state.dashboardId] : state.filteredCountries;
+  },
   getFilteredRegion: state => state.filteredRegion,
   getGovernmentApproved: state => state.governmentApproved,
   getGovernmentFinanced: state => state.governmentFinanced,
@@ -99,15 +117,18 @@ export const getters = {
   getSorting: state => state.sorting,
   getSavedFilters: state => state.savedFilters,
   getDashboardType: state => state.dashboardType,
-  getSearchParameters: state => {
+  getSearchParameters: (state, getters) => {
     const q = state.searchString && state.searchString.length > 1 ? state.searchString : undefined;
+    const country = getters.getFilteredCountries;
+    const donor = state.dashboardType === 'donor' ? [state.dashboardId] : null;
     return {
       page_size: state.pageSize,
       page: state.page,
       ordering: state.sorting,
       q,
       in: q ? state.searchIn : undefined,
-      country: state.filteredCountries,
+      country,
+      donor,
       region: state.filteredRegion,
       gov: state.governmentFinanced ? [1, 2] : undefined,
       approved: state.governmentApproved ? 1 : undefined,
@@ -115,7 +136,9 @@ export const getters = {
       dhi: state.selectedDHI,
       hfa: state.selectedHFA,
       hsc: state.selectedHSC,
-      his: state.selectedHIS
+      his: state.selectedHIS,
+      view_as: state.dashboardType !== 'user' ? state.dashboardType : undefined,
+      sc: state.selectedColumns
     };
   }
 };
@@ -227,6 +250,16 @@ export const actions = {
     }
     commit('SET_SAVED_FILTERS', filters);
   },
+  setDashboardType ({commit, getters}, {type, id}) {
+    commit('SET_DASHBOARD_TYPE', {type, id});
+    const selectedColumns = [...getters.getSelectedColumns];
+    if (type === 'country') {
+      selectedColumns.push(...getters.getCountryColumns.map(cc => cc.id));
+    } else if (type === 'donor') {
+      selectedColumns.push(...getters.getDonorColumns.map(cc => cc.id));
+    }
+    commit('SET_SELECTED_COLUMNS', selectedColumns);
+  },
   resetUserInput ({commit}) {
     commit('RESET_USER_INPUT');
     commit('SET_SEARCH_OPTIONS', {});
@@ -256,6 +289,9 @@ export const mutations = {
     state.selectedHFA = intArrayFromQs(options.hfa);
     state.selectedHSC = intArrayFromQs(options.hsc);
     state.selectedHIS = intArrayFromQs(options.his);
+    state.selectedColumns = options.sc ? strArrayFromQs(options.sc) : defaultSelectedColumns();
+    state.dashboardType = options.view_as ? options.view_as : 'user';
+    state.dashboardId = options.view_as === 'country' ? intArrayFromQs(options.country)[0] : options.view_as === 'donor' ? +options.donor : null;
   },
   SET_SELECTED_COLUMNS: (state, columns) => {
     state.selectedColumns = columns;
@@ -309,5 +345,9 @@ export const mutations = {
   },
   SET_SAVED_FILTERS: (state, filters) => {
     state.savedFilters = filters;
+  },
+  SET_DASHBOARD_TYPE: (state, {type, id}) => {
+    state.dashboardType = type;
+    state.dashboardId = id;
   }
 };
