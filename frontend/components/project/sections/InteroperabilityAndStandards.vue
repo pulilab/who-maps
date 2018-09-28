@@ -7,9 +7,13 @@
         :label="$gettext('Does your digital health project link to a digital HIS?')"
         prop="interoperability_links">
         <interoperability-link-component
-          v-for="ir in interopearilbityLinksStructure"
+          v-for="(ir, index) in interopearilbityLinksStructure"
+          ref="interoperabilityLink"
           :key="ir.id"
           :item="ir"
+          :index="index"
+          :rules="rules"
+          :api-errors="apiErrors"
           :interoperability-links.sync="interoperability_links"
         />
       </el-form-item>
@@ -53,7 +57,8 @@ export default {
   methods: {
     async validate () {
       const validations = await Promise.all([
-        this.$validator.validate()
+        this.$validator.validate(),
+        ...this.$refs.interoperabilityLink.map(ir => ir.validate())
       ]);
       return validations.reduce((a, c) => a && c, true);
     }

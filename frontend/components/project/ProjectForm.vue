@@ -85,6 +85,9 @@ export default {
     CountryCustom,
     DonorCustom
   },
+  $_veeValidate: {
+    validator: 'new'
+  },
   data () {
     return {
       readyElements: 0,
@@ -250,7 +253,11 @@ export default {
           max: 256,
           url: true
         },
-        interoperability_links: {},
+        interoperability_links: {
+          url: {
+            require_protocol: true
+          }
+        },
         interoperability_standards: {}
       };
     },
@@ -385,6 +392,7 @@ export default {
             });
             return;
           } catch (e) {
+            console.log(e);
             this.setLoading(false);
             this.apiErrors = e.response.data;
           }
