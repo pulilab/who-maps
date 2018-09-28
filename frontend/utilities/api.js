@@ -196,6 +196,10 @@ export const intArrayFromQs = item => {
   return item ? Array.isArray(item) ? item.map(i => +i) : [+item] : [];
 };
 
+export const strArrayFromQs = item => {
+  return item ? Array.isArray(item) ? item : [item] : [];
+};
+
 export const queryStringComparisonParser = collection => {
   const result = {};
   for (let key in collection) {
@@ -222,3 +226,29 @@ export const questionWriteParser = (question, type, parent) => {
     [type]: parent.id
   };
 };
+
+export const customColumnsMapper = (columns, prefix) => {
+  return columns.map(c => ({
+    originalId: c.id,
+    id: `${prefix}_${c.id}`,
+    label: c.question,
+    type: c.type,
+    donorId: c.donor
+  }));
+};
+
+export const parseSearchResult = r => ({
+  ...r,
+  country_answers: {
+    ...r.country_custom_answers,
+    ...r.country_custom_answers_private
+  },
+  donor_answers: {
+    ...r.donor_custom_answers,
+    ...r.donor_custom_answers_private
+  },
+  country_custom_answers: undefined,
+  country_custom_answers_private: undefined,
+  donor_custom_answers: undefined,
+  donor_custom_answers_private: undefined
+});
