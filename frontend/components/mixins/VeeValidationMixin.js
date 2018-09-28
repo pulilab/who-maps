@@ -1,7 +1,8 @@
 const errorLibrary = {
   platforms: 'platform_',
   coverage: 'coverage_',
-  coverage_second_level: 'coverage_second_level_'
+  coverage_second_level: 'coverage_second_level_',
+  interoperability_links: 'interoperability_link_'
 };
 
 export default {
@@ -73,6 +74,11 @@ export default {
     clear () {
       this.errors.clear();
     },
+    addErrorIfMissing ({field, msg, scope}) {
+      if (!this.errors.has(field, scope)) {
+        this.errors.add({field, msg, scope});
+      }
+    },
     countryCustomAnswersErrorHandling (errors) {
       if (errors && Array.isArray(errors)) {
         this.customCountryErrors = errors;
@@ -107,7 +113,7 @@ export default {
               const scope = errorLibrary[field] + key;
               this.scopes.push(scope);
               for (let innerField in innerError) {
-                this.errors.add({
+                this.addErrorIfMissing({
                   field: innerField,
                   msg: innerError[innerField][0],
                   scope
@@ -115,7 +121,7 @@ export default {
               }
             });
           } else {
-            this.errors.add({
+            this.addErrorIfMissing({
               field,
               msg: first
             });
@@ -123,7 +129,7 @@ export default {
         } else {
           for (let inner in item) {
             if (inner === 'non_field_errors') {
-              this.errors.add({
+              this.addErrorIfMissing({
                 field,
                 msg: item.non_field_errors[0]
               });
