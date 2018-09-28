@@ -14,14 +14,22 @@ export default {
     DashboardMap,
     DashboardProjectBox
   },
-  async fetch ({store, query}) {
-    await store.dispatch('countries/loadMapData');
-    await store.dispatch('dashboard/setSearchOptions', query);
+  async fetch ({store, query, error}) {
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),
       store.dispatch('projects/loadProjectStructure'),
-      store.dispatch('dashboard/loadProjectsMap')
+      store.dispatch('countries/loadMapData')
     ]);
+    await store.dispatch('dashboard/setSearchOptions', query);
+    try {
+      await store.dispatch('dashboard/loadProjectsMap');
+    } catch (e) {
+      console.log(e);
+      error({
+        statusCode: 404,
+        message: 'Unable to process the search with the current parameters'
+      });
+    }
   },
   computed: {
     ...mapGetters({
