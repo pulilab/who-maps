@@ -14,7 +14,9 @@ import VueDjangoFeedback from './feedback/RawDjangoFeedback.vue';
 
 export default {
   components: { VueDjangoFeedback },
-
+  $_veeValidate: {
+    validator: 'new'
+  },
   computed: {
     ...mapGetters({
       profile: 'user/getProfile',
