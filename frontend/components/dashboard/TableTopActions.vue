@@ -47,23 +47,25 @@
             value="PDF"/>
         </el-select>
 
-        <div class="Separator" />
-        <el-button
-          :disabled="selectedRows.length === 0"
-          type="primary"
-          size="small"
-          class="IconLeft"
-          @click="openMailDialog"
-        >
-          <fa icon="envelope"/>
-          <translate v-show="selected === 0">Contact selected</translate>
-          <translate
-            v-show="selected > 0"
-            :parameters="{selected}">
-            Contact {selected} selected
-          </translate>
-        </el-button>
-        <pdf-export ref="pdfExport" />
+        <template v-if="showEmailButton">
+          <div class="Separator" />
+          <el-button
+            :disabled="selectedRows.length === 0"
+            type="primary"
+            size="small"
+            class="IconLeft"
+            @click="openMailDialog"
+          >
+            <fa icon="envelope"/>
+            <translate v-show="selected === 0">Contact selected</translate>
+            <translate
+              v-show="selected > 0"
+              :parameters="{selected}">
+              Contact {selected} selected
+            </translate>
+          </el-button>
+          <pdf-export ref="pdfExport" />
+        </template>
       </el-row>
     </el-col>
 
@@ -161,13 +163,21 @@ export default {
       selected: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
       allSelected: 'dashboard/getSelectAll',
-      total: 'dashboard/getTotal'
+      total: 'dashboard/getTotal',
+      user: 'user/getProfile'
     }),
     settingsTitle () {
       return `${this.$gettext('main fields')} (${this.selected.length}/${this.columns.length})`;
     },
     selected () {
       return this.allSelected ? this.total : this.selectedRows.length;
+    },
+    showEmailButton () {
+      const allowed = ['CA', 'SCA', 'D', 'DA', 'SDA'];
+      if (this.user) {
+        return allowed.includes(this.user.account_type) || this.user.is_superuser;
+      }
+      return false;
     }
   },
   methods: {
