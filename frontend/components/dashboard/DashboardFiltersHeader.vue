@@ -4,9 +4,9 @@
       <fa icon="list-ul" />
       <translate :parameters="{total}">{total} project(s) to show</translate>
     </span>
-    <el-button class="ToggleFiltersButton">
+    <!-- <el-button class="ToggleFiltersButton">
       <fa icon="chevron-right" />
-    </el-button>
+    </el-button> -->
   </div>
 </template>
 

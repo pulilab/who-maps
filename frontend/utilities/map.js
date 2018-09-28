@@ -114,6 +114,9 @@ export const actionsGenerator = () => ({
   },
   setSearchIn ({commit}, value) {
     commit('SET_SEARCH_IN', value);
+  },
+  resetUserInput ({commit}) {
+    commit('RESET_USER_INPUT');
   }
 });
 
@@ -144,5 +147,15 @@ export const mutationsGenerator = () => ({
   },
   SET_SEARCH_IN: (state, value) => {
     state.searchIn = value;
+  },
+  RESET_USER_INPUT: state => {
+    state.selectedCountry = null;
+    state.currentZoom = 3;
+    state.activeCountry = null;
+    state.mapReady = false;
+    state.projectBoxActiveTab = 'subNational';
+    state.activeSubLevel = null;
+    state.searchString = '';
+    state.searchIn = searchIn();
   }
 });
