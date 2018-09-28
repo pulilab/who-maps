@@ -271,7 +271,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                 else:
                     errors['country_custom_answers'] = country_answers.errors
 
-        for donor_id in data_serializer.validated_data.get('donors'):
+        for donor_id in data_serializer.validated_data.get('donors', []):
             donor = Donor.objects.get(id=donor_id)
             if donor and donor.donor_questions.exists():
                 if 'donor_custom_answers' not in request.data:
@@ -349,7 +349,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                 if not country_answers.is_valid():
                     errors['country_custom_answers'] = country_answers.errors
 
-        for donor_id in data_serializer.validated_data.get('donors'):
+        for donor_id in data_serializer.validated_data.get('donors', []):
             donor = Donor.objects.filter(id=donor_id).first()
             if donor and donor.donor_questions.exists():
                 if 'donor_custom_answers' not in request.data:
@@ -417,7 +417,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                 if not country_answers.is_valid():
                     errors['country_custom_answers'] = country_answers.errors
 
-        for donor_id in data_serializer.validated_data.get('donors'):
+        for donor_id in data_serializer.validated_data.get('donors', []):
             donor = Donor.objects.get(id=donor_id)
             if donor and donor.donor_questions.exists():
                 if 'donor_custom_answers' not in request.data:
