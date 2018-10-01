@@ -384,10 +384,12 @@ class ProjectApprovalSerializer(serializers.ModelSerializer):
     project = serializers.ReadOnlyField(source='project_id')
     project_name = serializers.SerializerMethodField()
     history = serializers.SerializerMethodField()
+    legacy_approved_by = serializers.ReadOnlyField(source='user_id')
 
     class Meta:
         model = ProjectApproval
-        fields = ('id', 'project_name', 'created', 'modified', 'approved', 'reason', 'project', 'history')
+        fields = ('id', 'project_name', 'created', 'modified', 'approved',
+                  'reason', 'project', 'history', 'legacy_approved_by')
 
     def get_project_name(self, obj):
         return obj.project.name
