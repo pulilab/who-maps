@@ -8,6 +8,7 @@ from django.contrib.postgres.fields import JSONField, ArrayField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from simple_history.models import HistoricalRecords
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
@@ -200,6 +201,7 @@ class ProjectApproval(ExtendedModel):
                              help_text="Administrator who approved the project", on_delete=models.CASCADE)
     approved = models.NullBooleanField(blank=True, null=True)
     reason = models.TextField(blank=True, null=True)
+    history = HistoricalRecords(excluded_fields=['project', 'created'])
 
     def __str__(self):
         return "Approval for {}".format(self.project.name)
