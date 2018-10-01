@@ -8,12 +8,14 @@ from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval
+from project.permissions import InCountryAdminForApproval
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, CountryField, Donor
@@ -608,7 +610,8 @@ class MapProjectCountryViewSet(ListModelMixin, GenericViewSet):
     serializer_class = MapProjectCountrySerializer
 
 
-class ProjectApprovalViewSet(UpdateModelMixin, GenericViewSet):
+class ProjectApprovalViewSet(TokenAuthMixin, UpdateModelMixin, GenericViewSet):
+    permission_classes = (IsAuthenticated, InCountryAdminForApproval)
     serializer_class = ProjectApprovalSerializer
     queryset = ProjectApproval.objects.all()\
         .select_related('project', 'project__search', 'project__search__country').exclude(project__public_id='')
