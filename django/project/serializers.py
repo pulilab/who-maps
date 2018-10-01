@@ -383,10 +383,14 @@ class DonorCustomAnswerSerializer(CustomAnswerSerializer):
 class ProjectApprovalSerializer(serializers.ModelSerializer):
     project = serializers.ReadOnlyField(source='project_id')
     project_name = serializers.SerializerMethodField()
+    history = serializers.SerializerMethodField()
 
     class Meta:
         model = ProjectApproval
-        fields = "__all__"
+        fields = ('id', 'project_name', 'created', 'modified', 'approved', 'reason', 'project', 'history')
 
     def get_project_name(self, obj):
         return obj.project.name
+
+    def get_history(self, obj):
+        return obj.history.values('history_user__userprofile', 'approved', 'reason', 'modified')
