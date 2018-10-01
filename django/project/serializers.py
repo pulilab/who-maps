@@ -381,6 +381,7 @@ class DonorCustomAnswerSerializer(CustomAnswerSerializer):
 
 
 class ProjectApprovalSerializer(serializers.ModelSerializer):
+    project = serializers.ReadOnlyField(source='project_id')
     project_name = serializers.SerializerMethodField()
 
     class Meta:
