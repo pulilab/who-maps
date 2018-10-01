@@ -381,3 +381,8 @@ class DonorCustomAnswerSerializer(CustomAnswerSerializer):
 
 
 class ProjectApprovalSerializer(serializers.ModelSerializer):
+    project_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ProjectApproval
+        fields = "__all__"
