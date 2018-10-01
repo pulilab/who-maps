@@ -164,8 +164,10 @@ class Project(SoftDeleteModel, ExtendedModel):
 
     def reset_approval(self):
         if self.approval.approved:
-            self.approval.delete()
-            ProjectApproval.objects.create(project=self)
+            self.approval.user = None
+            self.approval.approved = None
+            self.approval.reason = None
+            self.approval.save_without_historical_record()
 
     @classmethod
     def remove_stale_donors(cls):
