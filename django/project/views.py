@@ -617,3 +617,7 @@ class ProjectApprovalViewSet(UpdateModelMixin, GenericViewSet):
         queryset = self.filter_queryset(self.get_queryset().filter(project__search__country=country_id))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
