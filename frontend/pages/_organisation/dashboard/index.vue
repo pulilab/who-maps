@@ -15,6 +15,7 @@ export default {
     DashboardProjectBox
   },
   async fetch ({store, query, error}) {
+    store.dispatch('dashboard/setDashboardSection', 'map');
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),
       store.dispatch('projects/loadProjectStructure'),
@@ -33,14 +34,18 @@ export default {
   },
   computed: {
     ...mapGetters({
-      searchParameters: 'dashboard/getSearchParameters'
+      searchParameters: 'dashboard/getSearchParameters',
+      dashboardSection: 'dashboard/getDashboardSection'
     })
   },
   watch: {
     searchParameters: {
       immediate: false,
-      handler (params) {
-        this.load();
+      handler (query) {
+        if (this.dashboardSection === 'map') {
+          this.$router.replace({...this.$route, query});
+          this.load();
+        }
       }
     }
   },

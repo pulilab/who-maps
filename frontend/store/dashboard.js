@@ -73,7 +73,8 @@ export const state = () => ({
   sorting: null,
   savedFilters: [],
   dashboardType: 'user',
-  dashboardId: null
+  dashboardId: null,
+  dashboardSection: 'map'
 });
 export const getters = {
   ...gettersGenerator(),
@@ -117,6 +118,7 @@ export const getters = {
   getSorting: state => state.sorting,
   getSavedFilters: state => state.savedFilters,
   getDashboardType: state => state.dashboardType,
+  getDashboardSection: state => state.dashboardSection,
   getSearchParameters: (state, getters) => {
     const q = state.searchString && state.searchString.length > 1 ? state.searchString : undefined;
     const country = getters.getFilteredCountries;
@@ -260,6 +262,9 @@ export const actions = {
     }
     commit('SET_SELECTED_COLUMNS', selectedColumns);
   },
+  setDashboardSection ({commit}, value) {
+    commit('SET_DASHBOARD_SECTION', value);
+  },
   resetUserInput ({commit}) {
     commit('RESET_USER_INPUT');
     commit('SET_SEARCH_OPTIONS', {});
@@ -349,5 +354,8 @@ export const mutations = {
   SET_DASHBOARD_TYPE: (state, {type, id}) => {
     state.dashboardType = type;
     state.dashboardId = id;
+  },
+  SET_DASHBOARD_SECTION: (state, section) => {
+    state.dashboardSection = section;
   }
 };

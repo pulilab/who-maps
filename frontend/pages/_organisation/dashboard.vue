@@ -13,26 +13,13 @@
 
 <script>
 import AdvancedSearch from '../../components/dashboard/AdvancedSearch';
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   components: {
     AdvancedSearch
   },
   middleware: ['isLoggedIn'],
-  computed: {
-    ...mapGetters({
-      searchParameters: 'dashboard/getSearchParameters'
-    })
-  },
-  watch: {
-    searchParameters: {
-      immediate: false,
-      handler (query) {
-        this.$router.replace({...this.$route, query});
-      }
-    }
-  },
   mounted () {
     if (window) {
       const savedFilters = window.localStorage.getItem('savedFilters');
