@@ -386,3 +386,6 @@ class ProjectApprovalSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectApproval
         fields = "__all__"
+
+    def get_project_name(self, obj):
+        return obj.project.name
