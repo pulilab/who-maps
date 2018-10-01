@@ -58,6 +58,7 @@ export const actions = () => ({
 
     if (state.type === 'country') {
       await dispatch('admin/map/loadGeoJSON', null, {root: true});
+      await dispatch('admin/approval/loadList', null, {root: true});
     }
 
     dispatch('admin/questions/setQuestions', data, {root: true});

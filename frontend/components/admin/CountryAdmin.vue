@@ -85,6 +85,10 @@
 
     </collapsible-card>
 
+    <collapsible-card :title="$gettext('Project Approval')">
+      <project-approval />
+    </collapsible-card>
+
     <collapsible-card
       :title="$gettext('User management')"
       class="UserManagement">
@@ -234,6 +238,8 @@ import VueMapCustomizer from '../admin/VueMapCustomizer';
 import DhaQuestionaire from '../admin/DhaQuestionaire';
 import FileUpload from '../common/FileUpload';
 import CountrySelect from '../common/CountrySelect';
+import ProjectApproval from './ProjectApproval';
+
 import { mapGettersActions } from '../../utilities/form';
 
 export default {
@@ -245,7 +251,8 @@ export default {
     VueMapCustomizer,
     DhaQuestionaire,
     FileUpload,
-    CountrySelect
+    CountrySelect,
+    ProjectApproval
   },
 
   data () {
