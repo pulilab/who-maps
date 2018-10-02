@@ -603,7 +603,7 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
                             answer = p.data['country_custom_answers_private'][str(q.id)]
                         except KeyError:
                             pass
-                    representation.extend([{q.question: answer}])
+                    representation.extend([{q.question: ", ".join(answer)}])
 
             results.append(representation)
 
