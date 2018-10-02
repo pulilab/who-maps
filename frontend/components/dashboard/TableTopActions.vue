@@ -242,6 +242,11 @@ export default {
       width: 100%;
 
       .el-button {
+        &.is-disabled {
+          + .el-select {
+            display: none;
+          }
+        }
       }
 
       .el-select {

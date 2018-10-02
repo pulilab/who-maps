@@ -19,6 +19,8 @@ export const getters = {
     return state.profiles ? [ ...state.profiles.filter(p => p.name) ] : [];
   },
 
+  getUserProfileDetails: (state, getters) => id => getters.getUserProfiles.find(u => u.id === id),
+
   getSearchResult: state => {
     const search = state.projectSearch ? state.projectSearch : [];
     return search.map(s => {

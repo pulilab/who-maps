@@ -4,6 +4,7 @@
     <dashboard-filters-dialog />
     <save-filter-dialog />
     <send-email-dialog />
+    <project-approval-dialog />
   </div>
 </template>
 
@@ -12,13 +13,15 @@ import DigitalHealthInterventionsDialog from './DigitalHealthInterventionsDialog
 import DashboardFiltersDialog from './DashboardFiltersDialog';
 import SaveFilterDialog from './SaveFilterDialog';
 import SendEmailDialog from './SendEmailDialog';
+import ProjectApprovalDialog from './ProjectApprovalDialog';
 
 export default {
   components: {
     DigitalHealthInterventionsDialog,
     DashboardFiltersDialog,
     SaveFilterDialog,
-    SendEmailDialog
+    SendEmailDialog,
+    ProjectApprovalDialog
   }
 };
 </script>

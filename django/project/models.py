@@ -8,6 +8,7 @@ from django.contrib.postgres.fields import JSONField, ArrayField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from simple_history.models import HistoricalRecords
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
@@ -131,6 +132,7 @@ class Project(SoftDeleteModel, ExtendedModel):
             name=self.draft.get('name', '') if draft_mode else self.name,
             approved=self.approval.approved if hasattr(self, 'approval') else None,
             fields=[field.to_representation(draft_mode) for field in CountryField.get_for_project(self, draft_mode)],
+            modified=self.modified,
         )
 
         data.update(extra_data)
@@ -163,8 +165,10 @@ class Project(SoftDeleteModel, ExtendedModel):
 
     def reset_approval(self):
         if self.approval.approved:
-            self.approval.delete()
-            ProjectApproval.objects.create(project=self)
+            self.approval.user = None
+            self.approval.approved = None
+            self.approval.reason = None
+            self.approval.save_without_historical_record()
 
     @classmethod
     def remove_stale_donors(cls):
@@ -200,9 +204,18 @@ class ProjectApproval(ExtendedModel):
                              help_text="Administrator who approved the project", on_delete=models.CASCADE)
     approved = models.NullBooleanField(blank=True, null=True)
     reason = models.TextField(blank=True, null=True)
+    history = HistoricalRecords(excluded_fields=['project', 'created'])
 
     def __str__(self):
         return "Approval for {}".format(self.project.name)
+
+    def save_without_historical_record(self, *args, **kwargs):
+        self.skip_history_when_saving = True
+        try:
+            ret = self.save(*args, **kwargs)
+        finally:
+            del self.skip_history_when_saving
+        return ret
 
 
 class CoverageVersion(ExtendedModel):

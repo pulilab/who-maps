@@ -15,7 +15,8 @@
     >
       <el-table-column
         type="selection"
-        width="38"
+        align="center"
+        width="35"
       />
       <el-table-column
         v-if="selectedColumns.includes('1')"
@@ -364,14 +365,6 @@ export default {
         }
       }
 
-      // select row
-      .el-table-column--selection {
-        > .cell {
-          padding: 0 10px;
-          text-align: center;
-        }
-      }
-
       // selected table row
       .el-table__row {
         &.Selected {
@@ -387,19 +380,12 @@ export default {
 
       .caret-wrapper {
         position: absolute;
-        top: -2px;
-        right: 2px;
-        vertical-align: top;
-        height: 30px;
-
-        i {
-          border-width: 4px;
-        }
+        top: 1px;
+        right: 3px;
       }
 
       .el-table__empty-block {
         position: relative;
-        // width: 100% !important;
       }
 
       .el-table__empty-text {

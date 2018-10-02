@@ -72,7 +72,7 @@
 
       <el-button
         circle
-        class="CloseBox"
+        class="CloseBox CancelButton"
         @click="closeCountryProjextBox"
       >
         <fa icon="times" />
@@ -257,7 +257,7 @@ export default {
       transition: @transitionAll;
 
       &:hover {
-        color: @colorTextPrimary;
+        color: lighten(@colorTextSecondary, 10%) !important;
       }
     }
   }

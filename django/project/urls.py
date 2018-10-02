@@ -82,4 +82,14 @@ urlpatterns = [
             'get': 'list',
         }),
         name="project-map"),
+    path(r'approvals/<int:country_id>/',
+         view=views.ProjectApprovalViewSet.as_view({
+             'get': 'list'
+         }),
+         name="approval"),
+    path(r'approval/<int:pk>/',
+         view=views.ProjectApprovalViewSet.as_view({
+             'put': 'update'
+         }),
+         name="approval"),
 ]

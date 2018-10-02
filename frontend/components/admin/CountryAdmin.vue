@@ -86,6 +86,14 @@
     </collapsible-card>
 
     <collapsible-card
+      v-if="projectApproval"
+      :title="$gettext('Project Approval')"
+      class="ProjectApproval"
+    >
+      <project-approval />
+    </collapsible-card>
+
+    <collapsible-card
       :title="$gettext('User management')"
       class="UserManagement">
       <el-row type="flex">
@@ -234,6 +242,8 @@ import VueMapCustomizer from '../admin/VueMapCustomizer';
 import DhaQuestionaire from '../admin/DhaQuestionaire';
 import FileUpload from '../common/FileUpload';
 import CountrySelect from '../common/CountrySelect';
+import ProjectApproval from './ProjectApproval';
+
 import { mapGettersActions } from '../../utilities/form';
 
 export default {
@@ -245,7 +255,8 @@ export default {
     VueMapCustomizer,
     DhaQuestionaire,
     FileUpload,
-    CountrySelect
+    CountrySelect,
+    ProjectApproval
   },
 
   data () {
@@ -511,6 +522,12 @@ export default {
 
       .el-checkbox {
         line-height: 40px;
+      }
+    }
+
+    .ProjectApproval {
+      .ContentContainer {
+        padding: 20px 40px 60px;
       }
     }
 
