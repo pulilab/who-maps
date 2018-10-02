@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    :title="$gettext('Proejct Approval')"
+    :title="$gettext('Project Approval')"
     :modal="mini"
     :top="top"
     :width="width"

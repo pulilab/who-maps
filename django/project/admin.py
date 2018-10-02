@@ -1,19 +1,15 @@
 import csv
-from io import StringIO
 
-from django.contrib import admin, messages
+from django.contrib import admin
 from django import forms
-from django.contrib.admin import SimpleListFilter
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.http import HttpResponse
 from django.core import mail
 from django.utils.html import mark_safe
 from django.template import loader
 from django.conf import settings
-from django.utils.translation import ugettext, override
 
 from allauth.account.models import EmailAddress
 from toolkit.toolkit_data import toolkit_default
@@ -21,8 +17,7 @@ from core.admin import AllObjectsAdmin
 from country.models import Country
 from toolkit.models import Toolkit
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, Project, HSCGroup, \
-    ProjectApproval
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, Project, HSCGroup
 from user.models import UserProfile, Organisation
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
