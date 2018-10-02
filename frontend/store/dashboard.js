@@ -2,7 +2,7 @@ import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator 
 import { intArrayFromQs, customColumnsMapper, strArrayFromQs, parseCustomAnswers } from '../utilities/api';
 
 export const searchIn = () => ['name', 'org', 'overview', 'partner', 'donor', 'loc'];
-export const defaultSelectedColumns = () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+export const defaultSelectedColumns = () => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
 export const state = () => ({
   ...stateGenerator(),
