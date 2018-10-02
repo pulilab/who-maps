@@ -1,9 +1,5 @@
-<template>
-  <div/>
-</template>
-
 <script>
-import moment from 'moment';
+import { format } from 'date-fns';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -15,10 +11,13 @@ export default {
       getCountryDetails: 'countries/getCountryDetails',
       getDonorDetails: 'system/getDonorDetails',
       getOrganisationDetails: 'system/getOrganisationDetails',
-      getHealthFocusAreas: 'projects/getHealthFocusAreas'
+      getHealthFocusAreas: 'projects/getHealthFocusAreas',
+      dashboardType: 'dashboard/getDashboardType',
+      countryColumns: 'dashboard/getCountryColumns',
+      donorColumns: 'dashboard/getDonorColumns'
     }),
     exportDate () {
-      return moment().format('Do MMM, YYYY');
+      return format(Date.now(), 'Do MMM, YYYY');
     },
     docDefinition () {
       return {
@@ -98,12 +97,58 @@ export default {
     },
     selected () {
       return this.selectAll ? this.projects : this.projects.filter(p => this.selectedRows.some(sr => sr === p.id));
+    },
+    parsed () {
+      return this.selected.map(s => {
+        let custom = [];
+        if (this.dashboardType === 'donor') {
+          try {
+            custom = this.donorColumns.map(dc => {
+              const value = s.donor_answers && s.donor_answers[dc.donorId] ? s.donor_answers[dc.donorId][dc.originalId] : '';
+              return {
+                text: dc.label,
+                value,
+                donor: dc.donorId
+              };
+            });
+          } catch (e) {
+            console.error('failed to print custom donor answers', e);
+          }
+        }
+        if (this.dashboardType === 'country') {
+          try {
+            custom = this.countryColumns.map(cc => {
+              const value = s.country_answers ? s.country_answers[cc.originalId] : '';
+              return {
+                text: cc.label,
+                value
+              };
+            });
+          } catch (e) {
+            console.error('failed to print custom country answers', e);
+          }
+        }
+        return {
+          ...s,
+          custom
+        };
+      });
     }
   },
   methods: {
     printDate (dateString) {
-      const mom = moment(dateString);
-      return mom.format('Do MMM, YYYY');
+      return format(dateString, 'Do MMM, YYYY');
+    },
+    printBoolean (value) {
+      return value ? this.$gettext('Yes') : this.$gettext('No');
+    },
+    printCustomAnswer (value) {
+      if (value && value[0] && value.length === 1) {
+        return value[0];
+      } else if (value && value.length > 0) {
+        return value.join(', ');
+      }
+      return 'N/A';
     },
     async printPdf () {
       this.base64Images = require('../../utilities/exportBase64Images.js');
@@ -111,7 +156,7 @@ export default {
       const pdfFonts = require('pdfmake/build/vfs_fonts.js');
       this.pdfMake.vfs = pdfFonts.pdfMake.vfs;
       const docDefinition = {...this.docDefinition};
-      this.selected.forEach((project, index) => {
+      this.parsed.forEach((project, index) => {
         const country = this.getCountryDetails(project.country);
         const country_name = country && country.name ? country.name.toUpperCase() : '';
         const donors = project.donors.map(d => this.getDonorDetails(d)).filter(d => d).map(d => d.name);
@@ -137,8 +182,8 @@ export default {
               ],
               [
                 [
-                  { text: this.$gettext('Date of:'), style: 'subHeader' },
-                  this.printDate(project.implementation_dates)],
+                  { text: this.$gettext('Government investor:'), style: 'subHeader' },
+                  this.printBoolean(project.government_investor)],
                 [
                   { text: this.$gettext('Organisation name:'), style: 'subHeader' },
                   organisation_name
@@ -178,17 +223,26 @@ export default {
                   colSpan: 3
                 },
                 '', ''
-              ]
+              ],
+              ...project.custom.map(c => [
+                {
+                  stack: [
+                    { text: c.text, style: 'subHeader' },
+                    this.printCustomAnswer(c.value)
+                  ],
+                  colSpan: 6
+                },
+                '', '', '', '', ''
+              ])
             ]
           }
         });
       });
       this.pdfMake.createPdf(docDefinition).download('clv-searchable-export.pdf');
     }
+  },
+  render () {
+    return null;
   }
 };
 </script>
-
-<style>
-
-</style>
