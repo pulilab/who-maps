@@ -44,6 +44,10 @@ export const actions = {
   },
   clearCountryData ({commit}) {
     commit('SET_COUNTRY_LANDING_DATA', null);
+  },
+  resetSearch ({commit}) {
+    commit('SET_SEARCHED', null);
+    commit('SET_SEARCH_STRING', null);
   }
 };
 export const mutations = {
