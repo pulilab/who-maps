@@ -591,14 +591,19 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
                 {'First Level Coverage': p.str_coverage()},
                 {'Second Level Coverage': p.str_coverage(second_level=True)},
             ]
-            if has_country_permission:
-                custom_answers = p.data.get('country_custom_answers', {}).update(
-                    p.data.get('country_custom_answers_private', {}))
-                for question_id, answer in custom_answers.items():
+            if single_country and has_country_permission:
+                for q in projects[0].search.country.country_questions.all():
+                    answer = ""
                     try:
-                        representation.extend({CustomQuestion.objects.get(id=question_id).question: answer})
-                    except (CustomQuestion.DoesNotExist, ValueError):
+                        answer = p.data['country_custom_answers'][str(q.id)]
+                    except KeyError:
                         pass
+                    if not answer:
+                        try:
+                            answer = p.data['country_custom_answers_private'][str(q.id)]
+                        except KeyError:
+                            pass
+                    representation.extend([{q.question: ", ".join(answer)}])
 
             results.append(representation)
 
