@@ -6,7 +6,6 @@
       <el-col class="Download">
         <el-button
           :disabled="rowSelection.length === 0"
-          type="text"
           class="IconLeft"
           @click="csvExport"
         >
