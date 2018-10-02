@@ -535,7 +535,7 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
         return Response(coverage_versions)
 
 
-class CSVExportViewSet(TeamTokenAuthMixin, ViewSet):
+class CSVExportViewSet(TokenAuthMixin, ViewSet):
     def create(self, request):
         """
         Creates CSV file out of a list of project IDs
