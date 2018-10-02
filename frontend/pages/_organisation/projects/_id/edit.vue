@@ -6,7 +6,10 @@
 
 <script>
 export default {
-  middleware: ['isLoggedIn']
+  middleware: ['isLoggedIn'],
+  async fetch ({store}) {
+    store.dispatch('landing/resetSearch');
+  }
 };
 </script>
 

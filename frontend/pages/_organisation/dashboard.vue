@@ -20,6 +20,9 @@ export default {
     AdvancedSearch
   },
   middleware: ['isLoggedIn'],
+  fetch ({store}) {
+    store.dispatch('landing/resetSearch');
+  },
   mounted () {
     if (window) {
       const savedFilters = window.localStorage.getItem('savedFilters');

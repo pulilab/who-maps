@@ -11,6 +11,7 @@ export default {
   },
   middleware: ['isLoggedIn'],
   async fetch ({store}) {
+    store.dispatch('landing/resetSearch');
     await store.dispatch('projects/loadUserProjects');
     await store.dispatch('toolkit/loadToolkitData');
   }

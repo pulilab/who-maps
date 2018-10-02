@@ -18,6 +18,9 @@
 import ProjectData from '../../../../components/project/ProjectData';
 export default {
   middleware: ['isLoggedIn'],
+  async fetch ({store}) {
+    store.dispatch('landing/resetSearch');
+  },
   components: {
     ProjectData
   }

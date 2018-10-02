@@ -19,6 +19,9 @@ import ProjectData from '../../../../components/project/ProjectData';
 export default {
   components: {
     ProjectData
+  },
+  async fetch ({store}) {
+    store.dispatch('landing/resetSearch');
   }
 };
 </script>

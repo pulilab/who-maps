@@ -20,6 +20,7 @@ export default {
   middleware: ['isLoggedIn'],
   fetch ({store}) {
     store.dispatch('project/resetProjectState');
+    store.dispatch('landing/resetSearch');
   }
 };
 </script>

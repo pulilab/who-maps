@@ -45,6 +45,9 @@ export default {
     AboutSection,
     CountryProjectsBox
   },
+  fetch ({store}) {
+    store.dispatch('landing/resetSearch');
+  },
   computed: {
     ...mapGetters({
       countryData: 'landing/getCountryData'
