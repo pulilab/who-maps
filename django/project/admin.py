@@ -76,33 +76,6 @@ class HSCChallengeAdmin(AllObjectsAdmin):
     pass
 
 
-class ApprovalFilter(SimpleListFilter):
-    title = 'Status'
-
-    parameter_name = 'approved'
-
-    def lookups(self, request, model_admin):
-        return (None, "Waiting for approval"), (True, "Approved"), (False, "Declined")
-
-    def choices(self, cl):  # pragma: no cover
-        for lookup, title in self.lookup_choices:
-            try:
-                selected = self.value() == lookup
-            except TypeError:
-                selected = None
-
-            yield {
-                'selected': selected,
-                'query_string': cl.get_query_string({
-                    self.parameter_name: lookup,
-                }, []),
-                'display': title,
-            }
-
-    def queryset(self, request, queryset):
-        return queryset.filter(approved=self.value())
-
-
 def validate_csv_ext(value):
     if not value.name.endswith('.csv'):
         raise forms.ValidationError('Only CSV format is accepted.')
