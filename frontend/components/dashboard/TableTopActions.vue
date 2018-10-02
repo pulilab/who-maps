@@ -167,7 +167,9 @@ export default {
       allSelected: 'dashboard/getSelectAll',
       total: 'dashboard/getTotal',
       user: 'user/getProfile',
-      projects: 'dashboard/getProjectsBucket'
+      projects: 'dashboard/getProjectsBucket',
+      dashboardId: 'dashboard/getDashboardId',
+      dashboardType: 'dashboard/getDashboardType'
     }),
     settingsTitle () {
       return `${this.$gettext('main fields')} (${this.selectedCol.length}/${this.columns.length})`;
@@ -215,7 +217,12 @@ export default {
         this.$refs.pdfExport.printPdf();
       } else if (this.exportType === 'CSV') {
         const ids = this.rowToExport.map(p => p.id);
-        const { data } = await this.$axios.post('/api/projects/csv-export/', ids, {responseType: 'blob'});
+        const payload = {
+          ids,
+          donor: this.dashboardType === 'donor' ? this.dashboardId : undefined,
+          country: this.dashboardType === 'country' ? this.dashboardId : undefined
+        };
+        const { data } = await this.$axios.post('/api/projects/csv-export/', payload, {responseType: 'blob'});
         const download_url = window.URL.createObjectURL(data);
         let link = document.createElement('a');
         link.setAttribute('href', download_url);
