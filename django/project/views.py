@@ -556,7 +556,6 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
         for p in projects:
             representation = [
                 {'Name': p.name},
-                {'UUID': p.public_id},
                 {'Country': Country.get_name_by_id(p.data.get('country'))},
                 {'Implementation Date': p.data.get('implementation_dates')},
                 {'Start Date': p.data.get('start_date')},
