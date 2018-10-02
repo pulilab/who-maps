@@ -61,7 +61,11 @@
               v-show="showArrow"
               icon="arrow-right" />
           </transition>
-          <project-legend :id="project.id" />
+          <project-legend
+            :id="project.id"
+            :donors="project.donors"
+            :country="project.country"
+          />
         </el-col>
       </el-row>
     </div>

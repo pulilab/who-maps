@@ -7,19 +7,21 @@ from django.db.models import QuerySet
 from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.mixins import RetrieveModelMixin, ListModelMixin
+from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from project.cache import cache_structure
-from project.models import HSCGroup
+from project.models import HSCGroup, ProjectApproval
+from project.permissions import InCountryAdminForApproval
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, CountryField, Donor, CustomQuestion
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
-    MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer
+    MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, ProjectApprovalSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
 
@@ -617,3 +619,15 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
 class MapProjectCountryViewSet(ListModelMixin, GenericViewSet):
     queryset = Project.objects.published_only()
     serializer_class = MapProjectCountrySerializer
+
+
+class ProjectApprovalViewSet(TokenAuthMixin, UpdateModelMixin, GenericViewSet):
+    permission_classes = (IsAuthenticated, InCountryAdminForApproval)
+    serializer_class = ProjectApprovalSerializer
+    queryset = ProjectApproval.objects.all()\
+        .select_related('project', 'project__search', 'project__search__country').exclude(project__public_id='')
+
+    def list(self, request, country_id):
+        queryset = self.filter_queryset(self.get_queryset().filter(project__search__country=country_id))
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

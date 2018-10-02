@@ -14,7 +14,7 @@ import scheduler.celery # noqa
 
 from country.models import CustomQuestion
 from project.utils import remove_keys
-from .models import Project
+from .models import Project, ProjectApproval
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
@@ -378,3 +378,21 @@ class CountryCustomAnswerSerializer(CustomAnswerSerializer):
 class DonorCustomAnswerSerializer(CustomAnswerSerializer):
     class Meta:
         list_serializer_class = DonorCustomAnswerListSerializer
+
+
+class ProjectApprovalSerializer(serializers.ModelSerializer):
+    project = serializers.ReadOnlyField(source='project_id')
+    project_name = serializers.SerializerMethodField()
+    history = serializers.SerializerMethodField()
+    legacy_approved_by = serializers.ReadOnlyField(source='user_id')
+
+    class Meta:
+        model = ProjectApproval
+        fields = ('id', 'project_name', 'created', 'modified', 'approved',
+                  'reason', 'project', 'history', 'legacy_approved_by')
+
+    def get_project_name(self, obj):
+        return obj.project.name
+
+    def get_history(self, obj):
+        return obj.history.values('history_user__userprofile', 'approved', 'reason', 'modified')

@@ -285,6 +285,7 @@ export default {
         }
 
         &:hover {
+          background-color: @colorGrayLighter;
           color: @colorTextPrimary;
         }
       }
@@ -354,9 +355,21 @@ export default {
   }
 
   .SearchShadow {
+    position: relative;
     width: 400px;
     height: @actionBarHeight;
     background-color: @colorGrayLightest;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-color: @colorGrayLight;
+    }
 
     .el-col {
       height: @actionBarHeight;
@@ -419,6 +432,7 @@ export default {
 
           &:hover {
             color: @colorTextPrimary;
+            background-color: @colorGrayLighter;
           }
         }
       }
