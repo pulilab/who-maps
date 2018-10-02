@@ -1,5 +1,5 @@
 import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator } from '../utilities/map';
-import { intArrayFromQs, customColumnsMapper, strArrayFromQs, parseSearchResult } from '../utilities/api';
+import { intArrayFromQs, customColumnsMapper, strArrayFromQs, parseCustomAnswers } from '../utilities/api';
 
 export const searchIn = () => ['name', 'org', 'overview', 'partner', 'donor', 'loc'];
 export const defaultSelectedColumns = () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -78,8 +78,8 @@ export const state = () => ({
 });
 export const getters = {
   ...gettersGenerator(),
-  getProjectsList: state => [...state.projectsList.map(r => parseSearchResult(r))],
-  getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => parseSearchResult(r))] : getters.getProjectsList,
+  getProjectsList: state => [...state.projectsList.map(r => parseCustomAnswers(r))],
+  getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => parseCustomAnswers(r))] : getters.getProjectsList,
   getCountryColumns: (state, getters, rootState, rootGetters) => {
     if (state.dashboardId && state.dashboardType === 'country') {
       const country = rootGetters['countries/getCountryDetails'](state.dashboardId);
