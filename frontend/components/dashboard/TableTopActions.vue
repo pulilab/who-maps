@@ -162,7 +162,7 @@ export default {
   computed: {
     ...mapGetters({
       columns: 'dashboard/getAvailableColumns',
-      selected: 'dashboard/getSelectedColumns',
+      selectedCol: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
       allSelected: 'dashboard/getSelectAll',
       total: 'dashboard/getTotal',
@@ -170,7 +170,7 @@ export default {
       projects: 'dashboard/getProjectsBucket'
     }),
     settingsTitle () {
-      return `${this.$gettext('main fields')} (${this.selected.length}/${this.columns.length})`;
+      return `${this.$gettext('main fields')} (${this.selectedCol.length}/${this.columns.length})`;
     },
     selected () {
       return this.allSelected ? this.total : this.selectedRows.length;
