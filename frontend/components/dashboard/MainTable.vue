@@ -387,19 +387,12 @@ export default {
 
       .caret-wrapper {
         position: absolute;
-        top: -2px;
-        right: 2px;
-        vertical-align: top;
-        height: 30px;
-
-        i {
-          border-width: 4px;
-        }
+        top: 1px;
+        right: 3px;
       }
 
       .el-table__empty-block {
         position: relative;
-        // width: 100% !important;
       }
 
       .el-table__empty-text {

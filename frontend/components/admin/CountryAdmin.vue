@@ -88,6 +88,7 @@
     <collapsible-card
       v-if="projectApproval"
       :title="$gettext('Project Approval')"
+      class="ProjectApproval"
     >
       <project-approval />
     </collapsible-card>
@@ -521,6 +522,12 @@ export default {
 
       .el-checkbox {
         line-height: 40px;
+      }
+    }
+
+    .ProjectApproval {
+      .ContentContainer {
+        padding: 20px 40px 60px;
       }
     }
 

@@ -354,10 +354,18 @@ a {
   border: 0 !important;
 
   &.el-button--default {
-    &:hover {
+    &:not(.is-disabled):hover {
       color: @colorWhite;
       border-color: @colorBrandPrimaryLight;
       background-color: @colorBrandPrimaryLight;
+    }
+  }
+
+  &.is-disabled {
+    background-color: @colorGrayLighter;
+
+    &:hover {
+      background-color: @colorGrayLightest;
     }
   }
 
@@ -610,6 +618,15 @@ fieldset {
     font-weight: 400;
   }
 
+  // for border=true
+  &.el-checkbox--small {
+    .el-checkbox__inner::after {
+      top: 0;
+      left: 3px;
+    }
+  }
+
+  // for border=false — needs an extra class
   &.CheckboxSmall {
     .el-checkbox__input {}
     .el-checkbox__label {
@@ -1025,7 +1042,20 @@ fieldset {
 
 // Table
 
-.el-table {}
+.el-table {
+  .caret-wrapper {
+    height: 22px;
+
+    .sort-caret {
+      &.ascending {
+        top: 0;
+      }
+      &.descending {
+        bottom: 0;
+      }
+    }
+  }
+}
 
 // Pagination
 

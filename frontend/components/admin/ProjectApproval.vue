@@ -1,57 +1,70 @@
 <template>
-  <div class="ProjectApproval">
+  <div class="ProjectApprovalTable">
     <el-row
       type="flex"
       class="Actions">
-      <el-button
-        :disabled="rowSelection.length === 0"
-        @click="csvExport"
-      >
-        <fa icon="download"/>
-        <translate>Export Selected</translate>
-      </el-button>
-
-      <div class="Separator"/>
-      <div class="Label">
-        Approved:
-      </div>
-      <el-checkbox-group v-model="filters">
-        <el-checkbox
-          :label="true"
-          border
+      <el-col class="Download">
+        <el-button
+          :disabled="rowSelection.length === 0"
+          class="IconLeft"
+          @click="csvExport"
         >
-          Yes
-        </el-checkbox>
-        <el-checkbox
-          :label="false"
-          border
-        >
-          No
-        </el-checkbox>
-        <el-checkbox
-          :label="null"
-          border
-        >
-          Pending
-        </el-checkbox>
-      </el-checkbox-group>
+          <fa icon="download"/>
+          <translate>Export Selected</translate>
+        </el-button>
+      </el-col>
+      <el-col class="Filters">
+        <el-row type="flex">
+          <el-col>
+            <div class="Separator"/>
+          </el-col>
+          <el-col>
+            <span class="Label">
+              Approved:
+            </span>
+          </el-col>
+          <el-col>
+            <el-checkbox-group v-model="filters">
+              <el-checkbox
+                :label="true"
+                border
+                size="small"
+              >
+                Yes
+              </el-checkbox>
+              <el-checkbox
+                :label="false"
+                border
+                size="small"
+              >
+                No
+              </el-checkbox>
+              <el-checkbox
+                :label="null"
+                border
+                size="small"
+              >
+                Pending
+              </el-checkbox>
+            </el-checkbox-group>
+          </el-col>
+        </el-row>
+      </el-col>
     </el-row>
+
     <el-table
       :data="filteredList"
-      border
-      size="mini"
-      style="width: 100%"
+      size="medium"
       @selection-change="selectionHandler"
     >
       <el-table-column
         type="selection"
-        width="38"
+        width="50"
       />
 
       <el-table-column
         :label="$gettext('Project')"
         sortable
-        class="ProjetNameColumn"
         prop="project_name"
       />
       <el-table-column
@@ -69,7 +82,6 @@
       <el-table-column
         :label="$gettext('Approved')"
         sortable
-        align="center"
         width="150px"
         prop="approved"
       >
@@ -79,7 +91,6 @@
       </el-table-column>
       <el-table-column
         label="Actions"
-        align="center"
         width="100px"
       >
         <template slot-scope="scope">
@@ -174,21 +185,59 @@ export default {
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
 
-.ProjectApproval {
+.ProjectApprovalTable {
 
   .Actions {
-    margin: 0 0 12px 0;
+    margin: 0 0 20px;
 
-    .Label {
-      margin: 0 20px 0 0;
-      line-height: 40px;
+    .Download {
+      width: auto;
+    }
+
+    .Filters {
+      width: 100%;
+
+      .Label {
+        font-size: @fontSizeBase;
+        line-height: 38px;
+      }
+
+      .el-checkbox-group {
+        display: inline-block;
+        width: auto;
+        margin: 4px 20px;
+      }
+
+      .Separator {
+        .SeparatorStyle();
+        display: inline-block;
+        height: 38px;
+        margin: 0 20px;
+      }
+
+      > .el-row {
+        .el-col {
+          width: auto;
+
+          &:last-child {
+            width: 100%;
+          }
+        }
+      }
     }
   }
 
-  .Separator {
-    .SeparatorStyle();
-    height: 40px;
-    margin: 0 20px;
+  .el-table {
+    th, td {
+      // vertical-align: top;
+    }
+
+    td {
+      > .cell {
+        line-height: 19px;
+        word-break: normal;
+      }
+    }
   }
 }
 
