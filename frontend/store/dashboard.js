@@ -253,6 +253,7 @@ export const actions = {
     commit('SET_SAVED_FILTERS', filters);
   },
   setDashboardType ({commit, getters}, {type, id}) {
+    commit('SET_SEARCH_OPTIONS', {});
     commit('SET_DASHBOARD_TYPE', {type, id});
     const selectedColumns = [...getters.getSelectedColumns];
     if (type === 'country') {
@@ -260,6 +261,7 @@ export const actions = {
     } else if (type === 'donor') {
       selectedColumns.push(...getters.getDonorColumns.map(cc => cc.id));
     }
+    commit('SET_PROJECT_BUCKET', []);
     commit('SET_SELECTED_COLUMNS', selectedColumns);
   },
   setDashboardSection ({commit}, value) {
