@@ -432,6 +432,7 @@ export default {
 
           &:hover {
             color: @colorTextPrimary;
+            background-color: @colorGrayLighter;
           }
         }
       }
