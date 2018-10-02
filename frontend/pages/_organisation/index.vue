@@ -97,7 +97,8 @@ export default {
 
     .CoverImageBg {
       display: block;
-      height: 60vh;
+      height: @landingMapHeight;
+      min-height: @landingMapMinHeight;
       background-color: @colorGrayLight;
       background-size: cover;
       background-position: center center;

@@ -64,6 +64,11 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .DashboardProjectsBox {
+    .MapProjectBox {
+      .el-tabs__content {
+        max-height: calc(100vh - @topBarHeight - @actionBarHeight - @appFooterHeight - 156px);
+        overflow-y: auto;
+      }
+    }
   }
-
 </style>

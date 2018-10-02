@@ -81,6 +81,7 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .LandingMap {
-    height: 60vh;
+    height: @landingMapHeight;
+    min-height: @landingMapMinHeight;
   }
 </style>
