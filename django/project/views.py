@@ -555,16 +555,17 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
         single_country_selected = len(set([p.data.get('country') for p in projects])) == 1
         single_donor_selected = 'donor' in serializer.validated_data and serializer.validated_data['donor']
 
-        if projects and single_country_selected and hasattr(request.user, 'userprofile'):
-            has_country_permission = request.user.is_superuser or \
-                                     projects[0].search.country.user_in_groups(request.user.userprofile)
-        if projects and single_donor_selected and hasattr(request.user, 'userprofile'):
-            try:
-                donor = Donor.objects.get(id=serializer.validated_data['donor'])
-            except Donor.DoesNotExist:
-                donor = None
-            else:
-                has_donor_permission = request.user.is_superuser or donor.user_in_groups(request.user.userprofile)
+        if projects and hasattr(request.user, 'userprofile'):
+            if single_country_selected:
+                has_country_permission = request.user.is_superuser or \
+                                         projects[0].search.country.user_in_groups(request.user.userprofile)
+            if single_donor_selected:
+                try:
+                    donor = Donor.objects.get(id=serializer.validated_data['donor'])
+                except Donor.DoesNotExist:
+                    donor = None
+                else:
+                    has_donor_permission = request.user.is_superuser or donor.user_in_groups(request.user.userprofile)
 
         for p in projects:
             representation = [
