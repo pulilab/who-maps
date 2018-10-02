@@ -132,6 +132,7 @@ class Project(SoftDeleteModel, ExtendedModel):
             name=self.draft.get('name', '') if draft_mode else self.name,
             approved=self.approval.approved if hasattr(self, 'approval') else None,
             fields=[field.to_representation(draft_mode) for field in CountryField.get_for_project(self, draft_mode)],
+            modified=self.modified,
         )
 
         data.update(extra_data)
