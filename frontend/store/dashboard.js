@@ -118,6 +118,7 @@ export const getters = {
   getSorting: state => state.sorting,
   getSavedFilters: state => state.savedFilters,
   getDashboardType: state => state.dashboardType,
+  getDashboardId: state => state.dashboardId,
   getDashboardSection: state => state.dashboardSection,
   getSearchParameters: (state, getters) => {
     const q = state.searchString && state.searchString.length > 1 ? state.searchString : undefined;
