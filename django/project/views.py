@@ -21,7 +21,8 @@ from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, CountryField, Donor, CustomQuestion
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
-    MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, ProjectApprovalSerializer
+    MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, ProjectApprovalSerializer, \
+    CSVExportSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
 
@@ -538,12 +539,14 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
 
 
 class CSVExportViewSet(TokenAuthMixin, ViewSet):
+    serializer_class = CSVExportSerializer
+
     def create(self, request):
         """
         Creates CSV file out of a list of project IDs
         """
-        if not request.data or not isinstance(request.data, list):
-            return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         results = []
         has_country_permission = False
