@@ -79,7 +79,7 @@ export const state = () => ({
 export const getters = {
   ...gettersGenerator(),
   getProjectsList: state => [...state.projectsList.map(r => parseSearchResult(r))],
-  getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => ({...r}))] : getters.getProjectsList,
+  getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => parseSearchResult(r))] : getters.getProjectsList,
   getCountryColumns: (state, getters, rootState, rootGetters) => {
     if (state.dashboardId && state.dashboardType === 'country') {
       const country = rootGetters['countries/getCountryDetails'](state.dashboardId);
