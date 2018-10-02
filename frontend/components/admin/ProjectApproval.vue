@@ -39,6 +39,7 @@
     <el-table
       :data="filteredList"
       border
+      size="mini"
       style="width: 100%"
       @selection-change="selectionHandler"
     >
@@ -50,6 +51,7 @@
       <el-table-column
         :label="$gettext('Project')"
         sortable
+        class="ProjetNameColumn"
         prop="project_name"
       />
       <el-table-column
