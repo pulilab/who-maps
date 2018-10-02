@@ -1,3 +1,7 @@
+<template>
+  <div/>
+</template>
+
 <script>
 import { format } from 'date-fns';
 import { mapGetters } from 'vuex';
@@ -19,46 +23,48 @@ export default {
     exportDate () {
       return format(Date.now(), 'Do MMM, YYYY');
     },
+    tableHeader () {
+      return {
+        table: {
+          widths: ['50%', '50%'],
+          headerRows: 2,
+          body: [
+            [
+              {
+                text: this.$gettext('Digital Health Atlas'),
+                fillColor: '#1A237E',
+                color: '#FFFFFF',
+                colSpan: 2,
+                style: 'mainHeader',
+                margin: [5, 0, 0, 0]
+              },
+              ''
+            ],
+            [
+              {
+                text: this.$gettext('All Countries'),
+                fillColor: '#EEEEEE',
+                color: '#000000',
+                style: 'headerSecondRow',
+                margin: [5, 0, 0, 0]
+              },
+              {
+                text: this.$gettext('List exported on ') + this.exportDate,
+                fillColor: '#EEEEEE',
+                color: '#000000',
+                style: 'headerSecondRowRight',
+                margin: [0, 0, 5, 0]
+              }
+            ]
+          ]
+        },
+        layout: 'noBorders',
+        margin: [0, 10]
+      };
+    },
     docDefinition () {
       return {
         content: [
-          {
-            table: {
-              widths: ['50%', '50%'],
-              headerRows: 2,
-              body: [
-                [
-                  {
-                    text: this.$gettext('Digital Health Atlas'),
-                    fillColor: '#1A237E',
-                    color: '#FFFFFF',
-                    colSpan: 2,
-                    style: 'mainHeader',
-                    margin: [5, 0, 0, 0]
-                  },
-                  ''
-                ],
-                [
-                  {
-                    text: this.$gettext('All Countries'),
-                    fillColor: '#EEEEEE',
-                    color: '#000000',
-                    style: 'headerSecondRow',
-                    margin: [5, 0, 0, 0]
-                  },
-                  {
-                    text: this.$gettext('List exported on ') + this.exportDate,
-                    fillColor: '#EEEEEE',
-                    color: '#000000',
-                    style: 'headerSecondRowRight',
-                    margin: [0, 0, 5, 0]
-                  }
-                ]
-              ]
-            },
-            layout: 'noBorders',
-            margin: [0, 10]
-          }
         ],
         defaultStyle: {
           font: 'Roboto',
@@ -155,7 +161,8 @@ export default {
       this.pdfMake = require('pdfmake/build/pdfmake');
       const pdfFonts = require('pdfmake/build/vfs_fonts.js');
       this.pdfMake.vfs = pdfFonts.pdfMake.vfs;
-      const docDefinition = {...this.docDefinition};
+      const docDefinition = {...this.docDefinition, content: [this.tableHeader]};
+
       this.parsed.forEach((project, index) => {
         const country = this.getCountryDetails(project.country);
         const country_name = country && country.name ? country.name.toUpperCase() : '';
@@ -240,9 +247,6 @@ export default {
       });
       this.pdfMake.createPdf(docDefinition).download('clv-searchable-export.pdf');
     }
-  },
-  render () {
-    return null;
   }
 };
 </script>
