@@ -226,6 +226,9 @@ export const actions = () => ({
 
   setFooterText ({ commit }, txt) {
     commit('SET_DATA_FIELD', {field: 'footer_text', data: txt});
+  },
+  setProjectApproval ({commit}, data) {
+    commit('SET_DATA_FIELD', {field: 'project_approval', data});
   }
 });
 
