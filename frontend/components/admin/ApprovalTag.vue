@@ -1,7 +1,7 @@
 <template>
   <div class="ApprovalTag">
     <el-tag
-      :type="value ? 'success' : value === null ? 'info' : 'warning'"
+      :type="value ? 'success' : value === null ? 'warning' : 'danger'"
       size="small"
       disable-transitions>
       <span v-show="value === true"> <translate>Yes</translate></span>
@@ -26,6 +26,7 @@ export default {
 .ApprovalTag {
   .el-tag--small {
     height: 26px;
+    font-weight: 700;
     line-height: 24px;
   }
 }
