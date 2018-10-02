@@ -16,7 +16,7 @@ from project.cache import cache_structure
 from project.models import HSCGroup
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
-from country.models import Country, CountryField, Donor
+from country.models import Country, CountryField, Donor, CustomQuestion
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer
@@ -589,8 +589,15 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
                 {'First Level Coverage': p.str_coverage()},
                 {'Second Level Coverage': p.str_coverage(second_level=True)},
             ]
-            if single_country:
-                representation.extend([field.to_csv() for field in CountryField.get_for_project(p)])
+            if has_country_permission:
+                custom_answers = p.data.get('country_custom_answers', {}).update(
+                    p.data.get('country_custom_answers_private', {}))
+                for question_id, answer in custom_answers.items():
+                    try:
+                        representation.extend({CustomQuestion.objects.get(id=question_id).question: answer})
+                    except (CustomQuestion.DoesNotExist, ValueError):
+                        pass
+
             results.append(representation)
 
         response = HttpResponse(content_type='text/csv')
