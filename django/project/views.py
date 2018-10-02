@@ -602,7 +602,8 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
                 {'First Level Coverage': p.str_coverage()},
                 {'Second Level Coverage': p.str_coverage(second_level=True)},
             ]
-            if single_country and has_country_permission:
+
+            if single_country_selected and has_country_permission:
                 for q in projects[0].search.country.country_questions.all():
                     answer = ""
                     try:
@@ -612,6 +613,20 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
                     if not answer:
                         try:
                             answer = p.data['country_custom_answers_private'][str(q.id)]
+                        except KeyError:
+                            pass
+                    representation.extend([{q.question: ", ".join(answer)}])
+
+            if single_donor_selected and has_donor_permission:
+                for q in donor.donor_questions.all():
+                    answer = ""
+                    try:
+                        answer = p.data['donor_custom_answers'][donor.id][str(q.id)]
+                    except KeyError:
+                        pass
+                    if not answer:
+                        try:
+                            answer = p.data['donor_custom_answers_private'][donor.id][str(q.id)]
                         except KeyError:
                             pass
                     representation.extend([{q.question: ", ".join(answer)}])
@@ -640,7 +655,7 @@ class MapProjectCountryViewSet(ListModelMixin, GenericViewSet):
 class ProjectApprovalViewSet(TokenAuthMixin, UpdateModelMixin, GenericViewSet):
     permission_classes = (IsAuthenticated, InCountryAdminForApproval)
     serializer_class = ProjectApprovalSerializer
-    queryset = ProjectApproval.objects.all()\
+    queryset = ProjectApproval.objects.all() \
         .select_related('project', 'project__search', 'project__search__country').exclude(project__public_id='')
 
     def list(self, request, country_id):
