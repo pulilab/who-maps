@@ -228,7 +228,8 @@ export default {
     },
     goToProject () {
       this.mini = true;
-      const path = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params, id: this.currentProject}});
+      const id = this.currentElementDetails.project;
+      const path = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params, id}});
       this.$router.push(path);
     },
     goToCountryAdmin () {
