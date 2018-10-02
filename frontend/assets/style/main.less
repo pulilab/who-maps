@@ -362,10 +362,15 @@ a {
   }
 
   &.is-disabled {
+    color: @colorTextMuted;
     background-color: @colorGrayLighter;
 
     &:hover {
-      background-color: @colorGrayLightest;
+      color: @colorTextMuted;
+
+      &:not(.el-button--text) {
+        background-color: @colorGrayLighter;
+      }
     }
   }
 

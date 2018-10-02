@@ -6,6 +6,7 @@
       <el-col class="Download">
         <el-button
           :disabled="rowSelection.length === 0"
+          type="text"
           class="IconLeft"
           @click="csvExport"
         >
@@ -59,17 +60,20 @@
     >
       <el-table-column
         type="selection"
-        width="50"
+        align="center"
+        width="46"
       />
 
       <el-table-column
         :label="$gettext('Project')"
         sortable
         prop="project_name"
+        class-name="ProjectName"
       />
       <el-table-column
         :label="$gettext('User')"
         sortable
+        width="220px"
         prop="user"
       >
         <template slot-scope="scope">
@@ -82,7 +86,7 @@
       <el-table-column
         :label="$gettext('Approved')"
         sortable
-        width="150px"
+        width="120px"
         prop="approved"
       >
         <template slot-scope="scope">
@@ -91,7 +95,7 @@
       </el-table-column>
       <el-table-column
         label="Actions"
-        width="100px"
+        width="120px"
       >
         <template slot-scope="scope">
           <el-button
@@ -238,7 +242,11 @@ export default {
         word-break: normal;
       }
     }
+
+    .ProjectName {
+      padding-right: 80px;
+      font-weight: 700;
+    }
   }
 }
-
 </style>
