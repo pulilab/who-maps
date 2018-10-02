@@ -41,18 +41,8 @@
             <fa
               icon="info-circle"
               size="lg" />
-            <translate>Select a pin blablabla...</translate>
-          </div>
-          <!-- TODO -->
-          <!-- Show hint text when list is empty -->
-          <!-- <div
-            class="HintText"
-          >
-            <fa
-              icon="info-circle"
-              size="lg" />
             <translate>No project to show...</translate>
-          </div> -->
+          </div>
           <div
             v-if="showSubNational"
             class="PlainList SubNational"
