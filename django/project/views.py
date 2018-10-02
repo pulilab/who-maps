@@ -21,7 +21,8 @@ from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, CountryField, Donor, CustomQuestion
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
-    MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, ProjectApprovalSerializer
+    MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, ProjectApprovalSerializer, \
+    CSVExportSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
 
@@ -538,22 +539,33 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
 
 
 class CSVExportViewSet(TokenAuthMixin, ViewSet):
+    serializer_class = CSVExportSerializer
+
     def create(self, request):
         """
         Creates CSV file out of a list of project IDs
         """
-        if not request.data or not isinstance(request.data, list):
-            return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         results = []
-        has_country_permission = False
-        projects = Project.objects.filter(id__in=request.data)
+        has_country_permission = has_donor_permission = False
+        projects = Project.objects.filter(id__in=serializer.validated_data['ids'])
 
-        # determine if there was only one country selected
-        single_country = len(set([p.data.get('country') for p in projects])) == 1
-        if projects and single_country and hasattr(request.user, 'userprofile'):
-            has_country_permission = request.user.is_superuser or \
-                                     projects[0].search.country.user_in_groups(request.user.userprofile)
+        single_country_selected = len(set([p.data.get('country') for p in projects])) == 1
+        single_donor_selected = 'donor' in serializer.validated_data and serializer.validated_data['donor']
+
+        if projects and hasattr(request.user, 'userprofile'):
+            if single_country_selected:
+                has_country_permission = request.user.is_superuser or \
+                                         projects[0].search.country.user_in_groups(request.user.userprofile)
+            if single_donor_selected:
+                try:
+                    donor = Donor.objects.get(id=serializer.validated_data['donor'])
+                except Donor.DoesNotExist:
+                    donor = None
+                else:
+                    has_donor_permission = request.user.is_superuser or donor.user_in_groups(request.user.userprofile)
 
         for p in projects:
             representation = [
@@ -591,7 +603,8 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
                 {'First Level Coverage': p.str_coverage()},
                 {'Second Level Coverage': p.str_coverage(second_level=True)},
             ]
-            if single_country and has_country_permission:
+
+            if single_country_selected and has_country_permission:
                 for q in projects[0].search.country.country_questions.all():
                     answer = ""
                     try:
@@ -601,6 +614,20 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
                     if not answer:
                         try:
                             answer = p.data['country_custom_answers_private'][str(q.id)]
+                        except KeyError:
+                            pass
+                    representation.extend([{q.question: ", ".join(answer)}])
+
+            if single_donor_selected and has_donor_permission:
+                for q in donor.donor_questions.all():
+                    answer = ""
+                    try:
+                        answer = p.data['donor_custom_answers'][donor.id][str(q.id)]
+                    except KeyError:
+                        pass
+                    if not answer:
+                        try:
+                            answer = p.data['donor_custom_answers_private'][donor.id][str(q.id)]
                         except KeyError:
                             pass
                     representation.extend([{q.question: ", ".join(answer)}])
@@ -629,7 +656,7 @@ class MapProjectCountryViewSet(ListModelMixin, GenericViewSet):
 class ProjectApprovalViewSet(TokenAuthMixin, UpdateModelMixin, GenericViewSet):
     permission_classes = (IsAuthenticated, InCountryAdminForApproval)
     serializer_class = ProjectApprovalSerializer
-    queryset = ProjectApproval.objects.all()\
+    queryset = ProjectApproval.objects.all() \
         .select_related('project', 'project__search', 'project__search__country').exclude(project__public_id='')
 
     def list(self, request, country_id):
