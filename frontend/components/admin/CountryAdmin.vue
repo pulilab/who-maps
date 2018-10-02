@@ -85,7 +85,10 @@
 
     </collapsible-card>
 
-    <collapsible-card :title="$gettext('Project Approval')">
+    <collapsible-card
+      v-if="projectApproval"
+      :title="$gettext('Project Approval')"
+    >
       <project-approval />
     </collapsible-card>
 
