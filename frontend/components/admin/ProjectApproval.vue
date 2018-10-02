@@ -95,6 +95,7 @@
 
 <script>
 import Papa from 'papaparse';
+import { format } from 'date-fns';
 import { mapGetters, mapActions } from 'vuex';
 import ApprovalTag from './ApprovalTag';
 import UserItem from '../common/UserItem';
@@ -119,14 +120,15 @@ export default {
       return this.list.filter(i => this.filters.length === 0 || this.filters.some(f => f === i.approved));
     },
     parsedList () {
-      return this.rowSelection.map(i => {
+      return this.rowSelection.map((i) => {
         const user = this.getUserDetails(this.getUserId(i));
         const approved = i.approved === true ? this.$gettext('Yes') : i.approved === false ? this.$gettext('No') : this.$gettext('Pending');
         return {
-          project: i.project_name,
+          project_id: i.project,
+          project_name: i.project_name,
           user: user ? user.name : '',
           approved,
-          modified: i.modified
+          modified: format(i.modified, 'YYYY-MM-DD HH:mm')
         };
       });
     }
