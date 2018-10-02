@@ -171,7 +171,7 @@ export default {
       this.rowSelection = selection;
     },
     csvExport () {
-      const csv = Papa.unparse(this.parsedList);
+      const csv = Papa.unparse(this.parsedList, {delimiter: ';'});
       const toDownload = `data:text/csv;charset=utf-8,${csv}`;
       const data = encodeURI(toDownload);
       let link = document.createElement('a');
