@@ -76,6 +76,8 @@
         <project-legend
           force-star
           force-eye
+          force-handshake
+          force-globe
           show-label
         />
 
