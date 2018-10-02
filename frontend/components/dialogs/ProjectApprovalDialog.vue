@@ -2,14 +2,15 @@
   <el-dialog
     :visible.sync="visible"
     :title="$gettext('Proejct Approval')"
-    modal
-    top="10vh"
-    width="80vw"
+    :modal="mini"
+    :top="top"
+    :width="width"
     custom-class="ProjectApprovalDialog"
     @open="loadCurrent"
   >
 
-    <el-tabs v-model="activeTab">
+    <el-tabs
+      v-model="activeTab">
       <el-tab-pane
         :label="$gettext('Update')"
         name="form"
@@ -51,12 +52,22 @@
               type="textarea"
             />
           </el-form-item>
+
+          <el-form-item
+            :label="$gettext('User')"
+          >
+            <user-item
+              :id="approvedBy"
+              show-organisation
+            />
+            <span class="Hint"><translate>Administrator that approved the project </translate></span>
+          </el-form-item>
         </el-form>
       </el-tab-pane>
+
       <el-tab-pane
         :label="$gettext('History')"
-        name="history"
-      >
+        name="history">
         <el-table
           :data="history"
           border
@@ -99,7 +110,6 @@
 
     <span slot="footer">
       <el-row
-        v-show="activeTab === 'form'"
         type="flex"
         align="center">
         <el-col class="SecondaryButtons">
@@ -109,9 +119,22 @@
             @click="cancel">
             <translate>Cancel</translate>
           </el-button>
+          <el-button
+            v-show="!mini"
+            type="text"
+            @click="goToProject">
+            <translate>See Project</translate>
+          </el-button>
+          <el-button
+            v-show="mini"
+            type="text"
+            @click="goToCountryAdmin">
+            <translate>Back to admin</translate>
+          </el-button>
         </el-col>
         <el-col class="PrimaryButtons">
           <el-button
+            v-show="activeTab === 'form'"
             type="primary"
             @click="apply"
           >
@@ -137,6 +160,7 @@ export default {
   },
   data () {
     return {
+      mini: false,
       form: {
         approved: null,
         reason: null
@@ -162,11 +186,24 @@ export default {
         this.setCurrentElement(null);
       }
     },
+    top () {
+      return this.mini ? '12px' : '10vh';
+    },
+    width () {
+      return this.mini ? '60vw' : '80vw';
+    },
     history () {
       if (this.currentElementDetails) {
         return this.currentElementDetails.history;
       }
       return [];
+    },
+    approvedBy () {
+      if (this.currentElementDetails) {
+        return this.history && this.history[0] && this.history[0].history_user__userprofile
+          ? this.history[0].history_user__userprofile
+          : this.currentElementDetails.legacy_approved_by;
+      }
     }
   },
   methods: {
@@ -184,14 +221,30 @@ export default {
       return format(value, 'YYYY-MM-DD HH:mm');
     },
     cancel () {
-      this.setCurrentElement(null);
+      this.visible = null;
+      if (this.mini) {
+        this.goToCountryAdmin();
+      }
+    },
+    goToProject () {
+      this.mini = true;
+      const path = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params, id: this.currentProject}});
+      this.$router.push(path);
+    },
+    goToCountryAdmin () {
+      this.mini = false;
+      const path = this.localePath({name: 'organisation-admin-country', params: this.$route.params});
+      this.$router.push(path);
     },
     apply () {
       this.$refs.approvalForm.validate(async valid => {
         if (valid) {
           try {
             await this.updateProjectApproval(this.form);
-            this.setCurrentElement(null);
+            this.visible = null;
+            if (this.mini) {
+              this.goToCountryAdmin();
+            }
           } catch (e) {
             console.log(e);
             this.$alert(
