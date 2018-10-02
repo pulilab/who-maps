@@ -59,6 +59,7 @@ export default {
 
       .DashboardMap {
         height: calc(100vh - @topBarHeight - @actionBarHeight - @appFooterHeight);
+        min-height: auto;
       }
     }
 

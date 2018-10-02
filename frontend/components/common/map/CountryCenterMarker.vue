@@ -12,6 +12,7 @@
         v-if="!disableTooltip"
         ref="tooltip"
         :options="popupOptions"
+        :dynamic="true"
       >
         <div
           class="MouseEventSpy"

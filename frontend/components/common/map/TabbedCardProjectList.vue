@@ -13,6 +13,15 @@
         show-organisation
         show-arrow-on-over
       />
+      <div
+        v-show="projects.length === 0"
+        class="HintText"
+      >
+        <fa
+          icon="info-circle"
+          size="lg" />
+        <translate>No project to show...</translate>
+      </div>
     </el-tab-pane>
     <el-tab-pane
       :label="$gettext('National')"
@@ -24,6 +33,15 @@
         show-organisation
         show-arrow-on-over
       />
+      <div
+        v-show="projects.length === 0"
+        class="HintText"
+      >
+        <fa
+          icon="info-circle"
+          size="lg" />
+        <translate>No project to show...</translate>
+      </div>
     </el-tab-pane>
   </el-tabs>
 </template>
