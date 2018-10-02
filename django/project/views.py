@@ -543,10 +543,15 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
         if not request.data or not isinstance(request.data, list):
             return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
+        results = []
+        has_country_permission = False
         projects = Project.objects.filter(id__in=request.data)
+
         # determine if there was only one country selected
         single_country = len(set([p.data.get('country') for p in projects])) == 1
-        results = []
+        if projects and single_country and hasattr(request.user, 'userprofile'):
+            has_country_permission = request.user.is_superuser or \
+                                     projects[0].search.country.user_in_groups(request.user.userprofile)
 
         for p in projects:
             representation = [
