@@ -401,4 +401,5 @@ class ProjectApprovalSerializer(serializers.ModelSerializer):
 class CSVExportSerializer(serializers.Serializer):
     ids = serializers.ListField(
         child=serializers.IntegerField(), max_length=200, min_length=1, required=True)
+    country = serializers.IntegerField(required=False)
     donor = serializers.IntegerField(required=False)
