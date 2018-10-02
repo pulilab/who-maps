@@ -1,11 +1,52 @@
 <template>
   <div class="ProjectApproval">
-    <el-button @click="csvExport">Export</el-button>
+    <el-row
+      type="flex"
+      class="Actions">
+      <el-button
+        :disabled="rowSelection.length === 0"
+        @click="csvExport"
+      >
+        <fa icon="download"/>
+        <translate>Export Selected</translate>
+      </el-button>
+
+      <div class="Separator"/>
+      <div class="Label">
+        Approved:
+      </div>
+      <el-checkbox-group v-model="filters">
+        <el-checkbox
+          :label="true"
+          border
+        >
+          Yes
+        </el-checkbox>
+        <el-checkbox
+          :label="false"
+          border
+        >
+          No
+        </el-checkbox>
+        <el-checkbox
+          :label="null"
+          border
+        >
+          Pending
+        </el-checkbox>
+      </el-checkbox-group>
+    </el-row>
     <el-table
-      :data="list"
+      :data="filteredList"
       border
       style="width: 100%"
+      @selection-change="selectionHandler"
     >
+      <el-table-column
+        type="selection"
+        width="38"
+      />
+
       <el-table-column
         :label="$gettext('Project')"
         sortable
@@ -25,8 +66,6 @@
       </el-table-column>
       <el-table-column
         :label="$gettext('Approved')"
-        :filter-method="filterHandler"
-        :filters="approvalFilters"
         sortable
         align="center"
         width="150px"
@@ -65,20 +104,22 @@ export default {
     ApprovalTag,
     UserItem
   },
+  data () {
+    return {
+      filters: [true, false, null],
+      rowSelection: []
+    };
+  },
   computed: {
     ...mapGetters({
       list: 'admin/approval/getList',
       getUserDetails: 'system/getUserProfileDetails'
     }),
-    approvalFilters () {
-      return [
-        { text: this.$gettext('Yes'), value: true },
-        { text: this.$gettext('No'), value: false },
-        { text: this.$gettext('Pending'), value: null }
-      ];
+    filteredList () {
+      return this.list.filter(i => this.filters.length === 0 || this.filters.some(f => f === i.approved));
     },
     parsedList () {
-      return this.list.map(i => {
+      return this.rowSelection.map(i => {
         const user = this.getUserDetails(this.getUserId(i));
         const approved = i.approved === true ? this.$gettext('Yes') : i.approved === false ? this.$gettext('No') : this.$gettext('Pending');
         return {
@@ -108,6 +149,9 @@ export default {
       const property = column['property'];
       return row[property] === value;
     },
+    selectionHandler (selection) {
+      this.rowSelection = selection;
+    },
     csvExport () {
       const csv = Papa.unparse(this.parsedList);
       const toDownload = `data:text/csv;charset=utf-8,${csv}`;
@@ -123,8 +167,25 @@ export default {
 </script>
 
 <style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
 .ProjectApproval {
+
+  .Actions {
+    margin: 0 0 12px 0;
+
+    .Label {
+      margin: 0 20px 0 0;
+      line-height: 40px;
+    }
+  }
+
+  .Separator {
+    .SeparatorStyle();
+    height: 40px;
+    margin: 0 20px;
+  }
 }
 
 </style>
