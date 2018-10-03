@@ -52,6 +52,9 @@ export default {
   methods: {
     toggleCard () {
       this.open = !this.open;
+    },
+    expandCard () {
+      this.open = true;
     }
   }
 };

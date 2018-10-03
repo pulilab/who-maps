@@ -238,18 +238,25 @@ export const customColumnsMapper = (columns, prefix) => {
   }));
 };
 
-export const parseCustomAnswers = r => ({
-  ...r,
-  country_answers: {
-    ...r.country_custom_answers,
-    ...r.country_custom_answers_private
-  },
-  donor_answers: {
-    ...r.donor_custom_answers,
-    ...r.donor_custom_answers_private
-  },
-  country_custom_answers: undefined,
-  country_custom_answers_private: undefined,
-  donor_custom_answers: undefined,
-  donor_custom_answers_private: undefined
-});
+export const parseCustomAnswers = r => {
+  const donor_answers = {};
+  r.donors.forEach(d => {
+    donor_answers[d] = {
+      ...(r.donor_custom_answers ? r.donor_custom_answers[d] : null),
+      ...(r.donor_custom_answers_private ? r.donor_custom_answers_private[d] : null)
+    };
+  });
+  return {
+    ...r,
+    country_answers: {
+      ...r.country_custom_answers,
+      ...r.country_custom_answers_private
+    },
+
+    donor_answers,
+    country_custom_answers: undefined,
+    country_custom_answers_private: undefined,
+    donor_custom_answers: undefined,
+    donor_custom_answers_private: undefined
+  };
+};

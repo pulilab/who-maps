@@ -2,7 +2,9 @@
   <div
     id="technology"
     class="TechnologyOverview">
-    <collapsible-card title="Technology overview">
+    <collapsible-card
+      ref="collapsible"
+      title="Technology overview">
       <el-form-item
         :error="errors.first('implementation_dates')"
         :label="$gettext('Technology deployment date')"
@@ -99,6 +101,7 @@ export default {
   },
   methods: {
     async validate () {
+      this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate()
       ]);

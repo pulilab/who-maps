@@ -2,7 +2,10 @@
   <div
     id="general"
     class="GeneralOverview">
-    <collapsible-card :title="$gettext('General overview')">
+    <collapsible-card
+      ref="collapsible"
+      :title="$gettext('General overview')"
+    >
       <el-form-item
         :error="errors.first('name')"
         :label="$gettext('Project name')"
@@ -220,6 +223,7 @@ export default {
   },
   methods: {
     async validate () {
+      this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate(),
         Promise.resolve(this.endDateError === undefined)
@@ -227,6 +231,7 @@ export default {
       return validations.reduce((a, c) => a && c, true);
     },
     async validateDraft () {
+      this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate('name'),
         this.$validator.validate('country'),
