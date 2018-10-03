@@ -378,6 +378,12 @@ export default {
         }
       }
 
+      .el-table-column--selection {
+        > .cell {
+          text-overflow: clip !important;
+        }
+      }
+
       .caret-wrapper {
         position: absolute;
         top: 1px;
@@ -407,8 +413,8 @@ export default {
         }
 
         .ProjectLegend {
-          top: -1px;
-          right: 0;
+          top: 1px;
+          right: -1px;
           opacity: 1 !important;
 
           .svg-inline--fa {
@@ -418,11 +424,6 @@ export default {
 
             &.fa-star {
               font-size: 11px;
-            }
-
-            &.fa-eye,
-            &.fa-handshake {
-              right: -1px;
             }
           }
         }
@@ -496,7 +497,7 @@ export default {
       text-align: right;
 
       .el-pagination {
-        padding: 11px 20px;
+        padding: 11px 15px;
         font-weight: 400;
 
         .el-pagination__sizes {

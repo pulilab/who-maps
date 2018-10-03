@@ -70,7 +70,7 @@
             @click.native="closePopover"
           >
             <span class="MenuIcon">
-              <fa icon="globe" />
+              <fa icon="globe-africa" />
             </span>
             <translate>Country admin</translate>
           </nuxt-link>
