@@ -176,7 +176,7 @@
         <collapsible-card
           v-if="countryQuestions && countryQuestions.length > 0"
           id="countrycustom"
-          :title="$gettext('Custom country fields')"
+          :title="$gettext('{name} custom fields', {name: country.name})"
         >
           <custom-readonly-field
             v-for="question in countryQuestions"
@@ -275,12 +275,14 @@ export default {
     project () {
       return this.isDraft ? this.draft : this.published;
     },
-    countryQuestions () {
+    country () {
       if (this.project.country) {
-        const country = this.getCountryDetails(this.project.country);
-        if (country) {
-          return country.country_questions;
-        }
+        return this.getCountryDetails(this.project.country);
+      }
+    },
+    countryQuestions () {
+      if (this.country) {
+        return this.country.country_questions;
       }
       return [];
     },
