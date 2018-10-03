@@ -492,6 +492,10 @@ export default {
       .el-checkbox {
         line-height: 40px;
       }
+
+      .DonorSelector {
+        width: 50%;
+      }
     }
 
     .UserManagement {

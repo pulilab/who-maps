@@ -265,10 +265,18 @@ export default {
         white-space: nowrap;
 
         .svg-inline--fa {
+          position: relative;
+          vertical-align: middle;
+          height: 14px;
           margin-left: 20px;
           margin-right: 2px;
           color: @colorTextSecondary;
-          vertical-align: middle;
+          font-size: 12px;
+
+          &.fa-star {
+            top: -1px;
+            font-size: 11px;
+          }
         }
       }
 

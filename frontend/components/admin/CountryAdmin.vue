@@ -523,6 +523,10 @@ export default {
       .el-checkbox {
         line-height: 40px;
       }
+
+      .CountrySelector {
+        width: 50%;
+      }
     }
 
     .ProjectApproval {

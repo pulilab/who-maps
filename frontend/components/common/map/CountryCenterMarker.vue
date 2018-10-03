@@ -20,6 +20,7 @@
           @mouseleave="mouseLeaveHandler"
         >
           <el-button
+            type="primary"
             class="CountryViewBtn"
             @click="openCountryView">
             <fa icon="search-plus" />

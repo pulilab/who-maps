@@ -381,7 +381,7 @@ export default {
       .caret-wrapper {
         position: absolute;
         top: 1px;
-        right: 3px;
+        right: 4px;
       }
 
       .el-table__empty-block {
@@ -396,6 +396,8 @@ export default {
       }
 
       .ProjectCard {
+        overflow: visible;
+
         .ProjectName {
           padding-right: 12px;
         }
@@ -408,6 +410,21 @@ export default {
           top: -1px;
           right: 0;
           opacity: 1 !important;
+
+          .svg-inline--fa {
+            position: relative;
+            height: 14px;
+            font-size: 12px;
+
+            &.fa-star {
+              font-size: 11px;
+            }
+
+            &.fa-eye,
+            &.fa-handshake {
+              right: -1px;
+            }
+          }
         }
       }
 

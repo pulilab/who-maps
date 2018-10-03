@@ -23,7 +23,7 @@
     </template>
     <template v-if="showGlobe">
       <fa
-        icon="globe"
+        icon="globe-africa"
         size="xs"
         class="Viewer" />
       <span v-show="showLabel"> <translate>Country admin</translate></span>
