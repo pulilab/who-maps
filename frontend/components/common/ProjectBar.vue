@@ -26,7 +26,7 @@
                 <translate>Last Updated</translate>
               </div>
               <div class="Info">
-                1/12/2018!!
+                {{ modified }}
               </div>
             </el-col>
             <el-col
@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import { format } from 'date-fns';
 import { mapGetters } from 'vuex';
 import OrganisationItem from './OrganisationItem';
 import ProjectLegend from './ProjectLegend';
@@ -148,6 +149,11 @@ export default {
     },
     anon () {
       return !this.isViewer && !this.isTeam;
+    },
+    modified () {
+      if (this.project) {
+        return format(this.project.modified, 'DD-MM-YYYY');
+      }
     }
   }
 };
