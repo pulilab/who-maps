@@ -253,12 +253,17 @@ export const actions = {
     }
     commit('SET_SAVED_FILTERS', filters);
   },
-  setDashboardType ({commit, getters}, {type, id}) {
-    commit('SET_SEARCH_OPTIONS', {});
-    commit('SET_DASHBOARD_TYPE', {type, id});
+  async setDashboardType ({commit, dispatch, getters}, {type, id}) {
+    commit('SET_SEARCH_OPTIONS', {
+      view_as: type,
+      donor: type === 'donor' ? id : undefined,
+      country: type === 'country' ? [id] : undefined
+    });
     const selectedColumns = [...getters.getSelectedColumns];
     if (type === 'country') {
       selectedColumns.push(...getters.getCountryColumns.map(cc => cc.id));
+      await dispatch('setSelectedCountry', id);
+      commit('SET_ACTIVE_COUNTRY', id);
     } else if (type === 'donor') {
       selectedColumns.push(...getters.getDonorColumns.map(cc => cc.id));
     }
