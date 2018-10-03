@@ -244,7 +244,7 @@ export const parseCustomAnswers = r => {
     donor_answers[d] = {
       ...(r.donor_custom_answers ? r.donor_custom_answers[d] : null),
       ...(r.donor_custom_answers_private ? r.donor_custom_answers_private[d] : null)
-    }
+    };
   });
   return {
     ...r,
