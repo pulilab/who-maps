@@ -57,16 +57,8 @@ export const actions = () => ({
     }
 
     if (state.type === 'country') {
-      try {
-        await dispatch('admin/map/loadGeoJSON', null, {root: true});
-      } catch (e) {
-        console.error('Map failed to load', e);
-      }
-      try {
-        await dispatch('admin/approval/loadList', null, {root: true});
-      } catch (e) {
-        console.error('approval list failed to load', e);
-      }
+      await dispatch('admin/map/loadGeoJSON', null, {root: true});
+      await dispatch('admin/approval/loadList', null, {root: true});
     }
 
     dispatch('admin/questions/setQuestions', data, {root: true});
