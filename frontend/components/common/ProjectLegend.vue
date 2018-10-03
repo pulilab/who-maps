@@ -88,13 +88,13 @@ export default {
     },
     isDonor () {
       const donorPersonas = ['D', 'DA', 'SDA'];
-      if (this.donors && Array.isArray(this.donors)) {
+      if (this.donors && Array.isArray(this.donors) && this.userProfile) {
         return donorPersonas.includes(this.userProfile.account_type) && this.donors.includes(this.userProfile.donor);
       }
     },
     isCountry () {
       const countryPersonas = ['G', 'CA', 'SCA'];
-      if (this.country) {
+      if (this.country && this.userProfile) {
         return countryPersonas.includes(this.userProfile.account_type) && this.country === this.userProfile.country;
       }
     },
