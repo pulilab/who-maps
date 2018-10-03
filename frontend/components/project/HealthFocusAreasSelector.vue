@@ -16,7 +16,7 @@
         :key="hfa.id"
         :label="hfa.name"
         :value="hfa.id"/>
-    </el-option-group>\
+    </el-option-group>
   </el-select>
 </template>
 
