@@ -175,7 +175,7 @@ export default {
       text-decoration: none;
       cursor: pointer;
       white-space: nowrap;
-      opacity: .6;
+      opacity: .8;
       transition: @transitionAll;
       &.Active, &.nuxt-link-exact-active {
         opacity: 1;

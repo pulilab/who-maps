@@ -1,7 +1,6 @@
 <template>
   <div class="DashboardFiltersHeader">
     <span class="ProjectToShow">
-      <fa icon="list-ul" />
       <translate :parameters="{total}">{total} project(s) to show</translate>
     </span>
     <!-- <el-button class="ToggleFiltersButton">
