@@ -50,7 +50,7 @@
           </template>
           <template v-if="showCountry">
             <div class="el-popover__title">
-              <fa icon="globe" />
+              <fa icon="globe-africa" />
               <translate>Country View</translate>
             </div>
             <li
@@ -100,7 +100,7 @@ export default {
       return this.meActive ? 'Me' : this.countryActive ? 'Country' : 'Donor';
     },
     personaIcon () {
-      return this.meActive ? 'user-circle' : this.countryActive ? 'globe' : 'handshake';
+      return this.meActive ? 'user-circle' : this.countryActive ? 'globe-africa' : 'handshake';
     },
     donor () {
       if (this.user && this.user.donor) {
