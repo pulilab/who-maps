@@ -622,12 +622,12 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
                 for q in donor.donor_questions.all():
                     answer = ""
                     try:
-                        answer = p.data['donor_custom_answers'][donor.id][str(q.id)]
+                        answer = p.data['donor_custom_answers'][str(donor.id)][str(q.id)]
                     except KeyError:
                         pass
                     if not answer:
                         try:
-                            answer = p.data['donor_custom_answers_private'][donor.id][str(q.id)]
+                            answer = p.data['donor_custom_answers_private'][str(donor.id)][str(q.id)]
                         except KeyError:
                             pass
                     representation.extend([{q.question: ", ".join(answer)}])
