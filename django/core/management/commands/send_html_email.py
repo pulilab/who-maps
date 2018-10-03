@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from django.template import loader, Context
+from django.template import loader
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa

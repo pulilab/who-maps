@@ -1,3 +1,3 @@
-from who_maps.settings import *
+from who_maps.settings import *  # noqa
 
-EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
