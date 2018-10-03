@@ -1,11 +1,12 @@
 <template>
   <div
+    v-if="donors && donors.length >0"
     id="donorcustom"
     class="DonorCustom">
     <collapsible-card
       v-for="(donor) in donors"
       :key="donor.id"
-      :title="donor.name + ' custom fields'"
+      :title="$gettext('{name} custom fields', {name: donor.name})"
     >
       <custom-field
         v-for="(field, index) in donor.donor_questions"
