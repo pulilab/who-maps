@@ -116,16 +116,20 @@ const parseNames = (collection) => {
 
 export const actions = {
   async loadGeoJSON ({commit, rootGetters}) {
-    const country = rootGetters['admin/country/getData'];
-    const url = country.map_files.length && country.map_files.slice(-1)[0].map_file;
-    if (url) {
-      const mediaIndex = url.indexOf('/media/');
-      const proper = url.slice(mediaIndex);
-      const { data } = await this.$axios.get(proper);
-      Object.freeze(data);
-      commit('UPDATE_GEO_JSON', data);
-    } else {
-      commit('RESET_MAP_STATE');
+    try {
+      const country = rootGetters['admin/country/getData'];
+      const url = country.map_files.length && country.map_files.slice(-1)[0].map_file;
+      if (url) {
+        const mediaIndex = url.indexOf('/media/');
+        const proper = url.slice(mediaIndex);
+        const { data } = await this.$axios.get(proper);
+        Object.freeze(data);
+        commit('UPDATE_GEO_JSON', data);
+      } else {
+        commit('RESET_MAP_STATE');
+      }
+    } catch (e) {
+      console.error('Map failed to load', e);
     }
   },
   setCountryCenter ({commit}, value) {

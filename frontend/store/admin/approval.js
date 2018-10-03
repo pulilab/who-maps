@@ -11,10 +11,14 @@ export const getters = {
 
 export const actions = {
   async loadList ({commit, rootGetters}) {
-    const country = rootGetters['admin/country/getData'];
-    if (country) {
-      const { data } = await this.$axios.get(`/api/approvals/${country.id}/`);
-      commit('SET_LIST', data);
+    try {
+      const country = rootGetters['admin/country/getData'];
+      if (country) {
+        const { data } = await this.$axios.get(`/api/approvals/${country.id}/`);
+        commit('SET_LIST', data);
+      }
+    } catch (e) {
+      console.error('approval list failed to load', e);
     }
   },
   setCurrentElement ({commit}, value) {
