@@ -196,7 +196,7 @@ class SetOrderToMixin:
         custom_question = self.get_object()
         to_id = request.data.get('to')
 
-        if to_id:
+        if to_id is not None:
             try:
                 custom_question.to(int(to_id))
                 return Response({'status': 'order set'})
