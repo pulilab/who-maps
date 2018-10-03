@@ -2,7 +2,9 @@
   <div
     id="implementation"
     class="ImplementationOverview">
-    <collapsible-card :title="$gettext('Implementation overview')">
+    <collapsible-card
+      ref="collapsible"
+      :title="$gettext('Implementation overview')">
 
       <el-form-item
         :error="errors.first('platforms')"
@@ -301,6 +303,7 @@ export default {
       this.implementing_partners = this.implementing_partners.filter((ip, i) => i !== index);
     },
     async validate () {
+      this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate(),
         this.coverageType === 2

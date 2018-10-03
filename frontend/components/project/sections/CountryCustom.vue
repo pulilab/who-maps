@@ -3,7 +3,9 @@
     v-if="countryQuestions && countryQuestions.length >0"
     id="countrycustom"
     class="CountryCustom">
-    <collapsible-card :title="$gettext('{name} custom fields', {name: country.name})" >
+    <collapsible-card
+      ref="collapsible"
+      :title="$gettext('{name} custom fields', {name: country.name})" >
       <custom-field
         v-for="(field, index) in countryQuestions"
         ref="customQuestion"
@@ -62,6 +64,7 @@ export default {
   methods: {
     async validate () {
       if (this.$refs.customQuestion) {
+        this.$refs.collapsible.expandCard();
         const validations = await Promise.all(this.$refs.customQuestion.map(r => r.validate()));
         console.log('Custom country questions validators', validations);
         return validations.reduce((a, c) => a && c, true);

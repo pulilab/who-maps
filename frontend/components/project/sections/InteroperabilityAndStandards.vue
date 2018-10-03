@@ -2,7 +2,9 @@
   <div
     id="interoperability"
     class="InteroperabilityAndStandards">
-    <collapsible-card title="Interoperability &amp; Standards">
+    <collapsible-card
+      ref="collapsible"
+      title="Interoperability &amp; Standards">
       <el-form-item
         :label="$gettext('Does your digital health project link to a digital HIS?')"
         prop="interoperability_links">
@@ -56,6 +58,7 @@ export default {
   },
   methods: {
     async validate () {
+      this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate(),
         ...this.$refs.interoperabilityLink.map(ir => ir.validate())
