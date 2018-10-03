@@ -156,13 +156,13 @@ export const actions = {
     commit('SET_SELECTED_ROWS', []);
   },
   async loadProjectsMap ({commit, dispatch}) {
-    const data = await dispatch('loadProjects', {type: 'map', page_size: 999999});
+    const data = await dispatch('loadProjects', {type: 'map', page_size: 999999, page: 1});
     commit('SET_PROJECT_MAP', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
   },
   async loadProjectsBucket ({commit, dispatch, state}) {
     if (state.projectsBucket.length === 0) {
-      const data = await dispatch('loadProjects', {type: 'list', page_size: 999999});
+      const data = await dispatch('loadProjects', {type: 'list', page_size: 999999, page: 1});
       commit('SET_PROJECT_BUCKET', data.results.projects);
       commit('SET_SEARCH_STATUS', data);
     }
