@@ -1,8 +1,8 @@
 import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator } from '../utilities/map';
-import { intArrayFromQs, customColumnsMapper, strArrayFromQs, parseSearchResult } from '../utilities/api';
+import { intArrayFromQs, customColumnsMapper, strArrayFromQs, parseCustomAnswers } from '../utilities/api';
 
 export const searchIn = () => ['name', 'org', 'overview', 'partner', 'donor', 'loc'];
-export const defaultSelectedColumns = () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+export const defaultSelectedColumns = () => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
 export const state = () => ({
   ...stateGenerator(),
@@ -78,8 +78,8 @@ export const state = () => ({
 });
 export const getters = {
   ...gettersGenerator(),
-  getProjectsList: state => [...state.projectsList.map(r => parseSearchResult(r))],
-  getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => ({...r}))] : getters.getProjectsList,
+  getProjectsList: state => [...state.projectsList.map(r => parseCustomAnswers(r))],
+  getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => parseCustomAnswers(r))] : getters.getProjectsList,
   getCountryColumns: (state, getters, rootState, rootGetters) => {
     if (state.dashboardId && state.dashboardType === 'country') {
       const country = rootGetters['countries/getCountryDetails'](state.dashboardId);
@@ -118,6 +118,7 @@ export const getters = {
   getSorting: state => state.sorting,
   getSavedFilters: state => state.savedFilters,
   getDashboardType: state => state.dashboardType,
+  getDashboardId: state => state.dashboardId,
   getDashboardSection: state => state.dashboardSection,
   getSearchParameters: (state, getters) => {
     const q = state.searchString && state.searchString.length > 1 ? state.searchString : undefined;
@@ -155,13 +156,13 @@ export const actions = {
     commit('SET_SELECTED_ROWS', []);
   },
   async loadProjectsMap ({commit, dispatch}) {
-    const data = await dispatch('loadProjects', {type: 'map', page_size: 999999});
+    const data = await dispatch('loadProjects', {type: 'map', page_size: 999999, page: 1});
     commit('SET_PROJECT_MAP', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
   },
   async loadProjectsBucket ({commit, dispatch, state}) {
     if (state.projectsBucket.length === 0) {
-      const data = await dispatch('loadProjects', {type: 'list', page_size: 999999});
+      const data = await dispatch('loadProjects', {type: 'list', page_size: 999999, page: 1});
       commit('SET_PROJECT_BUCKET', data.results.projects);
       commit('SET_SEARCH_STATUS', data);
     }
@@ -252,14 +253,21 @@ export const actions = {
     }
     commit('SET_SAVED_FILTERS', filters);
   },
-  setDashboardType ({commit, getters}, {type, id}) {
-    commit('SET_DASHBOARD_TYPE', {type, id});
+  async setDashboardType ({commit, dispatch, getters}, {type, id}) {
+    commit('SET_SEARCH_OPTIONS', {
+      view_as: type,
+      donor: type === 'donor' ? id : undefined,
+      country: type === 'country' ? [id] : undefined
+    });
     const selectedColumns = [...getters.getSelectedColumns];
     if (type === 'country') {
       selectedColumns.push(...getters.getCountryColumns.map(cc => cc.id));
+      await dispatch('setSelectedCountry', id);
+      commit('SET_ACTIVE_COUNTRY', id);
     } else if (type === 'donor') {
       selectedColumns.push(...getters.getDonorColumns.map(cc => cc.id));
     }
+    commit('SET_PROJECT_BUCKET', []);
     commit('SET_SELECTED_COLUMNS', selectedColumns);
   },
   setDashboardSection ({commit}, value) {

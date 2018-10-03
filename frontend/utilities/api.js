@@ -62,8 +62,9 @@ export const apiReadParser = p => {
   const interoperability_links = interoperabilityLinksMapper(p.interoperability_links);
   const [ platforms, digitalHealthInterventions ] = platformsMapper(p.platforms);
   const coverageType = coverage === undefined || coverage.length === 0 ? 2 : 1;
-  const country_custom_answers = countryCustomFieldMapper(p.country_custom_answers);
-  const donor_custom_answers = donorCustomFieldMapper(p.donor_custom_answers);
+  p = parseCustomAnswers(p);
+  const country_custom_answers = countryCustomFieldMapper(p.country_answers);
+  const donor_custom_answers = donorCustomFieldMapper(p.donor_answers);
   return {...p,
     coverage,
     coverage_second_level,
@@ -237,18 +238,25 @@ export const customColumnsMapper = (columns, prefix) => {
   }));
 };
 
-export const parseSearchResult = r => ({
-  ...r,
-  country_answers: {
-    ...r.country_custom_answers,
-    ...r.country_custom_answers_private
-  },
-  donor_answers: {
-    ...r.donor_custom_answers,
-    ...r.donor_custom_answers_private
-  },
-  country_custom_answers: undefined,
-  country_custom_answers_private: undefined,
-  donor_custom_answers: undefined,
-  donor_custom_answers_private: undefined
-});
+export const parseCustomAnswers = r => {
+  const donor_answers = {};
+  r.donors.forEach(d => {
+    donor_answers[d] = {
+      ...(r.donor_custom_answers ? r.donor_custom_answers[d] : null),
+      ...(r.donor_custom_answers_private ? r.donor_custom_answers_private[d] : null)
+    };
+  });
+  return {
+    ...r,
+    country_answers: {
+      ...r.country_custom_answers,
+      ...r.country_custom_answers_private
+    },
+
+    donor_answers,
+    country_custom_answers: undefined,
+    country_custom_answers_private: undefined,
+    donor_custom_answers: undefined,
+    donor_custom_answers_private: undefined
+  };
+};

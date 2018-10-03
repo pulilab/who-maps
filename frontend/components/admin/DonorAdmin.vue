@@ -187,7 +187,7 @@
     </collapsible-card>
 
     <collapsible-card
-      :title="$gettext('Country specific questionaire')"
+      :title="$gettext('Donor specific questionaire')"
       class="Questionnaire">
       <dha-questionaire ref="customQuestions" />
     </collapsible-card>

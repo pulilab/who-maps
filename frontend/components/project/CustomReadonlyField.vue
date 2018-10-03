@@ -3,7 +3,12 @@
     :header="question"
   >
     <template v-if="type < 5">
-      {{ value }}
+      <span v-show="value">
+        {{ value }}
+      </span>
+      <span v-show="!value">
+        <translate> N/A </translate>
+      </span>
     </template>
     <template v-if="type === 5">
       <ul>
@@ -11,7 +16,12 @@
           v-for="v in value"
           :key="v"
         >
-          {{ v }}
+          <span v-show="v">
+            {{ v }}
+          </span>
+          <span v-show="!v">
+            <translate> N/A </translate>
+          </span>
         </li>
       </ul>
     </template>

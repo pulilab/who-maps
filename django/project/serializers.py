@@ -10,7 +10,7 @@ from rest_framework.fields import ReadOnlyField
 from rest_framework.validators import UniqueValidator
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
-import scheduler.celery # noqa
+import scheduler.celery  # noqa
 
 from country.models import CustomQuestion
 from project.utils import remove_keys
@@ -396,3 +396,10 @@ class ProjectApprovalSerializer(serializers.ModelSerializer):
 
     def get_history(self, obj):
         return obj.history.values('history_user__userprofile', 'approved', 'reason', 'modified')
+
+
+class CSVExportSerializer(serializers.Serializer):
+    ids = serializers.ListField(
+        child=serializers.IntegerField(), max_length=200, min_length=1, required=True)
+    country = serializers.IntegerField(required=False)
+    donor = serializers.IntegerField(required=False)

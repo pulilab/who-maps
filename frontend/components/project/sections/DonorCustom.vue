@@ -1,11 +1,13 @@
 <template>
   <div
+    v-if="donors && donors.length >0"
     id="donorcustom"
     class="DonorCustom">
     <collapsible-card
       v-for="(donor) in donors"
+      ref="collapsible"
       :key="donor.id"
-      :title="donor.name + ' custom fields'"
+      :title="$gettext('{name} custom fields', {name: donor.name})"
     >
       <custom-field
         v-for="(field, index) in donor.donor_questions"
@@ -59,6 +61,7 @@ export default {
   },
   methods: {
     async validate () {
+      this.$refs.collapsible.forEach(c => c.expandCard());
       if (this.$refs.customQuestion) {
         const validations = await Promise.all(this.$refs.customQuestion.map(r => r.validate()));
         console.log('Custom donoros validators', validations);

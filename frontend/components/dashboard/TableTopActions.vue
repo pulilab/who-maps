@@ -162,17 +162,23 @@ export default {
   computed: {
     ...mapGetters({
       columns: 'dashboard/getAvailableColumns',
-      selected: 'dashboard/getSelectedColumns',
+      selectedCol: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
       allSelected: 'dashboard/getSelectAll',
       total: 'dashboard/getTotal',
-      user: 'user/getProfile'
+      user: 'user/getProfile',
+      projects: 'dashboard/getProjectsBucket',
+      dashboardId: 'dashboard/getDashboardId',
+      dashboardType: 'dashboard/getDashboardType'
     }),
     settingsTitle () {
-      return `${this.$gettext('main fields')} (${this.selected.length}/${this.columns.length})`;
+      return `${this.$gettext('main fields')} (${this.selectedCol.length}/${this.columns.length})`;
     },
     selected () {
       return this.allSelected ? this.total : this.selectedRows.length;
+    },
+    rowToExport () {
+      return this.allSelected ? this.projects : this.projects.filter(p => this.selectedRows.some(sr => sr === p.id));
     },
     showEmailButton () {
       const allowed = ['CA', 'SCA', 'D', 'DA', 'SDA'];
@@ -206,9 +212,23 @@ export default {
         this.setSelectedRows([]);
       }
     },
-    exportRows () {
+    async exportRows () {
       if (this.exportType === 'PDF') {
         this.$refs.pdfExport.printPdf();
+      } else if (this.exportType === 'CSV') {
+        const ids = this.rowToExport.map(p => p.id);
+        const payload = {
+          ids,
+          donor: this.dashboardType === 'donor' ? this.dashboardId : undefined,
+          country: this.dashboardType === 'country' ? this.dashboardId : undefined
+        };
+        const { data } = await this.$axios.post('/api/projects/csv-export/', payload, {responseType: 'blob'});
+        const download_url = window.URL.createObjectURL(data);
+        let link = document.createElement('a');
+        link.setAttribute('href', download_url);
+        link.setAttribute('download', 'project-export.csv');
+        link.click();
+        link = null;
       }
     },
     async openMailDialog () {

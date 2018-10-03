@@ -15,10 +15,14 @@ export const circleOfCoords = ({ lat, lng }, amount) => {
   return result;
 };
 export const calculatePolyCenter = (geometry) => {
-  let coordinates = [...geometry.coordinates];
-  if (geometry.type !== 'Polygon') {
-    coordinates = coordinates.sort((a, b) => b[0].length - a[0].length)[0];
+  try {
+    let coordinates = [...geometry.coordinates];
+    if (geometry.type !== 'Polygon') {
+      coordinates = coordinates.sort((a, b) => b[0].length - a[0].length)[0];
+    }
+    const r = polylabel(coordinates);
+    return {lat: r[1], lng: r[0]};
+  } catch (e) {
+    console.warn('error in polycenter calculation', e);
   }
-  const r = polylabel(coordinates);
-  return {lat: r[1], lng: r[0]};
 };

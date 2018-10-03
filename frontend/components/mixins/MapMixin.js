@@ -122,7 +122,7 @@ const MapMixin = {
     selectedCountryAndMapReady: {
       immediate: false,
       handler (selectedCountry, old) {
-        if (old && !selectedCountry && this.currentZoom >= 6) {
+        if (old && !selectedCountry && this.currentZoom >= 4) {
           this.centerOn([0, 0], 2);
         }
       }

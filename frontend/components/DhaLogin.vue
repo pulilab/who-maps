@@ -203,8 +203,7 @@ export default {
     ...mapActions({
       login: 'user/doLogin',
       resetPassword: 'user/resetPassword',
-      setSelectedCountry: 'dashboard/setSelectedCountry',
-      setFilteredCountries: 'dashboard/setFilteredCountries'
+      setSelectedCountry: 'dashboard/setSelectedCountry'
     }),
 
     loginLocal () {

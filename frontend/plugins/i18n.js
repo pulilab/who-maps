@@ -5,8 +5,21 @@ Vue.component('translate', TranslateWrapper);
 
 Vue.mixin({
   methods: {
-    $gettext (word) {
-      return this.$t(word);
+    $gettext (word, parameters) {
+      const locale = this.$i18n.locale;
+      // safely search for translation string if not found default to word
+      let msg = this.$i18n.messages &&
+      this.$i18n.messages[locale] &&
+      this.$i18n.messages[locale][word]
+        ? this.$i18n.messages[locale][word]
+        : word;
+
+      if (parameters) {
+        for (let k in parameters) {
+          msg = msg.replace(`{${k}}`, parameters[k]);
+        }
+      }
+      return msg;
     }
   }
 });
