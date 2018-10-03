@@ -357,7 +357,7 @@ export default {
           name: sb.properties.name,
           latlng: calculatePolyCenter(sb.geometry)
         };
-      });
+      }).filter(p => p.latlng);
       this.setSubLevelsPolyCenters(subLevelsPolycenter);
     },
 
@@ -374,7 +374,6 @@ export default {
       this.setCountryDataField({field: 'map_files', data: [response]});
       setTimeout(async () => {
         await this.loadGeoJSON();
-        this.polycenterCalculation();
         this.forceMapFileChange = false;
         this.uploadMapFile = false;
         this.mapFileList = [];
