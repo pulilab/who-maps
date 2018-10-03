@@ -14,15 +14,13 @@ export default {
         }
         return this.$slots.default[0].text.trim();
       }
-    }
-  },
-  created () {
-    if (this.message && !this.$i18n.te(this.message)) {
-      this.$i18n.mergeLocaleMessage('en', {[this.message]: this.message});
+    },
+    translated () {
+      return this.$gettext(this.message);
     }
   },
   render (createElement) {
-    return createElement('span', this.$t(this.message, this.parameters));
+    return createElement('span', this.translated);
   }
 };
 </script>
