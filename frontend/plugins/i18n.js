@@ -5,7 +5,7 @@ Vue.component('translate', TranslateWrapper);
 
 Vue.mixin({
   methods: {
-    $gettext (word) {
+    $gettext (word, parameters) {
       const locale = this.$i18n.locale;
       // safely search for translation string if not found default to word
       let msg = this.$i18n.messages &&
@@ -14,9 +14,9 @@ Vue.mixin({
         ? this.$i18n.messages[locale][word]
         : word;
 
-      if (this.parameters) {
-        for (let k in this.parameters) {
-          msg = msg.replace(`{${k}}`, this.parameters[k]);
+      if (parameters) {
+        for (let k in parameters) {
+          msg = msg.replace(`{${k}}`, parameters[k]);
         }
       }
       return msg;

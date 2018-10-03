@@ -16,7 +16,7 @@ export default {
       }
     },
     translated () {
-      return this.$gettext(this.message);
+      return this.$gettext(this.message, this.parameters);
     }
   },
   render (createElement) {
