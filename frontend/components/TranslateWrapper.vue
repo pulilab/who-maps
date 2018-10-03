@@ -1,9 +1,3 @@
-<template>
-  <span>
-    {{ $t(message, parameters) }}
-  </span>
-</template>
-
 <script>
 export default {
   props: {
@@ -26,11 +20,9 @@ export default {
     if (this.message && !this.$i18n.te(this.message)) {
       this.$i18n.mergeLocaleMessage('en', {[this.message]: this.message});
     }
+  },
+  render (createElement) {
+    return createElement('span', this.$t(this.message, this.parameters));
   }
-
 };
 </script>
-
-<style>
-
-</style>
