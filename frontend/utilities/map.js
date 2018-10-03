@@ -89,7 +89,7 @@ export const actionsGenerator = () => ({
   },
   setCurrentZoom ({commit}, value) {
     commit('SET_CURRENT_ZOOM', value);
-    if (value < 6) {
+    if (value < 4) {
       commit('SET_SELECTED_COUNTRY', null);
       commit('SET_ACTIVE_COUNTRY', null);
     }
