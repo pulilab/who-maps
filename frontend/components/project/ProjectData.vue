@@ -174,6 +174,7 @@
         </collapsible-card>
 
         <collapsible-card
+          v-if="countryQuestions && countryQuestions.length > 0"
           id="countrycustom"
           :title="$gettext('Custom country fields')"
         >
@@ -188,11 +189,12 @@
         </collapsible-card>
 
         <div
+          v-if="donors && donors.length >0"
           id="donorcustom">
           <collapsible-card
             v-for="donor in donors"
             :key="donor.id"
-            :title="donor.name + ' custom fields'"
+            :title="$gettext('{name} custom fields', {name: donor.name})"
           >
             <custom-readonly-field
               v-for="question in donor.donor_questions"
