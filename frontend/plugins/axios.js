@@ -1,5 +1,5 @@
-export default function ({ $axios, store: { state, getters, dispatch } }) {
-  $axios.interceptors.request.use(config => {
+export default function ({ $axios, store: { state, getters, dispatch }, redirect }) {
+  $axios.onRequest(config => {
     const token = getters['user/getToken'];
     const lng = state.i18n.locale;
     if (token) {
@@ -10,12 +10,12 @@ export default function ({ $axios, store: { state, getters, dispatch } }) {
     }
     return config;
   });
-  $axios.interceptors.response.use(res => {
-    return res;
-  }, error => {
-    if (error && error.response && error.response.status === 401) {
+
+  $axios.onError(error => {
+    const code = parseInt(error.response && error.response.status);
+    if (code === 401) {
       dispatch('user/doLogout');
+      redirect('/en/-/login/');
     }
-    return Promise.reject(error);
   });
 }
