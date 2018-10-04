@@ -136,9 +136,9 @@ export default {
         return this.$i18n.locale;
       },
       set (value) {
-        const name = this.$route.name.split('___')[0];
-        const path = this.localePath({...this.$route, name}, value);
-        this.$router.replace(path);
+        // for now on language switch we need a full page change
+        const path = this.switchLocalePath(value);
+        window.location.href = path;
         this.shown = false;
       }
     }
