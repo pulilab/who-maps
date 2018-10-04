@@ -50,7 +50,7 @@
     "ng-redux": "^4.0.3",
     "nuxt": "^1.0.0",
     "nuxt-fontawesome": "^0.3.0",
-    "nuxt-i18n": "^4.1.0",
+    "nuxt-i18n": "^5.1.0",
     "papaparse": "^4.5.0",
     "pdfmake": "^0.1.38",
     "qs": "^6.5.2",

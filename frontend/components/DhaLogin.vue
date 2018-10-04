@@ -79,7 +79,7 @@
 
       <el-form
         ref="forgotForm"
-        :rules="rules2"
+        :rules="forgettenPasswordRules"
         :model="{ email }"
         label-position="top"
         status-icon
@@ -185,7 +185,7 @@ export default {
           { validator: this.validatorGenerator('password') }
         ]
       },
-      rules2: {
+      forgettenPasswordRules: {
         email: [
           { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
           { type: 'email', message: this.$gettext('Has to be a valid email address'), trigger: 'blur' },
