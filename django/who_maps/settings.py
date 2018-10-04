@@ -356,3 +356,7 @@ if CI_RUN:
     MEDIA_ROOT = "/root/who-maps/django/media/"
 
 OSM_MAP_CLI_KEY = 'a9ea45b5-ab37-4323-8263-767aa5896113'
+
+# Uncomment these lines if you want to redirect all emails to the forced addresses
+# EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
+# TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "nico@pulilab.com", "f@pulilab.com"]
