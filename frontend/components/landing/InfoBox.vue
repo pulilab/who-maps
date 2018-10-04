@@ -41,8 +41,8 @@ export default {
       }
 
       p {
-        font-size: @fontSizeSmall;
-        line-height: 18px;
+        font-size: @fontSizeBase;
+        line-height: 19px;
         color: @colorTextPrimary;
         margin: 0 0 20px;
       }
