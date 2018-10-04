@@ -269,7 +269,7 @@ export default {
       }
 
       .svg-inline--fa {
-        margin-right: 2px;
+        margin-right: 6px;
       }
     }
 

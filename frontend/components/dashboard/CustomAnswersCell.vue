@@ -1,11 +1,18 @@
 <template>
   <div class="CustomAnswersCell">
     <ul v-if="type > 3">
+      <!-- TODO -->
+      <!-- We might need the same v-for limiter here as on HFA list not to exceed the 4 lines max. limit -->
       <li
         v-for="(v, index) in values"
         :key="index"
       >
-        {{ v }}
+        <span>
+          <fa
+            icon="check"
+            size="xs" />
+        </span>
+        <span>{{ v }}</span>
       </li>
     </ul>
     <p v-if="type < 4">
@@ -52,6 +59,8 @@ export default {
 };
 </script>
 
-<style>
-
+<style lang="less">
+.CustomAnswersCell {
+  width: 100%;
+}
 </style>

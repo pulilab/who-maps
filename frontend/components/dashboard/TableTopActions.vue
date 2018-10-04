@@ -289,7 +289,7 @@ export default {
           vertical-align: middle;
           height: 14px;
           margin-left: 20px;
-          margin-right: 2px;
+          margin-right: 6px;
           color: @colorTextSecondary;
           font-size: 12px;
 

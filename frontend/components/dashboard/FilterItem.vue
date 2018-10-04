@@ -104,6 +104,12 @@ export default {
 
         .el-button {
           padding: 0;
+
+          .svg-inline--fa {
+            position: relative;
+            top: -1px;
+            font-size: 10px;
+          }
         }
       }
     }
