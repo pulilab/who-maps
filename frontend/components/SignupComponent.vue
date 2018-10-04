@@ -8,7 +8,7 @@
         <translate>Sign up for Digital Health Atlas</translate>
       </div>
       <el-form
-        ref="signupForm"
+        ref="form"
         :model="signupForm"
         :rules="rules"
         label-position="top"
@@ -124,11 +124,13 @@ export default {
     passwordMatching (rule, value, callback) {
       value === this.signupForm.password1 ? callback() : callback(Error(this.$gettext('The password must match')));
     },
-    async signup () {
+    signup () {
       this.deleteFormAPIErrors();
-      this.$refs.signupForm.validate(async valid => {
+      this.$refs.form.validate(async valid => {
         if (valid) {
           try {
+            // locale needs to be saved in this place due to i18n being unavailable right after the signup call
+            const locale = this.$i18n.locale;
             this.$nuxt.$loading.start();
             await this.doSignup({
               account_type: 'I',
@@ -136,16 +138,18 @@ export default {
               password2: this.signupForm.password2,
               email: this.signupForm.email
             });
-            this.$router.push(this.localePath({name: 'organisation-edit-profile', params: this.$route.params}));
+            const path = this.localePath({...this.$route, name: 'organisation-edit-profile'}, locale);
+            this.$router.push(path);
             this.$message({
               message: this.$gettext('User created succesfully'),
               type: 'success',
               showClose: true
             });
           } catch (e) {
+            console.log(e);
             this.$nuxt.$loading.finish();
             this.setFormAPIErrors(e);
-            this.$refs.signupForm.validate(() => {});
+            this.$refs.form.validate(() => {});
           }
         }
       });
