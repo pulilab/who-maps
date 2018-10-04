@@ -34,6 +34,7 @@
             :active-tab="activeTab"
             @change="tabChangeHandler"
           />
+
           <div
             v-show="showSubLevelHint"
             class="HintText"
@@ -41,8 +42,19 @@
             <fa
               icon="info-circle"
               size="lg" />
+            <translate>Select a sub-level on the map to dispaly the data </translate>
+          </div>
+
+          <div
+            v-show="showNoProjectToShow"
+            class="HintText"
+          >
+            <fa
+              icon="info-circle"
+              size="lg" />
             <translate>No project to show...</translate>
           </div>
+
           <div
             v-if="showSubNational"
             class="PlainList SubNational"
@@ -143,6 +155,9 @@ export default {
     },
     showMapProjectBox () {
       return this.activeCountry;
+    },
+    showNoProjectToShow () {
+      return (this.showNational && this.nationalProjects.length === 0) || (this.showSubNational && this.currentSubLevelProjects.length === 0);
     }
   },
   methods: {
