@@ -28,45 +28,6 @@ from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPl
 
 
 class ProjectPublicViewSet(ViewSet):
-    @staticmethod
-    def by_district(request, country_id):
-        """
-        Retrieves list of projects by district
-        """
-
-        # TODO: this is very very suboptimal, should switch to mongodb aggregate framework
-
-        projects = Project.objects.published_only().filter(data__country=int(country_id))
-
-        # get district names
-        district_names = set()
-
-        def district_name_finder(projects):
-            for project in projects:
-                for district in project.data.get('coverage', []):
-                    district_names.add(district.get('district'))
-
-        district_name_finder(projects)
-
-        # build project list by districts
-        result_dict = {name: [] for name in district_names}
-
-        def filter_project_by_district_name(districts, projects):
-            for district_name in districts:
-                for project in projects:
-                    for district in project.data.get('coverage', []):
-                        if district.get('district') == district_name:
-                            result_dict[district_name].append({
-                                "approved": project.approval.approved if hasattr(project, 'approval') else None,
-                                "id": project.id,
-                                "name": project.name,
-                                "organisation": Organisation.get_name_by_id(project.data.get('organisation'))
-                            })
-
-        filter_project_by_district_name(district_names, projects)
-
-        return Response(result_dict)
-
     def project_structure(self, request):
         return Response(self._get_project_structure())
 
