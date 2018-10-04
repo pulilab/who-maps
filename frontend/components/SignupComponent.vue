@@ -124,25 +124,29 @@ export default {
     },
     async signup () {
       this.deleteFormAPIErrors();
-      try {
-        this.$nuxt.$loading.start();
-        await this.doSignup({
-          account_type: 'I',
-          password1: this.signupForm.password1,
-          password2: this.signupForm.password2,
-          email: this.signupForm.email
-        });
-        this.$router.push(this.localePath({name: 'organisation-edit-profile', params: this.$route.params}));
-        this.$message({
-          message: this.$gettext('User created succesfully'),
-          type: 'success',
-          showClose: true
-        });
-      } catch (e) {
-        this.$nuxt.$loading.finish();
-        this.setFormAPIErrors(e);
-        this.$refs.signupForm.validate(() => {});
-      }
+      this.$refs.signupForm.validate(async valid => {
+        if (valid) {
+          try {
+            this.$nuxt.$loading.start();
+            await this.doSignup({
+              account_type: 'I',
+              password1: this.signupForm.password1,
+              password2: this.signupForm.password2,
+              email: this.signupForm.email
+            });
+            this.$router.push(this.localePath({name: 'organisation-edit-profile', params: this.$route.params}));
+            this.$message({
+              message: this.$gettext('User created succesfully'),
+              type: 'success',
+              showClose: true
+            });
+          } catch (e) {
+            this.$nuxt.$loading.finish();
+            this.setFormAPIErrors(e);
+            this.$refs.signupForm.validate(() => {});
+          }
+        }
+      });
     }
   }
 };
