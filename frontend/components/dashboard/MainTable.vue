@@ -112,12 +112,24 @@
           <p>{{ scope.row.implementation_overview }}</p>
         </template>
       </el-table-column>
+
       <el-table-column
         v-if="selectedColumns.includes('9')"
         :label="$gettext('Geographic Scope')"
         width="240">
         <template slot-scope="scope">
           <p>{{ scope.row.geographic_scope }}</p>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-if="selectedColumns.includes('10')"
+        label="Health Focus Areas"
+        width="240">
+        <template slot-scope="scope">
+          <health-focus-areas-list
+            :value="scope.row.health_focus_areas"
+            :limit="3" />
         </template>
       </el-table-column>
 
