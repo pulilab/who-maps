@@ -21,7 +21,7 @@
             prop="email">
             <el-input
               v-model="signupForm.email"
-              type="email" />
+            />
           </el-form-item>
 
           <el-form-item
@@ -29,7 +29,8 @@
             prop="password1">
             <el-input
               v-model="signupForm.password1"
-              type="password" />
+              type="password"
+            />
           </el-form-item>
 
           <el-form-item
@@ -37,7 +38,8 @@
             prop="password2">
             <el-input
               v-model="signupForm.password2"
-              type="password" />
+              type="password"
+            />
             <div
               v-if="nonFieldErrors"
               class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
