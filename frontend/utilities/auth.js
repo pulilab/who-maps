@@ -22,6 +22,7 @@ export const deleteToken = () => {
     window.localStorage.removeItem('profile_id');
   }
   Cookie.remove('jwt_token');
+  Cookie.remove('profile_id');
 };
 
 export const getValueFromCookie = (req, value) => {
