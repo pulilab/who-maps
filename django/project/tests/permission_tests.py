@@ -2,7 +2,6 @@ from copy import copy
 
 from django.urls import reverse
 
-from country.models import CountryField
 from django.core import mail
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
@@ -322,81 +321,6 @@ class PermissionTests(SetupTests):
                                          "District: dist2 [Clients: 10, Health Workers: 2, Facilities: 8]")
         self.assertNotContains(response, "District: ward1 [Clients: 209, Health Workers: 59, Facilities: 49], "
                                          "District: ward2 [Clients: 109, Health Workers: 29, Facilities: 89]")
-
-    def test_retrieve_project_with_country_fields(self):
-        schema_1 = CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
-        cf1 = CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?",
-                                          answer="a1", schema=False, schema_instance=schema_1)
-        url = reverse("project-retrieve", kwargs={"pk": self.project_id})
-        response = self.test_user_client.get(url)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
-        self.assertEqual(response.json()['published'].get("national_level_deployment")["clients"], 20000)
-        self.assertEqual(response.json()['published'].get("platforms")[0]["id"],
-                         self.project_data['platforms'][0]['id'])
-        self.assertEqual(response.json()['published'].get("country"), self.country_id)
-
-        self.assertEqual(response.json()['published']['fields'][0]['schema_id'], schema_1.id)
-        self.assertEqual(response.json()['published']['fields'][0]['country'], cf1.country.id)
-        self.assertEqual(response.json()['published']['fields'][0]['project'], cf1.project.id)
-        self.assertEqual(response.json()['published']['fields'][0]['type'], cf1.type)
-        self.assertEqual(response.json()['published']['fields'][0]['question'], cf1.question)
-        self.assertEqual(response.json()['published']['fields'][0]['answer'], cf1.answer)
-
-    def test_retrieve_project_with_country_fields_without_schema(self):
-        CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?",
-                                    answer="a1", schema=False)
-        url = reverse("project-retrieve", kwargs={"pk": self.project_id})
-        response = self.test_user_client.get(url)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
-        self.assertEqual(response.json()['published'].get("national_level_deployment")["clients"], 20000)
-        self.assertEqual(response.json()['published'].get("platforms")[0]["id"],
-                         self.project_data['platforms'][0]['id'])
-        self.assertEqual(response.json()['published'].get("country"), self.country_id)
-        self.assertEqual(len(response.json()['published']['fields']), 0)
-
-    def test_retrieve_project_and_draft_with_country_fields(self):
-        schema_1 = CountryField.objects.create(country=self.country, type=1, question="q1?", schema=True)
-        schema_2 = CountryField.objects.create(country=self.country, type=1, question="q2?", schema=True)
-        cf1 = CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q1?",
-                                          answer="published1", draft="draft1", schema=False, schema_instance=schema_1)
-        cf2 = CountryField.objects.create(project_id=self.project_id, country=self.country, type=1, question="q2?",
-                                          draft="draft2", answer="", schema=False, schema_instance=schema_2)
-        url = reverse("project-retrieve", kwargs={"pk": self.project_id})
-        response = self.test_user_client.get(url)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['published'].get("name"), "Test Project1")
-        self.assertEqual(response.json()['published'].get("national_level_deployment")["clients"], 20000)
-        self.assertEqual(response.json()['published'].get("platforms")[0]["id"],
-                         self.project_data['platforms'][0]['id'])
-        self.assertEqual(response.json()['published'].get("country"), self.country_id)
-
-        # published
-        self.assertEqual(response.json()['published']['fields'][0]['schema_id'], schema_1.id)
-        self.assertEqual(response.json()['published']['fields'][0]['country'], cf1.country.id)
-        self.assertEqual(response.json()['published']['fields'][0]['project'], cf1.project.id)
-        self.assertEqual(response.json()['published']['fields'][0]['type'], cf1.type)
-        self.assertEqual(response.json()['published']['fields'][0]['question'], cf1.question)
-        self.assertEqual(response.json()['published']['fields'][0]['answer'], cf1.answer)
-        self.assertEqual(response.json()['published']['fields'][1]['schema_id'], schema_2.id)
-        self.assertEqual(response.json()['published']['fields'][1]['type'], cf2.type)
-        self.assertEqual(response.json()['published']['fields'][1]['question'], cf2.question)
-        self.assertEqual(response.json()['published']['fields'][1]['answer'], cf2.answer)
-
-        # draft
-        self.assertEqual(response.json()['draft']['fields'][0]['schema_id'], schema_1.id)
-        self.assertEqual(response.json()['draft']['fields'][0]['country'], cf1.country.id)
-        self.assertEqual(response.json()['draft']['fields'][0]['project'], cf1.project.id)
-        self.assertEqual(response.json()['draft']['fields'][0]['type'], cf1.type)
-        self.assertEqual(response.json()['draft']['fields'][0]['question'], cf1.question)
-        self.assertEqual(response.json()['draft']['fields'][0]['answer'], cf1.draft)
-        self.assertEqual(response.json()['draft']['fields'][1]['type'], cf2.type)
-        self.assertEqual(response.json()['draft']['fields'][1]['question'], cf2.question)
-        self.assertEqual(response.json()['draft']['fields'][1]['answer'], cf2.draft)
 
     def test_project_structure_export(self):
         url = reverse("get-project-structure-export")
