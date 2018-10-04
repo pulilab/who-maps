@@ -16,6 +16,7 @@ export default {
       userProfile: 'user/getProfile'
     })
   },
+  middleware: ['profile'],
   watch: {
     userProfile: {
       immediate: true,

@@ -14,6 +14,7 @@ import DashboardFiltersDialog from './DashboardFiltersDialog';
 import SaveFilterDialog from './SaveFilterDialog';
 import SendEmailDialog from './SendEmailDialog';
 import ProjectApprovalDialog from './ProjectApprovalDialog';
+import { mapGettersActions } from '../..//utilities/form';
 
 export default {
   components: {
@@ -22,6 +23,29 @@ export default {
     SaveFilterDialog,
     SendEmailDialog,
     ProjectApprovalDialog
+  },
+  computed: {
+    ...mapGettersActions({
+      showEmptyProfileWarning: ['layout', 'getShowEmptyProfileWarning', 'setShowEmptyProfileWarning']
+    })
+  },
+  watch: {
+    showEmptyProfileWarning: {
+      immediate: true,
+      handler (show) {
+        if (show) {
+          this.$alert(
+            this.$gettext('Please fill your profile first'),
+            this.$gettext('Warning'),
+            {
+              confirmButtonText: 'OK',
+              callback: action => {
+                this.showEmptyProfileWarning = false;
+              }
+            });
+        }
+      }
+    }
   }
 };
 </script>
