@@ -137,14 +137,14 @@
         v-for="col in countryColumns"
         :key="col.id"
         :label="col.label"
-        show-overflow-tooltip="true"
+        :show-overflow-tooltip="true"
         width="240">
         <template slot-scope="scope">
           <custom-answers-cell
             :row="scope.row"
             :id="col.originalId"
             :type="col.type"
-            module="country"
+            :limit="3"
           />
         </template>
       </el-table-column>
@@ -161,6 +161,7 @@
             :id="col.originalId"
             :type="col.type"
             :donor-id="col.donorId"
+            :limit="3"
           />
         </template>
       </el-table-column>

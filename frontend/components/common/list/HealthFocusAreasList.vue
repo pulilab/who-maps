@@ -16,7 +16,7 @@
         </span>
         <span>{{ hfa.name }}</span>
       </li>
-      <li v-show="excluded">
+      <li v-show="excluded > 0">
         <span>
           <fa
             icon="check"

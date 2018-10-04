@@ -1,10 +1,8 @@
 <template>
   <div class="CustomAnswersCell">
     <ul v-if="type > 3">
-      <!-- TODO -->
-      <!-- We might need the same v-for limiter here as on HFA list not to exceed the 4 lines max. limit -->
       <li
-        v-for="(v, index) in values"
+        v-for="(v, index) in limited"
         :key="index"
       >
         <span>
@@ -13,6 +11,14 @@
             size="xs" />
         </span>
         <span>{{ v }}</span>
+      </li>
+      <li v-show="excluded > 0">
+        <span>
+          <fa
+            icon="check"
+            size="xs" />
+        </span>
+        <span><translate :parameters="{excluded}">... {excluded} more</translate></span>
       </li>
     </ul>
     <p v-if="type < 4">
@@ -39,6 +45,10 @@ export default {
     donorId: {
       type: Number,
       default: null
+    },
+    limit: {
+      type: Number,
+      default: null
     }
   },
   computed: {
@@ -54,6 +64,15 @@ export default {
         return module[this.id] ? module[this.id] : [];
       }
       return [];
+    },
+    limited () {
+      return this.limit && this.values.length > this.limit ? this.values.slice(0, this.limit) : this.selected;
+    },
+    excluded () {
+      if (this.values && this.limited) {
+        return this.values.length - this.limited.length;
+      }
+      return 0;
     }
   }
 };
