@@ -100,20 +100,28 @@ export const getters = {
 export const actions = {
 
   async loadUserProfiles ({ commit }) {
-    const { data } = await this.$axios.get('/api/userprofiles/');
-    commit('SET_USER_PROFILES', data);
+    try {
+      const { data } = await this.$axios.get('/api/userprofiles/');
+      commit('SET_USER_PROFILES', data);
+    } catch (e) {
+      console.error('system/loadUserProfiles failed');
+    }
   },
 
   async loadStaticData ({ commit }) {
-    const { data } = await this.$axios.get('/api/static-data/');
-    commit('SET_AXIS', data.axis);
-    commit('SET_DOMAINS', data.domains);
-    commit('SET_LANDING_PAGE_DEFAULTS', data.landing_page_defaults);
-    commit('SET_LANGUAGES', data.languages);
-    commit('SET_THEMATIC_OVERVIEW', data.thematic_overview);
-    commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
-    commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
-    commit('SET_REGIONS', data.regions);
+    try {
+      const { data } = await this.$axios.get('/api/static-data/');
+      commit('SET_AXIS', data.axis);
+      commit('SET_DOMAINS', data.domains);
+      commit('SET_LANDING_PAGE_DEFAULTS', data.landing_page_defaults);
+      commit('SET_LANGUAGES', data.languages);
+      commit('SET_THEMATIC_OVERVIEW', data.thematic_overview);
+      commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
+      commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
+      commit('SET_REGIONS', data.regions);
+    } catch (e) {
+      console.error('system/loadStaticData failed');
+    }
   },
 
   async loadOrganisations ({ commit, rootGetters }) {
@@ -123,7 +131,7 @@ export const actions = {
         const { data } = await this.$axios.get(`/api/organisations/`);
         commit('SET_SYSTEM_ORGANISATIONS', data);
       } catch (e) {
-        console.error('failed to load organisation');
+        console.error('system/loadOrganisations failed');
       }
     }
   },
@@ -133,7 +141,7 @@ export const actions = {
       const { data } = await this.$axios.get(`/api/landing-donor/`);
       commit('SET_DONORS', data);
     } catch (e) {
-      console.error('failed to load donors');
+      console.error('system/loadDonors failed');
     }
   },
 

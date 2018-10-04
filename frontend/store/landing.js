@@ -30,11 +30,15 @@ export const getters = {
 export const actions = {
   ...actionsGenerator(),
   async search ({commit, dispatch}) {
-    commit('SET_SEARCHED', null);
-    const { results } = await dispatch('loadProjects');
-    commit('SET_PROJECT_MAP', results.projects);
-    commit('SET_SEARCHED', results.search_term);
-    commit('SET_FOUND_IN', results.found_in);
+    try {
+      commit('SET_SEARCHED', null);
+      const { results } = await dispatch('loadProjects');
+      commit('SET_PROJECT_MAP', results.projects);
+      commit('SET_SEARCHED', results.search_term);
+      commit('SET_FOUND_IN', results.found_in);
+    } catch (e) {
+      // console.log(e);
+    }
   },
   async loadCountryData ({commit, dispatch, rootGetters}, code) {
     const country = rootGetters['countries/getCountries'].find(c => c.code.toLowerCase() === code.toLowerCase());

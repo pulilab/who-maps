@@ -84,7 +84,7 @@ export const actionsGenerator = () => ({
       });
       return data;
     } catch (e) {
-      console.error(e);
+      console.error('sharedMapModule/loadProjects failed');
     }
   },
   setCurrentZoom ({commit}, value) {
