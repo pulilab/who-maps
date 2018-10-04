@@ -120,7 +120,8 @@ export default {
       immediate: true,
       handler (stored) {
         if (stored) {
-          this.question = {...stored, options: [...stored.options]};
+          const options = stored.type > 3 ? [...stored.options] : [];
+          this.question = {...stored, options};
         }
       }
     }
