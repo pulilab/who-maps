@@ -18,7 +18,7 @@ from project.models import HSCGroup, ProjectApproval
 from project.permissions import InCountryAdminForApproval
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
-from country.models import Country, CountryField, Donor, CustomQuestion
+from country.models import Country, Donor
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, ProjectApprovalSerializer, \
