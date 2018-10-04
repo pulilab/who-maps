@@ -14,6 +14,8 @@
       </el-col>
     </el-row>
 
+    <!-- TODO -->
+    <!-- Pls show only the last 3 recently updated project here... -->
     <user-projects-list />
 
     <el-row
@@ -97,8 +99,8 @@ export default {
     }
 
     .SeeAllMyProjects {
+      padding-bottom: 40px;
       text-align: center;
     }
   }
-
 </style>

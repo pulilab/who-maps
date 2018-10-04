@@ -22,12 +22,14 @@
             </div>
             <div class="Partner">
               <img
-                src="/static/partners/logo-path-color.png"
+                src="/static/partners/logo-path_new-color.png"
+                style="height: 42px"
                 alt="PATH">
             </div>
             <div class="Partner">
               <img
                 src="/static/partners/logo-digital_square.png"
+                style="height: 54px"
                 alt="Digital Square">
             </div>
           </div>
@@ -123,11 +125,14 @@ export default {
 
         .Partner {
           float: left;
-          margin: 20px 80px 40px 0;
+          display: inline-flex;
+          height: 60px;
+          margin: 10px 80px 40px 0;
 
           img {
             width: auto;
-            height: 60px;
+            height: 50px;
+            align-self: center;
           }
         }
       }

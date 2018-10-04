@@ -12,9 +12,7 @@
         type="text"
         class="ButtonPopper"
       >
-        <fa icon="user-circle" />
-        {{ user.name }}
-        <fa icon="angle-down" />
+        <fa icon="user-circle" />{{ user.name }}<fa icon="angle-down" />
       </el-button>
 
       <div class="DropdownContent">
@@ -180,10 +178,10 @@ export default {
     text-decoration: none;
 
     .svg-inline--fa {
-      margin-right: 2px;
+      margin-right: 6px;
 
       &.fa-angle-down {
-        margin: 0 0 0 4px;
+        margin: 0 0 0 10px;
       }
     }
   }

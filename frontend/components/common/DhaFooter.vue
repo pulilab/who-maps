@@ -37,6 +37,7 @@ export default {
 
       a {
         color: inherit;
+        margin: 0 6px;
       }
     }
   }

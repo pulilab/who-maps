@@ -125,6 +125,7 @@
         v-for="col in countryColumns"
         :key="col.id"
         :label="col.label"
+        show-overflow-tooltip="true"
         width="240">
         <template slot-scope="scope">
           <custom-answers-cell
@@ -140,6 +141,7 @@
         v-for="col in donorColumns"
         :key="col.id"
         :label="col.label"
+        show-overflow-tooltip="true"
         width="240">
         <template slot-scope="scope">
           <custom-answers-cell
@@ -316,6 +318,9 @@ export default {
       th {
         > .cell {
           line-height: 24px;
+          // truncate long headers
+          white-space: nowrap;
+          //
         }
 
         &.is-leaf {
@@ -423,7 +428,12 @@ export default {
             font-size: 12px;
 
             &.fa-star {
+              right: 1px;
               font-size: 11px;
+            }
+
+            &.fa-globe-africa {
+              right: 1px;
             }
           }
         }
@@ -460,22 +470,28 @@ export default {
         }
       }
 
-      .HealthFocusAreasList {
+      .HealthFocusAreasList,
+      .CustomAnswersCell {
         ul {
           list-style-type: none;
           margin: 0;
           padding: 0;
 
           li {
-            display: inline-flex;
-            align-items: flex-start;
-            width: 100%;
+            position: relative;
 
-            .svg-inline--fa {
-              position: relative;
-              top: -1px;
-              display: inline-block;
-              margin-right: 5px;
+            > span {
+              &:first-child {
+                position: absolute;
+                left: 0;
+                top: 0;
+              }
+
+              &:last-child {
+                display: block;
+                padding-left: 15px;
+                .textTruncate();
+              }
             }
           }
         }

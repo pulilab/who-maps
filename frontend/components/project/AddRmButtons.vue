@@ -11,7 +11,7 @@
     <el-button
       v-show="showRm"
       type="text"
-      class="DeleteButton IViewert"
+      class="DeleteButton IconLeft IViewert"
       @click="$emit('rm')">
       <fa icon="minus" />
       <translate>Delete</translate>

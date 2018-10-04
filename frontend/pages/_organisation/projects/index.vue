@@ -7,12 +7,11 @@
         <fa
           icon="star"
           class="Owner" />
-        <b><translate>Member</translate></b>
-        <translate>or</translate>
+        <b><translate>Member</translate></b>&nbsp;<translate>or</translate>
         <fa
           icon="eye"
           class="Viewer" />
-        <b><translate>Viewer</translate></b> <translate>of.</translate>
+        <b><translate>Viewer</translate></b>&nbsp;<translate>of.</translate>
       </p>
     </div>
     <user-project-list />
@@ -43,7 +42,7 @@ export default {
   .MyProjects {
     .PageTitle {
       .svg-inline--fa {
-        margin: 0 4px;
+        margin: 0 6px 0 10px;
         width: 16px;
         height: 16px;
       }
