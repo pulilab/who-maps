@@ -41,24 +41,30 @@ const config = {
         {
           code: 'en',
           iso: 'en-GB',
-          name: 'English'
+          name: 'English',
+          file: 'en-GB.js'
         },
         {
           code: 'fr',
           iso: 'fr-FR',
-          name: 'Français'
+          name: 'Français',
+          file: 'fr-FR.js'
         },
         {
           code: 'es',
           iso: 'es-ES',
-          name: 'Español'
+          name: 'Español',
+          file: 'es-ES.js'
         },
         {
           code: 'pt',
           iso: 'pt-PT',
-          name: 'Português'
+          name: 'Português',
+          file: 'pt-PT.js'
         }
       ],
+      lazy: true,
+      langDir: 'lang/',
       strategy: 'prefix',
       rootRedirect: 'en/-/',
       defaultLocale: 'en',
