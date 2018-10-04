@@ -2,7 +2,7 @@
   <div class="UserProjectsList">
     <empty-projects v-if="!hasProjects" />
     <extended-project-card
-      v-for="project in userProjecList"
+      v-for="project in limited"
       :key="project.id"
       :id="project.id"
     />
@@ -24,6 +24,9 @@ export default {
     ...mapGetters({
       userProjecList: 'projects/getUserProjectList'
     }),
+    limited () {
+      return this.userProjecList.length > 3 ? this.userProjecList.slice(0, 3) : this.userProjecList;
+    },
     hasProjects () {
       return this.userProjecList.length > 0;
     }
