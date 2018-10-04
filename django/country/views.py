@@ -4,7 +4,7 @@ import requests
 from requests import RequestException
 from django.conf import settings
 from django.http import HttpResponse
-from rest_framework import generics, mixins, viewsets, status
+from rest_framework import mixins, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
@@ -16,20 +16,20 @@ from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
-from .models import Country, CountryField, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
+from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
     CountryCustomQuestion, DonorCustomQuestion
-from .serializers import CountryFieldsListSerializer, CountryFieldsWriteSerializer, CountrySerializer, \
-    SuperAdminCountrySerializer, AdminCountrySerializer, PartnerLogoSerializer, DonorSerializer, \
+from .serializers import CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, PartnerLogoSerializer, \
+    DonorSerializer, \
     SuperAdminDonorSerializer, AdminDonorSerializer, DonorPartnerLogoSerializer, MapFileSerializer, \
     CountryImageSerializer, DonorImageSerializer, DonorCustomQuestionSerializer, CountryCustomQuestionSerializer
 
 
-class CountryLandingPageViewSet(mixins.RetrieveModelMixin,  mixins.ListModelMixin, viewsets.GenericViewSet):
+class CountryLandingPageViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
 
 
-class DonorLandingPageViewSet(mixins.RetrieveModelMixin,  mixins.ListModelMixin, viewsets.GenericViewSet):
+class DonorLandingPageViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Donor.objects.all()
     serializer_class = DonorSerializer
 
@@ -102,17 +102,6 @@ class DonorPartnerLogoViewSet(DonorSuperAdminPermissionMixin, mixins.CreateModel
     queryset = DonorPartnerLogo.objects.all()
     serializer_class = DonorPartnerLogoSerializer
     parser_classes = (MultiPartParser, FormParser)
-
-
-class CountryFieldsListView(generics.ListAPIView):
-    serializer_class = CountryFieldsListSerializer
-
-    def get_queryset(self):
-        return CountryField.objects.get_schema(self.kwargs.get('country_id'))
-
-
-class CountryFieldsCreateUpdateView(generics.CreateAPIView):
-    serializer_class = CountryFieldsWriteSerializer
 
 
 class CountryExportView(APIView):
