@@ -55,6 +55,7 @@
           <el-input
             :disabled="notSCA"
             v-model="footerTitle"
+            :maxlength="128"
             type="text"/>
         </el-form-item>
 
@@ -62,6 +63,7 @@
           <el-input
             :disabled="notSCA"
             v-model="footerText"
+            :maxlength="128"
             type="text"/>
         </el-form-item>
 
