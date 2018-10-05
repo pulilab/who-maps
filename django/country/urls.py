@@ -25,10 +25,4 @@ urlpatterns = [
                   url(r"^countries/map-download/(?P<country_id>\d+)/$",
                       view=views.MapDownloadViewSet.as_view({'get': 'map_download'}),
                       name="country-map-download"),
-                  url(r"^country-fields/(?P<country_id>\d+)/$",
-                      view=views.CountryFieldsListView.as_view(),
-                      name="country-fields-list"),
-                  url(r"^country-fields/(?P<country_id>\d+)/(?P<project_id>\d+)/(?P<mode>draft|publish)/$",
-                      view=views.CountryFieldsCreateUpdateView.as_view(),
-                      name="country-fields"),
               ] + router.urls

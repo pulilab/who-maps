@@ -18,7 +18,7 @@ from project.models import HSCGroup, ProjectApproval
 from project.permissions import InCountryAdminForApproval
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
-from country.models import Country, CountryField, Donor, CustomQuestion
+from country.models import Country, Donor
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, ProjectApprovalSerializer, \
@@ -28,90 +28,6 @@ from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPl
 
 
 class ProjectPublicViewSet(ViewSet):
-    @staticmethod
-    def by_district(request, country_id):
-        """
-        Retrieves list of projects by district
-        """
-
-        # TODO: this is very very suboptimal, should switch to mongodb aggregate framework
-
-        projects = Project.objects.published_only().filter(data__country=int(country_id))
-
-        # get district names
-        district_names = set()
-
-        def district_name_finder(projects):
-            for project in projects:
-                for district in project.data.get('coverage', []):
-                    district_names.add(district.get('district'))
-
-        district_name_finder(projects)
-
-        # build project list by districts
-        result_dict = {name: [] for name in district_names}
-
-        def filter_project_by_district_name(districts, projects):
-            for district_name in districts:
-                for project in projects:
-                    for district in project.data.get('coverage', []):
-                        if district.get('district') == district_name:
-                            result_dict[district_name].append({
-                                "approved": project.approval.approved if hasattr(project, 'approval') else None,
-                                "id": project.id,
-                                "name": project.name,
-                                "organisation": Organisation.get_name_by_id(project.data.get('organisation'))
-                            })
-
-        filter_project_by_district_name(district_names, projects)
-
-        return Response(result_dict)
-
-    @staticmethod
-    def list_all(request, *args, **kwargs):
-        """
-        Retrieves list of projects (optionally by country)
-        """
-
-        def get_strategies(platforms):
-            ds_names = []
-            for platform in platforms:
-                ds_names.extend([x.name for x in DigitalStrategy.objects.get_names_for_ids(platform['strategies'])])
-            return list(set(ds_names))
-
-        projects = Project.objects.published_only()  # lazy QuerySet
-
-        if kwargs.get("country_id"):
-            projects = projects.filter(data__country=int(kwargs.get("country_id")))
-
-        result_list = functools.reduce(
-            lambda acc, p: acc + [{
-                "approved": p.approval.approved if hasattr(p, 'approval') else None,
-                "id": p.id,
-                "uuid": p.public_id,
-                "name": p.name,
-                "organisation": p.data.get('organisation'),
-                "organisation_name": Organisation.get_name_by_id(p.data.get('organisation')),
-                "donors": p.data.get('donors'),
-                "country": p.data.get('country'),
-                "country_name": Country.get_name_by_id(p.data.get('country')),
-                "contact_name": p.data.get('contact_name'),
-                "contact_email": p.data.get('contact_email'),
-                "implementation_overview": p.data.get('implementation_overview'),
-                "implementing_partners": p.data.get('implementing_partners'),
-                "implementation_dates": p.data.get('implementation_dates'),
-                "health_focus_areas": [x.name for x in HealthFocusArea.objects.get_names_for_ids(
-                    p.data.get("health_focus_areas", []))],
-                "digital_strategies": get_strategies(p.data.get("platforms", [])),
-                "hsc_challenges": [x.challenge for x in HSCChallenge.objects.get_names_for_ids(
-                    p.data.get("hsc_challenges", []))],
-                "his_bucket": [x.name for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))],
-                "geographic_scope": p.data.get('geographic_scope'),
-                "platforms": [x.name for x in TechnologyPlatform.objects.get_names_for_ids(
-                    [x['id'] for x in p.data.get("platforms", [])])],
-            }], projects, [])
-        return Response(result_list)
-
     def project_structure(self, request):
         return Response(self._get_project_structure())
 
