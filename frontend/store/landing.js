@@ -48,15 +48,23 @@ export const actions = {
     }
   },
   async loadCountryData ({commit, dispatch, rootGetters}, code) {
-    const country = rootGetters['countries/getCountries'].find(c => c.code.toLowerCase() === code.toLowerCase());
-    const { data } = await this.$axios.get(`/api/landing-country/${country.id}/`);
-    await dispatch('setSelectedCountry', data.id);
-    commit('SET_LANDING_PAGE_DATA', Object.freeze(data));
+    try {
+      const country = rootGetters['countries/getCountries'].find(c => c.code.toLowerCase() === code.toLowerCase());
+      const { data } = await this.$axios.get(`/api/landing-country/${country.id}/`);
+      await dispatch('setSelectedCountry', data.id);
+      commit('SET_LANDING_PAGE_DATA', Object.freeze(data));
+    } catch (e) {
+      console.error('landing/loadCountryData failed');
+    }
   },
-  async loadDonorData ({commit, dispatch, rootGetters}, code) {
-    const donor = rootGetters['system/getDonors'].find(d => d.code.toLowerCase() === code.toLowerCase());
-    const { data } = await this.$axios.get(`/api/landing-donor/${donor.id}/`);
-    commit('SET_LANDING_PAGE_DATA', Object.freeze(data));
+  async loadDonorData ({commit, rootGetters}, code) {
+    try {
+      const donor = rootGetters['system/getDonors'].find(d => d.code.toLowerCase() === code.toLowerCase());
+      const { data } = await this.$axios.get(`/api/landing-donor/${donor.id}/`);
+      commit('SET_LANDING_PAGE_DATA', Object.freeze(data));
+    } catch (e) {
+      console.error('landing/loadDonorData failed');
+    }
   },
   clearCustomLandingPage ({commit}) {
     commit('SET_LANDING_PAGE_DATA', null);
