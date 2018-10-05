@@ -11,8 +11,11 @@
           <el-button
             slot="reference"
             type="text"
+            size="small"
             class="IconRight"
           >
+            <!-- TODO -->
+            <!-- This should display the selected preset's name; show 'Load filters' only for empty state -->
             <translate>Load filters</translate>
             <fa icon="caret-down" />
           </el-button>
