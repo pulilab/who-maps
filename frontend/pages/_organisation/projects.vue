@@ -23,10 +23,11 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .ProjectsArea {
-    margin-bottom: 60px;
+    margin-bottom: 120px;
 
     .UserProjectsList {
       .limitPageWidth();
+      max-width: @cardSizeMedium;
     }
   }
 </style>

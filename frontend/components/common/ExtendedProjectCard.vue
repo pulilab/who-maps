@@ -138,7 +138,8 @@ export default {
   @import "../../assets/style/mixins.less";
 
 .ExtendedProjectCard {
-  margin-bottom: 20px;
+  max-width: @cardSizeMedium;
+  margin: 0 auto 20px;
 
   .FirstRow {
     position: relative;
