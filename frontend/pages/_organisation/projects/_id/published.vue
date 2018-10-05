@@ -54,7 +54,7 @@ export default {
 
     .PublishedLabel {
       display: inline-block;
-      height: 24px;
+      height: 23px;
       margin: 0 6px;
       padding: 0 10px;
       font-size: @fontSizeSmall;
