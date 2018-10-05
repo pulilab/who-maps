@@ -27,8 +27,9 @@
         <el-col class="SecondaryButtons">
           <el-button
             type="text"
-            class="CancelButton"
+            class="IconLeft"
             @click="copy">
+            <fa icon="clone" />
             <translate>Copy to clipboard</translate>
           </el-button>
         </el-col>
