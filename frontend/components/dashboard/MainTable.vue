@@ -149,7 +149,6 @@
         :resizable="false"
         :key="col.id"
         :label="col.label"
-        :show-overflow-tooltip="true"
         width="240">
         <template slot-scope="scope">
           <custom-answers-cell
@@ -166,7 +165,6 @@
         :resizable="false"
         :key="col.id"
         :label="col.label"
-        show-overflow-tooltip="true"
         width="240">
         <template slot-scope="scope">
           <custom-answers-cell

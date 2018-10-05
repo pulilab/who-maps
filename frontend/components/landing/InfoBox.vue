@@ -8,7 +8,7 @@
     <div class="InfoArticle">
       <h3><translate>Why use the Digital Health Atlas?</translate></h3>
 
-      <p><translate>This web platform supports issuing unique IDs for curating the range of digital health products and projects globally. Governments and communities of technologists, implementers, and donors will be equipped to better coordinate and plan, monitor the growth of implementations, and reduce redundancy of investments.</translate></p>
+      <p class="Lead"><translate>This web platform supports issuing unique IDs for curating the range of digital health products and projects globally. Governments and communities of technologists, implementers, and donors will be equipped to better coordinate and plan, monitor the growth of implementations, and reduce redundancy of investments.</translate></p>
 
       <p><translate>The Digital Health Atlas (DHA) offers governments, technologists, implementers, and donors a platform of tools and guidance to improve the use of, and planning coordination for digital information systems for health.</translate></p>
 
@@ -28,10 +28,17 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .InfoBox {
+    height: 100%;
+    background-image: url(/photo-whyusedha-bottom.jpg);
+    background-size: 115% auto;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+
     .InfoPicture {
       width: 100%;
       height: auto;
     }
+
     .InfoArticle {
       padding: 20px 40px;
 
@@ -41,10 +48,15 @@ export default {
       }
 
       p {
-        font-size: @fontSizeBase;
-        line-height: 19px;
+        font-size: @fontSizeSmall;
+        line-height: 18px;
         color: @colorTextPrimary;
         margin: 0 0 20px;
+
+        &.Lead {
+          font-size: @fontSizeBase;
+          line-height: 19px;
+        }
       }
     }
   }
