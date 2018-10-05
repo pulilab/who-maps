@@ -166,8 +166,8 @@ class Project(SoftDeleteModel, ExtendedModel):
         if self.approval.approved:
             self.approval.user = None
             self.approval.approved = None
-            self.approval.reason = None
-            self.approval.save_without_historical_record()
+            self.approval.reason = "Project has been republished"
+            self.approval.save()
 
     @classmethod
     def remove_stale_donors(cls):
