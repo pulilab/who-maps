@@ -6,7 +6,7 @@
       <li
         v-for="(option, index) in options"
         :key="index">
-        <fa icon="caret-right" />
+        <fa icon="check-circle" />
         <span class="Option">{{ option }}</span>
         <el-button
           v-if="!disabled"
