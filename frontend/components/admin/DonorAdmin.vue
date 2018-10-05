@@ -1,7 +1,7 @@
 <template>
   <div class="CountryAdmin">
     <div class="PageTitle">
-      <h2><translate>Donor admin for {{ donor.name }}</translate></h2>
+      <h2><translate :parameters="{name: donor.name}">Donor admin for {name}</translate></h2>
     </div>
 
     <collapsible-card
