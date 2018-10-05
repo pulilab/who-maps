@@ -2,14 +2,14 @@ import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator 
 
 export const state = () => ({
   ...stateGenerator(),
-  countryData: null,
+  landingPageData: null,
   searched: null,
   foundIn: {}
 });
 
 export const getters = {
   ...gettersGenerator(),
-  getCountryData: state => state.countryData,
+  getLandingPageData: state => state.landingPageData,
   getSearchResult: (state, getters) => {
     if (state.searched && state.searched === state.searchString) {
       return getters.getProjectsMap;
@@ -40,14 +40,26 @@ export const actions = {
       // console.log(e);
     }
   },
+  async loadCustomLandingPage ({dispatch}, code) {
+    if (code.length === 2) {
+      await dispatch('loadCountryData', code);
+    } else if (code.length > 2) {
+      await dispatch('loadDonorData', code);
+    }
+  },
   async loadCountryData ({commit, dispatch, rootGetters}, code) {
     const country = rootGetters['countries/getCountries'].find(c => c.code.toLowerCase() === code.toLowerCase());
     const { data } = await this.$axios.get(`/api/landing-country/${country.id}/`);
     await dispatch('setSelectedCountry', data.id);
-    commit('SET_COUNTRY_LANDING_DATA', Object.freeze(data));
+    commit('SET_LANDING_PAGE_DATA', Object.freeze(data));
   },
-  clearCountryData ({commit}) {
-    commit('SET_COUNTRY_LANDING_DATA', null);
+  async loadDonorData ({commit, dispatch, rootGetters}, code) {
+    const donor = rootGetters['system/getDonors'].find(d => d.code.toLowerCase() === code.toLowerCase());
+    const { data } = await this.$axios.get(`/api/landing-donor/${donor.id}/`);
+    commit('SET_LANDING_PAGE_DATA', Object.freeze(data));
+  },
+  clearCustomLandingPage ({commit}) {
+    commit('SET_LANDING_PAGE_DATA', null);
   },
   resetSearch ({commit}) {
     commit('SET_SEARCHED', null);
@@ -56,8 +68,8 @@ export const actions = {
 };
 export const mutations = {
   ...mutationsGenerator(),
-  SET_COUNTRY_LANDING_DATA: (state, data) => {
-    state.countryData = data;
+  SET_LANDING_PAGE_DATA: (state, data) => {
+    state.landingPageData = data;
   },
   SET_SEARCHED: (state, searched) => {
     state.searched = searched;

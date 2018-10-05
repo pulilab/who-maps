@@ -7,7 +7,7 @@
 
       <div
         v-if="showCoverImage"
-        :style="{backgroundImage: `url(${countryData.cover_url})`}"
+        :style="{backgroundImage: `url(${landingData.cover_url})`}"
         class="CoverImageBg" />
     </div>
 
@@ -50,10 +50,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      countryData: 'landing/getCountryData'
+      landingData: 'landing/getLandingPageData'
     }),
     showCoverImage () {
-      return this.countryData && this.countryData.cover;
+      return this.landingData && this.landingData.cover;
     }
   }
 };

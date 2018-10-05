@@ -61,26 +61,26 @@ import { mapGetters } from 'vuex';
 export default {
   computed: {
     ...mapGetters({
-      countryData: 'landing/getCountryData',
+      landingData: 'landing/getLandingPageData',
       landingPageDefaults: 'system/getLandingPageDefaults'
     }),
     countrySpecific () {
-      return this.countryData !== null;
+      return this.landingData !== null;
     },
     title () {
-      return this.countrySpecific ? this.countryData.footer_title : this.landingPageDefaults.footer_title;
+      return this.countrySpecific ? this.landingData.footer_title : this.landingPageDefaults.footer_title;
     },
     permanentFooterText () {
       return this.landingPageDefaults.permanent_footer;
     },
     countryText () {
       if (this.countrySpecific) {
-        return this.countryData.footer_text;
+        return this.landingData.footer_text;
       }
     },
     partnerLogos () {
       if (this.countrySpecific) {
-        return this.countryData.partner_logos.length > 0 ? this.countryData.partner_logos : null;
+        return this.landingData.partner_logos.length > 0 ? this.landingData.partner_logos : null;
       }
     }
   }
