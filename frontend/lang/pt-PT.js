@@ -1,11 +1,7 @@
-import axios from 'axios';
+import langReq from './langReq';
 export default () => {
   return new Promise(function (resolve) {
-    axios.get('/translation/json/', {
-      headers: {
-        'Accept-Language': 'pt'
-      }
-    }).then(res => {
+    langReq('pt').then(res => {
       resolve(res.data.catalog);
     });
   });

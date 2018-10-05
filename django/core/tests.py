@@ -11,8 +11,7 @@ from rest_framework.reverse import reverse
 
 from core.admin import CustomUserAdmin
 from core.admin.widgets import AdminArrayFieldWidget, AdminArrayField, NoneReadOnlyAdminArrayFieldWidget
-from country.forms import CountryFieldAdminForm
-from country.models import CountryField, Country
+from country.models import Country
 from user.models import UserProfile
 
 
@@ -123,34 +122,6 @@ class TestAdminArrayField(TestCase):
 
         native_value = self.field.prepare_value(python_value)
         self.assertEqual(native_value, value)
-
-
-class TestCountryFieldAdmin(TestCase):
-    def test_cleaning_create(self):
-        data = {'type': CountryField.TEXT,
-                'question': 'WHO let the dogs out?'}
-        form = CountryFieldAdminForm(data=data)
-        self.assertTrue(form.is_valid())
-
-    def test_cleaning_update(self):
-        country = Country.objects.create(name='Hungary',
-                                         code='HUN')
-        country_field = CountryField.objects.create(country=country,
-                                                    type=CountryField.TEXT,
-                                                    question='')
-        data = {'question': 'What is love?'}
-        form = CountryFieldAdminForm(instance=country_field, data=data)
-        form.fields.pop('type')
-
-        self.assertTrue(form.is_valid())
-
-    def test_missing_options(self):
-        data = {'type': CountryField.MULTI,
-                'question': 'WHO let the dogs out?'}
-        form = CountryFieldAdminForm(data=data)
-        self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors,
-                         {'__all__': ['Options is a required field']})
 
 
 class TestStaticDataEndpoint(TestCase):

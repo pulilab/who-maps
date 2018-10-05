@@ -14,12 +14,14 @@
       @sort-change="sortChanged"
     >
       <el-table-column
+        :resizable="false"
         type="selection"
         align="center"
         width="35"
       />
       <el-table-column
         v-if="selectedColumns.includes('1')"
+        :resizable="false"
         :label="$gettext('Project Name')"
         fixed
         sortable="custom"
@@ -35,6 +37,7 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes('2')"
+        :resizable="false"
         :label="$gettext('Country')"
         sortable="custom"
         prop="country__name"
@@ -48,6 +51,7 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes('3')"
+        :resizable="false"
         :label="$gettext('Organisation Name')"
         sortable="custom"
         prop="organisation__name"
@@ -60,6 +64,7 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes('4')"
+        :resizable="false"
         :label="$gettext('Government Investor')"
         sortable="custom"
         prop="project__data__government_investor"
@@ -71,6 +76,7 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes('5')"
+        :resizable="false"
         :label="$gettext('Region')"
         sortable="custom"
         prop="country__region"
@@ -83,6 +89,7 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes('6')"
+        :resizable="false"
         :label="$gettext('Donors')"
         width="240">
         <template slot-scope="scope">
@@ -94,6 +101,7 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes('7')"
+        :resizable="false"
         :label="$gettext('Contact Name')"
         width="240">
         <template slot-scope="scope">
@@ -106,6 +114,7 @@
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes('8')"
+        :resizable="false"
         :label="$gettext('Implementation Overview')"
         width="240">
         <template slot-scope="scope">
@@ -115,6 +124,7 @@
 
       <el-table-column
         v-if="selectedColumns.includes('9')"
+        :resizable="false"
         :label="$gettext('Geographic Scope')"
         width="240">
         <template slot-scope="scope">
@@ -124,6 +134,7 @@
 
       <el-table-column
         v-if="selectedColumns.includes('10')"
+        :resizable="false"
         label="Health Focus Areas"
         width="240">
         <template slot-scope="scope">
@@ -135,6 +146,7 @@
 
       <el-table-column
         v-for="col in countryColumns"
+        :resizable="false"
         :key="col.id"
         :label="col.label"
         :show-overflow-tooltip="true"
@@ -151,6 +163,7 @@
 
       <el-table-column
         v-for="col in donorColumns"
+        :resizable="false"
         :key="col.id"
         :label="col.label"
         show-overflow-tooltip="true"

@@ -12,7 +12,7 @@ from simple_history.models import HistoricalRecords
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
-from country.models import Country, CountryField
+from country.models import Country
 from project.cache import InvalidateCacheMixin
 from project.utils import remove_keys
 from user.models import UserProfile, Organisation
@@ -131,7 +131,6 @@ class Project(SoftDeleteModel, ExtendedModel):
             id=self.pk,
             name=self.draft.get('name', '') if draft_mode else self.name,
             approved=self.approval.approved if hasattr(self, 'approval') else None,
-            fields=[field.to_representation(draft_mode) for field in CountryField.get_for_project(self, draft_mode)],
             modified=self.modified,
         )
 
