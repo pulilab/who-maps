@@ -1,7 +1,7 @@
 <template>
   <div class="CountryAdmin">
     <div class="PageTitle">
-      <h2><translate>Country admin for {{ country.name }}</translate></h2>
+      <h2><translate :parameters="{name: country.name}">Country admin for {name}</translate></h2>
     </div>
 
     <collapsible-card
@@ -55,6 +55,7 @@
           <el-input
             :disabled="notSCA"
             v-model="footerTitle"
+            :maxlength="128"
             type="text"/>
         </el-form-item>
 
@@ -62,6 +63,7 @@
           <el-input
             :disabled="notSCA"
             v-model="footerText"
+            :maxlength="128"
             type="text"/>
         </el-form-item>
 
