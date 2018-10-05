@@ -99,14 +99,14 @@
           type="flex"
           align="middle">
           <el-col>
-            <div class="PinSwitch">
+            <div class="PinSwitch CountryCenter">
               <span><translate>Country center pin</translate></span>
               <el-switch
                 v-model="showCenterPin"
                 :active-text="$gettext('Show')"
                 :inactive-text="$gettext('Hide') "/>
             </div>
-            <div class="PinSwitch">
+            <div class="PinSwitch DistrictsCenter">
               <span><translate>Districts center pin</translate></span>
               <el-switch
                 v-model="showSubLevelsPins"
@@ -521,6 +521,27 @@ export default {
             font-weight: 700;
             line-height: 16px;
             .textTruncate();
+          }
+
+          .el-switch {
+            .el-switch__label {
+              color: @colorGray;
+
+              &.is-active {
+                color: @colorTextPrimary;
+              }
+            }
+          }
+
+          &.CountryCenter {
+            .el-switch {
+              &.is-checked {
+                .el-switch__core {
+                  border-color: @colorBrandAccent;
+                  background-color: @colorBrandAccent;
+                }
+              }
+            }
           }
         }
 
