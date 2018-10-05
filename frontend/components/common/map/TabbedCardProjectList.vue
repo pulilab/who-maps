@@ -86,7 +86,9 @@ export default {
           const tabsContainer = this.$el.querySelector('.el-tabs__nav-scroll').getBoundingClientRect();
           const stripeLeftCorner = tabNameBox.left - tabsContainer.left;
           const paddingLeft = parseInt(getComputedStyle(tabName).paddingLeft, 10);
-          const stripeWidth = tabNameBox.width - paddingLeft;
+          const paddingRight = parseInt(getComputedStyle(tabName).paddingRight, 10);
+          const padding = paddingLeft > paddingRight ? paddingLeft : paddingRight;
+          const stripeWidth = tabNameBox.width - padding;
           const stripeTranslate = stripeLeftCorner === 0 ? 0 : stripeLeftCorner + paddingLeft;
           stripe.style.width = `${stripeWidth}px`;
           stripe.style.transform = `translate(${stripeTranslate}px)`;
