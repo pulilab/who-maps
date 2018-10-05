@@ -3,7 +3,7 @@
     <div class="PageTitle">
       <h2><translate>My Projects</translate></h2>
       <p>
-        <translate>List of all the projects you are a</translate>
+        <translate>Here are all of the projects you are a</translate>
         <fa
           icon="star"
           class="Owner" />
