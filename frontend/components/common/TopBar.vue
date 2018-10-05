@@ -26,7 +26,7 @@
           align="middle">
 
           <template v-if="!user">
-            <el-col v-if="!customOrganisation">
+            <el-col>
               <language-selector />
             </el-col>
 
@@ -34,11 +34,13 @@
               <div class="Separator" />
               <div>
                 <nuxt-link
+                  key="signupBtn"
                   :to="localePath({name: 'organisation-signup', params: $route.params})"
                   class="HeaderBtn HideOnActive"><translate>Signup</translate></nuxt-link>
               </div>
               <div>
                 <nuxt-link
+                  key="loginBtn"
                   :to="localePath({name: 'organisation-login', params: $route.params})"
                   class="HeaderBtn HideOnActive"><translate>Login</translate></nuxt-link>
               </div>
@@ -48,6 +50,7 @@
             <el-col class="AuthLinks">
               <div>
                 <nuxt-link
+                  key="dashboardBtn"
                   :to="localePath({name: 'organisation-dashboard', params: $route.params, query: {}})"
                   class="HeaderBtn"
                 >
@@ -56,6 +59,7 @@
               </div>
               <div>
                 <nuxt-link
+                  key="myProjectsBtn"
                   :to="localePath({name: 'organisation-projects', params: $route.params})"
                   exact
                   class="HeaderBtn"
@@ -65,6 +69,7 @@
               </div>
               <div>
                 <nuxt-link
+                  key="planningAndGuidanceBtn"
                   :to="localePath({name: 'organisation-cms', params: $route.params})"
                   class="HeaderBtn"
                 >
@@ -76,6 +81,7 @@
               </div>
               <div>
                 <nuxt-link
+                  key="newProjectBtn"
                   :to="localePath({name: 'organisation-projects-create', params: $route.params})"
                   class="HeaderBtn">
                   <fa icon="plus-circle" />
@@ -110,7 +116,9 @@
             class="CountrySpecificMenu">
             <div class="Separator" />
             <div>
-              <nuxt-link :to="localePath({name: 'organisation', params: {organisation: '-'}})">
+              <nuxt-link
+                key="whoLandingBtn"
+                :to="localePath({name: 'organisation', params: {organisation: '-'}})">
                 <img
                   class="LogoSmall"
                   alt="WHO logo small"
@@ -150,7 +158,7 @@ export default {
       return this.landingData !== null;
     },
     countrySpecific () {
-      return this.customOrganisation && this.landingData.code.legnth === 2;
+      return this.customOrganisation && this.landingData.code.length === 2;
     },
     organisationLogo () {
       if (this.landingData) {
