@@ -1,4 +1,3 @@
-import functools
 import csv
 from collections import OrderedDict
 
