@@ -152,7 +152,7 @@ export default {
     logout () {
       this.closePopover();
       this.doLogout();
-      this.$router.push(this.localePath({name: 'organisation', params: this.$route.params}));
+      this.$router.push(this.localePath({name: 'organisation', params: this.$route.params, query: undefined}));
     }
   }
 };
