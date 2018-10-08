@@ -84,8 +84,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return False
 
     def validate(self, attrs):
-        if attrs['account_type'] in [UserProfile.DONOR, UserProfile.DONOR_ADMIN, UserProfile.SUPER_DONOR_ADMIN]:
-            if not attrs['donor']:
+        if attrs.get('account_type') in [UserProfile.DONOR, UserProfile.DONOR_ADMIN, UserProfile.SUPER_DONOR_ADMIN]:
+            if not attrs.get('donor'):
                 raise ValidationError({'donor': 'Donor is required'})
         return attrs
 
