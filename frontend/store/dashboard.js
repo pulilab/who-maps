@@ -215,7 +215,7 @@ export const actions = {
     if (value && value.length === 1) {
       await dispatch('setSelectedCountry', value[0]);
       commit('SET_ACTIVE_COUNTRY', value[0]);
-    } else if (value && value.length > 0) {
+    } else if (value && (value.length > 0 || value.length === 0)) {
       commit('SET_SELECTED_COUNTRY', null);
       commit('SET_ACTIVE_COUNTRY', null);
     }
