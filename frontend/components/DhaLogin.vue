@@ -2,6 +2,7 @@
   <div class="LoginComponent">
     <el-card
       v-if="!showForgotten && !successfulReset"
+      key="loginCard"
       :body-style="{ padding: '0px' }">
       <div slot="header">
         <translate>Log in to Digital Health Atlas</translate>
@@ -77,6 +78,7 @@
 
     <el-card
       v-if="showForgotten"
+      key="forgottenCard"
       :body-style="{ padding: '0px' }">
       <div slot="header">
         <translate>Reset forgotten password</translate>
@@ -134,6 +136,7 @@
 
     <el-card
       v-if="successfulReset"
+      key="resetCard"
       :body-style="{ padding: '0px' }"
       class="Success">
       <div slot="header">
@@ -226,7 +229,13 @@ export default {
             if (this.profile.country) {
               this.setSelectedCountry(this.profile.country);
             }
-            this.$router.push(this.localePath({name: 'organisation-dashboard', params: this.$route.params, query: {country: [this.profile.country]}}));
+            if (this.$route.query && this.$route.query.redirectTo) {
+              const path = this.$route.query.redirectTo;
+              const query = {...this.$route.query, redirectTo: undefined};
+              this.$router.push({path, query});
+            } else {
+              this.$router.push(this.localePath({name: 'organisation-dashboard', params: this.$route.params, query: {country: [this.profile.country]}}));
+            }
           } catch (err) {
             this.setFormAPIErrors(err);
             this.$refs.loginForm.validate(() => {});
