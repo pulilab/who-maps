@@ -201,17 +201,17 @@ class ProjectDraftTests(SetupTests):
         self.assertEqual(response.json(), {'country': ['Country cannot be altered on published projects.']})
 
     def test_draft_country_can_change(self):
-        url = reverse("project-draft", kwargs={"pk": self.project_draft_id})
+        url = reverse("project-draft", kwargs={"project_id": self.project_draft_id, "country_id": self.country_id})
         data = copy.deepcopy(self.project_draft_data)
-        data.update(country=20)
+        data['project'].update(country=20)
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['draft']["country"], 20)
 
     def test_published_country_cannot_change_even_in_draft(self):
-        url = reverse("project-draft", kwargs={"pk": self.project_pub_id})
+        url = reverse("project-draft", kwargs={"project_id": self.project_pub_id, "country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
-        data.update(country=20)
+        data['project'].update(country=20)
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'country': ['Country cannot be altered on published projects.']})
