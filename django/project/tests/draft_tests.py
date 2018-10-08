@@ -12,32 +12,32 @@ class ProjectDraftTests(SetupTests):
         super(ProjectDraftTests, self).setUp()
 
         # Draft
-        self.project_draft_data = {
+        self.project_draft_data = {'project': {
             'name': 'Draft Proj 1',
             'country': self.country_id,
             'health_focus_areas': []
-        }
+        }}
 
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, self.project_draft_data, format="json")
         self.project_draft_id = response.json().get("id")
 
         # Published
-        url = reverse("project-publish", kwargs={"pk": self.project_draft_id})
+        url = reverse("project-publish", kwargs={"project_id": self.project_draft_id, "country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         data.update(name='Proj 1')
         response = self.test_user_client.put(url, data, format="json")
         self.project_pub_id = response.json().get("id")
 
         # Draft without published
-        self.project_draft_data = {
+        self.project_draft_data = {'project': {
             'name': 'Draft Proj 2',
             'country': self.country_id,
             'organisation': self.org.id,
             'health_focus_areas': []
-        }
+        }}
 
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, self.project_draft_data, format="json")
         self.project_draft_id = response.json().get("id")
 
