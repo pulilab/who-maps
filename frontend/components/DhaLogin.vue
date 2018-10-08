@@ -112,7 +112,7 @@
               class="SecondaryAction">
               <el-button
                 type="text"
-                size="medium"
+                size="small"
                 @click="showForgotten = false">
                 <translate>Go back to login</translate>
               </el-button>
@@ -134,7 +134,8 @@
 
     <el-card
       v-if="successfulReset"
-      :body-style="{ padding: '0px' }">
+      :body-style="{ padding: '0px' }"
+      class="Success">
       <div slot="header">
         <translate>Congratulations!</translate>
       </div>
@@ -162,7 +163,6 @@
           </el-col>
         </el-row>
       </div>
-
     </el-card>
   </div>
 </template>
@@ -271,10 +271,21 @@ export default {
     margin: 80px auto;
 
     .Instruction {
-      font-size: 16px;
+      font-size: @fontSizeMedium;
+      line-height: 24px;
       text-align: center;
-      color: #6D6D6D;
-      padding: 0 80px;
+      color: @colorTextSecondary;
+      padding: 40px 120px 20px;
+
+      + .el-form {
+        fieldset {
+          padding-top: 0;
+        }
+      }
+
+      + .CardActionsBottom {
+        margin-top: 40px;
+      }
     }
 
     fieldset {
