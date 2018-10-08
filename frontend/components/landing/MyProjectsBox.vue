@@ -12,7 +12,7 @@
       </el-col>
     </el-row>
 
-    <user-projects-list />
+    <user-projects-list :limit="3" />
 
     <el-row
       v-if="userProjecList.length > 0"
