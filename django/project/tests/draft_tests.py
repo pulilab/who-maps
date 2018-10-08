@@ -25,7 +25,7 @@ class ProjectDraftTests(SetupTests):
         # Published
         url = reverse("project-publish", kwargs={"project_id": self.project_draft_id, "country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
-        data.update(name='Proj 1')
+        data['project'].update(name='Proj 1')
         response = self.test_user_client.put(url, data, format="json")
         self.project_pub_id = response.json().get("id")
 
@@ -167,7 +167,8 @@ class ProjectDraftTests(SetupTests):
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'project':
-                         {'national_level_deployment': {'health_workers': ['This field is required.']}}})
+            {'national_level_deployment': {
+                'health_workers': ['This field is required.']}}})
 
         data['project'].update(name='Draft Proj 5', national_level_deployment={'clients': None, 'facilities': 10})
         response = self.test_user_client.post(url, data, format="json")
@@ -177,7 +178,7 @@ class ProjectDraftTests(SetupTests):
             'health_workers': ['This field is required.']}}})
 
         data['project'].update(name='Draft Proj 6',
-                    national_level_deployment={'clients': 80, 'facilities': 10, 'health_workers': 3})
+                               national_level_deployment={'clients': 80, 'facilities': 10, 'health_workers': 3})
         response = self.test_user_client.post(url, data, format="json")
         project_id = response.json()['id']
         self.assertEqual(response.status_code, 201)
@@ -195,10 +196,11 @@ class ProjectDraftTests(SetupTests):
     def test_published_country_cannot_change(self):
         url = reverse("project-publish", kwargs={"project_id": self.project_pub_id, "country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
-        data.update(name='unique', country=999)
+        data['project'].update(name='unique', country=999)
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'country': ['Country cannot be altered on published projects.']})
+        self.assertEqual(response.json(),
+                         {'project': {'country': ['Country cannot be altered on published projects.']}})
 
     def test_draft_country_can_change(self):
         url = reverse("project-draft", kwargs={"project_id": self.project_draft_id, "country_id": self.country_id})
@@ -214,7 +216,8 @@ class ProjectDraftTests(SetupTests):
         data['project'].update(country=20)
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'country': ['Country cannot be altered on published projects.']})
+        self.assertEqual(response.json(),
+                         {'project': {'country': ['Country cannot be altered on published projects.']}})
 
     def test_retrieve_project_with_second_sublevel(self):
         url = reverse("project-retrieve", kwargs={"pk": self.project_pub_id})
