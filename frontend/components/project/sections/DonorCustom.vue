@@ -61,7 +61,9 @@ export default {
   },
   methods: {
     async validate () {
-      this.$refs.collapsible.forEach(c => c.expandCard());
+      if (this.$refs.collapsible) {
+        this.$refs.collapsible.forEach(c => c.expandCard());
+      }
       if (this.$refs.customQuestion) {
         const validations = await Promise.all(this.$refs.customQuestion.map(r => r.validate()));
         console.log('Custom donoros validators', validations);

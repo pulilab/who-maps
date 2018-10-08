@@ -63,8 +63,10 @@ export default {
   },
   methods: {
     async validate () {
-      if (this.$refs.customQuestion) {
+      if (this.$refs.collapsible) {
         this.$refs.collapsible.expandCard();
+      }
+      if (this.$refs.customQuestion) {
         const validations = await Promise.all(this.$refs.customQuestion.map(r => r.validate()));
         console.log('Custom country questions validators', validations);
         return validations.reduce((a, c) => a && c, true);
