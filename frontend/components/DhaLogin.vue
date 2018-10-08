@@ -226,7 +226,13 @@ export default {
             if (this.profile.country) {
               this.setSelectedCountry(this.profile.country);
             }
-            this.$router.push(this.localePath({name: 'organisation-dashboard', params: this.$route.params, query: {country: [this.profile.country]}}));
+            if (this.$route.query && this.$route.query.redirectTo) {
+              const path = this.$route.query.redirectTo;
+              const query = {...this.$route.query, redirectTo: undefined};
+              this.$router.push({path, query});
+            } else {
+              this.$router.push(this.localePath({name: 'organisation-dashboard', params: this.$route.params, query: {country: [this.profile.country]}}));
+            }
           } catch (err) {
             this.setFormAPIErrors(err);
             this.$refs.loginForm.validate(() => {});
