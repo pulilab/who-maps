@@ -146,9 +146,9 @@ class ProjectDraftTests(SetupTests):
     def test_project_create_can_send_blank_fields_in(self):
         # add one new project where health_focus_areas is empty
         project_data = copy.copy(self.project_data)
-        project_data['name'] = "Test Project8"
-        project_data['health_focus_areas'] = []
-        url = reverse("project-create")
+        project_data['project']['name'] = "Test Project8"
+        project_data['project']['health_focus_areas'] = []
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertIn("implementing_partners", response.json()['draft'])
@@ -184,16 +184,16 @@ class ProjectDraftTests(SetupTests):
         self.assertEqual(response.json()['draft']['national_level_deployment'],
                          {'clients': 80, 'health_workers': 3, 'facilities': 10})
 
-        url = reverse("project-publish", kwargs={"pk": project_id})
+        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
-        data.update(name='Proj 6', national_level_deployment=None)
+        data['project'].update(name='Proj 6', national_level_deployment=None)
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertIsNone(response.json()['draft']['national_level_deployment'])
         self.assertIsNone(Project.objects.get(id=project_id).draft['national_level_deployment'])
 
     def test_published_country_cannot_change(self):
-        url = reverse("project-publish", kwargs={"pk": self.project_pub_id})
+        url = reverse("project-publish", kwargs={"project_id": self.project_pub_id, "country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         data.update(name='unique', country=999)
         response = self.test_user_client.put(url, data, format="json")
