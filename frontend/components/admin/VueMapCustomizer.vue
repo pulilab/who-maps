@@ -12,18 +12,13 @@
           <div>{{ country.name }}</div>
         </el-col>
         <el-col class="CountryMapFile">
-          <a
-            ref="hiddenMapDownload"
-            :href="`/api/countries/map-download/${country.id}/`"
-            style="display: none"
-            download>Hidden but needed element!</a>
           <el-row
             type="flex"
             align="middle">
             <span><translate>Map file:</translate></span>
             <el-button
               type="text"
-              @click="$refs.hiddenMapDownload.click()">
+              @click="downloadMap">
               <translate>Download</translate>
             </el-button>
             <el-upload
@@ -228,6 +223,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { calculatePolyCenter } from '../../utilities/coords';
+import { blobDownloader } from '../../utilities/dom';
+
 import FacilityImport from './FacilityImport';
 import NoSSR from 'vue-no-ssr';
 
@@ -339,6 +336,18 @@ export default {
       setSubLevelsPolyCenters: 'admin/map/setSubLevelsPolyCenters',
       updateSubLevelPolyCenter: 'admin/map/updateSubLevelPolyCenter'
     }),
+
+    async downloadMap () {
+      // /api/countries/map-download/${country.id}/
+      this.$nuxt.$loading.start();
+      try {
+        const { data } = await this.$axios.get(`/api/countries/map-download/${this.country.id}/`, {responseType: 'blob'});
+        blobDownloader(data, `${this.country.name}_boundaries.zip`);
+      } catch (e) {
+        this.$message.error(this.$gettext('Map donwload failed, please try again later'));
+      }
+      this.$nuxt.$loading.finish();
+    },
 
     geoJsonLoadHandler () {
       this.$refs.mainMap.mapObject.fitBounds(this.$refs.geoJsonLayer.mapObject.getBounds());
