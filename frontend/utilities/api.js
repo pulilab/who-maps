@@ -261,3 +261,15 @@ export const parseCustomAnswers = r => {
     donor_custom_answers_private: undefined
   };
 };
+
+export const APIError = (field, message) => {
+  const error = new Error('APIError');
+  error.response = {
+    data: {
+      project: {
+        [field]: [message]
+      }
+    }
+  };
+  return error;
+};
