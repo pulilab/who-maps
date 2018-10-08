@@ -20,12 +20,18 @@ export default {
     EmptyProjects,
     ExtendedProjectCard
   },
+  props: {
+    limit: {
+      type: Number,
+      default: null
+    }
+  },
   computed: {
     ...mapGetters({
       userProjecList: 'projects/getUserProjectList'
     }),
     limited () {
-      return this.userProjecList.length > 3 ? this.userProjecList.slice(0, 3) : this.userProjecList;
+      return this.limit && this.userProjecList.length > 3 ? this.userProjecList.slice(0, this.limit) : this.userProjecList;
     },
     hasProjects () {
       return this.userProjecList.length > 0;
