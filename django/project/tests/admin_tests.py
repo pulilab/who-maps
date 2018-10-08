@@ -11,8 +11,7 @@ from django.contrib.auth.models import User, Permission
 from country.models import Country
 from project.admin import ProjectAdmin, DigitalStrategyAdmin, TechnologyPlatformAdmin
 from user.models import UserProfile
-from project.models import Project, DigitalStrategy, TechnologyPlatform, ProjectApproval
-from project.admin import ProjectApprovalAdmin
+from project.models import Project, DigitalStrategy, TechnologyPlatform
 
 from project.tests.setup import MockRequest
 
@@ -121,105 +120,6 @@ class TestAdmin(TestCase):
         tpa.save_form(self.request, form, True)
 
         self.assertEqual(len(mail.outbox), initial_email_count)
-
-    def test_project_approval_admin_changeform_view(self):
-        request = MockRequest()
-        request.method = 'GET'
-        request.POST = {}
-        request.META = {'SCRIPT_NAME': 'from_test'}
-        request.resolver_match = False
-
-        content_type = ContentType.objects.get(app_label=ProjectApproval._meta.app_label,
-                                               model=ProjectApproval._meta.model_name)
-        change_permission = Permission.objects.get(content_type=content_type,
-                                                   codename='change_{}'.format(ProjectApproval._meta.model_name))
-
-        p = Project.objects.create(name="test change view")
-        pa = ProjectApproval.objects.get(project=p)
-        self.user.user_permissions.add(change_permission)
-        self.user.is_superuser = True
-        self.user.is_staff = True
-        self.user.save()
-        request.user = self.user
-        ma = ProjectApprovalAdmin(ProjectApproval, self.site)
-        response = ma.changeform_view(request, object_id=str(pa.id))
-        self.assertTrue(isinstance(response, TemplateResponse))
-
-    def test_admin_list_filters(self):
-        ma = ProjectApprovalAdmin(ProjectApproval, self.site)
-        self.user.is_superuser = True
-        self.user.is_staff = True
-        self.user.save()
-        self.request.user = self.user
-
-        approval_filter_class = ma.list_filter[0]
-        approval_filter_obj = approval_filter_class(self.request, {}, ProjectApproval, ma)
-
-        self.assertEqual(
-            approval_filter_obj.lookups(self.request, ma), ((None, "Waiting for approval"), (True, "Approved"),
-                                                            (False, "Declined")))
-        self.assertFalse(ma.has_add_permission(self.request))
-        p1 = Project.objects.create(name="Test1")
-        p2 = Project.objects.create(name="Test2")
-        p3 = Project.objects.create(name="Test3")
-        ProjectApproval.objects.filter(project=p1).update(approved=None)
-        p2.approve()
-        p3.disapprove()
-
-        approvals = approval_filter_obj.queryset(self.request, ProjectApproval.objects.all())
-
-        self.assertEqual(approvals.count(), 1)
-        self.assertEqual(approvals[0].project.name, "Test1")
-
-        approval_filter_obj = approval_filter_class(self.request, {"approved": True}, ProjectApproval, ma)
-
-        approvals = approval_filter_obj.queryset(self.request, ProjectApproval.objects.all())
-
-        self.assertEqual(approvals.count(), 1)
-        self.assertEqual(approvals[0].project.name, "Test2")
-
-        approval_filter_obj = approval_filter_class(self.request, {"approved": False}, ProjectApproval, ma)
-
-        approvals = approval_filter_obj.queryset(self.request, ProjectApproval.objects.all())
-        self.assertEqual(approvals.count(), 1)
-        self.assertEqual(approvals[0].project.name, "Test3")
-
-    def test_approval_admin_get_country(self):
-        ma = ProjectApprovalAdmin(ProjectApproval, self.site)
-        self.user.is_superuser = True
-        self.user.is_staff = True
-        self.user.save()
-        self.request.user = self.user
-        p = Project.objects.create(name="test change view", data=dict(country=Country.objects.get(id=1).id))
-        pa = ProjectApproval.objects.get(project=p)
-        self.assertEqual(ma.get_country(pa), Country.objects.get(id=1))
-
-    def test_approval_admin_save_model(self):
-        ma = ProjectApprovalAdmin(ProjectApproval, self.site)
-        self.user.is_superuser = True
-        self.user.is_staff = True
-        self.user.save()
-        self.request.user = self.user
-
-        p = Project.objects.create(name="test change view", data=dict(country=Country.objects.get(id=1).id))
-        pa = ProjectApproval.objects.get(project=p)
-
-        mf = ma.get_form(self.request, pa)
-        data = {'project': pa.project.id,
-                'reason': 'LOL',
-                'approved': True}
-        form = mf(data, instance=pa)
-
-        self.assertIsNone(pa.user)
-        self.assertIsNone(pa.approved)
-        self.assertEqual(str(pa), "Approval for {}".format(p.name))
-
-        ma.save_form(self.request, form, True)
-        ma.save_model(self.request, pa, form, True)
-        pa.refresh_from_db()
-        self.assertEqual(pa.user, self.user.userprofile)
-        self.assertEqual(pa.reason, 'LOL')
-        self.assertTrue(pa.approved)
 
     def test_project_admin_custom_fields(self):
         pa = ProjectAdmin(Project, self.site)

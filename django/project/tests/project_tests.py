@@ -1,17 +1,12 @@
 import copy
-import csv
 from datetime import datetime
 
 from django.urls import reverse
-from mock import patch
-from io import StringIO
 
 from django.core import mail
 from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import User
 from django.core.cache import cache
-from django.http import HttpResponse
-from django.utils.encoding import force_text
 from rest_framework.test import APIClient
 
 from country.models import Country, Donor
@@ -19,7 +14,6 @@ from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
 from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
     Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HSCGroup, ProjectApproval
-from project.admin import ProjectApprovalAdmin
 from project.tasks import send_project_approval_digest
 
 from project.tests.setup import SetupTests, MockRequest
@@ -778,43 +772,6 @@ class ProjectTests(SetupTests):
 
         return project_id
 
-    @patch('django.contrib.admin.options.messages')
-    def test_project_approval_admin_filter_country_admins(self, mocked_messages):
-        messages = []
-        mocked_messages.add_message = lambda s, *args, **kwargs: messages.append((args, kwargs))
-
-        self._create_new_project()
-
-        request = MockRequest()
-        site = AdminSite()
-        user = UserProfile.objects.get(id=self.user_profile_id).user
-        request.user = user
-        ma = ProjectApprovalAdmin(ProjectApproval, site)
-        self.assertEqual(ma.get_queryset(request).count(), 1)
-        self.assertEqual(len(messages), 1)
-
-    def test_project_approval_admin_link_add(self):
-        request = MockRequest()
-        site = AdminSite()
-        user = UserProfile.objects.get(id=self.user_profile_id).user
-        request.user = user
-        ma = ProjectApprovalAdmin(ProjectApproval, site)
-        link = ma.link(ProjectApproval())
-        self.assertEqual(link, '-')
-
-    def test_project_approval_admin_link_edit(self):
-        request = MockRequest()
-        site = AdminSite()
-        user = UserProfile.objects.get(id=self.user_profile_id).user
-        request.user = user
-        ma = ProjectApprovalAdmin(ProjectApproval, site)
-        project_approval = ProjectApproval.objects.get(project_id=self.project_id)
-        link = ma.link(project_approval)
-
-        expected_link = "<a target='_blank' href='/app/{}/edit-project/publish/'>See project</a>"\
-            .format(self.project_id)
-        self.assertEqual(link, expected_link)
-
     def test_project_admin_link_add(self):
         request = MockRequest()
         site = AdminSite()
@@ -835,79 +792,6 @@ class ProjectTests(SetupTests):
 
         expected_link = "<a target='_blank' href='/app/{}/edit-project/draft/'>See project</a>".format(p.id)
         self.assertEqual(link, expected_link)
-
-    @patch('django.contrib.admin.options.messages')
-    def test_project_approval_admin_export(self, mocked_messages):
-        messages = []
-        mocked_messages.add_message = lambda s, *args, **kwargs: messages.append((args, kwargs))
-
-        ProjectApproval.objects.all().delete()
-        Country.objects.create(name='country2', code='CTR2', project_approval=True)
-        user = UserProfile.objects.get(id=self.user_profile_id).user
-
-        project_1_id = self._create_new_project()
-        project_1 = Project.objects.get(id=project_1_id)
-        project_2_id = self._create_new_project()
-        project_2 = Project.objects.get(id=project_2_id)
-        project_3_id = self._create_new_project()
-        project_3 = Project.objects.get(id=project_3_id)
-
-        approval_1 = ProjectApproval.objects.get(project_id=project_1_id)
-        self.assertIsNone(approval_1.user)
-        self.assertIsNone(approval_1.approved)
-        self.assertIsNone(approval_1.reason)
-
-        approval_2 = ProjectApproval.objects.get(project_id=project_2_id)
-        approval_2.user = user.userprofile
-        approval_2.approved = True
-        approval_2.reason = "it's fine"
-        approval_2.save()
-
-        approval_3 = ProjectApproval.objects.get(project_id=project_3_id)
-        approval_3.user = user.userprofile
-        approval_3.approved = False
-        approval_3.reason = "not suitable"
-        approval_3.save()
-
-        request = MockRequest()
-        site = AdminSite()
-        request.user = user
-        ma = ProjectApprovalAdmin(ProjectApproval, site)
-
-        response = ma.export_project_approvals(request, ProjectApproval.objects.all())
-        self.assertTrue(isinstance(response, HttpResponse))
-        self.assertEqual(response['Content-Disposition'], 'attachment; filename=project_approval_export.csv')
-
-        f = StringIO(force_text(response.content))
-        lines = [l for l in csv.reader(f)]
-        self.assertEqual(len(lines), 4)
-        self.assertEqual(lines[0],
-                         ['Project name',
-                          'Approved by',
-                          'Status',
-                          'Country',
-                          'Reason'])
-
-        self.assertEqual(lines[1],
-                         [project_1.name,
-                          '-',
-                          'Pending',
-                          'country2',
-                          ''])
-
-        self.assertEqual(lines[2],
-                         [project_2.name,
-                          'Test Name',
-                          'Approved',
-                          'country2',
-                          "it's fine"])
-
-        self.assertEqual(lines[3],
-                         [project_3.name,
-                          'Test Name',
-                          'Rejected',
-                          'country2',
-                          'not suitable'])
 
     def test_project_approval_email(self):
         user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')

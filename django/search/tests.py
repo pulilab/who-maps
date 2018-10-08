@@ -309,10 +309,12 @@ class SearchTests(SetupTests):
     def test_multi_filter_same_filter(self):
         # all the filters are AND relations, within the same filter there's an OR relation
         project_data = self.project_data.copy()
-        project_data.update(platforms=[dict(id=1, strategies=[206]),
+        project_data['project'].update(platforms=[dict(id=1, strategies=[206]),
                                        dict(id=2, strategies=[223])])
-
-        url = reverse("project-publish", kwargs=dict(pk=self.project_id))
+        self.country.country_questions.all().delete()
+        self.d1.donor_questions.all().delete()
+        self.d2.donor_questions.all().delete()
+        url = reverse("project-publish", kwargs=dict(project_id=self.project_id, country_id=self.country_id))
         response = self.test_user_client.put(url, project_data, format="json")
         self.assertEqual(response.status_code, 200)
 
