@@ -42,9 +42,9 @@ class ProjectDraftTests(SetupTests):
         self.project_draft_id = response.json().get("id")
 
     def test_create_new_draft_project_basic_data(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_draft_data)
-        data.update(name='Draft Proj 3', implementation_overview="Test overview")
+        data['project'].update(name='Draft Proj 3', implementation_overview="Test overview")
         response = self.test_user_client.post(url, data, format="json")
 
         self.assertEqual(response.status_code, 201)
@@ -56,14 +56,14 @@ class ProjectDraftTests(SetupTests):
         self.assertFalse(response.json()['public_id'])
 
     def test_create_new_draft_name_is_not_unique(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, self.project_draft_data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertNotEqual(self.project_draft_id, response.json().get("id"))
         self.assertEqual(Project.objects.filter(name='Draft Proj 2').count(), 2)
 
     def test_create_new_project_bad_data(self):
-        url = reverse("project-publish", kwargs={"pk": self.project_draft_id})
+        url = reverse("project-publish", kwargs={"project_id": self.project_draft_id, "country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         data.update(name="")
         data.update(organisation="")
