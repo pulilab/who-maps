@@ -112,6 +112,7 @@
 <script>
 import Papa from 'papaparse';
 import { format } from 'date-fns';
+import { uriDownloader } from '../../utilities/dom';
 import { mapGetters, mapActions } from 'vuex';
 import ApprovalTag from './ApprovalTag';
 import UserItem from '../common/UserItem';
@@ -173,12 +174,7 @@ export default {
     csvExport () {
       const csv = Papa.unparse(this.parsedList, {delimiter: ';'});
       const toDownload = `data:text/csv;charset=utf-8,${csv}`;
-      const data = encodeURI(toDownload);
-      let link = document.createElement('a');
-      link.setAttribute('href', data);
-      link.setAttribute('download', 'project-approval-export.csv');
-      link.click();
-      link = null;
+      uriDownloader(toDownload, 'project-approval-export.csv');
     }
   }
 };

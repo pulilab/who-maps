@@ -144,6 +144,7 @@
 <script>
 import ProjectLegend from '../common/ProjectLegend';
 import PdfExport from './PdfExport';
+import { blobDownloader } from '../../utilities/dom';
 
 import { mapGetters, mapActions } from 'vuex';
 
@@ -213,6 +214,7 @@ export default {
       }
     },
     async exportRows () {
+      this.$nuxt.$loading.start();
       if (this.exportType === 'PDF') {
         this.$refs.pdfExport.printPdf();
       } else if (this.exportType === 'CSV') {
@@ -223,13 +225,9 @@ export default {
           country: this.dashboardType === 'country' ? this.dashboardId : undefined
         };
         const { data } = await this.$axios.post('/api/projects/csv-export/', payload, {responseType: 'blob'});
-        const download_url = window.URL.createObjectURL(data);
-        let link = document.createElement('a');
-        link.setAttribute('href', download_url);
-        link.setAttribute('download', 'project-export.csv');
-        link.click();
-        link = null;
+        blobDownloader(data, 'project-export.csv');
       }
+      this.$nuxt.$loading.finish();
     },
     async openMailDialog () {
       if (this.allSelected) {
