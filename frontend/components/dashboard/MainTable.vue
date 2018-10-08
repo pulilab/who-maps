@@ -148,6 +148,7 @@
         v-for="col in countryColumns"
         :resizable="false"
         :key="col.id"
+        :render-header="customHeaderRenderer"
         :label="col.label"
         width="240">
         <template slot-scope="scope">
@@ -164,6 +165,7 @@
         v-for="col in donorColumns"
         :resizable="false"
         :key="col.id"
+        :render-header="customHeaderRenderer"
         :label="col.label"
         width="240">
         <template slot-scope="scope">
@@ -291,6 +293,9 @@ export default {
     ...mapActions({
       setSelectedRows: 'dashboard/setSelectedRows'
     }),
+    customHeaderRenderer (h, {column, $index}) {
+      return h('span', {attrs: {title: column.label}}, column.label);
+    },
     selectHandler (selection) {
       this.setSelectedRows(selection.map(s => s.id));
     },
