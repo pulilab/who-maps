@@ -32,7 +32,7 @@ export default {
             [
               {
                 text: this.$gettext('Digital Health Atlas'),
-                fillColor: '#1A237E',
+                fillColor: '#008DC9',
                 color: '#FFFFFF',
                 colSpan: 2,
                 style: 'mainHeader',
@@ -156,6 +156,16 @@ export default {
       }
       return 'N/A';
     },
+    printProjectLink (project) {
+      if (window) {
+        let path = '/404';
+        if (project && project.id) {
+          path = this.localePath({name: 'organisation-projects-id-published', params: {organisation: '-', id: project.id}});
+        }
+        return window.location.origin + path;
+      }
+      return '';
+    },
     async printPdf () {
       this.base64Images = require('../../utilities/exportBase64Images.js');
       this.pdfMake = require('pdfmake/build/pdfmake');
@@ -184,7 +194,13 @@ export default {
                   style: 'tableHeader',
                   colSpan: 4
                 }, '', '', '',
-                { text: this.$gettext('UUID:') + project.id, style: 'subHeader' },
+                {
+                  text: this.$gettext('Go to project'),
+                  decoration: 'underline',
+                  link: this.printProjectLink(project),
+                  color: '#008DC9',
+                  style: 'subHeader'
+                },
                 country_name
               ],
               [
