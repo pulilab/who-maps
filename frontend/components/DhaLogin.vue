@@ -44,18 +44,14 @@
             class="cardActions">
             <el-col
               :span="6"
-              class="">
+              class="SecondaryAction">
               <nuxt-link
                 :to="localePath({name: 'organisation-signup', params: $route.params})"
                 type="text"
-                size="small"
-                class="CancelButton">
+                class="NuxtLink Small">
                 <translate>Signup</translate>
               </nuxt-link>
-            </el-col>
-            <el-col
-              :span="6"
-              class="SecondaryAction">
+              <div class="Separator"/>
               <el-button
                 type="text"
                 size="small"
@@ -283,6 +279,14 @@ export default {
 
     fieldset {
       padding: 40px 80px;
+    }
+
+    .CardActionsBottom {
+      .Separator {
+        height: 20px;
+        margin: 0 12px;
+        vertical-align: middle;
+      }
     }
   }
 </style>
