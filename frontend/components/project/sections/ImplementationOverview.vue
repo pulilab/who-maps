@@ -166,17 +166,19 @@
             >
               <el-input
                 v-validate="rules.implementing_partners"
+                ref="implementingPartnersInput"
                 :value="partner"
                 :data-vv-name="'implementing_partners_' + index"
                 data-vv-validate-on="change"
                 data-vv-as="Implementing partners"
-                @change="updateImplmeentingPartners($event, index)"
+                @input="updateImplmeentingPartners($event, index)"
+                @keyup.enter.native="addImplementingPartners"
               />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <add-rm-buttons
-              :show-add="!!partner"
+              :show-add="isLastAndExist(implementing_partners, index)"
               :show-rm="implementing_partners.length > 1"
               @add="addImplementingPartners"
               @rm="rmImplementingPartners(index)"
@@ -246,7 +248,7 @@ export default {
       coverageType: ['project', 'getCoverageType', 'setCoverageType', 0],
       national_level_deployment: ['project', 'getNationalLevelDeployment', 'setNationalLevelDeployment', 0],
       government_investor: ['project', 'getGovernmentInvestor', 'setGovernmentInvestor', 0],
-      implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners', 0],
+      implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners', 50],
       donors: ['project', 'getDonors', 'setDonors', 0]
     }),
     healthWorkers: {
@@ -277,10 +279,27 @@ export default {
       }
     }
   },
+  watch: {
+    implementing_partners: {
+      immediate: false,
+      handler (ip, oldIp) {
+        if (oldIp && ip && ip.length > oldIp.length) {
+          this.$nextTick(() => {
+            if (this.$refs.implementingPartnersInput && this.$refs.implementingPartnersInput.length > 0) {
+              this.$refs.implementingPartnersInput[this.$refs.implementingPartnersInput.length - 1].focus();
+            }
+          });
+        }
+      }
+    }
+  },
   mounted () {
     this.$emit('mounted');
   },
   methods: {
+    isLastAndExist (collection, index) {
+      return !!(collection.length - 1 === index && collection[index]);
+    },
     addDhi () {
       this.platforms = [...this.platforms, null];
     },
@@ -297,7 +316,10 @@ export default {
       this.implementing_partners = ip;
     },
     addImplementingPartners () {
-      this.implementing_partners = [...this.implementing_partners, null];
+      const index = this.implementing_partners.length - 1;
+      if (this.isLastAndExist(this.implementing_partners, index)) {
+        this.implementing_partners = [...this.implementing_partners, null];
+      }
     },
     rmImplementingPartners (index) {
       this.implementing_partners = this.implementing_partners.filter((ip, i) => i !== index);
