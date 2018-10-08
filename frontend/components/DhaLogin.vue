@@ -2,7 +2,7 @@
   <div class="LoginComponent">
     <el-card
       v-if="!showForgotten && !successfulReset"
-      key="loginForm"
+      key="loginCard"
       :body-style="{ padding: '0px' }">
       <div slot="header">
         <translate>Log in to Digital Health Atlas</translate>
@@ -78,7 +78,7 @@
 
     <el-card
       v-if="showForgotten"
-      key="forgottenPassword"
+      key="forgottenCard"
       :body-style="{ padding: '0px' }">
       <div slot="header">
         <translate>Reset forgotten password</translate>
