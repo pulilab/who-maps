@@ -46,7 +46,7 @@
           </el-col>
           <el-col :span="8">
             <add-rm-buttons
-              :show-add="!!platform"
+              :show-add="isLastAndExist(platforms, index)"
               :show-rm="platforms.length > 1"
               @add="addDhi"
               @rm="rmDhi(index, platform)"

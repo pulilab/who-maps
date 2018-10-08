@@ -1,20 +1,22 @@
 <template>
   <div class="AddRmButtons">
     <el-button
-      :disabled="!showAdd"
-      type="text"
-      class="AddButton IconLeft"
-      @click="$emit('add')">
-      <fa icon="plus" />
-      <translate>Add</translate>
-    </el-button>
-    <el-button
       v-show="showRm"
+      key="delete"
       type="text"
       class="DeleteButton IconLeft IViewert"
       @click="$emit('rm')">
       <fa icon="minus" />
       <translate>Delete</translate>
+    </el-button>
+    <el-button
+      v-show="showAdd"
+      key="show"
+      type="text"
+      class="AddButton IconLeft"
+      @click="$emit('add')">
+      <fa icon="plus" />
+      <translate>Add</translate>
     </el-button>
   </div>
 </template>
@@ -41,7 +43,7 @@ export default {
   .AddRmButtons {
     padding-left: 30px;
 
-    .DeleteButton {
+    .AddButton {
       margin-left: 30px;
     }
 
