@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { apiReadParser, apiWriteParser } from '../utilities/api';
+import { apiReadParser, apiWriteParser, APIError } from '../utilities/api';
 
 const cleanState = () => ({
   name: null,
@@ -283,11 +283,16 @@ export const actions = {
     }
   },
   async verifyOrganisation ({dispatch}, organisation) {
-    if (organisation && isNaN(organisation)) {
-      const org = await dispatch('system/addOrganisation', organisation, { root: true });
-      return org.id;
+    try {
+      if (organisation && isNaN(organisation)) {
+        const org = await dispatch('system/addOrganisation', organisation, { root: true });
+        return org.id;
+      }
+      return organisation;
+    } catch (e) {
+      console.log('project/verifyOrganisation failed');
+      return Promise.reject(APIError('organisation', 'Failed to save the organisation'));
     }
-    return organisation;
   },
   async saveTeamViewers ({getters, commit, dispatch}, id) {
     const teamViewers = {

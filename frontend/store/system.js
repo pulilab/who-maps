@@ -145,10 +145,21 @@ export const actions = {
     }
   },
 
-  async addOrganisation ({ commit, dispatch }, name) {
-    const { data } = await this.$axios.post('/api/organisations/', { name });
-    await dispatch('loadOrganisations');
-    return Promise.resolve(data);
+  async addOrganisation ({ dispatch, getters }, name) {
+    try {
+      await this.$axios.post('/api/organisations/', { name });
+    } catch (e) {
+      console.error('system/addOrganisation failed');
+    } finally {
+      await dispatch('loadOrganisations');
+    }
+    const org = getters.getOrganisations.find(o => o.name === name);
+    if (org) {
+      return Promise.resolve(org);
+    } else {
+      const error = new Error('Organisation saving / fetching failed, could not find the organisation');
+      return Promise.reject(error);
+    }
   }
 };
 
