@@ -44,6 +44,17 @@
             class="cardActions">
             <el-col
               :span="6"
+              class="">
+              <nuxt-link
+                :to="localePath({name: 'organisation-signup', params: $route.params})"
+                type="text"
+                size="small"
+                class="CancelButton">
+                <translate>Signup</translate>
+              </nuxt-link>
+            </el-col>
+            <el-col
+              :span="6"
               class="SecondaryAction">
               <el-button
                 type="text"
