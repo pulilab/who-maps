@@ -76,7 +76,6 @@ a {
 
     &:hover {
       color: @colorBrandPrimaryLight;
-      text-decoration: none;
     }
 
     &.Small {
@@ -310,6 +309,18 @@ a {
 
   &.rounded {
     border-radius: 3px;
+  }
+
+  &.Success {
+    .el-card__header {
+      background-color: @colorPublished;
+    }
+  }
+
+  &.Error {
+    .el-card__header {
+      background-color: @colorDanger;
+    }
   }
 
   .el-card__header {
