@@ -122,9 +122,9 @@ class ProjectDraftTests(SetupTests):
         self.assertEqual(response.json()['draft']['name'], 'Draft Proj 2')
         self.assertNotEqual(response.json()['draft'], response.json()['published'])
 
-        url = reverse("project-publish", kwargs={"pk": self.project_draft_id})
+        url = reverse("project-publish", kwargs={"project_id": self.project_draft_id, "country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
-        data.update(name='Proj 2')
+        data['project'].update(name='Proj 2')
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['draft']['name'], 'Proj 2')
