@@ -241,7 +241,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         """
         country = get_object_or_400(Country, error_message="No such country", id=country_id)
 
-        country_answers = None
+        instance = country_answers = None
         all_donor_answers = []
         errors = {}
 
@@ -250,10 +250,11 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
         data_serializer = ProjectDraftSerializer(data=request.data['project'])
         data_serializer.is_valid()
-        instance = data_serializer.save()
 
         if data_serializer.errors:
             errors['project'] = data_serializer.errors
+        else:
+            instance = data_serializer.save()
 
         if country.country_questions.exists():
             if 'country_custom_answers' not in request.data:
