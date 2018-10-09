@@ -220,7 +220,7 @@ class DonorCustomQuestion(CustomQuestion):
     order_with_respect_to = 'donor'
 
     class Meta(OrderedModel.Meta):
-        pass
+        base_manager_name = 'objects'
 
 
 class CountryCustomQuestion(CustomQuestion):
@@ -228,4 +228,4 @@ class CountryCustomQuestion(CustomQuestion):
     order_with_respect_to = 'country'
 
     class Meta(OrderedModel.Meta):
-        pass
+        base_manager_name = 'objects'
