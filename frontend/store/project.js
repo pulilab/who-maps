@@ -151,7 +151,7 @@ export const actions = {
       commit('SET_VIEWERS', data.viewers);
     }
   },
-  resetProjectState ({dispatch, commit, rootGetters}) {
+  resetProjectState ({commit, rootGetters}) {
     const clean = cleanState();
     const profile = rootGetters['user/getProfile'];
     if (profile) {
@@ -161,6 +161,11 @@ export const actions = {
     commit('INIT_PROJECT', clean);
     commit('SET_TEAM', clean.team);
     commit('SET_VIEWERS', clean.viewers);
+  },
+  initProjectState ({commit}, value) {
+    commit('INIT_PROJECT', value);
+    commit('SET_TEAM', value.team);
+    commit('SET_VIEWERS', value.viewers);
   },
   setName ({commit}, value) {
     commit('SET_NAME', value);
