@@ -263,7 +263,7 @@ class ProjectTests(SetupTests):
         data['project'].update(name="TestProject93", platforms=[{"name": "updated platform"}])
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['platforms'][0]['strategies'][0], 'This field is required.')
+        self.assertEqual(response.json()['project']['platforms'][0]['strategies'][0], 'This field is required.')
 
     def test_create_new_project_unique_name(self):
         url = reverse("project-create", kwargs={"country_id": self.country_id})
@@ -530,13 +530,13 @@ class ProjectTests(SetupTests):
         url = reverse("project-publish", kwargs={"project_id": self.project_id, "country_id": self.country_id})
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['published']["health_focus_areas"], data['health_focus_areas'])
+        self.assertEqual(response.json()['published']["health_focus_areas"], data['project']['health_focus_areas'])
         self.assertNotEqual(response.json()['published']["health_focus_areas"],
                             self.project_data['project']['health_focus_areas'])
 
         response = self.test_user_client.get(retrieve_url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['published'].get('health_focus_areas'), data['health_focus_areas'])
+        self.assertEqual(response.json()['published'].get('health_focus_areas'), data['project']['health_focus_areas'])
         self.assertNotEqual(response.json()['published'].get('health_focus_areas'),
                             self.project_data['project']['health_focus_areas'])
 
