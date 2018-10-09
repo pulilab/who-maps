@@ -269,7 +269,7 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201)
         project_id = response.json()['id']
-        self.assertEqual(response.json()['draft']['name'], self.project_data['name'])
+        self.assertEqual(response.json()['draft']['name'], self.project_data['project']['name'])
 
         url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
         response = self.test_user_client.put(url, self.project_data, format="json")
@@ -284,7 +284,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
         self.assertEqual(response.json()['published'].get("national_level_deployment")["clients"], 20000)
         self.assertEqual(response.json()['published'].get("platforms")[0]["id"],
-                         self.project_data['platforms'][0]['id'])
+                         self.project_data['project']['platforms'][0]['id'])
         self.assertEqual(response.json()['published'].get("country"), self.country_id)
 
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
@@ -378,15 +378,16 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0].get("name"), "Test Project1")
-        nameslist = [x.challenge for x in HSCChallenge.objects.get_names_for_ids(self.project_data['hsc_challenges'])]
+        nameslist = [x.challenge for x in
+                     HSCChallenge.objects.get_names_for_ids(self.project_data['project']['hsc_challenges'])]
         self.assertEqual(response.json()[0].get("hsc_challenges"), nameslist)
         nameslist = [x.name for x in HealthFocusArea.objects.get_names_for_ids(
-            self.project_data['health_focus_areas'])]
+            self.project_data['project']['health_focus_areas'])]
         self.assertEqual(response.json()[0].get("health_focus_areas"), nameslist)
-        nameslist = [x.name for x in HISBucket.objects.get_names_for_ids(self.project_data['his_bucket'])]
+        nameslist = [x.name for x in HISBucket.objects.get_names_for_ids(self.project_data['project']['his_bucket'])]
         self.assertEqual(response.json()[0].get("his_bucket"), nameslist)
         nameslist = [x.name for x in TechnologyPlatform.objects.get_names_for_ids(
-            [x['id'] for x in self.project_data['platforms']])]
+            [x['id'] for x in self.project_data['project']['platforms']])]
         self.assertEqual(response.json()[0].get("platforms"), nameslist)
         self.assertEqual(len(response.json()), 2)
 
@@ -620,7 +621,7 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(retrieve_url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get('health_focus_areas'),
-                         self.project_data['health_focus_areas'])
+                         self.project_data['project']['health_focus_areas'])
 
         data = copy.deepcopy(self.project_data)
         data['project'].update(health_focus_areas=[1])
@@ -628,13 +629,14 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published']["health_focus_areas"], data['health_focus_areas'])
-        self.assertNotEqual(response.json()['published']["health_focus_areas"], self.project_data['health_focus_areas'])
+        self.assertNotEqual(response.json()['published']["health_focus_areas"],
+                            self.project_data['project']['health_focus_areas'])
 
         response = self.test_user_client.get(retrieve_url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get('health_focus_areas'), data['health_focus_areas'])
         self.assertNotEqual(response.json()['published'].get('health_focus_areas'),
-                            self.project_data['health_focus_areas'])
+                            self.project_data['project']['health_focus_areas'])
 
     def test_update_project_with_different_invalid_name(self):
         url = reverse("project-publish", kwargs={"project_id": self.project_id, "country_id": self.country_id})
@@ -1012,7 +1014,7 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0]['id'], self.project_id)
-        self.assertEqual(response.json()[0]['name'], self.project_data['name'])
+        self.assertEqual(response.json()[0]['name'], self.project_data['project']['name'])
         self.assertEqual(response.json()[0]['country'], self.country_id)
 
     def test_remove_stale_donors_from_projects(self):
