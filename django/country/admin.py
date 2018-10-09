@@ -5,6 +5,7 @@ from .models import Country, Donor
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
 
+
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
     list_display = ('name', 'code', 'project_approval')

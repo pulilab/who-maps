@@ -217,7 +217,6 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
         base_manager_name = 'objects'
 
 
-
 class DonorCustomQuestion(CustomQuestion):
     donor = models.ForeignKey(Donor, related_name='donor_questions', on_delete=models.CASCADE)
     order_with_respect_to = 'donor'

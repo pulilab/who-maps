@@ -1,4 +1,3 @@
-import json
 import os
 from fnmatch import fnmatch
 from unittest.mock import patch

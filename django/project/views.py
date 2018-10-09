@@ -20,8 +20,8 @@ from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
-    MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, ProjectApprovalSerializer, \
-    CSVExportSerializer
+    MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
+    ProjectApprovalSerializer, CSVExportSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
 
