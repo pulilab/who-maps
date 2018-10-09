@@ -93,7 +93,8 @@ class ProjectDraftTests(SetupTests):
                                platforms=[{"id": 999, "strategies": [999]}])
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertNotEqual(response.json()['draft']["platforms"][0]["id"], self.project_data['project']['platforms'][0]['id'])
+        self.assertNotEqual(response.json()['draft']["platforms"][0]["id"],
+                            self.project_data['project']['platforms'][0]['id'])
         self.assertNotEqual(response.json()['draft']["platforms"][0]["strategies"][0],
                             self.project_data['project']['platforms'][0]['strategies'][0])
 
@@ -166,9 +167,8 @@ class ProjectDraftTests(SetupTests):
         data['project'].update(name='Draft Proj 4', national_level_deployment={'clients': 0, 'facilities': 10})
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'project':
-            {'national_level_deployment': {
-                'health_workers': ['This field is required.']}}})
+        self.assertEqual(response.json(), {'project': {'national_level_deployment': {
+            'health_workers': ['This field is required.']}}})
 
         data['project'].update(name='Draft Proj 5', national_level_deployment={'clients': None, 'facilities': 10})
         response = self.test_user_client.post(url, data, format="json")

@@ -18,10 +18,10 @@ from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOn
     InCountrySuperAdmin, InDonorSuperAdmin
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
     CountryCustomQuestion, DonorCustomQuestion
-from .serializers import CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, PartnerLogoSerializer, \
-    DonorSerializer, \
-    SuperAdminDonorSerializer, AdminDonorSerializer, DonorPartnerLogoSerializer, MapFileSerializer, \
-    CountryImageSerializer, DonorImageSerializer, DonorCustomQuestionSerializer, CountryCustomQuestionSerializer
+from .serializers import CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, \
+    PartnerLogoSerializer, DonorSerializer, SuperAdminDonorSerializer, AdminDonorSerializer, \
+    DonorPartnerLogoSerializer, MapFileSerializer, CountryImageSerializer, DonorImageSerializer, \
+    DonorCustomQuestionSerializer, CountryCustomQuestionSerializer
 
 
 class CountryLandingPageViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
