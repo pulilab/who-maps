@@ -64,7 +64,7 @@
     "vue-click-outside": "^1.0.7",
     "vue-no-ssr": "^0.2.2",
     "vue-scroll-class": "^1.2.3",
-    "vue2-leaflet": "git+https://github.com/pulilab/Vue2Leaflet.git#c805285",
+    "vue2-leaflet": "git+https://github.com/KoRiGaN/Vue2Leaflet.git#next",
     "vue2-leaflet-markercluster": "^2.0.0",
     "vuedraggable": "^2.16.0",
     "vuetify": "^1.0.10",
