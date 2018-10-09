@@ -144,15 +144,16 @@ class ProjectTests(SetupTests):
         ))
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(len(response.json().keys()), 8)
-        self.assertEqual(response.json()['implementing_partners']['0'], ['Not a valid string.'])
-        self.assertEqual(response.json()['health_focus_areas']['0'], ['A valid integer is required.'])
-        self.assertEqual(response.json()['licenses']['0'], ['A valid integer is required.'])
-        self.assertEqual(response.json()['donors']['0'], ['A valid integer is required.'])
-        self.assertEqual(response.json()['his_bucket']['0'], ['A valid integer is required.'])
-        self.assertEqual(response.json()['hsc_challenges']['0'], ['A valid integer is required.'])
-        self.assertEqual(response.json()['interoperability_links'], [{'id': ['This field is required.']}])
-        self.assertEqual(response.json()['interoperability_standards']['0'], ['A valid integer is required.'])
+        self.assertEqual(len(response.json()['project'].keys()), 8)
+        self.assertEqual(response.json()['project']['implementing_partners']['0'], ['Not a valid string.'])
+        self.assertEqual(response.json()['project']['health_focus_areas']['0'], ['A valid integer is required.'])
+        self.assertEqual(response.json()['project']['licenses']['0'], ['A valid integer is required.'])
+        self.assertEqual(response.json()['project']['donors']['0'], ['A valid integer is required.'])
+        self.assertEqual(response.json()['project']['his_bucket']['0'], ['A valid integer is required.'])
+        self.assertEqual(response.json()['project']['hsc_challenges']['0'], ['A valid integer is required.'])
+        self.assertEqual(response.json()['project']['interoperability_links'], [{'id': ['This field is required.']}])
+        self.assertEqual(response.json()['project']['interoperability_standards']['0'],
+                         ['A valid integer is required.'])
 
     def test_create_new_project_with_platform_name_missing(self):
         url = reverse("project-create", kwargs={"country_id": self.country_id})
@@ -166,8 +167,8 @@ class ProjectTests(SetupTests):
         data['project'].update(new_data)
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertIn("platforms", response.json())
-        self.assertEqual(response.json()['platforms'][0]['id'][0], 'This field is required.')
+        self.assertIn("platforms", response.json()['project'])
+        self.assertEqual(response.json()['project']['platforms'][0]['id'][0], 'This field is required.')
 
     def test_create_new_project_with_platform_empty_array(self):
         url = reverse("project-create", kwargs={"country_id": self.country_id})
@@ -192,8 +193,8 @@ class ProjectTests(SetupTests):
         data['project'].update(new_data)
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertIn("platforms", response.json())
-        self.assertEqual(response.json()['platforms'][0]['strategies'][0], 'This field is required.')
+        self.assertIn("platforms", response.json()['project'])
+        self.assertEqual(response.json()['project']['platforms'][0]['strategies'][0], 'This field is required.')
 
     def test_create_new_project_with_platform_strategies_empty(self):
         url = reverse("project-create", kwargs={"country_id": self.country_id})
@@ -275,7 +276,7 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.put(url, self.project_data, format="json")
 
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['name'][0], 'This field must be unique.')
+        self.assertEqual(response.json()['project']['name'][0], 'This field must be unique.')
 
     def test_retrieve_project(self):
         url = reverse("project-retrieve", kwargs={"pk": self.project_id})
@@ -424,7 +425,7 @@ class ProjectTests(SetupTests):
 
     def test_retrieve_project_exclude_draft(self):
         project_data = copy.copy(self.project_data)
-        project_data['name'] = "Test Project2"
+        project_data['project']['name'] = "Test Project2"
         url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201)
