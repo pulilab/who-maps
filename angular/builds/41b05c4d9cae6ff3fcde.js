@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[540],{"./src/Cms/StaticInfoWidget/StaticInfoWidget.scss":function(n,s,c){}}]);

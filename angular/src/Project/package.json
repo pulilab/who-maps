@@ -1,6 +1,0 @@
-{
-  "name": "ProjectModule",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./projectModule.js"
-}

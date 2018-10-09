@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[4],{"./src/Project/package.json":function(o){o.exports={name:"ProjectModule",version:"0.0.0",private:!0,main:"./projectModule.js"}}}]);

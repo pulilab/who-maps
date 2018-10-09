@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[301],{"./src/MapsToolkit/Resource/template/16-2a-2.html":function(e,r){e.exports="<p>\r\n  <translate>\r\n    ii) Provider/health service delivery-level outcomes have been articulated\r\n  </translate>\r\n</p>"}}]);

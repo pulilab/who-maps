@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[400],{"./src/Dashboard/img/after-white.svg":function(s,o,p){s.exports=p.p+"public/fonts/after-white.svg"}}]);

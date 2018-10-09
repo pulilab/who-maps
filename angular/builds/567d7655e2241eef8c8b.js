@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[576],{"./src/Cms/DashboardWidget/images/illustration-1.svg":function(s,i,o){s.exports=o.p+"public/fonts/illustration-1.svg"}}]);

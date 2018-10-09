@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[40],{"./src/MyProjects/MyProjectList/img/squares.svg":function(s,o,p){s.exports=p.p+"public/fonts/squares.svg"}}]);

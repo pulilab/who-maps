@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[363],{"./src/MapsToolkit/Resource/template/10-1-3.html":function(n,o){n.exports="<p>\r\n  <translate>\r\n    iii) Documentation for guiding the adaptation of technology is available\r\n  </translate>\r\n</p>"}}]);

@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[97],{"./src/Common/CountryPartners/package.json":function(n){n.exports={name:"CountryPartners",version:"0.0.0",private:!0,main:"./countryPartnersComponent.js"}}}]);

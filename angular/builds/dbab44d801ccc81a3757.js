@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[406],{"./src/Common/TrixComponent/TrixComponent.scss":function(n,o,p){}}]);
