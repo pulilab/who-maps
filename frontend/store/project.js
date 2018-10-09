@@ -55,7 +55,8 @@ export const getters = {
     published: undefined,
     loading: undefined,
     country_answers: undefined,
-    donor_answers: undefined
+    donor_answers: undefined,
+    original: undefined
   }),
   getName: state => state.name,
   getOrganisation: state => state.organisation,
