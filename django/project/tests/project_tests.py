@@ -717,7 +717,7 @@ class ProjectTests(SetupTests):
         user = UserProfile.objects.get(id=self.user_profile_id)
         country.users.add(user)
 
-        self.project_data = {
+        self.project_data = {"project": {
             "date": datetime.utcnow(),
             "name": "Test Project{}".format(Project.objects.all().count() + 1),
             "organisation": self.org.id,
@@ -740,8 +740,13 @@ class ProjectTests(SetupTests):
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
             ],
+            "coverage_second_level": [
+                {"district": "ward1", "clients": 209, "health_workers": 59, "facilities": 49},
+                {"district": "ward2", "clients": 109, "health_workers": 29, "facilities": 89}
+            ],
             "national_level_deployment":
-                {"clients": 20000, "health_workers": 0, "facilities": 0},
+                {"clients": 20000, "health_workers": 0, "facilities": 0,
+                 "facilities_list": ['facility1', 'facility2', 'facility3']},
             "donors": [self.d1.id, self.d2.id],
             "his_bucket": [1, 2],
             "hsc_challenges": [1, 2],
@@ -756,7 +761,7 @@ class ProjectTests(SetupTests):
             "interoperability_standards": [1],
             "start_date": str(datetime.today().date()),
             "end_date": str(datetime.today().date())
-        }
+        }}
 
         # Create project draft
         url = reverse("project-create", kwargs={"country_id": country.id})
@@ -770,7 +775,7 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.put(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 200, response.json())
 
-        return project_id
+        return project_id, country.id
 
     def test_project_admin_link_add(self):
         request = MockRequest()
