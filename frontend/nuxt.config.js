@@ -85,9 +85,6 @@ const config = {
       }
     }]
   ],
-  sentry: {
-    config: {}
-  },
   fontawesome: {
     component: 'fa',
     imports: [
