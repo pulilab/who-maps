@@ -468,6 +468,9 @@ class CSVExportViewSet(TokenAuthMixin, ViewSet):
         has_country_permission = has_donor_permission = False
         projects = Project.objects.filter(id__in=serializer.validated_data['ids'])
 
+        if not projects:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
         single_country_selected = serializer.validated_data.get('country')
         single_donor_selected = serializer.validated_data.get('donor')
 

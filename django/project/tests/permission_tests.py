@@ -153,7 +153,7 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
         self.assertEqual(response.json()['published'].get("platforms")[0].get('id'),
-                         self.project_data['platforms'][0]['id'])
+                         self.project_data['project']['platforms'][0]['id'])
 
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY + Project.FIELDS_FOR_LOGGED_IN:
@@ -192,7 +192,7 @@ class PermissionTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
         self.assertEqual(response.json()['published'].get("platforms")[0].get('id'),
-                         self.project_data['platforms'][0]['id'])
+                         self.project_data['project']['platforms'][0]['id'])
 
         # filtering checks
         for key in Project.FIELDS_FOR_MEMBERS_ONLY:
@@ -200,17 +200,17 @@ class PermissionTests(SetupTests):
 
     def test_non_member_doesnt_see_private_answers(self):
         data = copy(self.project_data)
-        data.update({"name": "Test private"})
+        data['project'].update({"name": "Test private"})
 
         # Create project draft
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
 
         project_id = response.json().get("id")
 
         # Publish
-        url = reverse("project-publish", kwargs={"pk": project_id})
+        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
 
@@ -282,12 +282,12 @@ class PermissionTests(SetupTests):
 
     def test_csv_export_failed(self):
         url = reverse("csv-export")
-        response = self.test_user_client.post(url, {"data": [1, 2]}, format="json")
+        response = self.test_user_client.post(url, {"ids": [1, 2]}, format="json")
         self.assertEqual(response.status_code, 404)
 
     def test_csv_export_success(self):
         url = reverse("csv-export")
-        response = self.test_user_client.post(url, [1, 2, Project.objects.get().id], format="json")
+        response = self.test_user_client.post(url, {"ids": [1, 2, Project.objects.get().id]}, format="json")
         self.assertEqual(response.status_code, 200)
         headers = dict(response.items())
         self.assertEqual(headers['Content-Type'], 'text/csv')
@@ -308,7 +308,7 @@ class PermissionTests(SetupTests):
         p.data.pop('coverage_second_level')
         p.data.pop('national_level_deployment')
         p.save()
-        response = self.test_user_client.post(url, [1, 2, Project.objects.get().id], format="json")
+        response = self.test_user_client.post(url, {"ids": [1, 2, Project.objects.get().id]}, format="json")
         self.assertEqual(response.status_code, 200)
         headers = dict(response.items())
         self.assertEqual(headers['Content-Type'], 'text/csv')
