@@ -74,10 +74,10 @@ class ProjectTests(SetupTests):
         project_id = response.json()['id']
 
         # Publish project
-        url = reverse("project-publish", kwargs={"project_id": self.project_id, "country_id": self.country_id})
+        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'wiki': ['Enter a valid URL.']})
+        self.assertEqual(response.json()['project'], {'wiki': ['Enter a valid URL.']})
 
         data['project'].update(dict(
             wiki="wiki.cancerresearch",
@@ -548,7 +548,7 @@ class ProjectTests(SetupTests):
                  "alidnameheretoolongnamemorethan128charactersisaninvalidnamehere")
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["name"][0], 'Ensure this field has no more than 128 characters.')
+        self.assertEqual(response.json()['project']["name"][0], 'Ensure this field has no more than 128 characters.')
 
     def test_update_project_with_new_name_that_collides_with_a_different_project(self):
         url = reverse("project-create", kwargs={"country_id": self.country_id})
@@ -568,7 +568,7 @@ class ProjectTests(SetupTests):
         data['project'].update(name="thisnameisunique")
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["name"][0], 'This field must be unique.')
+        self.assertEqual(response.json()['project']["name"][0], 'This field must be unique.')
 
     def test_digitalstrategies_str(self):
         ds1 = DigitalStrategy.objects.create(name='ds1', group='Client')
