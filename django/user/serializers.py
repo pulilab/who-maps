@@ -90,7 +90,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return attrs
 
 
-
 class OrganisationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organisation
