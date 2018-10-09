@@ -265,13 +265,32 @@ export default {
       return this.usePublishRules ? this.publishRules : this.draftRules;
     }
   },
+  mounted () {
+    if (this.$route.query.reloadDataFromStorage) {
+      this.$nextTick(() => {
+        this.$nuxt.$loading.start();
+        try {
+          const stored = JSON.parse(window.localStorage.getItem('rescuedProject'));
+          this.initProjectState(stored);
+        } catch (e) {
+          this.$alert(this.$gettext('Failed to restore auto-saved project'), this.$gettext('Warning'), {
+            confirmButtonText: this.$gettext('OK')
+          });
+        }
+        window.localStorage.removeItem('rescuedProject');
+        this.$router.replace({...this.$route, query: undefined});
+        this.$nuxt.$loading.finish();
+      });
+    }
+  },
   methods: {
     ...mapActions({
       createProject: 'project/createProject',
       saveDraft: 'project/saveDraft',
       discardDraft: 'project/discardDraft',
       publishProject: 'project/publishProject',
-      setLoading: 'project/setLoading'
+      setLoading: 'project/setLoading',
+      initProjectState: 'project/initProjectState'
     }),
     digitalHealthInterventionsValidator (rule, value, callback) {
       const ownDhi = this.project.digitalHealthInterventions.filter(dhi => dhi.platform === value && dhi.id);
@@ -290,6 +309,32 @@ export default {
         this.readyElements += 1;
       }, 300);
     },
+    async unCaughtErrorHandler (errors) {
+      if (this.$raven) {
+        this.$raven.captureMessage('Un-caught validation error in project page', {
+          level: 'warning',
+          extra: {
+            apiErrors: this.apiErrors,
+            errors
+          }
+        });
+      }
+
+      try {
+        await this.$confirm(this.$gettext('There was an un-caught validation error an automatic report has been submitted'),
+          this.$gettext('Warning'), {
+            confirmButtonText: this.$gettext('Save & Reload'),
+            cancelButtonText: this.$gettext('Reload')
+          });
+        const toStore = JSON.stringify(this.project);
+        window.localStorage.setItem('rescuedProject', toStore);
+        const newUrl = window.location.origin + this.$route.path + `?reloadDataFromStorage=true`;
+        window.location.href = newUrl;
+      } catch (e) {
+        console.log('User declined the option to save, just reloading');
+        window.location.reload(true);
+      }
+    },
     handleErrorMessages () {
       this.$nextTick(() => {
         const errors = [...this.$el.querySelectorAll('.is-error')];
@@ -297,16 +342,7 @@ export default {
         if (visibleErrors && visibleErrors.length > 0) {
           visibleErrors[0].scrollIntoView();
         } else {
-          this.$alert(this.$gettext('There was an un-caught validation error an automatic report has been submitted'), this.$gettext('Warning'), {
-            confirmButtonText: this.$gettext('Close')
-          });
-          this.$raven.captureMessage('Un-caught validation error in project page', {
-            level: 'warning',
-            extra: {
-              apiErrors: this.apiErrors,
-              errors
-            }
-          });
+          this.unCaughtErrorHandler(errors);
         }
       });
     },
