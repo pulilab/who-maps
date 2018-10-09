@@ -68,13 +68,13 @@ class ProjectTests(SetupTests):
             name="testing_wiki_validation"
         ))
         # Create project draft
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
         project_id = response.json()['id']
 
         # Publish project
-        url = reverse("project-publish", kwargs={'pk': project_id})
+        url = reverse("project-publish", kwargs={"project_id": self.project_id, "country_id": self.country_id})
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'wiki': ['Enter a valid URL.']})
@@ -94,7 +94,7 @@ class ProjectTests(SetupTests):
         c.project_approval = True
         c.users.add(self.user_profile_id)
         c.save()
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         data.update(dict(name="Test Project3"))
         response = self.test_user_client.post(url, data, format="json")
@@ -108,7 +108,7 @@ class ProjectTests(SetupTests):
         c.users.add(self.user_profile_id)
         c.save()
         # Create project
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         data.update(dict(name="Test Project3"))
         response = self.test_user_client.post(url, data, format="json")
@@ -129,7 +129,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(new_approval.approved, None)
 
     def test_create_validating_list_fields_invalid_data(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         data.update(dict(
             name="Test Project4",
@@ -155,7 +155,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['interoperability_standards']['0'], ['A valid integer is required.'])
 
     def test_create_new_project_with_platform_name_missing(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         new_data = {
             "name": "Test Project91",
@@ -170,7 +170,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['platforms'][0]['id'][0], 'This field is required.')
 
     def test_create_new_project_with_platform_empty_array(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         new_data = {
             "name": "Test Project91",
@@ -181,7 +181,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 201)
 
     def test_create_new_project_with_platform_strategies_missing(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         new_data = {
             "name": "Test Project92",
@@ -196,7 +196,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['platforms'][0]['strategies'][0], 'This field is required.')
 
     def test_create_new_project_with_platform_strategies_empty(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         new_data = {
             "name": "Test Project93",
@@ -211,7 +211,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['draft']['platforms'][0]['strategies'], list())
 
     def test_create_new_project_with_platform_extra_data(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         new_data = {
             "name": "Test Project93",
@@ -228,7 +228,7 @@ class ProjectTests(SetupTests):
         self.assertNotIn("extra", response.json()['draft']['platforms'][0])
 
     def test_publish_project_makes_public_id(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         data.update(name="Test Project4")
         response = self.test_user_client.post(url, data, format="json")
@@ -236,7 +236,7 @@ class ProjectTests(SetupTests):
         self.assertFalse(response.json()['public_id'])
         project_id = response.json()['id']
 
-        url = reverse("project-publish", kwargs={"pk": project_id})
+        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['public_id'])
@@ -265,7 +265,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['platforms'][0]['strategies'][0], 'This field is required.')
 
     def test_create_new_project_unique_name(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201)
         project_id = response.json()['id']
@@ -365,7 +365,7 @@ class ProjectTests(SetupTests):
     def test_retrieve_project_list_by_country(self):
         project_data = copy.copy(self.project_data)
         project_data['name'] = "Test Project2"
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, project_data, format="json")
 
         self.assertEqual(response.status_code, 201)
@@ -396,7 +396,7 @@ class ProjectTests(SetupTests):
         project_data['name'] = "Test Project2"
         project_data['organisation'] = str(Organisation.objects.create(name="org2").id)
 
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201)
         project_id = response.json()['id']
@@ -409,7 +409,7 @@ class ProjectTests(SetupTests):
         project_data['name'] = "Test Project3"
         project_data['organisation'] = str(Organisation.objects.create(name="org3").id)
 
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201)
 
@@ -424,7 +424,7 @@ class ProjectTests(SetupTests):
     def test_retrieve_project_exclude_draft(self):
         project_data = copy.copy(self.project_data)
         project_data['name'] = "Test Project2"
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201)
 
@@ -445,7 +445,7 @@ class ProjectTests(SetupTests):
         # add one new project to detect district name project duplications
         project_data = copy.copy(self.project_data)
         project_data['name'] = "Test Project 2"
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 201)
         project_id = response.json()['id']
@@ -461,7 +461,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['dist1'][0]['approved'], None)
 
     def test_create_project_adds_owner_to_team(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         data.update(name="Test Project3")
         response = self.test_user_client.post(url, data, format="json")
@@ -472,7 +472,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(project.team.first(), userprofile)
 
     def test_team_cant_be_but_viewers_can_be_empty(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         data.update(name="Test Project4")
         response = self.test_user_client.post(url, data, format="json")
@@ -646,7 +646,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()["name"][0], 'Ensure this field has no more than 128 characters.')
 
     def test_update_project_with_new_name_that_collides_with_a_different_project(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
         data.update(name="thisnameisunique")
         response = self.test_user_client.post(url, data, format="json")
@@ -759,7 +759,7 @@ class ProjectTests(SetupTests):
         }
 
         # Create project draft
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": country.id})
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
 
