@@ -282,12 +282,12 @@ class PermissionTests(SetupTests):
 
     def test_csv_export_failed(self):
         url = reverse("csv-export")
-        response = self.test_user_client.post(url, {"data": [1, 2]}, format="json")
+        response = self.test_user_client.post(url, {"ids": [1, 2]}, format="json")
         self.assertEqual(response.status_code, 404)
 
     def test_csv_export_success(self):
         url = reverse("csv-export")
-        response = self.test_user_client.post(url, [1, 2, Project.objects.get().id], format="json")
+        response = self.test_user_client.post(url, {"ids": [1, 2, Project.objects.get().id]}, format="json")
         self.assertEqual(response.status_code, 200)
         headers = dict(response.items())
         self.assertEqual(headers['Content-Type'], 'text/csv')
@@ -308,7 +308,7 @@ class PermissionTests(SetupTests):
         p.data.pop('coverage_second_level')
         p.data.pop('national_level_deployment')
         p.save()
-        response = self.test_user_client.post(url, [1, 2, Project.objects.get().id], format="json")
+        response = self.test_user_client.post(url, {"ids": [1, 2, Project.objects.get().id]}, format="json")
         self.assertEqual(response.status_code, 200)
         headers = dict(response.items())
         self.assertEqual(headers['Content-Type'], 'text/csv')
