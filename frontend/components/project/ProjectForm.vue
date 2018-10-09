@@ -325,8 +325,8 @@ export default {
       try {
         await this.$confirm(this.$gettext('There was an un-caught validation error an automatic report has been submitted'),
           this.$gettext('Warning'), {
-            confirmButtonText: this.$gettext('Save & Reload'),
-            cancelButtonText: this.$gettext('Reload')
+            confirmButtonText: this.$gettext('Recover & Reload'),
+            cancelButtonText: this.$gettext('Discard changes')
           });
         const project = {
           ...this.project,
