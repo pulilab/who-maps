@@ -363,105 +363,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['published'].get("last_version"), 1)
         self.assertIn("last_version_date", response.json()['published'])
 
-    def test_retrieve_project_list_by_country(self):
-        project_data = copy.copy(self.project_data)
-        project_data['name'] = "Test Project2"
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
-        response = self.test_user_client.post(url, project_data, format="json")
-
-        self.assertEqual(response.status_code, 201)
-        project_id = response.json()['id']
-        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
-        response = self.test_user_client.put(url, project_data, format="json")
-        self.assertEqual(response.status_code, 200)
-
-        url = reverse("project-country-list", kwargs={"country_id": self.country_id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()[0].get("name"), "Test Project1")
-        nameslist = [x.challenge for x in
-                     HSCChallenge.objects.get_names_for_ids(self.project_data['project']['hsc_challenges'])]
-        self.assertEqual(response.json()[0].get("hsc_challenges"), nameslist)
-        nameslist = [x.name for x in HealthFocusArea.objects.get_names_for_ids(
-            self.project_data['project']['health_focus_areas'])]
-        self.assertEqual(response.json()[0].get("health_focus_areas"), nameslist)
-        nameslist = [x.name for x in HISBucket.objects.get_names_for_ids(self.project_data['project']['his_bucket'])]
-        self.assertEqual(response.json()[0].get("his_bucket"), nameslist)
-        nameslist = [x.name for x in TechnologyPlatform.objects.get_names_for_ids(
-            [x['id'] for x in self.project_data['project']['platforms']])]
-        self.assertEqual(response.json()[0].get("platforms"), nameslist)
-        self.assertEqual(len(response.json()), 2)
-
-    def test_retrieve_project_list_by_country_all(self):
-        # add a new project that I don't own
-        project_data = copy.copy(self.project_data)
-        project_data['name'] = "Test Project2"
-        project_data['organisation'] = str(Organisation.objects.create(name="org2").id)
-
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
-        response = self.test_user_client.post(url, project_data, format="json")
-        self.assertEqual(response.status_code, 201)
-        project_id = response.json()['id']
-        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
-        response = self.test_user_client.put(url, project_data, format="json")
-        self.assertEqual(response.status_code, 200)
-
-        # This will stay as draft
-        project_data = copy.copy(self.project_data)
-        project_data['name'] = "Test Project3"
-        project_data['organisation'] = str(Organisation.objects.create(name="org3").id)
-
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
-        response = self.test_user_client.post(url, project_data, format="json")
-        self.assertEqual(response.status_code, 201)
-
-        url = reverse("project-country-list", kwargs={"country_id": self.country_id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 2)
-        self.assertEqual(response.json()[0].get("name"), "Test Project1")
-        self.assertEqual(response.json()[1].get("name"), "Test Project2")
-        self.assertEqual(response.json()[1].get("approved"), None)
-
-    def test_retrieve_project_exclude_draft(self):
-        project_data = copy.copy(self.project_data)
-        project_data['project']['name'] = "Test Project2"
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
-        response = self.test_user_client.post(url, project_data, format="json")
-        self.assertEqual(response.status_code, 201)
-
-        url = reverse("project-country-list", kwargs={"country_id": self.country_id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()[0].get("name"), "Test Project1")
-        self.assertEqual(len(response.json()), 1)
-
-    def test_retrieve_project_list_all_without_country(self):
-        url = reverse("project-all-list")
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 1)
-        self.assertEqual(response.json()[0]['country'], self.country_id)
-
-    def test_retrieve_project_list_by_district_name(self):
-        # add one new project to detect district name project duplications
-        project_data = copy.copy(self.project_data)
-        project_data['name'] = "Test Project 2"
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
-        response = self.test_user_client.post(url, project_data, format="json")
-        self.assertEqual(response.status_code, 201)
-        project_id = response.json()['id']
-        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
-        response = self.test_user_client.put(url, project_data, format="json")
-        self.assertEqual(response.status_code, 200)
-
-        url = reverse("project-by-district", kwargs={"country_id": self.country_id})
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(response.json(), dict)
-        self.assertEqual(response.json().keys(), {"dist1": None, "dist2": None}.keys())
-        self.assertEqual(response.json()['dist1'][0]['approved'], None)
-
     def test_create_project_adds_owner_to_team(self):
         url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
@@ -668,20 +569,6 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["name"][0], 'This field must be unique.')
-
-    def test_retrieve_project_list_all_has_all_new_fields(self):
-        url = reverse("project-all-list")
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 1)
-        self.assertEqual(response.json()[0]['country'], self.country_id)
-        self.assertIn("contact_name", response.json()[0])
-        self.assertIn("contact_email", response.json()[0])
-        self.assertIn("implementation_overview", response.json()[0])
-        self.assertIn("implementing_partners", response.json()[0])
-        self.assertIn("implementation_dates", response.json()[0])
-        self.assertIn("health_focus_areas", response.json()[0])
-        self.assertIn("geographic_scope", response.json()[0])
 
     def test_digitalstrategies_str(self):
         ds1 = DigitalStrategy.objects.create(name='ds1', group='Client')
