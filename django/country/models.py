@@ -213,6 +213,9 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
 
     class Meta:
         abstract = True
+        default_manager_name = 'objects'
+        base_manager_name = 'objects'
+
 
 
 class DonorCustomQuestion(CustomQuestion):
@@ -220,7 +223,7 @@ class DonorCustomQuestion(CustomQuestion):
     order_with_respect_to = 'donor'
 
     class Meta(OrderedModel.Meta):
-        base_manager_name = 'objects'
+        pass
 
 
 class CountryCustomQuestion(CustomQuestion):
@@ -228,4 +231,4 @@ class CountryCustomQuestion(CustomQuestion):
     order_with_respect_to = 'country'
 
     class Meta(OrderedModel.Meta):
-        base_manager_name = 'objects'
+        pass
