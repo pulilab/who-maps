@@ -98,7 +98,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      project: 'project/getProjectData'
+      project: 'project/getProjectData',
+      countryAnswers: 'project/getCountryAnswers',
+      donorAnswers: 'project/getDonorsAnswers'
     }),
     isDraft () {
       return this.$route.name.includes('organisation-projects-id-edit');
@@ -326,7 +328,12 @@ export default {
             confirmButtonText: this.$gettext('Save & Reload'),
             cancelButtonText: this.$gettext('Reload')
           });
-        const toStore = JSON.stringify(this.project);
+        const project = {
+          ...this.project,
+          country_custom_answers: this.countryAnswers,
+          donor_custom_answers: this.donorAnswers
+        };
+        const toStore = JSON.stringify(project);
         window.localStorage.setItem('rescuedProject', toStore);
         const newUrl = window.location.origin + this.$route.path + `?reloadDataFromStorage=true`;
         window.location.href = newUrl;
