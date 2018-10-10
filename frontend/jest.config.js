@@ -1,14 +1,15 @@
 module.exports = {
   verbose: true,
   bail: true,
-  collectCoverage: false,
+  collectCoverage: true,
   restoreMocks: true,
   collectCoverageFrom: [
-    '**/store/**/*.js'
+    '**/store/**/*.js',
+    '**/utilities/**/*.js',
   ],
   coverageDirectory: 'coverage',
   coverageThreshold: {
-    global: {
+    './utilities/api.js/': {
       branches: 100,
       functions: 100,
       lines: 100,
