@@ -1,6 +1,5 @@
 import * as CmsModule from '../../../angular/store/modules/cms';
 import { defaultAxiosSuccess, dispatch, getState } from '../testUtilities';
-// import axios from '../../src/plugins/axios';
 
 describe('CMS Store Module', () => {
   describe('GETTERS', () => {
@@ -250,6 +249,11 @@ describe('CMS Store Module', () => {
       const action = { type: 'CLEAR_CMS_DATA' };
       state = CmsModule.default(state, action);
       expect(state.data).toEqual([]);
+    });
+    test('DEFAULT', () => {
+      let state = 1;
+      state = CmsModule.default(state, '');
+      expect(state).toEqual(1);
     });
   });
 });
