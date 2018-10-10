@@ -194,11 +194,8 @@ export default function cms (state = initialState, action) {
   case 'CLEAR_CMS_DATA': {
     return { ...initialState };
   }
-  default:
+  default: {
     return state;
   }
+  }
 }
-
-export {
-
-};
