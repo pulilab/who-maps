@@ -2,27 +2,35 @@ export const coverageMapper = collection => {
   const coverage = [];
   const coverageData = {};
   collection = collection || [];
-  collection.forEach(c => {
-    coverage.push(c.district);
-    coverageData[c.district] = {
-      clients: c.clients,
-      facilities: c.facilities_list ? c.facilities_list.length : c.facilities,
-      health_workers: c.health_workers,
-      facilities_list: c.facilities_list
-    };
-  });
+  if (Array.isArray(collection)) {
+    collection.forEach(c => {
+      coverage.push(c.district);
+      coverageData[c.district] = {
+        clients: c.clients,
+        facilities: c.facilities_list ? c.facilities_list.length : c.facilities,
+        health_workers: c.health_workers,
+        facilities_list: c.facilities_list
+      };
+    });
+  } else {
+    console.warn('Invalid type passed to api/coverageMapper');
+  }
   return [coverage, coverageData];
 };
 
 export const interoperabilityLinksMapper = links => {
   const result = {};
   links = links || [];
-  links.forEach(l => {
-    result[l.id] = {
-      link: l.link,
-      selected: l.selected
-    };
-  });
+  if (Array.isArray(links)) {
+    links.forEach(l => {
+      result[l.id] = {
+        link: l.link,
+        selected: l.selected
+      };
+    });
+  } else {
+    console.warn('Invalid type passed to api/interoperabilityLinksMapper');
+  }
   return result;
 };
 
@@ -30,10 +38,16 @@ export const platformsMapper = collection => {
   const platforms = [];
   const digitalHealthInterventions = [];
   collection = collection || [];
-  collection.forEach(p => {
-    platforms.push(p.id);
-    digitalHealthInterventions.push(...p.strategies.map(s => ({id: s, platform: p.id})));
-  });
+  if (Array.isArray(collection)) {
+    collection.forEach(p => {
+      platforms.push(p.id);
+      if (p.strategies && Array.isArray(p.strategies)) {
+        digitalHealthInterventions.push(...p.strategies.map(s => ({id: s, platform: p.id})));
+      }
+    });
+  } else {
+    console.warn('Invalid type passed to api/platformsMapper');
+  }
   return [platforms, digitalHealthInterventions];
 };
 
