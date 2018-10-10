@@ -202,8 +202,6 @@ export default {
   @import "../../../assets/style/variables.less";
   @import "../../../assets/style/mixins.less";
 
-  .CountryDetailsOverlay {}
-
   .DistrictCenterIcon {
     background-image: url('~/assets/img/pins/pin-with-counter.svg');
 
