@@ -9,7 +9,6 @@ export const getters = {
   getCmsData (state) {
     return [...state.cms.data];
   },
-
   getDomainStructureForCms (state) {
     const axes = window.$nuxt.$store.getters['system/getAxis'];
     const domains = window.$nuxt.$store.getters['system/getDomains'];
