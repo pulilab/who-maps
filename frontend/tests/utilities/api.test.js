@@ -6,15 +6,17 @@ const emptyTest = (fn, expected) => {
   expect(result).toEqual(expected);
 };
 
-const wrongInputTest = (fn, expected) => {
+const wrongInputTest = (fn, expected, objectIsValid = false) => {
   jest.spyOn(console, 'warn').mockReturnValue(null);
   let result = fn(1);
   expect(result).toEqual(expected);
   result = fn('a');
   expect(result).toEqual(expected);
+
   result = fn({});
   expect(result).toEqual(expected);
-  expect(console.warn).toHaveBeenCalledTimes(3);
+
+  expect(console.warn).toHaveBeenCalledTimes(objectIsValid ? 2 : 3);
 };
 
 describe('coverageMapper', () => {
@@ -135,5 +137,83 @@ describe('platformsMapper', () => {
     original[0].strategies = '';
     result = api.platformsMapper(original);
     expect(result).toEqual([[1], []]);
+  });
+});
+
+describe('countryCustomFieldMapper', () => {
+  test('returns an array', () => {
+    const result = api.countryCustomFieldMapper({});
+    expect(result).toEqual([]);
+  });
+
+  test('does not fail with empty input', () => {
+    emptyTest(api.countryCustomFieldMapper, []);
+  });
+
+  test('does not fail with wrong input', () => {
+    wrongInputTest(api.countryCustomFieldMapper, [], true);
+  });
+
+  test('convert an object in an array of objects', () => {
+    const original = {
+      1: ['yes']
+    };
+    const result = api.countryCustomFieldMapper(original);
+    expect(result).toEqual([{question_id: 1, answer: ['yes']}]);
+  });
+});
+
+describe('countryCustomFieldMapper', () => {
+  test('returns an array', () => {
+    const result = api.countryCustomFieldMapper({});
+    expect(result).toEqual([]);
+  });
+
+  test('does not fail with empty input', () => {
+    emptyTest(api.countryCustomFieldMapper, []);
+  });
+
+  test('does not fail with wrong input', () => {
+    wrongInputTest(api.countryCustomFieldMapper, [], true);
+  });
+
+  test('convert an object in an array of objects', () => {
+    const original = {
+      1: ['yes']
+    };
+    const result = api.countryCustomFieldMapper(original);
+    expect(result).toEqual([{question_id: 1, answer: ['yes']}]);
+  });
+});
+
+describe('donorCustomFieldMapper', () => {
+  test('returns an array', () => {
+    const result = api.donorCustomFieldMapper({});
+    expect(result).toEqual([]);
+  });
+
+  test('does not fail with empty input', () => {
+    emptyTest(api.donorCustomFieldMapper, []);
+  });
+
+  test('does not fail with wrong input', () => {
+    wrongInputTest(api.donorCustomFieldMapper, [], true);
+
+    const wrongInside = {
+      1: 1
+    };
+    const result = api.donorCustomFieldMapper(wrongInside);
+    expect(result).toEqual([]);
+    expect(console.warn).toHaveBeenCalledTimes(3);
+  });
+
+  test('convert an object in an array of objects', () => {
+    const original = {
+      1: {
+        11: ['yes']
+      }
+    };
+    const result = api.donorCustomFieldMapper(original);
+    expect(result).toEqual([{question_id: 11, answer: ['yes'], donor_id: 1}]);
   });
 });
