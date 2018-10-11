@@ -217,3 +217,28 @@ describe('donorCustomFieldMapper', () => {
     expect(result).toEqual([{question_id: 11, answer: ['yes'], donor_id: 1}]);
   });
 });
+
+describe('apiReadParser', () => {
+  test('returns an object', () => {
+    const result = api.apiReadParser({});
+    expect(result).toEqual(expect.any(Object));
+  });
+
+  test('calls all the api parsing functions', () => {
+    jest.spyOn(api, 'coverageMapper').mockReturnValue([1, 2]);
+    jest.spyOn(api, 'platformsMapper').mockReturnValue([1, 2]);
+    jest.spyOn(api, 'interoperabilityLinksMapper').mockReturnValue(1);
+    jest.spyOn(api, 'parseCustomAnswers').mockReturnValue({});
+    jest.spyOn(api, 'countryCustomFieldMapper').mockReturnValue([]);
+    jest.spyOn(api, 'donorCustomFieldMapper').mockReturnValue([]);
+
+    api.apiReadParser({});
+
+    expect(api.coverageMapper).toHaveBeenCalled();
+    expect(api.platformsMapper).toHaveBeenCalled();
+    expect(api.interoperabilityLinksMapper).toHaveBeenCalled();
+    expect(api.parseCustomAnswers).toHaveBeenCalled();
+    expect(api.countryCustomFieldMapper).toHaveBeenCalled();
+    expect(api.donorCustomFieldMapper).toHaveBeenCalled();
+  });
+});
