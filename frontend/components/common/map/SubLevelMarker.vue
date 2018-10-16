@@ -1,6 +1,7 @@
 <template>
   <div>
     <l-marker
+      v-if="icon"
       :options="pin.options"
       :lat-lng="pin.latlng"
       :icon="icon"
@@ -23,7 +24,7 @@ export default {
     icon: {
       type: Object,
       required: false,
-      default: () => null
+      default: null
     }
   },
   data () {
