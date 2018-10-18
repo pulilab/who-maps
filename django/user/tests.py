@@ -45,6 +45,8 @@ class UserTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
 
+        self.donor = Donor.objects.create(name='Donor 1', code='dnr1')
+
         # Store to be able to mock later.
         self.timezone_now = timezone.now()
 
@@ -433,7 +435,8 @@ class UserProfileTests(APITestCase):
             "name": "Test Name",
             "organisation": self.org.id,
             "country": Country.objects.get(id=3).id,
-            "account_type": "D"
+            "account_type": UserProfile.DONOR,
+            "donor": self.donor.id
         }
         response = client.put(url, data)
         self.assertEqual(response.status_code, 200)
@@ -449,7 +452,8 @@ class UserProfileTests(APITestCase):
             "name": "Test Name",
             "organisation": self.org.id,
             "country": Country.objects.get(id=3).id,
-            "account_type": UserProfile.DONOR
+            "account_type": UserProfile.DONOR,
+            "donor": self.donor.id
         }
         response = self.client.put(url, data)
         self.assertEqual(response.status_code, 200)
