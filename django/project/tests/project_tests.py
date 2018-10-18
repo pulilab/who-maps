@@ -12,7 +12,7 @@ from rest_framework.test import APIClient
 from country.models import Country, Donor
 from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
-from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, HealthFocusArea, \
+from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, \
     Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HSCGroup, ProjectApproval
 from project.tasks import send_project_approval_digest
 
