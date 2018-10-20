@@ -9,7 +9,6 @@ export const getters = {
   getCmsData (state) {
     return [...state.cms.data];
   },
-
   getDomainStructureForCms (state) {
     const axes = window.$nuxt.$store.getters['system/getAxis'];
     const domains = window.$nuxt.$store.getters['system/getDomains'];
@@ -195,11 +194,8 @@ export default function cms (state = initialState, action) {
   case 'CLEAR_CMS_DATA': {
     return { ...initialState };
   }
-  default:
+  default: {
     return state;
   }
+  }
 }
-
-export {
-
-};

@@ -229,9 +229,9 @@ export default {
             if (this.profile.country) {
               this.setSelectedCountry(this.profile.country);
             }
-            if (this.$route.query && this.$route.query.redirectTo) {
-              const path = this.$route.query.redirectTo;
-              const query = {...this.$route.query, redirectTo: undefined};
+            if (this.$route.query && this.$route.query.next) {
+              const path = this.$route.query.next;
+              const query = {...this.$route.query, next: undefined};
               this.$router.push({path, query});
             } else {
               this.$router.push(this.localePath({name: 'organisation-dashboard', params: this.$route.params, query: {country: [this.profile.country]}}));

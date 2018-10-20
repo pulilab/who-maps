@@ -1,6 +1,7 @@
 <template>
   <div>
     <l-marker
+      v-if="icon"
       ref="countryMarker"
       :options="options"
       :lat-lng="pin.latlng"
@@ -12,7 +13,6 @@
         v-if="!disableTooltip"
         ref="tooltip"
         :options="popupOptions"
-        :dynamic="true"
       >
         <div
           class="MouseEventSpy"
@@ -49,7 +49,7 @@ export default {
     icon: {
       type: Object,
       required: false,
-      default: () => null
+      default: null
     },
     options: {
       type: Object,

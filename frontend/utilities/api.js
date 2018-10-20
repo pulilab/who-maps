@@ -2,27 +2,35 @@ export const coverageMapper = collection => {
   const coverage = [];
   const coverageData = {};
   collection = collection || [];
-  collection.forEach(c => {
-    coverage.push(c.district);
-    coverageData[c.district] = {
-      clients: c.clients,
-      facilities: c.facilities_list ? c.facilities_list.length : c.facilities,
-      health_workers: c.health_workers,
-      facilities_list: c.facilities_list
-    };
-  });
+  if (Array.isArray(collection)) {
+    collection.forEach(c => {
+      coverage.push(c.district);
+      coverageData[c.district] = {
+        clients: c.clients,
+        facilities: c.facilities_list ? c.facilities_list.length : c.facilities,
+        health_workers: c.health_workers,
+        facilities_list: c.facilities_list
+      };
+    });
+  } else {
+    console.warn('Invalid or malformed input passed to api/coverageMapper');
+  }
   return [coverage, coverageData];
 };
 
 export const interoperabilityLinksMapper = links => {
   const result = {};
   links = links || [];
-  links.forEach(l => {
-    result[l.id] = {
-      link: l.link,
-      selected: l.selected
-    };
-  });
+  if (Array.isArray(links)) {
+    links.forEach(l => {
+      result[l.id] = {
+        link: l.link,
+        selected: l.selected
+      };
+    });
+  } else {
+    console.warn('Invalid or malformed input passed to api/interoperabilityLinksMapper');
+  }
   return result;
 };
 
@@ -30,27 +38,45 @@ export const platformsMapper = collection => {
   const platforms = [];
   const digitalHealthInterventions = [];
   collection = collection || [];
-  collection.forEach(p => {
-    platforms.push(p.id);
-    digitalHealthInterventions.push(...p.strategies.map(s => ({id: s, platform: p.id})));
-  });
+  if (Array.isArray(collection)) {
+    collection.forEach(p => {
+      platforms.push(p.id);
+      if (p.strategies && Array.isArray(p.strategies)) {
+        digitalHealthInterventions.push(...p.strategies.map(s => ({id: s, platform: p.id})));
+      }
+    });
+  } else {
+    console.warn('Invalid or malformed input passed to api/platformsMapper');
+  }
   return [platforms, digitalHealthInterventions];
 };
 
 export const countryCustomFieldMapper = collection => {
   const customAnswers = [];
-  for (let key in collection) {
-    customAnswers.push({question_id: +key, answer: collection[key]});
+  if (typeof collection === 'object' && collection) {
+    for (let key in collection) {
+      customAnswers.push({question_id: +key, answer: collection[key]});
+    }
+  } else {
+    console.warn('Invalid or malformed input passed to api/countryCustomFieldMapper');
   }
   return customAnswers;
 };
 
 export const donorCustomFieldMapper = collection => {
   const customAnswers = [];
-  for (let donor in collection) {
-    for (let key in collection[donor]) {
-      customAnswers.push({question_id: +key, answer: collection[donor][key], donor_id: donor});
+  if (typeof collection === 'object' && !Array.isArray(collection) && collection) {
+    for (let donor in collection) {
+      if (typeof collection[donor] === 'object' && !Array.isArray(collection) && collection) {
+        for (let key in collection[donor]) {
+          customAnswers.push({question_id: +key, answer: collection[donor][key], donor_id: +donor});
+        }
+      } else {
+        console.warn('Malformed input passed to api/countryCustomFieldMapper');
+      }
     }
+  } else {
+    console.warn('Invalid or malformed input passed to api/countryCustomFieldMapper');
   }
   return customAnswers;
 };

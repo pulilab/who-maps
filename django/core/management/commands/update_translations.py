@@ -21,8 +21,7 @@ class Command(BaseCommand):
         pot_file = os.path.join(settings.LOCALE_PATHS[0], pot_name)
 
         for language in settings.LANGUAGES:
-            if not language[0] == 'en':
-                po_file = os.path.join(settings.LOCALE_PATHS[0], '{}/LC_MESSAGES/djangojs.po'.format(language[0]))
-                if not os.path.exists(po_file):
-                    copyfile(pot_file, po_file)
-                call(["msgmerge", "-U", "-N", po_file, pot_file])
+            po_file = os.path.join(settings.LOCALE_PATHS[0], '{}/LC_MESSAGES/djangojs.po'.format(language[0]))
+            if not os.path.exists(po_file):
+                copyfile(pot_file, po_file)
+            call(["msgmerge", "-U", "-N", po_file, pot_file])
