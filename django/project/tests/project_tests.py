@@ -314,6 +314,25 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['project']['platforms'][0]['strategies'][0], 'This field is required.')
 
+    def test_project_data_missing(self):
+        data = copy.deepcopy(self.project_data)
+        data.pop('project', None)
+
+        url = reverse("project-publish", kwargs={"project_id": self.project_id, "country_id": self.country_id})
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'project': 'Project data is missing'})
+
+        url = reverse("project-draft", kwargs={"project_id": self.project_id, "country_id": self.country_id})
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'project': 'Project data is missing'})
+
+        url = reverse("project-create", kwargs={"project_id": self.project_id, "country_id": self.country_id})
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'project': 'Project data is missing'})
+
     def test_create_new_project_unique_name(self):
         url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, self.project_data, format="json")
