@@ -79,3 +79,41 @@ class CSVExportTests(SetupTests):
         self.assertContains(response, "Country Question With No Answer")
         self.assertContains(response, "Country Answer 1")
         self.assertContains(response, "Country Private Answer 1")
+
+    def test_csv_donor_answers_export(self):
+        q1 = DonorCustomQuestion.objects.create(question="Donor Question", donor_id=self.d1.id)
+        q2 = DonorCustomQuestion.objects.create(question="Donor Private Question", donor_id=self.d1.id, private=True)
+        DonorCustomQuestion.objects.create(question="Donor Question With No Answer", donor_id=self.d1.id)
+
+        url = reverse("project-publish",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
+        data = copy(self.project_data)
+        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=q1.id, answer=["Donor Answer 1"]),
+                                                                dict(question_id=q2.id,
+                                                                     answer=["Donor Private Answer 1"])]}})
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']['donor_custom_answers'],
+                         {str(self.d1.id): {str(q1.id): ['Donor Answer 1']}})
+        self.assertEqual(response.json()['published']['donor_custom_answers_private'],
+                         {str(self.d1.id): {str(q2.id): ['Donor Private Answer 1']}})
+
+        self.d1.admins.add(self.user_profile_id)
+        url = reverse("csv-export")
+
+        response = self.test_user_client.post(url, {"ids": [Project.objects.get().id], "donor": 999},
+                                              format="json")
+        self.assertNotContains(response, "Donor Question")
+        self.assertNotContains(response, "Donor Private Question")
+
+        response = self.test_user_client.post(url, {"ids": [Project.objects.get().id], "donor": self.d1.id},
+                                              format="json")
+        self.assertContains(response, "Donor Question")
+        self.assertContains(response, "Donor Private Question")
+        self.assertContains(response, "Donor Question With No Answer")
+        self.assertContains(response, "Donor Answer 1")
+        self.assertContains(response, "Donor Private Answer 1")
