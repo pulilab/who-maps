@@ -423,3 +423,49 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
+
+    def test_search_view_as_country_unsuccessful_flow(self):
+        url = reverse("search-project-list")
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country"}
+        self.country.admins.remove(self.userprofile)
+        self.country.users.remove(self.userprofile)
+
+        response = self.client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ['You must be authenticated for viewing as.'])
+
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ['No country selected for view as.'])
+
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": self.country.id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ['No access to country.'])
+
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country_lol", "country": self.country.id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ['You can only view as country or donor.'])
+
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": [self.country.id, 999]}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ['View as can only work with one country selected.'])
+
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": [999]}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ['No such country.'])
+
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": 'aaa'}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ['No such country.'])
+
+        self.country.admins.add(self.userprofile)
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": self.country.id}
+
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
