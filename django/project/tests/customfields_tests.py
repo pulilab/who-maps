@@ -2,7 +2,7 @@ from copy import copy
 
 from rest_framework.reverse import reverse
 
-from country.models import CountryCustomQuestion
+from country.models import CountryCustomQuestion, DonorCustomQuestion
 from project.models import Project
 from project.tests.setup import SetupTests
 
@@ -309,3 +309,22 @@ class CustomFieldTests(SetupTests):
         self.assertTrue(response.json()['country_questions'][0]['order'] <
                         response.json()['country_questions'][1]['order'] <
                         response.json()['country_questions'][2]['order'])
+
+    def test_donor_answer_for_published(self):
+        q = DonorCustomQuestion.objects.create(question="test", donor_id=self.d1.id)
+        url = reverse("project-publish",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
+        data = copy(self.project_data)
+        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=q.id, answer=["lol1"])]}})
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
+        self.assertEqual(response.json()['draft']['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
+
+        project = Project.objects.last()
+        self.assertEqual(project.data['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
+        self.assertEqual(project.draft['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
