@@ -328,7 +328,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'project': 'Project data is missing'})
 
-        url = reverse("project-create", kwargs={"project_id": self.project_id, "country_id": self.country_id})
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'project': 'Project data is missing'})
