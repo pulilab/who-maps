@@ -146,15 +146,6 @@ class CountryField(models.Model):
         return ""
 
 
-    def to_representation(self, draft_mode=False):
-        return {
-            "schema_id": getattr(self.schema_instance, 'pk', None),
-            "country": self.country.id,
-            "type": self.type,
-            "question": self.question,
-            "answer": self.draft if draft_mode else self.answer,
-            "project": self.project.id
-        }
 class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
     TEXT = 1
     NUMBER = 2
