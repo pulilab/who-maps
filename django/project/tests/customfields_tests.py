@@ -34,6 +34,20 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'details': 'No such project'})
 
+    def test_country_answers_are_ignored_if_no_questions(self):
+        url = reverse("project-create",
+                      kwargs={
+                          "country_id": self.country_id
+                      })
+        data = copy(self.project_data)
+        # will be ignored even if the question ID is invalid
+        data.update({"country_custom_answers": [dict(question_id='a', answer=["lol1"])]})
+
+        response = self.test_user_client.post(url, data=data, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue('id' in response.json())
+        self.assertFalse('country_custom_answers' in response.json())
+
     def test_country_answer_wrong_question_id(self):
         url = reverse("country-custom-answer",
                       kwargs={
