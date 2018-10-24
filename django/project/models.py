@@ -15,7 +15,7 @@ from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, Acti
 from country.models import Country
 from project.cache import InvalidateCacheMixin
 from project.utils import remove_keys
-from user.models import UserProfile, Organisation
+from user.models import UserProfile
 from toolkit.toolkit_data import toolkit_default
 
 
