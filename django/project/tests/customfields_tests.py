@@ -388,14 +388,52 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.json()['donor_custom_answers'],
                          {str(self.d1.id): {str(dq2.id): ['This field is required']}})
 
+        # donor custom answers are missing
+        data.pop('donor_custom_answers', None)
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
+
+        url = reverse("project-create",
+                      kwargs={
+                          "country_id": self.country_id,
+                      })
+
+        response = self.test_user_client.post(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
+
+        url = reverse("project-draft",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
+
         # donor custom answer for donor one are missing
         data.update({"donor_custom_answers": {}})
         response = self.test_user_client.put(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
 
-        # donor custom answers are missing
-        data.pop('donor_custom_answers', None)
+        url = reverse("project-create",
+                      kwargs={
+                          "country_id": self.country_id,
+                      })
+
+        response = self.test_user_client.post(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
+
+        url = reverse("project-publish",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
 
         response = self.test_user_client.put(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
