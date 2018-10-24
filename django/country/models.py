@@ -146,10 +146,6 @@ class CountryField(models.Model):
         return ""
 
 
-    @classmethod
-    def get_schema_for_answer(cls, country, question):
-        return cls.objects.filter(schema=True, enabled=True, country=country, question=question).first()
-
     def to_representation(self, draft_mode=False):
         return {
             "schema_id": getattr(self.schema_instance, 'pk', None),
