@@ -69,18 +69,18 @@ class CustomFieldTests(SetupTests):
                          [{'question_id': ['This question_id does not exist.']}])
 
     def test_country_answer_wrong_all_required(self):
-        url = reverse("country-custom-answer",
+        CountryCustomQuestion.objects.create(question="What up?", country_id=self.country_id)
+        url = reverse("project-create",
                       kwargs={
-                          "country_id": self.country_id,
-                          "project_id": self.project_id
+                          "country_id": self.country_id
                       })
-        data = [dict()]
+        data = copy(self.project_data)
+        data.update({"country_custom_answers": [dict()]})
 
         response = self.test_user_client.post(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), [{'question_id': ['This field is required.'],
-                                            'answer': ['This field is required.'],
-                                            'draft': ['This field is required.']}])
+        self.assertEqual(response.json()['country_custom_answers'], [{'question_id': ['This field is required.'],
+                                                                      'answer': ['This field is required.']}])
 
     def test_country_answer_for_draft(self):
         q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
