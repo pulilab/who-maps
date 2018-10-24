@@ -82,6 +82,28 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.json()['country_custom_answers'], [{'question_id': ['This field is required.'],
                                                                       'answer': ['This field is required.']}])
 
+        url = reverse("project-draft",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['country_custom_answers'], [{'question_id': ['This field is required.'],
+                                                                      'answer': ['This field is required.']}])
+
+        url = reverse("project-publish",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['country_custom_answers'], [{'question_id': ['This field is required.'],
+                                                                      'answer': ['This field is required.']}])
+
     def test_country_answer_for_draft(self):
         q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
         url = reverse("project-draft",
