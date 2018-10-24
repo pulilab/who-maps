@@ -91,15 +91,6 @@ class Project(SoftDeleteModel, ExtendedModel):
     def get_anon_data(self):
         return remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
 
-    # TODO: deprecate
-    def get_organisation(self, draft_mode=False):  # pragma: no cover
-        try:
-            organisation_id = self.draft.get('organisation') if draft_mode else self.data.get('organisation')
-            organisation_id = int(organisation_id)
-        except TypeError:  # pragma: no cover
-            return None
-        return Organisation.objects.filter(id=organisation_id).first()
-
     def str_national_level_deployment(self):
         nld = self.data.get('national_level_deployment', {})
         if not nld:
