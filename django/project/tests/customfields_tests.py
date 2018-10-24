@@ -84,16 +84,17 @@ class CustomFieldTests(SetupTests):
 
     def test_country_answer_for_draft(self):
         q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
-        url = reverse("country-custom-answer",
+        url = reverse("project-draft",
                       kwargs={
                           "country_id": self.country_id,
                           "project_id": self.project_id
                       })
-        data = [dict(question_id=q.id, answer=["lol1"], draft=True)]
+        data = copy(self.project_data)
+        data.update({"country_custom_answers": [dict(question_id=q.id, answer=["lol1"])]})
 
-        response = self.test_user_client.post(url, data=data, format='json')
+        response = self.test_user_client.put(url, data=data, format='json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), [{'question_id': q.id, 'answer': ['lol1'], 'draft': True}])
+        self.assertEqual(response.json()['draft']['country_custom_answers'], {str(q.id): ['lol1']})
 
         project = Project.objects.last()
         self.assertEqual(project.draft['country_custom_answers'], {str(q.id): ['lol1']})
