@@ -336,7 +336,7 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(project.data['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
         self.assertEqual(project.draft['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
 
-    def test_donor_answer_for_published_is_required(self):
+    def test_donor_answer_for_all_is_required(self):
         dq1 = DonorCustomQuestion.objects.create(question="test", donor_id=self.d1.id, required=True)
         dq2 = DonorCustomQuestion.objects.create(question="test2", donor_id=self.d1.id, required=True)
         url = reverse("project-publish",
