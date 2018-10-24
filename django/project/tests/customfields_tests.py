@@ -1,3 +1,5 @@
+from copy import copy
+
 from rest_framework.reverse import reverse
 
 from country.models import CountryCustomQuestion
@@ -8,16 +10,16 @@ from project.tests.setup import SetupTests
 class CustomFieldTests(SetupTests):
 
     def test_country_answer_wrong_country(self):
-        url = reverse("country-custom-answer",
+        url = reverse("project-create",
                       kwargs={
                           "country_id": 999,
-                          "project_id": self.project_id
                       })
-        data = [dict(question_id=1, answer=["lol1"], draft=False)]
+        data = copy(self.project_data)
+        data.update({"country_custom_answers": [dict(question_id=1, answer=["lol1"])]})
 
         response = self.test_user_client.post(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'country_id': ['Wrong country_id']})
+        self.assertEqual(response.json(), {'details': 'No such country'})
 
     def test_country_answer_wrong_country_and_project(self):
         url = reverse("country-custom-answer",
