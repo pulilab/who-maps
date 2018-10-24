@@ -382,3 +382,59 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
 
+    def test_donor_answer_wrong_question_id(self):
+        DonorCustomQuestion.objects.create(question="What up?", donor_id=self.d1.id)
+        url = reverse("project-create",
+                      kwargs={
+                          "country_id": self.country_id
+                      })
+        data = copy(self.project_data)
+        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id='a', answer=["lol1"])]}})
+
+        response = self.test_user_client.post(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['donor_custom_answers'],
+                         {str(self.d1.id): [{'question_id': ['A valid integer is required.']}]})
+
+        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=999, answer=["lol1"])]}})
+
+        response = self.test_user_client.post(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['donor_custom_answers'],
+                         {str(self.d1.id): [{'question_id': ['This question_id does not exist.']}]})
+
+        url = reverse("project-publish",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['donor_custom_answers'],
+                         {str(self.d1.id): [{'question_id': ['This question_id does not exist.']}]})
+
+        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id='a', answer=["lol1"])]}})
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['donor_custom_answers'],
+                         {str(self.d1.id): [{'question_id': ['A valid integer is required.']}]})
+
+        url = reverse("project-draft",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['donor_custom_answers'],
+                         {str(self.d1.id): [{'question_id': ['A valid integer is required.']}]})
+
+        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=999, answer=["lol1"])]}})
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['donor_custom_answers'],
+                         {str(self.d1.id): [{'question_id': ['This question_id does not exist.']}]})
