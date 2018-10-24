@@ -17,7 +17,7 @@ class ExceptionLoggingMiddleware(MiddlewareMixin):
 
 
 class TestCeleryEmailBackend(CeleryEmailBackend):
-    def send_messages(self, email_messages):
+    def send_messages(self, email_messages):  # pragma: no cover
         result_tasks = []
         for msg in email_messages:
             msg.to = settings.TEST_FORCED_TO_ADDRESS
