@@ -149,6 +149,13 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['country_custom_answers'], {str(q2.id): ['This field is required']})
 
+        # country custom answers are missing
+        data.pop('country_custom_answers', None)
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['non_field_errors'], 'Country answers are missing')
+
     def test_country_answer_numeric_validation(self):
         q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id,
                                                  type=CountryCustomQuestion.NUMBER)
