@@ -159,7 +159,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         errors = {}
 
         if 'project' not in request.data:
-            raise ValidationError({'non_field_errors': 'Project data is missing'})
+            raise ValidationError({'project': 'Project data is missing'})
 
         data_serializer = ProjectPublishedSerializer(project, data=request.data['project'])
 
@@ -246,7 +246,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         errors = {}
 
         if 'project' not in request.data:
-            raise ValidationError({'non_field_errors': 'Project data is missing'})
+            raise ValidationError({'project': 'Project data is missing'})
 
         data_serializer = ProjectDraftSerializer(data=request.data['project'])
         data_serializer.is_valid()
@@ -316,7 +316,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         errors = {}
 
         if 'project' not in request.data:
-            raise ValidationError({'non_field_errors': 'Project data is missing'})
+            raise ValidationError({'project': 'Project data is missing'})
 
         data_serializer = ProjectDraftSerializer(project, data=request.data['project'])
         self.check_object_permissions(self.request, project)
