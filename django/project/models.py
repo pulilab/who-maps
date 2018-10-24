@@ -154,10 +154,11 @@ class Project(SoftDeleteModel, ExtendedModel):
         self.approval.save()
 
     def reset_approval(self):
-        self.approval.user = None
-        self.approval.approved = None
-        self.approval.reason = "Project has been republished"
-        self.approval.save()
+        if self.approval.approved is not None:
+            self.approval.user = None
+            self.approval.approved = None
+            self.approval.reason = "Project has been republished"
+            self.approval.save()
 
     @classmethod
     def remove_stale_donors(cls):
