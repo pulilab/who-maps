@@ -384,3 +384,42 @@ class SearchTests(SetupTests):
                          {})
         self.assertEqual(response.json()['results']['projects'][0]['country_custom_answers_private'],
                          {str(self.ccq1.id): ['answer country 1'], str(self.ccq2.id): ['answer country 2']})
+
+    def test_search_view_as_donor_unsuccessful_flow(self):
+        url = reverse("search-project-list")
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "donor"}
+
+        response = self.client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ['You must be authenticated for viewing as.'])
+
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ['No donor selected for view as.'])
+
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "donor", "donor": self.d1.id}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ['No access to donor.'])
+
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "donor", "donor": [self.d1.id, 999]}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ['View as can only work with one donor selected.'])
+
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "donor", "donor": [999]}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ['No such donor.'])
+
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "donor", "donor": 'aaa'}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), ['No such donor.'])
+
+        self.d1.admins.add(self.userprofile)
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "donor", "donor": self.d1.id}
+
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
