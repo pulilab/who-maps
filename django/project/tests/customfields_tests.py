@@ -152,22 +152,23 @@ class CustomFieldTests(SetupTests):
     def test_country_answer_numeric_validation(self):
         q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id,
                                                  type=CountryCustomQuestion.NUMBER)
-        url = reverse("country-custom-answer",
+        url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
                           "project_id": self.project_id
                       })
-        data = [dict(question_id=q.id, answer=['123a'], draft=False)]
+        data = copy(self.project_data)
+        data.update({"country_custom_answers": [dict(question_id=q.id, answer=["123a"])]})
 
-        response = self.test_user_client.post(url, data=data, format='json')
+        response = self.test_user_client.put(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), [{'answer': ['This field must be numeric.']}])
+        self.assertEqual(response.json()['country_custom_answers'], [{'answer': ['This field must be numeric.']}])
 
-        data = [dict(question_id=q.id, answer=['123'], draft=False)]
+        data.update({"country_custom_answers": [dict(question_id=q.id, answer=["123"])]})
 
-        response = self.test_user_client.post(url, data=data, format='json')
+        response = self.test_user_client.put(url, data=data, format='json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), [{'question_id': q.id, 'answer': ['123'], 'draft': False}])
+        self.assertEqual(response.json()['published']['country_custom_answers'], {str(q.id): ['123']})
 
     def test_country_answer_length_validation(self):
         q1 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id,
