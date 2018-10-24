@@ -154,11 +154,10 @@ class Project(SoftDeleteModel, ExtendedModel):
         self.approval.save()
 
     def reset_approval(self):
-        if self.approval.approved:
-            self.approval.user = None
-            self.approval.approved = None
-            self.approval.reason = "Project has been republished"
-            self.approval.save()
+        self.approval.user = None
+        self.approval.approved = None
+        self.approval.reason = "Project has been republished"
+        self.approval.save()
 
     @classmethod
     def remove_stale_donors(cls):
@@ -198,14 +197,6 @@ class ProjectApproval(ExtendedModel):
 
     def __str__(self):
         return "Approval for {}".format(self.project.name)
-
-    def save_without_historical_record(self, *args, **kwargs):
-        self.skip_history_when_saving = True
-        try:
-            ret = self.save(*args, **kwargs)
-        finally:
-            del self.skip_history_when_saving
-        return ret
 
 
 class CoverageVersion(ExtendedModel):
