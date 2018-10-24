@@ -137,15 +137,6 @@ class CountryField(models.Model):
     class Meta:
         ordering = ['id']
 
-    def save(self, *args, **kwargs):
-        if self.type in [CountryField.TEXT, CountryField.NUMBER, CountryField.YESNO]:
-            self.options = None
-        super(CountryField, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return ""
-
-
 class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
     TEXT = 1
     NUMBER = 2
