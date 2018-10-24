@@ -335,3 +335,50 @@ class CustomFieldTests(SetupTests):
         project = Project.objects.last()
         self.assertEqual(project.data['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
         self.assertEqual(project.draft['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
+
+    def test_donor_answer_for_published_is_required(self):
+        dq1 = DonorCustomQuestion.objects.create(question="test", donor_id=self.d1.id, required=True)
+        dq2 = DonorCustomQuestion.objects.create(question="test2", donor_id=self.d1.id, required=True)
+        url = reverse("project-publish",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
+        # answer key present but empty
+        data = copy(self.project_data)
+        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=dq1.id, answer=[])]}})
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['donor_custom_answers'],
+                         {str(self.d1.id): [{'answer': ['This field is required.']}]})
+
+        # answer key not present
+        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=dq1.id)]}})
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['donor_custom_answers'],
+                         {str(self.d1.id): [{'answer': ['This field is required.']}]})
+
+        # answer one is present, but answer 2 is missing
+        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=dq1.id, answer=["answer1"])]}})
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['donor_custom_answers'],
+                         {str(self.d1.id): {str(dq2.id): ['This field is required']}})
+
+        # donor custom answer for donor one are missing
+        data.update({"donor_custom_answers": {}})
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
+
+        # donor custom answers are missing
+        data.pop('donor_custom_answers', None)
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
+
