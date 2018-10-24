@@ -156,6 +156,25 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['non_field_errors'], 'Country answers are missing')
 
+        url = reverse("project-create",
+                      kwargs={
+                          "country_id": self.country_id,
+                      })
+
+        response = self.test_user_client.post(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['non_field_errors'], 'Country answers are missing')
+
+        url = reverse("project-draft",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['non_field_errors'], 'Country answers are missing')
+
     def test_country_answer_numeric_validation(self):
         q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id,
                                                  type=CountryCustomQuestion.NUMBER)
