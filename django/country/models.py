@@ -103,40 +103,6 @@ class MapFile(ExtendedModel):
     map_file = models.FileField(null=True, upload_to='uploaded_maps/')
 
 
-
-
-class CountryField(models.Model):
-    TEXT = 1
-    NUMBER = 2
-    YESNO = 3
-    SINGLE = 4
-    MULTI = 5
-
-    TYPE_CHOICES = (
-        (TEXT, "Text field"),
-        (NUMBER, "Numeric field"),
-        (YESNO, "Yes - no field"),
-        (SINGLE, "Single choice"),
-        (MULTI, "Multiple choice"),
-    )
-
-    country = models.ForeignKey(Country, related_name='fields', on_delete=models.CASCADE)
-    type = models.IntegerField(choices=TYPE_CHOICES)
-    question = models.CharField(max_length=256, blank=False)
-    options = ArrayField(models.CharField(max_length=256), blank=True, null=True)
-    answer = models.TextField(max_length=2000, blank=True)
-    draft = models.TextField(max_length=2000, blank=True)
-    project = models.ForeignKey('project.Project', null=True, on_delete=models.CASCADE)
-    enabled = models.BooleanField(default=True, help_text="This field will show up on the project page if enabled")
-    schema = models.BooleanField(default=True, help_text="Determines if this is treated as the schema for country")
-    schema_instance = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
-    required = models.BooleanField(default=False)
-
-    objects = CountryFieldManager()
-
-    class Meta:
-        ordering = ['id']
-
 class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
     TEXT = 1
     NUMBER = 2
