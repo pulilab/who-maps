@@ -8,14 +8,14 @@ from project.tests.setup import SetupTests
 
 class ODKProjectTests(SetupTests):
     def test_post_draft_with_odk_stuff(self):
-        url = reverse("project-create")
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
 
         odk_etag = "59605878-6a6a-4f5f-9262-256939398333"
         odk_id = "dfdsfk-dsfsdf-sd-f-sdf-sdfafdsf"
         odk_extra_data = {"dict": {"of": "dicts"}}
 
-        data.update(dict(
+        data['project'].update(dict(
             name="Test Project From ODK",
             odk_etag=odk_etag,
             odk_id=odk_id,
@@ -32,8 +32,8 @@ class ODKProjectTests(SetupTests):
         self.assertEqual(project.odk_id, odk_id)
         self.assertEqual(project.odk_extra_data, odk_extra_data)
 
-        url = reverse("project-draft", kwargs={"pk": project_draft_id})
-        data.update(odk_etag="59605878-6a6a-4f5f-9262-256939398334")
+        url = reverse("project-draft", kwargs={"country_id": self.country_id, "project_id": project_draft_id})
+        data['project'].update(odk_etag="59605878-6a6a-4f5f-9262-256939398334")
 
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
