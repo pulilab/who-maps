@@ -334,7 +334,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
         self.assertEqual(response.json()['published'].get("national_level_deployment")["clients"], 20000)
         self.assertEqual(response.json()['published'].get("platforms")[0]["id"],
-                         self.project_data['project']['platforms'][0]['id'])
+                         self.project_data['project'].get("platforms")[0]["id"])
         self.assertEqual(response.json()['published'].get("country"), self.country_id)
 
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
@@ -377,7 +377,7 @@ class ProjectTests(SetupTests):
 
     def test_get_coverage_versions(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.post(url, format="json")
+        self.test_user_client.post(url, format="json")
         url = reverse("get-coverage-versions", kwargs={"project_id": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -386,7 +386,7 @@ class ProjectTests(SetupTests):
 
     def test_get_toolkit_versions(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.post(url, format="json")
+        self.test_user_client.post(url, format="json")
         url = reverse("get-toolkit-versions", kwargs={"project_id": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -394,8 +394,8 @@ class ProjectTests(SetupTests):
 
     def test_version_numbers_increasing(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.post(url, format="json")
-        response = self.test_user_client.post(url, format="json")
+        self.test_user_client.post(url, format="json")
+        self.test_user_client.post(url, format="json")
         url = reverse("get-toolkit-versions", kwargs={"project_id": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -404,7 +404,7 @@ class ProjectTests(SetupTests):
 
     def test_retrieve_last_version(self):
         url = reverse("make-version", kwargs={"project_id": self.project_id})
-        response = self.test_user_client.post(url, format="json")
+        self.test_user_client.post(url, format="json")
         url = reverse("project-retrieve", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -479,7 +479,7 @@ class ProjectTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
-        response = self.client.post(url, data, format="json")
+        self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
@@ -531,7 +531,7 @@ class ProjectTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
-        response = self.client.post(url, data, format="json")
+        self.client.post(url, data, format="json")
 
         # Log in the user.
         url = reverse("api_token_auth")
