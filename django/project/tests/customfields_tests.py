@@ -122,31 +122,32 @@ class CustomFieldTests(SetupTests):
     def test_country_answer_for_published_is_required(self):
         q1 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id, required=True)
         q2 = CountryCustomQuestion.objects.create(question="test2", country_id=self.country_id, required=True)
-        url = reverse("country-custom-answer",
+        url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
                           "project_id": self.project_id
                       })
         # answer key present but empty
-        data = [dict(question_id=q1.id, answer=[], draft=False)]
+        data = copy(self.project_data)
+        data.update({"country_custom_answers": [dict(question_id=q1.id, answer=[])]})
 
-        response = self.test_user_client.post(url, data=data, format='json')
+        response = self.test_user_client.put(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), [{'answer': ['This field is required.']}])
+        self.assertEqual(response.json()['country_custom_answers'], [{'answer': ['This field is required.']}])
 
         # answer key not present
-        data = [dict(question_id=q1.id, draft=False)]
+        data.update({"country_custom_answers": [dict(question_id=q1.id)]})
 
-        response = self.test_user_client.post(url, data=data, format='json')
+        response = self.test_user_client.put(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), [{'answer': ['This field is required.']}])
+        self.assertEqual(response.json()['country_custom_answers'], [{'answer': ['This field is required.']}])
 
         # answer one is present, but answer 2 is missing
-        data = [dict(question_id=q1.id, answer=["answer1"], draft=False)]
+        data.update({"country_custom_answers": [dict(question_id=q1.id, answer=["answer1"])]})
 
-        response = self.test_user_client.post(url, data=data, format='json')
+        response = self.test_user_client.put(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {str(q2.id): ['This field is required']})
+        self.assertEqual(response.json()['country_custom_answers'], {str(q2.id): ['This field is required']})
 
     def test_country_answer_numeric_validation(self):
         q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id,
