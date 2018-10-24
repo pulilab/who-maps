@@ -128,6 +128,29 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(new_approval.approved, None)
 
+    def test_project_approval_project_methods(self):
+        project = Project.objects.get(id=self.project_id)
+        project.approve()
+
+        approval = ProjectApproval.objects.get(project_id=self.project_id)
+
+        self.assertTrue(project.approval.approved)
+        self.assertTrue(approval.approved)
+
+        project.disapprove()
+        approval.refresh_from_db()
+
+        self.assertFalse(project.approval.approved)
+        self.assertFalse(approval.approved)
+
+        project.reset_approval()
+        approval.refresh_from_db()
+
+        self.assertIsNone(project.approval.approved)
+        self.assertIsNone(approval.approved)
+
+        self.assertEqual(approval.__str__(), 'Approval for {}'.format(project.name))
+
     def test_create_validating_list_fields_invalid_data(self):
         url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
