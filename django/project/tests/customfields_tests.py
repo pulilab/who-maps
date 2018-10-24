@@ -22,16 +22,17 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.json(), {'details': 'No such country'})
 
     def test_country_answer_wrong_country_and_project(self):
-        url = reverse("country-custom-answer",
+        url = reverse("project-draft",
                       kwargs={
                           "country_id": 999,
                           "project_id": 999
                       })
-        data = [dict(question_id=1, answer=["lol1"], draft=False)]
+        data = copy(self.project_data)
+        data.update({"country_custom_answers": [dict(question_id=1, answer=["lol1"])]})
 
-        response = self.test_user_client.post(url, data=data, format='json')
+        response = self.test_user_client.put(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'country_id': ['Wrong country_id'], 'project_id': ['Wrong project_id']})
+        self.assertEqual(response.json(), {'details': 'No such project'})
 
     def test_country_answer_wrong_question_id(self):
         url = reverse("country-custom-answer",
