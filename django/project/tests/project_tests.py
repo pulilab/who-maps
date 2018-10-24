@@ -151,6 +151,15 @@ class ProjectTests(SetupTests):
 
         self.assertEqual(approval.__str__(), 'Approval for {}'.format(project.name))
 
+    def test_project_approval_list_by_country(self):
+        url = reverse("approval", kwargs={"country_id": self.country_id})
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0]['project_name'], self.project_data['project']['name'])
+        self.assertEqual(response.json()[0]['history'][0]['history_user__userprofile'], self.user_profile_id)
+        self.assertIsNone(response.json()[0]['history'][0]['approved'])
+        self.assertIsNone(response.json()[0]['history'][0]['reason'])
+
     def test_create_validating_list_fields_invalid_data(self):
         url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
