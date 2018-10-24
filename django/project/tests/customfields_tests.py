@@ -247,25 +247,21 @@ class CustomFieldTests(SetupTests):
         q1 = CountryCustomQuestion.objects.create(question="test private", country_id=self.country_id, private=True)
         q2 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
         q3 = CountryCustomQuestion.objects.create(question="test2 private", country_id=self.country_id, private=True)
-        url = reverse("country-custom-answer",
+        url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
                           "project_id": self.project_id
                       })
-        data = [dict(question_id=q1.id, answer=["private answer 1"], draft=False),
-                dict(question_id=q2.id, answer=["public answer"], draft=False),
-                dict(question_id=q3.id, answer=["private answer 2"], draft=False)]
+        data = copy(self.project_data)
+        data.update({"country_custom_answers": [dict(question_id=q1.id, answer=["private answer 1"]),
+                                                dict(question_id=q2.id, answer=["public answer"]),
+                                                dict(question_id=q3.id, answer=["private answer 2"])]})
 
-        response = self.test_user_client.post(url, data=data, format='json')
+        response = self.test_user_client.put(url, data=data, format='json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), [{'question_id': q1.id, 'answer': ['private answer 1'], 'draft': False},
-                                           {'question_id': q2.id, 'answer': ['public answer'], 'draft': False},
-                                           {'question_id': q3.id, 'answer': ['private answer 2'], 'draft': False}])
-        project = Project.objects.last()
-        self.assertNotEqual(project.data['country_custom_answers'], project.draft['country_custom_answers'])
-        self.assertEqual(project.data['country_custom_answers'], {str(q2.id): ["public answer"]})
-        self.assertEqual(project.data['country_custom_answers_private'], {str(q1.id): ["private answer 1"],
-                                                                          str(q3.id): ["private answer 2"]})
+        self.assertEqual(response.json()['published']['country_custom_answers'], {str(q2.id): ['public answer']})
+        self.assertEqual(response.json()['published']['country_custom_answers_private'],
+                         {str(q1.id): ['private answer 1'], str(q3.id): ['private answer 2']})
 
     def test_reorder_country_questions_unsuccessful(self):
         q = CountryCustomQuestion.objects.create(question="test3", country_id=self.country_id)
