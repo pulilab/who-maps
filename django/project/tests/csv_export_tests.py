@@ -1,5 +1,8 @@
+from copy import copy
+
 from rest_framework.reverse import reverse
 
+from country.models import CountryCustomQuestion, DonorCustomQuestion
 from project.models import Project
 from project.tests.setup import SetupTests
 
@@ -46,3 +49,33 @@ class CSVExportTests(SetupTests):
                                          "District: dist2 [Clients: 10, Health Workers: 2, Facilities: 8]")
         self.assertNotContains(response, "District: ward1 [Clients: 209, Health Workers: 59, Facilities: 49], "
                                          "District: ward2 [Clients: 109, Health Workers: 29, Facilities: 89]")
+
+    def test_csv_country_answers_export(self):
+        q1 = CountryCustomQuestion.objects.create(question="Country Question", country_id=self.country_id)
+        q2 = CountryCustomQuestion.objects.create(question="Country Private Question", country_id=self.country_id,
+                                                  private=True)
+        CountryCustomQuestion.objects.create(question="Country Question With No Answer", country_id=self.country_id)
+        url = reverse("project-publish",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
+        data = copy(self.project_data)
+        data.update({"country_custom_answers": [dict(question_id=q1.id, answer=["Country Answer 1"]),
+                                                dict(question_id=q2.id, answer=["Country Private Answer 1"])]})
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']['country_custom_answers'], {str(q1.id): ['Country Answer 1']})
+        self.assertEqual(response.json()['published']['country_custom_answers_private'],
+                         {str(q2.id): ['Country Private Answer 1']})
+
+        self.country.admins.add(self.user_profile_id)
+        url = reverse("csv-export")
+        response = self.test_user_client.post(url, {"ids": [Project.objects.get().id], "country": self.country_id},
+                                              format="json")
+        self.assertContains(response, "Country Question")
+        self.assertContains(response, "Country Private Question")
+        self.assertContains(response, "Country Question With No Answer")
+        self.assertContains(response, "Country Answer 1")
+        self.assertContains(response, "Country Private Answer 1")
