@@ -160,6 +160,23 @@ class ProjectTests(SetupTests):
         self.assertIsNone(response.json()[0]['history'][0]['approved'])
         self.assertIsNone(response.json()[0]['history'][0]['reason'])
 
+    def test_project_approval_approve(self):
+        project = Project.objects.get(id=self.project_id)
+        approval = project.approval
+
+        url = reverse("approval", kwargs={"pk": approval.id})
+        response = self.test_user_client.put(url, data={}, format="json")
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json(), {'detail': 'You do not have permission to perform this action.'})
+
+        self.country.admins.add(self.user_profile_id)
+        url = reverse("approval", kwargs={"pk": approval.id})
+        response = self.test_user_client.put(url, data={'approved': True, 'reason': 'all good'}, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['history']), 2)
+        self.assertTrue(response.json()['history'][0]['approved'], self.user_profile_id)
+        self.assertEqual(response.json()['history'][0]['reason'], 'all good')
+
     def test_create_validating_list_fields_invalid_data(self):
         url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_data)
