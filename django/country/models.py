@@ -178,11 +178,6 @@ class CountryField(models.Model):
             "answer": self.draft if draft_mode else self.answer,
             "project": self.project.id
         }
-
-    def to_csv(self):
-        return {self.schema_instance.question: self.answer}
-
-
 class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
     TEXT = 1
     NUMBER = 2
