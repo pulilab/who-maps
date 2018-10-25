@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
 from allauth.account.views import confirm_email
+from rest_framework_jwt.views import obtain_jwt_token
 
 import user.views as views
 
@@ -14,6 +15,6 @@ urlpatterns = [
     url(r"^all-auth/", include("allauth.urls")),
     url(r"^rest-auth/", include("rest_auth.urls")),
     url(r"^rest-auth/registration/", include("rest_auth.registration.urls")),
-    url(r'^api-token-auth/', view=views.ExpiringAuthTokenWithUserProfile.as_view(), name="api_token_auth"),
+    url(r'^api-token-auth/', obtain_jwt_token, name="api_token_auth"),
     url(r"^email-confirmation/(?P<key>\w+)/$", confirm_email, name="account_confirm_email"),
 ]
