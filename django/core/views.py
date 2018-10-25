@@ -1,11 +1,11 @@
 from django.conf import settings
 from django.utils.translation import ugettext
 
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from project.permissions import InTeamOrReadOnly
 from project.models import Project
@@ -24,12 +24,12 @@ class TokenAuthMixin(object):
     Mixin class for defining general permission and authentication settings on
     REST Framework Class Based Views.
     """
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
 
 class TeamTokenAuthMixin(object):
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated, InTeamOrReadOnly)
 
 
