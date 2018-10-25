@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'rest_auth.registration',
-    'drf_expiring_tokens',
     'ordered_model',
     'rosetta',
     'allauth',
@@ -172,7 +171,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'drf_expiring_tokens.authentication.ExpiringTokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
 }
 
@@ -192,9 +191,6 @@ REST_AUTH_SERIALIZERS = {
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'user.serializers.RegisterWithProfileSerializer'
 }
-
-EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=7)
-# ALWAYS_RESET_TOKEN = False
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
@@ -259,7 +255,7 @@ if SITE_ID in [3, 4]:
 
     REST_FRAMEWORK = {
         'DEFAULT_AUTHENTICATION_CLASSES': (
-            'drf_expiring_tokens.authentication.ExpiringTokenAuthentication',
+            'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         ),
         'DEFAULT_RENDERER_CLASSES': (
             'rest_framework.renderers.JSONRenderer',
