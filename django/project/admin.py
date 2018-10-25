@@ -318,9 +318,9 @@ class ProjectImportAdmin(admin.ModelAdmin):
             self._notify_superusers()
 
     def _notify_users(self):
-        html_template = loader.get_template('email/import_projects.html')
+        html_template = loader.get_template('email/master-inline.html')
         for email, data in self._users_to_notify.items():
-            html_message = html_template.render({'email': email, 'data': data})
+            html_message = html_template.render({'type': 'import_projects', 'email': email, 'data': data})
             mail.send_mail(
                 subject="You were added to imported projects",
                 message="",
@@ -330,8 +330,8 @@ class ProjectImportAdmin(admin.ModelAdmin):
 
     def _notify_superusers(self):
         superusers_emails = User.objects.filter(is_superuser=True).values_list('email')
-        html_template = loader.get_template("email/project_import_list.html")
-        html_message = html_template.render({'projects': self._projects_created})
+        html_template = loader.get_template("email/master-inline.html")
+        html_message = html_template.render({'type': 'project_import_list', 'projects': self._projects_created})
 
         mail.send_mail(
             subject='New projects have been imported',

@@ -34,7 +34,7 @@ class FlagMixin(object):
 
     @staticmethod
     def _notify_admins(instance):
-        html_template = loader.get_template("email/flag_content.html")
+        html_template = loader.get_template("email/master-inline.html")
         change_url = reverse('admin:cms_{}_change'.format(instance._meta.model_name), args=(instance.id,))
 
         admins = User.objects.filter(is_superuser=True)
@@ -49,7 +49,8 @@ class FlagMixin(object):
             for language, email_list in email_mapping.items():
                 with override(language):
                     subject = ugettext("Content has been flagged.")
-                    html_message = html_template.render({'change_url': change_url,
+                    html_message = html_template.render({'type': 'flag_content',
+                                                         'change_url': change_url,
                                                          'language': language})
 
                 send_mail(

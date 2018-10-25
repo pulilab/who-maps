@@ -1,89 +1,383 @@
-{% load utils %}
+<!-- {% load utils %}
 {% load staticfiles %}
+{% load i18n %} -->
 
-<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%" valign="top" bgcolor="#E3EAEF" style="margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;width:100% !important;height:100%;font-size:100%;font-family:'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:none;" ><tr><td>
+<!doctype html>
+<html style="margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-language" content="{{ language }}">
+    <meta name="viewport" content="width=device-width" />
+    <title>Email templates</title>
 
-<!-- topnav -->
-<table class="topnav-wrap" width="100%" height="50px" bgcolor="#283593" style="background-color:#283593;width:100%;height:50px;color:#FFFFFF;" >
-  <tr>
-    <td class="logo" style="padding-top:0;padding-bottom:0;padding-right:20px;padding-left:20px;" ><strong style="display:inline-block;margin-top:5px;width:163px;height:22px;border-width:0;background:transparent url('{% site_url %}/static/email/dha-logo@2x.png') no-repeat 0 0 / 163px 22px;color:transparent;text-shadow:none;" >Digital Health Atlas</strong></td>
-    <td class="link" style="text-align:right;padding-top:0;padding-bottom:0;padding-right:20px;padding-left:20px;" ><a href="http://digitalhealthatlas.org" style="word-break:break-all;color:#FFFFFF;text-decoration:none;font-size:12px;" >Visit digitalhealthatlas.org</a></td>
-  </tr>
-</table>
+    <style>
 
-<!-- headline -->
-<table class="headline-wrap" width="100%" style="width:100%;color:#283593;text-align:center;" >
-  <tr>
-    <td class="container" style="display:block !important;clear:both !important;margin-top:0 !important;margin-bottom:0 !important;margin-right:auto !important;margin-left:auto !important;max-width:600px !important;padding-top:0;padding-bottom:0;padding-right:20px;padding-left:20px;" >
-      <div class="content" style="display:block;margin-top:0;margin-bottom:0;margin-right:auto;margin-left:auto;max-width:600px;" >
-        <table style="width:100%;" >
-          <tr>
-            <td>
-              <h2 style="color:#283593;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;line-height:1.2;font-size:30px;margin-top:30px;margin-bottom:30px;margin-right:0;margin-left:0;" >Thank you!</h2>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </td>
-  </tr>
-</table>
+      img {
+        border: none;
+        -ms-interpolation-mode: bicubic;
+        max-width: 100%; }
 
-<!-- body -->
-<table class="body-wrap" bgcolor="#E3EAEF" style="width:100%;padding-top:0;padding-bottom:0;padding-right:20px;padding-left:20px;" >
-  <tr>
-    <td></td>
-    <td class="container container-bg-2" bgcolor="#FFFFFF" style="display:block !important;clear:both !important;margin-top:0 !important;margin-bottom:0 !important;margin-right:auto !important;margin-left:auto !important;max-width:600px !important;padding-top:50px;padding-bottom:50px;padding-right:50px;padding-left:50px;-webkit-box-shadow:0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);-moz-box-shadow:0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);box-shadow:0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);border-bottom: 1px solid rgba(0, 0, 0, 0.2); background: #FFFFFF url('{% site_url %}/static/email/bg-icon-2.png') no-repeat 40% bottom / 44% auto" >
+        html {
+          margin: 0;
+          padding: 0;
+        }
 
-      <!-- content -->
-      <div class="content" style="display:block;margin-top:0;margin-bottom:0;margin-right:auto;margin-left:auto;max-width:600px;" >
-      <table style="width:100%;" >
-        <tr>
-          <td>
-            <h3 class="first" style="margin-bottom:20px;margin-right:0;margin-left:0;color:#283593;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;line-height:1.2;font-size:20px;margin-top:0;" >Your account has been created!</h3>
-            <p style="margin-bottom:20px;font-weight:normal;font-size:14px;color:#212121;" >Your e-mail needs to be confirmed to finalize your registration.</p>
+      body {
+        background-color: #F2F2F2;
+        font-family: arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 14px;
+        line-height: 1.4;
+        margin: 0;
+        padding: 0;
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%; }
 
-            <p style="margin-bottom:20px;font-weight:normal;font-size:14px;color:#212121;" ><b>Please visit this link below to confim your e-mail address:</b></p>
+      table {
+        border-collapse: separate;
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+        width: 100%; }
+        table td {
+          font-family: arial, sans-serif;
+          font-size: 14px;
+          vertical-align: top; }
 
-            <p style="margin-bottom:20px;font-weight:normal;font-size:14px;color:#212121;" ><a href="{{ activate_url }}" style="color:#283593;text-decoration:none;word-break:break-all;" >{{ activate_url }}</a></p>
-          </td>
-        </tr>
-      </table>
-      </div>
-      <!-- /content -->
 
-    </td>
-    <td></td>
-  </tr>
-</table>
-<!-- /body -->
+      .body {
+        background-color: #F2F2F2;
+        width: 100%; }
 
-<!-- footer -->
-<table class="footer-wrap" style="clear:both !important;width:100%;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:20px;padding-left:20px;font-size:12px;" >
-  <tr>
-    <td></td>
-    <td class="container" style="display:block !important;clear:both !important;margin-top:0 !important;margin-bottom:0 !important;margin-right:auto !important;margin-left:auto !important;max-width:600px !important;" >
 
-      <!-- content -->
-      <div class="content" style="display:block;margin-top:0;margin-bottom:0;margin-right:auto;margin-left:auto;max-width:600px;" >
-        <table style="width:100%;" >
-          <tr>
-            <td align="center">
-              <ul style="font-weight:normal;margin-top:20px;margin-bottom:20px;margin-right:20px;margin-left:20px;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;font-size:12px;" >
-                <li style="list-style-position:inside;display:inline-block;margin-top:0;margin-bottom:10px;margin-right:10px;margin-left:10px;list-style-type:none;" ><a href="http://digitalhealthatlas.org" style="word-break:break-all;color:#9D9D9D;text-decoration:underline;" >Go to website</a></li>
-                <li style="list-style-position:inside;display:inline-block;margin-top:0;margin-bottom:10px;margin-right:10px;margin-left:10px;list-style-type:none;" ><a href="http://digitalhealthatlas.org/terms-of-use" style="word-break:break-all;color:#9D9D9D;text-decoration:underline;" >Terms of use</a></li>
-                <li style="list-style-position:inside;display:inline-block;margin-top:0;margin-bottom:10px;margin-right:10px;margin-left:10px;list-style-type:none;" ><a href="mailto:digitalhealthatlas@gmail.com" style="word-break:break-all;color:#9D9D9D;text-decoration:underline;" >Contact us</a></li>
-              </ul>
-              <p style="margin-bottom:20px;font-weight:normal;color:#9D9D9D;font-size:10px;line-height:1.4;" ><b>Disclaimer:</b> All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.</p>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <!-- /content -->
+      .container {
+        display: block;
+        margin: 0 auto !important;
 
-    </td>
-    <td></td>
-  </tr>
-</table>
-<!-- /footer -->
+        max-width: 580px;
+        padding: 10px;
+        width: 580px;
+        color: #474747; }
 
-</td></tr></table>
+
+      .content {
+        box-sizing: border-box;
+        display: block;
+        margin: 0 auto;
+        max-width: 580px;
+        padding: 20px; }
+
+
+      .main {
+        width: 100%;
+
+        background: #FFFFFF;
+        border-radius: 3px; }
+
+      .wrapper {
+        box-sizing: border-box;
+        padding: 20px; }
+
+      .content-block {
+        padding-bottom: 10px;
+        padding-top: 10px;
+      }
+
+      .header {
+        height: 80px; }
+        .header .align-right {
+          padding-top: 5px; }
+        .visit-link {
+          font-size: 12px; }
+
+      .footer {
+        clear: both;
+        margin-top: 10px;
+        text-align: center;
+        width: 100%; }
+        .footer td,
+        .footer p,
+        .footer span,
+        .footer a {
+          color: #9B9B9B;
+          font-size: 12px;
+          text-align: center; }
+        .footer .disclaimer {
+          font-size: 11px; }
+        .footer-links a + span {
+          color: #B9B9B9; }
+
+      .project-list {}
+        .list-header td {
+          padding: 5px 10px;
+          background-color: #9B9B9B;
+          font-size: 12px;
+          color: #FFFFFF; }
+        .list-header td b {
+          text-transform: uppercase; }
+        .list-content td {
+          padding-top: 20px; }
+
+
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: arial, sans-serif;
+        font-weight: 400;
+        line-height: 1.4;
+        margin: 0;
+        margin-top: 10px;
+        margin-bottom: 20px; }
+
+      h1 {
+        font-size: 20px;
+        font-weight: 700; }
+
+      h2 {
+        font-size: 16px; }
+
+      p,
+      ul,
+      ol {
+        font-family: arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        margin: 0;
+        margin-bottom: 20px;
+        padding: 0; }
+        p li,
+        ul li,
+        ol li {
+          list-style-position: inside;
+          margin-left: 10px;
+          margin-bottom: 10px; }
+
+      a {
+        color: #008DC9;
+        text-decoration: underline; }
+
+
+      .btn {
+        box-sizing: border-box;
+        width: 100%; }
+        .btn > tbody > tr > td {
+          padding-top: 10px;
+          padding-bottom: 20px; }
+        .btn table {
+          width: auto; }
+        .btn table td {
+          background-color: #FFFFFF;
+          text-align: center; }
+        .btn a {
+          background-color: #FFFFFF;
+          border: solid 1px #008DC9;
+          box-sizing: border-box;
+          color: #008DC9;
+          cursor: pointer;
+          display: inline-block;
+          font-size: 14px;
+          font-weight: bold;
+          margin: 0;
+          padding: 10px 20px;
+          text-decoration: none; }
+
+      .btn-primary table td {
+        background-color: #008DC9; }
+
+      .btn-primary a {
+        background-color: #008DC9;
+        border-color: #008DC9;
+        color: #FFFFFF; }
+
+
+      .last {
+        margin-bottom: 0; }
+
+      .first {
+        margin-top: 0; }
+
+      .align-center {
+        text-align: center; }
+
+      .align-right {
+        text-align: right; }
+
+      .align-left {
+        text-align: left; }
+
+      .clear {
+        clear: both; }
+
+      .mt0 {
+        margin-top: 0; }
+
+      .mb0 {
+        margin-bottom: 0; }
+
+      .nowrap {
+        white-space: nowrap; }
+
+      .preheader {
+        color: transparent;
+        display: none;
+        height: 0;
+        max-height: 0;
+        max-width: 0;
+        opacity: 0;
+        overflow: hidden;
+        mso-hide: all;
+        visibility: hidden;
+        width: 0; }
+
+      hr {
+        border: 0;
+        border-bottom: 1px solid #D6D6D6;
+        margin: 20px 0; }
+
+
+      @media only screen and (max-width: 620px) {
+
+        table[class=body] .wrapper,
+        table[class=body] .article {
+          padding: 15px !important; }
+        table[class=body] .content {
+          padding: 0 !important; }
+        table[class=body] .container {
+          padding: 0 !important;
+          width: 100% !important; }
+        table[class=body] .main {
+          border-left-width: 0 !important;
+          border-radius: 0 !important;
+          border-right-width: 0 !important; }
+        table[class=body] .btn table {
+          width: 100% !important; }
+        table[class=body] .btn a {
+          width: 100% !important; }
+        table[class=body] .img-responsive {
+          height: auto !important;
+          max-width: 100% !important;
+          width: auto !important; }
+        .footer > table {
+          padding: 0 15px 15px; }
+        }
+
+
+      @media all {
+        .ExternalClass {
+          width: 100%; }
+        .ExternalClass,
+        .ExternalClass p,
+        .ExternalClass span,
+        .ExternalClass font,
+        .ExternalClass td,
+        .ExternalClass div {
+          line-height: 100%; }
+        .apple-link a {
+          color: inherit !important;
+          font-family: inherit !important;
+          font-size: inherit !important;
+          font-weight: inherit !important;
+          line-height: inherit !important;
+          text-decoration: none !important; }
+        .btn-primary table td:hover {
+          background-color: #008DC9 !important; }
+        .btn-primary a:hover {
+          background-color: #008DC9 !important;
+          border-color: #008DC9 !important; }
+        }
+    </style>
+  </head>
+
+
+  <body style="background-color:#F2F2F2;font-family:arial, sans-serif;-webkit-font-smoothing:antialiased;font-size:14px;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;" >
+    <table border="0" cellpadding="0" cellspacing="0" class="body" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;background-color:#F2F2F2;width:100%;" >
+      <tr>
+        <td class="container" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;display:block;margin-top:0 !important;margin-bottom:0 !important;margin-right:auto !important;margin-left:auto !important;max-width:580px;padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:580px;color:#474747;" >
+          <div class="content" style="box-sizing:border-box;display:block;margin-top:0;margin-bottom:0;margin-right:auto;margin-left:auto;max-width:580px;padding-top:20px;padding-bottom:20px;padding-right:20px;padding-left:20px;" >
+
+            <!-- START CENTERED WHITE CONTAINER -->
+            <span class="preheader" style="color:transparent;display:none;height:0;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;visibility:hidden;width:0;" >This is preheader text. Some clients will show this text as a preview.</span>
+            <table class="main" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;background-color:#FFFFFF;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;border-radius:3px;" >
+
+              <!-- START MAIN CONTENT AREA -->
+              <tr>
+                <td class="wrapper" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-top:20px;padding-bottom:20px;padding-right:20px;padding-left:20px;" >
+                  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
+                    <tr class="header" style="height:80px;" >
+                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;" >
+                        <!-- TODO: Replace image link with global path -->
+                        <!-- Path to img: '/frontend/static/email-who-logo.png' -->
+                        <img src="../../../frontend/static/email-who-logo.png" width="154" height="60" alt="WHO x DHA logo" style="border-style:none;-ms-interpolation-mode:bicubic;max-width:100%;" >
+                      </td>
+                      <td class="align-right" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:right;padding-top:5px;" >
+                        <!-- TODO: Add Website link -->
+                        <a href="http://" class="visit-link nowrap" style="color:#008DC9;text-decoration:underline;font-size:12px;white-space:nowrap;" >{% trans "Visit website" %}</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;" >
+
+
+
+                        <!-- TEMPLATES -->
+
+
+                        <!-- TEMPLATE: EMAIL CONFIRAMTION SIGNUP MESSAGE -->
+                        {% if type == "email_confirmation_signup_message" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Thank you!" %}</h1>
+                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Your account has been created!" %}</h2>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% blocktrans %}Your e-mail needs to be confirmed to finalize your registration.{% endblocktrans %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" ><b>{% blocktrans %}Please visit this link below to confim your e-mail address:{% endblocktrans %}</b></p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                          <a href="{{ activate_url }}" target="_blank " style="color:#008DC9;text-decoration:underline;" >{{ activate_url }}</a>
+                        </p>
+                        {% endif %}
+                        <!-- /TEMPLATE: EMAIL CONFIRAMTION SIGNUP MESSAGE  -->
+
+
+                      <!-- END TEMPLATES -->
+
+
+
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+            <!-- END MAIN CONTENT AREA -->
+            </table>
+
+
+            <!-- START FOOTER -->
+            <div class="footer" style="clear:both;margin-top:10px;text-align:center;width:100%;" >
+              <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
+                <tr>
+                  <tr>
+                    <td class="content-block footer-links" style="font-family:arial, sans-serif;vertical-align:top;padding-bottom:10px;padding-top:10px;color:#9B9B9B;font-size:12px;text-align:center;" >
+                      <!-- TODO: Update footer links -->
+                      <a href="http://" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Go to website" %}</a>
+                      <span style="color:#9B9B9B;font-size:12px;text-align:center;" >&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                      <a href="http://" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Terms of use" %}</a>
+                      <span style="color:#9B9B9B;font-size:12px;text-align:center;" >&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                      <a href="mailto:" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Contact us" %}</a>
+                    </td>
+                  </tr>
+                  <td class="content-block" style="font-family:arial, sans-serif;vertical-align:top;padding-bottom:10px;padding-top:10px;color:#9B9B9B;font-size:12px;text-align:center;" >
+                    <span class="disclaimer" style="color:#9B9B9B;text-align:center;font-size:11px;" >
+                      {% trans "All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use." %}
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!-- END FOOTER -->
+
+          <!-- END CENTERED WHITE CONTAINER -->
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

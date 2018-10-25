@@ -251,12 +251,13 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         new_team_members = [x for x in validated_data.get('team', []) if x not in instance.team.all()]
         new_viewers = [x for x in validated_data.get('viewers', []) if x not in instance.viewers.all()]
 
-        html_template = loader.get_template("email/new_member.html")
+        html_template = loader.get_template("email/master-inline.html")
 
         for profile in new_team_members:
             with override(profile.language):
                 subject = ugettext("You were added to a project!")
                 html_message = html_template.render({
+                    "type": "new_member",
                     "project_id": instance.id,
                     "project_name": instance.name,
                     "role": "team member",

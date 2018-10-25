@@ -42,7 +42,7 @@ def send_project_approval_digest():
             if not projects_today and not projects_earlier:
                 return
 
-            html_template = loader.get_template('email/status_report_inline.html')
+            html_template = loader.get_template('email/master-inline.html')
 
             email_mapping = defaultdict(list)
             for profile in country.users.all():
@@ -51,7 +51,8 @@ def send_project_approval_digest():
             for language, email_list in email_mapping.items():
                 with override(language):
                     subject = ugettext('Projects waiting for your approval')
-                    html_message = html_template.render({'projects_today': projects_today,
+                    html_message = html_template.render({'type': 'status_report',
+                                                         'projects_today': projects_today,
                                                          'projects_earlier': projects_earlier,
                                                          'language': language})
 

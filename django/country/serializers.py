@@ -91,17 +91,17 @@ class UpdateAdminMixin:
         if new_users:
             instance.admins.remove(*new_users)
             instance.super_admins.remove(*new_users)
-            self.notify_users(new_users, instance, 'User', 'email/added_to_group.html')
+            self.notify_users(new_users, instance, 'User', 'email/master-inline.html')
 
         if new_admins:
             instance.users.remove(*new_admins)
             instance.super_admins.remove(*new_admins)
-            self.notify_users(new_admins, instance, 'Admin', 'email/added_to_group.html')
+            self.notify_users(new_admins, instance, 'Admin', 'email/master-inline.html')
 
         if new_super_admins:
             instance.users.remove(*new_super_admins)
             instance.admins.remove(*new_super_admins)
-            self.notify_users(new_super_admins, instance, 'Super Admin', 'email/added_to_group.html')
+            self.notify_users(new_super_admins, instance, 'Super Admin', 'email/master-inline.html')
 
         return instance
 
@@ -118,7 +118,8 @@ class UpdateAdminMixin:
             with override(language):
                 subject = "You have been selected as {} for {}".format(group, instance.name)
                 subject = ugettext(subject)
-                html_message = html_template.render({'change_url': change_url,
+                html_message = html_template.render({'type': 'country_admin',
+                                                     'change_url': change_url,
                                                      'group': group,
                                                      'name': instance.name,
                                                      'language': language})
