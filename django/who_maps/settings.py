@@ -175,6 +175,7 @@ REST_FRAMEWORK = {
     ),
 }
 
+
 def jwt_response_payload_handler(token, user=None, request=None):
     return {
         'token': token,
@@ -182,6 +183,7 @@ def jwt_response_payload_handler(token, user=None, request=None):
         'account_type': user.userprofile.account_type if user.userprofile else None,
         'is_superuser': user.is_superuser
     }
+
 
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
