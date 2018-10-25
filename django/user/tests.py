@@ -1,10 +1,5 @@
-from datetime import timedelta
-
 from django.urls import reverse
-from django.utils import timezone
-from django.conf import settings
 from django.core import mail
-from mock import patch
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from allauth.account.models import EmailConfirmation
@@ -46,9 +41,6 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, 201, response.json())
 
         self.donor = Donor.objects.create(name='Donor 1', code='dnr1')
-
-        # Store to be able to mock later.
-        self.timezone_now = timezone.now()
 
     def test_register_user(self):
         url = reverse("rest_register")
@@ -109,14 +101,6 @@ class UserTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 400)
         self.assertIn(response.json()["non_field_errors"][0], "Unable to log in with provided credentials.")
-
-    @patch("django.utils.timezone.now")
-    def test_expired_token(self, mock_timezone_now):
-        mock_timezone_now.return_value = self.timezone_now + settings.EXPIRING_TOKEN_LIFESPAN + timedelta(days=1)
-        url = reverse("rest_user_details")
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, 401)
-        self.assertEqual(response.json().get("detail"), "Token has expired")
 
     def test_register_user_creates_user_profile(self):
         url = reverse("rest_register")
