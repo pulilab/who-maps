@@ -175,6 +175,13 @@ REST_FRAMEWORK = {
     ),
 }
 
+def jwt_response_payload_handler(token, user=None, request=None):
+    return {
+        'token': token,
+        'user_profile_id': user.userprofile.id if user.userprofile else None,
+        'account_type': user.userprofile.account_type if user.userprofile else None,
+        'is_superuser': user.is_superuser
+    }
 # django-allauth and rest-auth settings
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
