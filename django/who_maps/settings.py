@@ -182,6 +182,13 @@ def jwt_response_payload_handler(token, user=None, request=None):
         'account_type': user.userprofile.account_type if user.userprofile else None,
         'is_superuser': user.is_superuser
     }
+
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
+    'JWT_AUTH_HEADER_PREFIX': 'Token',
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7)
+}
+
 # django-allauth and rest-auth settings
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
