@@ -81,12 +81,12 @@
             @click="cancel">
             <translate>Cancel</translate>
           </el-button>
-          <el-button
+          <!-- <el-button
             type="text"
             class="DeleteButton"
             @click="clearAll">
             <translate>Clear All</translate>
-          </el-button>
+          </el-button> -->
         </el-col>
         <el-col class="PrimaryButtons">
           <el-button

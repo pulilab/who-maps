@@ -13,8 +13,8 @@ const config = {
   fieldsBagName: 'fieldsBag',
   // i18n: null, // the vue-i18n plugin instance
   // i18nRootKey: 'validations', // the nested key under which the validation messages will be located
-  // inject: true,
-  // locale: 'en',
+  inject: false,
+  locale: 'en',
   strict: false
   // validity: false,
 };

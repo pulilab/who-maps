@@ -3,7 +3,7 @@ import { mapGetters, mapActions } from 'vuex';
 const MapMixin = {
   data () {
     return {
-      zoom: 3,
+      zoom: 2,
       countryCenterIcons: {},
       countryCenterOptions: {},
       mapOptions: {
@@ -26,7 +26,8 @@ const MapMixin = {
       getActiveSubLevel: 'landing/getActiveSubLevel',
       subNationalProjects: 'landing/getSelectedCountrySubNationalProjects',
       nationalProjects: 'landing/getSelectedCountryNationalProjects',
-      mapProjects: 'landing/getProjectsMap'
+      mapProjects: 'landing/getProjectsMap',
+      currentZoom: 'landing/getCurrentZoom'
     }),
     activeCountry: {
       get () {
@@ -71,6 +72,11 @@ const MapMixin = {
         return this.activeCountry;
       }
     },
+    selectedCountryAndMapReady () {
+      if (this.mapReady) {
+        return this.selectedCountry;
+      }
+    },
     clusterOptions () {
       return {
         disableClusteringAtZoom: 8,
@@ -111,6 +117,14 @@ const MapMixin = {
         this.$nextTick(() => {
           this.$refs.markerCluster.mapObject.refreshClusters();
         });
+      }
+    },
+    selectedCountryAndMapReady: {
+      immediate: false,
+      handler (selectedCountry, old) {
+        if (old && !selectedCountry && this.currentZoom >= 4) {
+          this.centerOn([0, 0], 2);
+        }
       }
     }
   },

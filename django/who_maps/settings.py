@@ -36,12 +36,14 @@ INSTALLED_APPS = [
     'rest_auth',
     'rest_auth.registration',
     'drf_expiring_tokens',
+    'ordered_model',
     'rosetta',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'corsheaders',
     'djcelery_email',
+    'simple_history',
     'user',
     'core',
     'project',
@@ -65,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.ExceptionLoggingMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'who_maps.urls'
@@ -158,6 +161,8 @@ STATIC_ROOT = '/usr/share/django/static'
 MEDIA_ROOT = '/usr/share/django/media'
 # MEDIA_ROOT = '/usr/share/nginx/html/media'
 MEDIA_URL = '/media/'
+
+FILE_UPLOAD_PERMISSIONS = 0o644
 
 SITE_ID = int(os.environ.get('SITE_ID', 1))
 CI_RUN = bool(os.environ.get('CI_RUN', False))
@@ -314,8 +319,8 @@ LOGGING = {
     },
 }
 
-LOGIN_URL = '/login'
-LOGIN_REDIRECT_URL = '/login'
+LOGIN_URL = '/admin/login/'
+LOGIN_REDIRECT_URL = '/admin/login/'
 
 ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
 ROSETTA_WSGI_AUTO_RELOAD = True
@@ -353,3 +358,7 @@ if CI_RUN:
     MEDIA_ROOT = "/root/who-maps/django/media/"
 
 OSM_MAP_CLI_KEY = 'a9ea45b5-ab37-4323-8263-767aa5896113'
+
+# Uncomment these lines if you want to redirect all emails to the forced addresses
+# EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
+# TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "nico@pulilab.com", "f@pulilab.com"]

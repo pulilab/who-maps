@@ -1,6 +1,0 @@
-{
-  "name": "CountryPartners",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./countryPartnersComponent.js"
-}

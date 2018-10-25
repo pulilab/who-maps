@@ -17,6 +17,7 @@ export default {
       store.dispatch('system/loadUserProfiles'),
       store.dispatch('system/loadDonors')
     ]);
+    store.dispatch('admin/questions/setQuestionnaireType', 'donor');
     await store.dispatch('admin/donor/fetchData');
   }
 };

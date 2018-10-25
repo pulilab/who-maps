@@ -2,10 +2,13 @@
   <div
     id="technology"
     class="TechnologyOverview">
-    <collapsible-card title="Technology overview">
+    <collapsible-card
+      ref="collapsible"
+      title="Technology overview">
       <el-form-item
         :error="errors.first('implementation_dates')"
         :label="$gettext('Technology deployment date')"
+        :required="rules.implementation_dates && rules.implementation_dates.required"
       >
         <el-date-picker
           v-validate="rules.implementation_dates"
@@ -19,7 +22,9 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('licenses')"
-        :label="$gettext('Under what license is the project governed?')">
+        :label="$gettext('Under what license is the project governed?')"
+        :required="rules.licenses && rules.licenses.required"
+      >
         <license-selector
           v-validate="rules.licenses"
           v-model="licenses"
@@ -29,7 +34,9 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('repository')"
-        :label="$gettext('Code documentation or download link')">
+        :label="$gettext('Code documentation or download link')"
+        :required="rules.repository && rules.repository.required"
+      >
         <link-field
           v-validate="rules.repository"
           v-model="repository"
@@ -39,7 +46,9 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('mobile_application')"
-        :label="$gettext('Link to the application')">
+        :label="$gettext('Link to the application')"
+        :required="rules.mobile_application && rules.mobile_application.required"
+      >
         <link-field
           v-validate="rules.mobile_application"
           v-model="mobile_application"
@@ -49,7 +58,9 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('wiki')"
-        :label="$gettext('Link to the wiki page')">
+        :label="$gettext('Link to the wiki page')"
+        :required="rules.wiki && rules.wiki.required"
+      >
         <link-field
           v-validate="rules.wiki"
           v-model="wiki"
@@ -80,9 +91,9 @@ export default {
     ...mapGettersActions({
       implementation_dates: ['project', 'getImplementationDates', 'setImplementationDates', 0],
       licenses: ['project', 'getLicenses', 'setLicenses', 0],
-      repository: ['project', 'getRepository', 'setRepository', 300],
-      mobile_application: ['project', 'getMobileApplication', 'setMobileApplication', 300],
-      wiki: ['project', 'getWiki', 'setWiki', 300]
+      repository: ['project', 'getRepository', 'setRepository', 0],
+      mobile_application: ['project', 'getMobileApplication', 'setMobileApplication', 0],
+      wiki: ['project', 'getWiki', 'setWiki', 0]
     })
   },
   mounted () {
@@ -90,6 +101,7 @@ export default {
   },
   methods: {
     async validate () {
+      this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate()
       ]);

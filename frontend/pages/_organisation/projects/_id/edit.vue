@@ -6,7 +6,10 @@
 
 <script>
 export default {
-  middleware: ['isLoggedIn']
+  middleware: ['isLoggedIn'],
+  async fetch ({store}) {
+    store.dispatch('landing/resetSearch');
+  }
 };
 </script>
 
@@ -36,7 +39,7 @@ export default {
           .el-button {
             .Step {
               background-color: lighten(@colorDraft, 10%) !important;
-              color: @colorTextPrimary;
+              color: @colorTextPrimary !important;
             }
           }
         }

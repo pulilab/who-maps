@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[240],{"./src/MapsToolkit/Resource/template/5-1c-1.html":function(n,a){n.exports="<p>\r\n  <translate>\r\n    i) Champion(s) have decision-making capabilities and authority\r\n  </translate>\r\n</p>"}}]);

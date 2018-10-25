@@ -97,6 +97,11 @@ export default {
       if (this.activeSubLevel && this.mapReady) {
         return this.activeSubLevel;
       }
+    },
+    nationalLevelCoverageAndNationalProjects () {
+      if (this.nationalLevelCoverage && this.nationalProjects) {
+        return this.nationalProjects;
+      }
     }
   },
   watch: {
@@ -126,12 +131,10 @@ export default {
         }
       }
     },
-    nationalProjects: {
+    nationalLevelCoverageAndNationalProjects: {
       immediate: false,
       handler () {
-        if (this.nationalLevelCoverage) {
-          this.countryCenterIcon = this.countryCenterIconGenerator();
-        }
+        this.countryCenterIcon = this.countryCenterIconGenerator();
       }
     }
   },
@@ -199,8 +202,6 @@ export default {
   @import "../../../assets/style/variables.less";
   @import "../../../assets/style/mixins.less";
 
-  .CountryDetailsOverlay {}
-
   .DistrictCenterIcon {
     background-image: url('~/assets/img/pins/pin-with-counter.svg');
 
@@ -210,6 +211,7 @@ export default {
 
      &.EmptyMarker {
         opacity: 0.6 !important;
+        display: none;
       }
 
      span {

@@ -14,11 +14,14 @@
       @sort-change="sortChanged"
     >
       <el-table-column
+        :resizable="false"
         type="selection"
-        width="38"
+        align="center"
+        width="35"
       />
       <el-table-column
-        v-if="selectedColumns.includes(1)"
+        v-if="selectedColumns.includes('1')"
+        :resizable="false"
         :label="$gettext('Project Name')"
         fixed
         sortable="custom"
@@ -33,7 +36,8 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(2)"
+        v-if="selectedColumns.includes('2')"
+        :resizable="false"
         :label="$gettext('Country')"
         sortable="custom"
         prop="country__name"
@@ -46,7 +50,8 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(3)"
+        v-if="selectedColumns.includes('3')"
+        :resizable="false"
         :label="$gettext('Organisation Name')"
         sortable="custom"
         prop="organisation__name"
@@ -58,7 +63,8 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(4)"
+        v-if="selectedColumns.includes('4')"
+        :resizable="false"
         :label="$gettext('Government Investor')"
         sortable="custom"
         prop="project__data__government_investor"
@@ -69,7 +75,8 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(5)"
+        v-if="selectedColumns.includes('5')"
+        :resizable="false"
         :label="$gettext('Region')"
         sortable="custom"
         prop="country__region"
@@ -81,7 +88,8 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(6)"
+        v-if="selectedColumns.includes('6')"
+        :resizable="false"
         :label="$gettext('Donors')"
         width="240">
         <template slot-scope="scope">
@@ -92,7 +100,8 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(7)"
+        v-if="selectedColumns.includes('7')"
+        :resizable="false"
         :label="$gettext('Contact Name')"
         width="240">
         <template slot-scope="scope">
@@ -104,24 +113,29 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="selectedColumns.includes(8)"
+        v-if="selectedColumns.includes('8')"
+        :resizable="false"
         :label="$gettext('Implementation Overview')"
         width="240">
         <template slot-scope="scope">
           <p>{{ scope.row.implementation_overview }}</p>
         </template>
       </el-table-column>
+
       <el-table-column
-        v-if="selectedColumns.includes(9)"
+        v-if="selectedColumns.includes('9')"
+        :resizable="false"
         :label="$gettext('Geographic Scope')"
         width="240">
         <template slot-scope="scope">
           <p>{{ scope.row.geographic_scope }}</p>
         </template>
       </el-table-column>
+
       <el-table-column
-        v-if="selectedColumns.includes(10)"
-        :label="$gettext('Health Focus Areas')"
+        v-if="selectedColumns.includes('10')"
+        :resizable="false"
+        label="Health Focus Areas"
         width="240">
         <template slot-scope="scope">
           <health-focus-areas-list
@@ -129,6 +143,42 @@
             :limit="3" />
         </template>
       </el-table-column>
+
+      <el-table-column
+        v-for="col in countryColumns"
+        :resizable="false"
+        :key="col.id"
+        :render-header="customHeaderRenderer"
+        :label="col.label"
+        width="240">
+        <template slot-scope="scope">
+          <custom-answers-cell
+            :row="scope.row"
+            :id="col.originalId"
+            :type="col.type"
+            :limit="3"
+          />
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        v-for="col in donorColumns"
+        :resizable="false"
+        :key="col.id"
+        :render-header="customHeaderRenderer"
+        :label="col.label"
+        width="240">
+        <template slot-scope="scope">
+          <custom-answers-cell
+            :row="scope.row"
+            :id="col.originalId"
+            :type="col.type"
+            :donor-id="col.donorId"
+            :limit="3"
+          />
+        </template>
+      </el-table-column>
+
     </el-table>
 
     <div class="Pagination">
@@ -158,6 +208,7 @@ import OrganisationItem from '../common/OrganisationItem';
 import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
 import DonorsList from '../common/list/DonorsList';
 import RegionItem from '../common/RegionItem';
+import CustomAnswersCell from './CustomAnswersCell';
 
 export default {
   components: {
@@ -166,7 +217,8 @@ export default {
     OrganisationItem,
     HealthFocusAreasList,
     DonorsList,
-    RegionItem
+    RegionItem,
+    CustomAnswersCell
   },
   data () {
     return {
@@ -181,7 +233,9 @@ export default {
       selectedColumns: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
       selectAll: 'dashboard/getSelectAll',
-      total: 'dashboard/getTotal'
+      total: 'dashboard/getTotal',
+      countryColumns: 'dashboard/getCountryColumns',
+      donorColumns: 'dashboard/getDonorColumns'
     }),
     ...mapGettersActions({
       pageSize: ['dashboard', 'getPageSize', 'setPageSize', 0],
@@ -200,9 +254,11 @@ export default {
     selectAll: {
       immediate: true,
       handler (value) {
-        if (value && this.$refs.mainTable) {
+        if (this.$refs.mainTable) {
           this.$refs.mainTable.clearSelection();
-          this.$refs.mainTable.toggleAllSelection();
+          if (value) {
+            this.$refs.mainTable.toggleAllSelection();
+          }
         }
       }
     },
@@ -237,11 +293,14 @@ export default {
     ...mapActions({
       setSelectedRows: 'dashboard/setSelectedRows'
     }),
+    customHeaderRenderer (h, {column, $index}) {
+      return h('span', {attrs: {title: column.label}}, column.label);
+    },
     selectHandler (selection) {
       this.setSelectedRows(selection.map(s => s.id));
     },
     rowClassCalculator ({row}) {
-      return this.selectedRows.includes(row.id) ? 'Selected' : 'NotSelected';
+      return this.selectedRows.includes('row'.id) ? 'Selected' : 'NotSelected';
     },
     sortChanged ({prop, order}) {
       if (order === 'descending') {
@@ -288,6 +347,9 @@ export default {
       th {
         > .cell {
           line-height: 24px;
+          // truncate long headers
+          white-space: nowrap;
+          //
         }
 
         &.is-leaf {
@@ -337,14 +399,6 @@ export default {
         }
       }
 
-      // select row
-      .el-table-column--selection {
-        > .cell {
-          padding: 0 10px;
-          text-align: center;
-        }
-      }
-
       // selected table row
       .el-table__row {
         &.Selected {
@@ -358,19 +412,32 @@ export default {
         }
       }
 
-      .caret-wrapper {
-        position: absolute;
-        top: -2px;
-        right: 2px;
-        vertical-align: top;
-        height: 30px;
-
-        i {
-          border-width: 4px;
+      .el-table-column--selection {
+        > .cell {
+          text-overflow: clip !important;
         }
       }
 
+      .caret-wrapper {
+        position: absolute;
+        top: 1px;
+        right: 4px;
+      }
+
+      .el-table__empty-block {
+        position: relative;
+      }
+
+      .el-table__empty-text {
+        position: absolute;
+        top: 24px;
+        left: 20px;
+        width: auto;
+      }
+
       .ProjectCard {
+        overflow: visible;
+
         .ProjectName {
           padding-right: 12px;
         }
@@ -380,9 +447,24 @@ export default {
         }
 
         .ProjectLegend {
-          top: -1px;
-          right: 0;
+          top: 1px;
+          right: -1px;
           opacity: 1 !important;
+
+          .svg-inline--fa {
+            position: relative;
+            height: 14px;
+            font-size: 12px;
+
+            &.fa-star {
+              right: 1px;
+              font-size: 11px;
+            }
+
+            &.fa-globe-africa {
+              right: 1px;
+            }
+          }
         }
       }
 
@@ -417,22 +499,28 @@ export default {
         }
       }
 
-      .HealthFocusAreasList {
+      .HealthFocusAreasList,
+      .CustomAnswersCell {
         ul {
           list-style-type: none;
           margin: 0;
           padding: 0;
 
           li {
-            display: inline-flex;
-            align-items: flex-start;
-            width: 100%;
+            position: relative;
 
-            .svg-inline--fa {
-              position: relative;
-              top: -1px;
-              display: inline-block;
-              margin-right: 5px;
+            > span {
+              &:first-child {
+                position: absolute;
+                left: 0;
+                top: 0;
+              }
+
+              &:last-child {
+                display: block;
+                padding-left: 15px;
+                .textTruncate();
+              }
             }
           }
         }
@@ -454,7 +542,7 @@ export default {
       text-align: right;
 
       .el-pagination {
-        padding: 11px 20px;
+        padding: 11px 15px;
         font-weight: 400;
 
         .el-pagination__sizes {

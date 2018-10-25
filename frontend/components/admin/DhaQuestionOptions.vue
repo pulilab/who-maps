@@ -6,46 +6,59 @@
       <li
         v-for="(option, index) in options"
         :key="index">
-        <fa icon="caret-right" />
+        <fa icon="check-circle" />
         <span class="Option">{{ option }}</span>
         <el-button
+          v-if="!disabled"
+          :disabled="disabled"
           type="text"
           size="mini"
           class="DeleteButton IconLeft RemoveOption"
-          @click="removeOption({questionId, index})"><fa icon="times" /></el-button>
+          @click="removeOption(index)"><fa icon="times" /></el-button>
       </li>
     </ul>
-    <el-row
-      type="flex"
-      align="middle">
-      <el-col :span="16">
-        <el-input
-          ref="input"
-          v-model="inputField"
-          :placeholder="$gettext('Add a new option here')"
-          type="text"
-          @keyup.enter="addLocalOption" />
-      </el-col>
-      <el-col :span="8">
-        <el-button
-          :disabled="!inputField"
-          type="text"
-          class="IconLeft AddOption"
-          @click="addLocalOption"><fa icon="plus" /> <translate>Add</translate></el-button>
-      </el-col>
-    </el-row>
+    <el-tooltip
+      :disabled="!disabled"
+      :content="$gettext('Unable to add or remove options on saved questions')"
+      placement="top">
+      <el-row
+        type="flex"
+        align="middle">
+
+        <el-col :span="16">
+          <el-input
+            ref="input"
+            v-model="inputField"
+            :disabled="disabled"
+            :placeholder="$gettext('Add a new option here')"
+            type="text"
+            @keyup.enter.native="addOption" />
+        </el-col>
+        <el-col :span="8">
+          <el-button
+            :disabled="!inputField || disabled"
+            type="text"
+            class="IconLeft AddOption"
+            @click="addOption"><fa icon="plus" /> <translate>Add</translate></el-button>
+        </el-col>
+
+      </el-row>
+    </el-tooltip>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
 
 export default {
 
   props: {
-    questionId: {
-      type: String,
-      required: true
+    options: {
+      type: Array,
+      default: () => []
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -54,26 +67,12 @@ export default {
       inputField: ''
     };
   },
-
-  computed: {
-    ...mapGetters({
-      getOptions: 'admin/questions/getQuestionOptionsById'
-    }),
-
-    options () {
-      return this.getOptions(this.questionId);
-    }
-  },
-
   methods: {
-
-    ...mapActions({
-      removeOption: 'admin/questions/removeOption',
-      addOption: 'admin/questions/addOption'
-    }),
-
-    addLocalOption () {
-      this.addOption({ 'questionId': this.questionId, 'optionStr': this.inputField });
+    removeOption (index) {
+      this.options.splice(index, 1);
+    },
+    addOption () {
+      this.options.push(this.inputField);
       this.inputField = '';
       this.$refs.input.focus();
     }

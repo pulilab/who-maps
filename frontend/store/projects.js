@@ -167,7 +167,7 @@ export const actions = {
         commit('SET_USER_PROJECT_LIST', data);
       }
     } catch (error) {
-      console.log(error);
+      console.error('projects/loadUserProjects failed');
       return Promise.reject(error);
     }
   },
@@ -189,8 +189,8 @@ export const actions = {
         commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', coverageVersions.data);
       }
     } catch (error) {
-      console.log(error);
-      // return Promise.reject(error);
+      console.error('projects/loadProjectDetails failed');
+      return Promise.reject(error);
     }
   },
   async snapShotProject ({state, dispatch}) {
@@ -199,10 +199,14 @@ export const actions = {
     return dispatch('loadProjectDetails', id);
   },
   async loadProjectStructure ({ state, commit }) {
-    const structure = state.projectStructure;
-    if (isEmpty(structure)) {
-      const { data } = await this.$axios.get('/api/projects/structure/');
-      commit('SET_PROJECT_STRUCTURE', data);
+    try {
+      const structure = state.projectStructure;
+      if (isEmpty(structure)) {
+        const { data } = await this.$axios.get('/api/projects/structure/');
+        commit('SET_PROJECT_STRUCTURE', data);
+      }
+    } catch (e) {
+      console.error('projects/loadProjectStructure failed');
     }
   },
   addProjectToList ({commit}, project) {
@@ -213,6 +217,9 @@ export const actions = {
   },
   removeProject ({commit}, id) {
     commit('RM_USER_PROJECT', id);
+  },
+  resetProjectsData ({commit}) {
+    commit('RESET_PROJECTS_DATA');
   }
 };
 
@@ -241,5 +248,12 @@ export const mutations = {
   },
   SET_CURRENT_PROJECT_COVERAGE_VERSIONS: (state, coverage) => {
     state.currentProjectCoverageVersions = coverage;
+  },
+  RESET_PROJECTS_DATA: state => {
+    state.userProjects = [];
+    state.currentProject = null;
+    state.projectStructure = {};
+    state.currentProjectToolkitVersions = [];
+    state.currentProjectCoverageVersions = [];
   }
 };

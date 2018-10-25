@@ -11,6 +11,7 @@ export default {
   },
   middleware: ['isLoggedIn'],
   async fetch ({store, params}) {
+    store.dispatch('landing/resetSearch');
     await store.dispatch('projects/setCurrentProject', params.id);
     await Promise.all([
       store.dispatch('project/loadProject', params.id),

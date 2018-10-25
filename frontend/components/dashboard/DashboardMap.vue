@@ -7,7 +7,7 @@
         :world-copy-jump="true"
         :options="mapOptions"
         @zoomend="zoomChangeHandler"
-        @load="setMapReady(true)"
+        @leaflet:load="setMapReady(true)"
       >
         <l-tilelayer
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
@@ -86,7 +86,8 @@ export default {
       getActiveSubLevel: 'dashboard/getActiveSubLevel',
       subNationalProjects: 'dashboard/getSelectedCountrySubNationalProjects',
       nationalProjects: 'dashboard/getSelectedCountryNationalProjects',
-      mapProjects: 'dashboard/getProjectsMap'
+      mapProjects: 'dashboard/getProjectsMap',
+      currentZoom: 'dashboard/getCurrentZoom'
     })
   },
   methods: {

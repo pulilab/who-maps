@@ -19,6 +19,9 @@ import ProjectData from '../../../../components/project/ProjectData';
 export default {
   components: {
     ProjectData
+  },
+  async fetch ({store}) {
+    store.dispatch('landing/resetSearch');
   }
 };
 </script>
@@ -51,8 +54,8 @@ export default {
 
     .PublishedLabel {
       display: inline-block;
-      height: 24px;
-      margin: 0 2px;
+      height: 23px;
+      margin: 0 6px;
       padding: 0 10px;
       font-size: @fontSizeSmall;
       font-weight: 700;

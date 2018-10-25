@@ -12,37 +12,18 @@
 </template>
 
 <script>
-import isEmpty from 'lodash/isEmpty';
 import AdvancedSearch from '../../components/dashboard/AdvancedSearch';
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   components: {
     AdvancedSearch
   },
   middleware: ['isLoggedIn'],
-  fetch ({query, store}) {
-    if (!isEmpty(query)) {
-      store.dispatch('dashboard/setSearchOptions', query);
-    }
-  },
-  computed: {
-    ...mapGetters({
-      searchParameters: 'dashboard/getSearchParameters'
-    })
-  },
-  watch: {
-    searchParameters: {
-      immediate: false,
-      handler (query) {
-        this.$router.replace({...this.$route, query});
-      }
-    }
+  fetch ({store}) {
+    store.dispatch('landing/resetSearch');
   },
   mounted () {
-    if (isEmpty(this.$route.query)) {
-      this.$router.replace({...this.$route, query: this.searchParameters});
-    }
     if (window) {
       const savedFilters = window.localStorage.getItem('savedFilters');
       if (savedFilters) {
@@ -81,6 +62,7 @@ export default {
 
       .DashboardMap {
         height: calc(100vh - @topBarHeight - @actionBarHeight - @appFooterHeight);
+        min-height: auto;
       }
     }
 

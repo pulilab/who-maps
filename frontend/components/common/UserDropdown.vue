@@ -12,9 +12,7 @@
         type="text"
         class="ButtonPopper"
       >
-        <fa icon="user-circle" />
-        {{ user.name }}
-        <fa icon="angle-down" />
+        <fa icon="user-circle" />{{ user.name }}<fa icon="angle-down" />
       </el-button>
 
       <div class="DropdownContent">
@@ -43,6 +41,7 @@
 
             <language-select
               v-model="currentLanguage"
+              size="small"
             />
           </div>
         </div>
@@ -69,7 +68,7 @@
             @click.native="closePopover"
           >
             <span class="MenuIcon">
-              <fa icon="globe" />
+              <fa icon="globe-africa" />
             </span>
             <translate>Country admin</translate>
           </nuxt-link>
@@ -135,9 +134,9 @@ export default {
         return this.$i18n.locale;
       },
       set (value) {
-        const name = this.$route.name.split('___')[0];
-        const path = this.localePath({...this.$route, name}, value);
-        this.$router.replace(path);
+        // for now on language switch we need a full page change
+        const path = this.switchLocalePath(value);
+        window.location.href = path;
         this.shown = false;
       }
     }
@@ -153,7 +152,7 @@ export default {
     logout () {
       this.closePopover();
       this.doLogout();
-      this.$router.push(this.localePath({name: 'organisation', params: this.$route.params}));
+      this.$router.push(this.localePath({name: 'organisation', params: this.$route.params, query: undefined}));
     }
   }
 };
@@ -179,10 +178,10 @@ export default {
     text-decoration: none;
 
     .svg-inline--fa {
-      margin-right: 2px;
+      margin-right: 6px;
 
       &.fa-angle-down {
-        margin: 0 0 0 4px;
+        margin: 0 0 0 10px;
       }
     }
   }

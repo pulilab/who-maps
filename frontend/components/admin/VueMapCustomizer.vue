@@ -12,18 +12,13 @@
           <div>{{ country.name }}</div>
         </el-col>
         <el-col class="CountryMapFile">
-          <a
-            ref="hiddenMapDownload"
-            :href="`/api/countries/map-download/${country.id}/`"
-            style="display: none"
-            download>Hidden but needed element!</a>
           <el-row
             type="flex"
             align="middle">
             <span><translate>Map file:</translate></span>
             <el-button
               type="text"
-              @click="$refs.hiddenMapDownload.click()">
+              @click="downloadMap">
               <translate>Download</translate>
             </el-button>
             <el-upload
@@ -99,14 +94,14 @@
           type="flex"
           align="middle">
           <el-col>
-            <div class="PinSwitch">
+            <div class="PinSwitch CountryCenter">
               <span><translate>Country center pin</translate></span>
               <el-switch
                 v-model="showCenterPin"
                 :active-text="$gettext('Show')"
                 :inactive-text="$gettext('Hide') "/>
             </div>
-            <div class="PinSwitch">
+            <div class="PinSwitch DistrictsCenter">
               <span><translate>Districts center pin</translate></span>
               <el-switch
                 v-model="showSubLevelsPins"
@@ -228,6 +223,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { calculatePolyCenter } from '../../utilities/coords';
+import { blobDownloader } from '../../utilities/dom';
+
 import FacilityImport from './FacilityImport';
 import NoSSR from 'vue-no-ssr';
 
@@ -340,6 +337,18 @@ export default {
       updateSubLevelPolyCenter: 'admin/map/updateSubLevelPolyCenter'
     }),
 
+    async downloadMap () {
+      // /api/countries/map-download/${country.id}/
+      this.$nuxt.$loading.start();
+      try {
+        const { data } = await this.$axios.get(`/api/countries/map-download/${this.country.id}/`, {responseType: 'blob'});
+        blobDownloader(data, `${this.country.name}_boundaries.zip`);
+      } catch (e) {
+        this.$message.error(this.$gettext('Map donwload failed, please try again later'));
+      }
+      this.$nuxt.$loading.finish();
+    },
+
     geoJsonLoadHandler () {
       this.$refs.mainMap.mapObject.fitBounds(this.$refs.geoJsonLayer.mapObject.getBounds());
     },
@@ -357,7 +366,7 @@ export default {
           name: sb.properties.name,
           latlng: calculatePolyCenter(sb.geometry)
         };
-      });
+      }).filter(p => p.latlng);
       this.setSubLevelsPolyCenters(subLevelsPolycenter);
     },
 
@@ -374,7 +383,6 @@ export default {
       this.setCountryDataField({field: 'map_files', data: [response]});
       setTimeout(async () => {
         await this.loadGeoJSON();
-        this.polycenterCalculation();
         this.forceMapFileChange = false;
         this.uploadMapFile = false;
         this.mapFileList = [];
@@ -522,6 +530,27 @@ export default {
             font-weight: 700;
             line-height: 16px;
             .textTruncate();
+          }
+
+          .el-switch {
+            .el-switch__label {
+              color: @colorGray;
+
+              &.is-active {
+                color: @colorTextPrimary;
+              }
+            }
+          }
+
+          &.CountryCenter {
+            .el-switch {
+              &.is-checked {
+                .el-switch__core {
+                  border-color: @colorBrandAccent;
+                  background-color: @colorBrandAccent;
+                }
+              }
+            }
           }
         }
 

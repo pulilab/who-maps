@@ -3,8 +3,9 @@ from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinLengthValidator
+from ordered_model.models import OrderedModel
 
-from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel
+from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
 from user.models import UserProfile
 
 
@@ -41,6 +42,11 @@ class UserManagement(models.Model):
 
     class Meta:
         abstract = True
+
+    def user_in_groups(self, profile):
+        return self.admins.filter(id=profile.id).exists() or \
+               self.super_admins.filter(id=profile.id).exists() or \
+               self.users.filter(id=profile.id).exists()
 
 
 class Country(UserManagement, LandingPageCommon):
@@ -97,15 +103,7 @@ class MapFile(ExtendedModel):
     map_file = models.FileField(null=True, upload_to='uploaded_maps/')
 
 
-class CountryFieldManager(models.Manager):
-    def get_schema(self, country_id):
-        return self.filter(country_id=country_id, schema=True, enabled=True)
-
-    def get_answers(self, country_id, project_id):
-        return self.filter(country_id=country_id, project_id=project_id, enabled=True, schema=False)
-
-
-class CountryField(models.Model):
+class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
     TEXT = 1
     NUMBER = 2
     YESNO = 3
@@ -113,71 +111,37 @@ class CountryField(models.Model):
     MULTI = 5
 
     TYPE_CHOICES = (
-        (TEXT, "Text field"),
-        (NUMBER, "Numeric field"),
-        (YESNO, "Yes - no field"),
-        (SINGLE, "Single choice"),
-        (MULTI, "Multiple choice"),
+        (TEXT, _("Text answer")),
+        (NUMBER, _("Numeric answer")),
+        (YESNO, _("Yes/No answer")),
+        (SINGLE, _("Single choice")),
+        (MULTI, _("Multiple choice")),
     )
 
-    country = models.ForeignKey(Country, related_name='fields', on_delete=models.CASCADE)
-    type = models.IntegerField(choices=TYPE_CHOICES)
+    type = models.IntegerField(choices=TYPE_CHOICES, default=TEXT)
     question = models.CharField(max_length=256, blank=False)
     options = ArrayField(models.CharField(max_length=256), blank=True, null=True)
-    answer = models.TextField(max_length=2000, blank=True)
-    draft = models.TextField(max_length=2000, blank=True)
-    project = models.ForeignKey('project.Project', null=True, on_delete=models.CASCADE)
-    enabled = models.BooleanField(default=True, help_text="This field will show up on the project page if enabled")
-    schema = models.BooleanField(default=True, help_text="Determines if this is treated as the schema for country")
-    schema_instance = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
+
+    private = models.BooleanField(default=False)
     required = models.BooleanField(default=False)
 
-    objects = CountryFieldManager()
-
     class Meta:
-        ordering = ['id']
+        abstract = True
+        default_manager_name = 'objects'
+        base_manager_name = 'objects'
 
-    def save(self, *args, **kwargs):
-        if self.type in [CountryField.TEXT, CountryField.NUMBER, CountryField.YESNO]:
-            self.options = None
-        super(CountryField, self).save(*args, **kwargs)
 
-    def __str__(self):
-        return ""
+class DonorCustomQuestion(CustomQuestion):
+    donor = models.ForeignKey(Donor, related_name='donor_questions', on_delete=models.CASCADE)
+    order_with_respect_to = 'donor'
 
-    @classmethod
-    def get_for_project(cls, project, draft_mode=False):
-        """
-        Return all the country fields available for a country filled with the answers (if present)
-        """
-        country = project.get_country(draft_mode)
-        if not country:  # pragma: no cover
-            return []
+    class Meta(OrderedModel.Meta):
+        pass
 
-        schema = cls.objects.get_schema(country.id)
-        answers = cls.objects.get_answers(country_id=country.id, project_id=project.id)
-        country_fields = []
 
-        for field in schema:
-            found = answers.filter(question=field.question, type=field.type).first()
-            if found:
-                country_fields.append(found)
+class CountryCustomQuestion(CustomQuestion):
+    country = models.ForeignKey(Country, related_name='country_questions', on_delete=models.CASCADE)
+    order_with_respect_to = 'country'
 
-        return country_fields
-
-    @classmethod
-    def get_schema_for_answer(cls, country, question):
-        return cls.objects.filter(schema=True, enabled=True, country=country, question=question).first()
-
-    def to_representation(self, draft_mode=False):
-        return {
-            "schema_id": getattr(self.schema_instance, 'pk', None),
-            "country": self.country.id,
-            "type": self.type,
-            "question": self.question,
-            "answer": self.draft if draft_mode else self.answer,
-            "project": self.project.id
-        }
-
-    def to_csv(self):
-        return {self.schema_instance.question: self.answer}
+    class Meta(OrderedModel.Meta):
+        pass

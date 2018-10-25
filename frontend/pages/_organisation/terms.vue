@@ -22,14 +22,16 @@
             <p><translate>Please read these Terms of Use before using the Website or any of its features. By using the
             Website, you accept and agree to be bound by these Terms. If you do not agree to the Terms,
             please exit the Website and do not access or otherwise use the Website.</translate></p>
-            <p><translate>The following Terms of Use (“Terms”) govern the use of
+            <p>
+              <translate>The following Terms of Use (“Terms”) govern the use of</translate>
               <a
                 href="http://www.digitalhealthatlas.org/"
                 title="www.digitalhealthatlas.org">
                 www.digitalhealthatlas.org
               </a>
-              (“Website”), including without limitation participation in its forums, blog, and all linked
-              pages owned and operated by Results for Development Institute (“HRP,” “we,” or “our”).</translate></p>
+              <translate>(“Website”), including without limitation participation in its forums, blog, and all linked
+              pages owned and operated by Results for Development Institute (“HRP,” “we,” or “our”).</translate>
+            </p>
             <p><translate>We reserve the right to modify, add, or delete any of these Terms at any time. Continued use of
             the Website after any modifications, additions, or deletions to the Terms will constitute your
             acceptance of the Terms, as modified.</translate></p>
@@ -238,7 +240,7 @@
           <h3><translate>Get MAPS Toolkit now!</translate></h3>
 
           <div>
-            <p><translate>A new toolkit has been launched to help mHealth implementers<br> to successfully and sustainably scale-up their innovations.</translate></p>
+            <p><translate>A new toolkit has been launched to help mHealth implementers</translate><br><translate> to successfully and sustainably scale-up their innovations.</translate></p>
           </div>
 
           <el-button @click="downloadPdf"><i class="el-icon-download" /><translate>Download Pdf</translate></el-button>

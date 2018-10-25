@@ -9,10 +9,10 @@ export default {
   components: {
   },
   async fetch ({store}) {
+    store.dispatch('landing/resetSearch');
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),
       store.dispatch('projects/loadProjectStructure')
-
     ]);
   }
 };
@@ -23,10 +23,11 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .ProjectsArea {
-    margin-bottom: 60px;
+    margin-bottom: 120px;
 
     .UserProjectsList {
       .limitPageWidth();
+      max-width: @cardSizeMedium;
     }
   }
 </style>

@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.urls import path
 
 from . import views
 
@@ -8,39 +9,24 @@ urlpatterns = [
             'get': 'retrieve',
         }),
         name="project-retrieve"),
-    url(r"^projects/publish/(?P<pk>\d+)/$",
-        view=views.ProjectPublishViewSet.as_view({
-            'put': 'update'
-        }),
-        name="project-publish"),
-    url(r"^projects/draft/$",
-        view=views.ProjectDraftViewSet.as_view({
-            'post': 'create'
-        }), name="project-create"),
-    url(r"^projects/draft/(?P<pk>\d+)/$",
-        view=views.ProjectDraftViewSet.as_view({
-            'put': 'update'
-        }),
-        name="project-draft"),
+    path(r'projects/publish/<int:project_id>/<int:country_id>/',
+         view=views.ProjectPublishViewSet.as_view({
+             'put': 'update'
+         }),
+         name="project-publish"),
+    path(r'projects/draft/<int:country_id>/',
+         view=views.ProjectDraftViewSet.as_view({
+             'post': 'create'
+         }), name="project-create"),
+    path(r'projects/draft/<int:project_id>/<int:country_id>/',
+         view=views.ProjectDraftViewSet.as_view({
+             'put': 'update'
+         }),
+         name="project-draft"),
     url(r"^projects/member-of/$",
         view=views.ProjectListViewSet.as_view({
             'get': 'list'
         }), name="project-list"),
-    url(r"^projects/by-view/map/(?P<country_id>\d+)/$",
-        view=views.ProjectPublicViewSet.as_view({
-            'get': 'by_district'
-        }),
-        name="project-by-district"),
-    url(r"^projects/by-view/list/(?P<country_id>\d+)/$",
-        view=views.ProjectPublicViewSet.as_view({
-            'get': 'list_all'
-        }),
-        name="project-country-list"),
-    url(r"^projects/by-view/list/$",
-        view=views.ProjectPublicViewSet.as_view({
-            'get': 'list_all'
-        }),
-        name="project-all-list"),
     url(r"^projects/structure/$",
         view=views.ProjectPublicViewSet.as_view({
             'get': 'project_structure'
@@ -81,4 +67,14 @@ urlpatterns = [
             'get': 'list',
         }),
         name="project-map"),
+    path(r'approvals/<int:country_id>/',
+         view=views.ProjectApprovalViewSet.as_view({
+             'get': 'list'
+         }),
+         name="approval"),
+    path(r'approval/<int:pk>/',
+         view=views.ProjectApprovalViewSet.as_view({
+             'put': 'update'
+         }),
+         name="approval"),
 ]

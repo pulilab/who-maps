@@ -14,23 +14,38 @@ export default {
     DashboardMap,
     DashboardProjectBox
   },
-  async fetch ({store}) {
+  async fetch ({store, query, error}) {
+    store.dispatch('dashboard/setDashboardSection', 'map');
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),
       store.dispatch('projects/loadProjectStructure'),
-      store.dispatch('dashboard/loadProjectsMap')
+      store.dispatch('countries/loadMapData')
     ]);
+    await store.dispatch('dashboard/setSearchOptions', query);
+    try {
+      await store.dispatch('dashboard/loadProjectsMap');
+    } catch (e) {
+      console.log(e);
+      error({
+        statusCode: 404,
+        message: 'Unable to process the search with the current parameters'
+      });
+    }
   },
   computed: {
     ...mapGetters({
-      searchParameters: 'dashboard/getSearchParameters'
+      searchParameters: 'dashboard/getSearchParameters',
+      dashboardSection: 'dashboard/getDashboardSection'
     })
   },
   watch: {
     searchParameters: {
       immediate: false,
-      handler (params) {
-        this.load();
+      handler (query) {
+        if (this.dashboardSection === 'map') {
+          this.$router.replace({...this.$route, query});
+          this.load();
+        }
       }
     }
   },

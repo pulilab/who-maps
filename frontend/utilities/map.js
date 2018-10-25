@@ -59,7 +59,7 @@ export const gettersGenerator = () => ({
     };
   },
   getActiveTabProjects: (state, getters) => state.projectBoxActiveTab === 'subNational' ? getters.getSelectedCountrySubNationalProjects : getters.getSelectedCountryNationalProjects,
-  getSelectedCountryProjects: state => state.projectsMap.filter(p => p.country === state.selectedCountry || p.country === state.activeCountry),
+  getSelectedCountryProjects: state => state.projectsMap.filter(p => p.country && (p.country === state.selectedCountry || p.country === state.activeCountry)),
   getSelectedCountrySubNationalProjects: (state, getters) => getters.getSelectedCountryProjects.filter(cp => cp.coverage && cp.coverage.length > 0),
   getSelectedCountryNationalProjects: (state, getters) => getters.getSelectedCountryProjects.filter(cp => cp.national_level_deployment && Object.keys(cp.national_level_deployment).length > 0),
   getSelectedCountryCurrentSubLevelProjects: (state, getters, rootState, rootGetters) => {
@@ -79,17 +79,17 @@ export const actionsGenerator = () => ({
       const { data } = await this.$axios({
         method: 'get',
         url: '/api/search/',
-        params: {...getters.getSearchParameters, ...paramsOverride},
+        params: {...getters.getSearchParameters, ...paramsOverride, sc: undefined, dashboardType: undefined, dashboardId: undefined},
         paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'})
       });
       return data;
     } catch (e) {
-      console.error(e);
+      console.error('sharedMapModule/loadProjects failed');
     }
   },
   setCurrentZoom ({commit}, value) {
     commit('SET_CURRENT_ZOOM', value);
-    if (value < 6) {
+    if (value < 4) {
       commit('SET_SELECTED_COUNTRY', null);
       commit('SET_ACTIVE_COUNTRY', null);
     }
@@ -114,6 +114,9 @@ export const actionsGenerator = () => ({
   },
   setSearchIn ({commit}, value) {
     commit('SET_SEARCH_IN', value);
+  },
+  resetUserInput ({commit}) {
+    commit('RESET_USER_INPUT');
   }
 });
 
@@ -144,5 +147,15 @@ export const mutationsGenerator = () => ({
   },
   SET_SEARCH_IN: (state, value) => {
     state.searchIn = value;
+  },
+  RESET_USER_INPUT: state => {
+    state.selectedCountry = null;
+    state.currentZoom = 3;
+    state.activeCountry = null;
+    state.mapReady = false;
+    state.projectBoxActiveTab = 'subNational';
+    state.activeSubLevel = null;
+    state.searchString = '';
+    state.searchIn = searchIn();
   }
 });

@@ -28,7 +28,6 @@ const config = {
     { src: '~plugins/axios.js', ssr: true },
     { src: '~plugins/vee-validate.js', ssr: true },
     { src: '~plugins/vue-leaflet.js', ssr: false },
-    { src: '~plugins/vue-django-feedback.js', ssr: false },
     { src: '~plugins/element.js', ssr: true },
     { src: '~plugins/i18n.js', ssr: true }
   ],
@@ -42,24 +41,30 @@ const config = {
         {
           code: 'en',
           iso: 'en-GB',
-          name: 'English'
+          name: 'English',
+          file: 'en-GB.js'
         },
         {
           code: 'fr',
           iso: 'fr-FR',
-          name: 'Français'
+          name: 'Français',
+          file: 'fr-FR.js'
         },
         {
           code: 'es',
           iso: 'es-ES',
-          name: 'Español'
+          name: 'Español',
+          file: 'es-ES.js'
         },
         {
           code: 'pt',
           iso: 'pt-PT',
-          name: 'Português'
+          name: 'Português',
+          file: 'pt-PT.js'
         }
       ],
+      lazy: true,
+      langDir: 'lang/',
       strategy: 'prefix',
       rootRedirect: 'en/-/',
       defaultLocale: 'en',
@@ -80,12 +85,6 @@ const config = {
       }
     }]
   ],
-  sentry: {
-    dsn: 'https://cea32567f8aa4eefa4d2051848d37dea:a884ff71e8ae444c8a40af705699a19c@sentry.vidzor.com/12',
-    public_dsn: 'https://cea32567f8aa4eefa4d2051848d37dea@sentry.vidzor.com/12',
-    config: {
-    }
-  },
   fontawesome: {
     component: 'fa',
     imports: [
@@ -130,7 +129,8 @@ const config = {
   build: {
     extractCSS: true,
     vendor: [
-      'babel-polyfill'
+      'babel-polyfill',
+      'eventsource-polyfill'
     ],
     extend (config, { isDev, isClient }) {
       config.module.rules.push({

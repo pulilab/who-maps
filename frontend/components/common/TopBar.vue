@@ -11,8 +11,8 @@
       <el-col class="LogoHolder">
         <nuxt-link :to="localePath({name: 'organisation', params: $route.params})">
           <img
-            :src="countrySpecific ? countryLogoURL : '/logo-who-blue.svg'"
-            :alt="countrySpecific ? $gettext('Country logo') : $gettext('WHO logo')"
+            :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
+            :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')"
             class="Logo">
         </nuxt-link>
       </el-col>
@@ -26,7 +26,7 @@
           align="middle">
 
           <template v-if="!user">
-            <el-col v-if="!countrySpecific">
+            <el-col>
               <language-selector />
             </el-col>
 
@@ -34,11 +34,13 @@
               <div class="Separator" />
               <div>
                 <nuxt-link
+                  key="signupBtn"
                   :to="localePath({name: 'organisation-signup', params: $route.params})"
                   class="HeaderBtn HideOnActive"><translate>Signup</translate></nuxt-link>
               </div>
               <div>
                 <nuxt-link
+                  key="loginBtn"
                   :to="localePath({name: 'organisation-login', params: $route.params})"
                   class="HeaderBtn HideOnActive"><translate>Login</translate></nuxt-link>
               </div>
@@ -48,7 +50,8 @@
             <el-col class="AuthLinks">
               <div>
                 <nuxt-link
-                  :to="localePath({name: 'organisation-dashboard', params: $route.params})"
+                  key="dashboardBtn"
+                  :to="localePath({name: 'organisation-dashboard', params: $route.params, query: {}})"
                   class="HeaderBtn"
                 >
                   <translate>Dashboard</translate>
@@ -56,6 +59,7 @@
               </div>
               <div>
                 <nuxt-link
+                  key="myProjectsBtn"
                   :to="localePath({name: 'organisation-projects', params: $route.params})"
                   exact
                   class="HeaderBtn"
@@ -65,6 +69,7 @@
               </div>
               <div>
                 <nuxt-link
+                  key="planningAndGuidanceBtn"
                   :to="localePath({name: 'organisation-cms', params: $route.params})"
                   class="HeaderBtn"
                 >
@@ -76,6 +81,7 @@
               </div>
               <div>
                 <nuxt-link
+                  key="newProjectBtn"
                   :to="localePath({name: 'organisation-projects-create', params: $route.params})"
                   class="HeaderBtn">
                   <fa icon="plus-circle" />
@@ -100,17 +106,19 @@
                   class="CountryFlag">
               </el-col>
               <el-col>
-                <div class="CountryName">{{ countryData.name }}</div>
+                <div class="CountryName">{{ landingData.name }}</div>
               </el-col>
             </el-row>
           </el-col>
 
           <el-col
-            v-if="countrySpecific"
+            v-if="customOrganisation"
             class="CountrySpecificMenu">
             <div class="Separator" />
             <div>
-              <nuxt-link :to="localePath({name: 'organisation', params: {organisation: '-'}})">
+              <nuxt-link
+                key="whoLandingBtn"
+                :to="localePath({name: 'organisation', params: {organisation: '-'}})">
                 <img
                   class="LogoSmall"
                   alt="WHO logo small"
@@ -144,19 +152,22 @@ export default {
   computed: {
     ...mapGetters({
       user: 'user/getProfile',
-      countryData: 'landing/getCountryData'
+      landingData: 'landing/getLandingPageData'
     }),
-    countrySpecific () {
-      return this.countryData !== null;
+    customOrganisation () {
+      return this.landingData !== null;
     },
-    countryLogoURL () {
-      if (this.countryData) {
-        return this.countryData.logo_url;
+    countrySpecific () {
+      return this.customOrganisation && this.landingData.code.length === 2;
+    },
+    organisationLogo () {
+      if (this.landingData) {
+        return this.landingData.logo_url;
       }
     },
     countryFlag () {
-      if (this.countryData) {
-        return `/static/flags/${this.countryData.code.toLowerCase()}.png`;
+      if (this.landingData) {
+        return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
       }
     }
 
@@ -269,7 +280,7 @@ export default {
       }
 
       .svg-inline--fa {
-        margin-right: 2px;
+        margin-right: 6px;
       }
     }
 

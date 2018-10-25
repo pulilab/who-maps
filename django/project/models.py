@@ -8,12 +8,14 @@ from django.contrib.postgres.fields import JSONField, ArrayField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from simple_history.models import HistoricalRecords
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
-from country.models import Country, CountryField
+from country.models import Country
 from project.cache import InvalidateCacheMixin
-from user.models import UserProfile, Organisation
+from project.utils import remove_keys
+from user.models import UserProfile
 from toolkit.toolkit_data import toolkit_default
 
 
@@ -43,7 +45,8 @@ class ProjectQuerySet(ActiveQuerySet, ProjectManager):
 
 
 class Project(SoftDeleteModel, ExtendedModel):
-    FIELDS_FOR_MEMBERS_ONLY = ("last_version", "last_version_date", "start_date", "end_date")
+    FIELDS_FOR_MEMBERS_ONLY = ("country_custom_answers_private",
+                               "last_version", "last_version_date", "start_date", "end_date")
     FIELDS_FOR_LOGGED_IN = ("coverage",)
 
     name = models.CharField(max_length=255)
@@ -73,9 +76,8 @@ class Project(SoftDeleteModel, ExtendedModel):
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
 
-    def is_country_admin(self, user):
-        # Country admin has permissions only for the published project
-        return user.userprofile in self.get_country().users.all() if self.get_country() else False
+    def is_country_user_or_admin(self, user):
+        return self.get_country().user_in_groups(user.userprofile) if self.get_country() else False
 
     def get_member_data(self):
         return self.data
@@ -84,18 +86,10 @@ class Project(SoftDeleteModel, ExtendedModel):
         return self.draft
 
     def get_non_member_data(self):
-        return self.remove_keys(self.FIELDS_FOR_MEMBERS_ONLY)
+        return remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY)
 
     def get_anon_data(self):
-        return self.remove_keys(self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
-
-    def get_organisation(self, draft_mode=False):
-        try:
-            organisation_id = self.draft.get('organisation') if draft_mode else self.data.get('organisation')
-            organisation_id = int(organisation_id)
-        except TypeError:  # pragma: no cover
-            return None
-        return Organisation.objects.filter(id=organisation_id).first()
+        return remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
 
     def str_national_level_deployment(self):
         nld = self.data.get('national_level_deployment', {})
@@ -117,13 +111,6 @@ class Project(SoftDeleteModel, ExtendedModel):
                                                                                      c.get('facilities'))
                          for c in coverage])
 
-    def remove_keys(self, keys):
-        d = self.data
-        for key in keys:
-            if key in d:
-                d.pop(key, None)
-        return d
-
     def to_representation(self, data=None, draft_mode=False):
         if data is None:
             data = self.get_member_draft() if draft_mode else self.get_member_data()
@@ -134,10 +121,8 @@ class Project(SoftDeleteModel, ExtendedModel):
         extra_data = dict(
             id=self.pk,
             name=self.draft.get('name', '') if draft_mode else self.name,
-            organisation_name=self.get_organisation(draft_mode).name if self.get_organisation(draft_mode) else '',
-            country_name=self.get_country(draft_mode).name if self.get_country(draft_mode) else None,
             approved=self.approval.approved if hasattr(self, 'approval') else None,
-            fields=[field.to_representation(draft_mode) for field in CountryField.get_for_project(self, draft_mode)],
+            modified=self.modified,
         )
 
         data.update(extra_data)
@@ -168,6 +153,32 @@ class Project(SoftDeleteModel, ExtendedModel):
         self.approval.approved = False
         self.approval.save()
 
+    def reset_approval(self):
+        if self.approval.approved is not None:
+            self.approval.user = None
+            self.approval.approved = None
+            self.approval.reason = "Project has been republished"
+            self.approval.save()
+
+    @classmethod
+    def remove_stale_donors(cls):
+        from country.models import Donor
+
+        stale_ids = []
+        donor_ids = set(Donor.objects.values_list('id', flat=True))
+
+        for p in Project.objects.all():
+            if p.data and 'donors' in p.data:
+                published_donors = set(p.data.get('donors', []))
+                stale_ids.extend(list(published_donors - donor_ids))
+                p.data['donors'] = list(published_donors & donor_ids)
+            if p.draft and 'donors' in p.draft:
+                draft_donors = set(p.draft.get('donors', []))
+                stale_ids.extend(list(draft_donors - donor_ids))
+                p.draft['donors'] = list(draft_donors & donor_ids)
+            p.save()
+        return stale_ids
+
 
 @receiver(post_save, sender=Project)
 def on_create_init(sender, instance, created, **kwargs):
@@ -183,6 +194,7 @@ class ProjectApproval(ExtendedModel):
                              help_text="Administrator who approved the project", on_delete=models.CASCADE)
     approved = models.NullBooleanField(blank=True, null=True)
     reason = models.TextField(blank=True, null=True)
+    history = HistoricalRecords(excluded_fields=['project', 'created'])
 
     def __str__(self):
         return "Approval for {}".format(self.project.name)

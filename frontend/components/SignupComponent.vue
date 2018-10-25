@@ -8,7 +8,7 @@
         <translate>Sign up for Digital Health Atlas</translate>
       </div>
       <el-form
-        ref="signupForm"
+        ref="form"
         :model="signupForm"
         :rules="rules"
         label-position="top"
@@ -21,7 +21,7 @@
             prop="email">
             <el-input
               v-model="signupForm.email"
-              type="email" />
+            />
           </el-form-item>
 
           <el-form-item
@@ -29,7 +29,8 @@
             prop="password1">
             <el-input
               v-model="signupForm.password1"
-              type="password" />
+              type="password"
+            />
           </el-form-item>
 
           <el-form-item
@@ -37,7 +38,8 @@
             prop="password2">
             <el-input
               v-model="signupForm.password2"
-              type="password" />
+              type="password"
+            />
             <div
               v-if="nonFieldErrors"
               class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
@@ -122,27 +124,35 @@ export default {
     passwordMatching (rule, value, callback) {
       value === this.signupForm.password1 ? callback() : callback(Error(this.$gettext('The password must match')));
     },
-    async signup () {
+    signup () {
       this.deleteFormAPIErrors();
-      try {
-        this.$nuxt.$loading.start();
-        await this.doSignup({
-          account_type: 'I',
-          password1: this.signupForm.password1,
-          password2: this.signupForm.password2,
-          email: this.signupForm.email
-        });
-        this.$router.push(this.localePath({name: 'organisation-edit-profile', params: this.$route.params}));
-        this.$message({
-          message: this.$gettext('User created succesfully'),
-          type: 'success',
-          showClose: true
-        });
-      } catch (e) {
-        this.$nuxt.$loading.finish();
-        this.setFormAPIErrors(e);
-        this.$refs.signupForm.validate(() => {});
-      }
+      this.$refs.form.validate(async valid => {
+        if (valid) {
+          try {
+            // locale needs to be saved in this place due to i18n being unavailable right after the signup call
+            const locale = this.$i18n.locale;
+            this.$nuxt.$loading.start();
+            await this.doSignup({
+              account_type: 'I',
+              password1: this.signupForm.password1,
+              password2: this.signupForm.password2,
+              email: this.signupForm.email
+            });
+            const path = this.localePath({...this.$route, name: 'organisation-edit-profile'}, locale);
+            this.$router.push(path);
+            this.$message({
+              message: this.$gettext('User created succesfully'),
+              type: 'success',
+              showClose: true
+            });
+          } catch (e) {
+            console.log(e);
+            this.$nuxt.$loading.finish();
+            this.setFormAPIErrors(e);
+            this.$refs.form.validate(() => {});
+          }
+        }
+      });
     }
   }
 };

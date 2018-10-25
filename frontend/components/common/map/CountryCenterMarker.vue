@@ -1,6 +1,7 @@
 <template>
   <div>
     <l-marker
+      v-if="icon"
       ref="countryMarker"
       :options="options"
       :lat-lng="pin.latlng"
@@ -19,6 +20,7 @@
           @mouseleave="mouseLeaveHandler"
         >
           <el-button
+            type="primary"
             class="CountryViewBtn"
             @click="openCountryView">
             <fa icon="search-plus" />
@@ -47,7 +49,7 @@ export default {
     icon: {
       type: Object,
       required: false,
-      default: () => null
+      default: null
     },
     options: {
       type: Object,
@@ -91,15 +93,9 @@ export default {
     },
     mouseEnterHandler (event) {
       this.popUpHover = true;
-      this.$nextTick(() => {
-        this.safeMapObjectFunctionCall('tooltip', 'update');
-      });
     },
     mouseLeaveHandler (event) {
       this.popUpHover = false;
-      this.$nextTick(() => {
-        this.safeMapObjectFunctionCall('tooltip', 'update');
-      });
     }
   }
 };

@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[572],{"./src/Cms/DetailElement/DetailElement.scss":function(e,n,s){}}]);

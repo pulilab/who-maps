@@ -11,8 +11,14 @@ export default {
   components: {
     EditProfile
   },
-  async fetch ({ store }) {
-    store.dispatch('system/loadDonors');
+  watchQuery: ['missingProfile'],
+  async fetch ({ store, query, redirect }) {
+    if (query && query.missingProfile) {
+      store.dispatch('layout/setShowEmptyProfileWarning', true);
+      redirect({...this.$route, query: undefined});
+      return;
+    }
+    await store.dispatch('system/loadDonors');
   }
 };
 </script>

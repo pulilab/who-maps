@@ -6,7 +6,7 @@
         :key="item.id">
         <list-action
           v-if="actions"
-          @click="$emit('delete', item)"
+          @click="$emit('delete', item.id)"
         />
         <span>{{ item.name }}</span>
       </li>

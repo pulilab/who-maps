@@ -39,54 +39,56 @@
             </el-col>
           </el-row>
 
-          <el-row
-            type="flex"
-            align="middle"
-            class="SearchResultsHeader"
-          >
-            <el-col
-              v-show="hasResults"
-              class="SearchResultsCounter"
+          <div class="SearchResultsWrapper">
+            <el-row
+              type="flex"
+              align="middle"
+              class="SearchResultsHeader"
             >
-              <translate :parameters="{num: results.length}">{num} result(s):</translate>
-            </el-col>
-            <el-col class="AdvancedSearchLink">
-              <nuxt-link
-                :to="localePath({name : 'organisation-dashboard', params: $route.params})"
-                class="NuxtLink IconRight"
-              ><span><translate>Advanced search</translate></span><fa icon="angle-right" />
-              </nuxt-link>
-            </el-col>
-          </el-row>
+              <el-col
+                v-show="hasResults"
+                class="SearchResultsCounter"
+              >
+                <translate :parameters="{num: results.length}">{num} result(s):</translate>
+              </el-col>
+              <el-col class="AdvancedSearchLink">
+                <nuxt-link
+                  :to="localePath({name : 'organisation-dashboard', params: $route.params})"
+                  class="NuxtLink IconRight"
+                ><span><translate>Advanced search</translate></span><fa icon="angle-right" />
+                </nuxt-link>
+              </el-col>
+            </el-row>
 
-          <el-row v-show="!hasResults">
-            <el-col class="SearchResultsNope">
-              <p class="TipText">
-                <fa
-                  icon="info-circle"
-                  size="lg" />
-                <span><translate>Short tip text about advenced search lorem ipsum dolor sit ametncidunt ut labore et dolore magna aliqua.</translate></span>
-              </p>
-            </el-col>
-          </el-row>
+            <el-row v-show="!hasResults">
+              <el-col class="SearchResultsNope">
+                <p class="TipText">
+                  <fa
+                    icon="info-circle"
+                    size="lg" />
+                  <span><translate>Short tip text about advenced search lorem ipsum dolor sit ametncidunt ut labore et dolore magna aliqua.</translate></span>
+                </p>
+              </el-col>
+            </el-row>
 
-          <el-row
-            v-for="project in results"
-            v-show="hasResults"
-            :key="project.id"
-            class="SearchResultItem"
-          >
-            <el-col>
-              <project-card
-                :project="project"
-                :found-in="getFoundIn(project.id)"
-                show-found-in
-                show-country
-                show-organisation
-                show-arrow-on-over
-              />
-            </el-col>
-          </el-row>
+            <el-row
+              v-for="project in results"
+              v-show="hasResults"
+              :key="project.id"
+              class="SearchResultItem"
+            >
+              <el-col>
+                <project-card
+                  :project="project"
+                  :found-in="getFoundIn(project.id)"
+                  show-found-in
+                  show-country
+                  show-organisation
+                  show-arrow-on-over
+                />
+              </el-col>
+            </el-row>
+          </div>
         </el-card>
       </div>
     </transition>
@@ -283,6 +285,7 @@ export default {
         }
 
         &:hover {
+          background-color: @colorGrayLighter;
           color: @colorTextPrimary;
         }
       }
@@ -299,6 +302,15 @@ export default {
         &:hover {
           background-color: @colorBrandAccentLight;
         }
+      }
+    }
+
+    .SearchResultsWrapper {
+      max-height: calc(@landingMapHeight - 36px);
+      overflow-y: auto;
+
+      @media screen and (max-height: 694px) {
+        max-height: calc(@landingMapMinHeight - 36px);
       }
     }
 
@@ -338,19 +350,26 @@ export default {
     }
 
     .SearchResultItem {
-      margin: 0 20px 8px;
-      cursor: pointer;
-
-      &:last-child {
-        margin-bottom: 20px;
-      }
+      margin: 0 10px 8px;
     }
   }
 
   .SearchShadow {
+    position: relative;
     width: 400px;
     height: @actionBarHeight;
     background-color: @colorGrayLightest;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-color: @colorGrayLight;
+    }
 
     .el-col {
       height: @actionBarHeight;
@@ -413,6 +432,7 @@ export default {
 
           &:hover {
             color: @colorTextPrimary;
+            background-color: @colorGrayLighter;
           }
         }
       }

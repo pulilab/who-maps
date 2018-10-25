@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[59],{"./src/EmailTemplates/Source/images/bg-icon-1.png":function(p,e,n){p.exports=n.p+"b969e5a300fb3042c353b83a8ecd6142.png"}}]);

@@ -6,20 +6,17 @@
     class="TableTopActions">
     <el-col class="TableExportOptions">
       <el-row type="flex">
-        <!-- <template v-if="selectedRows.length > 0">
-          <el-button
-            :disabled="allSelected"
-            size="small"
-            @click="selectAll"><translate :parameters="{total}">Select all {total} rows</translate>
-          </el-button>
-          <div class="Separator" />
-        </template> -->
-
-        <!-- TODO -->
-        <!-- Please make it as a toggle button: Select/Deselect all -->
         <el-button
           size="small"
-          @click="selectAll"><translate :parameters="{total}">Select all {total} projects</translate>
+          @click="toggleSelectAll">
+          <translate
+            v-show="!allSelected"
+            :parameters="{total}">Select all {total} projects
+          </translate>
+          <translate
+            v-show="allSelected"
+            :parameters="{total}">Deselect all {total} projects
+          </translate>
         </el-button>
 
         <div class="Separator" />
@@ -50,23 +47,25 @@
             value="PDF"/>
         </el-select>
 
-        <div class="Separator" />
-        <el-button
-          :disabled="selectedRows.length === 0"
-          type="primary"
-          size="small"
-          class="IconLeft"
-          @click="openMailDialog"
-        >
-          <fa icon="envelope"/>
-          <translate v-show="selected === 0">Contact selected</translate>
-          <translate
-            v-show="selected > 0"
-            :parameters="{selected}">
-            Contact {selected} selected
-          </translate>
-        </el-button>
-        <pdf-export ref="pdfExport" />
+        <template v-if="showEmailButton">
+          <div class="Separator" />
+          <el-button
+            :disabled="selectedRows.length === 0"
+            type="primary"
+            size="small"
+            class="IconLeft"
+            @click="openMailDialog"
+          >
+            <fa icon="envelope"/>
+            <translate v-show="selected === 0">Contact selected</translate>
+            <translate
+              v-show="selected > 0"
+              :parameters="{selected}">
+              Contact {selected} selected
+            </translate>
+          </el-button>
+          <pdf-export ref="pdfExport" />
+        </template>
       </el-row>
     </el-col>
 
@@ -77,6 +76,8 @@
         <project-legend
           force-star
           force-eye
+          force-handshake
+          force-globe
           show-label
         />
 
@@ -143,6 +144,7 @@
 <script>
 import ProjectLegend from '../common/ProjectLegend';
 import PdfExport from './PdfExport';
+import { blobDownloader } from '../../utilities/dom';
 
 import { mapGetters, mapActions } from 'vuex';
 
@@ -161,16 +163,30 @@ export default {
   computed: {
     ...mapGetters({
       columns: 'dashboard/getAvailableColumns',
-      selected: 'dashboard/getSelectedColumns',
+      selectedCol: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
       allSelected: 'dashboard/getSelectAll',
-      total: 'dashboard/getTotal'
+      total: 'dashboard/getTotal',
+      user: 'user/getProfile',
+      projects: 'dashboard/getProjectsBucket',
+      dashboardId: 'dashboard/getDashboardId',
+      dashboardType: 'dashboard/getDashboardType'
     }),
     settingsTitle () {
-      return `${this.$gettext('main fields')} (${this.selected.length}/${this.columns.length})`;
+      return `${this.$gettext('main fields')} (${this.selectedCol.length}/${this.columns.length})`;
     },
     selected () {
       return this.allSelected ? this.total : this.selectedRows.length;
+    },
+    rowToExport () {
+      return this.allSelected ? this.projects : this.projects.filter(p => this.selectedRows.some(sr => sr === p.id));
+    },
+    showEmailButton () {
+      const allowed = ['CA', 'SCA', 'D', 'DA', 'SDA'];
+      if (this.user) {
+        return allowed.includes(this.user.account_type) || this.user.is_superuser;
+      }
+      return false;
     }
   },
   methods: {
@@ -178,7 +194,8 @@ export default {
       setSelectedColumns: 'dashboard/setSelectedColumns',
       setSelectAll: 'dashboard/setSelectAll',
       setSendEmailDialogState: 'layout/setSendEmailDialogState',
-      loadProjectsBucket: 'dashboard/loadProjectsBucket'
+      loadProjectsBucket: 'dashboard/loadProjectsBucket',
+      setSelectedRows: 'dashboard/setSelectedRows'
     }),
     popperOpenHandler () {
       this.selectedColumns = [...this.columns.map(s => ({...s}))];
@@ -187,14 +204,30 @@ export default {
       this.setSelectedColumns(this.selectedColumns.filter(s => s.selected).map(s => s.id));
       this.columnSelectorOpen = false;
     },
-    async selectAll () {
-      await this.loadProjectsBucket();
-      this.setSelectAll(true);
+    async toggleSelectAll () {
+      if (!this.allSelected) {
+        await this.loadProjectsBucket();
+        this.setSelectAll(true);
+      } else {
+        this.setSelectAll(false);
+        this.setSelectedRows([]);
+      }
     },
-    exportRows () {
+    async exportRows () {
+      this.$nuxt.$loading.start();
       if (this.exportType === 'PDF') {
         this.$refs.pdfExport.printPdf();
+      } else if (this.exportType === 'CSV') {
+        const ids = this.rowToExport.map(p => p.id);
+        const payload = {
+          ids,
+          donor: this.dashboardType === 'donor' ? this.dashboardId : undefined,
+          country: this.dashboardType === 'country' ? this.dashboardId : undefined
+        };
+        const { data } = await this.$axios.post('/api/projects/csv-export/', payload, {responseType: 'blob'});
+        blobDownloader(data, 'project-export.csv');
       }
+      this.$nuxt.$loading.finish();
     },
     async openMailDialog () {
       if (this.allSelected) {
@@ -227,6 +260,11 @@ export default {
       width: 100%;
 
       .el-button {
+        &.is-disabled {
+          + .el-select {
+            display: none;
+          }
+        }
       }
 
       .el-select {
@@ -245,10 +283,18 @@ export default {
         white-space: nowrap;
 
         .svg-inline--fa {
-          margin-left: 20px;
-          margin-right: 2px;
-          color: @colorTextSecondary;
+          position: relative;
           vertical-align: middle;
+          height: 14px;
+          margin-left: 20px;
+          margin-right: 6px;
+          color: @colorTextSecondary;
+          font-size: 12px;
+
+          &.fa-star {
+            top: -1px;
+            font-size: 11px;
+          }
         }
       }
 

@@ -16,6 +16,7 @@ export default {
       userProfile: 'user/getProfile'
     })
   },
+  middleware: ['profile'],
   watch: {
     userProfile: {
       immediate: true,
@@ -34,9 +35,9 @@ export default {
       store.dispatch('landing/search')
     ]);
     if (params.organisation !== '-') {
-      await store.dispatch('landing/loadCountryData', params.organisation);
+      await store.dispatch('landing/loadCustomLandingPage', params.organisation);
     } else {
-      store.dispatch('landing/clearCountryData');
+      store.dispatch('landing/clearCustomLandingPage');
     }
     if (store.getters['user/getProfile']) {
       await Promise.all([

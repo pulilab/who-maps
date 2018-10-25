@@ -45,6 +45,8 @@ class UserTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
 
+        self.donor = Donor.objects.create(name='Donor 1', code='dnr1')
+
         # Store to be able to mock later.
         self.timezone_now = timezone.now()
 
@@ -433,7 +435,8 @@ class UserProfileTests(APITestCase):
             "name": "Test Name",
             "organisation": self.org.id,
             "country": Country.objects.get(id=3).id,
-            "account_type": "D"
+            "account_type": UserProfile.DONOR,
+            "donor": self.donor.id
         }
         response = client.put(url, data)
         self.assertEqual(response.status_code, 200)
@@ -449,7 +452,35 @@ class UserProfileTests(APITestCase):
             "name": "Test Name",
             "organisation": self.org.id,
             "country": Country.objects.get(id=3).id,
+            "account_type": UserProfile.DONOR,
+            "donor": self.donor.id
+        }
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['account_type'], UserProfile.DONOR)
+
+    def test_user_profile_donor_is_missing(self):
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['account_type'], UserProfile.GOVERNMENT)
+
+        data = {
+            "name": "Test Name",
+            "organisation": self.org.id,
+            "country": Country.objects.get(id=3).id,
             "account_type": UserProfile.DONOR
+        }
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'donor': ['Donor is required']})
+
+        data = {
+            "name": "Test Name",
+            "organisation": self.org.id,
+            "country": Country.objects.get(id=3).id,
+            "account_type": UserProfile.DONOR,
+            "donor": self.donor.id
         }
         response = self.client.put(url, data)
         self.assertEqual(response.status_code, 200)

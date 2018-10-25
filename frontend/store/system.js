@@ -19,6 +19,8 @@ export const getters = {
     return state.profiles ? [ ...state.profiles.filter(p => p.name) ] : [];
   },
 
+  getUserProfileDetails: (state, getters) => id => getters.getUserProfiles.find(u => u.id === id),
+
   getSearchResult: state => {
     const search = state.projectSearch ? state.projectSearch : [];
     return search.map(s => {
@@ -98,20 +100,28 @@ export const getters = {
 export const actions = {
 
   async loadUserProfiles ({ commit }) {
-    const { data } = await this.$axios.get('/api/userprofiles/');
-    commit('SET_USER_PROFILES', data);
+    try {
+      const { data } = await this.$axios.get('/api/userprofiles/');
+      commit('SET_USER_PROFILES', data);
+    } catch (e) {
+      console.error('system/loadUserProfiles failed');
+    }
   },
 
   async loadStaticData ({ commit }) {
-    const { data } = await this.$axios.get('/api/static-data/');
-    commit('SET_AXIS', data.axis);
-    commit('SET_DOMAINS', data.domains);
-    commit('SET_LANDING_PAGE_DEFAULTS', data.landing_page_defaults);
-    commit('SET_LANGUAGES', data.languages);
-    commit('SET_THEMATIC_OVERVIEW', data.thematic_overview);
-    commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
-    commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
-    commit('SET_REGIONS', data.regions);
+    try {
+      const { data } = await this.$axios.get('/api/static-data/');
+      commit('SET_AXIS', data.axis);
+      commit('SET_DOMAINS', data.domains);
+      commit('SET_LANDING_PAGE_DEFAULTS', data.landing_page_defaults);
+      commit('SET_LANGUAGES', data.languages);
+      commit('SET_THEMATIC_OVERVIEW', data.thematic_overview);
+      commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
+      commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
+      commit('SET_REGIONS', data.regions);
+    } catch (e) {
+      console.error('system/loadStaticData failed');
+    }
   },
 
   async loadOrganisations ({ commit, rootGetters }) {
@@ -121,7 +131,7 @@ export const actions = {
         const { data } = await this.$axios.get(`/api/organisations/`);
         commit('SET_SYSTEM_ORGANISATIONS', data);
       } catch (e) {
-        console.error('failed to load organisation');
+        console.error('system/loadOrganisations failed');
       }
     }
   },
@@ -131,14 +141,25 @@ export const actions = {
       const { data } = await this.$axios.get(`/api/landing-donor/`);
       commit('SET_DONORS', data);
     } catch (e) {
-      console.error('failed to load donors');
+      console.error('system/loadDonors failed');
     }
   },
 
-  async addOrganisation ({ commit, dispatch }, name) {
-    const { data } = await this.$axios.post('/api/organisations/', { name });
-    await dispatch('loadOrganisations');
-    return Promise.resolve(data);
+  async addOrganisation ({ dispatch, getters }, name) {
+    try {
+      await this.$axios.post('/api/organisations/', { name });
+    } catch (e) {
+      console.error('system/addOrganisation failed');
+    } finally {
+      await dispatch('loadOrganisations');
+    }
+    const org = getters.getOrganisations.find(o => o.name === name);
+    if (org) {
+      return Promise.resolve(org);
+    } else {
+      const error = new Error('Organisation saving / fetching failed, could not find the organisation');
+      return Promise.reject(error);
+    }
   }
 };
 

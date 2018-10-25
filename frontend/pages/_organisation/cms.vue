@@ -11,7 +11,9 @@ export default {
   },
 
   middleware: ['isLoggedIn'],
-
+  fetch ({store}) {
+    store.dispatch('landing/resetSearch');
+  },
   mounted () {
     const cmsFactory = require('../../angular/Cms/cmsFactory');
     cmsFactory.cmsFactory();

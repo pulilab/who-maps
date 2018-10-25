@@ -50,19 +50,24 @@ export const actions = {
     await dispatch('system/loadOrganisations', {}, {root: true});
   },
 
-  doLogout ({ commit }) {
+  doLogout ({ commit, dispatch }) {
     commit('SET_USER', null);
     commit('SET_PROFILE', null);
     commit('SET_TOKEN', null);
+    dispatch('dashboard/resetUserInput', null, {root: true});
+    dispatch('landing/resetUserInput', null, {root: true});
+    dispatch('projects/resetProjectsData', null, {root: true});
     deleteToken();
   },
 
   async loadProfile ({ commit, getters }, profileId) {
-    if (getters.getToken && !getters.getProfile) {
-      let { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`);
-      // console.log('userProfile');
-      // console.log(data);
-      commit('SET_PROFILE', data);
+    try {
+      if (getters.getToken && !getters.getProfile) {
+        let { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`);
+        commit('SET_PROFILE', data);
+      }
+    } catch (e) {
+      console.error('user/loadProfile failed');
     }
   },
 

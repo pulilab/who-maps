@@ -5,7 +5,6 @@
     :remote-method="filterList"
     multiple
     filterable
-    reserve-keyword
     remote
     class="TeamSelector"
     popper-class="TeamSelectorDropdown"

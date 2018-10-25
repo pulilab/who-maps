@@ -1,7 +1,7 @@
 <template>
   <div class="CountryAdmin">
     <div class="PageTitle">
-      <h2><translate>Donor admin for {{ donor.name }}</translate></h2>
+      <h2><translate :parameters="{name: donor.name}">Donor admin for {name}</translate></h2>
     </div>
 
     <collapsible-card
@@ -187,9 +187,9 @@
     </collapsible-card>
 
     <collapsible-card
-      :title="$gettext('Country specific questionaire')"
+      :title="$gettext('Donor specific questionaire')"
       class="Questionnaire">
-      <dha-questionaire/>
+      <dha-questionaire ref="customQuestions" />
     </collapsible-card>
 
     <div class="AdminActionBarBottom">
@@ -198,13 +198,14 @@
         justify="space-between">
         <el-button
           type="text"
-          class="CancelButton">
+          class="CancelButton IconLeft">
+          <fa icon="reply" />
           <translate>Dismiss changes</translate>
         </el-button>
         <el-button
           type="primary"
           size="medium"
-          @click="saveChanges"><translate>Save changes</translate>
+          @click="save"><translate>Save changes</translate>
         </el-button>
       </el-row>
     </div>
@@ -457,6 +458,15 @@ export default {
 
     setDonorId (value) {
       this.donorId = value;
+    },
+    save () {
+      if (this.$refs.customQuestions.allSaved) {
+        this.saveChanges();
+      } else {
+        this.$alert('Your questionnaire is not completely saved', 'Warning', {
+          confirmButtonText: 'Ok'
+        });
+      }
     }
   }
 };
@@ -481,6 +491,10 @@ export default {
 
       .el-checkbox {
         line-height: 40px;
+      }
+
+      .DonorSelector {
+        width: 50%;
       }
     }
 

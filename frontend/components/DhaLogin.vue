@@ -2,6 +2,7 @@
   <div class="LoginComponent">
     <el-card
       v-if="!showForgotten && !successfulReset"
+      key="loginCard"
       :body-style="{ padding: '0px' }">
       <div slot="header">
         <translate>Log in to Digital Health Atlas</translate>
@@ -45,6 +46,13 @@
             <el-col
               :span="6"
               class="SecondaryAction">
+              <nuxt-link
+                :to="localePath({name: 'organisation-signup', params: $route.params})"
+                type="text"
+                class="NuxtLink Small">
+                <translate>Signup</translate>
+              </nuxt-link>
+              <div class="Separator"/>
               <el-button
                 type="text"
                 size="small"
@@ -70,6 +78,7 @@
 
     <el-card
       v-if="showForgotten"
+      key="forgottenCard"
       :body-style="{ padding: '0px' }">
       <div slot="header">
         <translate>Reset forgotten password</translate>
@@ -79,7 +88,7 @@
 
       <el-form
         ref="forgotForm"
-        :rules="rules2"
+        :rules="forgettenPasswordRules"
         :model="{ email }"
         label-position="top"
         status-icon
@@ -105,7 +114,7 @@
               class="SecondaryAction">
               <el-button
                 type="text"
-                size="medium"
+                size="small"
                 @click="showForgotten = false">
                 <translate>Go back to login</translate>
               </el-button>
@@ -127,7 +136,9 @@
 
     <el-card
       v-if="successfulReset"
-      :body-style="{ padding: '0px' }">
+      key="resetCard"
+      :body-style="{ padding: '0px' }"
+      class="Success">
       <div slot="header">
         <translate>Congratulations!</translate>
       </div>
@@ -155,7 +166,6 @@
           </el-col>
         </el-row>
       </div>
-
     </el-card>
   </div>
 </template>
@@ -185,7 +195,7 @@ export default {
           { validator: this.validatorGenerator('password') }
         ]
       },
-      rules2: {
+      forgettenPasswordRules: {
         email: [
           { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
           { type: 'email', message: this.$gettext('Has to be a valid email address'), trigger: 'blur' },
@@ -219,7 +229,13 @@ export default {
             if (this.profile.country) {
               this.setSelectedCountry(this.profile.country);
             }
-            this.$router.push(this.localePath({name: 'organisation-dashboard', params: this.$route.params}));
+            if (this.$route.query && this.$route.query.next) {
+              const path = this.$route.query.next;
+              const query = {...this.$route.query, next: undefined};
+              this.$router.push({path, query});
+            } else {
+              this.$router.push(this.localePath({name: 'organisation-dashboard', params: this.$route.params, query: {country: [this.profile.country]}}));
+            }
           } catch (err) {
             this.setFormAPIErrors(err);
             this.$refs.loginForm.validate(() => {});
@@ -264,14 +280,33 @@ export default {
     margin: 80px auto;
 
     .Instruction {
-      font-size: 16px;
+      font-size: @fontSizeMedium;
+      line-height: 24px;
       text-align: center;
-      color: #6D6D6D;
-      padding: 0 80px;
+      color: @colorTextSecondary;
+      padding: 40px 120px 20px;
+
+      + .el-form {
+        fieldset {
+          padding-top: 0;
+        }
+      }
+
+      + .CardActionsBottom {
+        margin-top: 40px;
+      }
     }
 
     fieldset {
       padding: 40px 80px;
+    }
+
+    .CardActionsBottom {
+      .Separator {
+        height: 20px;
+        margin: 0 12px;
+        vertical-align: middle;
+      }
     }
   }
 </style>

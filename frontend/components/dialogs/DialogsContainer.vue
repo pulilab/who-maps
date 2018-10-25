@@ -4,6 +4,7 @@
     <dashboard-filters-dialog />
     <save-filter-dialog />
     <send-email-dialog />
+    <project-approval-dialog />
   </div>
 </template>
 
@@ -12,13 +13,39 @@ import DigitalHealthInterventionsDialog from './DigitalHealthInterventionsDialog
 import DashboardFiltersDialog from './DashboardFiltersDialog';
 import SaveFilterDialog from './SaveFilterDialog';
 import SendEmailDialog from './SendEmailDialog';
+import ProjectApprovalDialog from './ProjectApprovalDialog';
+import { mapGettersActions } from '../..//utilities/form';
 
 export default {
   components: {
     DigitalHealthInterventionsDialog,
     DashboardFiltersDialog,
     SaveFilterDialog,
-    SendEmailDialog
+    SendEmailDialog,
+    ProjectApprovalDialog
+  },
+  computed: {
+    ...mapGettersActions({
+      showEmptyProfileWarning: ['layout', 'getShowEmptyProfileWarning', 'setShowEmptyProfileWarning']
+    })
+  },
+  watch: {
+    showEmptyProfileWarning: {
+      immediate: true,
+      handler (show) {
+        if (show) {
+          this.$alert(
+            this.$gettext('Please fill your profile first'),
+            this.$gettext('Warning'),
+            {
+              confirmButtonText: 'OK',
+              callback: action => {
+                this.showEmptyProfileWarning = false;
+              }
+            });
+        }
+      }
+    }
   }
 };
 </script>

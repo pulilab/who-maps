@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[376],{"./src/LandingPage/images/screenshot-2.png":function(n,e,p){n.exports=p.p+"764179042d6763e9ca77f519bf35e095.png"}}]);

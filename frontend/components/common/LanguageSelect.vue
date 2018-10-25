@@ -1,8 +1,7 @@
 <template>
-  <!-- TODO -->
-  <!-- Please add 'size="small"' attribute to selector if it's included in UserDropdown -->
   <el-select
     :value="value"
+    :size="size"
     :placeholder="$gettext('Select language')"
     class="LanguageSelectorDropdown"
     popper-class="LanguageSelectorPopper"
@@ -26,6 +25,10 @@ export default {
     value: {
       type: String,
       default: null
+    },
+    size: {
+      type: String,
+      default: undefined
     }
   },
   computed: {

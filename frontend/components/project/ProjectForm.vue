@@ -40,6 +40,18 @@
             :api-errors="apiErrors"
             @mounted="mountedHandler"
           />
+          <country-custom
+            ref="countryCustom"
+            :use-publish-rules="usePublishRules"
+            :api-errors="apiErrors"
+            @mounted="mountedHandler"
+          />
+          <donor-custom
+            ref="donorCustom"
+            :use-publish-rules="usePublishRules"
+            :api-errors="apiErrors"
+            @mounted="mountedHandler"
+          />
         </el-col>
         <el-col :span="6">
           <project-navigation
@@ -59,6 +71,8 @@ import GeneralOverview from './sections/GeneralOverview';
 import ImplementationOverview from './sections/ImplementationOverview';
 import TechnologyOverview from './sections/TechnologyOverview';
 import InteroperabilityAndStandards from './sections/InteroperabilityAndStandards';
+import CountryCustom from './sections/CountryCustom';
+import DonorCustom from './sections/DonorCustom';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -67,7 +81,12 @@ export default {
     GeneralOverview,
     ImplementationOverview,
     TechnologyOverview,
-    InteroperabilityAndStandards
+    InteroperabilityAndStandards,
+    CountryCustom,
+    DonorCustom
+  },
+  $_veeValidate: {
+    validator: 'new'
   },
   data () {
     return {
@@ -79,7 +98,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      project: 'project/getProjectData'
+      project: 'project/getProjectData',
+      countryAnswers: 'project/getCountryAnswers',
+      donorAnswers: 'project/getDonorsAnswers'
     }),
     isDraft () {
       return this.$route.name.includes('organisation-projects-id-edit');
@@ -88,7 +109,7 @@ export default {
       return this.$route.name.includes('organisation-projects-create');
     },
     showForm () {
-      return this.readyElements === this.maxElements;
+      return this.readyElements > this.maxElements;
     },
     draftRules () {
       return {
@@ -234,12 +255,34 @@ export default {
           max: 256,
           url: true
         },
-        interoperability_links: {},
+        interoperability_links: {
+          url: {
+            require_protocol: true
+          }
+        },
         interoperability_standards: {}
       };
     },
     rules () {
       return this.usePublishRules ? this.publishRules : this.draftRules;
+    }
+  },
+  mounted () {
+    if (this.$route.query.reloadDataFromStorage) {
+      this.$nextTick(() => {
+        this.$nuxt.$loading.start();
+        try {
+          const stored = JSON.parse(window.localStorage.getItem('rescuedProject'));
+          this.initProjectState(stored);
+        } catch (e) {
+          this.$alert(this.$gettext('Failed to restore auto-saved project'), this.$gettext('Warning'), {
+            confirmButtonText: this.$gettext('OK')
+          });
+        }
+        window.localStorage.removeItem('rescuedProject');
+        this.$router.replace({...this.$route, query: undefined});
+        this.$nuxt.$loading.finish();
+      });
     }
   },
   methods: {
@@ -248,7 +291,8 @@ export default {
       saveDraft: 'project/saveDraft',
       discardDraft: 'project/discardDraft',
       publishProject: 'project/publishProject',
-      setLoading: 'project/setLoading'
+      setLoading: 'project/setLoading',
+      initProjectState: 'project/initProjectState'
     }),
     digitalHealthInterventionsValidator (rule, value, callback) {
       const ownDhi = this.project.digitalHealthInterventions.filter(dhi => dhi.platform === value && dhi.id);
@@ -267,6 +311,37 @@ export default {
         this.readyElements += 1;
       }, 300);
     },
+    async unCaughtErrorHandler (errors) {
+      if (this.$raven) {
+        this.$raven.captureMessage('Un-caught validation error in project page', {
+          level: 'warning',
+          extra: {
+            apiErrors: this.apiErrors,
+            errors
+          }
+        });
+      }
+
+      try {
+        await this.$confirm(this.$gettext('There was an un-caught validation error an automatic report has been submitted'),
+          this.$gettext('Warning'), {
+            confirmButtonText: this.$gettext('Recover & Reload'),
+            cancelButtonText: this.$gettext('Discard changes')
+          });
+        const project = {
+          ...this.project,
+          country_custom_answers: this.countryAnswers,
+          donor_custom_answers: this.donorAnswers
+        };
+        const toStore = JSON.stringify(project);
+        window.localStorage.setItem('rescuedProject', toStore);
+        const newUrl = window.location.origin + this.$route.path + `?reloadDataFromStorage=true`;
+        window.location.href = newUrl;
+      } catch (e) {
+        console.log('User declined the option to save, just reloading');
+        window.location.reload(true);
+      }
+    },
     handleErrorMessages () {
       this.$nextTick(() => {
         const errors = [...this.$el.querySelectorAll('.is-error')];
@@ -274,16 +349,7 @@ export default {
         if (visibleErrors && visibleErrors.length > 0) {
           visibleErrors[0].scrollIntoView();
         } else {
-          this.$alert(this.$gettext('There was an un-caught validation error an automatic report has been submitted'), this.$gettext('Warning'), {
-            confirmButtonText: this.$gettext('Close')
-          });
-          this.$raven.captureMessage('Un-caught validation error in project page', {
-            level: 'warning',
-            extra: {
-              apiErrors: this.apiErrors,
-              errors
-            }
-          });
+          this.unCaughtErrorHandler(errors);
         }
       });
     },
@@ -292,7 +358,9 @@ export default {
         this.$refs.generalOverview.validate(),
         this.$refs.implementationOverview.validate(),
         this.$refs.technologyOverview.validate(),
-        this.$refs.interoperabilityAndStandards.validate()
+        this.$refs.interoperabilityAndStandards.validate(),
+        this.$refs.countryCustom.validate(),
+        this.$refs.donorCustom.validate()
       ]);
       console.log('root validations', validations);
       return validations.reduce((a, c) => a && c, true);
@@ -303,6 +371,8 @@ export default {
       this.$refs.implementationOverview.clear();
       this.$refs.technologyOverview.clear();
       this.$refs.interoperabilityAndStandards.clear();
+      this.$refs.countryCustom.clear();
+      this.$refs.donorCustom.clear();
     },
     async doSaveDraft () {
       this.clearValidation();
@@ -365,6 +435,7 @@ export default {
             });
             return;
           } catch (e) {
+            console.log(e);
             this.setLoading(false);
             this.apiErrors = e.response.data;
           }

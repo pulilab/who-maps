@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[445],{"./src/Common/Thematic/images/quote.svg":function(o,s,n){o.exports=n.p+"public/fonts/quote.svg"}}]);

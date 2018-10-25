@@ -1,19 +1,15 @@
 import csv
-from io import StringIO
 
-from django.contrib import admin, messages
+from django.contrib import admin
 from django import forms
-from django.contrib.admin import SimpleListFilter
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.http import HttpResponse
 from django.core import mail
 from django.utils.html import mark_safe
 from django.template import loader
 from django.conf import settings
-from django.utils.translation import ugettext, override
 
 from allauth.account.models import EmailAddress
 from toolkit.toolkit_data import toolkit_default
@@ -21,52 +17,11 @@ from core.admin import AllObjectsAdmin
 from country.models import Country
 from toolkit.models import Toolkit
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, Project, HSCGroup, \
-    ProjectApproval
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, Project, HSCGroup
 from user.models import UserProfile, Organisation
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
-
-
-class ChangeNotificationMixin(object):  # pragma: no cover
-    def save_form(self, request, form, change):
-        if change:
-            if form.has_changed():
-                self.send_changed_notification(form)
-        else:
-            self.send_created_notification(form)
-        return super(ChangeNotificationMixin, self).save_form(request, form, change)
-
-    def send_changed_notification(self, form):
-        html_template = loader.get_template('email/data_model_changed.html')
-
-        for profile in UserProfile.objects.all():
-            with override(profile.language):
-                subject = ugettext('{} - {} was changed').format(form.instance._meta.verbose_name.title(),
-                                                                 str(form.instance))
-                html_message = html_template.render({'text': subject,
-                                                     'language': profile.language})
-                self.send_notification_email(profile.user.email, subject, html_message)
-
-    def send_created_notification(self, form):
-        html_template = loader.get_template('email/new_data_model_created.html')
-
-        for profile in UserProfile.objects.all():
-            with override(profile.language):
-                subject = ugettext('New {} was created: {}').format(form.instance._meta.verbose_name,
-                                                                    str(form.instance))
-                html_message = html_template.render({'text': subject,
-                                                     'language': profile.language})
-
-                self.send_notification_email(profile.user.email, subject, html_message)
-
-    def send_notification_email(self, email, subject, html_message):
-            mail.send_mail(subject=subject,
-                           message='',
-                           from_email=settings.FROM_EMAIL,
-                           recipient_list=[email],
-                           html_message=html_message)
 
 
 class TechnologyPlatformAdmin(AllObjectsAdmin):
@@ -114,105 +69,6 @@ class HSCGroupAdmin(AllObjectsAdmin):
 
 class HSCChallengeAdmin(AllObjectsAdmin):
     pass
-
-
-class ApprovalFilter(SimpleListFilter):
-    title = 'Status'
-
-    parameter_name = 'approved'
-
-    def lookups(self, request, model_admin):
-        return (None, "Waiting for approval"), (True, "Approved"), (False, "Declined")
-
-    def choices(self, cl):  # pragma: no cover
-        for lookup, title in self.lookup_choices:
-            try:
-                selected = self.value() == lookup
-            except TypeError:
-                selected = None
-
-            yield {
-                'selected': selected,
-                'query_string': cl.get_query_string({
-                    self.parameter_name: lookup,
-                }, []),
-                'display': title,
-            }
-
-    def queryset(self, request, queryset):
-        return queryset.filter(approved=self.value())
-
-
-class ProjectApprovalAdmin(admin.ModelAdmin):
-    list_filter = (ApprovalFilter,)
-    list_display = ['project', 'user', 'approved', 'get_country']
-    readonly_fields = ['link', 'user']
-    actions = ['export_project_approvals']
-    ordering = ['approved', 'created']
-
-    def save_model(self, request, obj, form, change):
-        obj.user = request.user.userprofile
-        super(ProjectApprovalAdmin, self).save_model(request, obj, form, change)
-
-    def get_country(self, obj):
-        return obj.project.get_country()
-    get_country.short_description = "Country"
-
-    def link(self, obj):
-        if obj.id is None:
-            return '-'
-
-        return mark_safe("<a target='_blank' href='/app/{}/edit-project/publish/'>See project</a>"
-                         .format(obj.project.id))
-
-    def get_queryset(self, request):
-        qs = super(ProjectApprovalAdmin, self).get_queryset(request)
-        if not request.user.is_superuser:
-            country_id_qs = Country.objects.filter(users=request.user.userprofile).values_list('id', flat=True)
-
-            no_approval_ids = country_id_qs.filter(project_approval=False)
-            if qs.filter(project__data__country__contained_by=list(no_approval_ids)).exists():
-                self.message_user(request, ugettext('Some project approvals are hidden due to country configuration. '
-                                                    'Check the project approval checkbox on the country admin to make '
-                                                    'them visible.'), messages.WARNING)
-
-            approval_required_ids = country_id_qs.filter(project_approval=True)
-            qs = qs.filter(project__data__country__contained_by=list(approval_required_ids))
-        return qs
-
-    def export_project_approvals(self, request, queryset):
-        f = StringIO()
-        writer = csv.writer(f)
-        writer.writerow(['Project name', 'Approved by', 'Status', 'Country', 'Reason'])
-
-        queryset = queryset.select_related('project')
-        for project_approval in queryset:
-            if project_approval.approved:
-                status = ugettext('Approved')
-            elif project_approval.approved is None:
-                status = ugettext('Pending')
-            else:
-                status = ugettext('Rejected')
-
-            if project_approval.user:
-                user_name = project_approval.user.name
-            else:
-                user_name = '-'
-            country = project_approval.project.get_country() if project_approval.project.public_id \
-                else project_approval.project.get_country(draft_mode=True)
-            writer.writerow([project_approval.project.name,
-                             user_name,
-                             status,
-                             getattr(country, 'name', '-'),
-                             project_approval.reason])
-
-        f.seek(0)
-        response = HttpResponse(f, content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename=project_approval_export.csv'
-        return response
-
-    def has_add_permission(self, request):
-        return False
 
 
 def validate_csv_ext(value):
@@ -473,7 +329,6 @@ class ProjectAdmin(AllObjectsAdmin):
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(InteroperabilityLink, InteroperabilityLinkAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
-admin.site.register(ProjectApproval, ProjectApprovalAdmin)
 admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)
 admin.site.register(HealthCategory, HealthCategoryAdmin)
 admin.site.register(Licence, LicenceAdmin)

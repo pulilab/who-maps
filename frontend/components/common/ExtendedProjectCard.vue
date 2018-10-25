@@ -8,7 +8,10 @@
         type="flex"
         align="center"
         class="FirstRow">
-        <el-col :span="15">
+        <el-col
+          :span="15"
+          class="ProjectName"
+        >
           <el-row class="FirstSubRow">
             <el-col>
               {{ projectData.name }}
@@ -28,6 +31,7 @@
             </el-col>
           </el-row>
         </el-col>
+
         <el-col
           :span="4"
           class="ProjectMeta"
@@ -134,11 +138,12 @@ export default {
   @import "../../assets/style/mixins.less";
 
 .ExtendedProjectCard {
-  margin-bottom: 20px;
+  max-width: @cardSizeMedium;
+  margin: 0 auto 20px;
 
   .FirstRow {
     position: relative;
-    padding: 20px 30px;
+    padding: 20px 50px 20px 30px;
 
     .FirstSubRow {
       margin-bottom: 16px;
@@ -194,12 +199,21 @@ export default {
       }
     }
 
+    .ProjectName {
+      width: 100%;
+      padding-right: 40px;
+    }
+
     .ProjectMeta {
+      min-width: 140px;
+      max-width: 2000px;
       border-left: 1px solid @colorGrayLight;
-      text-align: center;
 
       .Donors,
       .LastChange {
+        padding: 0 20px;
+        text-align: center;
+
         > div {
           margin: 8px 0 12px;
           font-size: @fontSizeMedium;
@@ -208,8 +222,10 @@ export default {
         }
 
         > span {
+          display: block;
           font-size: @fontSizeSmall;
           color: @colorTextSecondary;
+          white-space: nowrap;
         }
       }
     }

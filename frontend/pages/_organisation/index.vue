@@ -7,7 +7,7 @@
 
       <div
         v-if="showCoverImage"
-        :style="{backgroundImage: `url(${countryData.cover_url})`}"
+        :style="{backgroundImage: `url(${landingData.cover_url})`}"
         class="CoverImageBg" />
     </div>
 
@@ -45,12 +45,15 @@ export default {
     AboutSection,
     CountryProjectsBox
   },
+  fetch ({store}) {
+    store.dispatch('landing/resetSearch');
+  },
   computed: {
     ...mapGetters({
-      countryData: 'landing/getCountryData'
+      landingData: 'landing/getLandingPageData'
     }),
     showCoverImage () {
-      return this.countryData && this.countryData.cover;
+      return this.landingData && this.landingData.cover;
     }
   }
 };
@@ -97,7 +100,8 @@ export default {
 
     .CoverImageBg {
       display: block;
-      height: 60vh;
+      height: @landingMapHeight;
+      min-height: @landingMapMinHeight;
       background-color: @colorGrayLight;
       background-size: cover;
       background-position: center center;

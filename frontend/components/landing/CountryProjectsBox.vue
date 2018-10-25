@@ -1,5 +1,5 @@
 <template>
-  <div class="CountryProjectxBox">
+  <div class="CountryProjectsBox">
     <map-projects-box
       :active-country.sync="activeCountry"
       :active-tab.sync="activeTab"
@@ -64,6 +64,16 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .CountryProjectsBox {
+    .MapProjectBox {
+      .el-tabs__content {
+        max-height: calc(@landingMapHeight - 155px);
+        overflow-y: auto;
+
+        @media screen and (max-height: 694px) {
+          max-height: calc(@landingMapMinHeight - 155px);
+        }
+      }
+    }
   }
 
 </style>

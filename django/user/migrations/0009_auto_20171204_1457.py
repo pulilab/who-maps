@@ -19,8 +19,6 @@ def create_country_admin_group(apps, schema_editor):
     group, c = Group.objects.get_or_create(name='Country Admin')
     group.permissions.set([
         Permission.objects.get(codename='change_country'),
-        Permission.objects.get(codename='add_countryfield'),
-        Permission.objects.get(codename='change_countryfield'),
         Permission.objects.get(codename='add_partnerlogo'),
         Permission.objects.get(codename='change_partnerlogo'),
         Permission.objects.get(codename='delete_partnerlogo'),

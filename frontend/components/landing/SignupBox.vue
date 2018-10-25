@@ -104,6 +104,16 @@ export default {
           .el-input__inner {
             height: 50px;
           }
+
+          .el-form-item.is-error {
+            .el-input__inner {
+              background-color: lighten(@colorDanger, 28%);
+            }
+
+            .el-form-item__error {
+              color: @colorWhite;
+            }
+          }
         }
 
         .CardActionsBottom {

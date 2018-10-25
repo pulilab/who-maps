@@ -11,15 +11,15 @@
         />
         <span>
           <fa
-            icon="arrow-alt-circle-right"
+            icon="check"
             size="xs" />
         </span>
         <span>{{ hfa.name }}</span>
       </li>
-      <li v-show="excluded">
+      <li v-show="excluded > 0">
         <span>
           <fa
-            icon="arrow-alt-circle-right"
+            icon="check"
             size="xs" />
         </span>
         <span><translate :parameters="{excluded}">... {excluded} more</translate></span>

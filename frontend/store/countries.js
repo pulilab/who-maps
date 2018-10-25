@@ -82,16 +82,20 @@ export const actions = {
         const frozen = data.map(cd => ({...cd, map_data: {...cd.map_data, facilities: Object.freeze(cd.map_data.facilities)}}));
         commit('SET_COUNTRY_LIST', frozen);
       } catch (e) {
-        console.error('failed to load countries');
+        console.error('countries/loadMapData failed');
       }
     }
   },
   async loadGeoJSON ({commit, getters}, id) {
     if (!getters.getGeoJsonLibrary[id]) {
-      const country = getters.getCountries.find(c => c.id === id);
-      const { data } = await this.$axios.get(`/static/country-geodata/${country.code.toLowerCase()}.json?version=${country.map_version}`);
-      Object.freeze(data);
-      commit('UPDATE_JSON_LIBRARY', {id, data});
+      try {
+        const country = getters.getCountries.find(c => c.id === id);
+        const { data } = await this.$axios.get(`/static/country-geodata/${country.code.toLowerCase()}.json?version=${country.map_version}`);
+        Object.freeze(data);
+        commit('UPDATE_JSON_LIBRARY', {id, data});
+      } catch (e) {
+        console.error('countries/loadGeoJSON  failed');
+      }
     }
   }
 };

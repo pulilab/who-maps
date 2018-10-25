@@ -7,18 +7,19 @@
     <el-card
       :body-style="{ padding: '0px' }"
       class="ProfileCard">
+      <el-form
+        ref="editProfileForm"
+        :rules="rules"
+        :model="innerProfile"
+        label-position="top"
+        class="FormPart"
+        @submit.native.prevent>
 
-      <el-row type="flex">
-        <el-col
-          :span="12"
-          class="UserForm">
-          <el-form
-            ref="editProfileForm"
-            :rules="rules"
-            :model="innerProfile"
-            label-position="top"
-            class="FormPart"
-            @submit.native.prevent>
+        <el-row type="flex">
+          <el-col
+            :span="12"
+            class="UserForm">
+
             <el-form-item
               :label="$gettext('My name')"
               prop="name">
@@ -57,333 +58,337 @@
               prop="language">
               <language-select v-model="innerProfile.language" />
             </el-form-item>
-          </el-form>
-        </el-col>
 
-        <el-col
-          :span="12"
-          class="UserRole">
-          <!-- SELECT ACCOUNT TYPE -->
-          <div v-if="!innerProfile.account_type_approved || changeApprovedUserRole || !['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(innerProfile.account_type)">
-
-            <h5 v-if="!userTypeRequested"><translate>I request to be a:</translate></h5>
-
-            <h5
-              v-if="userTypeRequested"
-              class="RoleRequested"><fa
-                icon="circle-notch"
-                spin /><translate>User role requested!</translate></h5>
-
-            <p v-if="userTypeRequested"><translate>Waiting for admin approval — you're still able to change your request by selecting an other role and saving your settings!</translate></p>
-
-            <div
-              v-if="userTypeRequested"
-              class="Separator" />
-
-            <el-checkbox
-              v-model="isCountryUser"
-              border><span class="IconRole IconGovernmentUser" /><translate>Government user</translate></el-checkbox>
-
-            <p class="UserArchTypeText"><translate>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore aliqua.</translate></p>
-
-            <el-collapse-transition>
-              <el-radio-group
-                v-if="isCountryUser"
-                v-model="innerProfile.account_type"
-                :disabled="!isCountryUser"
-                class="OnePerRow">
-                <el-radio
-                  label="G"
-                  class="RadioSmall"><translate>Country user</translate></el-radio>
-                <ul
-                  v-if="innerProfile.account_type === 'G'"
-                  class="UserTypeTextList">
-                  <li><translate>List item 1</translate></li>
-                  <li><translate>List item 2</translate></li>
-                  <li><translate>List item 3</translate></li>
-                </ul>
-
-                <el-radio
-                  label="CA"
-                  class="RadioSmall">Administrator of this country</el-radio>
-                <ul
-                  v-if="innerProfile.account_type === 'CA'"
-                  class="UserTypeTextList">
-                  <li><translate>List item 1</translate></li>
-                  <li><translate>List item 2</translate></li>
-                  <li><translate>List item 3</translate></li>
-                </ul>
-
-                <el-radio
-                  label="SCA"
-                  class="RadioSmall">Super country administrator</el-radio>
-                <ul
-                  v-if="innerProfile.account_type === 'SCA'"
-                  class="UserTypeTextList">
-                  <li><translate>List item 1</translate></li>
-                  <li><translate>List item 2</translate></li>
-                  <li><translate>List item 3</translate></li>
-                </ul>
-              </el-radio-group>
-            </el-collapse-transition>
-
-            <div class="Separator Or">
-              <span><translate>or</translate></span>
-            </div>
-
-            <el-checkbox
-              v-model="isDonorUser"
-              border><span class="IconRole IconInvestorUser" /><translate>Financial investor</translate></el-checkbox>
-
-            <p class="UserArchTypeText"><translate>Sed eiusmod tempor incidunt ut labore et dolore aliqua. Morbi fringilla convallis sapien, id pulvinar odio volutpat.</translate></p>
-
-            <el-collapse-transition>
-              <el-radio-group
-                v-if="isDonorUser"
-                v-model="innerProfile.account_type"
-                :disabled="!isDonorUser"
-                class="OnePerRow">
-                <el-radio
-                  :label="'D'"
-                  class="RadioSmall"><translate>Donor</translate></el-radio>
-                <ul
-                  v-if="innerProfile.account_type === 'D'"
-                  class="UserTypeTextList">
-                  <li><translate>List item 1</translate></li>
-                  <li><translate>List item 2</translate></li>
-                  <li><translate>List item 3</translate></li>
-                </ul>
-
-                <el-radio
-                  :label="'DA'"
-                  class="RadioSmall"><translate>Donor administrator</translate></el-radio>
-                <ul
-                  v-if="innerProfile.account_type === 'DA'"
-                  class="UserTypeTextList">
-                  <li><translate>List item 1</translate></li>
-                  <li><translate>List item 2</translate></li>
-                  <li><translate>List item 3</translate></li>
-                </ul>
-
-                <el-radio
-                  :label="'SDA'"
-                  class="RadioSmall"><translate>Super donor administrator</translate></el-radio>
-                <ul
-                  v-if="innerProfile.account_type === 'SDA'"
-                  class="UserTypeTextList">
-                  <li><translate>List item 1</translate></li>
-                  <li><translate>List item 2</translate></li>
-                  <li><translate>List item 3</translate></li>
-                </ul>
-              </el-radio-group>
-            </el-collapse-transition>
-
-            <el-collapse-transition>
-              <el-form
-                v-if="isDonorUser"
-                label-position="top"
-                class="DonorSelector"
-                @submit.native.prevent>
-                <el-form-item :label="$gettext('I want to be a part of this donor group:')">
-                  <donor-select
-                    :value="innerProfile.donor"
-                    @change="setDonor"/>
-                </el-form-item>
-              </el-form>
-            </el-collapse-transition>
-          </div>
-
-          <!-- APPROVED ACCOUNT TYPE -->
-          <div v-if="innerProfile.account_type_approved && ['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(innerProfile.account_type) && !changeApprovedUserRole">
-
-            <h5 class="RoleAccepted">
-              <fa icon="check-circle" />
-              <translate>Your user role request has been accepted!</translate>
-            </h5>
-
-            <div class="UserRoleDescription">
-              <el-button
-                size="mini"
-                @click="changingUserRole">Change</el-button>
-
-              <div
-                v-if="innerProfile.account_type === 'G'"
-                class="ClickThrough">
-                <el-row
-                  type="flex"
-                  align="middle">
-                  <el-col>
-                    <span class="IconRole IconGovernmentUser" />
-                  </el-col>
-                  <el-col>
-                    <h5><translate>Government user</translate></h5>
-                    <span><translate>Country user</translate></span>
-                  </el-col>
-                </el-row>
-                <div class="MyPrivileges">
-                  <span><translate>My Privileges are:</translate></span>
-                  <ul class="UserTypeTextList">
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
-                  </ul>
-                </div>
-              </div>
-
-              <div
-                v-if="innerProfile.account_type === 'CA'"
-                class="ClickThrough">
-                <el-row
-                  type="flex"
-                  align="middle">
-                  <el-col>
-                    <span class="IconRole IconGovernmentUser" />
-                  </el-col>
-                  <el-col>
-                    <h5><translate>Government user</translate></h5>
-                    <span><translate>Country user admin</translate></span>
-                  </el-col>
-                </el-row>
-                <div class="MyPrivileges">
-                  <span><translate>My Privileges are:</translate></span>
-                  <ul class="UserTypeTextList">
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
-                  </ul>
-                </div>
-              </div>
-
-              <div
-                v-if="innerProfile.account_type === 'SCA'"
-                class="ClickThrough">
-                <el-row
-                  type="flex"
-                  align="middle">
-                  <el-col>
-                    <span class="IconRole IconGovernmentUser" />
-                  </el-col>
-                  <el-col>
-                    <h5><translate>Government user</translate></h5>
-                    <span><translate>Super Country User Admin</translate></span>
-                  </el-col>
-                </el-row>
-                <div class="MyPrivileges">
-                  <span><translate>My Privileges are:</translate></span>
-                  <ul class="UserTypeTextList">
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
-                  </ul>
-                </div>
-              </div>
-
-              <div
-                v-if="innerProfile.account_type === 'D'"
-                class="ClickThrough">
-                <el-row
-                  type="flex"
-                  align="middle">
-                  <el-col>
-                    <span class="IconRole IconInvestorUser" />
-                  </el-col>
-                  <el-col>
-                    <h5><translate>Financial investor</translate></h5>
-                    <span><translate>Donor</translate></span>
-                  </el-col>
-                </el-row>
-                <div class="MyPrivileges">
-                  <span><translate>My Privileges are:</translate></span>
-                  <ul class="UserTypeTextList">
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
-                  </ul>
-                </div>
-              </div>
-
-              <div
-                v-if="innerProfile.account_type === 'DA'"
-                class="ClickThrough">
-                <el-row
-                  type="flex"
-                  align="middle">
-                  <el-col>
-                    <span class="IconRole IconInvestorUser" />
-                  </el-col>
-                  <el-col>
-                    <h5><translate>Financial investor</translate></h5>
-                    <span><translate>Donor admin</translate></span>
-                  </el-col>
-                </el-row>
-                <div class="MyPrivileges">
-                  <span><translate>My Privileges are:</translate></span>
-                  <ul class="UserTypeTextList">
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
-                  </ul>
-                </div>
-              </div>
-
-              <div
-                v-if="innerProfile.account_type === 'SDA'"
-                class="ClickThrough">
-                <el-row
-                  type="flex"
-                  align="middle">
-                  <el-col>
-                    <span class="IconRole IconInvestorUser" />
-                  </el-col>
-                  <el-col>
-                    <h5><translate>Financial investor</translate></h5>
-                    <span><translate>Super donor admin</translate></span>
-                  </el-col>
-                </el-row>
-                <div class="MyPrivileges">
-                  <span><translate>My Privileges are:</translate></span>
-                  <ul class="UserTypeTextList">
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </el-col>
-      </el-row>
-
-      <div class="CardActionsBottom">
-        <el-row
-          type="flex"
-          justify="space-between"
-          align="middle"
-          class="cardActions">
-          <el-col
-            :span="6"
-            class="SecondaryAction">
-            <el-button
-              type="text"
-              class="CancelButton"
-              @click="dismissChanges">
-              <translate>Dismiss changes</translate>
-            </el-button>
           </el-col>
+
           <el-col
-            :span="6"
-            class="PrimaryAction">
-            <el-button
-              type="primary"
-              size="medium"
-              native-type="submit"
-              @click="submit"
-            >
-              <translate>Save settings</translate>
-            </el-button>
+            :span="12"
+            class="UserRole">
+            <!-- SELECT ACCOUNT TYPE -->
+            <div v-if="!innerProfile.account_type_approved || changeApprovedUserRole || !['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(innerProfile.account_type)">
+
+              <h5 v-if="!userTypeRequested"><translate>I request to be a:</translate></h5>
+
+              <h5
+                v-if="userTypeRequested"
+                class="RoleRequested"><fa
+                  icon="circle-notch"
+                  spin /><translate>User role requested!</translate></h5>
+
+              <p v-if="userTypeRequested"><translate>Waiting for admin approval — you're still able to change your request by selecting an other role and saving your settings!</translate></p>
+
+              <div
+                v-if="userTypeRequested"
+                class="Separator" />
+
+              <el-checkbox
+                v-model="isCountryUser"
+                border><span class="IconRole IconGovernmentUser" /><translate>Government user</translate></el-checkbox>
+
+              <p class="UserArchTypeText"><translate>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore aliqua.</translate></p>
+
+              <el-collapse-transition>
+                <el-radio-group
+                  v-if="isCountryUser"
+                  v-model="innerProfile.account_type"
+                  :disabled="!isCountryUser"
+                  class="OnePerRow">
+                  <el-radio
+                    label="G"
+                    class="RadioSmall"><translate>Country user</translate></el-radio>
+                  <ul
+                    v-if="innerProfile.account_type === 'G'"
+                    class="UserTypeTextList">
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
+                  </ul>
+
+                  <el-radio
+                    label="CA"
+                    class="RadioSmall">Administrator of this country</el-radio>
+                  <ul
+                    v-if="innerProfile.account_type === 'CA'"
+                    class="UserTypeTextList">
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
+                  </ul>
+
+                  <el-radio
+                    label="SCA"
+                    class="RadioSmall">Super country administrator</el-radio>
+                  <ul
+                    v-if="innerProfile.account_type === 'SCA'"
+                    class="UserTypeTextList">
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
+                  </ul>
+                </el-radio-group>
+              </el-collapse-transition>
+
+              <div class="Separator Or">
+                <span><translate>or</translate></span>
+              </div>
+
+              <el-checkbox
+                v-model="isDonorUser"
+                border><span class="IconRole IconInvestorUser" /><translate>Financial investor</translate></el-checkbox>
+
+              <p class="UserArchTypeText"><translate>Sed eiusmod tempor incidunt ut labore et dolore aliqua. Morbi fringilla convallis sapien, id pulvinar odio volutpat.</translate></p>
+
+              <el-collapse-transition>
+                <el-radio-group
+                  v-if="isDonorUser"
+                  v-model="innerProfile.account_type"
+                  :disabled="!isDonorUser"
+                  class="OnePerRow">
+                  <el-radio
+                    :label="'D'"
+                    class="RadioSmall"><translate>Donor</translate></el-radio>
+                  <ul
+                    v-if="innerProfile.account_type === 'D'"
+                    class="UserTypeTextList">
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
+                  </ul>
+
+                  <el-radio
+                    :label="'DA'"
+                    class="RadioSmall"><translate>Donor administrator</translate></el-radio>
+                  <ul
+                    v-if="innerProfile.account_type === 'DA'"
+                    class="UserTypeTextList">
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
+                  </ul>
+
+                  <el-radio
+                    :label="'SDA'"
+                    class="RadioSmall"><translate>Super donor administrator</translate></el-radio>
+                  <ul
+                    v-if="innerProfile.account_type === 'SDA'"
+                    class="UserTypeTextList">
+                    <li><translate>List item 1</translate></li>
+                    <li><translate>List item 2</translate></li>
+                    <li><translate>List item 3</translate></li>
+                  </ul>
+                </el-radio-group>
+              </el-collapse-transition>
+
+              <el-collapse-transition>
+                <div
+                  v-if="isDonorUser"
+                  class="DonorSelector">
+                  <el-form-item
+                    :label="$gettext('I want to be a part of this donor group:')"
+                    prop="donor"
+                  >
+                    <donor-select
+                      v-model="innerProfile.donor"
+                    />
+                  </el-form-item>
+                </div>
+              </el-collapse-transition>
+            </div>
+
+            <!-- APPROVED ACCOUNT TYPE -->
+            <div v-if="innerProfile.account_type_approved && ['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(innerProfile.account_type) && !changeApprovedUserRole">
+
+              <h5 class="RoleAccepted">
+                <fa icon="check-circle" />
+                <translate>Your user role request has been accepted!</translate>
+              </h5>
+
+              <div class="UserRoleDescription">
+                <el-button
+                  size="mini"
+                  @click="changingUserRole">Change</el-button>
+
+                <div
+                  v-if="innerProfile.account_type === 'G'"
+                  class="ClickThrough">
+                  <el-row
+                    type="flex"
+                    align="middle">
+                    <el-col>
+                      <span class="IconRole IconGovernmentUser" />
+                    </el-col>
+                    <el-col>
+                      <h5><translate>Government user</translate></h5>
+                      <span><translate>Country user</translate></span>
+                    </el-col>
+                  </el-row>
+                  <div class="MyPrivileges">
+                    <span><translate>My Privileges are:</translate></span>
+                    <ul class="UserTypeTextList">
+                      <li><translate>List item 1</translate></li>
+                      <li><translate>List item 2</translate></li>
+                      <li><translate>List item 3</translate></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div
+                  v-if="innerProfile.account_type === 'CA'"
+                  class="ClickThrough">
+                  <el-row
+                    type="flex"
+                    align="middle">
+                    <el-col>
+                      <span class="IconRole IconGovernmentUser" />
+                    </el-col>
+                    <el-col>
+                      <h5><translate>Government user</translate></h5>
+                      <span><translate>Country user admin</translate></span>
+                    </el-col>
+                  </el-row>
+                  <div class="MyPrivileges">
+                    <span><translate>My Privileges are:</translate></span>
+                    <ul class="UserTypeTextList">
+                      <li><translate>List item 1</translate></li>
+                      <li><translate>List item 2</translate></li>
+                      <li><translate>List item 3</translate></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div
+                  v-if="innerProfile.account_type === 'SCA'"
+                  class="ClickThrough">
+                  <el-row
+                    type="flex"
+                    align="middle">
+                    <el-col>
+                      <span class="IconRole IconGovernmentUser" />
+                    </el-col>
+                    <el-col>
+                      <h5><translate>Government user</translate></h5>
+                      <span><translate>Super Country User Admin</translate></span>
+                    </el-col>
+                  </el-row>
+                  <div class="MyPrivileges">
+                    <span><translate>My Privileges are:</translate></span>
+                    <ul class="UserTypeTextList">
+                      <li><translate>List item 1</translate></li>
+                      <li><translate>List item 2</translate></li>
+                      <li><translate>List item 3</translate></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div
+                  v-if="innerProfile.account_type === 'D'"
+                  class="ClickThrough">
+                  <el-row
+                    type="flex"
+                    align="middle">
+                    <el-col>
+                      <span class="IconRole IconInvestorUser" />
+                    </el-col>
+                    <el-col>
+                      <h5><translate>Financial investor</translate></h5>
+                      <span><translate>Donor</translate></span>
+                    </el-col>
+                  </el-row>
+                  <div class="MyPrivileges">
+                    <span><translate>My Privileges are:</translate></span>
+                    <ul class="UserTypeTextList">
+                      <li><translate>List item 1</translate></li>
+                      <li><translate>List item 2</translate></li>
+                      <li><translate>List item 3</translate></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div
+                  v-if="innerProfile.account_type === 'DA'"
+                  class="ClickThrough">
+                  <el-row
+                    type="flex"
+                    align="middle">
+                    <el-col>
+                      <span class="IconRole IconInvestorUser" />
+                    </el-col>
+                    <el-col>
+                      <h5><translate>Financial investor</translate></h5>
+                      <span><translate>Donor admin</translate></span>
+                    </el-col>
+                  </el-row>
+                  <div class="MyPrivileges">
+                    <span><translate>My Privileges are:</translate></span>
+                    <ul class="UserTypeTextList">
+                      <li><translate>List item 1</translate></li>
+                      <li><translate>List item 2</translate></li>
+                      <li><translate>List item 3</translate></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div
+                  v-if="innerProfile.account_type === 'SDA'"
+                  class="ClickThrough">
+                  <el-row
+                    type="flex"
+                    align="middle">
+                    <el-col>
+                      <span class="IconRole IconInvestorUser" />
+                    </el-col>
+                    <el-col>
+                      <h5><translate>Financial investor</translate></h5>
+                      <span><translate>Super donor admin</translate></span>
+                    </el-col>
+                  </el-row>
+                  <div class="MyPrivileges">
+                    <span><translate>My Privileges are:</translate></span>
+                    <ul class="UserTypeTextList">
+                      <li><translate>List item 1</translate></li>
+                      <li><translate>List item 2</translate></li>
+                      <li><translate>List item 3</translate></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
           </el-col>
         </el-row>
-      </div>
+
+        <div class="CardActionsBottom">
+          <el-row
+            type="flex"
+            justify="space-between"
+            align="middle"
+            class="cardActions">
+            <el-col
+              :span="6"
+              class="SecondaryAction">
+              <el-button
+                type="text"
+                class="CancelButton IconLeft"
+                @click="dismissChanges">
+                <fa icon="reply" />
+                <translate>Dismiss changes</translate>
+              </el-button>
+            </el-col>
+            <el-col
+              :span="6"
+              class="PrimaryAction">
+              <el-button
+                type="primary"
+                size="medium"
+                native-type="submit"
+                @click="submit"
+              >
+                <translate>Save settings</translate>
+              </el-button>
+            </el-col>
+          </el-row>
+
+        </div>
+      </el-form>
     </el-card>
   </div>
 </template>
@@ -411,13 +416,30 @@ export default {
         organisation: null,
         language: null,
         country: null,
-        accountType: null,
+        account_type: null,
         donor: null
       },
       isCountryUser: false,
       isDonorUser: false,
-      changeApprovedUserRole: false,
-      rules: {
+      changeApprovedUserRole: false
+    };
+  },
+
+  computed: {
+    ...mapGetters({
+      profile: 'user/getProfile',
+      user: 'user/getUser',
+      donors: 'system/getDonors'
+    }),
+
+    userTypeRequested () {
+      return this.profile && this.profile.account_type !== 'I' && !this.profile.account_type_approved;
+    },
+    isDonorRequired () {
+      return this.innerProfile && this.innerProfile.account_type && ['D', 'DA', 'SDA'].includes(this.innerProfile.account_type);
+    },
+    rules () {
+      return {
         name: [
           { required: true, message: this.$gettext('This field is required'), trigger: 'change' },
           { validator: this.validatorGenerator('name') }
@@ -433,30 +455,12 @@ export default {
         country: [
           { required: true, message: this.$gettext('This field is required'), trigger: 'change' },
           { validator: this.validatorGenerator('country') }
+        ],
+        donor: [
+          {required: this.isDonorRequired, message: this.$gettext('This field is required'), trigger: 'change'},
+          { validator: this.validatorGenerator('donor') }
         ]
-      }
-    };
-  },
-
-  computed: {
-    ...mapGetters({
-      profile: 'user/getProfile',
-      user: 'user/getUser',
-      donors: 'system/getDonors'
-    }),
-
-    userTypeRequested () {
-      return this.profile.account_type !== 'I' && !this.profile.account_type_approved;
-    },
-
-    donorId: {
-      get () {
-        return this.donor.id || this.userProfile.donor;
-      },
-      async set (value) {
-        this.setId(value);
-        await this.fetchData();
-      }
+      };
     }
   },
 
@@ -548,10 +552,6 @@ export default {
     },
     changingUserRole () {
       this.changeApprovedUserRole = true;
-    },
-
-    setDonor (value) {
-      this.innerProfile.donor = value;
     }
   }
 };

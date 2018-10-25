@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[125],{"./src/Assessment/package.json":function(s){s.exports={name:"AssessmentModule",version:"0.0.0",private:!0,main:"./assessmentModule.js"}}}]);

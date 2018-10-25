@@ -18,6 +18,9 @@
 import ProjectData from '../../../../components/project/ProjectData';
 export default {
   middleware: ['isLoggedIn'],
+  async fetch ({store}) {
+    store.dispatch('landing/resetSearch');
+  },
   components: {
     ProjectData
   }
@@ -31,8 +34,8 @@ export default {
   .ProjectDraftView {
     .DraftLabel {
       display: inline-block;
-      height: 24px;
-      margin: 0 2px;
+      height: 23px;
+      margin: 0 6px;
       padding: 0 10px;
       font-size: @fontSizeSmall;
       font-weight: 700;

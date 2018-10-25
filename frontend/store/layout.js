@@ -2,14 +2,16 @@ export const state = () => ({
   digitalHealthInterventionsDialogState: null,
   dashboardFiltersDialogState: null,
   saveFiltersDialogState: null,
-  sendEmailDialogState: null
+  sendEmailDialogState: null,
+  showEmptyProfileWarning: false
 });
 
 export const getters = {
   getDigitalHealthInterventionsDialogState: state => state.digitalHealthInterventionsDialogState,
   getDashboardFiltersDialogState: state => state.dashboardFiltersDialogState,
   getSaveFiltersDialogState: state => state.saveFiltersDialogState,
-  getSendEmailDialogState: state => state.sendEmailDialogState
+  getSendEmailDialogState: state => state.sendEmailDialogState,
+  getShowEmptyProfileWarning: state => state.showEmptyProfileWarning
 };
 
 export const actions = {
@@ -24,6 +26,9 @@ export const actions = {
   },
   setSendEmailDialogState ({commit}, value) {
     commit('SET_SEND_EMAIL_DIALOG_STATE', value);
+  },
+  setShowEmptyProfileWarning ({commit}, value) {
+    commit('SET_SHOW_EMPTY_PROFILE_WARNING', value);
   }
 };
 
@@ -39,5 +44,8 @@ export const mutations = {
   },
   SET_SEND_EMAIL_DIALOG_STATE: (state, value) => {
     state.sendEmailDialogState = value;
+  },
+  SET_SHOW_EMPTY_PROFILE_WARNING: (state, value) => {
+    state.showEmptyProfileWarning = value;
   }
 };

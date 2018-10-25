@@ -2,10 +2,14 @@
   <div
     id="general"
     class="GeneralOverview">
-    <collapsible-card :title="$gettext('General overview')">
+    <collapsible-card
+      ref="collapsible"
+      :title="$gettext('General overview')"
+    >
       <el-form-item
         :error="errors.first('name')"
         :label="$gettext('Project name')"
+        :required="rules.name && rules.name.required"
       >
         <el-input
           v-validate="rules.name"
@@ -16,6 +20,7 @@
       <el-form-item
         :error="errors.first('organisation')"
         :label="$gettext('Organisation')"
+        :required="rules.organisation && rules.organisation.required"
       >
         <organisation-select
           v-validate="rules.organisation"
@@ -25,7 +30,9 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('country')"
-        :label="$gettext('Project country')">
+        :label="$gettext('Project country')"
+        :required="rules.country && rules.country.required"
+      >
         <country-select
           v-validate="rules.country"
           v-model="country"
@@ -34,7 +41,9 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('geographic_scope')"
-        :label="$gettext('Geographic Scope')">
+        :label="$gettext('Geographic Scope')"
+        :required="rules.geographic_scope && rules.geographic_scope.required"
+      >
 
         <el-input
           v-validate="rules.geographic_scope"
@@ -50,7 +59,9 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('implementation_overview')"
-        :label="$gettext('Overview of the digital health implementation')">
+        :label="$gettext('Overview of the digital health implementation')"
+        :required="rules.implementation_overview && rules.implementation_overview.required"
+      >
 
         <el-input
           v-validate="rules.implementation_overview"
@@ -71,6 +82,7 @@
           <el-form-item
             :error="errors.first('start_date')"
             :label="$gettext('Project start date')"
+            :required="rules.start_date && rules.start_date.required"
           >
             <el-date-picker
               v-validate="rules.start_date"
@@ -89,6 +101,7 @@
           <el-form-item
             :error="errors.first('end_date') || endDateError"
             :label="$gettext('Project end date')"
+            :required="rules.end_date && rules.end_date.required"
           >
             <el-date-picker
               v-validate="rules.end_date"
@@ -109,6 +122,7 @@
           <el-form-item
             :error="errors.first('contact_name')"
             :label="$gettext('Contact name')"
+            :required="rules.contact_name && rules.contact_name.required"
           >
             <el-input
               v-validate="rules.contact_name"
@@ -122,6 +136,7 @@
           <el-form-item
             :error="errors.first('contact_email')"
             :label="$gettext('Contact email')"
+            :required="rules.contact_email && rules.contact_email.required"
           >
             <el-input
               v-validate="rules.contact_email"
@@ -136,6 +151,7 @@
         <el-form-item
           :error="errors.first('team')"
           :label="$gettext('Add Team members (Editor role)')"
+          :required="rules.team && rules.team.required"
         >
           <team-selector
             v-validate="rules.team"
@@ -146,6 +162,7 @@
         <el-form-item
           :error="errors.first('viewers')"
           :label="$gettext('Add Viewers (only Viewer role)')"
+          :required="rules.viewers && rules.viewers.required"
         >
           <team-selector
             v-validate="rules.viewers"
@@ -183,15 +200,15 @@ export default {
   },
   computed: {
     ...mapGettersActions({
-      name: ['project', 'getName', 'setName', 300],
+      name: ['project', 'getName', 'setName', 0],
       organisation: ['project', 'getOrganisation', 'setOrganisation', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
-      geographic_scope: ['project', 'getGeographicScope', 'setGeographicScope', 300],
-      implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 300],
+      geographic_scope: ['project', 'getGeographicScope', 'setGeographicScope', 0],
+      implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
       start_date: ['project', 'getStartDate', 'setStartDate', 0],
       end_date: ['project', 'getEndDate', 'setEndDate', 0],
-      contact_name: ['project', 'getContactName', 'setContactName', 300],
-      contact_email: ['project', 'getContactEmail', 'setContactEmail', 300],
+      contact_name: ['project', 'getContactName', 'setContactName', 0],
+      contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
       team: ['project', 'getTeam', 'setTeam', 0],
       viewers: ['project', 'getViewers', 'setViewers', 0]
     }),
@@ -206,6 +223,7 @@ export default {
   },
   methods: {
     async validate () {
+      this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate(),
         Promise.resolve(this.endDateError === undefined)
@@ -213,12 +231,14 @@ export default {
       return validations.reduce((a, c) => a && c, true);
     },
     async validateDraft () {
+      this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate('name'),
         this.$validator.validate('country'),
-        this.$validator.validate('email'),
+        this.$validator.validate('contact_email'),
         this.$validator.validate('team')
       ]);
+      console.log('General overview draft validation', validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }

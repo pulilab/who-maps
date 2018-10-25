@@ -7,14 +7,12 @@
       <el-col>
         <h2><translate>My Projects</translate></h2>
         <h6>
-          <translate>Here you can find a list of the last 3 projects</translate>
-          <br>
-          <translate>which have been updated recently:</translate>
+          <translate>Here are your projects updated most recently</translate>
         </h6>
       </el-col>
     </el-row>
 
-    <user-projects-list />
+    <user-projects-list :limit="3" />
 
     <el-row
       v-if="userProjecList.length > 0"
@@ -97,8 +95,8 @@ export default {
     }
 
     .SeeAllMyProjects {
+      padding-bottom: 40px;
       text-align: center;
     }
   }
-
 </style>

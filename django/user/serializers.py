@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import TokenSerializer, PasswordResetSerializer
 from rest_auth.models import TokenModel
+from rest_framework.exceptions import ValidationError
 
 from country.models import Country
 from project.models import Project
@@ -81,6 +82,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
         if obj.account_type == UserProfile.SUPER_COUNTRY_ADMIN and obj.country:
             return obj in obj.country.super_admins.all()
         return False
+
+    def validate(self, attrs):
+        if attrs.get('account_type') in [UserProfile.DONOR, UserProfile.DONOR_ADMIN, UserProfile.SUPER_DONOR_ADMIN]:
+            if not attrs.get('donor'):
+                raise ValidationError({'donor': 'Donor is required'})
+        return attrs
 
 
 class OrganisationSerializer(serializers.ModelSerializer):

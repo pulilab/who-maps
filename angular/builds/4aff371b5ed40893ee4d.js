@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[77],{"./src/Common/Axis/images/after-grey.svg":function(s,o,e){s.exports=e.p+"public/fonts/after-grey.svg"}}]);

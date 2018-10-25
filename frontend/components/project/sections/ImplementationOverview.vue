@@ -2,7 +2,9 @@
   <div
     id="implementation"
     class="ImplementationOverview">
-    <collapsible-card :title="$gettext('Implementation overview')">
+    <collapsible-card
+      ref="collapsible"
+      :title="$gettext('Implementation overview')">
 
       <el-form-item
         :error="errors.first('platforms')"
@@ -13,6 +15,7 @@
           :key="platform"
           :error="errors.first('id', 'platform_' + index)"
           :label="$gettext('Software')"
+          :required="rules.platforms && rules.platforms.required"
           class="ItemIndent"
         >
           <el-col :span="16">
@@ -29,6 +32,7 @@
               v-show="platform"
               :error="errors.first('strategies', 'platform_' + index)"
               :label="$gettext('Digital Health Interventions')"
+              :required="rules.strategies && rules.strategies.required"
               class="DigitalHealthIntervention"
             >
               <digital-health-interventions-selector
@@ -42,7 +46,7 @@
           </el-col>
           <el-col :span="8">
             <add-rm-buttons
-              :show-add="!!platform"
+              :show-add="isLastAndExist(platforms, index)"
               :show-rm="platforms.length > 1"
               @add="addDhi"
               @rm="rmDhi(index, platform)"
@@ -53,7 +57,9 @@
 
       <el-form-item
         :error="errors.first('health_focus_areas')"
-        :label="$gettext('Health focus area(s) - select all that apply:')">
+        :label="$gettext('Health focus area(s) - select all that apply:')"
+        :required="rules.health_focus_areas && rules.health_focus_areas.required"
+      >
         <health-focus-areas-selector
           v-validate="rules.health_focus_areas"
           v-model="health_focus_areas"
@@ -65,7 +71,9 @@
 
       <el-form-item
         :error="errors.first('hsc_challenges')"
-        :label="$gettext('What are the Health System Challenges (HSC) your project addresses?')">
+        :label="$gettext('What are the Health System Challenges (HSC) your project addresses?')"
+        :required="rules.hsc_challenges && rules.hsc_challenges.required"
+      >
         <health-system-challenges-selector
           v-validate="rules.hsc_challenges"
           v-model="hsc_challenges"
@@ -78,6 +86,7 @@
       <el-form-item
         :error="errors.first('his_bucket')"
         :label="$gettext('What part(s) of the Health Information System (HIS) does this project support?')"
+        :required="rules.his_bucket && rules.his_bucket.required"
       >
         <his-bucket-selector
           v-validate="rules.his_bucket"
@@ -128,7 +137,9 @@
       </div>
       <el-form-item
         :error="errors.first('government_investor')"
-        :label="$gettext('Has the government financially invested in the project?')">
+        :label="$gettext('Has the government financially invested in the project?')"
+        :required="rules.government_investor && rules.government_investor.required"
+      >
         <el-radio-group
           v-validate="rules.government_investor"
           v-model="government_investor"
@@ -142,26 +153,32 @@
       </el-form-item>
       <el-form-item
         :label="$gettext('Implementing partners')"
-        class="ImplementingPartners">
+        class="ImplementingPartners"
+      >
         <el-row
           v-for="(partner, index) in implementing_partners"
           :key="index"
         >
           <el-col :span="16">
-            <el-form-item :error="errors.first('implementing_partners_' + index)">
+            <el-form-item
+              :error="errors.first('implementing_partners_' + index)"
+              :required="rules.implementing_partners && rules.implementing_partners.required"
+            >
               <el-input
                 v-validate="rules.implementing_partners"
+                ref="implementingPartnersInput"
                 :value="partner"
                 :data-vv-name="'implementing_partners_' + index"
                 data-vv-validate-on="change"
                 data-vv-as="Implementing partners"
-                @change="updateImplmeentingPartners($event, index)"
+                @input="updateImplmeentingPartners($event, index)"
+                @keyup.enter.native="addImplementingPartners"
               />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <add-rm-buttons
-              :show-add="!!partner"
+              :show-add="isLastAndExist(implementing_partners, index)"
               :show-rm="implementing_partners.length > 1"
               @add="addImplementingPartners"
               @rm="rmImplementingPartners(index)"
@@ -172,6 +189,7 @@
       <el-form-item
         :error="errors.first('donors')"
         :label="$gettext('Donor(s) supporting the project (Add one at least)')"
+        :required="rules.donors && rules.donors.required"
       >
         <donor-selector
           v-validate="rules.donors"
@@ -230,7 +248,7 @@ export default {
       coverageType: ['project', 'getCoverageType', 'setCoverageType', 0],
       national_level_deployment: ['project', 'getNationalLevelDeployment', 'setNationalLevelDeployment', 0],
       government_investor: ['project', 'getGovernmentInvestor', 'setGovernmentInvestor', 0],
-      implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners', 0],
+      implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners', 50],
       donors: ['project', 'getDonors', 'setDonors', 0]
     }),
     healthWorkers: {
@@ -261,10 +279,27 @@ export default {
       }
     }
   },
+  watch: {
+    implementing_partners: {
+      immediate: false,
+      handler (ip, oldIp) {
+        if (oldIp && ip && ip.length > oldIp.length) {
+          this.$nextTick(() => {
+            if (this.$refs.implementingPartnersInput && this.$refs.implementingPartnersInput.length > 0) {
+              this.$refs.implementingPartnersInput[this.$refs.implementingPartnersInput.length - 1].focus();
+            }
+          });
+        }
+      }
+    }
+  },
   mounted () {
     this.$emit('mounted');
   },
   methods: {
+    isLastAndExist (collection, index) {
+      return !!(collection.length - 1 === index && collection[index]);
+    },
     addDhi () {
       this.platforms = [...this.platforms, null];
     },
@@ -281,12 +316,16 @@ export default {
       this.implementing_partners = ip;
     },
     addImplementingPartners () {
-      this.implementing_partners = [...this.implementing_partners, null];
+      const index = this.implementing_partners.length - 1;
+      if (this.isLastAndExist(this.implementing_partners, index)) {
+        this.implementing_partners = [...this.implementing_partners, null];
+      }
     },
     rmImplementingPartners (index) {
       this.implementing_partners = this.implementing_partners.filter((ip, i) => i !== index);
     },
     async validate () {
+      this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate(),
         this.coverageType === 2

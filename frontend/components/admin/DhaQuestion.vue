@@ -1,113 +1,196 @@
 <template>
-  <el-card :class="['QuestionContainer rounded', thisQuestion.meta, {'inactive': !thisQuestion.active, 'invalid': !valid}]">
+  <el-card :class="['QuestionContainer rounded', {'Inactive': !question.is_active, 'Invalid': !valid, 'Edited': !saved}]">
+
+    <!-- Actions -->
+    <div class="Actions">
+      <el-button
+        :disabled="!valid || saved"
+        type="text"
+        class="IconLeft"
+        @click="saveQuestion"
+      >
+        <fa icon="save" /> Save
+      </el-button>
+      <el-button
+        type="text"
+        class="DeleteButton IconLeft"
+        @click="doDelete(id)">
+        <fa icon="trash" /> Delete
+      </el-button>
+    </div>
+
     <!-- Type -->
     <el-select
-      v-model="type"
+      v-model="question.type"
+      :disabled="saved"
       placeholder="Type">
       <el-option
         :label="$gettext('Text field')"
-        :value="$gettext('Text field')" />
+        :value="1" />
       <el-option
         :label="$gettext('Numeric field')"
-        :value="$gettext('Numeric field')" />
+        :value="2" />
       <el-option
         :label="$gettext('Yes - no field')"
-        :value="$gettext('Yes - no field')" />
+        :value="3" />
       <el-option
         :label="$gettext('Single choice')"
-        :value="$gettext('Single choice')" />
+        :value="4" />
       <el-option
         :label="$gettext('Multiple choice')"
-        :value="$gettext('Multiple choice')" />
+        :value="5" />
     </el-select>
 
     <!-- Question -->
     <el-input
-      v-model="question"
+      v-model="question.question"
       :placeholder="$gettext('Question text')" />
 
     <div class="QSwitches">
       <!-- Required -->
       <el-switch
-        v-model="required"
+        v-model="question.required"
         :active-text="$gettext('Required')" />
 
-      <!-- Active -->
-      <!-- <el-switch
-        v-model="active"
-        size="small"
-        active-text="Active" /> -->
-
-      <!-- TODO -->
       <el-switch
-        v-model="active"
+        v-model="question.is_private"
         :active-text="$gettext('Private')" />
     </div>
-
-    <!-- Valid -->
-    <!-- <span>{{ valid ? '' : 'INVALID' }}</span> -->
-
-    <!-- Options -->
     <dha-question-options
-      v-if="thisQuestion.type.includes('choice')"
-      :question-id="questionId" />
+      v-if="question.type > 3"
+      :disabled="saved"
+      :options.sync="question.options" />
 
-    <span class="DDHandler">
+    <span :class="['DDHandler', {'DraggingDisabled': !draggable}]">
       <fa icon="bars" />
     </span>
   </el-card>
 </template>
 
 <script>
+import isEqual from 'lodash/isEqual';
 import { mapGetters, mapActions } from 'vuex';
 import DhaQuestionOptions from './DhaQuestionOptions';
 
 export default {
-
   components: {DhaQuestionOptions},
-
   props: {
-    questionId: {
-      type: String,
-      required: true
+    id: {
+      type: [String, Number],
+      default: null
+    },
+    draggable: {
+      type: Boolean,
+      default: false
     }
   },
-
+  data () {
+    return {
+      question: {
+        type: '',
+        question: '',
+        options: [],
+        required: false,
+        is_private: false,
+        is_active: true
+      }
+    };
+  },
   computed: {
-
     ...mapGetters({
       questionById: 'admin/questions/getQuestionById'
     }),
-
-    thisQuestion () {
-      return this.questionById(this.questionId);
+    stored () {
+      if (this.id) {
+        const stored = {...this.questionById(+this.id)};
+        stored.is_private = stored.private;
+        delete stored.private;
+        return stored;
+      }
     },
-
-    ...['type', 'question', 'required', 'active'].reduce((ret, key) => {
-      ret[key] = {
-        get () {
-          return this.thisQuestion[key];
-        },
-        set (val) {
-          const diffObj = {id: this.questionId};
-          diffObj[key] = val;
-          this.alterLocalQuestion(diffObj);
-        }
-      };
-      return ret;
-    }, {}),
-
     valid () {
-      const q = this.thisQuestion;
-      return Boolean(q.type && q.question.length && (!q.type.includes('choice') || q.options.length));
+      return Boolean(this.question.type && this.question.question.length && (this.question.type < 4 || this.question.options.length));
+    },
+    saved () {
+      return isEqual(this.stored, this.question);
     }
-
   },
-
+  watch: {
+    stored: {
+      immediate: true,
+      handler (stored) {
+        if (stored) {
+          const options = stored.type > 3 ? [...stored.options] : [];
+          this.question = {...stored, options};
+        }
+      }
+    }
+  },
   methods: {
     ...mapActions({
-      alterLocalQuestion: 'admin/questions/alterLocalQuestion'
-    })
+      createQuestion: 'admin/questions/createQuestion',
+      updateQuestion: 'admin/questions/updateQuestion',
+      deleteQuestion: 'admin/questions/deleteQuestion'
+    }),
+    async doDelete (id) {
+      try {
+        if (this.id) {
+          await this.$confirm(this.$gettext('This will permanently delete the question?'), this.$gettext('Warning'), {
+            confirmButtonText: this.$gettext('OK'),
+            cancelButtonText: this.$gettext('Cancel'),
+            type: 'warning'
+          });
+        }
+        await this.deleteQuestion(id);
+        this.$message({
+          type: 'success',
+          message: this.$gettext('Question successfully deleted')
+        });
+      } catch (e) {
+        if (e === 'cancel') {
+          this.$message({
+            type: 'info',
+            message: this.$gettext('Question deletion canceled')
+          });
+        } else {
+          this.$message({
+            type: 'error',
+            message: this.$gettext('An error occured while deleting the question')
+          });
+        }
+      }
+    },
+    async saveQuestion () {
+      try {
+        if (this.id) {
+          await this.updateQuestion({question: this.question, id: this.id});
+        } else {
+          await this.$confirm(this.$gettext('This will save the question, type and options will not be editable anymore'), this.$gettext('Warning'), {
+            confirmButtonText: this.$gettext('OK'),
+            cancelButtonText: this.$gettext('Cancel'),
+            type: 'warning'
+          });
+          await this.createQuestion(this.question);
+        }
+        this.$message({
+          type: 'success',
+          message: this.$gettext('Question successfully saved')
+        });
+      } catch (e) {
+        if (e === 'cancel') {
+          this.$message({
+            type: 'info',
+            message: this.$gettext('Question saving canceled')
+          });
+        } else {
+          console.error(e);
+          this.$message({
+            type: 'error',
+            message: this.$gettext('An error occured while saving the question')
+          });
+        }
+      }
+    }
   }
 
 };
@@ -122,28 +205,36 @@ export default {
     margin-bottom: 20px;
     padding-left: 24px;
 
-    &.added {
-      // background-color: lighten(@colorPublished, 50%);
+    .Actions {
+      position: absolute;
+      right: 20px;
+      top: 10px;
+
+      .el-button {
+        margin-left: 20px;
+      }
     }
 
-    &.edited {
+    &.Inactive {
+      opacity: .8;
+      background-color: @colorGrayLightest;
+    }
+
+    &.Edited {
+      border-color: darken(@colorBrandBlueLight, 15%);
       background-color: @colorBrandBlueLight;
     }
 
-    &.inactive {
-      // background-color: @colorGrayLightest;
-    }
-
-    &.invalid {
+    &.Invalid {
       border-color: @colorDanger;
       background-color: #FEECEB;
     }
 
     .el-card__body {
       > div {
-        margin-top: 20px;
+        margin-bottom: 20px;
 
-        &:first-child {
+        &:last-of-type {
           margin: 0;
         }
       }
@@ -165,6 +256,17 @@ export default {
       border-radius: 3px 0 0 3px;
       cursor: move;
       transition: @transitionAll;
+
+      &.DraggingDisabled {
+        cursor: not-allowed;
+        &:hover,
+        &:active {
+          background-color: @colorGrayLighter;
+          .svg-inline--fa {
+            color: @colorGray;
+          }
+        }
+      }
 
       &:hover,
       &:active {

@@ -173,7 +173,8 @@ a {
 
 .DhaMap {
   display: block;
-  height: 60vh;
+  height: @landingMapHeight;
+  min-height: @landingMapMinHeight;
   background-color: @colorGrayLight;
 
   .CountryClusterIcon {
@@ -310,6 +311,18 @@ a {
     border-radius: 3px;
   }
 
+  &.Success {
+    .el-card__header {
+      background-color: @colorPublished;
+    }
+  }
+
+  &.Error {
+    .el-card__header {
+      background-color: @colorDanger;
+    }
+  }
+
   .el-card__header {
     padding: 0 20px;
     height: 48px;
@@ -343,6 +356,11 @@ a {
         float: right;
       }
     }
+
+    .Separator {
+      .SeparatorStyle();
+      display: inline-block;
+    }
   }
 }
 
@@ -353,22 +371,35 @@ a {
   border: 0 !important;
 
   &.el-button--default {
-    &:hover {
+    &:not(.is-disabled):hover {
       color: @colorWhite;
       border-color: @colorBrandPrimaryLight;
       background-color: @colorBrandPrimaryLight;
     }
   }
 
+  &.is-disabled {
+    color: @colorTextMuted;
+    background-color: @colorGrayLighter;
+
+    &:hover {
+      color: @colorTextMuted;
+
+      &:not(.el-button--text) {
+        background-color: @colorGrayLighter;
+      }
+    }
+  }
+
   &.IconLeft {
     .svg-inline--fa {
-      margin-right: 2px;
+      margin-right: 6px;
     }
   }
 
   &.IconRight {
     .svg-inline--fa {
-      margin-left: 2px;
+      margin-left: 6px;
     }
   }
 
@@ -609,11 +640,30 @@ fieldset {
     font-weight: 400;
   }
 
+  // for border=true
+  &.el-checkbox--small {
+    .el-checkbox__inner::after {
+      top: 0;
+      left: 3px;
+    }
+  }
+
+  // for border=false — needs an extra class
   &.CheckboxSmall {
     .el-checkbox__input {}
     .el-checkbox__label {
       font-size: @fontSizeSmall;
       line-height: 16px;
+    }
+  }
+
+  &.is-bordered {
+    &.el-checkbox--small {
+      padding: 6px 10px 5px 10px;
+
+      .el-checkbox__input {
+        top: 1px;
+      }
     }
   }
 }
@@ -630,12 +680,6 @@ fieldset {
       font-size: @fontSizeSmall;
       line-height: 16px;
     }
-  }
-}
-
-.el-radio-group {
-  .el-radio {
-    line-height: 40px;
   }
 }
 
@@ -900,9 +944,9 @@ fieldset {
 .el-popover {
   // disable arrow
   margin: 0 !important;
-  border: 0;
+  border: 1px solid @colorTextMuted;
   border-radius: 0;
-  box-shadow: 0 4px 12px 4px rgba(0,0,0,.22);
+  box-shadow: 0 0 12px 4px rgba(0,0,0,.24), 0 4px 16px 0 rgba(0,0,0,.12);
 
   .popper__arrow {
     display: none;
@@ -926,7 +970,7 @@ fieldset {
       .textTruncate();
 
       .svg-inline--fa {
-        margin-right: 2px;
+        margin-right: 6px;
       }
     }
 
@@ -980,10 +1024,9 @@ fieldset {
           }
 
           .DeleteButton {
-
             position: absolute;
             top: 50%;
-            right: 30px;
+            right: 32px;
             transform: translateY(-50%);
             margin-top: -1px;
 
@@ -1030,7 +1073,20 @@ fieldset {
 
 // Table
 
-.el-table {}
+.el-table {
+  .caret-wrapper {
+    height: 22px;
+
+    .sort-caret {
+      &.ascending {
+        top: 0;
+      }
+      &.descending {
+        bottom: 0;
+      }
+    }
+  }
+}
 
 // Pagination
 
@@ -1155,7 +1211,7 @@ fieldset {
     font-weight: 700;
 
     .svg-inline--fa {
-      margin-right: 2px;
+      margin-right: 6px;
       color: @colorGray;
     }
   }

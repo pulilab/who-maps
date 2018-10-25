@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { apiReadParser, apiWriteParser } from '../utilities/api';
+import { apiReadParser, apiWriteParser, APIError } from '../utilities/api';
 
 const cleanState = () => ({
   name: null,
@@ -37,6 +37,8 @@ const cleanState = () => ({
   wiki: null,
   interoperability_links: {},
   interoperability_standards: [],
+  country_answers: [],
+  donors_answers: [],
   published: null,
   original: null
 });
@@ -47,7 +49,15 @@ export const state = () => ({
 });
 
 export const getters = {
-  getProjectData: state => ({...state, published: undefined, loading: undefined}),
+  getProjectData: (state, getters) => ({
+    ...state,
+    interoperability_links: getters.getInteroperabilityLinks,
+    published: undefined,
+    loading: undefined,
+    country_answers: undefined,
+    donor_answers: undefined,
+    original: undefined
+  }),
   getName: state => state.name,
   getOrganisation: state => state.organisation,
   getCountry: state => state.country,
@@ -77,8 +87,41 @@ export const getters = {
   getRepository: state => state.repository,
   getMobileApplication: state => state.mobile_application,
   getWiki: state => state.wiki,
-  getInteroperabilityLinks: state => state.interoperability_links,
+  getInteroperabilityLinks: (state, getters, rootState, rootGetters) => {
+    const result = {};
+    rootGetters['projects/getInteroperabilityLinks'].forEach((ir, index) => {
+      result[ir.id] = {...state.interoperability_links[ir.id], index};
+    });
+    return result;
+  },
   getInteroperabilityStandards: state => state.interoperability_standards,
+  getCountryAnswers: state => state.country_answers ? [...state.country_answers] : [],
+  getCountryAnswerDetails: (state, getters) => id => getters.getCountryAnswers.find(ca => ca.question_id === id),
+  getAllCountryAnswers: (state, getters, rootState, rootGetters) => {
+    const country = rootGetters['countries/getCountryDetails'](getters.getCountry);
+    if (country && country.country_questions) {
+      return country.country_questions.map(cq => {
+        const answer = getters.getCountryAnswerDetails(cq.id);
+        return { question_id: cq.id, answer: answer ? answer.answer : [] };
+      });
+    }
+  },
+  getPublishedCountryAnswerDetails: (state, getters) => id => getters.getPublished.country_custom_answers.find(ca => ca.question_id === id),
+  getDonorsAnswers: state => state.donors_answers ? [...state.donors_answers] : [],
+  getDonorsAnswerDetails: (state, getters) => id => getters.getDonorsAnswers.find(da => da.question_id === id),
+  getAllDonorsAnswers: (state, getters, rootState, rootGetters) => {
+    const donors = getters.getDonors.map(d => rootGetters['system/getDonorDetails'](d));
+    if (donors) {
+      return donors.reduce((a, c) => {
+        a.push(...c.donor_questions.map(dq => {
+          const answer = getters.getDonorsAnswerDetails(dq.id);
+          return { question_id: dq.id, answer: answer ? answer.answer : [], donor_id: c.id };
+        }));
+        return a;
+      }, []);
+    }
+  },
+  getPublishedDonorsAnswerDetails: (state, getters) => id => getters.getPublished.donor_custom_answers.find(ca => ca.question_id === id),
   getPublished: state => ({...state.published, team: state.team, viewers: state.viewers}),
   getLoading: state => state.loading,
   getOriginal: state => state.original
@@ -108,7 +151,7 @@ export const actions = {
       commit('SET_VIEWERS', data.viewers);
     }
   },
-  resetProjectState ({dispatch, commit, rootGetters}) {
+  resetProjectState ({commit, rootGetters}) {
     const clean = cleanState();
     const profile = rootGetters['user/getProfile'];
     if (profile) {
@@ -118,6 +161,11 @@ export const actions = {
     commit('INIT_PROJECT', clean);
     commit('SET_TEAM', clean.team);
     commit('SET_VIEWERS', clean.viewers);
+  },
+  initProjectState ({commit}, value) {
+    commit('INIT_PROJECT', value);
+    commit('SET_TEAM', value.team);
+    commit('SET_VIEWERS', value.viewers);
   },
   setName ({commit}, value) {
     commit('SET_NAME', value);
@@ -224,12 +272,33 @@ export const actions = {
   setLoading ({commit}, value) {
     commit('SET_LOADING', value);
   },
-  async verifyOrganisation ({dispatch}, organisation) {
-    if (organisation && isNaN(organisation)) {
-      const org = await dispatch('system/addOrganisation', organisation, { root: true });
-      return org.id;
+  setCountryAnswer ({commit, getters}, answer) {
+    const index = getters.getCountryAnswers.findIndex(ca => ca.question_id === answer.question_id);
+    if (index > -1) {
+      commit('UPDATE_COUNTRY_ANSWER', {answer, index});
+    } else {
+      commit('ADD_COUNTRY_ANSWER', answer);
     }
-    return organisation;
+  },
+  setDonorAnswer ({commit, getters}, answer) {
+    const index = getters.getDonorsAnswers.findIndex(da => da.question_id === answer.question_id);
+    if (index > -1) {
+      commit('UPDATE_DONOR_ANSWER', {answer, index});
+    } else {
+      commit('ADD_DONOR_ANSWER', answer);
+    }
+  },
+  async verifyOrganisation ({dispatch}, organisation) {
+    try {
+      if (organisation && isNaN(organisation)) {
+        const org = await dispatch('system/addOrganisation', organisation, { root: true });
+        return org.id;
+      }
+      return organisation;
+    } catch (e) {
+      console.log('project/verifyOrganisation failed');
+      return Promise.reject(APIError('organisation', 'Failed to save the organisation'));
+    }
   },
   async saveTeamViewers ({getters, commit, dispatch}, id) {
     const teamViewers = {
@@ -245,8 +314,8 @@ export const actions = {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
-    const parsed = apiWriteParser(draft);
-    const { data } = await this.$axios.post('api/projects/draft/', parsed);
+    const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
+    const { data } = await this.$axios.post(`api/projects/draft/${draft.country}/`, parsed);
     dispatch('projects/addProjectToList', data, {root: true});
     await dispatch('saveTeamViewers', data.id);
     dispatch('setLoading', false);
@@ -256,8 +325,8 @@ export const actions = {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
-    const parsed = apiWriteParser(draft);
-    const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
+    const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
+    const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country}/`, parsed);
     const isUserProject = await dispatch('saveTeamViewers', id);
     if (isUserProject) {
       dispatch('projects/updateProject', data, {root: true});
@@ -270,8 +339,8 @@ export const actions = {
     dispatch('setLoading', 'publish');
     const draft = getters.getProjectData;
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
-    const parsed = apiWriteParser(draft);
-    const { data } = await this.$axios.put(`/api/projects/publish/${id}/`, parsed);
+    const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
+    const { data } = await this.$axios.put(`/api/projects/publish/${id}/${draft.country}/`, parsed);
     const isUserProject = await dispatch('saveTeamViewers', id);
     const parsedResponse = apiReadParser(data.draft);
     commit('SET_PUBLISHED', Object.freeze(parsedResponse));
@@ -391,6 +460,18 @@ export const mutations = {
   SET_INTEROPERABILITY_STANDARDS: (state, interoperability_standards) => {
     Vue.set(state, 'interoperability_standards', [...interoperability_standards]);
   },
+  ADD_COUNTRY_ANSWER: (state, answer) => {
+    state.country_answers.push(answer);
+  },
+  UPDATE_COUNTRY_ANSWER: (state, {answer, index}) => {
+    state.country_answers.splice(index, 1, answer);
+  },
+  ADD_DONOR_ANSWER: (state, answer) => {
+    state.donors_answers.push(answer);
+  },
+  UPDATE_DONOR_ANSWER: (state, {answer, index}) => {
+    state.donors_answers.splice(index, 1, answer);
+  },
   SET_PUBLISHED: (state, published) => {
     Vue.set(state, 'published', {...published});
   },
@@ -429,6 +510,8 @@ export const mutations = {
     state.wiki = project.wiki;
     state.interoperability_links = project.interoperability_links;
     state.interoperability_standards = project.interoperability_standards;
+    state.country_answers = project.country_custom_answers ? project.country_custom_answers : [];
+    state.donors_answers = project.donor_custom_answers ? project.donor_custom_answers : [];
   },
   SET_ORIGINAL: (state, project) => {
     state.original = project;

@@ -32,13 +32,13 @@ export default {
     ...mapGetters({
       landingPageDefaults: 'system/getLandingPageDefaults',
       activeCountry: 'landing/getActiveCountry',
-      countryData: 'landing/getCountryData'
+      landingData: 'landing/getLandingPageData'
     }),
     showWelcomeBox () {
       return this.visible && !this.activeCountry;
     },
     welcomeText () {
-      return this.countryData ? this.countryData.cover_text : this.landingPageDefaults.cover_text;
+      return this.landingData ? this.landingData.cover_text : this.landingPageDefaults.cover_text;
     }
   },
   methods: {

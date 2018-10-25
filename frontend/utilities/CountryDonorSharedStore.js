@@ -58,7 +58,10 @@ export const actions = () => ({
 
     if (state.type === 'country') {
       await dispatch('admin/map/loadGeoJSON', null, {root: true});
+      await dispatch('admin/approval/loadList', null, {root: true});
     }
+
+    dispatch('admin/questions/setQuestions', data, {root: true});
 
     dispatch('mapAdminSelections', data);
   },
@@ -215,6 +218,9 @@ export const actions = () => ({
 
   setFooterText ({ commit }, txt) {
     commit('SET_DATA_FIELD', {field: 'footer_text', data: txt});
+  },
+  setProjectApproval ({commit}, data) {
+    commit('SET_DATA_FIELD', {field: 'project_approval', data});
   }
 });
 

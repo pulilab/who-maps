@@ -1,5 +1,5 @@
 <template>
-  <div class="DjangoFeedback">
+  <div class="vue-django-feedback">
     <vue-django-feedback
       v-if="token"
       :name="name"
@@ -10,7 +10,13 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import VueDjangoFeedback from './feedback/RawDjangoFeedback.vue';
+
 export default {
+  components: { VueDjangoFeedback },
+  $_veeValidate: {
+    validator: 'new'
+  },
   computed: {
     ...mapGetters({
       profile: 'user/getProfile',
@@ -33,18 +39,28 @@ export default {
 <style lang="less">
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
-  @import "../node_modules/vue-django-feedback/dist/styles/variables";
-  @import "../node_modules/vue-django-feedback/dist/styles/main";
+  @import "./feedback/variables.less";
+  @import "./feedback/main.less";
 
-  .DjangoFeedback {
-    vue-django-feedback {
-      .vue-django-feedback {
-        z-index: 5000;
-        font-family: Arial, sans-serif;
-        color: @colorTextPrimary;
+  .vue-django-feedback {
+    .vue-django-feedback {
+      z-index: 5000;
+      font-family: Arial, sans-serif;
+      color: @colorTextPrimary;
+    }
+
+    .feedback-button {
+      background-color: @colorBrandPrimary;
+
+      .icon.icon-opened {
+        > span {
+          font-weight: 700 !important;
+        }
       }
+    }
 
-      .feedback-button {
+    .pop-up-container {
+      .header {
         background-color: @colorBrandPrimary;
 
         .icon.icon-opened {
@@ -52,111 +68,98 @@ export default {
             font-weight: 700 !important;
           }
         }
+
+        h2 {
+          font-weight: 700;
+          letter-spacing: -0.5px;
+        }
       }
 
-      .pop-up-container {
-        .header {
-          background-color: @colorBrandPrimary;
+      .message-container {
+        h4 {
+          color: @colorPublished;
 
-          .icon.icon-opened {
-            > span {
-              font-weight: 700 !important;
-            }
-          }
-
-          h2 {
-            font-weight: 700;
-            letter-spacing: -0.5px;
+          &.error {
+            color: @colorDanger;
           }
         }
 
-        .message-container {
-          h4 {
-            color: @colorPublished;
+        p {
+          color: @colorTextSecondary;
+        }
+      }
 
-            &.error {
-              color: @colorDanger;
+      .pop-up-controls {
+        border-color: @colorGrayLight;
+        border-radius: 0;
+
+        .error-info {
+          font-weight: 700;
+          color: @colorDanger;
+
+          .icon.icon-danger span {
+            font-weight: 700;
+          }
+        }
+
+        .actions {
+          button {
+            color: @colorBrandPrimary;
+            font-weight: 700;
+            text-transform: none;
+
+            &:hover {
+              color: @colorBrandPrimaryLight;
+            }
+
+            &:disabled {
+              color: @colorTextMuted;
             }
           }
+        }
+      }
 
-          p {
+      .input-container {
+        label {
+          color: @colorTextPrimary;
+          font-weight: 700;
+        }
+
+        input,
+        textarea {
+          color: @colorTextPrimary;
+          border-color:@colorTextMuted;
+          border-radius: 0;
+
+          &:hover,
+          &:focus {
+            border-color: @colorGray;
+          }
+
+          &.error {
+            border-color: @colorDanger;
+          }
+        }
+
+        .feedback {
+          color: @colorTextMuted;
+
+          .errors {
+            color: @colorDanger;
+          }
+        }
+      }
+
+      .user-block {
+        .user {
+          .name {
+            font-weight: 700;
+          }
+
+          .email {
             color: @colorTextSecondary;
           }
         }
-
-        .pop-up-controls {
-          border-color: @colorGrayLight;
-          border-radius: 0;
-
-          .error-info {
-            font-weight: 700;
-            color: @colorDanger;
-
-            .icon.icon-danger span {
-              font-weight: 700;
-            }
-          }
-
-          .actions {
-            button {
-              color: @colorBrandPrimary;
-              font-weight: 700;
-              text-transform: none;
-
-              &:hover {
-                color: @colorBrandPrimaryLight;
-              }
-
-              &:disabled {
-                color: @colorTextMuted;
-              }
-            }
-          }
-        }
-
-        .input-container {
-          label {
-            color: @colorTextPrimary;
-            font-weight: 700;
-          }
-
-          input,
-          textarea {
-            color: @colorTextPrimary;
-            border-color:@colorTextMuted;
-            border-radius: 0;
-
-            &:hover,
-            &:focus {
-              border-color: @colorGray;
-            }
-
-            &.error {
-              border-color: @colorDanger;
-            }
-          }
-
-          .feedback {
-            color: @colorTextMuted;
-
-            .errors {
-              color: @colorDanger;
-            }
-          }
-        }
-
-        .user-block {
-          .user {
-            .name {
-              font-weight: 700;
-            }
-
-            .email {
-              color: @colorTextSecondary;
-            }
-          }
-        }
-
       }
     }
   }

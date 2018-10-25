@@ -12,6 +12,9 @@
           :content="link.link"
           link />
       </li>
+      <li v-show="selected.length === 0">
+        <translate>N/A</translate>
+      </li>
     </ul>
   </div>
 </template>

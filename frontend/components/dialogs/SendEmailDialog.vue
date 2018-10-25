@@ -27,8 +27,9 @@
         <el-col class="SecondaryButtons">
           <el-button
             type="text"
-            class="CancelButton"
+            class="IconLeft"
             @click="copy">
+            <fa icon="clone" />
             <translate>Copy to clipboard</translate>
           </el-button>
         </el-col>
@@ -80,6 +81,10 @@ export default {
       const area = this.$refs.emailArea.$el.querySelectorAll('textarea')[0];
       area.select();
       document.execCommand('copy');
+      this.$message({
+        message: this.$gettext('Email address(es) successfully copied in your clipboard'),
+        type: 'success'
+      });
     },
     send () {
       const mailto = `mailto:${this.profile.email}?bcc=${this.addresses.map(a => a.contact_email).join(',')}`;
