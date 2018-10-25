@@ -52,10 +52,10 @@ jobs:
 
       # run tests!
 
-      - run:
-          name: frontend unit tests
-          working_directory: ~/who-maps/frontend
-          command: yarn test
+#      - run:
+#          name: frontend unit tests
+#          working_directory: ~/who-maps/frontend
+#          command: yarn test
 
       - run:
           name: backend flake8
