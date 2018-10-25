@@ -35,7 +35,7 @@ django-simplefeedback==0.8
 django-simple-history==2.4.0
 django-ordered-model==2.1.0
 djangorestframework==3.8.2
-drf-expiring-tokens==0.2.1
+djangorestframework-jwt==1.11.0
 docopt==0.6.2
 Fabric3==1.14.post1
 flake8==3.5.0

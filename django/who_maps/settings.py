@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'rest_auth.registration',
-    'drf_expiring_tokens',
     'ordered_model',
     'rosetta',
     'allauth',
@@ -172,8 +171,24 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'drf_expiring_tokens.authentication.ExpiringTokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
+}
+
+
+def jwt_response_payload_handler(token, user=None, request=None):
+    return {
+        'token': token,
+        'user_profile_id': user.userprofile.id if user.userprofile else None,
+        'account_type': user.userprofile.account_type if user.userprofile else None,
+        'is_superuser': user.is_superuser
+    }
+
+
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
+    'JWT_AUTH_HEADER_PREFIX': 'Token',
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7)
 }
 
 # django-allauth and rest-auth settings
@@ -192,9 +207,6 @@ REST_AUTH_SERIALIZERS = {
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'user.serializers.RegisterWithProfileSerializer'
 }
-
-EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=7)
-# ALWAYS_RESET_TOKEN = False
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
@@ -259,7 +271,7 @@ if SITE_ID in [3, 4]:
 
     REST_FRAMEWORK = {
         'DEFAULT_AUTHENTICATION_CLASSES': (
-            'drf_expiring_tokens.authentication.ExpiringTokenAuthentication',
+            'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         ),
         'DEFAULT_RENDERER_CLASSES': (
             'rest_framework.renderers.JSONRenderer',

@@ -1,7 +1,5 @@
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin
 from rest_framework.viewsets import GenericViewSet
-from rest_auth.models import TokenModel
-from drf_expiring_tokens.views import ObtainExpiringAuthToken
 
 from core.views import TokenAuthMixin
 from .serializers import UserProfileSerializer, OrganisationSerializer
@@ -11,21 +9,6 @@ from .models import UserProfile, Organisation
 class UserProfileViewSet(TokenAuthMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
-
-
-class ExpiringAuthTokenWithUserProfile(ObtainExpiringAuthToken):
-    def post(self, request):
-        """
-        Decorate the login/token retrieval response with userprofile information.
-        """
-        response = super(ExpiringAuthTokenWithUserProfile, self).post(request)
-        if hasattr(response, "data") and "token" in response.data.keys():
-            authtoken = TokenModel.objects.get(key=response.data.get("token"))
-            user_profile = UserProfile.objects.get_object_or_none(user=authtoken.user)
-            response.data.update(user_profile_id=user_profile.id if user_profile else None)
-            response.data.update(account_type=user_profile.account_type if user_profile else None)
-            response.data.update(is_superuser=user_profile.user.is_superuser)
-        return response
 
 
 class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, RetrieveModelMixin, GenericViewSet):
