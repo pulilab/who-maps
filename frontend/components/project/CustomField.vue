@@ -4,6 +4,22 @@
     :label="question"
     class="CustomField"
   >
+
+    <!-- TODO -->
+    <!-- Show only when field is private -->
+    <div class="PrivateBadge">
+      <el-tooltip
+        effect="dark"
+        placement="right"
+        content="This field is hidden from public">
+        <el-tag
+          size="mini"
+          type="danger">
+          Private field
+        </el-tag>
+      </el-tooltip>
+    </div>
+
     <el-input
       v-validate="localRules"
       v-if="type < 3"
@@ -182,9 +198,21 @@ export default {
 
 <style lang="less">
 .CustomField {
-  width: 100%;
+  position: relative;
+
+  .el-form-item__label {
+    line-height: 20px;
+    margin-bottom: 10px;
+  }
 
   .CustomFieldSelector {
+    width: 100%;
+  }
+
+  .PrivateBadge {
+    position: relative;
+    top: -5px;
+    margin-bottom: 10px;
     width: 100%;
   }
 }
