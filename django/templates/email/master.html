@@ -468,7 +468,12 @@
                                   <tbody>
                                     <tr>
                                       <!-- TODO#7
-                                        I dont see this feature on the frontend at all
+                                        Right now there's no way to route to exact resouce on the frontend via url, as details are shown in a popup
+                                        you can narrow down category like eg.:
+                                        http://localhost:3000/en/-/cms#experiences
+                                        http://localhost:3000/en/-/cms#lessons
+                                        http://localhost:3000/en/-/cms#resources
+                                        and provide the title/details about it in the links name, to help the user find it via frontends search
                                       -->
                                       <td> <a href="{% site_url %}{{ change_url }}" target="_blank">{% trans "Go to see content" %}</a> </td>
                                     </tr>
