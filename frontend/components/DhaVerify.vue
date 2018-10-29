@@ -5,13 +5,15 @@
         <translate>Email confirmation</translate>
       </div>
 
-      <p class="Instruction">
+      <p
+        class="Instruction"
+        @click="toLogin">
         <translate>Congratulations your email address is verified, you can now </translate>
-        <span
-          class="TextLink"
-          @click="toLogin">
+        <span>&nbsp;</span>
+        <span class="TextLink">
           <translate>login</translate>
         </span>
+        <span>&nbsp;</span>
         <translate>and use the system</translate>
       </p>
     </el-card>
