@@ -1,7 +1,5 @@
 <template>
   <el-col class="Breadcrumb">
-    <!-- TODO: Zoli -->
-    <!-- Fix this on landing page, without the subpage part it breaks the positioning, with longer subpages names it breaks as well -->
     <el-row
       type="flex"
       align="middle">
@@ -38,7 +36,7 @@ export default {
     },
     subPageName () {
       const pages = {
-        'organisation-edit-profile': this.$gettext('User'),
+        'organisation-edit-profile': this.$gettext('Admin'),
         'organisation-admin-country': this.$gettext('Admin'),
         'organisation-admin-donor': this.$gettext('Admin'),
         'organisation-dashboard': this.$gettext('Dashboard'),
@@ -72,10 +70,16 @@ export default {
   color: @colorWhite;
 
   .Home {
-    transform: translateY(-1px);
+
     a {
+      line-height: @actionBarHeight;
       text-decoration: none;
       color: @colorWhite;
+      transition: @transitionFade;
+
+      &:hover {
+        opacity: .7;
+      }
     }
   }
 
@@ -89,6 +93,7 @@ export default {
     font-size: @fontSizeBase;
     line-height: @actionBarHeight;
     font-weight: 700;
+    white-space: nowrap;
   }
 
   // h3 {
