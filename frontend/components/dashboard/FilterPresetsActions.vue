@@ -15,7 +15,7 @@
             class="IconRight"
           >
             <translate v-show="!activePreseet">Load filters</translate>
-            <span v-show="activePreseet"> {{ activePreseet.name }} </span>
+            <span v-if="activePreseet"> {{ activePreseet.name }} </span>
             <fa icon="caret-down" />
           </el-button>
           <div class="CustomPopoverList">
