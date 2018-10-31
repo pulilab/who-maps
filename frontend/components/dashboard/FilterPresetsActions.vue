@@ -14,9 +14,8 @@
             size="small"
             class="IconRight"
           >
-            <!-- TODO -->
-            <!-- This should display the selected preset's name; show 'Load filters' only for empty state -->
-            <translate>Load filters</translate>
+            <translate v-show="!activePreseet">Load filters</translate>
+            <span v-show="activePreseet"> {{ activePreseet.name }} </span>
             <fa icon="caret-down" />
           </el-button>
           <div class="CustomPopoverList">
@@ -74,7 +73,10 @@ export default {
     ...mapGetters({
       dashboardType: 'dashboard/getDashboardType',
       savedFilters: 'dashboard/getSavedFilters'
-    })
+    }),
+    activePreseet () {
+      return this.savedFilters.find(f => this.isActive(f.query));
+    }
   },
   methods: {
     ...mapActions({
