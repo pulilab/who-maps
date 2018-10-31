@@ -47,6 +47,39 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
 
+  .LandingPage {}
+
+  .CountryDonorLandingPage {
+    .TopBar {
+      .TopBarInner {
+        height: @topBarHeightSubpage;
+
+        .LogoHolder {
+          .LogoWHO,
+          .Separator {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  .SubPage {
+    .TopBar {
+      .TopBarInner {
+        height: @topBarHeightSubpage;
+
+        .LogoHolder {
+          .LogoWHO,
+          .Separator {
+            display: none;
+          }
+        }
+      }
+    }
+  }
 </style>

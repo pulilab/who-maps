@@ -1,4 +1,6 @@
 <template>
+  <!-- TODO -->
+  <!-- Height of datatable should be checked if it's calculated properly ... -->
   <div class="MainTable">
     <el-table
       ref="mainTable"
@@ -336,7 +338,7 @@ export default {
 
   .MainTable {
     margin: 0 40px;
-    max-height: calc(100vh - @topBarHeight - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
+    max-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
 
     // Custom table template
     .el-table {

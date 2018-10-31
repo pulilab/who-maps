@@ -18,8 +18,8 @@
                 :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
                 :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')">
             </el-col>
-            <el-col>
-              <div class="Separator" />
+            <el-col class="Separator">
+              <div />
             </el-col>
             <el-col class="LogoDHA">
               <img
@@ -119,6 +119,8 @@
                   class="CountryFlag">
               </el-col>
               <el-col>
+                <!-- TODO -->
+                <!-- Could we use here something shorter, for ex a country code? -->
                 <div class="CountryName">{{ landingData.name }}</div>
               </el-col>
             </el-row>
@@ -133,9 +135,9 @@
                 key="whoLandingBtn"
                 :to="localePath({name: 'organisation', params: {organisation: '-'}})">
                 <img
-                  class="LogoSmall"
+                  class="LogoWHOxDHA"
                   alt="WHO logo small"
-                  src="/logo-who-blue.svg">
+                  src="/logo-whoxdha.svg">
               </nuxt-link>
             </div>
           </el-col>
@@ -206,20 +208,30 @@ export default {
       width: auto;
 
       .LogoWHO {
+        width: 100%;
+
         img {
           height: 48px;
         }
       }
 
       .LogoDHA {
+        width: 100%;
+
         img {
           height: 24px;
+          transform: translateY(2px);
         }
       }
 
       .Separator {
-        .SeparatorStyle();
+        width: auto;
         height: 36px;
+        margin: 0 15px;
+
+        > div {
+          .SeparatorStyle();
+        }
       }
     }
 
@@ -245,7 +257,7 @@ export default {
     {
       position: relative;
       height: 24px;
-      margin: 0 10px;
+      margin: 0 5px;
       padding: 0 10px;
       font-size: @fontSizeBase;
       font-weight: 700;
@@ -327,8 +339,9 @@ export default {
       }
 
       .CountryName {
-        font-size: @fontSizeSmall;
-        color: @colorTextSecondary;
+        font-size: @fontSizeBase;
+        font-weight: 700;
+        color: @colorTextPrimary;
         line-height: 24px;
       }
     }
@@ -344,7 +357,7 @@ export default {
     }
 
     .CountrySpecificMenu {
-      .LogoSmall {
+      .LogoWHOxDHA {
         height: 24px;
       }
     }

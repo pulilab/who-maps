@@ -12,7 +12,7 @@
           <div class="SupporterLogos">
             <div class="Partner">
               <img
-                src="/static/partners/who-logo.png"
+                src="/static/partners/logo-who.png"
                 alt="WHO">
             </div>
             <div class="Partner">

@@ -6,14 +6,34 @@
       align="middle"
       class="InnerActionBar">
 
-      <el-col class="Title">
-        <h3>Digital Health Atlas</h3>
+      <el-col class="Breadcrumb">
+        <el-row
+          type="flex"
+          align="middle">
+          <el-col class="Home">
+            <!-- TODO -->
+            <!-- This must go to landing page always -->
+            <fa
+              icon="home"
+              size="lg" />
+          </el-col>
+          <!-- TODO -->
+          <!-- Show this only if it's a subpage, i assume this gonna be a new component -->
+          <el-col class="Sep">
+            <fa icon="angle-right" />
+          </el-col>
+          <el-col class="Page">Subpage</el-col>
+        </el-row>
       </el-col>
 
-      <el-col class="ActionBarMenu">
+      <el-col class="ActionBarTabs">
         <el-row
           v-if="isAdmin"
-          type="flex">
+          type="flex"
+          align="middle">
+          <el-col class="Sep">
+            <fa icon="angle-right" />
+          </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
               :to="localePath({name: 'organisation-edit-profile', params: $route.params})"
@@ -43,7 +63,11 @@
         </el-row>
         <el-row
           v-if="isDashboard"
-          type="flex">
+          type="flex"
+          align="middle">
+          <el-col class="Sep">
+            <fa icon="angle-right" />
+          </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
               :to="localePath({name: 'organisation-dashboard', params: $route.params, query: $route.query})"
@@ -129,44 +153,78 @@ export default {
 
   .ActionBar {
     background-color: @colorBrandPrimary;
+
     .InnerActionBar {
       .limitPageWidth();
       height: @actionBarHeight;
     }
-    .Title {
+
+    .Breadcrumb {
       width: auto;
-      h3 {
-        display: inline-block;
-        margin: 0;
-        font-size: @fontSizeLarge;
-        color: @colorWhite;
-        white-space: nowrap;
+      height: @actionBarHeight;
+      color: @colorWhite;
+
+      .Home {
+        transform: translateY(-1px);
       }
+
+      .Sep {
+        margin: 0 5px;
+        padding: 0 10px;
+        transform: translateY(1px);
+      }
+
+      .Page {
+        font-size: @fontSizeBase;
+        line-height: @actionBarHeight;
+        font-weight: 700;
+      }
+
+      // h3 {
+      //   display: inline-block;
+      //   margin: 0;
+      //   font-size: @fontSizeLarge;
+      //   color: @colorWhite;
+      //   white-space: nowrap;
+      // }
     }
+
     .SearchComponentWrapper {
       width: auto;
     }
+
     .PersonaSelectorWrapper {
       width: auto;
     }
+
     .DashboardFiltersHeaderWrapper {
       min-width: @advancedSearchWidth;
       max-width: @advancedSearchWidth;
     }
-    .ActionBarMenu {
+
+    .ActionBarTabs {
       width: 100%;
       height: @actionBarHeight;
-      padding-left: 70px;
       overflow: hidden;
+
+      .Sep {
+        width: auto;
+        margin: 0 5px;
+        padding: 0 10px;
+        color: @colorWhite;
+        transform: translateY(1px);
+      }
+
       .ActionBarTab {
         width: auto;
       }
     }
+
     .ActionBarLink {
       position: relative;
       width: auto;
       height: 100%;
-      margin-right: 20px;
+      margin: 0 10px;
       padding: 0 10px;
       font-size: @fontSizeBase;
       line-height: @actionBarHeight;
@@ -177,13 +235,20 @@ export default {
       white-space: nowrap;
       opacity: .8;
       transition: @transitionAll;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
       &.Active, &.nuxt-link-exact-active {
         opacity: 1;
+
         &::before {
           background-color: @colorWhite;
           transform: translateY(0);
         }
       }
+
       &::before {
         content: "";
         position: absolute;
@@ -196,6 +261,7 @@ export default {
         transform: translateY(4px);
         transition: @transitionAll;
       }
+
       &:hover {
         opacity: 1;
         // &::before {

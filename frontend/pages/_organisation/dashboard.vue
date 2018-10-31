@@ -50,7 +50,7 @@ export default {
     width: 100vw;
     min-width: @appWidthMinLimit;
     max-width: @appWidthMaxLimit;
-    height: calc(100vh - @topBarHeight - @actionBarHeight - @appFooterHeight);
+    height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @appFooterHeight);
 
     .ChildContainer {
       z-index: 1;
@@ -61,7 +61,7 @@ export default {
       height: 100%;
 
       .DashboardMap {
-        height: calc(100vh - @topBarHeight - @actionBarHeight - @appFooterHeight);
+        height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @appFooterHeight);
         min-height: auto;
       }
     }
