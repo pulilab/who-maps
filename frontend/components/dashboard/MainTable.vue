@@ -1,6 +1,4 @@
 <template>
-  <!-- TODO -->
-  <!-- Height of datatable should be checked if it's calculated properly ... -->
   <div class="MainTable">
     <el-table
       ref="mainTable"
