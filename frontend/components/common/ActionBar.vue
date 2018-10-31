@@ -6,25 +6,7 @@
       align="middle"
       class="InnerActionBar">
 
-      <el-col class="Breadcrumb">
-        <el-row
-          type="flex"
-          align="middle">
-          <el-col class="Home">
-            <!-- TODO -->
-            <!-- This must go to landing page always -->
-            <fa
-              icon="home"
-              size="lg" />
-          </el-col>
-          <!-- TODO -->
-          <!-- Show this only if it's a subpage, i assume this gonna be a new component -->
-          <el-col class="Sep">
-            <fa icon="angle-right" />
-          </el-col>
-          <el-col class="Page">Subpage</el-col>
-        </el-row>
-      </el-col>
+      <bread-crumb/>
 
       <el-col class="ActionBarTabs">
         <el-row
@@ -110,12 +92,14 @@ import { mapGetters } from 'vuex';
 import SearchComponent from '../common/SearchComponent.vue';
 import PersonaSelector from '../dashboard/PersonaSelector';
 import DashboardFiltersHeader from '../dashboard/DashboardFiltersHeader';
+import BreadCrumb from '../BreadCrumb';
 
 export default {
   components: {
     SearchComponent,
     PersonaSelector,
-    DashboardFiltersHeader
+    DashboardFiltersHeader,
+    BreadCrumb
   },
   computed: {
     ...mapGetters({
@@ -157,36 +141,6 @@ export default {
     .InnerActionBar {
       .limitPageWidth();
       height: @actionBarHeight;
-    }
-
-    .Breadcrumb {
-      width: auto;
-      height: @actionBarHeight;
-      color: @colorWhite;
-
-      .Home {
-        transform: translateY(-1px);
-      }
-
-      .Sep {
-        margin: 0 5px;
-        padding: 0 10px;
-        transform: translateY(1px);
-      }
-
-      .Page {
-        font-size: @fontSizeBase;
-        line-height: @actionBarHeight;
-        font-weight: 700;
-      }
-
-      // h3 {
-      //   display: inline-block;
-      //   margin: 0;
-      //   font-size: @fontSizeLarge;
-      //   color: @colorWhite;
-      //   white-space: nowrap;
-      // }
     }
 
     .SearchComponentWrapper {

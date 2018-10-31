@@ -119,9 +119,7 @@
                   class="CountryFlag">
               </el-col>
               <el-col>
-                <!-- TODO -->
-                <!-- Could we use here something shorter, for ex a country code? -->
-                <div class="CountryName">{{ landingData.name }}</div>
+                <div class="CountryName">{{ landingData.code }}</div>
               </el-col>
             </el-row>
           </el-col>
