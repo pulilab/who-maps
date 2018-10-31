@@ -288,7 +288,7 @@ export default {
 
     .el-tabs {
       .el-tabs__header {
-        margin: 0;
+        margin: 30px 0 0;
 
         .el-tabs__nav {
           .el-tabs__item {
@@ -307,7 +307,7 @@ export default {
       }
 
       .el-tabs__content {
-        padding: 20px 40px 60px;
+        padding: 20px 60px 80px;
         transform: translateX(-1px);
         box-shadow: inset 2px 0 0 0 @colorGrayLightest;
 
