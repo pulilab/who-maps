@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="layoutClass">
     <dialogs-container />
     <top-bar />
     <action-bar v-if="showActionBar" />
@@ -25,12 +25,22 @@ export default {
     DjangoFeedback
   },
   computed: {
+    pureRoute () {
+      return this.$route.name.split('___')[0];
+    },
     showActionBar () {
       const hiddenOn = ['index-login', 'index-signup'];
       if (this.$route && this.$route.name) {
-        const pureRoute = this.$route.name.split('___')[0];
-        return !hiddenOn.includes(pureRoute);
+        return !hiddenOn.includes(this.pureRoute);
       }
+    },
+    layoutClass () {
+      if (this.pureRoute !== 'organisation' && this.pureRoute !== 'organisation-login' && this.pureRoute !== 'organisation-signup') {
+        return 'SubPage';
+      } else if (this.$route.params.organisation !== '-') {
+        return 'CountryDonorLandingPage';
+      }
+      return 'LandingPage';
     }
   }
 
