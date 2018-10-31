@@ -36,7 +36,7 @@ export default {
     },
     subPageName () {
       const pages = {
-        'organisation-edit-profile': this.$gettext('User'),
+        'organisation-edit-profile': this.$gettext('Admin'),
         'organisation-admin-country': this.$gettext('Admin'),
         'organisation-admin-donor': this.$gettext('Admin'),
         'organisation-dashboard': this.$gettext('Dashboard'),
@@ -78,7 +78,7 @@ export default {
       transition: @transitionFade;
 
       &:hover {
-        opacity: .8;
+        opacity: .7;
       }
     }
   }

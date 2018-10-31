@@ -187,7 +187,7 @@ export default {
       text-decoration: none;
       cursor: pointer;
       white-space: nowrap;
-      opacity: .8;
+      opacity: .7;
       transition: @transitionAll;
 
       &:first-child {
