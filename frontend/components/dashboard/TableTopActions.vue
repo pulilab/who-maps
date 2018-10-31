@@ -69,6 +69,8 @@
       </el-row>
     </el-col>
 
+    <!-- TODO -->
+    <!-- On smaller viewport it must be transformed into a popover/tooltip/dropdown to free up space and not be broken -->
     <el-col class="TableLegend">
       <el-row
         type="flex"
