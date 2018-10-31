@@ -10,10 +10,23 @@
 
       <el-col class="LogoHolder">
         <nuxt-link :to="localePath({name: 'organisation', params: $route.params})">
-          <img
-            :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
-            :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')"
-            class="Logo">
+          <el-row
+            type="flex"
+            align="middle">
+            <el-col class="LogoWHO">
+              <img
+                :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
+                :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')">
+            </el-col>
+            <el-col>
+              <div class="Separator" />
+            </el-col>
+            <el-col class="LogoDHA">
+              <img
+                src="/logo-dha.svg"
+                alt="Digital Health Atlas">
+            </el-col>
+          </el-row>
         </nuxt-link>
       </el-col>
 
@@ -188,11 +201,25 @@ export default {
     }
 
     .LogoHolder {
+      display: flex;
       align-self: center;
       width: auto;
 
-      .Logo {
-        height: 54px;
+      .LogoWHO {
+        img {
+          height: 48px;
+        }
+      }
+
+      .LogoDHA {
+        img {
+          height: 24px;
+        }
+      }
+
+      .Separator {
+        .SeparatorStyle();
+        height: 36px;
       }
     }
 
