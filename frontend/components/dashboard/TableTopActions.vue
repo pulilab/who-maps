@@ -69,13 +69,12 @@
       </el-row>
     </el-col>
 
-    <!-- TODO -->
-    <!-- On smaller viewport it must be transformed into a popover/tooltip/dropdown to free up space and not be broken -->
     <el-col class="TableLegend">
       <el-row
         type="flex"
         align="middle">
         <project-legend
+          :compact-mode="viewportSize < 1100"
           force-star
           force-eye
           force-handshake
@@ -159,7 +158,8 @@ export default {
     return {
       exportType: 'CSV',
       columnSelectorOpen: false,
-      selectedColumns: []
+      selectedColumns: [],
+      viewportSize: 2000
     };
   },
   computed: {
@@ -191,6 +191,17 @@ export default {
       return false;
     }
   },
+  mounted () {
+    this.$nextTick(() => {
+      this.setViewport();
+      window.addEventListener('resize', this.setViewport);
+    });
+  },
+  beforeDestroy () {
+    if (process.client) {
+      window.removeEventListener('resize', this.setViewport);
+    }
+  },
   methods: {
     ...mapActions({
       setSelectedColumns: 'dashboard/setSelectedColumns',
@@ -199,6 +210,11 @@ export default {
       loadProjectsBucket: 'dashboard/loadProjectsBucket',
       setSelectedRows: 'dashboard/setSelectedRows'
     }),
+    setViewport () {
+      if (process.client && window) {
+        this.viewportSize = window.innerWidth;
+      }
+    },
     popperOpenHandler () {
       this.selectedColumns = [...this.columns.map(s => ({...s}))];
     },
