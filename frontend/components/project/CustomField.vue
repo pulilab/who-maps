@@ -5,9 +5,9 @@
     class="CustomField"
   >
 
-    <!-- TODO -->
-    <!-- Show only when field is private -->
-    <div class="PrivateBadge">
+    <div
+      v-show="isPrivate"
+      class="PrivateBadge">
       <el-tooltip
         effect="dark"
         placement="right"
@@ -87,6 +87,10 @@ export default {
       default: () => []
     },
     isRequired: {
+      type: Boolean,
+      default: false
+    },
+    isPrivate: {
       type: Boolean,
       default: false
     },
