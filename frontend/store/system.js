@@ -108,7 +108,7 @@ export const actions = {
     }
   },
 
-  async loadStaticData ({ commit }) {
+  async loadStaticData ({ commit, dispatch }) {
     try {
       const { data } = await this.$axios.get('/api/static-data/');
       commit('SET_AXIS', data.axis);
@@ -119,6 +119,7 @@ export const actions = {
       commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
       commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
       commit('SET_REGIONS', data.regions);
+      dispatch('dashboard/setDashboardColumns', data.dashboard_columns, {root: true});
     } catch (e) {
       console.error('system/loadStaticData failed');
     }
