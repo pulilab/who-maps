@@ -1,6 +1,6 @@
 <template>
   <div
-    v-scroll-class:FixedNavigation="340"
+    v-scroll-class:FixedNavigation="266"
     class="ProjectNavigation"
   >
     <el-card :body-style="{ padding: '0px' }">
