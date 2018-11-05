@@ -89,10 +89,7 @@ class CountryTests(APITestCase):
         response_keys = response.json()[0].keys()
         self.assertIn("name", response_keys)
         self.assertIn("code", response_keys)
-        self.assertIn("logo", response_keys)
-        self.assertIn("cover", response_keys)
-        self.assertIn("cover_text", response_keys)
-        self.assertIn("footer_text", response_keys)
+        self.assertIn("id", response_keys)
 
     def test_get_countries(self):
         Country.objects.exclude(id=self.country.id).delete()
@@ -926,10 +923,7 @@ class DonorTests(APITestCase):
         response_keys = response.json()[0].keys()
         self.assertIn("name", response_keys)
         self.assertIn("code", response_keys)
-        self.assertIn("logo", response_keys)
-        self.assertIn("cover", response_keys)
-        self.assertIn("cover_text", response_keys)
-        self.assertIn("footer_text", response_keys)
+        self.assertIn("id", response_keys)
 
     def test_donor_admin_retrieve(self):
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
