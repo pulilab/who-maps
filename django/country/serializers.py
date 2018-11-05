@@ -238,6 +238,12 @@ class CountrySerializer(SuperAdminCountrySerializer):
         read_only_fields = READ_ONLY_COUNTRY_FIELDS
 
 
+class CountryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ('id', 'name', 'code')
+
+
 DONOR_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
                 "footer_text", "partner_logos", "donor_questions")
 READ_ONLY_DONOR_FIELDS = ("logo_url", "cover_url", "logo", "cover", "name", "code", "donor_questions")
