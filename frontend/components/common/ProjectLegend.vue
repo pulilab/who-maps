@@ -15,6 +15,7 @@
       v-if="compactMode"
       placement="bottom-end"
       trigger="hover"
+      title="Table legend"
       popper-class="CustomPopover TableLegendDropdown">
       <project-legend-content
         :id="id"

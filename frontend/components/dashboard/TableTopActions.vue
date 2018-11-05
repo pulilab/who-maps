@@ -338,7 +338,7 @@ export default {
     transform: translate(10px, -30px);
 
     .ProjectLegendContent {
-      padding: 12px;
+      padding: 8px 12px 12px;
 
       > span {
         position: relative;
