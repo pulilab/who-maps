@@ -303,3 +303,9 @@ class DonorSerializer(SuperAdminDonorSerializer):
     class Meta(SuperAdminDonorSerializer.Meta):
         fields = DONOR_FIELDS
         read_only_fields = READ_ONLY_DONOR_FIELDS
+
+
+class DonorListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Donor
+        fields = ('id', 'name', 'code')
