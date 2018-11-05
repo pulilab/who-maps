@@ -173,7 +173,9 @@
           @click="goToDashboard"
         >
           <translate>Cancel</translate>
-          <span class="ButtonHint"><translate>Go back to Dashboard</translate></span>
+          <span class="ButtonHint">
+            <translate>Return to the Dashboard</translate>
+          </span>
         </el-button>
       </div>
     </el-card>

@@ -42,7 +42,7 @@
             <fa
               icon="info-circle"
               size="lg" />
-            <translate>Select a sub-level on the map to dispaly the data </translate>
+            <translate>Click on the map to view the digital health project information.</translate>
           </div>
 
           <div
