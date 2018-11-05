@@ -7,50 +7,7 @@ export const defaultSelectedColumns = () => ['1', '2', '3', '4', '5', '6', '7', 
 export const state = () => ({
   ...stateGenerator(),
   searchIn: searchIn(),
-  columns: [
-    {
-      id: 1,
-      label: 'Project name'
-    },
-    {
-      id: 2,
-      label: 'Country'
-
-    },
-    {
-      id: 3,
-      label: 'Organisation Name'
-    },
-    {
-      id: 4,
-      label: 'Government Investor'
-    },
-    {
-      id: 5,
-      label: 'Region'
-    },
-
-    {
-      id: 6,
-      label: 'Donors'
-    },
-    {
-      id: 7,
-      label: 'Contact Name'
-    },
-    {
-      id: 8,
-      label: 'Overview of digital health implementation'
-    },
-    {
-      id: 9,
-      label: 'Geographic scope'
-    },
-    {
-      id: 10,
-      label: 'Health Focus Areas'
-    }
-  ],
+  columns: [],
   selectedColumns: defaultSelectedColumns(),
   projectsList: [],
   projectsBucket: [],
@@ -148,6 +105,9 @@ export const getters = {
 
 export const actions = {
   ...actionsGenerator(),
+  setDashboardColumns ({commit}, columns) {
+    commit('SET_DASHBOARD_COLUMNS', columns);
+  },
   async loadProjectList ({commit, dispatch}) {
     const data = await dispatch('loadProjects', {type: 'list'});
     commit('SET_PROJECT_LIST', data.results.projects);
@@ -281,6 +241,9 @@ export const actions = {
 };
 export const mutations = {
   ...mutationsGenerator(),
+  SET_DASHBOARD_COLUMNS: (state, columns) => {
+    state.columns = columns;
+  },
   SET_PROJECT_LIST: (state, projects) => {
     state.projectsList = projects;
   },

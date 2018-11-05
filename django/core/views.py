@@ -9,6 +9,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from project.permissions import InTeamOrReadOnly
 from project.models import Project
+from country.models import Country
 
 from .data.landing_page_defaults import LANDING_PAGE_DEFAULTS
 from .data.domains import AXIS, DOMAINS
@@ -16,7 +17,7 @@ from .data.search_filters import SEARCH_FILTERS
 from .data.thematic_overview import THEMATIC_OVERVIEW
 from .data.toolkit_questions import TOOLKIT_QUESTIONS
 from .data.sub_level_types import SUB_LEVEL_TYPES
-from country.models import Country
+from .data.dashboard_columns import DASHBOARD_COLUMNS
 
 
 class TokenAuthMixin(object):
@@ -90,6 +91,7 @@ class StaticDataView(GenericAPIView):
         data['toolkit_questions'] = TOOLKIT_QUESTIONS
         data['sub_level_types'] = SUB_LEVEL_TYPES
         data['regions'] = [{'id': reg[0], 'name': reg[1]} for reg in Country.REGIONS]
+        data['dashboard_columns'] = DASHBOARD_COLUMNS
 
         return Response(data)
 
