@@ -74,6 +74,7 @@
         type="flex"
         align="middle">
         <project-legend
+          :compact-mode="viewportSize < 1440"
           force-star
           force-eye
           force-handshake
@@ -157,7 +158,8 @@ export default {
     return {
       exportType: 'CSV',
       columnSelectorOpen: false,
-      selectedColumns: []
+      selectedColumns: [],
+      viewportSize: 2000
     };
   },
   computed: {
@@ -189,6 +191,17 @@ export default {
       return false;
     }
   },
+  mounted () {
+    this.$nextTick(() => {
+      this.setViewport();
+      window.addEventListener('resize', this.setViewport);
+    });
+  },
+  beforeDestroy () {
+    if (process.client) {
+      window.removeEventListener('resize', this.setViewport);
+    }
+  },
   methods: {
     ...mapActions({
       setSelectedColumns: 'dashboard/setSelectedColumns',
@@ -197,6 +210,11 @@ export default {
       loadProjectsBucket: 'dashboard/loadProjectsBucket',
       setSelectedRows: 'dashboard/setSelectedRows'
     }),
+    setViewport () {
+      if (process.client && window) {
+        this.viewportSize = window.innerWidth;
+      }
+    },
     popperOpenHandler () {
       this.selectedColumns = [...this.columns.map(s => ({...s}))];
     },
@@ -298,11 +316,51 @@ export default {
         }
       }
 
+      .ShowLegendButton {
+        color: @colorTextSecondary;
+
+        .svg-inline--fa {
+          height: 12px;
+          margin-left: 0;
+          color: @colorTextSecondary;
+        }
+      }
+
       .TableSettingsButton {}
     }
   }
 
   .TableSettingsDropdown {
     transform: translate(10px, -30px);
+  }
+
+  .TableLegendDropdown {
+    transform: translate(10px, -30px);
+
+    .ProjectLegendContent {
+      padding: 8px 12px 12px;
+
+      > span {
+        position: relative;
+        display: block;
+
+        .svg-inline--fa {
+          position: absolute;
+          top: 3px;
+          left: 0;
+          height: 14px;
+          margin-right: 6px;
+
+          &.fa-handshake {
+            left: -1px;
+          }
+        }
+
+        > span {
+          margin-left: 20px;
+          font-size: @fontSizeSmall
+        }
+      }
+    }
   }
 </style>

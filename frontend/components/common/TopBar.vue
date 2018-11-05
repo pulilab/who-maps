@@ -10,10 +10,23 @@
 
       <el-col class="LogoHolder">
         <nuxt-link :to="localePath({name: 'organisation', params: $route.params})">
-          <img
-            :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
-            :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')"
-            class="Logo">
+          <el-row
+            type="flex"
+            align="middle">
+            <el-col class="LogoWHO">
+              <img
+                :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
+                :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')">
+            </el-col>
+            <el-col class="Separator">
+              <div />
+            </el-col>
+            <el-col class="LogoDHA">
+              <img
+                src="/logo-dha.svg"
+                alt="Digital Health Atlas">
+            </el-col>
+          </el-row>
         </nuxt-link>
       </el-col>
 
@@ -106,7 +119,7 @@
                   class="CountryFlag">
               </el-col>
               <el-col>
-                <div class="CountryName">{{ landingData.name }}</div>
+                <div class="CountryName">{{ landingData.code }}</div>
               </el-col>
             </el-row>
           </el-col>
@@ -120,9 +133,9 @@
                 key="whoLandingBtn"
                 :to="localePath({name: 'organisation', params: {organisation: '-'}})">
                 <img
-                  class="LogoSmall"
+                  class="LogoWHOxDHA"
                   alt="WHO logo small"
-                  src="/logo-who-blue.svg">
+                  src="/logo-whoxdha.svg">
               </nuxt-link>
             </div>
           </el-col>
@@ -188,11 +201,35 @@ export default {
     }
 
     .LogoHolder {
+      display: flex;
       align-self: center;
       width: auto;
 
-      .Logo {
-        height: 54px;
+      .LogoWHO {
+        width: 100%;
+
+        img {
+          height: 48px;
+        }
+      }
+
+      .LogoDHA {
+        width: 100%;
+
+        img {
+          height: 24px;
+          transform: translateY(2px);
+        }
+      }
+
+      .Separator {
+        width: auto;
+        height: 36px;
+        margin: 0 15px;
+
+        > div {
+          .SeparatorStyle();
+        }
       }
     }
 
@@ -218,7 +255,7 @@ export default {
     {
       position: relative;
       height: 24px;
-      margin: 0 10px;
+      margin: 0 5px;
       padding: 0 10px;
       font-size: @fontSizeBase;
       font-weight: 700;
@@ -300,8 +337,9 @@ export default {
       }
 
       .CountryName {
-        font-size: @fontSizeSmall;
-        color: @colorTextSecondary;
+        font-size: @fontSizeBase;
+        font-weight: 700;
+        color: @colorTextPrimary;
         line-height: 24px;
       }
     }
@@ -317,7 +355,7 @@ export default {
     }
 
     .CountrySpecificMenu {
-      .LogoSmall {
+      .LogoWHOxDHA {
         height: 24px;
       }
     }
