@@ -277,6 +277,7 @@ export default {
 
   .LoginComponent {
     width: @cardSizeSmall;
+    min-height: calc(100vh - @topBarHeight - @actionBarHeight - @appFooterHeight - 160px);
     margin: 80px auto;
 
     .Instruction {

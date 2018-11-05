@@ -1,40 +1,52 @@
 <template>
   <div class="ProjectLegend">
-    <template v-if="showStar">
-      <fa
-        icon="star"
-        size="xs"
-        class="Owner" />
-      <span v-show="showLabel"> <translate>Team Member</translate></span>
-    </template>
-    <template v-if="showEye">
-      <fa
-        icon="eye"
-        size="xs"
-        class="Viewer" />
-      <span v-show="showLabel"> <translate>Viewer</translate></span>
-    </template>
-    <template v-if="showHandshake">
-      <fa
-        icon="handshake"
-        size="xs"
-        class="Viewer" />
-      <span v-show="showLabel"> <translate>Donor</translate></span>
-    </template>
-    <template v-if="showGlobe">
-      <fa
-        icon="globe-africa"
-        size="xs"
-        class="Viewer" />
-      <span v-show="showLabel"> <translate>Country admin</translate></span>
-    </template>
+    <project-legend-content
+      v-if="!compactMode"
+      :id="id"
+      :donors="donors"
+      :country="country"
+      :force-star="forceStar"
+      :force-eye="forceEye"
+      :force-handshake="forceHandshake"
+      :force-globe="forceGlobe"
+      :show-label="showLabel"
+    />
+    <el-popover
+      v-if="compactMode"
+      placement="bottom-end"
+      trigger="hover"
+      title="Table legend"
+      popper-class="CustomPopover TableLegendDropdown">
+      <project-legend-content
+        :id="id"
+        :donors="donors"
+        :country="country"
+        :force-star="forceStar"
+        :force-eye="forceEye"
+        :force-handshake="forceHandshake"
+        :force-globe="forceGlobe"
+        :show-label="showLabel"
+      />
+      <el-button
+        slot="reference"
+        type="text"
+        size="small"
+        class="ShowLegendButton"
+      >
+        <fa icon="question-circle" />
+        <translate>Show legend</translate>
+      </el-button>
+    </el-popover>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import ProjectLegendContent from './ProjectLegendContent';
 
 export default {
+  components: {
+    ProjectLegendContent
+  },
   props: {
     id: {
       type: Number,
@@ -67,49 +79,13 @@ export default {
     showLabel: {
       type: Boolean,
       default: false
+    },
+    compactMode: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
-    ...mapGetters({
-      userProfile: 'user/getProfile'
-    }),
-    isMember () {
-      if (this.id && this.userProfile) {
-        return this.userProfile.member.includes(this.id);
-      }
-    },
-    isViewer () {
-      if (this.id && this.userProfile) {
-        return this.userProfile.viewer.includes(this.id);
-      }
-    },
-    isTeam () {
-      return this.isMember || this.isViewer;
-    },
-    isDonor () {
-      const donorPersonas = ['D', 'DA', 'SDA'];
-      if (this.donors && Array.isArray(this.donors) && this.userProfile) {
-        return donorPersonas.includes(this.userProfile.account_type) && this.donors.includes(this.userProfile.donor);
-      }
-    },
-    isCountry () {
-      const countryPersonas = ['G', 'CA', 'SCA'];
-      if (this.country && this.userProfile) {
-        return countryPersonas.includes(this.userProfile.account_type) && this.country === this.userProfile.country;
-      }
-    },
-    showStar () {
-      return this.forceStar || this.isMember;
-    },
-    showEye () {
-      return this.forceEye || (!this.isMember && this.isViewer);
-    },
-    showHandshake () {
-      return this.forceHandshake || (this.isDonor && !this.isTeam);
-    },
-    showGlobe () {
-      return this.forceGlobe || (this.isCountry && !this.isTeam);
-    }
   }
 };
 </script>
@@ -128,6 +104,14 @@ export default {
 
     .Viewer {
       color: @colorViewer;
+    }
+
+    .Donor {
+      color: @colorDonor;
+    }
+
+    .CountryAdmin {
+      color: @colorCountryAdmin;
     }
   }
 

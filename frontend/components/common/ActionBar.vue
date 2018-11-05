@@ -6,14 +6,16 @@
       align="middle"
       class="InnerActionBar">
 
-      <el-col class="Title">
-        <h3>Digital Health Atlas</h3>
-      </el-col>
+      <bread-crumb/>
 
-      <el-col class="ActionBarMenu">
+      <el-col class="ActionBarTabs">
         <el-row
           v-if="isAdmin"
-          type="flex">
+          type="flex"
+          align="middle">
+          <el-col class="Sep">
+            <fa icon="angle-right" />
+          </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
               :to="localePath({name: 'organisation-edit-profile', params: $route.params})"
@@ -43,7 +45,11 @@
         </el-row>
         <el-row
           v-if="isDashboard"
-          type="flex">
+          type="flex"
+          align="middle">
+          <el-col class="Sep">
+            <fa icon="angle-right" />
+          </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
               :to="localePath({name: 'organisation-dashboard', params: $route.params, query: $route.query})"
@@ -86,12 +92,14 @@ import { mapGetters } from 'vuex';
 import SearchComponent from '../common/SearchComponent.vue';
 import PersonaSelector from '../dashboard/PersonaSelector';
 import DashboardFiltersHeader from '../dashboard/DashboardFiltersHeader';
+import BreadCrumb from '../BreadCrumb';
 
 export default {
   components: {
     SearchComponent,
     PersonaSelector,
-    DashboardFiltersHeader
+    DashboardFiltersHeader,
+    BreadCrumb
   },
   computed: {
     ...mapGetters({
@@ -129,44 +137,48 @@ export default {
 
   .ActionBar {
     background-color: @colorBrandPrimary;
+
     .InnerActionBar {
       .limitPageWidth();
       height: @actionBarHeight;
     }
-    .Title {
-      width: auto;
-      h3 {
-        display: inline-block;
-        margin: 0;
-        font-size: @fontSizeLarge;
-        color: @colorWhite;
-        white-space: nowrap;
-      }
-    }
+
     .SearchComponentWrapper {
       width: auto;
     }
+
     .PersonaSelectorWrapper {
       width: auto;
     }
+
     .DashboardFiltersHeaderWrapper {
       min-width: @advancedSearchWidth;
       max-width: @advancedSearchWidth;
     }
-    .ActionBarMenu {
+
+    .ActionBarTabs {
       width: 100%;
       height: @actionBarHeight;
-      padding-left: 70px;
       overflow: hidden;
+
+      .Sep {
+        width: auto;
+        margin: 0 5px;
+        padding: 0 10px;
+        color: @colorWhite;
+        transform: translateY(1px);
+      }
+
       .ActionBarTab {
         width: auto;
       }
     }
+
     .ActionBarLink {
       position: relative;
       width: auto;
       height: 100%;
-      margin-right: 20px;
+      margin: 0 10px;
       padding: 0 10px;
       font-size: @fontSizeBase;
       line-height: @actionBarHeight;
@@ -175,15 +187,22 @@ export default {
       text-decoration: none;
       cursor: pointer;
       white-space: nowrap;
-      opacity: .8;
+      opacity: .7;
       transition: @transitionAll;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
       &.Active, &.nuxt-link-exact-active {
         opacity: 1;
+
         &::before {
           background-color: @colorWhite;
           transform: translateY(0);
         }
       }
+
       &::before {
         content: "";
         position: absolute;
@@ -196,6 +215,7 @@ export default {
         transform: translateY(4px);
         transition: @transitionAll;
       }
+
       &:hover {
         opacity: 1;
         // &::before {
