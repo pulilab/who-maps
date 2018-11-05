@@ -13,9 +13,9 @@
     />
     <el-popover
       v-if="compactMode"
-      placement="bottom"
-      width="200"
-      trigger="hover">
+      placement="bottom-end"
+      trigger="hover"
+      popper-class="CustomPopover TableLegendDropdown">
       <project-legend-content
         :id="id"
         :donors="donors"
@@ -26,8 +26,14 @@
         :force-globe="forceGlobe"
         :show-label="showLabel"
       />
-      <el-button slot="reference">
-        <translate>Legend</translate>
+      <el-button
+        slot="reference"
+        type="text"
+        size="small"
+        class="ShowLegendButton"
+      >
+        <fa icon="question-circle" />
+        <translate>Show legend</translate>
       </el-button>
     </el-popover>
   </div>
@@ -97,6 +103,14 @@ export default {
 
     .Viewer {
       color: @colorViewer;
+    }
+
+    .Donor {
+      color: @colorDonor;
+    }
+
+    .CountryAdmin {
+      color: @colorCountryAdmin;
     }
   }
 

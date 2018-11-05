@@ -74,7 +74,7 @@
         type="flex"
         align="middle">
         <project-legend
-          :compact-mode="viewportSize < 1100"
+          :compact-mode="viewportSize < 1440"
           force-star
           force-eye
           force-handshake
@@ -316,11 +316,51 @@ export default {
         }
       }
 
+      .ShowLegendButton {
+        color: @colorTextSecondary;
+
+        .svg-inline--fa {
+          height: 12px;
+          margin-left: 0;
+          color: @colorTextSecondary;
+        }
+      }
+
       .TableSettingsButton {}
     }
   }
 
   .TableSettingsDropdown {
     transform: translate(10px, -30px);
+  }
+
+  .TableLegendDropdown {
+    transform: translate(10px, -30px);
+
+    .ProjectLegendContent {
+      padding: 12px;
+
+      > span {
+        position: relative;
+        display: block;
+
+        .svg-inline--fa {
+          position: absolute;
+          top: 3px;
+          left: 0;
+          height: 14px;
+          margin-right: 6px;
+
+          &.fa-handshake {
+            left: -1px;
+          }
+        }
+
+        > span {
+          margin-left: 20px;
+          font-size: @fontSizeSmall
+        }
+      }
+    }
   }
 </style>

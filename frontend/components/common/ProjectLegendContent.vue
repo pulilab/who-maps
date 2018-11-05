@@ -1,32 +1,40 @@
 <template>
   <div class="ProjectLegendContent">
     <template v-if="showStar">
-      <fa
-        icon="star"
-        size="xs"
-        class="Owner" />
-      <span v-show="showLabel"> <translate>Team Member</translate></span>
+      <span>
+        <fa
+          icon="star"
+          size="xs"
+          class="Owner" />
+        <span v-show="showLabel"> <translate>Team Member</translate></span>
+      </span>
     </template>
     <template v-if="showEye">
-      <fa
-        icon="eye"
-        size="xs"
-        class="Viewer" />
-      <span v-show="showLabel"> <translate>Viewer</translate></span>
+      <span>
+        <fa
+          icon="eye"
+          size="xs"
+          class="Viewer" />
+        <span v-show="showLabel"> <translate>Viewer</translate></span>
+      </span>
     </template>
     <template v-if="showHandshake">
-      <fa
-        icon="handshake"
-        size="xs"
-        class="Viewer" />
-      <span v-show="showLabel"> <translate>Donor</translate></span>
+      <span>
+        <fa
+          icon="handshake"
+          size="xs"
+          class="Donor" />
+        <span v-show="showLabel"> <translate>Donor</translate></span>
+      </span>
     </template>
     <template v-if="showGlobe">
-      <fa
-        icon="globe-africa"
-        size="xs"
-        class="Viewer" />
-      <span v-show="showLabel"> <translate>Country admin</translate></span>
+      <span>
+        <fa
+          icon="globe-africa"
+          size="xs"
+          class="CountryAdmin" />
+        <span v-show="showLabel"> <translate>Country admin</translate></span>
+      </span>
     </template>
   </div>
 </template>
@@ -123,13 +131,20 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .ProjectLegendContent {
-
     .Owner {
       color: @colorOwner;
     }
 
     .Viewer {
       color: @colorViewer;
+    }
+
+    .Donor {
+      color: @colorDonor;
+    }
+
+    .CountryAdmin {
+      color: @colorCountryAdmin;
     }
   }
 
