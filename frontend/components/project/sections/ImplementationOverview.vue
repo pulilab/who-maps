@@ -7,9 +7,36 @@
       :title="$gettext('Implementation overview')">
 
       <el-form-item
-        :error="errors.first('platforms')"
-        :label="$gettext('Add one or more Software and related Digital Health Interventions (DHI):')"
+        :error="errors.first('health_focus_areas')"
+        :label="$gettext('Health focus area(s) - select all that apply:')"
+        :required="rules.health_focus_areas && rules.health_focus_areas.required"
       >
+        <health-focus-areas-selector
+          v-validate="rules.health_focus_areas"
+          v-model="health_focus_areas"
+          data-vv-name="health_focus_areas"
+          data-vv-validate-on="change"
+          data-vv-as="Health focus areas"
+        />
+      </el-form-item>
+
+      <el-form-item
+        :error="errors.first('hsc_challenges')"
+        :label="$gettext('What are the Health System Challenges (HSC) your project addresses?')"
+        :required="rules.hsc_challenges && rules.hsc_challenges.required"
+      >
+        <health-system-challenges-selector
+          v-validate="rules.hsc_challenges"
+          v-model="hsc_challenges"
+          data-vv-name="hsc_challenges"
+          data-vv-validate-on="change"
+          data-vv-as="Health system challenges"
+        />
+      </el-form-item>
+
+      <el-form-item
+        :error="errors.first('platforms')"
+        :label="$gettext('Add one or more Software and related Digital Health Interventions (DHI):')">
         <el-form-item
           v-for="(platform, index) in platforms"
           :key="platform"
@@ -53,34 +80,6 @@
             />
           </el-col>
         </el-form-item>
-      </el-form-item>
-
-      <el-form-item
-        :error="errors.first('health_focus_areas')"
-        :label="$gettext('Health focus area(s) - select all that apply:')"
-        :required="rules.health_focus_areas && rules.health_focus_areas.required"
-      >
-        <health-focus-areas-selector
-          v-validate="rules.health_focus_areas"
-          v-model="health_focus_areas"
-          data-vv-name="health_focus_areas"
-          data-vv-validate-on="change"
-          data-vv-as="Health focus areas"
-        />
-      </el-form-item>
-
-      <el-form-item
-        :error="errors.first('hsc_challenges')"
-        :label="$gettext('What are the Health System Challenges (HSC) your project addresses?')"
-        :required="rules.hsc_challenges && rules.hsc_challenges.required"
-      >
-        <health-system-challenges-selector
-          v-validate="rules.hsc_challenges"
-          v-model="hsc_challenges"
-          data-vv-name="hsc_challenges"
-          data-vv-validate-on="change"
-          data-vv-as="Health system challenges"
-        />
       </el-form-item>
 
       <el-form-item
