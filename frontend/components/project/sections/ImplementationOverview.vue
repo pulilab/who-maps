@@ -8,9 +8,12 @@
 
       <el-form-item
         :error="errors.first('health_focus_areas')"
-        :label="$gettext('Health focus area(s) - select all that apply:')"
         :required="rules.health_focus_areas && rules.health_focus_areas.required"
       >
+        <template slot="label">
+          <translate key="health-focus-areas">What is the health focus area(s) addressed by the Digital Health Intervention?</translate>
+        </template>
+
         <health-focus-areas-selector
           v-validate="rules.health_focus_areas"
           v-model="health_focus_areas"
@@ -22,9 +25,11 @@
 
       <el-form-item
         :error="errors.first('hsc_challenges')"
-        :label="$gettext('What are the Health System Challenges (HSC) your project addresses?')"
         :required="rules.hsc_challenges && rules.hsc_challenges.required"
       >
+        <template slot="label">
+          <translate key="hsc-challenges">What are the Health System Challenges addressed by the Digital Health Intervention?</translate>
+        </template>
         <health-system-challenges-selector
           v-validate="rules.hsc_challenges"
           v-model="hsc_challenges"
@@ -36,7 +41,15 @@
 
       <el-form-item
         :error="errors.first('platforms')"
-        :label="$gettext('Add one or more Software and related Digital Health Interventions (DHI):')">
+      >
+
+        <template slot="label">
+          <translate key="platforms">What are the names of the software included in the deployment?</translate>
+          <form-hint >
+            <translate key="platforms-hint">Include all software that is part of your project. If you cannot find your software listed in the options, send an email to digitalhealthatlas@gmail.com with the software name.</translate>
+          </form-hint>
+        </template>
+
         <el-form-item
           v-for="(platform, index) in platforms"
           :key="platform"
@@ -58,10 +71,15 @@
             <el-form-item
               v-show="platform"
               :error="errors.first('strategies', 'platform_' + index)"
-              :label="$gettext('Digital Health Interventions')"
               :required="rules.strategies && rules.strategies.required"
               class="DigitalHealthIntervention"
             >
+              <template slot="label">
+                <translate key="strategies">What Digital Health Intervention(s) are included in this software?</translate>
+                <form-hint >
+                  <!-- This is going to be a link to a pdf / webpage -->
+                </form-hint>
+              </template>
               <digital-health-interventions-selector
                 v-validate="rules.strategies"
                 :platform-id="platform"
@@ -84,9 +102,11 @@
 
       <el-form-item
         :error="errors.first('his_bucket')"
-        :label="$gettext('What part(s) of the Health Information System (HIS) does this project support?')"
         :required="rules.his_bucket && rules.his_bucket.required"
       >
+        <template slot="label">
+          <translate key="his-bucket">What health information system(s) in your country does this project support?</translate>
+        </template>
         <his-bucket-selector
           v-validate="rules.his_bucket"
           v-model="his_bucket"
@@ -98,9 +118,15 @@
 
       <div class="CoverageArea">
         <el-form-item
-          :label="$gettext('What kind of coverage does your project have?')"
           prop="coverageType"
         >
+          <template slot="label">
+            <translate key="coverage-type">What level of coverage does your project have (Sub-national, National)</translate>
+            <form-hint >
+              <translate key="coverage-type-hint"> Subnational may include district, regional, provincial, county levels.</translate>
+            </form-hint>
+          </template>
+
           <el-radio-group v-model="coverageType">
             <el-radio :label="1"><translate>Sub-national</translate></el-radio>
             <el-radio :label="2"><translate>National</translate></el-radio>
@@ -136,9 +162,12 @@
       </div>
       <el-form-item
         :error="errors.first('government_investor')"
-        :label="$gettext('Has the government financially invested in the project?')"
         :required="rules.government_investor && rules.government_investor.required"
       >
+        <template slot="label">
+          <translate key="gobernment-investor">Has the government contributed to the project, either financially or in-kind?</translate>
+        </template>
+
         <el-radio-group
           v-validate="rules.government_investor"
           v-model="government_investor"
@@ -150,10 +179,14 @@
           <el-radio :label="2"><translate>Yes, there is a financial contribution through MOH budget</translate></el-radio>
         </el-radio-group>
       </el-form-item>
+
       <el-form-item
-        :label="$gettext('Implementing partners')"
         class="ImplementingPartners"
       >
+        <template slot="label">
+          <translate key="implementing-partners">Who are your implementing partners?</translate>
+        </template>
+
         <el-row
           v-for="(partner, index) in implementing_partners"
           :key="index"
@@ -187,9 +220,16 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('donors')"
-        :label="$gettext('Donor(s) supporting the project (Add one at least)')"
         :required="rules.donors && rules.donors.required"
       >
+
+        <template slot="label">
+          <translate key="donors">Who are your investment partners?</translate>
+          <form-hint >
+            <translate key="donors-hint">Investment partners can include those contributing funds, human resources or in-kind support.</translate>
+          </form-hint>
+        </template>
+
         <donor-selector
           v-validate="rules.donors"
           v-model="donors"
@@ -214,6 +254,7 @@ import SubNationalLevelDeployment from '../SubNationalLevelDeployment';
 import AddRmButtons from '../AddRmButtons';
 import CoverageFieldset from '../CoverageFieldset';
 import DonorSelector from '../DonorSelector';
+import FormHint from '../FormHint';
 
 import { mapGettersActions } from '../../../utilities/form';
 
@@ -228,7 +269,8 @@ export default {
     SubNationalLevelDeployment,
     AddRmButtons,
     CoverageFieldset,
-    DonorSelector
+    DonorSelector,
+    FormHint
   },
   mixins: [VeeValidationMixin],
   props: {
