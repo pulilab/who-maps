@@ -67,6 +67,8 @@ class Country(UserManagement, LandingPageCommon):
     map_activated_on = models.DateTimeField(blank=True, null=True,
                                             help_text="WARNING: this field is for developers only")
     project_approval = models.BooleanField(default=False)
+    lat = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
+    lon = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
 
     class Meta:
         verbose_name_plural = "Countries"
