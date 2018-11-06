@@ -77,10 +77,12 @@ class Country(UserManagement, LandingPageCommon):
 
 @receiver(pre_save, sender=Country)
 def save_coordinates(sender, instance, **kwargs):
-    if instance.map_data and 'polylabel' in instance.map_data and instance.map_data['polylabel'] \
-            and 'lat' in instance.map_data['polylabel'] and 'lng' in instance.map_data['polylabel']:
-        instance.lat = instance.map_data['polylabel']['lat']
-        instance.lon = instance.map_data['polylabel']['lng']
+    if instance.map_data:
+        try:
+            instance.lat = instance.map_data['polylabel']['lat']
+            instance.lon = instance.map_data['polylabel']['lng']
+        except (TypeError, KeyError, ValueError):
+            pass
 
 
 class Donor(UserManagement, LandingPageCommon):
