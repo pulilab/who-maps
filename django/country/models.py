@@ -75,6 +75,14 @@ class Country(UserManagement, LandingPageCommon):
         ordering = ('id',)
 
 
+@receiver(pre_save, sender=Country)
+def save_coordinates(sender, instance, **kwargs):
+    if instance.map_data and 'polylabel' in instance.map_data \
+            and 'lat' in instance.map_data['polylabel'] and 'lng' in instance.map_data['polylabel']:
+        instance.lat = instance.map_data['polylabel']['lat']
+        instance.lon = instance.map_data['polylabel']['lng']
+
+
 class Donor(UserManagement, LandingPageCommon):
     code = models.CharField(max_length=10, default="NULL", help_text="Acronym for Donor", unique=True,
                             validators=[MinLengthValidator(3)])
