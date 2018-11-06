@@ -44,7 +44,7 @@
       >
 
         <template slot="label">
-          <translate key="platforms">What are the names of the software included in the deployment?</translate>
+          <translate key="platforms">Add information about your Digital Health program activies</translate>
           <form-hint >
             <translate key="platforms-hint">Include all software that is part of your project. If you cannot find your software listed in the options, send an email to digitalhealthatlas@gmail.com with the software name.</translate>
           </form-hint>
