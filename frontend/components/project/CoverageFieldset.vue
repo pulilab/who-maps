@@ -11,7 +11,7 @@
           :required="rules.health_workers && rules.health_workers.required"
         >
           <template slot="label">
-            <translate key="health-workers">How many health workers use the system?</translate>
+            <translate key="health-workers"># Health workers</translate>
             <form-hint >
               <translate key="health-workers-hint"> Health workers include all recognized health professionals directly accessing the software. If there are no users of this type, put 0.</translate>
             </form-hint>
@@ -37,7 +37,7 @@
           :required="rules.facilities && rules.facilities.required"
         >
           <template slot="label">
-            <translate key="facilities">How many facilities use  the system?</translate>
+            <translate key="facilities"># Facilities</translate>
             <form-hint >
               <translate key="facilities-hint"> Health facilities using the system refers to all facilities that have direct access to the software. If there are no users of this type, put 0.</translate>
             </form-hint>
@@ -63,7 +63,7 @@
           :required="rules.clients && rules.clients.required"
         >
           <template slot="label">
-            <translate key="facilities">How many clients use the system?</translate>
+            <translate key="facilities"># Clients</translate>
             <form-hint >
               <translate key="facilities-hint">Client users refers to all care recipients who have direct access to the software.  If there are no users of this type, put 0.</translate>
             </form-hint>

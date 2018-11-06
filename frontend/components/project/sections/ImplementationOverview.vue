@@ -121,9 +121,9 @@
           prop="coverageType"
         >
           <template slot="label">
-            <translate key="coverage-type">What level of coverage does your project have (Sub-national, National)</translate>
+            <translate key="coverage-type">What kind of coverage does your project have?</translate>
             <form-hint >
-              <translate key="coverage-type-hint"> Subnational may include district, regional, provincial, county levels.</translate>
+              <translate key="coverage-type-hint">Subnational may include district, regional, provincial, county levels.</translate>
             </form-hint>
           </template>
 

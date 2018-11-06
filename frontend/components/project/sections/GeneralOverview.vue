@@ -27,7 +27,7 @@
         :required="rules.organisation && rules.organisation.required"
       >
         <template slot="label">
-          <translate key="organisation">What is the name of the lead organization? </translate>
+          <translate key="organisation">What is the name of the lead organization?</translate>
         </template>
         <organisation-select
           v-validate="rules.organisation"
@@ -40,7 +40,7 @@
         :required="rules.country && rules.country.required"
       >
         <template slot="label">
-          <translate key="country">Which country is the project located in?</translate>
+          <translate key="country">Project Country</translate>
         </template>
         <country-select
           v-validate="rules.country"
@@ -194,7 +194,7 @@
           :required="rules.team && rules.team.required"
         >
           <template slot="label">
-            <translate key="team">Add team members (editors)--can modify entry on Add New Project page</translate>
+            <translate key="team">Add Team members (Editor role)</translate>
             <form-hint >
               <translate key="team-hint">Project editors can change and update all project information.</translate>
             </form-hint>
@@ -211,7 +211,7 @@
           :required="rules.viewers && rules.viewers.required"
         >
           <template slot="label">
-            <translate key="viewers">Add team members (viewers)--can receive notification that project has been added</translate>
+            <translate key="viewers">Add Viewers (only Viewer role)</translate>
             <form-hint >
               <translate key="viewers-hint">Project viewers will be able to view the full project details.</translate>
             </form-hint>
