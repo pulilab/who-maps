@@ -1,8 +1,8 @@
-import moment from 'moment';
+import { format } from 'date-fns';
 
 const prettifyDate = ({ created }) => {
   // 3:26 pm — 4 May, 2015
-  return moment(created).format('D MMM, YYYY');
+  return format(created, 'D MMM, YYYY');
 };
 
 const itemType = (item) => {
