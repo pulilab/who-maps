@@ -163,9 +163,9 @@ def can_read_private_questions(obj: Union[Country, Donor], request) -> bool:
 
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
                   "footer_text", "partner_logos", "project_approval", "map_data", "map_version", "map_files",
-                  "map_activated_on", "country_questions")
+                  "map_activated_on", "country_questions", "lat", "lon")
 READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "logo_url", "cover", "cover_url", "map_version", "map_files",
-                            "map_activated_on", "country_questions")
+                            "map_activated_on", "country_questions", "lat", "lon")
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos", "project_approval",)
 
@@ -238,6 +238,12 @@ class CountrySerializer(SuperAdminCountrySerializer):
         read_only_fields = READ_ONLY_COUNTRY_FIELDS
 
 
+class CountryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ('id', 'name', 'code', 'lat', 'lon')
+
+
 DONOR_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
                 "footer_text", "partner_logos", "donor_questions")
 READ_ONLY_DONOR_FIELDS = ("logo_url", "cover_url", "logo", "cover", "name", "code", "donor_questions")
@@ -297,3 +303,9 @@ class DonorSerializer(SuperAdminDonorSerializer):
     class Meta(SuperAdminDonorSerializer.Meta):
         fields = DONOR_FIELDS
         read_only_fields = READ_ONLY_DONOR_FIELDS
+
+
+class DonorListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Donor
+        fields = ('id', 'name', 'code')

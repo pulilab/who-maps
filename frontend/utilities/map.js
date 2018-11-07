@@ -17,14 +17,16 @@ export const stateGenerator = () => ({
 export const gettersGenerator = () => ({
   getProjectsMap: state => [...state.projectsMap.map(r => ({...r}))],
   getCountryPins (state, getters, rootState, rootGetters) {
-    const polyLabeled = rootGetters['countries/getCountries'].filter(c => c.map_data.polylabel);
+    const polyLabeled = rootGetters['countries/getCountries'].filter(c => c.lat);
     return polyLabeled.map(c => ({
       id: c.id,
-      latlng: {...c.map_data.polylabel}
+      latlng: {lat: c.lat, lon: c.lon}
     }));
   },
   getSubLevelPins (state, getters, rootState, rootGetters) {
-    const selectedPolyLabeled = rootGetters['countries/getCountries'].filter(c => c.map_data.polylabel && c.id === state.selectedCountry);
+    const selectedPolyLabeled = rootGetters['countries/getCountries']
+      .filter(c => c.lat && c.id === state.selectedCountry)
+      .map(c => rootGetters['countries/getCountryDetails'](c.id));
     const pins = [];
     selectedPolyLabeled.forEach(sp => {
       if (sp.map_data && sp.map_data.first_sub_level && sp.map_data.first_sub_level.elements) {
@@ -72,6 +74,7 @@ export const gettersGenerator = () => ({
 export const actionsGenerator = () => ({
   async setSelectedCountry ({commit, dispatch}, id) {
     await dispatch('countries/loadGeoJSON', id, {root: true});
+    await dispatch('countries/loadCountryDetails', id, {root: true});
     commit('SET_SELECTED_COUNTRY', id);
   },
   async loadProjects ({commit, getters, dispatch}, paramsOverride) {
