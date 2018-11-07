@@ -18,8 +18,8 @@ export default {
     ProjectForm
   },
   middleware: ['isLoggedIn'],
-  fetch ({store}) {
-    store.dispatch('project/resetProjectState');
+  async fetch ({store}) {
+    await store.dispatch('project/resetProjectState');
     store.dispatch('landing/resetSearch');
   }
 };
