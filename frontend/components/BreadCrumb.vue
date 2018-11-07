@@ -32,9 +32,16 @@
 export default {
   computed: {
     pureRoute () {
-      return this.$route.name.split('___')[0];
+      if (this.$route && this.$route.name) {
+        return this.$route.name.split('___')[0];
+      }
     },
     subPageName () {
+      const noSubPage = {
+        'organisation': true,
+        'organisation-login': true,
+        'organisation-signup': true
+      };
       const pages = {
         'organisation-edit-profile': this.$gettext('Admin'),
         'organisation-admin-country': this.$gettext('Admin'),
@@ -52,8 +59,8 @@ export default {
         'organisation-projects-id-toolkit-scorecard': this.$gettext('Toolkit')
       };
       const match = pages[this.pureRoute];
-      if (!match) {
-        console.error('Missing subpage key for breadcrumb');
+      if (this.pureRoute && !match && !noSubPage[this.pureRoute]) {
+        console.warn(`Potential missing subpage key for breadcrumb ${this.pureRoute}`);
       }
       return match;
     }
