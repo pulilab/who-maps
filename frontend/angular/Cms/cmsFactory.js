@@ -31,9 +31,7 @@ function config ($stateProvider, $locationProvider, $ngReduxProvider) {
     });
   $locationProvider.html5Mode(true);
 
-  const reduxDevTools = window.__REDUX_DEVTOOLS_EXTENSION__;
-  const storeExtension = reduxDevTools ? [reduxDevTools()] : undefined;
-  $ngReduxProvider.createStoreWith(reducers, middleware, storeExtension);
+  $ngReduxProvider.createStoreWith(reducers, middleware);
 }
 
 config.$inject = ['$stateProvider', '$locationProvider', '$ngReduxProvider'];
