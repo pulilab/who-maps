@@ -7,7 +7,7 @@
       title="Technology overview">
       <el-form-item
         :error="errors.first('implementation_dates')"
-        :label="$gettext('Technology deployment date')"
+        :label="$gettext('When will the technology be first deployed?')"
         :required="rules.implementation_dates && rules.implementation_dates.required"
       >
         <el-date-picker
@@ -34,7 +34,7 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('repository')"
-        :label="$gettext('Code documentation or download link')"
+        :label="$gettext('Can you provide links to code documentation, a demo of the application or the software wikipage?')"
         :required="rules.repository && rules.repository.required"
       >
         <link-field

@@ -37,7 +37,7 @@
               class="Verified"
             >
               <fa icon="check-circle" />
-              <translate>Verified by country</translate>
+              <translate>Approved by MOH</translate>
             </el-col>
           </el-row>
 
