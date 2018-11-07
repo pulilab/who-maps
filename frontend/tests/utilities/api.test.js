@@ -225,20 +225,19 @@ describe('apiReadParser', () => {
   });
 
   test('calls all the api parsing functions', () => {
-    jest.spyOn(api, 'coverageMapper').mockReturnValue([1, 2]);
-    jest.spyOn(api, 'platformsMapper').mockReturnValue([1, 2]);
-    jest.spyOn(api, 'interoperabilityLinksMapper').mockReturnValue(1);
-    jest.spyOn(api, 'parseCustomAnswers').mockReturnValue({});
-    jest.spyOn(api, 'countryCustomFieldMapper').mockReturnValue([]);
-    jest.spyOn(api, 'donorCustomFieldMapper').mockReturnValue([]);
-
+    jest.spyOn(api.lib, 'coverageMapper').mockReturnValue([1, 2]);
+    jest.spyOn(api.lib, 'platformsMapper').mockReturnValue([1, 2]);
+    jest.spyOn(api.lib, 'interoperabilityLinksMapper').mockReturnValue(1);
+    jest.spyOn(api.lib, 'parseCustomAnswers').mockReturnValue({});
+    jest.spyOn(api.lib, 'countryCustomFieldMapper').mockReturnValue([]);
+    jest.spyOn(api.lib, 'donorCustomFieldMapper').mockReturnValue([]);
     api.apiReadParser({});
 
-    expect(api.coverageMapper).toHaveBeenCalled();
-    expect(api.platformsMapper).toHaveBeenCalled();
-    expect(api.interoperabilityLinksMapper).toHaveBeenCalled();
-    expect(api.parseCustomAnswers).toHaveBeenCalled();
-    expect(api.countryCustomFieldMapper).toHaveBeenCalled();
-    expect(api.donorCustomFieldMapper).toHaveBeenCalled();
+    expect(api.lib.coverageMapper).toHaveBeenCalled();
+    expect(api.lib.platformsMapper).toHaveBeenCalled();
+    expect(api.lib.interoperabilityLinksMapper).toHaveBeenCalled();
+    expect(api.lib.parseCustomAnswers).toHaveBeenCalled();
+    expect(api.lib.countryCustomFieldMapper).toHaveBeenCalled();
+    expect(api.lib.donorCustomFieldMapper).toHaveBeenCalled();
   });
 });

@@ -82,15 +82,15 @@ export const donorCustomFieldMapper = collection => {
 };
 
 export const apiReadParser = p => {
-  const [ coverage, coverageDataFirstLevel ] = coverageMapper(p.coverage);
-  const [ coverage_second_level, coverageDataSecondLevelLevel ] = coverageMapper(p.coverage_second_level);
+  const [ coverage, coverageDataFirstLevel ] = lib.coverageMapper(p.coverage);
+  const [ coverage_second_level, coverageDataSecondLevelLevel ] = lib.coverageMapper(p.coverage_second_level);
   const coverageData = {...coverageDataFirstLevel, ...coverageDataSecondLevelLevel};
-  const interoperability_links = interoperabilityLinksMapper(p.interoperability_links);
-  const [ platforms, digitalHealthInterventions ] = platformsMapper(p.platforms);
+  const interoperability_links = lib.interoperabilityLinksMapper(p.interoperability_links);
+  const [ platforms, digitalHealthInterventions ] = lib.platformsMapper(p.platforms);
   const coverageType = coverage === undefined || coverage.length === 0 ? 2 : 1;
-  p = parseCustomAnswers(p);
-  const country_custom_answers = countryCustomFieldMapper(p.country_answers);
-  const donor_custom_answers = donorCustomFieldMapper(p.donor_answers);
+  p = lib.parseCustomAnswers(p);
+  const country_custom_answers = lib.countryCustomFieldMapper(p.country_answers);
+  const donor_custom_answers = lib.donorCustomFieldMapper(p.donor_answers);
   return {...p,
     coverage,
     coverage_second_level,
@@ -298,4 +298,13 @@ export const APIError = (field, message) => {
     }
   };
   return error;
+};
+
+export const lib = {
+  coverageMapper,
+  platformsMapper,
+  interoperabilityLinksMapper,
+  parseCustomAnswers,
+  countryCustomFieldMapper,
+  donorCustomFieldMapper
 };
