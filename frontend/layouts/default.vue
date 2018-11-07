@@ -26,7 +26,9 @@ export default {
   },
   computed: {
     pureRoute () {
-      return this.$route.name.split('___')[0];
+      if (this.$route && this.$route.name) {
+        return this.$route.name.split('___')[0];
+      }
     },
     showActionBar () {
       const hiddenOn = ['index-login', 'index-signup'];
