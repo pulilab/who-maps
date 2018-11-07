@@ -231,6 +231,7 @@ describe('apiReadParser', () => {
     jest.spyOn(api.lib, 'parseCustomAnswers').mockReturnValue({});
     jest.spyOn(api.lib, 'countryCustomFieldMapper').mockReturnValue([]);
     jest.spyOn(api.lib, 'donorCustomFieldMapper').mockReturnValue([]);
+
     api.apiReadParser({});
 
     expect(api.lib.coverageMapper).toHaveBeenCalled();
@@ -239,5 +240,44 @@ describe('apiReadParser', () => {
     expect(api.lib.parseCustomAnswers).toHaveBeenCalled();
     expect(api.lib.countryCustomFieldMapper).toHaveBeenCalled();
     expect(api.lib.donorCustomFieldMapper).toHaveBeenCalled();
+  });
+
+  test('coverageType is set accordingly', () => {
+    const coverageMapper = jest.spyOn(api.lib, 'coverageMapper').mockReturnValue([1, 2]);
+    let result = api.apiReadParser({});
+    expect(result.coverageType).toEqual(1);
+    coverageMapper.mockReturnValue([undefined, null]);
+    result = api.apiReadParser({});
+    expect(result.coverageType).toEqual(2);
+  });
+});
+
+describe('isNullUndefinedOrEmptyString', () => {
+  test('returns true for null undefined and empty string', () => {
+    expect(api.isNullUndefinedOrEmptyString(null)).toEqual(true);
+    expect(api.isNullUndefinedOrEmptyString(undefined)).toEqual(true);
+    expect(api.isNullUndefinedOrEmptyString('')).toEqual(true);
+    expect(api.isNullUndefinedOrEmptyString(1)).toEqual(false);
+  });
+});
+
+describe('isEmpty', () => {
+  test('return false if is an Array', () => {
+    expect(api.isEmpty([])).toEqual(false);
+  });
+  test('return false if is a Date', () => {
+    expect(api.isEmpty(new Date())).toEqual(false);
+  });
+  test('if is an Object returns true if the object has no keys', () => {
+    expect(api.isEmpty({})).toEqual(true);
+    expect(api.isEmpty({foo: 'bar'})).toEqual(false);
+  });
+  test('in any other case it invoke isNullUndefinedOrEmptyString', () => {
+    jest.spyOn(api.lib, 'isNullUndefinedOrEmptyString').mockReturnValue(undefined);
+    api.isEmpty(null);
+    api.isEmpty('');
+    api.isEmpty(1);
+    api.isEmpty('foo');
+    expect(api.lib.isNullUndefinedOrEmptyString).toHaveBeenCalledTimes(4);
   });
 });

@@ -114,12 +114,12 @@ export const isEmpty = (value) => {
   } else if (value instanceof Object && value !== null) {
     return Object.keys(value).length === 0;
   }
-  return isNullUndefinedOrEmptyString(value);
+  return lib.isNullUndefinedOrEmptyString(value);
 };
 
 export const dataCleaner = value => {
   if (Array.isArray(value)) {
-    const result = value.filter(v => !isNullUndefinedOrEmptyString(v));
+    const result = value.filter(v => !lib.isNullUndefinedOrEmptyString(v));
     return result;
   }
   return value;
@@ -130,7 +130,7 @@ export const interoperabilityLinkWriteParser = links => {
   for (let link in links) {
     const value = {...links[link]};
     value.selected = value.selected ? true : undefined;
-    value.link = !value.selected || isNullUndefinedOrEmptyString(value.link) ? undefined : value.link;
+    value.link = !value.selected || lib.isNullUndefinedOrEmptyString(value.link) ? undefined : value.link;
     const item = {id: link, ...value};
     result.push(item);
   }
@@ -306,5 +306,6 @@ export const lib = {
   interoperabilityLinksMapper,
   parseCustomAnswers,
   countryCustomFieldMapper,
-  donorCustomFieldMapper
+  donorCustomFieldMapper,
+  isNullUndefinedOrEmptyString
 };
