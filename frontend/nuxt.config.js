@@ -132,7 +132,11 @@ const config = {
     },
     vendor: [
       'babel-polyfill',
-      'eventsource-polyfill'
+      'eventsource-polyfill',
+      'angular',
+      'angular-material',
+      'lodash',
+      'date-fns'
     ],
     extend (config, { isDev, isClient }) {
       config.module.rules.push({
