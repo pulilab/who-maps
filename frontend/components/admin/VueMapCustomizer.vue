@@ -398,6 +398,7 @@ export default {
 
   .CountryMapCustomizer {
     align-items: stretch;
+    width: 100%;
 
     > .el-col {
       // Left side - Vue map

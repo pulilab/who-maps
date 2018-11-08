@@ -98,19 +98,19 @@ export default {
     opacity: 1;
     transition: @transitionFade;
 
-    .Owner {
+    .OwnerIcon {
       color: @colorOwner;
     }
 
-    .Viewer {
+    .ViewerIcon {
       color: @colorViewer;
     }
 
-    .Donor {
+    .DonorIcon {
       color: @colorDonor;
     }
 
-    .CountryAdmin {
+    .CountryAdminIcon {
       color: @colorCountryAdmin;
     }
   }
