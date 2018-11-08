@@ -134,7 +134,7 @@
 
               <el-checkbox
                 v-model="isDonorUser"
-                border><span class="IconRole IconInvestorUser" /><translate>Financial investor</translate></el-checkbox>
+                border><span class="IconRole IconInvestorUser" /><translate>Investor</translate></el-checkbox>
 
               <p class="UserArchTypeText"><translate>Sed eiusmod tempor incidunt ut labore et dolore aliqua. Morbi fringilla convallis sapien, id pulvinar odio volutpat.</translate></p>
 
@@ -314,7 +314,7 @@
                       <span class="IconRole IconInvestorUser" />
                     </el-col>
                     <el-col>
-                      <h5><translate>Financial investor</translate></h5>
+                      <h5><translate>Investor</translate></h5>
                       <span><translate>Investor admin</translate></span>
                     </el-col>
                   </el-row>

@@ -136,7 +136,7 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> <translate>Show privileges for invenstor administrators</translate>
+                  <fa icon="info-circle" /> <translate>Show privileges for investor administrators</translate>
                 </template>
                 <div>
                   <ul>
