@@ -39,7 +39,7 @@
               :to="localePath({name: 'organisation-admin-donor', params: $route.params})"
               class="ActionBarLink"
               tag="div">
-              <translate key="donor-admin">Donor admin</translate>
+              <translate key="donor-admin">Investor admin</translate>
             </nuxt-link>
           </el-col>
         </el-row>

@@ -40,7 +40,7 @@
             <div>
               {{ donors }}
             </div>
-            <span><translate>Donor(s)</translate></span>
+            <span><translate>Invenstor(s)</translate></span>
           </div>
         </el-col>
         <el-col

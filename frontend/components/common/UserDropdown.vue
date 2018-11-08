@@ -84,7 +84,7 @@
             <span class="MenuIcon">
               <fa icon="hand-holding-usd" />
             </span>
-            <translate>Donor admin</translate>
+            <translate>Investor admin</translate>
           </nuxt-link>
         </div>
 

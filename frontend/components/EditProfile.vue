@@ -134,7 +134,7 @@
 
               <el-checkbox
                 v-model="isDonorUser"
-                border><span class="IconRole IconInvestorUser" /><translate>Financial investor</translate></el-checkbox>
+                border><span class="IconRole IconInvestorUser" /><translate>Investor</translate></el-checkbox>
 
               <p class="UserArchTypeText"><translate>Sed eiusmod tempor incidunt ut labore et dolore aliqua. Morbi fringilla convallis sapien, id pulvinar odio volutpat.</translate></p>
 
@@ -146,7 +146,7 @@
                   class="OnePerRow">
                   <el-radio
                     :label="'D'"
-                    class="RadioSmall"><translate>Donor</translate></el-radio>
+                    class="RadioSmall"><translate>Investor</translate></el-radio>
                   <ul
                     v-if="innerProfile.account_type === 'D'"
                     class="UserTypeTextList">
@@ -157,7 +157,7 @@
 
                   <el-radio
                     :label="'DA'"
-                    class="RadioSmall"><translate>Donor administrator</translate></el-radio>
+                    class="RadioSmall"><translate>Investor administrator</translate></el-radio>
                   <ul
                     v-if="innerProfile.account_type === 'DA'"
                     class="UserTypeTextList">
@@ -168,7 +168,7 @@
 
                   <el-radio
                     :label="'SDA'"
-                    class="RadioSmall"><translate>Super donor administrator</translate></el-radio>
+                    class="RadioSmall"><translate>Super Investor administrator</translate></el-radio>
                   <ul
                     v-if="innerProfile.account_type === 'SDA'"
                     class="UserTypeTextList">
@@ -291,7 +291,7 @@
                     </el-col>
                     <el-col>
                       <h5><translate>Financial investor</translate></h5>
-                      <span><translate>Donor</translate></span>
+                      <span><translate>Investor</translate></span>
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
@@ -314,8 +314,8 @@
                       <span class="IconRole IconInvestorUser" />
                     </el-col>
                     <el-col>
-                      <h5><translate>Financial investor</translate></h5>
-                      <span><translate>Donor admin</translate></span>
+                      <h5><translate>Investor</translate></h5>
+                      <span><translate>Investor admin</translate></span>
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">

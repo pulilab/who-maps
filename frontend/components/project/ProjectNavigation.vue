@@ -104,7 +104,7 @@
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
-              <translate>Donor fields</translate>
+              <translate>Investor fields</translate>
             </el-button>
           </li>
         </ul>

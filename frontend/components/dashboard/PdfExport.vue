@@ -212,7 +212,7 @@ export default {
                   organisation_name
                 ],
                 [
-                  { text: this.$gettext('Donors:'), style: 'subHeader' },
+                  { text: this.$gettext('Investors:'), style: 'subHeader' },
                   donors.join(', ')
                 ],
                 {
