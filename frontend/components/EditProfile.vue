@@ -505,6 +505,7 @@ export default {
 
     dismissChanges () {
       this.innerProfile = {...this.profile};
+      this.$router.go(-1);
     },
 
     submit () {
