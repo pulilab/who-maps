@@ -76,7 +76,7 @@
               class="CheckboxSmall"><translate>Implementing Partners</translate></el-checkbox>
             <el-checkbox
               label="donor"
-              class="CheckboxSmall"><translate>Donors</translate></el-checkbox>
+              class="CheckboxSmall"><translate>Investors</translate></el-checkbox>
           </el-checkbox-group>
         </el-col>
       </transition>

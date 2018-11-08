@@ -224,7 +224,7 @@
       >
 
         <template slot="label">
-          <translate key="donors">Who are your investment partners?</translate>
+          <translate key="donors">Investors</translate>
           <form-hint >
             <translate key="donors-hint">Investment partners can include those contributing funds, human resources or in-kind support.</translate>
           </form-hint>
@@ -234,7 +234,7 @@
           v-validate="rules.donors"
           v-model="donors"
           data-vv-name="donors"
-          data-vv-as="Donors"
+          data-vv-as="Investors"
         />
       </el-form-item>
     </collapsible-card>

@@ -135,7 +135,7 @@ export default {
     found () {
       const nameMApping = {
         country: this.$gettext('Country'),
-        donor: this.$gettext('Donors'),
+        donor: this.$gettext('Investor'),
         loc: this.$gettext('Location'),
         name: this.$gettext('Name'),
         org: this.$gettext('Organisation'),

@@ -38,7 +38,7 @@
           <template v-if="showDonor">
             <div class="el-popover__title">
               <fa icon="handshake" />
-              <translate>Donor View</translate>
+              <translate>Investor View</translate>
             </div>
             <li
               :class="{'Active': donorActive}"

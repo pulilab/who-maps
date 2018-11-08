@@ -7,7 +7,7 @@
       <filter-switch
         v-if="donorView"
         v-model="onlyMyDonor"
-        :label="$gettext('Only my Donor Projects')"
+        :label="$gettext('Only my Investor Projects')"
         :tooltip="$gettext('Lorem ipsum something else')"
       />
       <filter-switch

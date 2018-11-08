@@ -90,7 +90,7 @@
       <el-table-column
         v-if="selectedColumns.includes('6')"
         :resizable="false"
-        :label="$gettext('Donors')"
+        :label="$gettext('Investors')"
         width="240">
         <template slot-scope="scope">
           <donors-list

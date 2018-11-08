@@ -24,7 +24,7 @@
           icon="handshake"
           size="xs"
           class="Donor" />
-        <span v-show="showLabel"> <translate>Donor</translate></span>
+        <span v-show="showLabel"> <translate>Investor</translate></span>
       </span>
     </template>
     <template v-if="showGlobe">

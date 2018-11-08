@@ -1,11 +1,11 @@
 <template>
   <div class="CountryAdmin">
     <div class="PageTitle">
-      <h2><translate :parameters="{name: donor.name}">Donor admin for {name}</translate></h2>
+      <h2><translate :parameters="{name: donor.name}">Investor admin for {name}</translate></h2>
     </div>
 
     <collapsible-card
-      :title="$gettext('Donor information')"
+      :title="$gettext('Invenstor information')"
       class="CountryInformation">
 
       <el-form
@@ -18,7 +18,7 @@
 
         <el-form-item
           v-if="userProfile.is_superuser"
-          :label="$gettext('Choose donor')">
+          :label="$gettext('Choose investor')">
           <donor-select
             :value="donorId"
             @change="setDonorId"/>
@@ -110,7 +110,7 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> <translate>Show privileges for donor users</translate>
+                  <fa icon="info-circle" /> <translate>Show privileges for investor users</translate>
                 </template>
                 <div>
                   <ul>
@@ -136,7 +136,7 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> <translate>Show privileges for donor administrators</translate>
+                  <fa icon="info-circle" /> <translate>Show privileges for invenstor administrators</translate>
                 </template>
                 <div>
                   <ul>
@@ -162,7 +162,7 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> <translate>Show privileges for super donor administrators</translate>
+                  <fa icon="info-circle" /> <translate>Show privileges for super investor administrators</translate>
                 </template>
                 <div>
                   <ul>
@@ -187,7 +187,7 @@
     </collapsible-card>
 
     <collapsible-card
-      :title="$gettext('Donor specific questionaire')"
+      :title="$gettext('Investor specific questionaire')"
       class="Questionnaire">
       <dha-questionaire ref="customQuestions" />
     </collapsible-card>

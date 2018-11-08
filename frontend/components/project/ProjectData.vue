@@ -125,7 +125,7 @@
             </ul>
           </simple-field>
 
-          <simple-field :header="$gettext('Donor(s)')">
+          <simple-field :header="$gettext('Investor(s)')">
             <donors-list :value="project.donors" />
           </simple-field>
         </collapsible-card>
