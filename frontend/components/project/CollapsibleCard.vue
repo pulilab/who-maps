@@ -67,14 +67,14 @@ export default {
   .CollapsibleCard {
     margin: 0 0 20px;
 
-    .el-card__body {}
-
-    .el-card__header {
-      padding: 0 20px 0 40px;
-      height: 58px;
-      line-height: 58px;
-      background-color: @colorBrandPrimaryDark;
-      font-size: @fontSizeLarger;
+    .el-card {
+      .el-card__header {
+        padding: 0 20px 0 40px;
+        height: 58px;
+        line-height: 58px;
+        background-color: @colorBrandPrimaryDark;
+        font-size: @fontSizeLarger;
+      }
     }
 
     .CollapsibleHeader {

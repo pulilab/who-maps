@@ -5,7 +5,7 @@
         <fa
           icon="star"
           size="xs"
-          class="Owner" />
+          class="OwnerIcon" />
         <span v-show="showLabel"> <translate>Team Member</translate></span>
       </span>
     </template>
@@ -14,7 +14,7 @@
         <fa
           icon="eye"
           size="xs"
-          class="Viewer" />
+          class="ViewerIcon" />
         <span v-show="showLabel"> <translate>Viewer</translate></span>
       </span>
     </template>
@@ -23,7 +23,7 @@
         <fa
           icon="handshake"
           size="xs"
-          class="Donor" />
+          class="DonorIcon" />
         <span v-show="showLabel"> <translate>Investor</translate></span>
       </span>
     </template>
@@ -32,7 +32,7 @@
         <fa
           icon="globe-africa"
           size="xs"
-          class="CountryAdmin" />
+          class="CountryAdminIcon" />
         <span v-show="showLabel"> <translate>Country admin</translate></span>
       </span>
     </template>
@@ -131,19 +131,19 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .ProjectLegendContent {
-    .Owner {
+    .OwnerIcon {
       color: @colorOwner;
     }
 
-    .Viewer {
+    .ViewerIcon {
       color: @colorViewer;
     }
 
-    .Donor {
+    .DonorIcon {
       color: @colorDonor;
     }
 
-    .CountryAdmin {
+    .CountryAdminIcon {
       color: @colorCountryAdmin;
     }
   }
