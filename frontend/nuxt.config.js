@@ -127,7 +127,9 @@ const config = {
   },
   loading: '~/components/DhaLoader.vue',
   build: {
-    extractCSS: true,
+    extractCSS: {
+      allChunks: true
+    },
     vendor: [
       'babel-polyfill',
       'eventsource-polyfill'
