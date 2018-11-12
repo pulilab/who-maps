@@ -80,6 +80,8 @@ def clone_prod_to(server):
         run('scp {}:~/backup/dump`date +%d-%m-%Y`.media.tar.gz .'.format(PROD_HOST_STRING))
         run('tar -xzvf dump`date +%d-%m-%Y`.media.tar.gz django/media/')
 
+        run('docker-compose restart django')
+
 
 def backup():
     # Backup database
