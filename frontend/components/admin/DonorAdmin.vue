@@ -85,19 +85,19 @@
           <div
             :class="['Persona', { 'active': selectedPersona === 'D'}]"
             @click="selectPersona('D')">
-            <div class="PersonaName"><translate>Users/viewers</translate></div>
+            <div class="PersonaName"><translate>Investor Viewers</translate></div>
             <div class="RequestCount"><translate :parameters="{num: userSelection.length - users.length}">{num} new request(s)</translate></div>
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'DA'}]"
             @click="selectPersona('DA')">
-            <div class="PersonaName"><translate>Admins</translate></div>
+            <div class="PersonaName"><translate>Investor Admins</translate></div>
             <div class="RequestCount"><translate :parameters="{num: adminSelection.length - admins.length}">{num} new request(s)</translate></div>
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'SDA'}]"
             @click="selectPersona('SDA')">
-            <div class="PersonaName"><translate>Superadmins</translate></div>
+            <div class="PersonaName"><translate>Investor System Admins</translate></div>
             <div class="RequestCount"><translate :parameters="{num: superadminSelection.length - superAdmins.length}">{num} new request(s)</translate></div>
           </div>
         </el-col>
@@ -110,13 +110,11 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> <translate>Show privileges for investor users</translate>
+                  <fa icon="info-circle" /> <translate>Privileges for Investor Users</translate>
                 </template>
                 <div>
                   <ul>
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
+                    <li><translate key="d-list-item-1">Can read/export responses to private investor questions</translate></li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -136,13 +134,14 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> <translate>Show privileges for investor administrators</translate>
+                  <fa icon="info-circle" /> <translate>Privileges for Investor Admins</translate>
                 </template>
                 <div>
                   <ul>
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
+                    <li><translate key="da-list-item-1">Can read/export responses to private investor questions</translate></li>
+                    <li><translate key="da-list-item-2">Can create and delete investor-specific questions</translate></li>
+                    <li><translate key="da-list-item-3">Can select which questions are private and public</translate></li>
+                    <li><translate key="da-list-item-4">Can approve users to join the investor page</translate></li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -162,13 +161,15 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> <translate>Show privileges for super investor administrators</translate>
+                  <fa icon="info-circle" /> <translate>Privileges for Investor System Admins</translate>
                 </template>
                 <div>
                   <ul>
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
+                    <li><translate key="sda-list-item-1">Can read/export responses to private investor-specific questions</translate></li>
+                    <li><translate key="sda-list-item-2">Can create and delete investor-specific questions</translate></li>
+                    <li><translate key="sda-list-item-3">Can select which questions are private and public</translate></li>
+                    <li><translate key="sda-list-item-4">Can approve users to join the investor page</translate></li>
+                    <li><translate key="sda-list-item-5">Can customize and update investor home page</translate></li>
                   </ul>
                 </div>
               </el-collapse-item>
