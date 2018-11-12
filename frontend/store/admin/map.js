@@ -23,11 +23,18 @@ export const getters = {
   },
   getSubLevelFeatures (state, getters) {
     const geoJson = getters.getGeoJson;
+    let result = [];
     if (geoJson && geoJson.features && geoJson.features.length > 0) {
-      return geoJson.features.filter(
+      result = geoJson.features.filter(
         f => f.properties['admin_level'] !== '2'
       );
     }
+    if (geoJson && geoJson.features && result.length === 0) {
+      result = geoJson.features.filter(
+        f => f.properties['admin_level'] === '2'
+      );
+    }
+    return result;
   },
   getSubLevels (state, getters) {
     const features = getters.getSubLevelFeatures;

@@ -8,7 +8,7 @@ import scheduler.celery  # noqa
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'code', 'project_approval')
+    list_display = ('name', 'code', 'region', 'project_approval')
     ordering = ('name',)
     filter_horizontal = ('users', 'admins', 'super_admins')
     readonly_fields = ('code', 'name')
