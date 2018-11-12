@@ -132,9 +132,6 @@ class UpdateAdminMixin:
 
     def notify_users(self, user_profiles, instance, group, template_name):
         html_template = loader.get_template(template_name)
-        # TODO: replace this for frontend URLs for Country and Donor
-        change_url = reverse('admin:country_country_change', args=(instance.id,))
-
         email_mapping = defaultdict(list)
         for profile in user_profiles:
             email_mapping[profile.language].append(profile.user.email)
@@ -144,7 +141,6 @@ class UpdateAdminMixin:
                 subject = "You have been selected as {} for {}".format(group, instance.name)
                 subject = ugettext(subject)
                 html_message = html_template.render({'type': 'country_admin',
-                                                     'change_url': change_url,
                                                      'group': group,
                                                      'name': instance.name,
                                                      'language': language})
