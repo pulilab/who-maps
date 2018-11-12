@@ -17,13 +17,23 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('type')
         parser.add_argument('email')
+        parser.add_argument('--project-id', dest="project_id", required=False)
+        parser.add_argument('--project-name', dest="project_name", required=False)
+        parser.add_argument('--language', dest="language", required=False)
+        parser.add_argument('--role', dest="role", required=False)
+        parser.add_argument('--group', dest="group", required=False)
+        parser.add_argument('--name', dest="name", required=False)
+        parser.add_argument('--change-url', dest="change_url", required=False)
+        parser.add_argument('--country-name', dest="country_name", required=False)
 
     def handle(self, *args, **options):
+        renderOptions = {x: options[x] for x in options if x not in {'settings', 'verbosity', 'pythonpath', 'traceback', 'no_color', 'type'}}
         self.stdout.write("-- Trying to send an email")
+        self.stdout.write("-- Template filled with {}".format(renderOptions))
         type = options['type']
         email = options['email']
         html_template = loader.get_template("email/master-inline.html")
-        html_message = html_template.render({"type": type})
+        html_message = html_template.render(renderOptions)
         send_mail(
             subject="Test HTML templates",
             message="",
