@@ -11,6 +11,6 @@ class DefaultAccountAdapterCustom(DefaultAccountAdapter):
 
     def send_mail(self, template_prefix, email, context):
         context['activate_url'] = self.ACTIVATE_BASE_URL + \
-            'email-confirmation/' + context['key']
+            'en/-/email-confirmation/' + context['key']
         msg = self.render_mail(template_prefix, email, context)
         msg.send()
