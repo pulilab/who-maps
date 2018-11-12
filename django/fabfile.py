@@ -44,16 +44,16 @@ def staging():
 
 # COMMANDS #
 
-def copy_prod(server):
+def clone_prod_to(server):
     if server not in ['dev', 'staging']:
         print("Error. Valid servers are 'dev', 'staging'.")
         exit(1)
     # Dump prod data and tag
     production()
-    tag = None
     with cd(env.project_root):
         # Get current tag
-        tag = run('git describe --tags')
+        tag = run('git rev-parse --abbrev-ref HEAD')
+        # tag = run('git describe --tags')
         # Backup production database
         run('docker-compose exec postgres pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
         run('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
@@ -63,7 +63,8 @@ def copy_prod(server):
     globals()[server]()
     with cd(env.project_root):
         # Deploy as usual, but from the production tag
-        env.branch = 'tags/{}'.format(tag)
+        # env.branch = 'tags/{}'.format(tag)
+        env.branch = '{}'.format(tag)
         deploy()
         # Import production database
         run('scp {}:~/backup/dump`date +%d-%m-%Y`.sql.tar.gz .'.format(PROD_HOST_STRING))
