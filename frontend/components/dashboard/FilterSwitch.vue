@@ -25,6 +25,7 @@
         :content="tooltip"
         effect="dark"
         placement="left"
+        popper-class="FilterSwitchTooltip"
         manual
       >
         <el-button
@@ -106,6 +107,10 @@ export default {
         padding: 0;
       }
     }
+  }
+
+  .FilterSwitchTooltip {
+    max-width: @advancedSearchWidth;
   }
 
 </style>

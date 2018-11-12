@@ -128,7 +128,7 @@
               <el-collapse-transition>
                 <div
                   v-if="isDonorUser"
-                  class="DonorSelector">
+                  class="DonorSelectorWrapper">
                   <el-form-item
                     :label="$gettext('I request to join the donor group below:')"
                     prop="donor"
@@ -657,17 +657,19 @@ export default {
         }
 
         .UserTypeTextList {
-          margin-bottom: 5px;
+          margin-bottom: 10px;
 
           li {
+            margin-bottom: 5px;
             font-size: @fontSizeSmall - 1;
-            line-height: 18px;
+            line-height: 16px;
             color: @colorTextSecondary;
           }
         }
 
-        .DonorSelector {
+        .DonorSelectorWrapper {
           width: 100%;
+          margin-top: 20px;
 
           .el-form-item__label {
             font-size: @fontSizeSmall;

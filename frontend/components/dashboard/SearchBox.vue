@@ -39,6 +39,7 @@
           :content="$gettext('By selecting these fields, you will limit the search to only data included in these fields. If you want a broader search, leave these fields blank and all project data will be searched.')"
           effect="dark"
           placement="left"
+          popper-class="SearchBoxTooltip"
           manual
         >
           <el-button
@@ -127,6 +128,7 @@ export default {
 
         .el-tooltip {
           float: right;
+          margin-top: 2px;
         }
       }
 
@@ -154,5 +156,9 @@ export default {
       transform: translateY(-10px);
       opacity: 0;
     }
+  }
+
+  .SearchBoxTooltip {
+    max-width: @advancedSearchWidth;
   }
 </style>
