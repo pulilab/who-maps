@@ -1360,7 +1360,6 @@ class CountryAdminTests(TestCase):
         self.user.is_staff = True
         self.user.save()
         self.request.user = self.user
-        self.assertEqual(ma.get_list_display(self.request), ('name', 'code', 'region', 'project_approval'))
         self.assertEqual(ma.get_queryset(self.request).count(), Country.objects.all().count())
 
     def test_superuser_readonlies(self):
