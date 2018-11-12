@@ -3,12 +3,14 @@ import json
 from django.core.management.base import BaseCommand
 from country.models import Country
 
+FILENAME = 'countries-12-11-2018.json'
+
 class Command(BaseCommand):
     help = "Imports map data of countries"
 
     def handle(self, *args, **options):
         self.stdout.write("-- Importing map_data...")
-        with open('./countries-12-11-2018.json') as countries:
+        with open('./{}'.format(FILENAME)) as countries:
             countries = json.load(countries)
             for c in countries:
                 try:
