@@ -230,27 +230,8 @@
           right to asset and enforce provisions of the Terms directly and on their own behalf.</translate></p>
         </el-tab-pane>
 
-        <el-tab-pane label="Toolkit">
-          <h2><translate>Get MAPS Toolkit now!</translate></h2>
-
-          <p>
-            <translate>A new toolkit has been launched to help mHealth implementers</translate>
-            <translate> to successfully and sustainably scale-up their innovations.</translate>
-          </p>
-
-          <el-button
-            type="primary"
-            class="IconLeft"
-            @click="downloadPdf"
-          >
-            <fa icon="file-download" />
-            <translate>Download Pdf</translate>
-          </el-button>
-        </el-tab-pane>
-
         <el-tab-pane label="Contact">
-          <h2><translate>Contact</translate></h2>
-          <p><translate>Here comes the contact data...</translate></p>
+          <h2><translate>If you have further questions about the DHA, do not hesitate to get in touch using the details below</translate></h2>
           <p>
             <b><translate>Email:</translate></b>&nbsp;<a href="mailto:digitalhealthatlas@gmail.com">digitalhealthatlas@gmail.com</a>
           </p>
@@ -267,10 +248,6 @@ export default {
 
     goBack () {
       this.$router.go(-1);
-    },
-
-    downloadPdf () {
-      window.open('/static/documents/maps_toolkit_eng.pdf', '_blank');
     }
   }
 };

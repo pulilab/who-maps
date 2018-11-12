@@ -24,7 +24,7 @@
           class="MutedButton IconRight"
           @click="toggleOptionsVisibility"
         >
-          Where to search in
+          Select fields to include in your search
           <fa
             v-show="optionsVisible"
             icon="caret-up"
@@ -36,8 +36,8 @@
         </el-button>
         <el-tooltip
           v-model="showSearchBoxTooltip"
+          :content="$gettext('By selecting these fields, you will limit the search to only data included in these fields. If you want a broader search, leave these fields blank and all project data will be searched.')"
           effect="dark"
-          content="Lorem Ipsum dolor sit"
           placement="left"
           manual
         >
