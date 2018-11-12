@@ -11,16 +11,15 @@ export const state = () => ({
   sub_level_types: [],
   organisations: [],
   donors: [],
-  regions: []
+  regions: [],
+  donorsLibrary: {}
 });
 
 export const getters = {
   getUserProfiles: state => {
     return state.profiles ? [ ...state.profiles.filter(p => p.name) ] : [];
   },
-
   getUserProfileDetails: (state, getters) => id => getters.getUserProfiles.find(u => u.id === id),
-
   getSearchResult: state => {
     const search = state.projectSearch ? state.projectSearch : [];
     return search.map(s => {
@@ -29,7 +28,6 @@ export const getters = {
       };
     });
   },
-
   getLanguages: state => {
     return state.languages.map(l => ({ ...l, flag: `/static/flags/${l.flag}` }));
   },
@@ -37,34 +35,27 @@ export const getters = {
   getLanguageDetails: (state, getters) => code => {
     return getters.getLanguages.find(l => l.code === code);
   },
-
   getSearchFilters: state => {
     return [...state.search_filters];
   },
-
   getLandingPageDefaults: state => {
     return { ...state.landing_page_defaults };
   },
-
   getAxis: state => {
     return [...state.axis];
   },
-
   getDomains: state => {
     return [...state.domains];
   },
-
   getQuestions: state => {
     return [...state.toolkit_questions];
   },
-
   getThematicOverview: state => {
     const th = state.thematic_overview;
     return th.categories
       ? th.categories.map(cat => ({ ...cat, domains: th.sub_categories.filter(sb => sb.category === cat.id) }))
       : [];
   },
-
   getDomainsForThematic: (state, getters) => {
     const axis = getters.getAxis;
     const domains = getters.getDomains;
@@ -78,21 +69,18 @@ export const getters = {
           .map(df => ({ name: df.name }))
       }))];
   },
-
   getSubLevelTypes: state => {
     return [...state.sub_level_types.map(t => ({ ...t }))];
   },
-
   getOrganisations: state => {
     return [...state.organisations.map(o => ({...o}))];
   },
-
   getOrganisationDetails: (state, getters) => id => {
     const o = getters.getOrganisations.find(org => org.id === id);
     return o ? { ...o } : undefined;
   },
   getDonors: state => state.donors,
-  getDonorDetails: state => id => ({...state.donors.find(d => d.id === id)}),
+  getDonorDetails: state => id => ({...state.donors.find(d => d.id === id), ...state.donorsLibrary[id]}),
   getRegions: state => state.regions,
   getRegionDetails: state => id => ({...state.regions.find(r => r.id === id)})
 };
@@ -108,7 +96,7 @@ export const actions = {
     }
   },
 
-  async loadStaticData ({ commit }) {
+  async loadStaticData ({ commit, dispatch }) {
     try {
       const { data } = await this.$axios.get('/api/static-data/');
       commit('SET_AXIS', data.axis);
@@ -119,6 +107,7 @@ export const actions = {
       commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
       commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
       commit('SET_REGIONS', data.regions);
+      dispatch('dashboard/setDashboardColumns', data.dashboard_columns, {root: true});
     } catch (e) {
       console.error('system/loadStaticData failed');
     }
@@ -135,7 +124,6 @@ export const actions = {
       }
     }
   },
-
   async loadDonors ({ commit }) {
     try {
       const { data } = await this.$axios.get(`/api/landing-donor/`);
@@ -144,7 +132,16 @@ export const actions = {
       console.error('system/loadDonors failed');
     }
   },
-
+  async loadDonorDetails ({ commit, state }, id) {
+    if (!state.donorsLibrary[id]) {
+      try {
+        const { data } = await this.$axios.get(`/api/landing-donor/${id}/`);
+        commit('SET_DONOR_DETAILS', {id, data});
+      } catch (e) {
+        console.error('system/loadDonorDetails failed');
+      }
+    }
+  },
   async addOrganisation ({ dispatch, getters }, name) {
     try {
       await this.$axios.post('/api/organisations/', { name });
@@ -201,6 +198,9 @@ export const mutations = {
   },
   SET_DONORS: (state, donors) => {
     state.donors = donors;
+  },
+  SET_DONOR_DETAILS: (state, {id, data}) => {
+    state.donorsLibrary = {...state.donorsLibrary, [id]: data};
   },
   SET_REGIONS: (state, regions) => {
     state.regions = regions;

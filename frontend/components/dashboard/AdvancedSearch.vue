@@ -5,20 +5,14 @@
     <country-filters />
     <div class="FilterSwitches">
       <filter-switch
-        v-if="donorView"
-        v-model="onlyMyDonor"
-        :label="$gettext('Only my Donor Projects')"
-        :tooltip="$gettext('Lorem ipsum something else')"
-      />
-      <filter-switch
         v-model="governamentApproved"
         :label="$gettext('Only MOH Verified Projects')"
-        :tooltip="$gettext('Lorem ipsum something else')"
+        :tooltip="$gettext('Show only projects that have been verified by the country MOH')"
       />
       <filter-switch
         v-model="governamentFinanced"
         :label="$gettext('Government financed')"
-        :tooltip="$gettext('Lorem ipsum something else')"
+        :tooltip="$gettext('Show only projects that have been received financial or in-kind government support')"
       />
     </div>
     <div class="FilterItems">
@@ -111,12 +105,6 @@ export default {
     HealthSystemChallengesList,
     HisBucketList,
     SimplePlatformList
-  },
-  data () {
-    return {
-      donorView: false,
-      onlyMyDonor: false
-    };
   },
   computed: {
     ...mapGettersActions({

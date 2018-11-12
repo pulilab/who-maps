@@ -6,7 +6,7 @@
       ref="collapsible"
       title="Interoperability &amp; Standards">
       <el-form-item
-        :label="$gettext('Does your digital health project link to a digital HIS?')"
+        :label="$gettext('Does your project share information with one or more of these digital Health Information System components?')"
         prop="interoperability_links">
         <interoperability-link-component
           v-for="(ir, index) in interopearilbityLinksStructure"
@@ -22,6 +22,14 @@
       <el-form-item
         :label="$gettext('What data standards does your digital health project use?')"
         prop="interoperability_standards">
+
+        <template slot="label">
+          <translate key="interoperability-standards">What data standards does your digital health project use?</translate>
+          <form-hint >
+            <translate key="interoperability-standards-hint">If your data standards are not available here, please email digitalhealthatlas@gmail.com</translate>
+          </form-hint>
+        </template>
+
         <standards-selector v-model="interoperability_standards" />
       </el-form-item>
     </collapsible-card>
@@ -36,12 +44,14 @@ import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
 import CollapsibleCard from '../CollapsibleCard';
 import InteroperabilityLinkComponent from '../InteroperabilityLinkComponent';
 import StandardsSelector from '../StandardsSelector';
+import FormHint from '../FormHint';
 
 export default {
   components: {
     CollapsibleCard,
     InteroperabilityLinkComponent,
-    StandardsSelector
+    StandardsSelector,
+    FormHint
   },
   mixins: [VeeValidationMixin],
   computed: {

@@ -21,17 +21,27 @@ from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
 from .serializers import CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, \
     PartnerLogoSerializer, DonorSerializer, SuperAdminDonorSerializer, AdminDonorSerializer, \
     DonorPartnerLogoSerializer, MapFileSerializer, CountryImageSerializer, DonorImageSerializer, \
-    DonorCustomQuestionSerializer, CountryCustomQuestionSerializer
+    DonorCustomQuestionSerializer, CountryCustomQuestionSerializer, CountryListSerializer, DonorListSerializer
 
 
-class CountryLandingPageViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+class CountryLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
 
 
-class DonorLandingPageViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+class CountryLandingListPageViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Country.objects.only('id', 'name', 'code')
+    serializer_class = CountryListSerializer
+
+
+class DonorLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Donor.objects.all()
     serializer_class = DonorSerializer
+
+
+class DonorLandingListPageViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Donor.objects.only('id', 'name', 'code')
+    serializer_class = DonorListSerializer
 
 
 class AdminPermissionMixin:

@@ -6,7 +6,9 @@
     >
       <div class="CoverageSubtitle">
         <fa icon="map-marker-alt" />
-        <translate :parameters="{name: countrySubLevelNames.first}">{name} level deployment</translate>
+        <translate
+          key="firstSubLevel"
+          :parameters="{name: countrySubLevelNames.first}">If subnational, which {name} does your project cover?</translate>
       </div>
       <el-row
         v-for="(cov, index) in coverage"
@@ -44,7 +46,9 @@
     >
       <div class="CoverageSubtitle">
         <fa icon="map-marker-alt" />
-        <translate :parameters="{name: countrySubLevelNames.first}">{name} level deployment</translate>
+        <translate
+          key="secondSubLevel"
+          :parameters="{name: countrySubLevelNames.first}">If subnational, which {name} does your project cover?</translate>
       </div>
       <el-row
         v-for="(cov, index) in coverageSecondLevel"

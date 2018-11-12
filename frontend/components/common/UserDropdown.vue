@@ -12,7 +12,7 @@
         type="text"
         class="ButtonPopper"
       >
-        <fa icon="user-circle" />{{ user.name }}<fa icon="angle-down" />
+        <fa icon="user-circle" />{{ user.name }}<fa icon="caret-down" />
       </el-button>
 
       <div class="DropdownContent">
@@ -84,7 +84,7 @@
             <span class="MenuIcon">
               <fa icon="hand-holding-usd" />
             </span>
-            <translate>Donor admin</translate>
+            <translate>Investor admin</translate>
           </nuxt-link>
         </div>
 
@@ -163,13 +163,13 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .UserDropdownPopper {
-    transform: translate(0, -30px);
+    transform: translate(10px, -30px);
   }
 
   .ButtonPopper {
     height: 24px;
-    margin: 0 10px;
-    padding: 0 10px;
+    margin: 0 5px 0 5px;
+    padding: 0 0 0 10px;
     border: 0;
     font-size: @fontSizeBase;
     font-weight: 700;
@@ -180,7 +180,7 @@ export default {
     .svg-inline--fa {
       margin-right: 6px;
 
-      &.fa-angle-down {
+      &.fa-caret-down {
         margin: 0 0 0 10px;
       }
     }

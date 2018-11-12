@@ -110,7 +110,9 @@ export const getters = {
   getDonorsAnswers: state => state.donors_answers ? [...state.donors_answers] : [],
   getDonorsAnswerDetails: (state, getters) => id => getters.getDonorsAnswers.find(da => da.question_id === id),
   getAllDonorsAnswers: (state, getters, rootState, rootGetters) => {
-    const donors = getters.getDonors.map(d => rootGetters['system/getDonorDetails'](d));
+    const donors = getters.getDonors
+      .map(d => rootGetters['system/getDonorDetails'](d))
+      .filter(d => d.donor_questions);
     if (donors) {
       return donors.reduce((a, c) => {
         a.push(...c.donor_questions.map(dq => {
@@ -133,15 +135,25 @@ export const actions = {
     const { data } = userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`);
     commit('SET_ORIGINAL', Object.freeze(data));
     const clean = cleanState();
+    const countriesToFetch = new Set();
+    const donorsToFetch = new Set();
     if (data.draft) {
       const draft = {...clean, ...apiReadParser(data.draft)};
+      countriesToFetch.add(draft.country);
+      donorsToFetch.add(...draft.donors);
       commit('INIT_PROJECT', draft);
     }
     if (data.published) {
       const published = {...clean, ...apiReadParser(data.published)};
+      countriesToFetch.add(published.country);
+      donorsToFetch.add(...published.donors);
       commit('SET_PUBLISHED', Object.freeze(published));
     }
-    await dispatch('loadTeamViewers', id);
+    await Promise.all([
+      ...[...countriesToFetch].map(cf => dispatch('countries/loadCountryDetails', cf, {root: true})),
+      ...[...donorsToFetch].map(df => dispatch('system/loadDonorDetails', df, {root: true})),
+      dispatch('loadTeamViewers', id)
+    ]);
   },
   async loadTeamViewers ({commit, rootGetters}, projectId) {
     const profile = rootGetters['user/getProfile'];
@@ -151,12 +163,13 @@ export const actions = {
       commit('SET_VIEWERS', data.viewers);
     }
   },
-  resetProjectState ({commit, rootGetters}) {
+  async resetProjectState ({commit, rootGetters, dispatch}) {
     const clean = cleanState();
     const profile = rootGetters['user/getProfile'];
     if (profile) {
       clean.country = profile.country;
       clean.team = [profile.id];
+      await dispatch('countries/loadCountryDetails', profile.country, {root: true});
     }
     commit('INIT_PROJECT', clean);
     commit('SET_TEAM', clean.team);
@@ -173,7 +186,8 @@ export const actions = {
   setOrganisation ({commit}, value) {
     commit('SET_ORGANISATION', value);
   },
-  setCountry ({commit}, value) {
+  setCountry ({commit, dispatch}, value) {
+    dispatch('countries/loadCountryDetails', value, {root: true});
     commit('SET_COUNTRY', value);
   },
   setGeographicScope ({commit}, value) {
@@ -242,7 +256,8 @@ export const actions = {
   setImplementingPartners ({commit}, value) {
     commit('SET_IMPLEMENTING_PARTNERS', value);
   },
-  setDonors ({commit}, value) {
+  setDonors ({commit, dispatch}, value) {
+    value.forEach(d => dispatch('system/loadDonorDetails', d, {root: true}));
     commit('SET_DONORS', value);
   },
   setImplementationDates ({commit}, value) {

@@ -21,7 +21,7 @@
             class="UserForm">
 
             <el-form-item
-              :label="$gettext('My name')"
+              :label="$gettext('First and Last Name')"
               prop="name">
               <el-input
                 v-model="innerProfile.name"
@@ -29,7 +29,7 @@
             </el-form-item>
 
             <el-form-item
-              :label="$gettext('My email address')"
+              :label="$gettext('Email address')"
               class="is-required">
               <el-input
                 v-model="innerProfile.email"
@@ -73,9 +73,9 @@
                 v-if="userTypeRequested"
                 class="RoleRequested"><fa
                   icon="circle-notch"
-                  spin /><translate>User role requested!</translate></h5>
+                  spin /><translate>Your user access has been submitted</translate></h5>
 
-              <p v-if="userTypeRequested"><translate>Waiting for admin approval — you're still able to change your request by selecting an other role and saving your settings!</translate></p>
+              <p v-if="userTypeRequested"><translate>We will notify you via email when your user access has been approved. If you would like to request a different type of access, you can resubmit the form below and saving your changes.</translate></p>
 
               <div
                 v-if="userTypeRequested"
@@ -85,7 +85,7 @@
                 v-model="isCountryUser"
                 border><span class="IconRole IconGovernmentUser" /><translate>Government user</translate></el-checkbox>
 
-              <p class="UserArchTypeText"><translate>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore aliqua.</translate></p>
+              <p class="UserArchTypeText"><translate>Privileges for Government Users are detailed below. Select the user type that most matches your role within the DHA. This request will be received by the Government Admin team and a response will be sent via email for your request.</translate></p>
 
               <el-collapse-transition>
                 <el-radio-group
@@ -95,36 +95,23 @@
                   class="OnePerRow">
                   <el-radio
                     label="G"
-                    class="RadioSmall"><translate>Country user</translate></el-radio>
-                  <ul
+                    class="RadioSmall"><translate>Country viewer</translate></el-radio>
+                  <user-privileges
                     v-if="innerProfile.account_type === 'G'"
-                    class="UserTypeTextList">
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
-                  </ul>
-
+                    type="G" />
                   <el-radio
                     label="CA"
-                    class="RadioSmall">Administrator of this country</el-radio>
-                  <ul
+                    class="RadioSmall">Government Admins for this country</el-radio>
+                  <user-privileges
                     v-if="innerProfile.account_type === 'CA'"
-                    class="UserTypeTextList">
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
-                  </ul>
+                    type="CA" />
 
                   <el-radio
                     label="SCA"
-                    class="RadioSmall">Super country administrator</el-radio>
-                  <ul
+                    class="RadioSmall">Government System Admins</el-radio>
+                  <user-privileges
                     v-if="innerProfile.account_type === 'SCA'"
-                    class="UserTypeTextList">
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
-                  </ul>
+                    type="SCA" />
                 </el-radio-group>
               </el-collapse-transition>
 
@@ -134,9 +121,24 @@
 
               <el-checkbox
                 v-model="isDonorUser"
-                border><span class="IconRole IconInvestorUser" /><translate>Financial investor</translate></el-checkbox>
+                border><span class="IconRole IconInvestorUser" /><translate>Investor</translate></el-checkbox>
 
-              <p class="UserArchTypeText"><translate>Sed eiusmod tempor incidunt ut labore et dolore aliqua. Morbi fringilla convallis sapien, id pulvinar odio volutpat.</translate></p>
+              <p class="UserArchTypeText"><translate>If you are part of an investor group that is providing either financial or in-kind support to project activities, the DHA can be used to help organize and connect all of your projects. By joining your investor page, you will see information that is private to your organization. If your group is not listed below, send an email to digitalhealthatlas@gmail.com to add them to the list.</translate></p>
+
+              <el-collapse-transition>
+                <div
+                  v-if="isDonorUser"
+                  class="DonorSelector">
+                  <el-form-item
+                    :label="$gettext('I request to join the donor group below:')"
+                    prop="donor"
+                  >
+                    <donor-select
+                      v-model="innerProfile.donor"
+                    />
+                  </el-form-item>
+                </div>
+              </el-collapse-transition>
 
               <el-collapse-transition>
                 <el-radio-group
@@ -146,52 +148,25 @@
                   class="OnePerRow">
                   <el-radio
                     :label="'D'"
-                    class="RadioSmall"><translate>Donor</translate></el-radio>
-                  <ul
+                    class="RadioSmall"><translate>Investor Viewers</translate></el-radio>
+                  <user-privileges
                     v-if="innerProfile.account_type === 'D'"
-                    class="UserTypeTextList">
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
-                  </ul>
+                    type="D" />
 
                   <el-radio
                     :label="'DA'"
-                    class="RadioSmall"><translate>Donor administrator</translate></el-radio>
-                  <ul
+                    class="RadioSmall"><translate>Investor Admins</translate></el-radio>
+                  <user-privileges
                     v-if="innerProfile.account_type === 'DA'"
-                    class="UserTypeTextList">
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
-                  </ul>
+                    type="DA" />
 
                   <el-radio
                     :label="'SDA'"
-                    class="RadioSmall"><translate>Super donor administrator</translate></el-radio>
-                  <ul
+                    class="RadioSmall"><translate>Investor System Admins</translate></el-radio>
+                  <user-privileges
                     v-if="innerProfile.account_type === 'SDA'"
-                    class="UserTypeTextList">
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
-                  </ul>
+                    type="SDA" />
                 </el-radio-group>
-              </el-collapse-transition>
-
-              <el-collapse-transition>
-                <div
-                  v-if="isDonorUser"
-                  class="DonorSelector">
-                  <el-form-item
-                    :label="$gettext('I want to be a part of this donor group:')"
-                    prop="donor"
-                  >
-                    <donor-select
-                      v-model="innerProfile.donor"
-                    />
-                  </el-form-item>
-                </div>
               </el-collapse-transition>
             </div>
 
@@ -219,16 +194,14 @@
                     </el-col>
                     <el-col>
                       <h5><translate>Government user</translate></h5>
-                      <span><translate>Country user</translate></span>
+                      <span><translate>Country viewer</translate></span>
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
                     <span><translate>My Privileges are:</translate></span>
-                    <ul class="UserTypeTextList">
-                      <li><translate>List item 1</translate></li>
-                      <li><translate>List item 2</translate></li>
-                      <li><translate>List item 3</translate></li>
-                    </ul>
+                    <user-privileges
+                      v-if="innerProfile.account_type === 'G'"
+                      type="G" />
                   </div>
                 </div>
 
@@ -243,16 +216,15 @@
                     </el-col>
                     <el-col>
                       <h5><translate>Government user</translate></h5>
-                      <span><translate>Country user admin</translate></span>
+                      <span><translate>Country Admin</translate></span>
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
                     <span><translate>My Privileges are:</translate></span>
-                    <ul class="UserTypeTextList">
-                      <li><translate>List item 1</translate></li>
-                      <li><translate>List item 2</translate></li>
-                      <li><translate>List item 3</translate></li>
-                    </ul>
+                    <user-privileges
+                      v-if="innerProfile.account_type === 'CA'"
+                      type="CA" />
+
                   </div>
                 </div>
 
@@ -267,16 +239,15 @@
                     </el-col>
                     <el-col>
                       <h5><translate>Government user</translate></h5>
-                      <span><translate>Super Country User Admin</translate></span>
+                      <span><translate>Country System Admin</translate></span>
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
                     <span><translate>My Privileges are:</translate></span>
-                    <ul class="UserTypeTextList">
-                      <li><translate>List item 1</translate></li>
-                      <li><translate>List item 2</translate></li>
-                      <li><translate>List item 3</translate></li>
-                    </ul>
+                    <user-privileges
+                      v-if="innerProfile.account_type === 'SCA'"
+                      type="SCA" />
+
                   </div>
                 </div>
 
@@ -290,17 +261,16 @@
                       <span class="IconRole IconInvestorUser" />
                     </el-col>
                     <el-col>
-                      <h5><translate>Financial investor</translate></h5>
-                      <span><translate>Donor</translate></span>
+                      <h5><translate>Investor</translate></h5>
+                      <span><translate>Investor Viewer</translate></span>
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
                     <span><translate>My Privileges are:</translate></span>
-                    <ul class="UserTypeTextList">
-                      <li><translate>List item 1</translate></li>
-                      <li><translate>List item 2</translate></li>
-                      <li><translate>List item 3</translate></li>
-                    </ul>
+                    <user-privileges
+                      v-if="innerProfile.account_type === 'D'"
+                      type="D" />
+
                   </div>
                 </div>
 
@@ -314,17 +284,16 @@
                       <span class="IconRole IconInvestorUser" />
                     </el-col>
                     <el-col>
-                      <h5><translate>Financial investor</translate></h5>
-                      <span><translate>Donor admin</translate></span>
+                      <h5><translate>Investor</translate></h5>
+                      <span><translate>Investor Admin</translate></span>
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
                     <span><translate>My Privileges are:</translate></span>
-                    <ul class="UserTypeTextList">
-                      <li><translate>List item 1</translate></li>
-                      <li><translate>List item 2</translate></li>
-                      <li><translate>List item 3</translate></li>
-                    </ul>
+                    <user-privileges
+                      v-if="innerProfile.account_type === 'DA'"
+                      type="DA" />
+
                   </div>
                 </div>
 
@@ -339,21 +308,18 @@
                     </el-col>
                     <el-col>
                       <h5><translate>Financial investor</translate></h5>
-                      <span><translate>Super donor admin</translate></span>
+                      <span><translate>Investor System Admin</translate></span>
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
                     <span><translate>My Privileges are:</translate></span>
-                    <ul class="UserTypeTextList">
-                      <li><translate>List item 1</translate></li>
-                      <li><translate>List item 2</translate></li>
-                      <li><translate>List item 3</translate></li>
-                    </ul>
+                    <user-privileges
+                      v-if="innerProfile.account_type === 'SDA'"
+                      type="SDA" />
                   </div>
                 </div>
               </div>
-            </div>
-          </el-col>
+          </div></el-col>
         </el-row>
 
         <div class="CardActionsBottom">
@@ -400,13 +366,15 @@ import OrganisationSelect from './common/OrganisationSelect';
 import LanguageSelect from './common/LanguageSelect';
 import CountrySelect from './common/CountrySelect';
 import DonorSelect from './common/DonorSelect';
+import UserPrivileges from './UserPrivileges';
 
 export default {
   components: {
     OrganisationSelect,
     LanguageSelect,
     CountrySelect,
-    DonorSelect
+    DonorSelect,
+    UserPrivileges
   },
   mixins: [FormAPIErrorsMixin],
   data () {
@@ -505,6 +473,7 @@ export default {
 
     dismissChanges () {
       this.innerProfile = {...this.profile};
+      this.$router.go(-1);
     },
 
     submit () {
