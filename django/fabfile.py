@@ -68,10 +68,15 @@ def clone_prod_to(server):
         deploy()
         # Import production database
         run('scp {}:~/backup/dump`date +%d-%m-%Y`.sql.tar.gz .'.format(PROD_HOST_STRING))
-        run('tar -xzvf dump`date +%d-%m-%Y`.sql.tar.gz')
-        run('cat ~/backup/dump`date +%d-%m-%Y`.sql | docker-compose exec  postgres psql -Upostgres')
+        file = run('tar -xzvf dump`date +%d-%m-%Y`.sql.tar.gz')
+        run('mv {} ~/backup/dump`date +%d-%m-%Y`.sql'.format(file))
+        _drop_db()
+        time.sleep(1)
+        _create_db()
+        # restore DB
+        time.sleep(1)
+        _restore_db()
         # Import production media files
-        run('rm -rf media')
         run('scp {}:~/backup/dump`date +%d-%m-%Y`.media.tar.gz .'.format(PROD_HOST_STRING))
         run('tar -xzvf dump`date +%d-%m-%Y`.media.tar.gz django/media/')
 
