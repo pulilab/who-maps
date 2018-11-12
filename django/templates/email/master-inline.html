@@ -1,9 +1,11 @@
+<!-- To make css inline use this tool: https://inliner.cm/ -->
+
 <!-- {% load utils %}
 {% load staticfiles %}
 {% load i18n %} -->
 
 <!doctype html>
-<html style="margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+<html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="content-language" content="{{ language }}">
@@ -11,7 +13,9 @@
     <title>Email templates</title>
 
     <style>
-
+      /* -------------------------------------
+          GLOBAL RESETS
+      ------------------------------------- */
       img {
         border: none;
         -ms-interpolation-mode: bicubic;
@@ -43,22 +47,24 @@
           font-size: 14px;
           vertical-align: top; }
 
-
+      /* -------------------------------------
+          BODY & CONTAINER
+      ------------------------------------- */
       .body {
         background-color: #F2F2F2;
         width: 100%; }
 
-
+      /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
       .container {
         display: block;
         margin: 0 auto !important;
-
+        /* makes it centered */
         max-width: 580px;
         padding: 10px;
         width: 580px;
         color: #474747; }
 
-
+      /* This should also be a block element, so that it will fill 100% of the .container */
       .content {
         box-sizing: border-box;
         display: block;
@@ -66,10 +72,12 @@
         max-width: 580px;
         padding: 20px; }
 
-
+      /* -------------------------------------
+          HEADER, FOOTER, MAIN
+      ------------------------------------- */
       .main {
         width: 100%;
-
+        /* border: 1px solid #D6D6D6; */
         background: #FFFFFF;
         border-radius: 3px; }
 
@@ -118,7 +126,9 @@
           padding-top: 20px; }
 
 
-
+      /* -------------------------------------
+          TYPOGRAPHY
+      ------------------------------------- */
       h1,
       h2,
       h3,
@@ -157,7 +167,9 @@
         color: #008DC9;
         text-decoration: underline; }
 
-
+      /* -------------------------------------
+          BUTTONS
+      ------------------------------------- */
       .btn {
         box-sizing: border-box;
         width: 100%; }
@@ -190,7 +202,9 @@
         border-color: #008DC9;
         color: #FFFFFF; }
 
-
+      /* -------------------------------------
+          OTHER STYLES THAT MIGHT BE USEFUL
+      ------------------------------------- */
       .last {
         margin-bottom: 0; }
 
@@ -235,9 +249,20 @@
         border-bottom: 1px solid #D6D6D6;
         margin: 20px 0; }
 
-
+      /* -------------------------------------
+          RESPONSIVE AND MOBILE FRIENDLY STYLES
+      ------------------------------------- */
       @media only screen and (max-width: 620px) {
-
+        /* table[class=main] h1 {
+          font-size: 24px !important;
+          margin-bottom: 10px !important; }
+        table[class=main] p,
+        table[class=main] ul,
+        table[class=main] ol,
+        table[class=main] td,
+        table[class=main] span,
+        table[class=main] a {
+          font-size: 16px !important; } */
         table[class=body] .wrapper,
         table[class=body] .article {
           padding: 15px !important; }
@@ -262,7 +287,9 @@
           padding: 0 15px 15px; }
         }
 
-
+      /* -------------------------------------
+          PRESERVE THESE STYLES IN THE HEAD
+      ------------------------------------- */
       @media all {
         .ExternalClass {
           width: 100%; }
@@ -290,33 +317,30 @@
   </head>
 
 
-  <body style="background-color:#F2F2F2;font-family:arial, sans-serif;-webkit-font-smoothing:antialiased;font-size:14px;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;" >
-    <table border="0" cellpadding="0" cellspacing="0" class="body" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;background-color:#F2F2F2;width:100%;" >
+  <body>
+    <table border="0" cellpadding="0" cellspacing="0" class="body">
       <tr>
-        <td class="container" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;display:block;margin-top:0 !important;margin-bottom:0 !important;margin-right:auto !important;margin-left:auto !important;max-width:580px;padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:580px;color:#474747;" >
-          <div class="content" style="box-sizing:border-box;display:block;margin-top:0;margin-bottom:0;margin-right:auto;margin-left:auto;max-width:580px;padding-top:20px;padding-bottom:20px;padding-right:20px;padding-left:20px;" >
+        <td class="container">
+          <div class="content">
 
             <!-- START CENTERED WHITE CONTAINER -->
-            <span class="preheader" style="color:transparent;display:none;height:0;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;visibility:hidden;width:0;" >This is preheader text. Some clients will show this text as a preview.</span>
-            <table class="main" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;background-color:#FFFFFF;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;border-radius:3px;" >
+            <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
+            <table class="main">
 
               <!-- START MAIN CONTENT AREA -->
               <tr>
-                <td class="wrapper" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-top:20px;padding-bottom:20px;padding-right:20px;padding-left:20px;" >
-                  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
-                    <tr class="header" style="height:80px;" >
-                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;" >
-                        <!-- TODO: Replace image link with global path -->
-                        <!-- Path to img: '/frontend/static/email-who-logo.png' -->
-                        <img src="../../../frontend/static/email-who-logo.png" width="154" height="60" alt="WHO x DHA logo" style="border-style:none;-ms-interpolation-mode:bicubic;max-width:100%;" >
+                <td class="wrapper">
+                  <table border="0" cellpadding="0" cellspacing="0">
+                    <tr class="header">
+                      <td>
+                        <img src="{% site_url %}/email-who-logo.png" width="154" height="60" alt="WHO x DHA logo">
                       </td>
-                      <td class="align-right" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:right;padding-top:5px;" >
-                        <!-- TODO: Add Website link -->
-                        <a href="http://" class="visit-link nowrap" style="color:#008DC9;text-decoration:underline;font-size:12px;white-space:nowrap;" >{% trans "Visit website" %}</a>
+                      <td class="align-right">
+                        <a href="{% site_url %}" class="visit-link nowrap">{% trans "Visit website" %}</a>
                       </td>
                     </tr>
                     <tr>
-                      <td colspan="2" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;" >
+                      <td colspan="2">
 
 
 
@@ -326,17 +350,17 @@
 
                         <!-- TEMPLATE: NEW MEMBER -->
                         {% if type == "new_member" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Thank you!" %}</h1>
-                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Notification" %}</h2>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% blocktrans %}You have been added to project <b>{{ project_name }}</b> as a <b>{{ role }}</b>.{% endblocktrans %}</p>
-                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                        <h1>{% trans "Thank you!" %}</h1>
+                        <h2>{% trans "Notification" %}</h2>
+                        <p>{% blocktrans %}You have been added to project <b>{{ project_name }}</b> as a <b>{{ role }}</b>.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
-                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
-                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}/app/{{ project_id }}/dashboard" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to project" %}</a> </td>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/projects/{{project_id }}/" target="_blank">{% trans "Go to project" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -350,17 +374,17 @@
 
                         <!-- TEMPLATE: COUNTRY ADMIN -->
                         {% if type == "country_admin" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Country admin" %}</h1>
-                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Notification" %}</h2>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% blocktrans %}You have been selected as the Country Admin for <b>{{ country_name }}</b>. Please log in to the admin platform to see your country specific options.{% endblocktrans %}</p>
-                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                        <h1>{% trans "Country admin" %}</h1>
+                        <h2>{% trans "Notification" %}</h2>
+                        <p>{% blocktrans %}You have been selected as the Country Admin for <b>{{ country_name }}</b>. Please log in to the admin platform to see your country specific options.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
-                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
-                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}{{ change_url }}" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to country admin" %}</a> </td>
+                                      <td> <a href="{% site_url %}/{{language}}/-/admin/country" target="_blank">{% trans "Go to country admin" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -371,57 +395,33 @@
                         {% endif %}
                         <!-- /TEMPLATE: COUNTRY ADMIN -->
 
-
-                        <!-- TEMPLATE: COUNTRY ADMIN - ACTIVATED -->
-                        {% if type == "country_admin_activated" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Country admin" %}</h1>
-                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Notification" %}</h2>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% blocktrans %}A new map for <b>{{ country_name }}</b> has been activated. Please log in to the admin platform to see your map or go straight to DHA and see it in action.{% endblocktrans %}</p>
-                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
-                          <tbody>
-                            <tr>
-                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
-                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
-                                  <tbody>
-                                    <tr>
-                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}{{ change_url }}" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to country admin" %}</a> </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        {% endif %}
-                        <!-- /TEMPLATE: COUNTRY ADMIN - ACTIVATED -->
-
-
-                        <!-- TEMPLATE: EMAIL CONFIRAMTION SIGNUP MESSAGE -->
+                        <!-- EDIT THIS IN account/email/email_confirmation_signup_message.html -->
+                        <!-- TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE -->
                         {% if type == "email_confirmation_signup_message" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Thank you!" %}</h1>
-                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Your account has been created!" %}</h2>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% blocktrans %}Your e-mail needs to be confirmed to finalize your registration.{% endblocktrans %}</p>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" ><b>{% blocktrans %}Please visit this link below to confim your e-mail address:{% endblocktrans %}</b></p>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
-                          <a href="{{ activate_url }}" target="_blank " style="color:#008DC9;text-decoration:underline;" >{{ activate_url }}</a>
+                        <h1>{% trans "Thank you!" %}</h1>
+                        <h2>{% trans "Your account has been created!" %}</h2>
+                        <p>{% blocktrans %}Your e-mail needs to be confirmed to finalize your registration.{% endblocktrans %}</p>
+                        <p><b>{% blocktrans %}Please visit this link below to confim your e-mail address:{% endblocktrans %}</b></p>
+                        <p>
+                          <a href="{{ activate_url }}" target="_blank ">{{ activate_url }}</a>
                         </p>
                         {% endif %}
-                        <!-- /TEMPLATE: EMAIL CONFIRAMTION SIGNUP MESSAGE  -->
+                        <!-- /TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE  -->
 
 
                         <!-- TEMPLATE: FLAG CONTENT -->
                         {% if type == "flag_content" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Reported content!" %}</h1>
-                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Notification" %}</h2>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Content has been flagged as inappropriate. Please take action." %}</p>
-                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                        <h1>{% trans "Reported content!" %}</h1>
+                        <h2>{% trans "Notification" %}</h2>
+                        <p>{% trans "Content has been flagged as inappropriate. Please take action." %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
-                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
-                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}{{ change_url }}" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to see content" %}</a> </td>
+                                      <td> <a href="{% site_url %}{{ change_url }}" target="_blank">{% trans "Go to see content" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -433,13 +433,17 @@
                         <!-- /TEMPLATE: FLAG CONTENT -->
 
 
+                        <!-- EDIT THIS IN registration/password_reset_html_email.html -->
                         <!-- TEMPLATE: PASSWORD RESET -->
                         {% if type == "password_reset" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Password Reset" %}</h1>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "You requested your password to be reset." %}</p>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" ><b>Please visit this link below to create a new password:</b></p>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
-                        <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank" style="color:#008DC9;text-decoration:underline;" >{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
+                        <h1>{% trans "Password Reset" %}</h1>
+                        <p>{% trans "You requested your password to be reset." %}</p>
+                        <p><b>Please visit this link below to create a new password:</b></p>
+                        <p>
+                          <!-- TODO#8
+                            Couldn't test, this should lead to django backend according to Ilcsik
+                          -->
+                        <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank">{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
                         </p>
                         {% endif %}
                         <!-- /TEMPLATE: PASSWORD RESET -->
@@ -447,11 +451,14 @@
 
                         <!-- TEMPLATE: TOOLKIT DIGEST -->
                         {% if type == "toolkit_digest" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Notification" %}</h1>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "MAPS Toolkit has been updated lately on your project!" %}</p>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" ><b>{% trans "Check the MAPS Toolkit on the link below:" %}</b></p>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
-                          <a href="{% site_url %}/app/{{ project_id }}/maps/0/0" target="_blank" style="color:#008DC9;text-decoration:underline;" >{% site_url %}/app/{{ project_id }}/maps/0/0</a>
+                        <h1>{% trans "Notification" %}</h1>
+                        <p>{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
+                        <p><b>{% trans "Check the MAPS Toolkit on the link below:" %}</b></p>
+                        <p>
+                          <!-- TODO#9
+                            eg.: http://localhost:3000/en/-/projects/1/assessment
+                          -->
+                          <a href="{% site_url %}/projects/{{ project_id }}/assessment" target="_blank">{% site_url %}/projects/{{ project_id }}/assessment</a>
                         </p>
                         {% endif %}
                         <!-- /TEMPLATE: TOOLKIT DIGEST -->
@@ -459,25 +466,29 @@
 
                         <!-- TEMPLATE: STATUS REPORT -->
                         {% if type == "status_report" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Status report" %}</h1>
-                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear Admin! " %}</h2>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The projects listed below are waiting for your approval:" %}</p>
-                        <table border="0" cellpadding="0" cellspacing="0" class="project-list" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
+                        <h1>{% trans "Status report" %}</h1>
+                        <h2>{% trans "Dear Admin! " %}</h2>
+                        <p>{% trans "The projects listed below are waiting for your approval:" %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
                           <tbody>
                             <tr class="list-header">
-                              <td align="left" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
-                                <b style="text-transform:uppercase;" >{% trans "Today" %}</b>
+                              <td align="left">
+                                <b>{% trans "Today" %}</b>
                               </td>
-                              <td align="right" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
+                              <td align="right">
                                 {{ projects_today.count }} {% trans "project(s)" %}
                               </td>
                             </tr>
                             <tr class="list-content">
-                              <td colspan="2" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
-                                <ul style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                              <td colspan="2">
+                                <ul>
                                   {% for project in projects_today %}
-                                  <li style="list-style-position:inside;margin-left:10px;margin-bottom:10px;" >
-                                    <a href="{% site_url %}/admin/project/projectapproval/{{project.approval.id}}/change" target="_blank" style="color:#008DC9;text-decoration:underline;" ><b>{{ project.name }}</b></a>
+                                  <li>
+                                    <!-- TODO#10
+                                      eg.: http://localhost:3000/en/-/admin/country
+                                      same as country admin (#4, #5)
+                                    -->
+                                    <a href="{% site_url %}/admin/country" target="_blank"><b>{{ project.name }}</b></a>
                                   </li>
                                   {% endfor %}
                                 </ul>
@@ -485,22 +496,25 @@
                             </tr>
                           </tbody>
                         </table>
-                        <table border="0" cellpadding="0" cellspacing="0" class="project-list" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
                           <tbody>
                             <tr class="list-header">
-                              <td align="left" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
-                                <b style="text-transform:uppercase;" >{% trans "Earlier" %}</b>
+                              <td align="left">
+                                <b>{% trans "Earlier" %}</b>
                               </td>
-                              <td align="right" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
+                              <td align="right">
                                 {{ projects_earlier.count }} {% trans "project(s)" %}
                               </td>
                             </tr>
                             <tr class="list-content">
-                              <td colspan="2" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
-                                <ul style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                              <td colspan="2">
+                                <ul>
                                   {% for project in projects_earlier %}
-                                  <li style="list-style-position:inside;margin-left:10px;margin-bottom:10px;" >
-                                    <a href="{% site_url %}/admin/project/projectapproval/{{project.approval.id}}/change" target="_blank" style="color:#008DC9;text-decoration:underline;" ><b>{{ project.name }}</b></a>
+                                  <li>
+                                    <!-- TODO#10
+                                      eg.: {% site_url %}/admin/country
+                                    -->
+                                    <a href="{% site_url %}/admin/country" target="_blank"><b>{{ project.name }}</b></a>
                                   </li>
                                   {% endfor %}
                                 </ul>
@@ -508,14 +522,19 @@
                             </tr>
                           </tbody>
                         </table>
-                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
-                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
-                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}/admin" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to Admin Dashboard" %}</a> </td>
+                                      <!-- TODO#11
+                                        if this should lead to frontend country admin: http://localhost:3000/en/-/admin/country  ,
+                                        if this should lead to frontend donor admin: http://localhost:3000/en/-/admin/donor  ,
+                                        if this should lead to django admin, then that url
+                                      -->
+                                      <td> <a href="{% site_url %}/admin" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -529,25 +548,28 @@
 
                         <!-- TEMPLATE: PROJECT IMPORT LIST -->
                         {% if type == "project_import_list" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Status report" %}</h1>
-                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear Admin! " %}</h2>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The following projects have been imported:" %}</p>
-                        <table border="0" cellpadding="0" cellspacing="0" class="project-list" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
+                        <h1>{% trans "Status report" %}</h1>
+                        <h2>{% trans "Dear Admin! " %}</h2>
+                        <p>{% trans "The following projects have been imported:" %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
                           <tbody>
                             <tr class="list-header">
-                              <td align="left" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
-                                <b style="text-transform:uppercase;" >{% trans "Imported projects" %}</b>
+                              <td align="left">
+                                <b>{% trans "Imported projects" %}</b>
                               </td>
-                              <td align="right" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
+                              <td align="right">
                                 {{ projects|length }} {% trans "project(s)" %}
                               </td>
                             </tr>
                             <tr class="list-content">
-                              <td colspan="2" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
-                                <ul style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                              <td colspan="2">
+                                <ul>
                                   {% for project in projects %}
-                                  <li style="list-style-position:inside;margin-left:10px;margin-bottom:10px;" >
-                                    <a href="{% site_url %}/admin/project/project/{{project.id}}/change" target="_blank" style="color:#008DC9;text-decoration:underline;" ><b>{{ project.name }}</b></a>
+                                  <li>
+                                    <!-- TODO#12
+                                      eg.: http://localhost:3000/en/-/projects/1/edit
+                                    -->
+                                    <a href="{% site_url %}/projects/{{project.id}}/edit" target="_blank"><b>{{ project.name }}</b></a>
                                   </li>
                                   {% endfor %}
                                 </ul>
@@ -555,14 +577,19 @@
                             </tr>
                           </tbody>
                         </table>
-                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
-                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
-                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}/admin" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to Admin Dashboard" %}</a> </td>
+                                      <!-- TODO#11
+                                        if this should lead to frontend country admin: http://localhost:3000/en/-/admin/country  ,
+                                        if this should lead to frontend donor admin: http://localhost:3000/en/-/admin/donor  ,
+                                        if this should lead to django admin, then that url
+                                      -->
+                                      <td> <a href="{% site_url %}/admin" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -576,15 +603,16 @@
 
                         <!-- TEMPLATE: IMPORT PROJECTS -->
                         {% if type == "import_projects" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Notification" %}</h1>
-                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Your were added to the following projects: " %}</h2>
+                        <h1>{% trans "Notification" %}</h1>
+                        <h2>{% trans "Your were added to the following projects: " %}</h2>
                         {% if data.password %}
-                        <ul style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                        <ul>
                           {% for project in data.projects %}
-                          <li style="list-style-position:inside;margin-left:10px;margin-bottom:10px;" ><a href="{{ SITE_URL }}/app/{{ project.id }}/edit-project" style="color:#008DC9;text-decoration:underline;" ><b>{{ project.name }}</b></a></li>
+                          <!-- TODO#13 -->
+                          <li><a href="{{ SITE_URL }}/projects/{{ project.id }}/edit"><b>{{ project.name }}</b></a></li>
                           {% endfor %}
                         </ul>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                        <p>
                           <b>Your login credentials are:</b><br>
                           <em>Username: {{ email }}</em><br>
                           <em>Password: {{ data.password }}</em>
@@ -610,21 +638,21 @@
 
 
             <!-- START FOOTER -->
-            <div class="footer" style="clear:both;margin-top:10px;text-align:center;width:100%;" >
-              <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
+            <div class="footer">
+              <table border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <tr>
-                    <td class="content-block footer-links" style="font-family:arial, sans-serif;vertical-align:top;padding-bottom:10px;padding-top:10px;color:#9B9B9B;font-size:12px;text-align:center;" >
-                      <!-- TODO: Update footer links -->
-                      <a href="http://" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Go to website" %}</a>
-                      <span style="color:#9B9B9B;font-size:12px;text-align:center;" >&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                      <a href="http://" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Terms of use" %}</a>
-                      <span style="color:#9B9B9B;font-size:12px;text-align:center;" >&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                      <a href="mailto:" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Contact us" %}</a>
+                    <td class="content-block footer-links">
+                      <!-- TODO#14 Update footer links -->
+                      <a href="{% site_url %}">{% trans "Go to website" %}</a>
+                      <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                      <a href="{% site_url %}/terms">{% trans "Terms of use" %}</a>
+                      <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                      <a href="mailto:digitalhealthatlas@gmail.com">{% trans "Contact us" %}</a>
                     </td>
                   </tr>
-                  <td class="content-block" style="font-family:arial, sans-serif;vertical-align:top;padding-bottom:10px;padding-top:10px;color:#9B9B9B;font-size:12px;text-align:center;" >
-                    <span class="disclaimer" style="color:#9B9B9B;text-align:center;font-size:11px;" >
+                  <td class="content-block">
+                    <span class="disclaimer">
                       {% trans "All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use." %}
                     </span>
                   </td>
