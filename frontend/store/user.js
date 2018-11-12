@@ -4,12 +4,14 @@ import { saveToken, deleteToken } from '../utilities/auth';
 export const state = () => ({
   token: null,
   user: null,
-  profile: null
+  profile: null,
+  emailVerifyResult: null
 });
 
 export const getters = {
   getToken: state => state.token,
   getUser: state => state.user,
+  emailVerifiedRecently: state => state.emailVerifyResult,
 
   getProfile: state => {
     if (state.profile) {
@@ -96,8 +98,13 @@ export const actions = {
     return team.includes(user) || viewers.includes(user);
   },
 
-  async verifyEmail (ctx, key) {
-    return this.$axios.post('/api/rest-auth/registration/verify-email/', { key });
+  async verifyEmail ({commit}, key) {
+    try {
+      await this.$axios.post('/api/rest-auth/registration/verify-email/', { key });
+      commit('EMAIL_VERIFY_RESULT', true);
+    } catch (e) {
+      commit('EMAIL_VERIFY_RESULT', false);
+    }
   }
 
 };
@@ -118,5 +125,9 @@ export const mutations = {
 
   UPDATE_TEAM_VIEWER: (state, {member, viewer}) => {
     state.profile = {...state.profile, member, viewer};
+  },
+
+  EMAIL_VERIFY_RESULT: (state, isSuccess) => {
+    state.emailVerifyResult = isSuccess;
   }
 };

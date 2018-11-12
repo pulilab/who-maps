@@ -333,13 +333,13 @@
                   <table border="0" cellpadding="0" cellspacing="0">
                     <tr class="header">
                       <td>
-                        <!-- TODO: Replace image link with global path -->
+                        <!-- TODO#1 Replace image link with global path -->
                         <!-- Path to img: '/frontend/static/email-who-logo.png' -->
                         <img src="../../../frontend/static/email-who-logo.png" width="154" height="60" alt="WHO x DHA logo">
                       </td>
                       <td class="align-right">
-                        <!-- TODO: Add Website link -->
-                        <a href="http://" class="visit-link nowrap">{% trans "Visit website" %}</a>
+                        <!-- TODO#2 Add Website link -->
+                        <a href="{% site_url %}" class="visit-link nowrap">{% trans "Visit website" %}</a>
                       </td>
                     </tr>
                     <tr>
@@ -363,7 +363,13 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td> <a href="{% site_url %}/app/{{ project_id }}/dashboard" target="_blank">{% trans "Go to project" %}</a> </td>
+                                      <!-- TODO#3
+                                        eg: http://localhost:3000/en/-/projects/1
+                                        where `en` is users language
+                                        '-' is users country or donor or just `-`
+                                        `1` is projects id
+                                      -->
+                                      <td> <a href="{% site_url %}/projects/{{ project_id }}" target="_blank">{% trans "Go to project" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -387,7 +393,11 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td> <a href="{% site_url %}{{ change_url }}" target="_blank">{% trans "Go to country admin" %}</a> </td>
+                                      <!-- TODO#4
+                                        eg.: http://localhost:3000/en/-/admin/country
+                                        note `/en/-/` again
+                                      -->
+                                      <td> <a href="{% site_url %}/admin/country" target="_blank">{% trans "Go to country admin" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -411,7 +421,11 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td> <a href="{% site_url %}{{ change_url }}" target="_blank">{% trans "Go to country admin" %}</a> </td>
+                                      <!-- TODO#5
+                                        eg.: http://localhost:3000/en/-/admin/country
+                                        note `/en/-/` again
+                                      -->
+                                      <td> <a href="{% site_url %}/admin/country" target="_blank">{% trans "Go to country admin" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -430,6 +444,11 @@
                         <p>{% blocktrans %}Your e-mail needs to be confirmed to finalize your registration.{% endblocktrans %}</p>
                         <p><b>{% blocktrans %}Please visit this link below to confim your e-mail address:{% endblocktrans %}</b></p>
                         <p>
+                          <!-- TODO#6
+                            eg.: http://localhost:3000/en/-/email-confirmation/{key}
+                            note `/en/-/` again
+                            `key` is the value that will be used for calling the POST for `/api/rest-auth/registration/verify-email/` on hitting this url
+                          -->
                           <a href="{{ activate_url }}" target="_blank ">{{ activate_url }}</a>
                         </p>
                         {% endif %}
@@ -448,6 +467,14 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
+                                      <!-- TODO#7
+                                        Right now there's no way to route to exact resouce on the frontend via url, as details are shown in a popup
+                                        you can narrow down category like eg.:
+                                        http://localhost:3000/en/-/cms#experiences
+                                        http://localhost:3000/en/-/cms#lessons
+                                        http://localhost:3000/en/-/cms#resources
+                                        and provide the title/details about it in the links name, to help the user find it via frontends search
+                                      -->
                                       <td> <a href="{% site_url %}{{ change_url }}" target="_blank">{% trans "Go to see content" %}</a> </td>
                                     </tr>
                                   </tbody>
@@ -467,6 +494,9 @@
                         <p>{% trans "You requested your password to be reset." %}</p>
                         <p><b>Please visit this link below to create a new password:</b></p>
                         <p>
+                          <!-- TODO#8
+                            Couldn't test, this should lead to django backend according to Ilcsik
+                          -->
                         <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank">{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
                         </p>
                         {% endif %}
@@ -479,7 +509,10 @@
                         <p>{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
                         <p><b>{% trans "Check the MAPS Toolkit on the link below:" %}</b></p>
                         <p>
-                          <a href="{% site_url %}/app/{{ project_id }}/maps/0/0" target="_blank">{% site_url %}/app/{{ project_id }}/maps/0/0</a>
+                          <!-- TODO#9
+                            eg.: http://localhost:3000/en/-/projects/1/assessment
+                          -->
+                          <a href="{% site_url %}/projects/{{ project_id }}/assessment" target="_blank">{% site_url %}/projects/{{ project_id }}/assessment</a>
                         </p>
                         {% endif %}
                         <!-- /TEMPLATE: TOOLKIT DIGEST -->
@@ -505,7 +538,11 @@
                                 <ul>
                                   {% for project in projects_today %}
                                   <li>
-                                    <a href="{% site_url %}/admin/project/projectapproval/{{project.approval.id}}/change" target="_blank"><b>{{ project.name }}</b></a>
+                                    <!-- TODO#10
+                                      eg.: http://localhost:3000/en/-/admin/country
+                                      same as country admin (#4, #5)
+                                    -->
+                                    <a href="{% site_url %}/admin/country" target="_blank"><b>{{ project.name }}</b></a>
                                   </li>
                                   {% endfor %}
                                 </ul>
@@ -528,7 +565,10 @@
                                 <ul>
                                   {% for project in projects_earlier %}
                                   <li>
-                                    <a href="{% site_url %}/admin/project/projectapproval/{{project.approval.id}}/change" target="_blank"><b>{{ project.name }}</b></a>
+                                    <!-- TODO#10
+                                      eg.: {% site_url %}/admin/country
+                                    -->
+                                    <a href="{% site_url %}/admin/country" target="_blank"><b>{{ project.name }}</b></a>
                                   </li>
                                   {% endfor %}
                                 </ul>
@@ -543,6 +583,11 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
+                                      <!-- TODO#11
+                                        if this should lead to frontend country admin: http://localhost:3000/en/-/admin/country  ,
+                                        if this should lead to frontend donor admin: http://localhost:3000/en/-/admin/donor  ,
+                                        if this should lead to django admin, then that url
+                                      -->
                                       <td> <a href="{% site_url %}/admin" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
                                     </tr>
                                   </tbody>
@@ -575,7 +620,10 @@
                                 <ul>
                                   {% for project in projects %}
                                   <li>
-                                    <a href="{% site_url %}/admin/project/project/{{project.id}}/change" target="_blank"><b>{{ project.name }}</b></a>
+                                    <!-- TODO#12
+                                      eg.: http://localhost:3000/en/-/projects/1/edit
+                                    -->
+                                    <a href="{% site_url %}/projects/{{project.id}}/edit" target="_blank"><b>{{ project.name }}</b></a>
                                   </li>
                                   {% endfor %}
                                 </ul>
@@ -590,6 +638,11 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
+                                      <!-- TODO#11
+                                        if this should lead to frontend country admin: http://localhost:3000/en/-/admin/country  ,
+                                        if this should lead to frontend donor admin: http://localhost:3000/en/-/admin/donor  ,
+                                        if this should lead to django admin, then that url
+                                      -->
                                       <td> <a href="{% site_url %}/admin" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
                                     </tr>
                                   </tbody>
@@ -609,7 +662,8 @@
                         {% if data.password %}
                         <ul>
                           {% for project in data.projects %}
-                          <li><a href="{{ SITE_URL }}/app/{{ project.id }}/edit-project"><b>{{ project.name }}</b></a></li>
+                          <!-- TODO#13 -->
+                          <li><a href="{{ SITE_URL }}/projects/{{ project.id }}/edit"><b>{{ project.name }}</b></a></li>
                           {% endfor %}
                         </ul>
                         <p>
@@ -643,12 +697,12 @@
                 <tr>
                   <tr>
                     <td class="content-block footer-links">
-                      <!-- TODO: Update footer links -->
-                      <a href="http://">{% trans "Go to website" %}</a>
+                      <!-- TODO#14 Update footer links -->
+                      <a href="{% site_url %}">{% trans "Go to website" %}</a>
                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                      <a href="http://">{% trans "Terms of use" %}</a>
+                      <a href="{% site_url %}/terms">{% trans "Terms of use" %}</a>
                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                      <a href="mailto:">{% trans "Contact us" %}</a>
+                      <a href="mailto:digitalhealthatlas@gmail.com">{% trans "Contact us" %}</a>
                     </td>
                   </tr>
                   <td class="content-block">
