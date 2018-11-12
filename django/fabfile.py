@@ -270,7 +270,7 @@ def single_coverage(folder, test_to_run):
 
 def send_test_email(type, email, **kwargs):
     params = ""
-    for key,value in kwargs.items():
+    for key, value in kwargs.items():
         params += '--{} {} '.format(key, value)
     local("docker-compose exec django python manage.py send_html_email {} {} {}".format(type, email, params) +
           "--settings=who_maps.settings_email_test")

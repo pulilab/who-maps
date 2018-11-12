@@ -27,10 +27,10 @@ class Command(BaseCommand):
         parser.add_argument('--country-name', dest="country_name", required=False)
 
     def handle(self, *args, **options):
-        renderOptions = {x: options[x] for x in options if x not in {'settings', 'verbosity', 'pythonpath', 'traceback', 'no_color', 'type'}}
+        excluded = {'settings', 'verbosity', 'pythonpath', 'traceback', 'no_color'}
+        renderOptions = {x: options[x] for x in options if x not in excluded}
         self.stdout.write("-- Trying to send an email")
         self.stdout.write("-- Template filled with {}".format(renderOptions))
-        type = options['type']
         email = options['email']
         html_template = loader.get_template("email/master-inline.html")
         html_message = html_template.render(renderOptions)

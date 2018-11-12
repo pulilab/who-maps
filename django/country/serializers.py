@@ -5,7 +5,6 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.utils.dateformat import format
 from django.db.transaction import atomic
-from django.urls import reverse
 from django.template import loader
 from django.core.mail import send_mail
 from django.core import management
