@@ -103,21 +103,21 @@
           <div
             :class="['Persona', { 'active': selectedPersona === 'G'}]"
             @click="selectPersona('G')">
-            <div class="PersonaName"><translate>Users/viewers</translate></div>
+            <div class="PersonaName"><translate>Government Viewers</translate></div>
             <div class="RequestCount"><translate :parameters="{num: userSelection.length - users.length}">{num} new request(s)</translate></div>
             <fa icon="chevron-right" />
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'CA'}]"
             @click="selectPersona('CA')">
-            <div class="PersonaName"><translate>Admins</translate></div>
+            <div class="PersonaName"><translate>Government Admins</translate></div>
             <div class="RequestCount"><translate :parameters="{num: adminSelection.length - admins.length}">{num} new request(s)</translate></div>
             <fa icon="chevron-right" />
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'SCA'}]"
             @click="selectPersona('SCA')">
-            <div class="PersonaName"><translate>Superadmins</translate></div>
+            <div class="PersonaName"><translate>Government System Admins</translate></div>
             <div class="RequestCount"><translate :parameters="{num: superadminSelection.length - superAdmins.length}"> {num} new request(s)</translate></div>
             <fa icon="chevron-right" />
           </div>
@@ -130,13 +130,12 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> <translate>Show privileges for government users</translate>
+                  <fa icon="info-circle" /> <translate>Privileges for Government Viewers</translate>
                 </template>
                 <div>
                   <ul>
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
+                    <li><translate key="g-list-item-1">Can read/export responses to private Government questions</translate></li>
+                    <li><translate key="g-list-item-2">Can view when a project is approved/declined</translate></li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -156,13 +155,16 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> <translate>Show privileges for country administrators</translate>
+                  <fa icon="info-circle" /> <translate>Privileges for Government Admins</translate>
                 </template>
                 <div>
                   <ul>
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
+                    <li><translate key="ca-list-item-1">Can update Government map data</translate></li>
+                    <li><translate key="ca-list-item-2">Can create and delete Government-specific questions</translate></li>
+                    <li><translate key="ca-list-item-3">Can select which questions are private and public</translate></li>
+                    <li><translate key="ca-list-item-4">Can read/export responses to private Government questions</translate></li>
+                    <li><translate key="ca-list-item-5">Can approve users to join the Government page</translate></li>
+                    <li><translate key="ca-list-item-6">Can approve projects if the project approval feature is active</translate></li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -182,13 +184,17 @@
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
-                  <fa icon="info-circle" /> <translate>Show privileges for super country administrators</translate>
+                  <fa icon="info-circle" /> <translate>Privileges for Government System Admins</translate>
                 </template>
                 <div>
                   <ul>
-                    <li><translate>List item 1</translate></li>
-                    <li><translate>List item 2</translate></li>
-                    <li><translate>List item 3</translate></li>
+                    <li><translate key="sca-list-item-1">Can update Government map data</translate></li>
+                    <li><translate key="sca-list-item-2">Can create and delete Government-specific questions</translate></li>
+                    <li><translate key="sca-list-item-3">Can select which questions are private and public</translate></li>
+                    <li><translate key="sca-list-item-4">Can read/export responses to private Government questions</translate></li>
+                    <li><translate key="sca-list-item-5">Can approve users to join the Government page</translate></li>
+                    <li><translate key="sca-list-item-6">Can approve projects if the project approval feature is active</translate></li>
+                    <li><translate key="sca-list-item-7">Can customize and update Government home page</translate></li>
                   </ul>
                 </div>
               </el-collapse-item>
