@@ -6,9 +6,12 @@ export const downloadLinkManager = (data, name) => {
   link = null;
 };
 
-export const blobDownloader = (data, name) => {
+export const blobDownloader = (data, name, callback) => {
   const download_url = window.URL.createObjectURL(data);
   downloadLinkManager(download_url, name);
+  if (callback) {
+    callback();
+  }
 };
 
 export const uriDownloader = (data, name) => {

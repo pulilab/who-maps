@@ -11,11 +11,11 @@ msgstr ""
 msgid "... {excluded} more"
 msgstr ""
 
-#: pages/_organisation/terms.vue:31
+#: pages/_organisation/terms.vue:32
 msgid ""
 "(“Website”), including without limitation participation in its forums, blog, "
 "and all linked\n"
-"            pages owned and operated by Results for Development Institute "
+"          pages owned and operated by Results for Development Institute "
 "(“HRP,” “we,” or “our”)."
 msgstr ""
 
@@ -33,8 +33,6 @@ msgstr ""
 
 #: components/project/SubLevelCoverageField.vue:8
 #: components/project/SubLevelCoverageField.vue:32
-#: components/project/SubNationalLevelDeployment.vue:8
-#: components/project/SubNationalLevelDeployment.vue:46
 msgid "{name} level deployment"
 msgstr ""
 
@@ -65,7 +63,19 @@ msgstr ""
 msgid "&nbsp; {count} project(s)"
 msgstr ""
 
-#: pages/_organisation/terms.vue:242
+#: components/project/CoverageFieldset.vue:65
+msgid "# Clients"
+msgstr ""
+
+#: components/project/CoverageFieldset.vue:39
+msgid "# Facilities"
+msgstr ""
+
+#: components/project/CoverageFieldset.vue:13
+msgid "# Health workers"
+msgstr ""
+
+#: pages/_organisation/terms.vue:236
 msgid "A new toolkit has been launched to help mHealth implementers"
 msgstr ""
 
@@ -73,7 +83,7 @@ msgstr ""
 msgid "A saved configuration with this name is already present"
 msgstr ""
 
-#: pages/_organisation/terms.vue:43
+#: pages/_organisation/terms.vue:44
 msgid "Accuracy of Content"
 msgstr ""
 
@@ -91,8 +101,8 @@ msgstr ""
 msgid "Add Digital Health Interventions"
 msgstr ""
 
-#: pages/_organisation/projects/create.vue:3
-msgid "Add New Digital Health Project"
+#: components/project/sections/ImplementationOverview.vue:46
+msgid "Add information about your Digital Health program activies"
 msgstr ""
 
 #: components/common/EmptyProjects.vue:16
@@ -101,6 +111,19 @@ msgstr ""
 
 #: components/admin/DhaQuestionaire.vue:33
 msgid "Add new question"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:196
+msgid "Add Team members (Editor role)"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:213
+msgid "Add Viewers (only Viewer role)"
+msgstr ""
+
+#: components/BreadCrumb.vue:39 components/BreadCrumb.vue:40
+#: components/BreadCrumb.vue:41
+msgid "Admin"
 msgstr ""
 
 #: components/dialogs/ProjectApprovalDialog.vue:62
@@ -119,7 +142,7 @@ msgstr ""
 msgid "All Countries"
 msgstr ""
 
-#: components/common/DhaFooter.vue:7
+#: components/common/DhaFooter.vue:18
 msgid ""
 "All reasonable precautions have been taken by the World Health Organization "
 "to verify the information contained in this publication. However, the "
@@ -161,7 +184,7 @@ msgstr ""
 msgid "and use the system"
 msgstr ""
 
-#: pages/_organisation/terms.vue:129
+#: pages/_organisation/terms.vue:130
 msgid ""
 "Any personal information that you provide to us will be used only for the "
 "following purposes:"
@@ -171,19 +194,23 @@ msgstr ""
 msgid "Apply filters"
 msgstr ""
 
-#: components/common/ProjectCardActions.vue:39
+#: components/common/ProjectCard.vue:39
+msgid "Approved by MOH"
+msgstr ""
+
+#: components/BreadCrumb.vue:50 components/common/ProjectCardActions.vue:39
 msgid "Assessment"
 msgstr ""
 
-#: pages/_organisation/terms.vue:212
+#: pages/_organisation/terms.vue:213
 msgid ""
 "At any time and without notice, we may suspend, cancel, or terminate your "
 "right to use this\n"
-"          Website or any portion of the Website. In the event of a "
-"suspension, cancellation, or\n"
-"          termination, you are no longer authorized to access the part of "
-"the Website affected by such\n"
-"          suspension, cancellation, or termination."
+"        Website or any portion of the Website. In the event of a suspension, "
+"cancellation, or\n"
+"        termination, you are no longer authorized to access the part of the "
+"Website affected by such\n"
+"        suspension, cancellation, or termination."
 msgstr ""
 
 #: components/project/ProjectForm.vue:405
@@ -191,17 +218,13 @@ msgstr ""
 msgid "Attention"
 msgstr ""
 
-#: pages/_organisation/terms.vue:9
-msgid "Back"
-msgstr ""
-
 #: components/dialogs/ProjectApprovalDialog.vue:131
 msgid "Back to admin"
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:140 components/admin/DhaQuestion.vue:170
-#: components/dashboard/FilterPresetsActions.vue:103
-#: components/dashboard/TableTopActions.vue:125
+#: components/dashboard/FilterPresetsActions.vue:105
+#: components/dashboard/TableTopActions.vue:126
 #: components/dialogs/DashboardFiltersDialog.vue:81
 #: components/dialogs/DigitalHealthInterventionsDialog.vue:42
 #: components/dialogs/ProjectApprovalDialog.vue:119
@@ -219,7 +242,7 @@ msgstr ""
 msgid "Change"
 msgstr ""
 
-#: components/dashboard/FilterPresetsActions.vue:59
+#: components/dashboard/FilterPresetsActions.vue:58
 #: components/dialogs/FilterItem.vue:26
 msgid "Clear"
 msgstr ""
@@ -227,6 +250,16 @@ msgstr ""
 #: components/dialogs/DashboardFiltersDialog.vue:4
 #: components/dialogs/DigitalHealthInterventionsDialog.vue:48
 msgid "Clear All"
+msgstr ""
+
+#: components/common/map/MapProjectsBox.vue:44
+msgid "Click on the map to view the digital health project information."
+msgstr ""
+
+#: components/project/CoverageFieldset.vue:67
+msgid ""
+"Client users refers to all care recipients who have direct access to the "
+"software.  If there are no users of this type, put 0."
 msgstr ""
 
 #: components/project/ProjectForm.vue:392
@@ -252,12 +285,20 @@ msgstr ""
 msgid "Congratulations!"
 msgstr ""
 
-#: pages/_organisation/terms.vue:232
+#: pages/_organisation/terms.vue:251
 msgid "Contact"
 msgstr ""
 
 #: components/dashboard/TableTopActions.vue:60
 msgid "Contact {selected} selected"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:177
+msgid "Contact email"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:157
+msgid "Contact name"
 msgstr ""
 
 #: components/common/ProjectBar.vue:45
@@ -276,7 +317,8 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: components/common/ActionBar.vue:30 components/common/ProjectLegend.vue:28
+#: components/common/ActionBar.vue:32
+#: components/common/ProjectLegendContent.vue:35
 #: components/common/UserDropdown.vue:72
 msgid "Country admin"
 msgstr ""
@@ -301,7 +343,7 @@ msgstr ""
 msgid "Country user admin"
 msgstr ""
 
-#: components/common/map/CountryCenterMarker.vue:29
+#: components/common/map/CountryCenterMarker.vue:30
 msgid "Country view"
 msgstr ""
 
@@ -309,7 +351,8 @@ msgstr ""
 msgid "Country View"
 msgstr ""
 
-#: components/common/TopBar.vue:56
+#: components/BreadCrumb.vue:42 components/BreadCrumb.vue:43
+#: components/common/TopBar.vue:69
 msgid "Dashboard"
 msgstr ""
 
@@ -318,18 +361,27 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:74
+#: components/project/sections/GeneralOverview.vue:57
+msgid ""
+"Describe the user types, geographic coverage and other coverage details."
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:92
 msgid ""
 "Describe what the technology aims to achieve, detailing the users, the "
 "reasons for deploying the system, and current and future phases of "
 "deployment."
 msgstr ""
 
+#: components/project/sections/GeneralOverview.vue:80
+msgid "Describe your overall digital health project design."
+msgstr ""
+
 #: components/dashboard/TableTopActions.vue:15
 msgid "Deselect all {total} projects"
 msgstr ""
 
-#: pages/_organisation/terms.vue:7
+#: pages/_organisation/terms.vue:4
 msgid "DHA Help Center"
 msgstr ""
 
@@ -349,15 +401,15 @@ msgstr ""
 msgid "Discard draft"
 msgstr ""
 
-#: components/common/DhaFooter.vue:4
+#: components/common/DhaFooter.vue:16
 msgid "Disclaimer:"
 msgstr ""
 
-#: pages/_organisation/terms.vue:171
+#: pages/_organisation/terms.vue:172
 msgid "Disclaimers"
 msgstr ""
 
-#: pages/_organisation/terms.vue:140
+#: pages/_organisation/terms.vue:141
 msgid "Disclosure"
 msgstr ""
 
@@ -371,11 +423,11 @@ msgid "Districts center pin"
 msgstr ""
 
 #: components/EditProfile.vue:148 components/EditProfile.vue:293
-#: components/common/ProjectLegend.vue:21
+#: components/common/ProjectLegendContent.vue:26
 msgid "Donor"
 msgstr ""
 
-#: components/EditProfile.vue:317 components/common/ActionBar.vue:39
+#: components/EditProfile.vue:317 components/common/ActionBar.vue:41
 #: components/common/UserDropdown.vue:86
 msgid "Donor admin"
 msgstr ""
@@ -413,7 +465,7 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
-#: pages/_organisation/terms.vue:245
+#: pages/_organisation/terms.vue:246
 msgid "Download Pdf"
 msgstr ""
 
@@ -426,6 +478,10 @@ msgstr ""
 
 #: components/project/ProjectForm.vue:413
 msgid "Draft overriden with published version"
+msgstr ""
+
+#: components/BreadCrumb.vue:47
+msgid "Drafted Project"
 msgstr ""
 
 #: components/dashboard/FilterItem.vue:21
@@ -441,6 +497,10 @@ msgstr ""
 
 #: components/EditProfile.vue:3
 msgid "Edit my profile"
+msgstr ""
+
+#: components/BreadCrumb.vue:46
+msgid "Edit Project"
 msgstr ""
 
 #: pages/_organisation/projects/_id/edit/index.vue:3
@@ -463,11 +523,11 @@ msgstr ""
 msgid "Email confirmation"
 msgstr ""
 
-#: pages/_organisation/terms.vue:234
+#: pages/_organisation/terms.vue:254
 msgid "Email:"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:217
+#: components/project/sections/GeneralOverview.vue:272
 msgid "End date must be after Start date"
 msgstr ""
 
@@ -497,7 +557,7 @@ msgstr ""
 msgid "Financial investor"
 msgstr ""
 
-#: pages/_organisation/terms.vue:133
+#: pages/_organisation/terms.vue:134
 msgid "For internal review."
 msgstr ""
 
@@ -517,7 +577,7 @@ msgstr ""
 msgid "Geographical coverage:"
 msgstr ""
 
-#: pages/_organisation/terms.vue:239
+#: pages/_organisation/terms.vue:233
 msgid "Get MAPS Toolkit now!"
 msgstr ""
 
@@ -525,8 +585,8 @@ msgstr ""
 msgid "Global Support to DHA"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:175
-msgid "Go back to Dashboard"
+#: pages/_organisation/terms.vue:10
+msgid "Go back"
 msgstr ""
 
 #: components/DhaLogin.vue:118 components/DhaLogin.vue:163
@@ -550,13 +610,30 @@ msgstr ""
 msgid "Government user"
 msgstr ""
 
+#: components/project/sections/ImplementationOverview.vue:167
+msgid ""
+"Has the government contributed to the project, either financially or in-kind?"
+msgstr ""
+
 #: components/DhaLogin.vue:190 components/DhaLogin.vue:201
 #: components/SignupComponent.vue:105
 msgid "Has to be a valid email address"
 msgstr ""
 
+#: components/project/CoverageFieldset.vue:41
+msgid ""
+"Health facilities using the system refers to all facilities that have direct "
+"access to the software. If there are no users of this type, put 0."
+msgstr ""
+
 #: components/dashboard/PdfExport.vue:220
 msgid "Health Focus Area:"
+msgstr ""
+
+#: components/project/CoverageFieldset.vue:15
+msgid ""
+"Health workers include all recognized health professionals directly "
+"accessing the software. If there are no users of this type, put 0."
 msgstr ""
 
 #: pages/_organisation/projects/index.vue:5
@@ -567,68 +644,85 @@ msgstr ""
 msgid "Here are your projects updated most recently"
 msgstr ""
 
-#: pages/_organisation/terms.vue:233
+#: pages/_organisation/terms.vue:252
 msgid "Here comes the contact data..."
 msgstr ""
 
-#: pages/_organisation/terms.vue:103
+#: pages/_organisation/terms.vue:104
 msgid ""
 "HRP reserves the right, but has no obligation, to monitor the content of the "
 "message boards,\n"
-"          bulletin boards, blogs, and other services available on the "
-"Website to determine compliance with\n"
-"          the Terms of Use and any other operating rules we establish. We "
+"        bulletin boards, blogs, and other services available on the Website "
+"to determine compliance with\n"
+"        the Terms of Use and any other operating rules we establish. We "
 "reserve the exclusive right to\n"
-"          edit, remove, or refuse to post any submitted materials or "
+"        edit, remove, or refuse to post any submitted materials or "
 "information. We are not responsible\n"
-"          for and do not endorse any of the opinions, advice, or statements "
+"        for and do not endorse any of the opinions, advice, or statements "
 "posted in messages, bulletin\n"
-"          boards, blogs, and other services. We are not responsible for any "
+"        boards, blogs, and other services. We are not responsible for any "
 "offensive, defamatory, or\n"
-"          obscene posting made on the message boards or other features on "
-"the Website. We reserve the\n"
-"          right to disclose any information we believe necessary to satisfy "
+"        obscene posting made on the message boards or other features on the "
+"Website. We reserve the\n"
+"        right to disclose any information we believe necessary to satisfy "
 "any Law regulation, or\n"
-"          governmental request, or to refuse to post or to remove any "
+"        governmental request, or to refuse to post or to remove any "
 "information or materials, in whole\n"
-"          or in part, that in our sole discretion are inappropriate, "
+"        or in part, that in our sole discretion are inappropriate, "
 "objectionable or in violation of\n"
-"          these Terms. We also reserve the right to deny access to the "
-"Website or any features of the\n"
-"          Website to anyone who violates these Terms or who, in our "
-"judgment, interferes with the ability\n"
-"          of others to enjoy our website or infringes the rights of others. "
+"        these Terms. We also reserve the right to deny access to the Website "
+"or any features of the\n"
+"        Website to anyone who violates these Terms or who, in our judgment, "
+"interferes with the ability\n"
+"        of others to enjoy our website or infringes the rights of others. "
 "HRP assumes no liability for\n"
-"          any action or inaction with respect to any conduct, communication, "
+"        any action or inaction with respect to any conduct, communication, "
 "or posting on the message\n"
-"          boards, bulletin boards, blogs, or other services on this Website."
+"        boards, bulletin boards, blogs, or other services on this Website."
 msgstr ""
 
-#: pages/_organisation/terms.vue:50
+#: pages/_organisation/terms.vue:51
 msgid ""
 "HRP, its contributors, sponsors, administrators, or anyone else connected "
 "with HRP in any way\n"
-"          whatsoever, cannot be responsible for any inaccurate or libelous "
+"        whatsoever, cannot be responsible for any inaccurate or libelous "
 "information or for your use of\n"
-"          the information contained in or linked from these web pages."
+"        the information contained in or linked from these web pages."
 msgstr ""
 
-#: pages/_organisation/terms.vue:177
+#: pages/_organisation/terms.vue:178
 msgid ""
 "HRP, TO THE FULLEST EXTENT PERMITTED BY LAW,\n"
-"          DISCLAIMS ALL WARRANTIES, EITHER EXPRESS OR IMPLIED, INCLUDING BUT "
+"        DISCLAIMS ALL WARRANTIES, EITHER EXPRESS OR IMPLIED, INCLUDING BUT "
 "NOT LIMITED TO WARRANTIES OF\n"
-"          TITLE, NON-INFRINGEMENT OF THIRD PARTIES’ RIGHTS, AND IMPLIED "
+"        TITLE, NON-INFRINGEMENT OF THIRD PARTIES’ RIGHTS, AND IMPLIED "
 "WARRANTIES OF MERCHANTABILITY OF\n"
-"          FITNESS FOR A PARTICULAR PURPOSE. HRP DOES NOT WARRANT THAT THIS "
+"        FITNESS FOR A PARTICULAR PURPOSE. HRP DOES NOT WARRANT THAT THIS "
 "SERVICE WILL BE UNINTERRUPTED\n"
-"          OR ERROR-FREE, VIRUS-FREE, NOR DOES HRP MAKE ANY WARRANTIES THAT "
-"ANY DEFECTS WILL BE\n"
-"          CORRECTED."
+"        OR ERROR-FREE, VIRUS-FREE, NOR DOES HRP MAKE ANY WARRANTIES THAT ANY "
+"DEFECTS WILL BE\n"
+"        CORRECTED."
 msgstr ""
 
 #: components/EditProfile.vue:69
 msgid "I request to be a:"
+msgstr ""
+
+#: components/project/SubNationalLevelDeployment.vue:8
+#: components/project/SubNationalLevelDeployment.vue:48
+msgid "If subnational, which {name} does your project cover?"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:15
+msgid ""
+"If this is your first time uploading a project, a sample data form can be "
+"found here for reference."
+msgstr ""
+
+#: components/project/sections/InteroperabilityAndStandards.vue:28
+msgid ""
+"If your data standards are not available here, please email "
+"digitalhealthatlas@gmail.com"
 msgstr ""
 
 #: components/project/ProjectNavigation.vue:56
@@ -654,30 +748,37 @@ msgid ""
 "practices in digital health."
 msgstr ""
 
-#: pages/_organisation/terms.vue:203
+#: pages/_organisation/terms.vue:204
 msgid ""
 "In no event will HRP or its directors, employees, or agents be liable to you "
 "or any third person\n"
-"          for any direct, indirect, consequential, exemplary, incidental, "
+"        for any direct, indirect, consequential, exemplary, incidental, "
 "special, or punitive damages,\n"
-"          including for any lost profits or lost data arising from your use "
-"of the Website or this service\n"
-"          or the unavailability of the Website or this service. When using "
-"the Website, information will\n"
-"          be transmitted over a medium that may be beyond the control and "
+"        including for any lost profits or lost data arising from your use of "
+"the Website or this service\n"
+"        or the unavailability of the Website or this service. When using the "
+"Website, information will\n"
+"        be transmitted over a medium that may be beyond the control and "
 "jurisdiction of HRP.\n"
-"          Accordingly, HRP assumes no liability for or relating to the "
-"delay, failure, interruption, or\n"
-"          corruption of any data or other information transmitted in "
+"        Accordingly, HRP assumes no liability for or relating to the delay, "
+"failure, interruption, or\n"
+"        corruption of any data or other information transmitted in "
 "connection with use of the\n"
-"          Website."
+"        Website."
 msgstr ""
 
 #: components/landing/AboutSection.vue:40
 msgid "In-country support to DHA"
 msgstr ""
 
-#: pages/_organisation/terms.vue:53
+#: components/project/sections/ImplementationOverview.vue:48
+msgid ""
+"Include all software that is part of your project. If you cannot find your "
+"software listed in the options, send an email to digitalhealthatlas@gmail."
+"com with the software name."
+msgstr ""
+
+#: pages/_organisation/terms.vue:54
 msgid "Intellectual Property Rights"
 msgstr ""
 
@@ -685,11 +786,17 @@ msgstr ""
 msgid "Interoperability"
 msgstr ""
 
+#: components/project/sections/ImplementationOverview.vue:228
+msgid ""
+"Investment partners can include those contributing funds, human resources or "
+"in-kind support."
+msgstr ""
+
 #: components/common/ProjectBar.vue:25
 msgid "Last Updated"
 msgstr ""
 
-#: pages/_organisation/terms.vue:202
+#: pages/_organisation/terms.vue:203
 msgid "Limitations on Liability"
 msgstr ""
 
@@ -737,11 +844,11 @@ msgstr ""
 msgid "List of selectable options:"
 msgstr ""
 
-#: components/common/ActionBar.vue:59
+#: components/common/ActionBar.vue:65
 msgid "List view"
 msgstr ""
 
-#: components/dashboard/FilterPresetsActions.vue:18
+#: components/dashboard/FilterPresetsActions.vue:16
 msgid "Load filters"
 msgstr ""
 
@@ -765,7 +872,7 @@ msgstr ""
 msgid "login"
 msgstr ""
 
-#: components/common/TopBar.vue:44
+#: components/common/TopBar.vue:57
 msgid "Login"
 msgstr ""
 
@@ -783,7 +890,7 @@ msgid ""
 "incidunt ut labore et dolore aliqua."
 msgstr ""
 
-#: components/dashboard/TableTopActions.vue:176
+#: components/dashboard/TableTopActions.vue:178
 msgid "main fields"
 msgstr ""
 
@@ -795,7 +902,7 @@ msgstr ""
 msgid "Map file:"
 msgstr ""
 
-#: components/common/ActionBar.vue:51
+#: components/common/ActionBar.vue:57
 msgid "Map view"
 msgstr ""
 
@@ -804,7 +911,7 @@ msgstr ""
 msgid "MAPS Toolkit"
 msgstr ""
 
-#: pages/_organisation/terms.vue:143
+#: pages/_organisation/terms.vue:144
 msgid "Marketing and Advertising"
 msgstr ""
 
@@ -816,37 +923,37 @@ msgstr ""
 msgid "Member"
 msgstr ""
 
-#: pages/_organisation/terms.vue:89
+#: pages/_organisation/terms.vue:90
 msgid "Message Boards and Other Interactive Features"
 msgstr ""
 
-#: pages/_organisation/terms.vue:90
+#: pages/_organisation/terms.vue:91
 msgid ""
 "Message boards, bulletin boards, blogs, and other services may be available "
 "on or through the\n"
-"          Website. In addition to any other rules or regulations that HRP "
+"        Website. In addition to any other rules or regulations that HRP "
 "posts in connection with these\n"
-"          particular services, you shall not upload, post, transmit, "
+"        particular services, you shall not upload, post, transmit, "
 "distribute, or otherwise publish\n"
-"          through the Website or any service or feature made available on or "
+"        through the Website or any service or feature made available on or "
 "through the Website any\n"
-"          materials which: (a) restrict or inhibit any other user from using "
+"        materials which: (a) restrict or inhibit any other user from using "
 "and enjoying the Website; (b)\n"
-"          are fraudulent, unlawful, threatening, abusive, harassing, "
-"libelous, defamatory, or offensive;\n"
-"          (c) constitute or encourage conduct that would constitute a "
-"criminal offense, give rise to civil\n"
-"          liability or otherwise violate any local, state, federal, or "
+"        are fraudulent, unlawful, threatening, abusive, harassing, libelous, "
+"defamatory, or offensive;\n"
+"        (c) constitute or encourage conduct that would constitute a criminal "
+"offense, give rise to civil\n"
+"        liability or otherwise violate any local, state, federal, or "
 "international law; (d) violate,\n"
-"          plagiarize, or infringe the rights of third parties, including, "
+"        plagiarize, or infringe the rights of third parties, including, "
 "without limitation, copyright,\n"
-"          trademark, trade secret, confidentiality, contract, patent, rights "
+"        trademark, trade secret, confidentiality, contract, patent, rights "
 "of privacy, or publicity or\n"
-"          any other proprietary rights; (e) contain a virus, spyware, or any "
+"        any other proprietary rights; (e) contain a virus, spyware, or any "
 "other harmful content; (f)\n"
-"          contain embedded links or advertising of any kind; or (g) "
-"constitute or contain false or\n"
-"          misleading indications of origin, endorsements, or statements of "
+"        contain embedded links or advertising of any kind; or (g) constitute "
+"or contain false or\n"
+"        misleading indications of origin, endorsements, or statements of "
 "fact."
 msgstr ""
 
@@ -856,11 +963,12 @@ msgstr ""
 msgid "My Privileges are:"
 msgstr ""
 
-#: components/common/ActionBar.vue:21 components/common/UserDropdown.vue:58
+#: components/common/ActionBar.vue:23 components/common/UserDropdown.vue:58
 msgid "My profile"
 msgstr ""
 
-#: components/common/TopBar.vue:66 components/landing/MyProjectsBox.vue:7
+#: components/BreadCrumb.vue:44 components/common/TopBar.vue:79
+#: components/landing/MyProjectsBox.vue:7
 #: pages/_organisation/projects/index.vue:3
 msgid "My Projects"
 msgstr ""
@@ -878,11 +986,11 @@ msgid "Name"
 msgstr ""
 
 #: components/common/map/MapProjectsBox.vue:23
-#: components/project/sections/ImplementationOverview.vue:106
+#: components/project/sections/ImplementationOverview.vue:131
 msgid "National"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:123
+#: components/project/sections/ImplementationOverview.vue:148
 msgid "National level deployment"
 msgstr ""
 
@@ -894,13 +1002,13 @@ msgstr ""
 msgid "New order saved"
 msgstr ""
 
-#: components/common/TopBar.vue:87
+#: components/BreadCrumb.vue:49 components/common/TopBar.vue:100
 msgid "New Project"
 msgstr ""
 
 #: components/admin/ApprovalTag.vue:7 components/admin/ProjectApproval.vue:142
 #: components/dashboard/MainTable.vue:73 components/dashboard/PdfExport.vue:149
-#: components/project/CustomField.vue:23
+#: components/project/CustomField.vue:39
 #: angular/Cms/ReportDeleteButton/ReportDeleteButton.html:22
 #: angular/Thematic/static/0-2.html:38
 msgid "No"
@@ -920,16 +1028,16 @@ msgstr ""
 msgid "No project to show..."
 msgstr ""
 
-#: pages/_organisation/terms.vue:144
+#: pages/_organisation/terms.vue:145
 msgid ""
 "No promotional offers or advertising will appear on the Website nor will "
 "your personal contact\n"
-"          information ever be given, sold, or otherwise shared by HRP with "
+"        information ever be given, sold, or otherwise shared by HRP with "
 "third parties for advertising\n"
-"          or marketing purposes."
+"        or marketing purposes."
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:148
+#: components/project/sections/ImplementationOverview.vue:176
 msgid "No, they have not yet contributed"
 msgstr ""
 
@@ -947,12 +1055,12 @@ msgid "Ok"
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:139 components/admin/DhaQuestion.vue:169
-#: components/dashboard/FilterPresetsActions.vue:102
+#: components/dashboard/FilterPresetsActions.vue:104
 #: components/project/ProjectForm.vue:279
 msgid "OK"
 msgstr ""
 
-#: components/dashboard/FilterPresetsActions.vue:109
+#: components/dashboard/FilterPresetsActions.vue:111
 msgid "Operation successfully aborted"
 msgstr ""
 
@@ -976,7 +1084,7 @@ msgstr ""
 msgid "Organisation name:"
 msgstr ""
 
-#: pages/_organisation/terms.vue:216
+#: pages/_organisation/terms.vue:217
 msgid "Other Terms"
 msgstr ""
 
@@ -992,24 +1100,23 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
-#: pages/_organisation/terms.vue:123
+#: pages/_organisation/terms.vue:124
 msgid "Personal Information"
 msgstr ""
 
-#: components/common/TopBar.vue:75
+#: components/BreadCrumb.vue:48 components/common/TopBar.vue:88
 #: angular/Cms/StaticInfoWidget/StaticInfoWidget.html:4
 msgid "Planning and Guidance"
 msgstr ""
 
 #: pages/_organisation/projects/create.vue:5
 msgid ""
-"Please complete the following information before beginning the self-"
-"assessment process. These questions may be used as a baseline document "
-"recording the current features of your project and your goals for the "
-"process of scaling up."
+"Please complete the questions below to include your project information in "
+"the Digital Health Atlas. These questions document your project's health "
+"focus area(s), software features and national scale."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:56
+#: components/project/sections/GeneralOverview.vue:70
 msgid "Please describe where your implementation is currently taking place"
 msgstr ""
 
@@ -1025,13 +1132,18 @@ msgstr ""
 msgid "Please fill your profile first"
 msgstr ""
 
-#: pages/_organisation/terms.vue:21
+#: components/project/sections/GeneralOverview.vue:78
+msgid ""
+"Please provide a narrative summary of the digital health implementation."
+msgstr ""
+
+#: pages/_organisation/terms.vue:22
 msgid ""
 "Please read these Terms of Use before using the Website or any of its "
 "features. By using the\n"
-"          Website, you accept and agree to be bound by these Terms. If you "
-"do not agree to the Terms,\n"
-"          please exit the Website and do not access or otherwise use the "
+"        Website, you accept and agree to be bound by these Terms. If you do "
+"not agree to the Terms,\n"
+"        please exit the Website and do not access or otherwise use the "
 "Website."
 msgstr ""
 
@@ -1043,7 +1155,7 @@ msgstr ""
 msgid "Point of contact:"
 msgstr ""
 
-#: pages/_organisation/terms.vue:118
+#: pages/_organisation/terms.vue:119
 msgid "Privacy Policy"
 msgstr ""
 
@@ -1060,8 +1172,29 @@ msgstr ""
 msgid "Project"
 msgstr ""
 
+#: components/project/sections/GeneralOverview.vue:42
+msgid "Project Country"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:198
+msgid "Project editors can change and update all project information."
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:130
+msgid "Project end date"
+msgstr ""
+
 #: components/dashboard/SearchBox.vue:63
+#: components/project/sections/GeneralOverview.vue:13
 msgid "Project Name"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:104
+msgid "Project start date"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:215
+msgid "Project viewers will be able to view the full project details."
 msgstr ""
 
 #: components/project/ProjectNavigation.vue:127
@@ -1073,7 +1206,11 @@ msgstr ""
 msgid "Published"
 msgstr ""
 
-#: pages/_organisation/terms.vue:128
+#: components/BreadCrumb.vue:45
+msgid "Published Project"
+msgstr ""
+
+#: pages/_organisation/terms.vue:129
 msgid "Purposes for which Personal Information May Be Used"
 msgstr ""
 
@@ -1101,7 +1238,11 @@ msgstr ""
 msgid "Region"
 msgstr ""
 
-#: pages/_organisation/terms.vue:157
+#: pages/_organisation/projects/create.vue:3
+msgid "Register your Digital Health Project"
+msgstr ""
+
+#: pages/_organisation/terms.vue:158
 msgid "Registration and Passwords"
 msgstr ""
 
@@ -1113,7 +1254,11 @@ msgstr ""
 msgid "Reset forgotten password"
 msgstr ""
 
-#: components/dashboard/FilterPresetsActions.vue:49
+#: components/project/ProjectNavigation.vue:176
+msgid "Return to the Dashboard"
+msgstr ""
+
+#: components/dashboard/FilterPresetsActions.vue:48
 #: components/dialogs/ProjectApprovalDialog.vue:140
 #: components/dialogs/SaveFilterDialog.vue:40
 #: angular/Cms/CommentWidget/CommentWidget.html:42
@@ -1148,10 +1293,6 @@ msgstr ""
 msgid "See Project"
 msgstr ""
 
-#: components/common/map/MapProjectsBox.vue:44
-msgid "Select a sub-level on the map to dispaly the data"
-msgstr ""
-
 #: components/dashboard/TableTopActions.vue:11
 msgid "Select all {total} projects"
 msgstr ""
@@ -1168,7 +1309,7 @@ msgstr ""
 msgid "Set / Reset Markers"
 msgstr ""
 
-#: components/dashboard/TableTopActions.vue:101
+#: components/dashboard/TableTopActions.vue:102
 msgid "Settings"
 msgstr ""
 
@@ -1185,6 +1326,10 @@ msgstr ""
 
 #: components/dashboard/FilterItem.vue:40
 msgid "Show all selected..."
+msgstr ""
+
+#: components/common/ProjectLegend.vue:36
+msgid "Show legend"
 msgstr ""
 
 #: components/admin/CountryAdmin.vue:158
@@ -1219,7 +1364,7 @@ msgstr ""
 msgid "Sign up now"
 msgstr ""
 
-#: components/DhaLogin.vue:52 components/common/TopBar.vue:38
+#: components/DhaLogin.vue:52 components/common/TopBar.vue:51
 msgid "Signup"
 msgstr ""
 
@@ -1227,8 +1372,12 @@ msgstr ""
 msgid "Site Language"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:105
+#: components/project/sections/ImplementationOverview.vue:130
 msgid "Sub-national"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:125
+msgid "Subnational may include district, regional, provincial, county levels."
 msgstr ""
 
 #: components/common/ProjectBar.vue:93
@@ -1251,7 +1400,7 @@ msgstr ""
 msgid "Superadmins"
 msgstr ""
 
-#: components/common/ProjectLegend.vue:7
+#: components/common/ProjectLegendContent.vue:8
 msgid "Team Member"
 msgstr ""
 
@@ -1259,54 +1408,54 @@ msgstr ""
 msgid "Technology"
 msgstr ""
 
-#: pages/_organisation/terms.vue:211
+#: pages/_organisation/terms.vue:212
 msgid "Terminations"
 msgstr ""
 
-#: components/common/DhaFooter.vue:9
+#: components/common/DhaFooter.vue:20
 msgid "Terms of use"
 msgstr ""
 
-#: pages/_organisation/terms.vue:20
+#: pages/_organisation/terms.vue:21
 msgid "Terms of Use"
 msgstr ""
 
-#: pages/_organisation/terms.vue:54
+#: pages/_organisation/terms.vue:55
 msgid ""
 "The contents of the Website are protected by copyright, trademark, and other "
 "intellectual\n"
-"          property laws. The Website may not be used in any manner that "
+"        property laws. The Website may not be used in any manner that "
 "violates the privacy rights,\n"
-"          publicity rights, copyrights, trademark rights, patent rights, "
+"        publicity rights, copyrights, trademark rights, patent rights, "
 "contract rights, or any other\n"
-"          rights belonging to HRP or a third party. Unless authorized by the "
+"        rights belonging to HRP or a third party. Unless authorized by the "
 "Terms or by the owner of the\n"
-"          materials, you are strictly prohibited from modifying, copying, "
+"        materials, you are strictly prohibited from modifying, copying, "
 "reproducing, republishing,\n"
-"          uploading, posting, transmitting, translating, selling, creating "
+"        uploading, posting, transmitting, translating, selling, creating "
 "derivative works, or\n"
-"          distributing in any manner or medium (including email or other "
+"        distributing in any manner or medium (including email or other "
 "electronic means) any material\n"
-"          from the Website. Your use of the Website does not grant you "
+"        from the Website. Your use of the Website does not grant you "
 "ownership of any content, code,\n"
-"          data, or other materials you may access on or through the Website. "
+"        data, or other materials you may access on or through the Website. "
 "Use of the Website and the\n"
-"          services offered on or through the Website are only for your "
+"        services offered on or through the Website are only for your "
 "personal and non-commercial\n"
-"          use."
+"        use."
 msgstr ""
 
-#: pages/_organisation/terms.vue:38
+#: pages/_organisation/terms.vue:39
 msgid ""
 "The contents of the Website such as texts, graphics, images, and all other "
 "information, whether\n"
-"          provided by HRP or its users, are for informational purposes only. "
+"        provided by HRP or its users, are for informational purposes only. "
 "The content is not intended\n"
-"          to be a substitute for professional medical advice, diagnosis, or "
+"        to be a substitute for professional medical advice, diagnosis, or "
 "treatment. If you need\n"
-"          specific advice (for example, medical, legal, or financial) please "
+"        specific advice (for example, medical, legal, or financial) please "
 "seek a professional who is\n"
-"          licensed or knowledgeable in that area."
+"        licensed or knowledgeable in that area."
 msgstr ""
 
 #: components/project/ProjectForm.vue:405
@@ -1335,41 +1484,41 @@ msgid ""
 "of, and planning coordination for digital information systems for health."
 msgstr ""
 
-#: pages/_organisation/terms.vue:25
+#: pages/_organisation/terms.vue:26
 msgid "The following Terms of Use (“Terms”) govern the use of"
 msgstr ""
 
-#: pages/_organisation/terms.vue:124
+#: pages/_organisation/terms.vue:125
 msgid ""
 "The only personal information that we will collect is the personal "
 "information that you provide\n"
-"          to us when you register with us or when you communicate with us "
+"        to us when you register with us or when you communicate with us "
 "through our website. We will at\n"
-"          any time, at your request, provide you with a copy of any personal "
+"        any time, at your request, provide you with a copy of any personal "
 "information that we are\n"
-"          holding about you."
+"        holding about you."
 msgstr ""
 
 #: components/SignupComponent.vue:125
 msgid "The password must match"
 msgstr ""
 
-#: pages/_organisation/terms.vue:44
+#: pages/_organisation/terms.vue:45
 msgid ""
 "The use of the Website and its content is at your own risk. HRP makes a "
 "reasonable effort to\n"
-"          ensure that the content of the Website is accurate and up-to-date, "
+"        ensure that the content of the Website is accurate and up-to-date, "
 "but does not offer any\n"
-"          warranties (whether express, implied or otherwise) as to the "
+"        warranties (whether express, implied or otherwise) as to the "
 "reliability, accuracy or\n"
-"          completeness of the information appearing on the Website, whether "
+"        completeness of the information appearing on the Website, whether "
 "provided by HRP or any user,\n"
-"          information provider, or any other person or entity. HRP may "
-"remove material from the Website at\n"
-"          its own discretion and without giving any notice."
+"        information provider, or any other person or entity. HRP may remove "
+"material from the Website at\n"
+"        its own discretion and without giving any notice."
 msgstr ""
 
-#: pages/_organisation/terms.vue:176
+#: pages/_organisation/terms.vue:177
 msgid ""
 "The Website and any content, materials, features, or products available or "
 "sold on or through the Website are available on an “as is” basis."
@@ -1381,35 +1530,35 @@ msgid ""
 "submitted"
 msgstr ""
 
-#: pages/_organisation/terms.vue:217
+#: pages/_organisation/terms.vue:218
 msgid ""
 "These Terms constitute the entire agreement between you and HRP regarding "
 "the use of the Website\n"
-"          and supersede any prior agreements between you and HRP relating to "
+"        and supersede any prior agreements between you and HRP relating to "
 "your use of the Website. The\n"
-"          failure of HRP to exercise or enforce any right or provision of "
+"        failure of HRP to exercise or enforce any right or provision of "
 "these Terms shall not constitute\n"
-"          a waiver of such right or provision in that or any other instance. "
+"        a waiver of such right or provision in that or any other instance. "
 "If any provision of these\n"
-"          Terms is held invalid, the remainder of the Terms shall continue "
-"in full force and effect. If\n"
-"          any provision of these Terms shall be deemed unlawful, void, or "
-"for any other reason\n"
-"          unenforceable, then that provision shall be deemed severable from "
+"        Terms is held invalid, the remainder of the Terms shall continue in "
+"full force and effect. If\n"
+"        any provision of these Terms shall be deemed unlawful, void, or for "
+"any other reason\n"
+"        unenforceable, then that provision shall be deemed severable from "
 "these Terms and shall not\n"
-"          affect the validity and enforceability of any remaining "
-"provisions. This agreement shall be\n"
-"          governed and construed by the laws of the District of Columbia "
+"        affect the validity and enforceability of any remaining provisions. "
+"This agreement shall be\n"
+"        governed and construed by the laws of the District of Columbia "
 "without giving effect to any\n"
-"          principles of conflicts of law. The foregoing provisions of these "
+"        principles of conflicts of law. The foregoing provisions of these "
 "Terms are for the benefit of\n"
-"          HRP, its affiliates, and third-party content providers and "
+"        HRP, its affiliates, and third-party content providers and "
 "licensors, and each shall have the\n"
-"          right to asset and enforce provisions of the Terms directly and on "
+"        right to asset and enforce provisions of the Terms directly and on "
 "their own behalf."
 msgstr ""
 
-#: pages/_organisation/terms.vue:147
+#: pages/_organisation/terms.vue:148
 msgid "Third Party Sites"
 msgstr ""
 
@@ -1436,7 +1585,13 @@ msgstr ""
 msgid "This is required"
 msgstr ""
 
-#: pages/_organisation/terms.vue:37
+#: components/project/sections/GeneralOverview.vue:159
+msgid ""
+"This is the individual who will be the lead point of contact for any queries "
+"through the DHA."
+msgstr ""
+
+#: pages/_organisation/terms.vue:38
 msgid "This Site Does Not Provide Medical Advice, Diagnosis or Treatment."
 msgstr ""
 
@@ -1456,22 +1611,22 @@ msgid ""
 "redundancy of investments."
 msgstr ""
 
-#: pages/_organisation/terms.vue:172
+#: pages/_organisation/terms.vue:173
 msgid ""
 "This Website provides links to websites maintained by third parties. Any "
 "information, products,\n"
-"          or services provided by the third-party sites are maintained by "
-"the operators of such sites and\n"
-"          not by HRP or our subsidiaries. When these third-party sites are "
+"        or services provided by the third-party sites are maintained by the "
+"operators of such sites and\n"
+"        not by HRP or our subsidiaries. When these third-party sites are "
 "accessed, they are accessed at\n"
-"          your own risk."
+"        your own risk."
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:138
 msgid "This will permanently delete the question?"
 msgstr ""
 
-#: components/dashboard/FilterPresetsActions.vue:101
+#: components/dashboard/FilterPresetsActions.vue:103
 msgid "This will permanently delete this saved configuration. Continue?"
 msgstr ""
 
@@ -1480,49 +1635,49 @@ msgid ""
 "This will save the question, type and options will not be editable anymore"
 msgstr ""
 
-#: pages/_organisation/terms.vue:158
+#: pages/_organisation/terms.vue:159
 msgid ""
 "To access certain services of the Website, you may need to provide "
 "information such as your name,\n"
-"          email address, street address, and zip code. By use of these "
+"        email address, street address, and zip code. By use of these "
 "services, you agree to: (a) provide\n"
-"          accurate, current, and complete information about you; (b) "
-"maintain the security of your\n"
-"          password and identification; (c) maintain and promptly update your "
+"        accurate, current, and complete information about you; (b) maintain "
+"the security of your\n"
+"        password and identification; (c) maintain and promptly update your "
 "data and any other\n"
-"          information you provide to the Website to keep it accurate, "
-"current, and complete; and (d) be\n"
-"          fully responsible for all use of your account and for any actions, "
+"        information you provide to the Website to keep it accurate, current, "
+"and complete; and (d) be\n"
+"        fully responsible for all use of your account and for any actions, "
 "whether by you or another\n"
-"          person, that take place using your account. You will notify us "
+"        person, that take place using your account. You will notify us "
 "immediately of any unauthorized\n"
-"          use of your password or account or any other breach of security. "
-"HRP assumes no liability for\n"
-"          any loss or damage arising from any unauthorized use of your "
+"        use of your password or account or any other breach of security. HRP "
+"assumes no liability for\n"
+"        any loss or damage arising from any unauthorized use of your "
 "password or account by a third\n"
-"          party. Any reliance on the contents of a third-party site is done "
-"at your own risk and you\n"
-"          assume all responsibilities and consequences resulting from such "
+"        party. Any reliance on the contents of a third-party site is done at "
+"your own risk and you\n"
+"        assume all responsibilities and consequences resulting from such "
 "reliance. Our use of any\n"
-"          personally identifiable information provided by you in regards to "
+"        personally identifiable information provided by you in regards to "
 "obtaining a registration and\n"
-"          password is governed by the terms of our Privacy Policy."
+"        password is governed by the terms of our Privacy Policy."
 msgstr ""
 
-#: pages/_organisation/terms.vue:137
+#: pages/_organisation/terms.vue:138
 msgid ""
 "To compile and disclose statistics about our users and their preferences. "
 "However, these\n"
-"            statistics are anonymous and do not identify individual users."
+"          statistics are anonymous and do not identify individual users."
 msgstr ""
 
-#: pages/_organisation/terms.vue:135
+#: pages/_organisation/terms.vue:136
 msgid ""
 "To customize the content and /or layout of the website for each individual "
 "user."
 msgstr ""
 
-#: pages/_organisation/terms.vue:134
+#: pages/_organisation/terms.vue:135
 msgid "To improve the content of the website."
 msgstr ""
 
@@ -1530,30 +1685,31 @@ msgstr ""
 msgid "to include your project in the inventory"
 msgstr ""
 
-#: pages/_organisation/terms.vue:132
+#: pages/_organisation/terms.vue:133
 msgid ""
 "To let you know about information and services from HRP in which you may be "
 "interested."
 msgstr ""
 
-#: pages/_organisation/terms.vue:136
+#: pages/_organisation/terms.vue:137
 msgid "To notify users about updates to the website."
 msgstr ""
 
-#: pages/_organisation/terms.vue:131
+#: pages/_organisation/terms.vue:132
 msgid "To provide information or services to you as requested by you."
 msgstr ""
 
-#: pages/_organisation/terms.vue:242
+#: pages/_organisation/terms.vue:237
 msgid "to successfully and sustainably scale-up their innovations."
 msgstr ""
 
+#: components/BreadCrumb.vue:51 components/BreadCrumb.vue:52
 #: components/common/ToolkitDialogWrapper.vue:8
 #: components/common/ToolkitDialogWrapper.vue:24
 msgid "Toolkit"
 msgstr ""
 
-#: components/dashboard/TableTopActions.vue:132
+#: components/dashboard/TableTopActions.vue:133
 msgid "Update"
 msgstr ""
 
@@ -1583,10 +1739,6 @@ msgstr ""
 msgid "Users/viewers"
 msgstr ""
 
-#: components/common/ProjectCard.vue:39
-msgid "Verified by country"
-msgstr ""
-
 #: pages/_organisation/projects/_id/edit/index.vue:9
 #: pages/_organisation/projects/_id/index.vue:9
 #: pages/_organisation/projects/_id/published.vue:9
@@ -1606,7 +1758,7 @@ msgstr ""
 msgid "View Published"
 msgstr ""
 
-#: components/common/ProjectLegend.vue:14
+#: components/common/ProjectLegendContent.vue:17
 #: pages/_organisation/projects/index.vue:13
 msgid "Viewer"
 msgstr ""
@@ -1618,7 +1770,7 @@ msgid ""
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:138 components/admin/DhaQuestion.vue:168
-#: components/dashboard/FilterPresetsActions.vue:101
+#: components/dashboard/FilterPresetsActions.vue:103
 #: components/dialogs/DialogsContainer.vue:39
 #: components/dialogs/ProjectApprovalDialog.vue:253
 #: components/project/ProjectForm.vue:278
@@ -1627,140 +1779,196 @@ msgstr ""
 msgid "Warning"
 msgstr ""
 
-#: pages/_organisation/terms.vue:119
+#: pages/_organisation/terms.vue:120
 msgid ""
 "We know that you care how information about you is used and shared and we "
 "are careful to ensure\n"
-"          that any such information that comes into our possession is "
-"properly looked after. This Privacy\n"
-"          Policy sets out the steps that we take to ensure that any "
+"        that any such information that comes into our possession is properly "
+"looked after. This Privacy\n"
+"        Policy sets out the steps that we take to ensure that any "
 "information provided to us is kept\n"
-"          secure and confidential and is used only for the purposes for "
-"which it is provided."
+"        secure and confidential and is used only for the purposes for which "
+"it is provided."
 msgstr ""
 
-#: pages/_organisation/terms.vue:183
+#: pages/_organisation/terms.vue:184
 msgid ""
 "WE MAKE NO WARRANTY THAT THE WEBSITE OR THE PROVIDED SERVICES WILL MEET "
 "USERS' REQUIREMENTS. NO\n"
-"          ADVICE, RESULTS OR INFORMATION, WHETHER ORAL OR WRITTEN, OBTAINED "
-"BY YOU FROM US OR THROUGH THE\n"
-"          WEBSITE SHALL CREATE ANY WARRANTY NOT EXPRESSLY MADE HEREIN. HRP "
+"        ADVICE, RESULTS OR INFORMATION, WHETHER ORAL OR WRITTEN, OBTAINED BY "
+"YOU FROM US OR THROUGH THE\n"
+"        WEBSITE SHALL CREATE ANY WARRANTY NOT EXPRESSLY MADE HEREIN. HRP "
 "ALSO ASSUMES NO RESPONSIBILITY,\n"
-"          AND SHALL NOT BE LIABLE FOR, ANY DAMAGES TO, OR VIRUSES THAT MAY "
+"        AND SHALL NOT BE LIABLE FOR, ANY DAMAGES TO, OR VIRUSES THAT MAY "
 "INFECT, YOUR EQUIPMENT ON\n"
-"          ACCOUNT OF YOUR ACCESS TO, USE OF, OR BROWSING IN THE WEBSITE OR "
+"        ACCOUNT OF YOUR ACCESS TO, USE OF, OR BROWSING IN THE WEBSITE OR "
 "YOUR DOWNLOADING OF ANY\n"
-"          MATERIALS, DATA, TEXT, IMAGES, VIDEO CONTENT, OR AUDIO CONTENT "
-"FROM THE WEBSITE. IF YOU ARE\n"
-"          DISSATISFIED WITH THE WEBSITE, YOUR SOLE REMEDY IS TO DISCONTINUE "
+"        MATERIALS, DATA, TEXT, IMAGES, VIDEO CONTENT, OR AUDIO CONTENT FROM "
+"THE WEBSITE. IF YOU ARE\n"
+"        DISSATISFIED WITH THE WEBSITE, YOUR SOLE REMEDY IS TO DISCONTINUE "
 "USING THE WEBSITE."
 msgstr ""
 
-#: pages/_organisation/terms.vue:34
+#: pages/_organisation/terms.vue:35
 msgid ""
 "We reserve the right to modify, add, or delete any of these Terms at any "
 "time. Continued use of\n"
-"          the Website after any modifications, additions, or deletions to "
-"the Terms will constitute your\n"
-"          acceptance of the Terms, as modified."
+"        the Website after any modifications, additions, or deletions to the "
+"Terms will constitute your\n"
+"        acceptance of the Terms, as modified."
 msgstr ""
 
-#: pages/_organisation/terms.vue:79
+#: pages/_organisation/terms.vue:80
 msgid ""
 "We respect the intellectual property rights of others and require that "
 "people who use the Website\n"
-"          and services available on the Website do the same. If you believe "
+"        and services available on the Website do the same. If you believe "
 "your work has been copied in a\n"
-"          way that constitutes infringement, please forward the following "
+"        way that constitutes infringement, please forward the following "
 "information to our designated\n"
-"          offices: • your address, telephone number, and email address; • a "
+"        offices: • your address, telephone number, and email address; • a "
 "description of the copyrighted\n"
-"          work you claim has been infringed; • a description of where the "
+"        work you claim has been infringed; • a description of where the "
 "alleged infringing material is\n"
-"          located; • a statement that you have a good faith belief that the "
+"        located; • a statement that you have a good faith belief that the "
 "disputed use is not authorized\n"
-"          by the copyright owner, its agent, or the law; • an electronic or "
+"        by the copyright owner, its agent, or the law; • an electronic or "
 "physical signature of the\n"
-"          person authorized to act on behalf of the owner of the copyright "
+"        person authorized to act on behalf of the owner of the copyright "
 "interest; and • a statement by\n"
-"          you, made under penalty of perjury, that the above information in "
+"        you, made under penalty of perjury, that the above information in "
 "your notice is accurate and\n"
-"          that you are the copyright owner or are authorized to act on the "
+"        that you are the copyright owner or are authorized to act on the "
 "copyright owner's behalf."
 msgstr ""
 
-#: pages/_organisation/terms.vue:190
+#: pages/_organisation/terms.vue:191
 msgid ""
 "WE TRY TO ENSURE THAT THE INFORMATION POSTED ON THE WEBSITE IS CORRECT AND "
 "UP-TO-DATE. WE RESERVE\n"
-"          THE RIGHT TO CHANGE OR MAKE CORRECTIONS TO ANY OF THE INFORMATION "
+"        THE RIGHT TO CHANGE OR MAKE CORRECTIONS TO ANY OF THE INFORMATION "
 "PROVIDED ON THE WEBSITE AT ANY\n"
-"          TIME AND WITHOUT ANY PRIOR WARNING. HRP NEITHER ENDORSES NOR IS "
+"        TIME AND WITHOUT ANY PRIOR WARNING. HRP NEITHER ENDORSES NOR IS "
 "RESPONSIBLE FOR THE ACCURACY OR\n"
-"          RELIABILITY OF ANY OPINION, ADVICE OR STATEMENT ON THE WEBSITE, "
-"NOR FOR ANY OFFENSIVE,\n"
-"          DEFAMATORY, OBSCENE, INDECENT, UNLAWFUL OR INFRINGING POSTING MADE "
+"        RELIABILITY OF ANY OPINION, ADVICE OR STATEMENT ON THE WEBSITE, NOR "
+"FOR ANY OFFENSIVE,\n"
+"        DEFAMATORY, OBSCENE, INDECENT, UNLAWFUL OR INFRINGING POSTING MADE "
 "THEREON BY ANYONE OTHER THAN\n"
-"          AUTHORIZED HRP EMPLOYEE SPOKESPERSONS WHILE ACTING IN THEIR "
-"OFFICIAL CAPACITIES (INCLUDING,\n"
-"          WITHOUT LIMITATION, OTHER USERS OF THE WEBSITE). IT IS YOUR "
+"        AUTHORIZED HRP EMPLOYEE SPOKESPERSONS WHILE ACTING IN THEIR OFFICIAL "
+"CAPACITIES (INCLUDING,\n"
+"        WITHOUT LIMITATION, OTHER USERS OF THE WEBSITE). IT IS YOUR "
 "RESPONSIBILITY TO EVALUATE THE\n"
-"          ACCURACY, COMPLETENESS OR USEFULNESS OF ANY INFORMATION, OPINION, "
+"        ACCURACY, COMPLETENESS OR USEFULNESS OF ANY INFORMATION, OPINION, "
 "ADVICE OR OTHER CONTENT\n"
-"          AVAILABLE THROUGH THE WEBSITE. PLEASE SEEK THE ADVICE OF "
+"        AVAILABLE THROUGH THE WEBSITE. PLEASE SEEK THE ADVICE OF "
 "PROFESSIONALS, AS APPROPRIATE,\n"
-"          REGARDING THE EVALUATION OF ANY SPECIFIC INFORMATION, OPINION, "
+"        REGARDING THE EVALUATION OF ANY SPECIFIC INFORMATION, OPINION, "
 "ADVICE OR OTHER CONTENT,\n"
-"          INCLUDING BUT NOT LIMITED TO FINANCIAL, HEALTH, OR LIFESTYLE "
+"        INCLUDING BUT NOT LIMITED TO FINANCIAL, HEALTH, OR LIFESTYLE "
 "INFORMATION, OPINION, ADVICE OR\n"
-"          OTHER CONTENT."
+"        OTHER CONTENT."
 msgstr ""
 
-#: pages/_organisation/terms.vue:141
+#: pages/_organisation/terms.vue:142
 msgid ""
 "We will not pass any of your personal information to any third party, other "
 "than members of HRP,\n"
-"          without your consent."
+"        without your consent."
 msgstr ""
 
 #: components/landing/WelcomeBox.vue:7
 msgid "Welcome!"
 msgstr ""
 
-#: pages/_organisation/terms.vue:65
+#: components/project/sections/ImplementationOverview.vue:30
+msgid ""
+"What are the Health System Challenges addressed by the Digital Health "
+"Intervention?"
+msgstr ""
+
+#: components/project/sections/InteroperabilityAndStandards.vue:26
+msgid "What data standards does your digital health project use?"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:77
+msgid "What Digital Health Intervention(s) are included in this software?"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:107
+msgid ""
+"What health information system(s) in your country does this project support?"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:55
+msgid "What is the geographic scope of the project?"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:13
+msgid ""
+"What is the health focus area(s) addressed by the Digital Health "
+"Intervention?"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:29
+msgid "What is the name of the lead organization?"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:123
+msgid "What kind of coverage does your project have?"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:106
+msgid ""
+"When did the overall project, not just the digital health component, start."
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:132
+msgid ""
+"When will the overall project be completed. If your project is ongoing, "
+"leave this field blank."
+msgstr ""
+
+#: pages/_organisation/terms.vue:66
 msgid ""
 "When you post or submit any material to this Website, you represent and "
 "warrant that you are the\n"
-"          owner of the material or have express permission from the owner of "
+"        owner of the material or have express permission from the owner of "
 "the material to post, use, or\n"
-"          submit the material. By posting or submitting material to the "
+"        submit the material. By posting or submitting material to the "
 "Website, you agree that such\n"
-"          submission is non-confidential for all purposes. You are solely "
+"        submission is non-confidential for all purposes. You are solely "
 "responsible for any damages\n"
-"          resulting from any infringements of copyrights, trademark rights, "
+"        resulting from any infringements of copyrights, trademark rights, "
 "propriety rights, or any other\n"
-"          harm resulting from any uploading, posting, or submission. When "
-"you post or submit material to\n"
-"          the Website, you grant HRP the right to use the material, royalty-"
+"        harm resulting from any uploading, posting, or submission. When you "
+"post or submit material to\n"
+"        the Website, you grant HRP the right to use the material, royalty-"
 "free, and grant us a\n"
-"          non-exclusive, perpetual, and worldwide license to use, reproduce, "
+"        non-exclusive, perpetual, and worldwide license to use, reproduce, "
 "modify, adapt, publish,\n"
-"          translate, display, distribute and create any type of derivative "
+"        translate, display, distribute and create any type of derivative "
 "work from the submitted\n"
-"          material. Submitting or posting material also grants us the right "
-"to identify you as the author\n"
-"          of any of your postings or submissions by name, email address, or "
+"        material. Submitting or posting material also grants us the right to "
+"identify you as the author\n"
+"        of any of your postings or submissions by name, email address, or "
 "username, as we deem\n"
-"          appropriate. If you wish to keep any information, ideas, concepts "
-"or inventions private or\n"
-"          proprietary, do not submit them to the Website or to HRP by email. "
+"        appropriate. If you wish to keep any information, ideas, concepts or "
+"inventions private or\n"
+"        proprietary, do not submit them to the Website or to HRP by email. "
 "We try to answer every email\n"
-"          in a timely manner, but are not always able to do so."
+"        in a timely manner, but are not always able to do so."
 msgstr ""
 
 #: components/landing/SignupBox.vue:9
 msgid "Whether you are an implementer, government, or financial investor,"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:186
+msgid "Who are your implementing partners?"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:226
+msgid "Who are your investment partners?"
 msgstr ""
 
 #: components/landing/InfoBox.vue:8
@@ -1774,16 +1982,16 @@ msgstr ""
 
 #: components/admin/ApprovalTag.vue:6 components/admin/ProjectApproval.vue:142
 #: components/dashboard/MainTable.vue:72 components/dashboard/PdfExport.vue:149
-#: components/project/CustomField.vue:22
+#: components/project/CustomField.vue:38
 #: angular/Cms/ReportDeleteButton/ReportDeleteButton.html:26
 msgid "Yes"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:150
+#: components/project/sections/ImplementationOverview.vue:178
 msgid "Yes, there is a financial contribution through MOH budget"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:149
+#: components/project/sections/ImplementationOverview.vue:177
 msgid "Yes, they are contributing in-kind people or time"
 msgstr ""
 
@@ -1797,25 +2005,25 @@ msgstr ""
 msgid "You are viewing the"
 msgstr ""
 
-#: pages/_organisation/terms.vue:148
+#: pages/_organisation/terms.vue:149
 msgid ""
 "You may be able to link from HRP's Website to third-party websites; "
 "conversely, third-party\n"
-"          websites may link to HRP’s Website. You acknowledge and agree that "
+"        websites may link to HRP’s Website. You acknowledge and agree that "
 "HRP's Website has no\n"
-"          responsibility for the information, content, products, services, "
+"        responsibility for the information, content, products, services, "
 "advertising, code, or other\n"
-"          materials which may be provided by or through third-party sites. "
+"        materials which may be provided by or through third-party sites. "
 "Links to third-party sites do\n"
-"          not constitute an endorsement or sponsorship by HRP's Website of "
+"        not constitute an endorsement or sponsorship by HRP's Website of "
 "such third-party sites or the\n"
-"          information, content, products, services, advertising, or other "
+"        information, content, products, services, advertising, or other "
 "materials presented on or\n"
-"          through such websites. You agree that HRP and its affiliates are "
-"not responsible for any damages\n"
-"          that you incur arising from your use of any products or services "
+"        through such websites. You agree that HRP and its affiliates are not "
+"responsible for any damages\n"
+"        that you incur arising from your use of any products or services "
 "made available by third-parties\n"
-"          through the Website."
+"        through the Website."
 msgstr ""
 
 #: components/project/ProjectForm.vue:433

@@ -2,7 +2,8 @@ import uniqBy from 'lodash/uniqBy';
 
 export const state = () => ({
   countries: [],
-  geoJsonLibrary: {}
+  geoJsonLibrary: {},
+  countryLibrary: {}
 });
 export const getters = {
   getCountries (state) {
@@ -12,7 +13,7 @@ export const getters = {
     return state.geoJsonLibrary;
   },
   getCountryDetails: (state, getters) => id => {
-    const country = getters.getCountries.find(c => c.id === id);
+    const country = { ...getters.getCountries.find(c => c.id === id), ...state.countryLibrary[id] };
     return {
       ...country,
       geoJson: getters.getCountryGeoJson(id),
@@ -23,7 +24,7 @@ export const getters = {
     return getters.getGeoJsonLibrary[id];
   },
   getCountrySubLevelNames: (state, getters, rootState, rootGetters) => id => {
-    const c = getters.getCountries.find(c => c.id === id);
+    const c = getters.getCountryDetails(id);
     const types = rootGetters['system/getSubLevelTypes'];
     try {
       let first = types.find(t => t.name === c.map_data.first_sub_level.name);
@@ -37,7 +38,7 @@ export const getters = {
   },
   getCountryFirstSubLevel: (state, getters) => id => {
     const ln = 'en';
-    const country = getters.getCountries.find(c => c.id === id);
+    const country = state.countryLibrary[id];
     if (country && country.map_data && country.map_data.first_sub_level) {
       const mapped = country.map_data.first_sub_level.elements
         .map(ccd => ({ id: ccd.id || ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
@@ -47,7 +48,7 @@ export const getters = {
   },
   getCountrySecondSubLevel: (state, getters) => id => {
     const ln = 'en';
-    const country = getters.getCountries.find(c => c.id === id);
+    const country = state.countryLibrary[id];
     if (country && country.map_data && country.map_data.second_sub_level) {
       const mapped = country.map_data.second_sub_level.elements
         .map(ccd => ({ id: ccd.id || ccd.name, name: ccd[`name:${ln}`] || ccd['name:en'] || ccd.name }));
@@ -62,13 +63,14 @@ export const getters = {
     }
     return [];
   },
-  getSubLevelDetails: (state, getters) => id => {
+  getSubLevelDetails: (state) => id => {
     const allSubLevels = [];
-    getters.getCountries.forEach(c => {
+    for (const id in state.countryLibrary) {
+      const c = state.countryLibrary[id];
       if (c && c.map_data && c.map_data.first_sub_level) {
         allSubLevels.push(...c.map_data.first_sub_level.elements);
       }
-    });
+    }
     return {...allSubLevels.find(sb => sb.id === id)};
   }
 };
@@ -79,10 +81,19 @@ export const actions = {
       try {
         const { data } = await this.$axios.get('/api/landing-country/');
         data.sort((a, b) => a.name.localeCompare(b.name));
-        const frozen = data.map(cd => ({...cd, map_data: {...cd.map_data, facilities: Object.freeze(cd.map_data.facilities)}}));
-        commit('SET_COUNTRY_LIST', frozen);
+        commit('SET_COUNTRY_LIST', data);
       } catch (e) {
         console.error('countries/loadMapData failed');
+      }
+    }
+  },
+  async loadCountryDetails ({commit, state}, id) {
+    if (!state.countryLibrary[id]) {
+      try {
+        const { data } = await this.$axios.get(`/api/landing-country/${id}/`);
+        commit('SET_COUNTRY_DETAILS', {data, id});
+      } catch (e) {
+        console.error('countries/loadCountryDetails failed');
       }
     }
   },
@@ -103,6 +114,9 @@ export const actions = {
 export const mutations = {
   SET_COUNTRY_LIST: (state, list) => {
     state.countries = list;
+  },
+  SET_COUNTRY_DETAILS: (state, {data, id}) => {
+    state.countryLibrary = {...state.countryLibrary, [id]: data};
   },
   UPDATE_JSON_LIBRARY: (state, {id, data}) => {
     state.geoJsonLibrary[id] = data;

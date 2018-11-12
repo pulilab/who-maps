@@ -90,7 +90,7 @@
       <el-table-column
         v-if="selectedColumns.includes('6')"
         :resizable="false"
-        :label="$gettext('Donors')"
+        :label="$gettext('Investors')"
         width="240">
         <template slot-scope="scope">
           <donors-list
@@ -336,7 +336,7 @@ export default {
 
   .MainTable {
     margin: 0 40px;
-    max-height: calc(100vh - @topBarHeight - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
+    max-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @tableTopActionsHeight - @appFooterHeight - 93px);
 
     // Custom table template
     .el-table {

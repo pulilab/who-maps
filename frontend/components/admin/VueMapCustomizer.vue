@@ -342,7 +342,7 @@ export default {
       this.$nuxt.$loading.start();
       try {
         const { data } = await this.$axios.get(`/api/countries/map-download/${this.country.id}/`, {responseType: 'blob'});
-        blobDownloader(data, `${this.country.name}_boundaries.zip`);
+        blobDownloader(data, `${this.country.name}_boundaries.zip`, this.$nuxt.$loading.finish);
       } catch (e) {
         this.$message.error(this.$gettext('Map donwload failed, please try again later'));
       }
@@ -398,6 +398,7 @@ export default {
 
   .CountryMapCustomizer {
     align-items: stretch;
+    width: 100%;
 
     > .el-col {
       // Left side - Vue map

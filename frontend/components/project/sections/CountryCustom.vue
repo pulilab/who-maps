@@ -16,6 +16,7 @@
         :type="field.type"
         :question="field.question"
         :is-required="field.required"
+        :is-private="field.private"
         :options="field.options"
         :do-validation="usePublishRules"
       />

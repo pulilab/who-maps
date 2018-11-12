@@ -37,7 +37,7 @@
               class="Verified"
             >
               <fa icon="check-circle" />
-              <translate>Verified by country</translate>
+              <translate>Approved by MOH</translate>
             </el-col>
           </el-row>
 
@@ -135,7 +135,7 @@ export default {
     found () {
       const nameMApping = {
         country: this.$gettext('Country'),
-        donor: this.$gettext('Donors'),
+        donor: this.$gettext('Investor'),
         loc: this.$gettext('Location'),
         name: this.$gettext('Name'),
         org: this.$gettext('Organisation'),

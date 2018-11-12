@@ -89,10 +89,7 @@ class CountryTests(APITestCase):
         response_keys = response.json()[0].keys()
         self.assertIn("name", response_keys)
         self.assertIn("code", response_keys)
-        self.assertIn("logo", response_keys)
-        self.assertIn("cover", response_keys)
-        self.assertIn("cover_text", response_keys)
-        self.assertIn("footer_text", response_keys)
+        self.assertIn("id", response_keys)
 
     def test_get_countries(self):
         Country.objects.exclude(id=self.country.id).delete()
@@ -791,6 +788,30 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["map_data"], data["map_data"])
 
+    def test_save_coordinates_extracts_polylabels(self):
+        UserProfile.objects.filter(id=self.test_user['user_profile_id']) \
+            .update(account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
+        self.country.super_admins.add(self.test_user['user_profile_id'])
+
+        url = reverse("country-detail", kwargs={"pk": self.country.id})
+        lat = 8.569510985419903
+        lon = -11.781153749741312
+        data = {
+            "map_data": {
+                "polylabel": {
+                    "lat": lat,
+                    "lng": lon
+                }
+            }
+        }
+        response = self.test_user_client.patch(url, data=data, format='json', HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["map_data"], data["map_data"])
+        self.assertEqual(response.json()['lat'], str(lat))
+        self.assertEqual(response.json()['lon'], str(lon))
+        self.assertEqual(response.json()['map_data']['polylabel']['lat'], lat)
+        self.assertEqual(response.json()['map_data']['polylabel']['lng'], lon)
+
     def test_country_map_download_success(self):
         url = reverse("country-map-download", kwargs={"country_id": Country.objects.all()[0].id})
 
@@ -926,10 +947,7 @@ class DonorTests(APITestCase):
         response_keys = response.json()[0].keys()
         self.assertIn("name", response_keys)
         self.assertIn("code", response_keys)
-        self.assertIn("logo", response_keys)
-        self.assertIn("cover", response_keys)
-        self.assertIn("cover_text", response_keys)
-        self.assertIn("footer_text", response_keys)
+        self.assertIn("id", response_keys)
 
     def test_donor_admin_retrieve(self):
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})

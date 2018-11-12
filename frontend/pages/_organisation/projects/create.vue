@@ -1,9 +1,9 @@
 <template>
   <div class="CreateProject">
     <div class="PageTitle">
-      <h2><translate>Add New Digital Health Project</translate></h2>
+      <h2><translate>Register your Digital Health Project</translate></h2>
       <p>
-        <translate>Please complete the following information before beginning the self-assessment process. These questions may be used as a baseline document recording the current features of your project and your goals for the process of scaling up.</translate>
+        <translate>Please complete the questions below to include your project information in the Digital Health Atlas. These questions document your project's health focus area(s), software features and national scale.</translate>
       </p>
     </div>
     <project-form />
@@ -18,8 +18,8 @@ export default {
     ProjectForm
   },
   middleware: ['isLoggedIn'],
-  fetch ({store}) {
-    store.dispatch('project/resetProjectState');
+  async fetch ({store}) {
+    await store.dispatch('project/resetProjectState');
     store.dispatch('landing/resetSearch');
   }
 };

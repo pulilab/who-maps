@@ -1,6 +1,8 @@
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinLengthValidator
 from ordered_model.models import OrderedModel
@@ -65,10 +67,22 @@ class Country(UserManagement, LandingPageCommon):
     map_activated_on = models.DateTimeField(blank=True, null=True,
                                             help_text="WARNING: this field is for developers only")
     project_approval = models.BooleanField(default=False)
+    lat = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
+    lon = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
 
     class Meta:
         verbose_name_plural = "Countries"
         ordering = ('id',)
+
+
+@receiver(pre_save, sender=Country)
+def save_coordinates(sender, instance, **kwargs):
+    if instance.map_data:
+        try:
+            instance.lat = instance.map_data['polylabel']['lat']
+            instance.lon = instance.map_data['polylabel']['lng']
+        except (TypeError, KeyError, ValueError):
+            pass
 
 
 class Donor(UserManagement, LandingPageCommon):

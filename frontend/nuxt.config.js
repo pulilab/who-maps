@@ -127,10 +127,16 @@ const config = {
   },
   loading: '~/components/DhaLoader.vue',
   build: {
-    extractCSS: true,
+    extractCSS: {
+      allChunks: true
+    },
     vendor: [
       'babel-polyfill',
-      'eventsource-polyfill'
+      'eventsource-polyfill',
+      'angular',
+      'angular-material',
+      'lodash',
+      'date-fns'
     ],
     extend (config, { isDev, isClient }) {
       config.module.rules.push({

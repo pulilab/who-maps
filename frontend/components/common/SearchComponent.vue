@@ -16,7 +16,7 @@
             <el-col :span="24">
               <el-input
                 v-model="localSearchString"
-                :placeholder="$gettext('Type something')"
+                :placeholder="$gettext('Create your search here')"
                 @keyup.enter.native="search">
                 <fa
                   slot="prepend"
@@ -66,7 +66,9 @@
                   <fa
                     icon="info-circle"
                     size="lg" />
-                  <span><translate>Short tip text about advenced search lorem ipsum dolor sit ametncidunt ut labore et dolore magna aliqua.</translate></span>
+                  <span><translate>
+                    You can use filters to further refine your search. Note that these filters can be saved by selecting Filters and naming your filter. These can then be viewed at a later time after you log in.
+                  </translate></span>
                 </p>
               </el-col>
             </el-row>
