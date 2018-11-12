@@ -68,6 +68,16 @@ export default {
       position: relative;
     }
 
+    .CoverImageBg {
+      display: block;
+      height: @landingMapHeight;
+      min-height: @landingMapMinHeight;
+      background-color: @colorGrayLight;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
+
     .CoverImage {
       width: 100%;
       height: auto;
@@ -96,16 +106,10 @@ export default {
       .SignupBox {
         padding: 0 40px;
       }
-    }
 
-    .CoverImageBg {
-      display: block;
-      height: @landingMapHeight;
-      min-height: @landingMapMinHeight;
-      background-color: @colorGrayLight;
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
+      .SingupComponent {
+        min-height: auto !important;
+      }
     }
 
     h2 {
