@@ -352,7 +352,7 @@
                         {% if type == "new_member" %}
                         <h1>{% trans "Thank you!" %}</h1>
                         <h2>{% trans "Notification" %}</h2>
-                        <p>{% blocktrans %}You have been added to project <b>{{ project_name }}</b> as a <b>{{ role }}</b>.{% endblocktrans %}</p>
+                        <p>{% blocktrans %}You have been added to the <b>{{ project_name }}</b> within the Digital Health Atlas as a <b>{{ role }}</b>. Go to the link below to see your project information.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -376,7 +376,7 @@
                         {% if type == "country_admin" %}
                         <h1>{% trans "Country admin" %}</h1>
                         <h2>{% trans "Notification" %}</h2>
-                        <p>{% blocktrans %}You have been selected as the Country Admin for <b>{{ country_name }}</b>. Please log in to the admin platform to see your country specific options.{% endblocktrans %}</p>
+                        <p>{% blocktrans %}You have been selected as the Country Admin for <b>{{ country_name }}</b>. Go to (link to login, push to Admin page) to  begin customizing your Digital Health Atlas information.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
