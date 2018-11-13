@@ -12,7 +12,6 @@ import scheduler.celery  # noqa
 class CountryAdmin(AllObjectsAdmin):
     list_display = ('name', 'code', 'region', 'project_approval')
     ordering = ('name',)
-    filter_horizontal = ('users', 'admins', 'super_admins')
     readonly_fields = ('code', 'name')
 
     def get_queryset(self, request):
@@ -25,7 +24,9 @@ class CountryAdmin(AllObjectsAdmin):
 
     def get_fields(self, request, obj=None):
         fields = super(CountryAdmin, self).get_fields(request, obj)
-        return list(self.readonly_fields) + [f for f in fields if f not in ['name', 'code', 'map_data']]
+        return list(self.readonly_fields) + [f for f in fields if f not in ['name', 'code', 'map_data',
+                                                                            'users', 'admins', 'super_admins',
+                                                                            'lat', 'lon', 'map_activated_on']]
 
     def has_add_permission(self, request):  # pragma: no cover
         return False
