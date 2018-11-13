@@ -101,6 +101,14 @@ export default {
 <style lang="less">
 .SubNationalCoverageField {
   width: 100%;
+
+  .SimpleField {
+    &.FirstSubLevel {
+      > .Header {
+        margin-bottom: 20px;
+      }
+    }
+  }
 }
 
 </style>

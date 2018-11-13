@@ -11,20 +11,20 @@
           <country-item :id="activeCountry"/>
         </el-col>
       </el-row>
-      <el-row
+      <div
         v-show="!showTabbedView"
         class="CountrySubHeader">
-        <div v-if="showSubNational">
+        <span v-if="showSubNational">
           <sub-level-item
             :id="activeSubLevel"
           />
           <span class="SubLevelCounter"><translate :parameters="{count: currentSubLevelProjects.length }">&nbsp; {count} project(s)</translate></span>
-        </div>
+        </span>
         <div v-if="showNational">
-          <div class="SubLevelItem"><translate>National</translate></div>
+          <span class="SubLevelItem"><translate>National</translate></span>
           <span class="SubLevelCounter"><translate :parameters="{count: nationalProjects.length} ">&nbsp; {count} project(s)</translate></span>
         </div>
-      </el-row>
+      </div>
       <!-- -->
       <el-row class="ProjectsList">
         <el-col>
@@ -201,6 +201,7 @@ export default {
 
       .SubLevelItem {
         display: inline-block;
+        width: auto;
         padding-bottom: 8px;
         font-size: @fontSizeBase;
         font-weight: 700;
@@ -208,6 +209,7 @@ export default {
       }
 
       .SubLevelCounter {
+        float: right;
         margin-left: 5px;
         font-size: @fontSizeSmall;
         font-weight: 400;

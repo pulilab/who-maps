@@ -116,8 +116,8 @@ export default {
   @import "~assets/style/mixins.less";
 
   .TechnologyOverview {
-    .el-date-editor {
-      width: 50%;
+    .Date {
+      width: 50% !important;
     }
   }
 

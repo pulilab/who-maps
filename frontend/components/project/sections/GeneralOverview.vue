@@ -305,8 +305,12 @@ export default {
   @import "~assets/style/mixins.less";
 
   .GeneralOverview {
+    .CountrySelector {
+      width: 50%;
+    }
+
     .Date {
-      width: 100%;
+      width: 100% !important;
     }
   }
 </style>
