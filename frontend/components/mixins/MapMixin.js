@@ -132,10 +132,11 @@ const MapMixin = {
     this.$root.$on('map:center-on', this.centerOn);
     this.$root.$on('map:fit-on', this.fitOn);
     this.$root.$on('map:zoom-at', this.zoomAt);
+    this.$root.$on('map:reset-zoom', this.resetZoom);
     this.iconsGenerator();
   },
   beforeDestroy () {
-    this.$root.$off(['map:center-on', 'map:fit-on', 'map:zoom-at']);
+    this.$root.$off(['map:center-on', 'map:fit-on', 'map:zoom-at', 'map:reset-zoom']);
   },
   methods: {
     ...mapActions({
@@ -160,6 +161,10 @@ const MapMixin = {
       if (this.$refs.mainMap && this.$refs.mainMap.mapObject) {
         this.$refs.mainMap.mapObject.setZoom(zoom);
       }
+    },
+    resetZoom () {
+      // removing active and selected country will reset the zoom
+      this.setActiveCountry(null);
     },
     zoomChangeHandler (event) {
       this.setCurrentZoom(event.target.getZoom());
