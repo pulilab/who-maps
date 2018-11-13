@@ -72,10 +72,13 @@ export const gettersGenerator = () => ({
 });
 
 export const actionsGenerator = () => ({
-  async setSelectedCountry ({commit, dispatch}, id) {
+  async setSelectedCountry ({commit, dispatch, getters}, id) {
     if (id) {
       await dispatch('countries/loadGeoJSON', id, {root: true});
       await dispatch('countries/loadCountryDetails', id, {root: true});
+    }
+    if (getters.getFilteredCountries && getters.getFilteredCountries.length === 1) {
+      commit('SET_FILTERED_COUNTRIES', [id]);
     }
     commit('SET_SELECTED_COUNTRY', id);
   },
