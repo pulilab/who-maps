@@ -92,14 +92,13 @@ export const actionsGenerator = () => ({
   },
   setCurrentZoom ({commit}, value) {
     commit('SET_CURRENT_ZOOM', value);
-    if (value < 4) {
-      commit('SET_SELECTED_COUNTRY', null);
-      commit('SET_ACTIVE_COUNTRY', null);
-    }
   },
   setActiveCountry ({commit, getters, dispatch}, value) {
     if (value && getters.getSelectedCountry && getters.getSelectedCountry !== value) {
       dispatch('setSelectedCountry', value);
+    }
+    if (!value) {
+      dispatch('setSelectedCountry', null);
     }
     commit('SET_ACTIVE_COUNTRY', value);
   },
