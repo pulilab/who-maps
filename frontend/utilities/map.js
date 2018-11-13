@@ -73,8 +73,10 @@ export const gettersGenerator = () => ({
 
 export const actionsGenerator = () => ({
   async setSelectedCountry ({commit, dispatch}, id) {
-    await dispatch('countries/loadGeoJSON', id, {root: true});
-    await dispatch('countries/loadCountryDetails', id, {root: true});
+    if (id) {
+      await dispatch('countries/loadGeoJSON', id, {root: true});
+      await dispatch('countries/loadCountryDetails', id, {root: true});
+    }
     commit('SET_SELECTED_COUNTRY', id);
   },
   async loadProjects ({commit, getters, dispatch}, paramsOverride) {
@@ -100,6 +102,7 @@ export const actionsGenerator = () => ({
     if (!value) {
       dispatch('setSelectedCountry', null);
     }
+    dispatch('setActiveSubLevel', null);
     commit('SET_ACTIVE_COUNTRY', value);
   },
   setMapReady ({commit}, value) {
