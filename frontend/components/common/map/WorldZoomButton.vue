@@ -1,8 +1,9 @@
 <template>
-  <div class="WorldZoomButton">
+  <div
+    class="WorldZoomButton"
+    @click="zoomToWorld">
     <fa
       icon="globe-africa"
-      @click="zoomToWorld"
     />
   </div>
 </template>
@@ -11,7 +12,7 @@
 export default {
   methods: {
     zoomToWorld () {
-      this.$root.$emit('map:zoom-at', 3);
+      this.$root.$emit('map:reset-zoom', 3);
     }
   }
 };
