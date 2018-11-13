@@ -131,7 +131,7 @@ export default {
 
     .CountryViewBtn {
       position: absolute;
-      top: 0;
+      bottom: 36px;
       left: 50%;
       transform: translateX(-50%);
       width: 36px;
@@ -157,6 +157,7 @@ export default {
       }
 
       .Text {
+        display: none;
         font-size: 12px;
         line-height: 36px;
         padding-left: 4px;
@@ -165,6 +166,10 @@ export default {
       &:hover {
         width: auto;
         background-color: @colorBrandAccent;
+
+        .Text {
+          display: inline;
+        }
       }
     }
   }
