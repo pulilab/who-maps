@@ -407,7 +407,7 @@ class CountryTests(APITestCase):
         data = {
             "admins": [userprofile1.id]
         }
-        response = self.test_user_client.patch(url, data=data,  format='json', HTTP_ACCEPT_LANGUAGE='en')
+        response = self.test_user_client.patch(url, data=data, format='json', HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['admins'], [userprofile1.id])
 
@@ -598,19 +598,18 @@ class CountryTests(APITestCase):
         self.assertTrue(isinstance(response.json()['partner_logos'], list))
 
     def test_country_export(self):
-
         country = Country.objects.create(name='country111', code='C2')
         project_data1 = {
             'contact_email':
-            'foo1@gmail.com',
+                'foo1@gmail.com',
             'contact_name':
-            'foo1',
+                'foo1',
             'country':
-            country.id,
+                country.id,
             'platforms': [
                 {
                     'name':
-                    'OpenSRP',
+                        'OpenSRP',
                     'strategies': [
                         'Transmit or manage out of pocket payments by client',
                         'Access by client to own medical records',
@@ -633,19 +632,20 @@ class CountryTests(APITestCase):
         }
         project_data2 = {
             'contact_email':
-            'foo2@gmail.com',
+                'foo2@gmail.com',
             'contact_name':
-            'foo2',
+                'foo2',
             'country':
-            country.id,
+                country.id,
             'platforms': [{
                 'name':
-                'OpenSRP',
+                    'OpenSRP',
                 'strategies':
-                ['Transmit untargeted health promotion content to entire population', 'Transmit prescriptions orders']
+                    ['Transmit untargeted health promotion content to entire population',
+                     'Transmit prescriptions orders']
             }, {
                 'name':
-                'Bamboo',
+                    'Bamboo',
                 'strategies': [
                     'Provide prompts and alerts based according to protocol',
                     'Consultations between remote client and healthcare provider'
@@ -1380,6 +1380,13 @@ class CountryAdminTests(TestCase):
         self.user.save()
         self.request.user = self.user
         self.assertTrue('map_data' not in ma.get_fields(self.request))
+
+    def test_list_admin(self):
+        ma = CountryAdmin(Country, self.site)
+        self.assertEqual(ma.get_queryset(self.request).count(), Country.objects.all().count())
+        translate_bools = ['is_translated_{}'.format(language_code) for language_code, _ in settings.LANGUAGES]
+        self.assertEqual(ma.get_list_display(self.request), ['name', 'code', 'region',
+                                                             'project_approval'] + translate_bools)
 
 
 class CountryManagementCommandTest(TestCase):
