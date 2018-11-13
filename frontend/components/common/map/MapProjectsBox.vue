@@ -210,7 +210,7 @@ export default {
 
       .SubLevelCounter {
         float: right;
-        margin-left: 5px;
+        margin-top: 2px;
         font-size: @fontSizeSmall;
         font-weight: 400;
         color: @colorTextMuted;
