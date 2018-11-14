@@ -46,7 +46,11 @@ export default {
 
   .CoverageField {
     .SimpleField {
-      margin-bottom: 0 !important;
+      margin: 10px 0 !important;
+
+      .Header {
+        font-size: @fontSizeBase !important;
+      }
     }
   }
 

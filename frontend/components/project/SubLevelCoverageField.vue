@@ -99,15 +99,14 @@ export default {
 </script>
 
 <style lang="less">
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
+
 .SubNationalCoverageField {
   width: 100%;
 
   .SimpleField {
-    &.FirstSubLevel {
-      > .Header {
-        margin-bottom: 20px;
-      }
-    }
+    &.FirstSubLevel {}
   }
 }
 

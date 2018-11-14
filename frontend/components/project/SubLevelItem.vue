@@ -57,10 +57,26 @@ export default {
 </script>
 
 <style lang="less">
-.SubLevelItem {
-  width: 100%;
-}
-.SubLevelItemDropdown {
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
+.SubLevelItem {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 3px;
+  padding-left: 30px;
+  border-left: 5px solid @colorGrayLight;
+
+  .SimpleField {
+    margin: 0 !important;
+
+    .Header {
+      font-size: @fontSizeBase !important;
+    }
+  }
 }
+
+.SubLevelItemDropdown {}
 </style>

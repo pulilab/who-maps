@@ -333,6 +333,7 @@ export default {
 
         .Header {
           margin-bottom: 10px;
+          font-size: @fontSizeMedium;
           font-weight: 700;
         }
 
