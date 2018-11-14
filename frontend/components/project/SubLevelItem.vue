@@ -76,6 +76,12 @@ export default {
       font-size: @fontSizeBase !important;
     }
   }
+
+  .CoverageField {
+    .SimpleField {
+      margin: 20px 0 0 !important;
+    }
+  }
 }
 
 .SubLevelItemDropdown {}
