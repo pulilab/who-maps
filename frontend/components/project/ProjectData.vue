@@ -360,11 +360,13 @@ export default {
         }
 
         .PlatformList {
+          .Header {
+            font-size: @fontSizeBase;
+          }
+
           .Content {
             .SimpleField {
               margin-top: 20px;
-              font-size: @fontSizeBase;
-              line-height: 20px;
             }
           }
         }
