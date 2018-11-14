@@ -131,7 +131,7 @@ export default {
 
     .CountryViewBtn {
       position: absolute;
-      bottom: 36px;
+      bottom: 0;
       left: 50%;
       transform: translateX(-50%);
       width: 36px;
