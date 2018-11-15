@@ -671,10 +671,6 @@ export default {
           width: 100%;
           margin-top: 20px;
 
-          .el-form-item__label {
-            font-size: @fontSizeSmall;
-          }
-
           .el-select {
             min-width: 75%;
             max-width: 100%;
