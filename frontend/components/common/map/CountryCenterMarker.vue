@@ -106,8 +106,10 @@ export default {
   @import "~assets/style/mixins.less";
 
   .CountryViewPopup {
-    bottom: 0;
-    margin-bottom: 55px;
+
+    &.leaflet-popup {
+      margin-bottom: 55px;
+    }
 
     .leaflet-popup-content-wrapper {
       background-color: transparent;
@@ -131,7 +133,7 @@ export default {
 
     .CountryViewBtn {
       position: absolute;
-      bottom: 0;
+      top: 0;
       left: 50%;
       transform: translateX(-50%);
       width: 36px;
