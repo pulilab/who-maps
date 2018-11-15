@@ -215,34 +215,55 @@ export default {
       resetPassword: 'user/resetPassword',
       setSelectedCountry: 'dashboard/setSelectedCountry'
     }),
-
-    loginLocal () {
-      this.deleteFormAPIErrors();
-      this.$refs.loginForm.validate(async valid => {
-        if (valid) {
-          try {
-            this.$nuxt.$loading.start();
-            await this.login({
-              username: this.username,
-              password: this.password
-            });
-            if (this.profile.country) {
-              this.setSelectedCountry(this.profile.country);
-            }
-            if (this.$route.query && this.$route.query.next) {
-              const path = this.$route.query.next;
-              const query = {...this.$route.query, next: undefined};
-              this.$router.push({path, query});
-            } else {
-              this.$router.push(this.localePath({name: 'organisation-dashboard', params: this.$route.params, query: {country: [this.profile.country]}}));
-            }
-          } catch (err) {
-            this.setFormAPIErrors(err);
-            this.$refs.loginForm.validate(() => {});
-            this.$nuxt.$loading.finish();
-          }
+    handleRoutingErrors (e) {
+      this.$alert(
+        this.$gettext('An error occured during login, please reload the page and try again'),
+        this.$gettext('Warning'),
+        {
+          confirmButtonText: this.$gettext('OK')
         }
-      });
+      );
+      if (this.$raven) {
+        this.$raven.captureMessage('Un-caught validation error in project page', {
+          level: 'warning',
+          extra: {
+            e
+          }
+        });
+      }
+    },
+    async loginLocal () {
+      this.$nuxt.$loading.start('loginLoader');
+      this.deleteFormAPIErrors();
+      try {
+        await this.$refs.loginForm.validate();
+        await this.login({
+          username: this.username,
+          password: this.password
+        });
+      } catch (e) {
+        if (e) {
+          this.setFormAPIErrors(e);
+          this.$refs.loginForm.validate(() => {});
+        }
+        this.$nuxt.$loading.finish('loginLoader');
+        return;
+      }
+      try {
+        if (this.profile.country) {
+          this.setSelectedCountry(this.profile.country);
+        }
+        if (this.$route.query && this.$route.query.next) {
+          const path = this.$route.query.next;
+          const query = {...this.$route.query, next: undefined};
+          this.$router.push({path, query});
+        } else {
+          this.$router.push(this.localePath({name: 'organisation-dashboard', params: this.$route.params, query: {country: [this.profile.country]}}));
+        }
+      } catch (e) {
+        this.handleRoutingErrors(e);
+      }
+      this.$nuxt.$loading.finish('loginLoader');
     },
 
     toForgotten () {
