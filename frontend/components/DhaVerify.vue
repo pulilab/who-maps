@@ -5,7 +5,7 @@
         <translate>Email confirmation</translate>
       </div>
 
-      <p class="Instruction">
+      <p class="VerifyInstruction">
         <translate>Congratulations your email address is verified, you can now </translate>
         <span
           class="TextLink"
@@ -36,14 +36,14 @@ export default {
     width: @cardSizeSmall;
     margin: 80px auto;
 
-    .Instruction {
+    .VerifyInstruction {
       font-size: @fontSizeMedium;
       line-height: 24px;
       text-align: center;
       color: @colorTextPrimary;
       padding: 0 80px;
 
-      span {
+      .TextLink {
         cursor: pointer;
         color: @colorBrandPrimary;
       }
