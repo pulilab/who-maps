@@ -130,7 +130,7 @@
                   v-if="isDonorUser"
                   class="DonorSelectorWrapper">
                   <el-form-item
-                    :label="$gettext('I request to join the donor group below:')"
+                    :label="$gettext('I request to join the investor group below:')"
                     prop="donor"
                   >
                     <donor-select
