@@ -272,6 +272,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
             with override(profile.language):
                 subject = ugettext("You were added to a project!")
                 html_message = html_template.render({
+                    "type": "new_member",
                     "project_id": instance.id,
                     "project_name": instance.name,
                     "role": "viewer",
