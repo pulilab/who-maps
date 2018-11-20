@@ -111,7 +111,6 @@ class UpdateAdminMixin:
         new_super_admins = set(instance.super_admins.all().only('id')) - original_super_admins
 
         # remove new additions from any other user group
-        # TODO: check email template wording
         if new_users:
             instance.admins.remove(*new_users)
             instance.super_admins.remove(*new_users)
