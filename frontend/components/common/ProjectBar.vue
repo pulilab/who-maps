@@ -173,9 +173,9 @@ export default {
     }
 
     .ProjectName {
-      margin: 16px 0 0;
+      margin: 14px 0 0;
       font-size: @fontSizeLarge;
-      line-height: @fontSizeLarge;
+      line-height: 22px;
       font-weight: 700;
 
       > div {

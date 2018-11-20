@@ -72,9 +72,14 @@ export const gettersGenerator = () => ({
 });
 
 export const actionsGenerator = () => ({
-  async setSelectedCountry ({commit, dispatch}, id) {
-    await dispatch('countries/loadGeoJSON', id, {root: true});
-    await dispatch('countries/loadCountryDetails', id, {root: true});
+  async setSelectedCountry ({commit, dispatch, getters}, id) {
+    if (id) {
+      await dispatch('countries/loadGeoJSON', id, {root: true});
+      await dispatch('countries/loadCountryDetails', id, {root: true});
+    }
+    if (getters.getFilteredCountries && getters.getFilteredCountries.length === 1) {
+      commit('SET_FILTERED_COUNTRIES', [id]);
+    }
     commit('SET_SELECTED_COUNTRY', id);
   },
   async loadProjects ({commit, getters, dispatch}, paramsOverride) {
@@ -92,15 +97,15 @@ export const actionsGenerator = () => ({
   },
   setCurrentZoom ({commit}, value) {
     commit('SET_CURRENT_ZOOM', value);
-    if (value < 4) {
-      commit('SET_SELECTED_COUNTRY', null);
-      commit('SET_ACTIVE_COUNTRY', null);
-    }
   },
   setActiveCountry ({commit, getters, dispatch}, value) {
     if (value && getters.getSelectedCountry && getters.getSelectedCountry !== value) {
       dispatch('setSelectedCountry', value);
     }
+    if (!value) {
+      dispatch('setSelectedCountry', null);
+    }
+    dispatch('setActiveSubLevel', null);
     commit('SET_ACTIVE_COUNTRY', value);
   },
   setMapReady ({commit}, value) {

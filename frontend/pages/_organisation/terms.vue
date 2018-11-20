@@ -231,7 +231,8 @@
         </el-tab-pane>
 
         <el-tab-pane label="Contact">
-          <h2><translate>If you have further questions about the DHA, do not hesitate to get in touch using the details below</translate></h2>
+          <h2>Contact</h2>
+          <p><translate>If you have further questions about the DHA, do not hesitate to get in touch using the details below:</translate></p>
           <p>
             <b><translate>Email:</translate></b>&nbsp;<a href="mailto:digitalhealthatlas@gmail.com">digitalhealthatlas@gmail.com</a>
           </p>

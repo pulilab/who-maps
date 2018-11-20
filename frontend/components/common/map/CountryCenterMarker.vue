@@ -106,8 +106,10 @@ export default {
   @import "~assets/style/mixins.less";
 
   .CountryViewPopup {
-    bottom: 0;
-    margin-bottom: 55px;
+
+    &.leaflet-popup {
+      margin-bottom: 55px;
+    }
 
     .leaflet-popup-content-wrapper {
       background-color: transparent;
@@ -157,6 +159,7 @@ export default {
       }
 
       .Text {
+        display: none;
         font-size: 12px;
         line-height: 36px;
         padding-left: 4px;
@@ -165,6 +168,10 @@ export default {
       &:hover {
         width: auto;
         background-color: @colorBrandAccent;
+
+        .Text {
+          display: inline;
+        }
       }
     }
   }

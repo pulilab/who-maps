@@ -57,10 +57,10 @@ export default {
 </script>
 
 <style lang="less">
-.SubLevelItem {
-  width: 100%;
-}
-.SubLevelItemDropdown {
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-}
+.SubLevelItem {}
+
+.SubLevelItemDropdown {}
 </style>

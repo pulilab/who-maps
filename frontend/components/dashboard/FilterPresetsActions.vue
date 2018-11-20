@@ -1,6 +1,8 @@
 <template>
   <div class="FilterPresets">
-    <el-row type="flex">
+    <el-row
+      type="flex"
+      align="middle">
       <el-col :span="12">
         <el-popover
           :title="$gettext('My filters presets')"
@@ -120,6 +122,9 @@ export default {
   @import "~assets/style/mixins.less";
 
   .FilterPresets {
+    padding: 15px 20px !important;
+    background-color: lighten(@colorGrayLightest, 2%);
+
     .el-col {
       // Selector
       &:nth-child(1) {

@@ -426,13 +426,13 @@ export default {
 
       .el-table__empty-block {
         position: relative;
-      }
+        width: 100% !important;
+        text-align: center;
 
-      .el-table__empty-text {
-        position: absolute;
-        top: 24px;
-        left: 20px;
-        width: auto;
+        .el-table__empty-text {
+          width: auto;
+          font-weight: 700;
+        }
       }
 
       .ProjectCard {

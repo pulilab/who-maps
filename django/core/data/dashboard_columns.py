@@ -12,7 +12,7 @@ DASHBOARD_COLUMNS = [
     {'id': 5,
      'label': _('Region')},
     {'id': 6,
-     'label': _('Donors')},
+     'label': _('Investor')},
     {'id': 7,
      'label': _('Contact Name')},
     {'id': 8,

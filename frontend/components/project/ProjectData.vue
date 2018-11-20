@@ -333,6 +333,7 @@ export default {
 
         .Header {
           margin-bottom: 10px;
+          font-size: @fontSizeMedium;
           font-weight: 700;
         }
 
@@ -342,6 +343,30 @@ export default {
               .svg-inline--fa {
                 display: none;
               }
+            }
+          }
+        }
+
+        .SubLevelItem {
+          box-sizing: border-box;
+          width: 100%;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          margin-left: 3px;
+          padding-left: 30px;
+          border-left: 5px solid @colorGrayLight;
+
+          .SimpleField {
+            margin: 0 !important;
+
+            .Header {
+              font-size: @fontSizeBase !important;
+            }
+          }
+
+          .CoverageField {
+            .SimpleField {
+              margin: 20px 0 0 !important;
             }
           }
         }
@@ -359,11 +384,13 @@ export default {
         }
 
         .PlatformList {
+          .Header {
+            font-size: @fontSizeBase;
+          }
+
           .Content {
             .SimpleField {
               margin-top: 20px;
-              font-size: @fontSizeBase;
-              line-height: 20px;
             }
           }
         }

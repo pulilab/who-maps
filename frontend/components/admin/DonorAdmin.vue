@@ -5,7 +5,7 @@
     </div>
 
     <collapsible-card
-      :title="$gettext('Invenstor information')"
+      :title="$gettext('Investor information')"
       class="CountryInformation">
 
       <el-form

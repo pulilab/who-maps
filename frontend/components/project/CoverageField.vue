@@ -40,6 +40,18 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
+
+  .CoverageField {
+    .SimpleField {
+      margin: 10px 0 !important;
+
+      .Header {
+        font-size: @fontSizeBase !important;
+      }
+    }
+  }
 
 </style>
