@@ -20,7 +20,7 @@ class Command(BaseCommand):
         parser.add_argument('--project-id', dest="project_id", required=False)
         parser.add_argument('--project-name', dest="project_name", required=False)
         parser.add_argument('--language', dest="language", required=False)
-        parser.add_argument('--role', dest="role", required=False)
+        parser.add_argument('--r', dest="role", required=False)
         parser.add_argument('--group', dest="group", required=False)
         parser.add_argument('--name', dest="name", required=False)
         parser.add_argument('--change-url', dest="change_url", required=False)
