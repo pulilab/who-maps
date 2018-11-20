@@ -368,15 +368,14 @@
                             </tr>
                           </tbody>
                         </table>
-                        {% endif %}
                         <!-- /TEMPLATE: NEW MEMBER -->
 
 
                         <!-- TEMPLATE: COUNTRY ADMIN -->
-                        {% if type == "country_admin" %}
+                        {% elif type == "country_admin" %}
                         <h1>{% trans "Country admin" %}</h1>
                         <h2>{% trans "Notification" %}</h2>
-                        <p>{% blocktrans %}You have been selected as the Country Admin for <b>{{ country_name }}</b>. Go to (link to login, push to Admin page) to  begin customizing your Digital Health Atlas information.{% endblocktrans %}</p>
+                        <p>{% blocktrans %}You have been selected as the Country Admin for <b>{{ country_name }}</b>. Go to (link to login, push to Admin page) to begin customizing your Digital Health Atlas information.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -392,11 +391,10 @@
                             </tr>
                           </tbody>
                         </table>
-                        {% endif %}
                         <!-- /TEMPLATE: COUNTRY ADMIN -->
 
                         <!-- TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE -->
-                        {% if type == "email_confirmation_signup_message" %}
+                        {% elif type == "email_confirmation_signup_message" %}
                         <h1>{% trans "Thank you!" %}</h1>
                         <h2>{% trans "Your account has been created!" %}</h2>
                         <p>{% blocktrans %}Your e-mail needs to be confirmed to finalize your registration.{% endblocktrans %}</p>
@@ -404,12 +402,11 @@
                         <p>
                           <a href="{{ activate_url }}" target="_blank ">{{ activate_url }}</a>
                         </p>
-                        {% endif %}
                         <!-- /TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE  -->
 
 
                         <!-- TEMPLATE: FLAG CONTENT -->
-                        {% if type == "flag_content" %}
+                        {% elif type == "flag_content" %}
                         <h1>{% trans "Reported content!" %}</h1>
                         <h2>{% trans "Notification" %}</h2>
                         <p>{% trans "Content has been flagged as inappropriate. Please take action." %}</p>
@@ -428,13 +425,12 @@
                             </tr>
                           </tbody>
                         </table>
-                        {% endif %}
                         <!-- /TEMPLATE: FLAG CONTENT -->
 
 
                         <!-- EDIT THIS IN registration/password_reset_html_email.html -->
                         <!-- TEMPLATE: PASSWORD RESET -->
-                        {% if type == "password_reset" %}
+                        {% elif type == "password_reset" %}
                         <h1>{% trans "Password Reset" %}</h1>
                         <p>{% trans "You requested your password to be reset." %}</p>
                         <p><b>Please visit this link below to create a new password:</b></p>
@@ -444,12 +440,11 @@
                           -->
                         <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank">{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
                         </p>
-                        {% endif %}
                         <!-- /TEMPLATE: PASSWORD RESET -->
 
 
                         <!-- TEMPLATE: TOOLKIT DIGEST -->
-                        {% if type == "toolkit_digest" %}
+                        {% elif type == "toolkit_digest" %}
                         <h1>{% trans "Notification" %}</h1>
                         <p>{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
                         <p><b>{% trans "Check the MAPS Toolkit on the link below:" %}</b></p>
@@ -459,12 +454,11 @@
                           -->
                           <a href="{% site_url %}/projects/{{ project_id }}/assessment" target="_blank">{% site_url %}/projects/{{ project_id }}/assessment</a>
                         </p>
-                        {% endif %}
                         <!-- /TEMPLATE: TOOLKIT DIGEST -->
 
 
                         <!-- TEMPLATE: STATUS REPORT -->
-                        {% if type == "status_report" %}
+                        {% elif type == "status_report" %}
                         <h1>{% trans "Status report" %}</h1>
                         <h2>{% trans "Dear Admin! " %}</h2>
                         <p>{% trans "The projects listed below are waiting for your approval:" %}</p>
@@ -541,12 +535,11 @@
                             </tr>
                           </tbody>
                         </table>
-                        {% endif %}
                         <!-- /TEMPLATE: STATUS REPORT -->
 
 
                         <!-- TEMPLATE: PROJECT IMPORT LIST -->
-                        {% if type == "project_import_list" %}
+                        {% elif type == "project_import_list" %}
                         <h1>{% trans "Status report" %}</h1>
                         <h2>{% trans "Dear Admin! " %}</h2>
                         <p>{% trans "The following projects have been imported:" %}</p>
@@ -596,27 +589,26 @@
                             </tr>
                           </tbody>
                         </table>
-                        {% endif %}
                         <!-- /TEMPLATE: PROJECT IMPORT LIST -->
 
 
                         <!-- TEMPLATE: IMPORT PROJECTS -->
-                        {% if type == "import_projects" %}
+                        {% elif type == "import_projects" %}
                         <h1>{% trans "Notification" %}</h1>
                         <h2>{% trans "Your were added to the following projects: " %}</h2>
-                        {% if data.password %}
-                        <ul>
-                          {% for project in data.projects %}
-                          <!-- TODO#13 -->
-                          <li><a href="{{ SITE_URL }}/projects/{{ project.id }}/edit"><b>{{ project.name }}</b></a></li>
-                          {% endfor %}
-                        </ul>
-                        <p>
-                          <b>Your login credentials are:</b><br>
-                          <em>Username: {{ email }}</em><br>
-                          <em>Password: {{ data.password }}</em>
-                        </p>
-                        {% endif %}
+                            {% if data.password %}
+                            <ul>
+                              {% for project in data.projects %}
+                              <!-- TODO#13 -->
+                              <li><a href="{{ SITE_URL }}/projects/{{ project.id }}/edit"><b>{{ project.name }}</b></a></li>
+                              {% endfor %}
+                            </ul>
+                            <p>
+                              <b>Your login credentials are:</b><br>
+                              <em>Username: {{ email }}</em><br>
+                              <em>Password: {{ data.password }}</em>
+                            </p>
+                            {% endif %}
                         {% endif %}
                         <!-- /TEMPLATE: IMPORT PROJECTS -->
 
