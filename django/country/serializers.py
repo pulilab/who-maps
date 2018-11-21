@@ -138,9 +138,10 @@ class UpdateAdminMixin:
             with override(language):
                 subject = "You have been selected as {} for {}".format(group, instance.name)
                 subject = ugettext(subject)
-                html_message = html_template.render({'type': '{}_admin'.format(self.Meta.model.__name__.lower()),
+                model_name = self.Meta.model.__name__.lower()
+                html_message = html_template.render({'type': '{}_admin'.format(model_name),
                                                      'group': group,
-                                                     'country_name': instance.name,
+                                                     '{}_name'.format(model_name): instance.name,
                                                      'language': language})
 
             send_mail(
