@@ -124,7 +124,7 @@ class UpdateAdminMixin:
         if new_super_admins:
             instance.users.remove(*new_super_admins)
             instance.admins.remove(*new_super_admins)
-            self.notify_users(new_super_admins, instance, ugettext('Super Admin'))
+            self.notify_users(new_super_admins, instance, ugettext('System Admin'))
 
         return instance
 
