@@ -393,6 +393,28 @@
                         </table>
                         <!-- /TEMPLATE: COUNTRY ADMIN -->
 
+                        <!-- TEMPLATE: DONOR ADMIN -->
+                        {% elif type == "donor_admin" %}
+                        <h1>{% trans "Investor admin" %}</h1>
+                        <h2>{% trans "Notification" %}</h2>
+                        <p>{% blocktrans %}You have been selected as the <b>{{ group }}</b> for <b>{{ donor_name }}</b>. Go to (link to login, push to Admin page) to begin customizing your Digital Health Atlas information.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/donor" target="_blank">{% trans "Go to country admin" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: DONOR ADMIN -->
+
                         <!-- TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE -->
                         {% elif type == "email_confirmation_signup_message" %}
                         <h1>{% trans "Thank you!" %}</h1>
