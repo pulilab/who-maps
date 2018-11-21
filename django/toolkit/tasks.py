@@ -1,9 +1,9 @@
 from datetime import timedelta
 from django.conf import settings
+from django.core.mail import send_mail
 from django.utils import timezone
 from django.utils.translation import ugettext, override
 
-from django.core import mail
 from django.template import loader
 from celery.utils.log import get_task_logger
 
@@ -32,7 +32,7 @@ def send_daily_toolkit_digest():
                                                          "language": profile.language})
                     subject = ugettext("MAPS Toolkit updated!")
 
-                mail.send_mail(
+                send_mail(
                     subject=subject,
                     message="",
                     from_email=settings.FROM_EMAIL,
