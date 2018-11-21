@@ -114,17 +114,17 @@ class UpdateAdminMixin:
         if new_users:
             instance.admins.remove(*new_users)
             instance.super_admins.remove(*new_users)
-            self.notify_users(new_users, instance, 'User', 'email/master-inline.html')
+            self.notify_users(new_users, instance, ugettext('User'))
 
         if new_admins:
             instance.users.remove(*new_admins)
             instance.super_admins.remove(*new_admins)
-            self.notify_users(new_admins, instance, 'Admin', 'email/master-inline.html')
+            self.notify_users(new_admins, instance, ugettext('Admin'))
 
         if new_super_admins:
             instance.users.remove(*new_super_admins)
             instance.admins.remove(*new_super_admins)
-            self.notify_users(new_super_admins, instance, 'Super Admin', 'email/master-inline.html')
+            self.notify_users(new_super_admins, instance, ugettext('Super Admin'))
 
         return instance
 
