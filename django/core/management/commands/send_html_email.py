@@ -25,6 +25,7 @@ class Command(BaseCommand):
         parser.add_argument('--name', dest="name", required=False)
         parser.add_argument('--change-url', dest="change_url", required=False)
         parser.add_argument('--country-name', dest="country_name", required=False)
+        parser.add_argument('--donor-name', dest="donor_name", required=False)
         parser.add_argument('--activate-url', dest="activate_url", required=False)
 
     def handle(self, *args, **options):
