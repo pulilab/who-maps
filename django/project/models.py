@@ -230,11 +230,13 @@ class DigitalStrategy(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrdered
 
     class Meta:
         verbose_name_plural = 'Digital Strategies'
+        ordering = ['group', 'name']
 
 
 class HSCGroup(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Meta:
         verbose_name = 'Health System Challenge Group'
+        ordering = ['name']
 
 
 class HSCChallengeQuerySet(ActiveQuerySet):
@@ -254,7 +256,7 @@ class HSCChallenge(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSof
     class Meta:
         verbose_name = 'Health System Challenge'
         verbose_name_plural = 'Health System Challenges'
-        ordering = ('name',)
+        ordering = ['group', 'name']
 
     objects = HSCChallengeQuerySet.as_manager()
 
