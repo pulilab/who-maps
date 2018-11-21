@@ -434,9 +434,6 @@
                         <p>{% trans "You requested your password to be reset." %}</p>
                         <p><b>{% trans "Please visit this link below to create a new password:" %}</b></p>
                         <p>
-                          <!-- TODO#8
-                            Couldn't test, this should lead to django backend according to Ilcsik
-                          -->
                         <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank">{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
                         </p>
                         <!-- /TEMPLATE: PASSWORD RESET -->
