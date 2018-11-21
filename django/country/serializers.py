@@ -128,8 +128,8 @@ class UpdateAdminMixin:
 
         return instance
 
-    def notify_users(self, user_profiles, instance, group, template_name):
-        html_template = loader.get_template(template_name)
+    def notify_users(self, user_profiles, instance, group):
+        html_template = loader.get_template('email/master-inline.html')
         email_mapping = defaultdict(list)
         for profile in user_profiles:
             email_mapping[profile.language].append(profile.user.email)
