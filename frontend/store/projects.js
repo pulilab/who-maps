@@ -173,7 +173,12 @@ export const actions = {
   },
   async setCurrentProject ({commit, dispatch}, id) {
     id = parseInt(id, 10);
-    await dispatch('loadProjectDetails', id);
+    try {
+      await dispatch('loadProjectDetails', id);
+    } catch (e) {
+      console.error('projects/setCurrentProject failed');
+      return Promise.reject(e);
+    }
     commit('SET_CURRENT_PROJECT', id);
   },
   async loadProjectDetails ({commit, rootGetters}, projectId) {
