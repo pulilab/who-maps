@@ -611,14 +611,13 @@
 
 
                         <!-- TEMPLATE: IMPORT PROJECTS -->
-                        {% elif type == "import_projects" %}
+                        {% elif type == "project_import_notify_owner" %}
                         <h1>{% trans "Notification" %}</h1>
                         <h2>{% trans "Your were added to the following projects: " %}</h2>
                             {% if data.password %}
                             <ul>
                               {% for project in data.projects %}
-                              <!-- TODO#13 -->
-                              <li><a href="{{ SITE_URL }}/projects/{{ project.id }}/edit"><b>{{ project.name }}</b></a></li>
+                                <li><a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit"><b>{{ project.name }}</b></a></li>
                               {% endfor %}
                             </ul>
                             <p>

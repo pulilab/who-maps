@@ -176,7 +176,7 @@ class ProjectImportAdmin(admin.ModelAdmin):
     def _notify_users(self):
         html_template = loader.get_template('email/master-inline.html')
         for email, data in self._users_to_notify.items():
-            html_message = html_template.render({'type': 'import_projects', 'email': email, 'data': data})
+            html_message = html_template.render({'type': 'project_import_notify_owner', 'email': email, 'data': data})
             mail.send_mail(
                 subject="You were added to imported projects",
                 message="",
