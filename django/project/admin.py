@@ -175,13 +175,16 @@ class ProjectImportAdmin(admin.ModelAdmin):
 
     def _notify_users(self):
         html_template = loader.get_template('email/master-inline.html')
-        for email, data in self._users_to_notify.items():
-            html_message = html_template.render({'type': 'project_import_notify_owner', 'email': email, 'data': data})
+        for user, data in self._users_to_notify.items():
+            html_message = html_template.render({'type': 'project_import_notify_owner',
+                                                 'email': user.email,
+                                                 'data': data,
+                                                 'language': user.userprofile.language})
             mail.send_mail(
                 subject="You were added to imported projects",
                 message="",
                 from_email=settings.FROM_EMAIL,
-                recipient_list=[email],
+                recipient_list=[user.email],
                 html_message=html_message)
 
     def _notify_superusers(self):
