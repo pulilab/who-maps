@@ -542,7 +542,7 @@
 
 
                         <!-- TEMPLATE: PROJECT IMPORT LIST -->
-                        {% elif type == "project_import_list" %}
+                        {% elif type == "project_import_notify_admins" %}
                         <h1>{% trans "Status report" %}</h1>
                         <h2>{% trans "Dear Admin! " %}</h2>
                         <p>{% trans "The following projects have been imported:" %}</p>
@@ -561,10 +561,7 @@
                                 <ul>
                                   {% for project in projects %}
                                   <li>
-                                    <!-- TODO#12
-                                      eg.: http://localhost:3000/en/-/projects/1/edit
-                                    -->
-                                    <a href="{% site_url %}/projects/{{project.id}}/edit" target="_blank"><b>{{ project.name }}</b></a>
+                                    <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit" target="_blank"><b>{{ project.name }}</b></a>
                                   </li>
                                   {% endfor %}
                                 </ul>
@@ -579,12 +576,7 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <!-- TODO#11
-                                        if this should lead to frontend country admin: http://localhost:3000/en/-/admin/country  ,
-                                        if this should lead to frontend donor admin: http://localhost:3000/en/-/admin/donor  ,
-                                        if this should lead to django admin, then that url
-                                      -->
-                                      <td> <a href="{% site_url %}/admin" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -617,9 +609,6 @@
 
 
                       <!-- END TEMPLATES -->
-
-
-
                       </td>
                     </tr>
                   </table>
@@ -636,7 +625,6 @@
                 <tr>
                   <tr>
                     <td class="content-block footer-links">
-                      <!-- TODO#14 Update footer links -->
                       <a href="{% site_url %}">{% trans "Go to website" %}</a>
                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                       <a href="{% site_url %}/{{ language }}/-/terms">{% trans "Terms of use" %}</a>
