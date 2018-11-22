@@ -22,16 +22,16 @@ class ProfileJWTSerializer(JWTSerializer):
         """
         Checks the UserProfile existence for the given key.
         """
-        if hasattr(obj.user, 'userprofile'):
-            return obj.user.userprofile.id
+        if hasattr(obj['user'], 'userprofile'):
+            return obj['user'].userprofile.id
 
     @staticmethod
     def get_account_type(obj):
         """
         Checks the UserProfile existence for the given key.
         """
-        if hasattr(obj.user, 'userprofile'):
-            return obj.user.userprofile.account_type
+        if hasattr(obj['user'], 'userprofile'):
+            return obj['user'].userprofile.account_type
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
