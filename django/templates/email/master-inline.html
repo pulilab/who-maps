@@ -591,12 +591,12 @@
                         {% elif type == "project_import_notify_owner" %}
                         <h1>{% trans "Notification" %}</h1>
                         <h2>{% trans "Your were added to the following projects: " %}</h2>
-                            {% if data.password %}
                             <ul>
                               {% for project in data.projects %}
                                 <li><a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit"><b>{{ project.name }}</b></a></li>
                               {% endfor %}
                             </ul>
+                            {% if data.password %}
                             <p>
                               <b>Your login credentials are:</b><br>
                               <em>Username: {{ email }}</em><br>
