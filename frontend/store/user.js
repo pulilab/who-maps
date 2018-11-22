@@ -42,7 +42,6 @@ export const actions = {
   async doSignup ({ commit, dispatch }, { account_type, password1, password2, email }) {
     const { data } = await this.$axios.post('/api/rest-auth/registration/',
       { account_type, password1, password2, email });
-    data.token = data.key;
     commit('SET_USER', data);
     commit('SET_TOKEN', data.token);
     saveToken(data.token, data.user_profile_id);
