@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
-from rest_auth.serializers import TokenSerializer, PasswordResetSerializer
-from rest_auth.models import TokenModel
+from rest_auth.serializers import PasswordResetSerializer, JWTSerializer
 from rest_framework.exceptions import ValidationError
 
 from country.models import Country
@@ -9,16 +8,14 @@ from project.models import Project
 from .models import UserProfile, Organisation
 
 
-class ProfileTokenSerializer(TokenSerializer):
+class ProfileJWTSerializer(JWTSerializer):
     """
     Retrieves the token and userprofile of a given user after log in.
     """
+    token = serializers.CharField()
+    user = serializers.SerializerMethodField()
     user_profile_id = serializers.SerializerMethodField()
     account_type = serializers.SerializerMethodField()
-
-    class Meta:
-        model = TokenModel
-        fields = ("key", "user_profile_id", "account_type")
 
     @staticmethod
     def get_user_profile_id(obj):
