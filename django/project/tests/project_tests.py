@@ -772,12 +772,11 @@ class ProjectTests(SetupTests):
         fr_index = -1 if first_en else -2
 
         outgoing_en_email_text = mail.outbox[en_index].message().as_string()
-
-        self.assertIn('admin/project/projectapproval/', outgoing_en_email_text)
+        self.assertIn('/en/-/admin/country', outgoing_en_email_text)
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
 
         outgoing_fr_email_text = mail.outbox[fr_index].message().as_string()
-
+        self.assertIn('/fr/-/admin/country', outgoing_fr_email_text)
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
 
     def test_project_approval_email_not_sent(self):
@@ -786,7 +785,7 @@ class ProjectTests(SetupTests):
         pa.save()
         send_project_approval_digest()
         for m in mail.outbox:
-            self.assertFalse('<meta http-equiv="content-language" content="en">' in m.message().as_string())
+            self.assertNotIn('/en/-/admin/country', m.message().as_string())
 
     def test_country_admins_access_all_projects_in_country_as_viewer(self):
         # Create a test user with profile.
