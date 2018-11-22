@@ -51,7 +51,7 @@ class UserTests(APITestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201)
-        self.assertIn("key", response.json())
+        self.assertIn("token", response.json())
 
     def test_register_user_unique_email(self):
         url = reverse("rest_register")
@@ -111,7 +111,8 @@ class UserTests(APITestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201)
-        self.assertIn("key", response.json())
+        self.assertIn("token", response.json())
+        self.assertIn("user", response.json())
         self.assertIn("user_profile_id", response.json())
         self.assertIn("account_type", response.json())
         self.assertEqual(response.json().get("account_type"), UserProfile.IMPLEMENTER)
@@ -126,7 +127,8 @@ class UserTests(APITestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201)
-        self.assertIn("key", response.json())
+        self.assertIn("token", response.json())
+        self.assertIn("user", response.json())
         self.assertIn("user_profile_id", response.json())
         self.assertIn("account_type", response.json())
         self.assertEqual(response.json().get("account_type"), UserProfile.GOVERNMENT)
