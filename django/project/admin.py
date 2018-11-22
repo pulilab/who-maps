@@ -273,10 +273,10 @@ class ProjectImportAdmin(admin.ModelAdmin):
         self._projects_created.append(project)
 
         # Gather notification data
-        if user.email in self._users_to_notify:
-            self._users_to_notify[user.email]['projects'].append(project)
+        if user in self._users_to_notify:
+            self._users_to_notify[user]['projects'].append(project)
         else:
-            self._users_to_notify[user.email] = {
+            self._users_to_notify[user] = {
                 'password': password,
                 'projects': [project]
             }
