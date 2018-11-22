@@ -492,11 +492,7 @@
                                 <ul>
                                   {% for project in projects_today %}
                                   <li>
-                                    <!-- TODO#10
-                                      eg.: http://localhost:3000/en/-/admin/country
-                                      same as country admin (#4, #5)
-                                    -->
-                                    <a href="{% site_url %}/admin/country" target="_blank"><b>{{ project.name }}</b></a>
+                                    <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank"><b>{{ project.name }}</b></a>
                                   </li>
                                   {% endfor %}
                                 </ul>
@@ -519,10 +515,7 @@
                                 <ul>
                                   {% for project in projects_earlier %}
                                   <li>
-                                    <!-- TODO#10
-                                      eg.: {% site_url %}/admin/country
-                                    -->
-                                    <a href="{% site_url %}/admin/country" target="_blank"><b>{{ project.name }}</b></a>
+                                    <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank"><b>{{ project.name }}</b></a>
                                   </li>
                                   {% endfor %}
                                 </ul>
@@ -537,12 +530,7 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <!-- TODO#11
-                                        if this should lead to frontend country admin: http://localhost:3000/en/-/admin/country  ,
-                                        if this should lead to frontend donor admin: http://localhost:3000/en/-/admin/donor  ,
-                                        if this should lead to django admin, then that url
-                                      -->
-                                      <td> <a href="{% site_url %}/admin" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
