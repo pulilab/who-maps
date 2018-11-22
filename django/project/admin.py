@@ -190,7 +190,9 @@ class ProjectImportAdmin(admin.ModelAdmin):
     def _notify_superusers(self):
         superusers_emails = User.objects.filter(is_superuser=True).values_list('email')
         html_template = loader.get_template("email/master-inline.html")
-        html_message = html_template.render({'type': 'project_import_notify_admins', 'projects': self._projects_created})
+        html_message = html_template.render({'type': 'project_import_notify_admins',
+                                             'projects': self._projects_created,
+                                             'language': 'en'})
 
         mail.send_mail(
             subject='New projects have been imported',
