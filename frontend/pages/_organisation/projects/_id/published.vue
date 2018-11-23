@@ -15,13 +15,15 @@
 </template>
 
 <script>
-import ProjectData from '../../../../components/project/ProjectData';
+import { fetchProjectData } from '@/utilities/projects';
+import ProjectData from '@/components/project/ProjectData';
 export default {
   components: {
     ProjectData
   },
-  async fetch ({store}) {
+  async fetch ({store, params, error}) {
     store.dispatch('landing/resetSearch');
+    return fetchProjectData(store, params, error);
   }
 };
 </script>

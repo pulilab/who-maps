@@ -15,11 +15,13 @@
 </template>
 
 <script>
-import ProjectData from '../../../../components/project/ProjectData';
+import { fetchProjectData } from '@/utilities/projects';
+import ProjectData from '@/components/project/ProjectData';
 export default {
   middleware: ['isLoggedIn'],
-  async fetch ({store}) {
+  fetch ({store, params, error}) {
     store.dispatch('landing/resetSearch');
+    return fetchProjectData(store, params, error);
   },
   components: {
     ProjectData
