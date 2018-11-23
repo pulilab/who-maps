@@ -12,7 +12,11 @@ export default {
   middleware: ['isLoggedIn'],
   async fetch ({store, params, error}) {
     store.dispatch('landing/resetSearch');
-    await fetchProjectData(store, params, error);
+    try {
+      await fetchProjectData(store, params, error);
+    } catch (e) {
+      return;
+    }
     await store.dispatch('projects/loadUserProjects');
     await store.dispatch('toolkit/loadToolkitData');
   }
