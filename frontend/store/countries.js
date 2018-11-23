@@ -88,7 +88,7 @@ export const actions = {
     }
   },
   async loadCountryDetails ({commit, state}, id) {
-    if (!state.countryLibrary[id]) {
+    if (id && !state.countryLibrary[id]) {
       try {
         const { data } = await this.$axios.get(`/api/landing-country/${id}/`);
         commit('SET_COUNTRY_DETAILS', {data, id});
