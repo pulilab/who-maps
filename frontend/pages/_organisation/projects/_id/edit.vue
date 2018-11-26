@@ -8,7 +8,7 @@
 import { fetchProjectData } from '@/utilities/projects';
 export default {
   middleware: ['isLoggedIn'],
-  async fetch ({store, params, error}) {
+  fetch ({store, params, error}) {
     store.dispatch('landing/resetSearch');
     return fetchProjectData(store, params, error);
   }
