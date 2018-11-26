@@ -133,7 +133,7 @@ export const actions = {
     }
   },
   async loadDonorDetails ({ commit, state }, id) {
-    if (!state.donorsLibrary[id]) {
+    if (id && !state.donorsLibrary[id]) {
       try {
         const { data } = await this.$axios.get(`/api/landing-donor/${id}/`);
         commit('SET_DONOR_DETAILS', {id, data});
