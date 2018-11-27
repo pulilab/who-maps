@@ -24,6 +24,7 @@ export default {
       await store.dispatch('countries/loadMapData');
       await store.dispatch('countries/loadGeoJSON', country);
     } catch (e) {
+      console.log('Error in assesment fetch', e);
       error({
         response: {
           status: 500,

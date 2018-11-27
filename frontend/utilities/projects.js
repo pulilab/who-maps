@@ -6,6 +6,7 @@ export const fetchProjectData = async (store, params, error) => {
       store.dispatch('projects/loadProjectStructure')
     ]);
   } catch (e) {
+    console.warn('loadProjectData failed', e);
     error({
       response: {
         status: 404,
