@@ -30,7 +30,9 @@
         </nuxt-link>
       </el-col>
 
-      <el-col class="RightPart">
+      <el-col
+        v-if="!errorPage"
+        class="RightPart">
         <!-- ANON MODE -->
         <el-row
           :class="{'AnonView': !user, 'LoggedInView': user}"
@@ -161,6 +163,12 @@ export default {
     LanguageSelector,
     UserDropdown,
     ToolkitDialogWrapper
+  },
+  props: {
+    errorPage: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapGetters({

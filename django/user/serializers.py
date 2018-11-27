@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
-from rest_auth.serializers import TokenSerializer, PasswordResetSerializer
-from rest_auth.models import TokenModel
+from rest_auth.serializers import PasswordResetSerializer, JWTSerializer
 from rest_framework.exceptions import ValidationError
 
 from country.models import Country
@@ -10,32 +9,30 @@ from user.forms import PasswordHTMLEmailResetForm
 from .models import UserProfile, Organisation
 
 
-class ProfileTokenSerializer(TokenSerializer):
+class ProfileJWTSerializer(JWTSerializer):
     """
     Retrieves the token and userprofile of a given user after log in.
     """
+    token = serializers.CharField()
+    user = serializers.SerializerMethodField()
     user_profile_id = serializers.SerializerMethodField()
     account_type = serializers.SerializerMethodField()
-
-    class Meta:
-        model = TokenModel
-        fields = ("key", "user_profile_id", "account_type")
 
     @staticmethod
     def get_user_profile_id(obj):
         """
         Checks the UserProfile existence for the given key.
         """
-        if hasattr(obj.user, 'userprofile'):
-            return obj.user.userprofile.id
+        if hasattr(obj['user'], 'userprofile'):
+            return obj['user'].userprofile.id
 
     @staticmethod
     def get_account_type(obj):
         """
         Checks the UserProfile existence for the given key.
         """
-        if hasattr(obj.user, 'userprofile'):
-            return obj.user.userprofile.account_type
+        if hasattr(obj['user'], 'userprofile'):
+            return obj['user'].userprofile.account_type
 
 
 class UserProfileSerializer(serializers.ModelSerializer):

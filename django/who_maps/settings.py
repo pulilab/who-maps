@@ -199,11 +199,11 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+REST_USE_JWT = True
 REST_AUTH_SERIALIZERS = {
-    'TOKEN_SERIALIZER': 'user.serializers.ProfileTokenSerializer',
+    'JWT_SERIALIZER': 'user.serializers.ProfileJWTSerializer',
     'PASSWORD_RESET_SERIALIZER': 'user.serializers.PasswordResetHTMLEmailSerializer'
 }
-
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'user.serializers.RegisterWithProfileSerializer'
 }

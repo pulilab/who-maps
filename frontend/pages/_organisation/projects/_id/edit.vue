@@ -5,10 +5,12 @@
 </template>
 
 <script>
+import { fetchProjectData } from '@/utilities/projects';
 export default {
   middleware: ['isLoggedIn'],
-  async fetch ({store}) {
+  fetch ({store, params, error}) {
     store.dispatch('landing/resetSearch');
+    return fetchProjectData(store, params, error);
   }
 };
 </script>

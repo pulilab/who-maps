@@ -21,6 +21,7 @@ export default {
   components: {
     DjangoFeedback
   },
+  layout: 'error-layout',
   props: {
     error: {
       type: null,
