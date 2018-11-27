@@ -126,7 +126,7 @@ export default {
       return this.projectData && this.projectData.donors ? this.projectData.donors.length : 0;
     },
     lastChange () {
-      return format(Date.now(), 'DD/MM/YYYY');
+      return format(this.projectData.modified, 'DD/MM/YYYY');
     }
   },
   methods: {}
