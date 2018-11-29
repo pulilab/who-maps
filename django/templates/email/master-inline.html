@@ -351,8 +351,8 @@
                         <!-- TEMPLATE: NEW MEMBER -->
                         {% if type == "new_member" %}
                         <h1>{% trans "Thank you!" %}</h1>
-                        <h2>{% trans "Notification" %}</h2>
-                        <p>{% blocktrans %}You have been added to the <b>{{ project_name }}</b> within the Digital Health Atlas as a <b>{{ role }}</b>. Go to the link below to see your project information.{% endblocktrans %}</p>
+                        <h2>{% trans "Dear" %} {{ user_name }},</h2>
+                        <p>{% blocktrans %}You have been added to the <b>{{ project_name }}</b> within the Digital Health Atlas as a <b>{{ role }}</b>. Use the link below to begin updating the project information.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -360,7 +360,7 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td> <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/" target="_blank">{% trans "Go to project" %}</a> </td>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/" target="_blank">{% trans "Go to my project" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -370,12 +370,12 @@
                         </table>
                         <!-- /TEMPLATE: NEW MEMBER -->
 
-
+                        <!-- TODO:  Did not find the correct way to bind user_name parameter -->
                         <!-- TEMPLATE: COUNTRY ADMIN -->
                         {% elif type == "country_admin" %}
                         <h1>{% trans "Country admin" %}</h1>
-                        <h2>{% trans "Notification" %}</h2>
-                        <p>{% blocktrans %}You have been selected as the <b>{{ group }}</b> for <b>{{ country_name }}</b>. Go to (link to login, push to Admin page) to begin customizing your Digital Health Atlas information.{% endblocktrans %}</p>
+                        <h2>{% trans "Dear" %} {{ user_name }},</h2>
+                        <p>{% blocktrans %}You have been selected as the <b>{{ group }}</b> within the Digital Health Atlas for <b>{{ country_name }}</b>. se the link below to begin updating your country information.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -393,11 +393,12 @@
                         </table>
                         <!-- /TEMPLATE: COUNTRY ADMIN -->
 
+                        <!-- TODO:  Did not find the correct way to bind user_name parameter -->
                         <!-- TEMPLATE: DONOR ADMIN -->
                         {% elif type == "donor_admin" %}
                         <h1>{% trans "Investor admin" %}</h1>
-                        <h2>{% trans "Notification" %}</h2>
-                        <p>{% blocktrans %}You have been selected as the <b>{{ group }}</b> for <b>{{ donor_name }}</b>. Go to (link to login, push to Admin page) to begin customizing your Digital Health Atlas information.{% endblocktrans %}</p>
+                        <h2>{% trans "Dear" %} {{user_name }} </h2>
+                        <p>{% blocktrans %}You have been selected as the <b>{{ group }}</b> within the Digital Health Atlas for <b>{{ donor_name }}</b>. Use the link below to begin updating your organization information.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -417,13 +418,47 @@
 
                         <!-- TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE -->
                         {% elif type == "email_confirmation_signup_message" %}
-                        <h1>{% trans "Thank you!" %}</h1>
-                        <h2>{% trans "Your account has been created!" %}</h2>
-                        <p>{% blocktrans %}Your e-mail needs to be confirmed to finalize your registration.{% endblocktrans %}</p>
-                        <p><b>{% blocktrans %}Please visit this link below to confim your e-mail address:{% endblocktrans %}</b></p>
+                        <h1>{% trans "Welcome to the Digital Health Atlas." %}</h1>
+                        <h2>{% trans "Confirm your email address below to finalize your registration." %}</h2>
                         <p>
                           <a href="{{ activate_url }}" target="_blank ">{{ activate_url }}</a>
                         </p>
+                        <p>
+                            {% trans "Let us show you around." %}
+                        </p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/en/-/projects/create" target="_blank">{% trans "Register your project in the DHA" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/en/-/projects" target="_blank">{% trans "Your projects inbox" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/en/-/cms#all" target="_blank">{% trans "Global Digital Health Resources" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                         <!-- /TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE  -->
 
 
@@ -453,10 +488,15 @@
                         <!-- TEMPLATE: PASSWORD RESET -->
                         {% elif type == "password_reset" %}
                         <h1>{% trans "Password Reset" %}</h1>
-                        <p>{% trans "You requested your password to be reset." %}</p>
-                        <p><b>{% trans "Please visit this link below to create a new password:" %}</b></p>
+                        <p>{% trans "A password reset has been requested for the Digital Health Atlas account linked to your email address" %} {{ email }}</p>
+                        <p><b>{% trans "To reset your password, click the link below:" %}</b></p>
                         <p>
                         <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank">{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
+                        </p>
+                        <p>{% trans "If you did not request this password reset, please ignore this message." %}</p>
+                        <p>
+                          {% trans "Please do not reply to this email. For support or additional questions, email" %}
+                          <a href="mailto:digitalhealthatlas@gmail.com">digitalhealthatlas@gmail.com</a>
                         </p>
                         <!-- /TEMPLATE: PASSWORD RESET -->
 
@@ -475,52 +515,28 @@
                         <!-- TEMPLATE: STATUS REPORT -->
                         {% elif type == "status_report" %}
                         <h1>{% trans "Status report" %}</h1>
-                        <h2>{% trans "Dear Admin! " %}</h2>
-                        <p>{% trans "The projects listed below are waiting for your approval:" %}</p>
+                        <h2>{% trans "Dear" %} {{ country_name }} {% trans "Admin," %}</h2>
+                        <p>{% trans "The projects listed below re complete and waiting for your approval" %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="project-list">
                           <tbody>
                             <tr class="list-header">
                               <td align="left">
-                                <b>{% trans "Today" %}</b>
+                                <b>{% trans "Project Name" %}</b>
                               </td>
                               <td align="right">
-                                {{ projects_today.count }} {% trans "project(s)" %}
+                                {% trans "Date of Submission" %}
                               </td>
                             </tr>
+                            {% for project in projects %}
                             <tr class="list-content">
-                              <td colspan="2">
-                                <ul>
-                                  {% for project in projects_today %}
-                                  <li>
-                                    <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank"><b>{{ project.name }}</b></a>
-                                  </li>
-                                  {% endfor %}
-                                </ul>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
-                          <tbody>
-                            <tr class="list-header">
                               <td align="left">
-                                <b>{% trans "Earlier" %}</b>
+                                <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank"><b>{{ project.name }}</b></a>
                               </td>
                               <td align="right">
-                                {{ projects_earlier.count }} {% trans "project(s)" %}
+                                <b>{{ project.modified }}</b>
                               </td>
                             </tr>
-                            <tr class="list-content">
-                              <td colspan="2">
-                                <ul>
-                                  {% for project in projects_earlier %}
-                                  <li>
-                                    <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank"><b>{{ project.name }}</b></a>
-                                  </li>
-                                  {% endfor %}
-                                </ul>
-                              </td>
-                            </tr>
+                            {% endfor %}
                           </tbody>
                         </table>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
@@ -530,7 +546,7 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank">{% trans "Go to Project Approval Dashboard" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -543,30 +559,29 @@
 
                         <!-- TEMPLATE: PROJECT IMPORT LIST -->
                         {% elif type == "project_import_notify_admins" %}
-                        <h1>{% trans "Status report" %}</h1>
-                        <h2>{% trans "Dear Admin! " %}</h2>
-                        <p>{% trans "The following projects have been imported:" %}</p>
+                        <h1>{% trans "Country project update" %}</h1>
+                        <h2>{% trans "Dear" %} {{ country_name }} {% trans "Admin," %}</h2>
+                        <p>{% trans "The projects listed below have been imported into your country." %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="project-list">
                           <tbody>
                             <tr class="list-header">
                               <td align="left">
-                                <b>{% trans "Imported projects" %}</b>
+                                <b>{% trans "Project Name" %}</b>
                               </td>
                               <td align="right">
-                                {{ projects|length }} {% trans "project(s)" %}
+                                {{% trans "Date of import" %}
                               </td>
                             </tr>
+                            {% for project in projects %}
                             <tr class="list-content">
-                              <td colspan="2">
-                                <ul>
-                                  {% for project in projects %}
-                                  <li>
-                                    <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit" target="_blank"><b>{{ project.name }}</b></a>
-                                  </li>
-                                  {% endfor %}
-                                </ul>
+                              <td>
+                                  <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit" target="_blank"><b>{{ project.name }}</b></a>
+                              </td>
+                              <td>
+                                  {{ project.created }}
                               </td>
                             </tr>
+                            {% endfor %}
                           </tbody>
                         </table>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
@@ -576,7 +591,7 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank">{% trans "Go" %} {{country_name}} {% trans "Dashboard" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -589,8 +604,8 @@
 
                         <!-- TEMPLATE: IMPORT PROJECTS -->
                         {% elif type == "project_import_notify_owner" %}
-                        <h1>{% trans "Notification" %}</h1>
-                        <h2>{% trans "Your were added to the following projects: " %}</h2>
+                        <h1>{% trans "Project access notification" %}</h1>
+                        <h2>{% trans "You were added to the following projects as a: Project Admin" %} </h2>
                             <ul>
                               {% for project in data.projects %}
                                 <li><a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit"><b>{{ project.name }}</b></a></li>
@@ -602,6 +617,22 @@
                               <em>Username: {{ email }}</em><br>
                               <em>Password: {{ data.password }}</em>
                             </p>
+
+                            <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                                <tbody>
+                                  <tr>
+                                    <td align="left">
+                                      <table border="0" cellpadding="0" cellspacing="0">
+                                        <tbody>
+                                          <tr>
+                                            <td> <a href="{% site_url %}/{{ language }}/-/projects/" target="_blank">{% trans "Go to Project Inbox" %}</a> </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
                             {% endif %}
                         {% endif %}
                         <!-- /TEMPLATE: IMPORT PROJECTS -->
@@ -625,7 +656,7 @@
                 <tr>
                   <tr>
                     <td class="content-block footer-links">
-                      <a href="{% site_url %}">{% trans "Go to website" %}</a>
+                      <a href="{% site_url %}">{% trans "Go to the Digital Health Atals" %}</a>
                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                       <a href="{% site_url %}/{{ language }}/-/terms">{% trans "Terms of use" %}</a>
                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
