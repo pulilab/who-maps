@@ -10,11 +10,11 @@ class PasswordHTMLEmailResetForm(PasswordResetForm):
                   context, from_email, to_email, html_email_template_name=None):
         html_template = loader.get_template("email/master-inline.html")
         profile = context['user'].userprofile
-        context.update({"type": "password_reset", "language": profile.language})
+        context.update({"type": "password_reset", "language": profile.language, "email": to_email})
 
         with override(profile.language):
             html_message = html_template.render(context)
-            subject = ugettext("Password reset on Digital Health Atlas")
+            subject = ugettext("Your Digital Health Atlas password has been reset")
 
         send_mail(
             subject=subject,
