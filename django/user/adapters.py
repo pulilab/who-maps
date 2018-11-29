@@ -22,7 +22,7 @@ class DefaultAccountAdapterCustom(DefaultAccountAdapter):
             html_message = html_template.render({"type": "email_confirmation_signup_message",
                                                  "language": profile.language,
                                                  "activate_url": activate_url})
-            subject = ugettext("Please Confirm Your E-mail Address")
+            subject = ugettext("Welcome to the Digital Health Atlas")
 
         send_mail(
             subject=subject,

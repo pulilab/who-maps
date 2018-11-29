@@ -30,7 +30,7 @@ def send_daily_toolkit_digest():
                     html_message = html_template.render({"type": "toolkit_digest",
                                                          "project_id": project.id,
                                                          "language": profile.language})
-                    subject = ugettext("MAPS Toolkit updated!")
+                    subject = ugettext("Your Digital Health Atlas project has been updated")
 
                 send_mail(
                     subject=subject,
