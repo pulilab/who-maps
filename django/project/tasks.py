@@ -34,12 +34,9 @@ def send_project_approval_digest():
     countries = Country.objects.exclude(users=None)
     for country in countries:
         if country.project_approval:
-            projects_today = Project.objects.filter(data__country=country.id, approval__approved__isnull=True,
-                                                    created__day=timezone.now().day)
-            projects_earlier = Project.objects.filter(
-                data__country=country.id, approval__approved__isnull=True).exclude(id__in=projects_today.values('id'))
+            projects = Project.objects.filter(data__country=country.id, approval__approved__isnull=True)
 
-            if not projects_today and not projects_earlier:
+            if not projects:
                 return
 
             html_template = loader.get_template('email/master-inline.html')
@@ -50,10 +47,10 @@ def send_project_approval_digest():
 
             for language, email_list in email_mapping.items():
                 with override(language):
-                    subject = ugettext('Projects waiting for your approval')
+                    subject = ugettext('Action required: New projects awaiting approval')
                     html_message = html_template.render({'type': 'status_report',
-                                                         'projects_today': projects_today,
-                                                         'projects_earlier': projects_earlier,
+                                                         'country_name': country.name,
+                                                         'projects': projects,
                                                          'language': language})
 
                 send_mail(
