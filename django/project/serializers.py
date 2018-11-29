@@ -254,6 +254,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                 subject = ugettext("You were added to a project!")
                 html_message = html_template.render({
                     "type": "new_member",
+                    "user_name": profile.name,
                     "project_id": instance.id,
                     "project_name": instance.name,
                     "role": "team member",
@@ -273,6 +274,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                 subject = ugettext("You were added to a project!")
                 html_message = html_template.render({
                     "type": "new_member",
+                    "user_name": profile.name,
                     "project_id": instance.id,
                     "project_name": instance.name,
                     "role": "viewer",
