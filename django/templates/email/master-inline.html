@@ -419,57 +419,33 @@
                         {% elif type == "email_confirmation_signup_message" %}
                         <h1>{% trans "Welcome to the Digital Health Atlas." %}</h1>
                         <h2>{% trans "Confirm your email address below to finalize your registration." %}</h2>
-                        <p>
-                          <a href="{{ activate_url }}" target="_blank ">{{ activate_url }}</a>
-                        </p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                            <tbody>
+                              <tr>
+                                <td align="left">
+                                  <table border="0" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                      <tr>
+                                        <td> <a href="{{ activate_url }}" target="_blank ">{{ activate_url }}</a> </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </td>
+                              </tr>
+                              </tbody>
+                          </table>
                         <p>
                             {% trans "Let us show you around." %}
                         </p>
-                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-                          <tbody>
-                            <tr>
-                              <td align="left">
-                                <table border="0" cellpadding="0" cellspacing="0">
-                                  <tbody>
-                                    <tr>
-                                      <td> <a href="{% site_url %}/en/-/projects/create" target="_blank">{% trans "Register your project in the DHA" %}</a> </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-                          <tbody>
-                            <tr>
-                              <td align="left">
-                                <table border="0" cellpadding="0" cellspacing="0">
-                                  <tbody>
-                                    <tr>
-                                      <td> <a href="{% site_url %}/en/-/projects" target="_blank">{% trans "Your projects inbox" %}</a> </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-                          <tbody>
-                            <tr>
-                              <td align="left">
-                                <table border="0" cellpadding="0" cellspacing="0">
-                                  <tbody>
-                                    <tr>
-                                      <td> <a href="{% site_url %}/en/-/cms#all" target="_blank">{% trans "Global Digital Health Resources" %}</a> </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                        <p>
+                            <a href="{% site_url %}/en/-/projects/create" target="_blank">{% trans "Register your project in the DHA" %}</a>
+                        </p>
+                        <p>
+                            <a href="{% site_url %}/en/-/projects" target="_blank">{% trans "Your projects inbox" %}</a>
+                        </p>
+                        <p>
+                            <a href="{% site_url %}/en/-/cms#all" target="_blank">{% trans "Global Digital Health Resources" %}</a>
+                        </p>
                         <!-- /TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE  -->
 
 
