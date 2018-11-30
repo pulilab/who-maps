@@ -324,7 +324,7 @@
           <div class="content">
 
             <!-- START CENTERED WHITE CONTAINER -->
-            <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
+            <!-- <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span> -->
             <table class="main">
 
               <!-- START MAIN CONTENT AREA -->
@@ -333,12 +333,9 @@
                   <table border="0" cellpadding="0" cellspacing="0">
                     <tr class="header">
                       <td>
-                        <!-- TODO#1 Replace image link with global path -->
-                        <!-- Path to img: '/frontend/static/email-who-logo.png' -->
-                        <img src="../../../frontend/static/email-who-logo.png" width="154" height="60" alt="WHO x DHA logo">
+                        <img src="{% site_url %}/email-who-logo.png" width="154" height="60" alt="WHO x DHA logo">
                       </td>
                       <td class="align-right">
-                        <!-- TODO#2 Add Website link -->
                         <a href="{% site_url %}" class="visit-link nowrap">{% trans "Visit website" %}</a>
                       </td>
                     </tr>
@@ -353,9 +350,8 @@
 
                         <!-- TEMPLATE: NEW MEMBER -->
                         {% if type == "new_member" %}
-                        <h1>{% trans "Thank you!" %}</h1>
-                        <h2>{% trans "Notification" %}</h2>
-                        <p>{% blocktrans %}You have been added to project <b>{{ project_name }}</b> as a <b>{{ role }}</b>.{% endblocktrans %}</p>
+                        <h2>{% trans "Dear" %} {{ user_name }},</h2>
+                        <p>{% blocktrans %}You have been added to the <b>{{ project_name }}</b> within the Digital Health Atlas as a <b>{{ role }}</b>. Use the link below to begin updating the project information.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -363,13 +359,7 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <!-- TODO#3
-                                        eg: http://localhost:3000/en/-/projects/1
-                                        where `en` is users language
-                                        '-' is users country or donor or just `-`
-                                        `1` is projects id
-                                      -->
-                                      <td> <a href="{% site_url %}/projects/{{ project_id }}" target="_blank">{% trans "Go to project" %}</a> </td>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/" target="_blank">{% trans "Go to my project" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -377,15 +367,14 @@
                             </tr>
                           </tbody>
                         </table>
-                        {% endif %}
                         <!-- /TEMPLATE: NEW MEMBER -->
 
 
                         <!-- TEMPLATE: COUNTRY ADMIN -->
-                        {% if type == "country_admin" %}
+                        {% elif type == "country_admin" %}
                         <h1>{% trans "Country admin" %}</h1>
-                        <h2>{% trans "Notification" %}</h2>
-                        <p>{% blocktrans %}You have been selected as the Country Admin for <b>{{ country_name }}</b>. Please log in to the admin platform to see your country specific options.{% endblocktrans %}</p>
+                        <h2>{% trans "Dear" %} {{ full_name }},</h2>
+                        <p>{% blocktrans %}You have been selected as the <b>{{ group }}</b> within the Digital Health Atlas for <b>{{ country_name }}</b>. Use the link below to begin updating your country information.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -393,11 +382,7 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <!-- TODO#4
-                                        eg.: http://localhost:3000/en/-/admin/country
-                                        note `/en/-/` again
-                                      -->
-                                      <td> <a href="{% site_url %}/admin/country" target="_blank">{% trans "Go to country admin" %}</a> </td>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank">{% trans "Go to country admin" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -405,15 +390,14 @@
                             </tr>
                           </tbody>
                         </table>
-                        {% endif %}
                         <!-- /TEMPLATE: COUNTRY ADMIN -->
 
 
-                        <!-- TEMPLATE: COUNTRY ADMIN - ACTIVATED -->
-                        {% if type == "country_admin_activated" %}
-                        <h1>{% trans "Country admin" %}</h1>
-                        <h2>{% trans "Notification" %}</h2>
-                        <p>{% blocktrans %}A new map for <b>{{ country_name }}</b> has been activated. Please log in to the admin platform to see your map or go straight to DHA and see it in action.{% endblocktrans %}</p>
+                        <!-- TEMPLATE: DONOR ADMIN -->
+                        {% elif type == "donor_admin" %}
+                        <h1>{% trans "Investor admin" %}</h1>
+                        <h2>{% trans "Dear" %} {{full_name }} </h2>
+                        <p>{% blocktrans %}You have been selected as the <b>{{ group }}</b> within the Digital Health Atlas for <b>{{ donor_name }}</b>. Use the link below to begin updating your organization information.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -421,11 +405,7 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <!-- TODO#5
-                                        eg.: http://localhost:3000/en/-/admin/country
-                                        note `/en/-/` again
-                                      -->
-                                      <td> <a href="{% site_url %}/admin/country" target="_blank">{% trans "Go to country admin" %}</a> </td>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/donor" target="_blank">{% trans "Go to investor admin" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -433,30 +413,44 @@
                             </tr>
                           </tbody>
                         </table>
-                        {% endif %}
-                        <!-- /TEMPLATE: COUNTRY ADMIN - ACTIVATED -->
+                        <!-- /TEMPLATE: DONOR ADMIN -->
 
-                        <!-- EDIT THIS IN accoumt/email/email_confirmation.html -->
-                        <!-- TEMPLATE: EMAIL CONFIRAMTION SIGNUP MESSAGE -->
-                        {% if type == "email_confirmation_signup_message" %}
-                        <h1>{% trans "Thank you!" %}</h1>
-                        <h2>{% trans "Your account has been created!" %}</h2>
-                        <p>{% blocktrans %}Your e-mail needs to be confirmed to finalize your registration.{% endblocktrans %}</p>
-                        <p><b>{% blocktrans %}Please visit this link below to confim your e-mail address:{% endblocktrans %}</b></p>
+                        <!-- TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE -->
+                        {% elif type == "email_confirmation_signup_message" %}
+                        <h1>{% trans "Welcome to the Digital Health Atlas." %}</h1>
+                        <h2>{% trans "Confirm your email address below to finalize your registration." %}</h2>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                            <tbody>
+                              <tr>
+                                <td align="left">
+                                  <table border="0" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                      <tr>
+                                        <td> <a href="{{ activate_url }}" target="_blank ">{{ activate_url }}</a> </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </td>
+                              </tr>
+                              </tbody>
+                          </table>
                         <p>
-                          <!-- TODO#6
-                            eg.: http://localhost:3000/en/-/email-confirmation/{key}
-                            note `/en/-/` again
-                            `key` is the value that will be used for calling the POST for `/api/rest-auth/registration/verify-email/` on hitting this url
-                          -->
-                          <a href="{{ activate_url }}" target="_blank ">{{ activate_url }}</a>
+                            {% trans "Let us show you around." %}
                         </p>
-                        {% endif %}
-                        <!-- /TEMPLATE: EMAIL CONFIRAMTION SIGNUP MESSAGE  -->
+                        <p>
+                            <a href="{% site_url %}/en/-/projects/create" target="_blank">{% trans "Register your project in the DHA" %}</a>
+                        </p>
+                        <p>
+                            <a href="{% site_url %}/en/-/projects" target="_blank">{% trans "Your projects inbox" %}</a>
+                        </p>
+                        <p>
+                            <a href="{% site_url %}/en/-/cms#all" target="_blank">{% trans "Global Digital Health Resources" %}</a>
+                        </p>
+                        <!-- /TEMPLATE: EMAIL CONFIRMATION SIGNUP MESSAGE  -->
 
 
                         <!-- TEMPLATE: FLAG CONTENT -->
-                        {% if type == "flag_content" %}
+                        {% elif type == "flag_content" %}
                         <h1>{% trans "Reported content!" %}</h1>
                         <h2>{% trans "Notification" %}</h2>
                         <p>{% trans "Content has been flagged as inappropriate. Please take action." %}</p>
@@ -467,14 +461,6 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <!-- TODO#7
-                                        Right now there's no way to route to exact resouce on the frontend via url, as details are shown in a popup
-                                        you can narrow down category like eg.:
-                                        http://localhost:3000/en/-/cms#experiences
-                                        http://localhost:3000/en/-/cms#lessons
-                                        http://localhost:3000/en/-/cms#resources
-                                        and provide the title/details about it in the links name, to help the user find it via frontends search
-                                      -->
                                       <td> <a href="{% site_url %}{{ change_url }}" target="_blank">{% trans "Go to see content" %}</a> </td>
                                     </tr>
                                   </tbody>
@@ -483,97 +469,61 @@
                             </tr>
                           </tbody>
                         </table>
-                        {% endif %}
                         <!-- /TEMPLATE: FLAG CONTENT -->
 
 
-                        <!-- EDIT THIS IN registration/password_reset_html_email.html -->
                         <!-- TEMPLATE: PASSWORD RESET -->
-                        {% if type == "password_reset" %}
+                        {% elif type == "password_reset" %}
                         <h1>{% trans "Password Reset" %}</h1>
-                        <p>{% trans "You requested your password to be reset." %}</p>
-                        <p><b>Please visit this link below to create a new password:</b></p>
+                        <p>{% trans "A password reset has been requested for the Digital Health Atlas account linked to your email address" %} {{ email }}</p>
+                        <p><b>{% trans "To reset your password, click the link below:" %}</b></p>
                         <p>
-                          <!-- TODO#8
-                            Couldn't test, this should lead to django backend according to Ilcsik
-                          -->
                         <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank">{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
                         </p>
-                        {% endif %}
+                        <p>{% trans "If you did not request this password reset, please ignore this message." %}</p>
+                        <p>
+                          {% trans "Please do not reply to this email. For support or additional questions, email" %}
+                          <a href="mailto:digitalhealthatlas@gmail.com">digitalhealthatlas@gmail.com</a>
+                        </p>
                         <!-- /TEMPLATE: PASSWORD RESET -->
 
 
                         <!-- TEMPLATE: TOOLKIT DIGEST -->
-                        {% if type == "toolkit_digest" %}
+                        {% elif type == "toolkit_digest" %}
                         <h1>{% trans "Notification" %}</h1>
                         <p>{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
                         <p><b>{% trans "Check the MAPS Toolkit on the link below:" %}</b></p>
                         <p>
-                          <!-- TODO#9
-                            eg.: http://localhost:3000/en/-/projects/1/assessment
-                          -->
-                          <a href="{% site_url %}/projects/{{ project_id }}/assessment" target="_blank">{% site_url %}/projects/{{ project_id }}/assessment</a>
+                          <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment" target="_blank">{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment</a>
                         </p>
-                        {% endif %}
                         <!-- /TEMPLATE: TOOLKIT DIGEST -->
 
 
                         <!-- TEMPLATE: STATUS REPORT -->
-                        {% if type == "status_report" %}
+                        {% elif type == "status_report" %}
                         <h1>{% trans "Status report" %}</h1>
-                        <h2>{% trans "Dear Admin! " %}</h2>
-                        <p>{% trans "The projects listed below are waiting for your approval:" %}</p>
+                        <h2>{% trans "Dear" %} {{ country_name }} {% trans "Admin," %}</h2>
+                        <p>{% trans "The projects listed below re complete and waiting for your approval" %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="project-list">
                           <tbody>
                             <tr class="list-header">
                               <td align="left">
-                                <b>{% trans "Today" %}</b>
+                                <b>{% trans "Project Name" %}</b>
                               </td>
                               <td align="right">
-                                {{ projects_today.count }} {% trans "project(s)" %}
+                                {% trans "Date of Submission" %}
                               </td>
                             </tr>
+                            {% for project in projects %}
                             <tr class="list-content">
-                              <td colspan="2">
-                                <ul>
-                                  {% for project in projects_today %}
-                                  <li>
-                                    <!-- TODO#10
-                                      eg.: http://localhost:3000/en/-/admin/country
-                                      same as country admin (#4, #5)
-                                    -->
-                                    <a href="{% site_url %}/admin/country" target="_blank"><b>{{ project.name }}</b></a>
-                                  </li>
-                                  {% endfor %}
-                                </ul>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
-                          <tbody>
-                            <tr class="list-header">
                               <td align="left">
-                                <b>{% trans "Earlier" %}</b>
+                                <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank"><b>{{ project.name }}</b></a>
                               </td>
                               <td align="right">
-                                {{ projects_earlier.count }} {% trans "project(s)" %}
+                                <b>{{ project.modified }}</b>
                               </td>
                             </tr>
-                            <tr class="list-content">
-                              <td colspan="2">
-                                <ul>
-                                  {% for project in projects_earlier %}
-                                  <li>
-                                    <!-- TODO#10
-                                      eg.: {% site_url %}/admin/country
-                                    -->
-                                    <a href="{% site_url %}/admin/country" target="_blank"><b>{{ project.name }}</b></a>
-                                  </li>
-                                  {% endfor %}
-                                </ul>
-                              </td>
-                            </tr>
+                            {% endfor %}
                           </tbody>
                         </table>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
@@ -583,12 +533,7 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <!-- TODO#11
-                                        if this should lead to frontend country admin: http://localhost:3000/en/-/admin/country  ,
-                                        if this should lead to frontend donor admin: http://localhost:3000/en/-/admin/donor  ,
-                                        if this should lead to django admin, then that url
-                                      -->
-                                      <td> <a href="{% site_url %}/admin" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank">{% trans "Go to Project Approval Dashboard" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -596,39 +541,34 @@
                             </tr>
                           </tbody>
                         </table>
-                        {% endif %}
                         <!-- /TEMPLATE: STATUS REPORT -->
 
 
                         <!-- TEMPLATE: PROJECT IMPORT LIST -->
-                        {% if type == "project_import_list" %}
-                        <h1>{% trans "Status report" %}</h1>
-                        <h2>{% trans "Dear Admin! " %}</h2>
-                        <p>{% trans "The following projects have been imported:" %}</p>
+                        {% elif type == "project_import_notify_admins" %}
+                        <h1>{% trans "Country project update" %}</h1>
+                        <h2>{% trans "Dear DHA Admin" %}</h2>
+                        <p>{% trans "The projects listed below have been imported." %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="project-list">
                           <tbody>
                             <tr class="list-header">
                               <td align="left">
-                                <b>{% trans "Imported projects" %}</b>
+                                <b>{% trans "Project Name" %}</b>
                               </td>
                               <td align="right">
-                                {{ projects|length }} {% trans "project(s)" %}
+                                {% trans "Date of import" %}
                               </td>
                             </tr>
+                            {% for project in projects %}
                             <tr class="list-content">
-                              <td colspan="2">
-                                <ul>
-                                  {% for project in projects %}
-                                  <li>
-                                    <!-- TODO#12
-                                      eg.: http://localhost:3000/en/-/projects/1/edit
-                                    -->
-                                    <a href="{% site_url %}/projects/{{project.id}}/edit" target="_blank"><b>{{ project.name }}</b></a>
-                                  </li>
-                                  {% endfor %}
-                                </ul>
+                              <td>
+                                  <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit" target="_blank"><b>{{ project.name }}</b></a>
+                              </td>
+                              <td>
+                                  {{ project.created }}
                               </td>
                             </tr>
+                            {% endfor %}
                           </tbody>
                         </table>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
@@ -638,12 +578,7 @@
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <!-- TODO#11
-                                        if this should lead to frontend country admin: http://localhost:3000/en/-/admin/country  ,
-                                        if this should lead to frontend donor admin: http://localhost:3000/en/-/admin/donor  ,
-                                        if this should lead to django admin, then that url
-                                      -->
-                                      <td> <a href="{% site_url %}/admin" target="_blank">{% trans "Go to Admin Dashboard" %}</a> </td>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/country" target="_blank">{% trans "Go" %} {{country_name}} {% trans "Dashboard" %}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -651,36 +586,47 @@
                             </tr>
                           </tbody>
                         </table>
-                        {% endif %}
                         <!-- /TEMPLATE: PROJECT IMPORT LIST -->
 
 
                         <!-- TEMPLATE: IMPORT PROJECTS -->
-                        {% if type == "import_projects" %}
-                        <h1>{% trans "Notification" %}</h1>
-                        <h2>{% trans "Your were added to the following projects: " %}</h2>
-                        {% if data.password %}
-                        <ul>
-                          {% for project in data.projects %}
-                          <!-- TODO#13 -->
-                          <li><a href="{{ SITE_URL }}/projects/{{ project.id }}/edit"><b>{{ project.name }}</b></a></li>
-                          {% endfor %}
-                        </ul>
-                        <p>
-                          <b>Your login credentials are:</b><br>
-                          <em>Username: {{ email }}</em><br>
-                          <em>Password: {{ data.password }}</em>
-                        </p>
-                        {% endif %}
+                        {% elif type == "project_import_notify_owner" %}
+                        <h1>{% trans "Project access notification" %}</h1>
+                        <h2>{% trans "You were added to the following projects as a: Project Admin" %} </h2>
+                            <ul>
+                              {% for project in data.projects %}
+                                <li><a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit"><b>{{ project.name }}</b></a></li>
+                              {% endfor %}
+                            </ul>
+                            {% if data.password %}
+                            <p>
+                              <b>Your login credentials are:</b><br>
+                              <em>Username: {{ email }}</em><br>
+                              <em>Password: {{ data.password }}</em>
+                            </p>
+
+                            <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                                <tbody>
+                                  <tr>
+                                    <td align="left">
+                                      <table border="0" cellpadding="0" cellspacing="0">
+                                        <tbody>
+                                          <tr>
+                                            <td> <a href="{% site_url %}/{{ language }}/-/projects/" target="_blank">{% trans "Go to Project Inbox" %}</a> </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            {% endif %}
                         {% endif %}
                         <!-- /TEMPLATE: IMPORT PROJECTS -->
 
 
 
                       <!-- END TEMPLATES -->
-
-
-
                       </td>
                     </tr>
                   </table>
@@ -697,10 +643,9 @@
                 <tr>
                   <tr>
                     <td class="content-block footer-links">
-                      <!-- TODO#14 Update footer links -->
-                      <a href="{% site_url %}">{% trans "Go to website" %}</a>
+                      <a href="{% site_url %}">{% trans "Go to the Digital Health Atals" %}</a>
                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                      <a href="{% site_url %}/terms">{% trans "Terms of use" %}</a>
+                      <a href="{% site_url %}/{{ language }}/-/terms">{% trans "Terms of use" %}</a>
                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                       <a href="mailto:digitalhealthatlas@gmail.com">{% trans "Contact us" %}</a>
                     </td>
