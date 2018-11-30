@@ -130,25 +130,22 @@ class UpdateAdminMixin:
 
     def notify_users(self, user_profiles, instance, group):
         html_template = loader.get_template('email/master-inline.html')
-        email_mapping = defaultdict(list)
         for profile in user_profiles:
-            email_mapping[profile.language].append(profile.user.email)
-
-        for language in sorted(email_mapping.keys()):
-            with override(language):
+            with override(profile.language):
                 subject = "Notification: You have been selected as {} for {}".format(group, instance.name)
                 subject = ugettext(subject)
                 model_name = self.Meta.model.__name__.lower()
                 html_message = html_template.render({'type': '{}_admin'.format(model_name),
                                                      'group': group,
+                                                     'full_name': profile.name,
                                                      '{}_name'.format(model_name): instance.name,
-                                                     'language': language})
+                                                     'language': profile.language})
 
             send_mail(
                 subject=subject,
                 message="",
                 from_email=settings.FROM_EMAIL,
-                recipient_list=email_mapping[language],
+                recipient_list=[profile.user.email],
                 html_message=html_message,
                 fail_silently=True)
 
