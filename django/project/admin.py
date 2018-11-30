@@ -192,7 +192,7 @@ class ProjectImportAdmin(admin.ModelAdmin):
         html_template = loader.get_template("email/master-inline.html")
         #  TODO: bind country name the correct way
         html_message = html_template.render({'type': 'project_import_notify_admins',
-                                             'country_name': 'CountryName'
+                                             'country_name': 'CountryName',
                                              'projects': self._projects_created,
                                              'language': 'en'})
 
