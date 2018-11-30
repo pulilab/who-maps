@@ -251,7 +251,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
 
         for profile in new_team_members:
             with override(profile.language):
-                subject = ugettext("You were added to a project!")
+                subject = ugettext("You have been added to a project in the Digital Health Atlas")
                 html_message = html_template.render({
                     "type": "new_member",
                     "user_name": profile.name,
@@ -271,7 +271,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
 
         for profile in new_viewers:
             with override(profile.language):
-                subject = ugettext("You were added to a project!")
+                subject = ugettext("You have been added to a project in the Digital Health Atlas")
                 html_message = html_template.render({
                     "type": "new_member",
                     "user_name": profile.name,

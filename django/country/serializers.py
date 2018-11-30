@@ -136,7 +136,7 @@ class UpdateAdminMixin:
 
         for language in sorted(email_mapping.keys()):
             with override(language):
-                subject = "You have been selected as {} for {}".format(group, instance.name)
+                subject = "Notification: You have been selected as {} for {}".format(group, instance.name)
                 subject = ugettext(subject)
                 model_name = self.Meta.model.__name__.lower()
                 html_message = html_template.render({'type': '{}_admin'.format(model_name),
