@@ -376,7 +376,9 @@ class CountryTests(APITestCase):
 
         outgoing_en_email_text = outgoing_emails[2].as_string()
         self.assertTrue("test3@foo.com" in outgoing_emails[2].values())
-        self.assertTrue('You have been selected as the <b>System Admin</b> for <b>{}</b>'.format(self.country.name)
+        self.assertTrue('You have been selected as the <b>System Admin</b> within the Digital Health Atlas for ' +
+                        '<b>{}</b>. Use the link below to begin updating your country information.'.format(
+                            self.country.name)
                         in outgoing_en_email_text)
         self.assertTrue('/en/-/admin/country' in outgoing_en_email_text)
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)

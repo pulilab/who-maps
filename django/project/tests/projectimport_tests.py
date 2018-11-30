@@ -187,6 +187,7 @@ class TestProjectImportAdmin(TestCase):
                       mail.outbox[1].alternatives[0][0])
         # notifying the superusers about every successful project import
         # should be 3, Proj1, Proj2 and Proj11
+        self.assertIn('The projects listed below have been imported.', mail.outbox[-1].alternatives[0][0]),
         self.assertIn('/en/-/projects/{}/edit'.format(Project.objects.get(name='Proj1').id),
                       mail.outbox[-1].alternatives[0][0])
         self.assertIn('/en/-/projects/{}/edit'.format(Project.objects.get(name='Proj2').id),
