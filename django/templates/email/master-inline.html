@@ -350,7 +350,6 @@
 
                         <!-- TEMPLATE: NEW MEMBER -->
                         {% if type == "new_member" %}
-                        <h1>{% trans "Thank you!" %}</h1>
                         <h2>{% trans "Dear" %} {{ user_name }},</h2>
                         <p>{% blocktrans %}You have been added to the <b>{{ project_name }}</b> within the Digital Health Atlas as a <b>{{ role }}</b>. Use the link below to begin updating the project information.{% endblocktrans %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
@@ -438,6 +437,12 @@
                                   </tbody>
                                 </table>
                               </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
                               <td align="left">
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
@@ -447,6 +452,12 @@
                                   </tbody>
                                 </table>
                               </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
                               <td align="left">
                                 <table border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
