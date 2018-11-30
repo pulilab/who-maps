@@ -174,20 +174,25 @@ class ProjectImportAdmin(admin.ModelAdmin):
             self._notify_superusers()
 
     def _notify_users(self):
-        html_template = loader.get_template('email/import_projects.html')
-        for email, data in self._users_to_notify.items():
-            html_message = html_template.render({'email': email, 'data': data})
+        html_template = loader.get_template('email/master-inline.html')
+        for user, data in self._users_to_notify.items():
+            html_message = html_template.render({'type': 'project_import_notify_owner',
+                                                 'email': user.email,
+                                                 'data': data,
+                                                 'language': user.userprofile.language})
             mail.send_mail(
                 subject="You were added to imported projects",
                 message="",
                 from_email=settings.FROM_EMAIL,
-                recipient_list=[email],
+                recipient_list=[user.email],
                 html_message=html_message)
 
     def _notify_superusers(self):
         superusers_emails = User.objects.filter(is_superuser=True).values_list('email')
-        html_template = loader.get_template("email/project_import_list.html")
-        html_message = html_template.render({'projects': self._projects_created})
+        html_template = loader.get_template("email/master-inline.html")
+        html_message = html_template.render({'type': 'project_import_notify_admins',
+                                             'projects': self._projects_created,
+                                             'language': 'en'})
 
         mail.send_mail(
             subject='New projects have been imported',
@@ -268,10 +273,10 @@ class ProjectImportAdmin(admin.ModelAdmin):
         self._projects_created.append(project)
 
         # Gather notification data
-        if user.email in self._users_to_notify:
-            self._users_to_notify[user.email]['projects'].append(project)
+        if user in self._users_to_notify:
+            self._users_to_notify[user]['projects'].append(project)
         else:
-            self._users_to_notify[user.email] = {
+            self._users_to_notify[user] = {
                 'password': password,
                 'projects': [project]
             }

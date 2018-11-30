@@ -5,6 +5,7 @@ from rest_framework.exceptions import ValidationError
 
 from country.models import Country
 from project.models import Project
+from user.forms import PasswordHTMLEmailResetForm
 from .models import UserProfile, Organisation
 
 
@@ -101,11 +102,4 @@ class RegisterWithProfileSerializer(RegisterSerializer):
 
 
 class PasswordResetHTMLEmailSerializer(PasswordResetSerializer):
-    """
-    Serializer for requesting a password reset e-mail.
-    """
-
-    def get_email_options(self):
-        """ Override this method to change default e-mail options
-        """
-        return {'html_email_template_name': 'registration/password_reset_html_email.html'}
+    password_reset_form_class = PasswordHTMLEmailResetForm

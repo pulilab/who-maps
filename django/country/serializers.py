@@ -1,11 +1,9 @@
-from collections import defaultdict
 from typing import Union
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.utils.dateformat import format
 from django.db.transaction import atomic
-from django.urls import reverse
 from django.template import loader
 from django.core.mail import send_mail
 from django.core import management
@@ -112,47 +110,41 @@ class UpdateAdminMixin:
         new_super_admins = set(instance.super_admins.all().only('id')) - original_super_admins
 
         # remove new additions from any other user group
-        # TODO: check email template wording
         if new_users:
             instance.admins.remove(*new_users)
             instance.super_admins.remove(*new_users)
-            self.notify_users(new_users, instance, 'User', 'email/added_to_group.html')
+            self.notify_users(new_users, instance, ugettext('User'))
 
         if new_admins:
             instance.users.remove(*new_admins)
             instance.super_admins.remove(*new_admins)
-            self.notify_users(new_admins, instance, 'Admin', 'email/added_to_group.html')
+            self.notify_users(new_admins, instance, ugettext('Admin'))
 
         if new_super_admins:
             instance.users.remove(*new_super_admins)
             instance.admins.remove(*new_super_admins)
-            self.notify_users(new_super_admins, instance, 'Super Admin', 'email/added_to_group.html')
+            self.notify_users(new_super_admins, instance, ugettext('System Admin'))
 
         return instance
 
-    def notify_users(self, user_profiles, instance, group, template_name):
-        html_template = loader.get_template(template_name)
-        # TODO: replace this for frontend URLs for Country and Donor
-        change_url = reverse('admin:country_country_change', args=(instance.id,))
-
-        email_mapping = defaultdict(list)
+    def notify_users(self, user_profiles, instance, group):
+        html_template = loader.get_template('email/master-inline.html')
         for profile in user_profiles:
-            email_mapping[profile.language].append(profile.user.email)
-
-        for language in sorted(email_mapping.keys()):
-            with override(language):
-                subject = "You have been selected as {} for {}".format(group, instance.name)
+            with override(profile.language):
+                subject = "Notification: You have been selected as {} for {}".format(group, instance.name)
                 subject = ugettext(subject)
-                html_message = html_template.render({'change_url': change_url,
+                model_name = self.Meta.model.__name__.lower()
+                html_message = html_template.render({'type': '{}_admin'.format(model_name),
                                                      'group': group,
-                                                     'name': instance.name,
-                                                     'language': language})
+                                                     'full_name': profile.name,
+                                                     '{}_name'.format(model_name): instance.name,
+                                                     'language': profile.language})
 
             send_mail(
                 subject=subject,
                 message="",
                 from_email=settings.FROM_EMAIL,
-                recipient_list=email_mapping[language],
+                recipient_list=[profile.user.email],
                 html_message=html_message,
                 fail_silently=True)
 

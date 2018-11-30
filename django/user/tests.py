@@ -141,7 +141,7 @@ class UserTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['detail'], 'Password reset e-mail has been sent.')
-        self.assertIn("Password reset", mail.outbox[2].subject)
+        self.assertIn("Your Digital Health Atlas password has been reset", mail.outbox[2].subject)
 
 
 class UserProfileTests(APITestCase):

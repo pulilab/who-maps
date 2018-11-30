@@ -177,20 +177,22 @@ class TestProjectImportAdmin(TestCase):
                           Project.objects.get(name='Proj1').team.first())
         self.assertEquals(UserProfile.objects.filter(user__email='test_user@test.com').first(),
                           Project.objects.get(name='Proj2').team.first())
-        self.assertIn('owen@owner.com', mail.outbox[0].alternatives[0][0])
-        self.assertIn('app/{}/edit-project'.format(Project.objects.get(name='Proj1').id),
+        self.assertIn('Your login credentials are', mail.outbox[0].alternatives[0][0]),
+        self.assertIn('owen@owner.com', mail.outbox[0].alternatives[0][0]),
+        self.assertIn('/en/-/projects/{}/edit'.format(Project.objects.get(name='Proj1').id),
                       mail.outbox[0].alternatives[0][0])
-        self.assertIn('app/{}/edit-project'.format(Project.objects.get(name='Proj2').id),
+        self.assertIn('/en/-/projects/{}/edit'.format(Project.objects.get(name='Proj11').id),
+                      mail.outbox[0].alternatives[0][0])
+        self.assertIn('/en/-/projects/{}/edit'.format(Project.objects.get(name='Proj2').id),
                       mail.outbox[1].alternatives[0][0])
         # notifying the superusers about every successful project import
         # should be 3, Proj1, Proj2 and Proj11
-        self.assertIn('Imported projects',
+        self.assertIn('The projects listed below have been imported.', mail.outbox[-1].alternatives[0][0]),
+        self.assertIn('/en/-/projects/{}/edit'.format(Project.objects.get(name='Proj1').id),
                       mail.outbox[-1].alternatives[0][0])
-        self.assertIn('project/project/{}/change'.format(Project.objects.get(name='Proj1').id),
+        self.assertIn('/en/-/projects/{}/edit'.format(Project.objects.get(name='Proj2').id),
                       mail.outbox[-1].alternatives[0][0])
-        self.assertIn('project/project/{}/change'.format(Project.objects.get(name='Proj2').id),
-                      mail.outbox[-1].alternatives[0][0])
-        self.assertIn('project/project/{}/change'.format(Project.objects.get(name='Proj11').id),
+        self.assertIn('/en/-/projects/{}/edit'.format(Project.objects.get(name='Proj11').id),
                       mail.outbox[-1].alternatives[0][0])
         self.assertIn('Proj1', project_import.imported)
         self.assertIn('Proj2', project_import.imported)

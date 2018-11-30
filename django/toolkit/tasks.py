@@ -1,9 +1,9 @@
 from datetime import timedelta
 from django.conf import settings
+from django.core.mail import send_mail
 from django.utils import timezone
 from django.utils.translation import ugettext, override
 
-from django.core import mail
 from django.template import loader
 from celery.utils.log import get_task_logger
 
@@ -24,14 +24,15 @@ def send_daily_toolkit_digest():
         toolkit = Toolkit.objects.get_object_or_none(project_id=project.id)
         time_period = (timezone.localtime(timezone.now()) - timedelta(hours=settings.TOOLKIT_DIGEST_PERIOD))
         if toolkit and toolkit.modified > time_period:
-            html_template = loader.get_template("email/toolkit_digest.html")
+            html_template = loader.get_template("email/master-inline.html")
             for profile in project.team.all():
                 with override(profile.language):
-                    html_message = html_template.render({"project_id": project.id,
+                    html_message = html_template.render({"type": "toolkit_digest",
+                                                         "project_id": project.id,
                                                          "language": profile.language})
-                    subject = ugettext("MAPS Toolkit updated!")
+                    subject = ugettext("Your Digital Health Atlas project has been updated")
 
-                mail.send_mail(
+                send_mail(
                     subject=subject,
                     message="",
                     from_email=settings.FROM_EMAIL,
