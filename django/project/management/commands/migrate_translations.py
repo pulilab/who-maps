@@ -35,7 +35,7 @@ class Command(BaseCommand):
             return
         for file, klass, fields in FILES_CLASSES_FIELDS:
             with open('./{}/{}'.format(options['dir'], file)) as objs:
-                objects = json.load(objs.read())
+                objects = json.loads(objs.read())
                 for o in objects:
                     try:
                         instance = klass.objects.get(pk=o['pk'])
