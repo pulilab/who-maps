@@ -25,36 +25,36 @@
       :disabled="saved"
       placeholder="Type">
       <el-option
-        :label="$gettext('Text field')"
+        :label="$gettext('Text field') | translate"
         :value="1" />
       <el-option
-        :label="$gettext('Numeric field')"
+        :label="$gettext('Numeric field') | translate"
         :value="2" />
       <el-option
-        :label="$gettext('Yes - no field')"
+        :label="$gettext('Yes - no field') | translate"
         :value="3" />
       <el-option
-        :label="$gettext('Single choice')"
+        :label="$gettext('Single choice') | translate"
         :value="4" />
       <el-option
-        :label="$gettext('Multiple choice')"
+        :label="$gettext('Multiple choice') | translate"
         :value="5" />
     </el-select>
 
     <!-- Question -->
     <el-input
       v-model="question.question"
-      :placeholder="$gettext('Question text')" />
+      :placeholder="$gettext('Question text') | translate" />
 
     <div class="QSwitches">
       <!-- Required -->
       <el-switch
         v-model="question.required"
-        :active-text="$gettext('Required')" />
+        :active-text="$gettext('Required') | translate" />
 
       <el-switch
         v-model="question.is_private"
-        :active-text="$gettext('Private')" />
+        :active-text="$gettext('Private') | translate" />
     </div>
     <dha-question-options
       v-if="question.type > 3"

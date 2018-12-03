@@ -1,7 +1,7 @@
 <template>
   <el-select
     :value="value"
-    :placeholder="$gettext('Type and select a name')"
+    :placeholder="$gettext('Type and select a name') | translate"
     multiple
     filterable
     reserve-keyword

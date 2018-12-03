@@ -3,7 +3,7 @@
     v-model="innerValue"
     :multiple="multiple"
     :disabled="disabled"
-    :placeholder="$gettext('Select country')"
+    :placeholder="$gettext('Select country') | translate"
     filterable
     popper-class="CountrySelectorPopper"
     class="CountrySelector">

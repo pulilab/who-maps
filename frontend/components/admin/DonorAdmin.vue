@@ -5,7 +5,7 @@
     </div>
 
     <collapsible-card
-      :title="$gettext('Investor information')"
+      :title="$gettext('Investor information') | translate"
       class="CountryInformation">
 
       <el-form
@@ -18,7 +18,7 @@
 
         <el-form-item
           v-if="userProfile.is_superuser"
-          :label="$gettext('Choose investor')">
+          :label="$gettext('Choose investor') | translate">
           <donor-select
             :value="donorId"
             @change="setDonorId"/>
@@ -35,7 +35,7 @@
         </el-form-item>
 
         <el-form-item
-          :label="$gettext('Cover image')"
+          :label="$gettext('Cover image') | translate"
           prop="cover">
           <file-upload
             :disabled="notSDA"
@@ -43,7 +43,7 @@
             :limit="1"/>
         </el-form-item>
 
-        <el-form-item :label="$gettext('Cover text')">
+        <el-form-item :label="$gettext('Cover text') | translate">
           <el-input
             :disabled="notSDA"
             v-model="coverText"
@@ -51,14 +51,14 @@
             rows="5"/>
         </el-form-item>
 
-        <el-form-item :label="$gettext('Footer title')">
+        <el-form-item :label="$gettext('Footer title') | translate">
           <el-input
             :disabled="notSDA"
             v-model="footerTitle"
             type="text"/>
         </el-form-item>
 
-        <el-form-item :label="$gettext('Footer text')">
+        <el-form-item :label="$gettext('Footer text') | translate">
           <el-input
             :disabled="notSDA"
             v-model="footerText"
@@ -66,7 +66,7 @@
         </el-form-item>
 
         <el-form-item
-          :label="$gettext('Partner logos')"
+          :label="$gettext('Partner logos') | translate"
           prop="partnerLogos">
           <file-upload
             :disabled="notSDA"
@@ -78,7 +78,7 @@
     </collapsible-card>
 
     <collapsible-card
-      :title="$gettext('User management')"
+      :title="$gettext('User management') | translate"
       class="UserManagement">
       <el-row type="flex">
         <el-col class="AdminPersonaChooser">
@@ -122,10 +122,10 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'D'"
-            :titles="[$gettext('New requests'), $gettext('Approved')]"
+            :titles="transferTitles"
             v-model="users"
             :data="userSelection"
-            :filter-placeholder="$gettext('Type to filter users...')"
+            :filter-placeholder="$gettext('Type to filter users...') | translate"
             filterable />
 
           <div
@@ -149,10 +149,10 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'DA'"
-            :titles="[$gettext('New requests'), $gettext('Approved')]"
+            :titles="transferTitles"
             v-model="admins"
             :data="adminSelection"
-            :filter-placeholder="$gettext('Type to filter users...')"
+            :filter-placeholder="$gettext('Type to filter users...') | translate"
             filterable />
 
           <div
@@ -177,10 +177,10 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'SDA'"
-            :titles="[$gettext('New requests'), $gettext('Approved')]"
+            :titles="transferTitles"
             v-model="superAdmins"
             :data="superadminSelection"
-            :filter-placeholder="$gettext('Type to filter users...')"
+            :filter-placeholder="$gettext('Type to filter users...') | translate"
             filterable />
 
         </el-col>
@@ -188,7 +188,7 @@
     </collapsible-card>
 
     <collapsible-card
-      :title="$gettext('Investor specific questionaire')"
+      :title="$gettext('Investor specific questionaire') | translate"
       class="Questionnaire">
       <dha-questionaire ref="customQuestions" />
     </collapsible-card>
@@ -383,6 +383,9 @@ export default {
         this.setId(value);
         await this.fetchData();
       }
+    },
+    transferTitles () {
+      return [this.$gettext('New requests'), this.$gettext('Approved')];
     }
   },
 

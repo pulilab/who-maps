@@ -7,7 +7,7 @@
       v-for="(donor) in donors"
       ref="collapsible"
       :key="donor.id"
-      :title="$gettext('{name} custom fields', {name: donor.name})"
+      :title="$gettext('{name} custom fields', {name: donor.name}) | translate"
     >
       <custom-field
         v-for="(field, index) in donor.donor_questions"

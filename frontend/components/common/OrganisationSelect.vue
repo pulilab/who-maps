@@ -2,7 +2,7 @@
   <el-select
     v-model="innerValue"
     :allow-create="true"
-    :placeholder="$gettext('Type and select a name')"
+    :placeholder="$gettext('Type and select a name') | translate"
     :remote-method="filterList"
     :default-first-option="true"
     filterable

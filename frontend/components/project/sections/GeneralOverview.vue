@@ -4,7 +4,7 @@
     class="GeneralOverview">
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('General overview')"
+      :title="$gettext('General overview') | translate"
     >
       <el-form-item
         :error="errors.first('name')"
@@ -112,7 +112,7 @@
               v-validate="rules.start_date"
               ref="Start date"
               v-model="start_date"
-              :placeholder="$gettext('Start date')"
+              :placeholder="$gettext('Start date') | translate"
               data-vv-name="start_date"
               data-vv-as="Start date"
               class="Date"
@@ -137,7 +137,7 @@
             <el-date-picker
               v-validate="rules.end_date"
               v-model="end_date"
-              :placeholder="$gettext('End date')"
+              :placeholder="$gettext('End date') | translate"
               data-vv-name="end_date"
               data-vv-as="End date"
               class="Date"

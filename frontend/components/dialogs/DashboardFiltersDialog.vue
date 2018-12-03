@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    :title="$gettext('Applying specific filter to map/list')"
+    :title="$gettext('Applying specific filter to map/list') | translate"
     modal
     top="10vh"
     width="90vw"
@@ -15,28 +15,28 @@
         <filter-item
           :active="selectedFilter === 'dhi'"
           :selected="dhi"
-          :header="$gettext('Digital Health Interventions')"
+          :header="$gettext('Digital Health Interventions') | translate"
           item="dhi"
           @clear="dhi=[]"
         />
         <filter-item
           :active="selectedFilter === 'hfa'"
           :selected="hfa"
-          :header="$gettext('Health focus areas')"
+          :header="$gettext('Health focus areas') | translate"
           item="hfa"
           @clear="hfa=[]"
         />
         <filter-item
           :active="selectedFilter === 'hsc'"
           :selected="hsc"
-          :header="$gettext('Health system challenges')"
+          :header="$gettext('Health system challenges') | translate"
           item="hsc"
           @clear="hsc=[]"
         />
         <filter-item
           :active="selectedFilter === 'his'"
           :selected="his"
-          :header="$gettext('Health Information System')"
+          :header="$gettext('Health Information System') | translate"
           item="his"
           @clear="his=[]"
         />

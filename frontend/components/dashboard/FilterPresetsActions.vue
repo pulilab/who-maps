@@ -5,7 +5,7 @@
       align="middle">
       <el-col :span="12">
         <el-popover
-          :title="$gettext('My filters presets')"
+          :title="$gettext('My filters presets') | translate"
           placement="bottom-center"
           popper-class="CustomPopover AdvancedSearchPresetsDropdown"
           trigger="click"

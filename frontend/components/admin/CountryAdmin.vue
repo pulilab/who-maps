@@ -5,7 +5,7 @@
     </div>
 
     <collapsible-card
-      :title="$gettext('Country information')"
+      :title="$gettext('Country information') | translate"
       class="CountryInformation">
 
       <el-form
@@ -18,7 +18,7 @@
 
         <el-form-item
           v-if="userProfile.is_superuser"
-          :label="$gettext('Choose country')">
+          :label="$gettext('Choose country') | translate">
           <country-select
             :value="countryId"
             @change="setCountryId"/>
@@ -43,7 +43,7 @@
             :limit="1"/>
         </el-form-item>
 
-        <el-form-item :label="$gettext('Cover text')">
+        <el-form-item :label="$gettext('Cover text') | translate">
           <el-input
             :disabled="notSCA"
             v-model="coverText"
@@ -51,7 +51,7 @@
             rows="5"/>
         </el-form-item>
 
-        <el-form-item :label="$gettext('Footer title')">
+        <el-form-item :label="$gettext('Footer title') | translate">
           <el-input
             :disabled="notSCA"
             v-model="footerTitle"
@@ -59,7 +59,7 @@
             type="text"/>
         </el-form-item>
 
-        <el-form-item :label="$gettext('Footer text')">
+        <el-form-item :label="$gettext('Footer text') | translate">
           <el-input
             :disabled="notSCA"
             v-model="footerText"
@@ -67,16 +67,26 @@
             type="text"/>
         </el-form-item>
 
-        <el-form-item :label="$gettext('Project approval process')">
+        <el-form-item :label="$gettext('Project approval process') | translate">
           <el-checkbox
             :disabled="notSCA"
             v-model="projectApproval">
-            {{ projectApproval ? $gettext('Used for projects in country') : $gettext('Not used for projects in country') }}
+            <translate
+              v-if="projectApproval"
+              key="used-country">
+              Used for projects in country
+            </translate>
+            <translate
+              v-if="!projectApproval"
+              key="not-used-country">
+              Not used for projects in country
+            </translate>
+
           </el-checkbox>
         </el-form-item>
 
         <el-form-item
-          :label="$gettext('Partner logos')"
+          :label="$gettext('Partner logos') | translate"
           prop="partnerLogos">
           <file-upload
             :disabled="notSCA"
@@ -89,14 +99,14 @@
 
     <collapsible-card
       v-if="projectApproval"
-      :title="$gettext('Project Approval')"
+      :title="$gettext('Project Approval') | translate"
       class="ProjectApproval"
     >
       <project-approval />
     </collapsible-card>
 
     <collapsible-card
-      :title="$gettext('User management')"
+      :title="$gettext('User management') | translate"
       class="UserManagement">
       <el-row type="flex">
         <el-col class="AdminPersonaChooser">
@@ -143,10 +153,10 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'G'"
-            :titles="[$gettext('New requests'), $gettext('Approved')]"
+            :titles="transferTitles"
             v-model="users"
             :data="userSelection"
-            :filter-placeholder="$gettext('Type to filter users...')"
+            :filter-placeholder="$gettext('Type to filter users...') | translate"
             filterable />
 
           <div
@@ -172,10 +182,10 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'CA'"
-            :titles="[$gettext('New requests'), $gettext('Approved')]"
+            :titles="transferTitles"
             v-model="admins"
             :data="adminSelection"
-            :filter-placeholder="$gettext('Type to filter users...')"
+            :filter-placeholder="$gettext('Type to filter users...') | translate"
             filterable />
 
           <div
@@ -202,23 +212,23 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'SCA'"
-            :titles="[$gettext('New requests'), $gettext('Approved')]"
+            :titles="transferTitles"
             v-model="superAdmins"
             :data="superadminSelection"
-            :filter-placeholder="$gettext('Type to filter users...')"
+            :filter-placeholder="$gettext('Type to filter users...') | translate"
             filterable />
         </el-col>
       </el-row>
     </collapsible-card>
 
     <collapsible-card
-      :title="$gettext('Country specific questionnaire')"
+      :title="$gettext('Country specific questionnaire') | translate"
       class="Questionnaire">
       <dha-questionaire ref="customQuestions" />
     </collapsible-card>
 
     <collapsible-card
-      :title="$gettext('Country map')"
+      :title="$gettext('Country map') | translate"
       class="CountryMap">
       <vue-map-customizer />
     </collapsible-card>
@@ -417,6 +427,9 @@ export default {
         await this.fetchData();
         await this.loadGeoJSON();
       }
+    },
+    transferTitles () {
+      return [this.$gettext('New requests'), this.$gettext('Approved')];
     }
   },
 

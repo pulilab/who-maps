@@ -3,7 +3,7 @@
     <selector-dialog-column
       :header-selectable="true"
       :selected="catSelected"
-      :header="$gettext('Select from list')"
+      :header="$gettext('Select from list') | translate"
       @headerSelected="toggleAll"
     >
       <selector-dialog-category

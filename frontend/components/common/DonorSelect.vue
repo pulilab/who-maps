@@ -1,7 +1,7 @@
 <template>
   <el-select
     :value="value"
-    :placeholder="$gettext('Select investor')"
+    :placeholder="$gettext('Select investor') | translate"
     popper-class="DonorSelectorPopper"
     class="DonorSelector"
     @change="changeHandler">

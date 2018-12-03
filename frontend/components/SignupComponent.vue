@@ -17,7 +17,7 @@
         <fieldset>
           <div class="FieldsetLegend"><translate>Please fill out the form below:</translate></div>
           <el-form-item
-            :label="$gettext('Email address')"
+            :label="$gettext('Email address') | translate"
             prop="email">
             <el-input
               v-model="signupForm.email"
@@ -25,7 +25,7 @@
           </el-form-item>
 
           <el-form-item
-            :label="$gettext('Password')"
+            :label="$gettext('Password') | translate"
             prop="password1">
             <el-input
               v-model="signupForm.password1"
@@ -34,7 +34,7 @@
           </el-form-item>
 
           <el-form-item
-            :label="$gettext('Password (again)')"
+            :label="$gettext('Password (again)') | translate"
             prop="password2">
             <el-input
               v-model="signupForm.password2"

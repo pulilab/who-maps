@@ -6,20 +6,20 @@
     <div class="FilterSwitches">
       <filter-switch
         v-model="governamentApproved"
-        :label="$gettext('Only MOH Verified Projects')"
-        :tooltip="$gettext('Show only projects that have been verified by the country MOH')"
+        :label="$gettext('Only MOH Verified Projects') | translate"
+        :tooltip="$gettext('Show only projects that have been verified by the country MOH') | translate"
       />
       <filter-switch
         v-model="governamentFinanced"
         :label="$gettext('Government financed')"
-        :tooltip="$gettext('Show only projects that have been received financial or in-kind government support')"
+        :tooltip="$gettext('Show only projects that have been received financial or in-kind government support') | translate"
       />
     </div>
     <div class="FilterItems">
       <filter-item
         :selected="selectedDHI"
         :limit="4"
-        :label="$gettext('Digital Health Interventions')"
+        :label="$gettext('Digital Health Interventions') | translate"
         item="dhi">
         <dhi-categories-list
           :value="selectedDHI"
@@ -31,7 +31,7 @@
       <filter-item
         :selected="selectedHFA"
         :limit="4"
-        :label="$gettext('Health Focus Area')"
+        :label="$gettext('Health Focus Area') | translate"
         item="hfa">
         <hfa-categories-list
           :value="selectedHFA"
@@ -43,7 +43,7 @@
       <filter-item
         :selected="selectedHSC"
         :limit="4"
-        :label="$gettext('Health System Challenges')"
+        :label="$gettext('Health System Challenges') | translate"
         item="hsc">
         <health-system-challenges-list
           :value="selectedHSC"
@@ -55,7 +55,7 @@
       <filter-item
         :selected="selectedHIS"
         :limit="4"
-        :label="$gettext('Health Information System')"
+        :label="$gettext('Health Information System') | translate"
         item="his">
         <his-bucket-list
           :value="selectedHIS"
@@ -67,7 +67,7 @@
       <filter-item
         :selected="selectedPlatforms"
         :limit="4"
-        :label="$gettext('Software')"
+        :label="$gettext('Software') | translate"
         item="platform" >
         <simple-platform-list
           :value="selectedPlatforms"

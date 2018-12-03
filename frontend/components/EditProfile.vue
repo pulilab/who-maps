@@ -21,7 +21,7 @@
             class="UserForm">
 
             <el-form-item
-              :label="$gettext('First and Last Name')"
+              :label="$gettext('First and Last Name') | translate"
               prop="name">
               <el-input
                 v-model="innerProfile.name"
@@ -29,7 +29,7 @@
             </el-form-item>
 
             <el-form-item
-              :label="$gettext('Email address')"
+              :label="$gettext('Email address') | translate"
               class="is-required">
               <el-input
                 v-model="innerProfile.email"
@@ -38,13 +38,13 @@
             </el-form-item>
 
             <el-form-item
-              :label="$gettext('Organisation name')"
+              :label="$gettext('Organisation name') | translate"
               prop="organisation">
               <organisation-select v-model="innerProfile.organisation" />
             </el-form-item>
 
             <el-form-item
-              :label="$gettext('Country')"
+              :label="$gettext('Country') | translate"
               prop="country">
               <country-select v-model="innerProfile.country" />
               <div
@@ -54,7 +54,7 @@
             </el-form-item>
 
             <el-form-item
-              :label="$gettext('Site language')"
+              :label="$gettext('Site language') | translate"
               prop="language">
               <language-select v-model="innerProfile.language" />
             </el-form-item>
@@ -130,7 +130,7 @@
                   v-if="isDonorUser"
                   class="DonorSelectorWrapper">
                   <el-form-item
-                    :label="$gettext('I request to join the investor group below:')"
+                    :label="$gettext('I request to join the investor group below:') | translate"
                     prop="donor"
                   >
                     <donor-select

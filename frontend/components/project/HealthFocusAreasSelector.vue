@@ -1,7 +1,7 @@
 <template>
   <el-select
     :value="value"
-    :placeholder="$gettext('Select from list')"
+    :placeholder="$gettext('Select from list') | translate"
     multiple
     filterable
     popper-class="HealthFocusAreasSelectorDropdown"

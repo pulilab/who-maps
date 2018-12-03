@@ -1,7 +1,7 @@
 <template>
   <el-select
     :value="platform"
-    :placeholder="$gettext('Select from list')"
+    :placeholder="$gettext('Select from list') | translate"
     popper-class="PlatformSelectorDropdown"
     class="PlatformSelector"
     value-key="id"

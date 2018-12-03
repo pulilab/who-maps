@@ -13,7 +13,7 @@
           v-validate="rules.interoperability_links"
           :disabled="!selected"
           v-model="innerLinkValue"
-          :placeholder="$gettext('Specify URL')"
+          :placeholder="$gettext('Specify URL') | translate"
           :data-as-name="item.pre + item.name"
           :data-vv-scope="'interoperability_link_' + index"
           data-vv-name="link"

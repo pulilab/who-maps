@@ -4,7 +4,7 @@
     class="ImplementationOverview">
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('Implementation overview')">
+      :title="$gettext('Implementation overview') | translate">
 
       <el-form-item
         :error="errors.first('health_focus_areas')"
@@ -54,7 +54,7 @@
           v-for="(platform, index) in platforms"
           :key="platform"
           :error="errors.first('id', 'platform_' + index)"
-          :label="$gettext('Software')"
+          :label="$gettext('Software') | translate"
           :required="rules.platforms && rules.platforms.required"
           class="ItemIndent"
         >

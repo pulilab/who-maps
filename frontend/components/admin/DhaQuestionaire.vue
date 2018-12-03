@@ -21,7 +21,7 @@
       <el-col class="QActionsButtons">
         <el-tooltip
           :disabled="allSaved"
-          :content="$gettext('Before adding another question please save the previous one')"
+          :content="$gettext('Before adding another question please save the previous one') | translate"
           placement="top">
           <span>
             <el-button

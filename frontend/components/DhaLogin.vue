@@ -17,7 +17,7 @@
         @submit.native.prevent="loginLocal">
         <fieldset>
           <el-form-item
-            :label="$gettext('E-mail')"
+            :label="$gettext('E-mail') | translate"
             prop="username">
             <el-input
               v-model="username"
@@ -25,7 +25,7 @@
           </el-form-item>
 
           <el-form-item
-            :label="$gettext('Password')"
+            :label="$gettext('Password') | translate"
             prop="password">
             <el-input
               v-model="password"
@@ -95,7 +95,7 @@
         @submit.native.prevent="forgotEmail">
         <fieldset>
           <el-form-item
-            :label="$gettext('E-mail')"
+            :label="$gettext('E-mail') | translate"
             prop="email">
             <el-input
               v-model="email"

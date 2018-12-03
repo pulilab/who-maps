@@ -6,7 +6,7 @@
       <el-col>
         <el-input
           v-model="searchString"
-          :placeholder="$gettext('Type something...')">
+          :placeholder="$gettext('Type something...') | translate">
           <fa
             slot="prepend"
             icon="search"
@@ -36,7 +36,7 @@
         </el-button>
         <el-tooltip
           v-model="showSearchBoxTooltip"
-          :content="$gettext('By selecting these fields, you will limit the search to only data included in these fields. If you want a broader search, leave these fields blank and all project data will be searched.')"
+          :content="$gettext('By selecting these fields, you will limit the search to only data included in these fields. If you want a broader search, leave these fields blank and all project data will be searched.') | translate"
           effect="dark"
           placement="left"
           popper-class="SearchBoxTooltip"

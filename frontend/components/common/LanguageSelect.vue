@@ -2,7 +2,7 @@
   <el-select
     :value="value"
     :size="size"
-    :placeholder="$gettext('Select language')"
+    :placeholder="$gettext('Select language') | translate"
     class="LanguageSelectorDropdown"
     popper-class="LanguageSelectorPopper"
     @change="changeHandler">

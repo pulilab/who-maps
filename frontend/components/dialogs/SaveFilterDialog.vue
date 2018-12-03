@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    :title="$gettext('Save filters')"
+    :title="$gettext('Save filters') | translate"
     modal
     top="30vh"
     width="30vw"
@@ -15,7 +15,7 @@
       @submit.native.prevent
     >
       <el-form-item
-        :label="$gettext('Filter preset name')"
+        :label="$gettext('Filter preset name') | translate"
         prop="name">
         <el-input v-model="form.name"/>
       </el-form-item>

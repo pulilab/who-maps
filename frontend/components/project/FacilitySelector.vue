@@ -2,7 +2,7 @@
   <el-form-item
     v-if="facilities.length > 0"
     :error="errors.first('facilities_list', scope)"
-    :label="$gettext('Facilities')"
+    :label="$gettext('Facilities') | translate"
     :required="rules.facilities_list && rules.facilities_list.required"
   >
     <el-select
@@ -12,7 +12,7 @@
       :loading="loading"
       :disabled="disabled"
       :data-vv-scope="scope"
-      :placeholder="$gettext('Type and select a name')"
+      :placeholder="$gettext('Type and select a name') | translate"
       data-vv-name="facilities_list"
       data-vv-as="Facilitiy list"
       multiple

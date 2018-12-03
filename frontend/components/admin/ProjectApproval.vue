@@ -64,13 +64,13 @@
       />
 
       <el-table-column
-        :label="$gettext('Project')"
+        :label="$gettext('Project') | translate"
         sortable
         prop="project_name"
         class-name="ProjectName"
       />
       <el-table-column
-        :label="$gettext('User')"
+        :label="$gettext('User') | translate"
         sortable
         width="220px"
         prop="user"
@@ -83,7 +83,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :label="$gettext('Approved')"
+        :label="$gettext('Approved') | translate"
         sortable
         width="120px"
         prop="approved"

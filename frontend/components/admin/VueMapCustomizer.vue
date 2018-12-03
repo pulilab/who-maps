@@ -98,15 +98,15 @@
               <span><translate>Country center pin</translate></span>
               <el-switch
                 v-model="showCenterPin"
-                :active-text="$gettext('Show')"
-                :inactive-text="$gettext('Hide') "/>
+                :active-text="$gettext('Show') | translate"
+                :inactive-text="$gettext('Hide') | translate"/>
             </div>
             <div class="PinSwitch DistrictsCenter">
               <span><translate>Districts center pin</translate></span>
               <el-switch
                 v-model="showSubLevelsPins"
-                :active-text="$gettext('Show')"
-                :inactive-text="$gettext('Hide')"/>
+                :active-text="$gettext('Show') | translate"
+                :inactive-text="$gettext('Hide') | translate"/>
             </div>
           </el-col>
           <el-col>

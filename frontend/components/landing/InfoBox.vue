@@ -1,7 +1,7 @@
 <template>
   <div class="InfoBox">
     <img
-      :alt="$gettext('Why use the Digital Health Atlas')"
+      :alt="$gettext('Why use the Digital Health Atlas') | translate"
       class="InfoPicture"
       src="/photo-whyusedha.jpg">
 

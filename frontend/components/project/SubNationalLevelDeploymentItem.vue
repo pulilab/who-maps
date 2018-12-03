@@ -10,7 +10,7 @@
         v-model="subLevel"
         :data-vv-as="levelName"
         :data-vv-scope="scope + '_' + index"
-        :placeholder="$gettext('Select from list')"
+        :placeholder="$gettext('Select from list') | translate"
         data-vv-name="district"
         filterable
         popper-class="SubNationalLevelDeploymentRegionDropdown"

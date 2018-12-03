@@ -5,7 +5,7 @@
     class="CountryCustom">
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('{name} custom fields', {name: country.name})" >
+      :title="$gettext('{name} custom fields', {name: country.name}) | translate" >
       <custom-field
         v-for="(field, index) in countryQuestions"
         ref="customQuestion"

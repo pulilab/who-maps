@@ -13,7 +13,7 @@
         type="text"
         class="IconRight"
       >
-        View as:
+        <translate key="view-as">View as:</translate>
         <div :class="['PersonaBox', personaClass]">
           <fa
             :icon="personaIcon"

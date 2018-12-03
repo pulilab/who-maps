@@ -44,7 +44,7 @@
       <el-select
         v-validate="localRules"
         v-model="innerValue"
-        :placeholder="$gettext('Select from list')"
+        :placeholder="$gettext('Select from list') | translate"
         :multiple="type === 5"
         :data-vv-as="question"
         :data-vv-scope="'custom_question_' + id"

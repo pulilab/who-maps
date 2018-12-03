@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    :title="$gettext('Select Digital Health Intervention(s)')"
+    :title="$gettext('Select Digital Health Intervention(s)') | translate"
     modal
     top="10vh"
     width="90vw"

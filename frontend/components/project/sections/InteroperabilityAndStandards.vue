@@ -4,9 +4,9 @@
     class="InteroperabilityAndStandards">
     <collapsible-card
       ref="collapsible"
-      title="Interoperability &amp; Standards">
+      :title="$gettext('Interoperability &amp; Standards') | translate">
       <el-form-item
-        :label="$gettext('Does your project share information with one or more of these digital Health Information System components?')"
+        :label="$gettext('Does your project share information with one or more of these digital Health Information System components?') | translate"
         prop="interoperability_links">
         <interoperability-link-component
           v-for="(ir, index) in interopearilbityLinksStructure"
@@ -20,7 +20,7 @@
         />
       </el-form-item>
       <el-form-item
-        :label="$gettext('What data standards does your digital health project use?')"
+        :label="$gettext('What data standards does your digital health project use?') | translate"
         prop="interoperability_standards">
 
         <template slot="label">

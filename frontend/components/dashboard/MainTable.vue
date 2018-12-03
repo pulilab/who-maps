@@ -22,7 +22,7 @@
       <el-table-column
         v-if="selectedColumns.includes('1')"
         :resizable="false"
-        :label="$gettext('Project Name')"
+        :label="$gettext('Project Name') | translate"
         fixed
         sortable="custom"
         prop="project__name"
@@ -38,7 +38,7 @@
       <el-table-column
         v-if="selectedColumns.includes('2')"
         :resizable="false"
-        :label="$gettext('Country')"
+        :label="$gettext('Country') | translate"
         sortable="custom"
         prop="country__name"
         width="180">
@@ -52,7 +52,7 @@
       <el-table-column
         v-if="selectedColumns.includes('3')"
         :resizable="false"
-        :label="$gettext('Organisation Name')"
+        :label="$gettext('Organisation Name') | translate"
         sortable="custom"
         prop="organisation__name"
         width="240">
@@ -65,7 +65,7 @@
       <el-table-column
         v-if="selectedColumns.includes('4')"
         :resizable="false"
-        :label="$gettext('Government Investor')"
+        :label="$gettext('Government Investor') | translate"
         sortable="custom"
         prop="project__data__government_investor"
         width="180">
@@ -77,7 +77,7 @@
       <el-table-column
         v-if="selectedColumns.includes('5')"
         :resizable="false"
-        :label="$gettext('Region')"
+        :label="$gettext('Region') | translate"
         sortable="custom"
         prop="country__region"
         width="180">
@@ -90,7 +90,7 @@
       <el-table-column
         v-if="selectedColumns.includes('6')"
         :resizable="false"
-        :label="$gettext('Investors')"
+        :label="$gettext('Investors') | translate"
         width="240">
         <template slot-scope="scope">
           <donors-list
@@ -102,7 +102,7 @@
       <el-table-column
         v-if="selectedColumns.includes('7')"
         :resizable="false"
-        :label="$gettext('Contact Name')"
+        :label="$gettext('Contact Name') | translate"
         width="240">
         <template slot-scope="scope">
           <span>{{ scope.row.contact_name }}</span>
@@ -115,7 +115,7 @@
       <el-table-column
         v-if="selectedColumns.includes('8')"
         :resizable="false"
-        :label="$gettext('Implementation Overview')"
+        :label="$gettext('Implementation Overview') | translate"
         width="240">
         <template slot-scope="scope">
           <p>{{ scope.row.implementation_overview }}</p>
@@ -125,7 +125,7 @@
       <el-table-column
         v-if="selectedColumns.includes('9')"
         :resizable="false"
-        :label="$gettext('Geographic Scope')"
+        :label="$gettext('Geographic Scope') | translate"
         width="240">
         <template slot-scope="scope">
           <p>{{ scope.row.geographic_scope }}</p>

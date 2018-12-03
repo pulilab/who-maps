@@ -5,12 +5,12 @@
         v-for="p in selected"
         :key="p.id"
       >
-        <simple-field :header="$gettext('Software')">
+        <simple-field :header="$gettext('Software') | translate">
           <div>
             <span>
               {{ p.name }}
             </span>
-            <simple-field :header="$gettext('Digital Health Intervention')">
+            <simple-field :header="$gettext('Digital Health Intervention') | translate">
               <digital-health-interventions-list
                 :value="dhi"
                 :platform="p.id"

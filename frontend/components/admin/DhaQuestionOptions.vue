@@ -19,7 +19,7 @@
     </ul>
     <el-tooltip
       :disabled="!disabled"
-      :content="$gettext('Unable to add or remove options on saved questions')"
+      :content="$gettext('Unable to add or remove options on saved questions') | translate"
       placement="top">
       <el-row
         type="flex"
@@ -30,7 +30,7 @@
             ref="input"
             v-model="inputField"
             :disabled="disabled"
-            :placeholder="$gettext('Add a new option here')"
+            :placeholder="$gettext('Add a new option here') | translate"
             type="text"
             @keyup.enter.native="addOption" />
         </el-col>

@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    :title="$gettext('Project Approval')"
+    :title="$gettext('Project Approval') | translate"
     :modal="mini"
     :top="top"
     :width="width"
@@ -12,7 +12,7 @@
     <el-tabs
       v-model="activeTab">
       <el-tab-pane
-        :label="$gettext('Update')"
+        :label="$gettext('Update') | translate"
         name="form"
       >
         <el-form
@@ -24,7 +24,7 @@
           @submit.native.prevent
         >
           <el-form-item
-            :label="$gettext('Approved')"
+            :label="$gettext('Approved') | translate"
             prop="approved">
             <el-select
               v-model="form.approved"
@@ -44,7 +44,7 @@
             </el-select>
           </el-form-item>
           <el-form-item
-            :label="$gettext('Reason')"
+            :label="$gettext('Reason') "
             prop="reason">
             <el-input
               v-model="form.reason"
@@ -54,7 +54,7 @@
           </el-form-item>
 
           <el-form-item
-            :label="$gettext('User')"
+            :label="$gettext('User') | translate"
           >
             <user-item
               :id="approvedBy"
@@ -66,7 +66,7 @@
       </el-tab-pane>
 
       <el-tab-pane
-        :label="$gettext('History')"
+        :label="$gettext('History') | translate"
         name="history">
         <el-table
           :data="history"
@@ -74,12 +74,12 @@
           style="width: 100%"
         >
           <el-table-column
-            :label="$gettext('Date/Time')"
+            :label="$gettext('Date/Time') | translate"
             :formatter="dateFormat"
             prop="modified"
           />
           <el-table-column
-            :label="$gettext('User')"
+            :label="$gettext('User') | translate"
             prop="history_user__userprofile"
           >
             <template slot-scope="scope">
@@ -90,11 +90,11 @@
             </template>
           </el-table-column>
           <el-table-column
-            :label="$gettext('Reason')"
+            :label="$gettext('Reason') | translate"
             prop="reason"
           />
           <el-table-column
-            :label="$gettext('Approved')"
+            :label="$gettext('Approved') | translate"
             align="center"
             width="150px"
             prop="approved"

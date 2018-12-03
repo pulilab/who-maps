@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    :title="$gettext('Send email to contact person(s)')"
+    :title="$gettext('Send email to contact person(s)') | translate"
     modal
     top="10vh"
     width="70vw"
@@ -9,7 +9,7 @@
   >
     <el-form
       @submit.native.prevent>
-      <el-form-item :label="$gettext('Email addresses') + ` (${rows})`">
+      <el-form-item :label="$gettext('Email addresses') + ` (${rows})` | translate">
         <el-input
           ref="emailArea"
           :rows="rows < 10 ? rows : 10"

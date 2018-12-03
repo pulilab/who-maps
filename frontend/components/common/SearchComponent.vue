@@ -16,7 +16,7 @@
             <el-col :span="24">
               <el-input
                 v-model="localSearchString"
-                :placeholder="$gettext('Create your search here')"
+                :placeholder="$gettext('Create your search here') | translate"
                 @keyup.enter.native="search">
                 <fa
                   slot="prepend"

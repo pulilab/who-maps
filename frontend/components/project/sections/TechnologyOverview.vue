@@ -4,16 +4,16 @@
     class="TechnologyOverview">
     <collapsible-card
       ref="collapsible"
-      title="Technology overview">
+      :title="$gettext('Technology overview') | translate">
       <el-form-item
         :error="errors.first('implementation_dates')"
-        :label="$gettext('When will the technology be first deployed?')"
+        :label="$gettext('When will the technology be first deployed?') | translate"
         :required="rules.implementation_dates && rules.implementation_dates.required"
       >
         <el-date-picker
           v-validate="rules.implementation_dates"
           v-model="implementation_dates"
-          :placeholder="$gettext('Pick a day')"
+          :placeholder="$gettext('Pick a day') | translate"
           data-vv-name="implementation_dates"
           data-vv-as="Implementation dates"
           class="Date"
@@ -22,7 +22,7 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('licenses')"
-        :label="$gettext('Under what license is the project governed?')"
+        :label="$gettext('Under what license is the project governed?') | translate"
         :required="rules.licenses && rules.licenses.required"
       >
         <license-selector
@@ -34,7 +34,7 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('repository')"
-        :label="$gettext('Can you provide links to code documentation, a demo of the application or the software wikipage?')"
+        :label="$gettext('Can you provide links to code documentation, a demo of the application or the software wikipage?') | translate"
         :required="rules.repository && rules.repository.required"
       >
         <link-field
@@ -46,7 +46,7 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('mobile_application')"
-        :label="$gettext('Link to the application')"
+        :label="$gettext('Link to the application') | translate"
         :required="rules.mobile_application && rules.mobile_application.required"
       >
         <link-field
@@ -58,7 +58,7 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('wiki')"
-        :label="$gettext('Link to the wiki page')"
+        :label="$gettext('Link to the wiki page') | translate"
         :required="rules.wiki && rules.wiki.required"
       >
         <link-field
