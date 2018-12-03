@@ -20,6 +20,7 @@ FILES_CLASSES_FIELDS = [
     ('TechnologyPlatform.json', TechnologyPlatform, ['name_fr', 'name_es', 'name_pt']),
 ]
 
+
 class Command(BaseCommand):
     help = """"Imports field translation to DB
     usage eg: `python manage.py migrate_translations translation_dumps_03-12-2018`

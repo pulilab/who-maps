@@ -275,6 +275,7 @@ def send_test_email(type, email, **kwargs):
     local("docker-compose exec django python manage.py send_html_email {} {} {}".format(type, email, params) +
           "--settings=who_maps.settings_email_test")
 
+
 def dump_model_translations():
     local("docker-compose exec django python manage.py dumpdata country.country > Country.json")
     local("docker-compose exec django python manage.py dumpdata project.digitalstrategy > DigitalStrategy.json")
@@ -283,8 +284,11 @@ def dump_model_translations():
     local("docker-compose exec django python manage.py dumpdata project.hisbucket > HISBucket.json")
     local("docker-compose exec django python manage.py dumpdata project.hscchallenge > HSCChallenge.json")
     local("docker-compose exec django python manage.py dumpdata project.hscgroup > HSCGroup.json")
-    local("docker-compose exec django python manage.py dumpdata project.interoperabilitylink > InteroperabilityLink.json")
-    local("docker-compose exec django python manage.py dumpdata project.interoperabilitystandard > InteroperabilityStandard.json")
+    local(
+        "docker-compose exec django python manage.py dumpdata project.interoperabilitylink > InteroperabilityLink.json")
+    local(
+        "docker-compose exec django python manage.py dumpdata "
+        "project.interoperabilitystandard > InteroperabilityStandard.json")
     local("docker-compose exec django python manage.py dumpdata project.licence > Licence.json")
     local("docker-compose exec django python manage.py dumpdata project.technologyplatform > TechnologyPlatform.json")
     local("tar -czvf translation_dumps_`date +%d-%m-%Y`.tar.gz *.json")
