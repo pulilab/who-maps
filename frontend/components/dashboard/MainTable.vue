@@ -135,7 +135,7 @@
       <el-table-column
         v-if="selectedColumns.includes('10')"
         :resizable="false"
-        label="Health Focus Areas"
+        :label="$gettext('Health Focus Area') | translate"
         width="240">
         <template slot-scope="scope">
           <health-focus-areas-list

@@ -81,8 +81,16 @@ msgstr ""
 msgid "# Health Workers"
 msgstr ""
 
+#: components/project/ProjectData.vue:5
+msgid "1. General Overview"
+msgstr ""
+
 #: components/project/ProjectData.vue:67
 msgid "2. Implementation Overview"
+msgstr ""
+
+#: components/project/ProjectData.vue:132
+msgid "3. Techonology overview"
 msgstr ""
 
 #: components/project/ProjectData.vue:161
@@ -219,11 +227,17 @@ msgstr ""
 msgid "Approved"
 msgstr ""
 
+#: components/common/ExtendedProjectCard.vue:79
 #: components/common/ProjectCard.vue:39
 msgid "Approved by MOH"
 msgstr ""
 
-#: components/BreadCrumb.vue:57 components/common/ProjectCardActions.vue:39
+#: components/DjangoFeedback.vue:12
+msgid "Ask our experts"
+msgstr ""
+
+#: components/BreadCrumb.vue:57 components/common/ProjectBar.vue:81
+#: components/common/ProjectCardActions.vue:39
 msgid "Assessment"
 msgstr ""
 
@@ -366,6 +380,12 @@ msgstr ""
 msgid "Clear All"
 msgstr ""
 
+#: components/DjangoFeedback.vue:35
+msgid ""
+"Click here if you are experiencing any issues or have suggestion for "
+"improving the website"
+msgstr ""
+
 #: components/common/map/MapProjectsBox.vue:44
 msgid "Click on the map to view the digital health project information."
 msgstr ""
@@ -401,6 +421,10 @@ msgstr ""
 
 #: components/DhaLogin.vue:142
 msgid "Congratulations!"
+msgstr ""
+
+#: pages/_organisation/terms.vue:232 pages/_organisation/terms.vue:234
+msgid "Contact"
 msgstr ""
 
 #: components/dashboard/TableTopActions.vue:60
@@ -488,7 +512,7 @@ msgstr ""
 msgid "Country viewer"
 msgstr ""
 
-#: components/admin/DonorAdmin.vue:36
+#: components/admin/CountryAdmin.vue:36 components/admin/DonorAdmin.vue:36
 msgid "Cover image"
 msgstr ""
 
@@ -594,6 +618,7 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
+#: components/common/ExtendedProjectCard.vue:69
 #: components/project/ProjectNavigation.vue:22
 #: pages/_organisation/projects/_id/edit/index.vue:7
 #: pages/_organisation/projects/_id/index.vue:7
@@ -640,7 +665,7 @@ msgstr ""
 msgid "Edit selection"
 msgstr ""
 
-#: components/common/UserDropdown.vue:22
+#: components/DjangoFeedback.vue:2 components/common/UserDropdown.vue:22
 msgid "Email"
 msgstr ""
 
@@ -656,7 +681,7 @@ msgstr ""
 msgid "Email confirmation"
 msgstr ""
 
-#: pages/_organisation/terms.vue:236
+#: pages/_organisation/terms.vue:238
 msgid "Email:"
 msgstr ""
 
@@ -770,6 +795,10 @@ msgstr ""
 msgid "Government Admins"
 msgstr ""
 
+#: components/dashboard/AdvancedSearch.vue:11
+msgid "Government financed"
+msgstr ""
+
 #: components/dashboard/MainTable.vue:64
 msgid "Government Investor"
 msgstr ""
@@ -812,6 +841,7 @@ msgid ""
 msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:30
+#: components/dashboard/MainTable.vue:134
 msgid "Health Focus Area"
 msgstr ""
 
@@ -956,7 +986,7 @@ msgid ""
 "the list."
 msgstr ""
 
-#: pages/_organisation/terms.vue:234
+#: pages/_organisation/terms.vue:236
 msgid ""
 "If you have further questions about the DHA, do not hesitate to get in touch "
 "using the details below:"
@@ -1180,6 +1210,10 @@ msgstr ""
 msgid "Login here"
 msgstr ""
 
+#: components/admin/CountryAdmin.vue:26
+msgid "Logo"
+msgstr ""
+
 #: components/common/UserDropdown.vue:98
 msgid "Logout"
 msgstr ""
@@ -1215,6 +1249,10 @@ msgstr ""
 
 #: pages/_organisation/projects/index.vue:9
 msgid "Member"
+msgstr ""
+
+#: components/DjangoFeedback.vue:2
+msgid "Message"
 msgstr ""
 
 #: pages/_organisation/terms.vue:90
@@ -1283,7 +1321,7 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#: components/common/ProjectCard.vue:140
+#: components/DjangoFeedback.vue:2 components/common/ProjectCard.vue:140
 msgid "Name"
 msgstr ""
 
@@ -1601,6 +1639,7 @@ msgstr ""
 msgid "Publish"
 msgstr ""
 
+#: components/common/ExtendedProjectCard.vue:74
 #: components/project/ProjectNavigation.vue:29
 #: pages/_organisation/projects/_id/published.vue:7
 msgid "Published"
@@ -1719,6 +1758,10 @@ msgstr ""
 msgid "Select Facility List"
 msgstr ""
 
+#: components/dashboard/SearchBox.vue:26
+msgid "Select fields to include in your search"
+msgstr ""
+
 #: components/dialogs/filters/HealthFocusAreaFilter.vue:2
 #: components/dialogs/filters/HealthInformationSystemFilter.vue:2
 #: components/dialogs/filters/HealthSystemChallengesFilter.vue:2
@@ -1825,6 +1868,10 @@ msgstr ""
 msgid "Software and related Digital Health Interventions (DHI)"
 msgstr ""
 
+#: components/DjangoFeedback.vue:24
+msgid "Sorry"
+msgstr ""
+
 #: components/project/InteroperabilityLinkComponent.vue:11
 msgid "Specify URL"
 msgstr ""
@@ -1841,6 +1888,10 @@ msgstr ""
 #: components/common/map/TabbedCardProjectList.vue:5
 #: components/project/sections/ImplementationOverview.vue:130
 msgid "Sub-national"
+msgstr ""
+
+#: components/DjangoFeedback.vue:2
+msgid "Subject"
 msgstr ""
 
 #: components/project/sections/ImplementationOverview.vue:125
@@ -1879,12 +1930,16 @@ msgstr ""
 msgid "Terms of use"
 msgstr ""
 
-#: pages/_organisation/terms.vue:21
+#: pages/_organisation/terms.vue:20 pages/_organisation/terms.vue:21
 msgid "Terms of Use"
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:26
 msgid "Text field"
+msgstr ""
+
+#: components/DjangoFeedback.vue:15
+msgid "Thank you"
 msgstr ""
 
 #: pages/_organisation/terms.vue:55
@@ -1989,6 +2044,12 @@ msgstr ""
 msgid ""
 "The Website and any content, materials, features, or products available or "
 "sold on or through the Website are available on an “as is” basis."
+msgstr ""
+
+#: components/DjangoFeedback.vue:29
+msgid ""
+"There was a problem processing your ticket,\n"
+"        please try again"
 msgstr ""
 
 #: components/project/ProjectForm.vue:326
@@ -2564,6 +2625,12 @@ msgstr ""
 
 #: components/project/ProjectForm.vue:391
 msgid "Your draft has been saved successfully"
+msgstr ""
+
+#: components/DjangoFeedback.vue:18
+msgid ""
+"Your message has been successfully sent!\n"
+"        We will be back to you soon!"
 msgstr ""
 
 #: components/EditProfile.vue:75

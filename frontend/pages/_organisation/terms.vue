@@ -18,7 +18,7 @@
 
       <el-tabs tab-position="left">
 
-        <el-tab-pane label="Terms of Use">
+        <el-tab-pane :label="$gettext('Terms of Use') | translate">
           <h2><translate>Terms of Use</translate></h2>
           <p><translate>Please read these Terms of Use before using the Website or any of its features. By using the
           Website, you accept and agree to be bound by these Terms. If you do not agree to the Terms,
@@ -230,8 +230,10 @@
           right to asset and enforce provisions of the Terms directly and on their own behalf.</translate></p>
         </el-tab-pane>
 
-        <el-tab-pane label="Contact">
-          <h2>Contact</h2>
+        <el-tab-pane :label="$gettext('Contact') | translate">
+          <h2>
+            <translate>Contact</translate>
+          </h2>
           <p><translate>If you have further questions about the DHA, do not hesitate to get in touch using the details below:</translate></p>
           <p>
             <b><translate>Email:</translate></b>&nbsp;<a href="mailto:digitalhealthatlas@gmail.com">digitalhealthatlas@gmail.com</a>

@@ -25,7 +25,7 @@
         </el-form-item>
 
         <el-form-item
-          :label="$gettext('Logo')"
+          :label="$gettext('Logo') | translate"
           prop="logo">
           <file-upload
             :disabled="notSCA"
@@ -35,7 +35,7 @@
         </el-form-item>
 
         <el-form-item
-          :label="$gettext('Cover image')"
+          :label="$gettext('Cover image') | translate"
           prop="cover">
           <file-upload
             :disabled="notSCA"

@@ -5,7 +5,7 @@
       <el-col :span="18">
         <collapsible-card
           id="general"
-          title="1. General Overview">
+          :title="$gettext('1. General Overview') | translate">
 
           <simple-field
             :content="project.name"
@@ -132,7 +132,7 @@
 
         <collapsible-card
           id="technology"
-          title="3. Techonology overview">
+          :title="$gettext('3. Techonology overview') | translate">
           <simple-field
             :content="project.implementation_dates"
             :header="$gettext('Technology deployment date') | translate"

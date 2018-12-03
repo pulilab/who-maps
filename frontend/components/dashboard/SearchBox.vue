@@ -24,7 +24,7 @@
           class="MutedButton IconRight"
           @click="toggleOptionsVisibility"
         >
-          Select fields to include in your search
+          <translate>Select fields to include in your search</translate>
           <fa
             v-show="optionsVisible"
             icon="caret-up"

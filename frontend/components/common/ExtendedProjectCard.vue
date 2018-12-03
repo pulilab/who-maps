@@ -67,17 +67,17 @@
           <div
             v-if="!project.isPublished"
             class="ProjectStatus Draft">
-            Draft
+            <translate key="draft">Draft</translate>
           </div>
           <div
             v-if="project.isPublished"
             class="ProjectStatus Published">
-            Published
+            <translate key="published">Published</translate>
           </div>
           <div
             v-if="project.isPublished"
             class="ProjectStatus ApprovedByCountry">
-            Approved by country
+            <translate key="approved">Approved by MOH</translate>
           </div>
         </el-col>
         <el-col>

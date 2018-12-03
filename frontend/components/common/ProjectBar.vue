@@ -79,7 +79,7 @@
           <translate>Project</translate>
         </nuxt-link>
         <nuxt-link :to="localePath({name: 'organisation-projects-id-assessment', params: {id, organisation: $route.params.organisation}})">
-          Assessment
+          <translate>Assessment</translate>
         </nuxt-link>
         <nuxt-link
           v-if="isTeam"

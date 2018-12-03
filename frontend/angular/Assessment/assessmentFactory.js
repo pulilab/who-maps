@@ -41,6 +41,12 @@ function config ($stateProvider, $locationProvider, $ngReduxProvider) {
 
 config.$inject = ['$stateProvider', '$locationProvider', '$ngReduxProvider'];
 
+const run = (gettextCatalog) => {
+  const ln = window.$nuxt.$i18n.locale;
+  gettextCatalog.setCurrentLanguage(ln);
+  gettextCatalog.setStrings(ln, window.$nuxt.$i18n.messages[ln]);
+};
+
 export const assesmentFactory = () => {
   angular.module('assessment', [
     'ui.router',
@@ -61,7 +67,8 @@ export const assesmentFactory = () => {
     .component(commentWidget.name, commentWidget)
     .component(reportButton.name, reportButton)
     .component(trixComponent.name, trixComponent)
-    .config(config);
+    .config(config)
+    .run(run);
 
   const assessmentjs = document.querySelector('#assessmentjs');
   const uiView = document.createElement('ui-view');

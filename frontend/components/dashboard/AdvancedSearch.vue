@@ -11,7 +11,7 @@
       />
       <filter-switch
         v-model="governamentFinanced"
-        :label="$gettext('Government financed')"
+        :label="$gettext('Government financed') | translate"
         :tooltip="$gettext('Show only projects that have been received financial or in-kind government support') | translate"
       />
     </div>

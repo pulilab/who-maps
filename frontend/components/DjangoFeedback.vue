@@ -3,8 +3,41 @@
     <vue-django-feedback
       v-if="token"
       :name="name"
+      :name-label="$gettext('Name') | translate"
+      :email-label="$gettext('Email') | translate"
+      :subject-label="$gettext('Subject') | translate"
+      :message-label="$gettext('Message') | translate"
       :email="email"
-      :csrf-token="token" />
+      :csrf-token="token" >
+      <span slot="header-text">
+        <translate> Ask our experts </translate>
+      </span>
+      <span slot="success-header">
+        <translate>Thank you</translate>
+      </span>
+      <span slot="success-message">
+        <translate>
+          Your message has been successfully sent!
+          We will be back to you soon!
+        </translate>
+      </span>
+      <span slot="error-header">
+        <translate>
+          Sorry
+        </translate>
+      </span>
+      <span slot="error-message">
+        <translate>
+          There was a problem processing your ticket,
+          please try again
+        </translate>
+      </span>
+      <span slot="hint-text">
+        <translate>
+          Click here if you are experiencing any issues or have suggestion for improving the website
+        </translate>
+      </span>
+    </vue-django-feedback>
   </div>
 </template>
 
