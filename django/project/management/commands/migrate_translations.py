@@ -37,8 +37,8 @@ class Command(BaseCommand):
             self.stdout.write("ERROR: no translation dump dir specified")
             return
         for file, klass, fields in FILES_CLASSES_FIELDS:
-            with open('./{}/{}'.format(TRANSLATION_DIR, file)) as objs:
-                objects = json.load(objs)
+            with open('./{}/{}'.format(options['dir'], file)) as objs:
+                objects = json.load(objs.read())
                 for o in objects:
                     try:
                         instance = klass.objects.get(pk=o['pk'])
