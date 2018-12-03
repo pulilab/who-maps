@@ -24,10 +24,18 @@ TRANSLATION_DIR = 'translation_dumps_from_v2'
 
 
 class Command(BaseCommand):
-    help = "Imports field translation to DB"
+    help = """"Imports field translation to DB
+    usage eg: `python manage.py migrate_translations translation_dumps_03-12-2018`
+    """
+
+    def add_arguments(self, parser):
+        parser.add_argument('dir')
 
     def handle(self, *args, **options):
         self.stdout.write("-- Importing translations...")
+        if not options.get('dir'):
+            self.stdout.write("ERROR: no translation dump dir specified")
+            return
         for file, klass, fields in FILES_CLASSES_FIELDS:
             with open('./{}/{}'.format(TRANSLATION_DIR, file)) as objs:
                 objects = json.load(objs)
