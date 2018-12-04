@@ -133,6 +133,12 @@ export default {
                 field,
                 msg: item.non_field_errors[0]
               });
+            } else {
+              this.addErrorIfMissing({
+                scope: field,
+                field: inner,
+                msg: item[inner][0]
+              });
             }
           }
         }

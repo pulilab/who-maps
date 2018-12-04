@@ -157,6 +157,7 @@
             :health-workers.sync="healthWorkers"
             :clients.sync="clients"
             :facilities.sync="facilities"
+            scope="national_level_deployment"
           />
         </div>
       </div>
