@@ -80,7 +80,7 @@ class ProjectPublicViewSet(ViewSet):
         """
         return Response(dict(
             technology_platforms=TechnologyPlatform.objects.values('id', 'name'),
-            digital_strategies=DigitalStrategy.objects.values('id', 'name')
+            digital_strategies=DigitalStrategy.objects.filter(parent=None).values('id', 'name')
         ))
 
 
