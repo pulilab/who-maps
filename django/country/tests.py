@@ -23,7 +23,7 @@ from rest_framework.test import APITestCase
 from core.tests import get_temp_image
 from country.admin import CountryAdmin
 from country.models import Country, PartnerLogo, Donor, DonorPartnerLogo, CustomQuestion
-from project.models import Project, TechnologyPlatform, DigitalStrategy
+from project.models import TechnologyPlatform, DigitalStrategy
 from user.models import UserProfile, Organisation
 from django.utils.six import StringIO
 from django.conf import settings

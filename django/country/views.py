@@ -14,7 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from search.models import ProjectSearch
 from user.models import UserProfile
-from project.models import Project, DigitalStrategy, TechnologyPlatform, InteroperabilityLink
+from project.models import TechnologyPlatform
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
