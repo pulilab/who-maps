@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import get from 'lodash/get';
 import { apiReadParser, apiWriteParser, APIError } from '../utilities/api';
 
 const cleanState = () => ({
@@ -366,13 +367,13 @@ export const actions = {
     }
     dispatch('setLoading', false);
   },
-  async discardDraft ({getters, dispatch}, id) {
+  async discardDraft ({getters, dispatch, commit}, id) {
     dispatch('setLoading', 'discard');
     const published = getters.getPublished;
-    const parsed = apiWriteParser(published);
-    const { data } = await this.$axios.put(`api/projects/draft/${id}/`, parsed);
+    const parsed = apiWriteParser(published, published.country_custom_answers, published.donor_custom_answers);
+    const { data } = await this.$axios.put(`api/projects/draft/${id}/${published.country}/`, parsed);
     const parsedResponse = apiReadParser(data.draft);
-    await dispatch('setProjectState', parsedResponse);
+    commit('INIT_PROJECT', parsedResponse);
     dispatch('projects/updateProject', data, {root: true});
     dispatch('setLoading', false);
   }
@@ -494,39 +495,43 @@ export const mutations = {
     state.loading = loading;
   },
   INIT_PROJECT: (state, project) => {
-    state.name = project.name;
-    state.organisation = project.organisation;
-    state.country = project.country;
-    state.geographic_scope = project.geographic_scope;
-    state.implementation_overview = project.implementation_overview;
-    state.start_date = project.start_date;
-    state.end_date = project.end_date;
-    state.contact_name = project.contact_name;
-    state.contact_email = project.contact_email;
-    state.team = project.team;
-    state.viewers = project.viewers;
-    state.platforms = project.platforms;
-    state.digitalHealthInterventions = project.digitalHealthInterventions;
-    state.health_focus_areas = project.health_focus_areas;
-    state.hsc_challenges = project.hsc_challenges;
-    state.his_bucket = project.his_bucket;
-    state.coverageType = project.coverageType;
-    state.coverage = project.coverage;
-    state.coverageData = project.coverageData;
-    state.coverage_second_level = project.coverage_second_level;
-    state.national_level_deployment = project.national_level_deployment;
-    state.government_investor = project.government_investor;
-    state.implementing_partners = project.implementing_partners;
-    state.donors = project.donors;
-    state.implementation_dates = project.implementation_dates;
-    state.licenses = project.licenses;
-    state.repository = project.repository;
-    state.mobile_application = project.mobile_application;
-    state.wiki = project.wiki;
-    state.interoperability_links = project.interoperability_links;
-    state.interoperability_standards = project.interoperability_standards;
-    state.country_answers = project.country_custom_answers ? project.country_custom_answers : [];
-    state.donors_answers = project.donor_custom_answers ? project.donor_custom_answers : [];
+    state.name = get(project, 'name', '');
+    state.organisation = get(project, 'organisation', null);
+    state.country = get(project, 'country', null);
+    state.geographic_scope = get(project, 'geographic_scope', '');
+    state.implementation_overview = get(project, 'implementation_overview', '');
+    state.start_date = get(project, 'start_date', '');
+    state.end_date = get(project, 'end_date', '');
+    state.contact_name = get(project, 'contact_name', '');
+    state.contact_email = get(project, 'contact_email', '');
+    state.team = get(project, 'team', []);
+    state.viewers = get(project, 'viewers', []);
+    state.platforms = get(project, 'platforms', []);
+    state.digitalHealthInterventions = get(project, 'digitalHealthInterventions', []);
+    state.health_focus_areas = get(project, 'health_focus_areas', []);
+    state.hsc_challenges = get(project, 'hsc_challenges', []);
+    state.his_bucket = get(project, 'his_bucket', []);
+    state.coverageType = get(project, 'coverageType', null);
+    state.coverage = get(project, 'coverage', []);
+    state.coverageData = get(project, 'coverageData', {});
+    state.coverage_second_level = get(project, 'coverage_second_level', []);
+    state.national_level_deployment = get(project, 'national_level_deployment', {
+      health_workers: 0,
+      clients: 0,
+      facilities: 0
+    });
+    state.government_investor = get(project, 'government_investor', '');
+    state.implementing_partners = get(project, 'implementing_partners', []);
+    state.donors = get(project, 'donors', []);
+    state.implementation_dates = get(project, 'implementation_dates', '');
+    state.licenses = get(project, 'licenses', []);
+    state.repository = get(project, 'repository', '');
+    state.mobile_application = get(project, 'mobile_application', '');
+    state.wiki = get(project, 'wiki', '');
+    state.interoperability_links = get(project, 'interoperability_links', {});
+    state.interoperability_standards = get(project, 'interoperability_standards', []);
+    state.country_answers = get(project, 'country_custom_answers', []);
+    state.donors_answers = get(project, 'donor_custom_answers', []);
   },
   SET_ORIGINAL: (state, project) => {
     state.original = project;
