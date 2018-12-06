@@ -284,6 +284,5 @@ class PermissionTests(SetupTests):
         url = reverse("get-project-structure-export")
         response = self.test_user_client.get(url)
 
-        self.assertEqual(len(response.data['interoperability_links']), 8)
         self.assertEqual(len(response.data['technology_platforms']), 48)
         self.assertEqual(len(response.data['digital_strategies']), 117)
