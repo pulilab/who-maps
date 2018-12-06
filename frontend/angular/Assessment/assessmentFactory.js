@@ -47,6 +47,8 @@ const run = (gettextCatalog) => {
   gettextCatalog.setStrings(ln, window.$nuxt.$i18n.messages[ln]);
 };
 
+run.$inject = ['gettextCatalog'];
+
 export const assesmentFactory = () => {
   angular.module('assessment', [
     'ui.router',
