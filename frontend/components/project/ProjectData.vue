@@ -112,7 +112,7 @@
           <simple-field :header="$gettext('Has the government financially invested in the project?') | translate">
             <type-field
               :value="project.government_investor"
-              :list="investList" />
+              :list="investedList" />
           </simple-field>
 
           <simple-field :header="$gettext('Implementing partner(s)') | translate">
@@ -288,15 +288,14 @@ export default {
     },
     donors () {
       return this.project.donors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
+    },
+    coverageList () {
+      return ['', this.$gettext('Sub National'), this.$gettext('National')];
+    },
+    investedList () {
+      return [this.$gettext('No, they have not yet contributed'), this.$gettext('Yes, they are contributing in-kind people or time'), this.$gettext('Yes, there is a financial contribution through MOH budget')];
     }
-  },
-  coverageList () {
-    return ['', this.$gettext('Sub National'), this.$gettext('National')];
-  },
-  investedList () {
-    return [this.$gettext('No, they have not yet contributed'), this.$gettext('Yes, they are contributing in-kind people or time'), this.$gettext('Yes, there is a financial contribution through MOH budget')];
   }
-
 };
 </script>
 
