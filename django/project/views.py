@@ -79,7 +79,6 @@ class ProjectPublicViewSet(ViewSet):
         Used to sync objects to "Implementation Toolkit"
         """
         return Response(dict(
-            interoperability_links=InteroperabilityLink.objects.values('id', 'name'),
             technology_platforms=TechnologyPlatform.objects.values('id', 'name'),
             digital_strategies=DigitalStrategy.objects.values('id', 'name')
         ))
