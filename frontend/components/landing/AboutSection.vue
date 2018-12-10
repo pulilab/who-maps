@@ -32,6 +32,11 @@
                 style="height: 54px"
                 alt="Digital Square">
             </div>
+            <div class="Partner">
+              <img
+                src="/static/partners/logo-unfpa.png"
+                alt="UNFPA">
+            </div>
           </div>
         </div>
         <div
@@ -127,7 +132,7 @@ export default {
           float: left;
           display: inline-flex;
           height: 60px;
-          margin: 10px 80px 40px 0;
+          margin: 10px 80px 20px 0;
 
           img {
             width: auto;
