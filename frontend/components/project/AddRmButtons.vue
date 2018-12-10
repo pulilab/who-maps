@@ -43,8 +43,12 @@ export default {
   .AddRmButtons {
     padding-left: 30px;
 
-    .AddButton {
-      margin-left: 30px;
+    .el-button {
+      margin-left: 0;
+    }
+
+    .DeleteButton {
+      margin-right: 20px;
     }
 
     .svg-inline--fa {
