@@ -10,11 +10,12 @@ LANDING_PAGE_DEFAULTS = {
                     'value and impact of digital health investments, improve coordination, and facilitate '
                     'institutionalization and scale.'),
     'footer_title': '',
-    'permanent_footer': _('The DHA is led by WHO RHR/HRP, for the Health Data Collaborative Working Group on Digital '
-                          'Health and Interoperability, with support from USAID, Digital Square, UN Foundation,'
-                          'Johns Hopkins University Global mHealth Initiative, '
-                          'mPowering, developed as a global good software in response to the proliferation of '
-                          'uncoordinated duplicative investments into digital health.'),
+    'permanent_footer': _('The DHA is a global public good overseen by the World Health Organization. '
+                          'The DHA benefits from a diversity of contributions, including support from WHO'
+                          ' Reproductive Health and Research, PATH, Digital Square, USAID, UN Foundation,'
+                          ' UNFPA, JHU Global mHealth Initiative, mPowering, and the Digital Health and'
+                          ' Interoperability Working Group, and was developed to strengthen coordination'
+                          ' of investments into deliberate, harmonized, interoperable digital health systems'),
     'footer_text': '',
     'default_partners': [],
     'partner_logos': []
