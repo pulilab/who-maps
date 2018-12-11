@@ -58,9 +58,9 @@
               <h6><translate>Already signed up?</translate></h6>
               <nuxt-link
                 :to="localePath({name: 'organisation-login', params: $route.params})"
-                class="NuxtLink Small IconRight"
+                class="NuxtLink Small"
               >
-                <span><translate>Login here</translate></span><fa icon="angle-right" />
+                <span><translate>Login here</translate></span>
               </nuxt-link>
             </el-col>
             <el-col
