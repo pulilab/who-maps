@@ -12,7 +12,7 @@
           @click="toLogin">
           <translate>login</translate>
         </span>
-        <translate>and use the system</translate>
+        <translate>and use the system.</translate>
       </p>
     </el-card>
   </div>
@@ -41,11 +41,13 @@ export default {
       line-height: 24px;
       text-align: center;
       color: @colorTextPrimary;
-      padding: 0 80px;
+      padding: 40px 80px;
 
       .TextLink {
-        cursor: pointer;
+        display: inline-block;
+        margin: 0 5px;
         color: @colorBrandPrimary;
+        cursor: pointer;
       }
     }
   }
