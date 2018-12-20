@@ -1,4 +1,5 @@
 const result = require('dotenv').config();
+const webpack = require('webpack')
 
 if (result.error) {
   console.log('\x1b[31m%s\x1b[0m', 'Missing .env file, follow the README instructions');
@@ -126,6 +127,9 @@ const config = {
     }
   },
   loading: '~/components/DhaLoader.vue',
+  render: {
+    resourceHints: false
+  },
   build: {
     extractCSS: {
       allChunks: true
@@ -151,6 +155,14 @@ const config = {
           loader: 'eslint-loader',
           exclude: /(node_modules)/
         });
+      } else if (isClient) {
+        config.plugins.push(
+          new webpack.optimize.CommonsChunkPlugin({
+            async: 'common',
+            children: true,
+            minChunks: 3
+          })
+        );
       }
     }
   }
