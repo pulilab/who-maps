@@ -1,5 +1,8 @@
-const result = require('dotenv').config();
-const webpack = require('webpack')
+import dotenv from 'dotenv';
+// import webpack from 'webpack';
+const result = dotenv.config();
+
+// const bundlebuddy = require('bundle-buddy-webpack-plugin');
 
 if (result.error) {
   console.log('\x1b[31m%s\x1b[0m', 'Missing .env file, follow the README instructions');
@@ -20,12 +23,13 @@ const config = {
     ]
   },
   css: [
-    '~/assets/style/main.sass',
-    '~/assets/style/main.less'
+    '~assets/style/main.sass',
+    '~assets/style/main.less'
   ],
   env: {
   },
   plugins: [
+    { src: '~plugins/polyfills.js', ssr: false },
     { src: '~plugins/axios.js', ssr: true },
     { src: '~plugins/vee-validate.js', ssr: true },
     { src: '~plugins/vue-leaflet.js', ssr: false },
@@ -37,6 +41,7 @@ const config = {
     '@nuxtjs/proxy',
     'nuxt-fontawesome',
     '@nuxtjs/sentry',
+    // 'nuxt-purgecss',
     ['nuxt-i18n', {
       locales: [
         {
@@ -126,44 +131,31 @@ const config = {
       }
     }
   },
+  // purgeCSS: {
+  //   whitelistPatterns: () => [/\b[^\s]*(nuxt|leaflet|vue2-leaflet|el)[^\s]*\b/]
+  // },
   loading: '~/components/DhaLoader.vue',
   render: {
     resourceHints: false
   },
   build: {
-    extractCSS: {
-      allChunks: true
-    },
-    vendor: [
-      'babel-polyfill',
-      'eventsource-polyfill',
-      'angular',
-      'angular-material',
-      'lodash',
-      'date-fns'
-    ],
-    extend (config, { isDev, isClient }) {
+    extractCSS: true,
+    optimization: {},
+    extend (config, { isDev }) {
       config.module.rules.push({
         test: /\.html$/,
         loader: 'html-loader',
         exclude: /(node_modules)/
       });
-      if (isDev && isClient) {
+      if (isDev && process.client) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/
         });
-      } else if (isClient) {
-        config.plugins.push(
-          new webpack.optimize.CommonsChunkPlugin({
-            async: 'common',
-            children: true,
-            minChunks: 3
-          })
-        );
       }
+      // config.plugins.push(new bundlebuddy());
     }
   }
 };
