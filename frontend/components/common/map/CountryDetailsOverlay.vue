@@ -203,10 +203,10 @@ export default {
   @import "../../../assets/style/mixins.less";
 
   .DistrictCenterIcon {
-    background-image: url('~/assets/img/pins/pin-with-counter.svg');
+    background-image: url('~assets/img/pins/pin-with-counter.svg');
 
     &.ActiveDistrict {
-      background-image: url('~/assets/img/pins/pin-with-counter-active.svg');
+      background-image: url('~assets/img/pins/pin-with-counter-active.svg');
     }
 
      &.EmptyMarker {
