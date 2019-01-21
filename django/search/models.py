@@ -9,7 +9,7 @@ from django.dispatch import receiver
 from django.http import QueryDict
 
 from core.models import ExtendedModel
-from project.models import Project, HealthFocusArea, HSCChallenge, DigitalStrategy
+from project.models import Project, HealthFocusArea, DigitalStrategy
 from country.models import Country, Donor
 from user.models import Organisation
 
