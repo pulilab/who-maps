@@ -261,8 +261,6 @@ class ProjectImportAdmin(admin.ModelAdmin):
             user, password = self._create_user(row[owner_email_col], row[owner_name_col], country, organisation)
         project.team.add(user.userprofile)
 
-        # Default Toolkit structure for the new project.
-        Toolkit.objects.create(project_id=project.id, data=toolkit_default)
         project.save()
 
         # Log success
