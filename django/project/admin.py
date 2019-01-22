@@ -12,10 +12,8 @@ from django.template import loader
 from django.conf import settings
 
 from allauth.account.models import EmailAddress
-from toolkit.toolkit_data import toolkit_default
 from core.admin import AllObjectsAdmin
 from country.models import Country
-from toolkit.models import Toolkit
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, Project, HSCGroup
 from user.models import UserProfile, Organisation
