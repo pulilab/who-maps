@@ -19,14 +19,13 @@
         >
           <country-center-marker
             v-for="pin in countriesPin"
+            :key="pin.id"
             :icon="countryCenterIcons[pin.id]"
             :options="countryCenterOptions[pin.id]"
-            :key="pin.id"
             :pin="pin"
             :selected-country.sync="selectedCountry"
             :active-country.sync="activeCountry"
           />
-
         </v-marker-cluster>
 
         <country-details-overlay
@@ -43,7 +42,8 @@
         />
         <switch-view-box
           v-if="activeCountry"
-          :active-tab.sync="activeTab" />
+          :active-tab.sync="activeTab"
+        />
         <world-zoom-button />
 
         <l-control-zoom

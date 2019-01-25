@@ -3,8 +3,11 @@
     <el-card :body-style="{ padding: '0px' }">
       <div
         slot="header"
-        class="CollapsibleHeader">
-        <span class="CardTitle">{{ title }}</span>
+        class="CollapsibleHeader"
+      >
+        <span class="CardTitle">
+          {{ title }}
+        </span>
         <el-button
           type="text"
           class="CollapseToggle"
@@ -31,7 +34,6 @@
           <slot />
         </div>
       </transition>
-
     </el-card>
   </div>
 </template>

@@ -4,7 +4,8 @@
       :value="value"
       type="text"
       placeholder="http://"
-      @change="changeHandler"/>
+      @change="changeHandler"
+    />
   </div>
 </template>
 

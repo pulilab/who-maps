@@ -1,6 +1,6 @@
 <template>
   <div class="angularjs">
-    <div id="thematicjs"/>
+    <div id="thematicjs" />
     <!-- Following A is just a placeholder to avoid a flash of content -->
     <a
       v-if="!initialised"

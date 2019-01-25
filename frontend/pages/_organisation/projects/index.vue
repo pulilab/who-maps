@@ -6,11 +6,13 @@
         <translate>Here are all of the projects you are a</translate>
         <fa
           icon="star"
-          class="Owner" />
+          class="Owner"
+        />
         <b><translate>Member</translate></b>&nbsp;<translate>or</translate>
         <fa
           icon="eye"
-          class="Viewer" />
+          class="Viewer"
+        />
         <b><translate>Viewer</translate></b>&nbsp;<translate>of.</translate>
       </p>
     </div>

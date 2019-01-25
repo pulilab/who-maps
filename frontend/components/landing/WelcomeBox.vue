@@ -3,8 +3,8 @@
     <transition name="el-zoom-in-top">
       <div
         v-show="showWelcomeBox"
-        class="WelcomeBox">
-
+        class="WelcomeBox"
+      >
         <h2><translate>Welcome!</translate></h2>
         <h6>{{ welcomeText }}</h6>
 

@@ -132,14 +132,14 @@ class AssessmentModuleController {
 
   handleChangeDomain (axisId, domainId) {
     if (this.project.isMember || this.project.isViewer) {
-      const path = window.$nuxt.$root.localePath({name: 'organisation-projects-id-toolkit', params: window.$nuxt.$route.params, query: {axisId, domainId}});
+      const path = window.$nuxt.$root.localePath({ name: 'organisation-projects-id-toolkit', params: window.$nuxt.$route.params, query: { axisId, domainId } });
       window.$nuxt.$router.push(path);
     }
   }
 
   handleChangeAxis (axisId) {
     if (this.project.isMember || this.project.isViewer) {
-      const path = window.$nuxt.$root.localePath({name: 'organisation-projects-id-toolkit', params: window.$nuxt.$route.params, query: {axisId, domainId: 0}});
+      const path = window.$nuxt.$root.localePath({ name: 'organisation-projects-id-toolkit', params: window.$nuxt.$route.params, query: { axisId, domainId: 0 } });
       window.$nuxt.$router.push(path);
     }
   }

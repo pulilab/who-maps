@@ -8,8 +8,8 @@
     >
       <selector-dialog-category
         v-for="hsc in healthSystemChallenges"
-        :values="selected"
         :key="hsc.id"
+        :values="selected"
         :category="hsc"
         child-name="challenges"
         name-prop="challenge"

@@ -2,7 +2,8 @@
   <div
     v-if="donors && donors.length >0"
     id="donorcustom"
-    class="DonorCustom">
+    class="DonorCustom"
+  >
     <collapsible-card
       v-for="(donor) in donors"
       ref="collapsible"
@@ -11,11 +12,11 @@
     >
       <custom-field
         v-for="(field, index) in donor.donor_questions"
+        :id="field.id"
         ref="customQuestion"
         :key="field.id"
         :index="index"
         :api-errors="apiErrors"
-        :id="field.id"
         :type="field.type"
         :question="field.question"
         :is-required="field.required"
@@ -55,10 +56,8 @@ export default {
       if (this.projectDonors) {
         return this.projectDonors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
       }
+      return null;
     }
-  },
-  mounted () {
-    this.$emit('mounted');
   },
   methods: {
     async validate () {

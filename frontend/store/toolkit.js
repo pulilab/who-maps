@@ -45,7 +45,7 @@ export const getters = {
 };
 
 export const actions = {
-  async loadToolkitData ({commit, rootState}) {
+  async loadToolkitData ({ commit, rootState }) {
     try {
       const projectId = rootState.projects.currentProject;
       if (projectId) {
@@ -56,7 +56,7 @@ export const actions = {
       return Promise.reject(e);
     };
   },
-  async saveAnswer ({commit, dispatch, rootState}, answer) {
+  async saveAnswer ({ commit, dispatch, rootState }, answer) {
     try {
       const projectId = rootState.projects.currentProject;
       if (projectId) {

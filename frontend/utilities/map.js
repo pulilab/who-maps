@@ -15,12 +15,12 @@ export const stateGenerator = () => ({
 });
 
 export const gettersGenerator = () => ({
-  getProjectsMap: state => [...state.projectsMap.map(r => ({...r}))],
+  getProjectsMap: state => [...state.projectsMap.map(r => ({ ...r }))],
   getCountryPins (state, getters, rootState, rootGetters) {
     const polyLabeled = rootGetters['countries/getCountries'].filter(c => c.lat);
     return polyLabeled.map(c => ({
       id: c.id,
-      latlng: {lat: c.lat, lon: c.lon}
+      latlng: { lat: c.lat, lon: c.lon }
     }));
   },
   getSubLevelPins (state, getters, rootState, rootGetters) {
@@ -33,7 +33,7 @@ export const gettersGenerator = () => ({
         sp.map_data.first_sub_level.elements.forEach((e) => {
           if (e && e.polyCenter) {
             const id = e.id;
-            pins.push({latlng: e.polyCenter, id});
+            pins.push({ latlng: e.polyCenter, id });
           }
         });
       }
@@ -72,33 +72,33 @@ export const gettersGenerator = () => ({
 });
 
 export const actionsGenerator = () => ({
-  async setSelectedCountry ({commit, dispatch, getters}, id) {
+  async setSelectedCountry ({ commit, dispatch, getters }, id) {
     if (id) {
-      await dispatch('countries/loadGeoJSON', id, {root: true});
-      await dispatch('countries/loadCountryDetails', id, {root: true});
+      await dispatch('countries/loadGeoJSON', id, { root: true });
+      await dispatch('countries/loadCountryDetails', id, { root: true });
     }
     if (getters.getFilteredCountries && getters.getFilteredCountries.length === 1) {
       commit('SET_FILTERED_COUNTRIES', [id]);
     }
     commit('SET_SELECTED_COUNTRY', id);
   },
-  async loadProjects ({commit, getters, dispatch}, paramsOverride) {
+  async loadProjects ({ commit, getters, dispatch }, paramsOverride) {
     try {
       const { data } = await this.$axios({
         method: 'get',
         url: '/api/search/',
-        params: {...getters.getSearchParameters, ...paramsOverride, sc: undefined, dashboardType: undefined, dashboardId: undefined},
-        paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'})
+        params: { ...getters.getSearchParameters, ...paramsOverride, sc: undefined, dashboardType: undefined, dashboardId: undefined },
+        paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' })
       });
       return data;
     } catch (e) {
       console.error('sharedMapModule/loadProjects failed');
     }
   },
-  setCurrentZoom ({commit}, value) {
+  setCurrentZoom ({ commit }, value) {
     commit('SET_CURRENT_ZOOM', value);
   },
-  setActiveCountry ({commit, getters, dispatch}, value) {
+  setActiveCountry ({ commit, getters, dispatch }, value) {
     if (value && getters.getSelectedCountry && getters.getSelectedCountry !== value) {
       dispatch('setSelectedCountry', value);
     }
@@ -108,22 +108,22 @@ export const actionsGenerator = () => ({
     dispatch('setActiveSubLevel', null);
     commit('SET_ACTIVE_COUNTRY', value);
   },
-  setMapReady ({commit}, value) {
+  setMapReady ({ commit }, value) {
     commit('SET_MAP_READY', value);
   },
-  setProjectBoxActiveTab ({commit}, value) {
+  setProjectBoxActiveTab ({ commit }, value) {
     commit('SET_PROJECT_BOX_ACTIVE_TAB', value);
   },
-  setActiveSubLevel ({commit}, value) {
+  setActiveSubLevel ({ commit }, value) {
     commit('SET_ACTIVE_SUB_LEVEL', value);
   },
-  setSearchString ({commit}, value) {
+  setSearchString ({ commit }, value) {
     commit('SET_SEARCH_STRING', value);
   },
-  setSearchIn ({commit}, value) {
+  setSearchIn ({ commit }, value) {
     commit('SET_SEARCH_IN', value);
   },
-  resetUserInput ({commit}) {
+  resetUserInput ({ commit }) {
     commit('RESET_USER_INPUT');
   }
 });

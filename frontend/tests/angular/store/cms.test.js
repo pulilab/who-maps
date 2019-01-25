@@ -30,21 +30,21 @@ describe('CMS Store Module', () => {
     });
 
     test('getDomainStructureForCms', () => {
-      window.$nuxt.$store.getters['system/getAxis'] = [{id: 1}];
-      window.$nuxt.$store.getters['system/getDomains'] = [{id: 1, axis: 1, name: 1}];
+      window.$nuxt.$store.getters['system/getAxis'] = [{ id: 1 }];
+      window.$nuxt.$store.getters['system/getDomains'] = [{ id: 1, axis: 1, name: 1 }];
       const result = CmsModule.getters.getDomainStructureForCms({});
       expect(result[0].id).toBe(1);
       expect(result[0].domains[0].name).toBe(1);
     });
 
     test('getAxisName', () => {
-      window.$nuxt.$store.getters['system/getAxis'] = [{id: 1, name: 'a'}];
+      window.$nuxt.$store.getters['system/getAxis'] = [{ id: 1, name: 'a' }];
       const result = CmsModule.getters.getAxisName({}, 0);
       expect(result).toBe('a');
     });
 
     test('getDomain', () => {
-      window.$nuxt.$store.getters['system/getDomains'] = [{id: 1, axis: 1, name: 1}];
+      window.$nuxt.$store.getters['system/getDomains'] = [{ id: 1, axis: 1, name: 1 }];
       const result = CmsModule.getters.getDomain({}, 1);
       expect(result.name).toBe(1);
     });

@@ -49,7 +49,7 @@ export const getters = {
     return levels;
   },
   getSubLevelsPolyCenters (state) {
-    return [ ...state.subLevelsPolyCenters.filter(p => p.latlng).map(pc => ({name: pc.name, latlng: {...pc.latlng}})) ];
+    return [ ...state.subLevelsPolyCenters.filter(p => p.latlng).map(pc => ({ name: pc.name, latlng: { ...pc.latlng } })) ];
   },
   getFirstSubLevelMap (state, getters) {
     const features = getters.getSubLevelFeatures;
@@ -122,7 +122,7 @@ const parseNames = (collection) => {
 };
 
 export const actions = {
-  async loadGeoJSON ({commit, rootGetters}) {
+  async loadGeoJSON ({ commit, rootGetters }) {
     try {
       const country = rootGetters['admin/country/getData'];
       const url = country.map_files.length && country.map_files.slice(-1)[0].map_file;
@@ -139,44 +139,44 @@ export const actions = {
       console.error('Map failed to load', e);
     }
   },
-  setCountryCenter ({commit}, value) {
+  setCountryCenter ({ commit }, value) {
     value = value ? { ...value } : null;
     commit('SET_COUNTRY_CENTER', value);
   },
-  setFirstSubLevel ({commit}, value) {
+  setFirstSubLevel ({ commit }, value) {
     value = value || null;
     commit('SET_FIRST_SUB_LEVEL', value);
   },
-  setFirstSubLevelType ({commit}, value) {
+  setFirstSubLevelType ({ commit }, value) {
     value = value || null;
     commit('SET_FIRST_SUB_LEVEL_TYPE', value);
   },
-  setSecondSubLevel ({commit}, value) {
+  setSecondSubLevel ({ commit }, value) {
     value = value || null;
     commit('SET_SECOND_SUB_LEVEL', value);
   },
-  setSecondSubLevelType ({commit}, value) {
+  setSecondSubLevelType ({ commit }, value) {
     value = value || null;
     commit('SET_SECOND_SUB_LEVEL_TYPE', value);
   },
-  parseSubLevelsPolyCenters ({dispatch}, value) {
-    const polyCenters = value.elements.map(e => ({name: e.name, latlng: e.polyCenter}));
+  parseSubLevelsPolyCenters ({ dispatch }, value) {
+    const polyCenters = value.elements.map(e => ({ name: e.name, latlng: e.polyCenter }));
     dispatch('setSubLevelsPolyCenters', polyCenters);
   },
-  setSubLevelsPolyCenters ({commit}, value) {
+  setSubLevelsPolyCenters ({ commit }, value) {
     value = value || [];
     commit('SET_SUB_LEVELS_POLYCENTERS', value);
   },
-  updateSubLevelPolyCenter ({commit, getters}, {name, latlng}) {
+  updateSubLevelPolyCenter ({ commit, getters }, { name, latlng }) {
     const current = getters.getSubLevelsPolyCenters;
     const index = current.findIndex(c => c.name === name);
     commit('UPDATE_SUB_LEVELS_POLYCENTERS', { index, data: { name, latlng } });
   },
-  setFacilities ({commit}, list) {
+  setFacilities ({ commit }, list) {
     list = list || [];
     commit('SET_FACILITIES', list);
   },
-  async saveMapData ({getters, rootGetters}) {
+  async saveMapData ({ getters, rootGetters }) {
     const first = getters.getFirstSubLevelList.map((f, index) => {
       return {
         id: f.id || index,
@@ -220,8 +220,8 @@ export const mutations = {
   SET_SELECTED_COUNTRY: (state, id) => {
     state.id = id;
   },
-  SET_COUNTRY_DATA: (state, {id, map_file}) => {
-    state.country = {id, map_file};
+  SET_COUNTRY_DATA: (state, { id, map_file }) => {
+    state.country = { id, map_file };
   },
   SET_COUNTRY_CENTER: (state, data) => {
     state.countryCenter = data;
@@ -247,7 +247,7 @@ export const mutations = {
   SET_SUB_LEVELS_POLYCENTERS: (state, data) => {
     state.subLevelsPolyCenters = data;
   },
-  UPDATE_SUB_LEVELS_POLYCENTERS: (state, {index, data}) => {
+  UPDATE_SUB_LEVELS_POLYCENTERS: (state, { index, data }) => {
     state.subLevelsPolyCenters.splice(index, 1, data);
   },
   RESET_MAP_STATE: state => {

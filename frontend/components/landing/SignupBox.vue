@@ -3,7 +3,8 @@
     <el-row
       type="flex"
       align="middle"
-      class="SignupBoxHeadline">
+      class="SignupBoxHeadline"
+    >
       <el-col>
         <h2>Sign up</h2>
         <h6>
@@ -15,7 +16,7 @@
     </el-row>
     <el-row>
       <el-col>
-        <signup-component shadow="never"/>
+        <signup-component shadow="never" />
       </el-col>
     </el-row>
   </div>

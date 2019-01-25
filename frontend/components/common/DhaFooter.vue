@@ -4,11 +4,13 @@
       <el-row
         type="flex"
         justify-content="start"
-        align="middle">
+        align="middle"
+      >
         <el-col class="LogoWHO">
           <img
             src="/logo-who-gray-notext.svg"
-            alt="WHO">
+            alt="WHO"
+          >
         </el-col>
         <el-col class="Separator">
           <div />
@@ -18,7 +20,9 @@
           <span>
             <translate>All reasonable precautions have been taken by the World Health Organization to verify the information contained in this publication. However, the published material is being distributed without warranty of any kind, either expressed or implied. The responsibility for the interpretation and use of the material lies with the reader. In no event shall the World Health Organization be liable for damages arising from its use.</translate>
           </span>
-          <nuxt-link :to="localePath({name: 'organisation-terms', params: $route.params})"><translate>Terms of use</translate></nuxt-link>
+          <nuxt-link :to="localePath({name: 'organisation-terms', params: $route.params})">
+            <translate>Terms of use</translate>
+          </nuxt-link>
         </el-col>
       </el-row>
     </div>

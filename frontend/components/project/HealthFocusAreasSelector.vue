@@ -6,16 +6,19 @@
     filterable
     popper-class="HealthFocusAreasSelectorDropdown"
     class="HealthFocusAreasSelector"
-    @change="changeHandler">
+    @change="changeHandler"
+  >
     <el-option-group
       v-for="group in healthFocusAreas"
       :key="group.id"
-      :label="group.name">
+      :label="group.name"
+    >
       <el-option
         v-for="hfa in group.health_focus_areas"
         :key="hfa.id"
         :label="hfa.name"
-        :value="hfa.id"/>
+        :value="hfa.id"
+      />
     </el-option-group>
   </el-select>
 </template>

@@ -14,6 +14,7 @@ export default {
         }
         return this.$slots.default[0].text.trim();
       }
+      return null;
     },
     translated () {
       return this.$gettext(this.message, this.parameters);

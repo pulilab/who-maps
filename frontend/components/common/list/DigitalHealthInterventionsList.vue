@@ -3,7 +3,8 @@
     <ul class="SelectedDigitalHealthInterventions">
       <li
         v-for="item in selected"
-        :key="item">
+        :key="item"
+      >
         <list-action
           v-if="actions"
           @click="$emit('delete', item)"

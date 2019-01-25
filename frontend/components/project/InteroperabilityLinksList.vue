@@ -10,7 +10,8 @@
         </div>
         <simple-field
           :content="link.link"
-          link />
+          link
+        />
       </li>
       <li v-show="selected.length === 0">
         <translate>N/A</translate>
@@ -40,7 +41,7 @@ export default {
     selected () {
       const result = [];
       this.interoperabilityLinks.forEach(il => {
-        const selected = {...this.value[il.id]};
+        const selected = { ...this.value[il.id] };
         if (selected && selected.link) {
           selected.id = il.id;
           selected.label = `${il.pre} ${il.name}`;

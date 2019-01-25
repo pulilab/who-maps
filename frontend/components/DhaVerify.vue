@@ -9,7 +9,8 @@
         <translate>Congratulations your email address is verified, you can now </translate>
         <span
           class="TextLink"
-          @click="toLogin">
+          @click="toLogin"
+        >
           <translate>login</translate>
         </span>
         <translate>and use the system.</translate>
@@ -22,7 +23,7 @@
 export default {
   methods: {
     toLogin () {
-      this.$router.push(this.localePath({name: 'organisation-login', params: this.$route.params}));
+      this.$router.push(this.localePath({ name: 'organisation-login', params: this.$route.params }));
     }
   }
 };

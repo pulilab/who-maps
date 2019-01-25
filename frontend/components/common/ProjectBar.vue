@@ -3,10 +3,12 @@
     <div class="ProjectBarWrapper">
       <el-row
         type="flex"
-        justify="space-between">
+        justify="space-between"
+      >
         <el-col
           :span="12"
-          class="ProjectName">
+          class="ProjectName"
+        >
           <div>
             {{ project.name }}
             <project-legend :id="project.id" />
@@ -15,13 +17,16 @@
 
         <el-col
           :span="12"
-          class="ProjectInfo">
+          class="ProjectInfo"
+        >
           <el-row
             type="flex"
-            justify="end">
+            justify="end"
+          >
             <el-col
               :span="8"
-              class="InfoSection">
+              class="InfoSection"
+            >
               <div class="Label">
                 <translate>Last Updated</translate>
               </div>
@@ -31,7 +36,8 @@
             </el-col>
             <el-col
               :span="8"
-              class="InfoSection">
+              class="InfoSection"
+            >
               <div class="Label">
                 <translate>Organisation</translate>
               </div>
@@ -41,14 +47,16 @@
             </el-col>
             <el-col
               :span="8"
-              class="InfoSection">
+              class="InfoSection"
+            >
               <div class="Label">
                 <translate>Contact person</translate>
               </div>
               <div class="Info">
                 <a
                   :href="`mailto:${project.contact_email}`"
-                  class="NuxtLink Small IconRight">
+                  class="NuxtLink Small IconRight"
+                >
                   {{ project.contact_name }}
                   <fa icon="envelope" />
                 </a>
@@ -56,26 +64,28 @@
             </el-col>
           </el-row>
         </el-col>
-
       </el-row>
 
       <div class="ProjectMenu">
         <nuxt-link
           v-if="isTeam"
           :class="{'Active': isProjectActive}"
-          :to="localePath({name: 'organisation-projects-id-edit', params: {id, organisation: $route.params.organisation}})">
+          :to="localePath({name: 'organisation-projects-id-edit', params: {id, organisation: $route.params.organisation}})"
+        >
           <translate>Project</translate>
         </nuxt-link>
         <nuxt-link
           v-if="isViewer && !isTeam"
           :class="{'Active': isProjectActive}"
-          :to="localePath({name: 'organisation-projects-id', params: {id, organisation: $route.params.organisation}})">
+          :to="localePath({name: 'organisation-projects-id', params: {id, organisation: $route.params.organisation}})"
+        >
           <translate>Project</translate>
         </nuxt-link>
         <nuxt-link
           v-if="anon"
           :class="{'Active': isProjectActive}"
-          :to="localePath({name: 'organisation-projects-id-published', params: {id, organisation: $route.params.organisation}})">
+          :to="localePath({name: 'organisation-projects-id-published', params: {id, organisation: $route.params.organisation}})"
+        >
           <translate>Project</translate>
         </nuxt-link>
         <nuxt-link :to="localePath({name: 'organisation-projects-id-assessment', params: {id, organisation: $route.params.organisation}})">
@@ -84,13 +94,15 @@
         <nuxt-link
           v-if="isTeam"
           :class="{'Active': isUpdateScoreActive}"
-          :to="localePath({name: 'organisation-projects-id-toolkit', params: {id, organisation: $route.params.organisation}})">
+          :to="localePath({name: 'organisation-projects-id-toolkit', params: {id, organisation: $route.params.organisation}})"
+        >
           <translate>Update score</translate>
         </nuxt-link>
         <nuxt-link
           v-if="isTeam"
           :class="{'Active': isScorecardActive}"
-          :to="localePath({name: 'organisation-projects-id-toolkit-scorecard', params: {id, organisation: $route.params.organisation}})">
+          :to="localePath({name: 'organisation-projects-id-toolkit-scorecard', params: {id, organisation: $route.params.organisation}})"
+        >
           <translate>Summary score</translate>
         </nuxt-link>
       </div>
@@ -154,6 +166,7 @@ export default {
       if (this.project) {
         return format(this.project.modified, 'DD-MM-YYYY');
       }
+      return null;
     }
   }
 };

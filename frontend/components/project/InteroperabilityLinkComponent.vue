@@ -3,16 +3,17 @@
     <el-col :span="12">
       <el-checkbox
         :value="selected"
-        @change="selectedChangeHandler">
+        @change="selectedChangeHandler"
+      >
         {{ item.pre }} {{ item.name }}
       </el-checkbox>
     </el-col>
     <el-col :span="12">
       <el-form-item :error="errors.first('link', 'interoperability_link_' + index)">
         <el-input
+          v-model="innerLinkValue"
           v-validate="rules.interoperability_links"
           :disabled="!selected"
-          v-model="innerLinkValue"
           :placeholder="$gettext('Specify URL') | translate"
           :data-as-name="item.pre + item.name"
           :data-vv-scope="'interoperability_link_' + index"
@@ -22,7 +23,6 @@
       </el-form-item>
     </el-col>
   </el-row>
-
 </template>
 
 <script>
@@ -63,7 +63,7 @@ export default {
       },
       set (link) {
         const ir = { ...this.interoperabilityLinks };
-        ir[this.item.id] = {...this.interoperabilityLink, link};
+        ir[this.item.id] = { ...this.interoperabilityLink, link };
         this.$emit('update:interoperabilityLinks', ir);
       }
     }
@@ -71,7 +71,7 @@ export default {
   methods: {
     selectedChangeHandler (selected) {
       const ir = { ...this.interoperabilityLinks };
-      ir[this.item.id] = {...this.interoperabilityLink, selected};
+      ir[this.item.id] = { ...this.interoperabilityLink, selected };
       this.$emit('update:interoperabilityLinks', ir);
     },
     async validate () {

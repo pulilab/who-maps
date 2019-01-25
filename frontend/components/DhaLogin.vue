@@ -3,7 +3,8 @@
     <el-card
       v-if="!showForgotten && !successfulReset"
       key="loginCard"
-      :body-style="{ padding: '0px' }">
+      :body-style="{ padding: '0px' }"
+    >
       <div slot="header">
         <translate>Log in to Digital Health Atlas</translate>
       </div>
@@ -14,25 +15,32 @@
         :model="{ username, password }"
         label-position="top"
         status-icon
-        @submit.native.prevent="loginLocal">
+        @submit.native.prevent="loginLocal"
+      >
         <fieldset>
           <el-form-item
             :label="$gettext('E-mail') | translate"
-            prop="username">
+            prop="username"
+          >
             <el-input
               v-model="username"
-              type="text" />
+              type="text"
+            />
           </el-form-item>
 
           <el-form-item
             :label="$gettext('Password') | translate"
-            prop="password">
+            prop="password"
+          >
             <el-input
               v-model="password"
-              type="password" />
+              type="password"
+            />
             <div
               v-if="nonFieldErrors"
-              class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
+              class="el-form-item__error ModifiedFormError"
+            >
+              {{ nonFieldErrors }}
             </div>
           </el-form-item>
         </fieldset>
@@ -42,32 +50,38 @@
             type="flex"
             justify="space-between"
             align="middle"
-            class="cardActions">
+            class="cardActions"
+          >
             <el-col
               :span="6"
-              class="SecondaryAction">
+              class="SecondaryAction"
+            >
               <nuxt-link
                 :to="localePath({name: 'organisation-signup', params: $route.params})"
                 type="text"
-                class="NuxtLink Small">
+                class="NuxtLink Small"
+              >
                 <translate>Signup</translate>
               </nuxt-link>
-              <div class="Separator"/>
+              <div class="Separator" />
               <el-button
                 type="text"
                 size="small"
                 class="CancelButton"
-                @click="toForgotten">
+                @click="toForgotten"
+              >
                 <translate>Forgot password?</translate>
               </el-button>
             </el-col>
             <el-col
               :span="6"
-              class="PrimaryAction">
+              class="PrimaryAction"
+            >
               <el-button
                 type="primary"
                 size="medium"
-                native-type="submit">
+                native-type="submit"
+              >
                 <translate>Log in</translate>
               </el-button>
             </el-col>
@@ -79,12 +93,15 @@
     <el-card
       v-if="showForgotten"
       key="forgottenCard"
-      :body-style="{ padding: '0px' }">
+      :body-style="{ padding: '0px' }"
+    >
       <div slot="header">
         <translate>Reset forgotten password</translate>
       </div>
 
-      <p class="Instruction"><translate>Enter your email address and follow the instructions you will get by email.</translate></p>
+      <p class="Instruction">
+        <translate>Enter your email address and follow the instructions you will get by email.</translate>
+      </p>
 
       <el-form
         ref="forgotForm"
@@ -92,14 +109,17 @@
         :model="{ email }"
         label-position="top"
         status-icon
-        @submit.native.prevent="forgotEmail">
+        @submit.native.prevent="forgotEmail"
+      >
         <fieldset>
           <el-form-item
             :label="$gettext('E-mail') | translate"
-            prop="email">
+            prop="email"
+          >
             <el-input
               v-model="email"
-              type="text" />
+              type="text"
+            />
           </el-form-item>
         </fieldset>
 
@@ -108,24 +128,29 @@
             type="flex"
             justify="space-between"
             align="middle"
-            class="cardActions">
+            class="cardActions"
+          >
             <el-col
               :span="6"
-              class="SecondaryAction">
+              class="SecondaryAction"
+            >
               <el-button
                 type="text"
                 size="small"
-                @click="showForgotten = false">
+                @click="showForgotten = false"
+              >
                 <translate>Go back to login</translate>
               </el-button>
             </el-col>
             <el-col
               :span="6"
-              class="PrimaryAction">
+              class="PrimaryAction"
+            >
               <el-button
                 type="primary"
                 size="medium"
-                native-type="submit">
+                native-type="submit"
+              >
                 <translate>Reset</translate>
               </el-button>
             </el-col>
@@ -138,29 +163,36 @@
       v-if="successfulReset"
       key="resetCard"
       :body-style="{ padding: '0px' }"
-      class="Success">
+      class="Success"
+    >
       <div slot="header">
         <translate>Congratulations!</translate>
       </div>
 
-      <p class="Instruction"><translate>An email with instructions to reset your password have been sent.</translate></p>
+      <p class="Instruction">
+        <translate>An email with instructions to reset your password have been sent.</translate>
+      </p>
 
       <div class="CardActionsBottom">
         <el-row
           type="flex"
           justify="space-between"
           align="middle"
-          class="cardActions">
+          class="cardActions"
+        >
           <el-col
             :span="6"
-            class="SecondaryAction" />
+            class="SecondaryAction"
+          />
           <el-col
             :span="6"
-            class="PrimaryAction">
+            class="PrimaryAction"
+          >
             <el-button
               type="primary"
               size="medium"
-              @click="successfulReset = false">
+              @click="successfulReset = false"
+            >
               <translate>Go back to login</translate>
             </el-button>
           </el-col>
@@ -255,10 +287,10 @@ export default {
         }
         if (this.$route.query && this.$route.query.next) {
           const path = this.$route.query.next;
-          const query = {...this.$route.query, next: undefined};
-          this.$router.push({path, query});
+          const query = { ...this.$route.query, next: undefined };
+          this.$router.push({ path, query });
         } else {
-          this.$router.push(this.localePath({name: 'organisation-dashboard', params: this.$route.params, query: {country: [this.profile.country]}}));
+          this.$router.push(this.localePath({ name: 'organisation-dashboard', params: this.$route.params, query: { country: [this.profile.country] } }));
         }
       } catch (e) {
         this.handleRoutingErrors(e);

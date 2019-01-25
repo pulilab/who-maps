@@ -1,112 +1,148 @@
 <template>
   <div class="CountryAdmin">
     <div class="PageTitle">
-      <h2><translate :parameters="{name: donor.name}">Investor admin for {name}</translate></h2>
+      <h2>
+        <translate :parameters="{name: donor.name}">
+          Investor admin for {name}
+        </translate>
+      </h2>
     </div>
 
     <collapsible-card
       :title="$gettext('Investor information') | translate"
-      class="CountryInformation">
-
+      class="CountryInformation"
+    >
       <el-form
         ref="countryInfo"
         :rules="rules"
         :model="{ logo, cover }"
         label-width="220px"
         label-position="left"
-        @submit.native.prevent>
-
+        @submit.native.prevent
+      >
         <el-form-item
           v-if="userProfile.is_superuser"
-          :label="$gettext('Choose investor') | translate">
+          :label="$gettext('Choose investor') | translate"
+        >
           <donor-select
             :value="donorId"
-            @change="setDonorId"/>
+            @change="setDonorId"
+          />
         </el-form-item>
 
         <el-form-item
           :label="$gettext('Logo')"
-          prop="logo">
+          prop="logo"
+        >
           <file-upload
             :disabled="notSDA"
             :auto-upload="false"
             :files.sync="logo"
-            :limit="1"/>
+            :limit="1"
+          />
         </el-form-item>
 
         <el-form-item
           :label="$gettext('Cover image') | translate"
-          prop="cover">
+          prop="cover"
+        >
           <file-upload
             :disabled="notSDA"
             :files.sync="cover"
-            :limit="1"/>
+            :limit="1"
+          />
         </el-form-item>
 
         <el-form-item :label="$gettext('Cover text') | translate">
           <el-input
-            :disabled="notSDA"
             v-model="coverText"
+            :disabled="notSDA"
             type="textarea"
-            rows="5"/>
+            rows="5"
+          />
         </el-form-item>
 
         <el-form-item :label="$gettext('Footer title') | translate">
           <el-input
-            :disabled="notSDA"
             v-model="footerTitle"
-            type="text"/>
+            :disabled="notSDA"
+            type="text"
+          />
         </el-form-item>
 
         <el-form-item :label="$gettext('Footer text') | translate">
           <el-input
-            :disabled="notSDA"
             v-model="footerText"
-            type="text"/>
+            :disabled="notSDA"
+            type="text"
+          />
         </el-form-item>
 
         <el-form-item
           :label="$gettext('Partner logos') | translate"
-          prop="partnerLogos">
+          prop="partnerLogos"
+        >
           <file-upload
             :disabled="notSDA"
             :files.sync="partnerLogos"
-            :limit="10"/>
+            :limit="10"
+          />
         </el-form-item>
       </el-form>
-
     </collapsible-card>
 
     <collapsible-card
       :title="$gettext('User management') | translate"
-      class="UserManagement">
+      class="UserManagement"
+    >
       <el-row type="flex">
         <el-col class="AdminPersonaChooser">
           <div
             :class="['Persona', { 'active': selectedPersona === 'D'}]"
-            @click="selectPersona('D')">
-            <div class="PersonaName"><translate>Investor Viewers</translate></div>
-            <div class="RequestCount"><translate :parameters="{num: userSelection.length - users.length}">{num} new request(s)</translate></div>
+            @click="selectPersona('D')"
+          >
+            <div class="PersonaName">
+              <translate>Investor Viewers</translate>
+            </div>
+            <div class="RequestCount">
+              <translate :parameters="{num: userSelection.length - users.length}">
+                {num} new request(s)
+              </translate>
+            </div>
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'DA'}]"
-            @click="selectPersona('DA')">
-            <div class="PersonaName"><translate>Investor Admins</translate></div>
-            <div class="RequestCount"><translate :parameters="{num: adminSelection.length - admins.length}">{num} new request(s)</translate></div>
+            @click="selectPersona('DA')"
+          >
+            <div class="PersonaName">
+              <translate>Investor Admins</translate>
+            </div>
+            <div class="RequestCount">
+              <translate :parameters="{num: adminSelection.length - admins.length}">
+                {num} new request(s)
+              </translate>
+            </div>
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'SDA'}]"
-            @click="selectPersona('SDA')">
-            <div class="PersonaName"><translate>Investor System Admins</translate></div>
-            <div class="RequestCount"><translate :parameters="{num: superadminSelection.length - superAdmins.length}">{num} new request(s)</translate></div>
+            @click="selectPersona('SDA')"
+          >
+            <div class="PersonaName">
+              <translate>Investor System Admins</translate>
+            </div>
+            <div class="RequestCount">
+              <translate :parameters="{num: superadminSelection.length - superAdmins.length}">
+                {num} new request(s)
+              </translate>
+            </div>
           </div>
         </el-col>
 
         <el-col class="UserTransfers">
-
           <div
             v-if="selectedPersona === 'D'"
-            class="PersonaPrivileges">
+            class="PersonaPrivileges"
+          >
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -114,7 +150,11 @@
                 </template>
                 <div>
                   <ul>
-                    <li><translate key="d-list-item-1">Can read/export responses to private investor questions</translate></li>
+                    <li>
+                      <translate key="d-list-item-1">
+                        Can read/export responses to private investor questions
+                      </translate>
+                    </li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -122,15 +162,17 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'D'"
-            :titles="transferTitles"
             v-model="users"
+            :titles="transferTitles"
             :data="userSelection"
             :filter-placeholder="$gettext('Type to filter users...') | translate"
-            filterable />
+            filterable
+          />
 
           <div
             v-if="selectedPersona === 'DA'"
-            class="PersonaPrivileges">
+            class="PersonaPrivileges"
+          >
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -138,10 +180,26 @@
                 </template>
                 <div>
                   <ul>
-                    <li><translate key="da-list-item-1">Can read/export responses to private investor questions</translate></li>
-                    <li><translate key="da-list-item-2">Can create and delete investor-specific questions</translate></li>
-                    <li><translate key="da-list-item-3">Can select which questions are private and public</translate></li>
-                    <li><translate key="da-list-item-4">Can approve users to join the investor page</translate></li>
+                    <li>
+                      <translate key="da-list-item-1">
+                        Can read/export responses to private investor questions
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="da-list-item-2">
+                        Can create and delete investor-specific questions
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="da-list-item-3">
+                        Can select which questions are private and public
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="da-list-item-4">
+                        Can approve users to join the investor page
+                      </translate>
+                    </li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -149,15 +207,17 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'DA'"
-            :titles="transferTitles"
             v-model="admins"
+            :titles="transferTitles"
             :data="adminSelection"
             :filter-placeholder="$gettext('Type to filter users...') | translate"
-            filterable />
+            filterable
+          />
 
           <div
             v-if="selectedPersona === 'SDA'"
-            class="PersonaPrivileges">
+            class="PersonaPrivileges"
+          >
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -165,11 +225,31 @@
                 </template>
                 <div>
                   <ul>
-                    <li><translate key="sda-list-item-1">Can read/export responses to private investor-specific questions</translate></li>
-                    <li><translate key="sda-list-item-2">Can create and delete investor-specific questions</translate></li>
-                    <li><translate key="sda-list-item-3">Can select which questions are private and public</translate></li>
-                    <li><translate key="sda-list-item-4">Can approve users to join the investor page</translate></li>
-                    <li><translate key="sda-list-item-5">Can customize and update investor home page</translate></li>
+                    <li>
+                      <translate key="sda-list-item-1">
+                        Can read/export responses to private investor-specific questions
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="sda-list-item-2">
+                        Can create and delete investor-specific questions
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="sda-list-item-3">
+                        Can select which questions are private and public
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="sda-list-item-4">
+                        Can approve users to join the investor page
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="sda-list-item-5">
+                        Can customize and update investor home page
+                      </translate>
+                    </li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -177,47 +257,50 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'SDA'"
-            :titles="transferTitles"
             v-model="superAdmins"
+            :titles="transferTitles"
             :data="superadminSelection"
             :filter-placeholder="$gettext('Type to filter users...') | translate"
-            filterable />
-
+            filterable
+          />
         </el-col>
       </el-row>
     </collapsible-card>
 
     <collapsible-card
       :title="$gettext('Investor specific questionaire') | translate"
-      class="Questionnaire">
+      class="Questionnaire"
+    >
       <dha-questionaire ref="customQuestions" />
     </collapsible-card>
 
     <div class="AdminActionBarBottom">
       <el-row
         type="flex"
-        justify="space-between">
+        justify="space-between"
+      >
         <el-button
           type="text"
-          class="CancelButton IconLeft">
+          class="CancelButton IconLeft"
+        >
           <fa icon="reply" />
           <translate>Dismiss changes</translate>
         </el-button>
         <el-button
           type="primary"
           size="medium"
-          @click="save"><translate>Save changes</translate>
+          @click="save"
+        >
+          <translate>Save changes</translate>
         </el-button>
       </el-row>
     </div>
-
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import CollapsibleCard from '../project/CollapsibleCard';
-import VueMapCustomizer from '../admin/VueMapCustomizer';
 import DhaQuestionaire from '../admin/DhaQuestionaire';
 import FileUpload from '../common/FileUpload';
 import DonorSelect from '../common/DonorSelect';
@@ -229,7 +312,6 @@ export default {
 
   components: {
     CollapsibleCard,
-    VueMapCustomizer,
     DhaQuestionaire,
     FileUpload,
     DonorSelect
@@ -250,7 +332,7 @@ export default {
             } else {
               callback();
             }
-          }}
+          } }
         ],
         cover: [
           { validator: (rule, value, callback) => {
@@ -259,7 +341,7 @@ export default {
             } else {
               callback();
             }
-          }}
+          } }
         ],
         partnerLogos: [
           { validator: (rule, value, callback) => {
@@ -268,7 +350,7 @@ export default {
             } else {
               callback();
             }
-          }}
+          } }
         ]
       }
     };
@@ -307,7 +389,7 @@ export default {
         }
       },
       set ([value]) {
-        this.setDataField({field: 'logo', data: value});
+        this.setDataField({ field: 'logo', data: value });
       }
     },
 
@@ -325,7 +407,7 @@ export default {
         }
       },
       set ([value]) {
-        this.setDataField({field: 'cover', data: value});
+        this.setDataField({ field: 'cover', data: value });
       }
     },
 
@@ -344,7 +426,7 @@ export default {
         });
       },
       set (value) {
-        this.setDataField({field: 'partner_logos', data: value});
+        this.setDataField({ field: 'partner_logos', data: value });
       }
     },
 
@@ -353,7 +435,7 @@ export default {
         return this.donor.users || [];
       },
       set (value) {
-        this.setDataField({field: 'users', data: value});
+        this.setDataField({ field: 'users', data: value });
       }
     },
 
@@ -362,7 +444,7 @@ export default {
         return this.donor.admins || [];
       },
       set (value) {
-        this.setDataField({field: 'admins', data: value});
+        this.setDataField({ field: 'admins', data: value });
       }
     },
 
@@ -371,7 +453,7 @@ export default {
         return this.donor.super_admins || [];
       },
       set (value) {
-        this.setDataField({field: 'super_admins', data: value});
+        this.setDataField({ field: 'super_admins', data: value });
       }
     },
 

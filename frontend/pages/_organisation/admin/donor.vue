@@ -12,7 +12,7 @@ export default {
     DonorAdmin
   },
 
-  async fetch ({store}) {
+  async fetch ({ store }) {
     await Promise.all([
       store.dispatch('system/loadUserProfiles'),
       store.dispatch('system/loadDonors')

@@ -1,7 +1,8 @@
 <template>
   <div
     v-if="user"
-    class="PersonaSelector">
+    class="PersonaSelector"
+  >
     <el-popover
       v-model="visible"
       placement="bottom-end"
@@ -13,11 +14,14 @@
         type="text"
         class="IconRight"
       >
-        <translate key="view-as">View as:</translate>
+        <translate key="view-as">
+          View as:
+        </translate>
         <div :class="['PersonaBox', personaClass]">
           <fa
             :icon="personaIcon"
-            class="PersonaIcon" />
+            class="PersonaIcon"
+          />
           {{ persona }}
         </div>
         <fa icon="caret-down" />
@@ -33,7 +37,9 @@
             @click="setPersona('user')"
           >
             <fa icon="check" />
-            <translate :parameters="{name: user.name}">{name} (me)</translate>
+            <translate :parameters="{name: user.name}">
+              {name} (me)
+            </translate>
           </li>
           <template v-if="showDonor">
             <div class="el-popover__title">
@@ -58,7 +64,9 @@
               @click="setPersona('country')"
             >
               <fa icon="check" />
-              <translate :parameters="{country}">{country} MoH</translate>
+              <translate :parameters="{country}">
+                {country} MoH
+              </translate>
             </li>
           </template>
         </ul>
@@ -107,24 +115,28 @@ export default {
         const donor = this.getDonorDetails(this.user.donor);
         return donor ? donor.name : null;
       }
+      return null;
     },
     country () {
       if (this.user && this.user.country) {
         const country = this.getCountryDetails(this.user.country);
         return country ? country.name : null;
       }
+      return null;
     },
     showDonor () {
       const donorTypes = ['D', 'DA', 'SDA'];
       if (this.user) {
         return donorTypes.includes(this.user.account_type) || this.user.is_superuser;
       }
+      return null;
     },
     showCountry () {
       const countryTypes = ['G', 'CA', 'SCA'];
       if (this.user) {
         return countryTypes.includes(this.user.account_type) || this.user.is_superuser;
       }
+      return null;
     }
   },
   methods: {
@@ -133,7 +145,7 @@ export default {
     }),
     setPersona (type) {
       const id = type === 'user' ? null : type === 'country' ? this.user.country : this.user.donor;
-      this.setDashboardType({type, id});
+      this.setDashboardType({ type, id });
       this.visible = false;
     }
   }

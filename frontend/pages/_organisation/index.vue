@@ -8,7 +8,8 @@
       <div
         v-if="showCoverImage"
         :style="{backgroundImage: `url(${landingData.cover_url})`}"
-        class="CoverImageBg" />
+        class="CoverImageBg"
+      />
     </div>
 
     <div class="InfoSignupContainer">
@@ -45,7 +46,7 @@ export default {
     AboutSection,
     CountryProjectsBox
   },
-  fetch ({store}) {
+  fetch ({ store }) {
     store.dispatch('landing/resetSearch');
   },
   computed: {

@@ -1,5 +1,5 @@
 <template>
-  <span class="FormHint"/>
+  <span class="FormHint" />
 </template>
 
 <script>

@@ -19,7 +19,7 @@ export default {
     MainTable,
     TableTopActions
   },
-  async fetch ({store, query, error}) {
+  async fetch ({ store, query, error }) {
     store.dispatch('dashboard/setDashboardSection', 'list');
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),
@@ -48,7 +48,7 @@ export default {
       immediate: false,
       handler (query) {
         if (this.dashboardSection === 'list') {
-          this.$router.replace({...this.$route, query});
+          this.$router.replace({ ...this.$route, query });
           this.load();
         }
       }

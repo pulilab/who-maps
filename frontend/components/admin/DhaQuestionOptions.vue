@@ -1,30 +1,39 @@
 <template>
   <div class="ListOfOptions">
     <h6><translate>List of selectable options:</translate></h6>
-    <p v-if="!options.length"><translate>No options added yet</translate></p>
+    <p v-if="!options.length">
+      <translate>No options added yet</translate>
+    </p>
     <ul>
       <li
         v-for="(option, index) in options"
-        :key="index">
+        :key="index"
+      >
         <fa icon="check-circle" />
-        <span class="Option">{{ option }}</span>
+        <span class="Option">
+          {{ option }}
+        </span>
         <el-button
           v-if="!disabled"
           :disabled="disabled"
           type="text"
           size="mini"
           class="DeleteButton IconLeft RemoveOption"
-          @click="removeOption(index)"><fa icon="times" /></el-button>
+          @click="removeOption(index)"
+        >
+          <fa icon="times" />
+        </el-button>
       </li>
     </ul>
     <el-tooltip
       :disabled="!disabled"
       :content="$gettext('Unable to add or remove options on saved questions') | translate"
-      placement="top">
+      placement="top"
+    >
       <el-row
         type="flex"
-        align="middle">
-
+        align="middle"
+      >
         <el-col :span="16">
           <el-input
             ref="input"
@@ -32,16 +41,19 @@
             :disabled="disabled"
             :placeholder="$gettext('Add a new option here') | translate"
             type="text"
-            @keyup.enter.native="addOption" />
+            @keyup.enter.native="addOption"
+          />
         </el-col>
         <el-col :span="8">
           <el-button
             :disabled="!inputField || disabled"
             type="text"
             class="IconLeft AddOption"
-            @click="addOption"><fa icon="plus" /> <translate>Add</translate></el-button>
+            @click="addOption"
+          >
+            <fa icon="plus" /> <translate>Add</translate>
+          </el-button>
         </el-col>
-
       </el-row>
     </el-tooltip>
   </div>

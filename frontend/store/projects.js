@@ -158,7 +158,7 @@ export const getters = {
 };
 
 export const actions = {
-  async loadUserProjects ({commit, rootGetters, getters}) {
+  async loadUserProjects ({ commit, rootGetters, getters }) {
     try {
       const profile = rootGetters['user/getProfile'];
       if (profile && getters.getUserProjectList.length === 0) {
@@ -171,7 +171,7 @@ export const actions = {
       return Promise.reject(error);
     }
   },
-  async setCurrentProject ({commit, dispatch}, id) {
+  async setCurrentProject ({ commit, dispatch }, id) {
     id = parseInt(id, 10);
     try {
       await dispatch('loadProjectDetails', id);
@@ -181,7 +181,7 @@ export const actions = {
     }
     commit('SET_CURRENT_PROJECT', id);
   },
-  async loadProjectDetails ({commit, rootGetters}, projectId) {
+  async loadProjectDetails ({ commit, rootGetters }, projectId) {
     const profile = rootGetters['user/getProfile'];
     try {
       if (projectId && profile) {
@@ -198,7 +198,7 @@ export const actions = {
       return Promise.reject(error);
     }
   },
-  async snapShotProject ({state, dispatch}) {
+  async snapShotProject ({ state, dispatch }) {
     const id = state.currentProject;
     await this.$axios.post(`/api/projects/${id}/version/`);
     return dispatch('loadProjectDetails', id);
@@ -214,16 +214,16 @@ export const actions = {
       console.error('projects/loadProjectStructure failed');
     }
   },
-  addProjectToList ({commit}, project) {
+  addProjectToList ({ commit }, project) {
     commit('ADD_USER_PROJECT', project);
   },
-  updateProject ({commit}, project) {
+  updateProject ({ commit }, project) {
     commit('EDIT_USER_PROJECT', project);
   },
-  removeProject ({commit}, id) {
+  removeProject ({ commit }, id) {
     commit('RM_USER_PROJECT', id);
   },
-  resetProjectsData ({commit}) {
+  resetProjectsData ({ commit }) {
     commit('RESET_PROJECTS_DATA');
   }
 };

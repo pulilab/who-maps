@@ -1,100 +1,116 @@
 <template>
   <div class="CountryAdmin">
     <div class="PageTitle">
-      <h2><translate :parameters="{name: country.name}">Country admin for {name}</translate></h2>
+      <h2>
+        <translate :parameters="{name: country.name}">
+          Country admin for {name}
+        </translate>
+      </h2>
     </div>
 
     <collapsible-card
       :title="$gettext('Country information') | translate"
-      class="CountryInformation">
-
+      class="CountryInformation"
+    >
       <el-form
         ref="countryInfo"
         :rules="rules"
         :model="{ logo, cover }"
         label-width="220px"
         label-position="left"
-        @submit.native.prevent>
-
+        @submit.native.prevent
+      >
         <el-form-item
           v-if="userProfile.is_superuser"
-          :label="$gettext('Choose country') | translate">
+          :label="$gettext('Choose country') | translate"
+        >
           <country-select
             :value="countryId"
-            @change="setCountryId"/>
+            @change="setCountryId"
+          />
         </el-form-item>
 
         <el-form-item
           :label="$gettext('Logo') | translate"
-          prop="logo">
+          prop="logo"
+        >
           <file-upload
             :disabled="notSCA"
             :auto-upload="false"
             :files.sync="logo"
-            :limit="1"/>
+            :limit="1"
+          />
         </el-form-item>
 
         <el-form-item
           :label="$gettext('Cover image') | translate"
-          prop="cover">
+          prop="cover"
+        >
           <file-upload
             :disabled="notSCA"
             :files.sync="cover"
-            :limit="1"/>
+            :limit="1"
+          />
         </el-form-item>
 
         <el-form-item :label="$gettext('Cover text') | translate">
           <el-input
-            :disabled="notSCA"
             v-model="coverText"
+            :disabled="notSCA"
             type="textarea"
-            rows="5"/>
+            rows="5"
+          />
         </el-form-item>
 
         <el-form-item :label="$gettext('Footer title') | translate">
           <el-input
-            :disabled="notSCA"
             v-model="footerTitle"
+            :disabled="notSCA"
             :maxlength="128"
-            type="text"/>
+            type="text"
+          />
         </el-form-item>
 
         <el-form-item :label="$gettext('Footer text') | translate">
           <el-input
-            :disabled="notSCA"
             v-model="footerText"
+            :disabled="notSCA"
             :maxlength="128"
-            type="text"/>
+            type="text"
+          />
         </el-form-item>
 
         <el-form-item :label="$gettext('Project approval process') | translate">
           <el-checkbox
+            v-model="projectApproval"
             :disabled="notSCA"
-            v-model="projectApproval">
+          >
             <translate
               v-if="projectApproval"
-              key="used-country">
+              key="used-country"
+            >
               Used for projects in country
             </translate>
             <translate
               v-if="!projectApproval"
-              key="not-used-country">
+              key="not-used-country"
+            >
               Not used for projects in country
             </translate>
-
           </el-checkbox>
         </el-form-item>
 
         <el-form-item
           :label="$gettext('Partner logos') | translate"
-          prop="partnerLogos">
+          prop="partnerLogos"
+        >
           <file-upload
             :disabled="notSCA"
             :files.sync="partnerLogos"
-            :limit="10"/>
+            :limit="10"
+          />
         </el-form-item>
       </el-form>
-
     </collapsible-card>
 
     <collapsible-card
@@ -107,28 +123,50 @@
 
     <collapsible-card
       :title="$gettext('User management') | translate"
-      class="UserManagement">
+      class="UserManagement"
+    >
       <el-row type="flex">
         <el-col class="AdminPersonaChooser">
           <div
             :class="['Persona', { 'active': selectedPersona === 'G'}]"
-            @click="selectPersona('G')">
-            <div class="PersonaName"><translate>Government Viewers</translate></div>
-            <div class="RequestCount"><translate :parameters="{num: userSelection.length - users.length}">{num} new request(s)</translate></div>
+            @click="selectPersona('G')"
+          >
+            <div class="PersonaName">
+              <translate>Government Viewers</translate>
+            </div>
+            <div class="RequestCount">
+              <translate :parameters="{num: userSelection.length - users.length}">
+                {num} new request(s)
+              </translate>
+            </div>
             <fa icon="chevron-right" />
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'CA'}]"
-            @click="selectPersona('CA')">
-            <div class="PersonaName"><translate>Government Admins</translate></div>
-            <div class="RequestCount"><translate :parameters="{num: adminSelection.length - admins.length}">{num} new request(s)</translate></div>
+            @click="selectPersona('CA')"
+          >
+            <div class="PersonaName">
+              <translate>Government Admins</translate>
+            </div>
+            <div class="RequestCount">
+              <translate :parameters="{num: adminSelection.length - admins.length}">
+                {num} new request(s)
+              </translate>
+            </div>
             <fa icon="chevron-right" />
           </div>
           <div
             :class="['Persona', { 'active': selectedPersona === 'SCA'}]"
-            @click="selectPersona('SCA')">
-            <div class="PersonaName"><translate>Government System Admins</translate></div>
-            <div class="RequestCount"><translate :parameters="{num: superadminSelection.length - superAdmins.length}"> {num} new request(s)</translate></div>
+            @click="selectPersona('SCA')"
+          >
+            <div class="PersonaName">
+              <translate>Government System Admins</translate>
+            </div>
+            <div class="RequestCount">
+              <translate :parameters="{num: superadminSelection.length - superAdmins.length}">
+                {num} new request(s)
+              </translate>
+            </div>
             <fa icon="chevron-right" />
           </div>
         </el-col>
@@ -136,7 +174,8 @@
         <el-col class="UserTransfers">
           <div
             v-if="selectedPersona === 'G'"
-            class="PersonaPrivileges">
+            class="PersonaPrivileges"
+          >
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -144,8 +183,16 @@
                 </template>
                 <div>
                   <ul>
-                    <li><translate key="g-list-item-1">Can read/export responses to private Government questions</translate></li>
-                    <li><translate key="g-list-item-2">Can view when a project is approved/declined</translate></li>
+                    <li>
+                      <translate key="g-list-item-1">
+                        Can read/export responses to private Government questions
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="g-list-item-2">
+                        Can view when a project is approved/declined
+                      </translate>
+                    </li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -153,15 +200,17 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'G'"
-            :titles="transferTitles"
             v-model="users"
+            :titles="transferTitles"
             :data="userSelection"
             :filter-placeholder="$gettext('Type to filter users...') | translate"
-            filterable />
+            filterable
+          />
 
           <div
             v-if="selectedPersona === 'CA'"
-            class="PersonaPrivileges">
+            class="PersonaPrivileges"
+          >
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -169,12 +218,36 @@
                 </template>
                 <div>
                   <ul>
-                    <li><translate key="ca-list-item-1">Can update Government map data</translate></li>
-                    <li><translate key="ca-list-item-2">Can create and delete Government-specific questions</translate></li>
-                    <li><translate key="ca-list-item-3">Can select which questions are private and public</translate></li>
-                    <li><translate key="ca-list-item-4">Can read/export responses to private Government questions</translate></li>
-                    <li><translate key="ca-list-item-5">Can approve users to join the Government page</translate></li>
-                    <li><translate key="ca-list-item-6">Can approve projects if the project approval feature is active</translate></li>
+                    <li>
+                      <translate key="ca-list-item-1">
+                        Can update Government map data
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="ca-list-item-2">
+                        Can create and delete Government-specific questions
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="ca-list-item-3">
+                        Can select which questions are private and public
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="ca-list-item-4">
+                        Can read/export responses to private Government questions
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="ca-list-item-5">
+                        Can approve users to join the Government page
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="ca-list-item-6">
+                        Can approve projects if the project approval feature is active
+                      </translate>
+                    </li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -182,15 +255,17 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'CA'"
-            :titles="transferTitles"
             v-model="admins"
+            :titles="transferTitles"
             :data="adminSelection"
             :filter-placeholder="$gettext('Type to filter users...') | translate"
-            filterable />
+            filterable
+          />
 
           <div
             v-if="selectedPersona === 'SCA'"
-            class="PersonaPrivileges">
+            class="PersonaPrivileges"
+          >
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -198,13 +273,41 @@
                 </template>
                 <div>
                   <ul>
-                    <li><translate key="sca-list-item-1">Can update Government map data</translate></li>
-                    <li><translate key="sca-list-item-2">Can create and delete Government-specific questions</translate></li>
-                    <li><translate key="sca-list-item-3">Can select which questions are private and public</translate></li>
-                    <li><translate key="sca-list-item-4">Can read/export responses to private Government questions</translate></li>
-                    <li><translate key="sca-list-item-5">Can approve users to join the Government page</translate></li>
-                    <li><translate key="sca-list-item-6">Can approve projects if the project approval feature is active</translate></li>
-                    <li><translate key="sca-list-item-7">Can customize and update Government home page</translate></li>
+                    <li>
+                      <translate key="sca-list-item-1">
+                        Can update Government map data
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="sca-list-item-2">
+                        Can create and delete Government-specific questions
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="sca-list-item-3">
+                        Can select which questions are private and public
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="sca-list-item-4">
+                        Can read/export responses to private Government questions
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="sca-list-item-5">
+                        Can approve users to join the Government page
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="sca-list-item-6">
+                        Can approve projects if the project approval feature is active
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="sca-list-item-7">
+                        Can customize and update Government home page
+                      </translate>
+                    </li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -212,24 +315,27 @@
           </div>
           <el-transfer
             v-if="selectedPersona === 'SCA'"
-            :titles="transferTitles"
             v-model="superAdmins"
+            :titles="transferTitles"
             :data="superadminSelection"
             :filter-placeholder="$gettext('Type to filter users...') | translate"
-            filterable />
+            filterable
+          />
         </el-col>
       </el-row>
     </collapsible-card>
 
     <collapsible-card
       :title="$gettext('Country specific questionnaire') | translate"
-      class="Questionnaire">
+      class="Questionnaire"
+    >
       <dha-questionaire ref="customQuestions" />
     </collapsible-card>
 
     <collapsible-card
       :title="$gettext('Country map') | translate"
-      class="CountryMap">
+      class="CountryMap"
+    >
       <vue-map-customizer />
     </collapsible-card>
 
@@ -237,17 +343,22 @@
       <el-row
         type="flex"
         align="middle"
-        justify="space-between">
+        justify="space-between"
+      >
         <el-button
           type="text"
-          class="CancelButton IconLeft">
+          class="CancelButton IconLeft"
+        >
           <fa icon="reply" />
           <translate>Dismiss changes</translate>
         </el-button>
         <el-button
           type="primary"
           size="medium"
-          @click="save"><translate>Save changes</translate></el-button>
+          @click="save"
+        >
+          <translate>Save changes</translate>
+        </el-button>
       </el-row>
     </div>
   </div>
@@ -292,7 +403,7 @@ export default {
             } else {
               callback();
             }
-          }}
+          } }
         ],
         cover: [
           { validator: (rule, value, callback) => {
@@ -301,7 +412,7 @@ export default {
             } else {
               callback();
             }
-          }}
+          } }
         ],
         partnerLogos: [
           { validator: (rule, value, callback) => {
@@ -310,7 +421,7 @@ export default {
             } else {
               callback();
             }
-          }}
+          } }
         ]
       }
     };
@@ -350,7 +461,7 @@ export default {
         }
       },
       set ([value]) {
-        this.setDataField({field: 'logo', data: value});
+        this.setDataField({ field: 'logo', data: value });
       }
     },
 
@@ -368,7 +479,7 @@ export default {
         }
       },
       set ([value]) {
-        this.setDataField({field: 'cover', data: value});
+        this.setDataField({ field: 'cover', data: value });
       }
     },
 
@@ -387,7 +498,7 @@ export default {
         });
       },
       set (value) {
-        this.setDataField({field: 'partner_logos', data: value});
+        this.setDataField({ field: 'partner_logos', data: value });
       }
     },
 
@@ -396,7 +507,7 @@ export default {
         return this.country.users || [];
       },
       set (value) {
-        this.setDataField({field: 'users', data: value});
+        this.setDataField({ field: 'users', data: value });
       }
     },
 
@@ -405,7 +516,7 @@ export default {
         return this.country.admins || [];
       },
       set (value) {
-        this.setDataField({field: 'admins', data: value});
+        this.setDataField({ field: 'admins', data: value });
       }
     },
 
@@ -414,7 +525,7 @@ export default {
         return this.country.super_admins || [];
       },
       set (value) {
-        this.setDataField({field: 'super_admins', data: value});
+        this.setDataField({ field: 'super_admins', data: value });
       }
     },
 

@@ -4,9 +4,14 @@
       class="feedback-button"
       @click="togglePopUp()"
       @mouseenter="handleMouseOver(true)"
-      @mouseleave="handleMouseOver(false)">
-      <i class="icon icon-closed"><span>&times;</span></i>
-      <i class="icon icon-opened"><span>?</span></i>
+      @mouseleave="handleMouseOver(false)"
+    >
+      <i class="icon icon-closed">
+        <span>&times;</span>
+      </i>
+      <i class="icon icon-opened">
+        <span>?</span>
+      </i>
     </button>
 
     <div :class="['hint-container', {open: showHintContainer}]">
@@ -21,71 +26,94 @@
 
     <div class="pop-up-container">
       <div class="header">
-        <i class="icon icon-opened"><span>?</span></i>
-        <h2><slot name="header-text">Ask our experts!</slot></h2>
+        <i class="icon icon-opened">
+          <span>?</span>
+        </i>
+        <h2>
+          <slot name="header-text">
+            Ask our experts!
+          </slot>
+        </h2>
       </div>
 
       <div
         v-show="!submitted"
-        class="form-container">
-
+        class="form-container"
+      >
         <div
           v-show="showUserBlock"
-          class="user-block">
+          class="user-block"
+        >
           <div class="avatar">
             <img
               v-if="!showAvatarPlaceholder"
               :src="avatarUrl"
               class="avatar-img"
-              alt="avatar">
+              alt="avatar"
+            >
             <div
               v-show="showAvatarPlaceholder"
-              class="avatar-placeholder">
-              <i class="icon icon-avatar"/>
+              class="avatar-placeholder"
+            >
+              <i class="icon icon-avatar" />
             </div>
           </div>
           <div class="user">
-            <span class="name">{{ name }}</span>
-            <span class="email">{{ email }}</span>
+            <span class="name">
+              {{ name }}
+            </span>
+            <span class="email">
+              {{ email }}
+            </span>
           </div>
         </div>
 
         <div
           v-if="!showUserBlock"
-          :class="['input-container', 'input', 'name', {danger: errors.has('name')}]">
+          :class="['input-container', 'input', 'name', {danger: errors.has('name')}]"
+        >
           <label>
             {{ nameLabel }}
           </label>
           <input
-            v-validate="{required: true}"
             v-model="form.name"
+            v-validate="{required: true}"
             name="name"
-            type="text">
+            type="text"
+          >
           <div class="feedback">
             <div class="errors">
               <span
                 v-show="errors.has('name')"
-                class="error danger">{{ errors.first('name') }}</span>
+                class="error danger"
+              >
+                {{ errors.first('name') }}
+              </span>
             </div>
           </div>
         </div>
 
         <div
           v-if="!showUserBlock"
-          :class="['input-container', 'input', 'email', {danger: errors.has('email')}]">
+          :class="['input-container', 'input', 'email', {danger: errors.has('email')}]"
+        >
           <label>
             {{ emailLabel }}
           </label>
           <input
-            v-validate="{required: true, email: true}"
             v-model="form.email"
+            v-validate="{required: true, email: true}"
             name="email"
-            type="email">
+            type="email"
+          >
           <div class="feedback">
             <div class="errors">
               <span
                 v-show="errors.has('email')"
-                class="error danger">{{ errors.first('email') }}</span>
+                class="error danger"
+              >
+                {{ errors.first('email') }}
+              </span>
             </div>
           </div>
         </div>
@@ -95,17 +123,23 @@
             {{ subjectLabel }}
           </label>
           <input
-            v-validate="{required: true, max: limit.subjectLimit}"
             v-model="form.subject"
+            v-validate="{required: true, max: limit.subjectLimit}"
             name="subject"
-            type="text">
+            type="text"
+          >
           <div class="feedback">
             <div class="errors">
               <span
                 v-show="errors.has('subject')"
-                class="error danger">{{ errors.first('subject') }}</span>
+                class="error danger"
+              >
+                {{ errors.first('subject') }}
+              </span>
             </div>
-            <div class="char-count">{{ form.subject.length }} / {{ limit.subjectLimit }}</div>
+            <div class="char-count">
+              {{ form.subject.length }} / {{ limit.subjectLimit }}
+            </div>
           </div>
         </div>
 
@@ -114,43 +148,54 @@
             {{ messageLabel }}
           </label>
           <textarea
-            v-validate="{required: true, max: limit.messageLimit}"
             v-model="form.message"
+            v-validate="{required: true, max: limit.messageLimit}"
             name="message"
-            rows="3"/>
+            rows="3"
+          />
           <div class="feedback">
             <div class="errors">
               <span
                 v-show="errors.has('message')"
-                class="error danger">{{ errors.first('message') }}</span>
+                class="error danger"
+              >
+                {{ errors.first('message') }}
+              </span>
             </div>
-            <div class="char-count">{{ form.message.length }} / {{ limit.messageLimit }}</div>
+            <div class="char-count">
+              {{ form.message.length }} / {{ limit.messageLimit }}
+            </div>
           </div>
         </div>
-
       </div>
 
       <div
         v-show="!submitted"
-        class="pop-up-controls">
+        class="pop-up-controls"
+      >
         <div class="actions">
           <button
             :disabled="processing"
-            @click="submit()">
+            @click="submit()"
+          >
             {{ submitButtonText }}
           </button>
         </div>
         <div
           v-show="errors.any()"
-          class="error-info">
-          <i class="icon icon-danger"><span>!</span></i>
+          class="error-info"
+        >
+          <i class="icon icon-danger">
+            <span>!</span>
+          </i>
           {{ globalErrorWarning }}
         </div>
       </div>
 
       <div
         v-show="submitted"
-        class="message-container">
+        class="message-container"
+      >
         <h4>
           <slot name="success-header">
             Thank you!
@@ -166,7 +211,8 @@
 
       <div
         v-show="apiError"
-        class="message-container">
+        class="message-container"
+      >
         <h4 class="error">
           <slot name="error-header">
             Sorry
@@ -328,7 +374,7 @@ export default {
           if (this.csrfToken) {
             headers['x-csrftoken'] = this.csrfToken;
           }
-          await this.axios.post(this.apiUrl, data, {headers});
+          await this.axios.post(this.apiUrl, data, { headers });
           this.submitted = true;
           this.apiError = false;
         } catch (e) {

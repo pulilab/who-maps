@@ -3,11 +3,13 @@
     type="flex"
     justify="space-between"
     align="middle"
-    class="FilterSwitch">
+    class="FilterSwitch"
+  >
     <el-col class="SwitchComponent">
       <el-row
         type="flex"
-        align="middle">
+        align="middle"
+      >
         <el-col class="SwitchHandler">
           <el-switch
             :value="value"

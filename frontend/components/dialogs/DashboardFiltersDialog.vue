@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+    v-if="visible"
     :visible.sync="visible"
     :title="$gettext('Applying specific filter to map/list') | translate"
     modal
@@ -10,7 +11,8 @@
   >
     <el-row
       type="flex"
-      class="FilterDialogWrapper">
+      class="FilterDialogWrapper"
+    >
       <el-col class="FilterSelector">
         <filter-item
           :active="selectedFilter === 'dhi'"
@@ -51,7 +53,8 @@
       <el-col class="FilterArea">
         <digital-health-interventions-filter
           v-show="selectedFilter === 'dhi'"
-          :selected.sync="dhi" />
+          :selected.sync="dhi"
+        />
         <health-focus-areas-filter
           v-show="selectedFilter === 'hfa'"
           :selected.sync="hfa"
@@ -73,12 +76,14 @@
     <span slot="footer">
       <el-row
         type="flex"
-        align="center">
+        align="center"
+      >
         <el-col class="SecondaryButtons">
           <el-button
             type="text"
             class="CancelButton"
-            @click="cancel">
+            @click="cancel"
+          >
             <translate>Cancel</translate>
           </el-button>
           <!-- <el-button

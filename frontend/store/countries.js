@@ -7,7 +7,7 @@ export const state = () => ({
 });
 export const getters = {
   getCountries (state) {
-    return [...state.countries.map(c => ({...c}))];
+    return [...state.countries.map(c => ({ ...c }))];
   },
   getGeoJsonLibrary (state) {
     return state.geoJsonLibrary;
@@ -31,7 +31,7 @@ export const getters = {
       let second = types.find(t => t.name === c.map_data.second_sub_level.name);
       first = first ? first.displayName : c.map_data.first_sub_level.name;
       second = second ? second.displayName : c.map_data.second_sub_level.name;
-      return {first, second};
+      return { first, second };
     } catch (e) {
       return {};
     }
@@ -71,12 +71,12 @@ export const getters = {
         allSubLevels.push(...c.map_data.first_sub_level.elements);
       }
     }
-    return {...allSubLevels.find(sb => sb.id === id)};
+    return { ...allSubLevels.find(sb => sb.id === id) };
   }
 };
 
 export const actions = {
-  async loadMapData ({commit, state}) {
+  async loadMapData ({ commit, state }) {
     if (state.countries.length === 0) {
       try {
         const { data } = await this.$axios.get('/api/landing-country/');
@@ -87,23 +87,23 @@ export const actions = {
       }
     }
   },
-  async loadCountryDetails ({commit, state}, id) {
+  async loadCountryDetails ({ commit, state }, id) {
     if (id && !state.countryLibrary[id]) {
       try {
         const { data } = await this.$axios.get(`/api/landing-country/${id}/`);
-        commit('SET_COUNTRY_DETAILS', {data, id});
+        commit('SET_COUNTRY_DETAILS', { data, id });
       } catch (e) {
         console.error('countries/loadCountryDetails failed');
       }
     }
   },
-  async loadGeoJSON ({commit, getters}, id) {
+  async loadGeoJSON ({ commit, getters }, id) {
     if (!getters.getGeoJsonLibrary[id]) {
       try {
         const country = getters.getCountries.find(c => c.id === id);
         const { data } = await this.$axios.get(`/static/country-geodata/${country.code.toLowerCase()}.json?version=${country.map_version}`);
         Object.freeze(data);
-        commit('UPDATE_JSON_LIBRARY', {id, data});
+        commit('UPDATE_JSON_LIBRARY', { id, data });
       } catch (e) {
         console.error('countries/loadGeoJSON  failed');
       }
@@ -115,10 +115,10 @@ export const mutations = {
   SET_COUNTRY_LIST: (state, list) => {
     state.countries = list;
   },
-  SET_COUNTRY_DETAILS: (state, {data, id}) => {
-    state.countryLibrary = {...state.countryLibrary, [id]: data};
+  SET_COUNTRY_DETAILS: (state, { data, id }) => {
+    state.countryLibrary = { ...state.countryLibrary, [id]: data };
   },
-  UPDATE_JSON_LIBRARY: (state, {id, data}) => {
+  UPDATE_JSON_LIBRARY: (state, { id, data }) => {
     state.geoJsonLibrary[id] = data;
   }
 };

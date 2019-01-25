@@ -1,7 +1,8 @@
 <template>
   <div
     id="general"
-    class="GeneralOverview">
+    class="GeneralOverview"
+  >
     <collapsible-card
       ref="collapsible"
       :title="$gettext('General overview') | translate"
@@ -11,27 +12,34 @@
         :required="rules.name && rules.name.required"
       >
         <template slot="label">
-          <translate key="project-name">Project Name </translate>
-          <form-hint >
-            <translate key="project-name-hint">If this is your first time uploading a project, a sample data form can be found here for reference.</translate>
+          <translate key="project-name">
+            Project Name
+          </translate>
+          <form-hint>
+            <translate key="project-name-hint">
+              If this is your first time uploading a project, a sample data form can be found here for reference.
+            </translate>
           </form-hint>
         </template>
         <el-input
-          v-validate="rules.name"
           v-model="name"
+          v-validate="rules.name"
           data-as-name="Name"
-          data-vv-name="name"/>
+          data-vv-name="name"
+        />
       </el-form-item>
       <el-form-item
         :error="errors.first('organisation')"
         :required="rules.organisation && rules.organisation.required"
       >
         <template slot="label">
-          <translate key="organisation">What is the name of the lead organization?</translate>
+          <translate key="organisation">
+            What is the name of the lead organization?
+          </translate>
         </template>
         <organisation-select
-          v-validate="rules.organisation"
           v-model="organisation"
+          v-validate="rules.organisation"
           data-vv-name="organisation"
         />
       </el-form-item>
@@ -40,28 +48,35 @@
         :required="rules.country && rules.country.required"
       >
         <template slot="label">
-          <translate key="country">Project Country</translate>
+          <translate key="country">
+            Project Country
+          </translate>
         </template>
         <country-select
-          v-validate="rules.country"
           v-model="country"
+          v-validate="rules.country"
           data-vv-name="country"
-          data-vv-as="Country"/>
+          data-vv-as="Country"
+        />
       </el-form-item>
       <el-form-item
         :error="errors.first('geographic_scope')"
         :required="rules.geographic_scope && rules.geographic_scope.required"
       >
         <template slot="label">
-          <translate key="geographic-scope">What is the geographic scope of the project?</translate>
-          <form-hint >
-            <translate key="geographic-scope-hint">Describe the user types, geographic coverage and other coverage details.</translate>
+          <translate key="geographic-scope">
+            What is the geographic scope of the project?
+          </translate>
+          <form-hint>
+            <translate key="geographic-scope-hint">
+              Describe the user types, geographic coverage and other coverage details.
+            </translate>
           </form-hint>
         </template>
 
         <el-input
-          v-validate="rules.geographic_scope"
           v-model="geographic_scope"
+          v-validate="rules.geographic_scope"
           data-vv-name="geographic_scope"
           data-vv-as="Geographic scope"
           type="textarea"
@@ -76,14 +91,18 @@
         :required="rules.implementation_overview && rules.implementation_overview.required"
       >
         <template slot="label">
-          <translate key="implementation-overview">Please provide a narrative summary of the digital health implementation.</translate>
-          <form-hint >
-            <translate key="implementation-overview-hint">Describe your overall digital health project design.</translate>
+          <translate key="implementation-overview">
+            Please provide a narrative summary of the digital health implementation.
+          </translate>
+          <form-hint>
+            <translate key="implementation-overview-hint">
+              Describe your overall digital health project design.
+            </translate>
           </form-hint>
         </template>
         <el-input
-          v-validate="rules.implementation_overview"
           v-model="implementation_overview"
+          v-validate="rules.implementation_overview"
           data-vv-name="implementation_overview"
           data-vv-as="Implementation Overview"
           type="textarea"
@@ -95,23 +114,28 @@
       </el-form-item>
       <el-row
         :gutter="20"
-        type="flex">
+        type="flex"
+      >
         <el-col :span="12">
           <el-form-item
             :error="errors.first('start_date')"
             :required="rules.start_date && rules.start_date.required"
           >
             <template slot="label">
-              <translate key="start-date">Project start date</translate>
-              <form-hint >
-                <translate key="start-date-hint">When did the overall project, not just the digital health component, start.</translate>
+              <translate key="start-date">
+                Project start date
+              </translate>
+              <form-hint>
+                <translate key="start-date-hint">
+                  When did the overall project, not just the digital health component, start.
+                </translate>
               </form-hint>
             </template>
 
             <el-date-picker
-              v-validate="rules.start_date"
               ref="Start date"
               v-model="start_date"
+              v-validate="rules.start_date"
               :placeholder="$gettext('Start date') | translate"
               data-vv-name="start_date"
               data-vv-as="Start date"
@@ -128,15 +152,19 @@
             :required="rules.end_date && rules.end_date.required"
           >
             <template slot="label">
-              <translate key="end-date">Project end date</translate>
-              <form-hint >
-                <translate key="end-date-hint">When will the overall project be completed. If your project is ongoing, leave this field blank.</translate>
+              <translate key="end-date">
+                Project end date
+              </translate>
+              <form-hint>
+                <translate key="end-date-hint">
+                  When will the overall project be completed. If your project is ongoing, leave this field blank.
+                </translate>
               </form-hint>
             </template>
 
             <el-date-picker
-              v-validate="rules.end_date"
               v-model="end_date"
+              v-validate="rules.end_date"
               :placeholder="$gettext('End date') | translate"
               data-vv-name="end_date"
               data-vv-as="End date"
@@ -148,22 +176,27 @@
       </el-row>
       <el-row
         :gutter="20"
-        type="flex">
+        type="flex"
+      >
         <el-col :span="12">
           <el-form-item
             :error="errors.first('contact_name')"
             :required="rules.contact_name && rules.contact_name.required"
           >
             <template slot="label">
-              <translate key="contact-name">Contact name</translate>
-              <form-hint >
-                <translate key="contact-name-hint">This is the individual who will be the lead point of contact for any queries through the DHA.</translate>
+              <translate key="contact-name">
+                Contact name
+              </translate>
+              <form-hint>
+                <translate key="contact-name-hint">
+                  This is the individual who will be the lead point of contact for any queries through the DHA.
+                </translate>
               </form-hint>
             </template>
 
             <el-input
-              v-validate="rules.contact_name"
               v-model="contact_name"
+              v-validate="rules.contact_name"
               data-vv-name="contact_name"
               data-vv-as="Contact name"
             />
@@ -175,12 +208,14 @@
             :required="rules.contact_email && rules.contact_email.required"
           >
             <template slot="label">
-              <translate key="contact-email">Contact email</translate>
+              <translate key="contact-email">
+                Contact email
+              </translate>
             </template>
 
             <el-input
-              v-validate="rules.contact_email"
               v-model="contact_email"
+              v-validate="rules.contact_email"
               data-vv-name="contact_email"
               data-vv-as="Contact email"
             />
@@ -194,34 +229,44 @@
           :required="rules.team && rules.team.required"
         >
           <template slot="label">
-            <translate key="team">Add Team members (Editor role)</translate>
-            <form-hint >
-              <translate key="team-hint">Project editors can change and update all project information.</translate>
+            <translate key="team">
+              Add Team members (Editor role)
+            </translate>
+            <form-hint>
+              <translate key="team-hint">
+                Project editors can change and update all project information.
+              </translate>
             </form-hint>
           </template>
 
           <team-selector
-            v-validate="rules.team"
             v-model="team"
+            v-validate="rules.team"
             data-vv-name="team"
-            data-vv-as="Team" />
+            data-vv-as="Team"
+          />
         </el-form-item>
         <el-form-item
           :error="errors.first('viewers')"
           :required="rules.viewers && rules.viewers.required"
         >
           <template slot="label">
-            <translate key="viewers">Add Viewers (only Viewer role)</translate>
-            <form-hint >
-              <translate key="viewers-hint">Project viewers will be able to view the full project details.</translate>
+            <translate key="viewers">
+              Add Viewers (only Viewer role)
+            </translate>
+            <form-hint>
+              <translate key="viewers-hint">
+                Project viewers will be able to view the full project details.
+              </translate>
             </form-hint>
           </template>
 
           <team-selector
-            v-validate="rules.viewers"
             v-model="viewers"
+            v-validate="rules.viewers"
             data-vv-name="viewers"
-            data-vv-as="Viewers" />
+            data-vv-as="Viewers"
+          />
         </el-form-item>
       </div>
     </collapsible-card>
@@ -271,10 +316,8 @@ export default {
       if (this.usePublishRules && this.start_date && this.end_date && isAfter(this.start_date, this.end_date)) {
         return this.$gettext('End date must be after Start date');
       }
+      return null;
     }
-  },
-  mounted () {
-    this.$emit('mounted');
   },
   methods: {
     async validate () {

@@ -6,112 +6,148 @@
 
     <el-card
       :body-style="{ padding: '0px' }"
-      class="ProfileCard">
+      class="ProfileCard"
+    >
       <el-form
         ref="editProfileForm"
         :rules="rules"
         :model="innerProfile"
         label-position="top"
         class="FormPart"
-        @submit.native.prevent>
-
+        @submit.native.prevent
+      >
         <el-row type="flex">
           <el-col
             :span="12"
-            class="UserForm">
-
+            class="UserForm"
+          >
             <el-form-item
               :label="$gettext('First and Last Name') | translate"
-              prop="name">
+              prop="name"
+            >
               <el-input
                 v-model="innerProfile.name"
-                type="text" />
+                type="text"
+              />
             </el-form-item>
 
             <el-form-item
               :label="$gettext('Email address') | translate"
-              class="is-required">
+              class="is-required"
+            >
               <el-input
                 v-model="innerProfile.email"
                 disabled
-                type="text" />
+                type="text"
+              />
             </el-form-item>
 
             <el-form-item
               :label="$gettext('Organisation name') | translate"
-              prop="organisation">
+              prop="organisation"
+            >
               <organisation-select v-model="innerProfile.organisation" />
             </el-form-item>
 
             <el-form-item
               :label="$gettext('Country') | translate"
-              prop="country">
+              prop="country"
+            >
               <country-select v-model="innerProfile.country" />
               <div
                 v-if="nonFieldErrors"
-                class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
+                class="el-form-item__error ModifiedFormError"
+              >
+                {{ nonFieldErrors }}
               </div>
             </el-form-item>
 
             <el-form-item
               :label="$gettext('Site language') | translate"
-              prop="language">
+              prop="language"
+            >
               <language-select v-model="innerProfile.language" />
             </el-form-item>
-
           </el-col>
 
           <el-col
             :span="12"
-            class="UserRole">
+            class="UserRole"
+          >
             <!-- SELECT ACCOUNT TYPE -->
             <div v-if="!innerProfile.account_type_approved || changeApprovedUserRole || !['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(innerProfile.account_type)">
-
-              <h5 v-if="!userTypeRequested"><translate>I request to be a:</translate></h5>
+              <h5 v-if="!userTypeRequested">
+                <translate>I request to be a:</translate>
+              </h5>
 
               <h5
                 v-if="userTypeRequested"
-                class="RoleRequested"><fa
+                class="RoleRequested"
+              >
+                <fa
                   icon="circle-notch"
-                  spin /><translate>Your user access has been submitted</translate></h5>
+                  spin
+                /><translate>Your user access has been submitted</translate>
+              </h5>
 
-              <p v-if="userTypeRequested"><translate>We will notify you via email when your user access has been approved. If you would like to request a different type of access, you can resubmit the form below and saving your changes.</translate></p>
+              <p v-if="userTypeRequested">
+                <translate>We will notify you via email when your user access has been approved. If you would like to request a different type of access, you can resubmit the form below and saving your changes.</translate>
+              </p>
 
               <div
                 v-if="userTypeRequested"
-                class="Separator" />
+                class="Separator"
+              />
 
               <el-checkbox
                 v-model="isCountryUser"
-                border><span class="IconRole IconGovernmentUser" /><translate>Government user</translate></el-checkbox>
+                border
+              >
+                <span class="IconRole IconGovernmentUser" /><translate>Government user</translate>
+              </el-checkbox>
 
-              <p class="UserArchTypeText"><translate>Privileges for Government Users are detailed below. Select the user type that most matches your role within the DHA. This request will be received by the Government Admin team and a response will be sent via email for your request.</translate></p>
+              <p class="UserArchTypeText">
+                <translate>Privileges for Government Users are detailed below. Select the user type that most matches your role within the DHA. This request will be received by the Government Admin team and a response will be sent via email for your request.</translate>
+              </p>
 
               <el-collapse-transition>
                 <el-radio-group
                   v-if="isCountryUser"
                   v-model="innerProfile.account_type"
                   :disabled="!isCountryUser"
-                  class="OnePerRow">
+                  class="OnePerRow"
+                >
                   <el-radio
                     label="G"
-                    class="RadioSmall"><translate>Country viewer</translate></el-radio>
+                    class="RadioSmall"
+                  >
+                    <translate>Country viewer</translate>
+                  </el-radio>
                   <user-privileges
                     v-if="innerProfile.account_type === 'G'"
-                    type="G" />
+                    type="G"
+                  />
                   <el-radio
                     label="CA"
-                    class="RadioSmall">Government Admins for this country</el-radio>
+                    class="RadioSmall"
+                  >
+                    Government Admins for this country
+                  </el-radio>
                   <user-privileges
                     v-if="innerProfile.account_type === 'CA'"
-                    type="CA" />
+                    type="CA"
+                  />
 
                   <el-radio
                     label="SCA"
-                    class="RadioSmall">Government System Admins</el-radio>
+                    class="RadioSmall"
+                  >
+                    Government System Admins
+                  </el-radio>
                   <user-privileges
                     v-if="innerProfile.account_type === 'SCA'"
-                    type="SCA" />
+                    type="SCA"
+                  />
                 </el-radio-group>
               </el-collapse-transition>
 
@@ -121,14 +157,20 @@
 
               <el-checkbox
                 v-model="isDonorUser"
-                border><span class="IconRole IconInvestorUser" /><translate>Investor</translate></el-checkbox>
+                border
+              >
+                <span class="IconRole IconInvestorUser" /><translate>Investor</translate>
+              </el-checkbox>
 
-              <p class="UserArchTypeText"><translate>If you are part of an investor group that is providing either financial or in-kind support to project activities, the DHA can be used to help organize and connect all of your projects. By joining your investor page, you will see information that is private to your organization. If your group is not listed below, send an email to digitalhealthatlas@gmail.com to add them to the list.</translate></p>
+              <p class="UserArchTypeText">
+                <translate>If you are part of an investor group that is providing either financial or in-kind support to project activities, the DHA can be used to help organize and connect all of your projects. By joining your investor page, you will see information that is private to your organization. If your group is not listed below, send an email to digitalhealthatlas@gmail.com to add them to the list.</translate>
+              </p>
 
               <el-collapse-transition>
                 <div
                   v-if="isDonorUser"
-                  class="DonorSelectorWrapper">
+                  class="DonorSelectorWrapper"
+                >
                   <el-form-item
                     :label="$gettext('I request to join the investor group below:') | translate"
                     prop="donor"
@@ -145,34 +187,46 @@
                   v-if="isDonorUser"
                   v-model="innerProfile.account_type"
                   :disabled="!isDonorUser"
-                  class="OnePerRow">
+                  class="OnePerRow"
+                >
                   <el-radio
                     :label="'D'"
-                    class="RadioSmall"><translate>Investor Viewers</translate></el-radio>
+                    class="RadioSmall"
+                  >
+                    <translate>Investor Viewers</translate>
+                  </el-radio>
                   <user-privileges
                     v-if="innerProfile.account_type === 'D'"
-                    type="D" />
+                    type="D"
+                  />
 
                   <el-radio
                     :label="'DA'"
-                    class="RadioSmall"><translate>Investor Admins</translate></el-radio>
+                    class="RadioSmall"
+                  >
+                    <translate>Investor Admins</translate>
+                  </el-radio>
                   <user-privileges
                     v-if="innerProfile.account_type === 'DA'"
-                    type="DA" />
+                    type="DA"
+                  />
 
                   <el-radio
                     :label="'SDA'"
-                    class="RadioSmall"><translate>Investor System Admins</translate></el-radio>
+                    class="RadioSmall"
+                  >
+                    <translate>Investor System Admins</translate>
+                  </el-radio>
                   <user-privileges
                     v-if="innerProfile.account_type === 'SDA'"
-                    type="SDA" />
+                    type="SDA"
+                  />
                 </el-radio-group>
               </el-collapse-transition>
             </div>
 
             <!-- APPROVED ACCOUNT TYPE -->
             <div v-if="innerProfile.account_type_approved && ['G', 'CA', 'SCA', 'D', 'DA', 'SDA'].includes(innerProfile.account_type) && !changeApprovedUserRole">
-
               <h5 class="RoleAccepted">
                 <fa icon="check-circle" />
                 <translate>Your user role request has been accepted!</translate>
@@ -181,14 +235,19 @@
               <div class="UserRoleDescription">
                 <el-button
                   size="mini"
-                  @click="changingUserRole">Change</el-button>
+                  @click="changingUserRole"
+                >
+                  Change
+                </el-button>
 
                 <div
                   v-if="innerProfile.account_type === 'G'"
-                  class="ClickThrough">
+                  class="ClickThrough"
+                >
                   <el-row
                     type="flex"
-                    align="middle">
+                    align="middle"
+                  >
                     <el-col>
                       <span class="IconRole IconGovernmentUser" />
                     </el-col>
@@ -201,16 +260,19 @@
                     <span><translate>My Privileges are:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'G'"
-                      type="G" />
+                      type="G"
+                    />
                   </div>
                 </div>
 
                 <div
                   v-if="innerProfile.account_type === 'CA'"
-                  class="ClickThrough">
+                  class="ClickThrough"
+                >
                   <el-row
                     type="flex"
-                    align="middle">
+                    align="middle"
+                  >
                     <el-col>
                       <span class="IconRole IconGovernmentUser" />
                     </el-col>
@@ -223,17 +285,19 @@
                     <span><translate>My Privileges are:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'CA'"
-                      type="CA" />
-
+                      type="CA"
+                    />
                   </div>
                 </div>
 
                 <div
                   v-if="innerProfile.account_type === 'SCA'"
-                  class="ClickThrough">
+                  class="ClickThrough"
+                >
                   <el-row
                     type="flex"
-                    align="middle">
+                    align="middle"
+                  >
                     <el-col>
                       <span class="IconRole IconGovernmentUser" />
                     </el-col>
@@ -246,17 +310,19 @@
                     <span><translate>My Privileges are:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'SCA'"
-                      type="SCA" />
-
+                      type="SCA"
+                    />
                   </div>
                 </div>
 
                 <div
                   v-if="innerProfile.account_type === 'D'"
-                  class="ClickThrough">
+                  class="ClickThrough"
+                >
                   <el-row
                     type="flex"
-                    align="middle">
+                    align="middle"
+                  >
                     <el-col>
                       <span class="IconRole IconInvestorUser" />
                     </el-col>
@@ -269,17 +335,19 @@
                     <span><translate>My Privileges are:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'D'"
-                      type="D" />
-
+                      type="D"
+                    />
                   </div>
                 </div>
 
                 <div
                   v-if="innerProfile.account_type === 'DA'"
-                  class="ClickThrough">
+                  class="ClickThrough"
+                >
                   <el-row
                     type="flex"
-                    align="middle">
+                    align="middle"
+                  >
                     <el-col>
                       <span class="IconRole IconInvestorUser" />
                     </el-col>
@@ -292,17 +360,19 @@
                     <span><translate>My Privileges are:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'DA'"
-                      type="DA" />
-
+                      type="DA"
+                    />
                   </div>
                 </div>
 
                 <div
                   v-if="innerProfile.account_type === 'SDA'"
-                  class="ClickThrough">
+                  class="ClickThrough"
+                >
                   <el-row
                     type="flex"
-                    align="middle">
+                    align="middle"
+                  >
                     <el-col>
                       <span class="IconRole IconInvestorUser" />
                     </el-col>
@@ -315,11 +385,13 @@
                     <span><translate>My Privileges are:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'SDA'"
-                      type="SDA" />
+                      type="SDA"
+                    />
                   </div>
                 </div>
               </div>
-          </div></el-col>
+            </div>
+          </el-col>
         </el-row>
 
         <div class="CardActionsBottom">
@@ -327,21 +399,25 @@
             type="flex"
             justify="space-between"
             align="middle"
-            class="cardActions">
+            class="cardActions"
+          >
             <el-col
               :span="6"
-              class="SecondaryAction">
+              class="SecondaryAction"
+            >
               <el-button
                 type="text"
                 class="CancelButton IconLeft"
-                @click="dismissChanges">
+                @click="dismissChanges"
+              >
                 <fa icon="reply" />
                 <translate>Dismiss changes</translate>
               </el-button>
             </el-col>
             <el-col
               :span="6"
-              class="PrimaryAction">
+              class="PrimaryAction"
+            >
               <el-button
                 type="primary"
                 size="medium"
@@ -352,7 +428,6 @@
               </el-button>
             </el-col>
           </el-row>
-
         </div>
       </el-form>
     </el-card>
@@ -425,7 +500,7 @@ export default {
           { validator: this.validatorGenerator('country') }
         ],
         donor: [
-          {required: this.isDonorRequired, message: this.$gettext('This field is required'), trigger: 'change'},
+          { required: this.isDonorRequired, message: this.$gettext('This field is required'), trigger: 'change' },
           { validator: this.validatorGenerator('donor') }
         ]
       };
@@ -456,7 +531,7 @@ export default {
     profile: {
       immediate: true,
       handler (profile) {
-        this.innerProfile = {...profile};
+        this.innerProfile = { ...profile };
       }
     }
   },
@@ -472,7 +547,7 @@ export default {
     }),
 
     dismissChanges () {
-      this.innerProfile = {...this.profile};
+      this.innerProfile = { ...this.profile };
       this.$router.go(-1);
     },
 
@@ -511,12 +586,12 @@ export default {
     changeLocale (locale) {
       if (locale !== this.$i18n.locale) {
         const name = this.$route.name.split('___')[0];
-        const path = this.localePath({...this.$route, name}, locale);
+        const path = this.localePath({ ...this.$route, name }, locale);
         this.$router.replace(path);
       }
     },
     routeToDashboard (locale) {
-      const path = this.localePath({name: 'organisation-dashboard', params: this.$route.params}, locale);
+      const path = this.localePath({ name: 'organisation-dashboard', params: this.$route.params }, locale);
       this.$router.push(path);
     },
     changingUserRole () {

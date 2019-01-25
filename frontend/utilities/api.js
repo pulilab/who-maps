@@ -42,7 +42,7 @@ export const platformsMapper = collection => {
     collection.forEach(p => {
       platforms.push(p.id);
       if (p.strategies && Array.isArray(p.strategies)) {
-        digitalHealthInterventions.push(...p.strategies.map(s => ({id: s, platform: p.id})));
+        digitalHealthInterventions.push(...p.strategies.map(s => ({ id: s, platform: p.id })));
       }
     });
   } else {
@@ -55,7 +55,7 @@ export const countryCustomFieldMapper = collection => {
   const customAnswers = [];
   if (typeof collection === 'object' && collection) {
     for (let key in collection) {
-      customAnswers.push({question_id: +key, answer: collection[key]});
+      customAnswers.push({ question_id: +key, answer: collection[key] });
     }
   } else {
     console.warn('Invalid or malformed input passed to api/countryCustomFieldMapper');
@@ -69,7 +69,7 @@ export const donorCustomFieldMapper = collection => {
     for (let donor in collection) {
       if (typeof collection[donor] === 'object' && !Array.isArray(collection) && collection) {
         for (let key in collection[donor]) {
-          customAnswers.push({question_id: +key, answer: collection[donor][key], donor_id: +donor});
+          customAnswers.push({ question_id: +key, answer: collection[donor][key], donor_id: +donor });
         }
       } else {
         console.warn('Malformed input passed to api/countryCustomFieldMapper');
@@ -84,14 +84,14 @@ export const donorCustomFieldMapper = collection => {
 export const apiReadParser = p => {
   const [ coverage, coverageDataFirstLevel ] = lib.coverageMapper(p.coverage);
   const [ coverage_second_level, coverageDataSecondLevelLevel ] = lib.coverageMapper(p.coverage_second_level);
-  const coverageData = {...coverageDataFirstLevel, ...coverageDataSecondLevelLevel};
+  const coverageData = { ...coverageDataFirstLevel, ...coverageDataSecondLevelLevel };
   const interoperability_links = lib.interoperabilityLinksMapper(p.interoperability_links);
   const [ platforms, digitalHealthInterventions ] = lib.platformsMapper(p.platforms);
   const coverageType = coverage === undefined || coverage.length === 0 ? 2 : 1;
   p = lib.parseCustomAnswers(p);
   const country_custom_answers = lib.countryCustomFieldMapper(p.country_answers);
   const donor_custom_answers = lib.donorCustomFieldMapper(p.donor_answers);
-  return {...p,
+  return { ...p,
     coverage,
     coverage_second_level,
     coverageData,
@@ -128,19 +128,19 @@ export const dataCleaner = value => {
 export const interoperabilityLinkWriteParser = links => {
   const result = [];
   for (let link in links) {
-    const value = {...links[link]};
+    const value = { ...links[link] };
     value.selected = value.selected ? true : undefined;
     value.link = !value.selected || lib.isNullUndefinedOrEmptyString(value.link) ? undefined : value.link;
-    const item = {id: link, ...value};
+    const item = { id: link, ...value };
     result.push(item);
   }
-  return result.sort((a, b) => a.index - b.index).map(r => ({...r, index: undefined}));
+  return result.sort((a, b) => a.index - b.index).map(r => ({ ...r, index: undefined }));
 };
 
 export const platformsWriteParser = (platforms, digitalHealthInterventions) => {
   return platforms.map(p => {
     const strategies = [...digitalHealthInterventions.filter(dhi => dhi.platform === p).map(f => f.id)];
-    return {id: p, strategies: strategies || []};
+    return { id: p, strategies: strategies || [] };
   });
 };
 
@@ -153,7 +153,7 @@ const baseCoverage = {
 export const coverageWriteParser = (coverage, coverageData) => {
   return coverage.map(district => {
     const data = coverageData[district];
-    return {district, ...baseCoverage, ...data};
+    return { district, ...baseCoverage, ...data };
   });
 };
 
@@ -177,7 +177,7 @@ export const customDonorAnswerParser = (customAnswers, donors) => {
     result[donor].push({
       ...a,
       answer: a.answer[0] ? a.answer : [],
-      donor_id: undefined});
+      donor_id: undefined });
   });
   return result;
 };
@@ -197,7 +197,7 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
     coverage = coverageWriteParser(p.coverage, p.coverageData);
     coverage_second_level = coverageWriteParser(p.coverage_second_level, p.coverageData);
   } else {
-    national_level_deployment = {...baseCoverage, ...p.national_level_deployment};
+    national_level_deployment = { ...baseCoverage, ...p.national_level_deployment };
   }
   const country_custom_answers = customCountryAnswerParser(countryCustomAnswers);
   const donor_custom_answers = customDonorAnswerParser(donorsCustomAnswers, p.donors);

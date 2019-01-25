@@ -15,7 +15,7 @@ export default async function ({ store, redirect, app, route }) {
       )
     )
   ) {
-    const path = app.localePath({name: 'organisation-edit-profile', params: route.params, query: {missingProfile: true}});
+    const path = app.localePath({ name: 'organisation-edit-profile', params: route.params, query: { missingProfile: true } });
     redirect(path);
   }
 };

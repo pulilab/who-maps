@@ -8,7 +8,8 @@
       :subject-label="$gettext('Subject') | translate"
       :message-label="$gettext('Message') | translate"
       :email="email"
-      :csrf-token="token" >
+      :csrf-token="token"
+    >
       <span slot="header-text">
         <translate> Ask our experts </translate>
       </span>
@@ -59,11 +60,13 @@ export default {
       if (this.profile) {
         return this.profile.name;
       }
+      return null;
     },
     email () {
       if (this.profile) {
         return this.profile.email;
       }
+      return null;
     }
   }
 };

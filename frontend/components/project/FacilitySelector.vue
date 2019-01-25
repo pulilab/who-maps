@@ -6,8 +6,8 @@
     :required="rules.facilities_list && rules.facilities_list.required"
   >
     <el-select
-      v-validate="rules.facilities_list"
       v-model="innerValue"
+      v-validate="rules.facilities_list"
       :remote-method="search"
       :loading="loading"
       :disabled="disabled"

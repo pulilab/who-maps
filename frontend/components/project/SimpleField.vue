@@ -10,7 +10,8 @@
     </div>
     <div
       v-show="!missingContent"
-      class="Content">
+      class="Content"
+    >
       <template v-if="showContent">
         <span v-if="!link">
           {{ processedContent }}
@@ -25,12 +26,13 @@
         </a>
       </template>
       <template v-if="!showContent">
-        <slot/>
+        <slot />
       </template>
     </div>
     <div
       v-show="missingContent"
-      class="Empty">
+      class="Empty"
+    >
       <translate>N/A</translate>
     </div>
   </div>
@@ -78,6 +80,7 @@ export default {
         }
         return this.content;
       }
+      return null;
     }
   }
 };

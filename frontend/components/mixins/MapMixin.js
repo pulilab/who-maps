@@ -185,7 +185,7 @@ const MapMixin = {
         iconSize: [27, 44],
         iconAnchor: [13.5, 44]
       });
-      const option = {projects};
+      const option = { projects };
       return [icon, option];
     },
     iconsGenerator () {

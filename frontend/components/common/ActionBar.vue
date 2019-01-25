@@ -4,15 +4,16 @@
       type="flex"
       justify="space-between"
       align="middle"
-      class="InnerActionBar">
-
-      <bread-crumb/>
+      class="InnerActionBar"
+    >
+      <bread-crumb />
 
       <el-col class="ActionBarTabs">
         <el-row
           v-if="isAdmin"
           type="flex"
-          align="middle">
+          align="middle"
+        >
           <el-col class="Sep">
             <fa icon="angle-right" />
           </el-col>
@@ -20,8 +21,11 @@
             <nuxt-link
               :to="localePath({name: 'organisation-edit-profile', params: $route.params})"
               class="ActionBarLink"
-              tag="div">
-              <translate key="my-profile">My profile</translate>
+              tag="div"
+            >
+              <translate key="my-profile">
+                My profile
+              </translate>
             </nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
@@ -29,8 +33,11 @@
               v-if="allowCountryAdmin"
               :to="localePath({name: 'organisation-admin-country', params: $route.params})"
               class="ActionBarLink"
-              tag="div">
-              <translate key="country-admin">Country admin</translate>
+              tag="div"
+            >
+              <translate key="country-admin">
+                Country admin
+              </translate>
             </nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
@@ -38,15 +45,19 @@
               v-if="allowDonorAdmin"
               :to="localePath({name: 'organisation-admin-donor', params: $route.params})"
               class="ActionBarLink"
-              tag="div">
-              <translate key="donor-admin">Investor admin</translate>
+              tag="div"
+            >
+              <translate key="donor-admin">
+                Investor admin
+              </translate>
             </nuxt-link>
           </el-col>
         </el-row>
         <el-row
           v-if="isDashboard"
           type="flex"
-          align="middle">
+          align="middle"
+        >
           <el-col class="Sep">
             <fa icon="angle-right" />
           </el-col>
@@ -54,16 +65,22 @@
             <nuxt-link
               :to="localePath({name: 'organisation-dashboard', params: $route.params, query: $route.query})"
               :class="['ActionBarLink', {'Active': isMapSubRoute}]"
-              tag="div">
-              <translate key="map-view">Map view</translate>
+              tag="div"
+            >
+              <translate key="map-view">
+                Map view
+              </translate>
             </nuxt-link>
           </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
               :to="localePath({name: 'organisation-dashboard-list', params: $route.params, query: $route.query})"
               :class="['ActionBarLink', {'Active': isListSubRoute}]"
-              tag="div">
-              <translate key="list-view">List view</translate>
+              tag="div"
+            >
+              <translate key="list-view">
+                List view
+              </translate>
             </nuxt-link>
           </el-col>
         </el-row>
@@ -71,18 +88,18 @@
 
       <el-col
         v-if="!isDashboard"
-        class="SearchComponentWrapper">
+        class="SearchComponentWrapper"
+      >
         <search-component />
       </el-col>
       <template v-if="isDashboard">
         <el-col class="PersonaSelectorWrapper">
-          <persona-selector/>
+          <persona-selector />
         </el-col>
         <el-col class="DashboardFiltersHeaderWrapper">
-          <dashboard-filters-header/>
+          <dashboard-filters-header />
         </el-col>
       </template>
-
     </el-row>
   </div>
 </template>
@@ -112,11 +129,13 @@ export default {
       if (this.userProfile) {
         return (['CA', 'SCA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
       }
+      return false;
     },
     allowDonorAdmin () {
       if (this.userProfile) {
         return (['DA', 'SDA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
       }
+      return false;
     },
     isDashboard () {
       return this.$route.path.includes('/dashboard');

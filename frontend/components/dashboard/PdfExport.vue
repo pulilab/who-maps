@@ -1,5 +1,5 @@
 <template>
-  <div/>
+  <div />
 </template>
 
 <script>
@@ -160,7 +160,7 @@ export default {
       if (window) {
         let path = '/404';
         if (project && project.id) {
-          path = this.localePath({name: 'organisation-projects-id-published', params: {organisation: '-', id: project.id}});
+          path = this.localePath({ name: 'organisation-projects-id-published', params: { organisation: '-', id: project.id } });
         }
         return window.location.origin + path;
       }
@@ -171,7 +171,7 @@ export default {
       this.pdfMake = require('pdfmake/build/pdfmake');
       const pdfFonts = require('pdfmake/build/vfs_fonts.js');
       this.pdfMake.vfs = pdfFonts.pdfMake.vfs;
-      const docDefinition = {...this.docDefinition, content: [this.tableHeader]};
+      const docDefinition = { ...this.docDefinition, content: [this.tableHeader] };
 
       this.parsed.forEach((project, index) => {
         const country = this.getCountryDetails(project.country);

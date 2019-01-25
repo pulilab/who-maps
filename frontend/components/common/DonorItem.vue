@@ -1,7 +1,10 @@
 <template>
   <div
     v-if="donor"
-    class="DonorItem">{{ donor.name }}</div>
+    class="DonorItem"
+  >
+    {{ donor.name }}
+  </div>
 </template>
 
 <script>
@@ -24,6 +27,7 @@ export default {
         const id = parseInt(this.id, 10);
         return this.getDonorDetails(id);
       }
+      return null;
     }
   }
 };

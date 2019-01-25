@@ -74,9 +74,9 @@ export default {
     clear () {
       this.errors.clear();
     },
-    addErrorIfMissing ({field, msg, scope}) {
+    addErrorIfMissing ({ field, msg, scope }) {
       if (!this.errors.has(field, scope)) {
-        this.errors.add({field, msg, scope});
+        this.errors.add({ field, msg, scope });
       }
     },
     countryCustomAnswersErrorHandling (errors) {

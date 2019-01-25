@@ -6,12 +6,14 @@
     :placeholder="$gettext('Select country') | translate"
     filterable
     popper-class="CountrySelectorPopper"
-    class="CountrySelector">
+    class="CountrySelector"
+  >
     <el-option
       v-for="country in countries"
       :key="country.id"
       :label="country.name"
-      :value="country.id"/>
+      :value="country.id"
+    />
   </el-select>
 </template>
 

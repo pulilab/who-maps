@@ -2,7 +2,8 @@
   <div class="NewProjectForm">
     <div
       v-show="!showForm"
-      class="Loader">
+      class="Loader"
+    >
       <div />
       <span>Loading</span>
     </div>
@@ -13,44 +14,45 @@
     >
       <el-row
         v-show="showForm"
-        type="flex">
+        type="flex"
+      >
         <el-col :span="18">
           <general-overview
             ref="generalOverview"
             :use-publish-rules="usePublishRules"
             :rules="rules"
             :api-errors="apiErrors"
-            @mounted="mountedHandler"
+            @hook:mounted="mountedHandler"
           />
           <implementation-overview
             ref="implementationOverview"
             :rules="rules"
             :api-errors="apiErrors"
-            @mounted="mountedHandler"
+            @hook:mounted="mountedHandler"
           />
           <technology-overview
             ref="technologyOverview"
             :rules="rules"
             :api-errors="apiErrors"
-            @mounted="mountedHandler"
+            @hook:mounted="mountedHandler"
           />
           <interoperability-and-standards
             ref="interoperabilityAndStandards"
             :rules="rules"
             :api-errors="apiErrors"
-            @mounted="mountedHandler"
+            @hook:mounted="mountedHandler"
           />
           <country-custom
             ref="countryCustom"
             :use-publish-rules="usePublishRules"
             :api-errors="apiErrors"
-            @mounted="mountedHandler"
+            @hook:mounted="mountedHandler"
           />
           <donor-custom
             ref="donorCustom"
             :use-publish-rules="usePublishRules"
             :api-errors="apiErrors"
-            @mounted="mountedHandler"
+            @hook:mounted="mountedHandler"
           />
         </el-col>
         <el-col :span="6">
@@ -91,7 +93,7 @@ export default {
   data () {
     return {
       readyElements: 0,
-      maxElements: 4,
+      maxElements: -1,
       usePublishRules: false,
       apiErrors: {}
     };
@@ -280,7 +282,7 @@ export default {
           });
         }
         window.localStorage.removeItem('rescuedProject');
-        this.$router.replace({...this.$route, query: undefined});
+        this.$router.replace({ ...this.$route, query: undefined });
         this.$nuxt.$loading.finish();
       });
     }
@@ -307,6 +309,7 @@ export default {
       }
     },
     mountedHandler () {
+      console.log('mounted');
       setTimeout(() => {
         this.readyElements += 1;
       }, 300);
@@ -383,7 +386,7 @@ export default {
           try {
             if (this.isNewProject) {
               const id = await this.createProject();
-              const localised = this.localePath({name: 'organisation-projects-id-edit', params: {...this.$route.params, id}});
+              const localised = this.localePath({ name: 'organisation-projects-id-edit', params: { ...this.$route.params, id } });
               this.$router.push(localised);
             } else if (this.isDraft) {
               await this.saveDraft(this.$route.params.id);
@@ -428,7 +431,7 @@ export default {
         if (valid) {
           try {
             await this.publishProject(this.$route.params.id);
-            const localised = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params}});
+            const localised = this.localePath({ name: 'organisation-projects-id-published', params: { ...this.$route.params } });
             this.$router.push(localised);
             this.$alert(this.$gettext('Your draft has been published successfully'), this.$gettext('Congratulation'), {
               confirmButtonText: this.$gettext('Close')

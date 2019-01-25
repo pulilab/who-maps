@@ -1,7 +1,8 @@
 <template>
   <div
     class="WorldZoomButton"
-    @click="zoomToWorld">
+    @click="zoomToWorld"
+  >
     <fa
       icon="globe-africa"
     />

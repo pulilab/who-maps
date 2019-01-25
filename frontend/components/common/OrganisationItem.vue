@@ -1,7 +1,10 @@
 <template>
   <div
     v-if="organisation"
-    class="OrganisationItem">{{ organisation.name }}</div>
+    class="OrganisationItem"
+  >
+    {{ organisation.name }}
+  </div>
 </template>
 
 <script>
@@ -24,6 +27,7 @@ export default {
         const id = parseInt(this.id, 10);
         return this.getOrganisationDetails(id);
       }
+      return null;
     }
   }
 };

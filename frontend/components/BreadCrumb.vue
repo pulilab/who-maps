@@ -2,25 +2,28 @@
   <el-col class="Breadcrumb">
     <el-row
       type="flex"
-      align="middle">
+      align="middle"
+    >
       <el-col class="Home">
         <nuxt-link
           :to="localePath({name: 'organisation', params: $route.params})"
         >
           <fa
             icon="home"
-            size="lg" />
+            size="lg"
+          />
         </nuxt-link>
       </el-col>
       <template
         v-if="subPageName"
       >
-        <el-col class="Sep" >
+        <el-col class="Sep">
           <fa icon="angle-right" />
         </el-col>
         <el-col
           :key="subPageName"
-          class="Page">
+          class="Page"
+        >
           {{ subPageName }}
         </el-col>
       </template>
@@ -35,6 +38,7 @@ export default {
       if (this.$route && this.$route.name) {
         return this.$route.name.split('___')[0];
       }
+      return null;
     },
     subPageName () {
       const noSubPage = {

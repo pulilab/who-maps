@@ -3,7 +3,8 @@
     <el-row
       type="flex"
       align="middle"
-      class="ProjectsBoxHeadline">
+      class="ProjectsBoxHeadline"
+    >
       <el-col>
         <h2><translate>My Projects</translate></h2>
         <h6>
@@ -23,7 +24,8 @@
         <nuxt-link
           :to="localePath({name: 'organisation-projects', params: $route.params })"
           tag="button"
-          class="el-button el-button--default el-button--medium">
+          class="el-button el-button--default el-button--medium"
+        >
           <translate>See all my projects</translate>
         </nuxt-link>
       </el-col>

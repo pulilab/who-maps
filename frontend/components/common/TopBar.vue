@@ -1,22 +1,24 @@
 <template>
   <div
     v-scroll-class:TopBarMin="180"
-    class="TopBar">
+    class="TopBar"
+  >
     <el-row
       type="flex"
       justify="space-between"
       class="TopBarInner"
     >
-
       <el-col class="LogoHolder">
         <nuxt-link :to="localePath({name: 'organisation', params: $route.params})">
           <el-row
             type="flex"
-            align="middle">
+            align="middle"
+          >
             <el-col class="LogoWHO">
               <img
                 :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
-                :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')">
+                :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')"
+              >
             </el-col>
             <el-col class="Separator">
               <div />
@@ -24,7 +26,8 @@
             <el-col class="LogoDHA">
               <img
                 src="/logo-dha.svg"
-                alt="Digital Health Atlas">
+                alt="Digital Health Atlas"
+              >
             </el-col>
           </el-row>
         </nuxt-link>
@@ -32,14 +35,15 @@
 
       <el-col
         v-if="!errorPage"
-        class="RightPart">
+        class="RightPart"
+      >
         <!-- ANON MODE -->
         <el-row
           :class="{'AnonView': !user, 'LoggedInView': user}"
           type="flex"
           justify="end"
-          align="middle">
-
+          align="middle"
+        >
           <template v-if="!user">
             <el-col>
               <language-selector />
@@ -51,13 +55,19 @@
                 <nuxt-link
                   key="signupBtn"
                   :to="localePath({name: 'organisation-signup', params: $route.params})"
-                  class="HeaderBtn HideOnActive"><translate>Signup</translate></nuxt-link>
+                  class="HeaderBtn HideOnActive"
+                >
+                  <translate>Signup</translate>
+                </nuxt-link>
               </div>
               <div>
                 <nuxt-link
                   key="loginBtn"
                   :to="localePath({name: 'organisation-login', params: $route.params})"
-                  class="HeaderBtn HideOnActive"><translate>Login</translate></nuxt-link>
+                  class="HeaderBtn HideOnActive"
+                >
+                  <translate>Login</translate>
+                </nuxt-link>
               </div>
             </el-col>
           </template>
@@ -98,7 +108,8 @@
                 <nuxt-link
                   key="newProjectBtn"
                   :to="localePath({name: 'organisation-projects-create', params: $route.params})"
-                  class="HeaderBtn">
+                  class="HeaderBtn"
+                >
                   <fa icon="plus-circle" />
                   <translate>New Project</translate>
                 </nuxt-link>
@@ -109,7 +120,8 @@
 
           <el-col
             v-if="countrySpecific"
-            class="CountryHolder">
+            class="CountryHolder"
+          >
             <el-row type="flex">
               <el-col>
                 <div class="Separator" />
@@ -118,26 +130,32 @@
                 <img
                   :src="countryFlag"
                   alt="country flag"
-                  class="CountryFlag">
+                  class="CountryFlag"
+                >
               </el-col>
               <el-col>
-                <div class="CountryName">{{ landingData.code }}</div>
+                <div class="CountryName">
+                  {{ landingData.code }}
+                </div>
               </el-col>
             </el-row>
           </el-col>
 
           <el-col
             v-if="customOrganisation"
-            class="CountrySpecificMenu">
+            class="CountrySpecificMenu"
+          >
             <div class="Separator" />
             <div>
               <nuxt-link
                 key="whoLandingBtn"
-                :to="localePath({name: 'organisation', params: {organisation: '-'}})">
+                :to="localePath({name: 'organisation', params: {organisation: '-'}})"
+              >
                 <img
                   class="LogoWHOxDHA"
                   alt="WHO logo small"
-                  src="/logo-whoxdha.svg">
+                  src="/logo-whoxdha.svg"
+                >
               </nuxt-link>
             </div>
           </el-col>
@@ -185,11 +203,13 @@ export default {
       if (this.landingData) {
         return this.landingData.logo_url;
       }
+      return null;
     },
     countryFlag () {
       if (this.landingData) {
         return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
       }
+      return null;
     }
 
   }

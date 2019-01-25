@@ -57,11 +57,11 @@ export const actions = () => ({
     }
 
     if (state.type === 'country') {
-      await dispatch('admin/map/loadGeoJSON', null, {root: true});
-      await dispatch('admin/approval/loadList', null, {root: true});
+      await dispatch('admin/map/loadGeoJSON', null, { root: true });
+      await dispatch('admin/approval/loadList', null, { root: true });
     }
 
-    dispatch('admin/questions/setQuestions', data, {root: true});
+    dispatch('admin/questions/setQuestions', data, { root: true });
 
     dispatch('mapAdminSelections', data);
   },
@@ -174,14 +174,14 @@ export const actions = () => ({
 
     (getters.getData.partner_logos || []).forEach(async logo => {
       if (logo.raw) {
-        promArr.push({action: 'postPartnerLogo', data: {img: logo.raw}});
+        promArr.push({ action: 'postPartnerLogo', data: { img: logo.raw } });
       }
     });
 
     (getters.getStableData.partner_logos || []).forEach(async logo => {
       const isStillThere = !!getters.getData.partner_logos.find(newLogo => newLogo.id === logo.id);
       if (!isStillThere) {
-        promArr.push({action: 'delPartnerLogo', data: {id: logo.id}});
+        promArr.push({ action: 'delPartnerLogo', data: { id: logo.id } });
       }
     });
 
@@ -205,22 +205,22 @@ export const actions = () => ({
   },
 
   setDataField ({ commit }, { field, data }) {
-    commit('SET_DATA_FIELD', {field, data});
+    commit('SET_DATA_FIELD', { field, data });
   },
 
   setCoverText ({ commit }, txt) {
-    commit('SET_DATA_FIELD', {field: 'cover_text', data: txt});
+    commit('SET_DATA_FIELD', { field: 'cover_text', data: txt });
   },
 
   setFooterTitle ({ commit }, txt) {
-    commit('SET_DATA_FIELD', {field: 'footer_title', data: txt});
+    commit('SET_DATA_FIELD', { field: 'footer_title', data: txt });
   },
 
   setFooterText ({ commit }, txt) {
-    commit('SET_DATA_FIELD', {field: 'footer_text', data: txt});
+    commit('SET_DATA_FIELD', { field: 'footer_text', data: txt });
   },
-  setProjectApproval ({commit}, data) {
-    commit('SET_DATA_FIELD', {field: 'project_approval', data});
+  setProjectApproval ({ commit }, data) {
+    commit('SET_DATA_FIELD', { field: 'project_approval', data });
   }
 });
 
@@ -230,14 +230,14 @@ export const mutations = () => ({
   },
 
   SET_DATA: (state, data) => {
-    state.data = {...data};
+    state.data = { ...data };
   },
 
   SET_EDITABLE_DATA: (state, data) => {
-    state.editableData = {...data};
+    state.editableData = { ...data };
   },
 
-  SET_DATA_FIELD: (state, {field, data}) => {
+  SET_DATA_FIELD: (state, { field, data }) => {
     const valueToFill = typeof data === 'undefined' ? null : data;
     state.editableData[field] = valueToFill;
   },

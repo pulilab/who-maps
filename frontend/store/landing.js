@@ -29,7 +29,7 @@ export const getters = {
 
 export const actions = {
   ...actionsGenerator(),
-  async search ({commit, dispatch}) {
+  async search ({ commit, dispatch }) {
     try {
       commit('SET_SEARCHED', null);
       const { results } = await dispatch('loadProjects');
@@ -40,14 +40,14 @@ export const actions = {
       // console.log(e);
     }
   },
-  async loadCustomLandingPage ({dispatch}, code) {
+  async loadCustomLandingPage ({ dispatch }, code) {
     if (code.length === 2) {
       await dispatch('loadCountryData', code);
     } else if (code.length > 2) {
       await dispatch('loadDonorData', code);
     }
   },
-  async loadCountryData ({commit, dispatch, rootGetters}, code) {
+  async loadCountryData ({ commit, dispatch, rootGetters }, code) {
     try {
       const country = rootGetters['countries/getCountries'].find(c => c.code.toLowerCase() === code.toLowerCase());
       const { data } = await this.$axios.get(`/api/landing-country/${country.id}/`);
@@ -57,7 +57,7 @@ export const actions = {
       console.error('landing/loadCountryData failed');
     }
   },
-  async loadDonorData ({commit, rootGetters}, code) {
+  async loadDonorData ({ commit, rootGetters }, code) {
     try {
       const donor = rootGetters['system/getDonors'].find(d => d.code.toLowerCase() === code.toLowerCase());
       const { data } = await this.$axios.get(`/api/landing-donor/${donor.id}/`);
@@ -66,10 +66,10 @@ export const actions = {
       console.error('landing/loadDonorData failed');
     }
   },
-  clearCustomLandingPage ({commit}) {
+  clearCustomLandingPage ({ commit }) {
     commit('SET_LANDING_PAGE_DATA', null);
   },
-  resetSearch ({commit}) {
+  resetSearch ({ commit }) {
     commit('SET_SEARCHED', null);
     commit('SET_SEARCH_STRING', null);
   }
@@ -83,6 +83,6 @@ export const mutations = {
     state.searched = searched;
   },
   SET_FOUND_IN: (state, found) => {
-    state.foundIn = {...found};
+    state.foundIn = { ...found };
   }
 };

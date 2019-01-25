@@ -2,7 +2,8 @@
   <div class="FilterItem">
     <el-row
       type="flex"
-      class="FilterItemHeader">
+      class="FilterItemHeader"
+    >
       <el-col class="Label">
         {{ label }}
       </el-col>
@@ -26,7 +27,7 @@
     </el-row>
 
     <div class="FilterItemSelected">
-      <slot/>
+      <slot />
     </div>
 
     <div

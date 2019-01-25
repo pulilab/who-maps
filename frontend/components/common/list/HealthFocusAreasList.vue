@@ -12,7 +12,8 @@
         <span>
           <fa
             icon="check"
-            size="xs" />
+            size="xs"
+          />
         </span>
         <span>{{ hfa.name }}</span>
       </li>
@@ -20,9 +21,14 @@
         <span>
           <fa
             icon="check"
-            size="xs" />
+            size="xs"
+          />
         </span>
-        <span><translate :parameters="{excluded}">... {excluded} more</translate></span>
+        <span>
+          <translate :parameters="{excluded}">
+            ... {excluded} more
+          </translate>
+        </span>
       </li>
     </ul>
   </div>

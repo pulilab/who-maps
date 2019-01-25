@@ -18,7 +18,7 @@ export default {
     ProjectForm
   },
   middleware: ['isLoggedIn'],
-  async fetch ({store}) {
+  async fetch ({ store }) {
     await store.dispatch('project/resetProjectState');
     store.dispatch('landing/resetSearch');
   }

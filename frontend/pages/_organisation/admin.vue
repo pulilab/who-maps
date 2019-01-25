@@ -12,7 +12,7 @@ export default {
   components: {
   },
   middleware: ['isLoggedIn'],
-  async fetch ({store}) {
+  async fetch ({ store }) {
     store.dispatch('landing/resetSearch');
   },
   computed: {

@@ -14,7 +14,7 @@ export default {
     DashboardMap,
     DashboardProjectBox
   },
-  async fetch ({store, query, error}) {
+  async fetch ({ store, query, error }) {
     store.dispatch('dashboard/setDashboardSection', 'map');
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),
@@ -43,7 +43,7 @@ export default {
       immediate: false,
       handler (query) {
         if (this.dashboardSection === 'map') {
-          this.$router.replace({...this.$route, query});
+          this.$router.replace({ ...this.$route, query });
           this.load();
         }
       }

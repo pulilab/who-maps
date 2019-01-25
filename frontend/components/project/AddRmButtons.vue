@@ -5,7 +5,8 @@
       key="delete"
       type="text"
       class="DeleteButton IconLeft IViewert"
-      @click="$emit('rm')">
+      @click="$emit('rm')"
+    >
       <fa icon="minus" />
       <translate>Delete</translate>
     </el-button>
@@ -14,7 +15,8 @@
       key="show"
       type="text"
       class="AddButton IconLeft"
-      @click="$emit('add')">
+      @click="$emit('add')"
+    >
       <fa icon="plus" />
       <translate>Add</translate>
     </el-button>

@@ -6,7 +6,6 @@
       visible-arrow="false"
       popper-class="CustomPopover UserDropdownPopper"
     >
-
       <el-button
         slot="reference"
         type="text"
@@ -31,7 +30,8 @@
             </div>
             <country-item
               v-if="user.country"
-              :id="user.country" />
+              :id="user.country"
+            />
           </div>
 
           <div class="Item">
@@ -48,7 +48,7 @@
 
         <!-- User links block -->
         <div class="Divider" />
-        <div class="DropdownLink" >
+        <div class="DropdownLink">
           <nuxt-link
             :to="localePath({name: 'organisation-edit-profile', params: $route.params})"
             @click.native="closePopover"
@@ -62,7 +62,8 @@
 
         <div
           v-if="isUserCA"
-          class="DropdownLink">
+          class="DropdownLink"
+        >
           <nuxt-link
             :to="localePath({name: 'organisation-admin-country', params: $route.params})"
             @click.native="closePopover"
@@ -76,7 +77,8 @@
 
         <div
           v-if="isUserDA"
-          class="DropdownLink">
+          class="DropdownLink"
+        >
           <nuxt-link
             :to="localePath({name: 'organisation-admin-donor', params: $route.params})"
             @click.native="closePopover"
@@ -152,7 +154,7 @@ export default {
     logout () {
       this.closePopover();
       this.doLogout();
-      this.$router.push(this.localePath({name: 'organisation', params: this.$route.params, query: undefined}));
+      this.$router.push(this.localePath({ name: 'organisation', params: this.$route.params, query: undefined }));
     }
   }
 };

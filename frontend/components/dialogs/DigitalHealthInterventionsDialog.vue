@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+    v-if="visible"
     :visible.sync="visible"
     :title="$gettext('Select Digital Health Intervention(s)') | translate"
     modal
@@ -10,7 +11,8 @@
   >
     <el-row
       type="flex"
-      class="DHIMainCategories">
+      class="DHIMainCategories"
+    >
       <el-col
         v-for="category in digitalHealthInterventions"
         :key="category.name"
@@ -20,11 +22,11 @@
           :header="category.name"
         >
           <selector-dialog-category
-            v-for="category in category.subGroups"
+            v-for="cat in category.subGroups"
+            :key="cat.id"
             v-model="currentSelection"
-            :key="category.id"
             :category-selectable="true"
-            :category="category"
+            :category="cat"
             child-name="strategies"
           />
         </selector-dialog-column>
@@ -34,18 +36,21 @@
     <span slot="footer">
       <el-row
         type="flex"
-        align="center">
+        align="center"
+      >
         <el-col class="SecondaryButtons">
           <el-button
             type="text"
             class="CancelButton"
-            @click="cancel">
+            @click="cancel"
+          >
             <translate>Cancel</translate>
           </el-button>
           <el-button
             type="text"
             class="DeleteButton"
-            @click="clearAll">
+            @click="clearAll"
+          >
             <translate>Clear All</translate>
           </el-button>
         </el-col>

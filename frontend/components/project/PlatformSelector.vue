@@ -8,12 +8,12 @@
     @change="changeHandler"
     @blur="$emit('blur')"
   >
-
     <el-option
       v-for="paltform in availablePlatforms"
       :key="paltform.id"
       :label="paltform.name"
-      :value="paltform.id"/>
+      :value="paltform.id"
+    />
   </el-select>
 </template>
 

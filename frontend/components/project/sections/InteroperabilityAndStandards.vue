@@ -1,13 +1,16 @@
 <template>
   <div
     id="interoperability"
-    class="InteroperabilityAndStandards">
+    class="InteroperabilityAndStandards"
+  >
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('Interoperability &amp; Standards') | translate">
+      :title="$gettext('Interoperability &amp; Standards') "
+    >
       <el-form-item
         :label="$gettext('Does your project share information with one or more of these digital Health Information System components?') | translate"
-        prop="interoperability_links">
+        prop="interoperability_links"
+      >
         <interoperability-link-component
           v-for="(ir, index) in interopearilbityLinksStructure"
           ref="interoperabilityLink"
@@ -21,12 +24,16 @@
       </el-form-item>
       <el-form-item
         :label="$gettext('What data standards does your digital health project use?') | translate"
-        prop="interoperability_standards">
-
+        prop="interoperability_standards"
+      >
         <template slot="label">
-          <translate key="interoperability-standards">What data standards does your digital health project use?</translate>
-          <form-hint >
-            <translate key="interoperability-standards-hint">If your data standards are not available here, please email digitalhealthatlas@gmail.com</translate>
+          <translate key="interoperability-standards">
+            What data standards does your digital health project use?
+          </translate>
+          <form-hint>
+            <translate key="interoperability-standards-hint">
+              If your data standards are not available here, please email digitalhealthatlas@gmail.com
+            </translate>
           </form-hint>
         </template>
 
@@ -62,9 +69,6 @@ export default {
       interoperability_links: ['project', 'getInteroperabilityLinks', 'setInteroperabilityLinks', 0],
       interoperability_standards: ['project', 'getInteroperabilityStandards', 'setInteroperabilityStandards', 0]
     })
-  },
-  mounted () {
-    this.$emit('mounted');
   },
   methods: {
     async validate () {

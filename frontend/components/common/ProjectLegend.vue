@@ -16,7 +16,8 @@
       placement="bottom-end"
       trigger="hover"
       title="Table legend"
-      popper-class="CustomPopover TableLegendDropdown">
+      popper-class="CustomPopover TableLegendDropdown"
+    >
       <project-legend-content
         :id="id"
         :donors="donors"

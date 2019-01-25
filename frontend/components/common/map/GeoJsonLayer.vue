@@ -81,11 +81,13 @@ export default {
       if (this.geoJsonLoaded && this.activeSubLevel) {
         return this.activeSubLevel;
       }
+      return undefined;
     },
     geoJsonLoadedAndNationalLevelCoverage () {
       if (this.geoJsonLoaded) {
         return this.nationalLevelCoverage;
       }
+      return undefined;
     }
   },
   watch: {

@@ -3,8 +3,12 @@
     <div class="ErrorMessage">
       <div>
         <h2>{{ status }}</h2>
-        <p class="StatusText">{{ statusText }}</p>
-        <p class="Details">{{ details }}</p>
+        <p class="StatusText">
+          {{ statusText }}
+        </p>
+        <p class="Details">
+          {{ details }}
+        </p>
       </div>
       <span><fa icon="code" /></span>
     </div>

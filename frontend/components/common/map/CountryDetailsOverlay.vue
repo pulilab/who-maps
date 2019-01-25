@@ -1,6 +1,6 @@
 <template>
   <div class="CountryDetailsOverlay">
-    <template v-if="!nationalLevelCoverage" >
+    <template v-if="!nationalLevelCoverage">
       <sub-level-marker
         v-for="pin in subLevelPins"
         :key="pin.id"
@@ -92,16 +92,19 @@ export default {
       if (this.subLevelPins && this.mapReady) {
         return this.subLevelPins;
       }
+      return undefined;
     },
     activeSubLevelPinsAndMapReady () {
       if (this.activeSubLevel && this.mapReady) {
         return this.activeSubLevel;
       }
+      return undefined;
     },
     nationalLevelCoverageAndNationalProjects () {
       if (this.nationalLevelCoverage && this.nationalProjects) {
         return this.nationalProjects;
       }
+      return undefined;
     }
   },
   watch: {

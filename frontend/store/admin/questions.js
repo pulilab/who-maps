@@ -13,7 +13,7 @@ export const getters = {
 };
 
 export const actions = {
-  setQuestionnaireType ({commit}, type) {
+  setQuestionnaireType ({ commit }, type) {
     commit('SET_QUESTIONNAIRE_TYPE', type);
     commit('SET_QUESTIONS', []);
   },
@@ -31,15 +31,15 @@ export const actions = {
     const parent = rootGetters[`admin/${type}/getData`];
     const parsed = questionWriteParser(question, type, parent);
     const { data } = await this.$axios.post(`/api/${state.questionnaireType}-custom-questions/`, parsed);
-    commit('UPDATE_QUESTION', {question: data, id: undefined});
+    commit('UPDATE_QUESTION', { question: data, id: undefined });
   },
 
-  async updateQuestion ({ state, rootGetters, commit }, {question, id}) {
+  async updateQuestion ({ state, rootGetters, commit }, { question, id }) {
     const type = state.questionnaireType;
     const parent = rootGetters[`admin/${type}/getData`];
     const parsed = questionWriteParser(question, type, parent);
     const { data } = await this.$axios.patch(`/api/${state.questionnaireType}-custom-questions/${id}/`, parsed);
-    commit('UPDATE_QUESTION', {question: data, id});
+    commit('UPDATE_QUESTION', { question: data, id });
   },
 
   async deleteQuestion ({ commit, state }, id) {
@@ -49,10 +49,10 @@ export const actions = {
     commit('DELETE_QUESTION', id || undefined);
   },
 
-  async processReOrder ({state, commit}, {from, to, newOrder}) {
+  async processReOrder ({ state, commit }, { from, to, newOrder }) {
     from = state.questions[from];
     to = state.questions[to];
-    await this.$axios.post(`/api/${state.questionnaireType}-custom-questions/${from.id}/set_order_to/`, {to: to.order});
+    await this.$axios.post(`/api/${state.questionnaireType}-custom-questions/${from.id}/set_order_to/`, { to: to.order });
     commit('SET_QUESTIONS', newOrder);
   }
 
@@ -68,7 +68,7 @@ export const mutations = {
   ADD_NEW_QUESTION (state) {
     state.questions.push({});
   },
-  UPDATE_QUESTION (state, {question, id}) {
+  UPDATE_QUESTION (state, { question, id }) {
     const index = state.questions.findIndex(q => q.id === id);
     state.questions.splice(index, 1, question);
   },

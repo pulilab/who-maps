@@ -2,7 +2,8 @@
   <div class="FilterPresets">
     <el-row
       type="flex"
-      align="middle">
+      align="middle"
+    >
       <el-col :span="12">
         <el-popover
           :title="$gettext('My filters presets') | translate"
@@ -16,8 +17,12 @@
             size="small"
             class="IconRight"
           >
-            <translate v-show="!activePreseet">Load filters</translate>
-            <span v-if="activePreseet"> {{ activePreseet.name }} </span>
+            <translate v-show="!activePreseet">
+              Load filters
+            </translate>
+            <span v-if="activePreseet">
+              {{ activePreseet.name }}
+            </span>
             <fa icon="caret-down" />
           </el-button>
           <div class="CustomPopoverList">

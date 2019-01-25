@@ -9,7 +9,8 @@
       v-for="region in regions"
       :key="region.id"
       :label="region.name"
-      :value="region.id"/>
+      :value="region.id"
+    />
   </el-select>
 </template>
 

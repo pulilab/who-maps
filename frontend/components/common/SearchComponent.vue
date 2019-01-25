@@ -17,10 +17,12 @@
               <el-input
                 v-model="localSearchString"
                 :placeholder="$gettext('Create your search here') | translate"
-                @keyup.enter.native="search">
+                @keyup.enter.native="search"
+              >
                 <fa
                   slot="prepend"
-                  icon="search" />
+                  icon="search"
+                />
                 <template slot="append">
                   <el-button
                     class="SearchClear"
@@ -49,13 +51,16 @@
                 v-show="hasResults"
                 class="SearchResultsCounter"
               >
-                <translate :parameters="{num: results.length}">{num} result(s):</translate>
+                <translate :parameters="{num: results.length}">
+                  {num} result(s):
+                </translate>
               </el-col>
               <el-col class="AdvancedSearchLink">
                 <nuxt-link
                   :to="localePath({name : 'organisation-dashboard', params: $route.params})"
                   class="NuxtLink IconRight"
-                ><span><translate>Advanced search</translate></span><fa icon="angle-right" />
+                >
+                  <span><translate>Advanced search</translate></span><fa icon="angle-right" />
                 </nuxt-link>
               </el-col>
             </el-row>
@@ -65,10 +70,13 @@
                 <p class="TipText">
                   <fa
                     icon="info-circle"
-                    size="lg" />
-                  <span><translate>
-                    You can use filters to further refine your search. Note that these filters can be saved by selecting Filters and naming your filter. These can then be viewed at a later time after you log in.
-                  </translate></span>
+                    size="lg"
+                  />
+                  <span>
+                    <translate>
+                      You can use filters to further refine your search. Note that these filters can be saved by selecting Filters and naming your filter. These can then be viewed at a later time after you log in.
+                    </translate>
+                  </span>
                 </p>
               </el-col>
             </el-row>
@@ -122,7 +130,9 @@
         </el-col>
         <el-col>
           <span class="SearchResultsCounter">
-            <translate :parameters="{num: results.length}">{num} result(s)</translate>
+            <translate :parameters="{num: results.length}">
+              {num} result(s)
+            </translate>
           </span>
         </el-col>
         <el-col>

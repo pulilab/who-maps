@@ -1,6 +1,6 @@
 <template>
   <div class="angularjs">
-    <div id="toolkitjs"/>
+    <div id="toolkitjs" />
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="Toolkit" >
+  <div class="Toolkit">
     <nuxt-child />
   </div>
 </template>
@@ -10,7 +10,7 @@ export default {
   components: {
   },
   middleware: ['isLoggedIn'],
-  async fetch ({store, params, error}) {
+  async fetch ({ store, params, error }) {
     store.dispatch('landing/resetSearch');
     try {
       await fetchProjectData(store, params, error);

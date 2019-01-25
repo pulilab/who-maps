@@ -5,19 +5,22 @@
       class="IconLeft"
       @click="openDialog"
     >
-      <fa icon="plus"/>
+      <fa icon="plus" />
       <translate>Add Digital Health Interventions</translate>
     </el-button>
     <div
       v-show="dhi.length > 0"
-      class="HasSelectedItems">
+      class="HasSelectedItems"
+    >
       <ul class="SelectedDigitalHealthInterventions">
         <li
           v-for="item in dhi"
-          :key="item.id">
+          :key="item.id"
+        >
           <fa
             icon="check"
-            size="xs"/>
+            size="xs"
+          />
           <digital-health-intervention-item :id="item.id" />
         </li>
       </ul>
@@ -25,7 +28,7 @@
         class="IconLeft"
         @click="openDialog"
       >
-        <fa icon="edit"/>
+        <fa icon="edit" />
         <translate>Edit selection</translate>
       </el-button>
     </div>

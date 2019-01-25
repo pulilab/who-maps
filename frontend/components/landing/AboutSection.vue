@@ -4,7 +4,9 @@
       <el-col class="AboutSectionLeft">
         <h4>{{ title }}</h4>
         <p>{{ permanentFooterText }}</p>
-        <p v-show="countryText" >{{ countryText }}</p>
+        <p v-show="countryText">
+          {{ countryText }}
+        </p>
       </el-col>
       <el-col class="AboutSectionRight">
         <div class="WhoSupporter">
@@ -13,29 +15,34 @@
             <div class="Partner">
               <img
                 src="/static/partners/logo-who.png"
-                alt="WHO">
+                alt="WHO"
+              >
             </div>
             <div class="Partner">
               <img
                 src="static/partners/logo-hrp-new-cropped.png"
-                alt="HRP">
+                alt="HRP"
+              >
             </div>
             <div class="Partner">
               <img
                 src="/static/partners/logo-path_new-color.png"
                 style="height: 42px"
-                alt="PATH">
+                alt="PATH"
+              >
             </div>
             <div class="Partner">
               <img
                 src="/static/partners/logo-digital_square.png"
                 style="height: 54px"
-                alt="Digital Square">
+                alt="Digital Square"
+              >
             </div>
             <div class="Partner">
               <img
                 src="/static/partners/logo-unfpa.png"
-                alt="UNFPA">
+                alt="UNFPA"
+              >
             </div>
           </div>
         </div>
@@ -52,7 +59,8 @@
             >
               <img
                 :src="logo.image_url"
-                alt="PartnerLogo">
+                alt="PartnerLogo"
+              >
             </div>
           </div>
         </div>
@@ -82,11 +90,13 @@ export default {
       if (this.countrySpecific) {
         return this.landingData.footer_text;
       }
+      return null;
     },
     partnerLogos () {
       if (this.countrySpecific) {
         return this.landingData.partner_logos.length > 0 ? this.landingData.partner_logos : null;
       }
+      return null;
     }
   }
 };

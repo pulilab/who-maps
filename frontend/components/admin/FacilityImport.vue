@@ -4,16 +4,24 @@
       v-show="false"
       ref="fileInput"
       type="file"
-      @change="setCsv">
+      @change="setCsv"
+    >
     <el-button
       :loading="csvProcessing"
       type="text"
       class="IconLeft"
-      @click="triggerFile"><fa icon="plus" /> <translate>Select Facility List</translate></el-button>
+      @click="triggerFile"
+    >
+      <fa icon="plus" /> <translate>Select Facility List</translate>
+    </el-button>
 
     <template v-if="dataReady">
       <div class="FacilityList">
-        <h5><translate :parameters="{num: simpleFacilities.length}">Imported Facilities ({num}):</translate></h5>
+        <h5>
+          <translate :parameters="{num: simpleFacilities.length}">
+            Imported Facilities ({num}):
+          </translate>
+        </h5>
         <ul
           v-for="facility in simpleFacilities"
           :key="facility"

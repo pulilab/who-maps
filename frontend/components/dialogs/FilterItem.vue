@@ -1,10 +1,12 @@
 <template>
   <div
     :class="['FilterNavItem', {'Active': active}]"
-    @click="setActiveItem">
+    @click="setActiveItem"
+  >
     <el-row
       type="flex"
-      align="middle">
+      align="middle"
+    >
       <el-col :span="22">
         <div class="Header">
           {{ header }}
@@ -15,7 +17,9 @@
           </span>
           <template v-if="selected.length > 0">
             <span class="Filtered">
-              <translate :parameters="{selected: selected.length}">{selected} item(s) selected</translate>
+              <translate :parameters="{selected: selected.length}">
+                {selected} item(s) selected
+              </translate>
             </span>
             <el-button
               v-show="selected.lenght > 0"

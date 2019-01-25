@@ -4,46 +4,53 @@
     :label="question"
     class="CustomField"
   >
-
     <div
       v-show="isPrivate"
-      class="PrivateBadge">
+      class="PrivateBadge"
+    >
       <el-tooltip
         effect="dark"
         placement="right"
-        content="This field is hidden from public">
+        content="This field is hidden from public"
+      >
         <el-tag
           size="mini"
-          type="danger">
+          type="danger"
+        >
           Private field
         </el-tag>
       </el-tooltip>
     </div>
 
     <el-input
-      v-validate="localRules"
       v-if="type < 3"
       v-model="innerValue"
+      v-validate="localRules"
       :data-vv-as="question"
       :data-vv-scope="'custom_question_' + id"
-      data-vv-name="answer"/>
+      data-vv-name="answer"
+    />
 
     <el-radio-group
-      v-validate="localRules"
       v-if="type === 3"
       v-model="innerValue"
+      v-validate="localRules"
       :data-vv-as="question"
       :data-vv-scope="'custom_question_' + id"
       data-vv-name="answer"
     >
-      <el-radio label="yes"><translate>Yes</translate></el-radio>
-      <el-radio label="no"><translate>No</translate></el-radio>
+      <el-radio label="yes">
+        <translate>Yes</translate>
+      </el-radio>
+      <el-radio label="no">
+        <translate>No</translate>
+      </el-radio>
     </el-radio-group>
 
     <template v-if="type > 3 && options">
       <el-select
-        v-validate="localRules"
         v-model="innerValue"
+        v-validate="localRules"
         :placeholder="$gettext('Select from list') | translate"
         :multiple="type === 5"
         :data-vv-as="question"
@@ -132,9 +139,9 @@ export default {
       set (answer) {
         answer = Array.isArray(answer) ? answer : [answer];
         if (!this.donorId) {
-          this.setCountryAnswer({...this.answer, answer});
+          this.setCountryAnswer({ ...this.answer, answer });
         } else {
-          this.setDonorAnswer({...this.answer, answer});
+          this.setDonorAnswer({ ...this.answer, answer });
         }
       }
     },

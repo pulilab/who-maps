@@ -5,12 +5,14 @@
     :placeholder="$gettext('Select language') | translate"
     class="LanguageSelectorDropdown"
     popper-class="LanguageSelectorPopper"
-    @change="changeHandler">
+    @change="changeHandler"
+  >
     <el-option
       v-for="language in languages"
       :key="language.code"
       :label="language.name"
-      :value="language.code"/>
+      :value="language.code"
+    />
   </el-select>
 </template>
 

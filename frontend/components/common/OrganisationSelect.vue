@@ -17,17 +17,14 @@
       :value="organisation.id"
     />
   </el-select>
-
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import LightSelectMixin from '../mixins/LightSelectMixin.js';
-import OrganisationItem from '../common/OrganisationItem';
 
 export default {
   components: {
-    OrganisationItem
   },
   mixins: [LightSelectMixin],
   model: {
@@ -64,8 +61,5 @@ export default {
   width: 100%;
 }
 .OrganisationSelectorDropdown {
-   .OrganisationItem {
-    display: inline;
-  }
 }
 </style>

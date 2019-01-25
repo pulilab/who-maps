@@ -19,7 +19,7 @@ import { fetchProjectData } from '@/utilities/projects';
 import ProjectData from '@/components/project/ProjectData';
 export default {
   middleware: ['isLoggedIn'],
-  fetch ({store, params, error}) {
+  fetch ({ store, params, error }) {
     store.dispatch('landing/resetSearch');
     return fetchProjectData(store, params, error);
   },

@@ -26,7 +26,8 @@
         fixed
         sortable="custom"
         prop="project__name"
-        width="240">
+        width="240"
+      >
         <template slot-scope="scope">
           <project-card
             :project="scope.row"
@@ -41,7 +42,8 @@
         :label="$gettext('Country') | translate"
         sortable="custom"
         prop="country__name"
-        width="180">
+        width="180"
+      >
         <template slot-scope="scope">
           <country-item
             :id="scope.row.country"
@@ -55,7 +57,8 @@
         :label="$gettext('Organisation Name') | translate"
         sortable="custom"
         prop="organisation__name"
-        width="240">
+        width="240"
+      >
         <template slot-scope="scope">
           <organisation-item
             :id="scope.row.organisation"
@@ -68,10 +71,15 @@
         :label="$gettext('Government Investor') | translate"
         sortable="custom"
         prop="project__data__government_investor"
-        width="180">
+        width="180"
+      >
         <template slot-scope="scope">
-          <span v-show="scope.row.government_investor"><translate>Yes</translate></span>
-          <span v-show="!scope.row.government_investor"><translate>No</translate></span>
+          <span v-show="scope.row.government_investor">
+            <translate>Yes</translate>
+          </span>
+          <span v-show="!scope.row.government_investor">
+            <translate>No</translate>
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -80,7 +88,8 @@
         :label="$gettext('Region') | translate"
         sortable="custom"
         prop="country__region"
-        width="180">
+        width="180"
+      >
         <template slot-scope="scope">
           <region-item
             :id="scope.row.region"
@@ -91,32 +100,39 @@
         v-if="selectedColumns.includes('6')"
         :resizable="false"
         :label="$gettext('Investors') | translate"
-        width="240">
+        width="240"
+      >
         <template slot-scope="scope">
           <donors-list
             :value="scope.row.donors"
             :limit="3"
-            show-icon />
+            show-icon
+          />
         </template>
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes('7')"
         :resizable="false"
         :label="$gettext('Contact Name') | translate"
-        width="240">
+        width="240"
+      >
         <template slot-scope="scope">
           <span>{{ scope.row.contact_name }}</span>
           <a
             :href="`mailto:${scope.row.contact_email}`"
             :rel="`email`"
-            class="TextLink">{{ scope.row.contact_email }}</a>
+            class="TextLink"
+          >
+            {{ scope.row.contact_email }}
+          </a>
         </template>
       </el-table-column>
       <el-table-column
         v-if="selectedColumns.includes('8')"
         :resizable="false"
         :label="$gettext('Implementation Overview') | translate"
-        width="240">
+        width="240"
+      >
         <template slot-scope="scope">
           <p>{{ scope.row.implementation_overview }}</p>
         </template>
@@ -126,7 +142,8 @@
         v-if="selectedColumns.includes('9')"
         :resizable="false"
         :label="$gettext('Geographic Scope') | translate"
-        width="240">
+        width="240"
+      >
         <template slot-scope="scope">
           <p>{{ scope.row.geographic_scope }}</p>
         </template>
@@ -136,25 +153,28 @@
         v-if="selectedColumns.includes('10')"
         :resizable="false"
         :label="$gettext('Health Focus Area') | translate"
-        width="240">
+        width="240"
+      >
         <template slot-scope="scope">
           <health-focus-areas-list
             :value="scope.row.health_focus_areas"
-            :limit="3" />
+            :limit="3"
+          />
         </template>
       </el-table-column>
 
       <el-table-column
         v-for="col in countryColumns"
-        :resizable="false"
         :key="col.id"
+        :resizable="false"
         :render-header="customHeaderRenderer"
         :label="col.label"
-        width="240">
+        width="240"
+      >
         <template slot-scope="scope">
           <custom-answers-cell
-            :row="scope.row"
             :id="col.originalId"
+            :row="scope.row"
             :type="col.type"
             :limit="3"
           />
@@ -163,22 +183,22 @@
 
       <el-table-column
         v-for="col in donorColumns"
-        :resizable="false"
         :key="col.id"
+        :resizable="false"
         :render-header="customHeaderRenderer"
         :label="col.label"
-        width="240">
+        width="240"
+      >
         <template slot-scope="scope">
           <custom-answers-cell
-            :row="scope.row"
             :id="col.originalId"
+            :row="scope.row"
             :type="col.type"
             :donor-id="col.donorId"
             :limit="3"
           />
         </template>
       </el-table-column>
-
     </el-table>
 
     <div class="Pagination">
@@ -190,12 +210,13 @@
         layout="sizes, prev, slot, next"
       >
         <span class="PageCounter">
-          <translate :parameters="{min, max, total}">{min}-{max} of {total}</translate>
+          <translate :parameters="{min, max, total}">
+            {min}-{max} of {total}
+          </translate>
         </span>
       </el-pagination>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -293,16 +314,16 @@ export default {
     ...mapActions({
       setSelectedRows: 'dashboard/setSelectedRows'
     }),
-    customHeaderRenderer (h, {column, $index}) {
-      return h('span', {attrs: {title: column.label}}, column.label);
+    customHeaderRenderer (h, { column, $index }) {
+      return h('span', { attrs: { title: column.label } }, column.label);
     },
     selectHandler (selection) {
       this.setSelectedRows(selection.map(s => s.id));
     },
-    rowClassCalculator ({row}) {
+    rowClassCalculator ({ row }) {
       return this.selectedRows.includes('row'.id) ? 'Selected' : 'NotSelected';
     },
-    sortChanged ({prop, order}) {
+    sortChanged ({ prop, order }) {
       if (order === 'descending') {
         this.sorting = '-' + prop;
         this.localSort = '-' + prop;

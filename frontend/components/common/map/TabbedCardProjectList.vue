@@ -5,7 +5,8 @@
   >
     <el-tab-pane
       :label="$gettext('Sub-national') | translate"
-      name="subNational">
+      name="subNational"
+    >
       <project-card
         v-for="p in projects"
         :key="p.id"
@@ -19,13 +20,15 @@
       >
         <fa
           icon="info-circle"
-          size="lg" />
+          size="lg"
+        />
         <translate>No project to show...</translate>
       </div>
     </el-tab-pane>
     <el-tab-pane
       :label="$gettext('National') | translate"
-      name="national">
+      name="national"
+    >
       <project-card
         v-for="p in projects"
         :key="p.id"
@@ -39,7 +42,8 @@
       >
         <fa
           icon="info-circle"
-          size="lg" />
+          size="lg"
+        />
         <translate>No project to show...</translate>
       </div>
     </el-tab-pane>

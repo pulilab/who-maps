@@ -10,7 +10,8 @@
         <span v-show="showIcon">
           <fa
             icon="user-tie"
-            size="xs" />
+            size="xs"
+          />
         </span>
         <span>{{ p.name }}</span>
       </li>
@@ -18,9 +19,14 @@
         <span>
           <fa
             icon="arrow-alt-circle-right"
-            size="xs" />
+            size="xs"
+          />
         </span>
-        <span><translate :parameters="{excluded}">... {excluded} more</translate></span>
+        <span>
+          <translate :parameters="{excluded}">
+            ... {excluded} more
+          </translate>
+        </span>
       </li>
     </ul>
   </div>

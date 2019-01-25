@@ -2,11 +2,13 @@
   <div class="SearchBox">
     <el-row
       type="flex"
-      class="SearchInput">
+      class="SearchInput"
+    >
       <el-col>
         <el-input
           v-model="searchString"
-          :placeholder="$gettext('Type something...') | translate">
+          :placeholder="$gettext('Type something...') | translate"
+        >
           <fa
             slot="prepend"
             icon="search"
@@ -16,7 +18,8 @@
     </el-row>
     <el-row
       type="flex"
-      class="SearchOptions">
+      class="SearchOptions"
+    >
       <el-col class="SearchOptionsHeader">
         <el-button
           type="text"
@@ -59,25 +62,44 @@
         >
           <el-checkbox-group
             v-model="selectedOptions"
-            class="OnePerRow CheckboxSmall">
+            class="OnePerRow CheckboxSmall"
+          >
             <el-checkbox
               label="name"
-              class="CheckboxSmall"><translate>Project Name</translate></el-checkbox>
+              class="CheckboxSmall"
+            >
+              <translate>Project Name</translate>
+            </el-checkbox>
             <el-checkbox
               label="org"
-              class="CheckboxSmall"><translate>Organisation Name</translate></el-checkbox>
+              class="CheckboxSmall"
+            >
+              <translate>Organisation Name</translate>
+            </el-checkbox>
             <el-checkbox
               label="loc"
-              class="CheckboxSmall"><translate>Location</translate></el-checkbox>
+              class="CheckboxSmall"
+            >
+              <translate>Location</translate>
+            </el-checkbox>
             <el-checkbox
               label="overview"
-              class="CheckboxSmall">Overview of the <translate>digital health</translate></el-checkbox>
+              class="CheckboxSmall"
+            >
+              Overview of the <translate>digital health</translate>
+            </el-checkbox>
             <el-checkbox
               label="partner"
-              class="CheckboxSmall"><translate>Implementing Partners</translate></el-checkbox>
+              class="CheckboxSmall"
+            >
+              <translate>Implementing Partners</translate>
+            </el-checkbox>
             <el-checkbox
               label="donor"
-              class="CheckboxSmall"><translate>Investors</translate></el-checkbox>
+              class="CheckboxSmall"
+            >
+              <translate>Investors</translate>
+            </el-checkbox>
           </el-checkbox-group>
         </el-col>
       </transition>

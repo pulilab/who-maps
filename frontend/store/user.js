@@ -30,9 +30,9 @@ export const actions = {
     saveToken(data.token, data.user_profile_id);
     await dispatch('loadProfile', data.user_profile_id);
     await Promise.all([
-      dispatch('system/loadOrganisations', {}, {root: true}),
-      dispatch('projects/loadUserProjects', {}, {root: true}),
-      dispatch('system/loadUserProfiles', {}, {root: true})
+      dispatch('system/loadOrganisations', {}, { root: true }),
+      dispatch('projects/loadUserProjects', {}, { root: true }),
+      dispatch('system/loadUserProfiles', {}, { root: true })
     ]);
   },
 
@@ -48,16 +48,16 @@ export const actions = {
     commit('SET_TOKEN', data.token);
     saveToken(data.token, data.user_profile_id);
     await dispatch('loadProfile', data.user_profile_id);
-    await dispatch('system/loadOrganisations', {}, {root: true});
+    await dispatch('system/loadOrganisations', {}, { root: true });
   },
 
   doLogout ({ commit, dispatch }) {
     commit('SET_USER', null);
     commit('SET_PROFILE', null);
     commit('SET_TOKEN', null);
-    dispatch('dashboard/resetUserInput', null, {root: true});
-    dispatch('landing/resetUserInput', null, {root: true});
-    dispatch('projects/resetProjectsData', null, {root: true});
+    dispatch('dashboard/resetUserInput', null, { root: true });
+    dispatch('landing/resetUserInput', null, { root: true });
+    dispatch('projects/resetProjectsData', null, { root: true });
     deleteToken();
   },
 
@@ -87,17 +87,17 @@ export const actions = {
     await dispatch('loadProfile', tokens.profileId);
   },
 
-  updateTeamViewers ({commit, getters}, {team, viewers, id}) {
+  updateTeamViewers ({ commit, getters }, { team, viewers, id }) {
     const user = getters.getProfile.id;
     const originalTeam = getters.getProfile.member;
     const originalViewer = getters.getProfile.viewer;
     const member = team.includes(user) ? union(originalTeam, [id]) : originalTeam.filter(o => o !== id);
     const viewer = viewers.includes(user) ? union(originalViewer, [id]) : originalViewer.filter(o => o !== id);
-    commit('UPDATE_TEAM_VIEWER', {member, viewer});
+    commit('UPDATE_TEAM_VIEWER', { member, viewer });
     return team.includes(user) || viewers.includes(user);
   },
 
-  async verifyEmail ({commit}, key) {
+  async verifyEmail ({ commit }, key) {
     try {
       await this.$axios.post('/api/rest-auth/registration/verify-email/', { key });
       commit('EMAIL_VERIFY_RESULT', true);
@@ -122,8 +122,8 @@ export const mutations = {
     state.profile = profile;
   },
 
-  UPDATE_TEAM_VIEWER: (state, {member, viewer}) => {
-    state.profile = {...state.profile, member, viewer};
+  UPDATE_TEAM_VIEWER: (state, { member, viewer }) => {
+    state.profile = { ...state.profile, member, viewer };
   },
 
   EMAIL_VERIFY_RESULT: (state, isSuccess) => {

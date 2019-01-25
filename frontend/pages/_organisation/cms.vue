@@ -1,6 +1,6 @@
 <template>
   <div class="angularjs">
-    <div id="cmsjs"/>
+    <div id="cmsjs" />
   </div>
 </template>
 
@@ -11,7 +11,7 @@ export default {
   },
 
   middleware: ['isLoggedIn'],
-  fetch ({store}) {
+  fetch ({ store }) {
     store.dispatch('landing/resetSearch');
   },
   mounted () {

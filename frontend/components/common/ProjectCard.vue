@@ -7,7 +7,8 @@
     <div
       @click="goToProject"
       @mouseenter="mouseEnterHandler"
-      @mouseleave="mouseLeaveHandler">
+      @mouseleave="mouseLeaveHandler"
+    >
       <el-row type="flex">
         <el-col :span="22">
           <el-row class="ProjectName">
@@ -49,8 +50,13 @@
             <el-col>
               <fa
                 icon="search"
-                size="xs" />
-              <span><translate :parameters="{found}">Found in "{found}"</translate></span>
+                size="xs"
+              />
+              <span>
+                <translate :parameters="{found}">
+                  Found in "{found}"
+                </translate>
+              </span>
             </el-col>
           </el-row>
         </el-col>
@@ -59,7 +65,8 @@
           <transition name="el-fade-in">
             <fa
               v-show="showArrow"
-              icon="arrow-right" />
+              icon="arrow-right"
+            />
           </transition>
           <project-legend
             :id="project.id"
@@ -146,11 +153,12 @@ export default {
       if (this.foundIn && this.showFoundIn) {
         return this.foundIn.map(f => nameMApping[f]).join(',');
       }
+      return '';
     }
   },
   methods: {
     goToProject () {
-      const path = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params, id: this.project.id}});
+      const path = this.localePath({ name: 'organisation-projects-id-published', params: { ...this.$route.params, id: this.project.id } });
       this.$router.push(path);
     },
     mouseEnterHandler () {

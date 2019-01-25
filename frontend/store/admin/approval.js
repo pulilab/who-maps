@@ -10,7 +10,7 @@ export const getters = {
 };
 
 export const actions = {
-  async loadList ({commit, rootGetters}) {
+  async loadList ({ commit, rootGetters }) {
     try {
       const country = rootGetters['admin/country/getData'];
       if (country) {
@@ -21,10 +21,10 @@ export const actions = {
       console.error('approval list failed to load', e);
     }
   },
-  setCurrentElement ({commit}, value) {
+  setCurrentElement ({ commit }, value) {
     commit('SET_CURRENT_ELEMENT', value);
   },
-  async updateProjectApproval ({commit, getters}, form) {
+  async updateProjectApproval ({ commit, getters }, form) {
     const id = getters.getCurrentElement;
     const { data } = await this.$axios.put(`/api/approval/${id}/`, form);
     commit('UPDATE_ENTRY', data);

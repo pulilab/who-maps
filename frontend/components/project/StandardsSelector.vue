@@ -2,11 +2,13 @@
   <el-checkbox-group
     :value="value"
     class="ThreePerRow"
-    @input="changeHandler">
+    @input="changeHandler"
+  >
     <el-checkbox
       v-for="standard in standards"
       :key="standard.id"
-      :label="standard.id">
+      :label="standard.id"
+    >
       {{ standard.name }}
     </el-checkbox>
   </el-checkbox-group>

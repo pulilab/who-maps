@@ -8,7 +8,8 @@
         <span>
           <fa
             icon="check"
-            size="xs" />
+            size="xs"
+          />
         </span>
         <span>{{ v }}</span>
       </li>
@@ -16,9 +17,14 @@
         <span>
           <fa
             icon="check"
-            size="xs" />
+            size="xs"
+          />
         </span>
-        <span><translate :parameters="{excluded}">... {excluded} more</translate></span>
+        <span>
+          <translate :parameters="{excluded}">
+            ... {excluded} more
+          </translate>
+        </span>
       </li>
     </ul>
     <p v-if="type < 4">

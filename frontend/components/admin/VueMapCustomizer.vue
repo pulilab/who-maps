@@ -1,24 +1,27 @@
 <template>
   <el-row
     type="flex"
-    class="CountryMapCustomizer">
-
+    class="CountryMapCustomizer"
+  >
     <el-col>
       <el-row
         type="flex"
         align="middle"
-        class="CountryMapHeader">
+        class="CountryMapHeader"
+      >
         <el-col class="CountryMapTitle">
           <div>{{ country.name }}</div>
         </el-col>
         <el-col class="CountryMapFile">
           <el-row
             type="flex"
-            align="middle">
+            align="middle"
+          >
             <span><translate>Map file:</translate></span>
             <el-button
               type="text"
-              @click="downloadMap">
+              @click="downloadMap"
+            >
               <translate>Download</translate>
             </el-button>
             <el-upload
@@ -33,12 +36,16 @@
               :before-upload="beforeMapUpload"
               class="UploadComp"
               name="map_file"
-              action="/api/map-files/">
+              action="/api/map-files/"
+            >
               <el-button
                 :disabled="uploadMapFile"
                 :loading="uploadMapFile"
                 class="DeleteButton"
-                type="text"><translate>Change</translate></el-button>
+                type="text"
+              >
+                <translate>Change</translate>
+              </el-button>
             </el-upload>
           </el-row>
         </el-col>
@@ -92,21 +99,24 @@
       <div class="CountryMapSettings">
         <el-row
           type="flex"
-          align="middle">
+          align="middle"
+        >
           <el-col>
             <div class="PinSwitch CountryCenter">
               <span><translate>Country center pin</translate></span>
               <el-switch
                 v-model="showCenterPin"
                 :active-text="$gettext('Show') | translate"
-                :inactive-text="$gettext('Hide') | translate"/>
+                :inactive-text="$gettext('Hide') | translate"
+              />
             </div>
             <div class="PinSwitch DistrictsCenter">
               <span><translate>Districts center pin</translate></span>
               <el-switch
                 v-model="showSubLevelsPins"
                 :active-text="$gettext('Show') | translate"
-                :inactive-text="$gettext('Hide') | translate"/>
+                :inactive-text="$gettext('Hide') | translate"
+              />
             </div>
           </el-col>
           <el-col>
@@ -128,21 +138,25 @@
         <div>
           <el-select
             v-model="firstSubLevel"
-            placeholder="Admin level">
+            placeholder="Admin level"
+          >
             <el-option
               v-for="level in subLevels"
               :key="level"
               :label="`admin-level-${level}`"
-              :value="level"/>
+              :value="level"
+            />
           </el-select>
           <el-select
             v-model="firstSubLevelType"
-            placeholder="Sub level name">
+            placeholder="Sub level name"
+          >
             <el-option
               v-for="name in firstSubLevelTypes"
               :key="name.name"
               :label="name.displayName"
-              :value="name.name"/>
+              :value="name.name"
+            />
           </el-select>
         </div>
 
@@ -165,29 +179,34 @@
 
       <div
         v-show="showFirstSubLevelList"
-        class="MapSettingSection">
+        class="MapSettingSection"
+      >
         <h5>Sub Level II <span>(Only for selection)</span></h5>
         <p>Hover on a district name to highlight it on the country map.</p>
         <div>
           <el-select
             v-model="secondSubLevel"
             placeholder="Admin Level"
-            clearable>
+            clearable
+          >
             <el-option
               v-for="level in availableSubLevels"
               :key="level"
               :label="`admin-level-${level}`"
-              :value="level"/>
+              :value="level"
+            />
           </el-select>
           <el-select
             v-model="secondSubLevelType"
             placeholder="Sub level name"
-            clearable>
+            clearable
+          >
             <el-option
               v-for="name in secondSubLevelTypes"
               :key="name.name"
               :label="name.displayName"
-              :value="name.name"/>
+              :value="name.name"
+            />
           </el-select>
         </div>
 
@@ -214,7 +233,9 @@
           ref="facilityImporter"
           :places="places"
         />
-        <p v-show="!showFirstSubLevelList">Select at least one level to use the facility import</p>
+        <p v-show="!showFirstSubLevelList">
+          Select at least one level to use the facility import
+        </p>
       </div>
     </el-col>
   </el-row>
@@ -341,7 +362,7 @@ export default {
       // /api/countries/map-download/${country.id}/
       this.$nuxt.$loading.start();
       try {
-        const { data } = await this.$axios.get(`/api/countries/map-download/${this.country.id}/`, {responseType: 'blob'});
+        const { data } = await this.$axios.get(`/api/countries/map-download/${this.country.id}/`, { responseType: 'blob' });
         blobDownloader(data, `${this.country.name}_boundaries.zip`, this.$nuxt.$loading.finish);
       } catch (e) {
         this.$message.error(this.$gettext('Map donwload failed, please try again later'));
@@ -372,7 +393,7 @@ export default {
 
     subLevelsPinsMoveHandler (event, name) {
       const latlng = event.target.getLatLng();
-      this.updateSubLevelPolyCenter({name, latlng});
+      this.updateSubLevelPolyCenter({ name, latlng });
     },
 
     beforeMapUpload () {
@@ -380,7 +401,7 @@ export default {
     },
 
     mapFileChangeSuccessHandler (response) {
-      this.setCountryDataField({field: 'map_files', data: [response]});
+      this.setCountryDataField({ field: 'map_files', data: [response] });
       setTimeout(async () => {
         await this.loadGeoJSON();
         this.forceMapFileChange = false;

@@ -15,7 +15,7 @@ export default {
   async fetch ({ store, query, redirect }) {
     if (query && query.missingProfile) {
       store.dispatch('layout/setShowEmptyProfileWarning', true);
-      redirect({...this.$route, query: undefined});
+      redirect({ ...this.$route, query: undefined });
       return;
     }
     await store.dispatch('system/loadDonors');

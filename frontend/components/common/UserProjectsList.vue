@@ -3,8 +3,8 @@
     <empty-projects v-if="!hasProjects" />
     <extended-project-card
       v-for="project in limited"
-      :key="project.id"
       :id="project.id"
+      :key="project.id"
     />
   </div>
 </template>

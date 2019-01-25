@@ -5,7 +5,7 @@
     class="LanguageItem"
   >
     <el-col class="LanguageFlag">
-      <img :src="language.flag" >
+      <img :src="language.flag">
     </el-col>
     <el-col class="LanguageName">
       {{ language.name }}

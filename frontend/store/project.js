@@ -79,7 +79,7 @@ export const getters = {
   getCoverage: state => state.coverage.length === 0 ? [null] : state.coverage,
   getCoverageData: state => state.coverageData,
   getCoverageSecondLevel: state => state.coverage_second_level.length === 0 ? [null] : state.coverage_second_level,
-  getNationalLevelDeployment: state => ({...state.national_level_deployment}),
+  getNationalLevelDeployment: state => ({ ...state.national_level_deployment }),
   getGovernmentInvestor: state => state.government_investor,
   getImplementingPartners: state => state.implementing_partners.length === 0 ? [null] : state.implementing_partners,
   getDonors: state => state.donors,
@@ -91,7 +91,7 @@ export const getters = {
   getInteroperabilityLinks: (state, getters, rootState, rootGetters) => {
     const result = {};
     rootGetters['projects/getInteroperabilityLinks'].forEach((ir, index) => {
-      result[ir.id] = {...state.interoperability_links[ir.id], index};
+      result[ir.id] = { ...state.interoperability_links[ir.id], index };
     });
     return result;
   },
@@ -125,13 +125,13 @@ export const getters = {
     }
   },
   getPublishedDonorsAnswerDetails: (state, getters) => id => getters.getPublished.donor_custom_answers.find(ca => ca.question_id === id),
-  getPublished: state => ({...state.published, team: state.team, viewers: state.viewers}),
+  getPublished: state => ({ ...state.published, team: state.team, viewers: state.viewers }),
   getLoading: state => state.loading,
   getOriginal: state => state.original
 };
 
 export const actions = {
-  async loadProject ({commit, dispatch, rootGetters}, id) {
+  async loadProject ({ commit, dispatch, rootGetters }, id) {
     const userProject = rootGetters['projects/getUserProjectList'].find(p => p.id === id);
     const { data } = userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`);
     commit('SET_ORIGINAL', Object.freeze(data));
@@ -139,24 +139,24 @@ export const actions = {
     const countriesToFetch = new Set();
     const donorsToFetch = new Set();
     if (data.draft) {
-      const draft = {...clean, ...apiReadParser(data.draft)};
+      const draft = { ...clean, ...apiReadParser(data.draft) };
       countriesToFetch.add(draft.country);
       donorsToFetch.add(...draft.donors);
       commit('INIT_PROJECT', draft);
     }
     if (data.published) {
-      const published = {...clean, ...apiReadParser(data.published)};
+      const published = { ...clean, ...apiReadParser(data.published) };
       countriesToFetch.add(published.country);
       donorsToFetch.add(...published.donors);
       commit('SET_PUBLISHED', Object.freeze(published));
     }
     await Promise.all([
-      ...[...countriesToFetch].map(cf => dispatch('countries/loadCountryDetails', cf, {root: true})),
-      ...[...donorsToFetch].map(df => dispatch('system/loadDonorDetails', df, {root: true})),
+      ...[...countriesToFetch].map(cf => dispatch('countries/loadCountryDetails', cf, { root: true })),
+      ...[...donorsToFetch].map(df => dispatch('system/loadDonorDetails', df, { root: true })),
       dispatch('loadTeamViewers', id)
     ]);
   },
-  async loadTeamViewers ({commit, rootGetters}, projectId) {
+  async loadTeamViewers ({ commit, rootGetters }, projectId) {
     const profile = rootGetters['user/getProfile'];
     if (profile) {
       const { data } = await this.$axios.get(`/api/projects/${projectId}/groups/`);
@@ -164,147 +164,147 @@ export const actions = {
       commit('SET_VIEWERS', data.viewers);
     }
   },
-  async resetProjectState ({commit, rootGetters, dispatch}) {
+  async resetProjectState ({ commit, rootGetters, dispatch }) {
     const clean = cleanState();
     const profile = rootGetters['user/getProfile'];
     if (profile) {
       clean.country = profile.country;
       clean.team = [profile.id];
-      await dispatch('countries/loadCountryDetails', profile.country, {root: true});
+      await dispatch('countries/loadCountryDetails', profile.country, { root: true });
     }
     commit('INIT_PROJECT', clean);
     commit('SET_TEAM', clean.team);
     commit('SET_VIEWERS', clean.viewers);
   },
-  initProjectState ({commit}, value) {
+  initProjectState ({ commit }, value) {
     commit('INIT_PROJECT', value);
     commit('SET_TEAM', value.team);
     commit('SET_VIEWERS', value.viewers);
   },
-  setName ({commit}, value) {
+  setName ({ commit }, value) {
     commit('SET_NAME', value);
   },
-  setOrganisation ({commit}, value) {
+  setOrganisation ({ commit }, value) {
     commit('SET_ORGANISATION', value);
   },
-  setCountry ({commit, dispatch}, value) {
-    dispatch('countries/loadCountryDetails', value, {root: true});
+  setCountry ({ commit, dispatch }, value) {
+    dispatch('countries/loadCountryDetails', value, { root: true });
     commit('SET_COUNTRY', value);
   },
-  setGeographicScope ({commit}, value) {
+  setGeographicScope ({ commit }, value) {
     commit('SET_GEOGRAPHIC_SCOPE', value);
   },
-  setImplementationOverview ({commit}, value) {
+  setImplementationOverview ({ commit }, value) {
     commit('SET_IMPLEMENTATION_OVERVIEW', value);
   },
-  setStartDate ({commit}, value) {
+  setStartDate ({ commit }, value) {
     commit('SET_START_DATE', value);
   },
-  setEndDate ({commit}, value) {
+  setEndDate ({ commit }, value) {
     commit('SET_END_DATE', value);
   },
-  setContactName ({commit}, value) {
+  setContactName ({ commit }, value) {
     commit('SET_CONTACT_NAME', value);
   },
-  setContactEmail ({commit}, value) {
+  setContactEmail ({ commit }, value) {
     commit('SET_CONTACT_EMAIL', value);
   },
-  setTeam ({commit}, value) {
+  setTeam ({ commit }, value) {
     commit('SET_TEAM', value);
   },
-  setViewers ({commit}, value) {
+  setViewers ({ commit }, value) {
     commit('SET_VIEWERS', value);
   },
-  setPlatforms ({commit}, value) {
+  setPlatforms ({ commit }, value) {
     commit('SET_PLATFORMS', value);
   },
-  setDigitalHealthInterventions ({commit}, value) {
+  setDigitalHealthInterventions ({ commit }, value) {
     commit('SET_DIGITAL_HEALTH_INTERVENTIONS', value);
   },
-  setHealthFocusAreas ({commit}, value) {
+  setHealthFocusAreas ({ commit }, value) {
     commit('SET_HEALTH_FOCUS_AREAS', value);
   },
-  setHscChallenges ({commit}, value) {
+  setHscChallenges ({ commit }, value) {
     commit('SET_HSC_CHALLENGES', value);
   },
-  setHisBucket ({commit}, value) {
+  setHisBucket ({ commit }, value) {
     commit('SET_HIS_BUCKET', value);
   },
-  setCoverageType ({commit}, value) {
+  setCoverageType ({ commit }, value) {
     commit('SET_COVERAGE_TYPE', value);
   },
-  setCoverage ({commit}, value) {
+  setCoverage ({ commit }, value) {
     commit('SET_COVERAGE', value);
   },
-  setCoverageData ({commit, state}, {coverage, subLevel}) {
+  setCoverageData ({ commit, state }, { coverage, subLevel }) {
     if (coverage) {
       const cov = { ...state.coverageData };
-      cov[subLevel] = {...state.coverageData[subLevel], ...coverage};
+      cov[subLevel] = { ...state.coverageData[subLevel], ...coverage };
       commit('SET_COVERAGE_DATA', cov);
     } else {
       commit('DELETE_COVERAGE_DATA', subLevel);
     }
   },
-  setCoverageSecondLevel ({commit}, value) {
+  setCoverageSecondLevel ({ commit }, value) {
     commit('SET_COVERAGE_SECOND_LEVEL', value);
   },
-  setNationalLevelDeployment ({commit}, value) {
+  setNationalLevelDeployment ({ commit }, value) {
     commit('SET_NATIONAL_LEVEL_DEPLOYMENT', value);
   },
-  setGovernmentInvestor ({commit}, value) {
+  setGovernmentInvestor ({ commit }, value) {
     commit('SET_GOVERNMENT_INVESTOR', value);
   },
-  setImplementingPartners ({commit}, value) {
+  setImplementingPartners ({ commit }, value) {
     commit('SET_IMPLEMENTING_PARTNERS', value);
   },
-  setDonors ({commit, dispatch}, value) {
-    value.forEach(d => dispatch('system/loadDonorDetails', d, {root: true}));
+  setDonors ({ commit, dispatch }, value) {
+    value.forEach(d => dispatch('system/loadDonorDetails', d, { root: true }));
     commit('SET_DONORS', value);
   },
-  setImplementationDates ({commit}, value) {
+  setImplementationDates ({ commit }, value) {
     commit('SET_IMPLEMENTATION_DATES', value);
   },
-  setLicenses ({commit}, value) {
+  setLicenses ({ commit }, value) {
     commit('SET_LICENSES', value);
   },
-  setRepository ({commit}, value) {
+  setRepository ({ commit }, value) {
     commit('SET_REPOSITORY', value);
   },
-  setMobileApplication ({commit}, value) {
+  setMobileApplication ({ commit }, value) {
     commit('SET_MOBILE_APPLICATION', value);
   },
-  setWiki ({commit}, value) {
+  setWiki ({ commit }, value) {
     commit('SET_WIKI', value);
   },
-  setInteroperabilityLinks ({commit}, value) {
+  setInteroperabilityLinks ({ commit }, value) {
     commit('SET_INTEROPERABILITY_LINKS', value);
   },
-  setInteroperabilityStandards ({commit}, value) {
+  setInteroperabilityStandards ({ commit }, value) {
     commit('SET_INTEROPERABILITY_STANDARDS', value);
   },
-  setPublished ({commit}, value) {
+  setPublished ({ commit }, value) {
     commit('SET_PUBLISHED', value);
   },
-  setLoading ({commit}, value) {
+  setLoading ({ commit }, value) {
     commit('SET_LOADING', value);
   },
-  setCountryAnswer ({commit, getters}, answer) {
+  setCountryAnswer ({ commit, getters }, answer) {
     const index = getters.getCountryAnswers.findIndex(ca => ca.question_id === answer.question_id);
     if (index > -1) {
-      commit('UPDATE_COUNTRY_ANSWER', {answer, index});
+      commit('UPDATE_COUNTRY_ANSWER', { answer, index });
     } else {
       commit('ADD_COUNTRY_ANSWER', answer);
     }
   },
-  setDonorAnswer ({commit, getters}, answer) {
+  setDonorAnswer ({ commit, getters }, answer) {
     const index = getters.getDonorsAnswers.findIndex(da => da.question_id === answer.question_id);
     if (index > -1) {
-      commit('UPDATE_DONOR_ANSWER', {answer, index});
+      commit('UPDATE_DONOR_ANSWER', { answer, index });
     } else {
       commit('ADD_DONOR_ANSWER', answer);
     }
   },
-  async verifyOrganisation ({dispatch}, organisation) {
+  async verifyOrganisation ({ dispatch }, organisation) {
     try {
       if (organisation && isNaN(organisation)) {
         const org = await dispatch('system/addOrganisation', organisation, { root: true });
@@ -316,7 +316,7 @@ export const actions = {
       return Promise.reject(APIError('organisation', 'Failed to save the organisation'));
     }
   },
-  async saveTeamViewers ({getters, commit, dispatch}, id) {
+  async saveTeamViewers ({ getters, commit, dispatch }, id) {
     const teamViewers = {
       team: getters.getTeam,
       viewers: getters.getViewers
@@ -324,20 +324,20 @@ export const actions = {
     const { data } = await this.$axios.put(`/api/projects/${id}/groups/`, teamViewers);
     commit('SET_TEAM', data.team);
     commit('SET_VIEWERS', data.viewers);
-    return dispatch('user/updateTeamViewers', {...data, id}, {root: true});
+    return dispatch('user/updateTeamViewers', { ...data, id }, { root: true });
   },
-  async createProject ({getters, dispatch}) {
+  async createProject ({ getters, dispatch }) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.post(`api/projects/draft/${draft.country}/`, parsed);
-    dispatch('projects/addProjectToList', data, {root: true});
+    dispatch('projects/addProjectToList', data, { root: true });
     await dispatch('saveTeamViewers', data.id);
     dispatch('setLoading', false);
     return data.id;
   },
-  async saveDraft ({getters, dispatch}, id) {
+  async saveDraft ({ getters, dispatch }, id) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
@@ -345,13 +345,13 @@ export const actions = {
     const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country}/`, parsed);
     const isUserProject = await dispatch('saveTeamViewers', id);
     if (isUserProject) {
-      dispatch('projects/updateProject', data, {root: true});
+      dispatch('projects/updateProject', data, { root: true });
     } else {
-      dispatch('projects/removeProject', data.id, {root: true});
+      dispatch('projects/removeProject', data.id, { root: true });
     }
     dispatch('setLoading', false);
   },
-  async publishProject ({getters, dispatch, commit}, id) {
+  async publishProject ({ getters, dispatch, commit }, id) {
     dispatch('setLoading', 'publish');
     const draft = getters.getProjectData;
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
@@ -361,20 +361,20 @@ export const actions = {
     const parsedResponse = apiReadParser(data.draft);
     commit('SET_PUBLISHED', Object.freeze(parsedResponse));
     if (isUserProject) {
-      dispatch('projects/updateProject', data, {root: true});
+      dispatch('projects/updateProject', data, { root: true });
     } else {
-      dispatch('projects/removeProject', data.id, {root: true});
+      dispatch('projects/removeProject', data.id, { root: true });
     }
     dispatch('setLoading', false);
   },
-  async discardDraft ({getters, dispatch, commit}, id) {
+  async discardDraft ({ getters, dispatch, commit }, id) {
     dispatch('setLoading', 'discard');
     const published = getters.getPublished;
     const parsed = apiWriteParser(published, published.country_custom_answers, published.donor_custom_answers);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/${published.country}/`, parsed);
     const parsedResponse = apiReadParser(data.draft);
     commit('INIT_PROJECT', parsedResponse);
-    dispatch('projects/updateProject', data, {root: true});
+    dispatch('projects/updateProject', data, { root: true });
     dispatch('setLoading', false);
   }
 };
@@ -435,7 +435,7 @@ export const mutations = {
     Vue.set(state, 'coverage', [...coverage]);
   },
   SET_COVERAGE_DATA: (state, coverageData) => {
-    Vue.set(state, 'coverageData', {...coverageData});
+    Vue.set(state, 'coverageData', { ...coverageData });
   },
   DELETE_COVERAGE_DATA: (state, subLevel) => {
     Vue.delete(state.coverageData, subLevel);
@@ -444,7 +444,7 @@ export const mutations = {
     Vue.set(state, 'coverage_second_level', [...coverage_second_level]);
   },
   SET_NATIONAL_LEVEL_DEPLOYMENT: (state, national_level_deployment) => {
-    Vue.set(state, 'national_level_deployment', {...national_level_deployment});
+    Vue.set(state, 'national_level_deployment', { ...national_level_deployment });
   },
   SET_GOVERNMENT_INVESTOR: (state, government_investor) => {
     state.government_investor = government_investor;
@@ -471,7 +471,7 @@ export const mutations = {
     state.wiki = wiki;
   },
   SET_INTEROPERABILITY_LINKS: (state, interoperability_links) => {
-    Vue.set(state, 'interoperability_links', {...interoperability_links});
+    Vue.set(state, 'interoperability_links', { ...interoperability_links });
   },
   SET_INTEROPERABILITY_STANDARDS: (state, interoperability_standards) => {
     Vue.set(state, 'interoperability_standards', [...interoperability_standards]);
@@ -479,17 +479,17 @@ export const mutations = {
   ADD_COUNTRY_ANSWER: (state, answer) => {
     state.country_answers.push(answer);
   },
-  UPDATE_COUNTRY_ANSWER: (state, {answer, index}) => {
+  UPDATE_COUNTRY_ANSWER: (state, { answer, index }) => {
     state.country_answers.splice(index, 1, answer);
   },
   ADD_DONOR_ANSWER: (state, answer) => {
     state.donors_answers.push(answer);
   },
-  UPDATE_DONOR_ANSWER: (state, {answer, index}) => {
+  UPDATE_DONOR_ANSWER: (state, { answer, index }) => {
     state.donors_answers.splice(index, 1, answer);
   },
   SET_PUBLISHED: (state, published) => {
-    Vue.set(state, 'published', {...published});
+    Vue.set(state, 'published', { ...published });
   },
   SET_LOADING: (state, loading) => {
     state.loading = loading;

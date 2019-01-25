@@ -2,7 +2,7 @@
   <div class="SubPage">
     <dialogs-container />
     <top-bar error-page />
-    <nuxt/>
+    <nuxt />
     <dha-footer />
     <django-feedback />
   </div>

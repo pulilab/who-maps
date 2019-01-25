@@ -8,7 +8,7 @@
 export default {
   components: {
   },
-  async fetch ({store}) {
+  async fetch ({ store }) {
     store.dispatch('landing/resetSearch');
     await Promise.all([
       store.dispatch('projects/loadUserProjects'),

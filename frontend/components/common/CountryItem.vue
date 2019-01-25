@@ -7,7 +7,8 @@
     <el-col class="CountryFlag">
       <country-flag
         v-show="showFlag"
-        :code="country.code" />
+        :code="country.code"
+      />
     </el-col>
     <el-col class="CountryName">
       {{ country.name }}
@@ -41,6 +42,7 @@ export default {
       if (this.id) {
         return this.getCountryDetails(this.id);
       }
+      return null;
     }
   }
 };

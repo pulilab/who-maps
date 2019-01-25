@@ -20,7 +20,8 @@
         :selected="selectedDHI"
         :limit="4"
         :label="$gettext('Digital Health Interventions') | translate"
-        item="dhi">
+        item="dhi"
+      >
         <dhi-categories-list
           :value="selectedDHI"
           :limit="4"
@@ -32,7 +33,8 @@
         :selected="selectedHFA"
         :limit="4"
         :label="$gettext('Health Focus Area') | translate"
-        item="hfa">
+        item="hfa"
+      >
         <hfa-categories-list
           :value="selectedHFA"
           :limit="4"
@@ -44,7 +46,8 @@
         :selected="selectedHSC"
         :limit="4"
         :label="$gettext('Health System Challenges') | translate"
-        item="hsc">
+        item="hsc"
+      >
         <health-system-challenges-list
           :value="selectedHSC"
           :limit="4"
@@ -56,7 +59,8 @@
         :selected="selectedHIS"
         :limit="4"
         :label="$gettext('Health Information System') | translate"
-        item="his">
+        item="his"
+      >
         <his-bucket-list
           :value="selectedHIS"
           :limit="4"
@@ -68,7 +72,8 @@
         :selected="selectedPlatforms"
         :limit="4"
         :label="$gettext('Software') | translate"
-        item="platform" >
+        item="platform"
+      >
         <simple-platform-list
           :value="selectedPlatforms"
           :limit="4"

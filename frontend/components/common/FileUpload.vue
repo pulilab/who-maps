@@ -7,20 +7,26 @@
     :list-type="'picture'"
     :file-list="files"
     class="FileUpload"
-    action="doing it manually, so this prop isnt used, still needed">
+    action="doing it manually, so this prop isnt used, still needed"
+  >
     <el-row
       v-if="files.length < limit"
       type="flex"
-      align="middle">
+      align="middle"
+    >
       <el-button
         v-if="!disabled"
         type="text"
-        class="IconLeft">
+        class="IconLeft"
+      >
         <fa icon="plus" /> <translate>Upload file</translate>
       </el-button>
       <div
         v-if="files.length === 0"
-        class="NoFile"><translate>No file chosen</translate></div>
+        class="NoFile"
+      >
+        <translate>No file chosen</translate>
+      </div>
     </el-row>
   </el-upload>
 </template>

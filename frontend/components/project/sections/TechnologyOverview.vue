@@ -1,18 +1,20 @@
 <template>
   <div
     id="technology"
-    class="TechnologyOverview">
+    class="TechnologyOverview"
+  >
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('Technology overview') | translate">
+      :title="$gettext('Technology overview') | translate"
+    >
       <el-form-item
         :error="errors.first('implementation_dates')"
         :label="$gettext('When will the technology be first deployed?') | translate"
         :required="rules.implementation_dates && rules.implementation_dates.required"
       >
         <el-date-picker
-          v-validate="rules.implementation_dates"
           v-model="implementation_dates"
+          v-validate="rules.implementation_dates"
           :placeholder="$gettext('Pick a day') | translate"
           data-vv-name="implementation_dates"
           data-vv-as="Implementation dates"
@@ -26,8 +28,8 @@
         :required="rules.licenses && rules.licenses.required"
       >
         <license-selector
-          v-validate="rules.licenses"
           v-model="licenses"
+          v-validate="rules.licenses"
           data-vv-name="licenses"
           data-vv-as="License"
         />
@@ -38,8 +40,8 @@
         :required="rules.repository && rules.repository.required"
       >
         <link-field
-          v-validate="rules.repository"
           v-model="repository"
+          v-validate="rules.repository"
           data-vv-name="repository"
           data-vv-as="Repository"
         />
@@ -50,8 +52,8 @@
         :required="rules.mobile_application && rules.mobile_application.required"
       >
         <link-field
-          v-validate="rules.mobile_application"
           v-model="mobile_application"
+          v-validate="rules.mobile_application"
           data-vv-name="mobile_application"
           data-vv-as="Mobile application"
         />
@@ -62,8 +64,8 @@
         :required="rules.wiki && rules.wiki.required"
       >
         <link-field
-          v-validate="rules.wiki"
           v-model="wiki"
+          v-validate="rules.wiki"
           data-vv-name="wiki"
           data-vv-as="Wiki"
         />
@@ -95,9 +97,6 @@ export default {
       mobile_application: ['project', 'getMobileApplication', 'setMobileApplication', 0],
       wiki: ['project', 'getWiki', 'setWiki', 0]
     })
-  },
-  mounted () {
-    this.$emit('mounted');
   },
   methods: {
     async validate () {

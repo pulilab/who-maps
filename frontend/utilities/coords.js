@@ -21,7 +21,7 @@ export const calculatePolyCenter = (geometry) => {
       coordinates = coordinates.sort((a, b) => b[0].length - a[0].length)[0];
     }
     const r = polylabel(coordinates);
-    return {lat: r[1], lng: r[0]};
+    return { lat: r[1], lng: r[0] };
   } catch (e) {
     console.warn('error in polycenter calculation', e);
   }

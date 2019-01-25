@@ -4,12 +4,14 @@
     :placeholder="$gettext('Select investor') | translate"
     popper-class="DonorSelectorPopper"
     class="DonorSelector"
-    @change="changeHandler">
+    @change="changeHandler"
+  >
     <el-option
       v-for="donor in donors"
       :key="donor.id"
       :label="donor.name"
-      :value="donor.id"/>
+      :value="donor.id"
+    />
   </el-select>
 </template>
 

@@ -8,7 +8,8 @@
     </span>
     <span
       v-if="showOrganisation"
-      class="Organisation">
+      class="Organisation"
+    >
       <organisation-item :id="user.organisation" />
     </span>
   </div>
@@ -40,6 +41,7 @@ export default {
       if (this.id) {
         return this.getUserDetails(this.id);
       }
+      return null;
     }
   }
 };

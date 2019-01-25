@@ -5,7 +5,7 @@ module.exports = {
   restoreMocks: true,
   collectCoverageFrom: [
     '**/store/**/*.js',
-    '**/utilities/**/*.js',
+    '**/utilities/**/*.js'
   ],
   coverageDirectory: 'coverage',
   coverageThreshold: {

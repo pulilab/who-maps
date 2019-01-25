@@ -13,7 +13,9 @@
           justify="space-between"
           align="middle"
         >
-          <div class="SwitchLabel">Switch view:</div>
+          <div class="SwitchLabel">
+            Switch view:
+          </div>
           <el-button-group class="SwitchButtons">
             <el-button
               :class="['DraftButton', {'Active': isDraft || isReadOnlyDraft}]"
@@ -124,7 +126,8 @@
           <fa
             v-show="loading === 'publish'"
             icon="spinner"
-            spin />
+            spin
+          />
           <translate>Publish</translate>
         </el-button>
 
@@ -139,7 +142,8 @@
           <fa
             v-show="loading === 'draft'"
             icon="spinner"
-            spin />
+            spin
+          />
           <translate>Save draft</translate>
         </el-button>
 
@@ -153,7 +157,8 @@
           <fa
             v-show="loading === 'discard'"
             icon="spinner"
-            spin />
+            spin
+          />
           <translate>Discard draft</translate>
         </el-button>
 
@@ -269,15 +274,15 @@ export default {
     },
     goToDraft () {
       const name = this.isTeam ? 'organisation-projects-id-edit' : 'organisation-projects-id';
-      const localised = this.localePath({name, params: {...this.$route.params}});
+      const localised = this.localePath({ name, params: { ...this.$route.params } });
       this.$router.push(localised);
     },
     goToPublished () {
-      const localised = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params}});
+      const localised = this.localePath({ name: 'organisation-projects-id-published', params: { ...this.$route.params } });
       this.$router.push(localised);
     },
     goToDashboard () {
-      const localised = this.localePath({name: 'organisation-dashboard', params: {...this.$route.params}});
+      const localised = this.localePath({ name: 'organisation-dashboard', params: { ...this.$route.params } });
       this.$router.push(localised);
     },
     setNavigationBoxLeftStyle () {

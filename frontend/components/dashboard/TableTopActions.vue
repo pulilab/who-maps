@@ -3,19 +3,25 @@
     type="flex"
     justify="space-between"
     align="middle"
-    class="TableTopActions">
+    class="TableTopActions"
+  >
     <el-col class="TableExportOptions">
       <el-row type="flex">
         <el-button
           size="small"
-          @click="toggleSelectAll">
+          @click="toggleSelectAll"
+        >
           <translate
             v-show="!allSelected"
-            :parameters="{total}">Select all {total} projects
+            :parameters="{total}"
+          >
+            Select all {total} projects
           </translate>
           <translate
             v-show="allSelected"
-            :parameters="{total}">Deselect all {total} projects
+            :parameters="{total}"
+          >
+            Deselect all {total} projects
           </translate>
         </el-button>
 
@@ -28,23 +34,28 @@
           class="IconLeft"
           @click="exportRows"
         >
-          <fa icon="download"/>
+          <fa icon="download" />
           <span v-show="selectedRows.length === 0">
             <translate>Export selected</translate>
           </span>
           <span v-show="selected">
-            <translate :parameters="{selected}">Export {selected} selected</translate>
+            <translate :parameters="{selected}">
+              Export {selected} selected
+            </translate>
           </span>
         </el-button>
         <el-select
           v-model="exportType"
-          size="small">
+          size="small"
+        >
           <el-option
             label="CSV"
-            value="CSV"/>
+            value="CSV"
+          />
           <el-option
             label="PDF"
-            value="PDF"/>
+            value="PDF"
+          />
         </el-select>
 
         <template v-if="showEmailButton">
@@ -56,11 +67,14 @@
             class="IconLeft"
             @click="openMailDialog"
           >
-            <fa icon="envelope"/>
-            <translate v-show="selected === 0">Contact selected</translate>
+            <fa icon="envelope" />
+            <translate v-show="selected === 0">
+              Contact selected
+            </translate>
             <translate
               v-show="selected > 0"
-              :parameters="{selected}">
+              :parameters="{selected}"
+            >
               Contact {selected} selected
             </translate>
           </el-button>
@@ -72,7 +86,8 @@
     <el-col class="TableLegend">
       <el-row
         type="flex"
-        align="middle">
+        align="middle"
+      >
         <project-legend
           :compact-mode="viewportSize < 1440"
           force-star
@@ -118,20 +133,27 @@
             <div class="CustomPopoverActions">
               <el-row
                 type="flex"
-                align="middle">
+                align="middle"
+              >
                 <el-col>
                   <el-button
                     type="text"
                     size="small"
                     class="CancelButton"
-                    @click="columnSelectorOpen = false"><translate>Cancel</translate></el-button>
+                    @click="columnSelectorOpen = false"
+                  >
+                    <translate>Cancel</translate>
+                  </el-button>
                 </el-col>
                 <el-col>
                   <el-button
                     type="text"
                     size="small"
                     class="PrimaryButton"
-                    @click="updateColumns"><translate>Update</translate></el-button>
+                    @click="updateColumns"
+                  >
+                    <translate>Update</translate>
+                  </el-button>
                 </el-col>
               </el-row>
             </div>
@@ -216,7 +238,7 @@ export default {
       }
     },
     popperOpenHandler () {
-      this.selectedColumns = [...this.columns.map(s => ({...s}))];
+      this.selectedColumns = [...this.columns.map(s => ({ ...s }))];
     },
     updateColumns () {
       this.setSelectedColumns(this.selectedColumns.filter(s => s.selected).map(s => s.id));
@@ -242,7 +264,7 @@ export default {
           donor: this.dashboardType === 'donor' ? this.dashboardId : undefined,
           country: this.dashboardType === 'country' ? this.dashboardId : undefined
         };
-        const { data } = await this.$axios.post('/api/projects/csv-export/', payload, {responseType: 'blob'});
+        const { data } = await this.$axios.post('/api/projects/csv-export/', payload, { responseType: 'blob' });
         blobDownloader(data, 'project-export.csv');
       }
       this.$nuxt.$loading.finish();

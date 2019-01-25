@@ -1,7 +1,10 @@
 <template>
   <div
     v-if="region"
-    class="RegionItem">{{ region.name }}</div>
+    class="RegionItem"
+  >
+    {{ region.name }}
+  </div>
 </template>
 
 <script>
@@ -24,6 +27,7 @@ export default {
         const id = parseInt(this.id, 10);
         return this.getRegionDetails(id);
       }
+      return null;
     }
   }
 };

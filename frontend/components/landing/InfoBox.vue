@@ -3,7 +3,8 @@
     <img
       :alt="$gettext('Why use the Digital Health Atlas') | translate"
       class="InfoPicture"
-      src="/photo-whyusedha.jpg">
+      src="/photo-whyusedha.jpg"
+    >
 
     <div class="InfoArticle">
       <h3><translate>Why use the Digital Health Atlas?</translate></h3>

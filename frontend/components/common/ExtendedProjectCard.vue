@@ -7,7 +7,8 @@
       <el-row
         type="flex"
         align="center"
-        class="FirstRow">
+        class="FirstRow"
+      >
         <el-col
           :span="15"
           class="ProjectName"
@@ -20,11 +21,13 @@
           <el-row
             type="flex"
             justify="start"
-            class="SecondSubRow">
+            class="SecondSubRow"
+          >
             <el-col>
               <country-item
                 :id="projectData.country"
-                :show-flag="true" />
+                :show-flag="true"
+              />
             </el-col>
             <el-col>
               <organisation-item :id="projectData.organisation" />
@@ -66,24 +69,34 @@
         <el-col>
           <div
             v-if="!project.isPublished"
-            class="ProjectStatus Draft">
-            <translate key="draft">Draft</translate>
+            class="ProjectStatus Draft"
+          >
+            <translate key="draft">
+              Draft
+            </translate>
           </div>
           <div
             v-if="project.isPublished"
-            class="ProjectStatus Published">
-            <translate key="published">Published</translate>
+            class="ProjectStatus Published"
+          >
+            <translate key="published">
+              Published
+            </translate>
           </div>
           <div
             v-if="project.isPublished"
-            class="ProjectStatus ApprovedByCountry">
-            <translate key="approved">Approved by MOH</translate>
+            class="ProjectStatus ApprovedByCountry"
+          >
+            <translate key="approved">
+              Approved by MOH
+            </translate>
           </div>
         </el-col>
         <el-col>
           <project-card-actions
             :project="project"
-            :force-show="true" />
+            :force-show="true"
+          />
         </el-col>
       </el-row>
     </div>

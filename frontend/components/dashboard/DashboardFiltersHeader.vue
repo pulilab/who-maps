@@ -1,7 +1,9 @@
 <template>
   <div class="DashboardFiltersHeader">
     <span class="ProjectToShow">
-      <translate :parameters="{total}">{total} project(s) to show</translate>
+      <translate :parameters="{total}">
+        {total} project(s) to show
+      </translate>
     </span>
     <!-- <el-button class="ToggleFiltersButton">
       <fa icon="chevron-right" />

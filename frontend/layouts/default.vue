@@ -3,7 +3,7 @@
     <dialogs-container />
     <top-bar />
     <action-bar v-if="showActionBar" />
-    <nuxt/>
+    <nuxt />
     <dha-footer />
     <django-feedback />
   </div>
@@ -29,12 +29,14 @@ export default {
       if (this.$route && this.$route.name) {
         return this.$route.name.split('___')[0];
       }
+      return null;
     },
     showActionBar () {
       const hiddenOn = ['index-login', 'index-signup'];
       if (this.$route && this.$route.name) {
         return !hiddenOn.includes(this.pureRoute);
       }
+      return false;
     },
     layoutClass () {
       if (this.pureRoute !== 'organisation' && this.pureRoute !== 'organisation-login' && this.pureRoute !== 'organisation-signup') {

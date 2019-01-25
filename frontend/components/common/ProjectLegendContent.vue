@@ -5,8 +5,11 @@
         <fa
           icon="star"
           size="xs"
-          class="OwnerIcon" />
-        <span v-show="showLabel"> <translate>Team Member</translate></span>
+          class="OwnerIcon"
+        />
+        <span v-show="showLabel">
+          <translate>Team Member</translate>
+        </span>
       </span>
     </template>
     <template v-if="showEye">
@@ -14,8 +17,11 @@
         <fa
           icon="eye"
           size="xs"
-          class="ViewerIcon" />
-        <span v-show="showLabel"> <translate>Viewer</translate></span>
+          class="ViewerIcon"
+        />
+        <span v-show="showLabel">
+          <translate>Viewer</translate>
+        </span>
       </span>
     </template>
     <template v-if="showHandshake">
@@ -23,8 +29,11 @@
         <fa
           icon="handshake"
           size="xs"
-          class="DonorIcon" />
-        <span v-show="showLabel"> <translate>Investor</translate></span>
+          class="DonorIcon"
+        />
+        <span v-show="showLabel">
+          <translate>Investor</translate>
+        </span>
       </span>
     </template>
     <template v-if="showGlobe">
@@ -32,12 +41,15 @@
         <fa
           icon="globe-africa"
           size="xs"
-          class="CountryAdminIcon" />
-        <span v-show="showLabel"> <translate>Country admin</translate></span>
+          class="CountryAdminIcon"
+        />
+        <span v-show="showLabel">
+          <translate>Country admin</translate>
+        </span>
       </span>
     </template>
   </div>
-</template>
+</template>3
 
 <script>
 import { mapGetters } from 'vuex';
@@ -89,11 +101,13 @@ export default {
       if (this.id && this.userProfile) {
         return this.userProfile.member.includes(this.id);
       }
+      return false;
     },
     isViewer () {
       if (this.id && this.userProfile) {
         return this.userProfile.viewer.includes(this.id);
       }
+      return false;
     },
     isTeam () {
       return this.isMember || this.isViewer;
@@ -103,12 +117,14 @@ export default {
       if (this.donors && Array.isArray(this.donors) && this.userProfile) {
         return donorPersonas.includes(this.userProfile.account_type) && this.donors.includes(this.userProfile.donor);
       }
+      return false;
     },
     isCountry () {
       const countryPersonas = ['G', 'CA', 'SCA'];
       if (this.country && this.userProfile) {
         return countryPersonas.includes(this.userProfile.account_type) && this.country === this.userProfile.country;
       }
+      return false;
     },
     showStar () {
       return this.forceStar || this.isMember;

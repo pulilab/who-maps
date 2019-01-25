@@ -8,7 +8,7 @@ export default {
 
   components: { CountryAdmin },
 
-  async fetch ({store}) {
+  async fetch ({ store }) {
     await Promise.all([
       store.dispatch('system/loadUserProfiles')
     ]);

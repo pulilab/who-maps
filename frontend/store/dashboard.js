@@ -52,7 +52,7 @@ export const getters = {
     return [];
   },
   getAllColumns: (state, getters) => [...state.columns, ...getters.getCountryColumns, ...getters.getDonorColumns],
-  getAvailableColumns: (state, getters) => [...getters.getAllColumns.map(c => ({...c, id: `${c.id}`, selected: state.selectedColumns.includes(`${c.id}`)}))],
+  getAvailableColumns: (state, getters) => [...getters.getAllColumns.map(c => ({ ...c, id: `${c.id}`, selected: state.selectedColumns.includes(`${c.id}`) }))],
   getSelectedColumns: state => state.selectedColumns.map(s => `${s}`),
   getSelectedDHI: state => state.selectedDHI,
   getSelectedHFA: state => state.selectedHFA,
@@ -105,73 +105,73 @@ export const getters = {
 
 export const actions = {
   ...actionsGenerator(),
-  setDashboardColumns ({commit}, columns) {
+  setDashboardColumns ({ commit }, columns) {
     commit('SET_DASHBOARD_COLUMNS', columns);
   },
-  async loadProjectList ({commit, dispatch}) {
-    const data = await dispatch('loadProjects', {type: 'list'});
+  async loadProjectList ({ commit, dispatch }) {
+    const data = await dispatch('loadProjects', { type: 'list' });
     commit('SET_PROJECT_LIST', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
     commit('SET_SELECT_ALL', false);
     commit('SET_SELECTED_ROWS', []);
   },
-  async loadProjectsMap ({commit, dispatch}) {
-    const data = await dispatch('loadProjects', {type: 'map', page_size: 999999, page: 1});
+  async loadProjectsMap ({ commit, dispatch }) {
+    const data = await dispatch('loadProjects', { type: 'map', page_size: 999999, page: 1 });
     commit('SET_PROJECT_MAP', data.results.projects);
     commit('SET_SEARCH_STATUS', data);
   },
-  async loadProjectsBucket ({commit, dispatch, state}) {
+  async loadProjectsBucket ({ commit, dispatch, state }) {
     if (state.projectsBucket.length === 0) {
-      const data = await dispatch('loadProjects', {type: 'list', page_size: 999999, page: 1});
+      const data = await dispatch('loadProjects', { type: 'list', page_size: 999999, page: 1 });
       commit('SET_PROJECT_BUCKET', data.results.projects);
       commit('SET_SEARCH_STATUS', data);
     }
   },
-  async setSearchOptions ({commit, dispatch}, options) {
+  async setSearchOptions ({ commit, dispatch }, options) {
     if (options.country && !Array.isArray(options.country)) {
       await dispatch('setSelectedCountry', +options.country);
       commit('SET_ACTIVE_COUNTRY', +options.country);
     }
     commit('SET_SEARCH_OPTIONS', options);
   },
-  setSelectedColumns ({commit}, columns) {
+  setSelectedColumns ({ commit }, columns) {
     commit('SET_SELECTED_COLUMNS', columns);
   },
-  setSearchString ({commit}, value) {
+  setSearchString ({ commit }, value) {
     commit('SET_SEARCH_STRING', value);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setSearchIn ({commit}, value) {
+  setSearchIn ({ commit }, value) {
     commit('SET_SEARCH_IN', value);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setSelectedDHI ({commit}, columns) {
+  setSelectedDHI ({ commit }, columns) {
     commit('SET_SELECTED_DHI', columns);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setSelectedHFA ({commit}, columns) {
+  setSelectedHFA ({ commit }, columns) {
     commit('SET_SELECTED_HFA', columns);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setSelectedHSC ({commit}, columns) {
+  setSelectedHSC ({ commit }, columns) {
     commit('SET_SELECTED_HSC', columns);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setSelectedHIS ({commit}, columns) {
+  setSelectedHIS ({ commit }, columns) {
     commit('SET_SELECTED_HIS', columns);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setSelectedPlatforms ({commit}, columns) {
+  setSelectedPlatforms ({ commit }, columns) {
     commit('SET_SELECTED_PLATFORMS', columns);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setSelectedRows ({commit, state}, rows) {
+  setSelectedRows ({ commit, state }, rows) {
     if (state.selectAll && state.selectedRows.length > rows.length) {
       commit('SET_SELECT_ALL', false);
     }
     commit('SET_SELECTED_ROWS', rows);
   },
-  async setFilteredCountries ({commit, dispatch}, value) {
+  async setFilteredCountries ({ commit, dispatch }, value) {
     if (value && value.length === 1) {
       await dispatch('setSelectedCountry', value[0]);
       commit('SET_ACTIVE_COUNTRY', value[0]);
@@ -182,38 +182,38 @@ export const actions = {
     commit('SET_FILTERED_COUNTRIES', value);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setFilteredRegion ({commit}, value) {
+  setFilteredRegion ({ commit }, value) {
     commit('SET_FILTERED_REGION', value);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setGovernmentApproved ({commit}, value) {
+  setGovernmentApproved ({ commit }, value) {
     commit('SET_GOVERNMENT_APPROVED', value);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setGovernmentFinanced ({commit}, value) {
+  setGovernmentFinanced ({ commit }, value) {
     commit('SET_GOVERNMENT_FINANCED', value);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setSelectAll ({commit}, all) {
+  setSelectAll ({ commit }, all) {
     commit('SET_SELECT_ALL', all);
   },
-  setPageSize ({commit}, size) {
+  setPageSize ({ commit }, size) {
     commit('SET_PAGE_SIZE', size);
   },
-  setCurrentPage ({commit}, page) {
+  setCurrentPage ({ commit }, page) {
     commit('SET_CURRENT_PAGE', page);
   },
-  setSorting ({commit}, value) {
+  setSorting ({ commit }, value) {
     commit('SET_SORTING', value);
     commit('SET_CURRENT_PAGE', 1);
   },
-  setSavedFilters ({commit}, filters) {
+  setSavedFilters ({ commit }, filters) {
     if (window && window.localStorage) {
       window.localStorage.setItem('savedFilters', JSON.stringify(filters));
     }
     commit('SET_SAVED_FILTERS', filters);
   },
-  async setDashboardType ({commit, dispatch, getters}, {type, id}) {
+  async setDashboardType ({ commit, dispatch, getters }, { type, id }) {
     commit('SET_SEARCH_OPTIONS', {
       view_as: type,
       donor: type === 'donor' ? id : undefined,
@@ -230,10 +230,10 @@ export const actions = {
     commit('SET_PROJECT_BUCKET', []);
     commit('SET_SELECTED_COLUMNS', selectedColumns);
   },
-  setDashboardSection ({commit}, value) {
+  setDashboardSection ({ commit }, value) {
     commit('SET_DASHBOARD_SECTION', value);
   },
-  resetUserInput ({commit}) {
+  resetUserInput ({ commit }) {
     commit('RESET_USER_INPUT');
     commit('SET_SEARCH_OPTIONS', {});
     commit('SET_SELECTED_COLUMNS', defaultSelectedColumns());
@@ -322,7 +322,7 @@ export const mutations = {
   SET_SAVED_FILTERS: (state, filters) => {
     state.savedFilters = filters;
   },
-  SET_DASHBOARD_TYPE: (state, {type, id}) => {
+  SET_DASHBOARD_TYPE: (state, { type, id }) => {
     state.dashboardType = type;
     state.dashboardId = id;
   },

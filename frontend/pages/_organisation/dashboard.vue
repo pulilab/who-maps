@@ -7,7 +7,6 @@
     <div class="FilterArea">
       <advanced-search />
     </div>
-
   </div>
 </template>
 
@@ -20,7 +19,7 @@ export default {
     AdvancedSearch
   },
   middleware: ['isLoggedIn'],
-  fetch ({store}) {
+  fetch ({ store }) {
     store.dispatch('landing/resetSearch');
   },
   mounted () {

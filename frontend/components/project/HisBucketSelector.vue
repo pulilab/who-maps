@@ -6,13 +6,14 @@
     filterable
     popper-class="HisBucketSelectorSelectorDropdown"
     class="HisBucketSelector"
-    @change="changeHandler">
-
+    @change="changeHandler"
+  >
     <el-option
       v-for="his in hisBucket"
       :key="his.id"
       :label="his.name"
-      :value="his.id"/>
+      :value="his.id"
+    />
   </el-select>
 </template>
 

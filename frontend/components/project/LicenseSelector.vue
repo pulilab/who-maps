@@ -2,11 +2,13 @@
   <el-checkbox-group
     :value="value"
     class="OnePerRow"
-    @input="changeHandler">
+    @input="changeHandler"
+  >
     <el-checkbox
       v-for="license in licenses"
       :key="license.id"
-      :label="license.id">
+      :label="license.id"
+    >
       {{ license.name }}
     </el-checkbox>
   </el-checkbox-group>

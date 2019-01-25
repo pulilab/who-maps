@@ -2,27 +2,39 @@
   <transition name="el-zoom-in-top">
     <div
       v-if="showMapProjectBox"
-      class="MapProjectBox">
+      class="MapProjectBox"
+    >
       <el-row
         type="flex"
         class="CountryHeader"
       >
         <el-col>
-          <country-item :id="activeCountry"/>
+          <country-item :id="activeCountry" />
         </el-col>
       </el-row>
       <div
         v-show="!showTabbedView"
-        class="CountrySubHeader">
+        class="CountrySubHeader"
+      >
         <span v-if="showSubNational">
           <sub-level-item
             :id="activeSubLevel"
           />
-          <span class="SubLevelCounter"><translate :parameters="{count: currentSubLevelProjects.length }">&nbsp; {count} project(s)</translate></span>
+          <span class="SubLevelCounter">
+            <translate :parameters="{count: currentSubLevelProjects.length }">
+              &nbsp; {count} project(s)
+            </translate>
+          </span>
         </span>
         <div v-if="showNational">
-          <span class="SubLevelItem"><translate>National</translate></span>
-          <span class="SubLevelCounter"><translate :parameters="{count: nationalProjects.length} ">&nbsp; {count} project(s)</translate></span>
+          <span class="SubLevelItem">
+            <translate>National</translate>
+          </span>
+          <span class="SubLevelCounter">
+            <translate :parameters="{count: nationalProjects.length} ">
+              &nbsp; {count} project(s)
+            </translate>
+          </span>
         </div>
       </div>
       <!-- -->
@@ -41,7 +53,8 @@
           >
             <fa
               icon="info-circle"
-              size="lg" />
+              size="lg"
+            />
             <translate>Click on the map to view the digital health project information.</translate>
           </div>
 
@@ -51,7 +64,8 @@
           >
             <fa
               icon="info-circle"
-              size="lg" />
+              size="lg"
+            />
             <translate>No project to show...</translate>
           </div>
 

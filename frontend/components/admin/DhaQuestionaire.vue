@@ -4,11 +4,12 @@
       <draggable
         v-model="questions"
         :options="draggableOptions"
-        :move="moveHandler">
+        :move="moveHandler"
+      >
         <dha-question
           v-for="(question, index) in questions"
-          :key="index"
           :id="question.id"
+          :key="index"
           :draggable="allSaved"
         />
       </draggable>
@@ -17,12 +18,14 @@
     <el-row
       type="flex"
       align="middle"
-      class="QActionContainer">
+      class="QActionContainer"
+    >
       <el-col class="QActionsButtons">
         <el-tooltip
           :disabled="allSaved"
           :content="$gettext('Before adding another question please save the previous one') | translate"
-          placement="top">
+          placement="top"
+        >
           <span>
             <el-button
               :disabled="!allSaved"
@@ -79,8 +82,8 @@ export default {
       async set (newOrder) {
         this.$nuxt.$loading.start();
         try {
-          await this.processReOrder({from: this.from, to: this.to, newOrder});
-          this.$message({message: this.$gettext('New order saved'), type: 'success'});
+          await this.processReOrder({ from: this.from, to: this.to, newOrder });
+          this.$message({ message: this.$gettext('New order saved'), type: 'success' });
         } catch (e) {
           this.$message.error(this.$gettext('An error occured while processing your request'));
         }

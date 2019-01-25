@@ -1,12 +1,14 @@
 <template>
   <div class="SubNationalCoverageField">
-
     <simple-field
       v-if="countrySubLevelNames.first"
-      class="FirstSubLevel">
+      class="FirstSubLevel"
+    >
       <div slot="header">
         <fa icon="map-marker" />
-        <translate :parameters="{name: countrySubLevelNames.first}">{name} level deployment</translate>
+        <translate :parameters="{name: countrySubLevelNames.first}">
+          {name} level deployment
+        </translate>
       </div>
       <el-row
         v-for="(cov) in coverage"
@@ -30,7 +32,9 @@
     >
       <div slot="header">
         <fa icon="map-marker" />
-        <translate :parameters="{name: countrySubLevelNames.second}">{name} level deployment</translate>
+        <translate :parameters="{name: countrySubLevelNames.second}">
+          {name} level deployment
+        </translate>
       </div>
       <el-row
         v-for="(cov) in coverageSecondLevel"
@@ -47,7 +51,6 @@
         </el-col>
       </el-row>
     </simple-field>
-
   </div>
 </template>
 

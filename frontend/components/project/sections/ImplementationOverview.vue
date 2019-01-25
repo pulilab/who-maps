@@ -1,22 +1,25 @@
 <template>
   <div
     id="implementation"
-    class="ImplementationOverview">
+    class="ImplementationOverview"
+  >
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('Implementation overview') | translate">
-
+      :title="$gettext('Implementation overview') | translate"
+    >
       <el-form-item
         :error="errors.first('health_focus_areas')"
         :required="rules.health_focus_areas && rules.health_focus_areas.required"
       >
         <template slot="label">
-          <translate key="health-focus-areas">What is the health focus area(s) addressed by the Digital Health Intervention?</translate>
+          <translate key="health-focus-areas">
+            What is the health focus area(s) addressed by the Digital Health Intervention?
+          </translate>
         </template>
 
         <health-focus-areas-selector
-          v-validate="rules.health_focus_areas"
           v-model="health_focus_areas"
+          v-validate="rules.health_focus_areas"
           data-vv-name="health_focus_areas"
           data-vv-validate-on="change"
           data-vv-as="Health focus areas"
@@ -28,11 +31,13 @@
         :required="rules.hsc_challenges && rules.hsc_challenges.required"
       >
         <template slot="label">
-          <translate key="hsc-challenges">What are the Health System Challenges addressed by the Digital Health Intervention?</translate>
+          <translate key="hsc-challenges">
+            What are the Health System Challenges addressed by the Digital Health Intervention?
+          </translate>
         </template>
         <health-system-challenges-selector
-          v-validate="rules.hsc_challenges"
           v-model="hsc_challenges"
+          v-validate="rules.hsc_challenges"
           data-vv-name="hsc_challenges"
           data-vv-validate-on="change"
           data-vv-as="Health system challenges"
@@ -42,11 +47,14 @@
       <el-form-item
         :error="errors.first('platforms')"
       >
-
         <template slot="label">
-          <translate key="platforms">Add information about your Digital Health program activies</translate>
-          <form-hint >
-            <translate key="platforms-hint">Include all software that is part of your project. If you cannot find your software listed in the options, send an email to digitalhealthatlas@gmail.com with the software name.</translate>
+          <translate key="platforms">
+            Add information about your Digital Health program activies
+          </translate>
+          <form-hint>
+            <translate key="platforms-hint">
+              Include all software that is part of your project. If you cannot find your software listed in the options, send an email to digitalhealthatlas@gmail.com with the software name.
+            </translate>
           </form-hint>
         </template>
 
@@ -60,10 +68,10 @@
         >
           <el-col :span="16">
             <platform-selector
-              v-validate="rules.platforms"
               :key="platform"
-              :data-vv-scope="'platform_' + index"
               v-model="platforms"
+              v-validate="rules.platforms"
+              :data-vv-scope="'platform_' + index"
               :index="index"
               data-vv-name="id"
               data-vv-as="Software"
@@ -75,8 +83,10 @@
               class="DigitalHealthIntervention"
             >
               <template slot="label">
-                <translate key="strategies">What Digital Health Intervention(s) are included in this software?</translate>
-                <form-hint >
+                <translate key="strategies">
+                  What Digital Health Intervention(s) are included in this software?
+                </translate>
+                <form-hint>
                   <!-- This is going to be a link to a pdf / webpage -->
                 </form-hint>
               </template>
@@ -105,11 +115,13 @@
         :required="rules.his_bucket && rules.his_bucket.required"
       >
         <template slot="label">
-          <translate key="his-bucket">What health information system(s) in your country does this project support?</translate>
+          <translate key="his-bucket">
+            What health information system(s) in your country does this project support?
+          </translate>
         </template>
         <his-bucket-selector
-          v-validate="rules.his_bucket"
           v-model="his_bucket"
+          v-validate="rules.his_bucket"
           data-vv-name="his_bucket"
           data-vv-validate-on="change"
           data-vv-as="Health information system"
@@ -121,15 +133,23 @@
           prop="coverageType"
         >
           <template slot="label">
-            <translate key="coverage-type">What kind of coverage does your project have?</translate>
-            <form-hint >
-              <translate key="coverage-type-hint">Subnational may include district, regional, provincial, county levels.</translate>
+            <translate key="coverage-type">
+              What kind of coverage does your project have?
+            </translate>
+            <form-hint>
+              <translate key="coverage-type-hint">
+                Subnational may include district, regional, provincial, county levels.
+              </translate>
             </form-hint>
           </template>
 
           <el-radio-group v-model="coverageType">
-            <el-radio :label="1"><translate>Sub-national</translate></el-radio>
-            <el-radio :label="2"><translate>National</translate></el-radio>
+            <el-radio :label="1">
+              <translate>Sub-national</translate>
+            </el-radio>
+            <el-radio :label="2">
+              <translate>National</translate>
+            </el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -166,18 +186,27 @@
         :required="rules.government_investor && rules.government_investor.required"
       >
         <template slot="label">
-          <translate key="gobernment-investor">Has the government contributed to the project, either financially or in-kind?</translate>
+          <translate key="gobernment-investor">
+            Has the government contributed to the project, either financially or in-kind?
+          </translate>
         </template>
 
         <el-radio-group
-          v-validate="rules.government_investor"
           v-model="government_investor"
+          v-validate="rules.government_investor"
           data-vv-name="government_investor"
           data-vv-as="Government investor"
-          class="OnePerRow">
-          <el-radio :label="0"><translate>No, they have not yet contributed</translate></el-radio>
-          <el-radio :label="1"><translate>Yes, they are contributing in-kind people or time</translate></el-radio>
-          <el-radio :label="2"><translate>Yes, there is a financial contribution through MOH budget</translate></el-radio>
+          class="OnePerRow"
+        >
+          <el-radio :label="0">
+            <translate>No, they have not yet contributed</translate>
+          </el-radio>
+          <el-radio :label="1">
+            <translate>Yes, they are contributing in-kind people or time</translate>
+          </el-radio>
+          <el-radio :label="2">
+            <translate>Yes, there is a financial contribution through MOH budget</translate>
+          </el-radio>
         </el-radio-group>
       </el-form-item>
 
@@ -185,7 +214,9 @@
         class="ImplementingPartners"
       >
         <template slot="label">
-          <translate key="implementing-partners">Who are your implementing partners?</translate>
+          <translate key="implementing-partners">
+            Who are your implementing partners?
+          </translate>
         </template>
 
         <el-row
@@ -198,8 +229,8 @@
               :required="rules.implementing_partners && rules.implementing_partners.required"
             >
               <el-input
-                v-validate="rules.implementing_partners"
                 ref="implementingPartnersInput"
+                v-validate="rules.implementing_partners"
                 :value="partner"
                 :data-vv-name="'implementing_partners_' + index"
                 data-vv-validate-on="change"
@@ -223,17 +254,20 @@
         :error="errors.first('donors')"
         :required="rules.donors && rules.donors.required"
       >
-
         <template slot="label">
-          <translate key="donors">Investors</translate>
-          <form-hint >
-            <translate key="donors-hint">Investment partners can include those contributing funds, human resources or in-kind support.</translate>
+          <translate key="donors">
+            Investors
+          </translate>
+          <form-hint>
+            <translate key="donors-hint">
+              Investment partners can include those contributing funds, human resources or in-kind support.
+            </translate>
           </form-hint>
         </template>
 
         <donor-selector
-          v-validate="rules.donors"
           v-model="donors"
+          v-validate="rules.donors"
           data-vv-name="donors"
           data-vv-as="Investors"
         />
@@ -298,7 +332,7 @@ export default {
         return this.national_level_deployment ? this.national_level_deployment.health_workers : null;
       },
       set (value) {
-        const coverage = {...this.national_level_deployment, health_workers: value};
+        const coverage = { ...this.national_level_deployment, health_workers: value };
         this.national_level_deployment = coverage;
       }
     },
@@ -307,7 +341,7 @@ export default {
         return this.national_level_deployment ? this.national_level_deployment.clients : null;
       },
       set (value) {
-        const coverage = {...this.national_level_deployment, clients: value};
+        const coverage = { ...this.national_level_deployment, clients: value };
         this.national_level_deployment = coverage;
       }
     },
@@ -316,7 +350,7 @@ export default {
         return this.national_level_deployment ? this.national_level_deployment.facilities : null;
       },
       set (value) {
-        const coverage = {...this.national_level_deployment, facilities: value};
+        const coverage = { ...this.national_level_deployment, facilities: value };
         this.national_level_deployment = coverage;
       }
     }
@@ -334,9 +368,6 @@ export default {
         }
       }
     }
-  },
-  mounted () {
-    this.$emit('mounted');
   },
   methods: {
     isLastAndExist (collection, index) {

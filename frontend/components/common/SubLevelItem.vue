@@ -1,7 +1,8 @@
 <template>
   <div
     v-if="subLevel"
-    class="SubLevelItem">
+    class="SubLevelItem"
+  >
     {{ subLevel.name }}
   </div>
 </template>

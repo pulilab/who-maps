@@ -6,8 +6,8 @@
       :required="rules.district && rules.district.required"
     >
       <el-select
-        v-validate="rules.district"
         v-model="subLevel"
+        v-validate="rules.district"
         :data-vv-as="levelName"
         :data-vv-scope="scope + '_' + index"
         :placeholder="$gettext('Select from list') | translate"
@@ -16,18 +16,18 @@
         popper-class="SubNationalLevelDeploymentRegionDropdown"
         class="SubNationalLevelDeployementRegion"
       >
-
         <el-option
           v-for="sub in availableSubLevels"
           :key="sub.id"
           :label="sub.name"
-          :value="sub.id"/>
+          :value="sub.id"
+        />
       </el-select>
       <facility-selector
         ref="facilitySelector"
+        v-model="facilitiesList"
         :rules="rules"
         :api-errors="apiErrors"
-        v-model="facilitiesList"
         :disabled="!subLevel"
         :scope="scope + '_' + index"
       />
@@ -107,8 +107,8 @@ export default {
         return facilitiesList || [];
       },
       set (value) {
-        const coverage = {facilities_list: [...value], facilities: value.length};
-        this.coverageData = {coverage, subLevel: this.subLevel};
+        const coverage = { facilities_list: [...value], facilities: value.length };
+        this.coverageData = { coverage, subLevel: this.subLevel };
       }
     },
     healthWorkers: {
@@ -116,8 +116,8 @@ export default {
         return this.localCoverageData ? this.localCoverageData.health_workers : null;
       },
       set (value) {
-        const coverage = {health_workers: value};
-        this.coverageData = {coverage, subLevel: this.subLevel};
+        const coverage = { health_workers: value };
+        this.coverageData = { coverage, subLevel: this.subLevel };
       }
     },
     clients: {
@@ -125,8 +125,8 @@ export default {
         return this.localCoverageData ? this.localCoverageData.clients : null;
       },
       set (value) {
-        const coverage = {clients: value};
-        this.coverageData = {coverage, subLevel: this.subLevel};
+        const coverage = { clients: value };
+        this.coverageData = { coverage, subLevel: this.subLevel };
       }
     },
     facilities: {
@@ -134,8 +134,8 @@ export default {
         return this.localCoverageData ? this.localCoverageData.facilities : null;
       },
       set (value) {
-        const coverage = {facilities: value};
-        this.coverageData = {coverage, subLevel: this.subLevel};
+        const coverage = { facilities: value };
+        this.coverageData = { coverage, subLevel: this.subLevel };
       }
     }
   },

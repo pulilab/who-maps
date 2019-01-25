@@ -32,10 +32,10 @@ describe('actions', () => {
   });
 
   test('setToken', async () => {
-    await actions.setToken(vuex, {jwt: null});
+    await actions.setToken(vuex, { jwt: null });
     expect(vuex.commit.mock.calls[0]).toEqual(['SET_TOKEN', null]);
 
-    await actions.setToken(vuex, {jwt: 1});
+    await actions.setToken(vuex, { jwt: 1 });
     expect(vuex.commit.mock.calls[1]).toEqual(['SET_TOKEN', 1]);
   });
 });

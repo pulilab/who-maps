@@ -33,7 +33,7 @@ export default {
           this.$alert(this.$gettext('You are not authorized to access this view'), this.$gettext('Warning'), {
             confirmButtonText: 'OK',
             callback: () => {
-              const path = this.localePath({name: 'organisation-projects-id-published', params: this.$route.params});
+              const path = this.localePath({ name: 'organisation-projects-id-published', params: this.$route.params });
               this.$router.replace(path);
             }
           });

@@ -6,16 +6,19 @@
     filterable
     popper-class="HealthSystemChallengesSelectorDropdown"
     class="HealthSystemChallengesSelector"
-    @change="changeHandler">
+    @change="changeHandler"
+  >
     <el-option-group
       v-for="group in healthSystemChallenges"
       :key="group.id"
-      :label="group.name">
+      :label="group.name"
+    >
       <el-option
         v-for="hsc in group.challenges"
         :key="hsc.id"
         :label="hsc.challenge"
-        :value="hsc.id"/>
+        :value="hsc.id"
+      />
     </el-option-group>
   </el-select>
 </template>

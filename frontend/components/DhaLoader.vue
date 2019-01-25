@@ -2,7 +2,8 @@
   <transition name="el-fade-in">
     <div
       v-if="show"
-      class="GlobalLoader">
+      class="GlobalLoader"
+    >
       <div>
         <div class="Loader">
           <div />

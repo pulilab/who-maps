@@ -2,17 +2,19 @@
   <div
     v-if="countryQuestions && countryQuestions.length >0"
     id="countrycustom"
-    class="CountryCustom">
+    class="CountryCustom"
+  >
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('{name} custom fields', {name: country.name}) | translate" >
+      :title="$gettext('{name} custom fields', {name: country.name}) | translate"
+    >
       <custom-field
         v-for="(field, index) in countryQuestions"
+        :id="field.id"
         ref="customQuestion"
         :key="field.id"
         :index="index"
         :api-errors="apiErrors"
-        :id="field.id"
         :type="field.type"
         :question="field.question"
         :is-required="field.required"
@@ -51,6 +53,7 @@ export default {
       if (this.projectCountry) {
         return this.getCountryDetails(this.projectCountry);
       }
+      return null;
     },
     countryQuestions () {
       if (this.country) {
@@ -58,9 +61,6 @@ export default {
       }
       return [];
     }
-  },
-  mounted () {
-    this.$emit('mounted');
   },
   methods: {
     async validate () {

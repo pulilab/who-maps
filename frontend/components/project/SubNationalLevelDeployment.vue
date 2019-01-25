@@ -8,7 +8,10 @@
         <fa icon="map-marker-alt" />
         <translate
           key="firstSubLevel"
-          :parameters="{name: countrySubLevelNames.first}">If subnational, which {name} does your project cover?</translate>
+          :parameters="{name: countrySubLevelNames.first}"
+        >
+          If subnational, which {name} does your project cover?
+        </translate>
       </div>
       <el-row
         v-for="(cov, index) in coverage"
@@ -48,7 +51,10 @@
         <fa icon="map-marker-alt" />
         <translate
           key="secondSubLevel"
-          :parameters="{name: countrySubLevelNames.first}">If subnational, which {name} does your project cover?</translate>
+          :parameters="{name: countrySubLevelNames.first}"
+        >
+          If subnational, which {name} does your project cover?
+        </translate>
       </div>
       <el-row
         v-for="(cov, index) in coverageSecondLevel"
@@ -142,7 +148,7 @@ export default {
     rmCoverage (index, id) {
       this.coverage = this.coverage.filter((c, i) => i !== index);
       if (id) {
-        this.coverageData = {subLevel: id, coverage: undefined};
+        this.coverageData = { subLevel: id, coverage: undefined };
       }
     },
     addCoverageSecondLevel () {
@@ -151,7 +157,7 @@ export default {
     rmCoverageSecondLevel (index, id) {
       this.coverageSecondLevel = this.coverageSecondLevel.filter((c, i) => i !== index);
       if (id) {
-        this.coverageData = {subLevel: id, coverage: undefined};
+        this.coverageData = { subLevel: id, coverage: undefined };
       }
     }
   }

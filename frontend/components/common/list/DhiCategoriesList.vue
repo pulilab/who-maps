@@ -3,7 +3,8 @@
     <ul class="SelectedDHICategories">
       <li
         v-for="item in selected"
-        :key="item.id">
+        :key="item.id"
+      >
         <list-action
           v-if="actions"
           @click="$emit('delete', item.id)"

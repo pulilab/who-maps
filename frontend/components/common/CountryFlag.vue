@@ -1,7 +1,8 @@
 <template>
   <img
     :class="['CountryFlag', {small}]"
-    :src="countryFlagUrl">
+    :src="countryFlagUrl"
+  >
 </template>
 
 <script>
@@ -21,6 +22,7 @@ export default {
       if (this.code) {
         return `/static/flags/${this.code.toLowerCase()}.png`;
       }
+      return null;
     }
   }
 };

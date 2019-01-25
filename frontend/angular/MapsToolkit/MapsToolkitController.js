@@ -45,13 +45,13 @@ class MapsToolkitController {
   }
 
   handleChangeAxis (axisId) {
-    const path = window.$nuxt.$root.localePath({name: 'organisation-projects-id-toolkit', params: window.$nuxt.$route.params, query: {axisId, domainId: 0}});
+    const path = window.$nuxt.$root.localePath({ name: 'organisation-projects-id-toolkit', params: window.$nuxt.$route.params, query: { axisId, domainId: 0 } });
     window.$nuxt.$router.push(path, () => {
       this.scope.$digest();
     });
   }
   handleChangeDomain (axisId, domainId) {
-    const path = window.$nuxt.$root.localePath({name: 'organisation-projects-id-toolkit', params: window.$nuxt.$route.params, query: {axisId, domainId}});
+    const path = window.$nuxt.$root.localePath({ name: 'organisation-projects-id-toolkit', params: window.$nuxt.$route.params, query: { axisId, domainId } });
     window.$nuxt.$router.push(path, () => {
       this.scope.$digest();
     });
@@ -154,7 +154,7 @@ class MapsToolkitController {
 
   goToScorecard () {
     const axisId = this.axisId;
-    const path = window.$nuxt.$root.localePath({name: 'organisation-projects-id-toolkit-scorecard', params: window.$nuxt.$route.params, query: {axisId}});
+    const path = window.$nuxt.$root.localePath({ name: 'organisation-projects-id-toolkit-scorecard', params: window.$nuxt.$route.params, query: { axisId } });
     window.$nuxt.$router.push(path, () => {
       this.scope.$digest();
     });

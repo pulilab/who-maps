@@ -1,6 +1,6 @@
 <template>
   <div class="angularjs">
-    <div id="assessmentjs"/>
+    <div id="assessmentjs" />
   </div>
 </template>
 
@@ -10,7 +10,7 @@ export default {
   components: {
   },
   middleware: ['isLoggedIn'],
-  async fetch ({store, params, error}) {
+  async fetch ({ store, params, error }) {
     store.dispatch('landing/resetSearch');
     try {
       await fetchProjectData(store, params, error);

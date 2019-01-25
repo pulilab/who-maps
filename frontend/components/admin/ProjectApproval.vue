@@ -2,21 +2,22 @@
   <div class="ProjectApprovalTable">
     <el-row
       type="flex"
-      class="Actions">
+      class="Actions"
+    >
       <el-col class="Download">
         <el-button
           :disabled="rowSelection.length === 0"
           class="IconLeft"
           @click="csvExport"
         >
-          <fa icon="download"/>
+          <fa icon="download" />
           <translate>Export Selected</translate>
         </el-button>
       </el-col>
       <el-col class="Filters">
         <el-row type="flex">
           <el-col>
-            <div class="Separator"/>
+            <div class="Separator" />
           </el-col>
           <el-col>
             <span class="Label">
@@ -172,7 +173,7 @@ export default {
       this.rowSelection = selection;
     },
     csvExport () {
-      const csv = Papa.unparse(this.parsedList, {delimiter: ';'});
+      const csv = Papa.unparse(this.parsedList, { delimiter: ';' });
       const toDownload = `data:text/csv;charset=utf-8,${csv}`;
       uriDownloader(toDownload, 'project-approval-export.csv');
     }

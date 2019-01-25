@@ -1,7 +1,8 @@
 <template>
   <span
     v-if="dhi"
-    class="DhiItem">
+    class="DhiItem"
+  >
     {{ dhi.name }}
   </span>
 </template>

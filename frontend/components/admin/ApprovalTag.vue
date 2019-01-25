@@ -3,10 +3,17 @@
     <el-tag
       :type="value ? 'success' : value === null ? 'warning' : 'danger'"
       size="small"
-      disable-transitions>
-      <span v-show="value === true"> <translate>Yes</translate></span>
-      <span v-show="value === false"> <translate>No</translate></span>
-      <span v-show="value === null"> <translate>Pending</translate> </span>
+      disable-transitions
+    >
+      <span v-show="value === true">
+        <translate>Yes</translate>
+      </span>
+      <span v-show="value === false">
+        <translate>No</translate>
+      </span>
+      <span v-show="value === null">
+        <translate>Pending</translate>
+      </span>
     </el-tag>
   </div>
 </template>

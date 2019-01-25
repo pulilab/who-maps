@@ -22,7 +22,8 @@
           <el-button
             type="primary"
             class="CountryViewBtn"
-            @click="openCountryView">
+            @click="openCountryView"
+          >
             <fa icon="search-plus" />
             <span
               v-show="popUpHover"

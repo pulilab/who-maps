@@ -1,6 +1,5 @@
 <template>
   <el-card :class="['QuestionContainer rounded', {'Inactive': !question.is_active, 'Invalid': !valid, 'Edited': !saved}]">
-
     <!-- Actions -->
     <div class="Actions">
       <el-button
@@ -14,7 +13,8 @@
       <el-button
         type="text"
         class="DeleteButton IconLeft"
-        @click="doDelete(id)">
+        @click="doDelete(id)"
+      >
         <fa icon="trash" /> Delete
       </el-button>
     </div>
@@ -23,43 +23,53 @@
     <el-select
       v-model="question.type"
       :disabled="saved"
-      placeholder="Type">
+      placeholder="Type"
+    >
       <el-option
         :label="$gettext('Text field') | translate"
-        :value="1" />
+        :value="1"
+      />
       <el-option
         :label="$gettext('Numeric field') | translate"
-        :value="2" />
+        :value="2"
+      />
       <el-option
         :label="$gettext('Yes - no field') | translate"
-        :value="3" />
+        :value="3"
+      />
       <el-option
         :label="$gettext('Single choice') | translate"
-        :value="4" />
+        :value="4"
+      />
       <el-option
         :label="$gettext('Multiple choice') | translate"
-        :value="5" />
+        :value="5"
+      />
     </el-select>
 
     <!-- Question -->
     <el-input
       v-model="question.question"
-      :placeholder="$gettext('Question text') | translate" />
+      :placeholder="$gettext('Question text') | translate"
+    />
 
     <div class="QSwitches">
       <!-- Required -->
       <el-switch
         v-model="question.required"
-        :active-text="$gettext('Required') | translate" />
+        :active-text="$gettext('Required') | translate"
+      />
 
       <el-switch
         v-model="question.is_private"
-        :active-text="$gettext('Private') | translate" />
+        :active-text="$gettext('Private') | translate"
+      />
     </div>
     <dha-question-options
       v-if="question.type > 3"
       :disabled="saved"
-      :options.sync="question.options" />
+      :options.sync="question.options"
+    />
 
     <span :class="['DDHandler', {'DraggingDisabled': !draggable}]">
       <fa icon="bars" />
@@ -73,7 +83,7 @@ import { mapGetters, mapActions } from 'vuex';
 import DhaQuestionOptions from './DhaQuestionOptions';
 
 export default {
-  components: {DhaQuestionOptions},
+  components: { DhaQuestionOptions },
   props: {
     id: {
       type: [String, Number],
@@ -102,11 +112,12 @@ export default {
     }),
     stored () {
       if (this.id) {
-        const stored = {...this.questionById(+this.id)};
+        const stored = { ...this.questionById(+this.id) };
         stored.is_private = stored.private;
         delete stored.private;
         return stored;
       }
+      return null;
     },
     valid () {
       return Boolean(this.question.type && this.question.question.length && (this.question.type < 4 || this.question.options.length));
@@ -121,7 +132,7 @@ export default {
       handler (stored) {
         if (stored) {
           const options = stored.type > 3 ? [...stored.options] : [];
-          this.question = {...stored, options};
+          this.question = { ...stored, options };
         }
       }
     }
@@ -163,7 +174,7 @@ export default {
     async saveQuestion () {
       try {
         if (this.id) {
-          await this.updateQuestion({question: this.question, id: this.id});
+          await this.updateQuestion({ question: this.question, id: this.id });
         } else {
           await this.$confirm(this.$gettext('This will save the question, type and options will not be editable anymore'), this.$gettext('Warning'), {
             confirmButtonText: this.$gettext('OK'),

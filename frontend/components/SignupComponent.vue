@@ -15,10 +15,13 @@
         @submit.native.prevent="signup"
       >
         <fieldset>
-          <div class="FieldsetLegend"><translate>Please fill out the form below:</translate></div>
+          <div class="FieldsetLegend">
+            <translate>Please fill out the form below:</translate>
+          </div>
           <el-form-item
             :label="$gettext('Email address') | translate"
-            prop="email">
+            prop="email"
+          >
             <el-input
               v-model="signupForm.email"
             />
@@ -26,7 +29,8 @@
 
           <el-form-item
             :label="$gettext('Password') | translate"
-            prop="password1">
+            prop="password1"
+          >
             <el-input
               v-model="signupForm.password1"
               type="password"
@@ -35,14 +39,17 @@
 
           <el-form-item
             :label="$gettext('Password (again)') | translate"
-            prop="password2">
+            prop="password2"
+          >
             <el-input
               v-model="signupForm.password2"
               type="password"
             />
             <div
               v-if="nonFieldErrors"
-              class="el-form-item__error ModifiedFormError">{{ nonFieldErrors }}
+              class="el-form-item__error ModifiedFormError"
+            >
+              {{ nonFieldErrors }}
             </div>
           </el-form-item>
         </fieldset>
@@ -54,7 +61,8 @@
           >
             <el-col
               :span="12"
-              class="SecondaryAction LoginLink">
+              class="SecondaryAction LoginLink"
+            >
               <h6><translate>Already signed up?</translate></h6>
               <nuxt-link
                 :to="localePath({name: 'organisation-login', params: $route.params})"
@@ -65,11 +73,13 @@
             </el-col>
             <el-col
               :span="12"
-              class="PrimaryAction">
+              class="PrimaryAction"
+            >
               <el-button
                 type="primary"
                 size="medium"
-                native-type="submit">
+                native-type="submit"
+              >
                 <translate>Sign up now</translate>
               </el-button>
             </el-col>
@@ -138,7 +148,7 @@ export default {
               password2: this.signupForm.password2,
               email: this.signupForm.email
             });
-            const path = this.localePath({...this.$route, name: 'organisation-edit-profile'}, locale);
+            const path = this.localePath({ ...this.$route, name: 'organisation-edit-profile' }, locale);
             this.$router.push(path);
             this.$message({
               message: this.$gettext('User created succesfully'),

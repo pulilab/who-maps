@@ -1,5 +1,4 @@
 <template>
-
   <div class="SwitchViewBox">
     <div class="SwitchViewWrapper">
       <el-switch

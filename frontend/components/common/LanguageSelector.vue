@@ -3,12 +3,14 @@
     <div
       v-for="locale in $i18n.locales"
       :key="locale.code"
-      class="LanguageLink">
-
+      class="LanguageLink"
+    >
       <nuxt-link
         :to="switchLocalePath(locale.code)"
-        class="HeaderBtn">{{ locale.name }}</nuxt-link>
-
+        class="HeaderBtn"
+      >
+        {{ locale.name }}
+      </nuxt-link>
     </div>
   </div>
 </template>

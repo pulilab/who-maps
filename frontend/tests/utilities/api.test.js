@@ -93,10 +93,10 @@ describe('interoperabilityLinksMapper', () => {
 
   test('convert an array into an object', () => {
     const original = [
-      {id: 1, link: 'a', selected: true}
+      { id: 1, link: 'a', selected: true }
     ];
     const result = api.interoperabilityLinksMapper(original);
-    expect(result).toEqual({1: {link: 'a', selected: true}});
+    expect(result).toEqual({ 1: { link: 'a', selected: true } });
   });
 });
 
@@ -116,16 +116,16 @@ describe('platformsMapper', () => {
 
   test('convert an array of objects', () => {
     const original = [
-      {id: 1, strategies: [1]}
+      { id: 1, strategies: [1] }
     ];
     const result = api.platformsMapper(original);
     expect(result[0]).toEqual([1]);
-    expect(result[1]).toEqual([{id: 1, platform: 1}]);
+    expect(result[1]).toEqual([{ id: 1, platform: 1 }]);
   });
 
   test('does not fail for missing or malformed inner data', () => {
     const original = [
-      {id: 1}
+      { id: 1 }
     ];
     let result = api.platformsMapper(original);
     expect(result).toEqual([[1], []]);
@@ -159,7 +159,7 @@ describe('countryCustomFieldMapper', () => {
       1: ['yes']
     };
     const result = api.countryCustomFieldMapper(original);
-    expect(result).toEqual([{question_id: 1, answer: ['yes']}]);
+    expect(result).toEqual([{ question_id: 1, answer: ['yes'] }]);
   });
 });
 
@@ -182,7 +182,7 @@ describe('countryCustomFieldMapper', () => {
       1: ['yes']
     };
     const result = api.countryCustomFieldMapper(original);
-    expect(result).toEqual([{question_id: 1, answer: ['yes']}]);
+    expect(result).toEqual([{ question_id: 1, answer: ['yes'] }]);
   });
 });
 
@@ -214,7 +214,7 @@ describe('donorCustomFieldMapper', () => {
       }
     };
     const result = api.donorCustomFieldMapper(original);
-    expect(result).toEqual([{question_id: 11, answer: ['yes'], donor_id: 1}]);
+    expect(result).toEqual([{ question_id: 11, answer: ['yes'], donor_id: 1 }]);
   });
 });
 
@@ -270,7 +270,7 @@ describe('isEmpty', () => {
   });
   test('if is an Object returns true if the object has no keys', () => {
     expect(api.isEmpty({})).toEqual(true);
-    expect(api.isEmpty({foo: 'bar'})).toEqual(false);
+    expect(api.isEmpty({ foo: 'bar' })).toEqual(false);
   });
   test('in any other case it invoke isNullUndefinedOrEmptyString', () => {
     jest.spyOn(api.lib, 'isNullUndefinedOrEmptyString').mockReturnValue(undefined);

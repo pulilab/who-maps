@@ -15,19 +15,19 @@ export const getters = {
 };
 
 export const actions = {
-  setDigitalHealthInterventionsDialogState ({commit}, value) {
+  setDigitalHealthInterventionsDialogState ({ commit }, value) {
     commit('SET_DIGITAL_HEALTH_INTERVENTIONS_DIALOG_STATE', value);
   },
-  setDashboardFiltersDialogState ({commit}, value) {
+  setDashboardFiltersDialogState ({ commit }, value) {
     commit('SET_DASHBOARD_FILTERS_DIALOG_STATE', value);
   },
-  setSaveFiltersDialogState ({commit}, value) {
+  setSaveFiltersDialogState ({ commit }, value) {
     commit('SET_SAVE_FILTERS_DIALOG_STATE', value);
   },
-  setSendEmailDialogState ({commit}, value) {
+  setSendEmailDialogState ({ commit }, value) {
     commit('SET_SEND_EMAIL_DIALOG_STATE', value);
   },
-  setShowEmptyProfileWarning ({commit}, value) {
+  setShowEmptyProfileWarning ({ commit }, value) {
     commit('SET_SHOW_EMPTY_PROFILE_WARNING', value);
   }
 };

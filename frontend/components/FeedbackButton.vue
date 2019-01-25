@@ -4,7 +4,8 @@
       v-if="csrfToken"
       :name="userProfile.name"
       :email="userProfile.email"
-      :csrf-token="csrfToken" />
+      :csrf-token="csrfToken"
+    />
   </div>
 </template>
 
