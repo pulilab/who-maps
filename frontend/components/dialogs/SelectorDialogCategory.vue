@@ -10,10 +10,12 @@
       >
         <fa
           v-show="!categoryToggled && !alwaysExpandCategory"
-          icon="angle-down" />
+          icon="angle-down"
+        />
         <fa
           v-show="categoryToggled && !alwaysExpandCategory"
-          icon="angle-up" />
+          icon="angle-up"
+        />
         <el-checkbox
           v-show="categorySelectable"
           :value="headerChecked"
@@ -27,7 +29,8 @@
       <div
         v-show="categoryShown"
         role="group"
-        class="el-checkbox-group Items OnePerRow">
+        class="el-checkbox-group Items OnePerRow"
+      >
         <el-checkbox
           v-for="item in items"
           :key="item.id"

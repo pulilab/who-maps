@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+    v-if="visible"
     :visible.sync="visible"
     :title="$gettext('Save filters') | translate"
     modal
@@ -16,20 +17,23 @@
     >
       <el-form-item
         :label="$gettext('Filter preset name') | translate"
-        prop="name">
-        <el-input v-model="form.name"/>
+        prop="name"
+      >
+        <el-input v-model="form.name" />
       </el-form-item>
     </el-form>
 
     <span slot="footer">
       <el-row
         type="flex"
-        align="center">
+        align="center"
+      >
         <el-col class="SecondaryButtons">
           <el-button
             type="text"
             class="CancelButton"
-            @click="cancel">
+            @click="cancel"
+          >
             <translate>Cancel</translate>
           </el-button>
         </el-col>
@@ -96,7 +100,7 @@ export default {
       this.setSaveFiltersDialogState(null);
     },
     apply () {
-      const filters = [...this.savedFilters, {category: this.filterCategory, name: this.form.name, query: this.$route.query}];
+      const filters = [...this.savedFilters, { category: this.filterCategory, name: this.form.name, query: this.$route.query }];
       this.setSavedFilters(filters);
       this.setSaveFiltersDialogState(null);
       this.form.name = '';

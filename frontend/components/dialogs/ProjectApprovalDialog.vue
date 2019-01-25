@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+    v-if="visible"
     :visible.sync="visible"
     :title="$gettext('Project Approval') | translate"
     :modal="mini"
@@ -8,9 +9,9 @@
     custom-class="ProjectApprovalDialog"
     @open="loadCurrent"
   >
-
     <el-tabs
-      v-model="activeTab">
+      v-model="activeTab"
+    >
       <el-tab-pane
         :label="$gettext('Update') | translate"
         name="form"
@@ -25,10 +26,12 @@
         >
           <el-form-item
             :label="$gettext('Approved') | translate"
-            prop="approved">
+            prop="approved"
+          >
             <el-select
               v-model="form.approved"
-              placeholder="Select">
+              placeholder="Select"
+            >
               <el-option
                 :value="true"
                 label="Yes"
@@ -45,7 +48,8 @@
           </el-form-item>
           <el-form-item
             :label="$gettext('Reason') "
-            prop="reason">
+            prop="reason"
+          >
             <el-input
               v-model="form.reason"
               :rows="3"
@@ -60,14 +64,17 @@
               :id="approvedBy"
               show-organisation
             />
-            <span class="Hint"><translate>Administrator that approved the project </translate></span>
+            <span class="Hint">
+              <translate>Administrator that approved the project </translate>
+            </span>
           </el-form-item>
         </el-form>
       </el-tab-pane>
 
       <el-tab-pane
         :label="$gettext('History') | translate"
-        name="history">
+        name="history"
+      >
         <el-table
           :data="history"
           border
@@ -105,30 +112,33 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-
     </el-tabs>
 
     <span slot="footer">
       <el-row
         type="flex"
-        align="center">
+        align="center"
+      >
         <el-col class="SecondaryButtons">
           <el-button
             type="text"
             class="CancelButton"
-            @click="cancel">
+            @click="cancel"
+          >
             <translate>Cancel</translate>
           </el-button>
           <el-button
             v-show="!mini"
             type="text"
-            @click="goToProject">
+            @click="goToProject"
+          >
             <translate>See Project</translate>
           </el-button>
           <el-button
             v-show="mini"
             type="text"
-            @click="goToCountryAdmin">
+            @click="goToCountryAdmin"
+          >
             <translate>Back to admin</translate>
           </el-button>
         </el-col>
@@ -204,6 +214,7 @@ export default {
           ? this.history[0].history_user__userprofile
           : this.currentElementDetails.legacy_approved_by;
       }
+      return null;
     }
   },
   methods: {
@@ -229,12 +240,12 @@ export default {
     goToProject () {
       this.mini = true;
       const id = this.currentElementDetails.project;
-      const path = this.localePath({name: 'organisation-projects-id-published', params: {...this.$route.params, id}});
+      const path = this.localePath({ name: 'organisation-projects-id-published', params: { ...this.$route.params, id } });
       this.$router.push(path);
     },
     goToCountryAdmin () {
       this.mini = false;
-      const path = this.localePath({name: 'organisation-admin-country', params: this.$route.params});
+      const path = this.localePath({ name: 'organisation-admin-country', params: this.$route.params });
       this.$router.push(path);
     },
     apply () {

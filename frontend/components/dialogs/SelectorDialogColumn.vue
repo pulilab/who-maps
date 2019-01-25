@@ -1,7 +1,9 @@
 <template>
   <div class="SelectorDialogColumn">
     <div class="Header">
-      <span v-show="!headerSelectable">{{ header }}</span>
+      <span v-show="!headerSelectable">
+        {{ header }}
+      </span>
       <el-checkbox
         v-show="headerSelectable"
         :value="selected"
@@ -11,7 +13,7 @@
       </el-checkbox>
     </div>
     <div class="Main">
-      <slot/>
+      <slot />
     </div>
   </div>
 </template>

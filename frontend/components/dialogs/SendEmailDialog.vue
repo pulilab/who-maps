@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+    v-if="visible"
     :visible.sync="visible"
     :title="$gettext('Send email to contact person(s)') | translate"
     modal
@@ -8,12 +9,13 @@
     custom-class="SendEmailDialog"
   >
     <el-form
-      @submit.native.prevent>
+      @submit.native.prevent
+    >
       <el-form-item :label="$gettext('Email addresses') + ` (${rows})` | translate">
         <el-input
           ref="emailArea"
-          :rows="rows < 10 ? rows : 10"
           v-model="selectable"
+          :rows="rows < 10 ? rows : 10"
           readonly
           class="AddressesArea"
           type="textarea"
@@ -23,12 +25,14 @@
     <span slot="footer">
       <el-row
         type="flex"
-        align="center">
+        align="center"
+      >
         <el-col class="SecondaryButtons">
           <el-button
             type="text"
             class="IconLeft"
-            @click="copy">
+            @click="copy"
+          >
             <fa icon="clone" />
             <translate>Copy to clipboard</translate>
           </el-button>
