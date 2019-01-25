@@ -5,7 +5,7 @@
       :error="errors.first('district', scope + '_' + index)"
       :required="rules.district && rules.district.required"
     >
-      <el-select
+      <lazy-el-select
         v-model="subLevel"
         v-validate="rules.district"
         :data-vv-as="levelName"
@@ -22,7 +22,7 @@
           :label="sub.name"
           :value="sub.id"
         />
-      </el-select>
+      </lazy-el-select>
       <facility-selector
         ref="facilitySelector"
         v-model="facilitiesList"

@@ -1,5 +1,5 @@
 <template>
-  <el-select
+  <lazy-el-select
     :value="value"
     :placeholder="$gettext('Select from list')"
     multiple
@@ -14,7 +14,7 @@
       :label="his.name"
       :value="his.id"
     />
-  </el-select>
+  </lazy-el-select>
 </template>
 
 <script>

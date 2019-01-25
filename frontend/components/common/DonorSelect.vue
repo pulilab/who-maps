@@ -1,5 +1,5 @@
 <template>
-  <el-select
+  <lazy-el-select
     :value="value"
     :placeholder="$gettext('Select investor') | translate"
     popper-class="DonorSelectorPopper"
@@ -12,7 +12,7 @@
       :label="donor.name"
       :value="donor.id"
     />
-  </el-select>
+  </lazy-el-select>
 </template>
 
 <script>

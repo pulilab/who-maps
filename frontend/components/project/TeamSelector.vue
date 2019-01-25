@@ -1,5 +1,5 @@
 <template>
-  <el-select
+  <lazy-el-select
     :value="value"
     :placeholder="$gettext('Type and select a name') | translate"
     :remote-method="filterList"
@@ -21,7 +21,7 @@
         <organisation-item :id="person.organisation" />
       </template>
     </el-option>
-  </el-select>
+  </lazy-el-select>
 </template>
 
 <script>

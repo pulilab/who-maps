@@ -1,5 +1,5 @@
 <template>
-  <el-select
+  <lazy-el-select
     v-model="innerValue"
     :allow-create="true"
     :placeholder="$gettext('Type and select a name') | translate"
@@ -16,7 +16,7 @@
       :label="organisation.name"
       :value="organisation.id"
     />
-  </el-select>
+  </lazy-el-select>
 </template>
 
 <script>

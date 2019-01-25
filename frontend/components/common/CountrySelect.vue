@@ -1,5 +1,5 @@
 <template>
-  <el-select
+  <lazy-el-select
     v-model="innerValue"
     :multiple="multiple"
     :disabled="disabled"
@@ -14,7 +14,7 @@
       :label="country.name"
       :value="country.id"
     />
-  </el-select>
+  </lazy-el-select>
 </template>
 
 <script>

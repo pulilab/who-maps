@@ -1,5 +1,5 @@
 <template>
-  <el-select
+  <lazy-el-select
     :value="platform"
     :placeholder="$gettext('Select from list') | translate"
     popper-class="PlatformSelectorDropdown"
@@ -14,7 +14,7 @@
       :label="paltform.name"
       :value="paltform.id"
     />
-  </el-select>
+  </lazy-el-select>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <el-select
+  <lazy-el-select
     :value="value"
     :placeholder="$gettext('Type and select a name') | translate"
     multiple
@@ -15,7 +15,7 @@
       :label="donor.name"
       :value="donor.id"
     />
-  </el-select>
+  </lazy-el-select>
 </template>
 
 <script>

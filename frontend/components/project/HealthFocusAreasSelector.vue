@@ -1,5 +1,5 @@
 <template>
-  <el-select
+  <lazy-el-select
     :value="value"
     :placeholder="$gettext('Select from list') | translate"
     multiple
@@ -20,11 +20,12 @@
         :value="hfa.id"
       />
     </el-option-group>
-  </el-select>
+  </lazy-el-select>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+
 export default {
   model: {
     prop: 'value',
@@ -36,6 +37,11 @@ export default {
       default: null
     }
   },
+  data () {
+    return {
+      open: false
+    };
+  },
   computed: {
     ...mapGetters({
       healthFocusAreas: 'projects/getHealthFocusAreas'
@@ -44,6 +50,11 @@ export default {
   methods: {
     changeHandler (value) {
       this.$emit('change', value);
+    },
+    toggleHandler (value) {
+      if (value) {
+        this.open = value;
+      }
     }
   }
 };

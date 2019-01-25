@@ -5,7 +5,7 @@
     :label="$gettext('Facilities') | translate"
     :required="rules.facilities_list && rules.facilities_list.required"
   >
-    <el-select
+    <lazy-el-select
       v-model="innerValue"
       v-validate="rules.facilities_list"
       :remote-method="search"
@@ -27,7 +27,7 @@
         :label="facility.name"
         :value="facility.name"
       />
-    </el-select>
+    </lazy-el-select>
   </el-form-item>
 </template>
 
