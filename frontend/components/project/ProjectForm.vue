@@ -23,36 +23,42 @@
             :rules="rules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
           />
           <implementation-overview
             ref="implementationOverview"
             :rules="rules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
           />
           <technology-overview
             ref="technologyOverview"
             :rules="rules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
           />
           <interoperability-and-standards
             ref="interoperabilityAndStandards"
             :rules="rules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
           />
           <country-custom
             ref="countryCustom"
             :use-publish-rules="usePublishRules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
           />
           <donor-custom
             ref="donorCustom"
             :use-publish-rules="usePublishRules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
           />
         </el-col>
         <el-col :span="6">
@@ -93,7 +99,7 @@ export default {
   data () {
     return {
       readyElements: 0,
-      maxElements: -1,
+      createdElements: 0,
       usePublishRules: false,
       apiErrors: {}
     };
@@ -111,7 +117,7 @@ export default {
       return this.$route.name.includes('organisation-projects-create');
     },
     showForm () {
-      return this.readyElements > this.maxElements;
+      return this.readyElements >= this.createdElements;
     },
     draftRules () {
       return {
@@ -308,8 +314,10 @@ export default {
         callback();
       }
     },
+    createdHandler () {
+      this.createdElements += 1;
+    },
     mountedHandler () {
-      console.log('mounted');
       setTimeout(() => {
         this.readyElements += 1;
       }, 300);
