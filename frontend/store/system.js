@@ -73,24 +73,26 @@ export const getters = {
     return [...state.sub_level_types.map(t => ({ ...t }))];
   },
   getOrganisations: state => {
-    return [...state.organisations.map(o => ({...o}))];
+    return [...state.organisations.map(o => ({ ...o }))];
   },
   getOrganisationDetails: (state, getters) => id => {
     const o = getters.getOrganisations.find(org => org.id === id);
     return o ? { ...o } : undefined;
   },
   getDonors: state => state.donors,
-  getDonorDetails: state => id => ({...state.donors.find(d => d.id === id), ...state.donorsLibrary[id]}),
+  getDonorDetails: state => id => ({ ...state.donors.find(d => d.id === id), ...state.donorsLibrary[id] }),
   getRegions: state => state.regions,
-  getRegionDetails: state => id => ({...state.regions.find(r => r.id === id)})
+  getRegionDetails: state => id => ({ ...state.regions.find(r => r.id === id) })
 };
 
 export const actions = {
 
-  async loadUserProfiles ({ commit }) {
+  async loadUserProfiles ({ commit, state }, force = false) {
     try {
-      const { data } = await this.$axios.get('/api/userprofiles/');
-      commit('SET_USER_PROFILES', data);
+      if (!state.profiles || state.profiles.length === 0 || force) {
+        const { data } = await this.$axios.get('/api/userprofiles/');
+        commit('SET_USER_PROFILES', data);
+      }
     } catch (e) {
       console.error('system/loadUserProfiles failed');
     }
@@ -107,7 +109,7 @@ export const actions = {
       commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
       commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
       commit('SET_REGIONS', data.regions);
-      dispatch('dashboard/setDashboardColumns', data.dashboard_columns, {root: true});
+      dispatch('dashboard/setDashboardColumns', data.dashboard_columns, { root: true });
     } catch (e) {
       console.error('system/loadStaticData failed');
     }
@@ -136,7 +138,7 @@ export const actions = {
     if (id && !state.donorsLibrary[id]) {
       try {
         const { data } = await this.$axios.get(`/api/landing-donor/${id}/`);
-        commit('SET_DONOR_DETAILS', {id, data});
+        commit('SET_DONOR_DETAILS', { id, data });
       } catch (e) {
         console.error('system/loadDonorDetails failed');
       }
@@ -199,8 +201,8 @@ export const mutations = {
   SET_DONORS: (state, donors) => {
     state.donors = donors;
   },
-  SET_DONOR_DETAILS: (state, {id, data}) => {
-    state.donorsLibrary = {...state.donorsLibrary, [id]: data};
+  SET_DONOR_DETAILS: (state, { id, data }) => {
+    state.donorsLibrary = { ...state.donorsLibrary, [id]: data };
   },
   SET_REGIONS: (state, regions) => {
     state.regions = regions;
