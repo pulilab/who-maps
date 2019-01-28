@@ -13,11 +13,13 @@ Vue.mixin({
 
 Vue.filter('translate', value => value);
 
-export default function ({ app }) {
+export default function ({ app: { store, i18n } }) {
   // beforeLanguageSwitch called right before setting a new locale
-  app.i18n.beforeLanguageSwitch = (oldLocale, newLocale) => {
+  i18n.beforeLanguageSwitch = (oldLocale, newLocale) => {
   };
   // onLanguageSwitched called right after a new locale has been set
-  app.i18n.onLanguageSwitched = (oldLocale, newLocale) => {
+  i18n.onLanguageSwitched = (oldLocale, newLocale) => {
+    store.dispatch('system/loadStaticData');
+    store.dispatch('projects/loadProjectStructure', true);
   };
 };
