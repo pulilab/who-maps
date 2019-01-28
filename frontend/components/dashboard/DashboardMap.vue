@@ -13,9 +13,10 @@
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'"
         />
 
-        <v-marker-cluster
+        <custom-marker-cluster
           ref="markerCluster"
           :options="clusterOptions"
+          :total="countriesPin.length"
         >
           <country-center-marker
             v-for="pin in countriesPin"
@@ -26,7 +27,7 @@
             :selected-country.sync="selectedCountry"
             :active-country.sync="activeCountry"
           />
-        </v-marker-cluster>
+        </custom-marker-cluster>
 
         <country-details-overlay
           :selected-country="selectedCountry"
