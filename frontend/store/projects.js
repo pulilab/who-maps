@@ -203,10 +203,10 @@ export const actions = {
     await this.$axios.post(`/api/projects/${id}/version/`);
     return dispatch('loadProjectDetails', id);
   },
-  async loadProjectStructure ({ state, commit }) {
+  async loadProjectStructure ({ state, commit }, force) {
     try {
       const structure = state.projectStructure;
-      if (isEmpty(structure)) {
+      if (isEmpty(structure) || force) {
         const { data } = await this.$axios.get('/api/projects/structure/');
         commit('SET_PROJECT_STRUCTURE', data);
       }
