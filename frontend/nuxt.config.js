@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import path from 'path';
 // import webpack from 'webpack';
 const result = dotenv.config();
 
@@ -155,6 +156,7 @@ const config = {
           exclude: /(node_modules)/
         });
       }
+      config.resolve.alias['leaflet'] = path.join(__dirname, 'node_modules/leaflet');
       // config.plugins.push(new bundlebuddy());
     }
   }
