@@ -4,7 +4,7 @@
       :value="value"
       type="text"
       placeholder="http://"
-      @change="changeHandler"
+      @input="changeHandler"
     />
   </div>
 </template>
