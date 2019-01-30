@@ -29,6 +29,12 @@ const MapMixin = {
       mapProjects: 'landing/getProjectsMap',
       currentZoom: 'landing/getCurrentZoom'
     }),
+    tileServer () {
+      if (this.$i18n.locale === 'ar') {
+        return 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png?lang=ar';
+      }
+      return 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
+    },
     activeCountry: {
       get () {
         return this.getActiveCountry;
