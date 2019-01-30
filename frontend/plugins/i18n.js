@@ -5,8 +5,19 @@ Vue.component('translate', TranslateWrapper);
 
 Vue.mixin({
   methods: {
-    $gettext (word, parameters) {
-      return this.$t(word, parameters);
+    $gettext (word, parameters, debug) {
+      let translated = this.$t(word, parameters);
+      if (debug) {
+        console.log(this.$i18n.messages[this.$i18n.locale][word]);
+        console.log(this.$te(word));
+        console.log(`${word} => ${translated}`, parameters);
+      }
+      if (!this.$te(word) && parameters) {
+        for (let k in parameters) {
+          translated = translated.replace(`{${k}}`, parameters[k]);
+        }
+      }
+      return translated;
     }
   }
 });
