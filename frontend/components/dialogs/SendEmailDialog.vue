@@ -11,7 +11,7 @@
     <el-form
       @submit.native.prevent
     >
-      <el-form-item :label="$gettext('Email addresses') + ` (${rows})` | translate">
+      <el-form-item :label="emailAddressString($row)">
         <el-input
           ref="emailArea"
           v-model="selectable"
@@ -81,6 +81,9 @@ export default {
     }
   },
   methods: {
+    emailAddressString (rows) {
+      return this.$gettext('Email addresses ({rows})', { rows });
+    },
     copy () {
       const area = this.$refs.emailArea.$el.querySelectorAll('textarea')[0];
       area.select();

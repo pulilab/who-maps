@@ -8,7 +8,7 @@
       v-for="(donor) in donors"
       ref="collapsible"
       :key="donor.id"
-      :title="$gettext('{name} custom fields', {name: donor.name}) | translate"
+      :title="customFieldsName(donor.name)"
     >
       <custom-field
         v-for="(field, index) in donor.donor_questions"
@@ -60,6 +60,9 @@ export default {
     }
   },
   methods: {
+    customFieldsName (name) {
+      return this.$gettext('{name} custom fields', { name });
+    },
     async validate () {
       if (this.$refs.collapsible) {
         this.$refs.collapsible.forEach(c => c.expandCard());
