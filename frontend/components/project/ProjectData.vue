@@ -193,7 +193,7 @@
         <collapsible-card
           v-if="countryQuestions && countryQuestions.length > 0"
           id="countrycustom"
-          :title="$gettext('{name} custom fields', {name: country.name}) | translate"
+          :title="customFieldsName(country.name)"
         >
           <custom-readonly-field
             v-for="question in countryQuestions"
@@ -212,7 +212,7 @@
           <collapsible-card
             v-for="donor in donors"
             :key="donor.id"
-            :title="$gettext('{name} custom fields', {name: donor.name}) | translate"
+            :title="customFieldsName(donor.name)"
           >
             <custom-readonly-field
               v-for="question in donor.donor_questions"
@@ -312,6 +312,11 @@ export default {
     },
     investedList () {
       return [this.$gettext('No, they have not yet contributed'), this.$gettext('Yes, they are contributing in-kind people or time'), this.$gettext('Yes, there is a financial contribution through MOH budget')];
+    }
+  },
+  methods: {
+    customFieldsName (name) {
+      return this.$gettext('{name} custom fields', { name });
     }
   }
 };

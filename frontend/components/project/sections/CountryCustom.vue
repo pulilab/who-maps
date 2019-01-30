@@ -6,7 +6,7 @@
   >
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('{name} custom fields', {name: country.name}) | translate"
+      :title="customFieldsName(country.name)"
     >
       <custom-field
         v-for="(field, index) in countryQuestions"
@@ -63,6 +63,9 @@ export default {
     }
   },
   methods: {
+    customFieldsName (name) {
+      return this.$gettext('{name} custom fields', { name });
+    },
     async validate () {
       if (this.$refs.collapsible) {
         this.$refs.collapsible.expandCard();

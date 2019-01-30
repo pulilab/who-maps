@@ -141,13 +141,13 @@ export const actions = {
     if (data.draft) {
       const draft = { ...clean, ...apiReadParser(data.draft) };
       countriesToFetch.add(draft.country);
-      donorsToFetch.add(...draft.donors);
+      draft.donors.forEach(d => donorsToFetch.add(d));
       commit('INIT_PROJECT', draft);
     }
     if (data.published) {
       const published = { ...clean, ...apiReadParser(data.published) };
       countriesToFetch.add(published.country);
-      donorsToFetch.add(...published.donors);
+      published.donors.forEach(d => donorsToFetch.add(d));
       commit('SET_PUBLISHED', Object.freeze(published));
     }
     await Promise.all([

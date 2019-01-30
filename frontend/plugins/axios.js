@@ -1,7 +1,7 @@
-export default function ({ $axios, store: { state, getters, dispatch }, redirect }) {
+export default function ({ $axios, store: { getters, dispatch }, redirect, app: { i18n } }) {
   $axios.onRequest(config => {
     const token = getters['user/getToken'];
-    const lng = state.i18n.locale;
+    const lng = i18n.locale;
     if (token) {
       config.headers['Authorization'] = `Token ${token}`;
     }

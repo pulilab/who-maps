@@ -316,7 +316,7 @@ export default {
       if (this.usePublishRules && this.start_date && this.end_date && isAfter(this.start_date, this.end_date)) {
         return this.$gettext('End date must be after Start date');
       }
-      return null;
+      return '';
     }
   },
   methods: {
@@ -324,8 +324,9 @@ export default {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate(),
-        Promise.resolve(this.endDateError === undefined)
+        Promise.resolve(this.endDateError === '')
       ]);
+      console.log('General overview published validation', validations);
       return validations.reduce((a, c) => a && c, true);
     },
     async validateDraft () {

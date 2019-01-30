@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { LMap, LTileLayer, LMarker, LTooltip, LPopup, LControlZoom, LGeoJson, LFeatureGroup, L } from 'vue2-leaflet';
-import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster';
+import CustomMarkerCluster from '@/components/common/map/CustomMarkerCluster';
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -16,6 +16,6 @@ Vue.component('l-marker', LMarker);
 Vue.component('l-tooltip', LTooltip);
 Vue.component('l-popup', LPopup);
 Vue.component('l-control-zoom', LControlZoom);
-Vue.component('v-marker-cluster', Vue2LeafletMarkerCluster);
+Vue.component('custom-marker-cluster', CustomMarkerCluster);
 Vue.component('l-geo-json', LGeoJson);
 Vue.component('l-feature-group', LFeatureGroup);
