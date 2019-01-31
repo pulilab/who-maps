@@ -203,7 +203,7 @@ class SearchTests(SetupTests):
 
     def test_filter_hsc(self):
         url = reverse("search-project-list")
-        data = {"hsc": HSCChallenge.objects.get(id=1).group.id}
+        data = {"hsc": HSCChallenge.objects.get(id=1).id}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
