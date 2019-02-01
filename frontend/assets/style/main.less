@@ -1233,3 +1233,36 @@ fieldset {
     }
   }
 }
+
+[dir="rtl"] {
+
+  .el-select {
+    .el-select__tags {
+      padding-right: 15px;
+      .el-tag__close {
+        right: 2px;
+      }
+    }
+    .el-input__inner {
+      padding-right: 15px;
+    }
+  }
+
+  .el-input__prefix {
+    left: auto;
+    right: 5px;
+  }
+
+  .el-input__suffix {
+    right: auto;
+    left: -4px;
+    .el-select__caret:not(.el-icon-) {
+      border-right: 1px solid @colorGray;
+    }
+  }
+
+  .el-input-group__prepend {
+    border-left: none;
+    border-right: 1px solid @colorGray;
+  }
+}
