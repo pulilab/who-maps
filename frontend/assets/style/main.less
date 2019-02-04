@@ -1328,4 +1328,33 @@ fieldset {
     }
   }
 
+  .el-dialog {
+    .el-dialog__headerbtn {
+      right: auto;
+      left: 30px;
+    }
+
+    .el-dialog__footer {
+      .PrimaryButtons button {
+        float: left;
+      }
+      .SecondaryButtons button {
+        float: right;
+      }
+    }
+  }
+
+  .el-form--label-left .el-form-item {
+    display: flex;
+    flex-direction: row;
+    .el-form-item__label {
+      padding-right: 0;
+      padding-left: 12px;
+    }
+    .el-form-item__content {
+      margin-left: 0px !important;
+    }
+  }
+
+
 }
