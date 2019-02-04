@@ -77,7 +77,8 @@ class StaticDataView(GenericAPIView):
     flag_mapping = {'en': 'gb.png',
                     'fr': 'fr.png',
                     'es': 'es.png',
-                    'pt': 'pt.png'}
+                    'pt': 'pt.png',
+                    'ar': 'sa.png'}
 
     def get(self, request):
         data = {}
