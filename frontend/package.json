@@ -69,7 +69,8 @@
     "vue-scroll-class": "^1.2.3",
     "vue2-leaflet": "2.0.0-beta.0",
     "vuedraggable": "^2.16.0",
-    "vuex-geolocation": "^1.1.0"
+    "vuex-geolocation": "^1.1.0",
+    "xlsx": "^0.14.1"
   },
   "devDependencies": {
     "angular-gettext-cli": "^1.2.0",
