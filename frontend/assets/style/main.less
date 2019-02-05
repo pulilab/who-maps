@@ -1375,4 +1375,46 @@ fieldset {
     transform: rotate(180deg) translateX(10px);
   }
 
+  .MainTable .Pagination .el-pagination {
+    .el-pagination__sizes {
+      float: right;
+      .el-input__suffix {
+        right: auto;
+        left: -4px;
+      }
+      .el-input__inner {
+        padding-left: 35px;
+        padding-right: 8px;
+      }
+    }
+    .btn-prev,
+    .PageCounter,
+    .btn-next {
+      float: left;
+      i.el-icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .el-table__fixed {
+    right: 0;
+  }
+
+  // .el-table__fixed-body-wrapper,
+  // .el-table__fixed-header-wrapper {
+  //   left: is dynamically calculated by JS in MainTable.vue / alignFixedWidthForRTL method
+  // }
+
+  .MainTable .el-table td > .cell,
+  .MainTable .el-table th > .cell {
+    text-align: right;
+    .caret-wrapper {
+      right: auto;
+      left: 4px;
+    }
+    .el-checkbox__inner {
+      transform: translateX(4px);
+    }
+  }
 }
