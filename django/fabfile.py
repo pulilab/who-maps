@@ -226,7 +226,7 @@ def import_geodata():
 def rebuild_db():
     local("docker-compose exec postgres dropdb -U postgres postgres")
     local("docker-compose exec postgres createdb -U postgres postgres")
-    local("cat ./dump.sql | docker-compose exec postgres psql -Upostgres")
+    local("cat ./dump.sql | docker exec -i $(docker-compose ps -q postgres) psql -Upostgres")
 
 
 def backup_db():

@@ -1,10 +1,11 @@
 import Vue from 'vue';
-import { LMap, LTileLayer, LMarker, LTooltip, LPopup, LControlZoom, LGeoJson, LFeatureGroup, L } from 'vue2-leaflet';
+import { LMap, LTileLayer, LMarker, LTooltip, LPopup, LControlZoom, LGeoJson, LFeatureGroup } from 'vue2-leaflet';
+import { Icon } from 'leaflet';
 import CustomMarkerCluster from '@/components/common/map/CustomMarkerCluster';
 
-delete L.Icon.Default.prototype._getIconUrl;
+delete Icon.Default.prototype._getIconUrl;
 
-L.Icon.Default.mergeOptions({
+Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
