@@ -9,7 +9,7 @@ from django.dispatch import receiver
 from django.http import QueryDict
 
 from core.models import ExtendedModel
-from project.models import Project, HealthFocusArea, HSCChallenge, DigitalStrategy
+from project.models import Project, HealthFocusArea, DigitalStrategy
 from country.models import Country, Donor
 from user.models import Organisation
 
@@ -33,7 +33,7 @@ class ProjectSearch(ExtendedModel):
         "sw": "software",  # eg: sw=1&sw=2
         "dhi": "dhi_categories",  # eg: dhi=1&dhi=2
         "hfa": "hfa_categories",  # eg: hfa=1&hfa=2
-        "hsc": "hsc_categories",  # eg: hsc=1&hsc=2
+        "hsc": "hsc",  # eg: hsc=1&hsc=2
         "his": "his",  # eg: his=1&his=2
         "region": "country__region",  # eg: region=3
         "gov": "project__data__government_investor",  # false=> gov=0 ; true=> gov=1&gov=2
@@ -51,7 +51,7 @@ class ProjectSearch(ExtendedModel):
     software = ArrayField(models.IntegerField(), default=list)
     coverage = ArrayField(models.CharField(max_length=64), default=list)
     dhi_categories = ArrayField(models.IntegerField(), default=list)
-    hsc_categories = ArrayField(models.IntegerField(), default=list)
+    hsc = ArrayField(models.IntegerField(), default=list)
     hfa_categories = ArrayField(models.IntegerField(), default=list)
     his = ArrayField(models.IntegerField(), default=list)
 
@@ -142,9 +142,8 @@ class ProjectSearch(ExtendedModel):
                                                       *[platform['strategies'] for platform in
                                                         project.data.get("platforms", []) if
                                                         platform.get('strategies')]))])))
-            self.hsc_categories = list(set(filter(None.__ne__,
-                                                  [HSCChallenge.get_parent_id(int(id), 'group') for id in
-                                                   project.data.get("hsc_challenges", [])])))
+            self.hsc = project.data.get('hsc_challenges')
+
             self.hfa_categories = list(set(filter(None.__ne__,
                                                   [HealthFocusArea.get_parent_id(int(id), 'health_category') for
                                                    id in project.data.get("health_focus_areas", [])])))
