@@ -1417,4 +1417,47 @@ fieldset {
       transform: translateX(4px);
     }
   }
+
+  .ExtendedProjectCard {
+    .FirstRow {
+      padding-left: 50px;
+      padding-right: 30px;
+
+      .CountryName {
+        margin-left: 0;
+        margin-right: 10px;
+      }
+
+      .OrganisationItem::before {
+        right: -10px;
+      }
+
+      .ProjectMeta {
+
+        border-left: none !important;
+        border-right: 1px solid rgb(214, 214, 214);
+
+        .ProjectLegend {
+          right: auto !important;
+          left: 26px;
+        }
+      }
+    }
+
+    .SecondRow {
+      .ProjectCardActions .NuxtLink {
+        margin-left: auto;
+        margin-right: 40px;
+        svg {
+          margin-left: 6px;
+          margin-right: auto;
+          &.fa-arrow-right,
+          &.fa-arrow {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+
 }
