@@ -70,7 +70,7 @@ export default {
       return ['start_date', 'end_date', 'implementation_dates'].includes(this.column);
     },
     isTextArea () {
-      return ['geographic_scope', 'implementation_overview'].includes(this.column);
+      return ['geographic_scope', 'implementation_overview', 'name', 'contact_name', 'contact_email', 'mobile_application', 'wiki', 'repository'].includes(this.column);
     },
     isForced () {
       return ['country', 'donors'].includes(this.column);
