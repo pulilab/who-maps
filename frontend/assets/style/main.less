@@ -1363,7 +1363,6 @@ fieldset {
   .el-popover.CustomPopover .CustomPopoverList ul li .fa-check {
     right: auto;
     left: 12px;
-    // margin-right: 2px;
   }
 
   .el-popover.CustomPopover .CustomPopoverList ul li .DeleteButton {
@@ -1458,6 +1457,81 @@ fieldset {
         }
       }
     }
+  }
+
+  .TopBar {
+    .AuthLinks > div {
+      float: right;
+    }
+    .fa-plus-circle,
+    .fa-user-circle {
+      margin-left: 6px;
+      margin-right: auto;
+    }
+    .ButtonPopper .svg-inline--fa.fa-caret-down {
+      margin-left: auto;
+      margin-right: 10px;
+    }
+  }
+
+  .DropdownContent {
+
+    .UserInfoSection {
+      .CountryName {
+        margin-left: auto;
+        margin-right: 8px;
+      }
+    }
+    .MenuIcon {
+      text-align: right !important;
+      .fa-user-edit {
+        transform: scale(-1, 1);
+      }
+    }
+  }
+
+  .SearchPopper {
+    right: auto;
+    left: 40px;
+    .fa-arrow-right {
+      transform: scale(-1, 1);
+    }
+    .fa-search {
+      float: left !important;
+    }
+    .fa-angle-right {
+      margin-left: auto;
+      margin-right: 8px;
+      transform: scale(-1, 1);
+    }
+    .ProjectName {
+      padding-left: 12px;
+      padding-right: 0px;
+    }
+    .Country {
+      padding-left: 21px;
+      padding-right: 0px !important;
+      .CountryName {
+        margin-left: 0px !important;
+        margin-right: 6px;
+      }
+      &::after {
+        right: auto !important;
+        left: 10px;
+      }
+    }
+    .FoundIn > div > * {
+      float: right !important;
+      &.fa-search {
+        margin-left: 4px;
+        margin-right: 0;
+        transform: translate(0, 3px);
+      }
+    }
+  }
+
+  .Breadcrumb .Sep {
+    transform: scale(-1, 1);
   }
 
 }
