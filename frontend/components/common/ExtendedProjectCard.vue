@@ -84,7 +84,7 @@
             </translate>
           </div>
           <div
-            v-if="project.isPublished"
+            v-if="projectData.approved"
             class="ProjectStatus ApprovedByCountry"
           >
             <translate key="approved">
