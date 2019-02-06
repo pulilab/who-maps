@@ -1310,7 +1310,7 @@ fieldset {
   }
 
   .FilterSwitch .SwitchComponent .SwitchHandler {
-    padding-right: auto;
+    padding-right: 0;
     padding-left: 10px;
   }
 
@@ -1368,6 +1368,10 @@ fieldset {
   .el-popover.CustomPopover .CustomPopoverList ul li .DeleteButton {
     right: auto;
     left: 32px;
+  }
+
+  .el-popover.CustomPopover .CustomPopoverActions .PrimaryButton {
+    float: left;
   }
 
   .FilterDialog .fa-chevron-right {
@@ -1530,8 +1534,15 @@ fieldset {
     }
   }
 
-  .Breadcrumb .Sep {
-    transform: scale(-1, 1);
+  .ActionBar .Sep {
+    transform: rotate(180deg) !important;
+  }
+
+  .ProjectLegendContent {
+    .svg-inline--fa {
+      margin-left: 6px !important;
+      margin-right: 20px !important;
+    }
   }
 
 }
