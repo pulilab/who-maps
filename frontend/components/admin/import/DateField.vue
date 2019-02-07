@@ -1,6 +1,7 @@
 <template>
   <el-date-picker
     v-model="internalValue"
+    :disabled="disabled"
     class="ImportDatePicker"
     align="center"
     size="small"
@@ -17,6 +18,10 @@ export default {
     value: {
       type: String,
       default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="['SmartCell', {'Disabled': isForced}]"
+    :class="['SmartCell', {'Disabled': isDisabled}]"
     @click="openDialog"
   >
     <span v-if="!column">
@@ -9,10 +9,12 @@
     <date-field
       v-if="isDate"
       v-model="internalValue"
+      :disabled="disabled"
     />
     <el-input
       v-if="isTextArea"
       v-model="internalValue"
+      :disabled="disabled"
       type="textarea"
       :rows="6"
     />
@@ -49,6 +51,10 @@ export default {
     column: {
       type: String,
       default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -74,6 +80,9 @@ export default {
     },
     isForced () {
       return ['country', 'donors'].includes(this.column);
+    },
+    isDisabled () {
+      return this.isForced || this.disabled;
     },
     parsedValue () {
       const result = { names: [this.value], ids: [this.value] };
@@ -111,7 +120,7 @@ export default {
   },
   methods: {
     openDialog () {
-      if (this.isDate || this.isForced || this.isTextArea) {
+      if (this.isDate || this.isDisabled || this.isTextArea) {
         return;
       }
       if (this.column) {
@@ -152,6 +161,12 @@ export default {
     },
     findProjectCollectionValue () {
       return this.countries.find(c => c.name === this.value);
+    },
+    apiValue () {
+      const isMultiple = ['donors', 'implementing_partners'];
+      const isIds = ['donors', 'country', 'organisation'];
+      const idsOrNames = isIds.includes(this.column) ? this.parsedValue.ids : this.parsedValue.names;
+      return isMultiple.includes(this.column) ? idsOrNames : idsOrNames[0];
     }
   }
 };
