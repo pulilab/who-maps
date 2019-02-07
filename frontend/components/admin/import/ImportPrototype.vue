@@ -111,6 +111,10 @@
           class="Row"
         >
           <div
+            v-if="headers.length > 0"
+            class="Column Thin"
+          />
+          <div
             v-for="(header, index) in headers"
             :key="index"
             class="Column"
@@ -137,15 +141,39 @@
           :key="index"
           class="Row"
         >
-          <SmartCell
+          <div class="Column Thin">
+            <el-button
+              :disabled="globalErrors.length > 0 || !!row.id"
+              icon="el-icon-check"
+              type="primary"
+              circle
+              @click="save(`row_${index}`, row, index)"
+            />
+            <a
+              v-if="row.id"
+              :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.id, organisation: $route.params.organisation}})"
+              target="_blank"
+              class="NuxtLink IconLeft"
+            >
+              <fa icon="share-square" />
+            </a>
+            </el-button>
+          </div>
+          <template
             v-for="(col, key) in row"
-            :key="index + key"
-            :value="col"
-            :column="columnFinder(key)"
-            class="Column"
-            @change="updateValue(index, key, $event)"
-            @openDialog="openDialogHandler(index, key, $event)"
-          />
+          >
+            <SmartCell
+              v-if="col !== 'id'"
+              :ref="`row_${index}`"
+              :key="index + key"
+              :disabled="!!row.id"
+              :value="col"
+              :column="columnFinder(key)"
+              class="Column"
+              @change="updateValue(index, key, $event)"
+              @openDialog="openDialogHandler(index, key, $event)"
+            />
+          </template>
         </div>
       </div>
     </template>
@@ -159,6 +187,8 @@ import DonorSelector from '@/components/project/DonorSelector';
 import OrganisationSelect from '@/components/common/OrganisationSelect';
 import CountrySelect from '@/components/common/CountrySelect';
 import { projectFields } from '@/utilities/projects';
+import { apiWriteParser } from '@/utilities/api';
+import { mapGetters } from 'vuex';
 
 export default {
 
@@ -185,6 +215,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      userProfile: 'user/getProfile'
+    }),
     dialogVisible: {
       get () {
         return !!this.dialogData;
@@ -196,7 +229,7 @@ export default {
     },
     globalErrors () {
       const result = [];
-      const draftRequireds = ['name', 'country'];
+      const draftRequireds = ['name', 'country', 'organisation'];
       draftRequireds.forEach(dr => {
         if (!this.headers.some(h => h.selected === dr)) {
           result.push(`Please select ${dr} column`);
@@ -270,9 +303,23 @@ export default {
     },
     convertSheet (sheetName) {
       this.$nuxt.$loading.start('xlsx_convert');
-      this.imported = this._xlsx.utils.sheet_to_json(this._workbook.Sheets[sheetName], { defval: '' }).slice(0, 2);
+      this.imported = this._xlsx.utils.sheet_to_json(this._workbook.Sheets[sheetName], { defval: '' }).slice(0, 20);
       this.prepareHeaders(this.imported[0]);
       this.$nuxt.$loading.finish('xlsx_convert');
+    },
+    async save (row, dataRow, index) {
+      this.$nuxt.$loading.start('save');
+      const filled = this.$refs[row].filter(sc => sc.column);
+      const result = filled.reduce((a, c) => {
+        a[c.column] = c.apiValue();
+        return a;
+      }, projectFields());
+      result.team = [this.userProfile.id];
+      const parsed = apiWriteParser(result);
+      const { data } = await this.$axios.post(`api/projects/draft/${this.country}/`, parsed);
+      dataRow.id = data.id;
+      this.$set(this.imported, index, dataRow);
+      this.$nuxt.$loading.finish('save');
     }
   }
 };
@@ -305,6 +352,9 @@ export default {
 
       &.Wide {
         flex: 1 0 100%;
+      }
+      &.Thin {
+        flex: 0 0 50px;
       }
       &.Fluid {
         flex: 1;
