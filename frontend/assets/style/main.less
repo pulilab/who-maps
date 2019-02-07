@@ -1363,7 +1363,6 @@ fieldset {
   .el-popover.CustomPopover .CustomPopoverList ul li .fa-check {
     right: auto;
     left: 12px;
-    // margin-right: 2px;
   }
 
   .el-popover.CustomPopover .CustomPopoverList ul li .DeleteButton {
@@ -1373,6 +1372,166 @@ fieldset {
 
   .FilterDialog .fa-chevron-right {
     transform: rotate(180deg) translateX(10px);
+  }
+
+  .MainTable .Pagination .el-pagination {
+    .el-pagination__sizes {
+      float: right;
+      .el-input__suffix {
+        right: auto;
+        left: -4px;
+      }
+      .el-input__inner {
+        padding-left: 35px;
+        padding-right: 8px;
+      }
+    }
+    .btn-prev,
+    .PageCounter,
+    .btn-next {
+      float: left;
+      i.el-icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .el-table__fixed {
+    right: 0;
+  }
+
+  // .el-table__fixed-body-wrapper,
+  // .el-table__fixed-header-wrapper {
+  //   left: is dynamically calculated by JS in MainTable.vue / alignFixedWidthForRTL method
+  // }
+
+  .MainTable .el-table td > .cell,
+  .MainTable .el-table th > .cell {
+    text-align: right;
+    .caret-wrapper {
+      right: auto;
+      left: 4px;
+    }
+    .el-checkbox__inner {
+      transform: translateX(4px);
+    }
+  }
+
+  .ExtendedProjectCard {
+    .FirstRow {
+      padding-left: 50px;
+      padding-right: 30px;
+
+      .CountryName {
+        margin-left: 0;
+        margin-right: 10px;
+      }
+
+      .OrganisationItem::before {
+        right: -10px;
+      }
+
+      .ProjectMeta {
+
+        border-left: none !important;
+        border-right: 1px solid rgb(214, 214, 214);
+
+        .ProjectLegend {
+          right: auto !important;
+          left: 26px;
+        }
+      }
+    }
+
+    .SecondRow {
+      .ProjectCardActions .NuxtLink {
+        margin-left: auto;
+        margin-right: 40px;
+        svg {
+          margin-left: 6px;
+          margin-right: auto;
+          &.fa-arrow-right,
+          &.fa-arrow {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+
+  .TopBar {
+    .AuthLinks > div {
+      float: right;
+    }
+    .fa-plus-circle,
+    .fa-user-circle {
+      margin-left: 6px;
+      margin-right: auto;
+    }
+    .ButtonPopper .svg-inline--fa.fa-caret-down {
+      margin-left: auto;
+      margin-right: 10px;
+    }
+  }
+
+  .DropdownContent {
+
+    .UserInfoSection {
+      .CountryName {
+        margin-left: auto;
+        margin-right: 8px;
+      }
+    }
+    .MenuIcon {
+      text-align: right !important;
+      .fa-user-edit {
+        transform: scale(-1, 1);
+      }
+    }
+  }
+
+  .SearchPopper {
+    right: auto;
+    left: 40px;
+    .fa-arrow-right {
+      transform: scale(-1, 1);
+    }
+    .fa-search {
+      float: left !important;
+    }
+    .fa-angle-right {
+      margin-left: auto;
+      margin-right: 8px;
+      transform: scale(-1, 1);
+    }
+    .ProjectName {
+      padding-left: 12px;
+      padding-right: 0px;
+    }
+    .Country {
+      padding-left: 21px;
+      padding-right: 0px !important;
+      .CountryName {
+        margin-left: 0px !important;
+        margin-right: 6px;
+      }
+      &::after {
+        right: auto !important;
+        left: 10px;
+      }
+    }
+    .FoundIn > div > * {
+      float: right !important;
+      &.fa-search {
+        margin-left: 4px;
+        margin-right: 0;
+        transform: translate(0, 3px);
+      }
+    }
+  }
+
+  .Breadcrumb .Sep {
+    transform: scale(-1, 1);
   }
 
 }
