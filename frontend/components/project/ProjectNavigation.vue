@@ -287,10 +287,20 @@ export default {
     },
     setNavigationBoxLeftStyle () {
       const leftSide = document.querySelector('#general');
+      const lang = this.$nuxt.$i18n.locale;
+      const rtl = lang === 'ar';
+
       if (leftSide) {
-        const leftWidth = leftSide.getBoundingClientRect().right;
-        if (leftWidth) {
-          this.$el.style.left = `${leftWidth + 20}px`;
+        if (rtl) {
+          const generalLeftPos = leftSide.getBoundingClientRect().left;
+          if (generalLeftPos) {
+            this.$el.style.left = `${generalLeftPos - 320}px`;
+          }
+        } else {
+          const generalRightPos = leftSide.getBoundingClientRect().right;
+          if (generalRightPos) {
+            this.$el.style.left = `${generalRightPos + 20}px`;
+          }
         }
       }
     }
