@@ -409,24 +409,113 @@
     margin-right: 0 !important;
   }
 
-  .ProjectNavigation .Stepper ul {
-    &::after {
-      left: auto;
-      right: 45px;
-    }
-
-    > li {
-      > button {
-        padding-left: 20px;
-        padding-right: 70px;
-        .Step {
-          left: auto;
-          right: 30px;
-          svg {
-            transform: translate(-50%, -50%) scale(-1, 1) !important;
+  .ProjectNavigation {
+    .Stepper ul {
+      &::after {
+        left: auto;
+        right: 45px;
+      }
+      > li {
+        > button {
+          padding-left: 20px;
+          padding-right: 70px;
+          .Step {
+            left: auto;
+            right: 30px;
+            svg {
+              transform: translate(-50%, -50%) scale(-1, 1) !important;
+            }
           }
         }
       }
     }
+    .DraftButton,
+    .PublishedButton {
+      float: right;
+    }
   }
+
+  .CollapsibleCard {
+    .el-card__header {
+      padding-left: 20px !important;
+      padding-right: 40px !important;
+    }
+    .CollapsibleHeader {
+      .CardTitle {
+        float: right;
+      }
+      .CollapseToggle {
+        float: left;
+      }
+    }
+  }
+
+  .ContentContainer {
+    padding: 40px 40px 60px 80px !important;
+
+    .Hint {
+      padding-left: 40px;
+      padding-right: 0 !important;
+      svg {
+        margin-left: 5px !important;
+        margin-right: 0 !important;
+      }
+    }
+
+    .ItemIndent {
+      border-right: 5px solid rgb(214, 214, 214);
+      border-left-width: 0px !important;
+      padding: 0 30px 10px 0 !important;
+      .el-col {
+        float: right;
+      }
+    }
+
+    .CoverageArea {
+      label.el-radio {
+        margin-left: 30px;
+        margin-right: 0px;
+      }
+    }
+
+    .CoverageSubtitle {
+      padding: 10px 20px 0 0 !important;
+      svg {
+        left: auto;
+        right: 0px;
+        transform: scale(-1, 1);
+      }
+    }
+
+    .ImplementingPartners {
+      .el-col {
+        float: right !important;
+      }
+      .AddRmButtons {
+        padding: 0 30px 0 0 !important;
+      }
+    }
+
+    .LinkField {
+      direction: ltr;
+    }
+
+    .CheckboxAndLink {
+      .el-col {
+        float: right;
+      }
+      .el-input {
+        direction: ltr;
+      }
+      .el-checkbox__label {
+        padding: 0 10px 0 30px !important;
+      }
+    }
+    .ThreePerRow {
+      .el-checkbox__label {
+        padding: 0 10px 0 30px !important;
+      }
+    }
+  }
+
 }
