@@ -414,6 +414,7 @@ export default {
     background-color: #F5F5F5;
     font-size: @fontSizeSmall;
     line-height: 16px;
+    box-shadow: inset 0 0 5px 1px rgba(0,0,0,.12);
 
     .Container {
       display: flex;
