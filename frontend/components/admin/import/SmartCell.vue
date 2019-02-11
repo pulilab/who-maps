@@ -173,9 +173,23 @@ export default {
 </script>
 
 <style lang="less">
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
+
   .SmartCell {
     &.Disabled {
       cursor: not-allowed;
+    }
+
+    .el-textarea {
+      textarea {
+        font-size: @fontSizeSmall;
+      }
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
     }
   }
 </style>

@@ -4,7 +4,7 @@
     :disabled="disabled"
     :on-remove="handleChange"
     :on-change="handleChange"
-    :list-type="'picture'"
+    :list-type="listType"
     :file-list="files"
     class="FileUpload"
     action="doing it manually, so this prop isnt used, still needed"
@@ -45,6 +45,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    listType: {
+      type: String,
+      default: 'picture'
     }
   },
 
@@ -68,6 +72,7 @@ export default {
 
     .NoFile {
       padding-left: 30px;
+      font-size: @fontSizeBase;
       color: @colorTextMuted;
     }
   }

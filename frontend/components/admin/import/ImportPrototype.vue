@@ -17,28 +17,37 @@
         />
       </el-dialog>
 
-      <div
-        class="Container"
-      >
-        <div
-          class="Row"
-        >
-          <div class="Column Fluid">
-            Select Country
+      <el-card class="box-card">
+        <el-row type="flex">
+          <el-col :span="6">
+            <div class="Label">
+              Select Country
+            </div>
             <country-select
               v-model="country"
               :disabled="introDone"
             />
-          </div>
-          <div class="Column Fluid">
-            Select Investor
+          </el-col>
+          <el-col
+            :span="10"
+            :offset="1"
+          >
+            <div class="Label">
+              Select Investor
+            </div>
             <donor-selector
               v-model="donors"
               :disabled="introDone"
             />
-          </div>
-          <div class="Column Fluid">
-            Select Draft or Publish
+          </el-col>
+          <el-col
+            :span="6"
+            :offset="1"
+            class="DraftOrPublished"
+          >
+            <div class="Label">
+              Select Draft or Published
+            </div>
             <el-radio
               v-model="isDraftOrPublish"
               :disabled="introDone"
@@ -51,131 +60,142 @@
               :disabled="introDone"
               label="publish"
             >
-              Publish
+              Published
             </el-radio>
-          </div>
-          <div
-            v-if="country && isDraftOrPublish && !introDone"
-            class="Column Fluid"
+          </el-col>
+          <el-col
+            :span="2"
+            class="ConfirmSettings"
           >
-            <el-button @click="introDone = true">
+            <el-button
+              v-if="country && isDraftOrPublish && !introDone"
+              @click="introDone = true"
+            >
               Confirm
             </el-button>
-          </div>
-        </div>
+          </el-col>
+        </el-row>
 
         <div
           v-if="introDone"
-          class="Row"
+          class="XlsUpload"
         >
-          <div class="Column Wide">
+          <div>
             <file-upload
               :files="inputFile"
+              :list-type="'text'"
               @update:files="processFile"
             />
           </div>
         </div>
 
-        <div
+        <el-row
           v-if="sheets.length > 0"
-          class="Row"
+          type="flex"
         >
-          <div class="Column">
-            Select a sheet to import
-          </div>
-          <div
+          <el-col
             v-for="s in sheets"
             :key="s"
-            class="Column Fluid"
           >
             <el-button @click="convertSheet(s)">
               {{ s }}
             </el-button>
-          </div>
-        </div>
+          </el-col>
+        </el-row>
 
         <div
           v-if="imported && imported.length > 0"
-          class="Row"
+          class="GlobalErrors"
         >
-          <div
+          <el-tag
             v-for="error in globalErrors"
             :key="error"
-            class="Column Fuild Error"
+            type="danger"
           >
+            <fa icon="exclamation" />
             {{ error }}
-          </div>
+          </el-tag>
+          </el-tag>
         </div>
 
-        <div
-          class="Row"
-        >
-          <div
-            v-if="headers.length > 0"
-            class="Column Thin"
-          />
-          <div
-            v-for="(header, index) in headers"
-            :key="index"
-            class="Column"
-          >
-            <div>{{ header.title }} </div>
-            <div>
-              <el-select
-                v-model="header.selected"
-                filterable
-                @change="columnChange(header)"
+        <!-- Data table -->
+        <div class="ExportDataTable">
+          <div class="Container">
+            <div class="Row">
+              <div
+                v-if="headers.length > 0"
+                class="Column Thin"
+              />
+              <div
+                v-for="(header, index) in headers"
+                :key="index"
+                class="Column Header"
               >
-                <el-option
-                  v-for="item in fields"
-                  :key="item"
-                  :label="item"
-                  :value="item"
+                <div class="Title">
+                  {{ header.title }}
+                </div>
+                <div>
+                  <el-select
+                    v-model="header.selected"
+                    size="small"
+                    filterable
+                    @change="columnChange(header)"
+                  >
+                    <el-option
+                      v-for="item in fields"
+                      :key="item"
+                      :label="item"
+                      :value="item"
+                    />
+                  </el-select>
+                </div>
+              </div>
+            </div>
+
+            <div
+              v-for="(row, index) in imported"
+              :key="index"
+              class="Row"
+            >
+              <div class="Column Thin">
+                <el-button
+                  :disabled="globalErrors.length > 0 || !!row.id"
+                  icon="el-icon-check"
+                  type="primary"
+                  circle
+                  class="SaveButton"
+                  @click="save(`row_${index}`, row, index)"
                 />
-              </el-select>
+                <a
+                  v-if="row.id"
+                  :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.id, organisation: $route.params.organisation}})"
+                  target="_blank"
+                  class="NuxtLink IconLeft"
+                >
+                  <fa icon="share-square" />
+                </a>
+                </el-button>
+              </div>
+              <template
+                v-for="(col, key) in row"
+              >
+                <SmartCell
+                  v-if="col !== 'id'"
+                  :ref="`row_${index}`"
+                  :key="index + key"
+                  :disabled="!!row.id"
+                  :value="col"
+                  :column="columnFinder(key)"
+                  class="Column"
+                  @change="updateValue(index, key, $event)"
+                  @openDialog="openDialogHandler(index, key, $event)"
+                />
+              </template>
             </div>
           </div>
         </div>
-        <div
-          v-for="(row, index) in imported"
-          :key="index"
-          class="Row"
-        >
-          <div class="Column Thin">
-            <el-button
-              :disabled="globalErrors.length > 0 || !!row.id"
-              icon="el-icon-check"
-              type="primary"
-              circle
-              @click="save(`row_${index}`, row, index)"
-            />
-            <a
-              v-if="row.id"
-              :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.id, organisation: $route.params.organisation}})"
-              target="_blank"
-              class="NuxtLink IconLeft"
-            >
-              <fa icon="share-square" />
-            </a>
-            </el-button>
-          </div>
-          <template
-            v-for="(col, key) in row"
-          >
-            <SmartCell
-              v-if="col !== 'id'"
-              :ref="`row_${index}`"
-              :key="index + key"
-              :disabled="!!row.id"
-              :value="col"
-              :column="columnFinder(key)"
-              class="Column"
-              @change="updateValue(index, key, $event)"
-              @openDialog="openDialogHandler(index, key, $event)"
-            />
-          </template>
-        </div>
-      </div>
+        <!-- / Data table -->
+      </el-card>
     </template>
   </div>
 </template>
@@ -328,42 +348,129 @@ export default {
 <style lang="less">
 @import "~assets/style/variables.less";
 @import "~assets/style/mixins.less";
+
 .ImportPrototype {
   min-width: @appWidthMinLimit;
-  max-width: @appWidthMaxLimit - 10px;
-  height: 80vh;
+  min-height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @appFooterHeight);
+  padding: 40px 40px;
+  box-sizing: border-box;
   overflow: auto;
 
-  .Container {
-    display: flex;
-    flex-flow: column wrap;
+  .Label {
+    display: block;
+    margin: 0 0 15px;
+    color: @colorTextPrimary;
+    font-size: @fontSizeBase;
+    font-weight: 700;
+  }
 
-    .Row {
-      flex: 1 100%;
-      display: flex;
-      flex-direction: row
+  .CountrySelector {
+    width: 100%;
+  }
+
+  .DraftOrPublished {
+    .el-radio {
+      line-height: 40px;
     }
-    .Column {
-      flex: 0 0 200px;
-      max-height: 200px;
-      padding: 4px;
-      border: 1px solid black;
-      overflow-y: auto;
+  }
 
-      &.Wide {
-        flex: 1 0 100%;
+  .ConfirmSettings {
+    align-self: flex-end;
+    text-align: right;
+    min-width: 120px;
+  }
+
+  .XlsUpload {
+    width: 50%;
+    margin-top: 20px;
+
+    .el-upload {
+      float: none;
+    }
+
+    .el-upload-list {
+      margin-bottom: 20px;
+    }
+  }
+
+  // Fake data table
+
+  .GlobalErrors {
+    padding: 40px 0 20px;
+
+    .el-tag {
+      margin-right: 10px;
+
+      .svg-inline--fa {
+        margin-right: 3px;
       }
-      &.Thin {
-        flex: 0 0 50px;
-      }
-      &.Fluid {
-        flex: 1;
+    }
+  }
+
+  .ExportDataTable {
+    width: 100%;
+    margin: 0;
+    overflow-x: auto;
+    background-color: #F5F5F5;
+    font-size: @fontSizeSmall;
+    line-height: 16px;
+
+    .Container {
+      display: flex;
+      flex-flow: column wrap;
+
+      .Row {
+        flex: 1 100%;
+        display: flex;
+        flex-direction: row;
+
+        &:last-child {
+            border-right: 0;
+
+          .Column {
+            border-bottom: 0;
+          }
+        }
       }
 
-      &.Error {
-        background-color: red;
-        color: white;
-        font-weight: bold;
+      .Column {
+        flex: 0 0 200px;
+        max-height: 200px;
+        padding: 10px;
+        border: solid @colorGrayLight;
+        border-width: 0 1px 1px 0;
+        overflow-y: auto;
+
+        &.Header {
+          padding-bottom: 0;
+        }
+
+        &.Wide {
+          flex: 1 0 100%;
+        }
+
+        &.Thin {
+          flex: 0 0 50px;
+        }
+
+        &.Fluid {
+          flex: 1;
+        }
+
+        &.Error {
+          background-color: @colorDanger;
+          color: @colorWhite;
+          font-weight: 700;
+        }
+
+        .Title {
+          margin-bottom: 10px;
+          font-weight: 700;
+        }
+      }
+
+      .SaveButton {
+        margin-left: 6px;
       }
     }
   }

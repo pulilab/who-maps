@@ -107,6 +107,10 @@ a {
   }
 }
 
+.SubPage {
+  min-height: 100vh;
+}
+
 .PageTitle {
   .limitPageWidth();
   position: relative;
@@ -1186,6 +1190,54 @@ fieldset {
       i {
         display: none;
       }
+    }
+  }
+}
+
+.el-upload-list--text {
+  .el-upload-list__item {
+    height: 40px;
+    margin: 0;
+    padding: 0 10px;
+    line-height: 40px;
+    border: 1px solid @colorGray;
+    border-radius: 0;
+
+    + .el-upload-list__item {
+      margin-top: 10px;
+    }
+
+    &.is-ready {
+      background-image: none;
+    }
+
+    &.focusing {
+      outline: 0;
+    }
+
+    .el-upload-list__item-status-label {
+      box-shadow: none;
+
+      i {
+        font-weight: 700;
+      }
+    }
+
+    .el-icon-close {
+      top: 50%;
+      right: 8px;
+      transform: translateY(-50%);
+      color: @colorDanger;
+      font-weight: 700;
+      opacity: 1;
+
+      &:hover {
+        color: lighten(@colorDanger, 10%);
+      }
+    }
+
+    .el-icon-close-tip {
+      display: none !important;
     }
   }
 }
