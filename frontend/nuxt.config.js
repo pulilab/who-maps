@@ -5,6 +5,15 @@ const result = dotenv.config();
 
 // const bundlebuddy = require('bundle-buddy-webpack-plugin');
 
+const features = [
+  'default',
+  'fetch',
+  'Object.entries',
+  'Object.from',
+  'IntersectionObserver',
+  'EventSource'
+].join('%2C');
+
 if (result.error) {
   console.log('\x1b[31m%s\x1b[0m', 'Missing .env file, follow the README instructions');
   throw result.error;
@@ -21,6 +30,9 @@ const config = {
     link: [
       { rel: 'icon', type: 'image/ico', href: '/favicon.ico' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
+    ],
+    script: [
+      { src: `https://polyfill.io/v3/polyfill.min.js?features=${features}` }
     ]
   },
   css: [
@@ -30,7 +42,7 @@ const config = {
   env: {
   },
   plugins: [
-    { src: '~plugins/polyfills.js', ssr: false },
+    { src: '~plugins/extends.js', ssr: false },
     { src: '~plugins/axios.js', ssr: true },
     { src: '~plugins/vee-validate.js', ssr: true },
     { src: '~plugins/vue-leaflet.js', ssr: false },
@@ -148,6 +160,7 @@ const config = {
   build: {
     extractCSS: true,
     optimization: {},
+    transpile: ['redux', 'redux-async-thunk'],
     extend (config, { isDev }) {
       config.module.rules.push({
         test: /\.html$/,

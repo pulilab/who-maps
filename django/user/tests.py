@@ -73,6 +73,23 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["email"][0], "Enter a valid email address.")
 
+    def test_register_without_email(self):
+        url = reverse("rest_register")
+        data = {
+            "email": "",
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["email"][0], 'This field may not be blank.')
+
+        data = {
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["email"][0], 'This field is required.')
+
     def test_verify_email(self):
         key = EmailConfirmation.objects.get(email_address__email="test_user2@gmail.com").key
         url = reverse("rest_verify_email")

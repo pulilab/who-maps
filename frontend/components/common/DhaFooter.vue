@@ -47,6 +47,7 @@ export default {
 
     .Footer {
       padding: 0 120px 0 40px;
+      width: 100%;
 
       .LogoWHO {
         width: auto;
