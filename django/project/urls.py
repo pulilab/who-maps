@@ -23,6 +23,10 @@ urlpatterns = [
              'put': 'update'
          }),
          name="project-draft"),
+    path(r'projects/import/',
+         view=views.ProjectImportV2ViewSet.as_view({
+             'post': 'create'
+         }), name="project-import-create"),
     url(r"^projects/member-of/$",
         view=views.ProjectListViewSet.as_view({
             'get': 'list'
