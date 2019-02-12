@@ -407,3 +407,9 @@ class CSVExportSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=200, min_length=1, required=True)
     country = serializers.IntegerField(required=False)
     donor = serializers.IntegerField(required=False)
+
+
+class ImportRowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImportRow
+        fields = "__all__"
