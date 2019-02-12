@@ -313,3 +313,9 @@ class ProjectImportV2(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     status = models.NullBooleanField(null=True, blank=True)
     header_mapping = JSONField(default=dict)
+
+
+class ImportRow(models.Model):
+    data = JSONField(default=dict)
+    project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL)
+    parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)
