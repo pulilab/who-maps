@@ -14,7 +14,7 @@ import scheduler.celery  # noqa
 
 from country.models import CustomQuestion
 from project.utils import remove_keys
-from .models import Project, ProjectApproval
+from .models import Project, ProjectApproval, ImportRow, ProjectImportV2
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
@@ -413,3 +413,22 @@ class ImportRowSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImportRow
         fields = "__all__"
+
+
+class ProjectImportV2Serializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    status = serializers.ReadOnlyField()
+    rows = ImportRowSerializer(many=True)
+
+    class Meta:
+        model = ProjectImportV2
+        fields = ('user', 'status', 'header_mapping', 'rows')
+
+    def create(self, validated_data):
+        rows = validated_data.pop('rows')
+        instance = super().create(validated_data)
+        for row_data in rows[0].get('data', []):
+            ImportRow.objects.create(parent=instance, data=row_data)
+        return instance
+
+
