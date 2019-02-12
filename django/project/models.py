@@ -307,3 +307,9 @@ class ProjectImport(ExtendedModel):
 
     def __str__(self):
         return self.csv.name
+
+
+class ProjectImportV2(ExtendedModel):
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    status = models.NullBooleanField(null=True, blank=True)
+    header_mapping = JSONField(default=dict)
