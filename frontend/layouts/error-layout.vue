@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import LangMixin from '@/layouts/LangMixin';
 import DhaFooter from '../components/common/DhaFooter.vue';
 import TopBar from '../components/common/TopBar.vue';
 import DialogsContainer from '../components/dialogs/DialogsContainer.vue';
@@ -21,6 +22,7 @@ export default {
     DialogsContainer,
     DjangoFeedback
   },
+  mixins: [LangMixin],
   computed: {
     layoutClass () {
       if (this.$route.params.organisation !== '-') {

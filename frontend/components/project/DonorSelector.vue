@@ -2,6 +2,7 @@
   <lazy-el-select
     :value="value"
     :placeholder="$gettext('Type and select a name') | translate"
+    :disabled="disabled"
     multiple
     filterable
     reserve-keyword
@@ -38,6 +39,10 @@ export default {
     value: {
       type: Array,
       default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

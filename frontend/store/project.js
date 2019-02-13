@@ -1,43 +1,10 @@
 import Vue from 'vue';
 import get from 'lodash/get';
 import { apiReadParser, apiWriteParser, APIError } from '../utilities/api';
+import { projectFields } from '../utilities/projects';
 
 const cleanState = () => ({
-  name: null,
-  organisation: null,
-  country: null,
-  geographic_scope: null,
-  implementation_overview: null,
-  start_date: null,
-  end_date: null,
-  contact_name: null,
-  contact_email: null,
-  team: [],
-  viewers: [],
-  platforms: [],
-  digitalHealthInterventions: [],
-  health_focus_areas: [],
-  hsc_challenges: [],
-  his_bucket: [],
-  coverageType: 1,
-  coverage: [],
-  coverageData: {},
-  coverage_second_level: [],
-  national_level_deployment: {
-    health_workers: 0,
-    clients: 0,
-    facilities: 0
-  },
-  government_investor: null,
-  implementing_partners: [],
-  donors: [],
-  implementation_dates: null,
-  licenses: [],
-  repository: null,
-  mobile_application: null,
-  wiki: null,
-  interoperability_links: {},
-  interoperability_standards: [],
+  ...projectFields(),
   country_answers: [],
   donors_answers: [],
   published: null,

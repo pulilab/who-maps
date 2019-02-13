@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import LangMixin from '@/layouts/LangMixin';
 import DhaFooter from '../components/common/DhaFooter.vue';
 import TopBar from '../components/common/TopBar.vue';
 import ActionBar from '../components/common/ActionBar.vue';
@@ -24,6 +25,7 @@ export default {
     DialogsContainer,
     DjangoFeedback
   },
+  mixins: [LangMixin],
   computed: {
     pureRoute () {
       if (this.$route && this.$route.name) {

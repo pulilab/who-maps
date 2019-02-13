@@ -157,14 +157,14 @@ export const coverageWriteParser = (coverage, coverageData) => {
   });
 };
 
-export const customCountryAnswerParser = (customAnswers) => {
+export const customCountryAnswerParser = (customAnswers = []) => {
   return customAnswers.map(c => ({
     ...c,
     answer: c.answer[0] ? c.answer : []
   }));
 };
 
-export const customDonorAnswerParser = (customAnswers, donors) => {
+export const customDonorAnswerParser = (customAnswers = [], donors = []) => {
   const result = donors.reduce((a, c) => {
     a[c] = [];
     return a;

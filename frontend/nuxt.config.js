@@ -80,6 +80,12 @@ const config = {
           iso: 'pt-PT',
           name: 'Português',
           file: 'pt-PT.js'
+        },
+        {
+          code: 'ar',
+          iso: 'ar-AR',
+          name: 'Arabic',
+          file: 'ar-AR.js'
         }
       ],
       lazy: true,

@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import { publishRules, draftRules } from '@/utilities/projects';
 import ProjectNavigation from './ProjectNavigation';
 import GeneralOverview from './sections/GeneralOverview';
 import ImplementationOverview from './sections/ImplementationOverview';
@@ -119,158 +120,8 @@ export default {
     showForm () {
       return this.readyElements >= this.createdElements;
     },
-    draftRules () {
-      return {
-        name: {
-          required: true,
-          min: 1
-        },
-        contact_email: {
-          email: true
-        },
-        team: {
-          required: true,
-          min: 1
-        }
-      };
-    },
-    publishRules () {
-      return {
-        name: {
-          required: true,
-          min: 1,
-          max: 128
-        },
-        organisation: {
-          required: true
-        },
-        country: {
-          required: true
-        },
-        geographic_scope: {},
-        implementation_overview: {
-          required: true,
-          max: 512
-        },
-        start_date: {
-          required: true
-        },
-        end_date: {
-          required: false
-        },
-        contact_name: {
-          required: true,
-          max: 256
-        },
-        contact_email: {
-          email: true,
-          required: true
-        },
-        team: {
-          required: true
-        },
-        platforms: {
-          required: true
-        },
-        strategies: {
-          required: true,
-          min: 1
-        },
-        health_focus_areas: {
-        },
-        hsc_challenges: {
-          required: true,
-          min: 1
-        },
-        his_bucket: {
-          required: true,
-          min: 1
-        },
-        coverage: {
-          district: {
-            required: true
-          },
-          health_workers: {
-            required: true,
-            integer: true
-          },
-          clients: {
-            required: true,
-            integer: true
-          },
-          facilities: {
-            required: true,
-            integer: true
-          },
-          facilities_list: {
-            required: true,
-            min: 1
-          }
-        },
-        coverage_second_level: {
-          district: {
-            required: false
-          },
-          health_workers: {
-            required: false,
-            integer: true
-          },
-          clients: {
-            required: false,
-            integer: true
-          },
-          facilities: {
-            required: false,
-            integer: true
-          },
-          facilities_list: {
-            required: false
-          }
-        },
-        national_level_deployment: {
-          health_workers: {
-            required: true
-          },
-          clients: {
-            required: true
-          },
-          facilities: {
-            required: true
-          }
-        },
-        government_investor: {
-          required: true
-        },
-        implementing_partners: {
-          required: true
-        },
-        donors: {
-          required: true
-        },
-        implementation_dates: {
-          required: true
-        },
-        licenses: {},
-        repository: {
-          max: 256,
-          url: true
-        },
-        mobile_application: {
-          max: 256,
-          url: true
-        },
-        wiki: {
-          max: 256,
-          url: true
-        },
-        interoperability_links: {
-          url: {
-            require_protocol: true
-          }
-        },
-        interoperability_standards: {}
-      };
-    },
+    draftRules: draftRules(),
+    publishRules: publishRules(),
     rules () {
       return this.usePublishRules ? this.publishRules : this.draftRules;
     }
