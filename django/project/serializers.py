@@ -422,7 +422,7 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectImportV2
-        fields = ('user', 'status', 'header_mapping', 'rows')
+        fields = ('user', 'status', 'header_mapping', 'rows', 'country', 'donor', 'filename', 'draft')
 
     def create(self, validated_data):
         rows = validated_data.pop('rows')
@@ -430,5 +430,3 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
         for row_data in rows[0].get('data', []):
             ImportRow.objects.create(parent=instance, data=row_data)
         return instance
-
-
