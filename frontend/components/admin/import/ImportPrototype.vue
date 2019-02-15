@@ -50,14 +50,12 @@
             </div>
             <el-radio
               v-model="isDraftOrPublish"
-              :disabled="introDone"
               label="draft"
             >
               Draft
             </el-radio>
             <el-radio
               v-model="isDraftOrPublish"
-              :disabled="introDone"
               label="publish"
             >
               Published
