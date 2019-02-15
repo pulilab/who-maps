@@ -46,7 +46,7 @@
             class="DraftOrPublished"
           >
             <div class="Label">
-              Select Draft or Published
+              Save as Draft or Publish projects
             </div>
             <el-radio
               v-model="isDraftOrPublish"
@@ -58,7 +58,7 @@
               v-model="isDraftOrPublish"
               label="publish"
             >
-              Published
+              Publish
             </el-radio>
           </el-col>
           <el-col
