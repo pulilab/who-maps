@@ -113,7 +113,6 @@
             <fa icon="exclamation" />
             {{ error }}
           </el-tag>
-          </el-tag>
         </div>
 
         <!-- Data table -->
