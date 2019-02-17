@@ -312,11 +312,15 @@ class ProjectImport(ExtendedModel):
 class ProjectImportV2(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     status = models.NullBooleanField(null=True, blank=True)  # TODO: maybe remove this
-    header_mapping = JSONField(default=dict)
-    country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
-    donor = models.ForeignKey(Donor, null=True, on_delete=models.SET_NULL)
+    header_mapping = JSONField(default=dict, blank=True)
+    country = models.ForeignKey(Country, null=True, blank=True, on_delete=models.SET_NULL)
+    donor = models.ForeignKey(Donor, null=True, blank=True, on_delete=models.SET_NULL)
     filename = models.CharField(max_length=256, null=True, blank=True)
+    sheet_name = models.CharField(max_length=256, null=True, blank=True)
     draft = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('user', 'filename', 'sheet_name')
 
 
 class ImportRow(models.Model):
