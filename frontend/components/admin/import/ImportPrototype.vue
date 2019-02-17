@@ -95,7 +95,7 @@
             v-for="s in sheets"
             :key="s"
           >
-            <el-button @click="convertSheet(s)">
+            <el-button @click="saveAndProcessSheet(s)">
               {{ s }}
             </el-button>
           </el-col>
@@ -318,11 +318,6 @@ export default {
     prepareHeaders (row) {
       this.headers = Object.keys(row).map(title => ({ selected: null, title }));
     },
-    convertSheet (sheetName) {
-      this.$nuxt.$loading.start('xlsx_convert');
-      this.imported = this._xlsx.utils.sheet_to_json(this._workbook.Sheets[sheetName], { defval: '' }).slice(0, 20);
-      this.prepareHeaders(this.imported[0]);
-      this.$nuxt.$loading.finish('xlsx_convert');
     },
     async save (row, dataRow, index) {
       this.$nuxt.$loading.start('save');
