@@ -15,7 +15,8 @@ from allauth.account.models import EmailAddress
 from core.admin import AllObjectsAdmin
 from country.models import Country
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, Project, HSCGroup
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, Project, HSCGroup, \
+    ProjectImportV2
 from user.models import UserProfile, Organisation
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -327,6 +328,10 @@ class ProjectAdmin(AllObjectsAdmin):
         return False
 
 
+class ProjectImportV2Admin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(InteroperabilityLink, InteroperabilityLinkAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
@@ -338,4 +343,5 @@ admin.site.register(HISBucket, HISBucketAdmin)
 admin.site.register(HSCGroup, HSCGroupAdmin)
 admin.site.register(HSCChallenge, HSCChallengeAdmin)
 admin.site.register(ProjectImport, ProjectImportAdmin)
+admin.site.register(ProjectImportV2, ProjectImportV2Admin)
 admin.site.register(Project, ProjectAdmin)
