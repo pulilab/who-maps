@@ -223,6 +223,7 @@ export default {
       isDraftOrPublish: null,
       introDone: false,
       inputFile: [],
+      fileName: '',
       ready: false,
       imported: [],
       headers: [],
@@ -286,6 +287,7 @@ export default {
           console.log(e);
         };
         reader.readAsArrayBuffer(fileList[0].raw);
+        this.fileName = fileList[0].name;
       }
     },
     updateValue (row, key, value) {
