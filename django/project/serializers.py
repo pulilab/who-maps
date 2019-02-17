@@ -416,7 +416,7 @@ class ImportRowSerializer(serializers.ModelSerializer):
 
 
 class ProjectImportV2Serializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     status = serializers.ReadOnlyField()
     rows = ImportRowSerializer(many=True)
 
