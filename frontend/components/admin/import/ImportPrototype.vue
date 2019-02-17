@@ -318,6 +318,27 @@ export default {
     prepareHeaders (row) {
       this.headers = Object.keys(row).map(title => ({ selected: null, title }));
     },
+    async saveAndProcessSheet (sheetName) {
+      this.$nuxt.$loading.start('save_sheet');
+      const sheet = this._xlsx.utils.sheet_to_json(this._workbook.Sheets[sheetName], { defval: '' }).slice(0, 20);
+      this.prepareHeaders(sheet[0]);
+      const importData =
+        {
+          'filename': this.fileName,
+          'country': this.country,
+          'donor': this.donors[0],
+          'sheet_name': sheetName,
+          'header_mapping': this.headers,
+          'draft': this.isDraftOrPublish === 'draft',
+          'rows': [
+            {
+              'data': sheet
+            }
+          ]
+        };
+      const { data } = await this.$axios.post(`api/projects/import/`, importData);
+      this.imported = data.rows;
+      this.$nuxt.$loading.finish('save_sheet');
     },
     async save (row, dataRow, index) {
       this.$nuxt.$loading.start('save');
