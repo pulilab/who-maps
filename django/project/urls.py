@@ -1,9 +1,14 @@
 from django.conf.urls import url
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
 from . import views
 
+router = DefaultRouter()
+router.register(r'import', views.ProjectImportV2ViewSet)
+
 urlpatterns = [
+    url(r"^projects/", include(router.urls)),
     url(r"^projects/(?P<pk>\d+)/$",
         view=views.ProjectRetrieveViewSet.as_view({
             'get': 'retrieve',
@@ -23,10 +28,6 @@ urlpatterns = [
              'put': 'update'
          }),
          name="project-draft"),
-    path(r'projects/import/',
-         view=views.ProjectImportV2ViewSet.as_view({
-             'post': 'create'
-         }), name="project-import-create"),
     url(r"^projects/member-of/$",
         view=views.ProjectListViewSet.as_view({
             'get': 'list'
