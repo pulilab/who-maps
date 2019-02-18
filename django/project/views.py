@@ -583,7 +583,8 @@ class ProjectApprovalViewSet(TokenAuthMixin, UpdateModelMixin, GenericViewSet):
         return Response(serializer.data)
 
 
-class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, ListModelMixin, GenericViewSet):
+class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, ListModelMixin,
+                             GenericViewSet):
     serializer_class = ProjectImportV2Serializer
     queryset = ProjectImportV2.objects.all()
 
