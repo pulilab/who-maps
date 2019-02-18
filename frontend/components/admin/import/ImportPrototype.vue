@@ -174,7 +174,7 @@
                 </el-button>
               </div>
               <template
-                v-for="(col, key) in row"
+                v-for="(col, key) in row.data"
               >
                 <SmartCell
                   v-if="col !== 'id'"
@@ -291,7 +291,7 @@ export default {
       }
     },
     updateValue (row, key, value) {
-      this.imported[row][key] = value;
+      this.imported[row].data[key] = value;
     },
     openDialogHandler (row, key, { column, value }) {
       this.dialogData = {
