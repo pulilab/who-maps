@@ -324,7 +324,7 @@ export default {
       coverageType: ['project', 'getCoverageType', 'setCoverageType', 0],
       national_level_deployment: ['project', 'getNationalLevelDeployment', 'setNationalLevelDeployment', 0],
       government_investor: ['project', 'getGovernmentInvestor', 'setGovernmentInvestor', 0],
-      implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners', 50],
+      implementing_partners: ['project', 'getImplementingPartners', 'setImplementingPartners', 300, true],
       donors: ['project', 'getDonors', 'setDonors', 0]
     }),
     healthWorkers: {
