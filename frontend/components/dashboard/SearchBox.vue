@@ -119,7 +119,7 @@ export default {
   },
   computed: {
     ...mapGettersActions({
-      searchString: ['dashboard', 'getSearchString', 'setSearchString', 300],
+      searchString: ['dashboard', 'getSearchString', 'setSearchString', 300, true],
       selectedOptions: ['dashboard', 'getSearchIn', 'setSearchIn', 0]
     })
   },
