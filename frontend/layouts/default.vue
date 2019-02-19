@@ -26,6 +26,9 @@ export default {
     DjangoFeedback
   },
   mixins: [LangMixin],
+  head () {
+    return this.$nuxtI18nSeo();
+  },
   computed: {
     pureRoute () {
       if (this.$route && this.$route.name) {

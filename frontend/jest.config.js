@@ -16,11 +16,24 @@ module.exports = {
       statements: 25
     }
   },
+  moduleFileExtensions: [
+    'js',
+    'json',
+    'vue'
+  ],
   moduleNameMapper: {
     '~(.*)$': '<rootDir>/$1'
+  },
+  transform: {
+    '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
+    '.*\\.(vue)$': '<rootDir>/node_modules/vue-jest'
   },
   testPathIgnorePatterns: [
     '/node_modules/',
     '/cypress/'
+  ],
+  setupFiles: ['<rootDir>/node_modules/regenerator-runtime/runtime'],
+  snapshotSerializers: [
+    '<rootDir>/node_modules/jest-serializer-vue'
   ]
 };
