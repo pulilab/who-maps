@@ -16,7 +16,7 @@ export const mapGettersActions = (collection) => {
     result[item] = {
       localValue,
       get () {
-        if (skipGetter && localValue.value) {
+        if (skipGetter && localValue.value !== null) {
           return localValue.value;
         }
         return this.$store.getters[getter];
