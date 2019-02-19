@@ -87,6 +87,7 @@ const config = {
       strategy: 'prefix',
       rootRedirect: 'en/-/',
       defaultLocale: 'en',
+      seo: false,
       vueI18n: {
         fallbackLocale: 'en',
         silentTranslationWarn: true

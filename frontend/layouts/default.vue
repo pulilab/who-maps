@@ -24,6 +24,9 @@ export default {
     DialogsContainer,
     DjangoFeedback
   },
+  head () {
+    return this.$nuxtI18nSeo();
+  },
   computed: {
     pureRoute () {
       if (this.$route && this.$route.name) {
