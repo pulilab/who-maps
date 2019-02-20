@@ -18,7 +18,8 @@ export default {
       store.dispatch('projects/loadProjectStructure'),
       store.dispatch('system/loadStaticData'),
       store.dispatch('system/loadOrganisations'),
-      store.dispatch('countries/loadMapData')
+      store.dispatch('countries/loadMapData'),
+      store.dispatch('admin/import/loadQueue')
     ]);
   }
 };
