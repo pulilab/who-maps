@@ -6,14 +6,15 @@ from django.db.models import QuerySet
 from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin
+from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
+    DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from project.cache import cache_structure
-from project.models import HSCGroup, ProjectApproval, ProjectImportV2
+from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
 from project.permissions import InCountryAdminForApproval
 from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
@@ -21,7 +22,7 @@ from country.models import Country, Donor
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
-    ProjectApprovalSerializer, CSVExportSerializer, ProjectImportV2Serializer
+    ProjectApprovalSerializer, CSVExportSerializer, ProjectImportV2Serializer, ImportRowSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
 
@@ -590,3 +591,11 @@ class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin,
 
     def get_queryset(self):
         return ProjectImportV2.objects.filter(user=self.request.user)
+
+
+class ImportRowDeleteViewSet(TokenAuthMixin, DestroyModelMixin, GenericViewSet):
+    serializer_class = ImportRowSerializer
+    queryset = ImportRow.objects.all()
+
+    def get_queryset(self):
+        return ImportRow.objects.filter(parent__user=self.request.user)
