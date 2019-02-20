@@ -422,7 +422,7 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectImportV2
-        fields = ('user', 'status', 'header_mapping', 'rows', 'country', 'donor', 'filename', 'sheet_name', 'draft')
+        fields = ('user', 'status', 'header_mapping', 'rows', 'country', 'donor', 'filename', 'sheet_name', 'draft', 'id')
 
     def create(self, validated_data):
         rows = validated_data.pop('rows')
@@ -432,7 +432,7 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
         return instance
 
     def update(self, instance, validated_data):
-        rows = validated_data.pop('rows', None)
+        rows = validated_data.pop('rows', [])
         instance = super().update(instance, validated_data)
         for row in rows:
             ImportRow.objects.get(id=row.id).update(data=row.data)
