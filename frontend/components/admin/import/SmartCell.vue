@@ -1,33 +1,45 @@
 <template>
   <div
-    :class="['SmartCell', {'Disabled': isDisabled}]"
+    :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': validationError}]"
     @click="openDialog"
   >
-    <span v-if="!column">
-      {{ value }}
-    </span>
-    <date-field
-      v-if="isDate"
-      v-model="internalValue"
-      :disabled="disabled"
-    />
-    <el-input
-      v-if="isTextArea"
-      v-model="internalValue"
-      :disabled="disabled"
-      type="textarea"
-      :rows="6"
-    />
-    <template v-if="column && !isDate && !isTextArea">
-      <ul v-if="parsedValue && parsedValue.names">
-        <li
-          v-for="name in parsedValue.names"
-          :key="name"
-        >
-          {{ name }}
-        </li>
-      </ul>
-    </template>
+    <el-tooltip
+      :disabled="!validationError"
+      class="item"
+      effect="dark"
+      :content="validationError"
+      placement="top"
+    >
+      <span v-if="!column">
+        {{ value }}
+      </span>
+      <date-field
+        v-if="isDate"
+        v-model="internalValue"
+        v-validate="rules"
+        :data-vv-name="column"
+        :disabled="disabled"
+      />
+      <el-input
+        v-if="isTextArea"
+        v-model="internalValue"
+        v-validate="rules"
+        :data-vv-name="column"
+        :disabled="disabled"
+        type="textarea"
+        :rows="6"
+      />
+      <template v-if="column && !isDate && !isTextArea">
+        <ul v-if="parsedValue && parsedValue.names">
+          <li
+            v-for="name in parsedValue.names"
+            :key="name"
+          >
+            {{ name }}
+          </li>
+        </ul>
+      </template>
+    </el-tooltip>
   </div>
 </template>
 
@@ -36,6 +48,7 @@ import DateField from '@/components/admin/import/DateField';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
+  inject: ['$validator'],
   components: {
     DateField
   },
@@ -120,6 +133,9 @@ export default {
         const res = resolver[this.column];
         return res ? res() : result;
       }
+    },
+    validationError () {
+      return this.errors.first(this.column);
     }
   },
   methods: {
@@ -185,6 +201,10 @@ export default {
   .SmartCell {
     &.Disabled {
       cursor: not-allowed;
+    }
+
+    &.ValidationError {
+      background: pink;
     }
 
     .el-textarea {
