@@ -211,7 +211,7 @@
               </div>
             </div>
 
-            <div
+            <import-row
               v-for="(row, index) in imported"
               :key="index"
               class="Row"
@@ -242,14 +242,14 @@
                   :key="index + header.title"
                   :disabled="!!row.project"
                   :value="row.data[header.title]"
-                  :column="columnFinder(header.title)"
-                  :rules="validationRules[header.title]"
+                  :column="header.selected"
+                  :rules="validationRules[header.selected]"
                   class="Column"
                   @change="updateValue(index, header.title, $event)"
                   @openDialog="openDialogHandler(index, header.title, $event)"
                 />
               </template>
-            </div>
+            </import-row>
           </div>
         </div>
         <!-- / Data table -->
@@ -262,6 +262,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { mapGetters, mapActions } from 'vuex';
 
+import ImportRow from '@/components/admin/import/ImportRow';
 import FileUpload from '@/components/common/FileUpload';
 import SmartCell from '@/components/admin/import/SmartCell';
 import DonorSelector from '@/components/project/DonorSelector';
@@ -282,7 +283,8 @@ export default {
     OrganisationSelect,
     CountrySelect,
     CountryItem,
-    DonorItem
+    DonorItem,
+    ImportRow
   },
   data () {
     return {
@@ -409,11 +411,7 @@ export default {
       //     row[header.title] = this.donors;
       //   });
       // }
-      this.updateQueueItem({ id: this.currentQueueItem.id, header_mapping: this.headers });
-    },
-    columnFinder (title) {
-      const header = this.headers.find(h => h.title === title);
-      return header ? header.selected : null;
+      // this.updateQueueItem({ id: this.currentQueueItem.id, header_mapping: this.headers });
     },
     prepareHeaders (row) {
       this.headers = Object.keys(row).map(title => ({ selected: null, title }));
