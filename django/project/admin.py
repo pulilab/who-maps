@@ -16,7 +16,7 @@ from core.admin import AllObjectsAdmin
 from country.models import Country
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, ProjectImport, Project, HSCGroup, \
-    ProjectImportV2
+    ProjectImportV2, ImportRow
 from user.models import UserProfile, Organisation
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -328,8 +328,13 @@ class ProjectAdmin(AllObjectsAdmin):
         return False
 
 
+class ImportRowInline(admin.StackedInline):
+    model = ImportRow
+    readonly_fields = ('data',)
+
+
 class ProjectImportV2Admin(admin.ModelAdmin):
-    pass
+    inlines = (ImportRowInline,)
 
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
