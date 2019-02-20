@@ -55,6 +55,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    rules: {
+      type: Object,
+      default: null
     }
   },
   computed: {
@@ -129,10 +133,12 @@ export default {
     },
     findCountryValue () {
       const country = this.countries.find(c => c.id === this.value);
-      return {
-        ids: [country.id],
-        names: [country.name]
-      };
+      if (country) {
+        return {
+          ids: [country.id],
+          names: [country.name]
+        };
+      }
     },
     stringToArray (value) {
       return value.split(',').map(v => v.trim());
