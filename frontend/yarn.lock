@@ -891,7 +891,7 @@
     consola "^2.4.1"
     http-proxy-middleware "^0.19.1"
 
-"@nuxtjs/sentry@^2.2.2":
+"@nuxtjs/sentry@2.2.2":
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/@nuxtjs/sentry/-/sentry-2.2.2.tgz#2a3a712413952f9b4069b2d5401429b50275bd86"
   dependencies:
@@ -1147,21 +1147,22 @@
     "@vue/babel-plugin-transform-vue-jsx" "^1.0.0-beta.2"
     camelcase "^5.0.0"
 
-"@vue/cli-plugin-eslint@^3.4.0":
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-eslint/-/cli-plugin-eslint-3.4.0.tgz#e9fceff873661848be7e1341b31dad23302cd0ac"
+"@vue/cli-plugin-eslint@^3.4.1":
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-eslint/-/cli-plugin-eslint-3.4.1.tgz#59896379e12d68aefcdccac28c691cb6e23e5720"
   dependencies:
-    "@vue/cli-shared-utils" "^3.4.0"
+    "@vue/cli-shared-utils" "^3.4.1"
     babel-eslint "^10.0.1"
-    eslint "^4.19.1"
-    eslint-loader "^2.1.1"
-    eslint-plugin-vue "^4.7.1"
+    eslint-loader "^2.1.2"
     globby "^9.0.0"
     webpack ">=4 < 4.29"
+  optionalDependencies:
+    eslint "^4.19.1"
+    eslint-plugin-vue "^4.7.1"
 
-"@vue/cli-shared-utils@^3.4.0":
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/@vue/cli-shared-utils/-/cli-shared-utils-3.4.0.tgz#4331cb926351e399bf7305a9306bf09d0f2a1b9d"
+"@vue/cli-shared-utils@^3.4.1":
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/@vue/cli-shared-utils/-/cli-shared-utils-3.4.1.tgz#963454d2d2bc549d027c8988666c939903be6d7e"
   dependencies:
     chalk "^2.4.1"
     execa "^1.0.0"
@@ -3947,7 +3948,7 @@ eslint-import-resolver-node@^0.3.2:
     debug "^2.6.9"
     resolve "^1.5.0"
 
-eslint-loader@^2.1.1:
+eslint-loader@^2.1.1, eslint-loader@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/eslint-loader/-/eslint-loader-2.1.2.tgz#453542a1230d6ffac90e4e7cb9cadba9d851be68"
   dependencies:
