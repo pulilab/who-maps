@@ -35,6 +35,14 @@ class ProfileJWTSerializer(JWTSerializer):
             return obj['user'].userprofile.account_type
 
 
+class UserProfileListSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='user.email', read_only=True)
+
+    class Meta:
+        model = UserProfile
+        fields = ('id', 'modified', 'account_type', 'name', 'email')
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email', read_only=True)
     name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
@@ -69,15 +77,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def get_account_type_approved(obj):
         if obj.account_type == UserProfile.DONOR and obj.donor:
             return obj in obj.donor.users.all()
-        if obj.account_type == UserProfile.DONOR_ADMIN and obj.donor:
+        elif obj.account_type == UserProfile.DONOR_ADMIN and obj.donor:
             return obj in obj.donor.admins.all()
-        if obj.account_type == UserProfile.SUPER_DONOR_ADMIN and obj.donor:
+        elif obj.account_type == UserProfile.SUPER_DONOR_ADMIN and obj.donor:
             return obj in obj.donor.super_admins.all()
-        if obj.account_type == UserProfile.GOVERNMENT and obj.country:
+        elif obj.account_type == UserProfile.GOVERNMENT and obj.country:
             return obj in obj.country.users.all()
-        if obj.account_type == UserProfile.COUNTRY_ADMIN and obj.country:
+        elif obj.account_type == UserProfile.COUNTRY_ADMIN and obj.country:
             return obj in obj.country.admins.all()
-        if obj.account_type == UserProfile.SUPER_COUNTRY_ADMIN and obj.country:
+        elif obj.account_type == UserProfile.SUPER_COUNTRY_ADMIN and obj.country:
             return obj in obj.country.super_admins.all()
         return False
 
