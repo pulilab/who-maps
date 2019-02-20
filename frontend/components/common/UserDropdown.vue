@@ -91,6 +91,21 @@
         </div>
 
         <div
+          v-if="isUserDA || isUserCA"
+          class="DropdownLink"
+        >
+          <nuxt-link
+            :to="localePath({name: 'organisation-admin-import', params: $route.params})"
+            @click.native="closePopover"
+          >
+            <span class="MenuIcon">
+              <fa icon="file-import" />
+            </span>
+            <translate>Import interface</translate>
+          </nuxt-link>
+        </div>
+
+        <div
           class="DropdownLink"
           @click="logout"
         >
