@@ -2,13 +2,18 @@ from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateMo
 from rest_framework.viewsets import GenericViewSet
 
 from core.views import TokenAuthMixin
-from .serializers import UserProfileSerializer, OrganisationSerializer
+from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileListSerializer
 from .models import UserProfile, Organisation
 
 
-class UserProfileViewSet(TokenAuthMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
+class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
+
+
+class UserProfileListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    queryset = UserProfile.objects.select_related('user').only('id', 'modified', 'account_type', 'name', 'user__email')
+    serializer_class = UserProfileListSerializer
 
 
 class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, RetrieveModelMixin, GenericViewSet):
