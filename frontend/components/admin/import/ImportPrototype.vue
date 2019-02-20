@@ -18,6 +18,7 @@
       </el-dialog>
 
       <el-card class="box-card">
+        <h3>New Import</h3>
         <el-row type="flex">
           <el-col :span="6">
             <div class="Label">
@@ -101,6 +102,60 @@
           </el-col>
         </el-row>
 
+        <div>
+          <h3>Previous imports</h3>
+          <el-row
+            v-for="(item, index) in queue"
+            :key="index"
+            type="flex"
+          >
+            <el-col :span="4">
+              <div class="Label">
+                Selected Country
+              </div>
+              <country-item :id="item.country" />
+            </el-col>
+
+            <el-col :span="4">
+              <div class="Label">
+                Selected Investor
+              </div>
+              <donor-item :id="item.donor" />
+            </el-col>
+
+            <el-col :span="4">
+              <div class="Label">
+                File Name
+              </div>
+              {{ item.filename }}
+            </el-col>
+            <el-col :span="4">
+              <div class="Label">
+                Sheet Name
+              </div>
+              {{ item.sheet_name }}
+            </el-col>
+
+            <el-col :span="4">
+              <div class="Label">
+                Draft or Published
+              </div>
+              <span v-if="item.draft">Draft</span>
+              <span v-else>Publish</span>
+            </el-col>
+
+            <el-col :span="4">
+              <div class="Label">
+                Actions
+              </div>
+              <el-button @click="workOnThis(item)">
+                Select
+              </el-button>
+              </el-butto>
+            </el-col>
+          </el-row>
+        </div>
+
         <div
           v-if="imported && imported.length > 0"
           class="GlobalErrors"
@@ -122,7 +177,14 @@
               <div
                 v-if="headers.length > 0"
                 class="Column Thin"
-              />
+              >
+                <el-button
+                  circle
+                  @click="saveAll"
+                >
+                  <fa icon="save" />
+                </el-button>
+              </div>
               <div
                 v-for="(header, index) in headers"
                 :key="index"
@@ -139,7 +201,7 @@
                     @change="columnChange(header)"
                   >
                     <el-option
-                      v-for="item in fields"
+                      v-for="item in availableFields"
                       :key="item"
                       :label="item"
                       :value="item"
@@ -156,7 +218,7 @@
             >
               <div class="Column Thin">
                 <el-button
-                  :disabled="globalErrors.length > 0 || !!row.id"
+                  :disabled="globalErrors.length > 0 || !!row.project"
                   icon="el-icon-check"
                   type="primary"
                   circle
@@ -164,28 +226,27 @@
                   @click="save(`row_${index}`, row, index)"
                 />
                 <a
-                  v-if="row.id"
-                  :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.id, organisation: $route.params.organisation}})"
+                  v-if="row.project"
+                  :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
                   target="_blank"
                   class="NuxtLink IconLeft"
                 >
                   <fa icon="share-square" />
                 </a>
-                </el-button>
               </div>
               <template
-                v-for="(col, key) in row.data"
+                v-for="header in headers"
               >
                 <SmartCell
-                  v-if="col !== 'id'"
                   :ref="`row_${index}`"
-                  :key="index + key"
-                  :disabled="!!row.id"
-                  :value="col"
-                  :column="columnFinder(key)"
+                  :key="index + header.title"
+                  :disabled="!!row.project"
+                  :value="row.data[header.title]"
+                  :column="columnFinder(header.title)"
+                  :rules="validationRules[header.title]"
                   class="Column"
-                  @change="updateValue(index, key, $event)"
-                  @openDialog="openDialogHandler(index, key, $event)"
+                  @change="updateValue(index, header.title, $event)"
+                  @openDialog="openDialogHandler(index, header.title, $event)"
                 />
               </template>
             </div>
@@ -198,14 +259,19 @@
 </template>
 
 <script>
+import cloneDeep from 'lodash/cloneDeep';
+import { mapGetters, mapActions } from 'vuex';
+
 import FileUpload from '@/components/common/FileUpload';
 import SmartCell from '@/components/admin/import/SmartCell';
 import DonorSelector from '@/components/project/DonorSelector';
 import OrganisationSelect from '@/components/common/OrganisationSelect';
 import CountrySelect from '@/components/common/CountrySelect';
-import { projectFields } from '@/utilities/projects';
+import CountryItem from '@/components/common/CountryItem';
+import DonorItem from '@/components/common/DonorItem';
+
+import { projectFields, draftRules, publishRules } from '@/utilities/projects';
 import { apiWriteParser } from '@/utilities/api';
-import { mapGetters } from 'vuex';
 
 export default {
 
@@ -214,7 +280,9 @@ export default {
     SmartCell,
     DonorSelector,
     OrganisationSelect,
-    CountrySelect
+    CountrySelect,
+    CountryItem,
+    DonorItem
   },
   data () {
     return {
@@ -228,14 +296,35 @@ export default {
       imported: [],
       headers: [],
       sheets: [],
-      fields: Object.keys(projectFields()),
-      dialogData: null
+      fields: Object.keys(projectFields()).filter(k => k !== 'country' && k !== 'donors'),
+      dialogData: null,
+      currentQueueItem: null
     };
   },
   computed: {
     ...mapGetters({
-      userProfile: 'user/getProfile'
+      userProfile: 'user/getProfile',
+      queue: 'admin/import/getQueue'
     }),
+    availableFields () {
+      const selected = this.headers.map(h => h.selected).filter(s => s);
+      return this.fields.filter(f => !selected.includes(f));
+    },
+    internalDraftRules () {
+      return { ...draftRules(), organisation: { required: true } };
+    },
+    internalPublishRules () {
+      return publishRules();
+    },
+    validationRules () {
+      const rules = this.isDraftOrPublish === 'draft' ? this.internalDraftRules : this.internalPublishRules;
+      return {
+        ...rules,
+        team: undefined,
+        country: undefined,
+        donors: undefined
+      };
+    },
     dialogVisible: {
       get () {
         return !!this.dialogData;
@@ -247,7 +336,12 @@ export default {
     },
     globalErrors () {
       const result = [];
-      const draftRequireds = ['name', 'country', 'organisation'];
+      const draftRequireds = [];
+      for (const key in this.validationRules) {
+        if (this.validationRules[key] && this.validationRules[key].required) {
+          draftRequireds.push(key);
+        }
+      }
       draftRequireds.forEach(dr => {
         if (!this.headers.some(h => h.selected === dr)) {
           result.push(`Please select ${dr} column`);
@@ -263,6 +357,9 @@ export default {
     });
   },
   methods: {
+    ...mapActions({
+      updateQueueItem: 'admin/import/updateQueueItem'
+    }),
     async loadXlsxLib () {
       this._xlsx = await import('xlsx');
       this.ready = true;
@@ -302,16 +399,17 @@ export default {
       };
     },
     columnChange (header) {
-      if (header.selected === 'country') {
-        this.imported.forEach(row => {
-          row[header.title] = this.country;
-        });
-      }
-      if (header.selected === 'donors') {
-        this.imported.forEach(row => {
-          row[header.title] = this.donors;
-        });
-      }
+      // if (header.selected === 'country') {
+      //   this.imported.forEach(row => {
+      //     row[header.title] = this.country;
+      //   });
+      // }
+      // if (header.selected === 'donors') {
+      //   this.imported.forEach(row => {
+      //     row[header.title] = this.donors;
+      //   });
+      // }
+      this.updateQueueItem({ id: this.currentQueueItem.id, header_mapping: this.headers });
     },
     columnFinder (title) {
       const header = this.headers.find(h => h.title === title);
@@ -340,7 +438,11 @@ export default {
         };
       const { data } = await this.$axios.post(`api/projects/import/`, importData);
       this.imported = data.rows;
+      this.currentQueueItem = { ...data, rows: undefined };
       this.$nuxt.$loading.finish('save_sheet');
+    },
+    async saveAll () {
+      // await this.updateQueueItem({ id: this.currentQueueItem.id, header_mapping: this.headers });
     },
     async save (row, dataRow, index) {
       this.$nuxt.$loading.start('save');
@@ -355,6 +457,15 @@ export default {
       dataRow.id = data.id;
       this.$set(this.imported, index, dataRow);
       this.$nuxt.$loading.finish('save');
+    },
+    workOnThis (item) {
+      this.currentQueueItem = { ...item };
+      this.imported = item.rows.map(r => cloneDeep(r));
+      this.country = item.country;
+      this.donors = [item.donor];
+      this.isDraftOrPublish = item.draft ? 'draft' : 'publish';
+      this.headers = cloneDeep(item.header_mapping);
+      this.introDone = true;
     }
   }
 };
