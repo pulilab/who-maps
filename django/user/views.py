@@ -12,7 +12,8 @@ class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, G
 
 
 class UserProfileListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
-    queryset = UserProfile.objects.select_related('user').only('id', 'modified', 'account_type', 'name', 'user__email')
+    queryset = UserProfile.objects.select_related('user', 'organisation').only('id', 'modified', 'account_type',
+                                                                               'name', 'user__email', 'organisation')
     serializer_class = UserProfileListSerializer
 
 
