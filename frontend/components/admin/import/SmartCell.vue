@@ -81,6 +81,10 @@ export default {
     ...mapState('system', {
       systemDicts: state => state
     }),
+    ...mapState('projects', {
+      projectDicts: state => state.projectStructure
+    }),
+
     internalValue: {
       get () {
         return this.value;
@@ -108,14 +112,14 @@ export default {
       } else {
         const resolver = {
           organisation: () => this.findSystemValue('organisations'),
-          country: this.findCountryValue,
-          team: () => this.findSystemValue('profiles', true),
-          viewers: () => this.findSystemValue('profiles', true),
-          platforms: () => this.findProjectCollectionValue(''),
-          digitalHealthInterventions: () => this.findProjectCollectionValue(''),
-          health_focus_areas: () => this.findProjectCollectionValue(''),
-          hsc_challenges: () => this.findProjectCollectionValue(''),
-          his_bucket: () => this.findProjectCollectionValue(''),
+          // country: this.findCountryValue,
+          // team: () => this.findSystemValue('profiles', true),
+          // viewers: () => this.findSystemValue('profiles', true),
+          platforms: () => this.findProjectCollectionValue('technology_platforms', true),
+          digitalHealthInterventions: () => this.findProjectCollectionValue('strategies', true),
+          health_focus_areas: () => this.findProjectCollectionValue('health_focus_areas', true, 'health_focus_areas'),
+          hsc_challenges: () => this.findProjectCollectionValue('hsc_challenges', true),
+          his_bucket: () => this.findProjectCollectionValue('his_bucket', true),
           implementing_partners: this.stringArray,
           // coverage: [],
           // coverageData: {},
@@ -125,10 +129,10 @@ export default {
           //   clients: 0,
           //   facilities: 0
           // },
-          donors: () => this.findSystemValue('donors', true),
-          licenses: () => this.findProjectCollectionValue(''),
-          interoperability_links: () => this.findProjectCollectionValue(''),
-          interoperability_standards: () => this.findProjectCollectionValu('')
+          // donors: () => this.findSystemValue('donors', true),
+          licenses: () => this.findProjectCollectionValue('licenses'),
+          interoperability_links: () => this.findProjectCollectionValue('interoperability_links'),
+          interoperability_standards: () => this.findProjectCollectionValu('interoperability_standards')
         };
         const res = resolver[this.column];
         return res ? res() : result;
@@ -171,18 +175,32 @@ export default {
         .map(st => ({ id: st, name: st }));
       return this.toInternalRepresentation(filtered);
     },
-    findSystemValue (collection, isMultiple) {
-      let value = null;
+    valueParser (isMultiple) {
       if (!Array.isArray(this.value)) {
-        value = isMultiple ? this.stringToArray(this.value) : [this.value];
+        return isMultiple ? this.stringToArray(this.value) : [this.value];
       } else {
-        value = this.value;
+        return this.value;
       }
+    },
+    findSystemValue (collection, isMultiple) {
+      const value = this.valueParser(isMultiple);
       const filtered = this.systemDicts[collection].filter(c => value.some(d => d === c.id || d === c.name));
       return this.toInternalRepresentation(filtered);
     },
-    findProjectCollectionValue () {
-      return this.countries.find(c => c.name === this.value);
+    findProjectCollectionValue (collection, isMultiple, ...subValues) {
+      const value = this.valueParser(isMultiple);
+      let projectData = this.projectDicts[collection];
+      if (subValues && Array.isArray(subValues)) {
+        subValues.forEach(subKey => {
+          projectData = projectData.reduce((a, c) => {
+            a.push(...c[subKey]);
+            return a;
+          }, []);
+        });
+      }
+      console.log(projectData);
+      const filtered = projectData.filter(c => value.some(d => d === c.id || d === c.name));
+      return this.toInternalRepresentation(filtered);
     },
     apiValue () {
       const isMultiple = ['donors', 'implementing_partners'];

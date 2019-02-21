@@ -15,6 +15,24 @@
           v-if="dialogData.column === 'organisation'"
           v-model="dialogData.value[0]"
         />
+        <his-bucket-selector
+          v-if="dialogData.column === 'his_bucket'"
+          v-model="dialogData.value"
+        />
+        <template v-if="dialogData.column === 'platforms'">
+          <div
+            v-for="(element, index) in dialogData.value"
+            :key="index"
+          >
+            <platform-selector
+              v-model="dialogData.value"
+              :index="index"
+            />
+          </div>
+          <el-button @click="dialogData.value.push(null)">
+            Add more
+          </el-button>
+        </template>
       </el-dialog>
 
       <el-card class="box-card">
@@ -270,6 +288,8 @@ import OrganisationSelect from '@/components/common/OrganisationSelect';
 import CountrySelect from '@/components/common/CountrySelect';
 import CountryItem from '@/components/common/CountryItem';
 import DonorItem from '@/components/common/DonorItem';
+import PlatformSelector from '@/components/project/PlatformSelector';
+import HisBucketSelector from '@/components/project/HisBucketSelector';
 
 import { projectFields, draftRules, publishRules } from '@/utilities/projects';
 import { apiWriteParser } from '@/utilities/api';
@@ -284,7 +304,9 @@ export default {
     CountrySelect,
     CountryItem,
     DonorItem,
-    ImportRow
+    ImportRow,
+    PlatformSelector,
+    HisBucketSelector
   },
   data () {
     return {
