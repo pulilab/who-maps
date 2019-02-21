@@ -12,8 +12,8 @@ RUN cd /usr/src/app && ln -s /tmp/node_modules
 
 COPY . /usr/src/app/
 RUN echo "NODE_ENV=production" >> .env
-RUN yarn build
+RUN yarn build --quiet
 
 # start command
-CMD [ "yarn", "start" ]
+CMD yarn start
 

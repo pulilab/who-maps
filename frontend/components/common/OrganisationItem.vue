@@ -1,9 +1,13 @@
 <template>
   <div
-    v-if="organisation"
     class="OrganisationItem"
   >
-    {{ organisation.name }}
+    <span v-if="organisation">
+      {{ organisation.name }}
+    </span>
+    <span v-else>
+      <translate>N/A</translate>
+    </span>
   </div>
 </template>
 
