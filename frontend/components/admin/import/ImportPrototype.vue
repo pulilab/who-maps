@@ -234,19 +234,29 @@
                   {{ header.title }}
                 </div>
                 <div>
-                  <el-select
-                    v-model="header.selected"
-                    size="small"
-                    filterable
-                    @change="columnChange(header)"
+                  <el-tooltip
+                    :disabled="!alreadySaved"
+                    class="item"
+                    effect="dark"
+                    content="Once a row is saved is not possible to change the columns anymore"
+                    placement="top"
                   >
-                    <el-option
-                      v-for="item in availableFields"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                    />
-                  </el-select>
+                    <el-select
+                      v-model="header.selected"
+                      :disabled="alreadySaved"
+                      size="small"
+                      filterable
+                      clearable
+                      @change="columnChange(header)"
+                    >
+                      <el-option
+                        v-for="item in availableFields"
+                        :key="item"
+                        :label="item"
+                        :value="item"
+                      />
+                    </el-select>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
@@ -255,6 +265,8 @@
               v-for="(row, index) in imported"
               :key="index"
               ref="row"
+              :index="index"
+              :row="row"
               :class="['Row', `Row_${index}`]"
             >
               <template v-slot:default="{errors, valid, handleValidation}">
@@ -305,6 +317,7 @@
 
 <script>
 import cloneDeep from 'lodash/cloneDeep';
+import debounce from 'lodash/debounce';
 import { mapGetters, mapActions } from 'vuex';
 
 import ImportRow from '@/components/admin/import/ImportRow';
@@ -361,6 +374,11 @@ export default {
       userProfile: 'user/getProfile',
       queue: 'admin/import/getQueue'
     }),
+    alreadySaved () {
+      return this.imported.reduce((a, c) => {
+        return a && c.project !== null && c.project !== undefined;
+      }, true);
+    },
     availableFields () {
       const selected = this.headers.map(h => h.selected).filter(s => s);
       return this.fields.filter(f => !selected.includes(f));
@@ -413,7 +431,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      updateQueueItem: 'admin/import/updateQueueItem'
+      updateQueueItem: 'admin/import/updateQueueItem',
+      addDataToQueue: 'admin/import/addDataToQueue'
     }),
     scrollToError (valid, index) {
       if (!valid) {
@@ -450,6 +469,13 @@ export default {
     },
     updateValue (row, key, value) {
       this.imported[row].data[key] = value;
+      this.saveUpdatedValue(this.imported[row]);
+    },
+    saveUpdatedValue: debounce(function (row) {
+      this.patchRow(row);
+    }, 1000),
+    async patchRow (row) {
+      return this.$axios.patch(`/api/projects/import-row/${row.id}/`, { ...row, id: undefined });
     },
     openDialogHandler (row, key, { column, value, original }) {
       const stringified = JSON.stringify(value);
@@ -462,24 +488,14 @@ export default {
       };
     },
     columnChange (header) {
-      // if (header.selected === 'country') {
-      //   this.imported.forEach(row => {
-      //     row[header.title] = this.country;
-      //   });
-      // }
-      // if (header.selected === 'donors') {
-      //   this.imported.forEach(row => {
-      //     row[header.title] = this.donors;
-      //   });
-      // }
-      // this.updateQueueItem({ id: this.currentQueueItem.id, header_mapping: this.headers });
+      this.updateQueueItem({ id: this.currentQueueItem.id, header_mapping: this.headers });
     },
     prepareHeaders (row) {
       this.headers = Object.keys(row).map(title => ({ selected: null, title }));
     },
     async saveAndProcessSheet (sheetName) {
       this.$nuxt.$loading.start('save_sheet');
-      const sheet = this._xlsx.utils.sheet_to_json(this._workbook.Sheets[sheetName], { defval: '' }).slice(0, 20);
+      const sheet = this._xlsx.utils.sheet_to_json(this._workbook.Sheets[sheetName], { defval: '' });
       this.prepareHeaders(sheet[0]);
       const importData =
         {
@@ -495,33 +511,40 @@ export default {
             }
           ]
         };
-      const { data } = await this.$axios.post(`api/projects/import/`, importData);
-      this.imported = data.rows;
-      this.currentQueueItem = { ...data, rows: undefined };
+      await this.addDataToQueue(importData);
+      this.workOnThis(this.queue[this.queue.length - 1]);
       this.$nuxt.$loading.finish('save_sheet');
     },
     async saveAll () {
       const valid = this.$refs.row.filter(r => r.valid);
-      console.log(valid);
+      for (const p of valid) {
+        // console.log(p);
+        const newRow = await this.save(p);
+        await this.patchRow(newRow);
+      }
       // await this.updateQueueItem({ id: this.currentQueueItem.id, header_mapping: this.headers });
     },
-    async save (row, dataRow, index) {
+    async save (row) {
       this.$nuxt.$loading.start('save');
-      const filled = this.$refs[row].filter(sc => sc.column);
+      const filled = row.$children.filter(sc => sc.column);
       const result = filled.reduce((a, c) => {
         a[c.column] = c.apiValue();
         return a;
       }, projectFields());
       result.team = [this.userProfile.id];
+      result.country = this.country;
+      result.donors = this.donors;
       const parsed = apiWriteParser(result);
       const { data } = await this.$axios.post(`api/projects/draft/${this.country}/`, parsed);
-      dataRow.id = data.id;
-      this.$set(this.imported, index, dataRow);
+      const dataRow = row.$attrs.row;
+      dataRow.project = data.id;
+      this.$set(this.imported, row.$attrs.index, dataRow);
       this.$nuxt.$loading.finish('save');
+      return dataRow;
     },
     workOnThis (item) {
       this.currentQueueItem = { ...item };
-      this.imported = item.rows.map(r => cloneDeep(r));
+      this.imported = item.rows.filter(r => !r.project).slice(0, 10).map(r => cloneDeep(r));
       this.country = item.country;
       this.donors = [item.donor];
       this.isDraftOrPublish = item.draft ? 'draft' : 'publish';

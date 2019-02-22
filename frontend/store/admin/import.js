@@ -9,6 +9,14 @@ export const actions = {
     const { data } = await this.$axios.get('/api/projects/import/');
     commit('SET_QUEUE', data);
   },
+  async addDataToQueue ({ commit, state }, imported) {
+    const { data } = await this.$axios.post(`api/projects/import/`, imported);
+    const newQueue = [
+      ...state.queue,
+      data
+    ];
+    commit('SET_QUEUE', newQueue);
+  },
   async updateQueueItem ({ commit }, item) {
     const { data } = await this.$axios.patch(`/api/projects/import/${item.id}/`, { ...item, id: null });
     console.log(data);
