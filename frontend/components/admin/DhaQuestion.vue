@@ -299,4 +299,38 @@ export default {
     }
   }
 
+  [dir="rtl"] {
+    .QuestionContainer {
+      padding-left: 0;
+      padding-right: 24px;
+
+      .Actions {
+        left: 20px;
+        right: auto;
+
+        .el-button {
+          margin-left: 0;
+          margin-right: 20px;
+        }
+      }
+
+      .QSwitches {
+        .el-switch {
+          margin-left: 30px;
+          margin-right: 0;
+        }
+      }
+
+      .DDHandler {
+        left: auto;
+        right: 0;
+      }
+
+      .el-switch__label.el-switch__label--right {
+        margin-left: 0;
+        margin-right: 10px;
+      }
+    }
+  }
+
 </style>
