@@ -1,6 +1,6 @@
 <template>
   <div>
-    <slot />
+    <slot :errors="errors.any()" />
   </div>
 </template>
 
