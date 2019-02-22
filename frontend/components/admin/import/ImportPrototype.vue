@@ -5,34 +5,57 @@
         v-if="dialogVisible"
         :visible.sync="dialogVisible"
         title="Select"
-        width="50%"
+        width="80%"
       >
-        <donor-selector
-          v-if="dialogData.column === 'donors'"
-          v-model="dialogData.value"
-        />
-        <organisation-select
-          v-if="dialogData.column === 'organisation'"
-          v-model="dialogData.value[0]"
-        />
-        <his-bucket-selector
-          v-if="dialogData.column === 'his_bucket'"
-          v-model="dialogData.value"
-        />
-        <template v-if="dialogData.column === 'platforms'">
-          <div
-            v-for="(element, index) in dialogData.value"
-            :key="index"
-          >
-            <platform-selector
+        <el-row type="flex">
+          <el-col :span="12">
+            <h3>Original Data</h3>
+            {{ dialogData.original }}
+          </el-col>
+          <el-col :span="12">
+            <donor-selector
+              v-if="dialogData.column === 'donors'"
               v-model="dialogData.value"
-              :index="index"
             />
-          </div>
-          <el-button @click="dialogData.value.push(null)">
-            Add more
-          </el-button>
-        </template>
+            <organisation-select
+              v-if="dialogData.column === 'organisation'"
+              v-model="dialogData.value[0]"
+            />
+            <his-bucket-selector
+              v-if="dialogData.column === 'his_bucket'"
+              v-model="dialogData.value"
+            />
+            <health-system-challenges-selector
+              v-if="dialogData.column === 'hsc_challenges'"
+              v-model="dialogData.value"
+            />
+            <health-focus-areas-selector
+              v-if="dialogData.column === 'health_focus_areas'"
+              v-model="dialogData.value"
+            />
+            <template v-if="dialogData.column === 'platforms'">
+              <div
+                v-for="(element, index) in dialogData.value"
+                :key="index"
+              >
+                <platform-selector
+                  v-model="dialogData.value"
+                  :index="index"
+                />
+              </div>
+              <el-button @click="dialogData.value.push(null)">
+                Add more
+              </el-button>
+            </template>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-button @click="dialogVisible=false">
+              Save
+            </el-button>
+          </el-col>
+        </el-row>
       </el-dialog>
 
       <el-card class="box-card">
@@ -169,7 +192,6 @@
               <el-button @click="workOnThis(item)">
                 Select
               </el-button>
-              </el-butto>
             </el-col>
           </el-row>
         </div>
@@ -232,40 +254,43 @@
             <import-row
               v-for="(row, index) in imported"
               :key="index"
-              class="Row"
+              :class="['Row', `Row_${index}`]"
             >
-              <div class="Column Thin">
-                <el-button
-                  :disabled="globalErrors.length > 0 || !!row.project"
-                  icon="el-icon-check"
-                  type="primary"
-                  circle
-                  class="SaveButton"
-                  @click="save(`row_${index}`, row, index)"
-                />
-                <a
-                  v-if="row.project"
-                  :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
-                  target="_blank"
-                  class="NuxtLink IconLeft"
+              <template v-slot:default="{errors}">
+                <div
+                  class="Column Thin"
                 >
-                  <fa icon="share-square" />
-                </a>
-              </div>
-              <template
-                v-for="header in headers"
-              >
-                <SmartCell
-                  :ref="`row_${index}`"
-                  :key="index + header.title"
-                  :disabled="!!row.project"
-                  :value="row.data[header.title]"
-                  :column="header.selected"
-                  :rules="validationRules[header.selected]"
-                  class="Column"
-                  @change="updateValue(index, header.title, $event)"
-                  @openDialog="openDialogHandler(index, header.title, $event)"
-                />
+                  <el-button
+                    icon="el-icon-check"
+                    :type="globalErrors.length > 0 || errors ? 'warning' : 'success'"
+                    circle
+                    class="SaveButton"
+                    @click="scrollToError(errors, index)"
+                  />
+                  <a
+                    v-if="row.project"
+                    :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
+                    target="_blank"
+                    class="NuxtLink IconLeft"
+                  >
+                    <fa icon="share-square" />
+                  </a>
+                </div>
+                <template
+                  v-for="header in headers"
+                >
+                  <SmartCell
+                    :ref="`row_${index}`"
+                    :key="index + header.title"
+                    :disabled="!!row.project"
+                    :value="row.data[header.title]"
+                    :column="header.selected"
+                    :rules="validationRules[header.selected]"
+                    class="Column"
+                    @change="updateValue(index, header.title, $event)"
+                    @openDialog="openDialogHandler(index, header.title, $event)"
+                  />
+                </template>
               </template>
             </import-row>
           </div>
@@ -290,6 +315,8 @@ import CountryItem from '@/components/common/CountryItem';
 import DonorItem from '@/components/common/DonorItem';
 import PlatformSelector from '@/components/project/PlatformSelector';
 import HisBucketSelector from '@/components/project/HisBucketSelector';
+import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector';
+import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector';
 
 import { projectFields, draftRules, publishRules } from '@/utilities/projects';
 import { apiWriteParser } from '@/utilities/api';
@@ -306,7 +333,9 @@ export default {
     DonorItem,
     ImportRow,
     PlatformSelector,
-    HisBucketSelector
+    HisBucketSelector,
+    HealthSystemChallengesSelector,
+    HealthFocusAreasSelector
   },
   data () {
     return {
@@ -384,6 +413,12 @@ export default {
     ...mapActions({
       updateQueueItem: 'admin/import/updateQueueItem'
     }),
+    scrollToError (errors, index) {
+      if (errors) {
+        const elm = this.$el.querySelector(`.Row_${index} .ValidationError`);
+        elm.scrollIntoView();
+      }
+    },
     async loadXlsxLib () {
       this._xlsx = await import('xlsx');
       this.ready = true;
@@ -414,12 +449,14 @@ export default {
     updateValue (row, key, value) {
       this.imported[row].data[key] = value;
     },
-    openDialogHandler (row, key, { column, value }) {
+    openDialogHandler (row, key, { column, value, original }) {
+      const stringified = JSON.stringify(value);
       this.dialogData = {
         row,
         key,
         column,
-        value: value ? JSON.parse(JSON.stringify(value)) : null
+        value: value ? JSON.parse(stringified) : null,
+        original
       };
     },
     columnChange (header) {
