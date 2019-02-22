@@ -451,7 +451,8 @@
   }
 
   .ContentContainer {
-    padding: 40px 40px 60px 80px !important;
+    padding-left: 80px;
+    padding-right: 40px;
 
     .Hint {
       padding-left: 40px;
@@ -590,5 +591,31 @@
     }
   }
 
-}
+  .el-transfer-panel__header {
+    padding-left: 0;
+    padding-right: 15px;
+    .el-checkbox__label > span {
+      right: auto !important;
+      left: 15px;
+    }
+  }
 
+  .el-transfer-panel__body {
+    .el-input__inner {
+      padding-left: 10px;
+      padding-right: 30px;
+    }
+    .el-checkbox-group {
+      label {
+        margin-left: 30px;
+        margin-right: 0;
+        padding-left: 0;
+        padding-right: 15px;
+        .el-checkbox__label {
+          padding-left: 10px;
+          padding-right: 24px;
+        }
+      }
+    }
+  }
+}

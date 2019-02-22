@@ -727,4 +727,37 @@ export default {
       border-top: 1px solid @colorGrayLight;
     }
   }
+
+  [dir="rtl"] {
+    .CountryAdmin {
+      .UserManagement {
+
+        .AdminPersonaChooser {
+          border-left: 2px solid @colorGrayLighter;
+          border-right: none;
+
+          .Persona {
+            .svg-inline--fa {
+              left: 12px;
+              right: auto;
+              transform: translateY(-50%) rotate(180deg);
+            }
+          }
+        }
+
+        .UserTransfers {
+          .PersonaPrivileges {
+            .el-collapse .el-collapse-item__header .svg-inline--fa {
+              margin-left: 6px;
+              margin-right: 0;
+            }
+            ul {
+              padding-left: 0;
+              padding-right: 40px;
+            }
+          }
+        }
+      }
+    }
+  }
 </style>
