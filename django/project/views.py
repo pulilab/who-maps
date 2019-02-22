@@ -593,7 +593,7 @@ class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin,
         return ProjectImportV2.objects.filter(user=self.request.user)
 
 
-class ImportRowDeleteViewSet(TokenAuthMixin, DestroyModelMixin, GenericViewSet):
+class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):
     serializer_class = ImportRowSerializer
     queryset = ImportRow.objects.all()
 
