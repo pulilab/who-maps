@@ -1,13 +1,13 @@
 <template>
   <div
-    :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': validationError}]"
+    :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': errors.has(column)}]"
     @click="openDialog"
   >
     <el-tooltip
-      :disabled="!validationError"
+      :disabled="!errors.has(column)"
       class="item"
       effect="dark"
-      :content="validationError"
+      :content="errors.first(column)"
       placement="top"
     >
       <span v-if="!column">
@@ -55,6 +55,12 @@ export default {
   model: {
     prop: 'value',
     event: 'change'
+  },
+  $_veeValidate: {
+    value () {
+      return this.value;
+    },
+    events: 'input|change|blur|focus'
   },
   props: {
     value: {
@@ -154,6 +160,9 @@ export default {
         if (!this.originalStored) {
           this._original = value ? JSON.parse(JSON.stringify(value)) : null;
           this.originalStored = true;
+        }
+        if (this.column) {
+          this.$validator.validate(this.column);
         }
       }
     }
