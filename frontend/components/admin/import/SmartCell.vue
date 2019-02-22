@@ -1,30 +1,27 @@
 <template>
   <div
-    :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': errors.has(column)}]"
+    :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': errorMessage}]"
     @click="openDialog"
   >
     <el-tooltip
-      :disabled="!errors.has(column)"
+      :disabled="!errorMessage"
       class="item"
       effect="dark"
-      :content="errors.first(column)"
+      :content="errorMessage"
       placement="top"
     >
       <span v-if="!column">
         {{ value }}
       </span>
+
       <date-field
         v-if="isDate"
         v-model="internalValue"
-        v-validate="rules"
-        :data-vv-name="column"
         :disabled="disabled"
       />
       <el-input
         v-if="isTextArea"
         v-model="internalValue"
-        v-validate="rules"
-        :data-vv-name="column"
         :disabled="disabled"
         type="textarea"
         :rows="6"
@@ -45,22 +42,16 @@
 
 <script>
 import DateField from '@/components/admin/import/DateField';
+import { Validator } from 'vee-validate';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
-  inject: ['$validator'],
   components: {
     DateField
   },
   model: {
     prop: 'value',
     event: 'change'
-  },
-  $_veeValidate: {
-    value () {
-      return this.value;
-    },
-    events: 'input|change|blur|focus'
   },
   props: {
     value: {
@@ -78,6 +69,14 @@ export default {
     rules: {
       type: Object,
       default: null
+    },
+    errors: {
+      type: Array,
+      default: () => []
+    },
+    handleValidation: {
+      type: Function,
+      default: () => {}
     }
   },
   data () {
@@ -95,8 +94,11 @@ export default {
     ...mapState('projects', {
       projectDicts: state => state.projectStructure
     }),
-
+    validator () {
+      return new Validator();
+    },
     internalValue: {
+
       get () {
         return this.value;
       },
@@ -148,9 +150,19 @@ export default {
         const res = resolver[this.column];
         return res ? res() : result;
       }
+    },
+    errorMessage () {
+      const e = this.errors.find(e => e.field === this.column);
+      return e ? e.msg : null;
     }
   },
   watch: {
+    column: {
+      immediate: true,
+      handler (column) {
+        this.validate();
+      }
+    },
     value: {
       immediate: true,
       handler (value) {
@@ -158,13 +170,15 @@ export default {
           this._original = value ? JSON.parse(JSON.stringify(value)) : null;
           this.originalStored = true;
         }
-        if (this.column) {
-          this.$validator.validate(this.column);
-        }
+        this.validate();
       }
     }
   },
   methods: {
+    async validate () {
+      const { valid, errors } = await this.validator.verify(this.value, this.rules, { name: this.column });
+      this.handleValidation(valid, errors[0], this.column);
+    },
     openDialog () {
       if (this.isDate || this.isDisabled || this.isTextArea) {
         return;

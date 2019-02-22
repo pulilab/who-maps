@@ -254,18 +254,19 @@
             <import-row
               v-for="(row, index) in imported"
               :key="index"
+              ref="row"
               :class="['Row', `Row_${index}`]"
             >
-              <template v-slot:default="{errors}">
+              <template v-slot:default="{errors, valid, handleValidation}">
                 <div
                   class="Column Thin"
                 >
                   <el-button
                     icon="el-icon-check"
-                    :type="globalErrors.length > 0 || errors ? 'warning' : 'success'"
+                    :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
                     circle
                     class="SaveButton"
-                    @click="scrollToError(errors, index)"
+                    @click="scrollToError(valid, index)"
                   />
                   <a
                     v-if="row.project"
@@ -280,13 +281,14 @@
                   v-for="header in headers"
                 >
                   <SmartCell
-                    :ref="`row_${index}`"
                     :key="index + header.title"
                     :disabled="!!row.project"
                     :value="row.data[header.title]"
                     :column="header.selected"
                     :rules="validationRules[header.selected]"
                     class="Column"
+                    :errors="errors"
+                    :handle-validation="handleValidation"
                     @change="updateValue(index, header.title, $event)"
                     @openDialog="openDialogHandler(index, header.title, $event)"
                   />
@@ -413,8 +415,8 @@ export default {
     ...mapActions({
       updateQueueItem: 'admin/import/updateQueueItem'
     }),
-    scrollToError (errors, index) {
-      if (errors) {
+    scrollToError (valid, index) {
+      if (!valid) {
         const elm = this.$el.querySelector(`.Row_${index} .ValidationError`);
         elm.scrollIntoView();
       }
@@ -499,6 +501,8 @@ export default {
       this.$nuxt.$loading.finish('save_sheet');
     },
     async saveAll () {
+      const valid = this.$refs.row.filter(r => r.valid);
+      console.log(valid);
       // await this.updateQueueItem({ id: this.currentQueueItem.id, header_mapping: this.headers });
     },
     async save (row, dataRow, index) {
