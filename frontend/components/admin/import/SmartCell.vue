@@ -74,6 +74,11 @@ export default {
       default: null
     }
   },
+  data () {
+    return {
+      originalStored: false
+    };
+  },
   computed: {
     ...mapGetters({
       countries: 'countries/getCountries'
@@ -118,7 +123,7 @@ export default {
           platforms: () => this.findProjectCollectionValue('technology_platforms', true),
           digitalHealthInterventions: () => this.findProjectCollectionValue('strategies', true),
           health_focus_areas: () => this.findProjectCollectionValue('health_focus_areas', true, 'health_focus_areas'),
-          hsc_challenges: () => this.findProjectCollectionValue('hsc_challenges', true),
+          hsc_challenges: () => this.findProjectCollectionValue('hsc_challenges', true, 'challenges'),
           his_bucket: () => this.findProjectCollectionValue('his_bucket', true),
           implementing_partners: this.stringArray,
           // coverage: [],
@@ -132,7 +137,7 @@ export default {
           // donors: () => this.findSystemValue('donors', true),
           licenses: () => this.findProjectCollectionValue('licenses'),
           interoperability_links: () => this.findProjectCollectionValue('interoperability_links'),
-          interoperability_standards: () => this.findProjectCollectionValu('interoperability_standards')
+          interoperability_standards: () => this.findProjectCollectionValue('interoperability_standards')
         };
         const res = resolver[this.column];
         return res ? res() : result;
@@ -142,13 +147,24 @@ export default {
       return this.errors.first(this.column);
     }
   },
+  watch: {
+    value: {
+      immediate: true,
+      handler (value) {
+        if (!this.originalStored) {
+          this._original = value ? JSON.parse(JSON.stringify(value)) : null;
+          this.originalStored = true;
+        }
+      }
+    }
+  },
   methods: {
     openDialog () {
       if (this.isDate || this.isDisabled || this.isTextArea) {
         return;
       }
       if (this.column) {
-        this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column });
+        this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column, original: this._original });
       }
     },
     findCountryValue () {
@@ -166,7 +182,7 @@ export default {
     toInternalRepresentation (filtered) {
       return filtered.reduce((a, c) => {
         a.ids.push(c.id);
-        a.names.push(c.name);
+        a.names.push(c.name || c.challenge);
         return a;
       }, { names: [], ids: [] });
     },
@@ -198,8 +214,7 @@ export default {
           }, []);
         });
       }
-      console.log(projectData);
-      const filtered = projectData.filter(c => value.some(d => d === c.id || d === c.name));
+      const filtered = projectData.filter(c => value.some(d => d === c.id || d === c.name || d === c.challenge));
       return this.toInternalRepresentation(filtered);
     },
     apiValue () {
