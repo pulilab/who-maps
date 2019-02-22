@@ -148,9 +148,6 @@ export default {
         const res = resolver[this.column];
         return res ? res() : result;
       }
-    },
-    validationError () {
-      return this.errors.first(this.column);
     }
   },
   watch: {
