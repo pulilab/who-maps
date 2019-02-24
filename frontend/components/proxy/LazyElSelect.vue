@@ -31,6 +31,16 @@ export default {
       return { ...this.$listeners, 'visible-change': this.onVisibleChange };
     }
   },
+  watch: {
+    value: {
+      immediate: false,
+      handler (value) {
+        if (!this.open && value) {
+          this.open = true;
+        }
+      }
+    }
+  },
   mounted () {
     if (this.value) {
       window.requestAnimationFrame(() => {
