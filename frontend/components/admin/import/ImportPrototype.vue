@@ -234,42 +234,58 @@
                   {{ header.title }}
                 </div>
                 <div>
-                  <el-tooltip
-                    :disabled="!alreadySaved"
-                    class="item"
-                    effect="dark"
-                    content="Once a row is saved is not possible to change the columns anymore"
-                    placement="top"
+                  <el-select
+                    v-model="header.selected"
+
+                    size="small"
+                    filterable
+                    clearable
+                    @change="columnChange(header)"
                   >
-                    <el-select
-                      v-model="header.selected"
-                      :disabled="alreadySaved"
-                      size="small"
-                      filterable
-                      clearable
-                      @change="columnChange(header)"
-                    >
-                      <el-option
-                        v-for="item in availableFields"
-                        :key="item"
-                        :label="item"
-                        :value="item"
-                      />
-                    </el-select>
-                  </el-tooltip>
+                    <el-option
+                      v-for="item in availableFields"
+                      :key="item"
+                      :label="item"
+                      :value="item"
+                    />
+                  </el-select>
+                </div>
+              </div>
+              <div
+                v-if="headers.length > 0"
+                class="Column Header"
+              >
+                <div class="Title">
+                  Empty Column
+                </div>
+                <div>
+                  <el-select
+                    v-model="additonalHeader"
+
+                    size="small"
+                    filterable
+                    clearable
+                  >
+                    <el-option
+                      v-for="item in availableFields"
+                      :key="item"
+                      :label="item"
+                      :value="item"
+                    />
+                  </el-select>
                 </div>
               </div>
             </div>
 
             <import-row
-              v-for="(row, index) in imported"
+              v-for="(row, index) in rows"
               :key="index"
               ref="row"
               :index="index"
               :row="row"
               :class="['Row', `Row_${index}`]"
             >
-              <template v-slot:default="{errors, valid, handleValidation}">
+              <template v-slot:default="{errors, valid, handleValidation, columns}">
                 <div
                   class="Column Thin"
                 >
@@ -295,7 +311,7 @@
                   <SmartCell
                     :key="index + header.title"
                     :disabled="!!row.project"
-                    :value="row.data[header.title]"
+                    :value="columns[header.title]"
                     :column="header.selected"
                     :rules="validationRules[header.selected]"
                     class="Column"
@@ -305,6 +321,7 @@
                     @openDialog="openDialogHandler(index, header.title, $event)"
                   />
                 </template>
+                <div class="Column" />
               </template>
             </import-row>
           </div>
@@ -316,6 +333,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import { mapGetters, mapActions } from 'vuex';
@@ -336,6 +354,9 @@ import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelec
 import { projectFields, draftRules, publishRules } from '@/utilities/projects';
 import { apiWriteParser } from '@/utilities/api';
 
+const blackList = ['country', 'donors', 'coverage', 'national_level_deployment',
+  'coverageData', 'team', 'viewers', 'coverageType', 'digitalHealthInterventions'];
+const addendumFields = ['clients', 'health_workers', 'facilities'];
 export default {
 
   components: {
@@ -362,11 +383,16 @@ export default {
       fileName: '',
       ready: false,
       imported: [],
+      original: [],
       headers: [],
       sheets: [],
-      fields: Object.keys(projectFields()).filter(k => k !== 'country' && k !== 'donors'),
+      fields: [
+        ...Object.keys(projectFields()).filter(k => !blackList.includes(k)),
+        ...addendumFields
+      ],
       dialogData: null,
-      currentQueueItem: null
+      currentQueueItem: null,
+      additonalHeader: null
     };
   },
   computed: {
@@ -374,10 +400,8 @@ export default {
       userProfile: 'user/getProfile',
       queue: 'admin/import/getQueue'
     }),
-    alreadySaved () {
-      return this.imported.reduce((a, c) => {
-        return a && c.project !== null && c.project !== undefined;
-      }, true);
+    rows () {
+      return this.imported.filter(i => !i.project);
     },
     availableFields () {
       const selected = this.headers.map(h => h.selected).filter(s => s);
@@ -421,6 +445,23 @@ export default {
         }
       });
       return result;
+    }
+  },
+  watch: {
+    additonalHeader: {
+      immediate: false,
+      async handler (column) {
+        if (column) {
+          this.headers.push({ selected: column, title: column });
+          await this.columnChange();
+          this.$nextTick(() => {
+            this.additonalHeader = null;
+            this.imported.forEach(r => {
+              Vue.set(r.data, column, '');
+            });
+          });
+        }
+      }
     }
   },
   mounted () {
@@ -477,17 +518,17 @@ export default {
     async patchRow (row) {
       return this.$axios.patch(`/api/projects/import-row/${row.id}/`, { ...row, id: undefined });
     },
-    openDialogHandler (row, key, { column, value, original }) {
+    openDialogHandler (row, key, { column, value }) {
       const stringified = JSON.stringify(value);
       this.dialogData = {
         row,
         key,
         column,
         value: value ? JSON.parse(stringified) : null,
-        original
+        original: this.original[row].data[key]
       };
     },
-    columnChange (header) {
+    columnChange () {
       this.updateQueueItem({ id: this.currentQueueItem.id, header_mapping: this.headers });
     },
     prepareHeaders (row) {
@@ -516,13 +557,11 @@ export default {
       this.$nuxt.$loading.finish('save_sheet');
     },
     async saveAll () {
-      const valid = this.$refs.row.filter(r => r.valid);
+      const valid = this.$refs.row.filter(r => r.valid).slice(0, 1);
       for (const p of valid) {
-        // console.log(p);
         const newRow = await this.save(p);
         await this.patchRow(newRow);
       }
-      // await this.updateQueueItem({ id: this.currentQueueItem.id, header_mapping: this.headers });
     },
     async save (row) {
       this.$nuxt.$loading.start('save');
@@ -536,20 +575,26 @@ export default {
       result.donors = this.donors;
       const parsed = apiWriteParser(result);
       const { data } = await this.$axios.post(`api/projects/draft/${this.country}/`, parsed);
-      const dataRow = row.$attrs.row;
+      const dataRow = row.row;
       dataRow.project = data.id;
-      this.$set(this.imported, row.$attrs.index, dataRow);
+      this.$set(this.imported, row.index, dataRow);
       this.$nuxt.$loading.finish('save');
       return dataRow;
     },
     workOnThis (item) {
-      this.currentQueueItem = { ...item };
-      this.imported = item.rows.filter(r => !r.project).slice(0, 10).map(r => cloneDeep(r));
-      this.country = item.country;
-      this.donors = [item.donor];
-      this.isDraftOrPublish = item.draft ? 'draft' : 'publish';
-      this.headers = cloneDeep(item.header_mapping);
-      this.introDone = true;
+      this.$nuxt.$loading.start('select');
+      window.setTimeout(() => {
+        this.currentQueueItem = { ...item };
+        const rowString = JSON.stringify(item.rows.slice(0, 10));
+        this.imported = JSON.parse(rowString);
+        this.original = JSON.parse(rowString);
+        this.country = item.country;
+        this.donors = [item.donor];
+        this.isDraftOrPublish = item.draft ? 'draft' : 'publish';
+        this.headers = cloneDeep(item.header_mapping);
+        this.introDone = true;
+        this.$nuxt.$loading.finish('select');
+      }, 300);
     }
   }
 };
