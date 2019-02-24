@@ -450,16 +450,11 @@ export default {
   watch: {
     additonalHeader: {
       immediate: false,
-      async handler (column) {
+      handler (column) {
         if (column) {
           this.headers.push({ selected: column, title: column });
-          await this.columnChange();
-          this.$nextTick(() => {
-            this.additonalHeader = null;
-            this.imported.forEach(r => {
-              Vue.set(r.data, column, '');
-            });
-          });
+          this.additonalHeader = null;
+          this.columnChange();
         }
       }
     }
@@ -509,7 +504,7 @@ export default {
       }
     },
     updateValue (row, key, value) {
-      this.imported[row].data[key] = value;
+      Vue.set(this.imported[row].data, key, value);
       this.saveUpdatedValue(this.imported[row]);
     },
     saveUpdatedValue: debounce(function (row) {
