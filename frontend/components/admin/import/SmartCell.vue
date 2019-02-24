@@ -1,7 +1,7 @@
 <template>
   <div
     :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': errorMessage}]"
-    @click="openDialog"
+    @click="clickHandler"
   >
     <el-tooltip
       :disabled="!errorMessage"
@@ -10,17 +10,17 @@
       :content="errorMessage"
       placement="top"
     >
-      <span v-if="!column">
+      <span v-if="!active">
         {{ value }}
       </span>
 
       <date-field
-        v-if="isDate"
+        v-if="isDate && active"
         v-model="internalValue"
         :disabled="disabled"
       />
       <el-input
-        v-if="isTextArea"
+        v-if="isTextArea && active"
         v-model="internalValue"
         :disabled="disabled"
         type="textarea"
@@ -81,7 +81,7 @@ export default {
   },
   data () {
     return {
-      originalStored: false
+      active: false
     };
   },
   computed: {
@@ -98,7 +98,6 @@ export default {
       return new Validator();
     },
     internalValue: {
-
       get () {
         return this.value;
       },
@@ -110,7 +109,12 @@ export default {
       return ['start_date', 'end_date', 'implementation_dates'].includes(this.column);
     },
     isTextArea () {
-      return ['geographic_scope', 'implementation_overview', 'name', 'contact_name', 'contact_email', 'mobile_application', 'wiki', 'repository'].includes(this.column);
+      return ['geographic_scope', 'implementation_overview', 'name',
+        'contact_name', 'contact_email', 'mobile_application',
+        'wiki', 'repository', 'health_workers', 'clients', 'facilities'].includes(this.column);
+    },
+    isCoverage () {
+      return this.column === 'national_level_deployment';
     },
     isForced () {
       return ['country', 'donors'].includes(this.column);
@@ -166,10 +170,6 @@ export default {
     value: {
       immediate: true,
       handler (value) {
-        if (!this.originalStored) {
-          this._original = value ? JSON.parse(JSON.stringify(value)) : null;
-          this.originalStored = true;
-        }
         this.validate();
       }
     }
@@ -179,12 +179,13 @@ export default {
       const { valid, errors } = await this.validator.verify(this.value, this.rules, { name: this.column });
       this.handleValidation(valid, errors[0], this.column);
     },
-    openDialog () {
-      if (this.isDate || this.isDisabled || this.isTextArea) {
+    clickHandler () {
+      if (this.isDate || this.isDisabled || this.isTextArea || this.isCoverage) {
+        this.active = true;
         return;
       }
       if (this.column) {
-        this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column, original: this._original });
+        this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column });
       }
     },
     findCountryValue () {
