@@ -33,6 +33,17 @@
               v-if="dialogData.column === 'health_focus_areas'"
               v-model="dialogData.value"
             />
+            <template v-if="dialogData.column === 'implementing_partners'">
+              <div
+                v-for="(p, index) in dialogData.value"
+                :key="index"
+              >
+                <el-input v-model="dialogData.value[index]" />
+              </div>
+              <el-button @click="dialogData.value.push(null)">
+                Add more
+              </el-button>
+            </template>
             <template v-if="dialogData.column === 'platforms'">
               <div
                 v-for="(element, index) in dialogData.value"
@@ -232,6 +243,12 @@
               >
                 <div class="Title">
                   {{ header.title }}
+                  <el-button
+                    circle
+                    icon="el-icon-delete"
+                    size="mini"
+                    @click="rmHeader(index)"
+                  />
                 </div>
                 <div>
                   <el-select
@@ -401,7 +418,7 @@ export default {
       queue: 'admin/import/getQueue'
     }),
     rows () {
-      return this.imported.filter(i => !i.project);
+      return this.imported;
     },
     availableFields () {
       const selected = this.headers.map(h => h.selected).filter(s => s);
@@ -411,13 +428,19 @@ export default {
       return { ...draftRules(), organisation: { required: true } };
     },
     internalPublishRules () {
-      return publishRules();
+      const standardRules = publishRules();
+      return {
+        ...standardRules,
+        strategies: undefined,
+        ...standardRules.national_level_deployment
+      };
     },
     validationRules () {
       const rules = this.isDraftOrPublish === 'draft' ? this.internalDraftRules : this.internalPublishRules;
       return {
         ...rules,
         team: undefined,
+        viewers: undefined,
         country: undefined,
         donors: undefined
       };
@@ -470,6 +493,10 @@ export default {
       updateQueueItem: 'admin/import/updateQueueItem',
       addDataToQueue: 'admin/import/addDataToQueue'
     }),
+    rmHeader (index) {
+      Vue.delete(this.headers, index);
+      this.columnChange();
+    },
     scrollToError (valid, index) {
       if (!valid) {
         const elm = this.$el.querySelector(`.Row_${index} .ValidationError`);
@@ -553,9 +580,13 @@ export default {
     },
     async saveAll () {
       const valid = this.$refs.row.filter(r => r.valid).slice(0, 1);
-      for (const p of valid) {
-        const newRow = await this.save(p);
-        await this.patchRow(newRow);
+      try {
+        for (const p of valid) {
+          const newRow = await this.save(p);
+          await this.patchRow(newRow);
+        }
+      } catch (e) {
+        console.error(e);
       }
     },
     async save (row) {
