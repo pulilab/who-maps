@@ -10,32 +10,47 @@
       :content="errorMessage"
       placement="top"
     >
-      <span v-if="!active">
-        {{ value }}
-      </span>
-
-      <date-field
-        v-if="isDate && active"
-        v-model="internalValue"
-        :disabled="disabled"
-      />
-      <el-input
-        v-if="isTextArea && active"
-        v-model="internalValue"
-        :disabled="disabled"
-        type="textarea"
-        :rows="6"
-      />
-      <template v-if="column && !isDate && !isTextArea">
-        <ul v-if="parsedValue && parsedValue.names">
-          <li
-            v-for="name in parsedValue.names"
-            :key="name"
-          >
-            {{ name }}
-          </li>
-        </ul>
-      </template>
+      <div>
+        <date-field
+          v-if="isDate && active"
+          v-model="internalValue"
+          :disabled="disabled"
+        />
+        <el-input
+          v-if="isTextArea && active"
+          v-model="internalValue"
+          :disabled="disabled"
+          type="textarea"
+          :rows="6"
+        />
+        <el-radio-group
+          v-if="isGovInvestor && active"
+          v-model="internalValue"
+        >
+          <el-radio :label="0">
+            No, they have not yet contributed
+          </el-radio>
+          <el-radio :label="1">
+            Yes, they are contributing in-kind people or time
+          </el-radio>
+          <el-radio :label="2">
+            Yes, there is a financial contribution through MOH budget
+          </el-radio>
+        </el-radio-group>
+        <template v-if="column && !isDate && !isTextArea">
+          <ul v-if="parsedValue && parsedValue.names">
+            <li
+              v-for="name in parsedValue.names"
+              :key="name"
+            >
+              {{ name }}
+            </li>
+          </ul>
+        </template>
+        <span v-else-if="!active">
+          {{ value }}
+        </span>
+      </div>
     </el-tooltip>
   </div>
 </template>
@@ -113,8 +128,8 @@ export default {
         'contact_name', 'contact_email', 'mobile_application',
         'wiki', 'repository', 'health_workers', 'clients', 'facilities'].includes(this.column);
     },
-    isCoverage () {
-      return this.column === 'national_level_deployment';
+    isGovInvestor () {
+      return this.column === 'government_investor';
     },
     isForced () {
       return ['country', 'donors'].includes(this.column);
@@ -138,6 +153,19 @@ export default {
           hsc_challenges: () => this.findProjectCollectionValue('hsc_challenges', true, 'challenges'),
           his_bucket: () => this.findProjectCollectionValue('his_bucket', true),
           implementing_partners: this.stringArray,
+          government_investor: () => {
+            const labelLib = {
+              'No, they have not yet contributed': 0,
+              'Yes, they are contributing in-kind people or time': 1,
+              'Yes, there is a financial contribution through MOH budget': 2
+            };
+            const value = Number.isInteger(this.value) ? this.value : labelLib[this.value];
+            const label = !Number.isInteger(this.value) ? this.value : Object.keys(labelLib).find(k => labelLib[k] === this.value);
+            return {
+              ids: [value],
+              names: [label]
+            };
+          },
           // coverage: [],
           // coverageData: {},
           // coverage_second_level: [],
@@ -180,7 +208,7 @@ export default {
       this.handleValidation(valid, errors[0], this.column);
     },
     clickHandler () {
-      if (this.isDate || this.isDisabled || this.isTextArea || this.isCoverage) {
+      if (this.isDate || this.isDisabled || this.isTextArea || this.isCoverage || this.isGovInvestor) {
         this.active = true;
         return;
       }
@@ -198,6 +226,9 @@ export default {
       }
     },
     stringToArray (value) {
+      if (Array.isArray(value)) {
+        return value;
+      }
       return value.split(',').map(v => v.trim());
     },
     toInternalRepresentation (filtered) {
@@ -239,8 +270,8 @@ export default {
       return this.toInternalRepresentation(filtered);
     },
     apiValue () {
-      const isMultiple = ['donors', 'implementing_partners'];
-      const isIds = ['donors', 'country', 'organisation'];
+      const isMultiple = ['platforms', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards'];
+      const isIds = [...isMultiple, 'donors', 'country', 'organisation', 'government_investor'];
       const idsOrNames = isIds.includes(this.column) ? this.parsedValue.ids : this.parsedValue.names;
       return isMultiple.includes(this.column) ? idsOrNames : idsOrNames[0];
     }
