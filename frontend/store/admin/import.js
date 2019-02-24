@@ -7,7 +7,8 @@ export const getters = {
 export const actions = {
   async loadQueue ({ commit }) {
     const { data } = await this.$axios.get('/api/projects/import/');
-    commit('SET_QUEUE', data);
+    const filtered = data.filter(q => q.rows.some(r => !r.project));
+    commit('SET_QUEUE', filtered);
   },
   async addDataToQueue ({ commit, state }, imported) {
     const { data } = await this.$axios.post(`api/projects/import/`, imported);
