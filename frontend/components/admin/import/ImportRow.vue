@@ -3,6 +3,7 @@
     <slot
       :errors="errors"
       :valid="valid"
+      :columns="columns"
       :handleValidation="handleValidation"
     />
   </div>
@@ -11,6 +12,16 @@
 <script>
 
 export default {
+  props: {
+    row: {
+      type: Object,
+      default: () => ({})
+    },
+    index: {
+      type: Number,
+      default: null
+    }
+  },
   data () {
     return {
       errors: []
@@ -19,6 +30,12 @@ export default {
   computed: {
     valid () {
       return this.errors.length === 0;
+    },
+    columns () {
+      if (this.row && this.row.data) {
+        return this.row.data;
+      }
+      return {};
     }
   },
   methods: {
