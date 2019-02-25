@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import HeadMixin from '@/layouts/HeadMixin';
 import DhaFooter from '../components/common/DhaFooter.vue';
 import TopBar from '../components/common/TopBar.vue';
 import ActionBar from '../components/common/ActionBar.vue';
@@ -24,9 +25,7 @@ export default {
     DialogsContainer,
     DjangoFeedback
   },
-  head () {
-    return this.$nuxtI18nSeo();
-  },
+  mixins: [HeadMixin],
   computed: {
     pureRoute () {
       if (this.$route && this.$route.name) {

@@ -207,7 +207,7 @@
         :page-size.sync="pageSize"
         :page-sizes="pageSizeOption"
         :total="total"
-        layout="sizes, prev, slot, next"
+        :layout="paginationOrderStr"
       >
         <span class="PageCounter">
           <translate :parameters="{min, max, total}">
@@ -230,6 +230,7 @@ import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
 import DonorsList from '../common/list/DonorsList';
 import RegionItem from '../common/RegionItem';
 import CustomAnswersCell from './CustomAnswersCell';
+import { setTimeout } from 'timers';
 
 export default {
   components: {
@@ -269,6 +270,10 @@ export default {
     max () {
       const max = this.pageSize * this.currentPage;
       return max < this.total ? max : this.total;
+    },
+    paginationOrderStr () {
+      const loc = this.$i18n.locale;
+      return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next';
     }
   },
   watch: {
@@ -288,6 +293,9 @@ export default {
       handler (columns) {
         this.$nextTick(() => {
           this.$refs.mainTable.doLayout();
+          setTimeout(() => {
+            this.alignFixedTableWidthForRTL();
+          }, 50);
         });
       }
     },
@@ -308,6 +316,9 @@ export default {
         this.$refs.mainTable.clearSelection();
         this.$refs.mainTable.toggleAllSelection();
       }
+      this.$nextTick(() => {
+        this.alignFixedTableWidthForRTL();
+      });
     }, 500);
   },
   methods: {
@@ -345,6 +356,24 @@ export default {
           prop = prop.replace('-', '');
         }
         this.$refs.mainTable.sort(prop, direction);
+      }
+    },
+    alignFixedTableWidthForRTL () {
+      const locale = this.$i18n.locale;
+      if (locale === 'ar') {
+        const rawTableWidth = document.querySelector('.el-table__header').offsetWidth;
+        const fixedFieldWidths = 275;
+        const toShowBorder = 1;
+
+        const toAlignWidth = rawTableWidth - fixedFieldWidths - toShowBorder;
+
+        const fixedTableHeader = document.querySelector('.el-table__fixed-header-wrapper');
+        const fixedTableBody = document.querySelector('.el-table__fixed-body-wrapper');
+
+        if (fixedTableBody && fixedTableHeader) {
+          fixedTableHeader.style.left = -toAlignWidth + 'px';
+          fixedTableBody.style.left = -toAlignWidth + 'px';
+        }
       }
     }
   }

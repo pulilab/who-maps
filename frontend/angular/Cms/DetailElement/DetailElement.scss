@@ -7,6 +7,14 @@ cms-detail-element {
   }
 }
 
+[dir="rtl"] {
+  cms-detail-element {
+    md-card-actions {
+      float: left;
+    }
+  }
+}
+
 .detail-dialog {
   min-width: 720px;
   max-width: 720px;

@@ -6,18 +6,18 @@ from project.models import DigitalStrategy, InteroperabilityLink, HealthCategory
     HSCChallenge, HSCGroup, InteroperabilityStandard, TechnologyPlatform, Licence
 
 FILES_CLASSES_FIELDS = [
-    ('Country.json', Country, ['name_fr', 'name_es', 'name_pt']),
-    ('DigitalStrategy.json', DigitalStrategy, ['name_fr', 'name_es', 'name_pt']),
-    ('HealthCategory.json', HealthCategory, ['name_fr', 'name_es', 'name_pt']),
-    ('HealthFocusArea.json', HealthFocusArea, ['name_fr', 'name_es', 'name_pt']),
-    ('HISBucket.json', HISBucket, ['name_fr', 'name_es', 'name_pt']),
-    ('HSCChallenge.json', HSCChallenge, ['name_fr', 'name_es', 'name_pt']),
-    ('HSCGroup.json', HSCGroup, ['name_fr', 'name_es', 'name_pt']),
+    ('Country.json', Country, ['name_fr', 'name_es', 'name_pt', 'name_ar']),
+    ('DigitalStrategy.json', DigitalStrategy, ['name_fr', 'name_es', 'name_pt', 'name_ar']),
+    ('HealthCategory.json', HealthCategory, ['name_fr', 'name_es', 'name_pt', 'name_ar']),
+    ('HealthFocusArea.json', HealthFocusArea, ['name_fr', 'name_es', 'name_pt', 'name_ar']),
+    ('HISBucket.json', HISBucket, ['name_fr', 'name_es', 'name_pt', 'name_ar']),
+    ('HSCChallenge.json', HSCChallenge, ['name_fr', 'name_es', 'name_pt', 'name_ar']),
+    ('HSCGroup.json', HSCGroup, ['name_fr', 'name_es', 'name_pt', 'name_ar']),
     ('InteroperabilityLink.json', InteroperabilityLink,
-     ['pre_fr', 'pre_es', 'pre_pt', 'name_fr', 'name_es', 'name_pt']),
-    ('InteroperabilityStandard.json', InteroperabilityStandard, ['name_fr', 'name_es', 'name_pt']),
-    ('Licence.json', Licence, ['name_fr', 'name_es', 'name_pt']),
-    ('TechnologyPlatform.json', TechnologyPlatform, ['name_fr', 'name_es', 'name_pt']),
+     ['pre_fr', 'pre_es', 'pre_pt', 'pre_ar', 'name_fr', 'name_es', 'name_pt', 'name_ar']),
+    ('InteroperabilityStandard.json', InteroperabilityStandard, ['name_fr', 'name_es', 'name_pt', 'name_ar']),
+    ('Licence.json', Licence, ['name_fr', 'name_es', 'name_pt', 'name_ar']),
+    ('TechnologyPlatform.json', TechnologyPlatform, ['name_fr', 'name_es', 'name_pt', 'name_ar']),
 ]
 
 

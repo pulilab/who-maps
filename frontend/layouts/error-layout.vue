@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import HeadMixin from '@/layouts/HeadMixin';
 import DhaFooter from '../components/common/DhaFooter.vue';
 import TopBar from '../components/common/TopBar.vue';
 import DialogsContainer from '../components/dialogs/DialogsContainer.vue';
@@ -21,6 +22,7 @@ export default {
     DialogsContainer,
     DjangoFeedback
   },
+  mixins: [HeadMixin],
   computed: {
     layoutClass () {
       if (this.$route.params.organisation !== '-') {

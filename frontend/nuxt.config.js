@@ -47,7 +47,8 @@ const config = {
     { src: '~plugins/vee-validate.js', ssr: true },
     { src: '~plugins/vue-leaflet.js', ssr: false },
     { src: '~plugins/element.js', ssr: true },
-    { src: '~plugins/i18n.js', ssr: true }
+    { src: '~plugins/i18n.js', ssr: true },
+    { src: '~plugins/watchHead.js', ssr: false }
   ],
   modules: [
     '@nuxtjs/axios',
@@ -80,6 +81,12 @@ const config = {
           iso: 'pt-PT',
           name: 'Português',
           file: 'pt-PT.js'
+        },
+        {
+          code: 'ar',
+          iso: 'ar-AR',
+          name: 'Arabic',
+          file: 'ar-AR.js'
         }
       ],
       lazy: true,
