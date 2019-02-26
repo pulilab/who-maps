@@ -659,6 +659,11 @@ export default {
         }
       } catch (e) {
         console.error(e);
+        if (e.response && e.response.data) {
+          this.$alert(JSON.stringify(e.response.data), 'Error', {
+            confirmButtonText: 'OK'
+          });
+        }
         this.$nuxt.$loading.finish('save');
       }
     },
@@ -679,7 +684,6 @@ export default {
       result.donors = this.donors;
       result.digitalHealthInterventions = result.platforms.map(p => ({ platform: p, id: this.firstDHI }));
       const parsed = apiWriteParser(result, cf);
-      // console.log(parsed);
       const { data } = await this.$axios.post(`api/projects/draft/${this.country}/`, parsed);
       if (this.isDraftOrPublish === 'publish') {
         await this.$axios.put(`api/projects/publish/${data.id}/${this.country}/`, parsed);
