@@ -58,6 +58,45 @@
                 Add more
               </el-button>
             </template>
+
+            <div
+              v-if="dialogData.column === 'custom_field'"
+              ref="custom_fields"
+            >
+              <el-input
+                v-if="dialogData.customField.type < 3"
+                v-model="dialogData.value[0]"
+              />
+
+              <el-radio-group
+                v-if="dialogData.customField.type === 3"
+                v-model="dialogData.value[0]"
+              >
+                <el-radio label="yes">
+                  <translate>Yes</translate>
+                </el-radio>
+                <el-radio label="no">
+                  <translate>No</translate>
+                </el-radio>
+              </el-radio-group>
+
+              <template v-if="dialogData.customField.type > 3 && dialogData.customField.options">
+                <el-select
+                  v-model="dialogData.value"
+                  :placeholder="$gettext('Select from list') | translate"
+                  :multiple="dialogData.customField.type === 5"
+                  filterable
+                  popper-class="CustomFieldSelectorDropdown"
+                  class="CustomFieldSelector"
+                >
+                  <el-option
+                    v-for="(opt, index) in dialogData.customField.options"
+                    :key="index"
+                    :value="opt"
+                  />
+                </el-select>
+              </template>
+            </div>
           </el-col>
         </el-row>
         <el-row>
@@ -244,6 +283,7 @@
                 <div class="Title">
                   {{ header.title }}
                   <el-button
+                    v-if="header.selected === null || typeof header.selected === 'string'"
                     circle
                     icon="el-icon-delete"
                     size="mini"
@@ -252,6 +292,7 @@
                 </div>
                 <div>
                   <el-select
+                    v-if="header.selected === null || typeof header.selected === 'string'"
                     v-model="header.selected"
 
                     size="small"
@@ -266,6 +307,9 @@
                       :value="item"
                     />
                   </el-select>
+                  <div v-else>
+                    Custom Country Question
+                  </div>
                 </div>
               </div>
               <div
@@ -329,7 +373,7 @@
                     :key="index + header.title"
                     :disabled="!!row.project"
                     :value="columns[header.title]"
-                    :column="header.selected"
+                    :type="header.selected"
                     :rules="validationRules[header.selected]"
                     class="Column"
                     :errors="errors"
@@ -415,10 +459,25 @@ export default {
   computed: {
     ...mapGetters({
       userProfile: 'user/getProfile',
-      queue: 'admin/import/getQueue'
+      queue: 'admin/import/getQueue',
+      getCountryDetails: 'countries/getCountryDetails',
+      dhi: 'projects/getDigitalHealthInterventions'
     }),
+    firstDHI () {
+      if (this.dhi && this.dhi[0].subGroups[0] && this.dhi[0].subGroups[0].strategies) {
+        return this.dhi[0].subGroups[0].strategies[0].id;
+      }
+      return null;
+    },
     rows () {
       return this.imported;
+    },
+    countryFields () {
+      const country = this.getCountryDetails(this.country);
+      if (country) {
+        return country.country_questions;
+      }
+      return [];
     },
     availableFields () {
       const selected = this.headers.map(h => h.selected).filter(s => s);
@@ -491,7 +550,8 @@ export default {
   methods: {
     ...mapActions({
       updateQueueItem: 'admin/import/updateQueueItem',
-      addDataToQueue: 'admin/import/addDataToQueue'
+      addDataToQueue: 'admin/import/addDataToQueue',
+      loadCountryDetails: 'countries/loadCountryDetails'
     }),
     rmHeader (index) {
       Vue.delete(this.headers, index);
@@ -540,25 +600,36 @@ export default {
     async patchRow (row) {
       return this.$axios.patch(`/api/projects/import-row/${row.id}/`, { ...row, id: undefined });
     },
-    openDialogHandler (row, key, { column, value }) {
+    openDialogHandler (row, key, { column, value, type }) {
       const stringified = JSON.stringify(value);
       this.dialogData = {
         row,
         key,
         column,
         value: value ? JSON.parse(stringified) : null,
-        original: this.original[row].data[key]
+        original: this.original[row].data[key],
+        customField: type
       };
     },
     columnChange () {
       this.updateQueueItem({ id: this.currentQueueItem.id, header_mapping: this.headers });
     },
     prepareHeaders (row) {
-      this.headers = Object.keys(row).map(title => ({ selected: null, title }));
+      const headers = Object.keys(row).map(title => ({ selected: null, title }));
+      if (this.countryFields) {
+        const cH = this.countryFields.map(cf => ({ title: cf.question, selected: cf }));
+        this.headers = [
+          ...headers,
+          ...cH
+        ];
+      } else {
+        this.headers = headers;
+      }
     },
     async saveAndProcessSheet (sheetName) {
       this.$nuxt.$loading.start('save_sheet');
       const sheet = this._xlsx.utils.sheet_to_json(this._workbook.Sheets[sheetName], { defval: '' });
+      await this.loadCountryDetails(this.country);
       this.prepareHeaders(sheet[0]);
       const importData =
         {
@@ -582,16 +653,23 @@ export default {
       const valid = this.$refs.row.filter(r => r.valid).slice(0, 1);
       try {
         for (const p of valid) {
+          // eslint-disable-next-line no-unused-vars
           const newRow = await this.save(p);
-          await this.patchRow(newRow);
+          // await this.patchRow(newRow);
         }
       } catch (e) {
         console.error(e);
+        this.$nuxt.$loading.finish('save');
       }
     },
     async save (row) {
       this.$nuxt.$loading.start('save');
-      const filled = row.$children.filter(sc => sc.column);
+      const filled = row.$children.filter(sc => sc.column && sc.column !== 'custom_field');
+      const cf = row.$children.filter(sc => sc.column === 'custom_field').map(c => ({
+        question_id: c.type.id,
+        answer: c.apiValue()
+      })).filter(a => a.answer);
+
       const result = filled.reduce((a, c) => {
         a[c.column] = c.apiValue();
         return a;
@@ -599,15 +677,20 @@ export default {
       result.team = [this.userProfile.id];
       result.country = this.country;
       result.donors = this.donors;
-      const parsed = apiWriteParser(result);
+      result.digitalHealthInterventions = result.platforms.map(p => ({ platform: p, id: this.firstDHI }));
+      const parsed = apiWriteParser(result, cf);
+      // console.log(parsed);
       const { data } = await this.$axios.post(`api/projects/draft/${this.country}/`, parsed);
+      if (this.isDraftOrPublish === 'publish') {
+        await this.$axios.put(`api/projects/publish/${data.id}/${this.country}/`, parsed);
+      }
       const dataRow = row.row;
       dataRow.project = data.id;
       this.$set(this.imported, row.index, dataRow);
       this.$nuxt.$loading.finish('save');
       return dataRow;
     },
-    workOnThis (item) {
+    async workOnThis (item) {
       this.$nuxt.$loading.start('select');
       window.setTimeout(() => {
         this.currentQueueItem = { ...item };

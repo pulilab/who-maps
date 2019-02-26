@@ -40,8 +40,8 @@
         <template v-if="column && !isDate && !isTextArea">
           <ul v-if="parsedValue && parsedValue.names">
             <li
-              v-for="name in parsedValue.names"
-              :key="name"
+              v-for="(name, index) in parsedValue.names"
+              :key="index"
             >
               {{ name }}
             </li>
@@ -73,8 +73,8 @@ export default {
       type: null,
       default: null
     },
-    column: {
-      type: String,
+    type: {
+      type: [String, Object],
       default: null
     },
     disabled: {
@@ -120,6 +120,13 @@ export default {
         this.$emit('change', value);
       }
     },
+    column () {
+      if (typeof this.type === 'string' || this.type === null) {
+        return this.type;
+      } else {
+        return 'custom_field';
+      }
+    },
     isDate () {
       return ['start_date', 'end_date', 'implementation_dates'].includes(this.column);
     },
@@ -138,7 +145,7 @@ export default {
       return this.isForced || this.disabled;
     },
     parsedValue () {
-      const result = { names: [this.value], ids: [this.value] };
+      const result = { names: Array.isArray(this.value) ? this.value : [this.value], ids: Array.isArray(this.value) ? this.value : [this.value] };
       if (!this.column) {
         return result;
       } else {
@@ -213,7 +220,7 @@ export default {
         return;
       }
       if (this.column) {
-        this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column });
+        this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column, type: this.type });
       }
     },
     findCountryValue () {
@@ -270,7 +277,7 @@ export default {
       return this.toInternalRepresentation(filtered);
     },
     apiValue () {
-      const isMultiple = ['platforms', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards'];
+      const isMultiple = ['platforms', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards', 'custom_field'];
       const isIds = [...isMultiple, 'donors', 'country', 'organisation', 'government_investor'];
       const idsOrNames = isIds.includes(this.column) ? this.parsedValue.ids : this.parsedValue.names;
       return isMultiple.includes(this.column) ? idsOrNames : idsOrNames[0];
