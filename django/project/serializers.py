@@ -429,7 +429,7 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
         rows = validated_data.pop('rows')
         instance = super().create(validated_data)
         for row_data in rows[0].get('data', []):
-            ImportRow.objects.create(parent=instance, data=row_data)
+            ImportRow.objects.create(parent=instance, data=row_data, orginal_data=row_data)
         return instance
 
     def update(self, instance, validated_data):
