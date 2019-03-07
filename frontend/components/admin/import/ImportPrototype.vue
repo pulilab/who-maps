@@ -444,7 +444,6 @@ export default {
       fileName: '',
       ready: false,
       imported: [],
-      original: [],
       headers: [],
       sheets: [],
       fields: [
@@ -607,7 +606,7 @@ export default {
         key,
         column,
         value: value ? JSON.parse(stringified) : null,
-        original: this.original[row].data[key],
+        original: this.imported[row].original_data[key],
         customField: type
       };
     },
@@ -650,12 +649,11 @@ export default {
       this.$nuxt.$loading.finish('save_sheet');
     },
     async saveAll () {
-      const valid = this.$refs.row.filter(r => r.valid).slice(0, 1);
+      const valid = this.$refs.row.filter(r => r.valid);
       try {
         for (const p of valid) {
-          // eslint-disable-next-line no-unused-vars
           const newRow = await this.save(p);
-          // await this.patchRow(newRow);
+          await this.patchRow(newRow);
         }
       } catch (e) {
         console.error(e);
@@ -700,7 +698,6 @@ export default {
         this.currentQueueItem = { ...item };
         const rowString = JSON.stringify(item.rows.slice(0, 10));
         this.imported = JSON.parse(rowString);
-        this.original = JSON.parse(rowString);
         this.country = item.country;
         this.donors = [item.donor];
         this.isDraftOrPublish = item.draft ? 'draft' : 'publish';
