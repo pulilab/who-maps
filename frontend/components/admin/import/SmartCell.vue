@@ -10,7 +10,7 @@
       :content="errorMessage"
       placement="top"
     >
-      <div>
+      <div class="Content">
         <date-field
           v-if="isDate && active"
           v-model="internalValue"
@@ -211,7 +211,7 @@ export default {
   },
   methods: {
     async validate () {
-      const { valid, errors } = await this.validator.verify(this.value, this.rules, { name: this.column });
+      const { valid, errors } = await this.validator.verify(this.apiValue(), this.rules, { name: this.column });
       this.handleValidation(valid, errors[0], this.column);
     },
     clickHandler () {
@@ -291,6 +291,12 @@ export default {
 @import "~assets/style/mixins.less";
 
   .SmartCell {
+
+    .Content {
+      width: 100%;
+      height: 100%;
+    }
+
     &.Disabled {
       cursor: not-allowed;
     }
