@@ -30,7 +30,7 @@ export default {
         return this.value;
       },
       set (value) {
-        this.$emit('change', value.toJSON());
+        this.$emit('change', value ? value.toJSON() : null);
       }
     }
   }
