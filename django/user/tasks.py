@@ -2,11 +2,21 @@ import paramiko
 
 from django.conf import settings
 from celery.utils.log import get_task_logger
+from django.template import loader
+from django.core.mail import send_mail
+from django.utils.translation import ugettext, override
+
 from scheduler.celery import app
 
 logger = get_task_logger(__name__)
 
 
+@app.task(name="send_user_request_to_admins")
+def send_user_request_to_admins(profile):
+    """
+    Sends user requests for donor and country user types to the admins.
+    """
+    from country.models import Country, Donor
 @app.task(name="sync_users_to_odk")
 def sync_user_to_odk(user_id, update_user=False):  # pragma: no cover
     from .models import UserProfile
