@@ -11,7 +11,7 @@
     <el-form
       @submit.native.prevent
     >
-      <el-form-item :label="emailAddressString($row)">
+      <el-form-item :label="emailAddressString(rows)">
         <el-input
           ref="emailArea"
           v-model="selectable"
