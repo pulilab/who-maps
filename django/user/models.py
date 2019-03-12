@@ -3,12 +3,12 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, PBKDF2PasswordHasher
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from core.models import NameByIDMixin, ExtendedModel
-from .tasks import sync_user_to_odk
+from .tasks import sync_user_to_odk, send_user_request_to_admins
 
 
 def set_password(self, raw_password):  # pragma: no cover
@@ -75,6 +75,13 @@ class UserProfile(ExtendedModel):
 
     def is_investor_type(self):
         return self.account_type in [self.DONOR, self.DONOR_ADMIN, self.SUPER_DONOR_ADMIN]
+
+
+@receiver(post_save, sender=UserProfile)
+def admin_request_on_create(sender, instance, created, **kwargs):
+    if created and instance.account_type != UserProfile.IMPLEMENTER:
+        send_user_request_to_admins.apply_async(args=(instance,))
+
 
 @receiver(post_save, sender=UserProfile)
 def odk_sync_on_created(sender, instance, created, **kwargs):
