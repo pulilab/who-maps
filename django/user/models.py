@@ -77,6 +77,14 @@ class UserProfile(ExtendedModel):
         return self.account_type in [self.DONOR, self.DONOR_ADMIN, self.SUPER_DONOR_ADMIN]
 
 
+@receiver(pre_save, sender=UserProfile)
+def admin_request_on_change(sender, instance, **kwargs):
+    if instance.id:
+        old_account_type = UserProfile.objects.get(id=instance.id).account_type
+        if instance.account_type != UserProfile.IMPLEMENTER and instance.account_type != old_account_type:
+            send_user_request_to_admins.apply_async(args=(instance,))
+
+
 @receiver(post_save, sender=UserProfile)
 def admin_request_on_create(sender, instance, created, **kwargs):
     if created and instance.account_type != UserProfile.IMPLEMENTER:
