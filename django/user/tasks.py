@@ -17,6 +17,18 @@ def send_user_request_to_admins(profile):
     Sends user requests for donor and country user types to the admins.
     """
     from country.models import Country, Donor
+
+    admins = []
+    admin_type = ""
+    if profile.is_government_type():
+        country = Country.objects.get(id=profile.country.id)
+        admins = country.admins.all() | country.super_admins.all()
+        admin_type = 'country'
+    elif profile.is_investor_type():
+        donor = Donor.objects.get(id=profile.donor.id)
+        admins = donor.admins.all() | donor.super_admins.all()
+        admin_type = 'donor'
+
 @app.task(name="sync_users_to_odk")
 def sync_user_to_odk(user_id, update_user=False):  # pragma: no cover
     from .models import UserProfile
