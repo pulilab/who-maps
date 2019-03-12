@@ -113,7 +113,7 @@ class UpdateAdminMixin:
         if new_users:
             instance.admins.remove(*new_users)
             instance.super_admins.remove(*new_users)
-            self.notify_users(new_users, instance, ugettext('User'))
+            self.notify_users(new_users, instance, ugettext('Viewer'))
 
         if new_admins:
             instance.users.remove(*new_admins)
