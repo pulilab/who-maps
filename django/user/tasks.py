@@ -29,6 +29,26 @@ def send_user_request_to_admins(profile):
         admins = donor.admins.all() | donor.super_admins.all()
         admin_type = 'donor'
 
+    for admin in admins:
+        with override(admin.language):
+            subject = "Notification: {} has requested to be a {}".format(str(profile),
+                                                                         profile.get_account_type_display())
+            subject = ugettext(subject)
+            html_template = loader.get_template("email/master-inline.html")
+            html_message = html_template.render({"type": "admin_request",
+                                                 "full_name": admin.get_full_name(),
+                                                 "requester_full_name": str(profile),
+                                                 "requester_type": profile.get_account_type_display(),
+                                                 "admin_type": admin_type})
+
+        send_mail(
+            subject=subject,
+            message="",
+            from_email=settings.FROM_EMAIL,
+            recipient_list=[admin.user.email],
+            html_message=html_message)
+
+
 @app.task(name="sync_users_to_odk")
 def sync_user_to_odk(user_id, update_user=False):  # pragma: no cover
     from .models import UserProfile
