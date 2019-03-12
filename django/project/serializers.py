@@ -14,7 +14,7 @@ import scheduler.celery  # noqa
 
 from country.models import CustomQuestion
 from project.utils import remove_keys
-from .models import Project, ProjectApproval
+from .models import Project, ProjectApproval, ImportRow, ProjectImportV2
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
@@ -407,3 +407,33 @@ class CSVExportSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=200, min_length=1, required=True)
     country = serializers.IntegerField(required=False)
     donor = serializers.IntegerField(required=False)
+
+
+class ImportRowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImportRow
+        fields = "__all__"
+
+
+class ProjectImportV2Serializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    status = serializers.ReadOnlyField()
+    rows = ImportRowSerializer(many=True)
+
+    class Meta:
+        model = ProjectImportV2
+        fields = ('user', 'status', 'header_mapping', 'rows', 'country', 'donor', 'filename', 'sheet_name', 'draft')
+
+    def create(self, validated_data):
+        rows = validated_data.pop('rows')
+        instance = super().create(validated_data)
+        for row_data in rows[0].get('data', []):
+            ImportRow.objects.create(parent=instance, data=row_data)
+        return instance
+
+    def update(self, instance, validated_data):
+        rows = validated_data.pop('rows', None)
+        instance = super().update(instance, validated_data)
+        for row in rows:
+            ImportRow.objects.get(id=row.id).update(data=row.data)
+        return instance

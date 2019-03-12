@@ -12,7 +12,7 @@ from simple_history.models import HistoricalRecords
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
-from country.models import Country
+from country.models import Country, Donor
 from project.cache import InvalidateCacheMixin
 from project.utils import remove_keys
 from user.models import UserProfile
@@ -307,3 +307,23 @@ class ProjectImport(ExtendedModel):
 
     def __str__(self):
         return self.csv.name
+
+
+class ProjectImportV2(ExtendedModel):
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    status = models.NullBooleanField(null=True, blank=True)  # TODO: maybe remove this
+    header_mapping = JSONField(default=dict, blank=True)
+    country = models.ForeignKey(Country, null=True, blank=True, on_delete=models.SET_NULL)
+    donor = models.ForeignKey(Donor, null=True, blank=True, on_delete=models.SET_NULL)
+    filename = models.CharField(max_length=256, null=True, blank=True)
+    sheet_name = models.CharField(max_length=256, null=True, blank=True)
+    draft = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('user', 'filename', 'sheet_name')
+
+
+class ImportRow(models.Model):
+    data = JSONField(default=dict)
+    project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL)
+    parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)

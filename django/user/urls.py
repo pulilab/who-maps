@@ -7,6 +7,7 @@ import user.views as views
 
 router = DefaultRouter()
 router.register(r'userprofiles', views.UserProfileViewSet)
+router.register(r'userprofiles', views.UserProfileListViewSet)
 router.register(r'organisations', views.OrganisationViewSet)
 
 urlpatterns = [

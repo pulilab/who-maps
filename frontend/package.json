@@ -33,6 +33,7 @@
     "angular-aria": "1.5.0",
     "angular-gettext": "^2.3.10",
     "angular-material": "git+https://github.com/pulilab/material.git#p1.1.2",
+    "angular-material-source": "git+https://github.com/pulilab/material.git#p1.1.2",
     "angular-messages": "1.5.0",
     "angular-sanitize": "1.5.5",
     "angular-ui-router": "^1.0.18",
@@ -71,7 +72,8 @@
     "vue-template-compiler": "^2.6.6",
     "vue2-leaflet": "2.0.0-beta.0",
     "vuedraggable": "^2.16.0",
-    "vuex-geolocation": "^1.1.0"
+    "vuex-geolocation": "^1.1.0",
+    "xlsx": "^0.14.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.3.1",
