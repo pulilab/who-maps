@@ -39,12 +39,12 @@ class UserProfile(ExtendedModel):
     INVENTORY = 'Y'
     ACCOUNT_TYPE_CHOICES = (
         (IMPLEMENTER, _('Implementer')),
-        (DONOR, _('Financial Investor')),
-        (DONOR_ADMIN, _('Donor Admin')),
-        (SUPER_DONOR_ADMIN, _('Super Donor Admin')),
-        (GOVERNMENT, _('Government')),
-        (COUNTRY_ADMIN, _('Country Admin')),
-        (SUPER_COUNTRY_ADMIN, _('Super Country Admin')),
+        (DONOR, _('Investor Viewer')),
+        (DONOR_ADMIN, _('Investor Admin')),
+        (SUPER_DONOR_ADMIN, _('Investor System Admin')),
+        (GOVERNMENT, _('Government Viewer')),
+        (COUNTRY_ADMIN, _('Government Admin')),
+        (SUPER_COUNTRY_ADMIN, _('Government System Admin')),
         (INVENTORY, _('Inventory User')),
     )
 
