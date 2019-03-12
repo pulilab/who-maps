@@ -41,6 +41,7 @@ export default {
               confirmButtonText: 'OK',
               callback: action => {
                 this.showEmptyProfileWarning = false;
+                this.$router.replace(this.localePath({ name: 'organisation-edit-profile', params: this.$route.params, query: undefined }));
               }
             });
         }
