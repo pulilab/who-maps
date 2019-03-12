@@ -70,6 +70,11 @@ class UserProfile(ExtendedModel):
         profile, _ = UserProfile.objects.get_or_create(name='Deleted user', user=user)
         return profile
 
+    def is_government_type(self):
+        return self.account_type in [self.GOVERNMENT, self.COUNTRY_ADMIN, self.SUPER_COUNTRY_ADMIN]
+
+    def is_investor_type(self):
+        return self.account_type in [self.DONOR, self.DONOR_ADMIN, self.SUPER_DONOR_ADMIN]
 
 @receiver(post_save, sender=UserProfile)
 def odk_sync_on_created(sender, instance, created, **kwargs):
