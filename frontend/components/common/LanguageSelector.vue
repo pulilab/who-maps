@@ -1,7 +1,7 @@
 <template>
   <div class="LanguageSelector">
     <div
-      v-for="locale in $i18n.locales"
+      v-for="locale in localesButArabic"
       :key="locale.code"
       class="LanguageLink"
     >
@@ -17,7 +17,11 @@
 
 <script>
 export default {
-
+  computed: {
+    localesButArabic () {
+      return this.$i18n.locales.filter(la => la.code !== 'ar');
+    }
+  }
 };
 </script>
 

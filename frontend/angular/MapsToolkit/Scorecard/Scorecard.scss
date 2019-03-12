@@ -194,3 +194,56 @@ scorecard {
         }
     }
 }
+
+[dir="rtl"] {
+
+  .axis-header {
+    img {
+      margin-right: 0;
+      margin-left: 15px;
+    }
+  }
+
+  .domain-header {
+    padding-left: 15px;
+    padding-right: 20px;
+  }
+
+  .question {
+    padding-left: 30px;
+    padding-right: 50px;
+
+    strong {
+      margin-left: 5px;
+      margin-right: 0px;
+    }
+  }
+
+  .domain-total {
+    padding-left: 30px;
+    padding-right: 20px;
+
+    strong {
+      margin-left: 10px;
+      margin-right: 0px;
+    }
+  }
+
+  .domain-percentage {
+    padding-left: 30px;
+    padding-right: 20px;
+  }
+
+  .axes-scorecard {
+
+    .axis-header {
+      padding-left: 20px;
+      padding-right: 11px;
+    }
+
+    .domain {
+      padding-left: 20px;
+      padding-right: 0px;
+    }
+  }
+}

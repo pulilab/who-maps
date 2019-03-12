@@ -619,4 +619,60 @@ export default {
       }
     }
   }
+
+  [dir="rtl"] {
+    .CountryMapCustomizer {
+      > .el-col {
+
+        &:last-child {
+          border-left: none;
+          border-right: 1px solid @colorGrayLight;
+
+          .MapSettingSection {
+
+            .SubLevelList {
+              ul {
+                li {
+                  .svg-inline--fa {
+                    left: auto;
+                    right: 0;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .CountryMapHeader {
+          .CountryMapTitle {
+            padding-left: 20px;
+            padding-right: 0;
+          }
+
+          .CountryMapFile {
+            .el-button {
+              margin-left: 0px;
+              margin-right: 20px;
+            }
+          }
+        }
+
+        .CountryMapSettings {
+          .el-button {
+            float: left;
+          }
+
+          .el-switch__label.el-switch__label--left {
+            margin-left: 10px;
+            margin-right: 0;
+          }
+
+          .el-switch__label.el-switch__label--right {
+            margin-left: 0;
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+  }
 </style>

@@ -29,7 +29,9 @@ export const getters = {
     });
   },
   getLanguages: state => {
-    return state.languages.map(l => ({ ...l, flag: `/static/flags/${l.flag}` }));
+    return state.languages
+      .map(l => ({ ...l, flag: `/static/flags/${l.flag}` }))
+      .filter(l => l.code !== 'ar');
   },
 
   getLanguageDetails: (state, getters) => code => {

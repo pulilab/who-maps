@@ -272,7 +272,7 @@ export default {
       return max < this.total ? max : this.total;
     },
     paginationOrderStr () {
-      const loc = this.$i18n._vm.locale;
+      const loc = this.$i18n.locale;
       return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next';
     }
   },
@@ -359,7 +359,7 @@ export default {
       }
     },
     alignFixedTableWidthForRTL () {
-      const locale = this.$nuxt._i18n.locale;
+      const locale = this.$i18n.locale;
       if (locale === 'ar') {
         const rawTableWidth = document.querySelector('.el-table__header').offsetWidth;
         const fixedFieldWidths = 275;
