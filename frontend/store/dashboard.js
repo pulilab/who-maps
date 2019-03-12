@@ -114,6 +114,7 @@ export const actions = {
     commit('SET_SEARCH_STATUS', data);
     commit('SET_SELECT_ALL', false);
     commit('SET_SELECTED_ROWS', []);
+    commit('SET_PROJECT_BUCKET', []);
   },
   async loadProjectsMap ({ commit, dispatch }) {
     const data = await dispatch('loadProjects', { type: 'map', page_size: 999999, page: 1 });

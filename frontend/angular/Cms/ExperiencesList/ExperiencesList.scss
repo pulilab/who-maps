@@ -101,3 +101,22 @@
     &.experience {}
   }
 }
+
+[dir="rtl"] {
+  .cms-experience-list {
+    > div {
+
+      &:first-child {
+        padding-left: 60px;
+        padding-right: 0px;
+        border-left: 1px solid $color-gray-lighter;
+        border-right: none;
+      }
+
+      &:last-child {
+        padding-left: 0px;
+        padding-right: 60px;
+      }
+    }
+  }
+}

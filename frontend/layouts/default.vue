@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import LangMixin from '@/layouts/LangMixin';
+import HeadMixin from '@/layouts/HeadMixin';
 import DhaFooter from '../components/common/DhaFooter.vue';
 import TopBar from '../components/common/TopBar.vue';
 import ActionBar from '../components/common/ActionBar.vue';
@@ -25,10 +25,7 @@ export default {
     DialogsContainer,
     DjangoFeedback
   },
-  mixins: [LangMixin],
-  head () {
-    return this.$nuxtI18nSeo();
-  },
+  mixins: [HeadMixin],
   computed: {
     pureRoute () {
       if (this.$route && this.$route.name) {

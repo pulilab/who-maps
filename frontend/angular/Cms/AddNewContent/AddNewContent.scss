@@ -62,3 +62,24 @@
     }
   }
 }
+
+[dir="rtl"] {
+  .detail-dialog {
+    trix-component {
+      .counter-wrapper {
+        .error-message {
+          float: right;
+        }
+        :not(.error-message) {
+          float: left;
+        }
+      }
+    }
+    .file-upload {
+      width: 100%;
+      .md-button {
+        margin: 0 0 0 40px;
+      }
+    }
+  }
+}

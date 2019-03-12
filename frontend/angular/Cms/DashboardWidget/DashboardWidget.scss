@@ -269,6 +269,55 @@ cms-dashboard-widget {
       }
     }
 
-    &.experience {}
+    // &.experience {}
+  }
+}
+
+[dir="rtl"] {
+  .cms-widget-wrapper {
+    .cms-widget-header {
+      .domain-icon {
+        margin: 3px 6px 5px 2px;
+      }
+
+      .domain-selector {
+        margin: 7px 0 0 30px;
+
+        md-select {
+          margin: 0;
+        }
+      }
+
+      .domain-arrows {
+        transform: rotate(180deg);
+      }
+    }
+
+    .category-column {
+      border-right: 0;
+      border-left: 1px solid $color-gray-lighter;
+
+      &:last-child {
+        border-left: 0;
+      }
+    }
+
+    .category-header {
+
+      h4 {
+        margin-left: 0;
+        margin-right: 12px;
+      }
+
+      &.lessons-tips {
+        background-position: 6% 2px;
+      }
+      &.resources {
+        background-position: 6% -2px;
+      }
+      &.experiences {
+        background-position: 4% -15px;
+      }
+    }
   }
 }

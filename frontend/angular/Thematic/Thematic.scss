@@ -1,6 +1,5 @@
 @import '../app';
 
-
 .back-icon {
   position: fixed;
   top: 20px;
@@ -506,6 +505,143 @@ md-dialog {
             color: $text-secondary;
             font-weight: 700;
             font-size: $body-font-size-base;
+          }
+        }
+      }
+    }
+  }
+}
+
+[dir='rtl'] {
+  .back-icon {
+    left: 20px;
+    right: auto;
+  }
+
+  md-dialog {
+    md-dialog-content {
+      .left {
+        .axes {
+          &:nth-of-type(2),
+          &:nth-of-type(3) {
+            .axis .titles {
+              margin: 0 5px 0 10px;
+              padding: 16px 55px 6px 0;
+            }
+          }
+
+          .axis {
+            .iconcontainer {
+              left: auto;
+              right: 0;
+              margin: 10px 20px 10px 5px;
+            }
+
+            .titles {
+              margin: 0 5px 0 10px;
+              padding: 8px 55px 8px 0;
+            }
+
+            .expander {
+              right: auto;
+              left: 20px;
+            }
+          }
+
+          .domain {
+            &::before {
+              left: auto;
+              right: 45px;
+            }
+
+            &.active-domain {
+              position: relative;
+              transform: translateX(-10px);
+
+              &::before {
+                left: auto;
+                right: 50px;
+              }
+            }
+          }
+        }
+      }
+
+      .right {
+        .right-header {
+          .right-title {
+            img {
+              margin-left: 10px;
+              margin-right: 0;
+            }
+          }
+        }
+
+        .right-content {
+          padding: 0 70px 30px 80px;
+
+          .axis-html {
+            .graph {
+              img {
+                float: left;
+                margin: 10px 50px 25px -25px;
+              }
+            }
+          }
+
+          .content-html {
+
+            img,
+            .image-wrapper {
+              &.float-right {
+                float: left;
+                margin: 10px 50px 25px -25px;
+              }
+
+              &.float-left {
+                float: right;
+                margin: 10px -25px 25px 50px;
+              }
+            }
+
+            table {
+              text-align: right;
+
+              thead {
+                th {
+                  padding: 4px 8px 4px 24px;
+                }
+              }
+
+              td {
+                padding: 8px 8px 8px 24px;
+                border-left: none;
+                border-right: 1px solid $color-gray-lighter;
+              }
+            }
+
+            // Blockquotes
+            blockquote {
+              float: left;
+              margin: 10px 50px 25px 0;
+
+              &.float-left {
+                float: right;
+                margin: 10px 0 25px 50px;
+              }
+            }
+
+            // Titles
+            .title-domain {
+
+              img {
+                float: right;
+              }
+              h3 {
+                padding-left: auto;
+                padding-right: 15px;
+              }
+            }
           }
         }
       }
