@@ -364,7 +364,7 @@ class CountryTests(APITestCase):
 
         outgoing_en_email_text = outgoing_emails[0].as_string()
         self.assertTrue("test1@foo.com" in outgoing_emails[0].values())
-        self.assertTrue('You have been selected as User for {}'.format(self.country.name) in outgoing_en_email_text)
+        self.assertTrue('You have been selected as Viewer for {}'.format(self.country.name) in outgoing_en_email_text)
         self.assertTrue('/en/-/admin/country' in outgoing_en_email_text)
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
         self.assertNotIn('{{', outgoing_en_email_text)
@@ -1150,7 +1150,7 @@ class DonorTests(APITestCase):
 
         outgoing_en_email_text = outgoing_emails[0].as_string()
         self.assertTrue("test1@foo.com" in outgoing_emails[0].values())
-        self.assertTrue('You have been selected as User for {}'.format(self.donor.name) in outgoing_en_email_text)
+        self.assertTrue('You have been selected as Viewer for {}'.format(self.donor.name) in outgoing_en_email_text)
         self.assertTrue('/en/-/admin/donor' in outgoing_en_email_text)
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
         self.assertNotIn('{{', outgoing_en_email_text)
