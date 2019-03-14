@@ -22,6 +22,10 @@ def send_user_request_to_admins(profile_id):
     admins = []
     admin_type = ""
     profile = UserProfile.objects.get(id=profile_id)
+
+    if not any([profile.donor, profile.country]):
+        return
+
     if profile.is_government_type():
         country = Country.objects.get(id=profile.country.id)
         admins = country.admins.all() | country.super_admins.all()
