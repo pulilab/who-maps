@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('project', '0058_auto_20190205_1052'),
+        ('project', '0058_load_portugese_modeltranslations'),
     ]
 
     operations = [

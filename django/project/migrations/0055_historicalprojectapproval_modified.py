@@ -7,7 +7,7 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0055_remove_historicalprojectapproval_project'),
+        ('project', '0054_remove_historicalprojectapproval_project'),
     ]
 
     operations = [
