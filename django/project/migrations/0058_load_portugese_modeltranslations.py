@@ -27,7 +27,7 @@ def load_fixture(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0048_project_is_active'),
+        ('project', '0057_auto_20190205_1052')
     ]
 
     operations = [
