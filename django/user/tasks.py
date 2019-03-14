@@ -42,8 +42,8 @@ def send_user_request_to_admins(profile_id):
             subject = ugettext(subject)
             html_template = loader.get_template("email/master-inline.html")
             html_message = html_template.render({"type": "admin_request",
-                                                 "full_name": admin.get_full_name(),
-                                                 "requester_full_name": str(profile),
+                                                 "full_name": admin.name,
+                                                 "requester": str(profile),
                                                  "requester_type": profile.get_account_type_display(),
                                                  "admin_type": admin_type})
 
