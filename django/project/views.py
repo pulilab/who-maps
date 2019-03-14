@@ -589,7 +589,8 @@ class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin,
     serializer_class = ProjectImportV2Serializer
     queryset = ProjectImportV2.objects.all()
 
-    def get_queryset(self):
+    # TODO: NEEDS COVER
+    def get_queryset(self):  # pragma: no cover
         return ProjectImportV2.objects.filter(user=self.request.user)
 
 
@@ -597,5 +598,6 @@ class ImportRowDeleteViewSet(TokenAuthMixin, DestroyModelMixin, GenericViewSet):
     serializer_class = ImportRowSerializer
     queryset = ImportRow.objects.all()
 
-    def get_queryset(self):
+    # TODO: NEEDS COVER
+    def get_queryset(self):  # pragma: no cover
         return ImportRow.objects.filter(parent__user=self.request.user)
