@@ -12,14 +12,16 @@ logger = get_task_logger(__name__)
 
 
 @app.task(name="send_user_request_to_admins")
-def send_user_request_to_admins(profile):
+def send_user_request_to_admins(profile_id):
     """
     Sends user requests for donor and country user types to the admins.
     """
     from country.models import Country, Donor
+    from .models import UserProfile
 
     admins = []
     admin_type = ""
+    profile = UserProfile.objects.get(id=profile_id)
     if profile.is_government_type():
         country = Country.objects.get(id=profile.country.id)
         admins = country.admins.all() | country.super_admins.all()
