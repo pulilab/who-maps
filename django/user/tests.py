@@ -517,3 +517,9 @@ class UserProfileTests(APITestCase):
 
         self.assertEqual(mail.outbox[-1].subject, 'Notification: {} has requested to be a {}'.format(
             str(upf4), upf4.get_account_type_display()))
+
+        upf3.account_type = UserProfile.COUNTRY_ADMIN
+        upf3.save()
+
+        self.assertEqual(mail.outbox[-1].subject, 'Notification: {} has requested to be a {}'.format(
+            str(upf3), upf3.get_account_type_display()))
