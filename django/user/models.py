@@ -82,12 +82,12 @@ def admin_request_on_change(sender, instance, **kwargs):
     if instance.id:
         old_account_type = UserProfile.objects.get(id=instance.id).account_type
         if instance.account_type != UserProfile.IMPLEMENTER and instance.account_type != old_account_type:
-            send_user_request_to_admins.apply_async(args=(instance.pk,))
+            instance.__trigger_send = True
 
 
 @receiver(post_save, sender=UserProfile)
 def admin_request_on_create(sender, instance, created, **kwargs):
-    if created and instance.account_type != UserProfile.IMPLEMENTER:
+    if created and instance.account_type != UserProfile.IMPLEMENTER or getattr(instance, '__trigger_send', False):
         send_user_request_to_admins.apply_async(args=(instance.pk,))
 
 
