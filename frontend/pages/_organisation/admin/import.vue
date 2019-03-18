@@ -11,6 +11,7 @@ export default {
   components: {
     ImportPrototype
   },
+  middleware: ['importRestriction'],
   async fetch ({ store }) {
     await Promise.all([
       store.dispatch('system/loadUserProfiles'),
