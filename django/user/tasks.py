@@ -2,9 +2,57 @@ import paramiko
 
 from django.conf import settings
 from celery.utils.log import get_task_logger
+from django.template import loader
+from django.core.mail import send_mail
+from django.utils.translation import ugettext, override
+
 from scheduler.celery import app
 
 logger = get_task_logger(__name__)
+
+
+@app.task(name="send_user_request_to_admins")
+def send_user_request_to_admins(profile_id):
+    """
+    Sends user requests for donor and country user types to the admins.
+    """
+    from country.models import Country, Donor
+    from .models import UserProfile
+
+    admins = []
+    admin_type = ""
+    profile = UserProfile.objects.get(id=profile_id)
+
+    if not any([profile.donor, profile.country]):
+        return
+
+    if profile.is_government_type():
+        country = Country.objects.get(id=profile.country.id)
+        admins = country.admins.all() | country.super_admins.all()
+        admin_type = 'country'
+    elif profile.is_investor_type():
+        donor = Donor.objects.get(id=profile.donor.id)
+        admins = donor.admins.all() | donor.super_admins.all()
+        admin_type = 'donor'
+
+    for admin in admins:
+        with override(admin.language):
+            subject = "Notification: {} has requested to be a {}".format(str(profile),
+                                                                         profile.get_account_type_display())
+            subject = ugettext(subject)
+            html_template = loader.get_template("email/master-inline.html")
+            html_message = html_template.render({"type": "admin_request",
+                                                 "full_name": admin.name,
+                                                 "requester": str(profile),
+                                                 "requester_type": profile.get_account_type_display(),
+                                                 "admin_type": admin_type})
+
+        send_mail(
+            subject=subject,
+            message="",
+            from_email=settings.FROM_EMAIL,
+            recipient_list=[admin.user.email],
+            html_message=html_message)
 
 
 @app.task(name="sync_users_to_odk")

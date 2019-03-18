@@ -1,4 +1,7 @@
+from django.contrib.auth.models import User
+from django.test import override_settings
 from django.urls import reverse
+
 from django.core import mail
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
@@ -488,3 +491,35 @@ class UserProfileTests(APITestCase):
         response = self.client.put(url, data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['account_type'], UserProfile.DONOR)
+
+    @override_settings(CELERY_ALWAYS_EAGER=True)
+    def test_admin_requests_are_triggering_celery_task(self):
+        c = Country.objects.create(code='XXY', name='COUNTRY_TEST')
+        c.admins.add(self.user_profile_id)
+
+        d = Donor.objects.create(name='DONOR_TEST')
+        d.super_admins.add(self.user_profile_id)
+
+        u1 = User.objects.create(username="username1", email="user1@user.org")
+        UserProfile.objects.create(name="USER1", user=u1, account_type=UserProfile.IMPLEMENTER, country=c)
+
+        u2 = User.objects.create(username="username2", email="user2@user.org")
+        UserProfile.objects.create(name="USER2", user=u2, account_type=UserProfile.GOVERNMENT)
+
+        u3 = User.objects.create(username="username3", email="user3@user.org")
+        upf3 = UserProfile.objects.create(name="USER3", user=u3, account_type=UserProfile.GOVERNMENT, country=c)
+
+        self.assertEqual(mail.outbox[-1].subject, 'Notification: {} has requested to be a {}'.format(
+            str(upf3), upf3.get_account_type_display()))
+
+        u4 = User.objects.create(username="username4", email="user4@user.org")
+        upf4 = UserProfile.objects.create(name="USER4", user=u4, account_type=UserProfile.SUPER_DONOR_ADMIN, donor=d)
+
+        self.assertEqual(mail.outbox[-1].subject, 'Notification: {} has requested to be a {}'.format(
+            str(upf4), upf4.get_account_type_display()))
+
+        upf3.account_type = UserProfile.COUNTRY_ADMIN
+        upf3.save()
+
+        self.assertEqual(mail.outbox[-1].subject, 'Notification: {} has requested to be a {}'.format(
+            str(upf3), upf3.get_account_type_display()))

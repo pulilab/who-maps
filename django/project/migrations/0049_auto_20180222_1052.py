@@ -8,7 +8,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0049_load_portugese_modeltranslations'),
+        ('project', '0048_project_is_active'),
     ]
 
     operations = [

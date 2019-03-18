@@ -253,21 +253,23 @@ export default {
         this.setSelectedRows([]);
       }
     },
-    async exportRows () {
-      this.$nuxt.$loading.start();
-      if (this.exportType === 'PDF') {
-        this.$refs.pdfExport.printPdf();
-      } else if (this.exportType === 'CSV') {
-        const ids = this.rowToExport.map(p => p.id);
-        const payload = {
-          ids,
-          donor: this.dashboardType === 'donor' ? this.dashboardId : undefined,
-          country: this.dashboardType === 'country' ? this.dashboardId : undefined
-        };
-        const { data } = await this.$axios.post('/api/projects/csv-export/', payload, { responseType: 'blob' });
-        blobDownloader(data, 'project-export.csv');
-      }
-      this.$nuxt.$loading.finish();
+    exportRows () {
+      this.$nuxt.$loading.start('pdf');
+      window.setTimeout(async () => {
+        if (this.exportType === 'PDF') {
+          this.$refs.pdfExport.printPdf();
+        } else if (this.exportType === 'CSV') {
+          const ids = this.rowToExport.map(p => p.id);
+          const payload = {
+            ids,
+            donor: this.dashboardType === 'donor' ? this.dashboardId : undefined,
+            country: this.dashboardType === 'country' ? this.dashboardId : undefined
+          };
+          const { data } = await this.$axios.post('/api/projects/csv-export/', payload, { responseType: 'blob' });
+          blobDownloader(data, 'project-export.csv');
+        }
+        this.$nuxt.$loading.finish('pdf');
+      }, 500);
     },
     async openMailDialog () {
       if (this.allSelected) {

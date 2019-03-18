@@ -21,7 +21,7 @@
         @submit.native.prevent
       >
         <el-form-item
-          v-if="userProfile.is_superuser"
+          v-if="userProfile && userProfile.is_superuser"
           :label="$gettext('Choose country') | translate"
         >
           <country-select
@@ -444,7 +444,7 @@ export default {
     }),
 
     notSCA () {
-      return this.userProfile.account_type === 'CA' && !this.userProfile.is_superuser;
+      return this.userProfile && this.userProfile.account_type === 'CA' && !this.userProfile.is_superuser;
     },
 
     logo: {

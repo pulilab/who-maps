@@ -75,7 +75,7 @@ export const actions = () => ({
       if (typeof val !== 'object') {
         // In case of `id`
         const profile = profiles.find(prof => prof.id === val);
-        const label = `${profile.name} <${profile.user_email}>`;
+        const label = `${profile.name} <${profile.email}>`;
         return {
           key: val,
           label,

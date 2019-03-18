@@ -192,7 +192,6 @@
             </el-button>
           </el-col>
         </el-row>
-
         <div>
           <h3>Previous imports</h3>
           <el-row
@@ -243,9 +242,7 @@
                 Select
               </el-button>
             </el-col>
-          </el-row>
-        </div>
-
+          </el-row
         <div
           v-if="imported && imported.length > 0"
           class="GlobalErrors"
@@ -337,7 +334,6 @@
                 </div>
               </div>
             </div>
-
             <import-row
               v-for="(row, index) in rows"
               :key="index"
@@ -399,7 +395,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import { mapGetters, mapActions } from 'vuex';
 
-import ImportRow from '@/components/admin/import/ImportRow';
 import FileUpload from '@/components/common/FileUpload';
 import SmartCell from '@/components/admin/import/SmartCell';
 import DonorSelector from '@/components/project/DonorSelector';
@@ -672,7 +667,6 @@ export default {
         question_id: c.type.id,
         answer: c.apiValue()
       })).filter(a => a.answer);
-
       const result = filled.reduce((a, c) => {
         a[c.column] = c.apiValue();
         return a;
