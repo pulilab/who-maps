@@ -425,14 +425,16 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'status', 'header_mapping',
                   'rows', 'country', 'donor', 'filename', 'sheet_name', 'draft')
 
-    def create(self, validated_data):
+    # TODO: Need Coverage
+    def create(self, validated_data):  # pragma: no cover
         rows = validated_data.pop('rows')
         instance = super().create(validated_data)
         for row_data in rows[0].get('data', []):
             ImportRow.objects.create(parent=instance, data=row_data, original_data=row_data)
         return instance
 
-    def update(self, instance, validated_data):
+    # TODO: Need Coverage
+    def update(self, instance, validated_data):  # pragma: no cover
         rows = validated_data.pop('rows', [])
         instance = super().update(instance, validated_data)
         for row in rows:
