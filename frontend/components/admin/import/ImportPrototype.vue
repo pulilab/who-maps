@@ -242,148 +242,149 @@
                 Select
               </el-button>
             </el-col>
-          </el-row
-        <div
-          v-if="imported && imported.length > 0"
-          class="GlobalErrors"
-        >
-          <el-tag
-            v-for="error in globalErrors"
-            :key="error"
-            type="danger"
+          </el-row>
+          <div
+            v-if="imported && imported.length > 0"
+            class="GlobalErrors"
           >
-            <fa icon="exclamation" />
-            {{ error }}
-          </el-tag>
-        </div>
-
-        <!-- Data table -->
-        <div class="ExportDataTable">
-          <div class="Container">
-            <div class="Row">
-              <div
-                v-if="headers.length > 0"
-                class="Column Thin"
-              >
-                <el-button
-                  circle
-                  @click="saveAll"
-                >
-                  <fa icon="save" />
-                </el-button>
-              </div>
-              <div
-                v-for="(header, index) in headers"
-                :key="index"
-                class="Column Header"
-              >
-                <div class="Title">
-                  {{ header.title }}
-                  <el-button
-                    v-if="header.selected === null || typeof header.selected === 'string'"
-                    circle
-                    icon="el-icon-delete"
-                    size="mini"
-                    @click="rmHeader(index)"
-                  />
-                </div>
-                <div>
-                  <el-select
-                    v-if="header.selected === null || typeof header.selected === 'string'"
-                    v-model="header.selected"
-
-                    size="small"
-                    filterable
-                    clearable
-                    @change="columnChange(header)"
-                  >
-                    <el-option
-                      v-for="item in availableFields"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                    />
-                  </el-select>
-                  <div v-else>
-                    Custom Country Question
-                  </div>
-                </div>
-              </div>
-              <div
-                v-if="headers.length > 0"
-                class="Column Header"
-              >
-                <div class="Title">
-                  Empty Column
-                </div>
-                <div>
-                  <el-select
-                    v-model="additonalHeader"
-
-                    size="small"
-                    filterable
-                    clearable
-                  >
-                    <el-option
-                      v-for="item in availableFields"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                    />
-                  </el-select>
-                </div>
-              </div>
-            </div>
-            <import-row
-              v-for="(row, index) in rows"
-              :key="index"
-              ref="row"
-              :index="index"
-              :row="row"
-              :class="['Row', `Row_${index}`]"
+            <el-tag
+              v-for="error in globalErrors"
+              :key="error"
+              type="danger"
             >
-              <template v-slot:default="{errors, valid, handleValidation, columns}">
+              <fa icon="exclamation" />
+              {{ error }}
+            </el-tag>
+          </div>
+
+          <!-- Data table -->
+          <div class="ExportDataTable">
+            <div class="Container">
+              <div class="Row">
                 <div
+                  v-if="headers.length > 0"
                   class="Column Thin"
                 >
                   <el-button
-                    icon="el-icon-check"
-                    :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
                     circle
-                    class="SaveButton"
-                    @click="scrollToError(valid, index)"
-                  />
-                  <a
-                    v-if="row.project"
-                    :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
-                    target="_blank"
-                    class="NuxtLink IconLeft"
+                    @click="saveAll"
                   >
-                    <fa icon="share-square" />
-                  </a>
+                    <fa icon="save" />
+                  </el-button>
                 </div>
-                <template
-                  v-for="header in headers"
+                <div
+                  v-for="(header, index) in headers"
+                  :key="index"
+                  class="Column Header"
                 >
-                  <SmartCell
-                    :key="index + header.title"
-                    :disabled="!!row.project"
-                    :value="columns[header.title]"
-                    :type="header.selected"
-                    :rules="validationRules[header.selected]"
-                    class="Column"
-                    :errors="errors"
-                    :handle-validation="handleValidation"
-                    @change="updateValue(index, header.title, $event)"
-                    @openDialog="openDialogHandler(index, header.title, $event)"
-                  />
+                  <div class="Title">
+                    {{ header.title }}
+                    <el-button
+                      v-if="header.selected === null || typeof header.selected === 'string'"
+                      circle
+                      icon="el-icon-delete"
+                      size="mini"
+                      @click="rmHeader(index)"
+                    />
+                  </div>
+                  <div>
+                    <el-select
+                      v-if="header.selected === null || typeof header.selected === 'string'"
+                      v-model="header.selected"
+
+                      size="small"
+                      filterable
+                      clearable
+                      @change="columnChange(header)"
+                    >
+                      <el-option
+                        v-for="item in availableFields"
+                        :key="item"
+                        :label="item"
+                        :value="item"
+                      />
+                    </el-select>
+                    <div v-else>
+                      Custom Country Question
+                    </div>
+                  </div>
+                </div>
+                <div
+                  v-if="headers.length > 0"
+                  class="Column Header"
+                >
+                  <div class="Title">
+                    Empty Column
+                  </div>
+                  <div>
+                    <el-select
+                      v-model="additonalHeader"
+
+                      size="small"
+                      filterable
+                      clearable
+                    >
+                      <el-option
+                        v-for="item in availableFields"
+                        :key="item"
+                        :label="item"
+                        :value="item"
+                      />
+                    </el-select>
+                  </div>
+                </div>
+              </div>
+              <import-row
+                v-for="(row, index) in rows"
+                :key="index"
+                ref="row"
+                :index="index"
+                :row="row"
+                :class="['Row', `Row_${index}`]"
+              >
+                <template v-slot:default="{errors, valid, handleValidation, columns}">
+                  <div
+                    class="Column Thin"
+                  >
+                    <el-button
+                      icon="el-icon-check"
+                      :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
+                      circle
+                      class="SaveButton"
+                      @click="scrollToError(valid, index)"
+                    />
+                    <a
+                      v-if="row.project"
+                      :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
+                      target="_blank"
+                      class="NuxtLink IconLeft"
+                    >
+                      <fa icon="share-square" />
+                    </a>
+                  </div>
+                  <template
+                    v-for="header in headers"
+                  >
+                    <SmartCell
+                      :key="index + header.title"
+                      :disabled="!!row.project"
+                      :value="columns[header.title]"
+                      :type="header.selected"
+                      :rules="validationRules[header.selected]"
+                      class="Column"
+                      :errors="errors"
+                      :handle-validation="handleValidation"
+                      @change="updateValue(index, header.title, $event)"
+                      @openDialog="openDialogHandler(index, header.title, $event)"
+                    />
+                  </template>
+                  <div class="Column" />
                 </template>
-                <div class="Column" />
-              </template>
-            </import-row>
+              </import-row>
+            </div>
           </div>
+          <!-- / Data table -->
         </div>
-        <!-- / Data table -->
       </el-card>
     </template>
   </div>
@@ -406,6 +407,7 @@ import PlatformSelector from '@/components/project/PlatformSelector';
 import HisBucketSelector from '@/components/project/HisBucketSelector';
 import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector';
 import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector';
+import ImportRow from '@/components/admin/import/ImportRow';
 
 import { projectFields, draftRules, publishRules } from '@/utilities/projects';
 import { apiWriteParser } from '@/utilities/api';
