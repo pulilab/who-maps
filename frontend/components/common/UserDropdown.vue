@@ -91,6 +91,21 @@
         </div>
 
         <div
+          v-if="isSuperUser"
+          class="DropdownLink"
+        >
+          <nuxt-link
+            :to="localePath({name: 'organisation-admin-import', params: $route.params})"
+            @click.native="closePopover"
+          >
+            <span class="MenuIcon">
+              <fa icon="file-import" />
+            </span>
+            <translate>Import interface</translate>
+          </nuxt-link>
+        </div>
+
+        <div
           class="DropdownLink"
           @click="logout"
         >
@@ -125,11 +140,14 @@ export default {
     ...mapGetters({
       user: 'user/getProfile'
     }),
+    isSuperUser () {
+      return this.user && this.user.is_superuser;
+    },
     isUserCA () {
-      return (this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)) || this.user.is_superuser;
+      return (this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)) || this.isSuperUser;
     },
     isUserDA () {
-      return (this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)) || this.user.is_superuser;
+      return (this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)) || this.isSuperUser;
     },
     currentLanguage: {
       get () {

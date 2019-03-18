@@ -120,8 +120,8 @@ export default {
     showForm () {
       return this.readyElements >= this.createdElements;
     },
-    draftRules: draftRules(),
-    publishRules: publishRules(),
+    draftRules: draftRules,
+    publishRules: publishRules,
     rules () {
       return this.usePublishRules ? this.publishRules : this.draftRules;
     }

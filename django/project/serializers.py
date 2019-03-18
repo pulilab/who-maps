@@ -422,20 +422,21 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectImportV2
-        fields = ('user', 'status', 'header_mapping', 'rows', 'country', 'donor', 'filename', 'sheet_name', 'draft')
+        fields = ('id', 'user', 'status', 'header_mapping',
+                  'rows', 'country', 'donor', 'filename', 'sheet_name', 'draft')
 
-    # TODO: NEEDS COVER
+    # TODO: Need Coverage
     def create(self, validated_data):  # pragma: no cover
         rows = validated_data.pop('rows')
         instance = super().create(validated_data)
         for row_data in rows[0].get('data', []):
-            ImportRow.objects.create(parent=instance, data=row_data)
+            ImportRow.objects.create(parent=instance, data=row_data, original_data=row_data)
         return instance
 
-    # TODO: NEEDS COVER
+    # TODO: Need Coverage
     def update(self, instance, validated_data):  # pragma: no cover
-        rows = validated_data.pop('rows', None)
+        rows = validated_data.pop('rows', [])
         instance = super().update(instance, validated_data)
         for row in rows:
-            ImportRow.objects.get(id=row.id).update(data=row.data)
+            ImportRow.objects.get(id=row['id']).update(data=row.get('data'))
         return instance

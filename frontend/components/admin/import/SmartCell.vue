@@ -1,38 +1,63 @@
 <template>
   <div
-    :class="['SmartCell', {'Disabled': isDisabled}]"
-    @click="openDialog"
+    :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': errorMessage}]"
+    @click="clickHandler"
   >
-    <span v-if="!column">
-      {{ value }}
-    </span>
-    <date-field
-      v-if="isDate"
-      v-model="internalValue"
-      :disabled="disabled"
-    />
-    <el-input
-      v-if="isTextArea"
-      v-model="internalValue"
-      :disabled="disabled"
-      type="textarea"
-      :rows="6"
-    />
-    <template v-if="column && !isDate && !isTextArea">
-      <ul v-if="parsedValue && parsedValue.names">
-        <li
-          v-for="name in parsedValue.names"
-          :key="name"
+    <el-tooltip
+      :disabled="!errorMessage"
+      class="item"
+      effect="dark"
+      :content="errorMessage"
+      placement="top"
+    >
+      <div class="Content">
+        <date-field
+          v-if="isDate && active"
+          v-model="internalValue"
+          :disabled="disabled"
+        />
+        <el-input
+          v-if="isTextArea && active"
+          v-model="internalValue"
+          :disabled="disabled"
+          type="textarea"
+          :rows="6"
+        />
+        <el-radio-group
+          v-if="isGovInvestor && active"
+          v-model="internalValue"
         >
-          {{ name }}
-        </li>
-      </ul>
-    </template>
+          <el-radio :label="0">
+            No, they have not yet contributed
+          </el-radio>
+          <el-radio :label="1">
+            Yes, they are contributing in-kind people or time
+          </el-radio>
+          <el-radio :label="2">
+            Yes, there is a financial contribution through MOH budget
+          </el-radio>
+        </el-radio-group>
+        <template v-if="column && !isDate && !isTextArea">
+          <ul v-if="parsedValue && parsedValue.names">
+            <li
+              v-for="(name, index) in parsedValue.names"
+              :key="index"
+            >
+              {{ name }}
+            </li>
+          </ul>
+        </template>
+        <span v-else-if="!active">
+          {{ value }}
+        </span>
+      </div>
+    </el-tooltip>
   </div>
 </template>
 
 <script>
 import DateField from '@/components/admin/import/DateField';
+import { Validator } from 'vee-validate';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
@@ -48,14 +73,31 @@ export default {
       type: null,
       default: null
     },
-    column: {
-      type: String,
+    type: {
+      type: [String, Object],
       default: null
     },
     disabled: {
       type: Boolean,
       default: false
+    },
+    rules: {
+      type: Object,
+      default: null
+    },
+    errors: {
+      type: Array,
+      default: () => []
+    },
+    handleValidation: {
+      type: Function,
+      default: () => {}
     }
+  },
+  data () {
+    return {
+      active: false
+    };
   },
   computed: {
     ...mapGetters({
@@ -64,6 +106,12 @@ export default {
     ...mapState('system', {
       systemDicts: state => state
     }),
+    ...mapState('projects', {
+      projectDicts: state => state.projectStructure
+    }),
+    validator () {
+      return new Validator();
+    },
     internalValue: {
       get () {
         return this.value;
@@ -72,11 +120,23 @@ export default {
         this.$emit('change', value);
       }
     },
+    column () {
+      if (typeof this.type === 'string' || this.type === null) {
+        return this.type;
+      } else {
+        return 'custom_field';
+      }
+    },
     isDate () {
       return ['start_date', 'end_date', 'implementation_dates'].includes(this.column);
     },
     isTextArea () {
-      return ['geographic_scope', 'implementation_overview', 'name', 'contact_name', 'contact_email', 'mobile_application', 'wiki', 'repository'].includes(this.column);
+      return ['geographic_scope', 'implementation_overview', 'name',
+        'contact_name', 'contact_email', 'mobile_application',
+        'wiki', 'repository', 'health_workers', 'clients', 'facilities'].includes(this.column);
+    },
+    isGovInvestor () {
+      return this.column === 'government_investor';
     },
     isForced () {
       return ['country', 'donors'].includes(this.column);
@@ -85,21 +145,34 @@ export default {
       return this.isForced || this.disabled;
     },
     parsedValue () {
-      const result = { names: [this.value], ids: [this.value] };
+      const result = { names: Array.isArray(this.value) ? this.value : [this.value], ids: Array.isArray(this.value) ? this.value : [this.value] };
       if (!this.column) {
         return result;
       } else {
         const resolver = {
           organisation: () => this.findSystemValue('organisations'),
-          country: this.findCountryValue,
-          team: () => this.findSystemValue('profiles', true),
-          viewers: () => this.findSystemValue('profiles', true),
-          platforms: () => this.findProjectCollectionValue(''),
-          digitalHealthInterventions: () => this.findProjectCollectionValue(''),
-          health_focus_areas: () => this.findProjectCollectionValue(''),
-          hsc_challenges: () => this.findProjectCollectionValue(''),
-          his_bucket: () => this.findProjectCollectionValue(''),
+          // country: this.findCountryValue,
+          // team: () => this.findSystemValue('profiles', true),
+          // viewers: () => this.findSystemValue('profiles', true),
+          platforms: () => this.findProjectCollectionValue('technology_platforms', true),
+          digitalHealthInterventions: () => this.findProjectCollectionValue('strategies', true),
+          health_focus_areas: () => this.findProjectCollectionValue('health_focus_areas', true, 'health_focus_areas'),
+          hsc_challenges: () => this.findProjectCollectionValue('hsc_challenges', true, 'challenges'),
+          his_bucket: () => this.findProjectCollectionValue('his_bucket', true),
           implementing_partners: this.stringArray,
+          government_investor: () => {
+            const labelLib = {
+              'No, they have not yet contributed': 0,
+              'Yes, they are contributing in-kind people or time': 1,
+              'Yes, there is a financial contribution through MOH budget': 2
+            };
+            const value = Number.isInteger(this.value) ? this.value : labelLib[this.value];
+            const label = !Number.isInteger(this.value) ? this.value : Object.keys(labelLib).find(k => labelLib[k] === this.value);
+            return {
+              ids: [value],
+              names: [label]
+            };
+          },
           // coverage: [],
           // coverageData: {},
           // coverage_second_level: [],
@@ -108,39 +181,67 @@ export default {
           //   clients: 0,
           //   facilities: 0
           // },
-          donors: () => this.findSystemValue('donors', true),
-          licenses: () => this.findProjectCollectionValue(''),
-          interoperability_links: () => this.findProjectCollectionValue(''),
-          interoperability_standards: () => this.findProjectCollectionValu('')
+          // donors: () => this.findSystemValue('donors', true),
+          licenses: () => this.findProjectCollectionValue('licenses'),
+          interoperability_links: () => this.findProjectCollectionValue('interoperability_links'),
+          interoperability_standards: () => this.findProjectCollectionValue('interoperability_standards')
         };
         const res = resolver[this.column];
         return res ? res() : result;
       }
+    },
+    errorMessage () {
+      const e = this.errors.find(e => e.field === this.column);
+      return e ? e.msg : null;
+    }
+  },
+  watch: {
+    column: {
+      immediate: true,
+      handler (column) {
+        this.validate();
+      }
+    },
+    value: {
+      immediate: true,
+      handler (value) {
+        this.validate();
+      }
     }
   },
   methods: {
-    openDialog () {
-      if (this.isDate || this.isDisabled || this.isTextArea) {
+    async validate () {
+      const { valid, errors } = await this.validator.verify(this.apiValue(), this.rules, { name: this.column });
+      this.handleValidation(valid, errors[0], this.column);
+    },
+    clickHandler () {
+      if (this.isDate || this.isDisabled || this.isTextArea || this.isCoverage || this.isGovInvestor) {
+        this.active = true;
         return;
       }
       if (this.column) {
-        this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column });
+        this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column, type: this.type });
       }
     },
     findCountryValue () {
       const country = this.countries.find(c => c.id === this.value);
-      return {
-        ids: [country.id],
-        names: [country.name]
-      };
+      if (country) {
+        return {
+          ids: [country.id],
+          names: [country.name]
+        };
+      }
     },
     stringToArray (value) {
+      if (Array.isArray(value)) {
+        return value;
+      }
       return value.split(',').map(v => v.trim());
     },
     toInternalRepresentation (filtered) {
       return filtered.reduce((a, c) => {
         a.ids.push(c.id);
-        a.names.push(c.name);
+        a.names.push(c.name || c.challenge);
         return a;
       }, { names: [], ids: [] });
     },
@@ -149,22 +250,35 @@ export default {
         .map(st => ({ id: st, name: st }));
       return this.toInternalRepresentation(filtered);
     },
-    findSystemValue (collection, isMultiple) {
-      let value = null;
+    valueParser (isMultiple) {
       if (!Array.isArray(this.value)) {
-        value = isMultiple ? this.stringToArray(this.value) : [this.value];
+        return isMultiple ? this.stringToArray(this.value) : [this.value];
       } else {
-        value = this.value;
+        return this.value;
       }
+    },
+    findSystemValue (collection, isMultiple) {
+      const value = this.valueParser(isMultiple);
       const filtered = this.systemDicts[collection].filter(c => value.some(d => d === c.id || d === c.name));
       return this.toInternalRepresentation(filtered);
     },
-    findProjectCollectionValue () {
-      return this.countries.find(c => c.name === this.value);
+    findProjectCollectionValue (collection, isMultiple, ...subValues) {
+      const value = this.valueParser(isMultiple);
+      let projectData = this.projectDicts[collection];
+      if (subValues && Array.isArray(subValues)) {
+        subValues.forEach(subKey => {
+          projectData = projectData.reduce((a, c) => {
+            a.push(...c[subKey]);
+            return a;
+          }, []);
+        });
+      }
+      const filtered = projectData.filter(c => value.some(d => d === c.id || d === c.name || d === c.challenge));
+      return this.toInternalRepresentation(filtered);
     },
     apiValue () {
-      const isMultiple = ['donors', 'implementing_partners'];
-      const isIds = ['donors', 'country', 'organisation'];
+      const isMultiple = ['platforms', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards', 'custom_field'];
+      const isIds = [...isMultiple, 'donors', 'country', 'organisation', 'government_investor'];
       const idsOrNames = isIds.includes(this.column) ? this.parsedValue.ids : this.parsedValue.names;
       return isMultiple.includes(this.column) ? idsOrNames : idsOrNames[0];
     }
@@ -177,8 +291,18 @@ export default {
 @import "~assets/style/mixins.less";
 
   .SmartCell {
+
+    .Content {
+      width: 100%;
+      height: 100%;
+    }
+
     &.Disabled {
       cursor: not-allowed;
+    }
+
+    &.ValidationError {
+      background: pink;
     }
 
     .el-textarea {

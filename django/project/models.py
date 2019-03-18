@@ -325,5 +325,6 @@ class ProjectImportV2(ExtendedModel):
 
 class ImportRow(models.Model):
     data = JSONField(default=dict)
+    original_data = JSONField(default=dict)
     project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL)
     parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)
