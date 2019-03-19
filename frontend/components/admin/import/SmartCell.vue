@@ -125,7 +125,7 @@ export default {
       }
     },
     column () {
-      if (typeof this.type === 'string' || this.type === null) {
+      if (this.type === null || !this.type.startsWith('MOH')) {
         return this.type;
       } else {
         return 'custom_field';

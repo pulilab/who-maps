@@ -461,10 +461,8 @@ export default {
       imported: [],
       headers: [],
       sheets: [],
-      fields: [
-        ...Object.keys(projectFields()).filter(k => !blackList.includes(k)),
-        ...addendumFields
-      ],
+      fields: [],
+      countryFieldsLib: {},
       dialogData: null,
       currentQueueItem: null,
       additonalHeader: null
@@ -628,30 +626,20 @@ export default {
     },
     openDialogHandler (row, key, { column, value, type }) {
       const stringified = JSON.stringify(value);
-      console.log(value);
       this.dialogData = {
         row,
         key,
         column,
         value: value ? JSON.parse(stringified) : null,
         original: this.imported[row].original_data[key],
-        customField: type
+        customField: this.countryFieldsLib[type]
       };
     },
     columnChange () {
       this.updateQueueItem({ id: this.currentQueueItem.id, header_mapping: this.headers });
     },
     prepareHeaders (row) {
-      const headers = Object.keys(row).map(title => ({ selected: null, title }));
-      if (this.countryFields) {
-        const cH = this.countryFields.map(cf => ({ title: cf.question, selected: cf }));
-        this.headers = [
-          ...headers,
-          ...cH
-        ];
-      } else {
-        this.headers = headers;
-      }
+      this.headers = Object.keys(row).map(title => ({ selected: null, title }));
     },
     async saveAndProcessSheet (sheetName) {
       this.$nuxt.$loading.start('save_sheet');
@@ -754,6 +742,15 @@ export default {
         this.imported = JSON.parse(rowString);
         this.country = item.country;
         await this.loadCountryDetails(item.country);
+        this.countryFieldsLib = this.countryFields.reduce((a, c) => {
+          a[`MOH Q. ${c.id}: ${c.question}`] = c;
+          return a;
+        }, {});
+        this.fields = [
+          ...Object.keys(projectFields()).filter(k => !blackList.includes(k)),
+          ...addendumFields,
+          ...Object.keys(this.countryFieldsLib)
+        ];
         this.donors = [item.donor];
         this.isDraftOrPublish = item.draft ? 'draft' : 'publish';
         this.headers = cloneDeep(item.header_mapping);
