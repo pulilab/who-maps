@@ -27,14 +27,15 @@ def send_user_request_to_admins(profile_id):
     if not any([profile.donor, profile.country]):
         return
 
+    superusers = UserProfile.objects.filter(user__is_superuser=True)
     if profile.is_government_type():
         country = Country.objects.get(id=profile.country.id)
-        admins = country.admins.all() | country.super_admins.all()
+        admins = country.admins.all() | country.super_admins.all() | superusers
         admin_type = 'country'
         for_what = country.name
     elif profile.is_investor_type():
         donor = Donor.objects.get(id=profile.donor.id)
-        admins = donor.admins.all() | donor.super_admins.all()
+        admins = donor.admins.all() | donor.super_admins.all() | superusers
         admin_type = 'donor'
         for_what = donor.name
 
