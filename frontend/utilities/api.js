@@ -212,7 +212,8 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
       digitalHealthInterventions: undefined,
       coverageData: undefined,
       country_answers: undefined,
-      donors_answers: undefined
+      donors_answers: undefined,
+      modified: undefined
     },
     country_custom_answers,
     donor_custom_answers
