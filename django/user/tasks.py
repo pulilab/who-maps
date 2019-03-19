@@ -21,6 +21,7 @@ def send_user_request_to_admins(profile_id):
 
     admins = []
     admin_type = ""
+    for_what = ""
     profile = UserProfile.objects.get(id=profile_id)
 
     if not any([profile.donor, profile.country]):
@@ -30,15 +31,18 @@ def send_user_request_to_admins(profile_id):
         country = Country.objects.get(id=profile.country.id)
         admins = country.admins.all() | country.super_admins.all()
         admin_type = 'country'
+        for_what = country.name
     elif profile.is_investor_type():
         donor = Donor.objects.get(id=profile.donor.id)
         admins = donor.admins.all() | donor.super_admins.all()
         admin_type = 'donor'
+        for_what = donor.name
 
     for admin in admins:
         with override(admin.language):
-            subject = "Notification: {} has requested to be a {}".format(str(profile),
-                                                                         profile.get_account_type_display())
+            subject = "Request: {} has requested to be a {} for {}".format(str(profile),
+                                                                           profile.get_account_type_display(),
+                                                                           for_what)
             subject = ugettext(subject)
             html_template = loader.get_template("email/master-inline.html")
             html_message = html_template.render({"type": "admin_request",
