@@ -509,17 +509,27 @@ class UserProfileTests(APITestCase):
         u3 = User.objects.create(username="username3", email="user3@user.org")
         upf3 = UserProfile.objects.create(name="USER3", user=u3, account_type=UserProfile.GOVERNMENT, country=c)
 
-        self.assertEqual(mail.outbox[-1].subject, 'Notification: {} has requested to be a {}'.format(
-            str(upf3), upf3.get_account_type_display()))
+        self.assertEqual(mail.outbox[-1].subject, 'Request: {} has requested to be a {} for {}'.format(
+            str(upf3), upf3.get_account_type_display(), c.name))
 
         u4 = User.objects.create(username="username4", email="user4@user.org")
         upf4 = UserProfile.objects.create(name="USER4", user=u4, account_type=UserProfile.SUPER_DONOR_ADMIN, donor=d)
 
-        self.assertEqual(mail.outbox[-1].subject, 'Notification: {} has requested to be a {}'.format(
-            str(upf4), upf4.get_account_type_display()))
+        self.assertEqual(mail.outbox[-1].subject, 'Request: {} has requested to be a {} for {}'.format(
+            str(upf4), upf4.get_account_type_display(), d.name))
+
+        super_user = User.objects.filter(is_superuser=True).first()
+        UserProfile.objects.create(user=super_user)
 
         upf3.account_type = UserProfile.COUNTRY_ADMIN
         upf3.save()
 
-        self.assertEqual(mail.outbox[-1].subject, 'Notification: {} has requested to be a {}'.format(
-            str(upf3), upf3.get_account_type_display()))
+        self.assertEqual(mail.outbox[-1].subject, 'Request: {} has requested to be a {} for {}'.format(
+            str(upf3), upf3.get_account_type_display(), c.name))
+
+        # last two emails should be the same, but one going to the superuser
+        self.assertEqual(mail.outbox[-1].subject, mail.outbox[-2].subject)
+        self.assertNotEqual(mail.outbox[-1].recipients(), mail.outbox[-2].recipients())
+        recipients = mail.outbox[-2].recipients()[0] + mail.outbox[-1].recipients()[0]
+        self.assertTrue(UserProfile.objects.get(id=self.user_profile_id).user.email in recipients)
+        self.assertTrue(super_user.email in recipients)
