@@ -600,7 +600,7 @@ export default {
           for (var i = 0; i < length; i++) {
             binary += String.fromCharCode(bytes[i]);
           }
-          this._workbook = this._xlsx.read(binary, { type: 'binary' });
+          this._workbook = this._xlsx.read(binary, { type: 'binary', cellDates: true });
           this.sheets = this._workbook.SheetNames;
           this.$nuxt.$loading.finish('xlsx_load');
         };
