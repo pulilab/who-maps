@@ -96,6 +96,10 @@ export default {
     subLevels: {
       type: Array,
       default: () => []
+    },
+    customFieldsLib: {
+      type: Object,
+      default: () => ({})
     }
   },
   data () {
@@ -194,6 +198,16 @@ export default {
             const level = this.subLevels.find(cf => cf.id === value || cf.name === value);
             if (level) {
               return { names: [level.name], ids: [level.id] };
+            }
+            return result;
+          },
+          custom_field: () => {
+            const q = this.customFieldsLib[this.type];
+            if (q) {
+              if (q.type < 5) {
+                return { names: [this.value], ids: [this.value] };
+              }
+              return this.stringArray();
             }
             return result;
           }

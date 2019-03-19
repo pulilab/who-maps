@@ -393,6 +393,7 @@
                       :errors="errors"
                       :handle-validation="handleValidation"
                       :sub-levels="subLevels"
+                      :custom-fields-lib="countryFieldsLib"
                       @change="updateValue(index, header.title, $event)"
                       @openDialog="openDialogHandler(index, header.title, $event)"
                     />
