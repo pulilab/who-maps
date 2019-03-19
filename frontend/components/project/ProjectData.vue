@@ -160,7 +160,7 @@
 
           <simple-field
             :content="project.repository"
-            :header="$gettext('Code documentation or dowlonad link') | translate"
+            :header="$gettext('Code documentation or download link') | translate"
             link
           />
 
@@ -172,7 +172,7 @@
 
           <simple-field
             :content="project.wiki"
-            :header="$gettext('Link to wiki or project webside') | translate"
+            :header="$gettext('Link to wiki or project website') | translate"
             link
           />
         </collapsible-card>
