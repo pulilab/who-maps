@@ -482,6 +482,7 @@ export const mutations = {
     state.coverage = get(project, 'coverage', []);
     state.coverageData = get(project, 'coverageData', {});
     state.coverage_second_level = get(project, 'coverage_second_level', []);
+    state.modified = get(project, 'modified', new Date());
     state.national_level_deployment = get(project, 'national_level_deployment', {
       health_workers: 0,
       clients: 0,
