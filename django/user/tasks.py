@@ -45,7 +45,8 @@ def send_user_request_to_admins(profile_id):
                                                  "full_name": admin.name,
                                                  "requester": str(profile),
                                                  "requester_type": profile.get_account_type_display(),
-                                                 "admin_type": admin_type})
+                                                 "admin_type": admin_type,
+                                                 "language": admin.language})
 
         send_mail(
             subject=subject,
