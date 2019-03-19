@@ -92,6 +92,10 @@ export default {
     handleValidation: {
       type: Function,
       default: () => {}
+    },
+    subLevels: {
+      type: Array,
+      default: () => []
     }
   },
   data () {
@@ -184,7 +188,15 @@ export default {
           // donors: () => this.findSystemValue('donors', true),
           licenses: () => this.findProjectCollectionValue('licenses'),
           interoperability_links: () => this.findProjectCollectionValue('interoperability_links'),
-          interoperability_standards: () => this.findProjectCollectionValue('interoperability_standards')
+          interoperability_standards: () => this.findProjectCollectionValue('interoperability_standards'),
+          sub_level: () => {
+            const value = Array.isArray(this.value) ? this.value[0] : this.value;
+            const level = this.subLevels.find(cf => cf.id === value || cf.name === value);
+            if (level) {
+              return { names: [level.name], ids: [level.id] };
+            }
+            return result;
+          }
         };
         const res = resolver[this.column];
         return res ? res() : result;
@@ -236,7 +248,13 @@ export default {
       if (Array.isArray(value)) {
         return value;
       }
-      return value.split(',').map(v => v.trim());
+      if (typeof value === 'string') {
+        if (value.includes(',')) {
+          return value.split(',').map(v => v.trim());
+        }
+        return value.split(' ').map(v => v.trim());
+      }
+      return [value];
     },
     toInternalRepresentation (filtered) {
       return filtered.reduce((a, c) => {
@@ -278,7 +296,7 @@ export default {
     },
     apiValue () {
       const isMultiple = ['platforms', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards', 'custom_field'];
-      const isIds = [...isMultiple, 'donors', 'country', 'organisation', 'government_investor'];
+      const isIds = [...isMultiple, 'donors', 'country', 'organisation', 'government_investor', 'sub_level'];
       const idsOrNames = isIds.includes(this.column) ? this.parsedValue.ids : this.parsedValue.names;
       return isMultiple.includes(this.column) ? idsOrNames : idsOrNames[0];
     }

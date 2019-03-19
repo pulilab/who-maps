@@ -59,6 +59,17 @@
               </el-button>
             </template>
 
+            <template v-if="dialogData.column === 'sub_level'">
+              <el-select v-model="dialogData.value[0]">
+                <el-option
+                  v-for="item in subLevels"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                />
+              </el-select>
+            </template>
+
             <div
               v-if="dialogData.column === 'custom_field'"
               ref="custom_fields"
@@ -266,7 +277,6 @@
                   class="Column Thin"
                 >
                   <el-button
-                    circle
                     @click="saveAll"
                   >
                     <fa icon="save" />
@@ -346,21 +356,29 @@
                   <div
                     class="Column Thin"
                   >
-                    <el-button
-                      icon="el-icon-check"
-                      :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
-                      circle
-                      class="SaveButton"
-                      @click="scrollToError(valid, index)"
-                    />
-                    <a
-                      v-if="row.project"
-                      :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
-                      target="_blank"
-                      class="NuxtLink IconLeft"
-                    >
-                      <fa icon="share-square" />
-                    </a>
+                    <el-button-group>
+                      <el-button
+                        icon="el-icon-check"
+                        :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
+                        size="mini"
+                        class="SaveButton"
+                        @click="scrollToError(valid, index)"
+                      />
+                      <el-button
+                        icon="el-icon-delete"
+                        size="mini"
+                        class="DeleteButton"
+                        @click="deleteRow(row, index)"
+                      />
+                      <a
+                        v-if="row.project"
+                        :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
+                        target="_blank"
+                        class="NuxtLink IconLeft"
+                      >
+                        <fa icon="share-square" />
+                      </a>
+                    </el-button-group>
                   </div>
                   <template
                     v-for="header in headers"
@@ -374,6 +392,7 @@
                       class="Column"
                       :errors="errors"
                       :handle-validation="handleValidation"
+                      :sub-levels="subLevels"
                       @change="updateValue(index, header.title, $event)"
                       @openDialog="openDialogHandler(index, header.title, $event)"
                     />
@@ -391,7 +410,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import { mapGetters, mapActions } from 'vuex';
@@ -414,7 +432,7 @@ import { apiWriteParser } from '@/utilities/api';
 
 const blackList = ['country', 'donors', 'coverage', 'national_level_deployment',
   'coverageData', 'team', 'viewers', 'coverageType', 'digitalHealthInterventions'];
-const addendumFields = ['clients', 'health_workers', 'facilities'];
+const addendumFields = ['clients', 'health_workers', 'facilities', 'sub_level'];
 export default {
 
   components: {
@@ -468,10 +486,18 @@ export default {
     rows () {
       return this.imported;
     },
+    selectedCountry () {
+      return this.getCountryDetails(this.country);
+    },
+    subLevels () {
+      if (this.selectedCountry) {
+        return [{ id: 'National Level', name: 'National Level' }, ...this.selectedCountry.districts];
+      }
+      return [];
+    },
     countryFields () {
-      const country = this.getCountryDetails(this.country);
-      if (country) {
-        return country.country_questions;
+      if (this.selectedCountry) {
+        return this.selectedCountry.country_questions;
       }
       return [];
     },
@@ -550,7 +576,7 @@ export default {
       loadCountryDetails: 'countries/loadCountryDetails'
     }),
     rmHeader (index) {
-      Vue.delete(this.headers, index);
+      this.$delete(this.headers, index);
       this.columnChange();
     },
     scrollToError (valid, index) {
@@ -587,7 +613,7 @@ export default {
       }
     },
     updateValue (row, key, value) {
-      Vue.set(this.imported[row].data, key, value);
+      this.$set(this.imported[row].data, key, value);
       this.saveUpdatedValue(this.imported[row]);
     },
     saveUpdatedValue: debounce(function (row) {
@@ -596,8 +622,13 @@ export default {
     async patchRow (row) {
       return this.$axios.patch(`/api/projects/import-row/${row.id}/`, { ...row, id: undefined });
     },
+    async deleteRow (row, index) {
+      await this.$axios.delete(`/api/projects/import-row/${row.id}/`);
+      this.imported.splice(index, 1);
+    },
     openDialogHandler (row, key, { column, value, type }) {
       const stringified = JSON.stringify(value);
+      console.log(value);
       this.dialogData = {
         row,
         key,
@@ -624,10 +655,10 @@ export default {
     },
     async saveAndProcessSheet (sheetName) {
       this.$nuxt.$loading.start('save_sheet');
-      const sheet = this._xlsx.utils.sheet_to_json(this._workbook.Sheets[sheetName], { defval: '' });
-      await this.loadCountryDetails(this.country);
-      this.prepareHeaders(sheet[0]);
-      const importData =
+      try {
+        const sheet = this._xlsx.utils.sheet_to_json(this._workbook.Sheets[sheetName], { defval: '' });
+        this.prepareHeaders(sheet[0]);
+        const importData =
         {
           'filename': this.fileName,
           'country': this.country,
@@ -641,16 +672,26 @@ export default {
             }
           ]
         };
-      await this.addDataToQueue(importData);
-      this.workOnThis(this.queue[this.queue.length - 1]);
+        await this.addDataToQueue(importData);
+        this.workOnThis(this.queue[this.queue.length - 1]);
+      } catch (e) {
+        console.error(e);
+        this.headers = [];
+        if (e.response && e.response.data) {
+          this.$alert(JSON.stringify(e.response.data), 'Error', {
+            confirmButtonText: 'OK'
+          });
+        }
+      }
       this.$nuxt.$loading.finish('save_sheet');
     },
     async saveAll () {
       const valid = this.$refs.row.filter(r => r.valid);
       try {
         for (const p of valid) {
+          // eslint-disable-next-line no-unused-vars
           const newRow = await this.save(p);
-          await this.patchRow(newRow);
+          // await this.patchRow(newRow);
         }
       } catch (e) {
         console.error(e);
@@ -664,7 +705,7 @@ export default {
     },
     async save (row) {
       this.$nuxt.$loading.start('save');
-      const filled = row.$children.filter(sc => sc.column && sc.column !== 'custom_field');
+      const filled = row.$children.filter(sc => sc.column && !['custom_fields', 'sub_level'].includes(sc.column));
       const cf = row.$children.filter(sc => sc.column === 'custom_field').map(c => ({
         question_id: c.type.id,
         answer: c.apiValue()
@@ -673,6 +714,23 @@ export default {
         a[c.column] = c.apiValue();
         return a;
       }, projectFields());
+      const subLevel = row.$children.find(sc => sc.column === 'sub_level').apiValue();
+      if (subLevel === 'National Level') {
+        result.national_level_deployment = {
+          clients: +result.clients || result.national_level_deployment.clients,
+          facilities: +result.facilities || result.national_level_deployment.facilities,
+          health_workers: +result.health_workers || result.national_level_deployment.health_workers
+        };
+      } else if (subLevel) {
+        result.coverage.push(subLevel);
+        result.coverageData = {
+          [subLevel]: {
+            clients: +result.clients || result.national_level_deployment.clients,
+            facilities: +result.facilities || result.national_level_deployment.facilities,
+            health_workers: +result.health_workers || result.national_level_deployment.health_workers
+          }
+        };
+      }
       result.team = [this.userProfile.id];
       result.country = this.country;
       result.donors = this.donors;
@@ -688,13 +746,14 @@ export default {
       this.$nuxt.$loading.finish('save');
       return dataRow;
     },
-    async workOnThis (item) {
+    workOnThis (item) {
       this.$nuxt.$loading.start('select');
-      window.setTimeout(() => {
+      window.setTimeout(async () => {
         this.currentQueueItem = { ...item };
-        const rowString = JSON.stringify(item.rows.slice(0, 10));
+        const rowString = JSON.stringify(item.rows);
         this.imported = JSON.parse(rowString);
         this.country = item.country;
+        await this.loadCountryDetails(item.country);
         this.donors = [item.donor];
         this.isDraftOrPublish = item.draft ? 'draft' : 'publish';
         this.headers = cloneDeep(item.header_mapping);
@@ -812,7 +871,7 @@ export default {
         }
 
         &.Thin {
-          flex: 0 0 50px;
+          flex: 0 0 75px;
         }
 
         &.Fluid {
@@ -831,7 +890,7 @@ export default {
         }
       }
 
-      .SaveButton {
+      .SaveButton, .DeleteButton {
         margin-left: 6px;
       }
     }
