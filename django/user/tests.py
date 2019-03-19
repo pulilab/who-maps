@@ -530,5 +530,6 @@ class UserProfileTests(APITestCase):
         # last two emails should be the same, but one going to the superuser
         self.assertEqual(mail.outbox[-1].subject, mail.outbox[-2].subject)
         self.assertNotEqual(mail.outbox[-1].recipients(), mail.outbox[-2].recipients())
-        self.assertEqual(mail.outbox[-1].recipients()[0], UserProfile.objects.get(id=self.user_profile_id).user.email)
-        self.assertEqual(mail.outbox[-2].recipients()[0], super_user.email)
+        recipients = mail.outbox[-2].recipients()[0] + mail.outbox[-1].recipients()[0]
+        self.assertTrue(UserProfile.objects.get(id=self.user_profile_id).user.email in recipients)
+        self.assertTrue(super_user.email in recipients)
