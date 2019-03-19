@@ -86,7 +86,7 @@ export const publishRules = () => {
     geographic_scope: {},
     implementation_overview: {
       required: true,
-      max: 512
+      max: 1024
     },
     start_date: {
       required: true
