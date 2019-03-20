@@ -7,8 +7,13 @@ export const downloadLinkManager = (data, name) => {
 };
 
 export const blobDownloader = (data, name, callback) => {
-  const download_url = window.URL.createObjectURL(data);
-  downloadLinkManager(download_url, name);
+  if (window && window.navigator && window.navigator.msSaveBlob) {
+    const blobDownload = new Blob([data]);
+    window.navigator.msSaveBlob(blobDownload, name);
+  } else {
+    const download_url = window.URL.createObjectURL(data);
+    downloadLinkManager(download_url, name);
+  }
   if (callback) {
     callback();
   }
