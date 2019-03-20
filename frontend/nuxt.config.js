@@ -32,7 +32,7 @@ const config = {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
     ],
     script: [
-      { src: `https://polyfill.io/v3/polyfill.min.js?features=${features}` }
+      { src: `https://polyfill.io/v3/polyfill.min.js?features=${features}`, body: true }
     ]
   },
   css: [
@@ -160,6 +160,14 @@ const config = {
     resourceHints: false
   },
   build: {
+    babel: {
+      presets ({ isServer }) {
+        const targets = isServer ? { node: '10' } : { ie: '11' };
+        return [
+          [ require.resolve('@nuxt/babel-preset-app'), { targets } ]
+        ];
+      }
+    },
     extractCSS: true,
     optimization: {},
     transpile: ['redux', 'redux-async-thunk'],
