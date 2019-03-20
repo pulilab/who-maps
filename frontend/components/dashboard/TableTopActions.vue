@@ -167,7 +167,7 @@
 <script>
 import ProjectLegend from '../common/ProjectLegend';
 import PdfExport from './PdfExport';
-import { blobDownloader } from '../../utilities/dom';
+import { blobDownloader } from '@/utilities/dom';
 
 import { mapGetters, mapActions } from 'vuex';
 

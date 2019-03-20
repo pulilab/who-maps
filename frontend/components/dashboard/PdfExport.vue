@@ -166,10 +166,11 @@ export default {
       }
       return '';
     },
-    async printPdf () {
+    printPdf () {
       this.base64Images = require('../../utilities/exportBase64Images.js');
-      this.pdfMake = require('pdfmake/build/pdfmake');
+      this.pdfMake = require('pdfmake/build/pdfmake.js');
       const pdfFonts = require('pdfmake/build/vfs_fonts.js');
+
       this.pdfMake.vfs = pdfFonts.pdfMake.vfs;
       const docDefinition = { ...this.docDefinition, content: [this.tableHeader] };
 
