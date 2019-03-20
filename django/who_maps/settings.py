@@ -252,12 +252,17 @@ if SITE_ID in [3, 4]:
         "send_project_approval_digest": {
             "task": 'send_project_approval_digest',
             "schedule": datetime.timedelta(days=1),
-        },
-        "sync_project_from_odk": {
-            "task": 'sync_project_from_odk',
-            "schedule": datetime.timedelta(hours=ODK_SYNC_PERIOD),
-        },
+        }
     }
+    if ODK_SYNC_ENABLED:
+        CELERYBEAT_SCHEDULE.update(
+            {
+                "sync_project_from_odk": {
+                    "task": 'sync_project_from_odk',
+                    "schedule": datetime.timedelta(hours=ODK_SYNC_PERIOD)
+                }
+            })
+
     RAVEN_CONFIG = {
         'dsn': 'http://cea32567f8aa4eefa4d2051848d37dea:a884ff71e8ae444c8a40af705699a19c@sentry.vidzor.com/12',
     }
