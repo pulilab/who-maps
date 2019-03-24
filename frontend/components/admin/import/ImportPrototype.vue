@@ -20,6 +20,7 @@
             <organisation-select
               v-if="dialogData.column === 'organisation'"
               v-model="dialogData.value[0]"
+              :auto-save="true"
             />
             <his-bucket-selector
               v-if="dialogData.column === 'his_bucket'"
@@ -301,7 +302,6 @@
                     <el-select
                       v-if="header.selected === null || typeof header.selected === 'string'"
                       v-model="header.selected"
-
                       size="small"
                       filterable
                       clearable
@@ -309,9 +309,9 @@
                     >
                       <el-option
                         v-for="item in availableFields"
-                        :key="item"
-                        :label="item"
-                        :value="item"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
                       />
                     </el-select>
                     <div v-else>
@@ -336,9 +336,9 @@
                     >
                       <el-option
                         v-for="item in availableFields"
-                        :key="item"
-                        :label="item"
-                        :value="item"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
                       />
                     </el-select>
                   </div>
@@ -432,7 +432,7 @@ import { projectFields, draftRules, publishRules } from '@/utilities/projects';
 import { apiWriteParser } from '@/utilities/api';
 
 const blackList = ['country', 'donors', 'coverage', 'national_level_deployment',
-  'coverageData', 'team', 'viewers', 'coverageType', 'digitalHealthInterventions'];
+  'coverageData', 'team', 'viewers', 'coverageType', 'digitalHealthInterventions', 'coverage_second_level'];
 const addendumFields = ['clients', 'health_workers', 'facilities', 'sub_level'];
 export default {
 
@@ -502,7 +502,40 @@ export default {
     },
     availableFields () {
       const selected = this.headers.map(h => h.selected).filter(s => s);
-      return this.fields.filter(f => !selected.includes(f));
+      return this.fields.filter(f => !selected.includes(f)).map(f => {
+        const mapping = {
+          name: 'Project Name',
+          organisation: 'Organisation',
+          geographic_scope: 'Geographic Scope',
+          implementation_overview: 'Narrative of the project',
+          start_date: 'Start Date',
+          end_date: 'End Date',
+          contact_name: 'Contact name',
+          contact_email: 'Contact email',
+          platforms: 'Software',
+          health_focus_areas: 'Health Focus Areas',
+          hsc_challenges: 'Health System Challenges',
+          his_bucket: 'Health Information Systems',
+          government_investor: 'Governament Contribution',
+          implementing_partners: 'Partners',
+          implementation_dates: 'Technology Deployment Date',
+          licenses: 'Licenses',
+          repository: 'Link to Code documentation',
+          wiki: 'Link to Wiki',
+          mobile_application: 'Link to application',
+          interoperability_links: 'Interoperability Links',
+          interoperability_standards: 'Interoperability Standards',
+          health_workers: 'Health Workers',
+          clients: 'Clients',
+          facilities: 'Facilities',
+          sub_level: 'Coverage Type'
+
+        };
+        return {
+          label: mapping[f] || f,
+          value: f
+        };
+      }).sort((a, b) => a.label.localeCompare(b.label));
     },
     internalDraftRules () {
       return { ...draftRules(), organisation: { required: true } };
@@ -675,12 +708,12 @@ export default {
       this.$nuxt.$loading.finish('save_sheet');
     },
     async saveAll () {
-      const valid = this.$refs.row.filter(r => r.valid);
+      const toSave = this.$refs.row.filter(r => r.valid && r.row && !r.row.project);
       try {
-        for (const p of valid) {
+        for (const p of toSave) {
           // eslint-disable-next-line no-unused-vars
           const newRow = await this.save(p);
-          // await this.patchRow(newRow);
+          await this.patchRow(newRow);
         }
       } catch (e) {
         console.error(e);
@@ -703,17 +736,18 @@ export default {
         a[c.column] = c.apiValue();
         return a;
       }, projectFields());
-      const subLevel = row.$children.find(sc => sc.column === 'sub_level').apiValue();
-      if (subLevel === 'National Level') {
+      const subLevel = row.$children.find(sc => sc.column === 'sub_level');
+      const sublLevelValue = subLevel ? subLevel.apiValue() : null;
+      if (sublLevelValue === 'National Level') {
         result.national_level_deployment = {
           clients: +result.clients || result.national_level_deployment.clients,
           facilities: +result.facilities || result.national_level_deployment.facilities,
           health_workers: +result.health_workers || result.national_level_deployment.health_workers
         };
-      } else if (subLevel) {
-        result.coverage.push(subLevel);
+      } else if (sublLevelValue) {
+        result.coverage.push(sublLevelValue);
         result.coverageData = {
-          [subLevel]: {
+          [sublLevelValue]: {
             clients: +result.clients || result.national_level_deployment.clients,
             facilities: +result.facilities || result.national_level_deployment.facilities,
             health_workers: +result.health_workers || result.national_level_deployment.health_workers
@@ -739,8 +773,7 @@ export default {
       this.$nuxt.$loading.start('select');
       window.setTimeout(async () => {
         this.currentQueueItem = { ...item };
-        const rowString = JSON.stringify(item.rows);
-        this.imported = JSON.parse(rowString);
+        this.imported = cloneDeep([...item.rows].sort((a, b) => b.id - a.id).slice(0, 5));
         this.country = item.country;
         await this.loadCountryDetails(item.country);
         this.countryFieldsLib = this.countryFields.reduce((a, c) => {
