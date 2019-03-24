@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import LightSelectMixin from '../mixins/LightSelectMixin.js';
 
 export default {
@@ -35,6 +35,10 @@ export default {
     value: {
       type: [String, Number],
       default: null
+    },
+    autoSave: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -50,6 +54,19 @@ export default {
       },
       set (value) {
         this.$emit('change', value);
+        this.save(value);
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      addOrganisation: 'system/addOrganisation'
+    }),
+    async save (value) {
+      if (this.autoSave) {
+        this.$nuxt.$loading.start('organisation');
+        await this.addOrganisation(value);
+        this.$nuxt.$loading.finish('organisation');
       }
     }
   }
