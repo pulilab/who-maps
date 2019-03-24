@@ -199,7 +199,7 @@ export default {
             if (level) {
               return { names: [level.name], ids: [level.id] };
             }
-            return result;
+            return { names: [], ids: [] };
           },
           custom_field: () => {
             const q = this.customFieldsLib[this.type];
