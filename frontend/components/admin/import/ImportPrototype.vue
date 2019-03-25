@@ -744,7 +744,7 @@ export default {
       this.$nuxt.$loading.start('save');
       const filled = row.$children.filter(sc => sc.column && !['custom_fields', 'sub_level'].includes(sc.column));
       const cf = row.$children.filter(sc => sc.column === 'custom_field').map(c => ({
-        question_id: c.type.id,
+        question_id: this.countryFieldsLib[c.type].id,
         answer: c.apiValue()
       })).filter(a => a.answer);
       const result = filled.reduce((a, c) => {
