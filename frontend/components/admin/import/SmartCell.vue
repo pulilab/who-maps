@@ -254,10 +254,13 @@ export default {
         return value;
       }
       if (typeof value === 'string') {
+        let splitted = [];
         if (value.includes(',')) {
-          return value.split(',').map(v => v.trim());
+          splitted = value.split(',');
+        } else if (value.includes(';')) {
+          splitted = value.split(';');
         }
-        return value.split(' ').map(v => v.trim());
+        return splitted.map(v => v.trim());
       }
       return [value];
     },
