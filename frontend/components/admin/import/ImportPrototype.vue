@@ -773,7 +773,7 @@ export default {
       this.$nuxt.$loading.start('select');
       window.setTimeout(async () => {
         this.currentQueueItem = { ...item };
-        this.imported = cloneDeep([...item.rows].sort((a, b) => b.id - a.id).slice(0, 5));
+        this.imported = cloneDeep([...item.rows].sort((a, b) => b.id - a.id));
         this.country = item.country;
         await this.loadCountryDetails(item.country);
         this.countryFieldsLib = this.countryFields.reduce((a, c) => {
