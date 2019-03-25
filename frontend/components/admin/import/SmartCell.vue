@@ -159,9 +159,6 @@ export default {
       } else {
         const resolver = {
           organisation: () => this.findSystemValue('organisations'),
-          // country: this.findCountryValue,
-          // team: () => this.findSystemValue('profiles', true),
-          // viewers: () => this.findSystemValue('profiles', true),
           platforms: () => this.findProjectCollectionValue('technology_platforms', true),
           digitalHealthInterventions: () => this.findProjectCollectionValue('strategies', true),
           health_focus_areas: () => this.findProjectCollectionValue('health_focus_areas', true, 'health_focus_areas'),
@@ -181,15 +178,6 @@ export default {
               names: [label]
             };
           },
-          // coverage: [],
-          // coverageData: {},
-          // coverage_second_level: [],
-          // national_level_deployment: {
-          //   health_workers: 0,
-          //   clients: 0,
-          //   facilities: 0
-          // },
-          // donors: () => this.findSystemValue('donors', true),
           licenses: () => this.findProjectCollectionValue('licenses'),
           interoperability_links: () => this.findProjectCollectionValue('interoperability_links'),
           interoperability_standards: () => this.findProjectCollectionValue('interoperability_standards'),
@@ -203,13 +191,16 @@ export default {
           },
           custom_field: () => {
             const q = this.customFieldsLib[this.type];
-            if (q) {
-              if (q.type < 5) {
-                return { names: [this.value], ids: [this.value] };
-              }
-              return this.stringArray();
+            if (!q) {
+              return { ids: [], names: [] };
             }
-            return result;
+            if (q.type < 4) {
+              return result;
+            } else if (q.type >= 4) {
+              const options = this.stringToArray(this.value);
+              const filtered = options.filter(o => q.options.includes(o));
+              return { ids: [...filtered], names: [...filtered] };
+            }
           }
         };
         const res = resolver[this.column];

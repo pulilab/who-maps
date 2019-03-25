@@ -92,11 +92,26 @@
                 </el-radio>
               </el-radio-group>
 
-              <template v-if="dialogData.customField.type > 3 && dialogData.customField.options">
+              <template v-if="dialogData.customField.type === 4 && dialogData.customField.options">
+                <el-select
+                  v-model="dialogData.value[0]"
+                  :placeholder="$gettext('Select from list') | translate"
+                  filterable
+                  popper-class="CustomFieldSelectorDropdown"
+                  class="CustomFieldSelector"
+                >
+                  <el-option
+                    v-for="(opt, index) in dialogData.customField.options"
+                    :key="index"
+                    :value="opt"
+                  />
+                </el-select>
+              </template>
+              <template v-if="dialogData.customField.type === 5 && dialogData.customField.options">
                 <el-select
                   v-model="dialogData.value"
                   :placeholder="$gettext('Select from list') | translate"
-                  :multiple="dialogData.customField.type === 5"
+                  multiple
                   filterable
                   popper-class="CustomFieldSelectorDropdown"
                   class="CustomFieldSelector"
