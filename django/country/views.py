@@ -187,7 +187,7 @@ class SetOrderToMixin:
         if to_id is not None:
             try:
                 custom_question.to(int(to_id))
-                return Response({'status': 'order set'})
+                return Response(custom_question.get_order())
             except (ValueError, TypeError):
                 pass
         return Response(status=status.HTTP_400_BAD_REQUEST)
