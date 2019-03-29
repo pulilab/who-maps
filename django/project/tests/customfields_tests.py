@@ -327,8 +327,8 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.json(), {'detail': 'Not found.'})
 
     def test_reorder_country_questions_success(self):
-        CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
-        CountryCustomQuestion.objects.create(question="test2", country_id=self.country_id)
+        q1 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
+        q2 = CountryCustomQuestion.objects.create(question="test2", country_id=self.country_id)
         q3 = CountryCustomQuestion.objects.create(question="test3", country_id=self.country_id)
 
         url = reverse("country-detail", kwargs={"pk": self.country_id})
@@ -346,7 +346,9 @@ class CustomFieldTests(SetupTests):
         response = self.test_user_client.post(url, data={'to': str(response.json()['country_questions'][0]['order'])},
                                               format='json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), {'status': 'order set'})
+        self.assertEqual(response.json(), [{'id': q3.id, 'order': 0},
+                                           {'id': q1.id, 'order': 1},
+                                           {'id': q2.id, 'order': 2}])
 
         url = reverse("country-detail", kwargs={"pk": self.country_id})
         response = self.test_user_client.get(url, format='json')
@@ -357,6 +359,30 @@ class CustomFieldTests(SetupTests):
         self.assertTrue(response.json()['country_questions'][0]['order'] <
                         response.json()['country_questions'][1]['order'] <
                         response.json()['country_questions'][2]['order'])
+
+    def test_reorder_donor_questions_success(self):
+        dq1 = DonorCustomQuestion.objects.create(question="test", donor_id=self.d1.id)
+        dq2 = DonorCustomQuestion.objects.create(question="test2", donor_id=self.d1.id)
+        dq3 = DonorCustomQuestion.objects.create(question="test3", donor_id=self.d1.id)
+
+        url = reverse("donor-detail", kwargs={"pk": self.d1.id})
+        response = self.test_user_client.get(url, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['donor_questions']), 3)
+        self.assertTrue(response.json()['donor_questions'][0]['id'] <
+                        response.json()['donor_questions'][1]['id'] <
+                        response.json()['donor_questions'][2]['id'])
+        self.assertTrue(response.json()['donor_questions'][0]['order'] <
+                        response.json()['donor_questions'][1]['order'] <
+                        response.json()['donor_questions'][2]['order'])
+
+        url = reverse("donor-custom-questions-set-order-to", kwargs={"pk": dq3.id})
+        response = self.test_user_client.post(url, data={'to': str(response.json()['donor_questions'][0]['order'])},
+                                              format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), [{'id': dq3.id, 'order': 0},
+                                           {'id': dq1.id, 'order': 1},
+                                           {'id': dq2.id, 'order': 2}])
 
     def test_donor_answer_for_draft(self):
         q = DonorCustomQuestion.objects.create(question="test", donor_id=self.d1.id)
