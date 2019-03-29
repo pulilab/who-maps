@@ -63,7 +63,7 @@ export default {
       addOrganisation: 'system/addOrganisation'
     }),
     async save (value) {
-      if (this.autoSave) {
+      if (this.autoSave && !Number.isInteger(value)) {
         this.$nuxt.$loading.start('organisation');
         await this.addOrganisation(value);
         this.$nuxt.$loading.finish('organisation');
