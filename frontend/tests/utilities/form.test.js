@@ -45,7 +45,7 @@ describe('mapGettersActions', function () {
     toTest.set(1);
     expect(debounce).toHaveBeenCalledTimes(1);
   });
-  it('keeps in sync with vuex', () => {
+  it('keeps in sync with vuex: fixes issue #1184', () => {
     const toTest = initProxy(300, true);
     toTest.set('fromModule');
     expect(toTest.get()).toEqual('fromStore');
