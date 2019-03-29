@@ -155,6 +155,7 @@ class DonorCustomQuestion(CustomQuestion):
     def get_order(self):
         return self.__class__.objects.filter(donor=self.donor).values('id', 'order')
 
+
 class CountryCustomQuestion(CustomQuestion):
     country = models.ForeignKey(Country, related_name='country_questions', on_delete=models.CASCADE)
     order_with_respect_to = 'country'
