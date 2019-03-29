@@ -7,11 +7,14 @@ export const mapGettersActions = (collection) => {
     const [module, getterName, setterName, waitTime, skipGetter] = collection[item];
     const getter = module + '/' + getterName;
     const setter = module + '/' + setterName;
+    const debounceWait = waitTime || 0;
     const localValue = Vue.observable({
       value: null
     });
     const setFn = () => {
-      localValue.store.dispatch(setter, localValue.value);
+      if (localValue && localValue.store) {
+        localValue.store.dispatch(setter, localValue.value);
+      }
       debounceUpdate();
     };
     const debounceUpdate = debounce(() => {
@@ -20,7 +23,7 @@ export const mapGettersActions = (collection) => {
       }
     }, waitTime * 1.5);
 
-    const set = waitTime !== null ? debounce(setFn, waitTime) : setFn;
+    const set = debounceWait ? debounce(setFn, waitTime) : setFn;
     result[item] = {
       localValue,
       get () {
