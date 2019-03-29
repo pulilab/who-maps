@@ -152,6 +152,9 @@ class DonorCustomQuestion(CustomQuestion):
     class Meta(OrderedModel.Meta):
         pass
 
+    def get_order(self):
+        return self.__class__.objects.filter(donor=self.donor).values('id', 'order')
+
 
 class CountryCustomQuestion(CustomQuestion):
     country = models.ForeignKey(Country, related_name='country_questions', on_delete=models.CASCADE)
@@ -159,3 +162,6 @@ class CountryCustomQuestion(CustomQuestion):
 
     class Meta(OrderedModel.Meta):
         pass
+
+    def get_order(self):
+        return self.__class__.objects.filter(country=self.country).values('id', 'order')

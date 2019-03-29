@@ -52,8 +52,10 @@ export const actions = {
   async processReOrder ({ state, commit }, { from, to, newOrder }) {
     from = state.questions[from];
     to = state.questions[to];
-    await this.$axios.post(`/api/${state.questionnaireType}-custom-questions/${from.id}/set_order_to/`, { to: to.order });
-    commit('SET_QUESTIONS', newOrder);
+    const { data } = await this.$axios.post(`/api/${state.questionnaireType}-custom-questions/${from.id}/set_order_to/`, { to: to.order });
+    // positional order is important and should be respected, backend is sending ordered data so we use backend answer as base to map
+    const mixed = data.map(d => ({ ...newOrder.find(n => d.id === n.id), ...d }));
+    commit('SET_QUESTIONS', mixed);
   }
 
 };
