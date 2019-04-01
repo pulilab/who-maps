@@ -1,54 +1,71 @@
 <template>
   <div
-    :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': errorMessage}]"
+    :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': errorMessage, 'ParsingError': parsingFailed}]"
     @click="clickHandler"
   >
     <div class="Content">
-      <date-field
-        v-if="isDate && active"
-        v-model="internalValue"
-        :disabled="disabled"
-      />
-      <el-input
-        v-if="isTextArea && active"
-        v-model="internalValue"
-        :disabled="disabled"
-        type="textarea"
-        :rows="6"
-      />
-      <el-radio-group
-        v-if="isGovInvestor && active"
-        v-model="internalValue"
-      >
-        <el-radio :label="0">
-          No, they have not yet contributed
-        </el-radio>
-        <el-radio :label="1">
-          Yes, they are contributing in-kind people or time
-        </el-radio>
-        <el-radio :label="2">
-          Yes, there is a financial contribution through MOH budget
-        </el-radio>
-      </el-radio-group>
-      <template v-if="column && !isDate && !isTextArea">
-        <ul v-if="parsedValue && parsedValue.names">
-          <li
-            v-for="(name, index) in parsedValue.names"
-            :key="index"
+      <template v-if="column">
+        <div
+          v-if="active"
+          class="active"
+        >
+          <date-field
+            v-if="isDate"
+            v-model="internalValue"
+            :disabled="disabled"
+          />
+          <el-input
+            v-if="isTextArea"
+            v-model="internalValue"
+            :disabled="disabled"
+            type="textarea"
+            :rows="6"
+          />
+          <el-radio-group
+            v-if="isGovInvestor"
+            v-model="internalValue"
           >
-            {{ name }}
-          </li>
-        </ul>
+            <el-radio :label="0">
+              No, they have not yet contributed
+            </el-radio>
+            <el-radio :label="1">
+              Yes, they are contributing in-kind people or time
+            </el-radio>
+            <el-radio :label="2">
+              Yes, there is a financial contribution through MOH budget
+            </el-radio>
+          </el-radio-group>
+        </div>
+
+        <template v-else-if="isDate || isTextArea || isGovInvestor">
+          {{ internalValue }}
+        </template>
+
+        <template v-else-if="parsedValue && parsedValue.names">
+          <ul class="ParsedList">
+            <li
+              v-for="(name, index) in parsedValue.names"
+              :key="index"
+            >
+              {{ name }}
+            </li>
+          </ul>
+        </template>
       </template>
-      <span v-else-if="!active">
+      <template v-if="!column">
         {{ value }}
-      </span>
+      </template>
+      <template v-if="parsingFailed">
+        <span class="OriginalValue">{{ original }}</span>
+      </template>
     </div>
-    <div
-      v-if="errorMessage"
-      class="Error"
-    >
-      {{ errorMessage }}
+    <div class="ErrorOverlay">
+      <span v-if="errorMessage && !parsingFailed">
+        {{ errorMessage }}
+      </span>
+      <span v-if="parsingFailed">
+        Failed to parse your data, click to manually fix
+      </span>
     </div>
   </div>
 </template>
@@ -98,6 +115,10 @@ export default {
     customFieldsLib: {
       type: Object,
       default: () => ({})
+    },
+    original: {
+      type: null,
+      default: null
     }
   },
   data () {
@@ -201,6 +222,9 @@ export default {
         const res = resolver[this.column];
         return res ? res() : result;
       }
+    },
+    parsingFailed () {
+      return this.value && this.column && this.parsedValue.ids.length === 0;
     },
     errorMessage () {
       const e = this.errors.find(e => e.field === this.column);
@@ -307,8 +331,12 @@ export default {
     .Content {
       width: 100%;
       height: 100%;
+
+      .ParsedList{
+        list-style: none;
+      }
     }
-    .Error {
+    .ErrorOverlay {
       position: absolute;
       bottom: 0;
       left: 0;
@@ -322,6 +350,14 @@ export default {
 
     &.ValidationError {
       background: pink;
+    }
+
+    &.ParsingError {
+      background: orange;
+    }
+
+    .OriginalValue {
+      font-style: italic;
     }
 
     .el-textarea {
