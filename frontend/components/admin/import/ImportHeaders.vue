@@ -4,11 +4,7 @@
       v-if="headers.length > 0"
       class="Column Thin"
     >
-      <el-button
-        @click="$emit('save-all')"
-      >
-        <fa icon="save" />
-      </el-button>
+      <slot />
     </div>
     <div
       v-for="(header, index) in internalValue"

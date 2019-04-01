@@ -20,7 +20,11 @@
                 :id="rawImport.id"
                 :headers.sync="rawImport.header_mapping"
                 :country-fields-lib="countryFieldsLib"
-              />
+              >
+                <el-button @click="saveAll">
+                  <fa icon="save" />
+                </el-button>
+              </import-headers>
 
               <import-row
                 v-for="(row, index) in rawImport.rows"
