@@ -9,46 +9,47 @@
     <el-card class="box-card">
       <import-validation
         :headers="rawImport.header_mapping"
-        :publish="false"
+        :publish="!rawImport.draft"
       >
         <template
           v-slot:default="{globalErrors, rules}"
         >
           <div class="ExportDataTable">
             <div class="Container">
-              <div class="Row">
-                <import-headers
-                  :id="rawImport.id"
-                  :headers.sync="rawImport.header_mapping"
-                  :country-fields-lib="countryFieldsLib"
-                />
-              </div>
+              <import-headers
+                :id="rawImport.id"
+                :headers.sync="rawImport.header_mapping"
+                :country-fields-lib="countryFieldsLib"
+              />
+
               <import-row
                 v-for="(row, index) in rawImport.rows"
                 :key="index"
                 ref="row"
                 :index="index"
                 :row="row"
-                :class="['Row', `Row_${index}`]"
+                :class="['Row']"
               >
-                <template v-slot:default="{errors, valid, handleValidation, columns}">
+                <template v-slot:default="{errors, valid, handleValidation, data, original, rowSave}">
                   <div
                     class="Column Thin"
                   >
                     <el-button-group>
                       <el-button
-                        icon="el-icon-check"
                         :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
                         size="mini"
                         class="SaveButton"
-                        @click="scrollToError(valid, index)"
-                      />
+                        @click="rowSave()"
+                      >
+                        <fa icon="save" />
+                      </el-button>
                       <el-button
-                        icon="el-icon-delete"
                         size="mini"
                         class="DeleteButton"
                         @click="deleteRow(row, index)"
-                      />
+                      >
+                        <fa icon="times" />
+                      </el-button>
                       <a
                         v-if="row.project"
                         :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
@@ -65,7 +66,8 @@
                     <SmartCell
                       :key="index + header.title"
                       :disabled="!!row.project"
-                      :value="columns[header.title]"
+                      :value="data[header.title]"
+                      :original="original[header.title]"
                       :type="header.selected"
                       :rules="rules[header.selected]"
                       class="Column"
@@ -163,6 +165,24 @@ export default {
     async deleteRow (row, index) {
       await this.$axios.delete(`/api/projects/import-row/${row.id}/`);
       this.rawImport.rows.splice(index, 1);
+    },
+    async saveAll () {
+      this.$nuxt.$loading.start('saveAll');
+      const toSave = this.$refs.row.filter(r => r.valid && r.row && !r.row.project);
+      try {
+        for (const p of toSave) {
+          const newRow = await toSave.save(this.country, this.donor, !this.rawImport.draft);
+          await this.patchRow(newRow);
+        }
+      } catch (e) {
+        console.error(e);
+        if (e.response && e.response.data) {
+          this.$alert(JSON.stringify(e.response.data), 'Error', {
+            confirmButtonText: 'OK'
+          });
+        }
+        this.$nuxt.$loading.finish('saveAll');
+      }
     }
   }
 };
