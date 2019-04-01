@@ -3,62 +3,60 @@
     :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': errorMessage}]"
     @click="clickHandler"
   >
-    <el-tooltip
-      :disabled="!errorMessage"
-      class="item"
-      effect="dark"
-      :content="errorMessage"
-      placement="top"
+    <div class="Content">
+      <date-field
+        v-if="isDate && active"
+        v-model="internalValue"
+        :disabled="disabled"
+      />
+      <el-input
+        v-if="isTextArea && active"
+        v-model="internalValue"
+        :disabled="disabled"
+        type="textarea"
+        :rows="6"
+      />
+      <el-radio-group
+        v-if="isGovInvestor && active"
+        v-model="internalValue"
+      >
+        <el-radio :label="0">
+          No, they have not yet contributed
+        </el-radio>
+        <el-radio :label="1">
+          Yes, they are contributing in-kind people or time
+        </el-radio>
+        <el-radio :label="2">
+          Yes, there is a financial contribution through MOH budget
+        </el-radio>
+      </el-radio-group>
+      <template v-if="column && !isDate && !isTextArea">
+        <ul v-if="parsedValue && parsedValue.names">
+          <li
+            v-for="(name, index) in parsedValue.names"
+            :key="index"
+          >
+            {{ name }}
+          </li>
+        </ul>
+      </template>
+      <span v-else-if="!active">
+        {{ value }}
+      </span>
+    </div>
+    <div
+      v-if="errorMessage"
+      class="Error"
     >
-      <div class="Content">
-        <date-field
-          v-if="isDate && active"
-          v-model="internalValue"
-          :disabled="disabled"
-        />
-        <el-input
-          v-if="isTextArea && active"
-          v-model="internalValue"
-          :disabled="disabled"
-          type="textarea"
-          :rows="6"
-        />
-        <el-radio-group
-          v-if="isGovInvestor && active"
-          v-model="internalValue"
-        >
-          <el-radio :label="0">
-            No, they have not yet contributed
-          </el-radio>
-          <el-radio :label="1">
-            Yes, they are contributing in-kind people or time
-          </el-radio>
-          <el-radio :label="2">
-            Yes, there is a financial contribution through MOH budget
-          </el-radio>
-        </el-radio-group>
-        <template v-if="column && !isDate && !isTextArea">
-          <ul v-if="parsedValue && parsedValue.names">
-            <li
-              v-for="(name, index) in parsedValue.names"
-              :key="index"
-            >
-              {{ name }}
-            </li>
-          </ul>
-        </template>
-        <span v-else-if="!active">
-          {{ value }}
-        </span>
-      </div>
-    </el-tooltip>
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 
 <script>
 import DateField from '@/components/admin/import/DateField';
 import { Validator } from 'vee-validate';
-import { mapGetters, mapState } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -108,9 +106,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      countries: 'countries/getCountries'
-    }),
     ...mapState('system', {
       systemDicts: state => state
     }),
@@ -240,15 +235,6 @@ export default {
         this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column, type: this.type });
       }
     },
-    findCountryValue () {
-      const country = this.countries.find(c => c.id === this.value);
-      if (country) {
-        return {
-          ids: [country.id],
-          names: [country.name]
-        };
-      }
-    },
     stringToArray (value) {
       if (Array.isArray(value)) {
         return value;
@@ -317,10 +303,17 @@ export default {
 @import "~assets/style/mixins.less";
 
   .SmartCell {
-
+    position: relative;
     .Content {
       width: 100%;
       height: 100%;
+    }
+    .Error {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center
     }
 
     &.Disabled {
