@@ -30,29 +30,21 @@
           v-model="dialogData.value"
         />
         <template v-if="dialogData.column === 'implementing_partners'">
-          <div
-            v-for="(p, index) in dialogData.value"
-            :key="index"
-          >
-            <el-input v-model="dialogData.value[index]" />
-          </div>
-          <el-button @click="dialogData.value.push(null)">
-            Add more
-          </el-button>
+          <el-select
+            v-model="dialogData.value"
+            class="FullWidth"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="Add a partner"
+          />
         </template>
         <template v-if="dialogData.column === 'platforms'">
-          <div
-            v-for="(element, index) in dialogData.value"
-            :key="index"
-          >
-            <platform-selector
-              v-model="dialogData.value"
-              :index="index"
-            />
-          </div>
-          <el-button @click="dialogData.value.push(null)">
-            Add more
-          </el-button>
+          <platform-selector
+            v-model="dialogData.value"
+            :index="0"
+          />
         </template>
 
         <template v-if="dialogData.column === 'sub_level'">
@@ -121,13 +113,17 @@
         </div>
       </el-col>
     </el-row>
-    <el-row>
-      <el-col>
-        <el-button @click="dialogVisible=false">
-          Save
-        </el-button>
-      </el-col>
-    </el-row>
+    <div
+      slot="footer"
+    >
+      <el-button @click="dialogData = null">
+        Cancel
+      </el-button>
+
+      <el-button @click="save">
+        Save
+      </el-button>
+    </div>
   </el-dialog>
 </template>
 
@@ -167,7 +163,6 @@ export default {
         return !!this.dialogData;
       },
       set () {
-        this.$emit('update', { row: this.dialogData.row, key: this.dialogData.key, value: this.dialogData.value });
         this.dialogData = null;
       }
     }
@@ -183,11 +178,18 @@ export default {
         original: this.imported[row].original_data[key],
         customField: this.countryFieldsLib[type]
       };
+    },
+    save () {
+      this.$emit('update', { row: this.dialogData.row, key: this.dialogData.key, value: this.dialogData.value });
+      this.dialogData = null;
     }
   }
 };
 </script>
 
-<style>
+<style lang="less">
+.FullWidth{
+  width: 100%;
+}
 
 </style>
