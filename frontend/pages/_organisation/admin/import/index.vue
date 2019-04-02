@@ -1,85 +1,53 @@
 <template>
   <div class="ImportList">
-    <el-card class="box-card">
-      <div
-        slot="header"
-        class="clearfix"
+    <el-row type="flex">
+      <el-col
+        v-if="queue && queue.length > 0"
+        :span="16"
       >
-        <span>New Import</span>
-      </div>
-      <import-file />
-    </el-card>
-    <el-card class="box-card">
-      <div
-        slot="header"
-        class="clearfix"
-      >
-        <span>Previous imports</span>
-      </div>
-      <el-row
-        v-for="(item, index) in queue"
-        :key="index"
-        type="flex"
-      >
-        <el-col :span="4">
-          <div class="Label">
-            Selected Country
+        <el-card class="box-card">
+          <div
+            slot="header"
+            class="clearfix"
+          >
+            <span>Previous imports</span>
           </div>
-          <country-item :id="item.country" />
-        </el-col>
-
-        <el-col :span="4">
-          <div class="Label">
-            Selected Investor
+          <import-details
+            v-for="(item, index) in queue"
+            :key="index"
+            :item="item"
+            type="flex"
+          >
+            <el-button @click="select(item)">
+              Select
+            </el-button>
+          </import-details>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card class="box-card">
+          <div
+            slot="header"
+            class="clearfix"
+          >
+            <span>New Import</span>
           </div>
-          <donor-item :id="item.donor" />
-        </el-col>
-
-        <el-col :span="4">
-          <div class="Label">
-            File Name
-          </div>
-          {{ item.filename }}
-        </el-col>
-        <el-col :span="4">
-          <div class="Label">
-            Sheet Name
-          </div>
-          {{ item.sheet_name }}
-        </el-col>
-
-        <el-col :span="4">
-          <div class="Label">
-            Draft or Published
-          </div>
-          <span v-if="item.draft">Draft</span>
-          <span v-else>Publish</span>
-        </el-col>
-
-        <el-col :span="4">
-          <div class="Label">
-            Actions
-          </div>
-          <el-button @click="workOnThis(item)">
-            Select
-          </el-button>
-        </el-col>
-      </el-row>
-    </el-card>
+          <import-file />
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import ImportFile from '@/components/admin/import/ImportFile';
-import CountryItem from '@/components/common/CountryItem';
-import DonorItem from '@/components/common/DonorItem';
+import ImportDetails from '@/components/admin/import/ImportDetails';
 
 export default {
   components: {
     ImportFile,
-    CountryItem,
-    DonorItem
+    ImportDetails
   },
   computed: {
     ...mapGetters({
@@ -95,6 +63,13 @@ export default {
       store.dispatch('countries/loadMapData'),
       store.dispatch('admin/import/loadQueue')
     ]);
+  },
+  methods: {
+    async select ({ id }) {
+      this.$nuxt.$loading.start();
+      await this.$nextTick();
+      this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: id }, query: undefined }));
+    }
   }
 };
 </script>
