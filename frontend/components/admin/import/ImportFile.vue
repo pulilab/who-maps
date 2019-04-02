@@ -21,27 +21,31 @@
         :file="inputFile"
         :options="{ type: 'binary', cellDates: true }"
       >
-        <xlsx-sheets>
-          <template #default="{sheets}">
-            <el-select
-              v-model="selectedSheet"
-              class="SheetSelector"
-              :disabled="!sheets || sheets.length === 0"
-            >
-              <el-option
-                v-for="sheet in sheets"
-                :key="sheet"
-                :value="sheet"
-              >
-                {{ sheet }}
-              </el-option>
-            </el-select>
-          </template>
-        </xlsx-sheets>
-        <xlsx-json
-          :sheet="selectedSheet"
-          @parsed="parsed = $event"
-        />
+        <template #default="{loading}">
+          <xlsx-sheets>
+            <template #default="{sheets}">
+              <div v-loading="loading">
+                <el-select
+                  v-model="selectedSheet"
+                  class="SheetSelector"
+                  :disabled="!sheets || sheets.length === 0"
+                >
+                  <el-option
+                    v-for="sheet in sheets"
+                    :key="sheet"
+                    :value="sheet"
+                  >
+                    {{ sheet }}
+                  </el-option>
+                </el-select>
+              </div>
+            </template>
+          </xlsx-sheets>
+          <xlsx-json
+            :sheet="selectedSheet"
+            @parsed="parsed = $event"
+          />
+        </template>
       </xlsx-read>
     </el-form-item>
     <el-form-item>
