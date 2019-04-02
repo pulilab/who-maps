@@ -1,63 +1,66 @@
 <template>
-  <div
-    v-if="internalValue.length > 0"
-    class="Row Headers"
-  >
-    <div class="Column Thin">
-      <slot />
-    </div>
-
+  <div class="Headers">
     <div
-      v-for="(header, index) in internalValue"
-      :key="index"
-      class="Column Header"
+      v-if="internalValue.length > 0"
+      v-scroll-class:FixedHeader="270"
+      class="Row"
     >
-      <div class="Title">
-        {{ header.title }}
+      <div class="Column Thin">
+        <slot />
       </div>
-      <el-button
-        class="DeleteColumnButton"
-        size="mini"
-        @click="rmHeader(index)"
-      >
-        <fa icon="times" />
-      </el-button>
-      <el-select
-        v-model="header.selected"
-        class="HeaderSelect"
-        size="small"
-        filterable
-        clearable
-        @change="columnChange(header)"
-      >
-        <el-option
-          v-for="item in availableFields(header.selected)"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-    </div>
 
-    <div class="Column Header">
-      <div class="Title">
-        Empty Column
-      </div>
-      <div>
+      <div
+        v-for="(header, index) in internalValue"
+        :key="index"
+        class="Column Header"
+      >
+        <div class="Title">
+          {{ header.title }}
+        </div>
+        <el-button
+          class="DeleteColumnButton"
+          size="mini"
+          @click="rmHeader(index)"
+        >
+          <fa icon="times" />
+        </el-button>
         <el-select
-          v-model="additonalHeader"
+          v-model="header.selected"
           class="HeaderSelect"
           size="small"
           filterable
           clearable
+          @change="columnChange(header)"
         >
           <el-option
-            v-for="item in notUsedFields"
+            v-for="item in availableFields(header.selected)"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
         </el-select>
+      </div>
+
+      <div class="Column Header">
+        <div class="Title">
+          Empty Column
+        </div>
+        <div>
+          <el-select
+            v-model="additonalHeader"
+            class="HeaderSelect"
+            size="small"
+            filterable
+            clearable
+          >
+            <el-option
+              v-for="item in notUsedFields"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
       </div>
     </div>
   </div>
@@ -177,7 +180,13 @@ export default {
 </script>
 
 <style lang="less">
+
 .Headers {
+  position: sticky;
+  top:0;
+  background-color: #F5F5F5;
+  z-index: 10;
+
   .Column.Header {
     position: relative;
   }

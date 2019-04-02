@@ -1,5 +1,5 @@
 <template>
-  <div class="AdminImportPage">
+  <div>
     <import-dialog
       ref="dialog"
       :country-fields-lib="countryFieldsLib"
@@ -26,67 +26,68 @@
                   <fa icon="save" />
                 </el-button>
               </import-headers>
-
-              <import-row
-                v-for="(row, index) in rawImport.rows"
-                :key="index"
-                ref="row"
-                :index="index"
-                :row="row"
-                :class="['Row']"
-              >
-                <template v-slot:default="{errors, valid, handleValidation, data, original, rowSave}">
-                  <div
-                    class="Column Thin"
-                  >
-                    <el-button-group>
-                      <el-button
-                        :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
-                        size="mini"
-                        class="SaveButton"
-                        @click="rowSave()"
-                      >
-                        <fa icon="save" />
-                      </el-button>
-                      <el-button
-                        size="mini"
-                        class="DeleteButton"
-                        @click="deleteRow(row, index)"
-                      >
-                        <fa icon="times" />
-                      </el-button>
-                      <a
-                        v-if="row.project"
-                        :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
-                        target="_blank"
-                        class="NuxtLink IconLeft"
-                      >
-                        <fa icon="share-square" />
-                      </a>
-                    </el-button-group>
-                  </div>
-                  <template
-                    v-for="header in rawImport.header_mapping"
-                  >
-                    <SmartCell
-                      :key="index + header.title"
-                      :disabled="!!row.project"
-                      :value="data[header.title]"
-                      :original="original[header.title]"
-                      :type="header.selected"
-                      :rules="rules[header.selected]"
-                      class="Column"
-                      :errors="errors"
-                      :handle-validation="handleValidation"
-                      :sub-levels="subLevels"
-                      :custom-fields-lib="countryFieldsLib"
-                      @change="updateValue({row: index, key:header.title, value:$event})"
-                      @openDialog="$refs.dialog.openDialog(index, header.title, $event)"
-                    />
+              <div class="Rows">
+                <import-row
+                  v-for="(row, index) in rawImport.rows"
+                  :key="index"
+                  ref="row"
+                  :index="index"
+                  :row="row"
+                  :class="['Row']"
+                >
+                  <template v-slot:default="{errors, valid, handleValidation, data, original, rowSave}">
+                    <div
+                      class="Column Thin"
+                    >
+                      <el-button-group>
+                        <el-button
+                          :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
+                          size="mini"
+                          class="SaveButton"
+                          @click="rowSave()"
+                        >
+                          <fa icon="save" />
+                        </el-button>
+                        <el-button
+                          size="mini"
+                          class="DeleteButton"
+                          @click="deleteRow(row, index)"
+                        >
+                          <fa icon="times" />
+                        </el-button>
+                        <a
+                          v-if="row.project"
+                          :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
+                          target="_blank"
+                          class="NuxtLink IconLeft"
+                        >
+                          <fa icon="share-square" />
+                        </a>
+                      </el-button-group>
+                    </div>
+                    <template
+                      v-for="header in rawImport.header_mapping"
+                    >
+                      <SmartCell
+                        :key="index + header.title"
+                        :disabled="!!row.project"
+                        :value="data[header.title]"
+                        :original="original[header.title]"
+                        :type="header.selected"
+                        :rules="rules[header.selected]"
+                        class="Column"
+                        :errors="errors"
+                        :handle-validation="handleValidation"
+                        :sub-levels="subLevels"
+                        :custom-fields-lib="countryFieldsLib"
+                        @change="updateValue({row: index, key:header.title, value:$event})"
+                        @openDialog="$refs.dialog.openDialog(index, header.title, $event)"
+                      />
+                    </template>
+                    <div class="Column" />
                   </template>
-                  <div class="Column" />
-                </template>
-              </import-row>
+                </import-row>
+              </div>
             </div>
           </div>
         </template>
@@ -223,15 +224,21 @@ export default {
   .ExportDataTable {
     width: 100%;
     margin: 0;
-    overflow-x: auto;
     background-color: #F5F5F5;
     font-size: @fontSizeSmall;
     line-height: 16px;
     box-shadow: inset 0 0 5px 1px rgba(0,0,0,.12);
 
     .Container {
+      overflow: auto;
+      position: relative;
       display: flex;
       flex-flow: column wrap;
+
+      .Rows {
+        height: 50vh;
+        flex-shrink: 0;
+      }
 
       .Row {
         flex: 1 100%;
