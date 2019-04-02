@@ -277,7 +277,7 @@ export default {
     toInternalRepresentation (filtered) {
       return filtered.reduce((a, c) => {
         a.ids.push(c.id);
-        a.names.push(c.name || c.challenge);
+        a.names.push(c.challenge || c.name);
         return a;
       }, { names: [], ids: [] });
     },
