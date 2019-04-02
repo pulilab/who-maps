@@ -70,7 +70,7 @@
     "vue-no-ssr": "^1.1.1",
     "vue-scroll-class": "^1.2.3",
     "vue-template-compiler": "^2.6.6",
-    "vue-xlsx": "^0.1.1",
+    "vue-xlsx": "^0.2.0",
     "vue2-leaflet": "2.0.0-beta.0",
     "vuedraggable": "^2.16.0",
     "vuex-geolocation": "^1.1.0",
