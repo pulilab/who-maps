@@ -2,7 +2,6 @@
   <div class="Headers">
     <div
       v-if="internalValue.length > 0"
-      v-scroll-class:FixedHeader="270"
       class="Row"
     >
       <div class="Column Thin">
