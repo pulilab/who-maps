@@ -7,6 +7,7 @@
       @update="updateValue"
     />
     <el-card class="box-card">
+      <import-details :item="rawImport" />
       <import-validation
         :headers="rawImport.header_mapping"
         :publish="!rawImport.draft"
@@ -102,6 +103,7 @@ import ImportValidation from '@/components/admin/import/ImportValidation';
 import ImportRow from '@/components/admin/import/ImportRow';
 import SmartCell from '@/components/admin/import/SmartCell';
 import ImportDialog from '@/components/admin/import/ImportDialog';
+import ImportDetails from '@/components/admin/import/ImportDetails';
 
 export default {
   name: 'ImportDetail',
@@ -110,7 +112,8 @@ export default {
     ImportHeaders,
     ImportRow,
     SmartCell,
-    ImportDialog
+    ImportDialog,
+    ImportDetails
   },
   computed: {
     ...mapGetters({
@@ -203,43 +206,6 @@ export default {
   box-sizing: border-box;
   overflow: auto;
 
-  .Label {
-    display: block;
-    margin: 0 0 15px;
-    color: @colorTextPrimary;
-    font-size: @fontSizeBase;
-    font-weight: 700;
-  }
-
-  .CountrySelector {
-    width: 100%;
-  }
-
-  .DraftOrPublished {
-    .el-radio {
-      line-height: 40px;
-    }
-  }
-
-  .ConfirmSettings {
-    align-self: flex-end;
-    text-align: right;
-    min-width: 120px;
-  }
-
-  .XlsUpload {
-    width: 50%;
-    margin-top: 20px;
-
-    .el-upload {
-      float: none;
-    }
-
-    .el-upload-list {
-      margin-bottom: 20px;
-    }
-  }
-
   // Fake data table
 
   .GlobalErrors {
@@ -288,10 +254,6 @@ export default {
         border: solid @colorGrayLight;
         border-width: 0 1px 1px 0;
         overflow-y: auto;
-
-        &.Header {
-          padding-bottom: 0;
-        }
 
         &.Wide {
           flex: 1 0 100%;
