@@ -1,19 +1,20 @@
 <template>
-  <el-row
-    type="flex"
+  <el-form
+    label-width="120px"
+    label-position="top"
     class="ImportFile"
   >
-    <el-col :span="6">
-      <div class="Label">
+    <el-form-item>
+      <div slot="label">
         Select File
       </div>
       <input
         type="file"
         @change="onChange"
       >
-    </el-col>
-    <el-col :span="6">
-      <div class="Label">
+    </el-form-item>
+    <el-form-item>
+      <div slot="label">
         Select Sheet
       </div>
       <xlsx-read
@@ -42,59 +43,47 @@
           @parsed="parsed = $event"
         />
       </xlsx-read>
-    </el-col>
-    <el-col :span="4">
-      <div class="Label">
+    </el-form-item>
+    <el-form-item>
+      <div slot="label">
         Select Country
       </div>
       <country-select
         v-model="country"
       />
-    </el-col>
-    <el-col
-      :span="4"
-      :offset="1"
-    >
-      <div class="Label">
+    </el-form-item>
+    <el-form-item>
+      <div slot="label">
         Select Investor
       </div>
       <donor-select
         v-model="donor"
       />
-    </el-col>
-    <el-col
-      :span="4"
-      :offset="1"
+    </el-form-item>
+    <el-form-item
+
       class="DraftOrPublished"
     >
-      <div class="Label">
-        Save as Draft or Publish projects
+      <div slot="label">
+        Draft or Publish
       </div>
-      <el-radio
-        v-model="isDraftOrPublish"
-        label="draft"
-      >
-        Draft
-      </el-radio>
-      <el-radio
-        v-model="isDraftOrPublish"
-        label="publish"
-      >
-        Publish
-      </el-radio>
-    </el-col>
-    <el-col
-      :span="2"
+      <el-radio-group v-model="isDraftOrPublish">
+        <el-radio label="draft">
+          Draft
+        </el-radio>
+        <el-radio label="publish">
+          Publish
+        </el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item
       class="ConfirmSettings"
     >
-      <div class="Label">
-        Action
-      </div>
       <el-button @click="save">
-        Confirm
+        Import
       </el-button>
-    </el-col>
-  </el-row>
+    </el-form-item>
+  </el-form>
 </template>
 
 <script>
@@ -129,6 +118,7 @@ export default {
       this.inputFile = event.target.files ? event.target.files[0] : null;
     },
     async save () {
+      this.$nuxt.$loading.start('importXLSX');
       const importData = {
         filename: this.inputFile.name,
         country: this.country,
@@ -143,6 +133,7 @@ export default {
         ]
       };
       const importItem = await this.addDataToQueue(importData);
+      this.$nuxt.$loading.finish('importXLSX');
       this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: importItem.id }, query: undefined }));
     }
   }
@@ -152,7 +143,7 @@ export default {
 <style lang="less">
 .ImportFile {
   .SheetSelector{
-    width: 90%;
+    width: 100%;
   }
 }
 </style>
