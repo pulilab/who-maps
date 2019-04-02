@@ -1,11 +1,12 @@
 <template>
-  <div class="Row">
-    <div
-      v-if="headers.length > 0"
-      class="Column Thin"
-    >
+  <div
+    v-if="internalValue.length > 0"
+    class="Row Headers"
+  >
+    <div class="Column Thin">
       <slot />
     </div>
+
     <div
       v-for="(header, index) in internalValue"
       :key="index"
@@ -13,49 +14,45 @@
     >
       <div class="Title">
         {{ header.title }}
-        <el-button
-          v-if="header.selected === null || typeof header.selected === 'string'"
-          circle
-          icon="el-icon-delete"
-          size="mini"
-          @click="rmHeader(index)"
+      </div>
+      <el-button
+        class="DeleteColumnButton"
+        size="mini"
+        @click="rmHeader(index)"
+      >
+        <fa icon="times" />
+      </el-button>
+      <el-select
+        v-model="header.selected"
+        class="HeaderSelect"
+        size="small"
+        filterable
+        clearable
+        @change="columnChange(header)"
+      >
+        <el-option
+          v-for="item in availableFields(header.selected)"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
         />
-      </div>
-      <div>
-        <el-select
-          v-if="header.selected === null || typeof header.selected === 'string'"
-          v-model="header.selected"
-          size="small"
-          filterable
-          clearable
-          @change="columnChange(header)"
-        >
-          <el-option
-            v-for="item in availableFields"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </div>
+      </el-select>
     </div>
-    <div
-      v-if="internalValue.length > 0"
-      class="Column Header"
-    >
+
+    <div class="Column Header">
       <div class="Title">
         Empty Column
       </div>
       <div>
         <el-select
           v-model="additonalHeader"
-
+          class="HeaderSelect"
           size="small"
           filterable
           clearable
         >
           <el-option
-            v-for="item in availableFields"
+            v-for="item in notUsedFields"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -131,7 +128,7 @@ export default {
 
       };
     },
-    availableFields () {
+    notUsedFields () {
       const selected = this.headers.map(h => h.selected).filter(s => s);
       return this.fields.filter(f => !selected.includes(f)).map(f => {
         return {
@@ -165,6 +162,12 @@ export default {
       this.$delete(this.internalValue, index);
       this.columnChange();
     },
+    availableFields (value) {
+      if (value) {
+        return Array.from(new Set([ { label: this.nameMapping[value] || value, value }, ...this.notUsedFields ]));
+      }
+      return this.notUsedFields;
+    },
     async columnChange () {
       const { data } = await this.$axios.patch(`/api/projects/import/${this.id}/`, { header_mapping: this.internalValue });
       this.$emit('update:headers', data.header_mapping);
@@ -173,6 +176,23 @@ export default {
 };
 </script>
 
-<style>
-
+<style lang="less">
+.Headers {
+  .Column.Header {
+    position: relative;
+  }
+  .Title {
+    margin-right: 8px;
+  }
+  .DeleteColumnButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 2px 4px;
+  }
+  .HeaderSelect{
+    position: absolute;
+    bottom: 4px;
+  }
+}
 </style>
