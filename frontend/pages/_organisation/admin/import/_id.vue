@@ -3,7 +3,7 @@
     <import-dialog
       ref="dialog"
       :country-fields-lib="countryFieldsLib"
-      :imported="rawImport.rows"
+      :imported="rows"
       @update="updateValue"
     />
     <el-card class="box-card">
@@ -15,6 +15,11 @@
         <template
           v-slot:default="{globalErrors, rules}"
         >
+          <el-switch
+            v-model="showSaved"
+            active-text="Show saved projects"
+            inactive-text="Hide saved projects"
+          />
           <div class="ExportDataTable">
             <div class="Container">
               <import-headers
@@ -27,11 +32,45 @@
                 </el-button>
               </import-headers>
               <div class="Rows">
+                <template v-if="showSaved">
+                  <import-row
+                    v-for="(row) in saved"
+                    :key="row.id"
+                    :row="row"
+                    class="Row"
+                  >
+                    <template v-slot:default="{data}">
+                      <div
+                        class="Column Thin"
+                      >
+                        <el-button-group>
+                          <a
+                            v-if="row.project"
+                            :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
+                            target="_blank"
+                            class="NuxtLink IconLeft"
+                          >
+                            <fa icon="share-square" />
+                          </a>
+                        </el-button-group>
+                      </div>
+                      <template
+                        v-for="header in rawImport.header_mapping"
+                      >
+                        <div
+                          :key="row.id + header.title"
+                          class="Column"
+                        >
+                          {{ data[header.title] }}
+                        </div>
+                      </template>
+                    </template>
+                  </import-row>
+                </template>
                 <import-row
-                  v-for="(row, index) in rawImport.rows"
-                  :key="index"
+                  v-for="(row, index) in rows"
+                  :key="row.id"
                   ref="row"
-                  :index="index"
                   :row="row"
                   :class="['Row']"
                 >
@@ -69,8 +108,7 @@
                       v-for="header in rawImport.header_mapping"
                     >
                       <SmartCell
-                        :key="index + header.title"
-                        :disabled="!!row.project"
+                        :key="row.id + header.title"
                         :value="data[header.title]"
                         :original="original[header.title]"
                         :type="header.selected"
@@ -116,6 +154,11 @@ export default {
     ImportDialog,
     ImportDetails
   },
+  data () {
+    return {
+      showSaved: false
+    };
+  },
   computed: {
     ...mapGetters({
       getCountryDetails: 'countries/getCountryDetails'
@@ -140,6 +183,12 @@ export default {
         return [{ id: 'National Level', name: 'National Level' }, ...this.selectedCountry.districts];
       }
       return [];
+    },
+    saved () {
+      return this.rawImport.rows.filter(r => r.project);
+    },
+    rows () {
+      return this.rawImport.rows.filter(r => !r.project);
     }
   },
   async asyncData ({ params, app: { $axios }, store }) {
@@ -161,8 +210,9 @@ export default {
   },
   methods: {
     updateValue ({ row, key, value }) {
-      this.$set(this.rawImport.rows[row].data, key, value);
-      this.saveUpdatedValue(this.rawImport.rows[row]);
+      const originalRow = this.rows[row];
+      this.$set(originalRow.data, key, value);
+      this.saveUpdatedValue(originalRow);
     },
     saveUpdatedValue: debounce(function (row) {
       this.patchRow(row);
@@ -175,11 +225,26 @@ export default {
       this.rawImport.rows.splice(index, 1);
     },
     async saveAll () {
+      try {
+        await this.$confirm('Are you sure? this operation is not reversible once started', 'Notice', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        });
+        this.doSaveAll();
+      } catch (e) {
+        this.$message({
+          type: 'info',
+          message: 'Saving canceled'
+        });
+      }
+    },
+    async doSaveAll () {
       this.$nuxt.$loading.start('saveAll');
       const toSave = this.$refs.row.filter(r => r.valid && r.row && !r.row.project);
       try {
         for (const p of toSave) {
-          const newRow = await toSave.save(this.country, this.donor, !this.rawImport.draft);
+          const newRow = await p.save(this.rawImport.country, this.rawImport.donor, !this.rawImport.draft);
           await this.patchRow(newRow);
         }
       } catch (e) {
@@ -189,8 +254,8 @@ export default {
             confirmButtonText: 'OK'
           });
         }
-        this.$nuxt.$loading.finish('saveAll');
       }
+      this.$nuxt.$loading.finish('saveAll');
     }
   }
 };
