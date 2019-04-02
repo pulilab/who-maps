@@ -21,10 +21,6 @@ export default {
     row: {
       type: Object,
       default: () => ({})
-    },
-    index: {
-      type: Number,
-      default: null
     }
   },
   data () {
@@ -73,7 +69,6 @@ export default {
     scrollToError () {
       if (!this.valid) {
         const elm = this.$el.querySelector('.ValidationError');
-        console.log(elm);
         elm.scrollIntoView();
       }
     },
