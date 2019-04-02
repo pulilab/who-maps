@@ -11,10 +11,7 @@
         {{ dialogData.original }}
       </el-col>
       <el-col :span="12">
-        <donor-selector
-          v-if="dialogData.column === 'donors'"
-          v-model="dialogData.value"
-        />
+        <h3>Edit</h3>
         <organisation-select
           v-if="dialogData.column === 'organisation'"
           v-model="dialogData.value[0]"
@@ -135,7 +132,6 @@
 </template>
 
 <script>
-import DonorSelector from '@/components/project/DonorSelector';
 import OrganisationSelect from '@/components/common/OrganisationSelect';
 import PlatformSelector from '@/components/project/PlatformSelector';
 import HisBucketSelector from '@/components/project/HisBucketSelector';
@@ -144,7 +140,6 @@ import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelec
 
 export default {
   components: {
-    DonorSelector,
     OrganisationSelect,
     PlatformSelector,
     HisBucketSelector,
