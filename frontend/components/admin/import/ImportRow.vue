@@ -72,9 +72,9 @@ export default {
         elm.scrollIntoView();
       }
     },
-    rowSave () {
+    rowSave (country, donor, publish) {
       if (this.valid) {
-        this.save();
+        this.save(country, donor, publish);
       } else {
         this.scrollToError();
       }

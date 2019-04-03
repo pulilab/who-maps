@@ -83,7 +83,7 @@
                           :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
                           size="mini"
                           class="SaveButton"
-                          @click="rowSave()"
+                          @click="rowSave(rawImport.country, rawImport.donor, !rawImport.draft)"
                         >
                           <fa icon="save" />
                         </el-button>
