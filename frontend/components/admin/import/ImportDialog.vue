@@ -73,6 +73,18 @@
           />
         </template>
 
+        <template v-if="dialogData.column === 'interoperability_standards'">
+          <standards-selector
+            v-model="dialogData.value"
+          />
+        </template>
+
+        <template v-if="dialogData.column === 'licenses'">
+          <license-selector
+            v-model="dialogData.value"
+          />
+        </template>
+
         <div
           v-if="dialogData.column === 'custom_field'"
           ref="custom_fields"
@@ -149,6 +161,8 @@ import HisBucketSelector from '@/components/project/HisBucketSelector';
 import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector';
 import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector';
 import DigitalHealthInterventionsFilter from '@/components/dialogs/filters/DigitalHealthInterventionsFilter';
+import StandardsSelector from '@/components/project/StandardsSelector';
+import LicenseSelector from '@/components/project/LicenseSelector';
 
 export default {
   components: {
@@ -157,7 +171,9 @@ export default {
     HisBucketSelector,
     HealthSystemChallengesSelector,
     HealthFocusAreasSelector,
-    DigitalHealthInterventionsFilter
+    DigitalHealthInterventionsFilter,
+    StandardsSelector,
+    LicenseSelector
   },
   props: {
     countryFieldsLib: {
@@ -215,59 +231,62 @@ export default {
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
 
- .ImportDialog.digitalHealthInterventions {
-    max-width: @appWidthMaxLimit * 0.9;
-    height: 80vh;
-    margin-top: 0;
-    margin-bottom: 0;
+ .ImportDialog {
 
-    .el-dialog__body {
-      padding: 0;
-      height: calc(80vh - (@dialogHeaderFooterHeight*2));
+    .OriginalData {
+      max-width: 350px;
+      min-width: 350px;
     }
 
-    .ImportDialogWrapper {
+   &.digitalHealthInterventions{
+      max-width: @appWidthMaxLimit * 0.9;
+      height: 80vh;
+      margin-top: 0;
+      margin-bottom: 0;
 
-      .OriginalData {
-        max-width: 350px;
-        min-width: 350px;
+      .el-dialog__body {
+        padding: 0;
+        height: calc(80vh - (@dialogHeaderFooterHeight*2));
       }
 
-      .DigitalHealthInterventionsFilter {
-        .el-col-6 {
-          overflow: hidden;
-          height: calc(80vh - (@dialogHeaderFooterHeight * 2));
-          border-right: 1px solid @colorGrayLight;
+      .ImportDialogWrapper {
 
-          .SelectorDialogColumn {
-            .Header {
-              width: calc((90vw - @filterSelectorWidth) / 4 - 1px);
-              max-width: calc(((@appWidthMaxLimit * 0.9) - 350px) / 4 - 1px);
-            }
-
-            .Main {
-              .Item {
-                .el-checkbox__label {
-                  font-size: @fontSizeSmall;
-                  line-height: 16px;
-                }
-              }
-            }
-          }
-
-          &:last-child {
-            border: 0;
+        .DigitalHealthInterventionsFilter {
+          .el-col-6 {
+            overflow: hidden;
+            height: calc(80vh - (@dialogHeaderFooterHeight * 2));
+            border-right: 1px solid @colorGrayLight;
 
             .SelectorDialogColumn {
               .Header {
-                width: calc((90vw - @filterSelectorWidth) / 4);
-                max-width: calc(((@appWidthMaxLimit * 0.9) - 350px) / 4);
+                width: calc((90vw - @filterSelectorWidth) / 4 - 1px);
+                max-width: calc(((@appWidthMaxLimit * 0.9) - 350px) / 4 - 1px);
+              }
+
+              .Main {
+                .Item {
+                  .el-checkbox__label {
+                    font-size: @fontSizeSmall;
+                    line-height: 16px;
+                  }
+                }
+              }
+            }
+
+            &:last-child {
+              border: 0;
+
+              .SelectorDialogColumn {
+                .Header {
+                  width: calc((90vw - @filterSelectorWidth) / 4);
+                  max-width: calc(((@appWidthMaxLimit * 0.9) - 350px) / 4);
+                }
               }
             }
           }
         }
       }
-    }
+   }
  }
 
 </style>
