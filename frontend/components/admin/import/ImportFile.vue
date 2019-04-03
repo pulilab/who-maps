@@ -43,6 +43,7 @@
           </xlsx-sheets>
           <xlsx-json
             :sheet="selectedSheet"
+            :options="{defval: ''}"
             @parsed="parsed = $event"
           />
         </template>
