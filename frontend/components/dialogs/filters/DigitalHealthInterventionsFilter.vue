@@ -14,13 +14,27 @@
           :selected="catSelected(category)"
           @headerSelected="toggleAll($event, category)"
         >
-          <selector-dialog-category
-            :values="selected"
-            :category-selectable="true"
-            :category="category.subGroups"
-            hide-header
-            @change="filterChange"
-          />
+          <template v-if="!childSelection">
+            <selector-dialog-category
+              :values="selected"
+              :category-selectable="true"
+              :category="category.subGroups"
+              hide-header
+              @change="filterChange"
+            />
+          </template>
+
+          <template v-if="childSelection">
+            <selector-dialog-category
+              v-for="cat in category.subGroups"
+              :key="cat.id"
+              :values="selected"
+              :category-selectable="true"
+              :category="cat"
+              child-name="strategies"
+              @change="filterChange"
+            />
+          </template>
         </selector-dialog-column>
       </el-col>
     </el-row>
@@ -42,6 +56,10 @@ export default {
     selected: {
       type: Array,
       default: () => []
+    },
+    childSelection: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
