@@ -37,7 +37,6 @@
                     v-for="(row) in saved"
                     :key="row.id"
                     :row="row"
-                    :custom-fields-lib="customFieldsLib"
                     class="Row"
                   >
                     <template v-slot:default="{data}">
@@ -73,7 +72,8 @@
                   :key="row.id"
                   ref="row"
                   :row="row"
-                  :class="['Row']"
+                  :custom-fields-lib="customFieldsLib"
+                  class="Row"
                 >
                   <template v-slot:default="{errors, valid, handleValidation, data, original, rowSave}">
                     <div
@@ -84,7 +84,7 @@
                           :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
                           size="mini"
                           class="SaveButton"
-                          @click="rowSave(rawImport.country, rawImport.donor, !rawImport.draft)"
+                          @click="singleRowSave(rowSave)"
                         >
                           <fa icon="save" />
                         </el-button>
@@ -245,9 +245,40 @@ export default {
       await this.$axios.delete(`/api/projects/import-row/${row.id}/`);
       this.rawImport.rows.splice(index, 1);
     },
+    async singleRowSave (doSave) {
+      try {
+        await this.$confirm('Are you sure? this operation is not reversible once started', 'Save', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        });
+        await this.doSingleRowSave(doSave);
+      } catch (e) {
+        this.$message({
+          type: 'info',
+          message: 'Save canceled'
+        });
+      }
+    },
+    async doSingleRowSave (doSave, bubble) {
+      try {
+        const newRow = await doSave(this.rawImport.country, this.rawImport.donor, !this.rawImport.draft);
+        await this.patchRow(newRow);
+      } catch (e) {
+        console.error(e);
+        if (e.response && e.response.data) {
+          this.$alert(JSON.stringify(e.response.data), 'Error', {
+            confirmButtonText: 'OK'
+          });
+        }
+        if (bubble) {
+          throw e;
+        }
+      }
+    },
     async saveAll () {
       try {
-        await this.$confirm('Are you sure? this operation is not reversible once started', 'Notice', {
+        await this.$confirm('Are you sure? this operation is not reversible once started', 'Bulk Save', {
           confirmButtonText: 'OK',
           cancelButtonText: 'Cancel',
           type: 'warning'
@@ -256,7 +287,7 @@ export default {
       } catch (e) {
         this.$message({
           type: 'info',
-          message: 'Saving canceled'
+          message: 'Bulk Save canceled'
         });
       }
     },
@@ -265,16 +296,10 @@ export default {
       const toSave = this.$refs.row.filter(r => r.valid && r.row && !r.row.project);
       try {
         for (const p of toSave) {
-          const newRow = await p.save(this.rawImport.country, this.rawImport.donor, !this.rawImport.draft);
-          await this.patchRow(newRow);
+          await this.doSingleRowSave(p.save, true);
         }
       } catch (e) {
-        console.error(e);
-        if (e.response && e.response.data) {
-          this.$alert(JSON.stringify(e.response.data), 'Error', {
-            confirmButtonText: 'OK'
-          });
-        }
+        console.log(e);
       }
       this.$nuxt.$loading.finish('saveAll');
     }

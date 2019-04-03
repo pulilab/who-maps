@@ -76,9 +76,9 @@ export default {
         elm.scrollIntoView();
       }
     },
-    rowSave (country, donor, publish) {
+    async rowSave (country, donor, publish) {
       if (this.valid) {
-        this.save(country, donor, publish);
+        return this.save(country, donor, publish);
       } else {
         this.scrollToError();
       }
@@ -87,12 +87,13 @@ export default {
       this.$nuxt.$loading.start('save');
       const filled = this.$children.filter(sc => sc.column && !['custom_fields', 'sub_level'].includes(sc.column));
 
-      const countryCustom = this.$children.filter(sc => sc.column.startsWith('MOH')).map(c => ({
+      const countryCustom = this.$children.filter(sc => sc.type && sc.type.startsWith('MOH')).map(c => ({
         question_id: this.customFieldsLib[c.type].id,
         answer: c.apiValue()
       })).filter(a => a.answer);
 
-      const donorCustom = this.$children.filter(sc => sc.column.startsWith('INV')).map(c => ({
+      const donorCustom = this.$children.filter(sc => sc.type && sc.type.startsWith('INV')).map(c => ({
+        donor_id: donor,
         question_id: this.customFieldsLib[c.type].id,
         answer: c.apiValue()
       })).filter(a => a.answer);
