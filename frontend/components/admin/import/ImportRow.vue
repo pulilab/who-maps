@@ -108,10 +108,13 @@ export default {
           }
         };
       }
+      if (result.platforms && result.platforms[0] && result.digitalHealthInterventions) {
+        const platform = result.platforms[0];
+        result.digitalHealthInterventions = result.digitalHealthInterventions.map(id => ({ platform, id }));
+      }
       result.team = [this.userProfile.id];
       result.country = country;
       result.donors = [donor];
-      result.digitalHealthInterventions = result.platforms.map(p => ({ platform: p, id: this.firstDHI }));
       const parsed = apiWriteParser(result, cf);
       const { data } = await this.$axios.post(`api/projects/draft/${country}/`, parsed);
       if (publish) {

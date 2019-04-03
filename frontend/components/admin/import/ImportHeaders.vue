@@ -69,7 +69,7 @@
 import { projectFields } from '@/utilities/projects';
 
 const blackList = ['country', 'donors', 'coverage', 'national_level_deployment',
-  'coverageData', 'team', 'viewers', 'coverageType', 'digitalHealthInterventions', 'coverage_second_level', 'interoperability_links'];
+  'coverageData', 'team', 'viewers', 'coverageType', 'coverage_second_level' ];
 const addendumFields = ['clients', 'health_workers', 'facilities', 'sub_level'];
 export default {
   props: {
@@ -126,7 +126,8 @@ export default {
         health_workers: 'Health Workers',
         clients: 'Clients',
         facilities: 'Facilities',
-        sub_level: 'Coverage Type'
+        sub_level: 'Coverage Type',
+        digitalHealthInterventions: 'Digital Health Interventions (associated to the Software)'
 
       };
     },
@@ -165,8 +166,8 @@ export default {
       this.columnChange();
     },
     availableFields (value) {
-      if (value) {
-        return Array.from(new Set([ { label: this.nameMapping[value] || value, value }, ...this.notUsedFields ]));
+      if (value && !this.notUsedFields.some(f => f.value === value)) {
+        return [ { label: this.nameMapping[value] || value, value }, ...this.notUsedFields ];
       }
       return this.notUsedFields;
     },
