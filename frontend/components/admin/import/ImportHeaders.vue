@@ -69,7 +69,7 @@
 import { projectFields } from '@/utilities/projects';
 
 const blackList = ['country', 'donors', 'coverage', 'national_level_deployment',
-  'coverageData', 'team', 'viewers', 'coverageType', 'coverage_second_level' ];
+  'coverageData', 'team', 'viewers', 'coverageType', 'coverage_second_level', 'interoperability_links' ];
 const addendumFields = ['clients', 'health_workers', 'facilities', 'sub_level'];
 export default {
   props: {
@@ -81,7 +81,7 @@ export default {
       type: [Number, String],
       default: null
     },
-    countryFieldsLib: {
+    customFieldsLib: {
       type: Object,
       default: () => ({})
     }
@@ -97,7 +97,7 @@ export default {
       return [
         ...Object.keys(projectFields()).filter(k => !blackList.includes(k)),
         ...addendumFields,
-        ...Object.keys(this.countryFieldsLib)
+        ...Object.keys(this.customFieldsLib)
       ];
     },
     nameMapping () {
@@ -184,11 +184,12 @@ export default {
 .Headers {
   position: sticky;
   top:0;
-  background-color: #F5F5F5;
   z-index: 10;
 
   .Column.Header {
     position: relative;
+    background-color: #F5F5F5;
+    z-index: 10;
   }
   .Title {
     margin-right: 8px;

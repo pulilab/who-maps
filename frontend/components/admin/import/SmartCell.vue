@@ -89,7 +89,7 @@ export default {
       default: null
     },
     type: {
-      type: [String, Object],
+      type: String,
       default: null
     },
     disabled: {
@@ -145,7 +145,7 @@ export default {
       }
     },
     column () {
-      if (this.type === null || !this.type.startsWith('MOH')) {
+      if (this.type === null || (!this.type.startsWith('MOH') && !this.type.startsWith('INV'))) {
         return this.type;
       } else {
         return 'custom_field';

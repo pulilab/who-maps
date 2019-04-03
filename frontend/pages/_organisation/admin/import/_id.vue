@@ -2,7 +2,7 @@
   <div>
     <import-dialog
       ref="dialog"
-      :country-fields-lib="countryFieldsLib"
+      :custom-fields-lib="customFieldsLib"
       :imported="rows"
       @update="updateValue"
     />
@@ -25,7 +25,7 @@
               <import-headers
                 :id="rawImport.id"
                 :headers.sync="rawImport.header_mapping"
-                :country-fields-lib="countryFieldsLib"
+                :custom-fields-lib="customFieldsLib"
               >
                 <el-button @click="saveAll">
                   <fa icon="save" />
@@ -37,6 +37,7 @@
                     v-for="(row) in saved"
                     :key="row.id"
                     :row="row"
+                    :custom-fields-lib="customFieldsLib"
                     class="Row"
                   >
                     <template v-slot:default="{data}">
@@ -117,7 +118,7 @@
                         :errors="errors"
                         :handle-validation="handleValidation"
                         :sub-levels="subLevels"
-                        :custom-fields-lib="countryFieldsLib"
+                        :custom-fields-lib="customFieldsLib"
                         @change="updateValue({row: index, key:header.title, value:$event})"
                         @openDialog="$refs.dialog.openDialog(index, header.title, $event)"
                       />
@@ -161,11 +162,18 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getCountryDetails: 'countries/getCountryDetails'
+      getCountryDetails: 'countries/getCountryDetails',
+      getDonorDetails: 'system/getDonorDetails'
     }),
     selectedCountry () {
       if (this.rawImport) {
         return this.getCountryDetails(this.rawImport.country);
+      }
+      return {};
+    },
+    selectedDonor () {
+      if (this.rawImport) {
+        return this.getDonorDetails(this.rawImport.donor);
       }
       return {};
     },
@@ -176,7 +184,19 @@ export default {
           return a;
         }, {});
       }
-      return [];
+      return {};
+    },
+    donorFieldsLib () {
+      if (this.selectedDonor) {
+        return this.selectedDonor.donor_questions.reduce((a, c) => {
+          a[`INV Q.: ${c.question}`] = c;
+          return a;
+        }, {});
+      }
+      return {};
+    },
+    customFieldsLib () {
+      return { ...this.donorFieldsLib, ...this.countryFieldsLib };
     },
     subLevels () {
       if (this.selectedCountry) {
@@ -194,6 +214,7 @@ export default {
   async asyncData ({ params, app: { $axios }, store }) {
     const { data } = await $axios.get(`/api/projects/import/${params.id}/`);
     await store.dispatch('countries/loadCountryDetails', data.country);
+    await store.dispatch('system/loadDonorDetails', data.donor);
     return {
       rawImport: data
     };

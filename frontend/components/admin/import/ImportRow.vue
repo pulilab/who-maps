@@ -21,6 +21,10 @@ export default {
     row: {
       type: Object,
       default: () => ({})
+    },
+    customFieldsLib: {
+      type: Object,
+      default: () => ({})
     }
   },
   data () {
@@ -82,10 +86,17 @@ export default {
     async save (country, donor, publish) {
       this.$nuxt.$loading.start('save');
       const filled = this.$children.filter(sc => sc.column && !['custom_fields', 'sub_level'].includes(sc.column));
-      const cf = this.$children.filter(sc => sc.column === 'custom_field').map(c => ({
-        question_id: this.countryFieldsLib[c.type].id,
+
+      const countryCustom = this.$children.filter(sc => sc.column.startsWith('MOH')).map(c => ({
+        question_id: this.customFieldsLib[c.type].id,
         answer: c.apiValue()
       })).filter(a => a.answer);
+
+      const donorCustom = this.$children.filter(sc => sc.column.startsWith('INV')).map(c => ({
+        question_id: this.customFieldsLib[c.type].id,
+        answer: c.apiValue()
+      })).filter(a => a.answer);
+
       const result = filled.reduce((a, c) => {
         a[c.column] = c.apiValue();
         return a;
@@ -115,7 +126,7 @@ export default {
       result.team = [this.userProfile.id];
       result.country = country;
       result.donors = [donor];
-      const parsed = apiWriteParser(result, cf);
+      const parsed = apiWriteParser(result, countryCustom, donorCustom);
       const { data } = await this.$axios.post(`api/projects/draft/${country}/`, parsed);
       if (publish) {
         await this.$axios.put(`api/projects/publish/${data.id}/${country}/`, parsed);

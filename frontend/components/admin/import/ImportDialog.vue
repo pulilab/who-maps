@@ -176,7 +176,7 @@ export default {
     LicenseSelector
   },
   props: {
-    countryFieldsLib: {
+    customFieldsLib: {
       type: Object,
       required: true
     },
@@ -216,7 +216,7 @@ export default {
         column,
         value: value ? JSON.parse(stringified) : null,
         original: this.imported[row].original_data[key],
-        customField: this.countryFieldsLib[type]
+        customField: this.customFieldsLib[type]
       };
     },
     save () {
