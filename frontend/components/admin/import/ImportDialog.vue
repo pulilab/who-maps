@@ -3,15 +3,23 @@
     v-if="dialogVisible"
     :visible.sync="dialogVisible"
     title="Select"
-    width="80%"
+    modal
+    :top="dialogStyle.top"
+    :width="dialogStyle.width"
+    :custom-class="dialogStyle.className"
   >
-    <el-row type="flex">
-      <el-col :span="12">
+    <el-row
+      type="flex"
+      class="ImportDialogWrapper"
+    >
+      <el-col class="OriginalData">
         <h3>Original Data</h3>
         {{ dialogData.original }}
       </el-col>
-      <el-col :span="12">
-        <h3>Edit</h3>
+      <el-col>
+        <h3 v-if="dialogData.column !== 'digitalHealthInterventions'">
+          Edit
+        </h3>
         <organisation-select
           v-if="dialogData.column === 'organisation'"
           v-model="dialogData.value[0]"
@@ -56,6 +64,13 @@
               :value="item.id"
             />
           </el-select>
+        </template>
+
+        <template v-if="dialogData.column === 'digitalHealthInterventions'">
+          <digital-health-interventions-filter
+            child-selection
+            :selected.sync="dialogData.value"
+          />
         </template>
 
         <div
@@ -133,6 +148,7 @@ import PlatformSelector from '@/components/project/PlatformSelector';
 import HisBucketSelector from '@/components/project/HisBucketSelector';
 import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector';
 import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector';
+import DigitalHealthInterventionsFilter from '@/components/dialogs/filters/DigitalHealthInterventionsFilter';
 
 export default {
   components: {
@@ -140,7 +156,8 @@ export default {
     PlatformSelector,
     HisBucketSelector,
     HealthSystemChallengesSelector,
-    HealthFocusAreasSelector
+    HealthFocusAreasSelector,
+    DigitalHealthInterventionsFilter
   },
   props: {
     countryFieldsLib: {
@@ -165,6 +182,13 @@ export default {
       set () {
         this.dialogData = null;
       }
+    },
+    dialogStyle () {
+      return {
+        top: this.dialogData.column === 'digitalHealthInterventions' ? '10vh' : undefined,
+        width: this.dialogData.column === 'digitalHealthInterventions' ? '90vw' : '50%',
+        className: ['ImportDialog', this.dialogData.column].join(' ')
+      };
     }
   },
   methods: {
@@ -188,8 +212,62 @@ export default {
 </script>
 
 <style lang="less">
-.FullWidth{
-  width: 100%;
-}
+  @import "~assets/style/variables.less";
+  @import "~assets/style/mixins.less";
+
+ .ImportDialog.digitalHealthInterventions {
+    max-width: @appWidthMaxLimit * 0.9;
+    height: 80vh;
+    margin-top: 0;
+    margin-bottom: 0;
+
+    .el-dialog__body {
+      padding: 0;
+      height: calc(80vh - (@dialogHeaderFooterHeight*2));
+    }
+
+    .ImportDialogWrapper {
+
+      .OriginalData {
+        max-width: 350px;
+        min-width: 350px;
+      }
+
+      .DigitalHealthInterventionsFilter {
+        .el-col-6 {
+          overflow: hidden;
+          height: calc(80vh - (@dialogHeaderFooterHeight * 2));
+          border-right: 1px solid @colorGrayLight;
+
+          .SelectorDialogColumn {
+            .Header {
+              width: calc((90vw - @filterSelectorWidth) / 4 - 1px);
+              max-width: calc(((@appWidthMaxLimit * 0.9) - 350px) / 4 - 1px);
+            }
+
+            .Main {
+              .Item {
+                .el-checkbox__label {
+                  font-size: @fontSizeSmall;
+                  line-height: 16px;
+                }
+              }
+            }
+          }
+
+          &:last-child {
+            border: 0;
+
+            .SelectorDialogColumn {
+              .Header {
+                width: calc((90vw - @filterSelectorWidth) / 4);
+                max-width: calc(((@appWidthMaxLimit * 0.9) - 350px) / 4);
+              }
+            }
+          }
+        }
+      }
+    }
+ }
 
 </style>
