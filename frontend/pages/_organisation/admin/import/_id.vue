@@ -242,8 +242,20 @@ export default {
       return this.$axios.patch(`/api/projects/import-row/${row.id}/`, { ...row, id: undefined });
     },
     async deleteRow (row, index) {
-      await this.$axios.delete(`/api/projects/import-row/${row.id}/`);
-      this.rawImport.rows.splice(index, 1);
+      try {
+        await this.$confirm('Are you sure? this operation is not reversible', 'Row Delete', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        });
+        await this.$axios.delete(`/api/projects/import-row/${row.id}/`);
+        this.rawImport.rows.splice(index, 1);
+      } catch (e) {
+        this.$message({
+          type: 'info',
+          message: 'Delete canceled'
+        });
+      }
     },
     async singleRowSave (doSave) {
       try {
