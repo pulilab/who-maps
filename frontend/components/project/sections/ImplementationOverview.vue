@@ -13,7 +13,7 @@
       >
         <template slot="label">
           <translate key="health-focus-areas">
-            What is the health focus area(s) addressed by the Digital Health Intervention?
+            What is the health focus area(s) addressed by the DHI?
           </translate>
         </template>
 
@@ -62,10 +62,15 @@
           v-for="(platform, index) in platforms"
           :key="platform"
           :error="errors.first('id', 'platform_' + index)"
-          :label="$gettext('Software') | translate"
           :required="rules.platforms && rules.platforms.required"
           class="ItemIndent"
         >
+          <template slot="label">
+            <translate key="platform-label">
+              What are the names of the software included in the deployment?
+            </translate>
+          </template>
+
           <el-col :span="16">
             <platform-selector
               :key="platform"
@@ -134,7 +139,7 @@
         >
           <template slot="label">
             <translate key="coverage-type">
-              What kind of coverage does your project have?
+              What level of coverage does your project have (Sub-national, National)
             </translate>
             <form-hint>
               <translate key="coverage-type-hint">
@@ -256,7 +261,7 @@
       >
         <template slot="label">
           <translate key="donors">
-            Investors
+            Who are your investment partners?
           </translate>
           <form-hint>
             <translate key="donors-hint">

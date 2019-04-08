@@ -8,9 +8,14 @@
       :title="$gettext('Interoperability &amp; Standards') "
     >
       <el-form-item
-        :label="$gettext('Does your project share information with one or more of these digital Health Information System components?') | translate"
         prop="interoperability_links"
       >
+        <template slot="label">
+          <translate key="interoperability_links">
+            Does your project share information with one or more of these digital Health Information System components?
+          </translate>
+        </template>
+
         <interoperability-link-component
           v-for="(ir, index) in interopearilbityLinksStructure"
           ref="interoperabilityLink"
@@ -23,7 +28,6 @@
         />
       </el-form-item>
       <el-form-item
-        :label="$gettext('What data standards does your digital health project use?') | translate"
         prop="interoperability_standards"
       >
         <template slot="label">

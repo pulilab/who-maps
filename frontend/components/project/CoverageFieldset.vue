@@ -12,7 +12,7 @@
         >
           <template slot="label">
             <translate key="health-workers">
-              # Health workers
+              How many health workers use the system?
             </translate>
             <form-hint>
               <translate key="health-workers-hint">
@@ -42,7 +42,7 @@
         >
           <template slot="label">
             <translate key="facilities">
-              # Facilities
+              How many facilities use the system?
             </translate>
             <form-hint>
               <translate key="facilities-hint">
@@ -72,7 +72,7 @@
         >
           <template slot="label">
             <translate key="facilities">
-              # Clients
+              How many clients use the system?
             </translate>
             <form-hint>
               <translate key="facilities-hint">
@@ -185,5 +185,10 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-  .CoverageFieldset {}
+  .CoverageFieldset {
+    .el-form-item__label {
+      line-height: 20px;
+      height: 50px;
+    }
+  }
 </style>

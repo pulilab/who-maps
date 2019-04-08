@@ -9,9 +9,14 @@
     >
       <el-form-item
         :error="errors.first('implementation_dates')"
-        :label="$gettext('When will the technology be first deployed?') | translate"
         :required="rules.implementation_dates && rules.implementation_dates.required"
       >
+        <template slot="label">
+          <translate key="implementation_dates">
+            When will the technology be first deployed?
+          </translate>
+        </template>
+
         <el-date-picker
           v-model="implementation_dates"
           v-validate="rules.implementation_dates"
@@ -24,9 +29,13 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('licenses')"
-        :label="$gettext('Under what license is the project governed?') | translate"
         :required="rules.licenses && rules.licenses.required"
       >
+        <template slot="label">
+          <translate key="licenses">
+            Under what license is the project governed?
+          </translate>
+        </template>
         <license-selector
           v-model="licenses"
           v-validate="rules.licenses"
@@ -36,9 +45,14 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('repository')"
-        :label="$gettext('Can you provide links to code documentation, a demo of the application or the software wikipage?') | translate"
         :required="rules.repository && rules.repository.required"
       >
+        <template slot="label">
+          <translate key="repository">
+            Can you provide a link to code documentation?
+          </translate>
+        </template>
+
         <link-field
           v-model="repository"
           v-validate="rules.repository"
@@ -48,9 +62,14 @@
       </el-form-item>
       <el-form-item
         :error="errors.first('mobile_application')"
-        :label="$gettext('Link to the application') | translate"
         :required="rules.mobile_application && rules.mobile_application.required"
       >
+        <template slot="label">
+          <translate key="mobile_application">
+            Can you provide a link to a demo of the application?
+          </translate>
+        </template>
+
         <link-field
           v-model="mobile_application"
           v-validate="rules.mobile_application"
@@ -63,6 +82,12 @@
         :label="$gettext('Link to the wiki page') | translate"
         :required="rules.wiki && rules.wiki.required"
       >
+        <template slot="label">
+          <translate key="wiki">
+            Can you provide a link to the software wikipage?
+          </translate>
+        </template>
+
         <link-field
           v-model="wiki"
           v-validate="rules.wiki"

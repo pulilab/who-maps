@@ -13,7 +13,7 @@
       >
         <template slot="label">
           <translate key="project-name">
-            Project Name
+            What is the project name?
           </translate>
           <form-hint>
             <translate key="project-name-hint">
@@ -49,7 +49,7 @@
       >
         <template slot="label">
           <translate key="country">
-            Project Country
+            Which country is the project located in?
           </translate>
         </template>
         <country-select
@@ -83,7 +83,11 @@
         />
         <span class="Hint">
           <fa icon="info-circle" />
-          <p><translate>Please describe where your implementation is currently taking place</translate></p>
+          <p>
+            <translate>
+              Please describe where your implementation is currently taking place
+            </translate>
+          </p>
         </span>
       </el-form-item>
       <el-form-item
@@ -230,7 +234,7 @@
         >
           <template slot="label">
             <translate key="team">
-              Add Team members (Editor role)
+              Add team members (editors)--can modify entry on Add New Project page
             </translate>
             <form-hint>
               <translate key="team-hint">
@@ -252,7 +256,7 @@
         >
           <template slot="label">
             <translate key="viewers">
-              Add Viewers (only Viewer role)
+              Add team members (viewers)--can receive notification that project has been added
             </translate>
             <form-hint>
               <translate key="viewers-hint">
