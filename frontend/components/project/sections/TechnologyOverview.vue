@@ -53,9 +53,13 @@
           </translate>
         </template>
 
-        <link-field
+        <character-count-input
           v-model="repository"
           v-validate="rules.repository"
+          class="LinkField"
+          :rules="rules.repository"
+          type="text"
+          placeholder="http://"
           data-vv-name="repository"
           data-vv-as="Repository"
         />
@@ -70,9 +74,13 @@
           </translate>
         </template>
 
-        <link-field
+        <character-count-input
           v-model="mobile_application"
           v-validate="rules.mobile_application"
+          class="LinkField"
+          :rules="rules.mobile_application"
+          type="text"
+          placeholder="http://"
           data-vv-name="mobile_application"
           data-vv-as="Mobile application"
         />
@@ -88,9 +96,13 @@
           </translate>
         </template>
 
-        <link-field
+        <character-count-input
           v-model="wiki"
           v-validate="rules.wiki"
+          class="LinkField"
+          :rules="rules.wiki"
+          type="text"
+          placeholder="http://"
           data-vv-name="wiki"
           data-vv-as="Wiki"
         />
@@ -105,13 +117,11 @@ import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
 import { mapGettersActions } from '../../../utilities/form';
 import CollapsibleCard from '../CollapsibleCard';
 import LicenseSelector from '../LicenseSelector';
-import LinkField from '../LinkField';
 
 export default {
   components: {
     CollapsibleCard,
-    LicenseSelector,
-    LinkField
+    LicenseSelector
   },
   mixins: [VeeValidationMixin],
   computed: {

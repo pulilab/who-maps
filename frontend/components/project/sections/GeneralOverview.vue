@@ -21,9 +21,10 @@
             </translate>
           </form-hint>
         </template>
-        <el-input
+        <character-count-input
           v-model="name"
           v-validate="rules.name"
+          :rules="rules.name"
           data-as-name="Name"
           data-vv-name="name"
         />
@@ -74,9 +75,10 @@
           </form-hint>
         </template>
 
-        <el-input
+        <character-count-input
           v-model="geographic_scope"
           v-validate="rules.geographic_scope"
+          :rules="rules.geographic_scope"
           data-vv-name="geographic_scope"
           data-vv-as="Geographic scope"
           type="textarea"
@@ -104,9 +106,11 @@
             </translate>
           </form-hint>
         </template>
-        <el-input
+
+        <character-count-input
           v-model="implementation_overview"
           v-validate="rules.implementation_overview"
+          :rules="rules.implementation_overview"
           data-vv-name="implementation_overview"
           data-vv-as="Implementation Overview"
           type="textarea"
@@ -198,9 +202,10 @@
               </form-hint>
             </template>
 
-            <el-input
+            <character-count-input
               v-model="contact_name"
               v-validate="rules.contact_name"
+              :rules="rules.contact_name"
               data-vv-name="contact_name"
               data-vv-as="Contact name"
             />
@@ -217,9 +222,10 @@
               </translate>
             </template>
 
-            <el-input
+            <character-count-input
               v-model="contact_email"
               v-validate="rules.contact_email"
+              :rules="rules.contact_email"
               data-vv-name="contact_email"
               data-vv-as="Contact email"
             />
