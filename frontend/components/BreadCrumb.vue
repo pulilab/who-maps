@@ -50,6 +50,8 @@ export default {
         'organisation-edit-profile': this.$gettext('Admin'),
         'organisation-admin-country': this.$gettext('Admin'),
         'organisation-admin-donor': this.$gettext('Admin'),
+        'organisation-admin-import': this.$gettext('Admin'),
+        'organisation-admin-import-id': this.$gettext('Admin'),
         'organisation-dashboard': this.$gettext('Dashboard'),
         'organisation-dashboard-list': this.$gettext('Dashboard'),
         'organisation-projects': this.$gettext('My Projects'),
