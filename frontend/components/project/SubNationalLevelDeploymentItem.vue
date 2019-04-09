@@ -1,10 +1,14 @@
 <template>
   <div class="SubNationalLevelDeploymentItem">
-    <el-form-item
-      :label="levelName"
+    <custom-required-form-item
       :error="errors.first('district', scope + '_' + index)"
-      :required="rules.district && rules.district.required"
+      :draft-rule="draftRules.district"
+      :publish-rule="publishRules.district"
     >
+      <template slot="label">
+        {{ levelName }}
+      </template>
+
       <lazy-el-select
         v-model="subLevel"
         v-validate="rules.district"
@@ -27,6 +31,8 @@
         ref="facilitySelector"
         v-model="facilitiesList"
         :rules="rules"
+        :draft-rules="draftRules"
+        :publish-rules="publishRules"
         :api-errors="apiErrors"
         :disabled="!subLevel"
         :scope="scope + '_' + index"
@@ -39,9 +45,11 @@
         :clients.sync="clients"
         :facilities.sync="facilities"
         :disabled="!subLevel"
+        :draft-rules="draftRules"
+        :publish-rules="publishRules"
         :scope="scope + '_' + index"
       />
-    </el-form-item>
+    </custom-required-form-item>
   </div>
 </template>
 
@@ -79,6 +87,14 @@ export default {
     scope: {
       type: String,
       required: true
+    },
+    draftRules: {
+      type: Object,
+      default: null
+    },
+    publishRules: {
+      type: Object,
+      default: null
     }
   },
   computed: {

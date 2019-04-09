@@ -3,7 +3,8 @@
     v-if="facilities.length > 0"
     :error="errors.first('facilities_list', scope)"
     :label="$gettext('Facilities') | translate"
-    :required="rules.facilities_list && rules.facilities_list.required"
+    :draft-rule="draftRules.facilities_list"
+    :publish-rule="publishRules.facilities_list"
   >
     <lazy-el-select
       v-model="innerValue"
@@ -53,6 +54,14 @@ export default {
     },
     scope: {
       type: String,
+      default: null
+    },
+    draftRules: {
+      type: Object,
+      default: null
+    },
+    publishRules: {
+      type: Object,
       default: null
     }
   },

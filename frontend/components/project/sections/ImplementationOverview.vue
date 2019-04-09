@@ -7,13 +7,14 @@
       ref="collapsible"
       :title="$gettext('Implementation overview') | translate"
     >
-      <el-form-item
+      <custom-required-form-item
         :error="errors.first('health_focus_areas')"
-        :required="rules.health_focus_areas && rules.health_focus_areas.required"
+        :draft-rule="draftRules.health_focus_areas"
+        :publish-rule="publishRules.health_focus_areas"
       >
         <template slot="label">
           <translate key="health-focus-areas">
-            What is the health focus area(s) addressed by the Digital Health Intervention?
+            What is the health focus area(s) addressed by the DHI?
           </translate>
         </template>
 
@@ -24,11 +25,12 @@
           data-vv-validate-on="change"
           data-vv-as="Health focus areas"
         />
-      </el-form-item>
+      </custom-required-form-item>
 
-      <el-form-item
+      <custom-required-form-item
         :error="errors.first('hsc_challenges')"
-        :required="rules.hsc_challenges && rules.hsc_challenges.required"
+        :draft-rule="draftRules.hsc_challenges"
+        :publish-rule="publishRules.hsc_challenges"
       >
         <template slot="label">
           <translate key="hsc-challenges">
@@ -42,9 +44,9 @@
           data-vv-validate-on="change"
           data-vv-as="Health system challenges"
         />
-      </el-form-item>
+      </custom-required-form-item>
 
-      <el-form-item
+      <custom-required-form-item
         :error="errors.first('platforms')"
       >
         <template slot="label">
@@ -58,14 +60,20 @@
           </form-hint>
         </template>
 
-        <el-form-item
+        <custom-required-form-item
           v-for="(platform, index) in platforms"
           :key="platform"
           :error="errors.first('id', 'platform_' + index)"
-          :label="$gettext('Software') | translate"
-          :required="rules.platforms && rules.platforms.required"
+          :draft-rule="draftRules.platforms"
+          :publish-rule="publishRules.platforms"
           class="ItemIndent"
         >
+          <template slot="label">
+            <translate key="platform-label">
+              What are the names of the software included in the deployment?
+            </translate>
+          </template>
+
           <el-col :span="16">
             <platform-selector
               :key="platform"
@@ -76,10 +84,11 @@
               data-vv-name="id"
               data-vv-as="Software"
             />
-            <el-form-item
+            <custom-required-form-item
               v-show="platform"
               :error="errors.first('strategies', 'platform_' + index)"
-              :required="rules.strategies && rules.strategies.required"
+              :draft-rule="draftRules.strategies"
+              :publish-rule="publishRules.strategies"
               class="DigitalHealthIntervention"
             >
               <template slot="label">
@@ -97,7 +106,7 @@
                 data-vv-name="strategies"
                 data-vv-as="Digital health interventions"
               />
-            </el-form-item>
+            </custom-required-form-item>
           </el-col>
           <el-col :span="8">
             <add-rm-buttons
@@ -107,12 +116,13 @@
               @rm="rmDhi(index, platform)"
             />
           </el-col>
-        </el-form-item>
-      </el-form-item>
+        </custom-required-form-item>
+      </custom-required-form-item>
 
-      <el-form-item
+      <custom-required-form-item
         :error="errors.first('his_bucket')"
-        :required="rules.his_bucket && rules.his_bucket.required"
+        :draft-rule="draftRules.his_bucket"
+        :publish-rule="publishRules.his_bucket"
       >
         <template slot="label">
           <translate key="his-bucket">
@@ -126,15 +136,15 @@
           data-vv-validate-on="change"
           data-vv-as="Health information system"
         />
-      </el-form-item>
+      </custom-required-form-item>
 
       <div class="CoverageArea">
-        <el-form-item
+        <custom-required-form-item
           prop="coverageType"
         >
           <template slot="label">
             <translate key="coverage-type">
-              What kind of coverage does your project have?
+              What level of coverage does your project have (Sub-national, National)
             </translate>
             <form-hint>
               <translate key="coverage-type-hint">
@@ -151,13 +161,15 @@
               <translate>National</translate>
             </el-radio>
           </el-radio-group>
-        </el-form-item>
+        </custom-required-form-item>
 
         <sub-national-level-deployment
           v-if="coverageType == 1"
           ref="subNationalLevelDeployment"
           :api-errors="apiErrors"
           :rules="rules"
+          :draft-rules="draftRules"
+          :publish-rules="publishRules"
         />
 
         <div
@@ -177,13 +189,16 @@
             :health-workers.sync="healthWorkers"
             :clients.sync="clients"
             :facilities.sync="facilities"
+            :draft-rules="draftRules.national_level_deployment"
+            :publish-rules="publishRules.national_level_deployment"
             scope="national_level_deployment"
           />
         </div>
       </div>
-      <el-form-item
+      <custom-required-form-item
         :error="errors.first('government_investor')"
-        :required="rules.government_investor && rules.government_investor.required"
+        :draft-rule="draftRules.government_investor"
+        :publish-rule="publishRules.government_investor"
       >
         <template slot="label">
           <translate key="gobernment-investor">
@@ -208,10 +223,12 @@
             <translate>Yes, there is a financial contribution through MOH budget</translate>
           </el-radio>
         </el-radio-group>
-      </el-form-item>
+      </custom-required-form-item>
 
-      <el-form-item
+      <custom-required-form-item
         class="ImplementingPartners"
+        :draft-rule="draftRules.implementing_partners"
+        :publish-rule="publishRules.implementing_partners"
       >
         <template slot="label">
           <translate key="implementing-partners">
@@ -223,10 +240,9 @@
           v-for="(partner, index) in implementing_partners"
           :key="index"
         >
-          <el-col :span="16">
-            <el-form-item
+          <el-col :span="18">
+            <custom-required-form-item
               :error="errors.first('implementing_partners_' + index)"
-              :required="rules.implementing_partners && rules.implementing_partners.required"
             >
               <el-input
                 ref="implementingPartnersInput"
@@ -238,9 +254,9 @@
                 @input="updateImplmeentingPartners($event, index)"
                 @keyup.enter.native="addImplementingPartners"
               />
-            </el-form-item>
+            </custom-required-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <add-rm-buttons
               :show-add="isLastAndExist(implementing_partners, index)"
               :show-rm="implementing_partners.length > 1"
@@ -249,14 +265,15 @@
             />
           </el-col>
         </el-row>
-      </el-form-item>
-      <el-form-item
+      </custom-required-form-item>
+      <custom-required-form-item
         :error="errors.first('donors')"
-        :required="rules.donors && rules.donors.required"
+        :draft-rule="draftRules.donors"
+        :publish-rule="publishRules.donors"
       >
         <template slot="label">
           <translate key="donors">
-            Investors
+            Who are your investment partners?
           </translate>
           <form-hint>
             <translate key="donors-hint">
@@ -271,13 +288,14 @@
           data-vv-name="donors"
           data-vv-as="Investors"
         />
-      </el-form-item>
+      </custom-required-form-item>
     </collapsible-card>
   </div>
 </template>
 
 <script>
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 
 import CollapsibleCard from '../CollapsibleCard';
 import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector';
@@ -307,13 +325,8 @@ export default {
     DonorSelector,
     FormHint
   },
-  mixins: [VeeValidationMixin],
-  props: {
-    rules: {
-      type: Object,
-      default: () => ({})
-    }
-  },
+  mixins: [VeeValidationMixin, ProjectFieldsetMixin],
+
   computed: {
     ...mapGettersActions({
       platforms: ['project', 'getPlatforms', 'setPlatforms', 0],

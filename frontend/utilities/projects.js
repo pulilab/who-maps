@@ -59,7 +59,16 @@ export const draftRules = () => {
   return {
     name: {
       required: true,
-      min: 1
+      min: 1,
+      max: 128
+    },
+
+    organisation: {
+      required: true,
+      max: 128
+    },
+    contact_name: {
+      max: 256
     },
     contact_email: {
       email: true
@@ -67,6 +76,23 @@ export const draftRules = () => {
     team: {
       required: true,
       min: 1
+    },
+    geographic_scope: {
+      max: 1024
+    },
+    implementation_overview: {
+      max: 1024
+    },
+    coverage: {},
+    coverage_second_level: {},
+    repository: {
+      max: 256
+    },
+    mobile_application: {
+      max: 256
+    },
+    wiki: {
+      max: 256
     }
   };
 };
@@ -78,12 +104,15 @@ export const publishRules = () => {
       max: 128
     },
     organisation: {
-      required: true
+      required: true,
+      max: 128
     },
     country: {
       required: true
     },
-    geographic_scope: {},
+    geographic_scope: {
+      max: 1024
+    },
     implementation_overview: {
       required: true,
       max: 1024

@@ -7,10 +7,17 @@
       ref="collapsible"
       :title="$gettext('Interoperability &amp; Standards') "
     >
-      <el-form-item
-        :label="$gettext('Does your project share information with one or more of these digital Health Information System components?') | translate"
+      <custom-required-form-item
         prop="interoperability_links"
+        :draft-rule="draftRules.interoperability_links"
+        :publish-rule="publishRules.interoperability_links"
       >
+        <template slot="label">
+          <translate key="interoperability_links">
+            Does your project share information with one or more of these digital Health Information System components?
+          </translate>
+        </template>
+
         <interoperability-link-component
           v-for="(ir, index) in interopearilbityLinksStructure"
           ref="interoperabilityLink"
@@ -21,10 +28,11 @@
           :api-errors="apiErrors"
           :interoperability-links.sync="interoperability_links"
         />
-      </el-form-item>
-      <el-form-item
-        :label="$gettext('What data standards does your digital health project use?') | translate"
+      </custom-required-form-item>
+      <custom-required-form-item
         prop="interoperability_standards"
+        :draft-rule="draftRules.interoperability_standards"
+        :publish-rule="publishRules.interoperability_standards"
       >
         <template slot="label">
           <translate key="interoperability-standards">
@@ -38,7 +46,7 @@
         </template>
 
         <standards-selector v-model="interoperability_standards" />
-      </el-form-item>
+      </custom-required-form-item>
     </collapsible-card>
   </div>
 </template>
@@ -47,6 +55,7 @@
 import { mapGetters } from 'vuex';
 import { mapGettersActions } from '../../../utilities/form';
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 
 import CollapsibleCard from '../CollapsibleCard';
 import InteroperabilityLinkComponent from '../InteroperabilityLinkComponent';
@@ -60,7 +69,7 @@ export default {
     StandardsSelector,
     FormHint
   },
-  mixins: [VeeValidationMixin],
+  mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGetters({
       interopearilbityLinksStructure: 'projects/getInteroperabilityLinks'
