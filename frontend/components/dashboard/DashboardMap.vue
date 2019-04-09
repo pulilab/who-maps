@@ -1,5 +1,5 @@
 <template>
-  <div class="DhaMap DashboardMap">
+  <div :class="['DhaMap', 'DashboardMap', {'Searched': isSearched}]">
     <no-ssr>
       <l-map
         ref="mainMap"
@@ -88,7 +88,8 @@ export default {
       subNationalProjects: 'dashboard/getSelectedCountrySubNationalProjects',
       nationalProjects: 'dashboard/getSelectedCountryNationalProjects',
       mapProjects: 'dashboard/getProjectsMap',
-      currentZoom: 'dashboard/getCurrentZoom'
+      currentZoom: 'dashboard/getCurrentZoom',
+      getSearched: 'dashboard/getSearched'
     })
   },
   methods: {

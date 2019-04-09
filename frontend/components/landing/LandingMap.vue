@@ -1,5 +1,5 @@
 <template>
-  <div class="DhaMap LandingMap">
+  <div :class="['DhaMap', 'LandingMap', {'Searched': isSearched}]">
     <no-ssr>
       <l-map
         ref="mainMap"

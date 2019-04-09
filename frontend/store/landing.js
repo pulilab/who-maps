@@ -9,6 +9,7 @@ export const state = () => ({
 
 export const getters = {
   ...gettersGenerator(),
+  getSearched: state => state.searched,
   getLandingPageData: state => state.landingPageData,
   getSearchResult: (state, getters) => {
     if (state.searched && state.searched === state.searchString) {

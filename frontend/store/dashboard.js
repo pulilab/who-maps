@@ -35,6 +35,22 @@ export const state = () => ({
 });
 export const getters = {
   ...gettersGenerator(),
+  getSearched: (state, getters) => {
+    const g = getters.getSearchParameters;
+    return !(g.approved === undefined &&
+    g.country.length === 0 &&
+    g.dhi.length === 0 &&
+    g.donor === null &&
+    g.gov === undefined &&
+    g.hfa.length === 0 &&
+    g.his.length === 0 &&
+    g.hsc.length === 0 &&
+    g.in === undefined &&
+    g.q === undefined &&
+    g.region === null &&
+    g.sw.length === 0 &&
+    g.view_as === undefined);
+  },
   getProjectsList: state => [...state.projectsList.map(r => parseCustomAnswers(r))],
   getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => parseCustomAnswers(r))] : getters.getProjectsList,
   getCountryColumns: (state, getters, rootState, rootGetters) => {
