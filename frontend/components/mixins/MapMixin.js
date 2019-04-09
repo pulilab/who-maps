@@ -94,8 +94,12 @@ const MapMixin = {
         iconCreateFunction: (cluster) => {
           const projects = cluster.getAllChildMarkers().reduce((a, c) => a + c.options.projects, 0);
           const html = `<span>${projects}</span>`;
+          const classes = ['CountryClusterIcon'];
+          if (projects === 0) {
+            classes.push('EmptyCluster');
+          }
           return L.divIcon({
-            className: `CountryClusterIcon`,
+            className: classes.join(' '),
             html,
             iconSize: [40, 40],
             iconAnchor: [20, 40]
