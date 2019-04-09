@@ -83,6 +83,8 @@ export const draftRules = () => {
     implementation_overview: {
       max: 1024
     },
+    coverage: {},
+    coverage_second_level: {},
     repository: {
       max: 256
     },
