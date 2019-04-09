@@ -213,8 +213,8 @@ export default {
     }
 
      &.EmptyMarker {
-        opacity: 0.6 !important;
         display: none;
+        pointer-events: none;
       }
 
      span {

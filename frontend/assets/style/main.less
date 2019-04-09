@@ -189,6 +189,11 @@ a {
   .CountryClusterIcon {
     background-image: url('~assets/img/pins/pin-cluster.svg');
 
+    &.EmptyCluster {
+      display: none;
+      pointer-events: none;
+    }
+
      span {
       display: inline-block;
       width: 40px;
@@ -208,7 +213,8 @@ a {
     }
 
     &.EmptyMarker {
-      opacity: 0.6 !important;
+      display: none;
+      pointer-events: none;
     }
 
     span {
