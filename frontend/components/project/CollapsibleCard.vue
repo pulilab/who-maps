@@ -31,6 +31,20 @@
           v-show="open"
           class="ContentContainer"
         >
+          <div class="Legend">
+            <div>
+              <span class="Draft">
+                *
+              </span>
+              Required to save draft
+            </div>
+            <div>
+              <span class="Publish">
+                *
+              </span>
+              Required to publish
+            </div>
+          </div>
           <slot />
         </div>
       </transition>
@@ -68,6 +82,19 @@ export default {
 
   .CollapsibleCard {
     margin: 0 0 20px;
+
+    .Legend {
+      text-align: right;
+      font-weight: 500;
+
+      .Draft {
+        color: @colorDraft;
+      }
+
+      .Publish {
+        color: @colorPublished;
+      }
+    }
 
     .el-card {
       .el-card__header {
