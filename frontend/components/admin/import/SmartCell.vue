@@ -119,6 +119,10 @@ export default {
     original: {
       type: null,
       default: null
+    },
+    nameMapping: {
+      type: Object,
+      required: true
     }
   },
   data () {
@@ -183,12 +187,13 @@ export default {
           implementing_partners: this.stringArray,
           government_investor: () => {
             const labelLib = {
-              'No, they have not yet contributed': 0,
-              'Yes, they are contributing in-kind people or time': 1,
-              'Yes, there is a financial contribution through MOH budget': 2
+              'no they have not yet contributed': 0,
+              'yes they are contributing inkind people or time': 1,
+              'yes there is a financial contribution through moh budget': 2
             };
-            const value = Number.isInteger(this.value) ? this.value : labelLib[this.value];
-            const label = !Number.isInteger(this.value) ? this.value : Object.keys(labelLib).find(k => labelLib[k] === this.value);
+            const cleaned = ('' + this.value).replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase();
+            const value = Number.isInteger(this.value) ? this.value : labelLib[cleaned];
+            const label = !Number.isInteger(this.value) ? this.value : Object.keys(labelLib).find(k => labelLib[k] === cleaned);
             return {
               ids: [value],
               names: [label]
@@ -247,7 +252,8 @@ export default {
   },
   methods: {
     async validate () {
-      const { valid, errors } = await this.validator.verify(this.apiValue(), this.rules, { name: this.column });
+      const name = this.nameMapping[this.column] || this.column;
+      const { valid, errors } = await this.validator.verify(this.apiValue(), this.rules, { name });
       this.handleValidation(valid, errors[0], this.column);
     },
     clickHandler () {
