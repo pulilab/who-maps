@@ -6,7 +6,8 @@
       :data="data"
       :original="original"
       :handleValidation="handleValidation"
-      :rowSave="rowSave"
+      :rowSave="save"
+      :scrollToError="scrollToError"
     />
   </div>
 </template>
@@ -72,19 +73,16 @@ export default {
     },
     scrollToError () {
       if (!this.valid) {
-        const elm = this.$el.querySelector('.ValidationError');
-        elm.scrollIntoView();
-      }
-    },
-    async rowSave (country, donor, publish) {
-      if (this.valid) {
-        return this.save(country, donor, publish);
-      } else {
-        this.scrollToError();
+        const container = window.document.querySelector('.ExportDataTable .Container');
+        const header = container.querySelector('.Headers');
+        const elm = this.$el.querySelector('.ValidationError, .ParsingError');
+        elm.scrollIntoView(true);
+        if (container.scrollTop) {
+          container.scroll(container.scrollLeft, container.scrollTop - header.clientHeight);
+        }
       }
     },
     async save (country, donor, publish) {
-      this.$nuxt.$loading.start('save');
       const filled = this.$children.filter(sc => sc.column && !['custom_fields', 'sub_level'].includes(sc.column));
 
       const countryCustom = this.$children.filter(sc => sc.type && sc.type.startsWith('MOH')).map(c => ({
@@ -135,7 +133,6 @@ export default {
       const dataRow = this.row;
       dataRow.project = data.id;
       this.$emit('update:row', dataRow);
-      this.$nuxt.$loading.finish('save');
       return dataRow;
     }
   }
