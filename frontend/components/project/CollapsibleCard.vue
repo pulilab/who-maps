@@ -38,7 +38,11 @@
                   *
                 </span>
               </span>
-              <span class="Text">Required to save draft</span>
+              <span class="Text">
+                <translate ref="draft_required">
+                  Required to save draft
+                </translate>
+              </span>
             </div>
             <div>
               <span class="Required Publish">
@@ -46,7 +50,11 @@
                   *
                 </span>
               </span>
-              <span class="Text">Required to publish</span>
+              <span class="Text">
+                <translate ref="publish_required">
+                  Required to publish
+                </translate>
+              </span>
             </div>
           </div>
           <slot />
