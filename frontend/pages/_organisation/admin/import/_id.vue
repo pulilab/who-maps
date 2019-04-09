@@ -13,7 +13,7 @@
         :publish="!rawImport.draft"
       >
         <template
-          v-slot:default="{globalErrors, rules}"
+          v-slot:default="{globalErrors, rules, nameMapping}"
         >
           <el-switch
             v-model="showSaved"
@@ -26,6 +26,7 @@
                 :id="rawImport.id"
                 :headers.sync="rawImport.header_mapping"
                 :custom-fields-lib="customFieldsLib"
+                :name-mapping="nameMapping"
               >
                 <el-button @click="saveAll">
                   <fa icon="save" />
@@ -75,7 +76,7 @@
                   :custom-fields-lib="customFieldsLib"
                   class="Row"
                 >
-                  <template v-slot:default="{errors, valid, handleValidation, data, original, rowSave}">
+                  <template v-slot:default="{errors, valid, handleValidation, data, original, rowSave, scrollToError}">
                     <div
                       class="Column Thin"
                     >
@@ -84,7 +85,7 @@
                           :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
                           size="mini"
                           class="SaveButton"
-                          @click="singleRowSave(rowSave)"
+                          @click="singleRowSave(rowSave, valid, scrollToError)"
                         >
                           <fa icon="save" />
                         </el-button>
@@ -119,6 +120,7 @@
                         :handle-validation="handleValidation"
                         :sub-levels="subLevels"
                         :custom-fields-lib="customFieldsLib"
+                        :name-mapping="nameMapping"
                         @change="updateValue({row: index, key:header.title, value:$event})"
                         @openDialog="$refs.dialog.openDialog(index, header.title, $event)"
                       />
@@ -257,19 +259,25 @@ export default {
         });
       }
     },
-    async singleRowSave (doSave) {
-      try {
-        await this.$confirm('Are you sure? this operation is not reversible once started', 'Save', {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        });
-        await this.doSingleRowSave(doSave);
-      } catch (e) {
-        this.$message({
-          type: 'info',
-          message: 'Save canceled'
-        });
+    async singleRowSave (doSave, valid, scrollToError) {
+      if (valid) {
+        try {
+          await this.$confirm('Are you sure? this operation is not reversible once started', 'Save', {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning'
+          });
+          this.$nuxt.$loading.start('save');
+          await this.doSingleRowSave(doSave);
+        } catch (e) {
+          this.$message({
+            type: 'info',
+            message: 'Save canceled'
+          });
+        }
+        this.$nuxt.$loading.finish('save');
+      } else {
+        scrollToError();
       }
     },
     async doSingleRowSave (doSave, bubble) {
