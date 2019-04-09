@@ -10,13 +10,17 @@
         v-show="draftRequired"
         class="Required DraftRequired"
       >
-        *
+        <span>
+          *
+        </span>
       </span>
       <span
         v-show="publishRequired"
         class="Required PublishRequired"
       >
-        *
+        <span>
+          *
+        </span>
       </span>
     </template>
     <slot />
@@ -50,7 +54,7 @@ export default {
       return this.publishRule && this.publishRule.required;
     }
   }
-};
+}
 </script>
 
 <style lang="less">
@@ -58,14 +62,26 @@ export default {
   @import "~assets/style/mixins.less";
   .CustomRequiredFormItem{
     .Required{
+      display: inline-block;
+      width: 12px;
+      height: 12px;
       font-size: 16px;
-      font-weight: 900
+      line-height: 12px;
+      font-weight: 900;
+      text-align: center;
+      color: #FFFFFF;
+      border-radius: 50%;
+
+      > span {
+        position: relative;
+        top: 4px;
+      }
     }
     .DraftRequired{
-      color: @colorDraft
+      background-color: @colorDraft
     }
     .PublishRequired{
-      color: @colorPublished
+      background-color: @colorPublished
     }
   }
 </style>

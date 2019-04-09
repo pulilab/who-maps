@@ -33,16 +33,20 @@
         >
           <div class="Legend">
             <div>
-              <span class="Draft">
-                *
+              <span class="Required Draft">
+                <span>
+                  *
+                </span>
               </span>
-              Required to save draft
+              <span class="Text">Required to save draft</span>
             </div>
             <div>
-              <span class="Publish">
-                *
+              <span class="Required Publish">
+                <span>
+                  *
+                </span>
               </span>
-              Required to publish
+              <span class="Text">Required to publish</span>
             </div>
           </div>
           <slot />
@@ -85,14 +89,32 @@ export default {
 
     .Legend {
       text-align: right;
-      font-weight: 500;
 
-      .Draft {
-        color: @colorDraft;
+      .Text {
+        font-size: @fontSizeSmall
       }
 
-      .Publish {
-        color: @colorPublished;
+      .Required{
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        font-size: 16px;
+        line-height: 12px;
+        font-weight: 900;
+        text-align: center;
+        color: #FFFFFF;
+        border-radius: 50%;
+
+        > span {
+          position: relative;
+          top: 4px;
+        }
+      }
+      .Draft{
+        background-color: @colorDraft
+      }
+      .Publish{
+        background-color: @colorPublished
       }
     }
 
