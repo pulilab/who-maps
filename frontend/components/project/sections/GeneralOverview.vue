@@ -7,9 +7,10 @@
       ref="collapsible"
       :title="$gettext('General overview') | translate"
     >
-      <el-form-item
+      <custom-required-form-item
         :error="errors.first('name')"
-        :required="rules.name && rules.name.required"
+        :draft-rule="draftRules.name"
+        :publish-rule="publishRules.name"
       >
         <template slot="label">
           <translate key="project-name">
@@ -28,10 +29,12 @@
           data-as-name="Name"
           data-vv-name="name"
         />
-      </el-form-item>
-      <el-form-item
+      </custom-required-form-item>
+
+      <custom-required-form-item
         :error="errors.first('organisation')"
-        :required="rules.organisation && rules.organisation.required"
+        :draft-rule="draftRules.organisation"
+        :publish-rule="publishRules.organisation"
       >
         <template slot="label">
           <translate key="organisation">
@@ -43,10 +46,11 @@
           v-validate="rules.organisation"
           data-vv-name="organisation"
         />
-      </el-form-item>
-      <el-form-item
+      </custom-required-form-item>
+      <custom-required-form-item
         :error="errors.first('country')"
-        :required="rules.country && rules.country.required"
+        :draft-rule="draftRules.country"
+        :publish-rule="publishRules.country"
       >
         <template slot="label">
           <translate key="country">
@@ -59,10 +63,11 @@
           data-vv-name="country"
           data-vv-as="Country"
         />
-      </el-form-item>
-      <el-form-item
+      </custom-required-form-item>
+      <custom-required-form-item
         :error="errors.first('geographic_scope')"
-        :required="rules.geographic_scope && rules.geographic_scope.required"
+        :draft-rule="draftRules.geographic_scope"
+        :publish-rule="publishRules.geographic_scope"
       >
         <template slot="label">
           <translate key="geographic-scope">
@@ -91,10 +96,11 @@
             </translate>
           </p>
         </span>
-      </el-form-item>
-      <el-form-item
+      </custom-required-form-item>
+      <custom-required-form-item
         :error="errors.first('implementation_overview')"
-        :required="rules.implementation_overview && rules.implementation_overview.required"
+        :draft-rule="draftRules.implementation_overview"
+        :publish-rule="publishRules.implementation_overview"
       >
         <template slot="label">
           <translate key="implementation-overview">
@@ -119,15 +125,16 @@
           <fa icon="info-circle" />
           <p><translate>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.</translate></p>
         </span>
-      </el-form-item>
+      </custom-required-form-item>
       <el-row
         :gutter="20"
         type="flex"
       >
         <el-col :span="12">
-          <el-form-item
+          <custom-required-form-item
             :error="errors.first('start_date')"
-            :required="rules.start_date && rules.start_date.required"
+            :draft-rule="draftRules.start_date"
+            :publish-rule="publishRules.start_date"
           >
             <template slot="label">
               <translate key="start-date">
@@ -150,14 +157,14 @@
               class="Date"
               align="left"
             />
-          </el-form-item>
+          </custom-required-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item
+          <custom-required-form-item
             :error="errors.first('end_date') || endDateError"
-
-            :required="rules.end_date && rules.end_date.required"
+            :draft-rule="draftRules.end_date"
+            :publish-rule="publishRules.end_date"
           >
             <template slot="label">
               <translate key="end-date">
@@ -179,7 +186,7 @@
               class="Date"
               align="left"
             />
-          </el-form-item>
+          </custom-required-form-item>
         </el-col>
       </el-row>
       <el-row
@@ -187,9 +194,10 @@
         type="flex"
       >
         <el-col :span="12">
-          <el-form-item
+          <custom-required-form-item
             :error="errors.first('contact_name')"
-            :required="rules.contact_name && rules.contact_name.required"
+            :draft-rule="draftRules.contact_name"
+            :publish-rule="publishRules.contact_name"
           >
             <template slot="label">
               <translate key="contact-name">
@@ -209,12 +217,13 @@
               data-vv-name="contact_name"
               data-vv-as="Contact name"
             />
-          </el-form-item>
+          </custom-required-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
+          <custom-required-form-item
             :error="errors.first('contact_email')"
-            :required="rules.contact_email && rules.contact_email.required"
+            :draft-rule="draftRules.contact_email"
+            :publish-rule="publishRules.contact_email"
           >
             <template slot="label">
               <translate key="contact-email">
@@ -229,14 +238,14 @@
               data-vv-name="contact_email"
               data-vv-as="Contact email"
             />
-          </el-form-item>
+          </custom-required-form-item>
         </el-col>
       </el-row>
       <div class="TeamArea">
-        <el-form-item
+        <custom-required-form-item
           :error="errors.first('team')"
-
-          :required="rules.team && rules.team.required"
+          :draft-rule="draftRules.team"
+          :publish-rule="publishRules.team"
         >
           <template slot="label">
             <translate key="team">
@@ -255,10 +264,11 @@
             data-vv-name="team"
             data-vv-as="Team"
           />
-        </el-form-item>
-        <el-form-item
+        </custom-required-form-item>
+        <custom-required-form-item
           :error="errors.first('viewers')"
-          :required="rules.viewers && rules.viewers.required"
+          :draft-rule="draftRules.viewers"
+          :publish-rule="publishRules.viewers"
         >
           <template slot="label">
             <translate key="viewers">
@@ -277,7 +287,7 @@
             data-vv-name="viewers"
             data-vv-as="Viewers"
           />
-        </el-form-item>
+        </custom-required-form-item>
       </div>
     </collapsible-card>
   </div>
@@ -286,6 +296,7 @@
 <script>
 import { isAfter } from 'date-fns';
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 import CollapsibleCard from '../CollapsibleCard';
 import TeamSelector from '../TeamSelector';
 import CountrySelect from '../../common/CountrySelect';
@@ -301,13 +312,7 @@ export default {
     OrganisationSelect,
     FormHint
   },
-  mixins: [VeeValidationMixin],
-  props: {
-    usePublishRules: {
-      type: Boolean,
-      default: false
-    }
-  },
+  mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGettersActions({
       name: ['project', 'getName', 'setName', 0],

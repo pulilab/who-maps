@@ -21,6 +21,8 @@
             ref="generalOverview"
             :use-publish-rules="usePublishRules"
             :rules="rules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
@@ -28,6 +30,8 @@
           <implementation-overview
             ref="implementationOverview"
             :rules="rules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
@@ -35,6 +39,8 @@
           <technology-overview
             ref="technologyOverview"
             :rules="rules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
@@ -42,6 +48,8 @@
           <interoperability-and-standards
             ref="interoperabilityAndStandards"
             :rules="rules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
@@ -49,6 +57,8 @@
           <country-custom
             ref="countryCustom"
             :use-publish-rules="usePublishRules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
@@ -56,6 +66,8 @@
           <donor-custom
             ref="donorCustom"
             :use-publish-rules="usePublishRules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
             :api-errors="apiErrors"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"

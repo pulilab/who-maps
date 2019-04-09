@@ -7,9 +7,10 @@
       ref="collapsible"
       :title="$gettext('Technology overview') | translate"
     >
-      <el-form-item
+      <custom-required-form-item
         :error="errors.first('implementation_dates')"
-        :required="rules.implementation_dates && rules.implementation_dates.required"
+        :draft-rule="draftRules.implementation_dates"
+        :publish-rule="publishRules.implementation_dates"
       >
         <template slot="label">
           <translate key="implementation_dates">
@@ -26,10 +27,11 @@
           class="Date"
           align="left"
         />
-      </el-form-item>
-      <el-form-item
+      </custom-required-form-item>
+      <custom-required-form-item
         :error="errors.first('licenses')"
-        :required="rules.licenses && rules.licenses.required"
+        :draft-rule="draftRules.licenses"
+        :publish-rule="publishRules.licenses"
       >
         <template slot="label">
           <translate key="licenses">
@@ -42,10 +44,11 @@
           data-vv-name="licenses"
           data-vv-as="License"
         />
-      </el-form-item>
-      <el-form-item
+      </custom-required-form-item>
+      <custom-required-form-item
         :error="errors.first('repository')"
-        :required="rules.repository && rules.repository.required"
+        :draft-rule="draftRules.repository"
+        :publish-rule="publishRules.repository"
       >
         <template slot="label">
           <translate key="repository">
@@ -63,10 +66,11 @@
           data-vv-name="repository"
           data-vv-as="Repository"
         />
-      </el-form-item>
-      <el-form-item
+      </custom-required-form-item>
+      <custom-required-form-item
         :error="errors.first('mobile_application')"
-        :required="rules.mobile_application && rules.mobile_application.required"
+        :draft-rule="draftRules.mobile_application"
+        :publish-rule="publishRules.mobile_application"
       >
         <template slot="label">
           <translate key="mobile_application">
@@ -84,11 +88,12 @@
           data-vv-name="mobile_application"
           data-vv-as="Mobile application"
         />
-      </el-form-item>
-      <el-form-item
+      </custom-required-form-item>
+      <custom-required-form-item
         :error="errors.first('wiki')"
         :label="$gettext('Link to the wiki page') | translate"
-        :required="rules.wiki && rules.wiki.required"
+        :draft-rule="draftRules.wiki"
+        :publish-rule="publishRules.wiki"
       >
         <template slot="label">
           <translate key="wiki">
@@ -106,13 +111,14 @@
           data-vv-name="wiki"
           data-vv-as="Wiki"
         />
-      </el-form-item>
+      </custom-required-form-item>
     </collapsible-card>
   </div>
 </template>
 
 <script>
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 
 import { mapGettersActions } from '../../../utilities/form';
 import CollapsibleCard from '../CollapsibleCard';
@@ -123,7 +129,7 @@ export default {
     CollapsibleCard,
     LicenseSelector
   },
-  mixins: [VeeValidationMixin],
+  mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGettersActions({
       implementation_dates: ['project', 'getImplementationDates', 'setImplementationDates', 0],

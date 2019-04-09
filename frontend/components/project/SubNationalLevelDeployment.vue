@@ -19,7 +19,7 @@
         type="flex"
         class="CoverageWrapper"
       >
-        <el-col :span="16">
+        <el-col :span="18">
           <el-form-item>
             <sub-national-level-deployment-item
               ref="firstSubLevel"
@@ -29,11 +29,13 @@
               :level-name="countrySubLevelNames.first"
               :sub-levels="countryFirstSubLevel"
               :coverage.sync="coverage"
+              :draft-rules="draftRules.coverage"
+              :publish-rules="publishRules.coverage"
               scope="coverage"
             />
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <add-rm-buttons
             :show-add="!!cov"
             :show-rm="coverage.length > 1"
@@ -71,6 +73,8 @@
               :level-name="countrySubLevelNames.second"
               :sub-levels="countrySecondSubLevel"
               :coverage.sync="coverageSecondLevel"
+              :draft-rules="draftRules.coverage_second_level"
+              :publish-rules="publishRules.coverage_second_level"
               scope="coverage_second_level"
             />
           </el-form-item>
@@ -102,6 +106,16 @@ export default {
     AddRmButtons
   },
   mixins: [VeeValidationMixin],
+  props: {
+    draftRules: {
+      type: Object,
+      default: null
+    },
+    publishRules: {
+      type: Object,
+      default: null
+    }
+  },
   computed: {
     ...mapGetters({
       country: 'project/getCountry',

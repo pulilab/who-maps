@@ -5,10 +5,10 @@
       type="flex"
     >
       <el-col :span="8">
-        <el-form-item
+        <custom-required-form-item
           :error="errors.first('health_workers', scope)"
-
-          :required="rules.health_workers && rules.health_workers.required"
+          :draft-rule="draftRules.health_workers"
+          :publish-rule="publishRules.health_workers"
         >
           <template slot="label">
             <translate key="health-workers">
@@ -33,12 +33,13 @@
             max="10000000"
             step="1"
           />
-        </el-form-item>
+        </custom-required-form-item>
       </el-col>
       <el-col :span="8">
-        <el-form-item
+        <custom-required-form-item
           :error="errors.first('facilities', scope)"
-          :required="rules.facilities && rules.facilities.required"
+          :draft-rule="draftRules.facilities"
+          :publish-rule="publishRules.facilities"
         >
           <template slot="label">
             <translate key="facilities">
@@ -63,12 +64,13 @@
             max="10000000"
             step="1"
           />
-        </el-form-item>
+        </custom-required-form-item>
       </el-col>
       <el-col :span="8">
-        <el-form-item
+        <custom-required-form-item
           :error="errors.first('clients', scope)"
-          :required="rules.clients && rules.clients.required"
+          :draft-rule="draftRules.clients"
+          :publish-rule="publishRules.clients"
         >
           <template slot="label">
             <translate key="facilities">
@@ -92,7 +94,7 @@
             max="10000000"
             step="1"
           />
-        </el-form-item>
+        </custom-required-form-item>
       </el-col>
     </el-row>
   </div>
@@ -131,6 +133,14 @@ export default {
     },
     scope: {
       type: String,
+      default: null
+    },
+    draftRules: {
+      type: Object,
+      default: null
+    },
+    publishRules: {
+      type: Object,
       default: null
     }
   },

@@ -28,6 +28,7 @@
 
 <script>
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 import { mapGetters } from 'vuex';
 import CollapsibleCard from '../CollapsibleCard';
 import CustomField from '../CustomField';
@@ -37,13 +38,7 @@ export default {
     CollapsibleCard,
     CustomField
   },
-  mixins: [VeeValidationMixin],
-  props: {
-    usePublishRules: {
-      type: Boolean,
-      default: false
-    }
-  },
+  mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGetters({
       getCountryDetails: 'countries/getCountryDetails',
