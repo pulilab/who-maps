@@ -42,7 +42,8 @@
 
       <div class="Column Header">
         <div class="Title">
-          Empty Column
+          <fa icon="info" />
+          Select an header to create a new column
         </div>
         <div>
           <el-select
@@ -84,6 +85,10 @@ export default {
     customFieldsLib: {
       type: Object,
       default: () => ({})
+    },
+    nameMapping: {
+      type: Object,
+      required: true
     }
   },
   data () {
@@ -99,37 +104,6 @@ export default {
         ...addendumFields,
         ...Object.keys(this.customFieldsLib)
       ];
-    },
-    nameMapping () {
-      return {
-        name: 'Project Name',
-        organisation: 'Organisation',
-        geographic_scope: 'Geographic Scope',
-        implementation_overview: 'Narrative of the project',
-        start_date: 'Start Date',
-        end_date: 'End Date',
-        contact_name: 'Contact name',
-        contact_email: 'Contact email',
-        platforms: 'Software',
-        health_focus_areas: 'Health Focus Areas',
-        hsc_challenges: 'Health System Challenges',
-        his_bucket: 'Health Information Systems',
-        government_investor: 'Governament Contribution',
-        implementing_partners: 'Partners',
-        implementation_dates: 'Technology Deployment Date',
-        licenses: 'Licenses',
-        repository: 'Link to Code documentation',
-        wiki: 'Link to Wiki',
-        mobile_application: 'Link to application',
-        interoperability_links: 'Interoperability Links',
-        interoperability_standards: 'Interoperability Standards',
-        health_workers: 'Health Workers',
-        clients: 'Clients',
-        facilities: 'Facilities',
-        sub_level: 'Coverage Type',
-        digitalHealthInterventions: 'Digital Health Interventions (associated to the Software)'
-
-      };
     },
     notUsedFields () {
       const selected = this.headers.map(h => h.selected).filter(s => s);
