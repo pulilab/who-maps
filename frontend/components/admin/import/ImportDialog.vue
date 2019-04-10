@@ -183,6 +183,10 @@ export default {
     imported: {
       type: Array,
       required: true
+    },
+    subLevels: {
+      type: Array,
+      required: true
     }
   },
   data () {

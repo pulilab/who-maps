@@ -4,6 +4,7 @@
       ref="dialog"
       :custom-fields-lib="customFieldsLib"
       :imported="rows"
+      :sub-levels="subLevels"
       @update="updateValue"
     />
     <el-card class="box-card">
@@ -201,10 +202,11 @@ export default {
       return { ...this.donorFieldsLib, ...this.countryFieldsLib };
     },
     subLevels () {
+      const nationalLevel = { id: 'National Level', name: 'National Level' };
       if (this.selectedCountry) {
-        return [{ id: 'National Level', name: 'National Level' }, ...this.selectedCountry.districts];
+        return [nationalLevel, ...this.selectedCountry.districts];
       }
-      return [];
+      return [nationalLevel];
     },
     saved () {
       return this.rawImport.rows.filter(r => r.project);
