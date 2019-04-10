@@ -6,6 +6,7 @@
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Implementation overview') | translate"
+      show-legend
     >
       <custom-required-form-item
         :error="errors.first('health_focus_areas')"

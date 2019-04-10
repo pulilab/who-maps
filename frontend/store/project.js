@@ -46,7 +46,7 @@ export const getters = {
   getCoverage: state => state.coverage.length === 0 ? [null] : state.coverage,
   getCoverageData: state => state.coverageData,
   getCoverageSecondLevel: state => state.coverage_second_level.length === 0 ? [null] : state.coverage_second_level,
-  getNationalLevelDeployment: state => ({ ...state.national_level_deployment }),
+  getNationalLevelDeployment: state => state.national_level_deployment ? { ...state.national_level_deployment } : {},
   getGovernmentInvestor: state => state.government_investor,
   getImplementingPartners: state => state.implementing_partners.length === 0 ? [null] : state.implementing_partners,
   getDonors: state => state.donors,

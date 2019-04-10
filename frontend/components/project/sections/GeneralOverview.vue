@@ -6,6 +6,7 @@
     <collapsible-card
       ref="collapsible"
       :title="$gettext('General overview') | translate"
+      show-legend
     >
       <custom-required-form-item
         :error="errors.first('name')"

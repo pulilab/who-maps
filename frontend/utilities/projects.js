@@ -85,6 +85,14 @@ export const draftRules = () => {
     },
     coverage: {},
     coverage_second_level: {},
+    national_level_deployment: {
+      health_workers: {
+      },
+      clients: {
+      },
+      facilities: {
+      }
+    },
     repository: {
       max: 256
     },
