@@ -31,7 +31,10 @@
           v-show="open"
           class="ContentContainer"
         >
-          <div class="Legend">
+          <div
+            v-if="showLegend"
+            class="Legend"
+          >
             <div>
               <span class="Required Draft">
                 <span>
@@ -70,6 +73,10 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    showLegend: {
+      type: Boolean,
+      default: false
     }
   },
   data () {

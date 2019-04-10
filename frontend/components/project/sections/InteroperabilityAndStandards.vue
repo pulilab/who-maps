@@ -6,6 +6,7 @@
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Interoperability &amp; Standards') "
+      show-legend
     >
       <custom-required-form-item
         prop="interoperability_links"
