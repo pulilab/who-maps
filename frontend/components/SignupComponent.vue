@@ -140,6 +140,7 @@ export default {
         if (valid) {
           try {
             // locale needs to be saved in this place due to i18n being unavailable right after the signup call
+            const message = this.$gettext('User created succesfully');
             const locale = this.$i18n.locale;
             this.$nuxt.$loading.start();
             await this.doSignup({
@@ -151,7 +152,7 @@ export default {
             const path = this.localePath({ ...this.$route, name: 'organisation-edit-profile' }, locale);
             this.$router.push(path);
             this.$message({
-              message: this.$gettext('User created succesfully'),
+              message,
               type: 'success',
               showClose: true
             });
