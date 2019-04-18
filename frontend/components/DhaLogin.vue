@@ -255,8 +255,8 @@ export default {
           confirmButtonText: this.$gettext('OK')
         }
       );
-      if (this.$raven) {
-        this.$raven.captureMessage('Un-caught validation error in project page', {
+      if (this.$sentry) {
+        this.$sentry.captureMessage('Un-caught validation error in project page', {
           level: 'warning',
           extra: {
             e

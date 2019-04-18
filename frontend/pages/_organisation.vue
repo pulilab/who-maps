@@ -21,8 +21,8 @@ export default {
     userProfile: {
       immediate: true,
       handler (profile) {
-        if (this.$raven) {
-          this.$raven.setUserContext(profile);
+        if (this.$sentry) {
+          this.$sentry.setUserContext(profile);
         }
       }
     }

@@ -186,9 +186,9 @@ export default {
       }, 300);
     },
     async unCaughtErrorHandler (errors) {
-      if (this.$raven) {
-        this.$raven.captureMessage('Un-caught validation error in project page', {
-          level: 'warning',
+      if (this.$sentry) {
+        this.$sentry.captureMessage('Un-caught validation error in project page', {
+          level: 'error',
           extra: {
             apiErrors: this.apiErrors,
             errors
