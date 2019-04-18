@@ -22,7 +22,9 @@ export default {
       immediate: true,
       handler (profile) {
         if (this.$sentry) {
-          this.$sentry.setUserContext(profile);
+          this.$sentry.configureScope(scope => {
+            scope.setUser(profile);
+          });
         }
       }
     }
