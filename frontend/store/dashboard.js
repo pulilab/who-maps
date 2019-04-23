@@ -216,6 +216,7 @@ export const actions = {
   },
   setPageSize ({ commit }, size) {
     commit('SET_PAGE_SIZE', size);
+    commit('SET_CURRENT_PAGE', 1);
   },
   setCurrentPage ({ commit }, page) {
     commit('SET_CURRENT_PAGE', page);
