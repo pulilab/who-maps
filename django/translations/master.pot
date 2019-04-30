@@ -23,7 +23,7 @@ msgstr ""
 msgid "{country} MoH"
 msgstr ""
 
-#: components/dashboard/MainTable.vue:212
+#: components/dashboard/CurrentPage.vue:2
 msgid "{min}-{max} of {total}"
 msgstr ""
 
@@ -32,8 +32,8 @@ msgid "{name} (me)"
 msgstr ""
 
 #: components/project/ProjectData.vue:319
-#: components/project/sections/CountryCustom.vue:67
-#: components/project/sections/DonorCustom.vue:64
+#: components/project/sections/CountryCustom.vue:62
+#: components/project/sections/DonorCustom.vue:59
 msgid "{name} custom fields"
 msgstr ""
 
@@ -70,17 +70,11 @@ msgid "&nbsp; {count} project(s)"
 msgstr ""
 
 #: components/project/CoverageField.vue:16
-#: components/project/CoverageFieldset.vue:73
 msgid "# Clients"
 msgstr ""
 
 #: components/project/CoverageField.vue:10
-#: components/project/CoverageFieldset.vue:43
 msgid "# Facilities"
-msgstr ""
-
-#: components/project/CoverageFieldset.vue:13
-msgid "# Health workers"
 msgstr ""
 
 #: components/project/CoverageField.vue:4
@@ -107,7 +101,7 @@ msgstr ""
 msgid "Accuracy of Content"
 msgstr ""
 
-#: components/project/ProjectForm.vue:430
+#: components/project/ProjectForm.vue:293
 msgid "Action cancelled"
 msgstr ""
 
@@ -125,7 +119,7 @@ msgstr ""
 msgid "Add Digital Health Interventions"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:50
+#: components/project/sections/ImplementationOverview.vue:53
 msgid "Add information about your Digital Health program activies"
 msgstr ""
 
@@ -137,16 +131,19 @@ msgstr ""
 msgid "Add new question"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:231
-msgid "Add Team members (Editor role)"
+#: components/project/sections/GeneralOverview.vue:251
+msgid "Add team members (editors)--can modify entry on Add New Project page"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:253
-msgid "Add Viewers (only Viewer role)"
+#: components/project/sections/GeneralOverview.vue:274
+msgid ""
+"Add team members (viewers)--can receive notification that project has been "
+"added"
 msgstr ""
 
 #: components/BreadCrumb.vue:50 components/BreadCrumb.vue:51
-#: components/BreadCrumb.vue:52
+#: components/BreadCrumb.vue:52 components/BreadCrumb.vue:53
+#: components/BreadCrumb.vue:54
 msgid "Admin"
 msgstr ""
 
@@ -238,7 +235,7 @@ msgstr ""
 msgid "Ask our experts"
 msgstr ""
 
-#: components/BreadCrumb.vue:61 components/common/ProjectBar.vue:91
+#: components/BreadCrumb.vue:63 components/common/ProjectBar.vue:91
 #: components/common/ProjectCardActions.vue:39
 msgid "Assessment"
 msgstr ""
@@ -254,7 +251,7 @@ msgid ""
 "            suspension, cancellation, or termination."
 msgstr ""
 
-#: components/project/ProjectForm.vue:416
+#: components/project/ProjectForm.vue:279
 #: angular/Assessment/CountryMap/CountryMapController.js:41
 msgid "Attention"
 msgstr ""
@@ -338,10 +335,16 @@ msgstr ""
 msgid "Can view when a project is approved/declined"
 msgstr ""
 
-#: components/project/sections/TechnologyOverview.vue:36
-msgid ""
-"Can you provide links to code documentation, a demo of the application or "
-"the software wikipage?"
+#: components/project/sections/TechnologyOverview.vue:76
+msgid "Can you provide a link to a demo of the application?"
+msgstr ""
+
+#: components/project/sections/TechnologyOverview.vue:54
+msgid "Can you provide a link to code documentation?"
+msgstr ""
+
+#: components/project/sections/TechnologyOverview.vue:99
+msgid "Can you provide a link to the software wikipage?"
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:151 components/admin/DhaQuestion.vue:181
@@ -351,7 +354,7 @@ msgstr ""
 #: components/dialogs/DigitalHealthInterventionsDialog.vue:46
 #: components/dialogs/ProjectApprovalDialog.vue:127
 #: components/dialogs/SaveFilterDialog.vue:36
-#: components/project/ProjectForm.vue:418
+#: components/project/ProjectForm.vue:281
 #: components/project/ProjectNavigation.vue:179
 #: angular/Cms/AddNewContent/AddNewContentDialog.html:100
 #: angular/Cms/CommentWidget/CommentWidget.html:46
@@ -392,28 +395,28 @@ msgstr ""
 msgid "Click on the map to view the digital health project information."
 msgstr ""
 
-#: components/project/CoverageFieldset.vue:77
+#: components/project/CoverageFieldset.vue:79
 msgid ""
 "Client users refers to all care recipients who have direct access to the "
 "software.  If there are no users of this type, put 0."
 msgstr ""
 
-#: components/project/ProjectForm.vue:403
-#: components/project/ProjectForm.vue:445
+#: components/project/ProjectForm.vue:266
+#: components/project/ProjectForm.vue:308
 #: angular/Assessment/CountryMap/CountryMapController.js:43
 msgid "Close"
 msgstr ""
 
 #: components/project/ProjectData.vue:160
-msgid "Code documentation or dowlonad link"
+msgid "Code documentation or download link"
 msgstr ""
 
 #: components/dialogs/DigitalHealthInterventionsDialog.vue:61
 msgid "Confirm"
 msgstr ""
 
-#: components/project/ProjectForm.vue:402
-#: components/project/ProjectForm.vue:444
+#: components/project/ProjectForm.vue:265
+#: components/project/ProjectForm.vue:307
 msgid "Congratulation"
 msgstr ""
 
@@ -434,12 +437,12 @@ msgid "Contact {selected} selected"
 msgstr ""
 
 #: components/project/ProjectData.vue:60
-#: components/project/sections/GeneralOverview.vue:210
+#: components/project/sections/GeneralOverview.vue:229
 msgid "Contact email"
 msgstr ""
 
 #: components/project/ProjectData.vue:54
-#: components/project/sections/GeneralOverview.vue:186
+#: components/project/sections/GeneralOverview.vue:203
 msgid "Contact name"
 msgstr ""
 
@@ -526,7 +529,7 @@ msgstr ""
 msgid "Create your search here"
 msgstr ""
 
-#: components/BreadCrumb.vue:53 components/BreadCrumb.vue:54
+#: components/BreadCrumb.vue:55 components/BreadCrumb.vue:56
 #: components/common/TopBar.vue:81
 msgid "Dashboard"
 msgstr ""
@@ -540,19 +543,19 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:70
+#: components/project/sections/GeneralOverview.vue:77
 msgid ""
 "Describe the user types, geographic coverage and other coverage details."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:111
+#: components/project/sections/GeneralOverview.vue:126
 msgid ""
 "Describe what the technology aims to achieve, detailing the users, the "
 "reasons for deploying the system, and current and future phases of "
 "deployment."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:97
+#: components/project/sections/GeneralOverview.vue:110
 msgid "Describe your overall digital health project design."
 msgstr ""
 
@@ -581,7 +584,7 @@ msgstr ""
 msgid "Digital Health Interventions"
 msgstr ""
 
-#: components/project/ProjectForm.vue:340
+#: components/project/ProjectForm.vue:203
 msgid "Discard changes"
 msgstr ""
 
@@ -610,7 +613,7 @@ msgstr ""
 msgid "Districts center pin"
 msgstr ""
 
-#: components/project/sections/InteroperabilityAndStandards.vue:9
+#: components/project/sections/InteroperabilityAndStandards.vue:16
 msgid ""
 "Does your project share information with one or more of these digital Health "
 "Information System components?"
@@ -628,11 +631,11 @@ msgstr ""
 msgid "Draft"
 msgstr ""
 
-#: components/project/ProjectForm.vue:424
+#: components/project/ProjectForm.vue:287
 msgid "Draft overriden with published version"
 msgstr ""
 
-#: components/BreadCrumb.vue:58
+#: components/BreadCrumb.vue:60
 msgid "Drafted Project"
 msgstr ""
 
@@ -655,7 +658,7 @@ msgstr ""
 msgid "Edit my profile"
 msgstr ""
 
-#: components/BreadCrumb.vue:57
+#: components/BreadCrumb.vue:59
 msgid "Edit Project"
 msgstr ""
 
@@ -691,11 +694,11 @@ msgstr ""
 msgid "Email:"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:164
+#: components/project/sections/GeneralOverview.vue:180
 msgid "End date"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:317
+#: components/project/sections/GeneralOverview.vue:333
 msgid "End date must be after Start date"
 msgstr ""
 
@@ -721,7 +724,7 @@ msgstr ""
 msgid "Facilities"
 msgstr ""
 
-#: components/project/ProjectForm.vue:286
+#: components/project/ProjectForm.vue:149
 msgid "Failed to restore auto-saved project"
 msgstr ""
 
@@ -773,7 +776,7 @@ msgstr ""
 msgid "Geographic Scope"
 msgstr ""
 
-#: components/dashboard/PdfExport.vue:243
+#: components/dashboard/PdfExport.vue:244
 msgid "Geographical coverage:"
 msgstr ""
 
@@ -793,7 +796,7 @@ msgstr ""
 msgid "Go to Dashboard"
 msgstr ""
 
-#: components/dashboard/PdfExport.vue:198
+#: components/dashboard/PdfExport.vue:199
 msgid "Go to project"
 msgstr ""
 
@@ -809,7 +812,7 @@ msgstr ""
 msgid "Government Investor"
 msgstr ""
 
-#: components/dashboard/PdfExport.vue:208
+#: components/dashboard/PdfExport.vue:209
 msgid "Government investor:"
 msgstr ""
 
@@ -826,7 +829,7 @@ msgstr ""
 msgid "Government Viewers"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:188
+#: components/project/sections/ImplementationOverview.vue:204
 msgid ""
 "Has the government contributed to the project, either financially or in-kind?"
 msgstr ""
@@ -840,7 +843,7 @@ msgstr ""
 msgid "Has to be a valid email address"
 msgstr ""
 
-#: components/project/CoverageFieldset.vue:47
+#: components/project/CoverageFieldset.vue:48
 msgid ""
 "Health facilities using the system refers to all facilities that have direct "
 "access to the software. If there are no users of this type, put 0."
@@ -851,7 +854,7 @@ msgstr ""
 msgid "Health Focus Area"
 msgstr ""
 
-#: components/dashboard/PdfExport.vue:220
+#: components/dashboard/PdfExport.vue:221
 msgid "Health Focus Area:"
 msgstr ""
 
@@ -905,6 +908,18 @@ msgstr ""
 
 #: components/dialogs/ProjectApprovalDialog.vue:73
 msgid "History"
+msgstr ""
+
+#: components/project/CoverageFieldset.vue:75
+msgid "How many clients use the system?"
+msgstr ""
+
+#: components/project/CoverageFieldset.vue:44
+msgid "How many facilities use the system?"
+msgstr ""
+
+#: components/project/CoverageFieldset.vue:13
+msgid "How many health workers use the system?"
 msgstr ""
 
 #: pages/_organisation/terms.vue:143
@@ -973,11 +988,11 @@ msgid "I request to join the investor group below:"
 msgstr ""
 
 #: components/project/SubNationalLevelDeployment.vue:8
-#: components/project/SubNationalLevelDeployment.vue:51
+#: components/project/SubNationalLevelDeployment.vue:53
 msgid "If subnational, which {name} does your project cover?"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:18
+#: components/project/sections/GeneralOverview.vue:20
 msgid ""
 "If this is your first time uploading a project, a sample data form can be "
 "found here for reference."
@@ -999,7 +1014,7 @@ msgid ""
 "using the details below:"
 msgstr ""
 
-#: components/project/sections/InteroperabilityAndStandards.vue:33
+#: components/project/sections/InteroperabilityAndStandards.vue:42
 msgid ""
 "If your data standards are not available here, please email "
 "digitalhealthatlas@gmail.com"
@@ -1023,6 +1038,10 @@ msgstr ""
 
 #: components/dashboard/SearchBox.vue:94
 msgid "Implementing Partners"
+msgstr ""
+
+#: components/common/UserDropdown.vue:103
+msgid "Import interface"
 msgstr ""
 
 #: components/admin/FacilityImport.vue:20
@@ -1059,7 +1078,7 @@ msgstr ""
 msgid "In-country support to DHA"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:54
+#: components/project/sections/ImplementationOverview.vue:57
 msgid ""
 "Include all software that is part of your project. If you cannot find your "
 "software listed in the options, send an email to digitalhealthatlas@gmail."
@@ -1074,7 +1093,7 @@ msgstr ""
 msgid "Interoperability"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:261
+#: components/project/sections/ImplementationOverview.vue:279
 msgid ""
 "Investment partners can include those contributing funds, human resources or "
 "in-kind support."
@@ -1140,11 +1159,10 @@ msgid "Investor(s)"
 msgstr ""
 
 #: components/dashboard/MainTable.vue:98 components/dashboard/SearchBox.vue:100
-#: components/project/sections/ImplementationOverview.vue:257
 msgid "Investors"
 msgstr ""
 
-#: components/dashboard/PdfExport.vue:215
+#: components/dashboard/PdfExport.vue:216
 msgid "Investors:"
 msgstr ""
 
@@ -1157,16 +1175,15 @@ msgid "Limitations on Liability"
 msgstr ""
 
 #: components/project/ProjectData.vue:166
-#: components/project/sections/TechnologyOverview.vue:48
 msgid "Link to the application"
 msgstr ""
 
-#: components/project/sections/TechnologyOverview.vue:60
+#: components/project/sections/TechnologyOverview.vue:92
 msgid "Link to the wiki page"
 msgstr ""
 
 #: components/project/ProjectData.vue:172
-msgid "Link to wiki or project webside"
+msgid "Link to wiki or project website"
 msgstr ""
 
 #: components/dashboard/PdfExport.vue:52
@@ -1217,7 +1234,7 @@ msgstr ""
 msgid "Logo"
 msgstr ""
 
-#: components/common/UserDropdown.vue:100
+#: components/common/UserDropdown.vue:115
 msgid "Logout"
 msgstr ""
 
@@ -1310,12 +1327,13 @@ msgstr ""
 msgid "My profile"
 msgstr ""
 
-#: components/BreadCrumb.vue:55 components/common/TopBar.vue:91
+#: components/BreadCrumb.vue:57 components/common/TopBar.vue:91
 #: components/landing/MyProjectsBox.vue:8
 #: pages/_organisation/projects/index.vue:3
 msgid "My Projects"
 msgstr ""
 
+#: components/common/OrganisationItem.vue:8
 #: components/project/CustomReadonlyField.vue:9
 #: components/project/CustomReadonlyField.vue:22
 #: components/project/InteroperabilityLinksList.vue:16
@@ -1332,11 +1350,11 @@ msgstr ""
 #: components/common/map/SwitchViewBox.vue:3
 #: components/common/map/TabbedCardProjectList.vue:27
 #: components/project/ProjectData.vue:311
-#: components/project/sections/ImplementationOverview.vue:150
+#: components/project/sections/ImplementationOverview.vue:161
 msgid "National"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:168
+#: components/project/sections/ImplementationOverview.vue:181
 msgid "National level deployment"
 msgstr ""
 
@@ -1348,7 +1366,7 @@ msgstr ""
 msgid "New order saved"
 msgstr ""
 
-#: components/BreadCrumb.vue:60 components/common/TopBar.vue:113
+#: components/BreadCrumb.vue:62 components/common/TopBar.vue:113
 msgid "New Project"
 msgstr ""
 
@@ -1357,6 +1375,7 @@ msgid "New requests"
 msgstr ""
 
 #: components/admin/ApprovalTag.vue:11 components/admin/ProjectApproval.vue:143
+#: components/admin/import/ImportDialog.vue:104
 #: components/dashboard/MainTable.vue:80 components/dashboard/PdfExport.vue:149
 #: components/project/CustomField.vue:45
 #: angular/Cms/ReportDeleteButton/ReportDeleteButton.html:22
@@ -1388,7 +1407,7 @@ msgid ""
 msgstr ""
 
 #: components/project/ProjectData.vue:314
-#: components/project/sections/ImplementationOverview.vue:201
+#: components/project/sections/ImplementationOverview.vue:217
 msgid "No, they have not yet contributed"
 msgstr ""
 
@@ -1409,14 +1428,14 @@ msgid "of."
 msgstr ""
 
 #: components/dialogs/ProjectApprovalDialog.vue:266
-#: components/project/ProjectForm.vue:417
+#: components/project/ProjectForm.vue:280
 msgid "Ok"
 msgstr ""
 
 #: components/DhaLogin.vue:255 components/admin/DhaQuestion.vue:150
 #: components/admin/DhaQuestion.vue:180
 #: components/dashboard/FilterPresetsActions.vue:111
-#: components/project/ProjectForm.vue:287
+#: components/project/ProjectForm.vue:150
 msgid "OK"
 msgstr ""
 
@@ -1449,7 +1468,7 @@ msgstr ""
 msgid "Organisation Name"
 msgstr ""
 
-#: components/dashboard/PdfExport.vue:211
+#: components/dashboard/PdfExport.vue:212
 msgid "Organisation name:"
 msgstr ""
 
@@ -1457,7 +1476,7 @@ msgstr ""
 msgid "Other Terms"
 msgstr ""
 
-#: components/dashboard/PdfExport.vue:234
+#: components/dashboard/PdfExport.vue:235
 msgid "Overview of digital health implementation:"
 msgstr ""
 
@@ -1489,11 +1508,11 @@ msgstr ""
 msgid "Personal Information"
 msgstr ""
 
-#: components/project/sections/TechnologyOverview.vue:14
+#: components/project/sections/TechnologyOverview.vue:21
 msgid "Pick a day"
 msgstr ""
 
-#: components/BreadCrumb.vue:59 components/common/TopBar.vue:100
+#: components/BreadCrumb.vue:61 components/common/TopBar.vue:100
 #: angular/Cms/StaticInfoWidget/StaticInfoWidget.html:4
 msgid "Planning and Guidance"
 msgstr ""
@@ -1505,7 +1524,7 @@ msgid ""
 "focus area(s), software features and national scale."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:85
+#: components/project/sections/GeneralOverview.vue:94
 msgid "Please describe where your implementation is currently taking place"
 msgstr ""
 
@@ -1521,7 +1540,7 @@ msgstr ""
 msgid "Please fill your profile first"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:93
+#: components/project/sections/GeneralOverview.vue:106
 msgid ""
 "Please provide a narrative summary of the digital health implementation."
 msgstr ""
@@ -1536,11 +1555,11 @@ msgid ""
 "Website."
 msgstr ""
 
-#: components/project/ProjectForm.vue:309
+#: components/project/ProjectForm.vue:172
 msgid "Please select one or more Digital Health Intervetions for this Software"
 msgstr ""
 
-#: components/dashboard/PdfExport.vue:227
+#: components/dashboard/PdfExport.vue:228
 msgid "Point of contact:"
 msgstr ""
 
@@ -1610,31 +1629,26 @@ msgstr ""
 msgid "Project country"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:50
-msgid "Project Country"
-msgstr ""
-
-#: components/project/sections/GeneralOverview.vue:235
+#: components/project/sections/GeneralOverview.vue:255
 msgid "Project editors can change and update all project information."
 msgstr ""
 
 #: components/project/ProjectData.vue:45
-#: components/project/sections/GeneralOverview.vue:154
+#: components/project/sections/GeneralOverview.vue:170
 msgid "Project end date"
 msgstr ""
 
 #: components/dashboard/MainTable.vue:21 components/dashboard/SearchBox.vue:70
 #: components/project/ProjectData.vue:10
-#: components/project/sections/GeneralOverview.vue:14
 msgid "Project Name"
 msgstr ""
 
 #: components/project/ProjectData.vue:38
-#: components/project/sections/GeneralOverview.vue:124
+#: components/project/sections/GeneralOverview.vue:140
 msgid "Project start date"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:257
+#: components/project/sections/GeneralOverview.vue:278
 msgid "Project viewers will be able to view the full project details."
 msgstr ""
 
@@ -1648,7 +1662,7 @@ msgstr ""
 msgid "Published"
 msgstr ""
 
-#: components/BreadCrumb.vue:56
+#: components/BreadCrumb.vue:58
 msgid "Published Project"
 msgstr ""
 
@@ -1680,7 +1694,7 @@ msgstr ""
 msgid "Reason"
 msgstr ""
 
-#: components/project/ProjectForm.vue:339
+#: components/project/ProjectForm.vue:202
 msgid "Recover & Reload"
 msgstr ""
 
@@ -1698,6 +1712,14 @@ msgstr ""
 
 #: components/admin/DhaQuestion.vue:57
 msgid "Required"
+msgstr ""
+
+#: components/project/CollapsibleCard.vue:56
+msgid "Required to publish"
+msgstr ""
+
+#: components/project/CollapsibleCard.vue:44
+msgid "Required to save draft"
 msgstr ""
 
 #: components/DhaLogin.vue:153
@@ -1765,6 +1787,8 @@ msgstr ""
 msgid "Select fields to include in your search"
 msgstr ""
 
+#: components/admin/import/ImportDialog.vue:109
+#: components/admin/import/ImportDialog.vue:124
 #: components/dialogs/filters/HealthFocusAreaFilter.vue:2
 #: components/dialogs/filters/HealthInformationSystemFilter.vue:2
 #: components/dialogs/filters/HealthSystemChallengesFilter.vue:2
@@ -1773,7 +1797,7 @@ msgstr ""
 #: components/project/HealthFocusAreasSelector.vue:1
 #: components/project/HealthSystemChallengesSelector.vue:1
 #: components/project/PlatformSelector.vue:1
-#: components/project/SubNationalLevelDeploymentItem.vue:7
+#: components/project/SubNationalLevelDeploymentItem.vue:11
 msgid "Select from list"
 msgstr ""
 
@@ -1863,7 +1887,6 @@ msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:70
 #: components/project/PlatformsList.vue:7
-#: components/project/sections/ImplementationOverview.vue:60
 msgid "Software"
 msgstr ""
 
@@ -1879,7 +1902,7 @@ msgstr ""
 msgid "Specify URL"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:134
+#: components/project/sections/GeneralOverview.vue:150
 msgid "Start date"
 msgstr ""
 
@@ -1889,7 +1912,7 @@ msgstr ""
 
 #: components/common/map/SwitchViewBox.vue:3
 #: components/common/map/TabbedCardProjectList.vue:5
-#: components/project/sections/ImplementationOverview.vue:147
+#: components/project/sections/ImplementationOverview.vue:158
 msgid "Sub-national"
 msgstr ""
 
@@ -1897,7 +1920,7 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:139
+#: components/project/sections/ImplementationOverview.vue:150
 msgid "Subnational may include district, regional, provincial, county levels."
 msgstr ""
 
@@ -1983,7 +2006,7 @@ msgid ""
 "            licensed or knowledgeable in that area."
 msgstr ""
 
-#: components/project/ProjectForm.vue:416
+#: components/project/ProjectForm.vue:279
 msgid "The current draft will be overwritten by the published version"
 msgstr ""
 
@@ -2055,7 +2078,7 @@ msgid ""
 "        please try again"
 msgstr ""
 
-#: components/project/ProjectForm.vue:337
+#: components/project/ProjectForm.vue:200
 msgid ""
 "There was an un-caught validation error an automatic report has been "
 "submitted"
@@ -2116,7 +2139,7 @@ msgstr ""
 msgid "This is required"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:190
+#: components/project/sections/GeneralOverview.vue:207
 msgid ""
 "This is the individual who will be the lead point of contact for any queries "
 "through the DHA."
@@ -2230,7 +2253,7 @@ msgstr ""
 msgid "To provide information or services to you as requested by you."
 msgstr ""
 
-#: components/BreadCrumb.vue:62 components/BreadCrumb.vue:63
+#: components/BreadCrumb.vue:64 components/BreadCrumb.vue:65
 #: components/common/ToolkitDialogWrapper.vue:8
 #: components/common/ToolkitDialogWrapper.vue:24
 msgid "Toolkit"
@@ -2238,7 +2261,7 @@ msgstr ""
 
 #: components/common/OrganisationSelect.vue:1
 #: components/project/DonorSelector.vue:1
-#: components/project/FacilitySelector.vue:7
+#: components/project/FacilitySelector.vue:8
 #: components/project/TeamSelector.vue:1
 msgid "Type and select a name"
 msgstr ""
@@ -2261,7 +2284,7 @@ msgstr ""
 msgid "Under what license is the project governed"
 msgstr ""
 
-#: components/project/sections/TechnologyOverview.vue:24
+#: components/project/sections/TechnologyOverview.vue:37
 msgid "Under what license is the project governed?"
 msgstr ""
 
@@ -2294,7 +2317,7 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-#: components/SignupComponent.vue:154
+#: components/SignupComponent.vue:143
 msgid "User created succesfully"
 msgstr ""
 
@@ -2339,8 +2362,8 @@ msgstr ""
 #: components/dashboard/FilterPresetsActions.vue:110
 #: components/dialogs/DialogsContainer.vue:39
 #: components/dialogs/ProjectApprovalDialog.vue:264
-#: components/project/ProjectForm.vue:286
-#: components/project/ProjectForm.vue:338
+#: components/project/ProjectForm.vue:149
+#: components/project/ProjectForm.vue:201
 #: pages/_organisation/projects/_id.vue:33
 msgid "Warning"
 msgstr ""
@@ -2453,61 +2476,66 @@ msgstr ""
 msgid "Welcome!"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:33
+#: components/project/sections/ImplementationOverview.vue:36
 msgid ""
 "What are the Health System Challenges addressed by the Digital Health "
 "Intervention?"
 msgstr ""
 
+#: components/project/sections/ImplementationOverview.vue:72
+msgid "What are the names of the software included in the deployment?"
+msgstr ""
+
 #: components/project/ProjectData.vue:187
-#: components/project/sections/InteroperabilityAndStandards.vue:24
-#: components/project/sections/InteroperabilityAndStandards.vue:29
+#: components/project/sections/InteroperabilityAndStandards.vue:38
 msgid "What data standards does your digital health project use?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:85
+#: components/project/sections/ImplementationOverview.vue:95
 msgid "What Digital Health Intervention(s) are included in this software?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:117
+#: components/project/sections/ImplementationOverview.vue:128
 msgid ""
 "What health information system(s) in your country does this project support?"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:66
+#: components/project/sections/GeneralOverview.vue:73
 msgid "What is the geographic scope of the project?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:14
-msgid ""
-"What is the health focus area(s) addressed by the Digital Health "
-"Intervention?"
+#: components/project/sections/ImplementationOverview.vue:16
+msgid "What is the health focus area(s) addressed by the DHI?"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:35
+#: components/project/sections/GeneralOverview.vue:40
 msgid "What is the name of the lead organization?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:135
-msgid "What kind of coverage does your project have?"
+#: components/project/sections/GeneralOverview.vue:16
+msgid "What is the project name?"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:146
+msgid "What level of coverage does your project have (Sub-national, National)"
 msgstr ""
 
 #: components/project/ProjectData.vue:183
 msgid "What other system do you interoperate with ?"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:128
+#: components/project/sections/GeneralOverview.vue:144
 msgid ""
 "When did the overall project, not just the digital health component, start."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:158
+#: components/project/sections/GeneralOverview.vue:174
 msgid ""
 "When will the overall project be completed. If your project is ongoing, "
 "leave this field blank."
 msgstr ""
 
-#: components/project/sections/TechnologyOverview.vue:9
+#: components/project/sections/TechnologyOverview.vue:16
 msgid "When will the technology be first deployed?"
 msgstr ""
 
@@ -2546,8 +2574,16 @@ msgstr ""
 msgid "Whether you are an implementer, government, investor"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:216
+#: components/project/sections/GeneralOverview.vue:56
+msgid "Which country is the project located in?"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:234
 msgid "Who are your implementing partners?"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:275
+msgid "Who are your investment partners?"
 msgstr ""
 
 #: components/landing/InfoBox.vue:2
@@ -2564,6 +2600,7 @@ msgid "Wrong image format, you can only upload .jpg and .png files"
 msgstr ""
 
 #: components/admin/ApprovalTag.vue:8 components/admin/ProjectApproval.vue:143
+#: components/admin/import/ImportDialog.vue:101
 #: components/dashboard/MainTable.vue:77 components/dashboard/PdfExport.vue:149
 #: components/project/CustomField.vue:42
 #: angular/Cms/ReportDeleteButton/ReportDeleteButton.html:26
@@ -2575,12 +2612,12 @@ msgid "Yes - no field"
 msgstr ""
 
 #: components/project/ProjectData.vue:314
-#: components/project/sections/ImplementationOverview.vue:207
+#: components/project/sections/ImplementationOverview.vue:223
 msgid "Yes, there is a financial contribution through MOH budget"
 msgstr ""
 
 #: components/project/ProjectData.vue:314
-#: components/project/sections/ImplementationOverview.vue:204
+#: components/project/sections/ImplementationOverview.vue:220
 msgid "Yes, they are contributing in-kind people or time"
 msgstr ""
 
@@ -2622,11 +2659,11 @@ msgid ""
 "            through the Website."
 msgstr ""
 
-#: components/project/ProjectForm.vue:444
+#: components/project/ProjectForm.vue:307
 msgid "Your draft has been published successfully"
 msgstr ""
 
-#: components/project/ProjectForm.vue:402
+#: components/project/ProjectForm.vue:265
 msgid "Your draft has been saved successfully"
 msgstr ""
 

@@ -209,11 +209,7 @@
         :total="total"
         :layout="paginationOrderStr"
       >
-        <span class="PageCounter">
-          <translate :parameters="{min, max, total}">
-            {min}-{max} of {total}
-          </translate>
-        </span>
+        <current-page />
       </el-pagination>
     </div>
   </div>
@@ -230,6 +226,7 @@ import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
 import DonorsList from '../common/list/DonorsList';
 import RegionItem from '../common/RegionItem';
 import CustomAnswersCell from './CustomAnswersCell';
+import CurrentPage from '@/components/dashboard/CurrentPage';
 import { setTimeout } from 'timers';
 
 export default {
@@ -240,7 +237,8 @@ export default {
     HealthFocusAreasList,
     DonorsList,
     RegionItem,
-    CustomAnswersCell
+    CustomAnswersCell,
+    CurrentPage
   },
   data () {
     return {
@@ -264,13 +262,6 @@ export default {
       currentPage: ['dashboard', 'getCurrentPage', 'setCurrentPage', 0],
       sorting: ['dashboard', 'getSorting', 'setSorting', 0]
     }),
-    min () {
-      return 1 + this.pageSize * (this.currentPage - 1);
-    },
-    max () {
-      const max = this.pageSize * this.currentPage;
-      return max < this.total ? max : this.total;
-    },
     paginationOrderStr () {
       const loc = this.$i18n.locale;
       return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next';
