@@ -19,6 +19,7 @@
         <el-button
           class="DeleteColumnButton"
           size="mini"
+          type="danger"
           @click="rmHeader(index)"
         >
           <fa icon="times" />
@@ -43,7 +44,7 @@
       <div class="Column Header">
         <div class="Title">
           <fa icon="info" />
-          Select an header to create a new column
+          <translate>Select an header to create a new column</translate>
         </div>
         <div>
           <el-select
@@ -202,6 +203,8 @@ export default {
   .HeaderSelect{
     position: absolute;
     bottom: 4px;
+    left: 3.5px;
+    width: 192px;
   }
 }
 </style>

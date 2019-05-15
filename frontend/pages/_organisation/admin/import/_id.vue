@@ -36,7 +36,9 @@
                   size="small"
                   @click="saveAll"
                 >
-                  Save All
+                  <translate>
+                    Save All
+                  </translate>
                 </el-button>
               </import-headers>
               <div class="Rows">
@@ -56,7 +58,7 @@
                             v-if="row.project"
                             :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
                             target="_blank"
-                            class="NuxtLink IconLeft"
+                            class="el-button el-button--info el-button--mini"
                           >
                             <fa icon="share-square" />
                           </a>
@@ -87,7 +89,7 @@
                     <div
                       class="Column Thin"
                     >
-                      <el-button-group>
+                      <div class="ButtonList">
                         <el-button
                           :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
                           size="mini"
@@ -99,19 +101,12 @@
                         <el-button
                           size="mini"
                           class="DeleteButton"
+                          type="danger"
                           @click="deleteRow(row, index)"
                         >
                           <fa icon="times" />
                         </el-button>
-                        <a
-                          v-if="row.project"
-                          :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
-                          target="_blank"
-                          class="NuxtLink IconLeft"
-                        >
-                          <fa icon="share-square" />
-                        </a>
-                      </el-button-group>
+                      </div>
                     </div>
                     <template
                       v-for="header in rawImport.header_mapping"
@@ -378,7 +373,6 @@ export default {
       display: flex;
       flex-flow: column wrap;
 
-
       .Rows {
         height: 50vh;
         flex-shrink: 0;
@@ -405,6 +399,7 @@ export default {
       }
 
       .Column {
+        box-sizing: border-box;
         flex: 0 0 200px;
         max-height: 200px;
         padding: 10px;
@@ -416,12 +411,8 @@ export default {
           border-width: 0 1px 1px 1px;
         }
 
-        &.Wide {
-          flex: 1 0 100%;
-        }
-
         &.Thin {
-          flex: 0 0 75px;
+          flex: 0 0 100px;
         }
 
         &.Fluid {
@@ -439,9 +430,14 @@ export default {
           font-weight: 700;
         }
       }
+      .ButtonList {
+        display: inline-flex;
+        width: 100%;
 
-      .SaveButton, .DeleteButton {
-        margin-left: 6px;
+        .SaveButton, .DeleteButton {
+          margin-left: 0px;
+          color: white;
+        }
       }
     }
   }
