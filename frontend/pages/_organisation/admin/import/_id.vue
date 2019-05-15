@@ -16,11 +16,13 @@
         <template
           v-slot:default="{globalErrors, rules, nameMapping}"
         >
-          <el-switch
-            v-model="showSaved"
-            active-text="Show saved projects"
-            inactive-text="Hide saved projects"
-          />
+          <div class="SavedSwitch">
+            <el-switch
+              v-model="showSaved"
+              active-text="Show saved projects"
+              inactive-text="Hide saved projects"
+            />
+          </div>
           <div class="ExportDataTable">
             <div class="Container">
               <import-headers
@@ -29,8 +31,12 @@
                 :custom-fields-lib="customFieldsLib"
                 :name-mapping="nameMapping"
               >
-                <el-button @click="saveAll">
-                  <fa icon="save" />
+                <el-button
+                  type="primary"
+                  size="small"
+                  @click="saveAll"
+                >
+                  Save All
                 </el-button>
               </import-headers>
               <div class="Rows">
@@ -354,6 +360,10 @@ export default {
     }
   }
 
+  .SavedSwitch {
+    margin: 12px 0;
+  }
+
   .ExportDataTable {
     width: 100%;
     margin: 0;
@@ -368,23 +378,30 @@ export default {
       display: flex;
       flex-flow: column wrap;
 
+
       .Rows {
         height: 50vh;
         flex-shrink: 0;
+
+        .Row {
+          flex: 1 100%;
+          display: flex;
+          flex-direction: row;
+
+          &:last-child {
+              border-right: 0;
+
+            .Column {
+              border-bottom: 0;
+            }
+          }
+        }
       }
 
       .Row {
         flex: 1 100%;
         display: flex;
         flex-direction: row;
-
-        &:last-child {
-            border-right: 0;
-
-          .Column {
-            border-bottom: 0;
-          }
-        }
       }
 
       .Column {
@@ -394,6 +411,10 @@ export default {
         border: solid @colorGrayLight;
         border-width: 0 1px 1px 0;
         overflow-y: auto;
+
+        &:first-child {
+          border-width: 0 1px 1px 1px;
+        }
 
         &.Wide {
           flex: 1 0 100%;

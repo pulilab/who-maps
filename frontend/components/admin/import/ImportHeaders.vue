@@ -4,7 +4,7 @@
       v-if="internalValue.length > 0"
       class="Row"
     >
-      <div class="Column Thin">
+      <div class="Column Thin Header">
         <slot />
       </div>
 
@@ -165,18 +165,31 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
 .Headers {
   position: sticky;
   top:0;
   z-index: 10;
 
-  .Column.Header {
-    position: relative;
-    background-color: #F5F5F5;
-    z-index: 10;
+  .Row {
+    .Column {
+      &.Header {
+        border-width: 1px 1px 1px 0;
+        position: relative;
+        background-color: #F5F5F5;
+        z-index: 10;
+        overflow: hidden;
+
+        &:first-child {
+          border-width: 1px;
+        }
+      }
+    }
   }
+
   .Title {
     margin-right: 8px;
   }
