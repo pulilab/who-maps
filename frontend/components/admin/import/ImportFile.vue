@@ -6,7 +6,9 @@
   >
     <el-form-item>
       <div slot="label">
-        Select File
+        <translate>
+          Select File
+        </translate>
       </div>
       <input
         type="file"
@@ -15,7 +17,9 @@
     </el-form-item>
     <el-form-item>
       <div slot="label">
-        Select Sheet
+        <translate>
+          Select Sheet
+        </translate>
       </div>
       <xlsx-read
         :file="inputFile"
@@ -51,7 +55,9 @@
     </el-form-item>
     <el-form-item>
       <div slot="label">
-        Select Country
+        <translate>
+          Select Country
+        </translate>
       </div>
       <country-select
         v-model="country"
@@ -59,7 +65,9 @@
     </el-form-item>
     <el-form-item>
       <div slot="label">
-        Select Investor
+        <translate>
+          Select Investor
+        </translate>
       </div>
       <donor-select
         v-model="donor"
@@ -70,14 +78,20 @@
       class="DraftOrPublished"
     >
       <div slot="label">
-        Draft or Publish
+        <translate>
+          Draft or Publish
+        </translate>
       </div>
       <el-radio-group v-model="isDraftOrPublish">
         <el-radio label="draft">
-          Draft
+          <translate>
+            Draft
+          </translate>
         </el-radio>
         <el-radio label="publish">
-          Publish
+          <translate>
+            Publish
+          </translate>
         </el-radio>
       </el-radio-group>
     </el-form-item>
@@ -85,7 +99,9 @@
       class="ConfirmSettings"
     >
       <el-button @click="save">
-        Import
+        <translate>
+          Import
+        </translate>
       </el-button>
     </el-form-item>
   </el-form>

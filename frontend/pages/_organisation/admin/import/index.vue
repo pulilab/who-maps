@@ -10,7 +10,7 @@
             slot="header"
             class="clearfix"
           >
-            <span>Previous imports</span>
+            <translate>Previous imports</translate>
           </div>
           <import-details
             v-for="(item, index) in queue"
@@ -19,7 +19,9 @@
             type="flex"
           >
             <el-button @click="select(item)">
-              Select
+              <translate>
+                Select
+              </translate>
             </el-button>
           </import-details>
         </el-card>
@@ -30,7 +32,7 @@
             slot="header"
             class="clearfix"
           >
-            <span>New Import</span>
+            <translate>New Import</translate>
           </div>
           <import-file />
         </el-card>

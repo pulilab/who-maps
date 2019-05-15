@@ -6,34 +6,42 @@
     <el-row type="flex">
       <el-col :span="6">
         <div class="Label">
-          Selected Country
+          <translate>Selected Country</translate>
         </div>
         <country-item :id="item.country" />
       </el-col>
 
       <el-col :span="6">
         <div class="Label">
-          Selected Investor
+          <translate>
+            Selected Investor
+          </translate>
         </div>
         <donor-item :id="item.donor" />
       </el-col>
 
       <el-col :span="4">
         <div class="Label">
-          Draft or Published
+          <translate>
+            Draft or Published
+          </translate>
         </div>
         <span v-if="item.draft">Draft</span>
         <span v-else>Publish</span>
       </el-col>
       <el-col :span="8">
         <div class="Label">
-          Sheet Name
+          <translate>
+            Sheet Name
+          </translate>
         </div>
         {{ item.sheet_name }}
       </el-col>
       <el-col :span="20">
         <div class="Label">
-          File Name
+          <translate>
+            File Name
+          </translate>
         </div>
         {{ item.filename }}
       </el-col>
