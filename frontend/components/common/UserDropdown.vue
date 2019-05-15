@@ -91,7 +91,7 @@
         </div>
 
         <div
-          v-if="isSuperUser"
+          v-if="isUserCA || isUserDA"
           class="DropdownLink"
         >
           <nuxt-link
@@ -140,9 +140,6 @@ export default {
     ...mapGetters({
       user: 'user/getProfile'
     }),
-    isSuperUser () {
-      return this.user && this.user.is_superuser;
-    },
     isUserCA () {
       return (this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)) || this.isSuperUser;
     },
