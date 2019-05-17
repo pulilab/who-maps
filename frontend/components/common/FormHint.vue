@@ -2,6 +2,7 @@
   <div class="FormHint">
     <div class="Trigger">
       <slot /> <fa
+        class="HintToggle"
         icon="question-circle"
         @click="show = !show"
       />
@@ -31,6 +32,10 @@ export default {
 .FormHint {
   display: inline-flex;
   flex-flow: row wrap;
+
+  .HintToggle {
+    cursor: pointer;
+   }
 
   .Hint {
     margin-top: -10px;
