@@ -20,7 +20,7 @@
         <donor-item :id="item.donor" />
       </el-col>
 
-      <el-col :span="4">
+      <el-col :span="6">
         <div class="Label">
           <translate>
             Draft or Published
@@ -37,7 +37,7 @@
         </div>
         {{ item.sheet_name }}
       </el-col>
-      <el-col :span="20">
+      <el-col :span="18">
         <div class="Label">
           <translate>
             File Name
