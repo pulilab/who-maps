@@ -23,7 +23,7 @@ msgstr ""
 msgid "{country} MoH"
 msgstr ""
 
-#: components/dashboard/MainTable.vue:212
+#: components/dashboard/CurrentPage.vue:2
 msgid "{min}-{max} of {total}"
 msgstr ""
 
