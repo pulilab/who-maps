@@ -153,9 +153,20 @@ export default {
           }
         ]
       };
-      const importItem = await this.addDataToQueue(importData);
-      this.$nuxt.$loading.finish('importXLSX');
-      this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: importItem.id }, query: undefined }));
+      try {
+        const importItem = await this.addDataToQueue(importData);
+        this.$nuxt.$loading.finish('importXLSX');
+        this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: importItem.id }, query: undefined }));
+      } catch {
+        this.$nuxt.$loading.finish('importXLSX');
+        await this.$alert(
+          this.$gettext('Note that all import files need to have a unique name. Please re-name the file and upload it again.'),
+          this.$gettext('Error'),
+          {
+            confirmButtonText: 'OK',
+            type: 'warning'
+          });
+      }
     }
   }
 };
