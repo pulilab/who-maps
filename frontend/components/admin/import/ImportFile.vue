@@ -16,7 +16,8 @@
           When importing your projects
         </translate>
         <a
-          href=""
+          href="/static/documents/DHA_Import_Template.xlsx"
+          download="DHA_Import_Template.xlsx"
           target="_blank"
         >
           <translate> you can use this file as a reference for the format of the data </translate>
