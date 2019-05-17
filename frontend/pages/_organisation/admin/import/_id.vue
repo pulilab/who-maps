@@ -248,34 +248,40 @@ export default {
     },
     async deleteRow (row, index) {
       try {
-        await this.$confirm('Are you sure? this operation is not reversible', 'Row Delete', {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        });
+        await this.$confirm(
+          this.$gettext('Note that once this column is deleted, you cannot recover the data.'),
+          this.$gettext('Row Delete'),
+          {
+            confirmButtonText: this.$gettext('OK'),
+            cancelButtonText: this.$gettext('Cancel'),
+            type: 'warning'
+          });
         await this.$axios.delete(`/api/projects/import-row/${row.id}/`);
         this.rawImport.rows.splice(index, 1);
       } catch (e) {
         this.$message({
           type: 'info',
-          message: 'Delete canceled'
+          message: this.$gettext('Delete canceled')
         });
       }
     },
     async singleRowSave (doSave, valid, scrollToError) {
       if (valid) {
         try {
-          await this.$confirm('Are you sure? this operation is not reversible once started', 'Save', {
-            confirmButtonText: 'OK',
-            cancelButtonText: 'Cancel',
-            type: 'warning'
-          });
+          await this.$confirm(
+            this.$gettext('Note that once you have saved this project, it will be uploaded to the DHA. You can access all of your saved Projects from your My Projects page.'),
+            this.$gettext('Save Project'),
+            {
+              confirmButtonText: this.$gettext('OK'),
+              cancelButtonText: this.$gettext('Cancel'),
+              type: 'warning'
+            });
           this.$nuxt.$loading.start('save');
           await this.doSingleRowSave(doSave);
         } catch (e) {
           this.$message({
             type: 'info',
-            message: 'Save canceled'
+            message: this.$gettext('Save canceled')
           });
         }
         this.$nuxt.$loading.finish('save');
@@ -301,16 +307,19 @@ export default {
     },
     async saveAll () {
       try {
-        await this.$confirm('Are you sure? this operation is not reversible once started', 'Bulk Save', {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        });
+        await this.$confirm(
+          this.$gettext('Note that once you have saved these projects, they will be uploaded to the DHA. You can access all saved projects from your My Projects page.'),
+          this.$gettext('Save all projects'),
+          {
+            confirmButtonText: this.$gettext('OK'),
+            cancelButtonText: this.$gettext('Cancel'),
+            type: 'warning'
+          });
         this.doSaveAll();
       } catch (e) {
         this.$message({
           type: 'info',
-          message: 'Bulk Save canceled'
+          message: this.$gettext('Save all projects canceled')
         });
       }
     },
