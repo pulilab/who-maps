@@ -210,9 +210,9 @@ export default {
               names: [label]
             };
           },
-          licenses: () => this.findProjectCollectionValue('licenses'),
+          licenses: () => this.findProjectCollectionValue('licenses', true),
           interoperability_links: () => this.findProjectCollectionValue('interoperability_links'),
-          interoperability_standards: () => this.findProjectCollectionValue('interoperability_standards'),
+          interoperability_standards: () => this.findProjectCollectionValue('interoperability_standards', true),
           sub_level: () => {
             const value = Array.isArray(this.value) ? this.value[0] : this.value;
             const level = this.subLevels.find(cf => cf.id === value || cf.name === value);
