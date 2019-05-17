@@ -138,11 +138,14 @@ export default {
   methods: {
     async rmHeader (index) {
       try {
-        await this.$confirm('Are you sure? this operation is not reversible', 'Column Delete', {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        });
+        await this.$confirm(
+          this.$gettext('Are you sure? this operation is not reversible'),
+          this.$gettext('Column Delete'),
+          {
+            confirmButtonText: this.$gettext('OK'),
+            cancelButtonText: this.$gettext('Cancel'),
+            type: 'warning'
+          });
         this.$delete(this.internalValue, index);
         this.columnChange();
       } catch (e) {
