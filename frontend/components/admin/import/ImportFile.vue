@@ -4,23 +4,58 @@
     label-position="top"
     class="ImportFile"
   >
+    <div class="Info">
+      <p>
+        <fa icon="info-circle" />
+        <translate>
+          The Import Interface allows you to import your Projects from an Excel file into the Digital Health Atlas.
+        </translate>
+      </p>
+      <p>
+        <translate>
+          When importing your projects
+        </translate>
+        <a
+          href=""
+          target="_blank"
+        >
+          <translate> you can use this file as a reference for the format of the data </translate>
+          <fa icon="file-excel" />
+        </a>
+      </p>
+      <p>
+        <translate>
+          Note that your data should be organized to have data from only one country included in a spreadsheet.
+        </translate>
+      </p>
+      <p>
+        <translate>
+          In addition, you can also only select one Investor for all of the data from within your spreadsheet.
+        </translate>
+      </p>
+      <p>
+        <translate>
+          If you have more than one investor, we recommend that you go back to your projects once uploaded and add the correct investors.
+        </translate>
+      </p>
+    </div>
     <el-form-item>
-      <div slot="label">
+      <template #label>
         <translate>
           Select File
         </translate>
-      </div>
+      </template>
       <input
         type="file"
         @change="onChange"
       >
     </el-form-item>
     <el-form-item>
-      <div slot="label">
+      <template #label>
         <translate>
           Select Sheet
         </translate>
-      </div>
+      </template>
       <xlsx-read
         :file="inputFile"
         :options="{ type: 'binary', cellDates: true }"
@@ -54,21 +89,33 @@
       </xlsx-read>
     </el-form-item>
     <el-form-item>
-      <div slot="label">
-        <translate>
-          Select Country
-        </translate>
-      </div>
+      <template #label>
+        <form-hint>
+          <translate>
+            Select Country
+          </translate>
+          <template #hint>
+            <translate>Data can only be added one country at a time. If your data is from more than one country, you can make a separate sheet for each country.</translate>
+          </template>
+        </form-hint>
+      </template>
       <country-select
         v-model="country"
       />
     </el-form-item>
     <el-form-item>
-      <div slot="label">
-        <translate>
-          Select Investor
-        </translate>
-      </div>
+      <template #label>
+        <form-hint>
+          <translate>
+            Select Investor
+          </translate>
+          <template #hint>
+            <translate>
+              Data can only be uploaded for one investor at a time. You can update each project once they are saved in your My Projects page before publication.
+            </translate>
+          </template>
+        </form-hint>
+      </template>
       <donor-select
         v-model="donor"
       />
@@ -77,11 +124,11 @@
 
       class="DraftOrPublished"
     >
-      <div slot="label">
+      <template #label>
         <translate>
           Draft or Publish
         </translate>
-      </div>
+      </template>
       <el-radio-group v-model="isDraftOrPublish">
         <el-radio label="draft">
           <translate>
@@ -111,6 +158,7 @@
 import { mapActions } from 'vuex';
 import DonorSelect from '@/components/common/DonorSelect';
 import CountrySelect from '@/components/common/CountrySelect';
+import FormHint from '@/components/common/FormHint';
 import { XlsxRead, XlsxSheets, XlsxJson } from 'vue-xlsx';
 
 export default {
@@ -119,7 +167,8 @@ export default {
     CountrySelect,
     XlsxRead,
     XlsxSheets,
-    XlsxJson
+    XlsxJson,
+    FormHint
   },
   data () {
     return {
@@ -174,8 +223,12 @@ export default {
 
 <style lang="less">
 .ImportFile {
-  .SheetSelector{
+  .SheetSelector, .DonorSelector, .CountrySelector{
     width: 100%;
+  }
+
+  .Info {
+
   }
 }
 </style>
