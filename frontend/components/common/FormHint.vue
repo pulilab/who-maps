@@ -7,7 +7,7 @@
         @click="show = !show"
       />
     </div>
-    <transition name="el-fade-in-linear">
+    <transition name="el-zoom-in-top">
       <div
         v-if="show"
         class="Hint"
@@ -40,6 +40,7 @@ export default {
   .Hint {
     margin-top: -10px;
   }
+
 }
 
 </style>
