@@ -83,4 +83,8 @@ export default {
     font-weight: 700;
   }
 
+  .ImportDetails {
+    margin-bottom: 15px;
+  }
+
 </style>
