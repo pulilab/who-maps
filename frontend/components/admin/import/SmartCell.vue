@@ -26,13 +26,19 @@
             v-model="internalValue"
           >
             <el-radio :label="0">
-              No, they have not yet contributed
+              <translate>
+                No, they have not yet contributed
+              </translate>
             </el-radio>
             <el-radio :label="1">
-              Yes, they are contributing in-kind people or time
+              <translate>
+                Yes, they are contributing in-kind people or time
+              </translate>
             </el-radio>
             <el-radio :label="2">
-              Yes, there is a financial contribution through MOH budget
+              <translate>
+                Yes, there is a financial contribution through MOH budget
+              </translate>
             </el-radio>
           </el-radio-group>
         </div>
@@ -59,12 +65,17 @@
         <span class="OriginalValue">{{ original }}</span>
       </template>
     </div>
-    <div class="ErrorOverlay">
+    <div
+      v-if="errorMessage || parsingFailed"
+      class="ErrorOverlay"
+    >
       <span v-if="errorMessage && !parsingFailed">
         {{ errorMessage }}
       </span>
       <span v-if="parsingFailed">
-        Failed to parse your data, click to manually fix
+        <translate>
+          Failed to parse your data, click to manually fix
+        </translate>
       </span>
     </div>
   </div>
@@ -199,9 +210,9 @@ export default {
               names: [label]
             };
           },
-          licenses: () => this.findProjectCollectionValue('licenses'),
+          licenses: () => this.findProjectCollectionValue('licenses', true),
           interoperability_links: () => this.findProjectCollectionValue('interoperability_links'),
-          interoperability_standards: () => this.findProjectCollectionValue('interoperability_standards'),
+          interoperability_standards: () => this.findProjectCollectionValue('interoperability_standards', true),
           sub_level: () => {
             const value = Array.isArray(this.value) ? this.value[0] : this.value;
             const level = this.subLevels.find(cf => cf.id === value || cf.name === value);
@@ -334,6 +345,7 @@ export default {
 
   .SmartCell {
     position: relative;
+
     .Content {
       width: 100%;
       height: 100%;
@@ -342,12 +354,23 @@ export default {
         list-style: none;
       }
     }
+
     .ErrorOverlay {
+      padding: 2px;
+      opacity: 0;
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      text-align: center
+      text-align: center;
+      transition: all 0.3s ease-in;
+      background-color: #F5F5F5;
+    }
+
+    &:hover {
+       .ErrorOverlay {
+         opacity: 1;
+       }
     }
 
     &.Disabled {
@@ -355,11 +378,19 @@ export default {
     }
 
     &.ValidationError {
-      background: pink;
+      border: 2px solid red !important;
+
+      .ErrorOverlay {
+        background-color: red;
+      }
     }
 
     &.ParsingError {
-      background: orange;
+      border: 2px solid orange !important;
+
+      .ErrorOverlay {
+        background-color: orange;
+      }
     }
 
     .OriginalValue {

@@ -91,7 +91,6 @@
         </div>
 
         <div
-          v-if="isSuperUser"
           class="DropdownLink"
         >
           <nuxt-link

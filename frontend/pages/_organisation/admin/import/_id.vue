@@ -16,11 +16,13 @@
         <template
           v-slot:default="{globalErrors, rules, nameMapping}"
         >
-          <el-switch
-            v-model="showSaved"
-            active-text="Show saved projects"
-            inactive-text="Hide saved projects"
-          />
+          <div class="SavedSwitch">
+            <el-switch
+              v-model="showSaved"
+              active-text="Show saved projects"
+              inactive-text="Hide saved projects"
+            />
+          </div>
           <div class="ExportDataTable">
             <div class="Container">
               <import-headers
@@ -29,8 +31,14 @@
                 :custom-fields-lib="customFieldsLib"
                 :name-mapping="nameMapping"
               >
-                <el-button @click="saveAll">
-                  <fa icon="save" />
+                <el-button
+                  type="primary"
+                  size="small"
+                  @click="saveAll"
+                >
+                  <translate>
+                    Save All
+                  </translate>
                 </el-button>
               </import-headers>
               <div class="Rows">
@@ -50,7 +58,7 @@
                             v-if="row.project"
                             :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
                             target="_blank"
-                            class="NuxtLink IconLeft"
+                            class="el-button el-button--info el-button--mini"
                           >
                             <fa icon="share-square" />
                           </a>
@@ -81,7 +89,7 @@
                     <div
                       class="Column Thin"
                     >
-                      <el-button-group>
+                      <div class="ButtonList">
                         <el-button
                           :type="globalErrors.length > 0 || !valid ? 'warning' : 'success'"
                           size="mini"
@@ -93,19 +101,12 @@
                         <el-button
                           size="mini"
                           class="DeleteButton"
+                          type="danger"
                           @click="deleteRow(row, index)"
                         >
                           <fa icon="times" />
                         </el-button>
-                        <a
-                          v-if="row.project"
-                          :href="localePath({name: 'organisation-projects-id-edit', params: {id: row.project, organisation: $route.params.organisation}})"
-                          target="_blank"
-                          class="NuxtLink IconLeft"
-                        >
-                          <fa icon="share-square" />
-                        </a>
-                      </el-button-group>
+                      </div>
                     </div>
                     <template
                       v-for="header in rawImport.header_mapping"
@@ -247,34 +248,40 @@ export default {
     },
     async deleteRow (row, index) {
       try {
-        await this.$confirm('Are you sure? this operation is not reversible', 'Row Delete', {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        });
+        await this.$confirm(
+          this.$gettext('Note that once this column is deleted, you cannot recover the data.'),
+          this.$gettext('Row Delete'),
+          {
+            confirmButtonText: this.$gettext('OK'),
+            cancelButtonText: this.$gettext('Cancel'),
+            type: 'warning'
+          });
         await this.$axios.delete(`/api/projects/import-row/${row.id}/`);
         this.rawImport.rows.splice(index, 1);
       } catch (e) {
         this.$message({
           type: 'info',
-          message: 'Delete canceled'
+          message: this.$gettext('Delete canceled')
         });
       }
     },
     async singleRowSave (doSave, valid, scrollToError) {
       if (valid) {
         try {
-          await this.$confirm('Are you sure? this operation is not reversible once started', 'Save', {
-            confirmButtonText: 'OK',
-            cancelButtonText: 'Cancel',
-            type: 'warning'
-          });
+          await this.$confirm(
+            this.$gettext('Note that once you have saved this project, it will be uploaded to the DHA. You can access all of your saved Projects from your My Projects page.'),
+            this.$gettext('Save Project'),
+            {
+              confirmButtonText: this.$gettext('OK'),
+              cancelButtonText: this.$gettext('Cancel'),
+              type: 'warning'
+            });
           this.$nuxt.$loading.start('save');
           await this.doSingleRowSave(doSave);
         } catch (e) {
           this.$message({
             type: 'info',
-            message: 'Save canceled'
+            message: this.$gettext('Save canceled')
           });
         }
         this.$nuxt.$loading.finish('save');
@@ -300,16 +307,19 @@ export default {
     },
     async saveAll () {
       try {
-        await this.$confirm('Are you sure? this operation is not reversible once started', 'Bulk Save', {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        });
+        await this.$confirm(
+          this.$gettext('Note that once you have saved these projects, they will be uploaded to the DHA. You can access all saved projects from your My Projects page.'),
+          this.$gettext('Save all projects'),
+          {
+            confirmButtonText: this.$gettext('OK'),
+            cancelButtonText: this.$gettext('Cancel'),
+            type: 'warning'
+          });
         this.doSaveAll();
       } catch (e) {
         this.$message({
           type: 'info',
-          message: 'Bulk Save canceled'
+          message: this.$gettext('Save all projects canceled')
         });
       }
     },
@@ -354,6 +364,10 @@ export default {
     }
   }
 
+  .SavedSwitch {
+    margin: 12px 0;
+  }
+
   .ExportDataTable {
     width: 100%;
     margin: 0;
@@ -371,23 +385,30 @@ export default {
       .Rows {
         height: 50vh;
         flex-shrink: 0;
+
+        .Row {
+          flex: 1 100%;
+          display: flex;
+          flex-direction: row;
+
+          &:last-child {
+              border-right: 0;
+
+            .Column {
+              border-bottom: 0;
+            }
+          }
+        }
       }
 
       .Row {
         flex: 1 100%;
         display: flex;
         flex-direction: row;
-
-        &:last-child {
-            border-right: 0;
-
-          .Column {
-            border-bottom: 0;
-          }
-        }
       }
 
       .Column {
+        box-sizing: border-box;
         flex: 0 0 200px;
         max-height: 200px;
         padding: 10px;
@@ -395,12 +416,12 @@ export default {
         border-width: 0 1px 1px 0;
         overflow-y: auto;
 
-        &.Wide {
-          flex: 1 0 100%;
+        &:first-child {
+          border-width: 0 1px 1px 1px;
         }
 
         &.Thin {
-          flex: 0 0 75px;
+          flex: 0 0 100px;
         }
 
         &.Fluid {
@@ -418,9 +439,14 @@ export default {
           font-weight: 700;
         }
       }
+      .ButtonList {
+        display: inline-flex;
+        width: 100%;
 
-      .SaveButton, .DeleteButton {
-        margin-left: 6px;
+        .SaveButton, .DeleteButton {
+          margin-left: 0px;
+          color: white;
+        }
       }
     }
   }

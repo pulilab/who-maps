@@ -4,19 +4,59 @@
     label-position="top"
     class="ImportFile"
   >
+    <div class="Info">
+      <p>
+        <fa icon="info-circle" />
+        <translate>
+          The Import Interface allows you to import your Projects from an Excel file into the Digital Health Atlas.
+        </translate>
+      </p>
+      <p>
+        <translate>
+          When importing your projects
+        </translate>
+        <a
+          href="/static/documents/DHA_Import_Template.xlsx"
+          download="DHA_Import_Template.xlsx"
+          target="_blank"
+        >
+          <translate> you can use this file as a reference for the format of the data </translate>
+          <fa icon="file-excel" />
+        </a>
+      </p>
+      <p>
+        <translate>
+          Note that your data should be organized to have data from only one country included in a spreadsheet.
+        </translate>
+      </p>
+      <p>
+        <translate>
+          In addition, you can also only select one Investor for all of the data from within your spreadsheet.
+        </translate>
+      </p>
+      <p>
+        <translate>
+          If you have more than one investor, we recommend that you go back to your projects once uploaded and add the correct investors.
+        </translate>
+      </p>
+    </div>
     <el-form-item>
-      <div slot="label">
-        Select File
-      </div>
+      <template #label>
+        <translate>
+          Select File
+        </translate>
+      </template>
       <input
         type="file"
         @change="onChange"
       >
     </el-form-item>
     <el-form-item>
-      <div slot="label">
-        Select Sheet
-      </div>
+      <template #label>
+        <translate>
+          Select Sheet
+        </translate>
+      </template>
       <xlsx-read
         :file="inputFile"
         :options="{ type: 'binary', cellDates: true }"
@@ -50,17 +90,33 @@
       </xlsx-read>
     </el-form-item>
     <el-form-item>
-      <div slot="label">
-        Select Country
-      </div>
+      <template #label>
+        <form-hint>
+          <translate>
+            Select Country
+          </translate>
+          <template #hint>
+            <translate>Data can only be added one country at a time. If your data is from more than one country, you can make a separate sheet for each country.</translate>
+          </template>
+        </form-hint>
+      </template>
       <country-select
         v-model="country"
       />
     </el-form-item>
     <el-form-item>
-      <div slot="label">
-        Select Investor
-      </div>
+      <template #label>
+        <form-hint>
+          <translate>
+            Select Investor
+          </translate>
+          <template #hint>
+            <translate>
+              Data can only be uploaded for one investor at a time. You can update each project once they are saved in your My Projects page before publication.
+            </translate>
+          </template>
+        </form-hint>
+      </template>
       <donor-select
         v-model="donor"
       />
@@ -69,15 +125,21 @@
 
       class="DraftOrPublished"
     >
-      <div slot="label">
-        Draft or Publish
-      </div>
+      <template #label>
+        <translate>
+          Draft or Publish
+        </translate>
+      </template>
       <el-radio-group v-model="isDraftOrPublish">
         <el-radio label="draft">
-          Draft
+          <translate>
+            Draft
+          </translate>
         </el-radio>
         <el-radio label="publish">
-          Publish
+          <translate>
+            Publish
+          </translate>
         </el-radio>
       </el-radio-group>
     </el-form-item>
@@ -85,7 +147,9 @@
       class="ConfirmSettings"
     >
       <el-button @click="save">
-        Import
+        <translate>
+          Import
+        </translate>
       </el-button>
     </el-form-item>
   </el-form>
@@ -95,6 +159,7 @@
 import { mapActions } from 'vuex';
 import DonorSelect from '@/components/common/DonorSelect';
 import CountrySelect from '@/components/common/CountrySelect';
+import FormHint from '@/components/common/FormHint';
 import { XlsxRead, XlsxSheets, XlsxJson } from 'vue-xlsx';
 
 export default {
@@ -103,7 +168,8 @@ export default {
     CountrySelect,
     XlsxRead,
     XlsxSheets,
-    XlsxJson
+    XlsxJson,
+    FormHint
   },
   data () {
     return {
@@ -137,9 +203,20 @@ export default {
           }
         ]
       };
-      const importItem = await this.addDataToQueue(importData);
-      this.$nuxt.$loading.finish('importXLSX');
-      this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: importItem.id }, query: undefined }));
+      try {
+        const importItem = await this.addDataToQueue(importData);
+        this.$nuxt.$loading.finish('importXLSX');
+        this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: importItem.id }, query: undefined }));
+      } catch {
+        this.$nuxt.$loading.finish('importXLSX');
+        await this.$alert(
+          this.$gettext('Note that all import files need to have a unique name. Please re-name the file and upload it again.'),
+          this.$gettext('Error'),
+          {
+            confirmButtonText: 'OK',
+            type: 'warning'
+          });
+      }
     }
   }
 };
@@ -147,8 +224,12 @@ export default {
 
 <style lang="less">
 .ImportFile {
-  .SheetSelector{
+  .SheetSelector, .DonorSelector, .CountrySelector{
     width: 100%;
+  }
+
+  .Info {
+
   }
 }
 </style>

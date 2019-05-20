@@ -4,7 +4,7 @@
       v-if="internalValue.length > 0"
       class="Row"
     >
-      <div class="Column Thin">
+      <div class="Column Thin Header">
         <slot />
       </div>
 
@@ -19,6 +19,7 @@
         <el-button
           class="DeleteColumnButton"
           size="mini"
+          type="danger"
           @click="rmHeader(index)"
         >
           <fa icon="times" />
@@ -43,7 +44,7 @@
       <div class="Column Header">
         <div class="Title">
           <fa icon="info" />
-          Select an header to create a new column
+          <translate>Select an header to create a new column</translate>
         </div>
         <div>
           <el-select
@@ -137,11 +138,14 @@ export default {
   methods: {
     async rmHeader (index) {
       try {
-        await this.$confirm('Are you sure? this operation is not reversible', 'Column Delete', {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        });
+        await this.$confirm(
+          this.$gettext('Are you sure? this operation is not reversible'),
+          this.$gettext('Column Delete'),
+          {
+            confirmButtonText: this.$gettext('OK'),
+            cancelButtonText: this.$gettext('Cancel'),
+            type: 'warning'
+          });
         this.$delete(this.internalValue, index);
         this.columnChange();
       } catch (e) {
@@ -165,18 +169,31 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
 .Headers {
   position: sticky;
   top:0;
   z-index: 10;
 
-  .Column.Header {
-    position: relative;
-    background-color: #F5F5F5;
-    z-index: 10;
+  .Row {
+    .Column {
+      &.Header {
+        border-width: 1px 1px 1px 0;
+        position: relative;
+        background-color: #F5F5F5;
+        z-index: 10;
+        overflow: hidden;
+
+        &:first-child {
+          border-width: 1px;
+        }
+      }
+    }
   }
+
   .Title {
     margin-right: 8px;
   }
@@ -189,6 +206,8 @@ export default {
   .HeaderSelect{
     position: absolute;
     bottom: 4px;
+    left: 3.5px;
+    width: 192px;
   }
 }
 </style>

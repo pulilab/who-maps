@@ -348,6 +348,7 @@ msgid "Can you provide a link to the software wikipage?"
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:151 components/admin/DhaQuestion.vue:181
+#: components/admin/import/ImportDialog.vue:152
 #: components/dashboard/FilterPresetsActions.vue:112
 #: components/dashboard/TableTopActions.vue:144
 #: components/dialogs/DashboardFiltersDialog.vue:86
@@ -623,12 +624,21 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
+#: components/admin/import/ImportFile.vue:86
 #: components/common/ExtendedProjectCard.vue:73
 #: components/project/ProjectNavigation.vue:24
 #: pages/_organisation/projects/_id/edit/index.vue:7
 #: pages/_organisation/projects/_id/index.vue:7
 #: angular/Assessment/Statistics/Statistics.html:16
 msgid "Draft"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:80
+msgid "Draft or Publish"
+msgstr ""
+
+#: components/admin/import/ImportDetails.vue:24
+msgid "Draft or Published"
 msgstr ""
 
 #: components/project/ProjectForm.vue:287
@@ -643,6 +653,7 @@ msgstr ""
 msgid "E-mail"
 msgstr ""
 
+#: components/admin/import/ImportDialog.vue:24
 #: components/dashboard/FilterItem.vue:22
 #: angular/Cms/AddNewContent/AddNewContent.html:8
 #: angular/Cms/CommentWidget/CommentWidget.html:17
@@ -724,8 +735,16 @@ msgstr ""
 msgid "Facilities"
 msgstr ""
 
+#: components/admin/import/SmartCell.vue:75
+msgid "Failed to parse your data, click to manually fix"
+msgstr ""
+
 #: components/project/ProjectForm.vue:149
 msgid "Failed to restore auto-saved project"
+msgstr ""
+
+#: components/admin/import/ImportDetails.vue:41
+msgid "File Name"
 msgstr ""
 
 #: components/dialogs/SaveFilterDialog.vue:17
@@ -1038,6 +1057,10 @@ msgstr ""
 
 #: components/dashboard/SearchBox.vue:94
 msgid "Implementing Partners"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:101
+msgid "Import"
 msgstr ""
 
 #: components/common/UserDropdown.vue:103
@@ -1362,6 +1385,10 @@ msgstr ""
 msgid "National Level Deployment"
 msgstr ""
 
+#: pages/_organisation/admin/import/index.vue:34
+msgid "New Import"
+msgstr ""
+
 #: components/admin/DhaQuestionaire.vue:86
 msgid "New order saved"
 msgstr ""
@@ -1375,7 +1402,7 @@ msgid "New requests"
 msgstr ""
 
 #: components/admin/ApprovalTag.vue:11 components/admin/ProjectApproval.vue:143
-#: components/admin/import/ImportDialog.vue:104
+#: components/admin/import/ImportDialog.vue:110
 #: components/dashboard/MainTable.vue:80 components/dashboard/PdfExport.vue:149
 #: components/project/CustomField.vue:45
 #: angular/Cms/ReportDeleteButton/ReportDeleteButton.html:22
@@ -1406,6 +1433,7 @@ msgid ""
 "            or marketing purposes."
 msgstr ""
 
+#: components/admin/import/SmartCell.vue:28
 #: components/project/ProjectData.vue:314
 #: components/project/sections/ImplementationOverview.vue:217
 msgid "No, they have not yet contributed"
@@ -1470,6 +1498,10 @@ msgstr ""
 
 #: components/dashboard/PdfExport.vue:212
 msgid "Organisation name:"
+msgstr ""
+
+#: components/admin/import/ImportDialog.vue:16
+msgid "Original Data"
 msgstr ""
 
 #: pages/_organisation/terms.vue:317
@@ -1563,6 +1595,10 @@ msgstr ""
 msgid "Point of contact:"
 msgstr ""
 
+#: pages/_organisation/admin/import/index.vue:12
+msgid "Previous imports"
+msgstr ""
+
 #: pages/_organisation/terms.vue:161
 msgid "Privacy Policy"
 msgstr ""
@@ -1652,6 +1688,7 @@ msgstr ""
 msgid "Project viewers will be able to view the full project details."
 msgstr ""
 
+#: components/admin/import/ImportFile.vue:91
 #: components/project/ProjectNavigation.vue:130
 msgid "Publish"
 msgstr ""
@@ -1734,6 +1771,7 @@ msgstr ""
 msgid "Return to the Dashboard"
 msgstr ""
 
+#: components/admin/import/ImportDialog.vue:158
 #: components/dashboard/FilterPresetsActions.vue:55
 #: components/dialogs/ProjectApprovalDialog.vue:150
 #: components/dialogs/SaveFilterDialog.vue:44
@@ -1741,6 +1779,10 @@ msgstr ""
 #: angular/Cms/DetailElement/DetailElementDialog.html:54
 #: angular/Cms/DetailElement/DetailElementDialog.html:97
 msgid "Save"
+msgstr ""
+
+#: pages/_organisation/admin/import/_id.vue:38
+msgid "Save All"
 msgstr ""
 
 #: components/admin/CountryAdmin.vue:359 components/admin/DonorAdmin.vue:293
@@ -1767,12 +1809,24 @@ msgstr ""
 msgid "See Project"
 msgstr ""
 
+#: pages/_organisation/admin/import/index.vue:21
+msgid "Select"
+msgstr ""
+
 #: components/dashboard/TableTopActions.vue:13
 msgid "Select all {total} projects"
 msgstr ""
 
+#: components/admin/import/ImportHeaders.vue:46
+msgid "Select an header to create a new column"
+msgstr ""
+
 #: components/common/CountrySelect.vue:1
 msgid "Select country"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:57
+msgid "Select Country"
 msgstr ""
 
 #: components/dialogs/DigitalHealthInterventionsDialog.vue:1
@@ -1787,8 +1841,12 @@ msgstr ""
 msgid "Select fields to include in your search"
 msgstr ""
 
-#: components/admin/import/ImportDialog.vue:109
-#: components/admin/import/ImportDialog.vue:124
+#: components/admin/import/ImportFile.vue:8
+msgid "Select File"
+msgstr ""
+
+#: components/admin/import/ImportDialog.vue:115
+#: components/admin/import/ImportDialog.vue:130
 #: components/dialogs/filters/HealthFocusAreaFilter.vue:2
 #: components/dialogs/filters/HealthInformationSystemFilter.vue:2
 #: components/dialogs/filters/HealthSystemChallengesFilter.vue:2
@@ -1805,12 +1863,28 @@ msgstr ""
 msgid "Select investor"
 msgstr ""
 
+#: components/admin/import/ImportFile.vue:67
+msgid "Select Investor"
+msgstr ""
+
 #: components/common/LanguageSelect.vue:1
 msgid "Select language"
 msgstr ""
 
 #: components/common/RegionSelect.vue:1
 msgid "Select region"
+msgstr ""
+
+#: components/admin/import/ImportFile.vue:19
+msgid "Select Sheet"
+msgstr ""
+
+#: components/admin/import/ImportDetails.vue:8
+msgid "Selected Country"
+msgstr ""
+
+#: components/admin/import/ImportDetails.vue:15
+msgid "Selected Investor"
 msgstr ""
 
 #: components/dialogs/SendEmailDialog.vue:1
@@ -1831,6 +1905,10 @@ msgstr ""
 
 #: components/dashboard/TableTopActions.vue:117
 msgid "Settings"
+msgstr ""
+
+#: components/admin/import/ImportDetails.vue:33
+msgid "Sheet Name"
 msgstr ""
 
 #: components/admin/VueMapCustomizer.vue:106
@@ -2600,7 +2678,7 @@ msgid "Wrong image format, you can only upload .jpg and .png files"
 msgstr ""
 
 #: components/admin/ApprovalTag.vue:8 components/admin/ProjectApproval.vue:143
-#: components/admin/import/ImportDialog.vue:101
+#: components/admin/import/ImportDialog.vue:107
 #: components/dashboard/MainTable.vue:77 components/dashboard/PdfExport.vue:149
 #: components/project/CustomField.vue:42
 #: angular/Cms/ReportDeleteButton/ReportDeleteButton.html:26
@@ -2611,11 +2689,13 @@ msgstr ""
 msgid "Yes - no field"
 msgstr ""
 
+#: components/admin/import/SmartCell.vue:38
 #: components/project/ProjectData.vue:314
 #: components/project/sections/ImplementationOverview.vue:223
 msgid "Yes, there is a financial contribution through MOH budget"
 msgstr ""
 
+#: components/admin/import/SmartCell.vue:33
 #: components/project/ProjectData.vue:314
 #: components/project/sections/ImplementationOverview.vue:220
 msgid "Yes, they are contributing in-kind people or time"

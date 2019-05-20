@@ -13,12 +13,18 @@
       class="ImportDialogWrapper"
     >
       <el-col class="OriginalData">
-        <h3>Original Data</h3>
+        <h3>
+          <translate>
+            Original Data
+          </translate>
+        </h3>
         {{ dialogData.original }}
       </el-col>
       <el-col>
         <h3 v-if="dialogData.column !== 'digitalHealthInterventions'">
-          Edit
+          <translate>
+            Edit
+          </translate>
         </h3>
         <organisation-select
           v-if="dialogData.column === 'organisation'"
@@ -144,11 +150,15 @@
       slot="footer"
     >
       <el-button @click="dialogData = null">
-        Cancel
+        <translate>
+          Cancel
+        </translate>
       </el-button>
 
       <el-button @click="save">
-        Save
+        <translate>
+          Save
+        </translate>
       </el-button>
     </div>
   </el-dialog>
