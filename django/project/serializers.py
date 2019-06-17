@@ -77,7 +77,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
     country = serializers.IntegerField(min_value=0, max_value=100000)
     geographic_scope = serializers.CharField(max_length=1024, required=False)
     implementation_overview = serializers.CharField(max_length=1024)
-    start_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
+    start_date = serializers.CharField(max_length=256, required=True)
     end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
     contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
@@ -85,20 +85,20 @@ class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 2 Implementation Overview
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
     health_focus_areas = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=1)
     hsc_challenges = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=1)
-    his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64)
+    his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64, required=False)
     coverage = CoverageSerializer(many=True, required=False, allow_null=True)
     coverage_second_level = CoverageSerializer(many=True, required=False, allow_null=True)
     national_level_deployment = NDPSerializer(required=False, allow_null=True)
-    government_investor = serializers.ChoiceField(choices=INVESTOR_CHOICES)
+    government_investor = serializers.ChoiceField(choices=INVESTOR_CHOICES, required=False)
     implementing_partners = serializers.ListField(
-        child=serializers.CharField(max_length=64), max_length=50, min_length=0, required=False)
+        child=serializers.CharField(max_length=64), max_length=50, min_length=0, required=False, allow_empty=True)
     donors = serializers.ListField(child=serializers.IntegerField(), max_length=32)
 
     # SECTION 3 Technology Overview
-    implementation_dates = serializers.CharField(max_length=128)
+    implementation_dates = serializers.CharField(max_length=128, required=False)
     licenses = serializers.ListField(child=serializers.IntegerField(), max_length=16, required=False)
     repository = serializers.CharField(max_length=256, required=False, allow_blank=True)
     mobile_application = serializers.CharField(max_length=256, required=False, allow_blank=True)
@@ -154,17 +154,15 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     implementation_overview = serializers.CharField(max_length=1024, required=False)
     contact_name = serializers.CharField(max_length=256, required=False)
     contact_email = serializers.EmailField(required=False)
+    start_date = serializers.CharField(max_length=256, required=False)
 
     # SECTION 2 Implementation Overview
     platforms = DraftPlatformSerializer(many=True, required=False)
+    health_focus_areas = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
     hsc_challenges = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
-    his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64, required=False)
-    government_investor = serializers.ChoiceField(choices=INVESTOR_CHOICES, required=False)
     donors = serializers.ListField(child=serializers.IntegerField(), max_length=32, required=False)
-
-    # SECTION 3 Technology Overview
-    implementation_dates = serializers.CharField(max_length=128, required=False)
 
     # SECTION 4
     interoperability_links = DraftInteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
