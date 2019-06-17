@@ -1,3 +1,4 @@
+import get from 'lodash/get';
 export const coverageMapper = collection => {
   const coverage = [];
   const coverageData = {};
@@ -144,16 +145,16 @@ export const platformsWriteParser = (platforms, digitalHealthInterventions) => {
   });
 };
 
-const baseCoverage = {
-  clients: 0,
-  facilities: 0,
-  health_workers: 0
-};
-
 export const coverageWriteParser = (coverage, coverageData) => {
   return coverage.map(district => {
     const data = coverageData[district];
-    return { district, ...baseCoverage, ...data };
+    return {
+      district,
+      ...data,
+      clients: get(data, 'clients', 0),
+      health_workers: get(data, 'health_workers', 0),
+      facilities: get(data, 'facilities', 0)
+    };
   });
 };
 
@@ -196,8 +197,15 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
   if (p.coverageType === 1) {
     coverage = coverageWriteParser(p.coverage, p.coverageData);
     coverage_second_level = coverageWriteParser(p.coverage_second_level, p.coverageData);
+    national_level_deployment = null;
   } else {
-    national_level_deployment = { ...baseCoverage, ...p.national_level_deployment };
+    coverage = [];
+    coverage_second_level = [];
+    national_level_deployment = {
+      clients: get(p, 'national_level_deployment.clients', 0),
+      health_workers: get(p, 'national_level_deployment.health_workers',0),
+      facilities: get(p, 'national_level_deployment.facilities', 0)
+    };
   }
   const country_custom_answers = customCountryAnswerParser(countryCustomAnswers);
   const donor_custom_answers = customDonorAnswerParser(donorsCustomAnswers, p.donors);
