@@ -98,13 +98,16 @@
           </simple-field>
 
           <div class="GrayArea">
-            <simple-field :header="$gettext('Coverage type')">
+            <simple-field
+              v-if="isNationalLevelDeployment || (project.coverage && project.coverage.length)"
+              :header="$gettext('Coverage type')"
+            >
               <type-field
                 :value="project.coverageType"
                 :list="coverageList"
               />
             </simple-field>
-            <simple-field v-if="project.coverageType === 2">
+            <simple-field v-if="isNationalLevelDeployment">
               <div slot="header">
                 <fa icon="flag" />
                 <translate>National Level Deployment</translate>
@@ -291,6 +294,10 @@ export default {
     },
     project () {
       return this.isDraft ? this.draft : this.published;
+    },
+    isNationalLevelDeployment () {
+      return this.project.coverageType === 2 && this.project.national_level_deployment && (this.project.national_level_deployment.clients ||
+        this.project.national_level_deployment.facilities || this.project.national_level_deployment.health_workers);
     },
     country () {
       if (this.project.country) {
