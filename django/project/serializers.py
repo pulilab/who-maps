@@ -147,8 +147,8 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     """
     Override fields that are not required for draft project.
     """
-    name = serializers.CharField(max_length=128)
     # SECTION 1 General Overview
+    name = serializers.CharField(max_length=128)
     organisation = serializers.CharField(max_length=128, required=False)
     country = serializers.IntegerField(min_value=0, max_value=100000, required=False)
     implementation_overview = serializers.CharField(max_length=1024, required=False)
