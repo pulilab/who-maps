@@ -15,14 +15,20 @@
         <translate>
           When importing your projects
         </translate>
-        <a
-          href="/static/documents/DHA_Import_Template.xlsx"
-          download="DHA_Import_Template.xlsx"
-          target="_blank"
-        >
-          <translate> you can use this file as a reference for the format of the data </translate>
-          <fa icon="file-excel" />
-        </a>
+        <xlsx-workbook>
+          <xlsx-sheet
+            v-for="sheet in templateSheets"
+            :key="sheet.name"
+            :collection="sheet.data"
+            :sheet-name="sheet.name"
+          />
+          <xlsx-download filename="DHA_Import_template.xlsx">
+            <a class="XLSXTemplate">
+              <translate> you can use this file as a reference for the format of the data </translate>
+              <fa icon="file-excel" />
+            </a>
+          </xlsx-download>
+        </xlsx-workbook>
       </p>
       <p>
         <translate>
@@ -37,6 +43,11 @@
       <p>
         <translate>
           If you have more than one investor, we recommend that you go back to your projects once uploaded and add the correct investors.
+        </translate>
+      </p>
+      <p>
+        <translate>
+          Note that for now the imported project are loaded in draft and need to be manually published
         </translate>
       </p>
     </div>
@@ -122,7 +133,7 @@
       />
     </el-form-item>
     <el-form-item
-
+      v-if="false"
       class="DraftOrPublished"
     >
       <template #label>
@@ -156,11 +167,13 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import DonorSelect from '@/components/common/DonorSelect';
 import CountrySelect from '@/components/common/CountrySelect';
 import FormHint from '@/components/common/FormHint';
-import { XlsxRead, XlsxSheets, XlsxJson } from 'vue-xlsx';
+import { XlsxRead, XlsxSheets, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
+import { importTemplate, nameMapping } from '@/utilities/import';
+import { draftRules } from '@/utilities/projects';
 
 export default {
   components: {
@@ -169,17 +182,77 @@ export default {
     XlsxRead,
     XlsxSheets,
     XlsxJson,
-    FormHint
+    FormHint,
+    XlsxWorkbook,
+    XlsxSheet,
+    XlsxDownload
   },
   data () {
     return {
       country: null,
       donor: null,
-      isDraftOrPublish: null,
+      isDraftOrPublish: 'draft',
       inputFile: null,
       selectedSheet: null,
       parsed: null
     };
+  },
+  computed: {
+    ...mapState('system', {
+      systemDicts: state => state
+    }),
+    ...mapState('projects', {
+      projectDicts: state => state.projectStructure
+    }),
+    fieldsData () {
+      const flatHFA = this.projectDicts.health_focus_areas.reduce((a, c) => {
+        const innerNames = c.health_focus_areas.map(i => i.name);
+        return a.concat(innerNames);
+      }, []);
+      const flatHSC = this.projectDicts.hsc_challenges.reduce((a, c) => {
+        const innerNames = c.challenges.map(i => i.challenge);
+        return a.concat(innerNames);
+      }, []);
+      const flatsHIS = this.projectDicts.his_bucket.reduce((a, c) => {
+        a.push(c.name);
+        return a;
+      }, []);
+      const flatLicenses = this.projectDicts.licenses.map(l => l.name);
+      const flatPlatforms = this.projectDicts.technology_platforms.map(p => p.name);
+      const flathDHI = this.projectDicts.strategies.reduce((a, c) => {
+        const innerValue = c.subGroups.reduce((innerA, innerC) => {
+          return innerA.concat(innerC.strategies.map(s => s.name));
+        }, []);
+        return a.concat(innerValue);
+      }, []);
+      const flatOrganisations = this.systemDicts.organisations.map(o => o.name);
+      return [
+        [nameMapping.health_focus_areas, ...flatHFA],
+        [nameMapping.hsc_challenges, ...flatHSC],
+        [nameMapping.his_bucket, ...flatsHIS],
+        [nameMapping.licenses, ...flatLicenses],
+        [nameMapping.platforms, ...flatPlatforms],
+        [nameMapping.digitalHealthInterventions, ...flathDHI],
+        [nameMapping.organisation, ...flatOrganisations]
+      ];
+    },
+    draftRequiredFields () {
+      const rules = draftRules();
+      const requireds = [];
+      for (const rule in rules) {
+        if (rules[rule].required) {
+          requireds.push([nameMapping[rule]]);
+        }
+      }
+      return requireds;
+    },
+    templateSheets () {
+      return [
+        { name: 'Import Example', data: importTemplate },
+        { name: 'Fields', data: this.fieldsData },
+        { name: 'Draft required fields', data: this.draftRequiredFields }
+      ];
+    }
   },
   methods: {
     ...mapActions({
@@ -226,6 +299,11 @@ export default {
 .ImportFile {
   .SheetSelector, .DonorSelector, .CountrySelector{
     width: 100%;
+  }
+
+  .XLSXTemplate{
+    color: blue;
+    text-decoration: underline;
   }
 
   .Info {
