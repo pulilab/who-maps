@@ -63,7 +63,9 @@ export default {
     await Promise.all([
       store.dispatch('system/loadDonors'),
       store.dispatch('countries/loadMapData'),
-      store.dispatch('admin/import/loadQueue')
+      store.dispatch('admin/import/loadQueue'),
+      store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('system/loadStaticData')
     ]);
   },
   methods: {
