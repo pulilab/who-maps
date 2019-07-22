@@ -15,7 +15,8 @@
     "test": "jest",
     "test:w": "jest --watch",
     "cypress:open": "cypress open",
-    "translation:extract": "bash gettext.sh"
+    "translation:extract": "bash gettext.sh",
+    "webpack:extract": "node -r esm ./scripts/update-webpack-config.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.2",
