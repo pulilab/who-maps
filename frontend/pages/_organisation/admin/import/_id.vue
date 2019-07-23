@@ -67,12 +67,17 @@
                       <template
                         v-for="header in rawImport.header_mapping"
                       >
-                        <div
+                        <SmartCell
                           :key="row.id + header.title"
+                          :value="data[header.title]"
+                          :type="header.selected"
+                          :rules="rules[header.selected]"
                           class="Column"
-                        >
-                          {{ data[header.title] }}
-                        </div>
+                          :sub-levels="subLevels"
+                          :custom-fields-lib="customFieldsLib"
+                          :name-mapping="nameMapping"
+                          disabled
+                        />
                       </template>
                     </template>
                   </import-row>
