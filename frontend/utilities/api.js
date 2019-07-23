@@ -82,6 +82,13 @@ export const donorCustomFieldMapper = collection => {
   return customAnswers;
 };
 
+export const dateParser = date => {
+  if (date) {
+    return new Date(date);
+  }
+  return null;
+};
+
 export const apiReadParser = p => {
   const [ coverage, coverageDataFirstLevel ] = lib.coverageMapper(p.coverage);
   const [ coverage_second_level, coverageDataSecondLevelLevel ] = lib.coverageMapper(p.coverage_second_level);
@@ -93,6 +100,9 @@ export const apiReadParser = p => {
   const country_custom_answers = lib.countryCustomFieldMapper(p.country_answers);
   const donor_custom_answers = lib.donorCustomFieldMapper(p.donor_answers);
   return { ...p,
+    implementation_dates: dateParser(p.implementation_dates),
+    start_date: dateParser(p.start_date),
+    end_date: dateParser(p.end_date),
     coverage,
     coverage_second_level,
     coverageData,
@@ -111,7 +121,7 @@ export const isEmpty = (value) => {
   if (Array.isArray(value)) {
     return false;
   } else if (value instanceof Date) {
-    return false;
+    return !!value.toJSON();
   } else if (value instanceof Object && value !== null) {
     return Object.keys(value).length === 0;
   }
@@ -185,6 +195,7 @@ export const customDonorAnswerParser = (customAnswers = [], donors = []) => {
 
 export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => {
   const result = {};
+  console.log(p);
   for (let key in p) {
     const value = dataCleaner(p[key]);
     result[key] = isEmpty(value) ? undefined : value;
@@ -203,7 +214,7 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
     coverage_second_level = [];
     national_level_deployment = {
       clients: get(p, 'national_level_deployment.clients', 0),
-      health_workers: get(p, 'national_level_deployment.health_workers',0),
+      health_workers: get(p, 'national_level_deployment.health_workers', 0),
       facilities: get(p, 'national_level_deployment.facilities', 0)
     };
   }
