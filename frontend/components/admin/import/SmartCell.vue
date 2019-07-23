@@ -392,18 +392,20 @@ export default {
     }
 
     &.ValidationError {
-      border: 2px solid red !important;
+      border: 2px solid @colorDanger !important;
 
       .ErrorOverlay {
-        background-color: red;
+        background-color: @colorDanger;
+        color: @colorWhite;
+        font-weight: 500;
       }
     }
 
     &.ParsingError {
-      border: 2px solid orange !important;
+      border: 2px solid @colorDraft !important;
 
       .ErrorOverlay {
-        background-color: orange;
+        background-color: @colorDraft;
       }
     }
 
