@@ -1,3 +1,13 @@
+import { Validator } from 'vee-validate';
+
+Validator.extend('isDate', {
+  getMessage (field) {
+    return `${field} should be a valid date, IE: 2017/01/15`;
+  },
+  validate (value) {
+    return !!(value instanceof Date && value.toJSON());
+  }
+});
 export const fetchProjectData = async (store, params, error) => {
   try {
     await store.dispatch('projects/setCurrentProject', params.id);
@@ -83,6 +93,15 @@ export const draftRules = () => {
     implementation_overview: {
       max: 1024
     },
+    start_date: {
+      isDate: true
+    },
+    end_date: {
+      isDate: true
+    },
+    implementation_dates: {
+      isDate: true
+    },
     coverage: {},
     coverage_second_level: {},
     national_level_deployment: {
@@ -126,10 +145,12 @@ export const publishRules = () => {
       max: 1024
     },
     start_date: {
-      required: true
+      required: true,
+      isDate: true
     },
     end_date: {
-      required: false
+      required: false,
+      isDate: true
     },
     contact_name: {
       required: true,
@@ -203,7 +224,9 @@ export const publishRules = () => {
     donors: {
       required: true
     },
-    implementation_dates: {},
+    implementation_dates: {
+      isDate: true
+    },
     licenses: {},
     repository: {
       max: 256,
