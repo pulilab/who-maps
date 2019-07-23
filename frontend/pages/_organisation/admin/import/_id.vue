@@ -290,11 +290,19 @@ export default {
           });
         }
         this.$nuxt.$loading.finish('save');
+        await this.$confirm(
+          this.$gettext('Your project has been successfully saved as a draft, you can go to your project inbox or keep working on the import interface'),
+          this.$gettext('Success!'),
+          {
+            confirmButtonText: this.$gettext('Project inbox'),
+            cancelButtonText: this.$gettext('Keep working'),
+            type: 'info'
+          });
       } else {
         scrollToError();
       }
     },
-    async doSingleRowSave (doSave, bubble) {
+    async doSingleRowSave (doSave, nested) {
       try {
         const newRow = await doSave(this.rawImport.country, this.rawImport.donor, !this.rawImport.draft);
         await this.patchRow(newRow);
@@ -305,7 +313,7 @@ export default {
             confirmButtonText: 'OK'
           });
         }
-        if (bubble) {
+        if (nested) {
           throw e;
         }
       }
@@ -339,6 +347,19 @@ export default {
         console.log(e);
       }
       this.$nuxt.$loading.finish('saveAll');
+      try {
+        await this.$confirm(
+          this.$gettext('Your projects have been successfully saved as a draft, you can go to your project inbox or keep working on the import interface'),
+          this.$gettext('Success!'),
+          {
+            confirmButtonText: this.$gettext('Project inbox'),
+            cancelButtonText: this.$gettext('Keep working'),
+            type: 'info'
+          });
+        this.$router.push(this.localePath({ name: 'organisation-projects', params: this.$route.params }));
+      } catch (e) {
+        console.log('stay');
+      }
     }
   }
 };
