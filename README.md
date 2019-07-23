@@ -93,8 +93,7 @@ donor to the one that you want to keep for all projects:
 After migrating all projects, you can delete the typo / duplicate donor objects from the admin (don't forget to issue
 the `remove_stale_donors` after that.)
 
-
-## Translations command:
+## Translations command
 
 On Osx prerequisite is:
 
@@ -104,11 +103,11 @@ after this command completes:
 
 `brew link --overwrite --force gettext` may be needed
 
-
 To scrape the code and extract translations:
 `yarn translation:extract`
 
 To Update the translations files in the backend:
+
 ```bash
 cd django
 fab update_translations
@@ -122,9 +121,10 @@ To see the new string and modify translations:
 To have translation appear in the frontend (after saving them at the previous step):
 `docker-compose restart django`
 
-### Quirks:
+### Quirks
+
 Translations are picked up from `<translate></translate>` blocks this block is declared as a global vue component so it can be used without importing it.
 If a translation string needs parameters (ie: {{userProfile.name}} hello!) the syntax is `<translate :parameters="{name: userProfile.name}"> {name} hello </translate>`
 Also, `$gettext('english/base string')` method is available in every Vue component via a mixin in the i18n plugin.
-
-
+`<translate></translate>` blocka must be keyed with unique keys to avoid vue 'recycling' old translations
+`$gettext` cannot be used in the template markup (ie to pass a value to a prop) a computed property must be created instead and associated to the prop.
