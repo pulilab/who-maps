@@ -284,7 +284,6 @@ export default {
             });
           this.$nuxt.$loading.start('save');
           newRow = await this.doSingleRowSave(doSave, true);
-          console.log(newRow);
           this.$nuxt.$loading.finish('save');
         } catch (e) {
           this.$nuxt.$loading.finish('save');
