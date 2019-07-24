@@ -1,6 +1,5 @@
 import collect from './extract-webpack-config';
 import { writeFile } from 'fs';
-// import { inspect } from 'util';
 import rimraf from 'rimraf';
 
 (async () => {
