@@ -148,7 +148,7 @@
               </form-hint>
             </template>
 
-            <el-date-picker
+            <safe-date-picker
               ref="Start date"
               v-model="start_date"
               v-validate="rules.start_date"
@@ -178,7 +178,7 @@
               </form-hint>
             </template>
 
-            <el-date-picker
+            <safe-date-picker
               v-model="end_date"
               v-validate="rules.end_date"
               :placeholder="$gettext('End date') | translate"
@@ -351,7 +351,10 @@ export default {
         this.$validator.validate('name'),
         this.$validator.validate('country'),
         this.$validator.validate('contact_email'),
-        this.$validator.validate('team')
+        this.$validator.validate('team'),
+        this.$validator.validate('start_date'),
+        this.$validator.validate('end_date')
+
       ]);
       console.log('General overview draft validation', validations);
       return validations.reduce((a, c) => a && c, true);
