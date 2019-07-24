@@ -195,7 +195,6 @@ export const customDonorAnswerParser = (customAnswers = [], donors = []) => {
 
 export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => {
   const result = {};
-  console.log(p);
   for (let key in p) {
     const value = dataCleaner(p[key]);
     result[key] = isEmpty(value) ? undefined : value;
