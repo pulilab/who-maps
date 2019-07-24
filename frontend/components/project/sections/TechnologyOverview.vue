@@ -19,7 +19,8 @@
           </translate>
         </template>
 
-        <el-date-picker
+        <safe-date-picker
+          ref="datePicker"
           v-model="implementation_dates"
           v-validate="rules.implementation_dates"
           :placeholder="$gettext('Pick a day') | translate"
@@ -146,6 +147,15 @@ export default {
       const validations = await Promise.all([
         this.$validator.validate()
       ]);
+      console.log('Technology overview validators', validations);
+      return validations.reduce((a, c) => a && c, true);
+    },
+    async validateDraft () {
+      this.$refs.collapsible.expandCard();
+      const validations = await Promise.all([
+        this.$validator.validate('implementation_dates')
+      ]);
+      console.log('Technology overview draft validators', validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }

@@ -239,6 +239,14 @@ export default {
       console.log('root validations', validations);
       return validations.reduce((a, c) => a && c, true);
     },
+    async validateDraft () {
+      const validations = await Promise.all([
+        this.$refs.generalOverview.validateDraft(),
+        this.$refs.technologyOverview.validateDraft()
+      ]);
+      console.log('root draft validations', validations);
+      return validations.reduce((a, c) => a && c, true);
+    },
     clearValidation () {
       this.apiErrors = {};
       this.$refs.generalOverview.clear();
@@ -252,7 +260,7 @@ export default {
       this.clearValidation();
       this.usePublishRules = false;
       this.$nextTick(async () => {
-        const valid = await this.$refs.generalOverview.validateDraft();
+        const valid = await this.validateDraft();
         if (valid) {
           try {
             if (this.isNewProject) {

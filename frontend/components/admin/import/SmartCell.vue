@@ -153,6 +153,9 @@ export default {
     },
     internalValue: {
       get () {
+        if (this.isDate) {
+          return new Date(this.value);
+        }
         return this.value;
       },
       set (value) {
@@ -196,6 +199,9 @@ export default {
           hsc_challenges: () => this.findProjectCollectionValue('hsc_challenges', true, 'challenges'),
           his_bucket: () => this.findProjectCollectionValue('his_bucket', true),
           implementing_partners: this.stringArray,
+          implementation_dates: () => this.parseDate(),
+          start_date: () => this.parseDate(),
+          end_date: () => this.parseDate(),
           government_investor: () => {
             const labelLib = {
               'no they have not yet contributed': 0,
@@ -275,6 +281,13 @@ export default {
       if (this.column) {
         this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column, type: this.type });
       }
+    },
+    parseDate () {
+      const result = this.value ? new Date(this.value) : null;
+      return {
+        ids: [result],
+        names: [result]
+      };
     },
     stringToArray (value) {
       if (Array.isArray(value)) {
@@ -375,21 +388,24 @@ export default {
 
     &.Disabled {
       cursor: not-allowed;
+      pointer-events: none;
     }
 
     &.ValidationError {
-      border: 2px solid red !important;
+      border: 2px solid @colorDanger !important;
 
       .ErrorOverlay {
-        background-color: red;
+        background-color: @colorDanger;
+        color: @colorWhite;
+        font-weight: 500;
       }
     }
 
     &.ParsingError {
-      border: 2px solid orange !important;
+      border: 2px solid @colorDraft !important;
 
       .ErrorOverlay {
-        background-color: orange;
+        background-color: @colorDraft;
       }
     }
 
