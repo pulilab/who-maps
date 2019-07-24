@@ -271,6 +271,7 @@ export default {
       }
     },
     async singleRowSave (doSave, valid, scrollToError) {
+      let newRow = null;
       if (valid) {
         try {
           await this.$confirm(
@@ -282,24 +283,31 @@ export default {
               type: 'warning'
             });
           this.$nuxt.$loading.start('save');
-          await this.doSingleRowSave(doSave);
+          newRow = await this.doSingleRowSave(doSave, true);
+          console.log(newRow);
+          this.$nuxt.$loading.finish('save');
         } catch (e) {
+          this.$nuxt.$loading.finish('save');
           this.$message({
             type: 'info',
             message: this.$gettext('Saving Cancelled')
           });
-          this.$nuxt.$loading.finish('save');
           return;
         }
-        this.$nuxt.$loading.finish('save');
-        await this.$confirm(
-          this.$gettext('Your project has been successfully saved as a draft, you can go to your project inbox or keep working on the import interface'),
-          this.$gettext('Success!'),
-          {
-            confirmButtonText: this.$gettext('Project inbox'),
-            cancelButtonText: this.$gettext('Keep working'),
-            type: 'info'
-          });
+        try {
+          await this.$confirm(
+            this.$gettext('Your project has been successfully saved as a draft, you can go to your project page or keep working on the import interface'),
+            this.$gettext('Success!'),
+            {
+              confirmButtonText: this.$gettext('Project inbox'),
+              cancelButtonText: this.$gettext('Keep working'),
+              type: 'info'
+            });
+          const id = newRow.project;
+          this.$router.push(this.localePath({ name: 'organisation-projects-id', params: { id, organisation: this.$route.params.organisation } }));
+        } catch (e) {
+          console.log('stay');
+        }
       } else {
         scrollToError();
       }
@@ -308,6 +316,7 @@ export default {
       try {
         const newRow = await doSave(this.rawImport.country, this.rawImport.donor, !this.rawImport.draft);
         await this.patchRow(newRow);
+        return newRow;
       } catch (e) {
         console.error(e);
         if (e.response && e.response.data) {
