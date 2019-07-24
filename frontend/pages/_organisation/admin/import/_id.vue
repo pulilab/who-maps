@@ -286,8 +286,10 @@ export default {
         } catch (e) {
           this.$message({
             type: 'info',
-            message: this.$gettext('Save canceled')
+            message: this.$gettext('Saving Cancelled')
           });
+          this.$nuxt.$loading.finish('save');
+          return;
         }
         this.$nuxt.$loading.finish('save');
         await this.$confirm(
@@ -332,7 +334,7 @@ export default {
       } catch (e) {
         this.$message({
           type: 'info',
-          message: this.$gettext('Save all projects canceled')
+          message: this.$gettext('Saving all projects cancelled')
         });
       }
     },
