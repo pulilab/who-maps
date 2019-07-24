@@ -342,7 +342,7 @@ export default {
       } catch (e) {
         this.$message({
           type: 'info',
-          message: this.$gettext('Saving all projects cancelled')
+          message: this.$gettext('Saving all projects has been cancelled')
         });
       }
     },
