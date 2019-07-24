@@ -299,7 +299,7 @@ export default {
             this.$gettext('Your project has been successfully saved as a draft, you can go to your project page or keep working on the import interface'),
             this.$gettext('Success!'),
             {
-              confirmButtonText: this.$gettext('Project inbox'),
+              confirmButtonText: this.$gettext('Project page'),
               cancelButtonText: this.$gettext('Keep working'),
               type: 'info'
             });
