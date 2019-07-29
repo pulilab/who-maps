@@ -176,9 +176,12 @@ const MapMixin = {
         this.$refs.mainMap.mapObject.setZoom(zoom);
       }
     },
-    resetZoom () {
+    async resetZoom () {
       // removing active and selected country will reset the zoom
       this.setActiveCountry(null);
+      if (!this.selectedCountry) {
+        this.centerOn([0, 0], 2);
+      }
     },
     zoomChangeHandler (event) {
       this.setCurrentZoom(event.target.getZoom());
