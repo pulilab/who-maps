@@ -121,7 +121,7 @@ export const isEmpty = (value) => {
   if (Array.isArray(value)) {
     return false;
   } else if (value instanceof Date) {
-    return !!value.toJSON();
+    return !value.toJSON();
   } else if (value instanceof Object && value !== null) {
     return Object.keys(value).length === 0;
   }
@@ -199,6 +199,7 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
     const value = dataCleaner(p[key]);
     result[key] = isEmpty(value) ? undefined : value;
   }
+  console.log(result, p);
   const interoperability_links = interoperabilityLinkWriteParser(p.interoperability_links);
   const platforms = platformsWriteParser(p.platforms, p.digitalHealthInterventions);
   let coverage = [];
