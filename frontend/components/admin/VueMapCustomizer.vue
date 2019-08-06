@@ -292,11 +292,9 @@ export default {
       if (!this.mapReady) {
         return undefined;
       }
-      const markerClasses = ['ActiveCountry'];
-      const html = `<span></span>`;
       return L.divIcon({
-        className: markerClasses.join(' '),
-        html,
+        className: 'ActiveCountry',
+        html: '<span></span>',
         iconSize: [27, 44],
         iconAnchor: [13.5, 44]
       });
