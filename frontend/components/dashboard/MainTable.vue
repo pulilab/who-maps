@@ -156,9 +156,11 @@
         width="240"
       >
         <template slot-scope="scope">
-          <health-focus-areas-list
+          <HfaCategoriesList
             :value="scope.row.health_focus_areas"
             :limit="3"
+            value-is-child
+            show-check
           />
         </template>
       </el-table-column>
@@ -222,7 +224,7 @@ import { mapGettersActions } from '../../utilities/form.js';
 import ProjectCard from '../common/ProjectCard';
 import CountryItem from '../common/CountryItem';
 import OrganisationItem from '../common/OrganisationItem';
-import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
+import HfaCategoriesList from '@/components/common/list/HfaCategoriesList';
 import DonorsList from '../common/list/DonorsList';
 import RegionItem from '../common/RegionItem';
 import CustomAnswersCell from './CustomAnswersCell';
@@ -234,7 +236,7 @@ export default {
     ProjectCard,
     CountryItem,
     OrganisationItem,
-    HealthFocusAreasList,
+    HfaCategoriesList,
     DonorsList,
     RegionItem,
     CustomAnswersCell,
