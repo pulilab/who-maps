@@ -17,15 +17,11 @@ export default {
       dashboardType: 'dashboard/getDashboardType',
       countryColumns: 'dashboard/getCountryColumns',
       donorColumns: 'dashboard/getDonorColumns',
-      goalAreas: 'projects/getGoalAreas',
-      resultAreas: 'projects/getResultAreas',
-      capabilityLevels: 'projects/getCapabilityLevels',
-      capabilityCategories: 'projects/getCapabilityCategories',
-      capabilitySubcategories: 'projects/getCapabilitySubcategories',
       fieldOffices: 'projects/getFieldOffices',
-      regions: 'system/getUnicefRegions',
+      regions: 'system/getRegions',
       platforms: 'projects/getTechnologyPlatforms',
-      hscChallenges: 'projects/getHscChallenges'
+      hscChallenges: 'projects/getHscChallenges',
+      organisations: 'system/getOrganisations'
     }),
     parsed () {
       if (!this.projects || !this.projects[0] || typeof this.projects !== 'object') {
@@ -35,21 +31,16 @@ export default {
         const parsed = {
           ...s,
           country: this.parseCountry(s.country),
+          organisation: this.parseSingleSelection(s.organisation, 'organisations'),
           investors: this.parseDonors(s.donors),
           health_focus_areas: this.parseHealthFocusAreas(s.health_focus_areas),
           hsc_challenges: this.parseHscChallenges(s.hsc_challenges),
-          capability_levels: this.parseFlatList(s.capability_levels, 'capabilityLevels'),
-          capability_categories: this.parseFlatList(s.capability_categories, 'capabilityCategories'),
-          capability_subcategories: this.parseFlatList(s.capability_categories, 'capabilitySubcategories'),
-          field_office: this.parseSingleSelection(s.field_office, 'fieldOffices'),
-          goal_area: this.parseSingleSelection(s.goal_area, 'goalAreas'),
-          result_area: this.parseSingleSelection(s.result_area, 'resultAreas'),
           region: this.parseSingleSelection(s.region, 'regions'),
-          software: this.parseFlatList(s.platforms, 'platforms'),
+          software: this.parsePlatforms(s.platforms),
+          government_investor: this.parseBoolean(s.government_investor),
           approved: this.parseBoolean(s.approved),
           ...this.parseCustomQuestions(s.donor_answers),
           donors: undefined,
-          organisation: undefined,
           platforms: undefined,
           country_answers: undefined,
           donor_answers: undefined
@@ -61,6 +52,9 @@ export default {
   methods: {
     parseBoolean (value) {
       return value ? this.$gettext('yes') : this.$gettext('no');
+    },
+    parsePlatforms (platforms) {
+      return this.parseFlatList(platforms.map(p => p.id), 'platforms');
     },
     parseFlatList (flatList, type) {
       try {
