@@ -7,15 +7,14 @@ import { format } from 'date-fns';
 import { mapGetters } from 'vuex';
 
 export default {
+  props: {
+    input: {
+      type: Array,
+      default: () => []
+    }
+  },
   computed: {
     ...mapGetters({
-      projects: 'dashboard/getProjectsBucket',
-      selectedRows: 'dashboard/getSelectedRows',
-      selectAll: 'dashboard/getSelectAll',
-      getCountryDetails: 'countries/getCountryDetails',
-      getDonorDetails: 'system/getDonorDetails',
-      getOrganisationDetails: 'system/getOrganisationDetails',
-      getHealthFocusAreas: 'projects/getHealthFocusAreas',
       dashboardType: 'dashboard/getDashboardType',
       countryColumns: 'dashboard/getCountryColumns',
       donorColumns: 'dashboard/getDonorColumns'
@@ -101,11 +100,8 @@ export default {
         images: this.base64Images
       };
     },
-    selected () {
-      return this.selectAll ? this.projects : this.projects.filter(p => this.selectedRows.some(sr => sr === p.id));
-    },
     parsed () {
-      return this.selected.map(s => {
+      return this.input.map(s => {
         let custom = [];
         if (this.dashboardType === 'donor') {
           try {
@@ -175,13 +171,6 @@ export default {
       const docDefinition = { ...this.docDefinition, content: [this.tableHeader] };
 
       this.parsed.forEach((project, index) => {
-        const country = this.getCountryDetails(project.country);
-        const country_name = country && country.name ? country.name.toUpperCase() : '';
-        const donors = project.donors.map(d => this.getDonorDetails(d)).filter(d => d).map(d => d.name);
-        const organisation = this.getOrganisationDetails(project.organisation);
-        const organisation_name = organisation ? organisation.name : '';
-        const health_focus_areas = this.getHealthFocusAreas.filter(hfa => project.health_focus_areas.some(h => h === hfa.id)).map(hf => hf.name);
-
         docDefinition.content.push({
           margin: [0, 10],
           table: {
@@ -202,7 +191,7 @@ export default {
                   color: '#008DC9',
                   style: 'subHeader'
                 },
-                country_name
+                project.country
               ],
               [
                 [
@@ -210,16 +199,16 @@ export default {
                   this.printBoolean(project.government_investor)],
                 [
                   { text: this.$gettext('Organisation name:'), style: 'subHeader' },
-                  organisation_name
+                  project.organisation
                 ],
                 [
                   { text: this.$gettext('Investors:'), style: 'subHeader' },
-                  donors.join(', ')
+                  project.investors
                 ],
                 {
                   stack: [
                     { text: this.$gettext('Health Focus Area:'), style: 'subHeader' },
-                    health_focus_areas.join(', ')
+                    project.health_focus_areas
                   ],
                   colSpan: 2
                 },

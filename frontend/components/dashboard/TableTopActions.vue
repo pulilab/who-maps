@@ -28,79 +28,81 @@
         <div class="Separator" />
         <list-export :projects="rowToExport">
           <template #default="{parsed}">
-            <xlsx-workbook>
-              <xlsx-sheet
-                :collection="parsed"
-                sheet-name="export"
-              />
-              <xlsx-download
-                disable-wrapper-click
-                :options="{bookType: exportType.toLowerCase()}"
-                :filename="`export.${exportType.toLowerCase()}`"
+            <div class="TableExportContainer">
+              <xlsx-workbook>
+                <xlsx-sheet
+                  :collection="parsed"
+                  sheet-name="export"
+                />
+                <xlsx-download
+                  disable-wrapper-click
+                  :options="{bookType: exportType.toLowerCase()}"
+                  :filename="`export.${exportType.toLowerCase()}`"
+                >
+                  <template #default="{download}">
+                    <el-button
+                      :disabled="selectedRows.length === 0"
+                      type="primary"
+                      size="small"
+                      class="IconLeft"
+                      @click="exportRows(download)"
+                    >
+                      <fa icon="download" />
+                      <span v-show="selectedRows.length === 0">
+                        <translate>Export selected</translate>
+                      </span>
+                      <span v-show="selected">
+                        <translate :parameters="{selected}">
+                          Export {selected} selected
+                        </translate>
+                      </span>
+                    </el-button>
+                  </template>
+                </xlsx-download>
+              </xlsx-workbook>
+              <el-select
+                v-model="exportType"
+                size="small"
               >
-                <template #default="{download}">
-                  <el-button
-                    :disabled="selectedRows.length === 0"
-                    type="primary"
-                    size="small"
-                    class="IconLeft"
-                    @click="exportRows(download)"
+                <el-option
+                  label="CSV"
+                  value="CSV"
+                />
+                <el-option
+                  label="XLSX"
+                  value="XLSX"
+                />
+                <el-option
+                  label="PDF"
+                  value="PDF"
+                />
+              </el-select>
+              <pdf-export ref="pdfExport" :input="parsed" />
+
+              <template v-if="showEmailButton">
+                <div class="Separator" />
+                <el-button
+                  :disabled="selectedRows.length === 0"
+                  type="primary"
+                  size="small"
+                  class="IconLeft"
+                  @click="openMailDialog"
+                >
+                  <fa icon="envelope" />
+                  <translate v-show="selected === 0">
+                    Contact selected
+                  </translate>
+                  <translate
+                    v-show="selected > 0"
+                    :parameters="{selected}"
                   >
-                    <fa icon="download" />
-                    <span v-show="selectedRows.length === 0">
-                      <translate>Export selected</translate>
-                    </span>
-                    <span v-show="selected">
-                      <translate :parameters="{selected}">
-                        Export {selected} selected
-                      </translate>
-                    </span>
-                  </el-button>
-                </template>
-              </xlsx-download>
-            </xlsx-workbook>
+                    Contact {selected} selected
+                  </translate>
+                </el-button>
+              </template>
+            </div>
           </template>
         </list-export>
-        <el-select
-          v-model="exportType"
-          size="small"
-        >
-          <el-option
-            label="CSV"
-            value="CSV"
-          />
-          <el-option
-            label="XLSX"
-            value="XLSX"
-          />
-          <el-option
-            label="PDF"
-            value="PDF"
-          />
-        </el-select>
-
-        <template v-if="showEmailButton">
-          <div class="Separator" />
-          <el-button
-            :disabled="selectedRows.length === 0"
-            type="primary"
-            size="small"
-            class="IconLeft"
-            @click="openMailDialog"
-          >
-            <fa icon="envelope" />
-            <translate v-show="selected === 0">
-              Contact selected
-            </translate>
-            <translate
-              v-show="selected > 0"
-              :parameters="{selected}"
-            >
-              Contact {selected} selected
-            </translate>
-          </el-button>
-          <pdf-export ref="pdfExport" />
-        </template>
       </el-row>
     </el-col>
 
@@ -319,6 +321,11 @@ export default {
 
     .TableExportOptions {
       width: 100%;
+
+      .TableExportContainer {
+        width: 100%;
+        display: flex;
+      }
 
       .el-button {
         &.is-disabled {
