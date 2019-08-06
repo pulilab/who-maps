@@ -59,6 +59,7 @@
             :world-copy-jump="true"
             :options="mapOptions"
             class="MapContainer"
+            @leaflet:load="setMapReady()"
           >
             <l-tilelayer
               url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
@@ -76,6 +77,7 @@
               v-if="showCenterPin && countryCenter"
               :lat-lng="countryCenter"
               :draggable="true"
+              :icon="centerIcon"
               @moveend="countryCenterMoveHandler"
             >
               <l-tooltip> Country Central Pin </l-tooltip>
@@ -264,7 +266,8 @@ export default {
       forceMapFileChange: false,
       mapFile: {},
       uploadMapFile: false,
-      mapFileList: []
+      mapFileList: [],
+      mapReady: false
     };
   },
   computed: {
@@ -284,6 +287,20 @@ export default {
       countryBorder: 'admin/map/getCountryBorder',
       subLevelsPolyCenters: 'admin/map/getSubLevelsPolyCenters'
     }),
+
+    centerIcon () {
+      if (!this.mapReady) {
+        return undefined;
+      }
+      const markerClasses = ['ActiveCountry'];
+      const html = `<span></span>`;
+      return L.divIcon({
+        className: markerClasses.join(' '),
+        html,
+        iconSize: [27, 44],
+        iconAnchor: [13.5, 44]
+      });
+    },
     uploadHeaders () {
       return {
         'Authorization': `Token ${this.token}`
@@ -357,7 +374,9 @@ export default {
       setSubLevelsPolyCenters: 'admin/map/setSubLevelsPolyCenters',
       updateSubLevelPolyCenter: 'admin/map/updateSubLevelPolyCenter'
     }),
-
+    setMapReady () {
+      this.mapReady = true;
+    },
     async downloadMap () {
       // /api/countries/map-download/${country.id}/
       this.$nuxt.$loading.start();
@@ -414,88 +433,232 @@ export default {
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .CountryMapCustomizer {
-    align-items: stretch;
-    width: 100%;
+.CountryMapCustomizer {
+  align-items: stretch;
+  width: 100%;
 
-    > .el-col {
-      // Left side - Vue map
-      &:first-child {
-        width: 100%;
-        min-width: calc(100% - 340px);
-      }
+  .ActiveCountry {
+    background-image: url('~assets/img/pins/pin-without-counter-active.svg');
+  }
 
-      // Right side - Levels & Facilities
-      &:last-child {
-        min-width: 340px;
-        max-width: 340px;
-        // MapContainer + CountryMapHeader + CountryMapSettings
-        height: calc(50vh + 58px + 90px);
-        min-height: calc(50vh + 58px + 90px);
-        max-height: calc(500px + 58px + 90px);
-        overflow-y: auto;
-        padding: 0;
-        border-left: 1px solid @colorGrayLight;
-        background-color: @colorBrandBlueLight;
+  > .el-col {
+    // Left side - Vue map
+    &:first-child {
+      width: 100%;
+      min-width: calc(100% - 340px);
+    }
 
-        .MapSettingSection {
-          padding: 20px 40px;
-          border-bottom: 1px solid @colorGrayLight;
+    // Right side - Levels & Facilities
+    &:last-child {
+      min-width: 340px;
+      max-width: 340px;
+      // MapContainer + CountryMapHeader + CountryMapSettings
+      height: calc(50vh + 58px + 90px);
+      min-height: calc(50vh + 58px + 90px);
+      max-height: calc(500px + 58px + 90px);
+      overflow-y: auto;
+      padding: 0;
+      border-left: 1px solid @colorGrayLight;
+      background-color: @colorBrandBlueLight;
 
-          &:last-child {
-            padding-bottom: 80px;
-            border: 0;
-          }
+      .MapSettingSection {
+        padding: 20px 40px;
+        border-bottom: 1px solid @colorGrayLight;
 
-          h5 {
-            margin: 10px 0 20px;
-            font-size: @fontSizeBase;
+        &:last-child {
+          padding-bottom: 80px;
+          border: 0;
+        }
 
-            span {
-              font-weight: 400;
-              color: @colorGray;
-            }
-          }
+        h5 {
+          margin: 10px 0 20px;
+          font-size: @fontSizeBase;
 
-          p {
-            margin: 0 0 20px;
-            font-size: @fontSizeSmall;
-            line-height: 18px;
+          span {
+            font-weight: 400;
             color: @colorGray;
           }
+        }
 
-          .el-select {
-            width: 100%;
-            margin-bottom: 20px;
+        p {
+          margin: 0 0 20px;
+          font-size: @fontSizeSmall;
+          line-height: 18px;
+          color: @colorGray;
+        }
+
+        .el-select {
+          width: 100%;
+          margin-bottom: 20px;
+        }
+
+        .SubLevelList {
+          ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+
+            li {
+              position: relative;
+              font-size: @fontSizeBase;
+              margin: 0 0 10px;
+              padding: 0 20px;
+              color: @colorBrandPrimary;
+              cursor: pointer;
+              transition: @transitionAll;
+
+              &:hover {
+                color: @colorBrandPrimaryLight;
+              }
+
+              .svg-inline--fa {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 14px;
+              }
+            }
           }
+        }
+      }
+    }
+
+    .CountryMapHeader {
+      height: 58px;
+      padding: 0 40px;
+      background-color: @colorWhite;
+
+      .CountryMapTitle {
+        width: 100%;
+        padding-right: 20px;
+        font-size: @fontSizeMedium;
+        font-weight: 700;
+        .textTruncate();
+      }
+
+      .CountryMapFile {
+        width: auto;
+        font-size: @fontSizeBase;
+        text-align: right;
+        white-space: nowrap;
+
+        .el-button {
+          margin-left: 20px;
+          padding: 0;
+        }
+
+        // .UploadComp {}
+      }
+    }
+
+    .CountryMapSettings {
+      height: 90px;
+      padding: 0 40px;
+      background-color: @colorWhite;
+
+      > .el-row {
+        height: 100%;
+      }
+
+      .PinSwitch {
+        padding: 2px 0 6px;
+
+        > span {
+          position: relative;
+          top: 4px;
+          display: inline-block;
+          width: 160px;
+          font-size: @fontSizeBase;
+          font-weight: 700;
+          line-height: 16px;
+          .textTruncate();
+        }
+
+        .el-switch {
+          .el-switch__label {
+            color: @colorGray;
+
+            &.is-active {
+              color: @colorTextPrimary;
+            }
+          }
+        }
+
+        &.CountryCenter {
+          .el-switch {
+            &.is-checked {
+              .el-switch__core {
+                border-color: @colorBrandAccent;
+                background-color: @colorBrandAccent;
+              }
+            }
+          }
+        }
+      }
+
+      .el-button {
+        float: right;
+      }
+    }
+
+    .MapContainer {
+      box-sizing: border-box;
+      height: 50vh;
+      min-height: 50vh;
+      max-height: 500px;
+      border: 1px solid @colorGrayLight;
+      border-width: 1px 0;
+    }
+
+    // vue map custom styling
+    .map-container {
+      height: 15vh;
+      max-height: 500px;
+
+      .country {
+        fill: #e3e5ee;
+      }
+
+      .first-sub-level {
+        fill: #e3e5ee;
+        stroke: #9b9da8;
+        stroke-width: 2px;
+      }
+
+      .second-sub-level {
+        fill: #e3e5ee;
+        stroke: #283593;
+        stroke-width: 1px;
+      }
+
+      .label {
+        &.hidden {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+[dir="rtl"] {
+  .CountryMapCustomizer {
+    > .el-col {
+
+      &:last-child {
+        border-left: none;
+        border-right: 1px solid @colorGrayLight;
+
+        .MapSettingSection {
 
           .SubLevelList {
             ul {
-              list-style-type: none;
-              margin: 0;
-              padding: 0;
-
               li {
-                position: relative;
-                font-size: @fontSizeBase;
-                margin: 0 0 10px;
-                padding: 0 20px;
-                color: @colorBrandPrimary;
-                cursor: pointer;
-                transition: @transitionAll;
-
-                &:hover {
-                  color: @colorBrandPrimaryLight;
-                }
-
                 .svg-inline--fa {
-                  position: absolute;
-                  top: 0;
-                  left: 0;
-                  width: 14px;
+                  left: auto;
+                  right: 0;
                 }
               }
             }
@@ -504,175 +667,35 @@ export default {
       }
 
       .CountryMapHeader {
-        height: 58px;
-        padding: 0 40px;
-        background-color: @colorWhite;
-
         .CountryMapTitle {
-          width: 100%;
-          padding-right: 20px;
-          font-size: @fontSizeMedium;
-          font-weight: 700;
-          .textTruncate();
+          padding-left: 20px;
+          padding-right: 0;
         }
 
         .CountryMapFile {
-          width: auto;
-          font-size: @fontSizeBase;
-          text-align: right;
-          white-space: nowrap;
-
           .el-button {
-            margin-left: 20px;
-            padding: 0;
+            margin-left: 0px;
+            margin-right: 20px;
           }
-
-          // .UploadComp {}
         }
       }
 
       .CountryMapSettings {
-        height: 90px;
-        padding: 0 40px;
-        background-color: @colorWhite;
-
-        > .el-row {
-          height: 100%;
-        }
-
-        .PinSwitch {
-          padding: 2px 0 6px;
-
-          > span {
-            position: relative;
-            top: 4px;
-            display: inline-block;
-            width: 160px;
-            font-size: @fontSizeBase;
-            font-weight: 700;
-            line-height: 16px;
-            .textTruncate();
-          }
-
-          .el-switch {
-            .el-switch__label {
-              color: @colorGray;
-
-              &.is-active {
-                color: @colorTextPrimary;
-              }
-            }
-          }
-
-          &.CountryCenter {
-            .el-switch {
-              &.is-checked {
-                .el-switch__core {
-                  border-color: @colorBrandAccent;
-                  background-color: @colorBrandAccent;
-                }
-              }
-            }
-          }
-        }
-
         .el-button {
-          float: right;
-        }
-      }
-
-      .MapContainer {
-        box-sizing: border-box;
-        height: 50vh;
-        min-height: 50vh;
-        max-height: 500px;
-        border: 1px solid @colorGrayLight;
-        border-width: 1px 0;
-      }
-
-      // vue map custom styling
-      .map-container {
-        height: 15vh;
-        max-height: 500px;
-
-        .country {
-          fill: #e3e5ee;
+          float: left;
         }
 
-        .first-sub-level {
-          fill: #e3e5ee;
-          stroke: #9b9da8;
-          stroke-width: 2px;
+        .el-switch__label.el-switch__label--left {
+          margin-left: 10px;
+          margin-right: 0;
         }
 
-        .second-sub-level {
-          fill: #e3e5ee;
-          stroke: #283593;
-          stroke-width: 1px;
-        }
-
-        .label {
-          &.hidden {
-            display: none;
-          }
+        .el-switch__label.el-switch__label--right {
+          margin-left: 0;
+          margin-right: 10px;
         }
       }
     }
   }
-
-  [dir="rtl"] {
-    .CountryMapCustomizer {
-      > .el-col {
-
-        &:last-child {
-          border-left: none;
-          border-right: 1px solid @colorGrayLight;
-
-          .MapSettingSection {
-
-            .SubLevelList {
-              ul {
-                li {
-                  .svg-inline--fa {
-                    left: auto;
-                    right: 0;
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        .CountryMapHeader {
-          .CountryMapTitle {
-            padding-left: 20px;
-            padding-right: 0;
-          }
-
-          .CountryMapFile {
-            .el-button {
-              margin-left: 0px;
-              margin-right: 20px;
-            }
-          }
-        }
-
-        .CountryMapSettings {
-          .el-button {
-            float: left;
-          }
-
-          .el-switch__label.el-switch__label--left {
-            margin-left: 10px;
-            margin-right: 0;
-          }
-
-          .el-switch__label.el-switch__label--right {
-            margin-left: 0;
-            margin-right: 10px;
-          }
-        }
-      }
-    }
-  }
+}
 </style>
