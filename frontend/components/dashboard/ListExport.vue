@@ -52,7 +52,7 @@ export default {
           licenses: this.parseFlatList(s.licenses, 'licenses'),
           interoperability_standards: this.parseFlatList(s.interoperability_standards, 'interoperabilityStandards'),
           approved: this.parseBoolean(s.approved),
-          ...this.parseCustomQuestions(s.donor_answers),
+          point_of_contact: `${s.contact_name}, ${s.contact_email}`,
           donors: undefined,
           platforms: undefined,
           country_answers: undefined,
@@ -60,6 +60,39 @@ export default {
         };
         return pickBy(parsed, v => v !== undefined && v !== null);
       });
+    },
+    withLabels () {
+      if (!this.parsed || !this.parsed[0] || typeof this.parsed !== 'object') {
+        return null;
+      }
+      return this.parsed.map(s => ({
+        'Name': s.name,
+        'Country': s.country,
+        'Implementation Date': s.implementation_dates,
+        'Start Date': s.start_date,
+        'End Date': s.end_date,
+        'Organisation Name': s.organisation,
+        'Donors': s.investors,
+        'Implementing Partners': s.implementing_partners,
+        'Point of Contact': s.point_of_contact,
+        'Overview of digital health implementation': s.implementation_overview,
+        'Geographical scope': s.geographic_scope,
+        'Health Focus Areas': s.health_focus_areas,
+        'Software': s.software,
+        'Health System Challenges': s.hsc_challenges,
+        'Health Information System Support': s.his_bucket,
+        'Government Investor': s.government_investor,
+        'Licenses': s.licenses,
+        'Repository': s.repository,
+        'Mobile Application': s.mobile_application,
+        'Wiki': s.wiki,
+        'Interoperability Standards': s.interoperability_standards,
+        'National Level Deployment': s.national_level_deployment,
+        'First Level Coverage': s.coverage,
+        'Second Level Coverage': s.coverage_second_level,
+        'Approved': s.approved,
+        ...this.parseCustomQuestions(s.donor_answers, s.country_answers)
+      }));
     }
   },
   methods: {
@@ -155,7 +188,8 @@ export default {
   },
   render () {
     return this.$scopedSlots.default({
-      parsed: this.parsed
+      parsed: this.parsed,
+      labeled: this.withLabels
     });
   }
 };

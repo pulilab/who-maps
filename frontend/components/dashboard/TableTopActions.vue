@@ -27,11 +27,11 @@
 
         <div class="Separator" />
         <list-export :projects="rowToExport">
-          <template #default="{parsed}">
+          <template #default="{parsed, labeled}">
             <div class="TableExportContainer">
               <xlsx-workbook>
                 <xlsx-sheet
-                  :collection="parsed"
+                  :collection="labeled"
                   sheet-name="export"
                 />
                 <xlsx-download
@@ -77,7 +77,10 @@
                   value="PDF"
                 />
               </el-select>
-              <pdf-export ref="pdfExport" :input="parsed" />
+              <pdf-export
+                ref="pdfExport"
+                :input="parsed"
+              />
 
               <template v-if="showEmailButton">
                 <div class="Separator" />
@@ -189,8 +192,8 @@
 
 <script>
 import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
-import ProjectLegend from '../common/ProjectLegend';
-import PdfExport from './PdfExport';
+import ProjectLegend from '@/components/common/ProjectLegend';
+import PdfExport from '@/components/dashboard/PdfExport';
 import ListExport from '@/components/dashboard/ListExport';
 
 import { mapGetters, mapActions } from 'vuex';
