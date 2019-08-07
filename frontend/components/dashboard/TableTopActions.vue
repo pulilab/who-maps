@@ -26,60 +26,86 @@
         </el-button>
 
         <div class="Separator" />
+        <list-export :projects="rowToExport">
+          <template #default="{parsed, labeled}">
+            <div class="TableExportContainer">
+              <xlsx-workbook>
+                <xlsx-sheet
+                  :collection="labeled"
+                  sheet-name="export"
+                />
+                <xlsx-download
+                  disable-wrapper-click
+                  :options="{bookType: exportType.toLowerCase()}"
+                  :filename="`export.${exportType.toLowerCase()}`"
+                >
+                  <template #default="{download}">
+                    <el-button
+                      :disabled="selectedRows.length === 0"
+                      type="primary"
+                      size="small"
+                      class="IconLeft"
+                      @click="exportRows(download)"
+                    >
+                      <fa icon="download" />
+                      <span v-show="selectedRows.length === 0">
+                        <translate>Export selected</translate>
+                      </span>
+                      <span v-show="selected">
+                        <translate :parameters="{selected}">
+                          Export {selected} selected
+                        </translate>
+                      </span>
+                    </el-button>
+                  </template>
+                </xlsx-download>
+              </xlsx-workbook>
+              <el-select
+                v-model="exportType"
+                size="small"
+              >
+                <el-option
+                  label="CSV"
+                  value="CSV"
+                />
+                <el-option
+                  label="XLSX"
+                  value="XLSX"
+                />
+                <el-option
+                  label="PDF"
+                  value="PDF"
+                />
+              </el-select>
+              <pdf-export
+                ref="pdfExport"
+                :input="parsed"
+              />
 
-        <el-button
-          :disabled="selectedRows.length === 0"
-          type="primary"
-          size="small"
-          class="IconLeft"
-          @click="exportRows"
-        >
-          <fa icon="download" />
-          <span v-show="selectedRows.length === 0">
-            <translate>Export selected</translate>
-          </span>
-          <span v-show="selected">
-            <translate :parameters="{selected}">
-              Export {selected} selected
-            </translate>
-          </span>
-        </el-button>
-        <el-select
-          v-model="exportType"
-          size="small"
-        >
-          <el-option
-            label="CSV"
-            value="CSV"
-          />
-          <el-option
-            label="PDF"
-            value="PDF"
-          />
-        </el-select>
-
-        <template v-if="showEmailButton">
-          <div class="Separator" />
-          <el-button
-            :disabled="selectedRows.length === 0"
-            type="primary"
-            size="small"
-            class="IconLeft"
-            @click="openMailDialog"
-          >
-            <fa icon="envelope" />
-            <translate v-show="selected === 0">
-              Contact selected
-            </translate>
-            <translate
-              v-show="selected > 0"
-              :parameters="{selected}"
-            >
-              Contact {selected} selected
-            </translate>
-          </el-button>
-          <pdf-export ref="pdfExport" />
-        </template>
+              <template v-if="showEmailButton">
+                <div class="Separator" />
+                <el-button
+                  :disabled="selectedRows.length === 0"
+                  type="primary"
+                  size="small"
+                  class="IconLeft"
+                  @click="openMailDialog"
+                >
+                  <fa icon="envelope" />
+                  <translate v-show="selected === 0">
+                    Contact selected
+                  </translate>
+                  <translate
+                    v-show="selected > 0"
+                    :parameters="{selected}"
+                  >
+                    Contact {selected} selected
+                  </translate>
+                </el-button>
+              </template>
+            </div>
+          </template>
+        </list-export>
       </el-row>
     </el-col>
 
@@ -165,20 +191,25 @@
 </template>
 
 <script>
-import ProjectLegend from '../common/ProjectLegend';
-import PdfExport from './PdfExport';
-import { blobDownloader } from '@/utilities/dom';
+import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
+import ProjectLegend from '@/components/common/ProjectLegend';
+import PdfExport from '@/components/dashboard/PdfExport';
+import ListExport from '@/components/dashboard/ListExport';
 
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
     ProjectLegend,
-    PdfExport
+    PdfExport,
+    XlsxWorkbook,
+    XlsxSheet,
+    XlsxDownload,
+    ListExport
   },
   data () {
     return {
-      exportType: 'CSV',
+      exportType: 'XLSX',
       columnSelectorOpen: false,
       selectedColumns: [],
       viewportSize: 2000
@@ -253,20 +284,13 @@ export default {
         this.setSelectedRows([]);
       }
     },
-    exportRows () {
+    exportRows (xlsxDownloadFunction) {
       this.$nuxt.$loading.start('pdf');
       window.setTimeout(async () => {
         if (this.exportType === 'PDF') {
           this.$refs.pdfExport.printPdf();
-        } else if (this.exportType === 'CSV') {
-          const ids = this.rowToExport.map(p => p.id);
-          const payload = {
-            ids,
-            donor: this.dashboardType === 'donor' ? this.dashboardId : undefined,
-            country: this.dashboardType === 'country' ? this.dashboardId : undefined
-          };
-          const { data } = await this.$axios.post('/api/projects/csv-export/', payload, { responseType: 'blob' });
-          blobDownloader(data, 'project-export.csv');
+        } else {
+          xlsxDownloadFunction();
         }
         this.$nuxt.$loading.finish('pdf');
       }, 500);
@@ -300,6 +324,11 @@ export default {
 
     .TableExportOptions {
       width: 100%;
+
+      .TableExportContainer {
+        width: 100%;
+        display: flex;
+      }
 
       .el-button {
         &.is-disabled {

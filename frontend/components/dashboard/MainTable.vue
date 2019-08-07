@@ -156,9 +156,11 @@
         width="240"
       >
         <template slot-scope="scope">
-          <health-focus-areas-list
+          <HfaCategoriesList
             :value="scope.row.health_focus_areas"
             :limit="3"
+            value-is-child
+            show-check
           />
         </template>
       </el-table-column>
@@ -217,24 +219,23 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { mapGettersActions } from '../../utilities/form.js';
+import { mapGettersActions } from '@/utilities/form.js';
 
-import ProjectCard from '../common/ProjectCard';
-import CountryItem from '../common/CountryItem';
-import OrganisationItem from '../common/OrganisationItem';
-import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
-import DonorsList from '../common/list/DonorsList';
-import RegionItem from '../common/RegionItem';
+import ProjectCard from '@/components/common/ProjectCard';
+import CountryItem from '@/components/common/CountryItem';
+import OrganisationItem from '@/components/common/OrganisationItem';
+import HfaCategoriesList from '@/components/common/list/HfaCategoriesList';
+import DonorsList from '@/components/common/list/DonorsList';
+import RegionItem from '@/components/common/RegionItem';
 import CustomAnswersCell from './CustomAnswersCell';
 import CurrentPage from '@/components/dashboard/CurrentPage';
-import { setTimeout } from 'timers';
 
 export default {
   components: {
     ProjectCard,
     CountryItem,
     OrganisationItem,
-    HealthFocusAreasList,
+    HfaCategoriesList,
     DonorsList,
     RegionItem,
     CustomAnswersCell,

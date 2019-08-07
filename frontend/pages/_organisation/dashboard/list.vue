@@ -36,6 +36,11 @@ export default {
         message: 'Unable to process the search with the current parameters'
       });
     }
+    if (store.getters['dashboard/getDashboardType'] === 'donor') {
+      await store.dispatch('system/loadDonorDetails', store.getters['dashboard/getDashboardId']);
+    } else if (store.getters['dashboard/getDashboardType'] === 'country') {
+      await store.dispatch('countries/loadCountryDetails', store.getters['dashboard/getDashboardId']);
+    }
   },
   computed: {
     ...mapGetters({
