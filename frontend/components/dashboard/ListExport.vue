@@ -1,6 +1,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import pickBy from 'lodash/pickBy';
+import { format } from 'date-fns';
 
 export default {
   props: {
@@ -11,16 +12,18 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getCountryDetails: 'countries/getCountryDetails',
-      getDonorDetails: 'system/getDonorDetails',
+      counties: 'countries/getCountries',
+      donors: 'system/getDonors',
       getHealthFocusAreas: 'projects/getHealthFocusAreas',
       dashboardType: 'dashboard/getDashboardType',
       countryColumns: 'dashboard/getCountryColumns',
       donorColumns: 'dashboard/getDonorColumns',
-      fieldOffices: 'projects/getFieldOffices',
       regions: 'system/getRegions',
       platforms: 'projects/getTechnologyPlatforms',
       hscChallenges: 'projects/getHscChallenges',
+      hisBucket: 'projects/getHisBucket',
+      licenses: 'projects/getLicenses',
+      interoperabilityStandards: 'projects/getInteroperabilityStandards',
       organisations: 'system/getOrganisations'
     }),
     parsed () {
@@ -30,14 +33,24 @@ export default {
       return this.projects.map(s => {
         const parsed = {
           ...s,
-          country: this.parseCountry(s.country),
+          start_date: this.parseDate(s.start_date),
+          end_date: this.parseDate(s.end_date),
+          implementation_dates: this.parseDate(s.implementation_dates),
+          country: this.parseSingleSelection(s.country, 'counties'),
           organisation: this.parseSingleSelection(s.organisation, 'organisations'),
-          investors: this.parseDonors(s.donors),
+          investors: this.parseFlatList(s.donors, 'donors'),
+          implementing_partners: this.arrayToString(s.implementing_partners),
           health_focus_areas: this.parseHealthFocusAreas(s.health_focus_areas),
           hsc_challenges: this.parseHscChallenges(s.hsc_challenges),
+          his_bucket: this.parseFlatList(s.hsc_challenges, 'hisBucket'),
           region: this.parseSingleSelection(s.region, 'regions'),
           software: this.parsePlatforms(s.platforms),
+          national_level_deployment: this.parseCoverageItem(s.national_level_deployment),
+          coverage: this.parseCoverage(s.coverage),
+          coverage_second_level: this.parseCoverage(s.coverage_second_level),
           government_investor: this.parseBoolean(s.government_investor),
+          licenses: this.parseFlatList(s.licenses, 'licenses'),
+          interoperability_standards: this.parseFlatList(s.interoperability_standards, 'interoperabilityStandards'),
           approved: this.parseBoolean(s.approved),
           ...this.parseCustomQuestions(s.donor_answers),
           donors: undefined,
@@ -50,44 +63,58 @@ export default {
     }
   },
   methods: {
+    safeReturn (action, defaultReturn = '') {
+      try {
+        return action();
+      } catch (e) {
+        console.warn(e);
+        return defaultReturn;
+      }
+    },
+    parseDate (value) {
+      return this.safeReturn(() => {
+        return value ? format(new Date(value), 'DD/MM/YYYY') : '';
+      });
+    },
+    arrayToString (value) {
+      return this.safeReturn(() => value.join(','));
+    },
+    parseCoverageItem (coverage) {
+      return this.safeReturn(() =>
+        `Clients: ${coverage.clients}, Health Workers: ${coverage.health_workers}, Facilities: ${coverage.facilities}`
+      );
+    },
+    parseCoverage (coverage) {
+      return this.safeReturn(() => {
+        return coverage.map(c => {
+          return `District: ${c.district} [${this.parseCoverageItem(c)}]`;
+        }).join(', ');
+      });
+    },
     parseBoolean (value) {
-      return value ? this.$gettext('yes') : this.$gettext('no');
+      return this.safeReturn(() =>
+        value ? this.$gettext('yes') : this.$gettext('no')
+      );
     },
     parsePlatforms (platforms) {
-      return this.parseFlatList(platforms.map(p => p.id), 'platforms');
+      return this.safeReturn(() =>
+        this.parseFlatList(platforms.map(p => p.id), 'platforms')
+      );
     },
     parseFlatList (flatList, type) {
-      try {
+      return this.safeReturn(() => {
         const all = typeof this[type] === 'function' ? this[type]() : this[type];
         return all.filter(cb => flatList.includes(cb.id)).map(cb => cb.name).join(',');
-      } catch (e) {
-        console.warn(e);
-        return '';
-      }
+      });
     },
     parseSingleSelection (id, type) {
-      try {
+      return this.safeReturn(() => {
         const item = this[type].find(i => i.id === id);
         return item && item.name ? item.name : '';
-      } catch (e) {
-        console.warn(e);
-        return '';
-      }
-    },
-    parseCountry (countryId) {
-      const country = this.getCountryDetails(countryId);
-      return country && country.name ? country.name : '';
-    },
-    parseDonors (donors) {
-      try {
-        return donors.map(d => this.getDonorDetails(d)).filter(d => d).map(d => d.name).join(',');
-      } catch (e) {
-        console.log(e);
-        return '';
-      }
+      });
     },
     parseHscChallenges (values) {
-      try {
+      return this.safeReturn(() => {
         return this.hscChallenges.reduce((a, c) => {
           c.challenges.forEach(cc => {
             if (values.includes(cc.id)) {
@@ -96,42 +123,34 @@ export default {
           });
           return a;
         }, []).join(',');
-      } catch (e) {
-        console.warn(e);
-        return '';
-      }
+      });
     },
     parseHealthFocusAreas (health_focus_areas) {
-      try {
-        return this.getHealthFocusAreas.filter(hfa => hfa.health_focus_areas.some(h => health_focus_areas.includes(h.id))).map(hf => hf.name).join(',');
-      } catch (e) {
-        console.warn(e);
-        return '';
-      }
+      return this.safeReturn(() => {
+        return this.getHealthFocusAreas
+          .filter(hfa => hfa.health_focus_areas
+            .some(h => health_focus_areas.includes(h.id)))
+          .map(hf => hf.name)
+          .join(',');
+      });
     },
     parseCustomQuestions (donor_answers, country_answers) {
-      let custom = {};
-      if (this.dashboardType === 'donor') {
-        try {
+      return this.safeReturn(() => {
+        let custom = {};
+        if (this.dashboardType === 'donor') {
           this.donorColumns.forEach(dc => {
             const value = donor_answers && donor_answers[dc.donorId] ? donor_answers[dc.donorId][dc.originalId] : '';
             custom[dc.label] = value.join(',');
           });
-        } catch (e) {
-          console.warn('failed to parse custom donor answers', e);
         }
-      }
-      if (this.dashboardType === 'country') {
-        try {
+        if (this.dashboardType === 'country') {
           custom = this.countryColumns.forEach(cc => {
             const value = country_answers ? country_answers[cc.originalId] : '';
             custom[cc.label] = value.join(',');
           });
-        } catch (e) {
-          console.warn('failed to parse custom country answers', e);
         }
-      }
-      return custom;
+        return custom;
+      }, {});
     }
   },
   render () {
