@@ -173,13 +173,13 @@ export default {
         if (this.dashboardType === 'donor') {
           this.donorColumns.forEach(dc => {
             const value = donor_answers && donor_answers[dc.donorId] ? donor_answers[dc.donorId][dc.originalId] : '';
-            custom[dc.label] = value.join(',');
+            custom[dc.label] = value && Array.isArray(value) ? value.join(',') : '';
           });
         }
         if (this.dashboardType === 'country') {
           custom = this.countryColumns.forEach(cc => {
             const value = country_answers ? country_answers[cc.originalId] : '';
-            custom[cc.label] = value.join(',');
+            custom[cc.label] = value && Array.isArray(value) ? value.join(',') : '';
           });
         }
         return custom;
