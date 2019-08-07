@@ -219,17 +219,16 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { mapGettersActions } from '../../utilities/form.js';
+import { mapGettersActions } from '@/utilities/form.js';
 
-import ProjectCard from '../common/ProjectCard';
-import CountryItem from '../common/CountryItem';
-import OrganisationItem from '../common/OrganisationItem';
+import ProjectCard from '@/components/common/ProjectCard';
+import CountryItem from '@/components/common/CountryItem';
+import OrganisationItem from '@/components/common/OrganisationItem';
 import HfaCategoriesList from '@/components/common/list/HfaCategoriesList';
-import DonorsList from '../common/list/DonorsList';
-import RegionItem from '../common/RegionItem';
+import DonorsList from '@/components/common/list/DonorsList';
+import RegionItem from '@/components/common/RegionItem';
 import CustomAnswersCell from './CustomAnswersCell';
 import CurrentPage from '@/components/dashboard/CurrentPage';
-import { setTimeout } from 'timers';
 
 export default {
   components: {
