@@ -59,7 +59,7 @@
             :world-copy-jump="true"
             :options="mapOptions"
             class="MapContainer"
-            @leaflet:load="setMapReady()"
+            @ready="setMapReady()"
           >
             <l-tilelayer
               url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"

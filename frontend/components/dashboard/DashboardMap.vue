@@ -7,7 +7,7 @@
         :world-copy-jump="true"
         :options="mapOptions"
         @zoomend="zoomChangeHandler"
-        @leaflet:load="setMapReady(true)"
+        @ready="setMapReady(true)"
       >
         <l-tilelayer
           :url="tileServer"
