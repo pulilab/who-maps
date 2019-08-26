@@ -146,7 +146,7 @@
 
 <script>
 import debounce from 'lodash/debounce';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import ImportHeaders from '@/components/admin/import/ImportHeaders';
 import ImportValidation from '@/components/admin/import/ImportValidation';
 import ImportRow from '@/components/admin/import/ImportRow';
@@ -240,6 +240,9 @@ export default {
     ]);
   },
   methods: {
+    ...mapActions({
+      refreshProfile: 'user/refreshProfile'
+    }),
     updateValue ({ row, key, value }) {
       const originalRow = this.rows[row];
       this.$set(originalRow.data, key, value);
@@ -284,6 +287,7 @@ export default {
             });
           this.$nuxt.$loading.start('save');
           newRow = await this.doSingleRowSave(doSave, true);
+          await this.refreshProfile();
           this.$nuxt.$loading.finish('save');
         } catch (e) {
           this.$nuxt.$loading.finish('save');
@@ -353,6 +357,7 @@ export default {
         for (const p of toSave) {
           await this.doSingleRowSave(p.save, true);
         }
+        await this.refreshProfile();
       } catch (e) {
         console.log(e);
       }
