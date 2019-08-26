@@ -199,7 +199,6 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
     const value = dataCleaner(p[key]);
     result[key] = isEmpty(value) ? undefined : value;
   }
-  console.log(result, p);
   const interoperability_links = interoperabilityLinkWriteParser(p.interoperability_links);
   const platforms = platformsWriteParser(p.platforms, p.digitalHealthInterventions);
   let coverage = [];
