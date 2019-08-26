@@ -77,10 +77,14 @@
               v-if="showCenterPin && countryCenter"
               :lat-lng="countryCenter"
               :draggable="true"
-              :icon="centerIcon"
               @moveend="countryCenterMoveHandler"
             >
               <l-tooltip> Country Central Pin </l-tooltip>
+              <l-icon
+                :icon-size="[27, 46]"
+                :icon-anchor="[13.5, 13.5]"
+                :icon-url="iconCenterPic"
+              />
             </l-marker>
 
             <l-feature-group v-if="showSubLevelsPins">
@@ -151,6 +155,9 @@
           </el-select>
           <el-select
             v-model="firstSubLevelType"
+            allow-create
+            default-first-option
+            filterable
             placeholder="Sub level name"
           >
             <el-option
@@ -201,6 +208,9 @@
           <el-select
             v-model="secondSubLevelType"
             placeholder="Sub level name"
+            allow-create
+            default-first-option
+            filterable
             clearable
           >
             <el-option
@@ -247,6 +257,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import { calculatePolyCenter } from '../../utilities/coords';
 import { blobDownloader } from '../../utilities/dom';
+import iconCenterPic from '~/assets/img/pins/pin-without-counter-active.svg';
 
 import FacilityImport from './FacilityImport';
 import NoSSR from 'vue-no-ssr';
@@ -259,6 +270,7 @@ export default {
   },
   data () {
     return {
+      iconCenterPic,
       zoom: 3,
       mapOptions: { zoomControl: false, attributionControl: false },
       showCenterPin: true,
@@ -287,18 +299,6 @@ export default {
       countryBorder: 'admin/map/getCountryBorder',
       subLevelsPolyCenters: 'admin/map/getSubLevelsPolyCenters'
     }),
-
-    centerIcon () {
-      if (!this.mapReady) {
-        return undefined;
-      }
-      return L.divIcon({
-        className: 'ActiveCountry',
-        html: '<span></span>',
-        iconSize: [27, 44],
-        iconAnchor: [13.5, 44]
-      });
-    },
     uploadHeaders () {
       return {
         'Authorization': `Token ${this.token}`
