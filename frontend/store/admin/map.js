@@ -1,10 +1,13 @@
 export const state = () => ({
   geoJson: null,
   countryCenter: null,
+  secondSubLevelSource: null,
   firstSubLevel: '',
   firstSubLevelType: null,
+  firstSubLevelList: [],
   secondSubLevel: '',
   secondSubLevelType: null,
+  secondSubLevelList: [],
   facilities: [],
   subLevelsPolyCenters: []
 });
@@ -21,6 +24,9 @@ export const getters = {
       );
     }
   },
+  getSecondSubLevelSource (state) {
+    return state.secondSubLevelSource;
+  },
   getSubLevelFeatures (state, getters) {
     const geoJson = getters.getGeoJson;
     let result = [];
@@ -34,7 +40,7 @@ export const getters = {
         f => f.properties['admin_level'] === '2'
       );
     }
-    return result;
+    return result.map(r => JSON.parse(JSON.stringify(r)));
   },
   getSubLevels (state, getters) {
     const features = getters.getSubLevelFeatures;
@@ -54,13 +60,14 @@ export const getters = {
   getFirstSubLevelMap (state, getters) {
     const features = getters.getSubLevelFeatures;
     if (features) {
-      return features.filter(
-        f => f.properties.admin_level === getters.getFirstSubLevel
+      return features.filter(f => {
+        return f.properties.admin_level === getters.getFirstSubLevel;
+      }
       );
     }
     return [];
   },
-  getFirstSubLevelList (state, getters) {
+  getFirstSubLevelListFromMap (state, getters) {
     const features = getters.getSubLevelFeatures;
     const firstSubLevel = getters.getFirstSubLevel;
     const firstSubLevelType = getters.getFirstSubLevelType;
@@ -78,7 +85,7 @@ export const getters = {
     }
     return [];
   },
-  getSecondSubLevelList (state, getters) {
+  getSecondSubLevelListFromMap (state, getters) {
     const features = getters.getSubLevelFeatures;
     const secondSubLevel = getters.getSecondSubLevel;
     const secondSubLevelType = getters.getSecondSubLevelType;
@@ -110,6 +117,12 @@ export const getters = {
   },
   getFacilities (state) {
     return [...state.facilities];
+  },
+  getFirstSubLevelList (state) {
+    return state.firstSubLevelList;
+  },
+  getSecondSubLevelList (state) {
+    return state.secondSubLevelList;
   }
 
 };
@@ -131,7 +144,7 @@ export const actions = {
         const proper = url.slice(mediaIndex);
         const { data } = await this.$axios.get(proper);
         Object.freeze(data);
-        commit('UPDATE_GEO_JSON', data);
+        commit('SET_DATA', { type: 'geoJson', value: data });
       } else {
         commit('RESET_MAP_STATE');
       }
@@ -141,23 +154,35 @@ export const actions = {
   },
   setCountryCenter ({ commit }, value) {
     value = value ? { ...value } : null;
-    commit('SET_COUNTRY_CENTER', value);
+    commit('SET_DATA', { type: 'countryCenter', value });
+  },
+  setSecondSubLevelSource ({ commit }, value) {
+    commit('SET_DATA', { type: 'secondSubLevelSource', value });
   },
   setFirstSubLevel ({ commit }, value) {
     value = value || null;
-    commit('SET_FIRST_SUB_LEVEL', value);
+    commit('SET_DATA', { type: 'firstSubLevel', value });
   },
   setFirstSubLevelType ({ commit }, value) {
     value = value || null;
-    commit('SET_FIRST_SUB_LEVEL_TYPE', value);
+    commit('SET_DATA', { type: 'firstSubLevelType', value });
   },
-  setSecondSubLevel ({ commit }, value) {
+  setFirstSubLevelList ({ commit }, value) {
     value = value || null;
-    commit('SET_SECOND_SUB_LEVEL', value);
+    commit('SET_DATA', { type: 'firstSubLevelList', value });
+  },
+  setSecondSubLevel ({ commit, getters }, value) {
+    value = value || null;
+    commit('SET_DATA', { type: 'secondSubLevel', value });
+    commit('SET_DATA', { type: 'secondSubLevelList', value: getters.getSecondSubLevelListFromMap });
   },
   setSecondSubLevelType ({ commit }, value) {
     value = value || null;
-    commit('SET_SECOND_SUB_LEVEL_TYPE', value);
+    commit('SET_DATA', { type: 'secondSubLevelType', value });
+  },
+  setSecondSubLevelList ({ commit }, value) {
+    value = value || null;
+    commit('SET_DATA', { type: 'secondSubLevelList', value });
   },
   parseSubLevelsPolyCenters ({ dispatch }, value) {
     const polyCenters = value.elements.map(e => ({ name: e.name, latlng: e.polyCenter }));
@@ -165,7 +190,7 @@ export const actions = {
   },
   setSubLevelsPolyCenters ({ commit }, value) {
     value = value || [];
-    commit('SET_SUB_LEVELS_POLYCENTERS', value);
+    commit('SET_DATA', { type: 'subLevelsPolyCenters', value });
   },
   updateSubLevelPolyCenter ({ commit, getters }, { name, latlng }) {
     const current = getters.getSubLevelsPolyCenters;
@@ -174,10 +199,10 @@ export const actions = {
   },
   setFacilities ({ commit }, list) {
     list = list || [];
-    commit('SET_FACILITIES', list);
+    commit('SET_DATA', { type: 'facilities', value: list });
   },
   async saveMapData ({ getters, rootGetters }) {
-    const first = getters.getFirstSubLevelList.map((f, index) => {
+    const first = getters.getFirstSubLevelListFromMap.map((f, index) => {
       return {
         id: f.id || index,
         name: f.name,
@@ -185,14 +210,8 @@ export const actions = {
         ...parseNames(f.alltags)
       };
     });
-    const second = getters.getSecondSubLevelList.map((s, index) => {
-      return {
-        id: s.id || index,
-        name: s.name,
-        ...parseNames(s.alltags)
-      };
-    });
     const mapData = {
+      second_sub_level_source: getters.getSecondSubLevelSource,
       polylabel: getters.getCountryCenter,
       first_sub_level: {
         admin_level: getters.getFirstSubLevel,
@@ -202,7 +221,7 @@ export const actions = {
       second_sub_level: {
         admin_level: getters.getSecondSubLevel,
         name: getters.getSecondSubLevelType,
-        elements: second
+        elements: getters.getSecondSubLevelList
       },
       facilities: getters.getFacilities
     };
@@ -217,35 +236,14 @@ export const actions = {
   }
 };
 export const mutations = {
+  SET_DATA: (state, { type, value }) => {
+    state[type] = value;
+  },
   SET_SELECTED_COUNTRY: (state, id) => {
     state.id = id;
   },
   SET_COUNTRY_DATA: (state, { id, map_file }) => {
     state.country = { id, map_file };
-  },
-  SET_COUNTRY_CENTER: (state, data) => {
-    state.countryCenter = data;
-  },
-  SET_FIRST_SUB_LEVEL: (state, data) => {
-    state.firstSubLevel = data;
-  },
-  SET_FIRST_SUB_LEVEL_TYPE: (state, data) => {
-    state.firstSubLevelType = data;
-  },
-  SET_SECOND_SUB_LEVEL: (state, data) => {
-    state.secondSubLevel = data;
-  },
-  SET_SECOND_SUB_LEVEL_TYPE: (state, data) => {
-    state.secondSubLevelType = data;
-  },
-  UPDATE_GEO_JSON: (state, data) => {
-    state.geoJson = data;
-  },
-  SET_FACILITIES: (state, data) => {
-    state.facilities = data;
-  },
-  SET_SUB_LEVELS_POLYCENTERS: (state, data) => {
-    state.subLevelsPolyCenters = data;
   },
   UPDATE_SUB_LEVELS_POLYCENTERS: (state, { index, data }) => {
     state.subLevelsPolyCenters.splice(index, 1, data);

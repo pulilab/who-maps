@@ -143,17 +143,6 @@
         <h5>Sub Level I <span>(Displayed on the map)</span></h5>
         <div>
           <el-select
-            v-model="firstSubLevel"
-            placeholder="Admin level"
-          >
-            <el-option
-              v-for="level in subLevels"
-              :key="level"
-              :label="`admin-level-${level}`"
-              :value="level"
-            />
-          </el-select>
-          <el-select
             v-model="firstSubLevelType"
             allow-create
             default-first-option
@@ -165,6 +154,17 @@
               :key="name.name"
               :label="name.displayName"
               :value="name.name"
+            />
+          </el-select>
+          <el-select
+            v-model="firstSubLevel"
+            placeholder="Admin level"
+          >
+            <el-option
+              v-for="level in subLevels"
+              :key="level"
+              :label="`admin-level-${level}`"
+              :value="level"
             />
           </el-select>
         </div>
@@ -191,20 +191,7 @@
         class="MapSettingSection"
       >
         <h5>Sub Level II <span>(Only for selection)</span></h5>
-        <p>Hover on a district name to highlight it on the country map.</p>
         <div>
-          <el-select
-            v-model="secondSubLevel"
-            placeholder="Admin Level"
-            clearable
-          >
-            <el-option
-              v-for="level in availableSubLevels"
-              :key="level"
-              :label="`admin-level-${level}`"
-              :value="level"
-            />
-          </el-select>
           <el-select
             v-model="secondSubLevelType"
             placeholder="Sub level name"
@@ -222,6 +209,63 @@
           </el-select>
         </div>
 
+        <div class="ImportFromSelector">
+          <el-radio
+            v-model="secondSubLevelSource"
+            label="map"
+            border
+          >
+            From Map
+          </el-radio>
+          <el-radio
+            v-model="secondSubLevelSource"
+            label="file"
+            border
+          >
+            From File
+          </el-radio>
+        </div>
+
+        <div v-if="secondSubLevelSource === 'map'">
+          <el-select
+            v-model="secondSubLevel"
+            placeholder="Admin Level"
+            clearable
+          >
+            <el-option
+              v-for="level in availableSubLevels"
+              :key="level"
+              :label="`admin-level-${level}`"
+              :value="level"
+            />
+          </el-select>
+        </div>
+
+        <div
+          v-if="secondSubLevelSource === 'file'"
+          class="FileImport"
+        >
+          <template v-if="!fileParsed">
+            <xlsx-workbook>
+              <xlsx-sheet
+                :collection="currentSecondSubLevelExport"
+                sheet-name="Default"
+              />
+              <xlsx-download filename="second-sub-level-list.xlsx">
+                <a href="#">Download current list</a>
+              </xlsx-download>
+            </xlsx-workbook>
+
+            <input
+              type="file"
+              @change="onFileChange"
+            >
+            <xlsx-read :file="importFile">
+              <xlsx-json @parsed="subLevelParsed" />
+            </xlsx-read>
+          </template>
+        </div>
+
         <div
           v-show="showSecondSubLevelList"
           class="SubLevelList"
@@ -229,9 +273,12 @@
           <h5> List of {{ secondSubLevelType }}</h5>
           <ul>
             <li
+
               v-for="item in secondSubLevelList"
               :key="item.id"
+              @click="setEditSubLevelDialogState({item, callback: updateSecondSubLevelItem})"
             >
+              <fa icon="map-pin" />
               {{ item.name }}
             </li>
           </ul>
@@ -256,17 +303,23 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { calculatePolyCenter } from '../../utilities/coords';
-import { blobDownloader } from '../../utilities/dom';
+import { blobDownloader, uuidv4 } from '../../utilities/dom';
 import iconCenterPic from '~/assets/img/pins/pin-without-counter-active.svg';
 
 import FacilityImport from './FacilityImport';
 import NoSSR from 'vue-no-ssr';
+import { XlsxRead, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
 
 export default {
   name: 'VueMapCustomizer',
   components: {
     'no-ssr': NoSSR,
-    FacilityImport
+    FacilityImport,
+    XlsxJson,
+    XlsxRead,
+    XlsxWorkbook,
+    XlsxSheet,
+    XlsxDownload
   },
   data () {
     return {
@@ -279,7 +332,9 @@ export default {
       mapFile: {},
       uploadMapFile: false,
       mapFileList: [],
-      mapReady: false
+      mapReady: false,
+      importFile: null,
+      fileParsed: false
     };
   },
   computed: {
@@ -287,7 +342,8 @@ export default {
       token: 'user/getToken',
       country: 'admin/country/getData',
       subLevelTypes: 'system/getSubLevelTypes',
-      firstSubLevelList: 'admin/map/getFirstSubLevelList',
+      firstSubLevelList: 'admin/map/getFirstSubLevelListFromMap',
+      mapSecondSubLevelList: 'admin/map/getSecondSubLevelListFromMap',
       secondSubLevelList: 'admin/map/getSecondSubLevelList',
       subLevels: 'admin/map/getSubLevels',
       firstSubLevelMap: 'admin/map/getFirstSubLevelMap',
@@ -297,18 +353,42 @@ export default {
       getSecondSubLevelType: 'admin/map/getSecondSubLevelType',
       countryCenter: 'admin/map/getCountryCenter',
       countryBorder: 'admin/map/getCountryBorder',
-      subLevelsPolyCenters: 'admin/map/getSubLevelsPolyCenters'
+      subLevelsPolyCenters: 'admin/map/getSubLevelsPolyCenters',
+      getSecondSubLevelSource: 'admin/map/getSecondSubLevelSource'
     }),
     uploadHeaders () {
       return {
         'Authorization': `Token ${this.token}`
       };
     },
+    secondSubLevelSource: {
+      get () {
+        return this.getSecondSubLevelSource;
+      },
+      set (value) {
+        this.setSecondSubLevelSource(value);
+      }
+    },
     firstSubLevelTypes () {
       return this.subLevelTypes.filter(n => n.name !== this.secondSubLevelType);
     },
     secondSubLevelTypes  () {
       return this.subLevelTypes.filter(n => n.name !== this.firstSubLevelType);
+    },
+    currentSecondSubLevelExport () {
+      if (this.secondSubLevelList && this.secondSubLevelList.length > 0) {
+        const template = {
+          id: '',
+          name: '',
+          'fr:name': '',
+          'pt:name': '',
+          'es:name': '',
+          'ar:name': ''
+        };
+        const existing = this.secondSubLevelList.map(sb => ({ ...template, id: sb.id, name: sb.name }));
+        return [ ...existing, ...[...Array(500).keys()].map(() => ({ ...template, id: uuidv4(), name: '' })) ];
+      }
+      return [{}];
     },
     firstSubLevel: {
       get () {
@@ -355,9 +435,6 @@ export default {
       return this.secondSubLevel
         ? this.secondSubLevelList
         : this.firstSubLevel ? this.firstSubLevelList : [];
-    },
-    showSaveButton () {
-      return this.showFirstSubLevelList;
     }
   },
   methods: {
@@ -370,13 +447,26 @@ export default {
       setSecondSubLevelType: 'admin/map/setSecondSubLevelType',
       setCountryCenter: 'admin/map/setCountryCenter',
       setSubLevelsPolyCenters: 'admin/map/setSubLevelsPolyCenters',
-      updateSubLevelPolyCenter: 'admin/map/updateSubLevelPolyCenter'
+      updateSubLevelPolyCenter: 'admin/map/updateSubLevelPolyCenter',
+      setSecondSubLevelSource: 'admin/map/setSecondSubLevelSource',
+      setSecondSubLevelList: 'admin/map/setSecondSubLevelList',
+      setEditSubLevelDialogState: 'layout/setEditSubLevelDialogState'
     }),
+    onFileChange (event) {
+      this.importFile = event.target.files ? event.target.files[0] : null;
+    },
+    subLevelParsed (value) {
+      const filtered = value.filter(v => v.name && v.id);
+      this.setSecondSubLevelList(filtered);
+      this.fileParsed = true;
+    },
+    updateSecondSubLevelItem (updated) {
+      console.log(updated);
+    },
     setMapReady () {
       this.mapReady = true;
     },
     async downloadMap () {
-      // /api/countries/map-download/${country.id}/
       this.$nuxt.$loading.start();
       try {
         const { data } = await this.$axios.get(`/api/countries/map-download/${this.country.id}/`, { responseType: 'blob' });
@@ -491,6 +581,24 @@ export default {
         .el-select {
           width: 100%;
           margin-bottom: 20px;
+        }
+
+        .ImportFromSelector {
+          display: flex;
+          margin-bottom: 20px;
+
+          .el-radio {
+            margin-right: 0;
+          }
+        }
+
+        .FileImport {
+          input[type="file"] {
+            margin: 20px 0;
+          }
+          h5 {
+            margin: 0;
+          }
         }
 
         .SubLevelList {
