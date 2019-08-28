@@ -8,13 +8,43 @@
     width="70vw"
     custom-class="EditSubLevelDialog"
   >
-    {{ model }}
-    <div
-      v-for="key in editableKeys"
-      :key="key"
+    <el-form
+      label-position="left"
+      label-width="160px"
+      @submit.native.prevent
     >
-      {{ key }}
-    </div>
+      <el-form-item
+        v-for="key in editableKeys"
+        :key="key"
+        :label="key"
+      >
+        <el-input v-model="localValue[key]" />
+      </el-form-item>
+    </el-form>
+    <span slot="footer">
+      <el-row
+        type="flex"
+        align="center"
+      >
+        <el-col class="SecondaryButtons">
+          <el-button
+            type="text"
+            class="CancelButton"
+            @click="visible = false"
+          >
+            <translate>Cancel</translate>
+          </el-button>
+        </el-col>
+        <el-col class="PrimaryButtons">
+          <el-button
+            type="primary"
+            @click="save"
+          >
+            <translate>Save</translate>
+          </el-button>
+        </el-col>
+      </el-row>
+    </span>
   </el-dialog>
 </template>
 
@@ -43,7 +73,23 @@ export default {
       return Object.keys(this.model.item).filter(k => k.includes('name'));
     }
   },
-  methods: {}
+  watch: {
+    model: {
+      immediate: true,
+      deep: true,
+      handler (value) {
+        if (value) {
+          this.localValue = { ...value.item };
+        }
+      }
+    }
+  },
+  methods: {
+    save () {
+      this.model.callback(this.localValue);
+      this.visible = false;
+    }
+  }
 };
 </script>
 
