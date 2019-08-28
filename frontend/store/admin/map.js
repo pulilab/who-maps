@@ -78,10 +78,7 @@ export const getters = {
     ) {
       return features
         .filter(f => f.properties.admin_level === firstSubLevel)
-        .map(i => {
-          const polyCenter = getters.getSubLevelsPolyCenters.find(pc => pc.name === i.properties.name);
-          return { ...i.properties, ...parseNames(i.properties.alltags), polyCenter: polyCenter ? polyCenter.latlng : undefined };
-        });
+        .map(i => ({ ...i.properties, ...parseNames(i.properties.alltags) }));
     }
     return [];
   },
@@ -96,7 +93,7 @@ export const getters = {
     ) {
       return features
         .filter(f => f.properties.admin_level === secondSubLevel)
-        .map(i => i.properties);
+        .map(i => JSON.parse(JSON.stringify(i.properties)));
     }
     return [];
   },
