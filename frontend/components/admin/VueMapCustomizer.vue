@@ -91,9 +91,10 @@
               <l-marker
                 v-for="pin in subLevelsPolyCenters"
                 :key="pin.name"
-                :lat-lng="pin.latlng"
+                :lat-lng="pin.polyCenter"
                 :draggable="true"
-                @moveend="subLevelsPinsMoveHandler($event, pin.name)"
+                @moveend="subLevelsPinsMoveHandler($event, pin)"
+                @click="setEditSubLevelDialogState({item: pin, callback: updateFirstSubLevelItem})"
               >
                 <l-tooltip> {{ pin.name }} </l-tooltip>
               </l-marker>
@@ -496,18 +497,15 @@ export default {
     polycenterCalculation () {
       const countryCenter = calculatePolyCenter(this.countryBorder.geometry);
       this.setCountryCenter(countryCenter);
-      const subLevelsPolycenter = this.firstSubLevelMap.map(sb => {
-        return {
-          name: sb.properties.name,
-          latlng: calculatePolyCenter(sb.geometry)
-        };
-      }).filter(p => p.latlng);
-      this.setSubLevelsPolyCenters(subLevelsPolycenter);
+      this.setFirstSubLevelList.forEach(sb => {
+        const polyCenter = calculatePolyCenter(sb.geometry);
+        this.updateSubLevelPolyCenter({ ...sb, polyCenter });
+      });
     },
 
-    subLevelsPinsMoveHandler (event, name) {
-      const latlng = event.target.getLatLng();
-      this.updateSubLevelPolyCenter({ name, latlng });
+    subLevelsPinsMoveHandler (event, pin) {
+      const polyCenter = event.target.getLatLng();
+      this.updateSubLevelPolyCenter({ ...pin, polyCenter });
     },
 
     beforeMapUpload () {
