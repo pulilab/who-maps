@@ -462,6 +462,7 @@ export default {
       const filtered = value.filter(v => v.name && v.id);
       this.setSecondSubLevelList(filtered);
       this.fileParsed = true;
+      this.$message(this.$gettext('File imported succesffully'));
     },
     updateSecondSubLevelItem (updated) {
       const newList = this.secondSubLevelList.map(i => i.id === updated.id ? updated : i);
