@@ -178,6 +178,7 @@
             <li
               v-for="item in firstSubLevelList"
               :key="item.id"
+              @click="setEditSubLevelDialogState({item, callback: updateFirstSubLevelItem})"
             >
               <fa icon="map-pin" />
               {{ item.name }}
@@ -342,7 +343,7 @@ export default {
       token: 'user/getToken',
       country: 'admin/country/getData',
       subLevelTypes: 'system/getSubLevelTypes',
-      firstSubLevelList: 'admin/map/getFirstSubLevelListFromMap',
+      firstSubLevelList: 'admin/map/getFirstSubLevelList',
       mapSecondSubLevelList: 'admin/map/getSecondSubLevelListFromMap',
       secondSubLevelList: 'admin/map/getSecondSubLevelList',
       subLevels: 'admin/map/getSubLevels',
@@ -380,13 +381,13 @@ export default {
         const template = {
           id: '',
           name: '',
-          'fr:name': '',
-          'pt:name': '',
-          'es:name': '',
-          'ar:name': ''
+          'name:fr': '',
+          'name:pt': '',
+          'name:es': '',
+          'name:ar': ''
         };
         const existing = this.secondSubLevelList.map(sb => ({ ...template, id: sb.id, name: sb.name }));
-        return [ ...existing, ...[...Array(500).keys()].map(() => ({ ...template, id: uuidv4(), name: '' })) ];
+        return [ ...existing, ...[...Array(999).keys()].map(() => ({ ...template, id: uuidv4(), name: '' })) ];
       }
       return [{}];
     },
@@ -450,6 +451,7 @@ export default {
       updateSubLevelPolyCenter: 'admin/map/updateSubLevelPolyCenter',
       setSecondSubLevelSource: 'admin/map/setSecondSubLevelSource',
       setSecondSubLevelList: 'admin/map/setSecondSubLevelList',
+      setFirstSubLevelList: 'admin/map/setFirstSubLevelList',
       setEditSubLevelDialogState: 'layout/setEditSubLevelDialogState'
     }),
     onFileChange (event) {
@@ -461,7 +463,12 @@ export default {
       this.fileParsed = true;
     },
     updateSecondSubLevelItem (updated) {
-      console.log(updated);
+      const newList = this.secondSubLevelList.map(i => i.id === updated.id ? updated : i);
+      this.setSecondSubLevelList(newList);
+    },
+    updateFirstSubLevelItem (updated) {
+      const newList = this.firstSubLevelList.map(i => i.id === updated.id ? updated : i);
+      this.setFirstSubLevelList(newList);
     },
     setMapReady () {
       this.mapReady = true;

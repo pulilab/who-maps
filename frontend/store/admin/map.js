@@ -80,7 +80,7 @@ export const getters = {
         .filter(f => f.properties.admin_level === firstSubLevel)
         .map(i => {
           const polyCenter = getters.getSubLevelsPolyCenters.find(pc => pc.name === i.properties.name);
-          return { ...i.properties, polyCenter: polyCenter ? polyCenter.latlng : undefined };
+          return { ...i.properties, ...parseNames(i.properties.alltags), polyCenter: polyCenter ? polyCenter.latlng : undefined };
         });
     }
     return [];
@@ -129,8 +129,8 @@ export const getters = {
 
 const parseNames = (collection) => {
   const result = {};
-  const nameKeys = Object.keys(collection).filter(k => k.includes('name:'));
-  nameKeys.forEach(nk => (result[nk] = collection[nk]));
+  const names = ['name', 'name:es', 'name:pt', 'name:fr', 'name:ar'];
+  names.forEach(nk => (result[nk] = collection[nk] || ''));
   return result;
 };
 
@@ -159,9 +159,10 @@ export const actions = {
   setSecondSubLevelSource ({ commit }, value) {
     commit('SET_DATA', { type: 'secondSubLevelSource', value });
   },
-  setFirstSubLevel ({ commit }, value) {
+  setFirstSubLevel ({ commit, getters }, value) {
     value = value || null;
     commit('SET_DATA', { type: 'firstSubLevel', value });
+    commit('SET_DATA', { type: 'firstSubLevelList', value: getters.getFirstSubLevelListFromMap });
   },
   setFirstSubLevelType ({ commit }, value) {
     value = value || null;
@@ -202,21 +203,13 @@ export const actions = {
     commit('SET_DATA', { type: 'facilities', value: list });
   },
   async saveMapData ({ getters, rootGetters }) {
-    const first = getters.getFirstSubLevelListFromMap.map((f, index) => {
-      return {
-        id: f.id || index,
-        name: f.name,
-        polyCenter: f.polyCenter,
-        ...parseNames(f.alltags)
-      };
-    });
     const mapData = {
       second_sub_level_source: getters.getSecondSubLevelSource,
       polylabel: getters.getCountryCenter,
       first_sub_level: {
         admin_level: getters.getFirstSubLevel,
         name: getters.getFirstSubLevelType,
-        elements: first
+        elements: getters.getFirstSubLevelList
       },
       second_sub_level: {
         admin_level: getters.getSecondSubLevel,
@@ -232,7 +225,6 @@ export const actions = {
     } catch (e) {
       console.error(e);
     }
-    this.saving = false;
   }
 };
 export const mutations = {
