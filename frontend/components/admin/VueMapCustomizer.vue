@@ -498,9 +498,9 @@ export default {
     polycenterCalculation () {
       const countryCenter = calculatePolyCenter(this.countryBorder.geometry);
       this.setCountryCenter(countryCenter);
-      this.setFirstSubLevelList.forEach(sb => {
+      this.firstSubLevelMap.forEach(sb => {
         const polyCenter = calculatePolyCenter(sb.geometry);
-        this.updateSubLevelPolyCenter({ ...sb, polyCenter });
+        this.updateSubLevelPolyCenter({ id: sb.properties.id, polyCenter });
       });
     },
 
