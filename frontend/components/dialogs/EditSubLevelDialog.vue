@@ -50,6 +50,7 @@
 
 <script>
 import { mapGettersActions } from '@/utilities/form.js';
+import union from 'lodash/union';
 
 export default {
   data () {
@@ -70,7 +71,9 @@ export default {
       }
     },
     editableKeys () {
-      return Object.keys(this.model.item).filter(k => k.includes('name'));
+      const basic = ['name:fr', 'name:pt', 'name:es', 'name:ar'];
+      const filtered = Object.keys(this.model.item).filter(k => k.includes('name'));
+      return union(basic, filtered);
     }
   },
   watch: {
