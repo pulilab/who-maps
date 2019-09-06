@@ -7,7 +7,7 @@
 <script>
 export default {
   components: {},
-  middleware: ['importRestriction']
+  middleware: []
 };
 </script>
 
