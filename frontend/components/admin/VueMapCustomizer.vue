@@ -254,7 +254,7 @@
                 sheet-name="Default"
               />
               <xlsx-download filename="second-sub-level-list.xlsx">
-                <a href="#">Download current list</a>
+                <span class="FakeLink">Download current list</span>
               </xlsx-download>
             </xlsx-workbook>
 
@@ -605,6 +605,12 @@ export default {
           h5 {
             margin: 0;
           }
+        }
+
+        .FakeLink {
+          text-decoration: underline;
+          color: @colorBrandPrimary;
+          cursor: pointer;
         }
 
         .SubLevelList {
