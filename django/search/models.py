@@ -159,5 +159,12 @@ def create_search_objects(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=Project)
+def remove_search_objects(sender, instance, created, **kwargs):  # pragma: no cover
+    if not instance.is_active and getattr(instance, 'search', None):
+        instance.search.delete()
+
+
+@receiver(post_save, sender=Project)
 def update_with_project_data(sender, instance, **kwargs):
-    instance.search.update(instance)
+    if getattr(instance, 'search', None):
+        instance.search.update(instance)
