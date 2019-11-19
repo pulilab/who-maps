@@ -231,7 +231,7 @@ export default {
     },
     isTeam () {
       if (this.user) {
-        return this.user.member.includes(+this.$route.params.id);
+        return this.user.is_superuser || this.user.member.includes(+this.$route.params.id);
       }
       return false;
     },
