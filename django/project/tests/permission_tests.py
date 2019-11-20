@@ -46,6 +46,60 @@ class PermissionTests(SetupTests):
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
         self.assertNotIn('{{', outgoing_fr_email_text)
 
+    def test_superuser_can_update_project_groups(self):
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user2@gmail.com",
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
+        self.client.post(url, data, format="json")
+
+        # Log in the user.
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_user2@gmail.com",
+            "password": "123456hetNYOLC"}
+        response = self.client.post(url, data, format="json")
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+        user_profile_id = response.json().get('user_profile_id')
+
+        # update profile.
+        org = Organisation.objects.create(name="org2")
+        url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
+        data = {
+            "name": "Test Name 2",
+            "organisation": org.id,
+            "country": "test_country"}
+        test_user_client.put(url, data, format="json")
+
+        user_suser = User.objects.create_superuser(username='test_suser', email='test_suser@test.test', password='a')
+        user_suser_profile = UserProfile.objects.create(user=user_suser, language='en')
+
+        url = reverse("api_token_auth")
+        data = {
+            "username": "test_suser@test.test",
+            "password": "a"}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200, response.json())
+        test_user_key = response.json().get("token")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+
+        user_profile_id_1 = UserProfile.objects.first().id
+        groups = {
+            "team": [user_profile_id_1, user_profile_id],
+            "viewers": [user_profile_id]
+        }
+        response = test_user_client.put(url, groups, format="json")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'], [user_profile_id_1, user_profile_id])
+        self.assertTrue(user_suser_profile not in response.json()['team'])
+        self.assertEqual(response.json()['viewers'], [user_profile_id])
+
     def test_team_viewer_cannot_update_project_groups(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
