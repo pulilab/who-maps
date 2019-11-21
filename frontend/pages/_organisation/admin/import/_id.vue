@@ -187,7 +187,7 @@ export default {
       return {};
     },
     countryFieldsLib () {
-      if (this.selectedCountry) {
+      if (this.selectedCountry && this.selectedCountry.id !== undefined) {
         return this.selectedCountry.country_questions.reduce((a, c) => {
           a[`MOH Q.: ${c.question}`] = c;
           return a;
@@ -196,7 +196,7 @@ export default {
       return {};
     },
     donorFieldsLib () {
-      if (this.selectedDonor) {
+      if (this.selectedDonor && this.selectedDonor.id !== undefined) {
         return this.selectedDonor.donor_questions.reduce((a, c) => {
           a[`INV Q.: ${c.question}`] = c;
           return a;
