@@ -246,6 +246,7 @@
               :error="errors.first('implementing_partners_' + index)"
             >
               <el-input
+                :maxlength="rules.implementing_partners.max"
                 ref="implementingPartnersInput"
                 v-validate="rules.implementing_partners"
                 :value="partner"

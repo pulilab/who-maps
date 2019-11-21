@@ -90,6 +90,9 @@ export const draftRules = () => {
     geographic_scope: {
       max: 1024
     },
+    implementing_partners: {
+      max: 64
+    },
     implementation_overview: {
       max: 1024
     },
@@ -220,7 +223,9 @@ export const publishRules = () => {
       facilities: {}
     },
     government_investor: {},
-    implementing_partners: {},
+    implementing_partners: {
+      max: 64
+    },
     donors: {
       required: true
     },
