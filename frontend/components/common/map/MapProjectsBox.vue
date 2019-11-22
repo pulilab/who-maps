@@ -71,7 +71,7 @@
 
           <div
             v-if="showSubNational"
-            class="PlainList SubNational"
+            class="PlainList SubNational el-tabs__content"
           >
             <project-card
               v-for="p in currentSubLevelProjects"
@@ -83,7 +83,7 @@
           </div>
           <div
             v-if="showNational"
-            class="PlainList National"
+            class="PlainList National el-tabs__content"
           >
             <project-card
               v-for="p in nationalProjects"
