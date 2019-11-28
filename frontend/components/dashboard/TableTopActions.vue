@@ -26,7 +26,7 @@
         </el-button>
 
         <div class="Separator" />
-        <list-export :projects="rowToExport">
+        <list-export :projects="completeRowToExport">
           <template #default="{parsed, labeled}">
             <div class="TableExportContainer">
               <xlsx-workbook>
@@ -212,11 +212,31 @@ export default {
       exportType: 'XLSX',
       columnSelectorOpen: false,
       selectedColumns: [],
-      viewportSize: 2000
+      viewportSize: 2000,
+      completeRowToExport: []
     };
+  },
+  watch: {
+    rowToExport: {
+      immediate: true,
+      handler (list) {
+        this.completeRowToExport = [];
+        Promise.all(list.map(({ id }) => this.$axios.get(`/api/projects/${id}/groups/`)))
+          .then((res) => {
+            const results = res.map(({ data: { team, viewers } }) => {
+              return {
+                team: team.map(this.findName),
+                viewers: viewers.map(this.findName)
+              };
+            });
+            this.completeRowToExport = list.map((row, index) => ({ ...row, ...results[index] || {} }));
+          });
+      }
+    }
   },
   computed: {
     ...mapGetters({
+      profiles: 'system/getUserProfiles',
       columns: 'dashboard/getAvailableColumns',
       selectedCol: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
@@ -263,6 +283,9 @@ export default {
       loadProjectsBucket: 'dashboard/loadProjectsBucket',
       setSelectedRows: 'dashboard/setSelectedRows'
     }),
+    findName (id) {
+      return (this.profiles.find(p => p.id === id) || {}).name
+    },
     setViewport () {
       if (process.client && window) {
         this.viewportSize = window.innerWidth;

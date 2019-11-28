@@ -1,6 +1,8 @@
 <script>
 import { mapGetters } from 'vuex';
 import pickBy from 'lodash/pickBy';
+import flattenDeep from 'lodash/flattenDeep';
+import mapValues from 'lodash/mapValues';
 import { format } from 'date-fns';
 
 export default {
@@ -24,6 +26,7 @@ export default {
       hisBucket: 'projects/getHisBucket',
       licenses: 'projects/getLicenses',
       interoperabilityStandards: 'projects/getInteroperabilityStandards',
+      getInteroperabilityLinks: 'projects/getInteroperabilityLinks',
       organisations: 'system/getOrganisations'
     }),
     parsed () {
@@ -40,6 +43,8 @@ export default {
           organisation: this.parseSingleSelection(s.organisation, 'organisations'),
           investors: this.parseFlatList(s.donors, 'donors'),
           implementing_partners: this.arrayToString(s.implementing_partners),
+          team_list: this.arrayToString(s.team),
+          viewers_list: this.arrayToString(s.viewers),
           health_focus_areas: this.parseHealthFocusAreas(s.health_focus_areas),
           hsc_challenges: this.parseHscChallenges(s.hsc_challenges),
           his_bucket: this.parseFlatList(s.hsc_challenges, 'hisBucket'),
@@ -65,7 +70,7 @@ export default {
       if (!this.parsed || !this.parsed[0] || typeof this.parsed !== 'object') {
         return null;
       }
-      return this.parsed.map(s => ({
+      return this.parsed.map(s => this.parseEmpty({
         'Name': s.name,
         'Country': s.country,
         'Implementation Date': s.implementation_dates,
@@ -75,6 +80,8 @@ export default {
         'Donors': s.investors,
         'Implementing Partners': s.implementing_partners,
         'Point of Contact': s.point_of_contact,
+        'Team members': s.team_list,
+        'Viewers': s.viewers_list,
         'Overview of digital health implementation': s.implementation_overview,
         'Geographical scope': s.geographic_scope,
         'Health Focus Areas': s.health_focus_areas,
@@ -96,6 +103,9 @@ export default {
     }
   },
   methods: {
+    parseEmpty (obj) {
+      return mapValues(obj, (val) => val || 'N/A');
+    },
     safeReturn (action, defaultReturn = '') {
       try {
         return action();
@@ -160,9 +170,8 @@ export default {
     },
     parseHealthFocusAreas (health_focus_areas) {
       return this.safeReturn(() => {
-        return this.getHealthFocusAreas
-          .filter(hfa => hfa.health_focus_areas
-            .some(h => health_focus_areas.includes(h.id)))
+        return flattenDeep(this.getHealthFocusAreas.map(val => val.health_focus_areas))
+          .filter(h => health_focus_areas.includes(h.id))
           .map(hf => hf.name)
           .join(',');
       });
