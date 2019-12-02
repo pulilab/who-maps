@@ -94,7 +94,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
     national_level_deployment = NDPSerializer(required=False, allow_null=True)
     government_investor = serializers.ChoiceField(choices=INVESTOR_CHOICES, required=False)
     implementing_partners = serializers.ListField(
-        child=serializers.CharField(max_length=64), max_length=50, min_length=0, required=False, allow_empty=True)
+        child=serializers.CharField(max_length=128), max_length=50, min_length=0, required=False, allow_empty=True)
     donors = serializers.ListField(child=serializers.IntegerField(), max_length=32)
 
     # SECTION 3 Technology Overview
