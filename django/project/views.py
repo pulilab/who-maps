@@ -1,4 +1,3 @@
-import csv
 from collections import OrderedDict
 
 from django.db import transaction
@@ -18,11 +17,11 @@ from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
 
-from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
+from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
 
 
 class ProjectPublicViewSet(ViewSet):
