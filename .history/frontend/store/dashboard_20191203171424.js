@@ -97,7 +97,7 @@ export const getters = {
     const q = state.searchString && state.searchString.length > 1 ? state.searchString : undefined;
     const country = getters.getFilteredCountries;
     const donor = state.dashboardType === 'donor' ? [state.dashboardId] : null;
-    return {
+    const filter = {
       page_size: state.pageSize,
       page: state.page,
       ordering: state.sorting,
@@ -116,6 +116,10 @@ export const getters = {
       view_as: state.dashboardType !== 'user' ? state.dashboardType : undefined,
       sc: state.selectedColumns
     };
+
+    console.log(filter);
+
+    return filter;
   }
 };
 

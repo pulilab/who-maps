@@ -19,7 +19,7 @@
             v-model="internalValue"
             :disabled="disabled"
             type="textarea"
-            :rows="8"
+            :rows="6"
           />
           <el-radio-group
             v-if="isGovInvestor"
@@ -32,7 +32,7 @@
             </el-radio>
             <el-radio :label="1">
               <translate>
-                Yes, they are contributing in-kind people or time puto
+                Yes, they are contributing in-kind people or time
               </translate>
             </el-radio>
             <el-radio :label="2">
@@ -42,7 +42,7 @@
             </el-radio>
             <el-radio :label="3">
               <translate>
-                Yes, MOH is fully funding the project
+                Yes, MOH is fully funding the projec
               </translate>
             </el-radio>
           </el-radio-group>

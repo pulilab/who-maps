@@ -224,7 +224,7 @@
             <translate>Yes, there is a financial contribution through MOH budget</translate>
           </el-radio>
           <el-radio :label="3">
-            <translate>Yes, MOH is fully funding the project</translate>
+              <translate>Yes, MOH is fully funding the project</translate>
           </el-radio>
         </el-radio-group>
       </custom-required-form-item>

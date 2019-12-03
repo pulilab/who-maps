@@ -106,7 +106,7 @@ export const getters = {
       country,
       donor,
       region: state.filteredRegion,
-      gov: state.governmentFinanced ? [1, 2, 3] : undefined,
+      gov: state.governmentFinanced ? [1, 2] : undefined,
       approved: state.governmentApproved ? 1 : undefined,
       sw: state.selectedPlatforms,
       dhi: state.selectedDHI,

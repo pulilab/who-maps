@@ -42,7 +42,7 @@
             </el-radio>
             <el-radio :label="3">
               <translate>
-                Yes, MOH is fully funding the project
+                Yes, MOH is fully funding the projec
               </translate>
             </el-radio>
           </el-radio-group>
