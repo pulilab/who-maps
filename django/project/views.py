@@ -3,7 +3,6 @@ from collections import OrderedDict
 
 from django.db import transaction
 from django.db.models import QuerySet
-from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
@@ -16,13 +15,12 @@ from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
 from project.permissions import InCountryAdminForApproval
-from user.models import Organisation
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, INVESTOR_CHOICES, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
-    ProjectApprovalSerializer, CSVExportSerializer, ProjectImportV2Serializer, ImportRowSerializer
+    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HealthFocusArea
 
@@ -452,119 +450,6 @@ class ProjectVersionViewSet(TeamTokenAuthMixin, ViewSet):
         coverage_versions = CoverageVersion.objects.filter(project_id=project_id) \
             .order_by("version").values("version", "data", "modified")
         return Response(coverage_versions)
-
-
-class CSVExportViewSet(TokenAuthMixin, ViewSet):
-    serializer_class = CSVExportSerializer
-
-    def create(self, request):
-        """
-        Creates CSV file out of a list of project IDs
-        """
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        results = []
-        has_country_permission = has_donor_permission = False
-        projects = Project.objects.filter(id__in=serializer.validated_data['ids'])
-
-        if not projects:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        single_country_selected = serializer.validated_data.get('country')
-        single_donor_selected = serializer.validated_data.get('donor')
-
-        if projects and hasattr(request.user, 'userprofile'):
-            if single_country_selected:
-                has_country_permission = request.user.is_superuser or \
-                                         projects[0].search.country.user_in_groups(request.user.userprofile)
-            if single_donor_selected:
-                try:
-                    donor = Donor.objects.get(id=serializer.validated_data['donor'])
-                except Donor.DoesNotExist:
-                    donor = None
-                else:
-                    has_donor_permission = request.user.is_superuser or donor.user_in_groups(request.user.userprofile)
-
-        for p in projects:
-            representation = [
-                {'Name': p.name},
-                {'Country': Country.get_name_by_id(p.data.get('country'))},
-                {'Implementation Date': p.data.get('implementation_dates')},
-                {'Start Date': p.data.get('start_date')},
-                {'End Date': p.data.get('end_date')},
-                {'Organisation Name': Organisation.get_name_by_id(p.data.get('organisation'))},
-                {'Donors': ", ".join([Donor.objects.get(id=int(x)).name for x in p.data.get('donors', [])])},
-                {"Implementing Partners": ", ".join(p.data.get('implementing_partners', []))},
-                {"Point of Contact": ", ".join((p.data.get('contact_name'), p.data.get('contact_email')))},
-                {"Overview of digital health implementation": p.data.get('implementation_overview')},
-                {"Geographical scope": p.data.get('geographic_scope')},
-                {"Health Focus Areas": ", ".join(
-                    [str(x) for x in HealthFocusArea.objects.get_names_for_ids(p.data.get("health_focus_areas", []))])},
-                {"Software": ", ".join([str(x) for x in
-                                        TechnologyPlatform.objects.get_names_for_ids(
-                                            [x['id'] for x in p.data.get("platforms", [])])])},
-                {'Health System Challenges': ", ".join(
-                    ['({}) {}'.format(x.name, x.challenge) for x in
-                     HSCChallenge.objects.get_names_for_ids(p.data.get('hsc_challenges', []))])},
-                {'Health Information System Support': ", ".join(
-                    [str(x) for x in HISBucket.objects.get_names_for_ids(p.data.get("his_bucket", []))])},
-                {'Government Investor': INVESTOR_CHOICES[p.data.get('government_investor', 0)][1]},
-                {'Licenses': ", ".join(
-                    [str(x) for x in Licence.objects.get_names_for_ids(p.data.get("licenses", []))])},
-                {'Repository': p.data.get('repository')},
-                {'Mobile Application': p.data.get('mobile_application')},
-                {'Wiki': p.data.get('wiki')},
-                {'Interoperability Standards': ", ".join(
-                    [str(x) for x in InteroperabilityStandard.objects.get_names_for_ids(
-                        p.data.get("interoperability_standards", []))])},
-                {'National Level Deployment': p.str_national_level_deployment()},
-                {'First Level Coverage': p.str_coverage()},
-                {'Second Level Coverage': p.str_coverage(second_level=True)},
-            ]
-
-            if single_country_selected and has_country_permission:
-                for q in projects[0].search.country.country_questions.all():
-                    answer = ""
-                    try:
-                        answer = p.data['country_custom_answers'][str(q.id)]
-                    except KeyError:
-                        pass
-                    if not answer:
-                        try:
-                            answer = p.data['country_custom_answers_private'][str(q.id)]
-                        except KeyError:
-                            pass
-                    representation.extend([{q.question: ", ".join(answer)}])
-
-            if single_donor_selected and has_donor_permission:
-                for q in donor.donor_questions.all():
-                    answer = ""
-                    try:
-                        answer = p.data['donor_custom_answers'][str(donor.id)][str(q.id)]
-                    except KeyError:
-                        pass
-                    if not answer:
-                        try:
-                            answer = p.data['donor_custom_answers_private'][str(donor.id)][str(q.id)]
-                        except KeyError:
-                            pass
-                    representation.extend([{q.question: ", ".join(answer)}])
-
-            results.append(representation)
-
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="csv.csv"'
-
-        writer = csv.writer(response, delimiter=';')
-
-        # HEADER
-        writer.writerow([list(field.keys())[0] for field in results[0]])
-
-        # PROJECTS
-        [writer.writerow([list(field.values())[0] for field in project]) for project in results]
-
-        return response
 
 
 class MapProjectCountryViewSet(ListModelMixin, GenericViewSet):
