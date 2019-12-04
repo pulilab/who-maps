@@ -9,8 +9,6 @@ Validator.extend('isDate', {
   }
 });
 export const fetchProjectData = async (store, params, error) => {
-    console.log('hola');
-    console.log(params.id);
   try {
     await store.dispatch('projects/setCurrentProject', params.id);
     await Promise.all([
@@ -23,7 +21,6 @@ export const fetchProjectData = async (store, params, error) => {
         statusCode: 404,
         message: 'This project does not exist'
     });
-    // return Promise.reject(e);
   }
 };
 
