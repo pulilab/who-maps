@@ -105,6 +105,15 @@
                 <toolkit-dialog-wrapper />
               </div>
               <div>
+                <a
+                  href="http://wiki.digitalhealthatlas.org/"
+                  target="_blank"
+                  class="HeaderBtn"
+                >
+                  <translate>Wiki</translate>
+                </a>
+              </div>
+              <div>
                 <nuxt-link
                   key="newProjectBtn"
                   :to="localePath({name: 'organisation-projects-create', params: $route.params})"
