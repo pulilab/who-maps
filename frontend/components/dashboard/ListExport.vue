@@ -2,7 +2,6 @@
 import { mapGetters } from 'vuex';
 import pickBy from 'lodash/pickBy';
 import flattenDeep from 'lodash/flattenDeep';
-import mapValues from 'lodash/mapValues';
 import { format } from 'date-fns';
 
 export default {
@@ -33,6 +32,7 @@ export default {
         return null;
       }
       return this.projects.map(s => {
+        console.log(s)
         const parsed = {
           ...s,
           start_date: this.parseDate(s.start_date),
@@ -67,7 +67,7 @@ export default {
       if (!this.parsed || !this.parsed[0] || typeof this.parsed !== 'object') {
         return null;
       }
-      return this.parsed.map(s => this.parseEmpty({
+      return this.parsed.map(s => ({
         'Name': s.name,
         'Country': s.country,
         'Implementation Date': s.implementation_dates,
@@ -98,9 +98,6 @@ export default {
     }
   },
   methods: {
-    parseEmpty (obj) {
-      return mapValues(obj, (val) => val || 'N/A');
-    },
     safeReturn (action, defaultReturn = '') {
       try {
         return action();

@@ -439,4 +439,8 @@ export default {
       }
     }
   }
+  .ColumnList {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
 </style>

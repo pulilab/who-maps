@@ -255,7 +255,7 @@ export default {
       selectedRows: 'dashboard/getSelectedRows',
       selectAll: 'dashboard/getSelectAll',
       total: 'dashboard/getTotal',
-      countryColumns: 'dashboard/getCountryColumns',
+      countryColumns: 'dashboard/getFilteredCountryColumns',
       donorColumns: 'dashboard/getDonorColumns'
     }),
     ...mapGettersActions({

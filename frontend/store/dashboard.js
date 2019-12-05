@@ -60,6 +60,9 @@ export const getters = {
     }
     return [];
   },
+  getFilteredCountryColumns (state, getters) {
+    return getters['getCountryColumns'].filter((country) => state.selectedColumns.indexOf(country.id) !== -1);
+  },
   getDonorColumns: (state, getters, rootState, rootGetters) => {
     if (state.dashboardId && state.dashboardType === 'donor') {
       const donor = rootGetters['system/getDonorDetails'](state.dashboardId);
