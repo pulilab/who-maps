@@ -184,6 +184,8 @@ class GHDICountry(TimeStampedModel):
     doing_business_index = models.DecimalField(max_digits=5, decimal_places=0)
     adult_literacy = models.DecimalField(max_digits=5, decimal_places=2)
 
+    enable = models.BooleanField(default=False)
+
 
 class GHDICategory(TimeStampedModel):
     category_id = models.IntegerField()
