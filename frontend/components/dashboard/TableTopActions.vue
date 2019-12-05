@@ -217,7 +217,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      profiles: 'system/getUserProfiles',
       columns: 'dashboard/getAvailableColumns',
       selectedCol: 'dashboard/getSelectedColumns',
       selectedRows: 'dashboard/getSelectedRows',
@@ -264,9 +263,6 @@ export default {
       loadProjectsBucket: 'dashboard/loadProjectsBucket',
       setSelectedRows: 'dashboard/setSelectedRows'
     }),
-    findName (id) {
-      return (this.profiles.find(p => p.id === id) || {}).name
-    },
     setViewport () {
       if (process.client && window) {
         this.viewportSize = window.innerWidth;
