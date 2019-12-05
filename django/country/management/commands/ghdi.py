@@ -1,6 +1,6 @@
 import requests
 from django.core.management.base import BaseCommand
-from django_countries import countries
+from pycountry import countries
 from rest_framework import status
 
 from country.models import Country
@@ -22,7 +22,8 @@ class Command(BaseCommand):
         if country_code:
             countries_qs = countries_qs.filter(code=country_code)
         for country in countries_qs:
-            alpha_3_code = countries.alpha3(country.code)
+            py_country = countries.get(alpha_2=country.code)
+            alpha_3_code = py_country.alpha_3
             print(f'Processing context and health data for country: {country}')
             url = f'http://index.digitalhealthindex.org/api/countries/{alpha_3_code}/development_indicators'
             response = requests.get(url)
@@ -62,7 +63,8 @@ class Command(BaseCommand):
 
                 categories = country_data.get('categories')
                 if categories:
-                    alpha_2_code = countries.alpha2(country_data['countryId'])
+                    py_country = countries.get(alpha_3=country_data['countryId'])
+                    alpha_2_code = py_country.alpha_2
                     try:
                         country = Country.objects.get(code=alpha_2_code)
                     except Country.DoesNotExist:
