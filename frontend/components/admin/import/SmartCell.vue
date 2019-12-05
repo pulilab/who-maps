@@ -32,7 +32,7 @@
             </el-radio>
             <el-radio :label="1">
               <translate>
-                Yes, they are contributing in-kind people or time puto
+                Yes, they are contributing in-kind people or time
               </translate>
             </el-radio>
             <el-radio :label="2">
