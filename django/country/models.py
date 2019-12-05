@@ -17,9 +17,9 @@ class GHDI(models.Model):
     life_expectancy = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True,)
     health_expenditure = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True,)
 
-    leadership_and_governance_score = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)
-    strategy_and_investment_score = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)
-    legislation_policy_compliance_score = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)
+    leadership_and_governance = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)
+    strategy_and_investment = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)
+    legislation_policy_compliance = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)
     workforce = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)
     standards_and_interoperability = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)
     infrastructure = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)

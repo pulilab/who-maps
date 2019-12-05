@@ -75,17 +75,17 @@ class Command(BaseCommand):
                             category_name = category['name']
                             score = category['overallScore']
                             if category_name == 'Leadership and Governance':
-                                if country.leadership_and_governance_score is None or override:
+                                if country.leadership_and_governance is None or override:
                                     save = True
-                                    country.leadership_and_governance_score = score
+                                    country.leadership_and_governance = score
                             elif category_name == 'Strategy and Investment':
-                                if country.strategy_and_investment_score is None or override:
+                                if country.strategy_and_investment is None or override:
                                     save = True
-                                    country.strategy_and_investment_score = score
+                                    country.strategy_and_investment = score
                             elif category_name == 'Legislation, Policy, and Compliance':
-                                if country.legislation_policy_compliance_score is None or override:
+                                if country.legislation_policy_compliance is None or override:
                                     save = True
-                                    country.legislation_policy_compliance_score = score
+                                    country.legislation_policy_compliance = score
                             elif category_name == 'Workforce':
                                 if country.workforce is None or override:
                                     save = True
