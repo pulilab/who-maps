@@ -17,10 +17,10 @@ class Command(BaseCommand):
     def get_context_and_health_data_for_countries(self, options):
         override = options['override']
         country_code = options['country_code']
-        countries = Country.objects.order_by('name')
+        countries_qs = Country.objects.order_by('name')
         if country_code:
-            countries = countries.filter(code=country_code)
-        for country in countries:
+            countries_qs = countries_qs.filter(code=country_code)
+        for country in countries_qs:
             if country.alpha_3_code:
                 print(f'Processing context and health data for country: {country}')
                 url = f'http://index.digitalhealthindex.org/api/countries/{country.alpha_3_code}/development_indicators'
