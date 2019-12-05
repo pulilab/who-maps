@@ -159,7 +159,11 @@ COUNTRY_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url"
 READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "logo_url", "cover", "cover_url", "map_version", "map_files",
                             "map_activated_on", "country_questions", "lat", "lon")
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
-READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos", "project_approval",)
+READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos", "project_approval",
+                                  "total_population", "gni_per_capita", "life_expectancy", "health_expenditure",
+                                  "leadership_and_governance", "strategy_and_investment",
+                                  "legislation_policy_compliance", "workforce", "standards_and_interoperability",
+                                  "infrastructure", "services_and_applications")
 
 
 class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer):
