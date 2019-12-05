@@ -375,7 +375,8 @@ export const mutations = {
     state.contact_email = contact_email;
   },
   SET_TEAM: (state, team) => {
-    Vue.set(state, 'team', [...team]);
+    const items = typeof team === 'string' ? state.team.concat([team]) : team;
+    Vue.set(state, 'team', [...items]);
   },
   SET_VIEWERS: (state, viewers) => {
     Vue.set(state, 'viewers', [...viewers]);

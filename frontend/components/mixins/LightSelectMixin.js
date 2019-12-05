@@ -22,10 +22,14 @@ export default {
   methods: {
     filterList (query) {
       if (query) {
-        this.options = this.items.filter(p => p.name.toLowerCase().startsWith(query.toLowerCase()));
+        this.options = this.items.filter(p => this.filter(p.name, query) || this.filter(p.email, query) );
       } else {
         this.options = [];
       }
+    },
+
+    filter (val, query) {
+      return val.toLowerCase().startsWith(query.toLowerCase());
     }
   }
 };

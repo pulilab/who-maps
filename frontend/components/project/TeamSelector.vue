@@ -6,6 +6,7 @@
     multiple
     filterable
     remote
+    allow-create
     class="TeamSelector"
     popper-class="TeamSelectorDropdown"
     @change="changeHandler"
@@ -16,11 +17,13 @@
       :label="person.name"
       :value="person.id"
     >
-      <span>{{ person.name }}</span>
+      <span style="float: left;">{{ person.name }}</span>
       <template v-if="person.organisation">
         <organisation-item :id="person.organisation" />
       </template>
+      <span class="email"><small>{{ person.email }}</small></span>
     </el-option>
+    {{filterList.length }}
   </lazy-el-select>
 </template>
 
@@ -72,8 +75,12 @@ export default {
     width: 100%;
   }
 
+  .NoDisplay {
+    display: none;
+  }
+
   .TeamSelectorDropdown {
-     .OrganisationItem {
+    .OrganisationItem {
       display: inline-block;
       margin-left: 6px;
       font-weight: 400;
@@ -85,6 +92,27 @@ export default {
 
       &::after {
         content: ")";
+      }
+    }
+    li {
+      height: 50px;
+      .email {
+        float: left;
+        width: 100%;
+        margin-top: -18px;
+      }
+    }
+  }
+
+  .el-select-dropdown__item.selected {
+    display: none;
+  }
+
+  .el-select {
+    .el-tag{
+      &:hover {
+        background-color: white;
+        border-color: #B9B9B9;
       }
     }
   }
