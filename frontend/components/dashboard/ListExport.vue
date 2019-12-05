@@ -26,7 +26,6 @@ export default {
       hisBucket: 'projects/getHisBucket',
       licenses: 'projects/getLicenses',
       interoperabilityStandards: 'projects/getInteroperabilityStandards',
-      getInteroperabilityLinks: 'projects/getInteroperabilityLinks',
       organisations: 'system/getOrganisations'
     }),
     parsed () {
@@ -43,8 +42,6 @@ export default {
           organisation: this.parseSingleSelection(s.organisation, 'organisations'),
           investors: this.parseFlatList(s.donors, 'donors'),
           implementing_partners: this.arrayToString(s.implementing_partners),
-          team_list: this.arrayToString(s.team),
-          viewers_list: this.arrayToString(s.viewers),
           health_focus_areas: this.parseHealthFocusAreas(s.health_focus_areas),
           hsc_challenges: this.parseHscChallenges(s.hsc_challenges),
           his_bucket: this.parseFlatList(s.hsc_challenges, 'hisBucket'),
@@ -80,8 +77,6 @@ export default {
         'Donors': s.investors,
         'Implementing Partners': s.implementing_partners,
         'Point of Contact': s.point_of_contact,
-        'Team members': s.team_list,
-        'Viewers': s.viewers_list,
         'Overview of digital health implementation': s.implementation_overview,
         'Geographical scope': s.geographic_scope,
         'Health Focus Areas': s.health_focus_areas,
