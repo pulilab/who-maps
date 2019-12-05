@@ -26,7 +26,7 @@
         </el-button>
 
         <div class="Separator" />
-        <list-export :projects="completeRowToExport">
+        <list-export :projects="rowToExport">
           <template #default="{parsed, labeled}">
             <div class="TableExportContainer">
               <xlsx-workbook>
@@ -212,27 +212,8 @@ export default {
       exportType: 'XLSX',
       columnSelectorOpen: false,
       selectedColumns: [],
-      viewportSize: 2000,
-      completeRowToExport: []
+      viewportSize: 2000
     };
-  },
-  watch: {
-    rowToExport: {
-      immediate: true,
-      handler (list) {
-        this.completeRowToExport = [];
-        Promise.all(list.map(({ id }) => this.$axios.get(`/api/projects/${id}/groups/`)))
-          .then((res) => {
-            const results = res.map(({ data: { team, viewers } }) => {
-              return {
-                team: team.map(this.findName),
-                viewers: viewers.map(this.findName)
-              };
-            });
-            this.completeRowToExport = list.map((row, index) => ({ ...row, ...results[index] || {} }));
-          });
-      }
-    }
   },
   computed: {
     ...mapGetters({

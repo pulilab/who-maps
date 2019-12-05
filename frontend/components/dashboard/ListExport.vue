@@ -32,7 +32,6 @@ export default {
         return null;
       }
       return this.projects.map(s => {
-        console.log(s)
         const parsed = {
           ...s,
           start_date: this.parseDate(s.start_date),
@@ -57,8 +56,7 @@ export default {
           point_of_contact: `${s.contact_name}, ${s.contact_email}`,
           donors: undefined,
           platforms: undefined,
-          country_answers: undefined,
-          donor_answers: undefined
+          donor_answers: undefined // TODO remove line
         };
         return pickBy(parsed, v => v !== undefined && v !== null);
       });
@@ -170,17 +168,17 @@ export default {
     },
     parseCustomQuestions (donor_answers, country_answers) {
       return this.safeReturn(() => {
-        let custom = {};
-        if (this.dashboardType === 'donor') {
+        const custom = {};
+        if (donor_answers && this.dashboardType === 'donor') {
           this.donorColumns.forEach(dc => {
             const value = donor_answers && donor_answers[dc.donorId] ? donor_answers[dc.donorId][dc.originalId] : '';
-            custom[dc.label] = value && Array.isArray(value) ? value.join(',') : '';
+            custom[dc.label] = value && Array.isArray(value) ? value.join(', ') : '';
           });
         }
         if (this.dashboardType === 'country') {
-          custom = this.countryColumns.forEach(cc => {
+          this.countryColumns.forEach(cc => {
             const value = country_answers ? country_answers[cc.originalId] : '';
-            custom[cc.label] = value && Array.isArray(value) ? value.join(',') : '';
+            custom[cc.label] = (value && Array.isArray(value) ? value.join(', ') : value) || 'N/A';
           });
         }
         return custom;
