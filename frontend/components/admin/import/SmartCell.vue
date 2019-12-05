@@ -19,7 +19,7 @@
             v-model="internalValue"
             :disabled="disabled"
             type="textarea"
-            :rows="6"
+            :rows="8"
           />
           <el-radio-group
             v-if="isGovInvestor"
@@ -38,6 +38,11 @@
             <el-radio :label="2">
               <translate>
                 Yes, there is a financial contribution through MOH budget
+              </translate>
+            </el-radio>
+            <el-radio :label="3">
+              <translate>
+                Yes, MOH is fully funding the project
               </translate>
             </el-radio>
           </el-radio-group>
