@@ -5,6 +5,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinLengthValidator
+from django_extensions.db.models import TimeStampedModel
 from ordered_model.models import OrderedModel
 
 from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
@@ -165,3 +166,39 @@ class CountryCustomQuestion(CustomQuestion):
 
     def get_order(self):
         return self.__class__.objects.filter(country=self.country).values('id', 'order')
+
+
+class GHDICountry(TimeStampedModel):
+    country_id = models.CharField(max_length=3)
+    name = models.CharField(max_length=128)
+    alpha_2_code = models.CharField(max_length=2)
+    phase = models.IntegerField()
+    collected_date = models.CharField(max_length=64, blank=True, null=True)
+
+    total_population = models.DecimalField(max_digits=10, decimal_places=0)
+    gni_per_capita = models.DecimalField(max_digits=7, decimal_places=0)
+    life_expectancy = models.DecimalField(max_digits=5, decimal_places=2)
+    health_expenditure = models.DecimalField(max_digits=5, decimal_places=2)
+    total_ncd_deaths_per_capita = models.DecimalField(max_digits=5, decimal_places=2)
+    under_5_mortality = models.DecimalField(max_digits=5, decimal_places=2)
+    doing_business_index = models.DecimalField(max_digits=5, decimal_places=0)
+    adult_literacy = models.DecimalField(max_digits=5, decimal_places=2)
+
+
+class GHDICategory(TimeStampedModel):
+    category_id = models.IntegerField()
+    name = models.CharField(max_length=256)
+    overall_score = models.DecimalField(max_digits=3, decimal_places=1)
+    phase = models.IntegerField()
+    country = models.ForeignKey(GHDICountry, on_delete=models.CASCADE)
+
+
+class GHDIIndicator(TimeStampedModel):
+    indicator_id = models.IntegerField()
+    code = models.CharField(max_length=8)
+    name = models.CharField(max_length=256)
+    description = models.TextField(max_length=5000)
+    score = models.IntegerField()
+    supporting_text = models.TextField(max_length=5000)
+    score_description = models.TextField(max_length=5000)
+    category = models.ForeignKey(GHDICategory, on_delete=models.CASCADE)
