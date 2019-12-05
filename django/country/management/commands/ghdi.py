@@ -75,12 +75,16 @@ class Command(BaseCommand):
 
     def get_health_indicator_scores(self, options):
         override = options['override']
+        country_code = options['country_code']
         url = 'http://index.digitalhealthindex.org/api/countries_health_indicator_scores'
         response = requests.get(url)
         if response.status_code == status.HTTP_200_OK:
             data = response.json()
 
             for country_data in data['countryHealthScores']:
+                if country_code and country_data['countryAlpha2Code'] != country_code:
+                    continue
+
                 categories = country_data.get('categories')
                 if categories:
                     try:
@@ -133,4 +137,4 @@ class Command(BaseCommand):
 
         self.get_context_and_health_data_for_countries(options)
 
-        # self.get_health_indicator_scores(options)
+        self.get_health_indicator_scores(options)
