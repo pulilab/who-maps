@@ -18,12 +18,9 @@ export const fetchProjectData = async (store, params, error) => {
   } catch (e) {
     console.warn('loadProjectData failed', e);
     error({
-      response: {
-        status: 404,
-        statusText: 'This project does not exist'
-      }
+        statusCode: 404,
+        message: 'This project does not exist'
     });
-    return Promise.reject(e);
   }
 };
 
