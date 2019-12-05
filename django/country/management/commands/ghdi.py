@@ -1,5 +1,6 @@
 import requests
 from django.core.management.base import BaseCommand
+from django_countries import countries
 from rest_framework import status
 
 from country.models import Country
@@ -21,31 +22,31 @@ class Command(BaseCommand):
         if country_code:
             countries_qs = countries_qs.filter(code=country_code)
         for country in countries_qs:
-            if country.alpha_3_code:
-                print(f'Processing context and health data for country: {country}')
-                url = f'http://index.digitalhealthindex.org/api/countries/{country.alpha_3_code}/development_indicators'
-                response = requests.get(url)
-                if response.status_code == status.HTTP_200_OK:
-                    data = response.json()
+            alpha_3_code = countries.alpha3(country.code)
+            print(f'Processing context and health data for country: {country}')
+            url = f'http://index.digitalhealthindex.org/api/countries/{alpha_3_code}/development_indicators'
+            response = requests.get(url)
+            if response.status_code == status.HTTP_200_OK:
+                data = response.json()
 
-                    save = False
-                    if country.total_population is None or override:
-                        save = True
-                        country.total_population = data['totalPopulation']
-                    if country.gni_per_capita is None or override:
-                        save = True
-                        country.gni_per_capita = data['gniPerCapita']
-                    if country.life_expectancy is None or override:
-                        save = True
-                        country.life_expectancy = data['lifeExpectancy']
-                    if country.health_expenditure is None or override:
-                        save = True
-                        country.health_expenditure = data['healthExpenditure']
+                save = False
+                if country.total_population is None or override:
+                    save = True
+                    country.total_population = data['totalPopulation']
+                if country.gni_per_capita is None or override:
+                    save = True
+                    country.gni_per_capita = data['gniPerCapita']
+                if country.life_expectancy is None or override:
+                    save = True
+                    country.life_expectancy = data['lifeExpectancy']
+                if country.health_expenditure is None or override:
+                    save = True
+                    country.health_expenditure = data['healthExpenditure']
 
-                    if save:
-                        country.save()
-                else:
-                    print(f'Error getting context and health data for country: {response.content}')
+                if save:
+                    country.save()
+            else:
+                print(f'Error getting context and health data for country: {response.content}')
 
     def get_health_indicator_scores(self, options):
         override = options['override']
@@ -61,8 +62,9 @@ class Command(BaseCommand):
 
                 categories = country_data.get('categories')
                 if categories:
+                    alpha_2_code = countries.alpha2(country_data['countryId'])
                     try:
-                        country = Country.objects.get(alpha_3_code=country_data['countryId'])
+                        country = Country.objects.get(code=alpha_2_code)
                     except Country.DoesNotExist:
                         pass
                     else:
