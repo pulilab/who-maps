@@ -9,15 +9,26 @@ class Command(BaseCommand):
     help = "Remove unused features from geojson."
 
     def add_arguments(self, parser):
-        parser.add_argument('override', nargs='*', type=str, help='Override existing data')
-        parser.add_argument('country', nargs='*', type=str, help='Country')
+        parser.add_argument('--override', dest="override", required=False, default=False,
+                            help='Override existing data')
+        parser.add_argument('--country-code', dest="country_code", required=False, default=None,
+                            help='2 character long country code')
 
-    def fill_aplha_3_codes(self):
-        if Country.objects.filter(alpha_3_code__isnull=True).count() > 0:
+    def fill_aplha_3_codes(self, options):
+        print('Filling alpha 3 codes')
+        country_code = options['country_code']
+
+        countries = Country.objects.filter(alpha_3_code__isnull=True)
+        if country_code:
+            countries = countries.filter(code=country_code)
+
+        if countries.count() > 0:
             url = 'http://index.digitalhealthindex.org/api/countries/'
             response = requests.get(url)
             if response.status_code == status.HTTP_200_OK:
                 for item in response.json():
+                    if country_code and item['alpha2Code'] != country_code:
+                        continue
                     try:
                         country = Country.objects.get(code=item['alpha2Code'])
                     except Country.DoesNotExist:
@@ -114,8 +125,8 @@ class Command(BaseCommand):
             print(f'Error getting indicator data for country: {response.content}')
 
     def handle(self, *args, **options):
-        self.fill_aplha_3_codes()
+        self.fill_aplha_3_codes(options)
 
-        self.get_context_and_health_data_for_countries(options)
-
-        self.get_health_indicator_scores(options)
+        # self.get_context_and_health_data_for_countries(options)
+        #
+        # self.get_health_indicator_scores(options)
