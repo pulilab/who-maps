@@ -903,6 +903,14 @@ class CountryTests(APITestCase):
         self.assertEqual(call_args_list[0][1]['country_code'], 'AF')
         self.assertEqual(call_args_list[0][1]['override'], True)
 
+    def test_update_ghdi_data_without_permission(self):
+        country = Country.objects.get(code='AF')
+        self.assertEqual(country.admins.count(), 0)
+
+        url = reverse("country-update-ghdi-data") + '?country_code=AF'
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_update_ghdi_without_country_code(self):
         url = reverse("country-update-ghdi-data")
         response = self.test_user_client.get(url)
