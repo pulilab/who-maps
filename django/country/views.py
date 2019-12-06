@@ -1,5 +1,6 @@
 import pycountry
 import requests
+from django.core.management import call_command
 
 from requests import RequestException
 from django.conf import settings
@@ -81,6 +82,19 @@ class CountryViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateM
                     or self.request.user.is_superuser:
                 return SuperAdminCountrySerializer
         return super().get_serializer_class()
+
+    @action(methods=['get'], detail=False)
+    def update_ghdi_data(self, request):
+        country_code = request.query_params.get('country_code')
+        if country_code:
+            try:
+                Country.objects.get(code=country_code)
+            except Country.DoesNotExist:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            else:
+                call_command('ghdi', country_code=country_code, override=True)
+                return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class DonorViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
