@@ -112,5 +112,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.get_context_and_health_data_for_countries(options)
-
         self.get_health_indicator_scores(options)
