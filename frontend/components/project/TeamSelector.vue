@@ -1,36 +1,34 @@
 <template>
-  <lazy-el-select
-    :value="value"
-    :placeholder="$gettext('Type and select a name') | translate"
-    :remote-method="filterList"
-    multiple
-    filterable
-    remote
-    allow-create
-    class="TeamSelector"
-    popper-class="TeamSelectorDropdown"
-    @change="changeHandler"
-  >
-    <el-option
-      v-for="person in optionsAndValues"
-      :key="person.id"
-      :label="person.name"
-      :value="person.id"
+    <lazy-el-select
+      slot="reference"
+      :value="value"
+      :placeholder="$gettext('Type and select a name') | translate"
+      :remote-method="filterList"
+      multiple
+      filterable
+      remote
+      class="TeamSelector"
+      :popper-class="optionsAndValues.length > value.length ? 'TeamSelectorDropdown' : 'NoDisplay'"
+      @change="changeHandler"
     >
-      <span style="float: left;">{{ person.name }}</span>
-      <template v-if="person.organisation">
-        <organisation-item :id="person.organisation" />
-      </template>
-      <span class="email"><small>{{ person.email }}</small></span>
-    </el-option>
-    {{filterList.length }}
-  </lazy-el-select>
+      <el-option
+        v-for="person in optionsAndValues"
+        :key="person.id"
+        :label="person.name"
+        :value="person.id"
+      >
+        <span style="float: left;">{{ person.name }}</span>
+        <template v-if="person.organisation">
+          <organisation-item :id="person.organisation" />
+        </template>
+        <span class="email"><small>{{ person.email }}</small></span>
+      </el-option>
+    </lazy-el-select>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import LightSelectMixin from '../mixins/LightSelectMixin.js';
-
 import OrganisationItem from '../common/OrganisationItem';
 
 export default {
@@ -52,6 +50,11 @@ export default {
     value: {
       type: Array,
       default: null
+    }
+  },
+  data() {
+    return {
+      visible: false
     }
   },
   computed: {
