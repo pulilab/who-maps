@@ -5,6 +5,7 @@
     popper-class="PlatformSelectorDropdown"
     class="PlatformSelector"
     value-key="id"
+    filterable
     @change="changeHandler"
     @blur="$emit('blur')"
   >

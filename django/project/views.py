@@ -2,6 +2,8 @@ from collections import OrderedDict
 
 from django.db import transaction
 from django.db.models import QuerySet
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
@@ -127,7 +129,7 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         """
         Retrieves a project.
         """
-        project = get_object_or_400(Project, "No such project", id=kwargs.get("pk"))
+        project = get_object_or_404(Project, pk=kwargs.get("pk"))
 
         return Response(self._get_permission_based_data(project))
 
