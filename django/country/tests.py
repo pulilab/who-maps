@@ -905,6 +905,11 @@ class CountryTests(APITestCase):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_update_ghdi_data_with_invalid_country_code(self):
+        url = reverse("country-update-ghdi-data") + '?country_code=XXXX'
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 class DonorTests(APITestCase):
     def setUp(self):
