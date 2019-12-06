@@ -15,6 +15,20 @@ class Command(BaseCommand):
         parser.add_argument('--country-code', dest="country_code", required=False, default=None,
                             help='2 character long country code')
 
+    def fill_aplha_3_codes(self, options):
+        print('Filling alpha 3 codes')
+        country_code = options['country_code']
+
+        countries_qs = Country.objects.filter(alpha_3_code__isnull=True)
+        if country_code:
+            countries_qs = countries_qs.filter(code=country_code)
+
+        if countries_qs.count() > 0:
+            for country in countries_qs:
+                py_country = countries.get(alpha_2=country.code)
+                country.alpha_3_code = py_country.alpha_3
+                country.save()
+
     def get_context_and_health_data_for_countries(self, options):
         override = options['override']
         country_code = options['country_code']
@@ -111,5 +125,6 @@ class Command(BaseCommand):
             print(f'Error getting indicator data for country: {response.content}')
 
     def handle(self, *args, **options):
+        self.fill_aplha_3_codes(options)
         self.get_context_and_health_data_for_countries(options)
         self.get_health_indicator_scores(options)
