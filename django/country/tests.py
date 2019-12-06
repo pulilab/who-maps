@@ -890,6 +890,9 @@ class CountryTests(APITestCase):
 
     @mock.patch('country.views.call_command')
     def test_update_ghdi_data_success(self, call_command):
+        country = Country.objects.get(code='AF')
+        country.admins.add(self.test_user['user_profile_id'])
+
         call_command.return_value = None
         url = reverse("country-update-ghdi-data") + '?country_code=AF'
         response = self.test_user_client.get(url)

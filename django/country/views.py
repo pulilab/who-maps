@@ -88,10 +88,12 @@ class CountryViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateM
         country_code = request.query_params.get('country_code')
         if country_code:
             try:
-                Country.objects.get(code=country_code)
+                country = Country.objects.get(code=country_code)
             except Country.DoesNotExist:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
             else:
+                if request.user.userprofile not in country.admins.all():
+                    return Response(status=status.HTTP_403_FORBIDDEN)
                 call_command('ghdi', country_code=country_code, override=True)
                 return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
