@@ -2,6 +2,7 @@ import os
 from copy import copy
 from datetime import datetime
 from fnmatch import fnmatch
+from unittest import mock
 from unittest.mock import patch
 
 from django.contrib.admin import AdminSite
@@ -12,6 +13,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
 from django.utils.dateformat import format
 from requests import RequestException
+from rest_framework import status
 
 from django.core import mail
 from django.core.management import call_command
@@ -885,6 +887,18 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data=data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['options'], ['yes', 'maybe'])
+
+    @mock.patch('country.views.call_command')
+    def test_update_ghdi_data_success(self, call_command):
+        call_command.return_value = None
+        url = reverse("country-update-ghdi-data") + '?country_code=AF'
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        call_args_list = call_command.call_args_list
+        self.assertIn('ghdi', call_args_list[0][0])
+        self.assertEqual(call_args_list[0][1]['country_code'], 'AF')
+        self.assertEqual(call_args_list[0][1]['override'], True)
 
 
 class DonorTests(APITestCase):
