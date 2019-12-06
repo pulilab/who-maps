@@ -37,9 +37,7 @@ class Command(BaseCommand):
             countries_qs = countries_qs.filter(code=country_code)
         for country in countries_qs:
             print(f'Processing context and health data for country: {country}')
-            py_country = countries.get(alpha_2=country.code)
-            alpha_3_code = py_country.alpha_3
-            url = f'http://index.digitalhealthindex.org/api/countries/{alpha_3_code}/development_indicators'
+            url = f'http://index.digitalhealthindex.org/api/countries/{country.alpha_3_code}/development_indicators'
             response = requests.get(url)
             if response.status_code == status.HTTP_200_OK:
                 data = response.json()
