@@ -75,10 +75,8 @@ class Command(BaseCommand):
 
                 categories = country_data.get('categories')
                 if categories:
-                    py_country = countries.get(alpha_3=country_data['countryId'])
-                    alpha_2_code = py_country.alpha_2
                     try:
-                        country = Country.objects.get(code=alpha_2_code)
+                        country = Country.objects.get(alpha_3_code=country_data['countryId'])
                     except Country.DoesNotExist:
                         pass
                     else:
