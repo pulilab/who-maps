@@ -23,11 +23,10 @@ class Command(BaseCommand):
         if country_code:
             countries_qs = countries_qs.filter(code=country_code)
 
-        if countries_qs.count() > 0:
-            for country in countries_qs:
-                py_country = countries.get(alpha_2=country.code)
-                country.alpha_3_code = py_country.alpha_3
-                country.save()
+        for country in countries_qs:
+            py_country = countries.get(alpha_2=country.code)
+            country.alpha_3_code = py_country.alpha_3
+            country.save()
 
     def get_context_and_health_data_for_countries(self, options):
         override = options['override']
