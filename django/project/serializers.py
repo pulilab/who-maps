@@ -67,7 +67,8 @@ class DraftPlatformSerializer(serializers.Serializer):
 
 INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
                     (1, 'Yes, they are contributing in-kind people or time'),
-                    (2, 'Yes, there is a financial contribution through MOH budget')]
+                    (2, 'Yes, there is a financial contribution through MOH budget'),
+                    (3, 'Yes, MOH is fully funding the project')]
 
 
 class ProjectPublishedSerializer(serializers.Serializer):
