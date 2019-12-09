@@ -2,6 +2,7 @@ import copy
 from datetime import datetime
 
 from django.urls import reverse
+from rest_framework import status
 
 from django.core import mail
 from django.contrib.admin.sites import AdminSite
@@ -980,3 +981,8 @@ class ProjectTests(SetupTests):
         Project.remove_stale_donors()
         project.refresh_from_db()
         self.assertEqual(project.data['donors'], [self.d1.id])
+
+    def test_get_project_404_success(self):
+        url = reverse("project-retrieve", kwargs={"pk": 10000000})
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, response.json())

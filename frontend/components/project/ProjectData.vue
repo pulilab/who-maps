@@ -318,7 +318,12 @@ export default {
       return ['', this.$gettext('Sub National'), this.$gettext('National')];
     },
     investedList () {
-      return [this.$gettext('No, they have not yet contributed'), this.$gettext('Yes, they are contributing in-kind people or time'), this.$gettext('Yes, there is a financial contribution through MOH budget')];
+      return [
+        this.$gettext('No, they have not yet contributed'),
+        this.$gettext('Yes, they are contributing in-kind people or time'),
+        this.$gettext('Yes, there is a financial contribution through MOH budget'),
+        this.$gettext('Yes, MOH is fully funding the project'),
+      ];
     }
   },
   methods: {
