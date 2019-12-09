@@ -19,10 +19,6 @@ class GetObjectOrNoneMixin(object):
             return None
 
 
-class NameByIDMixin:
-    pass
-
-
 class ParentByIDMixin:
     @classmethod
     def get_parent_id(cls, object_id, parent_field):
