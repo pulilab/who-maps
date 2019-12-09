@@ -89,6 +89,7 @@ def backup():
     local('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
     # Backup media files
     local('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/')
+    backup_translation()
 
 
 def deploy():
