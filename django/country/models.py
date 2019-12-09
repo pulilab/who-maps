@@ -93,6 +93,12 @@ def save_coordinates(sender, instance, **kwargs):
             pass
 
 
+class ArchitectureRoadMapDocument(models.Model):
+    country = models.ForeignKey(Country, models.CASCADE)
+    title = models.CharField(max_length=128)
+    document = models.FileField(null=True, upload_to='documents/')
+
+
 class Donor(UserManagement, LandingPageCommon):
     code = models.CharField(max_length=10, default="NULL", help_text="Acronym for Donor", unique=True,
                             validators=[MinLengthValidator(3)])
