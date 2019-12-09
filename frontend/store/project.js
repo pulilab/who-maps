@@ -378,8 +378,9 @@ export const mutations = {
     const items = typeof team === 'string' ? state.team.concat([team]) : team;
     Vue.set(state, 'team', [...items]);
   },
-  SET_VIEWERS: (state, viewers) => {
-    Vue.set(state, 'viewers', [...viewers]);
+  SET_VIEWERS: (state, viewer) => {
+    const items = typeof viewer === 'string' ? state.viewers.concat([viewer]) : viewer;
+    Vue.set(state, 'viewers', [...items]);
   },
   SET_PLATFORMS: (state, platforms) => {
     Vue.set(state, 'platforms', [...platforms]);

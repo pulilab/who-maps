@@ -67,7 +67,6 @@ export default {
   },
   methods: {
     onEnter(e) {
-      console.log(this.team)
       if (this.validateEmail(e.target.value)) {
         this.$emit('change', e.target.value);
       }

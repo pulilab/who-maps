@@ -266,10 +266,11 @@
             data-vv-as="Team"
           />
         </custom-required-form-team-item>
-        <custom-required-form-item
+        <custom-required-form-team-item
           :error="errors.first('viewers')"
           :draft-rule="draftRules.viewers"
           :publish-rule="publishRules.viewers"
+          v-model="viewers"
         >
           <template slot="label">
             <translate key="viewers">
@@ -281,14 +282,13 @@
               </translate>
             </form-hint>
           </template>
-
           <team-selector
             v-model="viewers"
             v-validate="rules.viewers"
             data-vv-name="viewers"
             data-vv-as="Viewers"
           />
-        </custom-required-form-item>
+        </custom-required-form-team-item>
       </div>
     </collapsible-card>
   </div>

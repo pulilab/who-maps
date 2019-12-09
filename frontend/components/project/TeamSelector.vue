@@ -14,7 +14,7 @@
       <el-option
         v-for="person in optionsAndValues"
         :key="person.id"
-        :label="person.name"
+        :label="`${person.name}, ${getOrganisationDetails(person.organisation).name} (${person.email})` | truncate"
         :value="person.id"
       >
         <span style="float: left;">{{ person.name }}</span>
@@ -59,8 +59,15 @@ export default {
   },
   computed: {
     ...mapGetters({
-      items: 'system/getUserProfiles'
+      items: 'system/getUserProfiles',
+      getOrganisationDetails: 'system/getOrganisationDetails'
     })
+  },
+  filters: {
+    truncate (str) {
+      if (str.length > 50 ) return `${str.substr(0, 47)}...`
+      return str
+    }
   },
   methods: {
     changeHandler (value) {
@@ -76,6 +83,18 @@ export default {
 
   .TeamSelector {
     width: 100%;
+    .el-select-dropdown__item.selected {
+      display: none;
+    }
+
+    &.el-select {
+      .el-tag{
+        &:hover {
+          background-color: white;
+          border-color: #B9B9B9;
+        }
+      }
+    }
   }
 
   .NoDisplay {
@@ -107,16 +126,4 @@ export default {
     }
   }
 
-  .el-select-dropdown__item.selected {
-    display: none;
-  }
-
-  .el-select {
-    .el-tag{
-      &:hover {
-        background-color: white;
-        border-color: #B9B9B9;
-      }
-    }
-  }
 </style>
