@@ -20,10 +20,7 @@ class GetObjectOrNoneMixin(object):
 
 
 class NameByIDMixin:
-    @classmethod
-    def get_name_by_id(cls, id=None):
-        if not id:
-            return ""
+    pass
 
 
 class ParentByIDMixin:
