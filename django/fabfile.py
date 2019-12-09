@@ -89,6 +89,7 @@ def backup():
     local('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
     # Backup media files
     local('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/')
+    backup_translation()
 
 
 def deploy():
@@ -297,3 +298,7 @@ def dump_model_translations():
     local("docker-compose exec django python manage.py dumpdata project.technologyplatform > TechnologyPlatform.json")
     local("tar -czvf translation_dumps_`date +%d-%m-%Y`.tar.gz *.json")
     local("rm *.json")
+
+
+def backup_translation():
+    local("docker-compose exec django python manage.py backup_translation")
