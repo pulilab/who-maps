@@ -11,6 +11,14 @@ from core.models import NameByIDMixin, ExtendedModel, ExtendedMultilingualModel,
 from user.models import UserProfile
 
 
+class ArchitectureRoadMap(models.Model):
+    road_map_enabled = models.BooleanField(default=False)
+    description = models.TextField(max_length=5000)
+
+    class Meta:
+        abstract = True
+
+
 class LandingPageCommon(NameByIDMixin, ExtendedMultilingualModel):
     name = models.CharField(max_length=255, unique=True)
     logo = models.ImageField(blank=True, null=True)
@@ -51,7 +59,7 @@ class UserManagement(models.Model):
                self.users.filter(id=profile.id).exists()
 
 
-class Country(UserManagement, LandingPageCommon):
+class Country(UserManagement, LandingPageCommon, ArchitectureRoadMap):
     REGIONS = [
         (0, _('African Region')),
         (1, _('Region of the Americas')),
