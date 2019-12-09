@@ -28,7 +28,11 @@ class Command(BaseCommand):
                 shutil.copytree(f'{app_dir}/locale', dest)
 
         if 'locale' in os.listdir(base_dir):
-            dest = f'{backup_dir}//locale'
+            dest = f'{backup_dir}/locale'
             shutil.copytree(f'{base_dir}/locale', dest)
+
+        if 'translations' in os.listdir(base_dir):
+            dest = f'{backup_dir}/translations'
+            shutil.copytree(f'{base_dir}/translations', dest)
 
         subprocess.run(["tar", "-czvf", f'{backup_base_dir}/backup_translations_{timestamp}.tar.gz', backup_dir])
