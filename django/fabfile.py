@@ -296,5 +296,20 @@ def dump_model_translations():
     local("rm *.json")
 
 
-def backup_translation():
-    local("docker-compose exec django python manage.py backup_translation")
+def backup_translation(django_dir='/home/whomaps/who-maps/django'):
+    timestamp = time.strftime('%Y_%m_%d__%H_%M_%S', time.localtime())
+    backup_dir = f'backup_translations_{timestamp}'
+    backup_base_dir = f'~/backup/{backup_dir}'
+    local(f'mkdir {backup_base_dir}')
+
+    # gather project app directories
+    local(f'cp -R  {django_dir}/country/locale {backup_base_dir}/country')
+    local(f'cp -R  {django_dir}/cms/locale {backup_base_dir}/cms')
+    local(f'cp -R  {django_dir}/search/locale {backup_base_dir}/search')
+    local(f'cp -R  {django_dir}/toolkit/locale {backup_base_dir}/toolkit')
+
+    # gather locale and translations directories
+    local(f'cp -R  {django_dir}/locale {backup_base_dir}/locale')
+    local(f'cp -R  {django_dir}/translations {backup_base_dir}/translations')
+
+    local(f'tar -czvf ~/backup/{backup_dir}.tar.gz {backup_base_dir}')
