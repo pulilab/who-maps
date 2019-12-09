@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         timestamp = timezone.now().strftime('%Y_%m_%d__%H_%M_%S')
-        backup_base_dir = 'backup'
+        backup_base_dir = '~backup'
         if not os.path.exists(backup_base_dir):
             os.mkdir(backup_base_dir)
         backup_dir = f'{backup_base_dir}/backup_translations_{timestamp}'
