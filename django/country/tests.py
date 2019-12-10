@@ -914,6 +914,30 @@ class CountryTests(APITestCase):
             self.assertEqual(data['title'], 'test document')
             self.assertIn(tmp_file.name.split('/tmp/')[1], data['document'])
 
+    def test_upload_road_map_document_with_invalid_extension(self):
+        tmp_file = tempfile.NamedTemporaryFile(suffix='.abc')
+
+        # put some random content to the file
+        with open(tmp_file.name, 'w') as f:
+            letters = string.ascii_lowercase
+            content = ''.join(random.choice(letters) for i in range(20))
+            f.write(content)
+
+        with open(tmp_file.name, 'rb') as f:
+            country = Country.objects.first()
+            url = reverse('architecture-roadmap-document-list')
+            data = {
+                'country': country.id,
+                'title': 'test document',
+                'document': f,
+            }
+            response = self.test_user_client.post(url, data, format='multipart')
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
+            self.assertEqual(
+                response.json(),
+                {'document': ['Invalid file type. Allowed formats: .pdf, .txt, .doc, .docx, .xls, .xlsx, .rtf']}
+            )
+
 
 class DonorTests(APITestCase):
     def setUp(self):
