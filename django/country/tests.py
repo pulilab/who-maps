@@ -20,7 +20,7 @@ from rest_framework import status
 from django.core import mail
 from django.core.management import call_command
 from allauth.account.models import EmailConfirmation
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
@@ -937,6 +937,28 @@ class CountryTests(APITestCase):
                 response.json(),
                 {'document': ['Invalid file type. Allowed formats: .pdf, .txt, .doc, .docx, .xls, .xlsx, .rtf']}
             )
+
+    @override_settings(MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE=1024 * 1024)  # 1 MB
+    def test_upload_too_big_road_map_document(self):
+        tmp_file = tempfile.NamedTemporaryFile(suffix='.txt')
+
+        # put some random content to the file
+        with open(tmp_file.name, 'w') as f:
+            letters = string.ascii_lowercase
+            content = ''.join(random.choice(letters) for _ in range(settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE + 10))
+            f.write(content)
+
+        with open(tmp_file.name, 'rb') as f:
+            country = Country.objects.first()
+            url = reverse('architecture-roadmap-document-list')
+            data = {
+                'country': country.id,
+                'title': 'test document',
+                'document': f,
+            }
+            response = self.test_user_client.post(url, data, format='multipart')
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
+            self.assertEqual(response.json(), {'document': ['Too big file. Maximum allowed size: 1 MB.']})
 
 
 class DonorTests(APITestCase):
