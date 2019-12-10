@@ -310,6 +310,10 @@ class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_document(value):
+        if value.size > settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE:
+            max_size_in_mbb = round(settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE / 1024 / 1024)
+            raise ValidationError(f'Too big file. Maximum allowed size: {max_size_in_mbb} MB.')
+
         valid_file_types = ('.pdf', '.txt', '.doc', '.docx', '.xls', '.xlsx', '.rtf')
         if not value.name.lower().endswith(valid_file_types):
             msg = ", ".join(valid_file_types)
