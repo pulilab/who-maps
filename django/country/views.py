@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 
 from search.models import ProjectSearch
 from user.models import UserProfile
@@ -18,11 +19,12 @@ from project.models import TechnologyPlatform
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
-    CountryCustomQuestion, DonorCustomQuestion
+    CountryCustomQuestion, DonorCustomQuestion, ArchitectureRoadMapDocument
 from .serializers import CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, \
     PartnerLogoSerializer, DonorSerializer, SuperAdminDonorSerializer, AdminDonorSerializer, \
     DonorPartnerLogoSerializer, MapFileSerializer, CountryImageSerializer, DonorImageSerializer, \
-    DonorCustomQuestionSerializer, CountryCustomQuestionSerializer, CountryListSerializer, DonorListSerializer
+    DonorCustomQuestionSerializer, CountryCustomQuestionSerializer, CountryListSerializer, DonorListSerializer, \
+    ArchitectureRoadMapDocumentSerializer
 
 
 class CountryLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -203,3 +205,8 @@ class DonorCustomQuestionViewSet(SetOrderToMixin, mixins.CreateModelMixin, mixin
                                  mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = DonorCustomQuestion.objects.all()
     serializer_class = DonorCustomQuestionSerializer
+
+
+class ArchitectureRoadMapDocumentViewSet(ModelViewSet):
+    queryset = ArchitectureRoadMapDocument.objects.all()
+    serializer_class = ArchitectureRoadMapDocumentSerializer
