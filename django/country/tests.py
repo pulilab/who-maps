@@ -909,12 +909,11 @@ class CountryTests(APITestCase):
         self.assertEqual(country.admins.count(), 0)
         self.assertEqual(self.test_user['is_superuser'], False)
 
-        road_map_file = SimpleUploadedFile("test_file.txt", b"test_content")
         url = reverse('architecture-roadmap-document-list')
         data = {
             'country': country.id,
             'title': 'test document',
-            'document': road_map_file,
+            'document': SimpleUploadedFile("test_file.txt", b"test_content"),
         }
         response = self.test_user_client.post(url, data, format='multipart')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN, response.json())
