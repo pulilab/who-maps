@@ -16,7 +16,6 @@ from django.utils.dateformat import format
 from requests import RequestException
 from rest_framework import status
 
-from country.helpers import create_temp_file_with_random_content
 from django.core import mail
 from django.core.management import call_command
 from allauth.account.models import EmailConfirmation
@@ -959,8 +958,6 @@ class CountryTests(APITestCase):
 
     @override_settings(MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY=2)
     def test_upload_too_many_road_map_documents(self):
-        tmp_file = create_temp_file_with_random_content()
-
         country = Country.objects.first()
         country.admins.add(self.test_user['user_profile_id'])
         url = reverse('architecture-roadmap-document-list')
@@ -968,18 +965,16 @@ class CountryTests(APITestCase):
         data = {'country': country.id, }
         # document upload should work within the limit
         for i in range(settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY):
-            with open(tmp_file.name, 'rb') as f:
-                data['document'] = f
-                data['title'] = f'test document {i}'
-                response = self.test_user_client.post(url, data, format='multipart')
-                self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+            data['document'] = SimpleUploadedFile(f"test_file_{i}.txt", b"test_content")
+            data['title'] = f'test document {i}'
+            response = self.test_user_client.post(url, data, format='multipart')
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
         # next upload should fail
-        with open(tmp_file.name, 'rb') as f:
-            data['document'] = f
-            data['title'] = f'test document 100'
-            response = self.test_user_client.post(url, data, format='multipart')
-            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN, response.json())
+        data['document'] = SimpleUploadedFile(f"test_file_100.txt", b"test_content")
+        data['title'] = f'test document 100'
+        response = self.test_user_client.post(url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN, response.json())
 
 
 class DonorTests(APITestCase):
