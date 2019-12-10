@@ -12,7 +12,7 @@ from django.conf import settings
 
 from user.models import UserProfile
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
-    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion
+    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion, ArchitectureRoadMapDocument
 
 
 class OptionsValidatorMixin:
@@ -301,3 +301,9 @@ class DonorListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Donor
         fields = ('id', 'name', 'code')
+
+
+class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArchitectureRoadMapDocument
+        fields = "__all__"
