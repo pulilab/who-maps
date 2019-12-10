@@ -889,8 +889,6 @@ class CountryTests(APITestCase):
         country.admins.add(self.test_user['user_profile_id'])
 
         road_map_file = SimpleUploadedFile("test_file.txt", b"test_content")
-
-        # with open(tmp_file.name, 'rb') as f:
         url = reverse('architecture-roadmap-document-list')
         data = {
             'country': country.id,
