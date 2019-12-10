@@ -17,6 +17,7 @@ from django.utils.dateformat import format
 from requests import RequestException
 from rest_framework import status
 
+from country.helpers import create_temp_file_with_random_content
 from django.core import mail
 from django.core.management import call_command
 from allauth.account.models import EmailConfirmation
@@ -891,13 +892,7 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['options'], ['yes', 'maybe'])
 
     def test_upload_road_map_document_success(self):
-        tmp_file = tempfile.NamedTemporaryFile(suffix='.txt')
-
-        # put some random content to the file
-        with open(tmp_file.name, 'w') as f:
-            letters = string.ascii_lowercase
-            content = ''.join(random.choice(letters) for _ in range(20))
-            f.write(content)
+        tmp_file = create_temp_file_with_random_content()
 
         with open(tmp_file.name, 'rb') as f:
             country = Country.objects.first()
@@ -915,13 +910,7 @@ class CountryTests(APITestCase):
             self.assertIn(tmp_file.name.split('/tmp/')[1], data['document'])
 
     def test_upload_road_map_document_with_invalid_extension(self):
-        tmp_file = tempfile.NamedTemporaryFile(suffix='.abc')
-
-        # put some random content to the file
-        with open(tmp_file.name, 'w') as f:
-            letters = string.ascii_lowercase
-            content = ''.join(random.choice(letters) for _ in range(20))
-            f.write(content)
+        tmp_file = create_temp_file_with_random_content(extension='.abc')
 
         with open(tmp_file.name, 'rb') as f:
             country = Country.objects.first()
@@ -940,13 +929,7 @@ class CountryTests(APITestCase):
 
     @override_settings(MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE=1024 * 1024)  # 1 MB
     def test_upload_too_big_road_map_document(self):
-        tmp_file = tempfile.NamedTemporaryFile(suffix='.txt')
-
-        # put some random content to the file
-        with open(tmp_file.name, 'w') as f:
-            letters = string.ascii_lowercase
-            content = ''.join(random.choice(letters) for _ in range(settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE + 10))
-            f.write(content)
+        tmp_file = create_temp_file_with_random_content(size_in_bytes=settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE + 10)
 
         with open(tmp_file.name, 'rb') as f:
             country = Country.objects.first()
