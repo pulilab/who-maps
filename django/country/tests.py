@@ -885,24 +885,24 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['options'], ['yes', 'maybe'])
 
     def test_upload_road_map_document_success(self):
-        tmp_file = create_temp_file_with_random_content()
-
         country = Country.objects.first()
         country.admins.add(self.test_user['user_profile_id'])
 
-        with open(tmp_file.name, 'rb') as f:
-            url = reverse('architecture-roadmap-document-list')
-            data = {
-                'country': country.id,
-                'title': 'test document',
-                'document': f,
-            }
-            response = self.test_user_client.post(url, data, format='multipart')
-            self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
-            data = response.json()
-            self.assertEqual(data['country'], country.id)
-            self.assertEqual(data['title'], 'test document')
-            self.assertIn(tmp_file.name.split('/tmp/')[1], data['document'])
+        road_map_file = SimpleUploadedFile("test_file.txt", b"test_content")
+
+        # with open(tmp_file.name, 'rb') as f:
+        url = reverse('architecture-roadmap-document-list')
+        data = {
+            'country': country.id,
+            'title': 'test document',
+            'document': road_map_file,
+        }
+        response = self.test_user_client.post(url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        data = response.json()
+        self.assertEqual(data['country'], country.id)
+        self.assertEqual(data['title'], 'test document')
+        self.assertIn(road_map_file.name, data['document'])
 
     def test_upload_road_map_document_without_permission(self):
         tmp_file = create_temp_file_with_random_content()
