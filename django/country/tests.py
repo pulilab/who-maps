@@ -922,12 +922,11 @@ class CountryTests(APITestCase):
         country = Country.objects.first()
         country.admins.add(self.test_user['user_profile_id'])
 
-        road_map_file = SimpleUploadedFile("test_file.abc", b"test_content")
         url = reverse('architecture-roadmap-document-list')
         data = {
             'country': country.id,
             'title': 'test document',
-            'document': road_map_file,
+            'document': SimpleUploadedFile("test_file.abc", b"test_content"),
         }
         response = self.test_user_client.post(url, data, format='multipart')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
