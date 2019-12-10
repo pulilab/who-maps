@@ -1,7 +1,4 @@
 import os
-import random
-import string
-import tempfile
 from copy import copy
 from datetime import datetime
 from fnmatch import fnmatch
