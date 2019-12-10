@@ -1,4 +1,7 @@
 import os
+import random
+import string
+import tempfile
 from copy import copy
 from datetime import datetime
 from fnmatch import fnmatch
@@ -12,6 +15,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
 from django.utils.dateformat import format
 from requests import RequestException
+from rest_framework import status
 
 from django.core import mail
 from django.core.management import call_command
@@ -885,6 +889,30 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data=data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['options'], ['yes', 'maybe'])
+
+    def test_upload_road_map_document_success(self):
+        tmp_file = tempfile.NamedTemporaryFile(suffix='.txt')
+
+        # put some random content to the file
+        with open(tmp_file.name, 'w') as f:
+            letters = string.ascii_lowercase
+            content = ''.join(random.choice(letters) for i in range(20))
+            f.write(content)
+
+        with open(tmp_file.name, 'rb') as f:
+            country = Country.objects.first()
+            url = reverse('architecture-roadmap-document-list')
+            data = {
+                'country': country.id,
+                'title': 'test document',
+                'document': f,
+            }
+            response = self.test_user_client.post(url, data, format='multipart')
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+            data = response.json()
+            self.assertEqual(data['country'], country.id)
+            self.assertEqual(data['title'], 'test document')
+            self.assertIn(tmp_file.name.split('/tmp/')[1], data['document'])
 
 
 class DonorTests(APITestCase):
