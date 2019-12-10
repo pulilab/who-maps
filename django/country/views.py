@@ -210,3 +210,4 @@ class DonorCustomQuestionViewSet(SetOrderToMixin, mixins.CreateModelMixin, mixin
 class ArchitectureRoadMapDocumentViewSet(ModelViewSet):
     queryset = ArchitectureRoadMapDocument.objects.all()
     serializer_class = ArchitectureRoadMapDocumentSerializer
+    permission_classes = (InCountryAdminOrReadOnly,)

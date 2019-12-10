@@ -891,8 +891,10 @@ class CountryTests(APITestCase):
     def test_upload_road_map_document_success(self):
         tmp_file = create_temp_file_with_random_content()
 
+        country = Country.objects.first()
+        country.admins.add(self.test_user['user_profile_id'])
+
         with open(tmp_file.name, 'rb') as f:
-            country = Country.objects.first()
             url = reverse('architecture-roadmap-document-list')
             data = {
                 'country': country.id,
@@ -909,8 +911,10 @@ class CountryTests(APITestCase):
     def test_upload_road_map_document_with_invalid_extension(self):
         tmp_file = create_temp_file_with_random_content(extension='.abc')
 
+        country = Country.objects.first()
+        country.admins.add(self.test_user['user_profile_id'])
+
         with open(tmp_file.name, 'rb') as f:
-            country = Country.objects.first()
             url = reverse('architecture-roadmap-document-list')
             data = {
                 'country': country.id,
@@ -928,8 +932,10 @@ class CountryTests(APITestCase):
     def test_upload_too_big_road_map_document(self):
         tmp_file = create_temp_file_with_random_content(size_in_bytes=settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE + 10)
 
+        country = Country.objects.first()
+        country.admins.add(self.test_user['user_profile_id'])
+
         with open(tmp_file.name, 'rb') as f:
-            country = Country.objects.first()
             url = reverse('architecture-roadmap-document-list')
             data = {
                 'country': country.id,
@@ -945,6 +951,7 @@ class CountryTests(APITestCase):
         tmp_file = create_temp_file_with_random_content()
 
         country = Country.objects.first()
+        country.admins.add(self.test_user['user_profile_id'])
         url = reverse('architecture-roadmap-document-list')
 
         data = {'country': country.id, }
