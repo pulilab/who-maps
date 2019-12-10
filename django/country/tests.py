@@ -896,7 +896,7 @@ class CountryTests(APITestCase):
         # put some random content to the file
         with open(tmp_file.name, 'w') as f:
             letters = string.ascii_lowercase
-            content = ''.join(random.choice(letters) for i in range(20))
+            content = ''.join(random.choice(letters) for _ in range(20))
             f.write(content)
 
         with open(tmp_file.name, 'rb') as f:
@@ -920,7 +920,7 @@ class CountryTests(APITestCase):
         # put some random content to the file
         with open(tmp_file.name, 'w') as f:
             letters = string.ascii_lowercase
-            content = ''.join(random.choice(letters) for i in range(20))
+            content = ''.join(random.choice(letters) for _ in range(20))
             f.write(content)
 
         with open(tmp_file.name, 'rb') as f:
