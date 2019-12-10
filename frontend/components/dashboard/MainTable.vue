@@ -256,7 +256,7 @@ export default {
       selectAll: 'dashboard/getSelectAll',
       total: 'dashboard/getTotal',
       countryColumns: 'dashboard/getFilteredCountryColumns',
-      donorColumns: 'dashboard/getDonorColumns'
+      donorColumns: 'dashboard/getFilteredDonorColumns'
     }),
     ...mapGettersActions({
       pageSize: ['dashboard', 'getPageSize', 'setPageSize', 0],

@@ -63,6 +63,9 @@ export const getters = {
   getFilteredCountryColumns (state, getters) {
     return getters['getCountryColumns'].filter((country) => state.selectedColumns.indexOf(country.id) !== -1);
   },
+  getFilteredDonorColumns (state, getters) {
+    return getters['getDonorColumns'].filter((donor) => state.selectedColumns.indexOf(donor.id) !== -1);
+  },
   getDonorColumns: (state, getters, rootState, rootGetters) => {
     if (state.dashboardId && state.dashboardType === 'donor') {
       const donor = rootGetters['system/getDonorDetails'](state.dashboardId);
