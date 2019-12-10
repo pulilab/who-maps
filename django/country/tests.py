@@ -921,24 +921,22 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN, response.json())
 
     def test_upload_road_map_document_with_invalid_extension(self):
-        tmp_file = create_temp_file_with_random_content(extension='.abc')
-
         country = Country.objects.first()
         country.admins.add(self.test_user['user_profile_id'])
 
-        with open(tmp_file.name, 'rb') as f:
-            url = reverse('architecture-roadmap-document-list')
-            data = {
-                'country': country.id,
-                'title': 'test document',
-                'document': f,
-            }
-            response = self.test_user_client.post(url, data, format='multipart')
-            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
-            self.assertEqual(
-                response.json(),
-                {'document': ['Invalid file type. Allowed formats: .pdf, .txt, .doc, .docx, .xls, .xlsx, .rtf']}
-            )
+        road_map_file = SimpleUploadedFile("test_file.abc", b"test_content")
+        url = reverse('architecture-roadmap-document-list')
+        data = {
+            'country': country.id,
+            'title': 'test document',
+            'document': road_map_file,
+        }
+        response = self.test_user_client.post(url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
+        self.assertEqual(
+            response.json(),
+            {'document': ['Invalid file type. Allowed formats: .pdf, .txt, .doc, .docx, .xls, .xlsx, .rtf']}
+        )
 
     @override_settings(MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE=1024 * 1024)  # 1 MB
     def test_upload_too_big_road_map_document(self):
