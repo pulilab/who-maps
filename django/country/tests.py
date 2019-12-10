@@ -905,22 +905,20 @@ class CountryTests(APITestCase):
         self.assertIn(road_map_file.name, data['document'])
 
     def test_upload_road_map_document_without_permission(self):
-        tmp_file = create_temp_file_with_random_content()
-
         country = Country.objects.first()
 
         self.assertEqual(country.admins.count(), 0)
         self.assertEqual(self.test_user['is_superuser'], False)
 
-        with open(tmp_file.name, 'rb') as f:
-            url = reverse('architecture-roadmap-document-list')
-            data = {
-                'country': country.id,
-                'title': 'test document',
-                'document': f,
-            }
-            response = self.test_user_client.post(url, data, format='multipart')
-            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN, response.json())
+        road_map_file = SimpleUploadedFile("test_file.txt", b"test_content")
+        url = reverse('architecture-roadmap-document-list')
+        data = {
+            'country': country.id,
+            'title': 'test document',
+            'document': road_map_file,
+        }
+        response = self.test_user_client.post(url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN, response.json())
 
     def test_upload_road_map_document_with_invalid_extension(self):
         tmp_file = create_temp_file_with_random_content(extension='.abc')
