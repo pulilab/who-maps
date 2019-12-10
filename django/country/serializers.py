@@ -307,3 +307,11 @@ class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArchitectureRoadMapDocument
         fields = "__all__"
+
+    @staticmethod
+    def validate_document(value):
+        valid_file_types = ('.pdf', '.txt', '.doc', '.docx', '.xls', '.xlsx', '.rtf')
+        if not value.name.lower().endswith(valid_file_types):
+            msg = ", ".join(valid_file_types)
+            raise ValidationError(f'Invalid file type. Allowed formats: {msg}')
+        return value
