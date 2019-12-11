@@ -1,9 +1,15 @@
 import re
 
+from allauth.account import app_settings as allauth_settings
+from allauth.account.utils import complete_signup
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.template import loader
 from django.utils.translation import ugettext, override
+from rest_auth.app_settings import create_token
+from rest_auth.models import TokenModel
+from rest_auth.utils import jwt_encode
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import ReadOnlyField
@@ -14,6 +20,7 @@ import scheduler.celery  # noqa
 
 from country.models import CustomQuestion
 from project.utils import remove_keys
+from user.models import UserProfile
 from .models import Project, ProjectApproval, ImportRow, ProjectImportV2
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
@@ -232,6 +239,30 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         fields = ("team", "viewers", "new_team_emails", "new_viewer_emails")
         read_only_fields = ("id",)
 
+    def save(self, **kwargs):
+        for email in self.validated_data.get('new_team_emails', []):
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                user = self.perform_create(email)
+            self.validated_data['team'].append(user.userprofile)
+
+        for email in self.validated_data.get('new_viewer_emails', []):
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                user = self.perform_create(email)
+            self.validated_data['viewers'].append(user.userprofile)
+
+        self.validated_data.pop('new_viewer_emails', None)
+        self.validated_data.pop('new_viewer_emails', None)
+
+        # remove duplicates
+        self.validated_data['team'] = list(set(self.validated_data['team']))
+        self.validated_data['viewers'] = list(set(self.validated_data['viewers']))
+
+        return super().save(**kwargs)
+
     def update(self, instance, validated_data):
         self._send_notification(instance, validated_data)
 
@@ -284,7 +315,6 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                     "role": "viewer",
                     "language": profile.language
                 })
-
             send_mail(
                 subject=subject,
                 message="",
