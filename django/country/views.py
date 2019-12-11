@@ -92,7 +92,9 @@ class CountryViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateM
             except Country.DoesNotExist:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
             else:
-                if request.user.userprofile not in country.admins.all():
+                profile = request.user.userprofile
+                if (profile not in country.admins.all()) and (profile not in country.super_admins.all()) and \
+                        not request.user.is_superuser:
                     return Response(status=status.HTTP_403_FORBIDDEN)
                 call_command('gdhi', country_code=country_code, override=True)
                 country.refresh_from_db()
