@@ -587,6 +587,27 @@ class ProjectTests(SetupTests):
         self.assertTrue(owner_id not in response.json()['team'])
         self.assertEqual(response.json()['team'], [user_profile_id])
 
+    def test_add_new_users_by_invalid_email(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        owner_id = response.json()['team'][0]
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+
+        groups = {
+            "team": [],
+            "viewers": [],
+            "new_team_emails": ["new_email"],
+            "new_viewer_emails": ["yolo"]
+        }
+        response = self.test_user_client.put(url, groups, format="json")
+
+        self.assertEqual(response.json(), {'new_team_emails': {'0': ['Enter a valid email address.']},
+                                           'new_viewer_emails': {'0': ['Enter a valid email address.']}})
+        self.assertTrue("team" in response.json())
+        self.assertTrue("viewers" in response.json())
+        self.assertTrue(owner_id not in response.json()['team'])
+        self.assertEqual(response.json()['team'], [])
     def test_update_project_updates_health_focus_areas(self):
         retrieve_url = reverse("project-retrieve", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(retrieve_url)
