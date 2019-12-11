@@ -239,6 +239,20 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         fields = ("team", "viewers", "new_team_emails", "new_viewer_emails")
         read_only_fields = ("id",)
 
+    def perform_create(self, email):
+        user = User.objects.create_user(username=email[:150], email=email)
+        UserProfile.objects.create(user=user, account_type=UserProfile.IMPLEMENTER)
+
+        if getattr(settings, 'REST_USE_JWT', False):
+            self.token = jwt_encode(user)
+        else:
+            create_token(TokenModel, user, None)
+
+        complete_signup(self.context['request']._request, user,
+                        allauth_settings.EMAIL_VERIFICATION,
+                        None)
+        return user
+
     def save(self, **kwargs):
         for email in self.validated_data.get('new_team_emails', []):
             try:
