@@ -222,6 +222,11 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
 
 class ProjectGroupSerializer(serializers.ModelSerializer):
+    new_team_emails = serializers.ListField(
+        child=serializers.EmailField(), max_length=64, min_length=0, allow_empty=True, required=False)
+    new_viewer_emails = serializers.ListField(
+        child=serializers.EmailField(), max_length=64, min_length=0, allow_empty=True, required=False)
+
     class Meta:
         model = Project
         fields = ("team", "viewers")
