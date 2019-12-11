@@ -84,7 +84,7 @@ class CountryViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateM
         return super().get_serializer_class()
 
     @action(methods=['get'], detail=False)
-    def update_ghdi_data(self, request):
+    def update_gdhi_data(self, request):
         country_code = request.query_params.get('country_code')
         if country_code:
             try:
@@ -94,7 +94,7 @@ class CountryViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateM
             else:
                 if request.user.userprofile not in country.admins.all():
                     return Response(status=status.HTTP_403_FORBIDDEN)
-                call_command('ghdi', country_code=country_code, override=True)
+                call_command('gdhi', country_code=country_code, override=True)
                 return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
