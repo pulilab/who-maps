@@ -7,7 +7,7 @@ from country.models import Country
 
 
 class Command(BaseCommand):
-    help = "Updates GHDI data."
+    help = "Updates GDHI data."
 
     def add_arguments(self, parser):
         parser.add_argument('--override', dest="override", required=False, default=False,
