@@ -229,7 +229,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ("team", "viewers")
+        fields = ("team", "viewers", "new_team_emails", "new_viewer_emails")
         read_only_fields = ("id",)
 
     def update(self, instance, validated_data):
