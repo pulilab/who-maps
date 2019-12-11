@@ -22,7 +22,7 @@ export default {
   methods: {
     filterList (query) {
       if (query) {
-        this.options = this.items.filter(p => this.filter(p.name, query) || this.filter(p.email, query) );
+        this.options = this.items.filter(p => this.filter(p.name, query) || (p.email ? this.filter(p.email, query) : false));
       } else {
         this.options = [];
       }
