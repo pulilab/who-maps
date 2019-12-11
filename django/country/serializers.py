@@ -314,8 +314,7 @@ class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
             max_size_in_mb = round(settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE / 1024 / 1024)
             raise ValidationError(f'Too big file. Maximum allowed size: {max_size_in_mb} MB.')
 
-        valid_file_types = ('.pdf', '.txt', '.doc', '.docx', '.xls', '.xlsx', '.rtf')
-        if not value.name.lower().endswith(valid_file_types):
-            msg = ", ".join(valid_file_types)
+        if not value.name.lower().endswith(settings.VALID_ROAD_MAP_DOCUMENT_FILE_TYPES):
+            msg = ", ".join(settings.VALID_ROAD_MAP_DOCUMENT_FILE_TYPES)
             raise ValidationError(f'Invalid file type. Allowed formats: {msg}')
         return value
