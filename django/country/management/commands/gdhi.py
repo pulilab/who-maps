@@ -45,11 +45,12 @@ class Command(BaseCommand):
                 save = False
                 if country.total_population is None or override:
                     save = True
-                    # we store total population data in millions
+                    # we store total population data in Millions
                     country.total_population = round_decimal(data['totalPopulation'] / 1000000)
                 if country.gni_per_capita is None or override:
                     save = True
-                    country.gni_per_capita = data['gniPerCapita']
+                    # we store gni_per_capita in Thousands
+                    country.gni_per_capita = round_decimal(data['gniPerCapita'] / 1000)
                 if country.life_expectancy is None or override:
                     save = True
                     country.life_expectancy = data['lifeExpectancy']
@@ -122,6 +123,6 @@ class Command(BaseCommand):
             print(f'Error getting indicator data for country: {response.content}')
 
     def handle(self, *args, **options):
-        # self.fill_aplha_3_codes(options)
+        self.fill_aplha_3_codes(options)
         self.get_context_and_health_data_for_countries(options)
-        # self.get_health_indicator_scores(options)
+        self.get_health_indicator_scores(options)
