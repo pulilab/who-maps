@@ -629,6 +629,19 @@ class ProjectTests(SetupTests):
         self.assertTrue(response.json()['viewers'])
         self.assertTrue(owner_id not in response.json()['team'])
         self.assertEqual(UserProfile.objects.count(), 3)
+
+        welcome_emails_count = 0
+        for m in mail.outbox:
+            if m.subject == 'Welcome to the Digital Health Atlas':
+                welcome_emails_count += 1
+        self.assertEqual(welcome_emails_count, 3)
+
+        notified_on_member_add_count = 0
+        for m in mail.outbox:
+            if m.subject == 'You have been added to a project in the Digital Health Atlas':
+                notified_on_member_add_count += 1
+                self.assertTrue("new_email@yo.com" in m.to or "new_email@lol.ok" in m.to)
+        self.assertEqual(notified_on_member_add_count, 2)
     def test_update_project_updates_health_focus_areas(self):
         retrieve_url = reverse("project-retrieve", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(retrieve_url)
