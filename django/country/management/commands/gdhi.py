@@ -87,7 +87,7 @@ class Command(BaseCommand):
 
                         for category in categories:
                             category_name = category['name']
-                            score = category['overallScore']
+                            score = round(category['overallScore'])
                             if category_name == 'Leadership and Governance':
                                 if country.leadership_and_governance is None or override:
                                     save = True
