@@ -178,7 +178,7 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
     class Meta:
         model = Country
         fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',) + GDHI_FIELDS
-        read_only_fields = READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + GDHI_FIELDS
+        read_only_fields = READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS
 
     def update(self, instance, validated_data):
         map_changed = 'map_data' in validated_data and instance.map_data != validated_data['map_data']
@@ -225,7 +225,7 @@ class AdminCountrySerializer(SuperAdminCountrySerializer):
     class Meta(SuperAdminCountrySerializer.Meta):
         fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',) + GDHI_FIELDS
         read_only_fields = READ_ONLY_COUNTRY_ADMIN_FIELDS + READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS \
-            + ('super_admins',) + GDHI_FIELDS
+            + ('super_admins',)
 
 
 class CountrySerializer(SuperAdminCountrySerializer):
