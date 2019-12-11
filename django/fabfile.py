@@ -89,7 +89,7 @@ def backup():
     local('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
     # Backup media files
     local('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/')
-    backup_translation()
+    backup_translation_local()
 
 
 def deploy():
@@ -300,7 +300,7 @@ def dump_model_translations():
     local("rm *.json")
 
 
-def backup_translation(django_dir='/home/whomaps/who-maps/django'):
+def backup_translation_local(django_dir='/home/whomaps/who-maps/django'):
     timestamp = time.strftime('%Y_%m_%d__%H_%M_%S', time.localtime())
     backup_dir = f'backup_translations_{timestamp}'
     backup_base_dir = f'~/backup/{backup_dir}'
