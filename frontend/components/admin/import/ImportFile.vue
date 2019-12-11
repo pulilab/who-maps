@@ -189,7 +189,7 @@ export default {
   },
   data () {
     return {
-      country: null,
+      country: this.$store.state.user.profile.country,
       donor: null,
       isDraftOrPublish: 'draft',
       inputFile: null,
