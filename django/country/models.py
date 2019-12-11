@@ -11,7 +11,7 @@ from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteMode
 from user.models import UserProfile
 
 
-class GHDI(models.Model):
+class GDHI(models.Model):
     alpha_3_code = models.CharField(max_length=3, blank=True, null=True)
 
     total_population = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True,)
@@ -27,7 +27,7 @@ class GHDI(models.Model):
     infrastructure = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)
     services_and_applications = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)
 
-    ghdi_enabled = models.BooleanField(default=True)
+    gdhi_enabled = models.BooleanField(default=True)
 
     class Meta:
         abstract = True
@@ -73,7 +73,7 @@ class UserManagement(models.Model):
                self.users.filter(id=profile.id).exists()
 
 
-class Country(UserManagement, LandingPageCommon, GHDI):
+class Country(UserManagement, LandingPageCommon, GDHI):
     REGIONS = [
         (0, _('African Region')),
         (1, _('Region of the Americas')),
