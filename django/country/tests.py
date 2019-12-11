@@ -929,11 +929,13 @@ class CountryTests(APITestCase):
         data = {
             'total_population': 34.66,
             'gni_per_capita': 0.58,
+            'leadership_and_governance': 3,
         }
         response = self.test_user_client.patch(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(response.json()['total_population'], '34.66')
         self.assertEqual(response.json()['gni_per_capita'], '0.58')
+        self.assertEqual(response.json()['leadership_and_governance'], 3)
 
 
 class DonorTests(APITestCase):
