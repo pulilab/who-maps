@@ -14,7 +14,8 @@ from user.models import UserProfile
 class GDHI(models.Model):
     alpha_3_code = models.CharField(max_length=3, blank=True, null=True)
 
-    total_population = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True,)
+    total_population = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True,
+                                           verbose_name='Total population in Millions')
     gni_per_capita = models.DecimalField(max_digits=7, decimal_places=0, null=True, blank=True,)
     life_expectancy = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True,)
     health_expenditure = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True,)
