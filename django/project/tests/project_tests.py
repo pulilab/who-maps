@@ -642,6 +642,10 @@ class ProjectTests(SetupTests):
                 notified_on_member_add_count += 1
                 self.assertTrue("new_email@yo.com" in m.to or "new_email@lol.ok" in m.to)
         self.assertEqual(notified_on_member_add_count, 2)
+
+    def test_add_new_users_by_already_existing_email(self):
+        pass
+
     def test_update_project_updates_health_focus_areas(self):
         retrieve_url = reverse("project-retrieve", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(retrieve_url)
