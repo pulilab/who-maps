@@ -952,7 +952,7 @@ class CountryTests(APITestCase):
         }
         response = self.test_user_client.post(url, data, format='multipart')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
-        self.assertEqual(response.json(), {'document': ['Too big file. Maximum allowed size: 1 MB.']})
+        self.assertEqual(response.json(), {'document': ['The file exceeds the maximum allowed size: 1 MB.']})
 
     @override_settings(MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY=2)
     def test_upload_too_many_road_map_documents(self):
