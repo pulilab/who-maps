@@ -300,6 +300,26 @@ def dump_model_translations():
     local("rm *.json")
 
 
+def backup_translation(server):
+    globals()[server]()
+    timestamp = time.strftime('%Y_%m_%d__%H_%M_%S', time.localtime())
+    backup_dir = 'backup_translations_{}'.format(timestamp)
+    backup_base_dir = '~/backup/{}'.format(backup_dir)
+    run('mkdir {}'.format(backup_base_dir))
+
+    # gather project app directories
+    run('cp -R  {}/{}/country/locale {}/country'.format(env.project_root, env.backend_root, backup_base_dir))
+    run('cp -R  {}/{}/cms/locale {}/cms'.format(env.project_root, env.backend_root, backup_base_dir))
+    run('cp -R  {}/{}/search/locale {}/search'.format(env.project_root, env.backend_root, backup_base_dir))
+    run('cp -R  {}/{}/toolkit/locale {}/toolkit'.format(env.project_root, env.backend_root, backup_base_dir))
+
+    # gather locale and translations directories
+    run('cp -R  {}/{}/locale {}/locale'.format(env.project_root, env.backend_root, backup_base_dir))
+    run('cp -R  {}/{}/translations {}/translations'.format(env.project_root, env.backend_root, backup_base_dir))
+
+    run('tar -czvf ~/backup/{}.tar.gz {}'.format(backup_dir, backup_base_dir))
+
+
 def backup_translation_local(django_dir='/home/whomaps/who-maps/django'):
     timestamp = time.strftime('%Y_%m_%d__%H_%M_%S', time.localtime())
     backup_dir = f'backup_translations_{timestamp}'
