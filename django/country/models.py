@@ -27,7 +27,7 @@ class GHDI(models.Model):
     infrastructure = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)
     services_and_applications = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)
 
-    ghdi_enabled = models.BooleanField(default=False)
+    ghdi_enabled = models.BooleanField(default=True)
 
     class Meta:
         abstract = True
