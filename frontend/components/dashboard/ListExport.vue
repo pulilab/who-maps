@@ -1,6 +1,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import pickBy from 'lodash/pickBy';
+import flattenDeep from 'lodash/flattenDeep';
 import { format } from 'date-fns';
 
 export default {
@@ -54,9 +55,7 @@ export default {
           approved: this.parseBoolean(s.approved),
           point_of_contact: `${s.contact_name}, ${s.contact_email}`,
           donors: undefined,
-          platforms: undefined,
-          country_answers: undefined,
-          donor_answers: undefined
+          platforms: undefined
         };
         return pickBy(parsed, v => v !== undefined && v !== null);
       });
@@ -160,26 +159,25 @@ export default {
     },
     parseHealthFocusAreas (health_focus_areas) {
       return this.safeReturn(() => {
-        return this.getHealthFocusAreas
-          .filter(hfa => hfa.health_focus_areas
-            .some(h => health_focus_areas.includes(h.id)))
+        return flattenDeep(this.getHealthFocusAreas.map(val => val.health_focus_areas))
+          .filter(h => health_focus_areas.includes(h.id))
           .map(hf => hf.name)
           .join(',');
       });
     },
     parseCustomQuestions (donor_answers, country_answers) {
       return this.safeReturn(() => {
-        let custom = {};
-        if (this.dashboardType === 'donor') {
+        const custom = {};
+        if (donor_answers && this.dashboardType === 'donor') {
           this.donorColumns.forEach(dc => {
             const value = donor_answers && donor_answers[dc.donorId] ? donor_answers[dc.donorId][dc.originalId] : '';
-            custom[dc.label] = value && Array.isArray(value) ? value.join(',') : '';
+            custom[dc.label] = (value && Array.isArray(value) ? value.join(', ') : value) || 'N/A';
           });
         }
-        if (this.dashboardType === 'country') {
-          custom = this.countryColumns.forEach(cc => {
+        if (country_answers && this.dashboardType === 'country') {
+          this.countryColumns.forEach(cc => {
             const value = country_answers ? country_answers[cc.originalId] : '';
-            custom[cc.label] = value && Array.isArray(value) ? value.join(',') : '';
+            custom[cc.label] = (value && Array.isArray(value) ? value.join(', ') : value) || 'N/A';
           });
         }
         return custom;
