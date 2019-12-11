@@ -972,7 +972,9 @@ class CountryTests(APITestCase):
         data['document'] = SimpleUploadedFile(f"test_file_100.txt", b"test_content")
         data['title'] = f'test document 100'
         response = self.test_user_client.post(url, data, format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN, response.json())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
+        self.assertEqual(
+            response.json(), {'non_field_errors': ['The country already has 2 related road map documents']})
 
 
 class DonorTests(APITestCase):

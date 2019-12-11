@@ -1,7 +1,5 @@
-from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields.array import ArrayField
-from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -11,10 +9,6 @@ from ordered_model.models import OrderedModel
 
 from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
 from user.models import UserProfile
-
-
-class LimitExceeded(PermissionDenied):
-    pass
 
 
 class ArchitectureRoadMap(models.Model):
@@ -103,13 +97,6 @@ class ArchitectureRoadMapDocument(models.Model):
     country = models.ForeignKey(Country, models.CASCADE)
     title = models.CharField(max_length=128)
     document = models.FileField(null=True, upload_to='documents/')
-
-
-@receiver(pre_save, sender=ArchitectureRoadMapDocument)
-def limit_document_count(sender, instance, **kwargs):
-    if instance.id is None and \
-            instance.country.architectureroadmapdocument_set.count() >= settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY:
-        raise LimitExceeded
 
 
 class Donor(UserManagement, LandingPageCommon):
