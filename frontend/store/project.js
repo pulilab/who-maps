@@ -285,12 +285,11 @@ export const actions = {
   },
   async saveTeamViewers ({ getters, commit, dispatch }, id) {
     const teamViewers = {
-      team: getters.getTeam.filters(d => typeof d === 'number'),
-      viewers: getters.getViewers.filters(d => typeof d === 'number'),
-      new_team_emails: getters.getTeam.filters(d => typeof d === 'string'),
-      new_viewer_emails: getters.getViewers.filters(d => typeof d === 'string')
+      team: getters.getTeam.filter(d => typeof d === 'number'),
+      viewers: getters.getViewers.filter(d => typeof d === 'number'),
+      new_team_emails: getters.getTeam.filter(d => typeof d === 'string'),
+      new_viewer_emails: getters.getViewers.filter(d => typeof d === 'string')
     };
-    console.log(teamViewers);
     const { data } = await this.$axios.put(`/api/projects/${id}/groups/`, teamViewers);
     commit('SET_TEAM', data.team);
     commit('SET_VIEWERS', data.viewers);
