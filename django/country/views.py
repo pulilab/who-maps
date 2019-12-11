@@ -95,7 +95,10 @@ class CountryViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateM
                 if request.user.userprofile not in country.admins.all():
                     return Response(status=status.HTTP_403_FORBIDDEN)
                 call_command('gdhi', country_code=country_code, override=True)
-                return Response(status=status.HTTP_200_OK)
+                country.refresh_from_db()
+                serializer_class = self.get_serializer_class()
+                serializer = serializer_class(country, context={'request': request})
+                return Response(status=status.HTTP_200_OK, data=serializer.data)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
