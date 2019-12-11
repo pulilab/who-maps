@@ -917,6 +917,20 @@ class CountryTests(APITestCase):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_country_admin_updates_country_population_success(self):
+        user_profile = UserProfile.objects.get(id=self.test_user['user_profile_id'])
+        user_profile.account_type = 'CA'
+        user_profile.save()
+
+        country = Country.objects.get(code='AF')
+        country.admins.add(self.test_user['user_profile_id'])
+
+        url = reverse("country-detail", args=[country.id])
+        data = {'total_population': 34.66}
+        response = self.test_user_client.patch(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['total_population'], '34.66')
+
 
 class DonorTests(APITestCase):
     def setUp(self):
