@@ -18,7 +18,8 @@ class GDHI(models.Model):
                                            verbose_name='Total population in Millions')
     gni_per_capita = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True,
                                          verbose_name='GNI per capita in Thousands')
-    life_expectancy = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True,)
+    life_expectancy = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True,
+                                          verbose_name='Life expectancy at birth (years)')
     health_expenditure = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True,)
 
     leadership_and_governance = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,)
