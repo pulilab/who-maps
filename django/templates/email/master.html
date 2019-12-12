@@ -488,6 +488,17 @@
                         <!-- /TEMPLATE: PASSWORD RESET -->
 
 
+                        <!-- TEMPLATE: PASSWORD INVITE -->
+                        {% elif type == "password_invited" %}
+                        <h1>{% trans "Set Your Password on Digital Health Atlas" %}</h1>
+                        <p>{% trans "You have been invited to the Digital Health Atlas through a project. Please set you password so you can log in and view/edit your project." %}</p>
+                        <p><b>{% trans "To set your password, click the link below:" %}</b></p>
+                        <p>
+                        <a href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}" target="_blank">{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token as password_reset_confirm_url %}{{password_reset_confirm_url}}</a>
+                        </p>
+                        <!-- /TEMPLATE: PASSWORD INVITED -->
+
+
                         <!-- TEMPLATE: TOOLKIT DIGEST -->
                         {% elif type == "toolkit_digest" %}
                         <h1>{% trans "Notification" %}</h1>
