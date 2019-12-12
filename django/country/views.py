@@ -84,6 +84,13 @@ class CountryViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateM
                 return SuperAdminCountrySerializer
         return super().get_serializer_class()
 
+    @action(methods=['get'], detail=True)
+    def documents(self, request, pk=None):
+        country = self.get_object()
+        documents = country.architectureroadmapdocument_set.all()
+        serializer = ArchitectureRoadMapDocumentSerializer(instance=documents, many=True)
+        return Response(data=serializer.data)
+
 
 class DonorViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
                    viewsets.GenericViewSet):
