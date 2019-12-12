@@ -943,18 +943,18 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['leadership_and_governance'], None)
 
     @override_settings(COUNTRY_POST_SAVE_GDHI_UPDATE=True)
-    @mock.patch('country.models.call_command')
-    def test_update_gdhi_called_in_post_save(self, call_command):
-        call_command.return_value = None
+    @mock.patch('country.models.update_gdhi_data_task.apply_async')
+    def test_update_gdhi_called_in_post_save(self, update_gdhi_task):
+        update_gdhi_task.return_value = None
 
         country = Country.objects.get(code='AF')
         country.total_population = 34.5
         country.save()
 
-        call_args_list = call_command.call_args_list
-        self.assertIn('gdhi', call_args_list[0][0])
-        self.assertEqual(call_args_list[0][1]['country_code'], 'AF')
-        self.assertEqual(call_args_list[0][1]['override'], True)
+        call_args_list = update_gdhi_task.call_args_list
+
+        self.assertEqual(call_args_list[0][1]['args'][0], 'AF')
+        self.assertEqual(call_args_list[0][1]['args'][1], True)
 
 
 class DonorTests(APITestCase):

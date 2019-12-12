@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields.array import ArrayField
-from django.core.management import call_command
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
@@ -9,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinLengthValidator
 from ordered_model.models import OrderedModel
 
+from country.tasks import update_gdhi_data_task
 from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
 from user.models import UserProfile
 
@@ -124,7 +124,7 @@ def save_coordinates(sender, instance, **kwargs):
 @receiver(post_save, sender=Country)
 def update_gdhi_data(sender, instance, created, **kwargs):
     if instance.code and settings.COUNTRY_POST_SAVE_GDHI_UPDATE:
-        call_command('gdhi', country_code=instance.code, override=True)
+        update_gdhi_data_task.apply_async(args=(instance.code, True))
 
 
 class Donor(UserManagement, LandingPageCommon):
