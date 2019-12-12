@@ -5,8 +5,8 @@
       :body-style="{ padding: '0px' }"
     >
       <div slot="header">
-        <template v-if="reset">
-          <translate>Enter new password</translate>
+        <template v-if="token">
+          <translate>Set your password</translate>
         </template>
         <template v-else>
           <translate>Sign up for Digital Health Atlas</translate>
@@ -24,7 +24,7 @@
             <translate>Please fill out the form below:</translate>
           </div>
           <el-form-item
-            v-if="!reset"
+            v-if="!token"
             :label="$gettext('Email address') | translate"
             prop="email"
           >
@@ -55,6 +55,7 @@
               v-if="nonFieldErrors"
               class="el-form-item__error ModifiedFormError"
             >
+              <br>
               {{ nonFieldErrors }}
             </div>
           </el-form-item>
@@ -86,7 +87,8 @@
                 size="medium"
                 native-type="submit"
               >
-                <translate>Sign up now</translate>
+                <translate v-if="token">Set Password</translate>
+                <translate v-else>Sign up now</translate>
               </el-button>
             </el-col>
           </el-row>
@@ -107,7 +109,17 @@ export default {
       type: String,
       default: 'always'
     },
-    reset: {
+    token: {
+      type: String,
+      default: '',
+      required: false
+    },
+    uid: {
+      type: String,
+      default: '',
+      required: false
+    },
+    type: {
       type: String,
       default: '',
       required: false
@@ -122,7 +134,7 @@ export default {
       },
       rules: {
         email: (() => {
-          return this.reset ? [] : [
+          return this.token ? [] : [
             { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
             { type: 'email', message: this.$gettext('Has to be a valid email address'), trigger: 'blur' },
             { validator: this.validatorGenerator('email'), trigger: 'blur' }
@@ -149,7 +161,7 @@ export default {
       value === this.signupForm.password1 ? callback() : callback(Error(this.$gettext('The password must match')));
     },
     submitForm () {
-      this.reset ? this.resetPassword() : this.signup();
+      this.token ? this.resetPassword() : this.signup();
     },
     signup () {
       return this.setForm({
@@ -167,9 +179,11 @@ export default {
       return this.setForm({
         message: this.$gettext('Your password was reset successfully'),
         apiCall: () => this.dorResetPassword({
-          password1: this.signupForm.password1,
-          password2: this.signupForm.password2,
-          token: this.reset
+          new_password1: this.signupForm.password1,
+          new_password2: this.signupForm.password2,
+          uid: this.uid,
+          token: this.token,
+          errMessage: this.$gettext('The password reset link was invalid, possibly because it has already been used. Please request a new password reset.')
         }),
         pathName: 'organisation-login'
       });

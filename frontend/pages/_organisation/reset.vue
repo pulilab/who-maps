@@ -1,6 +1,10 @@
 <template>
   <div class="SignupPage">
-    <signup-component :reset="$route.params.key" />
+    <signup-component
+      :token="$route.query.token"
+      :uid="$route.query.uid"
+      :type="$route.query.type"
+    />
   </div>
 </template>
 

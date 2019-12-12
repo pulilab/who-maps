@@ -41,7 +41,7 @@ export default {
       return false;
     },
     layoutClass () {
-      if (!['organisation', 'organisation-login', 'organisation-signup', 'organisation-reset-key'].includes(this.pureRoute)) {
+      if (!['organisation', 'organisation-login', 'organisation-signup', 'organisation-reset'].includes(this.pureRoute)) {
         return 'SubPage';
       } else if (this.$route.params.organisation !== '-') {
         return 'CountryDonorLandingPage';
