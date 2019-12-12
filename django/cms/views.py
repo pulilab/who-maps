@@ -2,11 +2,7 @@ from collections import defaultdict
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail
 from django.urls import reverse
-from django.utils.translation import ugettext, override
-
-from django.template import loader
 
 from rest_framework import mixins, status
 from rest_framework.permissions import IsAuthenticated
@@ -19,6 +15,7 @@ from cms.serializers import CmsSerializer, CommentSerializer
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
+
 from core.utils import send_mail_wrapper
 
 
