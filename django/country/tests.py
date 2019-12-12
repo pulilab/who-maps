@@ -18,7 +18,7 @@ from rest_framework import status
 from django.core import mail
 from django.core.management import call_command
 from allauth.account.models import EmailConfirmation
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
@@ -941,6 +941,20 @@ class CountryTests(APITestCase):
         self.assertEqual(response.json()['total_population'], None)
         self.assertEqual(response.json()['gni_per_capita'], None)
         self.assertEqual(response.json()['leadership_and_governance'], None)
+
+    @override_settings(COUNTRY_POST_SAVE_GDHI_UPDATE=True)
+    @mock.patch('country.models.call_command')
+    def test_update_gdhi_called_in_post_save(self, call_command):
+        call_command.return_value = None
+
+        country = Country.objects.get(code='AF')
+        country.total_population = 34.5
+        country.save()
+
+        call_args_list = call_command.call_args_list
+        self.assertIn('gdhi', call_args_list[0][0])
+        self.assertEqual(call_args_list[0][1]['country_code'], 'AF')
+        self.assertEqual(call_args_list[0][1]['override'], True)
 
 
 class DonorTests(APITestCase):
