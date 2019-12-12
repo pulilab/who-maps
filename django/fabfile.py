@@ -16,6 +16,7 @@ def dev():
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = ''
+    env.backup_root = '~/backup'
 
 
 def production():
@@ -28,6 +29,7 @@ def production():
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = '-live'
+    env.backup_root = '~/backup'
 
 
 def staging():
@@ -40,6 +42,7 @@ def staging():
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = ''
+    env.backup_root = '~/backup'
 
 
 # COMMANDS #
@@ -304,7 +307,7 @@ def backup_translation(server):
     globals()[server]()
     timestamp = time.strftime('%Y_%m_%d__%H_%M_%S', time.localtime())
     backup_dir = 'backup_translations_{}'.format(timestamp)
-    backup_base_dir = '~/backup/{}'.format(backup_dir)
+    backup_base_dir = '{}/{}'.format(env.backup_root, backup_dir)
     run('mkdir {}'.format(backup_base_dir))
 
     # gather project app directories
