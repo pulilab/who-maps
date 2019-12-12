@@ -245,7 +245,8 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
 
         if getattr(settings, 'REST_USE_JWT', False):
             self.token = jwt_encode(user)
-        else:
+        else:  # pragma: no cover
+            # Backwards compatibility for use without JWT
             create_token(TokenModel, user, None)
 
         complete_signup(self.context['request']._request, user,
