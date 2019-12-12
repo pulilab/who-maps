@@ -604,10 +604,6 @@ class ProjectTests(SetupTests):
 
         self.assertEqual(response.json(), {'new_team_emails': {'0': ['Enter a valid email address.']},
                                            'new_viewer_emails': {'0': ['Enter a valid email address.']}})
-        self.assertTrue("team" in response.json())
-        self.assertTrue("viewers" in response.json())
-        self.assertTrue(owner_id not in response.json()['team'])
-        self.assertEqual(response.json()['team'], [])
 
     def test_add_new_users_by_email(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
@@ -644,7 +640,23 @@ class ProjectTests(SetupTests):
         self.assertEqual(notified_on_member_add_count, 2)
 
     def test_add_new_users_by_already_existing_email(self):
-        pass
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(UserProfile.objects.count(), 1)
+        owner_id = response.json()['team'][0]
+        owner_email = UserProfile.objects.get().user.email
+
+        groups = {
+            "team": [owner_id],
+            "viewers": [],
+            "new_team_emails": [owner_email],
+            "new_viewer_emails": [owner_email]
+        }
+        response = self.test_user_client.put(url, groups, format="json")
+        self.assertTrue(owner_id in response.json()['team'])
+        self.assertTrue(owner_id in response.json()['viewers'])
+        self.assertEqual(UserProfile.objects.count(), 1)
 
     def test_update_project_updates_health_focus_areas(self):
         retrieve_url = reverse("project-retrieve", kwargs={"pk": self.project_id})
