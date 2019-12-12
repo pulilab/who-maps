@@ -905,7 +905,6 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(len(response.json()), 2)
 
-
     def test_upload_road_map_document_success(self):
         country = Country.objects.first()
         country.super_admins.add(self.test_user['user_profile_id'])
