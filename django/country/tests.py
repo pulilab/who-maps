@@ -917,13 +917,17 @@ class CountryTests(APITestCase):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_country_admin_updates_country_gdhi_data_success(self):
+    def test_country_admin_tries_to_update_country_gdhi_data(self):
         user_profile = UserProfile.objects.get(id=self.test_user['user_profile_id'])
         user_profile.account_type = 'CA'
         user_profile.save()
 
         country = Country.objects.get(code='AF')
         country.admins.add(self.test_user['user_profile_id'])
+
+        self.assertEqual(country.total_population, None)
+        self.assertEqual(country.gni_per_capita, None)
+        self.assertEqual(country.leadership_and_governance, None)
 
         url = reverse("country-detail", args=[country.id])
         data = {
@@ -933,9 +937,10 @@ class CountryTests(APITestCase):
         }
         response = self.test_user_client.patch(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
-        self.assertEqual(response.json()['total_population'], '34.66')
-        self.assertEqual(response.json()['gni_per_capita'], '0.58')
-        self.assertEqual(response.json()['leadership_and_governance'], 3)
+        # the values should be the same as before
+        self.assertEqual(response.json()['total_population'], None)
+        self.assertEqual(response.json()['gni_per_capita'], None)
+        self.assertEqual(response.json()['leadership_and_governance'], None)
 
 
 class DonorTests(APITestCase):
