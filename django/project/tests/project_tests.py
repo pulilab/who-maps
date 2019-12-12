@@ -591,8 +591,6 @@ class ProjectTests(SetupTests):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        owner_id = response.json()['team'][0]
-        url = reverse("project-groups", kwargs={"pk": self.project_id})
 
         groups = {
             "team": [],
@@ -611,7 +609,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(UserProfile.objects.count(), 1)
         owner_id = response.json()['team'][0]
-        url = reverse("project-groups", kwargs={"pk": self.project_id})
 
         groups = {
             "team": [],
