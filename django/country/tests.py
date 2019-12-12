@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
 from django.urls import reverse
 from django.utils.translation import override
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -25,7 +26,7 @@ from rest_framework.test import APITestCase
 
 from core.tests import get_temp_image
 from country.admin import CountryAdmin
-from country.models import Country, PartnerLogo, Donor, DonorPartnerLogo, CustomQuestion
+from country.models import Country, PartnerLogo, Donor, DonorPartnerLogo, CustomQuestion, ArchitectureRoadMapDocument
 from project.models import TechnologyPlatform, DigitalStrategy
 from user.models import UserProfile, Organisation
 from django.utils.six import StringIO
@@ -884,6 +885,26 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data=data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['options'], ['yes', 'maybe'])
+
+    def test_list_road_map_documents_for_a_country(self):
+        country = Country.objects.first()
+        country.super_admins.add(self.test_user['user_profile_id'])
+
+        self.assertEqual(country.architectureroadmapdocument_set.count(), 0)
+
+        for i in range(2):
+            ArchitectureRoadMapDocument.objects.create(
+                country=country,
+                title=f'test {i}',
+                document=ContentFile('test_content', name=f'test_file_{i}.txt')
+            )
+        self.assertEqual(country.architectureroadmapdocument_set.count(), 2)
+
+        url = reverse('country-documents', args=[country.id])
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(len(response.json()), 2)
+
 
     def test_upload_road_map_document_success(self):
         country = Country.objects.first()
