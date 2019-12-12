@@ -320,7 +320,7 @@ def backup_translation(server):
     run('tar -czvf ~/backup/{}.tar.gz {}'.format(backup_dir, backup_base_dir))
 
 
-def backup_translation_local(django_dir='/home/whomaps/who-maps/django'):
+def backup_translation_local(django_dir):
     timestamp = time.strftime('%Y_%m_%d__%H_%M_%S', time.localtime())
     backup_dir = f'backup_translations_{timestamp}'
     backup_base_dir = f'~/backup/{backup_dir}'
