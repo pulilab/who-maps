@@ -303,8 +303,7 @@ def dump_model_translations():
     local("rm *.json")
 
 
-def backup_translation(server):
-    globals()[server]()
+def backup_translation():
     timestamp = time.strftime('%Y_%m_%d__%H_%M_%S', time.localtime())
     backup_dir = 'backup_translations_{}'.format(timestamp)
     backup_base_dir = '{}/{}'.format(env.backup_root, backup_dir)
