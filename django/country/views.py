@@ -207,7 +207,8 @@ class DonorCustomQuestionViewSet(SetOrderToMixin, mixins.CreateModelMixin, mixin
     serializer_class = DonorCustomQuestionSerializer
 
 
-class ArchitectureRoadMapDocumentViewSet(ModelViewSet):
+class ArchitectureRoadMapDocumentViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                                         viewsets.GenericViewSet):
     queryset = ArchitectureRoadMapDocument.objects.all()
     serializer_class = ArchitectureRoadMapDocumentSerializer
     permission_classes = (InCountrySuperAdmin,)
