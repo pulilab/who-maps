@@ -318,6 +318,7 @@ def backup_translation(server):
     run('cp -R  {}/{}/translations {}/translations'.format(env.project_root, env.backend_root, backup_base_dir))
 
     run('tar -czvf ~/backup/{}.tar.gz {}'.format(backup_dir, backup_base_dir))
+    run('rm -r {}'.format(backup_base_dir))
 
 
 def backup_translation_local(django_dir):
