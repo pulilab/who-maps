@@ -110,6 +110,38 @@
             :limit="10"
           />
         </el-form-item>
+        <div class="Divider"></div>
+        <el-form-item :label="$gettext('Widgets') | translate">
+          <label class="el-form-item__label">
+            <translate>Please enable widgets you want to show on the landing page:</translate>
+          </label>
+        </el-form-item>
+        <el-form-item>
+          <div class="Switch-container">
+            <filter-switch
+              v-model="GDIon"
+              :label="$gettext('Global Digital Health Index') | translate"
+              :tooltip="$gettext('Lorem ipsum') | translate"
+            />
+            <label class="Right-label">
+              <fa icon="external-link-alt" />
+              <translate>Visit digitalhealthindex.org</translate>
+            </label>
+          </div>
+        </el-form-item>
+        <el-form-item>
+          <div class="Switch-container">
+            <filter-switch
+              v-model="roadmapOn"
+              :label="$gettext('Architecture roadmap documents') | translate"
+              :tooltip="$gettext('Lorem ipsum2') | translate"
+            />
+            <label class="Right-label">
+              <fa icon="pen" />
+              <translate>Edit Documents</translate>
+            </label>
+          </div>
+        </el-form-item>
       </el-form>
     </collapsible-card>
 
@@ -372,6 +404,7 @@ import DhaQuestionaire from '../admin/DhaQuestionaire';
 import FileUpload from '../common/FileUpload';
 import CountrySelect from '../common/CountrySelect';
 import ProjectApproval from './ProjectApproval';
+import FilterSwitch from '~/components/dashboard/FilterSwitch';
 
 import { mapGettersActions } from '../../utilities/form';
 
@@ -385,11 +418,14 @@ export default {
     DhaQuestionaire,
     FileUpload,
     CountrySelect,
-    ProjectApproval
+    ProjectApproval,
+    FilterSwitch
   },
 
   data () {
     return {
+      GDIon: false,
+      roadmapOn: false,
       selectedPersona: 'G',
       logoError: '',
       coverError: '',
@@ -642,6 +678,26 @@ export default {
   .CountryAdmin {
     margin-bottom: 60px;
 
+    .Switch-container {
+      margin-top: -20px;
+      display: flex;
+      justify-content: space-between;
+      .Right-label {
+        color: @colorBrandPrimary;
+        font-weight: bold;
+        cursor: pointer;
+        &:hover {
+          color: @colorBrandPrimaryLight;
+        }
+      }
+    }
+    .Divider {
+      box-sizing: border-box;
+      height: 1px;
+      width: @cardSizeMedium;
+      margin: 40px 0 40px -40px;
+      border: 0.5px solid #B9B9B9;
+    }
     .CollapsibleCard {
       width: @cardSizeMedium;
       margin: 0 auto 20px;
