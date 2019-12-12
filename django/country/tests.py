@@ -1,5 +1,6 @@
 import os
 from copy import copy
+from country.tasks import update_gdhi_data_task
 from datetime import datetime
 from fnmatch import fnmatch
 from unittest import mock
@@ -952,9 +953,19 @@ class CountryTests(APITestCase):
         country.save()
 
         call_args_list = update_gdhi_task.call_args_list
+        self.assertEqual(call_args_list[0][0][0][0], 'AF')
+        self.assertEqual(call_args_list[0][0][0][1], True)
 
-        self.assertEqual(call_args_list[0][1]['args'][0], 'AF')
-        self.assertEqual(call_args_list[0][1]['args'][1], True)
+    @mock.patch('country.tasks.call_command')
+    def test_update_gdhi_data_task(self, call_command):
+        call_command.return_value = None
+
+        update_gdhi_data_task.apply(('AF', True))
+
+        call_args_list = call_command.call_args_list
+        self.assertIn('gdhi', call_args_list[0][0])
+        self.assertEqual(call_args_list[0][1]['country_code'], 'AF')
+        self.assertEqual(call_args_list[0][1]['override'], True)
 
 
 class DonorTests(APITestCase):

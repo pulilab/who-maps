@@ -124,7 +124,7 @@ def save_coordinates(sender, instance, **kwargs):
 @receiver(post_save, sender=Country)
 def update_gdhi_data(sender, instance, created, **kwargs):
     if instance.code and settings.COUNTRY_POST_SAVE_GDHI_UPDATE:
-        update_gdhi_data_task.apply_async(args=(instance.code, True))
+        update_gdhi_data_task.apply_async((instance.code, True))
 
 
 class Donor(UserManagement, LandingPageCommon):
