@@ -887,7 +887,7 @@ class CountryTests(APITestCase):
 
     def test_upload_road_map_document_success(self):
         country = Country.objects.first()
-        country.admins.add(self.test_user['user_profile_id'])
+        country.super_admins.add(self.test_user['user_profile_id'])
 
         road_map_file = SimpleUploadedFile("test_file.txt", b"test_content")
         url = reverse('architecture-roadmap-document-list')
@@ -920,7 +920,7 @@ class CountryTests(APITestCase):
 
     def test_upload_road_map_document_with_invalid_extension(self):
         country = Country.objects.first()
-        country.admins.add(self.test_user['user_profile_id'])
+        country.super_admins.add(self.test_user['user_profile_id'])
 
         url = reverse('architecture-roadmap-document-list')
         data = {
@@ -942,7 +942,7 @@ class CountryTests(APITestCase):
         road_map_file = SimpleUploadedFile("test_file.txt", content.encode())
 
         country = Country.objects.first()
-        country.admins.add(self.test_user['user_profile_id'])
+        country.super_admins.add(self.test_user['user_profile_id'])
 
         url = reverse('architecture-roadmap-document-list')
         data = {
@@ -957,7 +957,7 @@ class CountryTests(APITestCase):
     @override_settings(MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY=2)
     def test_upload_too_many_road_map_documents(self):
         country = Country.objects.first()
-        country.admins.add(self.test_user['user_profile_id'])
+        country.super_admins.add(self.test_user['user_profile_id'])
         url = reverse('architecture-roadmap-document-list')
 
         data = {'country': country.id, }
