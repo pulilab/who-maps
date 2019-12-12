@@ -337,3 +337,4 @@ def backup_translation_local(django_dir):
     local(f'cp -R  {django_dir}/translations {backup_base_dir}/translations')
 
     local(f'tar -czvf ~/backup/{backup_dir}.tar.gz {backup_base_dir}')
+    local(f'rm -r {backup_base_dir}')
