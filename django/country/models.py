@@ -93,7 +93,7 @@ def save_coordinates(sender, instance, **kwargs):
 
 
 class ArchitectureRoadMapDocument(models.Model):
-    country = models.ForeignKey(Country, models.CASCADE)
+    country = models.ForeignKey(Country, related_name='documents', on_delete=models.CASCADE)
     title = models.CharField(max_length=128)
     document = models.FileField(null=True, upload_to='documents/')
 
