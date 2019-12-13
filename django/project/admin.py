@@ -27,6 +27,7 @@ class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = [
         'name',
     ]
+    list_filter = ['state']
 
 
 class InteroperabilityLinkAdmin(AllObjectsAdmin):
