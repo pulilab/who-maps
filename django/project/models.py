@@ -257,7 +257,18 @@ class InteroperabilityLink(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedM
 
 
 class TechnologyPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    pass
+    APPROVED = 1
+    PENDING = 2
+    DECLINED = 3
+
+    SOFTWARE_STATES = (
+        (APPROVED, _("Approved")),
+        (PENDING, _("Pending")),
+        (DECLINED, _("Declined")),
+    )
+
+    state = models.IntegerField(choices=SOFTWARE_STATES, default=PENDING)
+    added_by = models.ForeignKey(UserProfile, null=True, on_delete=models.SET_NULL)
 
 
 class Licence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
