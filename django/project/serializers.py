@@ -14,7 +14,7 @@ import scheduler.celery  # noqa
 
 from country.models import CustomQuestion
 from project.utils import remove_keys
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2
+from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
@@ -432,3 +432,18 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
         for row in rows:
             ImportRow.objects.get(id=row['id']).update(data=row.get('data'))
         return instance
+
+
+class TechnologyPlatformListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TechnologyPlatform
+        fields = '__all__'
+
+
+class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TechnologyPlatform
+        fields = (
+            'id',
+            'name',
+        )
