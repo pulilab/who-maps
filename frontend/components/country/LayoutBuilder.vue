@@ -2,57 +2,57 @@
 <div>
     <!-- default -->
     <default>
-      <template v-slot:description>
-        <default-text />
+      <template v-slot:left>
+        <w-default />
       </template>
-      <template v-slot:image>
-        <bg-image :url="default1" />
+      <template v-slot:right>
+        <w-image :url="default1" />
       </template>
     </default>
 
     <!-- description (only) -->
-    <default :gutter="20">
-      <template v-slot:description>
-        <custom-description />
+    <default :gutter="20" classes="pb-0">
+      <template v-slot:left>
+        <w-description />
       </template>
-      <template v-slot:image>
-        <bg-image :url="default2" />
+      <template v-slot:right>
+        <w-image :url="default2" />
       </template>
     </default>
 
-    <default inverse>
-      <template v-slot:description>
-        <default-text />
+    <default inverse classes="pt-20">
+      <template v-slot:left>
+        <w-default />
       </template>
-      <template v-slot:image>
-        <bg-image :url="default1" />
+      <template v-slot:right>
+        <w-image :url="default1" />
       </template>
     </default>
 
     <!-- image (only) -->
     <default inverse :cols="[10, 14]" :gutter="20">
-      <template v-slot:description>
-        <default-text-vertical />
+      <template v-slot:left>
+        <w-default vertical />
       </template>
-      <template v-slot:image>
-        <bg-image :url="doctor" />
+      <template v-slot:right>
+        <w-image :url="doctor" />
       </template>
     </default>
 
     <!-- image, description (only) -->
     <!-- image, description, stats (complete or partial) (only) -->
     <!-- image, description, documents (only) -->
-    <two-columns>
-      <template v-slot:top>
-        <custom-description />
+    <default :gutter="20">
+      <template v-slot:lefttop>
+        <w-description />
       </template>
-      <template v-slot:bottom>
-        <bg-image :url="doctor" />
+      <template v-slot:leftbottom>
+        <w-image :url="doctor" />
       </template>
-      <template v-slot:aside>
-        <default-vertical :url="default1" />
+      <template v-slot:right>
+        <w-default vertical :url="default1" />
       </template>
-    </two-columns>
+    </default>
 
     <!-- description, image, stats (complete or partial), documents -->
     <!-- description, stats (complete or partial), documents -->
@@ -60,12 +60,10 @@
     <!-- stats (complete or partial), documents -->
     <three-columns>
       <template v-slot:lefttop>
-        <div class="grid-content">
-          <custom-description />
-        </div>
+        <w-description />
       </template>
       <template v-slot:leftbottom>
-        <bg-image :url="doctor" />
+        <w-image :url="doctor" />
       </template>
       <template v-slot:middle>
         <div class="grid-content"></div>
@@ -80,9 +78,7 @@
         <img :src="doctor" />
       </template>
       <template v-slot:leftbottom>
-        <div class="grid-content">
-          <default-text-vertical />
-        </div>
+        <w-default vertical />
       </template>
       <template v-slot:middle>
         <div class="grid-content"></div>
@@ -92,35 +88,40 @@
       </template>
     </three-columns>
 
-
+    <three-columns>
+      <template v-slot:left>
+        <w-default vertical :url="default1" />
+      </template>
+      <template v-slot:middle>
+        <w-stats :stats="stats"/>
+      </template>
+      <template v-slot:right>
+        <w-documents :documents="documents"/>
+      </template>
+    </three-columns>
 
     <!-- stats (complete or partial) -->
     <!-- documents -->
-    <el-row :gutter="20" type="flex" class="matrix-layout">
-    <el-col :span="16">
-      <el-row>
-        <el-col :span="24" class="mb"><div class="grid-content"></div></el-col>
-        <el-col :span="24"><div class="grid-content"></div></el-col>
-      </el-row>
-    </el-col>
-    <el-col :span="8">
-      <div class="grid-content">
-      </div>
-    </el-col>
-    </el-row>
-</div>
+    <default :gutter="20">
+      <template v-slot:left>
+        <w-default vertical :url="default1" />
+      </template>
+      <template v-slot:right>
+        <w-documents :documents="documents"/>
+      </template>
+    </default>
+  </div>
 </template>
 
 <script>
 import Default from '@/components/country/layouts/Default';
-import TwoColumns from '@/components/country/layouts/TwoColumns';
 import ThreeColumns from '@/components/country/layouts/ThreeColumns';
 
-import DefaultText from '@/components/country/commons/DefaultText';
-import BgImage from '@/components/country/commons/BgImage';
-import CustomDescription from '@/components/country/commons/CustomDescription';
-import DefaultTextVertical from '@/components/country/commons/DefaultTextVertical';
-import DefaultVertical from '@/components/country/commons/DefaultVertical';
+import WDescription from '@/components/country/widgets/WDescription';
+import WDefault from '@/components/country/widgets/WDefault';
+import WImage from '@/components/country/widgets/WImage';
+import WDocuments from '@/components/country/widgets/WDocuments';
+import WStats from '@/components/country/widgets/WStats';
 // import { mapGetters } from 'vuex';
 
 // images
@@ -131,19 +132,52 @@ import doctor from '~/assets/img/default/coverimage-sample.jpg';
 export default {
   components: {
     Default,
-    TwoColumns,
     ThreeColumns,
-    DefaultVertical,
-    DefaultText,
-    BgImage,
-    CustomDescription,
-    DefaultTextVertical
+    WDescription,
+    WDefault,
+    WImage,
+    WDocuments,
+    WStats
   },
   data() {
     return {
       default1,
       default2,
-      doctor
+      doctor,
+      documents: [
+        { id: 1, title: 'document 1'},
+        { id: 2, title: 'document 2'}
+      ],
+      stats: {
+        groups: [
+          {
+            title: 'Context',
+            metrics : [
+              {
+                measure: 'GNI PER CAPITA, ATLAS METHOD (CURRENT US$)',
+                value: '0.49K'
+              },
+              {
+                measure: 'TOTAL POPULATION',
+                value: '7.4M'
+              }
+            ]
+          },
+                    {
+            title: 'Health',
+            metrics : [
+              {
+                measure: 'LIFE EXPECTANCY AT BIRTH (YEARS)',
+                value: '51.41'
+              },
+              {
+                measure: 'HEALTH EXPENDITURE (% OF GDP)',
+                value: '11.1%'
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 };
@@ -165,6 +199,12 @@ export default {
           margin-bottom: 20px;
         }
         overflow: hidden;
+      }
+      &.pb-0 {
+        padding-bottom: 0px!important;
+      }
+      &.pt-20 {
+        padding-top: 20px!important;
       }
     }
     .fill{

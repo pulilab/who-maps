@@ -1,23 +1,35 @@
 <template>
-  <el-row type="flex" class="matrix-layout" :gutter="gutter">
+  <el-row type="flex" :class="`matrix-layout ${classes}`" :gutter="gutter">
     <template v-if="!inverse">
       <el-col :span="cols[0]">
-        <div class="grid-content">
-          <slot name="description"></slot>
-        </div>
+        <el-row class="fill" v-if="$slots.lefttop && $slots.leftbottom">
+          <el-col :span="24" class="mb">
+            <slot name="lefttop"></slot>
+          </el-col>
+          <el-col :span="24" class="fill">
+            <slot name="leftbottom"></slot>
+          </el-col>
+        </el-row>
+        <slot name="left" v-if="$slots.left"></slot>
       </el-col>
       <el-col :span="cols[1]">
-        <slot name="image"></slot>
+        <slot name="right"></slot>
       </el-col>
     </template>
     <template v-else>
       <el-col :span="cols[1]">
-        <slot name="image"></slot>
+        <slot name="right"></slot>
       </el-col>
       <el-col :span="cols[0]">
-        <div class="grid-content">
-          <slot name="description"></slot>
-        </div>
+        <el-row class="fill" v-if="$slots.lefttop && $slots.leftbottom">
+          <el-col :span="24" class="mb">
+            <slot name="lefttop"></slot>
+          </el-col>
+          <el-col :span="24" class="fill">
+            <slot name="leftbottom"></slot>
+          </el-col>
+        </el-row>
+        <slot name="left"></slot>
       </el-col>
     </template>
   </el-row>
@@ -41,6 +53,11 @@ export default {
       type: Number,
       required: false,
       default: 0
+    },
+    classes: {
+      type: String,
+      required: false,
+      default: ''
     }
   }
 };

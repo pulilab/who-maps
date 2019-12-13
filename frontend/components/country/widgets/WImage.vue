@@ -1,13 +1,13 @@
 <template>
-  <div 
-    class="grid-content img-center" 
-    :style="{backgroundImage: `url(${url})`}" 
+  <div
+    class="grid-content img-center"
+    :style="{backgroundImage: `url(${url})`}"
   />
 </template>
 
 <script>
 export default {
-  name: 'BgImage',
+  name: 'WImage',
   props: {
     url: {
       type: String,
