@@ -146,7 +146,8 @@ export const actions = {
         commit('RESET_MAP_STATE');
       }
     } catch (e) {
-      console.error('Map failed to load', e);
+      console.error('Map failed to load');
+      // console.error(e);
     }
   },
   setCountryCenter ({ commit }, value) {

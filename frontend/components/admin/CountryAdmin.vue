@@ -110,7 +110,9 @@
             :limit="10"
           />
         </el-form-item>
+
         <div class="Divider"></div>
+
         <el-form-item :label="$gettext('Widgets') | translate">
           <label class="el-form-item__label">
             <translate>Please enable widgets you want to show on the landing page:</translate>
@@ -151,6 +153,57 @@
       class="ProjectApproval"
     >
       <project-approval />
+    </collapsible-card>
+
+    <collapsible-card
+      v-if="roadmapOn"
+      :title="$gettext('Architecture roadmap documents') | translate"
+      class="CountryInformation"
+    >
+      <el-form
+        ref="document"
+        :model="{ documents }"
+        label-width="220px"
+        label-position="left"
+        @submit.native.prevent
+      >
+        <div
+          v-for="(document, index) in documents"
+          :key="index"
+        >
+          <el-form-item
+            :label="$gettext('Document') | translate"
+            prop="document"
+          >
+            <file-upload
+              :files.sync="document.document"
+              :limit="1"
+              :auto-upload="false"
+              list-type="text"
+            />
+          </el-form-item>
+          <el-form-item
+            :label="$gettext('Title') | translate"
+          >
+            <el-input
+              v-model="document.title"
+              :maxlength="128"
+              type="text"
+            />
+          </el-form-item>
+        </div>
+        <div>
+          <el-button
+            :disabled="documents.length === 5"
+            type="text"
+            class="IconLeft"
+            @click="addDocument"
+          >
+            <fa icon="plus" />
+            <translate>Add new question</translate>
+          </el-button>
+        </div>
+      </el-form>
     </collapsible-card>
 
     <collapsible-card
@@ -425,8 +478,9 @@ export default {
   data () {
     return {
       GDIon: false,
-      roadmapOn: false,
+      roadmapOn: true,
       selectedPersona: 'G',
+      documents: [],
       logoError: '',
       coverError: '',
       flagForKeepingPartnerLogosError: false,
@@ -478,6 +532,10 @@ export default {
       superadminSelection: 'admin/country/getSuperadminSelection',
       userProfile: 'user/getProfile'
     }),
+
+    documentList () {
+      return this.documents.map(document => document.document);
+    },
 
     notSCA () {
       return this.userProfile && this.userProfile.account_type === 'CA' && !this.userProfile.is_superuser;
@@ -581,6 +639,15 @@ export default {
   },
 
   watch: {
+    documentList (newDocs, oldDocs) {
+      console.log(newDocs, oldDocs);
+      newDocs.forEach((doc, index) => {
+        // console.log(doc.length, oldDocs[index] ? oldDocs[index].length : 'empty');
+        if (oldDocs[index] && oldDocs[index].length && doc.length === 0) {
+          this.$delete(this.documents, index);
+        }
+      });
+    },
     logo (newArr, oldArr) {
       // Handles error message placing for wrong image formats
       if (!newArr.length) {
@@ -647,6 +714,21 @@ export default {
       fetchData: 'admin/country/fetchData',
       loadGeoJSON: 'admin/map/loadGeoJSON'
     }),
+
+    addDocument () {
+      if (this.documents.length === 5) {
+        this.$message({
+          message: this.$gettext('Maximum number (5) of documents reached.'),
+          type: 'error',
+          showClose: true
+        });
+        return;
+      }
+      this.documents.push({
+        title: '',
+        document: []
+      });
+    },
 
     selectPersona (selected) {
       this.selectedPersona = selected;
