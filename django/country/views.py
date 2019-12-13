@@ -18,11 +18,12 @@ from project.models import TechnologyPlatform
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
-    CountryCustomQuestion, DonorCustomQuestion
+    CountryCustomQuestion, DonorCustomQuestion, ArchitectureRoadMapDocument
 from .serializers import CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, \
     PartnerLogoSerializer, DonorSerializer, SuperAdminDonorSerializer, AdminDonorSerializer, \
     DonorPartnerLogoSerializer, MapFileSerializer, CountryImageSerializer, DonorImageSerializer, \
-    DonorCustomQuestionSerializer, CountryCustomQuestionSerializer, CountryListSerializer, DonorListSerializer
+    DonorCustomQuestionSerializer, CountryCustomQuestionSerializer, CountryListSerializer, DonorListSerializer, \
+    ArchitectureRoadMapDocumentSerializer
 
 
 class CountryLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -81,6 +82,13 @@ class CountryViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateM
                     or self.request.user.is_superuser:
                 return SuperAdminCountrySerializer
         return super().get_serializer_class()
+
+    @action(methods=['get'], detail=True)
+    def documents(self, request, pk=None):
+        country = self.get_object()
+        documents = country.architectureroadmapdocument_set.all()
+        serializer = ArchitectureRoadMapDocumentSerializer(instance=documents, many=True)
+        return Response(data=serializer.data)
 
 
 class DonorViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
@@ -203,3 +211,10 @@ class DonorCustomQuestionViewSet(SetOrderToMixin, mixins.CreateModelMixin, mixin
                                  mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = DonorCustomQuestion.objects.all()
     serializer_class = DonorCustomQuestionSerializer
+
+
+class ArchitectureRoadMapDocumentViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                                         viewsets.GenericViewSet):
+    queryset = ArchitectureRoadMapDocument.objects.all()
+    serializer_class = ArchitectureRoadMapDocumentSerializer
+    permission_classes = (InCountrySuperAdmin,)

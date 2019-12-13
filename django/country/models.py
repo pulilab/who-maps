@@ -11,6 +11,13 @@ from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteMode
 from user.models import UserProfile
 
 
+class ArchitectureRoadMap(models.Model):
+    road_map_enabled = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
 class LandingPageCommon(ExtendedMultilingualModel):
     name = models.CharField(max_length=255, unique=True)
     logo = models.ImageField(blank=True, null=True)
@@ -51,7 +58,7 @@ class UserManagement(models.Model):
                self.users.filter(id=profile.id).exists()
 
 
-class Country(UserManagement, LandingPageCommon):
+class Country(UserManagement, LandingPageCommon, ArchitectureRoadMap):
     REGIONS = [
         (0, _('African Region')),
         (1, _('Region of the Americas')),
@@ -83,6 +90,12 @@ def save_coordinates(sender, instance, **kwargs):
             instance.lon = instance.map_data['polylabel']['lng']
         except (TypeError, KeyError, ValueError):
             pass
+
+
+class ArchitectureRoadMapDocument(models.Model):
+    country = models.ForeignKey(Country, models.CASCADE)
+    title = models.CharField(max_length=128)
+    document = models.FileField(null=True, upload_to='documents/')
 
 
 class Donor(UserManagement, LandingPageCommon):

@@ -12,7 +12,7 @@ from django.conf import settings
 
 from user.models import UserProfile
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
-    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion
+    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion, ArchitectureRoadMapDocument
 
 
 class OptionsValidatorMixin:
@@ -301,3 +301,29 @@ class DonorListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Donor
         fields = ('id', 'name', 'code')
+
+
+class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArchitectureRoadMapDocument
+        fields = "__all__"
+
+    @staticmethod
+    def validate_document(value):
+        if value.size > settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE:
+            max_size_in_mb = round(settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE / 1024 / 1024)
+            raise ValidationError(f'The file exceeds the maximum allowed size: {max_size_in_mb} MB.')
+
+        if not value.name.lower().endswith(settings.VALID_ROAD_MAP_DOCUMENT_FILE_TYPES):
+            msg = ", ".join(settings.VALID_ROAD_MAP_DOCUMENT_FILE_TYPES)
+            raise ValidationError(f'Invalid file type. Allowed formats: {msg}')
+        return value
+
+    def validate(self, attrs):
+        if self.instance is None:
+            country = attrs.get('country')
+            if country and \
+                    country.architectureroadmapdocument_set.count() >= settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY:
+                raise ValidationError(
+                    f'The country already has {settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY} related road map documents')
+        return attrs
