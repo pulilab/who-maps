@@ -890,7 +890,7 @@ class CountryTests(APITestCase):
         country = Country.objects.first()
         country.super_admins.add(self.test_user['user_profile_id'])
 
-        self.assertEqual(country.architectureroadmapdocument_set.count(), 0)
+        self.assertEqual(country.documents.count(), 0)
 
         for i in range(2):
             ArchitectureRoadMapDocument.objects.create(
@@ -898,12 +898,12 @@ class CountryTests(APITestCase):
                 title=f'test {i}',
                 document=ContentFile('test_content', name=f'test_file_{i}.txt')
             )
-        self.assertEqual(country.architectureroadmapdocument_set.count(), 2)
+        self.assertEqual(country.documents.count(), 2)
 
-        url = reverse('country-documents', args=[country.id])
+        url = reverse('country-detail', args=[country.id])
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
-        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(len(response.json()['documents']), 2)
 
     def test_upload_road_map_document_success(self):
         country = Country.objects.first()
