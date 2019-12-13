@@ -13,7 +13,6 @@ from user.models import UserProfile
 
 class ArchitectureRoadMap(models.Model):
     road_map_enabled = models.BooleanField(default=False)
-    road_map_description = models.TextField(max_length=5000, blank=True, null=True)
 
     class Meta:
         abstract = True
