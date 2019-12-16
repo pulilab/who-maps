@@ -39,29 +39,27 @@ class Command(BaseCommand):
             print(f'Processing context and health data for country: {country}')
             url = f'http://index.digitalhealthindex.org/api/countries/{country.alpha_3_code}/development_indicators'
             response = requests.get(url)
-            if response.status_code == status.HTTP_200_OK:
-                data = response.json()
+            response.raise_for_status()
+            data = response.json()
 
-                save = False
-                if country.total_population is None or override:
-                    save = True
-                    # we store total population data in Millions
-                    country.total_population = round_decimal(data['totalPopulation'] / 1000000)
-                if country.gni_per_capita is None or override:
-                    save = True
-                    # we store gni_per_capita in Thousands
-                    country.gni_per_capita = round_decimal(data['gniPerCapita'] / 1000)
-                if country.life_expectancy is None or override:
-                    save = True
-                    country.life_expectancy = data['lifeExpectancy']
-                if country.health_expenditure is None or override:
-                    save = True
-                    country.health_expenditure = data['healthExpenditure']
+            save = False
+            if country.total_population is None or override:
+                save = True
+                # we store total population data in Millions
+                country.total_population = round_decimal(data['totalPopulation'] / 1000000)
+            if country.gni_per_capita is None or override:
+                save = True
+                # we store gni_per_capita in Thousands
+                country.gni_per_capita = round_decimal(data['gniPerCapita'] / 1000)
+            if country.life_expectancy is None or override:
+                save = True
+                country.life_expectancy = data['lifeExpectancy']
+            if country.health_expenditure is None or override:
+                save = True
+                country.health_expenditure = data['healthExpenditure']
 
-                if save:
-                    country.save()
-            else:
-                print(f'Error getting context and health data for country: {response.content}')
+            if save:
+                country.save()
 
     def get_health_indicator_scores(self, options):
         override = options['override']
