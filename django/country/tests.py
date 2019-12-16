@@ -1,7 +1,9 @@
 import os
 from copy import copy
+from country.tasks import update_gdhi_data_task
 from datetime import datetime
 from fnmatch import fnmatch
+from unittest import mock
 from unittest.mock import patch
 
 from django.contrib.admin import AdminSite
@@ -12,11 +14,12 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
 from django.utils.dateformat import format
 from requests import RequestException
+from rest_framework import status
 
 from django.core import mail
 from django.core.management import call_command
 from allauth.account.models import EmailConfirmation
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
@@ -881,6 +884,88 @@ class CountryTests(APITestCase):
         response = self.test_user_client.post(url, data=data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['options'], ['yes', 'maybe'])
+
+    @mock.patch('country.views.call_command')
+    def test_update_gdhi_data_success(self, call_command):
+        country = Country.objects.get(code='AF')
+        country.admins.add(self.test_user['user_profile_id'])
+
+        call_command.return_value = None
+        url = reverse("country-update-gdhi-data") + '?country_code=AF'
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        call_args_list = call_command.call_args_list
+        self.assertIn('gdhi', call_args_list[0][0])
+        self.assertEqual(call_args_list[0][1]['country_code'], 'AF')
+        self.assertEqual(call_args_list[0][1]['override'], True)
+
+    def test_update_gdhi_data_without_permission(self):
+        country = Country.objects.get(code='AF')
+        self.assertEqual(country.admins.count(), 0)
+
+        url = reverse("country-update-gdhi-data") + '?country_code=AF'
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_update_gdhi_without_country_code(self):
+        url = reverse("country-update-gdhi-data")
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_gdhi_data_with_invalid_country_code(self):
+        url = reverse("country-update-gdhi-data") + '?country_code=XXXX'
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_country_admin_tries_to_update_country_gdhi_data(self):
+        user_profile = UserProfile.objects.get(id=self.test_user['user_profile_id'])
+        user_profile.account_type = 'CA'
+        user_profile.save()
+
+        country = Country.objects.get(code='AF')
+        country.admins.add(self.test_user['user_profile_id'])
+
+        self.assertEqual(country.total_population, None)
+        self.assertEqual(country.gni_per_capita, None)
+        self.assertEqual(country.leadership_and_governance, None)
+
+        url = reverse("country-detail", args=[country.id])
+        data = {
+            'total_population': 34.66,
+            'gni_per_capita': 0.58,
+            'leadership_and_governance': 3,
+        }
+        response = self.test_user_client.patch(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        # the values should be the same as before
+        self.assertEqual(response.json()['total_population'], None)
+        self.assertEqual(response.json()['gni_per_capita'], None)
+        self.assertEqual(response.json()['leadership_and_governance'], None)
+
+    @override_settings(COUNTRY_POST_SAVE_GDHI_UPDATE=True)
+    @mock.patch('country.models.update_gdhi_data_task.apply_async')
+    def test_update_gdhi_called_in_post_save(self, update_gdhi_task):
+        update_gdhi_task.return_value = None
+
+        country = Country.objects.get(code='AF')
+        country.total_population = 34.5
+        country.save()
+
+        call_args_list = update_gdhi_task.call_args_list
+        self.assertEqual(call_args_list[0][0][0][0], 'AF')
+        self.assertEqual(call_args_list[0][0][0][1], True)
+
+    @mock.patch('country.tasks.call_command')
+    def test_update_gdhi_data_task(self, call_command):
+        call_command.return_value = None
+
+        update_gdhi_data_task.apply(('AF', True))
+
+        call_args_list = call_command.call_args_list
+        self.assertIn('gdhi', call_args_list[0][0])
+        self.assertEqual(call_args_list[0][1]['country_code'], 'AF')
+        self.assertEqual(call_args_list[0][1]['override'], True)
 
 
 class DonorTests(APITestCase):
