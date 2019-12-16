@@ -1,7 +1,7 @@
 <template>
 <div>
     <!-- default -->
-    <default>
+    <default v-show="(image === false) && (description === false) && (gdhi === false) && (documentation === false)">
       <template v-slot:left>
         <w-default />
       </template>
@@ -11,16 +11,24 @@
     </default>
 
     <!-- description (only) -->
-    <default :gutter="20" classes="pb-0">
+    <default
+      v-show="(image === false) && (description === true) && (gdhi === false) && (documentation === false)"
+      :gutter="20"
+      classes="pb-0"
+    >
       <template v-slot:left>
-        <w-description />
+        <w-description :description="data.cover_text" />
       </template>
       <template v-slot:right>
         <w-image :url="default2" />
       </template>
     </default>
 
-    <default inverse classes="pt-20">
+    <default
+      v-show="(image === false) && (description === true) && (gdhi === false) && (documentation === false)"
+      inverse
+      classes="pt-20"
+    >
       <template v-slot:left>
         <w-default />
       </template>
@@ -30,65 +38,122 @@
     </default>
 
     <!-- image (only) -->
-    <default inverse :cols="[10, 14]" :gutter="20">
+    <default
+      v-show="(image === true) && (description === false) && (gdhi === false) && (documentation === false)"
+      inverse
+      :cols="[10, 14]"
+      :gutter="20">
       <template v-slot:left>
         <w-default vertical />
       </template>
       <template v-slot:right>
-        <w-image :url="doctor" />
+        <w-image :url="data.cover_url" />
       </template>
     </default>
 
     <!-- image, description (only) -->
-    <!-- image, description, stats (complete or partial) (only) -->
-    <!-- image, description, documents (only) -->
-    <default :gutter="20">
+    <default
+      v-show="(image === true) && (description === true) && (gdhi === false) && (documentation === false)"
+      :gutter="20">
       <template v-slot:lefttop>
-        <w-description />
+        <w-description :description="data.cover_text" />
       </template>
       <template v-slot:leftbottom>
-        <w-image :url="doctor" />
+        <w-image :url="data.cover_url" />
       </template>
       <template v-slot:right>
         <w-default vertical :url="default1" />
       </template>
     </default>
 
-    <!-- description, image, stats (complete or partial), documents -->
-    <!-- description, stats (complete or partial), documents -->
-    <!-- image, stats (complete or partial), documents -->
-    <!-- stats (complete or partial), documents -->
-    <three-columns>
+    <!-- image, description, stats (complete or partial) (only) -->
+    <default
+      v-show="(image === true) && (description === true) && (gdhi === true) && (documentation === false)"
+      :gutter="20">
       <template v-slot:lefttop>
-        <w-description />
+        <w-description :description="data.cover_text" />
       </template>
       <template v-slot:leftbottom>
-        <w-image :url="doctor" />
-      </template>
-      <template v-slot:middle>
-        <div class="grid-content"></div>
+        <w-image :url="data.cover_url" />
       </template>
       <template v-slot:right>
-        <div class="grid-content"></div>
+        <w-stats :stats="stats"/>
+      </template>
+    </default>
+
+    <!-- image, description, documents (only) -->
+    <default
+      v-show="(image === true) && (description === true) && (gdhi === false) && (documentation === true)"
+      :gutter="20">
+      <template v-slot:lefttop>
+        <w-description :description="data.cover_text" />
+      </template>
+      <template v-slot:leftbottom>
+        <w-image :url="data.cover_url" />
+      </template>
+      <template v-slot:right>
+        <w-documents :documents="documents"/>
+      </template>
+    </default>
+
+    <!-- description, image, stats (complete or partial), documents -->
+    <three-columns
+      v-show="(image === true) && (description === true) && (gdhi === true) && (documentation === true)"
+    >
+      <template v-slot:lefttop>
+        <w-description :description="data.cover_text" />
+      </template>
+      <template v-slot:leftbottom>
+        <w-image :url="data.cover_url" />
+      </template>
+      <template v-slot:middle>
+        <w-stats :stats="stats"/>
+      </template>
+      <template v-slot:right>
+        <w-documents :documents="documents"/>
       </template>
     </three-columns>
 
-    <three-columns>
+    <!-- description, stats (complete or partial), documents -->
+    <three-columns
+      v-show="(image === false) && (description === true) && (gdhi === true) && (documentation === true)"
+    >
       <template v-slot:lefttop>
-        <img :src="doctor" />
+        <w-description :description="data.cover_text" />
+      </template>
+      <template v-slot:leftbottom>
+        <img :src="default2" />
+      </template>
+      <template v-slot:middle>
+        <w-stats :stats="stats"/>
+      </template>
+      <template v-slot:right>
+        <w-documents :documents="documents"/>
+      </template>
+    </three-columns>
+
+    <!-- image, stats (complete or partial), documents -->
+    <three-columns
+      v-show="(image === true) && (description === false) && (gdhi === true) && (documentation === true)"
+    >
+      <template v-slot:lefttop>
+        <img :src="data.cover_url" />
       </template>
       <template v-slot:leftbottom>
         <w-default vertical />
       </template>
       <template v-slot:middle>
-        <div class="grid-content"></div>
+        <w-stats :stats="stats"/>
       </template>
       <template v-slot:right>
-        <div class="grid-content"></div>
+        <w-documents :documents="documents"/>
       </template>
     </three-columns>
 
-    <three-columns>
+    <!-- stats (complete or partial), documents -->
+    <three-columns
+      v-show="(image === false) && (description === false) && (gdhi === true) && (documentation === true)"
+    >
       <template v-slot:left>
         <w-default vertical :url="default1" />
       </template>
@@ -100,9 +165,24 @@
       </template>
     </three-columns>
 
-    <!-- stats (complete or partial) -->
-    <!-- documents -->
-    <default :gutter="20">
+    <!-- stats (complete or partial) only -->
+    <default
+      v-show="(image === false) && (description === false) && (gdhi === true) && (documentation === false)"
+      :gutter="20"
+    >
+      <template v-slot:left>
+        <w-default vertical :url="default1" />
+      </template>
+      <template v-slot:right>
+        <w-stats :stats="stats"/>
+      </template>
+    </default>
+
+    <!-- documents only -->
+    <default
+      v-show="(image === false) && (description === false) && (gdhi === false) && (documentation === true)"
+      :gutter="20"
+    >
       <template v-slot:left>
         <w-default vertical :url="default1" />
       </template>
@@ -127,7 +207,6 @@ import WStats from '@/components/country/widgets/WStats';
 // images
 import default1 from '~/assets/img/default/whyusedha-new.jpg';
 import default2 from '~/assets/img/default/coverimage-default.jpg';
-import doctor from '~/assets/img/default/coverimage-sample.jpg';
 
 export default {
   components: {
@@ -139,27 +218,58 @@ export default {
     WDocuments,
     WStats
   },
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       default1,
       default2,
-      doctor,
       documents: [
         { id: 1, title: 'document 1'},
         { id: 2, title: 'document 2'}
-      ],
-      stats: {
+      ]
+    }
+  },
+    computed: {
+    image () {
+      return this.data.cover !== null;
+    },
+    description () {
+      return this.data.cover_text !==  '';
+    },
+    gdhi () {
+      return this.data.gdhi_enabled;
+    },
+    documentation () {
+      return false;
+    },
+    stats () {
+      return {
+        name: this.data.name,
+        phases: [
+          { title: 'leadership and governance', phase: this.data.leadership_and_governance },
+          { title: 'strategy and investment', phase: this.data.strategy_and_investment },
+          { title: 'legislation policy compliance', phase: this.data.legislation_policy_compliance },
+          { title: 'workforce', phase: this.data.workforce },
+          { title: 'standards and interoperability', phase: this.data.standards_and_interoperability },
+          { title: 'infrastructure', phase: this.data.infrastructure },
+          { title: 'services and applications', phase: this.data.services_and_applications }
+        ],
         groups: [
           {
             title: 'Context',
             metrics : [
               {
                 measure: 'GNI PER CAPITA, ATLAS METHOD (CURRENT US$)',
-                value: '0.49K'
+                value: `${this.data.gni_per_capita}K`
               },
               {
                 measure: 'TOTAL POPULATION',
-                value: '7.4M'
+                value: `${this.data.total_population}M`
               }
             ]
           },
@@ -168,18 +278,35 @@ export default {
             metrics : [
               {
                 measure: 'LIFE EXPECTANCY AT BIRTH (YEARS)',
-                value: '51.41'
+                value: this.data.life_expectancy
               },
               {
                 measure: 'HEALTH EXPENDITURE (% OF GDP)',
-                value: '11.1%'
+                value: `${this.data.health_expenditure}%`
               }
             ]
           }
         ]
       }
     }
-  }
+  },
+  mounted() {
+    console.log(this.data)
+    // gdhi_enabled: true
+    // numbers
+    // total_population: null
+    // gni_per_capita: null
+    // life_expectancy: null
+    // health_expenditure: null
+    // phases
+    // leadership_and_governance: null
+    // strategy_and_investment: null
+    // legislation_policy_compliance: null
+    // workforce: null
+    // standards_and_interoperability: null
+    // infrastructure: null
+    // services_and_applications: null
+  },
 };
 </script>
 

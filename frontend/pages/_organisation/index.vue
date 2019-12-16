@@ -27,7 +27,7 @@
         </el-col>
       </el-row>
     </div>
-    <layout-builder v-else />
+    <layout-builder v-else :data="landingData"/>
     <about-section />
   </div>
 </template>

@@ -11,7 +11,8 @@ export default {
   props: {
     url: {
       type: String,
-      required: true
+      required: false,
+      default: ''
     }
   },
 };
@@ -19,6 +20,7 @@ export default {
 
 <style lang="less" scoped>
   .grid-content.img-center {
+    min-height: 400px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

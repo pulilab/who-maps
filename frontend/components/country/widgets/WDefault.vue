@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="fill">
     <img :src="url" v-if="vertical && url" />
-    <div class="grid-content">
+    <div class="grid-content fill">
       <default-text-vertical v-if="vertical" />
       <default-text v-else />
     </div>

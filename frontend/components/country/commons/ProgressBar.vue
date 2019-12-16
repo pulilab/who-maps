@@ -1,7 +1,7 @@
 <template>
   <div class="bar">
-    <div :class="`progress ${phase}`">
-      <span>Phase 1</span>
+    <div :class="`progress phase-${phase}`">
+      <span>Phase {{ phase }}</span>
     </div>
   </div>
 </template>
@@ -11,9 +11,9 @@ export default {
   name: 'ProgressBar',
   props: {
     phase: {
-      type: String,
+      type: Number,
       required: false,
-      default: 'phase-1'
+      default: 1
     }
   }
 };
@@ -29,7 +29,7 @@ export default {
     background-color: #ECEFF1;
     border-radius: 25px;
     overflow: hidden;
-    margin: 10px 0;
+    margin: 5px 0 10px;
     .progress {
       height: 16px;
       border-radius: 25px;

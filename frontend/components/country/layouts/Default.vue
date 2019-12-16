@@ -10,7 +10,11 @@
             <slot name="leftbottom"></slot>
           </el-col>
         </el-row>
-        <slot name="left" v-if="$slots.left"></slot>
+        <el-row class="fill" v-if="$slots.left">
+          <el-col :span="24" class="fill">
+            <slot name="left"></slot>
+          </el-col>
+        </el-row>
       </el-col>
       <el-col :span="cols[1]">
         <slot name="right"></slot>

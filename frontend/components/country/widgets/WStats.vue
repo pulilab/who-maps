@@ -1,17 +1,17 @@
 <template>
   <div class="grid-content">
-    <h3>State of Digital Health in Sierra Leone</h3>
+    <h3>State of Digital Health in {{ stats.name }} </h3>
 
-    <progress-bar />
-    <progress-bar phase="phase-2" />
-    <progress-bar phase="phase-3" />
-    <progress-bar phase="phase-4" />
-    <progress-bar phase="phase-5" />
+    <div v-if="!simple" class="phases">
+      <el-row v-for="(phase, i) in stats.phases" :key="i" v-if="phase.phase !== null">
+        <p>{{ phase.title }}</p>
+        <progress-bar :phase="phase.phase" />
+      </el-row>
+    </div>
 
-
-    <el-row v-for="(group, i) in stats.groups" :key="i" class="number-info">
+    <el-row v-for="(group, i) in stats.groups" :key="i" :class="`number-info ${simple ? 'simple' : ''}`">
       <p><b>{{ group.title }}</b></p>
-      <el-col v-for="(metric, k) in group.metrics" :key="k" :span="12">
+      <el-col v-for="(metric, k) in group.metrics" :key="k" :span="simple ? 24 : 12">
         <h3>{{metric.value}}</h3>
         <p>{{metric.measure}}</p>
       </el-col>
@@ -42,6 +42,11 @@ export default {
     stats: {
       type: Object,
       required: true
+    },
+    simple: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   }
 };
@@ -50,9 +55,20 @@ export default {
 <style lang="less" scoped>
   @import "../../../assets/style/variables.less";
 
+  .phases {
+    padding-bottom: 40px;
+    p {
+      margin-top: 6px!important;
+      margin-bottom: 0px!important;
+      line-height: 15px;
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+  }
   .number-info {
     text-align: center;
-    margin-bottom: 26px;
+    margin-bottom: 40px;
     .el-col {
       h3 {
         font-size: 18px;
