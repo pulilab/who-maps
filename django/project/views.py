@@ -497,4 +497,6 @@ class TechnologyPlatformViewSet(CreateModelMixin, ListModelMixin, GenericViewSet
     def perform_create(self, serializer: BaseSerializer) -> None:
         # state should be 'pending' if the API performs the creation
         serializer.validated_data['state'] = TechnologyPlatform.PENDING
+        # added_by should be the request's user's profile
+        serializer.validated_data['added_by'] = self.request.user.userprofile
         super().perform_create(serializer)
