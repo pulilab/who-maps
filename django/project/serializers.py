@@ -438,12 +438,4 @@ class TechnologyPlatformListSerializer(serializers.ModelSerializer):
     class Meta:
         model = TechnologyPlatform
         fields = '__all__'
-
-
-class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TechnologyPlatform
-        fields = (
-            'id',
-            'name',
-        )
+        read_only_field = ('state',)

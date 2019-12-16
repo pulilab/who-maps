@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from typing import Type
 
 from django.db import transaction
 from django.db.models import QuerySet
@@ -9,7 +8,6 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
@@ -22,8 +20,7 @@ from country.models import Country, Donor
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
-    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformListSerializer, \
-    TechnologyPlatformCreateSerializer
+    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformListSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
 
@@ -495,8 +492,3 @@ class TechnologyPlatformViewSet(CreateModelMixin, ListModelMixin, GenericViewSet
     queryset = TechnologyPlatform.objects.all()
     serializer_class = TechnologyPlatformListSerializer
     permission_classes = (IsAuthenticated,)
-
-    def get_serializer_class(self) -> Type[BaseSerializer]:
-        if self.action == 'create':
-            return TechnologyPlatformCreateSerializer
-        return super().get_serializer_class()
