@@ -15,11 +15,11 @@ from user.models import UserProfile
 
 class ArchitectureRoadMap(models.Model):
     road_map_enabled = models.BooleanField(default=False)
-    
+
     class Meta:
         abstract = True
 
-    
+
 class GDHI(models.Model):
     PHASE_CHOICES = (
         (1, _('Phase 1')),
@@ -127,12 +127,12 @@ def save_coordinates(sender, instance, **kwargs):
         except (TypeError, KeyError, ValueError):
             pass
 
-          
+
 @receiver(post_save, sender=Country)
 def update_gdhi_data(sender, instance, created, **kwargs):
     if instance.code and settings.ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE:
         update_gdhi_data_task.apply_async((instance.code, True))
-        
+
 
 class ArchitectureRoadMapDocument(models.Model):
     country = models.ForeignKey(Country, related_name='documents', on_delete=models.CASCADE)

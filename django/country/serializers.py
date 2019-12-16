@@ -204,7 +204,8 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
 
     class Meta:
         model = Country
-        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins', 'gdhi_enabled', 'road_map_enabled')
+        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',
+                                                          'gdhi_enabled', 'road_map_enabled')
         read_only_fields = READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS
 
     def update(self, instance, validated_data):
