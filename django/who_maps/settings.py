@@ -381,4 +381,4 @@ OSM_MAP_CLI_KEY = 'a9ea45b5-ab37-4323-8263-767aa5896113'
 # EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
 # TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "nico@pulilab.com", "f@pulilab.com"]
 
-COUNTRY_POST_SAVE_GDHI_UPDATE = os.environ.get('COUNTRY_POST_SAVE_GDHI_UPDATE', False)
+ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE = os.environ.get('ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE', False)

@@ -123,7 +123,7 @@ def save_coordinates(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Country)
 def update_gdhi_data(sender, instance, created, **kwargs):
-    if instance.code and settings.COUNTRY_POST_SAVE_GDHI_UPDATE:
+    if instance.code and settings.ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE:
         update_gdhi_data_task.apply_async((instance.code, True))
 
 

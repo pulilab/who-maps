@@ -944,7 +944,7 @@ class CountryTests(APITestCase):
         self.assertEqual(country.gni_per_capita, None)
         self.assertEqual(country.leadership_and_governance, None)
 
-    @override_settings(COUNTRY_POST_SAVE_GDHI_UPDATE=True)
+    @override_settings(ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE=True)
     @mock.patch('country.models.update_gdhi_data_task.apply_async')
     def test_update_gdhi_called_in_post_save(self, update_gdhi_task):
         update_gdhi_task.return_value = None
