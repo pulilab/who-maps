@@ -8,6 +8,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
@@ -492,3 +493,8 @@ class TechnologyPlatformViewSet(CreateModelMixin, ListModelMixin, GenericViewSet
     queryset = TechnologyPlatform.objects.all()
     serializer_class = TechnologyPlatformListSerializer
     permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer: BaseSerializer) -> None:
+        # state should be 'pending' if the API performs the creation
+        serializer.validated_data['state'] = TechnologyPlatform.PENDING
+        super().perform_create(serializer)
