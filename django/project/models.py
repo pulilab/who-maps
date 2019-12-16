@@ -267,7 +267,7 @@ class TechnologyPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedMod
         (DECLINED, _("Declined")),
     )
 
-    state = models.IntegerField(choices=SOFTWARE_STATES, default=PENDING)
+    state = models.IntegerField(choices=SOFTWARE_STATES, default=APPROVED)
     added_by = models.ForeignKey(UserProfile, null=True, on_delete=models.SET_NULL)
 
 
