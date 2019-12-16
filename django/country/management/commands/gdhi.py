@@ -66,59 +66,57 @@ class Command(BaseCommand):
         country_code = options['country_code']
         url = 'http://index.digitalhealthindex.org/api/countries_health_indicator_scores'
         response = requests.get(url)
-        if response.status_code == status.HTTP_200_OK:
-            data = response.json()
+        response.raise_for_status()
+        data = response.json()
 
-            for country_data in data['countryHealthScores']:
-                if country_code and country_data['countryAlpha2Code'] != country_code:
-                    continue
+        for country_data in data['countryHealthScores']:
+            if country_code and country_data['countryAlpha2Code'] != country_code:
+                continue
 
-                categories = country_data.get('categories')
-                if categories:
-                    try:
-                        country = Country.objects.get(alpha_3_code=country_data['countryId'])
-                    except Country.DoesNotExist:
-                        pass
-                    else:
-                        print(f'Processing indicator data for country: {country}')
-                        save = False
+            categories = country_data.get('categories')
+            if categories:
+                try:
+                    country = Country.objects.get(alpha_3_code=country_data['countryId'])
+                except Country.DoesNotExist:
+                    pass
+                else:
+                    print(f'Processing indicator data for country: {country}')
+                    save = False
 
-                        for category in categories:
-                            category_name = category['name']
-                            score = round(category['overallScore'])
-                            if category_name == 'Leadership and Governance':
-                                if country.leadership_and_governance is None or override:
-                                    save = True
-                                    country.leadership_and_governance = score
-                            elif category_name == 'Strategy and Investment':
-                                if country.strategy_and_investment is None or override:
-                                    save = True
-                                    country.strategy_and_investment = score
-                            elif category_name == 'Legislation, Policy, and Compliance':
-                                if country.legislation_policy_compliance is None or override:
-                                    save = True
-                                    country.legislation_policy_compliance = score
-                            elif category_name == 'Workforce':
-                                if country.workforce is None or override:
-                                    save = True
-                                    country.workforce = score
-                            elif category_name == 'Standards and Interoperability':
-                                if country.standards_and_interoperability is None or override:
-                                    save = True
-                                    country.standards_and_interoperability = score
-                            elif category_name == 'Infrastructure':
-                                if country.infrastructure is None or override:
-                                    save = True
-                                    country.infrastructure = score
-                            elif category_name == 'Services and Applications':
-                                if country.services_and_applications is None or override:
-                                    save = True
-                                    country.services_and_applications = score
+                    for category in categories:
+                        category_name = category['name']
+                        score = round(category['overallScore'])
+                        if category_name == 'Leadership and Governance':
+                            if country.leadership_and_governance is None or override:
+                                save = True
+                                country.leadership_and_governance = score
+                        elif category_name == 'Strategy and Investment':
+                            if country.strategy_and_investment is None or override:
+                                save = True
+                                country.strategy_and_investment = score
+                        elif category_name == 'Legislation, Policy, and Compliance':
+                            if country.legislation_policy_compliance is None or override:
+                                save = True
+                                country.legislation_policy_compliance = score
+                        elif category_name == 'Workforce':
+                            if country.workforce is None or override:
+                                save = True
+                                country.workforce = score
+                        elif category_name == 'Standards and Interoperability':
+                            if country.standards_and_interoperability is None or override:
+                                save = True
+                                country.standards_and_interoperability = score
+                        elif category_name == 'Infrastructure':
+                            if country.infrastructure is None or override:
+                                save = True
+                                country.infrastructure = score
+                        elif category_name == 'Services and Applications':
+                            if country.services_and_applications is None or override:
+                                save = True
+                                country.services_and_applications = score
 
-                        if save:
-                            country.save()
-        else:
-            print(f'Error getting indicator data for country: {response.content}')
+                    if save:
+                        country.save()
 
     def handle(self, *args, **options):
         self.fill_aplha_3_codes(options)
