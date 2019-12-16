@@ -1,7 +1,6 @@
 import requests
 from django.core.management.base import BaseCommand
 from pycountry import countries
-from rest_framework import status
 
 from country.helpers import round_decimal
 from country.models import Country
