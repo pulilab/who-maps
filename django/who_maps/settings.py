@@ -380,3 +380,8 @@ OSM_MAP_CLI_KEY = 'a9ea45b5-ab37-4323-8263-767aa5896113'
 # Uncomment these lines if you want to redirect all emails to the forced addresses
 # EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
 # TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "nico@pulilab.com", "f@pulilab.com"]
+
+MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE = 15728640  # 15 MB, 1024 * 1024 * 15
+MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY = 5
+VALID_ROAD_MAP_DOCUMENT_FILE_TYPES = ('.pdf', '.txt', '.doc', '.docx', '.xls', '.xlsx', '.rtf')
+ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE = os.environ.get('ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE', False)

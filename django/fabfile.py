@@ -16,6 +16,7 @@ def dev():
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = ''
+    env.backup_root = '~/backup'
 
 
 def production():
@@ -28,6 +29,7 @@ def production():
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = '-live'
+    env.backup_root = '~/backup'
 
 
 def staging():
@@ -40,6 +42,7 @@ def staging():
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
     env.webpack_options = ''
+    env.backup_root = '~/backup'
 
 
 # COMMANDS #
@@ -89,7 +92,7 @@ def backup():
     local('tar -czvf ~/backup/dump`date +%d-%m-%Y`.sql.tar.gz ~/backup/dump`date +%d-%m-%Y`.sql')
     # Backup media files
     local('tar -czvf ~/backup/dump`date +%d-%m-%Y`.media.tar.gz media/')
-    backup_translation()
+    backup_translation_local()
 
 
 def deploy():
@@ -201,6 +204,10 @@ def test(app=""):
     local("docker-compose exec django ptw -- {} -s --testmon".format(app))
 
 
+def test_specific(specific_test=''):
+    local(f"docker-compose exec django py.test -s -k {specific_test}")
+
+
 def cov():
     local(
         "docker-compose exec django py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing"
@@ -297,4 +304,40 @@ def dump_model_translations():
 
 
 def backup_translation():
-    local("docker-compose exec django python manage.py backup_translation")
+    timestamp = time.strftime('%Y_%m_%d__%H_%M_%S', time.localtime())
+    backup_dir = 'backup_translations_{}'.format(timestamp)
+    backup_base_dir = '{}/{}'.format(env.backup_root, backup_dir)
+    run('mkdir {}'.format(backup_base_dir))
+
+    # gather project app directories
+    run('cp -R  {}/{}/country/locale {}/country'.format(env.project_root, env.backend_root, backup_base_dir))
+    run('cp -R  {}/{}/cms/locale {}/cms'.format(env.project_root, env.backend_root, backup_base_dir))
+    run('cp -R  {}/{}/search/locale {}/search'.format(env.project_root, env.backend_root, backup_base_dir))
+    run('cp -R  {}/{}/toolkit/locale {}/toolkit'.format(env.project_root, env.backend_root, backup_base_dir))
+
+    # gather locale and translations directories
+    run('cp -R  {}/{}/locale {}/locale'.format(env.project_root, env.backend_root, backup_base_dir))
+    run('cp -R  {}/{}/translations {}/translations'.format(env.project_root, env.backend_root, backup_base_dir))
+
+    run('tar -czvf ~/backup/{}.tar.gz {}'.format(backup_dir, backup_base_dir))
+    run('rm -r {}'.format(backup_base_dir))
+
+
+def backup_translation_local(django_dir):
+    timestamp = time.strftime('%Y_%m_%d__%H_%M_%S', time.localtime())
+    backup_dir = f'backup_translations_{timestamp}'
+    backup_base_dir = f'~/backup/{backup_dir}'
+    local(f'mkdir {backup_base_dir}')
+
+    # gather project app directories
+    local(f'cp -R  {django_dir}/country/locale {backup_base_dir}/country')
+    local(f'cp -R  {django_dir}/cms/locale {backup_base_dir}/cms')
+    local(f'cp -R  {django_dir}/search/locale {backup_base_dir}/search')
+    local(f'cp -R  {django_dir}/toolkit/locale {backup_base_dir}/toolkit')
+
+    # gather locale and translations directories
+    local(f'cp -R  {django_dir}/locale {backup_base_dir}/locale')
+    local(f'cp -R  {django_dir}/translations {backup_base_dir}/translations')
+
+    local(f'tar -czvf ~/backup/{backup_dir}.tar.gz {backup_base_dir}')
+    local(f'rm -r {backup_base_dir}')
