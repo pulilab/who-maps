@@ -51,6 +51,28 @@ export const actions = {
     await dispatch('system/loadOrganisations', {}, { root: true });
   },
 
+  async dorResetPassword ({ commit, dispatch }, { uid, token, new_password1, new_password2, errMessage = '' }) {
+    try {
+      await this.$axios.post('/api/rest-auth/password/reset/confirm/', { uid, token, new_password1, new_password2 });
+    } catch (error) {
+      if (error.response && error.response.data) {
+        const data = error.response.data;
+        if (!data.new_password1 && !data.new_password2) {
+          data.non_field_errors = [errMessage];
+        } else {
+          [1, 2].forEach(function (index) {
+            if (data['new_password' + index]) {
+              data['password' + index] = data['new_password' + index];
+              delete data['new_password' + index];
+            }
+          });
+        }
+        error.response.data = data;
+        throw error;
+      }
+    }
+  },
+
   doLogout ({ commit, dispatch }) {
     commit('SET_USER', null);
     commit('SET_PROFILE', null);
