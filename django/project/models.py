@@ -296,19 +296,6 @@ class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
-class ProjectImport(ExtendedModel):
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    csv = models.FileField()
-    headers = ArrayField(models.CharField(max_length=512), blank=True, null=True)
-    mapping = JSONField(default=dict)
-    imported = models.TextField(null=True, blank=True, default='')
-    failed = models.TextField(null=True, blank=True, default='')
-    status = models.NullBooleanField(null=True, blank=True)
-
-    def __str__(self):
-        return self.csv.name
-
-
 class ProjectImportV2(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     status = models.NullBooleanField(null=True, blank=True)  # TODO: maybe remove this
