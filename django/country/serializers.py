@@ -153,11 +153,15 @@ def can_read_private_questions(obj: Union[Country, Donor], request) -> bool:
     return request.user.is_superuser or obj.user_in_groups(request.user.userprofile)
 
 
+GDHI_FIELDS = ("total_population", "gni_per_capita", "life_expectancy", "health_expenditure",
+               "leadership_and_governance", "strategy_and_investment", "legislation_policy_compliance", "workforce",
+               "standards_and_interoperability", "infrastructure", "services_and_applications")
+
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
                   "footer_text", "partner_logos", "project_approval", "map_data", "map_version", "map_files",
-                  "map_activated_on", "country_questions", "lat", "lon")
+                  "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code")
 READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "logo_url", "cover", "cover_url", "map_version", "map_files",
-                            "map_activated_on", "country_questions", "lat", "lon")
+                            "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code")
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos", "project_approval",)
 
@@ -173,7 +177,7 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
 
     class Meta:
         model = Country
-        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
+        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins', 'gdhi_enabled')
         read_only_fields = READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS
 
     def update(self, instance, validated_data):
@@ -228,6 +232,12 @@ class CountrySerializer(SuperAdminCountrySerializer):
     class Meta(SuperAdminCountrySerializer.Meta):
         fields = COUNTRY_FIELDS
         read_only_fields = READ_ONLY_COUNTRY_FIELDS
+
+
+class CountryLandingSerializer(SuperAdminCountrySerializer):
+    class Meta(SuperAdminCountrySerializer.Meta):
+        fields = COUNTRY_FIELDS + GDHI_FIELDS
+        read_only_fields = READ_ONLY_COUNTRY_FIELDS + GDHI_FIELDS
 
 
 class CountryListSerializer(serializers.ModelSerializer):

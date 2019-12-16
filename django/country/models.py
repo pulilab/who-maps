@@ -1,14 +1,50 @@
+from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinLengthValidator
 from ordered_model.models import OrderedModel
 
+from country.tasks import update_gdhi_data_task
 from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
 from user.models import UserProfile
+
+
+class GDHI(models.Model):
+    PHASE_CHOICES = (
+        (1, _('Phase 1')),
+        (2, _('Phase 2')),
+        (3, _('Phase 3')),
+        (4, _('Phase 4')),
+        (5, _('Phase 5')),
+    )
+
+    alpha_3_code = models.CharField(max_length=3, blank=True, null=True)
+
+    total_population = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True,
+                                           verbose_name='Total population in Millions')
+    gni_per_capita = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True,
+                                         verbose_name='GNI per capita in Thousands')
+    life_expectancy = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True,
+                                          verbose_name='Life expectancy at birth (years)')
+    health_expenditure = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True,
+                                             verbose_name='Health expenditure (% of GDP)')
+
+    leadership_and_governance = models.PositiveSmallIntegerField(choices=PHASE_CHOICES, null=True, blank=True,)
+    strategy_and_investment = models.PositiveSmallIntegerField(choices=PHASE_CHOICES, null=True, blank=True,)
+    legislation_policy_compliance = models.PositiveSmallIntegerField(choices=PHASE_CHOICES, null=True, blank=True,)
+    workforce = models.PositiveSmallIntegerField(choices=PHASE_CHOICES, null=True, blank=True,)
+    standards_and_interoperability = models.PositiveSmallIntegerField(choices=PHASE_CHOICES, null=True, blank=True,)
+    infrastructure = models.PositiveSmallIntegerField(choices=PHASE_CHOICES, null=True, blank=True,)
+    services_and_applications = models.PositiveSmallIntegerField(choices=PHASE_CHOICES, null=True, blank=True,)
+
+    gdhi_enabled = models.BooleanField(default=True)
+
+    class Meta:
+        abstract = True
 
 
 class LandingPageCommon(ExtendedMultilingualModel):
@@ -51,7 +87,7 @@ class UserManagement(models.Model):
                self.users.filter(id=profile.id).exists()
 
 
-class Country(UserManagement, LandingPageCommon):
+class Country(UserManagement, LandingPageCommon, GDHI):
     REGIONS = [
         (0, _('African Region')),
         (1, _('Region of the Americas')),
@@ -83,6 +119,12 @@ def save_coordinates(sender, instance, **kwargs):
             instance.lon = instance.map_data['polylabel']['lng']
         except (TypeError, KeyError, ValueError):
             pass
+
+
+@receiver(post_save, sender=Country)
+def update_gdhi_data(sender, instance, created, **kwargs):
+    if instance.code and settings.ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE:
+        update_gdhi_data_task.apply_async((instance.code, True))
 
 
 class Donor(UserManagement, LandingPageCommon):
