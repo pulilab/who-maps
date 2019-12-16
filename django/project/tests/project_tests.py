@@ -988,11 +988,17 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, response.json())
 
     def test_technology_platform_create(self):
+        user = User.objects.create(username="test_user_100000", password="test_user_100000")
+        user_profile = UserProfile.objects.create(user=user, name="test_user_100000")
+
         data = {
             'name': 'test platform',
-            'state': TechnologyPlatform.APPROVED,
+            'state': TechnologyPlatform.APPROVED,  # should have no effect
+            'added_by': user_profile.id,  # should have no effect
         }
         url = reverse('technologyplatform-list')
         response = self.test_user_client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
-        self.assertEqual(response.json()['state'], TechnologyPlatform.PENDING)
+        data = response.json()
+        self.assertEqual(data['state'], TechnologyPlatform.PENDING)
+        self.assertEqual(data['added_by'], self.user_profile_id)
