@@ -4,9 +4,6 @@ from allauth.account import app_settings as allauth_settings
 from allauth.account.utils import complete_signup
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
-from django.template import loader
-from django.utils.translation import ugettext, override
 from rest_auth.app_settings import create_token
 from rest_auth.models import TokenModel
 from rest_auth.utils import jwt_encode
@@ -18,6 +15,7 @@ from rest_framework.validators import UniqueValidator
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
 
+from core.utils import send_mail_wrapper
 from country.models import CustomQuestion
 from project.utils import remove_keys
 from user.models import UserProfile
@@ -297,46 +295,31 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         new_team_members = [x for x in validated_data.get('team', []) if x not in instance.team.all()]
         new_viewers = [x for x in validated_data.get('viewers', []) if x not in instance.viewers.all()]
 
-        html_template = loader.get_template("email/master-inline.html")
-
         for profile in new_team_members:
-            with override(profile.language):
-                subject = ugettext("You have been added to a project in the Digital Health Atlas")
-                html_message = html_template.render({
-                    "type": "new_member",
-                    "user_name": profile.name,
-                    "project_id": instance.id,
-                    "project_name": instance.name,
-                    "role": "team member",
-                    "language": profile.language
-                })
-
-            send_mail(
-                subject=subject,
-                message="",
-                from_email=settings.FROM_EMAIL,
-                recipient_list=[profile.user.email],
-                html_message=html_message,
-                fail_silently=True)
+            context = {
+                "user_name": profile.name,
+                "project_id": instance.id,
+                "project_name": instance.name,
+                "role": "team member",
+            }
+            send_mail_wrapper(subject="You have been added to a project in the Digital Health Atlas",
+                              email_type="new_member",
+                              to=profile.user.email,
+                              language=profile.language,
+                              context=context)
 
         for profile in new_viewers:
-            with override(profile.language):
-                subject = ugettext("You have been added to a project in the Digital Health Atlas")
-                html_message = html_template.render({
-                    "type": "new_member",
-                    "user_name": profile.name,
-                    "project_id": instance.id,
-                    "project_name": instance.name,
-                    "role": "viewer",
-                    "language": profile.language
-                })
-            send_mail(
-                subject=subject,
-                message="",
-                from_email=settings.FROM_EMAIL,
-                recipient_list=[profile.user.email],
-                html_message=html_message,
-                fail_silently=True)
+            context = {
+                "user_name": profile.name,
+                "project_id": instance.id,
+                "project_name": instance.name,
+                "role": "viewer",
+            }
+            send_mail_wrapper(subject="You have been added to a project in the Digital Health Atlas",
+                              email_type="new_member",
+                              to=profile.user.email,
+                              language=profile.language,
+                              context=context)
 
 
 class MapProjectCountrySerializer(serializers.ModelSerializer):
