@@ -1,13 +1,14 @@
 from typing import Union
 
+from django.conf import settings
+from django.core import management
+from django.utils.dateformat import format
+from django.utils.translation import ugettext
+from django.db.transaction import atomic
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from django.utils.dateformat import format
-from django.db.transaction import atomic
 
 from core.utils import send_mail_wrapper
-from django.core import management
-from django.utils.translation import ugettext
 
 from user.models import UserProfile
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
