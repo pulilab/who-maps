@@ -159,7 +159,7 @@ GDHI_FIELDS = ("total_population", "gni_per_capita", "life_expectancy", "health_
 
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
                   "footer_text", "partner_logos", "project_approval", "map_data", "map_version", "map_files",
-                  "map_activated_on", "country_questions", "lat", "lon")
+                  "map_activated_on", "country_questions", "lat", "lon", "gdhi_enabled")
 READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "logo_url", "cover", "cover_url", "map_version", "map_files",
                             "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code")
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
@@ -177,8 +177,8 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
 
     class Meta:
         model = Country
-        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',) + GDHI_FIELDS
-        read_only_fields = READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + GDHI_FIELDS
+        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
+        read_only_fields = READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS
 
     def update(self, instance, validated_data):
         map_changed = 'map_data' in validated_data and instance.map_data != validated_data['map_data']
@@ -223,12 +223,18 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
 
 class AdminCountrySerializer(SuperAdminCountrySerializer):
     class Meta(SuperAdminCountrySerializer.Meta):
-        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',) + GDHI_FIELDS
+        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
         read_only_fields = READ_ONLY_COUNTRY_ADMIN_FIELDS + READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS \
-            + ('super_admins',) + GDHI_FIELDS
+            + ('super_admins',)
 
 
 class CountrySerializer(SuperAdminCountrySerializer):
+    class Meta(SuperAdminCountrySerializer.Meta):
+        fields = COUNTRY_FIELDS
+        read_only_fields = READ_ONLY_COUNTRY_FIELDS
+
+
+class CountryLandingSerializer(SuperAdminCountrySerializer):
     class Meta(SuperAdminCountrySerializer.Meta):
         fields = COUNTRY_FIELDS + GDHI_FIELDS
         read_only_fields = READ_ONLY_COUNTRY_FIELDS + GDHI_FIELDS

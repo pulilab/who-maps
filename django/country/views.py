@@ -23,12 +23,13 @@ from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
 from .serializers import CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, \
     PartnerLogoSerializer, DonorSerializer, SuperAdminDonorSerializer, AdminDonorSerializer, \
     DonorPartnerLogoSerializer, MapFileSerializer, CountryImageSerializer, DonorImageSerializer, \
-    DonorCustomQuestionSerializer, CountryCustomQuestionSerializer, CountryListSerializer, DonorListSerializer
+    DonorCustomQuestionSerializer, CountryCustomQuestionSerializer, CountryListSerializer, DonorListSerializer, \
+    CountryLandingSerializer
 
 
 class CountryLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.all()
-    serializer_class = CountrySerializer
+    serializer_class = CountryLandingSerializer
 
 
 class CountryLandingListPageViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
