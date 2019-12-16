@@ -939,9 +939,10 @@ class CountryTests(APITestCase):
         response = self.test_user_client.patch(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         # the values should be the same as before
-        self.assertEqual(response.json()['total_population'], None)
-        self.assertEqual(response.json()['gni_per_capita'], None)
-        self.assertEqual(response.json()['leadership_and_governance'], None)
+        country.refresh_from_db()
+        self.assertEqual(country.total_population, None)
+        self.assertEqual(country.gni_per_capita, None)
+        self.assertEqual(country.leadership_and_governance, None)
 
     @override_settings(COUNTRY_POST_SAVE_GDHI_UPDATE=True)
     @mock.patch('country.models.update_gdhi_data_task.apply_async')
