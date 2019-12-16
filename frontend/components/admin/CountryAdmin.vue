@@ -121,20 +121,22 @@
         <el-form-item>
           <div class="Switch-container">
             <filter-switch
-              v-model="GDIon"
+              v-model="GDHIEnabled"
               :label="$gettext('Global Digital Health Index') | translate"
               :tooltip="$gettext('Lorem ipsum') | translate"
             />
-            <label class="Right-label">
-              <fa icon="external-link-alt" />
-              <translate>Visit digitalhealthindex.org</translate>
+            <label>
+              <a :href="`https://index.digitalhealthindex.org//country_profile/${country.alpha_3_code || ''}`" target="_blank" class="Right-label">
+                <fa icon="external-link-alt" />
+                <translate>Visit digitalhealthindex.org</translate>
+              </a>
             </label>
           </div>
         </el-form-item>
         <el-form-item>
           <div class="Switch-container">
             <filter-switch
-              v-model="roadmapOn"
+              v-model="roadmapEnabled"
               :label="$gettext('Architecture roadmap documents') | translate"
               :tooltip="$gettext('Lorem ipsum2') | translate"
             />
@@ -156,9 +158,9 @@
     </collapsible-card>
 
     <collapsible-card
-      v-if="roadmapOn"
+      v-if="roadmapEnabled"
       :title="$gettext('Architecture roadmap documents') | translate"
-      class="CountryInformation"
+      class="RoadmapDocuments"
     >
       <el-form
         ref="document"
@@ -170,13 +172,15 @@
         <div
           v-for="(document, index) in documents"
           :key="index"
+          class="FileUploadContainer"
         >
           <el-form-item
             :label="$gettext('Document') | translate"
             prop="document"
           >
             <file-upload
-              :files.sync="document.document"
+              :files="document.document"
+              @update:files="selectDocumentFile($event, index)"
               :limit="1"
               :auto-upload="false"
               list-type="text"
@@ -186,7 +190,8 @@
             :label="$gettext('Title') | translate"
           >
             <el-input
-              v-model="document.title"
+              :value="document.title"
+              @input="changeDocumentTitle($event, index)"
               :maxlength="128"
               type="text"
             />
@@ -204,6 +209,16 @@
           </el-button>
         </div>
       </el-form>
+      <div class="Footer">
+        <p>
+          <fa icon="info-circle" />
+          <translate>About these documents: Quisque placerat facilisis egestas cillum dolore. Gallia est omnis divisa in partes tres, quarum.</translate>
+        </p>
+        <p>
+          <fa icon="info-circle" />
+          <translate>Allowed file formats: .pdf, .xls, .xlsx. Uploaded size is limited to 15MB. Max. number of uploaded files is 5.</translate>
+        </p>
+      </div>
     </collapsible-card>
 
     <collapsible-card
@@ -477,10 +492,7 @@ export default {
 
   data () {
     return {
-      GDIon: false,
-      roadmapOn: true,
       selectedPersona: 'G',
-      documents: [],
       logoError: '',
       coverError: '',
       flagForKeepingPartnerLogosError: false,
@@ -522,7 +534,9 @@ export default {
       coverText: ['admin/country', 'getCoverText', 'setCoverText'],
       footerTitle: ['admin/country', 'getFooterTitle', 'setFooterTitle'],
       footerText: ['admin/country', 'getFooterText', 'setFooterText'],
-      projectApproval: ['admin/country', 'getProjectApproval', 'setProjectApproval']
+      projectApproval: ['admin/country', 'getProjectApproval', 'setProjectApproval'],
+      GDHIEnabled: ['admin/country', 'getGDHIEnabled', 'setGDHIEnabled'],
+      roadmapEnabled: ['admin/country', 'getRoadmapEnabled', 'setRoadmapEnabled']
     }),
 
     ...mapGetters({
@@ -535,6 +549,9 @@ export default {
 
     documentList () {
       return this.documents.map(document => document.document);
+    },
+    documentTitleList () {
+      return this.documents.map(document => document.title);
     },
 
     notSCA () {
@@ -596,6 +613,15 @@ export default {
       }
     },
 
+    documents: {
+      get () {
+        return this.country.documents;
+      },
+      set (value) {
+        this.setDataField({ field: 'documents', data: value });
+      }
+    },
+
     users: {
       get () {
         return this.country.users || [];
@@ -640,9 +666,7 @@ export default {
 
   watch: {
     documentList (newDocs, oldDocs) {
-      console.log(newDocs, oldDocs);
       newDocs.forEach((doc, index) => {
-        // console.log(doc.length, oldDocs[index] ? oldDocs[index].length : 'empty');
         if (oldDocs[index] && oldDocs[index].length && doc.length === 0) {
           this.$delete(this.documents, index);
         }
@@ -724,10 +748,26 @@ export default {
         });
         return;
       }
-      this.documents.push({
+      this.documents = [...this.documents, {
         title: '',
         document: []
-      });
+      }];
+    },
+
+    selectDocumentFile (document, index) {
+      const newDocuments = [...this.documents];
+      if (document && !document.length) {
+        newDocuments.splice(index, 1);
+      } else {
+        newDocuments[index] = { ...newDocuments[index], document };
+      }
+      this.documents = newDocuments;
+    },
+
+    changeDocumentTitle (title, index) {
+      const newDocuments = [...this.documents];
+      newDocuments[index] = { ...newDocuments[index], title };
+      this.documents = newDocuments;
     },
 
     selectPersona (selected) {
@@ -760,11 +800,36 @@ export default {
   .CountryAdmin {
     margin-bottom: 60px;
 
+    .RoadmapDocuments {
+      .el-form .el-form-item {
+        margin-bottom: 20px;
+      }
+      .el-upload-list__item {
+        border-color: white;
+        transition: none;
+      }
+      .FileUploadContainer:not(:first-child) {
+        margin-top: 30px;
+        border-top: 1px solid #B9B9B9;
+        padding-top: 20px;
+      }
+      .Footer {
+        color: #6D6D6D;
+        line-height: @fontSizeLarge;
+        font-size: @fontSizeSmall;
+      }
+      svg {
+        color: #B9B9B9;
+        padding-right: 7.5px;
+      }
+    }
+
     .Switch-container {
       margin-top: -20px;
       display: flex;
       justify-content: space-between;
       .Right-label {
+        text-decoration: none;
         color: @colorBrandPrimary;
         font-weight: bold;
         cursor: pointer;
