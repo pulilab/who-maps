@@ -885,39 +885,6 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['options'], ['yes', 'maybe'])
 
-    @mock.patch('country.views.call_command')
-    def test_update_gdhi_data_success(self, call_command):
-        country = Country.objects.get(code='AF')
-        country.admins.add(self.test_user['user_profile_id'])
-
-        call_command.return_value = None
-        url = reverse("country-update-gdhi-data") + '?country_code=AF'
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        call_args_list = call_command.call_args_list
-        self.assertIn('gdhi', call_args_list[0][0])
-        self.assertEqual(call_args_list[0][1]['country_code'], 'AF')
-        self.assertEqual(call_args_list[0][1]['override'], True)
-
-    def test_update_gdhi_data_without_permission(self):
-        country = Country.objects.get(code='AF')
-        self.assertEqual(country.admins.count(), 0)
-
-        url = reverse("country-update-gdhi-data") + '?country_code=AF'
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_update_gdhi_without_country_code(self):
-        url = reverse("country-update-gdhi-data")
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_update_gdhi_data_with_invalid_country_code(self):
-        url = reverse("country-update-gdhi-data") + '?country_code=XXXX'
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_country_admin_tries_to_update_country_gdhi_data(self):
         user_profile = UserProfile.objects.get(id=self.test_user['user_profile_id'])
         user_profile.account_type = 'CA'
