@@ -159,9 +159,9 @@ GDHI_FIELDS = ("total_population", "gni_per_capita", "life_expectancy", "health_
 
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
                   "footer_text", "partner_logos", "project_approval", "map_data", "map_version", "map_files",
-                  "map_activated_on", "country_questions", "lat", "lon", "gdhi_enabled")
+                  "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code", "gdhi_enabled")
 READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "logo_url", "cover", "cover_url", "map_version", "map_files",
-                            "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code")
+                            "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code", "gdhi_enabled")
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos", "project_approval",)
 
