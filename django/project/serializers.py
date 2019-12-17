@@ -239,7 +239,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
 
     def perform_create(self, email):
         user = User.objects.create_user(username=email[:150], email=email)
-        UserProfile.objects.create(user=user, account_type=UserProfile.IMPLEMENTER)
+        profile = UserProfile.objects.create(user=user, account_type=UserProfile.IMPLEMENTER)
 
         if getattr(settings, 'REST_USE_JWT', False):
             self.token = jwt_encode(user)
