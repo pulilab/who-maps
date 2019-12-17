@@ -1,6 +1,7 @@
 import copy
 from datetime import datetime
 
+from allauth.account.models import EmailAddress
 from django.urls import reverse
 from rest_framework import status
 
@@ -608,6 +609,7 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(UserProfile.objects.count(), 1)
+        self.assertEqual(EmailAddress.objects.count(), 1)
         owner_id = response.json()['team'][0]
 
         groups = {
@@ -622,6 +624,7 @@ class ProjectTests(SetupTests):
         self.assertTrue(response.json()['viewers'])
         self.assertTrue(owner_id not in response.json()['team'])
         self.assertEqual(UserProfile.objects.count(), 3)
+        self.assertEqual(EmailAddress.objects.count(), 3)
 
         welcome_emails_count = 0
         for m in mail.outbox:
@@ -635,6 +638,13 @@ class ProjectTests(SetupTests):
                 notified_on_member_add_count += 1
                 self.assertTrue("new_email@yo.com" in m.to or "new_email@lol.ok" in m.to)
         self.assertEqual(notified_on_member_add_count, 2)
+
+        set_password_sent = 0
+        for m in mail.outbox:
+            if m.subject == "Set Your Password on Digital Health Atlas":
+                set_password_sent += 1
+                self.assertTrue("new_email@yo.com" in m.to or "new_email@lol.ok" in m.to)
+        self.assertEqual(set_password_sent, 2)
 
     def test_add_new_users_by_already_existing_email(self):
         url = reverse("project-groups", kwargs={"pk": self.project_id})
