@@ -12,7 +12,7 @@ from django.conf import settings
 
 from user.models import UserProfile
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
-    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion
+    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion, ArchitectureRoadMapDocument
 
 
 class OptionsValidatorMixin:
@@ -153,17 +153,48 @@ def can_read_private_questions(obj: Union[Country, Donor], request) -> bool:
     return request.user.is_superuser or obj.user_in_groups(request.user.userprofile)
 
 
+GDHI_FIELDS = ("total_population", "gni_per_capita", "life_expectancy", "health_expenditure",
+               "leadership_and_governance", "strategy_and_investment", "legislation_policy_compliance", "workforce",
+               "standards_and_interoperability", "infrastructure", "services_and_applications")
+
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
                   "footer_text", "partner_logos", "project_approval", "map_data", "map_version", "map_files",
-                  "map_activated_on", "country_questions", "lat", "lon")
+                  "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code", "documents")
 READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "logo_url", "cover", "cover_url", "map_version", "map_files",
-                            "map_activated_on", "country_questions", "lat", "lon")
+                            "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code", "documents")
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos", "project_approval",)
 
 
+class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArchitectureRoadMapDocument
+        fields = "__all__"
+
+    @staticmethod
+    def validate_document(value):
+        if value.size > settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE:
+            max_size_in_mb = round(settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE / 1024 / 1024)
+            raise ValidationError(f'The file exceeds the maximum allowed size: {max_size_in_mb} MB.')
+
+        if not value.name.lower().endswith(settings.VALID_ROAD_MAP_DOCUMENT_FILE_TYPES):
+            msg = ", ".join(settings.VALID_ROAD_MAP_DOCUMENT_FILE_TYPES)
+            raise ValidationError(f'Invalid file type. Allowed formats: {msg}')
+        return value
+
+    def validate(self, attrs):
+        if self.instance is None:
+            country = attrs.get('country')
+            if country and \
+                    country.documents.count() >= settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY:
+                raise ValidationError(
+                    f'The country already has {settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY} related road map documents')
+        return attrs
+
+
 class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer):
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
+    documents = ArchitectureRoadMapDocumentSerializer(many=True, read_only=True)
     country_questions = serializers.SerializerMethodField()
     map_version = serializers.SerializerMethodField()
     map_files = MapFileSerializer(many=True, read_only=True)
@@ -173,7 +204,8 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
 
     class Meta:
         model = Country
-        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
+        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',
+                                                          'gdhi_enabled', 'road_map_enabled')
         read_only_fields = READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS
 
     def update(self, instance, validated_data):
@@ -228,6 +260,12 @@ class CountrySerializer(SuperAdminCountrySerializer):
     class Meta(SuperAdminCountrySerializer.Meta):
         fields = COUNTRY_FIELDS
         read_only_fields = READ_ONLY_COUNTRY_FIELDS
+
+
+class CountryLandingSerializer(SuperAdminCountrySerializer):
+    class Meta(SuperAdminCountrySerializer.Meta):
+        fields = COUNTRY_FIELDS + GDHI_FIELDS
+        read_only_fields = READ_ONLY_COUNTRY_FIELDS + GDHI_FIELDS
 
 
 class CountryListSerializer(serializers.ModelSerializer):
