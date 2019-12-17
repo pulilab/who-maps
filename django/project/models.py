@@ -268,7 +268,7 @@ class TechnologyPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedMod
     )
 
     state = models.IntegerField(choices=SOFTWARE_STATES, default=APPROVED)
-    added_by = models.ForeignKey(UserProfile, null=True, on_delete=models.SET_NULL)
+    added_by = models.ForeignKey(UserProfile, blank=True, null=True, on_delete=models.SET_NULL)
 
 
 class Licence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
