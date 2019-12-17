@@ -4,6 +4,10 @@ from allauth.account import app_settings as allauth_settings
 from allauth.account.utils import complete_signup
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
 from rest_auth.app_settings import create_token
 from rest_auth.models import TokenModel
 from rest_auth.utils import jwt_encode
@@ -250,6 +254,21 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         complete_signup(self.context['request']._request, user,
                         allauth_settings.EMAIL_VERIFICATION,
                         None)
+
+        # Send set password email
+        current_site = get_current_site(self.context['request'])
+        context = {
+            'email': email,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+            'token': default_token_generator.make_token(user),
+            'protocol': 'https' if not settings.DEBUG else 'http'
+        }
+        send_mail_wrapper(subject="Set Your Password on Digital Health Atlas",
+                          email_type="password_invited",
+                          to=profile.user.email,
+                          language=profile.language,
+                          context=context)
         return user
 
     def save(self, **kwargs):
