@@ -490,7 +490,7 @@ class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, Gene
 
 
 class TechnologyPlatformViewSet(CreateModelMixin, ListModelMixin, GenericViewSet):
-    queryset = TechnologyPlatform.objects.all()
+    queryset = TechnologyPlatform.objects.filter(state__in=[TechnologyPlatform.APPROVED, TechnologyPlatform.PENDING])
     serializer_class = TechnologyPlatformListSerializer
     permission_classes = (IsAuthenticated,)
 

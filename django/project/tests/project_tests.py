@@ -1002,3 +1002,23 @@ class ProjectTests(SetupTests):
         data = response.json()
         self.assertEqual(data['state'], TechnologyPlatform.PENDING)
         self.assertEqual(data['added_by'], self.user_profile_id)
+
+    def test_technology_platform_list(self):
+        software_1 = TechnologyPlatform.objects.create(name='software approved', state=TechnologyPlatform.APPROVED)
+        software_2 = TechnologyPlatform.objects.create(name='software pending', state=TechnologyPlatform.PENDING)
+        software_3 = TechnologyPlatform.objects.create(name='software declined', state=TechnologyPlatform.DECLINED)
+
+        url = reverse('technologyplatform-list')
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        data = response.json()
+        for software in data:
+            self.assertIn(software['state'], [TechnologyPlatform.APPROVED, TechnologyPlatform.PENDING])
+        ids = [software['id'] for software in data]
+        self.assertIn(software_1.id, ids)
+        self.assertIn(software_2.id, ids)
+        self.assertNotIn(software_3.id, ids)
+
+        software_1.delete()
+        software_2.delete()
+        software_3.delete()
