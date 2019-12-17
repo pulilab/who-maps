@@ -1,7 +1,9 @@
 <template>
-<div>
+  <div>
     <!-- default -->
-    <default v-show="(image === false) && (description === false) && (gdhi === false) && (documentation === false)">
+    <default
+      v-show="image === false && description === false && gdhi === false && documents === false"
+    >
       <template v-slot:left>
         <w-default />
       </template>
@@ -12,7 +14,7 @@
 
     <!-- description (only) -->
     <default
-      v-show="(image === false) && (description === true) && (gdhi === false) && (documentation === false)"
+      v-show="image === false && description === true && gdhi === false && documents === false"
       :gutter="20"
       classes="pb-0"
     >
@@ -25,7 +27,7 @@
     </default>
 
     <default
-      v-show="(image === false) && (description === true) && (gdhi === false) && (documentation === false)"
+      v-show="image === false && description === true && gdhi === false && documents === false"
       inverse
       classes="pt-20"
     >
@@ -39,10 +41,11 @@
 
     <!-- image (only) -->
     <default
-      v-show="(image === true) && (description === false) && (gdhi === false) && (documentation === false)"
+      v-show="image === true && description === false && gdhi === false && documents === false"
       inverse
       :cols="[10, 14]"
-      :gutter="20">
+      :gutter="20"
+    >
       <template v-slot:left>
         <w-default vertical />
       </template>
@@ -53,8 +56,9 @@
 
     <!-- image, description (only) -->
     <default
-      v-show="(image === true) && (description === true) && (gdhi === false) && (documentation === false)"
-      :gutter="20">
+      v-show="image === true && description === true && gdhi === false && documents === false"
+      :gutter="20"
+    >
       <template v-slot:lefttop>
         <w-description :description="data.cover_text" />
       </template>
@@ -68,8 +72,9 @@
 
     <!-- image, description, stats (complete or partial) (only) -->
     <default
-      v-show="(image === true) && (description === true) && (gdhi === true) && (documentation === false)"
-      :gutter="20">
+      v-show="image === true && description === true && gdhi === true && documents === false"
+      :gutter="20"
+    >
       <template v-slot:lefttop>
         <w-description :description="data.cover_text" />
       </template>
@@ -77,14 +82,15 @@
         <w-image :url="data.cover_url" />
       </template>
       <template v-slot:right>
-        <w-stats :stats="stats"/>
+        <w-stats :stats="stats" :simple="simpleStats" />
       </template>
     </default>
 
     <!-- image, description, documents (only) -->
     <default
-      v-show="(image === true) && (description === true) && (gdhi === false) && (documentation === true)"
-      :gutter="20">
+      v-show="image === true && description === true && gdhi === false && documents === true"
+      :gutter="20"
+    >
       <template v-slot:lefttop>
         <w-description :description="data.cover_text" />
       </template>
@@ -92,13 +98,13 @@
         <w-image :url="data.cover_url" />
       </template>
       <template v-slot:right>
-        <w-documents :documents="documents"/>
+        <w-documents :documents="data.documents" />
       </template>
     </default>
 
     <!-- description, image, stats (complete or partial), documents -->
     <three-columns
-      v-show="(image === true) && (description === true) && (gdhi === true) && (documentation === true)"
+      v-show="image === true && description === true && gdhi === true && documents === true"
     >
       <template v-slot:lefttop>
         <w-description :description="data.cover_text" />
@@ -107,16 +113,16 @@
         <w-image :url="data.cover_url" />
       </template>
       <template v-slot:middle>
-        <w-stats :stats="stats"/>
+        <w-stats :stats="stats" :simple="simpleStats" />
       </template>
       <template v-slot:right>
-        <w-documents :documents="documents"/>
+        <w-documents :documents="data.documents" />
       </template>
     </three-columns>
 
     <!-- description, stats (complete or partial), documents -->
     <three-columns
-      v-show="(image === false) && (description === true) && (gdhi === true) && (documentation === true)"
+      v-show="image === false && description === true && gdhi === true && documents === true"
     >
       <template v-slot:lefttop>
         <w-description :description="data.cover_text" />
@@ -125,16 +131,16 @@
         <img :src="default2" />
       </template>
       <template v-slot:middle>
-        <w-stats :stats="stats"/>
+        <w-stats :stats="stats" :simple="simpleStats" />
       </template>
       <template v-slot:right>
-        <w-documents :documents="documents"/>
+        <w-documents :documents="data.documents" />
       </template>
     </three-columns>
 
     <!-- image, stats (complete or partial), documents -->
     <three-columns
-      v-show="(image === true) && (description === false) && (gdhi === true) && (documentation === true)"
+      v-show="image === true && description === false && gdhi === true && documents === true"
     >
       <template v-slot:lefttop>
         <img :src="data.cover_url" />
@@ -143,51 +149,64 @@
         <w-default vertical />
       </template>
       <template v-slot:middle>
-        <w-stats :stats="stats"/>
+        <w-stats :stats="stats" :simple="simpleStats" />
       </template>
       <template v-slot:right>
-        <w-documents :documents="documents"/>
+        <w-documents :documents="data.documents" />
       </template>
     </three-columns>
 
     <!-- stats (complete or partial), documents -->
     <three-columns
-      v-show="(image === false) && (description === false) && (gdhi === true) && (documentation === true)"
+      v-show="image === false && description === false && gdhi === true && documents === true"
     >
       <template v-slot:left>
         <w-default vertical :url="default1" />
       </template>
       <template v-slot:middle>
-        <w-stats :stats="stats"/>
+        <w-stats :stats="stats" :simple="simpleStats" />
       </template>
       <template v-slot:right>
-        <w-documents :documents="documents"/>
+        <w-documents :documents="data.documents" />
       </template>
     </three-columns>
 
     <!-- stats (complete or partial) only -->
     <default
-      v-show="(image === false) && (description === false) && (gdhi === true) && (documentation === false)"
+      v-show="image === false && description === false && gdhi === true && documents === false"
       :gutter="20"
     >
       <template v-slot:left>
         <w-default vertical :url="default1" />
       </template>
       <template v-slot:right>
-        <w-stats :stats="stats"/>
+        <w-stats :stats="stats" :simple="simpleStats" />
       </template>
     </default>
 
     <!-- documents only -->
     <default
-      v-show="(image === false) && (description === false) && (gdhi === false) && (documentation === true)"
+      v-show="image === false && description === false && gdhi === false && documents === true"
       :gutter="20"
     >
       <template v-slot:left>
         <w-default vertical :url="default1" />
       </template>
       <template v-slot:right>
-        <w-documents :documents="documents"/>
+        <w-documents :documents="data.documents" />
+      </template>
+    </default>
+
+    <!-- image and stats only -->
+    <default
+      v-show="image === true && description === false && gdhi === true && documents === false"
+      :gutter="20"
+    >
+      <template v-slot:left>
+        <img :src="data.cover_url" />
+      </template>
+      <template v-slot:right>
+        <w-documents :documents="data.documents" />
       </template>
     </default>
   </div>
@@ -202,7 +221,6 @@ import WDefault from '@/components/country/widgets/WDefault';
 import WImage from '@/components/country/widgets/WImage';
 import WDocuments from '@/components/country/widgets/WDocuments';
 import WStats from '@/components/country/widgets/WStats';
-// import { mapGetters } from 'vuex';
 
 // images
 import default1 from '~/assets/img/default/whyusedha-new.jpg';
@@ -227,11 +245,7 @@ export default {
   data() {
     return {
       default1,
-      default2,
-      documents: [
-        { id: 1, title: 'document 1'},
-        { id: 2, title: 'document 2'}
-      ]
+      default2
     }
   },
     computed: {
@@ -244,20 +258,59 @@ export default {
     gdhi () {
       return this.data.gdhi_enabled;
     },
-    documentation () {
-      return false;
+    documents () {
+      return this.data.documents.length > 0;
+    },
+    simpleStats () {
+      const {
+        leadership_and_governance,
+        strategy_and_investment,
+        legislation_policy_compliance,
+        workforce,
+        standards_and_interoperability,
+        infrastructure,
+        services_and_applications
+      } = this.data
+
+      if (
+        leadership_and_governance !== null
+        || strategy_and_investment !== null
+        || legislation_policy_compliance !== null
+        || workforce !== null
+        || standards_and_interoperability !== null
+        || infrastructure !== null
+        || services_and_applications !== null
+      ) {
+        return false
+      }
+      return true;
     },
     stats () {
+      const {
+        name,
+        leadership_and_governance,
+        strategy_and_investment,
+        legislation_policy_compliance,
+        workforce,
+        standards_and_interoperability,
+        infrastructure,
+        services_and_applications,
+        gni_per_capita,
+        total_population,
+        life_expectancy,
+        health_expenditure
+      } = this.data
+
       return {
-        name: this.data.name,
+        name: name,
         phases: [
-          { title: 'leadership and governance', phase: this.data.leadership_and_governance },
-          { title: 'strategy and investment', phase: this.data.strategy_and_investment },
-          { title: 'legislation policy compliance', phase: this.data.legislation_policy_compliance },
-          { title: 'workforce', phase: this.data.workforce },
-          { title: 'standards and interoperability', phase: this.data.standards_and_interoperability },
-          { title: 'infrastructure', phase: this.data.infrastructure },
-          { title: 'services and applications', phase: this.data.services_and_applications }
+          { title: 'leadership and governance', phase: leadership_and_governance },
+          { title: 'strategy and investment', phase: strategy_and_investment },
+          { title: 'legislation policy compliance', phase: legislation_policy_compliance },
+          { title: 'workforce', phase: workforce },
+          { title: 'standards and interoperability', phase: standards_and_interoperability },
+          { title: 'infrastructure', phase: infrastructure },
+          { title: 'services and applications', phase: services_and_applications }
         ],
         groups: [
           {
@@ -265,24 +318,24 @@ export default {
             metrics : [
               {
                 measure: 'GNI PER CAPITA, ATLAS METHOD (CURRENT US$)',
-                value: `${this.data.gni_per_capita}K`
+                value: gni_per_capita === null ? 'N/A' : `${gni_per_capita}K`
               },
               {
                 measure: 'TOTAL POPULATION',
-                value: `${this.data.total_population}M`
+                value: total_population === null ? 'N/A' :  `${total_population}M`
               }
             ]
           },
-                    {
+          {
             title: 'Health',
             metrics : [
               {
                 measure: 'LIFE EXPECTANCY AT BIRTH (YEARS)',
-                value: this.data.life_expectancy
+                value: life_expectancy === null ? 'N/A' : life_expectancy
               },
               {
                 measure: 'HEALTH EXPENDITURE (% OF GDP)',
-                value: `${this.data.health_expenditure}%`
+                value: health_expenditure === null ? 'N/A' : `${health_expenditure}%`
               }
             ]
           }
@@ -292,70 +345,58 @@ export default {
   },
   mounted() {
     console.log(this.data)
-    // gdhi_enabled: true
-    // numbers
-    // total_population: null
-    // gni_per_capita: null
-    // life_expectancy: null
-    // health_expenditure: null
-    // phases
-    // leadership_and_governance: null
-    // strategy_and_investment: null
-    // legislation_policy_compliance: null
-    // workforce: null
-    // standards_and_interoperability: null
-    // infrastructure: null
-    // services_and_applications: null
-  },
+  }
 };
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
+@import "../../assets/style/variables.less";
 
-  .matrix-layout {
+.matrix-layout {
+  &.pb-0 {
+    padding-bottom: 0px !important;
+  }
+  &.el-row {
+    padding: 40px;
+    align-items: stretch;
+    flex-wrap: wrap;
+    .el-col {
+      &.mb {
+        margin-bottom: 20px;
+      }
+      overflow: hidden;
+    }
     &.pb-0 {
-      padding-bottom: 0px!important;
+      padding-bottom: 0px !important;
     }
-    &.el-row {
-      padding: 40px;
-      align-items: stretch;
-      flex-wrap: wrap;
-      .el-col {
-        &.mb {
-          margin-bottom: 20px;
-        }
-        overflow: hidden;
-      }
-      &.pb-0 {
-        padding-bottom: 0px!important;
-      }
-      &.pt-20 {
-        padding-top: 20px!important;
-      }
-    }
-    .fill{
-      height: 100%;
-    }
-    img {
-      width: 100%;
-      background-color: white;
-    }
-    .grid-content {
-      background: #fff;
-      min-height: 50px;
-      height: 100%;
-      padding: 40px;
-      p {
-        font-size: @fontSizeBase;
-        line-height: 21px;
-        color: @colorTextPrimary;
-        margin: 0 0 20px;
-      }
-      h1, h3, h2 {
-        color: @colorTextPrimary;
-        margin: 0 0 20px;
-      }
+    &.pt-20 {
+      padding-top: 20px !important;
     }
   }
+  .fill {
+    height: 100%;
+  }
+  img {
+    width: 100%;
+    background-color: white;
+  }
+  .grid-content {
+    background: #fff;
+    min-height: 50px;
+    height: 100%;
+    padding: 40px;
+    p {
+      font-size: @fontSizeBase;
+      line-height: 21px;
+      color: @colorTextPrimary;
+      margin: 0 0 20px;
+    }
+    h1,
+    h3,
+    h2 {
+      color: @colorTextPrimary;
+      margin: 0 0 20px;
+    }
+  }
+}
 </style>

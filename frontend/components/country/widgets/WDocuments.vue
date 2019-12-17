@@ -1,18 +1,18 @@
 <template>
   <div class="grid-content">
-    <h3>Architecture roadmap documents</h3>
+    <h3><translate>Architecture roadmap documents</translate></h3>
     <p>
-      Non equidem invideo, miror magis posuere velit aliquet. Donec sed odio operae, eu vulputate felis rhoncus. Petierunt uti sibi concilium totius Galliae in diem certam indicere.
-      <nuxt-link to="example">Read more »</nuxt-link>
+      <translate>Non equidem invideo, miror magis posuere velit aliquet. Donec sed odio operae, eu vulputate felis rhoncus. Petierunt uti sibi concilium totius Galliae in diem certam indicere.</translate>
+      <nuxt-link to="example"><translate>Read more</translate> »</nuxt-link>
     </p>
 
-    <div v-for="doc in documents" :key="doc.id" class="doc">
+    <div v-for="(doc, i) in documents" :key="i" class="doc">
       <p class="title">
-        <a href="/images/myw3schoolsimage.jpg" download>
+        <a :href="doc.document" download target="_blank">
           {{doc.title}} <fa icon="download" />
         </a>
       </p>
-      <p class="details">pdf — 558 kb</p>
+      <!-- <p class="details">pdf — 558 kb</p> -->
     </div>
 
   </div>

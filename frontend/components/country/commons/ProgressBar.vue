@@ -1,7 +1,7 @@
 <template>
   <div class="bar">
     <div :class="`progress phase-${phase}`">
-      <span>Phase {{ phase }}</span>
+      <span><translate>Phase</translate> {{ phase }}</span>
     </div>
   </div>
 </template>
@@ -34,7 +34,7 @@ export default {
       height: 16px;
       border-radius: 25px;
       background-color: #008DC9;
-      span {
+      > span {
         color: white;
         font-size: 11px;
         font-weight: 700;

@@ -1,28 +1,30 @@
 <template>
   <div class="grid-content">
-    <h3>State of Digital Health in {{ stats.name }} </h3>
+    <h3><translate>State of Digital Health in</translate> {{ stats.name }} </h3>
 
     <div v-if="!simple" class="phases">
-      <el-row v-for="(phase, i) in stats.phases" :key="i" v-if="phase.phase !== null">
-        <p>{{ phase.title }}</p>
-        <progress-bar :phase="phase.phase" />
-      </el-row>
+      <template v-for="(phase, i) in stats.phases" >
+        <el-row v-if="phase.phase !== null" :key="i">
+          <p><translate>{{ phase.title }}</translate></p>
+          <progress-bar :phase="phase.phase" />
+        </el-row>
+      </template>
     </div>
 
     <el-row v-for="(group, i) in stats.groups" :key="i" :class="`number-info ${simple ? 'simple' : ''}`">
-      <p><b>{{ group.title }}</b></p>
+      <p><b><translate>{{ group.title }}</translate></b></p>
       <el-col v-for="(metric, k) in group.metrics" :key="k" :span="simple ? 24 : 12">
         <h3>{{metric.value}}</h3>
-        <p>{{metric.measure}}</p>
+        <p><translate>{{metric.measure}}</translate></p>
       </el-col>
     </el-row>
 
     <footer>
-      <p>Disclaimer: State of Digital Health data is sourced</p>
-      <p>from the Global Digital Health Index.</p>
+      <p><translate>Disclaimer: State of Digital Health data is sourced</translate></p>
+      <p><translate>from the Global Digital Health Index.</translate></p>
       <p>
-        <a href="/images/myw3schoolsimage.jpg" target="_blank">
-          Visit digitalhealthindex.org
+        <a href="https://www.digitalhealthindex.org/" target="_blank">
+          <translate>Visit digitalhealthindex.org</translate>
         </a>
       </p>
     </footer>
@@ -81,6 +83,30 @@ export default {
         font-size: 10px;
         text-transform: uppercase;
         padding: 0 10%;
+        max-width: 180px;
+        margin-left: auto!important;
+        margin-right: auto!important;
+      }
+    }
+    &.simple {
+      border-bottom: 1px solid #E0E0E0;
+      &:first-of-type {
+        margin-top: 40px;
+      }
+      &:last-of-type {
+        border-bottom: none;
+      }
+      p {
+        font-size: 18px;
+      }
+      .el-col{
+        margin-bottom: 40px;
+        h3 {
+          font-size: 24px;
+        }
+        p {
+          font-size: 12px;
+        }
       }
     }
   }
