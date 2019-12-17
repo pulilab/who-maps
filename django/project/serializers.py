@@ -253,7 +253,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         send_mail_wrapper(subject="Set Your Password on Digital Health Atlas",
                           email_type="password_invited",
                           to=user.email,
-                          language=user.profile.language,
+                          language=user.userprofile.language,
                           context=context)
 
     def perform_create(self, email):
