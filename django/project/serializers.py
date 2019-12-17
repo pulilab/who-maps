@@ -242,7 +242,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         read_only_fields = ("id",)
 
     def send_set_password_email(self, user, request):
-        current_site = get_current_site(self.context['request'])
+        current_site = get_current_site(request)
         context = {
             'email': user.email,
             'domain': current_site.domain,
