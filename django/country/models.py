@@ -13,6 +13,13 @@ from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteMode
 from user.models import UserProfile
 
 
+class ArchitectureRoadMap(models.Model):
+    road_map_enabled = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
 class GDHI(models.Model):
     PHASE_CHOICES = (
         (1, _('Phase 1')),
@@ -87,7 +94,7 @@ class UserManagement(models.Model):
                self.users.filter(id=profile.id).exists()
 
 
-class Country(UserManagement, LandingPageCommon, GDHI):
+class Country(UserManagement, LandingPageCommon, GDHI, ArchitectureRoadMap):
     REGIONS = [
         (0, _('African Region')),
         (1, _('Region of the Americas')),
@@ -123,8 +130,14 @@ def save_coordinates(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Country)
 def update_gdhi_data(sender, instance, created, **kwargs):
-    if instance.code and settings.COUNTRY_POST_SAVE_GDHI_UPDATE:
+    if instance.code and settings.ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE:
         update_gdhi_data_task.apply_async((instance.code, True))
+
+
+class ArchitectureRoadMapDocument(models.Model):
+    country = models.ForeignKey(Country, related_name='documents', on_delete=models.CASCADE)
+    title = models.CharField(max_length=128)
+    document = models.FileField(null=True, upload_to='documents/')
 
 
 class Donor(UserManagement, LandingPageCommon):

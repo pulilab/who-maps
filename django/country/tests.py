@@ -1,4 +1,6 @@
 import os
+import random
+import string
 from copy import copy
 from country.tasks import update_gdhi_data_task
 from datetime import datetime
@@ -8,6 +10,7 @@ from unittest.mock import patch
 
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
 from django.urls import reverse
 from django.utils.translation import override
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -25,7 +28,7 @@ from rest_framework.test import APITestCase
 
 from core.tests import get_temp_image
 from country.admin import CountryAdmin
-from country.models import Country, PartnerLogo, Donor, DonorPartnerLogo, CustomQuestion
+from country.models import Country, PartnerLogo, Donor, DonorPartnerLogo, CustomQuestion, ArchitectureRoadMapDocument
 from project.models import TechnologyPlatform, DigitalStrategy
 from user.models import UserProfile, Organisation
 from django.utils.six import StringIO
@@ -885,38 +888,115 @@ class CountryTests(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['options'], ['yes', 'maybe'])
 
-    @mock.patch('country.views.call_command')
-    def test_update_gdhi_data_success(self, call_command):
-        country = Country.objects.get(code='AF')
-        country.admins.add(self.test_user['user_profile_id'])
+    def test_list_road_map_documents_for_a_country(self):
+        country = Country.objects.first()
+        country.super_admins.add(self.test_user['user_profile_id'])
 
-        call_command.return_value = None
-        url = reverse("country-update-gdhi-data") + '?country_code=AF'
+        self.assertEqual(country.documents.count(), 0)
+
+        for i in range(2):
+            ArchitectureRoadMapDocument.objects.create(
+                country=country,
+                title=f'test {i}',
+                document=ContentFile('test_content', name=f'test_file_{i}.txt')
+            )
+        self.assertEqual(country.documents.count(), 2)
+
+        url = reverse('country-detail', args=[country.id])
         response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(len(response.json()['documents']), 2)
 
-        call_args_list = call_command.call_args_list
-        self.assertIn('gdhi', call_args_list[0][0])
-        self.assertEqual(call_args_list[0][1]['country_code'], 'AF')
-        self.assertEqual(call_args_list[0][1]['override'], True)
+    def test_upload_road_map_document_success(self):
+        country = Country.objects.first()
+        country.super_admins.add(self.test_user['user_profile_id'])
 
-    def test_update_gdhi_data_without_permission(self):
-        country = Country.objects.get(code='AF')
+        road_map_file = SimpleUploadedFile("test_file.txt", b"test_content")
+        url = reverse('architecture-roadmap-document-list')
+        data = {
+            'country': country.id,
+            'title': 'test document',
+            'document': road_map_file,
+        }
+        response = self.test_user_client.post(url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        data = response.json()
+        self.assertEqual(data['country'], country.id)
+        self.assertEqual(data['title'], 'test document')
+        self.assertIn(road_map_file.name, data['document'])
+
+    def test_upload_road_map_document_without_permission(self):
+        country = Country.objects.first()
+
         self.assertEqual(country.admins.count(), 0)
+        self.assertEqual(self.test_user['is_superuser'], False)
 
-        url = reverse("country-update-gdhi-data") + '?country_code=AF'
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        url = reverse('architecture-roadmap-document-list')
+        data = {
+            'country': country.id,
+            'title': 'test document',
+            'document': SimpleUploadedFile("test_file.txt", b"test_content"),
+        }
+        response = self.test_user_client.post(url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN, response.json())
 
-    def test_update_gdhi_without_country_code(self):
-        url = reverse("country-update-gdhi-data")
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    def test_upload_road_map_document_with_invalid_extension(self):
+        country = Country.objects.first()
+        country.super_admins.add(self.test_user['user_profile_id'])
 
-    def test_update_gdhi_data_with_invalid_country_code(self):
-        url = reverse("country-update-gdhi-data") + '?country_code=XXXX'
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        url = reverse('architecture-roadmap-document-list')
+        data = {
+            'country': country.id,
+            'title': 'test document',
+            'document': SimpleUploadedFile("test_file.abc", b"test_content"),
+        }
+        response = self.test_user_client.post(url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
+        self.assertEqual(
+            response.json(),
+            {'document': ['Invalid file type. Allowed formats: .pdf, .txt, .doc, .docx, .xls, .xlsx, .rtf']}
+        )
+
+    @override_settings(MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE=1024 * 1024)  # 1 MB
+    def test_upload_too_big_road_map_document(self):
+        letters = string.ascii_lowercase
+        content = ''.join(random.choice(letters) for _ in range(settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE + 10))
+        road_map_file = SimpleUploadedFile("test_file.txt", content.encode())
+
+        country = Country.objects.first()
+        country.super_admins.add(self.test_user['user_profile_id'])
+
+        url = reverse('architecture-roadmap-document-list')
+        data = {
+            'country': country.id,
+            'title': 'test document',
+            'document': road_map_file,
+        }
+        response = self.test_user_client.post(url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
+        self.assertEqual(response.json(), {'document': ['The file exceeds the maximum allowed size: 1 MB.']})
+
+    @override_settings(MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY=2)
+    def test_upload_too_many_road_map_documents(self):
+        country = Country.objects.first()
+        country.super_admins.add(self.test_user['user_profile_id'])
+        url = reverse('architecture-roadmap-document-list')
+
+        data = {'country': country.id, }
+        # document upload should work within the limit
+        for i in range(settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY):
+            data['document'] = SimpleUploadedFile(f"test_file_{i}.txt", b"test_content")
+            data['title'] = f'test document {i}'
+            response = self.test_user_client.post(url, data, format='multipart')
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        # next upload should fail
+        data['document'] = SimpleUploadedFile(f"test_file_100.txt", b"test_content")
+        data['title'] = f'test document 100'
+        response = self.test_user_client.post(url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
+        self.assertEqual(
+            response.json(), {'non_field_errors': ['The country already has 2 related road map documents']})
 
     def test_country_admin_tries_to_update_country_gdhi_data(self):
         user_profile = UserProfile.objects.get(id=self.test_user['user_profile_id'])
@@ -944,7 +1024,7 @@ class CountryTests(APITestCase):
         self.assertEqual(country.gni_per_capita, None)
         self.assertEqual(country.leadership_and_governance, None)
 
-    @override_settings(COUNTRY_POST_SAVE_GDHI_UPDATE=True)
+    @override_settings(ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE=True)
     @mock.patch('country.models.update_gdhi_data_task.apply_async')
     def test_update_gdhi_called_in_post_save(self, update_gdhi_task):
         update_gdhi_task.return_value = None

@@ -2,7 +2,8 @@ from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
 from country.views import CountryViewSet, PartnerLogoViewSet, DonorViewSet, DonorPartnerLogoViewSet, \
     MapFileViewSet, CountryImageViewSet, DonorImageViewSet, CountryLandingPageViewSet, DonorLandingPageViewSet, \
-    CountryCustomQuestionViewSet, DonorCustomQuestionViewSet, CountryLandingListPageViewSet, DonorLandingListPageViewSet
+    CountryCustomQuestionViewSet, DonorCustomQuestionViewSet, CountryLandingListPageViewSet, \
+    DonorLandingListPageViewSet, ArchitectureRoadMapDocumentViewSet
 from . import views
 
 router = DefaultRouter()
@@ -19,6 +20,8 @@ router.register(r'country-images', CountryImageViewSet, base_name='country-image
 router.register(r'donor-images', DonorImageViewSet, base_name='donor-image')
 router.register(r'country-custom-questions', CountryCustomQuestionViewSet, base_name='country-custom-questions')
 router.register(r'donor-custom-questions', DonorCustomQuestionViewSet, base_name='donor-custom-questions')
+router.register(r'architecture-roadmap-document', ArchitectureRoadMapDocumentViewSet,
+                base_name='architecture-roadmap-document')
 
 urlpatterns = [
                   url(r'^countries/export/$',

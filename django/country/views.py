@@ -1,6 +1,5 @@
 import pycountry
 import requests
-from django.core.management import call_command
 
 from requests import RequestException
 from django.conf import settings
@@ -19,12 +18,12 @@ from project.models import TechnologyPlatform
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
-    CountryCustomQuestion, DonorCustomQuestion
+    CountryCustomQuestion, DonorCustomQuestion, ArchitectureRoadMapDocument
 from .serializers import CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, \
     PartnerLogoSerializer, DonorSerializer, SuperAdminDonorSerializer, AdminDonorSerializer, \
     DonorPartnerLogoSerializer, MapFileSerializer, CountryImageSerializer, DonorImageSerializer, \
     DonorCustomQuestionSerializer, CountryCustomQuestionSerializer, CountryListSerializer, DonorListSerializer, \
-    CountryLandingSerializer
+    ArchitectureRoadMapDocumentSerializer, CountryLandingSerializer
 
 
 class CountryLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -83,26 +82,6 @@ class CountryViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateM
                     or self.request.user.is_superuser:
                 return SuperAdminCountrySerializer
         return super().get_serializer_class()
-
-    @action(methods=['get'], detail=False)
-    def update_gdhi_data(self, request):
-        country_code = request.query_params.get('country_code')
-        if country_code:
-            try:
-                country = Country.objects.get(code=country_code)
-            except Country.DoesNotExist:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-            else:
-                profile = request.user.userprofile
-                if (profile not in country.admins.all()) and (profile not in country.super_admins.all()) and \
-                        not request.user.is_superuser:
-                    return Response(status=status.HTTP_403_FORBIDDEN)
-                call_command('gdhi', country_code=country_code, override=True)
-                country.refresh_from_db()
-                serializer_class = self.get_serializer_class()
-                serializer = serializer_class(country, context={'request': request})
-                return Response(status=status.HTTP_200_OK, data=serializer.data)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class DonorViewSet(AdminPermissionMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin,
@@ -225,3 +204,10 @@ class DonorCustomQuestionViewSet(SetOrderToMixin, mixins.CreateModelMixin, mixin
                                  mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = DonorCustomQuestion.objects.all()
     serializer_class = DonorCustomQuestionSerializer
+
+
+class ArchitectureRoadMapDocumentViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                                         viewsets.GenericViewSet):
+    queryset = ArchitectureRoadMapDocument.objects.all()
+    serializer_class = ArchitectureRoadMapDocumentSerializer
+    permission_classes = (InCountrySuperAdmin,)
