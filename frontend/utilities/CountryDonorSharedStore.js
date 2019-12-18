@@ -1,4 +1,5 @@
 import { Message } from 'element-ui';
+import {is} from "vee-validate/dist/rules.esm"
 
 // export const state = () => ({
 //   id: Number // countryId || donorId
@@ -23,7 +24,7 @@ export const getters = () => ({
 
   getUserSelection: state => state.userSelection,
   getAdminSelection: state => state.adminSelection,
-  getSuperadminSelection: state => state.superadminSelection
+  getSuperadminSelection: state => state.superadminSelection,
 });
 
 export const actions = () => ({
@@ -177,13 +178,13 @@ export const actions = () => ({
   async synchPartnerLogos ({ getters, dispatch }) {
     const promArr = [];
 
-    (getters.getData.partner_logos || []).forEach(async logo => {
+    (getters.getData.partner_logos || []).forEach(logo => {
       if (logo.raw) {
         promArr.push({ action: 'postPartnerLogo', data: { img: logo.raw } });
       }
     });
 
-    (getters.getStableData.partner_logos || []).forEach(async logo => {
+    (getters.getStableData.partner_logos || []).forEach(logo => {
       const isStillThere = !!getters.getData.partner_logos.find(newLogo => newLogo.id === logo.id);
       if (!isStillThere) {
         promArr.push({ action: 'delPartnerLogo', data: { id: logo.id } });
@@ -210,31 +211,32 @@ export const actions = () => ({
   },
 
   async synchRoadmapDocuments ({ getters, dispatch }) {
-    console.log(getters.getData.documents, 'kk');
-    console.log(getters.getStableData.documents);
-    return Promise.resolve(1);
-    // const promArr = [];
+    const promArr = [];
 
-    // (getters.getData.documents || []).forEach(async container => {
-    //   if (container.document.raw) {
-    //     promArr.push({
-    //       action: 'postRoadmapDocument',
-    //       data: {
-    //         document: container.document.raw,
-    //         title: container.document.title
-    //       }
-    //     });
-    //   }
-    // });
+    (getters.getData.documents || []).forEach(document => {
+      if (document.document.raw) {
+        promArr.push({
+          action: 'postRoadmapDocument',
+          data: {
+            document: document.document.raw,
+            title: document.title
+          }
+        });
+      }
+    });
 
-    // (getters.getStableData.partner_logos || []).forEach(async logo => {
-    //   const isStillThere = !!getters.getData.partner_logos.find(newLogo => newLogo.id === logo.id);
-    //   if (!isStillThere) {
-    //     promArr.push({ action: 'delPartnerLogo', data: { id: logo.id } });
-    //   }
-    // });
-    //
-    // return Promise.all(promArr.map(promObj => dispatch(promObj.action, promObj.data)));
+    (getters.getStableData.documents || []).forEach(document => {
+      const stillThere = getters.getData.documents.find(newDocument => newDocument.id === document.id);
+      if (!stillThere) {
+        promArr.push({ action: 'delRoadmapDocument', data: { id: document.id } });
+        return;
+      }
+      if (stillThere.title !== document.title) {
+        promArr.push({ action: 'updateRoadmapDocument', data: { id: document.id, title: stillThere.title } });
+      }
+    });
+
+    return Promise.all(promArr.map(promObj => dispatch(promObj.action, promObj.data)));
   },
 
   async postRoadmapDocument ({ state, rootGetters }, { document, title, id }) {

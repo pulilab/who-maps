@@ -163,7 +163,8 @@
       class="RoadmapDocuments"
     >
       <el-form
-        ref="document"
+        ref="documentsUpload"
+        :rules="documentRules"
         :model="{ documents }"
         label-width="220px"
         label-position="left"
@@ -176,30 +177,39 @@
         >
           <el-form-item
             :label="$gettext('Document') | translate"
-            prop="document"
+            :prop="`documents.${index}.document`"
           >
+            <div
+              @click="removeDocument(index)"
+              class="Remove-icon"
+            ></div>
             <file-upload
               :files="document.document"
-              @update:files="selectDocumentFile($event, index)"
               :limit="1"
               :auto-upload="false"
+              :disabled="notSCA"
               list-type="text"
+              @update:files="selectDocumentFile($event, index)"
             />
           </el-form-item>
           <el-form-item
             :label="$gettext('Title') | translate"
+            :prop="`documents.${index}.title`"
+            :rules="titleRules"
           >
             <el-input
               :value="document.title"
-              @input="changeDocumentTitle($event, index)"
               :maxlength="128"
+              :disabled="notSCA"
               type="text"
+              @input="changeDocumentTitle($event, index)"
             />
           </el-form-item>
         </div>
+        <el-form-item prop="documents"></el-form-item>
         <div>
           <el-button
-            :disabled="documents.length === 5"
+            :disabled="documents.length === 5 || notSCA"
             type="text"
             class="IconLeft"
             @click="addDocument"
@@ -495,8 +505,31 @@ export default {
       selectedPersona: 'G',
       logoError: '',
       coverError: '',
+      flagForKeepingdocumentsError: false,
       flagForKeepingPartnerLogosError: false,
       partnerLogosError: '',
+      documentsError: '',
+      titleRules: [{
+        trigger: ['blur', 'change'],
+        validator: (rule, value, callback) => {
+          if (!value || value.length < 1) {
+            callback(new Error(this.$gettext('A title is required')));
+          } else {
+            callback();
+          }
+        }
+      }],
+      documentRules: {
+        documents: [
+          { validator: (rule, value, callback) => {
+            if (this.documentsError) {
+              callback(new Error(this.documentsError));
+            } else {
+              callback();
+            }
+          } }
+        ]
+      },
       rules: {
         logo: [
           { validator: (rule, value, callback) => {
@@ -615,10 +648,46 @@ export default {
 
     documents: {
       get () {
-        return this.country.documents;
+        return this.country.documents.map(data => {
+          if (typeof data.document === 'string') {
+            return ({
+              title: data.title,
+              id: data.id,
+              document: [{
+                url: data.document,
+                name: ('' + data.document).split('/').pop()
+              }]
+            });
+          }
+          if (Array.isArray(data.document)) {
+            return data;
+          }
+          const document = data.document ? [data.document] : [];
+          const res = {
+            title: data.title,
+            document
+          };
+          if (data.id) {
+            res.id = data.id;
+          }
+          return res;
+        });
       },
-      set (value) {
-        this.setDataField({ field: 'documents', data: value });
+      set (documents) {
+        const data = documents.map(data => {
+          if (Array.isArray(data.document)) {
+            const result = {
+              title: data.title,
+              document: data.document[0]
+            };
+            if (data.id) {
+              result.id = data.id;
+            }
+            return result;
+          }
+          return data;
+        });
+        this.setDataField({ field: 'documents', data });
       }
     },
 
@@ -666,11 +735,27 @@ export default {
 
   watch: {
     documentList (newDocs, oldDocs) {
-      newDocs.forEach((doc, index) => {
-        if (oldDocs[index] && oldDocs[index].length && doc.length === 0) {
-          this.$delete(this.documents, index);
-        }
+      const formats = ['.pdf', '.txt', '.doc', 'docx', '.xls', 'xlsx', '.rtf', '.ppt', 'pptx'];
+      const incorrectDoc = this.documents.find(documentData => {
+        const document = documentData.document[0] || {};
+        return document.raw && !formats.includes(document.raw.name.substr(document.raw.name.length - 4));
       });
+      if (incorrectDoc) {
+        const newDocuments = [...this.documents];
+        const replacementDoc = { ...this.documents.indexOf(incorrectDoc) };
+        replacementDoc.document = [];
+        newDocuments[this.documents.indexOf(incorrectDoc)] = replacementDoc;
+        this.documents = newDocuments;
+        const message = 'Wrong file format, you can only upload .txt, .xls, xlsx, .doc, .docx, .rtf, .ppt, .pptx and .pdf files';
+        this.documentsError = this.$gettext(message);
+        this.flagForKeepingdocumentsError = true;
+      } else if (this.flagForKeepingdocumentsError) {
+        this.flagForKeepingdocumentsError = false;
+        return;
+      } else {
+        this.documentsError = '';
+      }
+      this.$refs.documentsUpload.validate(() => {});
     },
     logo (newArr, oldArr) {
       // Handles error message placing for wrong image formats
@@ -766,7 +851,15 @@ export default {
 
     changeDocumentTitle (title, index) {
       const newDocuments = [...this.documents];
-      newDocuments[index] = { ...newDocuments[index], title };
+      const doc = { ...newDocuments[index] };
+      doc.title = title;
+      newDocuments[index] = doc;
+      this.documents = newDocuments;
+    },
+
+    removeDocument (index) {
+      const newDocuments = [...this.documents];
+      newDocuments.splice(index, 1);
       this.documents = newDocuments;
     },
 
@@ -778,6 +871,17 @@ export default {
       this.countryId = selected;
     },
     save () {
+      if (this.documentList.find(doc => doc.length === 0)) {
+        this.documentsError = this.$gettext('A document is missing or too many were added');
+        this.$refs.documentsUpload.validate(() => {});
+        this.$alert('A roadmap document is missing', 'Warning', {
+          confirmButtonText: 'Ok',
+          callback: () => {
+            this.$refs.documentsUpload.$el.scrollIntoView();
+          }
+        });
+        return;
+      }
       if (this.$refs.customQuestions.allSaved) {
         this.saveChanges();
       } else {
@@ -813,6 +917,14 @@ export default {
         border-top: 1px solid #B9B9B9;
         padding-top: 20px;
       }
+      .FileUploadContainer:hover {
+        & .Remove-icon {
+          visibility: visible;
+        }
+        & .el-upload-list__item-status-label {
+          display: none;
+        }
+      }
       .Footer {
         color: #6D6D6D;
         line-height: @fontSizeLarge;
@@ -821,6 +933,36 @@ export default {
       svg {
         color: #B9B9B9;
         padding-right: 7.5px;
+      }
+      .Remove-icon {
+        font-family: 'element-icons' !important;
+        font-size: @fontSizeLarge;
+        cursor: pointer;
+        display: inline-block;
+        visibility: hidden;
+        z-index: 10;
+        position:absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        color: #F44336;
+        font-weight: 700;
+        opacity: 1;
+        &::before {
+          content: "\e60f";
+        }
+      }
+      .el-icon-close {
+        display: none !important;
+      }
+      .el-upload-list__item {
+        &:hover {
+          background-color: transparent;
+        }
+      }
+      .el-upload-list__item-name {
+        margin-left: -15px;
+        padding-right: 15px;
       }
     }
 
