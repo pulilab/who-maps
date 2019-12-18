@@ -7,6 +7,9 @@
       >
         {{ p.name }}
       </li>
+      <li v-show="unknow > 0">
+        <translate>+ {{unknow}}</translate>
+      </li>
     </ul>
     <span v-show="team.length === 0">
       <translate>N/A</translate>
@@ -35,6 +38,9 @@ export default {
         return this.profiles.filter(p => this.value.includes(p.id));
       }
       return [];
+    },
+    unknow () {
+      return this.value.filter(p => typeof p === 'string').length
     }
   }
 };
