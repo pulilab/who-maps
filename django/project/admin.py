@@ -13,7 +13,7 @@ import scheduler.celery # noqa
 
 class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = [
-        'name', 'state'
+        'name', 'state', 'added_by'
     ]
     list_filter = ['state']
 
