@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin import SimpleListFilter
 from django.db.models import Q
 from django.utils.html import mark_safe
 from core.admin import AllObjectsAdmin
@@ -18,11 +19,42 @@ def approve(modeladmin, request, queryset):
 approve.short_description = "Approve selected items"
 
 
+class SoftwareStatelFilter(SimpleListFilter):
+    title = 'State'
+
+    parameter_name = 'state'
+
+    def lookups(self, request, model_admin):
+        return (TechnologyPlatform.APPROVED, TechnologyPlatform.SOFTWARE_STATES[0][1]), \
+               (TechnologyPlatform.PENDING, TechnologyPlatform.SOFTWARE_STATES[1][1]), \
+               (TechnologyPlatform.DECLINED, TechnologyPlatform.SOFTWARE_STATES[2][1])
+
+    def choices(self, cl):  # pragma: no cover
+        for lookup, title in self.lookup_choices:
+            try:
+                selected = int(self.value()) == lookup
+            except TypeError:
+                selected = None
+
+            yield {
+                'selected': selected,
+                'query_string': cl.get_query_string({
+                    self.parameter_name: lookup,
+                }, []),
+                'display': title,
+            }
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            self.used_parameters[self.parameter_name] = TechnologyPlatform.PENDING
+        return queryset.filter(state=self.value())
+
+
 class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = [
         'name', 'state', 'added_by'
     ]
-    list_filter = ['state']
+    list_filter = [SoftwareStatelFilter]
     actions = (approve,)
 
 
