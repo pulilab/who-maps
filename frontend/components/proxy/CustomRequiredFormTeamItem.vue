@@ -3,7 +3,6 @@
     class="CustomRequiredFormItem"
     v-bind="propsAndAttrs"
     v-on="listeners"
-    @keyup.enter.native="onEnter"
   >
     <template slot="label">
       <slot name="label" />
@@ -51,6 +50,11 @@ export default {
       default: null
     }
   },
+  data() {
+    return {
+      inputValue: ''
+    }
+  },
   computed: {
     propsAndAttrs () {
       return { ...this.$props, ...this.$attrs };
@@ -66,21 +70,12 @@ export default {
     }
   },
   methods: {
-    onEnter(e) {
-      if (this.validateEmail(e.target.value)) {
-        this.$emit('change', e.target.value);
-      }
-    },
-    validateEmail(email) {
-      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(String(email).toLowerCase());
-    }
   },
 }
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
+  @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
   .CustomRequiredFormItem{
     .Required{

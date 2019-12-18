@@ -3,7 +3,8 @@ import uniqBy from 'lodash/uniqBy';
 export default {
   data () {
     return {
-      options: []
+      options: [],
+      query: ''
     };
   },
   computed: {
@@ -21,6 +22,7 @@ export default {
   },
   methods: {
     filterList (query) {
+      this.query = query
       if (query) {
         this.options = this.items.filter(p => this.filter(p.name, query) || (p.email ? this.filter(p.email, query) : false));
       } else {
