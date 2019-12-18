@@ -20,7 +20,7 @@ from core.utils import send_mail_wrapper
 from user.models import Organisation
 from country.models import Country
 
-from .models import Project, InteroperabilityLink
+from .models import Project, InteroperabilityLink, TechnologyPlatform
 from .serializers import ProjectDraftSerializer
 
 from scheduler.celery import app
@@ -304,3 +304,23 @@ def sync_project_from_odk():  # pragma: no cover
     #     rows = json.load(odk_file)
     #     start_sync(rows, interoperability_links)
     start_sync(res.json(), interoperability_links)
+
+
+@app.task(name='notify_super_users_about_new_pending_software')
+def notify_super_users_about_new_pending_software(software_id):
+    software = TechnologyPlatform.objects.get(id=software_id)
+    super_users = User.objects.filter(is_superuser=True)
+    if super_users:
+        email_mapping = defaultdict(list)
+        for user in super_users:
+            try:
+                email_mapping[user.userprofile.language].append(user.email)
+            except ObjectDoesNotExist:
+                email_mapping[settings.LANGUAGE_CODE].append(user.email)
+
+        for language, email_list in email_mapping.items():
+            send_mail_wrapper(subject="New software",
+                              email_type="new_pending_software",
+                              to=email_list,
+                              language=language,
+                              context={'software_name': software.name})
