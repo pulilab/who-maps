@@ -1,5 +1,6 @@
 import copy
 from datetime import datetime
+from unittest import mock
 
 from allauth.account.models import EmailAddress
 from django.urls import reverse
@@ -16,7 +17,7 @@ from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
 from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, \
     Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HSCGroup, ProjectApproval
-from project.tasks import send_project_approval_digest
+from project.tasks import send_project_approval_digest, notify_super_users_about_new_pending_software
 
 from project.tests.setup import SetupTests, MockRequest
 
@@ -1065,7 +1066,10 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url, format="json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, response.json())
 
-    def test_technology_platform_create(self):
+    @mock.patch('project.views.notify_super_users_about_new_pending_software.apply_async')
+    def test_technology_platform_create(self, task):
+        task.return_value = None
+
         user = User.objects.create(username="test_user_100000", password="test_user_100000")
         user_profile = UserProfile.objects.create(user=user, name="test_user_100000")
 
@@ -1080,6 +1084,41 @@ class ProjectTests(SetupTests):
         data = response.json()
         self.assertEqual(data['state'], TechnologyPlatform.PENDING)
         self.assertEqual(data['added_by'], self.user_profile_id)
+
+        call_args_list = task.call_args_list
+        self.assertEqual(call_args_list[0][0][0][0], data['id'])
+
+    @mock.patch('project.tasks.send_mail_wrapper')
+    def test_notify_super_users_about_pending_softwar_success(self, send_email):
+        send_email.return_value = None
+
+        super_users = User.objects.filter(is_superuser=True)
+        # remove super user status from the current super users
+        for user in super_users:
+            user.is_superuser = False
+            user.save()
+
+        test_super_user_1 = User.objects.create_superuser('bh_superuser_1', 'bh+1@pulilab.com', 'puli_1234')
+        test_super_user_2 = User.objects.create_superuser('bh_superuser_2', 'bh+2@pulilab.com', 'puli_2345')
+        try:
+            software = TechnologyPlatform.objects.create(name='pending software')
+            notify_super_users_about_new_pending_software.apply((software.id,))
+
+            call_args_list = send_email.call_args_list[0][1]
+            self.assertEqual(call_args_list['subject'], 'New software')
+            self.assertEqual(call_args_list['email_type'], 'new_pending_software')
+            self.assertIn(test_super_user_1.email, call_args_list['to'])
+            self.assertIn(test_super_user_2.email, call_args_list['to'])
+            self.assertEqual(call_args_list['context']['software_name'], software.name)
+
+        finally:
+            test_super_user_1.delete()
+            test_super_user_2.delete()
+
+            # give back super user status
+            for user in super_users:
+                user.is_superuser = True
+                user.save()
 
     def test_technology_platform_list(self):
         software_1 = TechnologyPlatform.objects.create(name='software approved', state=TechnologyPlatform.APPROVED)
