@@ -17,7 +17,7 @@ from celery.utils.log import get_task_logger
 from rest_framework.exceptions import ValidationError
 
 from core.utils import send_mail_wrapper
-from user.models import Organisation
+from user.models import Organisation, UserProfile
 from country.models import Country
 
 from .models import Project, InteroperabilityLink, TechnologyPlatform
@@ -324,3 +324,14 @@ def notify_superusers_about_new_pending_software(software_id):
                           to=email_list,
                           language=language,
                           context={'software_name': software.name})
+
+
+@app.task(name='notify_user_about_declined_software')
+def notify_user_about_declined_software(software_id):
+    software = TechnologyPlatform.objects.get(id=software_id)
+    profile = UserProfile.objects.get(id=software.added_by)
+    send_mail_wrapper(subject="Software declined",
+                      email_type="software_declined",
+                      to=profile.user.email,
+                      language=profile.language or settings.LANGUAGE_CODE,
+                      context={'software_name': software.name})
