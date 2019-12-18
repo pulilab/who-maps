@@ -827,15 +827,6 @@ export default {
     }),
 
     addDocument () {
-      if (this.documents.length === this.roadmap.max_documents) {
-        this.$message({
-          message: this.$gettext('Maximum number ({max}) of documents reached.', {
-            max: this.roadmap.max_documents }),
-          type: 'error',
-          showClose: true
-        });
-        return;
-      }
       this.documents = [...this.documents, {
         title: '',
         document: []
