@@ -18,6 +18,7 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
+from .tasks import notify_super_users_about_new_pending_software
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
@@ -500,3 +501,4 @@ class TechnologyPlatformViewSet(CreateModelMixin, ListModelMixin, GenericViewSet
         # added_by should be the request's user's profile
         serializer.validated_data['added_by'] = self.request.user.userprofile
         super().perform_create(serializer)
+        notify_super_users_about_new_pending_software.apply_async((serializer.instance.id,))
