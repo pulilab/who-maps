@@ -209,7 +209,7 @@
         <el-form-item prop="documents"></el-form-item>
         <div>
           <el-button
-            :disabled="documents.length === 5 || notSCA"
+            :disabled="documents.length === roadmap.max_documents || notSCA"
             type="text"
             class="IconLeft"
             @click="addDocument"
@@ -226,7 +226,9 @@
         </p>
         <p>
           <fa icon="info-circle" />
-          <translate>Allowed file formats: .pdf, .xls, .xlsx. Uploaded size is limited to 15MB. Max. number of uploaded files is 5.</translate>
+          <translate :parameters="{list: extensionList, size: roadmap.max_size_in_MB, max: roadmap.max_documents }">
+            Allowed file formats: {list} Uploaded size is limited to {size}MB. Max. number of uploaded files is {max}.
+          </translate>
         </p>
       </div>
     </collapsible-card>
@@ -577,9 +579,12 @@ export default {
       userSelection: 'admin/country/getUserSelection',
       adminSelection: 'admin/country/getAdminSelection',
       superadminSelection: 'admin/country/getSuperadminSelection',
-      userProfile: 'user/getProfile'
+      userProfile: 'user/getProfile',
+      roadmap: 'system/getRoadmap'
     }),
-
+    extensionList () {
+      return this.roadmap.valid_types.join(', ');
+    },
     documentList () {
       return this.documents.map(document => document.document);
     },
@@ -735,7 +740,7 @@ export default {
 
   watch: {
     documentList (newDocs, oldDocs) {
-      const formats = ['.pdf', '.txt', '.doc', 'docx', '.xls', 'xlsx', '.rtf', '.ppt', 'pptx'];
+      const formats = this.roadmap.valid_types.map(extension => extension.substr(extension.length - 4));
       const incorrectDoc = this.documents.find(documentData => {
         const document = documentData.document[0] || {};
         return document.raw && !formats.includes(document.raw.name.substr(document.raw.name.length - 4));
@@ -746,8 +751,8 @@ export default {
         replacementDoc.document = [];
         newDocuments[this.documents.indexOf(incorrectDoc)] = replacementDoc;
         this.documents = newDocuments;
-        const message = 'Wrong file format, you can only upload .txt, .xls, xlsx, .doc, .docx, .rtf, .ppt, .pptx and .pdf files';
-        this.documentsError = this.$gettext(message);
+        this.documentsError = this.$gettext('Wrong file format, you can only upload {list} files', {
+          list: this.extensionList });
         this.flagForKeepingdocumentsError = true;
       } else if (this.flagForKeepingdocumentsError) {
         this.flagForKeepingdocumentsError = false;
@@ -825,9 +830,10 @@ export default {
     }),
 
     addDocument () {
-      if (this.documents.length === 5) {
+      if (this.documents.length === this.roadmap.max_documents) {
         this.$message({
-          message: this.$gettext('Maximum number (5) of documents reached.'),
+          message: this.$gettext('Maximum number ({max}) of documents reached.', {
+            max: this.roadmap.max_documents }),
           type: 'error',
           showClose: true
         });

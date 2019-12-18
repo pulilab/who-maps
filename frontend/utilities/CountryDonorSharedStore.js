@@ -23,7 +23,7 @@ export const getters = () => ({
 
   getUserSelection: state => state.userSelection,
   getAdminSelection: state => state.adminSelection,
-  getSuperadminSelection: state => state.superadminSelection,
+  getSuperadminSelection: state => state.superadminSelection
 });
 
 export const actions = () => ({
@@ -43,8 +43,6 @@ export const actions = () => ({
       return Promise.reject(new Error('No donor found in the database to be loaded or modified, make one first!'));
     }
     const { data } = await this.$axios.get(`/api/${type}/${id}/`);
-    // console.log(`${state.type} DATA for #${id}`);
-    // console.log(data);
     commit('SET_DATA', data);
     commit('SET_EDITABLE_DATA', data);
 
@@ -120,9 +118,8 @@ export const actions = () => ({
         showClose: true
       });
     } catch (e) {
-      console.error(e);
       Message({
-        message: 'Data update error',
+        message: e.message !== 'Request failed with status code 413' ? 'Data update error' : 'File size is too large',
         type: 'error',
         showClose: true
       });

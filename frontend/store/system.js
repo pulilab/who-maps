@@ -12,7 +12,8 @@ export const state = () => ({
   organisations: [],
   donors: [],
   regions: [],
-  donorsLibrary: {}
+  donorsLibrary: {},
+  roadmap: {}
 });
 
 export const getters = {
@@ -48,6 +49,9 @@ export const getters = {
   },
   getDomains: state => {
     return [...state.domains];
+  },
+  getRoadmap: state => {
+    return state.roadmap;
   },
   getQuestions: state => {
     return [...state.toolkit_questions];
@@ -111,6 +115,7 @@ export const actions = {
       commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
       commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
       commit('SET_REGIONS', data.regions);
+      commit('SET_ROADMAP', data.roadmap);
       dispatch('dashboard/setDashboardColumns', data.dashboard_columns, { root: true });
     } catch (e) {
       console.error('system/loadStaticData failed');
@@ -208,5 +213,8 @@ export const mutations = {
   },
   SET_REGIONS: (state, regions) => {
     state.regions = regions;
+  },
+  SET_ROADMAP: (state, roadmap) => {
+    state.roadmap = roadmap;
   }
 };
