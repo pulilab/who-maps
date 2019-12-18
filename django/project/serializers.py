@@ -289,7 +289,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
                 user = self.perform_create(email)
             self.validated_data['viewers'].append(user.userprofile)
 
-        self.validated_data.pop('new_viewer_emails', None)
+        self.validated_data.pop('new_team_emails', None)
         self.validated_data.pop('new_viewer_emails', None)
 
         # remove duplicates
