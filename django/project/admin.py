@@ -11,11 +11,19 @@ from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, H
 import scheduler.celery # noqa
 
 
+def approve(modeladmin, request, queryset):
+    queryset.update(state=TechnologyPlatform.APPROVED)
+
+
+approve.short_description = "Approve selected items"
+
+
 class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = [
         'name', 'state', 'added_by'
     ]
     list_filter = ['state']
+    actions = (approve,)
 
 
 class InteroperabilityLinkAdmin(AllObjectsAdmin):
