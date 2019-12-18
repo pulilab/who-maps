@@ -1,14 +1,14 @@
 from typing import Union
 
+from django.conf import settings
+from django.core import management
+from django.utils.dateformat import format
+from django.utils.translation import ugettext
+from django.db.transaction import atomic
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from django.utils.dateformat import format
-from django.db.transaction import atomic
-from django.template import loader
-from django.core.mail import send_mail
-from django.core import management
-from django.utils.translation import ugettext, override
-from django.conf import settings
+
+from core.utils import send_mail_wrapper
 
 from user.models import UserProfile
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
@@ -128,44 +128,50 @@ class UpdateAdminMixin:
         return instance
 
     def notify_users(self, user_profiles, instance, group):
-        html_template = loader.get_template('email/master-inline.html')
         for profile in user_profiles:
-            with override(profile.language):
-                subject = "Notification: You have been selected as {} for {}".format(group, instance.name)
-                subject = ugettext(subject)
-                model_name = self.Meta.model.__name__.lower()
-                html_message = html_template.render({'type': '{}_admin'.format(model_name),
-                                                     'group': group,
-                                                     'full_name': profile.name,
-                                                     '{}_name'.format(model_name): instance.name,
-                                                     'language': profile.language})
-
-            send_mail(
-                subject=subject,
-                message="",
-                from_email=settings.FROM_EMAIL,
-                recipient_list=[profile.user.email],
-                html_message=html_message,
-                fail_silently=True)
+            subject = "Notification: You have been selected as {} for {}".format(group, instance.name)
+            model_name = self.Meta.model.__name__.lower()
+            context = {
+                'group': group,
+                'full_name': profile.name,
+                '{}_name'.format(model_name): instance.name
+            }
+            send_mail_wrapper(subject=subject,
+                              email_type='{}_admin'.format(model_name),
+                              to=profile.user.email,
+                              language=profile.language,
+                              context=context)
 
 
 def can_read_private_questions(obj: Union[Country, Donor], request) -> bool:
     return request.user.is_superuser or obj.user_in_groups(request.user.userprofile)
 
 
+GDHI_FIELDS = ("total_population", "gni_per_capita", "life_expectancy", "health_expenditure",
+               "leadership_and_governance", "strategy_and_investment", "legislation_policy_compliance", "workforce",
+               "standards_and_interoperability", "infrastructure", "services_and_applications")
+
+ENABLE_WIDGET_FIELDS = ("gdhi_enabled", "road_map_enabled")
+
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
                   "footer_text", "partner_logos", "project_approval", "map_data", "map_version", "map_files",
-                  "map_activated_on", "country_questions", "lat", "lon", "road_map_enabled", "documents")
+                  "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code", "documents")
 READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "logo_url", "cover", "cover_url", "map_version", "map_files",
-                            "map_activated_on", "country_questions", "lat", "lon", "documents")
+                            "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code", "documents")
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos", "project_approval",)
 
 
 class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
+    size = serializers.SerializerMethodField()
+
     class Meta:
         model = ArchitectureRoadMapDocument
         fields = "__all__"
+
+    @staticmethod
+    def get_size(obj):
+        return obj.document.size if obj.document else None
 
     @staticmethod
     def validate_document(value):
@@ -200,7 +206,7 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
 
     class Meta:
         model = Country
-        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
+        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',) + ENABLE_WIDGET_FIELDS
         read_only_fields = READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS
 
     def update(self, instance, validated_data):
@@ -246,15 +252,21 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
 
 class AdminCountrySerializer(SuperAdminCountrySerializer):
     class Meta(SuperAdminCountrySerializer.Meta):
-        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',)
+        fields = COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS + ('users', 'admins', 'super_admins',) + ENABLE_WIDGET_FIELDS
         read_only_fields = READ_ONLY_COUNTRY_ADMIN_FIELDS + READ_ONLY_COUNTRY_FIELDS + COUNTRY_ADMIN_FIELDS \
-            + ('super_admins',)
+            + ('super_admins',) + ENABLE_WIDGET_FIELDS
 
 
 class CountrySerializer(SuperAdminCountrySerializer):
     class Meta(SuperAdminCountrySerializer.Meta):
-        fields = COUNTRY_FIELDS
-        read_only_fields = READ_ONLY_COUNTRY_FIELDS
+        fields = COUNTRY_FIELDS + ENABLE_WIDGET_FIELDS
+        read_only_fields = READ_ONLY_COUNTRY_FIELDS + ENABLE_WIDGET_FIELDS
+
+
+class CountryLandingSerializer(SuperAdminCountrySerializer):
+    class Meta(SuperAdminCountrySerializer.Meta):
+        fields = COUNTRY_FIELDS + GDHI_FIELDS + ENABLE_WIDGET_FIELDS
+        read_only_fields = READ_ONLY_COUNTRY_FIELDS + GDHI_FIELDS + ENABLE_WIDGET_FIELDS
 
 
 class CountryListSerializer(serializers.ModelSerializer):
