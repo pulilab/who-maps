@@ -1022,3 +1022,62 @@ class ProjectTests(SetupTests):
         software_1.delete()
         software_2.delete()
         software_3.delete()
+
+    def test_software_decline(self):
+        country = Country.objects.last()
+
+        software_1 = TechnologyPlatform.objects.create(name='approved', state=TechnologyPlatform.APPROVED)
+        software_2 = TechnologyPlatform.objects.create(name='will be declined', state=TechnologyPlatform.PENDING)
+
+        s_parent = DigitalStrategy.objects.create(name="strategy parent", group=DigitalStrategy.GROUP_CHOICES[0])
+        s1 = DigitalStrategy.objects.create(parent=s_parent, name="strategy1", group=DigitalStrategy.GROUP_CHOICES[0])
+
+        data = {"project": {
+            "date": datetime.utcnow(),
+            "name": "Test Project 10000",
+            "organisation": self.org.id,
+            "contact_name": "test_contact",
+            "contact_email": "a@a.com",
+            "implementation_overview": "overview",
+            "implementation_dates": "2019",
+            "health_focus_areas": [1, 2],
+            "country": country.id,
+            "platforms": [
+                {
+                    "id": software_1.id,
+                    "strategies": [s1.id]
+                }, {
+                    "id": software_2.id,
+                    "strategies": [s1.id]
+                }
+            ],
+            "his_bucket": [1, 2],
+            "donors": [self.d1.id],
+            "hsc_challenges": [1, 2],
+            "start_date": str(datetime.today().date()),
+        }}
+
+        url = reverse("project-create", kwargs={"country_id": country.id})
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        project = Project.objects.get(pk=response.json()['id'])
+        self.assertEqual(len(project.draft['platforms']), 2)
+
+        url = reverse("project-publish", kwargs=dict(project_id=project.id, country_id=country.id))
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+
+        project.refresh_from_db()
+        self.assertEqual(len(project.draft['platforms']), 2)
+        self.assertEqual(len(project.data['platforms']), 2)
+
+        # decline software
+        software_2.state = TechnologyPlatform.DECLINED
+        software_2.save()
+
+        project.refresh_from_db()
+        self.assertEqual(len(project.draft['platforms']), 1)
+        self.assertEqual(project.draft['platforms'][0]['id'], software_1.id)
+        self.assertEqual(len(project.data['platforms']), 1)
+        self.assertEqual(project.data['platforms'][0]['id'], software_1.id)
