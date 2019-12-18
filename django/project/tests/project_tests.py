@@ -3,6 +3,7 @@ from datetime import datetime
 from unittest import mock
 
 from allauth.account.models import EmailAddress
+from django.test import Client
 from django.urls import reverse
 from rest_framework import status
 
@@ -1198,3 +1199,23 @@ class ProjectTests(SetupTests):
         self.assertEqual(project.draft['platforms'][0]['id'], software_1.id)
         self.assertEqual(len(project.data['platforms']), 1)
         self.assertEqual(project.data['platforms'][0]['id'], software_1.id)
+
+    def test_software_approve_in_admin(self):
+        client = Client()
+
+        password = '1234'
+        admin = User.objects.create_superuser('bh_admin', 'bhadmin@test.com', password)
+
+        software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
+
+        change_url = reverse('admin:project_technologyplatform_changelist')
+        data = {
+            'action': 'approve',
+            '_selected_action': [software.pk],
+        }
+        client.login(username=admin.email, password=password)
+        response = client.post(change_url, data, follow=True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        software.refresh_from_db()
+        self.assertEqual(software.state, TechnologyPlatform.APPROVED)
