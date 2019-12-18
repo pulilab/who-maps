@@ -278,7 +278,7 @@ class TechnologyPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedMod
 
 
 @receiver(post_save, sender=TechnologyPlatform)
-def removed_declined_software_from_projects(sender, instance, created, **kwargs):
+def remove_declined_software_from_projects(sender, instance, created, **kwargs):
     if not created and instance.__original_state != instance.state and instance.state == TechnologyPlatform.DECLINED:
         # remove software from data platforms and from draft platforms
         projects = Project.objects.filter(
