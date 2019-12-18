@@ -588,9 +588,6 @@ export default {
     documentList () {
       return this.documents.map(document => document.document);
     },
-    documentTitleList () {
-      return this.documents.map(document => document.title);
-    },
 
     notSCA () {
       return this.userProfile && this.userProfile.account_type === 'CA' && !this.userProfile.is_superuser;
