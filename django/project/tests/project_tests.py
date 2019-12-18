@@ -17,7 +17,7 @@ from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
 from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, \
     Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HSCGroup, ProjectApproval
-from project.tasks import send_project_approval_digest, notify_super_users_about_new_pending_software
+from project.tasks import send_project_approval_digest, notify_superusers_about_new_pending_software
 
 from project.tests.setup import SetupTests, MockRequest
 
@@ -1066,7 +1066,7 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url, format="json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, response.json())
 
-    @mock.patch('project.views.notify_super_users_about_new_pending_software.apply_async')
+    @mock.patch('project.views.notify_superusers_about_new_pending_software.apply_async')
     def test_technology_platform_create(self, task):
         task.return_value = None
 
@@ -1102,7 +1102,7 @@ class ProjectTests(SetupTests):
         test_super_user_2 = User.objects.create_superuser('bh_superuser_2', 'bh+2@pulilab.com', 'puli_2345')
         try:
             software = TechnologyPlatform.objects.create(name='pending software')
-            notify_super_users_about_new_pending_software.apply((software.id,))
+            notify_superusers_about_new_pending_software.apply((software.id,))
 
             call_args_list = send_email.call_args_list[0][1]
             self.assertEqual(call_args_list['subject'], 'New software')

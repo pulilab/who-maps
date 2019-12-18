@@ -306,8 +306,8 @@ def sync_project_from_odk():  # pragma: no cover
     start_sync(res.json(), interoperability_links)
 
 
-@app.task(name='notify_super_users_about_new_pending_software')
-def notify_super_users_about_new_pending_software(software_id):
+@app.task(name='notify_superusers_about_new_pending_software')
+def notify_superusers_about_new_pending_software(software_id):
     software = TechnologyPlatform.objects.get(id=software_id)
     super_users = User.objects.filter(is_superuser=True)
 
