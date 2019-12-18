@@ -118,6 +118,7 @@ export const actions = () => ({
         showClose: true
       });
     } catch (e) {
+      console.error(e);
       Message({
         message: e.message !== 'Request failed with status code 413' ? 'Data update error' : 'File size is too large',
         type: 'error',
