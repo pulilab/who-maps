@@ -171,8 +171,7 @@ class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_size(obj):
-        if obj.document:
-            return obj.document.size
+        return obj.document.size if obj.document else None
 
     @staticmethod
     def validate_document(value):
