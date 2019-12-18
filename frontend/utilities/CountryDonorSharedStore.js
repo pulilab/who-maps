@@ -1,5 +1,4 @@
 import { Message } from 'element-ui';
-import {is} from "vee-validate/dist/rules.esm"
 
 // export const state = () => ({
 //   id: Number // countryId || donorId
