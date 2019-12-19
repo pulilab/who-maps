@@ -1,48 +1,44 @@
 <template>
-  <div>
-    {{ query }}
-    <lazy-el-select
-      slot="reference"
-      :value="value"
-      :placeholder="$gettext('Type and select a name') | translate"
-      :remote-method="filterList"
-      multiple
-      filterable
-      remote
-      class="TeamSelector"
-      :popper-class="optionsAndValues.length > value.length ? 'TeamSelectorDropdown' : 'NoDisplay'"
-      @change="changeHandler"
-      v-outside="{
-        exclude: [],
-        handler: 'onOutside'
-      }"
-      @keyup.enter.native="onEnter"
-      v-paste="{
-        exclude: [],
-        handler: 'onPaste'
-      }"
+  <lazy-el-select
+    slot="reference"
+    :value="value"
+    :placeholder="$gettext('Type and select a name') | translate"
+    :remote-method="filterList"
+    multiple
+    filterable
+    remote
+    class="TeamSelector"
+    :popper-class="optionsAndValues.length > value.length ? 'TeamSelectorDropdown' : 'NoDisplay'"
+    @change="changeHandler"
+    v-outside="{
+      exclude: [],
+      handler: 'onOutside'
+    }"
+    @keyup.enter.native="onEnter"
+    v-paste="{
+      exclude: [],
+      handler: 'onPaste'
+    }"
+  >
+    <el-option
+      v-for="person in optionsAndValues"
+      :key="person.id"
+      :label="`${person.name}, ${getOrganisationDetails(person.organisation).name} (${person.email})` | truncate"
+      :value="person.id"
     >
-      <el-option
-        v-for="person in optionsAndValues"
-        :key="person.id"
-        :label="`${person.name}, ${getOrganisationDetails(person.organisation).name} (${person.email})` | truncate"
-        :value="person.id"
-      >
-        <span style="float: left;">{{ person.name }}</span>
-        <template v-if="person.organisation">
-          <organisation-item :id="person.organisation" />
-        </template>
-        <span class="email"><small>{{ person.email }}</small></span>
-      </el-option>
-    </lazy-el-select>
-  </div>
+      <span style="float: left;">{{ person.name }}</span>
+      <template v-if="person.organisation">
+        <organisation-item :id="person.organisation" />
+      </template>
+      <span class="email"><small>{{ person.email }}</small></span>
+    </el-option>
+  </lazy-el-select>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import LightSelectMixin from '../mixins/LightSelectMixin.js';
 import OrganisationItem from '../common/OrganisationItem';
-import debounce from 'lodash/debounce';
 
 export default {
   components: {
@@ -82,35 +78,33 @@ export default {
       this.$emit('change', value);
     },
     onOutside () {
-      if (this.query !== '') {
-        this.emailList(this.query)
+      this.emitEmails(this.validEmails(this.emailList(this.query)));
+    },
+    onPaste (str, e) {
+      // good paste
+      // pepe@pepe.com, trending@tren.com
+
+      // bad paste
+      // pepe@pepito.com, doni@asd
+      const emails = this.emailList(str);
+      const validEmails = this.validEmails(emails);
+
+      if (emails.length === validEmails.length) {
+        this.emitEmails(validEmails);
+        e.target.blur();
       }
     },
-    async onPaste () {
-      await this.$nextTick()
-      console.log(this.query)
-      console.log('me pego')
-
-      await setTimeout(() => {
-        console.log('entro al debounce')
-          console.log(this.query)
-          if (this.query !== '') {
-            this.emailList(this.query)
-          }
-        },
-        2500
-      )
-    },
     onEnter(e) {
-      this.emailList(e.target.value)
+      this.emitEmails(this.validEmails(this.emailList(e.target.value)));
     },
     emailList (str) {
-      // fail@gmail.com, general@gmail.com
-      str.trim().replace(/ /g,'').split(',').map((email) => {
-        if (this.validateEmail(email) && !this.arrIncludes(email)) {
-          this.$emit('change', email);
-        }
-      })
+      return str.trim().replace(/ /g,'').split(',');
+    },
+    emitEmails (mails) {
+      mails.map(email => this.$emit('change', email));
+    },
+    validEmails (mails) {
+      return mails.filter(email => this.validateEmail(email) && !this.arrIncludes(email))
     },
     arrIncludes (val) {
       return this.value.includes(val)

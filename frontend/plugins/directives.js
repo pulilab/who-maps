@@ -37,18 +37,12 @@ Vue.directive('paste', {
   bind (el, binding, vnode) {
     handlePaste = (e) => {
       e.stopPropagation()
+
       const { handler, exclude } = binding.value
+      let paste = (e.clipboardData || window.clipboardData).getData('text');
 
-      let clickedOnExcludedEl = false
-      exclude.forEach(refName => {
-        if (!clickedOnExcludedEl) {
-          const excludedEl = vnode.context.$refs[refName]
-          clickedOnExcludedEl = excludedEl.contains(e.target)
-        }
-      })
-
-      if (!el.contains(e.target) && !clickedOnExcludedEl) {
-        vnode.context[handler]()
+      if (el.contains(e.target)) {
+        vnode.context[handler](paste, e)
       }
     }
 
