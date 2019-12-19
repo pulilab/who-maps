@@ -897,7 +897,7 @@ class CountryTests(APITestCase):
         for i in range(2):
             ArchitectureRoadMapDocument.objects.create(
                 country=country,
-                title=f'test {i}',
+                title=f'{i} test',
                 document=ContentFile('test_content', name=f'test_file_{i}.txt')
             )
         self.assertEqual(country.documents.count(), 2)
@@ -906,6 +906,9 @@ class CountryTests(APITestCase):
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(len(response.json()['documents']), 2)
+        self.assertEqual(response.json()['documents'][0]['title'], '0 test')
+        self.assertEqual(response.json()['documents'][1]['title'], '1 test')
+        self.assertTrue(response.json()['documents'][0]['title'] < response.json()['documents'][1]['title'])
         for document in response.json()['documents']:
             self.assertEqual(document['size'], 12)
 
