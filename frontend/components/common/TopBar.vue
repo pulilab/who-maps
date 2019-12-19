@@ -127,27 +127,15 @@
             </el-col>
           </template>
 
-          <el-col
-            v-if="countrySpecific"
-            class="CountryHolder"
-          >
+          <el-col>
             <el-row type="flex">
               <el-col>
                 <div class="Separator" />
               </el-col>
-              <el-col>
-                <img
-                  :src="countryFlag"
-                  alt="country flag"
-                  class="CountryFlag"
-                >
-              </el-col>
-              <el-col>
-                <div class="CountryName">
-                  {{ landingData.code }}
-                </div>
-              </el-col>
             </el-row>
+          </el-col>
+          <el-col>
+            <country-chooser />
           </el-col>
 
           <el-col
@@ -181,6 +169,7 @@ import { mapGetters } from 'vuex';
 import LanguageSelector from './LanguageSelector';
 import UserDropdown from './UserDropdown';
 import ToolkitDialogWrapper from './ToolkitDialogWrapper';
+import CountryChooser from './CountryChooser';
 
 export default {
   directives: {
@@ -189,7 +178,8 @@ export default {
   components: {
     LanguageSelector,
     UserDropdown,
-    ToolkitDialogWrapper
+    ToolkitDialogWrapper,
+    CountryChooser
   },
   props: {
     errorPage: {
@@ -364,7 +354,7 @@ export default {
       margin: 0 20px;
     }
 
-    .CountryHolder {
+    /*.CountryHolder {
       height: 24px;
 
       .CountryFlag {
@@ -379,7 +369,7 @@ export default {
         color: @colorTextPrimary;
         line-height: 24px;
       }
-    }
+    }*/
 
     .AuthLinks,
     .CountrySpecificMenu {
