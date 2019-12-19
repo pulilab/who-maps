@@ -130,7 +130,7 @@ def save_coordinates(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Country)
 def update_gdhi_data(sender, instance, created, **kwargs):
-    if instance.code and settings.ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE:
+    if all([settings.ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE, instance.gdhi_enabled, instance.code]):
         update_gdhi_data_task.apply_async((instance.code, True))
 
 
@@ -138,6 +138,9 @@ class ArchitectureRoadMapDocument(models.Model):
     country = models.ForeignKey(Country, related_name='documents', on_delete=models.CASCADE)
     title = models.CharField(max_length=128)
     document = models.FileField(null=True, upload_to='documents/')
+
+    class Meta:
+        ordering = ('id',)
 
 
 class Donor(UserManagement, LandingPageCommon):
