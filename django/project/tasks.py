@@ -12,6 +12,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext
 from django.template import loader
+from django.utils.translation import ugettext_lazy as _
 
 from celery.utils.log import get_task_logger
 from rest_framework.exceptions import ValidationError
