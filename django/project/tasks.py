@@ -31,26 +31,25 @@ logger = get_task_logger(__name__)
 
 @app.task(name="send_project_approval_digest")
 def send_project_approval_digest():
-    countries = Country.objects.exclude(users=None)
+    countries = Country.objects.filter(project_approval=True)
     for country in countries:
-        if country.project_approval:
-            projects = Project.objects.filter(data__country=country.id, approval__approved__isnull=True)
+        projects = Project.objects.filter(data__country=country.id, approval__approved__isnull=True)
 
-            if not projects:
-                return
+        if not projects:
+            return
 
-            email_mapping = defaultdict(list)
-            for profile in country.users.all():
-                email_mapping[profile.language].append(profile.user.email)
+        email_mapping = defaultdict(list)
+        for profile in [country.super_admins.all(), country.admins.all()]:
+            email_mapping[profile.language].append(profile.user.email)
 
-            for language, email_list in email_mapping.items():
-                context = {'country_name': country.name, 'projects': projects}
+        for language, email_list in email_mapping.items():
+            context = {'country_name': country.name, 'projects': projects}
 
-                send_mail_wrapper(subject='Action required: New projects awaiting approval',
-                                  email_type='status_report',
-                                  to=email_list,
-                                  language=language,
-                                  context=context)
+            send_mail_wrapper(subject=_('Action required: New projects awaiting approval'),
+                              email_type='status_report',
+                              to=email_list,
+                              language=language,
+                              context=context)
 
 
 @app.task(name="sync_project_from_odk")
