@@ -39,7 +39,7 @@ def send_project_approval_digest():
             return
 
         email_mapping = defaultdict(list)
-        for profile in [country.super_admins.all(), country.admins.all()]:
+        for profile in country.super_admins.all() | country.admins.all():
             email_mapping[profile.language].append(profile.user.email)
 
         for language, email_list in email_mapping.items():
