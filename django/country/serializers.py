@@ -163,9 +163,15 @@ READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "
 
 
 class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
+    size = serializers.SerializerMethodField()
+
     class Meta:
         model = ArchitectureRoadMapDocument
         fields = "__all__"
+
+    @staticmethod
+    def get_size(obj):
+        return obj.document.size if obj.document else None
 
     @staticmethod
     def validate_document(value):
@@ -181,8 +187,7 @@ class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if self.instance is None:
             country = attrs.get('country')
-            if country and \
-                    country.documents.count() >= settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY:
+            if country and country.documents.count() >= settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY:
                 raise ValidationError(
                     f'The country already has {settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY} related road map documents')
         return attrs

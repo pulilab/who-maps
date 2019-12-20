@@ -67,8 +67,9 @@ export const actions = {
       console.error('landing/loadDonorData failed');
     }
   },
-  clearCustomLandingPage ({ commit }) {
+  clearCustomLandingPage ({ commit, dispatch }) {
     commit('SET_LANDING_PAGE_DATA', null);
+    dispatch('setSelectedCountry');
   },
   resetSearch ({ commit }) {
     commit('SET_SEARCHED', null);

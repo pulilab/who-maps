@@ -842,7 +842,7 @@ class ProjectTests(SetupTests):
 
         c = Country.objects.get(id=self.country_id)
         c.project_approval = True
-        c.users.add(self.user_profile_id, user_2_profile)
+        c.admins.add(self.user_profile_id, user_2_profile)
         c.save()
         send_project_approval_digest()
 
