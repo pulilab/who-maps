@@ -39,6 +39,7 @@
 import { mapGetters } from 'vuex';
 import LightSelectMixin from '../mixins/LightSelectMixin.js';
 import OrganisationItem from '../common/OrganisationItem';
+import validator from 'validator';
 
 export default {
   components: {
@@ -110,8 +111,7 @@ export default {
       return this.value.includes(val)
     },
     validateEmail (email) {
-      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(String(email).toLowerCase());
+      return validator.isEmail(email);
     }
   }
 };

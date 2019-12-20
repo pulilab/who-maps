@@ -7,8 +7,8 @@
       >
         {{ p.name }}
       </li>
-      <li v-show="unknow > 0">
-        <translate>+ {{unknow}}</translate>
+      <li v-show="unknown > 0">
+        <translate>+ {{unknown}}</translate>
       </li>
     </ul>
     <span v-show="team.length === 0">
@@ -39,7 +39,7 @@ export default {
       }
       return [];
     },
-    unknow () {
+    unknown () {
       return this.value.filter(p => typeof p === 'string').length
     }
   }
