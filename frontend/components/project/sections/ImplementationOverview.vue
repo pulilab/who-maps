@@ -86,7 +86,7 @@
               data-vv-as="Software"
             />
             <custom-required-form-item
-              v-show="platform"
+              v-show="typeof platform === 'number'"
               :error="errors.first('strategies', 'platform_' + index)"
               :draft-rule="draftRules.strategies"
               :publish-rule="publishRules.strategies"
@@ -101,6 +101,7 @@
                 </form-hint>
               </template>
               <digital-health-interventions-selector
+                v-if="typeof platform === 'number'"
                 v-validate="rules.strategies"
                 :platform-id="platform"
                 :data-vv-scope="'platform_' + index"
