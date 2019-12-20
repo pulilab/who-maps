@@ -161,7 +161,7 @@ export default {
       font-weight: 700;
       line-height: 24px;
       text-overflow: ellipsis;
-      max-width: 250px;
+      max-width: 240px;
       overflow: hidden;
     }
   }
