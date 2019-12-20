@@ -160,6 +160,9 @@ export default {
       color: @colorBrandPrimary;
       font-weight: 700;
       line-height: 24px;
+      text-overflow: ellipsis;
+      max-width: 250px;
+      overflow: hidden;
     }
   }
 
