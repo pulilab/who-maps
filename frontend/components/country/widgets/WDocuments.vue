@@ -12,7 +12,7 @@
           {{doc.title}} <fa icon="download" />
         </a>
       </p>
-      <!-- <p class="details">pdf — 558 kb</p> -->
+      <p class="details">{{ doc.document | extension }} — {{ doc.size }}</p>
     </div>
 
   </div>
@@ -25,6 +25,11 @@ export default {
     documents: {
       type: Array,
       required: true
+    }
+  },
+  filters: {
+    extension (filename) {
+      return filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename;
     }
   }
 };

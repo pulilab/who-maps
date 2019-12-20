@@ -206,7 +206,21 @@
         <img :src="data.cover_url" />
       </template>
       <template v-slot:right>
-        <w-documents :documents="data.documents" />
+        <w-stats :stats="stats" :simple="simpleStats" />
+      </template>
+    </default>
+
+    <!-- description and stats only -->
+    <default
+      v-show="image === false && description === true && gdhi === true && documents === false"
+      :gutter="20"
+      :cols="[10, 14]"
+    >
+      <template v-slot:left>
+        <w-description :description="data.cover_text" />
+      </template>
+      <template v-slot:right>
+        <w-stats :stats="stats" :simple="simpleStats" />
       </template>
     </default>
   </div>

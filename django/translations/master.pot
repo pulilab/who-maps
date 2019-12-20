@@ -2310,6 +2310,13 @@ msgid ""
 "of, and planning coordination for digital information systems for health."
 msgstr ""
 
+#: components/landing/WelcomeBox.vue:9
+msgid ""
+"The Digital Health Atlas is a WHO global technology registry platform aiming "
+"to strengthen the value and impact of digital health investments, improve "
+"coordination, and facilitate institutionalization and scale."
+msgstr ""
+
 #: pages/_organisation/terms.vue:29
 msgid "The following Terms of Use (“Terms”) govern the use of"
 msgstr ""
