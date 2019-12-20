@@ -137,25 +137,6 @@
           <el-col>
             <country-chooser />
           </el-col>
-
-          <el-col
-            v-if="customOrganisation"
-            class="CountrySpecificMenu"
-          >
-            <div class="Separator" />
-            <div>
-              <nuxt-link
-                key="whoLandingBtn"
-                :to="localePath({name: 'organisation', params: {organisation: '-'}})"
-              >
-                <img
-                  class="LogoWHOxDHA"
-                  alt="WHO logo small"
-                  src="/logo-whoxdha.svg"
-                >
-              </nuxt-link>
-            </div>
-          </el-col>
         </el-row>
       </el-col>
     </el-row>
@@ -282,7 +263,7 @@ export default {
     {
       position: relative;
       height: 24px;
-      margin: 0 5px;
+      margin: 0 3px;
       padding: 0 10px;
       font-size: @fontSizeBase;
       font-weight: 700;
@@ -354,35 +335,12 @@ export default {
       margin: 0 20px;
     }
 
-    /*.CountryHolder {
-      height: 24px;
-
-      .CountryFlag {
-        height: 14px;
-        margin-right: 6px;
-        padding: 5px 0;
-      }
-
-      .CountryName {
-        font-size: @fontSizeBase;
-        font-weight: 700;
-        color: @colorTextPrimary;
-        line-height: 24px;
-      }
-    }*/
-
     .AuthLinks,
     .CountrySpecificMenu {
       .clearfix();
 
       > div {
         float: left;
-        height: 24px;
-      }
-    }
-
-    .CountrySpecificMenu {
-      .LogoWHOxDHA {
         height: 24px;
       }
     }

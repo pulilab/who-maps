@@ -20,7 +20,12 @@
           class="CountryFlag"
         >
         <div class="CountryName">
-          {{ landingData.name }}
+          <template v-if="landingData">
+            {{ landingData.name }}
+          </template>
+          <translate v-else>
+            Global
+          </translate>
           <fa icon="caret-down"/>
         </div>
       </div>
@@ -42,9 +47,22 @@
       <el-scrollbar :native="false" :noresize="false" :key="filteredCountries.length">
         <div class="List-container CustomPopoverList">
           <ul>
+            <li
+              @click="selectCountry()"
+              :class="{Active: active()}"
+            >
+              <img
+                alt="WHO logo small"
+                src="/who-logo-small.svg"
+                class="CountryInnerFlag"
+              >
+              <translate>Global</translate>
+              <fa icon="check" class="check" />
+            </li>
             <li v-for="country in filteredCountries"
                 :key="country.code"
                 @click="selectCountry(country)"
+                :class="{Active: active(country.code)}"
             >
               <img
                 :src="getCountryFlag(country.code)"
@@ -52,6 +70,7 @@
                 class="CountryInnerFlag"
               >
               {{ country.name }}
+              <fa icon="check" class="check" />
             </li>
           </ul>
         </div>
@@ -79,7 +98,7 @@ export default {
       if (this.landingData) {
         return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
       }
-      return null;
+      return '/who-logo-small.svg';
     },
     filteredCountries () {
       return this.countries.filter(country => {
@@ -90,7 +109,7 @@ export default {
       if (this.filteredCountries.length > 9) {
         return 306;
       }
-      return this.filteredCountries.length * 34;
+      return (this.filteredCountries.length + 1) * 34;
     }
   },
   methods: {
@@ -99,8 +118,15 @@ export default {
     },
     selectCountry (country) {
       this.chooserOpen = false;
-      const localised = this.localePath({ name: 'organisation', params: { organisation: country.code.toLowerCase() } });
+      const organisation = country ? country.code.toLowerCase() : '-';
+      const localised = this.localePath({ name: 'organisation', params: { organisation } });
       this.$router.push(localised);
+    },
+    active (code) {
+      if (!this.landingData) {
+        return !code;
+      }
+      return code === this.landingData.code;
     }
   }
 };
@@ -121,9 +147,13 @@ export default {
     height: 24px;
 
     .CountryFlag {
-      height: 14px;
+      height: 16px;
       margin-right: 6px;
-      padding: 5px 0;
+      padding: 3px 0;
+      &[src~="/who-logo-small.svg"] {
+        height: 20px;
+        padding: 2px 0 0 0;
+      }
     }
     .CountryName {
       font-size: @fontSizeBase;
@@ -138,6 +168,10 @@ export default {
     .List-container {
       max-height: 299px;
 
+      li:first-child .CountryInnerFlag {
+        height: auto;
+      }
+
       .CountryInnerFlag {
         width: 23px;
         height: 16px;
@@ -151,6 +185,9 @@ export default {
       padding: 0 15px 0 15px !important;
       &:hover {
         background-color: @colorGrayLightest !important;
+        .check {
+          display: none;
+        }
       }
     }
   }
