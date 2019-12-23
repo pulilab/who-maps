@@ -139,7 +139,7 @@ class ToolkitTests(SetupTests):
             }
         self.test_user_client.post(url, data, format="json")
         tasks.send_daily_toolkit_digest()
-        self.assertEqual(mail.outbox[-1].subject, "Your Digital Health Atlas project has been updated")
+        self.assertEqual(mail.outbox[-1].subject, "Your Digital Health Atlas project assessment has been updated")
 
         profile = UserProfile.objects.get(id=self.user_profile_id)
         self.assertEqual(profile.language, 'en')
