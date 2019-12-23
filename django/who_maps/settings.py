@@ -250,6 +250,10 @@ if SITE_ID in [3, 4]:
             "task": 'send_daily_toolkit_digest',
             "schedule": datetime.timedelta(hours=TOOLKIT_DIGEST_PERIOD),
         },
+        "send_project_updated_digest": {
+            "task": 'send_daily_toolkit_digest',
+            "schedule": datetime.timedelta(hours=PROJECT_UPDATE_DIGEST_PERIOD),
+        },
         "send_project_approval_digest": {
             "task": 'send_project_approval_digest',
             "schedule": datetime.timedelta(days=1),
