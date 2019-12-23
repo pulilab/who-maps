@@ -1,6 +1,6 @@
-from datetime import timedelta
 from django.conf import settings
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from celery.utils.log import get_task_logger
 
 from core.utils import send_mail_wrapper
