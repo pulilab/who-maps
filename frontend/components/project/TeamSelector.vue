@@ -74,9 +74,6 @@ export default {
       return str
     }
   },
-  mounted() {
-    console.log(this.options)
-  },
   methods: {
     changeHandler (value) {
       this.$emit('change', value);
