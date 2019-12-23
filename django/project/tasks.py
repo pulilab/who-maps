@@ -53,6 +53,13 @@ def send_project_approval_digest():
                               context=context)
 
 
+@app.task(name="send_project_updated_digest")
+def send_project_updated_digest():
+    """
+    Sends daily digest on published project changes to country and donor admins.
+    """
+    projects = Project.objects.published_only().filter(
+        modified__gt=timezone.now() - timezone.timedelta(hours=settings.PROJECT_UPDATE_DIGEST_PERIOD))
 @app.task(name="sync_project_from_odk")
 def sync_project_from_odk():  # pragma: no cover
     base_url = '{}://{}'.format(settings.ODK_SERVER_PROTOCOL, settings.ODK_SERVER_HOST)
