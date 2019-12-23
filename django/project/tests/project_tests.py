@@ -3,6 +3,7 @@ from datetime import datetime
 
 from allauth.account.models import EmailAddress
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 
 from django.core import mail
@@ -16,7 +17,7 @@ from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
 from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, \
     Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HSCGroup, ProjectApproval
-from project.tasks import send_project_approval_digest
+from project.tasks import send_project_approval_digest, send_project_updated_digest
 
 from project.tests.setup import SetupTests, MockRequest
 
@@ -1064,3 +1065,38 @@ class ProjectTests(SetupTests):
         url = reverse("project-retrieve", kwargs={"pk": 10000000})
         response = self.test_user_client.get(url, format="json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, response.json())
+
+    def test_send_project_updated_digest(self):
+        project = Project.objects.last()
+
+        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
+        user_2_profile = UserProfile.objects.create(user=user_2, language='en')
+
+        user_3 = User.objects.create_superuser(username='test_3', email='test3@test.test', password='a')
+        user_3_profile = UserProfile.objects.create(user=user_3, language='en')
+
+        user_4 = User.objects.create_superuser(username='test_4', email='test4@test.test', password='a')
+        user_4_profile = UserProfile.objects.create(user=user_4, language='en')
+
+        c = project.search.country
+        c.admins.add(self.user_profile_id, user_2_profile)
+        c.save()
+
+        self.assertEqual(project.data['donors'], [self.d1.id, self.d2.id])
+        self.d1.super_admins.add(user_3_profile)
+        self.d2.super_admins.add(user_4_profile)
+        self.d1.save()
+        self.d2.save()
+
+        project.created = project.modified - timezone.timedelta(seconds=20)
+        project.save()
+        send_project_updated_digest()
+        profile = UserProfile.objects.get(id=self.user_profile_id)
+        self.assertEqual(mail.outbox[1].subject, f'A Digital Health Atlas project in {c.name} has been updated')
+        self.assertEqual(mail.outbox[1].to, [profile.user.email, user_2.email])
+        self.assertEqual(mail.outbox[2].subject,
+                         f'A Digital Health Atlas project that {self.d1.name} invests in has been updated')
+        self.assertEqual(mail.outbox[2].to, [user_3.email])
+        self.assertEqual(mail.outbox[3].subject,
+                         f'A Digital Health Atlas project that {self.d2.name} invests in has been updated')
+        self.assertEqual(mail.outbox[3].to, [user_4.email])
