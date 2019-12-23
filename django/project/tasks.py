@@ -61,6 +61,10 @@ def send_project_updated_digest():
     """
     projects = Project.objects.published_only().filter(
         modified__gt=timezone.now() - timezone.timedelta(hours=settings.PROJECT_UPDATE_DIGEST_PERIOD))
+
+    for project in projects:
+        has_passed_creation = project.modified - project.created > timezone.timedelta(seconds=10)
+        if has_passed_creation:
 @app.task(name="sync_project_from_odk")
 def sync_project_from_odk():  # pragma: no cover
     base_url = '{}://{}'.format(settings.ODK_SERVER_PROTOCOL, settings.ODK_SERVER_HOST)
