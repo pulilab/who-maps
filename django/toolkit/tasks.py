@@ -21,8 +21,8 @@ def send_daily_toolkit_digest():
 
     for project in projects:
         toolkit = Toolkit.objects.get_object_or_none(project_id=project.id)
-        time_period = (timezone.localtime(timezone.now()) - timedelta(hours=settings.TOOLKIT_DIGEST_PERIOD))
-        if toolkit and toolkit.modified > time_period:
+        has_passed_creation = toolkit.modified - toolkit.created > timezone.timedelta(seconds=10)
+        if toolkit and has_passed_creation:
             for profile in project.team.all():
                 context = {"project_id": project.id}
                 send_mail_wrapper(subject="Your Digital Health Atlas project has been updated",
