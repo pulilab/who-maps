@@ -23,7 +23,7 @@
     <el-option
       v-for="person in optionsAndValues"
       :key="person.id"
-      :label="`${person.name}, ${getOrganisationDetails(person.organisation).name} (${person.email})` | truncate"
+      :label="`${person.name ? person.name + ', ': ''}${person.organisation ?  getOrganisationDetails(person.organisation).name : ''} ${person.name ? '(' + person.email + ')' : person.email }` | truncate"
       :value="person.id"
     >
       <span style="float: left;">{{ person.name }}</span>
@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      items: 'system/getUserProfiles',
+      items: 'system/getUserProfilesNoFilter',
       getOrganisationDetails: 'system/getOrganisationDetails'
     })
   },
@@ -73,6 +73,9 @@ export default {
       if (str.length > 50 ) return `${str.substr(0, 47)}...`
       return str
     }
+  },
+  mounted() {
+    console.log(this.options)
   },
   methods: {
     changeHandler (value) {
