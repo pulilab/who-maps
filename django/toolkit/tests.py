@@ -1,11 +1,9 @@
 from math import ceil
 
-from django.utils import timezone
-
 from django.core import mail
 from django.urls import reverse
+from django.utils import timezone
 
-from project.models import Project
 from user.models import UserProfile
 from .models import Toolkit
 from . import tasks
