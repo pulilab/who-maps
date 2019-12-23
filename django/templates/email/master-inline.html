@@ -485,6 +485,17 @@
                         <!-- /TEMPLATE: TOOLKIT DIGEST -->
 
 
+                        <!-- TEMPLATE: PROJECT UPDATED ADMIN DIGEST -->
+                        {% elif type == "project_updated_admin_digest" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Notification" %}</h1>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" ><b>{% trans "View the updated project details on the link below:" %}</b></p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                          <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/published" target="_blank" style="color:#008DC9;text-decoration:underline;" >{% site_url %}/{{ language }}/-/projects/{{ project_id }}/published</a>
+                        </p>
+                        <!-- /TEMPLATE: PROJECT UPDATED ADMIN DIGEST -->
+
+
                         <!-- TEMPLATE: STATUS REPORT -->
                         {% elif type == "status_report" %}
                         <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Status report" %}</h1>
