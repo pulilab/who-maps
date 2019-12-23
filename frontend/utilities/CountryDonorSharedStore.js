@@ -18,6 +18,8 @@ export const getters = () => ({
   getFooterTitle: state => state.editableData && state.editableData.footer_title,
   getFooterText: state => state.editableData && state.editableData.footer_text,
   getProjectApproval: state => state.editableData && state.editableData.project_approval,
+  getGDHIEnabled: state => state.editableData && state.editableData.gdhi_enabled,
+  getRoadmapEnabled: state => state.editableData && state.editableData.road_map_enabled,
 
   getUserSelection: state => state.userSelection,
   getAdminSelection: state => state.adminSelection,
@@ -41,8 +43,6 @@ export const actions = () => ({
       return Promise.reject(new Error('No donor found in the database to be loaded or modified, make one first!'));
     }
     const { data } = await this.$axios.get(`/api/${type}/${id}/`);
-    // console.log(`${state.type} DATA for #${id}`);
-    // console.dir(data);
     commit('SET_DATA', data);
     commit('SET_EDITABLE_DATA', data);
 
@@ -106,6 +106,7 @@ export const actions = () => ({
         dispatch('patchInfoAndArrays'),
         dispatch('patchImages'),
         dispatch('synchPartnerLogos'),
+        state.type === 'country' ? dispatch('synchRoadmapDocuments') : Promise.resolve(),
         state.type === 'country' ? dispatch('synchMapFile') : Promise.resolve(),
         state.type === 'country' ? dispatch('admin/map/saveMapData', {}, { root: true }) : Promise.resolve()
       ]);
@@ -119,7 +120,7 @@ export const actions = () => ({
     } catch (e) {
       console.error(e);
       Message({
-        message: 'Data update error',
+        message: e.message !== 'Request failed with status code 413' ? 'Data update error' : 'File size is too large',
         type: 'error',
         showClose: true
       });
@@ -128,7 +129,7 @@ export const actions = () => ({
 
   async patchInfoAndArrays ({ state, getters, rootGetters }) {
     const userProfile = rootGetters['user/getProfile'];
-    const keys = ['cover_text', 'footer_title', 'footer_text', 'project_approval', 'users', 'admins'];
+    const keys = ['cover_text', 'footer_title', 'footer_text', 'project_approval', 'gdhi_enabled', 'road_map_enabled', 'users', 'admins'];
     const superUserStr = state.type === 'country' ? 'SCA' : 'SDA';
     if (userProfile.account_type === superUserStr || userProfile.is_superuser) keys.push('super_admins');
 
@@ -174,13 +175,13 @@ export const actions = () => ({
   async synchPartnerLogos ({ getters, dispatch }) {
     const promArr = [];
 
-    (getters.getData.partner_logos || []).forEach(async logo => {
+    (getters.getData.partner_logos || []).forEach(logo => {
       if (logo.raw) {
         promArr.push({ action: 'postPartnerLogo', data: { img: logo.raw } });
       }
     });
 
-    (getters.getStableData.partner_logos || []).forEach(async logo => {
+    (getters.getStableData.partner_logos || []).forEach(logo => {
       const isStillThere = !!getters.getData.partner_logos.find(newLogo => newLogo.id === logo.id);
       if (!isStillThere) {
         promArr.push({ action: 'delPartnerLogo', data: { id: logo.id } });
@@ -206,6 +207,68 @@ export const actions = () => ({
     await this.$axios.delete(`/api/${state.type}-partner-logos/${id}/`);
   },
 
+  async synchRoadmapDocuments ({ getters, dispatch }) {
+    const promArr = [];
+
+    (getters.getData.documents || []).forEach(document => {
+      if (document.document.raw) {
+        promArr.push({
+          action: 'postRoadmapDocument',
+          data: {
+            document: document.document.raw,
+            title: document.title
+          }
+        });
+      }
+    });
+
+    (getters.getStableData.documents || []).forEach(document => {
+      const stillThere = getters.getData.documents.find(newDocument => newDocument.id === document.id);
+      if (!stillThere) {
+        promArr.push({ action: 'delRoadmapDocument', data: { id: document.id } });
+        return;
+      }
+      if (stillThere.title !== document.title) {
+        promArr.push({ action: 'updateRoadmapDocument', data: { id: document.id, title: stillThere.title } });
+      }
+    });
+
+    return Promise.all(promArr.map(promObj => dispatch(promObj.action, promObj.data)));
+  },
+
+  async postRoadmapDocument ({ state, rootGetters }, { document, title, id }) {
+    const countryId = state.id || rootGetters['user/getProfile']['country'];
+    const formData = new FormData();
+    formData.append('country', countryId);
+    formData.append('document', document);
+    formData.append('title', title);
+    await this.$axios.post(`/api/architecture-roadmap-document/`, formData, {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    });
+  },
+
+  async delRoadmapDocument ({ state }, { id }) {
+    await this.$axios.delete(`/api/architecture-roadmap-document/${id}/`);
+  },
+
+  async updateRoadmapDocument ({ state }, { id, document, title }) {
+    const formData = new FormData();
+    formData.append('id', id);
+    if (document) {
+      formData.append('document', document);
+    }
+    if (title) {
+      formData.append('title', title);
+    }
+    await this.$axios.patch(`/api/architecture-roadmap-document/${id}/`, formData, {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    });
+  },
+
   setDataField ({ commit }, { field, data }) {
     commit('SET_DATA_FIELD', { field, data });
   },
@@ -223,6 +286,12 @@ export const actions = () => ({
   },
   setProjectApproval ({ commit }, data) {
     commit('SET_DATA_FIELD', { field: 'project_approval', data });
+  },
+  setGDHIEnabled ({ commit }, data) {
+    commit('SET_DATA_FIELD', { field: 'gdhi_enabled', data });
+  },
+  setRoadmapEnabled ({ commit }, data) {
+    commit('SET_DATA_FIELD', { field: 'road_map_enabled', data });
   }
 });
 
