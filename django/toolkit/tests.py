@@ -1,8 +1,11 @@
 from math import ceil
 
+from django.utils import timezone
+
 from django.core import mail
 from django.urls import reverse
 
+from project.models import Project
 from user.models import UserProfile
 from .models import Toolkit
 from . import tasks
@@ -138,6 +141,9 @@ class ToolkitTests(SetupTests):
                 "value": 2
             }
         self.test_user_client.post(url, data, format="json")
+        toolkit = Toolkit.objects.get_object_or_none(project_id=self.project_id)
+        toolkit.created = toolkit.modified - timezone.timedelta(seconds=20)
+        toolkit.save()
         tasks.send_daily_toolkit_digest()
         self.assertEqual(mail.outbox[-1].subject, "Your Digital Health Atlas project assessment has been updated")
 
