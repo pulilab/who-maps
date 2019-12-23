@@ -78,6 +78,23 @@ def send_project_updated_digest():
                                   to=email_list,
                                   language=language,
                                   context=context)
+
+            donors = project.search.donors
+            for donor in Donor.objects.filter(id__in=donors):
+                email_mapping = defaultdict(list)
+                for profile in donor.super_admins.all() | donor.admins.all():
+                    email_mapping[profile.language].append(profile.user.email)
+
+                for language, email_list in email_mapping.items():
+                    context = {'donor_name': country.name, 'project_id': project.id}
+                    subject = _(f"A Digital Health Atlas project that {donor.name} invests in has been updated")
+                    send_mail_wrapper(subject=subject,
+                                      email_type='project_updated_admin_digest',
+                                      to=email_list,
+                                      language=language,
+                                      context=context)
+
+
 @app.task(name="sync_project_from_odk")
 def sync_project_from_odk():  # pragma: no cover
     base_url = '{}://{}'.format(settings.ODK_SERVER_PROTOCOL, settings.ODK_SERVER_HOST)
