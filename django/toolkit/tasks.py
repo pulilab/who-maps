@@ -16,7 +16,9 @@ def send_daily_toolkit_digest():
     """
     Sends daily digest on maps toolkit changes to team members.
     """
-    projects = Project.objects.all()
+    projects = Project.objects.published_only().filter(
+        modified__gt=timezone.now() - timezone.timedelta(hours=settings.TOOLKIT_DIGEST_PERIOD))
+
     for project in projects:
         toolkit = Toolkit.objects.get_object_or_none(project_id=project.id)
         time_period = (timezone.localtime(timezone.now()) - timedelta(hours=settings.TOOLKIT_DIGEST_PERIOD))
