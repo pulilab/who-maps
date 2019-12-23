@@ -17,7 +17,7 @@
       :value="newPlatform.id"
       class="new"
     >
-      <span class="left"><b>{{ newPlatform.id }}</b></span>
+      <span class="left"><b>{{ newPlatform.name }}</b></span>
       <span class="left">
         <small>
           <translate>
@@ -25,7 +25,7 @@
           </translate>
         </small>
       </span>
-      <span class="right"><b><fa icon="chevron-right" /><translate>Add as new</translate></b></span>
+      <span class="right"><b><fa icon="plus-circle" /><translate>Add as new</translate></b></span>
     </el-option>
     <el-option
       v-for="platform in availablePlatformsFilter"
@@ -75,6 +75,7 @@ export default {
       technologyPlatforms: 'projects/getTechnologyPlatforms'
     }),
     platform () {
+      console.log(this.platforms);
       return this.platforms[this.index];
     }
   },
@@ -82,16 +83,20 @@ export default {
     changeHandler (value) {
       const p = [...this.platforms];
       p[this.index] = value;
-      console.log(p);
+      this.availablePlatforms = [{id: value, name: value, new: true }, ...this.availablePlatforms ];
       this.$emit('change', p);
     },
     filter (value) {
+      // console.log(this.availablePlatforms)
       this.availablePlatformsFilter = this.availablePlatforms.filter(platform => platform.name.toLowerCase().includes(value.toLowerCase()))
       if (value) {
         this.newPlatform = { id: value, name: value };
       } else {
         this.newPlatform = null;
       }
+      // this.$nextTick(() => {
+      //   console.log(this.availablePlatforms)
+      // })
     }
   }
 };
@@ -117,9 +122,13 @@ export default {
       }
       .right {
         float: right;
-        width: 25%;
+        // width: 25%;
         color: @colorBrandPrimary;
         font-size: 13px;
+        margin-top: -7px;
+        svg {
+          margin-right: 10px;
+        }
       }
     }
   }
