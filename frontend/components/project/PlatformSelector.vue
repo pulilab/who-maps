@@ -17,35 +17,53 @@
       :value="newPlatform.id"
       class="new"
     >
-      <span class="left"><b>{{ newPlatform.name }}</b></span>
+      <span class="left">
+        <b>{{ newPlatform.name }}</b>
+      </span>
       <span class="left">
         <small>
-          <translate>
-            DHA Admin will update the Software list to include your new software name
-          </translate>
+          <translate>DHA Admin will update the Software list to include your new software name</translate>
         </small>
       </span>
-      <span class="right"><b><fa icon="plus-circle" /><translate>Add as new</translate></b></span>
+      <span class="right">
+        <b>
+          <fa icon="plus-circle" />
+          <translate>Add as new</translate>
+        </b>
+      </span>
     </el-option>
     <el-option
       v-for="platform in availablePlatformsFilter"
       :key="platform.id"
       :label="platform.name"
       :value="platform.id"
-    />
-
+      :class="`${platform.new ? 'requested' : ''}`"
+    >
+      <template v-if="platform.new">
+        <span class="left">
+          <b>{{ platform.name }}</b>
+        </span>
+        <span class="right">
+          <small>
+            <fa icon="exclamation-triangle" />
+            <translate>Requested, please wait for approval</translate>
+          </small>
+        </span>
+      </template>
+      <template v-else>{{ platform.name }}</template>
+    </el-option>
   </lazy-el-select>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 export default {
   model: {
-    prop: 'platforms',
-    event: 'change'
+    prop: "platforms",
+    event: "change"
   },
   $_veeValidate: {
-    value () {
+    value() {
       return this.platform;
     }
   },
@@ -64,73 +82,99 @@ export default {
       newPlatform: null,
       availablePlatforms: [],
       availablePlatformsFilter: []
-    }
+    };
   },
   mounted() {
-    this.availablePlatforms = this.technologyPlatforms.filter(tp => !this.platforms.some(s => s === tp.id) || tp.id === this.platform)
-    this.availablePlatformsFilter = this.technologyPlatforms.filter(tp => !this.platforms.some(s => s === tp.id) || tp.id === this.platform)
+    const available = this.technologyPlatforms.filter(
+      tp => !this.platforms.some(s => s === tp.id) || tp.id === this.platform
+    );
+    const newAvailablePlatforms = this.platforms.map(p => {
+      if (typeof p === "string") {
+        return { id: p, name: p, new: true };
+      }
+    }).filter(val => typeof val !== 'undefined');
+
+    this.availablePlatforms = [
+      ...newAvailablePlatforms,
+      ...available
+    ].sort((a, b) => a.name.localeCompare(b.name));
+    this.availablePlatformsFilter = this.availablePlatforms;
   },
   computed: {
     ...mapGetters({
-      technologyPlatforms: 'projects/getTechnologyPlatforms'
+      technologyPlatforms: "projects/getTechnologyPlatforms"
     }),
-    platform () {
-      console.log(this.platforms);
+    platform() {
       return this.platforms[this.index];
     }
   },
   methods: {
-    changeHandler (value) {
+    changeHandler(value) {
       const p = [...this.platforms];
       p[this.index] = value;
-      this.availablePlatforms = [{id: value, name: value, new: true }, ...this.availablePlatforms ];
-      this.$emit('change', p);
+      this.$emit("change", p);
     },
-    filter (value) {
-      // console.log(this.availablePlatforms)
-      this.availablePlatformsFilter = this.availablePlatforms.filter(platform => platform.name.toLowerCase().includes(value.toLowerCase()))
+    filter(value) {
+      this.availablePlatformsFilter = this.availablePlatforms.filter(platform =>
+        platform.name.toLowerCase().includes(value.toLowerCase())
+      );
       if (value) {
         this.newPlatform = { id: value, name: value };
       } else {
         this.newPlatform = null;
       }
-      // this.$nextTick(() => {
-      //   console.log(this.availablePlatforms)
-      // })
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .PlatformSelector {
-    width: 100%;
-  }
+.PlatformSelector {
+  width: 100%;
+}
 
-  .el-select-dropdown__item {
-    &.new {
-      background-color: #FFF8C4;
-      padding-top: 5px;
-      height: 58px;
-      .left {
-        float: left;
-        width: 70%;
-        height: 16px;
-      }
-      .right {
-        float: right;
-        // width: 25%;
-        color: @colorBrandPrimary;
-        font-size: 13px;
-        margin-top: -7px;
-        svg {
-          margin-right: 10px;
-        }
+.el-select-dropdown__item {
+  &.requested {
+    background-color: #fffbdd;
+    .left {
+      float: left;
+      width: 60%;
+      overflow: hidden;
+    }
+    .right {
+      float: right;
+      overflow: hidden;
+      color: @colorTextMuted;
+      font-size: 10px;
+      margin-top: 0px;
+      svg {
+        color: #f8a72a;
+        margin-right: 6px;
       }
     }
   }
-
+  &.new {
+    background-color: #fff8c4;
+    padding-top: 5px;
+    height: 58px;
+    .left {
+      float: left;
+      width: 70%;
+      height: 16px;
+    }
+    .right {
+      float: right;
+      // width: 25%;
+      color: @colorBrandPrimary;
+      font-size: 13px;
+      margin-top: -7px;
+      svg {
+        margin-right: 10px;
+      }
+    }
+  }
+}
 </style>
