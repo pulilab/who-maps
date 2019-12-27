@@ -1,6 +1,6 @@
-from datetime import timedelta
 from django.conf import settings
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from celery.utils.log import get_task_logger
 
 from core.utils import send_mail_wrapper
@@ -16,14 +16,17 @@ def send_daily_toolkit_digest():
     """
     Sends daily digest on maps toolkit changes to team members.
     """
-    projects = Project.objects.all()
+    projects = Project.objects.published_only().filter(
+        modified__gt=timezone.now() - timezone.timedelta(hours=settings.TOOLKIT_DIGEST_PERIOD))
+
     for project in projects:
         toolkit = Toolkit.objects.get_object_or_none(project_id=project.id)
-        time_period = (timezone.localtime(timezone.now()) - timedelta(hours=settings.TOOLKIT_DIGEST_PERIOD))
-        if toolkit and toolkit.modified > time_period:
+        has_passed_creation = toolkit.modified - toolkit.created > timezone.timedelta(seconds=10)
+        if toolkit and has_passed_creation:
             for profile in project.team.all():
                 context = {"project_id": project.id}
-                send_mail_wrapper(subject="Your Digital Health Atlas project has been updated",
+                subject = _("Your Digital Health Atlas project assessment has been updated")
+                send_mail_wrapper(subject=subject,
                                   email_type="toolkit_digest",
                                   to=profile.user.email,
                                   language=profile.language,

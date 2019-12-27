@@ -48,7 +48,8 @@ const config = {
     { src: '~plugins/vue-leaflet.js', ssr: false },
     { src: '~plugins/element.js', ssr: true },
     { src: '~plugins/i18n.js', ssr: true },
-    { src: '~plugins/watchHead.js', ssr: false }
+    { src: '~plugins/watchHead.js', ssr: false },
+    { src: '~plugins/directives.js', ssr: false },
   ],
   modules: [
     '@nuxtjs/axios',
