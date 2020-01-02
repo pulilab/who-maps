@@ -6,7 +6,11 @@
         class="WelcomeBox"
       >
         <h2><translate>Welcome!</translate></h2>
-        <h6>{{ welcomeText }}</h6>
+        <h6>
+          <translate>
+            The Digital Health Atlas is a WHO global technology registry platform aiming to strengthen the value and impact of digital health investments, improve coordination, and facilitate institutionalization and scale.
+          </translate>
+        </h6>
 
         <el-button
           circle

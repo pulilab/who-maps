@@ -187,8 +187,7 @@ class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if self.instance is None:
             country = attrs.get('country')
-            if country and \
-                    country.documents.count() >= settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY:
+            if country and country.documents.count() >= settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY:
                 raise ValidationError(
                     f'The country already has {settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY} related road map documents')
         return attrs

@@ -275,7 +275,11 @@ export default {
             });
             return;
           } catch (e) {
-            this.apiErrors = e.response.data;
+            if (e.response) {
+              this.apiErrors = e.response.data;
+            } else {
+              console.error(e);
+            }
             this.setLoading(false);
           }
         }

@@ -522,6 +522,17 @@
                         <!-- /TEMPLATE: TOOLKIT DIGEST -->
 
 
+                        <!-- TEMPLATE: PROJECT UPDATED ADMIN DIGEST -->
+                        {% elif type == "project_updated_admin_digest" %}
+                        <h1>{% trans "Notification" %}</h1>
+                        <p>{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
+                        <p><b>{% trans "View the updated project details on the link below:" %}</b></p>
+                        <p>
+                          <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/published" target="_blank">{% site_url %}/{{ language }}/-/projects/{{ project_id }}/published</a>
+                        </p>
+                        <!-- /TEMPLATE: PROJECT UPDATED ADMIN DIGEST -->
+
+
                         <!-- TEMPLATE: STATUS REPORT -->
                         {% elif type == "status_report" %}
                         <h1>{% trans "Status report" %}</h1>

@@ -139,6 +139,9 @@ class ArchitectureRoadMapDocument(models.Model):
     title = models.CharField(max_length=128)
     document = models.FileField(null=True, upload_to='documents/')
 
+    class Meta:
+        ordering = ('id',)
+
 
 class Donor(UserManagement, LandingPageCommon):
     code = models.CharField(max_length=10, default="NULL", help_text="Acronym for Donor", unique=True,

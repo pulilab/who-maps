@@ -2,17 +2,22 @@
   <div class="LandingPage">
     <div class="MapBoxContainer">
       <welcome-box />
-      <landing-map v-if="!showCoverImage" />
-      <country-projects-box />
-
-      <div
-        v-if="showCoverImage"
-        :style="{backgroundImage: `url(${landingData.cover_url})`}"
-        class="CoverImageBg"
-      />
+      <template v-if="routeCheck">
+        <landing-map v-if="!showCoverImage" />
+        <country-projects-box />
+        <div
+          v-if="showCoverImage"
+          :style="{backgroundImage: `url(${landingData.cover_url})`}"
+          class="CoverImageBg"
+        />
+      </template>
+      <template v-else>
+        <landing-map />
+        <country-projects-box />
+      </template>
     </div>
 
-    <div class="InfoSignupContainer">
+    <div v-if="routeCheck" class="InfoSignupContainer">
       <el-row type="flex">
         <el-col class="InfoBoxWrapper">
           <info-box />
@@ -22,7 +27,7 @@
         </el-col>
       </el-row>
     </div>
-
+    <layout-builder v-else :data="landingData"/>
     <about-section />
   </div>
 </template>
@@ -35,6 +40,8 @@ import CountryProjectsBox from '../../components/landing/CountryProjectsBox.vue'
 import InfoBox from '../../components/landing/InfoBox.vue';
 import CentralBox from '../../components/landing/CentralBox.vue';
 import AboutSection from '../../components/landing/AboutSection.vue';
+import LayoutBuilder from '@/components/country/LayoutBuilder';
+
 import { mapGetters } from 'vuex';
 
 export default {
@@ -44,7 +51,8 @@ export default {
     InfoBox,
     CentralBox,
     AboutSection,
-    CountryProjectsBox
+    CountryProjectsBox,
+    LayoutBuilder
   },
   fetch ({ store }) {
     store.dispatch('landing/resetSearch');
@@ -55,6 +63,9 @@ export default {
     }),
     showCoverImage () {
       return this.landingData && this.landingData.cover;
+    },
+    routeCheck() {
+      return this.$route.path.split('/')[2].trim() === '-' || this.$route.path.split('/')[2].trim().length > 2;
     }
   }
 };
