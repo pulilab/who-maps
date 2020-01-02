@@ -228,7 +228,8 @@ BROKER_URL = 'redis://{}:6379/0'.format(REDIS_URL)
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-TOOLKIT_DIGEST_PERIOD = 1  # hours
+TOOLKIT_DIGEST_PERIOD = 24  # hours
+PROJECT_UPDATE_DIGEST_PERIOD = 24  # 1 day
 
 ODK_SYNC_PERIOD = 1  # hours
 ODK_CREDENTIALS = {
@@ -248,6 +249,10 @@ if SITE_ID in [3, 4]:
         "send_daily_toolkit_digest": {
             "task": 'send_daily_toolkit_digest',
             "schedule": datetime.timedelta(hours=TOOLKIT_DIGEST_PERIOD),
+        },
+        "send_project_updated_digest": {
+            "task": 'send_daily_toolkit_digest',
+            "schedule": datetime.timedelta(hours=PROJECT_UPDATE_DIGEST_PERIOD),
         },
         "send_project_approval_digest": {
             "task": 'send_project_approval_digest',
@@ -271,7 +276,7 @@ if SITE_ID in [3, 4]:
 
     ALLOWED_HOSTS = ['.digitalhealthatlas.org', '.prod.whomaps.pulilab.com',
                      '.qa.whomaps.pulilab.com', '.dhatlas.org',
-                     '.digitalhealthatlas.com', '.v3.dha.pulilab.com', 'nginx:9010', 'nginx']
+                     '.digitalhealthatlas.com', 'nginx:9010', 'nginx']
 
     EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
@@ -380,3 +385,8 @@ OSM_MAP_CLI_KEY = 'a9ea45b5-ab37-4323-8263-767aa5896113'
 # Uncomment these lines if you want to redirect all emails to the forced addresses
 # EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
 # TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "nico@pulilab.com", "f@pulilab.com"]
+
+MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE = 15728640  # 15 MB, 1024 * 1024 * 15
+MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY = 5
+VALID_ROAD_MAP_DOCUMENT_FILE_TYPES = ('.pdf', '.txt', '.doc', '.docx', '.xls', '.xlsx', '.rtf')
+ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE = os.environ.get('ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE', False)

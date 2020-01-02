@@ -4,7 +4,7 @@ from collections import namedtuple
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
-from django.contrib.postgres.fields import JSONField, ArrayField
+from django.contrib.postgres.fields import JSONField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
@@ -90,26 +90,6 @@ class Project(SoftDeleteModel, ExtendedModel):
 
     def get_anon_data(self):
         return remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY + self.FIELDS_FOR_LOGGED_IN)
-
-    def str_national_level_deployment(self):
-        nld = self.data.get('national_level_deployment', {})
-        if not nld:
-            return ''
-        return "National Level Deployment: " \
-               "[Clients: {}, Health Workers: {}, Facilities: {}]".format(nld.get('clients'),
-                                                                          nld.get('health_workers'),
-                                                                          nld.get('facilities'))
-
-    def str_coverage(self, second_level=False):
-        coverage = self.data.get('coverage' if not second_level else 'coverage_second_level', [])
-        if not coverage:
-            return ''
-        return ", ".join(["District: {} "
-                          "[Clients: {}, Health Workers: {}, Facilities: {}]".format(c.get('district'),
-                                                                                     c.get('clients'),
-                                                                                     c.get('health_workers'),
-                                                                                     c.get('facilities'))
-                         for c in coverage])
 
     def to_representation(self, data=None, draft_mode=False):
         if data is None:
@@ -242,10 +222,6 @@ class HSCGroup(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 class HSCChallengeQuerySet(ActiveQuerySet):
     FakeChallenge = namedtuple('FakeChallenge', ['name', 'challenge'])
 
-    def get_names_for_ids(self, ids):
-        return [self.FakeChallenge(l.group.name, l.name)
-                for l in self.filter(id__in=ids).select_related('group')]
-
 
 class HSCChallenge(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     group = models.ForeignKey(HSCGroup, on_delete=models.CASCADE, related_name='challenges')
@@ -294,19 +270,6 @@ class InteroperabilityStandard(InvalidateCacheMixin, ExtendedNameOrderedSoftDele
 
 class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
-
-
-class ProjectImport(ExtendedModel):
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    csv = models.FileField()
-    headers = ArrayField(models.CharField(max_length=512), blank=True, null=True)
-    mapping = JSONField(default=dict)
-    imported = models.TextField(null=True, blank=True, default='')
-    failed = models.TextField(null=True, blank=True, default='')
-    status = models.NullBooleanField(null=True, blank=True)
-
-    def __str__(self):
-        return self.csv.name
 
 
 class ProjectImportV2(ExtendedModel):

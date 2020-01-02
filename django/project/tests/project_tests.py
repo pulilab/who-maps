@@ -1,7 +1,9 @@
 import copy
 from datetime import datetime
 
+from allauth.account.models import EmailAddress
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 
 from django.core import mail
@@ -15,7 +17,7 @@ from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
 from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, \
     Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HSCGroup, ProjectApproval
-from project.tasks import send_project_approval_digest
+from project.tasks import send_project_approval_digest, send_project_updated_digest
 
 from project.tests.setup import SetupTests, MockRequest
 
@@ -587,6 +589,83 @@ class ProjectTests(SetupTests):
         self.assertTrue(owner_id not in response.json()['team'])
         self.assertEqual(response.json()['team'], [user_profile_id])
 
+    def test_add_new_users_by_invalid_email(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        groups = {
+            "team": [],
+            "viewers": [],
+            "new_team_emails": ["new_email"],
+            "new_viewer_emails": ["yolo"]
+        }
+        response = self.test_user_client.put(url, groups, format="json")
+
+        self.assertEqual(response.json(), {'new_team_emails': {'0': ['Enter a valid email address.']},
+                                           'new_viewer_emails': {'0': ['Enter a valid email address.']}})
+
+    def test_add_new_users_by_email(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(UserProfile.objects.count(), 1)
+        self.assertEqual(EmailAddress.objects.count(), 1)
+        owner_id = response.json()['team'][0]
+
+        groups = {
+            "team": [],
+            "viewers": [],
+            "new_team_emails": ["new_email@yo.com"],
+            "new_viewer_emails": ["new_email@lol.ok"]
+        }
+        response = self.test_user_client.put(url, groups, format="json")
+
+        self.assertTrue(response.json()['team'])
+        self.assertTrue(response.json()['viewers'])
+        self.assertTrue(owner_id not in response.json()['team'])
+        self.assertEqual(UserProfile.objects.count(), 3)
+        self.assertEqual(EmailAddress.objects.count(), 3)
+
+        welcome_emails_count = 0
+        for m in mail.outbox:
+            if m.subject == 'Welcome to the Digital Health Atlas':
+                welcome_emails_count += 1
+        self.assertEqual(welcome_emails_count, 3)
+
+        notified_on_member_add_count = 0
+        for m in mail.outbox:
+            if m.subject == 'You have been added to a project in the Digital Health Atlas':
+                notified_on_member_add_count += 1
+                self.assertTrue("new_email@yo.com" in m.to or "new_email@lol.ok" in m.to)
+        self.assertEqual(notified_on_member_add_count, 2)
+
+        set_password_sent = 0
+        for m in mail.outbox:
+            if m.subject == "Set Your Password on Digital Health Atlas":
+                set_password_sent += 1
+                self.assertTrue("new_email@yo.com" in m.to or "new_email@lol.ok" in m.to)
+        self.assertEqual(set_password_sent, 2)
+
+    def test_add_new_users_by_already_existing_email(self):
+        url = reverse("project-groups", kwargs={"pk": self.project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(UserProfile.objects.count(), 1)
+        owner_id = response.json()['team'][0]
+        owner_email = UserProfile.objects.get().user.email
+
+        groups = {
+            "team": [owner_id],
+            "viewers": [],
+            "new_team_emails": [owner_email],
+            "new_viewer_emails": [owner_email]
+        }
+        response = self.test_user_client.put(url, groups, format="json")
+        self.assertTrue(owner_id in response.json()['team'])
+        self.assertTrue(owner_id in response.json()['viewers'])
+        self.assertEqual(UserProfile.objects.count(), 1)
+
     def test_update_project_updates_health_focus_areas(self):
         retrieve_url = reverse("project-retrieve", kwargs={"pk": self.project_id})
         response = self.test_user_client.get(retrieve_url)
@@ -764,7 +843,7 @@ class ProjectTests(SetupTests):
 
         c = Country.objects.get(id=self.country_id)
         c.project_approval = True
-        c.users.add(self.user_profile_id, user_2_profile)
+        c.admins.add(self.user_profile_id, user_2_profile)
         c.save()
         send_project_approval_digest()
 
@@ -986,3 +1065,38 @@ class ProjectTests(SetupTests):
         url = reverse("project-retrieve", kwargs={"pk": 10000000})
         response = self.test_user_client.get(url, format="json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, response.json())
+
+    def test_send_project_updated_digest(self):
+        project = Project.objects.last()
+
+        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
+        user_2_profile = UserProfile.objects.create(user=user_2, language='en')
+
+        user_3 = User.objects.create_superuser(username='test_3', email='test3@test.test', password='a')
+        user_3_profile = UserProfile.objects.create(user=user_3, language='en')
+
+        user_4 = User.objects.create_superuser(username='test_4', email='test4@test.test', password='a')
+        user_4_profile = UserProfile.objects.create(user=user_4, language='en')
+
+        c = project.search.country
+        c.admins.add(self.user_profile_id, user_2_profile)
+        c.save()
+
+        self.assertEqual(project.data['donors'], [self.d1.id, self.d2.id])
+        self.d1.super_admins.add(user_3_profile)
+        self.d2.super_admins.add(user_4_profile)
+        self.d1.save()
+        self.d2.save()
+
+        project.created = project.modified - timezone.timedelta(seconds=20)
+        project.save()
+        send_project_updated_digest()
+        profile = UserProfile.objects.get(id=self.user_profile_id)
+        self.assertEqual(mail.outbox[1].subject, f'A Digital Health Atlas project in {c.name} has been updated')
+        self.assertEqual(mail.outbox[1].to, [profile.user.email, user_2.email])
+        self.assertEqual(mail.outbox[2].subject,
+                         f'A Digital Health Atlas project that {self.d1.name} invests in has been updated')
+        self.assertEqual(mail.outbox[2].to, [user_3.email])
+        self.assertEqual(mail.outbox[3].subject,
+                         f'A Digital Health Atlas project that {self.d2.name} invests in has been updated')
+        self.assertEqual(mail.outbox[3].to, [user_4.email])

@@ -10,14 +10,17 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext, override
+from django.utils.translation import ugettext
+from django.utils import timezone
 from django.template import loader
+from django.utils.translation import ugettext_lazy as _
 
 from celery.utils.log import get_task_logger
 from rest_framework.exceptions import ValidationError
 
+from core.utils import send_mail_wrapper
 from user.models import Organisation
-from country.models import Country
+from country.models import Country, Donor
 
 from .models import Project, InteroperabilityLink
 from .serializers import ProjectDraftSerializer
@@ -30,34 +33,66 @@ logger = get_task_logger(__name__)
 
 @app.task(name="send_project_approval_digest")
 def send_project_approval_digest():
-    countries = Country.objects.exclude(users=None)
+    countries = Country.objects.filter(project_approval=True)
     for country in countries:
-        if country.project_approval:
-            projects = Project.objects.filter(data__country=country.id, approval__approved__isnull=True)
+        projects = Project.objects.filter(data__country=country.id, approval__approved__isnull=True)
 
-            if not projects:
-                return
+        if not projects:
+            return
 
-            html_template = loader.get_template('email/master-inline.html')
+        email_mapping = defaultdict(list)
+        for profile in country.super_admins.all() | country.admins.all():
+            email_mapping[profile.language].append(profile.user.email)
 
+        for language, email_list in email_mapping.items():
+            context = {'country_name': country.name, 'projects': projects}
+
+            send_mail_wrapper(subject=_('Action required: New projects awaiting approval'),
+                              email_type='status_report',
+                              to=email_list,
+                              language=language,
+                              context=context)
+
+
+@app.task(name="send_project_updated_digest")
+def send_project_updated_digest():
+    """
+    Sends daily digest on published project changes to country and donor admins.
+    """
+    projects = Project.objects.published_only().filter(
+        modified__gt=timezone.now() - timezone.timedelta(hours=settings.PROJECT_UPDATE_DIGEST_PERIOD))
+
+    for project in projects:
+        has_passed_creation = project.modified - project.created > timezone.timedelta(seconds=10)
+        if has_passed_creation:
+            country = project.search.country
             email_mapping = defaultdict(list)
-            for profile in country.users.all():
+            for profile in country.super_admins.all() | country.admins.all():
                 email_mapping[profile.language].append(profile.user.email)
 
             for language, email_list in email_mapping.items():
-                with override(language):
-                    subject = ugettext('Action required: New projects awaiting approval')
-                    html_message = html_template.render({'type': 'status_report',
-                                                         'country_name': country.name,
-                                                         'projects': projects,
-                                                         'language': language})
+                context = {'country_name': country.name, 'project_id': project.id}
+                subject = _(f"A Digital Health Atlas project in {country.name} has been updated")
+                send_mail_wrapper(subject=subject,
+                                  email_type='project_updated_admin_digest',
+                                  to=email_list,
+                                  language=language,
+                                  context=context)
 
-                send_mail(
-                    subject=subject,
-                    message='',
-                    from_email=settings.FROM_EMAIL,
-                    recipient_list=email_list,
-                    html_message=html_message)
+            donors = project.search.donors
+            for donor in Donor.objects.filter(id__in=donors):
+                email_mapping = defaultdict(list)
+                for profile in donor.super_admins.all() | donor.admins.all():
+                    email_mapping[profile.language].append(profile.user.email)
+
+                for language, email_list in email_mapping.items():
+                    context = {'donor_name': country.name, 'project_id': project.id}
+                    subject = _(f"A Digital Health Atlas project that {donor.name} invests in has been updated")
+                    send_mail_wrapper(subject=subject,
+                                      email_type='project_updated_admin_digest',
+                                      to=email_list,
+                                      language=language,
+                                      context=context)
 
 
 @app.task(name="sync_project_from_odk")

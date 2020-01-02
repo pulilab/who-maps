@@ -105,6 +105,15 @@
                 <toolkit-dialog-wrapper />
               </div>
               <div>
+                <a
+                  href="http://wiki.digitalhealthatlas.org/"
+                  target="_blank"
+                  class="HeaderBtn"
+                >
+                  <translate>Wiki</translate>
+                </a>
+              </div>
+              <div>
                 <nuxt-link
                   key="newProjectBtn"
                   :to="localePath({name: 'organisation-projects-create', params: $route.params})"
@@ -118,46 +127,15 @@
             </el-col>
           </template>
 
-          <el-col
-            v-if="countrySpecific"
-            class="CountryHolder"
-          >
+          <el-col>
             <el-row type="flex">
               <el-col>
                 <div class="Separator" />
               </el-col>
-              <el-col>
-                <img
-                  :src="countryFlag"
-                  alt="country flag"
-                  class="CountryFlag"
-                >
-              </el-col>
-              <el-col>
-                <div class="CountryName">
-                  {{ landingData.code }}
-                </div>
-              </el-col>
             </el-row>
           </el-col>
-
-          <el-col
-            v-if="customOrganisation"
-            class="CountrySpecificMenu"
-          >
-            <div class="Separator" />
-            <div>
-              <nuxt-link
-                key="whoLandingBtn"
-                :to="localePath({name: 'organisation', params: {organisation: '-'}})"
-              >
-                <img
-                  class="LogoWHOxDHA"
-                  alt="WHO logo small"
-                  src="/logo-whoxdha.svg"
-                >
-              </nuxt-link>
-            </div>
+          <el-col>
+            <country-chooser />
           </el-col>
         </el-row>
       </el-col>
@@ -172,6 +150,7 @@ import { mapGetters } from 'vuex';
 import LanguageSelector from './LanguageSelector';
 import UserDropdown from './UserDropdown';
 import ToolkitDialogWrapper from './ToolkitDialogWrapper';
+import CountryChooser from './CountryChooser';
 
 export default {
   directives: {
@@ -180,7 +159,8 @@ export default {
   components: {
     LanguageSelector,
     UserDropdown,
-    ToolkitDialogWrapper
+    ToolkitDialogWrapper,
+    CountryChooser
   },
   props: {
     errorPage: {
@@ -283,7 +263,7 @@ export default {
     {
       position: relative;
       height: 24px;
-      margin: 0 5px;
+      margin: 0 3px;
       padding: 0 10px;
       font-size: @fontSizeBase;
       font-weight: 700;
@@ -355,35 +335,12 @@ export default {
       margin: 0 20px;
     }
 
-    .CountryHolder {
-      height: 24px;
-
-      .CountryFlag {
-        height: 14px;
-        margin-right: 6px;
-        padding: 5px 0;
-      }
-
-      .CountryName {
-        font-size: @fontSizeBase;
-        font-weight: 700;
-        color: @colorTextPrimary;
-        line-height: 24px;
-      }
-    }
-
     .AuthLinks,
     .CountrySpecificMenu {
       .clearfix();
 
       > div {
         float: left;
-        height: 24px;
-      }
-    }
-
-    .CountrySpecificMenu {
-      .LogoWHOxDHA {
         height: 24px;
       }
     }

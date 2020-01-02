@@ -110,6 +110,42 @@
             :limit="10"
           />
         </el-form-item>
+
+        <div class="Divider"></div>
+
+        <el-form-item :label="$gettext('Widgets') | translate">
+          <label class="el-form-item__label">
+            <translate>Please enable widgets you want to show on the landing page:</translate>
+          </label>
+        </el-form-item>
+        <el-form-item>
+          <div class="Switch-container">
+            <filter-switch
+              v-model="GDHIEnabled"
+              :label="$gettext('Global Digital Health Index') | translate"
+              :tooltip="$gettext('Lorem ipsum') | translate"
+            />
+            <label>
+              <a :href="`https://index.digitalhealthindex.org//country_profile/${country.alpha_3_code || ''}`" target="_blank" class="Right-label">
+                <fa icon="external-link-alt" />
+                <translate>Visit digitalhealthindex.org</translate>
+              </a>
+            </label>
+          </div>
+        </el-form-item>
+        <el-form-item>
+          <div class="Switch-container">
+            <filter-switch
+              v-model="roadmapEnabled"
+              :label="$gettext('Architecture roadmap documents') | translate"
+              :tooltip="$gettext('Lorem ipsum2') | translate"
+            />
+            <label class="Right-label">
+              <fa icon="pen" />
+              <translate>Edit Documents</translate>
+            </label>
+          </div>
+        </el-form-item>
       </el-form>
     </collapsible-card>
 
@@ -119,6 +155,82 @@
       class="ProjectApproval"
     >
       <project-approval />
+    </collapsible-card>
+
+    <collapsible-card
+      v-if="roadmapEnabled"
+      :title="$gettext('Architecture roadmap documents') | translate"
+      class="RoadmapDocuments"
+    >
+      <el-form
+        ref="documentsUpload"
+        :rules="documentRules"
+        :model="{ documents }"
+        label-width="220px"
+        label-position="left"
+        @submit.native.prevent
+      >
+        <div
+          v-for="(document, index) in documents"
+          :key="index"
+          class="FileUploadContainer"
+        >
+          <el-form-item
+            :label="$gettext('Document') | translate"
+            :prop="`documents.${index}.document`"
+          >
+            <div
+              @click="removeDocument(index)"
+              class="Remove-icon"
+            ></div>
+            <file-upload
+              :files="document.document"
+              :limit="1"
+              :auto-upload="false"
+              :disabled="notSCA"
+              list-type="text"
+              @update:files="selectDocumentFile($event, index)"
+            />
+          </el-form-item>
+          <el-form-item
+            :label="$gettext('Title') | translate"
+            :prop="`documents.${index}.title`"
+            :rules="titleRules"
+          >
+            <el-input
+              :value="document.title"
+              :maxlength="128"
+              :disabled="notSCA"
+              type="text"
+              @input="changeDocumentTitle($event, index)"
+            />
+          </el-form-item>
+        </div>
+        <el-form-item prop="documents"></el-form-item>
+        <div>
+          <el-button
+            :disabled="documents.length === roadmap.max_documents || notSCA"
+            type="text"
+            class="IconLeft"
+            @click="addDocument"
+          >
+            <fa icon="plus" />
+            <translate>Add new question</translate>
+          </el-button>
+        </div>
+      </el-form>
+      <div class="Footer">
+        <p>
+          <fa icon="info-circle" />
+          <translate>About these documents: Quisque placerat facilisis egestas cillum dolore. Gallia est omnis divisa in partes tres, quarum.</translate>
+        </p>
+        <p>
+          <fa icon="info-circle" />
+          <translate :parameters="{list: extensionList, size: roadmap.max_size_in_MB, max: roadmap.max_documents }">
+            Allowed file formats: {list} Uploaded size is limited to {size}MB. Max. number of uploaded files is {max}.
+          </translate>
+        </p>
+      </div>
     </collapsible-card>
 
     <collapsible-card
@@ -372,6 +484,7 @@ import DhaQuestionaire from '../admin/DhaQuestionaire';
 import FileUpload from '../common/FileUpload';
 import CountrySelect from '../common/CountrySelect';
 import ProjectApproval from './ProjectApproval';
+import FilterSwitch from '~/components/dashboard/FilterSwitch';
 
 import { mapGettersActions } from '../../utilities/form';
 
@@ -385,7 +498,8 @@ export default {
     DhaQuestionaire,
     FileUpload,
     CountrySelect,
-    ProjectApproval
+    ProjectApproval,
+    FilterSwitch
   },
 
   data () {
@@ -393,8 +507,31 @@ export default {
       selectedPersona: 'G',
       logoError: '',
       coverError: '',
+      flagForKeepingdocumentsError: false,
       flagForKeepingPartnerLogosError: false,
       partnerLogosError: '',
+      documentsError: '',
+      titleRules: [{
+        trigger: ['blur', 'change'],
+        validator: (rule, value, callback) => {
+          if (!value || value.length < 1) {
+            callback(new Error(this.$gettext('A title is required')));
+          } else {
+            callback();
+          }
+        }
+      }],
+      documentRules: {
+        documents: [
+          { validator: (rule, value, callback) => {
+            if (this.documentsError) {
+              callback(new Error(this.documentsError));
+            } else {
+              callback();
+            }
+          } }
+        ]
+      },
       rules: {
         logo: [
           { validator: (rule, value, callback) => {
@@ -432,7 +569,9 @@ export default {
       coverText: ['admin/country', 'getCoverText', 'setCoverText'],
       footerTitle: ['admin/country', 'getFooterTitle', 'setFooterTitle'],
       footerText: ['admin/country', 'getFooterText', 'setFooterText'],
-      projectApproval: ['admin/country', 'getProjectApproval', 'setProjectApproval']
+      projectApproval: ['admin/country', 'getProjectApproval', 'setProjectApproval'],
+      GDHIEnabled: ['admin/country', 'getGDHIEnabled', 'setGDHIEnabled'],
+      roadmapEnabled: ['admin/country', 'getRoadmapEnabled', 'setRoadmapEnabled']
     }),
 
     ...mapGetters({
@@ -440,8 +579,15 @@ export default {
       userSelection: 'admin/country/getUserSelection',
       adminSelection: 'admin/country/getAdminSelection',
       superadminSelection: 'admin/country/getSuperadminSelection',
-      userProfile: 'user/getProfile'
+      userProfile: 'user/getProfile',
+      roadmap: 'system/getRoadmap'
     }),
+    extensionList () {
+      return this.roadmap.valid_types.join(', ');
+    },
+    documentList () {
+      return this.documents.map(document => document.document);
+    },
 
     notSCA () {
       return this.userProfile && this.userProfile.account_type === 'CA' && !this.userProfile.is_superuser;
@@ -502,6 +648,51 @@ export default {
       }
     },
 
+    documents: {
+      get () {
+        return this.country.documents.map(data => {
+          if (typeof data.document === 'string') {
+            return ({
+              title: data.title,
+              id: data.id,
+              document: [{
+                url: data.document,
+                name: ('' + data.document).split('/').pop()
+              }]
+            });
+          }
+          if (Array.isArray(data.document)) {
+            return data;
+          }
+          const document = data.document ? [data.document] : [];
+          const res = {
+            title: data.title,
+            document
+          };
+          if (data.id) {
+            res.id = data.id;
+          }
+          return res;
+        });
+      },
+      set (documents) {
+        const data = documents.map(data => {
+          if (Array.isArray(data.document)) {
+            const result = {
+              title: data.title,
+              document: data.document[0]
+            };
+            if (data.id) {
+              result.id = data.id;
+            }
+            return result;
+          }
+          return data;
+        });
+        this.setDataField({ field: 'documents', data });
+      }
+    },
+
     users: {
       get () {
         return this.country.users || [];
@@ -545,6 +736,29 @@ export default {
   },
 
   watch: {
+    documentList (newDocs, oldDocs) {
+      const formats = this.roadmap.valid_types.map(extension => extension.substr(extension.length - 4));
+      const incorrectDoc = this.documents.find(documentData => {
+        const document = documentData.document[0] || {};
+        return document.raw && !formats.includes(document.raw.name.substr(document.raw.name.length - 4));
+      });
+      if (incorrectDoc) {
+        const newDocuments = [...this.documents];
+        const replacementDoc = { ...this.documents.indexOf(incorrectDoc) };
+        replacementDoc.document = [];
+        newDocuments[this.documents.indexOf(incorrectDoc)] = replacementDoc;
+        this.documents = newDocuments;
+        this.documentsError = this.$gettext('Wrong file format, you can only upload {list} files', {
+          list: this.extensionList });
+        this.flagForKeepingdocumentsError = true;
+      } else if (this.flagForKeepingdocumentsError) {
+        this.flagForKeepingdocumentsError = false;
+        return;
+      } else {
+        this.documentsError = '';
+      }
+      this.$refs.documentsUpload.validate(() => {});
+    },
     logo (newArr, oldArr) {
       // Handles error message placing for wrong image formats
       if (!newArr.length) {
@@ -612,6 +826,37 @@ export default {
       loadGeoJSON: 'admin/map/loadGeoJSON'
     }),
 
+    addDocument () {
+      this.documents = [...this.documents, {
+        title: '',
+        document: []
+      }];
+    },
+
+    selectDocumentFile (document, index) {
+      const newDocuments = [...this.documents];
+      if (document && !document.length) {
+        newDocuments.splice(index, 1);
+      } else {
+        newDocuments[index] = { ...newDocuments[index], document };
+      }
+      this.documents = newDocuments;
+    },
+
+    changeDocumentTitle (title, index) {
+      const newDocuments = [...this.documents];
+      const doc = { ...newDocuments[index] };
+      doc.title = title;
+      newDocuments[index] = doc;
+      this.documents = newDocuments;
+    },
+
+    removeDocument (index) {
+      const newDocuments = [...this.documents];
+      newDocuments.splice(index, 1);
+      this.documents = newDocuments;
+    },
+
     selectPersona (selected) {
       this.selectedPersona = selected;
     },
@@ -620,6 +865,17 @@ export default {
       this.countryId = selected;
     },
     save () {
+      if (this.documentList.find(doc => doc.length === 0)) {
+        this.documentsError = this.$gettext('A document is missing or too many were added');
+        this.$refs.documentsUpload.validate(() => {});
+        this.$alert('A roadmap document is missing', 'Warning', {
+          confirmButtonText: 'Ok',
+          callback: () => {
+            this.$refs.documentsUpload.$el.scrollIntoView();
+          }
+        });
+        return;
+      }
       if (this.$refs.customQuestions.allSaved) {
         this.saveChanges();
       } else {
@@ -642,6 +898,89 @@ export default {
   .CountryAdmin {
     margin-bottom: 60px;
 
+    .RoadmapDocuments {
+      .el-form .el-form-item {
+        margin-bottom: 20px;
+      }
+      .el-upload-list__item {
+        border-color: white;
+        transition: none;
+      }
+      .FileUploadContainer:not(:first-child) {
+        margin-top: 30px;
+        border-top: 1px solid #B9B9B9;
+        padding-top: 20px;
+      }
+      .FileUploadContainer:hover {
+        & .Remove-icon {
+          visibility: visible;
+        }
+        & .el-upload-list__item-status-label {
+          display: none;
+        }
+      }
+      .Footer {
+        color: #6D6D6D;
+        line-height: @fontSizeLarge;
+        font-size: @fontSizeSmall;
+      }
+      svg {
+        color: #B9B9B9;
+        padding-right: 7.5px;
+      }
+      .Remove-icon {
+        font-family: 'element-icons' !important;
+        font-size: @fontSizeLarge;
+        cursor: pointer;
+        display: inline-block;
+        visibility: hidden;
+        z-index: 10;
+        position:absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        color: #F44336;
+        font-weight: 700;
+        opacity: 1;
+        &::before {
+          content: "\e60f";
+        }
+      }
+      .el-icon-close {
+        display: none !important;
+      }
+      .el-upload-list__item {
+        &:hover {
+          background-color: transparent;
+        }
+      }
+      .el-upload-list__item-name {
+        margin-left: -15px;
+        padding-right: 15px;
+      }
+    }
+
+    .Switch-container {
+      margin-top: -20px;
+      display: flex;
+      justify-content: space-between;
+      .Right-label {
+        text-decoration: none;
+        color: @colorBrandPrimary;
+        font-weight: bold;
+        cursor: pointer;
+        &:hover {
+          color: @colorBrandPrimaryLight;
+        }
+      }
+    }
+    .Divider {
+      box-sizing: border-box;
+      height: 1px;
+      width: @cardSizeMedium;
+      margin: 40px 0 40px -40px;
+      border: 0.5px solid #B9B9B9;
+    }
     .CollapsibleCard {
       width: @cardSizeMedium;
       margin: 0 auto 20px;
