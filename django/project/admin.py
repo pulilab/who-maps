@@ -13,7 +13,9 @@ import scheduler.celery # noqa
 
 
 def approve(modeladmin, request, queryset):
-    queryset.update(state=TechnologyPlatform.APPROVED)
+    for obj in queryset:
+        obj.state = TechnologyPlatform.APPROVED
+        obj.save()
 
 
 approve.short_description = "Approve selected items"
