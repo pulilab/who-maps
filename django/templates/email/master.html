@@ -507,7 +507,9 @@
 
                         <!-- SOFTWARE DECLINED -->
                         {% elif type == "software_declined" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Software declined: " %}{{ software_name }}</h1>
+                        <h1>{% trans "Software declined: " %}{{ software_name }}</h1>
+                        <p>{% trans "Unfortunately the software you requested has been declined by the administrator" %}</p>
+                        <p>{% trans "The software has been removed from the project(s) you referenced them." %}</p>
                         <!-- /SOFTWARE DECLINED -->
 
 
