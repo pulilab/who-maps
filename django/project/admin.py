@@ -21,7 +21,14 @@ def approve(modeladmin, request, queryset):
 approve.short_description = "Approve selected items"
 
 
-class SoftwareStatelFilter(SimpleListFilter):
+def decline(modeladmin, request, queryset):
+    for obj in queryset:
+        obj.state = TechnologyPlatform.DECLINED
+        obj.save()
+
+
+decline.short_description = "Decline selected items"
+
     title = 'State'
 
     parameter_name = 'state'
