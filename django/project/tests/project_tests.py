@@ -1108,7 +1108,7 @@ class ProjectTests(SetupTests):
             notify_superusers_about_new_pending_software.apply((software.id,))
 
             call_args_list = send_email.call_args_list[0][1]
-            self.assertEqual(call_args_list['subject'], 'New software')
+            self.assertEqual(call_args_list['subject'], 'New software is pending for approval')
             self.assertEqual(call_args_list['email_type'], 'new_pending_software')
             self.assertIn(test_super_user_1.email, call_args_list['to'])
             self.assertIn(test_super_user_2.email, call_args_list['to'])
@@ -1123,27 +1123,6 @@ class ProjectTests(SetupTests):
                 user.is_superuser = True
                 user.save()
 
-    def test_technology_platform_list(self):
-        software_1 = TechnologyPlatform.objects.create(name='software approved', state=TechnologyPlatform.APPROVED)
-        software_2 = TechnologyPlatform.objects.create(name='software pending', state=TechnologyPlatform.PENDING)
-        software_3 = TechnologyPlatform.objects.create(name='software declined', state=TechnologyPlatform.DECLINED)
-
-        url = reverse('technologyplatform-list')
-        response = self.test_user_client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
-        data = response.json()
-        for software in data:
-            self.assertIn(software['state'], [TechnologyPlatform.APPROVED, TechnologyPlatform.PENDING])
-        ids = [software['id'] for software in data]
-        self.assertIn(software_1.id, ids)
-        self.assertIn(software_2.id, ids)
-        self.assertNotIn(software_3.id, ids)
-
-        software_1.delete()
-        software_2.delete()
-        software_3.delete()
-
-    def test_software_decline(self):
         country = Country.objects.last()
 
         software_1 = TechnologyPlatform.objects.create(name='approved', state=TechnologyPlatform.APPROVED)
