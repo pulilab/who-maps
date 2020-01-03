@@ -42,7 +42,9 @@ jobs:
           name: install frontend reqs
           working_directory: ~/who-maps/frontend
           command: |
-            sudo npm -v
+            sudo node -v
+            sudo apt-get update
+            sudo apt-get install -y yarn
             sudo npm install
 
       - run:
