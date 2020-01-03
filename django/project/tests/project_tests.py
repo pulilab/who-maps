@@ -1151,6 +1151,9 @@ class ProjectTests(SetupTests):
         notify_user_about_software_approval.apply(args=('approve', software.id))
 
         send_email.assert_not_called()
+
+    @mock.patch('project.tasks.notify_user_about_software_approval.apply_async', return_value=None)
+    def test_software_decline(self, notify_user_about_software_approval):
         country = Country.objects.last()
 
         software_1 = TechnologyPlatform.objects.create(name='approved', state=TechnologyPlatform.APPROVED)
@@ -1209,7 +1212,10 @@ class ProjectTests(SetupTests):
         self.assertEqual(len(project.data['platforms']), 1)
         self.assertEqual(project.data['platforms'][0]['id'], software_1.id)
 
-    def test_software_approve_in_admin(self):
+        notify_user_about_software_approval.assert_called_once_with(args=('decline', software_2.pk,))
+
+    @mock.patch('project.tasks.notify_user_about_software_approval.apply_async', return_value=None)
+    def test_software_approve_in_admin(self, notify_user_about_software_approval):
         client = Client()
 
         password = '1234'
@@ -1228,6 +1234,8 @@ class ProjectTests(SetupTests):
 
         software.refresh_from_db()
         self.assertEqual(software.state, TechnologyPlatform.APPROVED)
+
+        notify_user_about_software_approval.assert_called_once_with(args=('approve', software.pk,))
 
     def test_send_project_updated_digest(self):
         project = Project.objects.last()
