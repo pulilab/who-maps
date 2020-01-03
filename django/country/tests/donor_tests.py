@@ -1,43 +1,15 @@
-from allauth.account.models import EmailConfirmation
 from django.contrib.auth.models import User
+
+from country.tests.base import DonorBaseTests
 from django.core import mail
 from django.urls import reverse
 from django.utils.translation import override
-from rest_framework.test import APITestCase, APIClient
 
 from core.tests import get_temp_image
-from country.models import Donor, DonorPartnerLogo
 from user.models import UserProfile
 
 
-class DonorTests(APITestCase):
-    def setUp(self):
-        # Create a test user with profile.
-        url = reverse("rest_register")
-        data = {"email": "test_user@gmail.com", "password1": "123456hetNYOLC", "password2": "123456hetNYOLC"}
-        self.client.post(url, data)
-
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        self.client.post(url, data)
-
-        # Log in the user.
-        url = reverse("api_token_auth")
-        data = {"username": "test_user@gmail.com", "password": "123456hetNYOLC"}
-        response = self.client.post(url, data)
-        self.test_user = response.json()
-        self.test_user_key = response.json().get("token")
-        self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
-
-        self.donor = Donor.objects.create(name="donor1", code="donor1")
-        self.donor.name_en = 'Donor Group'
-        self.donor.name_fr = 'Doner Grup'
-        self.donor.save()
-        DonorPartnerLogo.objects.create(donor=self.donor)
+class DonorTests(DonorBaseTests):
 
     def test_donor_model(self):
         with override('en'):
