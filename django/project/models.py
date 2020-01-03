@@ -297,6 +297,8 @@ def remove_declined_software_from_projects(sender, instance, created, **kwargs):
                 project.save()
 
             notify_user_about_software_approval.apply_async(args=('decline', instance.pk,))
+        elif instance.state == TechnologyPlatform.APPROVED:
+            notify_user_about_software_approval.apply_async(args=('approve', instance.pk,))
 
 
 class Licence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
