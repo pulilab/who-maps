@@ -22,7 +22,7 @@ from .tasks import notify_superusers_about_new_pending_software
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
-    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformListSerializer
+    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
 
@@ -491,9 +491,9 @@ class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, Gene
         return ImportRow.objects.filter(parent__user=self.request.user)
 
 
-class TechnologyPlatformViewSet(CreateModelMixin, ListModelMixin, GenericViewSet):
-    queryset = TechnologyPlatform.objects.filter(state__in=[TechnologyPlatform.APPROVED, TechnologyPlatform.PENDING])
-    serializer_class = TechnologyPlatformListSerializer
+class TechnologyPlatformRequestViewSet(CreateModelMixin, GenericViewSet):
+    queryset = TechnologyPlatform.objects.all()
+    serializer_class = TechnologyPlatformCreateSerializer
     permission_classes = (IsAuthenticated,)
 
     def perform_create(self, serializer: BaseSerializer) -> None:
