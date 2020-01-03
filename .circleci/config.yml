@@ -51,7 +51,7 @@ jobs:
       - run:
           name: backend flake8
           working_directory: ~/who-maps/django
-          command: pipenv run flake8 --exclude='.*'
+          command: pipenv run flake8
 
       - run:
           name: backend makemigrations
