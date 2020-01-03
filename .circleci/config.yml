@@ -116,18 +116,13 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
-      - build-test-backend:
-          filters:
-            tags:
-              only: /^[0-9]+(\.[0-9]+)*$/
-      - build-test-frontend:
+      - build-and-test:
           filters:
             tags:
               only: /^[0-9]+(\.[0-9]+)*$/
       - deploy:
           requires:
-            - build-test-backend
-            - build-test-frontend
+            - build-and-test
           filters:
             branches:
               only: development
