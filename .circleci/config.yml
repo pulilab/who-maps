@@ -27,7 +27,6 @@ jobs:
       - checkout
       - run: sudo chown -R circleci:circleci /usr/local/bin
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
-      - run: sudo chmod -R 777 django/media
 
       - restore_cache:
           keys:
