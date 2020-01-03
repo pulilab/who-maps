@@ -283,15 +283,20 @@ class TechnologyPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedMod
 
 @receiver(post_save, sender=TechnologyPlatform)
 def remove_declined_software_from_projects(sender, instance, created, **kwargs):
-    if not created and instance.__original_state != instance.state and instance.state == TechnologyPlatform.DECLINED:
-        # remove software from data platforms and from draft platforms
-        projects = Project.objects.filter(
-            Q(data__platforms__contains=[{'id': instance.id}]) | Q(draft__platforms__contains=[{'id': instance.id}])
-        )
-        for project in projects:
-            project.data['platforms'] = [item for item in project.data['platforms'] if item['id'] != instance.id]
-            project.draft['platforms'] = [item for item in project.draft['platforms'] if item['id'] != instance.id]
-            project.save()
+    if not created and instance.__original_state != instance.state:
+        from project.tasks import notify_user_about_software_approval
+
+        if instance.state == TechnologyPlatform.DECLINED:
+            # remove software from data platforms and from draft platforms
+            projects = Project.objects.filter(
+                Q(data__platforms__contains=[{'id': instance.id}]) | Q(draft__platforms__contains=[{'id': instance.id}])
+            )
+            for project in projects:
+                project.data['platforms'] = [item for item in project.data['platforms'] if item['id'] != instance.id]
+                project.draft['platforms'] = [item for item in project.draft['platforms'] if item['id'] != instance.id]
+                project.save()
+
+            notify_user_about_software_approval.apply_async(args=('decline', instance.pk,))
 
 
 class Licence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
