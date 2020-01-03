@@ -30,7 +30,11 @@ jobs:
 
       - restore_cache:
           keys:
-          - v5-dependencies-b-{{ checksum "django/requirements.txt" }}
+            - v6-dependencies-b-{{ checksum "django/requirements.txt" }}
+
+      - restore_cache:
+          keys:
+            - v3-dependencies-f-{{ checksum "frontend/package.json" }}
 
       - run:
           name: install python reqs
@@ -40,12 +44,27 @@ jobs:
             pipenv install
             pipenv run pip install -r requirements.txt
 
+      - run:
+          name: install frontend reqs
+          working_directory: ~/who-maps/frontend
+          command: npm install
+
+      - run:
+          name: install mapshaper
+          working_directory: ~/who-maps
+          command: sudo npm install -g mapshaper
+
       - save_cache:
           paths:
             - "django/.venv"
             - "/usr/local/bin"
             - "/usr/local/lib/python3.7/site-packages"
-          key: v5-dependencies-b-{{ checksum "django/requirements.txt" }}
+          key: v6-dependencies-b-{{ checksum "django/requirements.txt" }}
+
+      - save_cache:
+          paths:
+            - frontend/node_modules
+          key: v3-dependencies-f-{{ checksum "frontend/package.json" }}
 
       - run:
           name: backend flake8
