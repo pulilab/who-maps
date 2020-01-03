@@ -14,11 +14,11 @@ from django.core.files.base import ContentFile
 from django.urls import reverse
 from django.utils.translation import override
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.utils import timezone
 from django.utils.dateformat import format
 from requests import RequestException
 from rest_framework import status
 
+from country.tests.base import CountryBaseTests
 from django.core import mail
 from django.core.management import call_command
 from allauth.account.models import EmailConfirmation
@@ -28,41 +28,14 @@ from rest_framework.test import APITestCase
 
 from core.tests import get_temp_image
 from country.admin import CountryAdmin
-from country.models import Country, PartnerLogo, Donor, DonorPartnerLogo, CustomQuestion, ArchitectureRoadMapDocument
+from country.models import Country, Donor, DonorPartnerLogo, CustomQuestion, ArchitectureRoadMapDocument
 from project.models import TechnologyPlatform, DigitalStrategy
 from user.models import UserProfile, Organisation
 from django.utils.six import StringIO
 from django.conf import settings
 
 
-class CountryTests(APITestCase):
-    def setUp(self):
-        # Create a test user with profile.
-        url = reverse("rest_register")
-        data = {"email": "test_user@gmail.com", "password1": "123456hetNYOLC", "password2": "123456hetNYOLC"}
-        self.client.post(url, data)
-
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        self.client.post(url, data)
-
-        # Log in the user.
-        url = reverse("api_token_auth")
-        data = {"username": "test_user@gmail.com", "password": "123456hetNYOLC"}
-        response = self.client.post(url, data)
-        self.test_user = response.json()
-        self.test_user_key = response.json().get("token")
-        self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
-
-        self.country = Country.objects.create(name="country1", code="CC", map_activated_on=timezone.now())
-        self.country.name_en = 'Hungary'
-        self.country.name_fr = 'Hongrie'
-        self.country.save()
-        PartnerLogo.objects.create(country=self.country)
+class CountryTests(CountryBaseTests):
 
     def test_country_model(self):
         with override('en'):
