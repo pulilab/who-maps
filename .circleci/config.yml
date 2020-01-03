@@ -97,15 +97,15 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/python:3.7.5-stretch
+      - image: circleci/python:3.7.6-stretch
     working_directory: ~/who-maps
     steps:
       - checkout
       - run:
           name: Install fabric and pycrypto
           command: |
-            pip install pycrypto
-            pip install Fabric3==1.10.2.post3
+            sudo pip install pycrypto
+            sudo pip install Fabric3==1.10.2.post3
       - run:
           name: Deploy Over SSH
           working_directory: ~/who-maps/django
