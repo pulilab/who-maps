@@ -20,7 +20,7 @@ from user.models import Organisation, UserProfile
 from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, \
     Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HSCGroup, ProjectApproval
 from project.tasks import send_project_approval_digest, \
-    send_project_updated_digest, notify_superusers_about_new_pending_software
+    send_project_updated_digest, notify_superusers_about_new_pending_software, notify_user_about_software_approval
 
 from project.tests.setup import SetupTests, MockRequest
 
@@ -1092,7 +1092,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(call_args_list[0][0][0][0], data['id'])
 
     @mock.patch('project.tasks.send_mail_wrapper')
-    def test_notify_super_users_about_pending_softwar_success(self, send_email):
+    def test_notify_super_users_about_pending_software_success(self, send_email):
         send_email.return_value = None
 
         super_users = User.objects.filter(is_superuser=True)
