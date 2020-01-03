@@ -6,12 +6,23 @@ orbs:
 jobs:
   build:
     docker:
-      - image: pulilab/who-maps-circleci
+      - image: circleci/python:3.7.5-stretch
         environment:
-            REDIS_URL: 127.0.0.1
-            DATABASE_URL: ''
-            CI_RUN: True
-            ODK_SYNC_ENABLED: False
+          PIPENV_VENV_IN_PROJECT: true
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+          DATABASE_URL: ''
+          CI_RUN: True
+          ODK_SYNC_ENABLED: False
+      - image: circleci/postgres:10.9-alpine-postgis-ram
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+      - image: circleci/node:12.13.0-stretch
+      - image: circleci/redis:5-stretch
+        environment:
+          REDIS_URL: 127.0.0.1
+
 
     working_directory: ~/who-maps
 
