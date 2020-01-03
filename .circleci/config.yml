@@ -68,7 +68,7 @@ jobs:
           name: backend unit tests
           working_directory: ~/who-maps/django
           command: |
-            pipenv run py.test --full-trace --timeout=180 --cov --cov-report html --cov-fail-under 97 --cov-report term-missing --cov-config .coveragerc
+            pipenv run py.test --full-trace --timeout=180 --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
 
       - run:
           name: backend check for commited migrations
