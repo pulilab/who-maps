@@ -1145,6 +1145,12 @@ class ProjectTests(SetupTests):
         self.assertEqual(call_args_list['email_type'], 'software_declined')
         self.assertEqual(call_args_list['context']['software_name'], software.name)
 
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_notify_user_about_software_approval_fail(self, send_email):
+        software = TechnologyPlatform.objects.create(name='pending software')
+        notify_user_about_software_approval.apply(args=('approve', software.id))
+
+        send_email.assert_not_called()
         country = Country.objects.last()
 
         software_1 = TechnologyPlatform.objects.create(name='approved', state=TechnologyPlatform.APPROVED)
