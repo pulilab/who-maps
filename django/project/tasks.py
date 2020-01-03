@@ -377,4 +377,14 @@ def notify_user_about_software_approval(action, software_id):
     software = TechnologyPlatform.objects.get(id=software_id)
     if not software.added_by:
         return
+
+    if action == 'approve':
+        subject = _("The software you requested has been approved")
+        email_type = "software_approved"
+    elif action == 'decline':
+        subject = _("The software you requested has been declined")
+        email_type = "software_declined"
+    else:
+        return
+
                       context={'software_name': software.name})
