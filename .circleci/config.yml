@@ -42,8 +42,8 @@ jobs:
           name: install frontend reqs
           working_directory: ~/who-maps/frontend
           command: |
-            sudo apt-get install -y yarn
-            yarn install
+            sudo apt-get install -y npm
+            npm install
 
       - run:
           name: install mapshaper
