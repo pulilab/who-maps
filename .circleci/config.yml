@@ -93,7 +93,7 @@ jobs:
           name: backend check for commited migrations
           working_directory: ~/who-maps/django
           command: |
-            export TERM=xterm && ! git diff --name-status origin/master HEAD | grep /migrations/0
+            export TERM=xterm && ! git diff --name-status origin/development HEAD | grep /migrations/0
 
   deploy:
     docker:
