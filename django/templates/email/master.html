@@ -511,6 +511,13 @@
                         <!-- /SOFTWARE DECLINED -->
 
 
+                        <!-- SOFTWARE APPROVED -->
+                        {% elif type == "software_approved" %}
+                        <h1>{% trans "Software approved: " %}{{ software_name }}</h1>
+                        <p>{% trans "The software you requested has been approved by the administrator" %}</p>
+                        <!-- /SOFTWARE APPROVED -->
+
+
                         <!-- TEMPLATE: TOOLKIT DIGEST -->
                         {% elif type == "toolkit_digest" %}
                         <h1>{% trans "Notification" %}</h1>
