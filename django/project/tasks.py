@@ -387,4 +387,8 @@ def notify_user_about_software_approval(action, software_id):
     else:
         return
 
+    send_mail_wrapper(subject=subject,
+                      email_type=email_type,
+                      to=software.added_by.user.email,
+                      language=software.added_by.language or settings.LANGUAGE_CODE,
                       context={'software_name': software.name})
