@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from django.urls import reverse
 from django.utils.translation import ugettext
 from django.utils import timezone
 from django.template import loader
@@ -19,7 +20,7 @@ from celery.utils.log import get_task_logger
 from rest_framework.exceptions import ValidationError
 
 from core.utils import send_mail_wrapper
-from user.models import Organisation, UserProfile
+from user.models import Organisation
 from country.models import Country, Donor
 
 from .models import Project, InteroperabilityLink, TechnologyPlatform
