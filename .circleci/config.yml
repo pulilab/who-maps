@@ -49,7 +49,7 @@ jobs:
       - run:
           name: backend flake8
           working_directory: ~/who-maps/django
-          command: pipenv run flake8
+          command: pipenv run flake8 .
 
       - run:
           name: backend makemigrations
@@ -97,7 +97,7 @@ jobs:
       - run:
           name: install mapshaper
           working_directory: ~/who-maps
-          command: npm install -g mapshaper
+          command: sudo npm install -g mapshaper
 
 #      - run:
 #          name: frontend unit tests
