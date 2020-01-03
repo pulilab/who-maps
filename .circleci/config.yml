@@ -6,7 +6,7 @@ orbs:
 jobs:
   build-test-backend:
     docker:
-      - image: circleci/python:3.7.5-stretch
+      - image: circleci/python:3.7.6-stretch-node
         environment:
           PIPENV_VENV_IN_PROJECT: true
           PGHOST: 127.0.0.1
