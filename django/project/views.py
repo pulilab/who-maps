@@ -66,7 +66,7 @@ class ProjectPublicViewSet(ViewSet):
         return dict(
             interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
             technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED)
-                .values('id', 'name', 'state', 'added_by'),
+                                                   .values('id', 'name', 'state', 'added_by'),
             licenses=Licence.objects.values('id', 'name'),
             interoperability_standards=InteroperabilityStandard.objects.values('id', 'name'),
             his_bucket=HISBucket.objects.values('id', 'name'),
