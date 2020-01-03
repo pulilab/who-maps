@@ -501,7 +501,12 @@
 
                         <!-- NEW PENDING SOFTWARE -->
                         {% elif type == "new_pending_software" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "New software added to the system: " %}{{ software_name }}</h1>
+                        <h1>{% trans "New software has been added to the system" %}</h1>
+                        <p>{% trans "Software is pending for approval: " %} <b>{{ software_name }}</b></p>
+                        <p>{% trans "Requested by: " %} {{ added_by }}</p>
+                        <p>
+                        <a href="{% site_url %}{{ change_url }}" target="_blank">{% trans "Approve/Decline software" %}</a>
+                        </p>
                         <!-- /NEW PENDING SOFTWARE -->
 
 
