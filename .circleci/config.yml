@@ -42,8 +42,8 @@ jobs:
           name: install frontend reqs
           working_directory: ~/who-maps/frontend
           command: |
-            sudo apt-get install -y npm
-            npm install
+            sudo npm -v
+            sudo npm install
 
       - run:
           name: install mapshaper
