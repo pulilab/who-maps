@@ -29,6 +29,8 @@ def decline(modeladmin, request, queryset):
 
 decline.short_description = "Decline selected items"
 
+
+class SoftwareStateFilter(SimpleListFilter):
     title = 'State'
 
     parameter_name = 'state'
