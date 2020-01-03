@@ -15,7 +15,7 @@ class DonorTests(APITestCase):
         # Create a test user with profile.
         url = reverse("rest_register")
         data = {"email": "test_user@gmail.com", "password1": "123456hetNYOLC", "password2": "123456hetNYOLC"}
-        response = self.client.post(url, data)
+        self.client.post(url, data)
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
@@ -23,7 +23,7 @@ class DonorTests(APITestCase):
         data = {
             "key": key,
         }
-        response = self.client.post(url, data)
+        self.client.post(url, data)
 
         # Log in the user.
         url = reverse("api_token_auth")
