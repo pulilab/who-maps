@@ -65,8 +65,8 @@ class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = [
         'name', 'state', 'added_by'
     ]
-    list_filter = [SoftwareStatelFilter]
-    actions = (approve,)
+    list_filter = [SoftwareStateFilter]
+    actions = (approve, decline)
 
 
 class InteroperabilityLinkAdmin(AllObjectsAdmin):
