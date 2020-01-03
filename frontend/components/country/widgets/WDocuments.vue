@@ -3,7 +3,6 @@
     <h3><translate>Architecture roadmap documents</translate></h3>
     <p>
       <translate>Non equidem invideo, miror magis posuere velit aliquet. Donec sed odio operae, eu vulputate felis rhoncus. Petierunt uti sibi concilium totius Galliae in diem certam indicere.</translate>
-      <nuxt-link to="example"><translate>Read more</translate> »</nuxt-link>
     </p>
 
     <div v-for="(doc, i) in documents" :key="i" class="doc">
@@ -12,7 +11,7 @@
           {{doc.title}} <fa icon="download" />
         </a>
       </p>
-      <p class="details">{{ doc.document | extension }} — {{ doc.size }}</p>
+      <p class="details">{{ doc.document | extension }} — {{ doc.size | size }}</p>
     </div>
 
   </div>
@@ -30,6 +29,16 @@ export default {
   filters: {
     extension (filename) {
       return filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename;
+    },
+    size (bytes) {
+      if (bytes === 0) return '0 Bytes';
+
+      const k = 1024;
+      // const dm = decimals < 0 ? 0 : decimals;
+      const dm = 0;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     }
   }
 };

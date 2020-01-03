@@ -82,7 +82,7 @@
         <w-image :url="data.cover_url" />
       </template>
       <template v-slot:right>
-        <w-stats :stats="stats" :simple="simpleStats" />
+        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
       </template>
     </default>
 
@@ -113,7 +113,7 @@
         <w-image :url="data.cover_url" />
       </template>
       <template v-slot:middle>
-        <w-stats :stats="stats" :simple="simpleStats" />
+        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
       </template>
       <template v-slot:right>
         <w-documents :documents="data.documents" />
@@ -131,7 +131,7 @@
         <img :src="default2" />
       </template>
       <template v-slot:middle>
-        <w-stats :stats="stats" :simple="simpleStats" />
+        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
       </template>
       <template v-slot:right>
         <w-documents :documents="data.documents" />
@@ -149,7 +149,7 @@
         <w-default vertical />
       </template>
       <template v-slot:middle>
-        <w-stats :stats="stats" :simple="simpleStats" />
+        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
       </template>
       <template v-slot:right>
         <w-documents :documents="data.documents" />
@@ -164,7 +164,7 @@
         <w-default vertical :url="default1" />
       </template>
       <template v-slot:middle>
-        <w-stats :stats="stats" :simple="simpleStats" />
+        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
       </template>
       <template v-slot:right>
         <w-documents :documents="data.documents" />
@@ -180,7 +180,7 @@
         <w-default vertical :url="default1" />
       </template>
       <template v-slot:right>
-        <w-stats :stats="stats" :simple="simpleStats" />
+        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
       </template>
     </default>
 
@@ -206,7 +206,7 @@
         <img :src="data.cover_url" />
       </template>
       <template v-slot:right>
-        <w-stats :stats="stats" :simple="simpleStats" />
+        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
       </template>
     </default>
 
@@ -220,7 +220,7 @@
         <w-description :description="data.cover_text" />
       </template>
       <template v-slot:right>
-        <w-stats :stats="stats" :simple="simpleStats" />
+        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
       </template>
     </default>
   </div>
@@ -316,7 +316,7 @@ export default {
       } = this.data
 
       return {
-        name: name,
+        name,
         phases: [
           { title: 'leadership and governance', phase: leadership_and_governance },
           { title: 'strategy and investment', phase: strategy_and_investment },
@@ -358,7 +358,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.data)
   }
 };
 </script>
