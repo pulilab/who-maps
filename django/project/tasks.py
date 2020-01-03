@@ -369,6 +369,7 @@ def notify_superusers_about_new_pending_software(software_id):
                           language=language,
                           context={'software_name': software.name,
                                    'change_url': change_url,
+                                   'added_by': software.added_by})
 
 
 @app.task(name='notify_user_about_declined_software')
