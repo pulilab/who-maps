@@ -76,41 +76,6 @@ jobs:
           command: |
             export TERM=xterm && ! git diff --name-status origin/master HEAD | grep /migrations/0
 
-
-  build-test-frontend:
-    docker:
-      - image: circleci/node:12.13.0-stretch
-
-    working_directory: ~/who-maps
-
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v2-dependencies-f-{{ checksum "frontend/package.json" }}
-
-      - run:
-          name: install frontend reqs
-          working_directory: ~/who-maps/frontend
-          command: npm install
-
-      - run:
-          name: install mapshaper
-          working_directory: ~/who-maps
-          command: sudo npm install -g mapshaper
-
-#      - run:
-#          name: frontend unit tests
-#          working_directory: ~/who-maps/frontend
-#          command: yarn test
-
-      - save_cache:
-          paths:
-            - frontend/node_modules
-          key: v2-dependencies-f-{{ checksum "frontend/package.json" }}
-
-
   deploy:
     docker:
       - image: circleci/python:3.7.5-stretch
