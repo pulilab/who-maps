@@ -375,9 +375,6 @@ def notify_superusers_about_new_pending_software(software_id):
 @app.task(name='notify_user_about_software_approval')
 def notify_user_about_software_approval(action, software_id):
     software = TechnologyPlatform.objects.get(id=software_id)
-    profile = UserProfile.objects.get(id=software.added_by)
-    send_mail_wrapper(subject="Software declined",
-                      email_type="software_declined",
-                      to=profile.user.email,
-                      language=profile.language or settings.LANGUAGE_CODE,
+    if not software.added_by:
+        return
                       context={'software_name': software.name})
