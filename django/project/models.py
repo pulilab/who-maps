@@ -270,6 +270,10 @@ class TechnologyPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedMod
     state = models.IntegerField(choices=SOFTWARE_STATES, default=APPROVED)
     added_by = models.ForeignKey(UserProfile, blank=True, null=True, on_delete=models.SET_NULL)
 
+    class Meta:
+        verbose_name = 'Software'
+        verbose_name_plural = 'Software'
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__important_fields = ['state']
