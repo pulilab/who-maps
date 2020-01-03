@@ -489,7 +489,7 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):
         return instance
 
 
-class TechnologyPlatformListSerializer(serializers.ModelSerializer):
+class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TechnologyPlatform
         fields = '__all__'
