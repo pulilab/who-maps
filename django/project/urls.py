@@ -7,7 +7,7 @@ from . import views
 router = DefaultRouter()
 router.register('import', views.ProjectImportV2ViewSet)
 router.register('import-row', views.ImportRowViewSet)
-router.register('software', views.TechnologyPlatformViewSet)
+router.register('software', views.TechnologyPlatformRequestViewSet)
 
 urlpatterns = [
     url(r"^projects/", include(router.urls)),
