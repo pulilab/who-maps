@@ -1237,6 +1237,29 @@ class ProjectTests(SetupTests):
 
         notify_user_about_software_approval.assert_called_once_with(args=('approve', software.pk,))
 
+    @mock.patch('project.tasks.notify_user_about_software_approval.apply_async', return_value=None)
+    def test_software_decline_in_admin(self, notify_user_about_software_approval):
+        client = Client()
+
+        password = '1234'
+        admin = User.objects.create_superuser('bh_admin', 'bhadmin@test.com', password)
+
+        software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
+
+        change_url = reverse('admin:project_technologyplatform_changelist')
+        data = {
+            'action': 'decline',
+            '_selected_action': [software.pk],
+        }
+        client.login(username=admin.email, password=password)
+        response = client.post(change_url, data, follow=True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        software.refresh_from_db()
+        self.assertEqual(software.state, TechnologyPlatform.DECLINED)
+
+        notify_user_about_software_approval.assert_called_once_with(args=('decline', software.pk,))
+
     def test_send_project_updated_digest(self):
         project = Project.objects.last()
 
