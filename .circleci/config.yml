@@ -23,7 +23,6 @@ jobs:
         environment:
           REDIS_URL: 127.0.0.1
 
-
     working_directory: ~/who-maps
 
     steps:
@@ -42,12 +41,14 @@ jobs:
       - run:
           name: install frontend reqs
           working_directory: ~/who-maps/frontend
-          command: npm install
+          command: |
+            sudo apt-get install -y yarn
+            yarn install
 
       - run:
           name: install mapshaper
           working_directory: ~/who-maps
-          command: npm install -g mapshaper
+          command: yarn global add mapshaper
 
       - run:
           name: install python reqs
