@@ -42,18 +42,18 @@ class Command(BaseCommand):
             data = response.json()
 
             save = False
-            if country.total_population is None or override:
+            if data['totalPopulation'] and (country.total_population is None or override):
                 save = True
                 # we store total population data in Millions
                 country.total_population = round_decimal(data['totalPopulation'] / 1000000)
-            if country.gni_per_capita is None or override:
+            if data['gniPerCapita'] and (country.gni_per_capita is None or override):
                 save = True
                 # we store gni_per_capita in Thousands
                 country.gni_per_capita = round_decimal(data['gniPerCapita'] / 1000)
-            if country.life_expectancy is None or override:
+            if data['lifeExpectancy'] and (country.life_expectancy is None or override):
                 save = True
                 country.life_expectancy = data['lifeExpectancy']
-            if country.health_expenditure is None or override:
+            if data['healthExpenditure'] and (country.health_expenditure is None or override):
                 save = True
                 country.health_expenditure = data['healthExpenditure']
 
