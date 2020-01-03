@@ -361,12 +361,14 @@ def notify_superusers_about_new_pending_software(software_id):
         except ObjectDoesNotExist:
             email_mapping[settings.LANGUAGE_CODE].append(user.email)
 
+    change_url = reverse('admin:project_{}_change'.format(software._meta.model_name), args=(software.id,))
     for language, email_list in email_mapping.items():
         send_mail_wrapper(subject="New software",
                           email_type="new_pending_software",
                           to=email_list,
                           language=language,
-                          context={'software_name': software.name})
+                          context={'software_name': software.name,
+                                   'change_url': change_url,
 
 
 @app.task(name='notify_user_about_declined_software')
