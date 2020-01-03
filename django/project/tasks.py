@@ -363,7 +363,7 @@ def notify_superusers_about_new_pending_software(software_id):
 
     change_url = reverse('admin:project_{}_change'.format(software._meta.model_name), args=(software.id,))
     for language, email_list in email_mapping.items():
-        send_mail_wrapper(subject="New software",
+        send_mail_wrapper(subject=_('New software is pending for approval'),
                           email_type="new_pending_software",
                           to=email_list,
                           language=language,
