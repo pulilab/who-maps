@@ -126,7 +126,7 @@
               :tooltip="$gettext('Lorem ipsum') | translate"
             />
             <label>
-              <a :href="`https://index.digitalhealthindex.org//country_profile/${country.alpha_3_code || ''}`" target="_blank" class="Right-label">
+              <a :href="`https://index.digitalhealthindex.org/country_profile/${country.alpha_3_code || ''}`" target="_blank" class="Right-label">
                 <fa icon="external-link-alt" />
                 <translate>Visit digitalhealthindex.org</translate>
               </a>
@@ -140,7 +140,11 @@
               :label="$gettext('Architecture roadmap documents') | translate"
               :tooltip="$gettext('Lorem ipsum2') | translate"
             />
-            <label class="Right-label">
+            <label
+              v-if="roadmapEnabled"
+              @click="focuseRoadmapDocuments"
+              class="Right-label"
+            >
               <fa icon="pen" />
               <translate>Edit Documents</translate>
             </label>
@@ -161,6 +165,7 @@
       v-if="roadmapEnabled"
       :title="$gettext('Architecture roadmap documents') | translate"
       class="RoadmapDocuments"
+      ref="roadmapdocs"
     >
       <el-form
         ref="documentsUpload"
@@ -215,7 +220,7 @@
             @click="addDocument"
           >
             <fa icon="plus" />
-            <translate>Add new question</translate>
+            <translate>Add new document</translate>
           </el-button>
         </div>
       </el-form>
@@ -825,6 +830,10 @@ export default {
       fetchData: 'admin/country/fetchData',
       loadGeoJSON: 'admin/map/loadGeoJSON'
     }),
+
+    focuseRoadmapDocuments () {
+      this.$refs.roadmapdocs.$el.scrollIntoView();
+    },
 
     addDocument () {
       this.documents = [...this.documents, {

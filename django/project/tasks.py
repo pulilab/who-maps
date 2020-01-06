@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from django.urls import reverse
 from django.utils.translation import ugettext
 from django.utils import timezone
 from django.template import loader
@@ -22,7 +23,7 @@ from core.utils import send_mail_wrapper
 from user.models import Organisation
 from country.models import Country, Donor
 
-from .models import Project, InteroperabilityLink
+from .models import Project, InteroperabilityLink, TechnologyPlatform
 from .serializers import ProjectDraftSerializer
 
 from scheduler.celery import app
@@ -346,3 +347,48 @@ def sync_project_from_odk():  # pragma: no cover
     #     rows = json.load(odk_file)
     #     start_sync(rows, interoperability_links)
     start_sync(res.json(), interoperability_links)
+
+
+@app.task(name='notify_superusers_about_new_pending_software')
+def notify_superusers_about_new_pending_software(software_id):
+    software = TechnologyPlatform.objects.get(id=software_id)
+    super_users = User.objects.filter(is_superuser=True)
+
+    email_mapping = defaultdict(list)
+    for user in super_users:
+        try:
+            email_mapping[user.userprofile.language].append(user.email)
+        except ObjectDoesNotExist:
+            email_mapping[settings.LANGUAGE_CODE].append(user.email)
+
+    change_url = reverse('admin:project_{}_change'.format(software._meta.model_name), args=(software.id,))
+    for language, email_list in email_mapping.items():
+        send_mail_wrapper(subject=_('New software is pending for approval'),
+                          email_type="new_pending_software",
+                          to=email_list,
+                          language=language,
+                          context={'software_name': software.name,
+                                   'change_url': change_url,
+                                   'added_by': software.added_by})
+
+
+@app.task(name='notify_user_about_software_approval')
+def notify_user_about_software_approval(action, software_id):
+    software = TechnologyPlatform.objects.get(id=software_id)
+    if not software.added_by:
+        return
+
+    if action == 'approve':
+        subject = _("The software you requested has been approved")
+        email_type = "software_approved"
+    elif action == 'decline':
+        subject = _("The software you requested has been declined")
+        email_type = "software_declined"
+    else:
+        return
+
+    send_mail_wrapper(subject=subject,
+                      email_type=email_type,
+                      to=software.added_by.user.email,
+                      language=software.added_by.language or settings.LANGUAGE_CODE,
+                      context={'software_name': software.name})

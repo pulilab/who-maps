@@ -23,7 +23,7 @@
       <p><translate>Disclaimer: State of Digital Health data is sourced</translate></p>
       <p><translate>from the Global Digital Health Index.</translate></p>
       <p>
-        <a href="https://www.digitalhealthindex.org/" target="_blank">
+        <a :href="`http://index.digitalhealthindex.org/country_profile/${code}`" target="_blank">
           <translate>Visit digitalhealthindex.org</translate>
         </a>
       </p>
@@ -44,6 +44,11 @@ export default {
     stats: {
       type: Object,
       required: true
+    },
+    code: {
+      type: String,
+      required: false,
+      default: ''
     },
     simple: {
       type: Boolean,
