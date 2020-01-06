@@ -17,8 +17,7 @@ from rest_framework.test import APIClient
 from country.models import Country, Donor
 from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
-from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, \
-    Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HSCGroup, ProjectApproval
+from project.models import Project, DigitalStrategy, TechnologyPlatform, Licence, ProjectApproval
 from project.tasks import send_project_approval_digest, \
     send_project_updated_digest, notify_superusers_about_new_pending_software, notify_user_about_software_approval
 
@@ -720,37 +719,6 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['project']["name"][0], 'This field must be unique.')
-
-    def test_digitalstrategies_str(self):
-        ds1 = DigitalStrategy.objects.create(name='ds1', group='Client')
-        ds2 = DigitalStrategy.objects.create(name='ds2', group='Client', parent=ds1)
-        self.assertEqual(str(ds1), '[Client] ds1')
-        self.assertEqual(str(ds2), '[Client] [ds1] ds2')
-
-    def test_interop_str(self):
-        io = InteroperabilityLink.objects.create(pre='bla', name='io')
-        self.assertEqual(str(io), 'io')
-
-    def test_platforms_str(self):
-        tp = TechnologyPlatform.objects.create(name='tp')
-        self.assertEqual(str(tp), 'tp')
-
-    def test_licences_str(self):
-        item = Licence.objects.create(name='name')
-        self.assertEqual(str(item), 'name')
-
-    def test_iopstandard_str(self):
-        item = InteroperabilityStandard.objects.create(name='name')
-        self.assertEqual(str(item), 'name')
-
-    def test_hisbucket_str(self):
-        item = HISBucket.objects.create(name='name')
-        self.assertEqual(str(item), 'name')
-
-    def test_hsc_str(self):
-        hsc_group = HSCGroup.objects.create(name='name')
-        item = HSCChallenge.objects.create(name='challenge', group=hsc_group)
-        self.assertEqual(str(item), '(name) challenge')
 
     def _create_new_project(self):
         country, c = Country.objects.get_or_create(code='CTR2', defaults={'name': "country2",
