@@ -3,26 +3,22 @@ from datetime import datetime
 from unittest import mock
 
 from allauth.account.models import EmailAddress
-from django.test import Client
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
 from django.core import mail
-from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from rest_framework.test import APIClient
 
 from country.models import Country, Donor
-from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
-from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, \
-    Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HSCGroup, ProjectApproval
+from project.models import Project, DigitalStrategy, TechnologyPlatform, Licence, ProjectApproval
 from project.tasks import send_project_approval_digest, \
     send_project_updated_digest, notify_superusers_about_new_pending_software, notify_user_about_software_approval
 
-from project.tests.setup import SetupTests, MockRequest
+from project.tests.setup import SetupTests
 
 
 class ProjectTests(SetupTests):
@@ -721,37 +717,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['project']["name"][0], 'This field must be unique.')
 
-    def test_digitalstrategies_str(self):
-        ds1 = DigitalStrategy.objects.create(name='ds1', group='Client')
-        ds2 = DigitalStrategy.objects.create(name='ds2', group='Client', parent=ds1)
-        self.assertEqual(str(ds1), '[Client] ds1')
-        self.assertEqual(str(ds2), '[Client] [ds1] ds2')
-
-    def test_interop_str(self):
-        io = InteroperabilityLink.objects.create(pre='bla', name='io')
-        self.assertEqual(str(io), 'io')
-
-    def test_platforms_str(self):
-        tp = TechnologyPlatform.objects.create(name='tp')
-        self.assertEqual(str(tp), 'tp')
-
-    def test_licences_str(self):
-        item = Licence.objects.create(name='name')
-        self.assertEqual(str(item), 'name')
-
-    def test_iopstandard_str(self):
-        item = InteroperabilityStandard.objects.create(name='name')
-        self.assertEqual(str(item), 'name')
-
-    def test_hisbucket_str(self):
-        item = HISBucket.objects.create(name='name')
-        self.assertEqual(str(item), 'name')
-
-    def test_hsc_str(self):
-        hsc_group = HSCGroup.objects.create(name='name')
-        item = HSCChallenge.objects.create(name='challenge', group=hsc_group)
-        self.assertEqual(str(item), '(name) challenge')
-
     def _create_new_project(self):
         country, c = Country.objects.get_or_create(code='CTR2', defaults={'name': "country2",
                                                                           'project_approval': False})
@@ -818,27 +783,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200, response.json())
 
         return project_id, country.id
-
-    def test_project_admin_link_add(self):
-        request = MockRequest()
-        site = AdminSite()
-        user = UserProfile.objects.get(id=self.user_profile_id).user
-        request.user = user
-        pa = ProjectAdmin(Project, site)
-        link = pa.link(Project())
-        self.assertEqual(link, '-')
-
-    def test_project_admin_link_edit(self):
-        request = MockRequest()
-        site = AdminSite()
-        user = UserProfile.objects.get(id=self.user_profile_id).user
-        request.user = user
-        pa = ProjectAdmin(Project, site)
-        p = Project.objects.create(name="test link")
-        link = pa.link(p)
-
-        expected_link = "<a target='_blank' href='/app/{}/edit-project/draft/'>See project</a>".format(p.id)
-        self.assertEqual(link, expected_link)
 
     def test_project_approval_email(self):
         user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
@@ -1213,52 +1157,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(project.data['platforms'][0]['id'], software_1.id)
 
         notify_user_about_software_approval.assert_called_once_with(args=('decline', software_2.pk,))
-
-    @mock.patch('project.tasks.notify_user_about_software_approval.apply_async', return_value=None)
-    def test_software_approve_in_admin(self, notify_user_about_software_approval):
-        client = Client()
-
-        password = '1234'
-        admin = User.objects.create_superuser('bh_admin', 'bhadmin@test.com', password)
-
-        software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
-
-        change_url = reverse('admin:project_technologyplatform_changelist')
-        data = {
-            'action': 'approve',
-            '_selected_action': [software.pk],
-        }
-        client.login(username=admin.email, password=password)
-        response = client.post(change_url, data, follow=True)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        software.refresh_from_db()
-        self.assertEqual(software.state, TechnologyPlatform.APPROVED)
-
-        notify_user_about_software_approval.assert_called_once_with(args=('approve', software.pk,))
-
-    @mock.patch('project.tasks.notify_user_about_software_approval.apply_async', return_value=None)
-    def test_software_decline_in_admin(self, notify_user_about_software_approval):
-        client = Client()
-
-        password = '1234'
-        admin = User.objects.create_superuser('bh_admin', 'bhadmin@test.com', password)
-
-        software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
-
-        change_url = reverse('admin:project_technologyplatform_changelist')
-        data = {
-            'action': 'decline',
-            '_selected_action': [software.pk],
-        }
-        client.login(username=admin.email, password=password)
-        response = client.post(change_url, data, follow=True)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        software.refresh_from_db()
-        self.assertEqual(software.state, TechnologyPlatform.DECLINED)
-
-        notify_user_about_software_approval.assert_called_once_with(args=('decline', software.pk,))
 
     def test_send_project_updated_digest(self):
         project = Project.objects.last()
