@@ -8,19 +8,17 @@ from django.utils import timezone
 from rest_framework import status
 
 from django.core import mail
-from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from rest_framework.test import APIClient
 
 from country.models import Country, Donor
-from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, Licence, ProjectApproval
 from project.tasks import send_project_approval_digest, \
     send_project_updated_digest, notify_superusers_about_new_pending_software, notify_user_about_software_approval
 
-from project.tests.setup import SetupTests, MockRequest
+from project.tests.setup import SetupTests
 
 
 class ProjectTests(SetupTests):
@@ -785,27 +783,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200, response.json())
 
         return project_id, country.id
-
-    def test_project_admin_link_add(self):
-        request = MockRequest()
-        site = AdminSite()
-        user = UserProfile.objects.get(id=self.user_profile_id).user
-        request.user = user
-        pa = ProjectAdmin(Project, site)
-        link = pa.link(Project())
-        self.assertEqual(link, '-')
-
-    def test_project_admin_link_edit(self):
-        request = MockRequest()
-        site = AdminSite()
-        user = UserProfile.objects.get(id=self.user_profile_id).user
-        request.user = user
-        pa = ProjectAdmin(Project, site)
-        p = Project.objects.create(name="test link")
-        link = pa.link(p)
-
-        expected_link = "<a target='_blank' href='/app/{}/edit-project/draft/'>See project</a>".format(p.id)
-        self.assertEqual(link, expected_link)
 
     def test_project_approval_email(self):
         user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')

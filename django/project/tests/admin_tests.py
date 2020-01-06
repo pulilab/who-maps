@@ -240,3 +240,16 @@ class TestAdmin(TestCase):
         self.assertEqual(software.state, TechnologyPlatform.DECLINED)
 
         notify_user_about_software_approval.assert_called_once_with(args=('decline', software.pk,))
+
+    def test_project_admin_link_add(self):
+        pa = ProjectAdmin(Project, AdminSite())
+        link = pa.link(Project())
+        self.assertEqual(link, '-')
+
+    def test_project_admin_link_edit(self):
+        pa = ProjectAdmin(Project, AdminSite())
+        p = Project.objects.create(name="test link")
+        link = pa.link(p)
+
+        expected_link = "<a target='_blank' href='/app/{}/edit-project/draft/'>See project</a>".format(p.id)
+        self.assertEqual(link, expected_link)
