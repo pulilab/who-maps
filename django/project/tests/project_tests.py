@@ -3,7 +3,6 @@ from datetime import datetime
 from unittest import mock
 
 from allauth.account.models import EmailAddress
-from django.test import Client
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
@@ -1181,52 +1180,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(project.data['platforms'][0]['id'], software_1.id)
 
         notify_user_about_software_approval.assert_called_once_with(args=('decline', software_2.pk,))
-
-    @mock.patch('project.tasks.notify_user_about_software_approval.apply_async', return_value=None)
-    def test_software_approve_in_admin(self, notify_user_about_software_approval):
-        client = Client()
-
-        password = '1234'
-        admin = User.objects.create_superuser('bh_admin', 'bhadmin@test.com', password)
-
-        software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
-
-        change_url = reverse('admin:project_technologyplatform_changelist')
-        data = {
-            'action': 'approve',
-            '_selected_action': [software.pk],
-        }
-        client.login(username=admin.email, password=password)
-        response = client.post(change_url, data, follow=True)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        software.refresh_from_db()
-        self.assertEqual(software.state, TechnologyPlatform.APPROVED)
-
-        notify_user_about_software_approval.assert_called_once_with(args=('approve', software.pk,))
-
-    @mock.patch('project.tasks.notify_user_about_software_approval.apply_async', return_value=None)
-    def test_software_decline_in_admin(self, notify_user_about_software_approval):
-        client = Client()
-
-        password = '1234'
-        admin = User.objects.create_superuser('bh_admin', 'bhadmin@test.com', password)
-
-        software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
-
-        change_url = reverse('admin:project_technologyplatform_changelist')
-        data = {
-            'action': 'decline',
-            '_selected_action': [software.pk],
-        }
-        client.login(username=admin.email, password=password)
-        response = client.post(change_url, data, follow=True)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        software.refresh_from_db()
-        self.assertEqual(software.state, TechnologyPlatform.DECLINED)
-
-        notify_user_about_software_approval.assert_called_once_with(args=('decline', software.pk,))
 
     def test_send_project_updated_digest(self):
         project = Project.objects.last()

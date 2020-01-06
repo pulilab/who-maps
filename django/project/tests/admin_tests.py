@@ -1,9 +1,13 @@
+from unittest import mock
+
 from allauth.account.models import EmailConfirmation
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.template.response import TemplateResponse
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
+from rest_framework import status
+
 from django.core import mail
 from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import User, Permission
@@ -190,3 +194,49 @@ class TestAdmin(TestCase):
         pa = ProjectAdmin(Project, self.site)
         response = pa.changeform_view(request, object_id=str(p.id))
         self.assertTrue(isinstance(response, TemplateResponse))
+
+    @mock.patch('project.tasks.notify_user_about_software_approval.apply_async', return_value=None)
+    def test_software_approve_in_admin(self, notify_user_about_software_approval):
+        client = Client()
+
+        password = '1234'
+        admin = User.objects.create_superuser('bh_admin', 'bhadmin@test.com', password)
+
+        software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
+
+        change_url = reverse('admin:project_technologyplatform_changelist')
+        data = {
+            'action': 'approve',
+            '_selected_action': [software.pk],
+        }
+        client.login(username=admin.email, password=password)
+        response = client.post(change_url, data, follow=True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        software.refresh_from_db()
+        self.assertEqual(software.state, TechnologyPlatform.APPROVED)
+
+        notify_user_about_software_approval.assert_called_once_with(args=('approve', software.pk,))
+
+    @mock.patch('project.tasks.notify_user_about_software_approval.apply_async', return_value=None)
+    def test_software_decline_in_admin(self, notify_user_about_software_approval):
+        client = Client()
+
+        password = '1234'
+        admin = User.objects.create_superuser('bh_admin', 'bhadmin@test.com', password)
+
+        software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
+
+        change_url = reverse('admin:project_technologyplatform_changelist')
+        data = {
+            'action': 'decline',
+            '_selected_action': [software.pk],
+        }
+        client.login(username=admin.email, password=password)
+        response = client.post(change_url, data, follow=True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        software.refresh_from_db()
+        self.assertEqual(software.state, TechnologyPlatform.DECLINED)
+
+        notify_user_about_software_approval.assert_called_once_with(args=('decline', software.pk,))
