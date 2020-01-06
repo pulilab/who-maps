@@ -45,6 +45,7 @@
 import { mapGetters } from 'vuex';
 import ImportFile from '@/components/admin/import/ImportFile';
 import ImportDetails from '@/components/admin/import/ImportDetails';
+// http://localhost:3000/api/projects/draft/9/
 
 export default {
   components: {
