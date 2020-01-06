@@ -112,7 +112,8 @@ class TestAdmin(TestCase):
         ModelForm = tpa.get_form(self.request, technology_platform)
         data = {'name': technology_platform.name,
                 'name_en': technology_platform.name,
-                'is_active': technology_platform.is_active}
+                'is_active': technology_platform.is_active,
+                'state': technology_platform.state}
         form = ModelForm(data, instance=technology_platform)
 
         self.assertTrue(form.is_valid(), form.errors)
