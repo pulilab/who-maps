@@ -19,7 +19,9 @@ const getTodayString = () => {
 };
 
 export const getters = {
-  getUserProjectList: state => [...state.userProjects.map(p => ({ ...p }))],
+  getUserProjectList: state => [...state.userProjects.map(p => ({
+    ...p
+  }))],
   getHealthFocusAreas: state => state.projectStructure.health_focus_areas ? [...state.projectStructure.health_focus_areas] : [],
   getHisBucket: state => state.projectStructure.his_bucket ? [...state.projectStructure.his_bucket] : [],
   getHscChallenges: state => state.projectStructure.hsc_challenges ? [...state.projectStructure.hsc_challenges] : [],
@@ -63,7 +65,10 @@ export const getters = {
   },
   getMapsAxisData: (state, getters, rootState, rootGetters) => {
     const axis = rootGetters['system/getAxis'];
-    const chartAxis = { labels: axis.map(a => a.name), data: [] };
+    const chartAxis = {
+      labels: axis.map(a => a.name),
+      data: []
+    };
     const toolkitVersion = getters.getToolkitVersions;
     const toolkitData = rootGetters['toolkit/getToolkitData'];
     const todayString = getTodayString();
@@ -101,12 +106,17 @@ export const getters = {
   getMapsDomainData: (state, getters, rootState, rootGetters) => {
     const domains = rootGetters['system/getDomains'];
     const axes = rootGetters['system/getAxis'];
-    const chartData = { labels: axes.map(a => a.name) };
+    const chartData = {
+      labels: axes.map(a => a.name)
+    };
     const toolkitVersion = getters.getToolkitVersions;
     const toolkitData = rootGetters['toolkit/getToolkitData'];
     const todayString = getTodayString();
     axes.forEach((axis, axInd) => {
-      chartData[axis.name] = { labels: domains.filter(d => d.axis === axis.id).map(df => df.name), data: [] };
+      chartData[axis.name] = {
+        labels: domains.filter(d => d.axis === axis.id).map(df => df.name),
+        data: []
+      };
       if (toolkitVersion.length > 0) {
         chartData[axis.name].data = toolkitVersion.map(version => {
           const ret = {};
@@ -118,7 +128,9 @@ export const getters = {
         });
       }
       if (toolkitData.length > 0) {
-        const current = { date: todayString };
+        const current = {
+          date: todayString
+        };
         toolkitData[axInd].domains.forEach((dom, ii) => {
           current['axis' + (ii + 1)] = dom.domain_percentage / 100;
         });
@@ -133,7 +145,9 @@ export const getters = {
     if (projectData) {
       const coverage = projectData.coverage ? projectData.coverage.slice() : [];
       coverage.push(Object.assign({}, projectData.national_level_deployment));
-      coverageVersion.push({ data: coverage });
+      coverageVersion.push({
+        data: coverage
+      });
 
       const todayString = getTodayString();
 
@@ -152,17 +166,26 @@ export const getters = {
           });
         });
         return ret;
-      }, { labels: [], data: [] });
+      }, {
+        labels: [],
+        data: []
+      });
     }
   }
 };
 
 export const actions = {
-  async loadUserProjects ({ commit, rootGetters, getters }) {
+  async loadUserProjects({
+    commit,
+    rootGetters,
+    getters
+  }) {
     try {
       const profile = rootGetters['user/getProfile'];
       if (profile && getters.getUserProjectList.length === 0) {
-        const { data } = await this.$axios.get('/api/projects/member-of/');
+        const {
+          data
+        } = await this.$axios.get('/api/projects/member-of/');
         data.sort((a, b) => b.id - a.id);
         commit('SET_USER_PROJECT_LIST', data);
       }
@@ -171,7 +194,10 @@ export const actions = {
       return Promise.reject(error);
     }
   },
-  async setCurrentProject ({ commit, dispatch }, id) {
+  async setCurrentProject({
+    commit,
+    dispatch
+  }, id) {
     id = parseInt(id, 10);
     try {
       await dispatch('loadProjectDetails', id);
@@ -181,15 +207,18 @@ export const actions = {
     }
     commit('SET_CURRENT_PROJECT', id);
   },
-  async loadProjectDetails ({ commit, rootGetters }, projectId) {
+  async loadProjectDetails({
+    commit,
+    rootGetters
+  }, projectId) {
     const profile = rootGetters['user/getProfile'];
     try {
       if (projectId && profile) {
         const [toolkitVersions, coverageVersions] =
-                  await Promise.all([
-                    this.$axios.get(`/api/projects/${projectId}/toolkit/versions/`),
-                    this.$axios.get(`/api/projects/${projectId}/coverage/versions/`)
-                  ]);
+        await Promise.all([
+          this.$axios.get(`/api/projects/${projectId}/toolkit/versions/`),
+          this.$axios.get(`/api/projects/${projectId}/coverage/versions/`)
+        ]);
         commit('SET_CURRENT_PROJECT_TOOLKIT', toolkitVersions.data);
         commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', coverageVersions.data);
       }
@@ -198,33 +227,61 @@ export const actions = {
       return Promise.reject(error);
     }
   },
-  async snapShotProject ({ state, dispatch }) {
+  async snapShotProject({
+    state,
+    dispatch
+  }) {
     const id = state.currentProject;
     await this.$axios.post(`/api/projects/${id}/version/`);
     return dispatch('loadProjectDetails', id);
   },
-  async loadProjectStructure ({ state, commit }, force) {
+  async loadProjectStructure({
+    state,
+    commit
+  }, force) {
     try {
       const structure = state.projectStructure;
       if (isEmpty(structure) || force) {
-        const { data } = await this.$axios.get('/api/projects/structure/');
+        const {
+          data
+        } = await this.$axios.get('/api/projects/structure/');
         commit('SET_PROJECT_STRUCTURE', data);
       }
     } catch (e) {
       console.error('projects/loadProjectStructure failed');
     }
   },
-  addProjectToList ({ commit }, project) {
+  addProjectToList({
+    commit
+  }, project) {
     commit('ADD_USER_PROJECT', project);
   },
-  updateProject ({ commit }, project) {
+  updateProject({
+    commit
+  }, project) {
     commit('EDIT_USER_PROJECT', project);
   },
-  removeProject ({ commit }, id) {
+  removeProject({
+    commit
+  }, id) {
     commit('RM_USER_PROJECT', id);
   },
-  resetProjectsData ({ commit }) {
+  resetProjectsData({
+    commit
+  }) {
     commit('RESET_PROJECTS_DATA');
+  },
+  async setNewSoftware({
+    commit,
+    dispatch
+  }, name) {
+    const {
+      data
+    } = await this.$axios.post('/api/projects/software/', {
+      name
+    });
+    await dispatch('loadProjectStructure', true);
+    return data.id;
   }
 };
 

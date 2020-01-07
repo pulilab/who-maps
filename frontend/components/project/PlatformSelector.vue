@@ -33,13 +33,14 @@
       </span>
     </el-option>
     <el-option
-      v-for="platform in availablePlatformsFilter"
+      v-for="platform in availablePlatforms"
       :key="platform.id"
       :label="platform.name"
       :value="platform.id"
-      :class="`${platform.new ? 'requested' : ''}`"
+      :class="`${platform.state === 2 ? 'requested' : ''}`"
     >
-      <template v-if="platform.new">
+      <template v-if="platform.state === 1">{{ platform.name }}</template>
+      <template v-if="platform.state === 2">
         <span class="left">
           <b>{{ platform.name }}</b>
         </span>
@@ -50,13 +51,13 @@
           </small>
         </span>
       </template>
-      <template v-else>{{ platform.name }}</template>
     </el-option>
   </lazy-el-select>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
+import { platform } from "os";
 export default {
   model: {
     prop: "platforms",
@@ -80,25 +81,13 @@ export default {
   data() {
     return {
       newPlatform: null,
-      availablePlatforms: [],
-      availablePlatformsFilter: []
+      availablePlatforms: []
     };
   },
   mounted() {
-    const available = this.technologyPlatforms.filter(
+    this.availablePlatforms = this.technologyPlatforms.filter(
       tp => !this.platforms.some(s => s === tp.id) || tp.id === this.platform
     );
-    const newAvailablePlatforms = this.platforms.map(p => {
-      if (typeof p === "string") {
-        return { id: p, name: p, new: true };
-      }
-    }).filter(val => typeof val !== 'undefined');
-
-    this.availablePlatforms = [
-      ...newAvailablePlatforms,
-      ...available
-    ].sort((a, b) => a.name.localeCompare(b.name));
-    this.availablePlatformsFilter = this.availablePlatforms;
   },
   computed: {
     ...mapGetters({
@@ -109,13 +98,21 @@ export default {
     }
   },
   methods: {
-    changeHandler(value) {
+    ...mapActions({
+      setNewSoftware: "projects/setNewSoftware"
+    }),
+    async changeHandler(value) {
+      let id = value;
+      if (typeof id === "string") {
+        id = await this.setNewSoftware(value);
+        console.log(id);
+      }
       const p = [...this.platforms];
-      p[this.index] = value;
+      p[this.index] = id;
       this.$emit("change", p);
     },
     filter(value) {
-      this.availablePlatformsFilter = this.availablePlatforms.filter(platform =>
+      this.availablePlatforms = this.technologyPlatforms.filter(platform =>
         platform.name.toLowerCase().includes(value.toLowerCase())
       );
       if (value) {
