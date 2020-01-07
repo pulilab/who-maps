@@ -26,7 +26,7 @@
       :label="`${person.name ? person.name + ', ': ''}${person.organisation ?  getOrganisationDetails(person.organisation).name : ''} ${person.name ? '(' + person.email + ')' : person.email }` | truncate"
       :value="person.id"
     >
-      <span style="float: left;">{{ person.name }}</span>
+      <span style="float: left;">{{ person.name ? person.name : 'N/A' }}</span>
       <template v-if="person.organisation">
         <organisation-item :id="person.organisation" />
       </template>

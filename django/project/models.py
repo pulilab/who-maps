@@ -257,7 +257,48 @@ class InteroperabilityLink(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedM
 
 
 class TechnologyPlatform(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    pass
+    APPROVED = 1
+    PENDING = 2
+    DECLINED = 3
+
+    SOFTWARE_STATES = (
+        (APPROVED, _("Approved")),
+        (PENDING, _("Pending")),
+        (DECLINED, _("Declined")),
+    )
+
+    state = models.IntegerField(choices=SOFTWARE_STATES, default=APPROVED)
+    added_by = models.ForeignKey(UserProfile, blank=True, null=True, on_delete=models.SET_NULL)
+
+    class Meta:
+        verbose_name = 'Software'
+        verbose_name_plural = 'Software'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__important_fields = ['state']
+        for field in self.__important_fields:
+            setattr(self, '__original_%s' % field, getattr(self, field))
+
+
+@receiver(post_save, sender=TechnologyPlatform)
+def remove_declined_software_from_projects(sender, instance, created, **kwargs):
+    if not created and instance.__original_state != instance.state:
+        from project.tasks import notify_user_about_software_approval
+
+        if instance.state == TechnologyPlatform.DECLINED:
+            # remove software from data platforms and from draft platforms
+            projects = Project.objects.filter(
+                Q(data__platforms__contains=[{'id': instance.id}]) | Q(draft__platforms__contains=[{'id': instance.id}])
+            )
+            for project in projects:
+                project.data['platforms'] = [item for item in project.data['platforms'] if item['id'] != instance.id]
+                project.draft['platforms'] = [item for item in project.draft['platforms'] if item['id'] != instance.id]
+                project.save()
+
+            notify_user_about_software_approval.apply_async(args=('decline', instance.pk,))
+        elif instance.state == TechnologyPlatform.APPROVED:
+            notify_user_about_software_approval.apply_async(args=('approve', instance.pk,))
 
 
 class Licence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):

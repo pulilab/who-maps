@@ -1,9 +1,13 @@
+from unittest import mock
+
 from allauth.account.models import EmailConfirmation
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.template.response import TemplateResponse
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
+from rest_framework import status
+
 from django.core import mail
 from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import User, Permission
@@ -112,7 +116,8 @@ class TestAdmin(TestCase):
         ModelForm = tpa.get_form(self.request, technology_platform)
         data = {'name': technology_platform.name,
                 'name_en': technology_platform.name,
-                'is_active': technology_platform.is_active}
+                'is_active': technology_platform.is_active,
+                'state': technology_platform.state}
         form = ModelForm(data, instance=technology_platform)
 
         self.assertTrue(form.is_valid(), form.errors)
@@ -189,3 +194,62 @@ class TestAdmin(TestCase):
         pa = ProjectAdmin(Project, self.site)
         response = pa.changeform_view(request, object_id=str(p.id))
         self.assertTrue(isinstance(response, TemplateResponse))
+
+    @mock.patch('project.tasks.notify_user_about_software_approval.apply_async', return_value=None)
+    def test_software_approve_in_admin(self, notify_user_about_software_approval):
+        client = Client()
+
+        password = '1234'
+        admin = User.objects.create_superuser('bh_admin', 'bhadmin@test.com', password)
+
+        software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
+
+        change_url = reverse('admin:project_technologyplatform_changelist')
+        data = {
+            'action': 'approve',
+            '_selected_action': [software.pk],
+        }
+        client.login(username=admin.email, password=password)
+        response = client.post(change_url, data, follow=True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        software.refresh_from_db()
+        self.assertEqual(software.state, TechnologyPlatform.APPROVED)
+
+        notify_user_about_software_approval.assert_called_once_with(args=('approve', software.pk,))
+
+    @mock.patch('project.tasks.notify_user_about_software_approval.apply_async', return_value=None)
+    def test_software_decline_in_admin(self, notify_user_about_software_approval):
+        client = Client()
+
+        password = '1234'
+        admin = User.objects.create_superuser('bh_admin', 'bhadmin@test.com', password)
+
+        software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
+
+        change_url = reverse('admin:project_technologyplatform_changelist')
+        data = {
+            'action': 'decline',
+            '_selected_action': [software.pk],
+        }
+        client.login(username=admin.email, password=password)
+        response = client.post(change_url, data, follow=True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        software.refresh_from_db()
+        self.assertEqual(software.state, TechnologyPlatform.DECLINED)
+
+        notify_user_about_software_approval.assert_called_once_with(args=('decline', software.pk,))
+
+    def test_project_admin_link_add(self):
+        pa = ProjectAdmin(Project, AdminSite())
+        link = pa.link(Project())
+        self.assertEqual(link, '-')
+
+    def test_project_admin_link_edit(self):
+        pa = ProjectAdmin(Project, AdminSite())
+        p = Project.objects.create(name="test link")
+        link = pa.link(p)
+
+        expected_link = "<a target='_blank' href='/app/{}/edit-project/draft/'>See project</a>".format(p.id)
+        self.assertEqual(link, expected_link)

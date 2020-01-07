@@ -1,5 +1,6 @@
 import copy
 from datetime import datetime
+from unittest import mock
 
 from allauth.account.models import EmailAddress
 from django.urls import reverse
@@ -7,19 +8,17 @@ from django.utils import timezone
 from rest_framework import status
 
 from django.core import mail
-from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from rest_framework.test import APIClient
 
 from country.models import Country, Donor
-from project.admin import ProjectAdmin
 from user.models import Organisation, UserProfile
-from project.models import Project, DigitalStrategy, InteroperabilityLink, TechnologyPlatform, \
-    Licence, InteroperabilityStandard, HISBucket, HSCChallenge, HSCGroup, ProjectApproval
-from project.tasks import send_project_approval_digest, send_project_updated_digest
+from project.models import Project, DigitalStrategy, TechnologyPlatform, Licence, ProjectApproval
+from project.tasks import send_project_approval_digest, \
+    send_project_updated_digest, notify_superusers_about_new_pending_software, notify_user_about_software_approval
 
-from project.tests.setup import SetupTests, MockRequest
+from project.tests.setup import SetupTests
 
 
 class ProjectTests(SetupTests):
@@ -718,37 +717,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['project']["name"][0], 'This field must be unique.')
 
-    def test_digitalstrategies_str(self):
-        ds1 = DigitalStrategy.objects.create(name='ds1', group='Client')
-        ds2 = DigitalStrategy.objects.create(name='ds2', group='Client', parent=ds1)
-        self.assertEqual(str(ds1), '[Client] ds1')
-        self.assertEqual(str(ds2), '[Client] [ds1] ds2')
-
-    def test_interop_str(self):
-        io = InteroperabilityLink.objects.create(pre='bla', name='io')
-        self.assertEqual(str(io), 'io')
-
-    def test_platforms_str(self):
-        tp = TechnologyPlatform.objects.create(name='tp')
-        self.assertEqual(str(tp), 'tp')
-
-    def test_licences_str(self):
-        item = Licence.objects.create(name='name')
-        self.assertEqual(str(item), 'name')
-
-    def test_iopstandard_str(self):
-        item = InteroperabilityStandard.objects.create(name='name')
-        self.assertEqual(str(item), 'name')
-
-    def test_hisbucket_str(self):
-        item = HISBucket.objects.create(name='name')
-        self.assertEqual(str(item), 'name')
-
-    def test_hsc_str(self):
-        hsc_group = HSCGroup.objects.create(name='name')
-        item = HSCChallenge.objects.create(name='challenge', group=hsc_group)
-        self.assertEqual(str(item), '(name) challenge')
-
     def _create_new_project(self):
         country, c = Country.objects.get_or_create(code='CTR2', defaults={'name': "country2",
                                                                           'project_approval': False})
@@ -815,27 +783,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200, response.json())
 
         return project_id, country.id
-
-    def test_project_admin_link_add(self):
-        request = MockRequest()
-        site = AdminSite()
-        user = UserProfile.objects.get(id=self.user_profile_id).user
-        request.user = user
-        pa = ProjectAdmin(Project, site)
-        link = pa.link(Project())
-        self.assertEqual(link, '-')
-
-    def test_project_admin_link_edit(self):
-        request = MockRequest()
-        site = AdminSite()
-        user = UserProfile.objects.get(id=self.user_profile_id).user
-        request.user = user
-        pa = ProjectAdmin(Project, site)
-        p = Project.objects.create(name="test link")
-        link = pa.link(p)
-
-        expected_link = "<a target='_blank' href='/app/{}/edit-project/draft/'>See project</a>".format(p.id)
-        self.assertEqual(link, expected_link)
 
     def test_project_approval_email(self):
         user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
@@ -1065,6 +1012,151 @@ class ProjectTests(SetupTests):
         url = reverse("project-retrieve", kwargs={"pk": 10000000})
         response = self.test_user_client.get(url, format="json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, response.json())
+
+    @mock.patch('project.views.notify_superusers_about_new_pending_software.apply_async')
+    def test_technology_platform_create(self, task):
+        task.return_value = None
+
+        user = User.objects.create(username="test_user_100000", password="test_user_100000")
+        user_profile = UserProfile.objects.create(user=user, name="test_user_100000")
+
+        data = {
+            'name': 'test platform',
+            'state': TechnologyPlatform.APPROVED,  # should have no effect
+            'added_by': user_profile.id,  # should have no effect
+        }
+        url = reverse('technologyplatform-list')
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        data = response.json()
+        self.assertEqual(data['state'], TechnologyPlatform.PENDING)
+        self.assertEqual(data['added_by'], self.user_profile_id)
+
+        call_args_list = task.call_args_list
+        self.assertEqual(call_args_list[0][0][0][0], data['id'])
+
+    @mock.patch('project.tasks.send_mail_wrapper')
+    def test_notify_super_users_about_pending_software_success(self, send_email):
+        send_email.return_value = None
+
+        super_users = User.objects.filter(is_superuser=True)
+        # remove super user status from the current super users
+        for user in super_users:
+            user.is_superuser = False
+            user.save()
+
+        test_super_user_1 = User.objects.create_superuser('bh_superuser_1', 'bh+1@pulilab.com', 'puli_1234')
+        test_super_user_2 = User.objects.create_superuser('bh_superuser_2', 'bh+2@pulilab.com', 'puli_2345')
+        try:
+            software = TechnologyPlatform.objects.create(name='pending software')
+            notify_superusers_about_new_pending_software.apply((software.id,))
+
+            call_args_list = send_email.call_args_list[0][1]
+            self.assertEqual(call_args_list['subject'], 'New software is pending for approval')
+            self.assertEqual(call_args_list['email_type'], 'new_pending_software')
+            self.assertIn(test_super_user_1.email, call_args_list['to'])
+            self.assertIn(test_super_user_2.email, call_args_list['to'])
+            self.assertEqual(call_args_list['context']['software_name'], software.name)
+
+        finally:
+            test_super_user_1.delete()
+            test_super_user_2.delete()
+
+            # give back super user status
+            for user in super_users:
+                user.is_superuser = True
+                user.save()
+
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_notify_user_about_software_approve(self, send_email):
+        software = TechnologyPlatform.objects.create(name='pending software', added_by_id=self.user_profile_id)
+        notify_user_about_software_approval.apply(args=('test', software.id))
+        notify_user_about_software_approval.apply(args=('approve', software.id))
+
+        send_email.assert_called_once()
+        call_args_list = send_email.call_args_list[0][1]
+        self.assertEqual(call_args_list['subject'], 'The software you requested has been approved')
+        self.assertEqual(call_args_list['email_type'], 'software_approved')
+        self.assertEqual(call_args_list['context']['software_name'], software.name)
+
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_notify_user_about_software_decline(self, send_email):
+        software = TechnologyPlatform.objects.create(name='pending software', added_by_id=self.user_profile_id)
+        notify_user_about_software_approval.apply(args=('decline', software.id))
+
+        call_args_list = send_email.call_args_list[0][1]
+        self.assertEqual(call_args_list['subject'], 'The software you requested has been declined')
+        self.assertEqual(call_args_list['email_type'], 'software_declined')
+        self.assertEqual(call_args_list['context']['software_name'], software.name)
+
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_notify_user_about_software_approval_fail(self, send_email):
+        software = TechnologyPlatform.objects.create(name='pending software')
+        notify_user_about_software_approval.apply(args=('approve', software.id))
+
+        send_email.assert_not_called()
+
+    @mock.patch('project.tasks.notify_user_about_software_approval.apply_async', return_value=None)
+    def test_software_decline(self, notify_user_about_software_approval):
+        country = Country.objects.last()
+
+        software_1 = TechnologyPlatform.objects.create(name='approved', state=TechnologyPlatform.APPROVED)
+        software_2 = TechnologyPlatform.objects.create(name='will be declined', state=TechnologyPlatform.PENDING)
+
+        s_parent = DigitalStrategy.objects.create(name="strategy parent", group=DigitalStrategy.GROUP_CHOICES[0])
+        s1 = DigitalStrategy.objects.create(parent=s_parent, name="strategy1", group=DigitalStrategy.GROUP_CHOICES[0])
+
+        data = {"project": {
+            "date": datetime.utcnow(),
+            "name": "Test Project 10000",
+            "organisation": self.org.id,
+            "contact_name": "test_contact",
+            "contact_email": "a@a.com",
+            "implementation_overview": "overview",
+            "implementation_dates": "2019",
+            "health_focus_areas": [1, 2],
+            "country": country.id,
+            "platforms": [
+                {
+                    "id": software_1.id,
+                    "strategies": [s1.id]
+                }, {
+                    "id": software_2.id,
+                    "strategies": [s1.id]
+                }
+            ],
+            "his_bucket": [1, 2],
+            "donors": [self.d1.id],
+            "hsc_challenges": [1, 2],
+            "start_date": str(datetime.today().date()),
+        }}
+
+        url = reverse("project-create", kwargs={"country_id": country.id})
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        project = Project.objects.get(pk=response.json()['id'])
+        self.assertEqual(len(project.draft['platforms']), 2)
+
+        url = reverse("project-publish", kwargs=dict(project_id=project.id, country_id=country.id))
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+
+        project.refresh_from_db()
+        self.assertEqual(len(project.draft['platforms']), 2)
+        self.assertEqual(len(project.data['platforms']), 2)
+
+        # decline software
+        software_2.state = TechnologyPlatform.DECLINED
+        software_2.save()
+
+        project.refresh_from_db()
+        self.assertEqual(len(project.draft['platforms']), 1)
+        self.assertEqual(project.draft['platforms'][0]['id'], software_1.id)
+        self.assertEqual(len(project.data['platforms']), 1)
+        self.assertEqual(project.data['platforms'][0]['id'], software_1.id)
+
+        notify_user_about_software_approval.assert_called_once_with(args=('decline', software_2.pk,))
 
     def test_send_project_updated_digest(self):
         project = Project.objects.last()
