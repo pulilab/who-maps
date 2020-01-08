@@ -54,6 +54,28 @@
             placeholder="Add a partner"
           />
         </template>
+        <template v-if="dialogData.column === 'implementing_team'">
+          <el-select
+            v-model="dialogData.value"
+            class="FullWidth"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            :placeholder="$gettext('Add a team') | translate"
+          />
+        </template>
+        <template v-if="dialogData.column === 'implementing_viewers'">
+          <el-select
+            v-model="dialogData.value"
+            class="FullWidth"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            :placeholder="$gettext('Add viewers') | translate"
+          />
+        </template>
         <template v-if="dialogData.column === 'platforms'">
           <platform-selector
             v-model="dialogData.value"

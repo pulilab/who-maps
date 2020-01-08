@@ -204,6 +204,8 @@ export default {
           hsc_challenges: () => this.findProjectCollectionValue('hsc_challenges', true, 'challenges'),
           his_bucket: () => this.findProjectCollectionValue('his_bucket', true),
           implementing_partners: this.stringArray,
+          implementing_team: this.stringArray,
+          implementing_viewers: this.stringArray,
           implementation_dates: () => this.parseDate(),
           start_date: () => this.parseDate(),
           end_date: () => this.parseDate(),
@@ -348,7 +350,7 @@ export default {
       return this.toInternalRepresentation(filtered);
     },
     apiValue () {
-      const isMultiple = ['platforms', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards', 'custom_field', 'digitalHealthInterventions'];
+      const isMultiple = ['platforms', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards', 'custom_field', 'digitalHealthInterventions', 'implementing_team', 'implementing_viewers'];
       const isIds = [...isMultiple, 'donors', 'country', 'organisation', 'government_investor', 'sub_level'];
       const idsOrNames = isIds.includes(this.column) ? this.parsedValue.ids : this.parsedValue.names;
       return isMultiple.includes(this.column) ? idsOrNames : idsOrNames[0];

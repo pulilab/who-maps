@@ -52,6 +52,8 @@ export const projectFields = () => ({
   },
   government_investor: null,
   implementing_partners: [],
+  implementing_team: [],
+  implementing_viewers: [],
   donors: [],
   implementation_dates: null,
   licenses: [],
@@ -88,6 +90,12 @@ export const draftRules = () => {
       max: 1024
     },
     implementing_partners: {
+      max: 64
+    },
+    implementing_team: {
+      max: 64
+    },
+    implementing_viewers: {
       max: 64
     },
     implementation_overview: {
@@ -221,6 +229,12 @@ export const publishRules = () => {
     },
     government_investor: {},
     implementing_partners: {
+      max: 64
+    },
+    implementing_team: {
+      max: 64
+    },
+    implementing_viewers: {
       max: 64
     },
     donors: {
