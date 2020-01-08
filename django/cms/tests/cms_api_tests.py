@@ -1,6 +1,6 @@
 from allauth.account.models import EmailConfirmation
 
-from core.factories import UserFactory
+from core.factories import UserFactory, UserProfileFactory
 from core.tests import get_temp_image
 from django.core import mail
 from rest_framework.reverse import reverse
@@ -8,7 +8,7 @@ from rest_framework.test import APITestCase, APIClient
 
 from cms.models import Post, Comment
 from country.models import Country
-from user.models import Organisation, UserProfile
+from user.models import Organisation
 
 
 class CmsApiTest(APITestCase):
@@ -385,7 +385,7 @@ class CmsApiTest(APITestCase):
         self.password = 'mypassword'
         self.admin = UserFactory(username='myuser', email='f@pulilab.com', password=self.password,
                                  is_staff=True, is_superuser=True)
-        UserProfile.objects.create(user=self.admin, language='fr')
+        UserProfileFactory(user=self.admin, language='fr')
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
         response = self.test_user_client.patch(url)

@@ -8,7 +8,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils.dateformat import format
 from requests import RequestException
 
-from core.factories import UserFactory
+from core.factories import UserFactory, UserProfileFactory
 from country.tests.base import CountryBaseTests
 from django.core import mail
 
@@ -165,11 +165,11 @@ class CountryTests(CountryBaseTests):
         self.country.admins.add(self.test_user['user_profile_id'])
 
         user1 = UserFactory(username='test1', password='12345678')
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.GOVERNMENT)
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.GOVERNMENT)
         user2 = UserFactory(username='test2', password='12345678')
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
-                                                  account_type=UserProfile.COUNTRY_ADMIN)
+        userprofile2 = UserProfileFactory(user=user2, name="test2", country=self.country,
+                                          account_type=UserProfile.COUNTRY_ADMIN)
 
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
@@ -186,14 +186,14 @@ class CountryTests(CountryBaseTests):
         self.country.super_admins.add(self.test_user['user_profile_id'])
 
         user1 = UserFactory(username='test1', password='12345678')
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.GOVERNMENT)
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.GOVERNMENT)
         user2 = UserFactory(username='test2', password='12345678')
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
-                                                  account_type=UserProfile.COUNTRY_ADMIN)
+        userprofile2 = UserProfileFactory(user=user2, name="test2", country=self.country,
+                                          account_type=UserProfile.COUNTRY_ADMIN)
         user3 = UserFactory(username='test3', password='12345678')
-        userprofile3 = UserProfile.objects.create(user=user3, name="test3", country=self.country,
-                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+        userprofile3 = UserProfileFactory(user=user3, name="test3", country=self.country,
+                                          account_type=UserProfile.SUPER_COUNTRY_ADMIN)
 
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
@@ -208,14 +208,14 @@ class CountryTests(CountryBaseTests):
         user.save()
 
         user1 = UserFactory(username='test1', password='12345678')
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.GOVERNMENT)
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.GOVERNMENT)
         user2 = UserFactory(username='test2', password='12345678')
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
-                                                  account_type=UserProfile.COUNTRY_ADMIN)
+        userprofile2 = UserProfileFactory(user=user2, name="test2", country=self.country,
+                                          account_type=UserProfile.COUNTRY_ADMIN)
         user3 = UserFactory(username='test3', password='12345678')
-        userprofile3 = UserProfile.objects.create(user=user3, name="test3", country=self.country,
-                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+        userprofile3 = UserProfileFactory(user=user3, name="test3", country=self.country,
+                                          account_type=UserProfile.SUPER_COUNTRY_ADMIN)
 
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
@@ -230,17 +230,17 @@ class CountryTests(CountryBaseTests):
         self.country.super_admins.add(self.test_user['user_profile_id'])
 
         user1 = UserFactory(username='test1', password='12345678', email='test1@foo.com')
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.GOVERNMENT)
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.GOVERNMENT)
         user2 = UserFactory(username='test2', password='12345678', email='test2@foo.com')
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
-                                                  account_type=UserProfile.COUNTRY_ADMIN)
+        userprofile2 = UserProfileFactory(user=user2, name="test2", country=self.country,
+                                          account_type=UserProfile.COUNTRY_ADMIN)
         user3 = UserFactory(username='test3', password='12345678', email='test3@foo.com')
-        userprofile3 = UserProfile.objects.create(user=user3, name="test3", country=self.country,
-                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+        userprofile3 = UserProfileFactory(user=user3, name="test3", country=self.country,
+                                          account_type=UserProfile.SUPER_COUNTRY_ADMIN)
         user4 = UserFactory(username='test4', password='12345678', email='test4@foo.com')
-        userprofile4 = UserProfile.objects.create(user=user4, name="test4", country=self.country,
-                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN, language='fr')
+        userprofile4 = UserProfileFactory(user=user4, name="test4", country=self.country,
+                                          account_type=UserProfile.SUPER_COUNTRY_ADMIN, language='fr')
 
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         data = {
@@ -290,8 +290,8 @@ class CountryTests(CountryBaseTests):
         self.country.super_admins.add(self.test_user['user_profile_id'])
 
         user1 = UserFactory(username='test1', password='12345678')
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.COUNTRY_ADMIN)
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.COUNTRY_ADMIN)
 
         url = reverse("country-detail", kwargs={"pk": self.country.id})
 
@@ -334,8 +334,8 @@ class CountryTests(CountryBaseTests):
         url = reverse("country-detail", kwargs={"pk": self.country.id})
 
         user1 = UserFactory(username='test1', password='12345678')
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.GOVERNMENT)
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.GOVERNMENT)
         data = {
             "users": [userprofile1.id]
         }
@@ -372,8 +372,8 @@ class CountryTests(CountryBaseTests):
         url = reverse("country-detail", kwargs={"pk": self.country.id})
 
         user1 = UserFactory(username='test1', password='12345678')
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.SUPER_COUNTRY_ADMIN)
         data = {
             "super_admins": [userprofile1.id],
         }
