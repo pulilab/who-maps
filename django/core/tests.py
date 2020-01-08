@@ -11,6 +11,7 @@ from rest_framework.reverse import reverse
 
 from core.admin import CustomUserAdmin
 from core.admin.widgets import AdminArrayFieldWidget, AdminArrayField, NoneReadOnlyAdminArrayFieldWidget
+from core.factories import UserFactory
 from country.models import Country
 from user.models import UserProfile
 
@@ -24,7 +25,7 @@ class AuthTest(TestCase):
         self.client = Client()
 
         self.site = AdminSite()
-        self.user = User.objects.create(username="alma", password="korte")
+        self.user = UserFactory(username='alma', password='korte')
         self.userprofile = UserProfile.objects.create(user=self.user, name="almakorte",
                                                       country=Country.objects.get(id=1))
 
