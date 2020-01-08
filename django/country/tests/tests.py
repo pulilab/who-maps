@@ -8,13 +8,13 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils.dateformat import format
 from requests import RequestException
 
-from core.factories import UserFactory, UserProfileFactory
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory
 from country.tests.base import CountryBaseTests
 from django.core import mail
 
 from country.models import Country, Donor, CustomQuestion
 from project.models import TechnologyPlatform, DigitalStrategy
-from user.models import UserProfile, Organisation
+from user.models import UserProfile
 
 
 class CountryTests(CountryBaseTests):
@@ -391,7 +391,7 @@ class CountryTests(CountryBaseTests):
 
     def test_country_export(self):
         country = Country.objects.create(name='country111', code='C2')
-        org = Organisation.objects.create(name="org1")
+        org = OrganisationFactory(name="org1")
         d1 = Donor.objects.create(name="Donor1", code="donor1")
         p1 = TechnologyPlatform.objects.create(name='platform1')
         p2 = TechnologyPlatform.objects.create(name='platform2')

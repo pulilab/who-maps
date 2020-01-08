@@ -2,14 +2,14 @@ from django.contrib.auth.models import User
 from django.test import override_settings
 from django.urls import reverse
 
-from core.factories import UserFactory, UserProfileFactory
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory
 from django.core import mail
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from allauth.account.models import EmailConfirmation
 
 from country.models import Country, Donor
-from .models import Organisation, UserProfile
+from .models import UserProfile
 
 
 class UserTests(APITestCase):
@@ -210,7 +210,7 @@ class UserProfileTests(APITestCase):
         self.client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
 
         # Update profile.
-        self.org = Organisation.objects.create(name="org1")
+        self.org = OrganisationFactory(name="org1")
         self.country = Country.objects.all()[0]
         self.donor = Donor.objects.create(name="Donor1", code="donor1")
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
@@ -245,7 +245,7 @@ class UserProfileTests(APITestCase):
         user_profile_id = response.json().get('user_profile_id')
         client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
 
-        org = Organisation.objects.create(name="org33")
+        org = OrganisationFactory(name="org33")
         country = Country.objects.all()[0]
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {

@@ -1,6 +1,6 @@
 from allauth.account.models import EmailConfirmation
 
-from core.factories import UserFactory, UserProfileFactory
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory
 from core.tests import get_temp_image
 from django.core import mail
 from rest_framework.reverse import reverse
@@ -8,7 +8,6 @@ from rest_framework.test import APITestCase, APIClient
 
 from cms.models import Post, Comment
 from country.models import Country
-from user.models import Organisation
 
 
 class CmsApiTest(APITestCase):
@@ -35,7 +34,7 @@ class CmsApiTest(APITestCase):
         self.user_profile_id = response.json().get('user_profile_id')
 
         # Update profile.
-        self.org = Organisation.objects.create(name="org1")
+        self.org = OrganisationFactory(name="org1")
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         self.country = Country.objects.create(name="country1")
         self.country_id = self.country.id

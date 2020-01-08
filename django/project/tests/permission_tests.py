@@ -2,11 +2,11 @@ from copy import copy
 
 from django.urls import reverse
 
-from core.factories import UserFactory, UserProfileFactory
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory
 from django.core import mail
 from rest_framework.test import APIClient
 
-from user.models import Organisation, UserProfile
+from user.models import UserProfile
 from project.models import Project
 
 from project.tests.setup import SetupTests
@@ -66,7 +66,7 @@ class PermissionTests(SetupTests):
         user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",
@@ -126,7 +126,7 @@ class PermissionTests(SetupTests):
         user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",
@@ -173,7 +173,7 @@ class PermissionTests(SetupTests):
         user_profile_id = response.json().get('user_profile_id')
 
         # Create profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",
@@ -234,7 +234,7 @@ class PermissionTests(SetupTests):
         user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",
@@ -302,7 +302,7 @@ class PermissionTests(SetupTests):
         user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",
