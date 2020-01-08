@@ -1,6 +1,6 @@
 from allauth.account.models import EmailConfirmation
-from django.contrib.auth.models import User
 
+from core.factories import UserFactory
 from core.tests import get_temp_image
 from django.core import mail
 from rest_framework.reverse import reverse
@@ -383,7 +383,8 @@ class CmsApiTest(APITestCase):
     def test_flag_post_sends_email(self):
         self.test_create()
         self.password = 'mypassword'
-        self.admin = User.objects.create_superuser('myuser', 'f@pulilab.com', self.password)
+        self.admin = UserFactory(username='myuser', email='f@pulilab.com', password=self.password,
+                                 is_staff=True, is_superuser=True)
         UserProfile.objects.create(user=self.admin, language='fr')
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})

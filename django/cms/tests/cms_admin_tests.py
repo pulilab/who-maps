@@ -1,5 +1,4 @@
 from django.contrib.admin import AdminSite
-from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from rest_framework.reverse import reverse
 
@@ -60,7 +59,8 @@ class CmsAdminTests(TestCase):
         ma = CommentAdmin(Comment, self.site)
         self.password = 'mypassword'
 
-        self.admin = User.objects.create_superuser('myuser', 'myemail@test.com', self.password)
+        self.admin = UserFactory(username='myuser', email='myemail@test.com', password=self.password,
+                                 is_staff=True, is_superuser=True)
 
         self.client = Client()
         self.request.user = self.admin
