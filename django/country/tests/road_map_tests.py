@@ -24,7 +24,7 @@ class CountryRoadMapTests(CountryBaseTests):
             ArchitectureRoadMapDocument.objects.create(
                 country=country,
                 title=f'{i} test',
-                document=ContentFile('test_content', name=f'test_file_{i}.txt')
+                document=ContentFile('test_content', name=f'test_file_{i}.xls')
             )
         self.assertEqual(country.documents.count(), 2)
 
@@ -42,7 +42,7 @@ class CountryRoadMapTests(CountryBaseTests):
         country = Country.objects.first()
         country.super_admins.add(self.test_user['user_profile_id'])
 
-        road_map_file = SimpleUploadedFile("test_file.txt", b"test_content")
+        road_map_file = SimpleUploadedFile("test_file.xls", b"test_content")
         url = reverse('architecture-roadmap-document-list')
         data = {
             'country': country.id,
@@ -85,7 +85,7 @@ class CountryRoadMapTests(CountryBaseTests):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
         self.assertEqual(
             response.json(),
-            {'document': ['Invalid file type. Allowed formats: .pdf, .txt, .doc, .docx, .xls, .xlsx, .rtf']}
+            {'document': ['Invalid file type. Allowed formats: .pdf, .xls, .xlsx']}
         )
 
     @override_settings(MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE=1024 * 1024)  # 1 MB
@@ -116,13 +116,13 @@ class CountryRoadMapTests(CountryBaseTests):
         data = {'country': country.id, }
         # document upload should work within the limit
         for i in range(settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY):
-            data['document'] = SimpleUploadedFile(f"test_file_{i}.txt", b"test_content")
+            data['document'] = SimpleUploadedFile(f"test_file_{i}.xls", b"test_content")
             data['title'] = f'test document {i}'
             response = self.test_user_client.post(url, data, format='multipart')
             self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
         # next upload should fail
-        data['document'] = SimpleUploadedFile(f"test_file_100.txt", b"test_content")
+        data['document'] = SimpleUploadedFile(f"test_file_100.xls", b"test_content")
         data['title'] = f'test document 100'
         response = self.test_user_client.post(url, data, format='multipart')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
