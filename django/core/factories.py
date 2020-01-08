@@ -4,6 +4,8 @@ from django.utils import timezone
 from factory.faker import faker
 from factory.fuzzy import FuzzyDateTime
 
+from user.models import UserProfile
+
 
 class UserFactory(factory.DjangoModelFactory):
     class Meta:
@@ -24,3 +26,12 @@ class UserFactory(factory.DjangoModelFactory):
     def password(self, create, extracted, **kwargs):
         if extracted:
             self.set_password(extracted)
+
+
+class UserProfileFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = UserProfile
+        django_get_or_create = ('name',)
+
+    user = factory.SubFactory(UserFactory)
+    name = factory.LazyAttribute(lambda a: f'{a.user.username}')
