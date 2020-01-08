@@ -5,6 +5,7 @@ from rest_framework.reverse import reverse
 
 from cms.admin import PostAdmin, CommentAdmin
 from cms.models import Post, Comment, State
+from core.factories import UserFactory
 from user.models import UserProfile
 
 
@@ -16,7 +17,7 @@ class CmsAdminTests(TestCase):
     def setUp(self):
         self.site = AdminSite()
         self.request = MockRequest()
-        self.user = User.objects.create(username="alma", password="korte")
+        self.user = UserFactory(username='alma', password='korte')
         self.userprofile = UserProfile.objects.create(user=self.user, name="almakorte")
 
     def test_admin_list_filters(self):
