@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test import override_settings
 from django.urls import reverse
 
-from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, DonorFactory
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, DonorFactory, CountryFactory
 from django.core import mail
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
@@ -495,7 +495,7 @@ class UserProfileTests(APITestCase):
 
     @override_settings(CELERY_ALWAYS_EAGER=True)
     def test_admin_requests_are_triggering_celery_task(self):
-        c = Country.objects.create(code='XXY', name='COUNTRY_TEST')
+        c = CountryFactory(code='XXY', name='COUNTRY_TEST')
         c.admins.add(self.user_profile_id)
 
         d = DonorFactory(name='DONOR_TEST')

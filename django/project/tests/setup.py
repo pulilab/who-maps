@@ -4,7 +4,7 @@ from allauth.account.models import EmailConfirmation
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 
-from core.factories import OrganisationFactory, DonorFactory
+from core.factories import OrganisationFactory, DonorFactory, CountryFactory
 from country.models import Country
 from user.models import UserProfile
 
@@ -48,8 +48,8 @@ class SetupTests(APITestCase):
 
         # Update profile.
         self.org = OrganisationFactory(name="org1")
-        self.country = Country.objects.create(name="country1", code='CTR1', project_approval=True,
-                                              region=Country.REGIONS[0][0])
+        self.country = CountryFactory(name="country1", code='CTR1', project_approval=True,
+                                      region=Country.REGIONS[0][0])
         self.country_id = self.country.id
         self.country.name_en = 'Hungary'
         self.country.name_fr = 'Hongrie'

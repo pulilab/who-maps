@@ -1,15 +1,17 @@
 import factory
+import pycountry
 from django.contrib.auth.models import User
 from django.utils import timezone
 from factory.faker import faker
 from factory.fuzzy import FuzzyDateTime, FuzzyChoice
 
-from country.models import Donor, DonorCustomQuestion
+from country.models import Donor, DonorCustomQuestion, Country
 from project.models import TechnologyPlatform, DigitalStrategy
 from user.models import UserProfile, Organisation
 
 
 DIGITAL_STRATEGY_GROUP_CHOICES = [item[0] for item in DigitalStrategy.GROUP_CHOICES]
+COUNTRY_NAMES = [country.name for country in pycountry.countries]
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -84,3 +86,14 @@ class DigitalStrategyFactory(factory.DjangoModelFactory):
 
     group = FuzzyChoice(DIGITAL_STRATEGY_GROUP_CHOICES)
     name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().sentence()))
+
+
+class CountryFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = Country
+        django_get_or_create = ('name',)
+
+    name = FuzzyChoice(COUNTRY_NAMES)
+    code = factory.LazyAttribute(
+        lambda s: '{}'.format(pycountry.countries.get(name=s.name).alpha_2)
+    )

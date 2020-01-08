@@ -9,7 +9,7 @@ from django.utils.dateformat import format
 from requests import RequestException
 
 from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, DonorFactory, \
-    TechnologyPlatformFactory, DigitalStrategyFactory
+    TechnologyPlatformFactory, DigitalStrategyFactory, CountryFactory
 from country.tests.base import CountryBaseTests
 from django.core import mail
 
@@ -85,7 +85,7 @@ class CountryTests(CountryBaseTests):
         self.assertIn("map_data", response_keys)
 
     def test_country_admin_retrieve_without_map_version(self):
-        country2 = Country.objects.create(name="country2", code="CC2")
+        country2 = CountryFactory(name="country2", code="CC2")
         url = reverse("country-detail", kwargs={"pk": country2.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
@@ -391,7 +391,7 @@ class CountryTests(CountryBaseTests):
         self.assertTrue(isinstance(response.json()['partner_logos'], list))
 
     def test_country_export(self):
-        country = Country.objects.create(name='country111', code='C2')
+        country = CountryFactory(name='country111', code='C2')
         org = OrganisationFactory(name="org1")
         d1 = DonorFactory(name="Donor1", code="donor1")
         p1 = TechnologyPlatformFactory(name='platform1')
