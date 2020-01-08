@@ -1,15 +1,15 @@
 import tempfile
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 
 from cms.models import Post, Comment, State
+from core.factories import UserFactory
 from user.models import UserProfile
 
 
 class CmsTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create(username="test@who.who", email="test@who.who", password="secure1234")
+        self.user = UserFactory(username='test@who.who', email='test@who.who', password='secure1234')
         self.userprofile = UserProfile.objects.create(name="Test User1", user=self.user)
 
         self.post_data = {
