@@ -2,7 +2,8 @@ from copy import copy
 
 from rest_framework.reverse import reverse
 
-from country.models import CountryCustomQuestion, DonorCustomQuestion
+from core.factories import DonorCustomQuestionFactory
+from country.models import CountryCustomQuestion
 from project.models import Project
 from project.tests.setup import SetupTests
 
@@ -361,9 +362,9 @@ class CustomFieldTests(SetupTests):
                         response.json()['country_questions'][2]['order'])
 
     def test_reorder_donor_questions_success(self):
-        dq1 = DonorCustomQuestion.objects.create(question="test", donor_id=self.d1.id)
-        dq2 = DonorCustomQuestion.objects.create(question="test2", donor_id=self.d1.id)
-        dq3 = DonorCustomQuestion.objects.create(question="test3", donor_id=self.d1.id)
+        dq1 = DonorCustomQuestionFactory(question="test", donor=self.d1)
+        dq2 = DonorCustomQuestionFactory(question="test2", donor=self.d1)
+        dq3 = DonorCustomQuestionFactory(question="test3", donor=self.d1)
 
         url = reverse("donor-detail", kwargs={"pk": self.d1.id})
         response = self.test_user_client.get(url, format='json')
@@ -385,7 +386,7 @@ class CustomFieldTests(SetupTests):
                                            {'id': dq2.id, 'order': 2}])
 
     def test_donor_answer_for_draft(self):
-        q = DonorCustomQuestion.objects.create(question="test", donor_id=self.d1.id)
+        q = DonorCustomQuestionFactory(question="test", donor_id=self.d1.id)
         url = reverse("project-draft",
                       kwargs={
                           "country_id": self.country_id,
@@ -403,7 +404,7 @@ class CustomFieldTests(SetupTests):
         self.assertTrue('donor_custom_answers' not in project.data)
 
     def test_donor_answer_for_published(self):
-        q = DonorCustomQuestion.objects.create(question="test", donor_id=self.d1.id)
+        q = DonorCustomQuestionFactory(question="test", donor_id=self.d1.id)
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
@@ -422,8 +423,8 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(project.draft['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
 
     def test_donor_answer_for_all_is_required(self):
-        dq1 = DonorCustomQuestion.objects.create(question="test", donor_id=self.d1.id, required=True)
-        dq2 = DonorCustomQuestion.objects.create(question="test2", donor_id=self.d1.id, required=True)
+        dq1 = DonorCustomQuestionFactory(question="test", donor_id=self.d1.id, required=True)
+        dq2 = DonorCustomQuestionFactory(question="test2", donor_id=self.d1.id, required=True)
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
@@ -506,7 +507,7 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
 
     def test_donor_answer_wrong_question_id(self):
-        DonorCustomQuestion.objects.create(question="What up?", donor_id=self.d1.id)
+        DonorCustomQuestionFactory(question="What up?", donor_id=self.d1.id)
         url = reverse("project-create",
                       kwargs={
                           "country_id": self.country_id
@@ -563,7 +564,7 @@ class CustomFieldTests(SetupTests):
                          {str(self.d1.id): [{'question_id': ['This question_id does not exist.']}]})
 
     def test_donor_answer_wrong_all_required(self):
-        DonorCustomQuestion.objects.create(question="What up?", donor_id=self.d1.id)
+        DonorCustomQuestionFactory(question="What up?", donor_id=self.d1.id)
         url = reverse("project-create",
                       kwargs={
                           "country_id": self.country_id

@@ -4,7 +4,7 @@ from django.utils import timezone
 from factory.faker import faker
 from factory.fuzzy import FuzzyDateTime
 
-from country.models import Donor
+from country.models import Donor, DonorCustomQuestion
 from project.models import TechnologyPlatform
 from user.models import UserProfile, Organisation
 
@@ -61,3 +61,14 @@ class TechnologyPlatformFactory(factory.DjangoModelFactory):
         django_get_or_create = ('name',)
 
     name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+
+
+class DonorCustomQuestionFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = DonorCustomQuestion
+        django_get_or_create = ('question', 'donor')
+
+    donor = factory.SubFactory(DonorFactory)
+    question = factory.LazyAttribute(
+        lambda s: '{}'.format(faker.Faker().sentence().replace('.', '?'))
+    )
