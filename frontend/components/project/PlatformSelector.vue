@@ -87,7 +87,7 @@ export default {
   mounted() {
     this.availablePlatforms = this.technologyPlatforms.filter(
       tp => !this.platforms.some(s => s === tp.id) || tp.id === this.platform
-    );
+    ).sort((a, b) => a.name.localeCompare(b.name));
   },
   computed: {
     ...mapGetters({
@@ -104,8 +104,8 @@ export default {
     async changeHandler(value) {
       let id = value;
       if (typeof id === "string") {
-        id = await this.setNewSoftware(value);
-        console.log(id);
+        const newSoftware = await this.setNewSoftware(value);
+        id = typeof newSoftware === 'number' ? newSoftware : 0;
       }
       const p = [...this.platforms];
       p[this.index] = id;

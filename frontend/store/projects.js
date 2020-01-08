@@ -275,13 +275,18 @@ export const actions = {
     commit,
     dispatch
   }, name) {
-    const {
-      data
-    } = await this.$axios.post('/api/projects/software/', {
-      name
-    });
-    await dispatch('loadProjectStructure', true);
-    return data.id;
+    try {
+      const {
+        data
+      } = await this.$axios.post('/api/projects/software/', {
+        name
+      });
+      await dispatch('loadProjectStructure', true);
+      return data.id;
+    } catch(e) {
+      return e;
+    }
+
   }
 };
 
