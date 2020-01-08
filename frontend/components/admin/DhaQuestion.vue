@@ -46,6 +46,12 @@
         :value="5"
       />
     </el-select>
+    <div
+      v-if="showError"
+      class="ErrorMessage"
+    >
+      <translate>‘Text field’ type cannot be selected for ‘Architecture related’ questions! Please select an other one.</translate>
+    </div>
 
     <!-- Question -->
     <el-input
@@ -64,6 +70,33 @@
         v-model="question.is_private"
         :active-text="$gettext('Private') | translate"
       />
+
+      <el-switch
+        v-model="question.architecture_related"
+        :active-text="$gettext('Architecture related') | translate"
+        :disabled="question.type === 1"
+      />
+
+      <span class="Tooltip">
+        <el-tooltip
+          v-model="architectureTooltip"
+          content="tooltip"
+          effect="dark"
+          placement="left"
+          popper-class="FilterSwitchTooltip"
+          manual
+        >
+          <el-button
+            type="text"
+            class="MutedButton"
+            :disabled="question.type === 1"
+            @click="architectureTooltip = !architectureTooltip"
+          >
+            <fa icon="question-circle" />
+          </el-button>
+        </el-tooltip>
+      </span>
+
     </div>
     <dha-question-options
       v-if="question.type > 3"
@@ -102,8 +135,11 @@ export default {
         options: [],
         required: false,
         is_private: false,
+        architecture_related: false,
         is_active: true
-      }
+      },
+      architectureTooltip: false,
+      showError: 0
     };
   },
   computed: {
@@ -133,6 +169,25 @@ export default {
         if (stored) {
           const options = stored.type > 3 ? [...stored.options] : [];
           this.question = { ...stored, options };
+        }
+      }
+    },
+    'question.type': {
+      handler (type, oldType) {
+        if (type === 1 && this.question.architecture_related) {
+          this.question.type = oldType;
+          this.showError = 2;
+        } else {
+          if (this.showError !== 0) {
+            this.showError -= 1;
+          }
+        }
+      }
+    },
+    'question.architecture_related': {
+      handler (related) {
+        if (!related) {
+          this.showError = 0;
         }
       }
     }
@@ -173,6 +228,7 @@ export default {
     },
     async saveQuestion () {
       try {
+        this.showError = 0;
         if (this.id) {
           await this.updateQuestion({ question: this.question, id: this.id });
         } else {
@@ -211,10 +267,21 @@ export default {
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
 
+  .ErrorMessage {
+    color: @colorDanger;
+    line-height: @fontSizeBase;
+    font-size: @fontSizeSmall;
+    margin-top: -14px;
+  }
+
   .QuestionContainer {
     position: relative;
     margin-bottom: 20px;
     padding-left: 24px;
+
+    .Tooltip {
+      margin-left: -25px;
+    }
 
     .Actions {
       position: absolute;
