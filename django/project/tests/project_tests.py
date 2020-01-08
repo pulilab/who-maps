@@ -7,7 +7,8 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, TechnologyPlatformFactory
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, TechnologyPlatformFactory, \
+    DigitalStrategyFactory
 from django.core import mail
 from django.contrib.auth.models import User
 from django.core.cache import cache
@@ -1106,8 +1107,8 @@ class ProjectTests(SetupTests):
         software_1 = TechnologyPlatformFactory(name='approved')
         software_2 = TechnologyPlatformFactory(name='will be declined', state=TechnologyPlatform.PENDING)
 
-        s_parent = DigitalStrategy.objects.create(name="strategy parent", group=DigitalStrategy.GROUP_CHOICES[0])
-        s1 = DigitalStrategy.objects.create(parent=s_parent, name="strategy1", group=DigitalStrategy.GROUP_CHOICES[0])
+        s_parent = DigitalStrategyFactory(name="strategy parent", group=DigitalStrategy.GROUP_CHOICES[0])
+        s1 = DigitalStrategyFactory(parent=s_parent, name="strategy1", group=DigitalStrategy.GROUP_CHOICES[0])
 
         data = {"project": {
             "date": datetime.utcnow(),

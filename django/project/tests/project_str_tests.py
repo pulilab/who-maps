@@ -1,15 +1,14 @@
 from rest_framework.test import APITestCase
 
-from core.factories import TechnologyPlatformFactory
-from project.models import DigitalStrategy, InteroperabilityLink, Licence, InteroperabilityStandard, HISBucket,\
-    HSCGroup, HSCChallenge
+from core.factories import TechnologyPlatformFactory, DigitalStrategyFactory
+from project.models import InteroperabilityLink, Licence, InteroperabilityStandard, HISBucket, HSCGroup, HSCChallenge
 
 
 class ProjectStrTests(APITestCase):
 
     def test_digital_strategies_str(self):
-        ds1 = DigitalStrategy.objects.create(name='ds1', group='Client')
-        ds2 = DigitalStrategy.objects.create(name='ds2', group='Client', parent=ds1)
+        ds1 = DigitalStrategyFactory(name='ds1', group='Client')
+        ds2 = DigitalStrategyFactory(name='ds2', group='Client', parent=ds1)
         self.assertEqual(str(ds1), '[Client] ds1')
         self.assertEqual(str(ds2), '[Client] [ds1] ds2')
 

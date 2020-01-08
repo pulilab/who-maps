@@ -2,11 +2,14 @@ import factory
 from django.contrib.auth.models import User
 from django.utils import timezone
 from factory.faker import faker
-from factory.fuzzy import FuzzyDateTime
+from factory.fuzzy import FuzzyDateTime, FuzzyChoice
 
 from country.models import Donor, DonorCustomQuestion
-from project.models import TechnologyPlatform
+from project.models import TechnologyPlatform, DigitalStrategy
 from user.models import UserProfile, Organisation
+
+
+DIGITAL_STRATEGY_GROUP_CHOICES = [item[0] for item in DigitalStrategy.GROUP_CHOICES]
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -72,3 +75,12 @@ class DonorCustomQuestionFactory(factory.DjangoModelFactory):
     question = factory.LazyAttribute(
         lambda s: '{}'.format(faker.Faker().sentence().replace('.', '?'))
     )
+
+
+class DigitalStrategyFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = DigitalStrategy
+        django_get_or_create = ('name',)
+
+    group = FuzzyChoice(DIGITAL_STRATEGY_GROUP_CHOICES)
+    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().sentence()))

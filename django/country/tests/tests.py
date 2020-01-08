@@ -8,7 +8,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils.dateformat import format
 from requests import RequestException
 
-from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, DonorFactory, TechnologyPlatformFactory
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, DonorFactory, \
+    TechnologyPlatformFactory, DigitalStrategyFactory
 from country.tests.base import CountryBaseTests
 from django.core import mail
 
@@ -395,10 +396,10 @@ class CountryTests(CountryBaseTests):
         d1 = DonorFactory(name="Donor1", code="donor1")
         p1 = TechnologyPlatformFactory(name='platform1')
         p2 = TechnologyPlatformFactory(name='platform2')
-        s_parent = DigitalStrategy.objects.create(name="strategy parent", group=DigitalStrategy.GROUP_CHOICES[0])
-        s1 = DigitalStrategy.objects.create(parent=s_parent, name="strategy1", group=DigitalStrategy.GROUP_CHOICES[0])
-        s2 = DigitalStrategy.objects.create(parent=s_parent, name="strategy2", group=DigitalStrategy.GROUP_CHOICES[0])
-        s3 = DigitalStrategy.objects.create(parent=s_parent, name="strategy3", group=DigitalStrategy.GROUP_CHOICES[0])
+        s_parent = DigitalStrategyFactory(name="strategy parent", group=DigitalStrategy.GROUP_CHOICES[0])
+        s1 = DigitalStrategyFactory(parent=s_parent, name="strategy1", group=DigitalStrategy.GROUP_CHOICES[0])
+        s2 = DigitalStrategyFactory(parent=s_parent, name="strategy2", group=DigitalStrategy.GROUP_CHOICES[0])
+        s3 = DigitalStrategyFactory(parent=s_parent, name="strategy3", group=DigitalStrategy.GROUP_CHOICES[0])
 
         project_data1 = {"project": {
             "date": datetime.utcnow(),
