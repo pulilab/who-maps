@@ -1,11 +1,12 @@
-from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
+
+from core.factories import UserFactory
 
 
 class DonorAdminTests(TestCase):
     def setUp(self):
-        self.user = User.objects.create(username="alma", email="test@test.com", is_staff=True, is_superuser=True)
+        self.user = UserFactory(username='alma', email='test@test.com', is_staff=True, is_superuser=True)
         self.user.set_password('korte')
         self.user.save()
 
