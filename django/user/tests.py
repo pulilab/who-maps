@@ -2,13 +2,13 @@ from django.contrib.auth.models import User
 from django.test import override_settings
 from django.urls import reverse
 
-from core.factories import UserFactory, UserProfileFactory, OrganisationFactory
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, DonorFactory
 from django.core import mail
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from allauth.account.models import EmailConfirmation
 
-from country.models import Country, Donor
+from country.models import Country
 from .models import UserProfile
 
 
@@ -44,7 +44,7 @@ class UserTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
 
-        self.donor = Donor.objects.create(name='Donor 1', code='dnr1')
+        self.donor = DonorFactory(name='Donor 1', code='dnr1')
 
     def test_register_user(self):
         url = reverse("rest_register")
@@ -212,7 +212,7 @@ class UserProfileTests(APITestCase):
         # Update profile.
         self.org = OrganisationFactory(name="org1")
         self.country = Country.objects.all()[0]
-        self.donor = Donor.objects.create(name="Donor1", code="donor1")
+        self.donor = DonorFactory(name="Donor1", code="donor1")
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
             "name": "Test Name",
@@ -498,7 +498,7 @@ class UserProfileTests(APITestCase):
         c = Country.objects.create(code='XXY', name='COUNTRY_TEST')
         c.admins.add(self.user_profile_id)
 
-        d = Donor.objects.create(name='DONOR_TEST')
+        d = DonorFactory(name='DONOR_TEST')
         d.super_admins.add(self.user_profile_id)
 
         u1 = UserFactory(username='username1', email='user1@user.org')

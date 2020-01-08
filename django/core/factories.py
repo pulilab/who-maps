@@ -4,6 +4,7 @@ from django.utils import timezone
 from factory.faker import faker
 from factory.fuzzy import FuzzyDateTime
 
+from country.models import Donor
 from user.models import UserProfile, Organisation
 
 
@@ -40,6 +41,14 @@ class UserProfileFactory(factory.DjangoModelFactory):
 class OrganisationFactory(factory.DjangoModelFactory):
     class Meta:
         model = Organisation
+        django_get_or_create = ('name',)
+
+    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().profile()['company']))
+
+
+class DonorFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = Donor
         django_get_or_create = ('name',)
 
     name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().profile()['company']))
