@@ -9,7 +9,7 @@ from country.models import Country, Donor
 from user.models import UserProfile
 
 
-class MockRequest():
+class MockRequest:
     user = None
     GET = {}
     COOKIES = {}
