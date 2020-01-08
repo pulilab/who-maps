@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test import override_settings
 from django.urls import reverse
 
-from core.factories import UserFactory
+from core.factories import UserFactory, UserProfileFactory
 from django.core import mail
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
@@ -502,25 +502,25 @@ class UserProfileTests(APITestCase):
         d.super_admins.add(self.user_profile_id)
 
         u1 = UserFactory(username='username1', email='user1@user.org')
-        UserProfile.objects.create(name="USER1", user=u1, account_type=UserProfile.IMPLEMENTER, country=c)
+        UserProfileFactory(name="USER1", user=u1, account_type=UserProfile.IMPLEMENTER, country=c)
 
         u2 = UserFactory(username='username2', email='user2@user.org')
-        UserProfile.objects.create(name="USER2", user=u2, account_type=UserProfile.GOVERNMENT)
+        UserProfileFactory(name="USER2", user=u2, account_type=UserProfile.GOVERNMENT)
 
         u3 = UserFactory(username='username3', email='user3@user.org')
-        upf3 = UserProfile.objects.create(name="USER3", user=u3, account_type=UserProfile.GOVERNMENT, country=c)
+        upf3 = UserProfileFactory(name="USER3", user=u3, account_type=UserProfile.GOVERNMENT, country=c)
 
         self.assertEqual(mail.outbox[-1].subject, 'Request: {} has requested to be a {} for {}'.format(
             str(upf3), upf3.get_account_type_display(), c.name))
 
         u4 = UserFactory(username='username4', email='user4@user.org')
-        upf4 = UserProfile.objects.create(name="USER4", user=u4, account_type=UserProfile.SUPER_DONOR_ADMIN, donor=d)
+        upf4 = UserProfileFactory(name="USER4", user=u4, account_type=UserProfile.SUPER_DONOR_ADMIN, donor=d)
 
         self.assertEqual(mail.outbox[-1].subject, 'Request: {} has requested to be a {} for {}'.format(
             str(upf4), upf4.get_account_type_display(), d.name))
 
         super_user = User.objects.filter(is_superuser=True).first()
-        UserProfile.objects.create(user=super_user)
+        UserProfileFactory(user=super_user)
 
         upf3.account_type = UserProfile.COUNTRY_ADMIN
         upf3.save()

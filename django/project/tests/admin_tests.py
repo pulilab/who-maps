@@ -8,7 +8,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from rest_framework import status
 
-from core.factories import UserFactory
+from core.factories import UserFactory, UserProfileFactory
 from django.core import mail
 from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import Permission
@@ -26,7 +26,7 @@ class TestAdmin(TestCase):
         self.request = MockRequest()
         self.site = AdminSite()
         self.user = UserFactory(username="alma", password="korte")
-        self.userprofile = UserProfile.objects.create(user=self.user, name="almakorte")
+        self.userprofile = UserProfileFactory(user=self.user, name="almakorte")
 
         url = reverse('rest_register')
         data = {'email': 'test_user@gmail.com',
@@ -50,7 +50,7 @@ class TestAdmin(TestCase):
     def xtest_created_notification(self):  # pragma: no cover
         initial_email_count = len(mail.outbox)
         user_2 = UserFactory(username='test_2', email='test2@test.test', password='a', is_staff=True, is_superuser=True)
-        UserProfile.objects.create(user=user_2, language='fr')
+        UserProfileFactory(user=user_2, language='fr')
 
         tpa = TechnologyPlatformAdmin(TechnologyPlatform, self.site)
 
@@ -80,7 +80,7 @@ class TestAdmin(TestCase):
     def xtest_modified_notification(self):  # pragma: no cover
         initial_email_count = len(mail.outbox)
         user_2 = UserFactory(username='test_2', email='test2@test.test', password='a', is_staff=True, is_superuser=True)
-        UserProfile.objects.create(user=user_2, language='fr')
+        UserProfileFactory(user=user_2, language='fr')
 
         tpa = TechnologyPlatformAdmin(TechnologyPlatform, self.site)
         technology_platform = TechnologyPlatform(name='Test platform')

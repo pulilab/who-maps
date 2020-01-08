@@ -11,9 +11,8 @@ from rest_framework.reverse import reverse
 
 from core.admin import CustomUserAdmin
 from core.admin.widgets import AdminArrayFieldWidget, AdminArrayField, NoneReadOnlyAdminArrayFieldWidget
-from core.factories import UserFactory
+from core.factories import UserFactory, UserProfileFactory
 from country.models import Country
-from user.models import UserProfile
 
 
 class AuthTest(TestCase):
@@ -27,8 +26,7 @@ class AuthTest(TestCase):
 
         self.site = AdminSite()
         self.user = UserFactory(username='alma', password='korte')
-        self.userprofile = UserProfile.objects.create(user=self.user, name="almakorte",
-                                                      country=Country.objects.get(id=1))
+        self.userprofile = UserProfileFactory(user=self.user, name="almakorte", country=Country.objects.get(id=1))
 
     def test_email_authentication(self):
         self.assertTrue(self.client.login(username=self.admin.email, password=self.password))

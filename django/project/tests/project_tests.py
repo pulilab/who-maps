@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from core.factories import UserFactory
+from core.factories import UserFactory, UserProfileFactory
 from django.core import mail
 from django.contrib.auth.models import User
 from django.core.cache import cache
@@ -787,7 +787,7 @@ class ProjectTests(SetupTests):
 
     def test_project_approval_email(self):
         user_2 = UserFactory(username='test_2', email='test2@test.test', password='a', is_staff=True, is_superuser=True)
-        user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
+        user_2_profile = UserProfileFactory(user=user_2, language='fr')
 
         c = Country.objects.get(id=self.country_id)
         c.project_approval = True
@@ -1019,7 +1019,7 @@ class ProjectTests(SetupTests):
         task.return_value = None
 
         user = UserFactory(username='test_user_100000', password='test_user_100000')
-        user_profile = UserProfile.objects.create(user=user, name="test_user_100000")
+        user_profile = UserProfileFactory(user=user, name="test_user_100000")
 
         data = {
             'name': 'test platform',
@@ -1165,13 +1165,13 @@ class ProjectTests(SetupTests):
         project = Project.objects.last()
 
         user_2 = UserFactory(username='test_2', email='test2@test.test', password='a', is_staff=True, is_superuser=True)
-        user_2_profile = UserProfile.objects.create(user=user_2, language='en')
+        user_2_profile = UserProfileFactory(user=user_2, language='en')
 
         user_3 = UserFactory(username='test_3', email='test3@test.test', password='a', is_staff=True, is_superuser=True)
-        user_3_profile = UserProfile.objects.create(user=user_3, language='en')
+        user_3_profile = UserProfileFactory(user=user_3, language='en')
 
         user_4 = UserFactory(username='test_4', email='test4@test.test', password='a', is_staff=True, is_superuser=True)
-        user_4_profile = UserProfile.objects.create(user=user_4, language='en')
+        user_4_profile = UserProfileFactory(user=user_4, language='en')
 
         c = project.search.country
         c.admins.add(self.user_profile_id, user_2_profile)

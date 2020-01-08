@@ -2,7 +2,7 @@ from copy import copy
 
 from django.urls import reverse
 
-from core.factories import UserFactory
+from core.factories import UserFactory, UserProfileFactory
 from django.core import mail
 from rest_framework.test import APIClient
 
@@ -15,7 +15,7 @@ from project.tests.setup import SetupTests
 class PermissionTests(SetupTests):
     def test_team_member_can_update_project_groups(self):
         user_2 = UserFactory(username='test_2', email='test2@test.test', password='a', is_staff=True, is_superuser=True)
-        user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
+        user_2_profile = UserProfileFactory(user=user_2, language='fr')
 
         url = reverse("project-groups", kwargs={"pk": self.project_id})
 
@@ -76,7 +76,7 @@ class PermissionTests(SetupTests):
 
         user_super = UserFactory(
             username='test_suser', email='test_suser@test.test', password='a', is_staff=True, is_superuser=True)
-        user_super_profile = UserProfile.objects.create(user=user_super, language='en')
+        user_super_profile = UserProfileFactory(user=user_super, language='en')
 
         url = reverse("api_token_auth")
         data = {

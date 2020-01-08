@@ -1,4 +1,4 @@
-from core.factories import UserFactory
+from core.factories import UserFactory, UserProfileFactory
 from country.tests.base import DonorBaseTests
 from django.core import mail
 from django.urls import reverse
@@ -112,17 +112,16 @@ class DonorTests(DonorBaseTests):
         self.donor.admins.add(self.test_user['user_profile_id'])
 
         user1 = UserFactory(username='test1', password='12345678')
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
-                                                  account_type=UserProfile.DONOR)
+        user_profile_1 = UserProfileFactory(user=user1, name="test1", donor=self.donor, account_type=UserProfile.DONOR)
         user2 = UserFactory(username='test2', password='12345678')
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
-                                                  account_type=UserProfile.DONOR_ADMIN)
+        user_profile_2 = UserProfileFactory(user=user2, name="test2", donor=self.donor,
+                                            account_type=UserProfile.DONOR_ADMIN)
 
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["user_requests"][0]['id'], userprofile1.id)
-        self.assertEqual(response.json()["admin_requests"][0]['id'], userprofile2.id)
+        self.assertEqual(response.json()["user_requests"][0]['id'], user_profile_1.id)
+        self.assertEqual(response.json()["admin_requests"][0]['id'], user_profile_2.id)
         self.assertEqual(response.json()["super_admin_requests"], [])
 
     def test_donor_admin_retrieve_super_admin_requests(self):
@@ -131,14 +130,13 @@ class DonorTests(DonorBaseTests):
         self.donor.super_admins.add(self.test_user['user_profile_id'])
 
         user1 = UserFactory(username='test1', password='12345678')
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
-                                                  account_type=UserProfile.DONOR)
+        userprofile1 = UserProfileFactory(user=user1, name="test1", donor=self.donor, account_type=UserProfile.DONOR)
         user2 = UserFactory(username='test2', password='12345678')
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
-                                                  account_type=UserProfile.DONOR_ADMIN)
+        userprofile2 = UserProfileFactory(user=user2, name="test2", donor=self.donor,
+                                          account_type=UserProfile.DONOR_ADMIN)
         user3 = UserFactory(username='test3', password='12345678')
-        userprofile3 = UserProfile.objects.create(user=user3, name="test3", donor=self.donor,
-                                                  account_type=UserProfile.SUPER_DONOR_ADMIN)
+        userprofile3 = UserProfileFactory(user=user3, name="test3", donor=self.donor,
+                                          account_type=UserProfile.SUPER_DONOR_ADMIN)
 
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
@@ -153,14 +151,13 @@ class DonorTests(DonorBaseTests):
         user.save()
 
         user1 = UserFactory(username='test1', password='12345678')
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
-                                                  account_type=UserProfile.DONOR)
+        userprofile1 = UserProfileFactory(user=user1, name="test1", donor=self.donor, account_type=UserProfile.DONOR)
         user2 = UserFactory(username='test2', password='12345678')
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
-                                                  account_type=UserProfile.DONOR_ADMIN)
+        userprofile2 = UserProfileFactory(user=user2, name="test2", donor=self.donor,
+                                          account_type=UserProfile.DONOR_ADMIN)
         user3 = UserFactory(username='test3', password='12345678')
-        userprofile3 = UserProfile.objects.create(user=user3, name="test3", donor=self.donor,
-                                                  account_type=UserProfile.SUPER_DONOR_ADMIN)
+        userprofile3 = UserProfileFactory(user=user3, name="test3", donor=self.donor,
+                                          account_type=UserProfile.SUPER_DONOR_ADMIN)
 
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
@@ -175,17 +172,16 @@ class DonorTests(DonorBaseTests):
         self.donor.super_admins.add(self.test_user['user_profile_id'])
 
         user1 = UserFactory(username='test1', password='12345678', email='test1@foo.com')
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
-                                                  account_type=UserProfile.DONOR)
+        userprofile1 = UserProfileFactory(user=user1, name="test1", donor=self.donor, account_type=UserProfile.DONOR)
         user2 = UserFactory(username='test2', password='12345678', email='test2@foo.com')
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
-                                                  account_type=UserProfile.DONOR_ADMIN)
+        userprofile2 = UserProfileFactory(user=user2, name="test2", donor=self.donor,
+                                          account_type=UserProfile.DONOR_ADMIN)
         user3 = UserFactory(username='test3', password='12345678', email='test3@foo.com')
-        userprofile3 = UserProfile.objects.create(user=user3, name="test3", donor=self.donor,
-                                                  account_type=UserProfile.SUPER_DONOR_ADMIN)
+        userprofile3 = UserProfileFactory(user=user3, name="test3", donor=self.donor,
+                                          account_type=UserProfile.SUPER_DONOR_ADMIN)
         user4 = UserFactory(username='test4', password='12345678', email='test4@foo.com')
-        userprofile4 = UserProfile.objects.create(user=user4, name="test4", donor=self.donor,
-                                                  account_type=UserProfile.SUPER_DONOR_ADMIN, language='fr')
+        userprofile4 = UserProfileFactory(user=user4, name="test4", donor=self.donor,
+                                          account_type=UserProfile.SUPER_DONOR_ADMIN, language='fr')
 
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
         data = {
@@ -235,8 +231,7 @@ class DonorTests(DonorBaseTests):
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
 
         user1 = UserFactory(username='test1', password='12345678')
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
-                                                  account_type=UserProfile.DONOR)
+        userprofile1 = UserProfileFactory(user=user1, name="test1", donor=self.donor, account_type=UserProfile.DONOR)
         data = {
             "users": [userprofile1.id]
         }
@@ -271,8 +266,8 @@ class DonorTests(DonorBaseTests):
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
 
         user1 = UserFactory(username='test1', password='12345678')
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
-                                                  account_type=UserProfile.SUPER_DONOR_ADMIN)
+        userprofile1 = UserProfileFactory(user=user1, name="test1", donor=self.donor,
+                                          account_type=UserProfile.SUPER_DONOR_ADMIN)
         data = {
             "super_admins": [userprofile1.id],
         }
