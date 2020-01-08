@@ -173,9 +173,9 @@ export default {
       }
     },
     'question.type': {
-      handler (type, oldType) {
+      handler (type) {
         if (type === 1 && this.question.architecture_related) {
-          this.question.type = oldType;
+          this.question.type = null;
           this.showError = 2;
         } else {
           if (this.showError !== 0) {
