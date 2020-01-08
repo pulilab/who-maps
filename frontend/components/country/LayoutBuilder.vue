@@ -227,18 +227,18 @@
 </template>
 
 <script>
-import Default from '@/components/country/layouts/Default';
-import ThreeColumns from '@/components/country/layouts/ThreeColumns';
+import Default from "@/components/country/layouts/Default";
+import ThreeColumns from "@/components/country/layouts/ThreeColumns";
 
-import WDescription from '@/components/country/widgets/WDescription';
-import WDefault from '@/components/country/widgets/WDefault';
-import WImage from '@/components/country/widgets/WImage';
-import WDocuments from '@/components/country/widgets/WDocuments';
-import WStats from '@/components/country/widgets/WStats';
+import WDescription from "@/components/country/widgets/WDescription";
+import WDefault from "@/components/country/widgets/WDefault";
+import WImage from "@/components/country/widgets/WImage";
+import WDocuments from "@/components/country/widgets/WDocuments";
+import WStats from "@/components/country/widgets/WStats";
 
 // images
-import default1 from '~/assets/img/default/whyusedha-new.jpg';
-import default2 from '~/assets/img/default/coverimage-default.jpg';
+import default1 from "~/assets/img/default/whyusedha-new.jpg";
+import default2 from "~/assets/img/default/coverimage-default.jpg";
 
 export default {
   components: {
@@ -260,22 +260,22 @@ export default {
     return {
       default1,
       default2
-    }
+    };
   },
-    computed: {
-    image () {
+  computed: {
+    image() {
       return this.data.cover !== null;
     },
-    description () {
-      return this.data.cover_text !==  '';
+    description() {
+      return this.data.cover_text !== "" && this.data.cover_text !== null;
     },
-    gdhi () {
+    gdhi() {
       return this.data.gdhi_enabled;
     },
-    documents () {
+    documents() {
       return this.data.documents.length > 0;
     },
-    simpleStats () {
+    simpleStats() {
       const {
         leadership_and_governance,
         strategy_and_investment,
@@ -284,22 +284,22 @@ export default {
         standards_and_interoperability,
         infrastructure,
         services_and_applications
-      } = this.data
+      } = this.data;
 
       if (
-        leadership_and_governance !== null
-        || strategy_and_investment !== null
-        || legislation_policy_compliance !== null
-        || workforce !== null
-        || standards_and_interoperability !== null
-        || infrastructure !== null
-        || services_and_applications !== null
+        leadership_and_governance !== null ||
+        strategy_and_investment !== null ||
+        legislation_policy_compliance !== null ||
+        workforce !== null ||
+        standards_and_interoperability !== null ||
+        infrastructure !== null ||
+        services_and_applications !== null
       ) {
-        return false
+        return false;
       }
       return true;
     },
-    stats () {
+    stats() {
       const {
         name,
         leadership_and_governance,
@@ -313,52 +313,65 @@ export default {
         total_population,
         life_expectancy,
         health_expenditure
-      } = this.data
+      } = this.data;
 
       return {
         name,
         phases: [
-          { title: 'leadership and governance', phase: leadership_and_governance },
-          { title: 'strategy and investment', phase: strategy_and_investment },
-          { title: 'legislation policy compliance', phase: legislation_policy_compliance },
-          { title: 'workforce', phase: workforce },
-          { title: 'standards and interoperability', phase: standards_and_interoperability },
-          { title: 'infrastructure', phase: infrastructure },
-          { title: 'services and applications', phase: services_and_applications }
+          {
+            title: "leadership and governance",
+            phase: leadership_and_governance
+          },
+          { title: "strategy and investment", phase: strategy_and_investment },
+          {
+            title: "legislation policy compliance",
+            phase: legislation_policy_compliance
+          },
+          { title: "workforce", phase: workforce },
+          {
+            title: "standards and interoperability",
+            phase: standards_and_interoperability
+          },
+          { title: "infrastructure", phase: infrastructure },
+          {
+            title: "services and applications",
+            phase: services_and_applications
+          }
         ],
         groups: [
           {
-            title: 'Context',
-            metrics : [
+            title: "Context",
+            metrics: [
               {
-                measure: 'GNI PER CAPITA, ATLAS METHOD (CURRENT US$)',
-                value: gni_per_capita === null ? 'N/A' : `${gni_per_capita}K`
+                measure: "GNI PER CAPITA, ATLAS METHOD (CURRENT US$)",
+                value: gni_per_capita === null ? "N/A" : `${gni_per_capita}K`
               },
               {
-                measure: 'TOTAL POPULATION',
-                value: total_population === null ? 'N/A' :  `${total_population}M`
+                measure: "TOTAL POPULATION",
+                value:
+                  total_population === null ? "N/A" : `${total_population}M`
               }
             ]
           },
           {
-            title: 'Health',
-            metrics : [
+            title: "Health",
+            metrics: [
               {
-                measure: 'LIFE EXPECTANCY AT BIRTH (YEARS)',
-                value: life_expectancy === null ? 'N/A' : life_expectancy
+                measure: "LIFE EXPECTANCY AT BIRTH (YEARS)",
+                value: life_expectancy === null ? "N/A" : life_expectancy
               },
               {
-                measure: 'HEALTH EXPENDITURE (% OF GDP)',
-                value: health_expenditure === null ? 'N/A' : `${health_expenditure}%`
+                measure: "HEALTH EXPENDITURE (% OF GDP)",
+                value:
+                  health_expenditure === null ? "N/A" : `${health_expenditure}%`
               }
             ]
           }
         ]
-      }
+      };
     }
   },
-  mounted() {
-  }
+  mounted() {}
 };
 </script>
 
