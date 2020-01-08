@@ -68,6 +68,31 @@
             >
               <language-select v-model="innerProfile.language" />
             </el-form-item>
+
+            <el-form-item
+              :label="$gettext('Email notifications') | translate"
+            >
+            <filter-switch
+              v-model="notifications.projects"
+              :label="$gettext('Project updates') | translate"
+              :tooltip="$gettext('Lorem ipsum') | translate"
+            />
+            <filter-switch
+              v-model="notifications.users"
+              :label="$gettext('User role request') | translate"
+              :tooltip="$gettext('Lorem ipsum') | translate"
+            />
+            <filter-switch
+              v-model="notifications.projectDigest"
+              :label="$gettext('Daily project approval digest') | translate"
+              :tooltip="$gettext('Lorem ipsum') | translate"
+            />
+            <filter-switch
+              v-model="notifications.toolkitDigest"
+              :label="$gettext('Daily Toolkit digest') | translate"
+              :tooltip="$gettext('Lorem ipsum') | translate"
+            />
+            </el-form-item>
           </el-col>
 
           <el-col
@@ -442,6 +467,7 @@ import LanguageSelect from './common/LanguageSelect';
 import CountrySelect from './common/CountrySelect';
 import DonorSelect from './common/DonorSelect';
 import UserPrivileges from './UserPrivileges';
+import FilterSwitch from '@/components/dashboard/FilterSwitch';
 
 export default {
   components: {
@@ -449,7 +475,8 @@ export default {
     LanguageSelect,
     CountrySelect,
     DonorSelect,
-    UserPrivileges
+    UserPrivileges,
+    FilterSwitch
   },
   mixins: [FormAPIErrorsMixin],
   data () {
@@ -461,6 +488,12 @@ export default {
         country: null,
         account_type: null,
         donor: null
+      },
+      notifications: {
+        projects: false,
+        users: true,
+        projectDigest: true,
+        toolkitDigest: false
       },
       isCountryUser: false,
       isDonorUser: false,
@@ -558,6 +591,7 @@ export default {
         if (valid) {
           try {
             const isFirstSave = !this.profile.country;
+            console.log(this.innerProfile);
             await this.updateUserProfile(this.innerProfile);
             window.scrollTo(0, 0);
             this.$message({
