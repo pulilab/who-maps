@@ -8,6 +8,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
@@ -17,10 +18,11 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
+from .tasks import notify_superusers_about_new_pending_software
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
-    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer
+    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
 
@@ -63,7 +65,8 @@ class ProjectPublicViewSet(ViewSet):
 
         return dict(
             interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
-            technology_platforms=TechnologyPlatform.objects.values('id', 'name'),
+            technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED)
+                                                   .values('id', 'name', 'state'),
             licenses=Licence.objects.values('id', 'name'),
             interoperability_standards=InteroperabilityStandard.objects.values('id', 'name'),
             his_bucket=HISBucket.objects.values('id', 'name'),
@@ -486,3 +489,17 @@ class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, Gene
     # TODO: NEEDS COVER
     def get_queryset(self):  # pragma: no cover
         return ImportRow.objects.filter(parent__user=self.request.user)
+
+
+class TechnologyPlatformRequestViewSet(CreateModelMixin, GenericViewSet):
+    queryset = TechnologyPlatform.objects.all()
+    serializer_class = TechnologyPlatformCreateSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer: BaseSerializer) -> None:
+        # state should be 'pending' if the API performs the creation
+        serializer.validated_data['state'] = TechnologyPlatform.PENDING
+        # added_by should be the request's user's profile
+        serializer.validated_data['added_by'] = self.request.user.userprofile
+        super().perform_create(serializer)
+        notify_superusers_about_new_pending_software.apply_async((serializer.instance.id,))
