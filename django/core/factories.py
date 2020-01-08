@@ -5,6 +5,7 @@ from factory.faker import faker
 from factory.fuzzy import FuzzyDateTime
 
 from country.models import Donor
+from project.models import TechnologyPlatform
 from user.models import UserProfile, Organisation
 
 
@@ -52,3 +53,11 @@ class DonorFactory(factory.DjangoModelFactory):
         django_get_or_create = ('name',)
 
     name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().profile()['company']))
+
+
+class TechnologyPlatformFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = TechnologyPlatform
+        django_get_or_create = ('name',)
+
+    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))

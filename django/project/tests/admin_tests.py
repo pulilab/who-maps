@@ -8,7 +8,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from rest_framework import status
 
-from core.factories import UserFactory, UserProfileFactory
+from core.factories import UserFactory, UserProfileFactory, TechnologyPlatformFactory
 from django.core import mail
 from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import Permission
@@ -204,7 +204,7 @@ class TestAdmin(TestCase):
         admin = UserFactory(username='bh_admin', email='bhadmin@test.com', password=password,
                             is_staff=True, is_superuser=True)
 
-        software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
+        software = TechnologyPlatformFactory(name='test platform 20000', state=TechnologyPlatform.PENDING)
 
         change_url = reverse('admin:project_technologyplatform_changelist')
         data = {
@@ -228,7 +228,7 @@ class TestAdmin(TestCase):
         admin = UserFactory(username='bh_admin', email='bhadmin@test.com', password=password,
                             is_staff=True, is_superuser=True)
 
-        software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
+        software = TechnologyPlatformFactory(name='test platform 20000', state=TechnologyPlatform.PENDING)
 
         change_url = reverse('admin:project_technologyplatform_changelist')
         data = {

@@ -5,6 +5,7 @@ from django.core.cache import cache
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
+from core.factories import TechnologyPlatformFactory
 from project.models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, HealthCategory, HSCChallenge, HSCGroup
 from user.models import UserProfile
 
@@ -48,7 +49,7 @@ class TestModelTranslations(TestCase):
         user_profile = UserProfile.objects.get(id=response.json().get('user_profile_id'))
         self.user = user_profile.user
 
-        self.platform = TechnologyPlatform.objects.create(name='Test platform')
+        self.platform = TechnologyPlatformFactory(name='Test platform')
         self.platform.name_en = 'English name'
         self.platform.name_fr = 'French name'
         self.platform.save()
