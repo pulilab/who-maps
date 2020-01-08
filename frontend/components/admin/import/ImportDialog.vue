@@ -62,7 +62,7 @@
             filterable
             allow-create
             default-first-option
-            placeholder="Add a team"
+            :placeholder="$gettext('Add a team') | translate"
           />
         </template>
         <template v-if="dialogData.column === 'implementing_viewers'">
@@ -73,7 +73,7 @@
             filterable
             allow-create
             default-first-option
-            placeholder="Add a viewers"
+            :placeholder="$gettext('Add viewers') | translate"
           />
         </template>
         <template v-if="dialogData.column === 'platforms'">
