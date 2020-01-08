@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
+from core.factories import UserFactory
 from django.core import mail
 from django.contrib.auth.models import User
 from django.core.cache import cache
@@ -785,7 +786,7 @@ class ProjectTests(SetupTests):
         return project_id, country.id
 
     def test_project_approval_email(self):
-        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
+        user_2 = UserFactory(username='test_2', email='test2@test.test', password='a', is_staff=True, is_superuser=True)
         user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
 
         c = Country.objects.get(id=self.country_id)
@@ -1017,7 +1018,7 @@ class ProjectTests(SetupTests):
     def test_technology_platform_create(self, task):
         task.return_value = None
 
-        user = User.objects.create(username="test_user_100000", password="test_user_100000")
+        user = UserFactory(username='test_user_100000', password='test_user_100000')
         user_profile = UserProfile.objects.create(user=user, name="test_user_100000")
 
         data = {
@@ -1045,8 +1046,10 @@ class ProjectTests(SetupTests):
             user.is_superuser = False
             user.save()
 
-        test_super_user_1 = User.objects.create_superuser('bh_superuser_1', 'bh+1@pulilab.com', 'puli_1234')
-        test_super_user_2 = User.objects.create_superuser('bh_superuser_2', 'bh+2@pulilab.com', 'puli_2345')
+        test_super_user_1 = UserFactory(username='bh_superuser_1', email='bh+1@pulilab.com', password='puli_1234',
+                                        is_staff=True, is_superuser=True)
+        test_super_user_2 = UserFactory(username='bh_superuser_2', email='bh+2@pulilab.com', password='puli_1234',
+                                        is_staff=True, is_superuser=True)
         try:
             software = TechnologyPlatform.objects.create(name='pending software')
             notify_superusers_about_new_pending_software.apply((software.id,))
@@ -1161,13 +1164,13 @@ class ProjectTests(SetupTests):
     def test_send_project_updated_digest(self):
         project = Project.objects.last()
 
-        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
+        user_2 = UserFactory(username='test_2', email='test2@test.test', password='a', is_staff=True, is_superuser=True)
         user_2_profile = UserProfile.objects.create(user=user_2, language='en')
 
-        user_3 = User.objects.create_superuser(username='test_3', email='test3@test.test', password='a')
+        user_3 = UserFactory(username='test_3', email='test3@test.test', password='a', is_staff=True, is_superuser=True)
         user_3_profile = UserProfile.objects.create(user=user_3, language='en')
 
-        user_4 = User.objects.create_superuser(username='test_4', email='test4@test.test', password='a')
+        user_4 = UserFactory(username='test_4', email='test4@test.test', password='a', is_staff=True, is_superuser=True)
         user_4_profile = UserProfile.objects.create(user=user_4, language='en')
 
         c = project.search.country
@@ -1185,7 +1188,8 @@ class ProjectTests(SetupTests):
         send_project_updated_digest()
         profile = UserProfile.objects.get(id=self.user_profile_id)
         self.assertEqual(mail.outbox[1].subject, f'A Digital Health Atlas project in {c.name} has been updated')
-        self.assertEqual(mail.outbox[1].to, [profile.user.email, user_2.email])
+        self.assertTrue(profile.user.email in mail.outbox[1].to)
+        self.assertTrue(user_2.email in mail.outbox[1].to)
         self.assertEqual(mail.outbox[2].subject,
                          f'A Digital Health Atlas project that {self.d1.name} invests in has been updated')
         self.assertEqual(mail.outbox[2].to, [user_3.email])
