@@ -59,3 +59,23 @@
     }
   }
 }
+
+.SectionSeparator {
+  position: absolute;
+  border-top: 1px solid @colorGrayLight;
+  width: 100%;
+  right: 0;
+  &:first-child {
+    display: none;
+    & + .SectionLabel {
+      margin-top: 0;
+    }
+  }
+}
+
+.SectionLabel {
+  color: #9D9D9D;
+  font-size: @fontSizeBase;
+  margin: 39px 0 30px 0;
+  text-transform: uppercase;
+}

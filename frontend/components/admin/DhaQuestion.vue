@@ -82,7 +82,7 @@
           v-model="architectureTooltip"
           content="tooltip"
           effect="dark"
-          placement="left"
+          placement="right"
           popper-class="FilterSwitchTooltip"
           manual
         >

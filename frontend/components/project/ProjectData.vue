@@ -206,6 +206,20 @@
             :is-draft="isDraft"
             :type="question.type"
           />
+          <template v-if="countryArchitectureQuestions.length">
+            <div class="SectionSeparator" />
+            <div class="SectionLabel">
+              <translate>architecture-related</translate>
+            </div>
+          </template>
+          <custom-readonly-field
+            v-for="question in countryArchitectureQuestions"
+            :id="question.id"
+            :key="question.id"
+            :question="question.question"
+            :is-draft="isDraft"
+            :type="question.type"
+          />
         </collapsible-card>
 
         <div
@@ -307,7 +321,13 @@ export default {
     },
     countryQuestions () {
       if (this.country) {
-        return this.country.country_questions;
+        return this.country.country_questions.filter(question => !question.architecture_related);
+      }
+      return [];
+    },
+    countryArchitectureQuestions () {
+      if (this.country) {
+        return this.country.country_questions.filter(question => question.architecture_related);
       }
       return [];
     },
@@ -340,6 +360,10 @@ export default {
 
   .ProjectData {
     .limitPageWidth();
+
+    #countrycustom {
+      position: relative;
+    }
 
     .Loader {
       display: block;

@@ -22,6 +22,26 @@
         :options="field.options"
         :do-validation="usePublishRules"
       />
+      <template v-if="countryArchitectureQuestions.length">
+        <div class="SectionSeparator" />
+        <div class="SectionLabel">
+          <translate>architecture-related</translate>
+        </div>
+      </template>
+      <custom-field
+        v-for="(field, index) in countryArchitectureQuestions"
+        :id="field.id"
+        ref="customQuestion"
+        :key="field.id"
+        :index="index"
+        :api-errors="apiErrors"
+        :type="field.type"
+        :question="field.question"
+        :is-required="field.required"
+        :is-private="field.private"
+        :options="field.options"
+        :do-validation="usePublishRules"
+      />
     </collapsible-card>
   </div>
 </template>
@@ -52,7 +72,13 @@ export default {
     },
     countryQuestions () {
       if (this.country) {
-        return this.country.country_questions;
+        return this.country.country_questions.filter(question => !question.architecture_related);
+      }
+      return [];
+    },
+    countryArchitectureQuestions () {
+      if (this.country) {
+        return this.country.country_questions.filter(question => question.architecture_related);
       }
       return [];
     }
@@ -80,6 +106,8 @@ export default {
  @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
 
-  .CountryCustom {}
+  .CountryCustom {
+    position: relative;
+  }
 
 </style>
