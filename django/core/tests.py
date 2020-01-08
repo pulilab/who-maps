@@ -20,7 +20,8 @@ class AuthTest(TestCase):
     def setUp(self):
         self.password = 'mypassword'
 
-        self.admin = User.objects.create_superuser('myuser', 'myemail@test.com', self.password)
+        self.admin = UserFactory(
+            username='myuser', email='myemail@test.com', password=self.password, is_staff=True, is_superuser=True)
 
         self.client = Client()
 
