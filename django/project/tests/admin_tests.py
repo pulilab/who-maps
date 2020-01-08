@@ -8,9 +8,10 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from rest_framework import status
 
+from core.factories import UserFactory
 from django.core import mail
 from django.contrib.admin.sites import AdminSite
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import Permission
 
 from country.models import Country
 from project.admin import ProjectAdmin, DigitalStrategyAdmin, TechnologyPlatformAdmin
@@ -24,7 +25,7 @@ class TestAdmin(TestCase):
     def setUp(self):
         self.request = MockRequest()
         self.site = AdminSite()
-        self.user = User.objects.create_user(username="alma", password="korte")
+        self.user = UserFactory(username="alma", password="korte")
         self.userprofile = UserProfile.objects.create(user=self.user, name="almakorte")
 
         url = reverse('rest_register')
@@ -48,7 +49,7 @@ class TestAdmin(TestCase):
 
     def xtest_created_notification(self):  # pragma: no cover
         initial_email_count = len(mail.outbox)
-        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
+        user_2 = UserFactory(username='test_2', email='test2@test.test', password='a', is_staff=True, is_superuser=True)
         UserProfile.objects.create(user=user_2, language='fr')
 
         tpa = TechnologyPlatformAdmin(TechnologyPlatform, self.site)
@@ -78,7 +79,7 @@ class TestAdmin(TestCase):
 
     def xtest_modified_notification(self):  # pragma: no cover
         initial_email_count = len(mail.outbox)
-        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
+        user_2 = UserFactory(username='test_2', email='test2@test.test', password='a', is_staff=True, is_superuser=True)
         UserProfile.objects.create(user=user_2, language='fr')
 
         tpa = TechnologyPlatformAdmin(TechnologyPlatform, self.site)
@@ -200,7 +201,8 @@ class TestAdmin(TestCase):
         client = Client()
 
         password = '1234'
-        admin = User.objects.create_superuser('bh_admin', 'bhadmin@test.com', password)
+        admin = UserFactory(username='bh_admin', email='bhadmin@test.com', password=password,
+                            is_staff=True, is_superuser=True)
 
         software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
 
@@ -223,7 +225,8 @@ class TestAdmin(TestCase):
         client = Client()
 
         password = '1234'
-        admin = User.objects.create_superuser('bh_admin', 'bhadmin@test.com', password)
+        admin = UserFactory(username='bh_admin', email='bhadmin@test.com', password=password,
+                            is_staff=True, is_superuser=True)
 
         software = TechnologyPlatform.objects.create(name='test platform 20000', state=TechnologyPlatform.PENDING)
 
