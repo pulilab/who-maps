@@ -1,5 +1,4 @@
-from django.contrib.auth.models import User
-
+from core.factories import UserFactory
 from country.tests.base import DonorBaseTests
 from django.core import mail
 from django.urls import reverse
@@ -112,10 +111,10 @@ class DonorTests(DonorBaseTests):
             account_type=UserProfile.DONOR_ADMIN, donor=self.donor)
         self.donor.admins.add(self.test_user['user_profile_id'])
 
-        user1 = User.objects.create(username="test1", password="12345678")
+        user1 = UserFactory(username='test1', password='12345678')
         userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
                                                   account_type=UserProfile.DONOR)
-        user2 = User.objects.create(username="test2", password="12345678")
+        user2 = UserFactory(username='test2', password='12345678')
         userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
                                                   account_type=UserProfile.DONOR_ADMIN)
 
@@ -131,13 +130,13 @@ class DonorTests(DonorBaseTests):
             account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
         self.donor.super_admins.add(self.test_user['user_profile_id'])
 
-        user1 = User.objects.create(username="test1", password="12345678")
+        user1 = UserFactory(username='test1', password='12345678')
         userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
                                                   account_type=UserProfile.DONOR)
-        user2 = User.objects.create(username="test2", password="12345678")
+        user2 = UserFactory(username='test2', password='12345678')
         userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
                                                   account_type=UserProfile.DONOR_ADMIN)
-        user3 = User.objects.create(username="test3", password="12345678")
+        user3 = UserFactory(username='test3', password='12345678')
         userprofile3 = UserProfile.objects.create(user=user3, name="test3", donor=self.donor,
                                                   account_type=UserProfile.SUPER_DONOR_ADMIN)
 
@@ -153,13 +152,13 @@ class DonorTests(DonorBaseTests):
         user.is_superuser = True
         user.save()
 
-        user1 = User.objects.create(username="test1", password="12345678")
+        user1 = UserFactory(username='test1', password='12345678')
         userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
                                                   account_type=UserProfile.DONOR)
-        user2 = User.objects.create(username="test2", password="12345678")
+        user2 = UserFactory(username='test2', password='12345678')
         userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
                                                   account_type=UserProfile.DONOR_ADMIN)
-        user3 = User.objects.create(username="test3", password="12345678")
+        user3 = UserFactory(username='test3', password='12345678')
         userprofile3 = UserProfile.objects.create(user=user3, name="test3", donor=self.donor,
                                                   account_type=UserProfile.SUPER_DONOR_ADMIN)
 
@@ -175,16 +174,16 @@ class DonorTests(DonorBaseTests):
             account_type=UserProfile.SUPER_DONOR_ADMIN, donor=self.donor)
         self.donor.super_admins.add(self.test_user['user_profile_id'])
 
-        user1 = User.objects.create(username="test1", password="12345678", email="test1@foo.com")
+        user1 = UserFactory(username='test1', password='12345678', email='test1@foo.com')
         userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
                                                   account_type=UserProfile.DONOR)
-        user2 = User.objects.create(username="test2", password="12345678", email="test2@foo.com")
+        user2 = UserFactory(username='test2', password='12345678', email='test2@foo.com')
         userprofile2 = UserProfile.objects.create(user=user2, name="test2", donor=self.donor,
                                                   account_type=UserProfile.DONOR_ADMIN)
-        user3 = User.objects.create(username="test3", password="12345678", email="test3@foo.com")
+        user3 = UserFactory(username='test3', password='12345678', email='test3@foo.com')
         userprofile3 = UserProfile.objects.create(user=user3, name="test3", donor=self.donor,
                                                   account_type=UserProfile.SUPER_DONOR_ADMIN)
-        user4 = User.objects.create(username="test4", password="12345678", email="test4@foo.com")
+        user4 = UserFactory(username='test4', password='12345678', email='test4@foo.com')
         userprofile4 = UserProfile.objects.create(user=user4, name="test4", donor=self.donor,
                                                   account_type=UserProfile.SUPER_DONOR_ADMIN, language='fr')
 
@@ -235,7 +234,7 @@ class DonorTests(DonorBaseTests):
 
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
 
-        user1 = User.objects.create(username="test1", password="12345678")
+        user1 = UserFactory(username='test1', password='12345678')
         userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
                                                   account_type=UserProfile.DONOR)
         data = {
@@ -271,7 +270,7 @@ class DonorTests(DonorBaseTests):
 
         url = reverse("donor-detail", kwargs={"pk": self.donor.id})
 
-        user1 = User.objects.create(username="test1", password="12345678")
+        user1 = UserFactory(username='test1', password='12345678')
         userprofile1 = UserProfile.objects.create(user=user1, name="test1", donor=self.donor,
                                                   account_type=UserProfile.SUPER_DONOR_ADMIN)
         data = {
