@@ -6,7 +6,7 @@ from factory.faker import faker
 from factory.fuzzy import FuzzyDateTime, FuzzyChoice
 
 from country.models import Donor, DonorCustomQuestion, Country, CountryCustomQuestion
-from project.models import TechnologyPlatform, DigitalStrategy
+from project.models import TechnologyPlatform, DigitalStrategy, HSCGroup
 from user.models import UserProfile, Organisation
 
 
@@ -108,3 +108,11 @@ class CountryCustomQuestionFactory(factory.DjangoModelFactory):
     question = factory.LazyAttribute(
         lambda s: '{}'.format(faker.Faker().sentence().replace('.', '?'))
     )
+
+
+class HSCGroupFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = HSCGroup
+        django_get_or_create = ('name',)
+
+    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().profile()['company']))
