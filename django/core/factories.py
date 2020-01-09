@@ -8,7 +8,7 @@ from factory.fuzzy import FuzzyDateTime, FuzzyChoice
 from cms.models import Post, Comment
 from country.models import Donor, DonorCustomQuestion, Country, CountryCustomQuestion
 from project.models import TechnologyPlatform, DigitalStrategy, HSCGroup, HSCChallenge, HealthCategory, \
-    HealthFocusArea, Project
+    HealthFocusArea, Project, Licence
 from user.models import UserProfile, Organisation
 
 
@@ -181,3 +181,11 @@ class CommentFactory(factory.DjangoModelFactory):
     text = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().sentence()))
     user = factory.SubFactory(UserProfileFactory)
     post = factory.SubFactory(PostFactory)
+
+
+class LicenceFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = Licence
+        django_get_or_create = ('name',)
+
+    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))

@@ -1,7 +1,8 @@
 from rest_framework.test import APITestCase
 
-from core.factories import TechnologyPlatformFactory, DigitalStrategyFactory, HSCGroupFactory, HSCChallengeFactory
-from project.models import InteroperabilityLink, Licence, InteroperabilityStandard, HISBucket
+from core.factories import TechnologyPlatformFactory, DigitalStrategyFactory, HSCGroupFactory, HSCChallengeFactory, \
+    LicenceFactory
+from project.models import InteroperabilityLink, InteroperabilityStandard, HISBucket
 
 
 class ProjectStrTests(APITestCase):
@@ -21,7 +22,7 @@ class ProjectStrTests(APITestCase):
         self.assertEqual(str(tp), 'tp')
 
     def test_licences_str(self):
-        item = Licence.objects.create(name='name')
+        item = LicenceFactory(name='name')
         self.assertEqual(str(item), 'name')
 
     def test_iop_standard_str(self):
