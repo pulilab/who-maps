@@ -6,7 +6,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
 from core.factories import TechnologyPlatformFactory, DigitalStrategyFactory, HSCGroupFactory, HSCChallengeFactory, \
-    HealthCategoryFactory
+    HealthCategoryFactory, HealthFocusAreaFactory
 from project.models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, HealthCategory, HSCChallenge, HSCGroup
 from user.models import UserProfile
 
@@ -95,10 +95,8 @@ class TestModelTranslations(TestCase):
 
         health_category = HealthCategoryFactory(name='Parent category', name_en='English name', name_fr='French name')
 
-        health_focus_area = HealthFocusArea.objects.create(name='Health focus area', health_category=health_category)
-        health_focus_area.name_en = 'English area'
-        health_focus_area.name_fr = 'French area'
-        health_focus_area.save()
+        health_focus_area = HealthFocusAreaFactory(name='Health focus area', health_category=health_category,
+                                                   name_en='English area', name_fr='French area')
 
         url = reverse('get-project-structure')
         # Getting the english version
