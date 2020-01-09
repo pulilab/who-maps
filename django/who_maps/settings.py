@@ -371,6 +371,9 @@ if SITE_ID == 3:
 elif SITE_ID == 4:
     ENVIRONMENT_NAME = "QA / STAGING"
     ENVIRONMENT_COLOR = "orange"
+    # redirect all emails to the forced addresses
+    EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
+    TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "nico@pulilab.com", "f@pulilab.com"]
 else:
     ENVIRONMENT_NAME = "DEVELOPMENT"
     ENVIRONMENT_COLOR = "blue"
@@ -382,9 +385,6 @@ if CI_RUN:
 
 OSM_MAP_CLI_KEY = 'a9ea45b5-ab37-4323-8263-767aa5896113'
 
-# Uncomment these lines if you want to redirect all emails to the forced addresses
-# EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
-# TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "nico@pulilab.com", "f@pulilab.com"]
 
 MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE = 15728640  # 15 MB, 1024 * 1024 * 15
 MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY = 5
