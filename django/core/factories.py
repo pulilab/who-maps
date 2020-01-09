@@ -8,7 +8,7 @@ from factory.fuzzy import FuzzyDateTime, FuzzyChoice
 from cms.models import Post, Comment
 from country.models import Donor, DonorCustomQuestion, Country, CountryCustomQuestion
 from project.models import TechnologyPlatform, DigitalStrategy, HSCGroup, HSCChallenge, HealthCategory, \
-    HealthFocusArea, Project, Licence, InteroperabilityStandard, HISBucket
+    HealthFocusArea, Project, Licence, InteroperabilityStandard, HISBucket, InteroperabilityLink
 from user.models import UserProfile, Organisation
 
 
@@ -205,3 +205,12 @@ class HISBucketFactory(factory.DjangoModelFactory):
         django_get_or_create = ('name',)
 
     name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+
+
+class InteroperabilityLinkFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = InteroperabilityLink
+        django_get_or_create = ('name', 'pre')
+
+    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    pre = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
