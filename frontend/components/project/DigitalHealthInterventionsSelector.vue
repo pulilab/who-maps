@@ -45,7 +45,7 @@ export default {
   },
   props: {
     platformId: {
-      type: Number,
+      type: [Number, String],
       default: null
     }
   },

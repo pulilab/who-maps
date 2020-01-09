@@ -292,8 +292,12 @@ def remove_declined_software_from_projects(sender, instance, created, **kwargs):
                 Q(data__platforms__contains=[{'id': instance.id}]) | Q(draft__platforms__contains=[{'id': instance.id}])
             )
             for project in projects:
-                project.data['platforms'] = [item for item in project.data['platforms'] if item['id'] != instance.id]
-                project.draft['platforms'] = [item for item in project.draft['platforms'] if item['id'] != instance.id]
+                if project.public_id and 'platforms' in project.data:
+                    project.data['platforms'] = \
+                        [item for item in project.data['platforms'] if item['id'] != instance.id]
+                if 'platforms' in project.draft:
+                    project.draft['platforms'] = \
+                        [item for item in project.draft['platforms'] if item['id'] != instance.id]
                 project.save()
 
             notify_user_about_software_approval.apply_async(args=('decline', instance.pk,))

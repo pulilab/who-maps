@@ -1,17 +1,11 @@
 <template>
-  <span
-    v-if="dhi"
-    class="DhiItem"
-  >
-    {{ dhi.name }}
-  </span>
+  <span v-if="dhi" class="DhiItem">{{ dhi.name }}</span>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
-
   props: {
     id: {
       type: Number,
@@ -20,9 +14,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getDigitalHealthInterventionDetails: 'projects/getDigitalHealthInterventionDetails'
+      getDigitalHealthInterventionDetails:
+        "projects/getDigitalHealthInterventionDetails"
     }),
-    dhi () {
+    dhi() {
       return this.getDigitalHealthInterventionDetails(this.id);
     }
   }
@@ -30,11 +25,10 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .DhiItem {
-    display: inline;
-  }
-
+.DhiItem {
+  display: inline;
+}
 </style>

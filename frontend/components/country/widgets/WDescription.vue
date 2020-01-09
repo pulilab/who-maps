@@ -6,11 +6,11 @@
 
 <script>
 export default {
-  name: 'WDescription',
+  name: "WDescription",
   props: {
     description: {
       type: String,
-      required: true
+      required: false
     }
   }
 };

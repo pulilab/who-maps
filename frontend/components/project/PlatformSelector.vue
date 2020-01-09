@@ -8,25 +8,63 @@
     filterable
     @change="changeHandler"
     @blur="$emit('blur')"
+    :filter-method="filter"
   >
     <el-option
-      v-for="paltform in availablePlatforms"
-      :key="paltform.id"
-      :label="paltform.name"
-      :value="paltform.id"
-    />
+      v-if="newPlatform"
+      :key="newPlatform.id"
+      :label="newPlatform.name"
+      :value="newPlatform.id"
+      class="new"
+    >
+      <span class="left">
+        <b>{{ newPlatform.name }}</b>
+      </span>
+      <span class="left">
+        <small>
+          <translate>DHA Admin will update the Software list to include your new software name</translate>
+        </small>
+      </span>
+      <span class="right">
+        <b>
+          <fa icon="plus-circle" />
+          <translate>Add as new</translate>
+        </b>
+      </span>
+    </el-option>
+    <el-option
+      v-for="platform in availablePlatforms"
+      :key="platform.id"
+      :label="platform.name"
+      :value="platform.id"
+      :class="`${platform.state === 2 ? 'requested' : ''}`"
+    >
+      <template v-if="platform.state === 1">{{ platform.name }}</template>
+      <template v-if="platform.state === 2">
+        <span class="left">
+          <b>{{ platform.name }}</b>
+        </span>
+        <span class="right">
+          <small>
+            <fa icon="exclamation-triangle" />
+            <translate>Requested, please wait for approval</translate>
+          </small>
+        </span>
+      </template>
+    </el-option>
   </lazy-el-select>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
+import { platform } from "os";
 export default {
   model: {
-    prop: 'platforms',
-    event: 'change'
+    prop: "platforms",
+    event: "change"
   },
   $_veeValidate: {
-    value () {
+    value() {
       return this.platform;
     }
   },
@@ -40,34 +78,100 @@ export default {
       default: () => []
     }
   },
+  data() {
+    return {
+      newPlatform: null,
+      availablePlatforms: []
+    };
+  },
+  mounted() {
+    this.availablePlatforms = this.technologyPlatforms.filter(
+      tp => !this.platforms.some(s => s === tp.id) || tp.id === this.platform
+    ).sort((a, b) => a.name.localeCompare(b.name));
+  },
   computed: {
     ...mapGetters({
-      technologyPlatforms: 'projects/getTechnologyPlatforms'
+      technologyPlatforms: "projects/getTechnologyPlatforms"
     }),
-    platform () {
+    platform() {
       return this.platforms[this.index];
-    },
-    availablePlatforms () {
-      return this.technologyPlatforms.filter(tp => !this.platforms.some(s => s === tp.id) || tp.id === this.platform);
     }
   },
   methods: {
-    changeHandler (value) {
+    ...mapActions({
+      setNewSoftware: "projects/setNewSoftware"
+    }),
+    async changeHandler(value) {
+      let id = value;
+      if (typeof id === "string") {
+        const newSoftware = await this.setNewSoftware(value);
+        id = typeof newSoftware === 'number' ? newSoftware : 0;
+      }
       const p = [...this.platforms];
-      p[this.index] = value;
-      this.$emit('change', p);
+      p[this.index] = id;
+      this.$emit("change", p);
+    },
+    filter(value) {
+      this.availablePlatforms = this.technologyPlatforms.filter(platform =>
+        platform.name.toLowerCase().includes(value.toLowerCase())
+      );
+      if (value) {
+        this.newPlatform = { id: value, name: value };
+      } else {
+        this.newPlatform = null;
+      }
     }
   }
 };
 </script>
 
-<style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+<style lang="less" scoped>
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .PlatformSelector {
-    width: 100%;
+.PlatformSelector {
+  width: 100%;
+}
+
+.el-select-dropdown__item {
+  &.requested {
+    background-color: #fffbdd;
+    .left {
+      float: left;
+      width: 60%;
+      overflow: hidden;
+    }
+    .right {
+      float: right;
+      overflow: hidden;
+      color: @colorTextMuted;
+      font-size: 10px;
+      margin-top: 0px;
+      svg {
+        color: #f8a72a;
+        margin-right: 6px;
+      }
+    }
   }
-
-  .PlatformSelectorDropdown {}
+  &.new {
+    background-color: #fff8c4;
+    padding-top: 5px;
+    height: 58px;
+    .left {
+      float: left;
+      width: 70%;
+      height: 16px;
+    }
+    .right {
+      float: right;
+      // width: 25%;
+      color: @colorBrandPrimary;
+      font-size: 13px;
+      margin-top: -7px;
+      svg {
+        margin-right: 10px;
+      }
+    }
+  }
+}
 </style>
