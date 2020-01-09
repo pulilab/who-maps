@@ -37,7 +37,7 @@ def staging():
     env.host_string = 'whomaps@139.59.148.238'
     env.name = 'staging'
     env.port = 22
-    env.branch = "master"
+    env.branch = "development"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
