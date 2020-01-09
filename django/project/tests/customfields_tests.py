@@ -2,7 +2,7 @@ from copy import copy
 
 from rest_framework.reverse import reverse
 
-from core.factories import DonorCustomQuestionFactory
+from core.factories import DonorCustomQuestionFactory, CountryCustomQuestionFactory
 from country.models import CountryCustomQuestion
 from project.models import Project
 from project.tests.setup import SetupTests
@@ -50,7 +50,7 @@ class CustomFieldTests(SetupTests):
         self.assertFalse('country_custom_answers' in response.json())
 
     def test_country_answer_wrong_question_id(self):
-        CountryCustomQuestion.objects.create(question="What up?", country_id=self.country_id)
+        CountryCustomQuestionFactory(question="What up?", country=self.country)
         url = reverse("project-create",
                       kwargs={
                           "country_id": self.country_id
@@ -70,7 +70,7 @@ class CustomFieldTests(SetupTests):
                          [{'question_id': ['This question_id does not exist.']}])
 
     def test_country_answer_wrong_all_required(self):
-        CountryCustomQuestion.objects.create(question="What up?", country_id=self.country_id)
+        CountryCustomQuestionFactory(question="What up?", country=self.country)
         url = reverse("project-create",
                       kwargs={
                           "country_id": self.country_id
@@ -106,7 +106,7 @@ class CustomFieldTests(SetupTests):
                                                                       'answer': ['This field is required.']}])
 
     def test_country_answer_for_draft(self):
-        q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
+        q = CountryCustomQuestionFactory(question="test", country=self.country)
         url = reverse("project-draft",
                       kwargs={
                           "country_id": self.country_id,
@@ -124,7 +124,7 @@ class CustomFieldTests(SetupTests):
         self.assertTrue('country_custom_answers' not in project.data)
 
     def test_country_answer_for_published(self):
-        q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
+        q = CountryCustomQuestionFactory(question="test", country=self.country)
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
@@ -143,8 +143,8 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(project.draft['country_custom_answers'], {str(q.id): ['lol1']})
 
     def test_country_answer_for_published_is_required(self):
-        q1 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id, required=True)
-        q2 = CountryCustomQuestion.objects.create(question="test2", country_id=self.country_id, required=True)
+        q1 = CountryCustomQuestionFactory(question="test", country=self.country, required=True)
+        q2 = CountryCustomQuestionFactory(question="test2", country=self.country, required=True)
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
@@ -199,8 +199,8 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.json()['non_field_errors'], 'Country answers are missing')
 
     def test_country_answer_numeric_validation(self):
-        q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id,
-                                                 type=CountryCustomQuestion.NUMBER)
+        q = CountryCustomQuestionFactory(question="test", country=self.country,
+                                         type=CountryCustomQuestion.NUMBER)
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
@@ -220,10 +220,10 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.json()['published']['country_custom_answers'], {str(q.id): ['123']})
 
     def test_country_answer_length_validation(self):
-        q1 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id,
-                                                  type=CountryCustomQuestion.TEXT)
-        q2 = CountryCustomQuestion.objects.create(question="test multi", country_id=self.country_id,
-                                                  type=CountryCustomQuestion.MULTI)
+        q1 = CountryCustomQuestionFactory(question="test", country=self.country,
+                                          type=CountryCustomQuestion.TEXT)
+        q2 = CountryCustomQuestionFactory(question="test multi", country=self.country,
+                                          type=CountryCustomQuestion.MULTI)
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
@@ -243,7 +243,7 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.json()['published']['country_custom_answers'], {str(q2.id): ['1', '2']})
 
     def test_country_answer_update_existing_answer(self):
-        q = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
+        q = CountryCustomQuestionFactory(question="test", country=self.country)
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
@@ -267,7 +267,7 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(project.draft['country_custom_answers'], {str(q.id): ['lol2']})
 
     def test_country_answer_new_required_question(self):
-        q1 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
+        q1 = CountryCustomQuestionFactory(question="test", country=self.country)
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
@@ -279,7 +279,7 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published']['country_custom_answers'], {str(q1.id): ['lol1']})
 
-        q2 = CountryCustomQuestion.objects.create(question="test2", country_id=self.country_id, required=True)
+        q2 = CountryCustomQuestionFactory(question="test2", country=self.country, required=True)
 
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
@@ -293,9 +293,9 @@ class CustomFieldTests(SetupTests):
                          {str(q1.id): ['lol1'], str(q2.id): ['lol2']})
 
     def test_country_private_answers_are_saved_separately(self):
-        q1 = CountryCustomQuestion.objects.create(question="test private", country_id=self.country_id, private=True)
-        q2 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
-        q3 = CountryCustomQuestion.objects.create(question="test2 private", country_id=self.country_id, private=True)
+        q1 = CountryCustomQuestionFactory(question="test private", country=self.country, private=True)
+        q2 = CountryCustomQuestionFactory(question="test", country=self.country)
+        q3 = CountryCustomQuestionFactory(question="test2 private", country=self.country, private=True)
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
@@ -313,7 +313,7 @@ class CustomFieldTests(SetupTests):
                          {str(q1.id): ['private answer 1'], str(q3.id): ['private answer 2']})
 
     def test_reorder_country_questions_unsuccessful(self):
-        q = CountryCustomQuestion.objects.create(question="test3", country_id=self.country_id)
+        q = CountryCustomQuestionFactory(question="test3", country=self.country)
 
         url = reverse("country-custom-questions-set-order-to", kwargs={"pk": q.id})
         response = self.test_user_client.post(url, format='json')
@@ -328,9 +328,9 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.json(), {'detail': 'Not found.'})
 
     def test_reorder_country_questions_success(self):
-        q1 = CountryCustomQuestion.objects.create(question="test", country_id=self.country_id)
-        q2 = CountryCustomQuestion.objects.create(question="test2", country_id=self.country_id)
-        q3 = CountryCustomQuestion.objects.create(question="test3", country_id=self.country_id)
+        q1 = CountryCustomQuestionFactory(question="test", country=self.country)
+        q2 = CountryCustomQuestionFactory(question="test2", country=self.country)
+        q3 = CountryCustomQuestionFactory(question="test3", country=self.country)
 
         url = reverse("country-detail", kwargs={"pk": self.country_id})
         response = self.test_user_client.get(url, format='json')

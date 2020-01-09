@@ -5,7 +5,7 @@ from django.utils import timezone
 from factory.faker import faker
 from factory.fuzzy import FuzzyDateTime, FuzzyChoice
 
-from country.models import Donor, DonorCustomQuestion, Country
+from country.models import Donor, DonorCustomQuestion, Country, CountryCustomQuestion
 from project.models import TechnologyPlatform, DigitalStrategy
 from user.models import UserProfile, Organisation
 
@@ -96,4 +96,15 @@ class CountryFactory(factory.DjangoModelFactory):
     name = FuzzyChoice(COUNTRY_NAMES)
     code = factory.LazyAttribute(
         lambda s: '{}'.format(pycountry.countries.get(name=s.name).alpha_2)
+    )
+
+
+class CountryCustomQuestionFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = CountryCustomQuestion
+        django_get_or_create = ('question', 'country')
+
+    country = factory.SubFactory(CountryFactory)
+    question = factory.LazyAttribute(
+        lambda s: '{}'.format(faker.Faker().sentence().replace('.', '?'))
     )

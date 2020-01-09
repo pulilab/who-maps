@@ -3,8 +3,8 @@ import itertools
 
 from django.urls import reverse
 
-from core.factories import DonorCustomQuestionFactory
-from country.models import Donor, CountryCustomQuestion
+from core.factories import DonorCustomQuestionFactory, CountryCustomQuestionFactory
+from country.models import Donor
 from project.models import Project, DigitalStrategy, HealthFocusArea, HSCChallenge
 from project.tests.setup import SetupTests
 
@@ -23,8 +23,8 @@ class SearchTests(SetupTests):
         self.d2cq = DonorCustomQuestionFactory(question="test 2", private=True, donor=self.d2)
         project_data2['donor_custom_answers'] = {self.d1.id: [{"question_id": self.d1cq.id, "answer": ["answer1"]}],
                                                  self.d2.id: [{"question_id": self.d2cq.id, "answer": ["answer2"]}]}
-        self.ccq1 = CountryCustomQuestion.objects.create(question="ctest q 1", private=True, country_id=self.country_id)
-        self.ccq2 = CountryCustomQuestion.objects.create(question="ctest q 2", private=True, country_id=self.country_id)
+        self.ccq1 = CountryCustomQuestionFactory(question="ctest q 1", private=True, country=self.country)
+        self.ccq2 = CountryCustomQuestionFactory(question="ctest q 2", private=True, country=self.country)
         project_data2['country_custom_answers'] = [{"question_id": self.ccq1.id, "answer": ["answer country 1"]},
                                                    {"question_id": self.ccq2.id, "answer": ["answer country 2"]}]
         response = self.test_user_client.post(url, project_data2, format="json")
