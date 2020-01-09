@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { projectFields } from '@/utilities/projects';
 import { apiWriteParser } from '@/utilities/api';
 
@@ -36,7 +36,9 @@ export default {
   computed: {
     ...mapGetters({
       userProfile: 'user/getProfile',
-      dhi: 'projects/getDigitalHealthInterventions'
+      dhi: 'projects/getDigitalHealthInterventions',
+      team: 'project/getTeam',
+      viewers: 'project/getViewers'
     }),
     firstDHI () {
       if (this.dhi && this.dhi[0].subGroups[0] && this.dhi[0].subGroups[0].strategies) {
@@ -61,6 +63,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setTeam: 'project/setTeam',
+      setViewers: 'project/setViewers',
+      saveTeamViewers: 'project/saveTeamViewers'
+    }),
     handleValidation (valid, msg, field) {
       if (valid) {
         this.errors = this.errors.filter(e => e.field !== field);
@@ -122,16 +129,23 @@ export default {
         const platform = result.platforms[0];
         result.digitalHealthInterventions = result.digitalHealthInterventions.map(id => ({ platform, id }));
       }
-      result.team = [this.userProfile.id];
       result.country = country;
       result.donors = [donor];
       const parsed = apiWriteParser(result, countryCustom, donorCustom);
       const { data } = await this.$axios.post(`api/projects/draft/${country}/`, parsed);
+
       if (publish) {
         await this.$axios.put(`api/projects/publish/${data.id}/${country}/`, parsed);
       }
       const dataRow = this.row;
       dataRow.project = data.id;
+
+      // setting teams and viewers and saving it
+      this.setTeam([this.userProfile.id, ...result.implementing_team]);
+      this.setViewers([...result.implementing_viewers]);
+      await this.saveTeamViewers(data.id);
+      // setting teams and viewers and saving it
+
       this.$emit('update:row', dataRow);
       return dataRow;
     }
