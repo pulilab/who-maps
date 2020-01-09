@@ -71,7 +71,7 @@
 import { projectFields } from '@/utilities/projects';
 
 const blackList = ['country', 'donors', 'coverage', 'national_level_deployment',
-  'coverageData', 'team', 'viewers', 'coverageType', 'coverage_second_level', 'interoperability_links' ];
+  'coverageData', 'coverageType', 'coverage_second_level', 'interoperability_links', 'team', 'viewers' ];
 const addendumFields = ['clients', 'health_workers', 'facilities', 'sub_level'];
 export default {
   props: {

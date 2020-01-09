@@ -49,6 +49,8 @@ export const getters = {
   getNationalLevelDeployment: state => state.national_level_deployment ? { ...state.national_level_deployment } : {},
   getGovernmentInvestor: state => state.government_investor,
   getImplementingPartners: state => state.implementing_partners.length === 0 ? [null] : state.implementing_partners,
+  getImplementingTeam: state => state.implementing_team.length === 0 ? [null] : state.implementing_team,
+  getImplementingViewers: state => state.implementing_viewers.length === 0 ? [null] : state.implementing_viewers,
   getDonors: state => state.donors,
   getImplementationDates: state => state.implementation_dates,
   getLicenses: state => state.licenses,
@@ -224,6 +226,12 @@ export const actions = {
   },
   setImplementingPartners ({ commit }, value) {
     commit('SET_IMPLEMENTING_PARTNERS', value);
+  },
+  setImplementingTeam ({ commit }, value) {
+    commit('SET_IMPLEMENTING_TEAM', value);
+  },
+  setImplementingViewers ({ commit }, value) {
+    commit('SET_IMPLEMENTING_VIEWERS', value);
   },
   setDonors ({ commit, dispatch }, value) {
     value.forEach(d => dispatch('system/loadDonorDetails', d, { root: true }));
@@ -424,6 +432,12 @@ export const mutations = {
   SET_IMPLEMENTING_PARTNERS: (state, implementing_partners) => {
     Vue.set(state, 'implementing_partners', [...implementing_partners]);
   },
+  SET_IMPLEMENTING_TEAM: (state, implementing_team) => {
+    Vue.set(state, 'implementing_team', [...implementing_team]);
+  },
+  SET_IMPLEMENTING_VIEWERS: (state, implementing_viewers) => {
+    Vue.set(state, 'implementing_viewers', [...implementing_viewers]);
+  },
   SET_DONORS: (state, donors) => {
     Vue.set(state, 'donors', [...donors]);
   },
@@ -495,6 +509,8 @@ export const mutations = {
     });
     state.government_investor = get(project, 'government_investor', '');
     state.implementing_partners = get(project, 'implementing_partners', []);
+    state.implementing_team = get(project, 'implementing_team', []);
+    state.implementing_viewers = get(project, 'implementing_viewers', []);
     state.donors = get(project, 'donors', []);
     state.implementation_dates = get(project, 'implementation_dates', '');
     state.licenses = get(project, 'licenses', []);
