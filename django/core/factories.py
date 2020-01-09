@@ -6,7 +6,7 @@ from factory.faker import faker
 from factory.fuzzy import FuzzyDateTime, FuzzyChoice
 
 from country.models import Donor, DonorCustomQuestion, Country, CountryCustomQuestion
-from project.models import TechnologyPlatform, DigitalStrategy, HSCGroup
+from project.models import TechnologyPlatform, DigitalStrategy, HSCGroup, HSCChallenge
 from user.models import UserProfile, Organisation
 
 
@@ -116,3 +116,12 @@ class HSCGroupFactory(factory.DjangoModelFactory):
         django_get_or_create = ('name',)
 
     name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().profile()['company']))
+
+
+class HSCChallengeFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = HSCChallenge
+        django_get_or_create = ('name', 'group')
+
+    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    group = factory.SubFactory(HSCGroupFactory)

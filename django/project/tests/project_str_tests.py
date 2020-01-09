@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase
 
-from core.factories import TechnologyPlatformFactory, DigitalStrategyFactory, HSCGroupFactory
-from project.models import InteroperabilityLink, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
+from core.factories import TechnologyPlatformFactory, DigitalStrategyFactory, HSCGroupFactory, HSCChallengeFactory
+from project.models import InteroperabilityLink, Licence, InteroperabilityStandard, HISBucket
 
 
 class ProjectStrTests(APITestCase):
@@ -34,5 +34,5 @@ class ProjectStrTests(APITestCase):
 
     def test_hsc_str(self):
         hsc_group = HSCGroupFactory(name='name')
-        item = HSCChallenge.objects.create(name='challenge', group=hsc_group)
+        item = HSCChallengeFactory(name='challenge', group=hsc_group)
         self.assertEqual(str(item), '(name) challenge')

@@ -5,7 +5,7 @@ from django.core.cache import cache
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
-from core.factories import TechnologyPlatformFactory, DigitalStrategyFactory, HSCGroupFactory
+from core.factories import TechnologyPlatformFactory, DigitalStrategyFactory, HSCGroupFactory, HSCChallengeFactory
 from project.models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, HealthCategory, HSCChallenge, HSCGroup
 from user.models import UserProfile
 
@@ -148,9 +148,9 @@ class TestModelTranslations(TestCase):
         hsc_group.name_fr = 'Omlette du fromage'
         hsc_group.save()
 
-        hsc = HSCChallenge.objects.create(name='Solve an issue', group=hsc_group)
-        hsc_2 = HSCChallenge.objects.create(name='Other problem appeared', group=hsc_group)
-        hsc_3 = HSCChallenge.objects.create(name='Third failure here', group=hsc_group)
+        hsc = HSCChallengeFactory(name='Solve an issue', group=hsc_group)
+        hsc_2 = HSCChallengeFactory(name='Other problem appeared', group=hsc_group)
+        hsc_3 = HSCChallengeFactory(name='Third failure here', group=hsc_group)
 
         hsc.name_en = 'Solve an issue'
         hsc.name_fr = "l'Solve an issue"
