@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import get from 'lodash/get';
+import moment from 'moment';
 import { apiReadParser, apiWriteParser, APIError } from '../utilities/api';
 import { projectFields } from '../utilities/projects';
 
@@ -31,8 +32,9 @@ export const getters = {
   getCountry: state => state.country,
   getGeographicScope: state => state.geographic_scope,
   getImplementationOverview: state => state.implementation_overview,
-  getStartDate: state => state.start_date,
-  getEndDate: state => state.end_date,
+  getStartDate: state => moment(state.start_date).format('YYYY-MM-DD') === '1970-01-01' ? moment().toDate() : state.start_date,
+  // getStartDate: state => state.start_date,
+  getEndDate: state => moment(state.end_date).format('YYYY-MM-DD') === '1970-01-01' ? moment().toDate() : state.end_date,
   getContactName: state => state.contact_name,
   getContactEmail: state => state.contact_email,
   getTeam: state => state.team,

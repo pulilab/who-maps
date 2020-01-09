@@ -147,7 +147,6 @@
                 </translate>
               </form-hint>
             </template>
-
             <safe-date-picker
               ref="Start date"
               v-model="start_date"
