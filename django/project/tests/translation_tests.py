@@ -86,16 +86,12 @@ class TestModelTranslations(TestCase):
         HealthCategory.objects.all().delete()
         cache.clear()
 
-        strategy = DigitalStrategyFactory(name='Test strategy', group=DigitalStrategy.GROUP_CHOICES[0][0])
-        strategy.name_en = 'English name'
-        strategy.name_fr = 'French name'
-        strategy.save()
+        strategy = DigitalStrategyFactory(name='Test strategy', group=DigitalStrategy.GROUP_CHOICES[0][0],
+                                          name_en='English name', name_fr='French name')
 
-        child_strategy = DigitalStrategyFactory(name='Child strategy', parent=strategy,
-                                                group=DigitalStrategy.GROUP_CHOICES[0][0])
-        child_strategy.name_en = 'Child name'
-        child_strategy.name_fr = 'Omlette du fromage'
-        child_strategy.save()
+        child_strategy = DigitalStrategyFactory(
+            name='Child strategy', parent=strategy, group=DigitalStrategy.GROUP_CHOICES[0][0],
+            name_en='Child name', name_fr='Omlette du fromage')
 
         health_category = HealthCategoryFactory(name='Parent category', name_en='English name', name_fr='French name')
 
