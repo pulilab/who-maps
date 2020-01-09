@@ -5,7 +5,7 @@ from django.utils import timezone
 from factory.faker import faker
 from factory.fuzzy import FuzzyDateTime, FuzzyChoice
 
-from cms.models import Post
+from cms.models import Post, Comment
 from country.models import Donor, DonorCustomQuestion, Country, CountryCustomQuestion
 from project.models import TechnologyPlatform, DigitalStrategy, HSCGroup, HSCChallenge, HealthCategory, \
     HealthFocusArea, Project
@@ -171,3 +171,13 @@ class ProjectFactory(factory.DjangoModelFactory):
         if extracted:
             for user_profile in extracted:
                 self.team.add(user_profile)
+
+
+class CommentFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = Comment
+        django_get_or_create = ('text', 'user')
+
+    text = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().sentence()))
+    user = factory.SubFactory(UserProfileFactory)
+    post = factory.SubFactory(PostFactory)

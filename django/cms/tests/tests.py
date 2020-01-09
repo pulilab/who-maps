@@ -2,8 +2,8 @@ import tempfile
 
 from django.test import TestCase
 
-from cms.models import Post, Comment, State
-from core.factories import UserFactory, UserProfileFactory, PostFactory
+from cms.models import Post, State
+from core.factories import UserFactory, UserProfileFactory, PostFactory, CommentFactory
 
 
 class CmsTest(TestCase):
@@ -35,7 +35,7 @@ class CmsTest(TestCase):
 
     def test_add_comments(self):
         self.post.comments.create(user=self.userprofile, text="Test Comment 1")
-        Comment.objects.create(post=self.post, user=self.userprofile, text="Test Comment 2")
+        CommentFactory(post=self.post, user=self.userprofile, text="Test Comment 2")
 
         self.assertEqual(self.post.comments.all().count(), 2)
         self.assertEqual(self.post.comments.first().__str__(), "Test Comment 1")
@@ -43,8 +43,8 @@ class CmsTest(TestCase):
         self.assertEqual(self.post.comments.last().text, "Test Comment 2")
 
     def test_delete_comments(self):
-        Comment.objects.create(post=self.post, user=self.userprofile, text="Test Comment 1")
-        Comment.objects.create(post=self.post, user=self.userprofile, text="Test Comment 2")
+        CommentFactory(post=self.post, user=self.userprofile, text="Test Comment 1")
+        CommentFactory(post=self.post, user=self.userprofile, text="Test Comment 2")
 
         self.post.comments.all().delete()
 
@@ -90,9 +90,9 @@ class CmsTest(TestCase):
         self.assertEqual(Post.objects.flagged().count(), 0)
         self.assertEqual(Post.objects.banned().count(), 0)
 
-        Comment.objects.create(post=self.post, user=self.userprofile, text="Test Comment 1")
-        Comment.objects.create(post=self.post, user=self.userprofile, text="Test Comment 2", state=State.FLAGGED)
-        Comment.objects.create(post=self.post, user=self.userprofile, text="Test Comment 3", state=State.BANNED)
+        CommentFactory(post=self.post, user=self.userprofile, text="Test Comment 1")
+        CommentFactory(post=self.post, user=self.userprofile, text="Test Comment 2", state=State.FLAGGED)
+        CommentFactory(post=self.post, user=self.userprofile, text="Test Comment 3", state=State.BANNED)
 
         self.assertEqual(self.post.comments.normal().count(), 1)
         self.assertEqual(self.post.comments.showable().count(), 2)

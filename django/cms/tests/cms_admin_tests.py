@@ -4,7 +4,7 @@ from rest_framework.reverse import reverse
 
 from cms.admin import PostAdmin, CommentAdmin
 from cms.models import Post, Comment, State
-from core.factories import UserFactory, UserProfileFactory, PostFactory
+from core.factories import UserFactory, UserProfileFactory, PostFactory, CommentFactory
 
 
 class MockRequest:
@@ -67,9 +67,9 @@ class CmsAdminTests(TestCase):
         self.assertFalse(ma.has_add_permission(self.request))
 
         post = PostFactory(name="Test1", body="test", domain=1, type=1, author=self.userprofile)
-        Comment.objects.create(post=post, text="test comment 1", user=self.userprofile, state=State.FLAGGED)
-        Comment.objects.create(post=post, text="test comment 2", user=self.userprofile, state=State.FLAGGED)
-        Comment.objects.create(post=post, text="test comment 3", user=self.userprofile, state=State.NORMAL)
+        CommentFactory(post=post, text="test comment 1", user=self.userprofile, state=State.FLAGGED)
+        CommentFactory(post=post, text="test comment 2", user=self.userprofile, state=State.FLAGGED)
+        CommentFactory(post=post, text="test comment 3", user=self.userprofile, state=State.NORMAL)
 
         self.assertEqual(Comment.objects.flagged().count(), 2)
         self.assertEqual(Comment.objects.banned().count(), 0)

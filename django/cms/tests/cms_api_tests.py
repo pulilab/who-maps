@@ -1,6 +1,7 @@
 from allauth.account.models import EmailConfirmation
 
-from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, CountryFactory, PostFactory
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, CountryFactory, PostFactory, \
+    CommentFactory
 from core.tests import get_temp_image
 from django.core import mail
 from rest_framework.reverse import reverse
@@ -205,7 +206,7 @@ class CmsApiTest(APITestCase):
         self.assertTrue(response.json()['modified'])
         self.assertEqual(response.json()['comments'], [])
 
-        comment = Comment.objects.create(
+        comment = CommentFactory(
             text="Comment 2", user_id=self.user_profile_id, post=Post.objects.get(id=self.post_id))
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
@@ -276,7 +277,7 @@ class CmsApiTest(APITestCase):
     def test_flagged_comment_shows(self):
         self.test_flag_comment()
 
-        comment = Comment.objects.create(
+        comment = CommentFactory(
             text="Comment 2", user_id=self.user_profile_id, post=Post.objects.get(id=self.post_id))
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
@@ -302,7 +303,7 @@ class CmsApiTest(APITestCase):
     def test_banned_comment_doesnt_show(self):
         self.test_add_comment()
 
-        comment = Comment.objects.create(
+        comment = CommentFactory(
             text="Comment 2", user_id=self.user_profile_id, post=Post.objects.get(id=self.post_id))
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
