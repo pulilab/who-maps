@@ -185,6 +185,7 @@ export const actions = {
     commit('SET_VIEWERS', value);
   },
   setPlatforms ({ commit }, value) {
+    // Here we set the platform, AKA software
     commit('SET_PLATFORMS', value);
   },
   setDigitalHealthInterventions ({ commit }, value) {
