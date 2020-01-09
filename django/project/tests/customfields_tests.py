@@ -386,7 +386,7 @@ class CustomFieldTests(SetupTests):
                                            {'id': dq2.id, 'order': 2}])
 
     def test_donor_answer_for_draft(self):
-        q = DonorCustomQuestionFactory(question="test", donor_id=self.d1.id)
+        q = DonorCustomQuestionFactory(question="test", donor=self.d1)
         url = reverse("project-draft",
                       kwargs={
                           "country_id": self.country_id,
@@ -404,7 +404,7 @@ class CustomFieldTests(SetupTests):
         self.assertTrue('donor_custom_answers' not in project.data)
 
     def test_donor_answer_for_published(self):
-        q = DonorCustomQuestionFactory(question="test", donor_id=self.d1.id)
+        q = DonorCustomQuestionFactory(question="test", donor=self.d1)
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
@@ -423,8 +423,8 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(project.draft['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
 
     def test_donor_answer_for_all_is_required(self):
-        dq1 = DonorCustomQuestionFactory(question="test", donor_id=self.d1.id, required=True)
-        dq2 = DonorCustomQuestionFactory(question="test2", donor_id=self.d1.id, required=True)
+        dq1 = DonorCustomQuestionFactory(question="test", donor=self.d1, required=True)
+        dq2 = DonorCustomQuestionFactory(question="test2", donor=self.d1, required=True)
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country_id,
@@ -507,7 +507,7 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
 
     def test_donor_answer_wrong_question_id(self):
-        DonorCustomQuestionFactory(question="What up?", donor_id=self.d1.id)
+        DonorCustomQuestionFactory(question="What up?", donor=self.d1)
         url = reverse("project-create",
                       kwargs={
                           "country_id": self.country_id
@@ -564,7 +564,7 @@ class CustomFieldTests(SetupTests):
                          {str(self.d1.id): [{'question_id': ['This question_id does not exist.']}]})
 
     def test_donor_answer_wrong_all_required(self):
-        DonorCustomQuestionFactory(question="What up?", donor_id=self.d1.id)
+        DonorCustomQuestionFactory(question="What up?", donor=self.d1)
         url = reverse("project-create",
                       kwargs={
                           "country_id": self.country_id
