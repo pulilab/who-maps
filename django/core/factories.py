@@ -7,7 +7,8 @@ from factory.fuzzy import FuzzyDateTime, FuzzyChoice
 
 from cms.models import Post
 from country.models import Donor, DonorCustomQuestion, Country, CountryCustomQuestion
-from project.models import TechnologyPlatform, DigitalStrategy, HSCGroup, HSCChallenge, HealthCategory, HealthFocusArea
+from project.models import TechnologyPlatform, DigitalStrategy, HSCGroup, HSCChallenge, HealthCategory, \
+    HealthFocusArea, Project
 from user.models import UserProfile, Organisation
 
 
@@ -156,3 +157,17 @@ class PostFactory(factory.DjangoModelFactory):
     type = FuzzyChoice(POST_TYPES)
     domain = FuzzyChoice(POST_DOMAINS)
     author = factory.SubFactory(UserProfileFactory)
+
+
+class ProjectFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = Project
+        django_get_or_create = ('name',)
+
+    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+
+    @factory.post_generation
+    def team(self, create, extracted, **kwargs):
+        if extracted:
+            for user_profile in extracted:
+                self.team.add(user_profile)

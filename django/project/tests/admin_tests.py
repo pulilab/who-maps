@@ -8,7 +8,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from rest_framework import status
 
-from core.factories import UserFactory, UserProfileFactory, TechnologyPlatformFactory
+from core.factories import UserFactory, UserProfileFactory, TechnologyPlatformFactory, ProjectFactory
 from django.core import mail
 from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import Permission
@@ -134,8 +134,8 @@ class TestAdmin(TestCase):
         self.user.save()
         self.request.user = self.user
 
-        p = Project.objects.create(name="test change view", draft=dict(country=Country.objects.get(id=1).id))
-        p.team.add(self.userprofile.id)
+        p = ProjectFactory(name="test change view", draft=dict(country=Country.objects.get(id=1).id),
+                           team=[self.userprofile])
 
         self.assertEqual(pa.get_country(p), Country.objects.get(id=1))
         self.assertEqual(pa.get_team(p), str(self.userprofile))
@@ -151,11 +151,11 @@ class TestAdmin(TestCase):
 
         country = Country.objects.get(id=1)
         country_id = country.id
-        p_not_in_country = Project.objects.create(name="not in country")
-        p1_draft = Project.objects.create(name="draft in country")
+        p_not_in_country = ProjectFactory(name="not in country")
+        p1_draft = ProjectFactory(name="draft in country")
         p1_draft.draft['country'] = country_id
         p1_draft.save()
-        p2_published = Project.objects.create(name="published in country")
+        p2_published = ProjectFactory(name="published in country")
         p2_published.draft['country'] = country_id
         p2_published.data['country'] = country_id
         p2_published.save()
@@ -186,7 +186,7 @@ class TestAdmin(TestCase):
         change_permission = Permission.objects.get(content_type=content_type,
                                                    codename='change_{}'.format(Project._meta.model_name))
 
-        p = Project.objects.create(name="test change view")
+        p = ProjectFactory(name="test change view")
         self.user.user_permissions.add(change_permission)
         self.user.is_superuser = True
         self.user.is_staff = True
@@ -251,7 +251,7 @@ class TestAdmin(TestCase):
 
     def test_project_admin_link_edit(self):
         pa = ProjectAdmin(Project, AdminSite())
-        p = Project.objects.create(name="test link")
+        p = ProjectFactory(name="test link")
         link = pa.link(p)
 
         expected_link = "<a target='_blank' href='/app/{}/edit-project/draft/'>See project</a>".format(p.id)
