@@ -5,6 +5,7 @@ from django.utils import timezone
 from factory.faker import faker
 from factory.fuzzy import FuzzyDateTime, FuzzyChoice
 
+from cms.models import Post
 from country.models import Donor, DonorCustomQuestion, Country, CountryCustomQuestion
 from project.models import TechnologyPlatform, DigitalStrategy, HSCGroup, HSCChallenge, HealthCategory, HealthFocusArea
 from user.models import UserProfile, Organisation
@@ -12,6 +13,8 @@ from user.models import UserProfile, Organisation
 
 DIGITAL_STRATEGY_GROUP_CHOICES = [item[0] for item in DigitalStrategy.GROUP_CHOICES]
 COUNTRY_NAMES = [country.name for country in pycountry.countries]
+POST_TYPES = [item[0] for item in Post.TYPE_CHOICES]
+POST_DOMAINS = [item[0] for item in Post.DOMAIN_CHOICES]
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -142,3 +145,14 @@ class HealthFocusAreaFactory(factory.DjangoModelFactory):
 
     name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
     health_category = factory.SubFactory(HealthCategoryFactory)
+
+
+class PostFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = Post
+
+    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    body = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().sentence()))
+    type = FuzzyChoice(POST_TYPES)
+    domain = FuzzyChoice(POST_DOMAINS)
+    author = factory.SubFactory(UserProfileFactory)

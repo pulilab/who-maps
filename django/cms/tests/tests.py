@@ -3,7 +3,7 @@ import tempfile
 from django.test import TestCase
 
 from cms.models import Post, Comment, State
-from core.factories import UserFactory, UserProfileFactory
+from core.factories import UserFactory, UserProfileFactory, PostFactory
 
 
 class CmsTest(TestCase):
@@ -19,7 +19,7 @@ class CmsTest(TestCase):
             "author": self.userprofile
         }
 
-        self.post = Post.objects.create(**self.post_data)
+        self.post = PostFactory(**self.post_data)
 
         self.assertEqual(self.post.__str__(), self.post_data['name'])
         self.assertEqual(self.post.author.__str__(), "Test User1 <test@who.who>")
@@ -56,11 +56,11 @@ class CmsTest(TestCase):
         post_data = {}
         post_data.update(self.post_data)
         post_data['name'] = 'a' * 128
-        post = Post.objects.create(**post_data)
+        post = PostFactory(**post_data)
         self.assertEqual(post.slug, 'a' * 128)
 
         # Slug ads extra chars to the end to keep the uniqueness - overflow check here
-        post = Post.objects.create(**post_data)
+        post = PostFactory(**post_data)
         self.assertEqual(post.slug, ('a' * 128) + '--1')
 
     def test_states(self):

@@ -1,6 +1,6 @@
 from allauth.account.models import EmailConfirmation
 
-from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, CountryFactory
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, CountryFactory, PostFactory
 from core.tests import get_temp_image
 from django.core import mail
 from rest_framework.reverse import reverse
@@ -134,7 +134,7 @@ class CmsApiTest(APITestCase):
             "author_id": self.user_profile_id
         }
 
-        self.post = Post.objects.create(**self.post_data)
+        self.post = PostFactory(**self.post_data)
 
         url = reverse("post-list")
         response = self.test_user_client.get(url)
@@ -159,11 +159,11 @@ class CmsApiTest(APITestCase):
             "author_id": self.user_profile_id
         }
 
-        self.post = Post.objects.create(**self.post_data)
+        self.post = PostFactory(**self.post_data)
         self.post_data.update(name="Test Post 1")
-        self.post2 = Post.objects.create(**self.post_data)
+        self.post2 = PostFactory(**self.post_data)
         self.post_data.update(name="Test Post 3")
-        self.post3 = Post.objects.create(**self.post_data)
+        self.post3 = PostFactory(**self.post_data)
 
         url = reverse("post-list")
         response = self.test_user_client.get(url)

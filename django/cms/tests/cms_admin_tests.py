@@ -4,7 +4,7 @@ from rest_framework.reverse import reverse
 
 from cms.admin import PostAdmin, CommentAdmin
 from cms.models import Post, Comment, State
-from core.factories import UserFactory, UserProfileFactory
+from core.factories import UserFactory, UserProfileFactory, PostFactory
 
 
 class MockRequest:
@@ -32,8 +32,8 @@ class CmsAdminTests(TestCase):
             state_filter_obj.lookups(self.request, ma), ((0, 'All'), (1, 'Normal'), (2, 'Flagged'), (3, 'Banned')))
         self.assertFalse(ma.has_add_permission(self.request))
 
-        Post.objects.create(name="Test1", body="test", domain=1, type=1, author=self.userprofile)
-        Post.objects.create(name="Test2", body="test", domain=1, type=1, author=self.userprofile, state=Post.FLAGGED)
+        PostFactory(name="Test1", body="test", domain=1, type=1, author=self.userprofile)
+        PostFactory(name="Test2", body="test", domain=1, type=1, author=self.userprofile, state=Post.FLAGGED)
 
         posts = state_filter_obj.queryset(self.request, Post.objects.all())
 
@@ -66,7 +66,7 @@ class CmsAdminTests(TestCase):
 
         self.assertFalse(ma.has_add_permission(self.request))
 
-        post = Post.objects.create(name="Test1", body="test", domain=1, type=1, author=self.userprofile)
+        post = PostFactory(name="Test1", body="test", domain=1, type=1, author=self.userprofile)
         Comment.objects.create(post=post, text="test comment 1", user=self.userprofile, state=State.FLAGGED)
         Comment.objects.create(post=post, text="test comment 2", user=self.userprofile, state=State.FLAGGED)
         Comment.objects.create(post=post, text="test comment 3", user=self.userprofile, state=State.NORMAL)
