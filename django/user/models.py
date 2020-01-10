@@ -61,6 +61,11 @@ class UserProfile(ExtendedModel):
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
 
+    project_updates_notification = models.BooleanField(default=True)
+    daily_toolkit_digest_notification = models.BooleanField(default=True)
+    project_approval_request_notification = models.BooleanField(default=True)
+    role_request_notification = models.BooleanField(default=True)
+
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""
 
