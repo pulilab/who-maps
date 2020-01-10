@@ -163,6 +163,7 @@ READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "
 
 
 class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
+    document = serializers.FileField(use_url=False)
     size = serializers.SerializerMethodField()
 
     class Meta:
