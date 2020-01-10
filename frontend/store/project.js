@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import get from 'lodash/get';
 import { apiReadParser, apiWriteParser, APIError } from '../utilities/api';
-import { projectFields } from '../utilities/projects';
+import { projectFields, epochCheck } from '../utilities/projects';
 
 const cleanState = () => ({
   ...projectFields(),
@@ -31,8 +31,8 @@ export const getters = {
   getCountry: state => state.country,
   getGeographicScope: state => state.geographic_scope,
   getImplementationOverview: state => state.implementation_overview,
-  getStartDate: state => state.start_date,
-  getEndDate: state => state.end_date,
+  getStartDate: state => epochCheck(state.start_date),
+  getEndDate: state => epochCheck(state.end_date),
   getContactName: state => state.contact_name,
   getContactEmail: state => state.contact_email,
   getTeam: state => state.team,
