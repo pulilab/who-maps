@@ -49,11 +49,8 @@ class SetupTests(APITestCase):
         # Update profile.
         self.org = OrganisationFactory(name="org1")
         self.country = CountryFactory(name="country1", code='CTR1', project_approval=True,
-                                      region=Country.REGIONS[0][0])
+                                      region=Country.REGIONS[0][0], name_en='Hungary', name_fr='Hongrie')
         self.country_id = self.country.id
-        self.country.name_en = 'Hungary'
-        self.country.name_fr = 'Hongrie'
-        self.country.save()
 
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {

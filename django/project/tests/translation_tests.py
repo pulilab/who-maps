@@ -50,10 +50,7 @@ class TestModelTranslations(TestCase):
         user_profile = UserProfile.objects.get(id=response.json().get('user_profile_id'))
         self.user = user_profile.user
 
-        self.platform = TechnologyPlatformFactory(name='Test platform')
-        self.platform.name_en = 'English name'
-        self.platform.name_fr = 'French name'
-        self.platform.save()
+        self.platform = TechnologyPlatformFactory(name='Test platform', name_en='English name', name_fr='French name')
 
     def test_model_translations(self):
         self.assertEqual(self.platform.name, 'English name')
@@ -135,18 +132,12 @@ class TestModelTranslations(TestCase):
         HSCGroup.objects.all().delete()
         cache.clear()
 
-        hsc_group = HSCGroupFactory(name='First group')
-        hsc_group.name_en = 'First group'
-        hsc_group.name_fr = 'Omlette du fromage'
-        hsc_group.save()
+        hsc_group = HSCGroupFactory(name='First group', name_en='First group', name_fr='Omlette du fromage')
 
-        hsc = HSCChallengeFactory(name='Solve an issue', group=hsc_group)
+        hsc = HSCChallengeFactory(name='Solve an issue', group=hsc_group, name_en='Solve an issue',
+                                  name_fr="l'Solve an issue")
         hsc_2 = HSCChallengeFactory(name='Other problem appeared', group=hsc_group)
         hsc_3 = HSCChallengeFactory(name='Third failure here', group=hsc_group)
-
-        hsc.name_en = 'Solve an issue'
-        hsc.name_fr = "l'Solve an issue"
-        hsc.save()
 
         url = reverse('get-project-structure')
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
