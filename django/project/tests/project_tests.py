@@ -7,13 +7,15 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, TechnologyPlatformFactory, \
+    DigitalStrategyFactory
 from django.core import mail
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from rest_framework.test import APIClient
 
 from country.models import Country, Donor
-from user.models import Organisation, UserProfile
+from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, Licence, ProjectApproval
 from project.tasks import send_project_approval_digest, \
     send_project_updated_digest, notify_superusers_about_new_pending_software, notify_user_about_software_approval
@@ -513,7 +515,7 @@ class ProjectTests(SetupTests):
         user_profile_id = response.json().get("user_profile_id")
 
         # update profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",
@@ -565,7 +567,7 @@ class ProjectTests(SetupTests):
         user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",
@@ -785,8 +787,8 @@ class ProjectTests(SetupTests):
         return project_id, country.id
 
     def test_project_approval_email(self):
-        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
-        user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
+        user_2 = UserFactory(username='test_2', email='test2@test.test', password='a', is_staff=True, is_superuser=True)
+        user_2_profile = UserProfileFactory(user=user_2, language='fr')
 
         c = Country.objects.get(id=self.country_id)
         c.project_approval = True
@@ -834,7 +836,7 @@ class ProjectTests(SetupTests):
         user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",
@@ -902,7 +904,7 @@ class ProjectTests(SetupTests):
         user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",
@@ -1017,8 +1019,8 @@ class ProjectTests(SetupTests):
     def test_technology_platform_create(self, task):
         task.return_value = None
 
-        user = User.objects.create(username="test_user_100000", password="test_user_100000")
-        user_profile = UserProfile.objects.create(user=user, name="test_user_100000")
+        user = UserFactory(username='test_user_100000', password='test_user_100000')
+        user_profile = UserProfileFactory(user=user, name="test_user_100000")
 
         data = {
             'name': 'test platform',
@@ -1045,10 +1047,12 @@ class ProjectTests(SetupTests):
             user.is_superuser = False
             user.save()
 
-        test_super_user_1 = User.objects.create_superuser('bh_superuser_1', 'bh+1@pulilab.com', 'puli_1234')
-        test_super_user_2 = User.objects.create_superuser('bh_superuser_2', 'bh+2@pulilab.com', 'puli_2345')
+        test_super_user_1 = UserFactory(username='bh_superuser_1', email='bh+1@pulilab.com', password='puli_1234',
+                                        is_staff=True, is_superuser=True)
+        test_super_user_2 = UserFactory(username='bh_superuser_2', email='bh+2@pulilab.com', password='puli_1234',
+                                        is_staff=True, is_superuser=True)
         try:
-            software = TechnologyPlatform.objects.create(name='pending software')
+            software = TechnologyPlatformFactory(name='pending software')
             notify_superusers_about_new_pending_software.apply((software.id,))
 
             call_args_list = send_email.call_args_list[0][1]
@@ -1069,7 +1073,7 @@ class ProjectTests(SetupTests):
 
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_notify_user_about_software_approve(self, send_email):
-        software = TechnologyPlatform.objects.create(name='pending software', added_by_id=self.user_profile_id)
+        software = TechnologyPlatformFactory(name='pending software', added_by_id=self.user_profile_id)
         notify_user_about_software_approval.apply(args=('test', software.id))
         notify_user_about_software_approval.apply(args=('approve', software.id))
 
@@ -1081,7 +1085,7 @@ class ProjectTests(SetupTests):
 
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_notify_user_about_software_decline(self, send_email):
-        software = TechnologyPlatform.objects.create(name='pending software', added_by_id=self.user_profile_id)
+        software = TechnologyPlatformFactory(name='pending software', added_by_id=self.user_profile_id)
         notify_user_about_software_approval.apply(args=('decline', software.id))
 
         call_args_list = send_email.call_args_list[0][1]
@@ -1091,7 +1095,7 @@ class ProjectTests(SetupTests):
 
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_notify_user_about_software_approval_fail(self, send_email):
-        software = TechnologyPlatform.objects.create(name='pending software')
+        software = TechnologyPlatformFactory(name='pending software')
         notify_user_about_software_approval.apply(args=('approve', software.id))
 
         send_email.assert_not_called()
@@ -1100,11 +1104,11 @@ class ProjectTests(SetupTests):
     def test_software_decline(self, notify_user_about_software_approval):
         country = Country.objects.last()
 
-        software_1 = TechnologyPlatform.objects.create(name='approved', state=TechnologyPlatform.APPROVED)
-        software_2 = TechnologyPlatform.objects.create(name='will be declined', state=TechnologyPlatform.PENDING)
+        software_1 = TechnologyPlatformFactory(name='approved')
+        software_2 = TechnologyPlatformFactory(name='will be declined', state=TechnologyPlatform.PENDING)
 
-        s_parent = DigitalStrategy.objects.create(name="strategy parent", group=DigitalStrategy.GROUP_CHOICES[0])
-        s1 = DigitalStrategy.objects.create(parent=s_parent, name="strategy1", group=DigitalStrategy.GROUP_CHOICES[0])
+        s_parent = DigitalStrategyFactory(name="strategy parent", group=DigitalStrategy.GROUP_CHOICES[0])
+        s1 = DigitalStrategyFactory(parent=s_parent, name="strategy1", group=DigitalStrategy.GROUP_CHOICES[0])
 
         data = {"project": {
             "date": datetime.utcnow(),
@@ -1161,14 +1165,14 @@ class ProjectTests(SetupTests):
     def test_send_project_updated_digest(self):
         project = Project.objects.last()
 
-        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
-        user_2_profile = UserProfile.objects.create(user=user_2, language='en')
+        user_2 = UserFactory(username='test_2', email='test2@test.test', password='a', is_staff=True, is_superuser=True)
+        user_2_profile = UserProfileFactory(user=user_2, language='en')
 
-        user_3 = User.objects.create_superuser(username='test_3', email='test3@test.test', password='a')
-        user_3_profile = UserProfile.objects.create(user=user_3, language='en')
+        user_3 = UserFactory(username='test_3', email='test3@test.test', password='a', is_staff=True, is_superuser=True)
+        user_3_profile = UserProfileFactory(user=user_3, language='en')
 
-        user_4 = User.objects.create_superuser(username='test_4', email='test4@test.test', password='a')
-        user_4_profile = UserProfile.objects.create(user=user_4, language='en')
+        user_4 = UserFactory(username='test_4', email='test4@test.test', password='a', is_staff=True, is_superuser=True)
+        user_4_profile = UserProfileFactory(user=user_4, language='en')
 
         c = project.search.country
         c.admins.add(self.user_profile_id, user_2_profile)
@@ -1185,7 +1189,8 @@ class ProjectTests(SetupTests):
         send_project_updated_digest()
         profile = UserProfile.objects.get(id=self.user_profile_id)
         self.assertEqual(mail.outbox[1].subject, f'A Digital Health Atlas project in {c.name} has been updated')
-        self.assertEqual(mail.outbox[1].to, [profile.user.email, user_2.email])
+        self.assertTrue(profile.user.email in mail.outbox[1].to)
+        self.assertTrue(user_2.email in mail.outbox[1].to)
         self.assertEqual(mail.outbox[2].subject,
                          f'A Digital Health Atlas project that {self.d1.name} invests in has been updated')
         self.assertEqual(mail.outbox[2].to, [user_3.email])

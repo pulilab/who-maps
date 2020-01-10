@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.contrib.admin import AdminSite
-from django.contrib.auth.models import User
 from django.test import TestCase
 
+from core.factories import UserFactory
 from country.admin import CountryAdmin
 from country.models import Country
 
@@ -15,7 +15,7 @@ class CountryAdminTests(TestCase):
     def setUp(self):
         self.site = AdminSite()
         self.request = MockRequest()
-        self.user = User.objects.create(username="alma", password="korte", email="test@test.com")
+        self.user = UserFactory(username='alma', password='korte', email='test@test.com')
 
     def test_superuser_can_see_every_country(self):
         ma = CountryAdmin(Country, self.site)

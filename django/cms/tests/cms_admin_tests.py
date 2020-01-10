@@ -1,11 +1,10 @@
 from django.contrib.admin import AdminSite
-from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from rest_framework.reverse import reverse
 
 from cms.admin import PostAdmin, CommentAdmin
 from cms.models import Post, Comment, State
-from user.models import UserProfile
+from core.factories import UserFactory, UserProfileFactory, PostFactory, CommentFactory
 
 
 class MockRequest:
@@ -16,8 +15,8 @@ class CmsAdminTests(TestCase):
     def setUp(self):
         self.site = AdminSite()
         self.request = MockRequest()
-        self.user = User.objects.create(username="alma", password="korte")
-        self.userprofile = UserProfile.objects.create(user=self.user, name="almakorte")
+        self.user = UserFactory(username='alma', password='korte')
+        self.userprofile = UserProfileFactory(user=self.user, name="almakorte")
 
     def test_admin_list_filters(self):
         ma = PostAdmin(Post, self.site)
@@ -33,8 +32,8 @@ class CmsAdminTests(TestCase):
             state_filter_obj.lookups(self.request, ma), ((0, 'All'), (1, 'Normal'), (2, 'Flagged'), (3, 'Banned')))
         self.assertFalse(ma.has_add_permission(self.request))
 
-        Post.objects.create(name="Test1", body="test", domain=1, type=1, author=self.userprofile)
-        Post.objects.create(name="Test2", body="test", domain=1, type=1, author=self.userprofile, state=Post.FLAGGED)
+        PostFactory(name="Test1", body="test", domain=1, type=1, author=self.userprofile)
+        PostFactory(name="Test2", body="test", domain=1, type=1, author=self.userprofile, state=Post.FLAGGED)
 
         posts = state_filter_obj.queryset(self.request, Post.objects.all())
 
@@ -59,17 +58,18 @@ class CmsAdminTests(TestCase):
         ma = CommentAdmin(Comment, self.site)
         self.password = 'mypassword'
 
-        self.admin = User.objects.create_superuser('myuser', 'myemail@test.com', self.password)
+        self.admin = UserFactory(username='myuser', email='myemail@test.com', password=self.password,
+                                 is_staff=True, is_superuser=True)
 
         self.client = Client()
         self.request.user = self.admin
 
         self.assertFalse(ma.has_add_permission(self.request))
 
-        post = Post.objects.create(name="Test1", body="test", domain=1, type=1, author=self.userprofile)
-        Comment.objects.create(post=post, text="test comment 1", user=self.userprofile, state=State.FLAGGED)
-        Comment.objects.create(post=post, text="test comment 2", user=self.userprofile, state=State.FLAGGED)
-        Comment.objects.create(post=post, text="test comment 3", user=self.userprofile, state=State.NORMAL)
+        post = PostFactory(name="Test1", body="test", domain=1, type=1, author=self.userprofile)
+        CommentFactory(post=post, text="test comment 1", user=self.userprofile, state=State.FLAGGED)
+        CommentFactory(post=post, text="test comment 2", user=self.userprofile, state=State.FLAGGED)
+        CommentFactory(post=post, text="test comment 3", user=self.userprofile, state=State.NORMAL)
 
         self.assertEqual(Comment.objects.flagged().count(), 2)
         self.assertEqual(Comment.objects.banned().count(), 0)

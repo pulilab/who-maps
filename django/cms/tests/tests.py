@@ -1,16 +1,15 @@
 import tempfile
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 
-from cms.models import Post, Comment, State
-from user.models import UserProfile
+from cms.models import Post, State
+from core.factories import UserFactory, UserProfileFactory, PostFactory, CommentFactory
 
 
 class CmsTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create(username="test@who.who", email="test@who.who", password="secure1234")
-        self.userprofile = UserProfile.objects.create(name="Test User1", user=self.user)
+        self.user = UserFactory(username='test@who.who', email='test@who.who', password='secure1234')
+        self.userprofile = UserProfileFactory(name="Test User1", user=self.user)
 
         self.post_data = {
             "name": "Test Post 1",
@@ -20,7 +19,7 @@ class CmsTest(TestCase):
             "author": self.userprofile
         }
 
-        self.post = Post.objects.create(**self.post_data)
+        self.post = PostFactory(**self.post_data)
 
         self.assertEqual(self.post.__str__(), self.post_data['name'])
         self.assertEqual(self.post.author.__str__(), "Test User1 <test@who.who>")
@@ -36,7 +35,7 @@ class CmsTest(TestCase):
 
     def test_add_comments(self):
         self.post.comments.create(user=self.userprofile, text="Test Comment 1")
-        Comment.objects.create(post=self.post, user=self.userprofile, text="Test Comment 2")
+        CommentFactory(post=self.post, user=self.userprofile, text="Test Comment 2")
 
         self.assertEqual(self.post.comments.all().count(), 2)
         self.assertEqual(self.post.comments.first().__str__(), "Test Comment 1")
@@ -44,8 +43,8 @@ class CmsTest(TestCase):
         self.assertEqual(self.post.comments.last().text, "Test Comment 2")
 
     def test_delete_comments(self):
-        Comment.objects.create(post=self.post, user=self.userprofile, text="Test Comment 1")
-        Comment.objects.create(post=self.post, user=self.userprofile, text="Test Comment 2")
+        CommentFactory(post=self.post, user=self.userprofile, text="Test Comment 1")
+        CommentFactory(post=self.post, user=self.userprofile, text="Test Comment 2")
 
         self.post.comments.all().delete()
 
@@ -57,11 +56,11 @@ class CmsTest(TestCase):
         post_data = {}
         post_data.update(self.post_data)
         post_data['name'] = 'a' * 128
-        post = Post.objects.create(**post_data)
+        post = PostFactory(**post_data)
         self.assertEqual(post.slug, 'a' * 128)
 
         # Slug ads extra chars to the end to keep the uniqueness - overflow check here
-        post = Post.objects.create(**post_data)
+        post = PostFactory(**post_data)
         self.assertEqual(post.slug, ('a' * 128) + '--1')
 
     def test_states(self):
@@ -91,9 +90,9 @@ class CmsTest(TestCase):
         self.assertEqual(Post.objects.flagged().count(), 0)
         self.assertEqual(Post.objects.banned().count(), 0)
 
-        Comment.objects.create(post=self.post, user=self.userprofile, text="Test Comment 1")
-        Comment.objects.create(post=self.post, user=self.userprofile, text="Test Comment 2", state=State.FLAGGED)
-        Comment.objects.create(post=self.post, user=self.userprofile, text="Test Comment 3", state=State.BANNED)
+        CommentFactory(post=self.post, user=self.userprofile, text="Test Comment 1")
+        CommentFactory(post=self.post, user=self.userprofile, text="Test Comment 2", state=State.FLAGGED)
+        CommentFactory(post=self.post, user=self.userprofile, text="Test Comment 3", state=State.BANNED)
 
         self.assertEqual(self.post.comments.normal().count(), 1)
         self.assertEqual(self.post.comments.showable().count(), 2)

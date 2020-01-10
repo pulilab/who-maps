@@ -2,13 +2,14 @@ from django.contrib.auth.models import User
 from django.test import override_settings
 from django.urls import reverse
 
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, DonorFactory, CountryFactory
 from django.core import mail
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from allauth.account.models import EmailConfirmation
 
-from country.models import Country, Donor
-from .models import Organisation, UserProfile
+from country.models import Country
+from .models import UserProfile
 
 
 class UserTests(APITestCase):
@@ -43,7 +44,7 @@ class UserTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
 
-        self.donor = Donor.objects.create(name='Donor 1', code='dnr1')
+        self.donor = DonorFactory(name='Donor 1', code='dnr1')
 
     def test_register_user(self):
         url = reverse("rest_register")
@@ -209,9 +210,9 @@ class UserProfileTests(APITestCase):
         self.client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
 
         # Update profile.
-        self.org = Organisation.objects.create(name="org1")
+        self.org = OrganisationFactory(name="org1")
         self.country = Country.objects.all()[0]
-        self.donor = Donor.objects.create(name="Donor1", code="donor1")
+        self.donor = DonorFactory(name="Donor1", code="donor1")
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
             "name": "Test Name",
@@ -244,7 +245,7 @@ class UserProfileTests(APITestCase):
         user_profile_id = response.json().get('user_profile_id')
         client = APIClient(HTTP_AUTHORIZATION="Token {}".format(response.json().get("token")), format="json")
 
-        org = Organisation.objects.create(name="org33")
+        org = OrganisationFactory(name="org33")
         country = Country.objects.all()[0]
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
@@ -494,32 +495,32 @@ class UserProfileTests(APITestCase):
 
     @override_settings(CELERY_ALWAYS_EAGER=True)
     def test_admin_requests_are_triggering_celery_task(self):
-        c = Country.objects.create(code='XXY', name='COUNTRY_TEST')
+        c = CountryFactory(code='XXY', name='COUNTRY_TEST')
         c.admins.add(self.user_profile_id)
 
-        d = Donor.objects.create(name='DONOR_TEST')
+        d = DonorFactory(name='DONOR_TEST')
         d.super_admins.add(self.user_profile_id)
 
-        u1 = User.objects.create(username="username1", email="user1@user.org")
-        UserProfile.objects.create(name="USER1", user=u1, account_type=UserProfile.IMPLEMENTER, country=c)
+        u1 = UserFactory(username='username1', email='user1@user.org')
+        UserProfileFactory(name="USER1", user=u1, account_type=UserProfile.IMPLEMENTER, country=c)
 
-        u2 = User.objects.create(username="username2", email="user2@user.org")
-        UserProfile.objects.create(name="USER2", user=u2, account_type=UserProfile.GOVERNMENT)
+        u2 = UserFactory(username='username2', email='user2@user.org')
+        UserProfileFactory(name="USER2", user=u2, account_type=UserProfile.GOVERNMENT)
 
-        u3 = User.objects.create(username="username3", email="user3@user.org")
-        upf3 = UserProfile.objects.create(name="USER3", user=u3, account_type=UserProfile.GOVERNMENT, country=c)
+        u3 = UserFactory(username='username3', email='user3@user.org')
+        upf3 = UserProfileFactory(name="USER3", user=u3, account_type=UserProfile.GOVERNMENT, country=c)
 
         self.assertEqual(mail.outbox[-1].subject, 'Request: {} has requested to be a {} for {}'.format(
             str(upf3), upf3.get_account_type_display(), c.name))
 
-        u4 = User.objects.create(username="username4", email="user4@user.org")
-        upf4 = UserProfile.objects.create(name="USER4", user=u4, account_type=UserProfile.SUPER_DONOR_ADMIN, donor=d)
+        u4 = UserFactory(username='username4', email='user4@user.org')
+        upf4 = UserProfileFactory(name="USER4", user=u4, account_type=UserProfile.SUPER_DONOR_ADMIN, donor=d)
 
         self.assertEqual(mail.outbox[-1].subject, 'Request: {} has requested to be a {} for {}'.format(
             str(upf4), upf4.get_account_type_display(), d.name))
 
         super_user = User.objects.filter(is_superuser=True).first()
-        UserProfile.objects.create(user=super_user)
+        UserProfileFactory(user=super_user)
 
         upf3.account_type = UserProfile.COUNTRY_ADMIN
         upf3.save()

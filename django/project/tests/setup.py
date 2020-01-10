@@ -4,11 +4,12 @@ from allauth.account.models import EmailConfirmation
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 
-from country.models import Country, Donor
-from user.models import Organisation, UserProfile
+from core.factories import OrganisationFactory, DonorFactory, CountryFactory
+from country.models import Country
+from user.models import UserProfile
 
 
-class MockRequest():
+class MockRequest:
     user = None
     GET = {}
     COOKIES = {}
@@ -46,9 +47,9 @@ class SetupTests(APITestCase):
         self.user_profile_id = response.json().get('user_profile_id')
 
         # Update profile.
-        self.org = Organisation.objects.create(name="org1")
-        self.country = Country.objects.create(name="country1", code='CTR1', project_approval=True,
-                                              region=Country.REGIONS[0][0])
+        self.org = OrganisationFactory(name="org1")
+        self.country = CountryFactory(name="country1", code='CTR1', project_approval=True,
+                                      region=Country.REGIONS[0][0])
         self.country_id = self.country.id
         self.country.name_en = 'Hungary'
         self.country.name_fr = 'Hongrie'
@@ -66,8 +67,8 @@ class SetupTests(APITestCase):
         self.userprofile = UserProfile.objects.get(id=self.user_profile_id)
         self.country.users.add(self.userprofile)
 
-        self.d1 = Donor.objects.create(name="Donor1", code="donor1")
-        self.d2 = Donor.objects.create(name="Donor2", code="donor2")
+        self.d1 = DonorFactory(name="Donor1", code="donor1")
+        self.d2 = DonorFactory(name="Donor2", code="donor2")
 
         self.project_data = {"project": {
             "date": datetime.utcnow(),

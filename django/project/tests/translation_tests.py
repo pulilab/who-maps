@@ -5,6 +5,8 @@ from django.core.cache import cache
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
+from core.factories import TechnologyPlatformFactory, DigitalStrategyFactory, HSCGroupFactory, HSCChallengeFactory, \
+    HealthCategoryFactory, HealthFocusAreaFactory
 from project.models import TechnologyPlatform, DigitalStrategy, HealthFocusArea, HealthCategory, HSCChallenge, HSCGroup
 from user.models import UserProfile
 
@@ -48,7 +50,7 @@ class TestModelTranslations(TestCase):
         user_profile = UserProfile.objects.get(id=response.json().get('user_profile_id'))
         self.user = user_profile.user
 
-        self.platform = TechnologyPlatform.objects.create(name='Test platform')
+        self.platform = TechnologyPlatformFactory(name='Test platform')
         self.platform.name_en = 'English name'
         self.platform.name_fr = 'French name'
         self.platform.save()
@@ -84,26 +86,17 @@ class TestModelTranslations(TestCase):
         HealthCategory.objects.all().delete()
         cache.clear()
 
-        strategy = DigitalStrategy.objects.create(name='Test strategy', group=DigitalStrategy.GROUP_CHOICES[0][0])
-        strategy.name_en = 'English name'
-        strategy.name_fr = 'French name'
-        strategy.save()
+        strategy = DigitalStrategyFactory(name='Test strategy', group=DigitalStrategy.GROUP_CHOICES[0][0],
+                                          name_en='English name', name_fr='French name')
 
-        child_strategy = DigitalStrategy.objects.create(name='Child strategy', parent=strategy,
-                                                        group=DigitalStrategy.GROUP_CHOICES[0][0])
-        child_strategy.name_en = 'Child name'
-        child_strategy.name_fr = 'Omlette du fromage'
-        child_strategy.save()
+        child_strategy = DigitalStrategyFactory(
+            name='Child strategy', parent=strategy, group=DigitalStrategy.GROUP_CHOICES[0][0],
+            name_en='Child name', name_fr='Omlette du fromage')
 
-        health_category = HealthCategory.objects.create(name='Parent category')
-        health_category.name_en = 'English name'
-        health_category.name_fr = 'French name'
-        health_category.save()
+        health_category = HealthCategoryFactory(name='Parent category', name_en='English name', name_fr='French name')
 
-        health_focus_area = HealthFocusArea.objects.create(name='Health focus area', health_category=health_category)
-        health_focus_area.name_en = 'English area'
-        health_focus_area.name_fr = 'French area'
-        health_focus_area.save()
+        health_focus_area = HealthFocusAreaFactory(name='Health focus area', health_category=health_category,
+                                                   name_en='English area', name_fr='French area')
 
         url = reverse('get-project-structure')
         # Getting the english version
@@ -142,14 +135,14 @@ class TestModelTranslations(TestCase):
         HSCGroup.objects.all().delete()
         cache.clear()
 
-        hsc_group = HSCGroup.objects.create(name='First group')
+        hsc_group = HSCGroupFactory(name='First group')
         hsc_group.name_en = 'First group'
         hsc_group.name_fr = 'Omlette du fromage'
         hsc_group.save()
 
-        hsc = HSCChallenge.objects.create(name='Solve an issue', group=hsc_group)
-        hsc_2 = HSCChallenge.objects.create(name='Other problem appeared', group=hsc_group)
-        hsc_3 = HSCChallenge.objects.create(name='Third failure here', group=hsc_group)
+        hsc = HSCChallengeFactory(name='Solve an issue', group=hsc_group)
+        hsc_2 = HSCChallengeFactory(name='Other problem appeared', group=hsc_group)
+        hsc_3 = HSCChallengeFactory(name='Third failure here', group=hsc_group)
 
         hsc.name_en = 'Solve an issue'
         hsc.name_fr = "l'Solve an issue"

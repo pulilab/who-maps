@@ -1,14 +1,13 @@
 from allauth.account.models import EmailConfirmation
-from django.contrib.auth.models import User
 
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, CountryFactory, PostFactory, \
+    CommentFactory
 from core.tests import get_temp_image
 from django.core import mail
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 
 from cms.models import Post, Comment
-from country.models import Country
-from user.models import Organisation, UserProfile
 
 
 class CmsApiTest(APITestCase):
@@ -35,9 +34,9 @@ class CmsApiTest(APITestCase):
         self.user_profile_id = response.json().get('user_profile_id')
 
         # Update profile.
-        self.org = Organisation.objects.create(name="org1")
+        self.org = OrganisationFactory(name="org1")
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
-        self.country = Country.objects.create(name="country1")
+        self.country = CountryFactory(name="country1", code='XX')
         self.country_id = self.country.id
         data = {"name": "Test Name", "organisation": self.org.id, "country": self.country_id}
         response = self.test_user_client.put(url, data)
@@ -136,7 +135,7 @@ class CmsApiTest(APITestCase):
             "author_id": self.user_profile_id
         }
 
-        self.post = Post.objects.create(**self.post_data)
+        self.post = PostFactory(**self.post_data)
 
         url = reverse("post-list")
         response = self.test_user_client.get(url)
@@ -161,11 +160,11 @@ class CmsApiTest(APITestCase):
             "author_id": self.user_profile_id
         }
 
-        self.post = Post.objects.create(**self.post_data)
+        self.post = PostFactory(**self.post_data)
         self.post_data.update(name="Test Post 1")
-        self.post2 = Post.objects.create(**self.post_data)
+        self.post2 = PostFactory(**self.post_data)
         self.post_data.update(name="Test Post 3")
-        self.post3 = Post.objects.create(**self.post_data)
+        self.post3 = PostFactory(**self.post_data)
 
         url = reverse("post-list")
         response = self.test_user_client.get(url)
@@ -207,7 +206,7 @@ class CmsApiTest(APITestCase):
         self.assertTrue(response.json()['modified'])
         self.assertEqual(response.json()['comments'], [])
 
-        comment = Comment.objects.create(
+        comment = CommentFactory(
             text="Comment 2", user_id=self.user_profile_id, post=Post.objects.get(id=self.post_id))
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
@@ -278,7 +277,7 @@ class CmsApiTest(APITestCase):
     def test_flagged_comment_shows(self):
         self.test_flag_comment()
 
-        comment = Comment.objects.create(
+        comment = CommentFactory(
             text="Comment 2", user_id=self.user_profile_id, post=Post.objects.get(id=self.post_id))
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
@@ -304,7 +303,7 @@ class CmsApiTest(APITestCase):
     def test_banned_comment_doesnt_show(self):
         self.test_add_comment()
 
-        comment = Comment.objects.create(
+        comment = CommentFactory(
             text="Comment 2", user_id=self.user_profile_id, post=Post.objects.get(id=self.post_id))
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
@@ -383,8 +382,9 @@ class CmsApiTest(APITestCase):
     def test_flag_post_sends_email(self):
         self.test_create()
         self.password = 'mypassword'
-        self.admin = User.objects.create_superuser('myuser', 'f@pulilab.com', self.password)
-        UserProfile.objects.create(user=self.admin, language='fr')
+        self.admin = UserFactory(username='myuser', email='f@pulilab.com', password=self.password,
+                                 is_staff=True, is_superuser=True)
+        UserProfileFactory(user=self.admin, language='fr')
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
         response = self.test_user_client.patch(url)

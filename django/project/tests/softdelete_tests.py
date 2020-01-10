@@ -1,11 +1,12 @@
 from rest_framework.test import APITestCase
 
+from core.factories import DigitalStrategyFactory
 from project.models import DigitalStrategy
 
 
 class TestSoftDelete(APITestCase):
     def test_on_instance_delete(self):
-        ds1 = DigitalStrategy.objects.create(name='ds1', group='Client')
+        ds1 = DigitalStrategyFactory(name='ds1', group='Client')
         self.assertEqual(ds1.is_active, True)
 
         ds1.delete()

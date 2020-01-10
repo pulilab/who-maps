@@ -2,19 +2,20 @@ from copy import copy
 from datetime import datetime
 from unittest.mock import patch
 
-from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.translation import override
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils.dateformat import format
 from requests import RequestException
 
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, DonorFactory, \
+    TechnologyPlatformFactory, DigitalStrategyFactory, CountryFactory
 from country.tests.base import CountryBaseTests
 from django.core import mail
 
-from country.models import Country, Donor, CustomQuestion
-from project.models import TechnologyPlatform, DigitalStrategy
-from user.models import UserProfile, Organisation
+from country.models import Country, CustomQuestion
+from project.models import DigitalStrategy
+from user.models import UserProfile
 
 
 class CountryTests(CountryBaseTests):
@@ -84,7 +85,7 @@ class CountryTests(CountryBaseTests):
         self.assertIn("map_data", response_keys)
 
     def test_country_admin_retrieve_without_map_version(self):
-        country2 = Country.objects.create(name="country2", code="CC2")
+        country2 = CountryFactory(name="country2", code="CC2")
         url = reverse("country-detail", kwargs={"pk": country2.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
         self.assertEqual(response.status_code, 200)
@@ -164,12 +165,12 @@ class CountryTests(CountryBaseTests):
                                                                                 country=self.country)
         self.country.admins.add(self.test_user['user_profile_id'])
 
-        user1 = User.objects.create(username="test1", password="12345678")
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.GOVERNMENT)
-        user2 = User.objects.create(username="test2", password="12345678")
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
-                                                  account_type=UserProfile.COUNTRY_ADMIN)
+        user1 = UserFactory(username='test1', password='12345678')
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.GOVERNMENT)
+        user2 = UserFactory(username='test2', password='12345678')
+        userprofile2 = UserProfileFactory(user=user2, name="test2", country=self.country,
+                                          account_type=UserProfile.COUNTRY_ADMIN)
 
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
@@ -185,15 +186,15 @@ class CountryTests(CountryBaseTests):
             account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
         self.country.super_admins.add(self.test_user['user_profile_id'])
 
-        user1 = User.objects.create(username="test1", password="12345678")
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.GOVERNMENT)
-        user2 = User.objects.create(username="test2", password="12345678")
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
-                                                  account_type=UserProfile.COUNTRY_ADMIN)
-        user3 = User.objects.create(username="test3", password="12345678")
-        userprofile3 = UserProfile.objects.create(user=user3, name="test3", country=self.country,
-                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+        user1 = UserFactory(username='test1', password='12345678')
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.GOVERNMENT)
+        user2 = UserFactory(username='test2', password='12345678')
+        userprofile2 = UserProfileFactory(user=user2, name="test2", country=self.country,
+                                          account_type=UserProfile.COUNTRY_ADMIN)
+        user3 = UserFactory(username='test3', password='12345678')
+        userprofile3 = UserProfileFactory(user=user3, name="test3", country=self.country,
+                                          account_type=UserProfile.SUPER_COUNTRY_ADMIN)
 
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
@@ -207,15 +208,15 @@ class CountryTests(CountryBaseTests):
         user.is_superuser = True
         user.save()
 
-        user1 = User.objects.create(username="test1", password="12345678")
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.GOVERNMENT)
-        user2 = User.objects.create(username="test2", password="12345678")
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
-                                                  account_type=UserProfile.COUNTRY_ADMIN)
-        user3 = User.objects.create(username="test3", password="12345678")
-        userprofile3 = UserProfile.objects.create(user=user3, name="test3", country=self.country,
-                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+        user1 = UserFactory(username='test1', password='12345678')
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.GOVERNMENT)
+        user2 = UserFactory(username='test2', password='12345678')
+        userprofile2 = UserProfileFactory(user=user2, name="test2", country=self.country,
+                                          account_type=UserProfile.COUNTRY_ADMIN)
+        user3 = UserFactory(username='test3', password='12345678')
+        userprofile3 = UserProfileFactory(user=user3, name="test3", country=self.country,
+                                          account_type=UserProfile.SUPER_COUNTRY_ADMIN)
 
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='en')
@@ -229,18 +230,18 @@ class CountryTests(CountryBaseTests):
             account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
         self.country.super_admins.add(self.test_user['user_profile_id'])
 
-        user1 = User.objects.create(username="test1", password="12345678", email="test1@foo.com")
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.GOVERNMENT)
-        user2 = User.objects.create(username="test2", password="12345678", email="test2@foo.com")
-        userprofile2 = UserProfile.objects.create(user=user2, name="test2", country=self.country,
-                                                  account_type=UserProfile.COUNTRY_ADMIN)
-        user3 = User.objects.create(username="test3", password="12345678", email="test3@foo.com")
-        userprofile3 = UserProfile.objects.create(user=user3, name="test3", country=self.country,
-                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN)
-        user4 = User.objects.create(username="test4", password="12345678", email="test4@foo.com")
-        userprofile4 = UserProfile.objects.create(user=user4, name="test4", country=self.country,
-                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN, language='fr')
+        user1 = UserFactory(username='test1', password='12345678', email='test1@foo.com')
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.GOVERNMENT)
+        user2 = UserFactory(username='test2', password='12345678', email='test2@foo.com')
+        userprofile2 = UserProfileFactory(user=user2, name="test2", country=self.country,
+                                          account_type=UserProfile.COUNTRY_ADMIN)
+        user3 = UserFactory(username='test3', password='12345678', email='test3@foo.com')
+        userprofile3 = UserProfileFactory(user=user3, name="test3", country=self.country,
+                                          account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+        user4 = UserFactory(username='test4', password='12345678', email='test4@foo.com')
+        userprofile4 = UserProfileFactory(user=user4, name="test4", country=self.country,
+                                          account_type=UserProfile.SUPER_COUNTRY_ADMIN, language='fr')
 
         url = reverse("country-detail", kwargs={"pk": self.country.id})
         data = {
@@ -289,9 +290,9 @@ class CountryTests(CountryBaseTests):
             account_type=UserProfile.SUPER_COUNTRY_ADMIN, country=self.country)
         self.country.super_admins.add(self.test_user['user_profile_id'])
 
-        user1 = User.objects.create(username="test1", password="12345678")
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.COUNTRY_ADMIN)
+        user1 = UserFactory(username='test1', password='12345678')
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.COUNTRY_ADMIN)
 
         url = reverse("country-detail", kwargs={"pk": self.country.id})
 
@@ -333,9 +334,9 @@ class CountryTests(CountryBaseTests):
 
         url = reverse("country-detail", kwargs={"pk": self.country.id})
 
-        user1 = User.objects.create(username="test1", password="12345678")
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.GOVERNMENT)
+        user1 = UserFactory(username='test1', password='12345678')
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.GOVERNMENT)
         data = {
             "users": [userprofile1.id]
         }
@@ -371,9 +372,9 @@ class CountryTests(CountryBaseTests):
 
         url = reverse("country-detail", kwargs={"pk": self.country.id})
 
-        user1 = User.objects.create(username="test1", password="12345678")
-        userprofile1 = UserProfile.objects.create(user=user1, name="test1", country=self.country,
-                                                  account_type=UserProfile.SUPER_COUNTRY_ADMIN)
+        user1 = UserFactory(username='test1', password='12345678')
+        userprofile1 = UserProfileFactory(user=user1, name="test1", country=self.country,
+                                          account_type=UserProfile.SUPER_COUNTRY_ADMIN)
         data = {
             "super_admins": [userprofile1.id],
         }
@@ -390,15 +391,15 @@ class CountryTests(CountryBaseTests):
         self.assertTrue(isinstance(response.json()['partner_logos'], list))
 
     def test_country_export(self):
-        country = Country.objects.create(name='country111', code='C2')
-        org = Organisation.objects.create(name="org1")
-        d1 = Donor.objects.create(name="Donor1", code="donor1")
-        p1 = TechnologyPlatform.objects.create(name='platform1')
-        p2 = TechnologyPlatform.objects.create(name='platform2')
-        s_parent = DigitalStrategy.objects.create(name="strategy parent", group=DigitalStrategy.GROUP_CHOICES[0])
-        s1 = DigitalStrategy.objects.create(parent=s_parent, name="strategy1", group=DigitalStrategy.GROUP_CHOICES[0])
-        s2 = DigitalStrategy.objects.create(parent=s_parent, name="strategy2", group=DigitalStrategy.GROUP_CHOICES[0])
-        s3 = DigitalStrategy.objects.create(parent=s_parent, name="strategy3", group=DigitalStrategy.GROUP_CHOICES[0])
+        country = CountryFactory(name='country111', code='C2')
+        org = OrganisationFactory(name="org1")
+        d1 = DonorFactory(name="Donor1", code="donor1")
+        p1 = TechnologyPlatformFactory(name='platform1')
+        p2 = TechnologyPlatformFactory(name='platform2')
+        s_parent = DigitalStrategyFactory(name="strategy parent", group=DigitalStrategy.GROUP_CHOICES[0])
+        s1 = DigitalStrategyFactory(parent=s_parent, name="strategy1", group=DigitalStrategy.GROUP_CHOICES[0])
+        s2 = DigitalStrategyFactory(parent=s_parent, name="strategy2", group=DigitalStrategy.GROUP_CHOICES[0])
+        s3 = DigitalStrategyFactory(parent=s_parent, name="strategy3", group=DigitalStrategy.GROUP_CHOICES[0])
 
         project_data1 = {"project": {
             "date": datetime.utcnow(),

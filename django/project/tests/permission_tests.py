@@ -2,11 +2,11 @@ from copy import copy
 
 from django.urls import reverse
 
+from core.factories import UserFactory, UserProfileFactory, OrganisationFactory
 from django.core import mail
-from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 
-from user.models import Organisation, UserProfile
+from user.models import UserProfile
 from project.models import Project
 
 from project.tests.setup import SetupTests
@@ -14,8 +14,8 @@ from project.tests.setup import SetupTests
 
 class PermissionTests(SetupTests):
     def test_team_member_can_update_project_groups(self):
-        user_2 = User.objects.create_superuser(username='test_2', email='test2@test.test', password='a')
-        user_2_profile = UserProfile.objects.create(user=user_2, language='fr')
+        user_2 = UserFactory(username='test_2', email='test2@test.test', password='a', is_staff=True, is_superuser=True)
+        user_2_profile = UserProfileFactory(user=user_2, language='fr')
 
         url = reverse("project-groups", kwargs={"pk": self.project_id})
 
@@ -66,7 +66,7 @@ class PermissionTests(SetupTests):
         user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",
@@ -74,8 +74,9 @@ class PermissionTests(SetupTests):
             "country": "test_country"}
         test_user_client.put(url, data, format="json")
 
-        user_suser = User.objects.create_superuser(username='test_suser', email='test_suser@test.test', password='a')
-        user_suser_profile = UserProfile.objects.create(user=user_suser, language='en')
+        user_super = UserFactory(
+            username='test_suser', email='test_suser@test.test', password='a', is_staff=True, is_superuser=True)
+        user_super_profile = UserProfileFactory(user=user_super, language='en')
 
         url = reverse("api_token_auth")
         data = {
@@ -97,7 +98,7 @@ class PermissionTests(SetupTests):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['team'], [user_profile_id_1, user_profile_id])
-        self.assertTrue(user_suser_profile not in response.json()['team'])
+        self.assertTrue(user_super_profile not in response.json()['team'])
         self.assertEqual(response.json()['viewers'], [user_profile_id])
 
     def test_team_viewer_cannot_update_project_groups(self):
@@ -125,7 +126,7 @@ class PermissionTests(SetupTests):
         user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",
@@ -172,7 +173,7 @@ class PermissionTests(SetupTests):
         user_profile_id = response.json().get('user_profile_id')
 
         # Create profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",
@@ -233,7 +234,7 @@ class PermissionTests(SetupTests):
         user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",
@@ -301,7 +302,7 @@ class PermissionTests(SetupTests):
         user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
-        org = Organisation.objects.create(name="org2")
+        org = OrganisationFactory(name="org2")
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
         data = {
             "name": "Test Name 2",

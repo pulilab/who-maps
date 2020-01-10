@@ -2,6 +2,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 
 from cms.models import Post, Comment
+from core.factories import PostFactory
 from user.models import UserProfile
 
 
@@ -27,9 +28,9 @@ class PermissionTest(APITestCase):
             "author_id": self.user_profile_id
         }
 
-        self.post = Post.objects.create(**self.post_data)
+        self.post = PostFactory(**self.post_data)
         self.post_data.update(author_id=self.user_profile_id_2)
-        self.post2 = Post.objects.create(**self.post_data)
+        self.post2 = PostFactory(**self.post_data)
 
         # Log in user 1.
         url = reverse("api_token_auth")
@@ -134,7 +135,7 @@ class PermissionTest(APITestCase):
             "author_id": self.user_profile_id
         }
 
-        self.post = Post.objects.create(**self.post_data)
+        self.post = PostFactory(**self.post_data)
 
         self.comment_data = {"text": "Comment 1", "user": self.user_profile_id, "post": self.post.id}
 
@@ -154,7 +155,7 @@ class PermissionTest(APITestCase):
             "author_id": self.user_profile_id
         }
 
-        self.post = Post.objects.create(**self.post_data)
+        self.post = PostFactory(**self.post_data)
 
         self.comment_data = {"text": "Comment 1", "user": self.user_profile_id_2, "post": self.post.id}
 
@@ -191,7 +192,7 @@ class PermissionTest(APITestCase):
             "author_id": self.user_profile_id
         }
 
-        self.post = Post.objects.create(**self.post_data)
+        self.post = PostFactory(**self.post_data)
 
         self.comment_data = {"text": "Comment 1", "user": self.user_profile_id, "post": self.post.id}
 
@@ -237,7 +238,7 @@ class PermissionTest(APITestCase):
             "author_id": self.user_profile_id
         }
 
-        self.post = Post.objects.create(**self.post_data)
+        self.post = PostFactory(**self.post_data)
 
         self.comment_data = {"text": "Comment 1", "user": self.user_profile_id, "post": self.post.id}
 
