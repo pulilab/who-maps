@@ -273,7 +273,7 @@ export default {
       return this.data.gdhi_enabled;
     },
     documents() {
-      return this.data.documents.length > 0;
+      return this.data.road_map_enabled && this.data.documents.length > 0;
     },
     simpleStats() {
       const {
@@ -371,7 +371,8 @@ export default {
       };
     }
   },
-  mounted() {}
+  mounted() {
+  }
 };
 </script>
 
