@@ -60,7 +60,7 @@ class SetupTests(APITestCase):
             "name": "Test Name",
             "organisation": self.org.id,
             "country": self.country_id}
-        response = self.test_user_client.put(url, data)
+        response = self.test_user_client.put(url, data, format='json')
         self.assertEqual(response.status_code, 200, response.json())
         self.user_profile_id = response.json().get('id')
 
