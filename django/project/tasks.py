@@ -68,7 +68,9 @@ def send_project_updated_digest():
         if has_passed_creation:
             country = project.search.country
             email_mapping = defaultdict(list)
-            for profile in country.super_admins.all() | country.admins.all():
+            receiver_super_admins = country.super_admins.filter(project_updates_notification=True)
+            receiver_admins = country.admins.filter(project_updates_notification=True)
+            for profile in receiver_super_admins | receiver_admins:
                 email_mapping[profile.language].append(profile.user.email)
 
             for language, email_list in email_mapping.items():
@@ -83,7 +85,9 @@ def send_project_updated_digest():
             donors = project.search.donors
             for donor in Donor.objects.filter(id__in=donors):
                 email_mapping = defaultdict(list)
-                for profile in donor.super_admins.all() | donor.admins.all():
+                receiver_donor_super_admins = donor.super_admins.filter(project_updates_notification=True)
+                receiver_donor_admins = donor.admins.filter(project_updates_notification=True)
+                for profile in receiver_donor_super_admins | receiver_donor_admins:
                     email_mapping[profile.language].append(profile.user.email)
 
                 for language, email_list in email_mapping.items():
