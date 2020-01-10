@@ -1197,3 +1197,36 @@ class ProjectTests(SetupTests):
         self.assertEqual(mail.outbox[3].subject,
                          f'A Digital Health Atlas project that {self.d2.name} invests in has been updated')
         self.assertEqual(mail.outbox[3].to, [user_4.email])
+
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_send_project_updated_digest_without_users_to_notify(self, send_email_wrapper):
+        project = Project.objects.last()
+
+        user_profile = UserProfile.objects.get(id=self.user_profile_id)
+        user_profile.project_updates_notification = False
+        user_profile.save()
+
+        user_2 = UserFactory(username='test_2', email='test2@test.test', password='a', is_staff=True, is_superuser=True)
+        user_2_profile = UserProfileFactory(user=user_2, language='en', project_updates_notification=False)
+
+        user_3 = UserFactory(username='test_3', email='test3@test.test', password='a', is_staff=True, is_superuser=True)
+        user_3_profile = UserProfileFactory(user=user_3, language='en', project_updates_notification=False)
+
+        user_4 = UserFactory(username='test_4', email='test4@test.test', password='a', is_staff=True, is_superuser=True)
+        user_4_profile = UserProfileFactory(user=user_4, language='en', project_updates_notification=False)
+
+        c = project.search.country
+        c.admins.add(self.user_profile_id, user_2_profile)
+        c.save()
+
+        self.assertEqual(project.data['donors'], [self.d1.id, self.d2.id])
+        self.d1.super_admins.add(user_3_profile)
+        self.d2.super_admins.add(user_4_profile)
+        self.d1.save()
+        self.d2.save()
+
+        project.created = project.modified - timezone.timedelta(seconds=20)
+        project.save()
+        send_project_updated_digest()
+
+        send_email_wrapper.assert_not_called()
