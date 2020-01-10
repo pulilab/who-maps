@@ -159,7 +159,7 @@ class ToolkitTests(SetupTests):
         self.assertIn('<meta http-equiv="content-language" content="fr">',
                       str(mail.outbox[-1].message()))
 
-    @mock.patch('core.utils.send_mail_wrapper', return_value=None)
+    @mock.patch('toolkit.tasks.send_mail_wrapper', return_value=None)
     def test_send_daily_toolkit_digest_without_users_to_notify(self, send_email_wrapper):
         # remove notification from all user profiles
         profiles_with_notification = UserProfile.objects.filter(daily_toolkit_digest_notification=True)
