@@ -1,5 +1,3 @@
-from typing import Union
-
 from django.conf import settings
 from django.core import management
 from django.utils.dateformat import format
