@@ -1,3 +1,5 @@
+from unittest import mock
+
 from django.contrib.auth.models import User
 from django.test import override_settings
 from django.urls import reverse
@@ -9,6 +11,7 @@ from rest_framework.test import APITestCase
 from allauth.account.models import EmailConfirmation
 
 from country.models import Country
+from user.tasks import send_user_request_to_admins
 from .models import UserProfile
 
 
@@ -534,3 +537,20 @@ class UserProfileTests(APITestCase):
         recipients = mail.outbox[-2].recipients()[0] + mail.outbox[-1].recipients()[0]
         self.assertTrue(UserProfile.objects.get(id=self.user_profile_id).user.email in recipients)
         self.assertTrue(super_user.email in recipients)
+
+    @mock.patch('user.tasks.send_mail_wrapper', return_value=None)
+    def test_send_user_request_to_admins(self, send_email_wrapper):
+
+        # create 1 country admin who will receive email notification
+        country = Country.objects.last()
+        country_admin_profile = UserProfileFactory(name='country_admin_user')
+        country.admins.add(country_admin_profile)
+
+        new_profile = UserProfileFactory(name='new_user', account_type='CA', country=country)
+        send_user_request_to_admins(new_profile.id)
+
+        call_args_list = send_email_wrapper.call_args_list[0][1]
+        self.assertIn(new_profile.name, call_args_list['subject'])
+        self.assertIn(f'has requested to be a Government Admin for {country.name}', call_args_list['subject'])
+        self.assertEqual(call_args_list['email_type'], 'admin_request')
+        self.assertEqual(call_args_list['to'], country_admin_profile.user.email)
