@@ -1,5 +1,3 @@
-from typing import Union
-
 from django.conf import settings
 from django.core import management
 from django.utils.dateformat import format
@@ -143,10 +141,6 @@ class UpdateAdminMixin:
                               context=context)
 
 
-def can_read_private_questions(obj: Union[Country, Donor], request) -> bool:
-    return request.user.is_superuser or obj.user_in_groups(request.user.userprofile)
-
-
 GDHI_FIELDS = ("total_population", "gni_per_capita", "life_expectancy", "health_expenditure",
                "leadership_and_governance", "strategy_and_investment", "legislation_policy_compliance", "workforce",
                "standards_and_interoperability", "infrastructure", "services_and_applications")
@@ -240,13 +234,7 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
         return UserProfileSerializer(data, many=True).data
 
     def get_country_questions(self, obj):
-        request = self.context['request']
-
-        if request.user and hasattr(request.user, 'userprofile') and can_read_private_questions(obj, request):
-            queryset = CountryCustomQuestion.objects.filter(country_id=obj.id)
-        else:
-            queryset = CountryCustomQuestion.objects.filter(country_id=obj.id).exclude(private=True)
-
+        queryset = CountryCustomQuestion.objects.filter(country_id=obj.id).exclude(private=True)
         return CountryCustomQuestionSerializer(queryset, many=True, read_only=True).data
 
 
@@ -313,13 +301,7 @@ class SuperAdminDonorSerializer(UpdateAdminMixin, serializers.ModelSerializer):
         return UserProfileSerializer(data, many=True).data
 
     def get_donor_questions(self, obj):
-        request = self.context['request']
-
-        if request.user and hasattr(request.user, 'userprofile') and can_read_private_questions(obj, request):
-            queryset = DonorCustomQuestion.objects.filter(donor_id=obj.id)
-        else:
-            queryset = DonorCustomQuestion.objects.filter(donor_id=obj.id).exclude(private=True)
-
+        queryset = DonorCustomQuestion.objects.filter(donor_id=obj.id).exclude(private=True)
         return DonorCustomQuestionSerializer(queryset, many=True, read_only=True).data
 
 
