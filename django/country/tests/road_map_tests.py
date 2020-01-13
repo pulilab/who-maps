@@ -33,7 +33,9 @@ class CountryRoadMapTests(CountryBaseTests):
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(len(response.json()['documents']), 2)
         self.assertEqual(response.json()['documents'][0]['title'], '0 test')
+        self.assertEqual(response.json()['documents'][0]['document'], 'documents/test_file_0.xls')
         self.assertEqual(response.json()['documents'][1]['title'], '1 test')
+        self.assertEqual(response.json()['documents'][1]['document'], 'documents/test_file_1.xls')
         self.assertTrue(response.json()['documents'][0]['title'] < response.json()['documents'][1]['title'])
         for document in response.json()['documents']:
             self.assertEqual(document['size'], 12)
