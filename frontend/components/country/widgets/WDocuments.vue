@@ -7,7 +7,7 @@
 
     <div v-for="(doc, i) in documents" :key="i" class="doc">
       <p class="title">
-        <a :href="doc.document" download target="_blank">
+        <a :href="'media/' + doc.document" download target="_blank">
           {{doc.title}} <fa icon="download" />
         </a>
       </p>
