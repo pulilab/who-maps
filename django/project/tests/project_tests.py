@@ -1188,12 +1188,12 @@ class ProjectTests(SetupTests):
         project.save()
         send_project_updated_digest()
         profile = UserProfile.objects.get(id=self.user_profile_id)
-        self.assertEqual(mail.outbox[1].subject, f'A Digital Health Atlas project in {c.name} has been updated')
+        self.assertEqual(mail.outbox[1].subject, f'Digital Health Atlas project(s) in {c.name} have been updated')
         self.assertTrue(profile.user.email in mail.outbox[1].to)
         self.assertTrue(user_2.email in mail.outbox[1].to)
         self.assertEqual(mail.outbox[2].subject,
-                         f'A Digital Health Atlas project that {self.d1.name} invests in has been updated')
+                         f'Digital Health Atlas project(s) that {self.d1.name} invests in have been updated')
         self.assertEqual(mail.outbox[2].to, [user_3.email])
         self.assertEqual(mail.outbox[3].subject,
-                         f'A Digital Health Atlas project that {self.d2.name} invests in has been updated')
+                         f'Digital Health Atlas project(s) that {self.d2.name} invests in have been updated')
         self.assertEqual(mail.outbox[3].to, [user_4.email])
