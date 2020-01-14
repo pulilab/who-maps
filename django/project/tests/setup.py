@@ -127,3 +127,15 @@ class SetupTests(APITestCase):
         url = reverse("project-publish", kwargs={"project_id": self.project_id, "country_id": self.country_id})
         response = self.test_user_client.put(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 200)
+
+    def check_project_search_init_state(self, project):
+        self.assertEqual(project.search.project_id, project.id)
+        self.assertEqual(project.search.country_id, None)
+        self.assertEqual(project.search.organisation_id, None)
+        self.assertEqual(project.search.donors, [])
+        self.assertEqual(project.search.donor_names, [])
+        self.assertEqual(project.search.software, [])
+        self.assertEqual(project.search.coverage, [])
+        self.assertEqual(project.search.dhi_categories, [])
+        self.assertEqual(project.search.hsc, [])
+        self.assertEqual(project.search.hfa_categories, [])
