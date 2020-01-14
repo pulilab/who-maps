@@ -241,8 +241,21 @@ class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
 
         project.public_id = ''
         project.data = {}
-        # TODO delete project search ?
         project.save()
+
+        # init project search
+        obj = project.search
+        obj.country = None
+        obj.organisation = None
+        obj.donors = []
+        obj.donor_names = []
+        obj.software = []
+        obj.coverage = []
+        obj.dhi_categories = []
+        obj.hsc = []
+        obj.hfa_categories = []
+        obj.his = []
+        obj.save()
 
         data = project.to_representation(draft_mode=True)
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
