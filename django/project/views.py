@@ -243,12 +243,7 @@ class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         project.data = {}
         project.save()
 
-        # init project search
-        obj = project.search
-        for field in obj._meta.fields:
-            if field.name not in ('created', 'modified', 'project'):
-                setattr(obj, field.name, field.get_default())
-        obj.save()
+        project.search.reset()
 
         data = project.to_representation(draft_mode=True)
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
