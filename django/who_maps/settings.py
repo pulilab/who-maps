@@ -376,6 +376,9 @@ elif SITE_ID == 4:
     # redirect all emails to the forced addresses
     EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
     TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "nico@pulilab.com", "f@pulilab.com"]
+    TOOLKIT_DIGEST_PERIOD = 1  # hours
+    PROJECT_UPDATE_DIGEST_PERIOD = 1  # hours
+    APPROVAL_DIGEST_PERIOD = 1  # hours
 else:
     ENVIRONMENT_NAME = "DEVELOPMENT"
     ENVIRONMENT_COLOR = "blue"
