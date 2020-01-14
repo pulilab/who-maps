@@ -1,6 +1,9 @@
 import json
+import operator
 import traceback
 import logging
+from functools import reduce
+
 import requests
 
 from datetime import datetime
@@ -61,39 +64,44 @@ def send_project_updated_digest():
     Sends daily digest on published project changes to country and donor admins.
     """
     projects = Project.objects.published_only().filter(
-        modified__gt=timezone.now() - timezone.timedelta(hours=settings.PROJECT_UPDATE_DIGEST_PERIOD))
+        modified__gt=timezone.now() - timezone.timedelta(hours=settings.PROJECT_UPDATE_DIGEST_PERIOD))\
+        .select_related('search', 'search__country')
 
-    for project in projects:
-        has_passed_creation = project.modified - project.created > timezone.timedelta(seconds=10)
-        if has_passed_creation:
-            country = project.search.country
-            email_mapping = defaultdict(list)
-            for profile in country.super_admins.all() | country.admins.all():
-                email_mapping[profile.language].append(profile.user.email)
+    countries_qs = projects.values_list('search__country', flat=True)
+    for country_id in countries_qs:
+        country_projects = projects.filter(search__country_id=country_id)
+        country = country_projects.first().search.country
 
-            for language, email_list in email_mapping.items():
-                context = {'country_name': country.name, 'project_id': project.id}
-                subject = _(f"A Digital Health Atlas project in {country.name} has been updated")
-                send_mail_wrapper(subject=subject,
-                                  email_type='project_updated_admin_digest',
-                                  to=email_list,
-                                  language=language,
-                                  context=context)
+        email_mapping = defaultdict(list)
+        for profile in country.super_admins.all() | country.admins.all():
+            email_mapping[profile.language].append(profile.user.email)
 
-            donors = project.search.donors
-            for donor in Donor.objects.filter(id__in=donors):
-                email_mapping = defaultdict(list)
-                for profile in donor.super_admins.all() | donor.admins.all():
-                    email_mapping[profile.language].append(profile.user.email)
+        for language, email_list in email_mapping.items():
+            context = {'name': country.name, 'projects': country_projects}
+            subject = _(f"Digital Health Atlas project(s) in {country.name} have been updated")
+            send_mail_wrapper(subject=subject,
+                              email_type='project_updated_admin_digest',
+                              to=email_list,
+                              language=language,
+                              context=context)
 
-                for language, email_list in email_mapping.items():
-                    context = {'donor_name': country.name, 'project_id': project.id}
-                    subject = _(f"A Digital Health Atlas project that {donor.name} invests in has been updated")
-                    send_mail_wrapper(subject=subject,
-                                      email_type='project_updated_admin_digest',
-                                      to=email_list,
-                                      language=language,
-                                      context=context)
+    donors_qs = projects.values_list('search__donors', flat=True)
+    donors = list(set(reduce(operator.add, list(donors_qs))))
+    for donor in Donor.objects.filter(id__in=donors):
+        donor_projects = projects.filter(search__donors__overlap=[donor.id])
+
+        email_mapping = defaultdict(list)
+        for profile in donor.super_admins.all() | donor.admins.all():
+            email_mapping[profile.language].append(profile.user.email)
+
+        for language, email_list in email_mapping.items():
+            context = {'name': donor.name, 'projects': donor_projects}
+            subject = _(f"Digital Health Atlas project(s) that {donor.name} invests in have been updated")
+            send_mail_wrapper(subject=subject,
+                              email_type='project_updated_admin_digest',
+                              to=email_list,
+                              language=language,
+                              context=context)
 
 
 @app.task(name="sync_project_from_odk")
