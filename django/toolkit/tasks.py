@@ -23,7 +23,7 @@ def send_daily_toolkit_digest():
         if toolkit and toolkit.modified - toolkit.created > timezone.timedelta(seconds=10):
             for profile in project.team.all():
                 context = {"project_id": project.id}
-                subject = _("Your Digital Health Atlas project assessment has been updated")
+                subject = _(f"{project.name}'s assessment has been updated")
                 send_mail_wrapper(subject=subject,
                                   email_type="toolkit_digest",
                                   to=profile.user.email,
