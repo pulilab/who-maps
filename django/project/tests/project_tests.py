@@ -1212,7 +1212,7 @@ class ProjectTests(SetupTests):
         project = Project.objects.get(id=resp_data['id'])
         self.assertEqual(project.data, {})
 
-        # TODO check search? after create
+        self.check_project_search_init_state(project)
 
         # publish project
         url = reverse('project-publish', kwargs={'project_id': resp_data['id'], 'country_id': self.country_id})
@@ -1224,7 +1224,16 @@ class ProjectTests(SetupTests):
         project.refresh_from_db()
         self.assertNotEqual(project.data, {})
 
-        # TODO check search? after publish
+        # check project search
+        self.assertEqual(project.search.project_id, project.id)
+        self.assertNotEqual(project.search.country_id, None)
+        self.assertNotEqual(project.search.organisation_id, None)
+        self.assertNotEqual(project.search.donors, [])
+        self.assertNotEqual(project.search.donor_names, [])
+        self.assertNotEqual(project.search.software, [])
+        self.assertNotEqual(project.search.coverage, [])
+        self.assertNotEqual(project.search.hsc, [])
+        self.assertNotEqual(project.search.hfa_categories, [])
 
         # unpublish project
         url = reverse('project-unpublish', kwargs={'project_id': resp_data['id']})
@@ -1236,4 +1245,4 @@ class ProjectTests(SetupTests):
         project.refresh_from_db()
         self.assertEqual(project.data, {})
 
-        # TODO check search after unpublish
+        self.check_project_search_init_state(project)
