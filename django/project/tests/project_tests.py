@@ -1197,3 +1197,43 @@ class ProjectTests(SetupTests):
         self.assertEqual(mail.outbox[3].subject,
                          f'A Digital Health Atlas project that {self.d2.name} invests in has been updated')
         self.assertEqual(mail.outbox[3].to, [user_4.email])
+
+    def test_unpublish_project(self):
+        data = copy.deepcopy(self.project_data)
+        data['project']['name'] = 'test unpublish'
+
+        # create project draft
+        url = reverse('project-create', kwargs={'country_id': self.country_id})
+        response = self.test_user_client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        resp_data = response.json()
+        self.assertEqual(resp_data['public_id'], '')
+
+        project = Project.objects.get(id=resp_data['id'])
+        self.assertEqual(project.data, {})
+
+        # TODO check search? after create
+
+        # publish project
+        url = reverse('project-publish', kwargs={'project_id': resp_data['id'], 'country_id': self.country_id})
+        response = self.test_user_client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        resp_data = response.json()
+        self.assertNotEqual(resp_data['public_id'], '')
+
+        project.refresh_from_db()
+        self.assertNotEqual(project.data, {})
+
+        # TODO check search? after publish
+
+        # unpublish project
+        url = reverse('project-unpublish', kwargs={'project_id': resp_data['id']})
+        response = self.test_user_client.put(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        resp_data = response.json()
+        self.assertEqual(resp_data['public_id'], '')
+
+        project.refresh_from_db()
+        self.assertEqual(project.data, {})
+
+        # TODO check search after unpublish
