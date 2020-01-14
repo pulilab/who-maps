@@ -238,13 +238,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
 class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
     def update(self, request, project_id):
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
-
-        project.public_id = ''
-        project.data = {}
-        project.save()
-
-        project.search.reset()
-
+        project.unpublish()
         data = project.to_representation(draft_mode=True)
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
 
