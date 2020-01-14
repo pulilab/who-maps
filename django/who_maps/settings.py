@@ -106,12 +106,6 @@ DATABASES = {
     }
 }
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -246,52 +240,6 @@ TOOLKIT_DIGEST_PERIOD = 24  # hours
 PROJECT_UPDATE_DIGEST_PERIOD = 24  # hours
 APPROVAL_DIGEST_PERIOD = 24  # hours
 
-# PRODUCTION SETTINGS
-if SITE_ID in [3, 4]:
-    CELERYBEAT_SCHEDULE = {
-        "send_daily_toolkit_digest": {
-            "task": 'send_daily_toolkit_digest',
-            "schedule": datetime.timedelta(hours=TOOLKIT_DIGEST_PERIOD),
-        },
-        "send_project_updated_digest": {
-            "task": 'send_project_updated_digest',
-            "schedule": datetime.timedelta(hours=PROJECT_UPDATE_DIGEST_PERIOD),
-        },
-        "send_project_approval_digest": {
-            "task": 'send_project_approval_digest',
-            "schedule": datetime.timedelta(hours=APPROVAL_DIGEST_PERIOD),
-        }
-    }
-    if ODK_SYNC_ENABLED:
-        CELERYBEAT_SCHEDULE.update(
-            {
-                "sync_project_from_odk": {
-                    "task": 'sync_project_from_odk',
-                    "schedule": datetime.timedelta(hours=ODK_SYNC_PERIOD)
-                }
-            })
-
-    RAVEN_CONFIG = {
-        'dsn': 'http://cea32567f8aa4eefa4d2051848d37dea:a884ff71e8ae444c8a40af705699a19c@sentry.vidzor.com/12',
-    }
-
-    DEBUG = False
-
-    ALLOWED_HOSTS = ['.digitalhealthatlas.org', '.prod.whomaps.pulilab.com',
-                     '.qa.whomaps.pulilab.com', '.dhatlas.org',
-                     '.digitalhealthatlas.com', 'nginx:9010', 'nginx']
-
-    EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
-
-    REST_FRAMEWORK = {
-        'DEFAULT_AUTHENTICATION_CLASSES': (
-            'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        ),
-        'DEFAULT_RENDERER_CLASSES': (
-            'rest_framework.renderers.JSONRenderer',
-        )
-    }
-
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -300,6 +248,9 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
+    #     'default': {
+    #         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    #     }
 }
 
 if SITE_ID in [3]:
@@ -374,12 +325,8 @@ if SITE_ID == 3:
 elif SITE_ID == 4:
     ENVIRONMENT_NAME = "QA / STAGING"
     ENVIRONMENT_COLOR = "orange"
-    # redirect all emails to the forced addresses
-    EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
-    TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "f@pulilab.com"]
     TOOLKIT_DIGEST_PERIOD = 1  # hours
     PROJECT_UPDATE_DIGEST_PERIOD = 1  # hours
-    APPROVAL_DIGEST_PERIOD = 1  # hours
 else:
     ENVIRONMENT_NAME = "DEVELOPMENT"
     ENVIRONMENT_COLOR = "blue"
@@ -396,3 +343,54 @@ MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE = 15728640  # 15 MB, 1024 * 1024 * 15
 MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY = 5
 VALID_ROAD_MAP_DOCUMENT_FILE_TYPES = ('.pdf', '.xls', '.xlsx')
 ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE = os.environ.get('ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE', False)
+
+# PRODUCTION SETTINGS
+if SITE_ID in [3, 4]:
+    CELERYBEAT_SCHEDULE = {
+        "send_daily_toolkit_digest": {
+            "task": 'send_daily_toolkit_digest',
+            "schedule": datetime.timedelta(hours=TOOLKIT_DIGEST_PERIOD),
+        },
+        "send_project_updated_digest": {
+            "task": 'send_project_updated_digest',
+            "schedule": datetime.timedelta(hours=PROJECT_UPDATE_DIGEST_PERIOD),
+        },
+        "send_project_approval_digest": {
+            "task": 'send_project_approval_digest',
+            "schedule": datetime.timedelta(hours=APPROVAL_DIGEST_PERIOD),
+        }
+    }
+    if ODK_SYNC_ENABLED:
+        CELERYBEAT_SCHEDULE.update(
+            {
+                "sync_project_from_odk": {
+                    "task": 'sync_project_from_odk',
+                    "schedule": datetime.timedelta(hours=ODK_SYNC_PERIOD)
+                }
+            })
+
+    RAVEN_CONFIG = {
+        'dsn': 'http://cea32567f8aa4eefa4d2051848d37dea:a884ff71e8ae444c8a40af705699a19c@sentry.vidzor.com/12',
+    }
+
+    DEBUG = False
+
+    ALLOWED_HOSTS = ['.digitalhealthatlas.org', '.prod.whomaps.pulilab.com',
+                     '.qa.whomaps.pulilab.com', '.dhatlas.org',
+                     '.digitalhealthatlas.com', 'nginx:9010', 'nginx']
+
+    EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        ),
+        'DEFAULT_RENDERER_CLASSES': (
+            'rest_framework.renderers.JSONRenderer',
+        )
+    }
+
+    if SITE_ID == 4:
+        # redirect all emails to the forced addresses
+        EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
+        TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "f@pulilab.com"]
