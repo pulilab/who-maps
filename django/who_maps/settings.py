@@ -258,7 +258,7 @@ if SITE_ID in [3, 4]:
         },
         "send_project_approval_digest": {
             "task": 'send_project_approval_digest',
-            "schedule": datetime.timedelta(days=1),
+            "schedule": datetime.timedelta(hours=APPROVAL_DIGEST_PERIOD),
         }
     }
     if ODK_SYNC_ENABLED:
