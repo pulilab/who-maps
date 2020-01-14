@@ -245,16 +245,9 @@ class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
 
         # init project search
         obj = project.search
-        obj.country = None
-        obj.organisation = None
-        obj.donors = []
-        obj.donor_names = []
-        obj.software = []
-        obj.coverage = []
-        obj.dhi_categories = []
-        obj.hsc = []
-        obj.hfa_categories = []
-        obj.his = []
+        for field in obj._meta.fields:
+            if field.name not in ('created', 'modified', 'project'):
+                setattr(obj, field.name, field.get_default())
         obj.save()
 
         data = project.to_representation(draft_mode=True)
