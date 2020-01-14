@@ -172,5 +172,4 @@ def remove_search_objects(sender, instance, created, **kwargs):  # pragma: no co
 
 @receiver(post_save, sender=Project)
 def update_with_project_data(sender, instance, **kwargs):
-    if getattr(instance, 'search', None):
-        instance.search.update(instance)
+    instance.search.update(instance)
