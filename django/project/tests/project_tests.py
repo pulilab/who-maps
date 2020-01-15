@@ -1205,15 +1205,64 @@ class ProjectTests(SetupTests):
         project.save()
         send_project_updated_digest()
         profile = UserProfile.objects.get(id=self.user_profile_id)
-        self.assertEqual(mail.outbox[1].subject, f'A Digital Health Atlas project in {c.name} has been updated')
+        self.assertEqual(mail.outbox[1].subject, f'Digital Health Atlas project(s) in {c.name} have been updated')
         self.assertTrue(profile.user.email in mail.outbox[1].to)
         self.assertTrue(user_2.email in mail.outbox[1].to)
         self.assertEqual(mail.outbox[2].subject,
-                         f'A Digital Health Atlas project that {self.d1.name} invests in has been updated')
+                         f'Digital Health Atlas project(s) that {self.d1.name} invests in have been updated')
         self.assertEqual(mail.outbox[2].to, [user_3.email])
         self.assertEqual(mail.outbox[3].subject,
-                         f'A Digital Health Atlas project that {self.d2.name} invests in has been updated')
+                         f'Digital Health Atlas project(s) that {self.d2.name} invests in have been updated')
         self.assertEqual(mail.outbox[3].to, [user_4.email])
+
+    def test_unpublish_project(self):
+        data = copy.deepcopy(self.project_data)
+        data['project']['name'] = 'test unpublish'
+
+        # create project draft
+        url = reverse('project-create', kwargs={'country_id': self.country_id})
+        response = self.test_user_client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+        resp_data = response.json()
+        self.assertEqual(resp_data['public_id'], '')
+
+        project = Project.objects.get(id=resp_data['id'])
+        self.assertEqual(project.data, {})
+
+        self.check_project_search_init_state(project)
+
+        # publish project
+        url = reverse('project-publish', kwargs={'project_id': resp_data['id'], 'country_id': self.country_id})
+        response = self.test_user_client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        resp_data = response.json()
+        self.assertNotEqual(resp_data['public_id'], '')
+
+        project.refresh_from_db()
+        self.assertNotEqual(project.data, {})
+
+        # check project search
+        self.assertEqual(project.search.project_id, project.id)
+        self.assertNotEqual(project.search.country_id, None)
+        self.assertNotEqual(project.search.organisation_id, None)
+        self.assertNotEqual(project.search.donors, [])
+        self.assertNotEqual(project.search.donor_names, [])
+        self.assertNotEqual(project.search.software, [])
+        self.assertNotEqual(project.search.coverage, [])
+        self.assertNotEqual(project.search.hsc, [])
+        self.assertNotEqual(project.search.hfa_categories, [])
+
+        # unpublish project
+        url = reverse('project-unpublish', kwargs={'project_id': resp_data['id']})
+        response = self.test_user_client.put(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        resp_data = response.json()
+        self.assertEqual(resp_data['public_id'], '')
+
+        project.refresh_from_db()
+        self.assertEqual(project.data, {})
+
+        self.check_project_search_init_state(project)
 
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_send_project_updated_digest_without_users_to_notify(self, send_email_wrapper):

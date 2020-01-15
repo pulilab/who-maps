@@ -234,7 +234,7 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
         return UserProfileSerializer(data, many=True).data
 
     def get_country_questions(self, obj):
-        queryset = CountryCustomQuestion.objects.filter(country_id=obj.id).exclude(private=True)
+        queryset = CountryCustomQuestion.objects.filter(country_id=obj.id)
         return CountryCustomQuestionSerializer(queryset, many=True, read_only=True).data
 
 

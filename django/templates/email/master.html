@@ -529,7 +529,7 @@
                         {% elif type == "toolkit_digest" %}
                         <h1>{% trans "Notification" %}</h1>
                         <p>{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
-                        <p><b>{% trans "Check the MAPS Toolkit on the link below:" %}</b></p>
+                        <p><b>{% trans "Check the DHA Assessment module on the link below:" %}</b></p>
                         <p>
                           <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment" target="_blank">{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment</a>
                         </p>
@@ -539,11 +539,30 @@
                         <!-- TEMPLATE: PROJECT UPDATED ADMIN DIGEST -->
                         {% elif type == "project_updated_admin_digest" %}
                         <h1>{% trans "Notification" %}</h1>
-                        <p>{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
-                        <p><b>{% trans "View the updated project details on the link below:" %}</b></p>
-                        <p>
-                          <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/published" target="_blank">{% site_url %}/{{ language }}/-/projects/{{ project_id }}/published</a>
-                        </p>
+                        <h2>{% trans "Dear" %} {{ name }} {% trans "Admin," %}</h2>
+                        <p>{% trans "The project(s) listed below have been updated by their teams." %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left">
+                                <b>{% trans "Project Name" %}</b>
+                              </td>
+                              <td align="right">
+                                {% trans "Date of Submission" %}
+                              </td>
+                            </tr>
+                            {% for project in projects %}
+                            <tr class="list-content">
+                              <td align="left">
+                                <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/published" target="_blank"><b>{{ project.name }}</b></a>
+                              </td>
+                              <td align="right">
+                                <b>{{ project.modified }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
                         <!-- /TEMPLATE: PROJECT UPDATED ADMIN DIGEST -->
 
 
@@ -551,7 +570,7 @@
                         {% elif type == "status_report" %}
                         <h1>{% trans "Status report" %}</h1>
                         <h2>{% trans "Dear" %} {{ country_name }} {% trans "Admin," %}</h2>
-                        <p>{% trans "The projects listed below re complete and waiting for your approval" %}</p>
+                        <p>{% trans "The projects listed below are complete and waiting for your approval" %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="project-list">
                           <tbody>
                             <tr class="list-header">

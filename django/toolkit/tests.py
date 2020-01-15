@@ -144,7 +144,7 @@ class ToolkitTests(SetupTests):
         toolkit.created = toolkit.modified - timezone.timedelta(seconds=20)
         toolkit.save()
         tasks.send_daily_toolkit_digest()
-        self.assertEqual(mail.outbox[-1].subject, "Your Digital Health Atlas project assessment has been updated")
+        self.assertEqual(mail.outbox[-1].subject, f"{toolkit.project.name}'s assessment has been updated")
 
         profile = UserProfile.objects.get(id=self.user_profile_id)
         self.assertEqual(profile.language, 'en')
