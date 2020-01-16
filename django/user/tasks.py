@@ -25,15 +25,19 @@ def send_user_request_to_admins(profile_id):
     if not any([profile.donor, profile.country]):
         return
 
-    superusers = UserProfile.objects.filter(user__is_superuser=True)
+    superusers = UserProfile.objects.filter(user__is_superuser=True).filter(role_request_notification=True)
     if profile.is_government_type():
         country = Country.objects.get(id=profile.country.id)
-        admins = country.admins.all() | country.super_admins.all() | superusers
+        receiver_country_admins = country.admins.filter(role_request_notification=True)
+        receiver_country_super_admins = country.super_admins.filter(role_request_notification=True)
+        admins = receiver_country_admins | receiver_country_super_admins | superusers
         admin_type = 'country'
         for_what = country.name
     elif profile.is_investor_type():
         donor = Donor.objects.get(id=profile.donor.id)
-        admins = donor.admins.all() | donor.super_admins.all() | superusers
+        receiver_donor_admins = donor.admins.filter(role_request_notification=True)
+        receiver_donor_super_admins = donor.super_admins.filter(role_request_notification=True)
+        admins = receiver_donor_admins | receiver_donor_super_admins | superusers
         admin_type = 'donor'
         for_what = donor.name
 

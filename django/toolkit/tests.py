@@ -1,4 +1,5 @@
 from math import ceil
+from unittest import mock
 
 from django.core import mail
 from django.urls import reverse
@@ -157,3 +158,27 @@ class ToolkitTests(SetupTests):
 
         self.assertIn('<meta http-equiv="content-language" content="fr">',
                       str(mail.outbox[-1].message()))
+
+    @mock.patch('toolkit.tasks.send_mail_wrapper', return_value=None)
+    def test_send_daily_toolkit_digest_without_users_to_notify(self, send_email_wrapper):
+        # remove notification from all user profiles
+        profiles_with_notification = UserProfile.objects.filter(daily_toolkit_digest_notification=True)
+        for profile in profiles_with_notification.all():
+            profile.daily_toolkit_digest_notification = False
+            profile.save()
+
+        url = reverse("toolkit-scores", kwargs={"project_id": self.project_id})
+        data = {
+            "axis": 0,
+            "domain": 0,
+            "question": 0,
+            "answer": 0,
+            "value": 2
+        }
+        self.test_user_client.post(url, data, format="json")
+        toolkit = Toolkit.objects.get_object_or_none(project_id=self.project_id)
+        toolkit.created = toolkit.modified - timezone.timedelta(seconds=20)
+        toolkit.save()
+        tasks.send_daily_toolkit_digest()
+
+        send_email_wrapper.assert_not_called()
