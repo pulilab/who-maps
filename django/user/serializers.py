@@ -69,7 +69,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
 
         account_type = user.userprofile.account_type
-        ac_enabled = user.userprofile.account_type_enabled
+        ac_enabled = user.userprofile.account_type_approved
         ca = UserProfile.COUNTRY_ADMIN
         sca = UserProfile.SUPER_COUNTRY_ADMIN
         da = UserProfile.DONOR_ADMIN

@@ -82,7 +82,7 @@ class UserProfile(ExtendedModel):
         return self.account_type in [self.DONOR, self.DONOR_ADMIN, self.SUPER_DONOR_ADMIN]
 
     @property
-    def account_type_enabled(self):
+    def account_type_approved(self):
         from country.models import Country
         from country.models import Donor
 
