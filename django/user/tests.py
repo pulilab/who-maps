@@ -572,6 +572,8 @@ class UserProfileTests(APITestCase):
         user_profile.account_type = UserProfile.COUNTRY_ADMIN
         user_profile.save()
         self.country.admins.add(user_profile)
+        self.country.project_approval = True
+        self.country.save()
 
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         response = self.client.get(url, format='json')
@@ -587,6 +589,8 @@ class UserProfileTests(APITestCase):
         user_profile.account_type = UserProfile.SUPER_COUNTRY_ADMIN
         user_profile.save()
         self.country.super_admins.add(user_profile)
+        self.country.project_approval = True
+        self.country.save()
 
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         response = self.client.get(url, format='json')
