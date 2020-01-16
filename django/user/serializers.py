@@ -1,7 +1,10 @@
+from typing import Dict
+
 from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import PasswordResetSerializer, JWTSerializer
 from rest_framework.exceptions import ValidationError
+from rest_framework.fields import Field as Field
 
 from country.models import Country
 from project.models import Project
@@ -59,6 +62,29 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = '__all__'
+
+    def get_fields(self) -> Dict[str, Field]:
+        fields = super().get_fields()
+
+        user = self.context['request'].user
+
+        account_type = user.userprofile.account_type
+        ac_enabled = user.userprofile.account_type_enabled
+        ca = UserProfile.COUNTRY_ADMIN
+        sca = UserProfile.SUPER_COUNTRY_ADMIN
+        da = UserProfile.DONOR_ADMIN
+        sda = UserProfile.SUPER_DONOR_ADMIN
+
+        if account_type not in (ca, sca, da, sda) or not ac_enabled:
+            fields.pop('project_updates_notification')
+
+        if account_type not in (ca, sca) or not ac_enabled:
+            fields.pop('project_approval_request_notification')
+
+        if not user.is_superuser and (account_type not in (ca, sca, da, sda) or not ac_enabled):
+            fields.pop('role_request_notification')
+
+        return fields
 
     @staticmethod
     def get_member(obj):
