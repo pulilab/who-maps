@@ -87,12 +87,12 @@ class UserProfile(ExtendedModel):
         from country.models import Donor
 
         approved_ca = self.account_type == self.COUNTRY_ADMIN and Country.objects.filter(project_approval=True).\
-            filter(admins__in=[self]).exists()
+            filter(admins=self).exists()
         approved_sca = self.account_type == self.SUPER_COUNTRY_ADMIN and Country.objects.filter(project_approval=True).\
-            filter(super_admins__in=[self]).exists()
-        approved_da = self.account_type == self.DONOR_ADMIN and Donor.objects.filter(admins__in=[self]).exists()
+            filter(super_admins=self).exists()
+        approved_da = self.account_type == self.DONOR_ADMIN and Donor.objects.filter(admins=self).exists()
         approved_sda = self.account_type == self.SUPER_DONOR_ADMIN and Donor.objects.filter(
-            super_admins__in=[self]).exists()
+            super_admins=self).exists()
         return self.user.is_superuser or approved_ca or approved_sca or approved_da or approved_sda
 
 
