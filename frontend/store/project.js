@@ -52,7 +52,7 @@ export const getters = {
   getImplementingTeam: state => state.implementing_team.length === 0 ? [null] : state.implementing_team,
   getImplementingViewers: state => state.implementing_viewers.length === 0 ? [null] : state.implementing_viewers,
   getDonors: state => state.donors,
-  getImplementationDates: state => state.implementation_dates,
+  getImplementationDates: state => state.implementation_dates && new Date(state.implementation_dates),
   getLicenses: state => state.licenses,
   getRepository: state => state.repository,
   getMobileApplication: state => state.mobile_application,
