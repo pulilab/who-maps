@@ -3,6 +3,7 @@ from unittest import mock
 from django.contrib.auth.models import User
 from django.test import override_settings
 from django.urls import reverse
+from rest_framework import status
 
 from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, DonorFactory, CountryFactory
 from django.core import mail
@@ -555,3 +556,88 @@ class UserProfileTests(APITestCase):
         self.assertIn(f'has requested to be a Government Admin for {country.name}', call_args_list['subject'])
         self.assertEqual(call_args_list['email_type'], 'admin_request')
         self.assertEqual(call_args_list['to'], country_admin_profile.user.email)
+
+    def test_user_profile_notification_fields_with_normal_user(self):
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        data = response.json()
+        self.assertNotIn('project_updates_notification', data)
+        self.assertIn('daily_toolkit_digest_notification', data)
+        self.assertNotIn('project_approval_request_notification', data)
+        self.assertNotIn('role_request_notification', data)
+
+    def test_user_profile_notification_fields_with_country_admin(self):
+        user_profile = UserProfile.objects.get(id=self.user_profile_id)
+        user_profile.account_type = UserProfile.COUNTRY_ADMIN
+        user_profile.save()
+        self.country.admins.add(user_profile)
+
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        data = response.json()
+        self.assertIn('project_updates_notification', data)
+        self.assertIn('daily_toolkit_digest_notification', data)
+        self.assertIn('project_approval_request_notification', data)
+        self.assertIn('role_request_notification', data)
+
+    def test_user_profile_notification_fields_with_super_country_admin(self):
+        user_profile = UserProfile.objects.get(id=self.user_profile_id)
+        user_profile.account_type = UserProfile.SUPER_COUNTRY_ADMIN
+        user_profile.save()
+        self.country.super_admins.add(user_profile)
+
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        data = response.json()
+        self.assertIn('project_updates_notification', data)
+        self.assertIn('daily_toolkit_digest_notification', data)
+        self.assertIn('project_approval_request_notification', data)
+        self.assertIn('role_request_notification', data)
+
+    def test_user_profile_notification_fields_with_donor_admin(self):
+        user_profile = UserProfile.objects.get(id=self.user_profile_id)
+        user_profile.account_type = UserProfile.DONOR_ADMIN
+        user_profile.save()
+        self.donor.admins.add(user_profile)
+
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        data = response.json()
+        self.assertIn('project_updates_notification', data)
+        self.assertIn('daily_toolkit_digest_notification', data)
+        self.assertNotIn('project_approval_request_notification', data)
+        self.assertIn('role_request_notification', data)
+
+    def test_user_profile_notification_fields_with_super_donor_admin(self):
+        user_profile = UserProfile.objects.get(id=self.user_profile_id)
+        user_profile.account_type = UserProfile.SUPER_DONOR_ADMIN
+        user_profile.save()
+        self.donor.super_admins.add(user_profile)
+
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        data = response.json()
+        self.assertIn('project_updates_notification', data)
+        self.assertIn('daily_toolkit_digest_notification', data)
+        self.assertNotIn('project_approval_request_notification', data)
+        self.assertIn('role_request_notification', data)
+
+    def test_user_profile_notification_fields_with_superuser(self):
+        user_profile = UserProfile.objects.get(id=self.user_profile_id)
+        user = user_profile.user
+        user.is_superuser = True
+        user.save()
+
+        url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        data = response.json()
+        self.assertNotIn('project_updates_notification', data)
+        self.assertIn('daily_toolkit_digest_notification', data)
+        self.assertNotIn('project_approval_request_notification', data)
+        self.assertIn('role_request_notification', data)
