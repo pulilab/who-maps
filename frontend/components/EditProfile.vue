@@ -604,7 +604,7 @@ export default {
       if (newVal && !oldVal) {
         this.isCountryUser = false;
         this.isDonorUser = false;
-        this.innerProfile.account_type = 'none'; 
+        this.innerProfile.account_type = 'I'; 
       }
     },
     profile: {
