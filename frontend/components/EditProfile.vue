@@ -114,62 +114,78 @@
                 class="Separator"
               />
 
+
               <el-checkbox
-                v-model="isCountryUser"
+                v-model="isNoneUser"
                 border
               >
-                <span class="IconRole IconGovernmentUser" /><translate>Government user</translate>
+                <span class="IconRole IconNoneUser">
+                  <fa icon="user-friends"></fa>
+                </span>
+                <translate>None (default role)</translate>
               </el-checkbox>
 
               <p class="UserArchTypeText">
-                <translate>Privileges for Government Users are detailed below. Select the user type that most matches your role within the DHA. This request will be received by the Government Admin team and a response will be sent via email for your request.</translate>
+                <translate>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</translate>
               </p>
-
-              <el-collapse-transition>
-                <el-radio-group
-                  v-if="isCountryUser"
-                  v-model="innerProfile.account_type"
-                  :disabled="!isCountryUser"
-                  class="OnePerRow"
-                >
-                  <el-radio
-                    label="G"
-                    class="RadioSmall"
-                  >
-                    <translate>Country viewer</translate>
-                  </el-radio>
-                  <user-privileges
-                    v-if="innerProfile.account_type === 'G'"
-                    type="G"
-                  />
-                  <el-radio
-                    label="CA"
-                    class="RadioSmall"
-                  >
-                    Government Admins for this country
-                  </el-radio>
-                  <user-privileges
-                    v-if="innerProfile.account_type === 'CA'"
-                    type="CA"
-                  />
-
-                  <el-radio
-                    label="SCA"
-                    class="RadioSmall"
-                  >
-                    Government System Admins
-                  </el-radio>
-                  <user-privileges
-                    v-if="innerProfile.account_type === 'SCA'"
-                    type="SCA"
-                  />
-                </el-radio-group>
-              </el-collapse-transition>
 
               <div class="Separator Or">
                 <span><translate>or</translate></span>
               </div>
 
+              <section class="space-bottom">
+                <el-checkbox
+                  v-model="isCountryUser"
+                  border
+                >
+                  <span class="IconRole IconGovernmentUser" /><translate>Government user</translate>
+                </el-checkbox>
+
+                <p class="UserArchTypeText">
+                  <translate>Privileges for Government Users are detailed below. Select the user type that most matches your role within the DHA. This request will be received by the Government Admin team and a response will be sent via email for your request.</translate>
+                </p>
+
+                <el-collapse-transition>
+                  <el-radio-group
+                    v-if="isCountryUser"
+                    v-model="innerProfile.account_type"
+                    :disabled="!isCountryUser"
+                    class="OnePerRow"
+                  >
+                    <el-radio
+                      label="G"
+                      class="RadioSmall"
+                    >
+                      <translate>Country viewer</translate>
+                    </el-radio>
+                    <user-privileges
+                      v-if="innerProfile.account_type === 'G'"
+                      type="G"
+                    />
+                    <el-radio
+                      label="CA"
+                      class="RadioSmall"
+                    >
+                      Government Admins for this country
+                    </el-radio>
+                    <user-privileges
+                      v-if="innerProfile.account_type === 'CA'"
+                      type="CA"
+                    />
+
+                    <el-radio
+                      label="SCA"
+                      class="RadioSmall"
+                    >
+                      Government System Admins
+                    </el-radio>
+                    <user-privileges
+                      v-if="innerProfile.account_type === 'SCA'"
+                      type="SCA"
+                    />
+                  </el-radio-group>
+                </el-collapse-transition>
+              </section>
               <el-checkbox
                 v-model="isDonorUser"
                 border
@@ -517,6 +533,7 @@ export default {
       },
       isCountryUser: false,
       isDonorUser: false,
+      isNoneUser: true,
       changeApprovedUserRole: false
     };
   },
@@ -564,6 +581,7 @@ export default {
     isCountryUser: function (newVal, oldVal) {
       if (newVal && !oldVal) {
         this.isDonorUser = false;
+        this.isNoneUser = false;
         if (!['G', 'CA', 'SCA'].includes(this.innerProfile.account_type)) {
           this.innerProfile.account_type = 'G';
         }
@@ -574,11 +592,19 @@ export default {
     isDonorUser: function (newVal, oldVal) {
       if (newVal && !oldVal) {
         this.isCountryUser = false;
+        this.isNoneUser = false;
         if (!['D', 'DA', 'SDA'].includes(this.innerProfile.account_type)) {
           this.innerProfile.account_type = 'D';
         }
       } else if (!newVal && !this.isCountryUser) {
         this.innerProfile.account_type = 'I';
+      }
+    },
+    isNoneUser: function (newVal, oldVal) {
+      if (newVal && !oldVal) {
+        this.isCountryUser = false;
+        this.isDonorUser = false;
+        this.innerProfile.account_type = 'I'; 
       }
     },
     profile: {
@@ -660,6 +686,10 @@ export default {
 
   .EditProfile {
     margin-bottom: 80px;
+
+    .space-bottom {
+      margin-bottom: 32px;
+    }
 
     .ProfileCard {
       width: @cardSizeMedium;
@@ -770,6 +800,11 @@ export default {
           &.IconGovernmentUser {
             top: 46%;
             background-image: url("~static/icon-role-government.svg");
+          }
+
+          &.IconNoneUser {
+            font-size: 22px;
+            right: 5px;
           }
 
           &.IconInvestorUser {
