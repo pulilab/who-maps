@@ -98,11 +98,13 @@ export default {
     cancel() {
       this.setDigitalHealthInterventionsDialogState(null);
     },
-    handleToggleExpand(category) {
-      if (this.expand.includes(category)) {
+    handleToggleExpand(category, expand) {
+      if (this.expand.includes(category) && !expand) {
         this.expand = this.expand.filter(val => val !== category);
       } else {
-        this.expand = [...this.expand, category];
+        if (expand) {
+          this.expand = [...this.expand, category];
+        }
       }
     },
     apply() {
