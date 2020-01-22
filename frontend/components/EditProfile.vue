@@ -68,6 +68,21 @@
             >
               <language-select v-model="innerProfile.language" />
             </el-form-item>
+
+            <el-form-item>
+              <label class="el-form-item__label">
+                <translate>Email notifications (standard)</translate>
+              </label>
+            </el-form-item>
+            <el-form-item>
+              <div class="Switch-container">
+                <filter-switch
+                  v-model="innerProfile.daily_toolkit_digest_notification"
+                  :label="$gettext('Daily Toolkit digest') | translate"
+                  :tooltip="$gettext('Lorem ipsum') | translate"
+                />
+              </div>
+            </el-form-item>
           </el-col>
 
           <el-col
@@ -257,6 +272,11 @@
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
+                    <notify-switch
+                      :project_updates_notification.sync="innerProfile.project_updates_notification"
+                      :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
+                      :role_request_notification.sync="innerProfile.role_request_notification"
+                    />
                     <span><translate>My Privileges are:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'G'"
@@ -282,6 +302,11 @@
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
+                    <notify-switch
+                      :project_updates_notification.sync="innerProfile.project_updates_notification"
+                      :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
+                      :role_request_notification.sync="innerProfile.role_request_notification"
+                    />
                     <span><translate>My Privileges are:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'CA'"
@@ -307,6 +332,11 @@
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
+                    <notify-switch
+                     :project_updates_notification.sync="innerProfile.project_updates_notification"
+                     :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
+                     :role_request_notification.sync="innerProfile.role_request_notification"
+                    />
                     <span><translate>My Privileges are:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'SCA'"
@@ -332,6 +362,11 @@
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
+                    <notify-switch
+                      :project_updates_notification.sync="innerProfile.project_updates_notification"
+                      :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
+                      :role_request_notification.sync="innerProfile.role_request_notification"
+                    />
                     <span><translate>My Privileges are:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'D'"
@@ -357,6 +392,11 @@
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
+                    <notify-switch
+                      :project_updates_notification.sync="innerProfile.project_updates_notification"
+                      :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
+                      :role_request_notification.sync="innerProfile.role_request_notification"
+                    />
                     <span><translate>My Privileges are:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'DA'"
@@ -382,6 +422,11 @@
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
+                    <notify-switch
+                      :project_updates_notification.sync="innerProfile.project_updates_notification"
+                      :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
+                      :role_request_notification.sync="innerProfile.role_request_notification"
+                    />
                     <span><translate>My Privileges are:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'SDA'"
@@ -442,6 +487,8 @@ import LanguageSelect from './common/LanguageSelect';
 import CountrySelect from './common/CountrySelect';
 import DonorSelect from './common/DonorSelect';
 import UserPrivileges from './UserPrivileges';
+import FilterSwitch from '~/components/dashboard/FilterSwitch';
+import NotifySwitch from '~/components/common/NotifySwitchers';
 
 export default {
   components: {
@@ -449,7 +496,9 @@ export default {
     LanguageSelect,
     CountrySelect,
     DonorSelect,
-    UserPrivileges
+    UserPrivileges,
+    FilterSwitch,
+    NotifySwitch
   },
   mixins: [FormAPIErrorsMixin],
   data () {
@@ -460,7 +509,11 @@ export default {
         language: null,
         country: null,
         account_type: null,
-        donor: null
+        donor: null,
+        daily_toolkit_digest_notification: true,
+        project_updates_notification: true,
+        project_approval_request_notification: true,
+        role_request_notification: true
       },
       isCountryUser: false,
       isDonorUser: false,
@@ -759,23 +812,23 @@ export default {
 
           .ClickThrough {
             pointer-events: none;
-          }
 
-          .el-row {
-            .el-col {
-              padding: 10px 10px 15px;
+            & > .el-row {
+              .el-col {
+                padding: 10px 10px 15px;
 
-              &:nth-child(1) {
-                width: auto;
-              }
+                &:nth-child(1) {
+                  width: auto;
+                }
 
-              &:nth-child(2) {
-                width: 100%;
+                &:nth-child(2) {
+                  width: 100%;
+                }
               }
             }
           }
 
-          .el-button {
+          & > .el-button {
             position: absolute;
             top: 15px;
             right: 20px;
@@ -808,7 +861,8 @@ export default {
             padding: 20px 20px 15px;
 
             > span {
-              font-size: @fontSizeSmall;
+              font-size: @fontSizeBase;
+              font-weight: bold;
             }
 
             ul {
@@ -823,6 +877,16 @@ export default {
           }
         }
       }
+    }
+    .el-form-item__label {
+      padding: 0 0 3px 0;
+      line-height: 30px;
+    }
+    .el-form .el-form-item {
+      margin-bottom: 10px;
+    }
+    .Switch-container {
+      margin-top: 0;
     }
   }
 </style>

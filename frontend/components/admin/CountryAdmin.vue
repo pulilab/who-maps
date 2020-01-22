@@ -969,20 +969,6 @@ export default {
       }
     }
 
-    .Switch-container {
-      margin-top: -20px;
-      display: flex;
-      justify-content: space-between;
-      .Right-label {
-        text-decoration: none;
-        color: @colorBrandPrimary;
-        font-weight: bold;
-        cursor: pointer;
-        &:hover {
-          color: @colorBrandPrimaryLight;
-        }
-      }
-    }
     .Divider {
       box-sizing: border-box;
       height: 1px;

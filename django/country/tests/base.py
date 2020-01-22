@@ -30,10 +30,8 @@ class CountryBaseTests(APITestCase):
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
 
-        self.country = CountryFactory(name="country1", code="CC", map_activated_on=timezone.now())
-        self.country.name_en = 'Hungary'
-        self.country.name_fr = 'Hongrie'
-        self.country.save()
+        self.country = CountryFactory(name="country1", code="CC", map_activated_on=timezone.now(), name_en='Hungary',
+                                      name_fr='Hongrie')
         PartnerLogo.objects.create(country=self.country)
 
 
@@ -60,8 +58,5 @@ class DonorBaseTests(APITestCase):
         self.test_user_key = response.json().get("token")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
 
-        self.donor = DonorFactory(name="donor1", code="donor1")
-        self.donor.name_en = 'Donor Group'
-        self.donor.name_fr = 'Doner Grup'
-        self.donor.save()
+        self.donor = DonorFactory(name="donor1", code="donor1", name_en='Donor Group', name_fr='Doner Grup')
         DonorPartnerLogo.objects.create(donor=self.donor)

@@ -61,6 +61,11 @@ class UserProfile(ExtendedModel):
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
 
+    project_updates_notification = models.BooleanField(default=True)
+    daily_toolkit_digest_notification = models.BooleanField(default=True)
+    project_approval_request_notification = models.BooleanField(default=True)
+    role_request_notification = models.BooleanField(default=True)
+
     def __str__(self):
         return "{} <{}>".format(self.name, self.user.email) if self.name else ""
 
@@ -75,6 +80,20 @@ class UserProfile(ExtendedModel):
 
     def is_investor_type(self):
         return self.account_type in [self.DONOR, self.DONOR_ADMIN, self.SUPER_DONOR_ADMIN]
+
+    @property
+    def account_type_approved(self):
+        from country.models import Country
+        from country.models import Donor
+
+        approved_ca = self.account_type == self.COUNTRY_ADMIN and Country.objects.filter(project_approval=True).\
+            filter(admins=self).exists()
+        approved_sca = self.account_type == self.SUPER_COUNTRY_ADMIN and Country.objects.filter(project_approval=True).\
+            filter(super_admins=self).exists()
+        approved_da = self.account_type == self.DONOR_ADMIN and Donor.objects.filter(admins=self).exists()
+        approved_sda = self.account_type == self.SUPER_DONOR_ADMIN and Donor.objects.filter(
+            super_admins=self).exists()
+        return self.user.is_superuser or approved_ca or approved_sca or approved_da or approved_sda
 
 
 @receiver(pre_save, sender=UserProfile)

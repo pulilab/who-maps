@@ -49,18 +49,15 @@ class SetupTests(APITestCase):
         # Update profile.
         self.org = OrganisationFactory(name="org1")
         self.country = CountryFactory(name="country1", code='CTR1', project_approval=True,
-                                      region=Country.REGIONS[0][0])
+                                      region=Country.REGIONS[0][0], name_en='Hungary', name_fr='Hongrie')
         self.country_id = self.country.id
-        self.country.name_en = 'Hungary'
-        self.country.name_fr = 'Hongrie'
-        self.country.save()
 
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
             "name": "Test Name",
             "organisation": self.org.id,
             "country": self.country_id}
-        response = self.test_user_client.put(url, data)
+        response = self.test_user_client.put(url, data, format='json')
         self.assertEqual(response.status_code, 200, response.json())
         self.user_profile_id = response.json().get('id')
 
