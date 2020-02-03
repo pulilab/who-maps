@@ -536,6 +536,16 @@
                         <!-- /TEMPLATE: TOOLKIT DIGEST -->
 
 
+                        <!-- TEMPLATE: DRAFT REMINDER -->
+                        {% elif type == "draft_reminder" %}
+                        <h1>{% trans "Notification" %}</h1>
+                        <p>{% trans "Your project in the Digital Health Atlas hasn't been published yet. Please consider publishing, so your project information becomes available to the public." %}</p>
+                        <p>
+                          <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}" target="_blank">{% site_url %}/{{ language }}/-/projects/{{ project_id }}</a>
+                        </p>
+                        <!-- /TEMPLATE: DRAFT REMINDER -->
+
+
                         <!-- TEMPLATE: PROJECT UPDATED ADMIN DIGEST -->
                         {% elif type == "project_updated_admin_digest" %}
                         <h1>{% trans "Notification" %}</h1>
