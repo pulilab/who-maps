@@ -25,3 +25,8 @@ def send_new_custom_country_question_digest():
         created__gt=timezone.now() - timezone.timedelta(hours=settings.NEW_QUESTION_DIGEST_PERIOD))\
         .select_related('country')
     countries = set(questions.values_list('country', flat=True))
+
+    for country_id in countries:
+        country_questions = questions.filter(country_id=country_id)
+        country = country_questions.first().country
+
