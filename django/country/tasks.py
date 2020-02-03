@@ -33,3 +33,10 @@ def send_new_custom_country_question_digest():
         country_projects = ProjectSearch.objects.filter(country_id=country_id)
         country_project_team_members = set(country_projects.values_list('project__team', flat=True))
 
+        for member in country_project_team_members:
+            member_projects = [p.project for p in country_projects.filter(project__team=member)]
+            try:
+                member_profile = UserProfile.objects.get(id=member)
+            except UserProfile.DoesNotExist:
+                pass
+            else:
