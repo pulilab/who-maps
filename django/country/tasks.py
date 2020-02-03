@@ -70,3 +70,6 @@ def send_new_custom_donor_question_digest():
         donor_questions = questions.filter(donor_id=donor_id)
         donor = donor_questions.first().donor
 
+        donor_projects = ProjectSearch.objects.filter(donors__overlap=[donor.id])
+        donor_project_team_members = set(donor_projects.values_list('project__team', flat=True))
+
