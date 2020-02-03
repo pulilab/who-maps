@@ -416,8 +416,8 @@ def send_draft_only_reminders():
     from project.models import Project
 
     projects = Project.objects.draft_only()
-    if getattr(settings, 'DRAFT_ONLY_REMINDER_LIMITED', False):
-        projects = projects.order_by('-id')[:1]
+    if getattr(settings, 'DRAFT_ONLY_REMINDER_LIMITED', False):  # pragma: no cover
+        projects = [projects.last()]
 
     for p in projects:
         email_mapping = defaultdict(list)
