@@ -8,7 +8,7 @@ from django.utils import timezone
 from rest_framework import status
 
 from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, TechnologyPlatformFactory, \
-    DigitalStrategyFactory
+    DigitalStrategyFactory, ProjectFactory
 from django.core import mail
 from django.contrib.auth.models import User
 from django.core.cache import cache
@@ -18,7 +18,8 @@ from country.models import Country, Donor
 from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, Licence, ProjectApproval
 from project.tasks import send_project_approval_digest, \
-    send_project_updated_digest, notify_superusers_about_new_pending_software, notify_user_about_software_approval
+    send_project_updated_digest, notify_superusers_about_new_pending_software, notify_user_about_software_approval, \
+    send_draft_only_reminders
 
 from project.tests.setup import SetupTests
 
