@@ -575,6 +575,47 @@
                         </table>
                         <!-- /TEMPLATE: PROJECT UPDATED ADMIN DIGEST -->
 
+                        <!-- TEMPLATE: COUNTRY/DONOR PUBLISHED NEW QUESTION DIGEST -->
+                        {% elif type == "cc_digest" %}
+                        <h1>{% trans "Notification" %}</h1>
+                        <h2>{% trans "Dear" %} {{ name }}</h2>
+                        <p>{% trans "New question(s) have been asked by the admins that relate to your project. Please update your project and republish." %}</p>
+                        <h3>{% trans "New question(s): " %}</h3>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            {% for question in questions %}
+                            <tr class="list-content">
+                              <td align="left">
+                                <b>{{ question.question }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table><br><br>
+                        <h3>{% trans "Related project(s): " %}</h3>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left">
+                                <b>{% trans "Project Name" %}</b>
+                              </td>
+                              <td align="right">
+                                {% trans "Date of Submission" %}
+                              </td>
+                            </tr>
+                            {% for project in projects %}
+                            <tr class="list-content">
+                              <td align="left">
+                                <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/published" target="_blank"><b>{{ project.name }}</b></a>
+                              </td>
+                              <td align="right">
+                                <b>{{ project.modified }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: COUNTRY/DONOR PUBLISHED NEW QUESTION DIGEST -->
 
                         <!-- TEMPLATE: STATUS REPORT -->
                         {% elif type == "status_report" %}
