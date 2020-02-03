@@ -406,3 +406,13 @@ def notify_user_about_software_approval(action, software_id):
                       to=software.added_by.user.email,
                       language=software.added_by.language or settings.LANGUAGE_CODE,
                       context={'software_name': software.name})
+
+
+@app.task(name="send_draft_only_reminders")
+def send_draft_only_reminders():
+    """
+    Sends reminder to projects that are draft only to publish.
+    """
+    from project.models import Project
+
+    projects = Project.objects.draft_only()
