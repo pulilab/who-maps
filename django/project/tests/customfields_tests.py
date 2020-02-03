@@ -1,11 +1,15 @@
 from copy import copy
+from unittest import mock
 
 from rest_framework.reverse import reverse
 
-from core.factories import DonorCustomQuestionFactory, CountryCustomQuestionFactory
+from core.factories import DonorCustomQuestionFactory, CountryCustomQuestionFactory, UserFactory, UserProfileFactory, \
+    ProjectFactory
 from country.models import CountryCustomQuestion
+from country.tasks import send_new_custom_country_question_digest, send_new_custom_donor_question_digest
 from project.models import Project
 from project.tests.setup import SetupTests
+from user.models import UserProfile
 
 
 class CustomFieldTests(SetupTests):
