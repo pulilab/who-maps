@@ -73,3 +73,10 @@ def send_new_custom_donor_question_digest():
         donor_projects = ProjectSearch.objects.filter(donors__overlap=[donor.id])
         donor_project_team_members = set(donor_projects.values_list('project__team', flat=True))
 
+        for member in donor_project_team_members:
+            member_projects = [p.project for p in donor_projects.filter(project__team=member)]
+            try:
+                member_profile = UserProfile.objects.get(id=member)
+            except UserProfile.DoesNotExist:
+                pass
+            else:
