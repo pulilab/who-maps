@@ -419,3 +419,14 @@ def send_draft_only_reminders():
     if getattr(settings, 'DRAFT_ONLY_REMINDER_LIMITED', False):
         projects = projects.order_by('-id')[:1]
 
+    for p in projects:
+        email_mapping = defaultdict(list)
+        for profile in p.team.all():
+            email_mapping[profile.language].append(profile.user.email)
+
+        for language, email_list in email_mapping.items():
+            send_mail_wrapper(subject=_(f"'{p.name}' is only a draft. Please consider publishing it."),
+                              email_type='draft_reminder',
+                              to=email_list,
+                              language=language,
+                              context={'project_id': p.id})
