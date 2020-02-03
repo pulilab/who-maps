@@ -50,3 +50,18 @@ def send_new_custom_country_question_digest():
                                       'questions': country_questions,
                                       'name': member_profile.name
                                   })
+
+
+@app.task(name="send_new_custom_donor_question_digest")
+def send_new_custom_donor_question_digest():
+    """
+    Sends daily digest to all project's team members that a new custom question has been asked by the donor
+    """
+    from country.models import DonorCustomQuestion
+    from search.models import ProjectSearch
+    from user.models import UserProfile
+
+    questions = DonorCustomQuestion.objects.filter(
+        created__gt=timezone.now() - timezone.timedelta(hours=settings.NEW_QUESTION_DIGEST_PERIOD))\
+        .select_related('donor')
+    donors = set(questions.values_list('donor', flat=True))
