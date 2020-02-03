@@ -360,6 +360,18 @@ if SITE_ID in [3, 4]:
         "send_project_approval_digest": {
             "task": 'send_project_approval_digest',
             "schedule": datetime.timedelta(hours=APPROVAL_DIGEST_PERIOD),
+        },
+        "send_new_custom_country_question_digest": {
+            "task": 'send_new_custom_country_question_digest',
+            "schedule": datetime.timedelta(hours=NEW_QUESTION_DIGEST_PERIOD),
+        },
+        "send_new_custom_donor_question_digest": {
+            "task": 'send_new_custom_donor_question_digest',
+            "schedule": datetime.timedelta(hours=NEW_QUESTION_DIGEST_PERIOD),
+        },
+        "send_draft_only_reminders": {
+            "task": 'send_draft_only_reminders',
+            "schedule": datetime.timedelta(hours=DRAFT_ONLY_REMINDER_PERIOD),
         }
     }
     if ODK_SYNC_ENABLED:
