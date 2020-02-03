@@ -635,3 +635,16 @@ class CustomFieldTests(SetupTests):
         p2 = ProjectFactory(name="published in country")
         p2.team.add(self.userprofile)
         p2.team.add(up2)
+
+        url = reverse("project-publish",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": p2.id
+                      })
+
+        data = copy(self.project_data)
+        data['project']['name'] = "published in country"
+        data.update({"country_custom_answers": [dict(question_id=q1.id, answer=['yooy'])]})
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 200, response)
+
