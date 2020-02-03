@@ -65,3 +65,8 @@ def send_new_custom_donor_question_digest():
         created__gt=timezone.now() - timezone.timedelta(hours=settings.NEW_QUESTION_DIGEST_PERIOD))\
         .select_related('donor')
     donors = set(questions.values_list('donor', flat=True))
+
+    for donor_id in donors:
+        donor_questions = questions.filter(donor_id=donor_id)
+        donor = donor_questions.first().donor
+
