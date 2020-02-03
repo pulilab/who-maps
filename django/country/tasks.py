@@ -37,7 +37,7 @@ def send_new_custom_country_question_digest():
             member_projects = [p.project for p in country_projects.filter(project__team=member)]
             try:
                 member_profile = UserProfile.objects.get(id=member)
-            except UserProfile.DoesNotExist:
+            except UserProfile.DoesNotExist:  # pragma: no cover
                 pass
             else:
                 subject = _(f"{country.name} has published new question(s) that relate to your project(s)")
@@ -77,7 +77,7 @@ def send_new_custom_donor_question_digest():
             member_projects = [p.project for p in donor_projects.filter(project__team=member)]
             try:
                 member_profile = UserProfile.objects.get(id=member)
-            except UserProfile.DoesNotExist:
+            except UserProfile.DoesNotExist:  # pragma: no cover
                 pass
             else:
                 subject = _(f"{donor.name} has published new question(s) that relate to your project(s)")
