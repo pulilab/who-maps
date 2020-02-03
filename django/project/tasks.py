@@ -69,8 +69,8 @@ def send_project_updated_digest():
         modified__gt=timezone.now() - timezone.timedelta(hours=settings.PROJECT_UPDATE_DIGEST_PERIOD))\
         .select_related('search', 'search__country')
 
-    countries_qs = projects.values_list('search__country', flat=True)
-    for country_id in countries_qs:
+    countries = set(projects.values_list('search__country', flat=True))
+    for country_id in countries:
         country_projects = projects.filter(search__country_id=country_id)
         country = country_projects.first().search.country
 
