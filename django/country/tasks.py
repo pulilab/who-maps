@@ -30,3 +30,6 @@ def send_new_custom_country_question_digest():
         country_questions = questions.filter(country_id=country_id)
         country = country_questions.first().country
 
+        country_projects = ProjectSearch.objects.filter(country_id=country_id)
+        country_project_team_members = set(country_projects.values_list('project__team', flat=True))
+
