@@ -605,3 +605,18 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.json()['donor_custom_answers'],
                          {str(self.d1.id): [{'question_id': ['This field is required.'],
                                              'answer': ['This field is required.']}]})
+
+    @mock.patch('country.tasks.send_mail_wrapper', return_value=None)
+    def test_custom_country_question_digest(self, send_mail_wrapper):
+        q1 = CountryCustomQuestionFactory(question="test", country=self.country, required=True)
+        CountryCustomQuestionFactory(question="test2", country=self.country, required=False)
+
+        url = reverse("project-publish",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
+        data = copy(self.project_data)
+        data.update({"country_custom_answers": [dict(question_id=q1.id, answer=['yoyo'])]})
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 200, response)
