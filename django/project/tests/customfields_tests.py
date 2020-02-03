@@ -648,3 +648,16 @@ class CustomFieldTests(SetupTests):
         response = self.test_user_client.put(url, data=data, format='json')
         self.assertEqual(response.status_code, 200, response)
 
+        send_new_custom_country_question_digest.apply()
+
+        self.assertEqual(send_mail_wrapper.call_count, 3)
+
+        for i in range(3):
+            if send_mail_wrapper.call_args_list[i][1]['to'] == self.userprofile.user.email:
+                self.assertTrue(p1 in send_mail_wrapper.call_args_list[i][1]['context']['projects'])
+                self.assertTrue(p2 in send_mail_wrapper.call_args_list[i][1]['context']['projects'])
+            elif send_mail_wrapper.call_args_list[i][1]['to'] == u1.email:
+                self.assertTrue(p1 in send_mail_wrapper.call_args_list[i][1]['context']['projects'])
+            elif send_mail_wrapper.call_args_list[i][1]['to'] == u2.email:
+                self.assertTrue(p2 in send_mail_wrapper.call_args_list[i][1]['context']['projects'])
+
