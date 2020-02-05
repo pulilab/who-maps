@@ -343,6 +343,29 @@
                         <!-- /TEMPLATE: NEW MEMBER -->
 
 
+                        <!-- TEMPLATE: ADMIN REQUEST -->
+                        {% elif type == "admin_request" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Admin request notification" %}</h1>
+                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear" %} {{ full_name }},</h2>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% blocktrans %}{{ requester }} has requested to be a {{ requester_type }}. (Phone: {{ requester_phone }} Title: {{ requester_title }} LinkedIn: {{ requester_linkedin }} ) Please go to the admin interface's user management section to review this request.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;" >
+                          <tbody>
+                            <tr>
+                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:10px;padding-bottom:20px;" >
+                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:auto;" >
+                                  <tbody>
+                                    <tr>
+                                      <td style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;text-align:center;background-color:#008DC9;" > <a href="{% site_url %}/{{ language }}/-/admin/{{ admin_type }}" target="_blank" style="border-width:1px;border-style:solid;box-sizing:border-box;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:10px;padding-bottom:10px;padding-right:20px;padding-left:20px;text-decoration:none;background-color:#008DC9;border-color:#008DC9;color:#FFFFFF;" >{% trans "Go to admin interface" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: ADMIN REQUEST-->
+
+
                         <!-- TEMPLATE: COUNTRY ADMIN -->
                         {% elif type == "country_admin" %}
                         <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Country admin" %}</h1>
