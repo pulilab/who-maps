@@ -70,6 +70,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
         account_type = user.userprofile.account_type
         ac_enabled = user.userprofile.account_type_approved
+        country_project_approval = True if \
+            user.userprofile.country and user.userprofile.country.project_approval else False
         ca = UserProfile.COUNTRY_ADMIN
         sca = UserProfile.SUPER_COUNTRY_ADMIN
         da = UserProfile.DONOR_ADMIN
@@ -78,7 +80,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         if account_type not in (ca, sca, da, sda) or not ac_enabled:
             fields.pop('project_updates_notification')
 
-        if account_type not in (ca, sca) or not ac_enabled:
+        if account_type not in (ca, sca) or not ac_enabled or not country_project_approval:
             fields.pop('project_approval_request_notification')
 
         if not user.is_superuser and (account_type not in (ca, sca, da, sda) or not ac_enabled):
