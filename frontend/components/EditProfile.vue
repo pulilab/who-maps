@@ -63,36 +63,6 @@
             </el-form-item>
 
             <el-form-item
-              :label="$gettext('Phone number') | translate"
-              prop="phone"
-            >
-              <el-input
-                v-model="innerProfile.phone"
-                type="text"
-              />
-            </el-form-item>
-
-            <el-form-item
-              :label="$gettext('Designation / Title') | translate"
-              prop="title"
-            >
-              <el-input
-                v-model="innerProfile.title"
-                type="text"
-              />
-            </el-form-item>
-
-            <el-form-item
-              :label="$gettext('LinkedIn profile') | translate"
-              prop="linkedin"
-            >
-              <el-input
-                v-model="innerProfile.linkedin"
-                type="text"
-              />
-            </el-form-item>
-
-            <el-form-item
               :label="$gettext('Site language') | translate"
               prop="language"
             >
@@ -559,10 +529,7 @@ export default {
         daily_toolkit_digest_notification: true,
         project_updates_notification: true,
         project_approval_request_notification: true,
-        role_request_notification: true,
-        phone: null,
-        title: null,
-        linkedin: null
+        role_request_notification: true
       },
       isCountryUser: false,
       isDonorUser: false,

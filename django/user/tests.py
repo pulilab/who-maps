@@ -548,8 +548,7 @@ class UserProfileTests(APITestCase):
         country_admin_profile = UserProfileFactory(name='country_admin_user')
         country.admins.add(country_admin_profile)
 
-        new_profile = UserProfileFactory(name='new_user', account_type='CA', country=country,
-                                         phone='1234567', title='test title', linkedin='http://linkedin.com/123456/')
+        new_profile = UserProfileFactory(name='new_user', account_type='CA', country=country)
         send_user_request_to_admins(new_profile.id)
 
         call_args_list = send_email_wrapper.call_args_list[0][1]
@@ -557,9 +556,6 @@ class UserProfileTests(APITestCase):
         self.assertIn(f'has requested to be a Government Admin for {country.name}', call_args_list['subject'])
         self.assertEqual(call_args_list['email_type'], 'admin_request')
         self.assertEqual(call_args_list['to'], country_admin_profile.user.email)
-        self.assertEqual(call_args_list['context']['requester_phone'], '1234567')
-        self.assertEqual(call_args_list['context']['requester_title'], 'test title')
-        self.assertEqual(call_args_list['context']['requester_linkedin'], 'http://linkedin.com/123456/')
 
     def test_user_profile_notification_fields_with_normal_user(self):
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
