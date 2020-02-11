@@ -605,6 +605,10 @@ export default {
         donor: [
           { required: this.isDonorRequired, message: this.$gettext('This field is required'), trigger: 'change' },
           { validator: this.validatorGenerator('donor') }
+        ],
+        linkedin: [
+          { type: 'url', message: this.$gettext('Has to be a valid url'), trigger: 'blur' },
+          { validator: this.validatorGenerator('linkedin') }
         ]
       };
     }
