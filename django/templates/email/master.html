@@ -539,15 +539,19 @@
                         <!-- SOFTWARE DECLINED -->
                         {% elif type == "software_declined" %}
                         <h1>{% trans "Software declined: " %}{{ software_name }}</h1>
-                        <p>{% trans "Unfortunately the software you requested has been declined by the administrator" %}</p>
-                        <p>{% trans "The software has been removed from the project(s) you referenced them." %}</p>
+                        <p>{{ software_name }}{% trans " has not been approved for inclusion in the Digital Health Atlas. Please get in touch with the Digital Health Atlas team if you believe this decision has been taken in error via digitalhealthatlas@gmail.com" %}</p>
+                        <p>{% trans "Sincerely," %}</p>
+                        <p>{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /SOFTWARE DECLINED -->
 
 
                         <!-- SOFTWARE APPROVED -->
                         {% elif type == "software_approved" %}
-                        <h1>{% trans "Software approved: " %}{{ software_name }}</h1>
-                        <p>{% trans "The software you requested has been approved by the administrator" %}</p>
+                        <h1>{% trans "Software approved: " %}</h1>
+                        <p>{{ software_name }}{% trans " has now been approved for inclusion in the Digital Health Atlas. You can now register all projects using your software globally." %}</p>
+                        <p>
+                          <a href="{% site_url %}/{{ language }}/-/projects/create" target="_blank">{% trans "Register new projects" %}</a>
+                        </p>
                         <!-- /SOFTWARE APPROVED -->
 
 
