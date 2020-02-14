@@ -558,11 +558,14 @@
                         <!-- TEMPLATE: TOOLKIT DIGEST -->
                         {% elif type == "toolkit_digest" %}
                         <h1>{% trans "Notification" %}</h1>
-                        <p>{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
-                        <p><b>{% trans "Check the DHA Assessment module on the link below:" %}</b></p>
+                        <p>{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to view these changes." %}</p>
+                        <p><b>{% blocktrans %}Link to {{ project_name }} Project Page{% endblocktrans %}</b></p>
                         <p>
                           <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment" target="_blank">{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment</a>
                         </p>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "Sincerely," %}</p>
+                        <p>{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: TOOLKIT DIGEST -->
 
 
