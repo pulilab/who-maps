@@ -486,12 +486,15 @@
 
                         <!-- TEMPLATE: PASSWORD INVITE -->
                         {% elif type == "password_invited" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Set Your Password on Digital Health Atlas" %}</h1>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "You have been invited to the Digital Health Atlas through a project. Please set you password so you can log in and view/edit your project." %}</p>
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Set up your account on the Digital Health Atlas" %}</h1>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "You have been invited to the Digital Health Atlas through a project. Please set your password so you can become part of the Project Team." %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" ><b>{% trans "To set your password, click the link below:" %}</b></p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
                         <a href="{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited" target="_blank" style="color:#008DC9;text-decoration:underline;" >{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited</a>
                         </p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: PASSWORD INVITED -->
 
 
@@ -509,44 +512,55 @@
                         <!-- SOFTWARE DECLINED -->
                         {% elif type == "software_declined" %}
                         <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Software declined: " %}{{ software_name }}</h1>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Unfortunately the software you requested has been declined by the administrator" %}</p>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The software has been removed from the project(s) you referenced them." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{{ software_name }}{% trans " has not been approved for inclusion in the Digital Health Atlas. Please get in touch with the Digital Health Atlas team if you believe this decision has been taken in error via digitalhealthatlas@gmail.com" %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /SOFTWARE DECLINED -->
 
 
                         <!-- SOFTWARE APPROVED -->
                         {% elif type == "software_approved" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Software approved: " %}{{ software_name }}</h1>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The software you requested has been approved by the administrator" %}</p>
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Software approved: " %}</h1>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{{ software_name }}{% trans " has now been approved for inclusion in the Digital Health Atlas. You can now register all projects using your software globally." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                          <a href="{% site_url %}/{{ language }}/-/projects/create" target="_blank" style="color:#008DC9;text-decoration:underline;" >{% trans "Register new projects" %}</a>
+                        </p>
                         <!-- /SOFTWARE APPROVED -->
 
 
                         <!-- TEMPLATE: TOOLKIT DIGEST -->
                         {% elif type == "toolkit_digest" %}
                         <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Notification" %}</h1>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" ><b>{% trans "Check the DHA Assessment module on the link below:" %}</b></p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to view these changes." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" ><b>{% blocktrans %}Link to {{ project_name }} Project Page{% endblocktrans %}</b></p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
                           <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment" target="_blank" style="color:#008DC9;text-decoration:underline;" >{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment</a>
                         </p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: TOOLKIT DIGEST -->
 
 
                         <!-- TEMPLATE: DRAFT REMINDER -->
                         {% elif type == "draft_reminder" %}
                         <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Notification" %}</h1>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Your project in the Digital Health Atlas hasn't been published yet. Please consider publishing, so your project information becomes available to the public." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Thank you for registering your project in the Digital Health Atlas. Your project is now part of the most comprehensive registry of Digital Health projects in the world. We noticed that your project(s) need a few more data points before you can publish." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Please take a few minutes to complete the project detailed below:" %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
                           <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}" target="_blank" style="color:#008DC9;text-decoration:underline;" >{% site_url %}/{{ language }}/-/projects/{{ project_id }}</a>
                         </p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: DRAFT REMINDER -->
 
 
                         <!-- TEMPLATE: PROJECT UPDATED ADMIN DIGEST -->
                         {% elif type == "project_updated_admin_digest" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Notification" %}</h1>
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "New Project Information in the Digital Health Atlas" %}</h1>
                         <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear" %} {{ name }} {% trans "Admin," %}</h2>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The project(s) listed below have been updated by their teams." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Projects that list you as an Investor have been updated. You can view the full project detailes below:" %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="project-list" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
                           <tbody>
                             <tr class="list-header">
@@ -571,11 +585,10 @@
                         </table>
                         <!-- /TEMPLATE: PROJECT UPDATED ADMIN DIGEST -->
 
-                        <!-- TEMPLATE: COUNTRY/DONOR PUBLISHED NEW QUESTION DIGEST -->
-                        {% elif type == "cc_digest" %}
-                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Notification" %}</h1>
+                        <!-- TEMPLATE: COUNTRY PUBLISHED NEW QUESTION DIGEST -->
+                        {% elif type == "cc_digest_country" %}
                         <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear" %} {{ name }}</h2>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "New question(s) have been asked by the admins that relate to your project. Please update your project and republish." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% blocktrans %}The Ministry of Health of {{ country_name }} has added new question(s) to the Project Questionaire in the Digital Health Atlas. You can update your project(s) by clicking the link(s) below.{% endblocktrans %}</p>
                         <h3 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;" >{% trans "New question(s): " %}</h3>
                         <table border="0" cellpadding="0" cellspacing="0" class="project-list" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
                           <tbody>
@@ -610,8 +623,56 @@
                             </tr>
                             {% endfor %}
                           </tbody>
-                        </table>
-                        <!-- /TEMPLATE: COUNTRY/DONOR PUBLISHED NEW QUESTION DIGEST -->
+                        </table><br><br>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
+                        <!-- /TEMPLATE: COUNTRY PUBLISHED NEW QUESTION DIGEST -->
+
+
+                        <!-- TEMPLATE: DONOR PUBLISHED NEW QUESTION DIGEST -->
+                        {% elif type == "cc_digest_donor" %}
+                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear" %} {{ name }}</h2>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% blocktrans %}{{ donor_name }} has added new question(s) to the Project Questionaire in the Digital Health Atlas. You can update your project(s) by clicking the link(s) below.{% endblocktrans %}</p>
+                        <h3 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;" >{% trans "New question(s): " %}</h3>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
+                          <tbody>
+                            {% for question in questions %}
+                            <tr class="list-content">
+                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
+                                <b>{{ question.question }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table><br><br>
+                        <h3 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;" >{% trans "Related project(s): " %}</h3>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
+                                <b style="text-transform:uppercase;" >{% trans "Project Name" %}</b>
+                              </td>
+                              <td align="right" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
+                                {% trans "Date of Submission" %}
+                              </td>
+                            </tr>
+                            {% for project in projects %}
+                            <tr class="list-content">
+                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
+                                <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/published" target="_blank" style="color:#008DC9;text-decoration:underline;" ><b>{{ project.name }}</b></a>
+                              </td>
+                              <td align="right" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
+                                <b>{{ project.modified }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table><br><br>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
+                        <!-- /TEMPLATE: DONOR PUBLISHED NEW QUESTION DIGEST -->
 
                         <!-- TEMPLATE: STATUS REPORT -->
                         {% elif type == "status_report" %}
@@ -720,7 +781,7 @@
                 <tr>
                   <tr>
                     <td class="content-block footer-links" style="font-family:arial, sans-serif;vertical-align:top;padding-bottom:10px;padding-top:10px;color:#9B9B9B;font-size:12px;text-align:center;" >
-                      <a href="{% site_url %}" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Go to the Digital Health Atals" %}</a>
+                      <a href="{% site_url %}" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Go to the Digital Health Atlas" %}</a>
                       <span style="color:#9B9B9B;font-size:12px;text-align:center;" >&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                       <a href="{% site_url %}/{{ language }}/-/terms" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Terms of use" %}</a>
                       <span style="color:#9B9B9B;font-size:12px;text-align:center;" >&nbsp;&nbsp;|&nbsp;&nbsp;</span>
