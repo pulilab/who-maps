@@ -42,13 +42,14 @@ def send_new_custom_country_question_digest():
             else:
                 subject = _(f"{country.name} has published new question(s) that relate to your project(s)")
                 send_mail_wrapper(subject=subject,
-                                  email_type='cc_digest',
+                                  email_type='cc_digest_country',
                                   to=member_profile.user.email,
                                   language=member_profile.language or settings.LANGUAGE_CODE,
                                   context={
                                       'projects': member_projects,
                                       'questions': country_questions,
-                                      'name': member_profile.name
+                                      'name': member_profile.name,
+                                      'country_name': country.name
                                   })
 
 
