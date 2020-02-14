@@ -513,12 +513,15 @@
 
                         <!-- TEMPLATE: PASSWORD INVITE -->
                         {% elif type == "password_invited" %}
-                        <h1>{% trans "Set Your Password on Digital Health Atlas" %}</h1>
-                        <p>{% trans "You have been invited to the Digital Health Atlas through a project. Please set you password so you can log in and view/edit your project." %}</p>
+                        <h1>{% trans "Set up your account on the Digital Health Atlas" %}</h1>
+                        <p>{% trans "You have been invited to the Digital Health Atlas through a project. Please set your password so you can become part of the Project Team." %}</p>
                         <p><b>{% trans "To set your password, click the link below:" %}</b></p>
                         <p>
                         <a href="{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited" target="_blank">{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited</a>
                         </p>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "Sincerely," %}</p>
+                        <p>{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: PASSWORD INVITED -->
 
 
