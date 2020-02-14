@@ -83,11 +83,12 @@ def send_new_custom_donor_question_digest():
             else:
                 subject = _(f"{donor.name} has published new question(s) that relate to your project(s)")
                 send_mail_wrapper(subject=subject,
-                                  email_type='cc_digest',
+                                  email_type='cc_digest_donor',
                                   to=member_profile.user.email,
                                   language=member_profile.language or settings.LANGUAGE_CODE,
                                   context={
                                       'projects': member_projects,
                                       'questions': donor_questions,
-                                      'name': member_profile.name
+                                      'name': member_profile.name,
+                                      'donor_name': donor.name
                                   })
