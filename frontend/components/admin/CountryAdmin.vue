@@ -137,8 +137,8 @@
           <div class="Switch-container">
             <filter-switch
               v-model="roadmapEnabled"
-              :label="$gettext('Architecture roadmap documents') | translate"
-              :tooltip="$gettext('Lorem ipsum2') | translate"
+              :label="$gettext('Digital Health Reference Documents') | translate"
+              :tooltip="$gettext('These documents may include a National Digital Health Vision, Action Plan,Implementation Plan, Digital Health Strategy, or Reference Architecture.') | translate"
             />
             <label
               v-if="roadmapEnabled"
@@ -146,7 +146,7 @@
               class="Right-label"
             >
               <fa icon="pen" />
-              <translate>Edit Documents</translate>
+              <translate>Upload documents</translate>
             </label>
           </div>
         </el-form-item>
@@ -163,7 +163,7 @@
 
     <collapsible-card
       v-if="roadmapEnabled"
-      :title="$gettext('Architecture roadmap documents') | translate"
+      :title="$gettext('National Digital Health Reference Documents') | translate"
       class="RoadmapDocuments"
       ref="roadmapdocs"
     >
@@ -227,12 +227,12 @@
       <div class="Footer">
         <p>
           <fa icon="info-circle" />
-          <translate>About these documents: Quisque placerat facilisis egestas cillum dolore. Gallia est omnis divisa in partes tres, quarum.</translate>
+          <translate>About these documents: Upload any reference policies, architecture blueprints or strategy documents which could be helpful to investors and implementation partners working in your country.</translate>
         </p>
         <p>
           <fa icon="info-circle" />
           <translate :parameters="{list: extensionList, size: roadmap.max_size_in_MB, max: roadmap.max_documents }">
-            Allowed file formats: {list} Uploaded size is limited to {size}MB. Max. number of uploaded files is {max}.
+            Supported file formats include: {list}. The file size is limited to {size}MB. You are able to upload a maximum of {max} reference files.
           </translate>
         </p>
       </div>
