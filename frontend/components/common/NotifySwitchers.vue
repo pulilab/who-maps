@@ -1,14 +1,14 @@
 <template>
   <div v-if="!hideAdminNotifications">
     <span class="NotifyTitle">
-      <translate>Email notifications (role specific)</translate>
+      <translate>Email Notifications (Providing updates related to your role)</translate>
     </span>
     <el-form-item v-if="project_approval_request_notification !== undefined">
       <div class="Switch-container">
         <filter-switch
           :value="project_approval_request_notification"
           @change="$emit('update:project_approval_request_notification', $event)"
-          :label="$gettext('Daily project approval digest') | translate"
+          :label="$gettext('Daily project approval status (Y/N)') | translate"
           :tooltip="$gettext('Lorem ipsum') | translate"
         />
       </div>
