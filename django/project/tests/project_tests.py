@@ -8,7 +8,7 @@ from django.utils import timezone
 from rest_framework import status
 
 from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, TechnologyPlatformFactory, \
-    DigitalStrategyFactory
+    DigitalStrategyFactory, ProjectFactory
 from django.core import mail
 from django.contrib.auth.models import User
 from django.core.cache import cache
@@ -18,7 +18,8 @@ from country.models import Country, Donor
 from user.models import UserProfile
 from project.models import Project, DigitalStrategy, TechnologyPlatform, Licence, ProjectApproval
 from project.tasks import send_project_approval_digest, \
-    send_project_updated_digest, notify_superusers_about_new_pending_software, notify_user_about_software_approval
+    send_project_updated_digest, notify_superusers_about_new_pending_software, notify_user_about_software_approval, \
+    send_draft_only_reminders
 
 from project.tests.setup import SetupTests
 
@@ -1296,3 +1297,17 @@ class ProjectTests(SetupTests):
         send_project_updated_digest()
 
         send_email_wrapper.assert_not_called()
+
+    @mock.patch('project.tasks.send_mail_wrapper')
+    def test_draft_only_reminders(self, send_email):
+        project_name = "published in country"
+        p = ProjectFactory(name=project_name)
+        p.team.add(self.userprofile)
+
+        send_draft_only_reminders.apply()
+
+        call_args_list = send_email.call_args_list[0][1]
+        self.assertEqual(call_args_list['subject'], f"'{project_name}' is only a draft. Please consider publishing it.")
+        self.assertEqual(call_args_list['email_type'], 'draft_reminder')
+        self.assertIn('test_user@gmail.com', call_args_list['to'])
+        self.assertEqual(call_args_list['context']['project_id'], p.id)

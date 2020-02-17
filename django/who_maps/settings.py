@@ -239,6 +239,8 @@ ODK_SYNC_ENABLED = bool(os.environ.get('ODK_SYNC_ENABLED', False))
 TOOLKIT_DIGEST_PERIOD = 24  # hours
 PROJECT_UPDATE_DIGEST_PERIOD = 24  # hours
 APPROVAL_DIGEST_PERIOD = 24  # hours
+NEW_QUESTION_DIGEST_PERIOD = 24  # hours
+DRAFT_ONLY_REMINDER_PERIOD = 7 * 24  # 1 week
 
 CACHES = {
     "default": {
@@ -325,8 +327,11 @@ if SITE_ID == 3:
 elif SITE_ID == 4:
     ENVIRONMENT_NAME = "QA / STAGING"
     ENVIRONMENT_COLOR = "orange"
-    TOOLKIT_DIGEST_PERIOD = 1  # hours
-    PROJECT_UPDATE_DIGEST_PERIOD = 1  # hours
+    TOOLKIT_DIGEST_PERIOD = 1  # hour
+    PROJECT_UPDATE_DIGEST_PERIOD = 1  # hour
+    NEW_QUESTION_DIGEST_PERIOD = 1  # hour
+    DRAFT_ONLY_REMINDER_PERIOD = 1  # hour
+    DRAFT_ONLY_REMINDER_LIMITED = True
 else:
     ENVIRONMENT_NAME = "DEVELOPMENT"
     ENVIRONMENT_COLOR = "blue"
@@ -358,6 +363,18 @@ if SITE_ID in [3, 4]:
         "send_project_approval_digest": {
             "task": 'send_project_approval_digest',
             "schedule": datetime.timedelta(hours=APPROVAL_DIGEST_PERIOD),
+        },
+        "send_new_custom_country_question_digest": {
+            "task": 'send_new_custom_country_question_digest',
+            "schedule": datetime.timedelta(hours=NEW_QUESTION_DIGEST_PERIOD),
+        },
+        "send_new_custom_donor_question_digest": {
+            "task": 'send_new_custom_donor_question_digest',
+            "schedule": datetime.timedelta(hours=NEW_QUESTION_DIGEST_PERIOD),
+        },
+        "send_draft_only_reminders": {
+            "task": 'send_draft_only_reminders',
+            "schedule": datetime.timedelta(hours=DRAFT_ONLY_REMINDER_PERIOD),
         }
     }
     if ODK_SYNC_ENABLED:

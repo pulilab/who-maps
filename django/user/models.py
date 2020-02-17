@@ -60,6 +60,9 @@ class UserProfile(ExtendedModel):
     donor = models.ForeignKey('country.Donor', related_name='userprofiles', null=True, on_delete=models.SET_NULL)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
+    phone = models.CharField(blank=True, null=True, max_length=50)
+    title = models.CharField(blank=True, null=True, max_length=100)
+    linkedin = models.URLField(blank=True, null=True)
 
     project_updates_notification = models.BooleanField(default=True)
     daily_toolkit_digest_notification = models.BooleanField(default=True)
@@ -86,10 +89,9 @@ class UserProfile(ExtendedModel):
         from country.models import Country
         from country.models import Donor
 
-        approved_ca = self.account_type == self.COUNTRY_ADMIN and Country.objects.filter(project_approval=True).\
-            filter(admins=self).exists()
-        approved_sca = self.account_type == self.SUPER_COUNTRY_ADMIN and Country.objects.filter(project_approval=True).\
-            filter(super_admins=self).exists()
+        approved_ca = self.account_type == self.COUNTRY_ADMIN and Country.objects.filter(admins=self).exists()
+        approved_sca = self.account_type == self.SUPER_COUNTRY_ADMIN and Country.objects.filter(
+            super_admins=self).exists()
         approved_da = self.account_type == self.DONOR_ADMIN and Donor.objects.filter(admins=self).exists()
         approved_sda = self.account_type == self.SUPER_DONOR_ADMIN and Donor.objects.filter(
             super_admins=self).exists()

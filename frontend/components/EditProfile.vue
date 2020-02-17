@@ -63,6 +63,36 @@
             </el-form-item>
 
             <el-form-item
+              :label="$gettext('Phone number') | translate"
+              prop="phone"
+            >
+              <el-input
+                v-model="innerProfile.phone"
+                type="text"
+              />
+            </el-form-item>
+
+            <el-form-item
+              :label="$gettext('Designation / Title') | translate"
+              prop="title"
+            >
+              <el-input
+                v-model="innerProfile.title"
+                type="text"
+              />
+            </el-form-item>
+
+            <el-form-item
+              :label="$gettext('LinkedIn profile') | translate"
+              prop="linkedin"
+            >
+              <el-input
+                v-model="innerProfile.linkedin"
+                type="text"
+              />
+            </el-form-item>
+
+            <el-form-item
               :label="$gettext('Site language') | translate"
               prop="language"
             >
@@ -78,7 +108,7 @@
               <div class="Switch-container">
                 <filter-switch
                   v-model="innerProfile.daily_toolkit_digest_notification"
-                  :label="$gettext('Daily Toolkit digest') | translate"
+                  :label="$gettext('Daily Project Toolkit updates (Y/N)') | translate"
                   :tooltip="$gettext('Lorem ipsum') | translate"
                 />
               </div>
@@ -114,62 +144,78 @@
                 class="Separator"
               />
 
+
               <el-checkbox
-                v-model="isCountryUser"
+                v-model="isNoneUser"
                 border
               >
-                <span class="IconRole IconGovernmentUser" /><translate>Government user</translate>
+                <span class="IconRole IconNoneUser">
+                  <fa icon="user-friends"></fa>
+                </span>
+                <translate>No addiitonal access required</translate>
               </el-checkbox>
 
               <p class="UserArchTypeText">
-                <translate>Privileges for Government Users are detailed below. Select the user type that most matches your role within the DHA. This request will be received by the Government Admin team and a response will be sent via email for your request.</translate>
+                <translate>The DHA has additional features to support Ministries of Health and Investors to understand and organize their digital health projects. If you plan to use the DHA to register projects only, select this option for your profile. This access can be updated at any time.</translate>
               </p>
-
-              <el-collapse-transition>
-                <el-radio-group
-                  v-if="isCountryUser"
-                  v-model="innerProfile.account_type"
-                  :disabled="!isCountryUser"
-                  class="OnePerRow"
-                >
-                  <el-radio
-                    label="G"
-                    class="RadioSmall"
-                  >
-                    <translate>Country viewer</translate>
-                  </el-radio>
-                  <user-privileges
-                    v-if="innerProfile.account_type === 'G'"
-                    type="G"
-                  />
-                  <el-radio
-                    label="CA"
-                    class="RadioSmall"
-                  >
-                    Government Admins for this country
-                  </el-radio>
-                  <user-privileges
-                    v-if="innerProfile.account_type === 'CA'"
-                    type="CA"
-                  />
-
-                  <el-radio
-                    label="SCA"
-                    class="RadioSmall"
-                  >
-                    Government System Admins
-                  </el-radio>
-                  <user-privileges
-                    v-if="innerProfile.account_type === 'SCA'"
-                    type="SCA"
-                  />
-                </el-radio-group>
-              </el-collapse-transition>
 
               <div class="Separator Or">
                 <span><translate>or</translate></span>
               </div>
 
+              <section class="space-bottom">
+                <el-checkbox
+                  v-model="isCountryUser"
+                  border
+                >
+                  <span class="IconRole IconGovernmentUser" /><translate>Government user</translate>
+                </el-checkbox>
+
+                <p class="UserArchTypeText">
+                  <translate>Privileges for Government Users are detailed below. Select the user type that most matches your role within the DHA. This request will be received by the Government Admin team and a response will be sent via email for your request.</translate>
+                </p>
+
+                <el-collapse-transition>
+                  <el-radio-group
+                    v-if="isCountryUser"
+                    v-model="innerProfile.account_type"
+                    :disabled="!isCountryUser"
+                    class="OnePerRow"
+                  >
+                    <el-radio
+                      label="G"
+                      class="RadioSmall"
+                    >
+                      <translate>Government Viewers</translate>
+                    </el-radio>
+                    <user-privileges
+                      v-if="innerProfile.account_type === 'G'"
+                      type="G"
+                    />
+                    <el-radio
+                      label="CA"
+                      class="RadioSmall"
+                    >
+                      Government Admins for this country
+                    </el-radio>
+                    <user-privileges
+                      v-if="innerProfile.account_type === 'CA'"
+                      type="CA"
+                    />
+
+                    <el-radio
+                      label="SCA"
+                      class="RadioSmall"
+                    >
+                      Government System Admins
+                    </el-radio>
+                    <user-privileges
+                      v-if="innerProfile.account_type === 'SCA'"
+                      type="SCA"
+                    />
+                  </el-radio-group>
+                </el-collapse-transition>
+              </section>
               <el-checkbox
                 v-model="isDonorUser"
                 border
@@ -267,8 +313,8 @@
                       <span class="IconRole IconGovernmentUser" />
                     </el-col>
                     <el-col>
-                      <h5><translate>Government user</translate></h5>
-                      <span><translate>Country viewer</translate></span>
+                      <h5><translate>Government User</translate></h5>
+                      <span><translate>Government Viewer</translate></span>
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
@@ -277,7 +323,7 @@
                       :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
                       :role_request_notification.sync="innerProfile.role_request_notification"
                     />
-                    <span><translate>My Privileges are:</translate></span>
+                    <span><translate>My Government Viewer access includes:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'G'"
                       type="G"
@@ -297,8 +343,8 @@
                       <span class="IconRole IconGovernmentUser" />
                     </el-col>
                     <el-col>
-                      <h5><translate>Government user</translate></h5>
-                      <span><translate>Country Admin</translate></span>
+                      <h5><translate>Government User</translate></h5>
+                      <span><translate>Government Admin</translate></span>
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
@@ -307,7 +353,7 @@
                       :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
                       :role_request_notification.sync="innerProfile.role_request_notification"
                     />
-                    <span><translate>My Privileges are:</translate></span>
+                    <span><translate>My Government Admin access includes:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'CA'"
                       type="CA"
@@ -327,8 +373,8 @@
                       <span class="IconRole IconGovernmentUser" />
                     </el-col>
                     <el-col>
-                      <h5><translate>Government user</translate></h5>
-                      <span><translate>Country System Admin</translate></span>
+                      <h5><translate>Government User</translate></h5>
+                      <span><translate>Government System Admin</translate></span>
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
@@ -337,7 +383,7 @@
                      :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
                      :role_request_notification.sync="innerProfile.role_request_notification"
                     />
-                    <span><translate>My Privileges are:</translate></span>
+                    <span><translate>My Government System Admin access includes:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'SCA'"
                       type="SCA"
@@ -357,7 +403,7 @@
                       <span class="IconRole IconInvestorUser" />
                     </el-col>
                     <el-col>
-                      <h5><translate>Investor</translate></h5>
+                      <h5><translate>Financial Investor</translate></h5>
                       <span><translate>Investor Viewer</translate></span>
                     </el-col>
                   </el-row>
@@ -367,7 +413,7 @@
                       :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
                       :role_request_notification.sync="innerProfile.role_request_notification"
                     />
-                    <span><translate>My Privileges are:</translate></span>
+                    <span><translate>My Investor Viewer access includes:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'D'"
                       type="D"
@@ -387,7 +433,7 @@
                       <span class="IconRole IconInvestorUser" />
                     </el-col>
                     <el-col>
-                      <h5><translate>Investor</translate></h5>
+                      <h5><translate>Financial Investor</translate></h5>
                       <span><translate>Investor Admin</translate></span>
                     </el-col>
                   </el-row>
@@ -397,7 +443,7 @@
                       :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
                       :role_request_notification.sync="innerProfile.role_request_notification"
                     />
-                    <span><translate>My Privileges are:</translate></span>
+                    <span><translate>My Investor Admin access includes:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'DA'"
                       type="DA"
@@ -417,7 +463,7 @@
                       <span class="IconRole IconInvestorUser" />
                     </el-col>
                     <el-col>
-                      <h5><translate>Financial investor</translate></h5>
+                      <h5><translate>Financial Investor</translate></h5>
                       <span><translate>Investor System Admin</translate></span>
                     </el-col>
                   </el-row>
@@ -427,7 +473,7 @@
                       :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
                       :role_request_notification.sync="innerProfile.role_request_notification"
                     />
-                    <span><translate>My Privileges are:</translate></span>
+                    <span><translate>My Investor System Admin access includes:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'SDA'"
                       type="SDA"
@@ -513,10 +559,14 @@ export default {
         daily_toolkit_digest_notification: true,
         project_updates_notification: true,
         project_approval_request_notification: true,
-        role_request_notification: true
+        role_request_notification: true,
+        phone: null,
+        title: null,
+        linkedin: null
       },
       isCountryUser: false,
       isDonorUser: false,
+      isNoneUser: true,
       changeApprovedUserRole: false
     };
   },
@@ -555,6 +605,10 @@ export default {
         donor: [
           { required: this.isDonorRequired, message: this.$gettext('This field is required'), trigger: 'change' },
           { validator: this.validatorGenerator('donor') }
+        ],
+        linkedin: [
+          { type: 'url', message: this.$gettext('Has to be a valid url'), trigger: 'blur' },
+          { validator: this.validatorGenerator('linkedin') }
         ]
       };
     }
@@ -564,6 +618,7 @@ export default {
     isCountryUser: function (newVal, oldVal) {
       if (newVal && !oldVal) {
         this.isDonorUser = false;
+        this.isNoneUser = false;
         if (!['G', 'CA', 'SCA'].includes(this.innerProfile.account_type)) {
           this.innerProfile.account_type = 'G';
         }
@@ -574,10 +629,18 @@ export default {
     isDonorUser: function (newVal, oldVal) {
       if (newVal && !oldVal) {
         this.isCountryUser = false;
+        this.isNoneUser = false;
         if (!['D', 'DA', 'SDA'].includes(this.innerProfile.account_type)) {
           this.innerProfile.account_type = 'D';
         }
       } else if (!newVal && !this.isCountryUser) {
+        this.innerProfile.account_type = 'I';
+      }
+    },
+    isNoneUser: function (newVal, oldVal) {
+      if (newVal && !oldVal) {
+        this.isCountryUser = false;
+        this.isDonorUser = false;
         this.innerProfile.account_type = 'I';
       }
     },
@@ -660,6 +723,10 @@ export default {
 
   .EditProfile {
     margin-bottom: 80px;
+
+    .space-bottom {
+      margin-bottom: 32px;
+    }
 
     .ProfileCard {
       width: @cardSizeMedium;
@@ -770,6 +837,11 @@ export default {
           &.IconGovernmentUser {
             top: 46%;
             background-image: url("~static/icon-role-government.svg");
+          }
+
+          &.IconNoneUser {
+            font-size: 22px;
+            right: 5px;
           }
 
           &.IconInvestorUser {

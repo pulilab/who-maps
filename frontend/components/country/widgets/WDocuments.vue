@@ -1,8 +1,8 @@
 <template>
   <div class="grid-content">
-    <h3><translate>Architecture roadmap documents</translate></h3>
+    <h3><translate>National Digital Health Reference Documents</translate></h3>
     <p>
-      <translate>Non equidem invideo, miror magis posuere velit aliquet. Donec sed odio operae, eu vulputate felis rhoncus. Petierunt uti sibi concilium totius Galliae in diem certam indicere.</translate>
+      <translate>The WHO recognizes the importance of government-led planning as a key component to sucessful, scaled digital health projects. Leadership from within the national MOH team have uploaded the reference documents below, and these represent a point-in time understanding of the specific national planning goals and strategic context.</translate>
     </p>
 
     <div v-for="(doc, i) in documents" :key="i" class="doc">

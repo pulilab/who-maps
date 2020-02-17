@@ -69,8 +69,8 @@ def send_project_updated_digest():
         modified__gt=timezone.now() - timezone.timedelta(hours=settings.PROJECT_UPDATE_DIGEST_PERIOD))\
         .select_related('search', 'search__country')
 
-    countries_qs = projects.values_list('search__country', flat=True)
-    for country_id in countries_qs:
+    countries = set(projects.values_list('search__country', flat=True))
+    for country_id in countries:
         country_projects = projects.filter(search__country_id=country_id)
         country = country_projects.first().search.country
 
@@ -406,3 +406,27 @@ def notify_user_about_software_approval(action, software_id):
                       to=software.added_by.user.email,
                       language=software.added_by.language or settings.LANGUAGE_CODE,
                       context={'software_name': software.name})
+
+
+@app.task(name="send_draft_only_reminders")
+def send_draft_only_reminders():
+    """
+    Sends reminder to projects that are draft only to publish.
+    """
+    from project.models import Project
+
+    projects = Project.objects.draft_only()
+    if getattr(settings, 'DRAFT_ONLY_REMINDER_LIMITED', False):  # pragma: no cover
+        projects = [projects.last()]
+
+    for p in projects:
+        email_mapping = defaultdict(list)
+        for profile in p.team.all():
+            email_mapping[profile.language].append(profile.user.email)
+
+        for language, email_list in email_mapping.items():
+            send_mail_wrapper(subject=_(f"'{p.name}' is only a draft. Please consider publishing it."),
+                              email_type='draft_reminder',
+                              to=email_list,
+                              language=language,
+                              context={'project_id': p.id})
