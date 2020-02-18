@@ -48,6 +48,9 @@ def send_user_request_to_admins(profile_id):
         context = {
             "full_name": admin.name,
             "requester": str(profile),
+            "requester_phone": profile.phone,
+            "requester_title": profile.title,
+            "requester_linkedin": profile.linkedin,
             "requester_type": profile.get_account_type_display(),
             "admin_type": admin_type,
         }

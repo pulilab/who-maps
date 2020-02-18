@@ -39,6 +39,9 @@ class ProjectManager(models.Manager):
     def published_only(self):
         return self.exclude(public_id='')
 
+    def draft_only(self):
+        return self.filter(public_id='')
+
 
 class ProjectQuerySet(ActiveQuerySet, ProjectManager):
     pass

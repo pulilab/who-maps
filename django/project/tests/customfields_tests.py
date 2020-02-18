@@ -1,11 +1,15 @@
 from copy import copy
+from unittest import mock
 
 from rest_framework.reverse import reverse
 
-from core.factories import DonorCustomQuestionFactory, CountryCustomQuestionFactory
+from core.factories import DonorCustomQuestionFactory, CountryCustomQuestionFactory, UserFactory, UserProfileFactory, \
+    ProjectFactory
 from country.models import CountryCustomQuestion
+from country.tasks import send_new_custom_country_question_digest, send_new_custom_donor_question_digest
 from project.models import Project
 from project.tests.setup import SetupTests
+from user.models import UserProfile
 
 
 class CustomFieldTests(SetupTests):
@@ -601,3 +605,120 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(response.json()['donor_custom_answers'],
                          {str(self.d1.id): [{'question_id': ['This field is required.'],
                                              'answer': ['This field is required.']}]})
+
+    @mock.patch('country.tasks.send_mail_wrapper', return_value=None)
+    def test_custom_country_question_digest(self, send_mail_wrapper):
+        q1 = CountryCustomQuestionFactory(question="test", country=self.country, required=True)
+        CountryCustomQuestionFactory(question="test2", country=self.country, required=False)
+
+        url = reverse("project-publish",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
+        data = copy(self.project_data)
+        data.update({"country_custom_answers": [dict(question_id=q1.id, answer=['yoyo'])]})
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 200, response)
+
+        u1 = UserFactory(username='username1', email='user1@user.org')
+        up1 = UserProfileFactory(name="USER1", user=u1, account_type=UserProfile.IMPLEMENTER,
+                                 country_id=self.country_id)
+
+        u2 = UserFactory(username='username2', email='user2@user.org')
+        up2 = UserProfileFactory(name="USER2", user=u2, account_type=UserProfile.IMPLEMENTER,
+                                 country_id=self.country_id)
+
+        p1 = Project.objects.get(id=self.project_id)
+        p1.team.add(up1)
+
+        p2 = ProjectFactory(name="published in country")
+        p2.team.add(self.userprofile)
+        p2.team.add(up2)
+
+        url = reverse("project-publish",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": p2.id
+                      })
+
+        data = copy(self.project_data)
+        data['project']['name'] = "published in country"
+        data.update({"country_custom_answers": [dict(question_id=q1.id, answer=['yooy'])]})
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 200, response)
+
+        send_new_custom_country_question_digest.apply()
+
+        self.assertEqual(send_mail_wrapper.call_count, 3)
+
+        for i in range(3):
+            if send_mail_wrapper.call_args_list[i][1]['to'] == self.userprofile.user.email:
+                self.assertTrue(p1 in send_mail_wrapper.call_args_list[i][1]['context']['projects'])
+                self.assertTrue(p2 in send_mail_wrapper.call_args_list[i][1]['context']['projects'])
+            elif send_mail_wrapper.call_args_list[i][1]['to'] == u1.email:
+                self.assertTrue(p1 in send_mail_wrapper.call_args_list[i][1]['context']['projects'])
+            elif send_mail_wrapper.call_args_list[i][1]['to'] == u2.email:
+                self.assertTrue(p2 in send_mail_wrapper.call_args_list[i][1]['context']['projects'])
+
+    @mock.patch('country.tasks.send_mail_wrapper', return_value=None)
+    def test_custom_donor_question_digest(self, send_mail_wrapper):
+        q = DonorCustomQuestionFactory(question="test", donor=self.d1, required=True)
+        DonorCustomQuestionFactory(question="test2", donor=self.d1, required=False)
+
+        url = reverse("project-publish",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": self.project_id
+                      })
+        data = copy(self.project_data)
+        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=q.id, answer=["lol1"])]}})
+
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['published']['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
+        self.assertEqual(response.json()['draft']['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
+
+        project = Project.objects.last()
+        self.assertEqual(project.data['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
+        self.assertEqual(project.draft['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
+
+        u1 = UserFactory(username='username1', email='user1@user.org')
+        up1 = UserProfileFactory(name="USER1", user=u1, account_type=UserProfile.IMPLEMENTER,
+                                 country_id=self.country_id)
+
+        u2 = UserFactory(username='username2', email='user2@user.org')
+        up2 = UserProfileFactory(name="USER2", user=u2, account_type=UserProfile.IMPLEMENTER,
+                                 country_id=self.country_id)
+
+        p1 = Project.objects.get(id=self.project_id)
+        p1.team.add(up1)
+
+        p2 = ProjectFactory(name="published in country")
+        p2.team.add(self.userprofile)
+        p2.team.add(up2)
+
+        url = reverse("project-publish",
+                      kwargs={
+                          "country_id": self.country_id,
+                          "project_id": p2.id
+                      })
+
+        data = copy(self.project_data)
+        data['project']['name'] = "published in country"
+        data.update({"donor_custom_answers": {str(self.d1.id): [dict(question_id=q.id, answer=["lol2"])]}})
+        response = self.test_user_client.put(url, data=data, format='json')
+        self.assertEqual(response.status_code, 200, response)
+
+        send_new_custom_donor_question_digest.apply()
+
+        self.assertEqual(send_mail_wrapper.call_count, 3)
+
+        for i in range(3):
+            if send_mail_wrapper.call_args_list[i][1]['to'] == self.userprofile.user.email:
+                self.assertTrue(p1 in send_mail_wrapper.call_args_list[i][1]['context']['projects'])
+                self.assertTrue(p2 in send_mail_wrapper.call_args_list[i][1]['context']['projects'])
+            elif send_mail_wrapper.call_args_list[i][1]['to'] == u1.email:
+                self.assertTrue(p1 in send_mail_wrapper.call_args_list[i][1]['context']['projects'])
+            elif send_mail_wrapper.call_args_list[i][1]['to'] == u2.email:
+                self.assertTrue(p2 in send_mail_wrapper.call_args_list[i][1]['context']['projects'])

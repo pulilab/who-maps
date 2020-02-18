@@ -370,6 +370,29 @@
                         <!-- /TEMPLATE: NEW MEMBER -->
 
 
+                        <!-- TEMPLATE: ADMIN REQUEST -->
+                        {% elif type == "admin_request" %}
+                        <h1>{% trans "Admin request notification" %}</h1>
+                        <h2>{% trans "Dear" %} {{ full_name }},</h2>
+                        <p>{% blocktrans %}{{ requester }} has requested to be a {{ requester_type }}. (Phone: {{ requester_phone }} Title: {{ requester_title }} LinkedIn: {{ requester_linkedin }} ) Please go to the admin interface's user management section to review this request.{% endblocktrans %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="{% site_url %}/{{ language }}/-/admin/{{ admin_type }}" target="_blank">{% trans "Go to admin interface" %}</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: ADMIN REQUEST-->
+
+
                         <!-- TEMPLATE: COUNTRY ADMIN -->
                         {% elif type == "country_admin" %}
                         <h1>{% trans "Country admin" %}</h1>
@@ -490,12 +513,15 @@
 
                         <!-- TEMPLATE: PASSWORD INVITE -->
                         {% elif type == "password_invited" %}
-                        <h1>{% trans "Set Your Password on Digital Health Atlas" %}</h1>
-                        <p>{% trans "You have been invited to the Digital Health Atlas through a project. Please set you password so you can log in and view/edit your project." %}</p>
+                        <h1>{% trans "Set up your account on the Digital Health Atlas" %}</h1>
+                        <p>{% trans "You have been invited to the Digital Health Atlas through a project. Please set your password so you can become part of the Project Team." %}</p>
                         <p><b>{% trans "To set your password, click the link below:" %}</b></p>
                         <p>
                         <a href="{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited" target="_blank">{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited</a>
                         </p>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "Sincerely," %}</p>
+                        <p>{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: PASSWORD INVITED -->
 
 
@@ -513,34 +539,55 @@
                         <!-- SOFTWARE DECLINED -->
                         {% elif type == "software_declined" %}
                         <h1>{% trans "Software declined: " %}{{ software_name }}</h1>
-                        <p>{% trans "Unfortunately the software you requested has been declined by the administrator" %}</p>
-                        <p>{% trans "The software has been removed from the project(s) you referenced them." %}</p>
+                        <p>{{ software_name }}{% trans " has not been approved for inclusion in the Digital Health Atlas. Please get in touch with the Digital Health Atlas team if you believe this decision has been taken in error via digitalhealthatlas@gmail.com" %}</p>
+                        <p>{% trans "Sincerely," %}</p>
+                        <p>{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /SOFTWARE DECLINED -->
 
 
                         <!-- SOFTWARE APPROVED -->
                         {% elif type == "software_approved" %}
-                        <h1>{% trans "Software approved: " %}{{ software_name }}</h1>
-                        <p>{% trans "The software you requested has been approved by the administrator" %}</p>
+                        <h1>{% trans "Software approved: " %}</h1>
+                        <p>{{ software_name }}{% trans " has now been approved for inclusion in the Digital Health Atlas. You can now register all projects using your software globally." %}</p>
+                        <p>
+                          <a href="{% site_url %}/{{ language }}/-/projects/create" target="_blank">{% trans "Register new projects" %}</a>
+                        </p>
                         <!-- /SOFTWARE APPROVED -->
 
 
                         <!-- TEMPLATE: TOOLKIT DIGEST -->
                         {% elif type == "toolkit_digest" %}
                         <h1>{% trans "Notification" %}</h1>
-                        <p>{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to see these new changes." %}</p>
-                        <p><b>{% trans "Check the DHA Assessment module on the link below:" %}</b></p>
+                        <p>{% trans "Your project information in the Digital Health Atlas has been updated. Select the link below to view these changes." %}</p>
+                        <p><b>{% blocktrans %}Link to {{ project_name }} Project Page{% endblocktrans %}</b></p>
                         <p>
                           <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment" target="_blank">{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment</a>
                         </p>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "Sincerely," %}</p>
+                        <p>{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: TOOLKIT DIGEST -->
+
+
+                        <!-- TEMPLATE: DRAFT REMINDER -->
+                        {% elif type == "draft_reminder" %}
+                        <h1>{% trans "Notification" %}</h1>
+                        <p>{% trans "Thank you for registering your project in the Digital Health Atlas. Your project is now part of the most comprehensive registry of Digital Health projects in the world. We noticed that your project(s) need a few more data points before you can publish." %}</p>
+                        <p>{% trans "Please take a few minutes to complete the project detailed below:" %}</p>
+                        <p>
+                          <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}" target="_blank">{% site_url %}/{{ language }}/-/projects/{{ project_id }}</a>
+                        </p>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "Sincerely," %}</p>
+                        <p>{% trans "The Digital Health Atlas Team" %}</p>
+                        <!-- /TEMPLATE: DRAFT REMINDER -->
 
 
                         <!-- TEMPLATE: PROJECT UPDATED ADMIN DIGEST -->
                         {% elif type == "project_updated_admin_digest" %}
-                        <h1>{% trans "Notification" %}</h1>
+                        <h1>{% trans "New Project Information in the Digital Health Atlas" %}</h1>
                         <h2>{% trans "Dear" %} {{ name }} {% trans "Admin," %}</h2>
-                        <p>{% trans "The project(s) listed below have been updated by their teams." %}</p>
+                        <p>{% trans "Projects that list you as an Investor have been updated. You can view the full project detailes below:" %}</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="project-list">
                           <tbody>
                             <tr class="list-header">
@@ -565,6 +612,94 @@
                         </table>
                         <!-- /TEMPLATE: PROJECT UPDATED ADMIN DIGEST -->
 
+                        <!-- TEMPLATE: COUNTRY PUBLISHED NEW QUESTION DIGEST -->
+                        {% elif type == "cc_digest_country" %}
+                        <h2>{% trans "Dear" %} {{ name }}</h2>
+                        <p>{% blocktrans %}The Ministry of Health of {{ country_name }} has added new question(s) to the Project Questionaire in the Digital Health Atlas. You can update your project(s) by clicking the link(s) below.{% endblocktrans %}</p>
+                        <h3>{% trans "New question(s): " %}</h3>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            {% for question in questions %}
+                            <tr class="list-content">
+                              <td align="left">
+                                <b>{{ question.question }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table><br><br>
+                        <h3>{% trans "Related project(s): " %}</h3>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left">
+                                <b>{% trans "Project Name" %}</b>
+                              </td>
+                              <td align="right">
+                                {% trans "Date of Submission" %}
+                              </td>
+                            </tr>
+                            {% for project in projects %}
+                            <tr class="list-content">
+                              <td align="left">
+                                <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/published" target="_blank"><b>{{ project.name }}</b></a>
+                              </td>
+                              <td align="right">
+                                <b>{{ project.modified }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table><br><br>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "Sincerely," %}</p>
+                        <p>{% trans "The Digital Health Atlas Team" %}</p>
+                        <!-- /TEMPLATE: COUNTRY PUBLISHED NEW QUESTION DIGEST -->
+
+
+                        <!-- TEMPLATE: DONOR PUBLISHED NEW QUESTION DIGEST -->
+                        {% elif type == "cc_digest_donor" %}
+                        <h2>{% trans "Dear" %} {{ name }}</h2>
+                        <p>{% blocktrans %}{{ donor_name }} has added new question(s) to the Project Questionaire in the Digital Health Atlas. You can update your project(s) by clicking the link(s) below.{% endblocktrans %}</p>
+                        <h3>{% trans "New question(s): " %}</h3>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            {% for question in questions %}
+                            <tr class="list-content">
+                              <td align="left">
+                                <b>{{ question.question }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table><br><br>
+                        <h3>{% trans "Related project(s): " %}</h3>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left">
+                                <b>{% trans "Project Name" %}</b>
+                              </td>
+                              <td align="right">
+                                {% trans "Date of Submission" %}
+                              </td>
+                            </tr>
+                            {% for project in projects %}
+                            <tr class="list-content">
+                              <td align="left">
+                                <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/published" target="_blank"><b>{{ project.name }}</b></a>
+                              </td>
+                              <td align="right">
+                                <b>{{ project.modified }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table><br><br>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "Sincerely," %}</p>
+                        <p>{% trans "The Digital Health Atlas Team" %}</p>
+                        <!-- /TEMPLATE: DONOR PUBLISHED NEW QUESTION DIGEST -->
 
                         <!-- TEMPLATE: STATUS REPORT -->
                         {% elif type == "status_report" %}
@@ -673,7 +808,7 @@
                 <tr>
                   <tr>
                     <td class="content-block footer-links">
-                      <a href="{% site_url %}">{% trans "Go to the Digital Health Atals" %}</a>
+                      <a href="{% site_url %}">{% trans "Go to the Digital Health Atlas" %}</a>
                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                       <a href="{% site_url %}/{{ language }}/-/terms">{% trans "Terms of use" %}</a>
                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>

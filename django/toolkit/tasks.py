@@ -22,7 +22,7 @@ def send_daily_toolkit_digest():
         toolkit = project.toolkit_set.last()
         if toolkit and toolkit.modified - toolkit.created > timezone.timedelta(seconds=10):
             for profile in project.team.filter(daily_toolkit_digest_notification=True):
-                context = {"project_id": project.id}
+                context = {"project_id": project.id, "project_name": project.name}
                 subject = _(f"{project.name}'s assessment has been updated")
                 send_mail_wrapper(subject=subject,
                                   email_type="toolkit_digest",
