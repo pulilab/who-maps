@@ -1,9 +1,21 @@
 <template>
   <div :class="['SelectorDialogCategory', {'NoParent': !hideHeader && !alwaysExpandCategory}]">
-    <div v-show="!hideHeader" :class="['CategoryName', {'Opened': categoryToggled}]">
-      <el-button type="text" @click="toggleCategory">
-        <fa v-show="!categoryToggled && !alwaysExpandCategory" icon="angle-down" />
-        <fa v-show="categoryToggled && !alwaysExpandCategory" icon="angle-up" />
+    <div
+      v-show="!hideHeader"
+      :class="['CategoryName', {'Opened': categoryToggled}]"
+    >
+      <el-button
+        type="text"
+        @click="toggleCategory"
+      >
+        <fa
+          v-show="!categoryToggled && !alwaysExpandCategory"
+          icon="angle-down"
+        />
+        <fa
+          v-show="categoryToggled && !alwaysExpandCategory"
+          icon="angle-up"
+        />
         <el-checkbox
           v-show="categorySelectable"
           :value="headerChecked"
@@ -14,24 +26,31 @@
     </div>
 
     <transition name="slide-fade">
-      <div v-show="categoryShown" role="group" class="el-checkbox-group Items OnePerRow">
+      <div
+        v-show="categoryShown"
+        role="group"
+        class="el-checkbox-group Items OnePerRow"
+      >
         <el-checkbox
           v-for="item in items"
           :key="item.id"
           :value="values.includes(item.id)"
           class="Item"
           @change="filterChange(item.id)"
-        >{{ getItemName(item) }}</el-checkbox>
+        >
+          {{ getItemName(item) }}
+        </el-checkbox>
       </div>
     </transition>
   </div>
 </template>
 
 <script>
+
 export default {
   model: {
-    prop: "values",
-    event: "change"
+    prop: 'values',
+    event: 'change'
   },
   props: {
     categorySelectable: {
@@ -53,7 +72,7 @@ export default {
     },
     nameProp: {
       type: String,
-      default: "name"
+      default: 'name'
     },
     hideHeader: {
       type: Boolean,
@@ -62,62 +81,63 @@ export default {
     alwaysExpandCategory: {
       type: Boolean,
       default: false
+    },
+    expandCollapse: {
+      type: Boolean,
+      default: false
     }
   },
-  data() {
+  data () {
     return {
       categoryToggled: false
     };
   },
+  watch : {
+    expandCollapse () {
+      this.categoryToggled = this.expandCollapse
+    }
+  },
   computed: {
-    categoryShown() {
-      return (
-        this.hideHeader || this.categoryToggled || this.alwaysExpandCategory
-      );
+    categoryShown () {
+      return this.hideHeader || this.categoryToggled || this.alwaysExpandCategory;
     },
-    items() {
+    items () {
       if (this.childName) {
         return this.category[this.childName];
       }
       return this.category;
     },
-    headerChecked() {
+    headerChecked () {
       return this.items.reduce((c, n) => {
         return c && this.values.includes(n.id);
       }, true);
     }
   },
   methods: {
-    filterChange(item) {
+    filterChange (item) {
       if (this.values.includes(item)) {
-        this.$emit(
-          "change",
-          this.values.filter(v => v !== item)
-        );
+        this.$emit('change', this.values.filter(v => v !== item));
       } else {
-        this.$emit("change", [...this.values, item]);
+        this.$emit('change', [...this.values, item]);
       }
     },
-    toggleCategory() {
+    toggleCategory () {
       this.categoryToggled = !this.categoryToggled;
     },
-    selectAll() {
-      this.$emit("change", [...this.values, ...this.items.map(i => i.id)]);
+    selectAll () {
+      this.$emit('change', [...this.values, ...this.items.map(i => i.id)]);
     },
-    deSelectAll() {
-      this.$emit(
-        "change",
-        this.values.filter(v => !this.items.map(i => i.id).includes(v))
-      );
+    deSelectAll () {
+      this.$emit('change', this.values.filter(v => !this.items.map(i => i.id).includes(v)));
     },
-    selectAllCategory() {
+    selectAllCategory () {
       if (!this.headerChecked) {
         this.selectAll();
       } else {
         this.deSelectAll();
       }
     },
-    getItemName(item) {
+    getItemName (item) {
       return item[this.nameProp];
     }
   }
@@ -125,11 +145,12 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+  @import "../../assets/style/variables.less";
+  @import "../../assets/style/mixins.less";
 
 .SelectorDialogCategory {
   .CategoryName {
+
     &.Opened {
       .el-button {
         color: @colorTextPrimary;
@@ -181,11 +202,11 @@ export default {
   }
 
   .slide-fade-enter-active {
-    transition: all 0.1s ease;
+    transition: all .1s ease;
   }
 
   .slide-fade-leave-active {
-    transition: all 0.1s cubic-bezier(1, 0.5, 0.8, 1);
+    transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
   }
 
   .slide-fade-enter, .slide-fade-leave-to
@@ -194,4 +215,5 @@ export default {
     opacity: 0;
   }
 }
+
 </style>

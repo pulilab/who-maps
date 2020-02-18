@@ -19,7 +19,7 @@
             :category-selectable="true"
             :category="cat"
             child-name="strategies"
-            :alwaysExpandCategory="expand.includes(category.name)"
+            :expandCollapse="expand.includes(category.name)"
           />
         </selector-dialog-column>
       </el-col>
