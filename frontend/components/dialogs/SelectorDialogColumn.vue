@@ -69,8 +69,11 @@ export default {
     .CategoryName {
       .el-button {
         span {
+          svg.fa-angle-down {
+            transform: rotate(-90deg);
+          }
           svg.fa-angle-up {
-            transform: rotate(90deg);
+            transform: rotate(180deg);
           }
         }
       }
