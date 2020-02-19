@@ -111,7 +111,7 @@ export default {
       return this.value.includes(val)
     },
     validateEmail (email) {
-      return validator.isEmail(email);
+      return validator.isEmail(email) && (email.includes('unicef.org') || email.includes('pulilab.com'));
     }
   }
 };
