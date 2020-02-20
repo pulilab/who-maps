@@ -65,6 +65,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     def get_fields(self) -> Dict[str, Field]:
         fields = super().get_fields()
+        if not self.context['request']:
+            return fields
 
         user = self.context['request'].user
 
