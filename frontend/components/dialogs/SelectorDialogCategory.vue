@@ -10,11 +10,11 @@
       >
         <fa
           v-show="!categoryToggled && !alwaysExpandCategory"
-          icon="angle-down"
+          icon="angle-right"
         />
         <fa
           v-show="categoryToggled && !alwaysExpandCategory"
-          icon="angle-up"
+          icon="angle-down"
         />
         <el-checkbox
           v-show="categorySelectable"
@@ -131,6 +131,8 @@ export default {
       this.$emit('change', this.values.filter(v => !this.items.map(i => i.id).includes(v)));
     },
     selectAllCategory () {
+      this.categoryToggled = true
+
       if (!this.headerChecked) {
         this.selectAll();
       } else {

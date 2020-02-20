@@ -77,6 +77,7 @@
               data-vv-as="Software"
             />
             <custom-required-form-item
+              v-show="platform"
               :error="errors.first('strategies', 'platform_' + index)"
               :draft-rule="draftRules.strategies"
               :publish-rule="publishRules.strategies"
