@@ -2,6 +2,13 @@
   <div class="SelectorDialogColumn">
     <div class="Header">
       <span v-show="!headerSelectable">{{ header }}</span>
+      <span @click="handleToggleExpand(false)" class="toggle-expand primary">
+        <small><translate>Collapse</translate></small>
+      </span>
+      <span class="toggle-expand divider">/</span>
+      <span @click="handleToggleExpand(true)" class="toggle-expand primary">
+        <small><translate>Expand</translate></small>
+      </span>
       <el-checkbox v-show="headerSelectable" :value="selected" @change="headerSelected">{{ header }}</el-checkbox>
     </div>
     <div class="Main">
@@ -28,9 +35,18 @@ export default {
     }
   },
   computed: {},
+  data() {
+    return {
+      expand: false
+    };
+  },
   methods: {
     headerSelected(value) {
       this.$emit("headerSelected", value);
+    },
+    handleToggleExpand(val) {
+      this.expand = val;
+      this.$emit("handleToggleExpand", this.header, val);
     }
   }
 };
@@ -72,6 +88,18 @@ export default {
     padding: 10px 20px 50px 30px;
     height: calc(80vh - (@dialogHeaderFooterHeight * 3));
     overflow-y: scroll;
+  }
+  .toggle-expand {
+    text-transform: none;
+    float: right;
+    font-weight: 300;
+    cursor: pointer;
+    &.primary {
+      color: @colorBrandPrimary;
+    }
+    &.divider{
+     padding: 0 5px;
+    }
   }
 }
 </style>

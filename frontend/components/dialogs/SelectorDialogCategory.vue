@@ -81,12 +81,21 @@ export default {
     alwaysExpandCategory: {
       type: Boolean,
       default: false
+    },
+    expandCollapse: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
       categoryToggled: false
     };
+  },
+  watch : {
+    expandCollapse () {
+      this.categoryToggled = this.expandCollapse
+    }
   },
   computed: {
     categoryShown () {
@@ -122,6 +131,8 @@ export default {
       this.$emit('change', this.values.filter(v => !this.items.map(i => i.id).includes(v)));
     },
     selectAllCategory () {
+      this.categoryToggled = true
+
       if (!this.headerChecked) {
         this.selectAll();
       } else {
