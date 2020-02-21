@@ -27,7 +27,7 @@
         </el-col>
       </el-row>
     </div>
-    <layout-builder v-else :data="landingData"/>
+    <layout-builder v-else-if="landingData" :data="landingData" />
     <about-section />
   </div>
 </template>
@@ -54,9 +54,6 @@ export default {
     CountryProjectsBox,
     LayoutBuilder
   },
-  fetch ({ store }) {
-    store.dispatch('landing/resetSearch');
-  },
   computed: {
     ...mapGetters({
       landingData: 'landing/getLandingPageData'
@@ -64,9 +61,12 @@ export default {
     showCoverImage () {
       return this.landingData && this.landingData.cover;
     },
-    routeCheck() {
+    routeCheck () {
       return this.$route.path.split('/')[2].trim() === '-' || this.$route.path.split('/')[2].trim().length > 2;
     }
+  },
+  fetch ({ store }) {
+    store.dispatch('landing/resetSearch');
   }
 };
 </script>
