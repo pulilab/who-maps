@@ -163,6 +163,21 @@
         </el-button>
 
         <el-button
+          v-if="isPublished"
+          :disabled="!!loading"
+          type="danger"
+          size="medium"
+          @click="$emit('handleClickUnPublish')"
+        >
+          <fa
+            v-show="loading === 'unpublish'"
+            icon="spinner"
+            spin
+          />
+          <translate>Unpublish</translate>
+        </el-button>
+
+        <el-button
           v-if="isPublished || isReadOnlyDraft"
           type="text"
           class="GoToDashboard"
@@ -284,6 +299,10 @@ export default {
     goToDashboard () {
       const localised = this.localePath({ name: 'organisation-dashboard', params: { ...this.$route.params } });
       this.$router.push(localised);
+    },
+    handleClickUnPublish () {
+      console.log('MARICON');
+      this.$emit('handleClickUnPublish');
     },
     setNavigationBoxLeftStyle () {
       const leftSide = document.querySelector('#general');
@@ -407,7 +426,6 @@ export default {
         &:active {
           .el-button {
             color: @colorTextPrimary;
-
             .Step {
               background-color: @colorBrandPrimaryDark;
               border-width: 4px;
@@ -486,7 +504,7 @@ export default {
       background-color: @colorBrandBlueLight;
       text-align: center;
 
-      .el-button--primary {
+      .el-button--primary, .el-button--danger {
         width: 100%;
         margin: 0 0 20px;
       }

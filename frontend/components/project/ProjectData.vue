@@ -230,7 +230,9 @@
         </div>
       </el-col>
       <el-col :span="6">
-        <project-navigation />
+        <project-navigation
+          @handleClickUnPublish="handleClickUnPublish"
+        />
       </el-col>
     </el-row>
   </div>
@@ -256,7 +258,8 @@ import InteroperabilityLinksList from './InteroperabilityLinksList';
 import DonorsList from '../common/list/DonorsList';
 import CustomReadonlyField from './CustomReadonlyField';
 
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
+
 
 export default {
   components: {
@@ -327,8 +330,34 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      unpublishProject: 'project/unpublishProject',
+      setLoading: 'project/setLoading'
+    }),
     customFieldsName (name) {
       return this.$gettext('{name} custom fields', { name });
+    },
+    async handleClickUnPublish () {
+      try {
+        await this.$confirm(this.$gettext('The current project will be unpublish'), this.$gettext('Attention'), {
+          confirmButtonText: this.$gettext('Ok'),
+          cancelButtonText: this.$gettext('Cancel'),
+          type: 'warning'
+        });
+        await this.unpublishProject(this.$route.params.id);
+        const localised = this.localePath({ name: 'organisation-projects-id-edit', params: { ...this.$route.params } });
+        this.$router.push(localised);
+        this.$message({
+          type: 'success',
+          message: this.$gettext('The project has been unpublish')
+        });
+      } catch (e) {
+        this.setLoading(false);
+        this.$message({
+          type: 'info',
+          message: this.$gettext('Action cancelled')
+        });
+      }
     }
   }
 };

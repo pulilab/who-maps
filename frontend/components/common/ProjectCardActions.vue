@@ -40,11 +40,23 @@
           <translate>Assessment</translate>
         </nuxt-link>
       </el-col>
+      <el-col v-if="project.isPublished">
+        <nuxt-link
+          to=""
+          @click.native="handleClickUnPublish"
+          class="NuxtLink IconLeft Danger"
+        >
+          <fa icon="times-circle" />
+          <translate>Unpublish</translate>
+        </nuxt-link>
+      </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   props: {
     project: {
@@ -66,6 +78,33 @@ export default {
     showViewPublished () {
       return this.forceShow || this.project.isPublished;
     }
+  },
+  methods: {
+    ...mapActions({
+      unpublishProject: 'project/unpublishProject',
+      setLoading: 'project/setLoading'
+    }),
+    async handleClickUnPublish () {
+      try {
+        await this.$confirm(this.$gettext('The current project will be unpublish'), this.$gettext('Attention'), {
+          confirmButtonText: this.$gettext('Ok'),
+          cancelButtonText: this.$gettext('Cancel'),
+          type: 'warning'
+        });
+        await this.unpublishProject(this.project.id);
+        location.reload();
+        this.$message({
+          type: 'success',
+          message: this.$gettext('The project has been unpublish')
+        });
+      } catch (e) {
+        this.setLoading(false);
+        this.$message({
+          type: 'info',
+          message: this.$gettext('Action cancelled')
+        });
+      }
+    }
   }
 };
 </script>
@@ -84,6 +123,13 @@ export default {
     .NuxtLink {
       margin-left: 40px;
       line-height: 24px;
+    }
+
+    .Danger {
+      color: @colorDanger;
+      &:hover {
+        color: @colorDanger;
+      }
     }
   }
 
