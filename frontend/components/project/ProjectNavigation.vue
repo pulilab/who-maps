@@ -300,10 +300,6 @@ export default {
       const localised = this.localePath({ name: 'organisation-dashboard', params: { ...this.$route.params } });
       this.$router.push(localised);
     },
-    handleClickUnPublish () {
-      console.log('MARICON');
-      this.$emit('handleClickUnPublish');
-    },
     setNavigationBoxLeftStyle () {
       const leftSide = document.querySelector('#general');
       const lang = this.$nuxt.$i18n.locale;

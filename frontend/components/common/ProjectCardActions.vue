@@ -43,7 +43,7 @@
       <el-col v-if="project.isPublished">
         <nuxt-link
           to=""
-          @click.native="handleClickUnPublish"
+          @click.native="handleClickUnPublish({ name: 'organisation-projects' })"
           class="NuxtLink IconLeft Danger"
         >
           <fa icon="times-circle" />
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import handleProjectUnpublish from '@/components/mixins/handleProjectUnpublish';
 import { mapActions } from 'vuex';
 
 export default {
@@ -68,6 +69,7 @@ export default {
       default: false
     }
   },
+  mixins: [handleProjectUnpublish],
   computed: {
     showViewDraft () {
       return this.forceShow || this.project.isViewer || this.project.isMember;
@@ -77,33 +79,6 @@ export default {
     },
     showViewPublished () {
       return this.forceShow || this.project.isPublished;
-    }
-  },
-  methods: {
-    ...mapActions({
-      unpublishProject: 'project/unpublishProject',
-      setLoading: 'project/setLoading'
-    }),
-    async handleClickUnPublish () {
-      try {
-        await this.$confirm(this.$gettext('The current project will be unpublish'), this.$gettext('Attention'), {
-          confirmButtonText: this.$gettext('Ok'),
-          cancelButtonText: this.$gettext('Cancel'),
-          type: 'warning'
-        });
-        await this.unpublishProject(this.project.id);
-        location.reload();
-        this.$message({
-          type: 'success',
-          message: this.$gettext('The project has been unpublish')
-        });
-      } catch (e) {
-        this.setLoading(false);
-        this.$message({
-          type: 'info',
-          message: this.$gettext('Action cancelled')
-        });
-      }
     }
   }
 };

@@ -38,7 +38,6 @@ export const actions = {
       commit('SET_SEARCHED', results.search_term);
       commit('SET_FOUND_IN', results.found_in);
     } catch (e) {
-      // console.log(e);
     }
   },
   async loadCustomLandingPage ({ dispatch }, code) {
