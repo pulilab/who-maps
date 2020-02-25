@@ -11,7 +11,9 @@
       />
     </el-col>
     <el-col class="CountryName">
-      {{ country.name }}
+      <div @click="selectCountry(country)">
+        {{ country.name }}
+      </div>
     </el-col>
   </el-row>
 </template>
@@ -44,6 +46,13 @@ export default {
       }
       return null;
     }
+  },
+  methods: {
+    selectCountry (country) {
+      const organisation = country ? country.code.toLowerCase() : '-';
+      const localised = this.localePath({ name: 'organisation', params: { organisation } });
+      this.$router.push(localised);
+    }
   }
 };
 </script>
@@ -69,7 +78,15 @@ export default {
       font-size: @fontSizeMedium;
       font-weight: 700;
       line-height: 16px;
-      color: @colorTextPrimary;
+      color: @colorBrandPrimary;
+
+      div {
+        display: inline-block;
+        cursor: pointer;
+        &:hover {
+          color: @colorBrandPrimaryLight;
+        }
+      }
     }
   }
 </style>

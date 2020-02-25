@@ -66,7 +66,10 @@
         <w-image :url="data.cover_url" />
       </template>
       <template v-slot:right>
-        <w-default vertical :url="default1" />
+        <w-default
+          vertical
+          :url="default1"
+        />
       </template>
     </default>
 
@@ -82,7 +85,11 @@
         <w-image :url="data.cover_url" />
       </template>
       <template v-slot:right>
-        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
+        <w-stats
+          :code="data.alpha_3_code"
+          :stats="stats"
+          :simple="simpleStats"
+        />
       </template>
     </default>
 
@@ -113,7 +120,11 @@
         <w-image :url="data.cover_url" />
       </template>
       <template v-slot:middle>
-        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
+        <w-stats
+          :code="data.alpha_3_code"
+          :stats="stats"
+          :simple="simpleStats"
+        />
       </template>
       <template v-slot:right>
         <w-documents :documents="data.documents" />
@@ -128,10 +139,14 @@
         <w-description :description="data.cover_text" />
       </template>
       <template v-slot:leftbottom>
-        <img :src="default2" />
+        <img :src="default2">
       </template>
       <template v-slot:middle>
-        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
+        <w-stats
+          :code="data.alpha_3_code"
+          :stats="stats"
+          :simple="simpleStats"
+        />
       </template>
       <template v-slot:right>
         <w-documents :documents="data.documents" />
@@ -143,13 +158,17 @@
       v-show="image === true && description === false && gdhi === true && documents === true"
     >
       <template v-slot:lefttop>
-        <img :src="data.cover_url" />
+        <img :src="data.cover_url">
       </template>
       <template v-slot:leftbottom>
         <w-default vertical />
       </template>
       <template v-slot:middle>
-        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
+        <w-stats
+          :code="data.alpha_3_code"
+          :stats="stats"
+          :simple="simpleStats"
+        />
       </template>
       <template v-slot:right>
         <w-documents :documents="data.documents" />
@@ -161,10 +180,17 @@
       v-show="image === false && description === false && gdhi === true && documents === true"
     >
       <template v-slot:left>
-        <w-default vertical :url="default1" />
+        <w-default
+          vertical
+          :url="default1"
+        />
       </template>
       <template v-slot:middle>
-        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
+        <w-stats
+          :code="data.alpha_3_code"
+          :stats="stats"
+          :simple="simpleStats"
+        />
       </template>
       <template v-slot:right>
         <w-documents :documents="data.documents" />
@@ -177,10 +203,17 @@
       :gutter="20"
     >
       <template v-slot:left>
-        <w-default vertical :url="default1" />
+        <w-default
+          vertical
+          :url="default1"
+        />
       </template>
       <template v-slot:right>
-        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
+        <w-stats
+          :code="data.alpha_3_code"
+          :stats="stats"
+          :simple="simpleStats"
+        />
       </template>
     </default>
 
@@ -190,7 +223,10 @@
       :gutter="20"
     >
       <template v-slot:left>
-        <w-default vertical :url="default1" />
+        <w-default
+          vertical
+          :url="default1"
+        />
       </template>
       <template v-slot:right>
         <w-documents :documents="data.documents" />
@@ -203,10 +239,14 @@
       :gutter="20"
     >
       <template v-slot:left>
-        <img :src="data.cover_url" />
+        <img :src="data.cover_url">
       </template>
       <template v-slot:right>
-        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
+        <w-stats
+          :code="data.alpha_3_code"
+          :stats="stats"
+          :simple="simpleStats"
+        />
       </template>
     </default>
 
@@ -220,25 +260,29 @@
         <w-description :description="data.cover_text" />
       </template>
       <template v-slot:right>
-        <w-stats :code="data.alpha_3_code" :stats="stats" :simple="simpleStats" />
+        <w-stats
+          :code="data.alpha_3_code"
+          :stats="stats"
+          :simple="simpleStats"
+        />
       </template>
     </default>
   </div>
 </template>
 
 <script>
-import Default from "@/components/country/layouts/Default";
-import ThreeColumns from "@/components/country/layouts/ThreeColumns";
+import Default from '@/components/country/layouts/Default';
+import ThreeColumns from '@/components/country/layouts/ThreeColumns';
 
-import WDescription from "@/components/country/widgets/WDescription";
-import WDefault from "@/components/country/widgets/WDefault";
-import WImage from "@/components/country/widgets/WImage";
-import WDocuments from "@/components/country/widgets/WDocuments";
-import WStats from "@/components/country/widgets/WStats";
+import WDescription from '@/components/country/widgets/WDescription';
+import WDefault from '@/components/country/widgets/WDefault';
+import WImage from '@/components/country/widgets/WImage';
+import WDocuments from '@/components/country/widgets/WDocuments';
+import WStats from '@/components/country/widgets/WStats';
 
 // images
-import default1 from "~/assets/img/default/whyusedha-new.jpg";
-import default2 from "~/assets/img/default/coverimage-default.jpg";
+import default1 from '~/assets/img/default/whyusedha-new.jpg';
+import default2 from '~/assets/img/default/coverimage-default.jpg';
 
 export default {
   components: {
@@ -256,26 +300,26 @@ export default {
       required: true
     }
   },
-  data() {
+  data () {
     return {
       default1,
       default2
     };
   },
   computed: {
-    image() {
+    image () {
       return this.data.cover !== null;
     },
-    description() {
-      return this.data.cover_text !== "" && this.data.cover_text !== null;
+    description () {
+      return this.data.cover_text !== '' && this.data.cover_text !== null;
     },
-    gdhi() {
+    gdhi () {
       return this.data.gdhi_enabled;
     },
-    documents() {
+    documents () {
       return this.data.road_map_enabled && this.data.documents.length > 0;
     },
-    simpleStats() {
+    simpleStats () {
       const {
         leadership_and_governance,
         strategy_and_investment,
@@ -299,7 +343,7 @@ export default {
       }
       return true;
     },
-    stats() {
+    stats () {
       const {
         name,
         leadership_and_governance,
@@ -319,59 +363,57 @@ export default {
         name,
         phases: [
           {
-            title: "leadership and governance",
+            title: 'leadership and governance',
             phase: leadership_and_governance
           },
-          { title: "strategy and investment", phase: strategy_and_investment },
+          { title: 'strategy and investment', phase: strategy_and_investment },
           {
-            title: "legislation policy compliance",
+            title: 'legislation policy compliance',
             phase: legislation_policy_compliance
           },
-          { title: "workforce", phase: workforce },
+          { title: 'workforce', phase: workforce },
           {
-            title: "standards and interoperability",
+            title: 'standards and interoperability',
             phase: standards_and_interoperability
           },
-          { title: "infrastructure", phase: infrastructure },
+          { title: 'infrastructure', phase: infrastructure },
           {
-            title: "services and applications",
+            title: 'services and applications',
             phase: services_and_applications
           }
         ],
         groups: [
           {
-            title: "Context",
+            title: 'Context',
             metrics: [
               {
-                measure: "GNI PER CAPITA, ATLAS METHOD (CURRENT US$)",
-                value: gni_per_capita === null ? "N/A" : `${gni_per_capita}K`
+                measure: 'GNI PER CAPITA, ATLAS METHOD (CURRENT US$)',
+                value: gni_per_capita === null ? 'N/A' : `${gni_per_capita}K`
               },
               {
-                measure: "TOTAL POPULATION",
+                measure: 'TOTAL POPULATION',
                 value:
-                  total_population === null ? "N/A" : `${total_population}M`
+                  total_population === null ? 'N/A' : `${total_population}M`
               }
             ]
           },
           {
-            title: "Health",
+            title: 'Health',
             metrics: [
               {
-                measure: "LIFE EXPECTANCY AT BIRTH (YEARS)",
-                value: life_expectancy === null ? "N/A" : life_expectancy
+                measure: 'LIFE EXPECTANCY AT BIRTH (YEARS)',
+                value: life_expectancy === null ? 'N/A' : life_expectancy
               },
               {
-                measure: "HEALTH EXPENDITURE (% OF GDP)",
+                measure: 'HEALTH EXPENDITURE (% OF GDP)',
                 value:
-                  health_expenditure === null ? "N/A" : `${health_expenditure}%`
+                  health_expenditure === null ? 'N/A' : `${health_expenditure}%`
               }
             ]
           }
         ]
       };
     }
-  },
-  mounted() {
   }
 };
 </script>
@@ -381,43 +423,53 @@ export default {
 
 .matrix-layout {
   &.pb-0 {
-    padding-bottom: 0px !important;
+    padding-bottom: 0 !important;
   }
+
   &.el-row {
     padding: 40px;
     align-items: stretch;
     flex-wrap: wrap;
+
     .el-col {
       &.mb {
         margin-bottom: 20px;
       }
+
       overflow: hidden;
     }
+
     &.pb-0 {
-      padding-bottom: 0px !important;
+      padding-bottom: 0 !important;
     }
+
     &.pt-20 {
       padding-top: 20px !important;
     }
   }
+
   .fill {
     height: 100%;
   }
+
   img {
     width: 100%;
     background-color: white;
   }
+
   .grid-content {
     background: #fff;
     min-height: 50px;
     height: 100%;
     padding: 40px;
+
     p {
       font-size: @fontSizeBase;
       line-height: 21px;
       color: @colorTextPrimary;
       margin: 0 0 20px;
     }
+
     h1,
     h3,
     h2 {
