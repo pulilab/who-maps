@@ -2,20 +2,34 @@
   <div class="grid-content">
     <h3><translate>State of Digital Health in</translate> {{ stats.name }} </h3>
 
-    <div v-if="!simple" class="phases">
-      <template v-for="(phase, i) in stats.phases" >
-        <el-row v-if="phase.phase !== null" :key="i">
+    <div
+      v-if="!simple"
+      class="phases"
+    >
+      <template v-for="(phase, i) in stats.phases">
+        <el-row
+          v-if="phase.phase !== null"
+          :key="i"
+        >
           <p><translate>{{ phase.title }}</translate></p>
           <progress-bar :phase="phase.phase" />
         </el-row>
       </template>
     </div>
 
-    <el-row v-for="(group, i) in stats.groups" :key="i" :class="`number-info ${simple ? 'simple' : ''}`">
+    <el-row
+      v-for="(group, i) in stats.groups"
+      :key="i"
+      :class="`number-info ${simple ? 'simple' : ''}`"
+    >
       <p><b><translate>{{ group.title }}</translate></b></p>
-      <el-col v-for="(metric, k) in group.metrics" :key="k" :span="simple ? 24 : 12">
-        <h3>{{metric.value}}</h3>
-        <p><translate>{{metric.measure}}</translate></p>
+      <el-col
+        v-for="(metric, k) in group.metrics"
+        :key="k"
+        :span="simple ? 24 : 12"
+      >
+        <h3>{{ metric.value }}</h3>
+        <p><translate>{{ metric.measure }}</translate></p>
       </el-col>
     </el-row>
 
@@ -23,12 +37,14 @@
       <p><translate>Disclaimer: State of Digital Health data is sourced</translate></p>
       <p><translate>from the Global Digital Health Index.</translate></p>
       <p>
-        <a :href="`http://index.digitalhealthindex.org/country_profile/${code}`" target="_blank">
+        <a
+          :href="`http://index.digitalhealthindex.org/country_profile/${code}`"
+          target="_blank"
+        >
           <translate>Visit digitalhealthindex.org</translate>
         </a>
       </p>
     </footer>
-
   </div>
 </template>
 
@@ -130,4 +146,3 @@ export default {
   }
 
 </style>
-

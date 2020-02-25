@@ -1,5 +1,8 @@
 <template>
-  <div id="implementation" class="ImplementationOverview">
+  <div
+    id="implementation"
+    class="ImplementationOverview"
+  >
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Implementation overview') | translate"
@@ -11,7 +14,9 @@
         :publish-rule="publishRules.health_focus_areas"
       >
         <template slot="label">
-          <translate key="health-focus-areas">What is the health focus area(s) addressed by the DHI?</translate>
+          <translate key="health-focus-areas">
+            What is the health focus area(s) addressed by the DHI?
+          </translate>
         </template>
 
         <health-focus-areas-selector
@@ -31,7 +36,9 @@
         <template slot="label">
           <translate
             key="hsc-challenges"
-          >What are the Health System Challenges addressed by the Digital Health Intervention?</translate>
+          >
+            What are the Health System Challenges addressed by the Digital Health Intervention?
+          </translate>
         </template>
         <health-system-challenges-selector
           v-model="hsc_challenges"
@@ -44,11 +51,15 @@
 
       <custom-required-form-item :error="errors.first('platforms')">
         <template slot="label">
-          <translate key="platforms">Add information about your Digital Health program activies</translate>
+          <translate key="platforms">
+            Add information about your Digital Health program activies
+          </translate>
           <form-hint>
             <translate
               key="platforms-hint"
-            >Include all software that is part of your project. If you cannot find your software listed in the options, send an email to digitalhealthatlas@gmail.com with the software name.</translate>
+            >
+              Include all software that is part of your project. If you cannot find your software listed in the options, send an email to digitalhealthatlas@gmail.com with the software name.
+            </translate>
           </form-hint>
         </template>
 
@@ -63,7 +74,9 @@
           <template slot="label">
             <translate
               key="platform-label"
-            >What are the names of the software included in the deployment?</translate>
+            >
+              What are the names of the software included in the deployment?
+            </translate>
           </template>
 
           <el-col :span="16">
@@ -86,7 +99,9 @@
               <template slot="label">
                 <translate
                   key="strategies"
-                >What Digital Health Intervention(s) are included in this software?</translate>
+                >
+                  What Digital Health Intervention(s) are included in this software?
+                </translate>
                 <form-hint>
                   <!-- This is going to be a link to a pdf / webpage -->
                 </form-hint>
@@ -119,7 +134,9 @@
         <template slot="label">
           <translate
             key="his-bucket"
-          >What health information system(s) in your country does this project support?</translate>
+          >
+            What health information system(s) in your country does this project support?
+          </translate>
         </template>
         <his-bucket-selector
           v-model="his_bucket"
@@ -135,11 +152,15 @@
           <template slot="label">
             <translate
               key="coverage-type"
-            >What level of coverage does your project have (Sub-national, National)</translate>
+            >
+              What level of coverage does your project have (Sub-national, National)
+            </translate>
             <form-hint>
               <translate
                 key="coverage-type-hint"
-              >Subnational may include district, regional, provincial, county levels.</translate>
+              >
+                Subnational may include district, regional, provincial, county levels.
+              </translate>
             </form-hint>
           </template>
 
@@ -162,7 +183,10 @@
           :publish-rules="publishRules"
         />
 
-        <div v-if="coverageType == 2" class="NationalLevelDeployment ItemIndent">
+        <div
+          v-if="coverageType == 2"
+          class="NationalLevelDeployment ItemIndent"
+        >
           <div class="CoverageSubtitle">
             <fa icon="flag" />
             <translate>National level deployment</translate>
@@ -190,7 +214,9 @@
         <template slot="label">
           <translate
             key="gobernment-investor"
-          >Has the government contributed to the project, either financially or in-kind?</translate>
+          >
+            Has the government contributed to the project, either financially or in-kind?
+          </translate>
         </template>
 
         <el-radio-group
@@ -221,16 +247,21 @@
         :publish-rule="publishRules.implementing_partners"
       >
         <template slot="label">
-          <translate key="implementing-partners">Who are your implementing partners?</translate>
+          <translate key="implementing-partners">
+            Who are your implementing partners?
+          </translate>
         </template>
 
-        <el-row v-for="(partner, index) in implementing_partners" :key="index">
+        <el-row
+          v-for="(partner, index) in implementing_partners"
+          :key="index"
+        >
           <el-col :span="18">
             <custom-required-form-item :error="errors.first('implementing_partners_' + index)">
               <el-input
-                :maxlength="rules.implementing_partners.max"
                 ref="implementingPartnersInput"
                 v-validate="rules.implementing_partners"
+                :maxlength="rules.implementing_partners.max"
                 :value="partner"
                 :data-vv-name="'implementing_partners_' + index"
                 data-vv-validate-on="change"
@@ -256,11 +287,15 @@
         :publish-rule="publishRules.donors"
       >
         <template slot="label">
-          <translate key="donors">Who are your investment partners?</translate>
+          <translate key="donors">
+            Who are your investment partners?
+          </translate>
           <form-hint>
             <translate
               key="donors-hint"
-            >Investment partners can include those contributing funds, human resources or in-kind support.</translate>
+            >
+              Investment partners can include those contributing funds, human resources or in-kind support.
+            </translate>
           </form-hint>
         </template>
 
@@ -276,22 +311,22 @@
 </template>
 
 <script>
-import VeeValidationMixin from "../../mixins/VeeValidationMixin.js";
-import ProjectFieldsetMixin from "../../mixins/ProjectFieldsetMixin.js";
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 
-import CollapsibleCard from "../CollapsibleCard";
-import HealthSystemChallengesSelector from "../HealthSystemChallengesSelector";
-import HealthFocusAreasSelector from "../HealthFocusAreasSelector";
-import HisBucketSelector from "../HisBucketSelector";
-import PlatformSelector from "../PlatformSelector";
-import DigitalHealthInterventionsSelector from "../DigitalHealthInterventionsSelector";
-import SubNationalLevelDeployment from "../SubNationalLevelDeployment";
-import AddRmButtons from "../AddRmButtons";
-import CoverageFieldset from "../CoverageFieldset";
-import DonorSelector from "../DonorSelector";
-import FormHint from "../FormHint";
+import CollapsibleCard from '../CollapsibleCard';
+import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector';
+import HealthFocusAreasSelector from '../HealthFocusAreasSelector';
+import HisBucketSelector from '../HisBucketSelector';
+import PlatformSelector from '../PlatformSelector';
+import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector';
+import SubNationalLevelDeployment from '../SubNationalLevelDeployment';
+import AddRmButtons from '../AddRmButtons';
+import CoverageFieldset from '../CoverageFieldset';
+import DonorSelector from '../DonorSelector';
+import FormHint from '../FormHint';
 
-import { mapGettersActions } from "../../../utilities/form";
+import { mapGettersActions } from '../../../utilities/form';
 
 export default {
   components: {
@@ -311,50 +346,50 @@ export default {
 
   computed: {
     ...mapGettersActions({
-      platforms: ["project", "getPlatforms", "setPlatforms", 0],
+      platforms: ['project', 'getPlatforms', 'setPlatforms', 0],
       digitalHealthInterventions: [
-        "project",
-        "getDigitalHealthInterventions",
-        "setDigitalHealthInterventions",
+        'project',
+        'getDigitalHealthInterventions',
+        'setDigitalHealthInterventions',
         0
       ],
       health_focus_areas: [
-        "project",
-        "getHealthFocusAreas",
-        "setHealthFocusAreas",
+        'project',
+        'getHealthFocusAreas',
+        'setHealthFocusAreas',
         0
       ],
-      hsc_challenges: ["project", "getHscChallenges", "setHscChallenges", 0],
-      his_bucket: ["project", "getHisBucket", "setHisBucket", 0],
-      coverageType: ["project", "getCoverageType", "setCoverageType", 0],
+      hsc_challenges: ['project', 'getHscChallenges', 'setHscChallenges', 0],
+      his_bucket: ['project', 'getHisBucket', 'setHisBucket', 0],
+      coverageType: ['project', 'getCoverageType', 'setCoverageType', 0],
       national_level_deployment: [
-        "project",
-        "getNationalLevelDeployment",
-        "setNationalLevelDeployment",
+        'project',
+        'getNationalLevelDeployment',
+        'setNationalLevelDeployment',
         0
       ],
       government_investor: [
-        "project",
-        "getGovernmentInvestor",
-        "setGovernmentInvestor",
+        'project',
+        'getGovernmentInvestor',
+        'setGovernmentInvestor',
         0
       ],
       implementing_partners: [
-        "project",
-        "getImplementingPartners",
-        "setImplementingPartners",
+        'project',
+        'getImplementingPartners',
+        'setImplementingPartners',
         300,
         true
       ],
-      donors: ["project", "getDonors", "setDonors", 0]
+      donors: ['project', 'getDonors', 'setDonors', 0]
     }),
     healthWorkers: {
-      get() {
+      get () {
         return this.national_level_deployment
           ? this.national_level_deployment.health_workers
           : null;
       },
-      set(value) {
+      set (value) {
         const coverage = {
           ...this.national_level_deployment,
           health_workers: value
@@ -363,23 +398,23 @@ export default {
       }
     },
     clients: {
-      get() {
+      get () {
         return this.national_level_deployment
           ? this.national_level_deployment.clients
           : null;
       },
-      set(value) {
+      set (value) {
         const coverage = { ...this.national_level_deployment, clients: value };
         this.national_level_deployment = coverage;
       }
     },
     facilities: {
-      get() {
+      get () {
         return this.national_level_deployment
           ? this.national_level_deployment.facilities
           : null;
       },
-      set(value) {
+      set (value) {
         const coverage = {
           ...this.national_level_deployment,
           facilities: value
@@ -391,7 +426,7 @@ export default {
   watch: {
     implementing_partners: {
       immediate: false,
-      handler(ip, oldIp) {
+      handler (ip, oldIp) {
         if (oldIp && ip && ip.length > oldIp.length) {
           this.$nextTick(() => {
             if (
@@ -408,13 +443,13 @@ export default {
     }
   },
   methods: {
-    isLastAndExist(collection, index) {
+    isLastAndExist (collection, index) {
       return !!(collection.length - 1 === index && collection[index]);
     },
-    addDhi() {
+    addDhi () {
       this.platforms = [...this.platforms, null];
     },
-    rmDhi(index, platformId) {
+    rmDhi (index, platformId) {
       if (platformId) {
         const filtered = this.digitalHealthInterventions.filter(
           dhi => dhi.platform !== platformId
@@ -423,23 +458,23 @@ export default {
       }
       this.platforms = this.platforms.filter((p, i) => i !== index);
     },
-    updateImplmeentingPartners(value, index) {
+    updateImplmeentingPartners (value, index) {
       const ip = [...this.implementing_partners];
       ip[index] = value;
       this.implementing_partners = ip;
     },
-    addImplementingPartners() {
+    addImplementingPartners () {
       const index = this.implementing_partners.length - 1;
       if (this.isLastAndExist(this.implementing_partners, index)) {
         this.implementing_partners = [...this.implementing_partners, null];
       }
     },
-    rmImplementingPartners(index) {
+    rmImplementingPartners (index) {
       this.implementing_partners = this.implementing_partners.filter(
         (ip, i) => i !== index
       );
     },
-    async validate() {
+    async validate () {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate(),
@@ -447,7 +482,7 @@ export default {
           ? this.$refs.nationalLevelDeployment.validate()
           : this.$refs.subNationalLevelDeployment.validate()
       ]);
-      console.log("Implementation overview validations", validations);
+      console.log('Implementation overview validations', validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }

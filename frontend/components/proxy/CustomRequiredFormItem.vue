@@ -54,7 +54,7 @@ export default {
       return this.publishRule && this.publishRule.required;
     }
   }
-}
+};
 </script>
 
 <style lang="less">

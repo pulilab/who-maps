@@ -43,8 +43,8 @@
       <el-col v-if="project.isPublished">
         <nuxt-link
           to=""
-          @click.native="handleClickUnPublish({ name: 'organisation-projects' })"
           class="NuxtLink IconLeft Danger"
+          @click.native="handleClickUnPublish({ name: 'organisation-projects' }, project.id)"
         >
           <fa icon="times-circle" />
           <translate>Unpublish</translate>
@@ -56,9 +56,9 @@
 
 <script>
 import handleProjectUnpublish from '@/components/mixins/handleProjectUnpublish';
-import { mapActions } from 'vuex';
 
 export default {
+  mixins: [handleProjectUnpublish],
   props: {
     project: {
       type: Object,
@@ -69,7 +69,6 @@ export default {
       default: false
     }
   },
-  mixins: [handleProjectUnpublish],
   computed: {
     showViewDraft () {
       return this.forceShow || this.project.isViewer || this.project.isMember;

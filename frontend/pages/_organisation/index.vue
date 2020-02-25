@@ -17,7 +17,10 @@
       </template>
     </div>
 
-    <div v-if="routeCheck" class="InfoSignupContainer">
+    <div
+      v-if="routeCheck"
+      class="InfoSignupContainer"
+    >
       <el-row type="flex">
         <el-col class="InfoBoxWrapper">
           <info-box />
@@ -27,7 +30,10 @@
         </el-col>
       </el-row>
     </div>
-    <layout-builder v-else-if="landingData" :data="landingData" />
+    <layout-builder
+      v-else-if="landingData"
+      :data="landingData"
+    />
     <about-section />
   </div>
 </template>

@@ -71,7 +71,7 @@
 import { projectFields } from '@/utilities/projects';
 
 const blackList = ['country', 'donors', 'coverage', 'national_level_deployment',
-  'coverageData', 'coverageType', 'coverage_second_level', 'interoperability_links', 'team', 'viewers' ];
+  'coverageData', 'coverageType', 'coverage_second_level', 'interoperability_links', 'team', 'viewers'];
 const addendumFields = ['clients', 'health_workers', 'facilities', 'sub_level'];
 export default {
   props: {
@@ -157,7 +157,7 @@ export default {
     },
     availableFields (value) {
       if (value && !this.notUsedFields.some(f => f.value === value)) {
-        return [ { label: this.nameMapping[value] || value, value }, ...this.notUsedFields ];
+        return [{ label: this.nameMapping[value] || value, value }, ...this.notUsedFields];
       }
       return this.notUsedFields;
     },

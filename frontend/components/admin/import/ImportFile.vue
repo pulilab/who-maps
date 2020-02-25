@@ -269,10 +269,10 @@ export default {
         donor: this.donor,
         sheet_name: this.selectedSheet,
         header_mapping: Object.keys(this.parsed[0]).map(title => ({ selected: null, title })),
-        'draft': this.isDraftOrPublish === 'draft',
-        'rows': [
+        draft: this.isDraftOrPublish === 'draft',
+        rows: [
           {
-            'data': this.parsed
+            data: this.parsed
           }
         ]
       };

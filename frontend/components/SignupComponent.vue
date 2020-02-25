@@ -87,8 +87,12 @@
                 size="medium"
                 native-type="submit"
               >
-                <translate v-if="token">Set Password</translate>
-                <translate v-else>Sign up now</translate>
+                <translate v-if="token">
+                  Set Password
+                </translate>
+                <translate v-else>
+                  Sign up now
+                </translate>
               </el-button>
             </el-col>
           </el-row>

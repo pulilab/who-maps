@@ -6,17 +6,16 @@ const handleProjectUnpublish = {
       unpublishProject: 'project/unpublishProject',
       setLoading: 'project/setLoading'
     }),
-    async handleClickUnPublish (destination) {
+    async handleClickUnPublish (destination, id) {
       try {
         await this.$confirm(this.$gettext('The current project will be unpublish'), this.$gettext('Attention'), {
           confirmButtonText: this.$gettext('Ok'),
           cancelButtonText: this.$gettext('Cancel'),
           type: 'warning'
         });
-        await this.unpublishProject(this.$route.params.id);
+        await this.unpublishProject(id);
         const localised = this.localePath(destination);
         this.$router.push(localised);
-        // location.reload();
         this.$message({
           type: 'success',
           message: this.$gettext('The project has been unpublish')

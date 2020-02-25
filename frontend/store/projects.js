@@ -30,8 +30,8 @@ export const getters = {
   getLicenses: state => state.projectStructure.licenses ? [...state.projectStructure.licenses] : [],
   getDigitalHealthInterventions: state => state.projectStructure.strategies ? [...state.projectStructure.strategies] : [],
   getDigitalHealthInterventionDetails: (state, getters) => id => {
-    for (let category of getters.getDigitalHealthInterventions) {
-      for (let group of category.subGroups) {
+    for (const category of getters.getDigitalHealthInterventions) {
+      for (const group of category.subGroups) {
         const result = group.strategies.find(s => s.id === id);
         if (result) {
           return result;
@@ -175,7 +175,7 @@ export const getters = {
 };
 
 export const actions = {
-  async loadUserProjects({
+  async loadUserProjects ({
     commit,
     rootGetters,
     getters
@@ -194,7 +194,7 @@ export const actions = {
       return Promise.reject(error);
     }
   },
-  async setCurrentProject({
+  async setCurrentProject ({
     commit,
     dispatch
   }, id) {
@@ -207,7 +207,7 @@ export const actions = {
     }
     commit('SET_CURRENT_PROJECT', id);
   },
-  async loadProjectDetails({
+  async loadProjectDetails ({
     commit,
     rootGetters
   }, projectId) {
@@ -227,7 +227,7 @@ export const actions = {
       return Promise.reject(error);
     }
   },
-  async snapShotProject({
+  async snapShotProject ({
     state,
     dispatch
   }) {
@@ -235,7 +235,7 @@ export const actions = {
     await this.$axios.post(`/api/projects/${id}/version/`);
     return dispatch('loadProjectDetails', id);
   },
-  async loadProjectStructure({
+  async loadProjectStructure ({
     state,
     commit
   }, force) {
@@ -251,27 +251,27 @@ export const actions = {
       console.error('projects/loadProjectStructure failed');
     }
   },
-  addProjectToList({
+  addProjectToList ({
     commit
   }, project) {
     commit('ADD_USER_PROJECT', project);
   },
-  updateProject({
+  updateProject ({
     commit
   }, project) {
     commit('EDIT_USER_PROJECT', project);
   },
-  removeProject({
+  removeProject ({
     commit
   }, id) {
     commit('RM_USER_PROJECT', id);
   },
-  resetProjectsData({
+  resetProjectsData ({
     commit
   }) {
     commit('RESET_PROJECTS_DATA');
   },
-  async setNewSoftware({
+  async setNewSoftware ({
     commit,
     dispatch
   }, name) {
@@ -283,10 +283,9 @@ export const actions = {
       });
       await dispatch('loadProjectStructure', true);
       return data.id;
-    } catch(e) {
+    } catch (e) {
       return e;
     }
-
   }
 };
 

@@ -348,7 +348,7 @@ export const actions = {
   async unpublishProject ({ dispatch }, id) {
     dispatch('setLoading', 'unpublish');
     const info = await this.$axios.put(`/api/projects/unpublish/${id}/`);
-    // console.log(info);
+    console.log(info);
     dispatch('setLoading', false);
   },
   async discardDraft ({ getters, dispatch, commit }, id) {

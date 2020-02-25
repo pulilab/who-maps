@@ -7,9 +7,9 @@
       <div class="Switch-container">
         <filter-switch
           :value="project_approval_request_notification"
-          @change="$emit('update:project_approval_request_notification', $event)"
           :label="$gettext('Daily project approval status (Y/N)') | translate"
           :tooltip="$gettext('Lorem ipsum') | translate"
+          @change="$emit('update:project_approval_request_notification', $event)"
         />
       </div>
     </el-form-item>
@@ -17,9 +17,9 @@
       <div class="Switch-container">
         <filter-switch
           :value="project_updates_notification"
-          @change="$emit('update:project_updates_notification', $event)"
           :label="$gettext('Project updates') | translate"
           :tooltip="$gettext('Lorem ipsum') | translate"
+          @change="$emit('update:project_updates_notification', $event)"
         />
       </div>
     </el-form-item>
@@ -27,9 +27,9 @@
       <div class="Switch-container">
         <filter-switch
           :value="role_request_notification"
-          @change="$emit('update:role_request_notification', $event)"
           :label="$gettext('User role requests') | translate"
           :tooltip="$gettext('Lorem ipsum') | translate"
+          @change="$emit('update:role_request_notification', $event)"
         />
       </div>
     </el-form-item>
@@ -44,17 +44,17 @@ export default {
     FilterSwitch
   },
   props: {
-    project_updates_notification: {
+    projectUpdatesNotification: {
       type: Boolean,
       required: false,
       default: undefined
     },
-    project_approval_request_notification: {
+    projectApprovalRequestNotification: {
       type: Boolean,
       required: false,
       default: undefined
     },
-    role_request_notification: {
+    roleRequestNotification: {
       type: Boolean,
       required: false,
       default: undefined

@@ -231,7 +231,7 @@
       </el-col>
       <el-col :span="6">
         <project-navigation
-          @handleClickUnPublish="handleClickUnPublish({ name: 'organisation-projects-id-edit', params: { ...$route.params } })"
+          @handleClickUnPublish="handleClickUnPublish({ name: 'organisation-projects-id-edit', params: { ...$route.params } }, $route.params.id)"
         />
       </el-col>
     </el-row>
@@ -326,7 +326,7 @@ export default {
         this.$gettext('No, they have not yet contributed'),
         this.$gettext('Yes, they are contributing in-kind people or time'),
         this.$gettext('Yes, there is a financial contribution through MOH budget'),
-        this.$gettext('Yes, MOH is fully funding the project'),
+        this.$gettext('Yes, MOH is fully funding the project')
       ];
     }
   },

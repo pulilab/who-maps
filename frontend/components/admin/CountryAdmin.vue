@@ -111,7 +111,7 @@
           />
         </el-form-item>
 
-        <div class="Divider"></div>
+        <div class="Divider" />
 
         <el-form-item :label="$gettext('Widgets') | translate">
           <label class="el-form-item__label">
@@ -126,7 +126,11 @@
               :tooltip="$gettext('Lorem ipsum') | translate"
             />
             <label>
-              <a :href="`https://index.digitalhealthindex.org/country_profile/${country.alpha_3_code || ''}`" target="_blank" class="Right-label">
+              <a
+                :href="`https://index.digitalhealthindex.org/country_profile/${country.alpha_3_code || ''}`"
+                target="_blank"
+                class="Right-label"
+              >
                 <fa icon="external-link-alt" />
                 <translate>Visit digitalhealthindex.org</translate>
               </a>
@@ -142,8 +146,8 @@
             />
             <label
               v-if="roadmapEnabled"
-              @click="focuseRoadmapDocuments"
               class="Right-label"
+              @click="focuseRoadmapDocuments"
             >
               <fa icon="pen" />
               <translate>Upload documents</translate>
@@ -163,9 +167,9 @@
 
     <collapsible-card
       v-if="roadmapEnabled"
+      ref="roadmapdocs"
       :title="$gettext('National Digital Health Reference Documents') | translate"
       class="RoadmapDocuments"
-      ref="roadmapdocs"
     >
       <el-form
         ref="documentsUpload"
@@ -185,9 +189,9 @@
             :prop="`documents.${index}.document`"
           >
             <div
-              @click="removeDocument(index)"
               class="Remove-icon"
-            ></div>
+              @click="removeDocument(index)"
+            />
             <file-upload
               :files="document.document"
               :limit="1"
@@ -211,7 +215,7 @@
             />
           </el-form-item>
         </div>
-        <el-form-item prop="documents"></el-form-item>
+        <el-form-item prop="documents" />
         <div>
           <el-button
             :disabled="documents.length === roadmap.max_documents || notSCA"

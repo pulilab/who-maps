@@ -55,7 +55,7 @@ export const getters = {
     return levels;
   },
   getSubLevelsPolyCenters (state) {
-    return [ ...state.firstSubLevelList.filter(p => p.polyCenter).map(pc => ({ ...pc, polyCenter: { ...pc.polyCenter } })) ];
+    return [...state.firstSubLevelList.filter(p => p.polyCenter).map(pc => ({ ...pc, polyCenter: { ...pc.polyCenter } }))];
   },
   getFirstSubLevelMap (state, getters) {
     const features = getters.getSubLevelFeatures;

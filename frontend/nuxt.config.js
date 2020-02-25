@@ -49,7 +49,7 @@ const config = {
     { src: '~plugins/element.js', ssr: true },
     { src: '~plugins/i18n.js', ssr: true },
     { src: '~plugins/watchHead.js', ssr: false },
-    { src: '~plugins/directives.js', ssr: false },
+    { src: '~plugins/directives.js', ssr: false }
   ],
   modules: [
     '@nuxtjs/axios',
@@ -165,7 +165,7 @@ const config = {
       presets ({ isServer }) {
         const targets = isServer ? { node: '10' } : { ie: '11' };
         return [
-          [ require.resolve('@nuxt/babel-preset-app'), { targets } ]
+          [require.resolve('@nuxt/babel-preset-app'), { targets }]
         ];
       }
     },

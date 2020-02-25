@@ -55,7 +55,7 @@ export const platformsMapper = collection => {
 export const countryCustomFieldMapper = collection => {
   const customAnswers = [];
   if (typeof collection === 'object' && collection) {
-    for (let key in collection) {
+    for (const key in collection) {
       customAnswers.push({ question_id: +key, answer: collection[key] });
     }
   } else {
@@ -67,9 +67,9 @@ export const countryCustomFieldMapper = collection => {
 export const donorCustomFieldMapper = collection => {
   const customAnswers = [];
   if (typeof collection === 'object' && !Array.isArray(collection) && collection) {
-    for (let donor in collection) {
+    for (const donor in collection) {
       if (typeof collection[donor] === 'object' && !Array.isArray(collection) && collection) {
-        for (let key in collection[donor]) {
+        for (const key in collection[donor]) {
           customAnswers.push({ question_id: +key, answer: collection[donor][key], donor_id: +donor });
         }
       } else {
@@ -90,11 +90,11 @@ export const dateParser = date => {
 };
 
 export const apiReadParser = p => {
-  const [ coverage, coverageDataFirstLevel ] = lib.coverageMapper(p.coverage);
-  const [ coverage_second_level, coverageDataSecondLevelLevel ] = lib.coverageMapper(p.coverage_second_level);
+  const [coverage, coverageDataFirstLevel] = lib.coverageMapper(p.coverage);
+  const [coverage_second_level, coverageDataSecondLevelLevel] = lib.coverageMapper(p.coverage_second_level);
   const coverageData = { ...coverageDataFirstLevel, ...coverageDataSecondLevelLevel };
   const interoperability_links = lib.interoperabilityLinksMapper(p.interoperability_links);
-  const [ platforms, digitalHealthInterventions ] = lib.platformsMapper(p.platforms);
+  const [platforms, digitalHealthInterventions] = lib.platformsMapper(p.platforms);
   const coverageType = coverage === undefined || coverage.length === 0 ? 2 : 1;
   p = lib.parseCustomAnswers(p);
   const country_custom_answers = lib.countryCustomFieldMapper(p.country_answers);
@@ -138,7 +138,7 @@ export const dataCleaner = value => {
 
 export const interoperabilityLinkWriteParser = links => {
   const result = [];
-  for (let link in links) {
+  for (const link in links) {
     const value = { ...links[link] };
     value.selected = value.selected ? true : undefined;
     value.link = !value.selected || lib.isNullUndefinedOrEmptyString(value.link) ? undefined : value.link;
@@ -195,7 +195,7 @@ export const customDonorAnswerParser = (customAnswers = [], donors = []) => {
 
 export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => {
   const result = {};
-  for (let key in p) {
+  for (const key in p) {
     const value = dataCleaner(p[key]);
     result[key] = isEmpty(value) ? undefined : value;
   }
@@ -248,7 +248,7 @@ export const strArrayFromQs = item => {
 
 export const queryStringComparisonParser = collection => {
   const result = {};
-  for (let key in collection) {
+  for (const key in collection) {
     const item = collection[key];
     if (item === null) {
       result[key] = null;
