@@ -11,7 +11,7 @@ def create_new_project_ids_based_on_hashids(apps, schema_editor):
         project_country = Country.objects.filter(id=project.data['country']).first()
         if project_country:
             project.public_id = f"{project_country.code}{Hashids(min_length=8).encode(project.pk)}"
-            project.save()
+            project.save(update_fields=['public_id'])
 
 
 class Migration(migrations.Migration):
