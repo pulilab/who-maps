@@ -101,6 +101,8 @@ class ProjectListViewSet(TokenAuthMixin, ViewSet):
 
 
 class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
+    lookup_fields = ("pk", "public_id")
+
     def get_permissions(self):
         if self.action == "retrieve":
             return []  # Retrieve needs a bit more complex filtering based on user permission
@@ -131,7 +133,11 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         """
         Retrieves a project.
         """
-        project = get_object_or_404(Project, pk=kwargs.get("pk"))
+        filter = {}
+        for field in self.lookup_fields:
+            if self.kwargs.get(field):
+                filter[field] = self.kwargs[field]
+        project = get_object_or_404(Project, **filter)
 
         return Response(self._get_permission_based_data(project))
 
