@@ -35,52 +35,52 @@ urlpatterns = [
              'put': 'update'
          }),
          name="project-draft"),
-    url(r"^projects/member-of/$",
+    path("projects/member-of/",
         view=views.ProjectListViewSet.as_view({
             'get': 'list'
         }), name="project-list"),
-    url(r"^projects/structure/$",
+    path("projects/structure/",
         view=views.ProjectPublicViewSet.as_view({
             'get': 'project_structure'
         }),
         name="get-project-structure"),
-    url(r"^projects/structure/export/$",
+    path("projects/structure/export/",
         view=views.ProjectPublicViewSet.as_view({
             'get': 'project_structure_export'
         }),
         name="get-project-structure-export"),
-    url(r"^projects/(?P<project_id>\d+)/version/$",
+    path("projects/<int:project_id>/version/",
         view=views.ProjectVersionViewSet.as_view({
             'post': 'create'
         }),
         name="make-version"),
-    url(r"^projects/(?P<project_id>\d+)/coverage/versions/$",
+    path("projects/<int:project_id>/coverage/versions/",
         view=views.ProjectVersionViewSet.as_view({
             'get': 'coverage_versions'
         }),
         name="get-coverage-versions"),
-    url(r"^projects/(?P<project_id>\d+)/toolkit/versions/$",
+    path("projects/<int:project_id>/toolkit/versions/",
         view=views.ProjectVersionViewSet.as_view({
             'get': 'toolkit_versions'
         }),
         name="get-toolkit-versions"),
-    url(r"^projects/(?P<pk>\d+)/groups/$",
+    path("projects/<int:pk>/groups/",
         view=views.ProjectGroupViewSet.as_view({
             'get': 'retrieve',
             'put': 'update'
         }),
         name="project-groups"),
-    url(r"^projects/map/$",
+    path("projects/map/",
         view=views.MapProjectCountryViewSet.as_view({
             'get': 'list',
         }),
         name="project-map"),
-    path(r'approvals/<int:country_id>/',
+    path('approvals/<int:country_id>/',
          view=views.ProjectApprovalViewSet.as_view({
              'get': 'list'
          }),
          name="approval"),
-    path(r'approval/<int:pk>/',
+    path('approval/<int:pk>/',
          view=views.ProjectApprovalViewSet.as_view({
              'put': 'update'
          }),
