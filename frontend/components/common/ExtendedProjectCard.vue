@@ -37,6 +37,13 @@
 
         <el-col
           :span="4"
+          class="ProjectMeta ProjectMeta--no-border-left"
+        >
+          <UidPopOver :uid="uid" />
+        </el-col>
+
+        <el-col
+          :span="4"
           class="ProjectMeta"
         >
           <div class="Donors">
@@ -111,18 +118,25 @@ import CountryItem from './CountryItem';
 import OrganisationItem from './OrganisationItem';
 import ProjectCardActions from './ProjectCardActions';
 import ProjectLegend from './ProjectLegend';
+import UidPopOver from '@/components/common/UidPopOver';
 
 export default {
   components: {
     CountryItem,
     OrganisationItem,
     ProjectCardActions,
-    ProjectLegend
+    ProjectLegend,
+    UidPopOver
   },
   props: {
     id: {
       type: Number,
       required: true
+    }
+  },
+  data() {
+    return {
+      uid: 'DHA-0012XYZ'
     }
   },
   computed: {
@@ -218,18 +232,19 @@ export default {
     }
 
     .ProjectMeta {
-      min-width: 140px;
+      min-width: 150px;
       max-width: 2000px;
       border-left: 1px solid @colorGrayLight;
 
       .Donors,
-      .LastChange {
+      .LastChange,
+      .uid {
         padding: 0 20px;
         text-align: center;
 
         > div {
           margin: 8px 0 12px;
-          font-size: @fontSizeMedium;
+          font-size: @fontSizeBase;
           font-weight: 700;
           color: @colorTextPrimary;
         }
@@ -241,6 +256,10 @@ export default {
           white-space: nowrap;
         }
       }
+    }
+
+    .ProjectMeta--no-border-left {
+      border-left: none;
     }
 
     .ProjectLegend {
@@ -283,8 +302,6 @@ export default {
         background-color: @colorApproved;
       }
     }
-
-    .ProjectCardActions {}
   }
 }
 

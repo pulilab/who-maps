@@ -62,6 +62,12 @@
                 </a>
               </div>
             </el-col>
+            <el-col
+              :span="8"
+              class="InfoSection"
+            >
+              <UidPopOver :uid="uid" type="infoSection"/>
+            </el-col>
           </el-row>
         </el-col>
       </el-row>
@@ -115,11 +121,19 @@ import { format } from 'date-fns';
 import { mapGetters } from 'vuex';
 import OrganisationItem from './OrganisationItem';
 import ProjectLegend from './ProjectLegend';
+import UidPopOver from '@/components/common/UidPopOver';
+
 
 export default {
   components: {
     OrganisationItem,
-    ProjectLegend
+    ProjectLegend,
+    UidPopOver
+  },
+  data() {
+    return {
+      uid: 'DHA-0012XYZ'
+    }
   },
   computed: {
     ...mapGetters({
