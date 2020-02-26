@@ -1,4 +1,3 @@
-from django.conf.urls import url
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
@@ -31,45 +30,45 @@ urlpatterns = [
          }),
          name="project-draft"),
     path("projects/member-of/",
-        view=views.ProjectListViewSet.as_view({
-            'get': 'list'
-        }), name="project-list"),
+         view=views.ProjectListViewSet.as_view({
+             'get': 'list'
+         }), name="project-list"),
     path("projects/structure/",
-        view=views.ProjectPublicViewSet.as_view({
-            'get': 'project_structure'
-        }),
-        name="get-project-structure"),
+         view=views.ProjectPublicViewSet.as_view({
+             'get': 'project_structure'
+         }),
+         name="get-project-structure"),
     path("projects/structure/export/",
-        view=views.ProjectPublicViewSet.as_view({
-            'get': 'project_structure_export'
-        }),
-        name="get-project-structure-export"),
+         view=views.ProjectPublicViewSet.as_view({
+             'get': 'project_structure_export'
+         }),
+         name="get-project-structure-export"),
     path("projects/<int:project_id>/version/",
-        view=views.ProjectVersionViewSet.as_view({
-            'post': 'create'
-        }),
-        name="make-version"),
+         view=views.ProjectVersionViewSet.as_view({
+             'post': 'create'
+         }),
+         name="make-version"),
     path("projects/<int:project_id>/coverage/versions/",
-        view=views.ProjectVersionViewSet.as_view({
-            'get': 'coverage_versions'
-        }),
-        name="get-coverage-versions"),
+         view=views.ProjectVersionViewSet.as_view({
+             'get': 'coverage_versions'
+         }),
+         name="get-coverage-versions"),
     path("projects/<int:project_id>/toolkit/versions/",
-        view=views.ProjectVersionViewSet.as_view({
-            'get': 'toolkit_versions'
-        }),
-        name="get-toolkit-versions"),
+         view=views.ProjectVersionViewSet.as_view({
+             'get': 'toolkit_versions'
+         }),
+         name="get-toolkit-versions"),
     path("projects/<int:pk>/groups/",
-        view=views.ProjectGroupViewSet.as_view({
-            'get': 'retrieve',
-            'put': 'update'
-        }),
-        name="project-groups"),
+         view=views.ProjectGroupViewSet.as_view({
+             'get': 'retrieve',
+             'put': 'update'
+         }),
+         name="project-groups"),
     path("projects/map/",
-        view=views.MapProjectCountryViewSet.as_view({
-            'get': 'list',
-        }),
-        name="project-map"),
+         view=views.MapProjectCountryViewSet.as_view({
+             'get': 'list',
+         }),
+         name="project-map"),
     path('approvals/<int:country_id>/',
          view=views.ProjectApprovalViewSet.as_view({
              'get': 'list'
