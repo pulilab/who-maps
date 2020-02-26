@@ -1,5 +1,6 @@
 import uuid
 from collections import namedtuple
+from hashids import Hashids
 
 from django.db import models
 from django.db.models import Q
@@ -58,7 +59,7 @@ class Project(SoftDeleteModel, ExtendedModel):
     team = models.ManyToManyField(UserProfile, related_name="team", blank=True)
     viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
     public_id = models.CharField(
-        max_length=64, default="", help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
+        max_length=64, default="", help_text="<CountryCode><HashID> eg: HU9fa42491")
     odk_etag = models.CharField(null=True, blank=True, max_length=64)
     odk_id = models.CharField(null=True, blank=True, max_length=64)
     odk_extra_data = JSONField(default=dict)
