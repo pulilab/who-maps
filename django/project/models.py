@@ -1,5 +1,5 @@
-import uuid
 from collections import namedtuple
+from hashids import Hashids
 
 from django.db import models
 from django.db.models import Q
@@ -58,7 +58,7 @@ class Project(SoftDeleteModel, ExtendedModel):
     team = models.ManyToManyField(UserProfile, related_name="team", blank=True)
     viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
     public_id = models.CharField(
-        max_length=64, default="", help_text="<CountryCode>-<uuid>-x-<ProjectID> eg: HU9fa42491x1")
+        max_length=64, default="", help_text="<CountryCode><HashID> eg: HU9fa42491")
     odk_etag = models.CharField(null=True, blank=True, max_length=64)
     odk_id = models.CharField(null=True, blank=True, max_length=64)
     odk_extra_data = JSONField(default=dict)
@@ -120,13 +120,17 @@ class Project(SoftDeleteModel, ExtendedModel):
     def to_response_dict(self, published, draft):
         return dict(id=self.pk, public_id=self.public_id, published=published, draft=draft)
 
+    def generate_hash_id(self):
+        hash_id = Hashids(min_length=8)
+        return hash_id.encode(self.pk)
+
     def make_public_id(self, country_id):
         if self.public_id:
             return
 
         project_country = Country.objects.filter(id=country_id).first()
         if project_country:
-            self.public_id = project_country.code + str(uuid.uuid1()).split('-')[0]
+            self.public_id = f"{project_country.code}{self.generate_hash_id()}"
 
     def approve(self):
         self.approval.approved = True
