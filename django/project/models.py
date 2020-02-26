@@ -1,4 +1,3 @@
-import uuid
 from collections import namedtuple
 from hashids import Hashids
 
