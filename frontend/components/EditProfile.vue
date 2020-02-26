@@ -144,13 +144,12 @@
                 class="Separator"
               />
 
-
               <el-checkbox
                 v-model="isNoneUser"
                 border
               >
                 <span class="IconRole IconNoneUser">
-                  <fa icon="user-friends"></fa>
+                  <fa icon="user-friends" />
                 </span>
                 <translate>No addiitonal access required</translate>
               </el-checkbox>
@@ -379,9 +378,9 @@
                   </el-row>
                   <div class="MyPrivileges">
                     <notify-switch
-                     :project_updates_notification.sync="innerProfile.project_updates_notification"
-                     :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
-                     :role_request_notification.sync="innerProfile.role_request_notification"
+                      :project_updates_notification.sync="innerProfile.project_updates_notification"
+                      :project_approval_request_notification.sync="innerProfile.project_approval_request_notification"
+                      :role_request_notification.sync="innerProfile.role_request_notification"
                     />
                     <span><translate>My Government System Admin access includes:</translate></span>
                     <user-privileges

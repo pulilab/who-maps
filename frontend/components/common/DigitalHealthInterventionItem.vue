@@ -1,9 +1,12 @@
 <template>
-  <span v-if="dhi" class="DhiItem">{{ dhi.name }}</span>
+  <span
+    v-if="dhi"
+    class="DhiItem"
+  >{{ dhi.name }}</span>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
   props: {
@@ -15,9 +18,9 @@ export default {
   computed: {
     ...mapGetters({
       getDigitalHealthInterventionDetails:
-        "projects/getDigitalHealthInterventionDetails"
+        'projects/getDigitalHealthInterventionDetails'
     }),
-    dhi() {
+    dhi () {
       return this.getDigitalHealthInterventionDetails(this.id);
     }
   }

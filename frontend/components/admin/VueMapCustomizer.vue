@@ -360,7 +360,7 @@ export default {
     }),
     uploadHeaders () {
       return {
-        'Authorization': `Token ${this.token}`
+        Authorization: `Token ${this.token}`
       };
     },
     secondSubLevelSource: {
@@ -388,7 +388,7 @@ export default {
           'name:ar': ''
         };
         const existing = this.secondSubLevelList.map(sb => ({ ...template, id: sb.id, name: sb.name }));
-        return [ ...existing, ...[...Array(999).keys()].map(() => ({ ...template, id: uuidv4(), name: '' })) ];
+        return [...existing, ...[...Array(999).keys()].map(() => ({ ...template, id: uuidv4(), name: '' }))];
       }
       return [{}];
     },

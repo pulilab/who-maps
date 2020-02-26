@@ -18,8 +18,8 @@ export const fetchProjectData = async (store, params, error) => {
   } catch (e) {
     console.warn('loadProjectData failed', e);
     error({
-        statusCode: 404,
-        message: 'This project does not exist'
+      statusCode: 404,
+      message: 'This project does not exist'
     });
   }
 };
@@ -30,7 +30,7 @@ export const epochCheck = (date) => {
     return new Date();
   }
   return date;
-}
+};
 
 export const projectFields = () => ({
   name: null,

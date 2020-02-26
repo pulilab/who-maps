@@ -14,7 +14,7 @@ export default {
       required: false,
       default: ''
     }
-  },
+  }
 };
 </script>
 

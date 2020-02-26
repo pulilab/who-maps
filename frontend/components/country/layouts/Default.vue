@@ -1,39 +1,67 @@
 <template>
-  <el-row type="flex" :class="`matrix-layout ${classes}`" :gutter="gutter">
+  <el-row
+    type="flex"
+    :class="`matrix-layout ${classes}`"
+    :gutter="gutter"
+  >
     <template v-if="!inverse">
       <el-col :span="cols[0]">
-        <el-row class="fill" v-if="$slots.lefttop && $slots.leftbottom">
-          <el-col :span="24" class="mb">
-            <slot name="lefttop"></slot>
+        <el-row
+          v-if="$slots.lefttop && $slots.leftbottom"
+          class="fill"
+        >
+          <el-col
+            :span="24"
+            class="mb"
+          >
+            <slot name="lefttop" />
           </el-col>
-          <el-col :span="24" class="fill">
-            <slot name="leftbottom"></slot>
+          <el-col
+            :span="24"
+            class="fill"
+          >
+            <slot name="leftbottom" />
           </el-col>
         </el-row>
-        <el-row class="fill" v-if="$slots.left">
-          <el-col :span="24" class="fill">
-            <slot name="left"></slot>
+        <el-row
+          v-if="$slots.left"
+          class="fill"
+        >
+          <el-col
+            :span="24"
+            class="fill"
+          >
+            <slot name="left" />
           </el-col>
         </el-row>
       </el-col>
       <el-col :span="cols[1]">
-        <slot name="right"></slot>
+        <slot name="right" />
       </el-col>
     </template>
     <template v-else>
       <el-col :span="cols[1]">
-        <slot name="right"></slot>
+        <slot name="right" />
       </el-col>
       <el-col :span="cols[0]">
-        <el-row class="fill" v-if="$slots.lefttop && $slots.leftbottom">
-          <el-col :span="24" class="mb">
-            <slot name="lefttop"></slot>
+        <el-row
+          v-if="$slots.lefttop && $slots.leftbottom"
+          class="fill"
+        >
+          <el-col
+            :span="24"
+            class="mb"
+          >
+            <slot name="lefttop" />
           </el-col>
-          <el-col :span="24" class="fill">
-            <slot name="leftbottom"></slot>
+          <el-col
+            :span="24"
+            class="fill"
+          >
+            <slot name="leftbottom" />
           </el-col>
         </el-row>
-        <slot name="left"></slot>
+        <slot name="left" />
       </el-col>
     </template>
   </el-row>
@@ -66,4 +94,3 @@ export default {
   }
 };
 </script>
-

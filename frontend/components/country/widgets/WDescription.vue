@@ -6,13 +6,13 @@
 
 <script>
 export default {
-  name: "WDescription",
+  name: 'WDescription',
   props: {
     description: {
       type: String,
-      required: false
+      required: false,
+      default: ''
     }
   }
 };
 </script>
-

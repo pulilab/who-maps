@@ -65,7 +65,6 @@ export const actions = {
         dispatch('loadToolkitData');
       }
     } catch (e) {
-      console.log(e);
       return Promise.reject(e);
     }
   }

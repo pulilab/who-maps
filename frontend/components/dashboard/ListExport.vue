@@ -67,13 +67,13 @@ export default {
         return null;
       }
       return this.parsed.map(s => ({
-        'Name': s.name,
-        'Country': s.country,
+        Name: s.name,
+        Country: s.country,
         'Implementation Date': s.implementation_dates,
         'Start Date': s.start_date,
         'End Date': s.end_date,
         'Organisation Name': s.organisation,
-        'Donors': s.investors,
+        Donors: s.investors,
         'Implementing Partners': s.implementing_partners,
         'Implementing Team': s.implementing_team,
         'Implementing Viewers': s.implementing_viewers,
@@ -81,19 +81,19 @@ export default {
         'Overview of digital health implementation': s.implementation_overview,
         'Geographical scope': s.geographic_scope,
         'Health Focus Areas': s.health_focus_areas,
-        'Software': s.software,
+        Software: s.software,
         'Health System Challenges': s.hsc_challenges,
         'Health Information System Support': s.his_bucket,
         'Government Investor': s.government_investor,
-        'Licenses': s.licenses,
-        'Repository': s.repository,
+        Licenses: s.licenses,
+        Repository: s.repository,
         'Mobile Application': s.mobile_application,
-        'Wiki': s.wiki,
+        Wiki: s.wiki,
         'Interoperability Standards': s.interoperability_standards,
         'National Level Deployment': s.national_level_deployment,
         'First Level Coverage': s.coverage,
         'Second Level Coverage': s.coverage_second_level,
-        'Approved': s.approved,
+        Approved: s.approved,
         ...this.parseCustomQuestions(s.donor_answers, s.country_answers)
       }));
     }

@@ -92,11 +92,6 @@ export default {
       categoryToggled: false
     };
   },
-  watch : {
-    expandCollapse () {
-      this.categoryToggled = this.expandCollapse
-    }
-  },
   computed: {
     categoryShown () {
       return this.hideHeader || this.categoryToggled || this.alwaysExpandCategory;
@@ -111,6 +106,11 @@ export default {
       return this.items.reduce((c, n) => {
         return c && this.values.includes(n.id);
       }, true);
+    }
+  },
+  watch: {
+    expandCollapse () {
+      this.categoryToggled = this.expandCollapse;
     }
   },
   methods: {
@@ -131,7 +131,7 @@ export default {
       this.$emit('change', this.values.filter(v => !this.items.map(i => i.id).includes(v)));
     },
     selectAllCategory () {
-      this.categoryToggled = true
+      this.categoryToggled = true;
 
       if (!this.headerChecked) {
         this.selectAll();

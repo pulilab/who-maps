@@ -6,9 +6,9 @@
     class="PlatformSelector"
     value-key="id"
     filterable
+    :filter-method="filter"
     @change="changeHandler"
     @blur="$emit('blur')"
-    :filter-method="filter"
   >
     <el-option
       v-if="newPlatform"
@@ -33,16 +33,18 @@
       </span>
     </el-option>
     <el-option
-      v-for="platform in availablePlatforms"
-      :key="platform.id"
-      :label="platform.name"
-      :value="platform.id"
-      :class="`${platform.state === 2 ? 'requested' : ''}`"
+      v-for="item in availablePlatforms"
+      :key="item.id"
+      :label="item.name"
+      :value="item.id"
+      :class="`${item.state === 2 ? 'requested' : ''}`"
     >
-      <template v-if="platform.state === 1">{{ platform.name }}</template>
-      <template v-if="platform.state === 2">
+      <template v-if="item.state === 1">
+        {{ item.name }}
+      </template>
+      <template v-if="item.state === 2">
         <span class="left">
-          <b>{{ platform.name }}</b>
+          <b>{{ item.name }}</b>
         </span>
         <span class="right">
           <small>
@@ -56,15 +58,15 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import { platform } from "os";
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   model: {
-    prop: "platforms",
-    event: "change"
+    prop: 'platforms',
+    event: 'change'
   },
   $_veeValidate: {
-    value() {
+    value () {
       return this.platform;
     }
   },
@@ -78,40 +80,40 @@ export default {
       default: () => []
     }
   },
-  data() {
+  data () {
     return {
       newPlatform: null,
       availablePlatforms: []
     };
   },
-  mounted() {
+  computed: {
+    ...mapGetters({
+      technologyPlatforms: 'projects/getTechnologyPlatforms'
+    }),
+    platform () {
+      return this.platforms[this.index];
+    }
+  },
+  mounted () {
     this.availablePlatforms = this.technologyPlatforms.filter(
       tp => !this.platforms.some(s => s === tp.id) || tp.id === this.platform
     ).sort((a, b) => a.name.localeCompare(b.name));
   },
-  computed: {
-    ...mapGetters({
-      technologyPlatforms: "projects/getTechnologyPlatforms"
-    }),
-    platform() {
-      return this.platforms[this.index];
-    }
-  },
   methods: {
     ...mapActions({
-      setNewSoftware: "projects/setNewSoftware"
+      setNewSoftware: 'projects/setNewSoftware'
     }),
-    async changeHandler(value) {
+    async changeHandler (value) {
       let id = value;
-      if (typeof id === "string") {
+      if (typeof id === 'string') {
         const newSoftware = await this.setNewSoftware(value);
         id = typeof newSoftware === 'number' ? newSoftware : 0;
       }
       const p = [...this.platforms];
       p[this.index] = id;
-      this.$emit("change", p);
+      this.$emit('change', p);
     },
-    filter(value) {
+    filter (value) {
       this.availablePlatforms = this.technologyPlatforms.filter(platform =>
         platform.name.toLowerCase().includes(value.toLowerCase())
       );

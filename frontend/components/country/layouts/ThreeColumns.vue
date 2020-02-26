@@ -1,25 +1,44 @@
 <template>
-  <el-row :gutter="20" type="flex" class="matrix-layout">
+  <el-row
+    :gutter="20"
+    type="flex"
+    class="matrix-layout"
+  >
     <el-col :span="8">
       <el-row class="fill">
-        <el-col :span="24" class="mb" v-if="$slots.lefttop">
+        <el-col
+          v-if="$slots.lefttop"
+          :span="24"
+          class="mb"
+        >
           <slot name="lefttop">
-            <slot></slot>
+            <slot />
           </slot>
         </el-col>
-        <el-col :span="24" class="fill" v-if="$slots.leftbottom">
-          <slot name="leftbottom"></slot>
+        <el-col
+          v-if="$slots.leftbottom"
+          :span="24"
+          class="fill"
+        >
+          <slot name="leftbottom" />
         </el-col>
-        <el-col :span="24" class="fill" v-if="$slots.left">
-          <slot name="left" v-if="$slots.left"></slot>
+        <el-col
+          v-if="$slots.left"
+          :span="24"
+          class="fill"
+        >
+          <slot
+            v-if="$slots.left"
+            name="left"
+          />
         </el-col>
       </el-row>
     </el-col>
     <el-col :span="8">
-      <slot name="middle"></slot>
+      <slot name="middle" />
     </el-col>
     <el-col :span="8">
-      <slot name="right"></slot>
+      <slot name="right" />
     </el-col>
   </el-row>
 </template>
@@ -31,4 +50,3 @@ export default {
   }
 };
 </script>
-

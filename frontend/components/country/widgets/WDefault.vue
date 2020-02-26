@@ -1,12 +1,14 @@
 <template>
   <div class="fill">
-    <img :src="url" v-if="vertical && url" />
+    <img
+      v-if="vertical && url"
+      :src="url"
+    >
     <div class="grid-content fill">
       <default-text-vertical v-if="vertical" />
       <default-text v-else />
     </div>
   </div>
-
 </template>
 
 <script>
@@ -33,4 +35,3 @@ export default {
   }
 };
 </script>
-

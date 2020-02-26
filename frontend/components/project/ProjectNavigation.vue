@@ -163,6 +163,21 @@
         </el-button>
 
         <el-button
+          v-if="isPublished"
+          :disabled="!!loading"
+          type="danger"
+          size="medium"
+          @click="$emit('handleClickUnPublish')"
+        >
+          <fa
+            v-show="loading === 'unpublish'"
+            icon="spinner"
+            spin
+          />
+          <translate>Unpublish</translate>
+        </el-button>
+
+        <el-button
           v-if="isPublished || isReadOnlyDraft"
           type="text"
           class="GoToDashboard"
@@ -247,7 +262,7 @@ export default {
     },
     showDonorFieldsLink () {
       if (this.project && this.project.donors) {
-        for (let donor of this.project.donors) {
+        for (const donor of this.project.donors) {
           const details = this.getDonorDetails(donor);
           if (details && details.donor_questions && details.donor_questions.length > 0) {
             return true;
@@ -407,7 +422,6 @@ export default {
         &:active {
           .el-button {
             color: @colorTextPrimary;
-
             .Step {
               background-color: @colorBrandPrimaryDark;
               border-width: 4px;
@@ -486,7 +500,7 @@ export default {
       background-color: @colorBrandBlueLight;
       text-align: center;
 
-      .el-button--primary {
+      .el-button--primary, .el-button--danger {
         width: 100%;
         margin: 0 0 20px;
       }

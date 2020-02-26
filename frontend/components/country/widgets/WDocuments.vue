@@ -5,27 +5,30 @@
       <translate>The WHO recognizes the importance of government-led planning as a key component to sucessful, scaled digital health projects. Leadership from within the national MOH team have uploaded the reference documents below, and these represent a point-in time understanding of the specific national planning goals and strategic context.</translate>
     </p>
 
-    <div v-for="(doc, i) in documents" :key="i" class="doc">
+    <div
+      v-for="(doc, i) in documents"
+      :key="i"
+      class="doc"
+    >
       <p class="title">
-        <a :href="'media/' + doc.document" download target="_blank">
-          {{doc.title}} <fa icon="download" />
+        <a
+          :href="'media/' + doc.document"
+          download
+          target="_blank"
+        >
+          {{ doc.title }} <fa icon="download" />
         </a>
       </p>
-      <p class="details">{{ doc.document | extension }} — {{ doc.size | size }}</p>
+      <p class="details">
+        {{ doc.document | extension }} — {{ doc.size | size }}
+      </p>
     </div>
-
   </div>
 </template>
 
 <script>
 export default {
   name: 'WDocuments',
-  props: {
-    documents: {
-      type: Array,
-      required: true
-    }
-  },
   filters: {
     extension (filename) {
       return filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename;
@@ -39,6 +42,12 @@ export default {
       const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
       const i = Math.floor(Math.log(bytes) / Math.log(k));
       return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+  },
+  props: {
+    documents: {
+      type: Array,
+      required: true
     }
   }
 };
@@ -82,4 +91,3 @@ export default {
   }
 
 </style>
-

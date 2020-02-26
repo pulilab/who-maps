@@ -26,30 +26,41 @@
           <translate v-else>
             Global
           </translate>
-          <fa icon="caret-down"/>
+          <fa icon="caret-down" />
         </div>
       </div>
     </el-button>
 
     <div class="Search-container">
       <el-input
+        v-model="search"
         size="small"
         placeholder="Search country"
-        v-model="search"
       >
-        <i slot="prefix" class="el-input__icon ">
+        <i
+          slot="prefix"
+          class="el-input__icon "
+        >
           <fa icon="search" />
         </i>
       </el-input>
     </div>
 
-    <div class="Scroll-list" :style="`height: ${displayListHeight}px`" v-if="chooserOpen">
-      <el-scrollbar :native="false" :noresize="false" :key="filteredCountries.length">
+    <div
+      v-if="chooserOpen"
+      class="Scroll-list"
+      :style="`height: ${displayListHeight}px`"
+    >
+      <el-scrollbar
+        :key="filteredCountries.length"
+        :native="false"
+        :noresize="false"
+      >
         <div class="List-container CustomPopoverList">
           <ul>
             <li
-              @click="selectCountry()"
               :class="{Active: active()}"
+              @click="selectCountry()"
             >
               <img
                 alt="WHO logo small"
@@ -57,12 +68,16 @@
                 class="CountryInnerFlag"
               >
               <translate>Global</translate>
-              <fa icon="check" class="check" />
+              <fa
+                icon="check"
+                class="check"
+              />
             </li>
-            <li v-for="country in filteredCountries"
-                :key="country.code"
-                @click="selectCountry(country)"
-                :class="{Active: active(country.code)}"
+            <li
+              v-for="country in filteredCountries"
+              :key="country.code"
+              :class="{Active: active(country.code)}"
+              @click="selectCountry(country)"
             >
               <img
                 :src="getCountryFlag(country.code)"
@@ -70,7 +85,10 @@
                 class="CountryInnerFlag"
               >
               {{ country.name }}
-              <fa icon="check" class="check" />
+              <fa
+                icon="check"
+                class="check"
+              />
             </li>
           </ul>
         </div>

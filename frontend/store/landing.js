@@ -19,7 +19,7 @@ export const getters = {
   },
   getFoundIn: (state) => id => {
     const result = [];
-    for (let category in state.foundIn) {
+    for (const category in state.foundIn) {
       if (state.foundIn[category].includes(id)) {
         result.push(category);
       }
@@ -38,7 +38,6 @@ export const actions = {
       commit('SET_SEARCHED', results.search_term);
       commit('SET_FOUND_IN', results.found_in);
     } catch (e) {
-      // console.log(e);
     }
   },
   async loadCustomLandingPage ({ dispatch }, code) {
