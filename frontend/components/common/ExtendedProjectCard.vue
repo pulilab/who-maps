@@ -103,7 +103,7 @@
         <el-col>
           <project-card-actions
             :project="project"
-            :force-show="true"
+            :force-show="false"
           />
         </el-col>
       </el-row>
