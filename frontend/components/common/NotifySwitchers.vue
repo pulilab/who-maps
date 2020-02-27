@@ -7,7 +7,7 @@
       <div class="Switch-container">
         <filter-switch
           :value="project_approval_request_notification"
-          :label="$gettext('Daily project approval status (Y/N)') | translate"
+          :label="$gettext('Weekly project approval status (Y/N)') | translate"
           :tooltip="$gettext('Lorem ipsum') | translate"
           @change="$emit('update:project_approval_request_notification', $event)"
         />
