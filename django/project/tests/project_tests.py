@@ -295,8 +295,14 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['public_id'])
+        public_id = response.json()['public_id']
 
         url = reverse("project-retrieve", kwargs={"pk": project_id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['public_id'])
+
+        url = reverse("project-retrieve", kwargs={"public_id": public_id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['public_id'])

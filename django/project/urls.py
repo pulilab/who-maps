@@ -1,4 +1,3 @@
-from django.conf.urls import url
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
@@ -10,23 +9,18 @@ router.register('import-row', views.ImportRowViewSet)
 router.register('software', views.TechnologyPlatformRequestViewSet)
 
 urlpatterns = [
-    url(r"^projects/", include(router.urls)),
-    url(r"^projects/(?P<pk>\d+)/$",
-        view=views.ProjectRetrieveViewSet.as_view({
-            'get': 'retrieve',
-        }),
-        name="project-retrieve"),
-    path(r'projects/publish/<int:project_id>/<int:country_id>/',
+    path("projects/", include(router.urls)),
+    path('projects/publish/<int:project_id>/<int:country_id>/',
          view=views.ProjectPublishViewSet.as_view({
              'put': 'update'
          }),
          name="project-publish"),
-    path(r'projects/unpublish/<int:project_id>/',
+    path('projects/unpublish/<int:project_id>/',
          view=views.ProjectUnPublishViewSet.as_view({
              'put': 'update'
          }),
          name="project-unpublish"),
-    path(r'projects/draft/<int:country_id>/',
+    path('projects/draft/<int:country_id>/',
          view=views.ProjectDraftViewSet.as_view({
              'post': 'create'
          }), name="project-create"),
@@ -35,54 +29,64 @@ urlpatterns = [
              'put': 'update'
          }),
          name="project-draft"),
-    url(r"^projects/member-of/$",
-        view=views.ProjectListViewSet.as_view({
-            'get': 'list'
-        }), name="project-list"),
-    url(r"^projects/structure/$",
-        view=views.ProjectPublicViewSet.as_view({
-            'get': 'project_structure'
-        }),
-        name="get-project-structure"),
-    url(r"^projects/structure/export/$",
-        view=views.ProjectPublicViewSet.as_view({
-            'get': 'project_structure_export'
-        }),
-        name="get-project-structure-export"),
-    url(r"^projects/(?P<project_id>\d+)/version/$",
-        view=views.ProjectVersionViewSet.as_view({
-            'post': 'create'
-        }),
-        name="make-version"),
-    url(r"^projects/(?P<project_id>\d+)/coverage/versions/$",
-        view=views.ProjectVersionViewSet.as_view({
-            'get': 'coverage_versions'
-        }),
-        name="get-coverage-versions"),
-    url(r"^projects/(?P<project_id>\d+)/toolkit/versions/$",
-        view=views.ProjectVersionViewSet.as_view({
-            'get': 'toolkit_versions'
-        }),
-        name="get-toolkit-versions"),
-    url(r"^projects/(?P<pk>\d+)/groups/$",
-        view=views.ProjectGroupViewSet.as_view({
-            'get': 'retrieve',
-            'put': 'update'
-        }),
-        name="project-groups"),
-    url(r"^projects/map/$",
-        view=views.MapProjectCountryViewSet.as_view({
-            'get': 'list',
-        }),
-        name="project-map"),
-    path(r'approvals/<int:country_id>/',
+    path("projects/member-of/",
+         view=views.ProjectListViewSet.as_view({
+             'get': 'list'
+         }), name="project-list"),
+    path("projects/structure/",
+         view=views.ProjectPublicViewSet.as_view({
+             'get': 'project_structure'
+         }),
+         name="get-project-structure"),
+    path("projects/structure/export/",
+         view=views.ProjectPublicViewSet.as_view({
+             'get': 'project_structure_export'
+         }),
+         name="get-project-structure-export"),
+    path("projects/<int:project_id>/version/",
+         view=views.ProjectVersionViewSet.as_view({
+             'post': 'create'
+         }),
+         name="make-version"),
+    path("projects/<int:project_id>/coverage/versions/",
+         view=views.ProjectVersionViewSet.as_view({
+             'get': 'coverage_versions'
+         }),
+         name="get-coverage-versions"),
+    path("projects/<int:project_id>/toolkit/versions/",
+         view=views.ProjectVersionViewSet.as_view({
+             'get': 'toolkit_versions'
+         }),
+         name="get-toolkit-versions"),
+    path("projects/<int:pk>/groups/",
+         view=views.ProjectGroupViewSet.as_view({
+             'get': 'retrieve',
+             'put': 'update'
+         }),
+         name="project-groups"),
+    path("projects/map/",
+         view=views.MapProjectCountryViewSet.as_view({
+             'get': 'list',
+         }),
+         name="project-map"),
+    path('approvals/<int:country_id>/',
          view=views.ProjectApprovalViewSet.as_view({
              'get': 'list'
          }),
          name="approval"),
-    path(r'approval/<int:pk>/',
+    path('approval/<int:pk>/',
          view=views.ProjectApprovalViewSet.as_view({
              'put': 'update'
          }),
          name="approval"),
+    path("projects/<int:pk>/",
+         view=views.ProjectRetrieveViewSet.as_view({
+             'get': 'retrieve',
+         }),
+         name="project-retrieve"),
+    path("projects/<str:public_id>/",
+         view=views.ProjectRetrieveViewSet.as_view({
+             'get': 'retrieve',
+         }),
+         name="project-retrieve")
 ]
