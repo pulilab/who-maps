@@ -236,10 +236,10 @@ ODK_TABLE_NAME = 'dha_form'
 ODK_SYNC_ENABLED = bool(os.environ.get('ODK_SYNC_ENABLED', False))
 
 # SCHEDULES
-TOOLKIT_DIGEST_PERIOD = 24  # hours
-PROJECT_UPDATE_DIGEST_PERIOD = 24  # hours
-APPROVAL_DIGEST_PERIOD = 24  # hours
-NEW_QUESTION_DIGEST_PERIOD = 24  # hours
+TOOLKIT_DIGEST_PERIOD = 7 * 24  # 1 week
+PROJECT_UPDATE_DIGEST_PERIOD = 7 * 24  # 1 week
+APPROVAL_DIGEST_PERIOD = 7 * 24  # 1 week
+NEW_QUESTION_DIGEST_PERIOD = 7 * 24  # 1 week
 DRAFT_ONLY_REMINDER_PERIOD = 7 * 24  # 1 week
 
 CACHES = {
@@ -352,8 +352,8 @@ ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE = os.environ.get('ENABLE_GDHI_UPDATE_ON_COUNT
 # PRODUCTION SETTINGS
 if SITE_ID in [3, 4]:
     CELERYBEAT_SCHEDULE = {
-        "send_daily_toolkit_digest": {
-            "task": 'send_daily_toolkit_digest',
+        "send_toolkit_digest": {
+            "task": 'send_toolkit_digest',
             "schedule": datetime.timedelta(hours=TOOLKIT_DIGEST_PERIOD),
         },
         "send_project_updated_digest": {
