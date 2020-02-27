@@ -36,10 +36,11 @@
         </el-col>
 
         <el-col
+          v-show="project.public_id"
           :span="4"
           class="ProjectMeta ProjectMeta--no-border-left"
         >
-          <UidPopOver :uid="uid" />
+          <UidPopOver :uid="project.public_id" />
         </el-col>
 
         <el-col
@@ -134,11 +135,6 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      uid: 'DHA-0012XYZ'
-    }
-  },
   computed: {
     ...mapGetters({
       getUserProjectDetails: 'projects/getUserProjectDetails'
@@ -155,8 +151,7 @@ export default {
     lastChange () {
       return format(this.projectData.modified, 'DD/MM/YYYY');
     }
-  },
-  methods: {}
+  }
 };
 </script>
 

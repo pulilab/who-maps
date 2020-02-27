@@ -198,7 +198,7 @@ export const actions = {
     commit,
     dispatch
   }, id) {
-    id = parseInt(id, 10);
+    id = parseInt(id, 10) || id;
     try {
       await dispatch('loadProjectDetails', id);
     } catch (e) {
@@ -214,13 +214,19 @@ export const actions = {
     const profile = rootGetters['user/getProfile'];
     try {
       if (projectId && profile) {
-        const [toolkitVersions, coverageVersions] =
-        await Promise.all([
-          this.$axios.get(`/api/projects/${projectId}/toolkit/versions/`),
-          this.$axios.get(`/api/projects/${projectId}/coverage/versions/`)
-        ]);
-        commit('SET_CURRENT_PROJECT_TOOLKIT', toolkitVersions.data);
-        commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', coverageVersions.data);
+        if (Number.isInteger(projectId)) {
+          const [toolkitVersions, coverageVersions] =
+          await Promise.all([
+            this.$axios.get(`/api/projects/${projectId}/toolkit/versions/`),
+            this.$axios.get(`/api/projects/${projectId}/coverage/versions/`)
+          ]);
+          commit('SET_CURRENT_PROJECT_TOOLKIT', toolkitVersions.data);
+          commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', coverageVersions.data);
+        } else {
+          const { data } = await this.$axios.get(`/api/projects/${projectId}/`);
+          commit('SET_CURRENT_PROJECT_TOOLKIT', data);
+          commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', data);
+        }
       }
     } catch (error) {
       console.error('projects/loadProjectDetails failed');

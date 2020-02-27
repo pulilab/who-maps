@@ -1,21 +1,36 @@
 <template>
   <el-popover
+    v-model="uidPopOver"
     placement="bottom-end"
     width="335"
-    v-model="uidPopOver"
     popper-class="popover"
   >
-    <p class="popover__title"><b><translate>Share public link</translate></b></p>
-    <el-input class="popover__input" placeholder="Please input" v-model="uid" id="copyInput"></el-input>
+    <p class="popover__title">
+      <b><translate>Share public link</translate></b>
+    </p>
+    <el-input
+      ref="copyInput"
+      v-model="uidUrl"
+      class="popover__input"
+      placeholder="Please input"
+    />
     <el-button
       :type="copied ? 'success' : 'primary'"
       :icon="copied ? 'el-icon-check' : ''"
       @click="copyToClipboard"
     >
-      {{ copied ? 'Copied' : 'Copy URL'}}
+      {{ copied ? 'Copied' : 'Copy URL' }}
     </el-button>
-    <el-button class="popover__button--text" @click="uidPopOver = false">Cancel</el-button>
-    <div class="uid popover__reference--pointer" slot="reference">
+    <el-button
+      class="popover__button--text"
+      @click="uidPopOver = false"
+    >
+      Cancel
+    </el-button>
+    <div
+      slot="reference"
+      class="uid popover__reference--pointer"
+    >
       <template v-if="type === 'general'">
         <div class="popover__diplay--blue">
           {{ uid }} <fa :icon="uidPopOver ? 'angle-up' : 'angle-down'" />
@@ -35,6 +50,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   props: {
     uid: {
@@ -47,29 +64,29 @@ export default {
       default: 'general'
     }
   },
-  data() {
+  data () {
     return {
       uidPopOver: false,
-      copied: false
-    }
+      copied: false,
+      uidUrl: ''
+    };
+  },
+  computed: {
+    ...mapGetters({
+      landingData: 'landing/getLandingPageData'
+    })
+  },
+  mounted () {
+    const base = window.location.origin;
+    const lang = this.$i18n.defaultLocale.toLowerCase();
+    const country = this.landingData ? this.landingData.code.toLowerCase() : '-';
+    this.uidUrl = `${base}/${lang}/${country}/projects/${this.uid}/published`;
   },
   methods: {
-    copyToClipboard () {
-      // http://dh.atlas.org/projects/dha-0012xyz
-
-      let testingCodeToCopy = document.querySelector('#copyInput');
-      testingCodeToCopy.setAttribute('type', 'text');
-      testingCodeToCopy.select();
-
-      try {
-        let successful = document.execCommand('copy');
-        this.copied = successful ? true : false;
-      } catch (err) {
-        this.copied = false
-      }
-
-      window.getSelection().removeAllRanges();
-      setTimeout(() => { this.copied = false }, 3200)
+    async copyToClipboard () {
+      this.copied = true;
+      await navigator.clipboard.writeText(this.$refs.copyInput.value);
+      setTimeout(() => { this.copied = false; }, 2500);
     }
   }
 };

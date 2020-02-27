@@ -63,10 +63,14 @@
               </div>
             </el-col>
             <el-col
+              v-show="uid"
               :span="8"
               class="InfoSection"
             >
-              <UidPopOver :uid="uid" type="infoSection"/>
+              <UidPopOver
+                :uid="uid"
+                type="infoSection"
+              />
             </el-col>
           </el-row>
         </el-col>
@@ -123,29 +127,27 @@ import OrganisationItem from './OrganisationItem';
 import ProjectLegend from './ProjectLegend';
 import UidPopOver from '@/components/common/UidPopOver';
 
-
 export default {
   components: {
     OrganisationItem,
     ProjectLegend,
     UidPopOver
   },
-  data() {
-    return {
-      uid: 'DHA-0012XYZ'
-    }
-  },
   computed: {
     ...mapGetters({
       draft: 'project/getProjectData',
       published: 'project/getPublished',
-      user: 'user/getProfile'
+      user: 'user/getProfile',
+      getUserProjectDetails: 'projects/getUserProjectDetails'
     }),
     project () {
       return this.published && this.published.name ? this.published : this.draft;
     },
     id () {
       return +this.$route.params.id;
+    },
+    uid () {
+      return this.getUserProjectDetails(this.id).public_id || '';
     },
     route () {
       return this.$route.name.split('__')[0];
