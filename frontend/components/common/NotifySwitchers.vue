@@ -38,23 +38,25 @@
 </template>
 
 <script>
+/* eslint-disable vue/prop-name-casing */
+
 import FilterSwitch from '~/components/dashboard/FilterSwitch';
 export default {
   components: {
     FilterSwitch
   },
   props: {
-    projectUpdatesNotification: {
+    project_updates_notification: {
       type: Boolean,
       required: false,
       default: undefined
     },
-    projectApprovalRequestNotification: {
+    project_approval_request_notification: {
       type: Boolean,
       required: false,
       default: undefined
     },
-    roleRequestNotification: {
+    role_request_notification: {
       type: Boolean,
       required: false,
       default: undefined
@@ -71,11 +73,11 @@ export default {
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-.NotifyTitle {
-  font-size: @fontSizeBase;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 15px;
-}
+  @import "~assets/style/variables.less";
+  .NotifyTitle {
+    font-size: @fontSizeBase;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 15px;
+  }
 </style>
