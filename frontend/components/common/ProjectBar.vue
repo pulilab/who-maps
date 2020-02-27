@@ -144,7 +144,7 @@ export default {
       return this.published && this.published.name ? this.published : this.draft;
     },
     id () {
-      return +this.$route.params.id;
+      return parseInt(this.$route.params.id, 10) ? +this.$route.params.id : this.$route.params.id;
     },
     uid () {
       return this.getUserProjectDetails(this.id).public_id || '';

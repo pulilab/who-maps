@@ -2,7 +2,7 @@
   <el-popover
     v-model="uidPopOver"
     placement="bottom-end"
-    width="335"
+    width="400"
     popper-class="popover"
   >
     <p class="popover__title">
@@ -68,19 +68,21 @@ export default {
     return {
       uidPopOver: false,
       copied: false,
-      uidUrl: ''
+      base: ''
     };
   },
   computed: {
     ...mapGetters({
       landingData: 'landing/getLandingPageData'
-    })
+    }),
+    uidUrl () {
+      const lang = this.$i18n.defaultLocale.toLowerCase();
+      const country = this.landingData ? this.landingData.code.toLowerCase() : '-';
+      return `${this.base}/${lang}/${country}/projects/${this.uid}/published`;
+    }
   },
-  mounted () {
-    const base = window.location.origin;
-    const lang = this.$i18n.defaultLocale.toLowerCase();
-    const country = this.landingData ? this.landingData.code.toLowerCase() : '-';
-    this.uidUrl = `${base}/${lang}/${country}/projects/${this.uid}/published`;
+  mounted() {
+    this.base = window.location.origin;
   },
   methods: {
     async copyToClipboard () {

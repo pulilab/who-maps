@@ -55,7 +55,7 @@ export const getters = {
     return {};
   },
   getUserProjectDetails: (state, getters, rootState, rootGetters) => id => {
-    const p = getters.getUserProjectList.find(p => p.id === id);
+    const p = getters.getUserProjectList.find(p => p.id === id || p.public_id === id);
     return getters.getProjectDetails(p);
   },
   getCurrentProject: (state, getters, rootState, rootGetters) => {
