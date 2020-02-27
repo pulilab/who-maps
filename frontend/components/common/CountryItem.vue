@@ -83,6 +83,7 @@ export default {
       div {
         display: inline-block;
         cursor: pointer;
+        white-space: nowrap;
         &:hover {
           color: @colorBrandPrimaryLight;
         }
