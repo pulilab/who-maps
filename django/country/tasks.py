@@ -15,7 +15,7 @@ def update_gdhi_data_task(country_code, override):
 @app.task(name="send_new_custom_country_question_digest")
 def send_new_custom_country_question_digest():
     """
-    Sends daily digest to all project's team members that a new custom question has been asked by the country
+    Sends digest to all project's team members that a new custom question has been asked by the country
     """
     from country.models import CountryCustomQuestion
     from search.models import ProjectSearch
@@ -56,7 +56,7 @@ def send_new_custom_country_question_digest():
 @app.task(name="send_new_custom_donor_question_digest")
 def send_new_custom_donor_question_digest():
     """
-    Sends daily digest to all project's team members that a new custom question has been asked by the donor
+    Sends digest to all project's team members that a new custom question has been asked by the donor
     """
     from country.models import DonorCustomQuestion
     from search.models import ProjectSearch
