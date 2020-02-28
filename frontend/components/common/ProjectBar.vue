@@ -62,6 +62,16 @@
                 </a>
               </div>
             </el-col>
+            <el-col
+              v-show="uid"
+              :span="8"
+              class="InfoSection"
+            >
+              <UidPopOver
+                :uid="uid"
+                type="infoSection"
+              />
+            </el-col>
           </el-row>
         </el-col>
       </el-row>
@@ -115,23 +125,29 @@ import { format } from 'date-fns';
 import { mapGetters } from 'vuex';
 import OrganisationItem from './OrganisationItem';
 import ProjectLegend from './ProjectLegend';
+import UidPopOver from '@/components/common/UidPopOver';
 
 export default {
   components: {
     OrganisationItem,
-    ProjectLegend
+    ProjectLegend,
+    UidPopOver
   },
   computed: {
     ...mapGetters({
       draft: 'project/getProjectData',
       published: 'project/getPublished',
-      user: 'user/getProfile'
+      user: 'user/getProfile',
+      getUserProjectDetails: 'projects/getUserProjectDetails'
     }),
     project () {
       return this.published && this.published.name ? this.published : this.draft;
     },
     id () {
-      return +this.$route.params.id;
+      return parseInt(this.$route.params.id, 10) ? +this.$route.params.id : this.$route.params.id;
+    },
+    uid () {
+      return this.getUserProjectDetails(this.id).public_id || '';
     },
     route () {
       return this.$route.name.split('__')[0];

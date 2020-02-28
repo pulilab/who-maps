@@ -40,7 +40,7 @@
           <translate>Assessment</translate>
         </nuxt-link>
       </el-col>
-      <el-col v-if="project.isPublished">
+      <el-col v-if="showViewPublished">
         <nuxt-link
           to=""
           class="NuxtLink IconLeft Danger"
