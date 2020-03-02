@@ -1,8 +1,8 @@
 <template>
   <div class="grid-content">
-    <h3><translate>National Digital Health Reference Documents</translate></h3>
+    <h3><translate>Government technical and governance documents</translate></h3>
     <p>
-      <translate>The WHO recognizes the importance of government-led planning as a key component to sucessful, scaled digital health projects. Leadership from within the national MOH team have uploaded the reference documents below, and these represent a point-in time understanding of the specific national planning goals and strategic context.</translate>
+      <translate>Government documents can be found below that ensure adequate governance, technical oversight, architecture, coordinated planning and financing that drive effective investment and use of digital and data systems within the country. document examples: national digital health strategy, investment roadmap, architecture; HIS, interoperability, and digital maturity assessments; prior country inventories and assessments, etc.</translate>
     </p>
 
     <div

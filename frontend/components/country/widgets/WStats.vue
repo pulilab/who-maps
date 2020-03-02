@@ -34,15 +34,15 @@
     </el-row>
 
     <footer>
-      <p><translate>Disclaimer: State of Digital Health data is sourced</translate></p>
-      <p><translate>from the Global Digital Health Index.</translate></p>
       <p>
+        <translate>Disclaimer: data above sourced from external sources</translate>
         <a
           :href="`http://index.digitalhealthindex.org/country_profile/${code}`"
           target="_blank"
         >
-          <translate>Visit digitalhealthindex.org</translate>
-        </a>
+          <translate>digitalhealthindex.org</translate>
+        </a>,
+        <translate>for which WHO is not responsible.</translate>
       </p>
     </footer>
   </div>

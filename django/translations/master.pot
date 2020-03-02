@@ -19,16 +19,16 @@ msgid ""
 "(“HRP,” “we,” or “our”)."
 msgstr ""
 
-#: components/country/widgets/WStats.vue:14
+#: components/country/widgets/WStats.vue:24
 msgid "{{ group.title }}"
 msgstr ""
 
-#: components/country/widgets/WStats.vue:7
-msgid "{{ phase.title }}"
+#: components/country/widgets/WStats.vue:31
+msgid "{{ metric.measure }}"
 msgstr ""
 
-#: components/country/widgets/WStats.vue:17
-msgid "{{metric.measure}}"
+#: components/country/widgets/WStats.vue:13
+msgid "{{ phase.title }}"
 msgstr ""
 
 #: components/dashboard/PersonaSelector.vue:66
@@ -43,7 +43,7 @@ msgstr ""
 msgid "{name} (me)"
 msgstr ""
 
-#: components/project/ProjectData.vue:331
+#: components/project/ProjectData.vue:335
 #: components/project/sections/CountryCustom.vue:62
 #: components/project/sections/DonorCustom.vue:59
 msgid "{name} custom fields"
@@ -54,8 +54,8 @@ msgstr ""
 msgid "{name} level deployment"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:254 components/admin/CountryAdmin.vue:268
-#: components/admin/CountryAdmin.vue:282 components/admin/DonorAdmin.vue:107
+#: components/admin/CountryAdmin.vue:258 components/admin/CountryAdmin.vue:272
+#: components/admin/CountryAdmin.vue:286 components/admin/DonorAdmin.vue:107
 #: components/admin/DonorAdmin.vue:120 components/admin/DonorAdmin.vue:133
 msgid "{num} new request(s)"
 msgstr ""
@@ -94,7 +94,7 @@ msgid "# Health Workers"
 msgstr ""
 
 #: components/project/TeamList.vue:10
-msgid "+ {{unknown}} members"
+msgid "+ {{ unknown }} members"
 msgstr ""
 
 #: components/project/ProjectData.vue:6
@@ -109,7 +109,7 @@ msgstr ""
 msgid "3. Techonology overview"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:878
+#: components/admin/CountryAdmin.vue:882
 msgid "A document is missing or too many were added"
 msgstr ""
 
@@ -117,11 +117,11 @@ msgstr ""
 msgid "A saved configuration with this name is already present"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:523
+#: components/admin/CountryAdmin.vue:527
 msgid "A title is required"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:229
+#: components/admin/CountryAdmin.vue:233
 msgid ""
 "About these documents: Upload any reference policies, architecture "
 "blueprints or strategy documents which could be helpful to investors and "
@@ -158,11 +158,11 @@ msgstr ""
 msgid "Add Digital Health Interventions"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:46
+#: components/project/sections/ImplementationOverview.vue:53
 msgid "Add information about your Digital Health program activies"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:222
+#: components/admin/CountryAdmin.vue:226
 msgid "Add new document"
 msgstr ""
 
@@ -266,7 +266,7 @@ msgstr ""
 msgid "Applying specific filter to map/list"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:739 components/admin/DonorAdmin.vue:470
+#: components/admin/CountryAdmin.vue:743 components/admin/DonorAdmin.vue:470
 #: components/admin/ProjectApproval.vue:85
 #: components/dialogs/ProjectApprovalDialog.vue:26
 #: components/dialogs/ProjectApprovalDialog.vue:102
@@ -303,7 +303,7 @@ msgid ""
 msgstr ""
 
 #: components/project/ProjectForm.vue:292
-#: angular/Assessment/CountryMap/CountryMapController.js:41
+#: angular/Assessment/CountryMap/CountryMapController.js:42
 msgid "Attention"
 msgstr ""
 
@@ -323,12 +323,12 @@ msgid ""
 msgstr ""
 
 #: components/UserPrivileges.vue:41 components/UserPrivileges.vue:73
-#: components/admin/CountryAdmin.vue:363 components/admin/CountryAdmin.vue:418
+#: components/admin/CountryAdmin.vue:367 components/admin/CountryAdmin.vue:422
 msgid "Can approve projects if the project approval feature is active"
 msgstr ""
 
 #: components/UserPrivileges.vue:36 components/UserPrivileges.vue:68
-#: components/admin/CountryAdmin.vue:358 components/admin/CountryAdmin.vue:413
+#: components/admin/CountryAdmin.vue:362 components/admin/CountryAdmin.vue:417
 msgid "Can approve users to join the Government page"
 msgstr ""
 
@@ -338,7 +338,7 @@ msgid "Can approve users to join the investor page"
 msgstr ""
 
 #: components/UserPrivileges.vue:21 components/UserPrivileges.vue:53
-#: components/admin/CountryAdmin.vue:343 components/admin/CountryAdmin.vue:398
+#: components/admin/CountryAdmin.vue:347 components/admin/CountryAdmin.vue:402
 msgid "Can create and delete Government-specific questions"
 msgstr ""
 
@@ -347,7 +347,7 @@ msgstr ""
 msgid "Can create and delete investor-specific questions"
 msgstr ""
 
-#: components/UserPrivileges.vue:78 components/admin/CountryAdmin.vue:423
+#: components/UserPrivileges.vue:78 components/admin/CountryAdmin.vue:427
 msgid "Can customize and update Government home page"
 msgstr ""
 
@@ -356,8 +356,8 @@ msgid "Can customize and update investor home page"
 msgstr ""
 
 #: components/UserPrivileges.vue:4 components/UserPrivileges.vue:31
-#: components/UserPrivileges.vue:63 components/admin/CountryAdmin.vue:303
-#: components/admin/CountryAdmin.vue:353 components/admin/CountryAdmin.vue:408
+#: components/UserPrivileges.vue:63 components/admin/CountryAdmin.vue:307
+#: components/admin/CountryAdmin.vue:357 components/admin/CountryAdmin.vue:412
 msgid "Can read/export responses to private Government questions"
 msgstr ""
 
@@ -372,17 +372,17 @@ msgstr ""
 
 #: components/UserPrivileges.vue:26 components/UserPrivileges.vue:58
 #: components/UserPrivileges.vue:102 components/UserPrivileges.vue:124
-#: components/admin/CountryAdmin.vue:348 components/admin/CountryAdmin.vue:403
+#: components/admin/CountryAdmin.vue:352 components/admin/CountryAdmin.vue:407
 #: components/admin/DonorAdmin.vue:193 components/admin/DonorAdmin.vue:238
 msgid "Can select which questions are private and public"
 msgstr ""
 
 #: components/UserPrivileges.vue:16 components/UserPrivileges.vue:48
-#: components/admin/CountryAdmin.vue:338 components/admin/CountryAdmin.vue:393
+#: components/admin/CountryAdmin.vue:342 components/admin/CountryAdmin.vue:397
 msgid "Can update Government map data"
 msgstr ""
 
-#: components/UserPrivileges.vue:9 components/admin/CountryAdmin.vue:308
+#: components/UserPrivileges.vue:9 components/admin/CountryAdmin.vue:312
 msgid "Can view when a project is approved/declined"
 msgstr ""
 
@@ -404,12 +404,12 @@ msgstr ""
 #: components/dashboard/FilterPresetsActions.vue:112
 #: components/dashboard/TableTopActions.vue:170
 #: components/dialogs/DashboardFiltersDialog.vue:86
-#: components/dialogs/DigitalHealthInterventionsDialog.vue:46
+#: components/dialogs/DigitalHealthInterventionsDialog.vue:48
 #: components/dialogs/EditSubLevelDialog.vue:34
 #: components/dialogs/ProjectApprovalDialog.vue:127
 #: components/dialogs/SaveFilterDialog.vue:36
 #: components/project/ProjectForm.vue:294
-#: components/project/ProjectNavigation.vue:179
+#: components/project/ProjectNavigation.vue:194
 #: pages/_organisation/admin/import/_id.vue:264
 #: pages/_organisation/admin/import/_id.vue:285
 #: pages/_organisation/admin/import/_id.vue:342
@@ -438,7 +438,7 @@ msgid "Clear"
 msgstr ""
 
 #: components/dialogs/DashboardFiltersDialog.vue:4
-#: components/dialogs/DigitalHealthInterventionsDialog.vue:53
+#: components/dialogs/DigitalHealthInterventionsDialog.vue:55
 msgid "Clear All"
 msgstr ""
 
@@ -460,7 +460,7 @@ msgstr ""
 
 #: components/project/ProjectForm.vue:275
 #: components/project/ProjectForm.vue:321
-#: angular/Assessment/CountryMap/CountryMapController.js:43
+#: angular/Assessment/CountryMap/CountryMapController.js:44
 msgid "Close"
 msgstr ""
 
@@ -468,11 +468,15 @@ msgstr ""
 msgid "Code documentation or download link"
 msgstr ""
 
+#: components/dialogs/SelectorDialogColumn.vue:8
+msgid "Collapse"
+msgstr ""
+
 #: components/admin/import/ImportHeaders.vue:143
 msgid "Column Delete"
 msgstr ""
 
-#: components/dialogs/DigitalHealthInterventionsDialog.vue:61
+#: components/dialogs/DigitalHealthInterventionsDialog.vue:63
 msgid "Confirm"
 msgstr ""
 
@@ -550,11 +554,11 @@ msgstr ""
 msgid "Country information"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:451
+#: components/admin/CountryAdmin.vue:455
 msgid "Country map"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:444
+#: components/admin/CountryAdmin.vue:448
 msgid "Country specific questionnaire"
 msgstr ""
 
@@ -666,8 +670,12 @@ msgstr ""
 msgid "Digital Health Interventions"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:137
+#: components/admin/CountryAdmin.vue:141
 msgid "Digital Health Reference Documents"
+msgstr ""
+
+#: components/country/widgets/WStats.vue:42
+msgid "digitalhealthindex.org"
 msgstr ""
 
 #: components/project/ProjectForm.vue:203
@@ -682,8 +690,8 @@ msgstr ""
 msgid "Disclaimer:"
 msgstr ""
 
-#: components/country/widgets/WStats.vue:22
-msgid "Disclaimer: State of Digital Health data is sourced"
+#: components/country/widgets/WStats.vue:37
+msgid "Disclaimer: data above sourced from external sources"
 msgstr ""
 
 #: pages/_organisation/terms.vue:242
@@ -694,7 +702,7 @@ msgstr ""
 msgid "Disclosure"
 msgstr ""
 
-#: components/EditProfile.vue:504 components/admin/CountryAdmin.vue:469
+#: components/EditProfile.vue:503 components/admin/CountryAdmin.vue:473
 #: components/admin/DonorAdmin.vue:286
 msgid "Dismiss changes"
 msgstr ""
@@ -703,7 +711,7 @@ msgstr ""
 msgid "Districts center pin"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:182
+#: components/admin/CountryAdmin.vue:186
 msgid "Document"
 msgstr ""
 
@@ -827,6 +835,10 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
+#: components/dialogs/SelectorDialogColumn.vue:15
+msgid "Expand"
+msgstr ""
+
 #: components/dashboard/TableTopActions.vue:54
 msgid "Export {selected} selected"
 msgstr ""
@@ -864,8 +876,8 @@ msgstr ""
 msgid "Filter preset name"
 msgstr ""
 
-#: components/EditProfile.vue:405 components/EditProfile.vue:435
-#: components/EditProfile.vue:465
+#: components/EditProfile.vue:404 components/EditProfile.vue:434
+#: components/EditProfile.vue:464
 msgid "Financial Investor"
 msgstr ""
 
@@ -885,16 +897,16 @@ msgstr ""
 msgid "For internal review."
 msgstr ""
 
+#: components/country/widgets/WStats.vue:44
+msgid "for which WHO is not responsible."
+msgstr ""
+
 #: components/DhaLogin.vue:72
 msgid "Forgot password?"
 msgstr ""
 
 #: components/common/ProjectCard.vue:55
 msgid "Found in \"{found}\""
-msgstr ""
-
-#: components/country/widgets/WStats.vue:23
-msgid "from the Global Digital Health Index."
 msgstr ""
 
 #: components/project/ProjectNavigation.vue:47
@@ -918,7 +930,7 @@ msgid "Geographical coverage:"
 msgstr ""
 
 #: components/common/CountryChooser.vue:25
-#: components/common/CountryChooser.vue:58
+#: components/common/CountryChooser.vue:69
 #: angular/Assessment/CountryMap/Countrymap.html:74
 msgid "Global"
 msgstr ""
@@ -943,7 +955,7 @@ msgstr ""
 msgid "GO TO COUNTRY PAGE"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:170
+#: components/project/ProjectNavigation.vue:185
 msgid "Go to Dashboard"
 msgstr ""
 
@@ -951,12 +963,22 @@ msgstr ""
 msgid "Go to project"
 msgstr ""
 
-#: components/EditProfile.vue:346
+#: components/EditProfile.vue:345
 msgid "Government Admin"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:265
+#: components/admin/CountryAdmin.vue:269
 msgid "Government Admins"
+msgstr ""
+
+#: components/country/widgets/WDocuments.vue:4
+msgid ""
+"Government documents can be found below that ensure adequate governance, "
+"technical oversight, architecture, coordinated planning and financing that "
+"drive effective investment and use of digital and data systems within the "
+"country. document examples: national digital health strategy, investment "
+"roadmap, architecture; HIS, interoperability, and digital maturity "
+"assessments; prior country inventories and assessments, etc."
 msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:11
@@ -971,28 +993,32 @@ msgstr ""
 msgid "Government investor:"
 msgstr ""
 
-#: components/EditProfile.vue:376
+#: components/EditProfile.vue:375
 msgid "Government System Admin"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:279
+#: components/admin/CountryAdmin.vue:283
 msgid "Government System Admins"
 msgstr ""
 
-#: components/EditProfile.vue:170
+#: components/country/widgets/WDocuments.vue:2
+msgid "Government technical and governance documents"
+msgstr ""
+
+#: components/EditProfile.vue:169
 msgid "Government user"
 msgstr ""
 
-#: components/EditProfile.vue:315 components/EditProfile.vue:345
-#: components/EditProfile.vue:375
+#: components/EditProfile.vue:314 components/EditProfile.vue:344
+#: components/EditProfile.vue:374
 msgid "Government User"
 msgstr ""
 
-#: components/EditProfile.vue:316
+#: components/EditProfile.vue:315
 msgid "Government Viewer"
 msgstr ""
 
-#: components/EditProfile.vue:188 components/admin/CountryAdmin.vue:251
+#: components/EditProfile.vue:187 components/admin/CountryAdmin.vue:255
 msgid "Government Viewers"
 msgstr ""
 
@@ -1006,7 +1032,7 @@ msgstr ""
 msgid "growth of implementations, and reduce redundancy of investments."
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:189
+#: components/project/sections/ImplementationOverview.vue:214
 msgid ""
 "Has the government contributed to the project, either financially or in-kind?"
 msgstr ""
@@ -1016,11 +1042,11 @@ msgid "Has the government financially invested in the project?"
 msgstr ""
 
 #: components/DhaLogin.vue:222 components/DhaLogin.vue:233
-#: components/SignupComponent.vue:139
+#: components/SignupComponent.vue:143
 msgid "Has to be a valid email address"
 msgstr ""
 
-#: components/EditProfile.vue:610
+#: components/EditProfile.vue:609
 msgid "Has to be a valid url"
 msgstr ""
 
@@ -1164,7 +1190,7 @@ msgstr ""
 msgid "I request to be a:"
 msgstr ""
 
-#: components/EditProfile.vue:234
+#: components/EditProfile.vue:233
 msgid "I request to join the investor group below:"
 msgstr ""
 
@@ -1179,7 +1205,7 @@ msgid ""
 "found here for reference."
 msgstr ""
 
-#: components/EditProfile.vue:226
+#: components/EditProfile.vue:225
 msgid ""
 "If you are part of an investor group that is providing either financial or "
 "in-kind support to project activities, the DHA can be used to help organize "
@@ -1211,7 +1237,7 @@ msgstr ""
 msgid "Implementation"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:2
+#: components/project/sections/ImplementationOverview.vue:5
 msgid "Implementation overview"
 msgstr ""
 
@@ -1275,7 +1301,7 @@ msgstr ""
 msgid "In-country support to DHA"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:48
+#: components/project/sections/ImplementationOverview.vue:57
 msgid ""
 "Include all software that is part of your project. If you cannot find your "
 "software listed in the options, send an email to digitalhealthatlas@gmail."
@@ -1290,13 +1316,13 @@ msgstr ""
 msgid "Interoperability"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:259
+#: components/project/sections/ImplementationOverview.vue:293
 msgid ""
 "Investment partners can include those contributing funds, human resources or "
 "in-kind support."
 msgstr ""
 
-#: components/EditProfile.vue:222 components/common/ProjectCard.vue:145
+#: components/EditProfile.vue:221 components/common/ProjectCard.vue:145
 #: components/common/ProjectLegendContent.vue:34
 msgid "Investor"
 msgstr ""
@@ -1305,7 +1331,7 @@ msgstr ""
 msgid "Investor admin"
 msgstr ""
 
-#: components/EditProfile.vue:436
+#: components/EditProfile.vue:435
 msgid "Investor Admin"
 msgstr ""
 
@@ -1313,7 +1339,7 @@ msgstr ""
 msgid "Investor admin for {name}"
 msgstr ""
 
-#: components/EditProfile.vue:267 components/admin/DonorAdmin.vue:117
+#: components/EditProfile.vue:266 components/admin/DonorAdmin.vue:117
 msgid "Investor Admins"
 msgstr ""
 
@@ -1329,11 +1355,11 @@ msgstr ""
 msgid "Investor specific questionaire"
 msgstr ""
 
-#: components/EditProfile.vue:466
+#: components/EditProfile.vue:465
 msgid "Investor System Admin"
 msgstr ""
 
-#: components/EditProfile.vue:278 components/admin/DonorAdmin.vue:130
+#: components/EditProfile.vue:277 components/admin/DonorAdmin.vue:130
 msgid "Investor System Admins"
 msgstr ""
 
@@ -1341,11 +1367,11 @@ msgstr ""
 msgid "Investor View"
 msgstr ""
 
-#: components/EditProfile.vue:406
+#: components/EditProfile.vue:405
 msgid "Investor Viewer"
 msgstr ""
 
-#: components/EditProfile.vue:256 components/admin/DonorAdmin.vue:104
+#: components/EditProfile.vue:255 components/admin/DonorAdmin.vue:104
 msgid "Investor Viewers"
 msgstr ""
 
@@ -1529,27 +1555,27 @@ msgstr ""
 msgid "My filters presets"
 msgstr ""
 
-#: components/EditProfile.vue:355
+#: components/EditProfile.vue:354
 msgid "My Government Admin access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:385
+#: components/EditProfile.vue:384
 msgid "My Government System Admin access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:325
+#: components/EditProfile.vue:324
 msgid "My Government Viewer access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:445
+#: components/EditProfile.vue:444
 msgid "My Investor Admin access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:475
+#: components/EditProfile.vue:474
 msgid "My Investor System Admin access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:415
+#: components/EditProfile.vue:414
 msgid "My Investor Viewer access includes:"
 msgstr ""
 
@@ -1579,17 +1605,16 @@ msgstr ""
 #: components/common/map/MapProjectsBox.vue:30
 #: components/common/map/SwitchViewBox.vue:3
 #: components/common/map/TabbedCardProjectList.vue:27
-#: components/project/ProjectData.vue:318
-#: components/project/sections/ImplementationOverview.vue:149
+#: components/project/ProjectData.vue:322
+#: components/project/sections/ImplementationOverview.vue:171
 msgid "National"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:163
-#: components/country/widgets/WDocuments.vue:2
+#: components/admin/CountryAdmin.vue:167
 msgid "National Digital Health Reference Documents"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:166
+#: components/project/sections/ImplementationOverview.vue:191
 msgid "National level deployment"
 msgstr ""
 
@@ -1609,7 +1634,7 @@ msgstr ""
 msgid "New Project"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:739 components/admin/DonorAdmin.vue:470
+#: components/admin/CountryAdmin.vue:743 components/admin/DonorAdmin.vue:470
 msgid "New requests"
 msgstr ""
 
@@ -1626,7 +1651,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: components/EditProfile.vue:154
+#: components/EditProfile.vue:153
 msgid "No addiitonal access required"
 msgstr ""
 
@@ -1654,8 +1679,8 @@ msgid ""
 msgstr ""
 
 #: components/admin/import/SmartCell.vue:28
-#: components/project/ProjectData.vue:322
-#: components/project/sections/ImplementationOverview.vue:202
+#: components/project/ProjectData.vue:326
+#: components/project/sections/ImplementationOverview.vue:229
 msgid "No, they have not yet contributed"
 msgstr ""
 
@@ -1733,7 +1758,7 @@ msgstr ""
 msgid "Operation successfully aborted"
 msgstr ""
 
-#: components/EditProfile.vue:162 pages/_organisation/projects/index.vue:10
+#: components/EditProfile.vue:161 pages/_organisation/projects/index.vue:10
 msgid "or"
 msgstr ""
 
@@ -1877,15 +1902,15 @@ msgstr ""
 msgid "Private"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:333
+#: components/admin/CountryAdmin.vue:337
 msgid "Privileges for Government Admins"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:388
+#: components/admin/CountryAdmin.vue:392
 msgid "Privileges for Government System Admins"
 msgstr ""
 
-#: components/EditProfile.vue:174
+#: components/EditProfile.vue:173
 msgid ""
 "Privileges for Government Users are detailed below. Select the user type "
 "that most matches your role within the DHA. This request will be received by "
@@ -1893,7 +1918,7 @@ msgid ""
 "request."
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:298
+#: components/admin/CountryAdmin.vue:302
 msgid "Privileges for Government Viewers"
 msgstr ""
 
@@ -1909,11 +1934,11 @@ msgstr ""
 msgid "Privileges for Investor Users"
 msgstr ""
 
-#: components/EditProfile.vue:680
+#: components/EditProfile.vue:679
 msgid "Profile succesfully updated"
 msgstr ""
 
-#: components/EditProfile.vue:694
+#: components/EditProfile.vue:693
 msgid "Profile update error"
 msgstr ""
 
@@ -1922,7 +1947,7 @@ msgstr ""
 msgid "Project"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:155
+#: components/admin/CountryAdmin.vue:159
 #: components/dialogs/ProjectApprovalDialog.vue:1
 msgid "Project Approval"
 msgstr ""
@@ -2029,7 +2054,7 @@ msgstr ""
 msgid "Registration and Passwords"
 msgstr ""
 
-#: components/project/PlatformSelector.vue:49
+#: components/project/PlatformSelector.vue:51
 msgid "Requested, please wait for approval"
 msgstr ""
 
@@ -2053,7 +2078,7 @@ msgstr ""
 msgid "Reset forgotten password"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:181
+#: components/project/ProjectNavigation.vue:196
 msgid "Return to the Dashboard"
 msgstr ""
 
@@ -2080,7 +2105,7 @@ msgstr ""
 msgid "Save all projects"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:476 components/admin/DonorAdmin.vue:293
+#: components/admin/CountryAdmin.vue:480 components/admin/DonorAdmin.vue:293
 msgid "Save changes"
 msgstr ""
 
@@ -2096,7 +2121,7 @@ msgstr ""
 msgid "Save Project"
 msgstr ""
 
-#: components/EditProfile.vue:517
+#: components/EditProfile.vue:516
 msgid "Save settings"
 msgstr ""
 
@@ -2258,7 +2283,7 @@ msgstr ""
 msgid "Sign up for Digital Health Atlas"
 msgstr ""
 
-#: components/SignupComponent.vue:90
+#: components/SignupComponent.vue:92
 msgid "Sign up now"
 msgstr ""
 
@@ -2303,13 +2328,13 @@ msgstr ""
 msgid "State of Digital Health in"
 msgstr ""
 
-#: components/project/ProjectData.vue:318
+#: components/project/ProjectData.vue:322
 msgid "Sub National"
 msgstr ""
 
 #: components/common/map/SwitchViewBox.vue:3
 #: components/common/map/TabbedCardProjectList.vue:5
-#: components/project/sections/ImplementationOverview.vue:146
+#: components/project/sections/ImplementationOverview.vue:168
 msgid "Sub-national"
 msgstr ""
 
@@ -2317,7 +2342,7 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:138
+#: components/project/sections/ImplementationOverview.vue:158
 msgid "Subnational may include district, regional, provincial, county levels."
 msgstr ""
 
@@ -2330,7 +2355,7 @@ msgstr ""
 msgid "Summary score"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:233
+#: components/admin/CountryAdmin.vue:237
 msgid ""
 "Supported file formats include: {list}. The file size is limited to {size}"
 "MB. You are able to upload a maximum of {max} reference files."
@@ -2428,7 +2453,7 @@ msgid ""
 "technical institutions."
 msgstr ""
 
-#: components/EditProfile.vue:158
+#: components/EditProfile.vue:157
 msgid ""
 "The DHA has additional features to support Ministries of Health and "
 "Investors to understand and organize their digital health projects. If you "
@@ -2480,11 +2505,11 @@ msgid ""
 "            holding about you."
 msgstr ""
 
-#: components/SignupComponent.vue:161
+#: components/SignupComponent.vue:165
 msgid "The password must match"
 msgstr ""
 
-#: components/SignupComponent.vue:186
+#: components/SignupComponent.vue:190
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used. Please request a new password reset."
@@ -2511,15 +2536,6 @@ msgid ""
 "sold on or through the Website are available on an “as is” basis."
 msgstr ""
 
-#: components/country/widgets/WDocuments.vue:4
-msgid ""
-"The WHO recognizes the importance of government-led planning as a key "
-"component to sucessful, scaled digital health projects. Leadership from "
-"within the national MOH team have uploaded the reference documents below, "
-"and these represent a point-in time understanding of the specific national "
-"planning goals and strategic context."
-msgstr ""
-
 #: components/DjangoFeedback.vue:30
 msgid ""
 "There was a problem processing your ticket,\n"
@@ -2532,7 +2548,7 @@ msgid ""
 "submitted"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:137
+#: components/admin/CountryAdmin.vue:141
 msgid ""
 "These documents may include a National Digital Health Vision, Action Plan,"
 "Implementation Plan, Digital Health Strategy, or Reference Architecture."
@@ -2575,15 +2591,15 @@ msgid "this"
 msgstr ""
 
 #: components/DhaLogin.vue:221 components/DhaLogin.vue:226
-#: components/DhaLogin.vue:232 components/EditProfile.vue:590
-#: components/EditProfile.vue:594 components/EditProfile.vue:598
-#: components/EditProfile.vue:602 components/EditProfile.vue:606
-#: components/SignupComponent.vue:138 components/SignupComponent.vue:144
-#: components/SignupComponent.vue:149
+#: components/DhaLogin.vue:232 components/EditProfile.vue:589
+#: components/EditProfile.vue:593 components/EditProfile.vue:597
+#: components/EditProfile.vue:601 components/EditProfile.vue:605
+#: components/SignupComponent.vue:142 components/SignupComponent.vue:148
+#: components/SignupComponent.vue:153
 msgid "This field is required"
 msgstr ""
 
-#: components/SignupComponent.vue:145
+#: components/SignupComponent.vue:149
 msgid "This field should be at least 8 characters"
 msgstr ""
 
@@ -2658,7 +2674,7 @@ msgid ""
 "This will save the question, type and options will not be editable anymore"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:199
+#: components/admin/CountryAdmin.vue:203
 msgid "Title"
 msgstr ""
 
@@ -2743,8 +2759,8 @@ msgstr ""
 msgid "Type something..."
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:317 components/admin/CountryAdmin.vue:372
-#: components/admin/CountryAdmin.vue:432 components/admin/DonorAdmin.vue:162
+#: components/admin/CountryAdmin.vue:321 components/admin/CountryAdmin.vue:376
+#: components/admin/CountryAdmin.vue:436 components/admin/DonorAdmin.vue:162
 #: components/admin/DonorAdmin.vue:207 components/admin/DonorAdmin.vue:257
 msgid "Type to filter users..."
 msgstr ""
@@ -2759,6 +2775,11 @@ msgstr ""
 
 #: components/project/sections/TechnologyOverview.vue:38
 msgid "Under what license is the project governed?"
+msgstr ""
+
+#: components/common/ProjectCardActions.vue:49
+#: components/project/ProjectNavigation.vue:176
+msgid "Unpublish"
 msgstr ""
 
 #: components/dashboard/TableTopActions.vue:180
@@ -2776,7 +2797,7 @@ msgstr ""
 msgid "Updated on"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:148
+#: components/admin/CountryAdmin.vue:152
 msgid "Upload documents"
 msgstr ""
 
@@ -2794,11 +2815,11 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-#: components/SignupComponent.vue:168
+#: components/SignupComponent.vue:172
 msgid "User created succesfully"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:240 components/admin/DonorAdmin.vue:93
+#: components/admin/CountryAdmin.vue:244 components/admin/DonorAdmin.vue:93
 msgid "User management"
 msgstr ""
 
@@ -2838,8 +2859,7 @@ msgstr ""
 msgid "Viewers"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:130
-#: components/country/widgets/WStats.vue:26
+#: components/admin/CountryAdmin.vue:134
 msgid "Visit digitalhealthindex.org"
 msgstr ""
 
@@ -2962,13 +2982,13 @@ msgstr ""
 msgid "Welcome!"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:31
+#: components/project/sections/ImplementationOverview.vue:36
 msgid ""
 "What are the Health System Challenges addressed by the Digital Health "
 "Intervention?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:63
+#: components/project/sections/ImplementationOverview.vue:74
 msgid "What are the names of the software included in the deployment?"
 msgstr ""
 
@@ -2977,11 +2997,11 @@ msgstr ""
 msgid "What data standards does your digital health project use?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:85
+#: components/project/sections/ImplementationOverview.vue:99
 msgid "What Digital Health Intervention(s) are included in this software?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:118
+#: components/project/sections/ImplementationOverview.vue:134
 msgid ""
 "What health information system(s) in your country does this project support?"
 msgstr ""
@@ -2990,7 +3010,7 @@ msgstr ""
 msgid "What is the geographic scope of the project?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:13
+#: components/project/sections/ImplementationOverview.vue:16
 msgid "What is the health focus area(s) addressed by the DHI?"
 msgstr ""
 
@@ -3002,7 +3022,7 @@ msgstr ""
 msgid "What is the project name?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:134
+#: components/project/sections/ImplementationOverview.vue:152
 msgid "What level of coverage does your project have (Sub-national, National)"
 msgstr ""
 
@@ -3068,11 +3088,11 @@ msgstr ""
 msgid "Which country is the project located in?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:222
+#: components/project/sections/ImplementationOverview.vue:249
 msgid "Who are your implementing partners?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:257
+#: components/project/sections/ImplementationOverview.vue:289
 msgid "Who are your investment partners?"
 msgstr ""
 
@@ -3094,12 +3114,12 @@ msgstr ""
 msgid "Wiki"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:756
+#: components/admin/CountryAdmin.vue:760
 msgid "Wrong file format, you can only upload {list} files"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:779 components/admin/CountryAdmin.vue:798
-#: components/admin/CountryAdmin.vue:813
+#: components/admin/CountryAdmin.vue:783 components/admin/CountryAdmin.vue:802
+#: components/admin/CountryAdmin.vue:817
 msgid "Wrong image format, you can only upload .jpg and .png files"
 msgstr ""
 
@@ -3120,20 +3140,20 @@ msgid "Yes - no field"
 msgstr ""
 
 #: components/admin/import/SmartCell.vue:43
-#: components/project/ProjectData.vue:325
-#: components/project/sections/ImplementationOverview.vue:211
+#: components/project/ProjectData.vue:329
+#: components/project/sections/ImplementationOverview.vue:238
 msgid "Yes, MOH is fully funding the project"
 msgstr ""
 
 #: components/admin/import/SmartCell.vue:38
-#: components/project/ProjectData.vue:324
-#: components/project/sections/ImplementationOverview.vue:208
+#: components/project/ProjectData.vue:328
+#: components/project/sections/ImplementationOverview.vue:235
 msgid "Yes, there is a financial contribution through MOH budget"
 msgstr ""
 
 #: components/admin/import/SmartCell.vue:33
-#: components/project/ProjectData.vue:323
-#: components/project/sections/ImplementationOverview.vue:205
+#: components/project/ProjectData.vue:327
+#: components/project/sections/ImplementationOverview.vue:232
 msgid "Yes, they are contributing in-kind people or time"
 msgstr ""
 
@@ -3193,7 +3213,7 @@ msgid ""
 "        We will be back to you soon!"
 msgstr ""
 
-#: components/SignupComponent.vue:180
+#: components/SignupComponent.vue:184
 msgid "Your password was reset successfully"
 msgstr ""
 
@@ -3213,7 +3233,7 @@ msgstr ""
 msgid "Your user access has been submitted"
 msgstr ""
 
-#: components/EditProfile.vue:292
+#: components/EditProfile.vue:291
 msgid "Your user role request has been accepted!"
 msgstr ""
 
@@ -6199,7 +6219,7 @@ msgid ""
 "or family planning methods."
 msgstr ""
 
-#: angular/Assessment/CountryMap/CountryMapController.js:42
+#: angular/Assessment/CountryMap/CountryMapController.js:43
 msgid "The map failed to load or loaded partially"
 msgstr ""
 
