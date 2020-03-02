@@ -101,9 +101,6 @@ def deploy():
     with cd(env.project_root):
         # get new stuff from git
         run('git fetch')
-        if env.name == 'production':
-            with warn_only():
-                run('rm ~/who-maps/nginx/conf.d/production.conf')
         run('git checkout %s' % env.branch)
         run('git pull origin %s' % env.branch)
         time.sleep(10)
