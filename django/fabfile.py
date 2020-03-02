@@ -1,6 +1,6 @@
 import time
 from fabric.api import local, run, cd, env
-from fabric.context_managers import warn_only
+
 
 # ENVIRONMENTS #
 PROD_HOST_STRING = 'whomaps@207.154.215.126'
