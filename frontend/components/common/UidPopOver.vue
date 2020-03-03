@@ -56,7 +56,8 @@ export default {
   props: {
     uid: {
       type: String,
-      required: true
+      required: false,
+      default: ''
     },
     type: {
       type: String,
@@ -81,7 +82,7 @@ export default {
       return `${this.base}/${lang}/${country}/projects/${this.uid}/published`;
     }
   },
-  mounted() {
+  mounted () {
     this.base = window.location.origin;
   },
   methods: {

@@ -1,6 +1,6 @@
 <template>
   <div class="Project">
-    <project-bar v-if="profile" />
+    <project-bar :key="barKey" />
     <nuxt-child />
   </div>
 </template>
@@ -13,12 +13,18 @@ export default {
   components: {
     ProjectBar
   },
+  data () {
+    return {
+      barKey: 0
+    };
+  },
   computed: {
     ...mapGetters({
       getProjectDetails: 'projects/getUserProjectDetails',
       profile: 'user/getProfile'
     }),
     currentProject () {
+      this.forceBarRerender();
       return this.getProjectDetails(+this.$route.params.id);
     },
     route () {
@@ -39,6 +45,11 @@ export default {
           });
         }
       }
+    }
+  },
+  methods: {
+    forceBarRerender () {
+      this.barKey += 1;
     }
   }
 };

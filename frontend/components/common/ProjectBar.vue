@@ -4,6 +4,7 @@
       <el-row
         type="flex"
         justify="space-between"
+        :class="user ? '' : 'project-bar-wrapper--margin-bottom'"
       >
         <el-col
           :span="12"
@@ -35,6 +36,7 @@
               </div>
             </el-col>
             <el-col
+              v-show="user"
               :span="8"
               class="InfoSection"
             >
@@ -46,6 +48,7 @@
               </div>
             </el-col>
             <el-col
+              v-show="project.contact_email"
               :span="8"
               class="InfoSection"
             >
@@ -63,12 +66,12 @@
               </div>
             </el-col>
             <el-col
-              v-show="uid"
+              v-show="publicProfile.public_id"
               :span="8"
               class="InfoSection"
             >
               <UidPopOver
-                :uid="uid"
+                :uid="publicProfile.public_id"
                 type="infoSection"
               />
             </el-col>
@@ -76,7 +79,10 @@
         </el-col>
       </el-row>
 
-      <div class="ProjectMenu">
+      <div
+        v-show="user"
+        class="ProjectMenu"
+      >
         <nuxt-link
           v-if="isTeam"
           :class="{'Active': isProjectActive}"
@@ -133,21 +139,22 @@ export default {
     ProjectLegend,
     UidPopOver
   },
+  data () {
+    return {
+      publicProfile: {}
+    };
+  },
   computed: {
     ...mapGetters({
       draft: 'project/getProjectData',
       published: 'project/getPublished',
-      user: 'user/getProfile',
-      getUserProjectDetails: 'projects/getUserProjectDetails'
+      user: 'user/getProfile'
     }),
     project () {
       return this.published && this.published.name ? this.published : this.draft;
     },
     id () {
       return parseInt(this.$route.params.id, 10) ? +this.$route.params.id : this.$route.params.id;
-    },
-    uid () {
-      return this.getUserProjectDetails(this.id).public_id || '';
     },
     route () {
       return this.$route.name.split('__')[0];
@@ -184,6 +191,15 @@ export default {
       }
       return null;
     }
+  },
+  async mounted () {
+    this.publicProfile = await this.handlePublicProfile();
+  },
+  methods: {
+    async handlePublicProfile () {
+      const { data } = await this.$axios.get(`/api/projects/${this.id}/`);
+      return data;
+    }
   }
 };
 </script>
@@ -199,6 +215,10 @@ export default {
     .ProjectBarWrapper {
       overflow: hidden;
       .limitPageWidth();
+    }
+
+    .project-bar-wrapper--margin-bottom {
+      margin-bottom: 10px;
     }
 
     .ProjectName {
