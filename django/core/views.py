@@ -2,7 +2,7 @@ from django.conf import settings
 from django.utils.translation import ugettext
 
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
@@ -26,7 +26,7 @@ class TokenAuthMixin(object):
     REST Framework Class Based Views.
     """
     authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 class TeamTokenAuthMixin(object):
