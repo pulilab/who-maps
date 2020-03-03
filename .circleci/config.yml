@@ -151,3 +151,18 @@ workflows:
                 job_type: deployment
                 issue_regexp: '[A-Z0-9]{2,30}-[0-9]+'
                 environment: DEV  # DEV, PROD, QA
+      - deploy-qa:
+          name: QA Server Deployment
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^[0-9]+(\.[0-9]+)*$/
+          post-steps:
+            - jira/notify:
+                environment_type: staging
+                job_type: deployment
+                issue_regexp: '[A-Z0-9]{2,30}-[0-9]+'
+                environment: QA  # DEV, PROD, QA
