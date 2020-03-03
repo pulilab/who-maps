@@ -95,7 +95,7 @@ jobs:
           command: |
             export TERM=xterm && ! git diff --name-status origin/development HEAD | grep /migrations/0 | grep "^A"
 
-  deploy:
+  deploy-dev:
     docker:
       - image: circleci/python:3.7.6-stretch
     working_directory: ~/who-maps
@@ -138,7 +138,8 @@ workflows:
           filters:
             tags:
               only: /^[0-9]+(\.[0-9]+)*$/
-      - deploy:
+      - deploy-dev:
+          name: Dev Server Deployment
           requires:
             - build-and-test
           filters:
