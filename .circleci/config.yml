@@ -128,7 +128,7 @@ jobs:
           name: Deploy Over SSH
           working_directory: ~/who-maps/django
           command: |
-            fab qa deploy
+            fab staging deploy
           no_output_timeout: "20m"
 
 workflows:
