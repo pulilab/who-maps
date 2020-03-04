@@ -24,13 +24,13 @@
                 alt="HRP"
               >
             </div>
-            <div class="Partner">
-              <img
-                src="/static/partners/logo-path_new-color.png"
-                style="height: 42px"
-                alt="PATH"
-              >
-            </div>
+            <!--<div class="Partner">-->
+            <!--  <img-->
+            <!--    src="/static/partners/logo-path_new-color.png"-->
+            <!--    style="height: 42px"-->
+            <!--    alt="PATH"-->
+            <!--  >-->
+            <!--</div>-->
             <div class="Partner">
               <img
                 src="/static/partners/logo-digital_square.png"

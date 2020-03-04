@@ -78,8 +78,8 @@
               :class="['ActionBarLink', {'Active': isListSubRoute}]"
               tag="div"
             >
-              <translate key="list-view">
-                List view
+              <translate key="export-view">
+                Export View
               </translate>
             </nuxt-link>
           </el-col>

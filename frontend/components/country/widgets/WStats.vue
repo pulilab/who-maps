@@ -35,12 +35,12 @@
 
     <footer>
       <p>
-        <translate>Disclaimer: data above sourced from external sources</translate>
+        <translate>Disclaimer: data above sourced from</translate>
         <a
           :href="`http://index.digitalhealthindex.org/country_profile/${code}`"
           target="_blank"
         >
-          <translate>digitalhealthindex.org</translate>
+          <translate>external sources</translate>
         </a>,
         <translate>for which WHO is not responsible.</translate>
       </p>
