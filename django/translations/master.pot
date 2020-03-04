@@ -666,10 +666,6 @@ msgstr ""
 msgid "Digital Health Reference Documents"
 msgstr ""
 
-#: components/country/widgets/WStats.vue:42
-msgid "digitalhealthindex.org"
-msgstr ""
-
 #: components/project/ProjectForm.vue:203
 msgid "Discard changes"
 msgstr ""
@@ -683,7 +679,7 @@ msgid "Disclaimer:"
 msgstr ""
 
 #: components/country/widgets/WStats.vue:37
-msgid "Disclaimer: data above sourced from external sources"
+msgid "Disclaimer: data above sourced from"
 msgstr ""
 
 #: pages/_organisation/terms.vue:242
@@ -845,6 +841,10 @@ msgstr ""
 
 #: components/common/ActionBar.vue:80
 msgid "Export View"
+msgstr ""
+
+#: components/country/widgets/WStats.vue:42
+msgid "external sources"
 msgstr ""
 
 #: components/project/FacilitySelector.vue:1
