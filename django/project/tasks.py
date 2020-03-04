@@ -63,7 +63,7 @@ def send_project_approval_digest():
 @app.task(name="send_project_updated_digest")
 def send_project_updated_digest():
     """
-    Sends daily digest on published project changes to country and donor admins.
+    Sends digest on published project changes to country and donor admins.
     """
     projects = Project.objects.published_only().filter(
         modified__gt=timezone.now() - timezone.timedelta(hours=settings.PROJECT_UPDATE_DIGEST_PERIOD))\

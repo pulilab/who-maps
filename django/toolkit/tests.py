@@ -130,7 +130,7 @@ class ToolkitTests(SetupTests):
         self.assertEqual(ceil(response.json()[0]["axis_score"]), 38)
         self.assertEqual(ceil(response.json()[0]["axis_completion"]), 9)
 
-    def test_send_daily_toolkit_digest(self):
+    def test_send_toolkit_digest(self):
         url = reverse("toolkit-scores", kwargs={"project_id": self.project_id})
         data = {
                 "axis": 0,
@@ -143,7 +143,7 @@ class ToolkitTests(SetupTests):
         toolkit = Toolkit.objects.get_object_or_none(project_id=self.project_id)
         toolkit.created = toolkit.modified - timezone.timedelta(seconds=20)
         toolkit.save()
-        tasks.send_daily_toolkit_digest()
+        tasks.send_toolkit_digest()
         self.assertEqual(mail.outbox[-1].subject, f"{toolkit.project.name}'s assessment has been updated")
 
         profile = UserProfile.objects.get(id=self.user_profile_id)
@@ -154,13 +154,13 @@ class ToolkitTests(SetupTests):
         # check other language
         profile.language = 'fr'
         profile.save()
-        tasks.send_daily_toolkit_digest()
+        tasks.send_toolkit_digest()
 
         self.assertIn('<meta http-equiv="content-language" content="fr">',
                       str(mail.outbox[-1].message()))
 
     @mock.patch('toolkit.tasks.send_mail_wrapper', return_value=None)
-    def test_send_daily_toolkit_digest_without_users_to_notify(self, send_email_wrapper):
+    def test_send_toolkit_digest_without_users_to_notify(self, send_email_wrapper):
         # remove notification from all user profiles
         profiles_with_notification = UserProfile.objects.filter(daily_toolkit_digest_notification=True)
         for profile in profiles_with_notification.all():
@@ -179,6 +179,6 @@ class ToolkitTests(SetupTests):
         toolkit = Toolkit.objects.get_object_or_none(project_id=self.project_id)
         toolkit.created = toolkit.modified - timezone.timedelta(seconds=20)
         toolkit.save()
-        tasks.send_daily_toolkit_digest()
+        tasks.send_toolkit_digest()
 
         send_email_wrapper.assert_not_called()

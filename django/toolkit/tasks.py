@@ -10,10 +10,10 @@ from scheduler.celery import app
 logger = get_task_logger(__name__)
 
 
-@app.task(name="send_daily_toolkit_digest")
-def send_daily_toolkit_digest():
+@app.task(name="send_toolkit_digest")
+def send_toolkit_digest():
     """
-    Sends daily digest on maps toolkit changes to team members.
+    Sends digest on maps toolkit changes to team members.
     """
     projects = Project.objects.published_only().filter(
         toolkit__modified__gt=timezone.now() - timezone.timedelta(hours=settings.TOOLKIT_DIGEST_PERIOD))

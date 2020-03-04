@@ -108,7 +108,7 @@
               <div class="Switch-container">
                 <filter-switch
                   v-model="innerProfile.daily_toolkit_digest_notification"
-                  :label="$gettext('Daily Project Toolkit updates (Y/N)') | translate"
+                  :label="$gettext('Weekly Project Toolkit updates (Y/N)') | translate"
                   :tooltip="$gettext('Lorem ipsum') | translate"
                 />
               </div>

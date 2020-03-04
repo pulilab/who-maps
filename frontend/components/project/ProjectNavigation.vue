@@ -163,7 +163,7 @@
         </el-button>
 
         <el-button
-          v-if="isPublished"
+          v-if="isPublished && parseInt($route.params.id, 10)"
           :disabled="!!loading"
           type="danger"
           size="medium"

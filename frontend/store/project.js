@@ -101,7 +101,7 @@ export const getters = {
 
 export const actions = {
   async loadProject ({ commit, dispatch, rootGetters }, id) {
-    const userProject = rootGetters['projects/getUserProjectList'].find(p => p.id === id);
+    const userProject = rootGetters['projects/getUserProjectList'].find(p => p.id === id || p.public_id === id);
     const { data } = userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`);
     commit('SET_ORIGINAL', Object.freeze(data));
     const clean = cleanState();
@@ -119,11 +119,18 @@ export const actions = {
       published.donors.forEach(d => donorsToFetch.add(d));
       commit('SET_PUBLISHED', Object.freeze(published));
     }
-    await Promise.all([
-      ...[...countriesToFetch].map(cf => dispatch('countries/loadCountryDetails', cf, { root: true })),
-      ...[...donorsToFetch].map(df => dispatch('system/loadDonorDetails', df, { root: true })),
-      dispatch('loadTeamViewers', id)
-    ]);
+    if (parseInt(id, 10)) {
+      await Promise.all([
+        ...[...countriesToFetch].map(cf => dispatch('countries/loadCountryDetails', cf, { root: true })),
+        ...[...donorsToFetch].map(df => dispatch('system/loadDonorDetails', df, { root: true })),
+        dispatch('loadTeamViewers', id)
+      ]);
+    } else {
+      await Promise.all([
+        ...[...countriesToFetch].map(cf => dispatch('countries/loadCountryDetails', cf, { root: true })),
+        ...[...donorsToFetch].map(df => dispatch('system/loadDonorDetails', df, { root: true }))
+      ]);
+    }
   },
   async loadTeamViewers ({ commit, rootGetters }, projectId) {
     const profile = rootGetters['user/getProfile'];
