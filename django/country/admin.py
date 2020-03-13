@@ -43,8 +43,9 @@ class DonorAdmin(admin.ModelAdmin):
 @admin.register(ArchitectureRoadMapDocument)
 class ArchitectureRoadMapDocumentAdmin(admin.ModelAdmin):
     search_fields = ('title', 'document')
-    list_display = ('id', 'country', 'title', 'document')
-    readonly_fields = ('country', 'title', 'document')
+    list_display = ('id', 'country', 'title', 'document', 'is_active')
+    readonly_fields = ('country', 'title', 'document', 'is_active')
+    list_filter = ('is_active',)
 
     def has_add_permission(self, request):  # pragma: no cover
         return False
