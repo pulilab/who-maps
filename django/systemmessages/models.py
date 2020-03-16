@@ -16,7 +16,7 @@ class SystemMessage(ExtendedModel):
     subject = models.CharField(max_length=200)
     receiver_type = models.CharField(max_length=5, choices=RECEIVER_TYPE_CHOICES, default=ALL_USERS)
     message = models.TextField()
-    receivers_number = models.IntegerField()
+    receivers_number = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return "{} {}".format(self.created, self.subject)
