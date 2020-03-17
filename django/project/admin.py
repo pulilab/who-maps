@@ -6,7 +6,7 @@ from core.admin import AllObjectsAdmin
 from country.models import Country
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Project, HSCGroup, \
-    ProjectImportV2, ImportRow
+    ProjectImportV2, ImportRow, ProjectStage
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
@@ -110,11 +110,21 @@ class HSCChallengeAdmin(AllObjectsAdmin):
     pass
 
 
+class ProjectStageInline(admin.TabularInline):
+    model = ProjectStage
+    extra = 0
+    can_delete = True
+    show_change_link = True
+    readonly_fields = ['created']
+    fields = ['created', 'stage_type']
+
+
 class ProjectAdmin(AllObjectsAdmin):
     list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active']
     readonly_fields = ['name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data']
     fields = ['is_active', 'name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data']
     search_fields = ['name']
+    inlines = [ProjectStageInline]
 
     def get_country(self, obj):
         return obj.get_country() if obj.public_id else obj.get_country(draft_mode=True)
