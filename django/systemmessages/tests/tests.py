@@ -29,7 +29,6 @@ class SystemMessageTests(APITestCase):
 
         self.country = CountryFactory(name="country_1", code='CTR1', project_approval=True,
                                       region=Country.REGIONS[0][0], name_en='Hungary', name_fr='Hongrie')
-
         self.org = OrganisationFactory(name="Test org 1")
 
         data = dict(country=self.country.id, organisation=self.org.id, hsc_challenges=[1, 2], his_bucket=[1, 2])
@@ -71,7 +70,7 @@ class SystemMessageTests(APITestCase):
         send_system_message.apply((system_message.id,))
 
         system_message.refresh_from_db()
-        self.assertEqual(system_message.receivers_number, 1)
+        self.assertEqual(system_message.receivers_number, 2)
 
         call_args = send_mail_wrapper.call_args_list[0][1]
 
@@ -80,7 +79,7 @@ class SystemMessageTests(APITestCase):
         self.assertEqual(call_args['context']['message'], system_message.message)
         self.assertNotIn(self.user_1.email, call_args['to'])
         self.assertIn(self.user_2.email, call_args['to'])
-        self.assertNotIn(self.user_3.email, call_args['to'])
+        self.assertIn(self.user_3.email, call_args['to'])
 
     @mock.patch('systemmessages.tasks.send_mail_wrapper', return_value=None)
     def test_system_message_to_project_owners_with_published_projects(self, send_mail_wrapper):
