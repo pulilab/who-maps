@@ -5,7 +5,6 @@ from django.dispatch import receiver
 from core.models import ExtendedModel
 from django.utils.translation import ugettext_lazy as _
 
-from user.models import UserProfile
 from .tasks import send_system_message
 
 
