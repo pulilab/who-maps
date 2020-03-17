@@ -23,7 +23,7 @@ class SystemMessage(ExtendedModel):
     message = models.TextField()
     receivers_number = models.IntegerField(blank=True, null=True)
 
-    def __str__(self):
+    def __str__(self):   # pragma: no cover
         return "{} {}".format(self.created, self.subject)
 
 
