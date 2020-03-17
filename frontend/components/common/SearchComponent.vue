@@ -45,41 +45,41 @@
             <el-row
               type="flex"
               align="middle"
-              class="SearchResultsHeader"
+              :class="`SearchResultsHeader ${hasResults ? 'HasResults' : ''}`"
             >
-              <el-col
-                v-show="hasResults"
-                class="SearchResultsCounter"
-              >
-                <translate :parameters="{num: results.length}">
-                  {num} result(s):
-                </translate>
-              </el-col>
-              <el-col class="AdvancedSearchLink">
-                <nuxt-link
-                  :to="localePath({name : 'organisation-dashboard', params: $route.params})"
-                  class="NuxtLink IconRight"
-                >
-                  <span><translate>Advanced search</translate></span><fa icon="angle-right" />
-                </nuxt-link>
+              <template v-if="hasResults">
+                <el-col class="SearchResultsCounter">
+                  <translate :parameters="{num: results.length}">
+                    {num} result(s):
+                  </translate>
+                </el-col>
+                <el-col class="AdvancedSearchLink">
+                  <nuxt-link
+                    :to="localePath({name : 'organisation-dashboard', params: $route.params})"
+                    class="NuxtLink IconRight"
+                  >
+                    <span><translate>Advanced search</translate></span><fa icon="angle-right" />
+                  </nuxt-link>
+                </el-col>
+              </template>
+              <el-col class="NopeMessage" v-else>
+                No results to show, please refine your search…
               </el-col>
             </el-row>
 
-            <el-row v-show="!hasResults">
-              <el-col class="SearchResultsNope">
-                <p class="TipText">
-                  <fa
-                    icon="info-circle"
-                    size="lg"
-                  />
-                  <span>
-                    <translate>
-                      You can use filters to further refine your search. Note that these filters can be saved by selecting Filters and naming your filter. These can then be viewed at a later time after you log in.
-                    </translate>
-                  </span>
-                </p>
-              </el-col>
-            </el-row>
+            <template v-if="!hasResults">
+              <SearchComponentLink
+                :title="$gettext('Go to Advanced project search') | translate"
+                :text="$gettext('You can use filters to further refine your search. Note that these filters can be saved by selecting Filters and naming your filter. These can then be viewed at a later time after you log in.') | translate"
+                page="organisation-dashboard"
+              />
+              <SearchComponentLink
+                :title="$gettext('Go to Planning & Guidance') | translate"
+                :text="$gettext('Salutantibus vitae elit libero, a pharetra augue. Morbi odio eros, volutpat ut pharetra vitae, lobortis sed nibh.') | translate"
+                page="organisation-cms"
+                class="LastSearchComponent"
+              />
+            </template>
 
             <el-row
               v-for="project in results"
@@ -149,7 +149,9 @@
 
 <script>
 import { mapGettersActions } from '../../utilities/form.js';
-import ProjectCard from './ProjectCard';
+// import ProjectCard from './ProjectCard';
+import ProjectCard from '@/components/common/ProjectCard';
+import SearchComponentLink from '@/components/common/SearchComponentLink';
 import ClickOutside from 'vue-click-outside';
 import { mapGetters, mapActions } from 'vuex';
 
@@ -158,7 +160,8 @@ export default {
     ClickOutside
   },
   components: {
-    ProjectCard
+    ProjectCard,
+    SearchComponentLink
   },
   data () {
     return {
@@ -211,6 +214,8 @@ export default {
   }
 };
 </script>
+
+
 
 <style lang="less">
   @import "../../assets/style/variables.less";
@@ -330,6 +335,9 @@ export default {
       height: 56px;
       padding: 0 20px;
       border-top: 1px solid @colorTextMuted;
+      &.HasResults {
+        background-color: white;
+      }
 
       .SearchResultsCounter {
         width: 100%;
@@ -341,24 +349,18 @@ export default {
       .AdvancedSearchLink {
         width: auto;
       }
-    }
 
-    .SearchResultsNope {
-      padding: 0 20px 30px;
-
-      .TipText {
-        display: inline-flex;
-        align-items: flex-start;
-        margin: 0;
-        font-size: @fontSizeSmall;
-        line-height: 18px;
+      .NopeMessage {
         color: @colorTextSecondary;
-
-        .svg-inline--fa {
-          margin-right: 6px;
-          color: @colorTextMuted;
-        }
+        font-weight: bold;
+        line-height: 24px;
+        font-size: 14px;
+        padding-top: 18px;
+        padding-bottom: 24px;
       }
+    }
+    .LastSearchComponent {
+      padding-bottom: 20px;
     }
 
     .SearchResultItem {
