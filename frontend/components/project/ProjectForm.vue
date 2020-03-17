@@ -17,6 +17,17 @@
         type="flex"
       >
         <el-col :span="18">
+          <stage-overview
+            ref="stageOverview"
+            :use-publish-rules="usePublishRules"
+            :rules="rules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
+            :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
+          />
+          <stage-history />
           <general-overview
             ref="generalOverview"
             :use-publish-rules="usePublishRules"
@@ -89,6 +100,8 @@
 import { publishRules, draftRules } from '@/utilities/projects';
 import ProjectNavigation from './ProjectNavigation';
 import GeneralOverview from './sections/GeneralOverview';
+import StageOverview from '@/components/project/sections/StageOverview';
+import StageHistory from '@/components/project/sections/StageHistory';
 import ImplementationOverview from './sections/ImplementationOverview';
 import TechnologyOverview from './sections/TechnologyOverview';
 import InteroperabilityAndStandards from './sections/InteroperabilityAndStandards';
@@ -100,6 +113,8 @@ export default {
   components: {
     ProjectNavigation,
     GeneralOverview,
+    StageOverview,
+    StageHistory,
     ImplementationOverview,
     TechnologyOverview,
     InteroperabilityAndStandards,
