@@ -18,7 +18,7 @@ def send_system_message(system_message_id):
 
     try:
         system_message = SystemMessage.objects.get(pk=system_message_id)
-    except SystemMessage.DoesNotExist:
+    except SystemMessage.DoesNotExist:  # pragma: no cover
         pass
     else:
         active_user_profiles = UserProfile.objects.filter(user__is_active=True)
