@@ -370,6 +370,12 @@
                         <!-- /TEMPLATE: NEW MEMBER -->
 
 
+                        <!-- TEMPLATE: ALL USERS -->
+                        {% elif type == "all_users" %}
+                        <p><b>{{ message }}</b></p>
+                        <!-- /TEMPLATE: ALL USERS-->
+
+
                         <!-- TEMPLATE: ADMIN REQUEST -->
                         {% elif type == "admin_request" %}
                         <h1>{% trans "Admin request notification" %}</h1>
