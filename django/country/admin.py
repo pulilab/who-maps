@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
+from django.forms import ModelForm
+from gfklookupwidget.widgets import GfkLookupWidget
 
 from core.admin import AllObjectsAdmin
 from .models import Country, Donor
@@ -35,6 +37,21 @@ class CountryAdmin(AllObjectsAdmin):
         return False
 
 
+class DonorForm(ModelForm):
+    class Meta(object):
+        model = Donor
+        fields = ('name', 'code', 'content_type', 'object_id')
+        widgets = {
+            'object_id': GfkLookupWidget(
+                content_type_field_name='content_type',
+                parent_field=Donor._meta.get_field('content_type'),
+            )
+        }
+
+
 @admin.register(Donor)
 class DonorAdmin(admin.ModelAdmin):
-    fields = list_display = ('name', 'code')
+    # fields = list_display = ('name', 'code')
+    list_display = ('name', 'code', 'content_type', 'object_id')
+
+    form = DonorForm
