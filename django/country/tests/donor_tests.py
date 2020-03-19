@@ -278,7 +278,7 @@ class DonorTests(DonorBaseTests):
         self.donor.refresh_from_db()
         self.assertTrue(userprofile1.id not in self.donor.super_admins.all())
 
-    def test_donor_generic_foreign_key(self):
+    def test_donor_generic_foreign_key_with_hfa(self):
         hfa = HealthFocusAreaFactory(name='Health focus area')
         self.assertEqual(hfa.donors.count(), 0)
 
