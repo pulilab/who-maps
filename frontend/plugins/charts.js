@@ -11,8 +11,17 @@ Vue.component('bar-chart', {
 
 Vue.component('line-chart', {
   extends: Line,
-  props: ['data', 'options'],
+  props: {
+    chartdata: {
+      type: Object,
+      default: null
+    },
+    options: {
+      type: Object,
+      default: null
+    }
+  },
   mounted () {
-    this.renderChart(this.data, this.options)
+    this.renderChart(this.chartdata, this.options);
   }
 })
