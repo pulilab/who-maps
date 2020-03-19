@@ -51,7 +51,6 @@ class DonorForm(ModelForm):
 
 @admin.register(Donor)
 class DonorAdmin(admin.ModelAdmin):
-    # fields = list_display = ('name', 'code')
-    list_display = ('name', 'code', 'content_type', 'object_id')
+    list_display = ('name', 'code', 'content_object')
 
     form = DonorForm
