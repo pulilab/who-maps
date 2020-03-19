@@ -188,11 +188,10 @@ class ProjectStage(ExtendedModel):
     IMPLEMENTATION_PLANNING = 'IP'
     DEVELOPING_OR_ADAPTING_SOLUTION = 'DAS'
     PILOTING_AND_EVIDENCE_GENERATION = 'PEG'
-    PACKAGE_AND_CHAMPION = 'PC'
+    PACKAGE_AND_ADVOCACY = 'PA'
     DEPLOYING = 'DEP'
     SCALING_UP = 'SU'
-    SCALE_AND_HANDOVER = 'SH'
-    UNDER_REVIEW = 'UR'
+    HANDOVER_OR_COMPLETE = 'SH'
 
     STAGE_TYPE_CHOICES = (
         (OPPORTUNITY_AND_IDEATION, _('Opportunity and Ideation')),
@@ -201,15 +200,15 @@ class ProjectStage(ExtendedModel):
         (IMPLEMENTATION_PLANNING, _('Implementation Planning')),
         (DEVELOPING_OR_ADAPTING_SOLUTION, _('Developing or Adapting Solution')),
         (PILOTING_AND_EVIDENCE_GENERATION, _('Piloting and Evidence Generation')),
-        (PACKAGE_AND_CHAMPION, _('Package and Champion')),
+        (PACKAGE_AND_ADVOCACY, _('Package and Advocacy')),
         (DEPLOYING, _('Deploying')),
         (SCALING_UP, _('Scaling up')),
-        (SCALE_AND_HANDOVER, _('Scale and Handover')),
-        (UNDER_REVIEW, _('Under Review')),
+        (HANDOVER_OR_COMPLETE, _('Handover or Complete')),
     )
 
     project = models.ForeignKey(Project, related_name='stages', on_delete=models.CASCADE)
     stage_type = models.CharField(max_length=5, choices=STAGE_TYPE_CHOICES)
+    note = models.CharField(max_length=256, blank=True, null=True)
 
     def __str__(self):  # pragma: no cover
         return "{} {} {}".format(self.project, self.stage_type, self.created)
