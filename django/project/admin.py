@@ -116,7 +116,7 @@ class ProjectStageInline(admin.TabularInline):
     can_delete = True
     show_change_link = True
     readonly_fields = ['created']
-    fields = ['created', 'stage_type']
+    fields = ['stage_type', 'date']
 
 
 class ProjectAdmin(AllObjectsAdmin):
