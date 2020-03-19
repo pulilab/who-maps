@@ -280,6 +280,8 @@ class DonorTests(DonorBaseTests):
 
     def test_donor_generic_foreign_key(self):
         hfa = HealthFocusAreaFactory(name='Health focus area')
+        self.assertEqual(hfa.donors.count(), 0)
+
         donor = DonorFactory(name='Test Donor', code='t_dnr')
 
         donor.content_object = hfa
@@ -287,3 +289,5 @@ class DonorTests(DonorBaseTests):
 
         self.assertEqual(donor.content_type, ContentType.objects.get(app_label='project', model='healthfocusarea'))
         self.assertEqual(donor.object_id, hfa.id)
+
+        self.assertEqual(hfa.donors.count(), 1)
