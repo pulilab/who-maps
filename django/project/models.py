@@ -209,7 +209,7 @@ class ProjectStage(ExtendedModel):
     project = models.ForeignKey(Project, related_name='stages', on_delete=models.CASCADE)
     stage_type = models.CharField(max_length=5, choices=STAGE_TYPE_CHOICES)
     note = models.CharField(max_length=256, blank=True, null=True)
-    date = models.DateField()
+    date = models.DateTimeField()
 
     def __str__(self):  # pragma: no cover
         return "{} {} {}".format(self.project, self.stage_type, self.date)
