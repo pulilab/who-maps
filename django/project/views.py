@@ -52,7 +52,7 @@ class ProjectPublicViewSet(ViewSet):
             health_focus_areas.append(dict(
                 id=category.id,
                 name=category.name,
-                health_focus_areas=category.health_focus_areas.filter(is_active=True).values('id', 'name')
+                health_focus_areas=category.health_focus_areas.filter(is_active=True).values('id', 'name', 'donors')
             ))
 
         hsc_challenges = []
