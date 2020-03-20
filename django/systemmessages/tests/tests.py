@@ -38,7 +38,7 @@ class SystemMessageTests(APITestCase):
         self.published_project.save()
 
     @mock.patch('systemmessages.tasks.send_mail_wrapper', return_value=None)
-    def test_system_message_to_all_users(self, send_mail_wrapper):
+    def test_system_message_to_all_users_success(self, send_mail_wrapper):
         system_message = SystemMessage.objects.create(
             subject='Message to all users',
             receiver_type=SystemMessage.ALL_USERS,
