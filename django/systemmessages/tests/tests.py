@@ -110,6 +110,9 @@ class SystemMessageTests(APITestCase):
         self.profile_3.language = 'es'
         self.profile_3.save()
 
+        user_4 = UserFactory(username='bh_4', email='bh+4@pulilab.com')
+        UserProfileFactory(user=user_4, language='pt')
+
         system_message = SystemMessage.objects.create(
             subject_en='subject',
             subject_fr='matière',
@@ -123,7 +126,7 @@ class SystemMessageTests(APITestCase):
         send_system_message.apply((system_message.id,))
 
         system_message.refresh_from_db()
-        self.assertEqual(system_message.receivers_number, 3)
+        self.assertEqual(system_message.receivers_number, 4)
 
         call_args_1 = send_mail_wrapper.call_args_list[0][1]
         self.assertEqual(call_args_1['subject'], system_message.subject_en)
@@ -145,3 +148,11 @@ class SystemMessageTests(APITestCase):
         self.assertEqual(call_args_3['to'], [self.user_3.email])
         self.assertEqual(call_args_3['context']['message'], system_message.message_es)
         self.assertEqual(call_args_3['language'], 'es')
+
+        # user with portugal language should get english translation
+        call_args_1 = send_mail_wrapper.call_args_list[3][1]
+        self.assertEqual(call_args_1['subject'], system_message.subject_en)
+        self.assertEqual(call_args_1['email_type'], 'all_users')
+        self.assertEqual(call_args_1['to'], [user_4.email])
+        self.assertEqual(call_args_1['context']['message'], system_message.message_en)
+        self.assertEqual(call_args_1['language'], 'pt')
