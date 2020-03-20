@@ -4,7 +4,7 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.reverse import reverse
 
-from project.models import ProjectStage, Project
+from project.models import ProjectStage
 from project.tests.setup import SetupTests
 
 
