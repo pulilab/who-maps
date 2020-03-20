@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.admin import AdminSite
 
 from rest_framework.test import APITestCase
@@ -20,5 +21,8 @@ class SystemMessageAdminTests(APITestCase):
         )
 
         admin = SystemMessageAdmin(model=SystemMessage, admin_site=AdminSite())
+        languages = dict(settings.LANGUAGES).keys()
+        language_fields = [f'subject_{lang}' for lang in languages] + \
+                          [f'message_{lang}' for lang in languages]
         self.assertEqual(admin.get_readonly_fields(request=None, obj=system_message),
-                         ['message', 'receiver_type', 'receivers_number', 'subject'])
+                         ['message', 'receiver_type', 'receivers_number', 'subject'] + language_fields)
