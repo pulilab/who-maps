@@ -224,7 +224,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
             instance.odk_extra_data = odk_extra_data
 
         # create stages
-        stages_data = validated_data.get('stages', None)
+        stages_data = validated_data.get('stages', [])
         instance.stages.all().delete()
         for stage_data in stages_data:
             ProjectStage.objects.create(project=instance, **stage_data)
