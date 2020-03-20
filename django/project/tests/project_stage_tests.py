@@ -53,3 +53,21 @@ class ProjectStageTests(SetupTests):
         self.assertEqual(len(resp_data['draft']['stages']), 3)
 
         self.assertEqual(ProjectStage.objects.filter(project_id=project_id).count(), 3)
+
+        # publish
+        data['project']['stages'].append(
+            {
+                'stage_type': ProjectStage.DEPLOYING,
+                'date': str((now - timezone.timedelta(days=3)).date()),
+                'note': 'deploying note'
+            }
+        )
+
+        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        resp_data = response.json()
+        self.assertIn('stages', resp_data['draft'])
+        self.assertEqual(len(resp_data['draft']['stages']), 4)
+
+        self.assertEqual(ProjectStage.objects.filter(project_id=project_id).count(), 4)
