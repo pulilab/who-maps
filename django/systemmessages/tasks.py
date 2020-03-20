@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 from celery.utils.log import get_task_logger
+from django.utils.translation import override
 
 from core.utils import send_mail_wrapper
 from scheduler.celery import app
@@ -36,17 +37,14 @@ def send_system_message(system_message_id):
             system_message.receivers_number = receivers.count()
             system_message.save()
 
-            context = {
-                "message": system_message.message
-            }
-
             email_mapping = defaultdict(list)
             for receiver in receivers:
                 email_mapping[receiver.language].append(receiver.user.email)
 
             for language, email_list in email_mapping.items():
-                send_mail_wrapper(subject=system_message.subject,
-                                  email_type="all_users",
-                                  to=email_list,
-                                  language=language,
-                                  context=context)
+                with override(language):
+                    send_mail_wrapper(subject=system_message.subject,
+                                      email_type="all_users",
+                                      to=email_list,
+                                      language=language,
+                                      context={"message": system_message.message})
