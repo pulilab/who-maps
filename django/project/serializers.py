@@ -23,7 +23,7 @@ from core.utils import send_mail_wrapper
 from country.models import CustomQuestion
 from project.utils import remove_keys
 from user.models import UserProfile
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform
+from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform, ProjectStage
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
@@ -32,6 +32,12 @@ def url_validator(value):
     if not URL_REGEX.match(value):
         raise ValidationError('Enter a valid URL.')
     return value
+
+
+class ProjectStageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectStage
+        fields = ('stage_type', 'note', 'date')
 
 
 class NDPSerializer(serializers.Serializer):
