@@ -192,6 +192,7 @@ class ProjectStage(ExtendedModel):
     DEPLOYING = 'DEP'
     SCALING_UP = 'SU'
     HANDOVER_OR_COMPLETE = 'SH'
+    ENDED = 'END'
 
     STAGE_TYPE_CHOICES = (
         (OPPORTUNITY_AND_IDEATION, _('Opportunity and Ideation')),
@@ -204,6 +205,7 @@ class ProjectStage(ExtendedModel):
         (DEPLOYING, _('Deploying')),
         (SCALING_UP, _('Scaling up')),
         (HANDOVER_OR_COMPLETE, _('Handover or Complete')),
+        (ENDED, _('Ended')),
     )
 
     project = models.ForeignKey(Project, related_name='stages', on_delete=models.CASCADE)
