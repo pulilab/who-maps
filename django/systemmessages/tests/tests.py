@@ -102,3 +102,46 @@ class SystemMessageTests(APITestCase):
         self.assertNotIn(self.user_1.email, call_args['to'])
         self.assertNotIn(self.user_2.email, call_args['to'])
         self.assertIn(self.user_3.email, call_args['to'])
+
+    @mock.patch('systemmessages.tasks.send_mail_wrapper', return_value=None)
+    def test_system_message_to_all_users_with_different_languages_success(self, send_mail_wrapper):
+        self.profile_2.language = 'fr'
+        self.profile_2.save()
+        self.profile_3.language = 'es'
+        self.profile_3.save()
+
+        system_message = SystemMessage.objects.create(
+            subject_en='subject',
+            subject_fr='matière',
+            subject_es='Sujeto(',
+            receiver_type=SystemMessage.ALL_USERS,
+            message_en='Message to everyone',
+            message_fr='message à tout le monde',
+            message_es='Mensaje a todos',
+        )
+
+        send_system_message.apply((system_message.id,))
+
+        system_message.refresh_from_db()
+        self.assertEqual(system_message.receivers_number, 3)
+
+        call_args_1 = send_mail_wrapper.call_args_list[0][1]
+        self.assertEqual(call_args_1['subject'], system_message.subject_en)
+        self.assertEqual(call_args_1['email_type'], 'all_users')
+        self.assertEqual(call_args_1['to'], [self.user_1.email])
+        self.assertEqual(call_args_1['context']['message'], system_message.message_en)
+        self.assertEqual(call_args_1['language'], 'en')
+
+        call_args_2 = send_mail_wrapper.call_args_list[1][1]
+        self.assertEqual(call_args_2['subject'], system_message.subject_fr)
+        self.assertEqual(call_args_2['email_type'], 'all_users')
+        self.assertEqual(call_args_2['to'], [self.user_2.email])
+        self.assertEqual(call_args_2['context']['message'], system_message.message_fr)
+        self.assertEqual(call_args_2['language'], 'fr')
+
+        call_args_3 = send_mail_wrapper.call_args_list[2][1]
+        self.assertEqual(call_args_3['subject'], system_message.subject_es)
+        self.assertEqual(call_args_3['email_type'], 'all_users')
+        self.assertEqual(call_args_3['to'], [self.user_3.email])
+        self.assertEqual(call_args_3['context']['message'], system_message.message_es)
+        self.assertEqual(call_args_3['language'], 'es')
