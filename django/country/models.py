@@ -136,7 +136,7 @@ def update_gdhi_data(sender, instance, created, **kwargs):
         update_gdhi_data_task.apply_async((instance.code, True))
 
 
-class ArchitectureRoadMapDocument(models.Model):
+class ArchitectureRoadMapDocument(SoftDeleteModel):
     country = models.ForeignKey(Country, related_name='documents', on_delete=models.CASCADE)
     title = models.CharField(max_length=128)
     document = models.FileField(null=True, upload_to='documents/')

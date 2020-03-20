@@ -4,7 +4,7 @@ from django.forms import ModelForm
 from gfklookupwidget.widgets import GfkLookupWidget
 
 from core.admin import AllObjectsAdmin
-from .models import Country, Donor
+from .models import Country, Donor, ArchitectureRoadMapDocument
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
@@ -54,3 +54,17 @@ class DonorAdmin(admin.ModelAdmin):
     list_display = ('name', 'code', 'content_object')
 
     form = DonorForm
+
+
+@admin.register(ArchitectureRoadMapDocument)
+class ArchitectureRoadMapDocumentAdmin(admin.ModelAdmin):
+    search_fields = ('title', 'document')
+    list_display = ('id', 'country', 'title', 'document', 'is_active')
+    readonly_fields = ('country', 'title', 'document', 'is_active')
+    list_filter = ('is_active', 'country')
+
+    def has_add_permission(self, request):  # pragma: no cover
+        return False
+
+    def has_delete_permission(self, request, obj=None):  # pragma: no cover
+        return False
