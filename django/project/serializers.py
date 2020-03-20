@@ -183,6 +183,9 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     # SECTION 4
     interoperability_links = DraftInteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
 
+    # SECTION 5
+    stages = ProjectStageSerializer(many=True, required=False, allow_null=True)
+
     # ODK DATA
     odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
     odk_id = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
