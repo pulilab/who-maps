@@ -45,7 +45,7 @@ class ArchitectureRoadMapDocumentAdmin(admin.ModelAdmin):
     search_fields = ('title', 'document')
     list_display = ('id', 'country', 'title', 'document', 'is_active')
     readonly_fields = ('country', 'title', 'document', 'is_active')
-    list_filter = ('is_active',)
+    list_filter = ('is_active', 'country')
 
     def has_add_permission(self, request):  # pragma: no cover
         return False
