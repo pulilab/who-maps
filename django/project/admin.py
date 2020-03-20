@@ -114,7 +114,6 @@ class ProjectStageInline(admin.TabularInline):
     model = ProjectStage
     extra = 0
     can_delete = True
-    show_change_link = True
     readonly_fields = ['created']
     fields = ['stage_type', 'date', 'note']
 
