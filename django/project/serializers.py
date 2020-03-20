@@ -21,7 +21,7 @@ import scheduler.celery  # noqa
 
 from core.utils import send_mail_wrapper
 from country.models import CustomQuestion
-from project.utils import remove_keys
+from project.utils import remove_keys, update_project_stages
 from user.models import UserProfile
 from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform, ProjectStage
 
@@ -145,11 +145,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
         instance.odk_etag = None
         instance.make_public_id(validated_data['country'])
 
-        # create stages
-        stages_data = validated_data.get('stages', [])
-        instance.stages.all().delete()
-        for stage_data in stages_data:
-            ProjectStage.objects.create(project=instance, **stage_data)
+        update_project_stages(instance, validated_data)
 
         instance.save()
 
@@ -232,11 +228,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
         if odk_extra_data:
             instance.odk_extra_data = odk_extra_data
 
-        # create stages
-        stages_data = validated_data.get('stages', [])
-        instance.stages.all().delete()
-        for stage_data in stages_data:
-            ProjectStage.objects.create(project=instance, **stage_data)
+        update_project_stages(instance, validated_data)
 
         instance.draft = validated_data
         return instance
