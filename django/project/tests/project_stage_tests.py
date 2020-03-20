@@ -48,8 +48,8 @@ class ProjectStageTests(SetupTests):
         url = reverse("project-draft", kwargs={"project_id": project_id, "country_id": self.country_id})
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
-        data = response.json()
-        self.assertIn('stages', data['draft'])
-        self.assertEqual(len(data['draft']['stages']), 3)
+        resp_data = response.json()
+        self.assertIn('stages', resp_data['draft'])
+        self.assertEqual(len(resp_data['draft']['stages']), 3)
 
         self.assertEqual(ProjectStage.objects.filter(project_id=project_id).count(), 3)
