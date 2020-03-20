@@ -44,7 +44,7 @@ def send_system_message(system_message_id):
             for language, email_list in email_mapping.items():
                 with override(language):
                     send_mail_wrapper(subject=system_message.subject,
-                                      email_type="all_users",
+                                      email_type="system_message",
                                       to=email_list,
                                       language=language,
                                       context={"message": system_message.message})

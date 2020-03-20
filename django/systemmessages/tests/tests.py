@@ -53,7 +53,7 @@ class SystemMessageTests(APITestCase):
         call_args = send_mail_wrapper.call_args_list[0][1]
 
         self.assertEqual(call_args['subject'], system_message.subject)
-        self.assertEqual(call_args['email_type'], 'all_users')
+        self.assertEqual(call_args['email_type'], 'system_message')
         self.assertEqual(call_args['context']['message'], system_message.message)
         self.assertIn(self.user_1.email, call_args['to'])
         self.assertIn(self.user_2.email, call_args['to'])
@@ -75,7 +75,7 @@ class SystemMessageTests(APITestCase):
         call_args = send_mail_wrapper.call_args_list[0][1]
 
         self.assertEqual(call_args['subject'], system_message.subject)
-        self.assertEqual(call_args['email_type'], 'all_users')
+        self.assertEqual(call_args['email_type'], 'system_message')
         self.assertEqual(call_args['context']['message'], system_message.message)
         self.assertNotIn(self.user_1.email, call_args['to'])
         self.assertIn(self.user_2.email, call_args['to'])
@@ -97,7 +97,7 @@ class SystemMessageTests(APITestCase):
         call_args = send_mail_wrapper.call_args_list[0][1]
 
         self.assertEqual(call_args['subject'], system_message.subject)
-        self.assertEqual(call_args['email_type'], 'all_users')
+        self.assertEqual(call_args['email_type'], 'system_message')
         self.assertEqual(call_args['context']['message'], system_message.message)
         self.assertNotIn(self.user_1.email, call_args['to'])
         self.assertNotIn(self.user_2.email, call_args['to'])
@@ -130,21 +130,21 @@ class SystemMessageTests(APITestCase):
 
         call_args_1 = send_mail_wrapper.call_args_list[0][1]
         self.assertEqual(call_args_1['subject'], system_message.subject_en)
-        self.assertEqual(call_args_1['email_type'], 'all_users')
+        self.assertEqual(call_args_1['email_type'], 'system_message')
         self.assertEqual(call_args_1['to'], [self.user_1.email])
         self.assertEqual(call_args_1['context']['message'], system_message.message_en)
         self.assertEqual(call_args_1['language'], 'en')
 
         call_args_2 = send_mail_wrapper.call_args_list[1][1]
         self.assertEqual(call_args_2['subject'], system_message.subject_fr)
-        self.assertEqual(call_args_2['email_type'], 'all_users')
+        self.assertEqual(call_args_2['email_type'], 'system_message')
         self.assertEqual(call_args_2['to'], [self.user_2.email])
         self.assertEqual(call_args_2['context']['message'], system_message.message_fr)
         self.assertEqual(call_args_2['language'], 'fr')
 
         call_args_3 = send_mail_wrapper.call_args_list[2][1]
         self.assertEqual(call_args_3['subject'], system_message.subject_es)
-        self.assertEqual(call_args_3['email_type'], 'all_users')
+        self.assertEqual(call_args_3['email_type'], 'system_message')
         self.assertEqual(call_args_3['to'], [self.user_3.email])
         self.assertEqual(call_args_3['context']['message'], system_message.message_es)
         self.assertEqual(call_args_3['language'], 'es')
@@ -152,7 +152,7 @@ class SystemMessageTests(APITestCase):
         # user with portugal language should get english translation
         call_args_1 = send_mail_wrapper.call_args_list[3][1]
         self.assertEqual(call_args_1['subject'], system_message.subject_en)
-        self.assertEqual(call_args_1['email_type'], 'all_users')
+        self.assertEqual(call_args_1['email_type'], 'system_message')
         self.assertEqual(call_args_1['to'], [user_4.email])
         self.assertEqual(call_args_1['context']['message'], system_message.message_en)
         self.assertEqual(call_args_1['language'], 'pt')
