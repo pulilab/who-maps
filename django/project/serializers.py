@@ -125,6 +125,9 @@ class ProjectPublishedSerializer(serializers.Serializer):
     interoperability_standards = serializers.ListField(
         child=serializers.IntegerField(), required=False, max_length=50)
 
+    # SECTION 5
+    stages = ProjectStageSerializer(many=True, required=False, allow_null=True)
+
     class Meta:
         model = Project
 
@@ -141,6 +144,12 @@ class ProjectPublishedSerializer(serializers.Serializer):
         instance.draft = validated_data
         instance.odk_etag = None
         instance.make_public_id(validated_data['country'])
+
+        # create stages
+        stages_data = validated_data.get('stages', [])
+        instance.stages.all().delete()
+        for stage_data in stages_data:
+            ProjectStage.objects.create(project=instance, **stage_data)
 
         instance.save()
 
