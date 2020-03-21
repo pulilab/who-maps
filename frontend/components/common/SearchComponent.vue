@@ -41,37 +41,42 @@
             </el-col>
           </el-row>
 
-          <div class="SearchResultsWrapper">
+          <div class="SearchResultTop">
             <el-row
+              v-if="localSearchString"
               type="flex"
               align="middle"
-              :class="`SearchResultsHeader ${hasResults ? 'HasResults' : ''}`"
+              class="SearchResultsHeader HasResults"
             >
-              <template v-if="hasResults">
+              <template>
                 <el-col class="SearchResultsCounter">
-                  <translate :parameters="{num: results.length}">
-                    {num} result(s):
+                  <translate :parameters="{num: 999}">
+                    Show {num} result(s):
                   </translate>
                 </el-col>
                 <el-col class="AdvancedSearchLink">
                   <nuxt-link
+                    :to="localePath({name : 'organisation-cms', params: $route.params})"
+                    class="NuxtLink IconRight"
+                  >
+                    <span><translate>Planning & Guidance</translate></span><fa icon="angle-right" />
+                  </nuxt-link>
+                  <nuxt-link
                     :to="localePath({name : 'organisation-dashboard', params: $route.params})"
                     class="NuxtLink IconRight"
                   >
-                    <span><translate>Advanced search</translate></span><fa icon="angle-right" />
+                    <span><translate>Dashboard</translate></span><fa icon="angle-right" />
                   </nuxt-link>
                 </el-col>
               </template>
-              <el-col class="NopeMessage" v-else>
-                No results to show, please refine your search…
-              </el-col>
             </el-row>
 
-            <template v-if="!hasResults">
+            <template v-else>
               <SearchComponentLink
                 :title="$gettext('Go to Advanced project search') | translate"
                 :text="$gettext('You can use filters to further refine your search. Note that these filters can be saved by selecting Filters and naming your filter. These can then be viewed at a later time after you log in.') | translate"
                 page="organisation-dashboard"
+                class="FirstSearchComponent"
               />
               <SearchComponentLink
                 :title="$gettext('Go to Planning & Guidance') | translate"
@@ -80,25 +85,62 @@
                 class="LastSearchComponent"
               />
             </template>
-
-            <el-row
-              v-for="project in results"
-              v-show="hasResults"
-              :key="project.id"
-              class="SearchResultItem"
-            >
-              <el-col>
-                <project-card
-                  :project="project"
-                  :found-in="getFoundIn(project.id)"
-                  show-found-in
-                  show-country
-                  show-organisation
-                  show-arrow-on-over
-                />
-              </el-col>
-            </el-row>
           </div>
+
+          <el-tabs
+            v-if="localSearchString"
+            v-model="activeSearchTab"
+            class="SearchTabs"
+          >
+            <el-tab-pane
+              :label="$gettext('Projects {num}', {num: results ? results.length : 0}) | translate"
+              name="projects"
+            >
+              <div
+                v-if="results !== null"
+                class="SearchResultsWrapper"
+              >
+                <el-row
+                  v-for="project in results"
+                  :key="project.id"
+                  class="SearchResultItem"
+                >
+                  <el-col>
+                    <project-card
+                      :project="project"
+                      :found-in="getFoundIn(project.id)"
+                      show-found-in
+                      show-country
+                      show-organisation
+                      show-arrow-on-over
+                    />
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="Loading" v-else>
+                <Spinner size="22" /> Loading...
+              </div>
+            </el-tab-pane>
+            <el-tab-pane
+              :label="$gettext('Planning & guidance {num}', {num: cms ? cms.length : 0}) | translate"
+              name="planning"
+            >
+              <div class="SearchResultsWrapper">
+                <el-row
+                  v-for="project in cms"
+                  :key="project.id"
+                  class="SearchResultItem"
+                >
+                  <el-col>
+                    <project-card-planning
+                      :project="project"
+                      show-arrow-on-over
+                    />
+                  </el-col>
+                </el-row>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
         </el-card>
       </div>
     </transition>
@@ -130,7 +172,7 @@
         </el-col>
         <el-col>
           <span class="SearchResultsCounter">
-            <translate :parameters="{num: results.length}">
+            <translate :parameters="{num: 999}">
               {num} result(s)
             </translate>
           </span>
@@ -148,10 +190,12 @@
 </template>
 
 <script>
-import { mapGettersActions } from '../../utilities/form.js';
-// import ProjectCard from './ProjectCard';
+import debounce from 'lodash/debounce';
+import { mapGettersActions } from '@/utilities/form';
 import ProjectCard from '@/components/common/ProjectCard';
+import ProjectCardPlanning from '@/components/common/ProjectCardPlanning';
 import SearchComponentLink from '@/components/common/SearchComponentLink';
+import Spinner from '@/components/common/Spinner';
 import ClickOutside from 'vue-click-outside';
 import { mapGetters, mapActions } from 'vuex';
 
@@ -160,44 +204,53 @@ export default {
     ClickOutside
   },
   components: {
+    ProjectCardPlanning,
     ProjectCard,
-    SearchComponentLink
+    SearchComponentLink,
+    Spinner
   },
   data () {
     return {
       localSearchString: '',
-      shown: false
+      shown: false,
+      activeSearchTab: 'projects'
     };
   },
   computed: {
     ...mapGetters({
       searchParameters: 'landing/getSearchParameters',
       results: 'landing/getSearchResult',
-      getFoundIn: 'landing/getFoundIn'
+      getFoundIn: 'landing/getFoundIn',
+      cms: 'landing/getCMS'
     }),
     ...mapGettersActions({
       searchString: ['landing', 'getSearchString', 'setSearchString', 0]
     }),
-    hasResults () {
-      return this.results.length > 0;
-    }
+    // hasResults () {
+    //   return this.results.length > 0;
+    // }
   },
   watch: {
-    searchParameters: {
+    localSearchString: {
       immediate: false,
-      handler (params) {
-        this.updateSearch();
-      }
+      handler: debounce(function (search) {
+        if (search.length >= 3) {
+          this.search();
+          this.updateSearch();
+        }
+      }, 500)
     }
   },
   methods: {
     ...mapActions({
-      doSearch: 'landing/search'
+      doSearch: 'landing/search',
+      doCMSSearch: 'landing/cmsSearch'
     }),
-    async updateSearch () {
-      this.$nuxt.$loading.start();
-      await this.doSearch();
-      this.$nuxt.$loading.finish();
+    updateSearch () {
+      // this.$nuxt.$loading.start();
+      this.doSearch();
+      this.doCMSSearch();
+      // this.$nuxt.$loading.finish();
     },
     clearSearch () {
       this.searchString = null;
@@ -214,8 +267,6 @@ export default {
   }
 };
 </script>
-
-
 
 <style lang="less">
   @import "../../assets/style/variables.less";
@@ -242,7 +293,7 @@ export default {
     right: 40px;
     top: 0;
     z-index: 2010;
-    width: 400px;
+    width: 500px;
     box-shadow: 5px 5px 20px 10px rgba(0,0,0,.15);
 
     > .el-card {
@@ -322,55 +373,86 @@ export default {
       }
     }
 
+    .Loading {
+      padding: 22px 20px;
+      color: #008DC9;
+      font-size: 14px;
+      line-height: 16px;
+      letter-spacing: 0;
+    }
+
     .SearchResultsWrapper {
-      max-height: calc(@landingMapHeight - 36px);
+      padding-top: 16px;
+      // max-height: calc(@landingMapHeight - 36px);
+      max-height: calc(@landingMapHeight);
       overflow-y: auto;
 
       @media screen and (max-height: 694px) {
-        max-height: calc(@landingMapMinHeight - 36px);
+        // max-height: calc(@landingMapMinHeight - 36px);
+        max-height: calc(@landingMapMinHeight);
       }
     }
 
     .SearchResultsHeader {
-      height: 56px;
+      height: 76px;
       padding: 0 20px;
       border-top: 1px solid @colorTextMuted;
       &.HasResults {
         background-color: white;
+        height: 52px;
       }
 
       .SearchResultsCounter {
-        width: 100%;
-        font-size: @fontSizeSmall;
+        width: 35%;
+        font-size: @fontSizeBase;
         font-weight: 700;
         color: @colorTextSecondary;
       }
 
       .AdvancedSearchLink {
         width: auto;
+        a {
+          padding-left: 24px;
+        }
       }
 
       .NopeMessage {
         color: @colorTextSecondary;
         font-weight: bold;
-        line-height: 24px;
         font-size: 14px;
-        padding-top: 18px;
-        padding-bottom: 24px;
+        padding-bottom: 14px;
       }
+    }
+    .FirstSearchComponent:first-child {
+      padding-top: 20px;
     }
     .LastSearchComponent {
       padding-bottom: 20px;
     }
 
+    .SearchTabs {
+      .el-tabs__header {
+        margin: 0;
+        background-color: white;
+        .el-tabs__nav-scroll  {
+          padding-left: 22px;
+          .el-tabs__item:not(.is-active) {
+            color: @colorTextSecondary;
+          }
+        }
+      }
+    }
     .SearchResultItem {
       margin: 0 10px 8px;
+    }
+    .SearchResultsHeader + .SearchResultItem {
+      margin-top: 8px;
     }
   }
 
   .SearchShadow {
     position: relative;
-    width: 400px;
+    width: 500px;
     height: @actionBarHeight;
     background-color: @colorGrayLightest;
 
