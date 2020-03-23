@@ -21,9 +21,9 @@ import scheduler.celery  # noqa
 
 from core.utils import send_mail_wrapper
 from country.models import CustomQuestion
-from project.utils import remove_keys, update_project_stages
+from project.utils import remove_keys
 from user.models import UserProfile
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform, ProjectStage
+from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
@@ -32,12 +32,6 @@ def url_validator(value):
     if not URL_REGEX.match(value):
         raise ValidationError('Enter a valid URL.')
     return value
-
-
-class ProjectStageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProjectStage
-        fields = ('stage_type', 'note', 'date')
 
 
 class NDPSerializer(serializers.Serializer):
@@ -56,6 +50,12 @@ class PlatformSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=True)
     strategies = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=1)
+
+
+class StageSerializer(serializers.Serializer):
+    id = serializers.IntegerField(required=True)
+    date = serializers.CharField(required=False, max_length=10)
+    note = serializers.CharField(required=False, max_length=256)
 
 
 class InteroperabilityLinksSerializer(serializers.Serializer):
@@ -126,7 +126,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
         child=serializers.IntegerField(), required=False, max_length=50)
 
     # SECTION 5
-    stages = ProjectStageSerializer(many=True, required=False, allow_null=True)
+    stages = StageSerializer(many=True, required=True, allow_empty=False)
 
     class Meta:
         model = Project
@@ -144,9 +144,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
         instance.draft = validated_data
         instance.odk_etag = None
         instance.make_public_id(validated_data['country'])
-
-        update_project_stages(instance, validated_data)
-
         instance.save()
 
         return instance
@@ -189,7 +186,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     interoperability_links = DraftInteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
 
     # SECTION 5
-    stages = ProjectStageSerializer(many=True, required=False, allow_null=True)
+    stages = StageSerializer(many=True, required=False, allow_empty=True)
 
     # ODK DATA
     odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
@@ -227,8 +224,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
         if odk_extra_data:
             instance.odk_extra_data = odk_extra_data
-
-        update_project_stages(instance, validated_data)
 
         instance.draft = validated_data
         return instance
