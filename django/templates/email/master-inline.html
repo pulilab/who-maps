@@ -343,6 +343,12 @@
                         <!-- /TEMPLATE: NEW MEMBER -->
 
 
+                        <!-- TEMPLATE: ALL USERS -->
+                        {% elif type == "system_message" %}
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" ><b>{{ message }}</b></p>
+                        <!-- /TEMPLATE: ALL USERS-->
+
+
                         <!-- TEMPLATE: ADMIN REQUEST -->
                         {% elif type == "admin_request" %}
                         <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Admin request notification" %}</h1>
