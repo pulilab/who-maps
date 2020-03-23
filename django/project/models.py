@@ -193,6 +193,16 @@ class ProjectApproval(ExtendedModel):
         return "Approval for {}".format(self.project.name)
 
 
+class Stage(ExtendedModel):
+    name = models.CharField(max_length=128)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):  # pragma: no cover
+        return self.name
+
+
 class CoverageVersion(ExtendedModel):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     version = models.IntegerField()
