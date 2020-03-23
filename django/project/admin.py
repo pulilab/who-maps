@@ -6,7 +6,7 @@ from core.admin import AllObjectsAdmin
 from country.models import Country
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Project, HSCGroup, \
-    ProjectImportV2, ImportRow
+    ProjectImportV2, ImportRow, Stage
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
@@ -157,6 +157,10 @@ class ProjectImportV2Admin(admin.ModelAdmin):
     inlines = (ImportRowInline,)
 
 
+class StageAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(InteroperabilityLink, InteroperabilityLinkAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
@@ -169,3 +173,4 @@ admin.site.register(HSCGroup, HSCGroupAdmin)
 admin.site.register(HSCChallenge, HSCChallengeAdmin)
 admin.site.register(ProjectImportV2, ProjectImportV2Admin)
 admin.site.register(Project, ProjectAdmin)
+admin.site.register(Stage, StageAdmin)
