@@ -1,4 +1,6 @@
 from collections import namedtuple
+
+from django.contrib.contenttypes.fields import GenericRelation
 from hashids import Hashids
 
 from django.db import models
@@ -257,6 +259,8 @@ class HealthCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
 class HealthFocusArea(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas', on_delete=models.CASCADE)
+
+    donors = GenericRelation(Donor)
 
     def __str__(self):
         return '[{}] {}'.format(self.health_category.name, self.name)

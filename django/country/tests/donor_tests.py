@@ -1,4 +1,6 @@
-from core.factories import UserFactory, UserProfileFactory
+from django.contrib.contenttypes.models import ContentType
+
+from core.factories import UserFactory, UserProfileFactory, DonorFactory, HealthFocusAreaFactory
 from country.tests.base import DonorBaseTests
 from django.core import mail
 from django.urls import reverse
@@ -275,3 +277,17 @@ class DonorTests(DonorBaseTests):
         self.assertEqual(response.status_code, 200)
         self.donor.refresh_from_db()
         self.assertTrue(userprofile1.id not in self.donor.super_admins.all())
+
+    def test_donor_generic_foreign_key_with_hfa(self):
+        hfa = HealthFocusAreaFactory(name='Health focus area')
+        self.assertEqual(hfa.donors.count(), 0)
+
+        donor = DonorFactory(name='Test Donor', code='t_dnr')
+
+        donor.content_object = hfa
+        donor.save()
+
+        self.assertEqual(donor.content_type, ContentType.objects.get(app_label='project', model='healthfocusarea'))
+        self.assertEqual(donor.object_id, hfa.id)
+
+        self.assertEqual(hfa.donors.count(), 1)
