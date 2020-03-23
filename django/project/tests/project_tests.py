@@ -1157,6 +1157,11 @@ class ProjectTests(SetupTests):
             "donors": [self.d1.id],
             "hsc_challenges": [1, 2],
             "start_date": str(datetime.today().date()),
+            "stages": [{
+                "id": 1,
+                "date": str(datetime.today().date()),
+                "note": "stage 1 note"
+            }],
         }}
 
         url = reverse("project-create", kwargs={"country_id": country.id})
