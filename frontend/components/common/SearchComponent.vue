@@ -15,6 +15,7 @@
           >
             <el-col :span="24">
               <el-input
+                ref="searchInput"
                 v-model="localSearchString"
                 :placeholder="$gettext('Create your search here') | translate"
                 @keyup.enter.native="search"
@@ -30,12 +31,6 @@
                   >
                     <fa icon="times" />
                   </el-button>
-                  <el-button
-                    class="SearchSubmit"
-                    @click="search"
-                  >
-                    <fa icon="arrow-right" />
-                  </el-button>
                 </template>
               </el-input>
             </el-col>
@@ -50,7 +45,7 @@
             >
               <template>
                 <el-col class="SearchResultsCounter">
-                  <translate :parameters="{num: 999}">
+                  <translate :parameters="{num: resultCount}">
                     Show {num} result(s):
                   </translate>
                 </el-col>
@@ -93,11 +88,22 @@
             class="SearchTabs"
           >
             <el-tab-pane
-              :label="$gettext('Projects {num}', {num: results ? results.length : 0}) | translate"
+              :label="$gettext('Projects {num}', {num: results.length}) | translate"
               name="projects"
             >
+              <el-row v-show="!resultsLoaded">
+                <div class="Loading">
+                  <Spinner size="22" />
+                  <translate>Loading...</translate>
+                </div>
+              </el-row>
+              <el-row v-show="resultsLoaded && results.length === 0">
+                <div class="Loading">
+                  <translate>No project to show</translate>
+                </div>
+              </el-row>
               <div
-                v-if="results !== null"
+                v-show="resultsLoaded && results.length > 0"
                 class="SearchResultsWrapper"
               >
                 <el-row
@@ -117,15 +123,26 @@
                   </el-col>
                 </el-row>
               </div>
-              <div class="Loading" v-else>
-                <Spinner size="22" /> Loading...
-              </div>
             </el-tab-pane>
             <el-tab-pane
               :label="$gettext('Planning & guidance {num}', {num: cms ? cms.length : 0}) | translate"
               name="planning"
             >
-              <div class="SearchResultsWrapper">
+              <el-row v-if="cms === null">
+                <div class="Loading">
+                  <Spinner size="22" />
+                  <translate>Loading...</translate>
+                </div>
+              </el-row>
+              <el-row v-else-if="cms.length === 0">
+                <div class="Loading">
+                  <translate>No project to show</translate>
+                </div>
+              </el-row>
+              <div
+                v-else
+                class="SearchResultsWrapper"
+              >
                 <el-row
                   v-for="project in cms"
                   :key="project.id"
@@ -172,7 +189,7 @@
         </el-col>
         <el-col>
           <span class="SearchResultsCounter">
-            <translate :parameters="{num: 999}">
+            <translate :parameters="{num: resultCount}">
               {num} result(s)
             </translate>
           </span>
@@ -221,39 +238,45 @@ export default {
       searchParameters: 'landing/getSearchParameters',
       results: 'landing/getSearchResult',
       getFoundIn: 'landing/getFoundIn',
+      resultsLoaded: 'landing/getLoaded',
       cms: 'landing/getCMS'
     }),
     ...mapGettersActions({
       searchString: ['landing', 'getSearchString', 'setSearchString', 0]
     }),
-    // hasResults () {
-    //   return this.results.length > 0;
-    // }
+    resultCount () {
+      return (this.results ? this.results.length : 0) +
+        (this.cms ? this.cms.length : 0);
+    }
   },
   watch: {
     localSearchString: {
       immediate: false,
-      handler: debounce(function (search) {
-        if (search.length >= 3) {
-          this.search();
-          this.updateSearch();
+      handler: function () {
+        // this.$nuxt.$loading.start();
+        this.$store.commit('landing/SET_LOADED', false);
+        if (this.cms) {
+          this.doCMSSearch();
         }
-      }, 500)
+        this.updateSearch();
+      }
     }
   },
   methods: {
     ...mapActions({
       doSearch: 'landing/search',
-      doCMSSearch: 'landing/cmsSearch'
+      doCMSSearch: 'landing/cmsSearch',
+      clearPage: 'landing/clearCustomLandingPage',
+      resetSearch: 'landing/resetSearch'
     }),
-    updateSearch () {
-      // this.$nuxt.$loading.start();
-      this.doSearch();
+    updateSearch: debounce(function () {
+      this.search();
       this.doCMSSearch();
-      // this.$nuxt.$loading.finish();
-    },
+      setTimeout(() => this.doSearch(), 0);
+    }, 500),
     clearSearch () {
-      this.searchString = null;
+      this.localSearchString = '';
+      this.$refs.searchInput.focus();
     },
     search () {
       this.searchString = this.localSearchString;
@@ -333,7 +356,7 @@ export default {
       }
 
       .el-input-group__append {
-        width: @actionBarHeight * 2;
+        width: @actionBarHeight; // * 2;
         height: @actionBarHeight;
         padding: 0;
 

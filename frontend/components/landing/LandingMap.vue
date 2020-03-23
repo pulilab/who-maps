@@ -1,5 +1,11 @@
 <template>
   <div :class="['DhaMap', 'LandingMap', {'Searched': isSearched}]">
+    <div v-show="!getLoaded" class="Overlay">
+      <div class="OverlayContent">
+        <Spinner size="32" />
+        <div>Updating map</div>
+      </div>
+    </div>
     <no-ssr>
       <l-map
         ref="mainMap"
@@ -64,6 +70,7 @@ import CountryCenterMarker from '../common/map/CountryCenterMarker';
 import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay';
 import WorldZoomButton from '../common/map/WorldZoomButton';
 import SwitchViewBox from '../common/map/SwitchViewBox';
+import Spinner from '@/components/common/Spinner';
 
 export default {
   components: {
@@ -71,7 +78,8 @@ export default {
     CountryCenterMarker,
     CountryDetailsOverlay,
     WorldZoomButton,
-    SwitchViewBox
+    SwitchViewBox,
+    Spinner
   },
   mixins: [MapMixin]
 };
@@ -82,7 +90,27 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .LandingMap {
+    position: relative;
     height: @landingMapHeight;
     min-height: @landingMapMinHeight;
+  }
+  .Overlay {
+    z-index: 500;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(255,255,255,0.65);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    .OverlayContent {
+      text-align: center;
+      color: #6D6D6D;
+      font-size: 14px;
+      letter-spacing: 0;
+      line-height: 16px;
+    }
   }
 </style>

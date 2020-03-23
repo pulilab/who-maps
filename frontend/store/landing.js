@@ -5,12 +5,14 @@ export const state = () => ({
   landingPageData: null,
   searched: null,
   cmsData: null,
-  foundIn: {}
+  foundIn: {},
+  loaded: false
 });
 
 export const getters = {
   ...gettersGenerator(),
   getSearched: state => state.searched,
+  getLoaded: state => state.loaded,
   getCMS: state => {
     if (!state.cmsData) {
       return null;
@@ -25,7 +27,7 @@ export const getters = {
     if (state.searched && state.searched === state.searchString) {
       return getters.getProjectsMap;
     }
-    return null;
+    return [];
   },
   getFoundIn: (state) => id => {
     const result = [];
@@ -42,17 +44,17 @@ export const actions = {
   ...actionsGenerator(),
   async search ({ commit, dispatch }) {
     try {
-      commit('SET_SEARCHED', null);
+      commit('SET_LOADED', false);
       const { results } = await dispatch('loadProjects');
       commit('SET_PROJECT_MAP', results.projects);
       commit('SET_SEARCHED', results.search_term);
       commit('SET_FOUND_IN', results.found_in);
+      commit('SET_LOADED', true);
     } catch (e) {
     }
   },
   async cmsSearch ({ state, commit }) {
     try {
-      // http://localhost:3000/api/cms/
       if (state.cmsData) {
         return;
       }
@@ -103,6 +105,9 @@ export const mutations = {
   },
   SET_SEARCHED: (state, searched) => {
     state.searched = searched;
+  },
+  SET_LOADED: (state, loaded) => {
+    state.loaded = loaded;
   },
   SET_FOUND_IN: (state, found) => {
     state.foundIn = { ...found };
