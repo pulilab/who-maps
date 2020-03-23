@@ -181,42 +181,6 @@ def on_create_init(sender, instance, created, **kwargs):
         ProjectApproval.objects.get_or_create(project_id=instance.id)
 
 
-class ProjectStage(ExtendedModel):
-    OPPORTUNITY_AND_IDEATION = 'OI'
-    PREPARATION = 'PREP'
-    ANALYSIS_AND_DESIGN = 'AD'
-    IMPLEMENTATION_PLANNING = 'IP'
-    DEVELOPING_OR_ADAPTING_SOLUTION = 'DAS'
-    PILOTING_AND_EVIDENCE_GENERATION = 'PEG'
-    PACKAGE_AND_ADVOCACY = 'PA'
-    DEPLOYING = 'DEP'
-    SCALING_UP = 'SU'
-    HANDOVER_OR_COMPLETE = 'SH'
-    ENDED = 'END'
-
-    STAGE_TYPE_CHOICES = (
-        (OPPORTUNITY_AND_IDEATION, _('Opportunity and Ideation')),
-        (PREPARATION, _('Preparation')),
-        (ANALYSIS_AND_DESIGN, _('Analysis and Design')),
-        (IMPLEMENTATION_PLANNING, _('Implementation Planning')),
-        (DEVELOPING_OR_ADAPTING_SOLUTION, _('Developing or Adapting Solution')),
-        (PILOTING_AND_EVIDENCE_GENERATION, _('Piloting and Evidence Generation')),
-        (PACKAGE_AND_ADVOCACY, _('Package and Advocacy')),
-        (DEPLOYING, _('Deploying')),
-        (SCALING_UP, _('Scaling up')),
-        (HANDOVER_OR_COMPLETE, _('Handover or Complete')),
-        (ENDED, _('Ended')),
-    )
-
-    project = models.ForeignKey(Project, related_name='stages', on_delete=models.CASCADE)
-    stage_type = models.CharField(max_length=5, choices=STAGE_TYPE_CHOICES)
-    note = models.CharField(max_length=256, blank=True, null=True)
-    date = models.CharField(max_length=128)
-
-    def __str__(self):  # pragma: no cover
-        return "{} {} {}".format(self.project, self.stage_type, self.date)
-
-
 class ProjectApproval(ExtendedModel):
     project = models.OneToOneField('Project', related_name='approval', on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, blank=True, null=True,
