@@ -1,3 +1,4 @@
+from collections import defaultdict
 from copy import copy
 from datetime import datetime
 from unittest.mock import patch
@@ -256,22 +257,29 @@ class CountryTests(CountryBaseTests):
 
         self.assertEqual(len(outgoing_emails), 4)
 
-        outgoing_en_email_text = outgoing_emails[0].as_string()
-        self.assertTrue("test1@foo.com" in outgoing_emails[0].values())
+        outgoing_emails_dict = defaultdict()
+        for email in outgoing_emails:
+            outgoing_emails_dict[email['To']] = email
+
+        message = outgoing_emails_dict[user1.email]
+        outgoing_en_email_text = message.as_string()
+        self.assertTrue("test1@foo.com" in message.values())
         self.assertTrue('You have been selected as Viewer for {}'.format(self.country.name) in outgoing_en_email_text)
         self.assertTrue('/en/-/admin/country' in outgoing_en_email_text)
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
         self.assertNotIn('{{', outgoing_en_email_text)
 
-        outgoing_en_email_text = outgoing_emails[1].as_string()
-        self.assertTrue("test2@foo.com" in outgoing_emails[1].values())
+        message = outgoing_emails_dict[user2.email]
+        outgoing_en_email_text = message.as_string()
+        self.assertTrue("test2@foo.com" in message.values())
         self.assertTrue('You have been selected as Admin for {}'.format(self.country.name) in outgoing_en_email_text)
         self.assertTrue('/en/-/admin/country' in outgoing_en_email_text)
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
         self.assertNotIn('{{', outgoing_en_email_text)
 
-        outgoing_en_email_text = outgoing_emails[2].as_string()
-        self.assertTrue("test3@foo.com" in outgoing_emails[2].values())
+        message = outgoing_emails_dict[user3.email]
+        outgoing_en_email_text = message.as_string()
+        self.assertTrue("test3@foo.com" in message.values())
         self.assertTrue('You have been selected as the <b>System Admin</b> within the Digital Health Atlas for ' +
                         '<b>{}</b>. Use the link below to begin updating your country information.'.format(
                             self.country.name)
@@ -280,8 +288,9 @@ class CountryTests(CountryBaseTests):
         self.assertIn('<meta http-equiv="content-language" content="en">', outgoing_en_email_text)
         self.assertNotIn('{{', outgoing_en_email_text)
 
-        outgoing_fr_email_text = outgoing_emails[3].as_string()
-        self.assertTrue("test4@foo.com" in outgoing_emails[3].values())
+        message = outgoing_emails_dict[user4.email]
+        outgoing_fr_email_text = message.as_string()
+        self.assertTrue("test4@foo.com" in message.values())
         self.assertIn('<meta http-equiv="content-language" content="fr">', outgoing_fr_email_text)
         self.assertNotIn('{{', outgoing_fr_email_text)
 
