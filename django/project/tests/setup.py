@@ -114,11 +114,11 @@ class SetupTests(APITestCase):
             "stages": [{
                 "id": 1,
                 "date": str(datetime.today().date()),
-                "note": "stage 1 note,"
+                "note": "stage 1 note",
             }, {
                 "id": 2,
                 "date": str(datetime.today().date()),
-                "note": "stage 2 note,"
+                "note": "stage 2 note",
             }],
         }}
 
