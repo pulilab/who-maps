@@ -162,7 +162,7 @@ class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ArchitectureRoadMapDocument
-        fields = "__all__"
+        exclude = ('is_active',)
 
     @staticmethod
     def get_size(obj):
