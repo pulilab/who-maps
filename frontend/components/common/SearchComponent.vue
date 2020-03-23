@@ -253,8 +253,11 @@ export default {
     localSearchString: {
       immediate: false,
       handler: function () {
-        // this.$nuxt.$loading.start();
+        if (this.localSearchString.length > 0 && this.localSearchString.length < 3) {
+          return;
+        }
         this.$store.commit('landing/SET_LOADED', false);
+        this.search();
         if (this.cms) {
           this.doCMSSearch();
         }
@@ -270,7 +273,6 @@ export default {
       resetSearch: 'landing/resetSearch'
     }),
     updateSearch: debounce(function () {
-      this.search();
       this.doCMSSearch();
       setTimeout(() => this.doSearch(), 0);
     }, 500),
