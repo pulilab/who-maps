@@ -2,6 +2,7 @@ import copy
 import itertools
 
 from django.urls import reverse
+from rest_framework import status
 
 from core.factories import DonorCustomQuestionFactory, CountryCustomQuestionFactory
 from country.models import Donor
@@ -470,3 +471,15 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
+
+    def test_filter_stage(self):
+        url = reverse("search-project-list")
+        data = {"stages": 300}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 0)
+
+        data = {"stages": 1}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
