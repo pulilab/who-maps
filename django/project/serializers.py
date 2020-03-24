@@ -97,6 +97,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
     end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
     contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
+    research = serializers.NullBooleanField(required=False)
 
     # SECTION 2 Implementation Overview
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
@@ -136,6 +137,12 @@ class ProjectPublishedSerializer(serializers.Serializer):
             project = Project.objects.get(id=self.instance.id)
             if project.public_id and project.data['country'] != self.initial_data['country']:
                 raise serializers.ValidationError('Country cannot be altered on published projects.')
+        return value
+
+    def validate_research(self, value):
+        # research can't be changed once it is already set
+        if self.instance and self.instance.draft.get('research') is not None:
+            return self.instance.draft['research']
         return value
 
     def update(self, instance, validated_data):

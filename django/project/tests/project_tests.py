@@ -1331,3 +1331,35 @@ class ProjectTests(SetupTests):
         self.assertEqual(call_args_list['email_type'], 'draft_reminder')
         self.assertIn('test_user@gmail.com', call_args_list['to'])
         self.assertEqual(call_args_list['context']['project_id'], p.id)
+
+    def test_research_project(self):
+        data = copy.deepcopy(self.project_data)
+        data['project']['name'] = 'Test Project 100'
+        data['project']['research'] = True
+
+        # create project
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        project_id = response.json()['id']
+
+        self.assertEqual(response.json()['draft']['research'], True)
+
+        # update project, try to change research
+        data['project']['research'] = False
+        url = reverse("project-draft", kwargs={"project_id": project_id, "country_id": self.country_id})
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+
+        # research can't be changed if it is already set
+        self.assertEqual(response.json()['draft']['research'], True)
+
+        # publish project and try to change research
+        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+
+        # research can't be changed if it is already set
+        self.assertEqual(response.json()['draft']['research'], True)
+        self.assertEqual(response.json()['published']['research'], True)
