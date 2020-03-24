@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
@@ -134,7 +136,7 @@ def update_gdhi_data(sender, instance, created, **kwargs):
         update_gdhi_data_task.apply_async((instance.code, True))
 
 
-class ArchitectureRoadMapDocument(models.Model):
+class ArchitectureRoadMapDocument(SoftDeleteModel):
     country = models.ForeignKey(Country, related_name='documents', on_delete=models.CASCADE)
     title = models.CharField(max_length=128)
     document = models.FileField(null=True, upload_to='documents/')
@@ -146,6 +148,11 @@ class ArchitectureRoadMapDocument(models.Model):
 class Donor(UserManagement, LandingPageCommon):
     code = models.CharField(max_length=10, default="NULL", help_text="Acronym for Donor", unique=True,
                             validators=[MinLengthValidator(3)])
+
+    # generic foreign key related fields
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, blank=True, null=True)
+    object_id = models.PositiveIntegerField(blank=True, null=True)
+    content_object = GenericForeignKey()
 
     class Meta:
         verbose_name_plural = "Donors"

@@ -109,7 +109,8 @@ class TestModelTranslations(TestCase):
                          {'id': health_category.id,
                           'name': 'English name',
                           'health_focus_areas': [{'id': health_focus_area.id,
-                                                  'name': 'English area'}]})
+                                                  'name': 'English area',
+                                                  'donors': None}]})
 
         # Getting the french version
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
@@ -124,7 +125,8 @@ class TestModelTranslations(TestCase):
                          {'id': health_category.id,
                           'name': 'French name',
                           'health_focus_areas': [{'id': health_focus_area.id,
-                                                  'name': 'French area'}]})
+                                                  'name': 'French area',
+                                                  'donors': None}]})
 
     def test_health_system_challenges(self):
         self.maxDiff = None
