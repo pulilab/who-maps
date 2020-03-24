@@ -4,12 +4,24 @@ export const state = () => ({
   ...stateGenerator(),
   landingPageData: null,
   searched: null,
-  foundIn: {}
+  cmsData: null,
+  foundIn: {},
+  loaded: false
 });
 
 export const getters = {
   ...gettersGenerator(),
   getSearched: state => state.searched,
+  getLoaded: state => state.loaded,
+  getCMS: state => {
+    if (!state.cmsData) {
+      return null;
+    }
+    const regex = new RegExp(`.*${state.searchString}.*`, 'i');
+    return state.cmsData.filter(function (row) {
+      return regex.test(row.name) || regex.test(row.body) || regex.test(row.author);
+    });
+  },
   getLandingPageData: state => state.landingPageData,
   getSearchResult: (state, getters) => {
     if (state.searched && state.searched === state.searchString) {
@@ -32,13 +44,24 @@ export const actions = {
   ...actionsGenerator(),
   async search ({ commit, dispatch }) {
     try {
-      commit('SET_SEARCHED', null);
+      commit('SET_LOADED', false);
       const { results } = await dispatch('loadProjects');
       commit('SET_PROJECT_MAP', results.projects);
       commit('SET_SEARCHED', results.search_term);
       commit('SET_FOUND_IN', results.found_in);
+      commit('SET_LOADED', true);
     } catch (e) {
     }
+  },
+  async cmsSearch ({ state, commit }) {
+    try {
+      if (state.cmsData) {
+        return;
+      }
+      commit('SET_CMS_DATA', null);
+      const { data } = await this.$axios.get('/api/cms/', { q: state.searchString });
+      commit('SET_CMS_DATA', data);
+    } catch (e) {}
   },
   async loadCustomLandingPage ({ dispatch }, code) {
     if (code.length === 2) {
@@ -83,7 +106,13 @@ export const mutations = {
   SET_SEARCHED: (state, searched) => {
     state.searched = searched;
   },
+  SET_LOADED: (state, loaded) => {
+    state.loaded = loaded;
+  },
   SET_FOUND_IN: (state, found) => {
     state.foundIn = { ...found };
+  },
+  SET_CMS_DATA: (state, data) => {
+    state.cmsData = data;
   }
 };
