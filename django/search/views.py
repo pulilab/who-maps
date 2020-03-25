@@ -48,6 +48,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__national_level_deployment",
         "project__data__government_investor",
         "project__approval__approved",
+        "project__data__stages",
     )
     list_values = (
         "project_id",
@@ -77,7 +78,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__coverage_second_level",
         "project__data__national_level_deployment",
         "donors",
-        "project__approval__approved"
+        "project__approval__approved",
+        "project__data__stages",
     )
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('project__name', 'organisation__name', 'country__name', 'country__region',

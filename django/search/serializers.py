@@ -10,6 +10,7 @@ class MapResultSerializer(serializers.Serializer):
     national_level_deployment = serializers.ReadOnlyField(source="project__data__national_level_deployment")
     government_investor = serializers.ReadOnlyField(source="project__data__government_investor")
     approved = serializers.ReadOnlyField(source="project__approval__approved")
+    stages = serializers.ReadOnlyField(source="project__data__stages")
 
 
 class ListResultSerializer(serializers.Serializer):
@@ -45,6 +46,7 @@ class ListResultSerializer(serializers.Serializer):
     country_custom_answers_private = serializers.ReadOnlyField(source="project__data__country_custom_answers_private")
     donor_custom_answers = serializers.ReadOnlyField(source="project__data__donor_custom_answers")
     donor_custom_answers_private = serializers.SerializerMethodField()
+    stages = serializers.ReadOnlyField(source="project__data__stages")
 
     def get_donor_custom_answers_private(self, obj):
         private_fields = obj.get("project__data__donor_custom_answers_private")
