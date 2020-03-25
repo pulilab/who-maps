@@ -39,7 +39,7 @@ class ProjectSearch(ExtendedModel):
         "gov": "project__data__government_investor",  # false=> gov=0 ; true=> gov=1&gov=2
         "donor": "donors",
         "approved": "project__approval__approved",  # false=> approved=0 ; true=> approved=1
-        "stage": "stages",
+        "stage": "stages",  # eg: stage=1&stage=2
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
