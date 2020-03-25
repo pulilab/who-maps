@@ -57,7 +57,8 @@
           <transition name="el-fade-in">
             <fa
               v-show="showArrow"
-              icon="arrow-right"
+              icon="download"
+              class="DownloadIcon"
             />
           </transition>
           <project-legend
@@ -214,14 +215,13 @@ export default {
       top: 0;
       right: 6px;
     }
-
-    .fa-arrow-right {
-      position: absolute;
-      top: 50%;
-      right: 6px;
-      transform: translateY(-50%);
-      color: @colorBrandPrimary;
-    }
+  }
+  .DownloadIcon {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    color: @colorBrandPrimary;
   }
 }
 </style>
