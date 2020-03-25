@@ -5,6 +5,7 @@ export const state = () => ({
   landingPageData: null,
   searched: null,
   cmsData: null,
+  documentData: null,
   foundIn: {},
   loaded: false
 });
@@ -21,6 +22,9 @@ export const getters = {
     return state.cmsData.filter(function (row) {
       return regex.test(row.name) || regex.test(row.body) || regex.test(row.author);
     });
+  },
+  getDocuments: state => {
+    return state.documentData;
   },
   getLandingPageData: state => state.landingPageData,
   getSearchResult: (state, getters) => {
@@ -61,6 +65,13 @@ export const actions = {
       commit('SET_CMS_DATA', null);
       const { data } = await this.$axios.get('/api/cms/', { q: state.searchString });
       commit('SET_CMS_DATA', data);
+    } catch (e) {}
+  },
+  async documentSearch ({ state, commit }) {
+    try {
+      commit('SET_DOCUMENT_DATA', null);
+      const { data } = await this.$axios.get('/api/document-search/', { search: state.searchString });
+      commit('SET_DOCUMENT_DATA', data);
     } catch (e) {}
   },
   async loadCustomLandingPage ({ dispatch }, code) {
@@ -114,5 +125,8 @@ export const mutations = {
   },
   SET_CMS_DATA: (state, data) => {
     state.cmsData = data;
+  },
+  SET_DOCUMENT_DATA: (state, data) => {
+    state.documentData = data;
   }
 };

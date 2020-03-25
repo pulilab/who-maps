@@ -115,10 +115,12 @@
                     <project-card
                       :project="project"
                       :found-in="getFoundIn(project.id)"
+                      :link-active="false"
                       show-found-in
                       show-country
                       show-organisation
                       show-arrow-on-over
+                      @redirect="reset"
                     />
                   </el-col>
                 </el-row>
@@ -136,7 +138,7 @@
               </el-row>
               <el-row v-else-if="cms.length === 0">
                 <div class="Loading">
-                  <translate>No project to show</translate>
+                  <translate>No content to show</translate>
                 </div>
               </el-row>
               <div
@@ -150,6 +152,40 @@
                 >
                   <el-col>
                     <project-card-planning
+                      :project="project"
+                      show-arrow-on-over
+                      @redirect="reset"
+                    />
+                  </el-col>
+                </el-row>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane
+              :label="$gettext('Ministry of Health {num}', {num: documents ? documents.length : 0}) | translate"
+              name="documents"
+            >
+              <el-row v-if="documents === null">
+                <div class="Loading">
+                  <Spinner size="22" />
+                  <translate>Loading...</translate>
+                </div>
+              </el-row>
+              <el-row v-else-if="documents.length === 0">
+                <div class="Loading">
+                  <translate>No document to show</translate>
+                </div>
+              </el-row>
+              <div
+                v-else
+                class="SearchResultsWrapper"
+              >
+                <el-row
+                  v-for="project in documents"
+                  :key="project.id"
+                  class="SearchResultItem"
+                >
+                  <el-col>
+                    <project-card-documents
                       :project="project"
                       show-arrow-on-over
                     />
@@ -211,6 +247,7 @@ import debounce from 'lodash/debounce';
 import { mapGettersActions } from '@/utilities/form';
 import ProjectCard from '@/components/common/ProjectCard';
 import ProjectCardPlanning from '@/components/common/ProjectCardPlanning';
+import ProjectCardDocuments from '@/components/common/ProjectCardDocuments';
 import SearchComponentLink from '@/components/common/SearchComponentLink';
 import Spinner from '@/components/common/Spinner';
 import ClickOutside from 'vue-click-outside';
@@ -221,6 +258,7 @@ export default {
     ClickOutside
   },
   components: {
+    ProjectCardDocuments,
     ProjectCardPlanning,
     ProjectCard,
     SearchComponentLink,
@@ -239,7 +277,8 @@ export default {
       results: 'landing/getSearchResult',
       getFoundIn: 'landing/getFoundIn',
       resultsLoaded: 'landing/getLoaded',
-      cms: 'landing/getCMS'
+      cms: 'landing/getCMS',
+      documents: 'landing/getDocuments'
     }),
     ...mapGettersActions({
       searchString: ['landing', 'getSearchString', 'setSearchString', 0]
@@ -269,13 +308,21 @@ export default {
     ...mapActions({
       doSearch: 'landing/search',
       doCMSSearch: 'landing/cmsSearch',
+      doDocumentSearch: 'landing/documentSearch',
       clearPage: 'landing/clearCustomLandingPage',
       resetSearch: 'landing/resetSearch'
     }),
     updateSearch: debounce(function () {
       this.doCMSSearch();
-      setTimeout(() => this.doSearch(), 0);
+      setTimeout(() => {
+        this.doDocumentSearch();
+        this.doSearch();
+      }, 0);
     }, 500),
+    reset () {
+      this.clearSearch();
+      this.hide();
+    },
     clearSearch () {
       this.localSearchString = '';
       this.$refs.searchInput.focus();

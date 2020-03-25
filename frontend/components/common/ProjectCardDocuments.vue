@@ -5,7 +5,8 @@
     :shadow="cardShadow"
   >
     <div
-      @click="goToProject"
+      class="DocumentCard"
+      @click="openFile"
       @mouseenter="mouseEnterHandler"
       @mouseleave="mouseLeaveHandler"
     >
@@ -13,13 +14,26 @@
         <el-col :span="22">
           <el-row class="ProjectName">
             <el-col>
-              {{ project.name }}
+              {{ project.title }}
             </el-col>
           </el-row>
 
-          <el-row>
-            <el-col class="MainText">
-              {{ text }}
+          <el-row
+            type="flex"
+            class="ProjectCountryOrg"
+          >
+            <el-col
+              class="Country"
+            >
+              <country-item
+                :id="project.country"
+                :active="false"
+              />
+            </el-col>
+            <el-col
+              class="Organisation"
+            >
+              &nbsp;<translate>Ministry of Health</translate>
             </el-col>
           </el-row>
 
@@ -29,13 +43,11 @@
           >
             <el-col>
               <fa
-                icon="search"
+                icon="file"
                 size="xs"
               />
               <span>
-                <translate>
-                  Found in "Planning & Guidance"
-                </translate>
+                {{ shortUrl }}
               </span>
             </el-col>
           </el-row>
@@ -59,10 +71,12 @@
 
 <script>
 import ProjectLegend from './ProjectLegend';
+import CountryItem from './CountryItem';
 
 export default {
   components: {
-    ProjectLegend
+    ProjectLegend,
+    CountryItem
   },
   props: {
     project: {
@@ -90,15 +104,13 @@ export default {
     showArrow () {
       return this.hovered && this.showArrowOnOver;
     },
-    text () {
-      return this.project.body.replace(/<\/?[^>]+>/ig, ' ');
+    shortUrl () {
+      return this.project.document.replace('documents/', '');
     }
   },
   methods: {
-    goToProject () {
-      const path = this.localePath({ name: 'organisation-cms', query: { q: this.project.name } });
-      this.$emit('redirect');
-      this.$router.push(path);
+    openFile () {
+      window.open('/media/' + this.project.document);
     },
     mouseEnterHandler () {
       this.hovered = true;
@@ -111,15 +123,22 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
-
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
+.DocumentCard {
   .ProjectCard {
     cursor: pointer;
 
-    // for MainTable
-    // TODO
-    // we might need a better name for this... 'InlineTableData'
+    .ProjectCountryOrg .Country {
+      padding-right: 0;
+      .CountryItem .CountryName {
+        color: @colorTextPrimary;
+      }
+      &::after {
+        display: none;
+      }
+    }
+
     &.HideBorders {
       border: none;
       background-color: transparent;
@@ -204,4 +223,5 @@ export default {
       color: @colorBrandPrimary;
     }
   }
+}
 </style>
