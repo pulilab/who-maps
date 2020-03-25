@@ -130,3 +130,42 @@ class CountryRoadMapTests(CountryBaseTests):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
         self.assertEqual(
             response.json(), {'non_field_errors': ['The country already has 2 related road map documents']})
+
+    def test_document_search(self):
+        ArchitectureRoadMapDocument.objects.all().delete()
+
+        country = Country.objects.first()
+        country.super_admins.add(self.test_user['user_profile_id'])
+
+        upload_url = reverse('architecture-roadmap-document-list')
+
+        data = {
+            'country': country.id,
+            'document': SimpleUploadedFile(f"test.xls", b"test_content_for_xls"),
+            'title': 'excel',
+        }
+        response = self.test_user_client.post(upload_url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        data['document'] = SimpleUploadedFile(f"01.pdf", b"test_content_for_pdf"),
+        data['title'] = 'presentation'
+        response = self.test_user_client.post(upload_url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        self.assertEqual(ArchitectureRoadMapDocument.objects.count(), 2)
+
+        # search by title
+        url = reverse('document-search-list') + '?search=presentation'
+        response = self.test_user_client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        data = response.json()
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]['title'], 'presentation')
+
+        # search by file name
+        url = reverse('document-search-list') + '?search=xls'
+        response = self.test_user_client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        data = response.json()
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]['title'], 'excel')
