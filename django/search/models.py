@@ -25,7 +25,6 @@ class ProjectSearch(ExtendedModel):
         "loc": "coverage",
         "partner": "project__data__implementing_partners",
         "donor": "donor_names",
-        "stages": "stages",
     }
 
     FILTER_BY = {
