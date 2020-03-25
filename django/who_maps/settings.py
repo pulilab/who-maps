@@ -262,7 +262,7 @@ if SITE_ID in [3]:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
 
-# Mailgun settings
+# email settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.sendgrid.net"
 EMAIL_HOST_USER = "apikey"
