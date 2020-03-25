@@ -483,3 +483,8 @@ class SearchTests(SetupTests):
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(response.json()['count'], 2)
+
+        url = url + '?stage=1&stage=300'
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['count'], 2)
