@@ -264,9 +264,9 @@ if SITE_ID in [3]:
 
 # Mailgun settings
 EMAIL_USE_TLS = True
-EMAIL_HOST = "smtp.mailgun.org"
-EMAIL_HOST_USER = "postmaster@whomaps.pulilab.com"
-EMAIL_HOST_PASSWORD = "5ede15430fbf90989648a0fe12e379cc"
+EMAIL_HOST = "smtp.sendgrid.net"
+EMAIL_HOST_USER = "apikey"
+EMAIL_HOST_PASSWORD = "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"
 EMAIL_PORT = 587
 
 FROM_EMAIL = DEFAULT_FROM_EMAIL
