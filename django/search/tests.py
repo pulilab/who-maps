@@ -474,12 +474,12 @@ class SearchTests(SetupTests):
 
     def test_filter_stage(self):
         url = reverse("search-project-list")
-        data = {"stages": 300}
+        data = {"stage": 300}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(response.json()['count'], 0)
 
-        data = {"stages": 1}
+        data = {"stage": 1}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(response.json()['count'], 2)

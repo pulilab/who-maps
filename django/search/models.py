@@ -39,7 +39,7 @@ class ProjectSearch(ExtendedModel):
         "gov": "project__data__government_investor",  # false=> gov=0 ; true=> gov=1&gov=2
         "donor": "donors",
         "approved": "project__approval__approved",  # false=> approved=0 ; true=> approved=1
-        "stages": "stages",
+        "stage": "stages",
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
@@ -97,7 +97,7 @@ class ProjectSearch(ExtendedModel):
                     if field in ["country", "region", "gov"]:
                         lookup_param = "in"
                         lookup = lookup_cleanup(query_params.getlist(field))
-                    elif field in ["donor", "sw", "dhi", "hfa", "hsc", "his", "stages"]:
+                    elif field in ["donor", "sw", "dhi", "hfa", "hsc", "his", "stage"]:
                         lookup_param = "overlap"  # This is the OR clause here
                         lookup = lookup_cleanup(query_params.getlist(field))
                     elif field == "approved":
