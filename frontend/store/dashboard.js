@@ -21,6 +21,7 @@ export const state = () => ({
   filteredRegion: null,
   governmentApproved: null,
   governmentFinanced: null,
+  onlyGlobal: null,
   selectAll: false,
   pageSize: 10,
   page: 1,
@@ -49,7 +50,8 @@ export const getters = {
     g.q === undefined &&
     g.region === null &&
     g.sw.length === 0 &&
-    g.view_as === undefined);
+    g.view_as === undefined &&
+    g.global === null);
   },
   getProjectsList: state => [...state.projectsList.map(r => parseCustomAnswers(r))],
   getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => parseCustomAnswers(r))] : getters.getProjectsList,
@@ -86,6 +88,7 @@ export const getters = {
     return state.dashboardType === 'country' && state.dashboardId ? [state.dashboardId] : state.filteredCountries;
   },
   getFilteredRegion: state => state.filteredRegion,
+  getOnlyGlobal: state => state.onlyGlobal,
   getGovernmentApproved: state => state.governmentApproved,
   getGovernmentFinanced: state => state.governmentFinanced,
   getSelectAll: state => state.selectAll,
@@ -120,7 +123,8 @@ export const getters = {
       hsc: state.selectedHSC,
       his: state.selectedHIS,
       view_as: state.dashboardType !== 'user' ? state.dashboardType : undefined,
-      sc: state.selectedColumns
+      sc: state.selectedColumns,
+      global: state.onlyGlobal
     };
   }
 };
@@ -258,6 +262,9 @@ export const actions = {
   setDashboardSection ({ commit }, value) {
     commit('SET_DASHBOARD_SECTION', value);
   },
+  setOnlyGlobal ({ commit }, value) {
+    commit('SET_ONLY_GLOBAL', value);
+  },
   resetUserInput ({ commit }) {
     commit('RESET_USER_INPUT');
     commit('SET_SEARCH_OPTIONS', {});
@@ -284,6 +291,7 @@ export const mutations = {
     state.filteredCountries = intArrayFromQs(options.country);
     state.filteredRegion = options.region ? +options.region : null;
     state.governmentFinanced = options.gov ? true : null;
+    state.onlyGlobal = options.global ? true : null;
     state.governmentApproved = options.approved ? true : null;
     state.selectedPlatforms = intArrayFromQs(options.sw);
     state.selectedDHI = intArrayFromQs(options.dhi);
@@ -353,5 +361,8 @@ export const mutations = {
   },
   SET_DASHBOARD_SECTION: (state, section) => {
     state.dashboardSection = section;
+  },
+  SET_ONLY_GLOBAL: (state, value) => {
+    state.onlyGlobal = value;
   }
 };

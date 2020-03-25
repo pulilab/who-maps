@@ -1,19 +1,26 @@
 <template>
-  <div class="CountryFilters">
-    <country-select
-      v-model="selectedCounties"
-      :disabled="disableCountries"
-    />
-    <region-select
-      v-model="selectedRegion"
-      :disabled="disableRegions"
-    />
+  <div>
+    <div class="FilterSwitchHandler">
+      <el-switch
+        v-model="selectedGlobal"
+        :active-text="$gettext('Show only Global projects') | translate"
+      />
+    </div>
+    <div class="CountryFilters">
+      <country-select
+        v-model="selectedCounties"
+        :disabled="disableCountries"
+      />
+      <region-select
+        v-model="selectedRegion"
+        :disabled="disableRegions"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGettersActions } from '../../utilities/form.js';
-
 import CountrySelect from '../common/CountrySelect';
 import RegionSelect from '../common/RegionSelect';
 import { mapGetters } from 'vuex';
@@ -28,7 +35,8 @@ export default {
     }),
     ...mapGettersActions({
       selectedCounties: ['dashboard', 'getFilteredCountries', 'setFilteredCountries'],
-      selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion']
+      selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion'],
+      selectedGlobal: ['dashboard', 'getOnlyGlobal', 'setOnlyGlobal']
     }),
     disableCountries () {
       return !!this.selectedRegion || this.dashboardType === 'country';
@@ -43,6 +51,11 @@ export default {
 <style lang="less">
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
+
+  .FilterSwitchHandler {
+    margin-bottom: 14px;
+    margin-top: -6px;
+  }
 
   .CountryFilters {
     .el-select {

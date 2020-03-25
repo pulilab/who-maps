@@ -63,7 +63,16 @@
           v-validate="rules.country"
           data-vv-name="country"
           data-vv-as="Country"
+          :disabled="global"
         />
+        <div class="FilterContainer">
+          <div class="FilterLabel">OR</div>
+          <filter-switch
+            v-model="global"
+            :label="$gettext('Set project as \'Global project\'') | translate"
+            :tooltip="$gettext('Lorem Ipsum') | translate"
+          />
+        </div>
       </custom-required-form-item>
       <custom-required-form-item
         :error="errors.first('geographic_scope')"
@@ -304,6 +313,7 @@ import OrganisationSelect from '../../common/OrganisationSelect';
 import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem';
+import FilterSwitch from '@/components/dashboard/FilterSwitch';
 
 export default {
   components: {
@@ -312,9 +322,15 @@ export default {
     TeamSelector,
     OrganisationSelect,
     FormHint,
-    CustomRequiredFormTeamItem
+    CustomRequiredFormTeamItem,
+    FilterSwitch
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
+  data () {
+    return {
+      global: false
+    };
+  },
   computed: {
     ...mapGettersActions({
       name: ['project', 'getName', 'setName', 0],
@@ -375,6 +391,19 @@ export default {
 
     .Date {
       width: 100% !important;
+    }
+    .FilterContainer {
+      display: inline-flex;
+      .FilterLabel {
+        display: inline-block;
+        width: 78px;
+        color: #9D9D9D;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 0;
+        line-height: 20px;
+        text-align: center;
+      }
     }
   }
 </style>
