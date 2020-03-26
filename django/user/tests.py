@@ -657,3 +657,13 @@ class UserProfileTests(APITestCase):
         data = response.json()
         for key in ('test_user', 'org', 'country'):
             self.assertIn(key, data)
+
+        # try to login with test user
+        url = reverse("api_token_auth")
+        login_data = {
+            "username": data['test_user'],
+            "password": 'puli1234',
+        }
+        response = self.client.post(url, login_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertIn('token', response.json())
