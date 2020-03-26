@@ -11,16 +11,15 @@ export const actions = {
 
     const phases = [
       'Opportunity and Ideation',
-      'Preparation',
+      'Preparation and Scoping',
       'Analysis and Design',
       'Implementation Planning',
       'Developing or Adapting Solution',
       'Piloting and Evidence Generation',
-      'Package and Champion',
+      'Package and Advocacy',
       'Deploying',
       'Scaling up',
-      'Scale and Handover',
-      'Under Review'
+      'Hand over or Complete'
     ];
 
     const labels = [

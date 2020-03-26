@@ -12,16 +12,6 @@
         :chartdata="chartdata"
         :options="options"
       />
-      <el-row
-        :gutter="20"
-        type="flex"
-      >
-        <el-col :span="12">
-        </el-col>
-
-        <el-col :span="12">
-        </el-col>
-      </el-row>
     </collapsible-card>
   </div>
 </template>

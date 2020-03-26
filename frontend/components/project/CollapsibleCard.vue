@@ -36,11 +36,7 @@
             class="Legend"
           >
             <div>
-              <span class="Required Draft">
-                <span>
-                  *
-                </span>
-              </span>
+              <span class="Required Draft" />
               <span class="Text">
                 <translate ref="draft_required">
                   Required to save draft
@@ -48,11 +44,7 @@
               </span>
             </div>
             <div>
-              <span class="Required Publish">
-                <span>
-                  *
-                </span>
-              </span>
+              <span class="Required Publish" />
               <span class="Text">
                 <translate ref="publish_required">
                   Required to publish
@@ -103,7 +95,14 @@ export default {
     margin: 0 0 20px;
 
     .Legend {
-      text-align: right;
+      position: absolute;
+      top: 22px;
+      right: 75px;
+      display: flex;
+
+      div {
+        margin-left: 12px;
+      }
 
       .Text {
         font-size: @fontSizeSmall
@@ -111,8 +110,8 @@ export default {
 
       .Required{
         display: inline-block;
-        width: 12px;
-        height: 12px;
+        width: 10px;
+        height: 10px;
         font-size: 16px;
         line-height: 12px;
         font-weight: 900;
@@ -172,7 +171,8 @@ export default {
     }
 
     .ContentContainer {
-      padding: 40px 80px 60px 40px;
+      position: relative;
+      padding: 50px 80px 60px 40px;
     }
 
     .slide-fade-enter-active {
