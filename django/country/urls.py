@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from country.views import CountryViewSet, PartnerLogoViewSet, DonorViewSet, DonorPartnerLogoViewSet, \
     MapFileViewSet, CountryImageViewSet, DonorImageViewSet, CountryLandingPageViewSet, DonorLandingPageViewSet, \
     CountryCustomQuestionViewSet, DonorCustomQuestionViewSet, CountryLandingListPageViewSet, \
-    DonorLandingListPageViewSet, ArchitectureRoadMapDocumentViewSet
+    DonorLandingListPageViewSet, ArchitectureRoadMapDocumentViewSet, DocumentSearchViewSet
 from . import views
 
 router = DefaultRouter()
@@ -22,6 +22,7 @@ router.register(r'country-custom-questions', CountryCustomQuestionViewSet, base_
 router.register(r'donor-custom-questions', DonorCustomQuestionViewSet, base_name='donor-custom-questions')
 router.register(r'architecture-roadmap-document', ArchitectureRoadMapDocumentViewSet,
                 base_name='architecture-roadmap-document')
+router.register(r'document-search', DocumentSearchViewSet, base_name='document-search')
 
 urlpatterns = [
                   url(r'^countries/export/$',
