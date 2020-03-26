@@ -649,3 +649,11 @@ class UserProfileTests(APITestCase):
         self.assertIn('daily_toolkit_digest_notification', data)
         self.assertNotIn('project_approval_request_notification', data)
         self.assertIn('role_request_notification', data)
+
+    def test_create_cypress_test_data(self):
+        url = reverse('cypress-test-data')
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        data = response.json()
+        for key in ('test_user', 'org', 'country'):
+            self.assertIn(key, data)

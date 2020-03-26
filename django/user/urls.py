@@ -18,4 +18,7 @@ urlpatterns = [
     url(r"^rest-auth/registration/", include("rest_auth.registration.urls")),
     url(r'^api-token-auth/', obtain_jwt_token, name="api_token_auth"),
     url(r"^email-confirmation/(?P<key>\w+)/$", confirm_email, name="account_confirm_email"),
+    url(r"^cypress-test-data", view=views.CypressTestViewSet.as_view({
+             'get': 'create_test_data_for_cypress'
+         }), name="cypress-test-data"),
 ]
