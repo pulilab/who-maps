@@ -48,9 +48,12 @@ class CypressTestViewSet(ViewSet):
             last_name='User',
             email='cypress_user@example.com',
             username='test_cypress_normal_user',
-            password=user_pass
         )
+        test_user.set_password(user_pass)
+        test_user.save()
+
         profile, _ = UserProfile.objects.get_or_create(
+            name='Cypress User',
             user=test_user,
             country=country,
             organisation=org,
@@ -60,7 +63,7 @@ class CypressTestViewSet(ViewSet):
             role_request_notification=False,
         )
         data = {
-            'test_user': test_user.username,
+            'test_user': test_user.email,
             'org': org.name,
             'country': country.name,
         }
