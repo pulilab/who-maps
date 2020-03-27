@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 
 from modeltranslation.translator import register, TranslationOptions
-from .models import DigitalStrategy, HSCChallenge, HealthCategory, HealthFocusArea, InteroperabilityLink,\
-    TechnologyPlatform, Licence, InteroperabilityStandard, HISBucket, HSCGroup
+from .models import DigitalStrategy, HSCChallenge, HealthCategory, HealthFocusArea, InteroperabilityLink, \
+    TechnologyPlatform, Licence, InteroperabilityStandard, HISBucket, HSCGroup, Stage
 
 
 @register(DigitalStrategy)
@@ -52,4 +52,9 @@ class InteroperabilityStandardTranslationOptions(TranslationOptions):
 
 @register(HISBucket)
 class HISBucketTranslationOptions(TranslationOptions):
+    fields = ('name',)
+
+
+@register(Stage)
+class StageTranslationOptions(TranslationOptions):
     fields = ('name',)
