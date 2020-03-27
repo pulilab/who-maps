@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 from celery.utils.log import get_task_logger
+from django.conf import settings
 from django.utils.translation import override
 
 from core.utils import send_mail_wrapper
@@ -34,7 +35,14 @@ def send_system_message(system_message_id):
                 filter(team__is_active=True)
 
         if receivers:
-            system_message.receivers_number = receivers.count()
+
+            # limit emails on QA and PROD
+            if settings.SITE_ID in (3, 4):
+                receivers = receivers[:1]
+                system_message.receivers_number = 1
+            else:
+                system_message.receivers_number = receivers.count()
+
             system_message.save()
 
             email_mapping = defaultdict(list)
