@@ -655,7 +655,7 @@ class UserProfileTests(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         data = response.json()
-        for key in ('test_user', 'org', 'country'):
+        for key in ('url', 'test_user', 'org', 'country'):
             self.assertIn(key, data)
 
         # try to login with test user

@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import status
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin
 from rest_framework.response import Response
@@ -40,6 +42,10 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
 class CypressTestViewSet(ViewSet):
 
     def create_test_data_for_cypress(self, request):
+        site = get_current_site(request)
+        protocol = 'https' if not settings.DEBUG else 'http'
+        domain = 'localhost:3000' if site.id == 1 else 'localhost'
+
         user_pass = 'puli1234'
         country, _ = Country.objects.get_or_create(code='HU', name='Hungary')
         org, _ = Organisation.objects.get_or_create(name='Cypress Org')
@@ -63,6 +69,7 @@ class CypressTestViewSet(ViewSet):
             role_request_notification=False,
         )
         data = {
+            'url': f'{protocol}://{domain}/',
             'test_user': test_user.email,
             'org': org.name,
             'country': country.name,
