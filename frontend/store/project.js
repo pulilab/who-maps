@@ -52,6 +52,13 @@ export const getters = {
   getImplementingTeam: state => state.implementing_team.length === 0 ? [null] : state.implementing_team,
   getImplementingViewers: state => state.implementing_viewers.length === 0 ? [null] : state.implementing_viewers,
   getDonors: state => state.donors,
+  getShadowDonors: (state, rootState, rootGetters) => {
+    return rootGetters.projects.projectStructure.health_focus_areas
+      .map(item => item.health_focus_areas)
+      .flat()
+      .filter(item => state.health_focus_areas.includes(item.id) && item.donors)
+      .map(item => item.donors);
+  },
   getImplementationDates: state => state.implementation_dates && new Date(state.implementation_dates),
   getLicenses: state => state.licenses,
   getRepository: state => state.repository,
@@ -198,7 +205,8 @@ export const actions = {
   setDigitalHealthInterventions ({ commit }, value) {
     commit('SET_DIGITAL_HEALTH_INTERVENTIONS', value);
   },
-  setHealthFocusAreas ({ commit }, value) {
+  setHealthFocusAreas ({ commit, state, getters }, value) {
+    commit('SET_DONORS', state.donors.filter((i) => !getters.getShadowDonors.includes(i)));
     commit('SET_HEALTH_FOCUS_AREAS', value);
   },
   setHscChallenges ({ commit }, value) {
@@ -240,9 +248,12 @@ export const actions = {
   setImplementingViewers ({ commit }, value) {
     commit('SET_IMPLEMENTING_VIEWERS', value);
   },
-  setDonors ({ commit, dispatch }, value) {
+  setDonors ({ commit, dispatch, rootState }, value) {
     value.forEach(d => dispatch('system/loadDonorDetails', d, { root: true }));
     commit('SET_DONORS', value);
+  },
+  setShadowDonors ({ commit }, value) {
+    commit('SET_SHADOW_DONORS', value);
   },
   setImplementationDates ({ commit }, value) {
     commit('SET_IMPLEMENTATION_DATES', value);
@@ -314,6 +325,7 @@ export const actions = {
   async createProject ({ getters, dispatch }) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
+    draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])]
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.post(`api/projects/draft/${draft.country}/`, parsed);
@@ -325,6 +337,7 @@ export const actions = {
   async saveDraft ({ getters, dispatch }, id) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
+    draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])]
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country}/`, parsed);
@@ -334,6 +347,7 @@ export const actions = {
   async publishProject ({ getters, dispatch, commit }, id) {
     dispatch('setLoading', 'publish');
     const draft = getters.getProjectData;
+    draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])]
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.put(`/api/projects/publish/${id}/${draft.country}/`, parsed);
@@ -451,6 +465,9 @@ export const mutations = {
   },
   SET_DONORS: (state, donors) => {
     Vue.set(state, 'donors', [...donors]);
+  },
+  SET_SHADOW_DONORS: (state, donors) => {
+    Vue.set(state, 'shadow_donors', [...donors]);
   },
   SET_IMPLEMENTATION_DATES: (state, implementation_dates) => {
     state.implementation_dates = implementation_dates;

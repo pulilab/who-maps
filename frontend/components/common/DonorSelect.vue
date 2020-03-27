@@ -28,6 +28,9 @@ export default {
       default: null
     }
   },
+  mounted() {
+    console.log(this.donors)
+  },
   computed: {
     ...mapGetters({
       donors: 'system/getDonors'
