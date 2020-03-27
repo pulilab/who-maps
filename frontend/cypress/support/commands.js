@@ -23,3 +23,17 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+
+Cypress.Commands.add('logIn', () => {
+  cy.request('http://localhost/api/cypress-test-data/')  .then((response) => {
+    expect(response.status).to.eq(200);
+    cy.visit(response.body.url);
+    cy.contains('Login').click();
+    cy.location('pathname', {timeout: 5000}).should('include', '/login');
+    cy.get('input[id="userName"]').type(response.body.test_user);
+    cy.get('input[type="password"]').type('puli1234');
+    cy.get('button[id="logIn"]').click();
+    cy.location('pathname', {timeout: 5000}).should('include', '/dashboard');
+  })
+});
