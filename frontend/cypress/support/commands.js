@@ -29,6 +29,7 @@ Cypress.Commands.add('logIn', () => {
   const timeOut = 5000;
 
   cy.request('http://localhost/api/cypress-test-data/')  .then((response) => {
+    Cypress.env('testData', response.body);
     expect(response.status).to.eq(200);
     cy.visit(response.body.url);
     cy.contains('Login').click();
