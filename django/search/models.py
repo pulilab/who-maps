@@ -147,12 +147,12 @@ class ProjectSearch(ExtendedModel):
                                                       *[platform['strategies'] for platform in
                                                         project.data.get("platforms", []) if
                                                         platform.get('strategies')]))])))
-            self.hsc = project.data.get('hsc_challenges')
-            self.hfa = project.data.get('health_focus_areas')
+            self.hsc = project.data.get('hsc_challenges', [])
+            self.hfa = project.data.get('health_focus_areas', [])
             self.hfa_categories = list(set(filter(None.__ne__,
                                                   [HealthFocusArea.get_parent_id(int(id), 'health_category') for
                                                    id in project.data.get("health_focus_areas", [])])))
-            self.his = project.data.get('his_bucket')
+            self.his = project.data.get('his_bucket', [])
 
             self.save()
 
