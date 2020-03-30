@@ -18,6 +18,7 @@ class ProjectSearch(ExtendedModel):
     SEARCH_BY = {
         # query_param: QuerySet param | eg: in=name&in=org
         "name": "project__name",
+        "uid": "project__public_id",
         "org": "organisation__name",
         "country": "country__name",
         "region": "country__region",
