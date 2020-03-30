@@ -217,6 +217,8 @@ DEFAULT_FROM_EMAIL = "Digital Health Atlas <noreply@dhatlas.org>"
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+EMAIL_SENDING_PRODUCTION = os.environ.get('EMAIL_SENDING_PRODUCTION', False)
+
 REDIS_URL = os.environ.get('REDIS_URL', 'redis')
 
 # Celery settings
