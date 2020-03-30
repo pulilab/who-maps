@@ -9,19 +9,28 @@
         class="ma-i"
         :placeholder="$gettext('Filter health focus areas') | translate"
         prefix-icon="el-icon-search"
-        v-model="search">
-      </el-input>
-      <selector-dialog-category
-        v-for="hfa in filterFocusArea"
-        :key="hfa.id"
-        :values="selected"
-        :category="hfa"
-        child-name="health_focus_areas"
-        name-prop="name"
-        expandCollapse
-        :categorySelectable="true"
-        @change="filterChange"
+        v-model="search"
+        clearable
       />
+      <template v-if="filterFocusArea.length > 0">
+        <selector-dialog-category
+          v-for="hfa in filterFocusArea"
+          :key="hfa.id"
+          :values="selected"
+          :category="hfa"
+          child-name="health_focus_areas"
+          name-prop="name"
+          expandCollapse
+          :categorySelectable="true"
+          @change="filterChange"
+        />
+      </template>
+      <template v-else>
+        <div class="empty-filter">
+          <p></p><translate>Can't find anything related to</translate> <b>{{search}}</b>.</p>
+          <p></p><translate>Please, try again.</translate></p>
+        </div>
+      </template>
     </selector-dialog-column>
   </div>
 </template>
@@ -57,7 +66,21 @@ export default {
       return difference(ids, this.selected).length === 0;
     },
     filterFocusArea () {
-      return this.healthFocusAreas.filter((item) => item.name.toLowerCase().includes(this.search.toLowerCase()))
+      let filtered = []
+      this.healthFocusAreas.forEach(
+        (item) => {
+          const health_focus_areas = item.health_focus_areas.filter((item) => item.name.toLowerCase().includes(this.search.toLowerCase()));
+          const category_name = item.name.toLowerCase().includes(this.search.toLowerCase())
+
+          if ( category_name || health_focus_areas.length > 0 ) {
+            filtered.push({
+              ...item,
+              health_focus_areas
+            })
+          }
+        }
+      );
+      return filtered;
     }
   },
   methods: {
@@ -78,5 +101,9 @@ export default {
 <style>
 .ma-i {
   margin: 10px 0 20px;
+}
+.empty-filter {
+  margin: 60px;
+  text-align: center;
 }
 </style>
