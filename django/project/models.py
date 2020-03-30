@@ -1,4 +1,6 @@
 from collections import namedtuple
+
+from django.contrib.contenttypes.fields import GenericRelation
 from hashids import Hashids
 
 from django.db import models
@@ -62,6 +64,8 @@ class Project(SoftDeleteModel, ExtendedModel):
     odk_etag = models.CharField(null=True, blank=True, max_length=64)
     odk_id = models.CharField(null=True, blank=True, max_length=64)
     odk_extra_data = JSONField(default=dict)
+
+    research = models.NullBooleanField(blank=True, null=True)
 
     projects = ProjectManager  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
@@ -193,6 +197,16 @@ class ProjectApproval(ExtendedModel):
         return "Approval for {}".format(self.project.name)
 
 
+class Stage(ExtendedModel):
+    name = models.CharField(max_length=128)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):  # pragma: no cover
+        return self.name
+
+
 class CoverageVersion(ExtendedModel):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     version = models.IntegerField()
@@ -257,6 +271,8 @@ class HealthCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
 class HealthFocusArea(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     health_category = models.ForeignKey(HealthCategory, related_name='health_focus_areas', on_delete=models.CASCADE)
+
+    donors = GenericRelation(Donor)
 
     def __str__(self):
         return '[{}] {}'.format(self.health_category.name, self.name)

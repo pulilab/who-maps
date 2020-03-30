@@ -4,7 +4,7 @@ import requests
 from requests import RequestException
 from django.conf import settings
 from django.http import HttpResponse
-from rest_framework import mixins, viewsets, status
+from rest_framework import mixins, viewsets, status, filters
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
@@ -211,3 +211,11 @@ class ArchitectureRoadMapDocumentViewSet(mixins.CreateModelMixin, mixins.UpdateM
     queryset = ArchitectureRoadMapDocument.objects.all()
     serializer_class = ArchitectureRoadMapDocumentSerializer
     permission_classes = (InCountrySuperAdmin,)
+
+
+class DocumentSearchViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = ArchitectureRoadMapDocument.objects.all()
+    serializer_class = ArchitectureRoadMapDocumentSerializer
+    filter_backends = [filters.SearchFilter]
+    permission_classes = (IsAuthenticated,)
+    search_fields = ['title', 'document']
