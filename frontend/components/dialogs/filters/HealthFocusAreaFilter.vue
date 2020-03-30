@@ -1,16 +1,25 @@
 <template>
   <div class="HealthFocusAreaFilter">
     <selector-dialog-column
-      :header-selectable="true"
       :selected="catSelected"
       :header="$gettext('Select from list') | translate"
       @headerSelected="toggleAll"
     >
+      <el-input
+        class="ma-i"
+        :placeholder="$gettext('Filter health focus areas') | translate"
+        prefix-icon="el-icon-search"
+        v-model="search">
+      </el-input>
       <selector-dialog-category
+        v-for="hfa in filterFocusArea"
+        :key="hfa.id"
         :values="selected"
-        :category-selectable="true"
-        :category="healthFocusAreas"
-        hide-header
+        :category="hfa"
+        child-name="health_focus_areas"
+        name-prop="name"
+        expandCollapse
+        :categorySelectable="true"
         @change="filterChange"
       />
     </selector-dialog-column>
@@ -34,6 +43,11 @@ export default {
       default: () => []
     }
   },
+  data () {
+    return {
+      search: ''
+    };
+  },
   computed: {
     ...mapGetters({
       healthFocusAreas: 'projects/getHealthFocusAreas'
@@ -41,6 +55,9 @@ export default {
     catSelected () {
       const ids = this.healthFocusAreas.map(s => s.id);
       return difference(ids, this.selected).length === 0;
+    },
+    filterFocusArea () {
+      return this.healthFocusAreas.filter((item) => item.name.toLowerCase().includes(this.search.toLowerCase()))
     }
   },
   methods: {
@@ -59,5 +76,7 @@ export default {
 </script>
 
 <style>
-
+.ma-i {
+  margin: 10px 0 20px;
+}
 </style>
