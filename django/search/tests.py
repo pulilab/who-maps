@@ -198,7 +198,7 @@ class SearchTests(SetupTests):
 
     def test_filter_hfa(self):
         url = reverse("search-project-list")
-        data = {"hfa": HealthFocusArea.objects.get(id=1).health_category.id}
+        data = {"hfa": HealthFocusArea.objects.get(id=2).id}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
