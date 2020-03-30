@@ -36,7 +36,7 @@ class SystemMessageTests(APITestCase):
                     organisation=self.org.id,
                     hsc_challenges=[1, 2],
                     his_bucket=[1, 2],
-                    health_focus_areas=[1,2])
+                    health_focus_areas=[1, 2])
         self.published_project = ProjectFactory(name='published project', data=data, team=[self.profile_3])
         # 'publish' the project
         self.published_project.public_id = '1234'
