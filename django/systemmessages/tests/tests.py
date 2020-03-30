@@ -32,7 +32,11 @@ class SystemMessageTests(APITestCase):
                                       region=Country.REGIONS[0][0], name_en='Hungary', name_fr='Hongrie')
         self.org = OrganisationFactory(name="Test org 1")
 
-        data = dict(country=self.country.id, organisation=self.org.id, hsc_challenges=[1, 2], his_bucket=[1, 2])
+        data = dict(country=self.country.id,
+                    organisation=self.org.id,
+                    hsc_challenges=[1, 2],
+                    his_bucket=[1, 2],
+                    health_focus_areas=[1,2])
         self.published_project = ProjectFactory(name='published project', data=data, team=[self.profile_3])
         # 'publish' the project
         self.published_project.public_id = '1234'
