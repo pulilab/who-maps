@@ -409,7 +409,9 @@ if SITE_ID in [3, 4]:
             'rest_framework.renderers.JSONRenderer',
         )
     }
-
+    # TODO: refactor these into .env settings
+    if SITE_ID == 3:
+        EMAIL_SENDING_PRODUCTION = True
     if SITE_ID == 4:
         # redirect all emails to the forced addresses
         EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
