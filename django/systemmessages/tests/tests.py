@@ -1,6 +1,7 @@
 from unittest import mock
 
 from django.contrib.auth.models import User
+from django.test import override_settings
 
 from rest_framework.test import APITestCase
 
@@ -45,19 +46,33 @@ class SystemMessageTests(APITestCase):
             message='Test message to all users'
         )
 
-        send_system_message.apply((system_message.id,))
+        with override_settings(EMAIL_SENDING_PRODUCTION=True):
+            send_system_message.apply((system_message.id,))
 
-        system_message.refresh_from_db()
-        self.assertEqual(system_message.receivers_number, 3)
+            system_message.refresh_from_db()
+            self.assertEqual(system_message.receivers_number, 3)
 
-        call_args = send_mail_wrapper.call_args_list[0][1]
+            call_args = send_mail_wrapper.call_args_list[0][1]
 
-        self.assertEqual(call_args['subject'], system_message.subject)
-        self.assertEqual(call_args['email_type'], 'system_message')
-        self.assertEqual(call_args['context']['message'], system_message.message)
-        self.assertIn(self.user_1.email, call_args['to'])
-        self.assertIn(self.user_2.email, call_args['to'])
-        self.assertIn(self.user_3.email, call_args['to'])
+            self.assertEqual(call_args['subject'], system_message.subject)
+            self.assertEqual(call_args['email_type'], 'system_message')
+            self.assertEqual(call_args['context']['message'], system_message.message)
+            self.assertIn(self.user_1.email, call_args['to'])
+            self.assertIn(self.user_2.email, call_args['to'])
+            self.assertIn(self.user_3.email, call_args['to'])
+
+        with override_settings(EMAIL_SENDING_PRODUCTION=False):
+            send_system_message.apply((system_message.id,))
+
+            system_message.refresh_from_db()
+            self.assertEqual(system_message.receivers_number, 1)
+
+            call_args = send_mail_wrapper.call_args_list[1][1]
+
+            self.assertEqual(call_args['subject'], system_message.subject)
+            self.assertEqual(call_args['email_type'], 'system_message')
+            self.assertEqual(call_args['context']['message'], system_message.message)
+            self.assertEqual(len(call_args['to']), 1)
 
     @mock.patch('systemmessages.tasks.send_mail_wrapper', return_value=None)
     def test_system_message_to_project_owners(self, send_mail_wrapper):
@@ -67,19 +82,33 @@ class SystemMessageTests(APITestCase):
             message='Test message to project owners'
         )
 
-        send_system_message.apply((system_message.id,))
+        with override_settings(EMAIL_SENDING_PRODUCTION=True):
+            send_system_message.apply((system_message.id,))
 
-        system_message.refresh_from_db()
-        self.assertEqual(system_message.receivers_number, 2)
+            system_message.refresh_from_db()
+            self.assertEqual(system_message.receivers_number, 2)
 
-        call_args = send_mail_wrapper.call_args_list[0][1]
+            call_args = send_mail_wrapper.call_args_list[0][1]
 
-        self.assertEqual(call_args['subject'], system_message.subject)
-        self.assertEqual(call_args['email_type'], 'system_message')
-        self.assertEqual(call_args['context']['message'], system_message.message)
-        self.assertNotIn(self.user_1.email, call_args['to'])
-        self.assertIn(self.user_2.email, call_args['to'])
-        self.assertIn(self.user_3.email, call_args['to'])
+            self.assertEqual(call_args['subject'], system_message.subject)
+            self.assertEqual(call_args['email_type'], 'system_message')
+            self.assertEqual(call_args['context']['message'], system_message.message)
+            self.assertNotIn(self.user_1.email, call_args['to'])
+            self.assertIn(self.user_2.email, call_args['to'])
+            self.assertIn(self.user_3.email, call_args['to'])
+
+        with override_settings(EMAIL_SENDING_PRODUCTION=False):
+            send_system_message.apply((system_message.id,))
+
+            system_message.refresh_from_db()
+            self.assertEqual(system_message.receivers_number, 1)
+
+            call_args = send_mail_wrapper.call_args_list[1][1]
+
+            self.assertEqual(call_args['subject'], system_message.subject)
+            self.assertEqual(call_args['email_type'], 'system_message')
+            self.assertEqual(call_args['context']['message'], system_message.message)
+            self.assertEqual(len(call_args['to']), 1)
 
     @mock.patch('systemmessages.tasks.send_mail_wrapper', return_value=None)
     def test_system_message_to_project_owners_with_published_projects(self, send_mail_wrapper):
@@ -89,19 +118,35 @@ class SystemMessageTests(APITestCase):
             message='Test message to project owners with published projects'
         )
 
-        send_system_message.apply((system_message.id,))
+        with override_settings(EMAIL_SENDING_PRODUCTION=True):
+            send_system_message.apply((system_message.id,))
 
-        system_message.refresh_from_db()
-        self.assertEqual(system_message.receivers_number, 1)
+            system_message.refresh_from_db()
+            self.assertEqual(system_message.receivers_number, 1)
 
-        call_args = send_mail_wrapper.call_args_list[0][1]
+            call_args = send_mail_wrapper.call_args_list[0][1]
 
-        self.assertEqual(call_args['subject'], system_message.subject)
-        self.assertEqual(call_args['email_type'], 'system_message')
-        self.assertEqual(call_args['context']['message'], system_message.message)
-        self.assertNotIn(self.user_1.email, call_args['to'])
-        self.assertNotIn(self.user_2.email, call_args['to'])
-        self.assertIn(self.user_3.email, call_args['to'])
+            self.assertEqual(call_args['subject'], system_message.subject)
+            self.assertEqual(call_args['email_type'], 'system_message')
+            self.assertEqual(call_args['context']['message'], system_message.message)
+            self.assertNotIn(self.user_1.email, call_args['to'])
+            self.assertNotIn(self.user_2.email, call_args['to'])
+            self.assertIn(self.user_3.email, call_args['to'])
+
+        with override_settings(EMAIL_SENDING_PRODUCTION=False):
+            send_system_message.apply((system_message.id,))
+
+            system_message.refresh_from_db()
+            self.assertEqual(system_message.receivers_number, 1)
+
+            call_args = send_mail_wrapper.call_args_list[1][1]
+
+            self.assertEqual(call_args['subject'], system_message.subject)
+            self.assertEqual(call_args['email_type'], 'system_message')
+            self.assertEqual(call_args['context']['message'], system_message.message)
+            self.assertNotIn(self.user_1.email, call_args['to'])
+            self.assertNotIn(self.user_2.email, call_args['to'])
+            self.assertIn(self.user_3.email, call_args['to'])
 
     @mock.patch('systemmessages.tasks.send_mail_wrapper', return_value=None)
     def test_system_message_to_all_users_with_different_languages_success(self, send_mail_wrapper):
@@ -123,36 +168,37 @@ class SystemMessageTests(APITestCase):
             message_es='Mensaje a todos',
         )
 
-        send_system_message.apply((system_message.id,))
+        with override_settings(EMAIL_SENDING_PRODUCTION=True):
+            send_system_message.apply((system_message.id,))
 
-        system_message.refresh_from_db()
-        self.assertEqual(system_message.receivers_number, 4)
+            system_message.refresh_from_db()
+            self.assertEqual(system_message.receivers_number, 4)
 
-        call_args_1 = send_mail_wrapper.call_args_list[0][1]
-        self.assertEqual(call_args_1['subject'], system_message.subject_en)
-        self.assertEqual(call_args_1['email_type'], 'system_message')
-        self.assertEqual(call_args_1['to'], [self.user_1.email])
-        self.assertEqual(call_args_1['context']['message'], system_message.message_en)
-        self.assertEqual(call_args_1['language'], 'en')
+            call_args_1 = send_mail_wrapper.call_args_list[0][1]
+            self.assertEqual(call_args_1['subject'], system_message.subject_en)
+            self.assertEqual(call_args_1['email_type'], 'system_message')
+            self.assertEqual(call_args_1['to'], [self.user_1.email])
+            self.assertEqual(call_args_1['context']['message'], system_message.message_en)
+            self.assertEqual(call_args_1['language'], 'en')
 
-        call_args_2 = send_mail_wrapper.call_args_list[1][1]
-        self.assertEqual(call_args_2['subject'], system_message.subject_fr)
-        self.assertEqual(call_args_2['email_type'], 'system_message')
-        self.assertEqual(call_args_2['to'], [self.user_2.email])
-        self.assertEqual(call_args_2['context']['message'], system_message.message_fr)
-        self.assertEqual(call_args_2['language'], 'fr')
+            call_args_2 = send_mail_wrapper.call_args_list[1][1]
+            self.assertEqual(call_args_2['subject'], system_message.subject_fr)
+            self.assertEqual(call_args_2['email_type'], 'system_message')
+            self.assertEqual(call_args_2['to'], [self.user_2.email])
+            self.assertEqual(call_args_2['context']['message'], system_message.message_fr)
+            self.assertEqual(call_args_2['language'], 'fr')
 
-        call_args_3 = send_mail_wrapper.call_args_list[2][1]
-        self.assertEqual(call_args_3['subject'], system_message.subject_es)
-        self.assertEqual(call_args_3['email_type'], 'system_message')
-        self.assertEqual(call_args_3['to'], [self.user_3.email])
-        self.assertEqual(call_args_3['context']['message'], system_message.message_es)
-        self.assertEqual(call_args_3['language'], 'es')
+            call_args_3 = send_mail_wrapper.call_args_list[2][1]
+            self.assertEqual(call_args_3['subject'], system_message.subject_es)
+            self.assertEqual(call_args_3['email_type'], 'system_message')
+            self.assertEqual(call_args_3['to'], [self.user_3.email])
+            self.assertEqual(call_args_3['context']['message'], system_message.message_es)
+            self.assertEqual(call_args_3['language'], 'es')
 
-        # user with portugal language should get english translation
-        call_args_1 = send_mail_wrapper.call_args_list[3][1]
-        self.assertEqual(call_args_1['subject'], system_message.subject_en)
-        self.assertEqual(call_args_1['email_type'], 'system_message')
-        self.assertEqual(call_args_1['to'], [user_4.email])
-        self.assertEqual(call_args_1['context']['message'], system_message.message_en)
-        self.assertEqual(call_args_1['language'], 'pt')
+            # user with portugal language should get english translation
+            call_args_1 = send_mail_wrapper.call_args_list[3][1]
+            self.assertEqual(call_args_1['subject'], system_message.subject_en)
+            self.assertEqual(call_args_1['email_type'], 'system_message')
+            self.assertEqual(call_args_1['to'], [user_4.email])
+            self.assertEqual(call_args_1['context']['message'], system_message.message_en)
+            self.assertEqual(call_args_1['language'], 'pt')

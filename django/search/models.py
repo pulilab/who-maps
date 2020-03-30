@@ -24,7 +24,7 @@ class ProjectSearch(ExtendedModel):
         "overview": "project__data__implementation_overview",
         "loc": "coverage",
         "partner": "project__data__implementing_partners",
-        "donor": "donor_names"
+        "donor": "donor_names",
     }
 
     FILTER_BY = {
@@ -38,7 +38,8 @@ class ProjectSearch(ExtendedModel):
         "region": "country__region",  # eg: region=3
         "gov": "project__data__government_investor",  # false=> gov=0 ; true=> gov=1&gov=2
         "donor": "donors",
-        "approved": "project__approval__approved"  # false=> approved=0 ; true=> approved=1
+        "approved": "project__approval__approved",  # false=> approved=0 ; true=> approved=1
+        "stage": "stages",  # eg: stage=1&stage=2
     }
 
     project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True, related_name='search')
@@ -54,6 +55,7 @@ class ProjectSearch(ExtendedModel):
     hsc = ArrayField(models.IntegerField(), default=list)
     hfa_categories = ArrayField(models.IntegerField(), default=list)
     his = ArrayField(models.IntegerField(), default=list)
+    stages = ArrayField(models.IntegerField(), default=list)
 
     @classmethod
     def search(cls, queryset: QuerySet, search_term: str, search_in: List[str]) -> QuerySet:
@@ -95,7 +97,7 @@ class ProjectSearch(ExtendedModel):
                     if field in ["country", "region", "gov"]:
                         lookup_param = "in"
                         lookup = lookup_cleanup(query_params.getlist(field))
-                    elif field in ["donor", "sw", "dhi", "hfa", "hsc", "his"]:
+                    elif field in ["donor", "sw", "dhi", "hfa", "hsc", "his", "stage"]:
                         lookup_param = "overlap"  # This is the OR clause here
                         lookup = lookup_cleanup(query_params.getlist(field))
                     elif field == "approved":
@@ -135,6 +137,7 @@ class ProjectSearch(ExtendedModel):
             self.donor_names = [Donor.objects.get(id=int(x)).name for x in project.data.get("donors", [])]
 
             self.software = [int(x['id']) for x in project.data.get("platforms", [])]
+            self.stages = [int(x['id']) for x in project.data.get("stages", [])]
             self.coverage = [x.get('district', "") for x in project.data.get("coverage", [])]
             self.dhi_categories = list(set(filter(None.__ne__,
                                                   [DigitalStrategy.get_parent_id(int(strategy_id), 'parent') for
