@@ -46,7 +46,7 @@ class SystemMessageTests(APITestCase):
             message='Test message to all users'
         )
 
-        with override_settings(SITE_ID=1):
+        with override_settings(EMAIL_SENDING_PRODUCTION=True):
             send_system_message.apply((system_message.id,))
 
             system_message.refresh_from_db()
@@ -61,7 +61,7 @@ class SystemMessageTests(APITestCase):
             self.assertIn(self.user_2.email, call_args['to'])
             self.assertIn(self.user_3.email, call_args['to'])
 
-        with override_settings(SITE_ID=3):
+        with override_settings(EMAIL_SENDING_PRODUCTION=False):
             send_system_message.apply((system_message.id,))
 
             system_message.refresh_from_db()
@@ -82,7 +82,7 @@ class SystemMessageTests(APITestCase):
             message='Test message to project owners'
         )
 
-        with override_settings(SITE_ID=1):
+        with override_settings(EMAIL_SENDING_PRODUCTION=True):
             send_system_message.apply((system_message.id,))
 
             system_message.refresh_from_db()
@@ -97,7 +97,7 @@ class SystemMessageTests(APITestCase):
             self.assertIn(self.user_2.email, call_args['to'])
             self.assertIn(self.user_3.email, call_args['to'])
 
-        with override_settings(SITE_ID=4):
+        with override_settings(EMAIL_SENDING_PRODUCTION=False):
             send_system_message.apply((system_message.id,))
 
             system_message.refresh_from_db()
@@ -118,7 +118,7 @@ class SystemMessageTests(APITestCase):
             message='Test message to project owners with published projects'
         )
 
-        with override_settings(SITE_ID=1):
+        with override_settings(EMAIL_SENDING_PRODUCTION=True):
             send_system_message.apply((system_message.id,))
 
             system_message.refresh_from_db()
@@ -133,7 +133,7 @@ class SystemMessageTests(APITestCase):
             self.assertNotIn(self.user_2.email, call_args['to'])
             self.assertIn(self.user_3.email, call_args['to'])
 
-        with override_settings(SITE_ID=3):
+        with override_settings(EMAIL_SENDING_PRODUCTION=False):
             send_system_message.apply((system_message.id,))
 
             system_message.refresh_from_db()
@@ -168,7 +168,7 @@ class SystemMessageTests(APITestCase):
             message_es='Mensaje a todos',
         )
 
-        with override_settings(SITE_ID=1):
+        with override_settings(EMAIL_SENDING_PRODUCTION=True):
             send_system_message.apply((system_message.id,))
 
             system_message.refresh_from_db()

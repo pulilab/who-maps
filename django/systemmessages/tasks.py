@@ -37,7 +37,7 @@ def send_system_message(system_message_id):
         if receivers:
 
             # limit emails on QA and PROD
-            if settings.SITE_ID in (3, 4):
+            if not settings.EMAIL_SENDING_PRODUCTION:
                 receivers = receivers[:1]
                 system_message.receivers_number = 1
             else:
