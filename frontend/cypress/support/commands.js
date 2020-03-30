@@ -40,3 +40,9 @@ Cypress.Commands.add('logIn', () => {
     cy.location('pathname', {timeout: timeOut}).should('include', '/dashboard');
   })
 });
+
+Cypress.Commands.add('randomString', (length) => {
+  return Array.from({length: length}, () => {
+    return String.fromCharCode(Math.floor(Math.random() * (65536)))
+  }).join('');
+});
