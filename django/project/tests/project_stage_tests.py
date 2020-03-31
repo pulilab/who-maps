@@ -57,8 +57,9 @@ class ProjectStageTests(SetupTests):
         del data['project']['stages']
         url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
         response = self.test_user_client.put(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
-        self.assertEqual(response.json(), {'project': {'stages': ['This field is required.']}})
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        resp_data = response.json()
+        self.assertNotIn('stages', resp_data['draft'])
 
         # publish with stages
         data['project']['stages'] = stages
