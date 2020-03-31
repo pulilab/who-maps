@@ -52,6 +52,12 @@ class PlatformSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=64, min_length=1)
 
 
+class StageSerializer(serializers.Serializer):
+    id = serializers.IntegerField(required=True)
+    date = serializers.CharField(required=False, max_length=10)
+    note = serializers.CharField(required=False, max_length=256)
+
+
 class InteroperabilityLinksSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     selected = serializers.BooleanField(required=False)
@@ -120,6 +126,9 @@ class ProjectPublishedSerializer(serializers.Serializer):
     interoperability_standards = serializers.ListField(
         child=serializers.IntegerField(), required=False, max_length=50)
 
+    # SECTION 5
+    stages = StageSerializer(many=True, required=False, allow_empty=True)
+
     class Meta:
         model = Project
 
@@ -142,7 +151,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
         instance.draft = validated_data
         instance.odk_etag = None
         instance.make_public_id(validated_data['country'])
-
         instance.save()
 
         return instance

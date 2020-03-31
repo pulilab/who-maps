@@ -48,6 +48,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__national_level_deployment",
         "project__data__government_investor",
         "project__approval__approved",
+        "project__data__stages",
     )
     list_values = (
         "project_id",
@@ -77,7 +78,8 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__coverage_second_level",
         "project__data__national_level_deployment",
         "donors",
-        "project__approval__approved"
+        "project__approval__approved",
+        "project__data__stages",
     )
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('project__name', 'organisation__name', 'country__name', 'country__region',
@@ -108,6 +110,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         gov: gov=0 (for false), gov=1&gov=2 (for true values, since there's two types of true)
         donor: eg: donor=1&donor=2
         approved: approved=0 (for not approved), approved=1 (for approved)
+        stage: eg: stage=1&stage=2
 
         ** FOUND IN FEATURE **
         found: include if present (defaults to exclude)
