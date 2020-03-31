@@ -53,11 +53,14 @@ export const getters = {
   getImplementingViewers: state => state.implementing_viewers.length === 0 ? [null] : state.implementing_viewers,
   getDonors: state => state.donors,
   getShadowDonors: (state, rootState, rootGetters) => {
-    return rootGetters.projects.projectStructure.health_focus_areas
-      .map(item => item.health_focus_areas)
-      .flat()
-      .filter(item => state.health_focus_areas.includes(item.id) && item.donors)
-      .map(item => item.donors);
+    if ('health_focus_areas' in rootGetters.projects.projectStructure) {
+      return rootGetters.projects.projectStructure.health_focus_areas
+        .map(item => item.health_focus_areas)
+        .flat()
+        .filter(item => state.health_focus_areas.includes(item.id) && item.donors)
+        .map(item => item.donors);
+    }
+    return [];
   },
   getImplementationDates: state => state.implementation_dates && new Date(state.implementation_dates),
   getLicenses: state => state.licenses,
