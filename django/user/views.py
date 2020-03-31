@@ -68,6 +68,10 @@ class CypressTestViewSet(ViewSet):
             project_approval_request_notification=False,
             role_request_notification=False,
         )
+
+        # delete all test projects for this user
+        profile.team.filter(name__icontains='test project').all().delete()
+
         data = {
             'url': f'{protocol}://{domain}/',
             'test_user': test_user.email,

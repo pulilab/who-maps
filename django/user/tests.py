@@ -658,6 +658,11 @@ class UserProfileTests(APITestCase):
         for key in ('url', 'test_user', 'org', 'country'):
             self.assertIn(key, data)
 
+        # user profile should have 0 projects
+        user = User.objects.get(email=data['test_user'])
+        profile = UserProfile.objects.get(user=user)
+        self.assertEqual(profile.team.count(), 0)
+
         # try to login with test user
         url = reverse("api_token_auth")
         login_data = {
