@@ -42,6 +42,21 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
 class CypressTestViewSet(ViewSet):
 
     def create_test_data_for_cypress(self, request):
+        # delete signup user
+        signup_user_email = 'cypress_user_signup@example.com'
+        try:
+            user = User.objects.get(email=signup_user_email)
+        except User.DoesNotExist:
+            pass
+        else:
+            try:
+                profile = UserProfile.objects.get(user=user)
+            except UserProfile.DoesNotExist:
+                pass
+            else:
+                profile.delete()
+            user.delete()
+
         site = get_current_site(request)
         protocol = 'https' if not settings.DEBUG else 'http'
         domain = 'localhost:3000' if site.id == 1 else 'localhost'
@@ -77,5 +92,6 @@ class CypressTestViewSet(ViewSet):
             'test_user': test_user.email,
             'org': org.name,
             'country': country.name,
+            'signup_username': signup_user_email,
         }
         return Response(status=status.HTTP_200_OK, data=data)
