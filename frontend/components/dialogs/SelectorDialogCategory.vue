@@ -85,6 +85,11 @@ export default {
     expandCollapse: {
       type: Boolean,
       default: false
+    },
+    initialToggle: {
+      type: Boolean,
+      default: false,
+      required: false
     }
   },
   data () {
@@ -112,6 +117,9 @@ export default {
     expandCollapse () {
       this.categoryToggled = this.expandCollapse;
     }
+  },
+  mounted() {
+    this.categoryToggled = this.initialToggle;
   },
   methods: {
     filterChange (item) {
