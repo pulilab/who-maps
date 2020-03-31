@@ -42,20 +42,23 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
 class CypressTestViewSet(ViewSet):
 
     def create_test_data_for_cypress(self, request):
-        # delete signup user
-        signup_user_email = 'cypress_user_signup@example.com'
-        try:
-            user = User.objects.get(email=signup_user_email)
-        except User.DoesNotExist:
-            pass
-        else:
+
+        def _delete_signup_user(user_email):
             try:
-                profile = UserProfile.objects.get(user=user)
-            except UserProfile.DoesNotExist:
+                user_obj = User.objects.get(email=user_email)
+            except User.DoesNotExist:
                 pass
-            else:
-                profile.delete()
-            user.delete()
+            else:  # pragma: no cover
+                try:
+                    profile_obj = UserProfile.objects.get(user=user_obj)
+                except UserProfile.DoesNotExist:
+                    pass
+                else:
+                    profile_obj.delete()
+                user_obj.delete()
+
+        signup_user_email = 'cypress_user_signup@example.com'
+        _delete_signup_user(signup_user_email)
 
         site = get_current_site(request)
         protocol = 'https' if not settings.DEBUG else 'http'
