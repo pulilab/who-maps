@@ -90,7 +90,7 @@ export const getters = {
   getDonorsAnswers: state => state.donors_answers ? [...state.donors_answers] : [],
   getDonorsAnswerDetails: (state, getters) => id => getters.getDonorsAnswers.find(da => da.question_id === id),
   getAllDonorsAnswers: (state, getters, rootState, rootGetters) => {
-    const donors = getters.getDonors
+    const donors = [...new Set([...getters.getDonors, ...getters.getShadowDonors])]
       .map(d => rootGetters['system/getDonorDetails'](d))
       .filter(d => d.donor_questions);
     if (donors) {
@@ -256,6 +256,7 @@ export const actions = {
     commit('SET_DONORS', value);
   },
   setShadowDonors ({ commit }, value) {
+    value.forEach(d => dispatch('system/loadDonorDetails', d, { root: true }));
     commit('SET_SHADOW_DONORS', value);
   },
   setImplementationDates ({ commit }, value) {
@@ -543,6 +544,7 @@ export const mutations = {
     state.implementing_team = get(project, 'implementing_team', []);
     state.implementing_viewers = get(project, 'implementing_viewers', []);
     state.donors = get(project, 'donors', []);
+    state.shadow_donors = get(project, 'shadow_donors', []);
     state.implementation_dates = get(project, 'implementation_dates', '');
     state.licenses = get(project, 'licenses', []);
     state.repository = get(project, 'repository', '');
