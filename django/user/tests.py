@@ -651,14 +651,14 @@ class UserProfileTests(APITestCase):
         self.assertIn('role_request_notification', data)
 
     def test_create_cypress_test_data(self):
-        self.assertEqual(User.objects.filter(email='cypress_user_signup@example.com').count(), 0)
-
         url = reverse('cypress-test-data')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         data = response.json()
         for key in ('url', 'test_user', 'org', 'country', 'signup_username'):
             self.assertIn(key, data)
+
+        self.assertEqual(User.objects.filter(email=data['signup_username']).count(), 0)
 
         # user profile should have 0 projects
         user = User.objects.get(email=data['test_user'])
