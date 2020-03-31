@@ -29,6 +29,7 @@
             prop="email"
           >
             <el-input
+              id="email"
               v-model="signupForm.email"
             />
           </el-form-item>
@@ -38,6 +39,7 @@
             prop="password1"
           >
             <el-input
+              id="password"
               v-model="signupForm.password1"
               type="password"
             />
@@ -48,6 +50,7 @@
             prop="password2"
           >
             <el-input
+              id="passwordAgain"
               v-model="signupForm.password2"
               type="password"
             />
