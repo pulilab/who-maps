@@ -127,7 +127,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
         child=serializers.IntegerField(), required=False, max_length=50)
 
     # SECTION 5
-    stages = StageSerializer(many=True, required=True, allow_empty=False)
+    stages = StageSerializer(many=True, required=False, allow_empty=True)
 
     class Meta:
         model = Project
@@ -191,9 +191,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
 
     # SECTION 4
     interoperability_links = DraftInteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
-
-    # SECTION 5
-    stages = StageSerializer(many=True, required=False, allow_empty=True)
 
     # ODK DATA
     odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)

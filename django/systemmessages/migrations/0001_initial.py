@@ -8,6 +8,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('project', '0068_auto_20200330_0934'),
+        ('search', '0019_update_search'),
     ]
 
     operations = [
