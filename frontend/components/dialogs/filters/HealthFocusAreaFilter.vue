@@ -7,7 +7,7 @@
     >
       <el-input
         class="ma-i"
-        :placeholder="$gettext('Filter health focus areas') | translate"
+        :placeholder="$gettext('Type name (eg: COVID-19)') | translate"
         prefix-icon="el-icon-search"
         v-model="search"
         clearable
