@@ -21,6 +21,7 @@
           child-name="health_focus_areas"
           name-prop="name"
           expandCollapse
+          alwaysExpandCategory
           :categorySelectable="true"
           @change="filterChange"
         />
