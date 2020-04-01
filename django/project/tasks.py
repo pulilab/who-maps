@@ -425,7 +425,7 @@ def send_draft_only_reminders():
             email_mapping[profile.language].append(profile.user.email)
 
         for language, email_list in email_mapping.items():
-            send_mail_wrapper(subject=_(f"'{p.name}' is only a draft. Please consider publishing it."),
+            send_mail_wrapper(subject=_(f"Complete your project in the Digital Health Atlas ({p.name})"),
                               email_type='draft_reminder',
                               to=email_list,
                               language=language,
