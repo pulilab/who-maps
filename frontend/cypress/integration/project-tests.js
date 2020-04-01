@@ -18,7 +18,6 @@ describe('Create new project', function() {
     const fields = [
       // General overview
       {htmlType: 'input', data: "name", maxLength: 10},  //128
-      // {specificSelector: "div[class=\"el-select OrganisationSelector\"]", maxLength: 128, specificValue: Cypress.env('testData').org},  TODO fix it later
       {htmlType: 'textarea', data: "geographic_scope", maxLength: 5},  //1024
       {htmlType: 'textarea', data: "implementation_overview", maxLength: 10},  //1024
       {htmlType: 'input', data: "contact_name", maxLength: 10},  //256
