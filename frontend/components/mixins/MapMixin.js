@@ -28,7 +28,8 @@ const MapMixin = {
       nationalProjects: 'landing/getSelectedCountryNationalProjects',
       mapProjects: 'landing/getProjectsMap',
       currentZoom: 'landing/getCurrentZoom',
-      getSearched: 'landing/getSearched'
+      getSearched: 'landing/getSearched',
+      getIsCountry: 'landing/getIsCountry'
     }),
     isSearched () {
       return !!this.getSearched;
@@ -99,6 +100,7 @@ const MapMixin = {
           const projects = cluster.getAllChildMarkers().reduce((a, c) => a + c.options.projects, 0);
           const html = `<span>${projects}</span>`;
           const classes = ['CountryClusterIcon'];
+          console.log(projects);
           if (projects === 0) {
             classes.push('EmptyCluster');
           }
