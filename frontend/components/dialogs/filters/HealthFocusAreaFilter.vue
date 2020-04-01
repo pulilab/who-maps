@@ -22,6 +22,7 @@
           name-prop="name"
           expandCollapse
           initialToggle
+          arrow-right
           :categorySelectable="true"
           @change="filterChange"
         />
