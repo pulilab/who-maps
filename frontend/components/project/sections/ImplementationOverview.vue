@@ -18,7 +18,6 @@
             What is the health focus area(s) addressed by the DHI?
           </translate>
         </template>
-
         <health-focus-areas-selector
           v-model="health_focus_areas"
           v-validate="rules.health_focus_areas"
@@ -304,6 +303,7 @@
           v-validate="rules.donors"
           data-vv-name="donors"
           data-vv-as="Investors"
+          :shadowDonors="shadow_donors"
         />
       </custom-required-form-item>
     </collapsible-card>
@@ -381,7 +381,8 @@ export default {
         300,
         true
       ],
-      donors: ['project', 'getDonors', 'setDonors', 0]
+      donors: ['project', 'getDonors', 'setDonors', 0],
+      shadow_donors: ['project', 'getShadowDonors', 'setShadowDonors', 0]
     }),
     healthWorkers: {
       get () {

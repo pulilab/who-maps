@@ -20,6 +20,7 @@
       >
         <selector-dialog-column
           :header="category.name"
+          expandCollapse
           @handleToggleExpand="handleToggleExpand"
         >
           <selector-dialog-category

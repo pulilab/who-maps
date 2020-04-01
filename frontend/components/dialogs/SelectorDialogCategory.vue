@@ -85,6 +85,11 @@ export default {
     expandCollapse: {
       type: Boolean,
       default: false
+    },
+    initialToggle: {
+      type: Boolean,
+      default: false,
+      required: false
     }
   },
   data () {
@@ -111,6 +116,13 @@ export default {
   watch: {
     expandCollapse () {
       this.categoryToggled = this.expandCollapse;
+    }
+  },
+  mounted() {
+    if (this.items.find(item => this.values.includes(item.id))) {
+      this.categoryToggled = true;
+    } else {
+      this.categoryToggled = this.initialToggle;
     }
   },
   methods: {
