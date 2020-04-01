@@ -8,7 +8,7 @@
         <filter-switch
           :value="project_approval_request_notification"
           :label="$gettext('Weekly project approval status (Y/N)') | translate"
-          :tooltip="$gettext('Lorem ipsum') | translate"
+          :tooltip="$gettext('If your country choses to approve/verify projects, this option will provide you a weekly digest of the projects awaiting feedback.  You can return to your profile at any time and update this selection.') | translate"
           @change="$emit('update:project_approval_request_notification', $event)"
         />
       </div>
@@ -28,7 +28,7 @@
         <filter-switch
           :value="role_request_notification"
           :label="$gettext('User role requests') | translate"
-          :tooltip="$gettext('Lorem ipsum') | translate"
+          :tooltip="$gettext('If you are not part of a Ministry of Health or Investor team, select this option.  You will still have full access to all standard data within the DHA, and be able to publish and add all new projects for immediate publication.') | translate"
           @change="$emit('update:role_request_notification', $event)"
         />
       </div>
