@@ -303,7 +303,6 @@
           v-validate="rules.donors"
           data-vv-name="donors"
           data-vv-as="Investors"
-          :shadowDonors="shadow_donors"
         />
       </custom-required-form-item>
     </collapsible-card>

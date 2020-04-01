@@ -62,6 +62,16 @@ export const getters = {
     }
     return [];
   },
+  getAllShadowDonors: (state, rootState, rootGetters) => {
+    if ('health_focus_areas' in rootGetters.projects.projectStructure) {
+      return rootGetters.projects.projectStructure.health_focus_areas
+        .map(item => item.health_focus_areas)
+        .flat()
+        .filter(item => item.donors)
+        .map(item => item.donors);
+    }
+    return [];
+  },
   getImplementationDates: state => state.implementation_dates && new Date(state.implementation_dates),
   getLicenses: state => state.licenses,
   getRepository: state => state.repository,

@@ -43,22 +43,18 @@ export default {
     disabled: {
       type: Boolean,
       default: false
-    },
-    shadowDonors: {
-      type: Array,
-      default: () => [],
-      required: false
-    },
+    }
   },
   computed: {
     ...mapGetters({
-      donors: 'system/getDonors'
+      donors: 'system/getDonors',
+      shadows: 'project/getAllShadowDonors'
     }),
     filtered () {
-      return this.donors.filter((item) => !this.shadowDonors.includes(item.id))
+      return this.donors.filter((item) => !this.shadows.includes(item.id))
     },
     showFiltered () {
-      return this.value.filter((elm) => !this.shadowDonors.includes(elm))
+      return this.value.filter((elm) => !this.shadows.includes(elm))
     }
   },
   methods: {
