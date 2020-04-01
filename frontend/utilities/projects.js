@@ -25,9 +25,11 @@ export const fetchProjectData = async (store, params, error) => {
 };
 
 export const epochCheck = (date) => {
-  const secondsSinceEpoch = Math.round(date.getTime() / 1000);
-  if (secondsSinceEpoch === 0) {
-    return new Date();
+  if (date) {
+    const secondsSinceEpoch = Math.round(date.getTime() / 1000);
+    if (secondsSinceEpoch === 0) {
+      return new Date();
+    }
   }
   return date;
 };
