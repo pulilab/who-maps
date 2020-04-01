@@ -190,7 +190,7 @@ class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
 
 class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer):
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
-    documents = ArchitectureRoadMapDocumentSerializer(many=True, read_only=True)
+    documents = serializers.SerializerMethodField()
     country_questions = serializers.SerializerMethodField()
     map_version = serializers.SerializerMethodField()
     map_files = MapFileSerializer(many=True, read_only=True)
@@ -236,6 +236,11 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
     def get_country_questions(self, obj):
         queryset = CountryCustomQuestion.objects.filter(country_id=obj.id)
         return CountryCustomQuestionSerializer(queryset, many=True, read_only=True).data
+
+    @staticmethod
+    def get_documents(obj):
+        queryset = ArchitectureRoadMapDocument.objects.filter(country_id=obj.id)
+        return ArchitectureRoadMapDocumentSerializer(queryset, many=True, read_only=True).data
 
 
 class AdminCountrySerializer(SuperAdminCountrySerializer):
