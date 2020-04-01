@@ -9,7 +9,8 @@
       class="TopBarInner"
     >
       <el-col class="LogoHolder">
-        <nuxt-link :to="localePath({name: 'organisation', params: $route.params})">
+        <!--<nuxt-link :to="localePath({name: 'organisation', params: $route.params})">-->
+        <nuxt-link :to="localePath({name: 'organisation', params: { organisation: '-' }})">
           <el-row
             type="flex"
             align="middle"
@@ -134,8 +135,22 @@
               </el-col>
             </el-row>
           </el-col>
-          <el-col>
+          <el-col v-if="!customOrganisation || countrySpecific">
             <country-chooser />
+          </el-col>
+          <el-col
+            v-else
+            class="CountrySpecificMenu"
+          >
+            <div>
+              <nuxt-link
+                key="whoLandingBtn"
+                :to="localePath({name: 'organisation', params: {organisation: landingData.code}})"
+                class="HeaderBtn"
+              >
+                {{ landingData.name }}
+              </nuxt-link>
+            </div>
           </el-col>
         </el-row>
       </el-col>
@@ -171,7 +186,8 @@ export default {
   computed: {
     ...mapGetters({
       user: 'user/getProfile',
-      landingData: 'landing/getLandingPageData'
+      landingData: 'landing/getLandingPageData',
+      isCountry: 'landing/getIsCountry'
     }),
     customOrganisation () {
       return this.landingData !== null;

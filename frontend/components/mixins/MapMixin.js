@@ -28,7 +28,8 @@ const MapMixin = {
       nationalProjects: 'landing/getSelectedCountryNationalProjects',
       mapProjects: 'landing/getProjectsMap',
       currentZoom: 'landing/getCurrentZoom',
-      getSearched: 'landing/getSearched'
+      getSearched: 'landing/getSearched',
+      getIsCountry: 'landing/getIsCountry'
     }),
     isSearched () {
       return !!this.getSearched;
