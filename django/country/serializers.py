@@ -301,7 +301,7 @@ class SuperAdminDonorSerializer(UpdateAdminMixin, serializers.ModelSerializer):
         return UserProfileSerializer(data, many=True).data
 
     def get_donor_questions(self, obj):
-        queryset = DonorCustomQuestion.objects.filter(donor_id=obj.id).exclude(private=True)
+        queryset = DonorCustomQuestion.objects.filter(donor_id=obj.id)
         return DonorCustomQuestionSerializer(queryset, many=True, read_only=True).data
 
 
