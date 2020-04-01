@@ -48,6 +48,13 @@ describe('Create new project', function() {
       }
     });
 
+    // fill org
+    cy.get("div[class=\"el-select OrganisationSelector\"]").as('orgInput');
+    cy.get('@orgInput').type(Cypress.env('testData').org);
+    cy.wait(500);  // it is necessary here to wait until the possibilities appear
+    cy.get('@orgInput').type("{enter}");
+
+
     // new team mebers
     cy.get("div[data-vv-name=\"viewers\"]").type(Cypress.env('testData').test_user).type("{downarrow}{enter}{esc}");
 
