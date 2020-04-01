@@ -2,19 +2,21 @@
   <div class="SelectorDialogColumn">
     <div class="Header">
       <span v-show="!headerSelectable">{{ header }}</span>
-      <span
-        class="toggle-expand primary"
-        @click="handleToggleExpand(false)"
-      >
-        <small><translate>Collapse</translate></small>
-      </span>
-      <span class="toggle-expand divider">/</span>
-      <span
-        class="toggle-expand primary"
-        @click="handleToggleExpand(true)"
-      >
-        <small><translate>Expand</translate></small>
-      </span>
+      <template v-if="expandCollapse">
+        <span
+          class="toggle-expand primary"
+          @click="handleToggleExpand(false)"
+        >
+          <small><translate>Collapse</translate></small>
+        </span>
+        <span class="toggle-expand divider">/</span>
+        <span
+          class="toggle-expand primary"
+          @click="handleToggleExpand(true)"
+        >
+          <small><translate>Expand</translate></small>
+        </span>
+      </template>
       <el-checkbox
         v-show="headerSelectable"
         :value="selected"
@@ -39,7 +41,13 @@ export default {
     },
     headerSelectable: {
       type: Boolean,
-      default: false
+      default: false,
+      required: false
+    },
+    expandCollapse: {
+      type: Boolean,
+      default: false,
+      required: false
     },
     selected: {
       type: Boolean,
