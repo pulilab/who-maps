@@ -135,9 +135,19 @@
               </el-col>
             </el-row>
           </el-col>
-          <el-col v-if="!customOrganisation || countrySpecific">
-            <country-chooser />
-          </el-col>
+          <template v-if="!customOrganisation || countrySpecific">
+            <el-col>
+              <nuxt-link
+                :to="localePath({name: 'organisation', params: {organisation: 'covid-19'}})"
+                class="HeaderBtn CovidLink"
+              >
+                COVID-19
+              </nuxt-link>
+            </el-col>
+            <el-col >
+              <country-chooser />
+            </el-col>
+          </template>
           <el-col
             v-else
             class="CountrySpecificMenu"
@@ -222,6 +232,11 @@ export default {
       height: @topBarHeight;
       background-color: @colorWhite;
       align-items: stretch;
+    }
+    .CovidLink {
+      margin-left: -6px !important;
+      margin-right: 10px !important;
+      white-space: nowrap;
     }
 
     .LogoHolder {
