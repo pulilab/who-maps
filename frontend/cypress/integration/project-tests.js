@@ -66,9 +66,6 @@ describe('Create new project', function() {
       }
     )
 
-    //government contribution - check the first radio button
-    cy.get("div[data-vv-name=\"government_investor\"]").children().first().click();
-
     // choose Sub-national
     cy.contains('Sub-national').click();
 
@@ -83,6 +80,9 @@ describe('Create new project', function() {
 
     // clients
     cy.get("input[data-vv-name=\"clients\"]").type("2000000000");
+
+    //government contribution - check the first radio button
+    cy.get("div[data-vv-name=\"government_investor\"]").children().first().click();
 
 
     // technology overview: check all checkboxes
