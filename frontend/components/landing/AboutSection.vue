@@ -44,6 +44,12 @@
                 alt="UNFPA"
               >
             </div>
+            <div class="Partner">
+              <img
+                src="/static/partners/unicef-logo-vertical.png"
+                alt="UNICEF"
+              >
+            </div>
           </div>
         </div>
         <div
