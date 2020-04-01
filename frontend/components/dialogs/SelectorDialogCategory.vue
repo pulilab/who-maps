@@ -119,7 +119,11 @@ export default {
     }
   },
   mounted() {
-    this.categoryToggled = this.initialToggle;
+    if (this.items.find(item => this.values.includes(item.id))) {
+      this.categoryToggled = true;
+    } else {
+      this.categoryToggled = this.initialToggle;
+    }
   },
   methods: {
     filterChange (item) {
