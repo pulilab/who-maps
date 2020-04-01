@@ -54,7 +54,7 @@ describe('Create new project', function() {
     cy.get('@orgInput').type("{enter}");
 
 
-    // new team mebers
+    // new team members
     cy.get("div[data-vv-name=\"viewers\"]").type(Cypress.env('testData').test_user).type("{downarrow}{enter}{esc}");
 
     // Implementation overview selects - select the first options
