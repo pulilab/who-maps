@@ -30,7 +30,6 @@ describe('Create new project', function() {
       {htmlType: 'input', data: "repository",  specificValue: "http://sme_doc.example.com"},
       {htmlType: 'input', data: "mobile_application",  specificValue: "http://demo_app.example.com"},
       {htmlType: 'input', data: "wiki",  specificValue: "http://software_wiki.example.com"},
-      // Interoperability
     ];
 
     fields.forEach(function (field) {
