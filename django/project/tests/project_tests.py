@@ -1327,7 +1327,7 @@ class ProjectTests(SetupTests):
         send_draft_only_reminders.apply()
 
         call_args_list = send_email.call_args_list[0][1]
-        self.assertEqual(call_args_list['subject'], f"'{project_name}' is only a draft. Please consider publishing it.")
+        self.assertEqual(call_args_list['subject'], f"Complete your project in the Digital Health Atlas '{p.name}'")
         self.assertEqual(call_args_list['email_type'], 'draft_reminder')
         self.assertIn('test_user@gmail.com', call_args_list['to'])
         self.assertEqual(call_args_list['context']['project_id'], p.id)
