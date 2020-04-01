@@ -95,11 +95,13 @@ export default {
     donorCustomAnswersErrorHandling (errors) {
       const result = [];
       for (const key in errors) {
-        result.push(...errors[key].map((e, index) => ({
-          error: e,
-          index,
-          donor_id: +key
-        })));
+        if (Array.isArray(errors) && errors[key]) {
+          result.push(...errors[key].map((e, index) => ({
+            error: e,
+            index,
+            donor_id: +key
+          })));
+        }
       }
       this.customDonorsErrors = result;
     },
