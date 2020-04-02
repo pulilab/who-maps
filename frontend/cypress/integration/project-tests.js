@@ -99,7 +99,7 @@ describe('Create new project', function() {
       }
     )
 
-    cy.contains('Save draft').click({force: true});
+    cy.get("button").contains('Save draft').click({force: true})
     cy.location('pathname', {timeout: 5000}).should('include', '/edit');
 
   })
