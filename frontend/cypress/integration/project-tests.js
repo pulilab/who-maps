@@ -102,5 +102,8 @@ describe('Create new project', function() {
     cy.get("button").contains('Save draft').click({force: true})
     cy.location('pathname', {timeout: 5000}).should('include', '/edit');
 
+    // close popup after saving draft
+    cy.get("button").contains('Close').click({force: true})
+
   })
 });
