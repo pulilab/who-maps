@@ -50,7 +50,7 @@ describe('Create new project', function() {
 
 
     // new team members
-    cy.get("div[data-vv-name=\"viewers\"]").type(Cypress.env('testData').test_user).type("{downarrow}{enter}{esc}");
+    cy.get("div[data-vv-name=\"viewers\"]").type(Cypress.env('testData').test_user + "{downarrow}{enter}{esc}");
 
     // Implementation overview selects - select the first options
     const selectors = ["health_focus_areas", "hsc_challenges", "id", "his_bucket", "donors"];
