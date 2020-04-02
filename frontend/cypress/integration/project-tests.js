@@ -25,19 +25,14 @@ describe('Create new project', function() {
       //Implementation overview
       {htmlType: 'input', data: "implementing_partners_0", maxLength: 10},  //256
       // Technology overview
-      {specificSelector: "input[id=\"implementationDate\"]", specificValue: implementationDateString},
+      {htmlType: 'div', data: "implementation_dates",  specificValue: implementationDateString},
       {htmlType: 'input', data: "repository",  specificValue: "http://sme_doc.example.com"},
       {htmlType: 'input', data: "mobile_application",  specificValue: "http://demo_app.example.com"},
       {htmlType: 'input', data: "wiki",  specificValue: "http://software_wiki.example.com"},
     ];
 
     fields.forEach(function (field) {
-      let sel = ""
-      if ('specificSelector' in field){
-        sel = field.specificSelector;
-      } else {
-        sel = field.htmlType + "[data-vv-name='" + field.data + "']";
-      }
+      let sel = field.htmlType + "[data-vv-name='" + field.data + "']";
       if ('specificValue' in field){
         cy.get(sel).type(field.specificValue, typeOptions);
       } else {
