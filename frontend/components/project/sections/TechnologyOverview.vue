@@ -20,7 +20,6 @@
         </template>
 
         <safe-date-picker
-          id="implementationDate"
           ref="datePicker"
           v-model="implementation_dates"
           v-validate="rules.implementation_dates"
