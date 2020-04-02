@@ -1,5 +1,5 @@
 <template>
-  <div :class="['DhaMap', 'LandingMap', {'Searched': isSearched}]">
+  <div :class="['DhaMap', 'LandingMap', {'Searched': isSearched}, {'HideIcons': getIsCountry === false}]">
     <div v-show="!getLoaded" class="Overlay">
       <div class="OverlayContent">
         <Spinner size="32" />
@@ -111,6 +111,13 @@ export default {
       font-size: 14px;
       letter-spacing: 0;
       line-height: 16px;
+    }
+  }
+
+  .HideIcons {
+    .CountryClusterIcon.EmptyCluster, .CountryCenterIcon.EmptyMarker {
+      display: none;
+      pointer-events: none;
     }
   }
 </style>
