@@ -15,7 +15,7 @@ describe('Create new project', function() {
 
     const typeOptions = {delay: 0};
 
-    const fields = [
+    const simpleInputFields = [
       // General overview
       {htmlType: 'input', data: "name", maxLength: 10},  //128
       {htmlType: 'textarea', data: "geographic_scope", maxLength: 5},  //1024
@@ -31,7 +31,7 @@ describe('Create new project', function() {
       {htmlType: 'input', data: "wiki",  specificValue: "http://software_wiki.example.com"},
     ];
 
-    fields.forEach(function (field) {
+    simpleInputFields.forEach(function (field) {
       let sel = field.htmlType + "[data-vv-name='" + field.data + "']";
       if ('specificValue' in field){
         cy.get(sel).type(field.specificValue, typeOptions);
