@@ -47,6 +47,11 @@ Cypress.Commands.add('logIn', () => {
   })
 });
 
+Cypress.Commands.add('logOut', () => {
+  cy.get("svg[data-icon=\"user-circle\"]").click({force: true});
+  cy.contains("Logout").click();
+});
+
 Cypress.Commands.add('randomString', (length) => {
   return Array.from({length: length}, () => {
     return unescape(String.fromCharCode(Math.floor(Math.random() * (32768))))
