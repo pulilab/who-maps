@@ -17,7 +17,7 @@ describe('Create new project', function() {
 
     const simpleInputFields = [
       // General overview
-      {htmlType: 'input', data: "name", maxLength: 10},  //128
+      {htmlType: 'input', data: "name", maxLength: 15, specificValue: "Test Project", extendSpecValue: true},  //128
       {htmlType: 'textarea', data: "geographic_scope", maxLength: 5},  //1024
       {htmlType: 'textarea', data: "implementation_overview", maxLength: 10},  //1024
       {htmlType: 'input', data: "contact_name", maxLength: 10},  //256
@@ -34,7 +34,13 @@ describe('Create new project', function() {
     simpleInputFields.forEach(function (field) {
       let sel = field.htmlType + "[data-vv-name='" + field.data + "']";
       if ('specificValue' in field){
-        cy.get(sel).type(field.specificValue, typeOptions);
+        if ("extendSpecValue" in field && field.extendSpecValue === true){
+          cy.randomString(field.maxLength - field.specificValue.length).then((response) => {
+            cy.get(sel).type(field.specificValue + response, typeOptions);
+          })
+        } else {
+          cy.get(sel).type(field.specificValue, typeOptions);
+        }
       } else {
         cy.randomString(field.maxLength).then((response) => {
           cy.get(sel).type(response, typeOptions);
@@ -92,7 +98,6 @@ describe('Create new project', function() {
         cy.wrap($el).type('http://test_link.example.com', typeOptions);
       }
     )
-
     // cy.contains('Save draft').click();
 
   })
