@@ -144,7 +144,7 @@
                 COVID-19
               </nuxt-link>
             </el-col>
-            <el-col >
+            <el-col>
               <country-chooser />
             </el-col>
           </template>

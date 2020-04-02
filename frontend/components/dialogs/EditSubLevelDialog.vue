@@ -1,6 +1,5 @@
 <template>
   <el-dialog
-    v-if="visible"
     :visible.sync="visible"
     :title="$gettext('Edit Sub Level') | translate"
     modal

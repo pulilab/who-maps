@@ -265,7 +265,7 @@ export const actions = {
     value.forEach(d => dispatch('system/loadDonorDetails', d, { root: true }));
     commit('SET_DONORS', value);
   },
-  setShadowDonors ({ commit }, value) {
+  setShadowDonors ({ commit, dispatch }, value) {
     value.forEach(d => dispatch('system/loadDonorDetails', d, { root: true }));
     commit('SET_SHADOW_DONORS', value);
   },
@@ -339,7 +339,7 @@ export const actions = {
   async createProject ({ getters, dispatch }) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
-    draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])]
+    draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])];
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.post(`api/projects/draft/${draft.country}/`, parsed);
@@ -351,7 +351,7 @@ export const actions = {
   async saveDraft ({ getters, dispatch }, id) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
-    draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])]
+    draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])];
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country}/`, parsed);
@@ -361,7 +361,7 @@ export const actions = {
   async publishProject ({ getters, dispatch, commit }, id) {
     dispatch('setLoading', 'publish');
     const draft = getters.getProjectData;
-    draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])]
+    draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])];
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.put(`/api/projects/publish/${id}/${draft.country}/`, parsed);
