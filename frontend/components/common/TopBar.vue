@@ -256,7 +256,7 @@ export default {
         width: 100%;
 
         img {
-          height: 24px;
+          height: 32px;
           transform: translateY(2px);
         }
       }
