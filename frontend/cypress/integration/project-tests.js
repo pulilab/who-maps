@@ -17,13 +17,13 @@ describe('Create new project', function() {
 
     const simpleInputFields = [
       // General overview
-      {htmlType: 'input', data: "name", maxLength: 15, specificValue: "Test Project", extendSpecValue: true},  //128
-      {htmlType: 'textarea', data: "geographic_scope", maxLength: 5},  //1024
-      {htmlType: 'textarea', data: "implementation_overview", maxLength: 10},  //1024
-      {htmlType: 'input', data: "contact_name", maxLength: 10},  //256
-      {htmlType: 'input', data: "contact_email", maxLength: 10, specificValue: 'test@example.com'},  //256
+      {htmlType: 'input', data: "name", maxLength: 128, specificValue: "Test Project", extendSpecValue: true},
+      {htmlType: 'textarea', data: "geographic_scope", maxLength: 1024, specificValue: "Geographic scope", extendSpecValue: true},
+      {htmlType: 'textarea', data: "implementation_overview", maxLength: 1024, specificValue: "Overview", extendSpecValue: true},
+      {htmlType: 'input', data: "contact_name", maxLength: 256, specificValue: "Contact name", extendSpecValue: true},
+      {htmlType: 'input', data: "contact_email", maxLength: 256, specificValue: 'test@example.com'},
       //Implementation overview
-      {htmlType: 'input', data: "implementing_partners_0", maxLength: 10},  //256
+      {htmlType: 'input', data: "implementing_partners_0", maxLength: 256, specificValue: "Partner", extendSpecValue: true},
       // Technology overview
       {htmlType: 'div', data: "implementation_dates",  specificValue: implementationDateString},
       {htmlType: 'input', data: "repository",  specificValue: "http://sme_doc.example.com"},
