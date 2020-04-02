@@ -3,6 +3,10 @@ describe('Create new project', function() {
     cy.logIn();
   })
 
+  afterEach(function () {
+    cy.logOut();
+  })
+
   it('Create Project with max field lengths', function() {
     cy.log('Create Project with max field lengths');
 
