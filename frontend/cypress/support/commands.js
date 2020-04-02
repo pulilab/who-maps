@@ -49,6 +49,6 @@ Cypress.Commands.add('logIn', () => {
 
 Cypress.Commands.add('randomString', (length) => {
   return Array.from({length: length}, () => {
-    return String.fromCharCode(Math.floor(Math.random() * (65536)))
+    return unescape(String.fromCharCode(Math.floor(Math.random() * (32768))))
   }).join('');
 });
