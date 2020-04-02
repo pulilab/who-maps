@@ -98,7 +98,9 @@ describe('Create new project', function() {
         cy.wrap($el).type('http://test_link.example.com', typeOptions);
       }
     )
-    // cy.contains('Save draft').click();
+
+    cy.contains('Save draft').click({force: true});
+    cy.location('pathname', {timeout: 5000}).should('include', '/edit');
 
   })
 });
