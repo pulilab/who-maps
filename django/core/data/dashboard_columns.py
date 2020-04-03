@@ -20,5 +20,7 @@ DASHBOARD_COLUMNS = [
     {'id': 9,
      'label': _('Geographic scope')},
     {'id': 10,
-     'label': _('Health Focus Areas')}
+     'label': _('Health Focus Areas')},
+    {'id': 11,
+     'label': _('Stage')}
 ]

@@ -1,5 +1,5 @@
 <template>
-  <div :class="['DhaMap', 'LandingMap', {'Searched': isSearched}]">
+  <div :class="['DhaMap', 'LandingMap', {'Searched': isSearched}, {'HideIcons': getIsCountry === false}]">
     <no-ssr>
       <l-map
         ref="mainMap"
@@ -84,5 +84,12 @@ export default {
   .LandingMap {
     height: @landingMapHeight;
     min-height: @landingMapMinHeight;
+  }
+
+  .HideIcons {
+    .CountryClusterIcon.EmptyCluster, .CountryCenterIcon.EmptyMarker {
+      display: none;
+      pointer-events: none;
+    }
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <lazy-el-select
-    :value="value"
+    :value="showFiltered"
     :placeholder="$gettext('Type and select a name') | translate"
     :disabled="disabled"
     multiple
@@ -11,7 +11,7 @@
     @change="changeHandler"
   >
     <el-option
-      v-for="donor in donors"
+      v-for="donor in filtered"
       :key="donor.id"
       :label="donor.name"
       :value="donor.id"
@@ -47,8 +47,15 @@ export default {
   },
   computed: {
     ...mapGetters({
-      donors: 'system/getDonors'
-    })
+      donors: 'system/getDonors',
+      shadows: 'project/getAllShadowDonors'
+    }),
+    filtered () {
+      return this.donors.filter((item) => !this.shadows.includes(item.id))
+    },
+    showFiltered () {
+      return this.value.filter((elm) => !this.shadows.includes(elm))
+    }
   },
   methods: {
     changeHandler (value) {

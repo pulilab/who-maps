@@ -776,7 +776,16 @@ class ProjectTests(SetupTests):
                                        {"id": 3, "selected": True, "link": "http://example.org"}],
             "interoperability_standards": [1],
             "start_date": str(datetime.today().date()),
-            "end_date": str(datetime.today().date())
+            "end_date": str(datetime.today().date()),
+            "stages": [{
+                "id": 1,
+                "date": str(datetime.today().date()),
+                "note": "stage 1 note",
+            }, {
+                "id": 2,
+                "date": str(datetime.today().date()),
+                "note": "stage 2 note",
+            }],
         }}
 
         # Create project draft
@@ -1157,6 +1166,11 @@ class ProjectTests(SetupTests):
             "donors": [self.d1.id],
             "hsc_challenges": [1, 2],
             "start_date": str(datetime.today().date()),
+            "stages": [{
+                "id": 1,
+                "date": str(datetime.today().date()),
+                "note": "stage 1 note"
+            }],
         }}
 
         url = reverse("project-create", kwargs={"country_id": country.id})
@@ -1313,7 +1327,7 @@ class ProjectTests(SetupTests):
         send_draft_only_reminders.apply()
 
         call_args_list = send_email.call_args_list[0][1]
-        self.assertEqual(call_args_list['subject'], f"'{project_name}' is only a draft. Please consider publishing it.")
+        self.assertEqual(call_args_list['subject'], f"Complete your project in the Digital Health Atlas '{p.name}'")
         self.assertEqual(call_args_list['email_type'], 'draft_reminder')
         self.assertIn('test_user@gmail.com', call_args_list['to'])
         self.assertEqual(call_args_list['context']['project_id'], p.id)

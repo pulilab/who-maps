@@ -141,7 +141,7 @@
           <div class="Switch-container">
             <filter-switch
               v-model="roadmapEnabled"
-              :label="$gettext('Digital Health Reference Documents') | translate"
+              :label="$gettext('National Digital Health Reference Documents') | translate"
               :tooltip="$gettext('These documents may include a National Digital Health Vision, Action Plan,Implementation Plan, Digital Health Strategy, or Reference Architecture.') | translate"
             />
             <label
@@ -231,12 +231,12 @@
       <div class="Footer">
         <p>
           <fa icon="info-circle" />
-          <translate>About these documents: Upload any reference policies, architecture blueprints or strategy documents which could be helpful to investors and implementation partners working in your country.</translate>
+          <translate>About these documents: Upload your national or regional reference policies, architecture blueprints or strategy documents which could be helpful to investors and implementation partners working in your country.</translate>
         </p>
         <p>
           <fa icon="info-circle" />
           <translate :parameters="{list: extensionList, size: roadmap.max_size_in_MB, max: roadmap.max_documents }">
-            Supported file formats include: {list}. The file size is limited to {size}MB. You are able to upload a maximum of {max} reference files.
+            Supported file formats include: {list} The file size is limited to {size}MB. You are able to upload a maximum of {max} reference files. If you need to increase this number, email digitalhealthatlas@gmail.com to add more documents.
           </translate>
         </p>
       </div>
