@@ -24,7 +24,7 @@
         >
           <selector-dialog-category
             v-for="cat in category.subGroups"
-            :key="cat.id"
+            :key="`${selectedPlatform || ''}_${cat.id}`"
             v-model="currentSelection"
             :category-selectable="true"
             :category="cat"
