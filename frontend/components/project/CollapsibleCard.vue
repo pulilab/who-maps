@@ -93,12 +93,10 @@ export default {
 
   .CollapsibleCard {
     margin: 0 0 20px;
-
     .Legend {
-      position: absolute;
-      top: 22px;
-      right: 75px;
       display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
 
       div {
         margin-left: 12px;
@@ -172,7 +170,7 @@ export default {
 
     .ContentContainer {
       position: relative;
-      padding: 50px 80px 60px 40px;
+      padding: 22px 74px 60px 40px;
     }
 
     .slide-fade-enter-active {

@@ -372,9 +372,5 @@ export default {
     .CountrySelector {
       width: 50%;
     }
-
-    .Date {
-      width: 100% !important;
-    }
   }
 </style>
