@@ -8,7 +8,6 @@ export const state = () => ({
 
 export const actions = {
   async getStageData ({ commit }) {
-
     const phases = [
       'Opportunity and Ideation',
       'Preparation and Scoping',
@@ -82,13 +81,13 @@ export const actions = {
           enabled: false
         },
         legend: {
-          display: false,
+          display: false
         },
         scales: {
           xAxes: [{
             offset: true,
             gridLines: {
-              display:false,
+              display: false,
               drawBorder: false
             },
             ticks: {
@@ -107,14 +106,14 @@ export const actions = {
               max: 10,
               fontColor: '#9E9E9E',
               padding: 12,
-              callback: function(value, index, values) {
+              callback: function (value, index, values) {
                 return phases[value] || '';
               }
             }
           }]
         }
       }
-    )
+    );
   }
 };
 
@@ -124,5 +123,5 @@ export const mutations = {
   },
   SET_OPTIONS: (state, obj) => {
     state.options = obj;
-  },
+  }
 };

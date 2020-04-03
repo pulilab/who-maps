@@ -267,7 +267,7 @@ export default {
       this.apiErrors = {};
       this.$refs.generalOverview.clear();
       this.$refs.implementationOverview.clear();
-      this.$refs.stageOverview.clear(),
+      this.$refs.stageOverview.clear();
       this.$refs.technologyOverview.clear();
       this.$refs.interoperabilityAndStandards.clear();
       this.$refs.countryCustom.clear();

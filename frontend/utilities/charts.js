@@ -1,22 +1,22 @@
 export const phaseInfo = (type) => {
-  let info = {}
+  let info = {};
   switch (type) {
-    case 'Ended':
+  case 'Ended':
     info = {
       color: '#558B2F',
       rotation: 270,
       dash: [],
       point: 'triangle'
     };
-  break;
-    case 'Discontinued':
+    break;
+  case 'Discontinued':
     info = {
       color: '#D86422',
       rotation: 180,
       dash: [10, 5],
       point: 'triangle'
     };
-  break;
+    break;
   default:
     // color = '#E0E0E0';
     info = {
@@ -35,17 +35,17 @@ export const lastLabelType = (arr) => arr[arr.length - 1][1];
 export const fillArr = (len, fill) => new Array(len).fill(fill);
 
 export const axisYColors = (phases, labels, data) => {
-  let axisColors = fillArr(phases.length, '#E0E0E0');
+  const axisColors = fillArr(phases.length, '#E0E0E0');
   axisColors[data[data.length - 1]] = phaseInfo(lastLabelType(labels)).color;
   return axisColors.reverse();
 };
 
 export const dataInfoFill = (len, fill, change = undefined, type = 'front') => {
-  let arrFill = fillArr(len, fill);
+  const arrFill = fillArr(len, fill);
 
   if (change) {
-    if (type == 'front') {
-      arrFill[0] = change
+    if (type === 'front') {
+      arrFill[0] = change;
       return arrFill;
     }
     arrFill[arrFill.length - 1] = change;
@@ -53,4 +53,3 @@ export const dataInfoFill = (len, fill, change = undefined, type = 'front') => {
   }
   return arrFill;
 };
-

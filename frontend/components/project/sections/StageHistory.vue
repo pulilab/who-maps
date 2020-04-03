@@ -30,16 +30,16 @@ export default {
   computed: {
     ...mapState({
       chartdata: state => state.charts.chartdata,
-      options: state => state.charts.options,
+      options: state => state.charts.options
     })
   },
   async mounted () {
-    await this.getStageData()
-    setTimeout(() => this.loaded = true, 250);
+    await this.getStageData();
+    setTimeout(() => { this.loaded = true; }, 250);
   },
   methods: {
     ...mapActions({
-      getStageData: 'charts/getStageData',
+      getStageData: 'charts/getStageData'
     })
   }
 };

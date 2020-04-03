@@ -1,13 +1,13 @@
-import Vue from 'vue'
-import { Bar, Line } from 'vue-chartjs'
+import Vue from 'vue';
+import { Bar, Line } from 'vue-chartjs';
 
 Vue.component('bar-chart', {
   extends: Bar,
   props: ['data', 'options'],
   mounted () {
-    this.renderChart(this.data, this.options)
+    this.renderChart(this.data, this.options);
   }
-})
+});
 
 Vue.component('line-chart', {
   extends: Line,
@@ -24,4 +24,4 @@ Vue.component('line-chart', {
   mounted () {
     this.renderChart(this.chartdata, this.options);
   }
-})
+});

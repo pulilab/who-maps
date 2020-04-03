@@ -15,7 +15,7 @@
           <div class="research">
             <el-switch
               v-model="research"
-              active-color='#008DC9'
+              active-color="#008DC9"
               :disabled="false"
             />
             <p class="research__switch">
@@ -24,7 +24,10 @@
               </translate>
             </p>
             <p class="info">
-              <fa icon="info-circle" class="info__icon" />
+              <fa
+                icon="info-circle"
+                class="info__icon"
+              />
               <span>
                 <translate key="research-project-info">
                   Explanatory text: Prima luce, cum quibus mons aliud consensu ab eo. Me non paenitet nullum festiviorem excogitasse ad hoc. Excepteur sint obcaecat cupiditat non proident culpa. Pellentesque habitant morbi tristique senectus et netus.
@@ -81,14 +84,16 @@
                 :span="24"
                 :class="`stage ${stage.checked ? 'active' : ''}`"
               >
-                <p class="stage__number">{{ idx + 1}}.</p>
+                <p class="stage__number">
+                  {{ idx + 1 }}.
+                </p>
                 <el-checkbox
+                  v-model="stage.checked"
                   class="stage__checkbox"
                   :label="stage.id"
-                  v-model="stage.checked"
                   @change="handleCheckItem(idx)"
                 >
-                  {{stage.name}}
+                  {{ stage.name }}
                   <el-tooltip
                     v-if="stage.tooltip && !stage.checked"
                     effect="dark"
@@ -96,33 +101,46 @@
                     placement="right"
                     popper-class="stages__tooltip"
                   >
-                    <fa icon="question-circle" class="info__icon" />
+                    <fa
+                      icon="question-circle"
+                      class="info__icon"
+                    />
                   </el-tooltip>
                 </el-checkbox>
                 <transition name="toggle">
-                  <div v-if="stage.checked" class="stage__form">
-                      <p v-if="stage.tooltip" class="info stage__info">
-                        <span>
-                          <translate :key="`stage-tooltip-${idx + 1}`">
-                            {{stage.tooltip}}
-                          </translate>
-                        </span>
-                      </p>
-                      <safe-date-picker
-                        v-model="note_date"
-                        v-validate="rules.note_date"
-                        :placeholder="$gettext('Pick a date (optional)') | translate"
-                        data-vv-name="note_date"
-                        data-vv-as="Note date"
-                        class="Date stage__picker"
-                        align="left"
+                  <div
+                    v-if="stage.checked"
+                    class="stage__form"
+                  >
+                    <p
+                      v-if="stage.tooltip"
+                      class="info stage__info"
+                    >
+                      <span>
+                        <translate :key="`stage-tooltip-${idx + 1}`">
+                          {{ stage.tooltip }}
+                        </translate>
+                      </span>
+                    </p>
+                    <safe-date-picker
+                      v-model="note_date"
+                      v-validate="rules.note_date"
+                      :placeholder="$gettext('Pick a date (optional)') | translate"
+                      data-vv-name="note_date"
+                      data-vv-as="Note date"
+                      class="Date stage__picker"
+                      align="left"
+                    />
+                    <el-input
+                      v-model="endNote"
+                      :placeholder="$gettext('Add note (optional)') | translate"
+                      class="stage__input"
+                    >
+                      <i
+                        slot="prefix"
+                        class="el-input__icon el-icon-document"
                       />
-                      <el-input
-                        :placeholder="$gettext('Add note (optional)') | translate"
-                        v-model="endNote"
-                        class="stage__input">
-                        <i slot="prefix" class="el-input__icon el-icon-document"></i>
-                      </el-input>
+                    </el-input>
                   </div>
                 </transition>
               </el-col>
@@ -143,7 +161,10 @@
               </translate>
             </template>
             <p class="info info--free-margin">
-              <fa icon="info-circle" class="info__icon" />
+              <fa
+                icon="info-circle"
+                class="info__icon"
+              />
               <span>
                 <translate key="research-project-info">
                   Explanatory text: Prima luce, cum quibus mons aliud consensu ab eo. Me non paenitet nullum festiviorem excogitasse ad hoc.
@@ -164,15 +185,18 @@
             </el-col>
             <el-col :span="18">
               <el-input
+                v-model="endNote"
                 :placeholder="$gettext('Add note (optional)') | translate"
-                v-model="endNote">
-                <i slot="prefix" class="el-input__icon el-icon-document"></i>
+              >
+                <i
+                  slot="prefix"
+                  class="el-input__icon el-icon-document"
+                />
               </el-input>
             </el-col>
           </custom-required-form-item>
         </el-col>
       </el-row>
-
     </collapsible-card>
   </div>
 </template>
@@ -191,7 +215,7 @@ export default {
     FormHint
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
-  data() {
+  data () {
     return {
       research: false,
       endNote: '',
@@ -277,13 +301,13 @@ export default {
           tooltip: ''
         }
       ]
-    }
+    };
   },
   computed: {
     ...mapGettersActions({
       // stages: ['project', 'getStages', 'setStages', 0],
       start_date: ['project', 'getStartDate', 'setStartDate', 0],
-      end_date: ['project', 'getEndDate', 'setEndDate', 0],
+      end_date: ['project', 'getEndDate', 'setEndDate', 0]
     }),
     endDateError () {
       if (this.usePublishRules && this.start_date && this.end_date && isAfter(this.start_date, this.end_date)) {
@@ -311,8 +335,8 @@ export default {
       return validations.reduce((a, c) => a && c, true);
     },
     handleCheckItem (idx) {
-      this.stages[idx].checked = !this.stages[idx].checked
-      this.stages[idx].checked = !this.stages[idx].checked
+      this.stages[idx].checked = !this.stages[idx].checked;
+      this.stages[idx].checked = !this.stages[idx].checked;
     }
   }
 };
