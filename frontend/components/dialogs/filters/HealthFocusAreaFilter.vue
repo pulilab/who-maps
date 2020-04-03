@@ -6,10 +6,10 @@
       @headerSelected="toggleAll"
     >
       <el-input
+        v-model="search"
         class="ma-i"
         :placeholder="$gettext('Type name (eg: COVID-19)') | translate"
         prefix-icon="el-icon-search"
-        v-model="search"
         clearable
       />
       <template v-if="filterFocusArea.length > 0">
@@ -20,17 +20,17 @@
           :category="hfa"
           child-name="health_focus_areas"
           name-prop="name"
-          expandCollapse
-          initialToggle
+          expand-collapse
+          initial-toggle
           arrow-right
-          :categorySelectable="true"
+          :category-selectable="true"
           @change="filterChange"
         />
       </template>
       <template v-else>
         <div class="empty-filter">
-          <p></p><translate>Can't find anything related to</translate> <b>{{search}}</b>.</p>
-          <p></p><translate>Please, try again.</translate></p>
+          <p><translate>Can't find anything related to</translate> <b>{{ search }}</b>.</p>
+          <p><translate>Please, try again.</translate></p>
         </div>
       </template>
     </selector-dialog-column>
@@ -68,17 +68,17 @@ export default {
       return difference(ids, this.selected).length === 0;
     },
     filterFocusArea () {
-      let filtered = []
+      const filtered = [];
       this.healthFocusAreas.forEach(
         (item) => {
           const health_focus_areas = item.health_focus_areas.filter((item) => item.name.toLowerCase().includes(this.search.toLowerCase()));
-          const category_name = item.name.toLowerCase().includes(this.search.toLowerCase())
+          const category_name = item.name.toLowerCase().includes(this.search.toLowerCase());
 
-          if ( category_name || health_focus_areas.length > 0 ) {
+          if (category_name || health_focus_areas.length > 0) {
             filtered.push({
               ...item,
               health_focus_areas
-            })
+            });
           }
         }
       );

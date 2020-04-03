@@ -49,7 +49,7 @@ export default {
       projectShadowDonors: 'project/getShadowDonors'
     }),
     donors () {
-      const allDonors = [...new Set([...this.projectDonors, ...this.projectShadowDonors])]
+      const allDonors = [...new Set([...this.projectDonors, ...this.projectShadowDonors])];
       if (allDonors) {
         allDonors.forEach(d => this.$store.dispatch('system/loadDonorDetails', d, { root: true }));
         return allDonors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);

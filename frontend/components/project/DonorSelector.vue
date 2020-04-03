@@ -51,10 +51,10 @@ export default {
       shadows: 'project/getAllShadowDonors'
     }),
     filtered () {
-      return this.donors.filter((item) => !this.shadows.includes(item.id))
+      return this.donors.filter((item) => !this.shadows.includes(item.id));
     },
     showFiltered () {
-      return this.value.filter((elm) => !this.shadows.includes(elm))
+      return this.value.filter((elm) => !this.shadows.includes(elm));
     }
   },
   methods: {
