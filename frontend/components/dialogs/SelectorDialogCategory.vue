@@ -2,26 +2,40 @@
   <div :class="['SelectorDialogCategory', {'NoParent': !hideHeader && !alwaysExpandCategory}]">
     <div
       v-show="!hideHeader"
-      :class="['CategoryName', {'Opened': categoryToggled}]"
+      :class="['CategoryName', {'ArrowRight': arrowRight }, {'Opened': categoryToggled}]"
     >
       <el-button
         type="text"
         @click="toggleCategory"
       >
-        <fa
-          v-show="!categoryToggled && !alwaysExpandCategory"
-          icon="angle-right"
-        />
-        <fa
-          v-show="categoryToggled && !alwaysExpandCategory"
-          icon="angle-down"
-        />
+        <template v-if="!arrowRight">
+          <fa
+            v-show="!categoryToggled && !alwaysExpandCategory"
+            icon="angle-right"
+          />
+          <fa
+            v-show="categoryToggled && !alwaysExpandCategory"
+            icon="angle-down"
+          />
+        </template>
         <el-checkbox
           v-show="categorySelectable"
           :value="headerChecked"
           @change="selectAllCategory"
         />
         <span>{{ category.name }}</span>
+        <template v-if="arrowRight">
+          <fa
+            v-show="!categoryToggled && !alwaysExpandCategory"
+            icon="angle-right"
+            class="arrow-right"
+          />
+          <fa
+            v-show="categoryToggled && !alwaysExpandCategory"
+            icon="angle-down"
+            class="arrow-right"
+          />
+        </template>
       </el-button>
     </div>
 
@@ -29,7 +43,7 @@
       <div
         v-show="categoryShown"
         role="group"
-        class="el-checkbox-group Items OnePerRow"
+        :class="['el-checkbox-group Items OnePerRow', {'subCatMargin': arrowRight }]"
       >
         <el-checkbox
           v-for="item in items"
@@ -85,6 +99,16 @@ export default {
     expandCollapse: {
       type: Boolean,
       default: false
+    },
+    initialToggle: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    arrowRight: {
+      type: Boolean,
+      default: false,
+      required: false
     }
   },
   data () {
@@ -111,6 +135,13 @@ export default {
   watch: {
     expandCollapse () {
       this.categoryToggled = this.expandCollapse;
+    }
+  },
+  mounted () {
+    if (this.items.find(item => this.values.includes(item.id))) {
+      this.categoryToggled = true;
+    } else {
+      this.categoryToggled = this.initialToggle;
     }
   },
   methods: {
@@ -150,8 +181,24 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
+.arrow-right {
+  margin-left: 10px;
+}
+
+.subCatMargin {
+  margin-left: 10px!important;
+}
+
 .SelectorDialogCategory {
   .CategoryName {
+
+    &.ArrowRight {
+      .el-button {
+        .el-checkbox {
+          margin: 0 10px 0 0px;
+        }
+      }
+    }
 
     &.Opened {
       .el-button {

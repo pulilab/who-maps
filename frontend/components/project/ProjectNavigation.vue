@@ -217,7 +217,8 @@ export default {
       getCountryDetails: 'countries/getCountryDetails',
       getDonorDetails: 'system/getDonorDetails',
       draft: 'project/getProjectData',
-      published: 'project/getPublished'
+      published: 'project/getPublished',
+      getShadowDonors: 'project/getShadowDonors'
     }),
     active () {
       const hash = this.$route.hash;
@@ -261,8 +262,9 @@ export default {
       return false;
     },
     showDonorFieldsLink () {
-      if (this.project && this.project.donors) {
-        for (const donor of this.project.donors) {
+      const donors = [...new Set([...this.project.donors, ...this.getShadowDonors])];
+      if (this.project && donors) {
+        for (const donor of donors) {
           const details = this.getDonorDetails(donor);
           if (details && details.donor_questions && details.donor_questions.length > 0) {
             return true;

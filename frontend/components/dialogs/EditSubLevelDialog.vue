@@ -1,6 +1,5 @@
 <template>
   <el-dialog
-    v-if="visible"
     :visible.sync="visible"
     :title="$gettext('Edit Sub Level') | translate"
     modal
@@ -72,7 +71,12 @@ export default {
     },
     editableKeys () {
       const basic = ['name:fr', 'name:pt', 'name:es', 'name:ar'];
-      const filtered = Object.keys(this.model.item).filter(k => k.includes('name'));
+      let filtered;
+      if (this.model) {
+        filtered = Object.keys(this.model.item).filter(k => k.includes('name'));
+      } else {
+        filtered = []
+      }
       return union(basic, filtered);
     }
   },

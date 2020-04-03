@@ -109,7 +109,7 @@
                 <filter-switch
                   v-model="innerProfile.daily_toolkit_digest_notification"
                   :label="$gettext('Weekly Project Toolkit updates (Y/N)') | translate"
-                  :tooltip="$gettext('Lorem ipsum') | translate"
+                  :tooltip="$gettext('If a project you are part of completes the MAPS Assessment for a project, any changes in the assessment data will be noted in this email. You can update this selection any time by returning to your My Profile page.') | translate"
                 />
               </div>
             </el-form-item>
@@ -151,11 +151,11 @@
                 <span class="IconRole IconNoneUser">
                   <fa icon="user-friends" />
                 </span>
-                <translate>No addiitonal access required</translate>
+                <translate>No additional access required</translate>
               </el-checkbox>
 
               <p class="UserArchTypeText">
-                <translate>The DHA has additional features to support Ministries of Health and Investors to understand and organize their digital health projects. If you plan to use the DHA to register projects only, select this option for your profile. This access can be updated at any time.</translate>
+                <translate>The DHA has additional features to support Ministries of Health and Investors to understand and organize their digital health implementations. If you plan to use the DHA to register projects only, select this option for your profile. Your access level can be updated at any time by returning to your profile page.</translate>
               </p>
 
               <div class="Separator Or">
