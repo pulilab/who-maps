@@ -24,7 +24,7 @@
             <el-col class="Separator">
               <div />
             </el-col>
-            <el-col class="LogoDHA">
+            <el-col :class="customOrganisation ? 'LogoDHASmall' : 'LogoDHA'">
               <img
                 src="/logo-dha.svg"
                 alt="Digital Health Atlas"
@@ -256,8 +256,17 @@ export default {
         width: 100%;
 
         img {
-          height: 32px;
+          height: 38px;
           transform: translateY(2px);
+        }
+      }
+
+      .LogoDHASmall {
+        width: 100%;
+
+        img {
+          height: 34px;
+          transform: translate(-5px);
         }
       }
 
