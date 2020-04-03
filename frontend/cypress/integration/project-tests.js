@@ -1,4 +1,4 @@
-describe('Create new project', function() {
+describe('Project tests', function() {
   beforeEach(function () {
     cy.logIn();
   })
