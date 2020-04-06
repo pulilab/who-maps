@@ -77,9 +77,8 @@
                   Set current and previous stages of project
                 </translate>
               </template>
-
               <el-col
-                v-for="(stage, idx) in stages"
+                v-for="(stage, idx) in stagesMapper"
                 :key="stage.id"
                 :span="24"
                 :class="`stage ${stage.checked ? 'active' : ''}`"
@@ -88,10 +87,10 @@
                   {{ idx + 1 }}.
                 </p>
                 <el-checkbox
-                  v-model="stage.checked"
+                  :value="stage.checked"
                   class="stage__checkbox"
                   :label="stage.id"
-                  @change="handleCheckItem(idx)"
+                  @input="handleToggleStage(stage)"
                 >
                   {{ stage.name }}
                   <el-tooltip
@@ -123,7 +122,7 @@
                       </span>
                     </p>
                     <safe-date-picker
-                      v-model="note_date"
+                      v-model="stage.date"
                       v-validate="rules.note_date"
                       :placeholder="$gettext('Pick a date (optional)') | translate"
                       data-vv-name="note_date"
@@ -132,7 +131,7 @@
                       align="left"
                     />
                     <el-input
-                      v-model="endNote"
+                      v-model="stage.note"
                       :placeholder="$gettext('Add note (optional)') | translate"
                       class="stage__input"
                     >
@@ -183,6 +182,7 @@
                 align="left"
               />
             </el-col>
+
             <el-col :span="18">
               <el-input
                 v-model="endNote"
@@ -208,6 +208,7 @@ import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 import CollapsibleCard from '../CollapsibleCard';
 import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -219,93 +220,15 @@ export default {
     return {
       research: false,
       endNote: '',
-      stages: [
-        {
-          id: 0,
-          name: 'Opportunity and Ideation',
-          date: '',
-          note: '',
-          checked: false,
-          tooltip: 'Using new tool in the field, feeding back into iterative development, M&E with an eye towards scale decision'
-        },
-        {
-          id: 1,
-          name: 'Preparation and Scoping',
-          date: '',
-          note: '',
-          checked: false,
-          tooltip: 'Using new tool in the field, feeding back into iterative development, M&E with an eye towards scale decision'
-        },
-        {
-          id: 2,
-          name: 'Analysis and Design',
-          date: '',
-          note: '',
-          checked: false,
-          tooltip: 'Using new tool in the field, feeding back into iterative development, M&E with an eye towards scale decision'
-        },
-        {
-          id: 3,
-          name: 'Implementation Planning',
-          date: '',
-          note: '',
-          checked: false,
-          tooltip: 'Using new tool in the field, feeding back into iterative development, M&E with an eye towards scale decision'
-        },
-        {
-          id: 4,
-          name: 'Developing or Adapting Solution',
-          date: '',
-          note: '',
-          checked: false,
-          tooltip: 'Using new tool in the field, feeding back into iterative development, M&E with an eye towards scale decision'
-        },
-        {
-          id: 5,
-          name: 'Piloting and Evidence Generation',
-          date: '',
-          note: '',
-          checked: false,
-          tooltip: 'Using new tool in the field, feeding back into iterative development, M&E with an eye towards scale decision'
-        },
-        {
-          id: 6,
-          name: 'Package and Advocacy',
-          date: '',
-          note: '',
-          checked: false,
-          tooltip: ''
-        },
-        {
-          id: 7,
-          name: 'Deploying',
-          date: '',
-          note: '',
-          checked: false,
-          tooltip: 'Using new tool in the field, feeding back into iterative development, M&E with an eye towards scale decision'
-        },
-        {
-          id: 8,
-          name: 'Scaling up',
-          date: '',
-          note: '',
-          checked: false,
-          tooltip: ''
-        },
-        {
-          id: 9,
-          name: 'Hand over or Complete',
-          date: '',
-          note: '',
-          checked: false,
-          tooltip: ''
-        }
-      ]
+      note_date: ''
     };
   },
   computed: {
+    ...mapState({
+      stagesList: state => state.project.stagesList
+    }),
     ...mapGettersActions({
-      // stages: ['project', 'getStages', 'setStages', 0],
+      stages: ['project', 'getStages', 'setStages', []],
       start_date: ['project', 'getStartDate', 'setStartDate', 0],
       end_date: ['project', 'getEndDate', 'setEndDate', 0]
     }),
@@ -314,6 +237,15 @@ export default {
         return this.$gettext('End date must be after Start date');
       }
       return '';
+    },
+    stagesMapper () {
+      return this.stagesList.map((item) => {
+        const included = this.stages.find(i => i.id === item.id)
+        if(included) {
+          return { ...item, date: included.date, note: included.note, checked: true}
+        }
+        return {...item, date: '', note: '', checked: false,}
+      })
     }
   },
   methods: {
@@ -334,9 +266,29 @@ export default {
       ]);
       return validations.reduce((a, c) => a && c, true);
     },
-    handleCheckItem (idx) {
-      this.stages[idx].checked = !this.stages[idx].checked;
-      this.stages[idx].checked = !this.stages[idx].checked;
+    handleToggleStage (stage) {
+      let newStages = this.stages
+      const index = newStages.findIndex(item => item.id === stage.id)
+      if (index !== -1) {
+        newStages = newStages.filter(item => item.id !== stage.id)
+      } else {
+        newStages = [...newStages, { id: stage.id, date: stage.date || '2020-04-06' , note: stage.note || 'success' }]
+      }
+
+      console.log(newStages)
+      this.$store.dispatch(
+        'project/setStages',
+        newStages,
+        { root: true }
+      );
+    },
+    updateStages (id, key, value) {
+      return this.stages.map( item => {
+        if (item.id === id) {
+          return {...item, [key]: value };
+        }
+        return item;
+      });
     }
   }
 };

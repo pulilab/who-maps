@@ -33,6 +33,8 @@ export const getters = {
   getImplementationOverview: state => state.implementation_overview,
   getStartDate: state => epochCheck(state.start_date),
   getEndDate: state => epochCheck(state.end_date),
+  getStages: state => state.stages,
+  getStagesList: stage => state.stagesList,
   getContactName: state => state.contact_name,
   getContactEmail: state => state.contact_email,
   getTeam: state => state.team,
@@ -121,6 +123,7 @@ export const getters = {
 
 export const actions = {
   async loadProject ({ commit, dispatch, rootGetters }, id) {
+    dispatch('loadStagesList');
     const userProject = rootGetters['projects/getUserProjectList'].find(p => p.id === id || p.public_id === id);
     const { data } = userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`);
     commit('SET_ORIGINAL', Object.freeze(data));
@@ -198,6 +201,12 @@ export const actions = {
   },
   setEndDate ({ commit }, value) {
     commit('SET_END_DATE', value);
+  },
+  setStages ({ commit }, value) {
+    commit('SET_STAGES', value);
+  },
+  setStagesList ({ commit }, value) {
+    commit('SET_STAGES_LIST', value);
   },
   setContactName ({ commit }, value) {
     commit('SET_CONTACT_NAME', value);
@@ -393,6 +402,10 @@ export const actions = {
     commit('INIT_PROJECT', parsedResponse);
     dispatch('projects/updateProject', data, { root: true });
     dispatch('setLoading', false);
+  },
+  async loadStagesList ({ dispatch }) {
+    const { data } = await this.$axios.get(`/api/projects/stages/`)
+    dispatch('setStagesList', data);
   }
 };
 
@@ -417,6 +430,12 @@ export const mutations = {
   },
   SET_END_DATE: (state, end_date) => {
     state.end_date = end_date;
+  },
+  SET_STAGES: (state, stages) => {
+    state.stages = stages;
+  },
+  SET_STAGES_LIST: (state, stages) => {
+    state.stagesList = stages;
   },
   SET_CONTACT_NAME: (state, contact_name) => {
     state.contact_name = contact_name;
@@ -530,6 +549,7 @@ export const mutations = {
     state.implementation_overview = get(project, 'implementation_overview', '');
     state.start_date = new Date(get(project, 'start_date', ''));
     state.end_date = new Date(get(project, 'end_date', ''));
+    state.stages = get(project, 'stages', []);
     state.contact_name = get(project, 'contact_name', '');
     state.contact_email = get(project, 'contact_email', '');
     state.team = get(project, 'team', []);

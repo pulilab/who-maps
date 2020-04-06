@@ -46,7 +46,6 @@
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
-          <stage-history />
           <technology-overview
             ref="technologyOverview"
             :rules="rules"
@@ -101,7 +100,6 @@ import { publishRules, draftRules } from '@/utilities/projects';
 import ProjectNavigation from './ProjectNavigation';
 import GeneralOverview from './sections/GeneralOverview';
 import StageOverview from '@/components/project/sections/StageOverview';
-import StageHistory from '@/components/project/sections/StageHistory';
 import ImplementationOverview from './sections/ImplementationOverview';
 import TechnologyOverview from './sections/TechnologyOverview';
 import InteroperabilityAndStandards from './sections/InteroperabilityAndStandards';
@@ -114,7 +112,6 @@ export default {
     ProjectNavigation,
     GeneralOverview,
     StageOverview,
-    StageHistory,
     ImplementationOverview,
     TechnologyOverview,
     InteroperabilityAndStandards,

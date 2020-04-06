@@ -1,11 +1,11 @@
 <template>
   <div
-    id="stagesHistory"
+    id="stages"
     class="StageHistory"
   >
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('History of project stage') | translate"
+      :title="$gettext('Completion of Project stages') | translate"
     >
       <line-chart
         v-if="loaded"
