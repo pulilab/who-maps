@@ -4,6 +4,7 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.reverse import reverse
 
+from project.models import Stage
 from project.tests.setup import SetupTests
 
 
@@ -69,3 +70,18 @@ class ProjectStageTests(SetupTests):
         resp_data = response.json()
         self.assertIn('stages', resp_data['draft'])
         self.assertEqual(len(resp_data['draft']['stages']), 3)
+
+    def test_stage_list(self):
+        Stage.objects.all().delete()
+
+        stage_c = Stage.objects.create(name='Stage C', order='3')
+        stage_a = Stage.objects.create(name='Stage A', order='2')
+        stage_b = Stage.objects.create(name='Stage B', order='1')
+
+        url = reverse('stage-list')
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        data = response.json()
+        self.assertEqual(data[0]['id'], stage_b.id)
+        self.assertEqual(data[1]['id'], stage_a.id)
+        self.assertEqual(data[2]['id'], stage_c.id)

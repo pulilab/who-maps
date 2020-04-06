@@ -23,7 +23,7 @@ from core.utils import send_mail_wrapper
 from country.models import CustomQuestion
 from project.utils import remove_keys
 from user.models import UserProfile
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform
+from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform, Stage
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
@@ -56,6 +56,13 @@ class StageSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=True)
     date = serializers.CharField(required=False, max_length=10)
     note = serializers.CharField(required=False, max_length=256)
+
+
+class StageListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Stage
+        fields = '__all__'
 
 
 class InteroperabilityLinksSerializer(serializers.Serializer):
