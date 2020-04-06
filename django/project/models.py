@@ -65,6 +65,8 @@ class Project(SoftDeleteModel, ExtendedModel):
     odk_id = models.CharField(null=True, blank=True, max_length=64)
     odk_extra_data = JSONField(default=dict)
 
+    research = models.NullBooleanField(blank=True, null=True)
+
     projects = ProjectManager  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
 
@@ -193,6 +195,16 @@ class ProjectApproval(ExtendedModel):
 
     def __str__(self):
         return "Approval for {}".format(self.project.name)
+
+
+class Stage(ExtendedModel):
+    name = models.CharField(max_length=128)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):  # pragma: no cover
+        return self.name
 
 
 class CoverageVersion(ExtendedModel):

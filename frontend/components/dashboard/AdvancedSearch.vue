@@ -39,6 +39,7 @@
           :value="selectedHFA"
           :limit="4"
           actions
+          value-is-child
           @delete="deleteHfaHandler"
         />
       </filter-item>

@@ -45,11 +45,14 @@ export default {
   computed: {
     ...mapGetters({
       getDonorDetails: 'system/getDonorDetails',
-      projectDonors: 'project/getDonors'
+      projectDonors: 'project/getDonors',
+      projectShadowDonors: 'project/getShadowDonors'
     }),
     donors () {
-      if (this.projectDonors) {
-        return this.projectDonors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
+      const allDonors = [...new Set([...this.projectDonors, ...this.projectShadowDonors])];
+      if (allDonors) {
+        allDonors.forEach(d => this.$store.dispatch('system/loadDonorDetails', d, { root: true }));
+        return allDonors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
       }
       return null;
     }
@@ -74,7 +77,7 @@ export default {
 </script>
 
 <style lang="less">
- @import "~assets/style/variables.less";
+  @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
 
   .DonorCustom {}

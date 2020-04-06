@@ -52,6 +52,12 @@ class PlatformSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=64, min_length=1)
 
 
+class StageSerializer(serializers.Serializer):
+    id = serializers.IntegerField(required=True)
+    date = serializers.CharField(required=False, max_length=10)
+    note = serializers.CharField(required=False, max_length=256)
+
+
 class InteroperabilityLinksSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     selected = serializers.BooleanField(required=False)
@@ -91,6 +97,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
     end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
     contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
+    research = serializers.NullBooleanField(required=False)
 
     # SECTION 2 Implementation Overview
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
@@ -119,6 +126,9 @@ class ProjectPublishedSerializer(serializers.Serializer):
     interoperability_standards = serializers.ListField(
         child=serializers.IntegerField(), required=False, max_length=50)
 
+    # SECTION 5
+    stages = StageSerializer(many=True, required=False, allow_empty=True)
+
     class Meta:
         model = Project
 
@@ -129,13 +139,18 @@ class ProjectPublishedSerializer(serializers.Serializer):
                 raise serializers.ValidationError('Country cannot be altered on published projects.')
         return value
 
+    def validate_research(self, value):
+        # research can't be changed once it is already set
+        if self.instance and self.instance.draft.get('research') is not None:
+            return self.instance.draft['research']
+        return value
+
     def update(self, instance, validated_data):
         instance.name = validated_data["name"]
         instance.data = validated_data
         instance.draft = validated_data
         instance.odk_etag = None
         instance.make_public_id(validated_data['country'])
-
         instance.save()
 
         return instance

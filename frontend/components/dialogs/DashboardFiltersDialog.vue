@@ -1,6 +1,5 @@
 <template>
   <el-dialog
-    v-if="visible"
     :visible.sync="visible"
     :title="$gettext('Applying specific filter to map/list') | translate"
     modal
@@ -136,7 +135,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      selectedFilter: 'layout/getDashboardFiltersDialogState'
+      selectedFilter: 'layout/getDashboardFiltersDialogState',
+      getSearchParameters: 'dashboard/getSearchParameters'
     }),
     ...mapGettersActions({
       selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0],
