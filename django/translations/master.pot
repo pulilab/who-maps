@@ -1991,7 +1991,7 @@ msgid "Project start date"
 msgstr ""
 
 #: components/common/UidPopOver.vue:37 components/common/UidPopOver.vue:41
-msgid "Project UID"
+msgid "Unique Project ID (UID)"
 msgstr ""
 
 #: components/common/NotifySwitchers.vue:17
