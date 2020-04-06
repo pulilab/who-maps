@@ -141,12 +141,8 @@ describe('Project tests', function() {
     cy.selectDHI("1.2 Untargeted client communication", "1.2.1 Transmit untargeted health information to an undefined population");
 
     cy.checkSelectedSoftwareDHICount();
-
-    // check the selected DHIs
-    cy.get("@ulElementsOfSelectedDHIs").first().find('li').first().find('span')
-      .should("contain", "1.1.1 Transmit health event alerts to specific population group(s)");
-    cy.get("@ulElementsOfSelectedDHIs").last().find('li').first().find('span')
-      .should("contain", "1.2.1 Transmit untargeted health information to an undefined population");
+    cy.checkSelectedDHIs("1.1.1 Transmit health event alerts to specific population group(s)",
+      "1.2.1 Transmit untargeted health information to an undefined population");
 
     //  save draft
     cy.get("button").contains('Save draft').click({force: true})
@@ -171,6 +167,8 @@ describe('Project tests', function() {
       cy.visit(projectEditURL);
 
       cy.checkSelectedSoftwareDHICount();
+      cy.checkSelectedDHIs("1.1.1 Transmit health event alerts to specific population group(s)",
+        "1.2.1 Transmit untargeted health information to an undefined population");
 
     });
 
