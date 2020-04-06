@@ -158,7 +158,7 @@ class ProjectImportV2Admin(admin.ModelAdmin):
 
 
 class StageAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['id', 'order', 'name']
 
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
