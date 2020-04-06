@@ -64,3 +64,9 @@ Cypress.Commands.add('checkSelectedSoftwareDHICount', () => {
   cy.get("@ulElementsOfSelectedDHIs").first().find('li').should('have.length', 1);
   cy.get("@ulElementsOfSelectedDHIs").last().find('li').should('have.length', 1);
 });
+
+Cypress.Commands.add('selectDHI', (mainCategory, subCategory) => {
+  cy.contains(mainCategory).click();
+  cy.contains(subCategory).click();
+  cy.contains("Confirm").click();
+});

@@ -1,11 +1,11 @@
 describe('Project tests', function() {
   beforeEach(function () {
     cy.logIn();
-  })
+  });
 
   afterEach(function () {
     cy.logOut();
-  })
+  });
 
   it('Create Project with max field lengths', function() {
     cy.log('Create Project with max field lengths');
@@ -127,10 +127,7 @@ describe('Project tests', function() {
     // add digital health intervention for the software
     cy.contains("Add Digital Health Interventions").click();
     //open first category and select first element
-    cy.contains("1.1 Targeted client communication").click()
-    cy.contains("1.1.1 Transmit health event alerts to specific population group(s)").click();
-    // click confirm
-    cy.contains("Confirm").click();
+    cy.selectDHI("1.1 Targeted client communication", "1.1.1 Transmit health event alerts to specific population group(s)");
 
     //add another software
     cy.get("button[class=\"el-button AddButton IconLeft el-button--text\"]").first().click();
@@ -141,10 +138,7 @@ describe('Project tests', function() {
     // add digital health intervention for the software
     cy.get("div[class=\"DigitalHealthInterventionsSelector\"]").last().click();
     // open second category and select first element
-    cy.contains("1.2 Untargeted client communication").click();
-    cy.contains("1.2.1 Transmit untargeted health information to an undefined population").click();
-    // click confirm
-    cy.contains("Confirm").click();
+    cy.selectDHI("1.2 Untargeted client communication", "1.2.1 Transmit untargeted health information to an undefined population");
 
     cy.checkSelectedSoftwareDHICount();
 
