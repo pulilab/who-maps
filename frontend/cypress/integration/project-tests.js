@@ -1,4 +1,4 @@
-describe('Create new project', function() {
+describe('Project tests', function() {
   beforeEach(function () {
     cy.logIn();
   })
@@ -109,5 +109,77 @@ describe('Create new project', function() {
     // close popup after saving draft
     cy.get("button").contains('Close').click({force: true})
 
+  });
+
+  it('Test Project DHI scenario', function() {
+    cy.log('Test Project DHI scenario');
+
+    cy.contains('New Project').click();
+    cy.location('pathname', {timeout: 5000}).should('include', '/projects/create');
+
+    const typeOptions = {delay: 0};
+
+    cy.get("input[data-vv-name=\"name\"]").type("Test Project DHI", typeOptions);
+
+    // select a software
+    cy.get("div[data-vv-name=\"id\"]").type("{downarrow}{enter}{esc}");
+
+    // add digital health intervention for the software
+    cy.contains("Add Digital Health Interventions").click();
+    //open first category and select first element
+    cy.contains("1.1 Targeted client communication").click()
+    cy.contains("1.1.1 Transmit health event alerts to specific population group(s)").click();
+    // click confirm
+    cy.contains("Confirm").click();
+
+    //add another software
+    cy.get("button[class=\"el-button AddButton IconLeft el-button--text\"]").first().click();
+
+    //  select the first one
+    cy.get("div[data-vv-name=\"id\"]").last().type("{downarrow}{enter}{esc}");
+
+    // add digital health intervention for the software
+    cy.get("div[class=\"DigitalHealthInterventionsSelector\"]").last().click();
+    // open second category and select first element
+    cy.contains("1.2 Untargeted client communication").click();
+    cy.contains("1.2.1 Transmit untargeted health information to an undefined population").click();
+    // click confirm
+    cy.contains("Confirm").click();
+
+    cy.checkSelectedSoftwareDHICount();
+
+    // check the selected DHIs
+    cy.get("@ulElementsOfSelectedDHIs").first().find('li').first().find('span')
+      .should("contain", "1.1.1 Transmit health event alerts to specific population group(s)");
+    cy.get("@ulElementsOfSelectedDHIs").last().find('li').first().find('span')
+      .should("contain", "1.2.1 Transmit untargeted health information to an undefined population");
+
+    //  save draft
+    cy.get("button").contains('Save draft').click({force: true})
+    cy.location('pathname', {timeout: 5000}).should('include', '/edit');
+
+    let projectEditURL = null;
+    cy.url().then(url => {
+      projectEditURL = url;
+
+      // refresh the page
+      cy.reload();
+
+      // go to the dashboard
+      cy.contains("Dashboard").click();
+      cy.location('pathname', {timeout: 5000}).should('include', '/dashboard');
+
+      // go to my projects
+      cy.contains("My Projects").click();
+      cy.location('pathname', {timeout: 5000}).should('include', '/projects');
+
+      // visit edit project
+      cy.visit(projectEditURL);
+
+      cy.checkSelectedSoftwareDHICount();
+
+    });
+
   })
+
 });
