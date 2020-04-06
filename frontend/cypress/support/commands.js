@@ -57,3 +57,10 @@ Cypress.Commands.add('randomString', (length) => {
     return unescape(String.fromCharCode(Math.floor(Math.random() * (32768))))
   }).join('');
 });
+
+Cypress.Commands.add('checkSelectedSoftwareDHICount', () => {
+  // check if both software has one selected DHI
+  cy.get("ul[class=\"SelectedDigitalHealthInterventions\"]").as('ulElementsOfSelectedDHIs');
+  cy.get("@ulElementsOfSelectedDHIs").first().find('li').should('have.length', 1);
+  cy.get("@ulElementsOfSelectedDHIs").last().find('li').should('have.length', 1);
+});
