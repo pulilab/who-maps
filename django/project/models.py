@@ -199,9 +199,10 @@ class ProjectApproval(ExtendedModel):
 
 class Stage(ExtendedModel):
     name = models.CharField(max_length=128)
+    order = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        ordering = ['name']
+        ordering = ['order', 'name']
 
     def __str__(self):  # pragma: no cover
         return self.name
