@@ -7,14 +7,14 @@ from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from project.cache import cache_structure
-from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
+from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
@@ -22,7 +22,8 @@ from .tasks import notify_superusers_about_new_pending_software
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
-    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer
+    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer, \
+    StageListSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
 
@@ -518,3 +519,9 @@ class TechnologyPlatformRequestViewSet(CreateModelMixin, GenericViewSet):
         serializer.validated_data['added_by'] = self.request.user.userprofile
         super().perform_create(serializer)
         notify_superusers_about_new_pending_software.apply_async((serializer.instance.id,))
+
+
+class StageViewSet(ListModelMixin, GenericViewSet):
+    queryset = Stage.objects.all()
+    serializer_class = StageListSerializer
+    permission_classes = (AllowAny,)
