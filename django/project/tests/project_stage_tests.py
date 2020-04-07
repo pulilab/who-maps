@@ -41,8 +41,8 @@ class ProjectStageTests(SetupTests):
             },
             {
                 'id': 3,
-                'date': str((now - timezone.timedelta(days=3)).date()),
-                'note': 'developing note'
+                'date': None,
+                'note': None
             }
         ]
         data['project']['stages'] = stages

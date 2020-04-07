@@ -54,8 +54,8 @@ class PlatformSerializer(serializers.Serializer):
 
 class StageSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=True)
-    date = serializers.CharField(required=False, max_length=10)
-    note = serializers.CharField(required=False, max_length=256)
+    date = serializers.CharField(required=False, max_length=10, allow_null=True)
+    note = serializers.CharField(required=False, max_length=256, allow_null=True)
 
 
 class InteroperabilityLinksSerializer(serializers.Serializer):
