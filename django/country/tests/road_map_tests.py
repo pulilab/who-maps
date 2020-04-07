@@ -7,6 +7,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.test import APIClient
 
 from country.models import Country, ArchitectureRoadMapDocument
 from country.tests.base import CountryBaseTests
@@ -132,6 +133,7 @@ class CountryRoadMapTests(CountryBaseTests):
             response.json(), {'non_field_errors': ['The country already has 2 related road map documents']})
 
     def test_document_search(self):
+        client = APIClient()
         ArchitectureRoadMapDocument.objects.all().delete()
 
         country = Country.objects.first()
@@ -156,7 +158,7 @@ class CountryRoadMapTests(CountryBaseTests):
 
         # search by title
         url = reverse('document-search-list') + '?search=presentation'
-        response = self.test_user_client.get(url, format='json')
+        response = client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         data = response.json()
         self.assertEqual(len(data), 1)
@@ -164,7 +166,7 @@ class CountryRoadMapTests(CountryBaseTests):
 
         # search by file name
         url = reverse('document-search-list') + '?search=xls'
-        response = self.test_user_client.get(url, format='json')
+        response = client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         data = response.json()
         self.assertEqual(len(data), 1)
