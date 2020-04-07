@@ -66,14 +66,14 @@ export const actions = {
         return;
       }
       commit('SET_CMS_DATA', null);
-      const { data } = await this.$axios.get('/api/cms/', { q: state.searchString });
+      const { data } = await this.$axios.get('/api/cms/', { params: { search: state.searchString } });
       commit('SET_CMS_DATA', data);
     } catch (e) {}
   },
   async documentSearch ({ state, commit }) {
     try {
       commit('SET_DOCUMENT_DATA', null);
-      const { data } = await this.$axios.get('/api/document-search/', { search: state.searchString });
+      const { data } = await this.$axios.get('/api/document-search/', { params: { search: state.searchString } });
       commit('SET_DOCUMENT_DATA', data);
     } catch (e) {}
   },
