@@ -69,7 +69,7 @@ describe('Project tests', function() {
         let selector = "div[data-vv-name=\"" + item + "\"]";
         cy.get(selector).type("{downarrow}{enter}{esc}");
       }
-    )
+    );
 
     // choose Sub-national
     cy.contains('Sub-national').click();
@@ -118,6 +118,10 @@ describe('Project tests', function() {
     cy.location('pathname', {timeout: 5000}).should('include', '/projects/create');
 
     const typeOptions = {delay: 0};
+    const DHICategory11 = "1.1 Targeted client communication";
+    const DHICategory12 = "1.2 Untargeted client communication";
+    const DHIElement111 = "1.1.1 Transmit health event alerts to specific population group(s)";
+    const DHIElement121 = "1.2.1 Transmit untargeted health information to an undefined population";
 
     cy.get("input[data-vv-name=\"name\"]").type("Test Project DHI", typeOptions);
 
@@ -127,7 +131,7 @@ describe('Project tests', function() {
     // add digital health intervention for the software
     cy.contains("Add Digital Health Interventions").click();
     //open first category and select first element
-    cy.selectDHI("1.1 Targeted client communication", "1.1.1 Transmit health event alerts to specific population group(s)");
+    cy.selectDHI(DHICategory11, DHIElement111);
 
     //add another software
     cy.get("button[class=\"el-button AddButton IconLeft el-button--text\"]").first().click();
@@ -138,11 +142,10 @@ describe('Project tests', function() {
     // add digital health intervention for the software
     cy.get("div[class=\"DigitalHealthInterventionsSelector\"]").last().click();
     // open second category and select first element
-    cy.selectDHI("1.2 Untargeted client communication", "1.2.1 Transmit untargeted health information to an undefined population");
+    cy.selectDHI(DHICategory12, DHIElement121);
 
     cy.checkSelectedSoftwareDHICount();
-    cy.checkSelectedDHIs("1.1.1 Transmit health event alerts to specific population group(s)",
-      "1.2.1 Transmit untargeted health information to an undefined population");
+    cy.checkSelectedDHIs(DHIElement111, DHIElement121);
 
     //  save draft
     cy.get("button").contains('Save draft').click({force: true})
@@ -167,8 +170,7 @@ describe('Project tests', function() {
       cy.visit(projectEditURL);
 
       cy.checkSelectedSoftwareDHICount();
-      cy.checkSelectedDHIs("1.1.1 Transmit health event alerts to specific population group(s)",
-        "1.2.1 Transmit untargeted health information to an undefined population");
+      cy.checkSelectedDHIs(DHIElement111, DHIElement121);
 
     });
 
