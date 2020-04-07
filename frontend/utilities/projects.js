@@ -1,4 +1,5 @@
 import { Validator } from 'vee-validate';
+import { format } from 'date-fns';
 
 Validator.extend('isDate', {
   getMessage (field) {
@@ -24,14 +25,26 @@ export const fetchProjectData = async (store, params, error) => {
   }
 };
 
-export const epochCheck = (date) => {
+export const epochCheck = (date, present = true) => {
   if (date) {
     const secondsSinceEpoch = Math.round(date.getTime() / 1000);
     if (secondsSinceEpoch === 0) {
-      return new Date();
+      return present ? new Date() : '';
     }
   }
   return date;
+};
+
+export const newStages = (draft) => {
+  return draft
+    .filter(i => i.checked)
+    .map(i => {
+      return {
+        id: i.id,
+        note: i.note || null,
+        date: format(i.date, 'YYYY-MM-DD') === 'Invalid Date' ? null : format(i.date, 'YYYY-MM-DD')
+      };
+    });
 };
 
 export const projectFields = () => ({

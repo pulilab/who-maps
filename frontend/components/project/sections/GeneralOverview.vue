@@ -232,7 +232,6 @@
 </template>
 
 <script>
-import { isAfter } from 'date-fns';
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
 import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 import CollapsibleCard from '../CollapsibleCard';

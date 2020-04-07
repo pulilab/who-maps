@@ -303,7 +303,7 @@ export default {
     goToDraft () {
       const name = this.isTeam ? 'organisation-projects-id-edit' : 'organisation-projects-id';
       const localised = this.localePath({ name, params: { ...this.$route.params } });
-      this.$router.push(localised);
+      window.location.href = localised;
     },
     goToPublished () {
       const localised = this.localePath({ name: 'organisation-projects-id-published', params: { ...this.$route.params } });

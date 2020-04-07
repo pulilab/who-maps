@@ -78,7 +78,7 @@
                 </translate>
               </template>
               <el-col
-                v-for="(stage, idx) in stagesMapper"
+                v-for="(stage, idx) in stagesDraft"
                 :key="stage.id"
                 :span="24"
                 :class="`stage ${stage.checked ? 'active' : ''}`"
@@ -90,7 +90,7 @@
                   :value="stage.checked"
                   class="stage__checkbox"
                   :label="stage.id"
-                  @input="handleToggleStage(stage)"
+                  @input="updateStagesDraft(stage.id, 'checked', !stage.checked)"
                 >
                   {{ stage.name }}
                   <el-tooltip
@@ -122,18 +122,20 @@
                       </span>
                     </p>
                     <safe-date-picker
-                      v-model="stage.date"
                       v-validate="rules.note_date"
-                      :placeholder="$gettext('Pick a date (optional)') | translate"
+                      :value="stage.date"
+                      :placeholder="$gettext('Pick a date (required)') | translate"
                       data-vv-name="note_date"
                       data-vv-as="Note date"
                       class="Date stage__picker"
                       align="left"
+                      @input="updateStagesDraft(stage.id, 'date', $event)"
                     />
                     <el-input
-                      v-model="stage.note"
+                      :value="stage.note"
                       :placeholder="$gettext('Add note (optional)') | translate"
                       class="stage__input"
+                      @input="updateStagesDraft(stage.id, 'note', $event)"
                     >
                       <i
                         slot="prefix"
@@ -208,7 +210,7 @@ import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 import CollapsibleCard from '../CollapsibleCard';
 import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -219,16 +221,14 @@ export default {
   data () {
     return {
       research: false,
-      endNote: '',
-      note_date: ''
+      endNote: ''
     };
   },
   computed: {
     ...mapState({
-      stagesList: state => state.project.stagesList
+      stagesDraft: state => state.project.stagesDraft
     }),
     ...mapGettersActions({
-      stages: ['project', 'getStages', 'setStages', []],
       start_date: ['project', 'getStartDate', 'setStartDate', 0],
       end_date: ['project', 'getEndDate', 'setEndDate', 0]
     }),
@@ -237,18 +237,15 @@ export default {
         return this.$gettext('End date must be after Start date');
       }
       return '';
-    },
-    stagesMapper () {
-      return this.stagesList.map((item) => {
-        const included = this.stages.find(i => i.id === item.id)
-        if(included) {
-          return { ...item, date: included.date, note: included.note, checked: true}
-        }
-        return {...item, date: '', note: '', checked: false,}
-      })
     }
   },
+  mounted () {
+    this.loadStagesDraft();
+  },
   methods: {
+    ...mapActions({
+      loadStagesDraft: 'project/loadStagesDraft'
+    }),
     async validate () {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
@@ -266,29 +263,17 @@ export default {
       ]);
       return validations.reduce((a, c) => a && c, true);
     },
-    handleToggleStage (stage) {
-      let newStages = this.stages
-      const index = newStages.findIndex(item => item.id === stage.id)
-      if (index !== -1) {
-        newStages = newStages.filter(item => item.id !== stage.id)
-      } else {
-        newStages = [...newStages, { id: stage.id, date: stage.date || '2020-04-06' , note: stage.note || 'success' }]
-      }
-
-      console.log(newStages)
+    updateStagesDraft (id, key, value) {
       this.$store.dispatch(
-        'project/setStages',
-        newStages,
+        'project/setStagesDraft',
+        this.stagesDraft.map(item => {
+          if (item.id === id) {
+            return { ...item, [key]: value };
+          }
+          return item;
+        }),
         { root: true }
       );
-    },
-    updateStages (id, key, value) {
-      return this.stages.map( item => {
-        if (item.id === id) {
-          return {...item, [key]: value };
-        }
-        return item;
-      });
     }
   }
 };

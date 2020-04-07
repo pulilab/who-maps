@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import get from 'lodash/get';
+import flatten from 'lodash/flatten';
 import { apiReadParser, apiWriteParser, APIError } from '../utilities/api';
-import { projectFields, epochCheck } from '../utilities/projects';
+import { projectFields, epochCheck, newStages } from '../utilities/projects';
 
 const cleanState = () => ({
   ...projectFields(),
@@ -32,9 +33,25 @@ export const getters = {
   getGeographicScope: state => state.geographic_scope,
   getImplementationOverview: state => state.implementation_overview,
   getStartDate: state => epochCheck(state.start_date),
-  getEndDate: state => epochCheck(state.end_date),
+  getEndDate: state => epochCheck(state.end_date, false),
   getStages: state => state.stages,
-  getStagesList: stage => state.stagesList,
+  getStagesDraft: (state, getters, rootState) => {
+    if (!('stageDraft' in state)) {
+      // initial set
+      if ('stages' in rootState.projects.projectStructure) {
+        return rootState.projects.projectStructure.stages.map((item) => {
+          const included = state.stages.find(i => i.id === item.id);
+          if (included) {
+            return { ...item, date: included.date, note: included.note, checked: true };
+          }
+          return { ...item, date: '', note: '', checked: false };
+        });
+      }
+      return [];
+    } else {
+      return state.stagesDraft;
+    }
+  },
   getContactName: state => state.contact_name,
   getContactEmail: state => state.contact_email,
   getTeam: state => state.team,
@@ -54,21 +71,23 @@ export const getters = {
   getImplementingTeam: state => state.implementing_team.length === 0 ? [null] : state.implementing_team,
   getImplementingViewers: state => state.implementing_viewers.length === 0 ? [null] : state.implementing_viewers,
   getDonors: state => state.donors,
-  getShadowDonors: (state, rootState, rootGetters) => {
-    if ('health_focus_areas' in rootGetters.projects.projectStructure) {
-      return rootGetters.projects.projectStructure.health_focus_areas
-        .map(item => item.health_focus_areas)
-        .flat()
+  getShadowDonors: (state, getters, rootState) => {
+    if ('health_focus_areas' in rootState.projects.projectStructure) {
+      return flatten(
+        rootState.projects.projectStructure.health_focus_areas
+          .map(item => item.health_focus_areas)
+      )
         .filter(item => state.health_focus_areas.includes(item.id) && item.donors)
         .map(item => item.donors);
     }
     return [];
   },
-  getAllShadowDonors: (state, rootState, rootGetters) => {
-    if ('health_focus_areas' in rootGetters.projects.projectStructure) {
-      return rootGetters.projects.projectStructure.health_focus_areas
-        .map(item => item.health_focus_areas)
-        .flat()
+  getAllShadowDonors: (state, getters, rootState) => {
+    if ('health_focus_areas' in rootState.projects.projectStructure) {
+      return flatten(
+        rootState.projects.projectStructure.health_focus_areas
+          .map(item => item.health_focus_areas)
+      )
         .filter(item => item.donors)
         .map(item => item.donors);
     }
@@ -123,7 +142,6 @@ export const getters = {
 
 export const actions = {
   async loadProject ({ commit, dispatch, rootGetters }, id) {
-    dispatch('loadStagesList');
     const userProject = rootGetters['projects/getUserProjectList'].find(p => p.id === id || p.public_id === id);
     const { data } = userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`);
     commit('SET_ORIGINAL', Object.freeze(data));
@@ -205,8 +223,8 @@ export const actions = {
   setStages ({ commit }, value) {
     commit('SET_STAGES', value);
   },
-  setStagesList ({ commit }, value) {
-    commit('SET_STAGES_LIST', value);
+  setStagesDraft ({ commit }, value) {
+    commit('SET_STAGES_DRAFT', value);
   },
   setContactName ({ commit }, value) {
     commit('SET_CONTACT_NAME', value);
@@ -345,10 +363,11 @@ export const actions = {
     commit('SET_VIEWERS', data.viewers);
     return dispatch('user/updateTeamViewers', { ...data, id }, { root: true });
   },
-  async createProject ({ getters, dispatch }) {
+  async createProject ({ state, getters, dispatch }) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])];
+    draft.stages = newStages(state.stagesDraft);
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.post(`api/projects/draft/${draft.country}/`, parsed);
@@ -357,20 +376,22 @@ export const actions = {
     dispatch('setLoading', false);
     return data.id;
   },
-  async saveDraft ({ getters, dispatch }, id) {
+  async saveDraft ({ state, getters, dispatch }, id) {
     dispatch('setLoading', 'draft');
     const draft = getters.getProjectData;
     draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])];
+    draft.stages = newStages(state.stagesDraft);
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country}/`, parsed);
     await dispatch('setProject', { data, id });
     dispatch('setLoading', false);
   },
-  async publishProject ({ getters, dispatch, commit }, id) {
+  async publishProject ({ state, getters, dispatch, commit }, id) {
     dispatch('setLoading', 'publish');
     const draft = getters.getProjectData;
     draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])];
+    draft.stages = newStages(state.stagesDraft);
     draft.organisation = await dispatch('verifyOrganisation', draft.organisation);
     const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers);
     const { data } = await this.$axios.put(`/api/projects/publish/${id}/${draft.country}/`, parsed);
@@ -403,9 +424,8 @@ export const actions = {
     dispatch('projects/updateProject', data, { root: true });
     dispatch('setLoading', false);
   },
-  async loadStagesList ({ dispatch }) {
-    const { data } = await this.$axios.get(`/api/projects/stages/`)
-    dispatch('setStagesList', data);
+  loadStagesDraft ({ getters, dispatch }) {
+    dispatch('setStagesDraft', getters.getStagesDraft);
   }
 };
 
@@ -434,8 +454,8 @@ export const mutations = {
   SET_STAGES: (state, stages) => {
     state.stages = stages;
   },
-  SET_STAGES_LIST: (state, stages) => {
-    state.stagesList = stages;
+  SET_STAGES_DRAFT: (state, stagesDraft) => {
+    Vue.set(state, 'stagesDraft', stagesDraft);
   },
   SET_CONTACT_NAME: (state, contact_name) => {
     state.contact_name = contact_name;
@@ -588,5 +608,4 @@ export const mutations = {
   SET_ORIGINAL: (state, project) => {
     state.original = project;
   }
-
 };
