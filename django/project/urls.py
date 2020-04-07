@@ -7,7 +7,6 @@ router = DefaultRouter()
 router.register('import', views.ProjectImportV2ViewSet)
 router.register('import-row', views.ImportRowViewSet)
 router.register('software', views.TechnologyPlatformRequestViewSet)
-router.register('stages', views.StageViewSet)
 
 urlpatterns = [
     path("projects/", include(router.urls)),
