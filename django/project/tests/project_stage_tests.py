@@ -78,10 +78,10 @@ class ProjectStageTests(SetupTests):
         stage_a = Stage.objects.create(name='Stage A', order='2')
         stage_b = Stage.objects.create(name='Stage B', order='1')
 
-        url = reverse('stage-list')
+        url = reverse("get-project-structure")
         response = self.test_user_client.get(url, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
-        data = response.json()
+        data = response.json()['stages']
         self.assertEqual(data[0]['id'], stage_b.id)
         self.assertEqual(data[1]['id'], stage_a.id)
         self.assertEqual(data[2]['id'], stage_c.id)
