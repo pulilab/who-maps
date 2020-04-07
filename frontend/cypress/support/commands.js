@@ -72,6 +72,7 @@ Cypress.Commands.add('selectDHI', (mainCategory, subCategory) => {
 });
 
 Cypress.Commands.add('checkSelectedDHIs', (firstDHI, secondDHI) => {
+  cy.get("ul[class=\"SelectedDigitalHealthInterventions\"]").as('ulElementsOfSelectedDHIs');
   cy.get("@ulElementsOfSelectedDHIs").first().find('li').first().find('span')
     .should("contain", firstDHI);
   cy.get("@ulElementsOfSelectedDHIs").last().find('li').first().find('span')
