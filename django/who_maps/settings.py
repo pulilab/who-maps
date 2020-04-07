@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'ordered_model',
     'rosetta',
+    'adminsortable2',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
