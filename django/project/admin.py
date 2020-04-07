@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.db.models import Q
@@ -157,8 +158,8 @@ class ProjectImportV2Admin(admin.ModelAdmin):
     inlines = (ImportRowInline,)
 
 
-class StageAdmin(admin.ModelAdmin):
-    list_display = ['id', 'order', 'name']
+class StageAdmin(SortableAdminMixin, admin.ModelAdmin):
+    pass
 
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
