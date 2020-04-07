@@ -51,12 +51,6 @@
                 </el-col>
                 <el-col class="AdvancedSearchLink">
                   <nuxt-link
-                    :to="localePath({name : 'organisation-cms', params: $route.params})"
-                    class="NuxtLink IconRight"
-                  >
-                    <span><translate>Planning & Guidance</translate></span><fa icon="angle-right" />
-                  </nuxt-link>
-                  <nuxt-link
                     :to="localePath({name : 'organisation-dashboard', params: $route.params})"
                     class="NuxtLink IconRight"
                   >
@@ -72,12 +66,6 @@
                 :text="$gettext('You can use filters to further refine your search. Note that these filters can be saved by selecting Filters and naming your filter. These can then be viewed at a later time after you log in.') | translate"
                 page="organisation-dashboard"
                 class="FirstSearchComponent"
-              />
-              <SearchComponentLink
-                :title="$gettext('Go to Planning & Guidance') | translate"
-                :text="$gettext('Salutantibus vitae elit libero, a pharetra augue. Morbi odio eros, volutpat ut pharetra vitae, lobortis sed nibh.') | translate"
-                page="organisation-cms"
-                class="LastSearchComponent"
               />
             </template>
           </div>
@@ -484,7 +472,7 @@ export default {
       .AdvancedSearchLink {
         width: auto;
         a {
-          padding-left: 24px;
+          padding-left: 200px;
         }
       }
 
