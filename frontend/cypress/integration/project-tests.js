@@ -69,7 +69,7 @@ describe('Project tests', function() {
         let selector = "div[data-vv-name=\"" + item + "\"]";
         cy.get(selector).type("{downarrow}{enter}{esc}");
       }
-    )
+    );
 
     // choose Sub-national
     cy.contains('Sub-national').click();
