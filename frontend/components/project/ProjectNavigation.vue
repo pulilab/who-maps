@@ -262,7 +262,7 @@ export default {
       return false;
     },
     showDonorFieldsLink () {
-      const donors = [...new Set([...this.project.donors, ...this.getShadowDonors])]
+      const donors = [...new Set([...this.project.donors, ...this.getShadowDonors])];
       if (this.project && donors) {
         for (const donor of donors) {
           const details = this.getDonorDetails(donor);

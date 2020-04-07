@@ -234,7 +234,6 @@ export default {
       .Donors,
       .LastChange,
       .uid {
-        padding: 0 20px;
         text-align: center;
 
         > div {

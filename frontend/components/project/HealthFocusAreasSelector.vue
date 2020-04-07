@@ -49,8 +49,8 @@ export default {
     })
   },
   methods: {
-    uniq(obj) {
-      return uniqBy(obj, 'id')
+    uniq (obj) {
+      return uniqBy(obj, 'id');
     },
     changeHandler (value) {
       this.$emit('change', value);

@@ -137,7 +137,7 @@ export default {
       this.categoryToggled = this.expandCollapse;
     }
   },
-  mounted() {
+  mounted () {
     if (this.items.find(item => this.values.includes(item.id))) {
       this.categoryToggled = true;
     } else {
