@@ -120,8 +120,8 @@ describe('Project tests', function() {
     const typeOptions = {delay: 0};
     const DHICategory11 = "1.1 Targeted client communication";
     const DHICategory12 = "1.2 Untargeted client communication";
-    const DHIElement111 = "1.1.1 Transmit health event alerts to specific population group(s)";
-    const DHIElement121 = "1.2.1 Transmit untargeted health information to an undefined population";
+    const DHIElement111 = "1.1.1";
+    const DHIElement121 = "1.2.1";
 
     cy.get("input[data-vv-name=\"name\"]").type("Test Project DHI", typeOptions);
 
