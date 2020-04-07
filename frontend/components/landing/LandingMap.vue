@@ -51,6 +51,10 @@
           v-if="activeCountry"
           :active-tab.sync="activeTab"
         />
+        <switch-global-box
+          v-else
+          :active-tab.sync="activeGlobalTab"
+        />
         <world-zoom-button />
 
         <l-control-zoom
@@ -70,6 +74,7 @@ import CountryCenterMarker from '../common/map/CountryCenterMarker';
 import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay';
 import WorldZoomButton from '../common/map/WorldZoomButton';
 import SwitchViewBox from '../common/map/SwitchViewBox';
+import SwitchGlobalBox from '@/components/common/map/SwitchGlobalBox'
 import Spinner from '@/components/common/Spinner';
 
 export default {
@@ -79,6 +84,7 @@ export default {
     CountryDetailsOverlay,
     WorldZoomButton,
     SwitchViewBox,
+    SwitchGlobalBox,
     Spinner
   },
   mixins: [MapMixin]

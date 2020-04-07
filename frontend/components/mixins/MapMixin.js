@@ -23,6 +23,7 @@ const MapMixin = {
       getCountryProjects: 'landing/getCountryProjects',
       mapReady: 'landing/getMapReady',
       getActiveTab: 'landing/getProjectBoxActiveTab',
+      getActiveGlobalTab: 'landing/getProjectBoxActiveGlobalTab',
       getActiveSubLevel: 'landing/getActiveSubLevel',
       subNationalProjects: 'landing/getSelectedCountrySubNationalProjects',
       nationalProjects: 'landing/getSelectedCountryNationalProjects',
@@ -63,6 +64,14 @@ const MapMixin = {
       },
       set (value) {
         this.setActiveTab(value);
+      }
+    },
+    activeGlobalTab: {
+      get () {
+        return this.getActiveGlobalTab;
+      },
+      set (value) {
+        this.setActiveGlobalTab(value);
       }
     },
     activeSubLevel: {
@@ -161,6 +170,7 @@ const MapMixin = {
       setSelectedCountry: 'landing/setSelectedCountry',
       setActiveCountry: 'landing/setActiveCountry',
       setActiveTab: 'landing/setProjectBoxActiveTab',
+      setActiveGlobalTab: 'landing/setProjectBoxActiveGlobalTab',
       setActiveSubLevel: 'landing/setActiveSubLevel'
     }),
     centerOn (latlng, zoom = 13) {
