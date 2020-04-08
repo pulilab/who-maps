@@ -73,7 +73,7 @@ class ProjectPublicViewSet(ViewSet):
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
             strategies=strategies,
-            stages=[stage for stage in Stage.objects.values('id', 'name', 'tooltip')],
+            stages=Stage.objects.values('id', 'name', 'tooltip', 'order'),
         )
 
     @staticmethod

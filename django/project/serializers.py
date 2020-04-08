@@ -54,7 +54,7 @@ class PlatformSerializer(serializers.Serializer):
 
 class StageSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=True)
-    date = serializers.CharField(required=False, max_length=10, allow_null=True)
+    date = serializers.CharField(required=True, max_length=10)
     note = serializers.CharField(required=False, max_length=256, allow_null=True)
 
 
@@ -95,6 +95,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
     implementation_overview = serializers.CharField(max_length=1024)
     start_date = serializers.CharField(max_length=256, required=True)
     end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
+    end_date_note = serializers.CharField(max_length=256, required=False, allow_blank=True)
     contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
     research = serializers.NullBooleanField(required=False)
