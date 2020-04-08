@@ -149,9 +149,10 @@ ENABLE_WIDGET_FIELDS = ("gdhi_enabled", "road_map_enabled")
 
 COUNTRY_FIELDS = ("id", "name", "code", "logo", "logo_url", "cover", "cover_url", "cover_text", "footer_title",
                   "footer_text", "partner_logos", "project_approval", "map_data", "map_version", "map_files",
-                  "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code", "documents")
+                  "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code", "documents", "is_global")
 READ_ONLY_COUNTRY_FIELDS = ("name", "code", "logo", "logo_url", "cover", "cover_url", "map_version", "map_files",
-                            "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code", "documents")
+                            "map_activated_on", "country_questions", "lat", "lon", "alpha_3_code",
+                            "documents", "is_global")
 COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests',)
 READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos", "project_approval",)
 
