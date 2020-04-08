@@ -115,6 +115,8 @@ class Country(UserManagement, LandingPageCommon, GDHI, ArchitectureRoadMap):
     lat = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
     lon = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
 
+    is_global = models.BooleanField(default=False)
+
     class Meta:
         verbose_name_plural = "Countries"
         ordering = ('id',)
