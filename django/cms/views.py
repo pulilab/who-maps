@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 
 from rest_framework import mixins, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
@@ -54,7 +54,7 @@ class FlagMixin(object):
 class CmsViewSet(FlagMixin, ModelViewSet):
     queryset = Post.objects.showable().order_by('-id')
     serializer_class = CmsSerializer
-    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly, OnlyAdminForLessons)
+    permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly, OnlyAdminForLessons)
 
     def perform_create(self, serializer):
         obj = Post()
@@ -68,4 +68,4 @@ class CommentViewSet(FlagMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin
                      GenericViewSet):
     queryset = Comment.objects.showable().order_by('-id')
     serializer_class = CommentSerializer
-    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+    permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
