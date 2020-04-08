@@ -5,8 +5,8 @@ from django.db import migrations
 
 def add_global(apps, schema_editor):
     Country = apps.get_model('country', 'Country')
-    Country.objects.get_or_create(name_en='Global', is_global=True,
-                                  gdhi_enabled=False)
+    Country.objects.get_or_create(name='Global', name_en='Global',
+                                  is_global=True, gdhi_enabled=False)
 
 def remove_global(apps, schema_editor):
     Country = apps.get_model('country', 'Country')
