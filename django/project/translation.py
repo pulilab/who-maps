@@ -57,4 +57,4 @@ class HISBucketTranslationOptions(TranslationOptions):
 
 @register(Stage)
 class StageTranslationOptions(TranslationOptions):
-    fields = ('name',)
+    fields = ('name', 'tooltip')
