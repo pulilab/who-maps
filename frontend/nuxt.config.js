@@ -40,6 +40,7 @@ const config = {
     '~assets/style/main.less'
   ],
   env: {
+    GlobalCountryID: process.env.GLOBAL_COUNTRY_ID || 157
   },
   plugins: [
     { src: '~plugins/eventfix.js', ssr: false },

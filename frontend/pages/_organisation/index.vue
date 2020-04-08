@@ -74,6 +74,7 @@ export default {
       return {
         gdhi_enabled: false,
         road_map_enabled: false,
+        documents: [],
         ...(this.landingData || {})
       };
     }

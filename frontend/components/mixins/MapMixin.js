@@ -124,6 +124,14 @@ const MapMixin = {
     }
   },
   watch: {
+    activeGlobalTab (val) {
+      if (val) {
+        this.setActiveCountry(process.env.GlobalCountryID);
+        this.centerOn([0, 0], 2);
+      } else {
+        this.resetZoom();
+      }
+    },
     activeCountryAndMapReady: {
       immediate: true,
       handler (id, old) {

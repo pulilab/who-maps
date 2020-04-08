@@ -24,7 +24,7 @@
             {{ landingData.name }}
           </template>
           <translate v-else>
-            Global
+            All countries
           </translate>
           <fa icon="caret-down" />
         </div>
@@ -67,7 +67,7 @@
                 src="/who-logo-small.svg"
                 class="CountryInnerFlag"
               >
-              <translate>Global</translate>
+              <translate>All countries</translate>
               <fa
                 icon="check"
                 class="check"

@@ -20,6 +20,7 @@
         />
 
         <custom-marker-cluster
+          v-if="!getActiveGlobalTab"
           ref="markerCluster"
           :options="clusterOptions"
           :total="countriesPin.length"
@@ -48,7 +49,7 @@
           :national-projects="nationalProjects"
         />
         <switch-view-box
-          v-if="activeCountry"
+          v-if="activeCountry && !getActiveGlobalTab"
           :active-tab.sync="activeTab"
         />
         <switch-global-box
