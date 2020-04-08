@@ -27,6 +27,20 @@ class ProjectStageTests(SetupTests):
 
         project_id = response.json()['id']
 
+        # add stage without date
+        stages = [
+            {
+                'id': 3,
+                'date': None,
+                'note': None
+            }
+        ]
+        data['project']['stages'] = stages
+        url = reverse("project-draft", kwargs={"project_id": project_id, "country_id": self.country_id})
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
+        self.assertEqual(response.json(), {'project': {'stages': [{'date': ['This field may not be null.']}]}})
+
         # add stages
         stages = [
             {
@@ -41,7 +55,7 @@ class ProjectStageTests(SetupTests):
             },
             {
                 'id': 3,
-                'date': None,
+                'date': str((now - timezone.timedelta(days=3)).date()),
                 'note': None
             }
         ]
