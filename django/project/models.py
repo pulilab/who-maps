@@ -51,7 +51,7 @@ class ProjectQuerySet(ActiveQuerySet, ProjectManager):
 
 class Project(SoftDeleteModel, ExtendedModel):
     FIELDS_FOR_MEMBERS_ONLY = ("country_custom_answers_private",
-                               "last_version", "last_version_date", "start_date", "end_date")
+                               "last_version", "last_version_date", "start_date", "end_date", 'end_date_note')
     FIELDS_FOR_LOGGED_IN = ("coverage", "contact_email", "contact_name")
 
     name = models.CharField(max_length=255)
@@ -197,11 +197,13 @@ class ProjectApproval(ExtendedModel):
         return "Approval for {}".format(self.project.name)
 
 
-class Stage(ExtendedModel):
+class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     name = models.CharField(max_length=128)
+    order = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
+    tooltip = models.CharField(max_length=256, blank=True, null=True)
 
     class Meta:
-        ordering = ['name']
+        ordering = ['order', 'name']
 
     def __str__(self):  # pragma: no cover
         return self.name
