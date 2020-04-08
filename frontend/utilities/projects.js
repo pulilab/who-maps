@@ -42,10 +42,15 @@ export const newStages = (draft) => {
       return {
         id: i.id,
         note: i.note || null,
-        date: format(i.date, 'YYYY-MM-DD') === 'Invalid Date' ? null : format(i.date, 'YYYY-MM-DD')
+        date: formatDate(i.date)
       };
     });
 };
+
+export const formatDate = (date) =>
+  format(date, 'YYYY-MM-DD') === 'Invalid Date'
+    ? null
+    : format(date, 'YYYY-MM-DD');
 
 export const projectFields = () => ({
   name: null,

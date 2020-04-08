@@ -9,28 +9,6 @@
       show-legend
     >
       <custom-required-form-item
-        :error="errors.first('implementation_dates')"
-        :draft-rule="draftRules.implementation_dates"
-        :publish-rule="publishRules.implementation_dates"
-      >
-        <template slot="label">
-          <translate key="implementation_dates">
-            When will the technology be first deployed?
-          </translate>
-        </template>
-
-        <safe-date-picker
-          ref="datePicker"
-          v-model="implementation_dates"
-          v-validate="rules.implementation_dates"
-          :placeholder="$gettext('Pick a day') | translate"
-          data-vv-name="implementation_dates"
-          data-vv-as="Implementation dates"
-          class="Date"
-          align="left"
-        />
-      </custom-required-form-item>
-      <custom-required-form-item
         :error="errors.first('licenses')"
         :draft-rule="draftRules.licenses"
         :publish-rule="publishRules.licenses"

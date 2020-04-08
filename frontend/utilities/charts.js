@@ -3,16 +3,16 @@ export const phaseInfo = (type) => {
   switch (type) {
   case 'Ended':
     info = {
-      color: '#558B2F',
-      rotation: 270,
+      color: '#D86422',
+      rotation: 180,
       dash: [],
       point: 'triangle'
     };
     break;
-  case 'Discontinued':
+  case 'Start':
     info = {
-      color: '#D86422',
-      rotation: 180,
+      color: '#558B2F',
+      rotation: 90,
       dash: [10, 5],
       point: 'triangle'
     };

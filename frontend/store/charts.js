@@ -1,51 +1,78 @@
 // utilities
-import { axisYColors, dataInfoFill, fillArr, phaseInfo, lastLabelType } from '@/utilities/charts';
+import { dataInfoFill, fillArr, phaseInfo, lastLabelType } from '@/utilities/charts';
+import { formatDate } from '@/utilities/projects';
+import { isBefore } from 'date-fns';
 
 export const state = () => ({
-  chartdata: {},
-  options: {}
+  stages: {
+    chartdata: {},
+    options: {}
+  }
 });
 
 export const actions = {
-  async getStageData ({ commit }) {
-    const phases = [
-      'Opportunity and Ideation',
-      'Preparation and Scoping',
-      'Analysis and Design',
-      'Implementation Planning',
-      'Developing or Adapting Solution',
-      'Piloting and Evidence Generation',
-      'Package and Advocacy',
-      'Deploying',
-      'Scaling up',
-      'Hand over or Complete'
-    ];
+  getStageData ({ commit, rootState }, stages) {
+    // phases
+    const phases = [''].concat(stages.map(i => i.name));
 
-    const labels = [
-      '2020-10-10',
-      '2020-10-11',
-      '2020-10-12',
-      '2020-10-13',
-      '2020-10-14',
-      '2020-10-15',
-      '2020-10-16',
-      '2020-10-17',
-      '2020-10-18',
-      ['2020-10-19', 'Discontinued']
-    ];
+    // labels
+    const start = formatDate(rootState.project.start_date);
+    const end = formatDate(rootState.project.end_date);
+    const today = formatDate(new Date());
 
-    const data = [0, 1, 2, 3, 4, 5, 6, 7, 9, 9];
+    const labels = [start].concat(stages.filter(i => i.checked).map(i => i.date));
+    const lastLabel = labels[labels.length - 1];
+
+    // data
+    const data = [0].concat(stages.filter(i => i.checked).map(i => phases.indexOf(i.name)));
+    const lastDataPoint = data[data.length - 1];
+    console.log(lastDataPoint);
+
+    // today and end date data points, if needed
+    if (isBefore(lastLabel, today) && isBefore(today, end)) {
+      data.push(lastDataPoint + 1);
+      labels.push([today, 'Today']);
+    }
+    if (isBefore(lastLabel, today) && end === '1970-01-01') {
+      data.push(lastDataPoint + 1);
+      labels.push([today, 'Today']);
+    }
+    if (end && end !== '1970-01-01') {
+      data.push(data[data.length - 1]);
+      labels.push([end, 'Ended']);
+    }
+
+    const lLen = labels.length;
+    // start calc
+    const startData = data.slice(0, 1);
+    // end calc
+    const endData = (Array.isArray(labels[lLen - 1]) && (labels[lLen - 1][1] === 'Ended'))
+      ? fillArr(lLen - 1, NaN).concat(data.slice(-1))
+      : [];
+    // today calc
+    const checkLabels = labels.filter(i => Array.isArray(i));
+    const todayIncludes = checkLabels.filter(i => i[1] === 'Today');
+    const todayData = (todayIncludes.length > 0)
+      ? fillArr(lLen - checkLabels.length - 1, NaN).concat(
+        checkLabels.length > 1 ? data.slice(-3, -1) : data.slice(-2))
+      : [];
+    console.log(todayData);
+    console.log(data);
+    // stages calc
+    const stagesData = (todayIncludes.length > 0)
+      ? data.slice(0, -checkLabels.length)
+      : data;
 
     const { color, rotation, dash, point } = phaseInfo(lastLabelType(labels));
 
     commit(
-      'SET_CHART_DATA',
+      'SET_STAGES_CHART_DATA',
       {
         labels,
         datasets: [
           {
-            borderColor: '#008DC9',
-            pointBackgroundColor: '#008DC9',
+            borderColor: '#558B2F',
+            pointBackgroundColor: '#558B2F',
             fill: false,
             lineTension: 0,
             pointStyle: dataInfoFill(labels.length - 1, 'circle', 'triangle'),
@@ -53,7 +80,7 @@ export const actions = {
             pointHoverRadius: dataInfoFill(labels.length - 1, 8, 14),
             pointBorderColor: 'white',
             pointRotation: 90,
-            data: data.slice(0, data.length - 1)
+            data: startData
           },
           {
             borderColor: color,
@@ -66,13 +93,39 @@ export const actions = {
             pointHoverRadius: dataInfoFill(labels.length, 0, 14, 'back'),
             pointBorderColor: 'white',
             pointRotation: rotation,
-            data: fillArr(labels.length - 2, NaN).concat(data.slice(-2))
+            data: endData
+          },
+          {
+            borderColor: '#008DC9',
+            pointBackgroundColor: '#008DC9',
+            fill: false,
+            lineTension: 0,
+            pointStyle: dataInfoFill(labels.length - 1, 'circle', 'circle'),
+            pointRadius: dataInfoFill(labels.length - 1, 6, 0),
+            pointHoverRadius: dataInfoFill(labels.length - 1, 8, 0),
+            pointBorderColor: 'white',
+            pointRotation: 90,
+            data: stagesData
+          },
+          {
+            borderColor: '#B9B9B9',
+            pointBackgroundColor: 'white',
+            fill: false,
+            lineTension: 0,
+            borderDash: [10, 5],
+            pointStyle: dataInfoFill(labels.length, 'circle', 'circle', 'back'),
+            pointRadius: dataInfoFill(labels.length, 5, 0, 'back'),
+            pointHoverRadius: dataInfoFill(labels.length, 7, 0, 'back'),
+            pointBorderColor: '#B9B9B9', // blue point border
+            pointBorderWidth: 2, // point border width
+            pointRotation: 0,
+            data: todayData
           }
         ]
       }
     );
     commit(
-      'SET_OPTIONS',
+      'SET_STAGES_OPTIONS',
       {
         maintainAspectRatio: false,
         defaultFontColor: '#474747',
@@ -91,14 +144,14 @@ export const actions = {
               drawBorder: false
             },
             ticks: {
-              padding: 12,
-              fontStyle: 'bold'
+              padding: 12
+              // fontStyle: 'bold'
             }
           }],
           yAxes: [{
             gridLines: {
-              drawBorder: false,
-              color: axisYColors(phases, labels, data)
+              drawBorder: false
+              // color: axisYColors(phases, labels, data)
             },
             ticks: {
               stepSize: 1,
@@ -107,7 +160,7 @@ export const actions = {
               fontColor: '#9E9E9E',
               padding: 12,
               callback: function (value, index, values) {
-                return phases[value] || '';
+                return value > 0 ? `${value}. ${phases[value]}` : phases[value];
               }
             }
           }]
@@ -118,10 +171,10 @@ export const actions = {
 };
 
 export const mutations = {
-  SET_CHART_DATA: (state, obj) => {
-    state.chartdata = obj;
+  SET_STAGES_CHART_DATA: (state, obj) => {
+    state.stages.chartdata = obj;
   },
-  SET_OPTIONS: (state, obj) => {
-    state.options = obj;
+  SET_STAGES_OPTIONS: (state, obj) => {
+    state.stages.options = obj;
   }
 };
