@@ -51,7 +51,7 @@ class ProjectQuerySet(ActiveQuerySet, ProjectManager):
 
 class Project(SoftDeleteModel, ExtendedModel):
     FIELDS_FOR_MEMBERS_ONLY = ("country_custom_answers_private",
-                               "last_version", "last_version_date", "start_date", "end_date")
+                               "last_version", "last_version_date", "start_date", "end_date", 'end_date_note')
     FIELDS_FOR_LOGGED_IN = ("coverage", "contact_email", "contact_name")
 
     name = models.CharField(max_length=255)

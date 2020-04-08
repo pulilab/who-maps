@@ -18,6 +18,7 @@ class ProjectStageTests(SetupTests):
         data['project']['name'] = 'Test Project 100'
         data['project']['start_date'] = str((now - timezone.timedelta(days=10)).date())
         data['project']['end_date'] = str((now - timezone.timedelta(days=1)).date())
+        data['project']['end_date_note'] = "note for end date"
         del data['project']['stages']
 
         # create project
@@ -26,6 +27,7 @@ class ProjectStageTests(SetupTests):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
         project_id = response.json()['id']
+        self.assertIn("end_date_note", response.json()['draft'])
 
         # add stage without date
         stages = [
@@ -75,6 +77,7 @@ class ProjectStageTests(SetupTests):
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         resp_data = response.json()
         self.assertNotIn('stages', resp_data['draft'])
+        self.assertIn("end_date_note", response.json()['draft'])
 
         # publish with stages
         data['project']['stages'] = stages
