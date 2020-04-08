@@ -152,19 +152,19 @@
               :label="$gettext('Ministry of Health {num}', {num: documents ? documents.length : 0}) | translate"
               name="documents"
             >
-              <el-row v-if="documents === null">
+              <el-row v-show="documents === null">
                 <div class="Loading">
                   <Spinner size="22" />
                   <translate>Loading...</translate>
                 </div>
               </el-row>
-              <el-row v-else-if="documents.length === 0">
+              <el-row v-show="documents && documents.length === 0">
                 <div class="Loading">
                   <translate>No document to show</translate>
                 </div>
               </el-row>
               <div
-                v-else
+                v-if="documents && documents.length"
                 class="SearchResultsWrapper"
               >
                 <el-row
@@ -273,7 +273,8 @@ export default {
     }),
     resultCount () {
       return (this.results ? this.results.length : 0) +
-        (this.cms ? this.cms.length : 0);
+        (this.cms ? this.cms.length : 0) +
+        (this.documents ? this.documents.length : 0);
     }
   },
   watch: {
@@ -320,6 +321,9 @@ export default {
     },
     show () {
       this.shown = true;
+      this.$nextTick(function () {
+        this.$refs.searchInput.focus();
+      });
     },
     hide () {
       this.shown = false;
