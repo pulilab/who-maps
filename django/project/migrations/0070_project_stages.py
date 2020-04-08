@@ -60,17 +60,6 @@ def create_stages(apps, schema_editor):
             "name": "Hand over or Complete",
             "tooltip": "capacity building of govt ICT for on-going maintenance",
         },
-        {
-            "order": 11,
-            "name": "Under Review",
-            "tooltip": "pilot projects that have gone on too long but no one wants to make the call to end it; or, "
-                       "formal evaluation that should happen after a couple of years to ensure that the project is "
-                       "still providing value",
-        },
-        {
-            "order": 12,
-            "name": "Discontinued",
-        }
     ]
 
     for item in stages:
