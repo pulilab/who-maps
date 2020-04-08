@@ -30,11 +30,11 @@ export default {
     }
   },
   async fetch ({ store, params }) {
+    await store.dispatch('system/loadDonors');
     await Promise.all([
       store.dispatch('system/loadStaticData'),
-      store.dispatch('system/loadDonors'),
       store.dispatch('countries/loadMapData'),
-      store.dispatch('landing/search')
+      store.dispatch('landing/search', params.organisation === '-' ? undefined : params.organisation)
     ]);
     if (params.organisation !== '-') {
       await store.dispatch('landing/loadCustomLandingPage', params.organisation);

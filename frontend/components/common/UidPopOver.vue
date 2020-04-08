@@ -35,11 +35,11 @@
         <div class="popover__diplay--blue">
           {{ uid }} <fa :icon="uidPopOver ? 'angle-up' : 'angle-down'" />
         </div>
-        <span><translate>Project UID</translate></span>
+        <span><translate>Unique Project ID (UID)</translate></span>
       </template>
       <template v-if="type === 'infoSection'">
         <div class="Label">
-          <translate>Project UID</translate>
+          <translate>Unique Project ID (UID)</translate>
         </div>
         <div class="popover__diplay--blue Info">
           {{ uid }} <fa :icon="uidPopOver ? 'angle-up' : 'angle-down'" />

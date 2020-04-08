@@ -11,7 +11,7 @@
       slot="reference"
       type="text"
       size="small"
-      class="IconLeft"
+      class="IconLeft ChooserButton"
     >
       <div class="CountryHolder">
         <img
@@ -154,6 +154,9 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
+  .ChooserButton {
+    padding: 0 !important;
+  }
   .CustomPopover {
     top: 15px !important;
     .el-popover__title {

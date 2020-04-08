@@ -18,7 +18,7 @@
     </div>
 
     <div
-      v-if="routeCheck"
+      v-if="!landingData"
       class="InfoSignupContainer"
     >
       <el-row type="flex">
@@ -31,8 +31,8 @@
       </el-row>
     </div>
     <layout-builder
-      v-else-if="landingData"
-      :data="landingData"
+      v-else
+      :data="defaultsLandingData"
     />
     <about-section />
   </div>
@@ -65,10 +65,17 @@ export default {
       landingData: 'landing/getLandingPageData'
     }),
     showCoverImage () {
-      return this.landingData && this.landingData.cover;
+      return false;
     },
     routeCheck () {
       return this.$route.path.split('/')[2].trim() === '-' || this.$route.path.split('/')[2].trim().length > 2;
+    },
+    defaultsLandingData () {
+      return {
+        gdhi_enabled: false,
+        road_map_enabled: false,
+        ...(this.landingData || {})
+      };
     }
   },
   fetch ({ store }) {

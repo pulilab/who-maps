@@ -14,7 +14,7 @@ from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from project.cache import cache_structure
-from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
+from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
@@ -72,7 +72,8 @@ class ProjectPublicViewSet(ViewSet):
             his_bucket=HISBucket.objects.values('id', 'name'),
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
-            strategies=strategies
+            strategies=strategies,
+            stages=Stage.objects.values('id', 'name', 'tooltip', 'order'),
         )
 
     @staticmethod

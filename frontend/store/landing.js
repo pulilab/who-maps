@@ -11,6 +11,7 @@ export const getters = {
   ...gettersGenerator(),
   getSearched: state => state.searched,
   getLandingPageData: state => state.landingPageData,
+  getIsCountry: state => state.landingPageData && state.landingPageData.isCountry,
   getSearchResult: (state, getters) => {
     if (state.searched && state.searched === state.searchString) {
       return getters.getProjectsMap;
@@ -30,10 +31,11 @@ export const getters = {
 
 export const actions = {
   ...actionsGenerator(),
-  async search ({ commit, dispatch }) {
+  async search ({ rootGetters, commit, dispatch }, code) {
     try {
       commit('SET_SEARCHED', null);
-      const { results } = await dispatch('loadProjects');
+      const params = code ? { donor: rootGetters['system/getDonors'].find(d => d.code.toLowerCase() === code.toLowerCase()).id } : undefined;
+      const { results } = await dispatch('loadProjects', params);
       commit('SET_PROJECT_MAP', results.projects);
       commit('SET_SEARCHED', results.search_term);
       commit('SET_FOUND_IN', results.found_in);
@@ -52,7 +54,7 @@ export const actions = {
       const country = rootGetters['countries/getCountries'].find(c => c.code.toLowerCase() === code.toLowerCase());
       const { data } = await this.$axios.get(`/api/landing-country/${country.id}/`);
       await dispatch('setSelectedCountry', data.id);
-      commit('SET_LANDING_PAGE_DATA', Object.freeze(data));
+      commit('SET_LANDING_PAGE_DATA', Object.freeze({ isCountry: true, ...data }));
     } catch (e) {
       console.error('landing/loadCountryData failed');
     }
@@ -61,8 +63,9 @@ export const actions = {
     try {
       const donor = rootGetters['system/getDonors'].find(d => d.code.toLowerCase() === code.toLowerCase());
       const { data } = await this.$axios.get(`/api/landing-donor/${donor.id}/`);
-      commit('SET_LANDING_PAGE_DATA', Object.freeze(data));
+      commit('SET_LANDING_PAGE_DATA', Object.freeze({ isCountry: false, ...data }));
     } catch (e) {
+      console.error(e);
       console.error('landing/loadDonorData failed');
     }
   },

@@ -9,7 +9,8 @@
       class="TopBarInner"
     >
       <el-col class="LogoHolder">
-        <nuxt-link :to="localePath({name: 'organisation', params: $route.params})">
+        <!--<nuxt-link :to="localePath({name: 'organisation', params: $route.params})">-->
+        <nuxt-link :to="localePath({name: 'organisation', params: { organisation: '-' }})">
           <el-row
             type="flex"
             align="middle"
@@ -23,7 +24,7 @@
             <el-col class="Separator">
               <div />
             </el-col>
-            <el-col class="LogoDHA">
+            <el-col :class="customOrganisation ? 'LogoDHASmall' : 'LogoDHA'">
               <img
                 src="/logo-dha.svg"
                 alt="Digital Health Atlas"
@@ -134,8 +135,32 @@
               </el-col>
             </el-row>
           </el-col>
-          <el-col>
-            <country-chooser />
+          <template v-if="!customOrganisation || countrySpecific">
+            <el-col>
+              <nuxt-link
+                :to="localePath({name: 'organisation', params: {organisation: 'covid-19'}})"
+                class="HeaderBtn CovidLink"
+              >
+                COVID-19
+              </nuxt-link>
+            </el-col>
+            <el-col>
+              <country-chooser />
+            </el-col>
+          </template>
+          <el-col
+            v-else
+            class="CountrySpecificMenu"
+          >
+            <div>
+              <nuxt-link
+                key="whoLandingBtn"
+                :to="localePath({name: 'organisation', params: {organisation: landingData.code}})"
+                class="HeaderBtn"
+              >
+                {{ landingData.name }}
+              </nuxt-link>
+            </div>
           </el-col>
         </el-row>
       </el-col>
@@ -171,7 +196,8 @@ export default {
   computed: {
     ...mapGetters({
       user: 'user/getProfile',
-      landingData: 'landing/getLandingPageData'
+      landingData: 'landing/getLandingPageData',
+      isCountry: 'landing/getIsCountry'
     }),
     customOrganisation () {
       return this.landingData !== null;
@@ -207,6 +233,11 @@ export default {
       background-color: @colorWhite;
       align-items: stretch;
     }
+    .CovidLink {
+      margin-left: -6px !important;
+      margin-right: 10px !important;
+      white-space: nowrap;
+    }
 
     .LogoHolder {
       display: flex;
@@ -225,8 +256,17 @@ export default {
         width: 100%;
 
         img {
-          height: 24px;
+          height: 38px;
           transform: translateY(2px);
+        }
+      }
+
+      .LogoDHASmall {
+        width: 100%;
+
+        img {
+          height: 34px;
+          transform: translate(-5px);
         }
       }
 

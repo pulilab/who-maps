@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'ordered_model',
     'rosetta',
+    'adminsortable2',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -330,10 +331,6 @@ if SITE_ID == 3:
 elif SITE_ID == 4:
     ENVIRONMENT_NAME = "QA / STAGING"
     ENVIRONMENT_COLOR = "orange"
-    TOOLKIT_DIGEST_PERIOD = 1  # hour
-    PROJECT_UPDATE_DIGEST_PERIOD = 1  # hour
-    NEW_QUESTION_DIGEST_PERIOD = 1  # hour
-    DRAFT_ONLY_REMINDER_PERIOD = 1  # hour
     DRAFT_ONLY_REMINDER_LIMITED = True
 else:
     ENVIRONMENT_NAME = "DEVELOPMENT"
@@ -409,7 +406,9 @@ if SITE_ID in [3, 4]:
             'rest_framework.renderers.JSONRenderer',
         )
     }
-
+    # TODO: refactor these into .env settings
+    if SITE_ID == 3:
+        EMAIL_SENDING_PRODUCTION = True
     if SITE_ID == 4:
         # redirect all emails to the forced addresses
         EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'

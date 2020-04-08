@@ -1,6 +1,5 @@
 <template>
   <el-dialog
-    v-if="visible"
     :visible.sync="visible"
     :title="$gettext('Select Digital Health Intervention(s)') | translate"
     modal
@@ -20,11 +19,12 @@
       >
         <selector-dialog-column
           :header="category.name"
+          expand-collapse
           @handleToggleExpand="handleToggleExpand"
         >
           <selector-dialog-category
             v-for="cat in category.subGroups"
-            :key="cat.id"
+            :key="`${selectedPlatform || ''}_${cat.id}`"
             v-model="currentSelection"
             :category-selectable="true"
             :category="cat"
