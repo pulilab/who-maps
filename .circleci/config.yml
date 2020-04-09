@@ -95,35 +95,6 @@ jobs:
           command: |
             export TERM=xterm && ! git diff --name-status origin/development HEAD | grep /migrations/0 | grep "^A"
 
-  cypress-e2e:
-    docker:
-      - image: cypress/base:8
-        environment:
-          ## this enables colors in the output
-          TERM: xterm
-    steps:
-      - checkout
-#      - run: sudo chown -R circleci:circleci /usr/local/bin
-#      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
-
-      - run:
-          name: install python reqs
-          working_directory: ~/who-maps/django
-          command: |
-            sudo pip install pipenv
-            pipenv install
-            pipenv run pip install -r requirements.txt
-
-      - run:
-          name: install frontend reqs
-          working_directory: ~/who-maps/frontend
-          command: npm install
-
-      - run:
-          name: cypress tests
-          working_directory: ~/who-maps/frontend
-          command: npm run cy.run -- --spec "cypress/integration/*"
-
   deploy-dev:
     docker:
       - image: circleci/python:3.7.6-stretch
@@ -167,7 +138,6 @@ workflows:
           filters:
             tags:
               only: /^[0-9]+(\.[0-9]+)*$/
-      - cypress-e2e
       - deploy-dev:
           name: Dev Server Deployment
           requires:
