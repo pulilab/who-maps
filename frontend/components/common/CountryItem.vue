@@ -10,7 +10,7 @@
         :code="country.code"
       />
     </el-col>
-    <el-col class="CountryName">
+    <el-col :class="`CountryName ${active ? 'Active': ''}`">
       <div @click="selectCountry(country)">
         {{ country.name }}
       </div>
@@ -34,6 +34,10 @@ export default {
     showFlag: {
       type: Boolean,
       default: true
+    },
+    active: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -49,8 +53,11 @@ export default {
   },
   methods: {
     selectCountry (country) {
+      if (!this.active) {
+        return;
+      }
       const organisation = country ? country.code.toLowerCase() : '-';
-      const localised = this.localePath({ name: 'organisation', params: { organisation } });
+      const localised = this.localePath({ name: 'organisation', params: { organisation } }, this.locale);
       this.$router.push(localised);
     }
   }
@@ -78,14 +85,18 @@ export default {
       font-size: @fontSizeMedium;
       font-weight: 700;
       line-height: 16px;
-      color: @colorBrandPrimary;
 
       div {
         display: inline-block;
-        cursor: pointer;
         white-space: nowrap;
-        &:hover {
-          color: @colorBrandPrimaryLight;
+      }
+      &.Active {
+        color: @colorBrandPrimary;
+        div {
+          cursor: pointer;
+          &:hover {
+            color: @colorBrandPrimaryLight;
+          }
         }
       }
     }
