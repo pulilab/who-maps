@@ -65,7 +65,7 @@ jobs:
       - save_cache:
           paths:
             - frontend/node_modules
-            - "/home/circleci/.cache/Cypress"
+            - ~/.cache
           key: v3-dependencies-f-{{ checksum "frontend/package.json" }}
 
       - run:
