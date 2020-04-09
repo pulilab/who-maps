@@ -54,6 +54,11 @@ jobs:
           working_directory: ~/who-maps
           command: sudo npm install -g mapshaper
 
+      - run:
+          name: cypress install
+          working_directory: ~/who-maps
+          command: cypress install
+
       - save_cache:
           paths:
             - "django/.venv"
