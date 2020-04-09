@@ -65,11 +65,11 @@ jobs:
             - "/usr/local/lib/python3.7/site-packages"
           key: v6-dependencies-b-{{ checksum "django/requirements.txt" }}
 
-#      - save_cache:
-#          paths:
-#            - frontend/node_modules
-#            - /home/circleci/.cache
-#          key: v3-dependencies-f-{{ checksum "frontend/package.json" }}
+      - save_cache:
+          paths:
+            - frontend/node_modules
+            - ~/.cache
+          key: v3-dependencies-f-{{ checksum "frontend/package.json" }}
 
       - run:
           name: backend flake8
