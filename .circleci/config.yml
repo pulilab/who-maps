@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   jira: circleci/jira@1.1.0
-  cypress: cypress-io/cypress@1.19.1
+  cypress: cypress-io/cypress@1
 
 jobs:
   build-and-test:
