@@ -57,7 +57,7 @@ jobs:
       - run:
           name: cypress install
           working_directory: ~/who-maps
-          command: cypress install
+          command: npm install cypress
 
       - save_cache:
           paths:
