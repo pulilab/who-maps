@@ -16,7 +16,7 @@
             <el-switch
               v-model="research"
               active-color="#008DC9"
-              :disabled="false"
+              :disabled="researchDisabled"
             />
             <p class="research__switch">
               <translate key="research-project-title">
@@ -37,7 +37,6 @@
           </div>
         </el-col>
         <!-- research section -->
-
         <!-- Start date section -->
         <el-col :span="24">
           <custom-required-form-item
@@ -187,7 +186,11 @@
 
             <el-col :span="18">
               <el-input
-                v-model="endNote"
+                key="end_date_note"
+                v-model="end_date_note"
+                v-validate="rules.end_date_note"
+                data-vv-name="end_date_note"
+                data-vv-as="End date note"
                 :placeholder="$gettext('Add note (optional)') | translate"
               >
                 <i
@@ -218,11 +221,10 @@ export default {
     FormHint
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
-  data () {
+  data() {
     return {
-      research: false,
-      endNote: ''
-    };
+      researchDisabled: false
+    }
   },
   computed: {
     ...mapState({
@@ -230,7 +232,9 @@ export default {
     }),
     ...mapGettersActions({
       start_date: ['project', 'getStartDate', 'setStartDate', 0],
-      end_date: ['project', 'getEndDate', 'setEndDate', 0]
+      end_date: ['project', 'getEndDate', 'setEndDate', 0],
+      end_date_note: ['project', 'getEndDateNote', 'setEndDateNote', 0],
+      research: ['project', 'getResearch', 'setResearch', 0]
     }),
     endDateError () {
       if (this.usePublishRules && this.start_date && this.end_date && isAfter(this.start_date, this.end_date)) {
@@ -241,6 +245,13 @@ export default {
   },
   mounted () {
     this.loadStagesDraft();
+    // research custom logic
+    if (this.research === undefined) {
+      this.researchDisabled = false
+      this.research = false
+    } else {
+      this.researchDisabled = true
+    }
   },
   methods: {
     ...mapActions({
@@ -260,7 +271,8 @@ export default {
       const validations = await Promise.all([
         this.$validator.validate('start_date'),
         this.$validator.validate('end_date')
-      ]);
+      ])
+      console.log('Project stages draft validation', validations);
       return validations.reduce((a, c) => a && c, true);
     },
     updateStagesDraft (id, key, value) {

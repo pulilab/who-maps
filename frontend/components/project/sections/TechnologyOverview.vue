@@ -112,7 +112,6 @@ export default {
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGettersActions({
-      implementation_dates: ['project', 'getImplementationDates', 'setImplementationDates', 0],
       licenses: ['project', 'getLicenses', 'setLicenses', 0],
       repository: ['project', 'getRepository', 'setRepository', 0],
       mobile_application: ['project', 'getMobileApplication', 'setMobileApplication', 0],
@@ -126,14 +125,6 @@ export default {
         this.$validator.validate()
       ]);
       console.log('Technology overview validators', validations);
-      return validations.reduce((a, c) => a && c, true);
-    },
-    async validateDraft () {
-      this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([
-        this.$validator.validate('implementation_dates')
-      ]);
-      console.log('Technology overview draft validators', validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }

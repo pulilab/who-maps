@@ -255,7 +255,7 @@ export default {
     async validateDraft () {
       const validations = await Promise.all([
         this.$refs.generalOverview.validateDraft(),
-        this.$refs.technologyOverview.validateDraft()
+        this.$refs.stageOverview.validateDraft()
       ]);
       console.log('root draft validations', validations);
       return validations.reduce((a, c) => a && c, true);

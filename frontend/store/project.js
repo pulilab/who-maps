@@ -34,6 +34,8 @@ export const getters = {
   getImplementationOverview: state => state.implementation_overview,
   getStartDate: state => epochCheck(state.start_date),
   getEndDate: state => epochCheck(state.end_date, false),
+  getResearch: state => state.research,
+  getEndDateNote: state => state.end_date_note,
   getStages: state => state.stages,
   getStagesDraft: (state, getters, rootState) => {
     if (!('stageDraft' in state)) {
@@ -219,6 +221,12 @@ export const actions = {
   },
   setEndDate ({ commit }, value) {
     commit('SET_END_DATE', value);
+  },
+  setResearch ({ commit }, value) {
+    commit('SET_RESEARCH', value);
+  },
+  setEndDateNote ({ commit }, value) {
+    commit('SET_END_DATE_NOTE', value);
   },
   setStages ({ commit }, value) {
     commit('SET_STAGES', value);
@@ -451,6 +459,12 @@ export const mutations = {
   SET_END_DATE: (state, end_date) => {
     state.end_date = end_date;
   },
+  SET_RESEARCH: (state, research) => {
+    state.research = research;
+  },
+  SET_END_DATE_NOTE: (state, end_date_note) => {
+    state.end_date_note = end_date_note;
+  },
   SET_STAGES: (state, stages) => {
     state.stages = stages;
   },
@@ -569,6 +583,8 @@ export const mutations = {
     state.implementation_overview = get(project, 'implementation_overview', '');
     state.start_date = new Date(get(project, 'start_date', ''));
     state.end_date = new Date(get(project, 'end_date', ''));
+    state.research = project.research;
+    state.end_date_note = get(project, 'end_date_note', '');
     state.stages = get(project, 'stages', []);
     state.contact_name = get(project, 'contact_name', '');
     state.contact_email = get(project, 'contact_email', '');

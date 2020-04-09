@@ -58,8 +58,10 @@ export const projectFields = () => ({
   country: null,
   geographic_scope: null,
   implementation_overview: null,
+  research: false,
   start_date: null,
   end_date: null,
+  end_date_note: null,
   contact_name: null,
   contact_email: null,
   team: [],
@@ -99,7 +101,6 @@ export const draftRules = () => {
       min: 1,
       max: 128
     },
-
     organisation: {
       required: true,
       max: 128
@@ -129,12 +130,16 @@ export const draftRules = () => {
     implementation_overview: {
       max: 1024
     },
+    research: {
+      required: false,
+    },
     start_date: {
       isDate: true
     },
     end_date: {
       isDate: true
     },
+    end_date_note: {},
     implementation_dates: {
       isDate: true
     },
@@ -180,6 +185,9 @@ export const publishRules = () => {
       required: true,
       max: 1024
     },
+    research: {
+      required: false
+    },
     start_date: {
       required: true,
       isDate: true
@@ -187,6 +195,9 @@ export const publishRules = () => {
     end_date: {
       required: false,
       isDate: true
+    },
+    end_date_note: {
+      required: false
     },
     contact_name: {
       required: true,
