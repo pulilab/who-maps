@@ -103,6 +103,22 @@ jobs:
           TERM: xterm
     steps:
       - checkout
+      - run: sudo chown -R circleci:circleci /usr/local/bin
+      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+
+      - run:
+          name: install python reqs
+          working_directory: ~/who-maps/django
+          command: |
+            sudo pip install pipenv
+            pipenv install
+            pipenv run pip install -r requirements.txt
+
+      - run:
+          name: install frontend reqs
+          working_directory: ~/who-maps/frontend
+          command: npm install
+
       - run:
           name: cypress tests
           working_directory: ~/who-maps/frontend
