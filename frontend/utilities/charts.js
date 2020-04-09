@@ -11,7 +11,7 @@ export const phaseInfo = (type) => {
     break;
   case 'Start':
     info = {
-      color: '#558B2F',
+      color: '#76BF41',
       rotation: 90,
       dash: [10, 5],
       point: 'triangle'

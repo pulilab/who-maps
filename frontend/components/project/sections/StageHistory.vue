@@ -17,12 +17,12 @@
       <section class="graph__legend">
         <ul class="legend">
           <li><translate>Legend:</translate></li>
-          <li><translate>Project start date</translate></li>
-          <li><translate>Project end date</translate></li>
+          <li><div class="legend__triangle-right" /><translate>Project start date</translate></li>
+          <li><div class="legend__triangle-down" /><translate>Project end date</translate></li>
           <li><div class="legend__cirle legend__circle--blue" /><translate>Stage completion date</translate></li>
           <li><div class="legend__cirle legend__circle--grey" /><translate>Next stage (incomplete)</translate></li>
-          <li><translate>Completion period</translate></li>
-          <li><translate>Current period</translate></li>
+          <li><div class="legend__line legend__line--blue" /><translate>Completion period</translate></li>
+          <li><div class="legend__line legend__line--dashed" /><translate>Current period</translate></li>
         </ul>
         <p><translate>The date under a stage represents when that stage was completed.</translate></p>
       </section>
@@ -75,14 +75,17 @@ export default {
       padding: 30px 20px 40px;
     }
     .graph__legend {
-      width: 100%;
       background-color: #F8F8F8;
       color: #9E9E9E;
       text-align: center;
       font-size: 11px;
       padding: 22px 33px;
+      p {
+        margin: 0;
+      }
     }
     .legend {
+      margin: 0 0 12px;
       li {
         display: inline-block;
         padding: 0 10px;
@@ -96,6 +99,19 @@ export default {
       height: 10px;
       border-radius: 10px;
     }
+    .legend__line {
+      display: inline-block;
+      margin-right: 8px;
+      margin-bottom: 3px;
+      width: 15px;
+      border-top: 2px solid @colorTextMuted;
+    }
+    .legend__line--blue {
+      border-top-color: @colorBrandPrimary;
+    }
+    .legend__line--dashed {
+      border-top: 2px dashed @colorTextMuted;
+    }
     .legend__circle--blue {
       background-color: @colorBrandPrimary;
     }
@@ -105,5 +121,24 @@ export default {
       background-color: @colorWhite;
       border: 2px solid @colorTextMuted;
     }
+    .legend__triangle-down {
+      display: inline-block;
+      margin-right: 8px;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid #D86422;
+    }
+    .legend__triangle-right {
+      display: inline-block;
+      margin-right: 8px;
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-left: 9px solid #76BF41;
+      border-bottom: 5px solid transparent;
+    }
+
   }
 </style>
