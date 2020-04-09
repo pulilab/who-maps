@@ -68,8 +68,9 @@ jobs:
           key: v3-dependencies-f-{{ checksum "frontend/package.json" }}
 
       - save_cache:
+          working_directory: ~/
           paths:
-            - "../.cache"
+            - ".cache"
           key: v3-dependencies-f-{{ checksum "cache" }}
 
       - run:
