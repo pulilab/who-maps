@@ -148,7 +148,11 @@ const MapMixin = {
       handler () {
         this.iconsGenerator();
         this.$nextTick(() => {
-          this.$refs.markerCluster.mapObject.refreshClusters();
+          try {
+            this.$refs.markerCluster.mapObject.refreshClusters();
+          } catch (e) {
+            console.error(e);
+          }
         });
       }
     },

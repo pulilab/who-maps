@@ -63,16 +63,24 @@
           v-validate="rules.country"
           data-vv-name="country"
           data-vv-as="Country"
-          :disabled="global"
+          :disabled="isGlobal"
         />
         <div class="FilterContainer">
           <div class="FilterLabel">OR</div>
           <filter-switch
-            v-model="global"
+            v-model="isGlobal"
             :label="$gettext('Set project as \'Global project\'') | translate"
-            :tooltip="$gettext('Lorem Ipsum') | translate"
+            :tooltip="$gettext('Global project tooltip text placeholder') | translate"
           />
         </div>
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>
+              Projects in the DHA can be linked to a specific country, or for projects which operate in multiple countries or across a region, projects can be listed as global.
+            </translate>
+          </p>
+        </span>
       </custom-required-form-item>
       <custom-required-form-item
         :error="errors.first('geographic_scope')"
@@ -326,11 +334,6 @@ export default {
     FilterSwitch
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
-  data () {
-    return {
-      global: false
-    };
-  },
   computed: {
     ...mapGettersActions({
       name: ['project', 'getName', 'setName', 0],
@@ -345,6 +348,14 @@ export default {
       team: ['project', 'getTeam', 'setTeam', 0],
       viewers: ['project', 'getViewers', 'setViewers', 0]
     }),
+    isGlobal: {
+      get () {
+        return this.country === process.env.GlobalCountryID;
+      },
+      set (val) {
+        this.country = val ? process.env.GlobalCountryID : null;
+      }
+    },
     endDateError () {
       if (this.usePublishRules && this.start_date && this.end_date && isAfter(this.start_date, this.end_date)) {
         return this.$gettext('End date must be after Start date');

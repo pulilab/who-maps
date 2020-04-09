@@ -9,6 +9,9 @@ export const getters = {
   getCountries (state) {
     return [...state.countries.map(c => ({ ...c }))];
   },
+  getGlobalLessCountries (state) {
+    return [...state.countries.map(c => ({ ...c }))].filter(country => country.id !== process.env.GlobalCountryID);
+  },
   getGeoJsonLibrary (state) {
     return state.geoJsonLibrary;
   },

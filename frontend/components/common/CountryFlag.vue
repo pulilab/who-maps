@@ -1,6 +1,6 @@
 <template>
   <img
-    :class="['CountryFlag', {small}]"
+    :class="['CountryFlag', {small, isGlobal}]"
     :src="countryFlagUrl"
   >
 </template>
@@ -19,10 +19,16 @@ export default {
   },
   computed: {
     countryFlagUrl () {
+      if (this.isGlobal) {
+        return '/who-logo-small.svg';
+      }
       if (this.code) {
         return `/static/flags/${this.code.toLowerCase()}.png`;
       }
       return null;
+    },
+    isGlobal () {
+      return this.code === 'NULL';
     }
   }
 };
@@ -36,6 +42,12 @@ export default {
     &.small {
       height: 16px;
       width: 24px;
+    }
+    &.isGlobal {
+      box-shadow: none !important;
+      height: 20px !important;
+      width: 24px !important;
+      margin-top: -4px;
     }
   }
 </style>
