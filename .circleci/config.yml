@@ -67,6 +67,11 @@ jobs:
             - frontend/node_modules
           key: v3-dependencies-f-{{ checksum "frontend/package.json" }}
 
+      - save_cache:
+          paths:
+            - "~/.cache"
+          key: v3-dependencies-f-{{ checksum "cache" }}
+
       - run:
           name: backend flake8
           working_directory: ~/who-maps/django
