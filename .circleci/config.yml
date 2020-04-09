@@ -102,6 +102,7 @@ jobs:
           ## this enables colors in the output
           TERM: xterm
     steps:
+      - checkout
       - run:
           name: cypress tests
           working_directory: ~/who-maps/frontend
