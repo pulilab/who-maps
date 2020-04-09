@@ -69,7 +69,7 @@ jobs:
 
       - save_cache:
           paths:
-            - "../.cache"
+            - "/home/circleci/.cache"
           key: v3-dependencies-f-{{ checksum "cache" }}
 
       - run:
