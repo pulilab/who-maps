@@ -10,8 +10,8 @@ import { isBefore } from 'date-fns';
 
 export const state = () => ({
   stages: {
-    chartdata: {},
-    options: {}
+    stagesChartdata: {},
+    stagesOptions: {}
   }
 });
 
@@ -20,7 +20,7 @@ export const actions = {
     // phases
     const phases = [''].concat(stages.map((i) => i.name));
     // notes
-    const notes = [''].concat(stages.map((i) => i.note));
+    let notes = [''].concat(stages.map((i) => i.note));
 
     // labels
     const start = formatDate(rootState.project.start_date);
@@ -50,6 +50,7 @@ export const actions = {
     if (end && end !== '1970-01-01') {
       data.push(data[data.length - 1]);
       labels.push([end, 'Ended']);
+      notes.push(rootState.project.end_date_note);
     }
 
     const lLen = labels.length;
@@ -75,62 +76,62 @@ export const actions = {
 
     const { color, rotation, dash, point } = phaseInfo(lastLabelType(labels));
 
-    commit('SET_STAGES_CHART_DATA', {
-      labels,
-      datasets: [
-        {
-          borderColor: '#558B2F',
-          pointBackgroundColor: '#558B2F',
-          fill: false,
-          lineTension: 0,
-          pointStyle: dataInfoFill(labels.length - 1, 'circle', 'triangle'),
-          pointRadius: dataInfoFill(labels.length - 1, 6, 12),
-          pointHoverRadius: dataInfoFill(labels.length - 1, 8, 14),
-          pointBorderColor: 'white',
-          pointRotation: 90,
-          data: startData
-        },
-        {
-          borderColor: color,
-          pointBackgroundColor: color,
-          fill: false,
-          lineTension: 0,
-          borderDash: dash,
-          pointStyle: dataInfoFill(labels.length, 'circle', point, 'back'),
-          pointRadius: dataInfoFill(labels.length, 0, 12, 'back'),
-          pointHoverRadius: dataInfoFill(labels.length, 0, 14, 'back'),
-          pointBorderColor: 'white',
-          pointRotation: rotation,
-          data: endData
-        },
-        {
-          borderColor: '#008DC9',
-          pointBackgroundColor: '#008DC9',
-          fill: false,
-          lineTension: 0,
-          pointStyle: dataInfoFill(labels.length - 1, 'circle', 'circle'),
-          pointRadius: dataInfoFill(labels.length - 1, 6, 0),
-          pointHoverRadius: dataInfoFill(labels.length - 1, 8, 0),
-          pointBorderColor: 'white',
-          pointRotation: 90,
-          data: stagesData
-        },
-        {
-          borderColor: '#B9B9B9',
-          pointBackgroundColor: 'white',
-          fill: false,
-          lineTension: 0,
-          borderDash: [10, 5],
-          pointStyle: dataInfoFill(labels.length, 'circle', 'circle', 'back'),
-          pointRadius: dataInfoFill(labels.length, 5, 0, 'back'),
-          pointHoverRadius: dataInfoFill(labels.length, 7, 0, 'back'),
-          pointBorderColor: '#B9B9B9', // blue point border
-          pointBorderWidth: 2, // point border width
-          pointRotation: 0,
-          data: todayData
-        }
-      ]
-    });
+    const datasets = Object.freeze([
+      {
+        borderColor: '#558B2F',
+        pointBackgroundColor: '#558B2F',
+        fill: false,
+        lineTension: 0,
+        pointStyle: dataInfoFill(labels.length - 1, 'circle', 'triangle'),
+        pointRadius: dataInfoFill(labels.length - 1, 6, 12),
+        pointHoverRadius: dataInfoFill(labels.length - 1, 8, 14),
+        pointBorderColor: 'white',
+        pointRotation: 90,
+        data: startData
+      },
+      {
+        borderColor: color,
+        pointBackgroundColor: color,
+        fill: false,
+        lineTension: 0,
+        borderDash: dash,
+        pointStyle: dataInfoFill(labels.length, 'circle', point, 'back'),
+        pointRadius: dataInfoFill(labels.length, 0, 12, 'back'),
+        pointHoverRadius: dataInfoFill(labels.length, 0, 14, 'back'),
+        pointBorderColor: 'white',
+        pointRotation: rotation,
+        data: endData
+      },
+      {
+        borderColor: '#008DC9',
+        pointBackgroundColor: '#008DC9',
+        fill: false,
+        lineTension: 0,
+        pointStyle: dataInfoFill(labels.length - 1, 'circle', 'circle'),
+        pointRadius: dataInfoFill(labels.length - 1, 6, 0),
+        pointHoverRadius: dataInfoFill(labels.length - 1, 8, 0),
+        pointBorderColor: 'white',
+        pointRotation: 90,
+        data: stagesData
+      },
+      {
+        borderColor: '#B9B9B9',
+        pointBackgroundColor: 'white',
+        fill: false,
+        lineTension: 0,
+        borderDash: [10, 5],
+        pointStyle: dataInfoFill(labels.length, 'circle', 'circle', 'back'),
+        pointRadius: dataInfoFill(labels.length, 5, 0, 'back'),
+        pointHoverRadius: dataInfoFill(labels.length, 7, 0, 'back'),
+        pointBorderColor: '#B9B9B9',
+        pointBorderWidth: 2,
+        pointRotation: 0,
+        data: todayData
+      }
+    ]);
+    const chartdata = { labels, datasets }
+
+    commit('SET_STAGES_CHART_DATA', chartdata);
     commit('SET_STAGES_OPTIONS', {
       maintainAspectRatio: false,
       defaultFontColor: '#474747',
@@ -146,7 +147,10 @@ export const actions = {
             return [xLabel, phases[yLabel]];
           },
           afterBody: (tooltipItem, data) => {
-            const { yLabel } = tooltipItem[0];
+            const { xLabel, yLabel } = tooltipItem[0];
+            if (xLabel.includes('Ended')) {
+              return `Note: ${notes[notes.length - 1]}`.match(/.{1,38}/g)
+            }
             return notes[yLabel]
               ? `Note: ${notes[yLabel]}`.match(/.{1,38}/g)
               : '';

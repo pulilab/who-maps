@@ -30,7 +30,7 @@
               />
               <span>
                 <translate key="research-project-info">
-                  Explanatory text: Prima luce, cum quibus mons aliud consensu ab eo. Me non paenitet nullum festiviorem excogitasse ad hoc. Excepteur sint obcaecat cupiditat non proident culpa. Pellentesque habitant morbi tristique senectus et netus.
+                  If your Digital Health project is focused on research activities, please indicate here.  The unique project ID can be shared as a reference during in your publication.
                 </translate>
               </span>
             </p>
@@ -167,7 +167,7 @@
               />
               <span>
                 <translate key="research-project-info">
-                  Explanatory text: Prima luce, cum quibus mons aliud consensu ab eo. Me non paenitet nullum festiviorem excogitasse ad hoc.
+                  When your project activities have completed, you can indicated by setting the end of the project. Note that the project will still be visible on the global map as a completed project.
                 </translate>
               </span>
             </p>
