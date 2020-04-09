@@ -2,7 +2,6 @@ version: 2.1
 
 orbs:
   jira: circleci/jira@1.1.0
-  cypress: cypress-io/cypress@1
 
 jobs:
   build-and-test:
@@ -21,6 +20,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_DB: postgres
       - image: circleci/redis:5-stretch
+      - image: cypress/base:8
 
     working_directory: ~/who-maps
 
