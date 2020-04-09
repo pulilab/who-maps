@@ -65,11 +65,8 @@ jobs:
       - save_cache:
           paths:
             - frontend/node_modules
+            - "../.cache"
           key: v3-dependencies-f-{{ checksum "frontend/package.json" }}
-
-      - save_cache:
-          paths:
-            - "/home/circleci/.cache"
 
       - run:
           name: backend flake8
