@@ -88,7 +88,8 @@ export const actionsGenerator = () => ({
         method: 'get',
         url: '/api/search/',
         params: { ...getters.getSearchParameters, ...paramsOverride, sc: undefined, dashboardType: undefined, dashboardId: undefined },
-        paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' })
+        paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' }),
+        progress: false
       });
       return data;
     } catch (e) {

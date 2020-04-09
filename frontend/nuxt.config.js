@@ -42,6 +42,7 @@ const config = {
   env: {
   },
   plugins: [
+    { src: '~plugins/eventfix.js', ssr: false },
     { src: '~plugins/extends.js', ssr: false },
     { src: '~plugins/axios.js', ssr: true },
     { src: '~plugins/vee-validate.js', ssr: true },

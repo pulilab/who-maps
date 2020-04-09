@@ -277,7 +277,7 @@ export const customColumnsMapper = (columns, prefix) => {
   return columns.map(c => ({
     originalId: c.id,
     id: `${prefix}_${c.id}`,
-    label: c.question,
+    label: c.question + (c.private ? ' *' : ''),
     type: c.type,
     donorId: c.donor
   }));

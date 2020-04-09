@@ -29,6 +29,7 @@ const MapMixin = {
       mapProjects: 'landing/getProjectsMap',
       currentZoom: 'landing/getCurrentZoom',
       getSearched: 'landing/getSearched',
+      getLoaded: 'landing/getLoaded',
       getIsCountry: 'landing/getIsCountry'
     }),
     isSearched () {
