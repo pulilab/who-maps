@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   jira: circleci/jira@1.1.0
+  cypress: cypress-io/cypress@3.8.3
 
 jobs:
   build-and-test:
@@ -53,11 +54,6 @@ jobs:
           name: install mapshaper
           working_directory: ~/who-maps
           command: sudo npm install -g mapshaper
-
-      - run:
-          name: cypress install
-          working_directory: ~/who-maps
-          command: npm install cypress
 
       - save_cache:
           paths:
