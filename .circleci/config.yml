@@ -20,7 +20,10 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_DB: postgres
       - image: circleci/redis:5-stretch
-      - image: cypress/base:10
+      - image: cypress/base:8
+        environment:
+          ## this enables colors in the output
+          TERM: xterm
 
     working_directory: ~/who-maps
 
