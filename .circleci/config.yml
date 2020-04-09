@@ -150,6 +150,7 @@ workflows:
           filters:
             tags:
               only: /^[0-9]+(\.[0-9]+)*$/
+      - cypress-e2e
       - deploy-dev:
           name: Dev Server Deployment
           requires:
