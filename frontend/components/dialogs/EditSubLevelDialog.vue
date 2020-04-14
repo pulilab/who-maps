@@ -75,7 +75,7 @@ export default {
       if (this.model) {
         filtered = Object.keys(this.model.item).filter(k => k.includes('name'));
       } else {
-        filtered = []
+        filtered = [];
       }
       return union(basic, filtered);
     }

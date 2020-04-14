@@ -36,6 +36,16 @@
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
+          <stage-overview
+            ref="stageOverview"
+            :use-publish-rules="usePublishRules"
+            :rules="rules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
+            :api-errors="apiErrors"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
+          />
           <technology-overview
             ref="technologyOverview"
             :rules="rules"
@@ -89,6 +99,7 @@
 import { publishRules, draftRules } from '@/utilities/projects';
 import ProjectNavigation from './ProjectNavigation';
 import GeneralOverview from './sections/GeneralOverview';
+import StageOverview from '@/components/project/sections/StageOverview';
 import ImplementationOverview from './sections/ImplementationOverview';
 import TechnologyOverview from './sections/TechnologyOverview';
 import InteroperabilityAndStandards from './sections/InteroperabilityAndStandards';
@@ -100,6 +111,7 @@ export default {
   components: {
     ProjectNavigation,
     GeneralOverview,
+    StageOverview,
     ImplementationOverview,
     TechnologyOverview,
     InteroperabilityAndStandards,
@@ -231,6 +243,7 @@ export default {
       const validations = await Promise.all([
         this.$refs.generalOverview.validate(),
         this.$refs.implementationOverview.validate(),
+        this.$refs.stageOverview.validate(),
         this.$refs.technologyOverview.validate(),
         this.$refs.interoperabilityAndStandards.validate(),
         this.$refs.countryCustom.validate(),
@@ -242,7 +255,7 @@ export default {
     async validateDraft () {
       const validations = await Promise.all([
         this.$refs.generalOverview.validateDraft(),
-        this.$refs.technologyOverview.validateDraft()
+        this.$refs.stageOverview.validateDraft()
       ]);
       console.log('root draft validations', validations);
       return validations.reduce((a, c) => a && c, true);
@@ -251,6 +264,7 @@ export default {
       this.apiErrors = {};
       this.$refs.generalOverview.clear();
       this.$refs.implementationOverview.clear();
+      this.$refs.stageOverview.clear();
       this.$refs.technologyOverview.clear();
       this.$refs.interoperabilityAndStandards.clear();
       this.$refs.countryCustom.clear();
