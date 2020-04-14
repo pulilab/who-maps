@@ -35,14 +35,21 @@ export default {
     }),
     ...mapGettersActions({
       selectedCounties: ['dashboard', 'getFilteredCountries', 'setFilteredCountries'],
-      selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion'],
-      selectedGlobal: ['dashboard', 'getOnlyGlobal', 'setOnlyGlobal']
+      selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion']
     }),
     disableCountries () {
-      return !!this.selectedRegion || this.dashboardType === 'country';
+      return !!this.selectedRegion || this.dashboardType === 'country' || this.selectedGlobal;
     },
     disableRegions () {
-      return this.selectedCounties.length > 0 || this.dashboardType === 'country';
+      return this.selectedCounties.length > 0 || this.dashboardType === 'country' || this.selectedGlobal;
+    },
+    selectedGlobal: {
+      set (val) {
+        this.selectedCounties = val ? [process.env.GlobalCountryID] : [];
+      },
+      get () {
+        return this.selectedCounties.length > 0 && this.selectedCounties[0] === process.env.GlobalCountryID;
+      }
     }
   }
 };

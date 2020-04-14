@@ -15,10 +15,17 @@
     >
       <div class="CountryHolder">
         <img
+          v-if="countryFlag"
           :src="countryFlag"
           alt="country flag"
           class="CountryFlag"
         >
+        <fa
+          v-else
+          size="lg"
+          class="AllIcon CountryFlag"
+          icon="globe"
+        />
         <div class="CountryName">
           <template v-if="landingData">
             {{ landingData.name }}
@@ -62,11 +69,11 @@
               :class="{Active: active()}"
               @click="selectCountry()"
             >
-              <img
-                alt="WHO logo small"
-                src="/who-logo-small.svg"
-                class="CountryInnerFlag"
-              >
+              <fa
+                size="lg"
+                class="AllIcon"
+                icon="globe"
+              />
               <translate>All countries</translate>
               <fa
                 icon="check"
@@ -116,11 +123,11 @@ export default {
       if (this.landingData) {
         return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
       }
-      return '/who-logo-small.svg';
+      return false;
     },
     filteredCountries () {
       return this.countries.filter(country => {
-        return country.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
+        return country.id !== process.env.GlobalCountryID && country.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
       });
     },
     displayListHeight () {
@@ -154,6 +161,9 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
+  .AllIcon {
+    margin-right: 10px;
+  }
   .ChooserButton {
     padding: 0 !important;
   }

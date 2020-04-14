@@ -172,7 +172,7 @@ export default {
       return this.activeCountry === process.env.GlobalCountryID;
     },
     showSubLevelHint () {
-      return this.selectedCountry && !this.activeSubLevel && this.activeTab === 'subNational';
+      return this.selectedCountry && !this.activeSubLevel && this.activeTab === 'subNational' && !this.isGlobal;
     },
     showMapProjectBox () {
       return this.activeCountry;
