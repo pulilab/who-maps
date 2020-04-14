@@ -39,11 +39,7 @@ export const actions = {
     const lastDataPoint = data[data.length - 1];
 
     // today and end date data points, if needed
-    if (isBefore(lastLabel, today) && isBefore(today, end)) {
-      data.push(lastDataPoint + 1);
-      labels.push([today, 'Today']);
-    }
-    if (isBefore(lastLabel, today) && end === '1970-01-01') {
+    if ((end && isBefore(today, end)) || (end === '1970-01-01')) {
       data.push(lastDataPoint + 1);
       labels.push([today, 'Today']);
     }
@@ -140,25 +136,35 @@ export const actions = {
         enabled: true,
         callbacks: {
           label: (tooltipItem, data) => {
-            return '';
+            return null;
           },
           title: (tooltipItem, data) => {
             const { xLabel, yLabel } = tooltipItem[0];
-            return [xLabel, phases[yLabel]];
+            if (phases[yLabel] === '') {
+              return xLabel;
+            }
+            if (Array.isArray(xLabel)) {
+              return [xLabel[0], xLabel[1]]
+            }
+            return [ xLabel, phases[yLabel]];
           },
-          afterBody: (tooltipItem, data) => {
+          footer: (tooltipItem, data) => {
             const { xLabel, yLabel } = tooltipItem[0];
             if (xLabel.includes('Ended')) {
               return `Note: ${notes[notes.length - 1]}`.match(/.{1,38}/g)
             }
             return notes[yLabel]
               ? `Note: ${notes[yLabel]}`.match(/.{1,38}/g)
-              : '';
+              : null;
           }
         },
         backgroundColor: '#474747',
         xPadding: 12,
-        yPadding: 15,
+        yPadding: 12,
+        titleMarginBottom: 0,
+        footerMarginTop: 8,
+        footerFontStyle: 'normal',
+        footerAlign: 'center',
         titleAlign: 'center',
         titleFontSize: 12,
         bodyFontSize: 12,

@@ -247,11 +247,12 @@ export default {
     this.loadStagesDraft();
     // research custom logic
     if (this.research === undefined) {
-      this.researchDisabled = false
+      // this.researchDisabled = false
       this.research = false
     } else {
-      this.researchDisabled = true
+      // this.researchDisabled = true
     }
+    this.start_date = this.start_date
   },
   methods: {
     ...mapActions({
