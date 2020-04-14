@@ -162,7 +162,8 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .AllIcon {
-    margin-right: 10px;
+    margin-right: 8px;
+    margin-left: 2px;
   }
   .ChooserButton {
     padding: 0 !important;
