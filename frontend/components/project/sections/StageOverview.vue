@@ -70,7 +70,7 @@
         <!-- Stages section -->
         <el-col :span="24">
           <el-row class="stages">
-            <custom-required-form-item :error="errors.first('stages')">
+            <custom-required-form-item>
               <template slot="label">
                 <translate key="stages">
                   Set current and previous stages of project
@@ -120,27 +120,36 @@
                         </translate>
                       </span>
                     </p>
-                    <safe-date-picker
-                      v-validate="rules.note_date"
-                      :value="stage.date"
-                      :placeholder="$gettext('Pick a date (required)') | translate"
-                      data-vv-name="note_date"
-                      data-vv-as="Note date"
-                      class="Date stage__picker"
-                      align="left"
-                      @input="updateStagesDraft(stage.id, 'date', $event)"
-                    />
-                    <el-input
-                      :value="stage.note"
-                      :placeholder="$gettext('Add note (optional)') | translate"
-                      class="stage__input"
-                      @input="updateStagesDraft(stage.id, 'note', $event)"
+                    <custom-required-form-item
+                      class="stage__picker"
+                      :error="(!stage.date ? stageDateError : '')"
                     >
-                      <i
-                        slot="prefix"
-                        class="el-input__icon el-icon-document"
+                      <safe-date-picker
+                        v-validate="rules.note_date"
+                        :value="stage.date"
+                        :placeholder="$gettext('Pick a date (required)') | translate"
+                        data-vv-name="note_date"
+                        data-vv-as="Note date"
+                        class="Date stage__input--full"
+                        align="left"
+                        @input="updateStagesDraft(stage.id, 'date', $event)"
                       />
-                    </el-input>
+                    </custom-required-form-item>
+                    <custom-required-form-item
+                      class="stage__input"
+                    >
+                      <el-input
+                        :value="stage.note"
+                        :placeholder="$gettext('Add note (optional)') | translate"
+                        @input="updateStagesDraft(stage.id, 'note', $event)"
+                        class="stage__input--full"
+                      >
+                        <i
+                          slot="prefix"
+                          class="el-input__icon el-icon-document"
+                        />
+                      </el-input>
+                    </custom-required-form-item>
                   </div>
                 </transition>
               </el-col>
@@ -241,6 +250,12 @@ export default {
         return this.$gettext('End date must be after Start date');
       }
       return '';
+    },
+    stageDateError () {
+      if ((this.stagesDraft) && (this.stagesDraft.filter(i => i.checked && (i.date === '' || i.date === null) ).length > 0)) {
+        return this.$gettext('Stage date is required');
+      }
+      return ''
     }
   },
   mounted () {
@@ -262,7 +277,8 @@ export default {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate(),
-        Promise.resolve(this.endDateError === '')
+        Promise.resolve(this.endDateError === ''),
+        Promise.resolve(this.stageDateError === '')
       ]);
       console.log('Project stages published validation', validations);
       return validations.reduce((a, c) => a && c, true);
@@ -271,7 +287,8 @@ export default {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate('start_date'),
-        this.$validator.validate('end_date')
+        this.$validator.validate('end_date'),
+        Promise.resolve(this.stageDateError === '')
       ])
       console.log('Project stages draft validation', validations);
       return validations.reduce((a, c) => a && c, true);
@@ -373,7 +390,8 @@ export default {
     }
     .stage__info {
       flex-basis: 100%;
-      margin: 0 0 16px 0;
+      // margin: 0 0 16px 0;
+      margin: 0 0 -8px 0;
     }
     .stage__picker {
       flex-basis: 30%;
@@ -381,6 +399,9 @@ export default {
     }
     .stage__input {
       flex-basis: 67%;
+    }
+    .stage__input--full {
+      width: 100%;
     }
   }
 

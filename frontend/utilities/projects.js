@@ -153,6 +153,7 @@ export const draftRules = () => {
       facilities: {
       }
     },
+    stages: {},
     repository: {
       max: 256
     },
@@ -198,6 +199,11 @@ export const publishRules = () => {
     },
     end_date_note: {
       required: false
+    },
+    stages: {
+      data: {
+        required: true
+      }
     },
     contact_name: {
       required: true,
