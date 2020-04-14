@@ -1332,7 +1332,8 @@ class ProjectTests(SetupTests):
         self.assertIn('test_user@gmail.com', call_args_list['to'])
         self.assertEqual(call_args_list['context']['project_id'], p.id)
 
-    def test_research_project(self):
+    def xtest_research_project(self):  # pragma: no cover
+        # TODO: might be re-enabled later
         data = copy.deepcopy(self.project_data)
         data['project']['name'] = 'Test Project 100'
         data['project']['research'] = True
