@@ -101,7 +101,7 @@ export const actions = {
     }
   },
   async loadGeoJSON ({ commit, getters }, id) {
-    if (!getters.getGeoJsonLibrary[id]) {
+    if (!getters.getGeoJsonLibrary[id] && id !== process.env.GlobalCountryID) {
       try {
         const country = getters.getCountries.find(c => c.id === id);
         const { data } = await this.$axios.get(`/static/country-geodata/${country.code.toLowerCase()}.json?version=${country.map_version}`);

@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   data () {
@@ -138,11 +138,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setProjectBoxActiveGlobalTab: 'landing/setProjectBoxActiveGlobalTab'
+    }),
     getCountryFlag (code) {
       return `/static/flags/${code.toLowerCase()}.png`;
     },
     selectCountry (country) {
       this.chooserOpen = false;
+      this.setProjectBoxActiveGlobalTab(false);
       const organisation = country ? country.code.toLowerCase() : '-';
       const localised = this.localePath({ name: 'organisation', params: { organisation } });
       this.$router.push(localised);

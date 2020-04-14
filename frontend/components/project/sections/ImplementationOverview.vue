@@ -163,7 +163,10 @@
             </form-hint>
           </template>
 
-          <el-radio-group v-model="coverageType">
+          <el-radio-group
+            v-model="coverageType"
+            :disabled="isGlobalSelected"
+          >
             <el-radio :label="1">
               <translate>Sub-national</translate>
             </el-radio>
@@ -345,6 +348,7 @@ export default {
 
   computed: {
     ...mapGettersActions({
+      country: ['project', 'getCountry', 'setCountry', 0],
       platforms: ['project', 'getPlatforms', 'setPlatforms', 0],
       digitalHealthInterventions: [
         'project',
@@ -421,9 +425,15 @@ export default {
         };
         this.national_level_deployment = coverage;
       }
+    },
+    isGlobalSelected () {
+      return this.country === process.env.GlobalCountryID;
     }
   },
   watch: {
+    isGlobalSelected () {
+      this.coverageType = 2;
+    },
     implementing_partners: {
       immediate: false,
       handler (ip, oldIp) {
