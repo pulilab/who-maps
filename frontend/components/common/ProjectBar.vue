@@ -104,6 +104,11 @@
         >
           <translate>Project</translate>
         </nuxt-link>
+        <nuxt-link
+          :to="localePath({name: 'organisation-projects-id-stages', params: {id, organisation: $route.params.organisation}})"
+        >
+          <translate>Stages</translate>
+        </nuxt-link>
         <nuxt-link :to="localePath({name: 'organisation-projects-id-assessment', params: {id, organisation: $route.params.organisation}})">
           <translate>Assessment</translate>
         </nuxt-link>

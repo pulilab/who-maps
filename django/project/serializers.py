@@ -140,11 +140,12 @@ class ProjectPublishedSerializer(serializers.Serializer):
                 raise serializers.ValidationError('Country cannot be altered on published projects.')
         return value
 
-    def validate_research(self, value):
-        # research can't be changed once it is already set
-        if self.instance and self.instance.draft.get('research') is not None:
-            return self.instance.draft['research']
-        return value
+    # TODO: might be re-enabled later
+    # def validate_research(self, value):
+    #     # research can't be changed once it is already set
+    #     if self.instance and self.instance.draft.get('research') is not None:
+    #         return self.instance.draft['research']
+    #     return value
 
     def update(self, instance, validated_data):
         instance.name = validated_data["name"]

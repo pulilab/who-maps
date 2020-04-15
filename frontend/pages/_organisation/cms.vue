@@ -5,12 +5,17 @@
 </template>
 
 <script>
-
 export default {
   components: {
   },
-
   middleware: ['isLoggedIn'],
+  watch: {
+    '$route.query.q': function (q) {
+      if (q) {
+        window.location.reload(true);
+      }
+    }
+  },
   fetch ({ store }) {
     store.dispatch('landing/resetSearch');
   },

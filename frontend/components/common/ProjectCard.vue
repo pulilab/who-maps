@@ -25,7 +25,10 @@
               v-show="showCountry"
               class="Country"
             >
-              <country-item :id="project.country" />
+              <country-item
+                :id="project.country"
+                :active="linkActive"
+              />
             </el-col>
             <el-col
               v-show="showOrganisation"
@@ -122,6 +125,10 @@ export default {
     showArrowOnOver: {
       type: Boolean,
       default: false
+    },
+    linkActive: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -159,6 +166,7 @@ export default {
   methods: {
     goToProject () {
       const path = this.localePath({ name: 'organisation-projects-id-published', params: { ...this.$route.params, id: this.project.id } });
+      this.$emit('redirect');
       this.$router.push(path);
     },
     mouseEnterHandler () {

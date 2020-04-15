@@ -23,6 +23,13 @@ class PlanningAndGuidanceController {
     this.showAllFlag = false;
     this.searchText = null;
     this.watchers();
+    setTimeout(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get('q');
+      if (query) {
+        this.searchText = query;
+      }
+    }, 0);
   }
 
   onDestroy () {

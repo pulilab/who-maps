@@ -42,6 +42,7 @@ const config = {
   env: {
   },
   plugins: [
+    { src: '~plugins/eventfix.js', ssr: false },
     { src: '~plugins/extends.js', ssr: false },
     { src: '~plugins/axios.js', ssr: true },
     { src: '~plugins/vee-validate.js', ssr: true },
@@ -49,7 +50,8 @@ const config = {
     { src: '~plugins/element.js', ssr: true },
     { src: '~plugins/i18n.js', ssr: true },
     { src: '~plugins/watchHead.js', ssr: false },
-    { src: '~plugins/directives.js', ssr: false }
+    { src: '~plugins/directives.js', ssr: false },
+    { src: '~plugins/charts.js', ssr: false }
   ],
   modules: [
     '@nuxtjs/axios',

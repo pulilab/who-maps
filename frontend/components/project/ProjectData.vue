@@ -37,22 +37,6 @@
           <el-row>
             <el-col :span="12">
               <simple-field
-                :content="project.start_date"
-                :header="$gettext('Project start date') | translate"
-                date
-              />
-            </el-col>
-            <el-col :span="12">
-              <simple-field
-                :content="project.end_date"
-                :header="$gettext('Project end date') | translate"
-                date
-              />
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <simple-field
                 :content="project.contact_name"
                 :header="$gettext('Contact name') | translate"
               />
@@ -146,6 +130,10 @@
             <donors-list :value="project.donors" />
           </simple-field>
         </collapsible-card>
+
+        <!-- stage graph -->
+        <stage-history />
+        <!-- stage graph -->
 
         <collapsible-card
           id="technology"
@@ -258,6 +246,7 @@ import InteroperabilityLinksList from './InteroperabilityLinksList';
 import DonorsList from '../common/list/DonorsList';
 import CustomReadonlyField from './CustomReadonlyField';
 import handleProjectUnpublish from '@/components/mixins/handleProjectUnpublish';
+import StageHistory from '@/components/project/sections/StageHistory';
 
 import { mapGetters } from 'vuex';
 
@@ -280,7 +269,8 @@ export default {
     StandardsList,
     InteroperabilityLinksList,
     DonorsList,
-    CustomReadonlyField
+    CustomReadonlyField,
+    StageHistory
   },
   mixins: [handleProjectUnpublish],
   computed: {
