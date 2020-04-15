@@ -47,6 +47,11 @@ Cypress.Commands.add('logIn', () => {
   })
 });
 
+Cypress.Commands.add('logOut', () => {
+  cy.get("svg[data-icon=\"user-circle\"]").click({force: true});
+  cy.contains("Logout").click();
+});
+
 Cypress.Commands.add('randomAlphaNumeric', (length) => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let charactersLength = characters.length;
