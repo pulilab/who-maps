@@ -15,7 +15,7 @@
     "precommit:fix": "npm run lint -- --fix",
     "test": "jest",
     "test:w": "jest --watch",
-    "cypress:open": "cypress open",
+    "cy.open": "cypress open",
     "cy.run": "cypress run",
     "translation:extract": "bash gettext.sh",
     "webpack:extract": "node -r esm ./scripts/update-webpack-config.js"
