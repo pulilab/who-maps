@@ -23,7 +23,6 @@
             prop="username"
           >
             <el-input
-              id="userName"
               v-model="username"
               type="text"
             />
@@ -79,7 +78,6 @@
               class="PrimaryAction"
             >
               <el-button
-                id="logIn"
                 type="primary"
                 size="medium"
                 native-type="submit"
