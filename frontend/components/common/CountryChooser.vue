@@ -15,16 +15,23 @@
     >
       <div class="CountryHolder">
         <img
+          v-if="countryFlag"
           :src="countryFlag"
           alt="country flag"
           class="CountryFlag"
         >
+        <fa
+          v-else
+          size="lg"
+          class="AllIcon CountryFlag"
+          icon="globe"
+        />
         <div class="CountryName">
           <template v-if="landingData">
             {{ landingData.name }}
           </template>
           <translate v-else>
-            Global
+            All countries
           </translate>
           <fa icon="caret-down" />
         </div>
@@ -62,12 +69,12 @@
               :class="{Active: active()}"
               @click="selectCountry()"
             >
-              <img
-                alt="WHO logo small"
-                src="/who-logo-small.svg"
-                class="CountryInnerFlag"
-              >
-              <translate>Global</translate>
+              <fa
+                size="lg"
+                class="AllIcon"
+                icon="globe"
+              />
+              <translate>All countries</translate>
               <fa
                 icon="check"
                 class="check"
@@ -98,7 +105,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   data () {
@@ -116,11 +123,11 @@ export default {
       if (this.landingData) {
         return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
       }
-      return '/who-logo-small.svg';
+      return false;
     },
     filteredCountries () {
       return this.countries.filter(country => {
-        return country.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
+        return country.id !== process.env.GlobalCountryID && country.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
       });
     },
     displayListHeight () {
@@ -131,11 +138,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setProjectBoxActiveGlobalTab: 'landing/setProjectBoxActiveGlobalTab'
+    }),
     getCountryFlag (code) {
       return `/static/flags/${code.toLowerCase()}.png`;
     },
     selectCountry (country) {
       this.chooserOpen = false;
+      this.setProjectBoxActiveGlobalTab(false);
       const organisation = country ? country.code.toLowerCase() : '-';
       const localised = this.localePath({ name: 'organisation', params: { organisation } });
       this.$router.push(localised);
@@ -154,6 +165,10 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
+  .AllIcon {
+    margin-right: 8px;
+    margin-left: 2px;
+  }
   .ChooserButton {
     padding: 0 !important;
   }

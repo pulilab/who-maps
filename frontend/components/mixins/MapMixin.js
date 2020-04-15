@@ -23,6 +23,7 @@ const MapMixin = {
       getCountryProjects: 'landing/getCountryProjects',
       mapReady: 'landing/getMapReady',
       getActiveTab: 'landing/getProjectBoxActiveTab',
+      getActiveGlobalTab: 'landing/getProjectBoxActiveGlobalTab',
       getActiveSubLevel: 'landing/getActiveSubLevel',
       subNationalProjects: 'landing/getSelectedCountrySubNationalProjects',
       nationalProjects: 'landing/getSelectedCountryNationalProjects',
@@ -63,6 +64,14 @@ const MapMixin = {
       },
       set (value) {
         this.setActiveTab(value);
+      }
+    },
+    activeGlobalTab: {
+      get () {
+        return this.getActiveGlobalTab;
+      },
+      set (value) {
+        this.setActiveGlobalTab(value);
       }
     },
     activeSubLevel: {
@@ -115,6 +124,14 @@ const MapMixin = {
     }
   },
   watch: {
+    activeGlobalTab (val) {
+      if (val) {
+        this.setActiveCountry(process.env.GlobalCountryID);
+        this.centerOn([0, 0], 2);
+      } else {
+        this.resetZoom();
+      }
+    },
     activeCountryAndMapReady: {
       immediate: true,
       handler (id, old) {
@@ -131,7 +148,11 @@ const MapMixin = {
       handler () {
         this.iconsGenerator();
         this.$nextTick(() => {
-          this.$refs.markerCluster.mapObject.refreshClusters();
+          try {
+            this.$refs.markerCluster.mapObject.refreshClusters();
+          } catch (e) {
+            console.error(e);
+          }
         });
       }
     },
@@ -161,6 +182,7 @@ const MapMixin = {
       setSelectedCountry: 'landing/setSelectedCountry',
       setActiveCountry: 'landing/setActiveCountry',
       setActiveTab: 'landing/setProjectBoxActiveTab',
+      setActiveGlobalTab: 'landing/setProjectBoxActiveGlobalTab',
       setActiveSubLevel: 'landing/setActiveSubLevel'
     }),
     centerOn (latlng, zoom = 13) {

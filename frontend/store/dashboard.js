@@ -49,7 +49,8 @@ export const getters = {
     g.q === undefined &&
     g.region === null &&
     g.sw.length === 0 &&
-    g.view_as === undefined);
+    g.view_as === undefined &&
+    g.global === null);
   },
   getProjectsList: state => [...state.projectsList.map(r => parseCustomAnswers(r))],
   getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => parseCustomAnswers(r))] : getters.getProjectsList,
