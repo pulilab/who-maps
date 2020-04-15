@@ -649,28 +649,3 @@ class UserProfileTests(APITestCase):
         self.assertIn('daily_toolkit_digest_notification', data)
         self.assertNotIn('project_approval_request_notification', data)
         self.assertIn('role_request_notification', data)
-
-    def test_create_cypress_test_data(self):
-        url = reverse('cypress-test-data')
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
-        data = response.json()
-        for key in ('url', 'test_user', 'org', 'country', 'signup_username'):
-            self.assertIn(key, data)
-
-        self.assertEqual(User.objects.filter(email=data['signup_username']).count(), 0)
-
-        # user profile should have 0 projects
-        user = User.objects.get(email=data['test_user'])
-        profile = UserProfile.objects.get(user=user)
-        self.assertEqual(profile.team.count(), 0)
-
-        # try to login with test user
-        url = reverse("api_token_auth")
-        login_data = {
-            "username": data['test_user'],
-            "password": 'puli1234',
-        }
-        response = self.client.post(url, login_data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
-        self.assertIn('token', response.json())

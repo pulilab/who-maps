@@ -1,13 +1,7 @@
-from django.conf import settings
-from django.contrib.auth.models import User
-from django.contrib.sites.shortcuts import get_current_site
-from rest_framework import status
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin
-from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet, ViewSet
+from rest_framework.viewsets import GenericViewSet
 
 from core.views import TokenAuthMixin
-from country.models import Country
 from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileListSerializer
 from .models import UserProfile, Organisation
 
@@ -37,64 +31,3 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
             return Organisation.objects.filter(name__contains=search_term)
         else:
             return Organisation.objects.all()
-
-
-class CypressTestViewSet(ViewSet):
-
-    def create_test_data_for_cypress(self, request):
-
-        def _delete_signup_user(user_email):
-            try:
-                user_obj = User.objects.get(email=user_email)
-            except User.DoesNotExist:
-                pass
-            else:  # pragma: no cover
-                try:
-                    profile_obj = UserProfile.objects.get(user=user_obj)
-                except UserProfile.DoesNotExist:
-                    pass
-                else:
-                    profile_obj.delete()
-                user_obj.delete()
-
-        signup_user_email = 'cypress_user_signup@example.com'
-        _delete_signup_user(signup_user_email)
-
-        site = get_current_site(request)
-        protocol = 'https' if not settings.DEBUG else 'http'
-        domain = 'localhost:3000' if site.id == 1 else 'localhost'
-
-        user_pass = 'puli1234'
-        country, _ = Country.objects.get_or_create(code='HU', name='Hungary')
-        org, _ = Organisation.objects.get_or_create(name='Cypress Org')
-        test_user, _ = User.objects.get_or_create(
-            first_name='Cypress',
-            last_name='User',
-            email='cypress_user@example.com',
-            username='test_cypress_normal_user',
-        )
-        test_user.set_password(user_pass)
-        test_user.save()
-
-        profile, _ = UserProfile.objects.get_or_create(
-            name='Cypress User',
-            user=test_user,
-            country=country,
-            organisation=org,
-            project_updates_notification=False,
-            daily_toolkit_digest_notification=False,
-            project_approval_request_notification=False,
-            role_request_notification=False,
-        )
-
-        # delete all test projects for this user
-        profile.team.filter(name__icontains='test project').all().delete()
-
-        data = {
-            'url': f'{protocol}://{domain}/',
-            'test_user': test_user.email,
-            'org': org.name,
-            'country': country.name,
-            'signup_username': signup_user_email,
-        }
-        return Response(status=status.HTTP_200_OK, data=data)
