@@ -28,6 +28,7 @@
               <el-input
                 v-model="innerProfile.name"
                 type="text"
+                data-vv-name="name"
               />
             </el-form-item>
 
@@ -45,6 +46,7 @@
             <el-form-item
               :label="$gettext('Organisation name') | translate"
               prop="organisation"
+              data-vv-name="organisation"
             >
               <organisation-select v-model="innerProfile.organisation" />
             </el-form-item>
@@ -52,6 +54,7 @@
             <el-form-item
               :label="$gettext('Country') | translate"
               prop="country"
+              data-vv-name="country"
             >
               <country-select v-model="innerProfile.country" />
               <div
@@ -69,6 +72,7 @@
               <el-input
                 v-model="innerProfile.phone"
                 type="text"
+                data-vv-name="phone"
               />
             </el-form-item>
 
@@ -79,6 +83,7 @@
               <el-input
                 v-model="innerProfile.title"
                 type="text"
+                data-vv-name="title"
               />
             </el-form-item>
 
@@ -89,6 +94,7 @@
               <el-input
                 v-model="innerProfile.linkedin"
                 type="text"
+                data-vv-name="linkedin"
               />
             </el-form-item>
 
