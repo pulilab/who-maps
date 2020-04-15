@@ -1,4 +1,4 @@
-describe('Fill user profile test', function() {
+describe('End to end tests', function() {
   before(function () {
     cy.signUp();
   });
