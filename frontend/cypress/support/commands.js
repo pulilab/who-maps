@@ -47,8 +47,10 @@ Cypress.Commands.add('logIn', () => {
   })
 });
 
-Cypress.Commands.add('randomString', (length) => {
+Cypress.Commands.add('randomAlphaNumeric', (length) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let charactersLength = characters.length;
   return Array.from({length: length}, () => {
-    return String.fromCharCode(Math.floor(Math.random() * (16384)))
+    return characters.charAt(Math.floor(Math.random() * charactersLength));
   }).join('');
 });
