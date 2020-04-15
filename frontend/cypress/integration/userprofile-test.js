@@ -3,6 +3,10 @@ describe('Fill user profile test', function() {
     cy.signUp();
   });
 
+  afterEach(function () {
+    cy.logOut();
+  });
+
   it('Fill user profile test', function() {
     cy.log('Fill user profile test');
     // after signup the page redirected to edit profile
