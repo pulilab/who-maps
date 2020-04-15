@@ -1,9 +1,9 @@
 describe('Fill user profile test', function() {
-  beforeEach(function () {
+  before(function () {
     cy.signUp();
   });
 
-  afterEach(function () {
+  after(function () {
     cy.logOut();
   });
 
