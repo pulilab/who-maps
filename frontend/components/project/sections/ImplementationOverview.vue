@@ -164,6 +164,7 @@
           </template>
 
           <el-radio-group
+            v-show="!isGlobalSelected"
             v-model="coverageType"
             :disabled="isGlobalSelected"
           >
@@ -174,6 +175,9 @@
               <translate>National</translate>
             </el-radio>
           </el-radio-group>
+          <label v-show="isGlobalSelected">
+            <translate>International</translate>
+          </label>
         </custom-required-form-item>
 
         <sub-national-level-deployment
