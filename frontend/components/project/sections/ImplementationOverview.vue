@@ -193,9 +193,13 @@
           v-if="coverageType == 2"
           class="NationalLevelDeployment ItemIndent"
         >
-          <div class="CoverageSubtitle">
+          <div v-show="!isGlobalSelected" class="CoverageSubtitle">
             <fa icon="flag" />
             <translate>National level deployment</translate>
+          </div>
+          <div v-show="isGlobalSelected" class="CoverageSubtitle">
+            <fa icon="globe" />
+            <translate>International level deployment</translate>
           </div>
           <coverage-fieldset
             ref="nationalLevelDeployment"

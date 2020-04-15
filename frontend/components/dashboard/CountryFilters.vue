@@ -3,7 +3,7 @@
     <div class="FilterSwitchHandler">
       <el-switch
         v-model="selectedGlobal"
-        :active-text="$gettext('Show only Global projects') | translate"
+        :active-text="$gettext('Show global projects only') | translate"
       />
     </div>
     <div class="CountryFilters">

@@ -71,6 +71,7 @@
             v-model="isGlobal"
             :label="$gettext('Set project as \'Global project\'') | translate"
             :tooltip="$gettext('Global project tooltip text placeholder') | translate"
+            placement="top"
           />
         </div>
         <span class="Hint">

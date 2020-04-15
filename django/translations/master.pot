@@ -179,11 +179,11 @@ msgstr ""
 msgid "Add note (optional)"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:206
+#: components/project/sections/GeneralOverview.vue:207
 msgid "Add team members (editors)--can modify entry on Add New Project page"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:229
+#: components/project/sections/GeneralOverview.vue:230
 msgid ""
 "Add team members (viewers)--can receive notification that project has been "
 "added"
@@ -520,12 +520,12 @@ msgid "Contact {selected} selected"
 msgstr ""
 
 #: components/project/ProjectData.vue:44
-#: components/project/sections/GeneralOverview.vue:183
+#: components/project/sections/GeneralOverview.vue:184
 msgid "Contact email"
 msgstr ""
 
 #: components/project/ProjectData.vue:38
-#: components/project/sections/GeneralOverview.vue:157
+#: components/project/sections/GeneralOverview.vue:158
 msgid "Contact name"
 msgstr ""
 
@@ -634,19 +634,19 @@ msgstr ""
 msgid "Delete canceled"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:94
+#: components/project/sections/GeneralOverview.vue:95
 msgid ""
 "Describe the user types, geographic coverage and other coverage details."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:143
+#: components/project/sections/GeneralOverview.vue:144
 msgid ""
 "Describe what the technology aims to achieve, detailing the users, the "
 "reasons for deploying the system, and current and future phases of "
 "deployment."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:127
+#: components/project/sections/GeneralOverview.vue:128
 msgid "Describe your overall digital health project design."
 msgstr ""
 
@@ -828,7 +828,7 @@ msgstr ""
 msgid "Email:"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:296
+#: components/project/sections/GeneralOverview.vue:297
 #: components/project/sections/StageOverview.vue:250
 msgid "End date must be after Start date"
 msgstr ""
@@ -1039,7 +1039,7 @@ msgstr ""
 msgid "growth of implementations, and reduce redundancy of investments."
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:220
+#: components/project/sections/ImplementationOverview.vue:224
 msgid ""
 "Has the government contributed to the project, either financially or in-kind?"
 msgstr ""
@@ -1352,11 +1352,15 @@ msgstr ""
 msgid "International"
 msgstr ""
 
+#: components/project/sections/ImplementationOverview.vue:201
+msgid "International level deployment"
+msgstr ""
+
 #: components/project/ProjectNavigation.vue:91
 msgid "Interoperability"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:299
+#: components/project/sections/ImplementationOverview.vue:303
 msgid ""
 "Investment partners can include those contributing funds, human resources or "
 "in-kind support."
@@ -1746,7 +1750,7 @@ msgstr ""
 
 #: components/admin/import/SmartCell.vue:28
 #: components/project/ProjectData.vue:316
-#: components/project/sections/ImplementationOverview.vue:235
+#: components/project/sections/ImplementationOverview.vue:239
 msgid "No, they have not yet contributed"
 msgstr ""
 
@@ -1918,7 +1922,7 @@ msgid ""
 "focus area(s), software features and national scale."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:111
+#: components/project/sections/GeneralOverview.vue:112
 msgid "Please describe where your implementation is currently taking place"
 msgstr ""
 
@@ -1938,7 +1942,7 @@ msgstr ""
 msgid "Please fill your profile first"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:123
+#: components/project/sections/GeneralOverview.vue:124
 msgid ""
 "Please provide a narrative summary of the digital health implementation."
 msgstr ""
@@ -2035,7 +2039,7 @@ msgstr ""
 msgid "Project country"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:210
+#: components/project/sections/GeneralOverview.vue:211
 msgid "Project editors can change and update all project information."
 msgstr ""
 
@@ -2072,11 +2076,11 @@ msgstr ""
 msgid "Project updates"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:233
+#: components/project/sections/GeneralOverview.vue:234
 msgid "Project viewers will be able to view the full project details."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:78
+#: components/project/sections/GeneralOverview.vue:79
 msgid ""
 "Projects in the DHA can be linked to a specific country, or for projects "
 "which operate in multiple countries or across a region, projects can be "
@@ -2382,15 +2386,12 @@ msgid "Show all selected..."
 msgstr ""
 
 #: components/common/map/SwitchGlobalBox.vue:3
+#: components/dashboard/CountryFilters.vue:3
 msgid "Show global projects only"
 msgstr ""
 
 #: components/common/ProjectLegend.vue:37
 msgid "Show legend"
-msgstr ""
-
-#: components/dashboard/CountryFilters.vue:3
-msgid "Show only Global projects"
 msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:11
@@ -2758,7 +2759,7 @@ msgstr ""
 msgid "This is required"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:161
+#: components/project/sections/GeneralOverview.vue:162
 msgid ""
 "This is the individual who will be the lead point of contact for any queries "
 "through the DHA."
@@ -3171,7 +3172,7 @@ msgid ""
 "What health information system(s) in your country does this project support?"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:90
+#: components/project/sections/GeneralOverview.vue:91
 msgid "What is the geographic scope of the project?"
 msgstr ""
 
@@ -3250,11 +3251,11 @@ msgstr ""
 msgid "Which country is the project located in?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:255
+#: components/project/sections/ImplementationOverview.vue:259
 msgid "Who are your implementing partners?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:295
+#: components/project/sections/ImplementationOverview.vue:299
 msgid "Who are your investment partners?"
 msgstr ""
 
@@ -3303,19 +3304,19 @@ msgstr ""
 
 #: components/admin/import/SmartCell.vue:43
 #: components/project/ProjectData.vue:319
-#: components/project/sections/ImplementationOverview.vue:244
+#: components/project/sections/ImplementationOverview.vue:248
 msgid "Yes, MOH is fully funding the project"
 msgstr ""
 
 #: components/admin/import/SmartCell.vue:38
 #: components/project/ProjectData.vue:318
-#: components/project/sections/ImplementationOverview.vue:241
+#: components/project/sections/ImplementationOverview.vue:245
 msgid "Yes, there is a financial contribution through MOH budget"
 msgstr ""
 
 #: components/admin/import/SmartCell.vue:33
 #: components/project/ProjectData.vue:317
-#: components/project/sections/ImplementationOverview.vue:238
+#: components/project/sections/ImplementationOverview.vue:242
 msgid "Yes, they are contributing in-kind people or time"
 msgstr ""
 
