@@ -1,4 +1,8 @@
 describe('Signup test', function() {
+  afterEach(function () {
+    cy.logOut();
+  });
+
   it('Signup test', function() {
     cy.log('Signup test');
     cy.visit("http://localhost:3000");
