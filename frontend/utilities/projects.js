@@ -1,4 +1,5 @@
 import { Validator } from 'vee-validate';
+import { format } from 'date-fns';
 
 Validator.extend('isDate', {
   getMessage (field) {
@@ -24,15 +25,32 @@ export const fetchProjectData = async (store, params, error) => {
   }
 };
 
-export const epochCheck = (date) => {
+export const epochCheck = (date, present = true) => {
   if (date) {
     const secondsSinceEpoch = Math.round(date.getTime() / 1000);
     if (secondsSinceEpoch === 0) {
-      return new Date();
+      return present ? new Date() : '';
     }
   }
   return date;
 };
+
+export const newStages = (draft) => {
+  return draft
+    .filter(i => i.checked)
+    .map(i => {
+      return {
+        id: i.id,
+        note: i.note || null,
+        date: formatDate(i.date)
+      };
+    });
+};
+
+export const formatDate = (date) =>
+  format(date, 'YYYY-MM-DD') === 'Invalid Date'
+    ? null
+    : format(date, 'YYYY-MM-DD');
 
 export const projectFields = () => ({
   name: null,
@@ -40,8 +58,10 @@ export const projectFields = () => ({
   country: null,
   geographic_scope: null,
   implementation_overview: null,
+  research: false,
   start_date: null,
   end_date: null,
+  end_date_note: null,
   contact_name: null,
   contact_email: null,
   team: [],
@@ -81,7 +101,6 @@ export const draftRules = () => {
       min: 1,
       max: 128
     },
-
     organisation: {
       required: true,
       max: 128
@@ -111,12 +130,16 @@ export const draftRules = () => {
     implementation_overview: {
       max: 1024
     },
+    research: {
+      required: false,
+    },
     start_date: {
       isDate: true
     },
     end_date: {
       isDate: true
     },
+    end_date_note: {},
     implementation_dates: {
       isDate: true
     },
@@ -130,6 +153,7 @@ export const draftRules = () => {
       facilities: {
       }
     },
+    stages: {},
     repository: {
       max: 256
     },
@@ -162,6 +186,9 @@ export const publishRules = () => {
       required: true,
       max: 1024
     },
+    research: {
+      required: false
+    },
     start_date: {
       required: true,
       isDate: true
@@ -169,6 +196,14 @@ export const publishRules = () => {
     end_date: {
       required: false,
       isDate: true
+    },
+    end_date_note: {
+      required: false
+    },
+    stages: {
+      data: {
+        required: true
+      }
     },
     contact_name: {
       required: true,

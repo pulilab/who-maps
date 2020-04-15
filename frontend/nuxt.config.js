@@ -51,7 +51,8 @@ const config = {
     { src: '~plugins/element.js', ssr: true },
     { src: '~plugins/i18n.js', ssr: true },
     { src: '~plugins/watchHead.js', ssr: false },
-    { src: '~plugins/directives.js', ssr: false }
+    { src: '~plugins/directives.js', ssr: false },
+    { src: '~plugins/charts.js', ssr: false }
   ],
   modules: [
     '@nuxtjs/axios',

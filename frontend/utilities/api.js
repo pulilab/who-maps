@@ -99,6 +99,7 @@ export const apiReadParser = p => {
   p = lib.parseCustomAnswers(p);
   const country_custom_answers = lib.countryCustomFieldMapper(p.country_answers);
   const donor_custom_answers = lib.donorCustomFieldMapper(p.donor_answers);
+  const research = 'research' in p ? p.research : undefined;
   return { ...p,
     implementation_dates: dateParser(p.implementation_dates),
     start_date: dateParser(p.start_date),
@@ -111,7 +112,8 @@ export const apiReadParser = p => {
     platforms,
     digitalHealthInterventions,
     country_custom_answers,
-    donor_custom_answers
+    donor_custom_answers,
+    research
   };
 };
 
