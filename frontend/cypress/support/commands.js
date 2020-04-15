@@ -37,29 +37,6 @@ Cypress.Commands.add('signUp', () => {
   });
 });
 
-
-Cypress.Commands.add('initData', () => {
-  cy.request('http://localhost/api/cypress-test-data/')  .then((response) => {
-    expect(response.status).to.eq(200);
-    Cypress.env('testData', response.body);
-  })
-});
-
-
-Cypress.Commands.add('logIn', () => {
-  const timeOut = 5000;
-
-  cy.initData().then(() => {
-    cy.visit(Cypress.env('testData').url);
-    cy.contains('Login').click();
-    cy.location('pathname', {timeout: timeOut}).should('include', '/login');
-    cy.get('input[id="userName"]').type(Cypress.env('testData').test_user);
-    cy.get('input[type="password"]').type('puli1234');
-    cy.get('button[id="logIn"]').click();
-    cy.location('pathname', {timeout: timeOut}).should('include', '/dashboard');
-  })
-});
-
 Cypress.Commands.add('logOut', () => {
   cy.get("svg[data-icon=\"user-circle\"]").click({force: true});
   cy.contains("Logout").click();
