@@ -107,7 +107,8 @@ describe('End to end tests', function() {
     //  save draft
     cy.get("button").contains('Save draft').click({force: true})
     cy.location('pathname', {timeout: 5000}).should('include', '/edit');
-    cy.contains("Close").click();
+    // there is a page refresh after this draft save, so here we don't need to click on the Close button in the popup
+    // because the popup disappears
 
     cy.checkSelectedSoftwareDHICount();
     cy.checkSelectedDHIs(DHIElement112, DHIElement122);
