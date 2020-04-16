@@ -25,5 +25,91 @@ describe('End to end tests', function() {
     cy.get("input[data-vv-name=\"linkedin\"]").type("http://linkedin.com/123456/");
     cy.contains("Save settings").click();
     cy.location('pathname', {timeout: 5000}).should('include', '/dashboard');
+  });
+
+  it('Test Project DHI scenario', function() {
+    cy.log('Test Project DHI scenario');
+
+    cy.log(Cypress.env('testUser'));
+
+    cy.contains('New Project').click();
+    cy.location('pathname', {timeout: 5000}).should('include', '/projects/create');
+
+    const typeOptions = {delay: 0};
+    const DHICategory11 = "1.1 Targeted client communication";
+    const DHICategory12 = "1.2 Untargeted client communication";
+    const DHIElement111 = "1.1.1";
+    const DHIElement112 = "1.1.2";
+    const DHIElement121 = "1.2.1";
+    const DHIElement122 = "1.2.2";
+
+    cy.get("input[data-vv-name=\"name\"]").type("Test Project DHI", typeOptions);
+
+    // select a software
+    cy.get("div[data-vv-name=\"id\"]").type("{downarrow}{enter}{esc}");
+
+    // add digital health intervention for the software
+    cy.contains("Add Digital Health Interventions").click();
+    //open first category and select first element
+    cy.selectDHI(DHICategory11, DHIElement111);
+
+    //add another software
+    cy.get("button[class=\"el-button AddButton IconLeft el-button--text\"]").first().click();
+
+    //  select the first one
+    cy.get("div[data-vv-name=\"id\"]").last().type("{downarrow}{enter}{esc}");
+
+    // add digital health intervention for the software
+    cy.get("div[class=\"DigitalHealthInterventionsSelector\"]").last().click();
+    // open second category and select first element
+    cy.selectDHI(DHICategory12, DHIElement121);
+
+    cy.checkSelectedSoftwareDHICount();
+    cy.checkSelectedDHIs(DHIElement111, DHIElement121);
+
+    //  save draft
+    cy.get("button").contains('Save draft').click({force: true})
+    cy.location('pathname', {timeout: 5000}).should('include', '/edit');
+    cy.contains("Close").click();
+
+    // go to the dashboard
+    cy.contains("Dashboard").click();
+    cy.location('pathname', {timeout: 5000}).should('include', '/dashboard');
+
+    // go to my projects
+    cy.contains("My Projects").click();
+    cy.location('pathname', {timeout: 5000}).should('include', '/projects');
+
+    // visit edit project
+    cy.contains("Edit Draft").click();
+
+    cy.checkSelectedSoftwareDHICount();
+    cy.checkSelectedDHIs(DHIElement111, DHIElement121);
+
+    cy.log("Select new DHIs for both software");
+
+    // select another DHI element for software 1
+    cy.get("div[class=\"DigitalHealthInterventionsSelector\"]").as("DHISelector");
+    cy.get("@DHISelector").first().contains("Edit selection").click();
+    cy.contains(DHIElement111).click();
+    cy.contains(DHIElement112).click();
+    cy.contains("Confirm").click();
+
+    // select another DHI element for software 2
+    cy.get("@DHISelector").last().contains("Edit selection").click();
+    cy.contains(DHIElement121).click();
+    cy.contains(DHIElement122).click();
+    cy.contains("Confirm").click();
+
+    cy.checkSelectedSoftwareDHICount();
+    cy.checkSelectedDHIs(DHIElement112, DHIElement122);
+
+    //  save draft
+    cy.get("button").contains('Save draft').click({force: true})
+    cy.location('pathname', {timeout: 5000}).should('include', '/edit');
+
+    cy.checkSelectedSoftwareDHICount();
+    cy.checkSelectedDHIs(DHIElement112, DHIElement122);
+
   })
 });
