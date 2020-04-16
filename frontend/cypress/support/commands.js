@@ -55,3 +55,10 @@ Cypress.Commands.add('selectDHI', (mainCategory, subCategory) => {
   cy.contains(subCategory).click();
   cy.contains("Confirm").click();
 });
+
+Cypress.Commands.add('checkSelectedSoftwareDHICount', () => {
+  // check if both software has one selected DHI
+  cy.get("ul[class=\"SelectedDigitalHealthInterventions\"]").as('ulElementsOfSelectedDHIs');
+  cy.get("@ulElementsOfSelectedDHIs").first().find('li').should('have.length', 1);
+  cy.get("@ulElementsOfSelectedDHIs").last().find('li').should('have.length', 1);
+});
