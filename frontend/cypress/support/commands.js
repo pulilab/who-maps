@@ -49,3 +49,9 @@ Cypress.Commands.add('randomAlphaNumeric', (length) => {
     return characters.charAt(Math.floor(Math.random() * charactersLength));
   }).join('');
 });
+
+Cypress.Commands.add('selectDHI', (mainCategory, subCategory) => {
+  cy.contains(mainCategory).click();
+  cy.contains(subCategory).click();
+  cy.contains("Confirm").click();
+});
