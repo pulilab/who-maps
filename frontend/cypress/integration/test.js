@@ -1,4 +1,7 @@
 describe('End to end tests', function() {
+
+  Cypress.LocalStorage.clear = function(){};
+
   before(function () {
     cy.signUp();
   });
