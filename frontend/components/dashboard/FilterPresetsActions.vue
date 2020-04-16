@@ -18,7 +18,7 @@
             class="IconRight"
           >
             <translate v-show="!activePreseet">
-              Load filters
+              My filters
             </translate>
             <span v-if="activePreseet">
               {{ activePreseet.name }}
