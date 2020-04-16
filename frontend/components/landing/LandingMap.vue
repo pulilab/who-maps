@@ -1,6 +1,9 @@
 <template>
   <div :class="['DhaMap', 'LandingMap', {'Searched': isSearched}, {'HideIcons': getIsCountry === false}]">
-    <div v-show="!getLoaded" class="Overlay">
+    <div
+      v-show="!getLoaded"
+      class="Overlay"
+    >
       <div class="OverlayContent">
         <Spinner size="32" />
         <div>Updating map</div>
@@ -75,7 +78,7 @@ import CountryCenterMarker from '../common/map/CountryCenterMarker';
 import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay';
 import WorldZoomButton from '../common/map/WorldZoomButton';
 import SwitchViewBox from '../common/map/SwitchViewBox';
-import SwitchGlobalBox from '@/components/common/map/SwitchGlobalBox'
+import SwitchGlobalBox from '@/components/common/map/SwitchGlobalBox';
 import Spinner from '@/components/common/Spinner';
 
 export default {

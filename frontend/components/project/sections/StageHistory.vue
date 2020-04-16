@@ -15,7 +15,6 @@
 <script>
 import CollapsibleCard from '../CollapsibleCard';
 import cStages from '@/components/common/chart/cStages';
-import { mapState, mapActions } from 'vuex';
 
 export default {
   components: {

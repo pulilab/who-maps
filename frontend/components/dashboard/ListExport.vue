@@ -13,19 +13,21 @@ export default {
   },
   computed: {
     ...mapGetters({
-      counties: 'countries/getCountries',
+      countries: 'countries/getCountries',
       donors: 'system/getDonors',
       getHealthFocusAreas: 'projects/getHealthFocusAreas',
       dashboardType: 'dashboard/getDashboardType',
       countryColumns: 'dashboard/getCountryColumns',
       donorColumns: 'dashboard/getDonorColumns',
       regions: 'system/getRegions',
+      stages: 'project/getStagesList',
       platforms: 'projects/getTechnologyPlatforms',
       hscChallenges: 'projects/getHscChallenges',
       hisBucket: 'projects/getHisBucket',
       licenses: 'projects/getLicenses',
       interoperabilityStandards: 'projects/getInteroperabilityStandards',
-      organisations: 'system/getOrganisations'
+      organisations: 'system/getOrganisations',
+      allStages: 'project/getStagesList'
     }),
     parsed () {
       if (!this.projects || !this.projects[0] || typeof this.projects !== 'object') {
@@ -37,7 +39,7 @@ export default {
           start_date: this.parseDate(s.start_date),
           end_date: this.parseDate(s.end_date),
           implementation_dates: this.parseDate(s.implementation_dates),
-          country: this.parseSingleSelection(s.country, 'counties'),
+          country: this.parseSingleSelection(s.country, 'countries'),
           organisation: this.parseSingleSelection(s.organisation, 'organisations'),
           investors: this.parseFlatList(s.donors, 'donors'),
           implementing_partners: this.arrayToString(s.implementing_partners),
@@ -47,6 +49,7 @@ export default {
           hsc_challenges: this.parseHscChallenges(s.hsc_challenges),
           his_bucket: this.parseFlatList(s.hsc_challenges, 'hisBucket'),
           region: this.parseSingleSelection(s.region, 'regions'),
+          stages: this.parseStages(s.stages),
           software: this.parsePlatforms(s.platforms),
           national_level_deployment: this.parseCoverageItem(s.national_level_deployment),
           coverage: this.parseCoverage(s.coverage),
@@ -82,6 +85,7 @@ export default {
         'Geographical scope': s.geographic_scope,
         'Health Focus Areas': s.health_focus_areas,
         Software: s.software,
+        Stages: s.stages,
         'Health System Challenges': s.hsc_challenges,
         'Health Information System Support': s.his_bucket,
         'Government Investor': s.government_investor,
@@ -186,6 +190,14 @@ export default {
         }
         return custom;
       }, {});
+    },
+    parseStages (stages) {
+      return this.safeReturn(() => {
+        const stagesIds = stages.map(s => s.id);
+        const stagesNames = this.allStages.filter(i => stagesIds.includes(i.id)).map(i => i.name).join(', ');
+        return stagesNames;
+        // this.parseFlatList(stages.map(p => p.id), 'stages')
+      });
     }
   },
   render () {

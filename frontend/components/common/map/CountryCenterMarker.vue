@@ -1,7 +1,7 @@
 <template>
   <div>
     <l-marker
-      v-if="icon"
+      v-if="show"
       ref="countryMarker"
       :options="options"
       :lat-lng="pin.latlng"
@@ -75,8 +75,14 @@ export default {
       popupOptions: {
         className: `CountryViewPopup`,
         closeButton: false
-      }
+      },
+      show: false
     };
+  },
+  mounted () {
+    setTimeout(() => {
+      this.show = true;
+    }, 500);
   },
   methods: {
     markerClickHandler () {

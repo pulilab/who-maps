@@ -3,16 +3,15 @@
     v-model="innerValue"
     :multiple="multiple"
     :disabled="disabled"
-    :placeholder="$gettext('Select country') | translate"
+    :placeholder="$gettext('Select stage') | translate"
     filterable
-    popper-class="CountrySelectorPopper"
-    class="CountrySelector"
+    clearable
   >
     <el-option
-      v-for="country in countries"
-      :key="country.id"
-      :label="country.name"
-      :value="country.id"
+      v-for="stage in stages"
+      :key="stage.id"
+      :label="stage.name"
+      :value="stage.id"
     />
   </lazy-el-select>
 </template>
@@ -32,11 +31,15 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    multiple: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     ...mapGetters({
-      countries: 'countries/getCountries'
+      stages: 'project/getStagesList'
     }),
     innerValue: {
       get () {
@@ -45,19 +48,7 @@ export default {
       set (value) {
         this.$emit('change', value);
       }
-    },
-    multiple () {
-      return Array.isArray(this.value);
     }
   }
 };
 </script>
-
-<style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
-
-  .CountrySelectorPopper {
-    max-width: @advancedSearchWidth - 40px;
-  }
-</style>
