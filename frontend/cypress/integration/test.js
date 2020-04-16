@@ -107,6 +107,7 @@ describe('End to end tests', function() {
     //  save draft
     cy.get("button").contains('Save draft').click({force: true})
     cy.location('pathname', {timeout: 5000}).should('include', '/edit');
+    cy.contains("Close").click();
 
     cy.checkSelectedSoftwareDHICount();
     cy.checkSelectedDHIs(DHIElement112, DHIElement122);
