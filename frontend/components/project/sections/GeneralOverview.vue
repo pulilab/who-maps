@@ -66,7 +66,9 @@
           :disabled="isGlobal"
         />
         <div class="FilterContainer">
-          <div class="FilterLabel">OR</div>
+          <div class="FilterLabel">
+            OR
+          </div>
           <filter-switch
             v-model="isGlobal"
             :label="$gettext('Set project as \'Global project\'') | translate"
@@ -291,12 +293,6 @@ export default {
       set (val) {
         this.country = val ? process.env.GlobalCountryID : null;
       }
-    },
-    endDateError () {
-      if (this.usePublishRules && this.start_date && this.end_date && isAfter(this.start_date, this.end_date)) {
-        return this.$gettext('End date must be after Start date');
-      }
-      return '';
     }
   },
   methods: {
@@ -315,7 +311,7 @@ export default {
         this.$validator.validate('country'),
         this.$validator.validate('contact_email'),
         this.$validator.validate('team')
-      ])
+      ]);
       console.log('General overview draft validation', validations);
       return validations.reduce((a, c) => a && c, true);
     }

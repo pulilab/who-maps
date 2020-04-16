@@ -141,8 +141,8 @@
                       <el-input
                         :value="stage.note"
                         :placeholder="$gettext('Add note (optional)') | translate"
-                        @input="updateStagesDraft(stage.id, 'note', $event)"
                         class="stage__input--full"
+                        @input="updateStagesDraft(stage.id, 'note', $event)"
                       >
                         <i
                           slot="prefix"
@@ -230,10 +230,10 @@ export default {
     FormHint
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
-  data() {
+  data () {
     return {
       researchDisabled: false
-    }
+    };
   },
   computed: {
     ...mapState({
@@ -252,10 +252,10 @@ export default {
       return '';
     },
     stageDateError () {
-      if ((this.stagesDraft) && (this.stagesDraft.filter(i => i.checked && (i.date === '' || i.date === null) ).length > 0)) {
+      if ((this.stagesDraft) && (this.stagesDraft.filter(i => i.checked && (i.date === '' || i.date === null)).length > 0)) {
         return this.$gettext('Stage date is required');
       }
-      return ''
+      return '';
     }
   },
   mounted () {
@@ -263,11 +263,11 @@ export default {
     // research custom logic
     if (this.research === undefined) {
       // this.researchDisabled = false
-      this.research = false
+      this.research = false;
     } else {
       // this.researchDisabled = true
     }
-    this.start_date = this.start_date
+    this.start_date = this.start_date;
   },
   methods: {
     ...mapActions({
@@ -289,7 +289,7 @@ export default {
         this.$validator.validate('start_date'),
         this.$validator.validate('end_date'),
         Promise.resolve(this.stageDateError === '')
-      ])
+      ]);
       console.log('Project stages draft validation', validations);
       return validations.reduce((a, c) => a && c, true);
     },

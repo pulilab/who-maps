@@ -17,7 +17,8 @@ export default {
     ...mapGetters({
       dashboardType: 'dashboard/getDashboardType',
       countryColumns: 'dashboard/getCountryColumns',
-      donorColumns: 'dashboard/getDonorColumns'
+      donorColumns: 'dashboard/getDonorColumns',
+      allStages: 'project/getStagesList'
     }),
     exportDate () {
       return format(Date.now(), 'Do MMM, YYYY');
@@ -205,6 +206,10 @@ export default {
                   { text: this.$gettext('Investors:'), style: 'subHeader' },
                   project.investors
                 ],
+                [
+                  { text: this.$gettext('Stages:'), style: 'subHeader' },
+                  `${project.stages || 'N/A'}`
+                ],
                 {
                   stack: [
                     { text: this.$gettext('Health Focus Area:'), style: 'subHeader' },
@@ -212,7 +217,6 @@ export default {
                   ],
                   colSpan: 2
                 },
-                '',
                 [
                   { text: this.$gettext('Point of contact:'), style: 'subHeader' },
                   `${project.contact_name || ''} - ${project.contact_email || ''}`
