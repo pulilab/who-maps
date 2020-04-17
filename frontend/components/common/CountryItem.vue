@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import CountryFlag from './CountryFlag';
 
 export default {
@@ -52,9 +52,16 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setProjectBoxActiveGlobalTab: 'landing/setProjectBoxActiveGlobalTab'
+    }),
     selectCountry (country) {
       if (!this.active) {
         return;
+      }
+      if (country && country.id === process.env.GlobalCountryID) {
+        country = null;
+        this.setProjectBoxActiveGlobalTab(true);
       }
       const organisation = country ? country.code.toLowerCase() : '-';
       const localised = this.localePath({ name: 'organisation', params: { organisation } }, this.locale);

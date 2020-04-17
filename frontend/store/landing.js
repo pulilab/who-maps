@@ -51,7 +51,8 @@ export const actions = {
     try {
       commit('SET_LOADED', false);
       commit('SET_SEARCHED', null);
-      const params = code ? { donor: rootGetters['system/getDonors'].find(d => d.code.toLowerCase() === code.toLowerCase()).id } : undefined;
+      // TODO refactor for country / donor
+      const params = (code && code.length > 2) ? { donor: rootGetters['system/getDonors'].find(d => d.code.toLowerCase() === code.toLowerCase()).id } : undefined;
       const { results } = await dispatch('loadProjects', params);
       commit('SET_PROJECT_MAP', results.projects);
       commit('SET_SEARCHED', results.search_term);

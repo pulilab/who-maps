@@ -20,7 +20,7 @@ export const actions = {
     // phases
     const phases = [''].concat(stages.map((i) => i.name));
     // notes
-    let notes = [''].concat(stages.map((i) => i.note));
+    const notes = [''].concat(stages.map((i) => i.note));
 
     // labels
     const start = formatDate(rootState.project.start_date);
@@ -30,7 +30,7 @@ export const actions = {
     const labels = [start].concat(
       stages.filter((i) => i.checked).map((i) => i.date)
     );
-    const lastLabel = labels[labels.length - 1];
+    // const lastLabel = labels[labels.length - 1];
 
     // data
     const data = [0].concat(
@@ -125,7 +125,7 @@ export const actions = {
         data: todayData
       }
     ]);
-    const chartdata = { labels, datasets }
+    const chartdata = { labels, datasets };
 
     commit('SET_STAGES_CHART_DATA', chartdata);
     commit('SET_STAGES_OPTIONS', {
@@ -144,14 +144,14 @@ export const actions = {
               return xLabel;
             }
             if (Array.isArray(xLabel)) {
-              return [xLabel[0], xLabel[1]]
+              return [xLabel[0], xLabel[1]];
             }
-            return [ xLabel, phases[yLabel]];
+            return [xLabel, phases[yLabel]];
           },
           footer: (tooltipItem, data) => {
             const { xLabel, yLabel } = tooltipItem[0];
             if (xLabel.includes('Ended')) {
-              return `Note: ${notes[notes.length - 1]}`.match(/.{1,38}/g)
+              return `Note: ${notes[notes.length - 1]}`.match(/.{1,38}/g);
             }
             return notes[yLabel]
               ? `Note: ${notes[yLabel]}`.match(/.{1,38}/g)

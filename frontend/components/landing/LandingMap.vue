@@ -1,6 +1,9 @@
 <template>
   <div :class="['DhaMap', 'LandingMap', {'Searched': isSearched}, {'HideIcons': getIsCountry === false}]">
-    <div v-show="!getLoaded" class="Overlay">
+    <div
+      v-show="!getLoaded"
+      class="Overlay"
+    >
       <div class="OverlayContent">
         <Spinner size="32" />
         <div>Updating map</div>
@@ -20,6 +23,7 @@
         />
 
         <custom-marker-cluster
+          v-if="!getActiveGlobalTab"
           ref="markerCluster"
           :options="clusterOptions"
           :total="countriesPin.length"
@@ -48,8 +52,12 @@
           :national-projects="nationalProjects"
         />
         <switch-view-box
-          v-if="activeCountry"
+          v-if="activeCountry && !getActiveGlobalTab"
           :active-tab.sync="activeTab"
+        />
+        <switch-global-box
+          v-else
+          :active-tab.sync="activeGlobalTab"
         />
         <world-zoom-button />
 
@@ -70,6 +78,7 @@ import CountryCenterMarker from '../common/map/CountryCenterMarker';
 import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay';
 import WorldZoomButton from '../common/map/WorldZoomButton';
 import SwitchViewBox from '../common/map/SwitchViewBox';
+import SwitchGlobalBox from '@/components/common/map/SwitchGlobalBox';
 import Spinner from '@/components/common/Spinner';
 
 export default {
@@ -79,6 +88,7 @@ export default {
     CountryDetailsOverlay,
     WorldZoomButton,
     SwitchViewBox,
+    SwitchGlobalBox,
     Spinner
   },
   mixins: [MapMixin]

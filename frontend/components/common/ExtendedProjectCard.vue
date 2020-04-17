@@ -191,6 +191,9 @@ export default {
             height: 14px;
             width: auto;
             margin: 1px 0;
+            &.isGlobal {
+              margin-top: -2px;
+            }
           }
         }
 
