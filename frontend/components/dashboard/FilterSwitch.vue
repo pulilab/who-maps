@@ -25,8 +25,8 @@
       <el-tooltip
         v-model="showTooltip"
         :content="tooltip"
+        :placement="placement"
         effect="dark"
-        placement="left"
         popper-class="FilterSwitchTooltip"
         manual
       >
@@ -60,6 +60,10 @@ export default {
     tooltip: {
       type: String,
       required: true
+    },
+    placement: {
+      type: String,
+      default: 'left'
     }
   },
   data () {

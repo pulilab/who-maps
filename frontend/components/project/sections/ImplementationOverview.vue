@@ -163,7 +163,11 @@
             </form-hint>
           </template>
 
-          <el-radio-group v-model="coverageType">
+          <el-radio-group
+            v-show="!isGlobalSelected"
+            v-model="coverageType"
+            :disabled="isGlobalSelected"
+          >
             <el-radio :label="1">
               <translate>Sub-national</translate>
             </el-radio>
@@ -171,6 +175,9 @@
               <translate>National</translate>
             </el-radio>
           </el-radio-group>
+          <label v-show="isGlobalSelected">
+            <translate>International</translate>
+          </label>
         </custom-required-form-item>
 
         <sub-national-level-deployment
@@ -186,9 +193,19 @@
           v-if="coverageType == 2"
           class="NationalLevelDeployment ItemIndent"
         >
-          <div class="CoverageSubtitle">
+          <div
+            v-show="!isGlobalSelected"
+            class="CoverageSubtitle"
+          >
             <fa icon="flag" />
             <translate>National level deployment</translate>
+          </div>
+          <div
+            v-show="isGlobalSelected"
+            class="CoverageSubtitle"
+          >
+            <fa icon="globe" />
+            <translate>International level deployment</translate>
           </div>
           <coverage-fieldset
             ref="nationalLevelDeployment"
@@ -345,6 +362,7 @@ export default {
 
   computed: {
     ...mapGettersActions({
+      country: ['project', 'getCountry', 'setCountry', 0],
       platforms: ['project', 'getPlatforms', 'setPlatforms', 0],
       digitalHealthInterventions: [
         'project',
@@ -421,9 +439,15 @@ export default {
         };
         this.national_level_deployment = coverage;
       }
+    },
+    isGlobalSelected () {
+      return this.country === process.env.GlobalCountryID;
     }
   },
   watch: {
+    isGlobalSelected () {
+      this.coverageType = 2;
+    },
     implementing_partners: {
       immediate: false,
       handler (ip, oldIp) {

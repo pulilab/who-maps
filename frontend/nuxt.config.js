@@ -40,6 +40,7 @@ const config = {
     '~assets/style/main.less'
   ],
   env: {
+    GlobalCountryID: process.env.GLOBAL_COUNTRY_ID || 201
   },
   plugins: [
     { src: '~plugins/eventfix.js', ssr: false },
@@ -50,7 +51,8 @@ const config = {
     { src: '~plugins/element.js', ssr: true },
     { src: '~plugins/i18n.js', ssr: true },
     { src: '~plugins/watchHead.js', ssr: false },
-    { src: '~plugins/directives.js', ssr: false }
+    { src: '~plugins/directives.js', ssr: false },
+    { src: '~plugins/charts.js', ssr: false }
   ],
   modules: [
     '@nuxtjs/axios',

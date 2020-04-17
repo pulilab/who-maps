@@ -83,6 +83,19 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="selectedColumns.includes('11')"
+        :resizable="false"
+        :label="$gettext('Stages') | translate"
+        sortable="custom"
+        width="250"
+      >
+        <template slot-scope="scope">
+          <stage-list
+            :stages="scope.row.stages || []"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column
         v-if="selectedColumns.includes('5')"
         :resizable="false"
         :label="$gettext('Region') | translate"
@@ -226,6 +239,7 @@ import CountryItem from '@/components/common/CountryItem';
 import OrganisationItem from '@/components/common/OrganisationItem';
 import HfaCategoriesList from '@/components/common/list/HfaCategoriesList';
 import DonorsList from '@/components/common/list/DonorsList';
+import StageList from '@/components/common/list/StageList';
 import RegionItem from '@/components/common/RegionItem';
 import CustomAnswersCell from './CustomAnswersCell';
 import CurrentPage from '@/components/dashboard/CurrentPage';
@@ -239,7 +253,8 @@ export default {
     DonorsList,
     RegionItem,
     CustomAnswersCell,
-    CurrentPage
+    CurrentPage,
+    StageList
   },
   data () {
     return {

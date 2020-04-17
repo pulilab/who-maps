@@ -8,6 +8,7 @@ export const stateGenerator = () => ({
   activeCountry: null,
   mapReady: false,
   projectBoxActiveTab: 'subNational',
+  projectBoxActiveGlobalTab: false,
   activeSubLevel: null,
   searchString: '',
   searchIn: searchIn(),
@@ -46,6 +47,7 @@ export const gettersGenerator = () => ({
   getCountryProjects: state => id => state.projectsMap.filter(p => p.country === id),
   getMapReady: state => state.mapReady,
   getProjectBoxActiveTab: state => state.projectBoxActiveTab,
+  getProjectBoxActiveGlobalTab: state => state.projectBoxActiveGlobalTab,
   getActiveSubLevel: state => state.activeSubLevel,
   getSearchString: state => state.searchString,
   getSearchIn: state => state.searchIn,
@@ -115,6 +117,9 @@ export const actionsGenerator = () => ({
   setProjectBoxActiveTab ({ commit }, value) {
     commit('SET_PROJECT_BOX_ACTIVE_TAB', value);
   },
+  setProjectBoxActiveGlobalTab ({ commit }, value) {
+    commit('SET_PROJECT_BOX_ACTIVE_GLOBAL_TAB', value);
+  },
   setActiveSubLevel ({ commit }, value) {
     commit('SET_ACTIVE_SUB_LEVEL', value);
   },
@@ -148,6 +153,9 @@ export const mutationsGenerator = () => ({
   SET_PROJECT_BOX_ACTIVE_TAB: (state, value) => {
     state.projectBoxActiveTab = value;
   },
+  SET_PROJECT_BOX_ACTIVE_GLOBAL_TAB: (state, value) => {
+    state.projectBoxActiveGlobalTab = value;
+  },
   SET_ACTIVE_SUB_LEVEL: (state, value) => {
     state.activeSubLevel = value;
   },
@@ -163,6 +171,7 @@ export const mutationsGenerator = () => ({
     state.activeCountry = null;
     state.mapReady = false;
     state.projectBoxActiveTab = 'subNational';
+    state.projectBoxActiveGlobalTab = false;
     state.activeSubLevel = null;
     state.searchString = '';
     state.searchIn = searchIn();

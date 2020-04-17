@@ -5,6 +5,7 @@ export const nameMapping = {
   implementation_overview: 'Narrative of the project',
   start_date: 'Start Date',
   end_date: 'End Date',
+  end_date_note: 'End Date Note',
   contact_name: 'Contact name',
   contact_email: 'Contact email',
   platforms: 'Software',
