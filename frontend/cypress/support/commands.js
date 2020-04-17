@@ -39,7 +39,7 @@ Cypress.Commands.add('signUp', () => {
 
 Cypress.Commands.add('logOut', () => {
   cy.get("svg[data-icon=\"user-circle\"]").first().click({force: true});
-  cy.contains("Logout").click();
+  cy.contains("Logout").click({force: true});
 });
 
 Cypress.Commands.add('randomAlphaNumeric', (length) => {
