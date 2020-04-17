@@ -138,23 +138,7 @@ const config = {
   },
   router: {
     middleware: ['auth'],
-    base: '/',
-    scrollBehavior (to, from, savedPosition) {
-      if (savedPosition) {
-        return savedPosition;
-      } else {
-        let position = {};
-        if (to.matched.length < 2) {
-          position = { x: 0, y: 0 };
-        } else if (to.matched.some(r => r.components.default.options.scrollToTop)) {
-          position = { x: 0, y: 0 };
-        }
-        if (to.hash) {
-          position = { selector: to.hash };
-        }
-        return position;
-      }
-    }
+    base: '/'
   },
   // purgeCSS: {
   //   whitelistPatterns: () => [/\b[^\s]*(nuxt|leaflet|vue2-leaflet|el)[^\s]*\b/]
@@ -176,6 +160,7 @@ const config = {
     optimization: {},
     transpile: ['redux', 'redux-async-thunk'],
     extend (config, { isDev }) {
+      config.plugins[1].options.ignoreOrder = true;
       config.module.rules.push({
         test: /\.html$/,
         loader: 'html-loader',

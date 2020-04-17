@@ -47,7 +47,4 @@ export default {
 .HisBucketSelector {
   width: 100%;
 }
-.HisBucketSelectorSelectorDropdown {
-
-}
 </style>
