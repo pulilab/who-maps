@@ -52,6 +52,11 @@ class CustomUserAdmin(UserAdmin):
         form = super(CustomUserAdmin, self).get_form(request, obj, **kwargs)
         return form
 
+    def get_readonly_fields(self, request, obj=None):
+        if request and request.user and not request.user.is_superuser:
+            return 'password', 'is_active', 'is_staff', 'is_superuser', 'groups', 'last_login', 'date_joined'
+        return super().get_readonly_fields(request, obj)
+
 
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, request=None, *args, **kwargs):  # pragma: no cover
