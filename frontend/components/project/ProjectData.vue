@@ -6,18 +6,26 @@
       <el-col :span="18">
         <collapsible-card
           id="general"
-          :title="$gettext('1. General Overview') | translate"
+          :title="$gettext('General Overview') | translate"
+          :prepend-title="1"
         >
           <simple-field
             :content="project.name"
             :header="$gettext('Project Name') | translate"
+            :prepend-label="1"
           />
 
-          <simple-field :header="$gettext('Organisation') | translate">
+          <simple-field
+            :header="$gettext('Organisation') | translate"
+            :prepend-label="2"
+          >
             <organisation-item :id="project.organisation" />
           </simple-field>
 
-          <simple-field :header="$gettext('Project country') | translate">
+          <simple-field
+            :header="$gettext('Project country') | translate"
+            :prepend-label="3"
+          >
             <country-item
               :id="project.country"
               :show-flag="false"
@@ -27,11 +35,13 @@
           <simple-field
             :content="project.geographic_scope"
             :header="$gettext('Geographic scope') | translate"
+            :prepend-label="4"
           />
 
           <simple-field
             :content="project.implementation_overview"
             :header="$gettext('Overview of the digital health implementation') | translate"
+            :prepend-label="5"
           />
 
           <el-row>
@@ -39,20 +49,28 @@
               <simple-field
                 :content="project.contact_name"
                 :header="$gettext('Contact name') | translate"
+                :prepend-label="6"
               />
             </el-col>
             <el-col :span="12">
               <simple-field
                 :content="project.contact_email"
                 :header="$gettext('Contact email') | translate"
+                :prepend-label="7"
               />
             </el-col>
           </el-row>
           <div class="GrayArea">
-            <simple-field :header="$gettext('Team members') | translate">
+            <simple-field
+              :header="$gettext('Team members') | translate"
+              :prepend-label="8"
+            >
               <team-list :value="project.team" />
             </simple-field>
-            <simple-field :header="$gettext('Viewers') | translate">
+            <simple-field
+              :header="$gettext('Viewers') | translate"
+              :prepend-label="9"
+            >
               <team-list :value="project.viewers" />
             </simple-field>
           </div>
@@ -60,24 +78,37 @@
 
         <collapsible-card
           id="implementation"
-          :title="$gettext('2. Implementation Overview') | translate"
+          :title="$gettext('Implementation Overview') | translate"
+          :prepend-title="2"
         >
-          <simple-field :header="$gettext('Software and related Digital Health Interventions (DHI)') | translate">
+          <simple-field
+            :header="$gettext('Software and related Digital Health Interventions (DHI)') | translate"
+            :prepend-label="1"
+          >
             <platforms-list
               :platforms="project.platforms"
               :dhi="project.digitalHealthInterventions"
             />
           </simple-field>
 
-          <simple-field :header="$gettext('Health focus area(s)') | translate">
+          <simple-field
+            :header="$gettext('Health focus area(s)') | translate"
+            :prepend-label="2"
+          >
             <health-focus-areas-list :value="project.health_focus_areas" />
           </simple-field>
 
-          <simple-field :header="$gettext('Health System Challenges (HSC)') | translate">
+          <simple-field
+            :header="$gettext('Health System Challenges (HSC)') | translate"
+            :prepend-label="3"
+          >
             <health-system-challenges-list :value="project.hsc_challenges" />
           </simple-field>
 
-          <simple-field :header="$gettext('Health Information System (HIS)') | translate">
+          <simple-field
+            :header="$gettext('Health Information System (HIS)') | translate"
+            :prepend-label="4"
+          >
             <his-bucket-list :value="project.his_bucket" />
           </simple-field>
 
@@ -85,13 +116,17 @@
             <simple-field
               v-if="isNationalLevelDeployment || (project.coverage && project.coverage.length)"
               :header="$gettext('Coverage type')"
+              :prepend-label="5"
             >
               <type-field
                 :value="project.coverageType"
                 :list="coverageList"
               />
             </simple-field>
-            <simple-field v-if="isNationalLevelDeployment">
+            <simple-field
+              v-if="isNationalLevelDeployment"
+              :prepend-label="5"
+            >
               <div slot="header">
                 <fa icon="flag" />
                 <translate>National Level Deployment</translate>
@@ -108,14 +143,20 @@
             />
           </div>
 
-          <simple-field :header="$gettext('Has the government financially invested in the project?') | translate">
+          <simple-field
+            :header="$gettext('Has the government financially invested in the project?') | translate"
+            :prepend-label="6"
+          >
             <type-field
               :value="project.government_investor"
               :list="investedList"
             />
           </simple-field>
 
-          <simple-field :header="$gettext('Implementing partner(s)') | translate">
+          <simple-field
+            :header="$gettext('Implementing partner(s)') | translate"
+            :prepend-label="7"
+          >
             <ul>
               <li
                 v-for="(partner, index) in project.implementing_partners"
@@ -126,7 +167,10 @@
             </ul>
           </simple-field>
 
-          <simple-field :header="$gettext('Investor(s)') | translate">
+          <simple-field
+            :header="$gettext('Investor(s)') | translate"
+            :prepend-label="8"
+          >
             <donors-list :value="project.donors" />
           </simple-field>
         </collapsible-card>
@@ -137,46 +181,61 @@
 
         <collapsible-card
           id="technology"
-          :title="$gettext('3. Techonology overview') | translate"
+          :title="$gettext('Techonology overview') | translate"
+          :prepend-title="4"
         >
           <simple-field
             :content="project.implementation_dates"
             :header="$gettext('Technology deployment date') | translate"
+            :prepend-label="1"
             date
           />
 
-          <simple-field :header="$gettext('Under what license is the project governed') | translate">
+          <simple-field
+            :header="$gettext('Under what license is the project governed') | translate"
+            :prepend-label="2"
+          >
             <licenses-list :value="project.licenses" />
           </simple-field>
 
           <simple-field
             :content="project.repository"
             :header="$gettext('Code documentation or download link') | translate"
+            :prepend-label="3"
             link
           />
 
           <simple-field
             :content="project.mobile_application"
             :header="$gettext('Link to the application') | translate"
+            :prepend-label="4"
             link
           />
 
           <simple-field
             :content="project.wiki"
             :header="$gettext('Link to wiki or project website') | translate"
+            :prepend-label="5"
             link
           />
         </collapsible-card>
 
         <collapsible-card
           id="interoperability"
-          :title="$gettext('4. Interoperability &amp; standards') "
+          :title="$gettext('Interoperability &amp; standards') "
+          :prepend-title="5"
         >
-          <simple-field :header="$gettext('What other system do you interoperate with ?') | translate">
+          <simple-field
+            :header="$gettext('What other system do you interoperate with ?') | translate"
+            :prepend-label="1"
+          >
             <interoperability-links-list :value="project.interoperability_links" />
           </simple-field>
 
-          <simple-field :header="$gettext('What data standards does your digital health project use?') | translate">
+          <simple-field
+            :header="$gettext('What data standards does your digital health project use?') | translate"
+            :prepend-label="2"
+          >
             <standards-list :value="project.interoperability_standards" />
           </simple-field>
         </collapsible-card>
@@ -185,14 +244,16 @@
           v-if="countryQuestions && countryQuestions.length > 0"
           id="countrycustom"
           :title="customFieldsName(country.name)"
+          :prepend-title="6"
         >
           <custom-readonly-field
-            v-for="question in countryQuestions"
+            v-for="(question, idx) in countryQuestions"
             :id="question.id"
             :key="question.id"
             :question="question.question"
             :is-draft="isDraft"
             :type="question.type"
+            :prepend-label="idx + 1"
           />
         </collapsible-card>
 
@@ -201,18 +262,20 @@
           id="donorcustom"
         >
           <collapsible-card
-            v-for="donor in donors"
+            v-for="(donor, idx) in donors"
             :key="donor.id"
             :title="customFieldsName(donor.name)"
+            :prepend-title="7 + idx"
           >
             <custom-readonly-field
-              v-for="question in donor.donor_questions"
+              v-for="(question, i) in donor.donor_questions"
               :id="question.id"
               :key="question.id"
               :question="question.question"
               :is-draft="isDraft"
               :type="question.type"
               :donor-id="donor.id"
+              :prepend-label="i + 1"
             />
           </collapsible-card>
         </div>

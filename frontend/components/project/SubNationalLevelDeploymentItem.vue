@@ -4,6 +4,7 @@
       :error="errors.first('district', scope + '_' + index)"
       :draft-rule="draftRules.district"
       :publish-rule="publishRules.district"
+      prepend-label="5a"
     >
       <template slot="label">
         {{ levelName }}

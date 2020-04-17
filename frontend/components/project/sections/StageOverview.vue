@@ -6,6 +6,7 @@
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Document Completion of Project Stages') | translate"
+      :prepend-title="prependTitle"
       show-legend
     >
       <!-- stages -->
@@ -43,6 +44,7 @@
             :error="errors.first('start_date')"
             :draft-rule="draftRules.start_date"
             :publish-rule="publishRules.start_date"
+            prepend-label="1"
           >
             <template slot="label">
               <translate key="start-date">
@@ -70,7 +72,7 @@
         <!-- Stages section -->
         <el-col :span="24">
           <el-row class="stages">
-            <custom-required-form-item>
+            <custom-required-form-item prepend-label="2">
               <template slot="label">
                 <translate key="stages">
                   Set current and previous stages of project
@@ -163,6 +165,7 @@
             :error="errors.first('end_date') || endDateError"
             :draft-rule="draftRules.end_date"
             :publish-rule="publishRules.end_date"
+            prepend-label="3"
           >
             <template slot="label">
               <translate key="end-date">
@@ -391,7 +394,7 @@ export default {
     .stage__info {
       flex-basis: 100%;
       // margin: 0 0 16px 0;
-      margin: 0 0 -8px 0;
+      margin: 0 0 16px 0;
     }
     .stage__picker {
       flex-basis: 30%;

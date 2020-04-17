@@ -6,12 +6,14 @@
     <collapsible-card
       ref="collapsible"
       :title="$gettext('General overview') | translate"
+      :prepend-title="prependTitle"
       show-legend
     >
       <custom-required-form-item
         :error="errors.first('name')"
         :draft-rule="draftRules.name"
         :publish-rule="publishRules.name"
+        prepend-label="1"
       >
         <template slot="label">
           <translate key="project-name">
@@ -36,6 +38,7 @@
         :error="errors.first('organisation')"
         :draft-rule="draftRules.organisation"
         :publish-rule="publishRules.organisation"
+        prepend-label="2"
       >
         <template slot="label">
           <translate key="organisation">
@@ -52,6 +55,7 @@
         :error="errors.first('country')"
         :draft-rule="draftRules.country"
         :publish-rule="publishRules.country"
+        prepend-label="3"
       >
         <template slot="label">
           <translate key="country">
@@ -89,6 +93,7 @@
         :error="errors.first('geographic_scope')"
         :draft-rule="draftRules.geographic_scope"
         :publish-rule="publishRules.geographic_scope"
+        prepend-label="4"
       >
         <template slot="label">
           <translate key="geographic-scope">
@@ -122,6 +127,7 @@
         :error="errors.first('implementation_overview')"
         :draft-rule="draftRules.implementation_overview"
         :publish-rule="publishRules.implementation_overview"
+        prepend-label="5"
       >
         <template slot="label">
           <translate key="implementation-overview">
@@ -156,6 +162,7 @@
             :error="errors.first('contact_name')"
             :draft-rule="draftRules.contact_name"
             :publish-rule="publishRules.contact_name"
+            prepend-label="6"
           >
             <template slot="label">
               <translate key="contact-name">
@@ -182,6 +189,7 @@
             :error="errors.first('contact_email')"
             :draft-rule="draftRules.contact_email"
             :publish-rule="publishRules.contact_email"
+            prepend-label="7"
           >
             <template slot="label">
               <translate key="contact-email">
@@ -205,6 +213,7 @@
           :error="errors.first('team')"
           :draft-rule="draftRules.team"
           :publish-rule="publishRules.team"
+          prepend-label="8"
         >
           <template slot="label">
             <translate key="team">
@@ -228,6 +237,7 @@
           :error="errors.first('viewers')"
           :draft-rule="draftRules.viewers"
           :publish-rule="publishRules.viewers"
+          prepend-label="9"
         >
           <template slot="label">
             <translate key="viewers">

@@ -6,12 +6,14 @@
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Interoperability &amp; Standards') "
+      :prepend-title="prependTitle"
       show-legend
     >
       <custom-required-form-item
         prop="interoperability_links"
         :draft-rule="draftRules.interoperability_links"
         :publish-rule="publishRules.interoperability_links"
+        prepend-label="1"
       >
         <template slot="label">
           <translate key="interoperability_links">
@@ -34,6 +36,7 @@
         prop="interoperability_standards"
         :draft-rule="draftRules.interoperability_standards"
         :publish-rule="publishRules.interoperability_standards"
+        prepend-label="2"
       >
         <template slot="label">
           <translate key="interoperability-standards">

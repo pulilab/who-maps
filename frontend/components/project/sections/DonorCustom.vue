@@ -5,10 +5,11 @@
     class="DonorCustom"
   >
     <collapsible-card
-      v-for="(donor) in donors"
+      v-for="(donor, idx) in donors"
       ref="collapsible"
       :key="donor.id"
       :title="customFieldsName(donor.name)"
+      :prepend-title="prependTitle + idx"
     >
       <custom-field
         v-for="(field, index) in donor.donor_questions"
@@ -19,6 +20,7 @@
         :api-errors="apiErrors"
         :type="field.type"
         :question="field.question"
+        :prepend-label="index + 1"
         :is-required="field.required"
         :is-private="field.private"
         :options="field.options"

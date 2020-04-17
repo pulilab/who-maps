@@ -7,6 +7,7 @@
     <collapsible-card
       ref="collapsible"
       :title="customFieldsName(country.name)"
+      :prepend-title="prependTitle"
     >
       <custom-field
         v-for="(field, index) in countryQuestions"
@@ -17,6 +18,7 @@
         :api-errors="apiErrors"
         :type="field.type"
         :question="field.question"
+        :prepend-label="index + 1"
         :is-required="field.required"
         :is-private="field.private"
         :options="field.options"

@@ -6,12 +6,14 @@
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Implementation overview') | translate"
+      :prepend-title="prependTitle"
       show-legend
     >
       <custom-required-form-item
         :error="errors.first('health_focus_areas')"
         :draft-rule="draftRules.health_focus_areas"
         :publish-rule="publishRules.health_focus_areas"
+        prepend-label="1"
       >
         <template slot="label">
           <translate key="health-focus-areas">
@@ -31,6 +33,7 @@
         :error="errors.first('hsc_challenges')"
         :draft-rule="draftRules.hsc_challenges"
         :publish-rule="publishRules.hsc_challenges"
+        prepend-label="2"
       >
         <template slot="label">
           <translate
@@ -48,7 +51,10 @@
         />
       </custom-required-form-item>
 
-      <custom-required-form-item :error="errors.first('platforms')">
+      <custom-required-form-item
+        :error="errors.first('platforms')"
+        prepend-label="3"
+      >
         <template slot="label">
           <translate key="platforms">
             Add information about your Digital Health program activies
@@ -69,6 +75,7 @@
           :draft-rule="draftRules.platforms"
           :publish-rule="publishRules.platforms"
           class="ItemIndent"
+          prepend-label="3a"
         >
           <template slot="label">
             <translate
@@ -94,6 +101,7 @@
               :draft-rule="draftRules.strategies"
               :publish-rule="publishRules.strategies"
               class="DigitalHealthIntervention"
+              prepend-label="3b"
             >
               <template slot="label">
                 <translate
@@ -129,6 +137,7 @@
         :error="errors.first('his_bucket')"
         :draft-rule="draftRules.his_bucket"
         :publish-rule="publishRules.his_bucket"
+        prepend-label="4"
       >
         <template slot="label">
           <translate
@@ -147,7 +156,10 @@
       </custom-required-form-item>
 
       <div class="CoverageArea">
-        <custom-required-form-item prop="coverageType">
+        <custom-required-form-item
+          prop="coverageType"
+          prepend-label="5"
+        >
           <template slot="label">
             <translate
               key="coverage-type"
@@ -222,10 +234,12 @@
           />
         </div>
       </div>
+
       <custom-required-form-item
         :error="errors.first('government_investor')"
         :draft-rule="draftRules.government_investor"
         :publish-rule="publishRules.government_investor"
+        prepend-label="6"
       >
         <template slot="label">
           <translate
@@ -261,18 +275,18 @@
         class="ImplementingPartners"
         :draft-rule="draftRules.implementing_partners"
         :publish-rule="publishRules.implementing_partners"
+        prepend-label="7"
       >
         <template slot="label">
           <translate key="implementing-partners">
             Who are your implementing partners?
           </translate>
         </template>
-
         <el-row
           v-for="(partner, index) in implementing_partners"
           :key="index"
         >
-          <el-col :span="18">
+          <el-col :span="17">
             <custom-required-form-item :error="errors.first('implementing_partners_' + index)">
               <el-input
                 ref="implementingPartnersInput"
@@ -301,6 +315,7 @@
         :error="errors.first('donors')"
         :draft-rule="draftRules.donors"
         :publish-rule="publishRules.donors"
+        prepend-label="8"
       >
         <template slot="label">
           <translate key="donors">

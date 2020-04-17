@@ -1,9 +1,17 @@
 <template>
   <el-form-item
     :error="errors.first('answer', 'custom_question_' + id)"
-    :label="question"
     class="CustomField"
   >
+    <template slot="label">
+      <span
+        v-if="!!prependFormat"
+        class="pre-number"
+      >
+        {{ prependFormat }}
+      </span>
+      {{ question }}
+    </template>
     <div
       v-show="isPrivate"
       class="PrivateBadge"
@@ -112,6 +120,10 @@ export default {
     index: {
       type: Number,
       required: true
+    },
+    prependLabel: {
+      type: Number,
+      default: 0
     }
   },
   computed: {
@@ -150,6 +162,9 @@ export default {
         required: this.isRequired && this.doValidation,
         numeric: this.type === 2 && this.doValidation
       };
+    },
+    prependFormat () {
+      return this.prependLabel ? `${this.prependLabel}. ` : '';
     }
   },
   watch: {
@@ -208,8 +223,15 @@ export default {
 </script>
 
 <style lang="less">
+  @import "~assets/style/variables.less";
+
 .CustomField {
   position: relative;
+
+  .pre-number {
+    border-left: 5px solid @colorGrayLight;
+    padding: 2px 15px 2px 10px;
+  }
 
   .el-form-item__label {
     line-height: 20px;

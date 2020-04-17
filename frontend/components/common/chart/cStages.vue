@@ -57,7 +57,7 @@ export default {
   @import "~assets/style/mixins.less";
 
   .graph__line {
-    padding: 30px 20px 40px;
+    padding: 50px 20px 40px;
   }
   .graph__legend {
     background-color: #F8F8F8;

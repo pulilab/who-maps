@@ -6,6 +6,7 @@
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Completion of Project stages') | translate"
+      :prepend-title="3"
     >
       <c-stages />
     </collapsible-card>

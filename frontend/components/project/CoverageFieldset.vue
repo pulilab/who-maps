@@ -9,6 +9,7 @@
           :error="errors.first('health_workers', scope)"
           :draft-rule="draftRules.health_workers"
           :publish-rule="publishRules.health_workers"
+          prepend-label="5aa"
         >
           <template slot="label">
             <translate key="health-workers">
@@ -40,6 +41,7 @@
           :error="errors.first('facilities', scope)"
           :draft-rule="draftRules.facilities"
           :publish-rule="publishRules.facilities"
+          prepend-label="5ab"
         >
           <template slot="label">
             <translate key="facilities">
@@ -71,6 +73,7 @@
           :error="errors.first('clients', scope)"
           :draft-rule="draftRules.clients"
           :publish-rule="publishRules.clients"
+          prepend-label="5ac"
         >
           <template slot="label">
             <translate key="facilities">

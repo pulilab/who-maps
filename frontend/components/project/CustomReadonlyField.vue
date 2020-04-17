@@ -1,6 +1,7 @@
 <template>
   <simple-field
     :header="question"
+    :prepend-label="prependLabel"
   >
     <template v-if="type < 5">
       <span v-show="value">
@@ -57,6 +58,10 @@ export default {
     isDraft: {
       type: Boolean,
       default: false
+    },
+    prependLabel: {
+      type: Number,
+      default: 0
     }
   },
   computed: {

@@ -6,7 +6,7 @@
         class="CollapsibleHeader"
       >
         <span class="CardTitle">
-          {{ title }}
+          {{ `${prependFormat}${title}` }}
         </span>
         <el-button
           type="text"
@@ -69,12 +69,21 @@ export default {
     showLegend: {
       type: Boolean,
       default: false
+    },
+    prependTitle: {
+      type: Number,
+      default: 0
     }
   },
   data () {
     return {
       open: true
     };
+  },
+  computed: {
+    prependFormat () {
+      return this.prependTitle ? `${this.prependTitle}. ` : '';
+    }
   },
   methods: {
     toggleCard () {
@@ -96,8 +105,8 @@ export default {
     .Legend {
       display: flex;
       justify-content: flex-end;
+      margin-top: -28px;
       margin-bottom: 16px;
-
       div {
         margin-left: 12px;
       }
@@ -170,7 +179,8 @@ export default {
 
     .ContentContainer {
       position: relative;
-      padding: 22px 74px 60px 40px;
+      // padding: 22px 74px 60px 40px;
+      padding: 50px 74px 60px 40px;
     }
 
     .slide-fade-enter-active {

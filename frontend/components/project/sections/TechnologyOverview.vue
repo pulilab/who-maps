@@ -6,12 +6,14 @@
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Technology overview') | translate"
+      :prepend-title="prependTitle"
       show-legend
     >
       <custom-required-form-item
         :error="errors.first('licenses')"
         :draft-rule="draftRules.licenses"
         :publish-rule="publishRules.licenses"
+        prepend-label="1"
       >
         <template slot="label">
           <translate key="licenses">
@@ -29,6 +31,7 @@
         :error="errors.first('repository')"
         :draft-rule="draftRules.repository"
         :publish-rule="publishRules.repository"
+        prepend-label="2"
       >
         <template slot="label">
           <translate key="repository">
@@ -51,6 +54,7 @@
         :error="errors.first('mobile_application')"
         :draft-rule="draftRules.mobile_application"
         :publish-rule="publishRules.mobile_application"
+        prepend-label="3"
       >
         <template slot="label">
           <translate key="mobile_application">
@@ -74,6 +78,7 @@
         :label="$gettext('Link to the wiki page') | translate"
         :draft-rule="draftRules.wiki"
         :publish-rule="publishRules.wiki"
+        prepend-label="4"
       >
         <template slot="label">
           <translate key="wiki">
