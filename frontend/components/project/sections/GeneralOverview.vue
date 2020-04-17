@@ -63,7 +63,27 @@
           v-validate="rules.country"
           data-vv-name="country"
           data-vv-as="Country"
+          :disabled="isGlobal"
         />
+        <div class="FilterContainer">
+          <div class="FilterLabel">
+            OR
+          </div>
+          <filter-switch
+            v-model="isGlobal"
+            :label="$gettext('Set project as \'Global project\'') | translate"
+            :tooltip="$gettext('Global project tooltip text placeholder') | translate"
+            placement="top"
+          />
+        </div>
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>
+              Projects in the DHA can be linked to a specific country, or for projects which operate in multiple countries or across a region, projects can be listed as global.
+            </translate>
+          </p>
+        </span>
       </custom-required-form-item>
       <custom-required-form-item
         :error="errors.first('geographic_scope')"
@@ -241,6 +261,7 @@ import OrganisationSelect from '../../common/OrganisationSelect';
 import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem';
+import FilterSwitch from '@/components/dashboard/FilterSwitch';
 
 export default {
   components: {
@@ -249,7 +270,8 @@ export default {
     TeamSelector,
     OrganisationSelect,
     FormHint,
-    CustomRequiredFormTeamItem
+    CustomRequiredFormTeamItem,
+    FilterSwitch
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
@@ -263,7 +285,15 @@ export default {
       contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
       team: ['project', 'getTeam', 'setTeam', 0],
       viewers: ['project', 'getViewers', 'setViewers', 0]
-    })
+    }),
+    isGlobal: {
+      get () {
+        return this.country === process.env.GlobalCountryID;
+      },
+      set (val) {
+        this.country = val ? process.env.GlobalCountryID : null;
+      }
+    }
   },
   methods: {
     async validate () {
@@ -281,7 +311,7 @@ export default {
         this.$validator.validate('country'),
         this.$validator.validate('contact_email'),
         this.$validator.validate('team')
-      ])
+      ]);
       console.log('General overview draft validation', validations);
       return validations.reduce((a, c) => a && c, true);
     }
@@ -296,6 +326,22 @@ export default {
   .GeneralOverview {
     .CountrySelector {
       width: 50%;
+    }
+    .Date {
+      width: 100% !important;
+    }
+    .FilterContainer {
+      display: inline-flex;
+      .FilterLabel {
+        display: inline-block;
+        width: 78px;
+        color: #9D9D9D;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 0;
+        line-height: 20px;
+        text-align: center;
+      }
     }
   }
 </style>

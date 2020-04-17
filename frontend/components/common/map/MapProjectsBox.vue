@@ -28,7 +28,12 @@
         </span>
         <div v-if="showNational">
           <span class="SubLevelItem">
-            <translate>National</translate>
+            <span v-show="!isGlobal">
+              <translate>National</translate>
+            </span>
+            <span v-show="isGlobal">
+              <translate>Project List</translate>
+            </span>
           </span>
           <span class="SubLevelCounter">
             <translate :parameters="{count: nationalProjects.length} ">
@@ -153,7 +158,7 @@ export default {
   },
   computed: {
     showTabbedView () {
-      return this.activeCountry && !this.selectedCountry;
+      return !this.isGlobal && this.activeCountry && !this.selectedCountry;
     },
     showSubNational () {
       return !this.showTabbedView &&
@@ -161,11 +166,13 @@ export default {
       this.activeSubLevel;
     },
     showNational () {
-      return !this.showTabbedView &&
-      this.activeTab === 'national';
+      return this.isGlobal || (!this.showTabbedView && this.activeTab === 'national');
+    },
+    isGlobal () {
+      return this.activeCountry === process.env.GlobalCountryID;
     },
     showSubLevelHint () {
-      return this.selectedCountry && !this.activeSubLevel && this.activeTab === 'subNational';
+      return this.selectedCountry && !this.activeSubLevel && this.activeTab === 'subNational' && !this.isGlobal;
     },
     showMapProjectBox () {
       return this.activeCountry;

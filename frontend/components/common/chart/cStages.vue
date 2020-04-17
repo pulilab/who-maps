@@ -40,7 +40,7 @@ export default {
     this.getStageData(this.stagesDraft);
     await setTimeout(() => { this.loaded = true; }, 250);
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.loaded = false;
   },
   methods: {

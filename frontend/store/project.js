@@ -54,6 +54,14 @@ export const getters = {
       return state.stagesDraft;
     }
   },
+  getStagesList: (state, getters, rootState) => {
+    if ('stages' in rootState.projects.projectStructure) {
+      return rootState.projects.projectStructure.stages.map(i => {
+        return { id: i.id, name: i.name };
+      });
+    }
+    return [];
+  },
   getContactName: state => state.contact_name,
   getContactEmail: state => state.contact_email,
   getTeam: state => state.team,

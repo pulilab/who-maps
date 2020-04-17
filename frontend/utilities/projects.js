@@ -131,7 +131,7 @@ export const draftRules = () => {
       max: 1024
     },
     research: {
-      required: false,
+      required: false
     },
     start_date: {
       isDate: true

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Bar, Line } from 'vue-chartjs';
+import { Line } from 'vue-chartjs';
 
 // Vue.component('bar-chart', {
 //   extends: Bar,

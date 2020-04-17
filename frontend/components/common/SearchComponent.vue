@@ -115,7 +115,7 @@
               </div>
             </el-tab-pane>
             <el-tab-pane
-              :label="$gettext('Planning & guidance {num}', {num: cms ? cms.length : 0}) | translate"
+              :label="$gettext('Planning & guidance {num}', {num: cmsLength}) | translate"
               name="planning"
             >
               <el-row v-if="cms === null">
@@ -149,7 +149,7 @@
               </div>
             </el-tab-pane>
             <el-tab-pane
-              :label="$gettext('Ministry of Health {num}', {num: documents ? documents.length : 0}) | translate"
+              :label="$gettext('Ministry of Health {num}', {num: documentsLength}) | translate"
               name="documents"
             >
               <el-row v-show="documents === null">
@@ -275,6 +275,12 @@ export default {
       return (this.results ? this.results.length : 0) +
         (this.cms ? this.cms.length : 0) +
         (this.documents ? this.documents.length : 0);
+    },
+    cmsLength () {
+      return this.cms ? this.cms.length : 0;
+    },
+    documentsLength () {
+      return this.documents ? this.documents.length : 0;
     }
   },
   watch: {

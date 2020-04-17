@@ -42,7 +42,7 @@
           :national-projects="nationalProjects"
         />
         <switch-view-box
-          v-if="activeCountry"
+          v-if="switchActive"
           :active-tab.sync="activeTab"
         />
         <world-zoom-button />
@@ -90,7 +90,10 @@ export default {
       mapProjects: 'dashboard/getProjectsMap',
       currentZoom: 'dashboard/getCurrentZoom',
       getSearched: 'dashboard/getSearched'
-    })
+    }),
+    switchActive () {
+      return this.activeCountry && this.activeCountry !== process.env.GlobalCountryID;
+    }
   },
   methods: {
     ...mapActions({

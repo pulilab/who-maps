@@ -2,7 +2,7 @@ import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator 
 import { intArrayFromQs, customColumnsMapper, strArrayFromQs, parseCustomAnswers } from '../utilities/api';
 
 export const searchIn = () => ['name', 'org', 'overview', 'partner', 'donor', 'loc', 'uid'];
-export const defaultSelectedColumns = () => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+export const defaultSelectedColumns = () => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
 
 export const state = () => ({
   ...stateGenerator(),
@@ -18,6 +18,7 @@ export const state = () => ({
   selectedPlatforms: [],
   selectedRows: [],
   filteredCountries: [],
+  filteredStages: null,
   filteredRegion: null,
   governmentApproved: null,
   governmentFinanced: null,
@@ -39,6 +40,7 @@ export const getters = {
     const g = getters.getSearchParameters;
     return !(g.approved === undefined &&
     g.country.length === 0 &&
+    g.stage === null &&
     g.dhi.length === 0 &&
     g.donor === null &&
     g.gov === undefined &&
@@ -49,7 +51,8 @@ export const getters = {
     g.q === undefined &&
     g.region === null &&
     g.sw.length === 0 &&
-    g.view_as === undefined);
+    g.view_as === undefined &&
+    g.global === null);
   },
   getProjectsList: state => [...state.projectsList.map(r => parseCustomAnswers(r))],
   getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => parseCustomAnswers(r))] : getters.getProjectsList,
@@ -85,6 +88,7 @@ export const getters = {
   getFilteredCountries: state => {
     return state.dashboardType === 'country' && state.dashboardId ? [state.dashboardId] : state.filteredCountries;
   },
+  getFilteredStages: state => state.filteredStages,
   getFilteredRegion: state => state.filteredRegion,
   getGovernmentApproved: state => state.governmentApproved,
   getGovernmentFinanced: state => state.governmentFinanced,
@@ -110,6 +114,7 @@ export const getters = {
       q,
       in: q ? state.searchIn : undefined,
       country,
+      stage: state.filteredStages,
       donor,
       region: state.filteredRegion,
       gov: state.governmentFinanced ? [1, 2, 3] : undefined,
@@ -205,6 +210,10 @@ export const actions = {
     commit('SET_FILTERED_COUNTRIES', value);
     commit('SET_CURRENT_PAGE', 1);
   },
+  setFilteredStages ({ commit, dispatch }, value) {
+    commit('SET_FILTERED_STAGES', value);
+    commit('SET_CURRENT_PAGE', 1);
+  },
   setFilteredRegion ({ commit }, value) {
     commit('SET_FILTERED_REGION', value);
     commit('SET_CURRENT_PAGE', 1);
@@ -282,6 +291,7 @@ export const mutations = {
     state.searchString = options.q ? options.q : '';
     state.searchIn = options.in ? options.in : searchIn();
     state.filteredCountries = intArrayFromQs(options.country);
+    state.filteredStages = options.stage ? +options.stage : null;
     state.filteredRegion = options.region ? +options.region : null;
     state.governmentFinanced = options.gov ? true : null;
     state.governmentApproved = options.approved ? true : null;
@@ -317,6 +327,9 @@ export const mutations = {
   },
   SET_FILTERED_COUNTRIES: (state, value) => {
     state.filteredCountries = value;
+  },
+  SET_FILTERED_STAGES: (state, value) => {
+    state.filteredStages = value;
   },
   SET_FILTERED_REGION: (state, value) => {
     state.filteredRegion = value;
