@@ -1,6 +1,8 @@
 <template>
   <div class="grid-content">
-    <p>{{ description }}</p>
+    <p class="special">
+      {{ description }}
+    </p>
   </div>
 </template>
 
