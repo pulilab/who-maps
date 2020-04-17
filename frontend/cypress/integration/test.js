@@ -116,6 +116,9 @@ describe('End to end tests', function() {
     // there is a page refresh after this draft save, so here we don't need to click on the Close button in the popup
     // because the popup disappears
 
+    // some wait is necessary here until the page fully reloads
+    cy.wait(5000);
+
     cy.checkSelectedSoftwareDHICount();
     cy.checkSelectedDHIs(DHIElement112, DHIElement122);
 
