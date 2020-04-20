@@ -6,7 +6,7 @@
     <el-popover
       v-model="visible"
       placement="bottom-end"
-      popper-class="CustomPopover PersonaSelectorPopover"
+      popper-class="CustomPopover"
       trigger="click"
     >
       <el-button
