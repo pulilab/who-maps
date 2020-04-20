@@ -40,10 +40,13 @@ const config = {
     '~assets/style/main.less'
   ],
   env: {
-    GlobalCountryID: process.env.GLOBAL_COUNTRY_ID || 201
+    GlobalCountryID: process.env.GLOBAL_COUNTRY_ID || 201,
+    hotjarId: process.env.HOTJAR_TRACKING_ID || null
   },
   plugins: [
+    { src: '~plugins/tracking.js' },
     { src: '~plugins/eventfix.js', ssr: false },
+    { src: '~plugins/hotjar.js', ssr: false },
     { src: '~plugins/extends.js', ssr: false },
     { src: '~plugins/axios.js', ssr: true },
     { src: '~plugins/vee-validate.js', ssr: true },
@@ -146,6 +149,16 @@ const config = {
   loading: '~/components/DhaLoader.vue',
   render: {
     resourceHints: false
+  },
+  buildModules: [
+    '@nuxtjs/google-analytics'
+  ],
+  googleAnalytics: {
+    id: process.env.GA_TRACKING_ID || 'UA-163761727-1',
+    disabled: true,
+    set: [
+      { field: 'anonymizeIp', value: true }
+    ]
   },
   build: {
     babel: {
