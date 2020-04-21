@@ -94,11 +94,7 @@
           <translate key="geographic-scope">
             What is the geographic scope of the project?
           </translate>
-          <form-hint>
-            <translate key="geographic-scope-hint">
-              Describe the user types, geographic coverage and other coverage details.
-            </translate>
-          </form-hint>
+          <tooltip :text="$gettext('Describe the user types, geographic coverage and other coverage details.') | translate" />
         </template>
 
         <character-count-input
@@ -127,11 +123,7 @@
           <translate key="implementation-overview">
             Please provide a narrative summary of the digital health implementation.
           </translate>
-          <form-hint>
-            <translate key="implementation-overview-hint">
-              Describe your overall digital health project design.
-            </translate>
-          </form-hint>
+          <tooltip :text="$gettext('Describe your overall digital health project design.') | translate" />
         </template>
 
         <character-count-input
@@ -161,11 +153,7 @@
               <translate key="contact-name">
                 Contact name
               </translate>
-              <form-hint>
-                <translate key="contact-name-hint">
-                  This is the individual who will be the lead point of contact for any queries through the DHA.
-                </translate>
-              </form-hint>
+              <tooltip :text="$gettext('This is the individual who will be the lead point of contact for any queries through the DHA.') | translate" />
             </template>
 
             <character-count-input
@@ -210,11 +198,7 @@
             <translate key="team">
               Add team members (editors)--can modify entry on Add New Project page
             </translate>
-            <form-hint>
-              <translate key="team-hint">
-                Project editors can change and update all project information.
-              </translate>
-            </form-hint>
+            <tooltip :text="$gettext('Project editors can change and update all project information.') | translate" />
           </template>
           <team-selector
             v-model="team"
@@ -233,11 +217,7 @@
             <translate key="viewers">
               Add team members (viewers)--can receive notification that project has been added
             </translate>
-            <form-hint>
-              <translate key="viewers-hint">
-                Project viewers will be able to view the full project details.
-              </translate>
-            </form-hint>
+            <tooltip :text="$gettext('Project viewers will be able to view the full project details.') | translate" />
           </template>
           <team-selector
             v-model="viewers"
@@ -262,6 +242,7 @@ import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem';
 import FilterSwitch from '@/components/dashboard/FilterSwitch';
+import Tooltip from '@/components/dashboard/Tooltip'
 
 export default {
   components: {
@@ -271,7 +252,8 @@ export default {
     OrganisationSelect,
     FormHint,
     CustomRequiredFormTeamItem,
-    FilterSwitch
+    FilterSwitch,
+    Tooltip
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {

@@ -14,11 +14,7 @@
             <translate key="health-workers">
               How many health workers use the system?
             </translate>
-            <form-hint>
-              <translate key="health-workers-hint">
-                Health workers include all recognized health professionals directly accessing the software. If there are no users of this type, put 0.
-              </translate>
-            </form-hint>
+            <tooltip :text="$gettext('Health workers include all recognized health professionals directly accessing the software. If there are no users of this type, put 0.') | translate" />
           </template>
 
           <el-input
@@ -45,11 +41,7 @@
             <translate key="facilities">
               How many facilities use the system?
             </translate>
-            <form-hint>
-              <translate key="facilities-hint">
-                Health facilities using the system refers to all facilities that have direct access to the software. If there are no users of this type, put 0.
-              </translate>
-            </form-hint>
+            <tooltip :text="$gettext('Health facilities using the system refers to all facilities that have direct access to the software. If there are no users of this type, put 0.') | translate" />
           </template>
 
           <el-input
@@ -76,11 +68,7 @@
             <translate key="facilities">
               How many clients use the system?
             </translate>
-            <form-hint>
-              <translate key="facilities-hint">
-                Client users refers to all care recipients who have direct access to the software.  If there are no users of this type, put 0.
-              </translate>
-            </form-hint>
+            <tooltip :text="$gettext('Client users refers to all care recipients who have direct access to the software.  If there are no users of this type, put 0.') | translate" />
           </template>
           <el-input
             v-model="localClients"
@@ -102,12 +90,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import FormHint from './FormHint';
 import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import Tooltip from '@/components/dashboard/Tooltip';
 
 export default {
   components: {
-    FormHint
+    Tooltip
   },
   mixins: [VeeValidationMixin],
   props: {
