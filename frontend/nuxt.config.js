@@ -173,7 +173,11 @@ const config = {
     optimization: {},
     transpile: ['redux', 'redux-async-thunk'],
     extend (config, { isDev }) {
-      config.plugins[1].options.ignoreOrder = true;
+      config.plugins.forEach(function (plugin) {
+        if (plugin.constructor && plugin.constructor.name === 'ExtractCssChunksPlugin') {
+          plugin.options.ignoreOrder = true;
+        }
+      });
       config.module.rules.push({
         test: /\.html$/,
         loader: 'html-loader',
