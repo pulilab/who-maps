@@ -30,7 +30,7 @@ export default {
     }
   },
   beforeRouteUpdate (to, from, next) {
-    if (to.params.organisation === 'covid-19') {
+    if (to.params.organisation.length > 2) {
       this.$store.dispatch('landing/setSelectedCountry');
     }
     next();
