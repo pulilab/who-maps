@@ -72,7 +72,7 @@
           <filter-switch
             v-model="isGlobal"
             :label="$gettext('Set project as \'Global project\'') | translate"
-            :tooltip="$gettext('Global project tooltip text placeholder') | translate"
+            :tooltip="$gettext('If your project is located in more than one country, or is part of a broader global initiative, your project is a Global Project. Indicated the countries covered and scope in the Narrative Summary Field.') | translate"
             placement="top"
           />
         </div>
