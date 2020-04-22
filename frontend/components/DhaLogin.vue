@@ -282,6 +282,8 @@ export default {
         return;
       }
       try {
+        this.$store.commit('user/SET_COOKIE', false);
+        this.$track();
         if (this.profile.country) {
           this.setSelectedCountry(this.profile.country);
         }

@@ -54,7 +54,4 @@ export default {
 .HealthSystemChallengesSelector {
   width: 100%;
 }
-.HealthSystemChallengesSelectorDropdown {
-
-}
 </style>
