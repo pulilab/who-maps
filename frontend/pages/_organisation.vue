@@ -29,6 +29,12 @@ export default {
       }
     }
   },
+  beforeRouteUpdate (to, from, next) {
+    if (to.params.organisation === 'covid-19') {
+      this.$store.dispatch('landing/setSelectedCountry');
+    }
+    next();
+  },
   async fetch ({ store, params }) {
     await store.dispatch('system/loadDonors');
     await Promise.all([
