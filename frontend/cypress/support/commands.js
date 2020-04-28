@@ -26,7 +26,7 @@
 
 
 Cypress.Commands.add('signUp', () => {
-  cy.visit("http://localhost:3000");
+  cy.visit(Cypress.env('server'));
   cy.randomAlphaNumeric(10).then((response) => {
     Cypress.env('testUser', "cypress_test_user_" + response + "@example.com");  // save user to env
     cy.get('input[id="email"]').type(Cypress.env('testUser'));
