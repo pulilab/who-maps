@@ -40,10 +40,13 @@ const config = {
     '~assets/style/main.less'
   ],
   env: {
-    GlobalCountryID: process.env.GLOBAL_COUNTRY_ID || 201
+    GlobalCountryID: process.env.GLOBAL_COUNTRY_ID || 201,
+    hotjarId: process.env.HOTJAR_TRACKING_ID || null
   },
   plugins: [
+    { src: '~plugins/tracking.js' },
     { src: '~plugins/eventfix.js', ssr: false },
+    { src: '~plugins/hotjar.js', ssr: false },
     { src: '~plugins/extends.js', ssr: false },
     { src: '~plugins/axios.js', ssr: true },
     { src: '~plugins/vee-validate.js', ssr: true },
@@ -138,23 +141,7 @@ const config = {
   },
   router: {
     middleware: ['auth'],
-    base: '/',
-    scrollBehavior (to, from, savedPosition) {
-      if (savedPosition) {
-        return savedPosition;
-      } else {
-        let position = {};
-        if (to.matched.length < 2) {
-          position = { x: 0, y: 0 };
-        } else if (to.matched.some(r => r.components.default.options.scrollToTop)) {
-          position = { x: 0, y: 0 };
-        }
-        if (to.hash) {
-          position = { selector: to.hash };
-        }
-        return position;
-      }
-    }
+    base: '/'
   },
   // purgeCSS: {
   //   whitelistPatterns: () => [/\b[^\s]*(nuxt|leaflet|vue2-leaflet|el)[^\s]*\b/]
@@ -162,6 +149,16 @@ const config = {
   loading: '~/components/DhaLoader.vue',
   render: {
     resourceHints: false
+  },
+  buildModules: [
+    '@nuxtjs/google-analytics'
+  ],
+  googleAnalytics: {
+    id: process.env.GA_TRACKING_ID || 'UA-163761727-1',
+    disabled: true,
+    set: [
+      { field: 'anonymizeIp', value: true }
+    ]
   },
   build: {
     babel: {
@@ -176,6 +173,11 @@ const config = {
     optimization: {},
     transpile: ['redux', 'redux-async-thunk'],
     extend (config, { isDev }) {
+      config.plugins.forEach(function (plugin) {
+        if (plugin.constructor && plugin.constructor.name === 'ExtractCssChunksPlugin') {
+          plugin.options.ignoreOrder = true;
+        }
+      });
       config.module.rules.push({
         test: /\.html$/,
         loader: 'html-loader',

@@ -20,7 +20,7 @@ export default {
 
 <style lang="less" scoped>
   .grid-content.img-center {
-    min-height: 400px;
+    min-height: 220px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

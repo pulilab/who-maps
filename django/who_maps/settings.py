@@ -394,7 +394,8 @@ if SITE_ID in [3, 4]:
 
     ALLOWED_HOSTS = ['.digitalhealthatlas.org', '.prod.whomaps.pulilab.com',
                      '.qa.whomaps.pulilab.com', '.dhatlas.org',
-                     '.digitalhealthatlas.com', 'nginx:9010', 'nginx']
+                     '.digitalhealthatlas.com', 'nginx:9010', 'nginx',
+                     'digitalatlas.who.int', 'digitalhealthatlas.who.int', 'atlas.who.int']
 
     EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 

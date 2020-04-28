@@ -39,11 +39,7 @@
           <translate key="interoperability-standards">
             What data standards does your digital health project use?
           </translate>
-          <form-hint>
-            <translate key="interoperability-standards-hint">
-              If your data standards are not available here, please email digitalhealthatlas@gmail.com
-            </translate>
-          </form-hint>
+          <tooltip :text="$gettext('If your data standards are not available here, please email digitalhealthatlas@gmail.com') | translate" />
         </template>
 
         <standards-selector v-model="interoperability_standards" />
@@ -61,14 +57,14 @@ import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 import CollapsibleCard from '../CollapsibleCard';
 import InteroperabilityLinkComponent from '../InteroperabilityLinkComponent';
 import StandardsSelector from '../StandardsSelector';
-import FormHint from '../FormHint';
+import Tooltip from '@/components/dashboard/Tooltip';
 
 export default {
   components: {
     CollapsibleCard,
     InteroperabilityLinkComponent,
     StandardsSelector,
-    FormHint
+    Tooltip
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {

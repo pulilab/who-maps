@@ -5,7 +5,8 @@ export const state = () => ({
   token: null,
   user: null,
   profile: null,
-  emailVerifyResult: null
+  emailVerifyResult: null,
+  cookieOn: false
 });
 
 export const getters = {
@@ -149,6 +150,13 @@ export const mutations = {
 
   SET_USER: (state, user) => {
     state.user = user;
+  },
+
+  SET_COOKIE: (state, cookieOn) => {
+    if (!process.server && cookieOn === false) {
+      window.localStorage.setItem('cookie:accepted', 'true');
+    }
+    state.cookieOn = cookieOn;
   },
 
   SET_PROFILE: (state, profile) => {
