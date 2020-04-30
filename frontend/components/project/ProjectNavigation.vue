@@ -133,6 +133,7 @@
           type="primary"
           size="medium"
           @click="$emit('publishProject')"
+          data-vv-name="Publish"
         >
           <fa
             v-show="loading === 'publish'"
