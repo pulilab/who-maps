@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import chunk from "lodash/chunk";
+
 export default {
   name: "WDescription",
   props: {
@@ -31,9 +33,9 @@ export default {
     dynamicDesc() {
       const len = this.description.length;
       if (len > 800) {
-        const splitStr = this.chunkString(
-          this.description,
-          parseInt(len / 3 + 1)
+        const words = this.description.split(" ");
+        const splitStr = chunk(words, Math.ceil(words.length / 3)).map(i =>
+          i.join(" ")
         );
         return splitStr.map(i => {
           return { description: i, span: 8 };
