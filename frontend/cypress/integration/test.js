@@ -7,6 +7,11 @@ describe('End to end tests', function() {
     cy.signUp();
   });
 
+  beforeEach(function () {
+    // we need to preserve these cookies to stay logged in between tests
+    Cypress.Cookies.preserveOnce('jwt_token', 'profile_id');
+  });
+
   after(function () {
     cy.logOut();
   });
