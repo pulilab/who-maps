@@ -31,5 +31,42 @@ describe('End to end tests', function() {
     cy.get("input[data-vv-name=\"linkedin\"]").type("http://linkedin.com/123456/");
     cy.contains("Save settings").click();
     cy.location('pathname', {timeout: 5000}).should('include', '/dashboard');
-  })
+  });
+
+  it('Test project publish required fields', function() {
+    cy.log('Test project publish required fields');
+    cy.contains('New Project').click();
+    cy.location('pathname', {timeout: 5000}).should('include', '/projects/create');
+
+    const typeOptions = {delay: 0};
+    cy.get("input[data-vv-name=\"name\"]").type("Test Project Publish Required Fields", typeOptions);
+
+    //  save draft
+    cy.get("button").contains('Save draft').click({force: true})
+    cy.location('pathname', {timeout: 5000}).should('include', '/edit');
+    cy.contains("Close").click();
+
+    // try to publish - it will fail because of the missing fields
+    cy.get("button[data-vv-name=\"Publish\"]").click({force: true});
+
+    // check required fields error messages
+    cy.get("div[data-vv-name=\"organisation\"]").siblings().first()
+      .should('contain', 'The organisation field is required');
+    cy.get("div[data-vv-name=\"implementation_overview\"]").siblings().last()
+      .should('contain', 'The Implementation Overview field is required');
+    cy.get("div[data-vv-name=\"contact_name\"]").siblings().first()
+      .should('contain', 'The Contact name field is required');
+    cy.get("div[data-vv-name=\"contact_email\"]").siblings().first()
+      .should('contain', 'The Contact email field must be a valid email');
+    cy.get("div[data-vv-name=\"health_focus_areas\"]").siblings().first()
+      .should('contain', 'The Health focus areas field is required');
+    cy.get("div[data-vv-name=\"hsc_challenges\"]").siblings().first()
+      .should('contain', 'The Health system challenges field is required');
+    cy.get("div[data-vv-as=\"Software\"]").parent().siblings().last()
+      .should('contain', 'The Software field is required');
+    cy.get("div[data-vv-name=\"donors\"]").siblings().first()
+      .should('contain', 'The Investors field is required');
+
+  });
+
 });
