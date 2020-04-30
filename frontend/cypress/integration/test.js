@@ -1,4 +1,8 @@
 describe('End to end tests', function() {
+
+    // Cypress automatically clears localstorage between tests, we need to prevent this
+  Cypress.LocalStorage.clear = function(){};
+
   before(function () {
     cy.signUp();
   });
