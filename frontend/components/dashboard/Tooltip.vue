@@ -1,20 +1,12 @@
 <template>
   <span class="TooltipContainer">
     <el-tooltip
-      v-model="showTooltip"
       :content="text"
       :placement="placement"
       effect="dark"
       popper-class="TooltipElement"
-      manual
     >
-      <el-button
-        type="text"
-        class="MutedButton"
-        @click="showTooltip = !showTooltip"
-      >
-        <fa icon="question-circle" />
-      </el-button>
+      <fa icon="question-circle" />
     </el-tooltip>
   </span>
 </template>
@@ -30,11 +22,6 @@ export default {
       type: String,
       default: 'right'
     }
-  },
-  data () {
-    return {
-      showTooltip: false
-    };
   }
 };
 </script>
@@ -43,11 +30,7 @@ export default {
 
   .TooltipContainer {
     width: auto;
-    /*padding-left: 10px;*/
-
-    .el-button {
-      padding: 0;
-    }
+    color: #9B9B9B !important;
   }
   .TooltipElement {
     max-width: 257px;
