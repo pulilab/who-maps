@@ -77,9 +77,7 @@ export default {
       landingData: 'landing/getLandingPageData'
     }),
     uidUrl () {
-      const lang = this.$i18n.defaultLocale.toLowerCase();
-      const country = this.landingData ? this.landingData.code.toLowerCase() : '-';
-      return `${this.base}/${lang}/${country}/projects/${this.uid}/published`;
+      return `${this.base}/p/${this.uid}`;
     }
   },
   mounted () {
