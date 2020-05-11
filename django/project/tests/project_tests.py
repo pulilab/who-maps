@@ -909,7 +909,7 @@ class ProjectTests(SetupTests):
         url = reverse("project-retrieve", kwargs={"pk": p_not_in_country.id})
         response = self.test_user_client.get(url, format="json")
         self.assertIsNone(response.json()['draft'])
-        self.assertTrue('start_date' not in response.json()['published'])
+        self.assertTrue('last_version' not in response.json()['published'])
 
         # Only works for retrieve, the list won't list any project that are not his/her
         url = reverse("project-list")
