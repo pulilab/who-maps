@@ -291,7 +291,6 @@ export default {
   },
   data () {
     return {
-      opened: false,
       submitted: false,
       apiError: false,
       processing: false,
@@ -309,6 +308,17 @@ export default {
     };
   },
   computed: {
+    storeForm () {
+      return this.$store.state.user.feedbackForm;
+    },
+    opened: {
+      get () {
+        return this.$store.state.user.feedbackOn;
+      },
+      set (val) {
+        this.$store.commit('user/SET_FEEDBACK', { feedbackOn: val });
+      }
+    },
     showUserBlock () {
       return !!(this.name && this.email);
     },
@@ -335,6 +345,12 @@ export default {
     },
     showHintContainer () {
       return this.buttonHover && !this.opened;
+    }
+  },
+  watch: {
+    storeForm (newData) {
+      this.form.subject = newData.subject;
+      this.form.message = newData.message;
     }
   },
   beforeCreate () {

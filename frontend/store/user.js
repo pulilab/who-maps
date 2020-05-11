@@ -6,7 +6,12 @@ export const state = () => ({
   user: null,
   profile: null,
   emailVerifyResult: null,
-  cookieOn: false
+  cookieOn: false,
+  feedbackOn: false,
+  feedbackForm: {
+    subject: '',
+    message: ''
+  }
 });
 
 export const getters = {
@@ -161,6 +166,13 @@ export const mutations = {
 
   SET_PROFILE: (state, profile) => {
     state.profile = profile;
+  },
+
+  SET_FEEDBACK: (state, { feedbackOn, feedbackForm }) => {
+    state.feedbackOn = feedbackOn;
+    if (feedbackForm) {
+      state.feedbackForm = Object.assign({}, state.feedbackForm, feedbackForm);
+    }
   },
 
   UPDATE_TEAM_VIEWER: (state, { member, viewer }) => {
