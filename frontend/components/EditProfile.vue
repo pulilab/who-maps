@@ -680,8 +680,8 @@ export default {
       this.$store.commit('user/SET_FEEDBACK', {
         feedbackOn: true,
         feedbackForm: {
-          subject: this.$gettext('Change e-mail request'),
-          message: this.$gettext('Change my e-mail to:')
+          subject: this.$gettext('Change email request'),
+          message: this.$gettext('Change my email to:')
         }
       });
     },
