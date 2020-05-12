@@ -33,10 +33,9 @@
         :publish-rule="publishRules.hsc_challenges"
       >
         <template slot="label">
-          <translate
-            key="hsc-challenges"
-          >
-            What are the Health System Challenges addressed by the Digital Health Intervention?
+          <translate key="hsc-challenges">
+            What are the Health System Challenges addressed by the Digital
+            Health Intervention?
           </translate>
         </template>
         <health-system-challenges-selector
@@ -64,12 +63,16 @@
           class="ItemIndent"
         >
           <template slot="label">
-            <translate
-              key="platform-label"
-            >
+            <translate key="platform-label">
               What are the names of the software included in the deployment?
             </translate>
-            <tooltip :text="$gettext('Include all software that is part of your project. If you cannot find your software listed in the options, send an email to digitalhealthatlas@gmail.com with the software name.') | translate" />
+            <tooltip
+              :text="
+                $gettext(
+                  'Include all software that is part of your project. If you cannot find your software listed in the options, you can add it by start typing the software name in the field, and then select ‘Add as new’.  which will add the software to the inventory.'
+                ) | translate
+              "
+            />
           </template>
 
           <el-col :span="16">
@@ -90,12 +93,15 @@
               class="DigitalHealthIntervention"
             >
               <template slot="label">
-                <translate
-                  key="strategies"
-                >
-                  What Digital Health Intervention(s) are included in this software?
+                <translate key="strategies">
+                  What Digital Health Intervention(s) are included in this
+                  software?
                 </translate>
-                <a class="TooltipLink" target="_blank" href="https://apps.who.int/iris/bitstream/handle/10665/260480/WHO-RHR-18.06-eng.pdf;jsessionid=50B83CAF6ACF46453B7D6BAB9672EB77?sequence=1)">
+                <a
+                  class="TooltipLink"
+                  target="_blank"
+                  href="https://apps.who.int/iris/bitstream/handle/10665/260480/WHO-RHR-18.06-eng.pdf;jsessionid=50B83CAF6ACF46453B7D6BAB9672EB77?sequence=1)"
+                >
                   <fa icon="question-circle" />
                 </a>
               </template>
@@ -125,10 +131,9 @@
         :publish-rule="publishRules.his_bucket"
       >
         <template slot="label">
-          <translate
-            key="his-bucket"
-          >
-            What health information system(s) in your country does this project support?
+          <translate key="his-bucket">
+            What health information system(s) in your country does this project
+            support?
           </translate>
         </template>
         <his-bucket-selector
@@ -143,12 +148,17 @@
       <div class="CoverageArea">
         <custom-required-form-item prop="coverageType">
           <template slot="label">
-            <translate
-              key="coverage-type"
-            >
-              What level of coverage does your project have (Sub-national, National)
+            <translate key="coverage-type">
+              What level of coverage does your project have (Sub-national,
+              National)
             </translate>
-            <tooltip :text="$gettext('Subnational may include district, regional, provincial, county levels.') | translate" />
+            <tooltip
+              :text="
+                $gettext(
+                  'Subnational may include district, regional, provincial, county levels.'
+                ) | translate
+              "
+            />
           </template>
 
           <el-radio-group
@@ -216,10 +226,9 @@
         :publish-rule="publishRules.government_investor"
       >
         <template slot="label">
-          <translate
-            key="gobernment-investor"
-          >
-            Has the government contributed to the project, either financially or in-kind?
+          <translate key="gobernment-investor">
+            Has the government contributed to the project, either financially or
+            in-kind?
           </translate>
         </template>
 
@@ -234,10 +243,15 @@
             <translate>No, they have not yet contributed</translate>
           </el-radio>
           <el-radio :label="1">
-            <translate>Yes, they are contributing in-kind people or time</translate>
+            <translate>
+              Yes, they are contributing in-kind people or time
+            </translate>
           </el-radio>
           <el-radio :label="2">
-            <translate>Yes, there is a financial contribution through MOH budget</translate>
+            <translate>
+              Yes, there is a financial contribution through MOH
+              budget
+            </translate>
           </el-radio>
           <el-radio :label="3">
             <translate>Yes, MOH is fully funding the project</translate>
@@ -261,7 +275,9 @@
           :key="index"
         >
           <el-col :span="18">
-            <custom-required-form-item :error="errors.first('implementing_partners_' + index)">
+            <custom-required-form-item
+              :error="errors.first('implementing_partners_' + index)"
+            >
               <el-input
                 ref="implementingPartnersInput"
                 v-validate="rules.implementing_partners"
@@ -294,7 +310,13 @@
           <translate key="donors">
             Who are your investment partners?
           </translate>
-          <tooltip :text="$gettext('Investment partners can include those contributing funds, human resources or in-kind support.') | translate" />
+          <tooltip
+            :text="
+              $gettext(
+                'Investment partners can include those contributing funds, human resources or in-kind support.'
+              ) | translate
+            "
+          />
         </template>
 
         <donor-selector
@@ -501,7 +523,7 @@ export default {
 
 .ImplementationOverview {
   .TooltipLink {
-    color: #9B9B9B;
+    color: #9b9b9b;
     &:hover {
       color: #b4b4b4;
     }

@@ -218,12 +218,12 @@ import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 import CollapsibleCard from '../CollapsibleCard';
 import { mapGettersActions } from '../../../utilities/form';
 import { mapState, mapActions } from 'vuex';
-import Tooltip from '@/components/dashboard/Tooltip'
+import Tooltip from '@/components/dashboard/Tooltip';
 
 export default {
   components: {
     CollapsibleCard,
-    Tooltip,
+    Tooltip
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   data () {

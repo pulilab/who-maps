@@ -5,7 +5,7 @@
   >
     <collapsible-card
       ref="collapsible"
-      :title="$gettext('Completion of Project stages') | translate"
+      :title="$gettext('3. Completion of Project stages') | translate"
     >
       <c-stages />
     </collapsible-card>
@@ -24,11 +24,11 @@ export default {
 };
 </script>
 
-<style lang="less" >
-  .graph {
-    // outside modifiers
-    .CollapsibleCard .ContentContainer{
-      padding: 0;
-    }
+<style lang="less">
+.graph {
+  // outside modifiers
+  .CollapsibleCard .ContentContainer {
+    padding: 0;
   }
+}
 </style>

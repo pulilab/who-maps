@@ -166,7 +166,7 @@ export default {
       }
     },
     filterHandler (value, row, column) {
-      const property = column['property'];
+      const property = column.property;
       return row[property] === value;
     },
     selectionHandler (selection) {

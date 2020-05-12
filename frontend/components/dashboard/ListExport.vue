@@ -30,7 +30,11 @@ export default {
       allStages: 'project/getStagesList'
     }),
     parsed () {
-      if (!this.projects || !this.projects[0] || typeof this.projects !== 'object') {
+      if (
+        !this.projects ||
+        !this.projects[0] ||
+        typeof this.projects !== 'object'
+      ) {
         return null;
       }
       return this.projects.map(s => {
@@ -40,7 +44,10 @@ export default {
           end_date: this.parseDate(s.end_date),
           implementation_dates: this.parseDate(s.implementation_dates),
           country: this.parseSingleSelection(s.country, 'countries'),
-          organisation: this.parseSingleSelection(s.organisation, 'organisations'),
+          organisation: this.parseSingleSelection(
+            s.organisation,
+            'organisations'
+          ),
           investors: this.parseFlatList(s.donors, 'donors'),
           implementing_partners: this.arrayToString(s.implementing_partners),
           implementing_team: this.arrayToString(s.implementing_team),
@@ -51,12 +58,17 @@ export default {
           region: this.parseSingleSelection(s.region, 'regions'),
           stages: this.parseStages(s.stages),
           software: this.parsePlatforms(s.platforms),
-          national_level_deployment: this.parseCoverageItem(s.national_level_deployment),
+          national_level_deployment: this.parseCoverageItem(
+            s.national_level_deployment
+          ),
           coverage: this.parseCoverage(s.coverage),
           coverage_second_level: this.parseCoverage(s.coverage_second_level),
           government_investor: this.parseBoolean(s.government_investor),
           licenses: this.parseFlatList(s.licenses, 'licenses'),
-          interoperability_standards: this.parseFlatList(s.interoperability_standards, 'interoperabilityStandards'),
+          interoperability_standards: this.parseFlatList(
+            s.interoperability_standards,
+            'interoperabilityStandards'
+          ),
           approved: this.parseBoolean(s.approved),
           point_of_contact: `${s.contact_name}, ${s.contact_email}`,
           donors: undefined,
@@ -120,15 +132,20 @@ export default {
       return this.safeReturn(() => value.join(','));
     },
     parseCoverageItem (coverage) {
-      return this.safeReturn(() =>
-        `Clients: ${coverage.clients}, Health Workers: ${coverage.health_workers}, Facilities: ${coverage.facilities}`
+      return this.safeReturn(
+        () =>
+          `Clients: ${coverage.clients}, Health Workers: ${
+            coverage.health_workers
+          }, Facilities: ${coverage.facilities}`
       );
     },
     parseCoverage (coverage) {
       return this.safeReturn(() => {
-        return coverage.map(c => {
-          return `District: ${c.district} [${this.parseCoverageItem(c)}]`;
-        }).join(', ');
+        return coverage
+          .map(c => {
+            return `District: ${c.district} [${this.parseCoverageItem(c)}]`;
+          })
+          .join(', ');
       });
     },
     parseBoolean (value) {
@@ -143,8 +160,12 @@ export default {
     },
     parseFlatList (flatList, type) {
       return this.safeReturn(() => {
-        const all = typeof this[type] === 'function' ? this[type]() : this[type];
-        return all.filter(cb => flatList.includes(cb.id)).map(cb => cb.name).join(',');
+        const all =
+          typeof this[type] === 'function' ? this[type]() : this[type];
+        return all
+          .filter(cb => flatList.includes(cb.id))
+          .map(cb => cb.name)
+          .join(',');
       });
     },
     parseSingleSelection (id, type) {
@@ -155,22 +176,29 @@ export default {
     },
     parseHscChallenges (values) {
       return this.safeReturn(() => {
-        return this.hscChallenges.reduce((a, c) => {
-          c.challenges.forEach(cc => {
-            if (values.includes(cc.id)) {
-              a.push(cc.challenge);
-            }
-          });
-          return a;
-        }, []).join(',');
+        return this.hscChallenges
+          .reduce((a, c) => {
+            c.challenges.forEach(cc => {
+              if (values.includes(cc.id)) {
+                a.push(cc.challenge);
+              }
+            });
+            return a;
+          }, [])
+          .join(',');
       });
     },
     parseHealthFocusAreas (health_focus_areas) {
       return this.safeReturn(() => {
-        return flattenDeep(this.getHealthFocusAreas.map(val => val.health_focus_areas))
-          .filter(h => health_focus_areas.includes(h.id))
-          .map(hf => hf.name)
-          .join(',');
+        if (this.getHealthFocusAreas) {
+          return flattenDeep(
+            this.getHealthFocusAreas.map(val => val.health_focus_areas)
+          )
+            .filter(h => health_focus_areas.includes(h.id))
+            .map(hf => hf.name)
+            .join(',');
+        }
+        return [];
       });
     },
     parseCustomQuestions (donor_answers, country_answers) {
@@ -178,14 +206,21 @@ export default {
         const custom = {};
         if (donor_answers && this.dashboardType === 'donor') {
           this.donorColumns.forEach(dc => {
-            const value = donor_answers && donor_answers[dc.donorId] ? donor_answers[dc.donorId][dc.originalId] : '';
-            custom[dc.label] = (value && Array.isArray(value) ? value.join(', ') : value) || 'N/A';
+            const value =
+              donor_answers && donor_answers[dc.donorId]
+                ? donor_answers[dc.donorId][dc.originalId]
+                : '';
+            custom[dc.label] =
+              (value && Array.isArray(value) ? value.join(', ') : value) ||
+              'N/A';
           });
         }
         if (country_answers && this.dashboardType === 'country') {
           this.countryColumns.forEach(cc => {
             const value = country_answers ? country_answers[cc.originalId] : '';
-            custom[cc.label] = (value && Array.isArray(value) ? value.join(', ') : value) || 'N/A';
+            custom[cc.label] =
+              (value && Array.isArray(value) ? value.join(', ') : value) ||
+              'N/A';
           });
         }
         return custom;
@@ -194,7 +229,10 @@ export default {
     parseStages (stages) {
       return this.safeReturn(() => {
         const stagesIds = stages.map(s => s.id);
-        const stagesNames = this.allStages.filter(i => stagesIds.includes(i.id)).map(i => i.name).join(', ');
+        const stagesNames = this.allStages
+          .filter(i => stagesIds.includes(i.id))
+          .map(i => i.name)
+          .join(', ');
         return stagesNames;
         // this.parseFlatList(stages.map(p => p.id), 'stages')
       });
@@ -209,6 +247,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

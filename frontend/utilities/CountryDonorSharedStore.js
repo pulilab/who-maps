@@ -237,12 +237,12 @@ export const actions = () => ({
   },
 
   async postRoadmapDocument ({ state, rootGetters }, { document, title, id }) {
-    const countryId = state.id || rootGetters['user/getProfile']['country'];
+    const countryId = state.id || rootGetters['user/getProfile'].country;
     const formData = new FormData();
     formData.append('country', countryId);
     formData.append('document', document);
     formData.append('title', title);
-    await this.$axios.post(`/api/architecture-roadmap-document/`, formData, {
+    await this.$axios.post('/api/architecture-roadmap-document/', formData, {
       headers: {
         'content-type': 'multipart/form-data'
       }

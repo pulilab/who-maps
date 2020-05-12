@@ -1,8 +1,6 @@
 <template>
   <div class="ProjectData">
-    <el-row
-      type="flex"
-    >
+    <el-row type="flex">
       <el-col :span="18">
         <collapsible-card
           id="general"
@@ -31,7 +29,10 @@
 
           <simple-field
             :content="project.implementation_overview"
-            :header="$gettext('Overview of the digital health implementation') | translate"
+            :header="
+              $gettext('Overview of the digital health implementation')
+                | translate
+            "
           />
 
           <el-row>
@@ -62,7 +63,13 @@
           id="implementation"
           :title="$gettext('2. Implementation Overview') | translate"
         >
-          <simple-field :header="$gettext('Software and related Digital Health Interventions (DHI)') | translate">
+          <simple-field
+            :header="
+              $gettext(
+                'Software and related Digital Health Interventions (DHI)'
+              ) | translate
+            "
+          >
             <platforms-list
               :platforms="project.platforms"
               :dhi="project.digitalHealthInterventions"
@@ -73,20 +80,30 @@
             <health-focus-areas-list :value="project.health_focus_areas" />
           </simple-field>
 
-          <simple-field :header="$gettext('Health System Challenges (HSC)') | translate">
+          <simple-field
+            :header="$gettext('Health System Challenges (HSC)') | translate"
+          >
             <health-system-challenges-list :value="project.hsc_challenges" />
           </simple-field>
 
-          <simple-field :header="$gettext('Health Information System (HIS)') | translate">
+          <simple-field
+            :header="$gettext('Health Information System (HIS)') | translate"
+          >
             <his-bucket-list :value="project.his_bucket" />
           </simple-field>
 
           <div class="GrayArea">
             <simple-field
-              v-if="isNationalLevelDeployment || (project.coverage && project.coverage.length)"
+              v-if="
+                isNationalLevelDeployment ||
+                  (project.coverage && project.coverage.length)
+              "
               :header="$gettext('Coverage type')"
             >
-              <div class="TypeField" v-show="isGlobalSelected">
+              <div
+                v-show="isGlobalSelected"
+                class="TypeField"
+              >
                 <translate>International</translate>
               </div>
               <type-field
@@ -96,11 +113,17 @@
               />
             </simple-field>
             <simple-field v-if="isNationalLevelDeployment">
-              <div slot="header" v-show="isGlobalSelected">
+              <div
+                v-show="isGlobalSelected"
+                slot="header"
+              >
                 <fa icon="flag" />
                 <translate>International Level Deployment</translate>
               </div>
-              <div slot="header" v-show="!isGlobalSelected">
+              <div
+                v-show="!isGlobalSelected"
+                slot="header"
+              >
                 <fa icon="flag" />
                 <translate>National Level Deployment</translate>
               </div>
@@ -116,14 +139,22 @@
             />
           </div>
 
-          <simple-field :header="$gettext('Has the government financially invested in the project?') | translate">
+          <simple-field
+            :header="
+              $gettext(
+                'Has the government financially invested in the project?'
+              ) | translate
+            "
+          >
             <type-field
               :value="project.government_investor"
               :list="investedList"
             />
           </simple-field>
 
-          <simple-field :header="$gettext('Implementing partner(s)') | translate">
+          <simple-field
+            :header="$gettext('Implementing partner(s)') | translate"
+          >
             <ul>
               <li
                 v-for="(partner, index) in project.implementing_partners"
@@ -145,7 +176,7 @@
 
         <collapsible-card
           id="technology"
-          :title="$gettext('3. Techonology overview') | translate"
+          :title="$gettext('4. Techonology overview') | translate"
         >
           <simple-field
             :content="project.implementation_dates"
@@ -153,13 +184,19 @@
             date
           />
 
-          <simple-field :header="$gettext('Under what license is the project governed') | translate">
+          <simple-field
+            :header="
+              $gettext('Under what license is the project governed') | translate
+            "
+          >
             <licenses-list :value="project.licenses" />
           </simple-field>
 
           <simple-field
             :content="project.repository"
-            :header="$gettext('Code documentation or download link') | translate"
+            :header="
+              $gettext('Code documentation or download link') | translate
+            "
             link
           />
 
@@ -178,13 +215,26 @@
 
         <collapsible-card
           id="interoperability"
-          :title="$gettext('4. Interoperability &amp; standards') "
+          :title="$gettext('5. Interoperability &amp; standards')"
         >
-          <simple-field :header="$gettext('What other system do you interoperate with ?') | translate">
-            <interoperability-links-list :value="project.interoperability_links" />
+          <simple-field
+            :header="
+              $gettext('What other system do you interoperate with ?')
+                | translate
+            "
+          >
+            <interoperability-links-list
+              :value="project.interoperability_links"
+            />
           </simple-field>
 
-          <simple-field :header="$gettext('What data standards does your digital health project use?') | translate">
+          <simple-field
+            :header="
+              $gettext(
+                'What data standards does your digital health project use?'
+              ) | translate
+            "
+          >
             <standards-list :value="project.interoperability_standards" />
           </simple-field>
         </collapsible-card>
@@ -205,7 +255,7 @@
         </collapsible-card>
 
         <div
-          v-if="donors && donors.length >0"
+          v-if="donors && donors.length > 0"
           id="donorcustom"
         >
           <collapsible-card
@@ -227,7 +277,15 @@
       </el-col>
       <el-col :span="6">
         <project-navigation
-          @handleClickUnPublish="handleClickUnPublish({ name: 'organisation-projects-id-edit', params: { ...$route.params } }, $route.params.id)"
+          @handleClickUnPublish="
+            handleClickUnPublish(
+              {
+                name: 'organisation-projects-id-edit',
+                params: { ...$route.params }
+              },
+              $route.params.id
+            )
+          "
         />
       </el-col>
     </el-row>
@@ -289,7 +347,7 @@ export default {
       getDonorDetails: 'system/getDonorDetails'
     }),
     isGlobalSelected () {
-      return this.country.id  === process.env.GlobalCountryID;
+      return this.country.id === process.env.GlobalCountryID;
     },
     route () {
       return this.$route.name.split('__')[0];
@@ -301,8 +359,13 @@ export default {
       return this.isDraft ? this.draft : this.published;
     },
     isNationalLevelDeployment () {
-      return this.project.coverageType === 2 && this.project.national_level_deployment && (this.project.national_level_deployment.clients ||
-        this.project.national_level_deployment.facilities || this.project.national_level_deployment.health_workers);
+      return (
+        this.project.coverageType === 2 &&
+        this.project.national_level_deployment &&
+        (this.project.national_level_deployment.clients ||
+          this.project.national_level_deployment.facilities ||
+          this.project.national_level_deployment.health_workers)
+      );
     },
     country () {
       if (this.project.country) {
@@ -317,7 +380,9 @@ export default {
       return [];
     },
     donors () {
-      return this.project.donors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
+      return this.project.donors
+        .map(d => this.getDonorDetails(d))
+        .filter(d => d.donor_questions && d.donor_questions.length > 0);
     },
     coverageList () {
       return ['', this.$gettext('Sub National'), this.$gettext('National')];
@@ -326,7 +391,9 @@ export default {
       return [
         this.$gettext('No, they have not yet contributed'),
         this.$gettext('Yes, they are contributing in-kind people or time'),
-        this.$gettext('Yes, there is a financial contribution through MOH budget'),
+        this.$gettext(
+          'Yes, there is a financial contribution through MOH budget'
+        ),
         this.$gettext('Yes, MOH is fully funding the project')
       ];
     }
@@ -340,135 +407,135 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .ProjectData {
-    .limitPageWidth();
+.ProjectData {
+  .limitPageWidth();
 
-    .Loader {
-      display: block;
-      margin: 0 auto 80px;
-    }
+  .Loader {
+    display: block;
+    margin: 0 auto 80px;
+  }
 
-    > .el-row {
-      > .el-col {
-        // form fieldsets
-        &:first-child {
-          width: calc(100% - @projectAsideNavWidth - 20px);
-          margin-right: 20px;
-        }
-
-        // aside navigation
-        &:last-child {
-          width: @projectAsideNavWidth;
-        }
-      }
-    }
-
-    .ContentContainer {
-      padding-bottom: 20px;
-    }
-
-    .CollapsibleCard {
-      .SimpleField {
-        margin-bottom: 40px;
-        font-size: @fontSizeBase;
-        line-height: 20px;
-
-        .Header {
-          margin-bottom: 10px;
-          font-size: @fontSizeMedium;
-          font-weight: 700;
-        }
-
-        .Content {
-          ul {
-            li {
-              .svg-inline--fa {
-                display: none;
-              }
-            }
-          }
-        }
-
-        .SubLevelItem {
-          box-sizing: border-box;
-          width: 100%;
-          margin-top: 10px;
-          margin-bottom: 10px;
-          margin-left: 3px;
-          padding-left: 30px;
-          border-left: 5px solid @colorGrayLight;
-
-          .SimpleField {
-            margin: 0 !important;
-
-            .Header {
-              font-size: @fontSizeBase !important;
-            }
-          }
-
-          .CoverageField {
-            .SimpleField {
-              margin: 20px 0 0 !important;
-            }
-          }
-        }
-
-        .CountryItem {
-          .CountryFlag {
-            display: none;
-          }
-
-          .CountryName {
-            margin: 0;
-            font-size: @fontSizeBase;
-            font-weight: 400;
-          }
-        }
-
-        .PlatformList {
-          .Header {
-            font-size: @fontSizeBase;
-          }
-
-          .Content {
-            .SimpleField {
-              margin-top: 20px;
-            }
-          }
-        }
-
-        .StandardsList {
-          li {
-            a {
-              display: block;
-              margin: 5px 0 20px;
-              color: @colorBrandPrimary;
-              text-decoration: none;
-              transition: @transitionAll;
-
-              &:hover {
-                color: @colorBrandPrimaryLight;
-                text-decoration: underline;
-              }
-            }
-
-            &:last-child {
-              a {
-                margin-bottom: 0;
-              }
-            }
-          }
-        }
+  > .el-row {
+    > .el-col {
+      // form fieldsets
+      &:first-child {
+        width: calc(100% - @projectAsideNavWidth - 20px);
+        margin-right: 20px;
       }
 
-      .GrayArea {
-        .svg-inline--fa {
-          margin-right: 8px;
-        }
+      // aside navigation
+      &:last-child {
+        width: @projectAsideNavWidth;
       }
     }
   }
+
+  .ContentContainer {
+    padding-bottom: 20px;
+  }
+
+  .CollapsibleCard {
+    .SimpleField {
+      margin-bottom: 40px;
+      font-size: @fontSizeBase;
+      line-height: 20px;
+
+      .Header {
+        margin-bottom: 10px;
+        font-size: @fontSizeMedium;
+        font-weight: 700;
+      }
+
+      .Content {
+        ul {
+          li {
+            .svg-inline--fa {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .SubLevelItem {
+        box-sizing: border-box;
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 3px;
+        padding-left: 30px;
+        border-left: 5px solid @colorGrayLight;
+
+        .SimpleField {
+          margin: 0 !important;
+
+          .Header {
+            font-size: @fontSizeBase !important;
+          }
+        }
+
+        .CoverageField {
+          .SimpleField {
+            margin: 20px 0 0 !important;
+          }
+        }
+      }
+
+      .CountryItem {
+        .CountryFlag {
+          display: none;
+        }
+
+        .CountryName {
+          margin: 0;
+          font-size: @fontSizeBase;
+          font-weight: 400;
+        }
+      }
+
+      .PlatformList {
+        .Header {
+          font-size: @fontSizeBase;
+        }
+
+        .Content {
+          .SimpleField {
+            margin-top: 20px;
+          }
+        }
+      }
+
+      .StandardsList {
+        li {
+          a {
+            display: block;
+            margin: 5px 0 20px;
+            color: @colorBrandPrimary;
+            text-decoration: none;
+            transition: @transitionAll;
+
+            &:hover {
+              color: @colorBrandPrimaryLight;
+              text-decoration: underline;
+            }
+          }
+
+          &:last-child {
+            a {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+
+    .GrayArea {
+      .svg-inline--fa {
+        margin-right: 8px;
+      }
+    }
+  }
+}
 </style>

@@ -532,42 +532,50 @@ export default {
       }],
       documentRules: {
         documents: [
-          { validator: (rule, value, callback) => {
-            if (this.documentsError) {
-              callback(new Error(this.documentsError));
-            } else {
-              callback();
+          {
+            validator: (rule, value, callback) => {
+              if (this.documentsError) {
+                callback(new Error(this.documentsError));
+              } else {
+                callback();
+              }
             }
-          } }
+          }
         ]
       },
       rules: {
         logo: [
-          { validator: (rule, value, callback) => {
-            if (this.logoError) {
-              callback(new Error(this.logoError));
-            } else {
-              callback();
+          {
+            validator: (rule, value, callback) => {
+              if (this.logoError) {
+                callback(new Error(this.logoError));
+              } else {
+                callback();
+              }
             }
-          } }
+          }
         ],
         cover: [
-          { validator: (rule, value, callback) => {
-            if (this.coverError) {
-              callback(new Error(this.coverError));
-            } else {
-              callback();
+          {
+            validator: (rule, value, callback) => {
+              if (this.coverError) {
+                callback(new Error(this.coverError));
+              } else {
+                callback();
+              }
             }
-          } }
+          }
         ],
         partnerLogos: [
-          { validator: (rule, value, callback) => {
-            if (this.partnerLogosError) {
-              callback(new Error(this.partnerLogosError));
-            } else {
-              callback();
+          {
+            validator: (rule, value, callback) => {
+              if (this.partnerLogosError) {
+                callback(new Error(this.partnerLogosError));
+              } else {
+                callback();
+              }
             }
-          } }
+          }
         ]
       }
     };
@@ -757,8 +765,7 @@ export default {
         replacementDoc.document = [];
         newDocuments[this.documents.indexOf(incorrectDoc)] = replacementDoc;
         this.documents = newDocuments;
-        this.documentsError = this.$gettext('Wrong file format, you can only upload {list} files', {
-          list: this.extensionList });
+        this.documentsError = this.$gettext('Wrong file format, you can only upload {list} files', { list: this.extensionList });
         this.flagForKeepingdocumentsError = true;
       } else if (this.flagForKeepingdocumentsError) {
         this.flagForKeepingdocumentsError = false;

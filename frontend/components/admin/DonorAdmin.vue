@@ -326,31 +326,37 @@ export default {
       partnerLogosError: '',
       rules: {
         logo: [
-          { validator: (rule, value, callback) => {
-            if (this.logoError) {
-              callback(new Error(this.logoError));
-            } else {
-              callback();
+          {
+            validator: (rule, value, callback) => {
+              if (this.logoError) {
+                callback(new Error(this.logoError));
+              } else {
+                callback();
+              }
             }
-          } }
+          }
         ],
         cover: [
-          { validator: (rule, value, callback) => {
-            if (this.coverError) {
-              callback(new Error(this.coverError));
-            } else {
-              callback();
+          {
+            validator: (rule, value, callback) => {
+              if (this.coverError) {
+                callback(new Error(this.coverError));
+              } else {
+                callback();
+              }
             }
-          } }
+          }
         ],
         partnerLogos: [
-          { validator: (rule, value, callback) => {
-            if (this.partnerLogosError) {
-              callback(new Error(this.partnerLogosError));
-            } else {
-              callback();
+          {
+            validator: (rule, value, callback) => {
+              if (this.partnerLogosError) {
+                callback(new Error(this.partnerLogosError));
+              } else {
+                callback();
+              }
             }
-          } }
+          }
         ]
       }
     };

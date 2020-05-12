@@ -242,7 +242,7 @@ import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem';
 import FilterSwitch from '@/components/dashboard/FilterSwitch';
-import Tooltip from '@/components/dashboard/Tooltip'
+import Tooltip from '@/components/dashboard/Tooltip';
 
 export default {
   components: {

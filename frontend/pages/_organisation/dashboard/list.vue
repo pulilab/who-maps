@@ -19,23 +19,6 @@ export default {
     MainTable,
     TableTopActions
   },
-  computed: {
-    ...mapGetters({
-      searchParameters: 'dashboard/getSearchParameters',
-      dashboardSection: 'dashboard/getDashboardSection'
-    })
-  },
-  watch: {
-    searchParameters: {
-      immediate: false,
-      handler (query) {
-        if (this.dashboardSection === 'list') {
-          this.$router.replace({ ...this.$route, query });
-          this.load();
-        }
-      }
-    }
-  },
   async fetch ({ store, query, error }) {
     store.dispatch('dashboard/setDashboardSection', 'list');
     await Promise.all([
@@ -54,9 +37,32 @@ export default {
       });
     }
     if (store.getters['dashboard/getDashboardType'] === 'donor') {
-      await store.dispatch('system/loadDonorDetails', store.getters['dashboard/getDashboardId']);
+      await store.dispatch(
+        'system/loadDonorDetails',
+        store.getters['dashboard/getDashboardId']
+      );
     } else if (store.getters['dashboard/getDashboardType'] === 'country') {
-      await store.dispatch('countries/loadCountryDetails', store.getters['dashboard/getDashboardId']);
+      await store.dispatch(
+        'countries/loadCountryDetails',
+        store.getters['dashboard/getDashboardId']
+      );
+    }
+  },
+  computed: {
+    ...mapGetters({
+      searchParameters: 'dashboard/getSearchParameters',
+      dashboardSection: 'dashboard/getDashboardSection'
+    })
+  },
+  watch: {
+    searchParameters: {
+      immediate: false,
+      handler (query) {
+        if (this.dashboardSection === 'list') {
+          this.$router.replace({ ...this.$route, query });
+          this.load();
+        }
+      }
     }
   },
   methods: {
@@ -72,6 +78,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

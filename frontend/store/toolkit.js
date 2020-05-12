@@ -13,10 +13,12 @@ export const getters = {
     const axis = rootGetters['system/getAxis'];
     const domains = rootGetters['system/getDomains'];
     const questions = rootGetters['system/getQuestions'];
-    return axis.map(a => ({ ...a,
+    return axis.map(a => ({
+      ...a,
       domains: domains
         .filter(d => d.axis === a.id)
-        .map(df => ({ ...df,
+        .map(df => ({
+          ...df,
           questions: questions
             .filter(q => q.domain === df.id)
             .map(qf => ({ ...qf, id: `${qf.domain}-${qf.question_id}` }))

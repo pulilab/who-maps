@@ -12,7 +12,7 @@ export const actions = {
     }
   },
   async addDataToQueue ({ commit, state }, imported) {
-    const { data } = await this.$axios.post(`api/projects/import/`, imported);
+    const { data } = await this.$axios.post('api/projects/import/', imported);
     const newQueue = [
       ...state.queue,
       data

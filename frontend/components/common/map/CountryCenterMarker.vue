@@ -73,7 +73,7 @@ export default {
     return {
       popUpHover: false,
       popupOptions: {
-        className: `CountryViewPopup`,
+        className: 'CountryViewPopup',
         closeButton: false
       },
       show: false

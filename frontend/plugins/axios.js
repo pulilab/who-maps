@@ -3,7 +3,7 @@ export default function ({ $axios, store: { getters, dispatch }, redirect, app: 
     const token = getters['user/getToken'];
     const lng = i18n.locale;
     if (token) {
-      config.headers['Authorization'] = `Token ${token}`;
+      config.headers.Authorization = `Token ${token}`;
     }
     if (lng) {
       config.headers['Accept-Language'] = lng;

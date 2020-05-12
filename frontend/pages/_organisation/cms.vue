@@ -9,15 +9,15 @@ export default {
   components: {
   },
   middleware: ['isLoggedIn'],
+  fetch ({ store }) {
+    store.dispatch('landing/resetSearch');
+  },
   watch: {
     '$route.query.q': function (q) {
       if (q) {
         window.location.reload(true);
       }
     }
-  },
-  fetch ({ store }) {
-    store.dispatch('landing/resetSearch');
   },
   mounted () {
     const cmsFactory = require('../../angular/Cms/cmsFactory');

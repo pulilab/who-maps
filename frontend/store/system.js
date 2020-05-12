@@ -129,7 +129,7 @@ export const actions = {
     const profile = rootGetters['user/getProfile'];
     if (profile) {
       try {
-        const { data } = await this.$axios.get(`/api/organisations/`);
+        const { data } = await this.$axios.get('/api/organisations/');
         commit('SET_SYSTEM_ORGANISATIONS', data);
       } catch (e) {
         console.error('system/loadOrganisations failed');
@@ -138,7 +138,7 @@ export const actions = {
   },
   async loadDonors ({ commit }) {
     try {
-      const { data } = await this.$axios.get(`/api/landing-donor/`);
+      const { data } = await this.$axios.get('/api/landing-donor/');
       commit('SET_DONORS', data);
     } catch (e) {
       console.error('system/loadDonors failed');

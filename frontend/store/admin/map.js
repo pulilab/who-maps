@@ -20,7 +20,7 @@ export const getters = {
     const geoJson = getters.getGeoJson;
     if (geoJson && geoJson.features && geoJson.features.length > 0) {
       return geoJson.features.find(
-        f => f.properties['admin_level'] === '2'
+        f => f.properties.admin_level === '2'
       );
     }
   },
@@ -32,12 +32,12 @@ export const getters = {
     let result = [];
     if (geoJson && geoJson.features && geoJson.features.length > 0) {
       result = geoJson.features.filter(
-        f => f.properties['admin_level'] !== '2'
+        f => f.properties.admin_level !== '2'
       );
     }
     if (geoJson && geoJson.features && result.length === 0) {
       result = geoJson.features.filter(
-        f => f.properties['admin_level'] === '2'
+        f => f.properties.admin_level === '2'
       );
     }
     return result.map(r => JSON.parse(JSON.stringify(r)));

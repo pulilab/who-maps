@@ -100,7 +100,8 @@ export const apiReadParser = p => {
   const country_custom_answers = lib.countryCustomFieldMapper(p.country_answers);
   const donor_custom_answers = lib.donorCustomFieldMapper(p.donor_answers);
   const research = 'research' in p ? p.research : undefined;
-  return { ...p,
+  return {
+    ...p,
     implementation_dates: dateParser(p.implementation_dates),
     start_date: dateParser(p.start_date),
     end_date: dateParser(p.end_date),
@@ -190,7 +191,8 @@ export const customDonorAnswerParser = (customAnswers = [], donors = []) => {
     result[donor].push({
       ...a,
       answer: a.answer[0] ? a.answer : [],
-      donor_id: undefined });
+      donor_id: undefined
+    });
   });
   return result;
 };

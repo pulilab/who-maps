@@ -51,14 +51,6 @@ export default {
     ImportFile,
     ImportDetails
   },
-  computed: {
-    ...mapGetters({
-      userProfile: 'user/getProfile',
-      queue: 'admin/import/getQueue',
-      getCountryDetails: 'countries/getCountryDetails',
-      dhi: 'projects/getDigitalHealthInterventions'
-    })
-  },
   async fetch ({ store }) {
     await Promise.all([
       store.dispatch('system/loadDonors'),
@@ -68,21 +60,34 @@ export default {
       store.dispatch('system/loadStaticData')
     ]);
   },
+  computed: {
+    ...mapGetters({
+      userProfile: 'user/getProfile',
+      queue: 'admin/import/getQueue',
+      getCountryDetails: 'countries/getCountryDetails',
+      dhi: 'projects/getDigitalHealthInterventions'
+    })
+  },
   methods: {
     async select ({ id }) {
       this.$nuxt.$loading.start();
       await this.$nextTick();
-      this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: id }, query: undefined }));
+      this.$router.push(
+        this.localePath({
+          name: 'organisation-admin-import-id',
+          params: { ...this.$route.params, id: id },
+          query: undefined
+        })
+      );
     }
   }
 };
 </script>
 
 <style lang="less">
-.ImportList{
+.ImportList {
   .box-card {
     margin: 12px;
   }
 }
-
 </style>

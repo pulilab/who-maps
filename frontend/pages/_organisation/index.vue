@@ -7,7 +7,7 @@
         <country-projects-box />
         <div
           v-if="showCoverImage"
-          :style="{backgroundImage: `url(${landingData.cover_url})`}"
+          :style="{ backgroundImage: `url(${landingData.cover_url})` }"
           class="CoverImageBg"
         />
       </template>
@@ -39,7 +39,6 @@
 </template>
 
 <script>
-
 import LandingMap from '../../components/landing/LandingMap.vue';
 import WelcomeBox from '../../components/landing/WelcomeBox.vue';
 import CountryProjectsBox from '../../components/landing/CountryProjectsBox.vue';
@@ -60,6 +59,9 @@ export default {
     CountryProjectsBox,
     LayoutBuilder
   },
+  fetch ({ store }) {
+    store.dispatch('landing/resetSearch');
+  },
   computed: {
     ...mapGetters({
       landingData: 'landing/getLandingPageData'
@@ -68,7 +70,10 @@ export default {
       return false;
     },
     routeCheck () {
-      return this.$route.path.split('/')[2].trim() === '-' || this.$route.path.split('/')[2].trim().length > 2;
+      return (
+        this.$route.path.split('/')[2].trim() === '-' ||
+        this.$route.path.split('/')[2].trim().length > 2
+      );
     },
     defaultsLandingData () {
       return {
@@ -78,82 +83,79 @@ export default {
         ...(this.landingData || {})
       };
     }
-  },
-  fetch ({ store }) {
-    store.dispatch('landing/resetSearch');
   }
 };
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .LandingPage {
-    .MapBoxContainer {
-      position: relative;
+.LandingPage {
+  .MapBoxContainer {
+    position: relative;
+  }
+
+  .CoverImageBg {
+    display: block;
+    height: @landingMapHeight;
+    min-height: @landingMapMinHeight;
+    background-color: @colorGrayLight;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+
+  .CoverImage {
+    width: 100%;
+    height: auto;
+  }
+
+  .InfoSignupContainer {
+    margin: 40px 0;
+
+    > .el-row {
+      align-items: stretch;
     }
 
-    .CoverImageBg {
-      display: block;
-      height: @landingMapHeight;
-      min-height: @landingMapMinHeight;
-      background-color: @colorGrayLight;
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
+    .InfoBoxWrapper {
+      min-width: 360px;
+      max-width: 360px;
+      margin-left: 40px;
+      margin-right: 30px;
+      background-color: @colorWhite;
     }
 
-    .CoverImage {
-      width: 100%;
-      height: auto;
+    .CentralBoxWrapper {
+      margin-right: 40px;
+      background-color: @colorBrandPrimary;
     }
 
-    .InfoSignupContainer {
-      margin: 40px 0;
-
-      > .el-row {
-        align-items: stretch;
-      }
-
-      .InfoBoxWrapper {
-        min-width: 360px;
-        max-width: 360px;
-        margin-left: 40px;
-        margin-right: 30px;
-        background-color: @colorWhite;
-      }
-
-      .CentralBoxWrapper {
-        margin-right: 40px;
-        background-color: @colorBrandPrimary;
-      }
-
-      .SignupBox {
-        padding: 0 40px;
-      }
-
-      .SingupComponent {
-        min-height: auto !important;
-      }
+    .SignupBox {
+      padding: 0 40px;
     }
 
-    h2 {
-      font-size: @fontSizeHeading;
-    }
-
-    h3 {
-      font-size: @fontSizeTitle;
-    }
-
-    h4 {
-      font-size: @fontSizeLarge;
-    }
-
-    h6 {
-      font-size: @fontSizeMedium;
-      line-height: 24px;
-      font-weight: 400;
+    .SingupComponent {
+      min-height: auto !important;
     }
   }
+
+  h2 {
+    font-size: @fontSizeHeading;
+  }
+
+  h3 {
+    font-size: @fontSizeTitle;
+  }
+
+  h4 {
+    font-size: @fontSizeLarge;
+  }
+
+  h6 {
+    font-size: @fontSizeMedium;
+    line-height: 24px;
+    font-weight: 400;
+  }
+}
 </style>

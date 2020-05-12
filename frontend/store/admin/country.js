@@ -24,7 +24,7 @@ export const actions = {
       const formData = new FormData();
       formData.append('country', countryId);
       formData.append('map_file', mapFile.raw);
-      await this.$axios.post(`/api/map-files/`, formData, {
+      await this.$axios.post('/api/map-files/', formData, {
         headers: {
           'content-type': 'multipart/form-data'
         }

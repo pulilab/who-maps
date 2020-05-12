@@ -225,8 +225,10 @@ export default {
               [
                 {
                   stack: [
-                    { text: this.$gettext('Overview of digital health implementation:'),
-                      style: 'subHeader' },
+                    {
+                      text: this.$gettext('Overview of digital health implementation:'),
+                      style: 'subHeader'
+                    },
                     { text: project.implementation_overview || '' }
                   ],
                   colSpan: 3

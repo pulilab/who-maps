@@ -1,8 +1,38 @@
-import { stateGenerator, gettersGenerator, actionsGenerator, mutationsGenerator } from '../utilities/map';
-import { intArrayFromQs, customColumnsMapper, strArrayFromQs, parseCustomAnswers } from '../utilities/api';
+import {
+  stateGenerator,
+  gettersGenerator,
+  actionsGenerator,
+  mutationsGenerator
+} from '../utilities/map';
+import {
+  intArrayFromQs,
+  customColumnsMapper,
+  strArrayFromQs,
+  parseCustomAnswers
+} from '../utilities/api';
 
-export const searchIn = () => ['name', 'org', 'overview', 'partner', 'donor', 'loc', 'uid'];
-export const defaultSelectedColumns = () => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+export const searchIn = () => [
+  'name',
+  'org',
+  'overview',
+  'partner',
+  'donor',
+  'loc',
+  'uid'
+];
+export const defaultSelectedColumns = () => [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11'
+];
 
 export const state = () => ({
   ...stateGenerator(),
@@ -38,46 +68,73 @@ export const getters = {
   ...gettersGenerator(),
   getSearched: (state, getters) => {
     const g = getters.getSearchParameters;
-    return !(g.approved === undefined &&
-    g.country.length === 0 &&
-    g.stage === null &&
-    g.dhi.length === 0 &&
-    g.donor === null &&
-    g.gov === undefined &&
-    g.hfa.length === 0 &&
-    g.his.length === 0 &&
-    g.hsc.length === 0 &&
-    g.in === undefined &&
-    g.q === undefined &&
-    g.region === null &&
-    g.sw.length === 0 &&
-    g.view_as === undefined &&
-    g.global === null);
+    return !(
+      g.approved === undefined &&
+      g.country.length === 0 &&
+      g.stage === null &&
+      g.dhi.length === 0 &&
+      g.donor === null &&
+      g.gov === undefined &&
+      g.hfa.length === 0 &&
+      g.his.length === 0 &&
+      g.hsc.length === 0 &&
+      g.in === undefined &&
+      g.q === undefined &&
+      g.region === null &&
+      g.sw.length === 0 &&
+      g.view_as === undefined &&
+      g.global === null
+    );
   },
-  getProjectsList: state => [...state.projectsList.map(r => parseCustomAnswers(r))],
-  getProjectsBucket: (state, getters) => state.selectAll ? [...state.projectsBucket.map(r => parseCustomAnswers(r))] : getters.getProjectsList,
+  getProjectsList: state => [
+    ...state.projectsList.map(r => parseCustomAnswers(r))
+  ],
+  getProjectsBucket: (state, getters) =>
+    state.selectAll
+      ? [...state.projectsBucket.map(r => parseCustomAnswers(r))]
+      : getters.getProjectsList,
   getCountryColumns: (state, getters, rootState, rootGetters) => {
     if (state.dashboardId && state.dashboardType === 'country') {
-      const country = rootGetters['countries/getCountryDetails'](state.dashboardId);
-      return country && country.country_questions ? customColumnsMapper(country.country_questions, 'c') : [];
+      const country = rootGetters['countries/getCountryDetails'](
+        state.dashboardId
+      );
+      return country && country.country_questions
+        ? customColumnsMapper(country.country_questions, 'c')
+        : [];
     }
     return [];
   },
   getFilteredCountryColumns (state, getters) {
-    return getters['getCountryColumns'].filter((country) => state.selectedColumns.indexOf(country.id) !== -1);
+    return getters.getCountryColumns.filter(
+      country => state.selectedColumns.indexOf(country.id) !== -1
+    );
   },
   getFilteredDonorColumns (state, getters) {
-    return getters['getDonorColumns'].filter((donor) => state.selectedColumns.indexOf(donor.id) !== -1);
+    return getters.getDonorColumns.filter(
+      donor => state.selectedColumns.indexOf(donor.id) !== -1
+    );
   },
   getDonorColumns: (state, getters, rootState, rootGetters) => {
     if (state.dashboardId && state.dashboardType === 'donor') {
       const donor = rootGetters['system/getDonorDetails'](state.dashboardId);
-      return donor && donor.donor_questions ? customColumnsMapper(donor.donor_questions, 'd') : [];
+      return donor && donor.donor_questions
+        ? customColumnsMapper(donor.donor_questions, 'd')
+        : [];
     }
     return [];
   },
-  getAllColumns: (state, getters) => [...state.columns, ...getters.getCountryColumns, ...getters.getDonorColumns],
-  getAvailableColumns: (state, getters) => [...getters.getAllColumns.map(c => ({ ...c, id: `${c.id}`, selected: state.selectedColumns.includes(`${c.id}`) }))],
+  getAllColumns: (state, getters) => [
+    ...state.columns,
+    ...getters.getCountryColumns,
+    ...getters.getDonorColumns
+  ],
+  getAvailableColumns: (state, getters) => [
+    ...getters.getAllColumns.map(c => ({
+      ...c,
+      id: `${c.id}`,
+      selected: state.selectedColumns.includes(`${c.id}`)
+    }))
+  ],
   getSelectedColumns: state => state.selectedColumns.map(s => `${s}`),
   getSelectedDHI: state => state.selectedDHI,
   getSelectedHFA: state => state.selectedHFA,
@@ -86,7 +143,9 @@ export const getters = {
   getSelectedPlatforms: state => state.selectedPlatforms,
   getSelectedRows: state => state.selectedRows,
   getFilteredCountries: state => {
-    return state.dashboardType === 'country' && state.dashboardId ? [state.dashboardId] : state.filteredCountries;
+    return state.dashboardType === 'country' && state.dashboardId
+      ? [state.dashboardId]
+      : state.filteredCountries;
   },
   getFilteredStages: state => state.filteredStages,
   getFilteredRegion: state => state.filteredRegion,
@@ -104,7 +163,10 @@ export const getters = {
   getDashboardId: state => state.dashboardId,
   getDashboardSection: state => state.dashboardSection,
   getSearchParameters: (state, getters) => {
-    const q = state.searchString && state.searchString.length > 1 ? state.searchString : undefined;
+    const q =
+      state.searchString && state.searchString.length > 1
+        ? state.searchString
+        : undefined;
     const country = getters.getFilteredCountries;
     const donor = state.dashboardType === 'donor' ? [state.dashboardId] : null;
     return {
@@ -144,13 +206,21 @@ export const actions = {
     commit('SET_PROJECT_BUCKET', []);
   },
   async loadProjectsMap ({ commit, dispatch }) {
-    const data = await dispatch('loadProjects', { type: 'map', page_size: 999999, page: 1 });
-    commit('SET_PROJECT_MAP', data.results.projects);
+    const data = await dispatch('loadProjects', {
+      type: 'map',
+      page_size: 999999,
+      page: 1
+    });
+    commit('SET_PROJECT_MAP', data.results ? data.results.projects : []);
     commit('SET_SEARCH_STATUS', data);
   },
   async loadProjectsBucket ({ commit, dispatch, state }) {
     if (state.projectsBucket.length === 0) {
-      const data = await dispatch('loadProjects', { type: 'list', page_size: 999999, page: 1 });
+      const data = await dispatch('loadProjects', {
+        type: 'list',
+        page_size: 999999,
+        page: 1
+      });
       commit('SET_PROJECT_BUCKET', data.results.projects);
       commit('SET_SEARCH_STATUS', data);
     }
@@ -258,7 +328,9 @@ export const actions = {
       await dispatch('setSelectedCountry', id);
       commit('SET_ACTIVE_COUNTRY', id);
     } else if (type === 'donor') {
-      await dispatch('system/loadDonorDetails', getters.getDashboardId, { root: true });
+      await dispatch('system/loadDonorDetails', getters.getDashboardId, {
+        root: true
+      });
       selectedColumns.push(...getters.getDonorColumns.map(cc => cc.id));
     }
     commit('SET_PROJECT_BUCKET', []);
@@ -300,9 +372,16 @@ export const mutations = {
     state.selectedHFA = intArrayFromQs(options.hfa);
     state.selectedHSC = intArrayFromQs(options.hsc);
     state.selectedHIS = intArrayFromQs(options.his);
-    state.selectedColumns = options.sc ? strArrayFromQs(options.sc) : defaultSelectedColumns();
+    state.selectedColumns = options.sc
+      ? strArrayFromQs(options.sc)
+      : defaultSelectedColumns();
     state.dashboardType = options.view_as ? options.view_as : 'user';
-    state.dashboardId = options.view_as === 'country' ? intArrayFromQs(options.country)[0] : options.view_as === 'donor' ? +options.donor : null;
+    state.dashboardId =
+      options.view_as === 'country'
+        ? intArrayFromQs(options.country)[0]
+        : options.view_as === 'donor'
+          ? +options.donor
+          : null;
   },
   SET_SELECTED_COLUMNS: (state, columns) => {
     state.selectedColumns = columns;
