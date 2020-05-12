@@ -23,6 +23,7 @@
 
 <script>
 import uniqBy from 'lodash/uniqBy';
+import flatten from 'lodash/flatten';
 import ListAction from './ListAction';
 import { mapGetters } from 'vuex';
 export default {
@@ -60,12 +61,8 @@ export default {
       if (!this.valueIsChild) {
         result = this.healthFocusAreas.filter(h => this.value.includes(h.id));
       } else {
-        result = uniqBy(
-          this.healthFocusAreas
-            .map(item => item.health_focus_areas)
-            .flat()
-            .filter(item => this.value.includes(item.id)),
-          'id');
+        result = flatten(this.healthFocusAreas.map(item => item.health_focus_areas));
+        result = uniqBy(result.filter(item => this.value.includes(item.id)), 'id');
       }
       return this.limit ? result.slice(0, this.limit) : result;
     }
