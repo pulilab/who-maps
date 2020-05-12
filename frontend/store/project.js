@@ -220,6 +220,10 @@ export const actions = {
       const published = { ...clean, ...apiReadParser(data.published) };
       countriesToFetch.add(published.country);
       published.donors.forEach(d => donorsToFetch.add(d));
+      commit('SET_STAGES', published.stages);
+      commit('SET_START_DATE', new Date(published.start_date));
+      commit('SET_END_DATE', new Date(published.end_date));
+      commit('SET_END_DATE_NOTE', published.end_date_note);
       commit('SET_PUBLISHED', Object.freeze(published));
     }
     if (parseInt(id, 10)) {
