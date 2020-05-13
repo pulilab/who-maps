@@ -179,13 +179,15 @@ export default {
         if (donor_answers && this.dashboardType === 'donor') {
           this.donorColumns.forEach(dc => {
             const value = donor_answers && donor_answers[dc.donorId] ? donor_answers[dc.donorId][dc.originalId] : '';
-            custom[dc.label] = (value && Array.isArray(value) ? value.join(', ') : value) || 'N/A';
+            const label = dc.label + (dc.private ? ' (' + this.$gettext('private') + ')' : '');
+            custom[label] = ((value && Array.isArray(value)) ? value.join(', ') : value) || 'N/A';
           });
         }
         if (country_answers && this.dashboardType === 'country') {
           this.countryColumns.forEach(cc => {
             const value = country_answers ? country_answers[cc.originalId] : '';
-            custom[cc.label] = (value && Array.isArray(value) ? value.join(', ') : value) || 'N/A';
+            const label = cc.label + (cc.private ? ' (' + this.$gettext('private') + ')' : '');
+            custom[label] = ((value && Array.isArray(value)) ? value.join(', ') : value) || 'N/A';
           });
         }
         return custom;

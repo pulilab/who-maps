@@ -1737,6 +1737,10 @@ msgstr ""
 msgid "No content to show"
 msgstr ""
 
+#: components/project/sections/StageHistory.vue:13
+msgid "No Data available"
+msgstr ""
+
 #: components/common/SearchComponent.vue:162
 msgid "No document to show"
 msgstr ""
@@ -1999,6 +2003,11 @@ msgstr ""
 
 #: components/common/CookieConsent.vue:14
 msgid "Privacy Policy."
+msgstr ""
+
+#: components/dashboard/ListExport.vue:181
+#: components/dashboard/ListExport.vue:188
+msgid "private"
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:62
