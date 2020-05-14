@@ -184,9 +184,15 @@
           :resizable="false"
           width="240"
         >
-          <template slot="header" slot-scope="scope">
+          <template
+            slot="header"
+          >
             <div>
-              <fa class="Table-Private" icon="lock" v-if="col.private" />
+              <fa
+                v-if="col.private"
+                class="Table-Private"
+                icon="lock"
+              />
               {{ col.label }}
             </div>
           </template>
@@ -207,9 +213,15 @@
           :resizable="false"
           width="240"
         >
-          <template slot="header" slot-scope="scope">
+          <template
+            slot="header"
+          >
             <div>
-              <fa class="Table-Private" icon="lock" v-if="col.private" />
+              <fa
+                v-if="col.private"
+                class="Table-Private"
+                icon="lock"
+              />
               {{ col.label }}
             </div>
           </template>
