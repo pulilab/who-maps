@@ -1,9 +1,6 @@
 <template>
   <div class="fill">
-    <img
-      v-if="vertical && url"
-      :src="url"
-    >
+    <img v-if="vertical && url" :src="url" />
     <div class="grid-content fill">
       <default-text-vertical v-if="vertical" />
       <default-text v-else />
@@ -12,11 +9,11 @@
 </template>
 
 <script>
-import DefaultText from '@/components/country/commons/DefaultText';
-import DefaultTextVertical from '@/components/country/commons/DefaultTextVertical';
+import DefaultText from "@/components/country/commons/DefaultText";
+import DefaultTextVertical from "@/components/country/commons/DefaultTextVertical";
 
 export default {
-  name: 'WDeafult',
+  name: "WDeafult",
   components: {
     DefaultText,
     DefaultTextVertical
@@ -30,7 +27,7 @@ export default {
     url: {
       type: String,
       required: false,
-      default: ''
+      default: ""
     }
   }
 };

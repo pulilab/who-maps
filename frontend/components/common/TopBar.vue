@@ -324,7 +324,7 @@ export default {
         }
 
         &::before {
-          top: -15px !important;
+          top: -17px !important;
         }
       }
 
@@ -336,7 +336,7 @@ export default {
       &::before {
         content: "";
         position: absolute;
-        top: -19px;
+        top: -21px;
         left: 0;
         display: inline-block;
         width: 100%;

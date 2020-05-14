@@ -412,7 +412,7 @@ msgstr ""
 #: components/admin/import/ImportDialog.vue:174
 #: components/admin/import/ImportHeaders.vue:146
 #: components/dashboard/FilterPresetsActions.vue:112
-#: components/dashboard/TableTopActions.vue:170
+#: components/dashboard/TableTopActions.vue:171
 #: components/dialogs/DashboardFiltersDialog.vue:85
 #: components/dialogs/DigitalHealthInterventionsDialog.vue:48
 #: components/dialogs/EditSubLevelDialog.vue:33
@@ -430,8 +430,16 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: components/admin/VueMapCustomizer.vue:46
+#: components/EditProfile.vue:51 components/admin/VueMapCustomizer.vue:46
 msgid "Change"
+msgstr ""
+
+#: components/EditProfile.vue:683
+msgid "Change email request"
+msgstr ""
+
+#: components/EditProfile.vue:684
+msgid "Change my email to:"
 msgstr ""
 
 #: components/admin/CountryAdmin.vue:22
@@ -545,7 +553,7 @@ msgstr ""
 msgid "Copy to clipboard"
 msgstr ""
 
-#: components/EditProfile.vue:51 components/common/ProjectCard.vue:151
+#: components/EditProfile.vue:66 components/common/ProjectCard.vue:151
 #: components/common/UserDropdown.vue:28 components/dashboard/MainTable.vue:38
 msgid "Country"
 msgstr ""
@@ -654,7 +662,7 @@ msgstr ""
 msgid "Deselect all {total} projects"
 msgstr ""
 
-#: components/EditProfile.vue:74
+#: components/EditProfile.vue:89
 msgid "Designation / Title"
 msgstr ""
 
@@ -708,7 +716,7 @@ msgstr ""
 msgid "Disclosure"
 msgstr ""
 
-#: components/EditProfile.vue:503 components/admin/CountryAdmin.vue:473
+#: components/EditProfile.vue:518 components/admin/CountryAdmin.vue:473
 #: components/admin/DonorAdmin.vue:286
 msgid "Dismiss changes"
 msgstr ""
@@ -820,7 +828,7 @@ msgstr ""
 msgid "Email Notifications (Providing updates related to your role)"
 msgstr ""
 
-#: components/EditProfile.vue:103
+#: components/EditProfile.vue:118
 msgid "Email notifications (standard)"
 msgstr ""
 
@@ -890,8 +898,8 @@ msgstr ""
 msgid "Filter preset name"
 msgstr ""
 
-#: components/EditProfile.vue:404 components/EditProfile.vue:434
-#: components/EditProfile.vue:464
+#: components/EditProfile.vue:419 components/EditProfile.vue:449
+#: components/EditProfile.vue:479
 msgid "Financial Investor"
 msgstr ""
 
@@ -979,7 +987,7 @@ msgstr ""
 msgid "Go to project"
 msgstr ""
 
-#: components/EditProfile.vue:345
+#: components/EditProfile.vue:360
 msgid "Government Admin"
 msgstr ""
 
@@ -999,7 +1007,7 @@ msgstr ""
 msgid "Government investor:"
 msgstr ""
 
-#: components/EditProfile.vue:375
+#: components/EditProfile.vue:390
 msgid "Government System Admin"
 msgstr ""
 
@@ -1007,20 +1015,20 @@ msgstr ""
 msgid "Government System Admins"
 msgstr ""
 
-#: components/EditProfile.vue:169
+#: components/EditProfile.vue:184
 msgid "Government user"
 msgstr ""
 
-#: components/EditProfile.vue:314 components/EditProfile.vue:344
-#: components/EditProfile.vue:374
+#: components/EditProfile.vue:329 components/EditProfile.vue:359
+#: components/EditProfile.vue:389
 msgid "Government User"
 msgstr ""
 
-#: components/EditProfile.vue:315
+#: components/EditProfile.vue:330
 msgid "Government Viewer"
 msgstr ""
 
-#: components/EditProfile.vue:187 components/admin/CountryAdmin.vue:255
+#: components/EditProfile.vue:202 components/admin/CountryAdmin.vue:255
 msgid "Government Viewers"
 msgstr ""
 
@@ -1048,7 +1056,7 @@ msgstr ""
 msgid "Has to be a valid email address"
 msgstr ""
 
-#: components/EditProfile.vue:609
+#: components/EditProfile.vue:624
 msgid "Has to be a valid url"
 msgstr ""
 
@@ -1188,15 +1196,15 @@ msgid ""
 "              CORRECTED."
 msgstr ""
 
-#: components/EditProfile.vue:124
+#: components/EditProfile.vue:139
 msgid "I request to be a:"
 msgstr ""
 
-#: components/EditProfile.vue:233
+#: components/EditProfile.vue:248
 msgid "I request to join the investor group below:"
 msgstr ""
 
-#: components/EditProfile.vue:108
+#: components/EditProfile.vue:123
 msgid ""
 "If a project you are part of completes the MAPS Assessment for a project, "
 "any changes in the assessment data will be noted in this email. You can "
@@ -1222,7 +1230,7 @@ msgid ""
 "publication."
 msgstr ""
 
-#: components/EditProfile.vue:225
+#: components/EditProfile.vue:240
 msgid ""
 "If you are part of an investor group that is providing either financial or "
 "in-kind support to project activities, the DHA can be used to help organize "
@@ -1230,6 +1238,10 @@ msgid ""
 "see information that is private to your organization. If your group is not "
 "listed below, send an email to digitalhealthatlas@gmail.com to add them to "
 "the list."
+msgstr ""
+
+#: components/common/CookieConsent.vue:16
+msgid "If you continue to use this site, you consent to our use of cookies."
 msgstr ""
 
 #: pages/_organisation/terms.vue:340
@@ -1373,7 +1385,7 @@ msgid ""
 "in-kind support."
 msgstr ""
 
-#: components/EditProfile.vue:221 components/common/ProjectCard.vue:152
+#: components/EditProfile.vue:236 components/common/ProjectCard.vue:152
 #: components/common/ProjectLegendContent.vue:34
 msgid "Investor"
 msgstr ""
@@ -1382,7 +1394,7 @@ msgstr ""
 msgid "Investor admin"
 msgstr ""
 
-#: components/EditProfile.vue:435
+#: components/EditProfile.vue:450
 msgid "Investor Admin"
 msgstr ""
 
@@ -1390,7 +1402,7 @@ msgstr ""
 msgid "Investor admin for {name}"
 msgstr ""
 
-#: components/EditProfile.vue:266 components/admin/DonorAdmin.vue:117
+#: components/EditProfile.vue:281 components/admin/DonorAdmin.vue:117
 msgid "Investor Admins"
 msgstr ""
 
@@ -1406,11 +1418,11 @@ msgstr ""
 msgid "Investor specific questionaire"
 msgstr ""
 
-#: components/EditProfile.vue:465
+#: components/EditProfile.vue:480
 msgid "Investor System Admin"
 msgstr ""
 
-#: components/EditProfile.vue:277 components/admin/DonorAdmin.vue:130
+#: components/EditProfile.vue:292 components/admin/DonorAdmin.vue:130
 msgid "Investor System Admins"
 msgstr ""
 
@@ -1418,11 +1430,11 @@ msgstr ""
 msgid "Investor View"
 msgstr ""
 
-#: components/EditProfile.vue:405
+#: components/EditProfile.vue:420
 msgid "Investor Viewer"
 msgstr ""
 
-#: components/EditProfile.vue:255 components/admin/DonorAdmin.vue:104
+#: components/EditProfile.vue:270 components/admin/DonorAdmin.vue:104
 msgid "Investor Viewers"
 msgstr ""
 
@@ -1469,7 +1481,7 @@ msgstr ""
 msgid "Link to wiki or project website"
 msgstr ""
 
-#: components/EditProfile.vue:84
+#: components/EditProfile.vue:99
 msgid "LinkedIn profile"
 msgstr ""
 
@@ -1528,7 +1540,7 @@ msgstr ""
 msgid "Lorem ipsum"
 msgstr ""
 
-#: components/dashboard/TableTopActions.vue:231
+#: components/dashboard/TableTopActions.vue:232
 msgid "main fields"
 msgstr ""
 
@@ -1616,27 +1628,27 @@ msgstr ""
 msgid "My filters presets"
 msgstr ""
 
-#: components/EditProfile.vue:354
+#: components/EditProfile.vue:369
 msgid "My Government Admin access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:384
+#: components/EditProfile.vue:399
 msgid "My Government System Admin access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:324
+#: components/EditProfile.vue:339
 msgid "My Government Viewer access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:444
+#: components/EditProfile.vue:459
 msgid "My Investor Admin access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:474
+#: components/EditProfile.vue:489
 msgid "My Investor System Admin access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:414
+#: components/EditProfile.vue:429
 msgid "My Investor Viewer access includes:"
 msgstr ""
 
@@ -1717,12 +1729,16 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: components/EditProfile.vue:153
+#: components/EditProfile.vue:168
 msgid "No additional access required"
 msgstr ""
 
 #: components/common/SearchComponent.vue:128
 msgid "No content to show"
+msgstr ""
+
+#: components/project/sections/StageHistory.vue:13
+msgid "No Data available"
 msgstr ""
 
 #: components/common/SearchComponent.vue:162
@@ -1836,7 +1852,7 @@ msgstr ""
 msgid "Operation successfully aborted"
 msgstr ""
 
-#: components/EditProfile.vue:161 pages/_organisation/projects/index.vue:10
+#: components/EditProfile.vue:176 pages/_organisation/projects/index.vue:10
 msgid "or"
 msgstr ""
 
@@ -1849,7 +1865,7 @@ msgstr ""
 msgid "Organisation"
 msgstr ""
 
-#: components/EditProfile.vue:44
+#: components/EditProfile.vue:59
 msgid "Organisation name"
 msgstr ""
 
@@ -1905,7 +1921,7 @@ msgstr ""
 msgid "Phase"
 msgstr ""
 
-#: components/EditProfile.vue:64
+#: components/EditProfile.vue:79
 msgid "Phone number"
 msgstr ""
 
@@ -1985,6 +2001,15 @@ msgstr ""
 msgid "Privacy Policy"
 msgstr ""
 
+#: components/common/CookieConsent.vue:14
+msgid "Privacy Policy."
+msgstr ""
+
+#: components/dashboard/ListExport.vue:181
+#: components/dashboard/ListExport.vue:188
+msgid "private"
+msgstr ""
+
 #: components/admin/DhaQuestion.vue:62
 msgid "Private"
 msgstr ""
@@ -1997,7 +2022,7 @@ msgstr ""
 msgid "Privileges for Government System Admins"
 msgstr ""
 
-#: components/EditProfile.vue:173
+#: components/EditProfile.vue:188
 msgid ""
 "Privileges for Government Users are detailed below. Select the user type "
 "that most matches your role within the DHA. This request will be received by "
@@ -2021,11 +2046,11 @@ msgstr ""
 msgid "Privileges for Investor Users"
 msgstr ""
 
-#: components/EditProfile.vue:679
+#: components/EditProfile.vue:704
 msgid "Profile succesfully updated"
 msgstr ""
 
-#: components/EditProfile.vue:693
+#: components/EditProfile.vue:718
 msgid "Profile update error"
 msgstr ""
 
@@ -2221,7 +2246,7 @@ msgstr ""
 msgid "Save Project"
 msgstr ""
 
-#: components/EditProfile.vue:516
+#: components/EditProfile.vue:531
 msgid "Save settings"
 msgstr ""
 
@@ -2432,7 +2457,7 @@ msgstr ""
 msgid "Single choice"
 msgstr ""
 
-#: components/EditProfile.vue:94
+#: components/EditProfile.vue:109
 msgid "Site language"
 msgstr ""
 
@@ -2609,7 +2634,7 @@ msgid ""
 "technical institutions."
 msgstr ""
 
-#: components/EditProfile.vue:157
+#: components/EditProfile.vue:172
 msgid ""
 "The DHA has additional features to support Ministries of Health and "
 "Investors to understand and organize their digital health implementations. "
@@ -2757,9 +2782,9 @@ msgid "this"
 msgstr ""
 
 #: components/DhaLogin.vue:221 components/DhaLogin.vue:226
-#: components/DhaLogin.vue:232 components/EditProfile.vue:589
-#: components/EditProfile.vue:593 components/EditProfile.vue:597
-#: components/EditProfile.vue:601 components/EditProfile.vue:605
+#: components/DhaLogin.vue:232 components/EditProfile.vue:604
+#: components/EditProfile.vue:608 components/EditProfile.vue:612
+#: components/EditProfile.vue:616 components/EditProfile.vue:620
 #: components/SignupComponent.vue:142 components/SignupComponent.vue:148
 #: components/SignupComponent.vue:153
 msgid "This field is required"
@@ -2956,7 +2981,7 @@ msgstr ""
 msgid "Unpublish"
 msgstr ""
 
-#: components/dashboard/TableTopActions.vue:180
+#: components/dashboard/TableTopActions.vue:181
 #: components/dialogs/ProjectApprovalDialog.vue:13
 msgid "Update"
 msgstr ""
@@ -3138,6 +3163,12 @@ msgid ""
 "              OTHER CONTENT."
 msgstr ""
 
+#: components/common/CookieConsent.vue:10
+msgid ""
+"We use cookies to offer you a better browsing experience, analyze site "
+"traffic and personalize content. Read about how we use cookies by clicking"
+msgstr ""
+
 #: pages/_organisation/terms.vue:197
 msgid ""
 "We will not pass any of your personal information to any third party, other "
@@ -3145,7 +3176,7 @@ msgid ""
 "            without your consent."
 msgstr ""
 
-#: components/EditProfile.vue:138
+#: components/EditProfile.vue:153
 msgid ""
 "We will notify you via email when your user access has been approved. If you "
 "would like to request a different type of access, you can resubmit the form "
@@ -3156,7 +3187,7 @@ msgstr ""
 msgid "Weekly project approval status (Y/N)"
 msgstr ""
 
-#: components/EditProfile.vue:108
+#: components/EditProfile.vue:123
 msgid "Weekly Project Toolkit updates (Y/N)"
 msgstr ""
 
@@ -3408,11 +3439,11 @@ msgid ""
 "project inbox or keep working on the import interface"
 msgstr ""
 
-#: components/EditProfile.vue:134
+#: components/EditProfile.vue:149
 msgid "Your user access has been submitted"
 msgstr ""
 
-#: components/EditProfile.vue:291
+#: components/EditProfile.vue:306
 msgid "Your user role request has been accepted!"
 msgstr ""
 

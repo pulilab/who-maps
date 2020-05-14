@@ -36,11 +36,26 @@
               :label="$gettext('Email address') | translate"
               class="is-required"
             >
-              <el-input
-                v-model="innerProfile.email"
-                disabled
-                type="text"
-              />
+              <el-row>
+                <el-col :span="17">
+                  <el-input
+                    v-model="innerProfile.email"
+                    disabled
+                    type="text"
+                  />
+                </el-col>
+                <el-col :span="7">
+                  <el-button
+                    class="ChangeEmail"
+                    type="primary"
+                    @click="openFeedback"
+                  >
+                    <translate>
+                      Change
+                    </translate>
+                  </el-button>
+                </el-col>
+              </el-row>
             </el-form-item>
 
             <el-form-item
@@ -667,6 +682,16 @@ export default {
       updateUserProfile: 'user/updateUserProfile'
     }),
 
+    openFeedback () {
+      this.$store.commit('user/SET_FEEDBACK', {
+        feedbackOn: true,
+        feedbackForm: {
+          subject: this.$gettext('Change email request'),
+          message: this.$gettext('Change my email to:')
+        }
+      });
+    },
+
     dismissChanges () {
       this.innerProfile = { ...this.profile };
       this.$router.go(-1);
@@ -728,6 +753,11 @@ export default {
 
   .EditProfile {
     margin-bottom: 80px;
+
+    .ChangeEmail {
+      overflow: hidden;
+      width: 100%;
+    }
 
     .space-bottom {
       margin-bottom: 32px;
