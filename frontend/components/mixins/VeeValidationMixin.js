@@ -61,7 +61,7 @@ export default {
         this.$validator.localize(localeName);
         this.currentLocale = localeName;
       } else {
-        import(`vee-validate/dist/locale/${localeName}`).then(locale => {
+        import('vee-validate/dist/locale/' + localeName).then(locale => {
           this.$validator.localize(localeName, locale);
           this.currentLocale = localeName;
         });

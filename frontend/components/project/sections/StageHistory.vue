@@ -8,7 +8,10 @@
       :title="$gettext('Completion of Project stages') | translate"
     >
       <c-stages v-if="stages" />
-      <div class="NoData" v-else>
+      <div
+        v-else
+        class="NoData"
+      >
         <div class="SimpleField">
           <div class="Header">
             <translate>

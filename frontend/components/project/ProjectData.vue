@@ -86,7 +86,10 @@
               v-if="isNationalLevelDeployment || (project.coverage && project.coverage.length)"
               :header="$gettext('Coverage type')"
             >
-              <div class="TypeField" v-show="isGlobalSelected">
+              <div
+                v-show="isGlobalSelected"
+                class="TypeField"
+              >
                 <translate>International</translate>
               </div>
               <type-field
@@ -96,11 +99,17 @@
               />
             </simple-field>
             <simple-field v-if="isNationalLevelDeployment">
-              <div slot="header" v-show="isGlobalSelected">
+              <div
+                v-show="isGlobalSelected"
+                slot="header"
+              >
                 <fa icon="flag" />
                 <translate>International Level Deployment</translate>
               </div>
-              <div slot="header" v-show="!isGlobalSelected">
+              <div
+                v-show="!isGlobalSelected"
+                slot="header"
+              >
                 <fa icon="flag" />
                 <translate>National Level Deployment</translate>
               </div>
@@ -289,7 +298,7 @@ export default {
       getDonorDetails: 'system/getDonorDetails'
     }),
     isGlobalSelected () {
-      return this.country.id  === process.env.GlobalCountryID;
+      return this.country.id === process.env.GlobalCountryID;
     },
     route () {
       return this.$route.name.split('__')[0];

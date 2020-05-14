@@ -7,12 +7,12 @@
 
 <script>
 export default {
-  name: "WImage",
+  name: 'WImage',
   props: {
     url: {
       type: String,
       required: false,
-      default: ""
+      default: ''
     }
   }
 };

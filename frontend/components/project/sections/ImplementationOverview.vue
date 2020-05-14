@@ -95,7 +95,11 @@
                 >
                   What Digital Health Intervention(s) are included in this software?
                 </translate>
-                <a class="TooltipLink" target="_blank" href="https://apps.who.int/iris/bitstream/handle/10665/260480/WHO-RHR-18.06-eng.pdf;jsessionid=50B83CAF6ACF46453B7D6BAB9672EB77?sequence=1)">
+                <a
+                  class="TooltipLink"
+                  target="_blank"
+                  href="https://apps.who.int/iris/bitstream/handle/10665/260480/WHO-RHR-18.06-eng.pdf;jsessionid=50B83CAF6ACF46453B7D6BAB9672EB77?sequence=1)"
+                >
                   <fa icon="question-circle" />
                 </a>
               </template>

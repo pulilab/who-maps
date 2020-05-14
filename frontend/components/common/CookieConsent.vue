@@ -1,10 +1,13 @@
 <template>
   <transition name="el-fade-in">
-    <div v-show="cookieOn" class="CookieContainer">
+    <div
+      v-show="cookieOn"
+      class="CookieContainer"
+    >
       <div class="CookieMessage">
         <div
-          @click="close"
           class="CloseConsent"
+          @click="close"
         >
           <fa icon="times" />
         </div>
