@@ -36,11 +36,13 @@
           </translate>
         </template>
 
-        <character-count-input
-          v-model="repository"
+        <character-count-input-standalone
           v-validate="rules.repository"
           class="LinkField"
           :rules="rules.repository"
+          get="getRepository"
+          set="setRepository"
+          namespace="project"
           type="text"
           placeholder="http://"
           data-vv-name="repository"
@@ -58,11 +60,13 @@
           </translate>
         </template>
 
-        <character-count-input
-          v-model="mobile_application"
+        <character-count-input-standalone
           v-validate="rules.mobile_application"
           class="LinkField"
           :rules="rules.mobile_application"
+          get="getMobileApplication"
+          set="setMobileApplication"
+          namespace="project"
           type="text"
           placeholder="http://"
           data-vv-name="mobile_application"
@@ -81,11 +85,13 @@
           </translate>
         </template>
 
-        <character-count-input
-          v-model="wiki"
+        <character-count-input-standalone
           v-validate="rules.wiki"
           class="LinkField"
           :rules="rules.wiki"
+          get="getWiki"
+          set="setWiki"
+          namespace="project"
           type="text"
           placeholder="http://"
           data-vv-name="wiki"
@@ -112,10 +118,7 @@ export default {
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGettersActions({
-      licenses: ['project', 'getLicenses', 'setLicenses', 0],
-      repository: ['project', 'getRepository', 'setRepository', 0],
-      mobile_application: ['project', 'getMobileApplication', 'setMobileApplication', 0],
-      wiki: ['project', 'getWiki', 'setWiki', 0]
+      licenses: ['project', 'getLicenses', 'setLicenses', 0]
     })
   },
   methods: {

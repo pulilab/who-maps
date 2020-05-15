@@ -23,12 +23,14 @@
             </translate>
           </form-hint>
         </template>
-        <character-count-input
-          v-model="name"
+        <character-count-input-standalone
           v-validate="rules.name"
           :rules="rules.name"
-          data-as-name="Name"
           data-vv-name="name"
+          data-vv-as="Name"
+          get="getName"
+          set="setName"
+          namespace="project"
         />
       </custom-required-form-item>
 
@@ -97,12 +99,14 @@
           <tooltip :text="$gettext('Describe the user types, geographic coverage and other coverage details.') | translate" />
         </template>
 
-        <character-count-input
-          v-model="geographic_scope"
+        <character-count-input-standalone
           v-validate="rules.geographic_scope"
           :rules="rules.geographic_scope"
           data-vv-name="geographic_scope"
           data-vv-as="Geographic scope"
+          get="getGeographicScope"
+          set="setGeographicScope"
+          namespace="project"
           type="textarea"
         />
         <span class="Hint">
@@ -125,13 +129,14 @@
           </translate>
           <tooltip :text="$gettext('Describe your overall digital health project design.') | translate" />
         </template>
-
-        <character-count-input
-          v-model="implementation_overview"
+        <character-count-input-standalone
           v-validate="rules.implementation_overview"
           :rules="rules.implementation_overview"
           data-vv-name="implementation_overview"
           data-vv-as="Implementation Overview"
+          get="getImplementationOverview"
+          set="setImplementationOverview"
+          namespace="project"
           type="textarea"
         />
         <span class="Hint">
@@ -156,12 +161,14 @@
               <tooltip :text="$gettext('This is the individual who will be the lead point of contact for any queries through the DHA.') | translate" />
             </template>
 
-            <character-count-input
-              v-model="contact_name"
+            <character-count-input-standalone
               v-validate="rules.contact_name"
               :rules="rules.contact_name"
               data-vv-name="contact_name"
               data-vv-as="Contact name"
+              get="getContactName"
+              set="setContactName"
+              namespace="project"
             />
           </custom-required-form-item>
         </el-col>
@@ -177,12 +184,14 @@
               </translate>
             </template>
 
-            <character-count-input
-              v-model="contact_email"
+            <character-count-input-standalone
               v-validate="rules.contact_email"
               :rules="rules.contact_email"
               data-vv-name="contact_email"
               data-vv-as="Contact email"
+              get="getContactEmail"
+              set="setContactEmail"
+              namespace="project"
             />
           </custom-required-form-item>
         </el-col>
@@ -258,13 +267,8 @@ export default {
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGettersActions({
-      name: ['project', 'getName', 'setName', 0],
       organisation: ['project', 'getOrganisation', 'setOrganisation', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
-      geographic_scope: ['project', 'getGeographicScope', 'setGeographicScope', 0],
-      implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
-      contact_name: ['project', 'getContactName', 'setContactName', 0],
-      contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
       team: ['project', 'getTeam', 'setTeam', 0],
       viewers: ['project', 'getViewers', 'setViewers', 0]
     }),
