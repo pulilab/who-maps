@@ -160,7 +160,7 @@ def deploy():
             _migrate_db()
             time.sleep(1)
             # _import_geodata()
-
+    time.sleep(20)
     tear_down()
 
 
