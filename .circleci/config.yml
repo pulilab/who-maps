@@ -152,7 +152,6 @@ workflows:
             tags:
               only: /^[0-9]+(\.[0-9]+)*$/
       - deploy-dev:
-          name: Dev Server Deployment
           requires:
             - build-and-test
           filters:
@@ -167,6 +166,7 @@ workflows:
       - e2e-dev:
           name: e2e tests against DEV
           requires:
+            - build-and-test
             - deploy-dev
           filters:
             branches:
