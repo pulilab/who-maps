@@ -168,12 +168,12 @@ workflows:
                 issue_regexp: '[A-Z0-9]{2,30}-[0-9]+'
                 environment: DEV  # DEV, PROD, QA
       - e2e-dev:
-#          requires:
-#            - build-and-test
-#            - deploy-dev
+          requires:
+            - build-and-test
+            - deploy-dev
           filters:
             branches:
-              only: e2e
+              only: development
       - deploy-qa:
           name: QA Server Deployment
           requires:
