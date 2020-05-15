@@ -69,7 +69,7 @@
             >
               What are the names of the software included in the deployment?
             </translate>
-            <tooltip :text="$gettext('Include all software that is part of your project. If you cannot find your software listed in the options, send an email to digitalhealthatlas@gmail.com with the software name.') | translate" />
+            <tooltip :text="$gettext('Include all software that is part of your project. If you cannot find your software listed in the options, you can add it by start typing the software name in the field, and then select ‘Add as new’.  which will add the software to the inventory.') | translate" />
           </template>
 
           <el-col :span="16">
