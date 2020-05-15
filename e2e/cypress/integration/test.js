@@ -21,6 +21,6 @@ describe('End to end tests', function() {
     cy.get("input[data-vv-name=\"title\"]").type("Cypress");
     cy.get("input[data-vv-name=\"linkedin\"]").type("http://linkedin.com/123456/");
     cy.contains("Save settings").click();
-    cy.location('pathname', {timeout: 5000}).should('include', '/dashboard');
+    cy.location('pathname', {timeout: 5000}).should('include', '/dashboard1');
   })
 });
