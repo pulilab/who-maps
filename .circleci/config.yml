@@ -131,6 +131,19 @@ jobs:
             fab staging deploy
           no_output_timeout: "20m"
 
+  e2e-dev:
+    docker:
+      - image: cypress/included:3.8.3
+    working_directory: ~/who-maps
+    steps:
+      - checkout
+      - run:
+          name: Deploy Over SSH
+          working_directory: ~/who-maps/django
+          command: |
+            cypress run -C cypress.dev.json
+          no_output_timeout: "20m"
+
 workflows:
   build-and-deploy:
     jobs:
