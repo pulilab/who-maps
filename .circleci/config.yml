@@ -143,6 +143,10 @@ jobs:
           command: |
             cypress run -C cypress.dev.json
           no_output_timeout: "20m"
+      - store_artifacts:
+          path: /root/who-maps/e2e/cypress/videos
+      - store_artifacts:
+          path: /root/who-maps/e2e/cypress/screenshots
 
 workflows:
   build-and-deploy:
@@ -164,13 +168,12 @@ workflows:
                 issue_regexp: '[A-Z0-9]{2,30}-[0-9]+'
                 environment: DEV  # DEV, PROD, QA
       - e2e-dev:
-          name: e2e tests against DEV
-          requires:
-            - build-and-test
-            - deploy-dev
+#          requires:
+#            - build-and-test
+#            - deploy-dev
           filters:
             branches:
-              only: development
+              only: e2e
       - deploy-qa:
           name: QA Server Deployment
           requires:
