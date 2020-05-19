@@ -133,7 +133,7 @@ jobs:
 
   e2e-dev:
     docker:
-      - image: cypress/included:3.8.3
+      - image: cypress/included:4.5.0
     working_directory: ~/who-maps
     steps:
       - checkout
