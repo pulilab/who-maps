@@ -1,5 +1,8 @@
 <template>
-  <div id="implementation" class="ImplementationOverview">
+  <div
+    id="implementation"
+    class="ImplementationOverview"
+  >
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Implementation overview') | translate"
@@ -150,7 +153,10 @@
       </custom-required-form-item>
 
       <div class="CoverageArea">
-        <custom-required-form-item prop="coverageType" prepend-label="14">
+        <custom-required-form-item
+          prop="coverageType"
+          prepend-label="14"
+        >
           <template slot="label">
             <translate key="coverage-type">
               What level of coverage does your project have (Sub-national,
@@ -195,11 +201,17 @@
           v-if="coverageType == 2"
           class="NationalLevelDeployment ItemIndent"
         >
-          <div v-show="!isGlobalSelected" class="CoverageSubtitle">
+          <div
+            v-show="!isGlobalSelected"
+            class="CoverageSubtitle"
+          >
             <fa icon="flag" />
             <translate>National level deployment</translate>
           </div>
-          <div v-show="isGlobalSelected" class="CoverageSubtitle">
+          <div
+            v-show="isGlobalSelected"
+            class="CoverageSubtitle"
+          >
             <fa icon="globe" />
             <translate>International level deployment</translate>
           </div>
@@ -243,15 +255,15 @@
             <translate>No, they have not yet contributed</translate>
           </el-radio>
           <el-radio :label="1">
-            <translate
-              >Yes, they are contributing in-kind people or time</translate
-            >
+            <translate>
+              Yes, they are contributing in-kind people or time
+            </translate>
           </el-radio>
           <el-radio :label="2">
-            <translate
-              >Yes, there is a financial contribution through MOH
-              budget</translate
-            >
+            <translate>
+              Yes, there is a financial contribution through MOH
+              budget
+            </translate>
           </el-radio>
           <el-radio :label="3">
             <translate>Yes, MOH is fully funding the project</translate>
@@ -270,7 +282,10 @@
             Who are your implementing partners?
           </translate>
         </template>
-        <el-row v-for="(partner, index) in implementing_partners" :key="index">
+        <el-row
+          v-for="(partner, index) in implementing_partners"
+          :key="index"
+        >
           <el-col :span="17">
             <custom-required-form-item
               :error="errors.first('implementing_partners_' + index)"
@@ -329,22 +344,22 @@
 </template>
 
 <script>
-import VeeValidationMixin from "../../mixins/VeeValidationMixin.js";
-import ProjectFieldsetMixin from "../../mixins/ProjectFieldsetMixin.js";
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 
-import CollapsibleCard from "../CollapsibleCard";
-import HealthSystemChallengesSelector from "../HealthSystemChallengesSelector";
-import HealthFocusAreasSelector from "../HealthFocusAreasSelector";
-import HisBucketSelector from "../HisBucketSelector";
-import PlatformSelector from "../PlatformSelector";
-import DigitalHealthInterventionsSelector from "../DigitalHealthInterventionsSelector";
-import SubNationalLevelDeployment from "../SubNationalLevelDeployment";
-import AddRmButtons from "../AddRmButtons";
-import CoverageFieldset from "../CoverageFieldset";
-import DonorSelector from "../DonorSelector";
-import Tooltip from "@/components/dashboard/Tooltip";
+import CollapsibleCard from '../CollapsibleCard';
+import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector';
+import HealthFocusAreasSelector from '../HealthFocusAreasSelector';
+import HisBucketSelector from '../HisBucketSelector';
+import PlatformSelector from '../PlatformSelector';
+import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector';
+import SubNationalLevelDeployment from '../SubNationalLevelDeployment';
+import AddRmButtons from '../AddRmButtons';
+import CoverageFieldset from '../CoverageFieldset';
+import DonorSelector from '../DonorSelector';
+import Tooltip from '@/components/dashboard/Tooltip';
 
-import { mapGettersActions } from "../../../utilities/form";
+import { mapGettersActions } from '../../../utilities/form';
 
 export default {
   components: {
@@ -364,52 +379,52 @@ export default {
 
   computed: {
     ...mapGettersActions({
-      country: ["project", "getCountry", "setCountry", 0],
-      platforms: ["project", "getPlatforms", "setPlatforms", 0],
+      country: ['project', 'getCountry', 'setCountry', 0],
+      platforms: ['project', 'getPlatforms', 'setPlatforms', 0],
       digitalHealthInterventions: [
-        "project",
-        "getDigitalHealthInterventions",
-        "setDigitalHealthInterventions",
+        'project',
+        'getDigitalHealthInterventions',
+        'setDigitalHealthInterventions',
         0
       ],
       health_focus_areas: [
-        "project",
-        "getHealthFocusAreas",
-        "setHealthFocusAreas",
+        'project',
+        'getHealthFocusAreas',
+        'setHealthFocusAreas',
         0
       ],
-      hsc_challenges: ["project", "getHscChallenges", "setHscChallenges", 0],
-      his_bucket: ["project", "getHisBucket", "setHisBucket", 0],
-      coverageType: ["project", "getCoverageType", "setCoverageType", 0],
+      hsc_challenges: ['project', 'getHscChallenges', 'setHscChallenges', 0],
+      his_bucket: ['project', 'getHisBucket', 'setHisBucket', 0],
+      coverageType: ['project', 'getCoverageType', 'setCoverageType', 0],
       national_level_deployment: [
-        "project",
-        "getNationalLevelDeployment",
-        "setNationalLevelDeployment",
+        'project',
+        'getNationalLevelDeployment',
+        'setNationalLevelDeployment',
         0
       ],
       government_investor: [
-        "project",
-        "getGovernmentInvestor",
-        "setGovernmentInvestor",
+        'project',
+        'getGovernmentInvestor',
+        'setGovernmentInvestor',
         0
       ],
       implementing_partners: [
-        "project",
-        "getImplementingPartners",
-        "setImplementingPartners",
+        'project',
+        'getImplementingPartners',
+        'setImplementingPartners',
         300,
         true
       ],
-      donors: ["project", "getDonors", "setDonors", 0],
-      shadow_donors: ["project", "getShadowDonors", "setShadowDonors", 0]
+      donors: ['project', 'getDonors', 'setDonors', 0],
+      shadow_donors: ['project', 'getShadowDonors', 'setShadowDonors', 0]
     }),
     healthWorkers: {
-      get() {
+      get () {
         return this.national_level_deployment
           ? this.national_level_deployment.health_workers
           : null;
       },
-      set(value) {
+      set (value) {
         const coverage = {
           ...this.national_level_deployment,
           health_workers: value
@@ -418,23 +433,23 @@ export default {
       }
     },
     clients: {
-      get() {
+      get () {
         return this.national_level_deployment
           ? this.national_level_deployment.clients
           : null;
       },
-      set(value) {
+      set (value) {
         const coverage = { ...this.national_level_deployment, clients: value };
         this.national_level_deployment = coverage;
       }
     },
     facilities: {
-      get() {
+      get () {
         return this.national_level_deployment
           ? this.national_level_deployment.facilities
           : null;
       },
-      set(value) {
+      set (value) {
         const coverage = {
           ...this.national_level_deployment,
           facilities: value
@@ -442,17 +457,17 @@ export default {
         this.national_level_deployment = coverage;
       }
     },
-    isGlobalSelected() {
+    isGlobalSelected () {
       return this.country === process.env.GlobalCountryID;
     }
   },
   watch: {
-    isGlobalSelected() {
+    isGlobalSelected () {
       this.coverageType = 2;
     },
     implementing_partners: {
       immediate: false,
-      handler(ip, oldIp) {
+      handler (ip, oldIp) {
         if (oldIp && ip && ip.length > oldIp.length) {
           this.$nextTick(() => {
             if (
@@ -469,13 +484,13 @@ export default {
     }
   },
   methods: {
-    isLastAndExist(collection, index) {
+    isLastAndExist (collection, index) {
       return !!(collection.length - 1 === index && collection[index]);
     },
-    addDhi() {
+    addDhi () {
       this.platforms = [...this.platforms, null];
     },
-    rmDhi(index, platformId) {
+    rmDhi (index, platformId) {
       if (platformId) {
         const filtered = this.digitalHealthInterventions.filter(
           dhi => dhi.platform !== platformId
@@ -484,23 +499,23 @@ export default {
       }
       this.platforms = this.platforms.filter((p, i) => i !== index);
     },
-    updateImplmeentingPartners(value, index) {
+    updateImplmeentingPartners (value, index) {
       const ip = [...this.implementing_partners];
       ip[index] = value;
       this.implementing_partners = ip;
     },
-    addImplementingPartners() {
+    addImplementingPartners () {
       const index = this.implementing_partners.length - 1;
       if (this.isLastAndExist(this.implementing_partners, index)) {
         this.implementing_partners = [...this.implementing_partners, null];
       }
     },
-    rmImplementingPartners(index) {
+    rmImplementingPartners (index) {
       this.implementing_partners = this.implementing_partners.filter(
         (ip, i) => i !== index
       );
     },
-    async validate() {
+    async validate () {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate(),
@@ -508,7 +523,7 @@ export default {
           ? this.$refs.nationalLevelDeployment.validate()
           : this.$refs.subNationalLevelDeployment.validate()
       ]);
-      console.log("Implementation overview validations", validations);
+      console.log('Implementation overview validations', validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }

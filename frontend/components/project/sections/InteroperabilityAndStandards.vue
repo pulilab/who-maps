@@ -1,5 +1,8 @@
 <template>
-  <div id="interoperability" class="InteroperabilityAndStandards">
+  <div
+    id="interoperability"
+    class="InteroperabilityAndStandards"
+  >
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Interoperability &amp; Standards')"
@@ -56,15 +59,15 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { mapGettersActions } from "../../../utilities/form";
-import VeeValidationMixin from "../../mixins/VeeValidationMixin.js";
-import ProjectFieldsetMixin from "../../mixins/ProjectFieldsetMixin.js";
+import { mapGetters } from 'vuex';
+import { mapGettersActions } from '../../../utilities/form';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 
-import CollapsibleCard from "../CollapsibleCard";
-import InteroperabilityLinkComponent from "../InteroperabilityLinkComponent";
-import StandardsSelector from "../StandardsSelector";
-import Tooltip from "@/components/dashboard/Tooltip";
+import CollapsibleCard from '../CollapsibleCard';
+import InteroperabilityLinkComponent from '../InteroperabilityLinkComponent';
+import StandardsSelector from '../StandardsSelector';
+import Tooltip from '@/components/dashboard/Tooltip';
 
 export default {
   components: {
@@ -76,25 +79,25 @@ export default {
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGetters({
-      interopearilbityLinksStructure: "projects/getInteroperabilityLinks"
+      interopearilbityLinksStructure: 'projects/getInteroperabilityLinks'
     }),
     ...mapGettersActions({
       interoperability_links: [
-        "project",
-        "getInteroperabilityLinks",
-        "setInteroperabilityLinks",
+        'project',
+        'getInteroperabilityLinks',
+        'setInteroperabilityLinks',
         0
       ],
       interoperability_standards: [
-        "project",
-        "getInteroperabilityStandards",
-        "setInteroperabilityStandards",
+        'project',
+        'getInteroperabilityStandards',
+        'setInteroperabilityStandards',
         0
       ]
     })
   },
   methods: {
-    async validate() {
+    async validate () {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate(),

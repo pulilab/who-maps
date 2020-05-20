@@ -4,18 +4,27 @@
     class="CustomField"
   >
     <template slot="label">
-      <span v-if="!!prependFormat" class="pre-number">
+      <span
+        v-if="!!prependFormat"
+        class="pre-number"
+      >
         {{ prependFormat }}
       </span>
       {{ question }}
     </template>
-    <div v-show="isPrivate" class="PrivateBadge">
+    <div
+      v-show="isPrivate"
+      class="PrivateBadge"
+    >
       <el-tooltip
         effect="dark"
         placement="right"
         content="This field is hidden from public"
       >
-        <el-tag size="mini" type="danger">
+        <el-tag
+          size="mini"
+          type="danger"
+        >
           Private field
         </el-tag>
       </el-tooltip>
@@ -59,15 +68,19 @@
         popper-class="CustomFieldSelectorDropdown"
         class="CustomFieldSelector"
       >
-        <el-option v-for="opt in options" :key="opt" :value="opt" />
+        <el-option
+          v-for="opt in options"
+          :key="opt"
+          :value="opt"
+        />
       </el-select>
     </template>
   </el-form-item>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import VeeValidationMixin from "../mixins/VeeValidationMixin.js";
+import { mapGetters, mapActions } from 'vuex';
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
 
 export default {
   mixins: [VeeValidationMixin],
@@ -115,10 +128,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getCountryAnswerDetails: "project/getCountryAnswerDetails",
-      getDonorsAnswerDetails: "project/getDonorsAnswerDetails"
+      getCountryAnswerDetails: 'project/getCountryAnswerDetails',
+      getDonorsAnswerDetails: 'project/getDonorsAnswerDetails'
     }),
-    answer() {
+    answer () {
       const saved = !this.donorId
         ? this.getCountryAnswerDetails(this.id)
         : this.getDonorsAnswerDetails(this.id);
@@ -129,17 +142,17 @@ export default {
         }
       );
     },
-    value() {
+    value () {
       return this.answer.answer;
     },
     innerValue: {
-      get() {
+      get () {
         if (this.value && Array.isArray(this.value) && this.value.length > 0) {
           return this.type === 5 ? this.value : this.value[0];
         }
         return this.type === 5 ? [] : null;
       },
-      set(answer) {
+      set (answer) {
         answer = Array.isArray(answer) ? answer : [answer];
         if (!this.donorId) {
           this.setCountryAnswer({ ...this.answer, answer });
@@ -148,20 +161,20 @@ export default {
         }
       }
     },
-    localRules() {
+    localRules () {
       return {
         required: this.isRequired && this.doValidation,
         numeric: this.type === 2 && this.doValidation
       };
     },
-    prependFormat() {
-      return this.prependLabel ? `${this.prependLabel}. ` : "";
+    prependFormat () {
+      return this.prependLabel ? `${this.prependLabel}. ` : '';
     }
   },
   watch: {
     customCountryErrors: {
       immediate: true,
-      handler(errors) {
+      handler (errors) {
         if (!this.donorId) {
           this.findCountryError(errors);
         }
@@ -169,7 +182,7 @@ export default {
     },
     customDonorsErrors: {
       immediate: true,
-      handler(errors) {
+      handler (errors) {
         if (this.donorId) {
           this.findDonorError(errors);
         }
@@ -178,21 +191,21 @@ export default {
   },
   methods: {
     ...mapActions({
-      setCountryAnswer: "project/setCountryAnswer",
-      setDonorAnswer: "project/setDonorAnswer"
+      setCountryAnswer: 'project/setCountryAnswer',
+      setDonorAnswer: 'project/setDonorAnswer'
     }),
-    addErrorToBag(error) {
+    addErrorToBag (error) {
       const firsElement = error[Object.keys(error)[0]];
       const msg = firsElement ? firsElement[0] : null;
       if (msg) {
         this.errors.add({
-          field: "answer",
-          scope: "custom_question_" + this.id,
+          field: 'answer',
+          scope: 'custom_question_' + this.id,
           msg
         });
       }
     },
-    findCountryError(errors) {
+    findCountryError (errors) {
       if (errors && errors.length > this.index - 1) {
         const error = errors[this.index];
         if (error) {
@@ -200,7 +213,7 @@ export default {
         }
       }
     },
-    findDonorError(errors) {
+    findDonorError (errors) {
       const error = errors.find(
         e => e.index === this.index && e.donor_id === this.donorId
       );
@@ -208,7 +221,7 @@ export default {
         this.addErrorToBag(error.error);
       }
     },
-    validate() {
+    validate () {
       return this.$validator.validate();
     }
   }

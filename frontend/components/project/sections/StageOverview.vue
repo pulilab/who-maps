@@ -1,5 +1,8 @@
 <template>
-  <div id="stages" class="StageOverview">
+  <div
+    id="stages"
+    class="StageOverview"
+  >
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Document Completion of Project Stages') | translate"
@@ -22,7 +25,10 @@
               </translate>
             </p>
             <p class="info">
-              <fa icon="info-circle" class="info__icon" />
+              <fa
+                icon="info-circle"
+                class="info__icon"
+              />
               <span>
                 <translate key="research-project-info">
                   If your Digital Health project is focused on research
@@ -82,7 +88,9 @@
                 :span="24"
                 :class="`stage ${stage.checked ? 'active' : ''}`"
               >
-                <p class="stage__number">{{ idx + 1 }}.</p>
+                <p class="stage__number">
+                  {{ idx + 1 }}.
+                </p>
                 <el-checkbox
                   :value="stage.checked"
                   class="stage__checkbox"
@@ -99,12 +107,21 @@
                     placement="right"
                     popper-class="stages__tooltip"
                   >
-                    <fa icon="question-circle" class="info__icon" />
+                    <fa
+                      icon="question-circle"
+                      class="info__icon"
+                    />
                   </el-tooltip>
                 </el-checkbox>
                 <transition name="toggle">
-                  <div v-if="stage.checked" class="stage__form">
-                    <p v-if="stage.tooltip" class="info stage__info">
+                  <div
+                    v-if="stage.checked"
+                    class="stage__form"
+                  >
+                    <p
+                      v-if="stage.tooltip"
+                      class="info stage__info"
+                    >
                       <span>
                         <translate :key="`stage-tooltip-${idx + 1}`">
                           {{ stage.tooltip }}
@@ -164,7 +181,10 @@
               </translate>
             </template>
             <p class="info info--free-margin">
-              <fa icon="info-circle" class="info__icon" />
+              <fa
+                icon="info-circle"
+                class="info__icon"
+              />
               <span>
                 <translate key="research-project-info">
                   When your project activities have completed, you can indicated
@@ -195,7 +215,10 @@
                 data-vv-as="End date note"
                 :placeholder="$gettext('Add note (optional)') | translate"
               >
-                <i slot="prefix" class="el-input__icon el-icon-document" />
+                <i
+                  slot="prefix"
+                  class="el-input__icon el-icon-document"
+                />
               </el-input>
             </el-col>
           </custom-required-form-item>
@@ -206,13 +229,13 @@
 </template>
 
 <script>
-import { isAfter } from "date-fns";
-import VeeValidationMixin from "../../mixins/VeeValidationMixin.js";
-import ProjectFieldsetMixin from "../../mixins/ProjectFieldsetMixin.js";
-import CollapsibleCard from "../CollapsibleCard";
-import { mapGettersActions } from "../../../utilities/form";
-import { mapState, mapActions } from "vuex";
-import Tooltip from "@/components/dashboard/Tooltip";
+import { isAfter } from 'date-fns';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
+import CollapsibleCard from '../CollapsibleCard';
+import { mapGettersActions } from '../../../utilities/form';
+import { mapState, mapActions } from 'vuex';
+import Tooltip from '@/components/dashboard/Tooltip';
 
 export default {
   components: {
@@ -220,7 +243,7 @@ export default {
     Tooltip
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
-  data() {
+  data () {
     return {
       researchDisabled: false
     };
@@ -230,35 +253,35 @@ export default {
       stagesDraft: state => state.project.stagesDraft
     }),
     ...mapGettersActions({
-      start_date: ["project", "getStartDate", "setStartDate", 0],
-      end_date: ["project", "getEndDate", "setEndDate", 0],
-      end_date_note: ["project", "getEndDateNote", "setEndDateNote", 0],
-      research: ["project", "getResearch", "setResearch", 0]
+      start_date: ['project', 'getStartDate', 'setStartDate', 0],
+      end_date: ['project', 'getEndDate', 'setEndDate', 0],
+      end_date_note: ['project', 'getEndDateNote', 'setEndDateNote', 0],
+      research: ['project', 'getResearch', 'setResearch', 0]
     }),
-    endDateError() {
+    endDateError () {
       if (
         this.usePublishRules &&
         this.start_date &&
         this.end_date &&
         isAfter(this.start_date, this.end_date)
       ) {
-        return this.$gettext("End date must be after Start date");
+        return this.$gettext('End date must be after Start date');
       }
-      return "";
+      return '';
     },
-    stageDateError() {
+    stageDateError () {
       if (
         this.stagesDraft &&
         this.stagesDraft.filter(
-          i => i.checked && (i.date === "" || i.date === null)
+          i => i.checked && (i.date === '' || i.date === null)
         ).length > 0
       ) {
-        return this.$gettext("Stage date is required");
+        return this.$gettext('Stage date is required');
       }
-      return "";
+      return '';
     }
   },
-  mounted() {
+  mounted () {
     this.loadStagesDraft();
     // research custom logic
     if (this.research === undefined) {
@@ -272,31 +295,31 @@ export default {
   },
   methods: {
     ...mapActions({
-      loadStagesDraft: "project/loadStagesDraft"
+      loadStagesDraft: 'project/loadStagesDraft'
     }),
-    async validate() {
+    async validate () {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
         this.$validator.validate(),
-        Promise.resolve(this.endDateError === ""),
-        Promise.resolve(this.stageDateError === "")
+        Promise.resolve(this.endDateError === ''),
+        Promise.resolve(this.stageDateError === '')
       ]);
-      console.log("Project stages published validation", validations);
+      console.log('Project stages published validation', validations);
       return validations.reduce((a, c) => a && c, true);
     },
-    async validateDraft() {
+    async validateDraft () {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([
-        this.$validator.validate("start_date"),
-        this.$validator.validate("end_date"),
-        Promise.resolve(this.stageDateError === "")
+        this.$validator.validate('start_date'),
+        this.$validator.validate('end_date'),
+        Promise.resolve(this.stageDateError === '')
       ]);
-      console.log("Project stages draft validation", validations);
+      console.log('Project stages draft validation', validations);
       return validations.reduce((a, c) => a && c, true);
     },
-    updateStagesDraft(id, key, value) {
+    updateStagesDraft (id, key, value) {
       this.$store.dispatch(
-        "project/setStagesDraft",
+        'project/setStagesDraft',
         this.stagesDraft.map(item => {
           if (item.id === id) {
             return { ...item, [key]: value };

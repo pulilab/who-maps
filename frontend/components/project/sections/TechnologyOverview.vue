@@ -1,5 +1,8 @@
 <template>
-  <div id="technology" class="TechnologyOverview">
+  <div
+    id="technology"
+    class="TechnologyOverview"
+  >
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Technology overview') | translate"
@@ -105,12 +108,12 @@
 </template>
 
 <script>
-import VeeValidationMixin from "../../mixins/VeeValidationMixin.js";
-import ProjectFieldsetMixin from "../../mixins/ProjectFieldsetMixin.js";
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 
-import { mapGettersActions } from "../../../utilities/form";
-import CollapsibleCard from "../CollapsibleCard";
-import LicenseSelector from "../LicenseSelector";
+import { mapGettersActions } from '../../../utilities/form';
+import CollapsibleCard from '../CollapsibleCard';
+import LicenseSelector from '../LicenseSelector';
 
 export default {
   components: {
@@ -120,14 +123,14 @@ export default {
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGettersActions({
-      licenses: ["project", "getLicenses", "setLicenses", 0]
+      licenses: ['project', 'getLicenses', 'setLicenses', 0]
     })
   },
   methods: {
-    async validate() {
+    async validate () {
       this.$refs.collapsible.expandCard();
       const validations = await Promise.all([this.$validator.validate()]);
-      console.log("Technology overview validators", validations);
+      console.log('Technology overview validators', validations);
       return validations.reduce((a, c) => a && c, true);
     }
   }

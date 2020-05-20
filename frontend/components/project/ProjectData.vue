@@ -24,7 +24,10 @@
             :header="$gettext('Project country') | translate"
             :prepend-label="3"
           >
-            <country-item :id="project.country" :show-flag="false" />
+            <country-item
+              :id="project.country"
+              :show-flag="false"
+            />
           </simple-field>
 
           <simple-field
@@ -121,7 +124,10 @@
               "
               :header="$gettext('Coverage type')"
             >
-              <div v-show="isGlobalSelected" class="TypeField">
+              <div
+                v-show="isGlobalSelected"
+                class="TypeField"
+              >
                 <translate>International</translate>
               </div>
               <type-field
@@ -131,11 +137,17 @@
               />
             </simple-field>
             <simple-field v-if="isNationalLevelDeployment">
-              <div v-show="isGlobalSelected" slot="header">
+              <div
+                v-show="isGlobalSelected"
+                slot="header"
+              >
                 <fa icon="flag" />
                 <translate>International Level Deployment</translate>
               </div>
-              <div v-show="!isGlobalSelected" slot="header">
+              <div
+                v-show="!isGlobalSelected"
+                slot="header"
+              >
                 <fa icon="flag" />
                 <translate>National Level Deployment</translate>
               </div>
@@ -272,7 +284,7 @@
           :prepend-title="6"
         >
           <custom-readonly-field
-            v-for="(question, idx) in countryQuestions"
+            v-for="question in countryQuestions"
             :id="question.id"
             :key="question.id"
             :question="question.question"
@@ -281,7 +293,10 @@
           />
         </collapsible-card>
 
-        <div v-if="donors && donors.length > 0" id="donorcustom">
+        <div
+          v-if="donors && donors.length > 0"
+          id="donorcustom"
+        >
           <collapsible-card
             v-for="(donor, idx) in donors"
             :key="donor.id"
@@ -289,7 +304,7 @@
             :prepend-title="7 + idx"
           >
             <custom-readonly-field
-              v-for="(question, i) in donor.donor_questions"
+              v-for="question in donor.donor_questions"
               :id="question.id"
               :key="question.id"
               :question="question.question"
@@ -318,28 +333,28 @@
 </template>
 
 <script>
-import ProjectNavigation from "./ProjectNavigation";
-import CollapsibleCard from "./CollapsibleCard";
-import SimpleField from "./SimpleField";
-import OrganisationItem from "../common/OrganisationItem";
-import CountryItem from "../common/CountryItem";
-import TeamList from "./TeamList";
-import PlatformsList from "./PlatformsList";
-import HealthFocusAreasList from "../common/list/HealthFocusAreasList";
-import HealthSystemChallengesList from "../common/list/HealthSystemChallengesList";
-import HisBucketList from "../common/list/HisBucketList";
-import TypeField from "./TypeField";
-import CoverageField from "./CoverageField";
-import SubLevelCoverageField from "./SubLevelCoverageField";
-import LicensesList from "./LicensesList";
-import StandardsList from "./StandardsList";
-import InteroperabilityLinksList from "./InteroperabilityLinksList";
-import DonorsList from "../common/list/DonorsList";
-import CustomReadonlyField from "./CustomReadonlyField";
-import handleProjectUnpublish from "@/components/mixins/handleProjectUnpublish";
-import StageHistory from "@/components/project/sections/StageHistory";
+import ProjectNavigation from './ProjectNavigation';
+import CollapsibleCard from './CollapsibleCard';
+import SimpleField from './SimpleField';
+import OrganisationItem from '../common/OrganisationItem';
+import CountryItem from '../common/CountryItem';
+import TeamList from './TeamList';
+import PlatformsList from './PlatformsList';
+import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
+import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList';
+import HisBucketList from '../common/list/HisBucketList';
+import TypeField from './TypeField';
+import CoverageField from './CoverageField';
+import SubLevelCoverageField from './SubLevelCoverageField';
+import LicensesList from './LicensesList';
+import StandardsList from './StandardsList';
+import InteroperabilityLinksList from './InteroperabilityLinksList';
+import DonorsList from '../common/list/DonorsList';
+import CustomReadonlyField from './CustomReadonlyField';
+import handleProjectUnpublish from '@/components/mixins/handleProjectUnpublish';
+import StageHistory from '@/components/project/sections/StageHistory';
 
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -366,24 +381,24 @@ export default {
   mixins: [handleProjectUnpublish],
   computed: {
     ...mapGetters({
-      draft: "project/getProjectData",
-      published: "project/getPublished",
-      getCountryDetails: "countries/getCountryDetails",
-      getDonorDetails: "system/getDonorDetails"
+      draft: 'project/getProjectData',
+      published: 'project/getPublished',
+      getCountryDetails: 'countries/getCountryDetails',
+      getDonorDetails: 'system/getDonorDetails'
     }),
-    isGlobalSelected() {
+    isGlobalSelected () {
       return this.country.id === process.env.GlobalCountryID;
     },
-    route() {
-      return this.$route.name.split("__")[0];
+    route () {
+      return this.$route.name.split('__')[0];
     },
-    isDraft() {
-      return this.route === "organisation-projects-id";
+    isDraft () {
+      return this.route === 'organisation-projects-id';
     },
-    project() {
+    project () {
       return this.isDraft ? this.draft : this.published;
     },
-    isNationalLevelDeployment() {
+    isNationalLevelDeployment () {
       return (
         this.project.coverageType === 2 &&
         this.project.national_level_deployment &&
@@ -392,40 +407,40 @@ export default {
           this.project.national_level_deployment.health_workers)
       );
     },
-    country() {
+    country () {
       if (this.project.country) {
         return this.getCountryDetails(this.project.country);
       }
       return null;
     },
-    countryQuestions() {
+    countryQuestions () {
       if (this.country) {
         return this.country.country_questions;
       }
       return [];
     },
-    donors() {
+    donors () {
       return this.project.donors
         .map(d => this.getDonorDetails(d))
         .filter(d => d.donor_questions && d.donor_questions.length > 0);
     },
-    coverageList() {
-      return ["", this.$gettext("Sub National"), this.$gettext("National")];
+    coverageList () {
+      return ['', this.$gettext('Sub National'), this.$gettext('National')];
     },
-    investedList() {
+    investedList () {
       return [
-        this.$gettext("No, they have not yet contributed"),
-        this.$gettext("Yes, they are contributing in-kind people or time"),
+        this.$gettext('No, they have not yet contributed'),
+        this.$gettext('Yes, they are contributing in-kind people or time'),
         this.$gettext(
-          "Yes, there is a financial contribution through MOH budget"
+          'Yes, there is a financial contribution through MOH budget'
         ),
-        this.$gettext("Yes, MOH is fully funding the project")
+        this.$gettext('Yes, MOH is fully funding the project')
       ];
     }
   },
   methods: {
-    customFieldsName(name) {
-      return this.$gettext("{name} custom fields", { name });
+    customFieldsName (name) {
+      return this.$gettext('{name} custom fields', { name });
     }
   }
 };
