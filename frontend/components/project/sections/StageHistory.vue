@@ -1,18 +1,12 @@
 <template>
-  <div
-    id="stages"
-    class="graph"
-  >
+  <div id="stages" class="graph">
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Completion of Project stages') | translate"
       :prepend-title="3"
     >
       <c-stages v-if="stages" />
-      <div
-        v-else
-        class="NoData"
-      >
+      <div v-else class="NoData">
         <div class="SimpleField">
           <div class="Header">
             <translate>
@@ -26,8 +20,8 @@
 </template>
 
 <script>
-import CollapsibleCard from '../CollapsibleCard';
-import cStages from '@/components/common/chart/cStages';
+import CollapsibleCard from "../CollapsibleCard";
+import cStages from "@/components/common/chart/cStages";
 
 export default {
   components: {
@@ -35,21 +29,21 @@ export default {
     cStages
   },
   computed: {
-    stages () {
-      return this.$store.getters['project/getStages'];
+    stages() {
+      return this.$store.getters["project/getStages"];
     }
   }
 };
 </script>
 
-<style lang="less" >
-  .graph {
-    // outside modifiers
-    .CollapsibleCard .ContentContainer{
-      padding: 0;
-    }
+<style lang="less">
+.graph {
+  // outside modifiers
+  .CollapsibleCard .ContentContainer {
+    padding: 0;
   }
-  .NoData {
-      padding: 22px 74px 0px 40px
-  }
+}
+.NoData {
+  padding: 22px 74px 0px 40px;
+}
 </style>

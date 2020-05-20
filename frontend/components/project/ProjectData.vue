@@ -41,7 +41,6 @@
             "
             :prepend-label="5"
           />
-
           <el-row>
             <el-col :span="12">
               <simple-field
@@ -85,7 +84,7 @@
                 'Software and related Digital Health Interventions (DHI)'
               ) | translate
             "
-            :prepend-label="1"
+            :prepend-label="10"
           >
             <platforms-list
               :platforms="project.platforms"
@@ -95,21 +94,21 @@
 
           <simple-field
             :header="$gettext('Health focus area(s)') | translate"
-            :prepend-label="2"
+            :prepend-label="11"
           >
             <health-focus-areas-list :value="project.health_focus_areas" />
           </simple-field>
 
           <simple-field
             :header="$gettext('Health System Challenges (HSC)') | translate"
-            :prepend-label="3"
+            :prepend-label="12"
           >
             <health-system-challenges-list :value="project.hsc_challenges" />
           </simple-field>
 
           <simple-field
             :header="$gettext('Health Information System (HIS)') | translate"
-            :prepend-label="4"
+            :prepend-label="13"
           >
             <his-bucket-list :value="project.his_bucket" />
           </simple-field>
@@ -121,7 +120,6 @@
                   (project.coverage && project.coverage.length)
               "
               :header="$gettext('Coverage type')"
-              :prepend-label="5"
             >
               <div v-show="isGlobalSelected" class="TypeField">
                 <translate>International</translate>
@@ -132,7 +130,7 @@
                 :list="coverageList"
               />
             </simple-field>
-            <simple-field v-if="isNationalLevelDeployment" :prepend-label="5">
+            <simple-field v-if="isNationalLevelDeployment">
               <div v-show="isGlobalSelected" slot="header">
                 <fa icon="flag" />
                 <translate>International Level Deployment</translate>
@@ -159,7 +157,7 @@
                 'Has the government financially invested in the project?'
               ) | translate
             "
-            :prepend-label="6"
+            :prepend-label="14"
           >
             <type-field
               :value="project.government_investor"
@@ -169,7 +167,7 @@
 
           <simple-field
             :header="$gettext('Implementing partner(s)') | translate"
-            :prepend-label="7"
+            :prepend-label="15"
           >
             <ul>
               <li
@@ -183,7 +181,7 @@
 
           <simple-field
             :header="$gettext('Investor(s)') | translate"
-            :prepend-label="8"
+            :prepend-label="16"
           >
             <donors-list :value="project.donors" />
           </simple-field>
@@ -201,7 +199,7 @@
           <simple-field
             :content="project.implementation_dates"
             :header="$gettext('Technology deployment date') | translate"
-            :prepend-label="1"
+            :prepend-label="17"
             date
           />
 
@@ -209,7 +207,7 @@
             :header="
               $gettext('Under what license is the project governed') | translate
             "
-            :prepend-label="2"
+            :prepend-label="18"
           >
             <licenses-list :value="project.licenses" />
           </simple-field>
@@ -219,21 +217,21 @@
             :header="
               $gettext('Code documentation or download link') | translate
             "
-            :prepend-label="3"
+            :prepend-label="19"
             link
           />
 
           <simple-field
             :content="project.mobile_application"
             :header="$gettext('Link to the application') | translate"
-            :prepend-label="4"
+            :prepend-label="20"
             link
           />
 
           <simple-field
             :content="project.wiki"
             :header="$gettext('Link to wiki or project website') | translate"
-            :prepend-label="5"
+            :prepend-label="21"
             link
           />
         </collapsible-card>
@@ -248,7 +246,7 @@
               $gettext('What other system do you interoperate with ?')
                 | translate
             "
-            :prepend-label="1"
+            :prepend-label="22"
           >
             <interoperability-links-list
               :value="project.interoperability_links"
@@ -261,7 +259,7 @@
                 'What data standards does your digital health project use?'
               ) | translate
             "
-            :prepend-label="2"
+            :prepend-label="23"
           >
             <standards-list :value="project.interoperability_standards" />
           </simple-field>
@@ -280,7 +278,6 @@
             :question="question.question"
             :is-draft="isDraft"
             :type="question.type"
-            :prepend-label="idx + 1"
           />
         </collapsible-card>
 
@@ -299,7 +296,6 @@
               :is-draft="isDraft"
               :type="question.type"
               :donor-id="donor.id"
-              :prepend-label="i + 1"
             />
           </collapsible-card>
         </div>
