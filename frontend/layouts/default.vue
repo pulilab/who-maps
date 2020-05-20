@@ -6,6 +6,7 @@
     <nuxt />
     <dha-footer />
     <django-feedback />
+    <cookie-consent />
   </div>
 </template>
 
@@ -16,6 +17,7 @@ import TopBar from '../components/common/TopBar.vue';
 import ActionBar from '../components/common/ActionBar.vue';
 import DialogsContainer from '../components/dialogs/DialogsContainer.vue';
 import DjangoFeedback from '../components/DjangoFeedback.vue';
+import CookieConsent from '@/components/common/CookieConsent';
 
 export default {
   components: {
@@ -23,7 +25,8 @@ export default {
     TopBar,
     ActionBar,
     DialogsContainer,
-    DjangoFeedback
+    DjangoFeedback,
+    CookieConsent
   },
   mixins: [HeadMixin],
   computed: {

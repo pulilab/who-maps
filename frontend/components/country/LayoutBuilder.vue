@@ -2,7 +2,12 @@
   <div>
     <!-- default -->
     <default
-      v-show="image === false && description === false && gdhi === false && documents === false"
+      v-show="
+        image === false &&
+          description === false &&
+          gdhi === false &&
+          documents === false
+      "
     >
       <template v-slot:left>
         <w-default />
@@ -14,8 +19,13 @@
 
     <!-- description (only) -->
     <default
-      v-show="image === false && description === true && gdhi === false && documents === false"
-      :gutter="20"
+      v-show="
+        image === false &&
+          description === true &&
+          gdhi === false &&
+          documents === false
+      "
+      :gutter="30"
       classes="pb-0"
     >
       <template v-slot:left>
@@ -27,9 +37,13 @@
     </default>
 
     <default
-      v-show="image === false && description === true && gdhi === false && documents === false"
+      v-show="
+        image === false &&
+          description === true &&
+          gdhi === false &&
+          documents === false
+      "
       inverse
-      classes="pt-20"
     >
       <template v-slot:left>
         <w-default />
@@ -41,10 +55,15 @@
 
     <!-- image (only) -->
     <default
-      v-show="image === true && description === false && gdhi === false && documents === false"
+      v-show="
+        image === true &&
+          description === false &&
+          gdhi === false &&
+          documents === false
+      "
       inverse
       :cols="[10, 14]"
-      :gutter="20"
+      :gutter="30"
     >
       <template v-slot:left>
         <w-default vertical />
@@ -56,8 +75,13 @@
 
     <!-- image, description (only) -->
     <default
-      v-show="image === true && description === true && gdhi === false && documents === false"
-      :gutter="20"
+      v-show="
+        image === true &&
+          description === true &&
+          gdhi === false &&
+          documents === false
+      "
+      :gutter="30"
     >
       <template v-slot:lefttop>
         <w-description :description="data.cover_text" />
@@ -75,8 +99,13 @@
 
     <!-- image, description, stats (complete or partial) (only) -->
     <default
-      v-show="image === true && description === true && gdhi === true && documents === false"
-      :gutter="20"
+      v-show="
+        image === true &&
+          description === true &&
+          gdhi === true &&
+          documents === false
+      "
+      :gutter="30"
     >
       <template v-slot:lefttop>
         <w-description :description="data.cover_text" />
@@ -95,8 +124,13 @@
 
     <!-- image, description, documents (only) -->
     <default
-      v-show="image === true && description === true && gdhi === false && documents === true"
-      :gutter="20"
+      v-show="
+        image === true &&
+          description === true &&
+          gdhi === false &&
+          documents === true
+      "
+      :gutter="30"
     >
       <template v-slot:lefttop>
         <w-description :description="data.cover_text" />
@@ -111,10 +145,18 @@
 
     <!-- description, image, stats (complete or partial), documents -->
     <three-columns
-      v-show="image === true && description === true && gdhi === true && documents === true"
+      v-show="
+        image === true &&
+          description === true &&
+          gdhi === true &&
+          documents === true
+      "
     >
       <template v-slot:lefttop>
-        <w-description :description="data.cover_text" />
+        <w-description
+          single
+          :description="data.cover_text"
+        />
       </template>
       <template v-slot:leftbottom>
         <w-image :url="data.cover_url" />
@@ -133,10 +175,18 @@
 
     <!-- description, stats (complete or partial), documents -->
     <three-columns
-      v-show="image === false && description === true && gdhi === true && documents === true"
+      v-show="
+        image === false &&
+          description === true &&
+          gdhi === true &&
+          documents === true
+      "
     >
       <template v-slot:lefttop>
-        <w-description :description="data.cover_text" />
+        <w-description
+          single
+          :description="data.cover_text"
+        />
       </template>
       <template v-slot:leftbottom>
         <img :src="default2">
@@ -155,7 +205,12 @@
 
     <!-- image, stats (complete or partial), documents -->
     <three-columns
-      v-show="image === true && description === false && gdhi === true && documents === true"
+      v-show="
+        image === true &&
+          description === false &&
+          gdhi === true &&
+          documents === true
+      "
     >
       <template v-slot:lefttop>
         <img :src="data.cover_url">
@@ -177,7 +232,12 @@
 
     <!-- stats (complete or partial), documents -->
     <three-columns
-      v-show="image === false && description === false && gdhi === true && documents === true"
+      v-show="
+        image === false &&
+          description === false &&
+          gdhi === true &&
+          documents === true
+      "
     >
       <template v-slot:left>
         <w-default
@@ -199,8 +259,13 @@
 
     <!-- stats (complete or partial) only -->
     <default
-      v-show="image === false && description === false && gdhi === true && documents === false"
-      :gutter="20"
+      v-show="
+        image === false &&
+          description === false &&
+          gdhi === true &&
+          documents === false
+      "
+      :gutter="30"
     >
       <template v-slot:left>
         <w-default
@@ -219,8 +284,13 @@
 
     <!-- documents only -->
     <default
-      v-show="image === false && description === false && gdhi === false && documents === true"
-      :gutter="20"
+      v-show="
+        image === false &&
+          description === false &&
+          gdhi === false &&
+          documents === true
+      "
+      :gutter="30"
     >
       <template v-slot:left>
         <w-default
@@ -235,8 +305,13 @@
 
     <!-- image and stats only -->
     <default
-      v-show="image === true && description === false && gdhi === true && documents === false"
-      :gutter="20"
+      v-show="
+        image === true &&
+          description === false &&
+          gdhi === true &&
+          documents === false
+      "
+      :gutter="30"
     >
       <template v-slot:left>
         <img :src="data.cover_url">
@@ -252,8 +327,13 @@
 
     <!-- description and stats only -->
     <default
-      v-show="image === false && description === true && gdhi === true && documents === false"
-      :gutter="20"
+      v-show="
+        image === false &&
+          description === true &&
+          gdhi === true &&
+          documents === false
+      "
+      :gutter="30"
       :cols="[10, 14]"
     >
       <template v-slot:left>
@@ -443,9 +523,9 @@ export default {
       padding-bottom: 0 !important;
     }
 
-    &.pt-20 {
-      padding-top: 20px !important;
-    }
+    // &.pt-20 {
+    //   padding-top: 20px !important;
+    // }
   }
 
   .fill {
@@ -468,6 +548,10 @@ export default {
       line-height: 21px;
       color: @colorTextPrimary;
       margin: 0 0 20px;
+      &.special {
+        line-height: 25px;
+        font-size: @fontSizeMedium;
+      }
     }
 
     h1,

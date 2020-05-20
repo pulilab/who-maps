@@ -1,8 +1,6 @@
 <template>
   <div class="ProjectData">
-    <el-row
-      type="flex"
-    >
+    <el-row type="flex">
       <el-col :span="18">
         <collapsible-card
           id="general"
@@ -26,10 +24,7 @@
             :header="$gettext('Project country') | translate"
             :prepend-label="3"
           >
-            <country-item
-              :id="project.country"
-              :show-flag="false"
-            />
+            <country-item :id="project.country" :show-flag="false" />
           </simple-field>
 
           <simple-field
@@ -40,7 +35,10 @@
 
           <simple-field
             :content="project.implementation_overview"
-            :header="$gettext('Overview of the digital health implementation') | translate"
+            :header="
+              $gettext('Overview of the digital health implementation')
+                | translate
+            "
             :prepend-label="5"
           />
 
@@ -82,7 +80,11 @@
           :prepend-title="2"
         >
           <simple-field
-            :header="$gettext('Software and related Digital Health Interventions (DHI)') | translate"
+            :header="
+              $gettext(
+                'Software and related Digital Health Interventions (DHI)'
+              ) | translate
+            "
             :prepend-label="1"
           >
             <platforms-list
@@ -114,20 +116,28 @@
 
           <div class="GrayArea">
             <simple-field
-              v-if="isNationalLevelDeployment || (project.coverage && project.coverage.length)"
+              v-if="
+                isNationalLevelDeployment ||
+                  (project.coverage && project.coverage.length)
+              "
               :header="$gettext('Coverage type')"
               :prepend-label="5"
             >
+              <div v-show="isGlobalSelected" class="TypeField">
+                <translate>International</translate>
+              </div>
               <type-field
+                v-show="!isGlobalSelected"
                 :value="project.coverageType"
                 :list="coverageList"
               />
             </simple-field>
-            <simple-field
-              v-if="isNationalLevelDeployment"
-              :prepend-label="5"
-            >
-              <div slot="header">
+            <simple-field v-if="isNationalLevelDeployment" :prepend-label="5">
+              <div v-show="isGlobalSelected" slot="header">
+                <fa icon="flag" />
+                <translate>International Level Deployment</translate>
+              </div>
+              <div v-show="!isGlobalSelected" slot="header">
                 <fa icon="flag" />
                 <translate>National Level Deployment</translate>
               </div>
@@ -144,7 +154,11 @@
           </div>
 
           <simple-field
-            :header="$gettext('Has the government financially invested in the project?') | translate"
+            :header="
+              $gettext(
+                'Has the government financially invested in the project?'
+              ) | translate
+            "
             :prepend-label="6"
           >
             <type-field
@@ -192,7 +206,9 @@
           />
 
           <simple-field
-            :header="$gettext('Under what license is the project governed') | translate"
+            :header="
+              $gettext('Under what license is the project governed') | translate
+            "
             :prepend-label="2"
           >
             <licenses-list :value="project.licenses" />
@@ -200,7 +216,9 @@
 
           <simple-field
             :content="project.repository"
-            :header="$gettext('Code documentation or download link') | translate"
+            :header="
+              $gettext('Code documentation or download link') | translate
+            "
             :prepend-label="3"
             link
           />
@@ -222,18 +240,27 @@
 
         <collapsible-card
           id="interoperability"
-          :title="$gettext('Interoperability &amp; standards') "
+          :title="$gettext('Interoperability &amp; standards')"
           :prepend-title="5"
         >
           <simple-field
-            :header="$gettext('What other system do you interoperate with ?') | translate"
+            :header="
+              $gettext('What other system do you interoperate with ?')
+                | translate
+            "
             :prepend-label="1"
           >
-            <interoperability-links-list :value="project.interoperability_links" />
+            <interoperability-links-list
+              :value="project.interoperability_links"
+            />
           </simple-field>
 
           <simple-field
-            :header="$gettext('What data standards does your digital health project use?') | translate"
+            :header="
+              $gettext(
+                'What data standards does your digital health project use?'
+              ) | translate
+            "
             :prepend-label="2"
           >
             <standards-list :value="project.interoperability_standards" />
@@ -257,10 +284,7 @@
           />
         </collapsible-card>
 
-        <div
-          v-if="donors && donors.length >0"
-          id="donorcustom"
-        >
+        <div v-if="donors && donors.length > 0" id="donorcustom">
           <collapsible-card
             v-for="(donor, idx) in donors"
             :key="donor.id"
@@ -282,7 +306,15 @@
       </el-col>
       <el-col :span="6">
         <project-navigation
-          @handleClickUnPublish="handleClickUnPublish({ name: 'organisation-projects-id-edit', params: { ...$route.params } }, $route.params.id)"
+          @handleClickUnPublish="
+            handleClickUnPublish(
+              {
+                name: 'organisation-projects-id-edit',
+                params: { ...$route.params }
+              },
+              $route.params.id
+            )
+          "
         />
       </el-col>
     </el-row>
@@ -290,28 +322,28 @@
 </template>
 
 <script>
-import ProjectNavigation from './ProjectNavigation';
-import CollapsibleCard from './CollapsibleCard';
-import SimpleField from './SimpleField';
-import OrganisationItem from '../common/OrganisationItem';
-import CountryItem from '../common/CountryItem';
-import TeamList from './TeamList';
-import PlatformsList from './PlatformsList';
-import HealthFocusAreasList from '../common/list/HealthFocusAreasList';
-import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList';
-import HisBucketList from '../common/list/HisBucketList';
-import TypeField from './TypeField';
-import CoverageField from './CoverageField';
-import SubLevelCoverageField from './SubLevelCoverageField';
-import LicensesList from './LicensesList';
-import StandardsList from './StandardsList';
-import InteroperabilityLinksList from './InteroperabilityLinksList';
-import DonorsList from '../common/list/DonorsList';
-import CustomReadonlyField from './CustomReadonlyField';
-import handleProjectUnpublish from '@/components/mixins/handleProjectUnpublish';
-import StageHistory from '@/components/project/sections/StageHistory';
+import ProjectNavigation from "./ProjectNavigation";
+import CollapsibleCard from "./CollapsibleCard";
+import SimpleField from "./SimpleField";
+import OrganisationItem from "../common/OrganisationItem";
+import CountryItem from "../common/CountryItem";
+import TeamList from "./TeamList";
+import PlatformsList from "./PlatformsList";
+import HealthFocusAreasList from "../common/list/HealthFocusAreasList";
+import HealthSystemChallengesList from "../common/list/HealthSystemChallengesList";
+import HisBucketList from "../common/list/HisBucketList";
+import TypeField from "./TypeField";
+import CoverageField from "./CoverageField";
+import SubLevelCoverageField from "./SubLevelCoverageField";
+import LicensesList from "./LicensesList";
+import StandardsList from "./StandardsList";
+import InteroperabilityLinksList from "./InteroperabilityLinksList";
+import DonorsList from "../common/list/DonorsList";
+import CustomReadonlyField from "./CustomReadonlyField";
+import handleProjectUnpublish from "@/components/mixins/handleProjectUnpublish";
+import StageHistory from "@/components/project/sections/StageHistory";
 
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -338,189 +370,201 @@ export default {
   mixins: [handleProjectUnpublish],
   computed: {
     ...mapGetters({
-      draft: 'project/getProjectData',
-      published: 'project/getPublished',
-      getCountryDetails: 'countries/getCountryDetails',
-      getDonorDetails: 'system/getDonorDetails'
+      draft: "project/getProjectData",
+      published: "project/getPublished",
+      getCountryDetails: "countries/getCountryDetails",
+      getDonorDetails: "system/getDonorDetails"
     }),
-    route () {
-      return this.$route.name.split('__')[0];
+    isGlobalSelected() {
+      return this.country.id === process.env.GlobalCountryID;
     },
-    isDraft () {
-      return this.route === 'organisation-projects-id';
+    route() {
+      return this.$route.name.split("__")[0];
     },
-    project () {
+    isDraft() {
+      return this.route === "organisation-projects-id";
+    },
+    project() {
       return this.isDraft ? this.draft : this.published;
     },
-    isNationalLevelDeployment () {
-      return this.project.coverageType === 2 && this.project.national_level_deployment && (this.project.national_level_deployment.clients ||
-        this.project.national_level_deployment.facilities || this.project.national_level_deployment.health_workers);
+    isNationalLevelDeployment() {
+      return (
+        this.project.coverageType === 2 &&
+        this.project.national_level_deployment &&
+        (this.project.national_level_deployment.clients ||
+          this.project.national_level_deployment.facilities ||
+          this.project.national_level_deployment.health_workers)
+      );
     },
-    country () {
+    country() {
       if (this.project.country) {
         return this.getCountryDetails(this.project.country);
       }
       return null;
     },
-    countryQuestions () {
+    countryQuestions() {
       if (this.country) {
         return this.country.country_questions;
       }
       return [];
     },
-    donors () {
-      return this.project.donors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
+    donors() {
+      return this.project.donors
+        .map(d => this.getDonorDetails(d))
+        .filter(d => d.donor_questions && d.donor_questions.length > 0);
     },
-    coverageList () {
-      return ['', this.$gettext('Sub National'), this.$gettext('National')];
+    coverageList() {
+      return ["", this.$gettext("Sub National"), this.$gettext("National")];
     },
-    investedList () {
+    investedList() {
       return [
-        this.$gettext('No, they have not yet contributed'),
-        this.$gettext('Yes, they are contributing in-kind people or time'),
-        this.$gettext('Yes, there is a financial contribution through MOH budget'),
-        this.$gettext('Yes, MOH is fully funding the project')
+        this.$gettext("No, they have not yet contributed"),
+        this.$gettext("Yes, they are contributing in-kind people or time"),
+        this.$gettext(
+          "Yes, there is a financial contribution through MOH budget"
+        ),
+        this.$gettext("Yes, MOH is fully funding the project")
       ];
     }
   },
   methods: {
-    customFieldsName (name) {
-      return this.$gettext('{name} custom fields', { name });
+    customFieldsName(name) {
+      return this.$gettext("{name} custom fields", { name });
     }
   }
 };
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .ProjectData {
-    .limitPageWidth();
+.ProjectData {
+  .limitPageWidth();
 
-    .Loader {
-      display: block;
-      margin: 0 auto 80px;
-    }
+  .Loader {
+    display: block;
+    margin: 0 auto 80px;
+  }
 
-    > .el-row {
-      > .el-col {
-        // form fieldsets
-        &:first-child {
-          width: calc(100% - @projectAsideNavWidth - 20px);
-          margin-right: 20px;
-        }
-
-        // aside navigation
-        &:last-child {
-          width: @projectAsideNavWidth;
-        }
-      }
-    }
-
-    .ContentContainer {
-      padding-bottom: 20px;
-    }
-
-    .CollapsibleCard {
-      .SimpleField {
-        margin-bottom: 40px;
-        font-size: @fontSizeBase;
-        line-height: 20px;
-
-        .Header {
-          margin-bottom: 10px;
-          font-size: @fontSizeMedium;
-          font-weight: 700;
-        }
-
-        .Content {
-          ul {
-            li {
-              .svg-inline--fa {
-                display: none;
-              }
-            }
-          }
-        }
-
-        .SubLevelItem {
-          box-sizing: border-box;
-          width: 100%;
-          margin-top: 10px;
-          margin-bottom: 10px;
-          margin-left: 3px;
-          padding-left: 30px;
-          border-left: 5px solid @colorGrayLight;
-
-          .SimpleField {
-            margin: 0 !important;
-
-            .Header {
-              font-size: @fontSizeBase !important;
-            }
-          }
-
-          .CoverageField {
-            .SimpleField {
-              margin: 20px 0 0 !important;
-            }
-          }
-        }
-
-        .CountryItem {
-          .CountryFlag {
-            display: none;
-          }
-
-          .CountryName {
-            margin: 0;
-            font-size: @fontSizeBase;
-            font-weight: 400;
-          }
-        }
-
-        .PlatformList {
-          .Header {
-            font-size: @fontSizeBase;
-          }
-
-          .Content {
-            .SimpleField {
-              margin-top: 20px;
-            }
-          }
-        }
-
-        .StandardsList {
-          li {
-            a {
-              display: block;
-              margin: 5px 0 20px;
-              color: @colorBrandPrimary;
-              text-decoration: none;
-              transition: @transitionAll;
-
-              &:hover {
-                color: @colorBrandPrimaryLight;
-                text-decoration: underline;
-              }
-            }
-
-            &:last-child {
-              a {
-                margin-bottom: 0;
-              }
-            }
-          }
-        }
+  > .el-row {
+    > .el-col {
+      // form fieldsets
+      &:first-child {
+        width: calc(100% - @projectAsideNavWidth - 20px);
+        margin-right: 20px;
       }
 
-      .GrayArea {
-        .svg-inline--fa {
-          margin-right: 8px;
-        }
+      // aside navigation
+      &:last-child {
+        width: @projectAsideNavWidth;
       }
     }
   }
+
+  .ContentContainer {
+    padding-bottom: 20px;
+  }
+
+  .CollapsibleCard {
+    .SimpleField {
+      margin-bottom: 40px;
+      font-size: @fontSizeBase;
+      line-height: 20px;
+
+      .Header {
+        margin-bottom: 10px;
+        font-size: @fontSizeMedium;
+        font-weight: 700;
+      }
+
+      .Content {
+        ul {
+          li {
+            .svg-inline--fa {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .SubLevelItem {
+        box-sizing: border-box;
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 3px;
+        padding-left: 30px;
+        border-left: 5px solid @colorGrayLight;
+
+        .SimpleField {
+          margin: 0 !important;
+
+          .Header {
+            font-size: @fontSizeBase !important;
+          }
+        }
+
+        .CoverageField {
+          .SimpleField {
+            margin: 20px 0 0 !important;
+          }
+        }
+      }
+
+      .CountryItem {
+        .CountryFlag {
+          display: none;
+        }
+
+        .CountryName {
+          margin: 0;
+          font-size: @fontSizeBase;
+          font-weight: 400;
+        }
+      }
+
+      .PlatformList {
+        .Header {
+          font-size: @fontSizeBase;
+        }
+
+        .Content {
+          .SimpleField {
+            margin-top: 20px;
+          }
+        }
+      }
+
+      .StandardsList {
+        li {
+          a {
+            display: block;
+            margin: 5px 0 20px;
+            color: @colorBrandPrimary;
+            text-decoration: none;
+            transition: @transitionAll;
+
+            &:hover {
+              color: @colorBrandPrimaryLight;
+              text-decoration: underline;
+            }
+          }
+
+          &:last-child {
+            a {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+
+    .GrayArea {
+      .svg-inline--fa {
+        margin-right: 8px;
+      }
+    }
+  }
+}
 </style>

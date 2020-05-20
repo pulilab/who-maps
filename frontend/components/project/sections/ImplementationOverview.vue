@@ -59,13 +59,6 @@
           <translate key="platforms">
             Add information about your Digital Health program activies
           </translate>
-          <form-hint>
-            <translate
-              key="platforms-hint"
-            >
-              Include all software that is part of your project. If you cannot find your software listed in the options, send an email to digitalhealthatlas@gmail.com with the software name.
-            </translate>
-          </form-hint>
         </template>
 
         <custom-required-form-item
@@ -83,6 +76,7 @@
             >
               What are the names of the software included in the deployment?
             </translate>
+            <tooltip :text="$gettext('Include all software that is part of your project. If you cannot find your software listed in the options, you can add it by start typing the software name in the field, and then select ‘Add as new’.  which will add the software to the inventory.') | translate" />
           </template>
 
           <el-col :span="16">
@@ -109,9 +103,13 @@
                 >
                   What Digital Health Intervention(s) are included in this software?
                 </translate>
-                <form-hint>
-                  <!-- This is going to be a link to a pdf / webpage -->
-                </form-hint>
+                <a
+                  class="TooltipLink"
+                  target="_blank"
+                  href="https://apps.who.int/iris/bitstream/handle/10665/260480/WHO-RHR-18.06-eng.pdf;jsessionid=50B83CAF6ACF46453B7D6BAB9672EB77?sequence=1)"
+                >
+                  <fa icon="question-circle" />
+                </a>
               </template>
               <digital-health-interventions-selector
                 v-validate="rules.strategies"
@@ -166,13 +164,7 @@
             >
               What level of coverage does your project have (Sub-national, National)
             </translate>
-            <form-hint>
-              <translate
-                key="coverage-type-hint"
-              >
-                Subnational may include district, regional, provincial, county levels.
-              </translate>
-            </form-hint>
+            <tooltip :text="$gettext('Subnational may include district, regional, provincial, county levels.') | translate" />
           </template>
 
           <el-radio-group
@@ -321,13 +313,7 @@
           <translate key="donors">
             Who are your investment partners?
           </translate>
-          <form-hint>
-            <translate
-              key="donors-hint"
-            >
-              Investment partners can include those contributing funds, human resources or in-kind support.
-            </translate>
-          </form-hint>
+          <tooltip :text="$gettext('Investment partners can include those contributing funds, human resources or in-kind support.') | translate" />
         </template>
 
         <donor-selector
@@ -355,7 +341,7 @@ import SubNationalLevelDeployment from '../SubNationalLevelDeployment';
 import AddRmButtons from '../AddRmButtons';
 import CoverageFieldset from '../CoverageFieldset';
 import DonorSelector from '../DonorSelector';
-import FormHint from '../FormHint';
+import Tooltip from '@/components/dashboard/Tooltip';
 
 import { mapGettersActions } from '../../../utilities/form';
 
@@ -371,7 +357,7 @@ export default {
     AddRmButtons,
     CoverageFieldset,
     DonorSelector,
-    FormHint
+    Tooltip
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
 
@@ -533,6 +519,12 @@ export default {
 @import "~assets/style/mixins.less";
 
 .ImplementationOverview {
+  .TooltipLink {
+    color: #9B9B9B;
+    &:hover {
+      color: #b4b4b4;
+    }
+  }
   .DigitalHealthIntervention {
     margin-top: 30px;
   }

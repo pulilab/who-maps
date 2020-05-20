@@ -8,7 +8,19 @@
       :title="$gettext('Completion of Project stages') | translate"
       :prepend-title="3"
     >
-      <c-stages />
+      <c-stages v-if="stages" />
+      <div
+        v-else
+        class="NoData"
+      >
+        <div class="SimpleField">
+          <div class="Header">
+            <translate>
+              No Data available
+            </translate>
+          </div>
+        </div>
+      </div>
     </collapsible-card>
   </div>
 </template>
@@ -21,6 +33,11 @@ export default {
   components: {
     CollapsibleCard,
     cStages
+  },
+  computed: {
+    stages () {
+      return this.$store.getters['project/getStages'];
+    }
   }
 };
 </script>
@@ -31,5 +48,8 @@ export default {
     .CollapsibleCard .ContentContainer{
       padding: 0;
     }
+  }
+  .NoData {
+      padding: 22px 74px 0px 40px
   }
 </style>

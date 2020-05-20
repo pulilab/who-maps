@@ -152,6 +152,10 @@
                 :class="['Item', {'Selected': c.selected}]"
                 @click="c.selected = !c.selected"
               >
+                <fa
+                  v-if="c.private"
+                  icon="lock"
+                />
                 <fa icon="check" />
                 {{ c.label }}
               </li>

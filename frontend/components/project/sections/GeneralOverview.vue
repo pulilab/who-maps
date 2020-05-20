@@ -25,12 +25,14 @@
             </translate>
           </form-hint>
         </template>
-        <character-count-input
-          v-model="name"
+        <character-count-input-standalone
           v-validate="rules.name"
           :rules="rules.name"
-          data-as-name="Name"
           data-vv-name="name"
+          data-vv-as="Name"
+          get="getName"
+          set="setName"
+          namespace="project"
         />
       </custom-required-form-item>
 
@@ -76,7 +78,7 @@
           <filter-switch
             v-model="isGlobal"
             :label="$gettext('Set project as \'Global project\'') | translate"
-            :tooltip="$gettext('Global project tooltip text placeholder') | translate"
+            :tooltip="$gettext('If your project is located in more than one country, or is part of a broader global initiative, your project is a Global Project. Indicated the countries covered and scope in the Narrative Summary Field.') | translate"
             placement="top"
           />
         </div>
@@ -99,19 +101,17 @@
           <translate key="geographic-scope">
             What is the geographic scope of the project?
           </translate>
-          <form-hint>
-            <translate key="geographic-scope-hint">
-              Describe the user types, geographic coverage and other coverage details.
-            </translate>
-          </form-hint>
+          <tooltip :text="$gettext('Describe the user types, geographic coverage and other coverage details.') | translate" />
         </template>
 
-        <character-count-input
-          v-model="geographic_scope"
+        <character-count-input-standalone
           v-validate="rules.geographic_scope"
           :rules="rules.geographic_scope"
           data-vv-name="geographic_scope"
           data-vv-as="Geographic scope"
+          get="getGeographicScope"
+          set="setGeographicScope"
+          namespace="project"
           type="textarea"
         />
         <span class="Hint">
@@ -133,19 +133,16 @@
           <translate key="implementation-overview">
             Please provide a narrative summary of the digital health implementation.
           </translate>
-          <form-hint>
-            <translate key="implementation-overview-hint">
-              Describe your overall digital health project design.
-            </translate>
-          </form-hint>
+          <tooltip :text="$gettext('Describe your overall digital health project design.') | translate" />
         </template>
-
-        <character-count-input
-          v-model="implementation_overview"
+        <character-count-input-standalone
           v-validate="rules.implementation_overview"
           :rules="rules.implementation_overview"
           data-vv-name="implementation_overview"
           data-vv-as="Implementation Overview"
+          get="getImplementationOverview"
+          set="setImplementationOverview"
+          namespace="project"
           type="textarea"
         />
         <span class="Hint">
@@ -168,19 +165,17 @@
               <translate key="contact-name">
                 Contact name
               </translate>
-              <form-hint>
-                <translate key="contact-name-hint">
-                  This is the individual who will be the lead point of contact for any queries through the DHA.
-                </translate>
-              </form-hint>
+              <tooltip :text="$gettext('This is the individual who will be the lead point of contact for any queries through the DHA.') | translate" />
             </template>
 
-            <character-count-input
-              v-model="contact_name"
+            <character-count-input-standalone
               v-validate="rules.contact_name"
               :rules="rules.contact_name"
               data-vv-name="contact_name"
               data-vv-as="Contact name"
+              get="getContactName"
+              set="setContactName"
+              namespace="project"
             />
           </custom-required-form-item>
         </el-col>
@@ -197,12 +192,14 @@
               </translate>
             </template>
 
-            <character-count-input
-              v-model="contact_email"
+            <character-count-input-standalone
               v-validate="rules.contact_email"
               :rules="rules.contact_email"
               data-vv-name="contact_email"
               data-vv-as="Contact email"
+              get="getContactEmail"
+              set="setContactEmail"
+              namespace="project"
             />
           </custom-required-form-item>
         </el-col>
@@ -219,11 +216,7 @@
             <translate key="team">
               Add team members (editors)--can modify entry on Add New Project page
             </translate>
-            <form-hint>
-              <translate key="team-hint">
-                Project editors can change and update all project information.
-              </translate>
-            </form-hint>
+            <tooltip :text="$gettext('Project editors can change and update all project information.') | translate" />
           </template>
           <team-selector
             v-model="team"
@@ -243,11 +236,7 @@
             <translate key="viewers">
               Add team members (viewers)--can receive notification that project has been added
             </translate>
-            <form-hint>
-              <translate key="viewers-hint">
-                Project viewers will be able to view the full project details.
-              </translate>
-            </form-hint>
+            <tooltip :text="$gettext('Project viewers will be able to view the full project details.') | translate" />
           </template>
           <team-selector
             v-model="viewers"
@@ -272,6 +261,7 @@ import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem';
 import FilterSwitch from '@/components/dashboard/FilterSwitch';
+import Tooltip from '@/components/dashboard/Tooltip';
 
 export default {
   components: {
@@ -281,18 +271,14 @@ export default {
     OrganisationSelect,
     FormHint,
     CustomRequiredFormTeamItem,
-    FilterSwitch
+    FilterSwitch,
+    Tooltip
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGettersActions({
-      name: ['project', 'getName', 'setName', 0],
       organisation: ['project', 'getOrganisation', 'setOrganisation', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
-      geographic_scope: ['project', 'getGeographicScope', 'setGeographicScope', 0],
-      implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
-      contact_name: ['project', 'getContactName', 'setContactName', 0],
-      contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
       team: ['project', 'getTeam', 'setTeam', 0],
       viewers: ['project', 'getViewers', 'setViewers', 0]
     }),

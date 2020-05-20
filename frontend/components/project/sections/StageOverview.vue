@@ -50,11 +50,7 @@
               <translate key="start-date">
                 Set start date of project
               </translate>
-              <form-hint>
-                <translate key="start-date-hint">
-                  When did the overall project, not just the digital health component, start.
-                </translate>
-              </form-hint>
+              <tooltip :text="$gettext('When did the overall project, not just the digital health component, start.') | translate" />
             </template>
             <safe-date-picker
               ref="Start date"
@@ -223,14 +219,14 @@ import { isAfter } from 'date-fns';
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
 import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
 import CollapsibleCard from '../CollapsibleCard';
-import FormHint from '../FormHint';
 import { mapGettersActions } from '../../../utilities/form';
 import { mapState, mapActions } from 'vuex';
+import Tooltip from '@/components/dashboard/Tooltip';
 
 export default {
   components: {
     CollapsibleCard,
-    FormHint
+    Tooltip
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   data () {
@@ -270,6 +266,7 @@ export default {
     } else {
       // this.researchDisabled = true
     }
+    // eslint-disable-next-line no-self-assign
     this.start_date = this.start_date;
   },
   methods: {

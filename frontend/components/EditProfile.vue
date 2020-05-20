@@ -28,6 +28,7 @@
               <el-input
                 v-model="innerProfile.name"
                 type="text"
+                data-vv-name="name"
               />
             </el-form-item>
 
@@ -35,16 +36,32 @@
               :label="$gettext('Email address') | translate"
               class="is-required"
             >
-              <el-input
-                v-model="innerProfile.email"
-                disabled
-                type="text"
-              />
+              <el-row>
+                <el-col :span="17">
+                  <el-input
+                    v-model="innerProfile.email"
+                    disabled
+                    type="text"
+                  />
+                </el-col>
+                <el-col :span="7">
+                  <el-button
+                    class="ChangeEmail"
+                    type="primary"
+                    @click="openFeedback"
+                  >
+                    <translate>
+                      Change
+                    </translate>
+                  </el-button>
+                </el-col>
+              </el-row>
             </el-form-item>
 
             <el-form-item
               :label="$gettext('Organisation name') | translate"
               prop="organisation"
+              data-vv-name="organisation"
             >
               <organisation-select v-model="innerProfile.organisation" />
             </el-form-item>
@@ -52,6 +69,7 @@
             <el-form-item
               :label="$gettext('Country') | translate"
               prop="country"
+              data-vv-name="country"
             >
               <country-select v-model="innerProfile.country" />
               <div
@@ -69,6 +87,7 @@
               <el-input
                 v-model="innerProfile.phone"
                 type="text"
+                data-vv-name="phone"
               />
             </el-form-item>
 
@@ -79,6 +98,7 @@
               <el-input
                 v-model="innerProfile.title"
                 type="text"
+                data-vv-name="title"
               />
             </el-form-item>
 
@@ -89,6 +109,7 @@
               <el-input
                 v-model="innerProfile.linkedin"
                 type="text"
+                data-vv-name="linkedin"
               />
             </el-form-item>
 
@@ -661,6 +682,16 @@ export default {
       updateUserProfile: 'user/updateUserProfile'
     }),
 
+    openFeedback () {
+      this.$store.commit('user/SET_FEEDBACK', {
+        feedbackOn: true,
+        feedbackForm: {
+          subject: this.$gettext('Change email request'),
+          message: this.$gettext('Change my email to:')
+        }
+      });
+    },
+
     dismissChanges () {
       this.innerProfile = { ...this.profile };
       this.$router.go(-1);
@@ -722,6 +753,11 @@ export default {
 
   .EditProfile {
     margin-bottom: 80px;
+
+    .ChangeEmail {
+      overflow: hidden;
+      width: 100%;
+    }
 
     .space-bottom {
       margin-bottom: 32px;

@@ -1,7 +1,7 @@
 <template>
   <div
     class="grid-content img-center"
-    :style="{backgroundImage: `url(${url})`}"
+    :style="{ backgroundImage: `url(${url})` }"
   />
 </template>
 
@@ -19,10 +19,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .grid-content.img-center {
-    min-height: 400px;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+.grid-content.img-center {
+  min-height: 180px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 </style>

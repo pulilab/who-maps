@@ -631,13 +631,13 @@ fieldset {
       border-left: 1px solid @colorGray;
 
       &::before {
-        content: "\E60B";
+        content: "\E6E1";
         color: @colorTextSecondary;
       }
 
       &.is-reverse {
         &::before {
-          content: "\E60C";
+          content: "\E6DF";
         }
       }
     }
@@ -1046,6 +1046,10 @@ fieldset {
             color: @colorBrandPrimary;
             font-weight: 700;
 
+            .fa-lock {
+              color: @colorBrandRed;
+            }
+
             .fa-check {
               opacity: 1;
             }
@@ -1060,6 +1064,18 @@ fieldset {
             height: 10px;
             margin-right: 2px;
             opacity: 0;
+            transition: @transitionFadeLinear;
+          }
+
+          .fa-lock {
+            color: @colorTextMuted;
+            position: absolute;
+            top: 50%;
+            right: 32px;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            margin-right: 2px;
             transition: @transitionFadeLinear;
           }
 

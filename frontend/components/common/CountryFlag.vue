@@ -28,7 +28,7 @@ export default {
       return null;
     },
     isGlobal () {
-      return this.code === 'NULL';
+      return this.code === '00';
     }
   }
 };

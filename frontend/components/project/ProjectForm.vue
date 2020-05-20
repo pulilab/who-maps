@@ -228,7 +228,7 @@ export default {
         };
         const toStore = JSON.stringify(project);
         window.localStorage.setItem('rescuedProject', toStore);
-        const newUrl = window.location.origin + this.$route.path + `?reloadDataFromStorage=true`;
+        const newUrl = window.location.origin + this.$route.path + '?reloadDataFromStorage=true';
         window.location.href = newUrl;
       } catch (e) {
         console.log('User declined the option to save, just reloading');

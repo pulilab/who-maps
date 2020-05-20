@@ -108,8 +108,9 @@ export default {
           try {
             custom = this.donorColumns.map(dc => {
               const value = s.donor_answers && s.donor_answers[dc.donorId] ? s.donor_answers[dc.donorId][dc.originalId] : '';
+              const label = dc.label + (dc.private ? ' (' + this.$gettext('private') + ')' : '');
               return {
-                text: dc.label,
+                text: label,
                 value,
                 donor: dc.donorId
               };
@@ -122,8 +123,9 @@ export default {
           try {
             custom = this.countryColumns.map(cc => {
               const value = s.country_answers ? s.country_answers[cc.originalId] : '';
+              const label = cc.label + (cc.private ? ' (' + this.$gettext('private') + ')' : '');
               return {
-                text: cc.label,
+                text: label,
                 value
               };
             });

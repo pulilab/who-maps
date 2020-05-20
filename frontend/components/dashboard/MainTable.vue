@@ -178,42 +178,64 @@
         </template>
       </el-table-column>
 
-      <el-table-column
-        v-for="col in countryColumns"
-        :key="col.id"
-        :resizable="false"
-        :render-header="customHeaderRenderer"
-        :label="col.label"
-        width="240"
-      >
-        <template slot-scope="scope">
-          <custom-answers-cell
-            :id="col.originalId"
-            :row="scope.row"
-            :type="col.type"
-            :limit="3"
-          />
-        </template>
-      </el-table-column>
+      <template v-for="col in countryColumns">
+        <el-table-column
+          :key="'country-'+col.id"
+          :resizable="false"
+          width="240"
+        >
+          <template
+            slot="header"
+          >
+            <div>
+              <fa
+                v-if="col.private"
+                class="Table-Private"
+                icon="lock"
+              />
+              {{ col.label }}
+            </div>
+          </template>
+          <template slot-scope="scope">
+            <custom-answers-cell
+              :id="col.originalId"
+              :row="scope.row"
+              :type="col.type"
+              :limit="3"
+            />
+          </template>
+        </el-table-column>
+      </template>
 
-      <el-table-column
-        v-for="col in donorColumns"
-        :key="col.id"
-        :resizable="false"
-        :render-header="customHeaderRenderer"
-        :label="col.label"
-        width="240"
-      >
-        <template slot-scope="scope">
-          <custom-answers-cell
-            :id="col.originalId"
-            :row="scope.row"
-            :type="col.type"
-            :donor-id="col.donorId"
-            :limit="3"
-          />
-        </template>
-      </el-table-column>
+      <template v-for="col in donorColumns">
+        <el-table-column
+          :key="'donor-'+col.id"
+          :resizable="false"
+          width="240"
+        >
+          <template
+            slot="header"
+          >
+            <div>
+              <fa
+                v-if="col.private"
+                class="Table-Private"
+                icon="lock"
+              />
+              {{ col.label }}
+            </div>
+          </template>
+          <template slot-scope="scope">
+            <custom-answers-cell
+              :id="col.originalId"
+              :row="scope.row"
+              :type="col.type"
+              :donor-id="col.donorId"
+              :limit="3"
+            />
+          </template>
+        </el-table-column>
+      </template>
     </el-table>
 
     <div class="Pagination">
@@ -402,6 +424,10 @@ export default {
       }
 
       th {
+        .Table-Private {
+          color: @colorBrandRed;
+          margin-right: 6px;
+        }
         > .cell {
           line-height: 24px;
           // truncate long headers
