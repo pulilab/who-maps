@@ -73,12 +73,12 @@
           </template>
 
           <el-col :span="16">
+            <!--v-validate="rules.platforms"-->
             <platform-selector
               :key="platform"
               v-model="platforms"
-              v-validate="rules.platforms"
-              :data-vv-scope="'platform_' + index"
               :index="index"
+              :data-vv-scope="'platform_' + index"
               data-vv-name="id"
               data-vv-as="Software"
             />
@@ -117,6 +117,14 @@
             />
           </el-col>
         </custom-required-form-item>
+
+        <input
+          v-model="platforms"
+          v-validate="rules.platforms"
+          name="platforms"
+          type="hidden"
+          class="HiddenPlatform"
+        >
       </custom-required-form-item>
 
       <custom-required-form-item
@@ -500,6 +508,12 @@ export default {
 @import "~assets/style/mixins.less";
 
 .ImplementationOverview {
+  .HiddenPlatform + .el-form-item__error {
+    box-sizing: border-box;
+    margin: 0 0 30px 2px;
+    padding: 10px 0 10px 30px;
+    border-left: 5px solid #D6D6D6;
+  }
   .TooltipLink {
     color: #9B9B9B;
     &:hover {
