@@ -2,9 +2,21 @@
   <div class="SimpleField">
     <div class="Header">
       <template v-if="header">
+        <span
+          v-if="!!prependFormat"
+          class="pre-number"
+        >
+          {{ prependFormat }}
+        </span>
         {{ header }}
       </template>
       <template v-if="!header">
+        <span
+          v-if="!!prependFormat"
+          class="pre-number"
+        >
+          {{ prependFormat }}
+        </span>
         <slot name="header" />
       </template>
     </div>
@@ -58,6 +70,10 @@ export default {
     link: {
       type: Boolean,
       default: false
+    },
+    prependLabel: {
+      type: Number,
+      default: 0
     }
   },
   computed: {
@@ -81,11 +97,20 @@ export default {
         return this.content;
       }
       return null;
+    },
+    prependFormat () {
+      return this.prependLabel ? `${this.prependLabel}. ` : '';
     }
   }
 };
 </script>
 
-<style>
-
+<style lang="less">
+  @import "~assets/style/variables.less";
+  .SimpleField {
+    .pre-number {
+      border-left: 5px solid @colorGrayLight;
+      padding: 2px 15px 2px 10px;
+    }
+  }
 </style>

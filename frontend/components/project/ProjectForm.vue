@@ -24,6 +24,7 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            :prepend-title="1"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
@@ -33,6 +34,7 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            :prepend-title="2"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
@@ -43,6 +45,7 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            :prepend-title="3"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
@@ -52,6 +55,7 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            :prepend-title="4"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
@@ -61,6 +65,7 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            :prepend-title="5"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
@@ -70,6 +75,7 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            :prepend-title="6"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
@@ -79,6 +85,7 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
+            :prepend-title="7"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />

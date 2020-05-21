@@ -112,24 +112,33 @@ export default {
       }
     },
     availableSubLevels () {
-      return this.subLevels.filter(tp => !this.coverage.some(s => s === tp.id) || tp.id === this.subLevel);
+      return this.subLevels.filter(
+        tp => !this.coverage.some(s => s === tp.id) || tp.id === this.subLevel
+      );
     },
     localCoverageData () {
       return this.coverageData[this.subLevel];
     },
     facilitiesList: {
       get () {
-        const facilitiesList = this.localCoverageData ? this.localCoverageData.facilities_list : [];
+        const facilitiesList = this.localCoverageData
+          ? this.localCoverageData.facilities_list
+          : [];
         return facilitiesList || [];
       },
       set (value) {
-        const coverage = { facilities_list: [...value], facilities: value.length };
+        const coverage = {
+          facilities_list: [...value],
+          facilities: value.length
+        };
         this.coverageData = { coverage, subLevel: this.subLevel };
       }
     },
     healthWorkers: {
       get () {
-        return this.localCoverageData ? this.localCoverageData.health_workers : null;
+        return this.localCoverageData
+          ? this.localCoverageData.health_workers
+          : null;
       },
       set (value) {
         const coverage = { health_workers: value };
@@ -147,7 +156,9 @@ export default {
     },
     facilities: {
       get () {
-        return this.localCoverageData ? this.localCoverageData.facilities : null;
+        return this.localCoverageData
+          ? this.localCoverageData.facilities
+          : null;
       },
       set (value) {
         const coverage = { facilities: value };
@@ -168,7 +179,10 @@ export default {
         this.$refs.coverageFieldset.validate(),
         this.$refs.facilitySelector.validate()
       ]);
-      console.log(`sub national level deployment item ${this.scope}`, validations);
+      console.log(
+        `sub national level deployment item ${this.scope}`,
+        validations
+      );
       return validations.reduce((a, c) => a && c, true);
     }
   }
@@ -176,11 +190,11 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .SubNationalLevelDeployementRegion {
-    width: 100%;
-    margin-bottom: 20px;
-  }
+.SubNationalLevelDeployementRegion {
+  width: 100%;
+  margin-bottom: 20px;
+}
 </style>

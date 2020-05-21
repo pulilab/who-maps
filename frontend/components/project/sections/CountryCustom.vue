@@ -1,12 +1,13 @@
 <template>
   <div
-    v-if="countryQuestions && countryQuestions.length >0"
+    v-if="countryQuestions && countryQuestions.length > 0"
     id="countrycustom"
     class="CountryCustom"
   >
     <collapsible-card
       ref="collapsible"
       :title="customFieldsName(country.name)"
+      :prepend-title="prependTitle"
     >
       <custom-field
         v-for="(field, index) in countryQuestions"
@@ -66,7 +67,9 @@ export default {
         this.$refs.collapsible.expandCard();
       }
       if (this.$refs.customQuestion) {
-        const validations = await Promise.all(this.$refs.customQuestion.map(r => r.validate()));
+        const validations = await Promise.all(
+          this.$refs.customQuestion.map(r => r.validate())
+        );
         console.log('Custom country questions validators', validations);
         return validations.reduce((a, c) => a && c, true);
       }
@@ -77,9 +80,9 @@ export default {
 </script>
 
 <style lang="less">
- @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .CountryCustom {}
-
+.CountryCustom {
+}
 </style>

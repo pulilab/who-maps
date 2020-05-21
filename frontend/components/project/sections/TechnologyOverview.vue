@@ -6,12 +6,14 @@
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Technology overview') | translate"
+      :prepend-title="prependTitle"
       show-legend
     >
       <custom-required-form-item
         :error="errors.first('licenses')"
         :draft-rule="draftRules.licenses"
         :publish-rule="publishRules.licenses"
+        prepend-label="21"
       >
         <template slot="label">
           <translate key="licenses">
@@ -29,6 +31,7 @@
         :error="errors.first('repository')"
         :draft-rule="draftRules.repository"
         :publish-rule="publishRules.repository"
+        prepend-label="22"
       >
         <template slot="label">
           <translate key="repository">
@@ -53,6 +56,7 @@
         :error="errors.first('mobile_application')"
         :draft-rule="draftRules.mobile_application"
         :publish-rule="publishRules.mobile_application"
+        prepend-label="23"
       >
         <template slot="label">
           <translate key="mobile_application">
@@ -78,6 +82,7 @@
         :label="$gettext('Link to the wiki page') | translate"
         :draft-rule="draftRules.wiki"
         :publish-rule="publishRules.wiki"
+        prepend-label="24"
       >
         <template slot="label">
           <translate key="wiki">
@@ -124,9 +129,7 @@ export default {
   methods: {
     async validate () {
       this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([
-        this.$validator.validate()
-      ]);
+      const validations = await Promise.all([this.$validator.validate()]);
       console.log('Technology overview validators', validations);
       return validations.reduce((a, c) => a && c, true);
     }
@@ -135,13 +138,12 @@ export default {
 </script>
 
 <style lang="less">
- @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .TechnologyOverview {
-    .Date {
-      width: 50% !important;
-    }
+.TechnologyOverview {
+  .Date {
+    width: 50% !important;
   }
-
+}
 </style>

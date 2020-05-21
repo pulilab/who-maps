@@ -6,6 +6,7 @@
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Document Completion of Project Stages') | translate"
+      :prepend-title="prependTitle"
       show-legend
     >
       <!-- stages -->
@@ -30,7 +31,9 @@
               />
               <span>
                 <translate key="research-project-info">
-                  If your Digital Health project is focused on research activities, please indicate here.  The unique project ID can be shared as a reference during in your publication.
+                  If your Digital Health project is focused on research
+                  activities, please indicate here. The unique project ID can be
+                  shared as a reference during in your publication.
                 </translate>
               </span>
             </p>
@@ -43,12 +46,19 @@
             :error="errors.first('start_date')"
             :draft-rule="draftRules.start_date"
             :publish-rule="publishRules.start_date"
+            prepend-label="18"
           >
             <template slot="label">
               <translate key="start-date">
                 Set start date of project
               </translate>
-              <tooltip :text="$gettext('When did the overall project, not just the digital health component, start.') | translate" />
+              <tooltip
+                :text="
+                  $gettext(
+                    'When did the overall project, not just the digital health component, start.'
+                  ) | translate
+                "
+              />
             </template>
             <safe-date-picker
               ref="Start date"
@@ -66,7 +76,7 @@
         <!-- Stages section -->
         <el-col :span="24">
           <el-row class="stages">
-            <custom-required-form-item>
+            <custom-required-form-item prepend-label="19">
               <template slot="label">
                 <translate key="stages">
                   Set current and previous stages of project
@@ -85,7 +95,9 @@
                   :value="stage.checked"
                   class="stage__checkbox"
                   :label="stage.id"
-                  @input="updateStagesDraft(stage.id, 'checked', !stage.checked)"
+                  @input="
+                    updateStagesDraft(stage.id, 'checked', !stage.checked)
+                  "
                 >
                   {{ stage.name }}
                   <el-tooltip
@@ -118,12 +130,14 @@
                     </p>
                     <custom-required-form-item
                       class="stage__picker"
-                      :error="(!stage.date ? stageDateError : '')"
+                      :error="!stage.date ? stageDateError : ''"
                     >
                       <safe-date-picker
                         v-validate="rules.note_date"
                         :value="stage.date"
-                        :placeholder="$gettext('Pick a date (required)') | translate"
+                        :placeholder="
+                          $gettext('Pick a date (required)') | translate
+                        "
                         data-vv-name="note_date"
                         data-vv-as="Note date"
                         class="Date stage__input--full"
@@ -131,12 +145,12 @@
                         @input="updateStagesDraft(stage.id, 'date', $event)"
                       />
                     </custom-required-form-item>
-                    <custom-required-form-item
-                      class="stage__input"
-                    >
+                    <custom-required-form-item class="stage__input">
                       <el-input
                         :value="stage.note"
-                        :placeholder="$gettext('Add note (optional)') | translate"
+                        :placeholder="
+                          $gettext('Add note (optional)') | translate
+                        "
                         class="stage__input--full"
                         @input="updateStagesDraft(stage.id, 'note', $event)"
                       >
@@ -159,6 +173,7 @@
             :error="errors.first('end_date') || endDateError"
             :draft-rule="draftRules.end_date"
             :publish-rule="publishRules.end_date"
+            prepend-label="20"
           >
             <template slot="label">
               <translate key="end-date">
@@ -172,7 +187,9 @@
               />
               <span>
                 <translate key="research-project-info">
-                  When your project activities have completed, you can indicated by setting the end of the project. Note that the project will still be visible on the global map as a completed project.
+                  When your project activities have completed, you can indicated
+                  by setting the end of the project. Note that the project will
+                  still be visible on the global map as a completed project.
                 </translate>
               </span>
             </p>
@@ -242,13 +259,23 @@ export default {
       research: ['project', 'getResearch', 'setResearch', 0]
     }),
     endDateError () {
-      if (this.usePublishRules && this.start_date && this.end_date && isAfter(this.start_date, this.end_date)) {
+      if (
+        this.usePublishRules &&
+        this.start_date &&
+        this.end_date &&
+        isAfter(this.start_date, this.end_date)
+      ) {
         return this.$gettext('End date must be after Start date');
       }
       return '';
     },
     stageDateError () {
-      if ((this.stagesDraft) && (this.stagesDraft.filter(i => i.checked && (i.date === '' || i.date === null)).length > 0)) {
+      if (
+        this.stagesDraft &&
+        this.stagesDraft.filter(
+          i => i.checked && (i.date === '' || i.date === null)
+        ).length > 0
+      ) {
         return this.$gettext('Stage date is required');
       }
       return '';
@@ -307,115 +334,116 @@ export default {
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .stages__tooltip {
-    max-width: 320px;
+.stages__tooltip {
+  max-width: 320px;
+}
+
+.StageOverview {
+  .research {
+    width: 721px;
+    max-width: 721px;
+    margin-bottom: 30px;
+  }
+  .research__switch {
+    font-size: @fontSizeBase;
+    margin-left: 8px;
+    display: inline;
+  }
+  .info {
+    margin-top: 24px;
+    margin-bottom: 0px;
+    font-size: @fontSizeSmall;
+    color: @colorTextSecondary;
+    display: flex;
+    line-height: 18px;
+  }
+  .info--free-margin {
+    margin-top: 0;
+    margin-bottom: 25px;
+  }
+  .info__icon {
+    color: @colorTextMuted;
+    margin-right: 8px;
+    margin-top: 3px;
   }
 
-  .StageOverview {
-    .research {
-      width: 721px;
-      max-width: 721px;
-      margin-bottom: 30px;
-    }
-    .research__switch {
-      font-size: @fontSizeBase;
-      margin-left: 8px;
-      display: inline;
-    }
-    .info {
-      margin-top: 24px;
-      margin-bottom: 0px;
-      font-size: @fontSizeSmall;
-      color: @colorTextSecondary;
-      display: flex;
-      line-height: 18px;
-    }
-    .info--free-margin {
-      margin-top: 0;
-      margin-bottom: 25px;
-    }
-    .info__icon {
-      color: @colorTextMuted;
-      margin-right: 8px;
-      margin-top: 3px;
-    }
-
-    .stages {
-      color: @colorTextMuted;
-    }
-    .stage {
-      &:hover, &.active {
-        .stage__number {
-          color: @colorTextPrimary;
-        }
-        .stage__checkbox {
-          color: @colorTextPrimary;
-          .el-checkbox__inner {
-            border-color: @colorTextPrimary;
-          }
-        }
+  .stages {
+    color: @colorTextMuted;
+  }
+  .stage {
+    &:hover,
+    &.active {
+      .stage__number {
+        color: @colorTextPrimary;
       }
-      &.active {
-        .stage__checkbox {
-          .el-checkbox__inner {
-            border-color: @colorBrandPrimary;
-          }
+      .stage__checkbox {
+        color: @colorTextPrimary;
+        .el-checkbox__inner {
+          border-color: @colorTextPrimary;
         }
       }
     }
-    .stage__checkbox {
-      color: @colorTextMuted;
-      .el-checkbox__inner {
-        border-color: @colorTextMuted;
-        border-radius: 2px;
+    &.active {
+      .stage__checkbox {
+        .el-checkbox__inner {
+          border-color: @colorBrandPrimary;
+        }
       }
     }
-    .stage__number {
-      display: inline-block;
-      width: 20px;
-      margin-right: 16px;
-    }
-    .stage__form {
-      border-left: 5px solid @colorGrayLight;
-      margin-left: 44px;
-      padding: 12px 0 12px 14px;
-      display: flex;
-      flex-wrap: wrap;
-    }
-    .stage__info {
-      flex-basis: 100%;
-      // margin: 0 0 16px 0;
-      margin: 0 0 -8px 0;
-    }
-    .stage__picker {
-      flex-basis: 30%;
-      margin-right: 20px;
-    }
-    .stage__input {
-      flex-basis: 67%;
-    }
-    .stage__input--full {
-      width: 100%;
+  }
+  .stage__checkbox {
+    color: @colorTextMuted;
+    .el-checkbox__inner {
+      border-color: @colorTextMuted;
+      border-radius: 2px;
     }
   }
+  .stage__number {
+    display: inline-block;
+    width: 20px;
+    margin-right: 16px;
+  }
+  .stage__form {
+    border-left: 5px solid @colorGrayLight;
+    margin-left: 44px;
+    padding: 12px 0 12px 14px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .stage__info {
+    flex-basis: 100%;
+    // margin: 0 0 16px 0;
+    margin: 0 0 16px 0;
+  }
+  .stage__picker {
+    flex-basis: 30%;
+    margin-right: 20px;
+  }
+  .stage__input {
+    flex-basis: 67%;
+  }
+  .stage__input--full {
+    width: 100%;
+  }
+}
 
-  // animation toggle
-  .toggle-enter {
-    opacity: 0;
-    max-height: 0px;
-  }
+// animation toggle
+.toggle-enter {
+  opacity: 0;
+  max-height: 0px;
+}
 
-  .toggle-enter-active,
-  .toggle-leave-active {
-    transition: all 0.5s ease-out;
-    max-height: 98px;
-  }
+.toggle-enter-active,
+.toggle-leave-active {
+  transition: all 0.5s ease-out;
+  max-height: 98px;
+}
 
-  .toggle-leave-to {
-    opacity: 0;
-    max-height: 0px;
-  }
+.toggle-leave-to {
+  opacity: 0;
+  max-height: 0px;
+}
 </style>

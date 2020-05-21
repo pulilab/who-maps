@@ -4,8 +4,18 @@
     v-bind="propsAndAttrs"
     v-on="listeners"
   >
-    <template slot="label">
+    <template
+      v-if="!!this.$slots.label"
+      slot="label"
+    >
+      <span
+        v-if="!!prependFormat"
+        class="pre-number"
+      >
+        {{ prependFormat }}
+      </span>
       <slot name="label" />
+      <span class="spacer" />
       <span
         v-show="draftRequired"
         class="Required DraftRequired"
@@ -38,6 +48,10 @@ export default {
     publishRule: {
       type: Object,
       default: null
+    },
+    prependLabel: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -52,20 +66,30 @@ export default {
     },
     publishRequired () {
       return this.publishRule && this.publishRule.required;
+    },
+    prependFormat () {
+      return this.prependLabel ? `${this.prependLabel}. ` : '';
     }
   }
 };
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
+  @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
-  .CustomRequiredFormItem{
+  .CustomRequiredFormItem {
+    .pre-number {
+      border-left: 5px solid @colorGrayLight;
+      padding: 2px 15px 2px 10px;
+    }
+    .spacer {
+      margin-left: 8px;
+    }
     .Required{
       display: inline-block;
-      width: 12px;
-      height: 12px;
-      font-size: 16px;
+      width: 15px;
+      height: 15px;
+      font-size: 22px;
       line-height: 12px;
       font-weight: 900;
       text-align: center;
@@ -74,7 +98,7 @@ export default {
 
       > span {
         position: relative;
-        top: 4px;
+        top: 6px;
       }
     }
     .DraftRequired{

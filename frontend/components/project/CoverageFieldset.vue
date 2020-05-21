@@ -14,7 +14,13 @@
             <translate key="health-workers">
               How many health workers use the system?
             </translate>
-            <tooltip :text="$gettext('Health workers include all recognized health professionals directly accessing the software. If there are no users of this type, put 0.') | translate" />
+            <tooltip
+              :text="
+                $gettext(
+                  'Health workers include all recognized health professionals directly accessing the software. If there are no users of this type, put 0.'
+                ) | translate
+              "
+            />
           </template>
 
           <el-input
@@ -41,7 +47,13 @@
             <translate key="facilities">
               How many facilities use the system?
             </translate>
-            <tooltip :text="$gettext('Health facilities using the system refers to all facilities that have direct access to the software. If there are no users of this type, put 0.') | translate" />
+            <tooltip
+              :text="
+                $gettext(
+                  'Health facilities using the system refers to all facilities that have direct access to the software. If there are no users of this type, put 0.'
+                ) | translate
+              "
+            />
           </template>
 
           <el-input
@@ -68,7 +80,13 @@
             <translate key="facilities">
               How many clients use the system?
             </translate>
-            <tooltip :text="$gettext('Client users refers to all care recipients who have direct access to the software.  If there are no users of this type, put 0.') | translate" />
+            <tooltip
+              :text="
+                $gettext(
+                  'Client users refers to all care recipients who have direct access to the software.  If there are no users of this type, put 0.'
+                ) | translate
+              "
+            />
           </template>
           <el-input
             v-model="localClients"
@@ -180,13 +198,13 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .CoverageFieldset {
-    .el-form-item__label {
-      line-height: 20px;
-      height: 50px;
-    }
+.CoverageFieldset {
+  .el-form-item__label {
+    line-height: 20px;
+    height: 50px;
   }
+}
 </style>

@@ -1,9 +1,17 @@
 <template>
   <el-form-item
     :error="errors.first('answer', 'custom_question_' + id)"
-    :label="question"
     class="CustomField"
   >
+    <template slot="label">
+      <span
+        v-if="!!prependFormat"
+        class="pre-number"
+      >
+        {{ prependFormat }}
+      </span>
+      {{ question }}
+    </template>
     <div
       v-show="isPrivate"
       class="PrivateBadge"
@@ -112,6 +120,10 @@ export default {
     index: {
       type: Number,
       required: true
+    },
+    prependLabel: {
+      type: Number,
+      default: 0
     }
   },
   computed: {
@@ -120,11 +132,15 @@ export default {
       getDonorsAnswerDetails: 'project/getDonorsAnswerDetails'
     }),
     answer () {
-      const saved = !this.donorId ? this.getCountryAnswerDetails(this.id) : this.getDonorsAnswerDetails(this.id);
-      return saved || {
-        question_id: this.id,
-        answer: null
-      };
+      const saved = !this.donorId
+        ? this.getCountryAnswerDetails(this.id)
+        : this.getDonorsAnswerDetails(this.id);
+      return (
+        saved || {
+          question_id: this.id,
+          answer: null
+        }
+      );
     },
     value () {
       return this.answer.answer;
@@ -150,6 +166,9 @@ export default {
         required: this.isRequired && this.doValidation,
         numeric: this.type === 2 && this.doValidation
       };
+    },
+    prependFormat () {
+      return this.prependLabel ? `${this.prependLabel}. ` : '';
     }
   },
   watch: {
@@ -195,7 +214,9 @@ export default {
       }
     },
     findDonorError (errors) {
-      const error = errors.find(e => e.index === this.index && e.donor_id === this.donorId);
+      const error = errors.find(
+        e => e.index === this.index && e.donor_id === this.donorId
+      );
       if (error) {
         this.addErrorToBag(error.error);
       }
@@ -208,8 +229,15 @@ export default {
 </script>
 
 <style lang="less">
+@import "~assets/style/variables.less";
+
 .CustomField {
   position: relative;
+
+  .pre-number {
+    border-left: 5px solid @colorGrayLight;
+    padding: 2px 15px 2px 10px;
+  }
 
   .el-form-item__label {
     line-height: 20px;
@@ -227,5 +255,4 @@ export default {
     width: 100%;
   }
 }
-
 </style>

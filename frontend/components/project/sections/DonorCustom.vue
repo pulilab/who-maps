@@ -1,14 +1,15 @@
 <template>
   <div
-    v-if="donors && donors.length >0"
+    v-if="donors && donors.length > 0"
     id="donorcustom"
     class="DonorCustom"
   >
     <collapsible-card
-      v-for="(donor) in donors"
+      v-for="(donor, idx) in donors"
       ref="collapsible"
       :key="donor.id"
       :title="customFieldsName(donor.name)"
+      :prepend-title="prependTitle + idx"
     >
       <custom-field
         v-for="(field, index) in donor.donor_questions"
@@ -49,10 +50,16 @@ export default {
       projectShadowDonors: 'project/getShadowDonors'
     }),
     donors () {
-      const allDonors = [...new Set([...this.projectDonors, ...this.projectShadowDonors])];
+      const allDonors = [
+        ...new Set([...this.projectDonors, ...this.projectShadowDonors])
+      ];
       if (allDonors) {
-        allDonors.forEach(d => this.$store.dispatch('system/loadDonorDetails', d, { root: true }));
-        return allDonors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
+        allDonors.forEach(d =>
+          this.$store.dispatch('system/loadDonorDetails', d, { root: true })
+        );
+        return allDonors
+          .map(d => this.getDonorDetails(d))
+          .filter(d => d.donor_questions && d.donor_questions.length > 0);
       }
       return null;
     }
@@ -66,7 +73,9 @@ export default {
         this.$refs.collapsible.forEach(c => c.expandCard());
       }
       if (this.$refs.customQuestion) {
-        const validations = await Promise.all(this.$refs.customQuestion.map(r => r.validate()));
+        const validations = await Promise.all(
+          this.$refs.customQuestion.map(r => r.validate())
+        );
         console.log('Custom donoros validators', validations);
         return validations.reduce((a, c) => a && c, true);
       }
@@ -77,9 +86,9 @@ export default {
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .DonorCustom {}
-
+.DonorCustom {
+}
 </style>
