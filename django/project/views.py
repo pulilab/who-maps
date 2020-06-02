@@ -421,6 +421,11 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
         if project_name and Project.objects.filter(name=project_name).exists():
             project_name = f"{project_name} {randint(1, 100)}"
             project_data['name'] = project_name
+
+        # WORKAROUND 2: organisation coming as a string, we need to check for Organisation objects
+        project_org = project_data.get('organisation')
+        org, created = Organisation.objects.get_or_create(name=project_org)
+        project_data['organisation'] = str(org.id)
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
