@@ -147,6 +147,13 @@ class ProjectPublishedSerializer(serializers.Serializer):
     #         return self.instance.draft['research']
     #     return value
 
+    def create(self, validated_data):
+        return self.Meta.model(
+            name=validated_data["name"],
+            data=validated_data,
+            draft=validated_data,
+        )
+
     def update(self, instance, validated_data):
         instance.name = validated_data["name"]
         instance.data = validated_data
