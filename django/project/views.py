@@ -442,6 +442,16 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
             errors['project'] = data_serializer.errors
         else:
             instance = data_serializer.save()
+
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            instance.save()
+            # TODO: set from_dch by evaluating payload, so we can reuse this for other external parties too.
+            instance.metadata = dict(from_dch=True)
+            instance.make_public_id(country.id)
+            instance.save(update_fields=['metadata', 'public_id'])
+            instance.team.add(request.user.userprofile)
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
