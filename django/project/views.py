@@ -452,6 +452,17 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
             instance.make_public_id(country.id)
             instance.save(update_fields=['metadata', 'public_id'])
             instance.team.add(request.user.userprofile)
+
+            # WORKAROUND 5: add contact_email as team member
+            group_data = {
+                "team": [request.user.userprofile.id],
+                "viewers": [],
+                "new_team_emails": [instance.data['contact_email']],
+                "new_viewer_emails": []
+            }
+            pg_serializer = ProjectGroupSerializer(instance=instance, data=group_data, context=dict(request=request))
+            pg_serializer.is_valid()
+            pg_serializer.save()
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
