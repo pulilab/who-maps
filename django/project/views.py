@@ -431,6 +431,9 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
         donor, created = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
         project_data['donors'] = [donor.id]
 
+        # WORKAROUND 4: set national_level_deployment to 0, so it can be added later
+        project_data['national_level_deployment'] = {"clients": 0, "health_workers": 0, "facilities": 0}
+
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
