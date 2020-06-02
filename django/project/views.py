@@ -426,6 +426,11 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
         project_org = project_data.get('organisation')
         org, created = Organisation.objects.get_or_create(name=project_org)
         project_data['organisation'] = str(org.id)
+
+        # WORKAROUND 3: auto choose "Other" as an investor
+        donor, created = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
+        project_data['donors'] = [donor.id]
+
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
