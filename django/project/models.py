@@ -65,6 +65,7 @@ class Project(SoftDeleteModel, ExtendedModel):
     odk_extra_data = JSONField(default=dict)
 
     research = models.NullBooleanField(blank=True, null=True)
+    metadata = JSONField(default=dict)
 
     projects = ProjectManager  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
