@@ -78,7 +78,7 @@ class ExternalAPITests(APITestCase):
         }}
 
     def test_post_to_publish_from_external_source(self):
-        url = reverse("project-external-publish", kwargs={"country_id": self.country_id})
+        url = reverse("project-external-publish")
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
 
@@ -120,13 +120,13 @@ class ExternalAPITests(APITestCase):
         self.assertEqual(set_password_sent, 1)
 
     def test_name_clash_resolved_automatically(self):
-        url = reverse("project-external-publish", kwargs={"country_id": self.country_id})
+        url = reverse("project-external-publish")
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
         self.assertTrue(response.json().get("id"))
         project_1_id = response.json().get("id")
 
-        url = reverse("project-external-publish", kwargs={"country_id": self.country_id})
+        url = reverse("project-external-publish")
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
         self.assertTrue(response.json().get("id"))
@@ -142,7 +142,7 @@ class ExternalAPITests(APITestCase):
     def test_invalid_email_published(self):
         project_data = copy.deepcopy(self.project_data)
         project_data['project']['contact_email'] = "invalid_email"
-        url = reverse("project-external-publish", kwargs={"country_id": self.country_id})
+        url = reverse("project-external-publish")
         response = self.test_user_client.post(url, project_data, format="json")
 
         self.assertEqual(response.status_code, 400, response.json())
