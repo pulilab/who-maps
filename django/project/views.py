@@ -394,6 +394,18 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
 
 
+class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
+    def create(self, request, country_id):
+        """
+        Publish projects from external sources.
+        Exceptions to internal API are:
+        - project names must be unique, so check if they are clashing and randomize to help
+        - organisation coming as a string, we need to check for Organisation objects
+        - auto choose "Other" as an investor
+        - exclude the check for required country questions
+        - set national_level_deployment to 0, so it can be added later
+        - add contact email as a team member
+        """
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
