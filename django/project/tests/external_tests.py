@@ -96,3 +96,25 @@ class ExternalAPITests(APITestCase):
         donor = Donor.objects.get(name="Other")
         self.assertEqual(project.data['donors'], [donor.id])
 
+        self.assertEqual(project.data['national_level_deployment'], 
+                         {"clients": 0, "health_workers": 0, "facilities": 0})
+
+        welcome_emails_count = 0
+        for m in mail.outbox:
+            if m.subject == 'Welcome to the Digital Health Atlas':
+                welcome_emails_count += 1
+        self.assertEqual(welcome_emails_count, 2)
+
+        notified_on_member_add_count = 0
+        for m in mail.outbox:
+            if m.subject == 'You have been added to a project in the Digital Health Atlas':
+                notified_on_member_add_count += 1
+                self.assertTrue("team_member@added.com" in m.to)
+        self.assertEqual(notified_on_member_add_count, 1)
+
+        set_password_sent = 0
+        for m in mail.outbox:
+            if m.subject == "Set Your Password on Digital Health Atlas":
+                set_password_sent += 1
+                self.assertTrue("team_member@added.com" in m.to)
+        self.assertEqual(set_password_sent, 1)
