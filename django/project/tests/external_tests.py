@@ -118,3 +118,24 @@ class ExternalAPITests(APITestCase):
                 set_password_sent += 1
                 self.assertTrue("team_member@added.com" in m.to)
         self.assertEqual(set_password_sent, 1)
+
+    def test_name_clash_resolved_automatically(self):
+        url = reverse("project-external-publish", kwargs={"country_id": self.country_id})
+        response = self.test_user_client.post(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 201, response.json())
+        self.assertTrue(response.json().get("id"))
+        project_1_id = response.json().get("id")
+
+        url = reverse("project-external-publish", kwargs={"country_id": self.country_id})
+        response = self.test_user_client.post(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 201, response.json())
+        self.assertTrue(response.json().get("id"))
+        project_2_id = response.json().get("id")
+
+        self.assertNotEqual(project_1_id, project_2_id)
+
+        project_1 = Project.objects.get(id=project_1_id)
+        project_2 = Project.objects.get(id=project_2_id)
+        self.assertNotEqual(project_1.name, project_2.name)
+        self.assertEqual(self.project_data['project']['name'], project_1.name)
+
