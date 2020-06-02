@@ -1,3 +1,5 @@
+import copy
+from random import randint
 from collections import OrderedDict
 
 from django.db import transaction
@@ -18,6 +20,7 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
+from user.models import Organisation
 from .tasks import notify_superusers_about_new_pending_software
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
