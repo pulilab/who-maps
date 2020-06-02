@@ -10,6 +10,11 @@ router.register('software', views.TechnologyPlatformRequestViewSet)
 
 urlpatterns = [
     path("projects/", include(router.urls)),
+    path('projects/external/publish/<int:country_id>/',
+         view=views.ExternalPublishAPI.as_view({
+             'post': 'create'
+         }),
+         name="project-external-publish"),
     path('projects/publish/<int:project_id>/<int:country_id>/',
          view=views.ProjectPublishViewSet.as_view({
              'put': 'update'
