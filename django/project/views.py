@@ -463,6 +463,12 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
             pg_serializer = ProjectGroupSerializer(instance=instance, data=group_data, context=dict(request=request))
             pg_serializer.is_valid()
             pg_serializer.save()
+
+        draft = instance.to_representation(draft_mode=True)
+        published = instance.to_representation()
+        return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_201_CREATED)
+
+
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
