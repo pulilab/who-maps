@@ -413,6 +413,14 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
 
         if 'project' not in request.data:  # pragma: no cover
             raise ValidationError({'project': 'Project data is missing'})
+
+        project_data = copy.deepcopy(request.data['project'])
+
+        # WORKAROUND 1: project names must be unique, so check if they are clashing and randomize to help
+        project_name = project_data.get('name')
+        if project_name and Project.objects.filter(name=project_name).exists():
+            project_name = f"{project_name} {randint(1, 100)}"
+            project_data['name'] = project_name
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
