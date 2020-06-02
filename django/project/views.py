@@ -395,7 +395,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
 
 class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
-    def create(self, request, country_id):
+    def create(self, request):
         """
         Publish projects from external sources.
         Exceptions to internal API are:
@@ -406,13 +406,15 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
         - set national_level_deployment to 0, so it can be added later
         - add contact email as a team member
         """
-        country = get_object_or_400(Country, error_message="No such country", id=country_id)
-
         instance = None
         errors = {}
 
         if 'project' not in request.data:  # pragma: no cover
             raise ValidationError({'project': 'Project data is missing'})
+        if 'country' not in request.data['project']:  # pragma: no cover
+            raise ValidationError({'country': 'Country is missing'})
+
+        country = get_object_or_400(Country, error_message="No such country", id=request.data['project']['country'])
 
         project_data = copy.deepcopy(request.data['project'])
 
