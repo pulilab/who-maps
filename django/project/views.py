@@ -434,6 +434,14 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
         # WORKAROUND 4: set national_level_deployment to 0, so it can be added later
         project_data['national_level_deployment'] = {"clients": 0, "health_workers": 0, "facilities": 0}
 
+        # TODO: validate UTC date
+        data_serializer = ProjectPublishedSerializer(data=project_data)
+        data_serializer.is_valid()
+
+        if data_serializer.errors:
+            errors['project'] = data_serializer.errors
+        else:
+            instance = data_serializer.save()
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
