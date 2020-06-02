@@ -73,6 +73,10 @@ class Project(SoftDeleteModel, ExtendedModel):
     def __str__(self):  # pragma: no cover
         return self.name
 
+    @property
+    def from_dch(self):
+        return self.metadata and 'from_dch' in self.metadata
+
     def get_country_id(self, draft_mode=False):
         return self.draft.get('country') if draft_mode else self.data.get('country')
 
