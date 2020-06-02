@@ -76,3 +76,23 @@ class ExternalAPITests(APITestCase):
             "hsc_challenges": [1, 2],
             "start_date": str(datetime.today().date())
         }}
+
+    def test_post_to_publish_from_external_source(self):
+        url = reverse("project-external-publish", kwargs={"country_id": self.country_id})
+        response = self.test_user_client.post(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 201, response.json())
+
+        self.assertTrue(response.json().get("id"))
+        project_id = response.json().get("id")
+        project = Project.objects.get(id=project_id)
+
+        self.assertTrue(project.from_dch)
+        self.assertTrue(project.public_id)
+        self.assertEqual(self.project_data['project']['name'], project.name)
+
+        org = Organisation.objects.get(name=self.project_data['project']['organisation'])
+        self.assertEqual(self.project_data['project']['organisation'], org.name)
+
+        donor = Donor.objects.get(name="Other")
+        self.assertEqual(project.data['donors'], [donor.id])
+
