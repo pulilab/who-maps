@@ -24,7 +24,7 @@ from rest_framework.exceptions import ValidationError
 
 from core.utils import send_mail_wrapper
 from user.models import Organisation
-from country.models import Country, Donor
+from country.models import Country, Donor, CountryCustomQuestion
 
 from .models import Project, InteroperabilityLink, TechnologyPlatform
 from .serializers import ProjectDraftSerializer
@@ -439,8 +439,9 @@ def send_no_country_question_answers_reminder():
     """
     from project.models import Project
 
-    countries_with_questions = Country.objects.filter(country_questions__isnull=False)
-    projects = Project.objects.published_only().filter(search__country__in=countries_with_questions).\
+    country_ids = CountryCustomQuestion.objects.filter(required=True).order_by('country').distinct().\
+        values_list('country', flat=True)
+    projects = Project.objects.published_only().filter(search__country__in=country_ids).\
         filter(data__country_custom_answers__isnull=True)
 
     email_mapping = defaultdict(lambda: defaultdict(list))

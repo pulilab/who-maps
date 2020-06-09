@@ -27,8 +27,8 @@ class ProjectNotificationTests(SetupTests):
     def test_send_no_country_question_answers_reminder(self, send_mail_wrapper):
         Project.objects.all().delete()
 
-        ccq_1 = CountryCustomQuestionFactory(question="question 1", private=True, country=self.country)
-        ccq_2 = CountryCustomQuestionFactory(question="question 2", private=True, country=self.country)
+        ccq_1 = CountryCustomQuestionFactory(question="question 1", required=True, country=self.country)
+        ccq_2 = CountryCustomQuestionFactory(question="question 2", required=True, country=self.country)
 
         # task shouldn't pick up this because it is a draft
         draft_project = Project.objects.create(name='Draft project 1', public_id='')
