@@ -457,3 +457,38 @@ def send_no_country_question_answers_reminder():
                 to=email,
                 language=language,
                 context={'projects': ", ".join(project_names_list)})
+
+
+@app.task(name="send_not_every_country_question_has_answer_reminder")
+def send_not_every_required_country_question_has_answer_reminder():
+    """
+    Sends reminder to projects that has no answer for every required country question.
+    """
+    from project.models import Project
+
+    required_questions = CountryCustomQuestion.objects.filter(required=True)
+    country_ids = required_questions.order_by('country').distinct().values_list('country', flat=True)
+    projects = Project.objects.published_only().filter(search__country__in=country_ids).\
+        filter(data__country_custom_answers__isnull=False)
+
+    projects_require_reminder = []
+    for project in projects:
+        answered_question_ids = [item['question_id'] for item in project.data['country_custom_answers']]
+        for question in required_questions:
+            if question.id not in answered_question_ids:
+                projects_require_reminder.append(project)
+                break
+
+    email_mapping = defaultdict(lambda: defaultdict(list))
+    for project in projects_require_reminder:
+        for profile in project.team.all():
+            email_mapping[profile.language][profile.user.email].append(project.name)
+
+    for language, data in email_mapping.items():
+        for email, project_names_list in data.items():
+            send_mail_wrapper(
+                subject=_("Missing required answer for country question"),
+                email_type='missing_required_country_question_answer',
+                to=email,
+                language=language,
+                context={'projects': ", ".join(project_names_list)})
