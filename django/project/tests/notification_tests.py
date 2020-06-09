@@ -48,8 +48,8 @@ class ProjectNotificationTests(SetupTests):
 
         # task shouldn't pick up this, because it has answers for every question
         data = copy.deepcopy(self.published_pr_data)
-        data['country_custom_answers'] = [{"question_id": ccq_1.id, "answer": ["answer country 1"]},
-                                          {"question_id": ccq_2.id, "answer": ["answer country 2"]}]
+        data['country_custom_answers'] = [{"question_id": ccq_1.id, "answer": ["answer 1"]},
+                                          {"question_id": ccq_2.id, "answer": ["answer 2"]}]
         published_pr_3 = Project.objects.create(
             name='Published project 3', data=data, public_id='3333')
         published_pr_3.team.add(self.profile_2)
@@ -83,3 +83,4 @@ class ProjectNotificationTests(SetupTests):
         self.assertEqual(call_args_list_2['to'], self.user_2.email)
         self.assertEqual(call_args_list_2['language'], 'en')
         self.assertEqual(call_args_list_2['context'], {'projects': 'Published project 5'})
+
