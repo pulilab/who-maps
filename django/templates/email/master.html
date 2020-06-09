@@ -531,6 +531,13 @@
                         <!-- /TEMPLATE: PASSWORD INVITED -->
 
 
+                        <!-- MISSING COUNTRY QUESTION ANSWERS -->
+                        {% elif type == "missing_country_question_answers" %}
+                        <h1>{% trans "Missing country question answers" %}</h1>
+                        <p>{% trans "Country question answers are missing for the following project(s): " %} <b>{{ projects }}</b></p>
+                        <!-- /MISSING COUNTRY QUESTION ANSWERS -->
+
+
                         <!-- NEW PENDING SOFTWARE -->
                         {% elif type == "new_pending_software" %}
                         <h1>{% trans "New software has been added to the system" %}</h1>
