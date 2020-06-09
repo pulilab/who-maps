@@ -32,7 +32,7 @@ class ProjectNotificationTests(SetupTests):
         ccq_2 = CountryCustomQuestionFactory(question="question 2", required=True, country=self.country)
 
         # task shouldn't pick up this because it is a draft
-        draft_project = Project.objects.create(name='Draft project 1', public_id='')
+        draft_project = Project.objects.create(name='Draft project', public_id='')
         draft_project.team.add(self.profile_1)
 
         # task should pick up this, because it has no answers at all
@@ -93,7 +93,7 @@ class ProjectNotificationTests(SetupTests):
         ccq_2 = CountryCustomQuestionFactory(question="optional question", required=False, country=self.country)
 
         # task shouldn't pick up this because it is a draft
-        draft_project = Project.objects.create(name='Draft project 1', public_id='')
+        draft_project = Project.objects.create(name='Draft project', public_id='')
         draft_project.team.add(self.profile_1)
 
         # task shouldn't pick up this, because it belongs to another country which has no questions
