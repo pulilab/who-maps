@@ -39,7 +39,7 @@ class ProjectNotificationTests(SetupTests):
             name='Published project 1', data=self.published_pr_data, public_id='1111')
         published_pr_1.team.add(self.profile_1)
 
-        # task shouldn't pick up this, becaue it belongs to another country which has no questions
+        # task shouldn't pick up this, because it belongs to another country which has no questions
         data = copy.deepcopy(self.published_pr_data)
         data['country'] = Country.objects.exclude(id=self.country_id).first().id
         published_pr_2 = Project.objects.create(
