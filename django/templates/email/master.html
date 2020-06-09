@@ -538,6 +538,13 @@
                         <!-- /MISSING COUNTRY QUESTION ANSWERS -->
 
 
+                        <!-- MISSING REQUIRED COUNTRY QUESTION ANSWER -->
+                        {% elif type == "missing_required_country_question_answer" %}
+                        <h1>{% trans "Missing required answer for country question" %}</h1>
+                        <p>{% trans "Required country question answers are missing for the following project(s): " %} <b>{{ projects }}</b></p>
+                        <!-- /MISSING REQUIRED COUNTRY QUESTION ANSWER -->
+
+
                         <!-- NEW PENDING SOFTWARE -->
                         {% elif type == "new_pending_software" %}
                         <h1>{% trans "New software has been added to the system" %}</h1>
