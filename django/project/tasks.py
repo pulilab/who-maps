@@ -430,3 +430,29 @@ def send_draft_only_reminders():
                               to=email_list,
                               language=language,
                               context={'project_id': p.id})
+
+
+@app.task(name="send_no_country_question_answers_reminder")
+def send_no_country_question_answers_reminder():
+    """
+    Sends reminder to projects that has no country question answers.
+    """
+    from project.models import Project
+
+    countries_with_questions = Country.objects.filter(country_questions__isnull=False)
+    projects = Project.objects.published_only().filter(search__country__in=countries_with_questions).\
+        filter(data__country_custom_answers__isnull=True)
+
+    email_mapping = defaultdict(lambda: defaultdict(list))
+    for project in projects:
+        for profile in project.team.all():
+            email_mapping[profile.language][profile.user.email].append(project.name)
+
+    for language, data in email_mapping.items():
+        for email, project_names_list in data.items():
+            send_mail_wrapper(
+                subject=_("Missing answers for country questions"),
+                email_type='missing_country_question_answers',
+                to=email,
+                language=language,
+                context={'projects': ", ".join(project_names_list)})
