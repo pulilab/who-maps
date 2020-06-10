@@ -443,7 +443,9 @@ def send_no_country_question_answers_reminder():
     country_ids = CountryCustomQuestion.objects.filter(required=True).order_by('country').distinct().\
         values_list('country', flat=True)
     projects = Project.objects.published_only().filter(search__country__in=country_ids).\
-        filter(data__country_custom_answers__isnull=True)
+        filter(Q(data__country_custom_answers__isnull=True) |
+               Q(data__country_custom_answers={}) |
+               Q(data__country_custom_answers=[]))
 
     email_mapping = defaultdict(lambda: defaultdict(list))
     for project in projects:
@@ -475,7 +477,7 @@ def send_not_every_required_country_question_has_answer_reminder():
     projects_require_reminder = []
     for project in projects:
         answered_question_ids = [item['question_id'] for item in project.data['country_custom_answers']]
-        for question in required_questions:
+        for question in required_questions.filter(country=project.search.country):
             if question.id not in answered_question_ids:
                 projects_require_reminder.append(project)
                 break
