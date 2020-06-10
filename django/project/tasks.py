@@ -24,8 +24,8 @@ from celery.utils.log import get_task_logger
 from rest_framework.exceptions import ValidationError
 
 from core.utils import send_mail_wrapper
-from user.models import Organisation, UserProfile
-from country.models import Country, Donor, CountryCustomQuestion
+from user.models import Organisation
+from country.models import Country, Donor
 
 from .models import Project, InteroperabilityLink, TechnologyPlatform
 from .serializers import ProjectDraftSerializer
@@ -439,6 +439,8 @@ def send_no_country_question_answers_reminder():
     Sends reminder to projects that has no country question answers.
     """
     from project.models import Project
+    from user.models import UserProfile
+    from country.models import CountryCustomQuestion
 
     country_ids = CountryCustomQuestion.objects.filter(required=True).order_by('country').distinct().\
         values_list('country', flat=True)
@@ -475,30 +477,41 @@ def send_not_every_required_country_question_has_answer_reminder():
     Sends reminder to projects that has no answer for every required country question.
     """
     from project.models import Project
+    from user.models import UserProfile
+    from country.models import CountryCustomQuestion
 
     required_questions = CountryCustomQuestion.objects.filter(required=True)
     country_ids = required_questions.order_by('country').distinct().values_list('country', flat=True)
     projects = Project.objects.published_only().filter(search__country__in=country_ids).\
         filter(data__country_custom_answers__isnull=False)
 
-    projects_require_reminder = []
+    projects_require_reminder_ids = []
     for project in projects:
         answered_question_ids = [item['question_id'] for item in project.data['country_custom_answers']]
         for question in required_questions.filter(country=project.search.country):
             if question.id not in answered_question_ids:
-                projects_require_reminder.append(project)
+                projects_require_reminder_ids.append(project.id)
                 break
 
-    email_mapping = defaultdict(lambda: defaultdict(list))
-    for project in projects_require_reminder:
-        for profile in project.team.all():
-            email_mapping[profile.language][profile.user.email].append(project.name)
+    projects_require_reminder = projects.filter(id__in=projects_require_reminder_ids)
 
-    for language, data in email_mapping.items():
-        for email, project_names_list in data.items():
+    project_team_members = set(projects_require_reminder.values_list('team', flat=True))
+
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects_require_reminder.filter(team=member)]
+            subject = _("Missing required answer for country question")
             send_mail_wrapper(
-                subject=_("Missing required answer for country question"),
+                subject=subject,
                 email_type='missing_required_country_question_answer',
-                to=email,
-                language=language,
-                context={'projects': ", ".join(project_names_list)})
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                }
+            )

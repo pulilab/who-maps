@@ -157,18 +157,23 @@ class ProjectNotificationTests(SetupTests):
 
         self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
 
-        # user_2 should receive notifications about project 2 and 5
+        # user_1 should receive notifications about project 4
         call_args_list_1 = send_mail_wrapper.call_args_list[0][1]
         self.assertEqual(call_args_list_1['subject'], 'Missing required answer for country question')
         self.assertEqual(call_args_list_1['email_type'], 'missing_required_country_question_answer')
-        self.assertEqual(call_args_list_1['to'], self.user_2.email)
+        self.assertEqual(call_args_list_1['to'], self.user_1.email)
         self.assertEqual(call_args_list_1['language'], 'en')
-        self.assertEqual(call_args_list_1['context'], {'projects': 'Published project 2, Published project 5'})
+        self.assertEqual(call_args_list_1['context']['name'], self.profile_1.name)
+        self.assertEqual(len(call_args_list_1['context']['projects']), 1)
+        self.assertIn(published_pr_4, call_args_list_1['context']['projects'])
 
-        # user_1 should receive notifications about project 4
+        # user_2 should receive notifications about project 2 and 5
         call_args_list_2 = send_mail_wrapper.call_args_list[1][1]
         self.assertEqual(call_args_list_2['subject'], 'Missing required answer for country question')
         self.assertEqual(call_args_list_2['email_type'], 'missing_required_country_question_answer')
-        self.assertEqual(call_args_list_2['to'], self.user_1.email)
+        self.assertEqual(call_args_list_2['to'], self.user_2.email)
         self.assertEqual(call_args_list_2['language'], 'en')
-        self.assertEqual(call_args_list_2['context'], {'projects': 'Published project 4'})
+        self.assertEqual(call_args_list_2['context']['name'], self.profile_2.name)
+        self.assertEqual(len(call_args_list_2['context']['projects']), 2)
+        self.assertIn(published_pr_2, call_args_list_2['context']['projects'])
+        self.assertIn(published_pr_5, call_args_list_2['context']['projects'])
