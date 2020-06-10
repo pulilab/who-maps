@@ -477,7 +477,7 @@ def send_not_every_required_country_question_has_answer_reminder():
     projects_require_reminder = []
     for project in projects:
         answered_question_ids = [item['question_id'] for item in project.data['country_custom_answers']]
-        for question in required_questions:
+        for question in required_questions.filter(country=project.search.country):
             if question.id not in answered_question_ids:
                 projects_require_reminder.append(project)
                 break
