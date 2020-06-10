@@ -83,28 +83,24 @@ class ProjectNotificationTests(SetupTests):
 
         self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
 
-        # user_1 should receive notifications about project 1 and 4
-        call_args_list_1 = send_mail_wrapper.call_args_list[0][1]
-        self.assertEqual(call_args_list_1['subject'], 'Missing answers for country questions')
-        self.assertEqual(call_args_list_1['email_type'], 'missing_country_question_answers')
-        self.assertEqual(call_args_list_1['to'], self.user_1.email)
-        self.assertEqual(call_args_list_1['language'], 'en')
-        self.assertEqual(call_args_list_1['context']['name'], self.profile_1.name)
-        self.assertEqual(len(call_args_list_1['context']['projects']), 2)
-        self.assertIn(published_pr_1, call_args_list_1['context']['projects'])
-        self.assertIn(published_pr_4, call_args_list_1['context']['projects'])
-
-        # user_2 should receive notifications about project 5
-        call_args_list_2 = send_mail_wrapper.call_args_list[1][1]
-        self.assertEqual(call_args_list_2['subject'], 'Missing answers for country questions')
-        self.assertEqual(call_args_list_2['email_type'], 'missing_country_question_answers')
-        self.assertEqual(call_args_list_2['to'], self.user_2.email)
-        self.assertEqual(call_args_list_2['language'], 'en')
-        self.assertEqual(call_args_list_2['context']['name'], self.profile_2.name)
-        self.assertEqual(len(call_args_list_2['context']['projects']), 3)
-        self.assertIn(published_pr_5, call_args_list_2['context']['projects'])
-        self.assertIn(published_pr_6, call_args_list_2['context']['projects'])
-        self.assertIn(published_pr_7, call_args_list_2['context']['projects'])
+        for call in send_mail_wrapper.call_args_list:
+            call_args = call[1]
+            self.assertEqual(call_args['subject'], 'Missing answers for country questions')
+            self.assertEqual(call_args['email_type'], 'missing_country_question_answers')
+            self.assertEqual(call_args['language'], 'en')
+            if call_args['to'] == self.user_1.email:
+                # user_1 should receive notifications about project 1 and 4
+                self.assertEqual(call_args['context']['name'], self.profile_1.name)
+                self.assertEqual(len(call_args['context']['projects']), 2)
+                self.assertIn(published_pr_1, call_args['context']['projects'])
+                self.assertIn(published_pr_4, call_args['context']['projects'])
+            else:
+                # user_2 should receive notifications about project 5
+                self.assertEqual(call_args['context']['name'], self.profile_2.name)
+                self.assertEqual(len(call_args['context']['projects']), 3)
+                self.assertIn(published_pr_5, call_args['context']['projects'])
+                self.assertIn(published_pr_6, call_args['context']['projects'])
+                self.assertIn(published_pr_7, call_args['context']['projects'])
 
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_send_not_every_required_country_question_has_answer_reminder(self, send_mail_wrapper):
@@ -157,23 +153,19 @@ class ProjectNotificationTests(SetupTests):
 
         self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
 
-        # user_1 should receive notifications about project 4
-        call_args_list_1 = send_mail_wrapper.call_args_list[0][1]
-        self.assertEqual(call_args_list_1['subject'], 'Missing required answer for country question')
-        self.assertEqual(call_args_list_1['email_type'], 'missing_required_country_question_answer')
-        self.assertEqual(call_args_list_1['to'], self.user_1.email)
-        self.assertEqual(call_args_list_1['language'], 'en')
-        self.assertEqual(call_args_list_1['context']['name'], self.profile_1.name)
-        self.assertEqual(len(call_args_list_1['context']['projects']), 1)
-        self.assertIn(published_pr_4, call_args_list_1['context']['projects'])
-
-        # user_2 should receive notifications about project 2 and 5
-        call_args_list_2 = send_mail_wrapper.call_args_list[1][1]
-        self.assertEqual(call_args_list_2['subject'], 'Missing required answer for country question')
-        self.assertEqual(call_args_list_2['email_type'], 'missing_required_country_question_answer')
-        self.assertEqual(call_args_list_2['to'], self.user_2.email)
-        self.assertEqual(call_args_list_2['language'], 'en')
-        self.assertEqual(call_args_list_2['context']['name'], self.profile_2.name)
-        self.assertEqual(len(call_args_list_2['context']['projects']), 2)
-        self.assertIn(published_pr_2, call_args_list_2['context']['projects'])
-        self.assertIn(published_pr_5, call_args_list_2['context']['projects'])
+        for call in send_mail_wrapper.call_args_list:
+            call_args = call[1]
+            self.assertEqual(call_args['subject'], 'Missing required answer for country question')
+            self.assertEqual(call_args['email_type'], 'missing_required_country_question_answer')
+            self.assertEqual(call_args['language'], 'en')
+            if call_args['to'] == self.user_1.email:
+                # user_1 should receive notifications about project 4
+                self.assertEqual(call_args['context']['name'], self.profile_1.name)
+                self.assertEqual(len(call_args['context']['projects']), 1)
+                self.assertIn(published_pr_4, call_args['context']['projects'])
+            else:
+                # user_2 should receive notifications about project 2 and 5
+                self.assertEqual(call_args['context']['name'], self.profile_2.name)
+                self.assertEqual(len(call_args['context']['projects']), 2)
+                self.assertIn(published_pr_2, call_args['context']['projects'])
+                self.assertIn(published_pr_5, call_args['context']['projects'])
