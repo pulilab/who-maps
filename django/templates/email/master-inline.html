@@ -518,6 +518,13 @@
                         <!-- /MISSING REQUIRED COUNTRY QUESTION ANSWER -->
 
 
+                        <!-- MISSING PROJECT STAGES -->
+                        {% elif type == "missing_stages_from_project_data" %}
+                        <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Stages are missing from project data" %}</h1>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Stages are missing for the following project(s): " %} <b>{{ projects }}</b></p>
+                        <!-- /MISSING PROJECT STAGES -->
+
+
                         <!-- NEW PENDING SOFTWARE -->
                         {% elif type == "new_pending_software" %}
                         <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "New software has been added to the system" %}</h1>
