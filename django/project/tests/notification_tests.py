@@ -89,7 +89,10 @@ class ProjectNotificationTests(SetupTests):
         self.assertEqual(call_args_list_1['email_type'], 'missing_country_question_answers')
         self.assertEqual(call_args_list_1['to'], self.user_1.email)
         self.assertEqual(call_args_list_1['language'], 'en')
-        self.assertEqual(call_args_list_1['context'], {'projects': 'Published project 1, Published project 4'})
+        self.assertEqual(call_args_list_1['context']['name'], self.profile_1.name)
+        self.assertEqual(len(call_args_list_1['context']['projects']), 2)
+        self.assertIn(published_pr_1, call_args_list_1['context']['projects'])
+        self.assertIn(published_pr_4, call_args_list_1['context']['projects'])
 
         # user_2 should receive notifications about project 5
         call_args_list_2 = send_mail_wrapper.call_args_list[1][1]
@@ -97,8 +100,11 @@ class ProjectNotificationTests(SetupTests):
         self.assertEqual(call_args_list_2['email_type'], 'missing_country_question_answers')
         self.assertEqual(call_args_list_2['to'], self.user_2.email)
         self.assertEqual(call_args_list_2['language'], 'en')
-        self.assertEqual(
-            call_args_list_2['context'], {'projects': 'Published project 5, Published project 6, Published project 7'})
+        self.assertEqual(call_args_list_2['context']['name'], self.profile_2.name)
+        self.assertEqual(len(call_args_list_2['context']['projects']), 3)
+        self.assertIn(published_pr_5, call_args_list_2['context']['projects'])
+        self.assertIn(published_pr_6, call_args_list_2['context']['projects'])
+        self.assertIn(published_pr_7, call_args_list_2['context']['projects'])
 
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_send_not_every_required_country_question_has_answer_reminder(self, send_mail_wrapper):

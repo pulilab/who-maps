@@ -24,7 +24,7 @@ from celery.utils.log import get_task_logger
 from rest_framework.exceptions import ValidationError
 
 from core.utils import send_mail_wrapper
-from user.models import Organisation
+from user.models import Organisation, UserProfile
 from country.models import Country, Donor, CountryCustomQuestion
 
 from .models import Project, InteroperabilityLink, TechnologyPlatform
@@ -447,19 +447,26 @@ def send_no_country_question_answers_reminder():
                Q(data__country_custom_answers={}) |
                Q(data__country_custom_answers=[]))
 
-    email_mapping = defaultdict(lambda: defaultdict(list))
-    for project in projects:
-        for profile in project.team.all():
-            email_mapping[profile.language][profile.user.email].append(project.name)
+    project_team_members = set(projects.values_list('team', flat=True))
 
-    for language, data in email_mapping.items():
-        for email, project_names_list in data.items():
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects.filter(team=member)]
+            subject = _("Missing answers for country questions")
             send_mail_wrapper(
-                subject=_("Missing answers for country questions"),
+                subject=subject,
                 email_type='missing_country_question_answers',
-                to=email,
-                language=language,
-                context={'projects': ", ".join(project_names_list)})
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                }
+            )
 
 
 @app.task(name="send_not_every_country_question_has_answer_reminder")
