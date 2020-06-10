@@ -13,6 +13,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.translation import ugettext
 from django.utils import timezone
@@ -442,7 +443,9 @@ def send_no_country_question_answers_reminder():
     country_ids = CountryCustomQuestion.objects.filter(required=True).order_by('country').distinct().\
         values_list('country', flat=True)
     projects = Project.objects.published_only().filter(search__country__in=country_ids).\
-        filter(data__country_custom_answers__isnull=True)
+        filter(Q(data__country_custom_answers__isnull=True) |
+               Q(data__country_custom_answers={}) |
+               Q(data__country_custom_answers=[]))
 
     email_mapping = defaultdict(lambda: defaultdict(list))
     for project in projects:

@@ -65,6 +65,20 @@ class ProjectNotificationTests(SetupTests):
             name='Published project 5', data=self.published_pr_data, public_id='5555')
         published_pr_5.team.add(self.profile_2)
 
+        # task should pick up this, because it has empty answers
+        data = copy.deepcopy(self.published_pr_data)
+        data['country_custom_answers'] = {}
+        published_pr_6 = Project.objects.create(
+            name='Published project 6', data=data, public_id='6666')
+        published_pr_6.team.add(self.profile_2)
+
+        # task should pick up this, because it has empty answers
+        data = copy.deepcopy(self.published_pr_data)
+        data['country_custom_answers'] = []
+        published_pr_7 = Project.objects.create(
+            name='Published project 7', data=data, public_id='7777')
+        published_pr_7.team.add(self.profile_2)
+
         send_no_country_question_answers_reminder.apply()
 
         self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
@@ -83,7 +97,8 @@ class ProjectNotificationTests(SetupTests):
         self.assertEqual(call_args_list_2['email_type'], 'missing_country_question_answers')
         self.assertEqual(call_args_list_2['to'], self.user_2.email)
         self.assertEqual(call_args_list_2['language'], 'en')
-        self.assertEqual(call_args_list_2['context'], {'projects': 'Published project 5'})
+        self.assertEqual(
+            call_args_list_2['context'], {'projects': 'Published project 5, Published project 6, Published project 7'})
 
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_send_not_every_required_country_question_has_answer_reminder(self, send_mail_wrapper):
