@@ -13,6 +13,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.translation import ugettext
 from django.utils import timezone
@@ -489,6 +490,30 @@ def send_not_every_required_country_question_has_answer_reminder():
             send_mail_wrapper(
                 subject=_("Missing required answer for country question"),
                 email_type='missing_required_country_question_answer',
+                to=email,
+                language=language,
+                context={'projects': ", ".join(project_names_list)})
+
+
+@app.task(name="send_empty_stages_reminder")
+def send_empty_stages_reminder():
+    """
+    Sends reminder to projects that has no stages.
+    """
+    from project.models import Project
+
+    projects = Project.objects.published_only().filter(Q(data__stages__isnull=True) | Q(data__stages=[]))
+
+    email_mapping = defaultdict(lambda: defaultdict(list))
+    for project in projects:
+        for profile in project.team.all():
+            email_mapping[profile.language][profile.user.email].append(project.name)
+
+    for language, data in email_mapping.items():
+        for email, project_names_list in data.items():
+            send_mail_wrapper(
+                subject=_("Stages are missing from project data"),
+                email_type='missing_stages_from_project_data',
                 to=email,
                 language=language,
                 context={'projects': ", ".join(project_names_list)})
