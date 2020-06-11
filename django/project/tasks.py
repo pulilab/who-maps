@@ -515,3 +515,62 @@ def send_not_every_required_country_question_has_answer_reminder():
                     'name': profile.name,
                 }
             )
+
+
+@app.task(name="send_coverage_reminder")
+def send_coverage_reminder():
+    """
+    Sends reminder to projects where coverage data is missing or not complete
+    """
+    from project.models import Project
+    from user.models import UserProfile
+
+    keys_to_check = ['clients', 'facilities', 'health_workers']
+
+    projects_need_reminder = []
+
+    # check where national level deployment is filled
+    projects = Project.objects.published_only().national_level_deployment_not_empty()
+    for project in projects:
+        deployment = project.data['national_level_deployment']
+        all_zero = all(deployment[key] == 0 for key in keys_to_check)
+        any_key_missing = any(key not in deployment for key in keys_to_check)
+        if all_zero or any_key_missing:
+            projects_need_reminder.append(project.id)
+
+    # check where coverage is filled
+    projects = Project.objects.published_only().coverage_not_empty()
+    for project in projects:
+        coverage = project.data['coverage']
+        for district_data in coverage:
+            all_zero = all(district_data[key] == 0 for key in keys_to_check)
+            any_key_missing = any(key not in district_data for key in keys_to_check)
+            if all_zero or any_key_missing:
+                projects_need_reminder.append(project.id)
+                break
+
+    projects_to_remind = Project.objects.filter(id__in=projects_need_reminder)
+
+    # where both keys are missing
+    projects_to_remind |= Project.objects.published_only().coverage_empty().national_level_deployment_empty()
+
+    project_team_members = set(projects_to_remind.values_list('team', flat=True))
+
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects_to_remind.filter(team=member)]
+            subject = _("Coverage data is missing")
+            send_mail_wrapper(
+                subject=subject,
+                email_type='missing_coverage_data',
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                }
+            )
