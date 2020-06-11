@@ -504,38 +504,6 @@
                         <!-- /TEMPLATE: PASSWORD INVITED -->
 
 
-                        <!-- MISSING COUNTRY QUESTION ANSWERS -->
-                        {% elif type == "missing_country_question_answers" %}
-                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear" %} {{ name }}</h2>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Country question answers are missing for the following project(s): " %}</p>
-                        <table border="0" cellpadding="0" cellspacing="0" class="project-list" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
-                          <tbody>
-                            <tr class="list-header">
-                              <td align="left" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
-                                <b style="text-transform:uppercase;" >{% trans "Project Name" %}</b>
-                              </td>
-                              <td align="right" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
-                                {% trans "Date of Submission" %}
-                              </td>
-                            </tr>
-                            {% for project in projects %}
-                            <tr class="list-content">
-                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
-                                <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/published" target="_blank" style="color:#008DC9;text-decoration:underline;" ><b>{{ project.name }}</b></a>
-                              </td>
-                              <td align="right" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
-                                <b>{{ project.modified }}</b>
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table><br><br>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
-                        <!-- /MISSING COUNTRY QUESTION ANSWERS -->
-
-
                         <!-- MISSING DATA COMMON TEMPLATE -->
                         {% elif type == "missing_data_common_template" %}
                         <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear" %} {{ name }}</h2>

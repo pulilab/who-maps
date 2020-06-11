@@ -459,14 +459,16 @@ def send_no_country_question_answers_reminder():
         else:
             member_projects = [project for project in projects.filter(team=member)]
             subject = _("Missing answers for country questions")
+            details = _('Country question answers are missing for the following project(s):')
             send_mail_wrapper(
                 subject=subject,
-                email_type='missing_country_question_answers',
+                email_type='missing_data_common_template',
                 to=profile.user.email,
                 language=profile.language or settings.LANGUAGE_CODE,
                 context={
                     'projects': member_projects,
                     'name': profile.name,
+                    'details': details,
                 }
             )
 
