@@ -246,6 +246,8 @@ PROJECT_UPDATE_DIGEST_PERIOD = 7 * 24  # 1 week
 APPROVAL_DIGEST_PERIOD = 7 * 24  # 1 week
 NEW_QUESTION_DIGEST_PERIOD = 7 * 24  # 1 week
 DRAFT_ONLY_REMINDER_PERIOD = 7 * 24  # 1 week
+NO_COUNTRY_QUESTION_ANSWER_REMINDER_PERIOD = 7 * 24  # 1 week
+NOT_EVERY_REQUIRED_COUNTRY_QUESTION_HAS_ANSWER_REMINDER_PERIOD = 7 * 24  # 1 week
 
 CACHES = {
     "default": {
@@ -376,7 +378,15 @@ if SITE_ID in [3, 4]:
         "send_draft_only_reminders": {
             "task": 'send_draft_only_reminders',
             "schedule": datetime.timedelta(hours=DRAFT_ONLY_REMINDER_PERIOD),
-        }
+        },
+        "send_no_country_question_answers_reminder": {
+            "task": 'send_no_country_question_answers_reminder',
+            "schedule": datetime.timedelta(hours=NO_COUNTRY_QUESTION_ANSWER_REMINDER_PERIOD),
+        },
+        "send_not_every_required_country_question_has_answer_reminder": {
+            "task": 'send_not_every_required_country_question_has_answer_reminder',
+            "schedule": datetime.timedelta(hours=NOT_EVERY_REQUIRED_COUNTRY_QUESTION_HAS_ANSWER_REMINDER_PERIOD),
+        },
     }
     if ODK_SYNC_ENABLED:
         CELERYBEAT_SCHEDULE.update(

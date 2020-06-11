@@ -13,6 +13,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.translation import ugettext
 from django.utils import timezone
@@ -430,3 +431,87 @@ def send_draft_only_reminders():
                               to=email_list,
                               language=language,
                               context={'project_id': p.id})
+
+
+@app.task(name="send_no_country_question_answers_reminder")
+def send_no_country_question_answers_reminder():
+    """
+    Sends reminder to projects that has no country question answers.
+    """
+    from project.models import Project
+    from user.models import UserProfile
+    from country.models import CountryCustomQuestion
+
+    country_ids = CountryCustomQuestion.objects.filter(required=True).order_by('country').distinct().\
+        values_list('country', flat=True)
+    projects = Project.objects.published_only().filter(search__country__in=country_ids).\
+        filter(Q(data__country_custom_answers__isnull=True) |
+               Q(data__country_custom_answers={}) |
+               Q(data__country_custom_answers=[]))
+
+    project_team_members = set(projects.values_list('team', flat=True))
+
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects.filter(team=member)]
+            subject = _("Missing answers for country questions")
+            send_mail_wrapper(
+                subject=subject,
+                email_type='missing_country_question_answers',
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                }
+            )
+
+
+@app.task(name="send_not_every_country_question_has_answer_reminder")
+def send_not_every_required_country_question_has_answer_reminder():
+    """
+    Sends reminder to projects that has no answer for every required country question.
+    """
+    from project.models import Project
+    from user.models import UserProfile
+    from country.models import CountryCustomQuestion
+
+    required_questions = CountryCustomQuestion.objects.filter(required=True)
+    country_ids = required_questions.order_by('country').distinct().values_list('country', flat=True)
+    projects = Project.objects.published_only().filter(search__country__in=country_ids).\
+        filter(data__country_custom_answers__isnull=False)
+
+    projects_require_reminder_ids = []
+    for project in projects:
+        answered_question_ids = [item['question_id'] for item in project.data['country_custom_answers']]
+        for question in required_questions.filter(country=project.search.country):
+            if question.id not in answered_question_ids:
+                projects_require_reminder_ids.append(project.id)
+                break
+
+    projects_require_reminder = projects.filter(id__in=projects_require_reminder_ids)
+
+    project_team_members = set(projects_require_reminder.values_list('team', flat=True))
+
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects_require_reminder.filter(team=member)]
+            subject = _("Missing required answer for country question")
+            send_mail_wrapper(
+                subject=subject,
+                email_type='missing_required_country_question_answer',
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                }
+            )
