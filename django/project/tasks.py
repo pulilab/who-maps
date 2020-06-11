@@ -523,19 +523,27 @@ def send_empty_stages_reminder():
     Sends reminder to projects that has no stages.
     """
     from project.models import Project
+    from user.models import UserProfile
 
     projects = Project.objects.published_only().filter(Q(data__stages__isnull=True) | Q(data__stages=[]))
 
-    email_mapping = defaultdict(lambda: defaultdict(list))
-    for project in projects:
-        for profile in project.team.all():
-            email_mapping[profile.language][profile.user.email].append(project.name)
+    project_team_members = set(projects.values_list('team', flat=True))
 
-    for language, data in email_mapping.items():
-        for email, project_names_list in data.items():
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects.filter(team=member)]
+            subject = _("Stages are missing from project data")
             send_mail_wrapper(
-                subject=_("Stages are missing from project data"),
+                subject=subject,
                 email_type='missing_stages_from_project_data',
-                to=email,
-                language=language,
-                context={'projects': ", ".join(project_names_list)})
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                }
+            )
