@@ -595,6 +595,38 @@
                         <!-- /MISSING REQUIRED COUNTRY QUESTION ANSWER -->
 
 
+                        <!-- MISSING COVERAGE -->
+                        {% elif type == "missing_coverage_data" %}
+                        <h2>{% trans "Dear" %} {{ name }}</h2>
+                        <p>{% trans "Coverage data is missing for the following project(s): " %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left">
+                                <b>{% trans "Project Name" %}</b>
+                              </td>
+                              <td align="right">
+                                {% trans "Date of Submission" %}
+                              </td>
+                            </tr>
+                            {% for project in projects %}
+                            <tr class="list-content">
+                              <td align="left">
+                                <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/published" target="_blank"><b>{{ project.name }}</b></a>
+                              </td>
+                              <td align="right">
+                                <b>{{ project.modified }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table><br><br>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "Sincerely," %}</p>
+                        <p>{% trans "The Digital Health Atlas Team" %}</p>
+                        <!-- /MISSING COVERAGE -->
+
+
                         <!-- NEW PENDING SOFTWARE -->
                         {% elif type == "new_pending_software" %}
                         <h1>{% trans "New software has been added to the system" %}</h1>
