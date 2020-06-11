@@ -505,14 +505,16 @@ def send_not_every_required_country_question_has_answer_reminder():
         else:
             member_projects = [project for project in projects_require_reminder.filter(team=member)]
             subject = _("Missing required answer for country question")
+            details = _('Required country question answers are missing for the following project(s):')
             send_mail_wrapper(
                 subject=subject,
-                email_type='missing_required_country_question_answer',
+                email_type='missing_data_common_template',
                 to=profile.user.email,
                 language=profile.language or settings.LANGUAGE_CODE,
                 context={
                     'projects': member_projects,
                     'name': profile.name,
+                    'details': details,
                 }
             )
 
