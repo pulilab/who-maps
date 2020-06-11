@@ -541,13 +541,15 @@ def send_empty_stages_reminder():
         else:
             member_projects = [project for project in projects.filter(team=member)]
             subject = _("Stages are missing from project data")
+            details = _('Stages are missing for the following project(s):')
             send_mail_wrapper(
                 subject=subject,
-                email_type='missing_stages_from_project_data',
+                email_type='missing_data_common_template',
                 to=profile.user.email,
                 language=profile.language or settings.LANGUAGE_CODE,
                 context={
                     'projects': member_projects,
                     'name': profile.name,
+                    'details': details,
                 }
             )

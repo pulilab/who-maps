@@ -217,8 +217,9 @@ class ProjectNotificationTests(SetupTests):
         for call in send_mail_wrapper.call_args_list:
             call_args = call[1]
             self.assertEqual(call_args['subject'], 'Stages are missing from project data')
-            self.assertEqual(call_args['email_type'], 'missing_stages_from_project_data')
+            self.assertEqual(call_args['email_type'], 'missing_data_common_template')
             self.assertEqual(call_args['language'], 'en')
+            self.assertEqual(call_args['context']['details'], 'Stages are missing for the following project(s):')
             if call_args['to'] == self.user_1.email:
                 # user_1 should receive notifications about project 1 and 3
                 self.assertEqual(len(call_args['context']['projects']), 2)
