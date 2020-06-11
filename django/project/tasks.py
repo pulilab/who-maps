@@ -525,7 +525,11 @@ def send_empty_stages_reminder():
     from project.models import Project
     from user.models import UserProfile
 
-    projects = Project.objects.published_only().filter(Q(data__stages__isnull=True) | Q(data__stages=[]))
+    projects = Project.objects.published_only().filter(
+        Q(data__stages__isnull=True) |
+        Q(data__stages=[]) |
+        Q(data__stages={})
+    )
 
     project_team_members = set(projects.values_list('team', flat=True))
 
