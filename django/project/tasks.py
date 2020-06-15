@@ -606,13 +606,15 @@ def send_coverage_reminder():
         else:
             member_projects = [project for project in projects_to_remind.filter(team=member)]
             subject = _("Coverage data is missing")
+            details = _('Coverage data is missing for the following project(s):')
             send_mail_wrapper(
                 subject=subject,
-                email_type='missing_coverage_data',
+                email_type='missing_data_common_template',
                 to=profile.user.email,
                 language=profile.language or settings.LANGUAGE_CODE,
                 context={
                     'projects': member_projects,
                     'name': profile.name,
+                    'details': details,
                 }
             )
