@@ -1,11 +1,14 @@
 import copy
 from unittest import mock
 
+from django.utils import timezone
+
 from core.factories import CountryCustomQuestionFactory, UserFactory, UserProfileFactory
 from country.models import Country
 from project.models import Project
 from project.tasks import send_no_country_question_answers_reminder,\
-    send_not_every_required_country_question_has_answer_reminder, send_coverage_reminder
+    send_not_every_required_country_question_has_answer_reminder, send_empty_stages_reminder,\
+    send_coverage_reminder
 from project.tests.setup import SetupTests
 
 
@@ -32,7 +35,7 @@ class ProjectNotificationTests(SetupTests):
         ccq_2 = CountryCustomQuestionFactory(question="question 2", required=True, country=self.country)
 
         # task shouldn't pick up this because it is a draft
-        draft_project = Project.objects.create(name='Draft project 1', public_id='')
+        draft_project = Project.objects.create(name='Draft project', public_id='')
         draft_project.team.add(self.profile_1)
 
         # task should pick up this, because it has no answers at all
@@ -86,8 +89,10 @@ class ProjectNotificationTests(SetupTests):
         for call in send_mail_wrapper.call_args_list:
             call_args = call[1]
             self.assertEqual(call_args['subject'], 'Missing answers for country questions')
-            self.assertEqual(call_args['email_type'], 'missing_country_question_answers')
+            self.assertEqual(call_args['email_type'], 'missing_data_common_template')
             self.assertEqual(call_args['language'], 'en')
+            self.assertEqual(call_args['context']['details'],
+                             'Country question answers are missing for the following project(s):')
             if call_args['to'] == self.user_1.email:
                 # user_1 should receive notifications about project 1 and 4
                 self.assertEqual(call_args['context']['name'], self.profile_1.name)
@@ -110,7 +115,7 @@ class ProjectNotificationTests(SetupTests):
         ccq_2 = CountryCustomQuestionFactory(question="optional question", required=False, country=self.country)
 
         # task shouldn't pick up this because it is a draft
-        draft_project = Project.objects.create(name='Draft project 1', public_id='')
+        draft_project = Project.objects.create(name='Draft project', public_id='')
         draft_project.team.add(self.profile_1)
 
         # task shouldn't pick up this, because it belongs to another country which has no questions
@@ -156,8 +161,10 @@ class ProjectNotificationTests(SetupTests):
         for call in send_mail_wrapper.call_args_list:
             call_args = call[1]
             self.assertEqual(call_args['subject'], 'Missing required answer for country question')
-            self.assertEqual(call_args['email_type'], 'missing_required_country_question_answer')
+            self.assertEqual(call_args['email_type'], 'missing_data_common_template')
             self.assertEqual(call_args['language'], 'en')
+            self.assertEqual(call_args['context']['details'],
+                             'Required country question answers are missing for the following project(s):')
             if call_args['to'] == self.user_1.email:
                 # user_1 should receive notifications about project 4
                 self.assertEqual(call_args['context']['name'], self.profile_1.name)
@@ -169,6 +176,65 @@ class ProjectNotificationTests(SetupTests):
                 self.assertEqual(len(call_args['context']['projects']), 2)
                 self.assertIn(published_pr_2, call_args['context']['projects'])
                 self.assertIn(published_pr_5, call_args['context']['projects'])
+
+    @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
+    def test_send_empty_stages_reminder(self, send_mail_wrapper):
+        Project.objects.all().delete()
+
+        # task shouldn't pick up this because it is a draft
+        draft_project = Project.objects.create(name='Draft project', public_id='')
+        draft_project.team.add(self.profile_1)
+
+        # task should pick up this, because it has no stages data
+        published_pr_1 = Project.objects.create(
+            name='Published project 1', data=self.published_pr_data, public_id='1111')
+        published_pr_1.team.add(self.profile_1)
+
+        # task shouldn't pick up this, because it has stages data
+        data = copy.deepcopy(self.published_pr_data)
+        data['stages'] = [
+            {
+                'id': 1,
+                'date': str(timezone.now()),
+                'note': 'preparation note'
+            }
+        ]
+        published_pr_2 = Project.objects.create(
+            name='Published project 2', data=data, public_id='2222')
+        published_pr_2.team.add(self.profile_1)
+
+        # task should pick up this, because it has empty stages data
+        data = copy.deepcopy(self.published_pr_data)
+        data['stages'] = []
+        published_pr_3 = Project.objects.create(
+            name='Published project 3', data=data, public_id='3333')
+        published_pr_3.team.add(self.profile_1)
+
+        # task should pick up this, because it has no stages data
+        published_pr_4 = Project.objects.create(
+            name='Published project 4', data=self.published_pr_data, public_id='4444')
+        published_pr_4.team.add(self.profile_2)
+
+        send_empty_stages_reminder.apply()
+
+        self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
+
+        for call in send_mail_wrapper.call_args_list:
+            call_args = call[1]
+            self.assertEqual(call_args['subject'], 'Stages are missing from project data')
+            self.assertEqual(call_args['email_type'], 'missing_data_common_template')
+            self.assertEqual(call_args['language'], 'en')
+            self.assertEqual(call_args['context']['details'], 'Stages are missing for the following project(s):')
+            if call_args['to'] == self.user_1.email:
+                # user_1 should receive notifications about project 1 and 3
+                self.assertEqual(len(call_args['context']['projects']), 2)
+                self.assertIn(published_pr_1, call_args['context']['projects'])
+                self.assertIn(published_pr_3, call_args['context']['projects'])
+            else:
+                # user_2 should receive notifications about project 4
+                self.assertEqual(call_args['to'], self.user_2.email)
+                self.assertEqual(len(call_args['context']['projects']), 1)
+                self.assertIn(published_pr_4, call_args['context']['projects'])
 
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)
     def test_send_no_coverage_reminder(self, send_mail_wrapper):

@@ -17,6 +17,7 @@
 
 <script>
 import get from 'lodash/get';
+import debounce from 'lodash/debounce';
 
 export default {
   name: 'CharacterCountInputStandalone',
@@ -38,10 +39,12 @@ export default {
       default: () => ({})
     }
   },
+  data () {
+    return {
+      value: this.$store.getters[`${this.namespace}/${this.get}`]
+    }
+  },
   computed: {
-    value () {
-      return this.$store.getters[`${this.namespace}/${this.get}`];
-    },
     count () {
       if (this.value) {
         return this.value.length;
@@ -57,8 +60,12 @@ export default {
   },
   methods: {
     setValue (val) {
+      this.value = val;
+      this.setStore(val);
+    },
+    setStore: debounce(function (val) {
       this.$store.dispatch(`${this.namespace}/${this.set}`, val);
-    }
+    }, 100)
   }
 };
 </script>

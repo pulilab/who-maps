@@ -248,6 +248,7 @@ NEW_QUESTION_DIGEST_PERIOD = 7 * 24  # 1 week
 DRAFT_ONLY_REMINDER_PERIOD = 7 * 24  # 1 week
 NO_COUNTRY_QUESTION_ANSWER_REMINDER_PERIOD = 7 * 24  # 1 week
 NOT_EVERY_REQUIRED_COUNTRY_QUESTION_HAS_ANSWER_REMINDER_PERIOD = 7 * 24  # 1 week
+EMPTY_STAGES_REMINDER_PERIOD = 3 * 4 * 7 * 24  # - 3 month (12 weeks)
 NO_COVERAGE_REMINDER = 4 * 7 * 24  # 4 weeks
 
 CACHES = {
@@ -387,6 +388,10 @@ if SITE_ID in [3, 4]:
         "send_not_every_required_country_question_has_answer_reminder": {
             "task": 'send_not_every_required_country_question_has_answer_reminder',
             "schedule": datetime.timedelta(hours=NOT_EVERY_REQUIRED_COUNTRY_QUESTION_HAS_ANSWER_REMINDER_PERIOD),
+        },
+        "send_empty_stages_reminder": {
+            "task": 'send_empty_stages_reminder',
+            "schedule": datetime.timedelta(hours=EMPTY_STAGES_REMINDER_PERIOD),
         },
         "send_coverage_reminder": {
             "task": 'send_coverage_reminder',
