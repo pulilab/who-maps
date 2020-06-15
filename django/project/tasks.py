@@ -459,14 +459,16 @@ def send_no_country_question_answers_reminder():
         else:
             member_projects = [project for project in projects.filter(team=member)]
             subject = _("Missing answers for country questions")
+            details = _('Country question answers are missing for the following project(s):')
             send_mail_wrapper(
                 subject=subject,
-                email_type='missing_country_question_answers',
+                email_type='missing_data_common_template',
                 to=profile.user.email,
                 language=profile.language or settings.LANGUAGE_CODE,
                 context={
                     'projects': member_projects,
                     'name': profile.name,
+                    'details': details,
                 }
             )
 
@@ -505,13 +507,53 @@ def send_not_every_required_country_question_has_answer_reminder():
         else:
             member_projects = [project for project in projects_require_reminder.filter(team=member)]
             subject = _("Missing required answer for country question")
+            details = _('Required country question answers are missing for the following project(s):')
             send_mail_wrapper(
                 subject=subject,
-                email_type='missing_required_country_question_answer',
+                email_type='missing_data_common_template',
                 to=profile.user.email,
                 language=profile.language or settings.LANGUAGE_CODE,
                 context={
                     'projects': member_projects,
                     'name': profile.name,
+                    'details': details,
+                }
+            )
+
+
+@app.task(name="send_empty_stages_reminder")
+def send_empty_stages_reminder():
+    """
+    Sends reminder to projects that has no stages.
+    """
+    from project.models import Project
+    from user.models import UserProfile
+
+    projects = Project.objects.published_only().filter(
+        Q(data__stages__isnull=True) |
+        Q(data__stages=[]) |
+        Q(data__stages={})
+    )
+
+    project_team_members = set(projects.values_list('team', flat=True))
+
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects.filter(team=member)]
+            subject = _("Stages are missing from project data")
+            details = _('Stages are missing for the following project(s):')
+            send_mail_wrapper(
+                subject=subject,
+                email_type='missing_data_common_template',
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                    'details': details,
                 }
             )
