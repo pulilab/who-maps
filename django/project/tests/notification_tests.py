@@ -299,6 +299,13 @@ class ProjectNotificationTests(SetupTests):
             name='Published project 7', data=data, public_id='7777')
         published_pr_7.team.add(self.profile_2)
 
+        # task should pick this up because national coverage data is NOne
+        data = copy.deepcopy(self.published_pr_data)
+        data['national_level_deployment'] = None
+        published_pr_8 = Project.objects.create(
+            name='Published project 8', data=data, public_id='8888')
+        published_pr_8.team.add(self.profile_2)
+
         send_coverage_reminder.apply()
 
         self.assertEqual(len(send_mail_wrapper.call_args_list), 2)
@@ -321,5 +328,6 @@ class ProjectNotificationTests(SetupTests):
             else:
                 # user_2 should receive notifications about project 6 and 8
                 self.assertEqual(call_args['context']['name'], self.profile_2.name)
-                self.assertEqual(len(call_args['context']['projects']), 1)
+                self.assertEqual(len(call_args['context']['projects']), 2)
                 self.assertIn(published_pr_6, call_args['context']['projects'])
+                self.assertIn(published_pr_8, call_args['context']['projects'])
