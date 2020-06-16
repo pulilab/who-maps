@@ -557,3 +557,60 @@ def send_empty_stages_reminder():
                     'details': details,
                 }
             )
+
+
+@app.task(name="send_coverage_reminder")
+def send_coverage_reminder():
+    """
+    Sends reminder to projects where coverage data is missing or not complete
+    """
+    from project.models import Project
+    from user.models import UserProfile
+
+    keys_to_check = ['clients', 'facilities', 'health_workers']
+
+    projects_need_reminder = []
+
+    # check where national level deployment is filled
+    projects = Project.objects.published_only().national_level_deployment_not_empty()
+    for project in projects:
+        deployment = project.data['national_level_deployment']
+        if all(deployment[key] == 0 for key in keys_to_check):
+            projects_need_reminder.append(project.id)
+
+    # check where coverage is filled
+    projects = Project.objects.published_only().coverage_not_empty()
+    for project in projects:
+        coverage = project.data['coverage']
+        for district_data in coverage:
+            if all(district_data[key] == 0 for key in keys_to_check):
+                projects_need_reminder.append(project.id)
+                break
+
+    projects_to_remind = Project.objects.filter(id__in=projects_need_reminder)
+
+    # where both keys are missing
+    projects_to_remind |= Project.objects.published_only().coverage_empty().national_level_deployment_empty()
+
+    project_team_members = set(projects_to_remind.values_list('team', flat=True))
+
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects_to_remind.filter(team=member)]
+            subject = _("Coverage data is missing")
+            details = _('Coverage data is missing for the following project(s):')
+            send_mail_wrapper(
+                subject=subject,
+                email_type='missing_data_common_template',
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                    'details': details,
+                }
+            )

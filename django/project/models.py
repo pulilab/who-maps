@@ -44,6 +44,32 @@ class ProjectManager(models.Manager):
     def draft_only(self):
         return self.filter(public_id='')
 
+    def coverage_empty(self):
+        return self.filter(
+            Q(data__coverage__isnull=True) | Q(data__coverage=[]) | Q(data__coverage={}) | Q(data__coverage=None)
+        )
+
+    def coverage_not_empty(self):
+        return self.exclude(
+            Q(data__coverage__isnull=True) | Q(data__coverage=[]) | Q(data__coverage={}) | Q(data__coverage=None)
+        )
+
+    def national_level_deployment_empty(self):
+        return self.filter(
+            Q(data__national_level_deployment__isnull=True) |
+            Q(data__national_level_deployment=[]) |
+            Q(data__national_level_deployment={}) |
+            Q(data__national_level_deployment=None)
+        )
+
+    def national_level_deployment_not_empty(self):
+        return self.exclude(
+            Q(data__national_level_deployment__isnull=True) |
+            Q(data__national_level_deployment=[]) |
+            Q(data__national_level_deployment={}) |
+            Q(data__national_level_deployment=None)
+        )
+
 
 class ProjectQuerySet(ActiveQuerySet, ProjectManager):
     pass
