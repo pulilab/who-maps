@@ -575,9 +575,7 @@ def send_coverage_reminder():
     projects = Project.objects.published_only().national_level_deployment_not_empty()
     for project in projects:
         deployment = project.data['national_level_deployment']
-        all_zero = all(deployment[key] == 0 for key in keys_to_check)
-        any_key_missing = any(key not in deployment for key in keys_to_check)
-        if all_zero or any_key_missing:
+        if all(deployment[key] == 0 for key in keys_to_check):
             projects_need_reminder.append(project.id)
 
     # check where coverage is filled
@@ -585,9 +583,7 @@ def send_coverage_reminder():
     for project in projects:
         coverage = project.data['coverage']
         for district_data in coverage:
-            all_zero = all(district_data[key] == 0 for key in keys_to_check)
-            any_key_missing = any(key not in district_data for key in keys_to_check)
-            if all_zero or any_key_missing:
+            if all(district_data[key] == 0 for key in keys_to_check):
                 projects_need_reminder.append(project.id)
                 break
 
