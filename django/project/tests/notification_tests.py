@@ -88,11 +88,8 @@ class ProjectNotificationTests(SetupTests):
 
         for call in send_mail_wrapper.call_args_list:
             call_args = call[1]
-            self.assertEqual(call_args['subject'], 'Missing answers for country questions')
             self.assertEqual(call_args['email_type'], 'missing_data_common_template')
             self.assertEqual(call_args['language'], 'en')
-            self.assertEqual(call_args['context']['details'],
-                             'Country question answers are missing for the following project(s):')
             if call_args['to'] == self.user_1.email:
                 # user_1 should receive notifications about project 1 and 4
                 self.assertEqual(call_args['context']['name'], self.profile_1.name)
@@ -160,11 +157,8 @@ class ProjectNotificationTests(SetupTests):
 
         for call in send_mail_wrapper.call_args_list:
             call_args = call[1]
-            self.assertEqual(call_args['subject'], 'Missing required answer for country question')
             self.assertEqual(call_args['email_type'], 'missing_data_common_template')
             self.assertEqual(call_args['language'], 'en')
-            self.assertEqual(call_args['context']['details'],
-                             'Required country question answers are missing for the following project(s):')
             if call_args['to'] == self.user_1.email:
                 # user_1 should receive notifications about project 4
                 self.assertEqual(call_args['context']['name'], self.profile_1.name)
