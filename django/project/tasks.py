@@ -458,8 +458,8 @@ def send_no_country_question_answers_reminder():
             pass
         else:
             member_projects = [project for project in projects.filter(team=member)]
-            subject = _("Missing answers for country questions")
-            details = _('Country question answers are missing for the following project(s):')
+            subject = _("Your country has asked question(s) you haven't answered yet")
+            details = _('The following project(s) have not answered all the required question(s) asked by the country:')
             send_mail_wrapper(
                 subject=subject,
                 email_type='missing_data_common_template',
@@ -506,8 +506,8 @@ def send_not_every_required_country_question_has_answer_reminder():
             pass
         else:
             member_projects = [project for project in projects_require_reminder.filter(team=member)]
-            subject = _("Missing required answer for country question")
-            details = _('Required country question answers are missing for the following project(s):')
+            subject = _("Your country has asked question(s) you haven't answered yet")
+            details = _('The following project(s) have not answered all the required question(s) asked by the country:')
             send_mail_wrapper(
                 subject=subject,
                 email_type='missing_data_common_template',
@@ -544,8 +544,8 @@ def send_empty_stages_reminder():
             pass
         else:
             member_projects = [project for project in projects.filter(team=member)]
-            subject = _("Stages are missing from project data")
-            details = _('Stages are missing for the following project(s):')
+            subject = _("Digital Health Atlas introduces project stages")
+            details = _('Please take a look at the new stages section and set them for the following project(s):')
             send_mail_wrapper(
                 subject=subject,
                 email_type='missing_data_common_template',
@@ -601,8 +601,8 @@ def send_coverage_reminder():
             pass
         else:
             member_projects = [project for project in projects_to_remind.filter(team=member)]
-            subject = _("Coverage data is missing")
-            details = _('Coverage data is missing for the following project(s):')
+            subject = _("Please set your project's coverage on the Digital Health Atlas")
+            details = _('Coverage data is missing or is incomplete for the following project(s):')
             send_mail_wrapper(
                 subject=subject,
                 email_type='missing_data_common_template',
