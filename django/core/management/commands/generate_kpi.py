@@ -7,8 +7,10 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.db.models import Count
 from django.utils import timezone
+from rest_framework.authtoken.models import Token
 
-from project.models import Project, ProjectApproval
+# from django.contrib.postgres.aggregates import ArrayAgg
+from project.models import Project, ProjectApproval, ProjectImportV2
 from country.models import Country
 from user.models import User, UserProfile
 from django.db.models import Q, F, IntegerField
@@ -60,8 +62,8 @@ class Command(BaseCommand):
         account_types = {x: y for x, y in UserProfile.ACCOUNT_TYPE_CHOICES}
         account_types[None] = 'Unknown'
         today = timezone.now() + datetime.timedelta(1)
-        last_week = timezone.now() - datetime.timedelta(70)  # TODO fix this before merge
-        last_month = timezone.now() - datetime.timedelta(300)
+        last_week = timezone.now() - datetime.timedelta(7)
+        last_month = timezone.now() - datetime.timedelta(30)
 
         qs_last_week = User.objects.filter(last_login__range=(last_week, today)).\
             annotate(account_type=F('userprofile__account_type')).\
@@ -114,6 +116,26 @@ class Command(BaseCommand):
             }
         return data
 
+    def calc_imported_projects(self):
+        """
+        -- number of imported projects from "Previous Imports" by date
+        -- API users ( tokens activated on QA / Prod ) (Note: nicetohave, if possible, show num imported projects pr.
+           Token )
+        """
+        data = dict()
+        tokens = Token.objects.all()
+        data['total_imported_projects'] = ProjectImportV2.objects.all().values_list('rows__project').distinct().count()
+        data['tokens'] = list(tokens.values_list('user__username', flat=True))
+
+        # !!! This is apparently buggy in Django 2.1. Need to update to 2.2 at least to have more detailed info
+        # See: https://github.com/Suor/django-cacheops/issues/316
+        # import_to_projects = ProjectImportV2.objects.\
+        #     annotate(projects=ArrayAgg('rows__project', distinct=True)).\
+        #     annotate(p_count=Count('projects')).\
+        #     filter(p_count__gt=0)
+
+        return data
+
     def format_output(self, data: dict):
         separator_line = "-" * 20
         separator_line_small = "-" * 10
@@ -156,6 +178,16 @@ class Command(BaseCommand):
             out_str += indent_small + country_name + '\n'
             for stat in data['approval']['detailed'][country_name]:
                 out_str += indent + f'{stat}: {data["approval"]["detailed"][country_name][stat]}\n'
+        out_str += '\n'
+        out_str += 'Api usage:' + '\n'
+        out_str += separator_line + '\n'
+        out_str += indent_small + 'Tokens in use' + '\n'
+        out_str += separator_line_small + '\n'
+        for token in data['tokens']['tokens']:
+            out_str += indent + token + '\n'
+        out_str += separator_line_small + '\n'
+        out_str += indent + f"Total imported projects: {data['tokens']['total_imported_projects']} \n"
+        out_str += '\n'
         return out_str
 
     def handle(self, *args, **options):
@@ -165,14 +197,9 @@ class Command(BaseCommand):
         data['project'] = self.calc_project_data()
         data['user'] = self.calc_user_data()
         data['approval'] = self.calc_country_data()
+        data['tokens'] = self.calc_imported_projects()
         output_str = self.format_output(data)
         self.stdout.write("-- Writing output")
         with open(output_file, "w") as text_file:
             text_file.write(output_str)
         self.stdout.write("-- Done")
-        # TODO: New API:
-        """
-        -- number of imported projects from "Previous Imports" by date 
-        -- API users ( tokens activated on QA / Prod ) (Note: nicetohave, if possible, show num imported projects pr.
-           Token )
-        """
