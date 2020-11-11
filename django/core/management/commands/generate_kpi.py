@@ -42,7 +42,7 @@ class Command(BaseCommand):
     def calc_project_data(self):
         data = dict()
         data['total'] = Project.objects.count()
-        data['draft'] = Project.objects.filter(public_id="").count()
+        data['draft'] = Project.objects.draft_only().count()
         data['published'] = data['total'] - data['draft']
 
         # name must be unique and data filled in order to be publishable
