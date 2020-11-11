@@ -13,9 +13,12 @@ from rest_framework.authtoken.models import Token
 from project.models import Project, ProjectApproval, ProjectImportV2
 from country.models import Country
 from user.models import User, UserProfile
-from django.db.models import Q, F, IntegerField
-from django.contrib.postgres.fields.jsonb import KeyTextTransform
-from django.db.models.functions import Cast
+from django.db.models import Q, F
+from search.models import ProjectSearch
+
+separator_line = "-" * 20
+separator_line_small = "-" * 10
+newline = "\n"
 
 
 class Command(BaseCommand):
@@ -43,13 +46,12 @@ class Command(BaseCommand):
         data['published'] = data['total'] - data['draft']
 
         # name must be unique and data filled in order to be publishable
-        # TODO: check if I'm missing something!
-        data['publishable'] = Project.objects.filter(public_id="").filter(data__isnull=False).distinct('name').count()
+        data['publishable'] = Project.objects.draft_only().filter(data__isnull=False).distinct('name').count()
         data['deletable'] = Project.objects.filter(
             reduce(operator.or_, (Q(name__contains=x) for x in self.obsolete_project_markers))).count()
         # This is in no way perfect, but should be good enough for a oneshot
 
-        data['duplicates'] = Project.objects.values('name', 'id').annotate(Count('name')).order_by().\
+        data['duplicates'] = Project.objects.values('name', 'id').annotate(Count('name')).order_by(). \
             filter(name__count__gt=1).count()
         return data
 
@@ -65,18 +67,18 @@ class Command(BaseCommand):
         last_week = timezone.now() - datetime.timedelta(7)
         last_month = timezone.now() - datetime.timedelta(30)
 
-        qs_last_week = User.objects.filter(last_login__range=(last_week, today)).\
-            annotate(account_type=F('userprofile__account_type')).\
+        qs_last_week = User.objects.filter(last_login__range=(last_week, today)). \
+            annotate(account_type=F('userprofile__account_type')). \
             values('account_type').annotate(Count("id")).order_by()
         data['last_week_logins'] = {account_types[x['account_type']]: x['id__count']
                                     for x in qs_last_week}
-        qs_last_month = User.objects.filter(last_login__range=(last_month, today)).\
-            annotate(account_type=F('userprofile__account_type')).\
+        qs_last_month = User.objects.filter(last_login__range=(last_month, today)). \
+            annotate(account_type=F('userprofile__account_type')). \
             values('account_type').annotate(Count("id")).order_by()
         data['last_month_logins'] = {account_types[x['account_type']]: x['id__count']
                                      for x in qs_last_month}
 
-        qs_all_time = User.objects.all().annotate(account_type=F('userprofile__account_type')).\
+        qs_all_time = User.objects.all().annotate(account_type=F('userprofile__account_type')). \
             values('account_type').annotate(Count("id")).order_by()
         data['all_time'] = {account_types[x['account_type']]: x['id__count']
                             for x in qs_all_time}
@@ -90,29 +92,27 @@ class Command(BaseCommand):
         data = dict()
         qs_countries = Country.objects.filter(project_approval=True)
         data['moh_countries_total'] = qs_countries.count()
-        qs_project_countries = Project.objects.published_only().\
-            annotate(country_id=Cast(KeyTextTransform('country', 'data'), output_field=IntegerField()))
         data['detailed'] = dict()
         for country in qs_countries:
             if country.name not in data['detailed']:
                 data['detailed'][country.name] = dict()
             data['detailed'][country.name] = {
-                'total_projects': qs_project_countries.filter(country_id=country.id).count(),
+                'total_projects': ProjectSearch.objects.filter(country=country.id).count(),
                 'pending': ProjectApproval.objects.
-                filter(project__in=qs_project_countries.filter(country_id=country.id)).
-                filter(approved__isnull=True)
-                .count(),
+                    filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
+                    filter(approved__isnull=True)
+                    .count(),
                 'approved': ProjectApproval.objects.
-                filter(project__in=qs_project_countries.filter(country_id=country.id)).
-                filter(approved=True)
-                .count(),
+                    filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
+                    filter(approved=True)
+                    .count(),
                 'rejected': ProjectApproval.objects.
-                filter(project__in=qs_project_countries.filter(country_id=country.id)).
-                filter(approved=False)
-                .count(),
+                    filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
+                    filter(approved=False)
+                    .count(),
                 'started': ProjectApproval.objects.
-                filter(project__in=qs_project_countries.filter(country_id=country.id)).
-                count()
+                    filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
+                    count()
             }
         return data
 
@@ -136,58 +136,90 @@ class Command(BaseCommand):
 
         return data
 
+    @staticmethod
+    def format_project_data(data: dict):
+        out_str = f'''
+Project KPIs:
+{separator_line}
+  Deletable: {data["deletable"]}
+  Draft: {data["draft"]}
+  Possible duplicates: {data["duplicates"]}
+  Publishable: {data["publishable"]}'
+  Total: {data["total"]}'
+'''
+        return out_str
+
+    @staticmethod
+    def format_user_data(data: dict):
+        all_time_str = [f'    {k}: {v}' for k, v in data["all_time"].items()]
+        last_week_str = [f'    {k}: {v}' for k, v in data["last_week_logins"].items()]
+        last_month_str = [f'    {k}: {v}' for k, v in data["last_month_logins"].items()]
+
+        out_str = f'''
+User KPIs:
+{separator_line}
+  All users:
+  {separator_line_small}
+{newline.join(line for line in all_time_str)}
+  Last month:
+  {separator_line_small}
+{newline.join(line for line in last_month_str)}
+  Last week:
+  {separator_line_small}
+{newline.join(line for line in last_week_str)}
+'''
+        return out_str
+
+    @staticmethod
+    def format_approval_data(data: dict):
+        country_data = dict()
+
+        for country_name in data['detailed']:
+            country_data[country_name] = [f'    {k}: {v}' for k, v in data['detailed'][country_name].items()]
+        country_data_str = [
+            f'  {k}{newline}'
+            f'{newline.join(v_part for v_part in v)}'
+            for k, v in country_data.items()]
+
+        out_str = f'''
+Approval KPIs:
+{separator_line}
+General data:
+{separator_line_small}
+Countries using MOH approval: {data["moh_countries_total"]}
+By-country stats:
+{separator_line_small}
+{newline.join(c for c in country_data_str)}
+'''
+        return out_str
+
+    @staticmethod
+    def format_api_data(data: dict):
+        out_str = f"""
+Api usage:
+{separator_line}
+Total imported projects: {data["total_imported_projects"]}
+Tokens in use
+{separator_line_small}
+{newline.join(v for v in data["tokens"])}
+"""
+        return out_str
+
     def format_output(self, data: dict):
-        separator_line = "-" * 20
-        separator_line_small = "-" * 10
-        indent = " " * 4
-        indent_small = " " * 2
-        out_str = str()
-        out_str += 'Project KPIs:' + '\n'
-        out_str += separator_line + '\n'
-        out_str += indent + f'Deletable: {data["project"]["deletable"]}' + '\n'
-        out_str += indent + f'Draft: {data["project"]["draft"]}' + '\n'
-        out_str += indent + f'Possible duplicates: {data["project"]["duplicates"]}' + '\n'
-        out_str += indent + f'Publishable: {data["project"]["publishable"]}' + '\n'
-        out_str += indent + f'Total: {data["project"]["total"]}' + '\n'
-        out_str += '\n'
-        out_str += 'User KPIs:' + '\n'
-        out_str += separator_line + '\n'
-        out_str += indent_small + 'All users' + '\n'
-        out_str += separator_line_small + '\n'
-        for stat in data['user']['all_time']:
-            out_str += indent + f'{stat}: {data["user"]["all_time"][stat]}' + '\n'
-        out_str += '\n'
-        out_str += indent_small + 'Last week logins' + '\n'
-        out_str += separator_line_small + '\n'
-        for stat in data['user']['last_week_logins']:
-            out_str += indent + f'{stat}: {data["user"]["last_week_logins"][stat]}' + '\n'
-        out_str += '\n'
-        out_str += indent_small + 'Last month logins' + '\n'
-        out_str += separator_line_small + '\n'
-        for stat in data['user']['last_month_logins']:
-            out_str += indent + f'{stat}: {data["user"]["last_month_logins"][stat]}' + '\n'
-        out_str += '\n'
-        out_str += 'Approval KPIs:' + '\n'
-        out_str += separator_line + '\n'
-        out_str += indent_small + 'Overall stats' + '\n'
-        out_str += separator_line_small + '\n'
-        out_str += indent + f'Countries using MOH approval: {data["approval"]["moh_countries_total"]}' + '\n'
-        out_str += indent_small + 'By-country stats' + '\n'
-        out_str += separator_line_small + '\n'
-        for country_name in data['approval']['detailed']:
-            out_str += indent_small + country_name + '\n'
-            for stat in data['approval']['detailed'][country_name]:
-                out_str += indent + f'{stat}: {data["approval"]["detailed"][country_name][stat]}\n'
-        out_str += '\n'
-        out_str += 'Api usage:' + '\n'
-        out_str += separator_line + '\n'
-        out_str += indent_small + 'Tokens in use' + '\n'
-        out_str += separator_line_small + '\n'
-        for token in data['tokens']['tokens']:
-            out_str += indent + token + '\n'
-        out_str += separator_line_small + '\n'
-        out_str += indent + f"Total imported projects: {data['tokens']['total_imported_projects']} \n"
-        out_str += '\n'
+        project_str = self.format_project_data(data['project'])
+        user_str = self.format_user_data(data['user'])
+        approval_str = self.format_approval_data(data['approval'])
+        tokens_str = self.format_api_data(data['tokens'])
+
+        out_str = \
+            f'{project_str}' \
+            f'' \
+            f'{user_str}' \
+            f'' \
+            f'{approval_str}' \
+            f'' \
+            f'{tokens_str}' \
+            f''
         return out_str
 
     def handle(self, *args, **options):
