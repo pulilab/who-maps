@@ -99,20 +99,20 @@ class Command(BaseCommand):
             data['detailed'][country.name] = {
                 'total_projects': ProjectSearch.objects.filter(country=country.id).count(),
                 'pending': ProjectApproval.objects.
-                    filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
-                    filter(approved__isnull=True)
-                    .count(),
+                filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
+                filter(approved__isnull=True)
+                .count(),
                 'approved': ProjectApproval.objects.
-                    filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
-                    filter(approved=True)
-                    .count(),
+                filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
+                filter(approved=True)
+                .count(),
                 'rejected': ProjectApproval.objects.
-                    filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
-                    filter(approved=False)
-                    .count(),
+                filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
+                filter(approved=False)
+                .count(),
                 'started': ProjectApproval.objects.
-                    filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
-                    count()
+                filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
+                count()
             }
         return data
 
