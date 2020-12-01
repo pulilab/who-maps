@@ -102,31 +102,26 @@ class Command(BaseCommand):
         #    (any "score" was created on the assessment of project)
         data = dict()
         qs_countries = Country.objects.filter(project_approval=True)
-        data['moh_countries_total'] = qs_countries.count()
+        data['moh_countries'] = {
+            'count': qs_countries.count(),
+            'list': list(qs_countries.values_list('name', flat=True))
+        }
         data['detailed'] = dict()
         if self.country:
             qs_countries = Country.objects.filter(id=self.country.id)
 
         for country in qs_countries:
+            qs_base = ProjectSearch.objects.filter(country=country.id)
+            qs_values = qs_base.values('project')
             if country.name not in data['detailed']:
                 data['detailed'][country.name] = dict()
             data['detailed'][country.name] = {
-                'total_projects': ProjectSearch.objects.filter(country=country.id).count(),
-                'pending': ProjectApproval.objects.
-                filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
-                filter(approved__isnull=True)
-                .count(),
-                'approved': ProjectApproval.objects.
-                filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
-                filter(approved=True)
-                .count(),
-                'rejected': ProjectApproval.objects.
-                filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
-                filter(approved=False)
-                .count(),
-                'started': ProjectApproval.objects.
-                filter(project__in=ProjectSearch.objects.filter(country=country.id).values('project')).
-                count()
+                'has_moh_approval': country.project_approval,
+                'total_projects': qs_base.count(),
+                'pending': ProjectApproval.objects.filter(project__in=qs_values).filter(approved__isnull=True).count(),
+                'approved': ProjectApproval.objects.filter(project__in=qs_values).filter(approved=True).count(),
+                'rejected': ProjectApproval.objects.filter(project__in=qs_values).filter(approved=False).count(),
+                'started': ProjectApproval.objects.filter(project__in=qs_values).count()
             }
         return data
 
