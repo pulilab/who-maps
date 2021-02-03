@@ -18,6 +18,7 @@ urlpatterns = [
     url(r"^api/", include("search.urls")),
     url(r"^api/", include("cms.urls")),
     url(r"^api/", include("simple-feedback.urls")),
+    url(r"^api/", include("kpiexport.urls")),
     url(r'^translation/json/$', JSONCatalog.as_view(), name='json-catalog'),
     url(r'^translation/', include('rosetta.urls'))
 ]

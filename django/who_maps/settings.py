@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'cms',
     'simple-feedback',
     'systemmessages',
+    'kpiexport',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
