@@ -1,13 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import authentication, permissions
-from django.contrib.auth.models import User
-from core.views import TokenAuthMixin
-from project.models import Project, ProjectApproval, ProjectImportV2
+from project.models import Project
 from country.models import Country
 from user.models import User, UserProfile
 from django.db.models import Q, F, IntegerField
-from search.models import ProjectSearch
 from django.db.models import Count
 
 from django.contrib.postgres.fields.jsonb import KeyTextTransform
@@ -15,7 +11,6 @@ from django.db.models.functions import Cast
 from django.db.models import QuerySet
 import operator
 from functools import reduce
-from rest_framework import mixins, viewsets, status, filters
 from django.shortcuts import get_object_or_404
 from user.authentication import BearerTokenAuthentication
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
@@ -23,6 +18,7 @@ from .permissions import IsAuthenticated
 from datetime import datetime
 from core.views import Http400
 from django.utils.timezone import make_aware
+
 
 class ApiAuthMixin(object):
     """

@@ -1,61 +1,14 @@
-import os
-
-import datetime
-import operator
-from functools import reduce
-from django.db.models import Count
-from django.utils import timezone
 from rest_framework.authtoken.models import Token
 
 # from django.contrib.postgres.aggregates import ArrayAgg
-from project.models import Project, ProjectApproval, ProjectImportV2
+from project.models import ProjectApproval, ProjectImportV2
 from country.models import Country
-from user.models import User, UserProfile
-from django.db.models import Q, F, IntegerField
 from search.models import ProjectSearch
-
-from django.contrib.postgres.fields.jsonb import KeyTextTransform
-from django.db.models.functions import Cast
-import pprint
-
-
-def calc_user_data(country_code: str = None):
-    # TODO: role filter, base date filter
-    # Number of user-logins the past 7 days: ( grouped by user types, Implementer, Country Admin, Investor Admin…)
-    # Number of user-logins the past 30 days:  ( grouped by user types, Implementer, Country Admin, Investor Admin…)
-    # Number of user all time:  ( grouped by user types, Implementer, Country Admin, Investor Admin…)
-    data = dict()
-    # need to get humanly-readable stuff
-    account_types = {x: y for x, y in UserProfile.ACCOUNT_TYPE_CHOICES}
-    account_types[None] = 'Unknown'
-    today = timezone.now() + datetime.timedelta(1)
-    last_week = timezone.now() - datetime.timedelta(7)
-    last_month = timezone.now() - datetime.timedelta(30)
-    qs_users = User.objects.all()
-    if country_code:
-        country = Country.objects.get(country_code)
-        qs_users = qs_users.filter(userprofile__country=country)
-
-    qs_last_week = qs_users.filter(last_login__range=(last_week, today)). \
-        annotate(account_type=F('userprofile__account_type')). \
-        values('account_type').annotate(Count("id")).order_by()
-    data['Last week logins'] = {account_types[x['account_type']]: x['id__count']
-                                for x in qs_last_week}
-    qs_last_month = qs_users.filter(last_login__range=(last_month, today)). \
-        annotate(account_type=F('userprofile__account_type')). \
-        values('account_type').annotate(Count("id")).order_by()
-    data['Last month logins'] = {account_types[x['account_type']]: x['id__count']
-                                 for x in qs_last_month}
-
-    qs_all_time = qs_users.annotate(account_type=F('userprofile__account_type')). \
-        values('account_type').annotate(Count("id")).order_by()
-    data['All time logins'] = {account_types[x['account_type']]: x['id__count']
-                               for x in qs_all_time}
-    return data
 
 
 def calc_country_data(country_code: str = None):
     # TODO: date_from and date_to filtering
+    # TODO: remove this function after merged to API
     # Number of countries using MOH approval, number of projects in each, and group by count and %
     #    (pending, Approved,  Rejected)
     # Number of Projects where the Assessment process was started
@@ -93,6 +46,7 @@ def calc_imported_projects(country_code: str = None):
     -- API users ( tokens activated on QA / Prod ) (Note: nicetohave, if possible, show num imported projects pr.
        Token )
     """
+    # TODO: remove this function after merged to API
     data = dict()
     tokens = Token.objects.all()
     if country_code:

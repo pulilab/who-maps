@@ -1,16 +1,16 @@
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.reverse import reverse
 
-from core.factories import OrganisationFactory, DonorFactory, CountryFactory, UserProfileFactory
+from core.factories import OrganisationFactory, DonorFactory, UserProfileFactory
 from country.models import Country, Donor
 from user.models import UserProfile, Organisation
-from project.models import Project
 
 from datetime import datetime, date, timedelta
 from random import randint
 
 from allauth.account.models import EmailConfirmation
 from django.utils import timezone
+
 
 class TestProjectData:
     """
