@@ -10,7 +10,7 @@ from random import randint
 
 from allauth.account.models import EmailConfirmation
 from django.utils import timezone
-
+from rest_framework.authtoken.models import Token
 
 class TestProjectData:
     """
@@ -76,6 +76,8 @@ class TestProjectData:
             profile.country = self.country1 if i % 2 == 0 else self.country3
             profile.user.save()
             profile.save()
+        self.token, _ = Token.objects.get_or_create(user=self.userprofile.user)
+        self.token_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.token.key), format="json")
 
     def create_user(self, user_email="test_user@gmail.com", user_password_1="123456hetNYOLC",
                     user_password_2="123456hetNYOLC", org: Organisation = None, country: Country = None):
@@ -243,14 +245,14 @@ class KPITests(TestProjectData, APITestCase):
 
     def test_project_kpi_nofilter(self):
         url = reverse("project-kpi")
-        response = self.test_user_client.get(url)
+        response = self.token_client.get(url)
         expected = {'deletable': 0, 'draft': 10, 'duplicates': 0, 'publishable': 10, 'published': 10, 'total': 20}
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected)
 
     def test_project_kpi_country_filter(self):
         url = reverse("project-kpi") + f'?countryCode={self.country1.code}'
-        response = self.test_user_client.get(url)
+        response = self.token_client.get(url)
         expected = {'deletable': 0, 'draft': 5, 'duplicates': 0, 'publishable': 5, 'published': 0, 'total': 5}
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected)
@@ -264,7 +266,7 @@ class KPITests(TestProjectData, APITestCase):
     def test_project_kpi_date_filter(self):
         date_str = str((timezone.now() - timezone.timedelta(days=9)).date())
         url = reverse('project-kpi') + f'?modified={date_str}'
-        response = self.test_user_client.get(url)
+        response = self.token_client.get(url)
         # we can't edit the modified date for projects, so it should be the same as no filter
         expected = {'deletable': 0, 'draft': 10, 'duplicates': 0, 'publishable': 10, 'published': 10, 'total': 20}
         self.assertEqual(response.status_code, 200)
@@ -272,7 +274,7 @@ class KPITests(TestProjectData, APITestCase):
 
     def test_user_kpi_nofilter(self):
         url = reverse("user-kpi")
-        response = self.test_user_client.get(url)
+        response = self.token_client.get(url)
 
         expected = {
             'Investor Admin': 3,
@@ -290,7 +292,7 @@ class KPITests(TestProjectData, APITestCase):
 
     def test_user_kpi_countryfilter(self):
         url = reverse("user-kpi") + f'?countryCode={self.country1.code}'
-        response = self.test_user_client.get(url)
+        response = self.token_client.get(url)
 
         expected = {'Investor Admin': 3, 'Government Viewer': 2, 'Implementer': 4, 'Government System Admin': 2}
         self.assertEqual(response.status_code, 200)
@@ -298,7 +300,7 @@ class KPITests(TestProjectData, APITestCase):
 
     def test_user_kpi_loginfilter(self):
         url = reverse("user-kpi") + f'?lastLogin={str((datetime.today() - timedelta(days=20)).date())}'
-        response = self.test_user_client.get(url)
+        response = self.token_client.get(url)
 
         expected = {'Investor Viewer': 1, 'Implementer': 2, 'Investor Admin': 1}
         self.assertEqual(response.status_code, 200)

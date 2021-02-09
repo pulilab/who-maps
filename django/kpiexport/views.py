@@ -12,9 +12,8 @@ from django.db.models import QuerySet
 import operator
 from functools import reduce
 from django.shortcuts import get_object_or_404
-from user.authentication import BearerTokenAuthentication
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from .permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from datetime import datetime
 from core.views import Http400
 from django.utils.timezone import make_aware
@@ -22,10 +21,9 @@ from django.utils.timezone import make_aware
 
 class ApiAuthMixin(object):
     """
-    Mixin class for defining general permission and authentication settings on
-    REST Framework Class Based Views.
+    Mixin class for defining permission and authentication settings on API views.
     """
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
 
