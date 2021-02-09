@@ -12,7 +12,7 @@ from django.db.models import QuerySet
 import operator
 from functools import reduce
 from django.shortcuts import get_object_or_404
-from rest_framework.authentication import TokenAuthentication
+from user.authentication import BearerTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from datetime import datetime
 from core.views import Http400
@@ -23,7 +23,7 @@ class ApiAuthMixin(object):
     """
     Mixin class for defining permission and authentication settings on API views.
     """
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (BearerTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
 

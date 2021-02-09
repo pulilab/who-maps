@@ -12,6 +12,7 @@ from allauth.account.models import EmailConfirmation
 from django.utils import timezone
 from rest_framework.authtoken.models import Token
 
+
 class TestProjectData:
     """
     Base class for KPI tests. In setUp, it creates:
@@ -77,7 +78,7 @@ class TestProjectData:
             profile.user.save()
             profile.save()
         self.token, _ = Token.objects.get_or_create(user=self.userprofile.user)
-        self.token_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.token.key), format="json")
+        self.token_client = APIClient(HTTP_AUTHORIZATION="Bearer {}".format(self.token.key), format="json")
 
     def create_user(self, user_email="test_user@gmail.com", user_password_1="123456hetNYOLC",
                     user_password_2="123456hetNYOLC", org: Organisation = None, country: Country = None):
