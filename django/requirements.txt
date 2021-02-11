@@ -22,7 +22,7 @@ cryptography==2.2.2
 decorator==4.3.0
 defusedxml==0.5.0
 dj-inmemorystorage==1.4.1
-Django==2.1
+Django==2.2.16
 django-admin-sortable2==0.7.6
 django-allauth==0.41.0
 django-appconf==1.0.2
@@ -37,7 +37,8 @@ django-rosetta==0.8.1
 django-simplefeedback==0.8
 django-simple-history==2.4.0
 django-ordered-model==2.1.0
-djangorestframework==3.8.2
+drf-yasg==1.20.0
+djangorestframework==3.10.3
 djangorestframework-jwt==1.11.0
 docopt==0.6.2
 Fabric3==1.14.post1
@@ -54,7 +55,7 @@ jedi==0.12.1
 Jinja2==2.10
 kombu==4.2.1
 lazy-object-proxy==1.4.3
-Markdown==2.6.11
+Markdown==3.3.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
 microsofttranslator==0.8
