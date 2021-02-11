@@ -435,3 +435,14 @@ if SITE_ID in [3, 4]:
         # redirect all emails to the forced addresses
         EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
         TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "f@pulilab.com"]
+
+SWAGGER_SETTINGS = {
+   'SECURITY_DEFINITIONS': {
+      'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'authorization: Bearer XXXXXXXXXXXXXXXXXXX'
+      }
+   }
+}
