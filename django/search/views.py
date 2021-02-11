@@ -87,6 +87,10 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
     ordering = ('project_id',)
     pagination_class = ResultsSetPagination
 
+    def get_serializer_class(self):
+        if getattr(self, 'swagger_fake_view', False):  # pragma: no cover
+            return ListResultSerializer
+
     def get_queryset(self):
         return ProjectSearch.objects.exclude(project__public_id='')\
             .select_related('project', 'project__approval', 'organisation', 'country', 'donor')
