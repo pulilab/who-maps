@@ -20,7 +20,7 @@ class OptionsValidatorMixin:
 
     def validate(self, attrs):
         if attrs.get('type', CustomQuestion.TEXT) in (CustomQuestion.SINGLE, CustomQuestion.MULTI):
-            self.validate_options_for_choice_fields(attrs['options'])
+            self.validate_options_for_choice_fields(attrs.get('options', ''))
         return attrs
 
 
