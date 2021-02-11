@@ -36,9 +36,9 @@ if settings.DEBUG:  # pragma: no cover
 
 
 api_info = openapi.Info(
-    title='UNICEF T4D & Innovation Inventory Portal API',
+    title='Digital Health Atlas Public API',
     default_version='v1',
-    description='UNICEF T4D & Innovation Inventory Portal API',
+    description='Digital Health Atlas Public API',
     contact=openapi.Contact(email="f@pulilab.com"),
 )
 
