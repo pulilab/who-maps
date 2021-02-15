@@ -40,7 +40,7 @@ api_info = openapi.Info(
     title='Digital Health Atlas Public API',
     default_version='v1 BETA',
     description='Digital Health Atlas Public API for Developers, '
-                'only BETA (suspect to breaking changes and deprecations)',
+                'only BETA (subject to breaking changes and deprecations)',
     contact=openapi.Contact(email="f@pulilab.com"),
 )
 
