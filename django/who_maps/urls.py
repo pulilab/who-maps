@@ -11,6 +11,7 @@ from rest_framework.routers import SimpleRouter
 
 from country.views import CountryLandingPageViewSet, CountryLandingListPageViewSet
 from project.views import ProjectPublicViewSet
+from user.views import OrganisationViewSet
 
 admin.site.site_header = 'Digital Health Atlas'
 API_TITLE = 'Digital Health Atlas API'
@@ -37,14 +38,16 @@ if settings.DEBUG:  # pragma: no cover
 
 api_info = openapi.Info(
     title='Digital Health Atlas Public API',
-    default_version='v1',
-    description='Digital Health Atlas Public API',
+    default_version='v1 BETA',
+    description='Digital Health Atlas Public API for Developers, '
+                'only BETA (suspect to breaking changes and deprecations)',
     contact=openapi.Contact(email="f@pulilab.com"),
 )
 
 api_info_router = SimpleRouter()
 api_info_router.register(r'api/landing-country', CountryLandingPageViewSet, base_name='landing-country'),
 api_info_router.register(r'api/landing-country', CountryLandingListPageViewSet, base_name='landing-country'),
+api_info_router.register(r'api/organisations', OrganisationViewSet, base_name='organisation')
 
 api_info_urlpatterns = [
     url(r"^api/", include("search.urls")),
