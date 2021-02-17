@@ -19,6 +19,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    absolute: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -34,12 +38,12 @@ export default {
       switch (true) {
         case rate > 0:
           this.icon = "el-icon-top-right";
-          this.rate = `+${rate}`;
+          this.rate = this.absolute ? rate : `+${rate}`;
           this.color = "up";
           break;
         case rate < 0:
           this.icon = "el-icon-bottom-right";
-          this.rate = rate;
+          this.rate = this.absolute ? Math.abs(rate) : rate;
           this.color = "down";
           break;
         default:
@@ -60,7 +64,7 @@ export default {
 p {
   letter-spacing: 0;
   line-height: 16px;
-  margin: 0;
+  margin: 0 20px 0 0;
 }
 .large {
   font-size: 32px;
