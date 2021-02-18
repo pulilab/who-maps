@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Line } from 'vue-chartjs';
+import { Line, mixins } from 'vue-chartjs';
 
 // Vue.component('bar-chart', {
 //   extends: Bar,
@@ -11,17 +11,19 @@ import { Line } from 'vue-chartjs';
 
 Vue.component('line-chart', {
   extends: Line,
+  mixins: [mixins.reactiveProp],
   props: {
-    chartdata: {
-      type: Object,
-      default: null
-    },
     options: {
       type: Object,
       default: null
     }
   },
   mounted () {
-    this.renderChart(this.chartdata, this.options);
-  }
+    this.renderChart(this.chartData, this.options);
+  },
+  watch: {
+    chartData(chartdata) {
+      this.renderChart(chartdata, this.options);
+    }
+  },
 });
