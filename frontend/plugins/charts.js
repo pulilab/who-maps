@@ -1,16 +1,7 @@
 import Vue from 'vue';
-import { Line, mixins } from 'vue-chartjs';
+import { Line, Doughnut, mixins, PolarArea, Bar } from 'vue-chartjs';
 
-// Vue.component('bar-chart', {
-//   extends: Bar,
-//   props: ['data', 'options'],
-//   mounted () {
-//     this.renderChart(this.data, this.options);
-//   }
-// });
-
-Vue.component('line-chart', {
-  extends: Line,
+const chartMixin = {
   mixins: [mixins.reactiveProp],
   props: {
     options: {
@@ -26,4 +17,25 @@ Vue.component('line-chart', {
       this.renderChart(chartdata, this.options);
     }
   },
+}
+
+
+Vue.component('line-chart', {
+  extends: Line,
+  mixins: [chartMixin],
+});
+
+Vue.component('doughnut', {
+  extends: Doughnut,
+  mixins: [chartMixin],
+});
+
+Vue.component('polar-area', {
+  extends: PolarArea,
+  mixins: [chartMixin],
+});
+
+Vue.component('bar-chart', {
+  extends: Bar,
+  mixins: [chartMixin],
 });
