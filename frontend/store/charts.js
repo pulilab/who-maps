@@ -10,8 +10,8 @@ import { isBefore } from "date-fns";
 
 export const state = () => ({
   stages: {
-    stagesChartdata: {},
-    stagesOptions: {}
+    chartData: {},
+    options: {}
   }
 });
 
@@ -125,9 +125,9 @@ export const actions = {
         data: todayData
       }
     ]);
-    const chartdata = { labels, datasets };
+    const chartData = { labels, datasets };
 
-    commit("SET_STAGES_CHART_DATA", chartdata);
+    commit("SET_STAGES_CHART_DATA", chartData);
     commit("SET_STAGES_OPTIONS", {
       maintainAspectRatio: false,
       defaultFontColor: "#474747",
@@ -213,7 +213,7 @@ export const actions = {
 
 export const mutations = {
   SET_STAGES_CHART_DATA: (state, obj) => {
-    state.stages.chartdata = obj;
+    state.stages.chartData = obj;
   },
   SET_STAGES_OPTIONS: (state, obj) => {
     state.stages.options = obj;

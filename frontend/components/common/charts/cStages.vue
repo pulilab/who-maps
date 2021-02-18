@@ -1,11 +1,6 @@
 <template>
   <section>
-    <line-chart
-      v-if="loaded"
-      :chart-data="chartdata"
-      :options="options"
-      class="graph__line"
-    />
+    <chart :chart-data="chartData" :options="options" class="graph__line" />
     <section class="graph__legend">
       <ul class="legend">
         <li><translate>Legend:</translate></li>
@@ -46,14 +41,15 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import Chart from "@/components/common/charts/Chart";
 
 export default {
-  data: () => ({
-    loaded: false,
-  }),
+  components: {
+    Chart,
+  },
   computed: {
     ...mapState({
-      chartdata: (state) => state.charts.stages.chartdata,
+      chartData: (state) => state.charts.stages.chartData,
       options: (state) => state.charts.stages.options,
       stagesDraft: (state) => state.project.stagesDraft,
     }),
@@ -61,12 +57,6 @@ export default {
   async mounted() {
     await this.loadStagesDraft();
     this.getStageData(this.stagesDraft);
-    await setTimeout(() => {
-      this.loaded = true;
-    }, 250);
-  },
-  beforeDestroy() {
-    this.loaded = false;
   },
   methods: {
     ...mapActions({
