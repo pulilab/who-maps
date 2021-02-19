@@ -82,8 +82,32 @@
         />
       </el-col>
     </el-row>
-    <!-- <chart type="polar-area" :chart-data="micro.chartData" :options="{}" />
-    <chart type="bar-chart" :chart-data="micro.chartData" :options="{}" /> -->
+    <el-row type="flex">
+      <el-col :span="12">
+        <chart :chart-data="lineA.chartData" :options="lineA.options" />
+      </el-col>
+      <el-col :span="12">
+        <chart :chart-data="lineB.chartData" :options="lineB.options" />
+      </el-col>
+    </el-row>
+
+    <el-row type="flex">
+      <el-col :span="12">
+        <chart
+          type="horizontal-bar"
+          :chart-data="horizontalBarA.chartData"
+          :options="horizontalBarA.options"
+        />
+      </el-col>
+      <el-col :span="12">
+        <chart
+          type="bar-chart"
+          :chart-data="barA.chartData"
+          :options="barA.options"
+        />
+      </el-col>
+    </el-row>
+    <!-- <chart type="polar-area" :chart-data="micro.chartData" :options="{}" />-->
   </div>
 </template>
 
@@ -92,6 +116,124 @@ import Growth from "@/components/common/charts/utilities/Growth";
 import Chart from "@/components/common/charts/Chart";
 
 import ResumeWidget from "@/components/common/charts/ResumeWidget";
+
+const datasetConfigLine = (color) => {
+  return {
+    borderColor: color,
+    lineTension: 0,
+    fill: false,
+    // points
+    pointRadius: 5,
+    pointBorderWidth: 4,
+    pointBackgroundColor: "#ffffff",
+    pointBorderColor: color,
+    pointHoverRadius: 6,
+    pointHoverBackgroundColor: color,
+    pointHoverBorderColor: color,
+    pointHoverBorderWidth: 3,
+  };
+};
+
+const scaleLabelConfigLine = (label) => {
+  return {
+    display: true,
+    labelString: label,
+    fontStyle: "bold",
+    fontColor: "#485465",
+    lineHeight: 3,
+  };
+};
+
+const optionsLineBarConfig = (xTitle, yTitle) => {
+  return {
+    maintainAspectRatio: false,
+    legend: {
+      display: false,
+    },
+    scales: {
+      xAxes: [
+        {
+          offset: true,
+          gridLines: {
+            drawOnChartArea: false,
+            drawTicks: false,
+          },
+          scaleLabel: {
+            ...scaleLabelConfigLine(xTitle),
+          },
+          ticks: {
+            fontSize: 10,
+            padding: 15,
+          },
+        },
+      ],
+      yAxes: [
+        {
+          gridLines: {
+            drawTicks: false,
+          },
+          scaleLabel: {
+            ...scaleLabelConfigLine(yTitle),
+          },
+          ticks: {
+            fontSize: 10,
+            padding: 15,
+          },
+        },
+      ],
+    },
+  };
+};
+
+const optionsHorizontalBarConfig = () => {
+  return {
+    maintainAspectRatio: false,
+    legend: {
+      display: false,
+    },
+    scales: {
+      xAxes: [
+        {
+          gridLines: {
+            drawTicks: false,
+          },
+
+          ticks: {
+            fontSize: 10,
+            padding: 15,
+          },
+        },
+      ],
+      yAxes: [
+        {
+          gridLines: {
+            drawOnChartArea: false,
+            drawTicks: false,
+          },
+          ticks: {
+            fontSize: 10,
+            padding: 15,
+          },
+        },
+      ],
+    },
+  };
+};
+
+const monthLabels = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 export default {
   components: {
@@ -219,6 +361,40 @@ export default {
           },
         },
       },
+      lineA: {
+        chartData: {
+          labels: [],
+          datasets: [datasetConfigLine("#49BCE8")],
+        },
+        options: optionsLineBarConfig("2019", "Growth of project"),
+      },
+      lineB: {
+        chartData: {
+          labels: [],
+          datasets: [
+            datasetConfigLine("#49BCE8"),
+            datasetConfigLine("#99CA67"),
+          ],
+        },
+        options: optionsLineBarConfig("2019", "# of users"),
+      },
+      horizontalBarA: {
+        chartData: {
+          labels: [],
+          datasets: [{ backgroundColor: "#49BCE8" }],
+        },
+        options: optionsHorizontalBarConfig(),
+      },
+      barA: {
+        chartData: {
+          labels: [],
+          datasets: [
+            { backgroundColor: "#49BCE8" },
+            { backgroundColor: "#99CA67" },
+          ],
+        },
+        options: optionsLineBarConfig("2018", "Growth of users"),
+      },
     };
   },
   created() {
@@ -226,18 +402,22 @@ export default {
     this.interval = setInterval(() => {
       this.handleChange(100);
       this.dynamic = this.dynamic + 1;
-    }, 10000);
+    }, 20000);
   },
   beforeDestroy() {
     clearInterval(this.interval);
   },
   watch: {
     dynamic() {
-      this.updateChart("micro", this.randomArray(10));
-      this.updateChart("doughnutA", this.randomArray(4));
-      this.updateChart("doughnutB", this.randomArray(4));
-      this.updateChart("doughnutC", this.randomArray(4));
-      this.updateChart("doughnutD", this.randomArray(2));
+      this.updateChart("micro", 10);
+      this.updateChart("doughnutA", 4);
+      this.updateChart("doughnutB", 4);
+      this.updateChart("doughnutC", 4);
+      this.updateChart("doughnutD", 2);
+      this.updateChart("lineA", 12);
+      this.updateChart("lineB", 12);
+      this.updateChart("horizontalBarA", 12);
+      this.updateChart("barA", 12);
     },
   },
   methods: {
@@ -248,13 +428,15 @@ export default {
     randomArray(length, range = 100) {
       return Array.from({ length }, () => Math.floor(Math.random() * range));
     },
-    updateChart(object, data) {
-      console.log(data);
+    updateChart(object, dataLength) {
       this[object].chartData = {
         ...this[object].chartData,
-        labels: data,
+        labels:
+          object.includes("line") || object.includes("bar")
+            ? monthLabels
+            : this.randomArray(dataLength),
         datasets: this[object].chartData.datasets.map((dataset) => {
-          return { ...dataset, data };
+          return { ...dataset, data: this.randomArray(dataLength) };
         }),
       };
     },

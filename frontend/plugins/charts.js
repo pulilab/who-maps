@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Line, Doughnut, mixins, PolarArea, Bar } from 'vue-chartjs';
+import { Line, Doughnut, mixins, PolarArea, Bar, HorizontalBar } from 'vue-chartjs';
 
 const chartMixin = {
   mixins: [mixins.reactiveProp],
@@ -37,5 +37,10 @@ Vue.component('polar-area', {
 
 Vue.component('bar-chart', {
   extends: Bar,
+  mixins: [chartMixin],
+});
+
+Vue.component('horizontal-bar', {
+  extends: HorizontalBar,
   mixins: [chartMixin],
 });
