@@ -16,7 +16,7 @@ const chartMixin = {
     chartData(chartdata) {
       this.renderChart(chartdata, this.options);
     }
-  },
+  }
 }
 
 

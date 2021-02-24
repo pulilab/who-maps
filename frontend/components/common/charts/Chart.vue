@@ -3,6 +3,7 @@
     v-if="loaded"
     :is="type"
     v-bind="{ ...$props, ...$attrs }"
+    v-on="{ ...$listeners }"
   ></component>
 </template>
 
@@ -39,4 +40,37 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+#chartjs-tooltip {
+  opacity: 1;
+  position: absolute;
+  background: #474747;
+  color: white;
+  border-radius: 6px;
+  -webkit-transition: all 0.1s ease;
+  transition: all 0.1s ease;
+  pointer-events: none;
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+  font-size: 12px;
+  line-height: 16px;
+  section {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    p {
+      margin: 0;
+    }
+  }
+}
+
+.chartjs-tooltip-key {
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+</style>
 
