@@ -15,9 +15,13 @@ export default {
       default: "line-chart",
       validator: function (value) {
         return (
-          ["line-chart", "doughnut", "polar-area", "bar-chart"].indexOf(
-            value
-          ) !== -1
+          [
+            "line-chart",
+            "doughnut",
+            "polar-area",
+            "bar-chart",
+            "horizontal-bar",
+          ].indexOf(value) !== -1
         );
       },
     },
