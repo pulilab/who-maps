@@ -107,7 +107,16 @@
         />
       </el-col>
     </el-row>
-    <!-- <chart type="polar-area" :chart-data="micro.chartData" :options="{}" />-->
+
+    <el-row type="flex">
+      <el-col :span="12">
+        <chart
+          type="polar-area"
+          :chart-data="polarA.chartData"
+          :options="polarA.options"
+        />
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -117,123 +126,8 @@ import Chart from "@/components/common/charts/Chart";
 
 import ResumeWidget from "@/components/common/charts/ResumeWidget";
 
-const datasetConfigLine = (color) => {
-  return {
-    borderColor: color,
-    lineTension: 0,
-    fill: false,
-    // points
-    pointRadius: 5,
-    pointBorderWidth: 4,
-    pointBackgroundColor: "#ffffff",
-    pointBorderColor: color,
-    pointHoverRadius: 6,
-    pointHoverBackgroundColor: color,
-    pointHoverBorderColor: color,
-    pointHoverBorderWidth: 3,
-  };
-};
-
-const scaleLabelConfigLine = (label) => {
-  return {
-    display: true,
-    labelString: label,
-    fontStyle: "bold",
-    fontColor: "#485465",
-    lineHeight: 3,
-  };
-};
-
-const optionsLineBarConfig = (xTitle, yTitle) => {
-  return {
-    maintainAspectRatio: false,
-    legend: {
-      display: false,
-    },
-    scales: {
-      xAxes: [
-        {
-          offset: true,
-          gridLines: {
-            drawOnChartArea: false,
-            drawTicks: false,
-          },
-          scaleLabel: {
-            ...scaleLabelConfigLine(xTitle),
-          },
-          ticks: {
-            fontSize: 10,
-            padding: 15,
-          },
-        },
-      ],
-      yAxes: [
-        {
-          gridLines: {
-            drawTicks: false,
-          },
-          scaleLabel: {
-            ...scaleLabelConfigLine(yTitle),
-          },
-          ticks: {
-            fontSize: 10,
-            padding: 15,
-          },
-        },
-      ],
-    },
-  };
-};
-
-const optionsHorizontalBarConfig = () => {
-  return {
-    maintainAspectRatio: false,
-    legend: {
-      display: false,
-    },
-    scales: {
-      xAxes: [
-        {
-          gridLines: {
-            drawTicks: false,
-          },
-
-          ticks: {
-            fontSize: 10,
-            padding: 15,
-          },
-        },
-      ],
-      yAxes: [
-        {
-          gridLines: {
-            drawOnChartArea: false,
-            drawTicks: false,
-          },
-          ticks: {
-            fontSize: 10,
-            padding: 15,
-          },
-        },
-      ],
-    },
-  };
-};
-
-const monthLabels = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
+// chart utilities
+import { chartsSetup } from "@/utilities/charts";
 
 export default {
   components: {
@@ -247,157 +141,12 @@ export default {
       incoming: 0,
       previous: 0,
       dynamic: 0,
-      micro: {
-        chartData: {
-          labels: [],
-          datasets: [
-            {
-              backgroundColor: "#E8F6FD",
-              borderColor: "#22ADE3",
-              label: "Dataset",
-              pointRadius: 0,
-              lineTension: 0,
-            },
-          ],
-        },
-        options: {
-          maintainAspectRatio: false,
-          legend: {
-            display: false,
-          },
-          tooltips: {
-            enabled: false,
-          },
-          animation: {},
-          scales: {
-            xAxes: [
-              {
-                display: false,
-                gridLines: {
-                  display: false,
-                },
-              },
-            ],
-            yAxes: [
-              {
-                display: false,
-                gridLines: {
-                  display: false,
-                },
-              },
-            ],
-          },
-        },
-      },
-      doughnutA: {
-        chartData: {
-          labels: [],
-          datasets: [
-            {
-              backgroundColor: ["#9ACB67", "#FFCF3F", "#BABABB", "#E84F48"],
-              pointRadius: 0,
-              lineTension: 0,
-            },
-          ],
-        },
-        options: {
-          maintainAspectRatio: false,
-          legend: {
-            display: false,
-          },
-        },
-      },
-      doughnutB: {
-        chartData: {
-          labels: [],
-          datasets: [
-            {
-              backgroundColor: ["#FFCF3F", "#FEAB7D", "#9ACB67", "#49BCE8"],
-              pointRadius: 0,
-              lineTension: 0,
-            },
-          ],
-        },
-        options: {
-          maintainAspectRatio: false,
-          legend: {
-            display: false,
-          },
-        },
-      },
-      doughnutC: {
-        chartData: {
-          labels: [],
-          datasets: [
-            {
-              backgroundColor: ["#FFCF3F", "#EF8A85", "#9ACB67", "#5F72B5"],
-              pointRadius: 0,
-              lineTension: 0,
-            },
-          ],
-        },
-        options: {
-          maintainAspectRatio: false,
-          legend: {
-            display: false,
-          },
-        },
-      },
-      doughnutD: {
-        chartData: {
-          labels: [],
-          datasets: [
-            {
-              backgroundColor: ["#9ACB67", "#E84F48"],
-              pointRadius: 0,
-              lineTension: 0,
-            },
-          ],
-        },
-        options: {
-          maintainAspectRatio: false,
-          legend: {
-            display: false,
-          },
-        },
-      },
-      lineA: {
-        chartData: {
-          labels: [],
-          datasets: [datasetConfigLine("#49BCE8")],
-        },
-        options: optionsLineBarConfig("2019", "Growth of project"),
-      },
-      lineB: {
-        chartData: {
-          labels: [],
-          datasets: [
-            datasetConfigLine("#49BCE8"),
-            datasetConfigLine("#99CA67"),
-          ],
-        },
-        options: optionsLineBarConfig("2019", "# of users"),
-      },
-      horizontalBarA: {
-        chartData: {
-          labels: [],
-          datasets: [{ backgroundColor: "#49BCE8" }],
-        },
-        options: optionsHorizontalBarConfig(),
-      },
-      barA: {
-        chartData: {
-          labels: [],
-          datasets: [
-            { backgroundColor: "#49BCE8" },
-            { backgroundColor: "#99CA67" },
-          ],
-        },
-        options: optionsLineBarConfig("2018", "Growth of users"),
-      },
+      ...chartsSetup,
     };
   },
   created() {
+    this.horizontalBarA.options.onClick = this.handle; // onClick: this.handle
+
     this.dynamic = this.dynamic + 1;
     this.interval = setInterval(() => {
       this.handleChange(100);
@@ -418,6 +167,7 @@ export default {
       this.updateChart("lineB", 12);
       this.updateChart("horizontalBarA", 12);
       this.updateChart("barA", 12);
+      this.updateChart("polarA", 5);
     },
   },
   methods: {
@@ -432,13 +182,25 @@ export default {
       this[object].chartData = {
         ...this[object].chartData,
         labels:
-          object.includes("line") || object.includes("bar")
-            ? monthLabels
-            : this.randomArray(dataLength),
+          this[object].chartData.labels.length === 0
+            ? this.randomArray(dataLength)
+            : this[object].chartData.labels,
         datasets: this[object].chartData.datasets.map((dataset) => {
           return { ...dataset, data: this.randomArray(dataLength) };
         }),
       };
+    },
+    handle(point, event) {
+      const item = event[0];
+      // this.$emit('on-receive', {
+      console.log({
+        index: item._index,
+        backgroundColor: item._view.backgroundColor,
+      });
+      // })
+
+      // console.log(data);
+      // this.selectedData = data;
     },
   },
 };
