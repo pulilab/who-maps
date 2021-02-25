@@ -1,130 +1,252 @@
 <template>
   <div class="wrapper">
-    <el-row type="flex" :gutter="30" class="resume-group">
-      <el-col :span="5">
-        <resume-widget>
-          <translate>Published Projects</translate>
-          <template #content>
-            <growth :incoming="incoming" large absolute />
-            <growth :incoming="incoming" :previous="previous" />
-          </template>
-        </resume-widget>
-      </el-col>
-      <el-col :span="5">
-        <resume-widget>
-          <translate>Publishable Projects</translate>
-          <template #content>
-            <growth :incoming="incoming" large absolute />
-            <growth :incoming="incoming" :previous="previous" />
-          </template>
-        </resume-widget>
-      </el-col>
-      <el-col :span="5">
-        <resume-widget>
-          <translate>Unpublished Projects</translate>
-          <template #content>
-            <growth :incoming="incoming" large absolute />
-          </template>
-        </resume-widget>
-      </el-col>
-      <el-col :span="5">
-        <resume-widget>
-          <translate>Deletable Projects</translate>
-          <template #content>
-            <growth :incoming="incoming" large absolute />
-            <growth :incoming="incoming" :previous="previous" />
-          </template>
-        </resume-widget>
-      </el-col>
-      <el-col :span="5">
-        <resume-widget no-border>
-          <translate>Monthly growth of Projects</translate>
-          <template #content>
-            <growth :incoming="incoming" :previous="previous" large />
-            <chart
-              :chart-data="micro.chartData"
-              :options="micro.options"
-              :width="72"
-              :height="26"
-            />
-          </template>
-        </resume-widget>
-      </el-col>
+    <el-row type="flex" :gutter="30" class="mb-80">
+      <div class="resume-group">
+        <el-col :span="5">
+          <resume>
+            <translate>Published Projects</translate>
+            <template #content>
+              <growth :incoming="incoming" large absolute />
+              <growth :incoming="incoming" :previous="previous" />
+            </template>
+          </resume>
+        </el-col>
+        <el-col :span="5">
+          <resume>
+            <translate>Publishable Projects</translate>
+            <template #content>
+              <growth :incoming="incoming" large absolute />
+              <growth :incoming="incoming" :previous="previous" />
+            </template>
+          </resume>
+        </el-col>
+        <el-col :span="5">
+          <resume>
+            <translate>Unpublished Projects</translate>
+            <template #content>
+              <growth :incoming="incoming" large absolute />
+            </template>
+          </resume>
+        </el-col>
+        <el-col :span="4">
+          <resume>
+            <translate>Deletable Projects</translate>
+            <template #content>
+              <growth :incoming="incoming" large absolute />
+              <growth :incoming="incoming" :previous="previous" />
+            </template>
+          </resume>
+        </el-col>
+        <el-col :span="5">
+          <resume no-border>
+            <translate>Monthly growth of Projects</translate>
+            <template #content>
+              <growth :incoming="incoming" :previous="previous" large />
+              <chart
+                :chart-data="micro.chartData"
+                :options="micro.options"
+                :width="72"
+                :height="26"
+              />
+            </template>
+          </resume>
+        </el-col>
+      </div>
     </el-row>
 
-    <el-row type="flex">
-      <el-col :span="6">
-        <chart
-          type="doughnut"
-          :chart-data="doughnutA.chartData"
-          :options="doughnutA.options"
-        />
-      </el-col>
-      <el-col :span="6">
-        <chart
-          type="doughnut"
-          :chart-data="doughnutB.chartData"
-          :options="doughnutB.options"
-        />
-      </el-col>
-      <el-col :span="6">
-        <chart
-          type="doughnut"
-          :chart-data="doughnutC.chartData"
-          :options="doughnutC.options"
-        />
-      </el-col>
-      <el-col :span="6">
-        <chart
-          type="doughnut"
-          :chart-data="doughnutD.chartData"
-          :options="doughnutD.options"
-        />
-      </el-col>
-    </el-row>
-    <el-row type="flex">
-      <el-col :span="12">
-        <chart :chart-data="lineA.chartData" :options="lineA.options" />
-      </el-col>
-      <el-col :span="12">
-        <chart :chart-data="lineB.chartData" :options="lineB.options" />
-      </el-col>
+    <!-- section A -->
+    <el-row type="flex" :gutter="20" class="mb-80">
+      <graph-layout :span="8">
+        <template #graph>
+          <chart
+            type="doughnut"
+            :width="160"
+            :height="160"
+            :chart-data="doughnutA.chartData"
+            :options="doughnutA.options"
+          />
+        </template>
+        <template #legend>
+          <data-legend :items="legend" />
+        </template>
+      </graph-layout>
+      <graph-layout :span="16">
+        <translate>Monthly growth of Projects</translate>
+        <template #graph>
+          <chart
+            :chart-data="lineA.chartData"
+            :options="lineA.options"
+            :height="320"
+          />
+        </template>
+      </graph-layout>
     </el-row>
 
-    <el-row type="flex">
-      <el-col :span="12">
-        <chart
-          type="horizontal-bar"
-          :chart-data="horizontalBarA.chartData"
-          :options="horizontalBarA.options"
-        />
-      </el-col>
-      <el-col :span="12">
-        <chart
-          type="bar-chart"
-          :chart-data="barA.chartData"
-          :options="barA.options"
-        />
-      </el-col>
+    <!-- section B -->
+    <el-row type="flex" class="mb-80">
+      <graph-layout :span="24">
+        <translate>Monthly User Activity</translate>
+        <template #graph>
+          <chart
+            :chart-data="lineB.chartData"
+            :options="lineB.options"
+            :height="300"
+          />
+        </template>
+      </graph-layout>
     </el-row>
 
-    <el-row type="flex">
-      <el-col :span="12">
-        <chart
-          type="polar-area"
-          :chart-data="polarA.chartData"
-          :options="polarA.options"
-        />
-      </el-col>
+    <!-- section C -->
+    <el-row type="flex" class="mb-80">
+      <graph-layout :span="24">
+        <translate>Monthly User Activity</translate>
+        <template #graph>
+          <chart
+            type="bar-chart"
+            :chart-data="barA.chartData"
+            :options="barA.options"
+            :height="300"
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
+    <!-- section D -->
+    <el-row type="flex" class="mb-80">
+      <graph-layout :span="24">
+        <translate>Monthly growth of API keys</translate>
+        <template #graph>
+          <chart
+            :chart-data="lineA.chartData"
+            :options="lineA.options"
+            :height="300"
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
+    <!-- section E -->
+    <el-row type="flex" :gutter="20" class="mb-80">
+      <graph-layout :span="8">
+        <translate>Project approval per countries</translate>
+        <template #graph> </template>
+        <template #legend> </template>
+      </graph-layout>
+      <graph-layout :span="16">
+        <translate>Monthly growth of API keys</translate>
+        <template #graph>
+          <chart
+            :chart-data="lineA.chartData"
+            :options="lineA.options"
+            :height="320"
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
+    <!-- section F -->
+    <el-row type="flex" :gutter="20" class="mb-80">
+      <graph-layout :span="8">
+        <translate>
+          Has the government contributed to the project, either financially or
+          in-kind?
+        </translate>
+        <template #graph>
+          <chart
+            type="doughnut"
+            :width="160"
+            :height="160"
+            :chart-data="doughnutB.chartData"
+            :options="doughnutB.options"
+          />
+        </template>
+        <template #legend>
+          <data-legend :items="legend" />
+        </template>
+      </graph-layout>
+      <graph-layout :span="16">
+        <translate>Top 10 ‘Data standards’ (by occurrences)</translate>
+        <template #graph>
+          <chart
+            type="horizontal-bar"
+            :chart-data="horizontalBarA.chartData"
+            :options="horizontalBarA.options"
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
+    <!-- section G -->
+    <el-row type="flex" :gutter="20" class="mb-80">
+      <graph-layout :span="16">
+        <translate>Distributions of projects’ stages</translate>
+        <template #graph>
+          <chart
+            type="polar-area"
+            :chart-data="polarA.chartData"
+            :options="polarA.options"
+          />
+        </template>
+        <template #legend>
+          <data-legend :items="legend" />
+        </template>
+      </graph-layout>
+      <graph-layout :span="8">
+        <translate>Distribution of projects’ statuses</translate>
+        <template #graph>
+          <chart
+            type="doughnut"
+            :width="160"
+            :height="160"
+            :chart-data="doughnutC.chartData"
+            :options="doughnutC.options"
+          />
+        </template>
+        <template #legend>
+          <data-legend :items="legend" />
+        </template>
+      </graph-layout>
+    </el-row>
+
+    <!-- section H -->
+    <el-row type="flex" :gutter="20" class="mb-80">
+      <graph-layout :span="8">
+        <translate>Coverage of Health Focus Areas</translate>
+        <template #graph>
+          <chart
+            type="doughnut"
+            :width="160"
+            :height="160"
+            :chart-data="doughnutD.chartData"
+            :options="doughnutD.options"
+          />
+        </template>
+        <template #legend>
+          <!-- <data-legend :items="legend" /> -->
+        </template>
+      </graph-layout>
+      <graph-layout :span="16">
+        <translate>Health Focus Areas (by occurrences)</translate>
+        <template #graph>
+          <chart
+            type="horizontal-bar"
+            :chart-data="horizontalBarA.chartData"
+            :options="horizontalBarA.options"
+          />
+        </template>
+      </graph-layout>
     </el-row>
   </div>
 </template>
 
 <script>
 import Growth from "@/components/common/charts/utilities/Growth";
+import DataLegend from "@/components/common/charts/utilities/DataLegend";
+
 import Chart from "@/components/common/charts/Chart";
 
-import ResumeWidget from "@/components/common/charts/ResumeWidget";
+import Resume from "@/components/common/charts/widgets/Resume";
+import GraphLayout from "@/components/common/charts/widgets/GraphLayout";
 
 // chart utilities
 import { chartsSetup } from "@/utilities/charts";
@@ -132,8 +254,10 @@ import { chartsSetup } from "@/utilities/charts";
 export default {
   components: {
     Growth,
-    ResumeWidget,
+    Resume,
     Chart,
+    GraphLayout,
+    DataLegend,
   },
   data() {
     return {
@@ -141,6 +265,32 @@ export default {
       incoming: 0,
       previous: 0,
       dynamic: 0,
+      legend: [
+        {
+          color: "#80BD41",
+          label: "Published Projects",
+          value: "30%",
+          disabled: false,
+        },
+        {
+          color: "#FFC20E",
+          label: "Publishable Projects",
+          value: "10%",
+          disabled: false,
+        },
+        {
+          color: "#A8A8A9",
+          label: "Unpublished Projects",
+          value: "60%",
+          disabled: false,
+        },
+        {
+          color: "#E2231A",
+          label: "Deleteble Projects",
+          value: "80%",
+          disabled: false,
+        },
+      ],
       ...chartsSetup,
     };
   },
@@ -214,6 +364,12 @@ export default {
   .resume-group {
     background-color: white;
     padding: 16px 40px;
+    margin: 0 15px;
+    width: 100%;
+  }
+
+  .mb-80 {
+    margin-bottom: 80px;
   }
 }
 </style>
