@@ -3,17 +3,38 @@
     <div class="wrapper">
       <div class="container">
         <p v-if="this.$slots.default" class="title"><slot /></p>
-        <div class="graph">
-          <slot name="graph" />
-        </div>
-        <slot name="legend" />
+        <template v-if="horizontal">
+          <el-row>
+            <el-col :span="13">
+              <div class="graph-horizontal">
+                <slot name="graph" />
+              </div>
+            </el-col>
+            <el-col :span="10">
+              <slot name="legend" />
+            </el-col>
+          </el-row>
+        </template>
+        <template v-else>
+          <div class="graph">
+            <slot name="graph" />
+          </div>
+          <slot name="legend" />
+        </template>
       </div>
     </div>
   </el-col>
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    horizontal: {
+      type: Boolean,
+      default: false,
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -34,6 +55,9 @@ export default {};
     }
     .graph {
       margin: 0 50px 15px 40px;
+    }
+    .graph-horizontal {
+      margin: 0 50px 50px 80px;
     }
   }
 }

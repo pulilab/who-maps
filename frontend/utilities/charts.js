@@ -55,16 +55,8 @@ export const dataInfoFill = (len, fill, change = undefined, type = 'front') => {
   return arrFill;
 };
 
-// general graph setups
-export const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
+// general setup for graph types
 // doughnut
-const colorSetA = ["#9ACB67", "#FFCF3F", "#BABABB", "#E84F48"];
-const colorSetB = ["#FFCF3F", "#FEAB7D", "#9ACB67", "#49BCE8"];
-const colorSetC = ["#FFCF3F", "#EF8A85", "#9ACB67", "#5F72B5"];
-const colorSetD = ["#9ACB67", "#E84F48"];
-const colorSetE = ["#FFCE3D", "#FEAB7D", "#49BCE8", "#5F72B5", "#9ACB67"];
-
 const customTooltip = {
   // Disable the on-canvas tooltip
   enabled: false,
@@ -127,7 +119,6 @@ const customTooltip = {
     tooltipEl.style.fontStyle = tooltip._fontStyle;
     tooltipEl.style.pointerEvents = 'none';
   }
-
 }
 
 const doughnutConfig = (colorSet, labels = []) => {
@@ -152,11 +143,6 @@ const doughnutConfig = (colorSet, labels = []) => {
   }
 };
 
-export const doughnutA = doughnutConfig(colorSetA);
-export const doughnutB = doughnutConfig(colorSetB);
-export const doughnutC = doughnutConfig(colorSetC);
-export const doughnutD = doughnutConfig(colorSetD);
-
 // Lines and Bar config
 const datasetConfigLine = (color) => {
   return {
@@ -175,6 +161,12 @@ const datasetConfigLine = (color) => {
   };
 };
 
+const datasetConfigBar = (color) => {
+  return {
+    backgroundColor: color
+  };
+};
+
 const scaleLabelConfigLine = (label) => {
   return {
     display: true,
@@ -185,7 +177,24 @@ const scaleLabelConfigLine = (label) => {
   };
 };
 
-const optionsLineBarConfig = (xTitle, yTitle) => {
+const tooltipsCallbacks = (label, xTitle, type = "line") => {
+  return {
+    title(item) {
+      if (type === "line") {
+        return `${item[0].yLabel} ${label}`
+      }
+      return `${label.title} ${item[0].value}`
+    },
+    label(item) {
+      if (type === "line") {
+        return `${item.label} ${xTitle}`
+      }
+      return `${label.subtitle}`
+    },
+  }
+}
+
+const optionsLineBarConfig = (xTitle, yTitle, tooltip) => {
   return {
     maintainAspectRatio: false,
     legend: {
@@ -230,19 +239,12 @@ const optionsLineBarConfig = (xTitle, yTitle) => {
       yPadding: 8,
       titleAlign: "center",
       bodyAlign: "center",
-      callbacks: {
-        title(item) {
-          return `${item[0].yLabel} API keys`
-        },
-        label(item) {
-          return `${item.label} ${xTitle}`
-        },
-      }
+      callbacks: tooltipsCallbacks(tooltip, xTitle)
     },
   };
 };
 
-const optionsHorizontalBarConfig = () => {
+const optionsHorizontalBarConfig = (tooltip, click = false) => {
   return {
     maintainAspectRatio: false,
     legend: {
@@ -279,22 +281,17 @@ const optionsHorizontalBarConfig = () => {
       displayColors: false,
       xPadding: 10,
       yPadding: 8,
-      callbacks: {
-        title(item) {
-          return `Ocurrances: ${item[0].value}`
-        },
-        label(item) {
-          return "Click to see Heatlh Focus Areas"
-        },
-      }
+      callbacks: tooltipsCallbacks(tooltip, "", "bar"),
     },
     onHover: (event) => {
-      event.target.style.cursor = 'pointer';
+      if (click) {
+        event.target.style.cursor = 'pointer';
+      }
     },
   };
 };
 
-const lineBarConfig = (datasets, options, labels = monthLabels) => {
+const lineBarConfig = (datasets, options, labels = []) => {
   return {
     chartData: {
       labels,
@@ -304,114 +301,114 @@ const lineBarConfig = (datasets, options, labels = monthLabels) => {
   }
 };
 
-export const lineA = lineBarConfig(
-  [datasetConfigLine("#49BCE8")],
-  optionsLineBarConfig("2019", "Growth of project")
-);
-export const lineB = lineBarConfig(
-  [datasetConfigLine("#49BCE8"), datasetConfigLine("#99CA67")],
-  optionsLineBarConfig("2019", "# of users")
-);
-export const horizontalBarA = lineBarConfig(
-  [{ backgroundColor: "#49BCE8" }],
-  optionsHorizontalBarConfig()
-);
-export const barA = lineBarConfig(
-  [ { backgroundColor: "#49BCE8" }, { backgroundColor: "#99CA67" }],
-  optionsLineBarConfig("2018", "Growth of users")
-);
-
 // micro line chart
-export const micro = {
-  chartData: {
-    labels: [],
-    datasets: [
-      {
-        backgroundColor: "#E8F6FD",
-        borderColor: "#22ADE3",
-        pointRadius: 0,
-        lineTension: 0,
+export const micro = (colors) => {
+  return {
+    chartData: {
+      labels: [],
+      datasets: [
+        {
+          backgroundColor: colors.bg,
+          borderColor: colors.border,
+          pointRadius: 0,
+          lineTension: 0,
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      legend: {
+        display: false,
       },
-    ],
-  },
-  options: {
-    maintainAspectRatio: false,
-    legend: {
-      display: false,
-    },
-    tooltips: {
-      enabled: false,
-    },
-    animation: {},
-    scales: {
-      xAxes: [
-        {
-          display: false,
-          gridLines: {
+      tooltips: {
+        enabled: false,
+      },
+      animation: {},
+      scales: {
+        xAxes: [
+          {
             display: false,
+            gridLines: {
+              display: false,
+            },
           },
-        },
-      ],
-      yAxes: [
-        {
-          display: false,
-          gridLines: {
+        ],
+        yAxes: [
+          {
             display: false,
+            gridLines: {
+              display: false,
+            },
           },
-        },
-      ],
+        ],
+      },
     },
-  },
+  }
 };
 
 // polar area
-export const polarA = {
-  chartData: {
-    labels: [],
-    datasets: [
-      {
-        backgroundColor: colorSetE,
-        pointRadius: 0,
-        lineTension: 0,
-      },
-    ],
-  },
-  options: {
-    maintainAspectRatio: false,
-    legend: {
-      display: false,
+export const polar = (colors, labels = []) => {
+  return {
+    chartData: {
+      labels,
+      datasets: [
+        {
+          backgroundColor: colors,
+          pointRadius: 0,
+          lineTension: 0,
+        },
+      ],
     },
-    scale: {
-      gridLines: {
-        borderDash: [6],
-        borderDashOffset: 10,
-        color: "#D8D1C9",
-        z: 1,
+    options: {
+      maintainAspectRatio: false,
+      legend: {
+        display: false,
       },
-      ticks: {
-        fontSize: 10,
-        fontStyle: "bold",
-        fontColor: "#D8D1C9",
-        z: 1,
-        showLabelBackdrop: false,
-        stepSize: 20,
-        padding: 20,
+      scale: {
+        gridLines: {
+          borderDash: [6],
+          borderDashOffset: 10,
+          color: "#D8D1C9",
+          z: 1,
+        },
+        ticks: {
+          fontSize: 10,
+          fontStyle: "bold",
+          fontColor: "#D8D1C9",
+          z: 1,
+          showLabelBackdrop: false,
+          stepSize: 20,
+          padding: 20,
+        },
       },
+      tooltips: {...customTooltip }
     },
-    tooltips: {...customTooltip }
-  },
+  }
 };
 
-// export full general config
-export const chartsSetup = {
-  micro,
-  doughnutA,
-  doughnutB,
-  doughnutC,
-  doughnutD,
-  lineA,
-  lineB,
-  horizontalBarA,
-  barA,
-  polarA,
+export const settings = (config) => {
+  const { type, colors, scales, labels, tooltip, click } = config;
+  let datasets, options;
+  switch (type) {
+    case "line":
+      datasets = colors.map((color) => datasetConfigLine(color));
+      options = optionsLineBarConfig(scales.x, scales.y, tooltip);
+      return lineBarConfig(datasets, options, labels);
+    case "bar":
+      datasets = colors.map((color) => datasetConfigBar(color));
+      options = optionsLineBarConfig(scales.x, scales.y, tooltip);
+      return lineBarConfig(datasets, options, labels);
+    case "horizontal-bar":
+      datasets = colors.map((color) => datasetConfigBar(color));
+      options = optionsHorizontalBarConfig(tooltip, click);
+      return lineBarConfig(datasets, options, labels);
+    case "doughnut":
+      return doughnutConfig(colors, labels);
+    case "micro":
+      return micro(colors);
+    case "polar":
+      return polar(colors, labels);
+  };
 };
+
+
