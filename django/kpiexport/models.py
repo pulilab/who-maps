@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import QuerySet
 from django.db.models.query_utils import Q
 from core.models import GetObjectOrNoneQueryset
-from country.models import Country
+from country.models import Country, Donor
 from user.models import UserProfile
 from rest_framework.authtoken.models import Token
 from django.contrib.postgres.fields import JSONField
@@ -23,13 +23,37 @@ class AuditLogBase(models.Model):
 
     class Meta:
         abstract = True
+        unique_together = ['date', 'country']
+        indexes = [
+            models.Index(fields=['date', 'country']),
+            models.Index(fields=['date'],),
+            # Country is a foreign key, index is automatically generated for it
+        ]
+
+
+class AuditLogWithDonorBase(AuditLogBase):
+    """
+    Base class for audit logs which also need to track Donor information
+    """
+    donor = models.ForeignKey(Donor, blank=False, null=False, on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
+        unique_together = ['country', 'date', 'donor']
+        indexes = [
+            models.Index(fields=['date', 'country', 'donor']),
+            models.Index(fields=['date', 'donor'],),
+            models.Index(fields=['country', 'donor'],),
+            models.Index(fields=['date', 'country']),
+            models.Index(fields=['date'],),
+            # Country and donors are foreign keys, index is automatically generated for them
+        ]
 
 
 class AuditLogUsers(AuditLogBase):
     """
     AuditLog model tracking the user KPIs in the DB
-    Pre-implementation historical data may be filled via searching through the DB for registrations
-    User activity historical information is only available for post-implementation dates
+    Retroactive: partial (activity info cannot be calculated for pre-implementation dates)
     """
     role = UserProfile.ACCOUNT_TYPE_CHOICES
     registered = models.IntegerField(default=0)
@@ -46,13 +70,11 @@ class AuditLogUsers(AuditLogBase):
 class AuditLogApi(AuditLogBase):
     """
     AuditLog model tracking the usage of API keys
-    Pre-implementation data: not available
-    Important: Implementing token usage tracking needs to extend token api calls to update this model
-               Tracking token IDs is important to get the actual number of tokens used
+    Retroactive: Full
+    TODO: decide if this model is even worth it, it's not too hard to grab this info as it is
     """
     created = models.IntegerField(default=0)
-    total = models.IntegerField(default=0)  # TODO: field calculated from the previous day's entry (?)
-    used = models.ManyToManyField(Token, blank=True, related_name='usage')
+    total = models.IntegerField(default=0)  # TODO: a property may be better for this field
 
     class Meta:
         verbose_name = "API KPI"
@@ -62,10 +84,10 @@ class AuditLogApi(AuditLogBase):
         return f'{self.date.year}-{self.date.month} - C{self.total}/T{self.total}'
 
 
-class AuditLogProjects(AuditLogBase):
+class AuditLogProjects(AuditLogWithDonorBase):
     """
     AuditLog model tracking the project KPIs
-    Pre-implementation historical data cannot be acquired
+    Retroactive: No
     """
     published = models.IntegerField(default=0)
     ready_to_publish = models.IntegerField(default=0)
@@ -75,6 +97,7 @@ class AuditLogProjects(AuditLogBase):
     class Meta:
         verbose_name = "Project KPI"
         verbose_name_plural = "Project KPIs"
+        unique_together = ['donor', 'date']
 
     @property
     def total(self):
@@ -87,7 +110,7 @@ class AuditLogProjects(AuditLogBase):
 class AuditLogInvestor(AuditLogBase):
     """
     AuditLog model tracking the responses to the Investor choices question
-    Pre-implementation historical data cannot be acquired
+    Retroactive: No
     data is stored in a dictionary, like:
     data = {<choice_n>: number_n, ...}
     """
@@ -101,10 +124,10 @@ class AuditLogInvestor(AuditLogBase):
         return f'{self.date.year}-{self.date.month} - {str(self.data)}'
 
 
-class AuditLogDataStandards(AuditLogBase):
+class AuditLogDataStandards(AuditLogWithDonorBase):
     """
     AuditLog model tracking the responses for the "interoperability_standards" property
-    Pre-implementation historical data cannot be acquired
+    Retroactive: No
     data is stored in a dictionary, like:
     data = {<choice_n>: number_n, ...}
     """
@@ -118,10 +141,10 @@ class AuditLogDataStandards(AuditLogBase):
         return f'{self.date.year}-{self.date.month} - {str(self.data)}'
 
 
-class AuditLogProjectStages(AuditLogBase):
+class AuditLogProjectStages(AuditLogWithDonorBase):
     """
     AuditLog model tracking the responses for the project stages
-    Pre-implementation historical data can be acquired
+    Retroactive: Yes
     """
     data = JSONField(default=dict)
 
@@ -130,9 +153,10 @@ class AuditLogProjectStages(AuditLogBase):
         verbose_name_plural = "Project Stages KPIs"
 
 
-class AuditLogProjectStatuses(AuditLogBase):
+class AuditLogProjectStatuses(AuditLogWithDonorBase):
     """
     AuditLog model tracking the status of projects
+    Retroactive: No
     """
     active = models.IntegerField(default=0)  # projects which are active (qs supports it)
     ended = models.IntegerField(default=0)
@@ -144,11 +168,12 @@ class AuditLogProjectStatuses(AuditLogBase):
         verbose_name_plural = "Project Statuses KPIs"
 
 
-class AuditLogHFA(AuditLogBase):
+class AuditLogHFA(AuditLogWithDonorBase):
     """
     AuditLog model tracking the health categories and health focus areas
     In order to support coverage, it stores data in a dict - all health categories with all hfa-s, with number of
     occurrences.
+    Retroactive: No
     TODO: check if this is feasible and makes sense in practice
     """
     data = JSONField(default=dict)
