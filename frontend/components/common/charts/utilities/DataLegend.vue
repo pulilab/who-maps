@@ -1,10 +1,10 @@
 <template>
-  <section>
+  <section :class="`${large && 'large'}`">
     <div v-for="item in items" :key="item.color">
       <span class="color" :style="{ 'background-color': item.color }" />
       <span class="label">{{ item.label }}</span>
       <span class="dots" />
-      <span class="value">{{ item.value }}</span>
+      <span class="value">{{ item.value }}{{ percentage ? "%" : "" }}</span>
     </div>
   </section>
 </template>
@@ -16,6 +16,14 @@ export default {
       type: Array,
       required: true,
     },
+    percentage: {
+      type: Boolean,
+      default: false,
+    },
+    large: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
@@ -23,34 +31,47 @@ export default {
 <style lang="scss" scoped>
 // @import "~assets/style/variables.less";
 section {
-  margin: 15px 65px 65px;
-}
-div {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
+  margin: 15px 40px 65px;
+  div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
 
-  span {
-    color: #404041;
-    font-size: 16px;
-    letter-spacing: 0;
-    line-height: 24px;
+    .label {
+      max-width: 250px;
+    }
+
+    span {
+      color: #404041;
+      font-size: 12px;
+      letter-spacing: 0;
+      line-height: 20px;
+    }
+    .color {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+    .dots {
+      border: 1px dashed #d8d1c9;
+      flex-grow: 1;
+      // align-self: flex-end;
+      margin: 0 12px 0px;
+    }
+    .value {
+      font-weight: 700;
+    }
   }
-  .color {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin-right: 12px;
-  }
-  .dots {
-    border: 1px dashed #d8d1c9;
-    flex-grow: 1;
-    align-self: flex-end;
-    margin: 0 12px 6px;
-  }
-  .value {
-    font-weight: 700;
+  &.large {
+    margin: 15px 65px 65px;
+    div {
+      span {
+        font-size: 16px;
+        line-height: 24px;
+      }
+    }
   }
 }
 </style>
