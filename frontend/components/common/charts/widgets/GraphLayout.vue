@@ -2,9 +2,13 @@
   <el-col v-bind="{ ...$props, ...$attrs }">
     <div class="wrapper">
       <div class="container">
+        <template v-if="this.$slots.back">
+          <slot name="back" />
+        </template>
         <p v-if="this.$slots.default" class="title"><slot /></p>
+        <slot name="subtitle" />
         <template v-if="horizontal">
-          <el-row>
+          <el-row class="mt-15">
             <el-col :span="13">
               <div class="graph-horizontal">
                 <slot name="graph" />
@@ -33,6 +37,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    back: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
@@ -42,8 +50,20 @@ export default {
   background-color: white;
   height: 100%;
   .container {
+    position: relative;
     padding-top: 30px;
     display: grid;
+    ::v-deep .el-button--text {
+      color: #404041;
+      position: absolute;
+      top: 30px;
+      left: 40px;
+      font-size: 14px;
+      letter-spacing: 0;
+      line-height: 18px;
+      font-weight: 100;
+      padding: 3px 0;
+    }
     .title {
       color: #1cabe2;
       font-size: 18px;
@@ -51,13 +71,16 @@ export default {
       line-height: 23px;
       margin: 9px 0 11px 0;
       text-align: center;
-      margin: 0 25px 40px;
+      margin: 0 25px 0px;
     }
     .graph {
-      margin: 0 50px 15px 40px;
+      margin: 25px 50px 15px 40px;
     }
     .graph-horizontal {
-      margin: 0 50px 50px 80px;
+      margin: 0px 50px 50px 80px;
+    }
+    .mt-15 {
+      margin-top: 15px;
     }
   }
 }

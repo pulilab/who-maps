@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <!-- section A -->
     <el-row type="flex" :gutter="30" class="mb-80">
       <div class="resume-group">
         <el-col :span="5">
@@ -54,7 +55,7 @@
       </div>
     </el-row>
 
-    <!-- section A -->
+    <!-- section B -->
     <el-row type="flex" :gutter="20" class="mb-80">
       <graph-layout :span="8">
         <template #graph>
@@ -76,13 +77,13 @@
           <chart
             :chart-data="lineA.chartData"
             :options="lineA.options"
-            :height="320"
+            :height="360"
           />
         </template>
       </graph-layout>
     </el-row>
 
-    <!-- section B -->
+    <!-- section C -->
     <el-row type="flex" class="mb-80">
       <graph-layout :span="24">
         <translate>Monthly User Activity</translate>
@@ -96,7 +97,7 @@
       </graph-layout>
     </el-row>
 
-    <!-- section C -->
+    <!-- section D -->
     <el-row type="flex" class="mb-80">
       <graph-layout :span="24">
         <translate>Monthly User Activity</translate>
@@ -111,7 +112,7 @@
       </graph-layout>
     </el-row>
 
-    <!-- section D -->
+    <!-- section E -->
     <el-row type="flex" class="mb-80">
       <graph-layout :span="24">
         <translate>Monthly growth of API keys</translate>
@@ -125,7 +126,7 @@
       </graph-layout>
     </el-row>
 
-    <!-- section E -->
+    <!-- section F -->
     <el-row type="flex" :gutter="20" class="mb-80">
       <graph-layout :span="8">
         <translate>Project approval per countries</translate>
@@ -144,7 +145,7 @@
       </graph-layout>
     </el-row>
 
-    <!-- section F -->
+    <!-- section G -->
     <el-row type="flex" :gutter="20" class="mb-80">
       <graph-layout :span="8">
         <translate>
@@ -176,7 +177,7 @@
       </graph-layout>
     </el-row>
 
-    <!-- section G -->
+    <!-- section H -->
     <el-row type="flex" :gutter="20" class="mb-80">
       <graph-layout :span="16" horizontal>
         <translate>Distributions of projects’ stages</translate>
@@ -208,7 +209,7 @@
       </graph-layout>
     </el-row>
 
-    <!-- section H -->
+    <!-- section I -->
     <el-row type="flex" :gutter="20" class="mb-80">
       <graph-layout :span="8">
         <translate>Coverage of Health Focus Areas</translate>
@@ -225,8 +226,22 @@
           <!-- <data-legend :items="legend" /> -->
         </template>
       </graph-layout>
+      <!-- back button graph style -->
       <graph-layout :span="16">
         <translate>Health Focus Areas (by occurrences)</translate>
+        <template #back>
+          <el-button
+            v-if="back.length > 0"
+            type="text"
+            icon="el-icon-arrow-left"
+            @click="handleBackClick"
+          >
+            <translate>Back</translate>
+          </el-button>
+        </template>
+        <template #subtitle>
+          <subtitle :item="backSubtitle" />
+        </template>
         <template #graph>
           <chart
             type="horizontal-bar"
@@ -241,6 +256,7 @@
 
 <script>
 import Growth from "@/components/common/charts/utilities/Growth";
+import Subtitle from "@/components/common/charts/utilities/Subtitle";
 import DataLegend from "@/components/common/charts/utilities/DataLegend";
 
 import Chart from "@/components/common/charts/Chart";
@@ -356,6 +372,7 @@ export default {
     Chart,
     GraphLayout,
     DataLegend,
+    Subtitle,
   },
   data() {
     return {
@@ -411,6 +428,7 @@ export default {
           subtitle: "",
         },
       }),
+      // click horizontal bar
       horizontalBarB: settings({
         type: "horizontal-bar",
         colors: colorSetA,
@@ -421,6 +439,10 @@ export default {
         },
         click: true,
       }),
+      dataHorizontalBarB: [],
+      back: [],
+      backSubtitle: {},
+      // click horizontal bar
       doughnutA: settings({
         type: "doughnut",
         colors: colorSetC,
@@ -447,13 +469,13 @@ export default {
     };
   },
   created() {
-    this.horizontalBarB.options.onClick = this.handle; // onClick: this.handle
-
     this.dynamic = this.dynamic + 1;
     this.interval = setInterval(() => {
       this.handleChange(100);
       this.dynamic = this.dynamic + 1;
     }, 15000);
+
+    this.handleHfaData();
   },
   beforeDestroy() {
     clearInterval(this.interval);
@@ -483,7 +505,7 @@ export default {
       this.updateChart("lineC", monthLabels.length);
       this.updateChart("barA", monthLabels.length);
       this.updateChart("horizontalBarA", dataStandardsLabels.length);
-      this.updateChart("horizontalBarB", hfaLabels.length);
+      // this.updateChart("horizontalBarB", hfaLabels.length);
     },
   },
   methods: {
@@ -513,12 +535,35 @@ export default {
         });
       }
     },
-    handle(point, event) {
+    handleHfaData() {
+      // special case for the horizontal bar, this is a "call"
+      this.dataHorizontalBarB = this.randomArray(hfaLabels.length);
+      this.horizontalBarB.options.onClick = this.handleBarClick; // onClick: this.handle
+      this.horizontalBarB.chartData = {
+        ...this.horizontalBarB.chartData,
+        datasets: this.horizontalBarB.chartData.datasets.map((dataset) => {
+          return { ...dataset, data: this.dataHorizontalBarB };
+        }),
+      };
+      // end special case
+    },
+    handleBarClick(point, event) {
       const item = event[0];
-      console.log({
-        index: item._index,
-        backgroundColor: item._view.backgroundColor,
+      this.back.push({
+        label: hfaLabels[item._index],
+        value: this.dataHorizontalBarB[item._index],
       });
+      // some call to BE, like this
+      this.backSubtitle = this.back[this.back.length - 1];
+      console.log(this.backSubtitle);
+      this.handleHfaData();
+    },
+    handleBackClick() {
+      this.back.pop();
+      // some call to BE, like this
+      this.backSubtitle =
+        this.back.length > 0 ? this.back[this.back.length - 1] : {};
+      this.handleHfaData();
     },
   },
 };
