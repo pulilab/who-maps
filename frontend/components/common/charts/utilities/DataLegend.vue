@@ -1,10 +1,12 @@
 <template>
-  <section :class="`${large && 'large'}`">
+  <section :class="classRoot">
     <div v-for="item in items" :key="item.color">
       <span class="color" :style="{ 'background-color': item.color }" />
       <span class="label">{{ item.label }}</span>
-      <span class="dots" />
-      <span class="value">{{ item.value }}{{ percentage ? "%" : "" }}</span>
+      <template v-if="!horizontal">
+        <span class="dots" />
+        <span class="value">{{ labelValue(item.value) }}</span>
+      </template>
     </div>
   </section>
 </template>
@@ -24,18 +26,46 @@ export default {
       type: Boolean,
       default: false,
     },
+    horizontal: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    classRoot() {
+      return { large: this.large, horizontal: this.horizontal };
+    },
+  },
+  methods: {
+    labelValue(value) {
+      return `${value} ${this.percentage ? "%" : ""}`;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 // @import "~assets/style/variables.less";
+@mixin flex($content) {
+  display: flex;
+  align-items: center;
+  justify-content: $content;
+}
+
 section {
   margin: 15px 40px 65px;
+  &.horizontal {
+    @include flex(center);
+    margin: -15px 0 15px 0;
+    div {
+      margin-right: 30px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
   div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include flex(space-between);
     margin-bottom: 15px;
 
     .label {

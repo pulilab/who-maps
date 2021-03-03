@@ -1,6 +1,6 @@
 <template>
   <p :class="`${large ? 'large' : color}`">
-    <i v-if="!large" :class="icon"></i> {{ rate }}
+    <i v-if="!large" :class="icon"></i> {{ handleRate(incoming, previous) }}
   </p>
 </template>
 
@@ -28,34 +28,26 @@ export default {
     return {
       icon: "el-icon-minus",
       color: "neutral",
-      rate: 0,
     };
   },
-  watch: {
-    incoming() {
-      const rate = this.incoming - this.previous;
-      rate > 0 ? (this.rate = `+${rate}`) : (this.rate = rate);
+  methods: {
+    handleRate(incoming, previous) {
+      const rate = incoming - previous;
       switch (true) {
         case rate > 0:
           this.icon = "el-icon-top-right";
-          this.rate = this.absolute ? rate : `+${rate}`;
           this.color = "up";
-          break;
+          return this.absolute ? rate : `+${rate}`;
         case rate < 0:
           this.icon = "el-icon-bottom-right";
-          this.rate = this.absolute ? Math.abs(rate) : rate;
           this.color = "down";
-          break;
+          return this.absolute ? Math.abs(rate) : rate;
         default:
           this.icon = "el-icon-minus";
-          this.rate = rate;
           this.color = "neutral";
-          break;
+          return rate;
       }
     },
-  },
-  methods: {
-    name() {},
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <p class="subtitle">
-    <template v-if="!item.value">
+    <template v-if="!item.label">
       <translate>
         Click on the bars to see health focus areas in specific category.
       </translate>
