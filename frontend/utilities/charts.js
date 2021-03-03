@@ -446,8 +446,8 @@ export const randomData = (length, range = 100) => {
 export const randomNumber = (max = 100) =>
   Math.floor(Math.random() * Math.floor(max));
 
-export const legendGenerator = (labels, colors, data) => {
+export const legendGenerator = (labels, colors, data = []) => {
   return labels.map((label, i) => {
-    return { label, color: colors[i], value: data[i] };
+    return { label, color: colors[i], value: data[i] || 0 };
   });
 };

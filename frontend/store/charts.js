@@ -17,23 +17,6 @@ import {
   legendGenerator
 } from "@/utilities/charts";
 
-const colorSetA = ["#49BCE8"];
-const hfaLabels = [
-  "Adolescent and Youth Health",
-  "Civil registration and vital statistics",
-  "Coronavirus",
-  "Cross cutting",
-  "Environmental health",
-  "Humanitarian health",
-  "Infectious diseases (non-vector borne)",
-  "Injury prevention and management",
-  "Maternal health",
-  "Newborn and Child Health",
-  "Non-communicable diseases",
-  "Nutrition and metabolic disorders",
-  "Sexual and reproductive health"
-];
-
 export const state = () => ({
   stages: {
     chartData: {},
@@ -60,7 +43,12 @@ export const state = () => ({
   polarALegend: [],
   doughnutALegend: [],
   doughnutBLegend: [],
-  doughnutCLegend: []
+  doughnutCLegend: [],
+  doughnutDLegend: {},
+  monthlyUserLegend: [],
+  // back bar hfa system
+  back: [],
+  subtitle: {}
 });
 
 export const actions = {
@@ -257,9 +245,10 @@ export const actions = {
       }
     });
   },
-  getDashboardData({ commit }) {
+  getDashboardData({ commit, dispatch }, { func, refresh }) {
     // start of data that should come from somewhere
     // color sets (should be dynamic?)
+    const colorSetA = ["#49BCE8"];
     const colorSetB = ["#49BCE8", "#99CA67"];
     const colorSetC = ["#9ACB67", "#FFCF3F", "#BABABB", "#E84F48"];
     const colorSetD = ["#FFCF3F", "#FEAB7D", "#9ACB67", "#49BCE8"];
@@ -267,7 +256,7 @@ export const actions = {
     const colorSetF = ["#9ACB67", "#E84F48"];
     const colorSetG = ["#FFCE3D", "#FEAB7D", "#49BCE8", "#5F72B5", "#9ACB67"];
 
-    // labels set (should be dynamic?)
+    // label sets (should be dynamic?)
     const monthLabels = [
       "Jan",
       "Feb",
@@ -320,10 +309,29 @@ export const actions = {
       "Implementation planning",
       "Hand over or Complete"
     ];
+    const hfaLabels = [
+      "Adolescent and Youth Health",
+      "Civil registration and vital statistics",
+      "Coronavirus",
+      "Cross cutting",
+      "Environmental health",
+      "Humanitarian health",
+      "Infectious diseases (non-vector borne)",
+      "Injury prevention and management",
+      "Maternal health",
+      "Newborn and Child Health",
+      "Non-communicable diseases",
+      "Nutrition and metabolic disorders",
+      "Sexual and reproductive health"
+    ];
     // end of data that should come from somewhere
 
     // data generation
     const polarAData = randomData(stageLabels.length);
+    const monthlyUserActivity = [
+      randomData(monthLabels.length),
+      randomData(monthLabels.length)
+    ];
     const doughnutAData = randomData(projectsLabels.length);
     const doughnutBData = randomData(govermentContributionLabels.length);
     const doughnutCData = randomData(distributionStatuesLabels.length);
@@ -367,7 +375,7 @@ export const actions = {
         scales: { x: "2019", y: "# of users" },
         labels: monthLabels,
         tooltip: "Users",
-        data: [randomData(monthLabels.length), randomData(monthLabels.length)]
+        data: monthlyUserActivity
       })
     );
     commit(
@@ -389,7 +397,7 @@ export const actions = {
         scales: { x: "2018", y: "Growth of users" },
         labels: monthLabels,
         tooltip: "New users",
-        data: [randomData(monthLabels.length), randomData(monthLabels.length)]
+        data: monthlyUserActivity
       })
     );
     commit(
@@ -472,19 +480,103 @@ export const actions = {
       "SET_DOUGHNUTC_LEGEND",
       legendGenerator(distributionStatuesLabels, colorSetE, doughnutCData)
     );
-    // commit(
-    //   "SET_DOUGHNUTD_LEGEND",
-    //   legendGenerator(coverageLabels, colorSetF, doughnutDData)
-    // );
+    commit(
+      "SET_MONTHLY_USER_LEGEND",
+      legendGenerator(["Monthly User Growth", "Monthly Active User"], colorSetB)
+    );
+    // a lot of doubts here, nested info incoming
+    commit("SET_DOUGHNUTD_LEGEND", {
+      tabs: [
+        // { name: this.$gettext("Covered"), color: "green", id: 1 },
+        // { name: this.$gettext("Not Covered"), color: "red", id: 2 }
+        { name: "Covered", color: "green", id: 1 },
+        { name: "Not Covered", color: "red", id: 2 }
+      ],
+      contents: [
+        {
+          id: 1,
+          icon: "el-icon-check",
+          color: "green",
+          areas: [
+            {
+              name: "Adolescent and Youth Health",
+              subareas: [
+                "Adolescents and communicable diseases",
+                "Adolescents and mental health",
+                "Adolescents and non-communicable diseases",
+                "Adolescents and sexual and reproductive health",
+                "Adolescents and violence",
+                "Child marriage"
+              ]
+            },
+            {
+              name: "Civil registration and vital statistics",
+              subareas: [
+                "Birth events",
+                "Death events",
+                "Other civil registration and vital statistics"
+              ]
+            },
+            {
+              name: "Civil registration and vital statistics",
+              subareas: [
+                "Birth events",
+                "Death events",
+                "Other civil registration and vital statistics"
+              ]
+            }
+          ]
+        },
+        {
+          id: 2,
+          icon: "el-icon-close",
+          color: "red",
+          areas: [
+            {
+              name: "Adolescent and Youth Health",
+              subareas: [
+                "Life-skills training",
+                "Other adolescent and youth health",
+                "School-based health programs",
+                "Youth friendly services"
+              ]
+            },
+            {
+              name: "Cross cutting",
+              subareas: [
+                "Blood Safety",
+                "Emergency Medical Services",
+                "Immunizations",
+                "Surveillance"
+              ]
+            }
+          ]
+        }
+      ]
+    });
 
+    // examples for random data
     commit("SET_INCOMING", randomNumber());
     commit("SET_PREVIOUS", randomNumber());
+    // click function link
+    commit("SET_BAR_CLICK", func);
   },
-  setBarClick({ commit }, fun) {
-    commit("SET_BAR_CLICK", fun);
+  handleBarClick({ state, commit, dispatch }, { func, idx }) {
+    const newStack = {
+      label: state.horizontalBarB.chartData.labels[idx],
+      value: state.horizontalBarB.chartData.datasets[0].data[idx]
+    };
+    commit("SET_BACK", [...state.back, newStack]);
+    commit("SET_SUBTITLE", newStack);
+    dispatch("getDashboardData", { func, refresh: false });
   },
-  setHorizontalBarBData({ commit, dispatch }) {
-    dispatch("getDashboardData");
+  handleBackClick({ state, commit, dispatch }, { func }) {
+    commit("SET_BACK", state.back.slice(0, state.back.length - 1));
+    commit(
+      "SET_SUBTITLE",
+      state.back.length > 0 ? state.back[state.back.length - 1] : {}
+    );
+    dispatch("getDashboardData", { func, refresh: false });
   }
 };
 
@@ -554,8 +646,20 @@ export const mutations = {
   SET_DOUGHNUTD_LEGEND: (state, val) => {
     state.doughnutDLegend = val;
   },
+  SET_MONTHLY_USER_LEGEND: (state, val) => {
+    state.monthlyUserLegend = val;
+  },
   // click hfa system
-  SET_BAR_CLICK: (state, fun) => {
-    state.horizontalBarB.options.onClick = fun;
+  SET_BAR_CLICK: (state, func) => {
+    state.horizontalBarB.options.onClick = func;
+  },
+  SET_CLICK_LISTENER: (state, func) => {
+    state.clickListener = func;
+  },
+  SET_BACK: (state, val) => {
+    state.back = val;
+  },
+  SET_SUBTITLE: (state, val) => {
+    state.subtitle = val;
   }
 };

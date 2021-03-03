@@ -106,6 +106,9 @@
             :height="300"
           />
         </template>
+        <template #legend>
+          <data-legend :items="monthlyUserLegend" horizontal />
+        </template>
       </graph-layout>
     </el-row>
 
@@ -120,6 +123,9 @@
             :options="barA.options"
             :height="300"
           />
+        </template>
+        <template #legend>
+          <data-legend :items="monthlyUserLegend" horizontal />
         </template>
       </graph-layout>
     </el-row>
@@ -235,7 +241,7 @@
           />
         </template>
         <template #legend>
-          <!-- <data-legend :items="legend" /> -->
+          <tab-legend :legend="doughnutDLegend" />
         </template>
       </graph-layout>
       <graph-layout :span="16">
@@ -270,9 +276,8 @@ import { mapState, mapActions } from "vuex";
 import Growth from "@/components/common/charts/utilities/Growth";
 import Subtitle from "@/components/common/charts/utilities/Subtitle";
 import DataLegend from "@/components/common/charts/utilities/DataLegend";
-
+import TabLegend from "@/components/common/charts/utilities/TabLegend";
 import Chart from "@/components/common/charts/Chart";
-
 import Resume from "@/components/common/charts/widgets/Resume";
 import GraphLayout from "@/components/common/charts/widgets/GraphLayout";
 
@@ -283,14 +288,8 @@ export default {
     Chart,
     GraphLayout,
     DataLegend,
+    TabLegend,
     Subtitle,
-  },
-  data() {
-    return {
-      // click hfa system
-      back: [],
-      subtitle: {},
-    };
   },
   created() {
     this.handleRandom();
@@ -318,36 +317,29 @@ export default {
       doughnutALegend: (state) => state.charts.doughnutALegend,
       doughnutBLegend: (state) => state.charts.doughnutBLegend,
       doughnutCLegend: (state) => state.charts.doughnutCLegend,
+      doughnutDLegend: (state) => state.charts.doughnutDLegend,
+      monthlyUserLegend: (state) => state.charts.monthlyUserLegend,
+      // back click hfa system
+      back: (state) => state.charts.back,
+      subtitle: (state) => state.charts.subtitle,
     }),
   },
   methods: {
     ...mapActions({
       getDashboardData: "charts/getDashboardData",
-      setBarClick: "charts/setBarClick",
-      getHfaData: "charts/getHfaData",
-      setHorizontalBarBData: "charts/setHorizontalBarBData",
+      handleBackClick: "charts/handleBackClick",
+      barClick: "charts/handleBarClick",
+      backClick: "charts/handleBackClick",
     }),
     handleRandom() {
-      this.getDashboardData();
-      this.setBarClick(this.handleBarClick);
+      // nees to wire the click event to the options object of horizontal bar
+      this.getDashboardData({ func: this.handleBarClick, refresh: true });
     },
     handleBarClick(point, event) {
-      const item = event[0];
-      const newStack = {
-        label: this.horizontalBarB.chartData.labels[item._index],
-        value: this.horizontalBarB.chartData.datasets[0].data[item._index],
-      };
-      this.back.push(newStack);
-      this.subtitle = newStack;
-      this.setHorizontalBarBData();
-      this.setBarClick(this.handleBarClick);
+      this.barClick({ func: this.handleBarClick, idx: event[0]._index });
     },
     handleBackClick() {
-      this.back.pop();
-      this.subtitle =
-        this.back.length > 0 ? this.back[this.back.length - 1] : {};
-      this.setHorizontalBarBData();
-      this.setBarClick(this.handleBarClick);
+      this.backClick({ func: this.handleBarClick });
     },
   },
 };
