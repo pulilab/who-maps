@@ -20,7 +20,7 @@
           </el-row>
         </template>
         <template v-else>
-          <div class="graph">
+          <div class="graph" v-if="this.$slots.graph">
             <slot name="graph" />
           </div>
           <slot name="legend" />

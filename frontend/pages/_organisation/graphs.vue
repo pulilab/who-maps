@@ -112,7 +112,7 @@
       </graph-layout>
     </el-row>
 
-    <!-- section D -->
+    <!-- section E -->
     <el-row type="flex" class="mb-80">
       <graph-layout :span="24">
         <translate>Monthly User Activity</translate>
@@ -130,7 +130,7 @@
       </graph-layout>
     </el-row>
 
-    <!-- section D -->
+    <!-- section F -->
     <el-row type="flex" class="mb-80">
       <graph-layout :span="24">
         <translate>Project statuses per month</translate>
@@ -148,7 +148,7 @@
       </graph-layout>
     </el-row>
 
-    <!-- section E -->
+    <!-- section G -->
     <el-row type="flex" class="mb-80">
       <graph-layout :span="24">
         <translate>Monthly growth of API keys</translate>
@@ -162,12 +162,11 @@
       </graph-layout>
     </el-row>
 
-    <!-- section F -->
+    <!-- section H -->
     <el-row type="flex" :gutter="20" class="mb-80">
       <graph-layout :span="8">
         <translate>Project approval per countries</translate>
-        <template #graph> </template>
-        <template #legend> </template>
+        <template #legend><country-legend :data="countryTable" /></template>
       </graph-layout>
       <graph-layout :span="16">
         <translate>Monthly growth of API keys</translate>
@@ -181,7 +180,7 @@
       </graph-layout>
     </el-row>
 
-    <!-- section G -->
+    <!-- section I -->
     <el-row type="flex" :gutter="20" class="mb-80">
       <graph-layout :span="8">
         <translate>
@@ -213,7 +212,7 @@
       </graph-layout>
     </el-row>
 
-    <!-- section H -->
+    <!-- section J -->
     <el-row type="flex" :gutter="20" class="mb-80">
       <graph-layout :span="16" horizontal>
         <translate>Distributions of projects’ stages</translate>
@@ -245,7 +244,7 @@
       </graph-layout>
     </el-row>
 
-    <!-- section I -->
+    <!-- section K -->
     <el-row type="flex" :gutter="20" class="mb-80">
       <graph-layout :span="8">
         <translate>Coverage of Health Focus Areas</translate>
@@ -295,6 +294,8 @@ import Growth from "@/components/common/charts/utilities/Growth";
 import Subtitle from "@/components/common/charts/utilities/Subtitle";
 import DataLegend from "@/components/common/charts/utilities/DataLegend";
 import TabLegend from "@/components/common/charts/utilities/TabLegend";
+import CountryLegend from "@/components/common/charts/utilities/CountryLegend";
+
 import Chart from "@/components/common/charts/Chart";
 import Resume from "@/components/common/charts/widgets/Resume";
 import GraphLayout from "@/components/common/charts/widgets/GraphLayout";
@@ -308,6 +309,7 @@ export default {
     DataLegend,
     TabLegend,
     Subtitle,
+    CountryLegend,
   },
   created() {
     this.handleRandom();
@@ -339,6 +341,7 @@ export default {
       doughnutDLegend: (state) => state.charts.doughnutDLegend,
       monthlyUserLegend: (state) => state.charts.monthlyUserLegend,
       projectStatusLegend: (state) => state.charts.projectStatusLegend,
+      countryTable: (state) => state.charts.countryTable,
       // back click hfa system
       back: (state) => state.charts.back,
       subtitle: (state) => state.charts.subtitle,
