@@ -56,7 +56,7 @@ export const dataInfoFill = (len, fill, change = undefined, type = "front") => {
 };
 
 // general setup for graph types
-// doughnut
+// tooltips
 const customTooltip = {
   // Disable the on-canvas tooltip
   enabled: false,
@@ -123,28 +123,114 @@ const customTooltip = {
     tooltipEl.style.pointerEvents = "none";
   }
 };
+const customStackedTooltip = {
+  // Disable the on-canvas tooltip
+  enabled: false,
+  custom(tooltip) {
+    // Tooltip Element
+    var tooltipEl = document.getElementById("chartjs-tooltip");
 
-const doughnutConfig = (colorSet, labels = [], data) => {
+    if (!tooltipEl) {
+      tooltipEl = document.createElement("div");
+      tooltipEl.id = "chartjs-tooltip";
+      tooltipEl.innerHTML = "<section></section>";
+      document.body.appendChild(tooltipEl);
+    }
+    // Hide if no tooltip
+    if (tooltip.opacity === 0) {
+      tooltipEl.style.opacity = 0;
+      return;
+    }
+
+    // Set caret Position
+    tooltipEl.classList.remove("above", "below", "no-transform");
+    if (tooltip.yAlign) {
+      tooltipEl.classList.add(tooltip.yAlign);
+    } else {
+      tooltipEl.classList.add("no-transform");
+    }
+
+    function getBody(bodyItem) {
+      return bodyItem.lines;
+    }
+
+    // Set Text
+    if (tooltip.body) {
+      var titleLines = tooltip.title || [];
+      var bodyLines = tooltip.body.map(getBody);
+
+      var innerHtml = "";
+      bodyLines.forEach(function(body, i) {
+        var colors = tooltip.labelColors[i];
+        var style = `background: ${colors.backgroundColor}`;
+        var span = `<span class="chartjs-tooltip-key" style="${style}"></span>`;
+        innerHtml += `<li>${span}${body}</li>`;
+      });
+
+      var htmlRoot = tooltipEl.querySelector("section");
+      htmlRoot.innerHTML = `<ul class="tooltip-list">${innerHtml}</ul>`;
+    }
+
+    var position = this._chart.canvas.getBoundingClientRect();
+
+    // Display, position, and set styles for font
+    tooltipEl.style.opacity = 1;
+    tooltipEl.style.position = "absolute";
+    tooltipEl.style.left =
+      position.left + window.pageXOffset + tooltip.caretX + "px";
+    tooltipEl.style.top =
+      position.top + window.pageYOffset + tooltip.caretY + "px";
+    tooltipEl.style.fontFamily = tooltip._fontFamily;
+    tooltipEl.style.fontSize = tooltip.fontSize;
+    tooltipEl.style.fontStyle = tooltip._fontStyle;
+    tooltipEl.style.pointerEvents = "none";
+  }
+};
+const generalTooltipSettings = (tooltip, xTitle, type = "line") => {
   return {
-    chartData: {
-      labels,
-      datasets: [
-        {
-          backgroundColor: colorSet,
-          pointRadius: 0,
-          lineTension: 0,
-          data
+    backgroundColor: "#474747",
+    displayColors: false,
+    xPadding: 10,
+    yPadding: 8,
+    callbacks: {
+      title(item) {
+        if (type === "line") {
+          return `${item[0].yLabel} ${tooltip}`;
         }
-      ]
-    },
-    options: {
-      maintainAspectRatio: false,
-      legend: {
-        display: false
+        return `${tooltip.title} ${item[0].value}`;
       },
-      tooltips: { ...customTooltip }
+      label(item) {
+        if (type === "line") {
+          return `${item.label} ${xTitle}`;
+        }
+        return `${tooltip.subtitle}`;
+      }
     }
   };
+};
+const tooltipType = (stacked, tooltip, xTitle) => {
+  if (stacked) {
+    return { tooltips: { mode: "index", ...customStackedTooltip } };
+  }
+  return {
+    tooltips: {
+      titleAlign: "center",
+      bodyAlign: "center",
+      ...generalTooltipSettings(tooltip, xTitle)
+    }
+  };
+};
+
+// general setups
+const ticks = {
+  fontSize: 10,
+  padding: 15
+};
+const generalOptions = {
+  maintainAspectRatio: false,
+  legend: {
+    display: false
+  }
 };
 
 // Lines and Bar config
@@ -165,14 +251,14 @@ const datasetConfigLine = (color, data) => {
     data
   };
 };
-
-const datasetConfigBar = (color, data) => {
+const datasetConfigBar = (color, data, label, thickness = "flex") => {
   return {
     backgroundColor: color,
+    barThickness: thickness,
+    label,
     data
   };
 };
-
 const scaleLabelConfigLine = label => {
   return {
     display: true,
@@ -182,30 +268,9 @@ const scaleLabelConfigLine = label => {
     lineHeight: 3
   };
 };
-
-const tooltipsCallbacks = (label, xTitle, type = "line") => {
+const optionsLineBarConfig = ({ scales, tooltip, stacked }) => {
   return {
-    title(item) {
-      if (type === "line") {
-        return `${item[0].yLabel} ${label}`;
-      }
-      return `${label.title} ${item[0].value}`;
-    },
-    label(item) {
-      if (type === "line") {
-        return `${item.label} ${xTitle}`;
-      }
-      return `${label.subtitle}`;
-    }
-  };
-};
-
-const optionsLineBarConfig = (xTitle, yTitle, tooltip) => {
-  return {
-    maintainAspectRatio: false,
-    legend: {
-      display: false
-    },
+    ...generalOptions,
     scales: {
       xAxes: [
         {
@@ -215,12 +280,10 @@ const optionsLineBarConfig = (xTitle, yTitle, tooltip) => {
             drawTicks: false
           },
           scaleLabel: {
-            ...scaleLabelConfigLine(xTitle)
+            ...scaleLabelConfigLine(scales.x)
           },
-          ticks: {
-            fontSize: 10,
-            padding: 15
-          }
+          ticks,
+          stacked
         }
       ],
       yAxes: [
@@ -229,44 +292,26 @@ const optionsLineBarConfig = (xTitle, yTitle, tooltip) => {
             drawTicks: false
           },
           scaleLabel: {
-            ...scaleLabelConfigLine(yTitle)
+            ...scaleLabelConfigLine(scales.y)
           },
-          ticks: {
-            fontSize: 10,
-            padding: 15
-          }
+          ticks,
+          stacked
         }
       ]
     },
-    tooltips: {
-      backgroundColor: "#474747",
-      displayColors: false,
-      xPadding: 10,
-      yPadding: 8,
-      titleAlign: "center",
-      bodyAlign: "center",
-      callbacks: tooltipsCallbacks(tooltip, xTitle)
-    }
+    ...tooltipType(stacked, tooltip, scales.x)
   };
 };
-
 const optionsHorizontalBarConfig = (tooltip, click = false) => {
   return {
-    maintainAspectRatio: false,
-    legend: {
-      display: false
-    },
+    ...generalOptions,
     scales: {
       xAxes: [
         {
           gridLines: {
             drawTicks: false
           },
-
-          ticks: {
-            fontSize: 10,
-            padding: 15
-          }
+          ticks
         }
       ],
       yAxes: [
@@ -275,19 +320,12 @@ const optionsHorizontalBarConfig = (tooltip, click = false) => {
             drawOnChartArea: false,
             drawTicks: false
           },
-          ticks: {
-            fontSize: 10,
-            padding: 15
-          }
+          ticks
         }
       ]
     },
     tooltips: {
-      backgroundColor: "#474747",
-      displayColors: false,
-      xPadding: 10,
-      yPadding: 8,
-      callbacks: tooltipsCallbacks(tooltip, "", "bar")
+      ...generalTooltipSettings(tooltip, "", "bar")
     },
     onHover: event => {
       if (click) {
@@ -296,7 +334,6 @@ const optionsHorizontalBarConfig = (tooltip, click = false) => {
     }
   };
 };
-
 const lineBarConfig = (datasets, options, labels = []) => {
   return {
     chartData: {
@@ -304,6 +341,27 @@ const lineBarConfig = (datasets, options, labels = []) => {
       datasets
     },
     options
+  };
+};
+
+// doughnut
+const doughnutConfig = (colorSet, labels = [], data) => {
+  return {
+    chartData: {
+      labels,
+      datasets: [
+        {
+          backgroundColor: colorSet,
+          pointRadius: 0,
+          lineTension: 0,
+          data
+        }
+      ]
+    },
+    options: {
+      ...generalOptions,
+      tooltips: { ...customTooltip }
+    }
   };
 };
 
@@ -323,10 +381,7 @@ export const micro = (colors, labels, datasets) => {
       })
     },
     options: {
-      maintainAspectRatio: false,
-      legend: {
-        display: false
-      },
+      ...generalOptions,
       tooltips: {
         enabled: false
       },
@@ -368,10 +423,7 @@ export const polar = (colors, labels = [], datasets = []) => {
       })
     },
     options: {
-      maintainAspectRatio: false,
-      legend: {
-        display: false
-      },
+      ...generalOptions,
       scale: {
         gridLines: {
           borderDash: [6],
@@ -394,22 +446,30 @@ export const polar = (colors, labels = [], datasets = []) => {
   };
 };
 
+const datasetGen = ({ type, colors, data, legendLabels, thickness }) => {
+  if (type === "line") {
+    return colors.map((color, i) => datasetConfigLine(color, data[i]));
+  }
+  return colors.map((color, i) =>
+    datasetConfigBar(color, data[i], legendLabels[i], thickness)
+  );
+};
 export const settings = config => {
-  const { type, colors, scales, labels, tooltip, click, data } = config;
-  let datasets, options;
+  const { type, colors, labels, data, tooltip, click, scales } = config;
   switch (type) {
     case "line":
-      datasets = colors.map((color, i) => datasetConfigLine(color, data[i]));
-      options = optionsLineBarConfig(scales.x, scales.y, tooltip);
-      return lineBarConfig(datasets, options, labels);
     case "bar":
-      datasets = colors.map((color, i) => datasetConfigBar(color, data[i]));
-      options = optionsLineBarConfig(scales.x, scales.y, tooltip);
-      return lineBarConfig(datasets, options, labels);
+      return lineBarConfig(
+        datasetGen(config),
+        optionsLineBarConfig(config),
+        labels
+      );
     case "horizontal-bar":
-      datasets = colors.map((color, i) => datasetConfigBar(color, data[i]));
-      options = optionsHorizontalBarConfig(tooltip, click);
-      return lineBarConfig(datasets, options, labels);
+      return lineBarConfig(
+        datasetGen(config),
+        optionsHorizontalBarConfig(tooltip, click),
+        labels
+      );
     case "doughnut":
       return doughnutConfig(colors, labels, data);
     case "micro":
@@ -419,7 +479,7 @@ export const settings = config => {
   }
 };
 
-// break line in chunks
+// Data generation utilities
 const chunkString = (str, len) => {
   const size = Math.ceil(str.length / len);
   const r = Array(size);

@@ -71,6 +71,18 @@ export default {
   margin-right: 10px;
   border-radius: 50%;
   border: 2px solid white;
+  display: inline-block;
+}
+.tooltip-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  li {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
 }
 </style>
 

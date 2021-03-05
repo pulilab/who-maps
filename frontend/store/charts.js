@@ -33,6 +33,7 @@ export const state = () => ({
   lineB: {},
   lineC: {},
   barA: {},
+  barB: {},
   horizontalBarA: {},
   horizontalBarB: {},
   doughnutA: {},
@@ -46,6 +47,7 @@ export const state = () => ({
   doughnutCLegend: [],
   doughnutDLegend: {},
   monthlyUserLegend: [],
+  projectStatusLegend: [],
   // back bar hfa system
   back: [],
   subtitle: {}
@@ -332,6 +334,12 @@ export const actions = {
       randomData(monthLabels.length),
       randomData(monthLabels.length)
     ];
+    const projectStatusMonthly = [
+      randomData(monthLabels.length),
+      randomData(monthLabels.length),
+      randomData(monthLabels.length),
+      randomData(monthLabels.length)
+    ];
     const doughnutAData = randomData(projectsLabels.length);
     const doughnutBData = randomData(govermentContributionLabels.length);
     const doughnutCData = randomData(distributionStatuesLabels.length);
@@ -396,8 +404,23 @@ export const actions = {
         colors: colorSetB,
         scales: { x: "2018", y: "Growth of users" },
         labels: monthLabels,
+        legendLabels: [],
         tooltip: "New users",
         data: monthlyUserActivity
+      })
+    );
+    commit(
+      "SET_BARB_GRAPH",
+      settings({
+        type: "bar",
+        colors: colorSetC,
+        scales: { x: "2019", y: "# of projects" },
+        labels: monthLabels,
+        legendLabels: projectsLabels,
+        tooltip: "",
+        data: projectStatusMonthly,
+        stacked: true,
+        thickness: 40
       })
     );
     commit(
@@ -406,6 +429,7 @@ export const actions = {
         type: "horizontal-bar",
         colors: colorSetA,
         labels: dataStandardsLabels,
+        legendLabels: [],
         tooltip: {
           title: "Ocurrances:",
           subtitle: ""
@@ -419,6 +443,7 @@ export const actions = {
         type: "horizontal-bar",
         colors: colorSetA,
         labels: hfaLabels,
+        legendLabels: [],
         tooltip: {
           title: "Ocurrances:",
           subtitle: "Click to see Heatlh Focus Areas"
@@ -554,6 +579,10 @@ export const actions = {
         }
       ]
     });
+    commit(
+      "SET_PROJECT_STATUS_LEGEND",
+      legendGenerator(projectsLabels, colorSetC)
+    );
 
     // examples for random data
     commit("SET_INCOMING", randomNumber());
@@ -596,6 +625,9 @@ export const mutations = {
   },
   SET_BARA_GRAPH: (state, obj) => {
     state.barA = obj;
+  },
+  SET_BARB_GRAPH: (state, obj) => {
+    state.barB = obj;
   },
   SET_HORIZONTALBARA_GRAPH: (state, obj) => {
     state.horizontalBarA = obj;
@@ -648,6 +680,9 @@ export const mutations = {
   },
   SET_MONTHLY_USER_LEGEND: (state, val) => {
     state.monthlyUserLegend = val;
+  },
+  SET_PROJECT_STATUS_LEGEND: (state, val) => {
+    state.projectStatusLegend = val;
   },
   // click hfa system
   SET_BAR_CLICK: (state, func) => {

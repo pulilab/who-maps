@@ -130,6 +130,24 @@
       </graph-layout>
     </el-row>
 
+    <!-- section D -->
+    <el-row type="flex" class="mb-80">
+      <graph-layout :span="24">
+        <translate>Project statuses per month</translate>
+        <template #graph>
+          <chart
+            type="bar-chart"
+            :chart-data="barB.chartData"
+            :options="barB.options"
+            :height="300"
+          />
+        </template>
+        <template #legend>
+          <data-legend :items="projectStatusLegend" horizontal />
+        </template>
+      </graph-layout>
+    </el-row>
+
     <!-- section E -->
     <el-row type="flex" class="mb-80">
       <graph-layout :span="24">
@@ -306,6 +324,7 @@ export default {
       lineB: (state) => state.charts.lineB,
       lineC: (state) => state.charts.lineC,
       barA: (state) => state.charts.barA,
+      barB: (state) => state.charts.barB,
       horizontalBarA: (state) => state.charts.horizontalBarA,
       horizontalBarB: (state) => state.charts.horizontalBarB,
       doughnutA: (state) => state.charts.doughnutA,
@@ -319,6 +338,7 @@ export default {
       doughnutCLegend: (state) => state.charts.doughnutCLegend,
       doughnutDLegend: (state) => state.charts.doughnutDLegend,
       monthlyUserLegend: (state) => state.charts.monthlyUserLegend,
+      projectStatusLegend: (state) => state.charts.projectStatusLegend,
       // back click hfa system
       back: (state) => state.charts.back,
       subtitle: (state) => state.charts.subtitle,
