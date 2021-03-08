@@ -48,6 +48,7 @@ export const state = () => ({
   doughnutDLegend: {},
   monthlyUserLegend: [],
   projectStatusLegend: [],
+  countryTable: [],
   // back bar hfa system
   back: [],
   subtitle: {}
@@ -247,7 +248,7 @@ export const actions = {
       }
     });
   },
-  getDashboardData({ commit, dispatch }, { func, refresh }) {
+  getDashboardData({ commit, dispatch, rootGetters }, { func, refresh }) {
     // start of data that should come from somewhere
     // color sets (should be dynamic?)
     const colorSetA = ["#49BCE8"];
@@ -583,6 +584,18 @@ export const actions = {
       "SET_PROJECT_STATUS_LEGEND",
       legendGenerator(projectsLabels, colorSetC)
     );
+    commit(
+      "SET_COUNTRY_TABLE",
+      rootGetters["countries/getCountries"].map(country => {
+        return {
+          country: country.name,
+          img: getFlagUrl(country.code),
+          no: randomNumber(),
+          pending: randomNumber(),
+          yes: randomNumber()
+        };
+      })
+    );
 
     // examples for random data
     commit("SET_INCOMING", randomNumber());
@@ -684,6 +697,9 @@ export const mutations = {
   SET_PROJECT_STATUS_LEGEND: (state, val) => {
     state.projectStatusLegend = val;
   },
+  SET_COUNTRY_TABLE: (state, val) => {
+    state.countryTable = val;
+  },
   // click hfa system
   SET_BAR_CLICK: (state, func) => {
     state.horizontalBarB.options.onClick = func;
@@ -697,4 +713,9 @@ export const mutations = {
   SET_SUBTITLE: (state, val) => {
     state.subtitle = val;
   }
+};
+
+// tiny helper to get the url flag, to specific to be a utility
+const getFlagUrl = code => {
+  return `/static/flags/${code.toLowerCase()}.png`;
 };
