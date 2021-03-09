@@ -5,24 +5,21 @@
 </template>
 
 <script>
-import { fetchProjectData } from '@/utilities/projects';
+import { fetchProjectData } from "@/utilities/projects";
 export default {
-  components: {
-  },
-  middleware: ['isLoggedIn'],
-  async fetch ({ store, params, error }) {
-    store.dispatch('landing/resetSearch');
+  components: {},
+  middleware: ["isLoggedIn"],
+  async fetch({ store, params, error }) {
     try {
       await fetchProjectData(store, params, error);
     } catch (e) {
       return;
     }
-    await store.dispatch('projects/loadUserProjects');
-    await store.dispatch('toolkit/loadToolkitData');
-  }
+    await store.dispatch("projects/loadUserProjects");
+    await store.dispatch("toolkit/loadToolkitData");
+  },
 };
 </script>
 
 <style>
-
 </style>
