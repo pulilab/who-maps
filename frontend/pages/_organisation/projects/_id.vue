@@ -1,60 +1,68 @@
 <template>
-  <div class="Project">
+  <div>
     <project-bar :key="barKey" />
     <nuxt-child />
   </div>
 </template>
 
 <script>
-import ProjectBar from '@/components/common/ProjectBar';
-import { mapGetters } from 'vuex';
+import ProjectBar from "@/components/common/ProjectBar";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
-    ProjectBar
+    ProjectBar,
   },
-  data () {
+  data() {
     return {
-      barKey: 0
+      barKey: 0,
     };
   },
   computed: {
     ...mapGetters({
-      getProjectDetails: 'projects/getUserProjectDetails',
-      profile: 'user/getProfile'
+      getProjectDetails: "projects/getUserProjectDetails",
+      profile: "user/getProfile",
     }),
-    currentProject () {
+    currentProject() {
       this.forceBarRerender();
       return this.getProjectDetails(+this.$route.params.id);
     },
-    route () {
-      return this.$route.name.split('__')[0];
-    }
+    route() {
+      return this.$route.name.split("__")[0];
+    },
   },
   watch: {
     currentProject: {
       immediate: true,
-      handler (project) {
-        if ((!project.draft || !project.draft.name) && this.profile && !this.profile.is_superuser && this.route !== 'organisation-projects-id-published') {
-          this.$alert(this.$gettext('You are not authorized to access this view'), this.$gettext('Warning'), {
-            confirmButtonText: 'OK',
-            callback: () => {
-              const path = this.localePath({ name: 'organisation-projects-id-published', params: this.$route.params });
-              this.$router.replace(path);
+      handler(project) {
+        if (
+          (!project.draft || !project.draft.name) &&
+          this.profile &&
+          !this.profile.is_superuser &&
+          this.route !== "organisation-projects-id-published"
+        ) {
+          this.$alert(
+            this.$gettext("You are not authorized to access this view"),
+            this.$gettext("Warning"),
+            {
+              confirmButtonText: "OK",
+              callback: () => {
+                const path = this.localePath({
+                  name: "organisation-projects-id-published",
+                  params: this.$route.params,
+                });
+                this.$router.replace(path);
+              },
             }
-          });
+          );
         }
-      }
-    }
+      },
+    },
   },
   methods: {
-    forceBarRerender () {
+    forceBarRerender() {
       this.barKey += 1;
-    }
-  }
+    },
+  },
 };
 </script>
-
-<style>
-
-</style>
