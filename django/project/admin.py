@@ -9,6 +9,8 @@ from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, H
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Project, HSCGroup, \
     ProjectImportV2, ImportRow, Stage
 
+from reversion.admin import VersionAdmin
+
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
 
@@ -111,10 +113,10 @@ class HSCChallengeAdmin(AllObjectsAdmin):
     pass
 
 
-class ProjectAdmin(AllObjectsAdmin):
+class ProjectAdmin(AllObjectsAdmin, VersionAdmin):
     list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active']
-    readonly_fields = ['name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data']
-    fields = ['is_active', 'name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data']
+    readonly_fields = ['name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'draft', 'data', 'public_id', 'metadata']
+    fields = ['is_active', 'name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'draft', 'data', 'public_id', 'metadata']
     search_fields = ['name']
 
     def get_country(self, obj):

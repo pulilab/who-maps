@@ -29,6 +29,8 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
 
+import reversion
+
 
 class ProjectPublicViewSet(ViewSet):
     def project_structure(self, request):
@@ -155,13 +157,15 @@ class CheckRequiredMixin:
             return {i: ['This field is required'] for i in missing_ids}
 
 
-class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
+class ProjectPublishViewSet(reversion.views.RevisionMixin, CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
     def update(self, request, project_id, country_id):
         """
         Publish a project
         Takes project data and custom question-answers in one go.
         """
+        reversion.set_comment('project_publish')
+        reversion.ignore_duplicates = True
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
         country = get_object_or_400(Country, error_message="No such country", id=country_id)
 
@@ -245,20 +249,22 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         return Response(instance.to_response_dict(published=published, draft=draft))
 
 
-class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
+class ProjectUnPublishViewSet(reversion.views.RevisionMixin, CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
     def update(self, request, project_id):
+        reversion.set_comment('project_unpublish')
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
         project.unpublish()
         data = project.to_representation(draft_mode=True)
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
 
 
-class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
+class ProjectDraftViewSet(reversion.views.RevisionMixin, TeamTokenAuthMixin, ViewSet):
     def create(self, request, country_id):
         """
         Creates a Draft project.
         """
+        reversion.set_comment('draft_create')
         country = get_object_or_400(Country, error_message="No such country", id=country_id)
 
         instance = country_answers = None
@@ -328,6 +334,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         """
         Updates a draft project.
         """
+        reversion.set_comment('draft_update')
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
         country = get_object_or_400(Country, error_message="No such country", id=country_id)
 

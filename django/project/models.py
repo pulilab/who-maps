@@ -20,6 +20,8 @@ from project.utils import remove_keys
 from user.models import UserProfile
 from toolkit.toolkit_data import toolkit_default
 
+import reversion
+
 
 class ProjectManager(models.Manager):
     use_in_migrations = True
@@ -205,6 +207,9 @@ class Project(SoftDeleteModel, ExtendedModel):
         self.data = {}
         self.save()
         self.search.reset()
+
+
+reversion.register(Project, exclude=('team', 'viewers',))
 
 
 @receiver(post_save, sender=Project)
