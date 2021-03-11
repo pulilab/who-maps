@@ -1,20 +1,14 @@
 <template>
   <el-row type="flex" class="project-view">
     <el-col :span="6" class="sidebar">
-      <!-- <project-navigation @handleClickUnPublish="handleUnpublish" /> -->
-      <section class="navigation sticky">
-        <p><translate>Table of Content</translate></p>
-        <ul>
-          <li
-            v-for="(section, i) in sections"
-            :key="section.id"
-            :class="`${section.id === selected && 'selected'}`"
-            @click="handleNavigation(section.id)"
-          >
-            {{ `${section.prepend}. ${section.nav}` }}
-          </li>
-        </ul>
-      </section>
+      <navigation
+        :items="sections"
+        :selected="selected"
+        sticky
+        @click="handleNavigation"
+      >
+        <view-actions :actions="actions" @click="handleActions" />
+      </navigation>
     </el-col>
     <el-col :span="18" class="main">
       <section v-for="(section, i) in sections" :key="section.id">
@@ -26,9 +20,7 @@
           <h1 :ref="section.id">
             {{ `${section.prepend}.  ${section.title}` }}
           </h1>
-          <div class="content">
-            <component :is="section.component" />
-          </div>
+          <component :is="section.component" />
         </observer>
       </section>
     </el-col>
@@ -36,9 +28,11 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 // project components
-// import ProjectNavigation from "@/components/project/ProjectNavigation";
+import Navigation from "@/components/project/Navigation";
+import ViewActions from "@/components/project/ViewActions";
+
 // sections
 import Overview from "@/components/project/sections/view/Overview";
 import Implementation from "@/components/project/sections/view/Implementation";
@@ -48,20 +42,25 @@ import Interoperability from "@/components/project/sections/view/Interoperabilit
 import Custom from "@/components/project/sections/view/Custom";
 // utilities components
 import Observer from "@/components/common/Observer";
-// mixins
-// import handleProjectUnpublish from "@/components/mixins/handleProjectUnpublish";
 
 export default {
   components: {
-    Observer,
+    Navigation,
+    ViewActions,
     Overview,
     Implementation,
     Stages,
     Technology,
     Interoperability,
     Custom,
+    Observer,
   },
-  // mixins: [handleProjectUnpublish],
+  props: {
+    published: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       sections: [
@@ -110,18 +109,127 @@ export default {
         },
       ],
       selected: "general",
+      actions: [],
     };
   },
+  // computed: {
+  //   ...mapGetters({
+  //     projectDraft: "project/getProjectData",
+  //     projectPublished: "project/getPublished",
+  //   }),
+  // },
+  mounted() {
+    window.scrollTo(0, 0);
+  },
+  watch: {
+    published: {
+      immediate: true,
+      handler(val) {
+        const print = {
+          id: "print",
+          type: "primary",
+          icon: "el-icon-printer",
+          plain: true,
+          label: this.$gettext("Print draft"),
+          handle: "handlePrint",
+          success: {
+            title: this.$gettext("Congratulations"),
+            message: this.$gettext(
+              "You can see the print version on a new window"
+            ),
+          },
+          error: {
+            title: this.$gettext("Error"),
+            message: this.$gettext("Is not possible to print. Try again."),
+            type: "error",
+          },
+        };
+        const info = {
+          title: this.$gettext("Info"),
+          message: this.$gettext("Action cancelled"),
+          type: "info",
+        };
+        if (val) {
+          this.actions = [
+            {
+              id: "unpublish",
+              type: "danger",
+              icon: "el-icon-delete",
+              plain: true,
+              label: this.$gettext("Unpublish"),
+              handle: "unpublishProject",
+              confirm: {
+                title: this.$gettext("Attention"),
+                description: this.$gettext(
+                  "The current project will be unpublish"
+                ),
+              },
+              route: {
+                name: "organisation-projects-id-edit",
+                params: { ...this.$route.params },
+              },
+              success: {
+                title: this.$gettext("Congratulations"),
+                message: this.$gettext("Project has been unpublish"),
+              },
+              error: info,
+            },
+            { ...print, label: this.$gettext("Print project") },
+          ];
+        } else {
+          this.actions = [
+            {
+              id: "draft",
+              type: "warning",
+              icon: "el-icon-upload2",
+              label: this.$gettext("Publish draft"),
+              handle: "publishProject",
+              route: {
+                name: "organisation-projects-id-published",
+                params: { ...this.$route.params },
+              },
+              success: {
+                title: this.$gettext("Congratulations"),
+                message: this.$gettext("Your draft has been published"),
+              },
+              error: {
+                title: this.$gettext("Error"),
+                message: this.$gettext("We could not publish. Try again"),
+                type: "error",
+              },
+            },
+            {
+              id: "discard",
+              type: "danger",
+              icon: "el-icon-delete",
+              plain: true,
+              label: this.$gettext("Discard draft"),
+              handle: "discardDraft",
+              confirm: {
+                title: this.$gettext("Attention"),
+                description: this.$gettext(
+                  "The current draft will be overwritten by the published version"
+                ),
+              },
+              success: {
+                title: this.$gettext("Congratulations"),
+                message: this.$gettext("Draft has been discard"),
+              },
+              error: info,
+            },
+            print,
+          ];
+        }
+      },
+    },
+  },
   methods: {
-    // handleUnpublish() {
-    //   this.handleClickUnPublish(
-    //     {
-    //       name: "organisation-projects-id-edit",
-    //       params: { ...$route.params },
-    //     },
-    //     $route.params.id
-    //   );
-    // },
+    ...mapActions({
+      publishProject: "project/publishProject",
+      discardDraft: "project/discardDraft",
+      unpublishProject: "project/unpublishProject",
+    }),
+    // manage navigation
     handleNavigation(target) {
       this.$refs[target][0].scrollIntoView({
         behavior: "smooth",
@@ -130,13 +238,78 @@ export default {
     intersected(target) {
       this.selected = target;
     },
+    // manage button actions
+    handleActions(handle) {
+      this.handleRequest(
+        this.actions.find((action) => action.handle === handle)
+      );
+    },
+    async handleRequest({ handle, route, success, error, confirm }) {
+      try {
+        this.handleLoaders(handle);
+        if (confirm) {
+          await this.handleConfirm(confirm);
+        }
+        await this[handle](this.$route.params.id);
+        if (route) {
+          this.handleRoute(route);
+        }
+        this.handleNotification(success);
+        this.handleLoaders();
+      } catch (e) {
+        this.handleLoaders();
+        this.handleNotification(error);
+      }
+    },
+    handleLoaders(handle = "") {
+      this.actions = this.actions.map((action) => {
+        const loaders = handle
+          ? {
+              loading: action.handle === handle ? true : false,
+              disabled: action.handle === handle ? false : true,
+            }
+          : { loading: false, disabled: false };
+        return {
+          ...action,
+          ...loaders,
+        };
+      });
+    },
+    handleRoute(obj) {
+      this.$router.push(this.localePath(obj));
+    },
+    handleNotification(obj) {
+      this.$notify({
+        type: "success",
+        position: "top-left",
+        ...obj,
+      });
+    },
+    async handleConfirm({ description, title, options }) {
+      await this.$confirm(
+        description,
+        title,
+        options || {
+          confirmButtonText: this.$gettext("Ok"),
+          cancelButtonText: this.$gettext("Cancel"),
+          type: "warning",
+        }
+      );
+    },
+    async handlePrint() {
+      // pending to ask
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve("Listo para imprimir");
+        }, 2000);
+      });
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
 @import "~assets/style/variables.less";
-
 .project-view {
   .sidebar,
   .main {
@@ -148,9 +321,6 @@ export default {
   }
   .main {
     box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.12);
-    // .content {
-    //   min-height: 1000px;
-    // }
     h1 {
       font-size: 24px;
       font-style: italic;
@@ -161,17 +331,6 @@ export default {
       padding-bottom: 15px;
       margin: 0px;
     }
-  }
-  .navigation {
-    .selected {
-      font-weight: 700;
-      cursor: none;
-    }
-  }
-  .sticky {
-    position: sticky;
-    top: 20px;
-    z-index: 1;
   }
 }
 </style>

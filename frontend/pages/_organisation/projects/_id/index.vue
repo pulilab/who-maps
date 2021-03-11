@@ -8,7 +8,7 @@
       <tag type="draft" label="draft" />
       <translate>version of the project.</translate>
     </template>
-    <project-data show-draft />
+    <project-data />
   </project-layout>
 </template>
 
