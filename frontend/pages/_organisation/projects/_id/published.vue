@@ -8,7 +8,7 @@
       <tag type="publish" label="published" />
       <translate>version of the project.</translate>
     </template>
-    <project-data />
+    <project-data published />
   </project-layout>
 </template>
 
