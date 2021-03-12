@@ -20,7 +20,10 @@
           <h1 :ref="section.id">
             {{ `${section.prepend}.  ${section.title}` }}
           </h1>
-          <component :is="section.component" />
+          <component
+            :is="section.component"
+            v-bind="{ ...section.properties }"
+          />
         </observer>
       </section>
     </el-col>
@@ -100,128 +103,23 @@ export default {
           prepend: 5,
           component: "Interoperability",
         },
-        {
-          id: "custom",
-          nav: this.$gettext("Custom"),
-          title: this.$gettext("Custom"),
-          prepend: 6,
-          component: "Custom",
-        },
       ],
       selected: "general",
       actions: [],
+      project: {},
     };
   },
-  // computed: {
-  //   ...mapGetters({
-  //     projectDraft: "project/getProjectData",
-  //     projectPublished: "project/getPublished",
-  //   }),
-  // },
+  computed: {
+    ...mapGetters({
+      projectDraft: "project/getProjectData",
+      projectPublished: "project/getPublished",
+      getCountryDetails: "countries/getCountryDetails",
+      getDonorDetails: "system/getDonorDetails",
+    }),
+  },
   mounted() {
     window.scrollTo(0, 0);
-  },
-  watch: {
-    published: {
-      immediate: true,
-      handler(val) {
-        const print = {
-          id: "print",
-          type: "primary",
-          icon: "el-icon-printer",
-          plain: true,
-          label: this.$gettext("Print draft"),
-          handle: "handlePrint",
-          success: {
-            title: this.$gettext("Congratulations"),
-            message: this.$gettext(
-              "You can see the print version on a new window"
-            ),
-          },
-          error: {
-            title: this.$gettext("Error"),
-            message: this.$gettext("Is not possible to print. Try again."),
-            type: "error",
-          },
-        };
-        const info = {
-          title: this.$gettext("Info"),
-          message: this.$gettext("Action cancelled"),
-          type: "info",
-        };
-        if (val) {
-          this.actions = [
-            {
-              id: "unpublish",
-              type: "danger",
-              icon: "el-icon-delete",
-              plain: true,
-              label: this.$gettext("Unpublish"),
-              handle: "unpublishProject",
-              confirm: {
-                title: this.$gettext("Attention"),
-                description: this.$gettext(
-                  "The current project will be unpublish"
-                ),
-              },
-              route: {
-                name: "organisation-projects-id-edit",
-                params: { ...this.$route.params },
-              },
-              success: {
-                title: this.$gettext("Congratulations"),
-                message: this.$gettext("Project has been unpublish"),
-              },
-              error: info,
-            },
-            { ...print, label: this.$gettext("Print project") },
-          ];
-        } else {
-          this.actions = [
-            {
-              id: "draft",
-              type: "warning",
-              icon: "el-icon-upload2",
-              label: this.$gettext("Publish draft"),
-              handle: "publishProject",
-              route: {
-                name: "organisation-projects-id-published",
-                params: { ...this.$route.params },
-              },
-              success: {
-                title: this.$gettext("Congratulations"),
-                message: this.$gettext("Your draft has been published"),
-              },
-              error: {
-                title: this.$gettext("Error"),
-                message: this.$gettext("We could not publish. Try again"),
-                type: "error",
-              },
-            },
-            {
-              id: "discard",
-              type: "danger",
-              icon: "el-icon-delete",
-              plain: true,
-              label: this.$gettext("Discard draft"),
-              handle: "discardDraft",
-              confirm: {
-                title: this.$gettext("Attention"),
-                description: this.$gettext(
-                  "The current draft will be overwritten by the published version"
-                ),
-              },
-              success: {
-                title: this.$gettext("Congratulations"),
-                message: this.$gettext("Draft has been discard"),
-              },
-              error: info,
-            },
-            print,
-          ];
-        }
-      },
-    },
+    this.handleInit();
   },
   methods: {
     ...mapActions({
@@ -229,6 +127,163 @@ export default {
       discardDraft: "project/discardDraft",
       unpublishProject: "project/unpublishProject",
     }),
+    handleInit() {
+      this.handleProject();
+      this.handleConfigActions();
+      this.handleCustomFields();
+    },
+    // project state selection
+    handleProject() {
+      this.published
+        ? (this.project = this.projectPublished)
+        : (this.project = this.projectDraft);
+    },
+    // configure loaders, usability and permissions for actions
+    handleConfigActions() {
+      const print = {
+        id: "print",
+        type: "primary",
+        icon: "el-icon-printer",
+        plain: true,
+        label: this.$gettext("Print draft"),
+        handle: "handlePrint",
+        success: {
+          title: this.$gettext("Congratulations"),
+          message: this.$gettext(
+            "You can see the print version on a new window"
+          ),
+        },
+        error: {
+          title: this.$gettext("Error"),
+          message: this.$gettext("Is not possible to print. Try again."),
+          type: "error",
+        },
+      };
+      const info = {
+        title: this.$gettext("Info"),
+        message: this.$gettext("Action cancelled"),
+        type: "info",
+      };
+      if (this.published) {
+        this.actions = [
+          {
+            id: "unpublish",
+            type: "danger",
+            icon: "el-icon-delete",
+            plain: true,
+            label: this.$gettext("Unpublish"),
+            handle: "unpublishProject",
+            confirm: {
+              title: this.$gettext("Attention"),
+              description: this.$gettext(
+                "The current project will be unpublish"
+              ),
+            },
+            route: {
+              name: "organisation-projects-id-edit",
+              params: { ...this.$route.params },
+            },
+            success: {
+              title: this.$gettext("Congratulations"),
+              message: this.$gettext("Project has been unpublish"),
+            },
+            error: info,
+          },
+          { ...print, label: this.$gettext("Print project") },
+        ];
+      } else {
+        this.actions = [
+          {
+            id: "draft",
+            type: "warning",
+            icon: "el-icon-upload2",
+            label: this.$gettext("Publish draft"),
+            handle: "publishProject",
+            route: {
+              name: "organisation-projects-id-published",
+              params: { ...this.$route.params },
+            },
+            success: {
+              title: this.$gettext("Congratulations"),
+              message: this.$gettext("Your draft has been published"),
+            },
+            error: {
+              title: this.$gettext("Error"),
+              message: this.$gettext("We could not publish. Try again"),
+              type: "error",
+            },
+          },
+          {
+            id: "discard",
+            type: "danger",
+            icon: "el-icon-delete",
+            plain: true,
+            label: this.$gettext("Discard draft"),
+            handle: "discardDraft",
+            confirm: {
+              title: this.$gettext("Attention"),
+              description: this.$gettext(
+                "The current draft will be overwritten by the published version"
+              ),
+            },
+            success: {
+              title: this.$gettext("Congratulations"),
+              message: this.$gettext("Draft has been discard"),
+            },
+            error: info,
+          },
+          print,
+        ];
+      }
+    },
+    // handle custom fields
+    handleCustomFields() {
+      const { country: countryId, donors: donorsId } = this.project;
+      this.sections = [
+        ...this.sections,
+        ...this.getCustomFields(
+          [
+            ...this.getCustomDetails(
+              [countryId],
+              "getCountryDetails",
+              "country_questions"
+            ),
+            ...this.getCustomDetails(
+              donorsId,
+              "getDonorDetails",
+              "donor_questions"
+            ),
+          ],
+          this.sections
+        ),
+      ];
+    },
+    getCustomDetails(items, getDetails, key) {
+      // we get  detail information for custom fields
+      return items
+        .map((d) => this[getDetails](d))
+        .filter((d) => d[key] && d[key].length > 0)
+        .map((d) => ({ ...d, questions: d[key] }));
+    },
+    getCustomFields(items, sections) {
+      // we set an object for component use and menu
+      let prepend = sections.length;
+      return items.map((item) => {
+        prepend += 1;
+        return {
+          id: item.name,
+          nav: this.$gettext("{name} fields", { name: item.name }),
+          title: this.$gettext("{name} custom fields", {
+            name: item.name,
+          }),
+          prepend,
+          component: "Custom",
+          properties: {
+            items: item.questions,
+          },
+        };
+      });
+    },
     // manage navigation
     handleNavigation(target) {
       this.$refs[target][0].scrollIntoView({
@@ -329,7 +384,7 @@ export default {
       line-height: 48px;
       border-bottom: 1px solid #e0e0e0;
       padding-bottom: 15px;
-      margin: 0px;
+      margin: 0 0 60px 0;
     }
   }
 }

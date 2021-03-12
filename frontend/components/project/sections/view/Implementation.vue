@@ -109,7 +109,6 @@
 import { mapGetters } from "vuex";
 // project components
 import SimpleField from "@/components/project/SimpleField";
-import CustomReadonlyField from "@/components/project/CustomReadonlyField";
 import TeamList from "@/components/project/TeamList";
 import PlatformsList from "@/components/project/PlatformsList";
 import TypeField from "@/components/project/TypeField";
@@ -118,7 +117,6 @@ import SubLevelCoverageField from "@/components/project/SubLevelCoverageField";
 import LicensesList from "@/components/project/LicensesList";
 import StandardsList from "@/components/project/StandardsList";
 import InteroperabilityLinksList from "@/components/project/InteroperabilityLinksList";
-import StageHistory from "@/components/project/sections/StageHistory";
 // common
 import OrganisationItem from "@/components/common/OrganisationItem";
 import CountryItem from "@/components/common/CountryItem";
@@ -144,8 +142,6 @@ export default {
     StandardsList,
     InteroperabilityLinksList,
     DonorsList,
-    CustomReadonlyField,
-    StageHistory,
   },
   computed: {
     ...mapGetters({
