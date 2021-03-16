@@ -1,100 +1,113 @@
 <template>
   <div>
-    <simple-field
-      :content="project.name"
+    <view-field
+      :prepend="1"
       :header="$gettext('Project Name') | translate"
-      :prepend-label="1"
+      :content="project.name"
     />
-
-    <simple-field
+    <view-field
+      :prepend="2"
       :header="$gettext('Organisation') | translate"
-      :prepend-label="2"
-    >
-      <organisation-item :id="project.organisation" />
-    </simple-field>
-
-    <simple-field
-      :header="$gettext('Project country') | translate"
-      :prepend-label="3"
-    >
-      <country-item :id="project.country" :show-flag="false" />
-    </simple-field>
-
-    <simple-field
-      :content="project.geographic_scope"
-      :header="$gettext('Geographic scope') | translate"
-      :prepend-label="4"
+      :content="organisation.name"
     />
-
-    <simple-field
-      :content="project.implementation_overview"
+    <view-field
+      :prepend="3"
+      :header="$gettext('Project country') | translate"
+      :content="country.name"
+    />
+    <view-field
+      :prepend="4"
+      :header="$gettext('Geographic scope') | translate"
+      :content="project.geographic_scope"
+    />
+    <view-field
+      :prepend="5"
       :header="
         $gettext('Overview of the digital health implementation') | translate
       "
-      :prepend-label="5"
+      :content="project.implementation_overview"
     />
+
     <el-row>
-      <el-col :span="12">
-        <simple-field
-          :content="project.contact_name"
+      <el-col :span="11">
+        <view-field
+          :prepend="6"
           :header="$gettext('Contact name') | translate"
-          :prepend-label="6"
+          :content="project.contact_name"
         />
       </el-col>
-      <el-col :span="12">
-        <simple-field
-          :content="project.contact_email"
+      <el-col :span="13">
+        <view-field
+          :prepend="7"
           :header="$gettext('Contact email') | translate"
-          :prepend-label="7"
+          :content="project.contact_email"
         />
       </el-col>
     </el-row>
-    <div class="GrayArea">
-      <simple-field
-        :header="$gettext('Team members') | translate"
-        :prepend-label="8"
-      >
-        <team-list :value="project.team" />
-      </simple-field>
-      <simple-field
-        :header="$gettext('Viewers') | translate"
-        :prepend-label="9"
-      >
-        <team-list :value="project.viewers" />
-      </simple-field>
-    </div>
+
+    <view-field
+      :prepend="8"
+      :header="$gettext('Team members') | translate"
+      :content="members"
+    />
+    <view-field
+      :prepend="9"
+      :header="$gettext('Viewers') | translate"
+      :content="viewers"
+    />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-// project components
-import SimpleField from "@/components/project/SimpleField";
-import TeamList from "@/components/project/TeamList";
-// common
-import OrganisationItem from "@/components/common/OrganisationItem";
-import CountryItem from "@/components/common/CountryItem";
+import ViewField from "@/components/project/wrappers/ViewField";
 
 export default {
   components: {
-    SimpleField,
-    OrganisationItem,
-    CountryItem,
-    TeamList,
+    ViewField,
+  },
+  props: {
+    project: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
     ...mapGetters({
-      draft: "project/getProjectData",
-      published: "project/getPublished",
+      getOrganisationDetails: "system/getOrganisationDetails",
+      getCountryDetails: "countries/getCountryDetails",
+      getProfiles: "system/getUserProfilesNoFilter",
     }),
-    route() {
-      return this.$route.name.split("__")[0];
+    organisation() {
+      return this.handleDetails(
+        this.project.organisation,
+        "getOrganisationDetails"
+      );
     },
-    isDraft() {
-      return this.route === "organisation-projects-id";
+    country() {
+      return this.handleDetails(this.project.country, "getCountryDetails");
     },
-    project() {
-      return this.isDraft ? this.draft : this.published;
+    members() {
+      return this.handleList(this.project.team);
+    },
+    viewers() {
+      return this.handleList(this.project.viewers);
+    },
+  },
+  methods: {
+    handleDetails(id, method) {
+      if (id) {
+        return this[method](parseInt(id, 10));
+      }
+      return {};
+    },
+    handleList(arr) {
+      if (arr) {
+        return this.getProfiles
+          .filter((p) => arr.includes(p.id) && p.name)
+          .map((i) => i.name);
+      }
+      return [];
     },
   },
 };

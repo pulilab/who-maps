@@ -22,7 +22,7 @@
           </h1>
           <component
             :is="section.component"
-            v-bind="{ ...section.properties }"
+            v-bind="{ ...section.properties, project }"
           />
         </observer>
       </section>
