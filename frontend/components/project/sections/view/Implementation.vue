@@ -1,46 +1,15 @@
 <template>
   <div>
-    <view-field
-      :prepend="10"
-      :header="
-        $gettext('Software and related Digital Health Interventions (DHI)')
-          | translate
-      "
-      :content="'hola'"
-    />
-    <p>
-      {{ project.platforms }}
-    </p>
-    <p>
-      {{ project.digitalHealthInterventions }}
-    </p>
-
-    <simple-field
-      :header="
-        $gettext('Software and related Digital Health Interventions (DHI)')
-          | translate
-      "
-      :prepend-label="10"
-    >
-      <platforms-list
-        :platforms="project.platforms"
-        :dhi="project.digitalHealthInterventions"
-      />
-    </simple-field>
+    <view-field v-for="field in fields" :key="field.prepend" v-bind="field" />
     <!--
-    <simple-field
-      :header="$gettext('Health focus area(s)') | translate"
-      :prepend-label="11"
-    >
-      <health-focus-areas-list :value="project.health_focus_areas" />
-    </simple-field>
-
     <simple-field
       :header="$gettext('Health System Challenges (HSC)') | translate"
       :prepend-label="12"
     >
       <health-system-challenges-list :value="project.hsc_challenges" />
-    </simple-field>
+    </simple-field> -->
+    <!--
+
 
     <simple-field
       :header="$gettext('Health Information System (HIS)') | translate"
@@ -122,7 +91,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import isEmpty from "lodash/isEmpty";
+import { isEmpty, flatten } from "lodash";
 import ViewField from "@/components/project/wrappers/ViewField";
 import Loader from "@/components/project/wrappers/Loader";
 
@@ -170,15 +139,29 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      loading: true,
+      dhi: [],
+      hfaList: [],
+      hfa: [],
+      hscList: [],
+      hsc: [],
+      fields: [],
+    };
+  },
   computed: {
     ...mapGetters({
       getCountryDetails: "countries/getCountryDetails",
       getDonorDetails: "system/getDonorDetails",
+      technologyPlatforms: "projects/getTechnologyPlatforms",
+      dhiDetails: "projects/getDigitalHealthInterventionDetails",
+      getHfa: "projects/getHealthFocusAreas",
+      getHsc: "projects/getHscChallenges",
     }),
     isGlobalSelected() {
       return this.country.id === process.env.GlobalCountryID;
     },
-
     isNationalLevelDeployment() {
       return (
         this.project.coverageType === 2 &&
@@ -204,6 +187,77 @@ export default {
           "Yes, there is a financial contribution through MOH budget"
         ),
         this.$gettext("Yes, MOH is fully funding the project"),
+      ];
+    },
+  },
+  watch: {
+    project: {
+      inmediate: true,
+      handler(project) {
+        if (!isEmpty(project)) {
+          const {
+            platforms,
+            digitalHealthInterventions,
+            health_focus_areas,
+            hsc_challenges,
+          } = this.project;
+          this.dhi = this.handleDhiList(platforms, digitalHealthInterventions);
+
+          this.hfaList = this.handleNestedList("getHfa", "health_focus_areas");
+          this.hfa = this.handleList(health_focus_areas, "hfaList");
+
+          this.hscList = this.handleNestedList("getHsc", "challenges");
+          this.hsc = this.handleList(hsc_challenges, "hscList", "challenge");
+          this.fields = this.handleFields();
+          this.loading = false;
+        } else {
+          this.loading = true;
+        }
+      },
+    },
+  },
+  methods: {
+    handleList(arr, getter, key = "name") {
+      if (arr) {
+        return this[getter]
+          .filter((p) => arr.includes(p.id) && p[key])
+          .map((i) => i[key]);
+      }
+      return [];
+    },
+    handleDhiList(platforms, interventions) {
+      return platforms.map((platform) => ({
+        name: this.technologyPlatforms.find((p) => p.id === platform).name,
+        categories: interventions
+          .filter((i) => i.platform === platform)
+          .map((i) => this.dhiDetails(i.id)),
+      }));
+    },
+    handleNestedList(list, key) {
+      return flatten(this[list].map((item) => item[key]));
+    },
+    handleFields() {
+      return [
+        {
+          prepend: 10,
+          header: this.$gettext(
+            "Software and related Digital Health Interventions (DHI)"
+          ),
+          content: this.dhi,
+          complex: true,
+          title: this.$gettext("Software"),
+          subtitle: this.$gettext("Digital Health Intervention"),
+        },
+        {
+          prepend: 11,
+          header: this.$gettext("Health focus area (s)"),
+          content: this.hfa,
+        },
+        {
+          prepend: 12,
+          header: this.$gettext("Health System Challenges (HSC)"),
+          content: this.hsc,
+        },
       ];
     },
   },

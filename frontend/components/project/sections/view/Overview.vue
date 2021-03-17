@@ -6,22 +6,11 @@
         <!-- in case of multiple fields -->
         <el-row v-if="field.row" :key="field.prepend">
           <el-col v-for="col in field.fields" :span="col.span">
-            <view-field
-              :key="col.prepend"
-              :prepend="col.prepend"
-              :header="col.header"
-              :content="col.content"
-            />
+            <view-field :key="col.prepend" v-bind="col" />
           </el-col>
         </el-row>
         <!-- one row field -->
-        <view-field
-          v-else
-          :key="field.prepend"
-          :prepend="field.prepend"
-          :header="field.header"
-          :content="field.content"
-        />
+        <view-field v-else :key="field.prepend" v-bind="field" />
       </template>
     </template>
   </div>
@@ -72,8 +61,8 @@ export default {
             "getOrganisationDetails"
           );
           this.country = this.handleDetails(country, "getCountryDetails");
-          this.members = this.handleList(team);
-          this.viewers = this.handleList(viewers);
+          this.members = this.handleList(team, "getProfiles");
+          this.viewers = this.handleList(viewers, "getProfiles");
           this.fields = this.handleFields();
           this.loading = false;
         } else {
@@ -89,9 +78,9 @@ export default {
       }
       return {};
     },
-    handleList(arr) {
+    handleList(arr, getter) {
       if (arr) {
-        return this.getProfiles
+        return this[getter]
           .filter((p) => arr.includes(p.id) && p.name)
           .map((i) => i.name);
       }
