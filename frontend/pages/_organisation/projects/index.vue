@@ -1,50 +1,62 @@
 <template>
-  <project-layout>
-    <template #title><translate>My Projects</translate></template>
-    <template #subtitle>
-      <translate>Here are all of the projects you are a</translate>
-      <fa icon="star" class="owner" />
-      <b><translate>Member</translate></b>
-      &nbsp;<translate>or</translate>
-      <fa icon="eye" class="viewer" />
-      <b><translate>Viewer</translate></b>
-      &nbsp;<translate>of.</translate>
-    </template>
+  <div class="MyProjects">
+    <div class="PageTitle">
+      <h2><translate>My Projects</translate></h2>
+      <p>
+        <translate>Here are all of the projects you are a</translate>
+        <fa
+          icon="star"
+          class="Owner"
+        />
+        <b><translate>Member</translate></b>&nbsp;<translate>or</translate>
+        <fa
+          icon="eye"
+          class="Viewer"
+        />
+        <b><translate>Viewer</translate></b>&nbsp;<translate>of.</translate>
+      </p>
+    </div>
     <user-project-list />
-  </project-layout>
+  </div>
 </template>
 
 <script>
-import UserProjectList from "@/components/common/UserProjectsList";
-import ProjectLayout from "@/components/project/wrappers/ProjectLayout";
+import { mapGetters } from 'vuex';
+
+import UserProjectList from '../../../components/common/UserProjectsList';
 
 export default {
   components: {
-    UserProjectList,
-    ProjectLayout,
+    UserProjectList
   },
-  middleware: ["isLoggedIn"],
-  async fetch({ store }) {
-    await store.dispatch("projects/loadUserProjects");
-  },
+  middleware: ['isLoggedIn'],
+  computed: {
+    ...mapGetters({
+    })
+  }
 };
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+  @import "../../../assets/style/variables.less";
+  @import "../../../assets/style/mixins.less";
 
-.svg-inline--fa {
-  margin: 0 6px 0 10px;
-  width: 16px;
-  height: 16px;
-}
+  .MyProjects {
+    .PageTitle {
+      .svg-inline--fa {
+        margin: 0 6px 0 10px;
+        width: 16px;
+        height: 16px;
+      }
 
-.owner {
-  color: @colorOwner;
-}
+      .Owner {
+        color: @colorOwner;
+      }
 
-.viewer {
-  color: @colorViewer;
-}
+      .Viewer {
+        color: @colorViewer;
+      }
+    }
+  }
+
 </style>
