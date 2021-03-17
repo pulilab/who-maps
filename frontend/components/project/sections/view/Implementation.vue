@@ -1,5 +1,20 @@
 <template>
   <div>
+    <view-field
+      :prepend="10"
+      :header="
+        $gettext('Software and related Digital Health Interventions (DHI)')
+          | translate
+      "
+      :content="'hola'"
+    />
+    <p>
+      {{ project.platforms }}
+    </p>
+    <p>
+      {{ project.digitalHealthInterventions }}
+    </p>
+
     <simple-field
       :header="
         $gettext('Software and related Digital Health Interventions (DHI)')
@@ -12,7 +27,7 @@
         :dhi="project.digitalHealthInterventions"
       />
     </simple-field>
-
+    <!--
     <simple-field
       :header="$gettext('Health focus area(s)') | translate"
       :prepend-label="11"
@@ -101,12 +116,16 @@
       :prepend-label="16"
     >
       <donors-list :value="project.donors" />
-    </simple-field>
+    </simple-field> -->
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import isEmpty from "lodash/isEmpty";
+import ViewField from "@/components/project/wrappers/ViewField";
+import Loader from "@/components/project/wrappers/Loader";
+
 // project components
 import SimpleField from "@/components/project/SimpleField";
 import TeamList from "@/components/project/TeamList";
@@ -142,26 +161,24 @@ export default {
     StandardsList,
     InteroperabilityLinksList,
     DonorsList,
+    ViewField,
+    Loader,
+  },
+  props: {
+    project: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
     ...mapGetters({
-      draft: "project/getProjectData",
-      published: "project/getPublished",
       getCountryDetails: "countries/getCountryDetails",
       getDonorDetails: "system/getDonorDetails",
     }),
     isGlobalSelected() {
       return this.country.id === process.env.GlobalCountryID;
     },
-    route() {
-      return this.$route.name.split("__")[0];
-    },
-    isDraft() {
-      return this.route === "organisation-projects-id";
-    },
-    project() {
-      return this.isDraft ? this.draft : this.published;
-    },
+
     isNationalLevelDeployment() {
       return (
         this.project.coverageType === 2 &&
