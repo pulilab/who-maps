@@ -81,7 +81,6 @@ export default {
           prepend: 2,
           component: "Implementation",
         },
-
         {
           id: "stages",
           nav: this.$gettext("Stages"),
