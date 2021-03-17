@@ -10,7 +10,25 @@
       </template>
       <template v-if="typeof this.contents === 'object'">
         <ul>
-          <li v-for="content in contents" :key="content">{{ content }}</li>
+          <template v-if="complex">
+            <li v-for="content in contents" :key="content.name">
+              <p>
+                <b>{{ title }}</b>
+              </p>
+              {{ content.name }}
+              <p>
+                <b>{{ subtitle }}</b>
+              </p>
+              <ul>
+                <li v-for="category in content.categories" :key="category.id">
+                  {{ category.name }}
+                </li>
+              </ul>
+            </li>
+          </template>
+          <template v-else>
+            <li v-for="content in contents" :key="content">{{ content }}</li>
+          </template>
         </ul>
       </template>
     </div>
@@ -31,6 +49,18 @@ export default {
     content: {
       type: [Array, String],
       default: undefined,
+    },
+    complex: {
+      type: Boolean,
+      default: false,
+    },
+    title: {
+      type: String,
+      required: false,
+    },
+    subtitle: {
+      type: String,
+      required: false,
     },
   },
   data() {
