@@ -1,39 +1,49 @@
 <template>
-  <project-layout small>
-    <template #subtitle>
-      <b class="uppercase"><translate>project stages</translate></b>
-    </template>
-    <c-stages class="stage-graph" />
-  </project-layout>
+  <section class="stage-graph">
+    <p><translate>project stages</translate></p>
+    <div>
+      <c-stages />
+    </div>
+  </section>
 </template>
 
 <script>
 import { fetchProjectData } from "@/utilities/projects";
 import cStages from "@/components/common/charts/cStages";
-import ProjectLayout from "@/components/project/wrappers/ProjectLayout";
 
 export default {
   middleware: ["isLoggedIn"],
   components: {
     cStages,
-    ProjectLayout,
   },
   fetch({ store, params, error }) {
+    store.dispatch("landing/resetSearch");
     return fetchProjectData(store, params, error);
   },
 };
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
+@import "../../../../assets/style/variables.less";
+@import "../../../../assets/style/mixins.less";
 
 .stage-graph {
-  padding-top: 10px;
-  background-color: @colorWhite;
-  border: 1px solid @colorGrayLight;
-  box-shadow: 0 1px 0 0 @colorGrayLight;
-}
-.uppercase {
-  text-transform: uppercase;
+  width: 1200px;
+  margin: 0 auto;
+  > p {
+    padding: 0;
+    margin: 20px;
+    color: @colorTextSecondary;
+    font-weight: bold;
+    font-size: 11px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  > div {
+    padding-top: 10px;
+    background-color: @colorWhite;
+    border: 1px solid @colorGrayLight;
+    box-shadow: 0 1px 0 0 @colorGrayLight;
+  }
 }
 </style>
