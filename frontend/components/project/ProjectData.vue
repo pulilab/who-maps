@@ -20,11 +20,11 @@
           <h1 :ref="section.id">
             {{ `${section.prepend}.  ${section.title}` }}
           </h1>
-          <component
-            :is="section.component"
-            v-bind="{ ...section.properties, project }"
-          />
         </observer>
+        <component
+          :is="section.component"
+          v-bind="{ ...section.properties, project }"
+        />
       </section>
     </el-col>
   </el-row>
@@ -66,6 +66,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       sections: [
         {
           id: "general",
@@ -119,6 +120,8 @@ export default {
   mounted() {
     window.scrollTo(0, 0);
     this.handleInit();
+    console.log("main");
+    this.loading = false;
   },
   methods: {
     ...mapActions({

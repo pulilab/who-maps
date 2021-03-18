@@ -1,5 +1,5 @@
-import isEmpty from 'lodash/isEmpty';
-import forOwn from 'lodash/forOwn';
+import isEmpty from "lodash/isEmpty";
+import forOwn from "lodash/forOwn";
 
 export const state = () => ({
   userProjects: [],
@@ -12,23 +12,44 @@ export const state = () => ({
 const getTodayString = () => {
   const today = new Date();
   const year = today.getFullYear();
-  const month = ('0' + (today.getMonth() + 1)).slice(-2);
-  const day = ('0' + today.getDate()).slice(-2);
+  const month = ("0" + (today.getMonth() + 1)).slice(-2);
+  const day = ("0" + today.getDate()).slice(-2);
 
-  return [year, month, day].join('-');
+  return [year, month, day].join("-");
 };
 
 export const getters = {
-  getUserProjectList: state => [...state.userProjects.map(p => ({
-    ...p
-  }))],
-  getHealthFocusAreas: state => state.projectStructure.health_focus_areas ? [...state.projectStructure.health_focus_areas] : [],
-  getHisBucket: state => state.projectStructure.his_bucket ? [...state.projectStructure.his_bucket] : [],
-  getHscChallenges: state => state.projectStructure.hsc_challenges ? [...state.projectStructure.hsc_challenges] : [],
-  getInteroperabilityLinks: state => state.projectStructure.interoperability_links ? [...state.projectStructure.interoperability_links] : [],
-  getInteroperabilityStandards: state => state.projectStructure.interoperability_standards ? [...state.projectStructure.interoperability_standards] : [],
-  getLicenses: state => state.projectStructure.licenses ? [...state.projectStructure.licenses] : [],
-  getDigitalHealthInterventions: state => state.projectStructure.strategies ? [...state.projectStructure.strategies] : [],
+  getUserProjectList: state => [
+    ...state.userProjects.map(p => ({
+      ...p
+    }))
+  ],
+  getHealthFocusAreas: state =>
+    state.projectStructure.health_focus_areas
+      ? [...state.projectStructure.health_focus_areas]
+      : [],
+  getHisBucket: state =>
+    state.projectStructure.his_bucket
+      ? [...state.projectStructure.his_bucket]
+      : [],
+  getHscChallenges: state =>
+    state.projectStructure.hsc_challenges
+      ? [...state.projectStructure.hsc_challenges]
+      : [],
+  getInteroperabilityLinks: state =>
+    state.projectStructure.interoperability_links
+      ? [...state.projectStructure.interoperability_links]
+      : [],
+  getInteroperabilityStandards: state =>
+    state.projectStructure.interoperability_standards
+      ? [...state.projectStructure.interoperability_standards]
+      : [],
+  getLicenses: state =>
+    state.projectStructure.licenses ? [...state.projectStructure.licenses] : [],
+  getDigitalHealthInterventions: state =>
+    state.projectStructure.strategies
+      ? [...state.projectStructure.strategies]
+      : [],
   getDigitalHealthInterventionDetails: (state, getters) => id => {
     for (const category of getters.getDigitalHealthInterventions) {
       for (const group of category.subGroups) {
@@ -39,12 +60,15 @@ export const getters = {
       }
     }
   },
-  getTechnologyPlatforms: state => state.projectStructure.technology_platforms ? [...state.projectStructure.technology_platforms] : [],
+  getTechnologyPlatforms: state =>
+    state.projectStructure.technology_platforms
+      ? [...state.projectStructure.technology_platforms]
+      : [],
   getToolkitVersions: state => [...state.currentProjectToolkitVersions],
   getCoverageVersions: state => [...state.currentProjectCoverageVersions],
   getProjectDetails: (state, getters, rootState, rootGetters) => p => {
     if (p) {
-      const user = rootGetters['user/getProfile'];
+      const user = rootGetters["user/getProfile"];
       return {
         ...p,
         isMember: user ? user.member.includes(p.id) : undefined,
@@ -55,28 +79,30 @@ export const getters = {
     return {};
   },
   getUserProjectDetails: (state, getters, rootState, rootGetters) => id => {
-    const p = getters.getUserProjectList.find(p => p.id === id || p.public_id === id);
+    const p = getters.getUserProjectList.find(
+      p => p.id === id || p.public_id === id
+    );
     return getters.getProjectDetails(p);
   },
   getCurrentProject: (state, getters, rootState, rootGetters) => {
     // Utility method for retro-compatibility
-    const p = rootGetters['project/getOriginal'];
+    const p = rootGetters["project/getOriginal"];
     return getters.getProjectDetails(p);
   },
   getMapsAxisData: (state, getters, rootState, rootGetters) => {
-    const axis = rootGetters['system/getAxis'];
+    const axis = rootGetters["system/getAxis"];
     const chartAxis = {
       labels: axis.map(a => a.name),
       data: []
     };
     const toolkitVersion = getters.getToolkitVersions;
-    const toolkitData = rootGetters['toolkit/getToolkitData'];
+    const toolkitData = rootGetters["toolkit/getToolkitData"];
     const todayString = getTodayString();
     if (toolkitVersion.length > 0) {
       // Data from versions
       chartAxis.data = toolkitVersion.map(version => {
         return {
-          date: version.modified.split('T')[0],
+          date: version.modified.split("T")[0],
           axis1: version.data[0].axis_score / 100,
           axis2: version.data[1].axis_score / 100,
           axis3: version.data[2].axis_score / 100,
@@ -104,13 +130,13 @@ export const getters = {
     return chartAxis;
   },
   getMapsDomainData: (state, getters, rootState, rootGetters) => {
-    const domains = rootGetters['system/getDomains'];
-    const axes = rootGetters['system/getAxis'];
+    const domains = rootGetters["system/getDomains"];
+    const axes = rootGetters["system/getAxis"];
     const chartData = {
       labels: axes.map(a => a.name)
     };
     const toolkitVersion = getters.getToolkitVersions;
-    const toolkitData = rootGetters['toolkit/getToolkitData'];
+    const toolkitData = rootGetters["toolkit/getToolkitData"];
     const todayString = getTodayString();
     axes.forEach((axis, axInd) => {
       chartData[axis.name] = {
@@ -120,9 +146,9 @@ export const getters = {
       if (toolkitVersion.length > 0) {
         chartData[axis.name].data = toolkitVersion.map(version => {
           const ret = {};
-          ret.date = version.modified.split('T')[0];
+          ret.date = version.modified.split("T")[0];
           version.data[axInd].domains.forEach((domain, domainInd) => {
-            ret['axis' + (domainInd + 1)] = domain.domain_percentage / 100;
+            ret["axis" + (domainInd + 1)] = domain.domain_percentage / 100;
           });
           return ret;
         });
@@ -132,7 +158,7 @@ export const getters = {
           date: todayString
         };
         toolkitData[axInd].domains.forEach((dom, ii) => {
-          current['axis' + (ii + 1)] = dom.domain_percentage / 100;
+          current["axis" + (ii + 1)] = dom.domain_percentage / 100;
         });
         chartData[axis.name].data.push(current);
       }
@@ -151,143 +177,117 @@ export const getters = {
 
       const todayString = getTodayString();
 
-      return coverageVersion.reduce((ret, versionObj, vInd) => {
-        ret.data[vInd] = {};
-        ret.data[vInd].date = versionObj.modified ? versionObj.modified.split('T')[0] : todayString;
+      return coverageVersion.reduce(
+        (ret, versionObj, vInd) => {
+          ret.data[vInd] = {};
+          ret.data[vInd].date = versionObj.modified
+            ? versionObj.modified.split("T")[0]
+            : todayString;
 
-        versionObj.data.forEach(distrObj => {
-          forOwn(distrObj, (val, key) => {
-            const labels = ['clients', 'facilities', 'health_workers'];
-            const index = labels.indexOf(key);
-            if (index > -1) {
-              const name = `axis${index + 1}`;
-              ret.data[vInd][name] = (ret.data[vInd][name] || 0) + val;
-            }
+          versionObj.data.forEach(distrObj => {
+            forOwn(distrObj, (val, key) => {
+              const labels = ["clients", "facilities", "health_workers"];
+              const index = labels.indexOf(key);
+              if (index > -1) {
+                const name = `axis${index + 1}`;
+                ret.data[vInd][name] = (ret.data[vInd][name] || 0) + val;
+              }
+            });
           });
-        });
-        return ret;
-      }, {
-        labels: [],
-        data: []
-      });
+          return ret;
+        },
+        {
+          labels: [],
+          data: []
+        }
+      );
     }
   }
 };
 
 export const actions = {
-  async loadUserProjects ({
-    commit,
-    rootGetters,
-    getters
-  }) {
+  async loadUserProjects({ commit, rootGetters, getters }) {
     try {
-      const profile = rootGetters['user/getProfile'];
+      const profile = rootGetters["user/getProfile"];
       if (profile && getters.getUserProjectList.length === 0) {
-        const {
-          data
-        } = await this.$axios.get('/api/projects/member-of/');
+        const { data } = await this.$axios.get("/api/projects/member-of/");
         data.sort((a, b) => b.id - a.id);
-        commit('SET_USER_PROJECT_LIST', data);
+        commit("SET_USER_PROJECT_LIST", data);
       }
     } catch (error) {
-      console.error('projects/loadUserProjects failed');
+      console.error("projects/loadUserProjects failed");
       return Promise.reject(error);
     }
   },
-  async setCurrentProject ({
-    commit,
-    dispatch
-  }, id) {
+  async setCurrentProject({ commit, dispatch }, id) {
     id = parseInt(id, 10) || id;
     try {
-      await dispatch('loadProjectDetails', id);
+      await dispatch("loadProjectDetails", id);
     } catch (e) {
-      console.error('projects/setCurrentProject failed');
+      console.error("projects/setCurrentProject failed");
       return Promise.reject(e);
     }
-    commit('SET_CURRENT_PROJECT', id);
+    commit("SET_CURRENT_PROJECT", id);
   },
-  async loadProjectDetails ({
-    commit,
-    rootGetters
-  }, projectId) {
-    const profile = rootGetters['user/getProfile'];
+  async loadProjectDetails({ commit, rootGetters }, projectId) {
+    const profile = rootGetters["user/getProfile"];
     try {
       if (projectId && profile) {
         if (Number.isInteger(projectId)) {
-          const [toolkitVersions, coverageVersions] =
-          await Promise.all([
+          const [toolkitVersions, coverageVersions] = await Promise.all([
             this.$axios.get(`/api/projects/${projectId}/toolkit/versions/`),
             this.$axios.get(`/api/projects/${projectId}/coverage/versions/`)
           ]);
-          commit('SET_CURRENT_PROJECT_TOOLKIT', toolkitVersions.data);
-          commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', coverageVersions.data);
+          commit("SET_CURRENT_PROJECT_TOOLKIT", toolkitVersions.data);
+          commit(
+            "SET_CURRENT_PROJECT_COVERAGE_VERSIONS",
+            coverageVersions.data
+          );
         } else {
           const { data } = await this.$axios.get(`/api/projects/${projectId}/`);
-          commit('SET_CURRENT_PROJECT_TOOLKIT', data);
-          commit('SET_CURRENT_PROJECT_COVERAGE_VERSIONS', data);
+          commit("SET_CURRENT_PROJECT_TOOLKIT", data);
+          commit("SET_CURRENT_PROJECT_COVERAGE_VERSIONS", data);
         }
       }
     } catch (error) {
-      console.error('projects/loadProjectDetails failed');
+      console.error("projects/loadProjectDetails failed");
       return Promise.reject(error);
     }
   },
-  async snapShotProject ({
-    state,
-    dispatch
-  }) {
+  async snapShotProject({ state, dispatch }) {
     const id = state.currentProject;
     await this.$axios.post(`/api/projects/${id}/version/`);
-    return dispatch('loadProjectDetails', id);
+    return dispatch("loadProjectDetails", id);
   },
-  async loadProjectStructure ({
-    state,
-    commit
-  }, force) {
+  async loadProjectStructure({ state, commit }, force) {
     try {
       const structure = state.projectStructure;
       if (isEmpty(structure) || force) {
-        const {
-          data
-        } = await this.$axios.get('/api/projects/structure/');
-        commit('SET_PROJECT_STRUCTURE', data);
+        const { data } = await this.$axios.get("/api/projects/structure/");
+        commit("SET_PROJECT_STRUCTURE", data);
       }
     } catch (e) {
-      console.error('projects/loadProjectStructure failed');
+      console.error("projects/loadProjectStructure failed");
     }
   },
-  addProjectToList ({
-    commit
-  }, project) {
-    commit('ADD_USER_PROJECT', project);
+  addProjectToList({ commit }, project) {
+    commit("ADD_USER_PROJECT", project);
   },
-  updateProject ({
-    commit
-  }, project) {
-    commit('EDIT_USER_PROJECT', project);
+  updateProject({ commit }, project) {
+    commit("EDIT_USER_PROJECT", project);
   },
-  removeProject ({
-    commit
-  }, id) {
-    commit('RM_USER_PROJECT', id);
+  removeProject({ commit }, id) {
+    commit("RM_USER_PROJECT", id);
   },
-  resetProjectsData ({
-    commit
-  }) {
-    commit('RESET_PROJECTS_DATA');
+  resetProjectsData({ commit }) {
+    commit("RESET_PROJECTS_DATA");
   },
-  async setNewSoftware ({
-    commit,
-    dispatch
-  }, name) {
+  async setNewSoftware({ commit, dispatch }, name) {
     try {
-      const {
-        data
-      } = await this.$axios.post('/api/projects/software/', {
+      const { data } = await this.$axios.post("/api/projects/software/", {
         name
       });
-      await dispatch('loadProjectStructure', true);
+      await dispatch("loadProjectStructure", true);
       return data.id;
     } catch (e) {
       return e;

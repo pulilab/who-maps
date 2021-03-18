@@ -1,18 +1,6 @@
 <template>
-  <div>
-    <loader v-if="loading" />
-    <template v-else>
-      <template v-for="field in fields">
-        <!-- in case of multiple fields -->
-        <el-row v-if="field.row" :key="field.prepend">
-          <el-col v-for="col in field.fields" :span="col.span">
-            <view-field :key="col.prepend" v-bind="col" />
-          </el-col>
-        </el-row>
-        <!-- one row field -->
-        <view-field v-else :key="field.prepend" v-bind="field" />
-      </template>
-    </template>
+  <div v-loading="loading">
+    <view-field v-for="field in fields" :key="field.prepend" v-bind="field" />
   </div>
 </template>
 
@@ -20,12 +8,10 @@
 import { mapGetters } from "vuex";
 import isEmpty from "lodash/isEmpty";
 import ViewField from "@/components/project/wrappers/ViewField";
-import Loader from "@/components/project/wrappers/Loader";
 
 export default {
   components: {
     ViewField,
-    Loader,
   },
   props: {
     project: {
@@ -51,24 +37,21 @@ export default {
     }),
   },
   watch: {
-    project: {
-      inmediate: true,
-      handler(project) {
-        if (!isEmpty(project)) {
-          const { organisation, country, team, viewers } = this.project;
-          this.organisation = this.handleDetails(
-            organisation,
-            "getOrganisationDetails"
-          );
-          this.country = this.handleDetails(country, "getCountryDetails");
-          this.members = this.handleList(team, "getProfiles");
-          this.viewers = this.handleList(viewers, "getProfiles");
-          this.fields = this.handleFields();
-          this.loading = false;
-        } else {
-          this.loading = true;
-        }
-      },
+    project(project) {
+      if (!isEmpty(project)) {
+        const { organisation, country, team, viewers } = project;
+        this.organisation = this.handleDetails(
+          organisation,
+          "getOrganisationDetails"
+        );
+        this.country = this.handleDetails(country, "getCountryDetails");
+        this.members = this.handleList(team, "getProfiles");
+        this.viewers = this.handleList(viewers, "getProfiles");
+        this.fields = this.handleFields();
+        this.loading = false;
+      } else {
+        this.loading = true;
+      }
     },
   },
   methods: {
@@ -116,7 +99,6 @@ export default {
           content: this.project.implementation_overview,
         },
         {
-          prepend: 6,
           row: true,
           fields: [
             {
