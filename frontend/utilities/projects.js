@@ -1,26 +1,27 @@
-import { Validator } from 'vee-validate';
-import { format } from 'date-fns';
+import { Validator } from "vee-validate";
+import { format } from "date-fns";
+import { flatten } from "lodash";
 
-Validator.extend('isDate', {
-  getMessage (field) {
+Validator.extend("isDate", {
+  getMessage(field) {
     return `${field} should be a valid date, IE: 2017/01/15`;
   },
-  validate (value) {
+  validate(value) {
     return !!(value instanceof Date && value.toJSON());
   }
 });
 export const fetchProjectData = async (store, params, error) => {
   try {
-    await store.dispatch('projects/setCurrentProject', params.id);
+    await store.dispatch("projects/setCurrentProject", params.id);
     await Promise.all([
-      store.dispatch('project/loadProject', params.id),
-      store.dispatch('projects/loadProjectStructure')
+      store.dispatch("project/loadProject", params.id),
+      store.dispatch("projects/loadProjectStructure")
     ]);
   } catch (e) {
-    console.warn('loadProjectData failed', e);
+    console.warn("loadProjectData failed", e);
     error({
       statusCode: 404,
-      message: 'This project does not exist'
+      message: "This project does not exist"
     });
   }
 };
@@ -29,13 +30,12 @@ export const epochCheck = (date, present = true) => {
   if (date) {
     const secondsSinceEpoch = Math.round(date.getTime() / 1000);
     if (secondsSinceEpoch === 0) {
-      return present ? new Date() : '';
+      return present ? new Date() : "";
     }
   }
   return date;
 };
-
-export const newStages = (draft) => {
+export const newStages = draft => {
   return draft
     .filter(i => i.checked)
     .map(i => {
@@ -47,10 +47,26 @@ export const newStages = (draft) => {
     });
 };
 
-export const formatDate = (date) =>
-  format(date, 'YYYY-MM-DD') === 'Invalid Date'
+export const formatDate = date =>
+  format(date, "YYYY-MM-DD") === "Invalid Date"
     ? null
-    : format(date, 'YYYY-MM-DD');
+    : format(date, "YYYY-MM-DD");
+
+export const getDate = date => {
+  if (date) {
+    return format(date, "DD/MM/YYYY");
+  }
+  return null;
+};
+export const getList = (arr, getter, key = "name") => {
+  if (arr) {
+    return getter.filter(p => arr.includes(p.id) && p[key]).map(i => i[key]);
+  }
+  return [];
+};
+export const getNestedList = (list, key) => {
+  return flatten(list.map(item => item[key]));
+};
 
 export const projectFields = () => ({
   name: null,
@@ -146,12 +162,9 @@ export const draftRules = () => {
     coverage: {},
     coverage_second_level: {},
     national_level_deployment: {
-      health_workers: {
-      },
-      clients: {
-      },
-      facilities: {
-      }
+      health_workers: {},
+      clients: {},
+      facilities: {}
     },
     stages: {},
     repository: {

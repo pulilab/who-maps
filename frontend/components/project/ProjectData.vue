@@ -99,7 +99,7 @@ export default {
         {
           id: "interoperability",
           nav: this.$gettext("Interoperability"),
-          title: this.$gettext("Interoperability &amp; standards"),
+          title: this.$gettext("Interoperability & standards"),
           prepend: 5,
           component: "Interoperability",
         },
@@ -120,8 +120,6 @@ export default {
   mounted() {
     window.scrollTo(0, 0);
     this.handleInit();
-    console.log("main");
-    this.loading = false;
   },
   methods: {
     ...mapActions({
