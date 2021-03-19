@@ -173,3 +173,4 @@ class ProjectVersionTests(APITestCase):
         project.refresh_from_db()
         self.assertEqual(version_2.data, project.data)
         self.assertEqual(version_2.name, project.name)
+        self.assertNotEqual(version_1.data, version_2.data)

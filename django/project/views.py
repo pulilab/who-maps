@@ -254,7 +254,6 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                     project.data != original_data['data']:
                 version = ProjectVersion.objects.create(project=project, name=project.name, data=project.data,
                                                         research=project.research)
-                version.save()
 
         project.reset_approval()
 
