@@ -252,8 +252,8 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
 
             if project.name != original_data['name'] or project.research != original_data['research'] or \
                     project.data != original_data['data']:
-                ProjectVersion.objects.create(
-                    project=project, name=project.name, data=project.data, research=project.research)
+                ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
+                                              data=project.data, research=project.research)
 
         project.reset_approval()
 

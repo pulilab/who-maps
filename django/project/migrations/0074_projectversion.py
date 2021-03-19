@@ -10,12 +10,10 @@ def create_project_initial_versions(apps, schema_editor):
     ProjectVersion = apps.get_model('project', 'ProjectVersion')
 
     for project in Project.objects.exclude(public_id=''):
-    	ProjectVersion.objects.create(project=project, data=project.data, research=project.research, name=project.name)
-
+        ProjectVersion.objects.create(project=project, data=project.data, research=project.research, name=project.name)
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('project', '0073_project_metadata'),
     ]
@@ -31,7 +29,9 @@ class Migration(migrations.Migration):
                 ('data', django.contrib.postgres.fields.jsonb.JSONField(default=dict)),
                 ('research', models.NullBooleanField()),
                 ('name', models.CharField(max_length=255)),
-                ('project', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='versions', to='project.Project')),
+                ('project',
+                 models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='versions',
+                                   to='project.Project')),
             ],
             options={
                 'ordering': ['modified'],

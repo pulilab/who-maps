@@ -164,7 +164,7 @@ class StageAdmin(SortableAdminMixin, admin.ModelAdmin):
 
 class ProjectVersionAdmin(admin.ModelAdmin):
     model = ProjectVersion
-    fields = ['modified', 'project', 'version', 'data']
+    fields = ['modified', 'project', 'user', 'version', 'data']
     readonly_fields = fields
     search_fields = ['project__name']
 
