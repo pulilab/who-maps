@@ -150,6 +150,7 @@ class ProjectVersionTests(APITestCase):
         self.assertEqual(version.data, project.data)
         self.assertEqual(version.name, project.name)
         self.assertEqual(version.version, 1)
+        self.assertEqual(version.user, self.userprofile)
         # publish again with same data
         url = reverse("project-publish", kwargs={"project_id": self.project_id, "country_id": self.country_id})
         response = self.test_user_client.put(url, self.project_data, format="json")

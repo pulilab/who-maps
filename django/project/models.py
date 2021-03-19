@@ -405,6 +405,8 @@ class ProjectVersion(ExtendedModel):
     name = models.CharField(max_length=255)
     data = JSONField(default=dict)
     research = models.NullBooleanField(blank=True, null=True)
+    user = models.ForeignKey(UserProfile, blank=True, on_delete=models.CASCADE, related_name='actions_publish',
+                             default=None)
 
     class Meta:
         unique_together = ('project', 'version')
