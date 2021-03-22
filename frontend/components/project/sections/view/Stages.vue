@@ -2,7 +2,10 @@
   <div class="graph">
     <c-stages v-if="stages" />
     <div v-else class="no-data">
-      <translate> No Data available </translate>
+      <i class="el-icon-warning" />
+      <h3>
+        <translate> No Data available </translate>
+      </h3>
     </div>
   </div>
 </template>
@@ -23,10 +26,21 @@ export default {
 </script>
 
 <style lang="less">
+@import "~assets/style/variables.less";
+
 .graph {
   margin: -50px 0 60px 0;
   .no-data {
-    padding: 22px 74px 0px 40px;
+    color: @colorTextMuted;
+    display: flex;
+    width: 100%;
+    height: 500px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    i {
+      font-size: 40px;
+    }
   }
 }
 </style>

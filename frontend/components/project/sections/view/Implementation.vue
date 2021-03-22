@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
-import { isEmpty, flatten } from "lodash";
+import { mapGetters } from "vuex";
+import { isEmpty } from "lodash";
+import { getList, getNestedList } from "@/utilities/projects";
 
-// project components
 import ViewField from "@/components/project/wrappers/ViewField";
 import SubLevelCoverageField from "@/components/project/SubLevelCoverageField";
 
@@ -100,12 +100,12 @@ export default {
         } = project;
 
         this.dhi = this.handleDhiList(platforms, digitalHealthInterventions);
-        this.hfaList = this.handleNestedList("getHfa", "health_focus_areas");
-        this.hfa = this.handleList(health_focus_areas, "hfaList");
-        this.hscList = this.handleNestedList("getHsc", "challenges");
-        this.hsc = this.handleList(hsc_challenges, "hscList", "challenge");
-        this.his = this.handleList(his_bucket, "getHis");
-        this.donors = this.handleList(donors, "getDonors");
+        this.hfaList = getNestedList(this.getHfa, "health_focus_areas");
+        this.hfa = getList(health_focus_areas, this.hfaList);
+        this.hscList = getNestedList(this.getHsc, "challenges");
+        this.hsc = getList(hsc_challenges, this.hscList, "challenge");
+        this.his = getList(his_bucket, this.getHis);
+        this.donors = getList(donors, this.getDonors);
 
         this.coverage = this.isGlobalSelected
           ? this.$gettext("International")
@@ -119,17 +119,6 @@ export default {
     },
   },
   methods: {
-    handleList(arr, getter, key = "name") {
-      if (arr) {
-        return this[getter]
-          .filter((p) => arr.includes(p.id) && p[key])
-          .map((i) => i[key]);
-      }
-      return [];
-    },
-    handleNestedList(list, key) {
-      return flatten(this[list].map((item) => item[key]));
-    },
     handleDhiList(platforms, interventions) {
       return platforms.map((platform) => ({
         name: this.getPlatforms.find((p) => p.id === platform).name,
@@ -147,7 +136,7 @@ export default {
             "Software and related Digital Health Interventions (DHI)"
           ),
           content: this.dhi,
-          complex: true,
+          dhi: true,
           title: this.$gettext("Software"),
           subtitle: this.$gettext("Digital Health Intervention"),
         },

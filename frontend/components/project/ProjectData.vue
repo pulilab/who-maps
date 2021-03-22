@@ -120,8 +120,6 @@ export default {
   mounted() {
     window.scrollTo(0, 0);
     this.handleInit();
-    console.log("main");
-    this.loading = false;
   },
   methods: {
     ...mapActions({
