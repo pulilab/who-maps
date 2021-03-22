@@ -424,7 +424,8 @@ export default {
 
           .svg-inline--fa {
             opacity: 1;
-            left: 30%;
+            // left: 30%;
+            left: 17px;
           }
         }
       }

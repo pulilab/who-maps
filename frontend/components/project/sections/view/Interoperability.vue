@@ -54,11 +54,11 @@ export default {
     handleInteroperability(links) {
       return Object.values(links)
         .filter((il) => !!(il.selected && il.link))
-        .map((il) => ({
+        .map((il, i) => ({
           ...il,
-          id: this.getInteroperabilityLinks[il.index].id,
-          label: `${this.getInteroperabilityLinks[il.index].pre} ${
-            this.getInteroperabilityLinks[il.index].name
+          id: this.getInteroperabilityLinks[il.index || i]?.id,
+          label: `${this.getInteroperabilityLinks[il.index || i]?.pre} ${
+            this.getInteroperabilityLinks[il.index || i]?.name
           }`,
         }));
     },
