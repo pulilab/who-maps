@@ -59,8 +59,8 @@
       <template v-else>
         <!-- row format-->
         <el-row v-if="row">
-          <el-col v-for="field in fields" :span="field.span">
-            <view-field :key="field.id" v-bind="field" no-margin />
+          <el-col v-for="field in fields" :key="field.id" :span="field.span">
+            <view-field v-bind="field" no-margin />
           </el-col>
         </el-row>
         <!-- no content at all-->
