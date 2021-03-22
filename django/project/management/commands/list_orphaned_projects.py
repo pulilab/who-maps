@@ -14,6 +14,7 @@ class Command(BaseCommand):
         projects = Project.objects.filter(team=None)
 
         for p in projects:
-            self.stdout.write(f"  - {p.id} - {p.name}")
+            published = "Published" if p.public_id else "Draft"
+            self.stdout.write(f"  - {p.id} - {p.name} ({published})")
 
         self.stdout.write("-- Done")
