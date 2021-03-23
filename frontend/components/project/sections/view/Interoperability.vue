@@ -26,7 +26,6 @@ export default {
       loading: true,
       interoperability: [],
       standards: [],
-      fields: [],
     };
   },
   computed: {
@@ -34,19 +33,21 @@ export default {
       getInteroperabilityLinks: "projects/getInteroperabilityLinks",
       getStandards: "projects/getInteroperabilityStandards",
     }),
-  },
-  watch: {
-    project(project) {
-      if (!isEmpty(project)) {
-        const { interoperability_links, interoperability_standards } = project;
+    fields() {
+      if (!isEmpty(this.project)) {
+        const {
+          interoperability_links,
+          interoperability_standards,
+        } = this.project;
         this.interoperability = this.handleInteroperability(
           interoperability_links
         );
         this.standards = getList(interoperability_standards, this.getStandards);
-        this.fields = this.handleFields();
         this.loading = false;
+        return this.handleFields();
       } else {
         this.loading = true;
+        return [];
       }
     },
   },
@@ -66,14 +67,14 @@ export default {
       return [
         {
           id: 1,
-          prepend: 22,
+          prepend: 25,
           header: this.$gettext("What other system do you interoperate with ?"),
           interoperability: true,
           content: this.interoperability,
         },
         {
           id: 2,
-          prepend: 23,
+          prepend: 26,
           header: this.$gettext(
             "What data standards does your digital health project use?"
           ),

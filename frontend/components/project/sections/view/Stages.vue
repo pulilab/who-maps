@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import cStages from "@/components/common/charts/cStages";
 
 export default {
@@ -18,9 +19,9 @@ export default {
     cStages,
   },
   computed: {
-    stages() {
-      return this.$store.getters["project/getStages"];
-    },
+    ...mapGetters({
+      stages: "project/getStages",
+    }),
   },
 };
 </script>

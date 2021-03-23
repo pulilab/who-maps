@@ -28,7 +28,6 @@ export default {
       country: {},
       members: [],
       viewers: [],
-      fields: [],
     };
   },
   computed: {
@@ -37,11 +36,9 @@ export default {
       getCountryDetails: "countries/getCountryDetails",
       getProfiles: "system/getUserProfilesNoFilter",
     }),
-  },
-  watch: {
-    project(project) {
-      if (!isEmpty(project)) {
-        const { organisation, country, team, viewers } = project;
+    fields() {
+      if (!isEmpty(this.project)) {
+        const { organisation, country, team, viewers } = this.project;
         this.organisation = this.handleDetails(
           organisation,
           "getOrganisationDetails"
@@ -49,13 +46,15 @@ export default {
         this.country = this.handleDetails(country, "getCountryDetails");
         this.members = getList(team, this.getProfiles);
         this.viewers = getList(viewers, this.getProfiles);
-        this.fields = this.handleFields();
         this.loading = false;
+        return this.handleFields();
       } else {
         this.loading = true;
+        return [];
       }
     },
   },
+
   methods: {
     handleDetails(id, method) {
       if (id) {
@@ -98,21 +97,26 @@ export default {
           content: this.project.implementation_overview,
         },
         {
-          row: true,
-          fields: [
+          layout: true,
+          rows: [
             {
-              id: 6,
-              prepend: 6,
-              header: this.$gettext("Contact name"),
-              content: this.project.contact_name,
-              span: 11,
-            },
-            {
-              id: 7,
-              prepend: 7,
-              header: this.$gettext("Contact email"),
-              content: this.project.contact_email,
-              span: 13,
+              id: 100,
+              cols: [
+                {
+                  id: 6,
+                  prepend: 6,
+                  header: this.$gettext("Contact name"),
+                  content: this.project.contact_name,
+                  span: 11,
+                },
+                {
+                  id: 7,
+                  prepend: 7,
+                  header: this.$gettext("Contact email"),
+                  content: this.project.contact_email,
+                  span: 13,
+                },
+              ],
             },
           ],
         },

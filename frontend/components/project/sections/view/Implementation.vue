@@ -2,12 +2,6 @@
   <div v-loading="loading">
     <view-field v-for="field in fields" :key="field.id" v-bind="field" />
   </div>
-  <!-- <sub-level-coverage-field
-      v-if="project.coverageType === 1"
-      :coverage="project.coverage"
-      :coverage-data="project.coverageData"
-      :coverage-second-level="project.coverageSecondLevel"
-    /> -->
 </template>
 
 <script>
@@ -16,12 +10,10 @@ import { isEmpty } from "lodash";
 import { getList, getNestedList } from "@/utilities/projects";
 
 import ViewField from "@/components/project/wrappers/ViewField";
-import SubLevelCoverageField from "@/components/project/SubLevelCoverageField";
 
 export default {
   components: {
     ViewField,
-    SubLevelCoverageField,
   },
   props: {
     project: {
@@ -40,7 +32,10 @@ export default {
       his: [],
       donors: [],
       coverage: "",
-      fields: [],
+      // sub level coverage
+      coverageLevelName: {},
+      coverageLevelFirst: [],
+      coverageLevelSecond: [],
       // literals
       coverageList: [
         "",
@@ -66,6 +61,10 @@ export default {
       getHsc: "projects/getHscChallenges",
       getHis: "projects/getHisBucket",
       getDonors: "system/getDonors",
+      country: "project/getCountry",
+      getCountrySubLevelNames: "countries/getCountrySubLevelNames",
+      getCountryFirstSubLevel: "countries/getCountryFirstSubLevel",
+      getCountrySecondSubLevel: "countries/getCountrySecondSubLevel",
     }),
     country() {
       if (this.project.country) {
@@ -85,10 +84,8 @@ export default {
           this.project.national_level_deployment.health_workers)
       );
     },
-  },
-  watch: {
-    project(project) {
-      if (!isEmpty(project)) {
+    fields() {
+      if (!isEmpty(this.project)) {
         const {
           platforms,
           digitalHealthInterventions,
@@ -97,7 +94,10 @@ export default {
           his_bucket,
           donors,
           coverageType,
-        } = project;
+          coverage,
+          coverageData,
+          coverageSecondLevel,
+        } = this.project;
 
         this.dhi = this.handleDhiList(platforms, digitalHealthInterventions);
         this.hfaList = getNestedList(this.getHfa, "health_focus_areas");
@@ -111,10 +111,23 @@ export default {
           ? this.$gettext("International")
           : this.coverageList[coverageType];
 
-        this.fields = this.handleFields();
+        // sub levels, if there's any
+        this.coverageLevelName = this.getCountrySubLevelNames(this.country.id);
+        if (this.coverageLevelName.first) {
+          this.coverageLevelFirst = this.handleRows(coverage, coverageData);
+        }
+        if (this.coverageLevelName.second) {
+          this.coverageLevelSecond = this.handleRows(
+            coverage,
+            coverageSecondLevel
+          );
+        }
+
         this.loading = false;
+        return this.handleFields();
       } else {
         this.loading = true;
+        return [];
       }
     },
   },
@@ -126,6 +139,41 @@ export default {
           .filter((i) => i.platform === platform)
           .map((i) => this.getDhi(i.id)),
       }));
+    },
+    handleRows(coverage, data, country = this.country) {
+      let rows = [];
+      for (const [key, value] of Object.entries(data)) {
+        if (coverage.includes(key)) {
+          rows = [
+            ...rows,
+            {
+              id: key,
+              name: country.districts.find((i) => i.id === key).name,
+              cols: [
+                {
+                  id: 1,
+                  header: this.$gettext("# Health Workers"),
+                  content: value.health_workers,
+                  span: 8,
+                },
+                {
+                  id: 2,
+                  header: this.$gettext("# Facilities"),
+                  content: value.facilities,
+                  span: 8,
+                },
+                {
+                  id: 3,
+                  header: this.$gettext("# Clients"),
+                  content: value.clients,
+                  span: 8,
+                },
+              ],
+            },
+          ];
+        }
+      }
+      return rows;
     },
     handleFields() {
       return [
@@ -160,6 +208,7 @@ export default {
         },
         {
           id: 5,
+          prepend: 14,
           show: !!(
             this.isNationalLevelDeployment ||
             (this.project.coverage && this.project.coverage.length)
@@ -174,45 +223,75 @@ export default {
             ? this.$gettext("International Level Deployment")
             : this.$gettext("National Level Deployment"),
           icon: "el-icon-s-flag",
-          row: true,
-          fields: [
+          layout: true,
+          rows: [
             {
-              id: 1,
-              header: this.$gettext("# Health Workers"),
-              content: this.project.national_level_deployment?.clients,
-              span: 8,
-            },
-            {
-              id: 2,
-              header: this.$gettext("# Facilities"),
-              content: this.project.national_level_deployment?.facilities,
-              span: 8,
-            },
-            {
-              id: 3,
-              header: this.$gettext("# Clients"),
-              content: this.project.national_level_deployment?.health_workers,
-              span: 8,
+              id: 101,
+              cols: [
+                {
+                  id: 1,
+                  header: this.$gettext("# Health Workers"),
+                  content: this.project.national_level_deployment
+                    ?.health_workers,
+                  span: 8,
+                },
+                {
+                  id: 2,
+                  header: this.$gettext("# Facilities"),
+                  content: this.project.national_level_deployment?.facilities,
+                  span: 8,
+                },
+                {
+                  id: 3,
+                  header: this.$gettext("# Clients"),
+                  content: this.project.national_level_deployment?.clients,
+                  span: 8,
+                },
+              ],
             },
           ],
         },
         {
           id: 7,
-          prepend: 14,
+          show: !!(
+            this.project.coverageType === 1 && this.coverageLevelName.first
+          ),
+          header: this.$gettext("{name} level deployment", {
+            name: this.coverageLevelName.first,
+          }),
+          icon: "el-icon-location",
+          layout: true,
+          rows: this.coverageLevelFirst,
+        },
+        {
+          id: 8,
+          show: !!(
+            this.project.coverageType === 1 && this.coverageLevelName.second
+          ),
+          header: this.$gettext("{name} level deployment", {
+            name: this.coverageLevelName.second,
+          }),
+          icon: "el-icon-location",
+          layout: true,
+          rows: this.coverageLevelSecond,
+        },
+        {
+          id: 9,
+          prepend: 15,
           header: this.$gettext(
             "Has the government financially invested in the project?"
           ),
           content: this.investedList[this.project.government_investor],
         },
         {
-          id: 8,
-          prepend: 15,
+          id: 10,
+          prepend: 16,
           header: this.$gettext("Implementing partner (s)"),
           content: this.project.implementing_partners,
         },
         {
-          id: 9,
-          prepend: 16,
+          id: 11,
+          prepend: 17,
           header: this.$gettext("Investor (s)"),
           content: this.donors,
         },
