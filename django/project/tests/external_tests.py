@@ -48,6 +48,7 @@ class ExternalAPITests(APITestCase):
         self.country = CountryFactory(name="country1", code='CTR1', project_approval=True,
                                       region=Country.REGIONS[0][0], name_en='Hungary', name_fr='Hongrie')
         self.country_id = self.country.id
+        self.donor, _ = Donor.objects.get_or_create(name="Donor 1", defaults={'code': "dnr1"})
 
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
@@ -69,6 +70,10 @@ class ExternalAPITests(APITestCase):
             "implementation_overview": "overview",
             "health_focus_areas": [1, 2],
             "country": self.country_id,
+            "donors": [{
+                "name": self.donor.name,
+                "code": self.donor.code
+            }],
             "platforms": [{
                 "id": 1,
                 "strategies": [1, 2]
@@ -86,15 +91,14 @@ class ExternalAPITests(APITestCase):
         project_id = response.json().get("id")
         project = Project.objects.get(id=project_id)
 
-        self.assertTrue(project.from_dch)
+        self.assertTrue(project.from_external)
         self.assertTrue(project.public_id)
         self.assertEqual(self.project_data['project']['name'], project.name)
 
         org = Organisation.objects.get(name=self.project_data['project']['organisation'])
         self.assertEqual(self.project_data['project']['organisation'], org.name)
 
-        donor = Donor.objects.get(name="Other")
-        self.assertEqual(project.data['donors'], [donor.id])
+        self.assertEqual(project.data['donors'], [self.donor.id])
 
         self.assertEqual(project.data['national_level_deployment'], 
                          {"clients": 0, "health_workers": 0, "facilities": 0})

@@ -100,8 +100,8 @@ class Project(SoftDeleteModel, ExtendedModel):
         return self.name
 
     @property
-    def from_dch(self):
-        return self.metadata and 'from_dch' in self.metadata
+    def from_external(self):
+        return self.metadata and 'from_external' in self.metadata
 
     def get_country_id(self, draft_mode=False):
         return self.draft.get('country') if draft_mode else self.data.get('country')
