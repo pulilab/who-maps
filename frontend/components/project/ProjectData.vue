@@ -1,5 +1,8 @@
 <template>
   <el-row type="flex" class="project-view">
+    <div v-if="!published" class="draft-banner">
+      <fa icon="pen" size="lg" />
+    </div>
     <el-col :span="6" class="sidebar">
       <navigation
         :items="sections"
@@ -385,6 +388,19 @@ export default {
       border-bottom: 1px solid #e0e0e0;
       padding-bottom: 15px;
       margin: 0 0 60px 0;
+    }
+  }
+  .draft-banner {
+    position: absolute;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-top: 70px solid @colorDraft;
+    border-left: 70px solid transparent;
+    svg {
+      position: absolute;
+      right: 3px;
+      top: -58px;
     }
   }
 }

@@ -7,9 +7,9 @@
       <h2 v-if="header"><i v-if="icon" :class="icon" />{{ header }}</h2>
       <template v-if="content">
         <template v-if="typeof this.contents === 'string'">
-          <nuxt-link v-if="link" :to="content" target="_blank">
+          <a v-if="link" :href="content" target="_blank">
             {{ contents }}
-          </nuxt-link>
+          </a>
           <span v-else :class="{ 'no-data': this.contents === this.noData }">
             {{ contents }}
           </span>
@@ -44,9 +44,9 @@
                   <p>
                     <b>{{ content.label }}</b>
                   </p>
-                  <nuxt-link :to="content.link" target="_blank">
+                  <a :href="content.link" target="_blank">
                     {{ content.link }}
-                  </nuxt-link>
+                  </a>
                 </li>
               </template>
             </template>
@@ -163,6 +163,23 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/style/variables.less";
+.long-url() {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
 
 .flex {
   display: flex;
@@ -183,6 +200,7 @@ export default {
     color: @colorBrandPrimary;
     text-decoration: none;
     transition: all 1s ease-out;
+    .long-url();
     &:hover {
       color: @colorBrandPrimaryLight;
       text-decoration: underline;

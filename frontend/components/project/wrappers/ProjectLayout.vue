@@ -36,6 +36,7 @@ export default {
 
 .project-layout {
   padding: 40px 120px 100px;
+  color: @colorTextPrimary;
   &.transparent {
     background-color: transparent;
   }
