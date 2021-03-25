@@ -140,25 +140,25 @@ export default {
     },
     // configure loaders, usability and permissions for actions
     handleConfigActions() {
-      const print = {
-        id: "print",
-        type: "primary",
-        icon: "el-icon-printer",
-        plain: true,
-        label: this.$gettext("Print draft"),
-        handle: "handlePrint",
-        success: {
-          title: this.$gettext("Congratulations"),
-          message: this.$gettext(
-            "You can see the print version on a new window"
-          ),
-        },
-        error: {
-          title: this.$gettext("Error"),
-          message: this.$gettext("Is not possible to print. Try again."),
-          type: "error",
-        },
-      };
+      // const print = {
+      //   id: "print",
+      //   type: "primary",
+      //   icon: "el-icon-printer",
+      //   plain: true,
+      //   label: this.$gettext("Print draft"),
+      //   handle: "handlePrint",
+      //   success: {
+      //     title: this.$gettext("Congratulations"),
+      //     message: this.$gettext(
+      //       "You can see the print version on a new window"
+      //     ),
+      //   },
+      //   error: {
+      //     title: this.$gettext("Error"),
+      //     message: this.$gettext("Is not possible to print. Try again."),
+      //     type: "error",
+      //   },
+      // };
       const info = {
         title: this.$gettext("Info"),
         message: this.$gettext("Action cancelled"),
@@ -189,7 +189,7 @@ export default {
             },
             error: info,
           },
-          { ...print, label: this.$gettext("Print project") },
+          // { ...print, label: this.$gettext("Print project") },
         ];
       } else {
         this.actions = [
@@ -232,7 +232,7 @@ export default {
             },
             error: info,
           },
-          print,
+          // print,
         ];
       }
     },

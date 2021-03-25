@@ -3,14 +3,14 @@
     <div v-if="prepend" class="prepend">
       <h2>{{ prepend }}.</h2>
     </div>
-    <div :class="`${row && 'full-width'}`">
+    <div :class="`${layout && 'full-width'}`">
       <h2 v-if="header"><i v-if="icon" :class="icon" />{{ header }}</h2>
       <template v-if="content">
         <template v-if="typeof this.contents === 'string'">
           <nuxt-link v-if="link" :to="content" target="_blank">
             {{ contents }}
           </nuxt-link>
-          <span v-else :class="{ na: this.contents === this.na }">
+          <span v-else :class="{ 'no-data': this.contents === this.noData }">
             {{ contents }}
           </span>
         </template>
@@ -58,14 +58,19 @@
       </template>
       <template v-else>
         <!-- row format-->
-        <el-row v-if="row">
-          <el-col v-for="field in fields" :key="field.id" :span="field.span">
-            <view-field v-bind="field" no-margin />
-          </el-col>
-        </el-row>
+        <template v-if="layout">
+          <el-row v-for="row in rows" :key="row.id">
+            <p v-if="row.name">
+              <b>{{ row.name }}</b>
+            </p>
+            <el-col v-for="col in row.cols" :key="col.id" :span="col.span">
+              <view-field v-bind="col" no-margin />
+            </el-col>
+          </el-row>
+        </template>
         <!-- no content at all-->
         <template v-else>
-          <span class="na">{{ na }}</span>
+          <span class="no-data">{{ noData }}</span>
         </template>
       </template>
     </div>
@@ -117,7 +122,7 @@ export default {
       type: String,
       default: "",
     },
-    row: {
+    layout: {
       type: Boolean,
       default: false,
     },
@@ -129,14 +134,14 @@ export default {
       type: Boolean,
       default: false,
     },
-    fields: {
+    rows: {
       type: Array,
       default: () => [],
     },
   },
   data() {
     return {
-      na: this.$gettext("N/A"),
+      noData: this.$gettext("No data"),
     };
   },
   computed: {
@@ -145,11 +150,11 @@ export default {
         case "number":
           return this.content;
         case "string":
-          return this.content ? this.content : this.na;
+          return this.content ? this.content : this.noData;
         case "object":
-          return this.content.length > 0 ? this.content : this.na;
+          return this.content.length > 0 ? this.content : this.noData;
         default:
-          return this.na;
+          return this.noData;
       }
     },
   },
@@ -183,6 +188,9 @@ export default {
       text-decoration: underline;
     }
   }
+  i {
+    margin-right: 10px;
+  }
   &.no-margin {
     margin: 0px;
     width: 100%;
@@ -190,7 +198,7 @@ export default {
   .full-width {
     width: 100%;
   }
-  .na {
+  .no-data {
     color: @colorTextMuted;
   }
   .prepend {
