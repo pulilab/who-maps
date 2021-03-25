@@ -2,7 +2,6 @@ import os
 import datetime
 import sys
 from django.utils.translation import ugettext_lazy as _
-from django.db import models
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

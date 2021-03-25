@@ -14,6 +14,7 @@ from .models import Project
 from .serializers import ProjectDraftSerializer, ProjectPublishedSerializer, ProjectGroupSerializer
 from django.conf import settings
 
+
 class CheckRequiredMixin:
     @staticmethod
     def check_required(queryset: QuerySet, answers: OrderedDict):

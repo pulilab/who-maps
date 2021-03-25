@@ -32,7 +32,7 @@ from .mixins import CheckRequiredMixin, ExternalAPIMixin
 
 class ProjectPublicViewSet(ViewSet):
 
-    @swagger_auto_schema(operation_id="project-structure",responses={200: TerminologySerializer})
+    @swagger_auto_schema(operation_id="project-structure", responses={200: TerminologySerializer})
     def project_structure(self, request):
         return Response(self._get_project_structure())
 
