@@ -253,18 +253,18 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { mapGettersActions } from '@/utilities/form.js';
+import { mapGetters, mapActions } from 'vuex'
+import { mapGettersActions } from '@/utilities/form.js'
 
-import ProjectCard from '@/components/common/ProjectCard';
-import CountryItem from '@/components/common/CountryItem';
-import OrganisationItem from '@/components/common/OrganisationItem';
-import HfaCategoriesList from '@/components/common/list/HfaCategoriesList';
-import DonorsList from '@/components/common/list/DonorsList';
-import StageList from '@/components/common/list/StageList';
-import RegionItem from '@/components/common/RegionItem';
-import CustomAnswersCell from './CustomAnswersCell';
-import CurrentPage from '@/components/dashboard/CurrentPage';
+import ProjectCard from '@/components/common/ProjectCard'
+import CountryItem from '@/components/common/CountryItem'
+import OrganisationItem from '@/components/common/OrganisationItem'
+import HfaCategoriesList from '@/components/common/list/HfaCategoriesList'
+import DonorsList from '@/components/common/list/DonorsList'
+import StageList from '@/components/common/list/StageList'
+import RegionItem from '@/components/common/RegionItem'
+import CustomAnswersCell from './CustomAnswersCell'
+import CurrentPage from '@/components/dashboard/CurrentPage'
 
 export default {
   components: {
@@ -283,7 +283,7 @@ export default {
       pageSizeOption: [10, 20, 50, 100],
       tableMaxHeight: 200,
       localSort: null
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -301,8 +301,8 @@ export default {
       sorting: ['dashboard', 'getSorting', 'setSorting', 0]
     }),
     paginationOrderStr () {
-      const loc = this.$i18n.locale;
-      return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next';
+      const loc = this.$i18n.locale
+      return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next'
     }
   },
   watch: {
@@ -310,9 +310,9 @@ export default {
       immediate: true,
       handler (value) {
         if (this.$refs.mainTable) {
-          this.$refs.mainTable.clearSelection();
+          this.$refs.mainTable.clearSelection()
           if (value) {
-            this.$refs.mainTable.toggleAllSelection();
+            this.$refs.mainTable.toggleAllSelection()
           }
         }
       }
@@ -321,92 +321,92 @@ export default {
       immediate: false,
       handler (columns) {
         this.$nextTick(() => {
-          this.$refs.mainTable.doLayout();
+          this.$refs.mainTable.doLayout()
           setTimeout(() => {
-            this.alignFixedTableWidthForRTL();
-          }, 50);
-        });
+            this.alignFixedTableWidthForRTL()
+          }, 50)
+        })
       }
     },
     sorting: {
       immediate: false,
       handler (current) {
         if (current !== this.localSort) {
-          this.fixSorting(current);
+          this.fixSorting(current)
         }
       }
     }
   },
   mounted () {
     setTimeout(() => {
-      this.fixTableHeight();
-      this.fixSorting(this.$route.query.ordering);
+      this.fixTableHeight()
+      this.fixSorting(this.$route.query.ordering)
       if (this.selectAll) {
-        this.$refs.mainTable.clearSelection();
-        this.$refs.mainTable.toggleAllSelection();
+        this.$refs.mainTable.clearSelection()
+        this.$refs.mainTable.toggleAllSelection()
       }
       this.$nextTick(() => {
-        this.alignFixedTableWidthForRTL();
-      });
-    }, 500);
+        this.alignFixedTableWidthForRTL()
+      })
+    }, 500)
   },
   methods: {
     ...mapActions({
       setSelectedRows: 'dashboard/setSelectedRows'
     }),
     customHeaderRenderer (h, { column, $index }) {
-      return h('span', { attrs: { title: column.label } }, column.label);
+      return h('span', { attrs: { title: column.label } }, column.label)
     },
     selectHandler (selection) {
-      this.setSelectedRows(selection.map(s => s.id));
+      this.setSelectedRows(selection.map(s => s.id))
     },
     rowClassCalculator ({ row }) {
-      return this.selectedRows.includes('row'.id) ? 'Selected' : 'NotSelected';
+      return this.selectedRows.includes('row'.id) ? 'Selected' : 'NotSelected'
     },
     sortChanged ({ prop, order }) {
       if (order === 'descending') {
-        this.sorting = '-' + prop;
-        this.localSort = '-' + prop;
+        this.sorting = '-' + prop
+        this.localSort = '-' + prop
       } else {
-        this.sorting = prop;
-        this.localSort = prop;
+        this.sorting = prop
+        this.localSort = prop
       }
     },
     fixTableHeight () {
-      const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height');
-      this.tableMaxHeight = +maxHeight.replace('px', '');
-      this.$refs.mainTable.doLayout();
+      const maxHeight = window.getComputedStyle(this.$el).getPropertyValue('max-height')
+      this.tableMaxHeight = +maxHeight.replace('px', '')
+      this.$refs.mainTable.doLayout()
     },
     fixSorting (prop) {
       if (prop) {
-        let direction = 'ascending';
+        let direction = 'ascending'
         if (prop.startsWith('-')) {
-          direction = 'descending';
-          prop = prop.replace('-', '');
+          direction = 'descending'
+          prop = prop.replace('-', '')
         }
-        this.$refs.mainTable.sort(prop, direction);
+        this.$refs.mainTable.sort(prop, direction)
       }
     },
     alignFixedTableWidthForRTL () {
-      const locale = this.$i18n.locale;
+      const locale = this.$i18n.locale
       if (locale === 'ar') {
-        const rawTableWidth = document.querySelector('.el-table__header').offsetWidth;
-        const fixedFieldWidths = 275;
-        const toShowBorder = 1;
+        const rawTableWidth = document.querySelector('.el-table__header').offsetWidth
+        const fixedFieldWidths = 275
+        const toShowBorder = 1
 
-        const toAlignWidth = rawTableWidth - fixedFieldWidths - toShowBorder;
+        const toAlignWidth = rawTableWidth - fixedFieldWidths - toShowBorder
 
-        const fixedTableHeader = document.querySelector('.el-table__fixed-header-wrapper');
-        const fixedTableBody = document.querySelector('.el-table__fixed-body-wrapper');
+        const fixedTableHeader = document.querySelector('.el-table__fixed-header-wrapper')
+        const fixedTableBody = document.querySelector('.el-table__fixed-body-wrapper')
 
         if (fixedTableBody && fixedTableHeader) {
-          fixedTableHeader.style.left = -toAlignWidth + 'px';
-          fixedTableBody.style.left = -toAlignWidth + 'px';
+          fixedTableHeader.style.left = -toAlignWidth + 'px'
+          fixedTableBody.style.left = -toAlignWidth + 'px'
         }
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less">

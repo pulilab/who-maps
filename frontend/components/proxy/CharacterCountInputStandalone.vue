@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import get from 'lodash/get';
-import debounce from 'lodash/debounce';
+import get from 'lodash/get'
+import debounce from 'lodash/debounce'
 
 export default {
   name: 'CharacterCountInputStandalone',
@@ -47,27 +47,27 @@ export default {
   computed: {
     count () {
       if (this.value) {
-        return this.value.length;
+        return this.value.length
       }
-      return 0;
+      return 0
     },
     max () {
-      return get(this, 'rules.max', null);
+      return get(this, 'rules.max', null)
     },
     error () {
-      return this.count && this.max && this.count > this.max;
+      return this.count && this.max && this.count > this.max
     }
   },
   methods: {
     setValue (val) {
-      this.value = val;
-      this.setStore(val);
+      this.value = val
+      this.setStore(val)
     },
     setStore: debounce(function (val) {
-      this.$store.dispatch(`${this.namespace}/${this.set}`, val);
+      this.$store.dispatch(`${this.namespace}/${this.set}`, val)
     }, 100)
   }
-};
+}
 </script>
 
 <style lang="less">

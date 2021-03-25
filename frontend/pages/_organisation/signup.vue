@@ -5,13 +5,13 @@
 </template>
 
 <script>
-import SignupComponent from '../../components/SignupComponent';
+import SignupComponent from '../../components/SignupComponent'
 
 export default {
   components: {
     SignupComponent
   }
-};
+}
 </script>
 
 <style lang="less">

@@ -87,18 +87,18 @@
 </template>
 
 <script>
-import { mapGettersActions } from '../../utilities/form';
+import { mapGettersActions } from '../../utilities/form'
 
-import FilterPresetsActions from './FilterPresetsActions';
-import SearchBox from './SearchBox';
-import CountryFilters from './CountryFilters';
-import FilterSwitch from './FilterSwitch';
-import FilterItem from './FilterItem';
-import DhiCategoriesList from '../common/list/DhiCategoriesList';
-import HfaCategoriesList from '../common/list/HfaCategoriesList';
-import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList';
-import HisBucketList from '../common/list/HisBucketList';
-import SimplePlatformList from '../common/list/SimplePlatformList';
+import FilterPresetsActions from './FilterPresetsActions'
+import SearchBox from './SearchBox'
+import CountryFilters from './CountryFilters'
+import FilterSwitch from './FilterSwitch'
+import FilterItem from './FilterItem'
+import DhiCategoriesList from '../common/list/DhiCategoriesList'
+import HfaCategoriesList from '../common/list/HfaCategoriesList'
+import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList'
+import HisBucketList from '../common/list/HisBucketList'
+import SimplePlatformList from '../common/list/SimplePlatformList'
 export default {
   components: {
     FilterPresetsActions,
@@ -125,22 +125,22 @@ export default {
   },
   methods: {
     deleteDhiHandler (id) {
-      this.selectedDHI = this.selectedDHI.filter(dhi => dhi !== id);
+      this.selectedDHI = this.selectedDHI.filter(dhi => dhi !== id)
     },
     deleteHfaHandler (id) {
-      this.selectedHFA = this.selectedHFA.filter(hfa => hfa !== id);
+      this.selectedHFA = this.selectedHFA.filter(hfa => hfa !== id)
     },
     deleteHscHandler (id) {
-      this.selectedHSC = this.selectedHSC.filter(hsc => hsc !== id);
+      this.selectedHSC = this.selectedHSC.filter(hsc => hsc !== id)
     },
     deleteHisHandler (id) {
-      this.selectedHIS = this.selectedHIS.filter(his => his !== id);
+      this.selectedHIS = this.selectedHIS.filter(his => his !== id)
     },
     deletePlatformsHandler (id) {
-      this.selectedPlatforms = this.selectedPlatforms.filter(p => p !== id);
+      this.selectedPlatforms = this.selectedPlatforms.filter(p => p !== id)
     }
   }
-};
+}
 
 </script>
 

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
   model: {
     prop: 'value',
@@ -37,10 +37,10 @@ export default {
   },
   methods: {
     changeHandler (value) {
-      this.$emit('change', value);
+      this.$emit('change', value)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

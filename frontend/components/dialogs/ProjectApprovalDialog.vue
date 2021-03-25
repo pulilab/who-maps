@@ -156,11 +156,11 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { format } from 'date-fns';
+import { mapGetters, mapActions } from 'vuex'
+import { format } from 'date-fns'
 
-import ApprovalTag from '../admin/ApprovalTag';
-import UserItem from '../common/UserItem';
+import ApprovalTag from '../admin/ApprovalTag'
+import UserItem from '../common/UserItem'
 
 export default {
   components: {
@@ -180,7 +180,7 @@ export default {
           { required: true, message: this.$gettext('This is required'), trigger: 'blur' }
         ]
       }
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -189,31 +189,31 @@ export default {
     }),
     visible: {
       get () {
-        return this.currentProject !== null;
+        return this.currentProject !== null
       },
       set () {
-        this.setCurrentElement(null);
+        this.setCurrentElement(null)
       }
     },
     top () {
-      return this.mini ? '12px' : '10vh';
+      return this.mini ? '12px' : '10vh'
     },
     width () {
-      return this.mini ? '60vw' : '80vw';
+      return this.mini ? '60vw' : '80vw'
     },
     history () {
       if (this.currentElementDetails) {
-        return this.currentElementDetails.history;
+        return this.currentElementDetails.history
       }
-      return [];
+      return []
     },
     approvedBy () {
       if (this.currentElementDetails) {
         return this.history && this.history[0] && this.history[0].history_user__userprofile
           ? this.history[0].history_user__userprofile
-          : this.currentElementDetails.legacy_approved_by;
+          : this.currentElementDetails.legacy_approved_by
       }
-      return null;
+      return null
     }
   },
   methods: {
@@ -225,54 +225,54 @@ export default {
       this.form = {
         approved: this.currentElementDetails ? this.currentElementDetails.approved : null,
         reason: this.currentElementDetails ? this.currentElementDetails.reason : ''
-      };
+      }
     },
     dateFormat (row, column, value) {
-      return format(value, 'YYYY-MM-DD HH:mm');
+      return format(value, 'YYYY-MM-DD HH:mm')
     },
     cancel () {
-      this.visible = null;
+      this.visible = null
       if (this.mini) {
-        this.goToCountryAdmin();
+        this.goToCountryAdmin()
       }
     },
     goToProject () {
-      this.mini = true;
-      const id = this.currentElementDetails.project;
-      const path = this.localePath({ name: 'organisation-projects-id-published', params: { ...this.$route.params, id } });
-      this.$router.push(path);
+      this.mini = true
+      const id = this.currentElementDetails.project
+      const path = this.localePath({ name: 'organisation-projects-id-published', params: { ...this.$route.params, id } })
+      this.$router.push(path)
     },
     goToCountryAdmin () {
-      this.mini = false;
-      const path = this.localePath({ name: 'organisation-admin-country', params: this.$route.params });
-      this.$router.push(path);
+      this.mini = false
+      const path = this.localePath({ name: 'organisation-admin-country', params: this.$route.params })
+      this.$router.push(path)
     },
     apply () {
       this.$refs.approvalForm.validate(async valid => {
         if (valid) {
           try {
-            await this.updateProjectApproval(this.form);
-            this.visible = null;
+            await this.updateProjectApproval(this.form)
+            this.visible = null
             if (this.mini) {
-              this.goToCountryAdmin();
+              this.goToCountryAdmin()
             }
           } catch (e) {
-            console.log(e);
+            console.log(e)
             this.$alert(
               this.$gettext('An error occured while saving the data'),
               this.$gettext('Warning'),
               {
                 confirmButtonText: this.$gettext('Ok')
               }
-            );
+            )
           }
         } else {
-          this.$message.error(this.$gettext('Please fill all the required fields'));
+          this.$message.error(this.$gettext('Please fill all the required fields'))
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="less">

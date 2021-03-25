@@ -3,7 +3,7 @@
     <p><translate>Table of Contents</translate></p>
     <ul>
       <li
-        v-for="(item, i) in items"
+        v-for="item in items"
         :key="item.id"
         :class="{ selected: item.id === selected }"
         @click="$emit('click', item.id)"
@@ -20,22 +20,22 @@ export default {
   props: {
     items: {
       type: Array,
-      required: true,
+      required: true
     },
     selected: {
       type: String,
-      required: true,
+      required: true
     },
     sticky: {
       type: Boolean,
-      default: false,
-    },
-  },
-};
+      default: false
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
+@import '~assets/style/variables.less';
 nav {
   p {
     text-transform: uppercase;
@@ -66,7 +66,7 @@ nav {
       }
       &.selected {
         &::before {
-          content: "\2014";
+          content: '\2014';
         }
         font-weight: 700;
         cursor: default;

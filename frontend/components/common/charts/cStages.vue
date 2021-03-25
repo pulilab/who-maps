@@ -1,6 +1,10 @@
 <template>
   <section>
-    <chart :chart-data="chartData" :options="options" class="graph__line" />
+    <chart
+      :chart-data="chartData"
+      :options="options"
+      class="graph__line"
+    />
     <section class="graph__legend">
       <ul class="legend">
         <li><translate>Legend:</translate></li>
@@ -30,41 +34,41 @@
         </li>
       </ul>
       <p>
-        <translate
-          >The date under a stage represents when that stage was
-          completed.</translate
-        >
+        <translate>
+          The date under a stage represents when that stage was
+          completed.
+        </translate>
       </p>
     </section>
   </section>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import Chart from "@/components/common/charts/Chart";
+import { mapState, mapActions } from 'vuex'
+import Chart from '@/components/common/charts/Chart'
 
 export default {
   components: {
-    Chart,
+    Chart
   },
   computed: {
     ...mapState({
       chartData: (state) => state.charts.stages.chartData,
       options: (state) => state.charts.stages.options,
-      stagesDraft: (state) => state.project.stagesDraft,
-    }),
+      stagesDraft: (state) => state.project.stagesDraft
+    })
   },
-  async mounted() {
-    await this.loadStagesDraft();
-    this.getStageData(this.stagesDraft);
+  async mounted () {
+    await this.loadStagesDraft()
+    this.getStageData(this.stagesDraft)
   },
   methods: {
     ...mapActions({
-      getStageData: "charts/getStageData",
-      loadStagesDraft: "project/loadStagesDraft",
-    }),
-  },
-};
+      getStageData: 'charts/getStageData',
+      loadStagesDraft: 'project/loadStagesDraft'
+    })
+  }
+}
 </script>
 
 <style lang="less" scoped>

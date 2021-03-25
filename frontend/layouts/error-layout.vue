@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import HeadMixin from '@/layouts/HeadMixin';
-import DhaFooter from '../components/common/DhaFooter.vue';
-import TopBar from '../components/common/TopBar.vue';
-import DialogsContainer from '../components/dialogs/DialogsContainer.vue';
-import DjangoFeedback from '../components/DjangoFeedback.vue';
+import HeadMixin from '@/layouts/HeadMixin'
+import DhaFooter from '../components/common/DhaFooter.vue'
+import TopBar from '../components/common/TopBar.vue'
+import DialogsContainer from '../components/dialogs/DialogsContainer.vue'
+import DjangoFeedback from '../components/DjangoFeedback.vue'
 
 export default {
   components: {
@@ -26,12 +26,12 @@ export default {
   computed: {
     layoutClass () {
       if (this.$route.params.organisation !== '-') {
-        return 'CountryDonorLandingPage';
+        return 'CountryDonorLandingPage'
       }
-      return 'SubPage';
+      return 'SubPage'
     }
   }
-};
+}
 </script>
 
 <style lang="less">

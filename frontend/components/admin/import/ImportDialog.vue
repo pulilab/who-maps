@@ -187,14 +187,14 @@
 </template>
 
 <script>
-import OrganisationSelect from '@/components/common/OrganisationSelect';
-import PlatformSelector from '@/components/project/PlatformSelector';
-import HisBucketSelector from '@/components/project/HisBucketSelector';
-import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector';
-import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector';
-import DigitalHealthInterventionsFilter from '@/components/dialogs/filters/DigitalHealthInterventionsFilter';
-import StandardsSelector from '@/components/project/StandardsSelector';
-import LicenseSelector from '@/components/project/LicenseSelector';
+import OrganisationSelect from '@/components/common/OrganisationSelect'
+import PlatformSelector from '@/components/project/PlatformSelector'
+import HisBucketSelector from '@/components/project/HisBucketSelector'
+import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector'
+import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector'
+import DigitalHealthInterventionsFilter from '@/components/dialogs/filters/DigitalHealthInterventionsFilter'
+import StandardsSelector from '@/components/project/StandardsSelector'
+import LicenseSelector from '@/components/project/LicenseSelector'
 
 export default {
   components: {
@@ -224,15 +224,15 @@ export default {
   data () {
     return {
       dialogData: null
-    };
+    }
   },
   computed: {
     dialogVisible: {
       get () {
-        return !!this.dialogData;
+        return !!this.dialogData
       },
       set () {
-        this.dialogData = null;
+        this.dialogData = null
       }
     },
     dialogStyle () {
@@ -240,12 +240,12 @@ export default {
         top: this.dialogData.column === 'digitalHealthInterventions' ? '10vh' : undefined,
         width: this.dialogData.column === 'digitalHealthInterventions' ? '90vw' : '50%',
         className: ['ImportDialog', this.dialogData.column].join(' ')
-      };
+      }
     }
   },
   methods: {
     openDialog (row, key, { column, value, type }) {
-      const stringified = JSON.stringify(value);
+      const stringified = JSON.stringify(value)
       this.dialogData = {
         row,
         key,
@@ -253,14 +253,14 @@ export default {
         value: value ? JSON.parse(stringified) : null,
         original: this.imported[row].original_data[key],
         customField: this.customFieldsLib[type]
-      };
+      }
     },
     save () {
-      this.$emit('update', { row: this.dialogData.row, key: this.dialogData.key, value: this.dialogData.value });
-      this.dialogData = null;
+      this.$emit('update', { row: this.dialogData.row, key: this.dialogData.key, value: this.dialogData.value })
+      this.dialogData = null
     }
   }
-};
+}
 </script>
 
 <style lang="less">

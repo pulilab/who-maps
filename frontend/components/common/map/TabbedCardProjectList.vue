@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import ProjectCard from '../ProjectCard';
+import ProjectCard from '../ProjectCard'
 
 export default {
   components: {
@@ -72,37 +72,37 @@ export default {
       immediate: true,
       handler (value) {
         if (value) {
-          this.setStripeSize();
+          this.setStripeSize()
         }
       }
     }
   },
   methods: {
     tabChangeHandler (value) {
-      this.$emit('change', value);
+      this.$emit('change', value)
     },
     setStripeSize () {
       this.$nextTick(() => {
         try {
-          const stripe = this.$el.querySelector('.el-tabs__active-bar');
-          const tabName = this.$el.querySelector('.el-tabs__item.is-active');
-          const tabNameBox = tabName.getBoundingClientRect();
-          const tabsContainer = this.$el.querySelector('.el-tabs__nav-scroll').getBoundingClientRect();
-          const stripeLeftCorner = tabNameBox.left - tabsContainer.left;
-          const paddingLeft = parseInt(getComputedStyle(tabName).paddingLeft, 10);
-          const paddingRight = parseInt(getComputedStyle(tabName).paddingRight, 10);
-          const padding = paddingLeft > paddingRight ? paddingLeft : paddingRight;
-          const stripeWidth = tabNameBox.width - padding;
-          const stripeTranslate = stripeLeftCorner === 0 ? 0 : stripeLeftCorner + paddingLeft;
-          stripe.style.width = `${stripeWidth}px`;
-          stripe.style.transform = `translate(${stripeTranslate}px)`;
+          const stripe = this.$el.querySelector('.el-tabs__active-bar')
+          const tabName = this.$el.querySelector('.el-tabs__item.is-active')
+          const tabNameBox = tabName.getBoundingClientRect()
+          const tabsContainer = this.$el.querySelector('.el-tabs__nav-scroll').getBoundingClientRect()
+          const stripeLeftCorner = tabNameBox.left - tabsContainer.left
+          const paddingLeft = parseInt(getComputedStyle(tabName).paddingLeft, 10)
+          const paddingRight = parseInt(getComputedStyle(tabName).paddingRight, 10)
+          const padding = paddingLeft > paddingRight ? paddingLeft : paddingRight
+          const stripeWidth = tabNameBox.width - padding
+          const stripeTranslate = stripeLeftCorner === 0 ? 0 : stripeLeftCorner + paddingLeft
+          stripe.style.width = `${stripeWidth}px`
+          stripe.style.transform = `translate(${stripeTranslate}px)`
         } catch (e) {
-          console.error('Failed to calculate strip lenght', e);
+          console.error('Failed to calculate strip lenght', e)
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style>

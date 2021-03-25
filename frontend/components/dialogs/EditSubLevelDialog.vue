@@ -48,14 +48,14 @@
 </template>
 
 <script>
-import { mapGettersActions } from '@/utilities/form.js';
-import union from 'lodash/union';
+import { mapGettersActions } from '@/utilities/form.js'
+import union from 'lodash/union'
 
 export default {
   data () {
     return {
       localValue: {}
-    };
+    }
   },
   computed: {
     ...mapGettersActions({
@@ -63,21 +63,21 @@ export default {
     }),
     visible: {
       get () {
-        return !!this.model;
+        return !!this.model
       },
       set () {
-        this.model = null;
+        this.model = null
       }
     },
     editableKeys () {
-      const basic = ['name:fr', 'name:pt', 'name:es', 'name:ar'];
-      let filtered;
+      const basic = ['name:fr', 'name:pt', 'name:es', 'name:ar']
+      let filtered
       if (this.model) {
-        filtered = Object.keys(this.model.item).filter(k => k.includes('name'));
+        filtered = Object.keys(this.model.item).filter(k => k.includes('name'))
       } else {
-        filtered = [];
+        filtered = []
       }
-      return union(basic, filtered);
+      return union(basic, filtered)
     }
   },
   watch: {
@@ -86,18 +86,18 @@ export default {
       deep: true,
       handler (value) {
         if (value) {
-          this.localValue = { ...value.item };
+          this.localValue = { ...value.item }
         }
       }
     }
   },
   methods: {
     save () {
-      this.model.callback(this.localValue);
-      this.visible = false;
+      this.model.callback(this.localValue)
+      this.visible = false
     }
   }
-};
+}
 </script>
 
 <style>

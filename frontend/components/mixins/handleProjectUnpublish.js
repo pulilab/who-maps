@@ -1,4 +1,4 @@
-import { mapActions } from 'vuex';
+import { mapActions } from 'vuex'
 
 const handleProjectUnpublish = {
   methods: {
@@ -12,23 +12,23 @@ const handleProjectUnpublish = {
           confirmButtonText: this.$gettext('Ok'),
           cancelButtonText: this.$gettext('Cancel'),
           type: 'warning'
-        });
-        await this.unpublishProject(id);
-        const localised = this.localePath(destination);
-        this.$router.push(localised);
+        })
+        await this.unpublishProject(id)
+        const localised = this.localePath(destination)
+        this.$router.push(localised)
         this.$message({
           type: 'success',
           message: this.$gettext('The project has been unpublish')
-        });
+        })
       } catch (e) {
-        this.setLoading(false);
+        this.setLoading(false)
         this.$message({
           type: 'info',
           message: this.$gettext('Action cancelled')
-        });
+        })
       }
     }
   }
-};
+}
 
-export default handleProjectUnpublish;
+export default handleProjectUnpublish

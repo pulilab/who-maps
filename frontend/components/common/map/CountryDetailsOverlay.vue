@@ -29,10 +29,10 @@
 </template>
 
 <script>
-import SubLevelMarker from './SubLevelMarker';
-import CountryCenterMarker from './CountryCenterMarker';
-import GeoJsonLayer from './GeoJsonLayer';
-import { mapGetters } from 'vuex';
+import SubLevelMarker from './SubLevelMarker'
+import CountryCenterMarker from './CountryCenterMarker'
+import GeoJsonLayer from './GeoJsonLayer'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -82,7 +82,7 @@ export default {
     return {
       markerIcons: {},
       countryCenterIcon: {}
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -90,39 +90,39 @@ export default {
     }),
     subLevelPinsAndMapReady () {
       if (this.subLevelPins && this.mapReady) {
-        return this.subLevelPins;
+        return this.subLevelPins
       }
-      return undefined;
+      return undefined
     },
     activeSubLevelPinsAndMapReady () {
       if (this.activeSubLevel && this.mapReady) {
-        return this.activeSubLevel;
+        return this.activeSubLevel
       }
-      return undefined;
+      return undefined
     },
     nationalLevelCoverageAndNationalProjects () {
       if (this.nationalLevelCoverage && this.nationalProjects) {
-        return this.nationalProjects;
+        return this.nationalProjects
       }
-      return undefined;
+      return undefined
     }
   },
   watch: {
     subLevelPinsAndMapReady: {
       immdieate: true,
       handler (pins) {
-        this.iconsGenerator();
-        this.countryCenterIcon = this.countryCenterIconGenerator();
+        this.iconsGenerator()
+        this.countryCenterIcon = this.countryCenterIconGenerator()
       }
     },
     activeSubLevelPinsAndMapReady: {
       immdieate: true,
       handler (subLevel, old) {
         if (old) {
-          this.markerIcons[old] = this.iconGenerator(old, false);
+          this.markerIcons[old] = this.iconGenerator(old, false)
         }
         if (subLevel) {
-          this.markerIcons[subLevel] = this.iconGenerator(subLevel, true);
+          this.markerIcons[subLevel] = this.iconGenerator(subLevel, true)
         }
       }
     },
@@ -130,75 +130,75 @@ export default {
       immediate: false,
       handler () {
         if (!this.nationalLevelCoverage) {
-          this.iconsGenerator();
+          this.iconsGenerator()
         }
       }
     },
     nationalLevelCoverageAndNationalProjects: {
       immediate: false,
       handler () {
-        this.countryCenterIcon = this.countryCenterIconGenerator();
+        this.countryCenterIcon = this.countryCenterIconGenerator()
       }
     }
   },
   mounted () {
     if (this.mapReady) {
-      this.iconsGenerator();
-      this.countryCenterIcon = this.countryCenterIconGenerator();
+      this.iconsGenerator()
+      this.countryCenterIcon = this.countryCenterIconGenerator()
     }
   },
   methods: {
     activeCountryUpdateHanlder (country) {
-      this.$emit('update:activeCountry', country);
+      this.$emit('update:activeCountry', country)
     },
     iconGenerator (id, isActive) {
-      const subLevel = this.getSubLevelDetails(id);
-      let amount = 0;
+      const subLevel = this.getSubLevelDetails(id)
+      let amount = 0
       if (this.subNationalProjects && subLevel) {
-        const filtered = this.subNationalProjects.filter(sn => sn.coverage.some(c => c.district === id || c.district === subLevel.name));
-        amount = filtered ? filtered.length : 0;
+        const filtered = this.subNationalProjects.filter(sn => sn.coverage.some(c => c.district === id || c.district === subLevel.name))
+        amount = filtered ? filtered.length : 0
       }
 
-      const markerClasses = ['DistrictCenterIcon'];
+      const markerClasses = ['DistrictCenterIcon']
       if (isActive) {
-        markerClasses.push('ActiveDistrict');
+        markerClasses.push('ActiveDistrict')
       }
       if (amount === 0) {
-        markerClasses.push('EmptyMarker');
+        markerClasses.push('EmptyMarker')
       }
       return L.divIcon({
         className: markerClasses.join(' '),
         html: `<span>${amount}</span>`,
         iconSize: [27, 44],
         iconAnchor: [13.5, 44]
-      });
+      })
     },
     iconsGenerator () {
-      const icons = {};
+      const icons = {}
       this.subLevelPins.forEach(cp => {
-        icons[cp.id] = this.iconGenerator(cp.id);
-      });
-      this.markerIcons = icons;
+        icons[cp.id] = this.iconGenerator(cp.id)
+      })
+      this.markerIcons = icons
     },
     countryCenterIconGenerator () {
-      const projects = this.nationalProjects.length;
-      const markerClasses = ['CountryCenterIcon', 'ActiveCountry'];
+      const projects = this.nationalProjects.length
+      const markerClasses = ['CountryCenterIcon', 'ActiveCountry']
       if (projects === 0) {
-        markerClasses.push('EmptyMarker');
+        markerClasses.push('EmptyMarker')
       }
       return L.divIcon({
         className: markerClasses.join(' '),
         html: `<span>${projects}</span>`,
         iconSize: [27, 44],
         iconAnchor: [13.5, 44]
-      });
+      })
     },
     markerClickHandler (id) {
-      this.$emit('update:activeCountry', this.selectedCountry);
-      this.$emit('update:activeSubLevel', id);
+      this.$emit('update:activeCountry', this.selectedCountry)
+      this.$emit('update:activeSubLevel', id)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

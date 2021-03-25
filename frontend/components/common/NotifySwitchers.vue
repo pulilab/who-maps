@@ -40,7 +40,7 @@
 <script>
 /* eslint-disable vue/prop-name-casing */
 
-import FilterSwitch from '~/components/dashboard/FilterSwitch';
+import FilterSwitch from '~/components/dashboard/FilterSwitch'
 export default {
   components: {
     FilterSwitch
@@ -66,10 +66,10 @@ export default {
     hideAdminNotifications () {
       return (this.project_updates_notification === undefined &&
         this.project_approval_request_notification === undefined &&
-        this.role_request_notification === undefined);
+        this.role_request_notification === undefined)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

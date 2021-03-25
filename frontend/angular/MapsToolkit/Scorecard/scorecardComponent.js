@@ -1,5 +1,5 @@
-import _template from './Scorecard.html';
-import ScorecardController from './ScorecardController';
+import _template from './Scorecard.html'
+import ScorecardController from './ScorecardController'
 
 const scorecardComponent = {
   controller: ScorecardController.scorecardFactory(),
@@ -10,6 +10,6 @@ const scorecardComponent = {
     summary: '@',
     viewMode: '@'
   }
-};
+}
 
-export default scorecardComponent;
+export default scorecardComponent

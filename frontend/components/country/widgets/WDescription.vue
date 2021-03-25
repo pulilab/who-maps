@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import chunk from 'lodash/chunk';
+import chunk from 'lodash/chunk'
 
 export default {
   name: 'WDescription',
@@ -38,32 +38,32 @@ export default {
   },
   computed: {
     dynamicDesc () {
-      const len = this.description.length;
+      const len = this.description.length
       if (len > 800) {
-        const words = this.description.split(' ');
+        const words = this.description.split(' ')
         const splitStr = chunk(words, Math.ceil(words.length / 3)).map(i =>
           i.join(' ')
-        );
+        )
         return splitStr.map(i => {
-          return { description: i, span: 8 };
-        });
+          return { description: i, span: 8 }
+        })
       }
-      return [{ description: this.description, span: 24 }];
+      return [{ description: this.description, span: 24 }]
     }
   },
   methods: {
     chunkString (str, len) {
-      const size = Math.ceil(str.length / len);
-      const r = Array(size);
-      let offset = 0;
+      const size = Math.ceil(str.length / len)
+      const r = Array(size)
+      let offset = 0
 
       for (let i = 0; i < size; i++) {
-        r[i] = str.substr(offset, len);
-        offset += len;
+        r[i] = str.substr(offset, len)
+        offset += len
       }
 
-      return r;
+      return r
     }
   }
-};
+}
 </script>

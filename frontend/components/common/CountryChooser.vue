@@ -105,14 +105,14 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data () {
     return {
       search: '',
       chooserOpen: false
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -121,20 +121,20 @@ export default {
     }),
     countryFlag () {
       if (this.landingData) {
-        return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
+        return `/static/flags/${this.landingData.code.toLowerCase()}.png`
       }
-      return false;
+      return false
     },
     filteredCountries () {
       return this.countries.filter(country => {
-        return country.id !== process.env.GlobalCountryID && country.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
-      });
+        return country.id !== process.env.GlobalCountryID && country.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+      })
     },
     displayListHeight () {
       if (this.filteredCountries.length > 9) {
-        return 306;
+        return 306
       }
-      return (this.filteredCountries.length + 1) * 34;
+      return (this.filteredCountries.length + 1) * 34
     }
   },
   methods: {
@@ -142,23 +142,23 @@ export default {
       setProjectBoxActiveGlobalTab: 'landing/setProjectBoxActiveGlobalTab'
     }),
     getCountryFlag (code) {
-      return `/static/flags/${code.toLowerCase()}.png`;
+      return `/static/flags/${code.toLowerCase()}.png`
     },
     selectCountry (country) {
-      this.chooserOpen = false;
-      this.setProjectBoxActiveGlobalTab(false);
-      const organisation = country ? country.code.toLowerCase() : '-';
-      const localised = this.localePath({ name: 'organisation', params: { organisation } });
-      this.$router.push(localised);
+      this.chooserOpen = false
+      this.setProjectBoxActiveGlobalTab(false)
+      const organisation = country ? country.code.toLowerCase() : '-'
+      const localised = this.localePath({ name: 'organisation', params: { organisation } })
+      this.$router.push(localised)
     },
     active (code) {
       if (!this.landingData) {
-        return !code;
+        return !code
       }
-      return code === this.landingData.code;
+      return code === this.landingData.code
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

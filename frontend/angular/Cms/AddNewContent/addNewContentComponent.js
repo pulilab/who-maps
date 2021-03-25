@@ -1,5 +1,5 @@
-import AddNewContentController from './AddNewContentController';
-import _template from './AddNewContent.html';
+import AddNewContentController from './AddNewContentController'
+import _template from './AddNewContent.html'
 
 const component = {
   template: _template,
@@ -9,6 +9,6 @@ const component = {
   bindings: {
     toEdit: '<?'
   }
-};
+}
 
-export default component;
+export default component

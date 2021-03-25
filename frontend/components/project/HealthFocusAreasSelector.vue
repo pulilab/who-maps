@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import uniqBy from 'lodash/uniqBy';
-import { mapGetters } from 'vuex';
+import uniqBy from 'lodash/uniqBy'
+import { mapGetters } from 'vuex'
 
 export default {
   model: {
@@ -41,7 +41,7 @@ export default {
   data () {
     return {
       open: false
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -50,18 +50,18 @@ export default {
   },
   methods: {
     uniq (obj) {
-      return uniqBy(obj, 'id');
+      return uniqBy(obj, 'id')
     },
     changeHandler (value) {
-      this.$emit('change', value);
+      this.$emit('change', value)
     },
     toggleHandler (value) {
       if (value) {
-        this.open = value;
+        this.open = value
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less">

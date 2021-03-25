@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import { mapGettersActions } from '../../utilities/form.js';
-import CountrySelect from '@/components/common/CountrySelect';
-import RegionSelect from '@/components/common/RegionSelect';
-import StageSelect from '@/components/common/StageSelect';
+import { mapGettersActions } from '../../utilities/form.js'
+import CountrySelect from '@/components/common/CountrySelect'
+import RegionSelect from '@/components/common/RegionSelect'
+import StageSelect from '@/components/common/StageSelect'
 
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -47,24 +47,24 @@ export default {
       selectedStages: ['dashboard', 'getFilteredStages', 'setFilteredStages']
     }),
     disableCountries () {
-      return !!this.selectedRegion || this.dashboardType === 'country' || this.selectedGlobal;
+      return !!this.selectedRegion || this.dashboardType === 'country' || this.selectedGlobal
     },
     disableRegions () {
-      return this.selectedCountries.length > 0 || this.dashboardType === 'country' || this.selectedGlobal;
+      return this.selectedCountries.length > 0 || this.dashboardType === 'country' || this.selectedGlobal
     },
     disableStages () {
-      return false;
+      return false
     },
     selectedGlobal: {
       set (val) {
-        this.selectedCountries = val ? [process.env.GlobalCountryID] : [];
+        this.selectedCountries = val ? [process.env.GlobalCountryID] : []
       },
       get () {
-        return this.selectedCountries.length > 0 && this.selectedCountries[0] === process.env.GlobalCountryID;
+        return this.selectedCountries.length > 0 && this.selectedCountries[0] === process.env.GlobalCountryID
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less">

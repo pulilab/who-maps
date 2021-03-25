@@ -1,5 +1,5 @@
-import CommentWidgetController from './CommentWidgetController';
-import _template from './CommentWidget.html';
+import CommentWidgetController from './CommentWidgetController'
+import _template from './CommentWidget.html'
 
 const component = {
   template: _template,
@@ -10,6 +10,6 @@ const component = {
     comment: '<',
     type: '<'
   }
-};
+}
 
-export default component;
+export default component

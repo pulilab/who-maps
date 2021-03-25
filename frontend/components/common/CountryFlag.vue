@@ -20,18 +20,18 @@ export default {
   computed: {
     countryFlagUrl () {
       if (this.isGlobal) {
-        return '/who-logo-small.svg';
+        return '/who-logo-small.svg'
       }
       if (this.code) {
-        return `/static/flags/${this.code.toLowerCase()}.png`;
+        return `/static/flags/${this.code.toLowerCase()}.png`
       }
-      return null;
+      return null
     },
     isGlobal () {
-      return this.code === '00';
+      return this.code === '00'
     }
   }
-};
+}
 </script>
 
 <style lang="less">

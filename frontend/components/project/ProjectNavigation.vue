@@ -1,9 +1,21 @@
 <template>
-  <div v-scroll-class:FixedNavigation="266" class="ProjectNavigation">
+  <div
+    v-scroll-class:FixedNavigation="266"
+    class="ProjectNavigation"
+  >
     <el-card :body-style="{ padding: '0px' }">
-      <div v-if="!isNewProject" class="SwitchProjectStatus">
-        <el-row type="flex" justify="space-between" align="middle">
-          <div class="SwitchLabel">Switch view:</div>
+      <div
+        v-if="!isNewProject"
+        class="SwitchProjectStatus"
+      >
+        <el-row
+          type="flex"
+          justify="space-between"
+          align="middle"
+        >
+          <div class="SwitchLabel">
+            Switch view:
+          </div>
           <el-button-group class="SwitchButtons">
             <el-button
               :class="['DraftButton', { Active: isDraft || isReadOnlyDraft }]"
@@ -29,7 +41,10 @@
       <div class="Stepper">
         <ul>
           <li :class="{ active: active === 'general' }">
-            <el-button type="text" @click="scrollTo('general')">
+            <el-button
+              type="text"
+              @click="scrollTo('general')"
+            >
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -37,7 +52,10 @@
             </el-button>
           </li>
           <li :class="{ active: active === 'implementation' }">
-            <el-button type="text" @click="scrollTo('implementation')">
+            <el-button
+              type="text"
+              @click="scrollTo('implementation')"
+            >
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -45,7 +63,10 @@
             </el-button>
           </li>
           <li :class="{ active: active === 'stages' }">
-            <el-button type="text" @click="scrollTo('stages')">
+            <el-button
+              type="text"
+              @click="scrollTo('stages')"
+            >
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -53,7 +74,10 @@
             </el-button>
           </li>
           <li :class="{ active: active === 'technology' }">
-            <el-button type="text" @click="scrollTo('technology')">
+            <el-button
+              type="text"
+              @click="scrollTo('technology')"
+            >
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -61,7 +85,10 @@
             </el-button>
           </li>
           <li :class="{ active: active === 'interoperability' }">
-            <el-button type="text" @click="scrollTo('interoperability')">
+            <el-button
+              type="text"
+              @click="scrollTo('interoperability')"
+            >
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -72,7 +99,10 @@
             v-show="showCountryFieldsLink"
             :class="{ active: active === 'countrycustom' }"
           >
-            <el-button type="text" @click="scrollTo('countrycustom')">
+            <el-button
+              type="text"
+              @click="scrollTo('countrycustom')"
+            >
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -83,7 +113,10 @@
             v-show="showDonorFieldsLink"
             :class="{ active: active === 'donorcustom' }"
           >
-            <el-button type="text" @click="scrollTo('donorcustom')">
+            <el-button
+              type="text"
+              @click="scrollTo('donorcustom')"
+            >
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -93,7 +126,10 @@
         </ul>
       </div>
 
-      <div v-if="isTeam || isNewProject" class="NavigationActions">
+      <div
+        v-if="isTeam || isNewProject"
+        class="NavigationActions"
+      >
         <el-button
           v-if="isDraft"
           :disabled="!!loading"
@@ -101,7 +137,11 @@
           size="medium"
           @click="$emit('publishProject')"
         >
-          <fa v-show="loading === 'publish'" icon="spinner" spin />
+          <fa
+            v-show="loading === 'publish'"
+            icon="spinner"
+            spin
+          />
           <translate>Publish</translate>
         </el-button>
 
@@ -113,7 +153,11 @@
           :disabled="!!loading"
           @click="$emit('saveDraft')"
         >
-          <fa v-show="loading === 'draft'" icon="spinner" spin />
+          <fa
+            v-show="loading === 'draft'"
+            icon="spinner"
+            spin
+          />
           <translate>Save draft</translate>
         </el-button>
 
@@ -124,7 +168,11 @@
           class="DiscardDraft DeleteButton"
           @click="$emit('discardDraft')"
         >
-          <fa v-show="loading === 'discard'" icon="spinner" spin />
+          <fa
+            v-show="loading === 'discard'"
+            icon="spinner"
+            spin
+          />
           <translate>Discard draft</translate>
         </el-button>
 
@@ -135,7 +183,11 @@
           size="medium"
           @click="$emit('handleClickUnPublish')"
         >
-          <fa v-show="loading === 'unpublish'" icon="spinner" spin />
+          <fa
+            v-show="loading === 'unpublish'"
+            icon="spinner"
+            spin
+          />
           <translate>Unpublish</translate>
         </el-button>
 
@@ -165,155 +217,155 @@
 </template>
 
 <script>
-import VueScrollClass from "vue-scroll-class";
-import { mapGetters } from "vuex";
+import VueScrollClass from 'vue-scroll-class'
+import { mapGetters } from 'vuex'
 
 export default {
   directives: {
-    "scroll-class": VueScrollClass,
+    'scroll-class': VueScrollClass
   },
   computed: {
     ...mapGetters({
-      loading: "project/getLoading",
-      user: "user/getProfile",
-      getCountryDetails: "countries/getCountryDetails",
-      getDonorDetails: "system/getDonorDetails",
-      draft: "project/getProjectData",
-      published: "project/getPublished",
-      getShadowDonors: "project/getShadowDonors",
+      loading: 'project/getLoading',
+      user: 'user/getProfile',
+      getCountryDetails: 'countries/getCountryDetails',
+      getDonorDetails: 'system/getDonorDetails',
+      draft: 'project/getProjectData',
+      published: 'project/getPublished',
+      getShadowDonors: 'project/getShadowDonors'
     }),
-    active() {
-      const hash = this.$route.hash;
-      return hash ? hash.replace("#", "") : "general";
+    active () {
+      const hash = this.$route.hash
+      return hash ? hash.replace('#', '') : 'general'
     },
-    route() {
-      return this.$route.name.split("__")[0];
+    route () {
+      return this.$route.name.split('__')[0]
     },
-    isNewProject() {
-      return this.route === "organisation-projects-create";
+    isNewProject () {
+      return this.route === 'organisation-projects-create'
     },
-    isPublished() {
-      return this.route === "organisation-projects-id-published";
+    isPublished () {
+      return this.route === 'organisation-projects-id-published'
     },
-    isDraft() {
-      return this.route === "organisation-projects-id-edit";
+    isDraft () {
+      return this.route === 'organisation-projects-id-edit'
     },
-    isReadOnlyDraft() {
-      return this.route === "organisation-projects-id";
+    isReadOnlyDraft () {
+      return this.route === 'organisation-projects-id'
     },
-    anon() {
+    anon () {
       if (this.user) {
         return (
           !this.user.is_superuser &&
           ![...this.user.member, ...this.user.viewer].includes(
             +this.$route.params.id
           )
-        );
+        )
       }
-      return true;
+      return true
     },
-    isTeam() {
+    isTeam () {
       if (this.user) {
         return (
           this.user.is_superuser ||
           this.user.member.includes(+this.$route.params.id)
-        );
+        )
       }
-      return false;
+      return false
     },
-    project() {
+    project () {
       return this.isDraft || this.isReadOnlyDraft || this.isNewProject
         ? this.draft
-        : this.published;
+        : this.published
     },
-    showCountryFieldsLink() {
-      const country = this.getCountryDetails(this.project.country);
+    showCountryFieldsLink () {
+      const country = this.getCountryDetails(this.project.country)
       if (country) {
         return (
           country.country_questions && country.country_questions.length > 0
-        );
+        )
       }
-      return false;
+      return false
     },
-    showDonorFieldsLink() {
+    showDonorFieldsLink () {
       const donors = [
-        ...new Set([...this.project.donors, ...this.getShadowDonors]),
-      ];
+        ...new Set([...this.project.donors, ...this.getShadowDonors])
+      ]
       if (this.project && donors) {
         for (const donor of donors) {
-          const details = this.getDonorDetails(donor);
+          const details = this.getDonorDetails(donor)
           if (
             details &&
             details.donor_questions &&
             details.donor_questions.length > 0
           ) {
-            return true;
+            return true
           }
         }
       }
-      return false;
-    },
+      return false
+    }
   },
-  mounted() {
-    window.addEventListener("resize", this.setNavigationBoxLeftStyle);
-    window.addEventListener("scroll", this.setNavigationBoxLeftStyle);
+  mounted () {
+    window.addEventListener('resize', this.setNavigationBoxLeftStyle)
+    window.addEventListener('scroll', this.setNavigationBoxLeftStyle)
   },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.setNavigationBoxLeftStyle);
-    window.removeEventListener("scroll", this.setNavigationBoxLeftStyle);
+  beforeDestroy () {
+    window.removeEventListener('resize', this.setNavigationBoxLeftStyle)
+    window.removeEventListener('scroll', this.setNavigationBoxLeftStyle)
   },
   methods: {
-    scrollTo(where) {
-      window.location.hash = "";
+    scrollTo (where) {
+      window.location.hash = ''
       this.$nextTick(() => {
-        this.$router.replace(`#${where}`);
-      });
+        this.$router.replace(`#${where}`)
+      })
     },
-    goToDraft() {
+    goToDraft () {
       const name = this.isTeam
-        ? "organisation-projects-id-edit"
-        : "organisation-projects-id";
+        ? 'organisation-projects-id-edit'
+        : 'organisation-projects-id'
       const localised = this.localePath({
         name,
-        params: { ...this.$route.params },
-      });
-      this.$router.push(localised);
+        params: { ...this.$route.params }
+      })
+      this.$router.push(localised)
     },
-    goToPublished() {
+    goToPublished () {
       const localised = this.localePath({
-        name: "organisation-projects-id-published",
-        params: { ...this.$route.params },
-      });
-      this.$router.push(localised);
+        name: 'organisation-projects-id-published',
+        params: { ...this.$route.params }
+      })
+      this.$router.push(localised)
     },
-    goToDashboard() {
+    goToDashboard () {
       const localised = this.localePath({
-        name: "organisation-dashboard",
-        params: { ...this.$route.params },
-      });
-      this.$router.push(localised);
+        name: 'organisation-dashboard',
+        params: { ...this.$route.params }
+      })
+      this.$router.push(localised)
     },
-    setNavigationBoxLeftStyle() {
-      const leftSide = document.querySelector("#general");
-      const lang = this.$nuxt.$i18n.locale;
-      const rtl = lang === "ar";
+    setNavigationBoxLeftStyle () {
+      const leftSide = document.querySelector('#general')
+      const lang = this.$nuxt.$i18n.locale
+      const rtl = lang === 'ar'
 
       if (leftSide) {
         if (rtl) {
-          const generalLeftPos = leftSide.getBoundingClientRect().left;
+          const generalLeftPos = leftSide.getBoundingClientRect().left
           if (generalLeftPos) {
-            this.$el.style.left = `${generalLeftPos - 320}px`;
+            this.$el.style.left = `${generalLeftPos - 320}px`
           }
         } else {
-          const generalRightPos = leftSide.getBoundingClientRect().right;
+          const generalRightPos = leftSide.getBoundingClientRect().right
           if (generalRightPos) {
-            this.$el.style.left = `${generalRightPos + 20}px`;
+            this.$el.style.left = `${generalRightPos + 20}px`
           }
         }
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="less">

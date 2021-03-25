@@ -8,7 +8,7 @@
 export default {
   components: {},
   middleware: []
-};
+}
 </script>
 
 <style>

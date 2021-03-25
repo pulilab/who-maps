@@ -34,9 +34,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
-import UserProjectsList from '../common/UserProjectsList';
+import UserProjectsList from '../common/UserProjectsList'
 export default {
   components: {
     UserProjectsList
@@ -46,7 +46,7 @@ export default {
       userProjecList: 'projects/getUserProjectList'
     })
   }
-};
+}
 </script>
 
 <style lang="less">

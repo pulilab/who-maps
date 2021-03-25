@@ -5,7 +5,10 @@
     </template>
     <template #subtitle>
       <translate>You are viewing the</translate>
-      <tag type="draft" label="draft" />
+      <tag
+        type="draft"
+        label="draft"
+      />
       <translate>version of the project.</translate>
     </template>
     <project-data />
@@ -13,19 +16,19 @@
 </template>
 
 <script>
-import { fetchProjectData } from "@/utilities/projects";
-import ProjectData from "@/components/project/ProjectData";
-import ProjectLayout from "@/components/project/wrappers/ProjectLayout";
-import Tag from "@/components/common/Tag";
+import { fetchProjectData } from '@/utilities/projects'
+import ProjectData from '@/components/project/ProjectData'
+import ProjectLayout from '@/components/project/wrappers/ProjectLayout'
+import Tag from '@/components/common/Tag'
 export default {
-  middleware: ["isLoggedIn"],
   components: {
     ProjectData,
     ProjectLayout,
-    Tag,
+    Tag
   },
-  fetch({ store, params, error }) {
-    return fetchProjectData(store, params, error);
-  },
-};
+  middleware: ['isLoggedIn'],
+  fetch ({ store, params, error }) {
+    return fetchProjectData(store, params, error)
+  }
+}
 </script>

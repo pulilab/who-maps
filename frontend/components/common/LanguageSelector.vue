@@ -20,12 +20,12 @@ export default {
   computed: {
     localesButArabic () {
       if (this.$route.query.ar) {
-        return this.$i18n.locales;
+        return this.$i18n.locales
       }
-      return this.$i18n.locales.filter(la => la.code !== 'ar');
+      return this.$i18n.locales.filter(la => la.code !== 'ar')
     }
   }
-};
+}
 </script>
 
 <style lang="less">

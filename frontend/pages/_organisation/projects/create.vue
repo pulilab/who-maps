@@ -15,16 +15,16 @@
 </template>
 
 <script>
-import ProjectForm from "@/components/project/ProjectForm";
-import ProjectLayout from "@/components/project/wrappers/ProjectLayout";
+import ProjectForm from '@/components/project/ProjectForm'
+import ProjectLayout from '@/components/project/wrappers/ProjectLayout'
 export default {
   components: {
     ProjectForm,
-    ProjectLayout,
+    ProjectLayout
   },
-  middleware: ["isLoggedIn"],
-  async fetch({ store }) {
-    await store.dispatch("project/resetProjectState");
-  },
-};
+  middleware: ['isLoggedIn'],
+  async fetch ({ store }) {
+    await store.dispatch('project/resetProjectState')
+  }
+}
 </script>

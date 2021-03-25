@@ -71,15 +71,15 @@
 
 <script>
 
-import MapMixin from '../mixins/MapMixin';
+import MapMixin from '../mixins/MapMixin'
 
-import NoSSR from 'vue-no-ssr';
-import CountryCenterMarker from '../common/map/CountryCenterMarker';
-import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay';
-import WorldZoomButton from '../common/map/WorldZoomButton';
-import SwitchViewBox from '../common/map/SwitchViewBox';
-import SwitchGlobalBox from '@/components/common/map/SwitchGlobalBox';
-import Spinner from '@/components/common/Spinner';
+import NoSSR from 'vue-no-ssr'
+import CountryCenterMarker from '../common/map/CountryCenterMarker'
+import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay'
+import WorldZoomButton from '../common/map/WorldZoomButton'
+import SwitchViewBox from '../common/map/SwitchViewBox'
+import SwitchGlobalBox from '@/components/common/map/SwitchGlobalBox'
+import Spinner from '@/components/common/Spinner'
 
 export default {
   components: {
@@ -92,7 +92,7 @@ export default {
     Spinner
   },
   mixins: [MapMixin]
-};
+}
 </script>
 
 <style lang="less">

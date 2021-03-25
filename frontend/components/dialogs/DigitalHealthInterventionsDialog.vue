@@ -70,9 +70,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import SelectorDialogColumn from './SelectorDialogColumn';
-import SelectorDialogCategory from './SelectorDialogCategory';
+import { mapGetters, mapActions } from 'vuex'
+import SelectorDialogColumn from './SelectorDialogColumn'
+import SelectorDialogCategory from './SelectorDialogCategory'
 
 export default {
   components: {
@@ -83,7 +83,7 @@ export default {
     return {
       currentSelection: [],
       expand: []
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -94,14 +94,14 @@ export default {
     savedSelection () {
       return this.selectedDHi
         .filter(dhi => dhi.platform === this.selectedPlatform)
-        .map(dhi => dhi.id);
+        .map(dhi => dhi.id)
     },
     visible: {
       get () {
-        return this.selectedPlatform !== null;
+        return this.selectedPlatform !== null
       },
       set () {
-        this.setDigitalHealthInterventionsDialogState(null);
+        this.setDigitalHealthInterventionsDialogState(null)
       }
     }
   },
@@ -113,20 +113,20 @@ export default {
     }),
 
     loadCurrentSelection () {
-      this.currentSelection = [...this.savedSelection];
+      this.currentSelection = [...this.savedSelection]
     },
     clearAll () {
-      this.currentSelection = [];
+      this.currentSelection = []
     },
     cancel () {
-      this.setDigitalHealthInterventionsDialogState(null);
+      this.setDigitalHealthInterventionsDialogState(null)
     },
     handleToggleExpand (category, expand) {
       if (this.expand.includes(category) && !expand) {
-        this.expand = this.expand.filter(val => val !== category);
+        this.expand = this.expand.filter(val => val !== category)
       } else {
         if (expand) {
-          this.expand = [...this.expand, category];
+          this.expand = [...this.expand, category]
         }
       }
     },
@@ -134,15 +134,15 @@ export default {
       const selected = this.currentSelection.map(id => ({
         platform: this.selectedPlatform,
         id
-      }));
+      }))
       const filtered = this.selectedDHi.filter(
         dhi => dhi.platform !== this.selectedPlatform
-      );
-      this.setDigitalHealthInterventions([...filtered, ...selected]);
-      this.setDigitalHealthInterventionsDialogState(null);
+      )
+      this.setDigitalHealthInterventions([...filtered, ...selected])
+      this.setDigitalHealthInterventionsDialogState(null)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

@@ -68,11 +68,11 @@
 </template>
 
 <script>
-import { projectFields } from '@/utilities/projects';
+import { projectFields } from '@/utilities/projects'
 
 const blackList = ['country', 'donors', 'coverage', 'national_level_deployment',
-  'coverageData', 'coverageType', 'coverage_second_level', 'interoperability_links', 'team', 'viewers'];
-const addendumFields = ['clients', 'health_workers', 'facilities', 'sub_level'];
+  'coverageData', 'coverageType', 'coverage_second_level', 'interoperability_links', 'team', 'viewers']
+const addendumFields = ['clients', 'health_workers', 'facilities', 'sub_level']
 export default {
   props: {
     headers: {
@@ -96,7 +96,7 @@ export default {
     return {
       internalValue: null,
       additonalHeader: null
-    };
+    }
   },
   computed: {
     fields () {
@@ -104,33 +104,33 @@ export default {
         ...Object.keys(projectFields()).filter(k => !blackList.includes(k)),
         ...addendumFields,
         ...Object.keys(this.customFieldsLib)
-      ];
+      ]
     },
     notUsedFields () {
-      const selected = this.headers.map(h => h.selected).filter(s => s);
+      const selected = this.headers.map(h => h.selected).filter(s => s)
       return this.fields.filter(f => !selected.includes(f)).map(f => {
         return {
           label: this.nameMapping[f] || f,
           value: f
-        };
-      }).sort((a, b) => a.label.localeCompare(b.label));
+        }
+      }).sort((a, b) => a.label.localeCompare(b.label))
     }
   },
   watch: {
     headers: {
       immediate: true,
       handler (headers) {
-        this.internalValue = headers.map(h => ({ ...h }));
+        this.internalValue = headers.map(h => ({ ...h }))
       }
     },
     additonalHeader: {
       immediate: false,
       handler (column) {
         if (column) {
-          const mappeName = this.nameMapping[column];
-          this.internalValue.push({ selected: column, title: mappeName || column });
-          this.additonalHeader = null;
-          this.columnChange();
+          const mappeName = this.nameMapping[column]
+          this.internalValue.push({ selected: column, title: mappeName || column })
+          this.additonalHeader = null
+          this.columnChange()
         }
       }
     }
@@ -145,28 +145,28 @@ export default {
             confirmButtonText: this.$gettext('OK'),
             cancelButtonText: this.$gettext('Cancel'),
             type: 'warning'
-          });
-        this.$delete(this.internalValue, index);
-        this.columnChange();
+          })
+        this.$delete(this.internalValue, index)
+        this.columnChange()
       } catch (e) {
         this.$message({
           type: 'info',
           message: 'Delete canceled'
-        });
+        })
       }
     },
     availableFields (value) {
       if (value && !this.notUsedFields.some(f => f.value === value)) {
-        return [{ label: this.nameMapping[value] || value, value }, ...this.notUsedFields];
+        return [{ label: this.nameMapping[value] || value, value }, ...this.notUsedFields]
       }
-      return this.notUsedFields;
+      return this.notUsedFields
     },
     async columnChange () {
-      const { data } = await this.$axios.patch(`/api/projects/import/${this.id}/`, { header_mapping: this.internalValue });
-      this.$emit('update:headers', data.header_mapping);
+      const { data } = await this.$axios.patch(`/api/projects/import/${this.id}/`, { header_mapping: this.internalValue })
+      this.$emit('update:headers', data.header_mapping)
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

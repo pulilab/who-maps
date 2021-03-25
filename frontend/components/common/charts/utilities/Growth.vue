@@ -1,6 +1,9 @@
 <template>
   <p :class="`${large ? 'large' : color}`">
-    <i v-if="!large" :class="icon"></i> {{ handleRate(incoming, previous) }}
+    <i
+      v-if="!large"
+      :class="icon"
+    /> {{ handleRate(incoming, previous) }}
   </p>
 </template>
 
@@ -9,47 +12,47 @@ export default {
   props: {
     incoming: {
       type: Number,
-      required: true,
+      required: true
     },
     previous: {
       type: Number,
-      default: 0,
+      default: 0
     },
     large: {
       type: Boolean,
-      default: false,
+      default: false
     },
     absolute: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
-  data() {
+  data () {
     return {
-      icon: "el-icon-minus",
-      color: "neutral",
-    };
+      icon: 'el-icon-minus',
+      color: 'neutral'
+    }
   },
   methods: {
-    handleRate(incoming, previous) {
-      const rate = incoming - previous;
+    handleRate (incoming, previous) {
+      const rate = incoming - previous
       switch (true) {
-        case rate > 0:
-          this.icon = "el-icon-top-right";
-          this.color = "up";
-          return this.absolute ? rate : `+${rate}`;
-        case rate < 0:
-          this.icon = "el-icon-bottom-right";
-          this.color = "down";
-          return this.absolute ? Math.abs(rate) : rate;
-        default:
-          this.icon = "el-icon-minus";
-          this.color = "neutral";
-          return rate;
+      case rate > 0:
+        this.icon = 'el-icon-top-right'
+        this.color = 'up'
+        return this.absolute ? rate : `+${rate}`
+      case rate < 0:
+        this.icon = 'el-icon-bottom-right'
+        this.color = 'down'
+        return this.absolute ? Math.abs(rate) : rate
+      default:
+        this.icon = 'el-icon-minus'
+        this.color = 'neutral'
+        return rate
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

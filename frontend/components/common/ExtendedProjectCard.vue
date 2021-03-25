@@ -112,14 +112,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { format } from 'date-fns';
+import { mapGetters } from 'vuex'
+import { format } from 'date-fns'
 
-import CountryItem from './CountryItem';
-import OrganisationItem from './OrganisationItem';
-import ProjectCardActions from './ProjectCardActions';
-import ProjectLegend from './ProjectLegend';
-import UidPopOver from '@/components/common/UidPopOver';
+import CountryItem from './CountryItem'
+import OrganisationItem from './OrganisationItem'
+import ProjectCardActions from './ProjectCardActions'
+import ProjectLegend from './ProjectLegend'
+import UidPopOver from '@/components/common/UidPopOver'
 
 export default {
   components: {
@@ -140,19 +140,19 @@ export default {
       getUserProjectDetails: 'projects/getUserProjectDetails'
     }),
     project () {
-      return this.getUserProjectDetails(this.id);
+      return this.getUserProjectDetails(this.id)
     },
     projectData () {
-      return this.project.isPublished ? this.project.published : this.project.draft;
+      return this.project.isPublished ? this.project.published : this.project.draft
     },
     donors () {
-      return this.projectData && this.projectData.donors ? this.projectData.donors.length : 0;
+      return this.projectData && this.projectData.donors ? this.projectData.donors.length : 0
     },
     lastChange () {
-      return format(this.projectData.modified, 'DD/MM/YYYY');
+      return format(this.projectData.modified, 'DD/MM/YYYY')
     }
   }
-};
+}
 </script>
 
 <style lang="less">

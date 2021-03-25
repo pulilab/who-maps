@@ -14,8 +14,8 @@
 
 <script>
 
-import SimpleField from './SimpleField';
-import CoverageField from './CoverageField';
+import SimpleField from './SimpleField'
+import CoverageField from './CoverageField'
 
 export default {
   components: {
@@ -42,18 +42,18 @@ export default {
   },
   computed: {
     subLevel () {
-      const level = this.subLevels.find(s => s.id === this.coverage || s.name === this.coverage);
+      const level = this.subLevels.find(s => s.id === this.coverage || s.name === this.coverage)
       if (level) {
-        return level;
+        return level
       }
-      console.error('Misisng sub level, probable corrupt map data');
-      return {};
+      console.error('Misisng sub level, probable corrupt map data')
+      return {}
     },
     localCoverageData () {
-      return this.coverageData[this.coverage];
+      return this.coverageData[this.coverage]
     }
   }
-};
+}
 </script>
 
 <style lang="less">

@@ -9,14 +9,14 @@ export default {
   props: {
     label: {
       type: String,
-      required: true,
+      required: true
     },
     type: {
       type: String,
-      default: "",
-    },
-  },
-};
+      default: ''
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

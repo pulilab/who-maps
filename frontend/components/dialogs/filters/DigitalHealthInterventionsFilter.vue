@@ -42,10 +42,10 @@
 </template>
 
 <script>
-import difference from 'lodash/difference';
-import SelectorDialogColumn from '../SelectorDialogColumn';
-import SelectorDialogCategory from '../SelectorDialogCategory';
-import { mapGetters } from 'vuex';
+import difference from 'lodash/difference'
+import SelectorDialogColumn from '../SelectorDialogColumn'
+import SelectorDialogCategory from '../SelectorDialogCategory'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -69,26 +69,26 @@ export default {
   },
   methods: {
     catSelected (category) {
-      const ids = this.categoryIds(category);
-      return difference(ids, this.selected).length === 0;
+      const ids = this.categoryIds(category)
+      return difference(ids, this.selected).length === 0
     },
     categoryIds (category) {
-      return category.subGroups.map(s => s.id);
+      return category.subGroups.map(s => s.id)
     },
     filterChange (value) {
-      this.$emit('update:selected', [...value]);
+      this.$emit('update:selected', [...value])
     },
     toggleAll (value, category) {
-      const categoryIds = this.categoryIds(category);
-      const filtered = this.selected.filter(s => !categoryIds.includes(s));
+      const categoryIds = this.categoryIds(category)
+      const filtered = this.selected.filter(s => !categoryIds.includes(s))
       if (value) {
-        this.$emit('update:selected', [...filtered, ...categoryIds]);
+        this.$emit('update:selected', [...filtered, ...categoryIds])
       } else {
-        this.$emit('update:selected', filtered);
+        this.$emit('update:selected', filtered)
       }
     }
   }
-};
+}
 </script>
 
 <style>

@@ -69,14 +69,14 @@ export default {
   data () {
     return {
       showTooltip: false
-    };
+    }
   },
   methods: {
     switchChangeHandler (value) {
-      this.$emit('change', value);
+      this.$emit('change', value)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import ListAction from './ListAction';
+import { mapGetters } from 'vuex'
+import ListAction from './ListAction'
 export default {
   components: {
     ListAction
@@ -41,12 +41,12 @@ export default {
       healthSystemChallenges: 'projects/getHscChallenges'
     }),
     selected () {
-      const hscs = this.healthSystemChallenges.reduce((a, c) => [...a, ...c.challenges], []);
-      const result = hscs.filter(hfa => this.value.includes(hfa.id));
-      return this.limit ? result.slice(0, this.limit) : result;
+      const hscs = this.healthSystemChallenges.reduce((a, c) => [...a, ...c.challenges], [])
+      const result = hscs.filter(hfa => this.value.includes(hfa.id))
+      return this.limit ? result.slice(0, this.limit) : result
     }
   }
-};
+}
 </script>
 
 <style lang="less">

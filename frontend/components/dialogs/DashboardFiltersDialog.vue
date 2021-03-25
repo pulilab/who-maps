@@ -106,14 +106,14 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { mapGettersActions } from '../../utilities/form.js';
-import FilterItem from './FilterItem';
-import HealthFocusAreasFilter from './filters/HealthFocusAreaFilter';
-import DigitalHealthInterventionsFilter from './filters/DigitalHealthInterventionsFilter';
-import HealthInformationSystemFilter from './filters/HealthInformationSystemFilter';
-import HealthSystemChallengesFilter from './filters/HealthSystemChallengesFilter';
-import PlatformFilter from './filters/PlatformFilter';
+import { mapGetters, mapActions } from 'vuex'
+import { mapGettersActions } from '../../utilities/form.js'
+import FilterItem from './FilterItem'
+import HealthFocusAreasFilter from './filters/HealthFocusAreaFilter'
+import DigitalHealthInterventionsFilter from './filters/DigitalHealthInterventionsFilter'
+import HealthInformationSystemFilter from './filters/HealthInformationSystemFilter'
+import HealthSystemChallengesFilter from './filters/HealthSystemChallengesFilter'
+import PlatformFilter from './filters/PlatformFilter'
 
 export default {
   components: {
@@ -131,7 +131,7 @@ export default {
       hsc: [],
       his: [],
       platforms: []
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -147,10 +147,10 @@ export default {
     }),
     visible: {
       get () {
-        return this.selectedFilter !== null;
+        return this.selectedFilter !== null
       },
       set () {
-        this.setDashboardFiltersDialogState(null);
+        this.setDashboardFiltersDialogState(null)
       }
     }
   },
@@ -159,34 +159,34 @@ export default {
       setDashboardFiltersDialogState: 'layout/setDashboardFiltersDialogState'
     }),
     loadCurrentSelection () {
-      this.dhi = [...this.selectedDHI];
-      this.hfa = [...this.selectedHFA];
-      this.hsc = [...this.selectedHSC];
-      this.his = [...this.selectedHIS];
-      this.platforms = [...this.selectedPlatforms];
+      this.dhi = [...this.selectedDHI]
+      this.hfa = [...this.selectedHFA]
+      this.hsc = [...this.selectedHSC]
+      this.his = [...this.selectedHIS]
+      this.platforms = [...this.selectedPlatforms]
     },
     clearAll () {
-      this.dhi = [];
-      this.hfa = [];
-      this.hsc = [];
-      this.his = [];
-      this.platforms = [];
+      this.dhi = []
+      this.hfa = []
+      this.hsc = []
+      this.his = []
+      this.platforms = []
     },
     cancel () {
-      this.setDashboardFiltersDialogState(null);
+      this.setDashboardFiltersDialogState(null)
     },
     apply () {
-      this.selectedDHI = this.dhi;
-      this.selectedHFA = this.hfa;
-      this.selectedHSC = this.hsc;
-      this.selectedHIS = this.his;
-      this.selectedPlatforms = this.platforms;
+      this.selectedDHI = this.dhi
+      this.selectedHFA = this.hfa
+      this.selectedHSC = this.hsc
+      this.selectedHIS = this.his
+      this.selectedPlatforms = this.platforms
       this.$nextTick(() => {
-        this.setDashboardFiltersDialogState(null);
-      });
+        this.setDashboardFiltersDialogState(null)
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="less">

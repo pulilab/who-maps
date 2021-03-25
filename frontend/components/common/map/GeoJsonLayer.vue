@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import * as topojson from 'topojson';
+import * as topojson from 'topojson'
 
 export default {
   props: {
@@ -59,35 +59,35 @@ export default {
         color: '#E3793B',
         opacity: 0.8
       }
-    };
+    }
   },
   computed: {
     geoJsonOptions () {
       return {
         style: this.defaultlSubLevelStyle
-      };
+      }
     },
     geoJson () {
-      const topo = this.collection[this.id];
+      const topo = this.collection[this.id]
       if (topo) {
-        const subKey = Object.keys(topo.objects)[0];
-        const geo = topojson.feature(topo, topo.objects[subKey]);
-        geo.id = this.id;
-        return geo;
+        const subKey = Object.keys(topo.objects)[0]
+        const geo = topojson.feature(topo, topo.objects[subKey])
+        geo.id = this.id
+        return geo
       }
-      return null;
+      return null
     },
     geoJsonLoadedAndActiveSubLevel () {
       if (this.geoJsonLoaded && this.activeSubLevel) {
-        return this.activeSubLevel;
+        return this.activeSubLevel
       }
-      return undefined;
+      return undefined
     },
     geoJsonLoadedAndNationalLevelCoverage () {
       if (this.geoJsonLoaded) {
-        return this.nationalLevelCoverage;
+        return this.nationalLevelCoverage
       }
-      return undefined;
+      return undefined
     }
   },
   watch: {
@@ -95,12 +95,12 @@ export default {
       immediate: true,
       handler (id) {
         if (this.id) {
-          this.id = null;
+          this.id = null
           this.$nextTick(() => {
-            this.id = id;
-          });
+            this.id = id
+          })
         } else {
-          this.id = id;
+          this.id = id
         }
       }
     },
@@ -108,7 +108,7 @@ export default {
       immediate: true,
       handler (subLevel) {
         if (subLevel) {
-          this.updateGeoJsonStyle(false, subLevel);
+          this.updateGeoJsonStyle(false, subLevel)
         }
       }
     },
@@ -116,7 +116,7 @@ export default {
       immediate: true,
       handler (nationalLevelCoverage) {
         if (nationalLevelCoverage !== undefined) {
-          this.updateGeoJsonStyle(nationalLevelCoverage, this.activeSubLevel);
+          this.updateGeoJsonStyle(nationalLevelCoverage, this.activeSubLevel)
         }
       }
     }
@@ -124,13 +124,13 @@ export default {
   methods: {
     layerAddHandler (event) {
       if (event && event.layer) {
-        this.geoJsonLoaded = true;
-        this.$root.$emit('map:fit-on', event.layer.getBounds());
+        this.geoJsonLoaded = true
+        this.$root.$emit('map:fit-on', event.layer.getBounds())
       }
     },
     clickHandler (event) {
       if (!this.nationalLevelCoverage && event && event.layer && event.layer.feature && event.layer.feature.properties) {
-        this.$emit('geo-json:click', event.layer.feature.properties.id);
+        this.$emit('geo-json:click', event.layer.feature.properties.id)
       }
     },
     updateGeoJsonStyle (nationalLevelCoverage, subLevel) {
@@ -138,20 +138,20 @@ export default {
         if (this.$refs.geoJson && this.$refs.geoJson.mapObject) {
           this.$refs.geoJson.mapObject.eachLayer((layer) => {
             if (nationalLevelCoverage) {
-              layer.setStyle(this.nationalLevelCoverageStyle);
+              layer.setStyle(this.nationalLevelCoverageStyle)
             } else if (subLevel === layer.feature.properties.id) {
-              layer.setStyle(this.activelSubLevelStyle);
-              layer.bringToFront();
+              layer.setStyle(this.activelSubLevelStyle)
+              layer.bringToFront()
             } else {
-              layer.setStyle(this.defaultlSubLevelStyle);
-              layer.bringToBack();
+              layer.setStyle(this.defaultlSubLevelStyle)
+              layer.bringToBack()
             }
-          });
+          })
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style>

@@ -42,14 +42,23 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import ImportFile from '@/components/admin/import/ImportFile';
-import ImportDetails from '@/components/admin/import/ImportDetails';
+import { mapGetters } from 'vuex'
+import ImportFile from '@/components/admin/import/ImportFile'
+import ImportDetails from '@/components/admin/import/ImportDetails'
 
 export default {
   components: {
     ImportFile,
     ImportDetails
+  },
+  async fetch ({ store }) {
+    await Promise.all([
+      store.dispatch('system/loadDonors'),
+      store.dispatch('countries/loadMapData'),
+      store.dispatch('admin/import/loadQueue'),
+      store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('system/loadStaticData')
+    ])
   },
   computed: {
     ...mapGetters({
@@ -59,30 +68,27 @@ export default {
       dhi: 'projects/getDigitalHealthInterventions'
     })
   },
-  async fetch ({ store }) {
-    await Promise.all([
-      store.dispatch('system/loadDonors'),
-      store.dispatch('countries/loadMapData'),
-      store.dispatch('admin/import/loadQueue'),
-      store.dispatch('projects/loadProjectStructure'),
-      store.dispatch('system/loadStaticData')
-    ]);
-  },
+
   methods: {
     async select ({ id }) {
-      this.$nuxt.$loading.start();
-      await this.$nextTick();
-      this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: id }, query: undefined }));
+      this.$nuxt.$loading.start()
+      await this.$nextTick()
+      this.$router.push(
+        this.localePath({
+          name: 'organisation-admin-import-id',
+          params: { ...this.$route.params, id: id },
+          query: undefined
+        })
+      )
     }
   }
-};
+}
 </script>
 
 <style lang="less">
-.ImportList{
+.ImportList {
   .box-card {
     margin: 12px;
   }
 }
-
 </style>

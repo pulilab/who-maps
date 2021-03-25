@@ -352,22 +352,22 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 
-import CollapsibleCard from '../CollapsibleCard';
-import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector';
-import HealthFocusAreasSelector from '../HealthFocusAreasSelector';
-import HisBucketSelector from '../HisBucketSelector';
-import PlatformSelector from '../PlatformSelector';
-import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector';
-import SubNationalLevelDeployment from '../SubNationalLevelDeployment';
-import AddRmButtons from '../AddRmButtons';
-import CoverageFieldset from '../CoverageFieldset';
-import DonorSelector from '../DonorSelector';
-import Tooltip from '@/components/dashboard/Tooltip';
+import CollapsibleCard from '../CollapsibleCard'
+import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector'
+import HealthFocusAreasSelector from '../HealthFocusAreasSelector'
+import HisBucketSelector from '../HisBucketSelector'
+import PlatformSelector from '../PlatformSelector'
+import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector'
+import SubNationalLevelDeployment from '../SubNationalLevelDeployment'
+import AddRmButtons from '../AddRmButtons'
+import CoverageFieldset from '../CoverageFieldset'
+import DonorSelector from '../DonorSelector'
+import Tooltip from '@/components/dashboard/Tooltip'
 
-import { mapGettersActions } from '../../../utilities/form';
+import { mapGettersActions } from '../../../utilities/form'
 
 export default {
   components: {
@@ -430,48 +430,48 @@ export default {
       get () {
         return this.national_level_deployment
           ? this.national_level_deployment.health_workers
-          : null;
+          : null
       },
       set (value) {
         const coverage = {
           ...this.national_level_deployment,
           health_workers: value
-        };
-        this.national_level_deployment = coverage;
+        }
+        this.national_level_deployment = coverage
       }
     },
     clients: {
       get () {
         return this.national_level_deployment
           ? this.national_level_deployment.clients
-          : null;
+          : null
       },
       set (value) {
-        const coverage = { ...this.national_level_deployment, clients: value };
-        this.national_level_deployment = coverage;
+        const coverage = { ...this.national_level_deployment, clients: value }
+        this.national_level_deployment = coverage
       }
     },
     facilities: {
       get () {
         return this.national_level_deployment
           ? this.national_level_deployment.facilities
-          : null;
+          : null
       },
       set (value) {
         const coverage = {
           ...this.national_level_deployment,
           facilities: value
-        };
-        this.national_level_deployment = coverage;
+        }
+        this.national_level_deployment = coverage
       }
     },
     isGlobalSelected () {
-      return this.country === process.env.GlobalCountryID;
+      return this.country === process.env.GlobalCountryID
     }
   },
   watch: {
     isGlobalSelected () {
-      this.coverageType = 2;
+      this.coverageType = 2
     },
     implementing_partners: {
       immediate: false,
@@ -484,58 +484,58 @@ export default {
             ) {
               this.$refs.implementingPartnersInput[
                 this.$refs.implementingPartnersInput.length - 1
-              ].focus();
+              ].focus()
             }
-          });
+          })
         }
       }
     }
   },
   methods: {
     isLastAndExist (collection, index) {
-      return !!(collection.length - 1 === index && collection[index]);
+      return !!(collection.length - 1 === index && collection[index])
     },
     addDhi () {
-      this.platforms = [...this.platforms, null];
+      this.platforms = [...this.platforms, null]
     },
     rmDhi (index, platformId) {
       if (platformId) {
         const filtered = this.digitalHealthInterventions.filter(
           dhi => dhi.platform !== platformId
-        );
-        this.digitalHealthInterventions = filtered;
+        )
+        this.digitalHealthInterventions = filtered
       }
-      this.platforms = this.platforms.filter((p, i) => i !== index);
+      this.platforms = this.platforms.filter((p, i) => i !== index)
     },
     updateImplmeentingPartners (value, index) {
-      const ip = [...this.implementing_partners];
-      ip[index] = value;
-      this.implementing_partners = ip;
+      const ip = [...this.implementing_partners]
+      ip[index] = value
+      this.implementing_partners = ip
     },
     addImplementingPartners () {
-      const index = this.implementing_partners.length - 1;
+      const index = this.implementing_partners.length - 1
       if (this.isLastAndExist(this.implementing_partners, index)) {
-        this.implementing_partners = [...this.implementing_partners, null];
+        this.implementing_partners = [...this.implementing_partners, null]
       }
     },
     rmImplementingPartners (index) {
       this.implementing_partners = this.implementing_partners.filter(
         (ip, i) => i !== index
-      );
+      )
     },
     async validate () {
-      this.$refs.collapsible.expandCard();
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
         this.$validator.validate(),
         this.coverageType === 2
           ? this.$refs.nationalLevelDeployment.validate()
           : this.$refs.subNationalLevelDeployment.validate()
-      ]);
-      console.log('Implementation overview validations', validations);
-      return validations.reduce((a, c) => a && c, true);
+      ])
+      console.log('Implementation overview validations', validations)
+      return validations.reduce((a, c) => a && c, true)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

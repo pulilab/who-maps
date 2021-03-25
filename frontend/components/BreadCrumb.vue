@@ -36,9 +36,9 @@ export default {
   computed: {
     pureRoute () {
       if (this.$route && this.$route.name) {
-        return this.$route.name.split('___')[0];
+        return this.$route.name.split('___')[0]
       }
-      return null;
+      return null
     },
     subPageName () {
       const noSubPage = {
@@ -46,7 +46,7 @@ export default {
         'organisation-login': true,
         'organisation-signup': true,
         'organisation-reset-key': true
-      };
+      }
       const pages = {
         'organisation-edit-profile': this.$gettext('Admin'),
         'organisation-admin-country': this.$gettext('Admin'),
@@ -64,15 +64,15 @@ export default {
         'organisation-projects-id-assessment': this.$gettext('Assessment'),
         'organisation-projects-id-toolkit': this.$gettext('Toolkit'),
         'organisation-projects-id-toolkit-scorecard': this.$gettext('Toolkit')
-      };
-      const match = pages[this.pureRoute];
-      if (this.pureRoute && !match && !noSubPage[this.pureRoute]) {
-        console.warn(`Potential missing subpage key for breadcrumb ${this.pureRoute}`);
       }
-      return match;
+      const match = pages[this.pureRoute]
+      if (this.pureRoute && !match && !noSubPage[this.pureRoute]) {
+        console.warn(`Potential missing subpage key for breadcrumb ${this.pureRoute}`)
+      }
+      return match
     }
   }
-};
+}
 </script>
 
 <style lang="less">

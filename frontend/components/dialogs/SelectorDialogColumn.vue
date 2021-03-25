@@ -57,19 +57,19 @@ export default {
   data () {
     return {
       expand: false
-    };
+    }
   },
   computed: {},
   methods: {
     headerSelected (value) {
-      this.$emit('headerSelected', value);
+      this.$emit('headerSelected', value)
     },
     handleToggleExpand (val) {
-      this.expand = val;
-      this.$emit('handleToggleExpand', this.header, val);
+      this.expand = val
+      this.$emit('handleToggleExpand', this.header, val)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

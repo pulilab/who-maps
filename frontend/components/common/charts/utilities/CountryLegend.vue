@@ -6,18 +6,42 @@
     size="small"
     class="table-custom"
   >
-    <el-table-column type="index" :index="handleIndex"> </el-table-column>
-    <el-table-column prop="country" label="Country" sortable width="130">
+    <el-table-column
+      type="index"
+      :index="handleIndex"
+    />
+    <el-table-column
+      prop="country"
+      label="Country"
+      sortable
+      width="130"
+    >
       <template slot-scope="scope">
         <div class="custom-column">
-          <img :src="scope.row.img" :alt="scope.row.country" />
+          <img
+            :src="scope.row.img"
+            :alt="scope.row.country"
+          >
           <b>{{ scope.row.country }}</b>
         </div>
       </template>
     </el-table-column>
-    <el-table-column prop="no" label="No" sortable width="62" />
-    <el-table-column prop="pending" label="Pending" sortable />
-    <el-table-column prop="yes" label="Yes" sortable />
+    <el-table-column
+      prop="no"
+      label="No"
+      sortable
+      width="62"
+    />
+    <el-table-column
+      prop="pending"
+      label="Pending"
+      sortable
+    />
+    <el-table-column
+      prop="yes"
+      label="Yes"
+      sortable
+    />
   </el-table>
 </template>
 
@@ -26,15 +50,15 @@ export default {
   props: {
     data: {
       type: Array,
-      required: true,
-    },
+      required: true
+    }
   },
   methods: {
-    handleIndex(index) {
-      return "";
-    },
-  },
-};
+    handleIndex (index) {
+      return ''
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

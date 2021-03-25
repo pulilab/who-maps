@@ -10,13 +10,13 @@
 </template>
 
 <script>
-import DigitalHealthInterventionsDialog from './DigitalHealthInterventionsDialog';
-import DashboardFiltersDialog from './DashboardFiltersDialog';
-import SaveFilterDialog from './SaveFilterDialog';
-import SendEmailDialog from './SendEmailDialog';
-import ProjectApprovalDialog from './ProjectApprovalDialog';
-import EditSubLevelDialog from './EditSubLevelDialog';
-import { mapGettersActions } from '../..//utilities/form';
+import DigitalHealthInterventionsDialog from './DigitalHealthInterventionsDialog'
+import DashboardFiltersDialog from './DashboardFiltersDialog'
+import SaveFilterDialog from './SaveFilterDialog'
+import SendEmailDialog from './SendEmailDialog'
+import ProjectApprovalDialog from './ProjectApprovalDialog'
+import EditSubLevelDialog from './EditSubLevelDialog'
+import { mapGettersActions } from '../..//utilities/form'
 
 export default {
   components: {
@@ -43,15 +43,15 @@ export default {
             {
               confirmButtonText: 'OK',
               callback: action => {
-                this.showEmptyProfileWarning = false;
-                this.$router.replace(this.localePath({ name: 'organisation-edit-profile', params: this.$route.params, query: undefined }));
+                this.showEmptyProfileWarning = false
+                this.$router.replace(this.localePath({ name: 'organisation-edit-profile', params: this.$route.params, query: undefined }))
               }
-            });
+            })
         }
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less">

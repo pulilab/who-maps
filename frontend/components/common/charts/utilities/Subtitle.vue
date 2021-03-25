@@ -16,10 +16,10 @@ export default {
   props: {
     item: {
       type: Object,
-      required: true,
-    },
-  },
-};
+      required: true
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

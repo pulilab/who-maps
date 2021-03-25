@@ -28,7 +28,7 @@ export const nameMapping = {
   facilities: 'Facilities',
   sub_level: 'Coverage Type',
   digitalHealthInterventions: 'Digital Health Interventions (associated to the Software)'
-};
+}
 
 export const importTemplate = [
   {
@@ -89,4 +89,4 @@ export const importTemplate = [
     Clients: 2,
     Facilities: 3
   }
-];
+]

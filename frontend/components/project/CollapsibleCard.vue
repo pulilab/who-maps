@@ -78,22 +78,22 @@ export default {
   data () {
     return {
       open: true
-    };
+    }
   },
   computed: {
     prependFormat () {
-      return this.prependTitle ? `${this.prependTitle}. ` : '';
+      return this.prependTitle ? `${this.prependTitle}. ` : ''
     }
   },
   methods: {
     toggleCard () {
-      this.open = !this.open;
+      this.open = !this.open
     },
     expandCard () {
-      this.open = true;
+      this.open = true
     }
   }
-};
+}
 </script>
 
 <style lang="less">

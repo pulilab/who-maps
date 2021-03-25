@@ -16,10 +16,10 @@ export default {
   props: {
     actions: {
       type: Array,
-      required: true,
-    },
-  },
-};
+      required: true
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

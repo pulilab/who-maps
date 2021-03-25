@@ -1,7 +1,7 @@
 export default async function ({ store, redirect, app, route }) {
-  const profile = store.getters['user/getProfile'];
-  const donorTypes = ['D', 'DA', 'SDA'];
-  const routeName = route.name.split('___')[0];
+  const profile = store.getters['user/getProfile']
+  const donorTypes = ['D', 'DA', 'SDA']
+  const routeName = route.name.split('___')[0]
   if (
     routeName !== 'organisation-edit-profile' &&
     profile &&
@@ -15,7 +15,7 @@ export default async function ({ store, redirect, app, route }) {
       )
     )
   ) {
-    const path = app.localePath({ name: 'organisation-edit-profile', params: route.params, query: { missingProfile: true } });
-    redirect(path);
+    const path = app.localePath({ name: 'organisation-edit-profile', params: route.params, query: { missingProfile: true } })
+    redirect(path)
   }
 };

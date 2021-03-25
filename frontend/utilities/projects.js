@@ -1,40 +1,40 @@
-import { Validator } from "vee-validate";
-import { format } from "date-fns";
-import { flatten } from "lodash";
+import { Validator } from 'vee-validate'
+import { format } from 'date-fns'
+import { flatten } from 'lodash'
 
-Validator.extend("isDate", {
-  getMessage(field) {
-    return `${field} should be a valid date, IE: 2017/01/15`;
+Validator.extend('isDate', {
+  getMessage (field) {
+    return `${field} should be a valid date, IE: 2017/01/15`
   },
-  validate(value) {
-    return !!(value instanceof Date && value.toJSON());
+  validate (value) {
+    return !!(value instanceof Date && value.toJSON())
   }
-});
+})
 export const fetchProjectData = async (store, params, error) => {
   try {
-    await store.dispatch("projects/setCurrentProject", params.id);
+    await store.dispatch('projects/setCurrentProject', params.id)
     await Promise.all([
-      store.dispatch("project/loadProject", params.id),
-      store.dispatch("projects/loadProjectStructure")
-    ]);
+      store.dispatch('project/loadProject', params.id),
+      store.dispatch('projects/loadProjectStructure')
+    ])
   } catch (e) {
-    console.warn("loadProjectData failed", e);
+    console.warn('loadProjectData failed', e)
     error({
       statusCode: 404,
-      message: "This project does not exist"
-    });
+      message: 'This project does not exist'
+    })
   }
-};
+}
 
 export const epochCheck = (date, present = true) => {
   if (date) {
-    const secondsSinceEpoch = Math.round(date.getTime() / 1000);
+    const secondsSinceEpoch = Math.round(date.getTime() / 1000)
     if (secondsSinceEpoch === 0) {
-      return present ? new Date() : "";
+      return present ? new Date() : ''
     }
   }
-  return date;
-};
+  return date
+}
 export const newStages = draft => {
   return draft
     .filter(i => i.checked)
@@ -43,30 +43,30 @@ export const newStages = draft => {
         id: i.id,
         note: i.note || null,
         date: formatDate(i.date)
-      };
-    });
-};
+      }
+    })
+}
 
 export const formatDate = date =>
-  format(date, "YYYY-MM-DD") === "Invalid Date"
+  format(date, 'YYYY-MM-DD') === 'Invalid Date'
     ? null
-    : format(date, "YYYY-MM-DD");
+    : format(date, 'YYYY-MM-DD')
 
 export const getDate = date => {
   if (date) {
-    return format(date, "DD/MM/YYYY");
+    return format(date, 'DD/MM/YYYY')
   }
-  return null;
-};
-export const getList = (arr, getter, key = "name") => {
+  return null
+}
+export const getList = (arr, getter, key = 'name') => {
   if (arr) {
-    return getter.filter(p => arr.includes(p.id) && p[key]).map(i => i[key]);
+    return getter.filter(p => arr.includes(p.id) && p[key]).map(i => i[key])
   }
-  return [];
-};
+  return []
+}
 export const getNestedList = (list, key) => {
-  return flatten(list.map(item => item[key]));
-};
+  return flatten(list.map(item => item[key]))
+}
 
 export const projectFields = () => ({
   name: null,
@@ -108,7 +108,7 @@ export const projectFields = () => ({
   wiki: null,
   interoperability_links: {},
   interoperability_standards: []
-});
+})
 
 export const draftRules = () => {
   return {
@@ -176,8 +176,8 @@ export const draftRules = () => {
     wiki: {
       max: 256
     }
-  };
-};
+  }
+}
 export const publishRules = () => {
   return {
     name: {
@@ -326,5 +326,5 @@ export const publishRules = () => {
       }
     },
     interoperability_standards: {}
-  };
-};
+  }
+}

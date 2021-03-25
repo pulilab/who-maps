@@ -54,8 +54,8 @@
 </template>
 
 <script>
-import CountryItem from '@/components/common/CountryItem';
-import DonorItem from '@/components/common/DonorItem';
+import CountryItem from '@/components/common/CountryItem'
+import DonorItem from '@/components/common/DonorItem'
 
 export default {
   components: {
@@ -68,7 +68,7 @@ export default {
       default: null
     }
   }
-};
+}
 </script>
 
 <style lang="less">

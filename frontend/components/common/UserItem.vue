@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import OrganisationItem from '../common/OrganisationItem';
+import { mapGetters } from 'vuex'
+import OrganisationItem from '../common/OrganisationItem'
 
 export default {
   components: {
@@ -39,12 +39,12 @@ export default {
     }),
     user () {
       if (this.id) {
-        return this.getUserDetails(this.id);
+        return this.getUserDetails(this.id)
       }
-      return null;
+      return null
     }
   }
-};
+}
 </script>
 
 <style lang="less">

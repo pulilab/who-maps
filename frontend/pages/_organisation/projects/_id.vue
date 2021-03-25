@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import ProjectBar from '@/components/common/ProjectBar';
-import { mapGetters } from 'vuex';
+import ProjectBar from '@/components/common/ProjectBar'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -16,7 +16,7 @@ export default {
   data () {
     return {
       barKey: 0
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -24,11 +24,11 @@ export default {
       profile: 'user/getProfile'
     }),
     currentProject () {
-      this.forceBarRerender();
-      return this.getProjectDetails(+this.$route.params.id);
+      this.forceBarRerender()
+      return this.getProjectDetails(+this.$route.params.id)
     },
     route () {
-      return this.$route.name.split('__')[0];
+      return this.$route.name.split('__')[0]
     }
   },
   watch: {
@@ -39,20 +39,20 @@ export default {
           this.$alert(this.$gettext('You are not authorized to access this view'), this.$gettext('Warning'), {
             confirmButtonText: 'OK',
             callback: () => {
-              const path = this.localePath({ name: 'organisation-projects-id-published', params: this.$route.params });
-              this.$router.replace(path);
+              const path = this.localePath({ name: 'organisation-projects-id-published', params: this.$route.params })
+              this.$router.replace(path)
             }
-          });
+          })
         }
       }
     }
   },
   methods: {
     forceBarRerender () {
-      this.barKey += 1;
+      this.barKey += 1
     }
   }
-};
+}
 </script>
 
 <style>

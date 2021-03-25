@@ -1,7 +1,13 @@
 <template>
   <section :class="classRoot">
-    <div v-for="item in items" :key="item.color">
-      <span class="color" :style="{ 'background-color': item.color }" />
+    <div
+      v-for="item in items"
+      :key="item.color"
+    >
+      <span
+        class="color"
+        :style="{ 'background-color': item.color }"
+      />
       <span class="label">{{ item.label }}</span>
       <template v-if="!horizontal">
         <span class="dots" />
@@ -16,32 +22,32 @@ export default {
   props: {
     items: {
       type: Array,
-      required: true,
+      required: true
     },
     percentage: {
       type: Boolean,
-      default: false,
+      default: false
     },
     large: {
       type: Boolean,
-      default: false,
+      default: false
     },
     horizontal: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   computed: {
-    classRoot() {
-      return { large: this.large, horizontal: this.horizontal };
-    },
+    classRoot () {
+      return { large: this.large, horizontal: this.horizontal }
+    }
   },
   methods: {
-    labelValue(value) {
-      return `${value} ${this.percentage ? "%" : ""}`;
-    },
-  },
-};
+    labelValue (value) {
+      return `${value} ${this.percentage ? '%' : ''}`
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

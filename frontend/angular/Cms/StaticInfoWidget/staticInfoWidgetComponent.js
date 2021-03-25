@@ -1,5 +1,5 @@
-import StaticInfoWidget from './StaticInfoWidgetController';
-import _template from './StaticInfoWidget.html';
+import StaticInfoWidget from './StaticInfoWidgetController'
+import _template from './StaticInfoWidget.html'
 
 const component = {
   template: _template,
@@ -7,6 +7,6 @@ const component = {
   controllerAs: 'vm',
   name: 'cmsStaticInfoWidget',
   bindings: {}
-};
+}
 
-export default component;
+export default component

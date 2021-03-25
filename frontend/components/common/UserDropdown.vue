@@ -121,9 +121,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import LanguageSelect from './LanguageSelect';
-import CountryItem from './CountryItem';
+import { mapGetters, mapActions } from 'vuex'
+import LanguageSelect from './LanguageSelect'
+import CountryItem from './CountryItem'
 
 export default {
   components: {
@@ -133,30 +133,30 @@ export default {
   data () {
     return {
       shown: false
-    };
+    }
   },
   computed: {
     ...mapGetters({
       user: 'user/getProfile'
     }),
     isSuperUser () {
-      return this.user && this.user.is_superuser;
+      return this.user && this.user.is_superuser
     },
     isUserCA () {
-      return (this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)) || this.isSuperUser;
+      return (this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)) || this.isSuperUser
     },
     isUserDA () {
-      return (this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)) || this.isSuperUser;
+      return (this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)) || this.isSuperUser
     },
     currentLanguage: {
       get () {
-        return this.$i18n.locale;
+        return this.$i18n.locale
       },
       set (value) {
         // for now on language switch we need a full page change
-        const path = this.switchLocalePath(value);
-        window.location.href = path;
-        this.shown = false;
+        const path = this.switchLocalePath(value)
+        window.location.href = path
+        this.shown = false
       }
     }
 
@@ -166,15 +166,15 @@ export default {
       doLogout: 'user/doLogout'
     }),
     closePopover () {
-      this.shown = false;
+      this.shown = false
     },
     logout () {
-      this.closePopover();
-      this.doLogout();
-      this.$router.push(this.localePath({ name: 'organisation', params: this.$route.params, query: undefined }));
+      this.closePopover()
+      this.doLogout()
+      this.$router.push(this.localePath({ name: 'organisation', params: this.$route.params, query: undefined }))
     }
   }
-};
+}
 </script>
 
 <style lang="less">

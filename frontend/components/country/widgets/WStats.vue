@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import ProgressBar from '@/components/country/commons/ProgressBar';
+import ProgressBar from '@/components/country/commons/ProgressBar'
 
 export default {
   name: 'WStats',
@@ -72,7 +72,7 @@ export default {
       default: false
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

@@ -251,17 +251,17 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
-import CollapsibleCard from '../CollapsibleCard';
-import TeamSelector from '../TeamSelector';
-import CountrySelect from '../../common/CountrySelect';
-import OrganisationSelect from '../../common/OrganisationSelect';
-import FormHint from '../FormHint';
-import { mapGettersActions } from '../../../utilities/form';
-import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem';
-import FilterSwitch from '@/components/dashboard/FilterSwitch';
-import Tooltip from '@/components/dashboard/Tooltip';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
+import CollapsibleCard from '../CollapsibleCard'
+import TeamSelector from '../TeamSelector'
+import CountrySelect from '../../common/CountrySelect'
+import OrganisationSelect from '../../common/OrganisationSelect'
+import FormHint from '../FormHint'
+import { mapGettersActions } from '../../../utilities/form'
+import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem'
+import FilterSwitch from '@/components/dashboard/FilterSwitch'
+import Tooltip from '@/components/dashboard/Tooltip'
 
 export default {
   components: {
@@ -284,35 +284,35 @@ export default {
     }),
     isGlobal: {
       get () {
-        return this.country === process.env.GlobalCountryID;
+        return this.country === process.env.GlobalCountryID
       },
       set (val) {
-        this.country = val ? process.env.GlobalCountryID : null;
+        this.country = val ? process.env.GlobalCountryID : null
       }
     }
   },
   methods: {
     async validate () {
-      this.$refs.collapsible.expandCard();
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
         this.$validator.validate()
-      ]);
-      console.log('General overview published validation', validations);
-      return validations.reduce((a, c) => a && c, true);
+      ])
+      console.log('General overview published validation', validations)
+      return validations.reduce((a, c) => a && c, true)
     },
     async validateDraft () {
-      this.$refs.collapsible.expandCard();
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
         this.$validator.validate('name'),
         this.$validator.validate('country'),
         this.$validator.validate('contact_email'),
         this.$validator.validate('team')
-      ]);
-      console.log('General overview draft validation', validations);
-      return validations.reduce((a, c) => a && c, true);
+      ])
+      console.log('General overview draft validation', validations)
+      return validations.reduce((a, c) => a && c, true)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

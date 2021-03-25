@@ -23,9 +23,9 @@ export default {
   data () {
     return {
       show: false
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

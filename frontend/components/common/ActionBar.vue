@@ -105,11 +105,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import SearchComponent from '../common/SearchComponent.vue';
-import PersonaSelector from '../dashboard/PersonaSelector';
-import DashboardFiltersHeader from '../dashboard/DashboardFiltersHeader';
-import BreadCrumb from '../BreadCrumb';
+import { mapGetters } from 'vuex'
+import SearchComponent from '../common/SearchComponent.vue'
+import PersonaSelector from '../dashboard/PersonaSelector'
+import DashboardFiltersHeader from '../dashboard/DashboardFiltersHeader'
+import BreadCrumb from '../BreadCrumb'
 
 export default {
   components: {
@@ -123,31 +123,31 @@ export default {
       userProfile: 'user/getProfile'
     }),
     isAdmin () {
-      return this.$route.path.includes('/admin') || this.$route.path.endsWith('/edit-profile');
+      return this.$route.path.includes('/admin') || this.$route.path.endsWith('/edit-profile')
     },
     allowCountryAdmin () {
       if (this.userProfile) {
-        return (['CA', 'SCA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
+        return (['CA', 'SCA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser
       }
-      return false;
+      return false
     },
     allowDonorAdmin () {
       if (this.userProfile) {
-        return (['DA', 'SDA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser;
+        return (['DA', 'SDA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser
       }
-      return false;
+      return false
     },
     isDashboard () {
-      return this.$route.path.includes('/dashboard');
+      return this.$route.path.includes('/dashboard')
     },
     isMapSubRoute () {
-      return this.$route.name.includes('organisation-dashboard___');
+      return this.$route.name.includes('organisation-dashboard___')
     },
     isListSubRoute () {
-      return this.$route.name.includes('organisation-dashboard-list___');
+      return this.$route.name.includes('organisation-dashboard-list___')
     }
   }
-};
+}
 </script>
 
 <style lang="less">

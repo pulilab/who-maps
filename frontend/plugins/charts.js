@@ -1,5 +1,13 @@
-import Vue from 'vue';
-import { Line, Doughnut, mixins, PolarArea, Bar, HorizontalBar } from 'vue-chartjs';
+/* eslint-disable vue/one-component-per-file */
+import Vue from 'vue'
+import {
+  Line,
+  Doughnut,
+  mixins,
+  PolarArea,
+  Bar,
+  HorizontalBar
+} from 'vue-chartjs'
 
 const chartMixin = {
   mixins: [mixins.reactiveProp],
@@ -10,37 +18,36 @@ const chartMixin = {
     }
   },
   mounted () {
-    this.renderChart(this.chartData, this.options);
+    this.renderChart(this.chartData, this.options)
   },
   watch: {
-    chartData(chartdata) {
-      this.renderChart(chartdata, this.options);
+    chartData (chartdata) {
+      this.renderChart(chartdata, this.options)
     }
   }
 }
 
-
-Vue.component('line-chart', {
+Vue.component('LineChart', {
   extends: Line,
-  mixins: [chartMixin],
-});
+  mixins: [chartMixin]
+})
 
-Vue.component('doughnut', {
+Vue.component('Doughnut', {
   extends: Doughnut,
-  mixins: [chartMixin],
-});
+  mixins: [chartMixin]
+})
 
-Vue.component('polar-area', {
+Vue.component('PolarArea', {
   extends: PolarArea,
-  mixins: [chartMixin],
-});
+  mixins: [chartMixin]
+})
 
-Vue.component('bar-chart', {
+Vue.component('BarChart', {
   extends: Bar,
-  mixins: [chartMixin],
-});
+  mixins: [chartMixin]
+})
 
-Vue.component('horizontal-bar', {
+Vue.component('HorizontalBar', {
   extends: HorizontalBar,
-  mixins: [chartMixin],
-});
+  mixins: [chartMixin]
+})
