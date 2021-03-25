@@ -48,7 +48,7 @@ class ExternalAPITests(APITestCase):
         self.country = CountryFactory(name="country1", code='CTR1', project_approval=True,
                                       region=Country.REGIONS[0][0], name_en='Hungary', name_fr='Hongrie')
         self.country_id = self.country.id
-        self.donor, _ = Donor.objects.get_or_create(name="Donor 1", defaults={'code': "dnr1"})
+        self.donor, _ = Donor.objects.get_or_create(name="Other", defaults={'code': "other"})
 
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
@@ -62,25 +62,21 @@ class ExternalAPITests(APITestCase):
         self.userprofile = UserProfile.objects.get(id=self.user_profile_id)
         self.country.users.add(self.userprofile)
 
-        self.project_data = {"project": {
-            "name": "Test Project1",
-            "organisation": "test organisation",
-            "contact_name": "name1",
-            "contact_email": "team_member@added.com",
-            "implementation_overview": "overview",
-            "health_focus_areas": [1, 2],
-            "country": self.country_id,
-            "donors": [{
-                "name": self.donor.name,
-                "code": self.donor.code
-            }],
-            "platforms": [{
-                "id": 1,
-                "strategies": [1, 2]
-            }],
-            "hsc_challenges": [1, 2],
-            "start_date": str(datetime.today().date())
-        }}
+        self.project_data = {
+            "source": "xNhlb4",
+            "project": dict(
+                name="Test Project1", organisation="test organisation", contact_name="name1",
+                contact_email="team_member@added.com", implementation_overview="overview", health_focus_areas=[1, 2],
+                country=self.country_id,
+                donors=[{
+                    "name": self.donor.name,
+                    "code": self.donor.code
+                }],
+                platforms=[{
+                    "id": 1,
+                    "strategies": [1, 2]
+                }],
+                hsc_challenges=[1, 2], start_date=str(datetime.today().date()))}
 
     def test_post_to_publish_from_external_source(self):
         url = reverse("project-external-publish")
@@ -100,7 +96,7 @@ class ExternalAPITests(APITestCase):
 
         self.assertEqual(project.data['donors'], [self.donor.id])
 
-        self.assertEqual(project.data['national_level_deployment'], 
+        self.assertEqual(project.data['national_level_deployment'],
                          {"clients": 0, "health_workers": 0, "facilities": 0})
 
         welcome_emails_count = 0
@@ -122,6 +118,65 @@ class ExternalAPITests(APITestCase):
                 set_password_sent += 1
                 self.assertTrue("team_member@added.com" in m.to)
         self.assertEqual(set_password_sent, 1)
+
+    def test_post_to_draft_from_external_source(self):
+        url = reverse("project-external-draft")
+        response = self.test_user_client.post(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 201, response.json())
+
+        self.assertTrue(response.json().get("id"))
+        project_id = response.json().get("id")
+        project = Project.objects.get(id=project_id)
+
+        self.assertTrue(project.from_external)
+        self.assertFalse(project.public_id)
+        self.assertEqual(self.project_data['project']['name'], project.name)
+
+        org = Organisation.objects.get(name=self.project_data['project']['organisation'])
+        self.assertEqual(project.draft['organisation'], str(org.id))
+
+        self.assertEqual(project.draft['donors'], [self.donor.id])
+
+        self.assertEqual(project.draft['national_level_deployment'],
+                         {"clients": 0, "health_workers": 0, "facilities": 0})
+
+        welcome_emails_count = 0
+        for m in mail.outbox:
+            if m.subject == 'Welcome to the Digital Health Atlas':
+                welcome_emails_count += 1
+        self.assertEqual(welcome_emails_count, 2)
+
+        notified_on_member_add_count = 0
+        for m in mail.outbox:
+            if m.subject == 'You have been added to a project in the Digital Health Atlas':
+                notified_on_member_add_count += 1
+                self.assertTrue("team_member@added.com" in m.to)
+        self.assertEqual(notified_on_member_add_count, 1)
+
+        set_password_sent = 0
+        for m in mail.outbox:
+            if m.subject == "Set Your Password on Digital Health Atlas":
+                set_password_sent += 1
+                self.assertTrue("team_member@added.com" in m.to)
+        self.assertEqual(set_password_sent, 1)
+
+    def test_invalid_source_draft(self):
+        project_data = copy.deepcopy(self.project_data)
+        project_data['source'] = 'TRUST-ME-NOT-A-HACKER'
+        url = reverse("project-external-draft")
+        response = self.test_user_client.post(url, project_data, format="json")
+
+        self.assertEqual(response.status_code, 400, response.json())
+        self.assertEqual(response.json(), {'source': "Service source is invalid"})
+
+    def test_invalid_email_draft(self):
+        project_data = copy.deepcopy(self.project_data)
+        project_data['project']['contact_email'] = "invalid_email"
+        url = reverse("project-external-draft")
+        response = self.test_user_client.post(url, project_data, format="json")
+
+        self.assertEqual(response.status_code, 400, response.json())
+        self.assertEqual(response.json(), {'project': {'contact_email': ['Enter a valid email address.']}})
 
     def test_name_clash_resolved_automatically(self):
         url = reverse("project-external-publish")

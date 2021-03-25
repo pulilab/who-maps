@@ -615,3 +615,21 @@ class TerminologySerializer(serializers.Serializer):
     health_focus_areas = HFAWithCategoriesSerializer(many=True)
     hsc_challenges = HSCGroupWithChallengesSerializer(many=True)
     strategies = StrategiesByGroupSerializer(many=True)
+
+
+class ExternalProjectPublishSerializer(serializers.Serializer):
+    """
+    Used to beautify swagger in public docs
+    TODO: May need to update the 'project' part
+    """
+    source = serializers.CharField(required=True)
+    project = ProjectPublishedSerializer(required=True)
+
+
+class ExternalProjectDraftSerializer(serializers.Serializer):
+    """
+    Used to beautify swagger in public docs
+    TODO: May need to update the 'project' part
+    """
+    source = serializers.CharField(required=True)
+    project = ProjectDraftSerializer(required=True)

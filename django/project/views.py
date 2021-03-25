@@ -23,7 +23,7 @@ from .tasks import notify_superusers_about_new_pending_software
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer, \
-    TerminologySerializer
+    TerminologySerializer, ExternalProjectPublishSerializer, ExternalProjectDraftSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
 
@@ -32,7 +32,7 @@ from .mixins import CheckRequiredMixin, ExternalAPIMixin
 
 class ProjectPublicViewSet(ViewSet):
 
-    @swagger_auto_schema(responses={200: TerminologySerializer})
+    @swagger_auto_schema(operation_id="project-structure",responses={200: TerminologySerializer})
     def project_structure(self, request):
         return Response(self._get_project_structure())
 
@@ -402,17 +402,22 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
 class ExternalDraftAPI(ExternalAPIMixin, TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
+    @swagger_auto_schema(
+        operation_id="project-draft-external",
+        request_body=ExternalProjectDraftSerializer,
+        responses={201: ProjectPublishedSerializer}
+        )
     def create(self, request):
         # TODO: openapi docs override
         """
-        Create draft projects from external sources.
-        Exceptions to internal API are:
+        Create *draft* projects from external sources.
+        Alterations from internal API are:
         - project names must be unique, so check if they are clashing and randomize to help
-        - organisation coming as a string, we need to check for Organisation objects
-        - donor coming as a string, we need to check for Donor objects
-        - exclude the check for required country questions
-        - set national_level_deployment to 0, so it can be added later
-        - add contact email as a team member
+        - organisation is coming as a string, we need to check for Organisation objects
+        - donor (Investor) is by default set to "Other"
+        - required country questions are not checked
+        - national_level_deployment is set to 0 (can be added later)
+        - contact email is automatically added as team member
         """
         response_dict, success = self.parse_data(request, publish=False)
 
@@ -424,16 +429,21 @@ class ExternalDraftAPI(ExternalAPIMixin, TeamTokenAuthMixin, ViewSet):
 
 class ExternalPublishAPI(ExternalAPIMixin, TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
+    @swagger_auto_schema(
+        operation_id="project-publish-external",
+        request_body=ExternalProjectPublishSerializer,
+        responses={201: ProjectPublishedSerializer}
+    )
     def create(self, request):
-        # TODO: openapi docs override
         """
-        Publish projects from external sources.
-        Exceptions to internal API are:
+        Create *Published* projects from external sources.
+        Alterations from internal API are:
         - project names must be unique, so check if they are clashing and randomize to help
-        - organisation coming as a string, we need to check for Organisation objects
-        - exclude the check for required country questions
-        - set national_level_deployment to 0, so it can be added later
-        - add contact email as a team member
+        - organisation is coming as a string, we need to check for Organisation objects
+        - donor (Investor) is by default set to "Other"
+        - required country questions are not checked
+        - national_level_deployment is set to 0 (can be added later)
+        - contact email is automatically added as team member
         """
         response_dict, success = self.parse_data(request, publish=True)
 

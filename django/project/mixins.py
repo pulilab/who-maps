@@ -12,10 +12,11 @@ from user.models import Organisation
 from .models import Project
 
 from .serializers import ProjectDraftSerializer, ProjectPublishedSerializer, ProjectGroupSerializer
-
+from django.conf import settings
 
 class CheckRequiredMixin:
-    def check_required(self, queryset: QuerySet, answers: OrderedDict):
+    @staticmethod
+    def check_required(queryset: QuerySet, answers: OrderedDict):
         required_ids = set(queryset.filter(required=True).values_list('id', flat=True))
         present_ids = {answer['question_id'] for answer in answers}
         missing_ids = required_ids - present_ids
@@ -27,21 +28,27 @@ class ExternalAPIMixin:
     """
     Mixin to provide the common functions required by APIs open external clients
     """
-    def parse_data(self, request, publish=False):
-        """
-        Function to parse the input parameters
-        """
-        instance = None
-        errors = {}
-
+    @staticmethod
+    def check_required(request):
+        if 'source' not in request.data:  # pragma: no cover
+            raise ValidationError({'source': 'Service source is missing'})
+        if not settings.EXTERNAL_API_CLIENTS.get(request.data['source'], None):
+            raise ValidationError({'source': 'Service source is invalid'})
         if 'project' not in request.data:  # pragma: no cover
             raise ValidationError({'project': 'Project data is missing'})
         if 'name' not in request.data['project']:  # pragma: no cover
             raise ValidationError({'project': 'Name is missing'})
         if 'country' not in request.data['project']:  # pragma: no cover
             raise ValidationError({'country': 'Country is missing'})
-        if 'donors' not in request.data['project']:  # pragma: no cover
-            raise ValidationError({'donors': 'Donors are missing'})
+
+    def parse_data(self, request, publish=False):
+        """
+        Function to parse the input parameters
+        """
+        self.check_required(request)
+
+        instance = None
+        errors = {}
 
         country = get_object_or_400(Country, error_message="No such country", id=request.data['project']['country'])
 
@@ -58,14 +65,9 @@ class ExternalAPIMixin:
         org, _ = Organisation.objects.get_or_create(name=project_org)
         project_data['organisation'] = str(org.id)
 
-        # WORKAROUND 3: auto create donors
-        donors = list()
-
-        for donor_data in project_data['donors']:
-            # TODO: Exception handling?
-            donor, _ = Donor.objects.get_or_create(name=donor_data['name'], defaults=dict(code=donor_data['code']))
-            donors.append(donor.id)
-        project_data['donors'] = donors
+        # WORKAROUND 3: auto choose "Other" as an investor
+        donor, created = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
+        project_data['donors'] = [donor.id]
         # WORKAROUND 4: set national_level_deployment to 0, so it can be added later
         project_data['national_level_deployment'] = {"clients": 0, "health_workers": 0, "facilities": 0}
 
@@ -86,18 +88,17 @@ class ExternalAPIMixin:
             return errors, False
         else:
             instance.save()
-            # TODO: Maybe check which external party is using the API?
-            instance.metadata = dict(from_external=True)
+            instance.metadata = dict(from_external=settings.EXTERNAL_API_CLIENTS[request.data['source']])
             if publish:
                 instance.make_public_id(country.id)
                 instance.save(update_fields=['metadata', 'public_id'])
             instance.team.add(request.user.userprofile)
 
-            # WORKAROUND 5: add contact_email as team member
+            # WORKAROUND 5: Add contact_email as team member
             group_data = {
                 "team": [request.user.userprofile.id],
                 "viewers": [],
-                "new_team_emails": [instance.data['contact_email']],
+                "new_team_emails": [instance.data['contact_email']] if publish else [instance.draft['contact_email']],
                 "new_viewer_emails": []
             }
             pg_serializer = ProjectGroupSerializer(instance=instance, data=group_data, context=dict(request=request))
