@@ -169,13 +169,13 @@
 </template>
 
 <script>
-import VueScrollClass from 'vue-scroll-class';
-import { mapGetters } from 'vuex';
+import VueScrollClass from 'vue-scroll-class'
+import { mapGetters } from 'vuex'
 
-import LanguageSelector from './LanguageSelector';
-import UserDropdown from './UserDropdown';
-import ToolkitDialogWrapper from './ToolkitDialogWrapper';
-import CountryChooser from './CountryChooser';
+import LanguageSelector from './LanguageSelector'
+import UserDropdown from './UserDropdown'
+import ToolkitDialogWrapper from './ToolkitDialogWrapper'
+import CountryChooser from './CountryChooser'
 
 export default {
   directives: {
@@ -200,26 +200,26 @@ export default {
       isCountry: 'landing/getIsCountry'
     }),
     customOrganisation () {
-      return this.landingData !== null;
+      return this.landingData !== null
     },
     countrySpecific () {
-      return this.customOrganisation && this.landingData.code.length === 2;
+      return this.customOrganisation && this.landingData.code.length === 2
     },
     organisationLogo () {
       if (this.landingData) {
-        return this.landingData.logo_url;
+        return this.landingData.logo_url
       }
-      return null;
+      return null
     },
     countryFlag () {
       if (this.landingData) {
-        return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
+        return `/static/flags/${this.landingData.code.toLowerCase()}.png`
       }
-      return null;
+      return null
     }
 
   }
-};
+}
 </script>
 
 <style lang="less">

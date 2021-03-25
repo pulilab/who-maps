@@ -107,9 +107,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
-import Tooltip from '@/components/dashboard/Tooltip';
+import { mapGetters } from 'vuex'
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js'
+import Tooltip from '@/components/dashboard/Tooltip'
 
 export default {
   components: {
@@ -156,45 +156,45 @@ export default {
       getFacilities: 'countries/getCountryFacilityList'
     }),
     hasFacilityList () {
-      return !!this.getFacilities(this.country).length;
+      return !!this.getFacilities(this.country).length
     },
     disableFacilities () {
       if (this.isNlc) {
-        return false;
+        return false
       }
-      return !!(this.disabled || this.hasFacilityList);
+      return !!(this.disabled || this.hasFacilityList)
     },
     localHealthWorkers: {
       get () {
-        return this.healthWorkers;
+        return this.healthWorkers
       },
       set (value) {
-        this.$emit('update:healthWorkers', value);
+        this.$emit('update:healthWorkers', value)
       }
     },
     localClients: {
       get () {
-        return this.clients;
+        return this.clients
       },
       set (value) {
-        this.$emit('update:clients', value);
+        this.$emit('update:clients', value)
       }
     },
     localFacilities: {
       get () {
-        return this.facilities;
+        return this.facilities
       },
       set (value) {
-        this.$emit('update:facilities', value);
+        this.$emit('update:facilities', value)
       }
     }
   },
   methods: {
     async validate () {
-      return this.$validator.validate();
+      return this.$validator.validate()
     }
   }
-};
+}
 </script>
 
 <style lang="less">

@@ -35,7 +35,7 @@ export default {
       default: true
     }
   }
-};
+}
 </script>
 
 <style lang="less">

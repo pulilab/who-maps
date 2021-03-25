@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js'
 
 export default {
   mixins: [VeeValidationMixin],
@@ -47,38 +47,38 @@ export default {
   computed: {
     interoperabilityLink () {
       if (this.interoperabilityLinks && this.item) {
-        return this.interoperabilityLinks[this.item.id] || {};
+        return this.interoperabilityLinks[this.item.id] || {}
       }
-      return {};
+      return {}
     },
     selected () {
-      return this.interoperabilityLink.selected;
+      return this.interoperabilityLink.selected
     },
     link () {
-      return this.interoperabilityLink.link;
+      return this.interoperabilityLink.link
     },
     innerLinkValue: {
       get () {
-        return this.link;
+        return this.link
       },
       set (link) {
-        const ir = { ...this.interoperabilityLinks };
-        ir[this.item.id] = { ...this.interoperabilityLink, link };
-        this.$emit('update:interoperabilityLinks', ir);
+        const ir = { ...this.interoperabilityLinks }
+        ir[this.item.id] = { ...this.interoperabilityLink, link }
+        this.$emit('update:interoperabilityLinks', ir)
       }
     }
   },
   methods: {
     selectedChangeHandler (selected) {
-      const ir = { ...this.interoperabilityLinks };
-      ir[this.item.id] = { ...this.interoperabilityLink, selected };
-      this.$emit('update:interoperabilityLinks', ir);
+      const ir = { ...this.interoperabilityLinks }
+      ir[this.item.id] = { ...this.interoperabilityLink, selected }
+      this.$emit('update:interoperabilityLinks', ir)
     },
     async validate () {
-      return this.$validator.validate();
+      return this.$validator.validate()
     }
   }
-};
+}
 </script>
 
 <style lang="less">

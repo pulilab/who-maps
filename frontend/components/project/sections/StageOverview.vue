@@ -229,13 +229,13 @@
 </template>
 
 <script>
-import { isAfter } from 'date-fns';
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
-import CollapsibleCard from '../CollapsibleCard';
-import { mapGettersActions } from '../../../utilities/form';
-import { mapState, mapActions } from 'vuex';
-import Tooltip from '@/components/dashboard/Tooltip';
+import { isAfter } from 'date-fns'
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
+import CollapsibleCard from '../CollapsibleCard'
+import { mapGettersActions } from '../../../utilities/form'
+import { mapState, mapActions } from 'vuex'
+import Tooltip from '@/components/dashboard/Tooltip'
 
 export default {
   components: {
@@ -246,7 +246,7 @@ export default {
   data () {
     return {
       researchDisabled: false
-    };
+    }
   },
   computed: {
     ...mapState({
@@ -265,9 +265,9 @@ export default {
         this.end_date &&
         isAfter(this.start_date, this.end_date)
       ) {
-        return this.$gettext('End date must be after Start date');
+        return this.$gettext('End date must be after Start date')
       }
-      return '';
+      return ''
     },
     stageDateError () {
       if (
@@ -276,61 +276,61 @@ export default {
           i => i.checked && (i.date === '' || i.date === null)
         ).length > 0
       ) {
-        return this.$gettext('Stage date is required');
+        return this.$gettext('Stage date is required')
       }
-      return '';
+      return ''
     }
   },
   mounted () {
-    this.loadStagesDraft();
+    this.loadStagesDraft()
     // research custom logic
     if (this.research === undefined) {
       // this.researchDisabled = false
-      this.research = false;
+      this.research = false
     } else {
       // this.researchDisabled = true
     }
     // eslint-disable-next-line no-self-assign
-    this.start_date = this.start_date;
+    this.start_date = this.start_date
   },
   methods: {
     ...mapActions({
       loadStagesDraft: 'project/loadStagesDraft'
     }),
     async validate () {
-      this.$refs.collapsible.expandCard();
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
         this.$validator.validate(),
         Promise.resolve(this.endDateError === ''),
         Promise.resolve(this.stageDateError === '')
-      ]);
-      console.log('Project stages published validation', validations);
-      return validations.reduce((a, c) => a && c, true);
+      ])
+      console.log('Project stages published validation', validations)
+      return validations.reduce((a, c) => a && c, true)
     },
     async validateDraft () {
-      this.$refs.collapsible.expandCard();
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
         this.$validator.validate('start_date'),
         this.$validator.validate('end_date'),
         Promise.resolve(this.stageDateError === '')
-      ]);
-      console.log('Project stages draft validation', validations);
-      return validations.reduce((a, c) => a && c, true);
+      ])
+      console.log('Project stages draft validation', validations)
+      return validations.reduce((a, c) => a && c, true)
     },
     updateStagesDraft (id, key, value) {
       this.$store.dispatch(
         'project/setStagesDraft',
         this.stagesDraft.map(item => {
           if (item.id === id) {
-            return { ...item, [key]: value };
+            return { ...item, [key]: value }
           }
-          return item;
+          return item
         }),
         { root: true }
-      );
+      )
     }
   }
-};
+}
 </script>
 
 <style lang="less">

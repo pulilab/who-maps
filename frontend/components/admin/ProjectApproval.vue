@@ -111,12 +111,12 @@
 </template>
 
 <script>
-import Papa from 'papaparse';
-import { format } from 'date-fns';
-import { uriDownloader } from '../../utilities/dom';
-import { mapGetters, mapActions } from 'vuex';
-import ApprovalTag from './ApprovalTag';
-import UserItem from '../common/UserItem';
+import Papa from 'papaparse'
+import { format } from 'date-fns'
+import { uriDownloader } from '../../utilities/dom'
+import { mapGetters, mapActions } from 'vuex'
+import ApprovalTag from './ApprovalTag'
+import UserItem from '../common/UserItem'
 
 export default {
   components: {
@@ -127,7 +127,7 @@ export default {
     return {
       filters: [true, false, null],
       rowSelection: []
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -135,20 +135,20 @@ export default {
       getUserDetails: 'system/getUserProfileDetails'
     }),
     filteredList () {
-      return this.list.filter(i => this.filters.length === 0 || this.filters.some(f => f === i.approved));
+      return this.list.filter(i => this.filters.length === 0 || this.filters.some(f => f === i.approved))
     },
     parsedList () {
       return this.rowSelection.map((i) => {
-        const user = this.getUserDetails(this.getUserId(i));
-        const approved = i.approved === true ? this.$gettext('Yes') : i.approved === false ? this.$gettext('No') : this.$gettext('Pending');
+        const user = this.getUserDetails(this.getUserId(i))
+        const approved = i.approved === true ? this.$gettext('Yes') : i.approved === false ? this.$gettext('No') : this.$gettext('Pending')
         return {
           project_id: i.project,
           project_name: i.project_name,
           user: user ? user.name : '',
           approved,
           modified: format(i.modified, 'YYYY-MM-DD HH:mm')
-        };
-      });
+        }
+      })
     }
   },
   methods: {
@@ -156,29 +156,29 @@ export default {
       openDetails: 'admin/approval/setCurrentElement'
     }),
     getUserId (row) {
-      const history = row.history;
+      const history = row.history
       if (history && history.length > 0) {
-        const first = history[0];
+        const first = history[0]
         if (first && first.history_user__userprofile) {
-          return first.history_user__userprofile;
+          return first.history_user__userprofile
         }
-        return row.legacy_approved_by;
+        return row.legacy_approved_by
       }
     },
     filterHandler (value, row, column) {
-      const property = column['property'];
-      return row[property] === value;
+      const property = column.property
+      return row[property] === value
     },
     selectionHandler (selection) {
-      this.rowSelection = selection;
+      this.rowSelection = selection
     },
     csvExport () {
-      const csv = Papa.unparse(this.parsedList, { delimiter: ';' });
-      const toDownload = `data:text/csv;charset=utf-8,${csv}`;
-      uriDownloader(toDownload, 'project-approval-export.csv');
+      const csv = Papa.unparse(this.parsedList, { delimiter: ';' })
+      const toDownload = `data:text/csv;charset=utf-8,${csv}`
+      uriDownloader(toDownload, 'project-approval-export.csv')
     }
   }
-};
+}
 </script>
 
 <style lang="less">

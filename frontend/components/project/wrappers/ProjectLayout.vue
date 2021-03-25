@@ -1,7 +1,9 @@
 <template>
   <section :class="`${type} ${small && 'small'} project-layout`">
     <header v-if="header">
-      <h2 v-if="this.$slots.title"><slot name="title" /></h2>
+      <h2 v-if="$slots.title">
+        <slot name="title" />
+      </h2>
       <p><slot name="subtitle" /></p>
     </header>
     <slot />
@@ -13,29 +15,30 @@ export default {
   props: {
     type: {
       type: String,
-      default: "transparent",
-      validator(value) {
-        return ["transparent", "draft"].indexOf(value) !== -1;
-      },
+      default: 'transparent',
+      validator (value) {
+        return ['transparent', 'draft'].indexOf(value) !== -1
+      }
     },
     small: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   computed: {
-    header() {
-      return this.$slots.title || this.$slots.subtitle;
-    },
-  },
-};
+    header () {
+      return this.$slots.title || this.$slots.subtitle
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
+@import '~assets/style/variables.less';
 
 .project-layout {
   padding: 40px 120px 100px;
+  color: @colorTextPrimary;
   &.transparent {
     background-color: transparent;
   }

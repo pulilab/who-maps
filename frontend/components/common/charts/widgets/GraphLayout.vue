@@ -2,10 +2,15 @@
   <el-col v-bind="{ ...$props, ...$attrs }">
     <div class="wrapper">
       <div class="container">
-        <template v-if="this.$slots.back">
+        <template v-if="$slots.back">
           <slot name="back" />
         </template>
-        <p v-if="this.$slots.default" class="title"><slot /></p>
+        <p
+          v-if="$slots.default"
+          class="title"
+        >
+          <slot />
+        </p>
         <slot name="subtitle" />
         <template v-if="horizontal">
           <el-row class="mt-15">
@@ -20,7 +25,10 @@
           </el-row>
         </template>
         <template v-else>
-          <div class="graph" v-if="this.$slots.graph">
+          <div
+            v-if="$slots.graph"
+            class="graph"
+          >
             <slot name="graph" />
           </div>
           <slot name="legend" />
@@ -35,14 +43,14 @@ export default {
   props: {
     horizontal: {
       type: Boolean,
-      default: false,
+      default: false
     },
     back: {
       type: Boolean,
-      default: false,
-    },
-  },
-};
+      default: false
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

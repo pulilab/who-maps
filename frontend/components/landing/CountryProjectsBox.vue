@@ -13,9 +13,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 
-import MapProjectsBox from '../common/map/MapProjectsBox';
+import MapProjectsBox from '../common/map/MapProjectsBox'
 
 export default {
   components: {
@@ -35,18 +35,18 @@ export default {
     }),
     activeCountry: {
       get () {
-        return this.getActiveCountry;
+        return this.getActiveCountry
       },
       set (value) {
-        this.setActiveCountry(value);
+        this.setActiveCountry(value)
       }
     },
     activeTab: {
       get () {
-        return this.getActiveTab;
+        return this.getActiveTab
       },
       set (value) {
-        this.setActiveTab(value);
+        this.setActiveTab(value)
       }
     }
   },
@@ -56,7 +56,7 @@ export default {
       setActiveTab: 'landing/setProjectBoxActiveTab'
     })
   }
-};
+}
 </script>
 
 <style lang="less">

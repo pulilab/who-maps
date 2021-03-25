@@ -13,10 +13,10 @@
 export default {
   methods: {
     zoomToWorld () {
-      this.$root.$emit('map:reset-zoom', 3);
+      this.$root.$emit('map:reset-zoom', 3)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

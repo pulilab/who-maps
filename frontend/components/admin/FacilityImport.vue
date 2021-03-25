@@ -37,8 +37,8 @@
 </template>
 
 <script>
-import Papa from 'papaparse';
-import { mapGettersActions } from '../../utilities/form';
+import Papa from 'papaparse'
+import { mapGettersActions } from '../../utilities/form'
 
 export default {
   name: 'FacilityImport',
@@ -57,17 +57,17 @@ export default {
       showMatched: false,
       showNotMatched: true,
       csvProcessing: false
-    };
+    }
   },
   computed: {
     ...mapGettersActions({
       facilities: ['admin/map', 'getFacilities', 'setFacilities']
     }),
     dataReady () {
-      return this.facilities && this.facilities.length > 0;
+      return this.facilities && this.facilities.length > 0
     },
     simpleFacilities () {
-      return this.facilities.map(f => f.name);
+      return this.facilities.map(f => f.name)
     }
   },
   watch: {
@@ -75,31 +75,31 @@ export default {
       immediate: true,
       handler (data) {
         if (data && data.length > 0) {
-          this.facilities = data.map(d => ({ name: d }));
+          this.facilities = data.map(d => ({ name: d }))
         }
       }
     }
   },
   methods: {
     triggerFile () {
-      this.csvProcessing = true;
-      this.$refs.fileInput.click();
+      this.csvProcessing = true
+      this.$refs.fileInput.click()
     },
     setCsv (event) {
-      const file = event.target.files ? event.target.files[0] : null;
+      const file = event.target.files ? event.target.files[0] : null
       Papa.parse(file, {
         header: true,
         complete: result => {
           this.facilities = result.data.map(f => ({
             name: f.name || f.Name || f.NAME,
             place: f.county || f.County || f.COUNTY
-          }));
-          this.csvProcessing = false;
+          }))
+          this.csvProcessing = false
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="less">

@@ -31,25 +31,25 @@ export default {
   computed: {
     cookieOn: {
       get () {
-        return this.$store.state.user.cookieOn;
+        return this.$store.state.user.cookieOn
       },
       set (val) {
-        this.$store.commit('user/SET_COOKIE', val);
+        this.$store.commit('user/SET_COOKIE', val)
       }
     }
   },
   mounted () {
     if (!process.server) {
-      this.cookieOn = window.localStorage.getItem('cookie:accepted') !== 'true';
+      this.cookieOn = window.localStorage.getItem('cookie:accepted') !== 'true'
     }
   },
   methods: {
     close () {
-      this.cookieOn = false;
-      this.$track();
+      this.cookieOn = false
+      this.$track()
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

@@ -20,14 +20,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
   },
   $_veeValidate: {
     value () {
-      return this.value;
+      return this.value
     },
     events: 'change|blur'
   },
@@ -51,18 +51,18 @@ export default {
       shadows: 'project/getAllShadowDonors'
     }),
     filtered () {
-      return this.donors.filter((item) => !this.shadows.includes(item.id));
+      return this.donors.filter((item) => !this.shadows.includes(item.id))
     },
     showFiltered () {
-      return this.value.filter((elm) => !this.shadows.includes(elm));
+      return this.value.filter((elm) => !this.shadows.includes(elm))
     }
   },
   methods: {
     changeHandler (value) {
-      this.$emit('change', value);
+      this.$emit('change', value)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

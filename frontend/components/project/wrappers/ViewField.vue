@@ -1,37 +1,58 @@
 <template>
-  <div :class="`${noMargin ? 'flex no-margin' : 'flex'}`" v-show="show">
-    <div v-if="prepend" class="prepend">
+  <div
+    v-show="show"
+    :class="`${noMargin ? 'flex no-margin' : 'flex'}`"
+  >
+    <div
+      v-if="prepend"
+      class="prepend"
+    >
       <h2>{{ prepend }}.</h2>
     </div>
     <div :class="`${layout && 'full-width'}`">
-      <h2 v-if="header"><i v-if="icon" :class="icon" />{{ header }}</h2>
+      <h2 v-if="header">
+        <i
+          v-if="icon"
+          :class="icon"
+        />{{ header }}
+      </h2>
       <template v-if="content">
-        <template v-if="typeof this.contents === 'string'">
-          <nuxt-link v-if="link" :to="content" target="_blank">
+        <template v-if="typeof contents === 'string'">
+          <a
+            v-if="link"
+            :href="content"
+            target="_blank"
+          >
             {{ contents }}
-          </nuxt-link>
-          <span v-else :class="{ 'no-data': this.contents === this.noData }">
+          </a>
+          <span
+            v-else
+            :class="{ 'no-data': contents === noData }"
+          >
             {{ contents }}
           </span>
         </template>
-        <template v-if="typeof this.contents === 'number'">
+        <template v-if="typeof contents === 'number'">
           <span>{{ contents }}</span>
         </template>
-        <template v-if="typeof this.contents === 'object'">
+        <template v-if="typeof contents === 'object'">
           <ul>
             <template v-if="dhi || interoperability">
               <template v-if="dhi">
-                <li v-for="content in contents" :key="content.name">
+                <li
+                  v-for="item in contents"
+                  :key="item.name"
+                >
                   <p>
                     <b>{{ title }}</b>
                   </p>
-                  {{ content.name }}
+                  {{ item.name }}
                   <p>
                     <b>{{ subtitle }}</b>
                   </p>
                   <ul>
                     <li
-                      v-for="category in content.categories"
+                      v-for="category in item.categories"
                       :key="category.id"
                     >
                       {{ category.name }}
@@ -40,18 +61,29 @@
                 </li>
               </template>
               <template v-if="interoperability">
-                <li v-for="content in contents" :key="content.id">
+                <li
+                  v-for="item in contents"
+                  :key="item.id"
+                >
                   <p>
-                    <b>{{ content.label }}</b>
+                    <b>{{ item.label }}</b>
                   </p>
-                  <nuxt-link :to="content.link" target="_blank">
-                    {{ content.link }}
-                  </nuxt-link>
+                  <a
+                    :href="item.link"
+                    target="_blank"
+                  >
+                    {{ item.link }}
+                  </a>
                 </li>
               </template>
             </template>
             <template v-else>
-              <li v-for="content in contents" :key="content">{{ content }}</li>
+              <li
+                v-for="item in contents"
+                :key="item"
+              >
+                {{ item }}
+              </li>
             </template>
           </ul>
         </template>
@@ -59,12 +91,22 @@
       <template v-else>
         <!-- row format-->
         <template v-if="layout">
-          <el-row v-for="row in rows" :key="row.id">
+          <el-row
+            v-for="row in rows"
+            :key="row.id"
+          >
             <p v-if="row.name">
               <b>{{ row.name }}</b>
             </p>
-            <el-col v-for="col in row.cols" :key="col.id" :span="col.span">
-              <view-field v-bind="col" no-margin />
+            <el-col
+              v-for="col in row.cols"
+              :key="col.id"
+              :span="col.span"
+            >
+              <view-field
+                v-bind="col"
+                no-margin
+              />
             </el-col>
           </el-row>
         </template>
@@ -78,91 +120,108 @@
 </template>
 
 <script>
-import ViewField from "@/components/project/wrappers/ViewField";
+import ViewField from '@/components/project/wrappers/ViewField'
 
 export default {
-  name: "view-field",
+  name: 'ViewField',
   components: {
-    ViewField,
+    ViewField
   },
   props: {
     prepend: {
       type: Number,
-      default: 0,
+      default: 0
     },
     header: {
       type: String,
-      required: false,
+      default: ''
     },
     content: {
       type: [Array, String, Number],
-      default: undefined,
+      default: undefined
     },
     dhi: {
       type: Boolean,
-      default: false,
+      default: false
     },
     interoperability: {
       type: Boolean,
-      default: false,
+      default: false
     },
     title: {
       type: String,
-      required: false,
+      default: ''
     },
     subtitle: {
       type: String,
-      required: false,
+      default: ''
     },
     show: {
       type: Boolean,
-      default: true,
+      default: true
     },
     icon: {
       type: String,
-      default: "",
+      default: ''
     },
     layout: {
       type: Boolean,
-      default: false,
+      default: false
     },
     noMargin: {
       type: Boolean,
-      default: false,
+      default: false
     },
     link: {
       type: Boolean,
-      default: false,
+      default: false
     },
     rows: {
       type: Array,
-      default: () => [],
-    },
+      default: () => []
+    }
   },
-  data() {
+  data () {
     return {
-      noData: this.$gettext("No data"),
-    };
+      noData: this.$gettext('No data')
+    }
   },
   computed: {
-    contents() {
+    contents () {
       switch (typeof this.content) {
-        case "number":
-          return this.content;
-        case "string":
-          return this.content ? this.content : this.noData;
-        case "object":
-          return this.content.length > 0 ? this.content : this.noData;
-        default:
-          return this.noData;
+      case 'number':
+        return this.content
+      case 'string':
+        return this.content ? this.content : this.noData
+      case 'object':
+        return this.content.length > 0 ? this.content : this.noData
+      default:
+        return this.noData
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variables.less";
+@import '~assets/style/variables.less';
+.long-url() {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
 
 .flex {
   display: flex;
@@ -183,6 +242,7 @@ export default {
     color: @colorBrandPrimary;
     text-decoration: none;
     transition: all 1s ease-out;
+    .long-url();
     &:hover {
       color: @colorBrandPrimaryLight;
       text-decoration: underline;

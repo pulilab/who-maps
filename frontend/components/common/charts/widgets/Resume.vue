@@ -1,7 +1,14 @@
 <template>
   <el-row :class="!noBorder && 'border'">
-    <p class="title"><slot /></p>
-    <el-row type="flex" align="middle" justify="start" class="margin-bottom">
+    <p class="title">
+      <slot />
+    </p>
+    <el-row
+      type="flex"
+      align="middle"
+      justify="start"
+      class="margin-bottom"
+    >
       <slot name="content" />
     </el-row>
   </el-row>
@@ -12,10 +19,10 @@ export default {
   props: {
     noBorder: {
       type: Boolean,
-      default: false,
-    },
-  },
-};
+      default: false
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

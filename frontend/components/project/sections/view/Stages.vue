@@ -1,7 +1,10 @@
 <template>
   <div class="graph">
     <c-stages v-if="stages" />
-    <div v-else class="no-data">
+    <div
+      v-else
+      class="no-data"
+    >
       <i class="el-icon-warning" />
       <h3>
         <translate> No Data available </translate>
@@ -11,19 +14,19 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import cStages from "@/components/common/charts/cStages";
+import { mapGetters } from 'vuex'
+import cStages from '@/components/common/charts/cStages'
 
 export default {
   components: {
-    cStages,
+    cStages
   },
   computed: {
     ...mapGetters({
-      stages: "project/getStages",
-    }),
-  },
-};
+      stages: 'project/getStages'
+    })
+  }
+}
 </script>
 
 <style lang="less">

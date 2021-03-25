@@ -16,16 +16,16 @@ export default {
   data () {
     return {
       initialised: false
-    };
+    }
   },
   mounted () {
     this.$nextTick(() => {
-      const factory = require('../../angular/Thematic/thematicFactory');
-      factory.factory(0, 0, this.$gettext('MAPS Toolkit'), 'HeaderBtn', this.$gettext('Toolkit'));
-      this.initialised = true;
-    });
+      const factory = require('../../angular/Thematic/thematicFactory')
+      factory.factory(0, 0, this.$gettext('MAPS Toolkit'), 'HeaderBtn', this.$gettext('Toolkit'))
+      this.initialised = true
+    })
   }
-};
+}
 </script>
 
 <style lang="less">

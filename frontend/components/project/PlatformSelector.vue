@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   model: {
@@ -67,7 +67,7 @@ export default {
   },
   $_veeValidate: {
     value () {
-      return this.platform;
+      return this.platform
     }
   },
   props: {
@@ -84,47 +84,47 @@ export default {
     return {
       newPlatform: null,
       availablePlatforms: []
-    };
+    }
   },
   computed: {
     ...mapGetters({
       technologyPlatforms: 'projects/getTechnologyPlatforms'
     }),
     platform () {
-      return this.platforms[this.index];
+      return this.platforms[this.index]
     }
   },
   mounted () {
     this.availablePlatforms = this.technologyPlatforms.filter(
       tp => !this.platforms.some(s => s === tp.id) || tp.id === this.platform
-    ).sort((a, b) => a.name.localeCompare(b.name));
+    ).sort((a, b) => a.name.localeCompare(b.name))
   },
   methods: {
     ...mapActions({
       setNewSoftware: 'projects/setNewSoftware'
     }),
     async changeHandler (value) {
-      let id = value;
+      let id = value
       if (typeof id === 'string') {
-        const newSoftware = await this.setNewSoftware(value);
-        id = typeof newSoftware === 'number' ? newSoftware : 0;
+        const newSoftware = await this.setNewSoftware(value)
+        id = typeof newSoftware === 'number' ? newSoftware : 0
       }
-      const p = [...this.platforms];
-      p[this.index] = id;
-      this.$emit('change', p);
+      const p = [...this.platforms]
+      p[this.index] = id
+      this.$emit('change', p)
     },
     filter (value) {
       this.availablePlatforms = this.technologyPlatforms.filter(platform =>
         platform.name.toLowerCase().includes(value.toLowerCase())
-      );
+      )
       if (value) {
-        this.newPlatform = { id: value, name: value };
+        this.newPlatform = { id: value, name: value }
       } else {
-        this.newPlatform = null;
+        this.newPlatform = null
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

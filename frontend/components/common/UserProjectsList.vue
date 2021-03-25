@@ -10,36 +10,36 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
-import EmptyProjects from "./EmptyProjects";
-import ExtendedProjectCard from "../common/ExtendedProjectCard";
+import EmptyProjects from './EmptyProjects'
+import ExtendedProjectCard from '../common/ExtendedProjectCard'
 
 export default {
   components: {
     EmptyProjects,
-    ExtendedProjectCard,
+    ExtendedProjectCard
   },
   props: {
     limit: {
       type: Number,
-      default: null,
-    },
+      default: null
+    }
   },
   computed: {
     ...mapGetters({
-      userProjecList: "projects/getUserProjectList",
+      userProjecList: 'projects/getUserProjectList'
     }),
-    limited() {
+    limited () {
       return this.limit && this.userProjecList.length > 3
         ? this.userProjecList.slice(0, this.limit)
-        : this.userProjecList;
+        : this.userProjecList
     },
-    hasProjects() {
-      return this.userProjecList.length > 0;
-    },
-  },
-};
+    hasProjects () {
+      return this.userProjecList.length > 0
+    }
+  }
+}
 </script>
 
 <style lang="less">

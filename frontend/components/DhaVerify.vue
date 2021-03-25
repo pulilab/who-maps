@@ -23,10 +23,10 @@
 export default {
   methods: {
     toLogin () {
-      this.$router.push(this.localePath({ name: 'organisation-login', params: this.$route.params }));
+      this.$router.push(this.localePath({ name: 'organisation-login', params: this.$route.params }))
     }
   }
-};
+}
 </script>
 
 <style lang="less">

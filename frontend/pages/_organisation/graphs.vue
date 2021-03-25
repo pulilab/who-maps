@@ -1,6 +1,10 @@
 <template>
   <div class="wrapper">
-    <el-row type="flex" :gutter="30" class="mb-80 sticky">
+    <el-row
+      type="flex"
+      :gutter="30"
+      class="mb-80 sticky"
+    >
       <div class="resume-group border-bar">
         <el-button
           type="primary"
@@ -13,14 +17,25 @@
     </el-row>
 
     <!-- section A -->
-    <el-row type="flex" :gutter="30" class="mb-80">
+    <el-row
+      type="flex"
+      :gutter="30"
+      class="mb-80"
+    >
       <div class="resume-group">
         <el-col :span="5">
           <resume>
             <translate>Published Projects</translate>
             <template #content>
-              <growth :incoming="incoming" large absolute />
-              <growth :incoming="incoming" :previous="previous" />
+              <growth
+                :incoming="incoming"
+                large
+                absolute
+              />
+              <growth
+                :incoming="incoming"
+                :previous="previous"
+              />
             </template>
           </resume>
         </el-col>
@@ -28,8 +43,15 @@
           <resume>
             <translate>Publishable Projects</translate>
             <template #content>
-              <growth :incoming="incoming" large absolute />
-              <growth :incoming="incoming" :previous="previous" />
+              <growth
+                :incoming="incoming"
+                large
+                absolute
+              />
+              <growth
+                :incoming="incoming"
+                :previous="previous"
+              />
             </template>
           </resume>
         </el-col>
@@ -37,7 +59,11 @@
           <resume>
             <translate>Unpublished Projects</translate>
             <template #content>
-              <growth :incoming="incoming" large absolute />
+              <growth
+                :incoming="incoming"
+                large
+                absolute
+              />
             </template>
           </resume>
         </el-col>
@@ -45,8 +71,15 @@
           <resume>
             <translate>Deletable Projects</translate>
             <template #content>
-              <growth :incoming="incoming" large absolute />
-              <growth :incoming="incoming" :previous="previous" />
+              <growth
+                :incoming="incoming"
+                large
+                absolute
+              />
+              <growth
+                :incoming="incoming"
+                :previous="previous"
+              />
             </template>
           </resume>
         </el-col>
@@ -54,7 +87,11 @@
           <resume no-border>
             <translate>Monthly growth of Projects</translate>
             <template #content>
-              <growth :incoming="incoming" :previous="previous" large />
+              <growth
+                :incoming="incoming"
+                :previous="previous"
+                large
+              />
               <chart
                 :chart-data="micro.chartData"
                 :options="micro.options"
@@ -68,7 +105,11 @@
     </el-row>
 
     <!-- section B -->
-    <el-row type="flex" :gutter="20" class="mb-80">
+    <el-row
+      type="flex"
+      :gutter="20"
+      class="mb-80"
+    >
       <graph-layout :span="8">
         <template #graph>
           <chart
@@ -80,7 +121,11 @@
           />
         </template>
         <template #legend>
-          <data-legend :items="doughnutALegend" percentage large />
+          <data-legend
+            :items="doughnutALegend"
+            percentage
+            large
+          />
         </template>
       </graph-layout>
       <graph-layout :span="16">
@@ -96,7 +141,10 @@
     </el-row>
 
     <!-- section C -->
-    <el-row type="flex" class="mb-80">
+    <el-row
+      type="flex"
+      class="mb-80"
+    >
       <graph-layout :span="24">
         <translate>Monthly User Activity</translate>
         <template #graph>
@@ -107,13 +155,19 @@
           />
         </template>
         <template #legend>
-          <data-legend :items="monthlyUserLegend" horizontal />
+          <data-legend
+            :items="monthlyUserLegend"
+            horizontal
+          />
         </template>
       </graph-layout>
     </el-row>
 
     <!-- section E -->
-    <el-row type="flex" class="mb-80">
+    <el-row
+      type="flex"
+      class="mb-80"
+    >
       <graph-layout :span="24">
         <translate>Monthly User Activity</translate>
         <template #graph>
@@ -125,13 +179,19 @@
           />
         </template>
         <template #legend>
-          <data-legend :items="monthlyUserLegend" horizontal />
+          <data-legend
+            :items="monthlyUserLegend"
+            horizontal
+          />
         </template>
       </graph-layout>
     </el-row>
 
     <!-- section F -->
-    <el-row type="flex" class="mb-80">
+    <el-row
+      type="flex"
+      class="mb-80"
+    >
       <graph-layout :span="24">
         <translate>Project statuses per month</translate>
         <template #graph>
@@ -143,13 +203,19 @@
           />
         </template>
         <template #legend>
-          <data-legend :items="projectStatusLegend" horizontal />
+          <data-legend
+            :items="projectStatusLegend"
+            horizontal
+          />
         </template>
       </graph-layout>
     </el-row>
 
     <!-- section G -->
-    <el-row type="flex" class="mb-80">
+    <el-row
+      type="flex"
+      class="mb-80"
+    >
       <graph-layout :span="24">
         <translate>Monthly growth of API keys</translate>
         <template #graph>
@@ -163,10 +229,16 @@
     </el-row>
 
     <!-- section H -->
-    <el-row type="flex" :gutter="20" class="mb-80">
+    <el-row
+      type="flex"
+      :gutter="20"
+      class="mb-80"
+    >
       <graph-layout :span="8">
         <translate>Project approval per countries</translate>
-        <template #legend><country-legend :data="countryTable" /></template>
+        <template #legend>
+          <country-legend :data="countryTable" />
+        </template>
       </graph-layout>
       <graph-layout :span="16">
         <translate>Monthly growth of API keys</translate>
@@ -181,7 +253,11 @@
     </el-row>
 
     <!-- section I -->
-    <el-row type="flex" :gutter="20" class="mb-80">
+    <el-row
+      type="flex"
+      :gutter="20"
+      class="mb-80"
+    >
       <graph-layout :span="8">
         <translate>
           Has the government contributed to the project, either financially or
@@ -197,7 +273,10 @@
           />
         </template>
         <template #legend>
-          <data-legend :items="doughnutBLegend" percentage />
+          <data-legend
+            :items="doughnutBLegend"
+            percentage
+          />
         </template>
       </graph-layout>
       <graph-layout :span="16">
@@ -213,8 +292,15 @@
     </el-row>
 
     <!-- section J -->
-    <el-row type="flex" :gutter="20" class="mb-80">
-      <graph-layout :span="16" horizontal>
+    <el-row
+      type="flex"
+      :gutter="20"
+      class="mb-80"
+    >
+      <graph-layout
+        :span="16"
+        horizontal
+      >
         <translate>Distributions of projects’ stages</translate>
         <template #graph>
           <chart
@@ -245,7 +331,11 @@
     </el-row>
 
     <!-- section K -->
-    <el-row type="flex" :gutter="20" class="mb-80">
+    <el-row
+      type="flex"
+      :gutter="20"
+      class="mb-80"
+    >
       <graph-layout :span="8">
         <translate>Coverage of Health Focus Areas</translate>
         <template #graph>
@@ -289,16 +379,16 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import Growth from "@/components/common/charts/utilities/Growth";
-import Subtitle from "@/components/common/charts/utilities/Subtitle";
-import DataLegend from "@/components/common/charts/utilities/DataLegend";
-import TabLegend from "@/components/common/charts/utilities/TabLegend";
-import CountryLegend from "@/components/common/charts/utilities/CountryLegend";
+import { mapState, mapActions } from 'vuex'
+import Growth from '@/components/common/charts/utilities/Growth'
+import Subtitle from '@/components/common/charts/utilities/Subtitle'
+import DataLegend from '@/components/common/charts/utilities/DataLegend'
+import TabLegend from '@/components/common/charts/utilities/TabLegend'
+import CountryLegend from '@/components/common/charts/utilities/CountryLegend'
 
-import Chart from "@/components/common/charts/Chart";
-import Resume from "@/components/common/charts/widgets/Resume";
-import GraphLayout from "@/components/common/charts/widgets/GraphLayout";
+import Chart from '@/components/common/charts/Chart'
+import Resume from '@/components/common/charts/widgets/Resume'
+import GraphLayout from '@/components/common/charts/widgets/GraphLayout'
 
 export default {
   components: {
@@ -309,63 +399,63 @@ export default {
     DataLegend,
     TabLegend,
     Subtitle,
-    CountryLegend,
-  },
-  created() {
-    this.handleRandom();
+    CountryLegend
   },
   computed: {
     ...mapState({
       //
-      incoming: (state) => state.charts.incoming,
-      previous: (state) => state.charts.previous,
+      incoming: state => state.charts.incoming,
+      previous: state => state.charts.previous,
       // graphs
-      micro: (state) => state.charts.micro,
-      polarA: (state) => state.charts.polarA,
-      lineA: (state) => state.charts.lineA,
-      lineB: (state) => state.charts.lineB,
-      lineC: (state) => state.charts.lineC,
-      barA: (state) => state.charts.barA,
-      barB: (state) => state.charts.barB,
-      horizontalBarA: (state) => state.charts.horizontalBarA,
-      horizontalBarB: (state) => state.charts.horizontalBarB,
-      doughnutA: (state) => state.charts.doughnutA,
-      doughnutB: (state) => state.charts.doughnutB,
-      doughnutC: (state) => state.charts.doughnutC,
-      doughnutD: (state) => state.charts.doughnutD,
+      micro: state => state.charts.micro,
+      polarA: state => state.charts.polarA,
+      lineA: state => state.charts.lineA,
+      lineB: state => state.charts.lineB,
+      lineC: state => state.charts.lineC,
+      barA: state => state.charts.barA,
+      barB: state => state.charts.barB,
+      horizontalBarA: state => state.charts.horizontalBarA,
+      horizontalBarB: state => state.charts.horizontalBarB,
+      doughnutA: state => state.charts.doughnutA,
+      doughnutB: state => state.charts.doughnutB,
+      doughnutC: state => state.charts.doughnutC,
+      doughnutD: state => state.charts.doughnutD,
       // legends
-      polarALegend: (state) => state.charts.polarALegend,
-      doughnutALegend: (state) => state.charts.doughnutALegend,
-      doughnutBLegend: (state) => state.charts.doughnutBLegend,
-      doughnutCLegend: (state) => state.charts.doughnutCLegend,
-      doughnutDLegend: (state) => state.charts.doughnutDLegend,
-      monthlyUserLegend: (state) => state.charts.monthlyUserLegend,
-      projectStatusLegend: (state) => state.charts.projectStatusLegend,
-      countryTable: (state) => state.charts.countryTable,
+      polarALegend: state => state.charts.polarALegend,
+      doughnutALegend: state => state.charts.doughnutALegend,
+      doughnutBLegend: state => state.charts.doughnutBLegend,
+      doughnutCLegend: state => state.charts.doughnutCLegend,
+      doughnutDLegend: state => state.charts.doughnutDLegend,
+      monthlyUserLegend: state => state.charts.monthlyUserLegend,
+      projectStatusLegend: state => state.charts.projectStatusLegend,
+      countryTable: state => state.charts.countryTable,
       // back click hfa system
-      back: (state) => state.charts.back,
-      subtitle: (state) => state.charts.subtitle,
-    }),
+      back: state => state.charts.back,
+      subtitle: state => state.charts.subtitle
+    })
+  },
+  created () {
+    this.handleRandom()
   },
   methods: {
     ...mapActions({
-      getDashboardData: "charts/getDashboardData",
-      handleBackClick: "charts/handleBackClick",
-      barClick: "charts/handleBarClick",
-      backClick: "charts/handleBackClick",
+      getDashboardData: 'charts/getDashboardData',
+      handleBackClick: 'charts/handleBackClick',
+      barClick: 'charts/handleBarClick',
+      backClick: 'charts/handleBackClick'
     }),
-    handleRandom() {
+    handleRandom () {
       // nees to wire the click event to the options object of horizontal bar
-      this.getDashboardData({ func: this.handleBarClick, refresh: true });
+      this.getDashboardData({ func: this.handleBarClick, refresh: true })
     },
-    handleBarClick(point, event) {
-      this.barClick({ func: this.handleBarClick, idx: event[0]._index });
+    handleBarClick (point, event) {
+      this.barClick({ func: this.handleBarClick, idx: event[0]._index })
     },
-    handleBackClick() {
-      this.backClick({ func: this.handleBarClick });
-    },
-  },
-};
+    handleBackClick () {
+      this.backClick({ func: this.handleBarClick })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

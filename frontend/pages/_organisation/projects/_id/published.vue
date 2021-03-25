@@ -5,7 +5,10 @@
     </template>
     <template #subtitle>
       <translate>You are viewing the</translate>
-      <tag type="publish" label="published" />
+      <tag
+        type="publish"
+        label="published"
+      />
       <translate>version of the project.</translate>
     </template>
     <project-data published />
@@ -13,29 +16,29 @@
 </template>
 
 <script>
-import { fetchProjectData } from "@/utilities/projects";
-import ProjectData from "@/components/project/ProjectData";
-import ProjectLayout from "@/components/project/wrappers/ProjectLayout";
-import Tag from "@/components/common/Tag";
+import { fetchProjectData } from '@/utilities/projects'
+import ProjectData from '@/components/project/ProjectData'
+import ProjectLayout from '@/components/project/wrappers/ProjectLayout'
+import Tag from '@/components/common/Tag'
 export default {
   components: {
     ProjectData,
     ProjectLayout,
-    Tag,
+    Tag
   },
-  async fetch({ store, params, error }) {
-    await fetchProjectData(store, params, error);
+  async fetch ({ store, params, error }) {
+    await fetchProjectData(store, params, error)
     if (
       !store.state.project.published ||
       store.state.project.published.name === null
     ) {
       error({
         statusCode: 404,
-        message: "Project is not published",
-      });
+        message: 'Project is not published'
+      })
     }
-  },
-};
+  }
+}
 </script>
 
 <style lang="less">

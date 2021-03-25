@@ -12,14 +12,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters({
       total: 'dashboard/getTotal'
     })
   }
-};
+}
 </script>
 
 <style lang="less">

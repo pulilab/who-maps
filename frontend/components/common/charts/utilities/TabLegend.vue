@@ -4,8 +4,8 @@
       <p
         v-for="tab in legend.tabs"
         :key="tab.id"
-        @click="handleSelect(tab.id)"
         :class="selected === tab.id && 'selected'"
+        @click="handleSelect(tab.id)"
       >
         <span :class="tab.color" />
         {{ tab.name }}
@@ -16,11 +16,18 @@
       :key="content.id"
       :class="`tab-content ${selected !== content.id && 'hide'}`"
     >
-      <div v-for="area in content.areas" :key="area.name" class="area">
+      <div
+        v-for="area in content.areas"
+        :key="area.name"
+        class="area"
+      >
         <h4>{{ area.name }}</h4>
         <div class="subarea">
-          <p v-for="subarea in area.subareas" :key="subarea">
-            <i :class="`${content.icon} ${content.color}`"></i>{{ subarea }}
+          <p
+            v-for="subarea in area.subareas"
+            :key="subarea"
+          >
+            <i :class="`${content.icon} ${content.color}`" />{{ subarea }}
           </p>
         </div>
       </div>
@@ -33,20 +40,20 @@ export default {
   props: {
     legend: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
-  data() {
+  data () {
     return {
-      selected: 1,
-    };
+      selected: 1
+    }
   },
   methods: {
-    handleSelect(id) {
-      this.selected = id;
-    },
-  },
-};
+    handleSelect (id) {
+      this.selected = id
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

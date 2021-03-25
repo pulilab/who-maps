@@ -54,12 +54,12 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js'
 
-import CoverageFieldset from './CoverageFieldset';
-import FacilitySelector from './FacilitySelector';
+import CoverageFieldset from './CoverageFieldset'
+import FacilitySelector from './FacilitySelector'
 
-import { mapGettersActions } from '../../utilities/form';
+import { mapGettersActions } from '../../utilities/form'
 
 export default {
   components: {
@@ -103,90 +103,90 @@ export default {
     }),
     subLevel: {
       get () {
-        return this.coverage[this.index];
+        return this.coverage[this.index]
       },
       set (value) {
-        const cov = [...this.coverage];
-        cov[this.index] = value;
-        this.$emit('update:coverage', cov);
+        const cov = [...this.coverage]
+        cov[this.index] = value
+        this.$emit('update:coverage', cov)
       }
     },
     availableSubLevels () {
       return this.subLevels.filter(
         tp => !this.coverage.some(s => s === tp.id) || tp.id === this.subLevel
-      );
+      )
     },
     localCoverageData () {
-      return this.coverageData[this.subLevel];
+      return this.coverageData[this.subLevel]
     },
     facilitiesList: {
       get () {
         const facilitiesList = this.localCoverageData
           ? this.localCoverageData.facilities_list
-          : [];
-        return facilitiesList || [];
+          : []
+        return facilitiesList || []
       },
       set (value) {
         const coverage = {
           facilities_list: [...value],
           facilities: value.length
-        };
-        this.coverageData = { coverage, subLevel: this.subLevel };
+        }
+        this.coverageData = { coverage, subLevel: this.subLevel }
       }
     },
     healthWorkers: {
       get () {
         return this.localCoverageData
           ? this.localCoverageData.health_workers
-          : null;
+          : null
       },
       set (value) {
-        const coverage = { health_workers: value };
-        this.coverageData = { coverage, subLevel: this.subLevel };
+        const coverage = { health_workers: value }
+        this.coverageData = { coverage, subLevel: this.subLevel }
       }
     },
     clients: {
       get () {
-        return this.localCoverageData ? this.localCoverageData.clients : null;
+        return this.localCoverageData ? this.localCoverageData.clients : null
       },
       set (value) {
-        const coverage = { clients: value };
-        this.coverageData = { coverage, subLevel: this.subLevel };
+        const coverage = { clients: value }
+        this.coverageData = { coverage, subLevel: this.subLevel }
       }
     },
     facilities: {
       get () {
         return this.localCoverageData
           ? this.localCoverageData.facilities
-          : null;
+          : null
       },
       set (value) {
-        const coverage = { facilities: value };
-        this.coverageData = { coverage, subLevel: this.subLevel };
+        const coverage = { facilities: value }
+        this.coverageData = { coverage, subLevel: this.subLevel }
       }
     }
   },
   methods: {
     clear () {
-      this.errors.clear();
-      this.$validator.clear();
-      this.$refs.coverageFieldset.clear();
-      this.$refs.facilitySelector.clear();
+      this.errors.clear()
+      this.$validator.clear()
+      this.$refs.coverageFieldset.clear()
+      this.$refs.facilitySelector.clear()
     },
     async validate () {
       const validations = await Promise.all([
         this.$validator.validate(),
         this.$refs.coverageFieldset.validate(),
         this.$refs.facilitySelector.validate()
-      ]);
+      ])
       console.log(
         `sub national level deployment item ${this.scope}`,
         validations
-      );
-      return validations.reduce((a, c) => a && c, true);
+      )
+      return validations.reduce((a, c) => a && c, true)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

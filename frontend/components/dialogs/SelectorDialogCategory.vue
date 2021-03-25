@@ -114,67 +114,67 @@ export default {
   data () {
     return {
       categoryToggled: false
-    };
+    }
   },
   computed: {
     categoryShown () {
-      return this.hideHeader || this.categoryToggled || this.alwaysExpandCategory;
+      return this.hideHeader || this.categoryToggled || this.alwaysExpandCategory
     },
     items () {
       if (this.childName) {
-        return this.category[this.childName];
+        return this.category[this.childName]
       }
-      return this.category;
+      return this.category
     },
     headerChecked () {
       return this.items.reduce((c, n) => {
-        return c && this.values.includes(n.id);
-      }, true);
+        return c && this.values.includes(n.id)
+      }, true)
     }
   },
   watch: {
     expandCollapse () {
-      this.categoryToggled = this.expandCollapse;
+      this.categoryToggled = this.expandCollapse
     }
   },
   mounted () {
     if (this.items.find(item => this.values.includes(item.id))) {
-      this.categoryToggled = true;
+      this.categoryToggled = true
     } else {
-      this.categoryToggled = this.initialToggle;
+      this.categoryToggled = this.initialToggle
     }
   },
   methods: {
     filterChange (item) {
       if (this.values.includes(item)) {
-        this.$emit('change', this.values.filter(v => v !== item));
+        this.$emit('change', this.values.filter(v => v !== item))
       } else {
-        this.$emit('change', [...this.values, item]);
+        this.$emit('change', [...this.values, item])
       }
     },
     toggleCategory () {
-      this.categoryToggled = !this.categoryToggled;
+      this.categoryToggled = !this.categoryToggled
     },
     selectAll () {
-      this.$emit('change', [...this.values, ...this.items.map(i => i.id)]);
+      this.$emit('change', [...this.values, ...this.items.map(i => i.id)])
     },
     deSelectAll () {
-      this.$emit('change', this.values.filter(v => !this.items.map(i => i.id).includes(v)));
+      this.$emit('change', this.values.filter(v => !this.items.map(i => i.id).includes(v)))
     },
     selectAllCategory () {
-      this.categoryToggled = true;
+      this.categoryToggled = true
 
       if (!this.headerChecked) {
-        this.selectAll();
+        this.selectAll()
       } else {
-        this.deSelectAll();
+        this.deSelectAll()
       }
     },
     getItemName (item) {
-      return item[this.nameProp];
+      return item[this.nameProp]
     }
   }
-};
+}
 </script>
 
 <style lang="less">

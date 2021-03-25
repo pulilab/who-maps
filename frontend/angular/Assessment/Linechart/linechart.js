@@ -1,5 +1,5 @@
-import _template from './Linechart.html';
-import LinechartController from './LinechartController';
+import _template from './Linechart.html'
+import LinechartController from './LinechartController'
 
 const linechart = {
   controller: LinechartController.linechartFactory(),
@@ -11,6 +11,6 @@ const linechart = {
     notpercentage: '='
   },
   name: 'linechart'
-};
+}
 
-export default linechart;
+export default linechart

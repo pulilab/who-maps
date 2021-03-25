@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import ProjectLegendContent from './ProjectLegendContent';
+import ProjectLegendContent from './ProjectLegendContent'
 
 export default {
   components: {
@@ -88,7 +88,7 @@ export default {
   },
   computed: {
   }
-};
+}
 </script>
 
 <style lang="less">

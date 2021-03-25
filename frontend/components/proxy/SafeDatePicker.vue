@@ -17,20 +17,20 @@ export default {
   },
   computed: {
     propsAndAttrs () {
-      return { ...this.$props, ...this.$attrs };
+      return { ...this.$props, ...this.$attrs }
     },
     listeners () {
-      return { ...this.$listeners };
+      return { ...this.$listeners }
     }
   },
   methods: {
     checkValue (value) {
       if (!(value && value instanceof Date && value.toJSON())) {
-        this.$emit('input', null);
+        this.$emit('input', null)
       }
     }
   }
-};
+}
 </script>
 
 <style>

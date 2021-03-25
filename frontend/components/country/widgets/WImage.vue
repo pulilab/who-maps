@@ -15,7 +15,7 @@ export default {
       default: ''
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

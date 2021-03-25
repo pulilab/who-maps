@@ -62,26 +62,26 @@ export default {
   data () {
     return {
       inputValue: ''
-    };
+    }
   },
   computed: {
     propsAndAttrs () {
-      return { ...this.$props, ...this.$attrs };
+      return { ...this.$props, ...this.$attrs }
     },
     listeners () {
-      return { ...this.$listeners };
+      return { ...this.$listeners }
     },
     draftRequired () {
-      return this.draftRule && this.draftRule.required;
+      return this.draftRule && this.draftRule.required
     },
     publishRequired () {
-      return this.publishRule && this.publishRule.required;
+      return this.publishRule && this.publishRule.required
     },
     prependFormat () {
-      return this.prependLabel ? `${this.prependLabel}. ` : '';
+      return this.prependLabel ? `${this.prependLabel}. ` : ''
     }
   },
   methods: {
   }
-};
+}
 </script>

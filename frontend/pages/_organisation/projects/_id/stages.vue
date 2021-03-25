@@ -8,19 +8,19 @@
 </template>
 
 <script>
-import { fetchProjectData } from "@/utilities/projects";
-import cStages from "@/components/common/charts/cStages";
-import ProjectLayout from "@/components/project/wrappers/ProjectLayout";
+import { fetchProjectData } from '@/utilities/projects'
+import cStages from '@/components/common/charts/cStages'
+import ProjectLayout from '@/components/project/wrappers/ProjectLayout'
 export default {
-  middleware: ["isLoggedIn"],
   components: {
     cStages,
-    ProjectLayout,
+    ProjectLayout
   },
-  fetch({ store, params, error }) {
-    return fetchProjectData(store, params, error);
-  },
-};
+  middleware: ['isLoggedIn'],
+  fetch ({ store, params, error }) {
+    return fetchProjectData(store, params, error)
+  }
+}
 </script>
 
 <style lang="less" scoped>

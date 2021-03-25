@@ -11,13 +11,13 @@
 </template>
 
 <script>
-import HeadMixin from '@/layouts/HeadMixin';
-import DhaFooter from '../components/common/DhaFooter.vue';
-import TopBar from '../components/common/TopBar.vue';
-import ActionBar from '../components/common/ActionBar.vue';
-import DialogsContainer from '../components/dialogs/DialogsContainer.vue';
-import DjangoFeedback from '../components/DjangoFeedback.vue';
-import CookieConsent from '@/components/common/CookieConsent';
+import HeadMixin from '@/layouts/HeadMixin'
+import DhaFooter from '../components/common/DhaFooter.vue'
+import TopBar from '../components/common/TopBar.vue'
+import ActionBar from '../components/common/ActionBar.vue'
+import DialogsContainer from '../components/dialogs/DialogsContainer.vue'
+import DjangoFeedback from '../components/DjangoFeedback.vue'
+import CookieConsent from '@/components/common/CookieConsent'
 
 export default {
   components: {
@@ -32,28 +32,28 @@ export default {
   computed: {
     pureRoute () {
       if (this.$route && this.$route.name) {
-        return this.$route.name.split('___')[0];
+        return this.$route.name.split('___')[0]
       }
-      return null;
+      return null
     },
     showActionBar () {
-      const hiddenOn = ['index-login', 'index-signup'];
+      const hiddenOn = ['index-login', 'index-signup']
       if (this.$route && this.$route.name) {
-        return !hiddenOn.includes(this.pureRoute);
+        return !hiddenOn.includes(this.pureRoute)
       }
-      return false;
+      return false
     },
     layoutClass () {
       if (!['organisation', 'organisation-login', 'organisation-signup', 'organisation-reset'].includes(this.pureRoute)) {
-        return 'SubPage';
+        return 'SubPage'
       } else if (this.$route.params.organisation !== '-') {
-        return 'CountryDonorLandingPage';
+        return 'CountryDonorLandingPage'
       }
-      return 'LandingPage';
+      return 'LandingPage'
     }
   }
 
-};
+}
 </script>
 
 <style lang="less">

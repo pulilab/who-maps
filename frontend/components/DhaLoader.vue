@@ -28,112 +28,112 @@ export default {
       skipTimerCount: 0,
       continuous: false,
       rtl: false
-    };
+    }
   },
   beforeDestroy () {
-    this.clear();
+    this.clear()
   },
   methods: {
     clear () {
-      clearInterval(this._timer);
-      clearTimeout(this._throttle);
-      this._timer = null;
+      clearInterval(this._timer)
+      clearTimeout(this._throttle)
+      this._timer = null
     },
     start (id) {
       if (id) {
-        this._skipUntill = id;
+        this._skipUntill = id
       }
-      this.clear();
-      this.percent = 0;
-      this.reversed = false;
-      this.skipTimerCount = 0;
-      this.canSucceed = true;
+      this.clear()
+      this.percent = 0
+      this.reversed = false
+      this.skipTimerCount = 0
+      this.canSucceed = true
       if (this.throttle) {
-        this._throttle = setTimeout(() => this.startTimer(), this.throttle);
+        this._throttle = setTimeout(() => this.startTimer(), this.throttle)
       } else {
-        this.startTimer();
+        this.startTimer()
       }
-      return this;
+      return this
     },
     set (num) {
-      this.show = true;
-      this.canSucceed = true;
-      this.percent = Math.min(100, Math.max(0, Math.floor(num)));
-      return this;
+      this.show = true
+      this.canSucceed = true
+      this.percent = Math.min(100, Math.max(0, Math.floor(num)))
+      return this
     },
     get () {
-      return this.percent;
+      return this.percent
     },
     increase (num) {
-      this.percent = Math.min(100, Math.floor(this.percent + num));
-      return this;
+      this.percent = Math.min(100, Math.floor(this.percent + num))
+      return this
     },
     decrease (num) {
-      this.percent = Math.max(0, Math.floor(this.percent - num));
-      return this;
+      this.percent = Math.max(0, Math.floor(this.percent - num))
+      return this
     },
     pause () {
-      clearInterval(this._timer);
-      return this;
+      clearInterval(this._timer)
+      return this
     },
     resume () {
-      this.startTimer();
-      return this;
+      this.startTimer()
+      return this
     },
     finish (id) {
       if (this._skipUntill && id !== this._skipUntill) {
-        return this;
+        return this
       }
-      this.percent = this.reversed ? 0 : 100;
-      this._skipUntill = null;
-      this.hide();
-      return this;
+      this.percent = this.reversed ? 0 : 100
+      this._skipUntill = null
+      this.hide()
+      return this
     },
     hide () {
-      this.clear();
+      this.clear()
       setTimeout(() => {
-        this.show = false;
+        this.show = false
         this.$nextTick(() => {
-          this.percent = 0;
-          this.reversed = false;
-        });
-      }, 500);
-      return this;
+          this.percent = 0
+          this.reversed = false
+        })
+      }, 500)
+      return this
     },
     fail () {
-      this.canSucceed = false;
-      return this;
+      this.canSucceed = false
+      return this
     },
     startTimer () {
       if (!this.show) {
-        this.show = true;
+        this.show = true
       }
       if (typeof this._cut === 'undefined') {
-        this._cut = 10000 / Math.floor(this.duration);
+        this._cut = 10000 / Math.floor(this.duration)
       }
       this._timer = setInterval(() => {
         if (this.skipTimerCount > 0) {
-          this.skipTimerCount--;
-          return;
+          this.skipTimerCount--
+          return
         }
         if (this.reversed) {
-          this.decrease(this._cut);
+          this.decrease(this._cut)
         } else {
-          this.increase(this._cut);
+          this.increase(this._cut)
         }
         if (this.continuous) {
           if (this.percent >= 100) {
-            this.skipTimerCount = 1;
-            this.reversed = !this.reversed;
+            this.skipTimerCount = 1
+            this.reversed = !this.reversed
           } else if (this.percent <= 0) {
-            this.skipTimerCount = 1;
-            this.reversed = !this.reversed;
+            this.skipTimerCount = 1
+            this.reversed = !this.reversed
           }
         }
-      }, 100);
+      }, 100)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

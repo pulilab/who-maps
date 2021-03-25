@@ -108,12 +108,12 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 
-import { mapGettersActions } from '../../../utilities/form';
-import CollapsibleCard from '../CollapsibleCard';
-import LicenseSelector from '../LicenseSelector';
+import { mapGettersActions } from '../../../utilities/form'
+import CollapsibleCard from '../CollapsibleCard'
+import LicenseSelector from '../LicenseSelector'
 
 export default {
   components: {
@@ -128,13 +128,13 @@ export default {
   },
   methods: {
     async validate () {
-      this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([this.$validator.validate()]);
-      console.log('Technology overview validators', validations);
-      return validations.reduce((a, c) => a && c, true);
+      this.$refs.collapsible.expandCard()
+      const validations = await Promise.all([this.$validator.validate()])
+      console.log('Technology overview validators', validations)
+      return validations.reduce((a, c) => a && c, true)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

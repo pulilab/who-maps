@@ -4,5 +4,5 @@ export const mockAxios = () => {
     post: jest.fn(),
     patch: jest.fn(),
     delete: jest.fn()
-  };
-};
+  }
+}

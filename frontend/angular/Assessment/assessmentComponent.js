@@ -1,6 +1,6 @@
-import AssessmentModuleController from './AssessmentModuleController';
-import _template from './Assessment.html';
-import './Assessment.scss';
+import AssessmentModuleController from './AssessmentModuleController'
+import _template from './Assessment.html'
+import './Assessment.scss'
 
 const assessmentComponent = {
   controller: AssessmentModuleController.factory(),
@@ -10,6 +10,6 @@ const assessmentComponent = {
   bindings: {
     viewMode: '@'
   }
-};
+}
 
-export default assessmentComponent;
+export default assessmentComponent

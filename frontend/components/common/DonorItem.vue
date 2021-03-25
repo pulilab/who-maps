@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   components: {},
@@ -24,13 +24,13 @@ export default {
     }),
     donor () {
       if (this.id) {
-        const id = parseInt(this.id, 10);
-        return this.getDonorDetails(id);
+        const id = parseInt(this.id, 10)
+        return this.getDonorDetails(id)
       }
-      return null;
+      return null
     }
   }
-};
+}
 </script>
 
 <style lang="less">

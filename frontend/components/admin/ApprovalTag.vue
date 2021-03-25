@@ -26,7 +26,7 @@ export default {
       default: null
     }
   }
-};
+}
 </script>
 
 <style lang="less">

@@ -195,12 +195,12 @@
 </template>
 
 <script>
-import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
-import ProjectLegend from '@/components/common/ProjectLegend';
-import PdfExport from '@/components/dashboard/PdfExport';
-import ListExport from '@/components/dashboard/ListExport';
+import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx'
+import ProjectLegend from '@/components/common/ProjectLegend'
+import PdfExport from '@/components/dashboard/PdfExport'
+import ListExport from '@/components/dashboard/ListExport'
 
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -217,7 +217,7 @@ export default {
       columnSelectorOpen: false,
       selectedColumns: [],
       viewportSize: 2000
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -232,31 +232,31 @@ export default {
       dashboardType: 'dashboard/getDashboardType'
     }),
     settingsTitle () {
-      return `${this.$gettext('main fields')} (${this.selectedCol.length}/${this.columns.length})`;
+      return `${this.$gettext('main fields')} (${this.selectedCol.length}/${this.columns.length})`
     },
     selected () {
-      return this.allSelected ? this.total : this.selectedRows.length;
+      return this.allSelected ? this.total : this.selectedRows.length
     },
     rowToExport () {
-      return this.allSelected ? this.projects : this.projects.filter(p => this.selectedRows.some(sr => sr === p.id));
+      return this.allSelected ? this.projects : this.projects.filter(p => this.selectedRows.some(sr => sr === p.id))
     },
     showEmailButton () {
-      const allowed = ['CA', 'SCA', 'D', 'DA', 'SDA'];
+      const allowed = ['CA', 'SCA', 'D', 'DA', 'SDA']
       if (this.user) {
-        return allowed.includes(this.user.account_type) || this.user.is_superuser;
+        return allowed.includes(this.user.account_type) || this.user.is_superuser
       }
-      return false;
+      return false
     }
   },
   mounted () {
     this.$nextTick(() => {
-      this.setViewport();
-      window.addEventListener('resize', this.setViewport);
-    });
+      this.setViewport()
+      window.addEventListener('resize', this.setViewport)
+    })
   },
   beforeDestroy () {
     if (process.client) {
-      window.removeEventListener('resize', this.setViewport);
+      window.removeEventListener('resize', this.setViewport)
     }
   },
   methods: {
@@ -269,44 +269,44 @@ export default {
     }),
     setViewport () {
       if (process.client && window) {
-        this.viewportSize = window.innerWidth;
+        this.viewportSize = window.innerWidth
       }
     },
     popperOpenHandler () {
-      this.selectedColumns = [...this.columns.map(s => ({ ...s }))];
+      this.selectedColumns = [...this.columns.map(s => ({ ...s }))]
     },
     updateColumns () {
-      this.setSelectedColumns(this.selectedColumns.filter(s => s.selected).map(s => s.id));
-      this.columnSelectorOpen = false;
+      this.setSelectedColumns(this.selectedColumns.filter(s => s.selected).map(s => s.id))
+      this.columnSelectorOpen = false
     },
     async toggleSelectAll () {
       if (!this.allSelected) {
-        await this.loadProjectsBucket();
-        this.setSelectAll(true);
+        await this.loadProjectsBucket()
+        this.setSelectAll(true)
       } else {
-        this.setSelectAll(false);
-        this.setSelectedRows([]);
+        this.setSelectAll(false)
+        this.setSelectedRows([])
       }
     },
     exportRows (xlsxDownloadFunction) {
-      this.$nuxt.$loading.start('pdf');
+      this.$nuxt.$loading.start('pdf')
       window.setTimeout(async () => {
         if (this.exportType === 'PDF') {
-          this.$refs.pdfExport.printPdf();
+          this.$refs.pdfExport.printPdf()
         } else {
-          xlsxDownloadFunction();
+          xlsxDownloadFunction()
         }
-        this.$nuxt.$loading.finish('pdf');
-      }, 500);
+        this.$nuxt.$loading.finish('pdf')
+      }, 500)
     },
     async openMailDialog () {
       if (this.allSelected) {
-        await this.loadProjectsBucket();
+        await this.loadProjectsBucket()
       }
-      this.setSendEmailDialogState(true);
+      this.setSendEmailDialogState(true)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

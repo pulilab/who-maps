@@ -1,44 +1,44 @@
 <template>
   <component
-    v-if="loaded"
     :is="type"
+    v-if="loaded"
     v-bind="{ ...$props, ...$attrs }"
     v-on="{ ...$listeners }"
-  ></component>
+  />
 </template>
 
 <script>
 export default {
-  name: "chart",
+  name: 'Chart',
   props: {
     type: {
       type: String,
-      default: "line-chart",
+      default: 'line-chart',
       validator: function (value) {
         return (
           [
-            "line-chart",
-            "doughnut",
-            "polar-area",
-            "bar-chart",
-            "horizontal-bar",
+            'line-chart',
+            'doughnut',
+            'polar-area',
+            'bar-chart',
+            'horizontal-bar'
           ].indexOf(value) !== -1
-        );
-      },
-    },
+        )
+      }
+    }
   },
   data: () => ({
-    loaded: false,
+    loaded: false
   }),
-  async created() {
+  async created () {
     await setTimeout(() => {
-      this.loaded = true;
-    }, 250);
+      this.loaded = true
+    }, 250)
   },
-  beforeDestroy() {
-    this.loaded = false;
-  },
-};
+  beforeDestroy () {
+    this.loaded = false
+  }
+}
 </script>
 
 <style lang="scss">
@@ -85,4 +85,3 @@ export default {
   }
 }
 </style>
-

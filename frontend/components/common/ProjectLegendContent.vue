@@ -52,7 +52,7 @@
 </template>3
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -99,47 +99,47 @@ export default {
     }),
     isMember () {
       if (this.id && this.userProfile) {
-        return this.userProfile.member.includes(this.id);
+        return this.userProfile.member.includes(this.id)
       }
-      return false;
+      return false
     },
     isViewer () {
       if (this.id && this.userProfile) {
-        return this.userProfile.viewer.includes(this.id);
+        return this.userProfile.viewer.includes(this.id)
       }
-      return false;
+      return false
     },
     isTeam () {
-      return this.isMember || this.isViewer;
+      return this.isMember || this.isViewer
     },
     isDonor () {
-      const donorPersonas = ['D', 'DA', 'SDA'];
+      const donorPersonas = ['D', 'DA', 'SDA']
       if (this.donors && Array.isArray(this.donors) && this.userProfile) {
-        return donorPersonas.includes(this.userProfile.account_type) && this.donors.includes(this.userProfile.donor);
+        return donorPersonas.includes(this.userProfile.account_type) && this.donors.includes(this.userProfile.donor)
       }
-      return false;
+      return false
     },
     isCountry () {
-      const countryPersonas = ['G', 'CA', 'SCA'];
+      const countryPersonas = ['G', 'CA', 'SCA']
       if (this.country && this.userProfile) {
-        return countryPersonas.includes(this.userProfile.account_type) && this.country === this.userProfile.country;
+        return countryPersonas.includes(this.userProfile.account_type) && this.country === this.userProfile.country
       }
-      return false;
+      return false
     },
     showStar () {
-      return this.forceStar || this.isMember;
+      return this.forceStar || this.isMember
     },
     showEye () {
-      return this.forceEye || (!this.isMember && this.isViewer);
+      return this.forceEye || (!this.isMember && this.isViewer)
     },
     showHandshake () {
-      return this.forceHandshake || (this.isDonor && !this.isTeam);
+      return this.forceHandshake || (this.isDonor && !this.isTeam)
     },
     showGlobe () {
-      return this.forceGlobe || (this.isCountry && !this.isTeam);
+      return this.forceGlobe || (this.isCountry && !this.isTeam)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

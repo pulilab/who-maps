@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   model: {
@@ -44,10 +44,10 @@ export default {
   },
   methods: {
     changeHandler (value) {
-      this.$emit('change', value);
+      this.$emit('change', value)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

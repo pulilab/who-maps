@@ -27,14 +27,14 @@ export default {
   computed: {
     internalValue: {
       get () {
-        return this.value instanceof Date ? this.value.toJSON() : this.value;
+        return this.value instanceof Date ? this.value.toJSON() : this.value
       },
       set (value) {
-        this.$emit('change', value ? value.toJSON() : null);
+        this.$emit('change', value ? value.toJSON() : null)
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less">
