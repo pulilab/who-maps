@@ -5,7 +5,6 @@ export default ln => {
       ? 'http://nginx:9010'
       : ''
   // const base = process.server && process.env.NODE_ENV === 'production' ? '' : ''
-
   return axios.get(`${base}/translation/json/`, {
     headers: {
       'Accept-Language': ln
