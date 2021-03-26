@@ -65,6 +65,8 @@ const config = {
     '@nuxtjs/proxy',
     'nuxt-fontawesome',
     '@nuxtjs/sentry',
+    // 'nuxt-purgecss',
+    '@nuxtjs/pwa',
     [
       'nuxt-i18n',
       {
