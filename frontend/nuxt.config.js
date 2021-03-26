@@ -65,7 +65,6 @@ const config = {
     '@nuxtjs/proxy',
     'nuxt-fontawesome',
     '@nuxtjs/sentry',
-    'nuxt-purgecss',
     [
       'nuxt-i18n',
       {
@@ -141,6 +140,7 @@ const config = {
   proxy: {},
   axios: {
     baseURL: 'http://nginx:9010/',
+    // baseURL: '',
     browserBaseURL: '/',
     credentials: true,
     retry: false
@@ -148,9 +148,6 @@ const config = {
   router: {
     middleware: ['auth'],
     base: '/'
-  },
-  purgeCSS: {
-    whitelistPatterns: () => [/\b[^\s]*(nuxt|leaflet|vue2-leaflet|el)[^\s]*\b/]
   },
   loading: '~/components/DhaLoader.vue',
   render: {
