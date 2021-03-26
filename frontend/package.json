@@ -55,7 +55,6 @@
     "nuxt": "^2.15.3",
     "nuxt-fontawesome": "^0.4.0",
     "nuxt-i18n": "^6.21.1",
-    "nuxt-purgecss": "^1.0.0",
     "papaparse": "^4.5.0",
     "pdfmake": "0.1.41",
     "qs": "^6.5.2",
