@@ -9,7 +9,8 @@ const cleanState = () => ({
   country_answers: [],
   donors_answers: [],
   published: null,
-  original: null
+  original: null,
+  openFormDialog: false
 })
 
 export const state = () => ({
@@ -41,10 +42,16 @@ export const getters = {
     if (!('stageDraft' in state)) {
       // initial set
       if ('stages' in rootState.projects.projectStructure) {
-        return rootState.projects.projectStructure.stages.map((item) => {
-          const included = state.stages && state.stages.find(i => i.id === item.id)
+        return rootState.projects.projectStructure.stages.map(item => {
+          const included =
+            state.stages && state.stages.find(i => i.id === item.id)
           if (included) {
-            return { ...item, date: included.date, note: included.note, checked: true }
+            return {
+              ...item,
+              date: included.date,
+              note: included.note,
+              checked: true
+            }
           }
           return { ...item, date: '', note: '', checked: false }
         })
@@ -66,28 +73,45 @@ export const getters = {
   getContactEmail: state => state.contact_email,
   getTeam: state => state.team,
   getViewers: state => state.viewers,
-  getPlatforms: state => state.platforms.length === 0 ? [null] : state.platforms,
+  getPlatforms: state =>
+    state.platforms.length === 0 ? [null] : state.platforms,
   getDigitalHealthInterventions: state => [...state.digitalHealthInterventions],
   getHealthFocusAreas: state => state.health_focus_areas,
   getHscChallenges: state => state.hsc_challenges,
   getHisBucket: state => state.his_bucket,
   getCoverageType: state => state.coverageType,
-  getCoverage: state => state.coverage.length === 0 ? [null] : state.coverage,
+  getCoverage: state => (state.coverage.length === 0 ? [null] : state.coverage),
   getCoverageData: state => state.coverageData,
-  getCoverageSecondLevel: state => state.coverage_second_level.length === 0 ? [null] : state.coverage_second_level,
-  getNationalLevelDeployment: state => state.national_level_deployment ? { ...state.national_level_deployment } : {},
+  getCoverageSecondLevel: state =>
+    state.coverage_second_level.length === 0
+      ? [null]
+      : state.coverage_second_level,
+  getNationalLevelDeployment: state =>
+    state.national_level_deployment
+      ? { ...state.national_level_deployment }
+      : {},
   getGovernmentInvestor: state => state.government_investor,
-  getImplementingPartners: state => state.implementing_partners.length === 0 ? [null] : state.implementing_partners,
-  getImplementingTeam: state => state.implementing_team.length === 0 ? [null] : state.implementing_team,
-  getImplementingViewers: state => state.implementing_viewers.length === 0 ? [null] : state.implementing_viewers,
+  getImplementingPartners: state =>
+    state.implementing_partners.length === 0
+      ? [null]
+      : state.implementing_partners,
+  getImplementingTeam: state =>
+    state.implementing_team.length === 0 ? [null] : state.implementing_team,
+  getImplementingViewers: state =>
+    state.implementing_viewers.length === 0
+      ? [null]
+      : state.implementing_viewers,
   getDonors: state => state.donors,
   getShadowDonors: (state, getters, rootState) => {
     if ('health_focus_areas' in rootState.projects.projectStructure) {
       return flatten(
-        rootState.projects.projectStructure.health_focus_areas
-          .map(item => item.health_focus_areas)
+        rootState.projects.projectStructure.health_focus_areas.map(
+          item => item.health_focus_areas
+        )
       )
-        .filter(item => state.health_focus_areas.includes(item.id) && item.donors)
+        .filter(
+          item => state.health_focus_areas.includes(item.id) && item.donors
+        )
         .map(item => item.donors)
     }
     return []
@@ -95,15 +119,17 @@ export const getters = {
   getAllShadowDonors: (state, getters, rootState) => {
     if ('health_focus_areas' in rootState.projects.projectStructure) {
       return flatten(
-        rootState.projects.projectStructure.health_focus_areas
-          .map(item => item.health_focus_areas)
+        rootState.projects.projectStructure.health_focus_areas.map(
+          item => item.health_focus_areas
+        )
       )
         .filter(item => item.donors)
         .map(item => item.donors)
     }
     return []
   },
-  getImplementationDates: state => state.implementation_dates && new Date(state.implementation_dates),
+  getImplementationDates: state =>
+    state.implementation_dates && new Date(state.implementation_dates),
   getLicenses: state => state.licenses,
   getRepository: state => state.repository,
   getMobileApplication: state => state.mobile_application,
@@ -116,10 +142,14 @@ export const getters = {
     return result
   },
   getInteroperabilityStandards: state => state.interoperability_standards,
-  getCountryAnswers: state => state.country_answers ? [...state.country_answers] : [],
-  getCountryAnswerDetails: (state, getters) => id => getters.getCountryAnswers.find(ca => ca.question_id === id),
+  getCountryAnswers: state =>
+    state.country_answers ? [...state.country_answers] : [],
+  getCountryAnswerDetails: (state, getters) => id =>
+    getters.getCountryAnswers.find(ca => ca.question_id === id),
   getAllCountryAnswers: (state, getters, rootState, rootGetters) => {
-    const country = rootGetters['countries/getCountryDetails'](getters.getCountry)
+    const country = rootGetters['countries/getCountryDetails'](
+      getters.getCountry
+    )
     if (country && country.country_questions) {
       return country.country_questions.map(cq => {
         const answer = getters.getCountryAnswerDetails(cq.id)
@@ -127,33 +157,56 @@ export const getters = {
       })
     }
   },
-  getPublishedCountryAnswerDetails: (state, getters) => id => getters.getPublished.country_custom_answers.find(ca => ca.question_id === id),
-  getDonorsAnswers: state => state.donors_answers ? [...state.donors_answers] : [],
-  getDonorsAnswerDetails: (state, getters) => id => getters.getDonorsAnswers.find(da => da.question_id === id),
+  getPublishedCountryAnswerDetails: (state, getters) => id =>
+    getters.getPublished.country_custom_answers.find(
+      ca => ca.question_id === id
+    ),
+  getDonorsAnswers: state =>
+    state.donors_answers ? [...state.donors_answers] : [],
+  getDonorsAnswerDetails: (state, getters) => id =>
+    getters.getDonorsAnswers.find(da => da.question_id === id),
   getAllDonorsAnswers: (state, getters, rootState, rootGetters) => {
-    const donors = [...new Set([...getters.getDonors, ...getters.getShadowDonors])]
+    const donors = [
+      ...new Set([...getters.getDonors, ...getters.getShadowDonors])
+    ]
       .map(d => rootGetters['system/getDonorDetails'](d))
       .filter(d => d.donor_questions)
     if (donors) {
       return donors.reduce((a, c) => {
-        a.push(...c.donor_questions.map(dq => {
-          const answer = getters.getDonorsAnswerDetails(dq.id)
-          return { question_id: dq.id, answer: answer ? answer.answer : [], donor_id: c.id }
-        }))
+        a.push(
+          ...c.donor_questions.map(dq => {
+            const answer = getters.getDonorsAnswerDetails(dq.id)
+            return {
+              question_id: dq.id,
+              answer: answer ? answer.answer : [],
+              donor_id: c.id
+            }
+          })
+        )
         return a
       }, [])
     }
   },
-  getPublishedDonorsAnswerDetails: (state, getters) => id => getters.getPublished.donor_custom_answers.find(ca => ca.question_id === id),
-  getPublished: state => ({ ...state.published, team: state.team, viewers: state.viewers }),
+  getPublishedDonorsAnswerDetails: (state, getters) => id =>
+    getters.getPublished.donor_custom_answers.find(ca => ca.question_id === id),
+  getPublished: state => ({
+    ...state.published,
+    team: state.team,
+    viewers: state.viewers
+  }),
   getLoading: state => state.loading,
   getOriginal: state => state.original
 }
 
 export const actions = {
   async loadProject ({ commit, dispatch, rootGetters }, id) {
-    const userProject = rootGetters['projects/getUserProjectList'].find(p => p.id === id || p.public_id === id)
-    const { data } = userProject && userProject.id ? { data: userProject } : await this.$axios.get(`/api/projects/${id}/`)
+    const userProject = rootGetters['projects/getUserProjectList'].find(
+      p => p.id === id || p.public_id === id
+    )
+    const { data } =
+      userProject && userProject.id
+        ? { data: userProject }
+        : await this.$axios.get(`/api/projects/${id}/`)
     commit('SET_ORIGINAL', Object.freeze(data))
     const clean = cleanState()
     const countriesToFetch = new Set()
@@ -176,21 +229,31 @@ export const actions = {
     }
     if (parseInt(id, 10)) {
       await Promise.all([
-        ...[...countriesToFetch].map(cf => dispatch('countries/loadCountryDetails', cf, { root: true })),
-        ...[...donorsToFetch].map(df => dispatch('system/loadDonorDetails', df, { root: true })),
+        ...[...countriesToFetch].map(cf =>
+          dispatch('countries/loadCountryDetails', cf, { root: true })
+        ),
+        ...[...donorsToFetch].map(df =>
+          dispatch('system/loadDonorDetails', df, { root: true })
+        ),
         dispatch('loadTeamViewers', id)
       ])
     } else {
       await Promise.all([
-        ...[...countriesToFetch].map(cf => dispatch('countries/loadCountryDetails', cf, { root: true })),
-        ...[...donorsToFetch].map(df => dispatch('system/loadDonorDetails', df, { root: true }))
+        ...[...countriesToFetch].map(cf =>
+          dispatch('countries/loadCountryDetails', cf, { root: true })
+        ),
+        ...[...donorsToFetch].map(df =>
+          dispatch('system/loadDonorDetails', df, { root: true })
+        )
       ])
     }
   },
   async loadTeamViewers ({ commit, rootGetters }, projectId) {
     const profile = rootGetters['user/getProfile']
     if (profile) {
-      const { data } = await this.$axios.get(`/api/projects/${projectId}/groups/`)
+      const { data } = await this.$axios.get(
+        `/api/projects/${projectId}/groups/`
+      )
       commit('SET_TEAM', data.team)
       commit('SET_VIEWERS', data.viewers)
     }
@@ -201,7 +264,9 @@ export const actions = {
     if (profile) {
       clean.country = profile.country
       clean.team = [profile.id]
-      await dispatch('countries/loadCountryDetails', profile.country, { root: true })
+      await dispatch('countries/loadCountryDetails', profile.country, {
+        root: true
+      })
     }
     commit('INIT_PROJECT', clean)
     commit('SET_TEAM', clean.team)
@@ -266,7 +331,10 @@ export const actions = {
     commit('SET_DIGITAL_HEALTH_INTERVENTIONS', value)
   },
   setHealthFocusAreas ({ commit, state, getters }, value) {
-    commit('SET_DONORS', state.donors.filter((i) => !getters.getShadowDonors.includes(i)))
+    commit(
+      'SET_DONORS',
+      state.donors.filter(i => !getters.getShadowDonors.includes(i))
+    )
     commit('SET_HEALTH_FOCUS_AREAS', value)
   },
   setHscChallenges ({ commit }, value) {
@@ -344,7 +412,9 @@ export const actions = {
     commit('SET_LOADING', value)
   },
   setCountryAnswer ({ commit, getters }, answer) {
-    const index = getters.getCountryAnswers.findIndex(ca => ca.question_id === answer.question_id)
+    const index = getters.getCountryAnswers.findIndex(
+      ca => ca.question_id === answer.question_id
+    )
     if (index > -1) {
       commit('UPDATE_COUNTRY_ANSWER', { answer, index })
     } else {
@@ -352,7 +422,9 @@ export const actions = {
     }
   },
   setDonorAnswer ({ commit, getters }, answer) {
-    const index = getters.getDonorsAnswers.findIndex(da => da.question_id === answer.question_id)
+    const index = getters.getDonorsAnswers.findIndex(
+      da => da.question_id === answer.question_id
+    )
     if (index > -1) {
       commit('UPDATE_DONOR_ANSWER', { answer, index })
     } else {
@@ -362,13 +434,17 @@ export const actions = {
   async verifyOrganisation ({ dispatch }, organisation) {
     try {
       if (organisation && isNaN(organisation)) {
-        const org = await dispatch('system/addOrganisation', organisation, { root: true })
+        const org = await dispatch('system/addOrganisation', organisation, {
+          root: true
+        })
         return org.id
       }
       return organisation
     } catch (e) {
       console.log('project/verifyOrganisation failed')
-      return Promise.reject(APIError('organisation', 'Failed to save the organisation'))
+      return Promise.reject(
+        APIError('organisation', 'Failed to save the organisation')
+      )
     }
   },
   async saveTeamViewers ({ getters, commit, dispatch }, id) {
@@ -378,7 +454,10 @@ export const actions = {
       new_team_emails: getters.getTeam.filter(d => typeof d === 'string'),
       new_viewer_emails: getters.getViewers.filter(d => typeof d === 'string')
     }
-    const { data } = await this.$axios.put(`/api/projects/${id}/groups/`, teamViewers)
+    const { data } = await this.$axios.put(
+      `/api/projects/${id}/groups/`,
+      teamViewers
+    )
     commit('SET_TEAM', data.team)
     commit('SET_VIEWERS', data.viewers)
     return dispatch('user/updateTeamViewers', { ...data, id }, { root: true })
@@ -388,9 +467,19 @@ export const actions = {
     const draft = getters.getProjectData
     draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])]
     draft.stages = newStages(state.stagesDraft)
-    draft.organisation = await dispatch('verifyOrganisation', draft.organisation)
-    const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers)
-    const { data } = await this.$axios.post(`api/projects/draft/${draft.country}/`, parsed)
+    draft.organisation = await dispatch(
+      'verifyOrganisation',
+      draft.organisation
+    )
+    const parsed = apiWriteParser(
+      draft,
+      getters.getAllCountryAnswers,
+      getters.getAllDonorsAnswers
+    )
+    const { data } = await this.$axios.post(
+      `api/projects/draft/${draft.country}/`,
+      parsed
+    )
     dispatch('projects/addProjectToList', data, { root: true })
     await dispatch('saveTeamViewers', data.id)
     dispatch('setLoading', false)
@@ -401,9 +490,19 @@ export const actions = {
     const draft = getters.getProjectData
     draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])]
     draft.stages = newStages(state.stagesDraft)
-    draft.organisation = await dispatch('verifyOrganisation', draft.organisation)
-    const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers)
-    const { data } = await this.$axios.put(`api/projects/draft/${id}/${draft.country}/`, parsed)
+    draft.organisation = await dispatch(
+      'verifyOrganisation',
+      draft.organisation
+    )
+    const parsed = apiWriteParser(
+      draft,
+      getters.getAllCountryAnswers,
+      getters.getAllDonorsAnswers
+    )
+    const { data } = await this.$axios.put(
+      `api/projects/draft/${id}/${draft.country}/`,
+      parsed
+    )
     await dispatch('setProject', { data, id })
     dispatch('setLoading', false)
   },
@@ -412,9 +511,19 @@ export const actions = {
     const draft = getters.getProjectData
     draft.donors = [...new Set([...draft.donors, ...getters.getShadowDonors])]
     draft.stages = newStages(state.stagesDraft)
-    draft.organisation = await dispatch('verifyOrganisation', draft.organisation)
-    const parsed = apiWriteParser(draft, getters.getAllCountryAnswers, getters.getAllDonorsAnswers)
-    const { data } = await this.$axios.put(`/api/projects/publish/${id}/${draft.country}/`, parsed)
+    draft.organisation = await dispatch(
+      'verifyOrganisation',
+      draft.organisation
+    )
+    const parsed = apiWriteParser(
+      draft,
+      getters.getAllCountryAnswers,
+      getters.getAllDonorsAnswers
+    )
+    const { data } = await this.$axios.put(
+      `/api/projects/publish/${id}/${draft.country}/`,
+      parsed
+    )
     const parsedResponse = apiReadParser(data.draft)
     commit('SET_PUBLISHED', Object.freeze(parsedResponse))
     await dispatch('setProject', { data, id })
@@ -437,8 +546,15 @@ export const actions = {
   async discardDraft ({ getters, dispatch, commit }, id) {
     dispatch('setLoading', 'discard')
     const published = getters.getPublished
-    const parsed = apiWriteParser(published, published.country_custom_answers, published.donor_custom_answers)
-    const { data } = await this.$axios.put(`api/projects/draft/${id}/${published.country}/`, parsed)
+    const parsed = apiWriteParser(
+      published,
+      published.country_custom_answers,
+      published.donor_custom_answers
+    )
+    const { data } = await this.$axios.put(
+      `api/projects/draft/${id}/${published.country}/`,
+      parsed
+    )
     const parsedResponse = apiReadParser(data.draft)
     commit('INIT_PROJECT', parsedResponse)
     dispatch('projects/updateProject', data, { root: true })
@@ -494,7 +610,8 @@ export const mutations = {
     Vue.set(state, 'team', [...items])
   },
   SET_VIEWERS: (state, viewer) => {
-    const items = typeof viewer === 'string' ? state.viewers.concat([viewer]) : viewer
+    const items =
+      typeof viewer === 'string' ? state.viewers.concat([viewer]) : viewer
     Vue.set(state, 'viewers', [...items])
   },
   SET_PLATFORMS: (state, platforms) => {
@@ -528,7 +645,9 @@ export const mutations = {
     Vue.set(state, 'coverage_second_level', [...coverage_second_level])
   },
   SET_NATIONAL_LEVEL_DEPLOYMENT: (state, national_level_deployment) => {
-    Vue.set(state, 'national_level_deployment', { ...national_level_deployment })
+    Vue.set(state, 'national_level_deployment', {
+      ...national_level_deployment
+    })
   },
   SET_GOVERNMENT_INVESTOR: (state, government_investor) => {
     state.government_investor = government_investor
@@ -567,7 +686,9 @@ export const mutations = {
     Vue.set(state, 'interoperability_links', { ...interoperability_links })
   },
   SET_INTEROPERABILITY_STANDARDS: (state, interoperability_standards) => {
-    Vue.set(state, 'interoperability_standards', [...interoperability_standards])
+    Vue.set(state, 'interoperability_standards', [
+      ...interoperability_standards
+    ])
   },
   ADD_COUNTRY_ANSWER: (state, answer) => {
     state.country_answers.push(answer)
@@ -587,6 +708,9 @@ export const mutations = {
   SET_LOADING: (state, loading) => {
     state.loading = loading
   },
+  SET_FORM_DIALOG: (state, val) => {
+    state.openFormDialog = val
+  },
   INIT_PROJECT: (state, project) => {
     state.name = get(project, 'name', '')
     state.organisation = get(project, 'organisation', null)
@@ -603,7 +727,11 @@ export const mutations = {
     state.team = get(project, 'team', [])
     state.viewers = get(project, 'viewers', [])
     state.platforms = get(project, 'platforms', [])
-    state.digitalHealthInterventions = get(project, 'digitalHealthInterventions', [])
+    state.digitalHealthInterventions = get(
+      project,
+      'digitalHealthInterventions',
+      []
+    )
     state.health_focus_areas = get(project, 'health_focus_areas', [])
     state.hsc_challenges = get(project, 'hsc_challenges', [])
     state.his_bucket = get(project, 'his_bucket', [])
@@ -612,11 +740,15 @@ export const mutations = {
     state.coverageData = get(project, 'coverageData', {})
     state.coverage_second_level = get(project, 'coverage_second_level', [])
     state.modified = get(project, 'modified', new Date())
-    state.national_level_deployment = get(project, 'national_level_deployment', {
-      health_workers: 0,
-      clients: 0,
-      facilities: 0
-    })
+    state.national_level_deployment = get(
+      project,
+      'national_level_deployment',
+      {
+        health_workers: 0,
+        clients: 0,
+        facilities: 0
+      }
+    )
     state.government_investor = get(project, 'government_investor', '')
     state.implementing_partners = get(project, 'implementing_partners', [])
     state.implementing_team = get(project, 'implementing_team', [])
@@ -629,7 +761,11 @@ export const mutations = {
     state.mobile_application = get(project, 'mobile_application', '')
     state.wiki = get(project, 'wiki', '')
     state.interoperability_links = get(project, 'interoperability_links', {})
-    state.interoperability_standards = get(project, 'interoperability_standards', [])
+    state.interoperability_standards = get(
+      project,
+      'interoperability_standards',
+      []
+    )
     state.country_answers = get(project, 'country_custom_answers', [])
     state.donors_answers = get(project, 'donor_custom_answers', [])
   },

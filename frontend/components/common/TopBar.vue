@@ -10,15 +10,25 @@
     >
       <el-col class="LogoHolder">
         <!--<nuxt-link :to="localePath({name: 'organisation', params: $route.params})">-->
-        <nuxt-link :to="localePath({name: 'organisation', params: { organisation: '-' }})">
+        <nuxt-link
+          :to="
+            localePath({ name: 'organisation', params: { organisation: '-' } })
+          "
+        >
           <el-row
             type="flex"
             align="middle"
           >
             <el-col class="LogoWHO">
               <img
-                :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
-                :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')"
+                :src="
+                  customOrganisation ? organisationLogo : '/logo-who-blue.svg'
+                "
+                :alt="
+                  customOrganisation
+                    ? $gettext('Country logo')
+                    : $gettext('WHO logo')
+                "
               >
             </el-col>
             <el-col class="Separator">
@@ -40,7 +50,7 @@
       >
         <!-- ANON MODE -->
         <el-row
-          :class="{'AnonView': !user, 'LoggedInView': user}"
+          :class="{ AnonView: !user, LoggedInView: user }"
           type="flex"
           justify="end"
           align="middle"
@@ -55,7 +65,12 @@
               <div>
                 <nuxt-link
                   key="signupBtn"
-                  :to="localePath({name: 'organisation-signup', params: $route.params})"
+                  :to="
+                    localePath({
+                      name: 'organisation-signup',
+                      params: $route.params
+                    })
+                  "
                   class="HeaderBtn HideOnActive"
                 >
                   <translate>Signup</translate>
@@ -64,7 +79,12 @@
               <div>
                 <nuxt-link
                   key="loginBtn"
-                  :to="localePath({name: 'organisation-login', params: $route.params})"
+                  :to="
+                    localePath({
+                      name: 'organisation-login',
+                      params: $route.params
+                    })
+                  "
                   class="HeaderBtn HideOnActive"
                 >
                   <translate>Login</translate>
@@ -77,7 +97,13 @@
               <div>
                 <nuxt-link
                   key="dashboardBtn"
-                  :to="localePath({name: 'organisation-dashboard', params: $route.params, query: {}})"
+                  :to="
+                    localePath({
+                      name: 'organisation-dashboard',
+                      params: $route.params,
+                      query: {}
+                    })
+                  "
                   class="HeaderBtn"
                 >
                   <translate>Dashboard</translate>
@@ -86,7 +112,12 @@
               <div>
                 <nuxt-link
                   key="myProjectsBtn"
-                  :to="localePath({name: 'organisation-projects', params: $route.params})"
+                  :to="
+                    localePath({
+                      name: 'organisation-projects',
+                      params: $route.params
+                    })
+                  "
                   exact
                   class="HeaderBtn"
                 >
@@ -96,7 +127,12 @@
               <div>
                 <nuxt-link
                   key="planningAndGuidanceBtn"
-                  :to="localePath({name: 'organisation-cms', params: $route.params})"
+                  :to="
+                    localePath({
+                      name: 'organisation-cms',
+                      params: $route.params
+                    })
+                  "
                   class="HeaderBtn"
                 >
                   <translate>Planning and Guidance</translate>
@@ -115,14 +151,14 @@
                 </a>
               </div>
               <div>
-                <nuxt-link
+                <span
                   key="newProjectBtn"
-                  :to="localePath({name: 'organisation-projects-create', params: $route.params})"
                   class="HeaderBtn"
+                  @click="handleDialog"
                 >
                   <fa icon="plus-circle" />
                   <translate>New Project</translate>
-                </nuxt-link>
+                </span>
               </div>
               <user-dropdown />
             </el-col>
@@ -138,7 +174,12 @@
           <template v-if="!customOrganisation || countrySpecific">
             <el-col>
               <nuxt-link
-                :to="localePath({name: 'organisation', params: {organisation: 'covid-19'}})"
+                :to="
+                  localePath({
+                    name: 'organisation',
+                    params: { organisation: 'covid-19' }
+                  })
+                "
                 class="HeaderBtn CovidLink"
               >
                 COVID-19
@@ -155,7 +196,12 @@
             <div>
               <nuxt-link
                 key="whoLandingBtn"
-                :to="localePath({name: 'organisation', params: {organisation: landingData.code}})"
+                :to="
+                  localePath({
+                    name: 'organisation',
+                    params: { organisation: landingData.code }
+                  })
+                "
                 class="HeaderBtn"
               >
                 {{ landingData.name }}
@@ -165,17 +211,19 @@
         </el-row>
       </el-col>
     </el-row>
+    <new-project-dialog />
   </div>
 </template>
 
 <script>
 import VueScrollClass from 'vue-scroll-class'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 import LanguageSelector from './LanguageSelector'
 import UserDropdown from './UserDropdown'
 import ToolkitDialogWrapper from './ToolkitDialogWrapper'
 import CountryChooser from './CountryChooser'
+import NewProjectDialog from '@/components/project/sections/create/NewProjectDialog'
 
 export default {
   directives: {
@@ -185,7 +233,8 @@ export default {
     LanguageSelector,
     UserDropdown,
     ToolkitDialogWrapper,
-    CountryChooser
+    CountryChooser,
+    NewProjectDialog
   },
   props: {
     errorPage: {
@@ -217,172 +266,180 @@ export default {
       }
       return null
     }
-
+  },
+  methods: {
+    ...mapMutations({
+      setFormDialog: 'project/SET_FORM_DIALOG'
+    }),
+    handleDialog () {
+      this.setFormDialog(true)
+    }
   }
 }
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .TopBar {
-    .TopBarInner {
-      .limitPageWidth();
-      height: @topBarHeight;
-      background-color: @colorWhite;
-      align-items: stretch;
-    }
-    .CovidLink {
-      margin-left: -6px !important;
-      margin-right: 10px !important;
-      white-space: nowrap;
-    }
+.TopBar {
+  .TopBarInner {
+    .limitPageWidth();
+    height: @topBarHeight;
+    background-color: @colorWhite;
+    align-items: stretch;
+  }
+  .CovidLink {
+    margin-left: -6px !important;
+    margin-right: 10px !important;
+    white-space: nowrap;
+  }
 
-    .LogoHolder {
-      display: flex;
-      align-self: center;
-      width: auto;
+  .LogoHolder {
+    display: flex;
+    align-self: center;
+    width: auto;
 
-      .LogoWHO {
-        width: 100%;
+    .LogoWHO {
+      width: 100%;
 
-        img {
-          height: 48px;
-        }
-      }
-
-      .LogoDHA {
-        width: 100%;
-
-        img {
-          height: 38px;
-          transform: translateY(2px);
-        }
-      }
-
-      .LogoDHASmall {
-        width: 100%;
-
-        img {
-          height: 34px;
-          transform: translate(-5px);
-        }
-      }
-
-      .Separator {
-        width: auto;
-        height: 36px;
-        margin: 0 15px;
-
-        > div {
-          .SeparatorStyle();
-        }
+      img {
+        height: 48px;
       }
     }
 
-    .RightPart {
-      padding: 15px 0;
+    .LogoDHA {
+      width: 100%;
 
-      > .el-row > .el-col {
-        width: auto;
+      img {
+        height: 38px;
+        transform: translateY(2px);
       }
     }
 
-    .HideOnActive {
-      &.nuxt-link-active {
-        display: none;
-      }
-    }
+    .LogoDHASmall {
+      width: 100%;
 
-    .HeaderBtn
-    // TODO: Remove Angular Material
-    // hacking Toolkit md-button :(
-    ,.HeaderBtn.md-button
-    //
-    {
-      position: relative;
-      height: 24px;
-      margin: 0 3px;
-      padding: 0 10px;
-      font-size: @fontSizeBase;
-      font-weight: 700;
-      line-height: 24px;
-      color: @colorBrandPrimary;
-      text-decoration: none;
-      transition: @transitionAll;
-
-      // hacking Toolkit md-button :(
-      min-height: auto;
-      min-width: auto;
-      overflow: visible;
-      background-color: transparent !important;
-
-      &.md-ink-ripple {
-        > span {
-          letter-spacing: 0 !important;
-        }
-
-        &::before {
-          top: -17px !important;
-        }
-      }
-
-      > .md-ripple-container {
-        display: none;
-      }
-      //
-
-      &::before {
-        content: "";
-        position: absolute;
-        top: -21px;
-        left: 0;
-        display: inline-block;
-        width: 100%;
-        height: 4px;
-        background-color: @colorWhite;
-        transform: translateY(-4px);
-        transition: @transitionAll;
-      }
-
-      &:hover {
-        color: @colorBrandPrimaryLight;
-
-        &::before {
-          background-color: @colorBrandPrimaryLight;
-          transform: translateY(0);
-        }
-      }
-
-      &.nuxt-link-active {
-        color: @colorBrandAccent;
-
-        &::before {
-          background-color: @colorBrandAccent;
-          transform: translateY(0);
-        }
-      }
-
-      .svg-inline--fa {
-        margin-right: 6px;
+      img {
+        height: 34px;
+        transform: translate(-5px);
       }
     }
 
     .Separator {
-      .SeparatorStyle();
-      display: inline-block;
-      margin: 0 20px;
-    }
-
-    .AuthLinks,
-    .CountrySpecificMenu {
-      .clearfix();
+      width: auto;
+      height: 36px;
+      margin: 0 15px;
 
       > div {
-        float: left;
-        height: 24px;
+        .SeparatorStyle();
       }
     }
   }
+
+  .RightPart {
+    padding: 15px 0;
+
+    > .el-row > .el-col {
+      width: auto;
+    }
+  }
+
+  .HideOnActive {
+    &.nuxt-link-active {
+      display: none;
+    }
+  }
+
+  .HeaderBtn
+    // TODO: Remove Angular Material
+    // hacking Toolkit md-button :(
+    ,.HeaderBtn.md-button
+    //
+ {
+    cursor: pointer;
+    position: relative;
+    height: 24px;
+    margin: 0 3px;
+    padding: 0 10px;
+    font-size: @fontSizeBase;
+    font-weight: 700;
+    line-height: 24px;
+    color: @colorBrandPrimary;
+    text-decoration: none;
+    transition: @transitionAll;
+
+    // hacking Toolkit md-button :(
+    min-height: auto;
+    min-width: auto;
+    overflow: visible;
+    background-color: transparent !important;
+
+    &.md-ink-ripple {
+      > span {
+        letter-spacing: 0 !important;
+      }
+
+      &::before {
+        top: -17px !important;
+      }
+    }
+
+    > .md-ripple-container {
+      display: none;
+    }
+    //
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -21px;
+      left: 0;
+      display: inline-block;
+      width: 100%;
+      height: 4px;
+      background-color: @colorWhite;
+      transform: translateY(-4px);
+      transition: @transitionAll;
+    }
+
+    &:hover {
+      color: @colorBrandPrimaryLight;
+
+      &::before {
+        background-color: @colorBrandPrimaryLight;
+        transform: translateY(0);
+      }
+    }
+
+    &.nuxt-link-active {
+      color: @colorBrandAccent;
+
+      &::before {
+        background-color: @colorBrandAccent;
+        transform: translateY(0);
+      }
+    }
+
+    .svg-inline--fa {
+      margin-right: 6px;
+    }
+  }
+
+  .Separator {
+    .SeparatorStyle();
+    display: inline-block;
+    margin: 0 20px;
+  }
+
+  .AuthLinks,
+  .CountrySpecificMenu {
+    .clearfix();
+
+    > div {
+      float: left;
+      height: 24px;
+    }
+  }
+}
 </style>
