@@ -1,46 +1,47 @@
 <template>
   <el-dialog
-    title="Add new project"
+    :title="title"
     :visible.sync="visible"
   >
-    <el-form :model="form">
+    <p>
+      Hi omnes lingua, institutis, legibus inter se differunt. Qui ipsorum
+      lingua Celtae, nostra Galli appellantur. Ut enim ad minim veniam, quis
+      nostrud exercitation. Fictum, deserunt mollit anim laborum astutumque!
+      Donec sed odio operae, eu vulputate felis rhoncus.
+    </p>
+    <el-form>
       <el-form-item
-        label="Promotion name"
-        :label-width="formLabelWidth"
+        :rules="rules.name"
+        :label="labels.name"
       >
         <el-input
-          v-model="form.name"
+          v-model="name"
           autocomplete="off"
+          maxlength="128"
+          show-word-limit
         />
       </el-form-item>
-      <el-form-item
-        label="Zones"
-        :label-width="formLabelWidth"
-      >
-        <el-select
-          v-model="form.region"
-          placeholder="Please select a zone"
-        >
-          <el-option
-            label="Zone No.1"
-            value="shanghai"
-          />
-          <el-option
-            label="Zone No.2"
-            value="beijing"
-          />
-        </el-select>
-      </el-form-item>
     </el-form>
-    <span
-      slot="footer"
-      class="dialog-footer"
-    >
-      <el-button @click="handleClose(false)">Cancel</el-button>
-      <el-button
-        type="primary"
-        @click="handleClose(false)"
-      >Confirm</el-button>
+    <span slot="footer">
+      <el-row
+        type="flex"
+        justify="space-between"
+      >
+        <el-button
+          type="text"
+          @click="handleClose(false)"
+        >
+          <translate>Cancel</translate>
+        </el-button>
+        <el-button
+          type="warning"
+          :loading="loading"
+          :disabled="disabled"
+          @click="handleSubmit(false)"
+        >
+          <translate>Complete registration</translate>
+        </el-button>
+      </el-row>
     </span>
   </el-dialog>
 </template>
@@ -51,17 +52,32 @@ import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+      loading: false,
+      disabled: true,
+      title: this.$gettext('Add new project'),
+      labels: {
+        name: this.$gettext('What is the project name?')
       },
-      formLabelWidth: '120px'
+
+      name: '',
+
+      rules: {
+        name: [
+          {
+            required: true,
+            message: this.$gettext('Project name is required'),
+            trigger: 'blur'
+          },
+          {
+            min: 4,
+            max: 180,
+            message: this.$gettext(
+              'Project name should be minimum 4 characters'
+            ),
+            trigger: 'blur'
+          }
+        ]
+      }
     }
   },
   computed: {
@@ -73,9 +89,14 @@ export default {
         return this.openFormDialog
       },
       set (value) {
-        // :to="localePath({name: 'organisation-projects-create', params: $route.params})"
+        this.form = { name: '' }
         this.setFormDialog(value)
       }
+    }
+  },
+  watch: {
+    name (newValue) {
+      newValue.length > 4 ? (this.disabled = false) : (this.disabled = true)
     }
   },
   methods: {
@@ -84,9 +105,39 @@ export default {
     }),
     handleClose () {
       this.setFormDialog(false)
+    },
+    async handleSubmit () {
+      this.loading = true
+      await new Promise(resolve => {
+        setTimeout(() => {
+          this.loading = false
+          this.setFormDialog(false)
+          resolve('Ready')
+        }, 2000)
+      })
+      // :to="localePath({name: 'organisation-projects-create', params: $route.params})"
     }
   }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="less" scoped>
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
+
+p {
+  letter-spacing: 0;
+  line-height: 21px;
+  margin-bottom: 30px;
+}
+.el-button--warning {
+  background-color: @colorBrandAccent;
+  &:hover {
+    background-color: lighten(@colorBrandAccent, 5%) loading();
+  }
+  .disabled();
+}
+::v-deep .el-dialog .el-dialog__footer {
+  padding: 12px 12px 12px 35px;
+}
+</style>

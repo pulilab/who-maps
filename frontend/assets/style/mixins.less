@@ -59,3 +59,22 @@
     }
   }
 }
+
+.button-plain(@color; @percentage: 5%) {
+  background-color: white;
+
+  color: @color;
+  border: 1px solid @color!important;
+  &:hover {
+    color: lighten(@color, @percentage);
+    border: 1px solid lighten(@color, @percentage) !important;
+  }
+}
+.disabled() {
+  &.is-disabled {
+    color: #b9b9b9;
+    background-image: none;
+    background-color: #ebeef5 !important;
+    border-color: #ebeef5 !important;
+  }
+}
