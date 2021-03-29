@@ -375,16 +375,6 @@
 
 <script>
 export default {
-  // data () {
-  //   const pathParts = this.$route.path.split('/')
-  //   const path = pathParts[3]
-  //   return {
-  //     activeTab: ['terms', 'contact', 'developers'].includes(path) ? path : 'terms',
-  //     uri: pathParts.pop() && pathParts.join('/')
-  //   }
-  // },
-  // watch: {
-  // },
   methods: {
     navigate (value) {
       this.$router.push(this.localePath(`/${this.$route.params.organisation}/info/${value}`))
