@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import ListAction from './ListAction';
+import { mapGetters } from 'vuex'
+import ListAction from './ListAction'
 export default {
   components: {
     ListAction
@@ -42,11 +42,11 @@ export default {
       platforms: 'projects/getTechnologyPlatforms'
     }),
     selected () {
-      const result = this.platforms.filter(p => this.value.includes(p.id));
-      return this.limit ? result.slice(0, this.limit) : result;
+      const result = this.platforms.filter(p => this.value.includes(p.id))
+      return this.limit ? result.slice(0, this.limit) : result
     }
   }
-};
+}
 </script>
 
 <style lang="less">

@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import ListAction from './ListAction';
-import { mapGetters } from 'vuex';
+import ListAction from './ListAction'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -42,12 +42,12 @@ export default {
       digitalHealthInterventions: 'projects/getDigitalHealthInterventions'
     }),
     selected () {
-      const subGroups = this.digitalHealthInterventions.reduce((a, c) => [...a, ...c.subGroups], []);
-      const result = subGroups.filter(sb => this.value.includes(sb.id));
-      return this.limit ? result.slice(0, this.limit) : result;
+      const subGroups = this.digitalHealthInterventions.reduce((a, c) => [...a, ...c.subGroups], [])
+      const result = subGroups.filter(sb => this.value.includes(sb.id))
+      return this.limit ? result.slice(0, this.limit) : result
     }
   }
-};
+}
 </script>
 
 <style lang="less">

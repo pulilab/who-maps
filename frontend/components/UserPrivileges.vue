@@ -149,7 +149,7 @@ export default {
       validator: value => ['G', 'CA', 'SCA', 'D', 'DA', 'SDA']
     }
   }
-};
+}
 </script>
 
 <style>

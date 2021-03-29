@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import get from 'lodash/get';
-import DjangoFeedback from '@/components/DjangoFeedback.vue';
+import get from 'lodash/get'
+import DjangoFeedback from '@/components/DjangoFeedback.vue'
 
 export default {
   components: {
@@ -34,20 +34,20 @@ export default {
   },
   computed: {
     response () {
-      return get(this, 'error.response', undefined);
+      return get(this, 'error.response', undefined)
     },
     status () {
-      return get(this, 'response.status', get(this, 'error.statusCode', 500));
+      return get(this, 'response.status', get(this, 'error.statusCode', 500))
     },
     statusText () {
-      return get(this, 'response.statusText', get(this, 'error.message', this.$gettext('Server error')));
+      return get(this, 'response.statusText', get(this, 'error.message', this.$gettext('Server error')))
     },
     details () {
-      return get(this, 'response.data.details', null);
+      return get(this, 'response.data.details', null)
     }
   }
 
-};
+}
 </script>
 
 <style lang="less">

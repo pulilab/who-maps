@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
-import SignupBox from './SignupBox';
-import MyProjectsBox from './MyProjectsBox';
+import SignupBox from './SignupBox'
+import MyProjectsBox from './MyProjectsBox'
 
 export default {
   components: {
@@ -21,10 +21,10 @@ export default {
       userProfile: 'user/getProfile'
     }),
     isLoggedIn () {
-      return !!this.userProfile;
+      return !!this.userProfile
     }
   }
-};
+}
 </script>
 
 <style lang="less">

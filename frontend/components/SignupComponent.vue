@@ -106,8 +106,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import FormAPIErrorsMixin from '~/components/mixins/FormAPIErrorsMixin';
+import { mapActions } from 'vuex'
+import FormAPIErrorsMixin from '~/components/mixins/FormAPIErrorsMixin'
 
 export default {
   mixins: [FormAPIErrorsMixin],
@@ -141,11 +141,13 @@ export default {
       },
       rules: {
         email: (() => {
-          return this.token ? [] : [
-            { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
-            { type: 'email', message: this.$gettext('Has to be a valid email address'), trigger: 'blur' },
-            { validator: this.validatorGenerator('email'), trigger: 'blur' }
-          ];
+          return this.token
+            ? []
+            : [
+              { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
+              { type: 'email', message: this.$gettext('Has to be a valid email address'), trigger: 'blur' },
+              { validator: this.validatorGenerator('email'), trigger: 'blur' }
+            ]
         })(),
         password1: [
           { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
@@ -157,7 +159,7 @@ export default {
           { validator: this.passwordMatching, trigger: 'blur' }
         ]
       }
-    };
+    }
   },
   methods: {
     ...mapActions({
@@ -165,10 +167,10 @@ export default {
       dorResetPassword: 'user/dorResetPassword'
     }),
     passwordMatching (rule, value, callback) {
-      value === this.signupForm.password1 ? callback() : callback(Error(this.$gettext('The password must match')));
+      value === this.signupForm.password1 ? callback() : callback(Error(this.$gettext('The password must match')))
     },
     submitForm () {
-      this.token ? this.resetPassword() : this.signup();
+      this.token ? this.resetPassword() : this.signup()
     },
     signup () {
       return this.setForm({
@@ -180,7 +182,7 @@ export default {
           email: this.signupForm.email
         }),
         pathName: 'organisation-edit-profile'
-      });
+      })
     },
     resetPassword () {
       return this.setForm({
@@ -193,35 +195,35 @@ export default {
           errMessage: this.$gettext('The password reset link was invalid, possibly because it has already been used. Please request a new password reset.')
         }),
         pathName: 'organisation-login'
-      });
+      })
     },
     setForm ({ message, apiCall, pathName }) {
-      this.deleteFormAPIErrors();
+      this.deleteFormAPIErrors()
       this.$refs.form.validate(async valid => {
         if (valid) {
           try {
             // locale needs to be saved in this place due to i18n being unavailable right after the signup call
-            const locale = this.$i18n.locale;
-            this.$nuxt.$loading.start();
-            await apiCall();
-            const path = this.localePath({ ...this.$route, name: pathName }, locale);
-            this.$router.push(path);
+            const locale = this.$i18n.locale
+            this.$nuxt.$loading.start()
+            await apiCall()
+            const path = this.localePath({ ...this.$route, name: pathName }, locale)
+            this.$router.push(path)
             this.$message({
               message,
               type: 'success',
               showClose: true
-            });
+            })
           } catch (e) {
-            console.log(e);
-            this.$nuxt.$loading.finish();
-            this.setFormAPIErrors(e);
-            this.$refs.form.validate(() => {});
+            console.log(e)
+            this.$nuxt.$loading.finish()
+            this.setFormAPIErrors(e)
+            this.$refs.form.validate(() => {})
           }
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="less">

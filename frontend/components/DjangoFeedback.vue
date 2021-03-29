@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import VueDjangoFeedback from './feedback/RawDjangoFeedback.vue';
+import { mapGetters } from 'vuex'
+import VueDjangoFeedback from './feedback/RawDjangoFeedback.vue'
 
 export default {
   components: { VueDjangoFeedback },
@@ -58,18 +58,18 @@ export default {
     }),
     name () {
       if (this.profile) {
-        return this.profile.name;
+        return this.profile.name
       }
-      return null;
+      return null
     },
     email () {
       if (this.profile) {
-        return this.profile.email;
+        return this.profile.email
       }
-      return null;
+      return null
     }
   }
-};
+}
 </script>
 
 <style lang="less">

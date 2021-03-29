@@ -23,7 +23,9 @@ from core.utils import send_mail_wrapper
 from country.models import CustomQuestion
 from project.utils import remove_keys
 from user.models import UserProfile
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform
+from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform, InteroperabilityLink, \
+    Licence, InteroperabilityStandard, HISBucket, Stage, HealthCategory, HealthFocusArea, HSCGroup, HSCChallenge, \
+    DigitalStrategy
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
@@ -270,7 +272,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         context = {
             'email': user.email,
             'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': default_token_generator.make_token(user),
             'protocol': 'https' if not settings.DEBUG else 'http'
         }
@@ -518,3 +520,98 @@ class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
         model = TechnologyPlatform
         fields = '__all__'
         read_only_fields = ('state', 'added_by')
+
+
+class StageModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stage
+        fields = ('id', 'name', 'tooltip', 'order')
+
+
+class HISBucketModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HISBucket
+        fields = ('id', 'name')
+
+
+class InteroperabilityStandardModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InteroperabilityStandard
+        fields = ('id', 'name')
+
+
+class LicenseModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Licence
+        fields = ('id', 'name')
+
+
+class TechnologyPlatformModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TechnologyPlatform
+        fields = ('id', 'name', 'state')
+
+
+class InteroperabilityLinkModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InteroperabilityLink
+        fields = ('id', 'name', 'pre')
+
+
+class HealthFocusAreaModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HealthFocusArea
+        fields = ('id', 'name', 'donors')
+
+
+class HFAWithCategoriesSerializer(serializers.ModelSerializer):
+    health_focus_areas = HealthFocusAreaModelReadSerializer(many=True)
+
+    class Meta:
+        model = HealthCategory
+        fields = ('id', 'name', 'health_focus_areas')
+
+
+class HSCChallengeModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HSCChallenge
+        fields = ('id', 'name')
+
+
+class HSCGroupWithChallengesSerializer(serializers.ModelSerializer):
+    challenges = HSCChallengeModelReadSerializer(many=True)
+
+    class Meta:
+        model = HSCGroup
+        fields = ('name', 'challenges')
+
+
+class DigitalStrategyModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DigitalStrategy
+        fields = ('id', 'name')
+
+
+class DigitalStrategyParentModelReadSerializer(serializers.ModelSerializer):
+    strategies = DigitalStrategyModelReadSerializer(many=True)
+
+    class Meta:
+        model = DigitalStrategy
+        fields = ('id', 'name', 'strategies')
+
+
+class StrategiesByGroupSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    subGroup = DigitalStrategyParentModelReadSerializer(many=True)
+
+
+class TerminologySerializer(serializers.Serializer):
+    interoperability_links = InteroperabilityLinkModelReadSerializer(many=True)
+    technology_platforms = TechnologyPlatformModelReadSerializer(many=True)
+    licenses = LicenseModelReadSerializer(many=True)
+    interoperability_standards = InteroperabilityStandardModelReadSerializer(many=True)
+    his_bucket = HISBucketModelReadSerializer(many=True)
+    stages = StageModelReadSerializer(many=True)
+    health_focus_areas = HFAWithCategoriesSerializer(many=True)
+    hsc_challenges = HSCGroupWithChallengesSerializer(many=True)
+    strategies = StrategiesByGroupSerializer(many=True)

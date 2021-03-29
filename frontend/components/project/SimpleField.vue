@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { format } from 'date-fns';
+import { format } from 'date-fns'
 
 export default {
   props: {
@@ -78,31 +78,31 @@ export default {
   },
   computed: {
     showContent () {
-      return this.content !== null && this.content !== undefined;
+      return this.content !== null && this.content !== undefined
     },
     missingContent () {
-      return !this.$slots.default && !this.content;
+      return !this.$slots.default && !this.content
     },
     processedContent () {
       if (this.date) {
-        return format(this.content, 'DD/MM/YYYY');
+        return format(this.content, 'DD/MM/YYYY')
       }
-      return this.content;
+      return this.content
     },
     formattedLink () {
       if (this.content) {
         if (!this.content.match(/^[a-zA-Z]+:\/\//)) {
-          return 'http://' + this.content;
+          return 'http://' + this.content
         }
-        return this.content;
+        return this.content
       }
-      return null;
+      return null
     },
     prependFormat () {
-      return this.prependLabel ? `${this.prependLabel}. ` : '';
+      return this.prependLabel ? `${this.prependLabel}. ` : ''
     }
   }
-};
+}
 </script>
 
 <style lang="less">

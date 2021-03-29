@@ -1,33 +1,30 @@
 <template>
-  <div class="CreateProject">
-    <div class="PageTitle">
-      <h2><translate>Register your Digital Health Project</translate></h2>
-      <p>
-        <translate>Please complete the questions below to include your project information in the Digital Health Atlas. These questions document your project's health focus area(s), software features and national scale.</translate>
-      </p>
-    </div>
+  <project-layout>
+    <template #title>
+      <translate>Register your Digital Health Project</translate>
+    </template>
+    <template #subtitle>
+      <translate>
+        Please complete the questions below to include your project information
+        in the Digital Health Atlas. These questions document your project's
+        health focus area(s), software features and national scale.
+      </translate>
+    </template>
     <project-form />
-  </div>
+  </project-layout>
 </template>
 
 <script>
-import ProjectForm from '../../../components/project/ProjectForm';
-
+import ProjectForm from '@/components/project/ProjectForm'
+import ProjectLayout from '@/components/project/wrappers/ProjectLayout'
 export default {
   components: {
-    ProjectForm
+    ProjectForm,
+    ProjectLayout
   },
   middleware: ['isLoggedIn'],
   async fetch ({ store }) {
-    await store.dispatch('project/resetProjectState');
-    store.dispatch('landing/resetSearch');
+    await store.dispatch('project/resetProjectState')
   }
-};
+}
 </script>
-
-<style lang="less">
-  @import "../../../assets/style/variables.less";
-  @import "../../../assets/style/mixins.less";
-
-  .CreateProject {}
-</style>

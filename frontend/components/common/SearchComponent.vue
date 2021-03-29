@@ -43,27 +43,34 @@
               align="middle"
               class="SearchResultsHeader HasResults"
             >
-              <template>
-                <el-col class="SearchResultsCounter">
-                  <translate :parameters="{num: resultCount}">
-                    Show {num} result(s):
-                  </translate>
-                </el-col>
-                <el-col class="AdvancedSearchLink">
-                  <nuxt-link
-                    :to="localePath({name : 'organisation-dashboard', params: $route.params})"
-                    class="NuxtLink IconRight"
-                  >
-                    <span><translate>Dashboard</translate></span><fa icon="angle-right" />
-                  </nuxt-link>
-                </el-col>
-              </template>
+              <el-col class="SearchResultsCounter">
+                <translate :parameters="{ num: resultCount }">
+                  Show {num} result(s):
+                </translate>
+              </el-col>
+              <el-col class="AdvancedSearchLink">
+                <nuxt-link
+                  :to="
+                    localePath({
+                      name: 'organisation-dashboard',
+                      params: $route.params
+                    })
+                  "
+                  class="NuxtLink IconRight"
+                >
+                  <span><translate>Dashboard</translate></span><fa icon="angle-right" />
+                </nuxt-link>
+              </el-col>
             </el-row>
 
             <template v-else>
               <SearchComponentLink
                 :title="$gettext('Go to Advanced project search') | translate"
-                :text="$gettext('You can use filters to further refine your search. Note that these filters can be saved by selecting Filters and naming your filter. These can then be viewed at a later time after you log in.') | translate"
+                :text="
+                  $gettext(
+                    'You can use filters to further refine your search. Note that these filters can be saved by selecting Filters and naming your filter. These can then be viewed at a later time after you log in.'
+                  ) | translate
+                "
                 page="organisation-dashboard"
                 class="FirstSearchComponent"
               />
@@ -76,7 +83,9 @@
             class="SearchTabs"
           >
             <el-tab-pane
-              :label="$gettext('Projects {num}', {num: results.length}) | translate"
+              :label="
+                $gettext('Projects {num}', { num: results.length }) | translate
+              "
               name="projects"
             >
               <el-row v-show="!resultsLoaded">
@@ -115,7 +124,10 @@
               </div>
             </el-tab-pane>
             <el-tab-pane
-              :label="$gettext('Planning & guidance {num}', {num: cmsLength}) | translate"
+              :label="
+                $gettext('Planning & guidance {num}', { num: cmsLength })
+                  | translate
+              "
               name="planning"
             >
               <el-row v-if="cms === null">
@@ -149,7 +161,10 @@
               </div>
             </el-tab-pane>
             <el-tab-pane
-              :label="$gettext('Ministry of Health {num}', {num: documentsLength}) | translate"
+              :label="
+                $gettext('Ministry of Health {num}', { num: documentsLength })
+                  | translate
+              "
               name="documents"
             >
               <el-row v-show="documents === null">
@@ -213,15 +228,13 @@
         </el-col>
         <el-col>
           <span class="SearchResultsCounter">
-            <translate :parameters="{num: resultCount}">
+            <translate :parameters="{ num: resultCount }">
               {num} result(s)
             </translate>
           </span>
         </el-col>
         <el-col>
-          <el-button
-            @click.prevent.stop="clearSearch"
-          >
+          <el-button @click.prevent.stop="clearSearch">
             <fa icon="times" />
           </el-button>
         </el-col>
@@ -231,15 +244,15 @@
 </template>
 
 <script>
-import debounce from 'lodash/debounce';
-import { mapGettersActions } from '@/utilities/form';
-import ProjectCard from '@/components/common/ProjectCard';
-import ProjectCardPlanning from '@/components/common/ProjectCardPlanning';
-import ProjectCardDocuments from '@/components/common/ProjectCardDocuments';
-import SearchComponentLink from '@/components/common/SearchComponentLink';
-import Spinner from '@/components/common/Spinner';
-import ClickOutside from 'vue-click-outside';
-import { mapGetters, mapActions } from 'vuex';
+import debounce from 'lodash/debounce'
+import { mapGettersActions } from '@/utilities/form'
+import ProjectCard from '@/components/common/ProjectCard'
+import ProjectCardPlanning from '@/components/common/ProjectCardPlanning'
+import ProjectCardDocuments from '@/components/common/ProjectCardDocuments'
+import SearchComponentLink from '@/components/common/SearchComponentLink'
+import Spinner from '@/components/common/Spinner'
+import ClickOutside from 'vue-click-outside'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   directives: {
@@ -257,7 +270,7 @@ export default {
       localSearchString: '',
       shown: false,
       activeSearchTab: 'projects'
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -272,30 +285,35 @@ export default {
       searchString: ['landing', 'getSearchString', 'setSearchString', 0]
     }),
     resultCount () {
-      return (this.results ? this.results.length : 0) +
+      return (
+        (this.results ? this.results.length : 0) +
         (this.cms ? this.cms.length : 0) +
-        (this.documents ? this.documents.length : 0);
+        (this.documents ? this.documents.length : 0)
+      )
     },
     cmsLength () {
-      return this.cms ? this.cms.length : 0;
+      return this.cms ? this.cms.length : 0
     },
     documentsLength () {
-      return this.documents ? this.documents.length : 0;
+      return this.documents ? this.documents.length : 0
     }
   },
   watch: {
     localSearchString: {
       immediate: false,
       handler: function () {
-        if (this.localSearchString.length > 0 && this.localSearchString.length < 3) {
-          return;
+        if (
+          this.localSearchString.length > 0 &&
+          this.localSearchString.length < 3
+        ) {
+          return
         }
-        this.$store.commit('landing/SET_LOADED', false);
-        this.search();
+        this.$store.commit('landing/SET_LOADED', false)
+        this.search()
         if (this.cms) {
-          this.doCMSSearch();
+          this.doCMSSearch()
         }
-        this.updateSearch();
+        this.updateSearch()
       }
     }
   },
@@ -308,301 +326,301 @@ export default {
       resetSearch: 'landing/resetSearch'
     }),
     updateSearch: debounce(function () {
-      this.doCMSSearch();
+      this.doCMSSearch()
       setTimeout(() => {
-        this.doDocumentSearch();
-        this.doSearch();
-      }, 0);
+        this.doDocumentSearch()
+        this.doSearch()
+      }, 0)
     }, 500),
     reset () {
-      this.clearSearch();
-      this.hide();
+      this.clearSearch()
+      this.hide()
     },
     clearSearch () {
-      this.localSearchString = '';
-      this.$refs.searchInput.focus();
+      this.localSearchString = ''
+      this.$refs.searchInput.focus()
     },
     search () {
-      this.searchString = this.localSearchString;
+      this.searchString = this.localSearchString
     },
     show () {
-      this.shown = true;
+      this.shown = true
       this.$nextTick(function () {
-        this.$refs.searchInput.focus();
-      });
+        this.$refs.searchInput.focus()
+      })
     },
     hide () {
-      this.shown = false;
+      this.shown = false
     }
   }
-};
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .SearchComponent {
-    .SearchButton {
-      background-color: transparent;
-      width: @actionBarHeight;
+.SearchComponent {
+  .SearchButton {
+    background-color: transparent;
+    width: @actionBarHeight;
+    height: @actionBarHeight;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    color: @colorWhite;
+
+    .svg-inline--fa {
+      font-size: 20px;
+      color: @colorWhite;
+    }
+  }
+}
+
+.SearchPopper {
+  position: absolute;
+  right: 40px;
+  top: 0;
+  z-index: 2010;
+  width: 500px;
+  box-shadow: 5px 5px 20px 10px rgba(0, 0, 0, 0.15);
+
+  > .el-card {
+    padding: 0;
+    border: 0;
+    background-color: fade(@colorGrayLightest, 90%);
+  }
+
+  .SearchBig {
+    height: @actionBarHeight;
+
+    .el-input,
+    .el-input__inner {
+      width: 100%;
+      height: @actionBarHeight;
+      font-size: @fontSizeBase;
+      font-weight: 700;
+    }
+
+    .el-input__inner,
+    .el-input-group__prepend,
+    .el-input-group__append {
+      border: none !important;
+    }
+
+    .el-input-group__prepend {
+      width: 38px;
       height: @actionBarHeight;
       padding: 0;
-      margin: 0;
-      text-align: center;
-      color: @colorWhite;
+      background-color: @colorWhite;
 
       .svg-inline--fa {
+        float: right;
         font-size: 20px;
+        color: @colorTextPrimary;
+      }
+    }
+
+    .el-input-group__append {
+      width: @actionBarHeight; // * 2;
+      height: @actionBarHeight;
+      padding: 0;
+
+      .el-button {
+        width: @actionBarHeight;
+        height: @actionBarHeight;
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    .SearchClear {
+      background-color: @colorGrayLightest;
+
+      .svg-inline--fa {
+        font-size: 18px;
+      }
+
+      &:hover {
+        background-color: @colorGrayLighter;
+        color: @colorTextPrimary;
+      }
+    }
+
+    .SearchSubmit {
+      border: 0;
+      background-color: @colorBrandAccent;
+
+      .svg-inline--fa {
+        font-size: 18px;
         color: @colorWhite;
       }
+
+      &:hover {
+        background-color: @colorBrandAccentLight;
+      }
     }
   }
 
-  .SearchPopper {
-    position: absolute;
-    right: 40px;
-    top: 0;
-    z-index: 2010;
-    width: 500px;
-    box-shadow: 5px 5px 20px 10px rgba(0,0,0,.15);
+  .Loading {
+    padding: 22px 20px;
+    color: #008dc9;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0;
+  }
 
-    > .el-card {
-      padding: 0;
-      border: 0;
-      background-color: fade(@colorGrayLightest, 90%);
+  .SearchResultsWrapper {
+    padding-top: 16px;
+    // max-height: calc(@landingMapHeight - 36px);
+    max-height: calc(@landingMapHeight);
+    overflow-y: auto;
+
+    @media screen and (max-height: 694px) {
+      // max-height: calc(@landingMapMinHeight - 36px);
+      max-height: calc(@landingMapMinHeight);
+    }
+  }
+
+  .SearchResultsHeader {
+    height: 76px;
+    padding: 0 20px;
+    border-top: 1px solid @colorTextMuted;
+    &.HasResults {
+      background-color: white;
+      height: 52px;
     }
 
-    .SearchBig {
+    .SearchResultsCounter {
+      width: 35%;
+      font-size: @fontSizeBase;
+      font-weight: 700;
+      color: @colorTextSecondary;
+    }
+
+    .AdvancedSearchLink {
+      width: auto;
+      a {
+        padding-left: 200px;
+      }
+    }
+
+    .NopeMessage {
+      color: @colorTextSecondary;
+      font-weight: bold;
+      font-size: 14px;
+      padding-bottom: 14px;
+    }
+  }
+  .FirstSearchComponent:first-child {
+    padding-top: 20px;
+  }
+  .LastSearchComponent {
+    padding-bottom: 20px;
+  }
+
+  .SearchTabs {
+    .el-tabs__header {
+      margin: 0;
+      background-color: white;
+      .el-tabs__nav-scroll {
+        padding-left: 22px;
+        .el-tabs__item:not(.is-active) {
+          color: @colorTextSecondary;
+        }
+      }
+    }
+  }
+  .SearchResultItem {
+    margin: 0 10px 8px;
+  }
+  .SearchResultsHeader + .SearchResultItem {
+    margin-top: 8px;
+  }
+}
+
+.SearchShadow {
+  position: relative;
+  width: 500px;
+  height: @actionBarHeight;
+  background-color: @colorGrayLightest;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: @colorGrayLight;
+  }
+
+  .el-col {
+    height: @actionBarHeight;
+
+    // search icon
+    &:nth-child(1) {
+      min-width: 38px;
+      max-width: 38px;
       height: @actionBarHeight;
 
-      .el-input,
-      .el-input__inner {
-        width: 100%;
+      .svg-inline--fa {
+        float: right;
         height: @actionBarHeight;
+        font-size: 20px;
+        color: @colorTextPrimary;
+      }
+    }
+
+    // search term
+    &:nth-child(2) {
+      width: 100%;
+
+      .SearchText {
+        color: @colorTextPrimary;
         font-size: @fontSizeBase;
         font-weight: 700;
-      }
-
-      .el-input__inner,
-      .el-input-group__prepend,
-      .el-input-group__append {
-        border: none !important;
-      }
-
-      .el-input-group__prepend {
-        width: 38px;
-        height: @actionBarHeight;
-        padding: 0;
-        background-color: @colorWhite;
-
-        .svg-inline--fa {
-          float: right;
-          font-size: 20px;
-          color: @colorTextPrimary;
-        }
-      }
-
-      .el-input-group__append {
-        width: @actionBarHeight; // * 2;
-        height: @actionBarHeight;
-        padding: 0;
-
-        .el-button {
-          width: @actionBarHeight;
-          height: @actionBarHeight;
-          margin: 0;
-          padding: 0;
-        }
-      }
-
-      .SearchClear {
-        background-color: @colorGrayLightest;
-
-        .svg-inline--fa {
-          font-size: 18px;
-        }
-
-        &:hover {
-          background-color: @colorGrayLighter;
-          color: @colorTextPrimary;
-        }
-      }
-
-      .SearchSubmit {
-        border: 0;
-        background-color: @colorBrandAccent;
-
-        .svg-inline--fa {
-          font-size: 18px;
-          color: @colorWhite;
-        }
-
-        &:hover {
-          background-color: @colorBrandAccentLight;
-        }
+        line-height: @actionBarHeight;
+        padding: 0 15px;
       }
     }
 
-    .Loading {
-      padding: 22px 20px;
-      color: #008DC9;
-      font-size: 14px;
-      line-height: 16px;
-      letter-spacing: 0;
-    }
-
-    .SearchResultsWrapper {
-      padding-top: 16px;
-      // max-height: calc(@landingMapHeight - 36px);
-      max-height: calc(@landingMapHeight);
-      overflow-y: auto;
-
-      @media screen and (max-height: 694px) {
-        // max-height: calc(@landingMapMinHeight - 36px);
-        max-height: calc(@landingMapMinHeight);
-      }
-    }
-
-    .SearchResultsHeader {
-      height: 76px;
-      padding: 0 20px;
-      border-top: 1px solid @colorTextMuted;
-      &.HasResults {
-        background-color: white;
-        height: 52px;
-      }
+    // search results
+    &:nth-child(3) {
+      width: auto;
 
       .SearchResultsCounter {
-        width: 35%;
+        padding: 0 15px;
+        color: @colorTextMuted;
         font-size: @fontSizeBase;
         font-weight: 700;
-        color: @colorTextSecondary;
-      }
-
-      .AdvancedSearchLink {
-        width: auto;
-        a {
-          padding-left: 200px;
-        }
-      }
-
-      .NopeMessage {
-        color: @colorTextSecondary;
-        font-weight: bold;
-        font-size: 14px;
-        padding-bottom: 14px;
+        line-height: @actionBarHeight;
+        white-space: nowrap;
       }
     }
-    .FirstSearchComponent:first-child {
-      padding-top: 20px;
-    }
-    .LastSearchComponent {
-      padding-bottom: 20px;
-    }
 
-    .SearchTabs {
-      .el-tabs__header {
-        margin: 0;
-        background-color: white;
-        .el-tabs__nav-scroll  {
-          padding-left: 22px;
-          .el-tabs__item:not(.is-active) {
-            color: @colorTextSecondary;
-          }
-        }
-      }
-    }
-    .SearchResultItem {
-      margin: 0 10px 8px;
-    }
-    .SearchResultsHeader + .SearchResultItem {
-      margin-top: 8px;
-    }
-  }
+    // search clear
+    &:nth-child(4) {
+      width: @actionBarHeight;
 
-  .SearchShadow {
-    position: relative;
-    width: 500px;
-    height: @actionBarHeight;
-    background-color: @colorGrayLightest;
-
-    &::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      display: block;
-      width: 100%;
-      height: 1px;
-      background-color: @colorGrayLight;
-    }
-
-    .el-col {
-      height: @actionBarHeight;
-
-      // search icon
-      &:nth-child(1) {
-        min-width: 38px;
-        max-width: 38px;
+      .el-button {
+        width: @actionBarHeight;
         height: @actionBarHeight;
+        padding: 0;
+        background-color: @colorGrayLightest;
+        color: @colorTextMuted;
 
         .svg-inline--fa {
-          float: right;
-          height: @actionBarHeight;
-          font-size: 20px;
+          font-size: 18px;
+        }
+
+        &:hover {
           color: @colorTextPrimary;
-        }
-      }
-
-      // search term
-      &:nth-child(2) {
-        width: 100%;
-
-        .SearchText {
-          color: @colorTextPrimary;
-          font-size: @fontSizeBase;
-          font-weight: 700;
-          line-height: @actionBarHeight;
-          padding: 0 15px;
-        }
-      }
-
-      // search results
-      &:nth-child(3) {
-        width: auto;
-
-        .SearchResultsCounter {
-          padding: 0 15px;
-          color: @colorTextMuted;
-          font-size: @fontSizeBase;
-          font-weight: 700;
-          line-height: @actionBarHeight;
-          white-space: nowrap;
-        }
-      }
-
-      // search clear
-      &:nth-child(4) {
-        width: @actionBarHeight;
-
-        .el-button {
-          width: @actionBarHeight;
-          height: @actionBarHeight;
-          padding: 0;
-          background-color: @colorGrayLightest;
-          color: @colorTextMuted;
-
-          .svg-inline--fa {
-            font-size: 18px;
-          }
-
-          &:hover {
-            color: @colorTextPrimary;
-            background-color: @colorGrayLighter;
-          }
+          background-color: @colorGrayLighter;
         }
       }
     }
   }
+}
 </style>

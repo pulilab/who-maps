@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -25,13 +25,13 @@ export default {
     }),
     projectStages () {
       if (Array.isArray(this.stages) && this.stages.length > 0) {
-        const currStagesIds = this.stages.map(i => i.id);
-        return this.allStages.filter(i => currStagesIds.includes(i.id)).map(i => i.name);
+        const currStagesIds = this.stages.map(i => i.id)
+        return this.allStages.filter(i => currStagesIds.includes(i.id)).map(i => i.name)
       }
-      return ['N/A'];
+      return ['N/A']
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

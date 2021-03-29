@@ -1,7 +1,7 @@
-import dotenv from 'dotenv';
-import path from 'path';
+import dotenv from 'dotenv'
+import path from 'path'
 // import webpack from 'webpack';
-const result = dotenv.config();
+const result = dotenv.config()
 
 // const bundlebuddy = require('bundle-buddy-webpack-plugin');
 
@@ -12,11 +12,14 @@ const features = [
   'Object.from',
   'IntersectionObserver',
   'EventSource'
-].join('%2C');
+].join('%2C')
 
 if (result.error) {
-  console.log('\x1b[31m%s\x1b[0m', 'Missing .env file, follow the README instructions');
-  throw result.error;
+  console.log(
+    '\x1b[31m%s\x1b[0m',
+    'Missing .env file, follow the README instructions'
+  )
+  throw result.error
 }
 
 const config = {
@@ -28,17 +31,17 @@ const config = {
       { hid: 'description', name: 'description', content: 'DHA' }
     ],
     link: [
-      { rel: 'icon', type: 'image/ico', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
+      { rel: 'icon', type: 'image/ico', href: '/favicon.ico' }
+      // { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
     ],
     script: [
-      { src: `https://polyfill.io/v3/polyfill.min.js?features=${features}`, body: true }
+      {
+        src: `https://polyfill.io/v3/polyfill.min.js?features=${features}`,
+        body: true
+      }
     ]
   },
-  css: [
-    '~assets/style/main.sass',
-    '~assets/style/main.less'
-  ],
+  css: ['~assets/style/main.sass', '~assets/style/main.less'],
   env: {
     GlobalCountryID: process.env.GLOBAL_COUNTRY_ID || 201,
     hotjarId: process.env.HOTJAR_TRACKING_ID || null
@@ -62,62 +65,64 @@ const config = {
     '@nuxtjs/proxy',
     'nuxt-fontawesome',
     '@nuxtjs/sentry',
-    // 'nuxt-purgecss',
-    ['nuxt-i18n', {
-      locales: [
-        {
-          code: 'en',
-          iso: 'en-GB',
-          name: 'English',
-          file: 'en-GB.js'
+    [
+      'nuxt-i18n',
+      {
+        locales: [
+          {
+            code: 'en',
+            iso: 'en-GB',
+            name: 'English',
+            file: 'en-GB.js'
+          },
+          {
+            code: 'fr',
+            iso: 'fr-FR',
+            name: 'Français',
+            file: 'fr-FR.js'
+          },
+          {
+            code: 'es',
+            iso: 'es-ES',
+            name: 'Español',
+            file: 'es-ES.js'
+          },
+          {
+            code: 'pt',
+            iso: 'pt-PT',
+            name: 'Português',
+            file: 'pt-PT.js'
+          },
+          {
+            code: 'ar',
+            iso: 'ar-AR',
+            name: 'Arabic',
+            file: 'ar-AR.js'
+          }
+        ],
+        lazy: true,
+        langDir: 'lang/',
+        strategy: 'prefix',
+        rootRedirect: 'en/-/',
+        defaultLocale: 'en',
+        seo: false,
+        vueI18n: {
+          fallbackLocale: 'en',
+          silentTranslationWarn: true
         },
-        {
-          code: 'fr',
-          iso: 'fr-FR',
-          name: 'Français',
-          file: 'fr-FR.js'
+        vuex: {
+          moduleName: 'i18n',
+          mutations: {
+            setLocale: 'I18N_SET_LOCALE',
+            setMessages: false
+          }
         },
-        {
-          code: 'es',
-          iso: 'es-ES',
-          name: 'Español',
-          file: 'es-ES.js'
-        },
-        {
-          code: 'pt',
-          iso: 'pt-PT',
-          name: 'Português',
-          file: 'pt-PT.js'
-        },
-        {
-          code: 'ar',
-          iso: 'ar-AR',
-          name: 'Arabic',
-          file: 'ar-AR.js'
+        detectBrowserLanguage: {
+          useCookie: true,
+          cookieKey: 'i18n_redirected'
         }
-      ],
-      lazy: true,
-      langDir: 'lang/',
-      strategy: 'prefix',
-      rootRedirect: 'en/-/',
-      defaultLocale: 'en',
-      seo: false,
-      vueI18n: {
-        fallbackLocale: 'en',
-        silentTranslationWarn: true
-      },
-      vuex: {
-        moduleName: 'i18n',
-        mutations: {
-          setLocale: 'I18N_SET_LOCALE',
-          setMessages: false
-        }
-      },
-      detectBrowserLanguage: {
-        useCookie: true,
-        cookieKey: 'i18n_redirected'
       }
-    }]
+    ]
   ],
   fontawesome: {
     component: 'fa',
@@ -135,6 +140,7 @@ const config = {
   proxy: {},
   axios: {
     baseURL: 'http://nginx:9010/',
+    // baseURL: '',
     browserBaseURL: '/',
     credentials: true,
     retry: false
@@ -143,30 +149,21 @@ const config = {
     middleware: ['auth'],
     base: '/'
   },
-  // purgeCSS: {
-  //   whitelistPatterns: () => [/\b[^\s]*(nuxt|leaflet|vue2-leaflet|el)[^\s]*\b/]
-  // },
   loading: '~/components/DhaLoader.vue',
   render: {
     resourceHints: false
   },
-  buildModules: [
-    '@nuxtjs/google-analytics'
-  ],
+  buildModules: ['@nuxtjs/google-analytics'],
   googleAnalytics: {
     id: process.env.GA_TRACKING_ID || 'UA-163761727-1',
     disabled: true,
-    set: [
-      { field: 'anonymizeIp', value: true }
-    ]
+    set: [{ field: 'anonymizeIp', value: true }]
   },
   build: {
     babel: {
       presets ({ isServer }) {
-        const targets = isServer ? { node: '10' } : { ie: '11' };
-        return [
-          [require.resolve('@nuxt/babel-preset-app'), { targets }]
-        ];
+        const targets = isServer ? { node: '10' } : { ie: '11' }
+        return [[require.resolve('@nuxt/babel-preset-app'), { targets }]]
       }
     },
     extractCSS: true,
@@ -174,39 +171,45 @@ const config = {
     transpile: ['redux', 'redux-async-thunk'],
     extend (config, { isDev }) {
       config.plugins.forEach(function (plugin) {
-        if (plugin.constructor && plugin.constructor.name === 'ExtractCssChunksPlugin') {
-          plugin.options.ignoreOrder = true;
+        if (
+          plugin.constructor &&
+          plugin.constructor.name === 'ExtractCssChunksPlugin'
+        ) {
+          plugin.options.ignoreOrder = true
         }
-      });
+      })
       config.module.rules.push({
         test: /\.html$/,
         loader: 'html-loader',
         exclude: /(node_modules)/
-      });
+      })
       if (isDev && process.client) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/
-        });
+        })
       }
-      config.resolve.alias['leaflet'] = path.join(__dirname, 'node_modules/leaflet');
+      config.resolve.alias.leaflet = path.join(
+        __dirname,
+        'node_modules/leaflet'
+      )
       // config.plugins.push(new bundlebuddy());
     }
   }
-};
+}
 
 if (process.env.NODE_ENV !== 'production') {
   config.axios = {
     proxy: true,
     credentials: true
-  };
+  }
   config.proxy = {
     '/api/': { target: 'http://localhost/', secure: false },
     '/media/': { target: 'http://localhost/', secure: false },
     '/static/': { target: 'http://localhost/', secure: false },
     '/translation/': { target: 'http://localhost/', secure: false }
-  };
+  }
 }
-module.exports = config;
+module.exports = config

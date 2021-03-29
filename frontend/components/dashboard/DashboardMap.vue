@@ -56,14 +56,14 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import MapMixin from '../mixins/MapMixin';
+import { mapGetters, mapActions } from 'vuex'
+import MapMixin from '../mixins/MapMixin'
 
-import NoSSR from 'vue-no-ssr';
-import CountryCenterMarker from '../common/map/CountryCenterMarker';
-import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay';
-import WorldZoomButton from '../common/map/WorldZoomButton';
-import SwitchViewBox from '../common/map/SwitchViewBox';
+import NoSSR from 'vue-no-ssr'
+import CountryCenterMarker from '../common/map/CountryCenterMarker'
+import CountryDetailsOverlay from '../common/map/CountryDetailsOverlay'
+import WorldZoomButton from '../common/map/WorldZoomButton'
+import SwitchViewBox from '../common/map/SwitchViewBox'
 
 export default {
   components: {
@@ -92,7 +92,7 @@ export default {
       getSearched: 'dashboard/getSearched'
     }),
     switchActive () {
-      return this.activeCountry && this.activeCountry !== process.env.GlobalCountryID;
+      return this.activeCountry && this.activeCountry !== process.env.GlobalCountryID
     }
   },
   methods: {
@@ -105,7 +105,7 @@ export default {
       setActiveSubLevel: 'dashboard/setActiveSubLevel'
     })
   }
-};
+}
 </script>
 
 <style lang="less">

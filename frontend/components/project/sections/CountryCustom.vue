@@ -28,11 +28,11 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
-import { mapGetters } from 'vuex';
-import CollapsibleCard from '../CollapsibleCard';
-import CustomField from '../CustomField';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
+import { mapGetters } from 'vuex'
+import CollapsibleCard from '../CollapsibleCard'
+import CustomField from '../CustomField'
 
 export default {
   components: {
@@ -47,36 +47,36 @@ export default {
     }),
     country () {
       if (this.projectCountry) {
-        return this.getCountryDetails(this.projectCountry);
+        return this.getCountryDetails(this.projectCountry)
       }
-      return null;
+      return null
     },
     countryQuestions () {
       if (this.country) {
-        return this.country.country_questions;
+        return this.country.country_questions
       }
-      return [];
+      return []
     }
   },
   methods: {
     customFieldsName (name) {
-      return this.$gettext('{name} custom fields', { name });
+      return this.$gettext('{name} custom fields', { name })
     },
     async validate () {
       if (this.$refs.collapsible) {
-        this.$refs.collapsible.expandCard();
+        this.$refs.collapsible.expandCard()
       }
       if (this.$refs.customQuestion) {
         const validations = await Promise.all(
           this.$refs.customQuestion.map(r => r.validate())
-        );
-        console.log('Custom country questions validators', validations);
-        return validations.reduce((a, c) => a && c, true);
+        )
+        console.log('Custom country questions validators', validations)
+        return validations.reduce((a, c) => a && c, true)
       }
-      return true;
+      return true
     }
   }
-};
+}
 </script>
 
 <style lang="less">

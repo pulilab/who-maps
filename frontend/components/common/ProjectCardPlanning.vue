@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import ProjectLegend from './ProjectLegend';
+import ProjectLegend from './ProjectLegend'
 
 export default {
   components: {
@@ -81,33 +81,33 @@ export default {
   data () {
     return {
       hovered: false
-    };
+    }
   },
   computed: {
     cardShadow () {
-      return this.hideBorders ? 'never' : 'always';
+      return this.hideBorders ? 'never' : 'always'
     },
     showArrow () {
-      return this.hovered && this.showArrowOnOver;
+      return this.hovered && this.showArrowOnOver
     },
     text () {
-      return this.project.body.replace(/<\/?[^>]+>/ig, ' ');
+      return this.project.body.replace(/<\/?[^>]+>/ig, ' ')
     }
   },
   methods: {
     goToProject () {
-      const path = this.localePath({ name: 'organisation-cms', query: { q: this.project.name } });
-      this.$emit('redirect');
-      this.$router.push(path);
+      const path = this.localePath({ name: 'organisation-cms', query: { q: this.project.name } })
+      this.$emit('redirect')
+      this.$router.push(path)
     },
     mouseEnterHandler () {
-      this.hovered = true;
+      this.hovered = true
     },
     mouseLeaveHandler () {
-      this.hovered = false;
+      this.hovered = false
     }
   }
-};
+}
 </script>
 
 <style lang="less">

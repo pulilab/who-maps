@@ -10,14 +10,43 @@
 </template>
 
 <script>
-import MainTable from '../../../components/dashboard/MainTable';
-import TableTopActions from '../../../components/dashboard/TableTopActions';
-import { mapGetters, mapActions } from 'vuex';
+import MainTable from '../../../components/dashboard/MainTable'
+import TableTopActions from '../../../components/dashboard/TableTopActions'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
     MainTable,
     TableTopActions
+  },
+  async fetch ({ store, query, error }) {
+    store.dispatch('dashboard/setDashboardSection', 'list')
+    await Promise.all([
+      store.dispatch('projects/loadUserProjects'),
+      store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('countries/loadMapData')
+    ])
+    await store.dispatch('dashboard/setSearchOptions', query)
+    try {
+      await store.dispatch('dashboard/loadProjectList')
+    } catch (e) {
+      console.log(e)
+      error({
+        statusCode: 404,
+        message: 'Unable to process the search with the current parameters'
+      })
+    }
+    if (store.getters['dashboard/getDashboardType'] === 'donor') {
+      await store.dispatch(
+        'system/loadDonorDetails',
+        store.getters['dashboard/getDashboardId']
+      )
+    } else if (store.getters['dashboard/getDashboardType'] === 'country') {
+      await store.dispatch(
+        'countries/loadCountryDetails',
+        store.getters['dashboard/getDashboardId']
+      )
+    }
   },
   computed: {
     ...mapGetters({
@@ -30,33 +59,10 @@ export default {
       immediate: false,
       handler (query) {
         if (this.dashboardSection === 'list') {
-          this.$router.replace({ ...this.$route, query });
-          this.load();
+          this.$router.replace({ ...this.$route, query })
+          this.load()
         }
       }
-    }
-  },
-  async fetch ({ store, query, error }) {
-    store.dispatch('dashboard/setDashboardSection', 'list');
-    await Promise.all([
-      store.dispatch('projects/loadUserProjects'),
-      store.dispatch('projects/loadProjectStructure'),
-      store.dispatch('countries/loadMapData')
-    ]);
-    await store.dispatch('dashboard/setSearchOptions', query);
-    try {
-      await store.dispatch('dashboard/loadProjectList');
-    } catch (e) {
-      console.log(e);
-      error({
-        statusCode: 404,
-        message: 'Unable to process the search with the current parameters'
-      });
-    }
-    if (store.getters['dashboard/getDashboardType'] === 'donor') {
-      await store.dispatch('system/loadDonorDetails', store.getters['dashboard/getDashboardId']);
-    } else if (store.getters['dashboard/getDashboardType'] === 'country') {
-      await store.dispatch('countries/loadCountryDetails', store.getters['dashboard/getDashboardId']);
     }
   },
   methods: {
@@ -64,14 +70,12 @@ export default {
       loadProjectList: 'dashboard/loadProjectList'
     }),
     async load () {
-      this.$nuxt.$loading.start();
-      await this.loadProjectList();
-      this.$nuxt.$loading.finish();
+      this.$nuxt.$loading.start()
+      await this.loadProjectList()
+      this.$nuxt.$loading.finish()
     }
   }
-};
+}
 </script>
 
-<style>
-
-</style>
+<style></style>

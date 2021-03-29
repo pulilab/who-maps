@@ -54,10 +54,10 @@ export default {
 
   methods: {
     handleChange (file, fileList) {
-      this.$emit('update:files', fileList);
+      this.$emit('update:files', fileList)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

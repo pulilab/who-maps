@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import { draftRules, publishRules } from '@/utilities/projects';
-import { nameMapping } from '@/utilities/import';
+import { draftRules, publishRules } from '@/utilities/projects'
+import { nameMapping } from '@/utilities/import'
 
 export default {
   props: {
@@ -38,51 +38,51 @@ export default {
   },
   computed: {
     internalDraftRules () {
-      return { ...draftRules(), organisation: { required: true } };
+      return { ...draftRules(), organisation: { required: true } }
     },
     internalPublishRules () {
-      const standardRules = publishRules();
+      const standardRules = publishRules()
       return {
         ...standardRules,
         strategies: undefined,
         digitalHealthInterventions: standardRules.strategies,
         ...standardRules.national_level_deployment
-      };
+      }
     },
     validationRules () {
-      const rules = this.publish ? this.internalPublishRules : this.internalDraftRules;
+      const rules = this.publish ? this.internalPublishRules : this.internalDraftRules
       return {
         ...rules,
         team: undefined,
         viewers: undefined,
         country: undefined,
         donors: undefined
-      };
+      }
     },
     nameMapping () {
       return {
         ...nameMapping
-      };
+      }
     },
     errors () {
-      const result = [];
-      const draftRequireds = [];
+      const result = []
+      const draftRequireds = []
       for (const key in this.validationRules) {
         if (this.validationRules[key] && this.validationRules[key].required) {
-          draftRequireds.push(key);
+          draftRequireds.push(key)
         }
       }
       draftRequireds.forEach(dr => {
         if (!this.headers.some(h => h.selected === dr)) {
-          const name = this.nameMapping[dr] || dr;
-          result.push(`Please select ${name} column`);
+          const name = this.nameMapping[dr] || dr
+          result.push(`Please select ${name} column`)
         }
-      });
-      return result;
+      })
+      return result
     }
   }
 
-};
+}
 </script>
 
 <style>

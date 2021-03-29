@@ -23,7 +23,7 @@ export default {
       default: 'right'
     }
   }
-};
+}
 </script>
 
 <style lang="less">

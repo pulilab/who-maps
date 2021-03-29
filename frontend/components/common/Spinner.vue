@@ -39,7 +39,7 @@ export default {
       default: '80'
     }
   }
-};
+}
 </script>
 
 <style scoped>

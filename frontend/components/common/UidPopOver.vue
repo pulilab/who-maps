@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -70,27 +70,27 @@ export default {
       uidPopOver: false,
       copied: false,
       base: ''
-    };
+    }
   },
   computed: {
     ...mapGetters({
       landingData: 'landing/getLandingPageData'
     }),
     uidUrl () {
-      return `${this.base}/p/${this.uid}`;
+      return `${this.base}/p/${this.uid}`
     }
   },
   mounted () {
-    this.base = window.location.origin;
+    this.base = window.location.origin
   },
   methods: {
     async copyToClipboard () {
-      this.copied = true;
-      await navigator.clipboard.writeText(this.$refs.copyInput.value);
-      setTimeout(() => { this.copied = false; }, 2500);
+      this.copied = true
+      await navigator.clipboard.writeText(this.$refs.copyInput.value)
+      setTimeout(() => { this.copied = false }, 2500)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

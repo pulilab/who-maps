@@ -397,3 +397,25 @@ class ImportRow(models.Model):
     original_data = JSONField(default=dict)
     project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL)
     parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)
+
+
+class ProjectVersion(ExtendedModel):
+    version = models.IntegerField(default=1)
+    project = models.ForeignKey(Project, blank=False, null=True, on_delete=models.CASCADE, related_name='versions')
+    name = models.CharField(max_length=255)
+    data = JSONField(default=dict)
+    research = models.NullBooleanField(blank=True, null=True)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='published_versions')
+
+    class Meta:
+        unique_together = ('project', 'version')
+        ordering = ['modified']
+
+    def save(self, *args, **kwargs):
+        """
+        Custom save method to auto-increment the version field
+        """
+        if not self.id:
+            qs = ProjectVersion.objects.filter(project=self.project)
+            self.version = qs.count() + 1
+        super().save(*args, **kwargs)

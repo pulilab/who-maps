@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import VeeValidate from 'vee-validate';
+import Vue from 'vue'
+import VeeValidate from 'vee-validate'
 
 // Needed this, because encountered: https://github.com/ElemeFE/element/issues/4720
 const config = {
@@ -17,6 +17,6 @@ const config = {
   locale: 'en',
   strict: false
   // validity: false,
-};
+}
 
-Vue.use(VeeValidate, config);
+Vue.use(VeeValidate, config)

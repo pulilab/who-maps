@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -21,10 +21,10 @@ export default {
         'projects/getDigitalHealthInterventionDetails'
     }),
     dhi () {
-      return this.getDigitalHealthInterventionDetails(this.id);
+      return this.getDigitalHealthInterventionDetails(this.id)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

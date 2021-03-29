@@ -78,9 +78,9 @@
 </template>
 
 <script>
-import isEqual from 'lodash/isEqual';
-import { mapGetters, mapActions } from 'vuex';
-import DhaQuestionOptions from './DhaQuestionOptions';
+import isEqual from 'lodash/isEqual'
+import { mapGetters, mapActions } from 'vuex'
+import DhaQuestionOptions from './DhaQuestionOptions'
 
 export default {
   components: { DhaQuestionOptions },
@@ -104,7 +104,7 @@ export default {
         is_private: false,
         is_active: true
       }
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -112,18 +112,18 @@ export default {
     }),
     stored () {
       if (this.id) {
-        const stored = { ...this.questionById(+this.id) };
-        stored.is_private = stored.private;
-        delete stored.private;
-        return stored;
+        const stored = { ...this.questionById(+this.id) }
+        stored.is_private = stored.private
+        delete stored.private
+        return stored
       }
-      return null;
+      return null
     },
     valid () {
-      return Boolean(this.question.type && this.question.question.length && (this.question.type < 4 || this.question.options.length));
+      return Boolean(this.question.type && this.question.question.length && (this.question.type < 4 || this.question.options.length))
     },
     saved () {
-      return isEqual(this.stored, this.question);
+      return isEqual(this.stored, this.question)
     }
   },
   watch: {
@@ -131,8 +131,8 @@ export default {
       immediate: true,
       handler (stored) {
         if (stored) {
-          const options = stored.type > 3 ? [...stored.options] : [];
-          this.question = { ...stored, options };
+          const options = stored.type > 3 ? [...stored.options] : []
+          this.question = { ...stored, options }
         }
       }
     }
@@ -150,61 +150,61 @@ export default {
             confirmButtonText: this.$gettext('OK'),
             cancelButtonText: this.$gettext('Cancel'),
             type: 'warning'
-          });
+          })
         }
-        await this.deleteQuestion(id);
+        await this.deleteQuestion(id)
         this.$message({
           type: 'success',
           message: this.$gettext('Question successfully deleted')
-        });
+        })
       } catch (e) {
         if (e === 'cancel') {
           this.$message({
             type: 'info',
             message: this.$gettext('Question deletion canceled')
-          });
+          })
         } else {
           this.$message({
             type: 'error',
             message: this.$gettext('An error occured while deleting the question')
-          });
+          })
         }
       }
     },
     async saveQuestion () {
       try {
         if (this.id) {
-          await this.updateQuestion({ question: this.question, id: this.id });
+          await this.updateQuestion({ question: this.question, id: this.id })
         } else {
           await this.$confirm(this.$gettext('This will save the question, type and options will not be editable anymore'), this.$gettext('Warning'), {
             confirmButtonText: this.$gettext('OK'),
             cancelButtonText: this.$gettext('Cancel'),
             type: 'warning'
-          });
-          await this.createQuestion(this.question);
+          })
+          await this.createQuestion(this.question)
         }
         this.$message({
           type: 'success',
           message: this.$gettext('Question successfully saved')
-        });
+        })
       } catch (e) {
         if (e === 'cancel') {
           this.$message({
             type: 'info',
             message: this.$gettext('Question saving canceled')
-          });
+          })
         } else {
-          console.error(e);
+          console.error(e)
           this.$message({
             type: 'error',
             message: this.$gettext('An error occured while saving the question')
-          });
+          })
         }
       }
     }
   }
 
-};
+}
 </script>
 
 <style lang="less">

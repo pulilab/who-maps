@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import { format } from 'date-fns';
-import { mapGetters } from 'vuex';
+import { format } from 'date-fns'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -21,7 +21,7 @@ export default {
       allStages: 'project/getStagesList'
     }),
     exportDate () {
-      return format(Date.now(), 'Do MMM, YYYY');
+      return format(Date.now(), 'Do MMM, YYYY')
     },
     tableHeader () {
       return {
@@ -60,7 +60,7 @@ export default {
         },
         layout: 'noBorders',
         margin: [0, 10]
-      };
+      }
     },
     docDefinition () {
       return {
@@ -99,79 +99,79 @@ export default {
           }
         },
         images: this.base64Images
-      };
+      }
     },
     parsed () {
       return this.input.map(s => {
-        let custom = [];
+        let custom = []
         if (this.dashboardType === 'donor') {
           try {
             custom = this.donorColumns.map(dc => {
-              const value = s.donor_answers && s.donor_answers[dc.donorId] ? s.donor_answers[dc.donorId][dc.originalId] : '';
-              const label = dc.label + (dc.private ? ' (' + this.$gettext('private') + ')' : '');
+              const value = s.donor_answers && s.donor_answers[dc.donorId] ? s.donor_answers[dc.donorId][dc.originalId] : ''
+              const label = dc.label + (dc.private ? ' (' + this.$gettext('private') + ')' : '')
               return {
                 text: label,
                 value,
                 donor: dc.donorId
-              };
-            });
+              }
+            })
           } catch (e) {
-            console.error('failed to print custom donor answers', e);
+            console.error('failed to print custom donor answers', e)
           }
         }
         if (this.dashboardType === 'country') {
           try {
             custom = this.countryColumns.map(cc => {
-              const value = s.country_answers ? s.country_answers[cc.originalId] : '';
-              const label = cc.label + (cc.private ? ' (' + this.$gettext('private') + ')' : '');
+              const value = s.country_answers ? s.country_answers[cc.originalId] : ''
+              const label = cc.label + (cc.private ? ' (' + this.$gettext('private') + ')' : '')
               return {
                 text: label,
                 value
-              };
-            });
+              }
+            })
           } catch (e) {
-            console.error('failed to print custom country answers', e);
+            console.error('failed to print custom country answers', e)
           }
         }
         return {
           ...s,
           custom
-        };
-      });
+        }
+      })
     }
   },
   methods: {
     printDate (dateString) {
-      return format(dateString, 'Do MMM, YYYY');
+      return format(dateString, 'Do MMM, YYYY')
     },
     printBoolean (value) {
-      return value ? this.$gettext('Yes') : this.$gettext('No');
+      return value ? this.$gettext('Yes') : this.$gettext('No')
     },
     printCustomAnswer (value) {
       if (value && value[0] && value.length === 1) {
-        return value[0];
+        return value[0]
       } else if (value && value.length > 0) {
-        return value.join(', ');
+        return value.join(', ')
       }
-      return 'N/A';
+      return 'N/A'
     },
     printProjectLink (project) {
       if (window) {
-        let path = '/404';
+        let path = '/404'
         if (project && project.id) {
-          path = this.localePath({ name: 'organisation-projects-id-published', params: { organisation: '-', id: project.id } });
+          path = this.localePath({ name: 'organisation-projects-id-published', params: { organisation: '-', id: project.id } })
         }
-        return window.location.origin + path;
+        return window.location.origin + path
       }
-      return '';
+      return ''
     },
     printPdf () {
-      this.base64Images = require('../../utilities/exportBase64Images.js');
-      this.pdfMake = require('pdfmake/build/pdfmake.js');
-      const pdfFonts = require('pdfmake/build/vfs_fonts.js');
+      this.base64Images = require('../../utilities/exportBase64Images.js')
+      this.pdfMake = require('pdfmake/build/pdfmake.js')
+      const pdfFonts = require('pdfmake/build/vfs_fonts.js')
 
-      this.pdfMake.vfs = pdfFonts.pdfMake.vfs;
-      const docDefinition = { ...this.docDefinition, content: [this.tableHeader] };
+      this.pdfMake.vfs = pdfFonts.pdfMake.vfs
+      const docDefinition = { ...this.docDefinition, content: [this.tableHeader] }
 
       this.parsed.forEach((project, index) => {
         docDefinition.content.push({
@@ -227,8 +227,10 @@ export default {
               [
                 {
                   stack: [
-                    { text: this.$gettext('Overview of digital health implementation:'),
-                      style: 'subHeader' },
+                    {
+                      text: this.$gettext('Overview of digital health implementation:'),
+                      style: 'subHeader'
+                    },
                     { text: project.implementation_overview || '' }
                   ],
                   colSpan: 3
@@ -255,10 +257,10 @@ export default {
               ])
             ]
           }
-        });
-      });
-      this.pdfMake.createPdf(docDefinition).download('clv-searchable-export.pdf');
+        })
+      })
+      this.pdfMake.createPdf(docDefinition).download('clv-searchable-export.pdf')
     }
   }
-};
+}
 </script>

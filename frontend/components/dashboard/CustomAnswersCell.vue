@@ -62,29 +62,29 @@ export default {
   },
   computed: {
     source () {
-      return this.donorId ? 'donor_answers' : 'country_answers';
+      return this.donorId ? 'donor_answers' : 'country_answers'
     },
     values () {
       if (this.id && this.row && this.row[this.source]) {
-        const module = this.row[this.source];
+        const module = this.row[this.source]
         if (this.donorId) {
-          return module[this.donorId] && module[this.donorId][this.id] ? module[this.donorId][this.id] : [];
+          return module[this.donorId] && module[this.donorId][this.id] ? module[this.donorId][this.id] : []
         }
-        return module[this.id] ? module[this.id] : [];
+        return module[this.id] ? module[this.id] : []
       }
-      return [];
+      return []
     },
     limited () {
-      return this.limit && this.values.length > this.limit ? this.values.slice(0, this.limit) : this.values;
+      return this.limit && this.values.length > this.limit ? this.values.slice(0, this.limit) : this.values
     },
     excluded () {
       if (this.values && this.limited) {
-        return this.values.length - this.limited.length;
+        return this.values.length - this.limited.length
       }
-      return 0;
+      return 0
     }
   }
-};
+}
 </script>
 
 <style lang="less">

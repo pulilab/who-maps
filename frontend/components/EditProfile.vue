@@ -546,15 +546,15 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import FormAPIErrorsMixin from './mixins/FormAPIErrorsMixin';
-import OrganisationSelect from './common/OrganisationSelect';
-import LanguageSelect from './common/LanguageSelect';
-import CountrySelect from './common/CountrySelect';
-import DonorSelect from './common/DonorSelect';
-import UserPrivileges from './UserPrivileges';
-import FilterSwitch from '~/components/dashboard/FilterSwitch';
-import NotifySwitch from '~/components/common/NotifySwitchers';
+import { mapGetters, mapActions } from 'vuex'
+import FormAPIErrorsMixin from './mixins/FormAPIErrorsMixin'
+import OrganisationSelect from './common/OrganisationSelect'
+import LanguageSelect from './common/LanguageSelect'
+import CountrySelect from './common/CountrySelect'
+import DonorSelect from './common/DonorSelect'
+import UserPrivileges from './UserPrivileges'
+import FilterSwitch from '~/components/dashboard/FilterSwitch'
+import NotifySwitch from '~/components/common/NotifySwitchers'
 
 export default {
   components: {
@@ -588,7 +588,7 @@ export default {
       isDonorUser: false,
       isNoneUser: true,
       changeApprovedUserRole: false
-    };
+    }
   },
 
   computed: {
@@ -599,10 +599,10 @@ export default {
     }),
 
     userTypeRequested () {
-      return this.profile && this.profile.account_type !== 'I' && !this.profile.account_type_approved;
+      return this.profile && this.profile.account_type !== 'I' && !this.profile.account_type_approved
     },
     isDonorRequired () {
-      return this.innerProfile && this.innerProfile.account_type && ['D', 'DA', 'SDA'].includes(this.innerProfile.account_type);
+      return this.innerProfile && this.innerProfile.account_type && ['D', 'DA', 'SDA'].includes(this.innerProfile.account_type)
     },
     rules () {
       return {
@@ -630,51 +630,51 @@ export default {
           { type: 'url', message: this.$gettext('Has to be a valid url'), trigger: 'blur' },
           { validator: this.validatorGenerator('linkedin') }
         ]
-      };
+      }
     }
   },
 
   watch: {
     isCountryUser: function (newVal, oldVal) {
       if (newVal && !oldVal) {
-        this.isDonorUser = false;
-        this.isNoneUser = false;
+        this.isDonorUser = false
+        this.isNoneUser = false
         if (!['G', 'CA', 'SCA'].includes(this.innerProfile.account_type)) {
-          this.innerProfile.account_type = 'G';
+          this.innerProfile.account_type = 'G'
         }
       } else if (!newVal && !this.isDonorUser) {
-        this.innerProfile.account_type = 'I';
+        this.innerProfile.account_type = 'I'
       }
     },
     isDonorUser: function (newVal, oldVal) {
       if (newVal && !oldVal) {
-        this.isCountryUser = false;
-        this.isNoneUser = false;
+        this.isCountryUser = false
+        this.isNoneUser = false
         if (!['D', 'DA', 'SDA'].includes(this.innerProfile.account_type)) {
-          this.innerProfile.account_type = 'D';
+          this.innerProfile.account_type = 'D'
         }
       } else if (!newVal && !this.isCountryUser) {
-        this.innerProfile.account_type = 'I';
+        this.innerProfile.account_type = 'I'
       }
     },
     isNoneUser: function (newVal, oldVal) {
       if (newVal && !oldVal) {
-        this.isCountryUser = false;
-        this.isDonorUser = false;
-        this.innerProfile.account_type = 'I';
+        this.isCountryUser = false
+        this.isDonorUser = false
+        this.innerProfile.account_type = 'I'
       }
     },
     profile: {
       immediate: true,
       handler (profile) {
-        this.innerProfile = { ...profile };
+        this.innerProfile = { ...profile }
       }
     }
   },
 
   mounted () {
-    this.isCountryUser = ['G', 'CA', 'SCA'].includes(this.profile.account_type);
-    this.isDonorUser = ['D', 'DA', 'SDA'].includes(this.profile.account_type);
+    this.isCountryUser = ['G', 'CA', 'SCA'].includes(this.profile.account_type)
+    this.isDonorUser = ['D', 'DA', 'SDA'].includes(this.profile.account_type)
   },
 
   methods: {
@@ -689,62 +689,62 @@ export default {
           subject: this.$gettext('Change email request'),
           message: this.$gettext('Change my email to:')
         }
-      });
+      })
     },
 
     dismissChanges () {
-      this.innerProfile = { ...this.profile };
-      this.$router.go(-1);
+      this.innerProfile = { ...this.profile }
+      this.$router.go(-1)
     },
 
     submit () {
-      this.deleteFormAPIErrors();
-      this.changeApprovedUserRole = false;
+      this.deleteFormAPIErrors()
+      this.changeApprovedUserRole = false
       this.$refs.editProfileForm.validate(async valid => {
         if (valid) {
           try {
-            const isFirstSave = !this.profile.country;
-            await this.updateUserProfile(this.innerProfile);
-            window.scrollTo(0, 0);
+            const isFirstSave = !this.profile.country
+            await this.updateUserProfile(this.innerProfile)
+            window.scrollTo(0, 0)
             this.$message({
               message: this.$gettext('Profile succesfully updated'),
               type: 'success',
               showClose: true
-            });
+            })
             if (isFirstSave) {
-              this.routeToDashboard(this.innerProfile.language);
+              this.routeToDashboard(this.innerProfile.language)
             } else {
-              this.changeLocale(this.innerProfile.language);
+              this.changeLocale(this.innerProfile.language)
             }
           } catch (err) {
-            console.log('ERR:', err);
-            this.setFormAPIErrors(err);
-            this.$refs.editProfileForm.validate(() => {});
+            console.log('ERR:', err)
+            this.setFormAPIErrors(err)
+            this.$refs.editProfileForm.validate(() => {})
             this.$message({
               message: this.$gettext('Profile update error'),
               type: 'error',
               showClose: true
-            });
+            })
           }
         }
-      });
+      })
     },
     changeLocale (locale) {
       if (locale !== this.$i18n.locale) {
-        const name = this.$route.name.split('___')[0];
-        const path = this.localePath({ ...this.$route, name }, locale);
-        this.$router.replace(path);
+        const name = this.$route.name.split('___')[0]
+        const path = this.localePath({ ...this.$route, name }, locale)
+        this.$router.replace(path)
       }
     },
     routeToDashboard (locale) {
-      const path = this.localePath({ name: 'organisation-dashboard', params: this.$route.params }, locale);
-      this.$router.push(path);
+      const path = this.localePath({ name: 'organisation-dashboard', params: this.$route.params }, locale)
+      this.$router.push(path)
     },
     changingUserRole () {
-      this.changeApprovedUserRole = true;
+      this.changeApprovedUserRole = true
     }
   }
-};
+}
 </script>
 
 <style lang="less">

@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import CountryFlag from './CountryFlag';
+import { mapGetters, mapActions } from 'vuex'
+import CountryFlag from './CountryFlag'
 
 export default {
   components: {
@@ -46,9 +46,9 @@ export default {
     }),
     country () {
       if (this.id) {
-        return this.getCountryDetails(this.id);
+        return this.getCountryDetails(this.id)
       }
-      return null;
+      return null
     }
   },
   methods: {
@@ -57,18 +57,18 @@ export default {
     }),
     selectCountry (country) {
       if (!this.active) {
-        return;
+        return
       }
       if (country && country.id === process.env.GlobalCountryID) {
-        country = null;
-        this.setProjectBoxActiveGlobalTab(true);
+        country = null
+        this.setProjectBoxActiveGlobalTab(true)
       }
-      const organisation = country ? country.code.toLowerCase() : '-';
-      const localised = this.localePath({ name: 'organisation', params: { organisation } }, this.locale);
-      this.$router.push(localised);
+      const organisation = country ? country.code.toLowerCase() : '-'
+      const localised = this.localePath({ name: 'organisation', params: { organisation } }, this.locale)
+      this.$router.push(localised)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

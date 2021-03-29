@@ -1,5 +1,5 @@
-import PlanningAndGuidanceController from './PlanningAndGuidanceController';
-import _template from './PlanningAndGuidance.html';
+import PlanningAndGuidanceController from './PlanningAndGuidanceController'
+import _template from './PlanningAndGuidance.html'
 
 const component = {
   template: _template,
@@ -7,6 +7,6 @@ const component = {
   controllerAs: 'vm',
   name: 'planningAndGuidance',
   bindings: {}
-};
+}
 
-export default component;
+export default component

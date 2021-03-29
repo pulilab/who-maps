@@ -23,13 +23,13 @@
 </template>
 
 <script>
-import SignupComponent from '../SignupComponent';
+import SignupComponent from '../SignupComponent'
 
 export default {
   components: {
     SignupComponent
   }
-};
+}
 </script>
 
 <style lang="less">

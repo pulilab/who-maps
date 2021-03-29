@@ -667,7 +667,7 @@ class CountryTests(CountryBaseTests):
         }
         response = self.test_user_client.post(url, data=data)
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json()['options'], [])
+        self.assertIsNone(response.json()['options'])
 
         data = {
             "country": self.country.id,

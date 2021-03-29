@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import AdvancedSearch from '../../components/dashboard/AdvancedSearch';
-import { mapActions } from 'vuex';
+import AdvancedSearch from '../../components/dashboard/AdvancedSearch'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -20,13 +20,13 @@ export default {
   },
   middleware: ['isLoggedIn'],
   fetch ({ store }) {
-    store.dispatch('landing/resetSearch');
+    store.dispatch('landing/resetSearch')
   },
   mounted () {
     if (window) {
-      const savedFilters = window.localStorage.getItem('savedFilters');
+      const savedFilters = window.localStorage.getItem('savedFilters')
       if (savedFilters) {
-        this.setSavedFilters(JSON.parse(savedFilters));
+        this.setSavedFilters(JSON.parse(savedFilters))
       }
     }
   },
@@ -35,7 +35,7 @@ export default {
       setSavedFilters: 'dashboard/setSavedFilters'
     })
   }
-};
+}
 </script>
 
 <style lang="less">

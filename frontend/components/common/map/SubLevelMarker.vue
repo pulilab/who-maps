@@ -28,14 +28,14 @@ export default {
     }
   },
   data () {
-    return {};
+    return {}
   },
   methods: {
     emitMarkerClick () {
-      this.$emit('marker-click', this.pin.id);
+      this.$emit('marker-click', this.pin.id)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

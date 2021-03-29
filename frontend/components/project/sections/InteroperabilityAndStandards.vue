@@ -59,15 +59,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { mapGettersActions } from '../../../utilities/form';
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
+import { mapGetters } from 'vuex'
+import { mapGettersActions } from '../../../utilities/form'
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 
-import CollapsibleCard from '../CollapsibleCard';
-import InteroperabilityLinkComponent from '../InteroperabilityLinkComponent';
-import StandardsSelector from '../StandardsSelector';
-import Tooltip from '@/components/dashboard/Tooltip';
+import CollapsibleCard from '../CollapsibleCard'
+import InteroperabilityLinkComponent from '../InteroperabilityLinkComponent'
+import StandardsSelector from '../StandardsSelector'
+import Tooltip from '@/components/dashboard/Tooltip'
 
 export default {
   components: {
@@ -98,15 +98,15 @@ export default {
   },
   methods: {
     async validate () {
-      this.$refs.collapsible.expandCard();
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
         this.$validator.validate(),
         ...this.$refs.interoperabilityLink.map(ir => ir.validate())
-      ]);
-      return validations.reduce((a, c) => a && c, true);
+      ])
+      return validations.reduce((a, c) => a && c, true)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

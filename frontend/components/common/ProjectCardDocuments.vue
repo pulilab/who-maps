@@ -71,8 +71,8 @@
 </template>
 
 <script>
-import ProjectLegend from './ProjectLegend';
-import CountryItem from './CountryItem';
+import ProjectLegend from './ProjectLegend'
+import CountryItem from './CountryItem'
 
 export default {
   components: {
@@ -96,31 +96,31 @@ export default {
   data () {
     return {
       hovered: false
-    };
+    }
   },
   computed: {
     cardShadow () {
-      return this.hideBorders ? 'never' : 'always';
+      return this.hideBorders ? 'never' : 'always'
     },
     showArrow () {
-      return this.hovered && this.showArrowOnOver;
+      return this.hovered && this.showArrowOnOver
     },
     shortUrl () {
-      return this.project.document.replace('documents/', '');
+      return this.project.document.replace('documents/', '')
     }
   },
   methods: {
     openFile () {
-      window.open('/media/' + this.project.document);
+      window.open('/media/' + this.project.document)
     },
     mouseEnterHandler () {
-      this.hovered = true;
+      this.hovered = true
     },
     mouseLeaveHandler () {
-      this.hovered = false;
+      this.hovered = false
     }
   }
-};
+}
 </script>
 
 <style lang="less">

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   computed: {
@@ -17,14 +17,14 @@ export default {
       currentPage: 'dashboard/getCurrentPage'
     }),
     min () {
-      return 1 + this.pageSize * (this.currentPage - 1);
+      return 1 + this.pageSize * (this.currentPage - 1)
     },
     max () {
-      const max = this.pageSize * this.currentPage;
-      return max < this.total ? max : this.total;
+      const max = this.pageSize * this.currentPage
+      return max < this.total ? max : this.total
     }
   }
-};
+}
 </script>
 
 <style>

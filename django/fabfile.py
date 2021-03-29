@@ -24,7 +24,7 @@ def production():
     env.host_string = PROD_HOST_STRING
     env.name = 'production'
     env.port = 22
-    env.branch = "tags/3.5.24"
+    env.branch = "tags/6.1.9"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -37,7 +37,7 @@ def staging():
     env.host_string = 'whomaps@139.59.148.238'
     env.name = 'staging'
     env.port = 22
-    env.branch = "development"
+    env.branch = "tags/6.1.9"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -65,7 +65,7 @@ def clone_prod_to(server):
     # Load prod data and code
     globals()[server]()
     with cd(env.project_root):
-        # Deploy as usual, but from the production tag
+        # Deploy as usual, but from the production 
         # env.branch = 'tags/{}'.format(tag)
         env.branch = '{}'.format(tag)
         deploy()

@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
   components: {
   },
@@ -56,17 +56,17 @@ export default {
       donors: 'system/getDonors'
     }),
     selected () {
-      const result = this.donors.filter(p => this.value.includes(p.id));
-      return this.limit ? result.slice(0, this.limit) : result;
+      const result = this.donors.filter(p => this.value.includes(p.id))
+      return this.limit ? result.slice(0, this.limit) : result
     },
     limited () {
-      return this.limit ? this.selected.slice(0, this.limit) : this.selected;
+      return this.limit ? this.selected.slice(0, this.limit) : this.selected
     },
     excluded () {
-      return this.selected.length - this.limited.length;
+      return this.selected.length - this.limited.length
     }
   }
-};
+}
 </script>
 
 <style lang="less">

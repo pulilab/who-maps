@@ -9,10 +9,10 @@
           documents === false
       "
     >
-      <template v-slot:left>
+      <template #left>
         <w-default />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-image :url="default1" />
       </template>
     </default>
@@ -28,10 +28,10 @@
       :gutter="30"
       classes="pb-0"
     >
-      <template v-slot:left>
+      <template #left>
         <w-description :description="data.cover_text" />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-image :url="default2" />
       </template>
     </default>
@@ -45,10 +45,10 @@
       "
       inverse
     >
-      <template v-slot:left>
+      <template #left>
         <w-default />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-image :url="default1" />
       </template>
     </default>
@@ -65,10 +65,10 @@
       :cols="[10, 14]"
       :gutter="30"
     >
-      <template v-slot:left>
+      <template #left>
         <w-default vertical />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-image :url="data.cover_url" />
       </template>
     </default>
@@ -83,13 +83,13 @@
       "
       :gutter="30"
     >
-      <template v-slot:lefttop>
+      <template #lefttop>
         <w-description :description="data.cover_text" />
       </template>
-      <template v-slot:leftbottom>
+      <template #leftbottom>
         <w-image :url="data.cover_url" />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-default
           vertical
           :url="default1"
@@ -107,13 +107,13 @@
       "
       :gutter="30"
     >
-      <template v-slot:lefttop>
+      <template #lefttop>
         <w-description :description="data.cover_text" />
       </template>
-      <template v-slot:leftbottom>
+      <template #leftbottom>
         <w-image :url="data.cover_url" />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-stats
           :code="data.alpha_3_code"
           :stats="stats"
@@ -132,13 +132,13 @@
       "
       :gutter="30"
     >
-      <template v-slot:lefttop>
+      <template #lefttop>
         <w-description :description="data.cover_text" />
       </template>
-      <template v-slot:leftbottom>
+      <template #leftbottom>
         <w-image :url="data.cover_url" />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-documents :documents="data.documents" />
       </template>
     </default>
@@ -152,23 +152,23 @@
           documents === true
       "
     >
-      <template v-slot:lefttop>
+      <template #lefttop>
         <w-description
           single
           :description="data.cover_text"
         />
       </template>
-      <template v-slot:leftbottom>
+      <template #leftbottom>
         <w-image :url="data.cover_url" />
       </template>
-      <template v-slot:middle>
+      <template #middle>
         <w-stats
           :code="data.alpha_3_code"
           :stats="stats"
           :simple="simpleStats"
         />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-documents :documents="data.documents" />
       </template>
     </three-columns>
@@ -182,23 +182,23 @@
           documents === true
       "
     >
-      <template v-slot:lefttop>
+      <template #lefttop>
         <w-description
           single
           :description="data.cover_text"
         />
       </template>
-      <template v-slot:leftbottom>
+      <template #leftbottom>
         <img :src="default2">
       </template>
-      <template v-slot:middle>
+      <template #middle>
         <w-stats
           :code="data.alpha_3_code"
           :stats="stats"
           :simple="simpleStats"
         />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-documents :documents="data.documents" />
       </template>
     </three-columns>
@@ -212,20 +212,20 @@
           documents === true
       "
     >
-      <template v-slot:lefttop>
+      <template #lefttop>
         <img :src="data.cover_url">
       </template>
-      <template v-slot:leftbottom>
+      <template #leftbottom>
         <w-default vertical />
       </template>
-      <template v-slot:middle>
+      <template #middle>
         <w-stats
           :code="data.alpha_3_code"
           :stats="stats"
           :simple="simpleStats"
         />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-documents :documents="data.documents" />
       </template>
     </three-columns>
@@ -239,20 +239,20 @@
           documents === true
       "
     >
-      <template v-slot:left>
+      <template #left>
         <w-default
           vertical
           :url="default1"
         />
       </template>
-      <template v-slot:middle>
+      <template #middle>
         <w-stats
           :code="data.alpha_3_code"
           :stats="stats"
           :simple="simpleStats"
         />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-documents :documents="data.documents" />
       </template>
     </three-columns>
@@ -267,13 +267,13 @@
       "
       :gutter="30"
     >
-      <template v-slot:left>
+      <template #left>
         <w-default
           vertical
           :url="default1"
         />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-stats
           :code="data.alpha_3_code"
           :stats="stats"
@@ -292,13 +292,13 @@
       "
       :gutter="30"
     >
-      <template v-slot:left>
+      <template #left>
         <w-default
           vertical
           :url="default1"
         />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-documents :documents="data.documents" />
       </template>
     </default>
@@ -313,10 +313,10 @@
       "
       :gutter="30"
     >
-      <template v-slot:left>
+      <template #left>
         <img :src="data.cover_url">
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-stats
           :code="data.alpha_3_code"
           :stats="stats"
@@ -336,10 +336,10 @@
       :gutter="30"
       :cols="[10, 14]"
     >
-      <template v-slot:left>
+      <template #left>
         <w-description :description="data.cover_text" />
       </template>
-      <template v-slot:right>
+      <template #right>
         <w-stats
           :code="data.alpha_3_code"
           :stats="stats"
@@ -351,18 +351,18 @@
 </template>
 
 <script>
-import Default from '@/components/country/layouts/Default';
-import ThreeColumns from '@/components/country/layouts/ThreeColumns';
+import Default from '@/components/country/layouts/Default'
+import ThreeColumns from '@/components/country/layouts/ThreeColumns'
 
-import WDescription from '@/components/country/widgets/WDescription';
-import WDefault from '@/components/country/widgets/WDefault';
-import WImage from '@/components/country/widgets/WImage';
-import WDocuments from '@/components/country/widgets/WDocuments';
-import WStats from '@/components/country/widgets/WStats';
+import WDescription from '@/components/country/widgets/WDescription'
+import WDefault from '@/components/country/widgets/WDefault'
+import WImage from '@/components/country/widgets/WImage'
+import WDocuments from '@/components/country/widgets/WDocuments'
+import WStats from '@/components/country/widgets/WStats'
 
 // images
-import default1 from '~/assets/img/default/whyusedha-new.jpg';
-import default2 from '~/assets/img/default/coverimage-default.jpg';
+import default1 from '~/assets/img/default/whyusedha-new.jpg'
+import default2 from '~/assets/img/default/coverimage-default.jpg'
 
 export default {
   components: {
@@ -384,20 +384,20 @@ export default {
     return {
       default1,
       default2
-    };
+    }
   },
   computed: {
     image () {
-      return this.data.cover !== null;
+      return this.data.cover !== null
     },
     description () {
-      return this.data.cover_text !== '' && this.data.cover_text !== null;
+      return this.data.cover_text !== '' && this.data.cover_text !== null
     },
     gdhi () {
-      return this.data.gdhi_enabled;
+      return this.data.gdhi_enabled
     },
     documents () {
-      return this.data.road_map_enabled && this.data.documents.length > 0;
+      return this.data.road_map_enabled && this.data.documents.length > 0
     },
     simpleStats () {
       const {
@@ -408,7 +408,7 @@ export default {
         standards_and_interoperability,
         infrastructure,
         services_and_applications
-      } = this.data;
+      } = this.data
 
       if (
         leadership_and_governance !== null ||
@@ -419,9 +419,9 @@ export default {
         infrastructure !== null ||
         services_and_applications !== null
       ) {
-        return false;
+        return false
       }
-      return true;
+      return true
     },
     stats () {
       const {
@@ -437,7 +437,7 @@ export default {
         total_population,
         life_expectancy,
         health_expenditure
-      } = this.data;
+      } = this.data
 
       return {
         name,
@@ -492,10 +492,10 @@ export default {
             ]
           }
         ]
-      };
+      }
     }
   }
-};
+}
 </script>
 
 <style lang="less">

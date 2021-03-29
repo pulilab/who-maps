@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -66,7 +66,7 @@ export default {
           { validator: this.noDuplicate, trigger: 'change' }
         ]
       }
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -75,10 +75,10 @@ export default {
     }),
     visible: {
       get () {
-        return this.filterCategory !== null;
+        return this.filterCategory !== null
       },
       set () {
-        this.setSaveFiltersDialogState(null);
+        this.setSaveFiltersDialogState(null)
       }
     }
   },
@@ -88,24 +88,24 @@ export default {
       setSavedFilters: 'dashboard/setSavedFilters'
     }),
     noDuplicate (rule, value, callback) {
-      const exist = this.savedFilters.find(s => s.name === value);
+      const exist = this.savedFilters.find(s => s.name === value)
       if (exist) {
-        callback(new Error(this.$gettext('A saved configuration with this name is already present')));
+        callback(new Error(this.$gettext('A saved configuration with this name is already present')))
       } else {
-        callback();
+        callback()
       }
     },
     cancel () {
-      this.setSaveFiltersDialogState(null);
+      this.setSaveFiltersDialogState(null)
     },
     apply () {
-      const filters = [...this.savedFilters, { category: this.filterCategory, name: this.form.name, query: this.$route.query }];
-      this.setSavedFilters(filters);
-      this.setSaveFiltersDialogState(null);
-      this.form.name = '';
+      const filters = [...this.savedFilters, { category: this.filterCategory, name: this.form.name, query: this.$route.query }]
+      this.setSavedFilters(filters)
+      this.setSaveFiltersDialogState(null)
+      this.form.name = ''
     }
   }
-};
+}
 </script>
 
 <style lang="less">

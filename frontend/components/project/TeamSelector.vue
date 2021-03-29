@@ -36,10 +36,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import LightSelectMixin from '../mixins/LightSelectMixin.js';
-import OrganisationItem from '../common/OrganisationItem';
-import validator from 'validator';
+import { mapGetters } from 'vuex'
+import LightSelectMixin from '../mixins/LightSelectMixin.js'
+import OrganisationItem from '../common/OrganisationItem'
+import validator from 'validator'
 
 export default {
   components: {
@@ -47,14 +47,14 @@ export default {
   },
   filters: {
     truncate (str) {
-      if (str.length > 50) return `${str.substr(0, 47)}...`;
-      return str;
+      if (str.length > 50) return `${str.substr(0, 47)}...`
+      return str
     }
   },
   mixins: [LightSelectMixin],
   $_veeValidate: {
     value () {
-      return this.value;
+      return this.value
     },
     events: 'change|blur'
   },
@@ -76,10 +76,10 @@ export default {
   },
   methods: {
     changeHandler (value) {
-      this.$emit('change', value);
+      this.$emit('change', value)
     },
     onOutside () {
-      this.emitEmails(this.validEmails(this.emailList(this.query)));
+      this.emitEmails(this.validEmails(this.emailList(this.query)))
     },
     onPaste (str, e) {
       // good paste
@@ -87,34 +87,34 @@ export default {
 
       // bad paste
       // pepe@pepito.com, doni@asd
-      const emails = this.emailList(str);
-      const validEmails = this.validEmails(emails);
+      const emails = this.emailList(str)
+      const validEmails = this.validEmails(emails)
 
       if (emails.length === validEmails.length) {
-        this.emitEmails(validEmails);
-        e.target.blur();
+        this.emitEmails(validEmails)
+        e.target.blur()
       }
     },
     onEnter (e) {
-      this.emitEmails(this.validEmails(this.emailList(e.target.value)));
+      this.emitEmails(this.validEmails(this.emailList(e.target.value)))
     },
     emailList (str) {
-      return str.trim().replace(/ /g, '').split(',');
+      return str.trim().replace(/ /g, '').split(',')
     },
     emitEmails (mails) {
-      mails.map(email => this.$emit('change', email));
+      mails.map(email => this.$emit('change', email))
     },
     validEmails (mails) {
-      return mails.filter(email => this.validateEmail(email) && !this.arrIncludes(email));
+      return mails.filter(email => this.validateEmail(email) && !this.arrIncludes(email))
     },
     arrIncludes (val) {
-      return this.value.includes(val);
+      return this.value.includes(val)
     },
     validateEmail (email) {
-      return validator.isEmail(email);
+      return validator.isEmail(email)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

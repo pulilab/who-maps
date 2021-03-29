@@ -6,13 +6,31 @@
 </template>
 
 <script>
-import DashboardMap from '../../../components/dashboard/DashboardMap';
-import DashboardProjectBox from '../../../components/dashboard/DashboardProjectBox';
-import { mapGetters, mapActions } from 'vuex';
+import DashboardMap from '../../../components/dashboard/DashboardMap'
+import DashboardProjectBox from '../../../components/dashboard/DashboardProjectBox'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
     DashboardMap,
     DashboardProjectBox
+  },
+  async fetch ({ store, query, error }) {
+    store.dispatch('dashboard/setDashboardSection', 'map')
+    await Promise.all([
+      store.dispatch('projects/loadUserProjects'),
+      store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('countries/loadMapData')
+    ])
+    await store.dispatch('dashboard/setSearchOptions', query)
+    try {
+      await store.dispatch('dashboard/loadProjectsMap')
+    } catch (e) {
+      console.log(e)
+      error({
+        statusCode: 404,
+        message: 'Unable to process the search with the current parameters'
+      })
+    }
   },
   computed: {
     ...mapGetters({
@@ -25,28 +43,10 @@ export default {
       immediate: false,
       handler (query) {
         if (this.dashboardSection === 'map') {
-          this.$router.replace({ ...this.$route, query });
-          this.load();
+          this.$router.replace({ ...this.$route, query })
+          this.load()
         }
       }
-    }
-  },
-  async fetch ({ store, query, error }) {
-    store.dispatch('dashboard/setDashboardSection', 'map');
-    await Promise.all([
-      store.dispatch('projects/loadUserProjects'),
-      store.dispatch('projects/loadProjectStructure'),
-      store.dispatch('countries/loadMapData')
-    ]);
-    await store.dispatch('dashboard/setSearchOptions', query);
-    try {
-      await store.dispatch('dashboard/loadProjectsMap');
-    } catch (e) {
-      console.log(e);
-      error({
-        statusCode: 404,
-        message: 'Unable to process the search with the current parameters'
-      });
     }
   },
   methods: {
@@ -54,17 +54,16 @@ export default {
       loadProjectsMap: 'dashboard/loadProjectsMap'
     }),
     async load () {
-      this.$nuxt.$loading.start();
-      await this.loadProjectsMap();
-      this.$nuxt.$loading.finish();
+      this.$nuxt.$loading.start()
+      await this.loadProjectsMap()
+      this.$nuxt.$loading.finish()
     }
   }
-};
+}
 </script>
 
 <style lang="less">
-  .DashboardMapView {
-    position: relative;
-  }
-
+.DashboardMapView {
+  position: relative;
+}
 </style>

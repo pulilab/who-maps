@@ -5,6 +5,7 @@ from collections import OrderedDict
 from django.db import transaction
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
@@ -16,7 +17,7 @@ from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
 from project.cache import cache_structure
-from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage
+from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
@@ -25,12 +26,15 @@ from .tasks import notify_superusers_about_new_pending_software
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
-    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer
+    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer, \
+    TerminologySerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
 
 
 class ProjectPublicViewSet(ViewSet):
+
+    @swagger_auto_schema(responses={200: TerminologySerializer})
     def project_structure(self, request):
         return Response(self._get_project_structure())
 
@@ -228,6 +232,12 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         else:
+            original_data = {
+                'name': project.name,
+                'data': copy.deepcopy(project.data),
+                'research': project.research
+            }
+
             instance = data_serializer.save()
             if country_answers:
                 country_answers.context['project'] = instance
@@ -236,7 +246,14 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                 donor_answers.context['project'] = instance
                 donor_answers.context['donor_id'] = donor_id
                 instance = donor_answers.save()
+
             instance.save()
+            project.refresh_from_db()  # need to do this due to JSONfield
+
+            if project.name != original_data['name'] or project.research != original_data['research'] or \
+                    project.data != original_data['data']:
+                ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
+                                              data=project.data, research=project.research)
 
         project.reset_approval()
 

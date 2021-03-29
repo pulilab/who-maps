@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
   model: {
     prop: 'value',
@@ -37,14 +37,14 @@ export default {
     }),
     innerValue: {
       get () {
-        return this.value;
+        return this.value
       },
       set (value) {
-        this.$emit('change', value);
+        this.$emit('change', value)
       }
     }
   }
-};
+}
 </script>
 
 <style>

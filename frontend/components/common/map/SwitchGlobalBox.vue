@@ -20,10 +20,10 @@ export default {
   },
   methods: {
     setActiveTab ($event) {
-      this.$emit('update:activeTab', $event);
+      this.$emit('update:activeTab', $event)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from 'vuex'
 export default {
   props: {
     label: {
@@ -68,10 +68,10 @@ export default {
   },
   computed: {
     isSelected () {
-      return this.selected.length > 0;
+      return this.selected.length > 0
     },
     showLimit () {
-      return this.limit ? this.selected.length > this.limit : false;
+      return this.limit ? this.selected.length > this.limit : false
     }
   },
   methods: {
@@ -79,10 +79,10 @@ export default {
       setDashboardFiltersDialogState: 'layout/setDashboardFiltersDialogState'
     }),
     openDialog () {
-      this.setDashboardFiltersDialogState(this.item);
+      this.setDashboardFiltersDialogState(this.item)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

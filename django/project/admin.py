@@ -7,7 +7,7 @@ from core.admin import AllObjectsAdmin
 from country.models import Country
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Project, HSCGroup, \
-    ProjectImportV2, ImportRow, Stage
+    ProjectImportV2, ImportRow, Stage, ProjectVersion
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
@@ -113,8 +113,8 @@ class HSCChallengeAdmin(AllObjectsAdmin):
 
 class ProjectAdmin(AllObjectsAdmin):
     list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active']
-    readonly_fields = ['name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data']
-    fields = ['is_active', 'name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data']
+    readonly_fields = ['name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'data']
+    fields = ['is_active', 'name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'data']
     search_fields = ['name']
 
     def get_country(self, obj):
@@ -162,6 +162,21 @@ class StageAdmin(SortableAdminMixin, admin.ModelAdmin):
     pass
 
 
+class ProjectVersionAdmin(admin.ModelAdmin):
+    model = ProjectVersion
+    fields = ['modified', 'project', 'user', 'version', 'data']
+    readonly_fields = fields
+    search_fields = ['project__name']
+
+    list_display = ['modified', 'project', 'version']
+
+    def get_project_name(self, obj):  # pragma: no cover
+        return obj.project.name
+
+    def has_add_permission(self, request):
+        return False
+
+
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(InteroperabilityLink, InteroperabilityLinkAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
@@ -175,3 +190,4 @@ admin.site.register(HSCChallenge, HSCChallengeAdmin)
 admin.site.register(ProjectImportV2, ProjectImportV2Admin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Stage, StageAdmin)
+admin.site.register(ProjectVersion, ProjectVersionAdmin)
