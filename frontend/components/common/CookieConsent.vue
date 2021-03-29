@@ -14,7 +14,7 @@
         <translate>
           We use cookies to offer you a better browsing experience, analyze site traffic and personalize content. Read about how we use cookies by clicking
         </translate>
-        <nuxt-link :to="localePath({name: 'organisation-terms', params: $route.params})">
+        <nuxt-link :to="localePath({name: 'organisation-info-tab', params: {...$route.params, tab: 'terms'}})">
           <translate>Privacy Policy.</translate>
         </nuxt-link>
         <translate>

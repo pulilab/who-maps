@@ -16,8 +16,15 @@
       :body-style="{ padding: '0px' }"
       class="HelpCard"
     >
-      <el-tabs tab-position="left">
-        <el-tab-pane :label="$gettext('Terms of Use') | translate">
+      <el-tabs
+        :value="$route.params.tab"
+        tab-position="left"
+        @input="navigate"
+      >
+        <el-tab-pane
+          name="terms"
+          :label="$gettext('Terms of Use') | translate"
+        >
           <h2><translate>Terms of Use</translate></h2>
           <p>
             <translate>
@@ -334,7 +341,10 @@
           </p>
         </el-tab-pane>
 
-        <el-tab-pane :label="$gettext('Contact') | translate">
+        <el-tab-pane
+          name="contact"
+          :label="$gettext('Contact') | translate"
+        >
           <h2>
             <translate>Contact</translate>
           </h2>
@@ -345,6 +355,19 @@
             </a>
           </p>
         </el-tab-pane>
+        <el-tab-pane
+          name="developers"
+          :label="$gettext('For Developers') | translate"
+        >
+          <h2>
+            <translate>For Developers</translate>
+          </h2>
+          <p>
+            <translate>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis knostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </translate>
+          </p>
+        </el-tab-pane>
       </el-tabs>
     </el-card>
   </div>
@@ -352,8 +375,20 @@
 
 <script>
 export default {
+  // data () {
+  //   const pathParts = this.$route.path.split('/')
+  //   const path = pathParts[3]
+  //   return {
+  //     activeTab: ['terms', 'contact', 'developers'].includes(path) ? path : 'terms',
+  //     uri: pathParts.pop() && pathParts.join('/')
+  //   }
+  // },
+  // watch: {
+  // },
   methods: {
-
+    navigate (value) {
+      this.$router.push(this.localePath(`/${this.$route.params.organisation}/info/${value}`))
+    },
     goBack () {
       this.$router.go(-1)
     }
