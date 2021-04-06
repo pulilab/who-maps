@@ -70,7 +70,7 @@ class TestProjectData:
         # Create test users:
         self.userprofiles = list()
         for i in range(20):
-            profile = UserProfileFactory(name=f'Test User {i}')
+            profile = UserProfileFactory()
 
             profile.account_type = UserProfile.ACCOUNT_TYPE_CHOICES[i % len(UserProfile.ACCOUNT_TYPE_CHOICES)][0]
             profile.user.last_login = timezone.now() - timedelta(days=i*10)
