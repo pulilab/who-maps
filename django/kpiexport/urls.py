@@ -5,6 +5,6 @@ from . import views
 router = DefaultRouter()
 
 urlpatterns = [
-    url('kpi/project/', view=views.ProjectKPIsView.as_view(), name='project-kpi'),
+    # url('kpi/project/', view=views.ProjectKPIsView.as_view(), name='project-kpi'),
     url('kpi/users/', view=views.UserKPIsView.as_view(), name='user-kpi'),
 ]
