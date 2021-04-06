@@ -30,6 +30,7 @@ from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPl
 from .mixins import CheckRequiredMixin, ExternalAPIMixin
 from django.conf import settings
 
+
 class ProjectPublicViewSet(ViewSet):
 
     @swagger_auto_schema(operation_id="project-structure", responses={200: TerminologySerializer})
