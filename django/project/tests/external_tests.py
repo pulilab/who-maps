@@ -61,9 +61,9 @@ class ExternalAPITests(APITestCase):
 
         self.userprofile = UserProfile.objects.get(id=self.user_profile_id)
         self.country.users.add(self.userprofile)
+        self.client_code = "xNhlb4"
 
         self.project_data = {
-            "source": "xNhlb4",
             "project": dict(
                 name="Test Project1", organisation="test organisation", contact_name="name1",
                 contact_email="team_member@added.com", implementation_overview="overview", health_focus_areas=[1, 2],
@@ -79,7 +79,7 @@ class ExternalAPITests(APITestCase):
                 hsc_challenges=[1, 2], start_date=str(datetime.today().date()))}
 
     def test_post_to_publish_from_external_source(self):
-        url = reverse("project-external-publish")
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
 
@@ -120,7 +120,7 @@ class ExternalAPITests(APITestCase):
         self.assertEqual(set_password_sent, 1)
 
     def test_post_to_draft_from_external_source(self):
-        url = reverse("project-external-draft")
+        url = reverse("project-external-draft", kwargs={'client_code': self.client_code})
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
 
@@ -161,31 +161,36 @@ class ExternalAPITests(APITestCase):
         self.assertEqual(set_password_sent, 1)
 
     def test_invalid_source_draft(self):
-        project_data = copy.deepcopy(self.project_data)
-        project_data['source'] = 'TRUST-ME-NOT-A-HACKER'
-        url = reverse("project-external-draft")
-        response = self.test_user_client.post(url, project_data, format="json")
+        url = reverse("project-external-draft", kwargs={'client_code': 'TRUST-ME-NOT-A-HACKER'})
+        response = self.test_user_client.post(url, self.project_data, format="json")
 
         self.assertEqual(response.status_code, 400, response.json())
-        self.assertEqual(response.json(), {'source': "Service source is invalid"})
+        self.assertEqual(response.json(), {'client_code': "Client code is invalid"})
+
+    def test_invalid_source_publish(self):
+        url = reverse("project-external-publish", kwargs={'client_code': 'TRUST-ME-NOT-A-HACKER'})
+        response = self.test_user_client.post(url, self.project_data, format="json")
+
+        self.assertEqual(response.status_code, 400, response.json())
+        self.assertEqual(response.json(), {'client_code': "Client code is invalid"})
 
     def test_invalid_email_draft(self):
         project_data = copy.deepcopy(self.project_data)
         project_data['project']['contact_email'] = "invalid_email"
-        url = reverse("project-external-draft")
+        url = reverse("project-external-draft", kwargs={'client_code': self.client_code})
         response = self.test_user_client.post(url, project_data, format="json")
 
         self.assertEqual(response.status_code, 400, response.json())
         self.assertEqual(response.json(), {'project': {'contact_email': ['Enter a valid email address.']}})
 
     def test_name_clash_resolved_automatically(self):
-        url = reverse("project-external-publish")
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
         self.assertTrue(response.json().get("id"))
         project_1_id = response.json().get("id")
 
-        url = reverse("project-external-publish")
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
         self.assertTrue(response.json().get("id"))
@@ -201,7 +206,7 @@ class ExternalAPITests(APITestCase):
     def test_invalid_email_published(self):
         project_data = copy.deepcopy(self.project_data)
         project_data['project']['contact_email'] = "invalid_email"
-        url = reverse("project-external-publish")
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
         response = self.test_user_client.post(url, project_data, format="json")
 
         self.assertEqual(response.status_code, 400, response.json())

@@ -31,18 +31,10 @@ class ExternalAPIMixin:
     """
     @staticmethod
     def check_required(request):
-        if 'source' not in request.data:  # pragma: no cover
-            raise ValidationError({'source': 'Service source is missing'})
-        if not settings.EXTERNAL_API_CLIENTS.get(request.data['source'], None):
-            raise ValidationError({'source': 'Service source is invalid'})
         if 'project' not in request.data:  # pragma: no cover
             raise ValidationError({'project': 'Project data is missing'})
-        if 'name' not in request.data['project']:  # pragma: no cover
-            raise ValidationError({'project': 'Name is missing'})
-        if 'country' not in request.data['project']:  # pragma: no cover
-            raise ValidationError({'country': 'Country is missing'})
 
-    def parse_data(self, request, publish=False):
+    def parse_data(self, request, client_code, publish=False):
         """
         Function to parse the input parameters
         """
@@ -51,7 +43,8 @@ class ExternalAPIMixin:
         instance = None
         errors = {}
 
-        country = get_object_or_400(Country, error_message="No such country", id=request.data['project']['country'])
+        country = get_object_or_400(Country, error_message="No such country",
+                                    id=request.data['project'].get('country'))
 
         project_data = copy.deepcopy(request.data['project'])
 
@@ -89,7 +82,7 @@ class ExternalAPIMixin:
             return errors, False
         else:
             instance.save()
-            instance.metadata = dict(from_external=settings.EXTERNAL_API_CLIENTS[request.data['source']])
+            instance.metadata = dict(from_external=settings.EXTERNAL_API_CLIENTS[client_code])
             if publish:
                 instance.make_public_id(country.id)
                 instance.save(update_fields=['metadata', 'public_id'])

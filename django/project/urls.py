@@ -10,12 +10,12 @@ router.register('software', views.TechnologyPlatformRequestViewSet)
 
 urlpatterns = [
     path("projects/", include(router.urls)),
-    path('projects/external/draft/',
+    path('projects/external/draft/<str:client_code>/',
          view=views.ExternalDraftAPI.as_view({
              'post': 'create'
          }),
          name="project-external-draft"),
-    path('projects/external/publish/',
+    path('projects/external/publish/<str:client_code>/',
          view=views.ExternalPublishAPI.as_view({
              'post': 'create'
          }),

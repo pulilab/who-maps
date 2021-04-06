@@ -28,7 +28,7 @@ from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPl
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
 
 from .mixins import CheckRequiredMixin, ExternalAPIMixin
-
+from django.conf import settings
 
 class ProjectPublicViewSet(ViewSet):
 
@@ -407,7 +407,7 @@ class ExternalDraftAPI(ExternalAPIMixin, TeamTokenAuthMixin, ViewSet):
         request_body=ExternalProjectDraftSerializer,
         responses={201: ProjectPublishedSerializer}
         )
-    def create(self, request):
+    def create(self, request, client_code):
         # TODO: openapi docs override
         """
         Create *draft* projects from external sources.
@@ -419,7 +419,10 @@ class ExternalDraftAPI(ExternalAPIMixin, TeamTokenAuthMixin, ViewSet):
         - national_level_deployment is set to 0 (can be added later)
         - contact email is automatically added as team member
         """
-        response_dict, success = self.parse_data(request, publish=False)
+        if not settings.EXTERNAL_API_CLIENTS.get(client_code):
+            raise ValidationError({'client_code': 'Client code is invalid'})
+
+        response_dict, success = self.parse_data(request, client_code, publish=False)
 
         if not success:
             return Response(response_dict, status=status.HTTP_400_BAD_REQUEST)
@@ -434,7 +437,7 @@ class ExternalPublishAPI(ExternalAPIMixin, TeamTokenAuthMixin, ViewSet):
         request_body=ExternalProjectPublishSerializer,
         responses={201: ProjectPublishedSerializer}
     )
-    def create(self, request):
+    def create(self, request, client_code):
         """
         Create *Published* projects from external sources.
         Alterations from internal API are:
@@ -445,7 +448,10 @@ class ExternalPublishAPI(ExternalAPIMixin, TeamTokenAuthMixin, ViewSet):
         - national_level_deployment is set to 0 (can be added later)
         - contact email is automatically added as team member
         """
-        response_dict, success = self.parse_data(request, publish=True)
+        if not settings.EXTERNAL_API_CLIENTS.get(client_code):
+            raise ValidationError({'client_code': 'Client code is invalid'})
+
+        response_dict, success = self.parse_data(request, client_code, publish=True)
 
         if not success:
             return Response(response_dict, status=status.HTTP_400_BAD_REQUEST)
