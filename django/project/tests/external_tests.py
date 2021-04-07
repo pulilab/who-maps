@@ -174,6 +174,13 @@ class ExternalAPITests(APITestCase):
         self.assertEqual(response.status_code, 400, response.json())
         self.assertEqual(response.json(), {'client_code': "Client code is invalid"})
 
+    def test_no_project_draft(self):
+        url = reverse("project-external-draft", kwargs={'client_code': self.client_code})
+        response = self.test_user_client.post(url, {}, format="json")
+
+        self.assertEqual(response.status_code, 400, response.json())
+        self.assertEqual(response.json(), {'project': 'Project data is missing'})
+
     def test_invalid_email_draft(self):
         project_data = copy.deepcopy(self.project_data)
         project_data['project']['contact_email'] = "invalid_email"

@@ -1,4 +1,5 @@
 import copy
+from random import randint
 
 from django.db import transaction
 from django.shortcuts import get_object_or_404
@@ -19,6 +20,7 @@ from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
 from .tasks import notify_superusers_about_new_pending_software
+from user.models import Organisation
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
@@ -29,7 +31,6 @@ from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPl
 
 from .mixins import CheckRequiredMixin, ExternalAPIMixin
 from django.conf import settings
-
 
 class ProjectPublicViewSet(ViewSet):
 
@@ -402,14 +403,14 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
 
 class ExternalDraftAPI(ExternalAPIMixin, TeamTokenAuthMixin, ViewSet):
+
     @transaction.atomic
     @swagger_auto_schema(
         operation_id="project-draft-external",
         request_body=ExternalProjectDraftSerializer,
-        responses={201: ProjectPublishedSerializer}
+        responses={201: ProjectDraftSerializer}
         )
     def create(self, request, client_code):
-        # TODO: openapi docs override
         """
         Create *draft* projects from external sources.
         Alterations from internal API are:
@@ -420,15 +421,34 @@ class ExternalDraftAPI(ExternalAPIMixin, TeamTokenAuthMixin, ViewSet):
         - national_level_deployment is set to 0 (can be added later)
         - contact email is automatically added as team member
         """
-        if not settings.EXTERNAL_API_CLIENTS.get(client_code):
+        # If client code is used, it needs to be correct
+        if client_code and not settings.EXTERNAL_API_CLIENTS.get(client_code):
             raise ValidationError({'client_code': 'Client code is invalid'})
 
-        response_dict, success = self.parse_data(request, client_code, publish=False)
+        if not request.data.get('project'):
+            raise ValidationError({'project': 'Project data is missing'})
 
-        if not success:
-            return Response(response_dict, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(response_dict, status=status.HTTP_201_CREATED)
+        # Project name needs to be unique
+        project_name = request.data['project'].get('name')
+        if Project.objects.filter(name=project_name).exists():
+            request.data['project']['name'] = f"{project_name} {randint(1, 100)}"
+
+        # Organisation is coming as a string (and is optional)
+        if request.data['project'].get('organisation'):
+            project_org = request.data['project'].get('organisation')
+            org, _ = Organisation.objects.get_or_create(name=project_org)
+            request.data['project']['organisation'] = str(org.id)
+        # Donor is required - set to "Other"
+        donor, _ = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
+        request.data['project']['donors'] = [donor.id]
+
+        # Set national_level_deployment to 0, so it can be added later
+        request.data['project']['national_level_deployment'] = {"clients": 0, "health_workers": 0, "facilities": 0}
+
+        data_serializer = ProjectDraftSerializer(data=request.data['project'])
+        data_serializer.is_valid(raise_exception=True)
+        data_serializer.save()
+        return Response(data_serializer.data)
 
 
 class ExternalPublishAPI(ExternalAPIMixin, TeamTokenAuthMixin, ViewSet):

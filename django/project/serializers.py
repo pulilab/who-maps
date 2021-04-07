@@ -27,6 +27,9 @@ from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Techno
     Licence, InteroperabilityStandard, HISBucket, Stage, HealthCategory, HealthFocusArea, HSCGroup, HSCChallenge, \
     DigitalStrategy
 
+from country.models import Country, Donor
+from user.models import Organisation
+
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
 
@@ -622,7 +625,6 @@ class ExternalProjectPublishSerializer(serializers.Serializer):
     Used to beautify swagger in public docs
     TODO: May need to update the 'project' part
     """
-    source = serializers.CharField(required=True)
     project = ProjectPublishedSerializer(required=True)
 
 
@@ -631,5 +633,4 @@ class ExternalProjectDraftSerializer(serializers.Serializer):
     Used to beautify swagger in public docs
     TODO: May need to update the 'project' part
     """
-    source = serializers.CharField(required=True)
     project = ProjectDraftSerializer(required=True)

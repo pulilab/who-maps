@@ -29,16 +29,13 @@ class ExternalAPIMixin:
     """
     Mixin to provide the common functions required by APIs open external clients
     """
-    @staticmethod
-    def check_required(request):
-        if 'project' not in request.data:  # pragma: no cover
-            raise ValidationError({'project': 'Project data is missing'})
 
     def parse_data(self, request, client_code, publish=False):
         """
         Function to parse the input parameters
         """
-        self.check_required(request)
+        if 'project' not in request.data:  # pragma: no cover
+            raise ValidationError({'project': 'Project data is missing'})
 
         instance = None
         errors = {}
@@ -55,9 +52,10 @@ class ExternalAPIMixin:
             project_data['name'] = project_name
 
         # WORKAROUND 2: organisation coming as a string, we need to check for Organisation objects
-        project_org = project_data.get('organisation')
-        org, _ = Organisation.objects.get_or_create(name=project_org)
-        project_data['organisation'] = str(org.id)
+        if publish or project_data.get('organisation'):
+            project_org = project_data.get('organisation')
+            org, _ = Organisation.objects.get_or_create(name=project_org)
+            project_data['organisation'] = str(org.id)
 
         # WORKAROUND 3: auto choose "Other" as an investor
         donor, created = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
@@ -82,12 +80,13 @@ class ExternalAPIMixin:
             return errors, False
         else:
             instance.save()
-            instance.metadata = dict(from_external=settings.EXTERNAL_API_CLIENTS[client_code])
+            instance.metadata = dict(from_external=client_code)
             if publish:
                 instance.make_public_id(country.id)
                 instance.save(update_fields=['metadata', 'public_id'])
             instance.team.add(request.user.userprofile)
 
+            # TODO: WA5 is for DCH only
             # WORKAROUND 5: Add contact_email as team member
             group_data = {
                 "team": [request.user.userprofile.id],
