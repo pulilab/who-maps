@@ -22,10 +22,12 @@
         sticky
         @click="handleNavigation"
       >
-        <view-actions
-          :actions="actions"
-          @click="handleActions"
-        />
+        <template v-if="user">
+          <view-actions
+            :actions="actions"
+            @click="handleActions"
+          />
+        </template>
       </navigation>
     </el-col>
     <el-col
@@ -138,8 +140,15 @@ export default {
       projectDraft: 'project/getProjectData',
       projectPublished: 'project/getPublished',
       getCountryDetails: 'countries/getCountryDetails',
-      getDonorDetails: 'system/getDonorDetails'
-    })
+      getDonorDetails: 'system/getDonorDetails',
+      user: 'user/getProfile'
+    }),
+    isTeam () {
+      if (this.user) {
+        return this.user.member.includes(+this.$route.params.id)
+      }
+      return false
+    }
   },
   mounted () {
     window.scrollTo(0, 0)
@@ -188,76 +197,78 @@ export default {
         message: this.$gettext('Action cancelled'),
         type: 'info'
       }
-      if (this.published) {
-        this.actions = [
-          {
-            id: 'unpublish',
-            type: 'danger',
-            icon: 'el-icon-delete',
-            plain: true,
-            label: this.$gettext('Unpublish'),
-            handle: 'unpublishProject',
-            confirm: {
-              title: this.$gettext('Attention'),
-              description: this.$gettext(
-                'The current project will be unpublish'
-              )
-            },
-            route: {
-              name: 'organisation-projects-id-edit',
-              params: { ...this.$route.params }
-            },
-            success: {
-              title: this.$gettext('Congratulations'),
-              message: this.$gettext('Project has been unpublish')
-            },
-            error: info
-          }
-          // { ...print, label: this.$gettext("Print project") },
-        ]
-      } else {
-        this.actions = [
-          {
-            id: 'draft',
-            type: 'warning',
-            icon: 'el-icon-upload2',
-            label: this.$gettext('Publish draft'),
-            handle: 'publishProject',
-            route: {
-              name: 'organisation-projects-id-published',
-              params: { ...this.$route.params }
-            },
-            success: {
-              title: this.$gettext('Congratulations'),
-              message: this.$gettext('Your draft has been published')
-            },
-            error: {
-              title: this.$gettext('Error'),
-              message: this.$gettext('We could not publish. Try again'),
-              type: 'error'
+      if (this.isTeam) {
+        if (this.published) {
+          this.actions = [
+            {
+              id: 'unpublish',
+              type: 'danger',
+              icon: 'el-icon-delete',
+              plain: true,
+              label: this.$gettext('Unpublish'),
+              handle: 'unpublishProject',
+              confirm: {
+                title: this.$gettext('Attention'),
+                description: this.$gettext(
+                  'The current project will be unpublish'
+                )
+              },
+              route: {
+                name: 'organisation-projects-id-edit',
+                params: { ...this.$route.params }
+              },
+              success: {
+                title: this.$gettext('Congratulations'),
+                message: this.$gettext('Project has been unpublish')
+              },
+              error: info
             }
-          },
-          {
-            id: 'discard',
-            type: 'danger',
-            icon: 'el-icon-delete',
-            plain: true,
-            label: this.$gettext('Discard draft'),
-            handle: 'discardDraft',
-            confirm: {
-              title: this.$gettext('Attention'),
-              description: this.$gettext(
-                'The current draft will be overwritten by the published version'
-              )
+            // { ...print, label: this.$gettext("Print project") },
+          ]
+        } else {
+          this.actions = [
+            {
+              id: 'draft',
+              type: 'warning',
+              icon: 'el-icon-upload2',
+              label: this.$gettext('Publish draft'),
+              handle: 'publishProject',
+              route: {
+                name: 'organisation-projects-id-published',
+                params: { ...this.$route.params }
+              },
+              success: {
+                title: this.$gettext('Congratulations'),
+                message: this.$gettext('Your draft has been published')
+              },
+              error: {
+                title: this.$gettext('Error'),
+                message: this.$gettext('We could not publish. Try again'),
+                type: 'error'
+              }
             },
-            success: {
-              title: this.$gettext('Congratulations'),
-              message: this.$gettext('Draft has been discard')
-            },
-            error: info
-          }
-          // print,
-        ]
+            {
+              id: 'discard',
+              type: 'danger',
+              icon: 'el-icon-delete',
+              plain: true,
+              label: this.$gettext('Discard draft'),
+              handle: 'discardDraft',
+              confirm: {
+                title: this.$gettext('Attention'),
+                description: this.$gettext(
+                  'The current draft will be overwritten by the published version'
+                )
+              },
+              success: {
+                title: this.$gettext('Congratulations'),
+                message: this.$gettext('Draft has been discard')
+              },
+              error: info
+            }
+            // print,
+          ]
+        }
       }
     },
     // handle custom fields
