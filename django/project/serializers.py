@@ -27,8 +27,6 @@ from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, Techno
     Licence, InteroperabilityStandard, HISBucket, Stage, HealthCategory, HealthFocusArea, HSCGroup, HSCChallenge, \
     DigitalStrategy
 
-from country.models import Country, Donor
-from user.models import Organisation
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 

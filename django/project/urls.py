@@ -10,11 +10,28 @@ router.register('software', views.TechnologyPlatformRequestViewSet)
 
 urlpatterns = [
     path("projects/", include(router.urls)),
+    path('projects/external/draft/',
+         view=views.ExternalDraftAPI.as_view({
+             'post': 'create'
+         }),
+         kwargs={'client_code': 'kc748'},
+         name="project-external-draft-general"),
     path('projects/external/draft/<str:client_code>/',
          view=views.ExternalDraftAPI.as_view({
              'post': 'create'
          }),
          name="project-external-draft"),
+    path('projects/external/publish/',
+         view=views.ExternalPublishAPI.as_view({
+             'post': 'create'
+         }),
+         kwargs={'client_code': 'kc748'},
+         name="project-external-publish-general"),
+    path('projects/external/publish/<str:client_code>/',
+         view=views.ExternalPublishAPI.as_view({
+             'post': 'create'
+         }),
+         name="project-external-publish"),
     path('projects/external/publish/<str:client_code>/',
          view=views.ExternalPublishAPI.as_view({
              'post': 'create'

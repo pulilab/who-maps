@@ -1,10 +1,14 @@
 import copy
 from datetime import datetime
+from unittest import mock
+from django.test import override_settings
+from django.core.cache import cache
 
 from allauth.account.models import EmailConfirmation
 from django.core import mail
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
+from rest_framework.throttling import ScopedRateThrottle
 
 from core.factories import CountryFactory, OrganisationFactory
 from country.models import Country, Donor
@@ -109,6 +113,7 @@ class ExternalAPITests(APITestCase):
         for m in mail.outbox:
             if m.subject == 'You have been added to a project in the Digital Health Atlas':
                 notified_on_member_add_count += 1
+
                 self.assertTrue("team_member@added.com" in m.to)
         self.assertEqual(notified_on_member_add_count, 1)
 
@@ -144,21 +149,7 @@ class ExternalAPITests(APITestCase):
         for m in mail.outbox:
             if m.subject == 'Welcome to the Digital Health Atlas':
                 welcome_emails_count += 1
-        self.assertEqual(welcome_emails_count, 2)
-
-        notified_on_member_add_count = 0
-        for m in mail.outbox:
-            if m.subject == 'You have been added to a project in the Digital Health Atlas':
-                notified_on_member_add_count += 1
-                self.assertTrue("team_member@added.com" in m.to)
-        self.assertEqual(notified_on_member_add_count, 1)
-
-        set_password_sent = 0
-        for m in mail.outbox:
-            if m.subject == "Set Your Password on Digital Health Atlas":
-                set_password_sent += 1
-                self.assertTrue("team_member@added.com" in m.to)
-        self.assertEqual(set_password_sent, 1)
+        self.assertEqual(welcome_emails_count, 1)
 
     def test_invalid_source_draft(self):
         url = reverse("project-external-draft", kwargs={'client_code': 'TRUST-ME-NOT-A-HACKER'})
@@ -188,7 +179,7 @@ class ExternalAPITests(APITestCase):
         response = self.test_user_client.post(url, project_data, format="json")
 
         self.assertEqual(response.status_code, 400, response.json())
-        self.assertEqual(response.json(), {'project': {'contact_email': ['Enter a valid email address.']}})
+        self.assertEqual(response.json(), {'contact_email': ['Enter a valid email address.']})
 
     def test_name_clash_resolved_automatically(self):
         url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
@@ -217,4 +208,28 @@ class ExternalAPITests(APITestCase):
         response = self.test_user_client.post(url, project_data, format="json")
 
         self.assertEqual(response.status_code, 400, response.json())
-        self.assertEqual(response.json(), {'project': {'contact_email': ['Enter a valid email address.']}})
+        self.assertEqual(response.json(), {'contact_email': ['Enter a valid email address.']})
+
+    @mock.patch('rest_framework.throttling.ScopedRateThrottle.get_rate', return_value='2/minute')
+    @override_settings(CACHES={
+        'default': {
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': '/var/tmp/django_cache',
+        }
+    })
+    def test_external_api_throttle_success(self, throttle_mock):
+        rate = ScopedRateThrottle().get_rate()
+
+        split = rate.split('/')
+
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
+        for i in range(0, int(split[0])):
+            response = self.test_user_client.post(url, self.project_data, format="json")
+            self.assertEqual(response.status_code, 201, response.json())
+            self.assertTrue(response.json().get("id"))
+
+        # next request should be throttled
+        response = self.test_user_client.post(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 429, response.json())
+        self.assertIn('Request was throttled. Expected available in', response.json()['detail'])
+        cache.clear()
