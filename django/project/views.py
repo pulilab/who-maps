@@ -417,13 +417,12 @@ class ExternalDraftAPI(TeamTokenAuthMixin, ViewSet):
     def create(self, request, client_code):
         """
         Create *draft* projects from external sources.
+        Clients are differentiated by custom endpoints. For most cases, the `/default/` endpoint needs to be used,
+        but if the client requires custom handling of some attributes, they can request a custom endpoint via e-mail
+        (feature in progress)
         Alterations from internal API are:
         - project names must be unique, so check if they are clashing and randomize to help
-        - organisation is coming as a string, we need to check for Organisation objects
-        - donor (Investor) is by default set to "Other"
         - required country questions are not checked
-        - national_level_deployment is set to 0 (can be added later)
-        - contact email is automatically added as team member
         """
         # If client code is used, it needs to be correct
         if client_code and not settings.EXTERNAL_API_CLIENTS.get(client_code):
@@ -459,13 +458,13 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
     def create(self, request, client_code):
         """
         Create *Published* projects from external sources.
+        Clients are differentiated by custom endpoints. For most cases, the `/default/` endpoint needs to be used,
+        but if the client requires custom handling of some attributes, they can request a custom endpoint via e-mail
+        (feature in progress)
+
         Alterations from internal API are:
         - project names must be unique, so check if they are clashing and randomize to help
-        - organisation is coming as a string, we need to check for Organisation objects
-        - donor (Investor) is by default set to "Other"
         - required country questions are not checked
-        - national_level_deployment is set to 0 (can be added later)
-        - contact email is automatically added as team member
         """
         # If client code is used, it needs to be correct
         if client_code and not settings.EXTERNAL_API_CLIENTS.get(client_code):
