@@ -429,9 +429,6 @@ if SITE_ID in [3, 4]:
         'DEFAULT_RENDERER_CLASSES': (
             'rest_framework.renderers.JSONRenderer',
         ),
-        'DEFAULT_THROTTLE_CLASSES': [
-            'rest_framework.throttling.UserRateThrottle',
-        ],
         'DEFAULT_THROTTLE_RATES': {
             'user': '200/hour',
         }
