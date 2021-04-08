@@ -32,11 +32,6 @@ urlpatterns = [
              'post': 'create'
          }),
          name="project-external-publish"),
-    path('projects/external/publish/<str:client_code>/',
-         view=views.ExternalPublishAPI.as_view({
-             'post': 'create'
-         }),
-         name="project-external-publish"),
     path('projects/publish/<int:project_id>/<int:country_id>/',
          view=views.ProjectPublishViewSet.as_view({
              'put': 'update'
