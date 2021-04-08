@@ -430,10 +430,10 @@ if SITE_ID in [3, 4]:
             'rest_framework.renderers.JSONRenderer',
         ),
         'DEFAULT_THROTTLE_CLASSES': [
-            'rest_framework.throttling.ScopedRateThrottle',
+            'rest_framework.throttling.UserRateThrottle',
         ],
         'DEFAULT_THROTTLE_RATES': {
-            'external_api': '200/hour',
+            'user': '200/hour',
         }
     }
     # TODO: refactor these into .env settings
@@ -459,7 +459,7 @@ SWAGGER_SETTINGS = {
 'hash' : 'name'
 """
 EXTERNAL_API_CLIENTS = {
-    "kc748": "Other",
+    "default": "Other",
     "xNhlb4": "DCH",
     "6TAyaB": "DHIS2"
 }

@@ -32,7 +32,7 @@ from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPl
 from .mixins import CheckRequiredMixin
 from django.conf import settings
 
-from rest_framework.throttling import ScopedRateThrottle
+from rest_framework.throttling import UserRateThrottle
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -406,8 +406,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
 
 class ExternalDraftAPI(TeamTokenAuthMixin, ViewSet):
-    throttle_classes = (ScopedRateThrottle, )
-    throttle_scope = 'external_api'
+    throttle_classes = [UserRateThrottle]
 
     @transaction.atomic
     @swagger_auto_schema(
@@ -438,18 +437,6 @@ class ExternalDraftAPI(TeamTokenAuthMixin, ViewSet):
         if Project.objects.filter(name=project_name).exists():  # pragma: no cover
             request.data['project']['name'] = f"{project_name} {randint(1, 100)}"
 
-        # Organisation is coming as a string (and is optional)
-        if request.data['project'].get('organisation'):
-            project_org = request.data['project'].get('organisation')
-            org, _ = Organisation.objects.get_or_create(name=project_org)
-            request.data['project']['organisation'] = str(org.id)
-        # Donor is required - set to "Other"
-        donor, _ = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
-        request.data['project']['donors'] = [donor.id]
-
-        # Set national_level_deployment to 0, so it can be added later
-        request.data['project']['national_level_deployment'] = {"clients": 0, "health_workers": 0, "facilities": 0}
-
         data_serializer = ProjectDraftSerializer(data=request.data['project'])
         data_serializer.is_valid(raise_exception=True)
         instance = data_serializer.save()
@@ -461,8 +448,7 @@ class ExternalDraftAPI(TeamTokenAuthMixin, ViewSet):
 
 
 class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
-    throttle_classes = (ScopedRateThrottle, )
-    throttle_scope = 'external_api'
+    throttle_classes = [UserRateThrottle]
 
     @transaction.atomic
     @swagger_auto_schema(
@@ -494,17 +480,19 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
         if Project.objects.filter(name=project_name).exists():
             request.data['project']['name'] = f"{project_name} {randint(1, 100)}"
 
-        # Organisation is coming as a string (and is optional)
-        if request.data['project'].get('organisation'):
-            project_org = request.data['project'].get('organisation')
-            org, _ = Organisation.objects.get_or_create(name=project_org)
-            request.data['project']['organisation'] = str(org.id)
-        # Donor is required - set to "Other"
-        donor, _ = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
-        request.data['project']['donors'] = [donor.id]
+        # DCH only
+        if client_code == 'xNhlb4':
+            # Organisation is coming as a string (and is optional)
+            if request.data['project'].get('organisation'):
+                project_org = request.data['project'].get('organisation')
+                org, _ = Organisation.objects.get_or_create(name=project_org)
+                request.data['project']['organisation'] = str(org.id)
+            # Donor is required - set to "Other"
+            donor, _ = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
+            request.data['project']['donors'] = [donor.id]
 
-        # Set national_level_deployment to 0, so it can be added later
-        request.data['project']['national_level_deployment'] = {"clients": 0, "health_workers": 0, "facilities": 0}
+            # Set national_level_deployment to 0, so it can be added later
+            request.data['project']['national_level_deployment'] = {"clients": 0, "health_workers": 0, "facilities": 0}
 
         data_serializer = ProjectPublishedSerializer(data=request.data['project'])
         data_serializer.is_valid(raise_exception=True)

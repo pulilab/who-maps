@@ -8,7 +8,7 @@ from allauth.account.models import EmailConfirmation
 from django.core import mail
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
-from rest_framework.throttling import ScopedRateThrottle
+from rest_framework.throttling import UserRateThrottle
 
 from core.factories import CountryFactory, OrganisationFactory
 from country.models import Country, Donor
@@ -72,10 +72,7 @@ class ExternalAPITests(APITestCase):
                 name="Test Project1", organisation="test organisation", contact_name="name1",
                 contact_email="team_member@added.com", implementation_overview="overview", health_focus_areas=[1, 2],
                 country=self.country_id,
-                donors=[{
-                    "name": self.donor.name,
-                    "code": self.donor.code
-                }],
+                donors=[self.donor.id],
                 platforms=[{
                     "id": 1,
                     "strategies": [1, 2]
@@ -137,13 +134,7 @@ class ExternalAPITests(APITestCase):
         self.assertFalse(project.public_id)
         self.assertEqual(self.project_data['project']['name'], project.name)
 
-        org = Organisation.objects.get(name=self.project_data['project']['organisation'])
-        self.assertEqual(project.draft['organisation'], str(org.id))
-
         self.assertEqual(project.draft['donors'], [self.donor.id])
-
-        self.assertEqual(project.draft['national_level_deployment'],
-                         {"clients": 0, "health_workers": 0, "facilities": 0})
 
         welcome_emails_count = 0
         for m in mail.outbox:
@@ -210,7 +201,7 @@ class ExternalAPITests(APITestCase):
         self.assertEqual(response.status_code, 400, response.json())
         self.assertEqual(response.json(), {'contact_email': ['Enter a valid email address.']})
 
-    @mock.patch('rest_framework.throttling.ScopedRateThrottle.get_rate', return_value='2/minute')
+    @mock.patch('rest_framework.throttling.UserRateThrottle.get_rate', return_value='2/minute')
     @override_settings(CACHES={
         'default': {
             'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
@@ -218,7 +209,7 @@ class ExternalAPITests(APITestCase):
         }
     })
     def test_external_api_throttle_success(self, throttle_mock):
-        rate = ScopedRateThrottle().get_rate()
+        rate = UserRateThrottle().get_rate()
 
         split = rate.split('/')
 
