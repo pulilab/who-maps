@@ -9,10 +9,9 @@ from datetime import datetime, date, timedelta
 from random import randint
 
 from allauth.account.models import EmailConfirmation
-from django.utils import timezone
+from django.utils.timezone import localdate, localtime
 from kpiexport.tasks import update_auditlog_user_data_task
 from rest_framework.authtoken.models import Token
-
 
 class TestUserKPIData:
     """
@@ -39,29 +38,50 @@ class TestUserKPIData:
         # Create users
         self.userprofile_1, self.test_user_key, self.test_user_client = self.create_user(org=self.org,
                                                                                          country=self.country1)
-
+        self.userprofile_1.donor = self.d1
+        self.userprofile_1.save()
         self.userprofile_2 = UserProfileFactory(name="USER2", account_type=UserProfile.IMPLEMENTER,
                                                 country=self.country2)
-        self.userprofile_2.user.date_joined = date.today() - timedelta(days=100)
-        self.userprofile_2.user.last_login = date.today() - timedelta(days=1)  # yesterday
+        self.userprofile_2.user.date_joined = localtime() - timedelta(days=100)
+        self.userprofile_2.user.last_login = localtime() - timedelta(days=1)  # yesterday
+        self.userprofile_2.donor = self.d1
+        self.userprofile_2.user.save()
+        self.userprofile_2.save()
 
         self.userprofile_3 = UserProfileFactory(name="USER3", account_type=UserProfile.GOVERNMENT,
                                                 country=self.country2)
-        self.userprofile_3.user.date_joined = date.today() - timedelta(days=100)
-        self.userprofile_3.user.last_login = date.today() - timedelta(days=1)  # yesterday
+        self.userprofile_3.user.date_joined = localtime() - timedelta(days=100)
+        self.userprofile_3.user.last_login = localtime() - timedelta(days=1)  # yesterday
+        self.userprofile_3.donor = self.d2
+        self.userprofile_3.user.save()
+        self.userprofile_3.save()
 
         self.userprofile_4 = UserProfileFactory(name="USER4", account_type=UserProfile.IMPLEMENTER,
                                                 country=self.country2)
-        self.userprofile_4.user.date_joined = date.today() - timedelta(days=100)
-        self.userprofile_4.user.last_login = date.today() - timedelta(days=1)  # yesterday
+        self.userprofile_4.user.date_joined = localtime() - timedelta(days=100)
+        self.userprofile_4.user.last_login = localtime() - timedelta(days=1)  # yesterday
+        self.userprofile_4.donor = self.d2
+        self.userprofile_4.user.save()
+        self.userprofile_4.save()
 
-        self.userprofile_5 = UserProfileFactory(name="USER4", account_type=UserProfile.IMPLEMENTER,
+        self.userprofile_5 = UserProfileFactory(name="USER5", account_type=UserProfile.IMPLEMENTER,
                                                 country=self.country2)
-        self.userprofile_5.user.date_joined = date.today() - timedelta(days=80)
-        self.userprofile_5.user.last_login = date.today() - timedelta(days=60)  # about two months ago
+        self.userprofile_5.user.date_joined = localtime() - timedelta(days=80)
+        self.userprofile_5.user.last_login = localtime() - timedelta(days=60)  # two months ago
+        self.userprofile_5.donor = self.d2
+        self.userprofile_5.user.save()
+        self.userprofile_5.save()
 
-        generate_date = date.today() - timedelta(days=100)
-        while generate_date < date.today():
+        self.userprofile_6 = UserProfileFactory(name="USER6", account_type=UserProfile.IMPLEMENTER,
+                                                country=self.country2)
+        self.userprofile_6.user.date_joined = localtime() - timedelta(days=80)
+        self.userprofile_6.user.last_login = localtime() - timedelta(days=60)  # about two months ago
+        self.userprofile_6.donor = self.d2
+        self.userprofile_6.user.save()
+        self.userprofile_6.save()
+
+        generate_date = date.today() - timedelta(days=101)
+        while generate_date <= date.today():
             update_auditlog_user_data_task(generate_date)
             generate_date = generate_date + timedelta(days=1)
 
@@ -121,8 +141,11 @@ class TestUserKPIData:
 class KPIUserTests(TestUserKPIData, APITestCase):
 
     def test_user_kpi_nofilter(self):
+        from kpiexport.models import AuditLogUsers
+        logs = AuditLogUsers.objects.all()
         import ipdb
         ipdb.set_trace()
+
 
         url = reverse("user-kpi")
         response = self.client.get(url)
