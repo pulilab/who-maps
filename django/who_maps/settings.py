@@ -429,9 +429,6 @@ if SITE_ID in [3, 4]:
         'DEFAULT_RENDERER_CLASSES': (
             'rest_framework.renderers.JSONRenderer',
         ),
-        'DEFAULT_THROTTLE_RATES': {
-            'user': '200/hour',
-        }
     }
     # TODO: refactor these into .env settings
     if SITE_ID == 3:

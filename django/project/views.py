@@ -32,10 +32,11 @@ from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPl
 from .mixins import CheckRequiredMixin
 from django.conf import settings
 
-from rest_framework.throttling import UserRateThrottle
+from who_maps.throttle import ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle
 
 
 class ProjectPublicViewSet(ViewSet):
+    throttle_classes = [ExternalAPIAnonRateThrottle]
 
     @swagger_auto_schema(operation_id="project-structure", responses={200: TerminologySerializer})
     def project_structure(self, request):
@@ -406,7 +407,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
 
 class ExternalDraftAPI(TeamTokenAuthMixin, ViewSet):
-    throttle_classes = [UserRateThrottle]
+    throttle_classes = [ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle]
 
     @transaction.atomic
     @swagger_auto_schema(
@@ -447,7 +448,7 @@ class ExternalDraftAPI(TeamTokenAuthMixin, ViewSet):
 
 
 class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
-    throttle_classes = [UserRateThrottle]
+    throttle_classes = [ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle]
 
     @transaction.atomic
     @swagger_auto_schema(
