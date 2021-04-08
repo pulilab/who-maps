@@ -79,7 +79,10 @@ export default {
           id: 2,
           prepend: 2,
           header: this.$gettext('Organisation'),
-          content: this.organisation.name
+          content:
+            this.organisation && this.organisation.name
+              ? this.organisation.name
+              : ''
         },
         {
           id: 3,
