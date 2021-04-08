@@ -428,7 +428,13 @@ if SITE_ID in [3, 4]:
         ),
         'DEFAULT_RENDERER_CLASSES': (
             'rest_framework.renderers.JSONRenderer',
-        )
+        ),
+        'DEFAULT_THROTTLE_CLASSES': [
+            'rest_framework.throttling.UserRateThrottle',
+        ],
+        'DEFAULT_THROTTLE_RATES': {
+            'user': '200/hour',
+        }
     }
     # TODO: refactor these into .env settings
     if SITE_ID == 3:
@@ -447,4 +453,13 @@ SWAGGER_SETTINGS = {
             'description': 'authorization: Bearer XXXXXXXXXXXXXXXXXXX'
       }
    }
+}
+
+"""
+'hash' : 'name'
+"""
+EXTERNAL_API_CLIENTS = {
+    "default": "Other",
+    "xNhlb4": "DCH",
+    "6TAyaB": "DHIS2"
 }

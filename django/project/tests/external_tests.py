@@ -1,10 +1,14 @@
 import copy
 from datetime import datetime
+from unittest import mock
+from django.test import override_settings
+from django.core.cache import cache
 
 from allauth.account.models import EmailConfirmation
 from django.core import mail
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
+from rest_framework.throttling import UserRateThrottle
 
 from core.factories import CountryFactory, OrganisationFactory
 from country.models import Country, Donor
@@ -48,6 +52,7 @@ class ExternalAPITests(APITestCase):
         self.country = CountryFactory(name="country1", code='CTR1', project_approval=True,
                                       region=Country.REGIONS[0][0], name_en='Hungary', name_fr='Hongrie')
         self.country_id = self.country.id
+        self.donor, _ = Donor.objects.get_or_create(name="Other", defaults={'code': "other"})
 
         url = reverse("userprofile-detail", kwargs={"pk": self.user_profile_id})
         data = {
@@ -60,25 +65,22 @@ class ExternalAPITests(APITestCase):
 
         self.userprofile = UserProfile.objects.get(id=self.user_profile_id)
         self.country.users.add(self.userprofile)
+        self.client_code = "xNhlb4"
 
-        self.project_data = {"project": {
-            "name": "Test Project1",
-            "organisation": "test organisation",
-            "contact_name": "name1",
-            "contact_email": "team_member@added.com",
-            "implementation_overview": "overview",
-            "health_focus_areas": [1, 2],
-            "country": self.country_id,
-            "platforms": [{
-                "id": 1,
-                "strategies": [1, 2]
-            }],
-            "hsc_challenges": [1, 2],
-            "start_date": str(datetime.today().date())
-        }}
+        self.project_data = {
+            "project": dict(
+                name="Test Project1", organisation="test organisation", contact_name="name1",
+                contact_email="team_member@added.com", implementation_overview="overview", health_focus_areas=[1, 2],
+                country=self.country_id,
+                donors=[self.donor.id],
+                platforms=[{
+                    "id": 1,
+                    "strategies": [1, 2]
+                }],
+                hsc_challenges=[1, 2], start_date=str(datetime.today().date()))}
 
     def test_post_to_publish_from_external_source(self):
-        url = reverse("project-external-publish")
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
 
@@ -86,17 +88,16 @@ class ExternalAPITests(APITestCase):
         project_id = response.json().get("id")
         project = Project.objects.get(id=project_id)
 
-        self.assertTrue(project.from_dch)
+        self.assertTrue(project.from_external)
         self.assertTrue(project.public_id)
         self.assertEqual(self.project_data['project']['name'], project.name)
 
         org = Organisation.objects.get(name=self.project_data['project']['organisation'])
         self.assertEqual(self.project_data['project']['organisation'], org.name)
 
-        donor = Donor.objects.get(name="Other")
-        self.assertEqual(project.data['donors'], [donor.id])
+        self.assertEqual(project.data['donors'], [self.donor.id])
 
-        self.assertEqual(project.data['national_level_deployment'], 
+        self.assertEqual(project.data['national_level_deployment'],
                          {"clients": 0, "health_workers": 0, "facilities": 0})
 
         welcome_emails_count = 0
@@ -109,6 +110,7 @@ class ExternalAPITests(APITestCase):
         for m in mail.outbox:
             if m.subject == 'You have been added to a project in the Digital Health Atlas':
                 notified_on_member_add_count += 1
+
                 self.assertTrue("team_member@added.com" in m.to)
         self.assertEqual(notified_on_member_add_count, 1)
 
@@ -119,14 +121,65 @@ class ExternalAPITests(APITestCase):
                 self.assertTrue("team_member@added.com" in m.to)
         self.assertEqual(set_password_sent, 1)
 
+    def test_post_to_draft_from_external_source(self):
+        url = reverse("project-external-draft", kwargs={'client_code': self.client_code})
+        response = self.test_user_client.post(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 201, response.json())
+
+        self.assertTrue(response.json().get("id"))
+        project_id = response.json().get("id")
+        project = Project.objects.get(id=project_id)
+
+        self.assertTrue(project.from_external)
+        self.assertFalse(project.public_id)
+        self.assertEqual(self.project_data['project']['name'], project.name)
+
+        self.assertEqual(project.draft['donors'], [self.donor.id])
+
+        welcome_emails_count = 0
+        for m in mail.outbox:
+            if m.subject == 'Welcome to the Digital Health Atlas':
+                welcome_emails_count += 1
+        self.assertEqual(welcome_emails_count, 1)
+
+    def test_invalid_source_draft(self):
+        url = reverse("project-external-draft", kwargs={'client_code': 'TRUST-ME-NOT-A-HACKER'})
+        response = self.test_user_client.post(url, self.project_data, format="json")
+
+        self.assertEqual(response.status_code, 400, response.json())
+        self.assertEqual(response.json(), {'client_code': "Client code is invalid"})
+
+    def test_invalid_source_publish(self):
+        url = reverse("project-external-publish", kwargs={'client_code': 'TRUST-ME-NOT-A-HACKER'})
+        response = self.test_user_client.post(url, self.project_data, format="json")
+
+        self.assertEqual(response.status_code, 400, response.json())
+        self.assertEqual(response.json(), {'client_code': "Client code is invalid"})
+
+    def test_no_project_draft(self):
+        url = reverse("project-external-draft", kwargs={'client_code': self.client_code})
+        response = self.test_user_client.post(url, {}, format="json")
+
+        self.assertEqual(response.status_code, 400, response.json())
+        self.assertEqual(response.json(), {'project': 'Project data is missing'})
+
+    def test_invalid_email_draft(self):
+        project_data = copy.deepcopy(self.project_data)
+        project_data['project']['contact_email'] = "invalid_email"
+        url = reverse("project-external-draft", kwargs={'client_code': self.client_code})
+        response = self.test_user_client.post(url, project_data, format="json")
+
+        self.assertEqual(response.status_code, 400, response.json())
+        self.assertEqual(response.json(), {'contact_email': ['Enter a valid email address.']})
+
     def test_name_clash_resolved_automatically(self):
-        url = reverse("project-external-publish")
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
         self.assertTrue(response.json().get("id"))
         project_1_id = response.json().get("id")
 
-        url = reverse("project-external-publish")
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
         response = self.test_user_client.post(url, self.project_data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
         self.assertTrue(response.json().get("id"))
@@ -142,8 +195,32 @@ class ExternalAPITests(APITestCase):
     def test_invalid_email_published(self):
         project_data = copy.deepcopy(self.project_data)
         project_data['project']['contact_email'] = "invalid_email"
-        url = reverse("project-external-publish")
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
         response = self.test_user_client.post(url, project_data, format="json")
 
         self.assertEqual(response.status_code, 400, response.json())
-        self.assertEqual(response.json(), {'project': {'contact_email': ['Enter a valid email address.']}})
+        self.assertEqual(response.json(), {'contact_email': ['Enter a valid email address.']})
+
+    @mock.patch('rest_framework.throttling.UserRateThrottle.get_rate', return_value='2/minute')
+    @override_settings(CACHES={
+        'default': {
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': '/var/tmp/django_cache',
+        }
+    })
+    def test_external_api_throttle_success(self, throttle_mock):
+        rate = UserRateThrottle().get_rate()
+
+        split = rate.split('/')
+
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
+        for i in range(0, int(split[0])):
+            response = self.test_user_client.post(url, self.project_data, format="json")
+            self.assertEqual(response.status_code, 201, response.json())
+            self.assertTrue(response.json().get("id"))
+
+        # next request should be throttled
+        response = self.test_user_client.post(url, self.project_data, format="json")
+        self.assertEqual(response.status_code, 429, response.json())
+        self.assertIn('Request was throttled. Expected available in', response.json()['detail'])
+        cache.clear()
