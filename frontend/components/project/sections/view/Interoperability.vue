@@ -11,7 +11,7 @@
 <script>
 /* eslint-disable vue/no-side-effects-in-computed-properties */
 import { mapGetters } from 'vuex'
-import { isEmpty } from 'lodash'
+import { isEmpty, orderBy } from 'lodash'
 import { getList } from '@/utilities/projects'
 
 import ViewField from '@/components/project/wrappers/ViewField'
@@ -58,15 +58,23 @@ export default {
   },
   methods: {
     handleInteroperability (links) {
-      return Object.values(links)
-        .filter(il => !!(il.selected && il.link))
-        .map((il, i) => ({
-          ...il,
-          id: this.getInteroperabilityLinks[il.index || i]?.id,
-          label: `${this.getInteroperabilityLinks[il.index || i]?.pre} ${
-            this.getInteroperabilityLinks[il.index || i]?.name
-          }`
-        }))
+      let result = []
+      for (const [key, value] of Object.entries(links)) {
+        console.log(key, value)
+        if (value.selected && value.link) {
+          result = [
+            ...result,
+            {
+              ...value,
+              id: this.getInteroperabilityLinks[value.index]?.id,
+              label: `${this.getInteroperabilityLinks[value.index]?.pre} ${
+                this.getInteroperabilityLinks[value.index]?.name
+              }`
+            }
+          ]
+        }
+      }
+      return orderBy(result, ['index'], ['asc'])
     },
     handleFields () {
       return [
