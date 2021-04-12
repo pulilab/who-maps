@@ -174,6 +174,10 @@ REST_FRAMEWORK = {
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'user.authentication.BearerTokenAuthentication'
     ),
+    'DEFAULT_THROTTLE_RATES': {
+        'ext_anon': '200/hour',
+        'ext_user': '200/hour'
+    }
 }
 
 
@@ -441,13 +445,7 @@ if SITE_ID in [3, 4]:
         # redirect all emails to the forced addresses
         EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
         TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "f@pulilab.com"]
-else:  # development settings
-    REST_FRAMEWORK = {
-        'DEFAULT_THROTTLE_RATES': {
-            'ext_anon': '200/hour',
-            'ext_user': '200/hour'
-        }
-    }
+
 
 SWAGGER_SETTINGS = {
    'SECURITY_DEFINITIONS': {
