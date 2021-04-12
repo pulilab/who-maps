@@ -250,7 +250,6 @@ export default {
   },
   computed: {
     ...mapState({
-      stages: state => state.project.stages,
       stagesDraft: state => state.project.stagesDraft
     }),
     ...mapGettersActions({
