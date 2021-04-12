@@ -250,6 +250,7 @@ export default {
   },
   computed: {
     ...mapState({
+      stages: state => state.project.stages,
       stagesDraft: state => state.project.stagesDraft
     }),
     ...mapGettersActions({
@@ -334,8 +335,8 @@ export default {
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .stages__tooltip {
   max-width: 320px;

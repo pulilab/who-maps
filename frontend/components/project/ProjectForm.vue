@@ -192,7 +192,7 @@ export default {
     }),
     digitalHealthInterventionsValidator (rule, value, callback) {
       const ownDhi = this.project.digitalHealthInterventions.filter(
-        (dhi) => dhi.platform === value && dhi.id
+        dhi => dhi.platform === value && dhi.id
       )
       if (ownDhi.length === 0) {
         const error = {
@@ -259,7 +259,7 @@ export default {
     handleErrorMessages () {
       this.$nextTick(() => {
         const errors = [...this.$el.querySelectorAll('.is-error')]
-        const visibleErrors = errors.filter((e) => e.offsetParent !== null)
+        const visibleErrors = errors.filter(e => e.offsetParent !== null)
         if (visibleErrors && visibleErrors.length > 0) {
           visibleErrors[0].scrollIntoView()
         } else {
@@ -396,8 +396,8 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .NewProjectForm {
   // .limitPageWidth();
