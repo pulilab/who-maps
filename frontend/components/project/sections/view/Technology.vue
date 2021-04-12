@@ -12,7 +12,7 @@
 /* eslint-disable vue/no-side-effects-in-computed-properties */
 import { mapGetters } from 'vuex'
 import { isEmpty } from 'lodash'
-import { getList, getDate } from '@/utilities/projects'
+import { getList } from '@/utilities/projects'
 
 import ViewField from '@/components/project/wrappers/ViewField'
 
@@ -51,12 +51,12 @@ export default {
   methods: {
     handleFields () {
       return [
-        {
-          id: 1,
-          // prepend: 21,
-          header: this.$gettext('Technology deployment date'),
-          content: getDate(this.project.implementation_dates)
-        },
+        // {
+        //   id: 1,
+        //   // prepend: 21,
+        //   header: this.$gettext('Technology deployment date'),
+        //   content: getDate(this.project.implementation_dates)
+        // },
         {
           id: 2,
           prepend: 21,

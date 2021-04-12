@@ -50,14 +50,19 @@
                   <p>
                     <b>{{ subtitle }}</b>
                   </p>
-                  <ul>
-                    <li
-                      v-for="category in item.categories"
-                      :key="category.id"
-                    >
-                      {{ category.name }}
-                    </li>
-                  </ul>
+                  <template v-if="item.categories.length > 0">
+                    <ul>
+                      <li
+                        v-for="category in item.categories"
+                        :key="category.id"
+                      >
+                        {{ category.name }}
+                      </li>
+                    </ul>
+                  </template>
+                  <template v-else>
+                    <span class="no-data">{{ noData }}</span>
+                  </template>
                 </li>
               </template>
               <template v-if="interoperability">
