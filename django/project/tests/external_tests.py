@@ -8,7 +8,7 @@ from allauth.account.models import EmailConfirmation
 from django.core import mail
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
-from rest_framework.throttling import UserRateThrottle
+from who_maps.throttle import ExternalAPIUserRateThrottle
 
 from core.factories import CountryFactory, OrganisationFactory
 from country.models import Country, Donor
@@ -201,7 +201,7 @@ class ExternalAPITests(APITestCase):
         self.assertEqual(response.status_code, 400, response.json())
         self.assertEqual(response.json(), {'contact_email': ['Enter a valid email address.']})
 
-    @mock.patch('rest_framework.throttling.UserRateThrottle.get_rate', return_value='2/minute')
+    @mock.patch('who_maps.throttle.ExternalAPIUserRateThrottle.get_rate', return_value='2/minute')
     @override_settings(CACHES={
         'default': {
             'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
@@ -209,7 +209,7 @@ class ExternalAPITests(APITestCase):
         }
     })
     def test_external_api_throttle_success(self, throttle_mock):
-        rate = UserRateThrottle().get_rate()
+        rate = ExternalAPIUserRateThrottle().get_rate()
 
         split = rate.split('/')
 
