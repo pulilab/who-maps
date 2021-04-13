@@ -512,7 +512,7 @@
                         <p>{% trans "If you did not request this password reset, please ignore this message." %}</p>
                         <p>
                           {% trans "Please do not reply to this email. For support or additional questions, email" %}
-                          <a href="mailto:digitalhealthatlas@gmail.com">digitalhealthatlas@gmail.com</a>
+                          <a href="mailto:digital-health-atlas@who.int">digital-health-atlas@who.int</a>
                         </p>
                         <!-- /TEMPLATE: PASSWORD RESET -->
 
@@ -525,7 +525,7 @@
                         <p>
                         <a href="{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited" target="_blank">{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited</a>
                         </p>
-                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digital-health-atlas@who.int." %}</p>
                         <p>{% trans "Sincerely," %}</p>
                         <p>{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: PASSWORD INVITED -->
@@ -557,7 +557,7 @@
                             {% endfor %}
                           </tbody>
                         </table><br><br>
-                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digital-health-atlas@who.int." %}</p>
                         <p>{% trans "Sincerely," %}</p>
                         <p>{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /MISSING DATA COMMON TEMPLATE -->
@@ -577,7 +577,7 @@
                         <!-- SOFTWARE DECLINED -->
                         {% elif type == "software_declined" %}
                         <h1>{% trans "Software declined: " %}{{ software_name }}</h1>
-                        <p>{{ software_name }}{% trans " has not been approved for inclusion in the Digital Health Atlas. Please get in touch with the Digital Health Atlas team if you believe this decision has been taken in error via digitalhealthatlas@gmail.com" %}</p>
+                        <p>{{ software_name }}{% trans " has not been approved for inclusion in the Digital Health Atlas. Please get in touch with the Digital Health Atlas team if you believe this decision has been taken in error via digital-health-atlas@who.int" %}</p>
                         <p>{% trans "Sincerely," %}</p>
                         <p>{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /SOFTWARE DECLINED -->
@@ -601,7 +601,7 @@
                         <p>
                           <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment" target="_blank">{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment</a>
                         </p>
-                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digital-health-atlas@who.int." %}</p>
                         <p>{% trans "Sincerely," %}</p>
                         <p>{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: TOOLKIT DIGEST -->
@@ -615,7 +615,7 @@
                         <p>
                           <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}" target="_blank">{% site_url %}/{{ language }}/-/projects/{{ project_id }}</a>
                         </p>
-                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digital-health-atlas@who.int." %}</p>
                         <p>{% trans "Sincerely," %}</p>
                         <p>{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: DRAFT REMINDER -->
@@ -689,7 +689,7 @@
                             {% endfor %}
                           </tbody>
                         </table><br><br>
-                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digital-health-atlas@who.int." %}</p>
                         <p>{% trans "Sincerely," %}</p>
                         <p>{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: COUNTRY PUBLISHED NEW QUESTION DIGEST -->
@@ -734,7 +734,7 @@
                             {% endfor %}
                           </tbody>
                         </table><br><br>
-                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p>{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digital-health-atlas@who.int." %}</p>
                         <p>{% trans "Sincerely," %}</p>
                         <p>{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: DONOR PUBLISHED NEW QUESTION DIGEST -->
@@ -850,7 +850,7 @@
                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                       <a href="{% site_url %}/{{ language }}/-/terms">{% trans "Terms of use" %}</a>
                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                      <a href="mailto:digitalhealthatlas@gmail.com">{% trans "Contact us" %}</a>
+                      <a href="mailto:digital-health-atlas@who.int">{% trans "Contact us" %}</a>
                     </td>
                   </tr>
                   <td class="content-block">
