@@ -48,6 +48,9 @@ api_info_router = SimpleRouter()
 api_info_router.register(r'api/landing-country', CountryLandingPageViewSet, base_name='landing-country'),
 api_info_router.register(r'api/landing-country', CountryLandingListPageViewSet, base_name='landing-country'),
 api_info_router.register(r'api/organisations', OrganisationViewSet, base_name='organisation')
+# These API urls miss their trailing slashes due to an apparent bug in redoc
+# adding extra trailing slashes. Since these are only used for generating the public docs,
+# this should cause no issue.
 api_info_router.register(r'api/projects/external/draft/<str:client_code>', ExternalDraftAPI,
                          base_name='project-external-draft')
 api_info_router.register(r'api/projects/external/publish/<str:client_code>', ExternalPublishAPI,
