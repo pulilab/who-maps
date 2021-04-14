@@ -1,9 +1,7 @@
 import copy
 from random import randint
-from collections import OrderedDict
 
 from django.db import transaction
-from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
@@ -21,20 +19,24 @@ from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
 from project.permissions import InCountryAdminForApproval
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
-from user.models import Organisation
 from .tasks import notify_superusers_about_new_pending_software
+from user.models import Organisation
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer, \
-    TerminologySerializer
+    TerminologySerializer, ExternalProjectPublishSerializer, ExternalProjectDraftSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
 
+from .mixins import CheckRequiredMixin
+from django.conf import settings
+
+from who_maps.throttle import ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle
+
 
 class ProjectPublicViewSet(ViewSet):
-
-    @swagger_auto_schema(responses={200: TerminologySerializer})
+    @swagger_auto_schema(operation_id="project-structure", responses={200: TerminologySerializer})
     def project_structure(self, request):
         return Response(self._get_project_structure())
 
@@ -148,15 +150,6 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         project = get_object_or_404(Project, **filter)
 
         return Response(self._get_permission_based_data(project))
-
-
-class CheckRequiredMixin:
-    def check_required(self, queryset: QuerySet, answers: OrderedDict):
-        required_ids = set(queryset.filter(required=True).values_list('id', flat=True))
-        present_ids = {answer['question_id'] for answer in answers}
-        missing_ids = required_ids - present_ids
-        if missing_ids:
-            return {i: ['This field is required'] for i in missing_ids}
 
 
 class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
@@ -411,68 +404,105 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
 
 
-class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
-    def create(self, request):
+class ExternalDraftAPI(TeamTokenAuthMixin, ViewSet):
+    throttle_classes = [ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle]
+
+    @transaction.atomic
+    @swagger_auto_schema(
+        operation_id="project-draft-external",
+        request_body=ExternalProjectDraftSerializer,
+        responses={201: ProjectDraftSerializer}
+        )
+    def create(self, request, client_code):
         """
-        Publish projects from external sources.
-        Exceptions to internal API are:
+        Create *draft* projects from external sources.
+        Clients are differentiated by custom endpoints. For most cases, the `/default/` endpoint needs to be used,
+        but if the client requires custom handling of some attributes, they can request a custom endpoint via e-mail
+        (feature in progress)
+        Alterations from internal API are:
         - project names must be unique, so check if they are clashing and randomize to help
-        - organisation coming as a string, we need to check for Organisation objects
-        - auto choose "Other" as an investor
-        - exclude the check for required country questions
-        - set national_level_deployment to 0, so it can be added later
-        - add contact email as a team member
+        - required country questions are not checked
         """
-        instance = None
-        errors = {}
+        # If client code is used, it needs to be correct
+        if client_code and not settings.EXTERNAL_API_CLIENTS.get(client_code):
+            raise ValidationError({'client_code': 'Client code is invalid'})
 
-        if 'project' not in request.data:  # pragma: no cover
+        if not request.data.get('project'):
             raise ValidationError({'project': 'Project data is missing'})
-        if 'country' not in request.data['project']:  # pragma: no cover
-            raise ValidationError({'country': 'Country is missing'})
 
-        country = get_object_or_400(Country, error_message="No such country", id=request.data['project']['country'])
+        # Project name needs to be unique
+        project_name = request.data['project'].get('name')
+        if Project.objects.filter(name=project_name).exists():  # pragma: no cover
+            request.data['project']['name'] = f"{project_name} {randint(1, 100)}"
 
-        project_data = copy.deepcopy(request.data['project'])
+        data_serializer = ProjectDraftSerializer(data=request.data['project'])
+        data_serializer.is_valid(raise_exception=True)
+        instance = data_serializer.save()
+        instance.metadata = dict(from_external=client_code)
+        instance.save()  # REST FW does not call save for these serializers by default, so we have to do it here
+        instance.team.add(request.user.userprofile)
 
-        # WORKAROUND 1: project names must be unique, so check if they are clashing and randomize to help
-        project_name = project_data.get('name')
-        if project_name and Project.objects.filter(name=project_name).exists():
-            project_name = f"{project_name} {randint(1, 100)}"
-            project_data['name'] = project_name
+        return Response(instance.to_representation(draft_mode=True), status=status.HTTP_201_CREATED)
 
-        # WORKAROUND 2: organisation coming as a string, we need to check for Organisation objects
-        project_org = project_data.get('organisation')
-        org, created = Organisation.objects.get_or_create(name=project_org)
-        project_data['organisation'] = str(org.id)
 
-        # WORKAROUND 3: auto choose "Other" as an investor
-        donor, created = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
-        project_data['donors'] = [donor.id]
+class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
+    throttle_classes = [ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle]
 
-        # WORKAROUND 4: set national_level_deployment to 0, so it can be added later
-        project_data['national_level_deployment'] = {"clients": 0, "health_workers": 0, "facilities": 0}
+    @transaction.atomic
+    @swagger_auto_schema(
+        operation_id="project-publish-external",
+        request_body=ExternalProjectPublishSerializer,
+        responses={201: ProjectPublishedSerializer}
+    )
+    def create(self, request, client_code):
+        """
+        Create *Published* projects from external sources.
+        Clients are differentiated by custom endpoints. For most cases, the `/default/` endpoint needs to be used,
+        but if the client requires custom handling of some attributes, they can request a custom endpoint via e-mail
+        (feature in progress)
 
-        # TODO: validate UTC date
-        data_serializer = ProjectPublishedSerializer(data=project_data)
-        data_serializer.is_valid()
+        Alterations from internal API are:
+        - project names must be unique, so check if they are clashing and randomize to help
+        - required country questions are not checked
+        """
+        # If client code is used, it needs to be correct
+        if client_code and not settings.EXTERNAL_API_CLIENTS.get(client_code):
+            raise ValidationError({'client_code': 'Client code is invalid'})
 
-        if data_serializer.errors:
-            errors['project'] = data_serializer.errors
-        else:
-            instance = data_serializer.save()
+        if not request.data.get('project'):
+            raise ValidationError({'project': 'Project data is missing'})  # pragma: no cover
+        country = get_object_or_400(Country, error_message="No such country", id=request.data['project'].get('country'))
 
-        if errors:
-            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            instance.save()
-            # TODO: set from_dch by evaluating payload, so we can reuse this for other external parties too.
-            instance.metadata = dict(from_dch=True)
-            instance.make_public_id(country.id)
-            instance.save(update_fields=['metadata', 'public_id'])
-            instance.team.add(request.user.userprofile)
+        # Project name needs to be unique
+        project_name = request.data['project'].get('name')
+        if Project.objects.filter(name=project_name).exists():
+            request.data['project']['name'] = f"{project_name} {randint(1, 100)}"
 
-            # WORKAROUND 5: add contact_email as team member
+        # DCH only
+        if client_code == 'xNhlb4':
+            # Organisation is coming as a string (and is optional)
+            if request.data['project'].get('organisation'):
+                project_org = request.data['project'].get('organisation')
+                org, _ = Organisation.objects.get_or_create(name=project_org)
+                request.data['project']['organisation'] = str(org.id)
+            # Donor is required - set to "Other"
+            donor, _ = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
+            request.data['project']['donors'] = [donor.id]
+
+            # Set national_level_deployment to 0, so it can be added later
+            request.data['project']['national_level_deployment'] = {"clients": 0, "health_workers": 0, "facilities": 0}
+
+        data_serializer = ProjectPublishedSerializer(data=request.data['project'])
+        data_serializer.is_valid(raise_exception=True)
+        instance = data_serializer.save()
+        instance.metadata = dict(from_external=client_code)
+        instance.save()  # REST FW does not call save for these serializers by default, so we have to do it here
+        instance.make_public_id(country.id)
+        instance.save(update_fields=['public_id'])
+        instance.team.add(request.user.userprofile)
+
+        # DCH only - Add contact_email as team member
+        if client_code == 'xNhlb4':
             group_data = {
                 "team": [request.user.userprofile.id],
                 "viewers": [],
@@ -483,9 +513,10 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
             pg_serializer.is_valid()
             pg_serializer.save()
 
-        draft = instance.to_representation(draft_mode=True)
-        published = instance.to_representation()
-        return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_201_CREATED)
+        # create changelog
+        ProjectVersion.objects.create(project=instance, user=request.user.userprofile, name=instance.name,
+                                      data=instance.data, research=instance.research)
+        return Response(instance.to_representation(draft_mode=True), status=status.HTTP_201_CREATED)
 
 
 class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):

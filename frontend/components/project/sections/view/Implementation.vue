@@ -108,7 +108,7 @@ export default {
         this.hfaList = getNestedList(this.getHfa, 'health_focus_areas')
         this.hfa = getList(health_focus_areas, this.hfaList)
         this.hscList = getNestedList(this.getHsc, 'challenges')
-        this.hsc = getList(hsc_challenges, this.hscList, 'challenge')
+        this.hsc = getList(hsc_challenges, this.hscList, ['challenge'])
         this.his = getList(his_bucket, this.getHis)
         this.donors = getList(donors, this.getDonors)
 
@@ -185,6 +185,18 @@ export default {
         {
           id: 1,
           prepend: 10,
+          header: this.$gettext('Health focus area (s)'),
+          content: this.hfa
+        },
+        {
+          id: 2,
+          prepend: 11,
+          header: this.$gettext('Health System Challenges (HSC)'),
+          content: this.hsc
+        },
+        {
+          id: 3,
+          prepend: 12,
           header: this.$gettext(
             'Software and related Digital Health Interventions (DHI)'
           ),
@@ -192,18 +204,6 @@ export default {
           dhi: true,
           title: this.$gettext('Software'),
           subtitle: this.$gettext('Digital Health Intervention')
-        },
-        {
-          id: 2,
-          prepend: 11,
-          header: this.$gettext('Health focus area (s)'),
-          content: this.hfa
-        },
-        {
-          id: 3,
-          prepend: 12,
-          header: this.$gettext('Health System Challenges (HSC)'),
-          content: this.hsc
         },
         {
           id: 4,
@@ -221,6 +221,7 @@ export default {
           header: this.$gettext('Coverage type'),
           content: this.coverage
         },
+        // national coverage
         {
           id: 6,
           show: !!this.isNationalLevelDeployment,
@@ -280,6 +281,7 @@ export default {
           layout: true,
           rows: this.coverageLevelSecond
         },
+        // national coverage
         {
           id: 9,
           prepend: 15,

@@ -24,7 +24,12 @@ export default {
   },
   middleware: ['isLoggedIn'],
   async fetch ({ store }) {
-    await store.dispatch('project/resetProjectState')
+    await Promise.all([
+      store.dispatch('project/resetProjectState'),
+      store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('system/loadDonors'),
+      store.dispatch('system/loadStaticData')
+    ])
   }
 }
 </script>

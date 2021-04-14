@@ -58,9 +58,20 @@ export const getDate = date => {
   }
   return null
 }
-export const getList = (arr, getter, key = 'name') => {
+export const getList = (arr, getter, keys = ['email', 'name']) => {
+  // optional keys are first, last is obligatory
   if (arr) {
-    return getter.filter(p => arr.includes(p.id) && p[key]).map(i => i[key])
+    return getter
+      .filter(p => arr.includes(p.id))
+      .map(i => {
+        let val = ''
+        for (const key of keys) {
+          if (i[key]) {
+            val = i[key]
+          }
+        }
+        return val
+      })
   }
   return []
 }
