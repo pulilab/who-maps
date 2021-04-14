@@ -1,10 +1,7 @@
 from django.db import models
 from core.models import GetObjectOrNoneQueryset
-from country.models import Country, Donor
-from user.models import UserProfile
-from rest_framework.authtoken.models import Token
+from country.models import Country
 from django.contrib.postgres.fields import JSONField
-from project.models import Stage
 
 
 class AuditLogBase(models.Model):
@@ -66,5 +63,5 @@ class AuditLogUsers(AuditLogBase):
         verbose_name = "User KPI"
         verbose_name_plural = "User KPIs"
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return f'{self.date.year}-{self.date.month} - {str(self.data)}'
