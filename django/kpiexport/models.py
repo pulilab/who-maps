@@ -1,6 +1,4 @@
 from django.db import models
-from django.db.models import QuerySet
-from django.db.models.query_utils import Q
 from core.models import GetObjectOrNoneQueryset
 from country.models import Country, Donor
 from user.models import UserProfile

@@ -19,42 +19,48 @@ from core.views import Http400
 from django.utils.timezone import make_aware
 from core.views import TokenAuthMixin
 from kpiexport.models import AuditLogUsers
+from kpiexport.serializers import AuditLogUserSerializer
+from django.views.generic import ListView
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.mixins import ListModelMixin
+from rest_framework import filters
 
 
-class KPIFilterMixin(object):
+class KPIFilterBackend(filters.BaseFilterBackend):
     @staticmethod
     def _parse_date_str(date_str: str) -> datetime.date:
         date = datetime.strptime(date_str, '%Y-%m')
         return date.date()
 
-    def get_queryset(self):
+    def filter_queryset(self, request, queryset, view):
         """
         Does general filtering for all KPI APIs
         """
-        country_id = self.request.query_params.get('country')
-        investor_id = self.request.query_params.get('investor')
-        date_from_str = self.request.query_params.get('from')
-        date_to_str = self.request.query_params.get('to')
+        country_id = request.query_params.get('country')
+        investor_id = request.query_params.get('investor')
+        date_from_str = request.query_params.get('from')
+        date_to_str = request.query_params.get('to')
 
         if country_id:
-            country = get_object_or_404(Country, "Country ID is invalid", pk=country_id)
-            self.queryset = self.queryset.filter(country=country)
+            country = get_object_or_404(Country, pk=int(country_id))
+
+            queryset = queryset.filter(country=country)
         if investor_id:
-            investor = get_object_or_404(Donor, "Donor ID is invalid", pk=investor_id)
-            self.queryset = self.queryset.filter(data__investor=investor)
+            investor = get_object_or_404(Donor, pk=int(investor_id))
+            queryset = queryset.filter(data__investor=investor)
         if date_from_str:
             date_from = self._parse_date_str(date_from_str)
         else:
             date_from = (datetime.today() - timedelta(days=365)).date()
         if date_to_str:
             date_to = self._parse_date_str(date_to_str)
-            self.queryset = self.queryset.filter(date__lte=date_to)
+            queryset = queryset.filter(date__lte=date_to)
 
-        self.queryset = self.queryset.filter(date__gte=date_from)
-        return self.queryset
+        queryset = queryset.filter(date__gte=date_from)
+        return queryset
 
 
-class UserKPIsView(KPIFilterMixin, TokenAuthMixin, APIView):
+class UserKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     """
     View to retrieve user KPIs
 
@@ -68,23 +74,7 @@ class UserKPIsView(KPIFilterMixin, TokenAuthMixin, APIView):
 
     By default, results are sent from the past year
     """
+    serializer_class = AuditLogUserSerializer
+    filter_backends = [KPIFilterBackend]
+    filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogUsers.objects.all()
-
-    def _to_representation(self, qs: QuerySet):
-        import ipdb
-        ipdb.set_trace()
-
-        # convert account type to humanly-readable strings
-        account_types = {x: y for x, y in UserProfile.ACCOUNT_TYPE_CHOICES}
-        account_types[None] = 'Unknown'
-        data = dict()
-        qs = self.get_queryset()
-
-        data = {str(account_types[x['account_type']]): x['id__count'] for x in qs}
-        return data
-
-    def get(self, request, *args, **kwargs):
-        """
-        Return user KPIs.
-        """
-        return Response(self._to_representation(self.get_queryset()))
