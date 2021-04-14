@@ -2,16 +2,14 @@ from rest_framework.test import APITestCase, APIClient
 from rest_framework.reverse import reverse
 
 from core.factories import OrganisationFactory, DonorFactory, UserProfileFactory
-from country.models import Country, Donor
-from user.models import UserProfile, Organisation
+from country.models import Country
+from user.models import UserProfile, Organisation, User
 
 from datetime import datetime, date, timedelta
-from random import randint
 
 from allauth.account.models import EmailConfirmation
-from django.utils.timezone import localdate, localtime
+from django.utils.timezone import localtime
 from kpiexport.tasks import update_auditlog_user_data_task
-from rest_framework.authtoken.models import Token
 
 
 class TestUserKPIData:
@@ -22,7 +20,16 @@ class TestUserKPIData:
     - 2 donors
     """
 
+    @staticmethod
+    def clear_db():
+        Country.objects.all().delete()
+        Organisation.objects.all().delete()
+        UserProfile.objects.all().delete()
+        User.objects.all().delete()
+
     def setUp(self):
+        # clean db
+        self.clear_db()
         # Create organisation and donors
         self.org = OrganisationFactory(name="org1")
         self.d1 = DonorFactory(name="Donor1", code="donor1")
@@ -37,6 +44,20 @@ class TestUserKPIData:
                                                          defaults={"code": "CTR2",
                                                                    "project_approval": True,
                                                                    "region": Country.REGIONS[0][0]})
+        # Create dates
+        self.date_1 = localtime() - timedelta(days=120)
+        self.date_1 = datetime(self.date_1.year, self.date_1.month, 1).astimezone()
+        self.date_1_str = self.date_1.strftime("%Y-%m-%d")
+        self.date_2 = localtime() - timedelta(days=90)
+        self.date_2 = datetime(self.date_2.year, self.date_2.month, 1).astimezone()
+        self.date_2_str = self.date_2.strftime("%Y-%m-%d")
+        self.date_3 = localtime() - timedelta(days=60)
+        self.date_3 = datetime(self.date_3.year, self.date_3.month, 1).astimezone()
+        self.date_3_str = self.date_3.strftime("%Y-%m-%d")
+        self.date_4 = localtime() - timedelta(days=1)
+        self.date_4 = datetime(self.date_4.year, self.date_4.month, 1).astimezone()
+        self.date_4_str = self.date_4.strftime("%Y-%m-%d")
+
         # Create users
         self.userprofile_1, self.test_user_key, self.test_user_client = self.create_user(org=self.org,
                                                                                          country=self.country1)
@@ -44,45 +65,44 @@ class TestUserKPIData:
         self.userprofile_1.save()
         self.userprofile_2 = UserProfileFactory(name="USER2", account_type=UserProfile.IMPLEMENTER,
                                                 country=self.country2)
-        self.userprofile_2.user.date_joined = localtime() - timedelta(days=100)
-        self.userprofile_2.user.last_login = localtime() - timedelta(days=1)  # yesterday
+        self.userprofile_2.user.date_joined = self.date_1
+        self.userprofile_2.user.last_login = self.date_4  # yesterday
         self.userprofile_2.donor = self.d1
         self.userprofile_2.user.save()
         self.userprofile_2.save()
 
         self.userprofile_3 = UserProfileFactory(name="USER3", account_type=UserProfile.GOVERNMENT,
                                                 country=self.country2)
-        self.userprofile_3.user.date_joined = localtime() - timedelta(days=100)
-        self.userprofile_3.user.last_login = localtime() - timedelta(days=1)  # yesterday
+        self.userprofile_3.user.date_joined = self.date_1
+        self.userprofile_3.user.last_login = self.date_4
         self.userprofile_3.donor = self.d2
         self.userprofile_3.user.save()
         self.userprofile_3.save()
 
         self.userprofile_4 = UserProfileFactory(name="USER4", account_type=UserProfile.IMPLEMENTER,
                                                 country=self.country2)
-        self.userprofile_4.user.date_joined = localtime() - timedelta(days=100)
-        self.userprofile_4.user.last_login = localtime() - timedelta(days=1)  # yesterday
+        self.userprofile_4.user.date_joined = self.date_1
+        self.userprofile_4.user.last_login = self.date_4  # yesterday
         self.userprofile_4.donor = self.d2
         self.userprofile_4.user.save()
         self.userprofile_4.save()
 
         self.userprofile_5 = UserProfileFactory(name="USER5", account_type=UserProfile.IMPLEMENTER,
                                                 country=self.country2)
-        self.userprofile_5.user.date_joined = localtime() - timedelta(days=80)
-        self.userprofile_5.user.last_login = localtime() - timedelta(days=60)  # two months ago
+        self.userprofile_5.user.date_joined = self.date_2
+        self.userprofile_5.user.last_login = self.date_3
         self.userprofile_5.donor = self.d2
         self.userprofile_5.user.save()
         self.userprofile_5.save()
 
         self.userprofile_6 = UserProfileFactory(name="USER6", account_type=UserProfile.IMPLEMENTER,
                                                 country=self.country2)
-        self.userprofile_6.user.date_joined = localtime() - timedelta(days=80)
-        self.userprofile_6.user.last_login = localtime() - timedelta(days=60)  # about two months ago
+        self.userprofile_6.user.date_joined = self.date_2
+        self.userprofile_6.user.last_login = self.date_3  # about two months ago
         self.userprofile_6.donor = self.d2
         self.userprofile_6.user.save()
         self.userprofile_6.save()
-
-        generate_date = date.today() - timedelta(days=101)
+        generate_date = date.today() - timedelta(days=150)
         while generate_date <= date.today():
             update_auditlog_user_data_task(generate_date)
             generate_date = generate_date + timedelta(days=1)
@@ -146,45 +166,32 @@ class KPIUserTests(TestUserKPIData, APITestCase):
     def test_user_kpi_nofilter(self):
         url = reverse("user-kpi")
         response = self.client.get(url)
-        expected = [{'active': 0,
-                     'country': self.country2.id,
-                     'data': {'1': {'I': {'active': 0, 'registered': 1}},
-                              '2': {'G': {'active': 0, 'registered': 1},
-                                    'I': {'active': 0, 'registered': 3}}},
-                     'date': '2021-01-01',
-                     'registered': 5},
-                    {'active': 0,
-                     'country': self.country_global.id,
-                     'data': {'1': {'I': {'active': 0, 'registered': 1}},
-                              '2': {'G': {'active': 0, 'registered': 1},
-                                    'I': {'active': 0, 'registered': 3}}},
-                     'date': '2021-01-01',
-                     'registered': 5},
-                    {'active': 2,
-                     'country': self.country2.id,
-                     'data': {'2': {'I': {'active': 2, 'registered': 0}}},
-                     'date': '2021-02-01',
-                     'registered': 0},
-                    {'active': 2,
-                     'country': self.country_global.id,
-                     'data': {'2': {'I': {'active': 2, 'registered': 0}}},
-                     'date': '2021-02-01',
-                     'registered': 0},
-                    {'active': 3,
-                     'country': self.country2.id,
-                     'data': {'1': {'I': {'active': 1, 'registered': 0}},
-                              '2': {'G': {'active': 1, 'registered': 0},
-                                    'I': {'active': 1, 'registered': 0}}},
-                     'date': '2021-04-01',
-                     'registered': 0},
-                    {'active': 3,
-                     'country': self.country_global.id,
-                     'data': {'1': {'I': {'active': 1, 'registered': 0}},
-                              '2': {'G': {'active': 1, 'registered': 0},
-                                    'I': {'active': 1, 'registered': 0}}},
-                     'date': '2021-04-01',
-                     'registered': 0}]
 
+        expected = \
+            [{'active': 0,
+              'country': self.country_global.id,
+              'data': {str(self.d1.id): {'I': {'active': 0, 'registered': 1}},
+                       str(self.d2.id): {'G': {'active': 0, 'registered': 1},
+                                         'I': {'active': 0, 'registered': 1}}},
+              'date': self.date_1_str,
+              'registered': 3},
+             {'active': 0,
+              'country': self.country_global.id,
+              'data': {str(self.d2.id): {'I': {'active': 0, 'registered': 2}}},
+              'date': self.date_2_str,
+              'registered': 2},
+             {'active': 2,
+              'country': self.country_global.id,
+              'data': {str(self.d2.id): {'I': {'active': 2, 'registered': 0}}},
+              'date': self.date_3_str,
+              'registered': 0},
+             {'active': 3,
+              'country': self.country_global.id,
+              'data': {str(self.d1.id): {'I': {'active': 1, 'registered': 0}},
+                       str(self.d2.id): {'G': {'active': 1, 'registered': 0},
+                                         'I': {'active': 1, 'registered': 0}}},
+              'date': self.date_4_str,
+              'registered': 0}]
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected)
 
@@ -192,9 +199,125 @@ class KPIUserTests(TestUserKPIData, APITestCase):
         url = reverse("user-kpi")
         url += f'?country={self.country2.id}'
         response = self.client.get(url)
-        expected = []
-        import ipdb
-        ipdb.set_trace()
+        expected = \
+            [{'active': 0,
+              'country': self.country2.id,
+              'data': {str(self.d1.id): {'I': {'active': 0, 'registered': 1}},
+                       str(self.d2.id): {'G': {'active': 0, 'registered': 1},
+                                         'I': {'active': 0, 'registered': 1}}},
+              'date': self.date_1_str,
+              'registered': 3},
+             {'active': 0,
+              'country': self.country2.id,
+              'data': {str(self.d2.id): {'I': {'active': 0, 'registered': 2}}},
+              'date': self.date_2_str,
+              'registered': 2},
+             {'active': 2,
+              'country': self.country2.id,
+              'data': {str(self.d2.id): {'I': {'active': 2, 'registered': 0}}},
+              'date': self.date_3_str,
+              'registered': 0},
+             {'active': 3,
+              'country': self.country2.id,
+              'data': {str(self.d1.id): {'I': {'active': 1, 'registered': 0}},
+                       str(self.d2.id): {'G': {'active': 1, 'registered': 0},
+                                         'I': {'active': 1, 'registered': 0}}},
+              'date': self.date_4_str,
+              'registered': 0}]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected)
+
+    def test_user_kpi_investor_filter(self):
+        url = reverse("user-kpi")
+        url += f'?investor={self.d1.id}'
+        response = self.client.get(url)
+        expected = \
+            [{'active': 0,
+              'country': self.country_global.id,
+              'data': {str(self.d1.id): {'I': {'active': 0, 'registered': 1}},
+                       str(self.d2.id): {'G': {'active': 0, 'registered': 1},
+                                         'I': {'active': 0, 'registered': 1}}},
+              'date': self.date_1_str,
+              'registered': 3},
+             {'active': 3,
+              'country': self.country_global.id,
+              'data': {str(self.d1.id): {'I': {'active': 1, 'registered': 0}},
+                       str(self.d2.id): {'G': {'active': 1, 'registered': 0},
+                                         'I': {'active': 1, 'registered': 0}}},
+              'date': self.date_4_str,
+              'registered': 0}]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected)
+
+        url = reverse("user-kpi")
+        url += f'?investor={self.d2.id}'
+        response = self.client.get(url)
+        expected = \
+            [{'active': 0,
+              'country': self.country_global.id,
+              'data': {str(self.d1.id): {'I': {'active': 0, 'registered': 1}},
+                       str(self.d2.id): {'G': {'active': 0, 'registered': 1},
+                                         'I': {'active': 0, 'registered': 1}}},
+              'date': self.date_1_str,
+              'registered': 3},
+             {'active': 0,
+              'country': self.country_global.id,
+              'data': {str(self.d2.id): {'I': {'active': 0, 'registered': 2}}},
+              'date': self.date_2_str,
+              'registered': 2},
+             {'active': 2,
+              'country': self.country_global.id,
+              'data': {str(self.d2.id): {'I': {'active': 2, 'registered': 0}}},
+              'date': self.date_3_str,
+              'registered': 0},
+             {'active': 3,
+              'country': self.country_global.id,
+              'data': {str(self.d1.id): {'I': {'active': 1, 'registered': 0}},
+                       str(self.d2.id): {'G': {'active': 1, 'registered': 0},
+                                         'I': {'active': 1, 'registered': 0}}},
+              'date': self.date_4_str,
+              'registered': 0}]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected)
+
+    def test_user_kpi_time_filter(self):
+        url = reverse("user-kpi")
+        url += f'?from={self.date_2.year}-{self.date_2.month}&to={self.date_3.year}-{self.date_3.month}'
+        response = self.client.get(url)
+        expected = \
+            [{'active': 0,
+              'country': self.country_global.id,
+              'data': {str(self.d2.id): {'I': {'active': 0, 'registered': 2}}},
+              'date': self.date_2_str,
+              'registered': 2},
+             {'active': 2,
+              'country': self.country_global.id,
+              'data': {str(self.d2.id): {'I': {'active': 2, 'registered': 0}}},
+              'date': self.date_3_str,
+              'registered': 0}]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected)
+
+    def test_user_kpi_multi_filter(self):
+        url = reverse("user-kpi")
+        url += f'?from={self.date_2.year}-{self.date_2.month}&to={self.date_3.year}-{self.date_3.month}' \
+               f'&country={self.country2.id}'
+        response = self.client.get(url)
+        expected = \
+            [{'active': 0,
+              'country': self.country2.id,
+              'data': {str(self.d2.id): {'I': {'active': 0, 'registered': 2}}},
+              'date': self.date_2_str,
+              'registered': 2},
+             {'active': 2,
+              'country': self.country2.id,
+              'data': {str(self.d2.id): {'I': {'active': 2, 'registered': 0}}},
+              'date': self.date_3_str,
+              'registered': 0}]
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected)

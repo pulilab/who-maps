@@ -1,26 +1,9 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from project.models import Project
-from country.models import Country, Donor
-from user.models import User, UserProfile
-from django.db.models import Q, F, IntegerField
-from django.db.models import Count
-
-from django.contrib.postgres.fields.jsonb import KeyTextTransform
-from django.db.models.functions import Cast
-from django.db.models import QuerySet
-import operator
-from functools import reduce
+from country.models import Country
 from django.shortcuts import get_object_or_404
-from user.authentication import BearerTokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 from datetime import datetime, timedelta
-from core.views import Http400
-from django.utils.timezone import make_aware
 from core.views import TokenAuthMixin
 from kpiexport.models import AuditLogUsers
 from kpiexport.serializers import AuditLogUserSerializer
-from django.views.generic import ListView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework import filters
@@ -43,11 +26,12 @@ class KPIFilterBackend(filters.BaseFilterBackend):
 
         if country_id:
             country = get_object_or_404(Country, pk=int(country_id))
-
+            queryset = queryset.filter(country=country)
+        else:  # Filter for 'global' country
+            country = get_object_or_404(Country, name='Global')
             queryset = queryset.filter(country=country)
         if investor_id:
-            investor = get_object_or_404(Donor, pk=int(investor_id))
-            queryset = queryset.filter(data__investor=investor)
+            queryset = queryset.filter(data__has_key=investor_id)
         if date_from_str:
             date_from = self._parse_date_str(date_from_str)
         else:
