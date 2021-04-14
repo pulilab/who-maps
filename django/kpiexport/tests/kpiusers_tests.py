@@ -13,6 +13,7 @@ from django.utils.timezone import localdate, localtime
 from kpiexport.tasks import update_auditlog_user_data_task
 from rest_framework.authtoken.models import Token
 
+
 class TestUserKPIData:
     """
     Base class for User KPI tests. In setUp, it creates:
@@ -27,9 +28,10 @@ class TestUserKPIData:
         self.d1 = DonorFactory(name="Donor1", code="donor1")
         self.d2 = DonorFactory(name="Donor2", code="donor2")
         # Create countries
+        self.country_global, _ = Country.objects.get_or_create(name="Global")
         self.country1, _ = Country.objects.get_or_create(name="kpi_country_1",
                                                          defaults={"code": "CTR1",
-                                                                   "project_approval": True,
+                                                                   "project_approval": False,
                                                                    "region": Country.REGIONS[0][0]})
         self.country2, _ = Country.objects.get_or_create(name="kpi_country_2",
                                                          defaults={"code": "CTR2",
@@ -138,18 +140,61 @@ class TestUserKPIData:
 
         return userprofile, test_user_key, test_user_client
 
+
 class KPIUserTests(TestUserKPIData, APITestCase):
 
     def test_user_kpi_nofilter(self):
-        from kpiexport.models import AuditLogUsers
-        logs = AuditLogUsers.objects.all()
-        import ipdb
-        ipdb.set_trace()
-
-
         url = reverse("user-kpi")
         response = self.client.get(url)
-        expected = {'deletable': 0, 'draft': 10, 'duplicates': 0, 'publishable': 10, 'published': 10, 'total': 20}
+        expected = [{'active': 0,
+                     'country': self.country2.id,
+                     'data': {'1': {'I': {'active': 0, 'registered': 1}},
+                              '2': {'G': {'active': 0, 'registered': 1},
+                                    'I': {'active': 0, 'registered': 3}}},
+                     'date': '2021-01-01',
+                     'registered': 5},
+                    {'active': 0,
+                     'country': self.country_global.id,
+                     'data': {'1': {'I': {'active': 0, 'registered': 1}},
+                              '2': {'G': {'active': 0, 'registered': 1},
+                                    'I': {'active': 0, 'registered': 3}}},
+                     'date': '2021-01-01',
+                     'registered': 5},
+                    {'active': 2,
+                     'country': self.country2.id,
+                     'data': {'2': {'I': {'active': 2, 'registered': 0}}},
+                     'date': '2021-02-01',
+                     'registered': 0},
+                    {'active': 2,
+                     'country': self.country_global.id,
+                     'data': {'2': {'I': {'active': 2, 'registered': 0}}},
+                     'date': '2021-02-01',
+                     'registered': 0},
+                    {'active': 3,
+                     'country': self.country2.id,
+                     'data': {'1': {'I': {'active': 1, 'registered': 0}},
+                              '2': {'G': {'active': 1, 'registered': 0},
+                                    'I': {'active': 1, 'registered': 0}}},
+                     'date': '2021-04-01',
+                     'registered': 0},
+                    {'active': 3,
+                     'country': self.country_global.id,
+                     'data': {'1': {'I': {'active': 1, 'registered': 0}},
+                              '2': {'G': {'active': 1, 'registered': 0},
+                                    'I': {'active': 1, 'registered': 0}}},
+                     'date': '2021-04-01',
+                     'registered': 0}]
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected)
 
+    def test_user_kpi_country_filter(self):
+        url = reverse("user-kpi")
+        url += f'?country={self.country2.id}'
+        response = self.client.get(url)
+        expected = []
+        import ipdb
+        ipdb.set_trace()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected)
