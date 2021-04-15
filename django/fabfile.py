@@ -24,7 +24,7 @@ def production():
     env.host_string = PROD_HOST_STRING
     env.name = 'production'
     env.port = 22
-    env.branch = "tags/6.1.9"
+    env.branch = "development"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -37,7 +37,7 @@ def staging():
     env.host_string = 'whomaps@139.59.148.238'
     env.name = 'staging'
     env.port = 22
-    env.branch = "tags/6.1.12"
+    env.branch = "development"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -95,12 +95,15 @@ def backup():
     backup_translation_local()
 
 
-def deploy():
+def deploy(tag=None):
     db_up = None
     """Updates the server and restarts the apps"""
     with cd(env.project_root):
         # get new stuff from git
         run('git fetch')
+        if tag:
+            run('git fetch --all --tags')
+            run('git checkout tags/%s' % tag)
         run('git checkout %s' % env.branch)
         run('git pull origin %s' % env.branch)
         time.sleep(10)
