@@ -128,7 +128,7 @@ jobs:
           name: Deploy Over SSH
           working_directory: ~/who-maps/django
           command: |
-            fab staging deploy
+            fab staging deploy:<< pipeline.git.tag >>
           no_output_timeout: "20m"
 
   e2e-dev:
