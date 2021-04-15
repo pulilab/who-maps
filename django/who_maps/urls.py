@@ -9,7 +9,8 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework.routers import SimpleRouter
 
-from country.views import CountryLandingPageViewSet, CountryLandingListPageViewSet
+from country.views import CountryLandingPageViewSet, CountryLandingListPageViewSet, DonorLandingPageViewSet, \
+    DonorLandingListPageViewSet
 from project.views import ProjectPublicViewSet, ExternalDraftAPI, ExternalPublishAPI
 from user.views import OrganisationViewSet
 
@@ -48,6 +49,8 @@ api_info_router = SimpleRouter()
 api_info_router.register(r'api/landing-country', CountryLandingPageViewSet, base_name='landing-country'),
 api_info_router.register(r'api/landing-country', CountryLandingListPageViewSet, base_name='landing-country'),
 api_info_router.register(r'api/organisations', OrganisationViewSet, base_name='organisation')
+api_info_router.register(r'api/landing-donor', DonorLandingPageViewSet, base_name='landing-donor')
+api_info_router.register(r'api/landing-donor', DonorLandingListPageViewSet, base_name='landing-donor')
 # These API urls miss their trailing slashes due to an apparent bug in redoc
 # adding extra trailing slashes. Since these are only used for generating the public docs,
 # this should cause no issue.
