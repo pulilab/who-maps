@@ -93,7 +93,7 @@
                 large
               />
               <chart
-                :chart-data="micro.chartData"
+                :chart-data="micro.chartData || {}"
                 :options="micro.options"
                 :width="72"
                 :height="26"
@@ -116,7 +116,7 @@
             type="doughnut"
             :width="160"
             :height="160"
-            :chart-data="doughnutA.chartData"
+            :chart-data="doughnutA.chartData || {}"
             :options="doughnutA.options"
           />
         </template>
@@ -132,7 +132,7 @@
         <translate>Monthly growth of Projects</translate>
         <template #graph>
           <chart
-            :chart-data="lineA.chartData"
+            :chart-data="lineA.chartData || {}"
             :options="lineA.options"
             :height="360"
           />
@@ -149,7 +149,7 @@
         <translate>Monthly User Activity</translate>
         <template #graph>
           <chart
-            :chart-data="lineB.chartData"
+            :chart-data="lineB.chartData || {}"
             :options="lineB.options"
             :height="300"
           />
@@ -173,7 +173,7 @@
         <template #graph>
           <chart
             type="bar-chart"
-            :chart-data="barA.chartData"
+            :chart-data="barA.chartData || {}"
             :options="barA.options"
             :height="300"
           />
@@ -197,7 +197,7 @@
         <template #graph>
           <chart
             type="bar-chart"
-            :chart-data="barB.chartData"
+            :chart-data="barB.chartData || {}"
             :options="barB.options"
             :height="300"
           />
@@ -220,7 +220,7 @@
         <translate>Monthly growth of API keys</translate>
         <template #graph>
           <chart
-            :chart-data="lineC.chartData"
+            :chart-data="lineC.chartData || {}"
             :options="lineC.options"
             :height="300"
           />
@@ -244,7 +244,7 @@
         <translate>Monthly growth of API keys</translate>
         <template #graph>
           <chart
-            :chart-data="lineC.chartData"
+            :chart-data="lineC.chartData || {}"
             :options="lineC.options"
             :height="320"
           />
@@ -268,7 +268,7 @@
             type="doughnut"
             :width="160"
             :height="160"
-            :chart-data="doughnutB.chartData"
+            :chart-data="doughnutB.chartData || {}"
             :options="doughnutB.options"
           />
         </template>
@@ -284,7 +284,7 @@
         <template #graph>
           <chart
             type="horizontal-bar"
-            :chart-data="horizontalBarA.chartData"
+            :chart-data="horizontalBarA.chartData || {}"
             :options="horizontalBarA.options"
           />
         </template>
@@ -305,7 +305,7 @@
         <template #graph>
           <chart
             type="polar-area"
-            :chart-data="polarA.chartData"
+            :chart-data="polarA.chartData || {}"
             :options="polarA.options"
           />
         </template>
@@ -320,7 +320,7 @@
             type="doughnut"
             :width="160"
             :height="160"
-            :chart-data="doughnutC.chartData"
+            :chart-data="doughnutC.chartData || {}"
             :options="doughnutC.options"
           />
         </template>
@@ -343,7 +343,7 @@
             type="doughnut"
             :width="160"
             :height="160"
-            :chart-data="doughnutD.chartData"
+            :chart-data="doughnutD.chartData || {}"
             :options="doughnutD.options"
           />
         </template>
@@ -369,7 +369,7 @@
         <template #graph>
           <chart
             type="horizontal-bar"
-            :chart-data="horizontalBarB.chartData"
+            :chart-data="horizontalBarB.chartData || {}"
             :options="horizontalBarB.options"
           />
         </template>
@@ -445,7 +445,6 @@ export default {
       backClick: 'charts/handleBackClick'
     }),
     handleRandom () {
-      // nees to wire the click event to the options object of horizontal bar
       this.getDashboardData({ func: this.handleBarClick, refresh: true })
     },
     handleBarClick (point, event) {
