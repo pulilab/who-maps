@@ -52,11 +52,11 @@ class UserKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
 
     Allowed filters:
 
-    * `country`: country ID
-    * `from`: YYYY-MM format, beginning of the sample
-    * `to`: YYYY-MM format, ending of the sample
+    * `country`: country ID, example: 01 (default: Global)
+    * `investor`: investor ID, example: 01 (default: None)
+    * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
+    * `to`: YYYY-MM format, ending of the sample (default: last month)
 
-    By default, results are sent from the past year
     """
 
     serializer_class = AuditLogUserSerializer

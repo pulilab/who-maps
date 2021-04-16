@@ -3,6 +3,7 @@ from django.db.models import Count
 from datetime import datetime, date, timedelta
 import logging
 
+
 @app.task(name='auditlog_update_user_data')
 def update_auditlog_user_data_task(current_date=date.today()):
     """
