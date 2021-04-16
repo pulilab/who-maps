@@ -27,7 +27,7 @@ class KPIFilterBackend(filters.BaseFilterBackend):
         if country_id:
             country = get_object_or_404(Country, pk=int(country_id))
             queryset = queryset.filter(country=country)
-        else:  # Filter for 'global' country
+        else:  # If there's no country filter, return with global data by default
             country = get_object_or_404(Country, name='Global')
             queryset = queryset.filter(country=country)
         if investor_id:
@@ -58,6 +58,7 @@ class UserKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
 
     By default, results are sent from the past year
     """
+
     serializer_class = AuditLogUserSerializer
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
