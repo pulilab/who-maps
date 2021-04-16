@@ -8,7 +8,9 @@ import {
   splitLabel,
   randomData,
   randomNumber,
-  legendGenerator
+  legendGenerator,
+  extract,
+  objectToQueryString
 } from '@/utilities/charts'
 import { formatDate } from '@/utilities/projects'
 import { isBefore } from 'date-fns'
@@ -47,7 +49,13 @@ export const state = () => ({
   countryTable: [],
   // back bar hfa system
   back: [],
-  subtitle: {}
+  subtitle: {},
+  filters: {
+    country: undefined,
+    investor: undefined,
+    from: undefined,
+    to: undefined
+  }
 })
 
 export const actions = {
@@ -244,7 +252,15 @@ export const actions = {
       }
     })
   },
-  getDashboardData ({ commit, dispatch, rootGetters }, { func, refresh }) {
+  async getDashboardData (
+    { state, commit, dispatch, rootGetters },
+    { func, refresh }
+  ) {
+    // /api/kpi/users/?country=40&from=2019-10&to=2020-01
+    const { data: userKpi } = await this.$axios.get(
+      `/api/kpi/users/${objectToQueryString(state.filters)}`
+    )
+
     // start of data that should come from somewhere
     // color sets (should be dynamic?)
     const colorSetA = ['#49BCE8']
@@ -328,8 +344,8 @@ export const actions = {
     // data generation
     const polarAData = randomData(stageLabels.length)
     const monthlyUserActivity = [
-      randomData(monthLabels.length),
-      randomData(monthLabels.length)
+      extract(userKpi, 'registered'),
+      extract(userKpi, 'active')
     ]
     const projectStatusMonthly = [
       randomData(monthLabels.length),
@@ -377,8 +393,8 @@ export const actions = {
       settings({
         type: 'line',
         colors: colorSetB,
-        scales: { x: '2019', y: '# of users' },
-        labels: monthLabels,
+        scales: { x: 'Months', y: '# of users' },
+        labels: extract(userKpi, 'date'),
         tooltip: 'Users',
         data: monthlyUserActivity
       })
@@ -399,13 +415,14 @@ export const actions = {
       settings({
         type: 'bar',
         colors: colorSetB,
-        scales: { x: '2018', y: 'Growth of users' },
-        labels: monthLabels,
+        scales: { x: 'Months', y: 'Growth of users' },
+        labels: extract(userKpi, 'date'),
         legendLabels: [],
         tooltip: 'New users',
         data: monthlyUserActivity
       })
     )
+
     commit(
       'SET_BARB_GRAPH',
       settings({
