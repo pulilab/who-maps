@@ -1,7 +1,7 @@
 from scheduler.celery import app
 from django.db.models import Count
 from datetime import datetime, date, timedelta
-
+import logging
 
 @app.task(name='auditlog_update_user_data')
 def update_auditlog_user_data_task(current_date=date.today()):
@@ -31,17 +31,25 @@ def update_auditlog_user_data_task(current_date=date.today()):
     date = current_date - timedelta(days=1)
     log_date = datetime(date.year, date.month, 1).date()
     qs_visitors = UserProfile.objects.filter(user__last_login__date=date).\
+        filter(country__isnull=False).\
         values('country', 'account_type', 'donor').annotate(Count("id")).order_by()
     for entry in qs_visitors:
-        country = Country.objects.get(pk=entry['country'])
-        donor_id = str(entry['donor'])
-        add_entry_to_data(entry, country, donor_id, log_date, 'active')
-        add_entry_to_data(entry, country_global, donor_id, log_date, 'active')
+        try:
+            country = Country.objects.get(pk=entry['country'])
+            donor_id = str(entry['donor'])
+            add_entry_to_data(entry, country, donor_id, log_date, 'active')
+            add_entry_to_data(entry, country_global, donor_id, log_date, 'active')
+        except Country.DoesNotExist:  # pragma: no cover
+            logging.warning(f'Country with this ID does not exist: {entry["country"]}')
 
     qs_registered = UserProfile.objects.filter(user__date_joined__date=date).\
+        filter(country__isnull=False).\
         values('country', 'account_type', 'donor').annotate(Count("id")).order_by()
     for entry in qs_registered:
-        country = Country.objects.get(pk=entry['country'])
-        donor_id = str(entry['donor'])
-        add_entry_to_data(entry, country, donor_id, log_date, 'registered')
-        add_entry_to_data(entry, country_global, donor_id, log_date, 'registered')
+        try:
+            country = Country.objects.get(pk=entry['country'])
+            donor_id = str(entry['donor'])
+            add_entry_to_data(entry, country, donor_id, log_date, 'registered')
+            add_entry_to_data(entry, country_global, donor_id, log_date, 'registered')
+        except Country.DoesNotExist:  # pragma: no cover
+            logging.warning(f'Country with this ID does not exist: {entry["country"]}')

@@ -178,7 +178,8 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'ext_anon': '200/hour',
         'ext_user': '200/hour'
-    }
+    },
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 

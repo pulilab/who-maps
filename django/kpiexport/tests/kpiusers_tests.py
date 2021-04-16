@@ -3,7 +3,7 @@ from rest_framework.reverse import reverse
 
 from core.factories import OrganisationFactory, DonorFactory, UserProfileFactory
 from country.models import Country
-from user.models import UserProfile, Organisation, User
+from user.models import UserProfile, Organisation
 
 from datetime import datetime, date, timedelta
 
@@ -19,17 +19,7 @@ class TestUserKPIData:
     - 2 countries
     - 2 donors
     """
-
-    @staticmethod
-    def clear_db():
-        Country.objects.all().delete()
-        Organisation.objects.all().delete()
-        UserProfile.objects.all().delete()
-        User.objects.all().delete()
-
     def setUp(self):
-        # clean db
-        self.clear_db()
         # Create organisation and donors
         self.org = OrganisationFactory(name="org1")
         self.d1 = DonorFactory(name="Donor1", code="donor1")
