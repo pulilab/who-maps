@@ -454,6 +454,15 @@ a {
     }
   }
 
+  &.el-button--accent {
+    color: @colorWhite;
+    background-color: @colorBrandAccent;
+
+    &:hover {
+      background-color: @colorBrandAccentLight !important;
+    }
+  }
+
   &.is-disabled {
     color: @colorTextMuted;
     background-color: @colorGrayLighter;
@@ -678,13 +687,13 @@ fieldset {
       border-left: 1px solid @colorGray;
 
       &::before {
-        content: "\E6E1";
+        content: "\E6DF";
         color: @colorTextSecondary;
       }
 
       &.is-reverse {
         &::before {
-          content: "\E6DF";
+          content: "\E6E1";
         }
       }
     }
