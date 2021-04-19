@@ -19,11 +19,15 @@ def update_auditlog_user_data_task(current_date=date.today()):
         log_entry, _ = AuditLogUsers.objects.get_or_create(date=log_date, country=country)
         new_value = log_entry.__getattribute__(attr_name) + entry['id__count']
         log_entry.__setattr__(attr_name, new_value)
+        # generate total data
+        if not log_entry.data.get('total'):
+            log_entry.data['total'] = dict()
         # Generate data structure if needed
         if not log_entry.data.get(donor_id):
-            log_entry.data[donor_id] = {}
+            # TODO: generate total data per donor!
+            log_entry.data[donor_id] = dict(total=dict(active=0, registered=0))
         if not log_entry.data[donor_id].get(entry['account_type']):
-            log_entry.data[donor_id][entry['account_type']] = {'active': 0, 'registered': 0}
+            log_entry.data[donor_id][entry['account_type']] = dict(active=0, registered=0)
         log_entry.data[donor_id][entry['account_type']][attr_name] += entry['id__count']
 
         log_entry.save()
