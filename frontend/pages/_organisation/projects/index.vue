@@ -5,16 +5,10 @@
     </template>
     <template #subtitle>
       <translate>Here are all of the projects you are a</translate>
-      <fa
-        icon="star"
-        class="owner"
-      />
+      <fa icon="star" class="owner" />
       <b><translate>Member</translate></b>
       &nbsp;<translate>or</translate>
-      <fa
-        icon="eye"
-        class="viewer"
-      />
+      <fa icon="eye" class="viewer" />
       <b><translate>Viewer</translate></b>
       &nbsp;<translate>of.</translate>
     </template>
@@ -23,21 +17,21 @@
 </template>
 
 <script>
-import UserProjectList from '@/components/common/UserProjectsList'
-import ProjectLayout from '@/components/project/wrappers/ProjectLayout'
+import UserProjectList from "@/components/common/UserProjectsList";
+import ProjectLayout from "@/components/project/wrappers/ProjectLayout";
 export default {
   components: {
     UserProjectList,
     ProjectLayout
   },
-  middleware: ['isLoggedIn'],
-  async fetch ({ store }) {
-    await store.dispatch('projects/loadUserProjects')
+  middleware: ["isLoggedIn"],
+  async fetch({ store }) {
+    await store.dispatch("projects/loadUserProjects");
   }
-}
+};
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "~assets/style/variables.less";
 @import "~assets/style/mixins.less";
 .svg-inline--fa {

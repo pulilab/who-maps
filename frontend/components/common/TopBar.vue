@@ -1,46 +1,40 @@
 <template>
-  <div
-    v-scroll-class:TopBarMin="180"
-    class="TopBar"
-  >
-    <el-row
-      type="flex"
-      justify="space-between"
-      class="TopBarInner"
-    >
+  <div v-scroll-class:TopBarMin="180" class="TopBar">
+    <el-row type="flex" justify="space-between" class="TopBarInner">
       <el-col class="LogoHolder">
         <!--<nuxt-link :to="localePath({name: 'organisation', params: $route.params})">-->
-        <nuxt-link :to="localePath({name: 'organisation', params: { organisation: '-' }})">
-          <el-row
-            type="flex"
-            align="middle"
-          >
+        <nuxt-link
+          :to="
+            localePath({ name: 'organisation', params: { organisation: '-' } })
+          "
+        >
+          <el-row type="flex" align="middle">
             <el-col class="LogoWHO">
               <img
-                :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
-                :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')"
-              >
+                :src="
+                  customOrganisation ? organisationLogo : '/logo-who-blue.svg'
+                "
+                :alt="
+                  customOrganisation
+                    ? $gettext('Country logo')
+                    : $gettext('WHO logo')
+                "
+              />
             </el-col>
             <el-col class="Separator">
               <div />
             </el-col>
             <el-col :class="customOrganisation ? 'LogoDHASmall' : 'LogoDHA'">
-              <img
-                src="/logo-dha.svg"
-                alt="Digital Health Atlas"
-              >
+              <img src="/logo-dha.svg" alt="Digital Health Atlas" />
             </el-col>
           </el-row>
         </nuxt-link>
       </el-col>
 
-      <el-col
-        v-if="!errorPage"
-        class="RightPart"
-      >
+      <el-col v-if="!errorPage" class="RightPart">
         <!-- ANON MODE -->
         <el-row
-          :class="{'AnonView': !user, 'LoggedInView': user}"
+          :class="{ AnonView: !user, LoggedInView: user }"
           type="flex"
           justify="end"
           align="middle"
@@ -55,7 +49,12 @@
               <div>
                 <nuxt-link
                   key="signupBtn"
-                  :to="localePath({name: 'organisation-signup', params: $route.params})"
+                  :to="
+                    localePath({
+                      name: 'organisation-signup',
+                      params: $route.params
+                    })
+                  "
                   class="HeaderBtn HideOnActive"
                 >
                   <translate>Signup</translate>
@@ -64,7 +63,12 @@
               <div>
                 <nuxt-link
                   key="loginBtn"
-                  :to="localePath({name: 'organisation-login', params: $route.params})"
+                  :to="
+                    localePath({
+                      name: 'organisation-login',
+                      params: $route.params
+                    })
+                  "
                   class="HeaderBtn HideOnActive"
                 >
                   <translate>Login</translate>
@@ -77,7 +81,13 @@
               <div>
                 <nuxt-link
                   key="dashboardBtn"
-                  :to="localePath({name: 'organisation-dashboard', params: $route.params, query: {}})"
+                  :to="
+                    localePath({
+                      name: 'organisation-dashboard',
+                      params: $route.params,
+                      query: {}
+                    })
+                  "
                   class="HeaderBtn"
                 >
                   <translate>Dashboard</translate>
@@ -86,7 +96,12 @@
               <div>
                 <nuxt-link
                   key="myProjectsBtn"
-                  :to="localePath({name: 'organisation-projects', params: $route.params})"
+                  :to="
+                    localePath({
+                      name: 'organisation-projects',
+                      params: $route.params
+                    })
+                  "
                   exact
                   class="HeaderBtn"
                 >
@@ -96,7 +111,12 @@
               <div>
                 <nuxt-link
                   key="planningAndGuidanceBtn"
-                  :to="localePath({name: 'organisation-cms', params: $route.params})"
+                  :to="
+                    localePath({
+                      name: 'organisation-cms',
+                      params: $route.params
+                    })
+                  "
                   class="HeaderBtn"
                 >
                   <translate>Planning and Guidance</translate>
@@ -117,11 +137,15 @@
               <div>
                 <nuxt-link
                   key="newProjectBtn"
-                  :to="localePath({name: 'organisation-projects-create', params: $route.params})"
+                  :to="
+                    localePath({
+                      name: 'organisation-projects-create',
+                      params: $route.params
+                    })
+                  "
                   class="HeaderBtn"
                 >
-                  <fa icon="plus-circle" />
-                  <translate>New Project</translate>
+                  <fa icon="plus-circle" /><translate>New Project</translate>
                 </nuxt-link>
               </div>
               <user-dropdown />
@@ -138,7 +162,12 @@
           <template v-if="!customOrganisation || countrySpecific">
             <el-col>
               <nuxt-link
-                :to="localePath({name: 'organisation', params: {organisation: 'covid-19'}})"
+                :to="
+                  localePath({
+                    name: 'organisation',
+                    params: { organisation: 'covid-19' }
+                  })
+                "
                 class="HeaderBtn CovidLink"
               >
                 COVID-19
@@ -148,14 +177,16 @@
               <country-chooser />
             </el-col>
           </template>
-          <el-col
-            v-else
-            class="CountrySpecificMenu"
-          >
+          <el-col v-else class="CountrySpecificMenu">
             <div>
               <nuxt-link
                 key="whoLandingBtn"
-                :to="localePath({name: 'organisation', params: {organisation: landingData.code}})"
+                :to="
+                  localePath({
+                    name: 'organisation',
+                    params: { organisation: landingData.code }
+                  })
+                "
                 class="HeaderBtn"
               >
                 {{ landingData.name }}
@@ -169,17 +200,17 @@
 </template>
 
 <script>
-import VueScrollClass from 'vue-scroll-class'
-import { mapGetters } from 'vuex'
+import VueScrollClass from "vue-scroll-class";
+import { mapGetters } from "vuex";
 
-import LanguageSelector from './LanguageSelector'
-import UserDropdown from './UserDropdown'
-import ToolkitDialogWrapper from './ToolkitDialogWrapper'
-import CountryChooser from './CountryChooser'
+import LanguageSelector from "./LanguageSelector";
+import UserDropdown from "./UserDropdown";
+import ToolkitDialogWrapper from "./ToolkitDialogWrapper";
+import CountryChooser from "./CountryChooser";
 
 export default {
   directives: {
-    'scroll-class': VueScrollClass
+    "scroll-class": VueScrollClass
   },
   components: {
     LanguageSelector,
@@ -195,194 +226,194 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: 'user/getProfile',
-      landingData: 'landing/getLandingPageData',
-      isCountry: 'landing/getIsCountry'
+      user: "user/getProfile",
+      landingData: "landing/getLandingPageData",
+      isCountry: "landing/getIsCountry"
     }),
-    customOrganisation () {
-      return this.landingData !== null
+    customOrganisation() {
+      return this.landingData !== null;
     },
-    countrySpecific () {
-      return this.customOrganisation && this.landingData.code.length === 2
+    countrySpecific() {
+      return this.customOrganisation && this.landingData.code.length === 2;
     },
-    organisationLogo () {
+    organisationLogo() {
       if (this.landingData) {
-        return this.landingData.logo_url
+        return this.landingData.logo_url;
       }
-      return null
+      return null;
     },
-    countryFlag () {
+    countryFlag() {
       if (this.landingData) {
-        return `/static/flags/${this.landingData.code.toLowerCase()}.png`
+        return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
       }
-      return null
+      return null;
     }
-
   }
-}
+};
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .TopBar {
-    .TopBarInner {
-      .limitPageWidth();
-      height: @topBarHeight;
-      background-color: @colorWhite;
-      align-items: stretch;
-    }
-    .CovidLink {
-      margin-left: -6px !important;
-      margin-right: 10px !important;
-      white-space: nowrap;
+.TopBar {
+  .TopBarInner {
+    .limitPageWidth();
+    height: @topBarHeight;
+    background-color: @colorWhite;
+    align-items: stretch;
+  }
+  .CovidLink {
+    margin-left: -6px !important;
+    margin-right: 10px !important;
+    white-space: nowrap;
+  }
+
+  .LogoHolder {
+    display: flex;
+    align-self: center;
+    width: auto;
+
+    .LogoWHO {
+      width: 100%;
+
+      img {
+        height: 48px;
+      }
     }
 
-    .LogoHolder {
-      display: flex;
-      align-self: center;
+    .LogoDHA {
+      width: 100%;
+
+      img {
+        height: 38px;
+        transform: translateY(2px);
+      }
+    }
+
+    // TODO: this does not work!
+    // .LogoDHASmall {
+    //   width: 100%;
+
+    //   img {
+    //     height: 32px;
+    //     transform: translate(-3px, 2px);
+    //   }
+    // }
+
+    .Separator {
       width: auto;
+      height: 36px;
+      margin: 0 15px;
 
-      .LogoWHO {
-        width: 100%;
-
-        img {
-          height: 48px;
-        }
-      }
-
-      .LogoDHA {
-        width: 100%;
-
-        img {
-          height: 38px;
-          transform: translateY(2px);
-        }
-      }
-
-      .LogoDHASmall {
-        width: 100%;
-
-        img {
-          height: 34px;
-          transform: translate(-5px);
-        }
-      }
-
-      .Separator {
-        width: auto;
-        height: 36px;
-        margin: 0 15px;
-
-        > div {
-          .SeparatorStyle();
-        }
+      > div {
+        .SeparatorStyle();
       }
     }
+  }
 
-    .RightPart {
-      padding: 15px 0;
+  .RightPart {
+    padding: 15px 0;
 
-      > .el-row > .el-col {
-        width: auto;
-      }
+    > .el-row > .el-col {
+      width: auto;
     }
+  }
 
-    .HideOnActive {
-      &.nuxt-link-active {
-        display: none;
-      }
+  .HideOnActive {
+    &.nuxt-link-active {
+      display: none;
     }
+  }
 
-    .HeaderBtn
+  .HeaderBtn
     // TODO: Remove Angular Material
     // hacking Toolkit md-button :(
     ,.HeaderBtn.md-button
     //
-    {
-      position: relative;
-      height: 24px;
-      margin: 0 3px;
-      padding: 0 10px;
-      font-size: @fontSizeBase;
-      font-weight: 700;
-      line-height: 24px;
-      color: @colorBrandPrimary;
-      text-decoration: none;
-      transition: @transitionAll;
+ {
+    position: relative;
+    height: 24px;
+    margin: 0 3px;
+    padding: 0 10px;
+    font-size: @fontSizeBase;
+    font-weight: 700;
+    line-height: 24px;
+    color: @colorBrandPrimary;
+    text-decoration: none;
+    transition: @transitionAll;
 
-      // hacking Toolkit md-button :(
-      min-height: auto;
-      min-width: auto;
-      overflow: visible;
-      background-color: transparent !important;
+    // hacking Toolkit md-button :(
+    min-height: auto;
+    min-width: auto;
+    overflow: visible;
+    background-color: transparent !important;
 
-      &.md-ink-ripple {
-        > span {
-          letter-spacing: 0 !important;
-        }
-
-        &::before {
-          top: -17px !important;
-        }
+    &.md-ink-ripple {
+      > span {
+        letter-spacing: 0 !important;
       }
-
-      > .md-ripple-container {
-        display: none;
-      }
-      //
 
       &::before {
-        content: "";
-        position: absolute;
-        top: -21px;
-        left: 0;
-        display: inline-block;
-        width: 100%;
-        height: 4px;
-        background-color: @colorWhite;
-        transform: translateY(-4px);
-        transition: @transitionAll;
-      }
-
-      &:hover {
-        color: @colorBrandPrimaryLight;
-
-        &::before {
-          background-color: @colorBrandPrimaryLight;
-          transform: translateY(0);
-        }
-      }
-
-      &.nuxt-link-active {
-        color: @colorBrandAccent;
-
-        &::before {
-          background-color: @colorBrandAccent;
-          transform: translateY(0);
-        }
-      }
-
-      .svg-inline--fa {
-        margin-right: 6px;
+        top: -17px !important;
       }
     }
 
-    .Separator {
-      .SeparatorStyle();
+    > .md-ripple-container {
+      display: none;
+    }
+    //
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -21px;
+      left: 0;
       display: inline-block;
-      margin: 0 20px;
+      width: 100%;
+      height: 4px;
+      background-color: @colorWhite;
+      transform: translateY(-4px);
+      transition: @transitionAll;
     }
 
-    .AuthLinks,
-    .CountrySpecificMenu {
-      .clearfix();
+    &:hover {
+      color: @colorBrandPrimaryLight;
 
-      > div {
-        float: left;
-        height: 24px;
+      &::before {
+        background-color: @colorBrandPrimaryLight;
+        transform: translateY(0);
       }
+    }
+
+    &.nuxt-link-active {
+      color: @colorBrandAccent;
+
+      &::before {
+        background-color: @colorBrandAccent;
+        transform: translateY(0);
+      }
+    }
+
+    .svg-inline--fa {
+      margin-right: 6px;
     }
   }
+
+  .Separator {
+    .SeparatorStyle();
+    display: inline-block;
+    margin: 0 20px;
+  }
+
+  .AuthLinks,
+  .CountrySpecificMenu {
+    .clearfix();
+
+    > div {
+      float: left;
+      height: 24px;
+    }
+  }
+}
 </style>
