@@ -7,6 +7,7 @@ from kpiexport.serializers import AuditLogUserSerializer
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework import filters
+from rest_framework.permissions import IsAuthenticated
 
 
 class KPIFilterBackend(filters.BaseFilterBackend):
@@ -58,8 +59,9 @@ class UserKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     * `to`: YYYY-MM format, ending of the sample (default: last month)
 
     """
-
     serializer_class = AuditLogUserSerializer
+    # TODO: permission handling
+    # permission_classes = (IsAuthenticated,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogUsers.objects.all()
