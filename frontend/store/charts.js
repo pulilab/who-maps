@@ -13,7 +13,7 @@ import {
   objectToQueryString
 } from '@/utilities/charts'
 import { formatDate } from '@/utilities/projects'
-import { isBefore } from 'date-fns'
+import { isBefore, format } from 'date-fns'
 
 export const state = () => ({
   stages: {
@@ -50,6 +50,8 @@ export const state = () => ({
   // back bar hfa system
   back: [],
   subtitle: {},
+  // filters
+  loading: false,
   filters: {
     country: undefined,
     investor: undefined,
@@ -256,7 +258,8 @@ export const actions = {
     { state, commit, dispatch, rootGetters },
     { func, refresh }
   ) {
-    // /api/kpi/users/?country=40&from=2019-10&to=2020-01
+    // console.log(`/api/kpi/users/${objectToQueryString(state.filters)}`)
+    commit('SET_LOADING', true)
     const { data: userKpi } = await this.$axios.get(
       `/api/kpi/users/${objectToQueryString(state.filters)}`
     )
@@ -394,7 +397,7 @@ export const actions = {
         type: 'line',
         colors: colorSetB,
         scales: { x: 'Months', y: '# of users' },
-        labels: extract(userKpi, 'date'),
+        labels: extract(userKpi, 'date').map(d => format(d, 'YYYY-MMM')),
         tooltip: 'Users',
         data: monthlyUserActivity
       })
@@ -416,7 +419,7 @@ export const actions = {
         type: 'bar',
         colors: colorSetB,
         scales: { x: 'Months', y: 'Growth of users' },
-        labels: extract(userKpi, 'date'),
+        labels: extract(userKpi, 'date').map(d => format(d, 'YYYY-MMM')),
         legendLabels: [],
         tooltip: 'New users',
         data: monthlyUserActivity
@@ -615,6 +618,7 @@ export const actions = {
     commit('SET_PREVIOUS', randomNumber())
     // click function link
     commit('SET_BAR_CLICK', func)
+    commit('SET_LOADING', false)
   },
   handleBarClick ({ state, commit, dispatch }, { func, idx }) {
     const newStack = {
@@ -632,6 +636,9 @@ export const actions = {
       state.back.length > 0 ? state.back[state.back.length - 1] : {}
     )
     dispatch('getDashboardData', { func, refresh: false })
+  },
+  setFilters ({ state, commit }, filters) {
+    commit('SET_FILTERS', filters)
   }
 }
 
@@ -725,6 +732,12 @@ export const mutations = {
   },
   SET_SUBTITLE: (state, val) => {
     state.subtitle = val
+  },
+  SET_FILTERS: (state, val) => {
+    state.filters = val
+  },
+  SET_LOADING: (state, val) => {
+    state.loading = val
   }
 }
 
