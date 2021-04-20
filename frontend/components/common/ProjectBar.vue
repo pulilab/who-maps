@@ -6,28 +6,16 @@
         justify="space-between"
         :class="user ? '' : 'project-bar-wrapper--margin-bottom'"
       >
-        <el-col
-          :span="12"
-          class="ProjectName"
-        >
+        <el-col :span="12" class="ProjectName">
           <div>
             {{ project.name }}
             <project-legend :id="project.id" />
           </div>
         </el-col>
 
-        <el-col
-          :span="12"
-          class="ProjectInfo"
-        >
-          <el-row
-            type="flex"
-            justify="end"
-          >
-            <el-col
-              :span="8"
-              class="InfoSection"
-            >
+        <el-col :span="12" class="ProjectInfo">
+          <el-row type="flex" justify="end">
+            <el-col :span="8" class="InfoSection">
               <div class="Label">
                 <translate>Last Updated</translate>
               </div>
@@ -35,11 +23,7 @@
                 {{ modified }}
               </div>
             </el-col>
-            <el-col
-              v-show="user"
-              :span="8"
-              class="InfoSection"
-            >
+            <el-col v-show="user" :span="8" class="InfoSection">
               <div class="Label">
                 <translate>Organisation</translate>
               </div>
@@ -70,19 +54,13 @@
               :span="8"
               class="InfoSection"
             >
-              <UidPopOver
-                :uid="publicProfile.public_id"
-                type="infoSection"
-              />
+              <UidPopOver :uid="publicProfile.public_id" type="infoSection" />
             </el-col>
           </el-row>
         </el-col>
       </el-row>
 
-      <div
-        v-show="user"
-        class="ProjectMenu"
-      >
+      <div v-show="user" class="ProjectMenu">
         <template v-for="link in links">
           <nuxt-link
             v-if="link.conditional"
@@ -99,11 +77,11 @@
 </template>
 
 <script>
-import { format } from 'date-fns'
-import { mapGetters } from 'vuex'
-import OrganisationItem from './OrganisationItem'
-import ProjectLegend from './ProjectLegend'
-import UidPopOver from '@/components/common/UidPopOver'
+import { format } from "date-fns";
+import { mapGetters } from "vuex";
+import OrganisationItem from "./OrganisationItem";
+import ProjectLegend from "./ProjectLegend";
+import UidPopOver from "@/components/common/UidPopOver";
 
 export default {
   components: {
@@ -111,120 +89,122 @@ export default {
     ProjectLegend,
     UidPopOver
   },
-  data () {
+  data() {
     return {
       publicProfile: {}
-    }
+    };
   },
   computed: {
     ...mapGetters({
-      draft: 'project/getProjectData',
-      published: 'project/getPublished',
-      user: 'user/getProfile'
+      draft: "project/getProjectData",
+      published: "project/getPublished",
+      user: "user/getProfile"
     }),
-    project () {
-      return this.published && this.published.name ? this.published : this.draft
+    project() {
+      return this.published && this.published.name
+        ? this.published
+        : this.draft;
     },
-    id () {
+    id() {
       return parseInt(this.$route.params.id, 10)
         ? +this.$route.params.id
-        : this.$route.params.id
+        : this.$route.params.id;
     },
-    route () {
-      return this.$route.name.split('__')[0]
+    route() {
+      return this.$route.name.split("__")[0];
     },
-    isTeam () {
+    isTeam() {
       if (this.user) {
-        return this.user.member.includes(+this.$route.params.id)
+        return this.user.member.includes(+this.$route.params.id);
       }
-      return false
+      return false;
     },
-    isViewer () {
+    isViewer() {
       if (this.user) {
         return (
           this.user.is_superuser ||
           this.user.viewer.includes(+this.$route.params.id)
-        )
+        );
       }
-      return true
+      return true;
     },
-    anon () {
-      return !this.isViewer && !this.isTeam
+    anon() {
+      return !this.isViewer && !this.isTeam;
     },
-    modified () {
+    modified() {
       if (this.project) {
-        return format(this.project.modified, 'DD-MM-YYYY')
+        return format(this.project.modified, "DD-MM-YYYY");
       }
-      return null
+      return null;
     },
-    links () {
+    links() {
       return [
         {
           conditional: this.published.name,
-          route: 'published',
-          title: this.$gettext('View Published')
+          route: "published",
+          title: this.$gettext("View Published")
         },
         {
           conditional: this.isTeam,
-          route: '',
-          title: this.$gettext('View Draft')
+          route: "",
+          title: this.$gettext("View Draft")
         },
         {
           conditional: this.isTeam,
-          route: 'edit',
-          title: this.$gettext('Edit Draft')
+          route: "edit",
+          title: this.$gettext("Edit Draft")
         },
         {
           conditional: this.isTeam,
-          route: 'stages',
-          title: this.$gettext('Stages')
+          route: "stages",
+          title: this.$gettext("Stages")
         },
         {
           conditional: true,
-          route: 'assessment',
-          title: this.$gettext('Assessment')
+          route: "assessment",
+          title: this.$gettext("Assessment")
         },
         {
           conditional: this.isTeam,
-          route: 'toolkit',
-          title: this.$gettext('Update score')
+          route: "toolkit",
+          title: this.$gettext("Update score")
         },
         {
           conditional: this.isTeam,
-          route: 'toolkit-scorecard',
-          title: this.$gettext('Summary score')
+          route: "toolkit-scorecard",
+          title: this.$gettext("Summary score")
         }
-      ]
+      ];
     }
   },
-  async mounted () {
-    this.publicProfile = await this.handlePublicProfile()
+  async mounted() {
+    this.publicProfile = await this.handlePublicProfile();
   },
 
   methods: {
-    async handlePublicProfile () {
-      const { data } = await this.$axios.get(`/api/projects/${this.id}/`)
-      return data
+    async handlePublicProfile() {
+      const { data } = await this.$axios.get(`/api/projects/${this.id}/`);
+      return data;
     },
-    handleLinkTo (name = '') {
+    handleLinkTo(name = "") {
       return this.localePath({
-        name: `organisation-projects-id${name ? `-${name}` : ''}`,
+        name: `organisation-projects-id${name ? `-${name}` : ""}`,
         params: { id: this.id, organisation: this.$route.params.organisation }
-      })
+      });
     },
-    handleActive (name = '') {
+    handleActive(name = "") {
       return {
         Active:
-          `organisation-projects-id${name ? `-${name}` : ''}` === this.route
-      }
+          `organisation-projects-id${name ? `-${name}` : ""}` === this.route
+      };
     }
   }
-}
+};
 </script>
 
 <style lang="less">
-@import '.~assets/style/variables.less';
-@import '.~assets/style/mixins.less';
+@import ".~assets/style/variables.less";
+@import ".~assets/style/mixins.less";
 
 .ProjectBar {
   background-color: @colorWhite;
@@ -241,6 +221,7 @@ export default {
 
   .ProjectName {
     margin: 14px 0 0;
+    color: @colorTextPrimary;
     font-size: @fontSizeLarge;
     line-height: 22px;
     font-weight: 700;
@@ -313,7 +294,7 @@ export default {
       }
 
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -1px;
         left: 0;

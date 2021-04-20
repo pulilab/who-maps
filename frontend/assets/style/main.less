@@ -158,6 +158,12 @@ a {
 
 .SubPage {
   min-height: 100vh;
+
+  // Copied resizing feature from'Topbar.vue'
+  .LogoDHA img {
+    height: 32px !important;
+    transform: translate(-3px, 2px) !important;
+  }
 }
 
 .PageTitle {
@@ -709,6 +715,8 @@ fieldset {
     .el-tag__close {
       right: -6px;
       top: -1px;
+      color: @colorWhite;
+      font-weight: bold;
     }
   }
 }
