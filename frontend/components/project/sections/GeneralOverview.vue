@@ -21,7 +21,8 @@
           </translate>
           <form-hint>
             <translate key="project-name-hint">
-              If this is your first time uploading a project, a sample data form can be found here for reference.
+              If this is your first time uploading a project, a sample data form
+              can be found here for reference.
             </translate>
           </form-hint>
         </template>
@@ -78,7 +79,11 @@
           <filter-switch
             v-model="isGlobal"
             :label="$gettext('Set project as \'Global project\'') | translate"
-            :tooltip="$gettext('If your project is located in more than one country, or is part of a broader global initiative, your project is a Global Project. Indicated the countries covered and scope in the Narrative Summary Field.') | translate"
+            :tooltip="
+              $gettext(
+                'If your project is located in more than one country, or is part of a broader global initiative, your project is a Global Project. Indicated the countries covered and scope in the Narrative Summary Field.'
+              ) | translate
+            "
             placement="top"
           />
         </div>
@@ -86,7 +91,9 @@
           <fa icon="info-circle" />
           <p>
             <translate>
-              Projects in the DHA can be linked to a specific country, or for projects which operate in multiple countries or across a region, projects can be listed as global.
+              Projects in the DHA can be linked to a specific country, or for
+              projects which operate in multiple countries or across a region,
+              projects can be listed as global.
             </translate>
           </p>
         </span>
@@ -101,7 +108,13 @@
           <translate key="geographic-scope">
             What is the geographic scope of the project?
           </translate>
-          <tooltip :text="$gettext('Describe the user types, geographic coverage and other coverage details.') | translate" />
+          <tooltip
+            :text="
+              $gettext(
+                'Describe the user types, geographic coverage and other coverage details.'
+              ) | translate
+            "
+          />
         </template>
 
         <character-count-input-standalone
@@ -118,7 +131,8 @@
           <fa icon="info-circle" />
           <p>
             <translate>
-              Please describe where your implementation is currently taking place
+              Please describe where your implementation is currently taking
+              place
             </translate>
           </p>
         </span>
@@ -131,9 +145,15 @@
       >
         <template slot="label">
           <translate key="implementation-overview">
-            Please provide a narrative summary of the digital health implementation.
+            Please provide a narrative summary of the digital health
+            implementation.
           </translate>
-          <tooltip :text="$gettext('Describe your overall digital health project design.') | translate" />
+          <tooltip
+            :text="
+              $gettext('Describe your overall digital health project design.')
+                | translate
+            "
+          />
         </template>
         <character-count-input-standalone
           v-validate="rules.implementation_overview"
@@ -143,11 +163,16 @@
           get="getImplementationOverview"
           set="setImplementationOverview"
           namespace="project"
+          :autosize="{ minRows: 5, maxRows: 20 }"
           type="textarea"
         />
         <span class="Hint">
           <fa icon="info-circle" />
-          <p><translate>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.</translate></p>
+          <p>
+            <translate>Describe what the technology aims to achieve, detailing the
+              users, the reasons for deploying the system, and current and
+              future phases of deployment.</translate>
+          </p>
         </span>
       </custom-required-form-item>
       <el-row
@@ -165,7 +190,13 @@
               <translate key="contact-name">
                 Contact name
               </translate>
-              <tooltip :text="$gettext('This is the individual who will be the lead point of contact for any queries through the DHA.') | translate" />
+              <tooltip
+                :text="
+                  $gettext(
+                    'This is the individual who will be the lead point of contact for any queries through the DHA.'
+                  ) | translate
+                "
+              />
             </template>
 
             <character-count-input-standalone
@@ -214,9 +245,16 @@
         >
           <template slot="label">
             <translate key="team">
-              Add team members (editors)--can modify entry on Add New Project page
+              Add team members (editors)--can modify entry on Add New Project
+              page
             </translate>
-            <tooltip :text="$gettext('Project editors can change and update all project information.') | translate" />
+            <tooltip
+              :text="
+                $gettext(
+                  'Project editors can change and update all project information.'
+                ) | translate
+              "
+            />
           </template>
           <team-selector
             v-model="team"
@@ -234,9 +272,16 @@
         >
           <template slot="label">
             <translate key="viewers">
-              Add team members (viewers)--can receive notification that project has been added
+              Add team members (viewers)--can receive notification that project
+              has been added
             </translate>
-            <tooltip :text="$gettext('Project viewers will be able to view the full project details.') | translate" />
+            <tooltip
+              :text="
+                $gettext(
+                  'Project viewers will be able to view the full project details.'
+                ) | translate
+              "
+            />
           </template>
           <team-selector
             v-model="viewers"
@@ -294,9 +339,7 @@ export default {
   methods: {
     async validate () {
       this.$refs.collapsible.expandCard()
-      const validations = await Promise.all([
-        this.$validator.validate()
-      ])
+      const validations = await Promise.all([this.$validator.validate()])
       console.log('General overview published validation', validations)
       return validations.reduce((a, c) => a && c, true)
     },
@@ -316,28 +359,28 @@ export default {
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .GeneralOverview {
-    .CountrySelector {
-      width: 50%;
-    }
-    .Date {
-      width: 100% !important;
-    }
-    .FilterContainer {
-      display: inline-flex;
-      .FilterLabel {
-        display: inline-block;
-        width: 78px;
-        color: #9D9D9D;
-        font-size: 12px;
-        font-weight: bold;
-        letter-spacing: 0;
-        line-height: 20px;
-        text-align: center;
-      }
+.GeneralOverview {
+  .CountrySelector {
+    width: 50%;
+  }
+  .Date {
+    width: 100% !important;
+  }
+  .FilterContainer {
+    display: inline-flex;
+    .FilterLabel {
+      display: inline-block;
+      width: 78px;
+      color: #9d9d9d;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 0;
+      line-height: 20px;
+      text-align: center;
     }
   }
+}
 </style>
