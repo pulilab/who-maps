@@ -294,9 +294,10 @@ md-dialog {
           }
 
           p.lead {
-            margin-bottom: 30px;
+            // margin-bottom: 60px;
             font-weight: 700;
-            font-size: $title-font-size-base;
+            font-size: 20px;
+            display: inline-block;
           }
 
           .graph {
