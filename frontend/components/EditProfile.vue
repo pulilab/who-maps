@@ -948,8 +948,11 @@ export default {
         }
 
         &.IconNoneUser {
-          font-size: 22px;
+          font-size: 20px;
           right: 5px;
+          .svg-inline--fa {
+            color: @colorBrandPrimary;
+          }
         }
 
         &.IconInvestorUser {
