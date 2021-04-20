@@ -450,7 +450,16 @@ a {
 .el-button {
   // font-family: "Univers", Arial, sans-serif;
   font-family: Arial, sans-serif;
+  line-height: 16px;
   border: 0 !important;
+
+  &.el-button--small {
+    line-height: 14px;
+  }
+
+  &.el-button--large {
+    line-height: 18px;
+  }
 
   &.el-button--default {
     &:not(.is-disabled):hover {
