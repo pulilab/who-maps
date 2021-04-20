@@ -19,6 +19,7 @@ class TestUserKPIData:
     - 2 countries
     - 2 donors
     """
+
     def setUp(self):
         # Create organisation and donors
         self.org = OrganisationFactory(name="org1")
@@ -156,30 +157,27 @@ class KPIUserTests(TestUserKPIData, APITestCase):
     def test_user_kpi_nofilter(self):
         url = reverse("user-kpi")
         response = self.client.get(url)
-
         expected = \
             [{'active': 0,
+              'data': {'total': {'G': {'active': 0, 'registered': 1},
+                                 'I': {'active': 0, 'registered': 2}}},
               'country': self.country_global.id,
-              'data': {str(self.d1.id): {'I': {'active': 0, 'registered': 1}},
-                       str(self.d2.id): {'G': {'active': 0, 'registered': 1},
-                                         'I': {'active': 0, 'registered': 1}}},
               'date': self.date_1_str,
               'registered': 3},
              {'active': 0,
+              'data': {'total': {'I': {'active': 0, 'registered': 2}}},
               'country': self.country_global.id,
-              'data': {str(self.d2.id): {'I': {'active': 0, 'registered': 2}}},
               'date': self.date_2_str,
               'registered': 2},
              {'active': 2,
+              'data': {'total': {'I': {'active': 2, 'registered': 0}}},
               'country': self.country_global.id,
-              'data': {str(self.d2.id): {'I': {'active': 2, 'registered': 0}}},
               'date': self.date_3_str,
               'registered': 0},
              {'active': 3,
+              'data': {'total': {'G': {'active': 1, 'registered': 0},
+                                 'I': {'active': 2, 'registered': 0}}},
               'country': self.country_global.id,
-              'data': {str(self.d1.id): {'I': {'active': 1, 'registered': 0}},
-                       str(self.d2.id): {'G': {'active': 1, 'registered': 0},
-                                         'I': {'active': 1, 'registered': 0}}},
               'date': self.date_4_str,
               'registered': 0}]
         self.assertEqual(response.status_code, 200)
@@ -192,29 +190,26 @@ class KPIUserTests(TestUserKPIData, APITestCase):
         expected = \
             [{'active': 0,
               'country': self.country2.id,
-              'data': {str(self.d1.id): {'I': {'active': 0, 'registered': 1}},
-                       str(self.d2.id): {'G': {'active': 0, 'registered': 1},
-                                         'I': {'active': 0, 'registered': 1}}},
+              'data': {'total': {'G': {'active': 0, 'registered': 1},
+                                 'I': {'active': 0, 'registered': 2}}},
               'date': self.date_1_str,
               'registered': 3},
              {'active': 0,
               'country': self.country2.id,
-              'data': {str(self.d2.id): {'I': {'active': 0, 'registered': 2}}},
+              'data': {'total': {'I': {'active': 0, 'registered': 2}}},
               'date': self.date_2_str,
               'registered': 2},
              {'active': 2,
               'country': self.country2.id,
-              'data': {str(self.d2.id): {'I': {'active': 2, 'registered': 0}}},
+              'data': {'total': {'I': {'active': 2, 'registered': 0}}},
               'date': self.date_3_str,
               'registered': 0},
              {'active': 3,
               'country': self.country2.id,
-              'data': {str(self.d1.id): {'I': {'active': 1, 'registered': 0}},
-                       str(self.d2.id): {'G': {'active': 1, 'registered': 0},
-                                         'I': {'active': 1, 'registered': 0}}},
+              'data': {'total': {'G': {'active': 1, 'registered': 0},
+                                 'I': {'active': 2, 'registered': 0}}},
               'date': self.date_4_str,
               'registered': 0}]
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected)
 
@@ -225,19 +220,27 @@ class KPIUserTests(TestUserKPIData, APITestCase):
         expected = \
             [{'active': 0,
               'country': self.country_global.id,
-              'data': {str(self.d1.id): {'I': {'active': 0, 'registered': 1}},
+              'data': {str(self.d1.id): {'I': {'active': 0, 'registered': 1},
+                                         'total': {'active': 0, 'registered': 1}},
                        str(self.d2.id): {'G': {'active': 0, 'registered': 1},
-                                         'I': {'active': 0, 'registered': 1}}},
+                                         'I': {'active': 0, 'registered': 1},
+                                         'total': {'active': 0, 'registered': 2}},
+                       'total': {'G': {'active': 0, 'registered': 1},
+                                 'I': {'active': 0, 'registered': 2}}},
               'date': self.date_1_str,
               'registered': 3},
              {'active': 3,
               'country': self.country_global.id,
-              'data': {str(self.d1.id): {'I': {'active': 1, 'registered': 0}},
+              'data': {str(self.d1.id): {'I': {'active': 1, 'registered': 0},
+                                         'total': {'active': 1, 'registered': 0}},
                        str(self.d2.id): {'G': {'active': 1, 'registered': 0},
-                                         'I': {'active': 1, 'registered': 0}}},
+                                         'I': {'active': 1, 'registered': 0},
+                                         'total': {'active': 2, 'registered': 0}},
+                       'total': {'G': {'active': 1, 'registered': 0},
+                                 'I': {'active': 2, 'registered': 0}}},
+
               'date': self.date_4_str,
               'registered': 0}]
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected)
 
@@ -247,26 +250,41 @@ class KPIUserTests(TestUserKPIData, APITestCase):
         expected = \
             [{'active': 0,
               'country': self.country_global.id,
-              'data': {str(self.d1.id): {'I': {'active': 0, 'registered': 1}},
+              'data': {str(self.d1.id): {'I': {'active': 0, 'registered': 1},
+                                         'total': {'active': 0, 'registered': 1}},
                        str(self.d2.id): {'G': {'active': 0, 'registered': 1},
-                                         'I': {'active': 0, 'registered': 1}}},
+                                         'I': {'active': 0, 'registered': 1},
+                                         'total': {'active': 0, 'registered': 2}},
+                       'total': {'G': {'active': 0, 'registered': 1},
+                                 'I': {'active': 0, 'registered': 2}}},
+
               'date': self.date_1_str,
               'registered': 3},
              {'active': 0,
               'country': self.country_global.id,
-              'data': {str(self.d2.id): {'I': {'active': 0, 'registered': 2}}},
+              'data': {str(self.d2.id): {'I': {'active': 0, 'registered': 2},
+                                         'total': {'active': 0, 'registered': 2}},
+                       'total': {'I': {'active': 0, 'registered': 2}}},
+
               'date': self.date_2_str,
               'registered': 2},
              {'active': 2,
               'country': self.country_global.id,
-              'data': {str(self.d2.id): {'I': {'active': 2, 'registered': 0}}},
+              'data': {str(self.d2.id): {'I': {'active': 2, 'registered': 0},
+                                         'total': {'active': 2, 'registered': 0}},
+                       'total': {'I': {'active': 2, 'registered': 0}}},
               'date': self.date_3_str,
               'registered': 0},
              {'active': 3,
               'country': self.country_global.id,
-              'data': {str(self.d1.id): {'I': {'active': 1, 'registered': 0}},
+              'data': {str(self.d1.id): {'I': {'active': 1, 'registered': 0},
+                                         'total': {'active': 1, 'registered': 0}},
                        str(self.d2.id): {'G': {'active': 1, 'registered': 0},
-                                         'I': {'active': 1, 'registered': 0}}},
+                                         'I': {'active': 1, 'registered': 0},
+                                         'total': {'active': 2, 'registered': 0}},
+                       'total': {'G': {'active': 1, 'registered': 0},
+                                 'I': {'active': 2, 'registered': 0}}},
+
               'date': self.date_4_str,
               'registered': 0}]
 
@@ -280,15 +298,14 @@ class KPIUserTests(TestUserKPIData, APITestCase):
         expected = \
             [{'active': 0,
               'country': self.country_global.id,
-              'data': {str(self.d2.id): {'I': {'active': 0, 'registered': 2}}},
+              'data': {'total': {'I': {'active': 0, 'registered': 2}}},
               'date': self.date_2_str,
               'registered': 2},
              {'active': 2,
               'country': self.country_global.id,
-              'data': {str(self.d2.id): {'I': {'active': 2, 'registered': 0}}},
+              'data': {'total': {'I': {'active': 2, 'registered': 0}}},
               'date': self.date_3_str,
               'registered': 0}]
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected)
 
@@ -300,14 +317,59 @@ class KPIUserTests(TestUserKPIData, APITestCase):
         expected = \
             [{'active': 0,
               'country': self.country2.id,
-              'data': {str(self.d2.id): {'I': {'active': 0, 'registered': 2}}},
+              'data': {'total': {'I': {'active': 0, 'registered': 2}}},
               'date': self.date_2_str,
               'registered': 2},
              {'active': 2,
               'country': self.country2.id,
-              'data': {str(self.d2.id): {'I': {'active': 2, 'registered': 0}}},
+              'data': {'total': {'I': {'active': 2, 'registered': 0}}},
               'date': self.date_3_str,
               'registered': 0}]
 
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected)
+
+    def test_user_kpi_detailed(self):
+        url = reverse("user-kpi")
+        url += '?detailed=true'
+        response = self.client.get(url)
+        expected = \
+            [{'active': 0,
+              'country': self.country_global.id,
+              'data': {str(self.d1.id): {'I': {'active': 0, 'registered': 1},
+                                         'total': {'active': 0, 'registered': 1}},
+                       str(self.d2.id): {'G': {'active': 0, 'registered': 1},
+                                         'I': {'active': 0, 'registered': 1},
+                                         'total': {'active': 0, 'registered': 2}},
+                       'total': {'G': {'active': 0, 'registered': 1},
+                                 'I': {'active': 0, 'registered': 2}}},
+
+              'date': self.date_1_str,
+              'registered': 3},
+             {'active': 0,
+              'country': self.country_global.id,
+              'data': {str(self.d2.id): {'I': {'active': 0, 'registered': 2},
+                                         'total': {'active': 0, 'registered': 2}},
+                       'total': {'I': {'active': 0, 'registered': 2}}},
+              'date': self.date_2_str,
+              'registered': 2},
+             {'active': 2,
+              'country': self.country_global.id,
+              'data': {str(self.d2.id): {'I': {'active': 2, 'registered': 0},
+                                         'total': {'active': 2, 'registered': 0}},
+                       'total': {'I': {'active': 2, 'registered': 0}}},
+              'date': self.date_3_str,
+              'registered': 0},
+             {'active': 3,
+              'country': self.country_global.id,
+              'data': {str(self.d1.id): {'I': {'active': 1, 'registered': 0},
+                                         'total': {'active': 1, 'registered': 0}},
+                       str(self.d2.id): {'G': {'active': 1, 'registered': 0},
+                                         'I': {'active': 1, 'registered': 0},
+                                         'total': {'active': 2, 'registered': 0}},
+                       'total': {'G': {'active': 1, 'registered': 0},
+                                 'I': {'active': 2, 'registered': 0}}},
+              'date': self.date_4_str,
+              'registered': 0}]
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected)
