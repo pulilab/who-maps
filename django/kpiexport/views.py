@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from datetime import datetime, timedelta
 from core.views import TokenAuthMixin
 from kpiexport.models import AuditLogUsers
-from kpiexport.serializers import AuditLogUserSerializer
+from kpiexport.serializers import AuditLogUserDetailedSerializer, AuditLogUserBasicSerializer
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework import filters
@@ -54,14 +54,22 @@ class UserKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     Allowed filters:
 
     * `country`: country ID, example: 01 (default: Global)
-    * `investor`: investor ID, example: 01 (default: None)
+    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
     * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
     * `to`: YYYY-MM format, ending of the sample (default: last month)
+    * `detailed`: if set to true, detailed donor-based data will be returned
 
     """
-    serializer_class = AuditLogUserSerializer
-    # TODO: permission handling
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogUsers.objects.all()
+
+    def get_serializer_class(self):
+        # TODO: investor filtering this can be made better, but it's currently not required
+        if (self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true') or \
+                self.request.query_params.get('investor'):
+
+            return AuditLogUserDetailedSerializer
+        else:
+            return AuditLogUserBasicSerializer

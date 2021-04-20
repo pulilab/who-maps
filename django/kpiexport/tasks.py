@@ -22,14 +22,16 @@ def update_auditlog_user_data_task(current_date=date.today()):
         # generate total data
         if not log_entry.data.get('total'):
             log_entry.data['total'] = dict()
+        if not log_entry.data['total'].get(entry['account_type']):
+            log_entry.data['total'][entry['account_type']] = dict(active=0, registered=0)
         # Generate data structure if needed
         if not log_entry.data.get(donor_id):
-            # TODO: generate total data per donor!
             log_entry.data[donor_id] = dict(total=dict(active=0, registered=0))
         if not log_entry.data[donor_id].get(entry['account_type']):
             log_entry.data[donor_id][entry['account_type']] = dict(active=0, registered=0)
         log_entry.data[donor_id][entry['account_type']][attr_name] += entry['id__count']
-
+        log_entry.data[donor_id]['total'][attr_name] += entry['id__count']
+        log_entry.data['total'][entry['account_type']][attr_name] += entry['id__count']
         log_entry.save()
 
     country_global = Country.objects.get(name='Global')
