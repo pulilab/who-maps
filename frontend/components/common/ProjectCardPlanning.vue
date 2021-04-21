@@ -23,9 +23,15 @@
             </el-col>
           </el-row>
 
-          <el-row type="flex" class="FoundIn">
+          <el-row
+            type="flex"
+            class="FoundIn"
+          >
             <el-col>
-              <fa icon="search" size="xs" />
+              <fa
+                icon="search"
+                size="xs"
+              />
               <span>
                 <translate>
                   Found in "Planning & Guidance"
@@ -37,7 +43,10 @@
 
         <el-col :span="2">
           <transition name="el-fade-in">
-            <fa v-show="showArrow" icon="arrow-right" />
+            <fa
+              v-show="showArrow"
+              icon="arrow-right"
+            />
           </transition>
           <project-legend :id="project.id" />
         </el-col>
@@ -47,7 +56,7 @@
 </template>
 
 <script>
-import ProjectLegend from "./ProjectLegend";
+import ProjectLegend from './ProjectLegend'
 
 export default {
   components: {
@@ -67,39 +76,39 @@ export default {
       default: false
     }
   },
-  data() {
+  data () {
     return {
       hovered: false
-    };
+    }
   },
   computed: {
-    cardShadow() {
-      return this.hideBorders ? "never" : "always";
+    cardShadow () {
+      return this.hideBorders ? 'never' : 'always'
     },
-    showArrow() {
-      return this.hovered && this.showArrowOnOver;
+    showArrow () {
+      return this.hovered && this.showArrowOnOver
     },
-    text() {
-      return this.project.body.replace(/<\/?[^>]+>/gi, " ");
+    text () {
+      return this.project.body.replace(/<\/?[^>]+>/gi, ' ')
     }
   },
   methods: {
-    goToProject() {
+    goToProject () {
       const path = this.localePath({
-        name: "organisation-cms",
+        name: 'organisation-cms',
         query: { q: this.project.name }
-      });
-      this.$emit("redirect");
-      this.$router.push(path);
+      })
+      this.$emit('redirect')
+      this.$router.push(path)
     },
-    mouseEnterHandler() {
-      this.hovered = true;
+    mouseEnterHandler () {
+      this.hovered = true
     },
-    mouseLeaveHandler() {
-      this.hovered = false;
+    mouseLeaveHandler () {
+      this.hovered = false
     }
   }
-};
+}
 </script>
 
 <style lang="less">

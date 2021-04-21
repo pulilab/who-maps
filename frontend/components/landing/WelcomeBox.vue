@@ -1,7 +1,10 @@
 <template>
   <div class="WelcomeBox-holder">
     <transition name="el-zoom-in-top">
-      <div v-show="showWelcomeBox" class="WelcomeBox">
+      <div
+        v-show="showWelcomeBox"
+        class="WelcomeBox"
+      >
         <h2><translate>Welcome!</translate></h2>
         <h6>
           <translate>
@@ -18,42 +21,41 @@
           icon="el-icon-close"
           size="large"
           @click="closeWelcomeBox"
-        >
-        </el-button>
+        />
       </div>
     </transition>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       visible: true
-    };
+    }
   },
   computed: {
     ...mapGetters({
-      landingPageDefaults: "system/getLandingPageDefaults",
-      activeCountry: "landing/getActiveCountry",
-      landingData: "landing/getLandingPageData"
+      landingPageDefaults: 'system/getLandingPageDefaults',
+      activeCountry: 'landing/getActiveCountry',
+      landingData: 'landing/getLandingPageData'
     }),
-    showWelcomeBox() {
-      return this.visible && !this.activeCountry;
+    showWelcomeBox () {
+      return this.visible && !this.activeCountry
     },
-    welcomeText() {
+    welcomeText () {
       return this.landingData
         ? this.landingData.cover_text
-        : this.landingPageDefaults.cover_text;
+        : this.landingPageDefaults.cover_text
     }
   },
   methods: {
-    closeWelcomeBox() {
-      this.visible = false;
+    closeWelcomeBox () {
+      this.visible = false
     }
   }
-};
+}
 </script>
 
 <style lang="less">

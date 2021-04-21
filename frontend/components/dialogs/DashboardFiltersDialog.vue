@@ -8,7 +8,10 @@
     custom-class="FilterDialog"
     @open="loadCurrentSelection"
   >
-    <el-row type="flex" class="FilterDialogWrapper">
+    <el-row
+      type="flex"
+      class="FilterDialogWrapper"
+    >
       <el-col class="FilterSelector">
         <filter-item
           :active="selectedFilter === 'dhi'"
@@ -70,9 +73,16 @@
       </el-col>
     </el-row>
     <span slot="footer">
-      <el-row type="flex" align="center">
+      <el-row
+        type="flex"
+        align="center"
+      >
         <el-col class="SecondaryButtons">
-          <el-button type="text" class="CancelButton" @click="cancel">
+          <el-button
+            type="text"
+            class="CancelButton"
+            @click="cancel"
+          >
             <translate>Cancel</translate>
           </el-button>
           <!-- <el-button
@@ -83,7 +93,10 @@
           </el-button> -->
         </el-col>
         <el-col class="PrimaryButtons">
-          <el-button type="primary" @click="apply">
+          <el-button
+            type="primary"
+            @click="apply"
+          >
             <translate>Apply filters</translate>
           </el-button>
         </el-col>
@@ -93,14 +106,14 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import { mapGettersActions } from "../../utilities/form.js";
-import FilterItem from "./FilterItem";
-import HealthFocusAreasFilter from "./filters/HealthFocusAreaFilter";
-import DigitalHealthInterventionsFilter from "./filters/DigitalHealthInterventionsFilter";
-import HealthInformationSystemFilter from "./filters/HealthInformationSystemFilter";
-import HealthSystemChallengesFilter from "./filters/HealthSystemChallengesFilter";
-import PlatformFilter from "./filters/PlatformFilter";
+import { mapGetters, mapActions } from 'vuex'
+import { mapGettersActions } from '../../utilities/form.js'
+import FilterItem from './FilterItem'
+import HealthFocusAreasFilter from './filters/HealthFocusAreaFilter'
+import DigitalHealthInterventionsFilter from './filters/DigitalHealthInterventionsFilter'
+import HealthInformationSystemFilter from './filters/HealthInformationSystemFilter'
+import HealthSystemChallengesFilter from './filters/HealthSystemChallengesFilter'
+import PlatformFilter from './filters/PlatformFilter'
 
 export default {
   components: {
@@ -111,74 +124,74 @@ export default {
     HealthSystemChallengesFilter,
     PlatformFilter
   },
-  data() {
+  data () {
     return {
       dhi: [],
       hfa: [],
       hsc: [],
       his: [],
       platforms: []
-    };
+    }
   },
   computed: {
     ...mapGetters({
-      selectedFilter: "layout/getDashboardFiltersDialogState",
-      getSearchParameters: "dashboard/getSearchParameters"
+      selectedFilter: 'layout/getDashboardFiltersDialogState',
+      getSearchParameters: 'dashboard/getSearchParameters'
     }),
     ...mapGettersActions({
-      selectedDHI: ["dashboard", "getSelectedDHI", "setSelectedDHI", 0],
-      selectedHFA: ["dashboard", "getSelectedHFA", "setSelectedHFA", 0],
-      selectedHSC: ["dashboard", "getSelectedHSC", "setSelectedHSC", 0],
-      selectedHIS: ["dashboard", "getSelectedHIS", "setSelectedHIS", 0],
+      selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0],
+      selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
+      selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
+      selectedHIS: ['dashboard', 'getSelectedHIS', 'setSelectedHIS', 0],
       selectedPlatforms: [
-        "dashboard",
-        "getSelectedPlatforms",
-        "setSelectedPlatforms",
+        'dashboard',
+        'getSelectedPlatforms',
+        'setSelectedPlatforms',
         0
       ]
     }),
     visible: {
-      get() {
-        return this.selectedFilter !== null;
+      get () {
+        return this.selectedFilter !== null
       },
-      set() {
-        this.setDashboardFiltersDialogState(null);
+      set () {
+        this.setDashboardFiltersDialogState(null)
       }
     }
   },
   methods: {
     ...mapActions({
-      setDashboardFiltersDialogState: "layout/setDashboardFiltersDialogState"
+      setDashboardFiltersDialogState: 'layout/setDashboardFiltersDialogState'
     }),
-    loadCurrentSelection() {
-      this.dhi = [...this.selectedDHI];
-      this.hfa = [...this.selectedHFA];
-      this.hsc = [...this.selectedHSC];
-      this.his = [...this.selectedHIS];
-      this.platforms = [...this.selectedPlatforms];
+    loadCurrentSelection () {
+      this.dhi = [...this.selectedDHI]
+      this.hfa = [...this.selectedHFA]
+      this.hsc = [...this.selectedHSC]
+      this.his = [...this.selectedHIS]
+      this.platforms = [...this.selectedPlatforms]
     },
-    clearAll() {
-      this.dhi = [];
-      this.hfa = [];
-      this.hsc = [];
-      this.his = [];
-      this.platforms = [];
+    clearAll () {
+      this.dhi = []
+      this.hfa = []
+      this.hsc = []
+      this.his = []
+      this.platforms = []
     },
-    cancel() {
-      this.setDashboardFiltersDialogState(null);
+    cancel () {
+      this.setDashboardFiltersDialogState(null)
     },
-    apply() {
-      this.selectedDHI = this.dhi;
-      this.selectedHFA = this.hfa;
-      this.selectedHSC = this.hsc;
-      this.selectedHIS = this.his;
-      this.selectedPlatforms = this.platforms;
+    apply () {
+      this.selectedDHI = this.dhi
+      this.selectedHFA = this.hfa
+      this.selectedHSC = this.hsc
+      this.selectedHIS = this.his
+      this.selectedPlatforms = this.platforms
       this.$nextTick(() => {
-        this.setDashboardFiltersDialogState(null);
-      });
+        this.setDashboardFiltersDialogState(null)
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="less">

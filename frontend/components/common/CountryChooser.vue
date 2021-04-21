@@ -19,8 +19,13 @@
           :src="countryFlag"
           alt="country flag"
           class="CountryFlag"
+        >
+        <fa
+          v-else
+          size="lg"
+          class="AllIcon CountryFlag"
+          icon="globe"
         />
-        <fa v-else size="lg" class="AllIcon CountryFlag" icon="globe" />
         <div class="CountryName">
           <template v-if="landingData">
             {{ landingData.name }}
@@ -34,8 +39,15 @@
     </el-button>
 
     <div class="Search-container">
-      <el-input v-model="search" size="small" placeholder="Search country">
-        <i slot="prefix" class="el-input__icon ">
+      <el-input
+        v-model="search"
+        size="small"
+        placeholder="Search country"
+      >
+        <i
+          slot="prefix"
+          class="el-input__icon "
+        >
           <fa icon="search" />
         </i>
       </el-input>
@@ -53,10 +65,20 @@
       >
         <div class="List-container CustomPopoverList">
           <ul>
-            <li :class="{ Active: active() }" @click="selectCountry()">
-              <fa size="lg" class="AllIcon" icon="globe" />
+            <li
+              :class="{ Active: active() }"
+              @click="selectCountry()"
+            >
+              <fa
+                size="lg"
+                class="AllIcon"
+                icon="globe"
+              />
               <translate>All countries</translate>
-              <fa icon="check" class="check" />
+              <fa
+                icon="check"
+                class="check"
+              />
             </li>
             <li
               v-for="country in filteredCountries"
@@ -68,9 +90,12 @@
                 :src="getCountryFlag(country.code)"
                 alt="country flag"
                 class="CountryInnerFlag"
-              />
+              >
               {{ country.name }}
-              <fa icon="check" class="check" />
+              <fa
+                icon="check"
+                class="check"
+              />
             </li>
           </ul>
         </div>
@@ -80,66 +105,66 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  data() {
+  data () {
     return {
-      search: "",
+      search: '',
       chooserOpen: false
-    };
+    }
   },
   computed: {
     ...mapGetters({
-      landingData: "landing/getLandingPageData",
-      countries: "countries/getCountries"
+      landingData: 'landing/getLandingPageData',
+      countries: 'countries/getCountries'
     }),
-    countryFlag() {
+    countryFlag () {
       if (this.landingData) {
-        return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
+        return `/static/flags/${this.landingData.code.toLowerCase()}.png`
       }
-      return false;
+      return false
     },
-    filteredCountries() {
+    filteredCountries () {
       return this.countries.filter(country => {
         return (
           country.id !== process.env.GlobalCountryID &&
           country.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1
-        );
-      });
+        )
+      })
     },
-    displayListHeight() {
+    displayListHeight () {
       if (this.filteredCountries.length > 9) {
-        return 306;
+        return 306
       }
-      return (this.filteredCountries.length + 1) * 34;
+      return (this.filteredCountries.length + 1) * 34
     }
   },
   methods: {
     ...mapActions({
-      setProjectBoxActiveGlobalTab: "landing/setProjectBoxActiveGlobalTab"
+      setProjectBoxActiveGlobalTab: 'landing/setProjectBoxActiveGlobalTab'
     }),
-    getCountryFlag(code) {
-      return `/static/flags/${code.toLowerCase()}.png`;
+    getCountryFlag (code) {
+      return `/static/flags/${code.toLowerCase()}.png`
     },
-    selectCountry(country) {
-      this.chooserOpen = false;
-      this.setProjectBoxActiveGlobalTab(false);
-      const organisation = country ? country.code.toLowerCase() : "-";
+    selectCountry (country) {
+      this.chooserOpen = false
+      this.setProjectBoxActiveGlobalTab(false)
+      const organisation = country ? country.code.toLowerCase() : '-'
       const localised = this.localePath({
-        name: "organisation",
+        name: 'organisation',
         params: { organisation }
-      });
-      this.$router.push(localised);
+      })
+      this.$router.push(localised)
     },
-    active(code) {
+    active (code) {
       if (!this.landingData) {
-        return !code;
+        return !code
       }
-      return code === this.landingData.code;
+      return code === this.landingData.code
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

@@ -1,6 +1,10 @@
 <template>
   <div class="MyProjectsBox">
-    <el-row type="flex" align="middle" class="ProjectsBoxHeadline">
+    <el-row
+      type="flex"
+      align="middle"
+      class="ProjectsBoxHeadline"
+    >
       <el-col>
         <h2><translate>My Projects</translate></h2>
         <h6>
@@ -32,19 +36,19 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
-import UserProjectsList from "../common/UserProjectsList";
+import UserProjectsList from '../common/UserProjectsList'
 export default {
   components: {
     UserProjectsList
   },
   computed: {
     ...mapGetters({
-      userProjecList: "projects/getUserProjectList"
+      userProjecList: 'projects/getUserProjectList'
     })
   }
-};
+}
 </script>
 
 <style lang="less">
