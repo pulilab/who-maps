@@ -4,7 +4,10 @@
       <h2><translate>Edit my profile</translate></h2>
     </div>
 
-    <el-card :body-style="{ padding: '0px' }" class="ProfileCard">
+    <el-card
+      :body-style="{ padding: '0px' }"
+      class="ProfileCard"
+    >
       <el-form
         ref="editProfileForm"
         :rules="rules"
@@ -14,7 +17,10 @@
         @submit.native.prevent
       >
         <el-row type="flex">
-          <el-col :span="12" class="UserForm">
+          <el-col
+            :span="12"
+            class="UserForm"
+          >
             <el-form-item
               :label="$gettext('First and Last Name') | translate"
               prop="name"
@@ -32,7 +38,11 @@
             >
               <el-row>
                 <el-col :span="17">
-                  <el-input v-model="innerProfile.email" disabled type="text" />
+                  <el-input
+                    v-model="innerProfile.email"
+                    disabled
+                    type="text"
+                  />
                 </el-col>
                 <el-col :span="7">
                   <el-button
@@ -132,7 +142,10 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="12" class="UserRole">
+          <el-col
+            :span="12"
+            class="UserRole"
+          >
             <!-- SELECT ACCOUNT TYPE -->
             <div
               v-if="
@@ -147,24 +160,36 @@
                 <translate>I request to be a:</translate>
               </h5>
 
-              <h5 v-if="userTypeRequested" class="RoleRequested">
-                <fa icon="circle-notch" spin /><translate
-                  >Your user access has been submitted</translate
-                >
+              <h5
+                v-if="userTypeRequested"
+                class="RoleRequested"
+              >
+                <fa
+                  icon="circle-notch"
+                  spin
+                /><translate>
+                  Your user access has been submitted
+                </translate>
               </h5>
 
               <p v-if="userTypeRequested">
-                <translate
-                  >We will notify you via email when your user access has been
+                <translate>
+                  We will notify you via email when your user access has been
                   approved. If you would like to request a different type of
                   access, you can resubmit the form below and saving your
-                  changes.</translate
-                >
+                  changes.
+                </translate>
               </p>
 
-              <div v-if="userTypeRequested" class="Separator" />
+              <div
+                v-if="userTypeRequested"
+                class="Separator"
+              />
 
-              <el-checkbox v-model="isNoneUser" border>
+              <el-checkbox
+                v-model="isNoneUser"
+                border
+              >
                 <span class="IconRole IconNoneUser">
                   <fa icon="user-friends" />
                 </span>
@@ -172,14 +197,14 @@
               </el-checkbox>
 
               <p class="UserArchTypeText">
-                <translate
-                  >The DHA has additional features to support Ministries of
+                <translate>
+                  The DHA has additional features to support Ministries of
                   Health and Investors to understand and organize their digital
                   health implementations. If you plan to use the DHA to register
                   projects only, select this option for your profile. Your
                   access level can be updated at any time by returning to your
-                  profile page.</translate
-                >
+                  profile page.
+                </translate>
               </p>
 
               <div class="Separator Or">
@@ -187,20 +212,23 @@
               </div>
 
               <section class="space-bottom">
-                <el-checkbox v-model="isCountryUser" border>
-                  <span class="IconRole IconGovernmentUser" /><translate
-                    >Government user</translate
-                  >
+                <el-checkbox
+                  v-model="isCountryUser"
+                  border
+                >
+                  <span class="IconRole IconGovernmentUser" /><translate>
+                    Government user
+                  </translate>
                 </el-checkbox>
 
                 <p class="UserArchTypeText">
-                  <translate
-                    >Privileges for Government Users are detailed below. Select
+                  <translate>
+                    Privileges for Government Users are detailed below. Select
                     the user type that most matches your role within the DHA.
                     This request will be received by the Government Admin team
                     and a response will be sent via email for your
-                    request.</translate
-                  >
+                    request.
+                  </translate>
                 </p>
 
                 <el-collapse-transition>
@@ -210,14 +238,20 @@
                     :disabled="!isCountryUser"
                     class="OnePerRow"
                   >
-                    <el-radio label="G" class="RadioSmall">
+                    <el-radio
+                      label="G"
+                      class="RadioSmall"
+                    >
                       <translate>Government Viewers</translate>
                     </el-radio>
                     <user-privileges
                       v-if="innerProfile.account_type === 'G'"
                       type="G"
                     />
-                    <el-radio label="CA" class="RadioSmall">
+                    <el-radio
+                      label="CA"
+                      class="RadioSmall"
+                    >
                       Government Admins for this country
                     </el-radio>
                     <user-privileges
@@ -225,7 +259,10 @@
                       type="CA"
                     />
 
-                    <el-radio label="SCA" class="RadioSmall">
+                    <el-radio
+                      label="SCA"
+                      class="RadioSmall"
+                    >
                       Government System Admins
                     </el-radio>
                     <user-privileges
@@ -235,26 +272,32 @@
                   </el-radio-group>
                 </el-collapse-transition>
               </section>
-              <el-checkbox v-model="isDonorUser" border>
-                <span class="IconRole IconInvestorUser" /><translate
-                  >Investor</translate
-                >
+              <el-checkbox
+                v-model="isDonorUser"
+                border
+              >
+                <span class="IconRole IconInvestorUser" /><translate>
+                  Investor
+                </translate>
               </el-checkbox>
 
               <p class="UserArchTypeText">
-                <translate
-                  >If you are part of an investor group that is providing either
+                <translate>
+                  If you are part of an investor group that is providing either
                   financial or in-kind support to project activities, the DHA
                   can be used to help organize and connect all of your projects.
                   By joining your investor page, you will see information that
                   is private to your organization. If your group is not listed
                   below, send an email to digital-health-atlas@who.int to add
-                  them to the list.</translate
-                >
+                  them to the list.
+                </translate>
               </p>
 
               <el-collapse-transition>
-                <div v-if="isDonorUser" class="DonorSelectorWrapper">
+                <div
+                  v-if="isDonorUser"
+                  class="DonorSelectorWrapper"
+                >
                   <el-form-item
                     :label="
                       $gettext('I request to join the investor group below:')
@@ -274,7 +317,10 @@
                   :disabled="!isDonorUser"
                   class="OnePerRow"
                 >
-                  <el-radio :label="'D'" class="RadioSmall">
+                  <el-radio
+                    :label="'D'"
+                    class="RadioSmall"
+                  >
                     <translate>Investor Viewers</translate>
                   </el-radio>
                   <user-privileges
@@ -282,7 +328,10 @@
                     type="D"
                   />
 
-                  <el-radio :label="'DA'" class="RadioSmall">
+                  <el-radio
+                    :label="'DA'"
+                    class="RadioSmall"
+                  >
                     <translate>Investor Admins</translate>
                   </el-radio>
                   <user-privileges
@@ -290,7 +339,10 @@
                     type="DA"
                   />
 
-                  <el-radio :label="'SDA'" class="RadioSmall">
+                  <el-radio
+                    :label="'SDA'"
+                    class="RadioSmall"
+                  >
                     <translate>Investor System Admins</translate>
                   </el-radio>
                   <user-privileges
@@ -317,7 +369,10 @@
               </h5>
 
               <div class="UserRoleDescription">
-                <el-button size="mini" @click="changingUserRole">
+                <el-button
+                  size="mini"
+                  @click="changingUserRole"
+                >
                   Change
                 </el-button>
 
@@ -325,7 +380,10 @@
                   v-if="innerProfile.account_type === 'G'"
                   class="ClickThrough"
                 >
-                  <el-row type="flex" align="middle">
+                  <el-row
+                    type="flex"
+                    align="middle"
+                  >
                     <el-col>
                       <span class="IconRole IconGovernmentUser" />
                     </el-col>
@@ -346,11 +404,7 @@
                         innerProfile.role_request_notification
                       "
                     />
-                    <span
-                      ><translate
-                        >My Government Viewer access includes:</translate
-                      ></span
-                    >
+                    <span><translate>My Government Viewer access includes:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'G'"
                       type="G"
@@ -362,7 +416,10 @@
                   v-if="innerProfile.account_type === 'CA'"
                   class="ClickThrough"
                 >
-                  <el-row type="flex" align="middle">
+                  <el-row
+                    type="flex"
+                    align="middle"
+                  >
                     <el-col>
                       <span class="IconRole IconGovernmentUser" />
                     </el-col>
@@ -383,11 +440,7 @@
                         innerProfile.role_request_notification
                       "
                     />
-                    <span
-                      ><translate
-                        >My Government Admin access includes:</translate
-                      ></span
-                    >
+                    <span><translate>My Government Admin access includes:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'CA'"
                       type="CA"
@@ -399,15 +452,16 @@
                   v-if="innerProfile.account_type === 'SCA'"
                   class="ClickThrough"
                 >
-                  <el-row type="flex" align="middle">
+                  <el-row
+                    type="flex"
+                    align="middle"
+                  >
                     <el-col>
                       <span class="IconRole IconGovernmentUser" />
                     </el-col>
                     <el-col>
                       <h5><translate>Government User</translate></h5>
-                      <span
-                        ><translate>Government System Admin</translate></span
-                      >
+                      <span><translate>Government System Admin</translate></span>
                     </el-col>
                   </el-row>
                   <div class="MyPrivileges">
@@ -422,11 +476,7 @@
                         innerProfile.role_request_notification
                       "
                     />
-                    <span
-                      ><translate
-                        >My Government System Admin access includes:</translate
-                      ></span
-                    >
+                    <span><translate>My Government System Admin access includes:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'SCA'"
                       type="SCA"
@@ -438,7 +488,10 @@
                   v-if="innerProfile.account_type === 'D'"
                   class="ClickThrough"
                 >
-                  <el-row type="flex" align="middle">
+                  <el-row
+                    type="flex"
+                    align="middle"
+                  >
                     <el-col>
                       <span class="IconRole IconInvestorUser" />
                     </el-col>
@@ -459,11 +512,7 @@
                         innerProfile.role_request_notification
                       "
                     />
-                    <span
-                      ><translate
-                        >My Investor Viewer access includes:</translate
-                      ></span
-                    >
+                    <span><translate>My Investor Viewer access includes:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'D'"
                       type="D"
@@ -475,7 +524,10 @@
                   v-if="innerProfile.account_type === 'DA'"
                   class="ClickThrough"
                 >
-                  <el-row type="flex" align="middle">
+                  <el-row
+                    type="flex"
+                    align="middle"
+                  >
                     <el-col>
                       <span class="IconRole IconInvestorUser" />
                     </el-col>
@@ -496,11 +548,7 @@
                         innerProfile.role_request_notification
                       "
                     />
-                    <span
-                      ><translate
-                        >My Investor Admin access includes:</translate
-                      ></span
-                    >
+                    <span><translate>My Investor Admin access includes:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'DA'"
                       type="DA"
@@ -512,7 +560,10 @@
                   v-if="innerProfile.account_type === 'SDA'"
                   class="ClickThrough"
                 >
-                  <el-row type="flex" align="middle">
+                  <el-row
+                    type="flex"
+                    align="middle"
+                  >
                     <el-col>
                       <span class="IconRole IconInvestorUser" />
                     </el-col>
@@ -533,11 +584,7 @@
                         innerProfile.role_request_notification
                       "
                     />
-                    <span
-                      ><translate
-                        >My Investor System Admin access includes:</translate
-                      ></span
-                    >
+                    <span><translate>My Investor System Admin access includes:</translate></span>
                     <user-privileges
                       v-if="innerProfile.account_type === 'SDA'"
                       type="SDA"
@@ -556,7 +603,10 @@
             align="middle"
             class="cardActions"
           >
-            <el-col :span="6" class="SecondaryAction">
+            <el-col
+              :span="6"
+              class="SecondaryAction"
+            >
               <el-button
                 type="text"
                 class="CancelButton IconLeft"
@@ -566,7 +616,10 @@
                 <translate>Dismiss changes</translate>
               </el-button>
             </el-col>
-            <el-col :span="6" class="PrimaryAction">
+            <el-col
+              :span="6"
+              class="PrimaryAction"
+            >
               <el-button
                 type="primary"
                 size="medium"
@@ -584,15 +637,15 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import FormAPIErrorsMixin from "./mixins/FormAPIErrorsMixin";
-import OrganisationSelect from "./common/OrganisationSelect";
-import LanguageSelect from "./common/LanguageSelect";
-import CountrySelect from "./common/CountrySelect";
-import DonorSelect from "./common/DonorSelect";
-import UserPrivileges from "./UserPrivileges";
-import FilterSwitch from "~/components/dashboard/FilterSwitch";
-import NotifySwitch from "~/components/common/NotifySwitchers";
+import { mapGetters, mapActions } from 'vuex'
+import FormAPIErrorsMixin from './mixins/FormAPIErrorsMixin'
+import OrganisationSelect from './common/OrganisationSelect'
+import LanguageSelect from './common/LanguageSelect'
+import CountrySelect from './common/CountrySelect'
+import DonorSelect from './common/DonorSelect'
+import UserPrivileges from './UserPrivileges'
+import FilterSwitch from '~/components/dashboard/FilterSwitch'
+import NotifySwitch from '~/components/common/NotifySwitchers'
 
 export default {
   components: {
@@ -605,7 +658,7 @@ export default {
     NotifySwitch
   },
   mixins: [FormAPIErrorsMixin],
-  data() {
+  data () {
     return {
       innerProfile: {
         name: null,
@@ -626,198 +679,198 @@ export default {
       isDonorUser: false,
       isNoneUser: true,
       changeApprovedUserRole: false
-    };
+    }
   },
 
   computed: {
     ...mapGetters({
-      profile: "user/getProfile",
-      user: "user/getUser",
-      donors: "system/getDonors"
+      profile: 'user/getProfile',
+      user: 'user/getUser',
+      donors: 'system/getDonors'
     }),
 
-    userTypeRequested() {
+    userTypeRequested () {
       return (
         this.profile &&
-        this.profile.account_type !== "I" &&
+        this.profile.account_type !== 'I' &&
         !this.profile.account_type_approved
-      );
+      )
     },
-    isDonorRequired() {
+    isDonorRequired () {
       return (
         this.innerProfile &&
         this.innerProfile.account_type &&
-        ["D", "DA", "SDA"].includes(this.innerProfile.account_type)
-      );
+        ['D', 'DA', 'SDA'].includes(this.innerProfile.account_type)
+      )
     },
-    rules() {
+    rules () {
       return {
         name: [
           {
             required: true,
-            message: this.$gettext("This field is required"),
-            trigger: "change"
+            message: this.$gettext('This field is required'),
+            trigger: 'change'
           },
-          { validator: this.validatorGenerator("name") }
+          { validator: this.validatorGenerator('name') }
         ],
         organisation: [
           {
             required: true,
-            message: this.$gettext("This field is required"),
-            trigger: "change"
+            message: this.$gettext('This field is required'),
+            trigger: 'change'
           },
-          { validator: this.validatorGenerator("organisation") }
+          { validator: this.validatorGenerator('organisation') }
         ],
         language: [
           {
             required: true,
-            message: this.$gettext("This field is required"),
-            trigger: "change"
+            message: this.$gettext('This field is required'),
+            trigger: 'change'
           },
-          { validator: this.validatorGenerator("language") }
+          { validator: this.validatorGenerator('language') }
         ],
         country: [
           {
             required: true,
-            message: this.$gettext("This field is required"),
-            trigger: "change"
+            message: this.$gettext('This field is required'),
+            trigger: 'change'
           },
-          { validator: this.validatorGenerator("country") }
+          { validator: this.validatorGenerator('country') }
         ],
         donor: [
           {
             required: this.isDonorRequired,
-            message: this.$gettext("This field is required"),
-            trigger: "change"
+            message: this.$gettext('This field is required'),
+            trigger: 'change'
           },
-          { validator: this.validatorGenerator("donor") }
+          { validator: this.validatorGenerator('donor') }
         ],
         linkedin: [
           {
-            type: "url",
-            message: this.$gettext("Has to be a valid url"),
-            trigger: "blur"
+            type: 'url',
+            message: this.$gettext('Has to be a valid url'),
+            trigger: 'blur'
           },
-          { validator: this.validatorGenerator("linkedin") }
+          { validator: this.validatorGenerator('linkedin') }
         ]
-      };
+      }
     }
   },
 
   watch: {
-    isCountryUser: function(newVal, oldVal) {
+    isCountryUser: function (newVal, oldVal) {
       if (newVal && !oldVal) {
-        this.isDonorUser = false;
-        this.isNoneUser = false;
-        if (!["G", "CA", "SCA"].includes(this.innerProfile.account_type)) {
-          this.innerProfile.account_type = "G";
+        this.isDonorUser = false
+        this.isNoneUser = false
+        if (!['G', 'CA', 'SCA'].includes(this.innerProfile.account_type)) {
+          this.innerProfile.account_type = 'G'
         }
       } else if (!newVal && !this.isDonorUser) {
-        this.innerProfile.account_type = "I";
+        this.innerProfile.account_type = 'I'
       }
     },
-    isDonorUser: function(newVal, oldVal) {
+    isDonorUser: function (newVal, oldVal) {
       if (newVal && !oldVal) {
-        this.isCountryUser = false;
-        this.isNoneUser = false;
-        if (!["D", "DA", "SDA"].includes(this.innerProfile.account_type)) {
-          this.innerProfile.account_type = "D";
+        this.isCountryUser = false
+        this.isNoneUser = false
+        if (!['D', 'DA', 'SDA'].includes(this.innerProfile.account_type)) {
+          this.innerProfile.account_type = 'D'
         }
       } else if (!newVal && !this.isCountryUser) {
-        this.innerProfile.account_type = "I";
+        this.innerProfile.account_type = 'I'
       }
     },
-    isNoneUser: function(newVal, oldVal) {
+    isNoneUser: function (newVal, oldVal) {
       if (newVal && !oldVal) {
-        this.isCountryUser = false;
-        this.isDonorUser = false;
-        this.innerProfile.account_type = "I";
+        this.isCountryUser = false
+        this.isDonorUser = false
+        this.innerProfile.account_type = 'I'
       }
     },
     profile: {
       immediate: true,
-      handler(profile) {
-        this.innerProfile = { ...profile };
+      handler (profile) {
+        this.innerProfile = { ...profile }
       }
     }
   },
 
-  mounted() {
-    this.isCountryUser = ["G", "CA", "SCA"].includes(this.profile.account_type);
-    this.isDonorUser = ["D", "DA", "SDA"].includes(this.profile.account_type);
+  mounted () {
+    this.isCountryUser = ['G', 'CA', 'SCA'].includes(this.profile.account_type)
+    this.isDonorUser = ['D', 'DA', 'SDA'].includes(this.profile.account_type)
   },
 
   methods: {
     ...mapActions({
-      updateUserProfile: "user/updateUserProfile"
+      updateUserProfile: 'user/updateUserProfile'
     }),
 
-    openFeedback() {
-      this.$store.commit("user/SET_FEEDBACK", {
+    openFeedback () {
+      this.$store.commit('user/SET_FEEDBACK', {
         feedbackOn: true,
         feedbackForm: {
-          subject: this.$gettext("Change email request"),
-          message: this.$gettext("Change my email to:")
+          subject: this.$gettext('Change email request'),
+          message: this.$gettext('Change my email to:')
         }
-      });
+      })
     },
 
-    dismissChanges() {
-      this.innerProfile = { ...this.profile };
-      this.$router.go(-1);
+    dismissChanges () {
+      this.innerProfile = { ...this.profile }
+      this.$router.go(-1)
     },
 
-    submit() {
-      this.deleteFormAPIErrors();
-      this.changeApprovedUserRole = false;
+    submit () {
+      this.deleteFormAPIErrors()
+      this.changeApprovedUserRole = false
       this.$refs.editProfileForm.validate(async valid => {
         if (valid) {
           try {
-            const isFirstSave = !this.profile.country;
-            await this.updateUserProfile(this.innerProfile);
-            window.scrollTo(0, 0);
+            const isFirstSave = !this.profile.country
+            await this.updateUserProfile(this.innerProfile)
+            window.scrollTo(0, 0)
             this.$message({
-              message: this.$gettext("Profile succesfully updated"),
-              type: "success",
+              message: this.$gettext('Profile succesfully updated'),
+              type: 'success',
               showClose: true
-            });
+            })
             if (isFirstSave) {
-              this.routeToDashboard(this.innerProfile.language);
+              this.routeToDashboard(this.innerProfile.language)
             } else {
-              this.changeLocale(this.innerProfile.language);
+              this.changeLocale(this.innerProfile.language)
             }
           } catch (err) {
-            console.log("ERR:", err);
-            this.setFormAPIErrors(err);
-            this.$refs.editProfileForm.validate(() => {});
+            console.log('ERR:', err)
+            this.setFormAPIErrors(err)
+            this.$refs.editProfileForm.validate(() => {})
             this.$message({
-              message: this.$gettext("Profile update error"),
-              type: "error",
+              message: this.$gettext('Profile update error'),
+              type: 'error',
               showClose: true
-            });
+            })
           }
         }
-      });
+      })
     },
-    changeLocale(locale) {
+    changeLocale (locale) {
       if (locale !== this.$i18n.locale) {
-        const name = this.$route.name.split("___")[0];
-        const path = this.localePath({ ...this.$route, name }, locale);
-        this.$router.replace(path);
+        const name = this.$route.name.split('___')[0]
+        const path = this.localePath({ ...this.$route, name }, locale)
+        this.$router.replace(path)
       }
     },
-    routeToDashboard(locale) {
+    routeToDashboard (locale) {
       const path = this.localePath(
-        { name: "organisation-dashboard", params: this.$route.params },
+        { name: 'organisation-dashboard', params: this.$route.params },
         locale
-      );
-      this.$router.push(path);
+      )
+      this.$router.push(path)
     },
-    changingUserRole() {
-      this.changeApprovedUserRole = true;
+    changingUserRole () {
+      this.changeApprovedUserRole = true
     }
   }
-};
+}
 </script>
 
 <style lang="less">
@@ -948,8 +1001,11 @@ export default {
         }
 
         &.IconNoneUser {
-          font-size: 22px;
+          font-size: 20px;
           right: 5px;
+          .svg-inline--fa {
+            color: @colorBrandPrimary;
+          }
         }
 
         &.IconInvestorUser {

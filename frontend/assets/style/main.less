@@ -158,6 +158,12 @@ a {
 
 .SubPage {
   min-height: 100vh;
+
+  // Copied resizing feature from'Topbar.vue'
+  .LogoDHA img {
+    height: 32px !important;
+    transform: translate(-3px, 2px) !important;
+  }
 }
 
 .PageTitle {
@@ -444,13 +450,31 @@ a {
 .el-button {
   // font-family: "Univers", Arial, sans-serif;
   font-family: Arial, sans-serif;
+  line-height: 16px;
   border: 0 !important;
+
+  &.el-button--small {
+    line-height: 14px;
+  }
+
+  &.el-button--large {
+    line-height: 18px;
+  }
 
   &.el-button--default {
     &:not(.is-disabled):hover {
       color: @colorWhite;
       border-color: @colorBrandPrimaryLight;
       background-color: @colorBrandPrimaryLight;
+    }
+  }
+
+  &.el-button--accent {
+    color: @colorWhite;
+    background-color: @colorBrandAccent;
+
+    &:hover {
+      background-color: @colorBrandAccentLight !important;
     }
   }
 
@@ -678,13 +702,13 @@ fieldset {
       border-left: 1px solid @colorGray;
 
       &::before {
-        content: "\E6E1";
+        content: "\E6DF";
         color: @colorTextSecondary;
       }
 
       &.is-reverse {
         &::before {
-          content: "\E6DF";
+          content: "\E6E1";
         }
       }
     }
@@ -700,6 +724,8 @@ fieldset {
     .el-tag__close {
       right: -6px;
       top: -1px;
+      color: @colorWhite;
+      font-weight: bold;
     }
   }
 }

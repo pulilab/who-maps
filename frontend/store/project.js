@@ -188,11 +188,21 @@ export const getters = {
   },
   getPublishedDonorsAnswerDetails: (state, getters) => id =>
     getters.getPublished.donor_custom_answers.find(ca => ca.question_id === id),
-  getPublished: state => ({
-    ...state.published,
-    team: state.team,
-    viewers: state.viewers
-  }),
+  getPublished: (state, getters, rootState, rootGetters) => {
+    const interoperability_links = {}
+    rootGetters['projects/getInteroperabilityLinks'].forEach((ir, index) => {
+      interoperability_links[ir.id] = {
+        ...state.published.interoperability_links[ir.id],
+        index
+      }
+    })
+    return {
+      ...state.published,
+      interoperability_links,
+      team: state.team,
+      viewers: state.viewers
+    }
+  },
   getLoading: state => state.loading,
   getOriginal: state => state.original
 }

@@ -47,7 +47,7 @@ export default {
 @import "../../assets/style/mixins.less";
 
 .UserProjectsList {
-  padding: 0px 40px 20px;
+  padding: 40px 40px 20px;
   background: url("~assets/img/squares.svg") no-repeat;
   background-position: center 0px;
 }

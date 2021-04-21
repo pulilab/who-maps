@@ -75,7 +75,12 @@
             >
               <h6><translate>Already signed up?</translate></h6>
               <nuxt-link
-                :to="localePath({name: 'organisation-login', params: $route.params})"
+                :to="
+                  localePath({
+                    name: 'organisation-login',
+                    params: $route.params
+                  })
+                "
                 class="NuxtLink Small"
               >
                 <span><translate>Login here</translate></span>
@@ -86,9 +91,9 @@
               class="PrimaryAction"
             >
               <el-button
-                type="primary"
                 size="medium"
                 native-type="submit"
+                class="el-button--accent"
               >
                 <translate v-if="token">
                   Set Password
@@ -144,18 +149,40 @@ export default {
           return this.token
             ? []
             : [
-              { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
-              { type: 'email', message: this.$gettext('Has to be a valid email address'), trigger: 'blur' },
+              {
+                required: true,
+                message: this.$gettext('This field is required'),
+                trigger: 'blur'
+              },
+              {
+                type: 'email',
+                message: this.$gettext('Has to be a valid email address'),
+                trigger: 'blur'
+              },
               { validator: this.validatorGenerator('email'), trigger: 'blur' }
             ]
         })(),
         password1: [
-          { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
-          { min: 8, message: this.$gettext('This field should be at least 8 characters'), trigger: 'blur' },
+          {
+            required: true,
+            message: this.$gettext('This field is required'),
+            trigger: 'blur'
+          },
+          {
+            min: 8,
+            message: this.$gettext(
+              'This field should be at least 8 characters'
+            ),
+            trigger: 'blur'
+          },
           { validator: this.validatorGenerator('password1'), trigger: 'blur' }
         ],
         password2: [
-          { required: true, message: this.$gettext('This field is required'), trigger: 'blur' },
+          {
+            required: true,
+            message: this.$gettext('This field is required'),
+            trigger: 'blur'
+          },
           { validator: this.passwordMatching, trigger: 'blur' }
         ]
       }
@@ -167,7 +194,9 @@ export default {
       dorResetPassword: 'user/dorResetPassword'
     }),
     passwordMatching (rule, value, callback) {
-      value === this.signupForm.password1 ? callback() : callback(Error(this.$gettext('The password must match')))
+      value === this.signupForm.password1
+        ? callback()
+        : callback(Error(this.$gettext('The password must match')))
     },
     submitForm () {
       this.token ? this.resetPassword() : this.signup()
@@ -175,25 +204,29 @@ export default {
     signup () {
       return this.setForm({
         message: this.$gettext('User created succesfully'),
-        apiCall: () => this.doSignup({
-          account_type: 'I',
-          password1: this.signupForm.password1,
-          password2: this.signupForm.password2,
-          email: this.signupForm.email
-        }),
+        apiCall: () =>
+          this.doSignup({
+            account_type: 'I',
+            password1: this.signupForm.password1,
+            password2: this.signupForm.password2,
+            email: this.signupForm.email
+          }),
         pathName: 'organisation-edit-profile'
       })
     },
     resetPassword () {
       return this.setForm({
         message: this.$gettext('Your password was reset successfully'),
-        apiCall: () => this.dorResetPassword({
-          new_password1: this.signupForm.password1,
-          new_password2: this.signupForm.password2,
-          uid: this.uid,
-          token: this.token,
-          errMessage: this.$gettext('The password reset link was invalid, possibly because it has already been used. Please request a new password reset.')
-        }),
+        apiCall: () =>
+          this.dorResetPassword({
+            new_password1: this.signupForm.password1,
+            new_password2: this.signupForm.password2,
+            uid: this.uid,
+            token: this.token,
+            errMessage: this.$gettext(
+              'The password reset link was invalid, possibly because it has already been used. Please request a new password reset.'
+            )
+          }),
         pathName: 'organisation-login'
       })
     },
@@ -206,7 +239,10 @@ export default {
             const locale = this.$i18n.locale
             this.$nuxt.$loading.start()
             await apiCall()
-            const path = this.localePath({ ...this.$route, name: pathName }, locale)
+            const path = this.localePath(
+              { ...this.$route, name: pathName },
+              locale
+            )
             this.$router.push(path)
             this.$message({
               message,
@@ -227,25 +263,27 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../assets/style/variables.less";
-  @import "../assets/style/mixins.less";
+@import "../assets/style/variables.less";
+@import "../assets/style/mixins.less";
 
-  .SingupComponent {
-    width: @cardSizeSmall;
-    min-height: calc(100vh - @topBarHeight - @actionBarHeight - @appFooterHeight - 160px);
-    margin: 80px auto;
+.SingupComponent {
+  width: @cardSizeSmall;
+  min-height: calc(
+    100vh - @topBarHeight - @actionBarHeight - @appFooterHeight - 160px
+  );
+  margin: 80px auto;
 
-    fieldset {
-      padding: 40px 80px;
-    }
+  fieldset {
+    padding: 40px 80px;
+  }
 
-    .SecondaryAction {
-      h6 {
-        margin: 0 0 2px;
-        font-size: @fontSizeSmall;
-        font-weight: 400;
-        color: @colorTextSecondary;
-      }
+  .SecondaryAction {
+    h6 {
+      margin: 0 0 2px;
+      font-size: @fontSizeSmall;
+      font-weight: 400;
+      color: @colorTextSecondary;
     }
   }
+}
 </style>
