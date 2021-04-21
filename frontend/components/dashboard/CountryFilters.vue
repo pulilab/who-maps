@@ -11,19 +11,25 @@
         v-model="selectedCountries"
         :disabled="disableCountries"
       />
-      <region-select v-model="selectedRegion" :disabled="disableRegions" />
-      <stage-select v-model="selectedStages" :disabled="disableStages" />
+      <region-select
+        v-model="selectedRegion"
+        :disabled="disableRegions"
+      />
+      <stage-select
+        v-model="selectedStages"
+        :disabled="disableStages"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { mapGettersActions } from "../../utilities/form.js";
-import CountrySelect from "@/components/common/CountrySelect";
-import RegionSelect from "@/components/common/RegionSelect";
-import StageSelect from "@/components/common/StageSelect";
+import { mapGettersActions } from '../../utilities/form.js'
+import CountrySelect from '@/components/common/CountrySelect'
+import RegionSelect from '@/components/common/RegionSelect'
+import StageSelect from '@/components/common/StageSelect'
 
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -33,47 +39,47 @@ export default {
   },
   computed: {
     ...mapGetters({
-      dashboardType: "dashboard/getDashboardType"
+      dashboardType: 'dashboard/getDashboardType'
     }),
     ...mapGettersActions({
       selectedCountries: [
-        "dashboard",
-        "getFilteredCountries",
-        "setFilteredCountries"
+        'dashboard',
+        'getFilteredCountries',
+        'setFilteredCountries'
       ],
-      selectedRegion: ["dashboard", "getFilteredRegion", "setFilteredRegion"],
-      selectedStages: ["dashboard", "getFilteredStages", "setFilteredStages"]
+      selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion'],
+      selectedStages: ['dashboard', 'getFilteredStages', 'setFilteredStages']
     }),
-    disableCountries() {
+    disableCountries () {
       return (
         !!this.selectedRegion ||
-        this.dashboardType === "country" ||
+        this.dashboardType === 'country' ||
         this.selectedGlobal
-      );
+      )
     },
-    disableRegions() {
+    disableRegions () {
       return (
         this.selectedCountries.length > 0 ||
-        this.dashboardType === "country" ||
+        this.dashboardType === 'country' ||
         this.selectedGlobal
-      );
+      )
     },
-    disableStages() {
-      return false;
+    disableStages () {
+      return false
     },
     selectedGlobal: {
-      set(val) {
-        this.selectedCountries = val ? [process.env.GlobalCountryID] : [];
+      set (val) {
+        this.selectedCountries = val ? [process.env.GlobalCountryID] : []
       },
-      get() {
+      get () {
         return (
           this.selectedCountries.length > 0 &&
           this.selectedCountries[0] === process.env.GlobalCountryID
-        );
+        )
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less">

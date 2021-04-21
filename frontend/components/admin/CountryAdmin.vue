@@ -24,10 +24,16 @@
           v-if="userProfile && userProfile.is_superuser"
           :label="$gettext('Choose country') | translate"
         >
-          <country-select :value="countryId" @change="setCountryId" />
+          <country-select
+            :value="countryId"
+            @change="setCountryId"
+          />
         </el-form-item>
 
-        <el-form-item :label="$gettext('Logo') | translate" prop="logo">
+        <el-form-item
+          :label="$gettext('Logo') | translate"
+          prop="logo"
+        >
           <file-upload
             :disabled="notSCA"
             :auto-upload="false"
@@ -36,8 +42,15 @@
           />
         </el-form-item>
 
-        <el-form-item :label="$gettext('Cover image') | translate" prop="cover">
-          <file-upload :disabled="notSCA" :files.sync="cover" :limit="1" />
+        <el-form-item
+          :label="$gettext('Cover image') | translate"
+          prop="cover"
+        >
+          <file-upload
+            :disabled="notSCA"
+            :files.sync="cover"
+            :limit="1"
+          />
         </el-form-item>
 
         <el-form-item :label="$gettext('Cover text') | translate">
@@ -68,11 +81,20 @@
         </el-form-item>
 
         <el-form-item :label="$gettext('Project approval process') | translate">
-          <el-checkbox v-model="projectApproval" :disabled="notSCA">
-            <translate v-if="projectApproval" key="used-country">
+          <el-checkbox
+            v-model="projectApproval"
+            :disabled="notSCA"
+          >
+            <translate
+              v-if="projectApproval"
+              key="used-country"
+            >
               Used for projects in country
             </translate>
-            <translate v-if="!projectApproval" key="not-used-country">
+            <translate
+              v-if="!projectApproval"
+              key="not-used-country"
+            >
               Not used for projects in country
             </translate>
           </el-checkbox>
@@ -93,10 +115,8 @@
 
         <el-form-item :label="$gettext('Widgets') | translate">
           <label class="el-form-item__label">
-            <translate
-              >Please enable widgets you want to show on the landing
-              page:</translate
-            >
+            <translate>Please enable widgets you want to show on the landing
+              page:</translate>
           </label>
         </el-form-item>
         <el-form-item>
@@ -181,7 +201,10 @@
             :label="$gettext('Document') | translate"
             :prop="`documents.${index}.document`"
           >
-            <div class="Remove-icon" @click="removeDocument(index)" />
+            <div
+              class="Remove-icon"
+              @click="removeDocument(index)"
+            />
             <file-upload
               :files="document.document"
               :limit="1"
@@ -305,7 +328,10 @@
         </el-col>
 
         <el-col class="UserTransfers">
-          <div v-if="selectedPersona === 'G'" class="PersonaPrivileges">
+          <div
+            v-if="selectedPersona === 'G'"
+            class="PersonaPrivileges"
+          >
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -341,7 +367,10 @@
             filterable
           />
 
-          <div v-if="selectedPersona === 'CA'" class="PersonaPrivileges">
+          <div
+            v-if="selectedPersona === 'CA'"
+            class="PersonaPrivileges"
+          >
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -398,7 +427,10 @@
             filterable
           />
 
-          <div v-if="selectedPersona === 'SCA'" class="PersonaPrivileges">
+          <div
+            v-if="selectedPersona === 'SCA'"
+            class="PersonaPrivileges"
+          >
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -478,12 +510,23 @@
     </collapsible-card>
 
     <div class="AdminActionBarBottom">
-      <el-row type="flex" align="middle" justify="space-between">
-        <el-button type="text" class="CancelButton IconLeft">
+      <el-row
+        type="flex"
+        align="middle"
+        justify="space-between"
+      >
+        <el-button
+          type="text"
+          class="CancelButton IconLeft"
+        >
           <fa icon="reply" />
           <translate>Dismiss changes</translate>
         </el-button>
-        <el-button type="primary" size="medium" @click="save">
+        <el-button
+          type="primary"
+          size="medium"
+          @click="save"
+        >
           <translate>Save changes</translate>
         </el-button>
       </el-row>
@@ -492,19 +535,19 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import CollapsibleCard from "../project/CollapsibleCard";
-import VueMapCustomizer from "../admin/VueMapCustomizer";
-import DhaQuestionaire from "../admin/DhaQuestionaire";
-import FileUpload from "../common/FileUpload";
-import CountrySelect from "../common/CountrySelect";
-import ProjectApproval from "./ProjectApproval";
-import FilterSwitch from "~/components/dashboard/FilterSwitch";
+import { mapGetters, mapActions } from 'vuex'
+import CollapsibleCard from '../project/CollapsibleCard'
+import VueMapCustomizer from '../admin/VueMapCustomizer'
+import DhaQuestionaire from '../admin/DhaQuestionaire'
+import FileUpload from '../common/FileUpload'
+import CountrySelect from '../common/CountrySelect'
+import ProjectApproval from './ProjectApproval'
+import FilterSwitch from '~/components/dashboard/FilterSwitch'
 
-import { mapGettersActions } from "../../utilities/form";
+import { mapGettersActions } from '../../utilities/form'
 
 export default {
-  name: "CountryAdministrator",
+  name: 'CountryAdministrator',
 
   components: {
     CollapsibleCard,
@@ -516,23 +559,23 @@ export default {
     FilterSwitch
   },
 
-  data() {
+  data () {
     return {
-      selectedPersona: "G",
-      logoError: "",
-      coverError: "",
+      selectedPersona: 'G',
+      logoError: '',
+      coverError: '',
       flagForKeepingdocumentsError: false,
       flagForKeepingPartnerLogosError: false,
-      partnerLogosError: "",
-      documentsError: "",
+      partnerLogosError: '',
+      documentsError: '',
       titleRules: [
         {
-          trigger: ["blur", "change"],
+          trigger: ['blur', 'change'],
           validator: (rule, value, callback) => {
             if (!value || value.length < 1) {
-              callback(new Error(this.$gettext("A title is required")));
+              callback(new Error(this.$gettext('A title is required')))
             } else {
-              callback();
+              callback()
             }
           }
         }
@@ -542,9 +585,9 @@ export default {
           {
             validator: (rule, value, callback) => {
               if (this.documentsError) {
-                callback(new Error(this.documentsError));
+                callback(new Error(this.documentsError))
               } else {
-                callback();
+                callback()
               }
             }
           }
@@ -555,9 +598,9 @@ export default {
           {
             validator: (rule, value, callback) => {
               if (this.logoError) {
-                callback(new Error(this.logoError));
+                callback(new Error(this.logoError))
               } else {
-                callback();
+                callback()
               }
             }
           }
@@ -566,9 +609,9 @@ export default {
           {
             validator: (rule, value, callback) => {
               if (this.coverError) {
-                callback(new Error(this.coverError));
+                callback(new Error(this.coverError))
               } else {
-                callback();
+                callback()
               }
             }
           }
@@ -577,406 +620,406 @@ export default {
           {
             validator: (rule, value, callback) => {
               if (this.partnerLogosError) {
-                callback(new Error(this.partnerLogosError));
+                callback(new Error(this.partnerLogosError))
               } else {
-                callback();
+                callback()
               }
             }
           }
         ]
       }
-    };
+    }
   },
 
   computed: {
     ...mapGettersActions({
-      coverText: ["admin/country", "getCoverText", "setCoverText"],
-      footerTitle: ["admin/country", "getFooterTitle", "setFooterTitle"],
-      footerText: ["admin/country", "getFooterText", "setFooterText"],
+      coverText: ['admin/country', 'getCoverText', 'setCoverText'],
+      footerTitle: ['admin/country', 'getFooterTitle', 'setFooterTitle'],
+      footerText: ['admin/country', 'getFooterText', 'setFooterText'],
       projectApproval: [
-        "admin/country",
-        "getProjectApproval",
-        "setProjectApproval"
+        'admin/country',
+        'getProjectApproval',
+        'setProjectApproval'
       ],
-      GDHIEnabled: ["admin/country", "getGDHIEnabled", "setGDHIEnabled"],
+      GDHIEnabled: ['admin/country', 'getGDHIEnabled', 'setGDHIEnabled'],
       roadmapEnabled: [
-        "admin/country",
-        "getRoadmapEnabled",
-        "setRoadmapEnabled"
+        'admin/country',
+        'getRoadmapEnabled',
+        'setRoadmapEnabled'
       ]
     }),
 
     ...mapGetters({
-      country: "admin/country/getData",
-      userSelection: "admin/country/getUserSelection",
-      adminSelection: "admin/country/getAdminSelection",
-      superadminSelection: "admin/country/getSuperadminSelection",
-      userProfile: "user/getProfile",
-      roadmap: "system/getRoadmap"
+      country: 'admin/country/getData',
+      userSelection: 'admin/country/getUserSelection',
+      adminSelection: 'admin/country/getAdminSelection',
+      superadminSelection: 'admin/country/getSuperadminSelection',
+      userProfile: 'user/getProfile',
+      roadmap: 'system/getRoadmap'
     }),
-    extensionList() {
-      return this.roadmap.valid_types.join(", ");
+    extensionList () {
+      return this.roadmap.valid_types.join(', ')
     },
-    documentList() {
-      return this.documents.map(document => document.document);
+    documentList () {
+      return this.documents.map(document => document.document)
     },
 
-    notSCA() {
+    notSCA () {
       return (
         this.userProfile &&
-        this.userProfile.account_type === "CA" &&
+        this.userProfile.account_type === 'CA' &&
         !this.userProfile.is_superuser
-      );
+      )
     },
 
     logo: {
-      get() {
-        if (typeof this.country.logo === "string") {
+      get () {
+        if (typeof this.country.logo === 'string') {
           return [
             {
               url: this.country.logo,
-              name: ("" + this.country.logo).split("/").pop()
+              name: ('' + this.country.logo).split('/').pop()
             }
-          ];
+          ]
         } else if (!this.country.logo) {
-          return [];
+          return []
         } else {
-          return [this.country.logo];
+          return [this.country.logo]
         }
       },
-      set([value]) {
-        this.setDataField({ field: "logo", data: value });
+      set ([value]) {
+        this.setDataField({ field: 'logo', data: value })
       }
     },
 
     cover: {
-      get() {
-        if (typeof this.country.cover === "string") {
+      get () {
+        if (typeof this.country.cover === 'string') {
           return [
             {
               url: this.country.cover,
-              name: ("" + this.country.cover).split("/").pop()
+              name: ('' + this.country.cover).split('/').pop()
             }
-          ];
+          ]
         } else if (!this.country.cover) {
-          return [];
+          return []
         } else {
-          return [this.country.cover];
+          return [this.country.cover]
         }
       },
-      set([value]) {
-        this.setDataField({ field: "cover", data: value });
+      set ([value]) {
+        this.setDataField({ field: 'cover', data: value })
       }
     },
 
     partnerLogos: {
-      get() {
+      get () {
         // eslint-disable-next-line array-callback-return
         return this.country.partner_logos.map(rawLogo => {
           if (rawLogo.raw || rawLogo.uid) {
-            return rawLogo;
+            return rawLogo
           } else if (rawLogo.image) {
             return {
               url: rawLogo.image,
-              name: ("" + rawLogo.image).split("/").pop(),
+              name: ('' + rawLogo.image).split('/').pop(),
               id: rawLogo.id
-            };
+            }
           }
-        });
+        })
       },
-      set(value) {
-        this.setDataField({ field: "partner_logos", data: value });
+      set (value) {
+        this.setDataField({ field: 'partner_logos', data: value })
       }
     },
 
     documents: {
-      get() {
+      get () {
         return this.country.documents.map(data => {
-          if (typeof data.document === "string") {
+          if (typeof data.document === 'string') {
             return {
               title: data.title,
               id: data.id,
               document: [
                 {
                   url: data.document,
-                  name: ("" + data.document).split("/").pop()
+                  name: ('' + data.document).split('/').pop()
                 }
               ]
-            };
+            }
           }
           if (Array.isArray(data.document)) {
-            return data;
+            return data
           }
-          const document = data.document ? [data.document] : [];
+          const document = data.document ? [data.document] : []
           const res = {
             title: data.title,
             document
-          };
-          if (data.id) {
-            res.id = data.id;
           }
-          return res;
-        });
+          if (data.id) {
+            res.id = data.id
+          }
+          return res
+        })
       },
-      set(documents) {
+      set (documents) {
         const data = documents.map(data => {
           if (Array.isArray(data.document)) {
             const result = {
               title: data.title,
               document: data.document[0]
-            };
-            if (data.id) {
-              result.id = data.id;
             }
-            return result;
+            if (data.id) {
+              result.id = data.id
+            }
+            return result
           }
-          return data;
-        });
-        this.setDataField({ field: "documents", data });
+          return data
+        })
+        this.setDataField({ field: 'documents', data })
       }
     },
 
     users: {
-      get() {
-        return this.country.users || [];
+      get () {
+        return this.country.users || []
       },
-      set(value) {
-        this.setDataField({ field: "users", data: value });
+      set (value) {
+        this.setDataField({ field: 'users', data: value })
       }
     },
 
     admins: {
-      get() {
-        return this.country.admins || [];
+      get () {
+        return this.country.admins || []
       },
-      set(value) {
-        this.setDataField({ field: "admins", data: value });
+      set (value) {
+        this.setDataField({ field: 'admins', data: value })
       }
     },
 
     superAdmins: {
-      get() {
-        return this.country.super_admins || [];
+      get () {
+        return this.country.super_admins || []
       },
-      set(value) {
-        this.setDataField({ field: "super_admins", data: value });
+      set (value) {
+        this.setDataField({ field: 'super_admins', data: value })
       }
     },
 
     countryId: {
-      get() {
-        return this.country.id;
+      get () {
+        return this.country.id
       },
-      async set(value) {
-        this.setId(value);
-        await this.fetchData();
-        await this.loadGeoJSON();
+      async set (value) {
+        this.setId(value)
+        await this.fetchData()
+        await this.loadGeoJSON()
       }
     },
-    transferTitles() {
-      return [this.$gettext("New requests"), this.$gettext("Approved")];
+    transferTitles () {
+      return [this.$gettext('New requests'), this.$gettext('Approved')]
     }
   },
 
   watch: {
-    documentList(newDocs, oldDocs) {
+    documentList (newDocs, oldDocs) {
       const formats = this.roadmap.valid_types.map(extension =>
         extension.substr(extension.length - 4)
-      );
+      )
       const incorrectDoc = this.documents.find(documentData => {
-        const document = documentData.document[0] || {};
+        const document = documentData.document[0] || {}
         return (
           document.raw &&
           !formats.includes(
             document.raw.name.substr(document.raw.name.length - 4)
           )
-        );
-      });
+        )
+      })
       if (incorrectDoc) {
-        const newDocuments = [...this.documents];
-        const replacementDoc = { ...this.documents.indexOf(incorrectDoc) };
-        replacementDoc.document = [];
-        newDocuments[this.documents.indexOf(incorrectDoc)] = replacementDoc;
-        this.documents = newDocuments;
+        const newDocuments = [...this.documents]
+        const replacementDoc = { ...this.documents.indexOf(incorrectDoc) }
+        replacementDoc.document = []
+        newDocuments[this.documents.indexOf(incorrectDoc)] = replacementDoc
+        this.documents = newDocuments
         this.documentsError = this.$gettext(
-          "Wrong file format, you can only upload {list} files",
+          'Wrong file format, you can only upload {list} files',
           { list: this.extensionList }
-        );
-        this.flagForKeepingdocumentsError = true;
+        )
+        this.flagForKeepingdocumentsError = true
       } else if (this.flagForKeepingdocumentsError) {
-        this.flagForKeepingdocumentsError = false;
-        return;
+        this.flagForKeepingdocumentsError = false
+        return
       } else {
-        this.documentsError = "";
+        this.documentsError = ''
       }
-      this.$refs.documentsUpload.validate(() => {});
+      this.$refs.documentsUpload.validate(() => {})
     },
-    logo(newArr, oldArr) {
+    logo (newArr, oldArr) {
       // Handles error message placing for wrong image formats
       if (!newArr.length) {
-        return;
+        return
       }
 
       const filteredArray = [
         ...this.logo.filter(image => {
           return (
             !image.raw ||
-            (image.raw && image.raw.name.endsWith(".jpg")) ||
-            (image.raw && image.raw.name.endsWith(".jpeg")) ||
-            (image.raw && image.raw.name.endsWith(".png"))
-          );
+            (image.raw && image.raw.name.endsWith('.jpg')) ||
+            (image.raw && image.raw.name.endsWith('.jpeg')) ||
+            (image.raw && image.raw.name.endsWith('.png'))
+          )
         })
-      ];
+      ]
 
       if (newArr.length !== filteredArray.length) {
-        this.logo = filteredArray;
+        this.logo = filteredArray
         this.logoError = this.$gettext(
-          "Wrong image format, you can only upload .jpg and .png files"
-        );
+          'Wrong image format, you can only upload .jpg and .png files'
+        )
       } else {
-        this.logoError = "";
+        this.logoError = ''
       }
-      this.$refs.countryInfo.validate(() => {});
+      this.$refs.countryInfo.validate(() => {})
     },
 
-    cover(newArr, oldArr) {
+    cover (newArr, oldArr) {
       // Handles error message placing for wrong image formats
       if (!newArr.length) {
-        return;
+        return
       }
 
       const filteredArray = [
         ...this.cover.filter(image => {
           return (
             !image.raw ||
-            (image.raw && image.raw.name.endsWith(".jpg")) ||
-            (image.raw && image.raw.name.endsWith(".jpeg")) ||
-            (image.raw && image.raw.name.endsWith(".png"))
-          );
+            (image.raw && image.raw.name.endsWith('.jpg')) ||
+            (image.raw && image.raw.name.endsWith('.jpeg')) ||
+            (image.raw && image.raw.name.endsWith('.png'))
+          )
         })
-      ];
+      ]
 
       if (newArr.length !== filteredArray.length) {
-        this.cover = filteredArray;
+        this.cover = filteredArray
         this.coverError = this.$gettext(
-          "Wrong image format, you can only upload .jpg and .png files"
-        );
+          'Wrong image format, you can only upload .jpg and .png files'
+        )
       } else {
-        this.coverError = "";
+        this.coverError = ''
       }
-      this.$refs.countryInfo.validate(() => {});
+      this.$refs.countryInfo.validate(() => {})
     },
 
-    partnerLogos(newArr, oldArr) {
+    partnerLogos (newArr, oldArr) {
       // Handles error message placing for wrong image formats
       const filteredArray = [
         ...this.partnerLogos.filter(image => {
           return (
             !image.raw ||
-            (image.raw && image.raw.name.endsWith(".jpg")) ||
-            (image.raw && image.raw.name.endsWith(".jpeg")) ||
-            (image.raw && image.raw.name.endsWith(".png"))
-          );
+            (image.raw && image.raw.name.endsWith('.jpg')) ||
+            (image.raw && image.raw.name.endsWith('.jpeg')) ||
+            (image.raw && image.raw.name.endsWith('.png'))
+          )
         })
-      ];
+      ]
 
       if (newArr.length !== filteredArray.length) {
-        this.partnerLogos = filteredArray;
+        this.partnerLogos = filteredArray
         this.partnerLogosError = this.$gettext(
-          "Wrong image format, you can only upload .jpg and .png files"
-        );
-        this.flagForKeepingPartnerLogosError = true;
+          'Wrong image format, you can only upload .jpg and .png files'
+        )
+        this.flagForKeepingPartnerLogosError = true
       } else if (this.flagForKeepingPartnerLogosError) {
-        this.flagForKeepingPartnerLogosError = false;
-        return;
+        this.flagForKeepingPartnerLogosError = false
+        return
       } else {
-        this.partnerLogosError = "";
+        this.partnerLogosError = ''
       }
-      this.$refs.countryInfo.validate(() => {});
+      this.$refs.countryInfo.validate(() => {})
     }
   },
 
   methods: {
     ...mapActions({
-      setDataField: "admin/country/setDataField",
-      saveChanges: "admin/country/saveChanges",
-      setId: "admin/country/setId",
-      fetchData: "admin/country/fetchData",
-      loadGeoJSON: "admin/map/loadGeoJSON"
+      setDataField: 'admin/country/setDataField',
+      saveChanges: 'admin/country/saveChanges',
+      setId: 'admin/country/setId',
+      fetchData: 'admin/country/fetchData',
+      loadGeoJSON: 'admin/map/loadGeoJSON'
     }),
 
-    focuseRoadmapDocuments() {
-      this.$refs.roadmapdocs.$el.scrollIntoView();
+    focuseRoadmapDocuments () {
+      this.$refs.roadmapdocs.$el.scrollIntoView()
     },
 
-    addDocument() {
+    addDocument () {
       this.documents = [
         ...this.documents,
         {
-          title: "",
+          title: '',
           document: []
         }
-      ];
+      ]
     },
 
-    selectDocumentFile(document, index) {
-      const newDocuments = [...this.documents];
+    selectDocumentFile (document, index) {
+      const newDocuments = [...this.documents]
       if (document && !document.length) {
-        newDocuments.splice(index, 1);
+        newDocuments.splice(index, 1)
       } else {
-        newDocuments[index] = { ...newDocuments[index], document };
+        newDocuments[index] = { ...newDocuments[index], document }
       }
-      this.documents = newDocuments;
+      this.documents = newDocuments
     },
 
-    changeDocumentTitle(title, index) {
-      const newDocuments = [...this.documents];
-      const doc = { ...newDocuments[index] };
-      doc.title = title;
-      newDocuments[index] = doc;
-      this.documents = newDocuments;
+    changeDocumentTitle (title, index) {
+      const newDocuments = [...this.documents]
+      const doc = { ...newDocuments[index] }
+      doc.title = title
+      newDocuments[index] = doc
+      this.documents = newDocuments
     },
 
-    removeDocument(index) {
-      const newDocuments = [...this.documents];
-      newDocuments.splice(index, 1);
-      this.documents = newDocuments;
+    removeDocument (index) {
+      const newDocuments = [...this.documents]
+      newDocuments.splice(index, 1)
+      this.documents = newDocuments
     },
 
-    selectPersona(selected) {
-      this.selectedPersona = selected;
+    selectPersona (selected) {
+      this.selectedPersona = selected
     },
 
-    setCountryId(selected) {
-      this.countryId = selected;
+    setCountryId (selected) {
+      this.countryId = selected
     },
-    save() {
+    save () {
       if (this.documentList.find(doc => doc.length === 0)) {
         this.documentsError = this.$gettext(
-          "A document is missing or too many were added"
-        );
-        this.$refs.documentsUpload.validate(() => {});
-        this.$alert("A roadmap document is missing", "Warning", {
-          confirmButtonText: "Ok",
+          'A document is missing or too many were added'
+        )
+        this.$refs.documentsUpload.validate(() => {})
+        this.$alert('A roadmap document is missing', 'Warning', {
+          confirmButtonText: 'Ok',
           callback: () => {
-            this.$refs.documentsUpload.$el.scrollIntoView();
+            this.$refs.documentsUpload.$el.scrollIntoView()
           }
-        });
-        return;
+        })
+        return
       }
       if (this.$refs.customQuestions.allSaved) {
-        this.saveChanges();
+        this.saveChanges()
       } else {
-        this.$alert("Your questionnaire is not completely saved", "Warning", {
-          confirmButtonText: "Ok",
+        this.$alert('Your questionnaire is not completely saved', 'Warning', {
+          confirmButtonText: 'Ok',
           callback: () => {
-            this.$refs.customQuestions.$el.scrollIntoView();
+            this.$refs.customQuestions.$el.scrollIntoView()
           }
-        });
+        })
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less">

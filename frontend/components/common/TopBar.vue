@@ -1,6 +1,13 @@
 <template>
-  <div v-scroll-class:TopBarMin="180" class="TopBar">
-    <el-row type="flex" justify="space-between" class="TopBarInner">
+  <div
+    v-scroll-class:TopBarMin="180"
+    class="TopBar"
+  >
+    <el-row
+      type="flex"
+      justify="space-between"
+      class="TopBarInner"
+    >
       <el-col class="LogoHolder">
         <!--<nuxt-link :to="localePath({name: 'organisation', params: $route.params})">-->
         <nuxt-link
@@ -8,7 +15,10 @@
             localePath({ name: 'organisation', params: { organisation: '-' } })
           "
         >
-          <el-row type="flex" align="middle">
+          <el-row
+            type="flex"
+            align="middle"
+          >
             <el-col class="LogoWHO">
               <img
                 :src="
@@ -19,19 +29,25 @@
                     ? $gettext('Country logo')
                     : $gettext('WHO logo')
                 "
-              />
+              >
             </el-col>
             <el-col class="Separator">
               <div />
             </el-col>
             <el-col :class="customOrganisation ? 'LogoDHASmall' : 'LogoDHA'">
-              <img src="/logo-dha.svg" alt="Digital Health Atlas" />
+              <img
+                src="/logo-dha.svg"
+                alt="Digital Health Atlas"
+              >
             </el-col>
           </el-row>
         </nuxt-link>
       </el-col>
 
-      <el-col v-if="!errorPage" class="RightPart">
+      <el-col
+        v-if="!errorPage"
+        class="RightPart"
+      >
         <!-- ANON MODE -->
         <el-row
           :class="{ AnonView: !user, LoggedInView: user }"
@@ -177,7 +193,10 @@
               <country-chooser />
             </el-col>
           </template>
-          <el-col v-else class="CountrySpecificMenu">
+          <el-col
+            v-else
+            class="CountrySpecificMenu"
+          >
             <div>
               <nuxt-link
                 key="whoLandingBtn"
@@ -200,17 +219,17 @@
 </template>
 
 <script>
-import VueScrollClass from "vue-scroll-class";
-import { mapGetters } from "vuex";
+import VueScrollClass from 'vue-scroll-class'
+import { mapGetters } from 'vuex'
 
-import LanguageSelector from "./LanguageSelector";
-import UserDropdown from "./UserDropdown";
-import ToolkitDialogWrapper from "./ToolkitDialogWrapper";
-import CountryChooser from "./CountryChooser";
+import LanguageSelector from './LanguageSelector'
+import UserDropdown from './UserDropdown'
+import ToolkitDialogWrapper from './ToolkitDialogWrapper'
+import CountryChooser from './CountryChooser'
 
 export default {
   directives: {
-    "scroll-class": VueScrollClass
+    'scroll-class': VueScrollClass
   },
   components: {
     LanguageSelector,
@@ -226,30 +245,30 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: "user/getProfile",
-      landingData: "landing/getLandingPageData",
-      isCountry: "landing/getIsCountry"
+      user: 'user/getProfile',
+      landingData: 'landing/getLandingPageData',
+      isCountry: 'landing/getIsCountry'
     }),
-    customOrganisation() {
-      return this.landingData !== null;
+    customOrganisation () {
+      return this.landingData !== null
     },
-    countrySpecific() {
-      return this.customOrganisation && this.landingData.code.length === 2;
+    countrySpecific () {
+      return this.customOrganisation && this.landingData.code.length === 2
     },
-    organisationLogo() {
+    organisationLogo () {
       if (this.landingData) {
-        return this.landingData.logo_url;
+        return this.landingData.logo_url
       }
-      return null;
+      return null
     },
-    countryFlag() {
+    countryFlag () {
       if (this.landingData) {
-        return `/static/flags/${this.landingData.code.toLowerCase()}.png`;
+        return `/static/flags/${this.landingData.code.toLowerCase()}.png`
       }
-      return null;
+      return null
     }
   }
-};
+}
 </script>
 
 <style lang="less">

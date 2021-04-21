@@ -18,18 +18,30 @@
             </el-col>
           </el-row>
 
-          <el-row type="flex" class="ProjectCountryOrg">
+          <el-row
+            type="flex"
+            class="ProjectCountryOrg"
+          >
             <el-col class="Country">
-              <country-item :id="project.country" :active="false" />
+              <country-item
+                :id="project.country"
+                :active="false"
+              />
             </el-col>
             <el-col class="Organisation">
               &nbsp;<translate>Ministry of Health</translate>
             </el-col>
           </el-row>
 
-          <el-row type="flex" class="FoundIn">
+          <el-row
+            type="flex"
+            class="FoundIn"
+          >
             <el-col>
-              <fa icon="file" size="xs" />
+              <fa
+                icon="file"
+                size="xs"
+              />
               <span>
                 {{ shortUrl }}
               </span>
@@ -39,7 +51,11 @@
 
         <el-col :span="2">
           <transition name="el-fade-in">
-            <fa v-show="showArrow" icon="download" class="DownloadIcon" />
+            <fa
+              v-show="showArrow"
+              icon="download"
+              class="DownloadIcon"
+            />
           </transition>
           <project-legend :id="project.id" />
         </el-col>
@@ -49,8 +65,8 @@
 </template>
 
 <script>
-import ProjectLegend from "./ProjectLegend";
-import CountryItem from "./CountryItem";
+import ProjectLegend from './ProjectLegend'
+import CountryItem from './CountryItem'
 
 export default {
   components: {
@@ -71,34 +87,34 @@ export default {
       default: false
     }
   },
-  data() {
+  data () {
     return {
       hovered: false
-    };
+    }
   },
   computed: {
-    cardShadow() {
-      return this.hideBorders ? "never" : "always";
+    cardShadow () {
+      return this.hideBorders ? 'never' : 'always'
     },
-    showArrow() {
-      return this.hovered && this.showArrowOnOver;
+    showArrow () {
+      return this.hovered && this.showArrowOnOver
     },
-    shortUrl() {
-      return this.project.document.replace("documents/", "");
+    shortUrl () {
+      return this.project.document.replace('documents/', '')
     }
   },
   methods: {
-    openFile() {
-      window.open("/media/" + this.project.document);
+    openFile () {
+      window.open('/media/' + this.project.document)
     },
-    mouseEnterHandler() {
-      this.hovered = true;
+    mouseEnterHandler () {
+      this.hovered = true
     },
-    mouseLeaveHandler() {
-      this.hovered = false;
+    mouseLeaveHandler () {
+      this.hovered = false
     }
   }
-};
+}
 </script>
 
 <style lang="less">

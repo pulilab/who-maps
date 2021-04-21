@@ -1,9 +1,18 @@
 <template>
-  <div v-click-outside="hide" class="SearchComponent">
+  <div
+    v-click-outside="hide"
+    class="SearchComponent"
+  >
     <transition name="el-fade-in">
-      <div v-show="shown" class="SearchPopper">
+      <div
+        v-show="shown"
+        class="SearchPopper"
+      >
         <el-card :body-style="{ padding: '0px' }">
-          <el-row type="flex" class="SearchBig">
+          <el-row
+            type="flex"
+            class="SearchBig"
+          >
             <el-col :span="24">
               <el-input
                 ref="searchInput"
@@ -11,9 +20,15 @@
                 :placeholder="$gettext('Create your search here') | translate"
                 @keyup.enter.native="search"
               >
-                <fa slot="prepend" icon="search" />
+                <fa
+                  slot="prepend"
+                  icon="search"
+                />
                 <template slot="append">
-                  <el-button class="SearchClear" @click="clearSearch">
+                  <el-button
+                    class="SearchClear"
+                    @click="clearSearch"
+                  >
                     <fa icon="times" />
                   </el-button>
                 </template>
@@ -43,8 +58,7 @@
                   "
                   class="NuxtLink IconRight"
                 >
-                  <span><translate>Dashboard</translate></span
-                  ><fa icon="angle-right" />
+                  <span><translate>Dashboard</translate></span><fa icon="angle-right" />
                 </nuxt-link>
               </el-col>
             </el-row>
@@ -127,7 +141,10 @@
                   <translate>No content to show</translate>
                 </div>
               </el-row>
-              <div v-else class="SearchResultsWrapper">
+              <div
+                v-else
+                class="SearchResultsWrapper"
+              >
                 <el-row
                   v-for="project in cms"
                   :key="project.id"
@@ -192,8 +209,15 @@
       <fa icon="search" />
     </el-button>
 
-    <div v-show="searchString && !shown" class="SearchShadow" @click="show">
-      <el-row type="flex" align="middle">
+    <div
+      v-show="searchString && !shown"
+      class="SearchShadow"
+      @click="show"
+    >
+      <el-row
+        type="flex"
+        align="middle"
+      >
         <el-col>
           <fa icon="search" />
         </el-col>
@@ -220,15 +244,15 @@
 </template>
 
 <script>
-import debounce from "lodash/debounce";
-import { mapGettersActions } from "@/utilities/form";
-import ProjectCard from "@/components/common/ProjectCard";
-import ProjectCardPlanning from "@/components/common/ProjectCardPlanning";
-import ProjectCardDocuments from "@/components/common/ProjectCardDocuments";
-import SearchComponentLink from "@/components/common/SearchComponentLink";
-import Spinner from "@/components/common/Spinner";
-import ClickOutside from "vue-click-outside";
-import { mapGetters, mapActions } from "vuex";
+import debounce from 'lodash/debounce'
+import { mapGettersActions } from '@/utilities/form'
+import ProjectCard from '@/components/common/ProjectCard'
+import ProjectCardPlanning from '@/components/common/ProjectCardPlanning'
+import ProjectCardDocuments from '@/components/common/ProjectCardDocuments'
+import SearchComponentLink from '@/components/common/SearchComponentLink'
+import Spinner from '@/components/common/Spinner'
+import ClickOutside from 'vue-click-outside'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   directives: {
@@ -241,95 +265,95 @@ export default {
     SearchComponentLink,
     Spinner
   },
-  data() {
+  data () {
     return {
-      localSearchString: "",
+      localSearchString: '',
       shown: false,
-      activeSearchTab: "projects"
-    };
+      activeSearchTab: 'projects'
+    }
   },
   computed: {
     ...mapGetters({
-      searchParameters: "landing/getSearchParameters",
-      results: "landing/getSearchResult",
-      getFoundIn: "landing/getFoundIn",
-      resultsLoaded: "landing/getLoaded",
-      cms: "landing/getCMS",
-      documents: "landing/getDocuments"
+      searchParameters: 'landing/getSearchParameters',
+      results: 'landing/getSearchResult',
+      getFoundIn: 'landing/getFoundIn',
+      resultsLoaded: 'landing/getLoaded',
+      cms: 'landing/getCMS',
+      documents: 'landing/getDocuments'
     }),
     ...mapGettersActions({
-      searchString: ["landing", "getSearchString", "setSearchString", 0]
+      searchString: ['landing', 'getSearchString', 'setSearchString', 0]
     }),
-    resultCount() {
+    resultCount () {
       return (
         (this.results ? this.results.length : 0) +
         (this.cms ? this.cms.length : 0) +
         (this.documents ? this.documents.length : 0)
-      );
+      )
     },
-    cmsLength() {
-      return this.cms ? this.cms.length : 0;
+    cmsLength () {
+      return this.cms ? this.cms.length : 0
     },
-    documentsLength() {
-      return this.documents ? this.documents.length : 0;
+    documentsLength () {
+      return this.documents ? this.documents.length : 0
     }
   },
   watch: {
     localSearchString: {
       immediate: false,
-      handler: function() {
+      handler: function () {
         if (
           this.localSearchString.length > 0 &&
           this.localSearchString.length < 3
         ) {
-          return;
+          return
         }
-        this.$store.commit("landing/SET_LOADED", false);
-        this.search();
+        this.$store.commit('landing/SET_LOADED', false)
+        this.search()
         if (this.cms) {
-          this.doCMSSearch();
+          this.doCMSSearch()
         }
-        this.updateSearch();
+        this.updateSearch()
       }
     }
   },
   methods: {
     ...mapActions({
-      doSearch: "landing/search",
-      doCMSSearch: "landing/cmsSearch",
-      doDocumentSearch: "landing/documentSearch",
-      clearPage: "landing/clearCustomLandingPage",
-      resetSearch: "landing/resetSearch"
+      doSearch: 'landing/search',
+      doCMSSearch: 'landing/cmsSearch',
+      doDocumentSearch: 'landing/documentSearch',
+      clearPage: 'landing/clearCustomLandingPage',
+      resetSearch: 'landing/resetSearch'
     }),
-    updateSearch: debounce(function() {
-      this.doCMSSearch();
+    updateSearch: debounce(function () {
+      this.doCMSSearch()
       setTimeout(() => {
-        this.doDocumentSearch();
-        this.doSearch();
-      }, 0);
+        this.doDocumentSearch()
+        this.doSearch()
+      }, 0)
     }, 500),
-    reset() {
-      this.clearSearch();
-      this.hide();
+    reset () {
+      this.clearSearch()
+      this.hide()
     },
-    clearSearch() {
-      this.localSearchString = "";
-      this.$refs.searchInput.focus();
+    clearSearch () {
+      this.localSearchString = ''
+      this.$refs.searchInput.focus()
     },
-    search() {
-      this.searchString = this.localSearchString;
+    search () {
+      this.searchString = this.localSearchString
     },
-    show() {
-      this.shown = true;
-      this.$nextTick(function() {
-        this.$refs.searchInput.focus();
-      });
+    show () {
+      this.shown = true
+      this.$nextTick(function () {
+        this.$refs.searchInput.focus()
+      })
     },
-    hide() {
-      this.shown = false;
+    hide () {
+      this.shown = false
     }
   }
-};
+}
 </script>
 
 <style lang="less">
