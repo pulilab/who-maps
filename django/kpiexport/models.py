@@ -65,3 +65,35 @@ class AuditLogUsers(AuditLogBase):
 
     def __str__(self):  # pragma: no cover
         return f'{self.date.year}-{self.date.month} - {str(self.data)}'
+
+
+class AuditLogTokens(AuditLogBase):
+    """
+    AuditLog model tracking the token KPIs in the DB
+    Important: We do not track token usage, only their existence
+
+    data format:
+      {
+        "<investor_name_1>":
+          {
+            "<role_1>": (int),
+            "<role_2>": (int),
+            "total": (int)
+          },
+        "<investor_name_2>":
+          {
+            "<role_1>": (int),
+            "<role_2>": (int),
+            "total": (int)
+          },
+      }
+    """
+
+    tokens = models.IntegerField(default=0)  # Total number of tokens
+
+    class Meta:
+        verbose_name = "Token KPI"
+        verbose_name_plural = "Token KPIs"
+
+    def __str__(self):  # pragma: no cover
+        return f'{self.date.year}-{self.date.month} - {str(self.data)}'
