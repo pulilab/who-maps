@@ -189,13 +189,18 @@ export const getters = {
   getPublishedDonorsAnswerDetails: (state, getters) => id =>
     getters.getPublished.donor_custom_answers.find(ca => ca.question_id === id),
   getPublished: (state, getters, rootState, rootGetters) => {
-    const interoperability_links = {}
-    rootGetters['projects/getInteroperabilityLinks'].forEach((ir, index) => {
-      interoperability_links[ir.id] = {
-        ...state.published.interoperability_links[ir.id],
-        index
-      }
-    })
+    let interoperability_links = {}
+    try {
+      rootGetters['projects/getInteroperabilityLinks'].forEach((ir, index) => {
+        interoperability_links[ir.id] = {
+          ...state.published.interoperability_links[ir.id],
+          index
+        }
+      })
+    } catch (e) {
+      interoperability_links = {}
+    }
+
     return {
       ...state.published,
       interoperability_links,
