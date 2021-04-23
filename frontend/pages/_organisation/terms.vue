@@ -2,20 +2,13 @@
   <div class="DHAHelpCenter">
     <div class="PageTitle">
       <h2><translate>DHA Help Center</translate></h2>
-      <el-button
-        type="text"
-        class="Back IconLeft"
-        @click="goBack"
-      >
+      <el-button type="text" class="Back IconLeft" @click="goBack">
         <fa icon="angle-left" />
         <translate>Go back</translate>
       </el-button>
     </div>
 
-    <el-card
-      :body-style="{ padding: '0px' }"
-      class="HelpCard"
-    >
+    <el-card :body-style="{ padding: '0px' }" class="HelpCard">
       <el-tabs tab-position="left">
         <el-tab-pane :label="$gettext('Terms of Use') | translate">
           <h2><translate>Terms of Use</translate></h2>
@@ -38,8 +31,7 @@
               In these Terms of Use “you”, “your” means: (i) the individual
               user; and (ii) the entity on whose behalf the individual user is
               accessing and using the DHA. The individual user and the relevant
-              entity are joint and severally responsible for the use of the
-              DHA.
+              entity are joint and severally responsible for the use of the DHA.
             </translate>
           </p>
           <h4><translate>1. About the DHA</translate></h4>
@@ -54,12 +46,12 @@
           </p>
           <h4><translate>2. Registration</translate></h4>
           <p>
-            <translate>
-              2.1 To use the DHA, you must first register via:
-              <a
-                maiulto="https://digitalhealthatlas.org/en/-/login"
-              >https://digitalhealthatlas.org/en/-/login</a>
-            </translate>
+            2.1 To use the DHA, you must first register via:
+            <a href="mailto:https://digitalhealthatlas.org/en/-/login"
+              ><translate
+                >https://digitalhealthatlas.org/en/-/login</translate
+              ></a
+            >
           </p>
           <p>
             <translate>2.2 Once registered, users are able to:</translate>
@@ -67,8 +59,7 @@
           <ol class="custom">
             <li>
               <translate>
-                View digital health projects at global and country
-                level
+                View digital health projects at global and country level
               </translate>
             </li>
             <li>
@@ -104,11 +95,10 @@
           </p>
           <p>
             <translate>
-              3.2 By uploading or submitting material to the DHA, you agree
-              that such submission is non-confidential for all purposes. If you
-              wish to keep any information, ideas, concepts or inventions
-              private or proprietary, do not submit or upload them to the
-              DHA.
+              3.2 By uploading or submitting material to the DHA, you agree that
+              such submission is non-confidential for all purposes. If you wish
+              to keep any information, ideas, concepts or inventions private or
+              proprietary, do not submit or upload them to the DHA.
             </translate>
           </p>
           <p>
@@ -123,11 +113,12 @@
             <translate>
               3.4 By uploading material to the DHA, you agree that the
               information will be made available under the Creative Commons
-              Attribution 3.0 IGO licence (CC BY 3.0 IGO)
-              <a
-                href="http://creativecommons.org/licenses/by/3.0/igo/legalcode"
-              >http://creativecommons.org/licenses/by/3.0/igo/legalcode</a>, which permits unrestricted use, distribution and reproduction
-              in any medium, provided the original work is properly cited.
+              Attribution 3.0 IGO licence (CC BY 3.0 IGO)</translate>
+              <a href="http://creativecommons.org/licenses/by/3.0/igo/legalcode"
+                ><translate>http://creativecommons.org/licenses/by/3.0/igo/legalcode</translate></a
+              ><translate>
+              , which permits unrestricted use, distribution and reproduction
+              in any medium, provided the original work is properly cited.</translate>
             </translate>
           </p>
           <h4>
@@ -176,8 +167,7 @@
               is the personal information that you provide to us when you
               register with us or when you communicate with us through our
               website. We will at any time, at your request, provide you with a
-              copy of any personal information that we are holding about
-              you.
+              copy of any personal information that we are holding about you.
             </translate>
           </p>
           <p>
@@ -189,8 +179,7 @@
           <ul>
             <li>
               <translate>
-                To provide information or services to you as requested by
-                you.
+                To provide information or services to you as requested by you.
               </translate>
             </li>
             <li>
@@ -276,10 +265,10 @@
           </p>
           <p>
             <translate>
-              7.4 The mention of specific companies or of certain
-              manufacturers' products does not imply that they are endorsed or
-              recommended by WHO in preference to others of a similar nature
-              that are not mentioned.
+              7.4 The mention of specific companies or of certain manufacturers'
+              products does not imply that they are endorsed or recommended by
+              WHO in preference to others of a similar nature that are not
+              mentioned.
             </translate>
           </p>
           <h4>
@@ -289,9 +278,9 @@
           </h4>
           <p>
             <translate>
-              8.1 Message boards, bulletin boards, blogs, and other services
-              may be available on or through the DHA. In addition to any other
-              rules or regulations that WHO may post in connection with these
+              8.1 Message boards, bulletin boards, blogs, and other services may
+              be available on or through the DHA. In addition to any other rules
+              or regulations that WHO may post in connection with these
               particular services, you shall not upload, post, transmit,
               distribute, or otherwise publish through the DHA or any service or
               feature made available on or through the DHA any materials which:
@@ -312,9 +301,9 @@
             </li>
             <li>
               <translate>
-                constitute or encourage conduct that would constitute a
-                criminal offense, give rise to civil liability or otherwise
-                violate any local, state, federal, or international law;
+                constitute or encourage conduct that would constitute a criminal
+                offense, give rise to civil liability or otherwise violate any
+                local, state, federal, or international law;
               </translate>
             </li>
             <li>
@@ -337,8 +326,8 @@
             </li>
             <li>
               <translate>
-                constitute or contain false or misleading indications of
-                origin, endorsements, or statements of fact.
+                constitute or contain false or misleading indications of origin,
+                endorsements, or statements of fact.
               </translate>
             </li>
           </ol>
@@ -371,10 +360,10 @@
           </h4>
           <p>
             <translate>
-              WHO reserves the right at any time and from time to time to
-              modify or discontinue, temporarily or permanently, the DHA, or any
-              means of accessing or utilizing the DHA, with or without prior
-              notice to you.
+              WHO reserves the right at any time and from time to time to modify
+              or discontinue, temporarily or permanently, the DHA, or any means
+              of accessing or utilizing the DHA, with or without prior notice to
+              you.
             </translate>
           </p>
           <h4>
@@ -382,9 +371,9 @@
           </h4>
           <p>
             <translate>
-              You agree to indemnify WHO for, and hold WHO harmless against,
-              any claims and liabilities, including reasonable attorneys' fees
-              and costs, arising from your use of the DHA and/or breach of these
+              You agree to indemnify WHO for, and hold WHO harmless against, any
+              claims and liabilities, including reasonable attorneys' fees and
+              costs, arising from your use of the DHA and/or breach of these
               Terms of Use.
             </translate>
           </p>
@@ -393,8 +382,8 @@
           </h4>
           <p>
             <translate>
-              Any dispute relating to the interpretation or application of
-              these Terms of Use shall, unless amicably settled, be subject to
+              Any dispute relating to the interpretation or application of these
+              Terms of Use shall, unless amicably settled, be subject to
               conciliation. In the event of failure of the latter, the dispute
               shall be settled by arbitration. The arbitration shall be
               conducted in accordance with the modalities to be agreed upon by
@@ -419,10 +408,10 @@
           </h4>
           <p>
             <translate>
-              These Terms of Use constitute the entire agreement between you
-              and WHO with respect to its subject matter. WHO is not bound by
-              any additional terms that may appear in any communication from
-              you. Any amendment of these Terms of Use shall be subject to WHO’s
+              These Terms of Use constitute the entire agreement between you and
+              WHO with respect to its subject matter. WHO is not bound by any
+              additional terms that may appear in any communication from you.
+              Any amendment of these Terms of Use shall be subject to WHO’s
               written agreement, it being agreed that WHO may amend these Terms
               and Conditions from time to time at its sole discretion, without
               prior notice.
@@ -441,7 +430,8 @@
             </translate>
           </p>
           <p>
-            <b><translate>Email:</translate></b>&nbsp;<a href="mailto:digital-health-atlas@who.int">
+            <b><translate>Email:</translate></b
+            >&nbsp;<a href="mailto:digital-health-atlas@who.int">
               digital-health-atlas@who.int
             </a>
           </p>
@@ -454,11 +444,11 @@
 <script>
 export default {
   methods: {
-    goBack () {
-      this.$router.go(-1)
+    goBack() {
+      this.$router.go(-1);
     }
   }
-}
+};
 </script>
 
 <style lang="less">
