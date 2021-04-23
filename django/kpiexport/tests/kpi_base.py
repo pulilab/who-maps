@@ -12,6 +12,7 @@ from django.utils.timezone import localtime
 from kpiexport.tasks import update_auditlog_user_data_task
 from rest_framework.authtoken.models import Token
 
+
 class KPITestData:
     """
     Base class for User KPI tests. In setUp, it creates:
@@ -51,8 +52,7 @@ class KPITestData:
         self.date_4_str = self.date_4.strftime("%Y-%m-%d")
 
         # Create users
-        self.userprofile_1, self.test_user_key, self.client = self.create_user(org=self.org,
-                                                                                         country=self.country1)
+        self.userprofile_1, self.test_user_key, self.client = self.create_user(org=self.org, country=self.country1)
         self.userprofile_1.donor = self.d1
         self.userprofile_1.save()
         self.userprofile_2 = UserProfileFactory(name="USER2", account_type=UserProfile.IMPLEMENTER,
