@@ -48,4 +48,4 @@ class AuditLogTokenDetailedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AuditLogTokens
-        fields = ("date", "country", "registered", "data", "tokens")
+        fields = ("date", "country", "data", "tokens")

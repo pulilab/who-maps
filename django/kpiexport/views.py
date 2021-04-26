@@ -42,7 +42,7 @@ class KPIFilterBackend(filters.BaseFilterBackend):
             date_to = self._parse_date_str(date_to_str)
             queryset = queryset.filter(date__lte=date_to)
 
-        queryset = queryset.filter(date__gte=date_from)
+        queryset = queryset.filter(date__gte=date_from).order_by('date')
         return queryset
 
 
@@ -91,7 +91,7 @@ class TokenKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     * `detailed`: if set to true, detailed donor-based data will be returned
 
     """
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogTokens.objects.all()
