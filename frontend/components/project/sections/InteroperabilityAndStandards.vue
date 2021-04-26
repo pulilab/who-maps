@@ -46,7 +46,7 @@
           <tooltip
             :text="
               $gettext(
-                'If your data standards are not available here, please email digitalhealthatlas@gmail.com'
+                'If your data standards are not available here, please email digital-health-atlas@who.int'
               ) | translate
             "
           />

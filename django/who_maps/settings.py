@@ -458,14 +458,14 @@ if SITE_ID in [3, 4]:
 
 
 SWAGGER_SETTINGS = {
-   'SECURITY_DEFINITIONS': {
-      'Bearer': {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',
             'in': 'header',
             'description': 'authorization: Bearer XXXXXXXXXXXXXXXXXXX'
-      }
-   }
+        }
+    }
 }
 
 """

@@ -31,8 +31,12 @@ const config = {
       { hid: 'description', name: 'description', content: 'DHA' }
     ],
     link: [
-      { rel: 'icon', type: 'image/ico', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/ico', href: '/favicon.ico' },
       // { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/icon?family=Material+Icons'
+      }
     ],
     script: [
       {
@@ -41,7 +45,7 @@ const config = {
       }
     ]
   },
-  css: ['~assets/style/main.sass', '~assets/style/main.less'],
+  css: ['~assets/style/main.scss', '~assets/style/main.less'],
   env: {
     GlobalCountryID: process.env.GLOBAL_COUNTRY_ID || 201,
     hotjarId: process.env.HOTJAR_TRACKING_ID || null

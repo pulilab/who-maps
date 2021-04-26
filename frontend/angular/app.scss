@@ -1,4 +1,5 @@
-@import "../../node_modules/angular-material/dist/angular-material.scss";
+@import "node_modules/angular-material/dist/angular-material.scss";
+
 @import "./variables";
 @import "./mixins";
 
@@ -100,6 +101,7 @@
     .md-display-1 {
       margin: 40px 0;
       font-size: 32px;
+      line-height: 24px;
       letter-spacing: -1px;
     }
 

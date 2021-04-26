@@ -41,15 +41,28 @@ class ProjectDraftTests(SetupTests):
         response = self.test_user_client.post(url, self.project_draft_data, format="json")
         self.project_draft_id = response.json().get("id")
 
+    def test_create_new_draft_project_description_narrative_validator(self):
+        url = reverse("project-create", kwargs={"country_id": self.country_id})
+        data = copy.deepcopy(self.project_draft_data)
+        # test for long "description narrative"
+        description_narrative = "x" * 5001
+        data['project'].update(name='Draft Proj 3', implementation_overview=description_narrative)
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['project']['implementation_overview'],
+                         ['Ensure this field has no more than 5000 characters.'])
+
     def test_create_new_draft_project_basic_data(self):
         url = reverse("project-create", kwargs={"country_id": self.country_id})
         data = copy.deepcopy(self.project_draft_data)
-        data['project'].update(name='Draft Proj 3', implementation_overview="Test overview")
+        # test for long "description narrative"
+        description_narrative = "x" * 4999
+        data['project'].update(name='Draft Proj 3', implementation_overview=description_narrative)
         response = self.test_user_client.post(url, data, format="json")
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()['draft']['name'], 'Draft Proj 3')
-        self.assertEqual(response.json()['draft']['implementation_overview'], 'Test overview')
+        self.assertEqual(response.json()['draft']['implementation_overview'], description_narrative)
         self.assertEqual(int(response.json()['draft']['organisation']), self.org.id)
         self.assertEqual(int(response.json()['draft']['country']), self.country_id)
         self.assertEqual(response.json()['published'], {})

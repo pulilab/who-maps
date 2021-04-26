@@ -95,7 +95,7 @@
                 </div>
               </el-row>
               <el-row v-show="resultsLoaded && results.length === 0">
-                <div class="Loading">
+                <div class="Loading Null">
                   <translate>No project to show</translate>
                 </div>
               </el-row>
@@ -137,7 +137,7 @@
                 </div>
               </el-row>
               <el-row v-else-if="cms.length === 0">
-                <div class="Loading">
+                <div class="Loading Null">
                   <translate>No content to show</translate>
                 </div>
               </el-row>
@@ -174,7 +174,7 @@
                 </div>
               </el-row>
               <el-row v-show="documents && documents.length === 0">
-                <div class="Loading">
+                <div class="Loading Null">
                   <translate>No document to show</translate>
                 </div>
               </el-row>
@@ -357,8 +357,8 @@ export default {
 </script>
 
 <style lang="less">
-@import '../../assets/style/variables.less';
-@import '../../assets/style/mixins.less';
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
 .SearchComponent {
   .SearchButton {
@@ -464,16 +464,20 @@ export default {
 
   .Loading {
     padding: 22px 20px;
-    color: #008dc9;
+    color: @colorBrandPrimary;
     font-size: 14px;
     line-height: 16px;
     letter-spacing: 0;
+
+    &.Null {
+      color: @colorGray;
+    }
   }
 
   .SearchResultsWrapper {
     padding-top: 16px;
     // max-height: calc(@landingMapHeight - 36px);
-    max-height: calc(@landingMapHeight);
+    max-height: calc(@landingMapHeight - 147px);
     overflow-y: auto;
 
     @media screen and (max-height: 694px) {
@@ -546,7 +550,7 @@ export default {
   background-color: @colorGrayLightest;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     bottom: 0;

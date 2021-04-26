@@ -1,7 +1,7 @@
 <template>
   <el-card
     :body-style="{ padding: hideBorders ? '0px' : '12px' }"
-    :class="['ProjectCard', 'rounded', {hovered, 'HideBorders': hideBorders}]"
+    :class="['ProjectCard', 'rounded', { hovered, HideBorders: hideBorders }]"
     :shadow="cardShadow"
   >
     <div
@@ -22,17 +22,13 @@
             type="flex"
             class="ProjectCountryOrg"
           >
-            <el-col
-              class="Country"
-            >
+            <el-col class="Country">
               <country-item
                 :id="project.country"
                 :active="false"
               />
             </el-col>
-            <el-col
-              class="Organisation"
-            >
+            <el-col class="Organisation">
               &nbsp;<translate>Ministry of Health</translate>
             </el-col>
           </el-row>
@@ -61,9 +57,7 @@
               class="DownloadIcon"
             />
           </transition>
-          <project-legend
-            :id="project.id"
-          />
+          <project-legend :id="project.id" />
         </el-col>
       </el-row>
     </div>
@@ -162,7 +156,8 @@ export default {
         color: @colorBrandPrimary;
       }
 
-      .ProjectCountryOrg {
+      .ProjectCountryOrg,
+      .MainText {
         color: @colorTextPrimary;
       }
 
@@ -176,11 +171,17 @@ export default {
     }
 
     .MainText {
-      max-height: 42px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      margin-top: 5px;
+      max-height: 36px;
       overflow: hidden;
+      text-overflow: ellipsis;
       font-size: 12px;
-      line-height: 20px;
-      color: @colorTextPrimary;
+      line-height: 18px;
+      color: @colorTextSecondary;
+      transition: @transitionAll;
     }
 
     .ProjectName {

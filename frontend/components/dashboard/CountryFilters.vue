@@ -42,15 +42,27 @@ export default {
       dashboardType: 'dashboard/getDashboardType'
     }),
     ...mapGettersActions({
-      selectedCountries: ['dashboard', 'getFilteredCountries', 'setFilteredCountries'],
+      selectedCountries: [
+        'dashboard',
+        'getFilteredCountries',
+        'setFilteredCountries'
+      ],
       selectedRegion: ['dashboard', 'getFilteredRegion', 'setFilteredRegion'],
       selectedStages: ['dashboard', 'getFilteredStages', 'setFilteredStages']
     }),
     disableCountries () {
-      return !!this.selectedRegion || this.dashboardType === 'country' || this.selectedGlobal
+      return (
+        !!this.selectedRegion ||
+        this.dashboardType === 'country' ||
+        this.selectedGlobal
+      )
     },
     disableRegions () {
-      return this.selectedCountries.length > 0 || this.dashboardType === 'country' || this.selectedGlobal
+      return (
+        this.selectedCountries.length > 0 ||
+        this.dashboardType === 'country' ||
+        this.selectedGlobal
+      )
     },
     disableStages () {
       return false
@@ -60,7 +72,10 @@ export default {
         this.selectedCountries = val ? [process.env.GlobalCountryID] : []
       },
       get () {
-        return this.selectedCountries.length > 0 && this.selectedCountries[0] === process.env.GlobalCountryID
+        return (
+          this.selectedCountries.length > 0 &&
+          this.selectedCountries[0] === process.env.GlobalCountryID
+        )
       }
     }
   }
@@ -68,21 +83,20 @@ export default {
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .FilterSwitchHandler {
-    margin-bottom: 14px;
-    margin-top: -6px;
-  }
+.FilterSwitchHandler {
+  margin: 0 0 20px;
+}
 
-  .CountryFilters {
-    .el-select {
-      width: 100%;
-      margin-bottom: 10px;
-      &:last-child {
-        margin-bottom: 0px;
-      }
+.CountryFilters {
+  .el-select {
+    width: 100%;
+    margin-bottom: 10px;
+    &:last-child {
+      margin-bottom: 0px;
     }
   }
+}
 </style>

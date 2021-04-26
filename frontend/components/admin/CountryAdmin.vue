@@ -263,7 +263,7 @@
             Supported file formats include: {list} The file size is limited to
             {size}MB. You are able to upload a maximum of {max} reference files.
             If you need to increase this number, email
-            digitalhealthatlas@gmail.com to add more documents.
+            digital-health-atlas@who.int to add more documents.
           </translate>
         </p>
       </div>
@@ -1023,8 +1023,8 @@ export default {
 </script>
 
 <style lang="less">
-@import '~assets/style/variables.less';
-@import '~assets/style/mixins.less';
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
 .CountryAdmin {
   margin-bottom: 60px;
@@ -1060,7 +1060,7 @@ export default {
       padding-right: 7.5px;
     }
     .Remove-icon {
-      font-family: 'element-icons' !important;
+      font-family: "element-icons" !important;
       font-size: @fontSizeLarge;
       cursor: pointer;
       display: inline-block;
@@ -1074,7 +1074,7 @@ export default {
       font-weight: 700;
       opacity: 1;
       &::before {
-        content: '\e60f';
+        content: "\e60f";
       }
     }
     .el-icon-close {
@@ -1093,10 +1093,11 @@ export default {
 
   .Divider {
     box-sizing: border-box;
+    width: 100%;
     height: 1px;
     width: @cardSizeMedium;
     margin: 40px 0 40px -40px;
-    border: 0.5px solid #b9b9b9;
+    background-color: @colorGrayLight;
   }
   .CollapsibleCard {
     width: @cardSizeMedium;
@@ -1223,31 +1224,37 @@ export default {
         justify-content: center;
         align-items: center;
         margin: 0 0 20px;
-      }
 
-      .el-transfer-panel {
-        width: 100%;
+        .el-transfer-panel {
+          width: 100%;
 
-        .el-transfer-panel__body {
-          min-height: 250px;
-          max-height: 40vh;
-          overflow-y: auto;
+          .el-transfer-panel__body {
+            min-height: 250px;
+            max-height: 40vh;
+            overflow-y: auto;
+          }
+
+          // &:first-child {
+          //   .el-transfer-panel__header {
+          //     background-color: lighten(@colorDraft, 33%);
+          //   }
+          // }
+          //
+          // &:last-child {
+          //   .el-transfer-panel__header {
+          //     background-color: lighten(@colorPublished, 52%);
+          //   }
+          // }
         }
 
-        // &:first-child {
-        //   .el-transfer-panel__header {
-        //     background-color: lighten(@colorDraft, 33%);
-        //   }
-        // }
-        //
-        // &:last-child {
-        //   .el-transfer-panel__header {
-        //     background-color: lighten(@colorPublished, 52%);
-        //   }
-        // }
-      }
+        .el-transfer__buttons {
+          text-align: center;
 
-      // .el-transfer-buttons {}
+          .el-button + .el-button {
+            margin-left: 0;
+          }
+        }
+      }
     }
   }
 
@@ -1273,7 +1280,7 @@ export default {
   }
 }
 
-[dir='rtl'] {
+[dir="rtl"] {
   .CountryAdmin {
     .UserManagement {
       .AdminPersonaChooser {

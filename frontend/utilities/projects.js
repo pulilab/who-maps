@@ -155,7 +155,7 @@ export const draftRules = () => {
       max: 64
     },
     implementation_overview: {
-      max: 1024
+      max: 5000
     },
     research: {
       required: false
@@ -208,7 +208,7 @@ export const publishRules = () => {
     },
     implementation_overview: {
       required: true,
-      max: 1024
+      max: 5000
     },
     research: {
       required: false

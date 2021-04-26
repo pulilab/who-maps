@@ -123,7 +123,9 @@ export default {
       user: 'user/getProfile'
     }),
     project () {
-      return this.published && this.published.name ? this.published : this.draft
+      return this.published && this.published.name
+        ? this.published
+        : this.draft
     },
     id () {
       return parseInt(this.$route.params.id, 10)
@@ -223,8 +225,8 @@ export default {
 </script>
 
 <style lang="less">
-@import '.~assets/style/variables.less';
-@import '.~assets/style/mixins.less';
+@import ".~assets/style/variables.less";
+@import ".~assets/style/mixins.less";
 
 .ProjectBar {
   background-color: @colorWhite;
@@ -241,6 +243,7 @@ export default {
 
   .ProjectName {
     margin: 14px 0 0;
+    color: @colorTextPrimary;
     font-size: @fontSizeLarge;
     line-height: 22px;
     font-weight: 700;
@@ -313,7 +316,7 @@ export default {
       }
 
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -1px;
         left: 0;

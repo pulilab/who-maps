@@ -1,5 +1,10 @@
 <template>
-  <el-card :class="['QuestionContainer rounded', {'Inactive': !question.is_active, 'Invalid': !valid, 'Edited': !saved}]">
+  <el-card
+    :class="[
+      'QuestionContainer rounded',
+      { Inactive: !question.is_active, Invalid: !valid, Edited: !saved }
+    ]"
+  >
     <!-- Actions -->
     <div class="Actions">
       <el-button
@@ -55,10 +60,10 @@
 
     <div class="QSwitches">
       <!-- Required -->
-      <el-switch
+      <!-- <el-switch
         v-model="question.required"
         :active-text="$gettext('Required') | translate"
-      />
+      /> -->
 
       <el-switch
         v-model="question.is_private"
@@ -71,7 +76,7 @@
       :options.sync="question.options"
     />
 
-    <span :class="['DDHandler', {'DraggingDisabled': !draggable}]">
+    <span :class="['DDHandler', { DraggingDisabled: !draggable }]">
       <fa icon="bars" />
     </span>
   </el-card>
@@ -120,7 +125,11 @@ export default {
       return null
     },
     valid () {
-      return Boolean(this.question.type && this.question.question.length && (this.question.type < 4 || this.question.options.length))
+      return Boolean(
+        this.question.type &&
+          this.question.question.length &&
+          (this.question.type < 4 || this.question.options.length)
+      )
     },
     saved () {
       return isEqual(this.stored, this.question)
@@ -146,11 +155,15 @@ export default {
     async doDelete (id) {
       try {
         if (this.id) {
-          await this.$confirm(this.$gettext('This will permanently delete the question?'), this.$gettext('Warning'), {
-            confirmButtonText: this.$gettext('OK'),
-            cancelButtonText: this.$gettext('Cancel'),
-            type: 'warning'
-          })
+          await this.$confirm(
+            this.$gettext('This will permanently delete the question?'),
+            this.$gettext('Warning'),
+            {
+              confirmButtonText: this.$gettext('OK'),
+              cancelButtonText: this.$gettext('Cancel'),
+              type: 'warning'
+            }
+          )
         }
         await this.deleteQuestion(id)
         this.$message({
@@ -166,7 +179,9 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: this.$gettext('An error occured while deleting the question')
+            message: this.$gettext(
+              'An error occured while deleting the question'
+            )
           })
         }
       }
@@ -176,11 +191,17 @@ export default {
         if (this.id) {
           await this.updateQuestion({ question: this.question, id: this.id })
         } else {
-          await this.$confirm(this.$gettext('This will save the question, type and options will not be editable anymore'), this.$gettext('Warning'), {
-            confirmButtonText: this.$gettext('OK'),
-            cancelButtonText: this.$gettext('Cancel'),
-            type: 'warning'
-          })
+          await this.$confirm(
+            this.$gettext(
+              'This will save the question, type and options will not be editable anymore'
+            ),
+            this.$gettext('Warning'),
+            {
+              confirmButtonText: this.$gettext('OK'),
+              cancelButtonText: this.$gettext('Cancel'),
+              type: 'warning'
+            }
+          )
           await this.createQuestion(this.question)
         }
         this.$message({
@@ -203,134 +224,132 @@ export default {
       }
     }
   }
-
 }
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .QuestionContainer {
-    position: relative;
-    margin-bottom: 20px;
-    padding-left: 24px;
+.QuestionContainer {
+  position: relative;
+  margin-bottom: 20px;
+  padding-left: 24px;
 
-    .Actions {
-      position: absolute;
-      right: 20px;
-      top: 10px;
+  .Actions {
+    position: absolute;
+    right: 20px;
+    top: 10px;
 
-      .el-button {
-        margin-left: 20px;
+    .el-button {
+      margin-left: 20px;
+    }
+  }
+
+  &.Inactive {
+    opacity: 0.8;
+    background-color: @colorGrayLightest;
+  }
+
+  &.Edited {
+    border-color: darken(@colorBrandBlueLight, 15%);
+    background-color: @colorBrandBlueLight;
+  }
+
+  &.Invalid {
+    border-color: @colorDanger;
+    background-color: #feeceb;
+  }
+
+  .el-card__body {
+    > div {
+      margin-bottom: 20px;
+
+      &:last-of-type {
+        margin: 0;
+      }
+    }
+  }
+
+  .QSwitches {
+    .el-switch {
+      margin-right: 30px;
+    }
+  }
+
+  .DDHandler {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 100%;
+    background-color: @colorGrayLighter;
+    border-radius: 3px 0 0 3px;
+    cursor: move;
+    transition: @transitionAll;
+
+    &.DraggingDisabled {
+      cursor: not-allowed;
+      &:hover,
+      &:active {
+        background-color: @colorGrayLighter;
+        .svg-inline--fa {
+          color: @colorGray;
+        }
       }
     }
 
-    &.Inactive {
-      opacity: .8;
-      background-color: @colorGrayLightest;
-    }
-
-    &.Edited {
-      border-color: darken(@colorBrandBlueLight, 15%);
+    &:hover,
+    &:active {
       background-color: @colorBrandBlueLight;
+
+      .svg-inline--fa {
+        color: @colorBrandPrimary;
+      }
     }
 
-    &.Invalid {
-      border-color: @colorDanger;
-      background-color: #FEECEB;
+    .svg-inline--fa {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: @colorGray;
+      transition: @transitionAll;
     }
+  }
+}
 
-    .el-card__body {
-      > div {
-        margin-bottom: 20px;
+[dir='rtl'] {
+  .QuestionContainer {
+    padding-left: 0;
+    padding-right: 24px;
 
-        &:last-of-type {
-          margin: 0;
-        }
+    .Actions {
+      left: 20px;
+      right: auto;
+
+      .el-button {
+        margin-left: 0;
+        margin-right: 20px;
       }
     }
 
     .QSwitches {
       .el-switch {
-        margin-right: 30px;
+        margin-left: 30px;
+        margin-right: 0;
       }
     }
 
     .DDHandler {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 24px;
-      height: 100%;
-      background-color: @colorGrayLighter;
-      border-radius: 3px 0 0 3px;
-      cursor: move;
-      transition: @transitionAll;
+      left: auto;
+      right: 0;
+    }
 
-      &.DraggingDisabled {
-        cursor: not-allowed;
-        &:hover,
-        &:active {
-          background-color: @colorGrayLighter;
-          .svg-inline--fa {
-            color: @colorGray;
-          }
-        }
-      }
-
-      &:hover,
-      &:active {
-        background-color: @colorBrandBlueLight;
-
-        .svg-inline--fa {
-          color: @colorBrandPrimary;
-        }
-      }
-
-      .svg-inline--fa {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: @colorGray;
-        transition: @transitionAll;
-      }
+    .el-switch__label.el-switch__label--right {
+      margin-left: 0;
+      margin-right: 10px;
     }
   }
-
-  [dir="rtl"] {
-    .QuestionContainer {
-      padding-left: 0;
-      padding-right: 24px;
-
-      .Actions {
-        left: 20px;
-        right: auto;
-
-        .el-button {
-          margin-left: 0;
-          margin-right: 20px;
-        }
-      }
-
-      .QSwitches {
-        .el-switch {
-          margin-left: 30px;
-          margin-right: 0;
-        }
-      }
-
-      .DDHandler {
-        left: auto;
-        right: 0;
-      }
-
-      .el-switch__label.el-switch__label--right {
-        margin-left: 0;
-        margin-right: 10px;
-      }
-    }
-  }
-
+}
 </style>
