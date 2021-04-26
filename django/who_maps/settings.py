@@ -1,6 +1,7 @@
 import os
 import datetime
 import sys
+from celery.schedules import crontab
 from django.utils.translation import ugettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -402,6 +403,10 @@ if SITE_ID in [3, 4]:
         "send_coverage_reminder": {
             "task": 'send_coverage_reminder',
             "schedule": datetime.timedelta(hours=NO_COVERAGE_REMINDER),
+        },
+        "auditlog_update_user_data": {
+            "task": "auditlog_update_user_data",
+            "schedule": crontab(hour=1, minute=0, )
         },
     }
     if ODK_SYNC_ENABLED:

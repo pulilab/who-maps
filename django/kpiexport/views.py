@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from project.models import Project
-from country.models import Country
+from country.models import Country, Donor
 from user.models import User, UserProfile
 from django.db.models import Q, F, IntegerField
 from django.db.models import Count
@@ -14,85 +14,47 @@ from functools import reduce
 from django.shortcuts import get_object_or_404
 from user.authentication import BearerTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from datetime import datetime
+from datetime import datetime, timedelta
 from core.views import Http400
 from django.utils.timezone import make_aware
+from core.views import TokenAuthMixin
+from kpiexport.models import AuditLogUsers
 
 
-class ApiAuthMixin(object):
-    """
-    Mixin class for defining permission and authentication settings on API views.
-    """
-    authentication_classes = (BearerTokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
-
-
-class ProjectKPIsView(ApiAuthMixin, APIView):
-    """
-    View to retrieve project KPIs
-
-    Requires token authentication.
-
-    Allowed filters:
-
-    * `countryCode`: country code (for example: UK)
-    * `modified`: modified date (for example: 2020-10-31
-    """
-    queryset = Project.objects \
-        .annotate(published_country_id=Cast(KeyTextTransform('country', 'data'), output_field=IntegerField())) \
-        .annotate(draft_country_id=Cast(KeyTextTransform('country', 'draft'), output_field=IntegerField()))
-
-    obsolete_project_markers = {
-        'test',
-        'demo',
-        'delete'
-    }
+class KPIFilterMixin(object):
+    @staticmethod
+    def _parse_date_str(date_str: str) -> datetime.date:
+        date = datetime.strptime(date_str, '%Y-%m')
+        return date.date()
 
     def get_queryset(self):
         """
-        Retrieves Project objects, filtered by filter term(s) if present,
-        for generating the response.
+        Does general filtering for all KPI APIs
         """
-        country_code = self.request.query_params.get('countryCode')
-        date_str = self.request.query_params.get('modified')
+        country_id = self.request.query_params.get('country')
+        investor_id = self.request.query_params.get('investor')
+        date_from_str = self.request.query_params.get('from')
+        date_to_str = self.request.query_params.get('to')
 
-        qs = self.queryset
+        if country_id:
+            country = get_object_or_404(Country, "Country ID is invalid", pk=country_id)
+            self.queryset = self.queryset.filter(country=country)
+        if investor_id:
+            investor = get_object_or_404(Donor, "Donor ID is invalid", pk=investor_id)
+            self.queryset = self.queryset.filter(data__investor=investor)
+        if date_from_str:
+            date_from = self._parse_date_str(date_from_str)
+        else:
+            date_from = (datetime.today() - timedelta(days=365)).date()
+        if date_to_str:
+            date_to = self._parse_date_str(date_to_str)
+            self.queryset = self.queryset.filter(date__lte=date_to)
 
-        if country_code:
-            country = get_object_or_404(Country.objects.all(), code=country_code)
-            qs = qs.filter(Q(draft_country_id=country.pk) | Q(published_country_id=country.pk))
-
-        if date_str:
-            try:
-                date = make_aware(datetime.strptime(date_str, "%Y-%m-%d"))
-            except ValueError:  # pragma: no cover
-                raise Http400("modified date needs to be in this format: YYYY-MM-DD")
-            qs = qs.filter(modified__gte=date)
-
-        return qs
-
-    def _to_representation(self, qs: QuerySet):
-        data = dict()
-        data['total'] = qs.count()
-        data['draft'] = qs.draft_only().count()
-        data['published'] = data['total'] - data['draft']
-
-        # name must be unique and data filled in order to be publishable
-        data['publishable'] = qs.draft_only().filter(data__isnull=False).distinct('name').count()
-        data['deletable'] = qs.filter(
-            reduce(operator.or_, (Q(name__contains=x) for x in self.obsolete_project_markers))).count()
-        data['duplicates'] = qs.values('name', 'id').annotate(Count('name')).order_by(). \
-            filter(name__count__gt=1).count()
-        return data
-
-    def get(self, request, *args, **kwargs):
-        """
-        Return user KPIs.
-        """
-        return Response(self._to_representation(self.get_queryset()))
+        self.queryset = self.queryset.filter(date__gte=date_from)
+        return self.queryset
 
 
-class UserKPIsView(ApiAuthMixin, APIView):
+class UserKPIsView(KPIFilterMixin, TokenAuthMixin, APIView):
     """
     View to retrieve user KPIs
 
@@ -100,36 +62,18 @@ class UserKPIsView(ApiAuthMixin, APIView):
 
     Allowed filters:
 
-    * `countryCode`: country code (for example: UK)
-    * `lastLogin`: filter for users who logged in after this date (for example:
+    * `country`: country ID
+    * `from`: YYYY-MM format, beginning of the sample
+    * `to`: YYYY-MM format, ending of the sample
+
+    By default, results are sent from the past year
     """
-    queryset = User.objects.filter(userprofile__isnull=False)
-
-    def get_queryset(self):
-        """
-        Retrieves User objects, filtered by filter term(s) if present,
-        for generating the response.
-        """
-        country_code = self.request.query_params.get('countryCode')
-        date_str = self.request.query_params.get('lastLogin')
-
-        qs = self.queryset
-
-        if country_code:
-            country = get_object_or_404(Country.objects.all(), code=country_code)
-            qs = qs.filter(userprofile__country=country)
-
-        if date_str:
-            try:
-                date = make_aware(datetime.strptime(date_str, "%Y-%m-%d"))
-            except ValueError:  # pragma: no cover
-                raise Http400("Modified date needs to be in this format: YYYY-MM-DD")
-            qs = qs.filter(last_login__gte=date)
-        qs = qs.annotate(account_type=F('userprofile__account_type')). \
-            values('account_type').annotate(Count("id")).order_by()
-        return qs
+    queryset = AuditLogUsers.objects.all()
 
     def _to_representation(self, qs: QuerySet):
+        import ipdb
+        ipdb.set_trace()
+
         # convert account type to humanly-readable strings
         account_types = {x: y for x, y in UserProfile.ACCOUNT_TYPE_CHOICES}
         account_types[None] = 'Unknown'
