@@ -12,6 +12,7 @@ from django.utils.timezone import localtime
 from kpiexport.tasks import update_auditlog_user_data_task, update_auditlog_token_data_task
 from rest_framework.authtoken.models import Token
 
+
 class KPITestData:
     """
     Base class for User KPI tests. In setUp, it creates:
