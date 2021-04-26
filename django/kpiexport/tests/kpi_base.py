@@ -23,9 +23,6 @@ class KPITestData:
     """
 
     def setUp(self):
-        # Clear existing logs
-        AuditLogTokens.objects.all().delete()
-        AuditLogUsers.objects.all().delete()
         # Create organisation and donors
         self.org = OrganisationFactory(name="org1")
         self.d1 = DonorFactory(name="Donor1", code="donor1")
