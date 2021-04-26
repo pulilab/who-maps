@@ -1,6 +1,7 @@
 from scheduler.celery import app
 from django.db.models import Count
 from datetime import datetime, date, timedelta
+from django.db.models import F
 import logging
 
 
@@ -58,5 +59,53 @@ def update_auditlog_user_data_task(current_date=date.today()):
             donor_id = str(entry['donor'])
             add_entry_to_data(entry, country, donor_id, log_date, 'registered')
             add_entry_to_data(entry, country_global, donor_id, log_date, 'registered')
+        except Country.DoesNotExist:  # pragma: no cover
+            logging.warning(f'Country with this ID does not exist: {entry["country"]}')
+
+
+@app.task(name='auditlog_update_token_data')
+def update_auditlog_token_data_task(current_date=date.today()):
+    """
+    Schedulable task to update token statistics
+    Needs to run daily - collects yesterday's stats
+    """
+    from rest_framework.authtoken.models import Token
+    from kpiexport.models import AuditLogTokens
+    from country.models import Country
+
+    def add_entry_to_data(entry, country, donor_id, log_date):
+        # get or create auditlog
+        log_entry, _ = AuditLogTokens.objects.get_or_create(date=log_date, country=country)
+        log_entry.tokens += entry['user_id__count']
+        # generate total data
+        if not log_entry.data.get('total'):
+            log_entry.data['total'] = dict()
+        if not log_entry.data['total'].get(entry['account_type']):
+            log_entry.data['total'][entry['account_type']] = 0
+        # Generate data structure if needed
+        if not log_entry.data.get(donor_id):
+            log_entry.data[donor_id] = dict(total=0)
+        if not log_entry.data[donor_id].get(entry['account_type']):
+            log_entry.data[donor_id][entry['account_type']] = 0
+        log_entry.data[donor_id][entry['account_type']] += entry['user_id__count']
+        log_entry.data[donor_id]['total'] += entry['user_id__count']
+        log_entry.data['total'][entry['account_type']] += entry['user_id__count']
+        log_entry.save()
+
+    country_global = Country.objects.get(name='Global')
+    date = current_date - timedelta(days=1)
+    log_date = datetime(date.year, date.month, 1).date()
+    qs = Token.objects.filter(created__date=date).filter(user__userprofile__isnull=False).\
+        filter(user__userprofile__country__isnull=False).\
+        annotate(country=F('user__userprofile__country')).\
+        annotate(donor=F('user__userprofile__donor')).\
+        annotate(account_type=F('user__userprofile__account_type')). \
+        values('country', 'donor', 'account_type').annotate(Count("user_id")).order_by()
+    for entry in qs:
+        try:
+            country = Country.objects.get(pk=entry['country'])
+            donor_id = str(entry['donor'])
+            add_entry_to_data(entry, country, donor_id, log_date)
+            add_entry_to_data(entry, country_global, donor_id, log_date)
         except Country.DoesNotExist:  # pragma: no cover
             logging.warning(f'Country with this ID does not exist: {entry["country"]}')

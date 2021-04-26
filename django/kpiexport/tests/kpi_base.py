@@ -9,7 +9,7 @@ from datetime import datetime, date, timedelta
 
 from allauth.account.models import EmailConfirmation
 from django.utils.timezone import localtime
-from kpiexport.tasks import update_auditlog_user_data_task
+from kpiexport.tasks import update_auditlog_user_data_task, update_auditlog_token_data_task
 from rest_framework.authtoken.models import Token
 
 
@@ -62,8 +62,9 @@ class KPITestData:
         self.userprofile_2.donor = self.d1
         self.userprofile_2.user.save()
         self.userprofile_2.save()
-        self.token_2 = Token.objects.get_or_create(user=self.userprofile_2.user, defaults=dict(created=self.date_1))
-
+        self.token_2, _ = Token.objects.get_or_create(user=self.userprofile_2.user)
+        self.token_2.created = self.date_1
+        self.token_2.save()
         self.userprofile_3 = UserProfileFactory(name="USER3", account_type=UserProfile.GOVERNMENT,
                                                 country=self.country2)
         self.userprofile_3.user.date_joined = self.date_1
@@ -71,7 +72,9 @@ class KPITestData:
         self.userprofile_3.donor = self.d2
         self.userprofile_3.user.save()
         self.userprofile_3.save()
-        self.token_2 = Token.objects.get_or_create(user=self.userprofile_3.user, defaults=dict(created=self.date_1))
+        self.token_3, _ = Token.objects.get_or_create(user=self.userprofile_3.user)
+        self.token_3.created = self.date_1
+        self.token_3.save()
 
         self.userprofile_4 = UserProfileFactory(name="USER4", account_type=UserProfile.IMPLEMENTER,
                                                 country=self.country2)
@@ -80,6 +83,9 @@ class KPITestData:
         self.userprofile_4.donor = self.d2
         self.userprofile_4.user.save()
         self.userprofile_4.save()
+        self.token_4, _ = Token.objects.get_or_create(user=self.userprofile_4.user)
+        self.token_4.created = self.date_1
+        self.token_4.save()
 
         self.userprofile_5 = UserProfileFactory(name="USER5", account_type=UserProfile.IMPLEMENTER,
                                                 country=self.country2)
@@ -88,6 +94,9 @@ class KPITestData:
         self.userprofile_5.donor = self.d2
         self.userprofile_5.user.save()
         self.userprofile_5.save()
+        self.token_5, _ = Token.objects.get_or_create(user=self.userprofile_5.user)
+        self.token_5.created = self.date_2
+        self.token_5.save()
 
         self.userprofile_6 = UserProfileFactory(name="USER6", account_type=UserProfile.IMPLEMENTER,
                                                 country=self.country2)
@@ -96,9 +105,14 @@ class KPITestData:
         self.userprofile_6.donor = self.d2
         self.userprofile_6.user.save()
         self.userprofile_6.save()
+        self.token_6, _ = Token.objects.get_or_create(user=self.userprofile_6.user)
+        self.token_6.created = self.date_2
+        self.token_6.save()
+
         generate_date = date.today() - timedelta(days=150)
         while generate_date <= date.today():
             update_auditlog_user_data_task(generate_date)
+            update_auditlog_token_data_task(generate_date)
             generate_date = generate_date + timedelta(days=1)
 
     def create_user(self, user_email="test_user@gmail.com", user_password_1="123456hetNYOLC",

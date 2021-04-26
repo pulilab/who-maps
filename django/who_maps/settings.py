@@ -409,6 +409,10 @@ if SITE_ID in [3, 4]:
             "task": "auditlog_update_user_data",
             "schedule": crontab(hour=1, minute=0, )
         },
+        "auditlog_update_token_data": {
+            "task": "auditlog_update_token_data",
+            "schedule": crontab(hour=1, minute=0, )
+        },
     }
     if ODK_SYNC_ENABLED:
         CELERYBEAT_SCHEDULE.update(
