@@ -201,7 +201,8 @@ const generalTooltipSettings = (tooltip, xTitle, type = 'line') => {
       },
       label (item) {
         if (type === 'line') {
-          return `${item.label} ${xTitle}`
+          // return `${item.label} ${xTitle}`
+          return `${item.label}`
         }
         return `${tooltip.subtitle}`
       }

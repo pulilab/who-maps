@@ -258,11 +258,15 @@ export const actions = {
     { state, commit, dispatch, rootGetters },
     { func, refresh }
   ) {
-    // console.log(`/api/kpi/users/${objectToQueryString(state.filters)}`)
     commit('SET_LOADING', true)
-    const { data: userKpi } = await this.$axios.get(
-      `/api/kpi/users/${objectToQueryString(state.filters)}`
-    )
+
+    const kpi = await Promise.all([
+      this.$axios.get(`/api/kpi/users/${objectToQueryString(state.filters)}`),
+      this.$axios.get(`/api/kpi/tokens/${objectToQueryString(state.filters)}`)
+    ])
+
+    const users = kpi[0].data
+    const tokens = kpi[1].data
 
     // start of data that should come from somewhere
     // color sets (should be dynamic?)
@@ -347,8 +351,8 @@ export const actions = {
     // data generation
     const polarAData = randomData(stageLabels.length)
     const monthlyUserActivity = [
-      extract(userKpi, 'registered'),
-      extract(userKpi, 'active')
+      extract(users, 'registered'),
+      extract(users, 'active')
     ]
     const projectStatusMonthly = [
       randomData(monthLabels.length),
@@ -397,7 +401,7 @@ export const actions = {
         type: 'line',
         colors: colorSetB,
         scales: { x: 'Months', y: '# of users' },
-        labels: extract(userKpi, 'date').map(d => format(d, 'YYYY-MMM')),
+        labels: extract(users, 'date').map(d => format(d, 'YYYY-MMM')),
         tooltip: 'Users',
         data: monthlyUserActivity
       })
@@ -407,10 +411,10 @@ export const actions = {
       settings({
         type: 'line',
         colors: colorSetA,
-        scales: { x: '2017', y: '# of API keys' },
-        labels: monthLabels,
+        scales: { x: 'Months', y: '# of API keys' },
+        labels: extract(tokens, 'date').map(d => format(d, 'YYYY-MMM')),
         tooltip: 'API keys',
-        data: [randomData(monthLabels.length)]
+        data: [extract(tokens, 'tokens')]
       })
     )
     commit(
@@ -419,7 +423,7 @@ export const actions = {
         type: 'bar',
         colors: colorSetB,
         scales: { x: 'Months', y: 'Growth of users' },
-        labels: extract(userKpi, 'date').map(d => format(d, 'YYYY-MMM')),
+        labels: extract(users, 'date').map(d => format(d, 'YYYY-MMM')),
         legendLabels: [],
         tooltip: 'New users',
         data: monthlyUserActivity

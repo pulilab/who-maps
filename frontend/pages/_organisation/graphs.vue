@@ -121,6 +121,46 @@
       </graph-layout>
     </el-row>
 
+    <!-- api keys -->
+    <p class="subtitle">
+      <translate>API keys</translate>
+    </p>
+    <el-row
+      type="flex"
+      class="mb-80"
+    >
+      <graph-layout :span="24">
+        <translate>Monthly growth of API keys</translate>
+        <template #graph>
+          <chart
+            :chart-data="lineC.chartData || {}"
+            :options="lineC.options"
+            :height="300"
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
+    <el-row
+      type="flex"
+      :gutter="20"
+      class="mb-80"
+    >
+      <graph-layout :span="8">
+        <translate>Blank demo grid</translate>
+      </graph-layout>
+      <graph-layout :span="16">
+        <translate>Monthly growth of API keys</translate>
+        <template #graph>
+          <chart
+            :chart-data="lineC.chartData || {}"
+            :options="lineC.options"
+            :height="320"
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
     <!-- not integrate -->
     <p class="headline">
       <translate>Random generated</translate>
@@ -277,23 +317,6 @@
       </graph-layout>
     </el-row>
 
-    <!-- section G -->
-    <el-row
-      type="flex"
-      class="mb-80"
-    >
-      <graph-layout :span="24">
-        <translate>Monthly growth of API keys</translate>
-        <template #graph>
-          <chart
-            :chart-data="lineC.chartData || {}"
-            :options="lineC.options"
-            :height="300"
-          />
-        </template>
-      </graph-layout>
-    </el-row>
-
     <!-- section H -->
     <el-row
       type="flex"
@@ -307,14 +330,15 @@
         </template>
       </graph-layout>
       <graph-layout :span="16">
-        <translate>Monthly growth of API keys</translate>
+        <translate>Blank demo grid</translate>
+        <!-- <translate>Monthly growth of API keys</translate>
         <template #graph>
           <chart
             :chart-data="lineC.chartData || {}"
             :options="lineC.options"
             :height="320"
           />
-        </template>
+        </template> -->
       </graph-layout>
     </el-row>
 
