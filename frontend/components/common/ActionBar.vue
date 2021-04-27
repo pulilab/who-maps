@@ -52,6 +52,18 @@
               </translate>
             </nuxt-link>
           </el-col>
+          <el-col class="ActionBarTab">
+            <nuxt-link              
+              :to="localePath({name: 'organisation-admin-api', params: $route.params})"
+              class="ActionBarLink"
+              tag="div"
+            >
+              <translate key="api-key">
+                API key
+              </translate>
+            </nuxt-link>
+          </el-col>
+
         </el-row>
         <el-row
           v-if="isDashboard"
