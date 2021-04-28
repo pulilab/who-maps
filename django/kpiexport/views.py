@@ -30,8 +30,7 @@ class KPIFilterBackend(filters.BaseFilterBackend):
             country = get_object_or_404(Country, pk=int(country_id))
             queryset = queryset.filter(country=country)
         else:  # If there's no country filter, return with global data by default
-            country = get_object_or_404(Country, name='Global')
-            queryset = queryset.filter(country=country)
+            queryset = queryset.filter(country=None)
         if investor_id:
             queryset = queryset.filter(data__has_key=investor_id)
         if date_from_str:
@@ -61,7 +60,7 @@ class UserKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     * `detailed`: if set to true, detailed donor-based data will be returned
 
     """
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogUsers.objects.all()

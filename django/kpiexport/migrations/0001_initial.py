@@ -33,7 +33,8 @@ class Migration(migrations.Migration):
                 ('data', django.contrib.postgres.fields.jsonb.JSONField(blank=True, default=dict)),
                 ('registered', models.IntegerField(default=0)),
                 ('active', models.IntegerField(default=0)),
-                ('country', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='country.Country')),
+                ('country', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, blank=True, null=True,
+                                              to='country.Country')),
             ],
             options={
                 'verbose_name': 'User KPI',

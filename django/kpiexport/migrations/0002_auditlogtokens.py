@@ -31,7 +31,8 @@ class Migration(migrations.Migration):
                 ('date', models.DateField(help_text='WARNING: Only use the year and month of this')),
                 ('data', django.contrib.postgres.fields.jsonb.JSONField(blank=True, default=dict)),
                 ('tokens', models.IntegerField(default=0)),
-                ('country', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='country.Country')),
+                ('country', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, blank=True, null=True,
+                                              to='country.Country')),
             ],
             options={
                 'verbose_name': 'Token KPI',

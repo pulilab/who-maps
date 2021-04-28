@@ -35,7 +35,6 @@ def update_auditlog_user_data_task(current_date=date.today()):
         log_entry.data['total'][entry['account_type']][attr_name] += entry['id__count']
         log_entry.save()
 
-    country_global = Country.objects.get(name='Global')
     date = current_date - timedelta(days=1)
     log_date = datetime(date.year, date.month, 1).date()
     qs_visitors = UserProfile.objects.filter(user__last_login__date=date).\
@@ -46,7 +45,7 @@ def update_auditlog_user_data_task(current_date=date.today()):
             country = Country.objects.get(pk=entry['country'])
             donor_id = str(entry['donor'])
             add_entry_to_data(entry, country, donor_id, log_date, 'active')
-            add_entry_to_data(entry, country_global, donor_id, log_date, 'active')
+            add_entry_to_data(entry, None, donor_id, log_date, 'active')
         except Country.DoesNotExist:  # pragma: no cover
             logging.warning(f'Country with this ID does not exist: {entry["country"]}')
 
@@ -58,7 +57,7 @@ def update_auditlog_user_data_task(current_date=date.today()):
             country = Country.objects.get(pk=entry['country'])
             donor_id = str(entry['donor'])
             add_entry_to_data(entry, country, donor_id, log_date, 'registered')
-            add_entry_to_data(entry, country_global, donor_id, log_date, 'registered')
+            add_entry_to_data(entry, None, donor_id, log_date, 'registered')
         except Country.DoesNotExist:  # pragma: no cover
             logging.warning(f'Country with this ID does not exist: {entry["country"]}')
 
@@ -92,7 +91,6 @@ def update_auditlog_token_data_task(current_date=date.today()):
         log_entry.data['total'][entry['account_type']] += entry['user_id__count']
         log_entry.save()
 
-    country_global = Country.objects.get(name='Global')
     date = current_date - timedelta(days=1)
     log_date = datetime(date.year, date.month, 1).date()
     qs = Token.objects.filter(created__date=date).filter(user__userprofile__isnull=False).\
@@ -106,6 +104,6 @@ def update_auditlog_token_data_task(current_date=date.today()):
             country = Country.objects.get(pk=entry['country'])
             donor_id = str(entry['donor'])
             add_entry_to_data(entry, country, donor_id, log_date)
-            add_entry_to_data(entry, country_global, donor_id, log_date)
+            add_entry_to_data(entry, None, donor_id, log_date)
         except Country.DoesNotExist:  # pragma: no cover
             logging.warning(f'Country with this ID does not exist: {entry["country"]}')
