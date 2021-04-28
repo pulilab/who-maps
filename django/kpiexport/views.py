@@ -60,7 +60,7 @@ class UserKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     * `detailed`: if set to true, detailed donor-based data will be returned
 
     """
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogUsers.objects.all()
