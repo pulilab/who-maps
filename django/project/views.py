@@ -409,8 +409,10 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
 
-        ProjectVersion.objects.create(project=instance, user=request.user.userprofile, name=instance.name,
-                                      data=instance.data, research=instance.research, published=False)
+        project = Project.objects.get(id=instance.id)
+
+        ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
+                                      data=project.data, research=project.research, published=False)
 
         return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
 
