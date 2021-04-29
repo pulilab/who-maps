@@ -1,16 +1,16 @@
 <template>
   <div class="screen">
     <div class="PageTitle">
-      <h2>
-        Manage API key
+      <h2>        
+        <translate>Manage API key</translate>
       </h2>
     </div>
     <div class="api-card-wrapper">
       <el-row class="api-card relative is-always-shadow">
         <el-col class="center">
-          Documentation can be found
+          <translate>Documentation can be found</translate>          
           <nuxt-link to="">
-            here
+            <translate>here</translate>
           </nuxt-link>
         </el-col>
         <transition name="block">
@@ -26,10 +26,10 @@
         </transition>
         <el-col class="center">
           <el-button @click="createAPIKey" type="primary el-button--medium" v-if="apiKey === ''">
-            Create API key
+            <translate>Create API key</translate>
           </el-button>
           <el-button @click="removeAPIKey" type="danger el-button--medium" v-else>
-            Inactivate API key
+            <translate>Inactivate API key</translate>
           </el-button>
         </el-col>
       </el-row>
@@ -38,11 +38,13 @@
 </template>
 
 <script>
+import TranslateWrapper from '../TranslateWrapper.vue'
 
 export default {
   data() {
     return {
-      apiKey: '',
+      apiKey: ''
+    TranslateWrapper,
       canCopy: false,
       copied: false,
     }
