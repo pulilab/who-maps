@@ -246,7 +246,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
             if project.name != original_data['name'] or project.research != original_data['research'] or \
                     project.data != original_data['data']:
                 ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
-                                              data=project.data, research=project.research)
+                                              data=project.data, research=project.research, published=True)
 
         project.reset_approval()
 
@@ -261,6 +261,9 @@ class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
         project.unpublish()
         data = project.to_representation(draft_mode=True)
+
+        ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
+                                      data=project.data, research=project.research, published=False)
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
 
 
@@ -331,6 +334,10 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
             instance.team.add(request.user.userprofile)
 
         data = instance.to_representation(draft_mode=True)
+
+        ProjectVersion.objects.create(project=instance, user=request.user.userprofile, name=instance.name,
+                                      data=instance.data, research=instance.research, published=False)
+
         return Response(instance.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
 
     @transaction.atomic
@@ -401,6 +408,12 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
+
+        project = Project.objects.get(id=instance.id)
+
+        ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
+                                      data=project.data, research=project.research, published=False)
+
         return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
 
 
@@ -441,6 +454,9 @@ class ExternalDraftAPI(TeamTokenAuthMixin, ViewSet):
         instance.metadata = dict(from_external=client_code)
         instance.save()  # REST FW does not call save for these serializers by default, so we have to do it here
         instance.team.add(request.user.userprofile)
+
+        ProjectVersion.objects.create(project=instance, user=request.user.userprofile, name=instance.name,
+                                      data=instance.data, research=instance.research, published=True)
 
         return Response(instance.to_representation(draft_mode=True), status=status.HTTP_201_CREATED)
 
@@ -515,7 +531,7 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
 
         # create changelog
         ProjectVersion.objects.create(project=instance, user=request.user.userprofile, name=instance.name,
-                                      data=instance.data, research=instance.research)
+                                      data=instance.data, research=instance.research, published=True)
         return Response(instance.to_representation(draft_mode=True), status=status.HTTP_201_CREATED)
 
 
