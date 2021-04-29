@@ -106,6 +106,20 @@
 
         <div
           class="DropdownLink"
+        >
+          <nuxt-link
+            :to="localePath({name: 'organisation-admin-api', params: $route.params})"
+            @click.native="closePopover"
+          >
+            <span class="MenuIcon">
+              <fa icon="code" />
+            </span>
+            <translate>API key</translate>
+          </nuxt-link>
+        </div>
+
+        <div
+          class="DropdownLink"
           @click="logout"
         >
           <el-button type="text">
