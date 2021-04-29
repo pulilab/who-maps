@@ -38,13 +38,11 @@
 </template>
 
 <script>
-import TranslateWrapper from '../TranslateWrapper.vue'
 
 export default {
   data() {
     return {
-      apiKey: ''
-    TranslateWrapper,
+      apiKey: '',
       canCopy: false,
       copied: false,
     }
