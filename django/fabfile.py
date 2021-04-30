@@ -104,8 +104,9 @@ def deploy(tag=None):
         if tag:
             run('git fetch --all --tags')
             run('git checkout tags/%s' % tag)
-        run('git checkout %s' % env.branch)
-        run('git pull origin %s' % env.branch)
+        else:
+            run('git checkout %s' % env.branch)
+            run('git pull origin %s' % env.branch)
         time.sleep(10)
 
         if env.name == 'dev':
