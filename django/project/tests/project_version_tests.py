@@ -133,7 +133,14 @@ class ProjectVersionTests(APITestCase):
         self.project_id = response.json().get("id")
 
         versions = ProjectVersion.objects.filter(project__pk=self.project_id)
-        self.assertEqual(len(versions), 0)
+        self.assertEqual(len(versions), 1)
+        version = versions[0]
+        project = Project.objects.get(id=self.project_id)
+
+        self.assertEqual(version.data, project.data)
+        self.assertEqual(version.name, project.name)
+        self.assertEqual(version.version, 1)
+        self.assertEqual(version.user, self.userprofile)
 
     def test_project_versioning(self):
         # Publish
@@ -142,14 +149,14 @@ class ProjectVersionTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         versions = ProjectVersion.objects.filter(project__pk=self.project_id)
-        self.assertEqual(len(versions), 1)
+        self.assertEqual(len(versions), 2)
 
-        version = versions[0]
+        version = versions[1]
         project = Project.objects.get(id=self.project_id)
 
         self.assertEqual(version.data, project.data)
         self.assertEqual(version.name, project.name)
-        self.assertEqual(version.version, 1)
+        self.assertEqual(version.version, 2)
         self.assertEqual(version.user, self.userprofile)
         # publish again with same data
         url = reverse("project-publish", kwargs={"project_id": self.project_id, "country_id": self.country_id})
@@ -157,7 +164,7 @@ class ProjectVersionTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         versions = ProjectVersion.objects.filter(project__pk=self.project_id)
-        self.assertEqual(len(versions), 1)
+        self.assertEqual(len(versions), 2)
         updated_data = copy.deepcopy(self.project_data)
         updated_data['project']['name'] = 'Updated_project_name'
         # publish again with new data
@@ -166,9 +173,9 @@ class ProjectVersionTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         versions = ProjectVersion.objects.filter(project__pk=self.project_id)
-        self.assertEqual(len(versions), 2)
-        version_1 = versions.filter(version=1)[0]
-        version_2 = versions.filter(version=2)[0]
+        self.assertEqual(len(versions), 3)
+        version_1 = versions.filter(version=2)[0]
+        version_2 = versions.filter(version=3)[0]
         self.assertEqual(version_1.data, project.data)
         self.assertEqual(version_1.name, project.name)
         project.refresh_from_db()
