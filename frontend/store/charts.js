@@ -8,10 +8,12 @@ import {
   splitLabel,
   randomData,
   randomNumber,
-  legendGenerator
+  legendGenerator,
+  extract,
+  objectToQueryString
 } from '@/utilities/charts'
 import { formatDate } from '@/utilities/projects'
-import { isBefore } from 'date-fns'
+import { isBefore, format } from 'date-fns'
 
 export const state = () => ({
   stages: {
@@ -47,7 +49,15 @@ export const state = () => ({
   countryTable: [],
   // back bar hfa system
   back: [],
-  subtitle: {}
+  subtitle: {},
+  // filters
+  loading: false,
+  filters: {
+    country: undefined,
+    investor: undefined,
+    from: undefined,
+    to: undefined
+  }
 })
 
 export const actions = {
@@ -244,7 +254,20 @@ export const actions = {
       }
     })
   },
-  getDashboardData ({ commit, dispatch, rootGetters }, { func, refresh }) {
+  async getDashboardData (
+    { state, commit, dispatch, rootGetters },
+    { func, refresh }
+  ) {
+    commit('SET_LOADING', true)
+
+    const kpi = await Promise.all([
+      this.$axios.get(`/api/kpi/users/${objectToQueryString(state.filters)}`),
+      this.$axios.get(`/api/kpi/tokens/${objectToQueryString(state.filters)}`)
+    ])
+
+    const users = kpi[0].data
+    const tokens = kpi[1].data
+
     // start of data that should come from somewhere
     // color sets (should be dynamic?)
     const colorSetA = ['#49BCE8']
@@ -328,8 +351,8 @@ export const actions = {
     // data generation
     const polarAData = randomData(stageLabels.length)
     const monthlyUserActivity = [
-      randomData(monthLabels.length),
-      randomData(monthLabels.length)
+      extract(users, 'registered'),
+      extract(users, 'active')
     ]
     const projectStatusMonthly = [
       randomData(monthLabels.length),
@@ -377,8 +400,8 @@ export const actions = {
       settings({
         type: 'line',
         colors: colorSetB,
-        scales: { x: '2019', y: '# of users' },
-        labels: monthLabels,
+        scales: { x: 'Months', y: '# of users' },
+        labels: extract(users, 'date').map(d => format(d, 'YYYY-MMM')),
         tooltip: 'Users',
         data: monthlyUserActivity
       })
@@ -388,10 +411,10 @@ export const actions = {
       settings({
         type: 'line',
         colors: colorSetA,
-        scales: { x: '2017', y: '# of API keys' },
-        labels: monthLabels,
+        scales: { x: 'Months', y: '# of API keys' },
+        labels: extract(tokens, 'date').map(d => format(d, 'YYYY-MMM')),
         tooltip: 'API keys',
-        data: [randomData(monthLabels.length)]
+        data: [extract(tokens, 'tokens')]
       })
     )
     commit(
@@ -399,13 +422,14 @@ export const actions = {
       settings({
         type: 'bar',
         colors: colorSetB,
-        scales: { x: '2018', y: 'Growth of users' },
-        labels: monthLabels,
+        scales: { x: 'Months', y: 'Growth of users' },
+        labels: extract(users, 'date').map(d => format(d, 'YYYY-MMM')),
         legendLabels: [],
         tooltip: 'New users',
         data: monthlyUserActivity
       })
     )
+
     commit(
       'SET_BARB_GRAPH',
       settings({
@@ -598,6 +622,7 @@ export const actions = {
     commit('SET_PREVIOUS', randomNumber())
     // click function link
     commit('SET_BAR_CLICK', func)
+    commit('SET_LOADING', false)
   },
   handleBarClick ({ state, commit, dispatch }, { func, idx }) {
     const newStack = {
@@ -615,6 +640,9 @@ export const actions = {
       state.back.length > 0 ? state.back[state.back.length - 1] : {}
     )
     dispatch('getDashboardData', { func, refresh: false })
+  },
+  setFilters ({ state, commit }, filters) {
+    commit('SET_FILTERS', filters)
   }
 }
 
@@ -708,6 +736,12 @@ export const mutations = {
   },
   SET_SUBTITLE: (state, val) => {
     state.subtitle = val
+  },
+  SET_FILTERS: (state, val) => {
+    state.filters = val
+  },
+  SET_LOADING: (state, val) => {
+    state.loading = val
   }
 }
 

@@ -1,6 +1,7 @@
 import os
 import datetime
 import sys
+from celery.schedules import crontab
 from django.utils.translation import ugettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -177,7 +178,8 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'ext_anon': '200/hour',
         'ext_user': '200/hour'
-    }
+    },
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 
@@ -403,6 +405,14 @@ if SITE_ID in [3, 4]:
             "task": 'send_coverage_reminder',
             "schedule": datetime.timedelta(hours=NO_COVERAGE_REMINDER),
         },
+        "auditlog_update_user_data": {
+            "task": "auditlog_update_user_data",
+            "schedule": crontab(hour=1, minute=0, )
+        },
+        "auditlog_update_token_data": {
+            "task": "auditlog_update_token_data",
+            "schedule": crontab(hour=1, minute=0, )
+        },
     }
     if ODK_SYNC_ENABLED:
         CELERYBEAT_SCHEDULE.update(
@@ -448,14 +458,14 @@ if SITE_ID in [3, 4]:
 
 
 SWAGGER_SETTINGS = {
-   'SECURITY_DEFINITIONS': {
-      'Bearer': {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',
             'in': 'header',
             'description': 'authorization: Bearer XXXXXXXXXXXXXXXXXXX'
-      }
-   }
+        }
+    }
 }
 
 """

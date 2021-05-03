@@ -1,98 +1,51 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from project.models import Project
 from country.models import Country
-from user.models import User, UserProfile
-from django.db.models import Q, F, IntegerField
-from django.db.models import Count
-
-from django.contrib.postgres.fields.jsonb import KeyTextTransform
-from django.db.models.functions import Cast
-from django.db.models import QuerySet
-import operator
-from functools import reduce
 from django.shortcuts import get_object_or_404
-from user.authentication import BearerTokenAuthentication
+from datetime import datetime, timedelta
+from core.views import TokenAuthMixin
+from kpiexport.models import AuditLogUsers, AuditLogTokens
+from kpiexport.serializers import AuditLogUserDetailedSerializer, AuditLogUserBasicSerializer, \
+    AuditLogTokenBasicSerializer, AuditLogTokenDetailedSerializer
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.mixins import ListModelMixin
+from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
-from datetime import datetime
-from core.views import Http400
-from django.utils.timezone import make_aware
 
 
-class ApiAuthMixin(object):
-    """
-    Mixin class for defining permission and authentication settings on API views.
-    """
-    authentication_classes = (BearerTokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+class KPIFilterBackend(filters.BaseFilterBackend):
+    @staticmethod
+    def _parse_date_str(date_str: str) -> datetime.date:
+        date = datetime.strptime(date_str, '%Y-%m')
+        return date.date()
 
-
-class ProjectKPIsView(ApiAuthMixin, APIView):
-    """
-    View to retrieve project KPIs
-
-    Requires token authentication.
-
-    Allowed filters:
-
-    * `countryCode`: country code (for example: UK)
-    * `modified`: modified date (for example: 2020-10-31
-    """
-    queryset = Project.objects \
-        .annotate(published_country_id=Cast(KeyTextTransform('country', 'data'), output_field=IntegerField())) \
-        .annotate(draft_country_id=Cast(KeyTextTransform('country', 'draft'), output_field=IntegerField()))
-
-    obsolete_project_markers = {
-        'test',
-        'demo',
-        'delete'
-    }
-
-    def get_queryset(self):
+    def filter_queryset(self, request, queryset, view):
         """
-        Retrieves Project objects, filtered by filter term(s) if present,
-        for generating the response.
+        Does general filtering for all KPI APIs
         """
-        country_code = self.request.query_params.get('countryCode')
-        date_str = self.request.query_params.get('modified')
+        country_id = request.query_params.get('country')
+        investor_id = request.query_params.get('investor')
+        date_from_str = request.query_params.get('from')
+        date_to_str = request.query_params.get('to')
 
-        qs = self.queryset
+        if country_id:
+            country = get_object_or_404(Country, pk=int(country_id))
+            queryset = queryset.filter(country=country)
+        else:  # If there's no country filter, return with global data by default
+            queryset = queryset.filter(country=None)
+        if investor_id:
+            queryset = queryset.filter(data__has_key=investor_id)
+        if date_from_str:
+            date_from = self._parse_date_str(date_from_str)
+        else:
+            date_from = (datetime.today() - timedelta(days=365)).date()
+        if date_to_str:
+            date_to = self._parse_date_str(date_to_str)
+            queryset = queryset.filter(date__lte=date_to)
 
-        if country_code:
-            country = get_object_or_404(Country.objects.all(), code=country_code)
-            qs = qs.filter(Q(draft_country_id=country.pk) | Q(published_country_id=country.pk))
-
-        if date_str:
-            try:
-                date = make_aware(datetime.strptime(date_str, "%Y-%m-%d"))
-            except ValueError:  # pragma: no cover
-                raise Http400("modified date needs to be in this format: YYYY-MM-DD")
-            qs = qs.filter(modified__gte=date)
-
-        return qs
-
-    def _to_representation(self, qs: QuerySet):
-        data = dict()
-        data['total'] = qs.count()
-        data['draft'] = qs.draft_only().count()
-        data['published'] = data['total'] - data['draft']
-
-        # name must be unique and data filled in order to be publishable
-        data['publishable'] = qs.draft_only().filter(data__isnull=False).distinct('name').count()
-        data['deletable'] = qs.filter(
-            reduce(operator.or_, (Q(name__contains=x) for x in self.obsolete_project_markers))).count()
-        data['duplicates'] = qs.values('name', 'id').annotate(Count('name')).order_by(). \
-            filter(name__count__gt=1).count()
-        return data
-
-    def get(self, request, *args, **kwargs):
-        """
-        Return user KPIs.
-        """
-        return Response(self._to_representation(self.get_queryset()))
+        queryset = queryset.filter(date__gte=date_from).order_by('date')
+        return queryset
 
 
-class UserKPIsView(ApiAuthMixin, APIView):
+class UserKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     """
     View to retrieve user KPIs
 
@@ -100,47 +53,53 @@ class UserKPIsView(ApiAuthMixin, APIView):
 
     Allowed filters:
 
-    * `countryCode`: country code (for example: UK)
-    * `lastLogin`: filter for users who logged in after this date (for example:
+    * `country`: country ID, example: 01 (default: Global)
+    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
+    * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
+    * `to`: YYYY-MM format, ending of the sample (default: last month)
+    * `detailed`: if set to true, detailed donor-based data will be returned
+
     """
-    queryset = User.objects.filter(userprofile__isnull=False)
+    permission_classes = (IsAuthenticated,)
+    filter_backends = [KPIFilterBackend]
+    filter_fields = ('country', 'investor', 'from', 'to')
+    queryset = AuditLogUsers.objects.all()
 
-    def get_queryset(self):
-        """
-        Retrieves User objects, filtered by filter term(s) if present,
-        for generating the response.
-        """
-        country_code = self.request.query_params.get('countryCode')
-        date_str = self.request.query_params.get('lastLogin')
+    def get_serializer_class(self):
+        # TODO: investor filtering this can be made better, but it's currently not required
+        if (self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true') or \
+                self.request.query_params.get('investor'):
 
-        qs = self.queryset
+            return AuditLogUserDetailedSerializer
+        else:
+            return AuditLogUserBasicSerializer
 
-        if country_code:
-            country = get_object_or_404(Country.objects.all(), code=country_code)
-            qs = qs.filter(userprofile__country=country)
 
-        if date_str:
-            try:
-                date = make_aware(datetime.strptime(date_str, "%Y-%m-%d"))
-            except ValueError:  # pragma: no cover
-                raise Http400("Modified date needs to be in this format: YYYY-MM-DD")
-            qs = qs.filter(last_login__gte=date)
-        qs = qs.annotate(account_type=F('userprofile__account_type')). \
-            values('account_type').annotate(Count("id")).order_by()
-        return qs
+class TokenKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    """
+    View to retrieve user KPIs
 
-    def _to_representation(self, qs: QuerySet):
-        # convert account type to humanly-readable strings
-        account_types = {x: y for x, y in UserProfile.ACCOUNT_TYPE_CHOICES}
-        account_types[None] = 'Unknown'
-        data = dict()
-        qs = self.get_queryset()
+    Requires token authentication.
 
-        data = {str(account_types[x['account_type']]): x['id__count'] for x in qs}
-        return data
+    Allowed filters:
 
-    def get(self, request, *args, **kwargs):
-        """
-        Return user KPIs.
-        """
-        return Response(self._to_representation(self.get_queryset()))
+    * `country`: country ID, example: 01 (default: Global)
+    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
+    * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
+    * `to`: YYYY-MM format, ending of the sample (default: last month)
+    * `detailed`: if set to true, detailed donor-based data will be returned
+
+    """
+    permission_classes = (IsAuthenticated,)
+    filter_backends = [KPIFilterBackend]
+    filter_fields = ('country', 'investor', 'from', 'to')
+    queryset = AuditLogTokens.objects.all()
+
+    def get_serializer_class(self):
+        # TODO: investor filtering this can be made better, but it's currently not required
+        if (self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true') or \
+                self.request.query_params.get('investor'):
+
+            return AuditLogTokenDetailedSerializer
+        else:
+            return AuditLogTokenBasicSerializer

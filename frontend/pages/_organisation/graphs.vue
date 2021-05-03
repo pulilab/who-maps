@@ -6,15 +6,168 @@
       class="mb-80 sticky"
     >
       <div class="resume-group border-bar">
-        <el-button
-          type="primary"
-          icon="el-icon-refresh-right"
-          @click="handleRandom"
-        >
-          Randomize data
-        </el-button>
+        <el-row type="flex">
+          <el-select
+            v-model="country"
+            filterable
+            placeholder="Select country"
+            clearable
+            class="input-search"
+            :disabled="loading"
+            @change="handleCountry"
+          >
+            <el-option
+              v-for="item in countries"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+          <el-select
+            v-model="investor"
+            filterable
+            placeholder="Select investor"
+            clearable
+            class="input-search"
+            :disabled="loading"
+            @change="handleInvestor"
+          >
+            <el-option
+              v-for="item in donors"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+          <el-date-picker
+            v-model="dateRange"
+            type="monthrange"
+            align="center"
+            unlink-panels
+            range-separator="To"
+            start-placeholder="Start month"
+            end-placeholder="End month"
+            format="yyyy-MM"
+            class="input-search"
+            :disabled="loading"
+            :picker-options="pickerOptions"
+            @change="handleDate"
+          />
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            class="btn-search"
+            :loading="loading"
+            @click="handleSearch"
+          >
+            <translate>Search</translate>
+          </el-button>
+        </el-row>
       </div>
     </el-row>
+
+    <!-- full integration -->
+    <p class="headline">
+      <translate>Kpi's integration</translate>
+    </p>
+    <!-- users -->
+    <p class="subtitle">
+      <translate>Users</translate>
+    </p>
+    <el-row
+      type="flex"
+      class="mb-80"
+    >
+      <graph-layout :span="24">
+        <translate>Monthly User Activity</translate>
+        <template #graph>
+          <chart
+            v-if="lineB.chartData"
+            :chart-data="lineB.chartData"
+            :options="lineB.options"
+            :height="300"
+          />
+        </template>
+        <template #legend>
+          <data-legend
+            :items="monthlyUserLegend"
+            horizontal
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
+    <el-row
+      type="flex"
+      class="mb-80"
+    >
+      <graph-layout :span="24">
+        <translate>Monthly User Activity</translate>
+        <template #graph>
+          <chart
+            v-if="barA.chartData"
+            type="bar-chart"
+            :chart-data="barA.chartData"
+            :options="barA.options"
+            :height="300"
+          />
+        </template>
+        <template #legend>
+          <data-legend
+            :items="monthlyUserLegend"
+            horizontal
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
+    <!-- api keys -->
+    <p class="subtitle">
+      <translate>API keys</translate>
+    </p>
+    <el-row
+      type="flex"
+      class="mb-80"
+    >
+      <graph-layout :span="24">
+        <translate>Monthly growth of API keys</translate>
+        <template #graph>
+          <chart
+            :chart-data="lineC.chartData || {}"
+            :options="lineC.options"
+            :height="300"
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
+    <el-row
+      type="flex"
+      :gutter="20"
+      class="mb-80"
+    >
+      <graph-layout :span="8">
+        <translate>Blank demo grid</translate>
+      </graph-layout>
+      <graph-layout :span="16">
+        <translate>Monthly growth of API keys</translate>
+        <template #graph>
+          <chart
+            :chart-data="lineC.chartData || {}"
+            :options="lineC.options"
+            :height="320"
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
+    <!-- not integrate -->
+    <p class="headline">
+      <translate>Random generated</translate>
+    </p>
+    <p class="subtitle">
+      <translate>Integration pending...</translate>
+    </p>
 
     <!-- section A -->
     <el-row
@@ -93,7 +246,7 @@
                 large
               />
               <chart
-                :chart-data="micro.chartData"
+                :chart-data="micro.chartData || {}"
                 :options="micro.options"
                 :width="72"
                 :height="26"
@@ -116,7 +269,7 @@
             type="doughnut"
             :width="160"
             :height="160"
-            :chart-data="doughnutA.chartData"
+            :chart-data="doughnutA.chartData || {}"
             :options="doughnutA.options"
           />
         </template>
@@ -132,56 +285,9 @@
         <translate>Monthly growth of Projects</translate>
         <template #graph>
           <chart
-            :chart-data="lineA.chartData"
+            :chart-data="lineA.chartData || {}"
             :options="lineA.options"
             :height="360"
-          />
-        </template>
-      </graph-layout>
-    </el-row>
-
-    <!-- section C -->
-    <el-row
-      type="flex"
-      class="mb-80"
-    >
-      <graph-layout :span="24">
-        <translate>Monthly User Activity</translate>
-        <template #graph>
-          <chart
-            :chart-data="lineB.chartData"
-            :options="lineB.options"
-            :height="300"
-          />
-        </template>
-        <template #legend>
-          <data-legend
-            :items="monthlyUserLegend"
-            horizontal
-          />
-        </template>
-      </graph-layout>
-    </el-row>
-
-    <!-- section E -->
-    <el-row
-      type="flex"
-      class="mb-80"
-    >
-      <graph-layout :span="24">
-        <translate>Monthly User Activity</translate>
-        <template #graph>
-          <chart
-            type="bar-chart"
-            :chart-data="barA.chartData"
-            :options="barA.options"
-            :height="300"
-          />
-        </template>
-        <template #legend>
-          <data-legend
-            :items="monthlyUserLegend"
-            horizontal
           />
         </template>
       </graph-layout>
@@ -197,7 +303,7 @@
         <template #graph>
           <chart
             type="bar-chart"
-            :chart-data="barB.chartData"
+            :chart-data="barB.chartData || {}"
             :options="barB.options"
             :height="300"
           />
@@ -206,23 +312,6 @@
           <data-legend
             :items="projectStatusLegend"
             horizontal
-          />
-        </template>
-      </graph-layout>
-    </el-row>
-
-    <!-- section G -->
-    <el-row
-      type="flex"
-      class="mb-80"
-    >
-      <graph-layout :span="24">
-        <translate>Monthly growth of API keys</translate>
-        <template #graph>
-          <chart
-            :chart-data="lineC.chartData"
-            :options="lineC.options"
-            :height="300"
           />
         </template>
       </graph-layout>
@@ -241,14 +330,15 @@
         </template>
       </graph-layout>
       <graph-layout :span="16">
-        <translate>Monthly growth of API keys</translate>
+        <translate>Blank demo grid</translate>
+        <!-- <translate>Monthly growth of API keys</translate>
         <template #graph>
           <chart
-            :chart-data="lineC.chartData"
+            :chart-data="lineC.chartData || {}"
             :options="lineC.options"
             :height="320"
           />
-        </template>
+        </template> -->
       </graph-layout>
     </el-row>
 
@@ -268,7 +358,7 @@
             type="doughnut"
             :width="160"
             :height="160"
-            :chart-data="doughnutB.chartData"
+            :chart-data="doughnutB.chartData || {}"
             :options="doughnutB.options"
           />
         </template>
@@ -284,7 +374,7 @@
         <template #graph>
           <chart
             type="horizontal-bar"
-            :chart-data="horizontalBarA.chartData"
+            :chart-data="horizontalBarA.chartData || {}"
             :options="horizontalBarA.options"
           />
         </template>
@@ -305,7 +395,7 @@
         <template #graph>
           <chart
             type="polar-area"
-            :chart-data="polarA.chartData"
+            :chart-data="polarA.chartData || {}"
             :options="polarA.options"
           />
         </template>
@@ -320,7 +410,7 @@
             type="doughnut"
             :width="160"
             :height="160"
-            :chart-data="doughnutC.chartData"
+            :chart-data="doughnutC.chartData || {}"
             :options="doughnutC.options"
           />
         </template>
@@ -343,7 +433,7 @@
             type="doughnut"
             :width="160"
             :height="160"
-            :chart-data="doughnutD.chartData"
+            :chart-data="doughnutD.chartData || {}"
             :options="doughnutD.options"
           />
         </template>
@@ -369,7 +459,7 @@
         <template #graph>
           <chart
             type="horizontal-bar"
-            :chart-data="horizontalBarB.chartData"
+            :chart-data="horizontalBarB.chartData || {}"
             :options="horizontalBarB.options"
           />
         </template>
@@ -379,7 +469,10 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
+import { format } from 'date-fns'
+import debounce from 'lodash/debounce'
+
 import Growth from '@/components/common/charts/utilities/Growth'
 import Subtitle from '@/components/common/charts/utilities/Subtitle'
 import DataLegend from '@/components/common/charts/utilities/DataLegend'
@@ -400,6 +493,42 @@ export default {
     TabLegend,
     Subtitle,
     CountryLegend
+  },
+  data () {
+    return {
+      // filters
+      country: '',
+      investor: '',
+      // date range
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: this.$gettext('This month'),
+            onClick (picker) {
+              picker.$emit('pick', [new Date(), new Date()])
+            }
+          },
+          {
+            text: this.$gettext('This year'),
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date(new Date().getFullYear(), 0)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: this.$gettext('Last 6 months'),
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setMonth(start.getMonth() - 6)
+              picker.$emit('pick', [start, end])
+            }
+          }
+        ]
+      },
+      dateRange: ''
+    }
   },
   computed: {
     ...mapState({
@@ -431,21 +560,28 @@ export default {
       countryTable: state => state.charts.countryTable,
       // back click hfa system
       back: state => state.charts.back,
-      subtitle: state => state.charts.subtitle
+      subtitle: state => state.charts.subtitle,
+      // filters
+      filters: state => state.charts.filters,
+      loading: state => state.charts.loading
+    }),
+    ...mapGetters({
+      countries: 'countries/getCountries',
+      donors: 'system/getDonors'
     })
   },
   created () {
-    this.handleRandom()
+    this.handleSearch()
   },
   methods: {
     ...mapActions({
       getDashboardData: 'charts/getDashboardData',
       handleBackClick: 'charts/handleBackClick',
       barClick: 'charts/handleBarClick',
-      backClick: 'charts/handleBackClick'
+      backClick: 'charts/handleBackClick',
+      setFilters: 'charts/setFilters'
     }),
-    handleRandom () {
-      // nees to wire the click event to the options object of horizontal bar
+    handleSearch () {
       this.getDashboardData({ func: this.handleBarClick, refresh: true })
     },
     handleBarClick (point, event) {
@@ -453,12 +589,47 @@ export default {
     },
     handleBackClick () {
       this.backClick({ func: this.handleBarClick })
-    }
+    },
+    handleDate (range) {
+      let newRange = {}
+      if (range === null) {
+        newRange = { from: undefined, to: undefined }
+      } else {
+        newRange = {
+          from: format(range[0], 'YYYY-MM'),
+          to: format(range[1], 'YYYY-MM')
+        }
+      }
+      this.setFilters({
+        ...this.filters,
+        ...newRange
+      })
+      this.debounceSearch()
+    },
+    handleCountry (country) {
+      this.setFilters({
+        ...this.filters,
+        country: country ? `${country}` : undefined
+      })
+      this.debounceSearch()
+    },
+    handleInvestor (investor) {
+      this.setFilters({
+        ...this.filters,
+        investor: investor ? `${investor}` : undefined
+      })
+      this.debounceSearch()
+    },
+    debounceSearch: debounce(function () {
+      this.handleSearch()
+    }, 500)
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
+@import '~assets/style/variables.less';
+
 .wrapper {
   padding: 80px 60px;
   background-color: #f2f2f2;
@@ -469,6 +640,12 @@ export default {
     padding: 16px 40px;
     margin: 0 15px;
     width: 100%;
+    .input-search {
+      margin-right: 16px;
+    }
+    .btn-search {
+      margin-left: auto;
+    }
   }
 
   .mb-80 {
@@ -482,5 +659,21 @@ export default {
 }
 .border-bar {
   border: 1px solid #d8d1c9;
+}
+.headline {
+  text-align: center;
+  line-height: 1.166666667;
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+.subtitle {
+  color: @colorTextSecondary;
+  text-align: center;
+  font-style: italic;
+  margin: 0 0 18px 0;
+  font-size: 1.125rem;
+  line-height: 1.7;
 }
 </style>
