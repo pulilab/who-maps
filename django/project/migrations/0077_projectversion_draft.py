@@ -16,8 +16,10 @@ def create_project_initial_versions(apps, schema_editor):
     ProjectVersion = apps.get_model('project', 'ProjectVersion')
 
     for project in Project.objects.filter(public_id=''):
+        filtered = len(ProjectVersion.objects.filter(project=project))  # handle unpublished projects too
         ProjectVersion.objects.create(project=project, data=project.data, research=project.research, name=project.name,
-                                      user=project.team.first())
+                                      user=project.team.first(), version=filtered + 1)
+
 
 
 class Migration(migrations.Migration):
