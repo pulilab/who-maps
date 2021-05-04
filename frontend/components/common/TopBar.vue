@@ -34,11 +34,8 @@
             <el-col class="Separator">
               <div />
             </el-col>
-            <el-col :class="customOrganisation ? 'LogoDHASmall' : 'LogoDHA'">
-              <img
-                src="/logo-dha.svg"
-                alt="Digital Health Atlas"
-              >
+            <el-col class="LogoDHASmall">
+              <img src="/logo-dha.svg" alt="Digital Health Atlas logo">
             </el-col>
           </el-row>
         </nuxt-link>
@@ -311,14 +308,14 @@ export default {
     }
 
     // TODO: this does not work!
-    // .LogoDHASmall {
-    //   width: 100%;
+    .LogoDHASmall {
+      width: 100%;
 
-    //   img {
-    //     height: 32px;
-    //     transform: translate(-3px, 2px);
-    //   }
-    // }
+      img {
+        height: 32px;
+        transform: translate(-3px, 2px);
+      }
+    }
 
     .Separator {
       width: auto;
