@@ -119,7 +119,7 @@ class ProjectAdmin(AllObjectsAdmin):
         list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active']
         readonly_fields = ['name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'data']
         fields = ['is_active', 'name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'data']
-    else:
+    else:  # on DEV and QA, we add some debug fields to help checking the project changelog's functionality
         list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active', 'versions']
         readonly_fields = ['name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'data',
                            'versions_detailed']
@@ -159,7 +159,7 @@ class ProjectAdmin(AllObjectsAdmin):
         return False
 
     def versions(self, obj):
-        return len(ProjectVersion.objects.filter(project=obj))
+        return ProjectVersion.objects.filter(project=obj).count()
 
     def versions_detailed(self, obj):
         results_list = list()
