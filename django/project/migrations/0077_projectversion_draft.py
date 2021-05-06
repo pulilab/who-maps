@@ -17,7 +17,7 @@ def create_project_initial_versions(apps, schema_editor):
 
     for project in Project.objects.filter(public_id=''):
         filtered = len(ProjectVersion.objects.filter(project=project))  # handle unpublished projects too
-        ProjectVersion.objects.create(project=project, data=project.data, research=project.research, name=project.name,
+        ProjectVersion.objects.create(project=project, data=project.draft, research=project.research, name=project.name,
                                       user=project.team.first(), version=filtered + 1)
 
 

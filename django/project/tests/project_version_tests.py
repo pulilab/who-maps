@@ -137,7 +137,7 @@ class ProjectVersionTests(APITestCase):
         version = versions[0]
         project = Project.objects.get(id=self.project_id)
 
-        self.assertEqual(version.data, project.data)
+        self.assertEqual(version.data, project.draft)
         self.assertEqual(version.name, project.name)
         self.assertEqual(version.version, 1)
         self.assertEqual(version.user, self.userprofile)

@@ -335,8 +335,10 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
         data = instance.to_representation(draft_mode=True)
 
+        instance.refresh_from_db()
+
         ProjectVersion.objects.create(project=instance, user=request.user.userprofile, name=instance.name,
-                                      data=instance.data, research=instance.research, published=False)
+                                      data=instance.draft, research=instance.research, published=False)
 
         return Response(instance.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
 
@@ -396,6 +398,11 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         else:
+            original_data = {
+                'name': project.name,
+                'data': copy.deepcopy(project.draft),
+                'research': project.research
+            }
             instance = data_serializer.save()
             if country_answers:
                 country_answers.context['project'] = instance
@@ -409,10 +416,12 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
 
-        project = Project.objects.get(id=instance.id)
+        instance.refresh_from_db()
 
-        ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
-                                      data=project.data, research=project.research, published=False)
+        if instance.name != original_data['name'] or instance.research != original_data['research'] or \
+                instance.draft != original_data['data']:
+            ProjectVersion.objects.create(project=instance, user=request.user.userprofile, name=instance.name,
+                                          data=instance.draft, research=instance.research, published=False)
 
         return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
 

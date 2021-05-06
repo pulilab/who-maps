@@ -20,6 +20,8 @@ from project.models import Project, DigitalStrategy, TechnologyPlatform
 
 from project.tests.setup import MockRequest
 
+from project.models import ProjectVersion
+
 
 class TestAdmin(TestCase):
     def setUp(self):
@@ -256,3 +258,25 @@ class TestAdmin(TestCase):
 
         expected_link = "<a target='_blank' href='/app/{}/edit-project/draft/'>See project</a>".format(p.id)
         self.assertEqual(link, expected_link)
+
+    def test_project_admin_version(self):
+        """
+        Basically an edge-case test since we're using a brand new project which was not made through API
+        """
+        pa = ProjectAdmin(Project, AdminSite())
+        p = ProjectFactory(name="test link")
+        self.assertEqual(pa.versions(p), 0)
+        self.assertEqual(pa.versions_detailed(p), '')
+        ProjectVersion.objects.create(project=p, data=p.draft, research=p.research, name=p.name,
+                                      user=p.team.first())
+
+        self.assertEqual(pa.versions(p), 1)
+        self.assertEqual(pa.versions_detailed(p)[-15:], 'Initial version')
+
+        p.name = 'New name'
+        p.save()
+        ProjectVersion.objects.create(project=p, data=p.draft, research=p.research, name=p.name,
+                                      user=p.team.first())
+
+        self.assertEqual(pa.versions(p), 2)
+        self.assertEqual(pa.versions_detailed(p)[-16:], 'name was changed')
