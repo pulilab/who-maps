@@ -1,10 +1,10 @@
 from __future__ import unicode_literals
 
 from django.core.management.base import BaseCommand
-from datetime import date, timedelta
+from datetime import datetime, date, timedelta
 
-from kpiexport.models import AuditLogUsers
-from kpiexport.tasks import update_auditlog_user_data_task
+from kpiexport.models import AuditLogProjectStatus
+from kpiexport.tasks import update_auditlog_project_status_data_task
 
 
 class Command(BaseCommand):
@@ -12,10 +12,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write("-- Clearing old data --")
-        AuditLogUsers.objects.all().delete()
+        AuditLogProjectStatus.objects.all().delete()
         self.stdout.write("-- Generating new data --")
-        generate_date = date.today() - timedelta(days=365)
-        while generate_date <= date.today() + timedelta(days=1):
-            update_auditlog_user_data_task(generate_date)
+        generate_date = datetime.now().astimezone() - timedelta(days=365)
+        while generate_date.date() <= date.today() + timedelta(days=1):
+            update_auditlog_project_status_data_task(generate_date)
             generate_date = generate_date + timedelta(days=1)
         self.stdout.write('-- Finished --')

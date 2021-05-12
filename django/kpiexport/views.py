@@ -2,9 +2,10 @@ from country.models import Country
 from django.shortcuts import get_object_or_404
 from datetime import datetime, timedelta
 from core.views import TokenAuthMixin
-from kpiexport.models import AuditLogUsers, AuditLogTokens
+from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatus
 from kpiexport.serializers import AuditLogUserDetailedSerializer, AuditLogUserBasicSerializer, \
-    AuditLogTokenBasicSerializer, AuditLogTokenDetailedSerializer
+    AuditLogTokenBasicSerializer, AuditLogTokenDetailedSerializer, AuditLogProjectStatusBasicSerializer, \
+    AuditLogProjectStatusDetailedSerializer
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework import filters
@@ -103,3 +104,33 @@ class TokenKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
             return AuditLogTokenDetailedSerializer
         else:
             return AuditLogTokenBasicSerializer
+
+
+class ProjectStatusKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    """
+    View to retrieve project status KPIs
+
+    Requires token authentication.
+
+    Allowed filters:
+
+    * `country`: country ID, example: 01 (default: Global)
+    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
+    * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
+    * `to`: YYYY-MM format, ending of the sample (default: last month)
+    * `detailed`: if set to true, detailed donor-based data will be returned
+
+    """
+    # permission_classes = (IsAuthenticated,)
+    filter_backends = [KPIFilterBackend]
+    filter_fields = ('country', 'investor', 'from', 'to')
+    queryset = AuditLogProjectStatus.objects.all()
+
+    def get_serializer_class(self):
+        # TODO: investor filtering this can be made better, but it's currently not required
+        if (self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true') or \
+                self.request.query_params.get('investor'):
+
+            return AuditLogProjectStatusDetailedSerializer
+        else:
+            return AuditLogProjectStatusBasicSerializer

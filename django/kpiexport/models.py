@@ -97,3 +97,44 @@ class AuditLogTokens(AuditLogBase):
 
     def __str__(self):  # pragma: no cover
         return f'{self.date.year}-{self.date.month} - {str(self.data)}'
+
+
+class AuditLogProjectStatus(AuditLogBase):
+    """
+    AuditLog model tracking the project KPIs in the DB
+    Needs to track project state changes and run the validator to determine if a project is publishable
+
+    data format:
+      {
+        "<investor_id_1>":
+          {
+            "published": (int),
+            "ready_to_publish": (int),
+            "unpublished": (int),
+            "to_delete": (int),
+            "growth": (int)
+          },
+        "<investor_id_2>":
+          {
+            "published": (int),
+            "ready_to_publish": (int),
+            "unpublished": (int),
+            "to_delete": (int),
+            "growth": (int)
+          },
+      }
+    """
+
+    published = models.IntegerField(default=0)  # Total number of projects published in the log interval
+    ready_to_publish = models.IntegerField(default=0)  # Total number of projects made ready to be published
+    unpublished = models.IntegerField(default=0)  # Total number of projects unpublished
+    to_delete = models.IntegerField(default=0)  # Total number of projects ready to be deleted
+    growth = models.IntegerField(default=0)  # Total number of new projects
+
+    class Meta:
+        verbose_name = "Project Status KPI"
+        verbose_name_plural = "Project Status KPIs"
+
+    def __str__(self):  # pragma: no cover
+        return f'{self.date.year}-{self.date.month}-{self.country} - P: {self.published}, ' \
+               f'RP: {self.ready_to_publish}, U: {self.unpublished}, TD: {self.to_delete}, G:{self.growth}'
