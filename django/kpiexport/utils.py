@@ -73,7 +73,7 @@ class ProjectStatusChangeDescriptor:
         """
         Fills descriptor based on two ProjectVersions
         """
-        self.to_delete = not self._check_for_obsolete_project_name(version_old) and \
+        self.to_delete = not self._check_for_obsolete_project_name(version_old.project.name) and \
             self._check_for_obsolete_project_name(version_new.project.name)
         self.unpublished = version_old.published and not version_new.published
         self.published = not version_old.published and version_new.published

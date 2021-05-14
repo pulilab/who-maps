@@ -125,31 +125,31 @@ def update_auditlog_project_status_data_task(current_date=date.today()):  # prag
     from django.db.models.functions import Cast
     import json
 
-    def add_stats_to_data(entry, donor_id, status_change):
+    def add_stats_to_data(entry, donor_id, status_change, project_id):
         if not entry.data.get(donor_id):
             entry.data[donor_id] = dict(
-                published=0,
-                unpublished=0,
-                ready_to_publish=0,
-                to_delete=0,
+                published=[],
+                unpublished=[],
+                ready_to_publish=[],
+                to_delete=[],
                 growth=0
             )
-        if status_change.published:
-            entry.data[donor_id]['published'] += 1
-        if status_change.unpublished:
-            entry.data[donor_id]['unpublished'] += 1
-        if status_change.ready_to_publish:
-            entry.data[donor_id]['ready_to_publish'] += 1
-        if status_change.to_delete:
-            entry.data[donor_id]['to_delete'] += 1
+        if status_change.published and project_id not in set(entry.data[donor_id]['published']):
+            entry.data[donor_id]['published'].append(project_id)
+        if status_change.unpublished and project_id not in set(entry.data[donor_id]['unpublished']):
+            entry.data[donor_id]['unpublished'].append(project_id)
+        if status_change.ready_to_publish and project_id not in set(entry.data[donor_id]['ready_to_publish']):
+            entry.data[donor_id]['ready_to_publish'].append(project_id)
+        if status_change.to_delete and project_id not in set(entry.data[donor_id]['to_delete']):
+            entry.data[donor_id]['to_delete'].append(project_id)
 
     def add_growth_to_data(entry, donor_id):
         if not entry.data.get(donor_id):
             entry.data[donor_id] = dict(
-                published=0,
-                unpublished=0,
-                ready_to_publish=0,
-                to_delete=0,
+                published=[],
+                unpublished=[],
+                ready_to_publish=[],
+                to_delete=[],
                 growth=0
             )
         entry.data[donor_id]['growth'] += 1
@@ -177,35 +177,50 @@ def update_auditlog_project_status_data_task(current_date=date.today()):  # prag
         status_change = project_status_change_sum(date=date, project=entry.project, country=country)
         donors = json.loads(entry.donors)
         if status_change.published:
-            log_entry.published += 1
-            log_entry_global.published += 1
+            if entry.project.id not in set(log_entry.published):
+                log_entry.published.append(entry.project.id)
+            if entry.project.id not in set(log_entry_global.published):
+                log_entry_global.published.append(entry.project.id)
         if status_change.unpublished:
-            log_entry.unpublished += 1
-            log_entry_global.unpublished += 1
+            if entry.project.id not in set(log_entry.unpublished):
+                log_entry.unpublished.append(entry.project.id)
+            if entry.project.id not in set(log_entry_global.unpublished):
+                log_entry_global.unpublished.append(entry.project.id)
         if status_change.ready_to_publish:
-            log_entry.ready_to_publish += 1
-            log_entry_global.ready_to_publish += 1
+            if entry.project.id not in set(log_entry.ready_to_publish):
+                log_entry.ready_to_publish.append(entry.project.id)
+            if entry.project.id not in set(log_entry_global.ready_to_publish):
+                log_entry_global.ready_to_publish.append(entry.project.id)
         if status_change.to_delete:
-            log_entry.to_delete += 1
-            log_entry_global.to_delete += 1
+            if entry.project.id not in set(log_entry.to_delete):
+                log_entry.to_delete.append(entry.project.id)
+            if entry.project.id not in set(log_entry_global.to_delete):
+                log_entry_global.to_delete.append(entry.project.id)
         for donor in donors:
-            add_stats_to_data(log_entry, donor, status_change)
-            add_stats_to_data(log_entry_global, donor, status_change)
+            add_stats_to_data(log_entry, donor, status_change, entry.project.id)
+            add_stats_to_data(log_entry_global, donor, status_change, entry.project.id)
         log_entry.save()
         log_entry_global.save()
 
     for entry in qs_growth:
         if entry.public_id:
-            country = entry.data.get('country')
+            country_id = entry.data.get('country')
             donors = entry.data.get('donors')
         else:
-            country = entry.draft.get('country')
+            country_id = entry.draft.get('country')
             donors = entry.draft.get('donors')
-
-        country = Country.objects.get(id=country)
+        if country_id is None:
+            continue
+        try:
+            country = Country.objects.get(id=country_id)
+        except Country.DoesNotExist:
+            logger = logging.getLogger(__name__)
+            logger.error(f'Invalid country ID set in project {entry.project.id}: {country_id}')
         log_entry, _ = AuditLogProjectStatus.objects.get_or_create(date=log_date, country=country)
         log_entry.growth += 1
         log_entry_global.growth += 1
+        if donors is None:
+            continue
         for donor in donors:
             add_growth_to_data(log_entry, donor)
             add_growth_to_data(log_entry_global, donor)
