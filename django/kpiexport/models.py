@@ -2,7 +2,6 @@ from django.db import models
 from core.models import GetObjectOrNoneQueryset
 from country.models import Country
 from django.contrib.postgres.fields import JSONField, ArrayField
-from setfield import SetField
 
 
 class AuditLogBase(models.Model):

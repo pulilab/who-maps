@@ -19,6 +19,3 @@ class Command(BaseCommand):
             update_auditlog_project_status_data_task(generate_date)
             generate_date = generate_date + timedelta(days=1)
         self.stdout.write('-- Finished --')
-        logs = AuditLogProjectStatus.objects.all()
-        import ipdb
-        ipdb.set_trace()
