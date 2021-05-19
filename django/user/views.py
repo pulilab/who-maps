@@ -17,12 +17,9 @@ class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, G
         """
         Custom function to update the user's last_login_date data
         """
-        try:
-            user = User.objects.get(id=self.request.user.id)
-            user.last_login = timezone.now()
-            user.save()
-        except User.DoesNotExist:  # pragma: no cover
-            pass
+        if self.request.user and self.request.user.id:
+            user = User.objects.filter(id=self.request.user.id)
+            user.update(last_login=timezone.now())
         return super().get_object()
 
 
