@@ -4,11 +4,26 @@ from rest_framework.viewsets import GenericViewSet
 from core.views import TokenAuthMixin
 from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileListSerializer
 from .models import UserProfile, Organisation
+from django.contrib.auth.models import User
+
+from django.utils import timezone
 
 
 class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
+
+    def get_object(self):
+        """
+        Custom function to update the user's last_login_date data
+        """
+        try:
+            user = User.objects.get(id=self.request.user.id)
+            user.last_login = timezone.now()
+            user.save()
+        except User.DoesNotExist:  # pragma: no cover
+            pass
+        return super().get_object()
 
 
 class UserProfileListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
