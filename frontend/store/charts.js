@@ -262,11 +262,15 @@ export const actions = {
 
     const kpi = await Promise.all([
       this.$axios.get(`/api/kpi/users/${objectToQueryString(state.filters)}`),
-      this.$axios.get(`/api/kpi/tokens/${objectToQueryString(state.filters)}`)
+      this.$axios.get(`/api/kpi/tokens/${objectToQueryString(state.filters)}`),
+      this.$axios.get(
+        `/api/kpi/project-status/${objectToQueryString(state.filters)}`
+      )
     ])
 
     const users = kpi[0].data
     const tokens = kpi[1].data
+    const projectStatus = kpi[2].data
 
     // start of data that should come from somewhere
     // color sets (should be dynamic?)
@@ -354,13 +358,30 @@ export const actions = {
       extract(users, 'registered'),
       extract(users, 'active')
     ]
+
+    // projects status data generation
+    const published = extract(projectStatus, 'published')
+    const publishable = extract(projectStatus, 'ready_to_publish')
+    const unpublished = extract(projectStatus, 'unpublished')
+    const deletable = extract(projectStatus, 'to_delete')
+
     const projectStatusMonthly = [
-      randomData(monthLabels.length),
-      randomData(monthLabels.length),
-      randomData(monthLabels.length),
-      randomData(monthLabels.length)
+      published,
+      publishable,
+      unpublished,
+      deletable
     ]
-    const doughnutAData = randomData(projectsLabels.length)
+
+    const projectSum = arr => {
+      return arr.reduce((acc, val) => acc + val, 0)
+    }
+
+    const doughnutAData = [
+      projectSum(published),
+      projectSum(publishable),
+      projectSum(unpublished),
+      projectSum(deletable)
+    ]
     const doughnutBData = randomData(govermentContributionLabels.length)
     const doughnutCData = randomData(distributionStatuesLabels.length)
     const doughnutDData = randomData(coverageLabels.length)
@@ -389,10 +410,10 @@ export const actions = {
       settings({
         type: 'line',
         colors: colorSetA,
-        scales: { x: '2019', y: 'Growth of project' },
-        labels: monthLabels,
+        scales: { x: 'Months', y: 'Growth of project' },
+        labels: extract(projectStatus, 'date').map(d => format(d, 'YYYY-MMM')),
         tooltip: 'Projects',
-        data: [randomData(monthLabels.length)]
+        data: [extract(projectStatus, 'growth')]
       })
     )
     commit(
@@ -435,8 +456,8 @@ export const actions = {
       settings({
         type: 'bar',
         colors: colorSetC,
-        scales: { x: '2019', y: '# of projects' },
-        labels: monthLabels,
+        scales: { x: 'Months', y: '# of projects' },
+        labels: extract(projectStatus, 'date').map(d => format(d, 'YYYY-MMM')),
         legendLabels: projectsLabels,
         tooltip: '',
         data: projectStatusMonthly,
