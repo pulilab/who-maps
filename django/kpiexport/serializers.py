@@ -89,11 +89,11 @@ class AuditLogProjectStatusDetailedSerializer(AuditLogProjectStatusBasicSerializ
         summary_dict = {}
         for donor_id in audit_log.data:
             summary_dict[donor_id] = {
-                'published': len(audit_log.data.get(donor_id).get('published')),
-                'unpublished': len(audit_log.data.get(donor_id).get('unpublished')),
-                'ready_to_publish': len(audit_log.data.get(donor_id).get('ready_to_publish')),
-                'to_delete': len(audit_log.data.get(donor_id).get('to_delete')),
-                'growth': audit_log.data.get(donor_id).get('growth')
+                'published': len(audit_log.data[donor_id]['published']),
+                'unpublished': len(audit_log.data[donor_id]['unpublished']),
+                'ready_to_publish': len(audit_log.data[donor_id]['ready_to_publish']),
+                'to_delete': len(audit_log.data[donor_id]['to_delete']),
+                'growth': audit_log.data[donor_id]['growth']
             }
 
         return summary_dict

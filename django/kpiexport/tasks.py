@@ -7,7 +7,7 @@ from django.utils import timezone
 
 
 @app.task(name='auditlog_update_user_data')
-def update_auditlog_user_data_task(current_date):
+def update_auditlog_user_data_task(current_date=None):
     """
     Schedulable task to update user statistics
     Needs to run daily - collects yesterday's stats
@@ -67,7 +67,7 @@ def update_auditlog_user_data_task(current_date):
 
 
 @app.task(name='auditlog_update_token_data')
-def update_auditlog_token_data_task(current_date):
+def update_auditlog_token_data_task(current_date=None):
     """
     Schedulable task to update token statistics
     Needs to run daily - collects yesterday's stats
@@ -117,7 +117,7 @@ def update_auditlog_token_data_task(current_date):
 
 
 @app.task(name='auditlog_update_project_status_data')
-def update_auditlog_project_status_data_task(current_date):  # pragma: no cover
+def update_auditlog_project_status_data_task(current_date=None):  # pragma: no cover
     """
     Schedulable task to update project status statistics
     Needs to run daily - collects yesterday's stats
