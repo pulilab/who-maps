@@ -1,12 +1,13 @@
 from scheduler.celery import app
 from django.db.models import Count
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 from django.db.models import F
 import logging
+from django.utils import timezone
 
 
 @app.task(name='auditlog_update_user_data')
-def update_auditlog_user_data_task(current_date=date.today()):
+def update_auditlog_user_data_task(current_date):
     """
     Schedulable task to update user statistics
     Needs to run daily - collects yesterday's stats
@@ -14,6 +15,9 @@ def update_auditlog_user_data_task(current_date=date.today()):
     from kpiexport.models import AuditLogUsers
     from user.models import UserProfile
     from country.models import Country
+
+    if current_date is None:  # pragma: no cover
+        current_date = timezone.now().date()
 
     def add_entry_to_data(entry, country, donor_id, log_date, attr_name):
         # get or create auditlog
@@ -63,7 +67,7 @@ def update_auditlog_user_data_task(current_date=date.today()):
 
 
 @app.task(name='auditlog_update_token_data')
-def update_auditlog_token_data_task(current_date=date.today()):
+def update_auditlog_token_data_task(current_date):
     """
     Schedulable task to update token statistics
     Needs to run daily - collects yesterday's stats
@@ -71,6 +75,9 @@ def update_auditlog_token_data_task(current_date=date.today()):
     from rest_framework.authtoken.models import Token
     from kpiexport.models import AuditLogTokens
     from country.models import Country
+
+    if current_date is None:  # pragma: no cover
+        current_date = timezone.now().date()
 
     def add_entry_to_data(entry, country, donor_id, log_date):
         # get or create auditlog
@@ -110,7 +117,7 @@ def update_auditlog_token_data_task(current_date=date.today()):
 
 
 @app.task(name='auditlog_update_project_status_data')
-def update_auditlog_project_status_data_task(current_date=date.today()):  # pragma: no cover
+def update_auditlog_project_status_data_task(current_date):  # pragma: no cover
     """
     Schedulable task to update project status statistics
     Needs to run daily - collects yesterday's stats
@@ -124,6 +131,9 @@ def update_auditlog_project_status_data_task(current_date=date.today()):  # prag
     from django.contrib.postgres.fields.jsonb import KeyTextTransform
     from django.db.models.functions import Cast
     import json
+
+    if current_date is None:
+        current_date = timezone.now().date()
 
     def add_stats_to_data(entry, donor_id, status_change, project_id):
         if not entry.data.get(donor_id):
