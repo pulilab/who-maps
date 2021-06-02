@@ -161,6 +161,72 @@
       </graph-layout>
     </el-row>
 
+    <!-- project status -->
+    <p class="subtitle">
+      <translate>Project status</translate>
+    </p>
+    <el-row
+      type="flex"
+      :gutter="20"
+      class="mb-80"
+    >
+      <graph-layout :span="8">
+        <template #graph>
+          <chart
+            type="doughnut"
+            :width="160"
+            :height="160"
+            :chart-data="doughnutA.chartData || {}"
+            :options="doughnutA.options"
+          />
+        </template>
+        <template #legend>
+          <data-legend
+            :items="doughnutALegend"
+            large
+          />
+          <!-- <data-legend
+            :items="doughnutALegend"
+            percentage
+            large
+          /> -->
+        </template>
+      </graph-layout>
+      <graph-layout :span="16">
+        <translate>Monthly growth of Projects</translate>
+        <template #graph>
+          <chart
+            :chart-data="lineA.chartData || {}"
+            :options="lineA.options"
+            :height="360"
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
+    <el-row
+      type="flex"
+      class="mb-80"
+    >
+      <graph-layout :span="24">
+        <translate>Project statuses per month</translate>
+        <template #graph>
+          <chart
+            type="bar-chart"
+            :chart-data="barB.chartData || {}"
+            :options="barB.options"
+            :height="300"
+          />
+        </template>
+        <template #legend>
+          <data-legend
+            :items="projectStatusLegend"
+            horizontal
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
     <!-- not integrate -->
     <p class="headline">
       <translate>Random generated</translate>
@@ -255,66 +321,6 @@
           </resume>
         </el-col>
       </div>
-    </el-row>
-
-    <!-- section B -->
-    <el-row
-      type="flex"
-      :gutter="20"
-      class="mb-80"
-    >
-      <graph-layout :span="8">
-        <template #graph>
-          <chart
-            type="doughnut"
-            :width="160"
-            :height="160"
-            :chart-data="doughnutA.chartData || {}"
-            :options="doughnutA.options"
-          />
-        </template>
-        <template #legend>
-          <data-legend
-            :items="doughnutALegend"
-            percentage
-            large
-          />
-        </template>
-      </graph-layout>
-      <graph-layout :span="16">
-        <translate>Monthly growth of Projects</translate>
-        <template #graph>
-          <chart
-            :chart-data="lineA.chartData || {}"
-            :options="lineA.options"
-            :height="360"
-          />
-        </template>
-      </graph-layout>
-    </el-row>
-
-    <!-- section F -->
-    <el-row
-      type="flex"
-      class="mb-80"
-    >
-      <graph-layout :span="24">
-        <translate>Project statuses per month</translate>
-        <template #graph>
-          <chart
-            type="bar-chart"
-            :chart-data="barB.chartData || {}"
-            :options="barB.options"
-            :height="300"
-          />
-        </template>
-        <template #legend>
-          <data-legend
-            :items="projectStatusLegend"
-            horizontal
-          />
-        </template>
-      </graph-layout>
     </el-row>
 
     <!-- section H -->
