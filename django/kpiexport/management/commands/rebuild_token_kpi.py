@@ -15,7 +15,7 @@ class Command(BaseCommand):
         AuditLogTokens.objects.all().delete()
         self.stdout.write("-- Generating new data --")
         generate_date = datetime.now().astimezone() - timedelta(days=365)
-        while generate_date.date() <= date.today():
+        while generate_date.date() <= date.today() + timedelta(days=1):
             update_auditlog_token_data_task(generate_date)
             generate_date = generate_date + timedelta(days=1)
         self.stdout.write('-- Finished --')

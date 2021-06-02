@@ -407,11 +407,15 @@ if SITE_ID in [3, 4]:
         },
         "auditlog_update_user_data": {
             "task": "auditlog_update_user_data",
-            "schedule": crontab(hour=1, minute=0, )
+            "schedule": crontab(hour=1, minute=0, ),
         },
         "auditlog_update_token_data": {
             "task": "auditlog_update_token_data",
-            "schedule": crontab(hour=1, minute=0, )
+            "schedule": crontab(hour=1, minute=0, ),
+        },
+        "auditlog_update_project_status_data": {
+            "task": "auditlog_update_project_status_data",
+            "schedule": crontab(hour=1, minute=0, ),
         },
     }
     if ODK_SYNC_ENABLED:
@@ -475,4 +479,12 @@ EXTERNAL_API_CLIENTS = {
     "default": "Other",
     "xNhlb4": "DCH",
     "6TAyaB": "DHIS2"
+}
+"""
+For checking which projects can be safely deleted
+"""
+OBSOLETE_PROJECT_MARKERS = {
+    'test',
+    'demo',
+    'delete'
 }

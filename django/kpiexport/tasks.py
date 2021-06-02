@@ -1,12 +1,13 @@
 from scheduler.celery import app
 from django.db.models import Count
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 from django.db.models import F
 import logging
+from django.utils import timezone
 
 
 @app.task(name='auditlog_update_user_data')
-def update_auditlog_user_data_task(current_date=date.today()):
+def update_auditlog_user_data_task(current_date=None):
     """
     Schedulable task to update user statistics
     Needs to run daily - collects yesterday's stats
@@ -14,6 +15,9 @@ def update_auditlog_user_data_task(current_date=date.today()):
     from kpiexport.models import AuditLogUsers
     from user.models import UserProfile
     from country.models import Country
+
+    if current_date is None:  # pragma: no cover
+        current_date = timezone.now().date()
 
     def add_entry_to_data(entry, country, donor_id, log_date, attr_name):
         # get or create auditlog
@@ -37,8 +41,8 @@ def update_auditlog_user_data_task(current_date=date.today()):
 
     date = current_date - timedelta(days=1)
     log_date = datetime(date.year, date.month, 1).date()
-    qs_visitors = UserProfile.objects.filter(user__last_login__date=date).\
-        filter(country__isnull=False).\
+    qs_visitors = UserProfile.objects.filter(user__last_login__date=date). \
+        filter(country__isnull=False). \
         values('country', 'account_type', 'donor').annotate(Count("id")).order_by()
     for entry in qs_visitors:
         try:
@@ -49,8 +53,8 @@ def update_auditlog_user_data_task(current_date=date.today()):
         except Country.DoesNotExist:  # pragma: no cover
             logging.warning(f'Country with this ID does not exist: {entry["country"]}')
 
-    qs_registered = UserProfile.objects.filter(user__date_joined__date=date).\
-        filter(country__isnull=False).\
+    qs_registered = UserProfile.objects.filter(user__date_joined__date=date). \
+        filter(country__isnull=False). \
         values('country', 'account_type', 'donor').annotate(Count("id")).order_by()
     for entry in qs_registered:
         try:
@@ -63,7 +67,7 @@ def update_auditlog_user_data_task(current_date=date.today()):
 
 
 @app.task(name='auditlog_update_token_data')
-def update_auditlog_token_data_task(current_date=date.today()):
+def update_auditlog_token_data_task(current_date=None):
     """
     Schedulable task to update token statistics
     Needs to run daily - collects yesterday's stats
@@ -71,6 +75,9 @@ def update_auditlog_token_data_task(current_date=date.today()):
     from rest_framework.authtoken.models import Token
     from kpiexport.models import AuditLogTokens
     from country.models import Country
+
+    if current_date is None:  # pragma: no cover
+        current_date = timezone.now().date()
 
     def add_entry_to_data(entry, country, donor_id, log_date):
         # get or create auditlog
@@ -93,10 +100,10 @@ def update_auditlog_token_data_task(current_date=date.today()):
 
     date = current_date - timedelta(days=1)
     log_date = datetime(date.year, date.month, 1).date()
-    qs = Token.objects.filter(created__date=date).filter(user__userprofile__isnull=False).\
-        filter(user__userprofile__country__isnull=False).\
-        annotate(country=F('user__userprofile__country')).\
-        annotate(donor=F('user__userprofile__donor')).\
+    qs = Token.objects.filter(created__date=date).filter(user__userprofile__isnull=False). \
+        filter(user__userprofile__country__isnull=False). \
+        annotate(country=F('user__userprofile__country')). \
+        annotate(donor=F('user__userprofile__donor')). \
         annotate(account_type=F('user__userprofile__account_type')). \
         values('country', 'donor', 'account_type').annotate(Count("user_id")).order_by()
     for entry in qs:
@@ -107,3 +114,125 @@ def update_auditlog_token_data_task(current_date=date.today()):
             add_entry_to_data(entry, None, donor_id, log_date)
         except Country.DoesNotExist:  # pragma: no cover
             logging.warning(f'Country with this ID does not exist: {entry["country"]}')
+
+
+@app.task(name='auditlog_update_project_status_data')
+def update_auditlog_project_status_data_task(current_date=None):  # pragma: no cover
+    """
+    Schedulable task to update project status statistics
+    Needs to run daily - collects yesterday's stats
+    """
+    from kpiexport.models import AuditLogProjectStatus
+    from kpiexport.utils import project_status_change_sum
+    from project.models import Project, ProjectVersion
+    from django.db.models import IntegerField, CharField
+    from country.models import Country
+
+    from django.contrib.postgres.fields.jsonb import KeyTextTransform
+    from django.db.models.functions import Cast
+    import json
+
+    if current_date is None:
+        current_date = timezone.now().date()
+
+    def add_stats_to_data(entry, donor_id, status_change, project_id):
+        if not entry.data.get(donor_id):
+            entry.data[donor_id] = dict(
+                published=[],
+                unpublished=[],
+                ready_to_publish=[],
+                to_delete=[],
+                growth=0
+            )
+        if status_change.published and project_id not in set(entry.data[donor_id]['published']):
+            entry.data[donor_id]['published'].append(project_id)
+        if status_change.unpublished and project_id not in set(entry.data[donor_id]['unpublished']):
+            entry.data[donor_id]['unpublished'].append(project_id)
+        if status_change.ready_to_publish and project_id not in set(entry.data[donor_id]['ready_to_publish']):
+            entry.data[donor_id]['ready_to_publish'].append(project_id)
+        if status_change.to_delete and project_id not in set(entry.data[donor_id]['to_delete']):
+            entry.data[donor_id]['to_delete'].append(project_id)
+
+    def add_growth_to_data(entry, donor_id):
+        if not entry.data.get(donor_id):
+            entry.data[donor_id] = dict(
+                published=[],
+                unpublished=[],
+                ready_to_publish=[],
+                to_delete=[],
+                growth=0
+            )
+        entry.data[donor_id]['growth'] += 1
+
+    date = current_date - timedelta(days=1)
+    log_date = datetime(date.year, date.month, 1).date()
+    qs = ProjectVersion.objects.filter(created__date=date). \
+        annotate(country=Cast(KeyTextTransform('country', 'data'),
+                              output_field=IntegerField())). \
+        annotate(donors=Cast(KeyTextTransform('donors', 'data'),
+                             output_field=CharField())). \
+        exclude(country__isnull=True). \
+        exclude(donors="[]"). \
+        order_by('project'). \
+        distinct('project')
+    qs_growth = Project.objects.filter(created__date=date)
+    if qs.count() > 0 or qs_growth.count() > 0:
+        log_entry_global, _ = AuditLogProjectStatus.objects.get_or_create(date=log_date, country=None)
+    else:
+        return
+    for entry in qs:
+        country = Country.objects.get(id=entry.country)
+        log_entry, _ = AuditLogProjectStatus.objects.get_or_create(date=log_date, country=country)
+
+        status_change = project_status_change_sum(date=date, project=entry.project, country=country)
+        donors = json.loads(entry.donors)
+        if status_change.published:
+            if entry.project.id not in set(log_entry.published):
+                log_entry.published.append(entry.project.id)
+            if entry.project.id not in set(log_entry_global.published):
+                log_entry_global.published.append(entry.project.id)
+        if status_change.unpublished:
+            if entry.project.id not in set(log_entry.unpublished):
+                log_entry.unpublished.append(entry.project.id)
+            if entry.project.id not in set(log_entry_global.unpublished):
+                log_entry_global.unpublished.append(entry.project.id)
+        if status_change.ready_to_publish:
+            if entry.project.id not in set(log_entry.ready_to_publish):
+                log_entry.ready_to_publish.append(entry.project.id)
+            if entry.project.id not in set(log_entry_global.ready_to_publish):
+                log_entry_global.ready_to_publish.append(entry.project.id)
+        if status_change.to_delete:
+            if entry.project.id not in set(log_entry.to_delete):
+                log_entry.to_delete.append(entry.project.id)
+            if entry.project.id not in set(log_entry_global.to_delete):
+                log_entry_global.to_delete.append(entry.project.id)
+        for donor in donors:
+            add_stats_to_data(log_entry, donor, status_change, entry.project.id)
+            add_stats_to_data(log_entry_global, donor, status_change, entry.project.id)
+        log_entry.save()
+        log_entry_global.save()
+
+    for entry in qs_growth:
+        if entry.public_id:
+            country_id = entry.data.get('country')
+            donors = entry.data.get('donors')
+        else:
+            country_id = entry.draft.get('country')
+            donors = entry.draft.get('donors')
+        if country_id is None:
+            continue
+        try:
+            country = Country.objects.get(id=country_id)
+        except Country.DoesNotExist:
+            logger = logging.getLogger(__name__)
+            logger.error(f'Invalid country ID set in project {entry.project.id}: {country_id}')
+        log_entry, _ = AuditLogProjectStatus.objects.get_or_create(date=log_date, country=country)
+        log_entry.growth += 1
+        log_entry_global.growth += 1
+        if donors is None:
+            continue
+        for donor in donors:
+            add_growth_to_data(log_entry, donor)
+            add_growth_to_data(log_entry_global, donor)
+        log_entry.save()
+        log_entry_global.save()

@@ -49,3 +49,55 @@ class AuditLogTokenDetailedSerializer(serializers.ModelSerializer):
     class Meta:
         model = AuditLogTokens
         fields = ("date", "country", "data", "tokens")
+
+
+class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
+    date = serializers.CharField(read_only=True, max_length=10)
+    country = serializers.PrimaryKeyRelatedField(read_only=True)
+    published = serializers.SerializerMethodField()
+    unpublished = serializers.SerializerMethodField()
+    ready_to_publish = serializers.SerializerMethodField()
+    to_delete = serializers.SerializerMethodField()
+    growth = serializers.IntegerField(read_only=True)
+
+    @staticmethod
+    def get_published(audit_log):
+        return len(audit_log.published)
+
+    @staticmethod
+    def get_unpublished(audit_log):
+        return len(audit_log.unpublished)
+
+    @staticmethod
+    def get_ready_to_publish(audit_log):
+        return len(audit_log.ready_to_publish)
+
+    @staticmethod
+    def get_to_delete(audit_log):
+        return len(audit_log.to_delete)
+
+    class Meta:
+        model = AuditLogTokens
+        fields = ("date", "country", "published", "unpublished", "ready_to_publish", "to_delete", "growth")
+
+
+class AuditLogProjectStatusDetailedSerializer(AuditLogProjectStatusBasicSerializer):
+    data = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_data(audit_log):
+        summary_dict = {}
+        for donor_id in audit_log.data:
+            summary_dict[donor_id] = {
+                'published': len(audit_log.data[donor_id]['published']),
+                'unpublished': len(audit_log.data[donor_id]['unpublished']),
+                'ready_to_publish': len(audit_log.data[donor_id]['ready_to_publish']),
+                'to_delete': len(audit_log.data[donor_id]['to_delete']),
+                'growth': audit_log.data[donor_id]['growth']
+            }
+
+        return summary_dict
+
+    class Meta:
+        model = AuditLogTokens
+        fields = ("date", "country", "data", "published", "unpublished", "ready_to_publish", "to_delete", "growth")

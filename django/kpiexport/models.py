@@ -1,7 +1,7 @@
 from django.db import models
 from core.models import GetObjectOrNoneQueryset
 from country.models import Country
-from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import JSONField, ArrayField
 
 
 class AuditLogBase(models.Model):
@@ -97,3 +97,44 @@ class AuditLogTokens(AuditLogBase):
 
     def __str__(self):  # pragma: no cover
         return f'{self.date.year}-{self.date.month} - {str(self.data)}'
+
+
+class AuditLogProjectStatus(AuditLogBase):
+    """
+    AuditLog model tracking the project KPIs in the DB
+    Needs to track project state changes and run the validator to determine if a project is publishable
+
+    data format:
+      {
+        "<investor_id_1>":
+          {
+            "published": {(int)},
+            "ready_to_publish": {(int)},
+            "unpublished": {(int)},
+            "to_delete": {(int)},
+            "growth": (int)
+          },
+        "<investor_id_2>":
+          {
+            "published": {(int)},
+            "ready_to_publish": {(int)},
+            "unpublished": {(int)},
+            "to_delete": {(int)},
+            "growth": (int)
+          },
+      }
+    """
+
+    published = ArrayField(models.IntegerField(null=True, blank=True), blank=True, default=list)
+    ready_to_publish = ArrayField(models.IntegerField(null=True, blank=True), blank=True, default=list)
+    unpublished = ArrayField(models.IntegerField(null=True, blank=True), blank=True, default=list)
+    to_delete = ArrayField(models.IntegerField(null=True, blank=True), blank=True, default=list)
+    growth = models.IntegerField(default=0)  # Total number of new projects
+
+    class Meta:
+        verbose_name = "Project Status KPI"
+        verbose_name_plural = "Project Status KPIs"
+
+    def __str__(self):  # pragma: no cover
+        return f'{self.date.year}-{self.date.month}-{self.country} - P: {self.published}, ' \
+               f'RP: {self.ready_to_publish}, U: {self.unpublished}, TD: {self.to_delete}, G:{self.growth}'

@@ -11,4 +11,7 @@ urlpatterns = [
     path('kpi/tokens/',
          view=views.TokenKPIsViewSet.as_view({'get': 'list'}),
          name='token-kpi'),
+    path('kpi/project-status/',
+         view=views.ProjectStatusKPIsViewSet.as_view({'get': 'list'}),
+         name='project-status-kpi'),
 ]
