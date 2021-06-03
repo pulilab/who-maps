@@ -1,22 +1,10 @@
-from unittest import mock
-
-from django.contrib.auth.models import User
-from django.test import override_settings
 from django.urls import reverse
-from rest_framework import status
 
-from core.factories import UserFactory, UserProfileFactory, OrganisationFactory, DonorFactory, CountryFactory
-from django.core import mail
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from allauth.account.models import EmailConfirmation
-from requests.auth import HTTPBasicAuth
 import base64
-
-from country.models import Country
-from user.tasks import send_user_request_to_admins
-from user.models import UserProfile
 
 
 class TokenTests(APITestCase):
@@ -68,7 +56,6 @@ class TokenTests(APITestCase):
         tokens = Token.objects.filter(user__id=self.user_1_id)
         self.assertEqual(tokens.count(), 0)  # user should not have token at this stage
         self.user_1_key, self.user_1_client = self.login_user()
-        self.donor = DonorFactory(name='Donor 1', code='dnr1')
 
     def test_token_scenarios(self):
         # Create the token
@@ -143,5 +130,3 @@ class TokenTests(APITestCase):
         self.assertEqual(response.status_code, 401)
         tokens = Token.objects.filter(user__id=self.user_1_id)
         self.assertEqual(tokens.count(), 0)  # user should not have token at this stage
-
-
