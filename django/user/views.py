@@ -11,6 +11,7 @@ from .models import UserProfile, Organisation
 from django.contrib.auth.models import User
 
 from django.utils import timezone
+from drf_yasg.utils import swagger_auto_schema
 
 
 class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
@@ -51,10 +52,17 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
 class TokenViewSet(TokenAndBasicAuthMixin, ViewSet):
     """
     Viewset providing functions for authenticated users for creating, retrieving, refreshing and deleting their tokens
+
+    For this menu, both Basic and Token-based authorization works.
     """
     queryset = Token.objects.all()
     serializer_class = TokenSerializer
 
+    @swagger_auto_schema(
+        operation_id="token_create",
+        security=[{'Basic': [], 'Bearer': [], 'Token': []}],
+        responses={201: TokenSerializer, 200: TokenSerializer}
+        )
     def create(self, request, *args, **kwargs):
         """
         Creates a new token for the user (if not existing) and retrieves it
@@ -63,6 +71,11 @@ class TokenViewSet(TokenAndBasicAuthMixin, ViewSet):
         serializer = TokenSerializer(token)
         return Response(serializer.data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        operation_id="token_refresh",
+        security=[{'Basic': [], 'Bearer': [], 'Token': []}],
+        responses={201: TokenSerializer}
+        )
     def refresh(self, request, *args, **kwargs):
         """
         Deletes existing token and creates a new one
@@ -73,6 +86,11 @@ class TokenViewSet(TokenAndBasicAuthMixin, ViewSet):
         serializer = TokenSerializer(new_token)
         return Response(serializer.data)
 
+    @swagger_auto_schema(
+        operation_id="token_get",
+        security=[{'Basic': [], 'Bearer': [], 'Token': []}],
+        responses={200: TokenSerializer}
+        )
     def get(self, request, *args, **kwargs):
         """
         Retrieves token associated with request user
@@ -81,6 +99,11 @@ class TokenViewSet(TokenAndBasicAuthMixin, ViewSet):
         serializer = TokenSerializer(token)
         return Response(serializer.data)
 
+    @swagger_auto_schema(
+        operation_id="token_delete",
+        security=[{'Basic': [], 'Bearer': [], 'Token': []}],
+        responses={204: []}
+        )
     def delete(self, request, *args, **kwargs):
         """
         Deletes token associated with user

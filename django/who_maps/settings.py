@@ -468,8 +468,18 @@ SWAGGER_SETTINGS = {
             'name': 'Authorization',
             'in': 'header',
             'description': 'authorization: Bearer XXXXXXXXXXXXXXXXXXX'
-        }
-    }
+        },
+        'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'authorization: Token XXXXXXXXXXXXXXXXXXX'
+        },
+        'Basic': {
+            "type": "basic",
+        },
+    },
+    'SECURITY_REQUIREMENTS': [{'Bearer': []}]
 }
 
 """
