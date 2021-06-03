@@ -14,7 +14,7 @@ from allauth.account.models import EmailConfirmation
 
 from country.models import Country
 from user.tasks import send_user_request_to_admins
-from .models import UserProfile
+from user.models import UserProfile
 
 
 class UserTests(APITestCase):

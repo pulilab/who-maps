@@ -18,4 +18,8 @@ urlpatterns = [
     url(r"^rest-auth/registration/", include("rest_auth.registration.urls")),
     url(r'^api-token-auth/', obtain_jwt_token, name="api_token_auth"),
     url(r"^email-confirmation/(?P<key>\w+)/$", confirm_email, name="account_confirm_email"),
+    url(r"^token/get/", view=views.TokenViewSet.as_view({'get': 'get'}), name="token-get"),
+    url(r"^token/create/", view=views.TokenViewSet.as_view({'post': 'create'}), name="token-create"),
+    url(r"^token/refresh/", view=views.TokenViewSet.as_view({'post': 'refresh'}), name="token-refresh"),
+    url(r"^token/delete/", view=views.TokenViewSet.as_view({'delete': 'delete'}), name="token-delete"),
 ]
