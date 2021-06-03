@@ -11,7 +11,7 @@ from project.permissions import InTeamOrReadOnly
 from project.models import Project
 from country.models import Country
 from user.authentication import BearerTokenAuthentication
-
+from rest_framework.authentication import BasicAuthentication
 from .data.landing_page_defaults import LANDING_PAGE_DEFAULTS
 from .data.domains import AXIS, DOMAINS
 from .data.search_filters import SEARCH_FILTERS
@@ -19,6 +19,15 @@ from .data.thematic_overview import THEMATIC_OVERVIEW
 from .data.toolkit_questions import TOOLKIT_QUESTIONS
 from .data.sub_level_types import SUB_LEVEL_TYPES
 from .data.dashboard_columns import DASHBOARD_COLUMNS
+
+
+class TokenAndBasicAuthMixin(object):
+    """
+    Mixin class for APIs which also support basic authentication
+    (for example, the token API's get and create interface)
+    """
+    authentication_classes = (BasicAuthentication, JSONWebTokenAuthentication, BearerTokenAuthentication)
+    permission_classes = (IsAuthenticated,)
 
 
 class TokenAuthMixin(object):
