@@ -35,7 +35,10 @@
               <div />
             </el-col>
             <el-col class="LogoDHASmall">
-              <img src="/logo-dha.svg" alt="Digital Health Atlas logo">
+              <img
+                src="/logo-dha.svg"
+                alt="Digital Health Atlas logo"
+              >
             </el-col>
           </el-row>
         </nuxt-link>
