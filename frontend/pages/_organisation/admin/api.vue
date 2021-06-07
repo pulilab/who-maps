@@ -5,6 +5,6 @@
 <script>
 import ApiAdmin from '@/components/admin/ApiAdmin'
 export default {
-  components: { ApiAdmin },
+  components: { ApiAdmin }
 }
 </script>

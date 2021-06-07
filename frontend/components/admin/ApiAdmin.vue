@@ -1,28 +1,28 @@
 <template>
   <div class="screen">
     <div class="PageTitle">
-      <h2>        
+      <h2>
         <translate>Manage API key</translate>
       </h2>
     </div>
     <div class="api-card-wrapper">
       <el-row class="api-card relative is-always-shadow">
         <el-col class="center">
-          <translate>Documentation can be found</translate>          
+          <translate>Documentation can be found</translate>
           <nuxt-link to="">
             <translate>here</translate>
           </nuxt-link>
         </el-col>
         <transition name="block">
           <el-col v-if="apiKey !== ''" class="center relative">
-            <input v-model="apiKey" ref="copyInput" readonly class="api-input" :class="{'center': !canCopy}" />
+            <input v-model="apiKey" ref="copyInput" readonly class="api-input" :class="{'center': !canCopy}" >
             <span v-if="canCopy" class="MenuIcon api-input-copy">
               <transition name="block">
                 <fa icon="clipboard-check" v-if="copied" />
                 <fa @click="copyToClipboard" icon="copy" v-else />
               </transition>
             </span>
-          </el-col>        
+          </el-col>
         </transition>
         <el-col class="center">
           <el-button @click="createAPIKey" type="primary el-button--medium" v-if="apiKey === ''">
@@ -40,28 +40,28 @@
 <script>
 
 export default {
-  data() {
+  data () {
     return {
       apiKey: '',
       canCopy: false,
-      copied: false,
+      copied: false
     }
   },
-  mounted() {
+  mounted () {
     this.canCopy = navigator.clipboard
   },
   methods: {
-    createAPIKey() {
+    createAPIKey () {
       this.apiKey = 'd2b48800-80c0-4a69-9346-60f02ef6d169'
     },
-    removeAPIKey() {
+    removeAPIKey () {
       this.apiKey = ''
     },
-    async copyToClipboard() {
+    async copyToClipboard () {
       this.copied = true
       await navigator.clipboard.writeText(this.$refs.copyInput.value)
       setTimeout(() => { this.copied = false }, 2500)
-    }    
+    }
   }
 }
 </script>
@@ -74,12 +74,10 @@ export default {
   .center {
     text-align: center;
   }
-    
   .screen {
     height: calc(100vh - 168px);
     overflow-y: auto;
-  } 
-
+  }
   .api-card-wrapper {
     display: flex;
     flex-flow: column;
@@ -120,7 +118,7 @@ export default {
     outline: none;
     padding: 0 15px;
     transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-    width: 100%;    
+    width: 100%;
   }
 
   .api-input:hover {
@@ -182,6 +180,4 @@ export default {
       transform: translateY(-20px);
     }
   }
-
-
 </style>
