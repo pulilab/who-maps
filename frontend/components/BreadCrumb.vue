@@ -51,6 +51,7 @@ export default {
         'organisation-edit-profile': this.$gettext('Admin'),
         'organisation-admin-country': this.$gettext('Admin'),
         'organisation-admin-api': this.$gettext('Admin'),
+        'organisation-graphs': this.$gettext('KPI Graphs'),
         'organisation-admin-donor': this.$gettext('Admin'),
         'organisation-admin-import': this.$gettext('Admin'),
         'organisation-admin-import-id': this.$gettext('Admin'),
