@@ -124,14 +124,3 @@ def project_status_change_str(status_dict: dict) -> str:  # pragma: no cover
         changes.append('research was changed')
 
     return ', '.join(changes)
-
-
-def project_stage_extract_active(project) -> dict:
-    """
-    This helper function basically just extracts the stages information from a project (if there's any)
-    and returns the topmost element of the list, sorted by date in descending order
-    """
-    stages = project.data.get('stages') if project.public_id != '' else project.draft.get('stages')
-    if not stages:
-        return None
-    return sorted(stages, key=lambda x: x['date'], reverse=True)[0]

@@ -136,7 +136,8 @@ class ProjectStatusKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
         else:
             return AuditLogProjectStatusBasicSerializer
 
-class ProjectStageKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+
+class ProjectStagesKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     """
     View to retrieve project stage KPIs
 
