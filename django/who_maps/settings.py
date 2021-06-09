@@ -473,12 +473,6 @@ SWAGGER_SETTINGS = {
             'in': 'header',
             'description': 'authorization: Bearer XXXXXXXXXXXXXXXXXXX'
         },
-        'Token': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header',
-            'description': 'authorization: Token XXXXXXXXXXXXXXXXXXX'
-        },
     },
     'SECURITY_REQUIREMENTS': [{'Bearer': []}]
 }
