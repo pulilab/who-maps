@@ -433,6 +433,7 @@ class ExternalDraftAPI(TeamTokenAuthMixin, ViewSet):
     @swagger_auto_schema(
         operation_id="project-draft-external",
         request_body=ExternalProjectDraftSerializer,
+        security=[{'Bearer': []}],
         responses={201: ProjectDraftSerializer}
         )
     def create(self, request, client_code):
@@ -477,6 +478,7 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
     @swagger_auto_schema(
         operation_id="project-publish-external",
         request_body=ExternalProjectPublishSerializer,
+        security=[{'Bearer': []}],
         responses={201: ProjectPublishedSerializer}
     )
     def create(self, request, client_code):
