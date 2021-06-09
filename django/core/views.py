@@ -11,7 +11,6 @@ from project.permissions import InTeamOrReadOnly
 from project.models import Project
 from country.models import Country
 from user.authentication import BearerTokenAuthentication
-
 from .data.landing_page_defaults import LANDING_PAGE_DEFAULTS
 from .data.domains import AXIS, DOMAINS
 from .data.search_filters import SEARCH_FILTERS
