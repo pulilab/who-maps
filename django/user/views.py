@@ -61,7 +61,7 @@ class TokenViewSet(JSONWebTokenAuthentication, ViewSet):
 
     @swagger_auto_schema(
         operation_id="token_create",
-        security=[{'Basic': [], 'Bearer': [], 'Token': []}],
+        security=[{'Token': []}],
         responses={201: TokenSerializer, 200: TokenSerializer}
         )
     def create(self, request, *args, **kwargs):
@@ -74,7 +74,7 @@ class TokenViewSet(JSONWebTokenAuthentication, ViewSet):
 
     @swagger_auto_schema(
         operation_id="token_refresh",
-        security=[{'Basic': [], 'Bearer': [], 'Token': []}],
+        security=[{'Token': []}],
         responses={201: TokenSerializer}
         )
     def refresh(self, request, *args, **kwargs):
@@ -89,7 +89,7 @@ class TokenViewSet(JSONWebTokenAuthentication, ViewSet):
 
     @swagger_auto_schema(
         operation_id="token_get",
-        security=[{'Basic': [], 'Bearer': [], 'Token': []}],
+        security=[{'Token': []}],
         responses={200: TokenSerializer}
         )
     def get(self, request, *args, **kwargs):
@@ -102,7 +102,7 @@ class TokenViewSet(JSONWebTokenAuthentication, ViewSet):
 
     @swagger_auto_schema(
         operation_id="token_delete",
-        security=[{'Basic': [], 'Bearer': [], 'Token': []}],
+        security=[{'Token': []}],
         responses={204: []}
         )
     def delete(self, request, *args, **kwargs):
