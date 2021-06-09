@@ -475,9 +475,6 @@ SWAGGER_SETTINGS = {
             'in': 'header',
             'description': 'authorization: Token XXXXXXXXXXXXXXXXXXX'
         },
-        'Basic': {
-            "type": "basic",
-        },
     },
     'SECURITY_REQUIREMENTS': [{'Bearer': []}]
 }
