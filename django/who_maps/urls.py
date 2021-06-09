@@ -64,10 +64,6 @@ api_info_urlpatterns = [
     url(r"^api/projects/structure/",
         view=ProjectPublicViewSet.as_view({'get': 'project_structure'}),
         name="get-project-structure"),
-    url(r"^api/token/get/", view=TokenViewSet.as_view({'get': 'get'}), name="token-get"),
-    url(r"^api/token/create/", view=TokenViewSet.as_view({'post': 'create'}), name="token-create"),
-    url(r"^api/token/refresh/", view=TokenViewSet.as_view({'post': 'refresh'}), name="token-refresh"),
-    url(r"^api/token/delete/", view=TokenViewSet.as_view({'delete': 'delete'}), name="token-delete"),
 ]
 api_info_urlpatterns += api_info_router.urls
 
