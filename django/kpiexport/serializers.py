@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from kpiexport.models import AuditLogUsers, AuditLogTokens
+from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages
 
 
 class AuditLogUserDetailedSerializer(serializers.ModelSerializer):
@@ -77,7 +77,7 @@ class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
         return len(audit_log.to_delete)
 
     class Meta:
-        model = AuditLogTokens
+        model = AuditLogProjectStatus
         fields = ("date", "country", "published", "unpublished", "ready_to_publish", "to_delete", "growth")
 
 
@@ -99,5 +99,26 @@ class AuditLogProjectStatusDetailedSerializer(AuditLogProjectStatusBasicSerializ
         return summary_dict
 
     class Meta:
-        model = AuditLogTokens
+        model = AuditLogProjectStatus
         fields = ("date", "country", "data", "published", "unpublished", "ready_to_publish", "to_delete", "growth")
+
+
+class AuditLogProjectStagesBasicSerializer(serializers.ModelSerializer):
+    date = serializers.CharField(read_only=True, max_length=10)
+    country = serializers.PrimaryKeyRelatedField(read_only=True)
+    stages = serializers.JSONField(read_only=True)
+
+    class Meta:
+        model = AuditLogProjectStages
+        fields = ("date", "country", "stages")
+
+
+class AuditLogProjectStagesDetailedSerializer(serializers.ModelSerializer):
+    date = serializers.CharField(read_only=True, max_length=10)
+    country = serializers.PrimaryKeyRelatedField(read_only=True)
+    stages = serializers.JSONField(read_only=True)
+    data = serializers.JSONField(read_only=True)
+
+    class Meta:
+        model = AuditLogProjectStages
+        fields = ("date", "country", "stages", "data")
