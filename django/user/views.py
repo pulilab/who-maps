@@ -5,13 +5,14 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 
-from core.views import TokenAuthMixin, TokenAndBasicAuthMixin
+from core.views import TokenAuthMixin
 from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileListSerializer, TokenSerializer
 from .models import UserProfile, Organisation
 from django.contrib.auth.models import User
 
 from django.utils import timezone
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 
 class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
@@ -49,7 +50,7 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
             return Organisation.objects.all()
 
 
-class TokenViewSet(TokenAndBasicAuthMixin, ViewSet):
+class TokenViewSet(JSONWebTokenAuthentication, ViewSet):
     """
     Viewset providing functions for authenticated users for creating, retrieving, refreshing and deleting their tokens
 

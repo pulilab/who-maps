@@ -86,6 +86,12 @@ class TokenTests(APITestCase):
         self.assertNotEqual(response.json()['key'], token_key)
         tokens = Token.objects.filter(user__id=self.user_1_id)
         self.assertEqual(tokens.count(), 1)
+        key_new = response.json()['key']
+        # Get the token
+        url = reverse('token-get')
+        response = self.user_1_client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['key'], key_new)
         # Delete the token
         url = reverse('token-delete')
         response = self.user_1_client.delete(url)
@@ -97,32 +103,10 @@ class TokenTests(APITestCase):
         response = self.user_1_client.get(url)
         self.assertEqual(response.status_code, 404)
 
-    def test_token_basic_auth(self):
-        cred_str = f'{self.user_email}:{self.user_password}'
-        credentials = base64.b64encode(cred_str.encode())
-        basic_auth_client = APIClient(HTTP_AUTHORIZATION=f'Basic {credentials.decode()}', format="json")
-        tokens = Token.objects.filter(user__id=self.user_1_id)
-        self.assertEqual(tokens.count(), 0)  # user should not have token at this stage
-        url = reverse('token-create')
-        response = basic_auth_client.post(url)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json()['user'], self.user_1_id)
-        token_key = response.json()['key']
-        tokens = Token.objects.filter(user__id=self.user_1_id)
-        self.assertEqual(tokens.count(), 1)  # Exactly one token per user
-        self.assertEqual(tokens[0].key, token_key)
-        url = reverse('token-get')
-        response = basic_auth_client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['key'], token_key)
-        url = reverse('token-delete')
-        response = basic_auth_client.delete(url)
-        self.assertEqual(response.status_code, 204)
-
     def test_token_bad_auth(self):
         cred_str = f'{self.user_email}:{self.user_password}ABLAKZSIRAF'
         credentials = base64.b64encode(cred_str.encode())
-        basic_auth_client = APIClient(HTTP_AUTHORIZATION=f'Basic {credentials.decode()}', format="json")
+        basic_auth_client = APIClient(HTTP_AUTHORIZATION=f'Token {credentials.decode()}', format="json")
         tokens = Token.objects.filter(user__id=self.user_1_id)
         self.assertEqual(tokens.count(), 0)  # user should not have token at this stage
         url = reverse('token-create')
