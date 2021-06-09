@@ -12,7 +12,7 @@ from rest_framework.routers import SimpleRouter
 from country.views import CountryLandingPageViewSet, CountryLandingListPageViewSet, DonorLandingPageViewSet, \
     DonorLandingListPageViewSet
 from project.views import ProjectPublicViewSet, ExternalDraftAPI, ExternalPublishAPI
-from user.views import OrganisationViewSet, TokenViewSet
+from user.views import OrganisationViewSet
 
 admin.site.site_header = 'Digital Health Atlas'
 API_TITLE = 'Digital Health Atlas API'
