@@ -49,7 +49,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userProfile: 'user/getProfile',
       apiKey: 'user/getApiKey'
     })
   },
