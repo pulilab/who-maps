@@ -147,7 +147,7 @@
       class="mb-80"
     >
       <graph-layout :span="8">
-        <translate>Blank demo grid</translate>
+        <translate>Blank template</translate>
       </graph-layout>
       <graph-layout :span="16">
         <translate>Monthly growth of API keys</translate>
@@ -224,6 +224,36 @@
             horizontal
           />
         </template>
+      </graph-layout>
+    </el-row>
+
+    <!-- Project stages -->
+    <p class="subtitle">
+      <translate>Project stages</translate>
+    </p>
+    <el-row
+      type="flex"
+      :gutter="20"
+      class="mb-80"
+    >
+      <graph-layout
+        :span="16"
+        horizontal
+      >
+        <translate>Distributions of projects’ stages</translate>
+        <template #graph>
+          <chart
+            type="polar-area"
+            :chart-data="polarA.chartData || {}"
+            :options="polarA.options"
+          />
+        </template>
+        <template #legend>
+          <data-legend :items="polarALegend" />
+        </template>
+      </graph-layout>
+      <graph-layout :span="8">
+        <translate>Blank template</translate>
       </graph-layout>
     </el-row>
 
@@ -336,7 +366,7 @@
         </template>
       </graph-layout>
       <graph-layout :span="16">
-        <translate>Blank demo grid</translate>
+        <translate>Blank template</translate>
         <!-- <translate>Monthly growth of API keys</translate>
         <template #graph>
           <chart
@@ -397,17 +427,7 @@
         :span="16"
         horizontal
       >
-        <translate>Distributions of projects’ stages</translate>
-        <template #graph>
-          <chart
-            type="polar-area"
-            :chart-data="polarA.chartData || {}"
-            :options="polarA.options"
-          />
-        </template>
-        <template #legend>
-          <data-legend :items="polarALegend" />
-        </template>
+        <translate>Blank template</translate>
       </graph-layout>
       <graph-layout :span="8">
         <translate>Distribution of projects’ statuses</translate>
