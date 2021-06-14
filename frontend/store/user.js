@@ -5,6 +5,7 @@ export const state = () => ({
   token: null,
   user: null,
   profile: null,
+  apiKey: null,
   emailVerifyResult: null,
   cookieOn: false,
   feedbackOn: false,
@@ -24,7 +25,8 @@ export const getters = {
       return { ...state.profile }
     }
     return null
-  }
+  },
+  getApiKey: state => state.apiKey
 }
 
 export const actions = {
@@ -83,17 +85,19 @@ export const actions = {
     commit('SET_USER', null)
     commit('SET_PROFILE', null)
     commit('SET_TOKEN', null)
+    commit('SET_APIKEY', null)
     dispatch('dashboard/resetUserInput', null, { root: true })
     dispatch('landing/resetUserInput', null, { root: true })
     dispatch('projects/resetProjectsData', null, { root: true })
     deleteToken()
   },
 
-  async loadProfile ({ commit, getters }, profileId) {
+  async loadProfile ({ commit, getters, dispatch }, profileId) {
     try {
       if (getters.getToken && !getters.getProfile) {
         const { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`)
         commit('SET_PROFILE', data)
+        dispatch('loadApiKey')
       }
     } catch (e) {
       console.error('user/loadProfile failed')
@@ -143,8 +147,43 @@ export const actions = {
     } catch (e) {
       commit('EMAIL_VERIFY_RESULT', false)
     }
-  }
+  },
 
+  async createApiKey ({ commit }) {
+    try {
+      const { data } = await this.$axios.post('/api/token/create/')
+      commit('SET_APIKEY', data.key)
+    } catch (e) {
+      console.error('user/createApiKey failed')
+    }
+  },
+
+  async loadApiKey ({ commit }) {
+    try {
+      const { data } = await this.$axios.get('/api/token/get/')
+      commit('SET_APIKEY', data.key)
+    } catch (e) {
+      console.error('user/loadApiKey failed')
+    }
+  },
+
+  async refreshApiKey ({ commit }) {
+    try {
+      const { data } = await this.$axios.post('/api/token/refresh/')
+      commit('SET_APIKEY', data.key)
+    } catch (e) {
+      console.error('user/refreshApiKey failed')
+    }
+  },
+
+  async deleteApiKey ({ commit }) {
+    try {
+      await this.$axios.delete('/api/token/delete/')
+      commit('SET_APIKEY', null)
+    } catch (e) {
+      console.error('user/deleteApiKey failed')
+    }
+  }
 }
 
 export const mutations = {
@@ -166,6 +205,10 @@ export const mutations = {
 
   SET_PROFILE: (state, profile) => {
     state.profile = profile
+  },
+
+  SET_APIKEY: (state, apiKey) => {
+    state.apiKey = apiKey
   },
 
   SET_FEEDBACK: (state, { feedbackOn, feedbackForm }) => {

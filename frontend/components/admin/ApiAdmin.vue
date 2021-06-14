@@ -14,7 +14,7 @@
           </nuxt-link>
         </el-col>
         <transition name="block">
-          <el-col v-if="apiKey !== ''" class="center relative">
+          <el-col v-if="apiKey" class="center relative">
             <input v-model="apiKey" ref="copyInput" readonly class="api-input" :class="{'center': !canCopy}" >
             <span v-if="canCopy" class="MenuIcon api-input-copy">
               <transition name="block">
@@ -25,11 +25,11 @@
           </el-col>
         </transition>
         <el-col class="center">
-          <el-button @click="createAPIKey" type="primary el-button--medium" v-if="apiKey === ''">
-            <translate>Create API key</translate>
-          </el-button>
-          <el-button @click="removeAPIKey" type="danger el-button--medium" v-else>
+          <el-button key="deleteBtn" v-if="apiKey" @click="deleteApiKey" type="danger el-button--medium">
             <translate>Inactivate API key</translate>
+          </el-button>
+          <el-button key="createBtn" v-else @click="createAPIKey" type="primary el-button--medium">
+            <translate>Create API key</translate>
           </el-button>
         </el-col>
       </el-row>
@@ -38,25 +38,28 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data () {
     return {
-      apiKey: '',
       canCopy: false,
       copied: false
     }
+  },
+  computed: {
+    ...mapGetters({
+      apiKey: 'user/getApiKey'
+    })
   },
   mounted () {
     this.canCopy = navigator.clipboard
   },
   methods: {
-    createAPIKey () {
-      this.apiKey = 'd2b48800-80c0-4a69-9346-60f02ef6d169'
-    },
-    removeAPIKey () {
-      this.apiKey = ''
-    },
+    ...mapActions({
+      createAPIKey: 'user/createApiKey',
+      deleteApiKey: 'user/deleteApiKey'
+    }),
     async copyToClipboard () {
       this.copied = true
       await navigator.clipboard.writeText(this.$refs.copyInput.value)
