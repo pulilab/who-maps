@@ -1,5 +1,7 @@
 export const nameMapping = {
   name: 'Project Name',
+  country: 'Country',
+  investor: 'Investor',
   organisation: 'Organisation',
   geographic_scope: 'Geographic Scope',
   implementation_overview: 'Narrative of the project',
@@ -33,7 +35,9 @@ export const nameMapping = {
 export const importTemplate = [
   {
     'Project Name': 'MyProject',
-    Organisation: 'WHO',
+    Country: 'Sierra Leone',
+    Investor: 'Global Investor',
+    Organisation: 'West African Health Organisation',
     'Geographic Scope': 'Gographipc Scope Free Text',
     'Narrative of the project': 'Narrative free text',
     'Start Date': 43742,
@@ -62,7 +66,9 @@ export const importTemplate = [
   },
   {
     'Project Name': 'MyProject2',
-    Organisation: 'WHO',
+    Country: 'Hungary',
+    Investor: 'Pulilab',
+    Organisation: 'Uni',
     'Geographic Scope': 'Gographipc Scope Free Text',
     'Narrative of the project': 'Narrative free text',
     'Start Date': 43742,
