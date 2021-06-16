@@ -52,6 +52,17 @@
               </translate>
             </nuxt-link>
           </el-col>
+          <el-col v-if="'organisation-admin-import'" class="ActionBarTab">
+            <nuxt-link
+              :to="localePath({name: 'organisation-admin-import', params: $route.params})"
+              class="ActionBarLink"
+              tag="div"
+            >
+              <translate key="import">
+                Import interface
+              </translate>
+            </nuxt-link>
+          </el-col>
           <el-col class="ActionBarTab">
             <nuxt-link
               :to="localePath({name: 'organisation-admin-api', params: $route.params})"
