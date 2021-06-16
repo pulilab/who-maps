@@ -295,7 +295,20 @@ export const actions = {
     const colorSetD = ['#FFCF3F', '#FEAB7D', '#9ACB67', '#49BCE8']
     const colorSetE = ['#FFCF3F', '#EF8A85', '#9ACB67', '#5F72B5']
     const colorSetF = ['#9ACB67', '#E84F48']
-    const colorSetG = ['#FFCE3D', '#FEAB7D', '#49BCE8', '#5F72B5', '#9ACB67']
+    const colorSetG = [
+      '#757575',
+      '#1A527B',
+      '#1577AC',
+      '#4897B3',
+      '#66C6D0',
+      '#87F7EF',
+      '#713ED2',
+      '#E2D83B',
+      '#1FA075',
+      '#BF2999',
+      '#D1632E',
+      '#E5A131'
+    ]
 
     // label sets (should be dynamic?)
     const projectsLabels = [
@@ -396,7 +409,7 @@ export const actions = {
       'SET_POLARA_GRAPH',
       settings({
         type: 'polar',
-        colors: [...colorSetG, ...colorSetG],
+        colors: colorSetG,
         labels: stageLabels,
         data: [polarAData]
       })
@@ -529,7 +542,7 @@ export const actions = {
     // legends
     commit(
       'SET_POLARA_LEGEND',
-      legendGenerator(stageLabels, [...colorSetG, ...colorSetG], polarAData)
+      legendGenerator(stageLabels, colorSetG, polarAData)
     )
     commit(
       'SET_DOUGHNUTA_LEGEND',
