@@ -108,6 +108,8 @@ def deploy(tag=None):
             run('git checkout %s' % env.branch)
             run('git pull origin %s' % env.branch)
         time.sleep(10)
+        version = run('git describe --tags --always')
+        run(f'export DEPLOY_VERSION={version}')
 
         if env.name == 'dev':
             options = "-f {}/docker-compose.yml -f {}/docker-compose.dev.yml ".format(
@@ -212,7 +214,7 @@ def test_specific(specific_test=''):
 def cov():
     local(
         "docker-compose exec django py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing"
-        " --cov-config .coveragerc"
+        " --cov-config .coveragerc -x"
     )
 
 
