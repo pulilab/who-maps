@@ -1,5 +1,5 @@
 <template>
-  <project-layout>
+  <page-layout>
     <template #title>
       <translate>Register your Digital Health Project</translate>
     </template>
@@ -11,16 +11,16 @@
       </translate>
     </template>
     <project-form />
-  </project-layout>
+  </page-layout>
 </template>
 
 <script>
 import ProjectForm from '@/components/project/ProjectForm'
-import ProjectLayout from '@/components/project/wrappers/ProjectLayout'
+import PageLayout from '@/components/common/wrappers/PageLayout'
 export default {
   components: {
     ProjectForm,
-    ProjectLayout
+    PageLayout
   },
   middleware: ['isLoggedIn'],
   async fetch ({ store }) {

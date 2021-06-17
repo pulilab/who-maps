@@ -1,5 +1,5 @@
 <template>
-  <section :class="`${type} ${small && 'small'} project-layout`">
+  <section :class="`${type} ${small && 'small'} page-layout`">
     <header v-if="header">
       <h2 v-if="$slots.title">
         <slot name="title" />
@@ -36,8 +36,8 @@ export default {
 <style lang="less" scoped>
 @import '~assets/style/variables.less';
 
-.project-layout {
-  padding: 40px 120px 100px;
+.page-layout {
+  padding: 40px;
   color: @colorTextPrimary;
   &.transparent {
     background-color: transparent;
