@@ -1,10 +1,8 @@
 <template>
-  <div class="screen">
-    <div class="PageTitle">
-      <h2>
-        <translate>Manage API key</translate>
-      </h2>
-    </div>
+  <page-layout>
+    <template #title>
+      <translate>Manage API key</translate>
+    </template>
     <div class="api-card-wrapper">
       <el-row class="api-card relative is-always-shadow">
         <el-col class="center">
@@ -34,13 +32,17 @@
         </el-col>
       </el-row>
     </div>
-  </div>
+  </page-layout>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import PageLayout from '@/components/common/wrappers/PageLayout'
 
 export default {
+  components: {
+    PageLayout
+  },
   data () {
     return {
       canCopy: false,
@@ -77,14 +79,15 @@ export default {
   .center {
     text-align: center;
   }
-  .screen {
+  /* .screen {
     height: calc(100vh - 168px);
     overflow-y: auto;
-  }
+  } */
   .api-card-wrapper {
     display: flex;
     flex-flow: column;
     align-items: center;
+    margin-bottom: 80px;
   }
 
   .api-card {
