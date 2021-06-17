@@ -3,35 +3,33 @@
     <template #title>
       <translate>Manage API key</translate>
     </template>
-    <div class="api-card-wrapper">
-      <el-row class="api-card relative is-always-shadow">
-        <el-col class="center">
-          <translate>Documentation can be found</translate>
-          <nuxt-link to="">
-            <translate>here</translate>
-          </nuxt-link>
+    <el-row class="api-card relative is-always-shadow">
+      <el-col class="center">
+        <translate>Documentation can be found</translate>
+        <nuxt-link target="_blank" to="/api/public-docs/">
+          <translate>here</translate>
+        </nuxt-link>
+      </el-col>
+      <transition name="block">
+        <el-col v-if="apiKey" class="center relative">
+          <input v-model="apiKey" ref="copyInput" readonly class="api-input" :class="{'center': !canCopy}" >
+          <span v-if="canCopy" class="MenuIcon api-input-copy">
+            <transition name="block">
+              <fa icon="clipboard-check" v-if="copied" />
+              <fa @click="copyToClipboard" icon="copy" v-else />
+            </transition>
+          </span>
         </el-col>
-        <transition name="block">
-          <el-col v-if="apiKey" class="center relative">
-            <input v-model="apiKey" ref="copyInput" readonly class="api-input" :class="{'center': !canCopy}" >
-            <span v-if="canCopy" class="MenuIcon api-input-copy">
-              <transition name="block">
-                <fa icon="clipboard-check" v-if="copied" />
-                <fa @click="copyToClipboard" icon="copy" v-else />
-              </transition>
-            </span>
-          </el-col>
-        </transition>
-        <el-col class="center">
-          <el-button key="deleteBtn" v-if="apiKey" @click="deleteApiKey" type="danger el-button--medium">
-            <translate>Inactivate API key</translate>
-          </el-button>
-          <el-button key="createBtn" v-else @click="createAPIKey" type="primary el-button--medium">
-            <translate>Create API key</translate>
-          </el-button>
-        </el-col>
-      </el-row>
-    </div>
+      </transition>
+      <el-col class="center">
+        <el-button key="deleteBtn" v-if="apiKey" @click="deleteApiKey" type="danger el-button--medium">
+          <translate>Inactivate API key</translate>
+        </el-button>
+        <el-button key="createBtn" v-else @click="createAPIKey" type="primary el-button--medium">
+          <translate>Create API key</translate>
+        </el-button>
+      </el-col>
+    </el-row>
   </page-layout>
 </template>
 
@@ -78,16 +76,6 @@ export default {
 
   .center {
     text-align: center;
-  }
-  /* .screen {
-    height: calc(100vh - 168px);
-    overflow-y: auto;
-  } */
-  .api-card-wrapper {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    margin-bottom: 80px;
   }
 
   .api-card {

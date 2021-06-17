@@ -39,6 +39,7 @@ export default {
 .page-layout {
   padding: 40px;
   color: @colorTextPrimary;
+  min-height: calc(100vh - 248px);
   &.transparent {
     background-color: transparent;
   }
