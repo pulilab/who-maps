@@ -1,9 +1,8 @@
-from rest_framework.test import APITestCase
 from rest_framework.reverse import reverse
 from kpiexport.tests.kpi_base import KPITestDataWithProjects
 
 
-class KPIProjectStatusTests(KPITestDataWithProjects, APITestCase):
+class KPIProjectStatusTests(KPITestDataWithProjects):
 
     def test_project_status_kpi_nofilter(self):
         url = reverse("project-status-kpi")
@@ -30,7 +29,6 @@ class KPIProjectStatusTests(KPITestDataWithProjects, APITestCase):
               'ready_to_publish': 0,
               'to_delete': 0,
               'unpublished': 0}]
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected)
 
@@ -57,6 +55,7 @@ class KPIProjectStatusTests(KPITestDataWithProjects, APITestCase):
         self.assertEqual(response.json(), expected)
 
     def test_project_status_kpi_investor_filter(self):
+        self.maxDiff = None
         url = reverse("project-status-kpi")
         url += f'?investor={self.d1.id}'
         response = self.client.get(url)
