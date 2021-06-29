@@ -1,5 +1,5 @@
 <template>
-  <project-layout type="draft">
+  <page-layout type="draft">
     <template #title>
       <translate>View Project Info</translate>
     </template>
@@ -12,18 +12,18 @@
       <translate>version of the project.</translate>
     </template>
     <project-data />
-  </project-layout>
+  </page-layout>
 </template>
 
 <script>
 import { fetchProjectData } from '@/utilities/projects'
 import ProjectData from '@/components/project/ProjectData'
-import ProjectLayout from '@/components/project/wrappers/ProjectLayout'
+import PageLayout from '@/components/common/wrappers/PageLayout'
 import Tag from '@/components/common/Tag'
 export default {
   components: {
     ProjectData,
-    ProjectLayout,
+    PageLayout,
     Tag
   },
   middleware: ['isLoggedIn'],

@@ -1,12 +1,10 @@
 <template>
-  <div class="CountryAdmin">
-    <div class="PageTitle">
-      <h2>
-        <translate :parameters="{ name: donor.name }">
-          Investor admin for {name}
-        </translate>
-      </h2>
-    </div>
+  <page-layout class="CountryAdmin">
+    <template #title>
+      <translate :parameters="{ name: donor.name }">
+        Investor admin for {name}
+      </translate>
+    </template>
 
     <collapsible-card
       :title="$gettext('Investor information') | translate"
@@ -313,11 +311,12 @@
         </el-button>
       </el-row>
     </div>
-  </div>
+  </page-layout>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import PageLayout from '@/components/common/wrappers/PageLayout'
 import CollapsibleCard from '../project/CollapsibleCard'
 import DhaQuestionaire from '../admin/DhaQuestionaire'
 import FileUpload from '../common/FileUpload'
@@ -328,6 +327,7 @@ export default {
   name: 'CountryAdministrator',
 
   components: {
+    PageLayout,
     CollapsibleCard,
     DhaQuestionaire,
     FileUpload,
@@ -612,13 +612,11 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
 .CountryAdmin {
-  margin-bottom: 60px;
-
   .CollapsibleCard {
     width: @cardSizeMedium;
     margin: 0 auto 20px;

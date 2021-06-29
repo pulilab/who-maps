@@ -1,20 +1,20 @@
 <template>
-  <project-layout small>
+  <page-layout small>
     <template #subtitle>
       <b class="uppercase"><translate>project stages</translate></b>
     </template>
     <c-stages class="stage-graph" />
-  </project-layout>
+  </page-layout>
 </template>
 
 <script>
 import { fetchProjectData } from '@/utilities/projects'
 import cStages from '@/components/common/charts/cStages'
-import ProjectLayout from '@/components/project/wrappers/ProjectLayout'
+import PageLayout from '@/components/common/wrappers/PageLayout'
 export default {
   components: {
     cStages,
-    ProjectLayout
+    PageLayout
   },
   middleware: ['isLoggedIn'],
   fetch ({ store, params, error }) {

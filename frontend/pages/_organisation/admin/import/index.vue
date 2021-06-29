@@ -1,53 +1,60 @@
 <template>
-  <div class="ImportList">
-    <el-row type="flex">
-      <el-col
-        v-if="queue && queue.length > 0"
-        :span="16"
-      >
-        <el-card class="box-card">
-          <div
-            slot="header"
-            class="clearfix"
-          >
-            <translate>Previous imports</translate>
-          </div>
-          <import-details
-            v-for="(item, index) in queue"
-            :key="index"
-            :item="item"
-            type="flex"
-          >
-            <el-button @click="select(item)">
-              <translate>
-                Select
-              </translate>
-            </el-button>
-          </import-details>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card class="box-card">
-          <div
-            slot="header"
-            class="clearfix"
-          >
-            <translate>New Import</translate>
-          </div>
-          <import-file />
-        </el-card>
-      </el-col>
-    </el-row>
-  </div>
+  <page-layout>
+    <template #title>
+      <translate>Import interface</translate>
+    </template>
+    <div class="ImportList">
+      <el-row type="flex">
+        <el-col
+          v-if="queue && queue.length > 0"
+          :span="16"
+        >
+          <el-card class="box-card">
+            <div
+              slot="header"
+              class="clearfix"
+            >
+              <translate>Previous imports</translate>
+            </div>
+            <import-details
+              v-for="(item, index) in queue"
+              :key="index"
+              :item="item"
+              type="flex"
+            >
+              <el-button @click="select(item)">
+                <translate>
+                  Select
+                </translate>
+              </el-button>
+            </import-details>
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card class="box-card">
+            <div
+              slot="header"
+              class="clearfix"
+            >
+              <translate>New Import</translate>
+            </div>
+            <import-file />
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
+  </page-layout>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import PageLayout from '@/components/common/wrappers/PageLayout'
 import ImportFile from '@/components/admin/import/ImportFile'
 import ImportDetails from '@/components/admin/import/ImportDetails'
 
 export default {
   components: {
+    PageLayout,
     ImportFile,
     ImportDetails
   },

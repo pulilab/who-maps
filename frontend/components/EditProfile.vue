@@ -1,9 +1,5 @@
 <template>
   <div class="EditProfile">
-    <div class="PageTitle">
-      <h2><translate>Edit my profile</translate></h2>
-    </div>
-
     <el-card
       :body-style="{ padding: '0px' }"
       class="ProfileCard"
@@ -878,8 +874,6 @@ export default {
 @import "~assets/style/mixins.less";
 
 .EditProfile {
-  margin-bottom: 80px;
-
   .ChangeEmail {
     overflow: hidden;
     width: 100%;
