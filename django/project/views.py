@@ -13,7 +13,8 @@ from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
-from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
+from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAuthMixin, CollectionTokenAuthMixin, \
+    get_object_or_400
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion
 from project.permissions import InCountryAdminForApproval
@@ -25,9 +26,9 @@ from user.models import Organisation
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer, \
-    TerminologySerializer, ExternalProjectPublishSerializer, ExternalProjectDraftSerializer
+    TerminologySerializer, ExternalProjectPublishSerializer, ExternalProjectDraftSerializer, CollectionSerializer
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
 
 from .mixins import CheckRequiredMixin
 from django.conf import settings
@@ -74,8 +75,8 @@ class ProjectPublicViewSet(ViewSet):
 
         return dict(
             interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
-            technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED)
-                                                   .values('id', 'name', 'state'),
+            technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED).values(
+                'id', 'name', 'state'),
             licenses=Licence.objects.values('id', 'name'),
             interoperability_standards=InteroperabilityStandard.objects.values('id', 'name'),
             his_bucket=HISBucket.objects.values('id', 'name'),
@@ -181,7 +182,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         if data_serializer.errors:
             errors['project'] = data_serializer.errors
 
-        if country.country_questions.exists():
+        if country.country_questions.exists():  # TODO: remove custom questions requiredness
             if 'country_custom_answers' not in request.data:
                 raise ValidationError({'non_field_errors': 'Country answers are missing'})
             else:
@@ -199,7 +200,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
 
         for donor_id in data_serializer.validated_data.get('donors', []):
             donor = Donor.objects.get(id=donor_id)
-            if donor and donor.donor_questions.exists():
+            if donor and donor.donor_questions.exists():  # TODO: remove donor custom question requiredness
                 if 'donor_custom_answers' not in request.data:
                     raise ValidationError({'non_field_errors': 'Donor answers are missing'})
                 if str(donor_id) not in request.data['donor_custom_answers']:
@@ -267,7 +268,7 @@ class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
 
 
-class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
+class ProjectDraftViewSet(TeamCollectionTokenAuthMixin, ViewSet):
     def create(self, request, country_id):
         """
         Creates a Draft project.
@@ -303,7 +304,7 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
         for donor_id in data_serializer.validated_data.get('donors', []):
             donor = Donor.objects.filter(id=donor_id).first()
-            if donor and donor.donor_questions.exists():
+            if donor and donor.donor_questions.exists():  # TODO: remove this from being required
                 if 'donor_custom_answers' not in request.data:
                     raise ValidationError({'non_field_errors': 'Donor answers are missing'})
                 if str(donor_id) not in request.data['donor_custom_answers']:
@@ -331,7 +332,11 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                 donor_answers.context['donor_id'] = donor_id
                 instance = donor_answers.save()
             instance.save()
-            instance.team.add(request.user.userprofile)
+            # COLLECTIONS - draft project can have an empty team if they are part of a collection
+            if 'import_row' in request.data['project']:
+                instance.import_rows.set(ImportRow.objects.filter(id=request.data['project']['import_row']))
+            else:
+                instance.team.add(request.user.userprofile)
 
         data = instance.to_representation(draft_mode=True)
 
@@ -435,7 +440,7 @@ class ExternalDraftAPI(TeamTokenAuthMixin, ViewSet):
         request_body=ExternalProjectDraftSerializer,
         security=[{'Bearer': []}],
         responses={201: ProjectDraftSerializer}
-        )
+    )
     def create(self, request, client_code):
         """
         Create *draft* projects from external sources.
@@ -546,7 +551,7 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
         return Response(instance.to_representation(draft_mode=True), status=status.HTTP_201_CREATED)
 
 
-class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
+class ProjectGroupViewSet(TeamCollectionTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
 
@@ -674,3 +679,68 @@ class TechnologyPlatformRequestViewSet(CreateModelMixin, GenericViewSet):
         serializer.validated_data['added_by'] = self.request.user.userprofile
         super().perform_create(serializer)
         notify_superusers_about_new_pending_software.apply_async((serializer.instance.id,))
+
+
+class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveModelMixin, ListModelMixin, GenericViewSet):
+    serializer_class = CollectionSerializer
+    lookup_field = 'url'
+
+    @staticmethod
+    def _check_parameters(request_data):
+        if 'add_me_as_editor' not in request_data or not isinstance(request_data['add_me_as_editor'], bool):
+            raise ValidationError("'add_me_as_editor' missing or invalid. Required: bool")
+        if 'project_import' not in request_data:  # pragma: no cover
+            raise ValidationError("'project_import' is required")
+
+    def get_queryset(self):
+        return Collection.objects.filter(importer=self.request.user)
+
+    @staticmethod
+    def _prepare_data(request):
+        data = copy.deepcopy(request.data)
+        data['importer'] = request.user.pk
+        if 'project_import' in data:
+            data['project_import']['user'] = request.user.pk
+            data['project_import']['country'] = data.get('country', data['project_import'].get('country', None))
+            data['project_import']['donor'] = data.get('donor', data['project_import'].get('donor', None))
+            data['project_imports'] = [data.pop('project_import')]
+        else:
+            data['project_imports'] = []
+        return data
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        self._check_parameters(data)
+        data = self._prepare_data(request)
+        # Modify the data to make it processable by the serializers
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        # Modify the data to make it processable by the serializers
+        if 'project_import' in request.data:
+            # We do not allow uploading the same xls file
+            if instance.project_imports.filter(filename=request.data['project_import']['filename']).count() > 0:
+                raise ValidationError(f'Uploading the same file multiple times is not allowed: '
+                                      f'"{request.data["project_import"]["filename"]}"')
+        data = self._prepare_data(request)
+
+        serializer = self.get_serializer(instance, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):  # pragma: no cover
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+# class CollectionAddProjectImport(APIView):

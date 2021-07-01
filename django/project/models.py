@@ -378,6 +378,23 @@ class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
+class Collection(ExtendedNameOrderedSoftDeletedModel):
+    importer = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)  # should be hidden on UI
+    url = models.CharField(max_length=256, blank=True)
+
+    def generate_hash_id(self):
+        hash_id = Hashids(min_length=12)
+        return hash_id.encode(self.pk)
+
+    def make_url(self):
+        if self.url:  # pragma: no cover
+            return
+        self.url = f"{self.importer.pk}{self.generate_hash_id()}"
+
+    class Meta:
+        unique_together = ('importer', 'name')
+
+
 class ProjectImportV2(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     status = models.NullBooleanField(null=True, blank=True)  # TODO: maybe remove this
@@ -387,6 +404,8 @@ class ProjectImportV2(ExtendedModel):
     filename = models.CharField(max_length=256, null=True, blank=True)
     sheet_name = models.CharField(max_length=256, null=True, blank=True)
     draft = models.BooleanField(default=True)
+    collection = models.ForeignKey(Collection, null=True, blank=True, related_name="project_imports",
+                                   on_delete=models.SET_NULL)
 
     class Meta:
         unique_together = ('user', 'filename', 'sheet_name')
@@ -395,7 +414,7 @@ class ProjectImportV2(ExtendedModel):
 class ImportRow(models.Model):
     data = JSONField(default=dict)
     original_data = JSONField(default=dict)
-    project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL)
+    project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL, related_name='import_rows')
     parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)
 
 

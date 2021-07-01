@@ -20,12 +20,12 @@ from rest_framework.validators import UniqueValidator
 import scheduler.celery  # noqa
 
 from core.utils import send_mail_wrapper
-from country.models import CustomQuestion
+from country.models import CustomQuestion, Country, Donor
 from project.utils import remove_keys
 from user.models import UserProfile
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform, InteroperabilityLink, \
-    Licence, InteroperabilityStandard, HISBucket, Stage, HealthCategory, HealthFocusArea, HSCGroup, HSCChallenge, \
-    DigitalStrategy
+from project.models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform, \
+    InteroperabilityLink, Licence, InteroperabilityStandard, HISBucket, Stage, HealthCategory, HealthFocusArea, \
+    HSCGroup, HSCChallenge, DigitalStrategy, Collection
 
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
@@ -257,7 +257,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
         return value
 
 
-class ProjectGroupSerializer(serializers.ModelSerializer):
+class ProjectGroupSerializer(serializers.ModelSerializer):  # TODO handle orphan projects
     new_team_emails = serializers.ListField(
         child=serializers.EmailField(), max_length=64, min_length=0, allow_empty=True, required=False)
     new_viewer_emails = serializers.ListField(
@@ -489,26 +489,25 @@ class ImportRowSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ProjectImportV2Serializer(serializers.ModelSerializer):
+class ProjectImportV2Serializer(serializers.ModelSerializer):  # pragma: no cover
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     status = serializers.ReadOnlyField()
     rows = ImportRowSerializer(many=True)
+    collection = serializers.IntegerField(required=False)
 
     class Meta:
         model = ProjectImportV2
-        fields = ('id', 'user', 'status', 'header_mapping',
-                  'rows', 'country', 'donor', 'filename', 'sheet_name', 'draft')
+        fields = ('id', 'user', 'status', 'header_mapping', 'rows', 'country', 'donor', 'filename', 'sheet_name',
+                  'draft', 'collection')
 
-    # TODO: Need Coverage
-    def create(self, validated_data):  # pragma: no cover
+    def create(self, validated_data):
         rows = validated_data.pop('rows')
         instance = super().create(validated_data)
         for row_data in rows[0].get('data', []):
             ImportRow.objects.create(parent=instance, data=row_data, original_data=row_data)
         return instance
 
-    # TODO: Need Coverage
-    def update(self, instance, validated_data):  # pragma: no cover
+    def update(self, instance, validated_data):
         rows = validated_data.pop('rows', [])
         instance = super().update(instance, validated_data)
         for row in rows:
@@ -613,6 +612,7 @@ class TerminologySerializer(serializers.Serializer):
     interoperability_standards = InteroperabilityStandardModelReadSerializer(many=True)
     his_bucket = HISBucketModelReadSerializer(many=True)
     stages = StageModelReadSerializer(many=True)
+
     health_focus_areas = HFAWithCategoriesSerializer(many=True)
     hsc_challenges = HSCGroupWithChallengesSerializer(many=True)
     strategies = StrategiesByGroupSerializer(many=True)
@@ -632,3 +632,85 @@ class ExternalProjectDraftSerializer(serializers.Serializer):
     TODO: May need to update the 'project' part
     """
     project = ProjectDraftSerializer(required=True)
+
+
+class ProjectImportV2CollectionSerializer(serializers.ModelSerializer):
+    # user = serializers.IntegerField(required=False)
+    status = serializers.ReadOnlyField()
+    rows = ImportRowSerializer(many=True)
+
+    class Meta:
+        model = ProjectImportV2
+        fields = ('id', 'user', 'status', 'header_mapping', 'rows', 'country', 'donor', 'filename', 'sheet_name',
+                  'draft', 'collection')
+
+    def create(self, validated_data):
+        rows = validated_data.pop('rows')
+        instance = super().create(validated_data)
+        for row_data in rows[0].get('data', []):
+            """
+            Overrides"""
+            if self.context.get('add_as_editor'):
+                team_data = set(row_data['Team'].split(', '))
+                team_data.add(validated_data["user"].email)
+                row_data['Team'] = ', '.join(team_data)
+            if self.context.get('country_override'):
+                row_data['Country'] = Country.objects.get(pk=self.context['country_override']).name
+            if self.context.get('donor_override'):
+                row_data['Donor'] = Donor.objects.get(pk=self.context['donor_override']).name
+            ImportRow.objects.create(parent=instance, data=row_data, original_data=row_data)
+        return instance
+
+    def update(self, instance, validated_data):  # pragma: no cover
+        rows = validated_data.pop('rows', [])
+        instance = super().update(instance, validated_data)
+        for row in rows:
+            ImportRow.objects.get(id=row['id']).update(data=row.get('data'))
+        return instance
+
+
+class CollectionSerializer(serializers.ModelSerializer):
+    url = serializers.ReadOnlyField()
+    # project_imports = ProjectImportV2Serializer(required=False, many=True)
+    project_imports = ProjectImportV2CollectionSerializer(required=False, many=True)
+
+    class Meta:
+        model = Collection
+        fields = ('id', 'url', 'name', 'importer', 'project_imports')
+
+    def _set_context(self):
+        context = {
+            'add_as_editor': self.context['request'].data.get('add_me_as_editor', False),
+            'country_override': self.context['request'].data.get('country', False),
+            'donor_override': self.context['request'].data.get('donor', False),
+        }
+        return context
+
+    def _set_project_import_data(self, instance, project_import_data, sub_context):
+        for p_data in project_import_data:
+            p_data['collection'] = instance.pk
+            p_data['user'] = self.context['request'].user.pk
+            p_data['country'] = p_data['country'].pk if p_data['country'] is not None else None
+            p_data['donor'] = p_data['donor'].pk if p_data['donor'] is not None else None
+            project_import = ProjectImportV2CollectionSerializer(context=sub_context, data=p_data)
+            project_import.is_valid(raise_exception=True)
+            project_import.save()
+
+    def create(self, validated_data):
+        project_import_data = validated_data.pop('project_imports')
+        instance = super().create(validated_data)
+        sub_context = self._set_context()
+        self._set_project_import_data(instance, project_import_data, sub_context)
+        instance.make_url()
+        instance.save()
+        return instance
+
+    def update(self, instance, validated_data):
+        if 'project_imports' in validated_data:
+            project_import_data = validated_data.pop('project_imports')
+        instance = super().update(instance, validated_data)
+        if 'project_import_data' in locals():
+            sub_context = self._set_context()
+            self._set_project_import_data(instance, project_import_data, sub_context)
+        instance.save()
+        return instance
