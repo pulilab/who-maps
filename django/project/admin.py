@@ -203,28 +203,6 @@ class ProjectVersionAdmin(admin.ModelAdmin):
         return False
 
 
-# if settings.ENVIRONMENT_NAME != 'PRODUCTION':  # pragma: no cover
-#     """
-#     Extra admin elements designed to help debugging stuff while in development/test
-#     """
-#     from project.models import ProjectImportV2, ImportRow
-#
-#
-#     class ProjectImportV2Admin(admin.ModelAdmin):
-#         model = ProjectImportV2
-#         fields = '__all__'
-#         readonly_fields = fields
-#
-#
-#     class ImportRowAdmin(admin.ModelAdmin):
-#         model = ImportRow
-#         fields = '__all__'
-#         readonly_fields = fields
-#
-#     admin.site.register(ProjectImportV2, ProjectImportV2Admin)
-#     admin.site.register(ImportRow, ImportRowAdmin)
-
-
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(InteroperabilityLink, InteroperabilityLinkAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
