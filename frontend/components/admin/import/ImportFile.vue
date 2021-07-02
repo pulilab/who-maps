@@ -5,17 +5,16 @@
     class="ImportFile"
   >
     <div class="Info">
-      <p>
-        <fa icon="info-circle" />
+      <p class="strong">
         <translate>
           The Import Interface allows you to import your Projects from an Excel file into the Digital Health Atlas.
         </translate>
       </p>
       <p>
         <translate>
-          When importing your projects
+          When importing your projects you can use this file as a reference for the format of the data:
         </translate>
-        <xlsx-workbook>
+        <xlsx-workbook class="inline">
           <xlsx-sheet
             v-for="sheet in templateSheets"
             :key="sheet.name"
@@ -23,44 +22,43 @@
             :sheet-name="sheet.name"
           />
           <xlsx-download filename="DHA_Import_template.xlsx">
-            <a class="XLSXTemplate">
-              <translate> you can use this file as a reference for the format of the data </translate>
-              <fa icon="file-excel" />
-            </a>
+            <span class="XLSXTemplate">
+              <translate>Download Reference File</translate>
+            </span>
           </xlsx-download>
         </xlsx-workbook>
       </p>
-      <p>
+      <warning>
         <translate>
-          Note that your data should be organized to have data from only one country included in a spreadsheet.
+          Your data should be organized to have data from only one country included in a spreadsheet. In addition, you can also only select one Investor for all of the data from within your spreadsheet. If you have more than one investor, we recommend that you go back to your projects once uploaded and add the correct investors.
         </translate>
-      </p>
-      <p>
+      </warning>
+      <warning>
         <translate>
-          In addition, you can also only select one Investor for all of the data from within your spreadsheet.
+          For now the imported projects are loaded in draft and need to be manually published.
         </translate>
-      </p>
-      <p>
-        <translate>
-          If you have more than one investor, we recommend that you go back to your projects once uploaded and add the correct investors.
-        </translate>
-      </p>
-      <p>
-        <translate>
-          Note that for now the imported project are loaded in draft and need to be manually published
-        </translate>
-      </p>
+      </warning>
     </div>
+    <el-divider class="wide" />
+    <el-form-item>
+      <alert type="success">Sikerult jol megcsinalni</alert>
+      <alert type="error">There was an error while importing the file! <a href="">Please try again.</a></alert>
+    </el-form-item>
     <el-form-item>
       <template #label>
-        <translate>
-          Select File
-        </translate>
+        <translate>Select file</translate>
       </template>
-      <input
-        type="file"
-        @change="onChange"
+      <el-upload
+        :auto-upload="false"
+        :limit="1"
+        :on-change="onSelectFile"
+        :before-remove="onResetFile"
+        action="doing it manually, so this prop isnt used, still needed"
       >
+        <el-button v-if="!inputFile" type="text">
+          <fa icon="plus" /> <translate>Upload file</translate>
+        </el-button>
+      </el-upload>
     </el-form-item>
     <el-form-item>
       <template #label>
@@ -111,9 +109,13 @@
           </template>
         </form-hint>
       </template>
-      <country-select
-        v-model="country"
-      />
+      <el-radio-group v-model="countryRadio" class="RadioGroup">
+        <el-radio :label="1">Import projects from multiple countries (default)</el-radio>
+        <el-radio :label="2">Import to single country</el-radio>
+      </el-radio-group>
+      <input-group v-if="countryRadio === 2">
+        <country-select v-model="country" />
+      </input-group>
     </el-form-item>
     <el-form-item>
       <template #label>
@@ -128,14 +130,44 @@
           </template>
         </form-hint>
       </template>
-      <donor-select
-        v-model="donor"
-      />
+      <el-radio-group v-model="donorRadio" class="RadioGroup">
+        <el-radio :label="1">Import projects from multiple investors (default)</el-radio>
+        <el-radio :label="2">Import to single investor</el-radio>
+      </el-radio-group>
+      <input-group v-if="donorRadio === 2">
+        <donor-select v-model="donor" />
+      </input-group>
     </el-form-item>
-    <el-form-item
-      v-if="false"
-      class="DraftOrPublished"
-    >
+    <el-form-item>
+      <template #label>
+        <form-hint>
+          <translate>Collections</translate>
+          <template #hint>
+            <translate>
+              Explanation of what collection is and why is that good. Or good practices to use this feature. Or restrictions. Or.. something something..
+            </translate>
+          </template>
+        </form-hint>
+      </template>
+      <el-checkbox v-model="importMultiple" class="Check">
+        <translate>
+          Group projects in a collection
+        </translate>
+      </el-checkbox>
+
+      <input-group v-if="importMultiple">
+        <el-radio-group v-model="toCollection" class="RadioGroup">
+          <el-radio :label="1">Create a new collection</el-radio>
+          <el-input v-if="toCollection === 1" v-model="newCollection" type="text" placeholder="type the name of the new collection" class="Input" />
+          <el-radio :label="2">Add to existing collection retrospectively</el-radio>
+          <donor-select v-if="toCollection === 2" v-model="donor" class="Select" />
+        </el-radio-group>
+        <el-checkbox v-model="projectEditor" class="Check">
+          <translate>Add me as project editor to all imported projects</translate>
+        </el-checkbox>
+      </input-group>
+    </el-form-item>
+    <el-form-item v-if="false" class="DraftOrPublished">
       <template #label>
         <translate>
           Draft or Publish
@@ -154,35 +186,36 @@
         </el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item
-      class="ConfirmSettings"
-    >
-      <el-button @click="save">
-        <translate>
-          Import
-        </translate>
-      </el-button>
-    </el-form-item>
+    <el-divider class="wide" />
+    <el-button @click="save" type="warning">
+      <translate>Import now</translate>
+    </el-button>
   </el-form>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import InputGroup from '@/components/common/wrappers/InputGroup'
 import DonorSelect from '@/components/common/DonorSelect'
 import CountrySelect from '@/components/common/CountrySelect'
 import FormHint from '@/components/common/FormHint'
+import Warning from '@/components/common/Warning'
+import Alert from '@/components/common/Alert'
 import { XlsxRead, XlsxSheets, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx'
 import { importTemplate, nameMapping } from '@/utilities/import'
 import { draftRules } from '@/utilities/projects'
 
 export default {
   components: {
+    InputGroup,
     DonorSelect,
     CountrySelect,
     XlsxRead,
     XlsxSheets,
     XlsxJson,
     FormHint,
+    Warning,
+    Alert,
     XlsxWorkbook,
     XlsxSheet,
     XlsxDownload
@@ -194,7 +227,13 @@ export default {
       isDraftOrPublish: 'draft',
       inputFile: null,
       selectedSheet: null,
-      parsed: null
+      parsed: null,
+      countryRadio: 1,
+      donorRadio: 1,
+      importMultiple: false,
+      projectEditor: false,
+      toCollection: 1,
+      newCollection: ''
     }
   },
   computed: {
@@ -260,6 +299,14 @@ export default {
     }),
     onChange (event) {
       this.inputFile = event.target.files ? event.target.files[0] : null
+      console.log('🚀 ~ onChange ~ this.inputFile', this.inputFile)
+    },
+    onSelectFile (file) {
+      console.log('🚀 ~ onSelectFile', file)
+      this.inputFile = file?.raw ? file?.raw : null
+    },
+    onResetFile () {
+      this.inputFile = null
     },
     async save () {
       this.$nuxt.$loading.start('importXLSX')
@@ -295,19 +342,96 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+@import "~assets/style/variables.less";
+
 .ImportFile {
   .SheetSelector, .DonorSelector, .CountrySelector{
     width: 100%;
+    margin: 5px 0;
+  }
+  .el-form-item {
+    height: auto;
+    margin-bottom: 25px;
+  }
+
+::v-deep .el-form-item__label {
+    padding: initial;
+    line-height: normal;
+    margin-bottom: 12px;
+  }
+
+  .wide {
+    position: relative;
+    left: -40px;
+    right: -40px;
+    width: calc(100% + 80px);
+    background-color: #E0E0E0;
+    margin: 40px 0;
+  }
+
+  p {
+    font-size: @fontSizeBase;
+    line-height: 21px;
   }
 
   .XLSXTemplate{
-    color: blue;
+    color: @colorBrandPrimary;
     text-decoration: underline;
+    cursor: pointer;
   }
 
-  .Info {
+  .strong {
+    font-weight: bold;
+    color: @colorTextSecondary;
+  }
 
+  .inline {
+    display: inline;
+  }
+
+  .Check {
+    height: 42px;
+    line-height: 42px;
+    ::v-deep .el-checkbox__inner {
+      width: 20px;
+      height: 20px;
+    }
+    ::v-deep .el-checkbox__inner::after {
+      width: 4px;
+      height: 11px;
+      margin-left: 2px;
+    }
+  }
+
+  .Input,
+  .Select {
+    margin: 10px 0;
+  }
+
+  .RadioGroup {
+    display: flex;
+    flex-direction: column;
+
+    .el-radio {
+      padding: 10px 0;
+    }
+
+    ::v-deep .el-radio__inner {
+      width: 20px;
+      height: 20px;
+    }
+    ::v-deep .el-radio__inner::after {
+      width: 8px;
+      height: 8px;
+    }
+  }
+
+  .el-button--warning {
+    background-color: @colorBrandRedNew;
+  }
+  .el-button--warning:hover {
+    background-color: #d86422b3;
   }
 }
 </style>
