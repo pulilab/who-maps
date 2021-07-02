@@ -158,7 +158,7 @@ class TestData(APITestCase):
         self.assertEqual(response.status_code, 201, response.json())
 
         # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
+        key = EmailConfirmation.objects.get(email_address__email=user_email).key
         url = reverse("rest_verify_email")
         data = {
             "key": key,
@@ -169,8 +169,8 @@ class TestData(APITestCase):
         # Log in the user.
         url = reverse("api_token_auth")
         data = {
-            "username": "test_user@gmail.com",
-            "password": "123456hetNYOLC"}
+            "username": user_email,
+            "password": user_password_1}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200, response.json())
         test_user_key = response.json().get("token")
@@ -211,6 +211,7 @@ class SetupTests(TestData):
     def setUp(self):
         super(SetupTests, self).setUp()
         self.userprofile, self.test_user_key, self.test_user_client = self.create_user()
+
         self.user_profile_id = self.userprofile.id
         self.project_data = self.generate_project_data(project_name="Test Project1")
         project = self.create_draft_project(self.project_data)
