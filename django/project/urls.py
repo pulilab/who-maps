@@ -112,21 +112,4 @@ urlpatterns = [
              'get': 'retrieve',
          }),
          name="project-retrieve"),
-    # path("collections/",
-    #      view=views.CollectionViewSet.as_view({
-    #          'get': 'list',
-    #      }), name='collections-list'),
-    # path("collections/",
-    #      view=views.CollectionViewSet.as_view({
-    #          'post': 'create',
-    #      }), name='collections-create'),
-    # path("collections/<str:url>/",
-    #      view=views.CollectionViewSet.as_view({
-    #          'get': 'retrieve',
-    #      }), name='collections-get'),
-    # path("collections/<str:url>/",
-    #      view=views.CollectionViewSet.as_view({
-    #          'put': 'update',
-    #      }), name='collections-update'),
-    # path("collections/<str:url>/import/")
 ]
