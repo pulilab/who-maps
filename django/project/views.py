@@ -26,7 +26,9 @@ from user.models import Organisation
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer, \
-    TerminologySerializer, ExternalProjectPublishSerializer, ExternalProjectDraftSerializer, CollectionSerializer
+    TerminologySerializer, CollectionSerializer, ExternalProjectPublishSerializer, ExternalProjectDraftSerializer, \
+    CollectionInputSerializer
+
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
 
@@ -693,12 +695,12 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
             raise ValidationError("'project_import' is required")
 
     def get_queryset(self):
-        return Collection.objects.filter(importer=self.request.user)
+        return Collection.objects.filter(user=self.request.user)
 
     @staticmethod
     def _prepare_data(request):
         data = copy.deepcopy(request.data)
-        data['importer'] = request.user.pk
+        data['user'] = request.user.pk
         if 'project_import' in data:
             data['project_import']['user'] = request.user.pk
             data['project_import']['country'] = data.get('country', data['project_import'].get('country', None))
@@ -708,7 +710,19 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
             data['project_imports'] = []
         return data
 
+    @swagger_auto_schema(
+        request_body=CollectionInputSerializer,
+        security=[{'Bearer': []}],
+        responses={201: CollectionSerializer, 400: "Bad Request", 403: "Unauthorized"}
+    )
     def create(self, request, *args, **kwargs):
+        """
+        Create a collection object.
+        required parameters
+        - name: name of collection
+        - add_me_as_editor: specify if user should be added to imported projects as editor
+        - project_import: project import obj.
+        """
         data = request.data
         self._check_parameters(data)
         data = self._prepare_data(request)
@@ -742,5 +756,3 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
 
     def perform_update(self, serializer):
         serializer.save()
-
-# class CollectionAddProjectImport(APIView):

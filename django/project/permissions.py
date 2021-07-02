@@ -32,7 +32,7 @@ class InTeamOrCollectionOwnerOrReadOnly(permissions.BasePermission):
 
         # had to separate these due to LINTER dying on 3 'or'-s
         in_team = obj.team.filter(id=request.user.userprofile.id).exists()
-        in_collection = obj.import_rows.filter(parent__collection__importer=request.user).exists()
+        in_collection = obj.import_rows.filter(parent__collection__user=request.user).exists()
 
         return request.user.is_superuser or in_team or in_collection
 
@@ -48,7 +48,7 @@ class CollectionOwnerOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:  # pragma: no cover
             return True
 
-        return request.user.is_superuser or obj.importer == request.user
+        return request.user.is_superuser or obj.user == request.user
 
 
 class InCountryAdminForApproval(permissions.BasePermission):

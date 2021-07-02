@@ -19,13 +19,13 @@ class CollectionsTests(SetupTests):
         Create a number of collections and add it to user 1"""
         self.user_1_collections = []
         for i in range(5):
-            c = Collection.objects.create(name=f"collection_{i}", importer=self.test_user)
+            c = Collection.objects.create(name=f"collection_{i}", user=self.test_user)
             self.user_1_collections.append(c)
         """
         Create some more collections and add them to user 2"""
         self.user_2_collections = []
         for i in range(3):
-            c = Collection.objects.create(name=f"collection_{i}", importer=self.test_user_2)
+            c = Collection.objects.create(name=f"collection_{i}", user=self.test_user_2)
             self.user_2_collections.append(c)
         """
         load the test data"""
@@ -132,7 +132,7 @@ class CollectionsTests(SetupTests):
         test_data_2.update({"name": "Projects about ponies", 'add_me_as_editor': True, 'donor': self.d1.id})
         response_2 = self.test_user_client.post(url, test_data_2, format='json')
         self.assertEqual(response_2.status_code, 400)
-        self.assertEqual(response_2.json(), {'non_field_errors': ['The fields importer, name must make a unique set.']})
+        self.assertEqual(response_2.json(), {'non_field_errors': ['The fields user, name must make a unique set.']})
         collections = Collection.objects.filter(name='Projects about ponies')
         self.assertEqual(collections.count(), 1)
 

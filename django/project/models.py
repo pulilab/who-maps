@@ -379,7 +379,7 @@ class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
 
 class Collection(ExtendedNameOrderedSoftDeletedModel):
-    importer = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)  # should be hidden on UI
+    user = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)  # should be hidden on UI
     url = models.CharField(max_length=256, blank=True)
 
     def generate_hash_id(self):
@@ -389,10 +389,10 @@ class Collection(ExtendedNameOrderedSoftDeletedModel):
     def make_url(self):
         if self.url:  # pragma: no cover
             return
-        self.url = f"{self.importer.pk}{self.generate_hash_id()}"
+        self.url = f"{self.user.pk}{self.generate_hash_id()}"
 
     class Meta:
-        unique_together = ('importer', 'name')
+        unique_together = ('user', 'name')
 
 
 class ProjectImportV2(ExtendedModel):

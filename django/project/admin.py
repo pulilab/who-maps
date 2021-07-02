@@ -7,7 +7,7 @@ from core.admin import AllObjectsAdmin
 from country.models import Country
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Project, HSCGroup, \
-    ProjectImportV2, ImportRow, Stage, ProjectVersion
+    ProjectImportV2, ImportRow, Stage, ProjectVersion, Collection
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
@@ -203,6 +203,24 @@ class ProjectVersionAdmin(admin.ModelAdmin):
         return False
 
 
+class CollectionAdmin(admin.ModelAdmin):  # pragma: no cover
+    model = Collection
+    fields = ['url', 'name', 'user', 'project_imports']
+    readonly_fields = fields
+    search_fields = ['name', 'user', 'url']
+
+    list_display = ['modified', 'name', 'user', 'url']
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
 admin.site.register(InteroperabilityLink, InteroperabilityLinkAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
@@ -217,3 +235,4 @@ admin.site.register(ProjectImportV2, ProjectImportV2Admin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Stage, StageAdmin)
 admin.site.register(ProjectVersion, ProjectVersionAdmin)
+admin.site.register(Collection, CollectionAdmin)

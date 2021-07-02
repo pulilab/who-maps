@@ -618,22 +618,6 @@ class TerminologySerializer(serializers.Serializer):
     strategies = StrategiesByGroupSerializer(many=True)
 
 
-class ExternalProjectPublishSerializer(serializers.Serializer):
-    """
-    Used to beautify swagger in public docs
-    TODO: May need to update the 'project' part
-    """
-    project = ProjectPublishedSerializer(required=True)
-
-
-class ExternalProjectDraftSerializer(serializers.Serializer):
-    """
-    Used to beautify swagger in public docs
-    TODO: May need to update the 'project' part
-    """
-    project = ProjectDraftSerializer(required=True)
-
-
 class ProjectImportV2CollectionSerializer(serializers.ModelSerializer):
     # user = serializers.IntegerField(required=False)
     status = serializers.ReadOnlyField()
@@ -676,7 +660,7 @@ class CollectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Collection
-        fields = ('id', 'url', 'name', 'importer', 'project_imports')
+        fields = ('id', 'url', 'name', 'user', 'project_imports')
 
     def _set_context(self):
         context = {
@@ -714,3 +698,28 @@ class CollectionSerializer(serializers.ModelSerializer):
             self._set_project_import_data(instance, project_import_data, sub_context)
         instance.save()
         return instance
+
+
+class ExternalProjectPublishSerializer(serializers.Serializer):
+    """
+    Used to beautify swagger in public docs
+    TODO: May need to update the 'project' part
+    """
+    project = ProjectPublishedSerializer(required=True)
+
+
+class ExternalProjectDraftSerializer(serializers.Serializer):
+    """
+    Used to beautify swagger in public docs
+    TODO: May need to update the 'project' part
+    """
+    project = ProjectDraftSerializer(required=True)
+
+
+class CollectionInputSerializer(serializers.Serializer):
+    """
+    Used to beautify swagger in docs
+    """
+    name = serializers.CharField(required=True)
+    add_me_as_editor = serializers.BooleanField(required=True)
+    project_import = ProjectImportV2CollectionSerializer(required=True)
