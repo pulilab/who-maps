@@ -1,12 +1,11 @@
 import copy
 from random import randint
 
-import django.contrib.auth.models
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.exceptions import ValidationError, NotAuthenticated
+from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
@@ -15,7 +14,7 @@ from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAuthMixin, CollectionTokenAuthMixin, \
-    get_object_or_400
+    get_object_or_400, CollectionAuthenticatedMixin
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion
 from project.permissions import InCountryAdminForApproval
@@ -37,6 +36,7 @@ from .mixins import CheckRequiredMixin
 from django.conf import settings
 
 from who_maps.throttle import ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle
+from rest_framework.views import APIView
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -684,21 +684,15 @@ class TechnologyPlatformRequestViewSet(CreateModelMixin, GenericViewSet):
         notify_superusers_about_new_pending_software.apply_async((serializer.instance.id,))
 
 
-class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveModelMixin, ListModelMixin, GenericViewSet):
+class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveModelMixin, GenericViewSet):
     serializer_class = CollectionSerializer
     lookup_field = 'url'
+    queryset = Collection.objects.all()
 
     @staticmethod
     def _check_parameters(request_data):
         if 'add_me_as_editor' not in request_data or not isinstance(request_data['add_me_as_editor'], bool):
             raise ValidationError("'add_me_as_editor' missing or invalid. Required: bool")
-
-    def get_queryset(self):
-        if isinstance(self.request.user, django.contrib.auth.models.AnonymousUser):
-            if self.action != 'retrieve':
-                raise NotAuthenticated
-            return Collection.objects.filter(url=self.kwargs.get('url'))
-        return Collection.objects.filter(user=self.request.user)
 
     @staticmethod
     def _prepare_data(request):
@@ -759,3 +753,24 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
 
     def perform_update(self, serializer):
         serializer.save()
+
+
+class CollectionListView(CollectionAuthenticatedMixin, APIView):
+    """
+    View to list all of an user's Collections.
+
+    * Requires authenticated user
+    """
+    """
+    View to list all users in the system.
+
+    * Requires token authentication.
+    * Only admin users are able to access this view.
+    """
+    def get(self, request, format=None):
+        """
+        Return a list of the user's collections.
+        """
+        collections = Collection.objects.filter(user=request.user)
+        serializer = CollectionSerializer(collections, many=True)
+        return Response(serializer.data)

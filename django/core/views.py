@@ -44,6 +44,11 @@ class CollectionTokenAuthMixin(object):
     permission_classes = (CollectionOwnerOrReadOnly,)
 
 
+class CollectionAuthenticatedMixin(object):
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    permission_classes = (IsAuthenticated, CollectionOwnerOrReadOnly)
+
+
 class CheckProjectAccessMixin(object):
     """
     This method needs to be used with an APIView (or ViewSet) that implements `check_object_permissions`

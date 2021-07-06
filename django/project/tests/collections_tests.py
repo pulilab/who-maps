@@ -36,7 +36,7 @@ class CollectionsTests(SetupTests):
         self.test_data_02 = json.load(f)
 
     def test_collections_list(self):
-        url = reverse("collection-list")
+        url = reverse("my-collections")
         response = self.test_user_client.get(url, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 5)
@@ -283,6 +283,6 @@ class CollectionsTests(SetupTests):
         response = test_anon_client.get(url_collection)
         self.assertEqual(response.status_code, 200)
 
-        url_collection_list = reverse("collection-list")
+        url_collection_list = reverse("my-collections")
         response = test_anon_client.get(url_collection_list)
         self.assertEqual(response.status_code, 401)
