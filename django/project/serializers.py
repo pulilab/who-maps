@@ -619,7 +619,6 @@ class TerminologySerializer(serializers.Serializer):
 
 
 class ProjectImportV2CollectionSerializer(serializers.ModelSerializer):
-    # user = serializers.IntegerField(required=False)
     status = serializers.ReadOnlyField()
     rows = ImportRowSerializer(many=True)
 
@@ -655,7 +654,6 @@ class ProjectImportV2CollectionSerializer(serializers.ModelSerializer):
 
 class CollectionSerializer(serializers.ModelSerializer):
     url = serializers.ReadOnlyField()
-    # project_imports = ProjectImportV2Serializer(required=False, many=True)
     project_imports = ProjectImportV2CollectionSerializer(required=False, many=True)
 
     class Meta:

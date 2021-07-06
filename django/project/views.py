@@ -14,7 +14,7 @@ from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAuthMixin, CollectionTokenAuthMixin, \
-    get_object_or_400
+    get_object_or_400, CollectionAuthenticatedMixin
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion
 from project.permissions import InCountryAdminForApproval
@@ -36,6 +36,7 @@ from .mixins import CheckRequiredMixin
 from django.conf import settings
 
 from who_maps.throttle import ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle
+from rest_framework.views import APIView
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -683,19 +684,15 @@ class TechnologyPlatformRequestViewSet(CreateModelMixin, GenericViewSet):
         notify_superusers_about_new_pending_software.apply_async((serializer.instance.id,))
 
 
-class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveModelMixin, ListModelMixin, GenericViewSet):
+class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveModelMixin, GenericViewSet):
     serializer_class = CollectionSerializer
     lookup_field = 'url'
+    queryset = Collection.objects.all()
 
     @staticmethod
     def _check_parameters(request_data):
         if 'add_me_as_editor' not in request_data or not isinstance(request_data['add_me_as_editor'], bool):
             raise ValidationError("'add_me_as_editor' missing or invalid. Required: bool")
-        if 'project_import' not in request_data:  # pragma: no cover
-            raise ValidationError("'project_import' is required")
-
-    def get_queryset(self):
-        return Collection.objects.filter(user=self.request.user)
 
     @staticmethod
     def _prepare_data(request):
@@ -756,3 +753,24 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
 
     def perform_update(self, serializer):
         serializer.save()
+
+
+class CollectionListView(CollectionAuthenticatedMixin, APIView):
+    """
+    View to list all of an user's Collections.
+
+    * Requires authenticated user
+    """
+    """
+    View to list all users in the system.
+
+    * Requires token authentication.
+    * Only admin users are able to access this view.
+    """
+    def get(self, request, format=None):
+        """
+        Return a list of the user's collections.
+        """
+        collections = Collection.objects.filter(user=request.user)
+        serializer = CollectionSerializer(collections, many=True)
+        return Response(serializer.data)
