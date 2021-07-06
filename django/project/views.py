@@ -184,29 +184,25 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         if data_serializer.errors:
             errors['project'] = data_serializer.errors
 
-        if country.country_questions.exists():  # TODO: remove custom questions requiredness
-            if 'country_custom_answers' not in request.data:
-                raise ValidationError({'non_field_errors': 'Country answers are missing'})
-            else:
-                country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
-                                                                context=dict(
-                                                                    question_queryset=country.country_questions,
-                                                                    is_draft=False))
+        if country.country_questions.exists() and 'country_custom_answers' in request.data:
+            country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
+                                                            context=dict(
+                                                                question_queryset=country.country_questions,
+                                                                is_draft=False))
 
-                if country_answers.is_valid():
-                    required_errors = self.check_required(country.country_questions, country_answers.validated_data)
-                    if required_errors:
-                        errors['country_custom_answers'] = required_errors
-                else:
-                    errors['country_custom_answers'] = country_answers.errors
+            if country_answers.is_valid():
+                required_errors = self.check_required(country.country_questions, country_answers.validated_data)
+                if required_errors:
+                    errors['country_custom_answers'] = required_errors
+            else:
+                errors['country_custom_answers'] = country_answers.errors
 
         for donor_id in data_serializer.validated_data.get('donors', []):
             donor = Donor.objects.get(id=donor_id)
-            if donor and donor.donor_questions.exists():  # TODO: remove donor custom question requiredness
-                if 'donor_custom_answers' not in request.data:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
-                if str(donor_id) not in request.data['donor_custom_answers']:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+            if donor and donor.donor_questions.exists() and 'donor_custom_answers' in request.data and \
+                    str(donor_id) in request.data['donor_custom_answers']:
+                """
+                Donor answers are no longer mandatory but if they exist, they need to be correct"""
                 donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
                                                             many=True,
                                                             context=dict(question_queryset=donor.donor_questions,
@@ -306,11 +302,7 @@ class ProjectDraftViewSet(TeamCollectionTokenAuthMixin, ViewSet):
 
         for donor_id in data_serializer.validated_data.get('donors', []):
             donor = Donor.objects.filter(id=donor_id).first()
-            if donor and donor.donor_questions.exists():  # TODO: remove this from being required
-                if 'donor_custom_answers' not in request.data:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
-                if str(donor_id) not in request.data['donor_custom_answers']:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+            if donor and donor.donor_questions.exists():
                 donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
                                                             many=True,
                                                             context=dict(question_queryset=donor.donor_questions,
@@ -686,13 +678,12 @@ class TechnologyPlatformRequestViewSet(CreateModelMixin, GenericViewSet):
 class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveModelMixin, ListModelMixin, GenericViewSet):
     serializer_class = CollectionSerializer
     lookup_field = 'url'
+    swagger_schema = None
 
     @staticmethod
     def _check_parameters(request_data):
         if 'add_me_as_editor' not in request_data or not isinstance(request_data['add_me_as_editor'], bool):
             raise ValidationError("'add_me_as_editor' missing or invalid. Required: bool")
-        if 'project_import' not in request_data:  # pragma: no cover
-            raise ValidationError("'project_import' is required")
 
     def get_queryset(self):
         return Collection.objects.filter(user=self.request.user)
@@ -720,8 +711,11 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
         Create a collection object.
         required parameters
         - name: name of collection
+
         - add_me_as_editor: specify if user should be added to imported projects as editor
+
         - project_import: project import obj.
+
         """
         data = request.data
         self._check_parameters(data)

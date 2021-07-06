@@ -147,6 +147,7 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(project.draft['country_custom_answers'], {str(q.id): ['lol1']})
 
     def test_country_answer_for_published_is_required(self):
+        # TODO fix this
         q1 = CountryCustomQuestionFactory(question="test", country=self.country1, required=True)
         q2 = CountryCustomQuestionFactory(question="test2", country=self.country1, required=True)
         url = reverse("project-publish",
@@ -460,6 +461,7 @@ class CustomFieldTests(SetupTests):
                          {str(self.d1.id): {str(dq2.id): ['This field is required']}})
 
         # donor custom answers are missing
+        # TODO: FIX HERE
         data.pop('donor_custom_answers', None)
 
         response = self.test_user_client.put(url, data=data, format='json')
