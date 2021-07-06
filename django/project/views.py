@@ -1,11 +1,12 @@
 import copy
 from random import randint
 
+import django.contrib.auth.models
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, NotAuthenticated
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
@@ -691,10 +692,12 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
     def _check_parameters(request_data):
         if 'add_me_as_editor' not in request_data or not isinstance(request_data['add_me_as_editor'], bool):
             raise ValidationError("'add_me_as_editor' missing or invalid. Required: bool")
-        if 'project_import' not in request_data:  # pragma: no cover
-            raise ValidationError("'project_import' is required")
 
     def get_queryset(self):
+        if isinstance(self.request.user, django.contrib.auth.models.AnonymousUser):
+            if self.action != 'retrieve':
+                raise NotAuthenticated
+            return Collection.objects.filter(url=self.kwargs.get('url'))
         return Collection.objects.filter(user=self.request.user)
 
     @staticmethod

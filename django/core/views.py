@@ -41,7 +41,7 @@ class TeamCollectionTokenAuthMixin(object):
 
 class CollectionTokenAuthMixin(object):
     authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
-    permission_classes = (IsAuthenticated, CollectionOwnerOrReadOnly)
+    permission_classes = (CollectionOwnerOrReadOnly,)
 
 
 class CheckProjectAccessMixin(object):
