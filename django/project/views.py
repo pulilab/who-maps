@@ -302,7 +302,8 @@ class ProjectDraftViewSet(TeamCollectionTokenAuthMixin, ViewSet):
 
         for donor_id in data_serializer.validated_data.get('donors', []):
             donor = Donor.objects.filter(id=donor_id).first()
-            if donor and donor.donor_questions.exists():
+            if donor and donor.donor_questions.exists() and 'donor_custom_answers' in request.data and \
+                    str(donor_id) in request.data['donor_custom_answers']:
                 donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
                                                             many=True,
                                                             context=dict(question_queryset=donor.donor_questions,

@@ -181,8 +181,7 @@ class CustomFieldTests(SetupTests):
         data.pop('country_custom_answers', None)
 
         response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Country answers are missing')
+        self.assertEqual(response.status_code, 200)
 
         url = reverse("project-create",
                       kwargs={
@@ -427,7 +426,7 @@ class CustomFieldTests(SetupTests):
         self.assertEqual(project.data['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
         self.assertEqual(project.draft['donor_custom_answers'], {str(self.d1.id): {str(q.id): ['lol1']}})
 
-    def test_donor_answer_for_all_is_required(self):
+    def test_donor_answer_for_all_is_required_to_be_good_if_exist(self):
         dq1 = DonorCustomQuestionFactory(question="test", donor=self.d1, required=True)
         dq2 = DonorCustomQuestionFactory(question="test2", donor=self.d1, required=True)
         url = reverse("project-publish",
@@ -461,12 +460,11 @@ class CustomFieldTests(SetupTests):
                          {str(self.d1.id): {str(dq2.id): ['This field is required']}})
 
         # donor custom answers are missing
-        # TODO: FIX HERE
         data.pop('donor_custom_answers', None)
 
         response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
+        self.assertEqual(response.status_code, 200)
+        # We accept this, as the answers are no longer required
 
         url = reverse("project-create",
                       kwargs={
@@ -474,8 +472,8 @@ class CustomFieldTests(SetupTests):
                       })
 
         response = self.test_user_client.post(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
+        self.assertEqual(response.status_code, 201)
+        # We accept this, as the answers are no longer required
 
         url = reverse("project-draft",
                       kwargs={
@@ -499,18 +497,16 @@ class CustomFieldTests(SetupTests):
                       })
 
         response = self.test_user_client.post(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
+        self.assertEqual(response.status_code, 201)
 
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country1.id,
                           "project_id": self.project_id
                       })
-
+        data['project']['name'] = 'Test Project Omega'
         response = self.test_user_client.put(url, data=data, format='json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['non_field_errors'], 'Donor answers are missing')
+        self.assertEqual(response.status_code, 200)
 
     def test_donor_answer_wrong_question_id(self):
         DonorCustomQuestionFactory(question="What up?", donor=self.d1)
