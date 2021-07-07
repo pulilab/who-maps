@@ -493,7 +493,8 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):  # pragma: no cove
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     status = serializers.ReadOnlyField()
     rows = ImportRowSerializer(many=True)
-    collection = serializers.IntegerField(required=False)
+    # collection = serializers.IntegerField(required=False)
+    collection = serializers.PrimaryKeyRelatedField(queryset=Collection.objects.all(), required=False)
 
     class Meta:
         model = ProjectImportV2
