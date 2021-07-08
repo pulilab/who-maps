@@ -148,7 +148,6 @@ class CustomFieldTests(SetupTests):
 
     def test_country_answer_for_published_is_required(self):
         q1 = CountryCustomQuestionFactory(question="test", country=self.country1, required=True)
-        q2 = CountryCustomQuestionFactory(question="test2", country=self.country1, required=True)
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country1.id,
@@ -425,7 +424,6 @@ class CustomFieldTests(SetupTests):
 
     def test_donor_answer_for_all_is_required_to_be_good_if_exist(self):
         dq1 = DonorCustomQuestionFactory(question="test", donor=self.d1, required=True)
-        dq2 = DonorCustomQuestionFactory(question="test2", donor=self.d1, required=True)
         url = reverse("project-publish",
                       kwargs={
                           "country_id": self.country1.id,
