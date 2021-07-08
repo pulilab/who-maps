@@ -190,11 +190,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                                                                 question_queryset=country.country_questions,
                                                                 is_draft=False))
 
-            if country_answers.is_valid():
-                required_errors = self.check_required(country.country_questions, country_answers.validated_data)
-                if required_errors:
-                    errors['country_custom_answers'] = required_errors
-            else:
+            if not country_answers.is_valid():
                 errors['country_custom_answers'] = country_answers.errors
 
         for donor_id in data_serializer.validated_data.get('donors', []):
@@ -207,19 +203,12 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                                                             many=True,
                                                             context=dict(question_queryset=donor.donor_questions,
                                                                          is_draft=False))
-
-                if not donor_answers.is_valid():
+                if donor_answers.is_valid():
+                    all_donor_answers.append((donor_id, donor_answers))
+                else:
                     errors.setdefault('donor_custom_answers', {})
                     errors['donor_custom_answers'].setdefault(donor_id, {})
                     errors['donor_custom_answers'][donor_id] = donor_answers.errors
-                else:
-                    required_errors = self.check_required(donor.donor_questions, donor_answers.validated_data)
-                    if required_errors:
-                        errors.setdefault('donor_custom_answers', {})
-                        errors['donor_custom_answers'].setdefault(donor_id, {})
-                        errors['donor_custom_answers'][donor_id] = required_errors
-                    else:
-                        all_donor_answers.append((donor_id, donor_answers))
 
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)

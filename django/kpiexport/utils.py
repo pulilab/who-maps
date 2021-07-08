@@ -31,17 +31,14 @@ class ProjectStatusChangeDescriptor:
             [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
         data_serializer.fields.get('name').validators \
             .append(UniqueValidator(queryset=version.project.__class__.objects.all().exclude(id=version.project.id)))
-        if country.country_questions.exists():
-            if 'country_custom_answers' not in version.data:
-                return False
-            else:
-                country_answers = CountryCustomAnswerSerializer(
-                    data=version.data['country_custom_answers'],
-                    many=True,
-                    context=dict(question_queryset=country.country_questions, is_draft=False))
+        if country.country_questions.exists() and 'country_custom_answers' in version.data:
+            country_answers = CountryCustomAnswerSerializer(
+                data=version.data['country_custom_answers'],
+                many=True,
+                context=dict(question_queryset=country.country_questions, is_draft=False))
 
-                if not country_answers.is_valid():
-                    return False
+            if not country_answers.is_valid():
+                return False
         if not data_serializer.is_valid():
             return False
         for donor_id in data_serializer.validated_data.get('donors', []):

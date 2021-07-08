@@ -489,11 +489,20 @@ class ImportRowSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CollectionBriefSerializer(serializers.ModelSerializer):
+    """
+    Serializer to show basic collection data inside ProjectImports
+    """
+    class Meta:
+        model = Collection
+        fields = ('id', 'name', 'user', 'url')
+
+
 class ProjectImportV2Serializer(serializers.ModelSerializer):  # pragma: no cover
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     status = serializers.ReadOnlyField()
     rows = ImportRowSerializer(many=True)
-    collection = serializers.IntegerField(required=False)
+    collection = CollectionBriefSerializer(required=False)
 
     class Meta:
         model = ProjectImportV2
@@ -655,7 +664,6 @@ class ProjectImportV2CollectionSerializer(serializers.ModelSerializer):
 
 class CollectionSerializer(serializers.ModelSerializer):
     url = serializers.ReadOnlyField()
-    # project_imports = ProjectImportV2Serializer(required=False, many=True)
     project_imports = ProjectImportV2CollectionSerializer(required=False, many=True)
 
     class Meta:
