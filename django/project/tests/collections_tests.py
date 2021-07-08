@@ -83,6 +83,23 @@ class CollectionsTests(SetupTests):
         for ir in importrows:
             self.assertNotIn(self.test_user.email, ir.data['Team'])
 
+    def test_collections_create_no_project_import(self):
+        url = reverse("collection-list")
+        test_data = copy.deepcopy(self.test_data_01)
+        test_data.update({"name": "Projects about ponies", 'add_me_as_editor': False})
+        response = self.test_user_client.post(url, test_data, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['name'], "Projects about ponies")
+        collections = Collection.objects.filter(name='Projects about ponies')
+        self.assertEqual(collections.count(), 1)
+        pimport = ProjectImportV2.objects.get(collection=collections[0])
+        self.assertEqual(pimport.user, self.test_user)
+        self.assertEqual(pimport.donor, None)
+        importrows = ImportRow.objects.filter(parent=pimport)
+        self.assertEqual(importrows.count(), 2)
+        for ir in importrows:
+            self.assertNotIn(self.test_user.email, ir.data['Team'])
+
     def test_collections_create_set_country(self):
         url = reverse("collection-list")
         test_data = copy.deepcopy(self.test_data_01)
