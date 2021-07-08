@@ -112,4 +112,7 @@ urlpatterns = [
              'get': 'retrieve',
          }),
          name="project-retrieve"),
+    path("projects/collection/my-collections/",
+         view=views.CollectionListView.as_view(),
+         name='my-collections')
 ]

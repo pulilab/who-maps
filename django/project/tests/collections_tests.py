@@ -5,6 +5,7 @@ from rest_framework.reverse import reverse
 from project.models import Collection, ImportRow, ProjectImportV2, Project
 from project.tests.setup import SetupTests
 from user.models import User
+from rest_framework.test import APIClient
 
 
 class CollectionsTests(SetupTests):
@@ -35,7 +36,7 @@ class CollectionsTests(SetupTests):
         self.test_data_02 = json.load(f)
 
     def test_collections_list(self):
-        url = reverse("collection-list")
+        url = reverse("my-collections")
         response = self.test_user_client.get(url, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 5)
@@ -275,4 +276,46 @@ class CollectionsTests(SetupTests):
         # try to publish it - it should succeed
         url = reverse("project-publish", kwargs={"project_id": project.id, "country_id": self.country1.id})
         response = self.test_user_client.put(url, project_data, format="json")
+        self.assertEqual(response.status_code, 200)
+
+    def test_collections_can_be_accessed_unathorized(self):
+        url = reverse("collection-list")
+        test_data = copy.deepcopy(self.test_data_01)
+        test_data.update({"name": "Projects about ponies", 'add_me_as_editor': False})
+        response = self.test_user_client.post(url, test_data, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['name'], "Projects about ponies")
+        collections = Collection.objects.filter(name='Projects about ponies')
+        self.assertEqual(collections.count(), 1)
+        pimport = ProjectImportV2.objects.get(collection=collections[0])
+        self.assertEqual(pimport.user, self.test_user)
+        self.assertEqual(pimport.donor, None)
+        importrows = ImportRow.objects.filter(parent=pimport)
+        self.assertEqual(importrows.count(), 2)
+        for ir in importrows:
+            self.assertNotIn(self.test_user.email, ir.data['Team'])
+        collection_url = response.json()['url']
+        url_collection = reverse("collection-detail", kwargs={'url': collection_url})
+        test_anon_client = APIClient(format="json")
+        response = test_anon_client.get(url_collection)
+        self.assertEqual(response.status_code, 200)
+
+        url_collection_list = reverse("my-collections")
+        response = test_anon_client.get(url_collection_list)
+        self.assertEqual(response.status_code, 401)
+
+    def test_collections_create_access_project_import(self):
+        url = reverse("collection-list")
+        test_data = copy.deepcopy(self.test_data_01)
+        test_data.update({"name": "Projects about ponies", 'add_me_as_editor': False})
+        response = self.test_user_client.post(url, test_data, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['name'], "Projects about ponies")
+        collections = Collection.objects.filter(name='Projects about ponies')
+        self.assertEqual(collections.count(), 1)
+        pimport = ProjectImportV2.objects.get(collection=collections[0])
+        self.assertEqual(pimport.user, self.test_user)
+        self.assertEqual(pimport.donor, None)
+        url = reverse('projectimportv2-list')
+        response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)

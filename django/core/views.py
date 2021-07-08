@@ -41,6 +41,11 @@ class TeamCollectionTokenAuthMixin(object):
 
 class CollectionTokenAuthMixin(object):
     authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    permission_classes = (CollectionOwnerOrReadOnly,)
+
+
+class CollectionAuthenticatedMixin(object):
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, CollectionOwnerOrReadOnly)
 
 

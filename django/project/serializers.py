@@ -628,7 +628,6 @@ class TerminologySerializer(serializers.Serializer):
 
 
 class ProjectImportV2CollectionSerializer(serializers.ModelSerializer):
-    # user = serializers.IntegerField(required=False)
     status = serializers.ReadOnlyField()
     rows = ImportRowSerializer(many=True)
 
