@@ -105,6 +105,11 @@ body {
   }
 }
 
+.debug {
+  outline: 2px solid red;
+}
+
+
 a {
   // SAMPLE MARKUP:
   //
@@ -640,6 +645,9 @@ fieldset {
       font-size: @fontSizeSmall;
       line-height: 16px;
       color: @colorTextMuted;
+      &:hover {
+        color: @colorTextSecondary;
+      }
 
       .svg-inline--fa {
         margin: 2px 5px 0 0;

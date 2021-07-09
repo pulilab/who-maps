@@ -12,6 +12,7 @@ export const state = () => ({
   organisations: [],
   donors: [],
   regions: [],
+  collections: [],
   donorsLibrary: {},
   roadmap: {}
 })
@@ -89,6 +90,7 @@ export const getters = {
     return o ? { ...o } : undefined
   },
   getDonors: state => state.donors,
+  getUserCollections: state => state.collections,
   getDonorDetails: state => id => ({ ...state.donors.find(d => d.id === id), ...state.donorsLibrary[id] }),
   getRegions: state => state.regions,
   getRegionDetails: state => id => ({ ...state.regions.find(r => r.id === id) })
@@ -144,6 +146,14 @@ export const actions = {
       console.error('system/loadDonors failed')
     }
   },
+  async loadUserCollections ({ commit }) {
+    try {
+      const { data } = await this.$axios.get('/api/projects/collection/my-collections/')
+      commit('setValue', { key: 'collections', val: data })
+    } catch (e) {
+      console.error('system/loadCollections failed')
+    }
+  },
   async loadDonorDetails ({ commit, state }, id) {
     if (id && !state.donorsLibrary[id]) {
       try {
@@ -173,6 +183,9 @@ export const actions = {
 }
 
 export const mutations = {
+  setValue(state, { key, val }) {
+    state[key] = val
+  },
   SET_USER_PROFILES: (state, value) => {
     state.profiles = value
   },
