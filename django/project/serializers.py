@@ -729,4 +729,4 @@ class CollectionInputSerializer(serializers.Serializer):
     """
     name = serializers.CharField(required=True)
     add_me_as_editor = serializers.BooleanField(required=True)
-    project_import = ProjectImportV2CollectionSerializer(required=True)
+    project_import = ProjectImportV2CollectionSerializer(required=False)

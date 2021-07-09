@@ -23,6 +23,10 @@ class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, G
         """
         Custom function to update the user's last_login_date data
         """
+        if getattr(self, "swagger_fake_view", False):
+            # object just for schema generation metadata (when there are no kwargs)
+            # as per https://github.com/axnsan12/drf-yasg/issues/333#issuecomment-474883875
+            return None
         if self.request.user and self.request.user.id:
             User.objects.filter(id=self.request.user.id).update(last_login=timezone.now())
         return super().get_object()
@@ -43,6 +47,11 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
         Retrieves Organisation objects, filtered by search term if present,
         for autocomplete of organisation fields.
         """
+        if getattr(self, "swagger_fake_view", False):
+            # queryset just for schema generation metadata
+            # as per https://github.com/axnsan12/drf-yasg/issues/333#issuecomment-474883875
+            return Organisation.objects.none()
+
         search_term = self.request.query_params.get("name")
         if search_term:
             return Organisation.objects.filter(name__contains=search_term)

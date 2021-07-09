@@ -34,8 +34,23 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:  # pragma: no cover
-    urlpatterns.append(url(r'^api/docs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION)))
+    api_info_internal = openapi.Info(
+        title='Digital Health Atlas Developer API',
+        default_version='latest',
+        description='Digital Health Atlas Public API for Developers, '
+                    'INTERNAL',
+        contact=openapi.Contact(email="f@pulilab.com"),
+    )
 
+    api_schema_view_internal = get_schema_view(
+        api_info_internal,
+        public=True,
+        patterns=urlpatterns,
+    )
+
+    urlpatterns += [
+        path('api/docs/', api_schema_view_internal.with_ui('redoc', cache_timeout=0), name='schema-redoc')
+    ]
 
 api_info = openapi.Info(
     title='Digital Health Atlas Public API',
@@ -67,7 +82,7 @@ api_info_urlpatterns = [
 ]
 api_info_urlpatterns += api_info_router.urls
 
-api_schema_view = get_schema_view(
+api_schema_view_public = get_schema_view(
     api_info,
     public=True,
     permission_classes=(permissions.AllowAny,),
@@ -75,5 +90,5 @@ api_schema_view = get_schema_view(
 )
 
 urlpatterns += [
-    path('api/public-docs/', api_schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')
+    path('api/public-docs/', api_schema_view_public.with_ui('redoc', cache_timeout=0), name='schema-redoc-public')
 ]
