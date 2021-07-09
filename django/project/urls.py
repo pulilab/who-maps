@@ -114,5 +114,11 @@ urlpatterns = [
          name="project-retrieve"),
     path("projects/collection/my-collections/",
          view=views.CollectionListView.as_view(),
-         name='my-collections')
+         name='my-collections'),
+    path("projects/import/check-availability",
+         view=views.ProjectImportCheckAvailabilityView.as_view(),
+         name='is-collection-data-available'),
+    path("projects/import/add-me/<int:pk>/",
+         view=views.ProjectGroupAddmeView.as_view(),
+         name='add-me-as-editor')
 ]

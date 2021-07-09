@@ -759,3 +759,51 @@ class CollectionListView(CollectionAuthenticatedMixin, APIView):
         collections = Collection.objects.filter(user=request.user)
         serializer = CollectionSerializer(collections, many=True)
         return Response(serializer.data)
+
+
+class ProjectImportCheckAvailabilityView(TokenAuthMixin, APIView):
+    """
+    View to check if name and sheet info is available for the user to import
+
+    _(as a QoL early-warning system)_
+    """
+    def _check_required(self, request):  # pragma: no cover
+        if 'filename' not in request.data:
+            raise ValidationError('`filename` is required. Expected: <str>')
+        if 'sheet_name' not in request.data:
+            raise ValidationError('`sheet_name` is required. Expected: <str>')
+
+    def post(self, request, format=None):
+        """
+        Returns with the status of availability for the sheet_name, import_name
+        """
+        self._check_required(request)
+
+        imports = ProjectImportV2.objects.filter(user=request.user)
+
+        result_dict = {
+            'available': imports.filter(filename=request.data['filename'],
+                                        sheet_name=request.data['sheet_name']).count() == 0
+        }
+
+        return Response(result_dict, content_type="application/json")
+
+
+class ProjectGroupAddmeView(TeamCollectionTokenAuthMixin, APIView):  # pragma: no cover
+    """
+    Adds the user to the project's team
+    """
+    def post(self, request, pk, format=None):
+        """
+        Return a list of the user's collections.
+        """
+        if not pk:  # pragma: no cover
+            raise ValidationError('ID of project is required')
+        instance = get_object_or_400(Project, select_for_update=True, error_message="No such project",
+                                     id=pk)
+
+        instance.team.add(request.user.userprofile)
+        instance.save()
+        serializer = ProjectGroupSerializer(instance=instance)
+
+        return Response(serializer.data)
