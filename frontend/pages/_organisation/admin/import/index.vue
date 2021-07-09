@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import PageLayout from '@/components/common/wrappers/PageLayout'
 import Panel from '@/components/common/Panel'
 import ImportFile from '@/components/admin/import/ImportFile'
@@ -71,9 +71,6 @@ export default {
     })
   },
   methods: {
-    ...mapActions({
-      loadQueue: 'admin/import/loadQueue'
-    }),
     async select ({ id }) {
       this.$nuxt.$loading.start()
       await this.$nextTick()
