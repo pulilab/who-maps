@@ -30,7 +30,6 @@ export const actions = {
     return data
   },
   async updateCollection ({ commit, state }, collectionData) {
-    console.log('collectionData', collectionData)
     const { data } = await this.$axios.patch(`api/projects/collections/${collectionData.url}/`, collectionData.importData)
     // const newQueue = [
     //   ...state.queue,

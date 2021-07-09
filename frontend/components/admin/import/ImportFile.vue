@@ -392,7 +392,7 @@ export default {
         this.importing = false
         this.resetForm()
         this.loadQueue()
-        console.log('api result', importItem)
+        console.log('🚀 ~ api result', importItem)
         // this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: importItem.id }, query: undefined }))
       } catch (err) {
         // this.$nuxt.$loading.finish('importXLSX')
