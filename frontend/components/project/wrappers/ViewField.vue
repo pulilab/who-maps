@@ -50,7 +50,7 @@
                   <p>
                     <b>{{ subtitle }}</b>
                   </p>
-                  <template v-if="item.categories.length > 0">
+                  <template v-if="checkCategories(item.categories)">
                     <ul>
                       <li
                         v-for="category in item.categories"
@@ -203,6 +203,12 @@ export default {
       default:
         return this.noData
       }
+    }
+  },
+  methods: {
+    checkCategories (items) {
+      const filterItems = items.filter(i => i !== undefined)
+      return filterItems.length > 0
     }
   }
 }

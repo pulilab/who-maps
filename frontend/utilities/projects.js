@@ -129,8 +129,10 @@ export const draftRules = () => {
       max: 128
     },
     organisation: {
-      required: true,
       max: 128
+    },
+    country: {
+      required: true
     },
     contact_name: {
       max: 256

@@ -67,28 +67,28 @@ export default {
       }
       return {}
     },
+    handleCheckKey (obj, key) {
+      return obj && obj[key] ? obj[key] : ''
+    },
     handleFields () {
       return [
         {
           id: 1,
           prepend: 1,
           header: this.$gettext('Project Name'),
-          content: this.project.name
+          content: this.handleCheckKey(this.project, 'name')
         },
         {
           id: 2,
           prepend: 2,
           header: this.$gettext('Organisation'),
-          content:
-            this.organisation && this.organisation.name
-              ? this.organisation.name
-              : ''
+          content: this.handleCheckKey(this.organisation, 'name')
         },
         {
           id: 3,
           prepend: 3,
           header: this.$gettext('Project country'),
-          content: this.country.name
+          content: this.handleCheckKey(this.country, 'name')
         },
         {
           id: 4,
