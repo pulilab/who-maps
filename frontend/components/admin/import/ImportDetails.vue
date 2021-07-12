@@ -56,6 +56,7 @@
 <script>
 import CountryItem from '@/components/common/CountryItem'
 import DonorItem from '@/components/common/DonorItem'
+
 export default {
   components: {
     CountryItem,
@@ -73,6 +74,7 @@ export default {
 <style lang="less">
 @import "~assets/style/variables.less";
 @import "~assets/style/mixins.less";
+
  .Label {
     display: block;
     margin: 0 0 15px;
@@ -80,7 +82,9 @@ export default {
     font-size: @fontSizeBase;
     font-weight: 700;
   }
+
   .ImportDetails {
     margin-bottom: 15px;
   }
+
 </style>
