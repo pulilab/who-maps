@@ -138,12 +138,17 @@ export default {
   },
   methods: {
     handleDhiList (platforms, interventions) {
-      return platforms.map(platform => ({
-        name: this.getPlatforms.find(p => p.id === platform).name,
-        categories: interventions
-          .filter(i => i.platform === platform)
-          .map(i => this.getDhi(i.id))
-      }))
+      return platforms.map(platform => {
+        if (this.getPlatforms) {
+          return {
+            name: this.getPlatforms.find(p => p.id === platform)?.name,
+            categories: interventions
+              .filter(i => i.platform === platform)
+              .map(i => this.getDhi(i.id))
+          }
+        }
+        return []
+      })
     },
     handleRows (coverage, data, country = this.country) {
       let rows = []
