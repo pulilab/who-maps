@@ -24,14 +24,15 @@ from .serializers import CountrySerializer, SuperAdminCountrySerializer, AdminCo
     DonorPartnerLogoSerializer, MapFileSerializer, CountryImageSerializer, DonorImageSerializer, \
     DonorCustomQuestionSerializer, CountryCustomQuestionSerializer, CountryListSerializer, DonorListSerializer, \
     ArchitectureRoadMapDocumentSerializer, CountryLandingSerializer
+from core.views import TokenAuthMixin
 
 
-class CountryLandingPageViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class CountryLandingPageViewSet(TokenAuthMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.all()
     serializer_class = CountryLandingSerializer
 
 
-class CountryLandingListPageViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class CountryLandingListPageViewSet(TokenAuthMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Country.objects.only('id', 'name', 'code')
     serializer_class = CountryListSerializer
 

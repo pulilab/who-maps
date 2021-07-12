@@ -13,6 +13,7 @@ from user.forms import PasswordHTMLEmailResetForm
 from .models import UserProfile, Organisation
 from django.contrib.auth.models import AnonymousUser
 
+
 class ProfileJWTSerializer(JWTSerializer):
     """
     Retrieves the token and userprofile of a given user after log in.
@@ -71,7 +72,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
         user = self.context['request'].user
 
-        if isinstance(user, AnonymousUser):
+        if isinstance(user, AnonymousUser):  # pragma: no cover
             return fields
 
         account_type = user.userprofile.account_type

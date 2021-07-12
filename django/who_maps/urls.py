@@ -4,7 +4,6 @@ from django.contrib import admin
 from django.urls import path
 from django.views.i18n import JSONCatalog
 from rest_framework import permissions
-from rest_framework.documentation import include_docs_urls
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework.routers import SimpleRouter
@@ -12,7 +11,7 @@ from rest_framework.routers import SimpleRouter
 from country.views import CountryLandingPageViewSet, CountryLandingListPageViewSet, DonorLandingPageViewSet, \
     DonorLandingListPageViewSet
 from project.views import ProjectPublicViewSet, ExternalDraftAPI, ExternalPublishAPI
-from user.views import OrganisationViewSet
+from user.views import OrganisationViewSet, TokenCheckView
 
 admin.site.site_header = 'Digital Health Atlas'
 API_TITLE = 'Digital Health Atlas API'
@@ -79,6 +78,8 @@ api_info_urlpatterns = [
     url(r"^api/projects/structure/",
         view=ProjectPublicViewSet.as_view({'get': 'project_structure'}),
         name="get-project-structure"),
+    url(r"^api/token/validate/",
+        view=TokenCheckView.as_view())
 ]
 api_info_urlpatterns += api_info_router.urls
 

@@ -700,7 +700,7 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
 
     @swagger_auto_schema(
         request_body=CollectionInputSerializer,
-        security=[{'Bearer': []}],
+        security=[{'Token': []}],
         responses={201: CollectionSerializer, 400: "Bad Request", 403: "Unauthorized"}
     )
     def create(self, request, *args, **kwargs):
@@ -748,12 +748,11 @@ class CollectionListView(CollectionAuthenticatedMixin, APIView):
 
     * Requires authenticated user
     """
-    """
-    View to list all users in the system.
-
-    * Requires token authentication.
-    * Only admin users are able to access this view.
-    """
+    @swagger_auto_schema(
+        # request_body=CollectionInputSerializer,
+        security=[{'Token': []}],
+        responses={201: CollectionSerializer(many=True), 403: "Unauthorized"}
+    )
     def get(self, request, format=None):
         """
         Return a list of the user's collections.

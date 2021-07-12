@@ -22,4 +22,5 @@ urlpatterns = [
     url(r"^token/create/", view=views.TokenViewSet.as_view({'post': 'create'}), name="token-create"),
     url(r"^token/refresh/", view=views.TokenViewSet.as_view({'post': 'refresh'}), name="token-refresh"),
     url(r"^token/delete/", view=views.TokenViewSet.as_view({'delete': 'delete'}), name="token-delete"),
+    url(r"^token/validate/", view=views.TokenCheckView.as_view(), name="token-check"),
 ]
