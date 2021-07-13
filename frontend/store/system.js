@@ -24,7 +24,8 @@ export const getters = {
   getUserProfilesNoFilter: state => {
     return state.profiles
   },
-  getUserProfileDetails: (state, getters) => id => getters.getUserProfiles.find(u => u.id === id),
+  getUserProfileDetails: (state, getters) => id =>
+    getters.getUserProfiles.find(u => u.id === id),
   getSearchResult: state => {
     const search = state.projectSearch ? state.projectSearch : []
     return search.map(s => {
@@ -63,7 +64,10 @@ export const getters = {
   getThematicOverview: state => {
     const th = state.thematic_overview
     return th.categories
-      ? th.categories.map(cat => ({ ...cat, domains: th.sub_categories.filter(sb => sb.category === cat.id) }))
+      ? th.categories.map(cat => ({
+        ...cat,
+        domains: th.sub_categories.filter(sb => sb.category === cat.id)
+      }))
       : []
   },
   getDomainsForThematic: (state, getters) => {
@@ -77,7 +81,8 @@ export const getters = {
         domains: domains
           .filter(d => d.axis === a.id)
           .map(df => ({ name: df.name }))
-      }))]
+      }))
+    ]
   },
   getSubLevelTypes: state => {
     return [...state.sub_level_types.map(t => ({ ...t }))]
@@ -91,13 +96,15 @@ export const getters = {
   },
   getDonors: state => state.donors,
   getUserCollections: state => state.collections,
-  getDonorDetails: state => id => ({ ...state.donors.find(d => d.id === id), ...state.donorsLibrary[id] }),
+  getDonorDetails: state => id => ({
+    ...state.donors.find(d => d.id === id),
+    ...state.donorsLibrary[id]
+  }),
   getRegions: state => state.regions,
   getRegionDetails: state => id => ({ ...state.regions.find(r => r.id === id) })
 }
 
 export const actions = {
-
   async loadUserProfiles ({ commit, state }, force = false) {
     try {
       if (!state.profiles || state.profiles.length === 0 || force) {
@@ -121,7 +128,9 @@ export const actions = {
       commit('SET_SUB_LEVEL_TYPES', data.sub_level_types)
       commit('SET_REGIONS', data.regions)
       commit('SET_ROADMAP', data.roadmap)
-      dispatch('dashboard/setDashboardColumns', data.dashboard_columns, { root: true })
+      dispatch('dashboard/setDashboardColumns', data.dashboard_columns, {
+        root: true
+      })
     } catch (e) {
       console.error('system/loadStaticData failed')
     }
@@ -148,7 +157,9 @@ export const actions = {
   },
   async loadUserCollections ({ commit }) {
     try {
-      const { data } = await this.$axios.get('/api/projects/collection/my-collections/')
+      const { data } = await this.$axios.get(
+        '/api/projects/collection/my-collections/'
+      )
       commit('setValue', { key: 'collections', val: data })
     } catch (e) {
       console.error('system/loadCollections failed')
@@ -176,14 +187,16 @@ export const actions = {
     if (org) {
       return Promise.resolve(org)
     } else {
-      const error = new Error('Organisation saving / fetching failed, could not find the organisation')
+      const error = new Error(
+        'Organisation saving / fetching failed, could not find the organisation'
+      )
       return Promise.reject(error)
     }
   }
 }
 
 export const mutations = {
-  setValue(state, { key, val }) {
+  setValue (state, { key, val }) {
     state[key] = val
   },
   SET_USER_PROFILES: (state, value) => {

@@ -14,6 +14,7 @@ import {
 } from '@/utilities/charts'
 import { formatDate } from '@/utilities/projects'
 import { isBefore, format } from 'date-fns'
+import sumBy from 'lodash/sumBy'
 
 export const state = () => ({
   stages: {
@@ -260,17 +261,31 @@ export const actions = {
   ) {
     commit('SET_LOADING', true)
 
+    const base = '/api/kpi'
     const kpi = await Promise.all([
-      this.$axios.get(`/api/kpi/users/${objectToQueryString(state.filters)}`),
-      this.$axios.get(`/api/kpi/tokens/${objectToQueryString(state.filters)}`),
+      this.$axios.get(`${base}/users/${objectToQueryString(state.filters)}`),
+      this.$axios.get(`${base}/tokens/${objectToQueryString(state.filters)}`),
       this.$axios.get(
-        `/api/kpi/project-status/${objectToQueryString(state.filters)}`
-      )
+        `${base}/project-status/${objectToQueryString(state.filters)}`
+      ),
+      this.$axios.get(
+        `${base}/project-stages/${objectToQueryString(state.filters)}`
+      ),
+      this.$axios.get('/api/projects/structure/')
     ])
 
+    const { stages } = kpi[4].data
     const users = kpi[0].data
     const tokens = kpi[1].data
     const projectStatus = kpi[2].data
+    const projectStages = stages.map(s => {
+      return {
+        ...s,
+        total: sumBy(kpi[3].data.map(i => i.stages), s.id)
+      }
+    })
+
+    console.log(projectStages)
 
     // start of data that should come from somewhere
     // color sets (should be dynamic?)
@@ -283,20 +298,6 @@ export const actions = {
     const colorSetG = ['#FFCE3D', '#FEAB7D', '#49BCE8', '#5F72B5', '#9ACB67']
 
     // label sets (should be dynamic?)
-    const monthLabels = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ]
     const projectsLabels = [
       'Published Projects',
       'Publishable Projects',
@@ -328,13 +329,7 @@ export const actions = {
       splitLabel('ISCO 08'),
       splitLabel('mACM - Mobile Alert Communication Management')
     ]
-    const stageLabels = [
-      'Opportunity and Ideation',
-      'Preparation and Scoping',
-      'Analysis and Design',
-      'Implementation planning',
-      'Hand over or Complete'
-    ]
+    const stageLabels = extract(projectStages, 'name')
     const hfaLabels = [
       'Adolescent and Youth Health',
       'Civil registration and vital statistics',
@@ -353,7 +348,8 @@ export const actions = {
     // end of data that should come from somewhere
 
     // data generation
-    const polarAData = randomData(stageLabels.length)
+    // stages
+    const polarAData = extract(projectStages, 'total')
     const monthlyUserActivity = [
       extract(users, 'registered'),
       extract(users, 'active')
@@ -400,7 +396,7 @@ export const actions = {
       'SET_POLARA_GRAPH',
       settings({
         type: 'polar',
-        colors: colorSetG,
+        colors: [...colorSetG, ...colorSetG],
         labels: stageLabels,
         data: [polarAData]
       })
@@ -476,7 +472,7 @@ export const actions = {
           title: 'Ocurrances:',
           subtitle: ''
         },
-        data: [randomData(monthLabels.length)]
+        data: [randomData(12)]
       })
     )
     commit(
@@ -533,7 +529,7 @@ export const actions = {
     // legends
     commit(
       'SET_POLARA_LEGEND',
-      legendGenerator(stageLabels, colorSetG, polarAData)
+      legendGenerator(stageLabels, [...colorSetG, ...colorSetG], polarAData)
     )
     commit(
       'SET_DOUGHNUTA_LEGEND',
