@@ -26,7 +26,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer, \
     TerminologySerializer, CollectionInputSerializer, ExternalProjectPublishSerializer, \
-    ExternalProjectDraftSerializer, CollectionOutputSerializer
+    ExternalProjectDraftSerializer, CollectionOutputSerializer, CollectionInputSwaggerSerializer
 
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
@@ -699,7 +699,7 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
         return data
 
     @swagger_auto_schema(
-        request_body=CollectionInputSerializer,
+        request_body=CollectionInputSwaggerSerializer,
         security=[{'Bearer': []}],
         responses={201: CollectionOutputSerializer, 400: "Bad Request", 403: "Unauthorized"}
     )

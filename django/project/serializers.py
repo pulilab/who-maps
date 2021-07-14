@@ -748,3 +748,12 @@ class ExternalProjectDraftSerializer(serializers.Serializer):
     TODO: May need to update the 'project' part
     """
     project = ProjectDraftSerializer(required=True)
+
+
+class CollectionInputSwaggerSerializer(serializers.Serializer):
+    """
+    Used to beautify swagger in docs
+    """
+    name = serializers.CharField(required=True)
+    add_me_as_editor = serializers.BooleanField(required=True)
+    project_import = ProjectImportV2CollectionSerializer(required=True)
