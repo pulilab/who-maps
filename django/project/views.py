@@ -37,9 +37,10 @@ from django.conf import settings
 from who_maps.throttle import ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle
 from rest_framework.views import APIView
 
-from user.authentication import BearerTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.http import HttpResponseBadRequest
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from user.authentication import BearerTokenAuthentication
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -801,26 +802,22 @@ class ProjectImportCheckAvailabilityView(TokenAuthMixin, APIView):
         return Response(result_dict, content_type="application/json")
 
 
-class ProjectGroupAddmeView(APIView):
+class ProjectGroupAddmeViewSet(GenericViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectGroupSerializer
     authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsOwnerShipModifiable)
 
-    """
-    Adds the user to the project's team
-    """
-
-    def post(self, request, collection_url, pk, format=None):
-        """
-        Adds user to project's team if:
-         - the project is an orphan project
-         - the user is the owner of the collection (and the project is in the collection)
-         - the user is a superuser
-        """
-        instance = get_object_or_400(Project, select_for_update=True, error_message="No such project",
-                                     id=pk)
-
-        instance.team.add(request.user.userprofile)
-        instance.save()
-        serializer = ProjectGroupSerializer(instance=instance)
-
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        instance = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        if not instance.import_rows.filter(parent__collection__url=kwargs['collection_url']):
+            return HttpResponseBadRequest("Project ID and Collection URL does not match")
+        self.check_object_permissions(self.request, instance)
+        team = list(instance.team.all().values_list('id', flat=True))
+        team.append(request.user.userprofile.id)
+        data = {'team': team, 'viewers': list(instance.viewers.all())}
+        serializer = ProjectGroupSerializer(instance, data=data, context=self.get_serializer_context())
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data)

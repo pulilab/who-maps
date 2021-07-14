@@ -119,6 +119,6 @@ urlpatterns = [
          view=views.ProjectImportCheckAvailabilityView.as_view(),
          name='is-collection-data-available'),
     path("projects/import/add-me/<str:collection_url>/<int:pk>/",
-         view=views.ProjectGroupAddmeView.as_view(),
+         view=views.ProjectGroupAddmeViewSet.as_view({'put': 'update'}),
          name='add-me-as-editor')
 ]

@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from project.models import ProjectApproval, Project
+from project.models import ProjectApproval
 
 
 class InTeamOrReadOnly(permissions.BasePermission):
@@ -21,7 +21,7 @@ class InTeamOrReadOnly(permissions.BasePermission):
 
 class InTeamOrCollectionOwnerOrReadOnly(permissions.BasePermission):
     """
-    Object-level permission which allows team members or collection owners to edit projects
+    Object-level permission which editing projects if they are draft and in collection
     """
 
     def has_object_permission(self, request, view, obj):
@@ -61,10 +61,15 @@ class InCountryAdminForApproval(permissions.BasePermission):
 
 class IsOwnerShipModifiable(permissions.BasePermission):
     """
-    Ownership of the project is modifyable IF it's draft AND in a collection AND we're using the correct collection
+    Ownership of the project is modifiable IF it's draft AND in a collection AND we're using the correct collection
     url
     """
-    def has_permission(self, request, view):
-        return request.user.is_superuser or Project.objects.draft_only().filter(
-            import_rows__parent__collection__url=view.kwargs['collection_url'],
-            pk=view.kwargs['pk']).exists()
+    def has_object_permission(self, request, view, obj):
+        if obj.public_id != "":  # pragma: no cover
+            return False
+
+        # had to separate these due to LINTER dying on 3 'or'-s
+        in_team = obj.team.filter(id=request.user.userprofile.id).exists()
+        in_collection = obj.import_rows.filter(parent__collection__isnull=False).exists()
+
+        return request.user.is_superuser or in_team or in_collection
