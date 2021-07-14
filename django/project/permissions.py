@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from project.models import ProjectApproval
+from project.models import ProjectApproval, Project
 
 
 class InTeamOrReadOnly(permissions.BasePermission):
@@ -57,3 +57,14 @@ class InCountryAdminForApproval(permissions.BasePermission):
             return request.user.is_superuser \
                    or obj.project.search.country.admins.filter(id=request.user.userprofile.id).exists() \
                    or obj.project.search.country.super_admins.filter(id=request.user.userprofile.id).exists()
+
+
+class IsOwnerShipModifiable(permissions.BasePermission):
+    """
+    Ownership of the project is modifyable IF it's draft AND in a collection AND we're using the correct collection
+    url
+    """
+    def has_permission(self, request, view):
+        return request.user.is_superuser or Project.objects.draft_only().filter(
+            import_rows__parent__collection__url=view.kwargs['collection_url'],
+            pk=view.kwargs['pk']).exists()

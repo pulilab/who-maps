@@ -332,11 +332,10 @@ class CollectionsTests(SetupTests):
         }
         response = self.test_user_client.post(url, data_2)
         self.assertEqual(response.json()['available'], False)
-
-    def test_orphan_project_add_me_as_team_member_api(self):
+        # Check the new add-me-as-editor api
         project = Project.objects.create(name='Test project stuff')
-        project.team.set([])
-        url = reverse('add-me-as-editor', kwargs={'pk': project.id})
+        project.import_rows.set([pimport.rows.all()[0]])  # added to collection!
+        url = reverse('add-me-as-editor', kwargs={'pk': project.id, 'collection_url': collections[0].url})
         response = self.test_user_client.post(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['team'], [self.test_user.userprofile.pk])
+        self.assertEqual(response.json()['team'], [self.test_user.userprofile.id])
