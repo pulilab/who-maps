@@ -68,8 +68,6 @@ class IsOwnerShipModifiable(permissions.BasePermission):
         if obj.public_id != "":  # pragma: no cover
             return False
 
-        # had to separate these due to LINTER dying on 3 'or'-s
-        in_team = obj.team.filter(id=request.user.userprofile.id).exists()
-        in_collection = obj.import_rows.filter(parent__collection__isnull=False).exists()
+        in_collection = obj.import_rows.filter(parent__collection__url=view.kwargs.get('collection_url')).exists()
 
-        return request.user.is_superuser or in_team or in_collection
+        return request.user.is_superuser or in_collection

@@ -811,8 +811,6 @@ class ProjectGroupAddmeViewSet(GenericViewSet):
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         instance = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
-        if not instance.import_rows.filter(parent__collection__url=kwargs['collection_url']):
-            return HttpResponseBadRequest("Project ID and Collection URL does not match")
         self.check_object_permissions(self.request, instance)
         team = list(instance.team.all().values_list('id', flat=True))
         team.append(request.user.userprofile.id)

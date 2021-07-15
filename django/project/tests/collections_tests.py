@@ -337,7 +337,7 @@ class CollectionsTests(SetupTests):
         project.import_rows.set([pimport.rows.all()[0]])  # added to collection!
         url = reverse('add-me-as-editor', kwargs={'pk': project.id, 'collection_url': "dude-trust-me"})
         response = self.test_user_client.put(url)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 403)
         url = reverse('add-me-as-editor', kwargs={'pk': project.id, 'collection_url': collections[0].url})
         response = self.test_user_client.put(url)
         self.assertEqual(response.status_code, 200)
@@ -345,4 +345,4 @@ class CollectionsTests(SetupTests):
         project2 = Project.objects.create(name='Test project stuff 2')
         url = reverse('add-me-as-editor', kwargs={'pk': project2.id, 'collection_url': collections[0].url})
         response = self.test_user_client.put(url)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 403)
