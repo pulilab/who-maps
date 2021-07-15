@@ -319,3 +319,30 @@ class CollectionsTests(SetupTests):
         url = reverse('projectimportv2-list')
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
+        url = reverse('is-collection-data-available')
+        data = {
+            'filename': 'List of greenleaf projects',
+            'sheet_name': 'Precise Sheet'
+        }
+        response = self.test_user_client.post(url, data)
+        self.assertEqual(response.json()['available'], True)
+        data_2 = {
+            "filename": "DHA_Import_template.xlsx",
+            "sheet_name": "Import Example"
+        }
+        response = self.test_user_client.post(url, data_2)
+        self.assertEqual(response.json()['available'], False)
+        # Check the new add-me-as-editor api
+        project = Project.objects.create(name='Test project stuff')
+        project.import_rows.set([pimport.rows.all()[0]])  # added to collection!
+        url = reverse('add-me-as-editor', kwargs={'pk': project.id, 'collection_url': "dude-trust-me"})
+        response = self.test_user_client.put(url)
+        self.assertEqual(response.status_code, 403)
+        url = reverse('add-me-as-editor', kwargs={'pk': project.id, 'collection_url': collections[0].url})
+        response = self.test_user_client.put(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['team'], [self.test_user.userprofile.id])
+        project2 = Project.objects.create(name='Test project stuff 2')
+        url = reverse('add-me-as-editor', kwargs={'pk': project2.id, 'collection_url': collections[0].url})
+        response = self.test_user_client.put(url)
+        self.assertEqual(response.status_code, 403)

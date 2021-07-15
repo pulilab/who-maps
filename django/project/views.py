@@ -8,7 +8,6 @@ from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
@@ -17,7 +16,7 @@ from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAu
     get_object_or_400, CollectionAuthenticatedMixin
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion
-from project.permissions import InCountryAdminForApproval
+from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
 from .tasks import notify_superusers_about_new_pending_software
@@ -26,8 +25,8 @@ from user.models import Organisation
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer, \
-    TerminologySerializer, CollectionSerializer, ExternalProjectPublishSerializer, ExternalProjectDraftSerializer, \
-    CollectionInputSerializer
+    TerminologySerializer, CollectionInputSerializer, ExternalProjectPublishSerializer, \
+    ExternalProjectDraftSerializer, CollectionOutputSerializer, CollectionInputSwaggerSerializer
 
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
@@ -37,6 +36,10 @@ from django.conf import settings
 
 from who_maps.throttle import ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle
 from rest_framework.views import APIView
+
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from user.authentication import BearerTokenAuthentication
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -667,9 +670,15 @@ class TechnologyPlatformRequestViewSet(CreateModelMixin, GenericViewSet):
 
 
 class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveModelMixin, GenericViewSet):
-    serializer_class = CollectionSerializer
     lookup_field = 'url'
     queryset = Collection.objects.all()
+
+    def get_serializer_class(self):
+        if self.request and self.action in ['update', 'create', 'partial_update'] and \
+                self.request.user.is_authenticated:
+            return CollectionInputSerializer
+        else:
+            return CollectionOutputSerializer
 
     @staticmethod
     def _check_parameters(request_data):
@@ -690,9 +699,9 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
         return data
 
     @swagger_auto_schema(
-        request_body=CollectionInputSerializer,
+        request_body=CollectionInputSwaggerSerializer,
         security=[{'Bearer': []}],
-        responses={201: CollectionSerializer, 400: "Bad Request", 403: "Unauthorized"}
+        responses={201: CollectionOutputSerializer, 400: "Bad Request", 403: "Unauthorized"}
     )
     def create(self, request, *args, **kwargs):
         """
@@ -713,7 +722,8 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        output_serializer = CollectionOutputSerializer(instance=serializer.instance)
+        return Response(output_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -752,10 +762,59 @@ class CollectionListView(CollectionAuthenticatedMixin, APIView):
     * Requires token authentication.
     * Only admin users are able to access this view.
     """
+
     def get(self, request, format=None):
         """
         Return a list of the user's collections.
         """
         collections = Collection.objects.filter(user=request.user)
-        serializer = CollectionSerializer(collections, many=True)
+        serializer = CollectionInputSerializer(collections, many=True)
+        return Response(serializer.data)
+
+
+class ProjectImportCheckAvailabilityView(TokenAuthMixin, APIView):
+    """
+    View to check if name and sheet info is available for the user to import
+
+    _(as a QoL early-warning system)_
+    """
+
+    def _check_required(self, request):  # pragma: no cover
+        if 'filename' not in request.data:
+            raise ValidationError('`filename` is required. Expected: <str>')
+        if 'sheet_name' not in request.data:
+            raise ValidationError('`sheet_name` is required. Expected: <str>')
+
+    def post(self, request, format=None):
+        """
+        Returns with the status of availability for the sheet_name, import_name
+        """
+        self._check_required(request)
+
+        imports = ProjectImportV2.objects.filter(user=request.user)
+
+        result_dict = {
+            'available': imports.filter(filename=request.data['filename'],
+                                        sheet_name=request.data['sheet_name']).count() == 0
+        }
+
+        return Response(result_dict, content_type="application/json")
+
+
+class ProjectGroupAddmeViewSet(GenericViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectGroupSerializer
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    permission_classes = (IsAuthenticated, IsOwnerShipModifiable)
+
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        instance = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        self.check_object_permissions(self.request, instance)
+        team = list(instance.team.all().values_list('id', flat=True))
+        team.append(request.user.userprofile.id)
+        data = {'team': team, 'viewers': list(instance.viewers.all())}
+        serializer = ProjectGroupSerializer(instance, data=data, context=self.get_serializer_context())
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data)

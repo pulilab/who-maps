@@ -26,7 +26,7 @@ from user.models import UserProfile
 from project.models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform, \
     InteroperabilityLink, Licence, InteroperabilityStandard, HISBucket, Stage, HealthCategory, HealthFocusArea, \
     HSCGroup, HSCChallenge, DigitalStrategy, Collection
-
+from country.serializers import CountrySerializer, DonorSerializer
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
@@ -627,7 +627,7 @@ class TerminologySerializer(serializers.Serializer):
     strategies = StrategiesByGroupSerializer(many=True)
 
 
-class ProjectImportV2CollectionSerializer(serializers.ModelSerializer):
+class ProjectImportV2CollectionInputSerializer(serializers.ModelSerializer):
     status = serializers.ReadOnlyField()
     rows = ImportRowSerializer(many=True)
 
@@ -661,9 +661,24 @@ class ProjectImportV2CollectionSerializer(serializers.ModelSerializer):
         return instance
 
 
-class CollectionSerializer(serializers.ModelSerializer):
+class ProjectImportV2CollectionOutputSerializer(serializers.ModelSerializer):
+    status = serializers.ReadOnlyField()
+    country = CountrySerializer(required=False, allow_null=True)
+    donor = DonorSerializer(required=False, allow_null=True)
+    rows = ImportRowSerializer(many=True)
+
+    class Meta:
+        model = ProjectImportV2
+        fields = ('id', 'user', 'status', 'header_mapping', 'rows', 'country', 'donor', 'filename', 'sheet_name',
+                  'draft', 'collection')
+
+
+class CollectionInputSerializer(serializers.ModelSerializer):
+    """
+    Collection serializer for creating and updating collections
+    """
     url = serializers.ReadOnlyField()
-    project_imports = ProjectImportV2CollectionSerializer(required=False, many=True)
+    project_imports = ProjectImportV2CollectionInputSerializer(required=False, many=True)
 
     class Meta:
         model = Collection
@@ -683,7 +698,7 @@ class CollectionSerializer(serializers.ModelSerializer):
             p_data['user'] = self.context['request'].user.pk
             p_data['country'] = p_data['country'].pk if p_data['country'] is not None else None
             p_data['donor'] = p_data['donor'].pk if p_data['donor'] is not None else None
-            project_import = ProjectImportV2CollectionSerializer(context=sub_context, data=p_data)
+            project_import = ProjectImportV2CollectionInputSerializer(context=sub_context, data=p_data)
             project_import.is_valid(raise_exception=True)
             project_import.save()
 
@@ -707,6 +722,18 @@ class CollectionSerializer(serializers.ModelSerializer):
         return instance
 
 
+class CollectionOutputSerializer(serializers.ModelSerializer):
+    """
+    Collection serializer to output detailed collection data
+    """
+    url = serializers.ReadOnlyField()
+    project_imports = ProjectImportV2CollectionOutputSerializer(required=False, many=True)
+
+    class Meta:
+        model = Collection
+        fields = ('id', 'url', 'name', 'user', 'project_imports')
+
+
 class ExternalProjectPublishSerializer(serializers.Serializer):
     """
     Used to beautify swagger in public docs
@@ -723,10 +750,10 @@ class ExternalProjectDraftSerializer(serializers.Serializer):
     project = ProjectDraftSerializer(required=True)
 
 
-class CollectionInputSerializer(serializers.Serializer):
+class CollectionInputSwaggerSerializer(serializers.Serializer):
     """
     Used to beautify swagger in docs
     """
     name = serializers.CharField(required=True)
     add_me_as_editor = serializers.BooleanField(required=True)
-    project_import = ProjectImportV2CollectionSerializer(required=True)
+    project_import = ProjectImportV2CollectionInputSerializer(required=True)
