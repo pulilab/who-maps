@@ -38,7 +38,6 @@ from who_maps.throttle import ExternalAPIUserRateThrottle, ExternalAPIAnonRateTh
 from rest_framework.views import APIView
 
 from rest_framework.permissions import IsAuthenticated
-from django.http import HttpResponseBadRequest
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from user.authentication import BearerTokenAuthentication
 
