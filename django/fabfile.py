@@ -108,8 +108,10 @@ def deploy(tag=None):
             run('git checkout %s' % env.branch)
             run('git pull origin %s' % env.branch)
         time.sleep(10)
-        run('echo REPO_VERSION=$(git describe --tags --always) > {}/.env'.format(env.project_root))
-
+        run('touch {}/.env'.format(env.project_root))
+        version = run('git describe --tags --always')
+        run('sed -i "s/REPO_VERSION=.*/DEPLOY_VERSION={}/g" {}/.env'
+            .format(version, env.project_root))
         if env.name == 'dev':
             options = "-f {}/docker-compose.yml -f {}/docker-compose.dev.yml ".format(
                 env.project_root, env.project_root)
