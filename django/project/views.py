@@ -818,3 +818,33 @@ class ProjectGroupAddmeViewSet(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+
+class ProjectsInCollectionViewSet(TokenAuthMixin, ViewSet):  # pragma: no cover
+    def list(self, request, *args, **kwargs):
+        """
+        Retrieves list of projects related to a collection
+        """
+        data = []
+        collection = get_object_or_400(Collection, url=kwargs.get('collection_url'))
+        project_import_ids = list(collection.project_imports.all().values_list('id', flat=True))
+        import_rows = ImportRow.objects.filter(parent__in=project_import_ids)
+        for project in Project.objects.filter(import_rows__in=import_rows):
+            published = project.to_representation()
+            draft = project.to_representation(draft_mode=True)
+            data.append(project.to_response_dict(published=published, draft=draft))
+        return Response(data)
+
+
+class ProjectsInProjectImportViewSet(TokenAuthMixin, ViewSet):  # pragma: no cover
+    def list(self, request, *args, **kwargs):
+        """
+        Retrieves list of projects related to a collection
+        """
+        data = []
+        import_rows = ImportRow.objects.filter(parent__id=kwargs.get('pk'))
+        for project in Project.objects.filter(import_rows__in=import_rows):
+            published = project.to_representation()
+            draft = project.to_representation(draft_mode=True)
+            data.append(project.to_response_dict(published=published, draft=draft))
+        return Response(data)
