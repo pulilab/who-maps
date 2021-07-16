@@ -6,7 +6,7 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
 
     def test_project_status_kpi_nofilter(self):
         url = reverse("project-status-kpi")
-        response = self.client.get(url)
+        response = self.test_user_client.get(url)
         expected = \
             [{'country': None,
               'date': self.date_1_str,
@@ -35,7 +35,7 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
     def test_project_status_kpi_country_filter(self):
         url = reverse("project-status-kpi")
         url += f'?country={self.country2.id}'
-        response = self.client.get(url)
+        response = self.test_user_client.get(url)
         expected = \
             [{'country': self.country2.id,
               'date': self.date_1_str,
@@ -58,7 +58,7 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
         self.maxDiff = None
         url = reverse("project-status-kpi")
         url += f'?investor={self.d1.id}'
-        response = self.client.get(url)
+        response = self.test_user_client.get(url)
         expected = \
             [{'country': None,
               'data': {str(self.d1.id): {'growth': 3,
@@ -112,7 +112,7 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
     def test_project_status_kpi_time_filter(self):
         url = reverse("project-status-kpi")
         url += f'?from={self.date_2.year}-{self.date_2.month}&to={self.date_3.year}-{self.date_3.month}'
-        response = self.client.get(url)
+        response = self.test_user_client.get(url)
         expected = \
             [{'country': None,
               'date': self.date_2_str,
@@ -136,7 +136,7 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
         url = reverse("project-status-kpi")
         url += f'?from={self.date_2.year}-{self.date_2.month}&to={self.date_3.year}-{self.date_3.month}' \
                f'&country={self.country2.id}'
-        response = self.client.get(url)
+        response = self.test_user_client.get(url)
         expected = \
             [{'country': self.country2.id,
               'date': self.date_2_str,
@@ -152,7 +152,7 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
     def test_project_status_kpi_detailed(self):
         url = reverse("project-status-kpi")
         url += '?detailed=true'
-        response = self.client.get(url)
+        response = self.test_user_client.get(url)
         expected = \
             [{'country': None,
               'data': {str(self.d1.id): {'growth': 3,
