@@ -1,5 +1,7 @@
 <template>
   <el-form
+    ref="importForm"
+    :model="importForm"
     label-width="120px"
     label-position="top"
     class="ImportFile"
@@ -41,14 +43,11 @@
     </div>
     <el-divider class="wide" />
     <el-form-item>
-      <alert type="success">Sikerult jol megcsinalni</alert>
-      <alert type="error">There was an error while importing the file! <a href="">Please try again.</a></alert>
-    </el-form-item>
-    <el-form-item>
       <template #label>
         <translate>Select file</translate>
       </template>
       <el-upload
+        ref="importFile"
         :auto-upload="false"
         :limit="1"
         :on-change="onSelectFile"
@@ -77,7 +76,8 @@
                 <el-select
                   v-model="selectedSheet"
                   class="SheetSelector"
-                  :disabled="!sheets || sheets.length === 0"
+                  placeholder="Select sheet"
+                  :disabled="!inputFile || !sheets || sheets.length === 0"
                 >
                   <el-option
                     v-for="sheet in sheets"
@@ -87,6 +87,9 @@
                     {{ sheet }}
                   </el-option>
                 </el-select>
+                <alert v-if="uniqueImport" type="warning">
+                  <translate key="warning">Note that all import files need to have a unique name. Please re-name the file and upload it again.</translate>
+                </alert>
               </div>
             </template>
           </xlsx-sheets>
@@ -98,7 +101,7 @@
         </template>
       </xlsx-read>
     </el-form-item>
-    <el-form-item>
+    <el-form-item prop="country">
       <template #label>
         <form-hint>
           <translate>
@@ -114,10 +117,10 @@
         <el-radio :label="2">Import to single country</el-radio>
       </el-radio-group>
       <input-group v-if="countryRadio === 2">
-        <country-select v-model="country" />
+        <country-select v-model="importForm.country" />
       </input-group>
     </el-form-item>
-    <el-form-item>
+    <el-form-item prop="donor">
       <template #label>
         <form-hint>
           <translate>
@@ -135,10 +138,10 @@
         <el-radio :label="2">Import to single investor</el-radio>
       </el-radio-group>
       <input-group v-if="donorRadio === 2">
-        <donor-select v-model="donor" />
+        <donor-select v-model="importForm.donor" />
       </input-group>
     </el-form-item>
-    <el-form-item>
+    <el-form-item prop="newCollection">
       <template #label>
         <form-hint>
           <translate>Collections</translate>
@@ -149,54 +152,43 @@
           </template>
         </form-hint>
       </template>
-      <el-checkbox v-model="importMultiple" class="Check">
+      <el-checkbox v-model="importToCollection" class="Check">
         <translate>
           Group projects in a collection
         </translate>
       </el-checkbox>
-
-      <input-group v-if="importMultiple">
+      <input-group v-if="importToCollection">
         <el-radio-group v-model="toCollection" class="RadioGroup">
           <el-radio :label="1">Create a new collection</el-radio>
-          <el-input v-if="toCollection === 1" v-model="newCollection" type="text" placeholder="type the name of the new collection" class="Input" />
+          <el-input v-if="toCollection === 1" v-model="importForm.newCollection" type="text" placeholder="type the name of the new collection" class="Input" />
           <el-radio :label="2">Add to existing collection retrospectively</el-radio>
-          <donor-select v-if="toCollection === 2" v-model="donor" class="Select" />
+          <collection-select v-if="toCollection === 2" v-model="importForm.collectionUrl" class="Select" />
         </el-radio-group>
-        <el-checkbox v-model="projectEditor" class="Check">
-          <translate>Add me as project editor to all imported projects</translate>
-        </el-checkbox>
       </input-group>
-    </el-form-item>
-    <el-form-item v-if="false" class="DraftOrPublished">
-      <template #label>
-        <translate>
-          Draft or Publish
-        </translate>
-      </template>
-      <el-radio-group v-model="isDraftOrPublish">
-        <el-radio label="draft">
-          <translate>
-            Draft
-          </translate>
-        </el-radio>
-        <el-radio label="publish">
-          <translate>
-            Publish
-          </translate>
-        </el-radio>
-      </el-radio-group>
+      <el-checkbox :disabled="!importToCollection" v-model="importForm.projectEditor" class="Check">
+        <translate>Add me as project editor to all imported projects</translate>
+      </el-checkbox>
     </el-form-item>
     <el-divider class="wide" />
-    <el-button @click="save" type="warning">
+    <el-form-item v-if="alert > 0">
+      <alert v-show="alert === 1" type="success">
+        <translate key="success">File has been successfully imported.</translate>
+      </alert>
+      <alert v-show="alert === 2" type="error">
+        <translate key="error">There was an error while importing the file! Maybe try again.</translate>
+      </alert>
+    </el-form-item>
+    <el-button type="warning" @click="save" :loading="importing" :disabled="!canImport">
       <translate>Import now</translate>
     </el-button>
   </el-form>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import InputGroup from '@/components/common/wrappers/InputGroup'
 import DonorSelect from '@/components/common/DonorSelect'
+import CollectionSelect from '@/components/common/CollectionSelect'
 import CountrySelect from '@/components/common/CountrySelect'
 import FormHint from '@/components/common/FormHint'
 import Warning from '@/components/common/Warning'
@@ -209,6 +201,7 @@ export default {
   components: {
     InputGroup,
     DonorSelect,
+    CollectionSelect,
     CountrySelect,
     XlsxRead,
     XlsxSheets,
@@ -223,17 +216,24 @@ export default {
   data () {
     return {
       country: this.$store.state.user.profile.country,
-      donor: null,
       isDraftOrPublish: 'draft',
       inputFile: null,
       selectedSheet: null,
       parsed: null,
+      importForm: {
+        country: null,
+        donor: null,
+        projectEditor: false,
+        collectionUrl: null,
+        newCollection: ''
+      },
+      uniqueImport: false,
       countryRadio: 1,
       donorRadio: 1,
-      importMultiple: false,
-      projectEditor: false,
+      importToCollection: false,
       toCollection: 1,
-      newCollection: ''
+      alert: 0,
+      importing: false // 0: n/a; 1: success; 2: error
     }
   },
   computed: {
@@ -242,6 +242,9 @@ export default {
     }),
     ...mapState('projects', {
       projectDicts: state => state.projectStructure
+    }),
+    ...mapGetters({
+      userCollections: 'system/getUserCollections'
     }),
     fieldsData () {
       const flatHFA = this.projectDicts.health_focus_areas.reduce((a, c) => {
@@ -291,51 +294,118 @@ export default {
         { name: 'Fields', data: this.fieldsData },
         { name: 'Draft required fields', data: this.draftRequiredFields }
       ]
+    },
+    canImport () {
+      return this.inputFile && this.selectedSheet
+    }
+  },
+  watch: {
+    importToCollection: function (val) {
+      if (!val) {
+        this.importForm.projectEditor = false
+      }
     }
   },
   methods: {
     ...mapActions({
-      addDataToQueue: 'admin/import/addDataToQueue'
+      loadUserCollections: 'system/loadUserCollections',
+      addDataToQueue: 'admin/import/addDataToQueue',
+      addDataToCollection: 'admin/import/addCollection',
+      updateDataToCollection: 'admin/import/updateCollection',
+      loadQueue: 'admin/import/loadQueue'
     }),
+    resetForm () {
+      this.$refs.importFile.clearFiles()
+      this.inputFile = null
+      this.selectedSheet = null
+      this.countryRadio = 1
+      this.donorRadio = 1
+      this.importToCollection = false
+      this.toCollection = 1
+      this.$refs.importForm.resetFields()
+    },
     onChange (event) {
       this.inputFile = event.target.files ? event.target.files[0] : null
-      console.log('🚀 ~ onChange ~ this.inputFile', this.inputFile)
     },
     onSelectFile (file) {
-      console.log('🚀 ~ onSelectFile', file)
       this.inputFile = file?.raw ? file?.raw : null
     },
     onResetFile () {
       this.inputFile = null
+      this.selectedSheet = null
     },
     async save () {
-      this.$nuxt.$loading.start('importXLSX')
+      // simple validation?
+      let endpoint = 0 // legacy 'import > create'
       const importData = {
-        filename: this.inputFile.name,
-        country: this.country,
-        donor: this.donor,
-        sheet_name: this.selectedSheet,
-        header_mapping: Object.keys(this.parsed[0]).map(title => ({ selected: null, title })),
-        draft: this.isDraftOrPublish === 'draft',
-        rows: [
-          {
-            data: this.parsed
-          }
-        ]
+        project_import: {
+          filename: this.inputFile.name,
+          sheet_name: this.selectedSheet,
+          header_mapping: Object.keys(this.parsed[0]).map(title => ({ selected: null, title })),
+          draft: this.isDraftOrPublish === 'draft',
+          rows: [
+            {
+              data: this.parsed
+            }
+          ]
+        }
       }
+      if (this.countryRadio === 2 && this.importForm.country) {
+        importData.project_import.country = this.importForm.country
+      }
+      if (this.donorRadio === 2 && this.importForm.donor) {
+        importData.project_import.donor = this.importForm.donor
+      }
+
+      if (this.importToCollection) {
+        importData.add_me_as_editor = this.importForm.projectEditor
+        if (this.toCollection === 1) {
+          importData.name = this.importForm.newCollection
+          endpoint = 1 // new collection 'collections > create'
+        } else {
+          endpoint = 2 // update collection 'collections > partial_update'
+        }
+      }
+
+      // this.$nuxt.$loading.start('importXLSX')
       try {
-        const importItem = await this.addDataToQueue(importData)
+        this.alert = 0
+        this.importing = true
+        let importItem
+        switch (endpoint) {
+        case 0:
+          importItem = await this.addDataToQueue(importData.project_import)
+          break
+        case 1:
+          importItem = await this.addDataToCollection(importData)
+          this.loadUserCollections()
+          break
+        case 2:
+          importItem = await this.updateDataToCollection({
+            importData: importData,
+            url: this.importForm.collectionUrl
+          })
+          break
+        }
         this.$nuxt.$loading.finish('importXLSX')
-        this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: importItem.id }, query: undefined }))
-      } catch {
-        this.$nuxt.$loading.finish('importXLSX')
-        await this.$alert(
+        this.alert = 1
+        this.importing = false
+        this.resetForm()
+        this.loadQueue()
+        console.log('🚀 ~ api result', importItem)
+        // this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: importItem.id }, query: undefined }))
+      } catch (err) {
+        // this.$nuxt.$loading.finish('importXLSX')
+        this.alert = 2
+        this.importing = false
+        console.log('🚀 ~ importItem', err)
+        /* await this.$alert(
           this.$gettext('Note that all import files need to have a unique name. Please re-name the file and upload it again.'),
           this.$gettext('Error'),
           {
             confirmButtonText: 'OK',
             type: 'warning'
-          })
+          }) */
       }
     }
   }
@@ -432,6 +502,16 @@ export default {
   }
   .el-button--warning:hover {
     background-color: #d86422b3;
+  }
+
+ .el-button--warning.is-disabled,
+ .el-button--warning.is-disabled:focus,
+ .el-button--warning.is-disabled:hover {
+    color: #B9B9B9;
+    background-color: #E9E9E9;
+    cursor: not-allowed;
+    background-image: none;
+    border-color: #EBEEF5
   }
 }
 </style>

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from kpiexport.models import AuditLogUsers, AuditLogTokens
+from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages
 
 
 class AuditLogUserDetailedSerializer(serializers.ModelSerializer):
@@ -77,7 +77,7 @@ class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
         return len(audit_log.to_delete)
 
     class Meta:
-        model = AuditLogTokens
+        model = AuditLogProjectStatus
         fields = ("date", "country", "published", "unpublished", "ready_to_publish", "to_delete", "growth")
 
 
@@ -99,5 +99,34 @@ class AuditLogProjectStatusDetailedSerializer(AuditLogProjectStatusBasicSerializ
         return summary_dict
 
     class Meta:
-        model = AuditLogTokens
+        model = AuditLogProjectStatus
         fields = ("date", "country", "data", "published", "unpublished", "ready_to_publish", "to_delete", "growth")
+
+
+class AuditLogProjectStagesBasicSerializer(serializers.ModelSerializer):
+    date = serializers.CharField(read_only=True, max_length=10)
+    country = serializers.PrimaryKeyRelatedField(read_only=True)
+    stages = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_stages(audit_log):
+        return {stage: len(val) for stage, val in audit_log.stages.items()}
+
+    class Meta:
+        model = AuditLogProjectStages
+        fields = ("date", "country", "stages")
+
+
+class AuditLogProjectStagesDetailedSerializer(AuditLogProjectStagesBasicSerializer):
+    data = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_data(audit_log):
+        result_dict = {}
+        for donor_id, donor_dict in audit_log.data.items():
+            result_dict[donor_id] = {stage: len(val) for stage, val in donor_dict.items()}
+        return result_dict
+
+    class Meta:
+        model = AuditLogProjectStages
+        fields = ("date", "country", "stages", "data")

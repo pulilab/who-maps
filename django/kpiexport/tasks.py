@@ -236,3 +236,64 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
             add_growth_to_data(log_entry_global, donor)
         log_entry.save()
         log_entry_global.save()
+
+
+@app.task(name='auditlog_update_project_stages_data')
+def update_auditlog_project_stages_data_task(current_date=None):
+    """
+    Schedulable task to update project stages statistics
+    Needs to run daily - overwrites this month's tasks
+    """
+    from project.models import ProjectVersion
+    from kpiexport.models import AuditLogProjectStages
+    from country.models import Country
+
+    if current_date is None:  # pragma: no cover
+        current_date = timezone.now().date()
+
+    def get_latest_stage(item: ProjectVersion):
+        if 'stages' not in item.data or len(item.data['stages']) == 0:  # pragma: no cover
+            return None
+        return sorted(item.data['stages'], key=lambda x: x['date'], reverse=True)[0]
+
+    def add_entry_to_data(entry: ProjectVersion, country: Country, log_date):
+        project_stage = get_latest_stage(entry)
+        if not project_stage:  # pragma: no cover
+            return
+        stage_id_str = str(project_stage['id'])
+        # get or create auditlog
+        log_entry, _ = AuditLogProjectStages.objects.get_or_create(date=log_date, country=country)
+        # generate total stages data - we track projects by ID
+        if stage_id_str not in log_entry.stages:
+            log_entry.stages[stage_id_str] = []
+        stages_list = log_entry.stages[stage_id_str]
+        stages_list.append(entry.project.id)
+        log_entry.stages[stage_id_str] = list(set(stages_list))
+        # Generate by-donor data
+        donors = entry.data.get('donors')
+        # Generate data structure if needed
+        for donor_id in donors:
+            donor_str = str(donor_id)
+            if donor_str not in log_entry.data:
+                log_entry.data[donor_str] = {}
+            if stage_id_str not in log_entry.data[donor_str]:
+                log_entry.data[donor_str][stage_id_str] = []
+            donor_stages = log_entry.data[donor_str][stage_id_str]
+            donor_stages.append(entry.project.id)
+            log_entry.data[donor_str][stage_id_str] = list(set(donor_stages))
+        log_entry.save()
+
+    date = current_date - timedelta(days=1)
+    log_date = datetime(date.year, date.month, 1).date()
+    qs = ProjectVersion.objects.filter(created__date=date)
+
+    for entry in qs:
+        country_id = entry.data.get('country')
+        if not country_id:  # pragma: no cover
+            continue
+        try:
+            country = Country.objects.get(pk=country_id)
+            add_entry_to_data(entry, country, log_date)
+            add_entry_to_data(entry, None, log_date)
+        except Country.DoesNotExist:  # pragma: no cover
+            logging.warning(f'Country with this ID does not exist: {country_id}')

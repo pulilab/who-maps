@@ -6,7 +6,7 @@ from datetime import datetime, date, timedelta
 
 from django.utils.timezone import localtime
 from kpiexport.tasks import update_auditlog_user_data_task, update_auditlog_token_data_task, \
-    update_auditlog_project_status_data_task
+    update_auditlog_project_status_data_task, update_auditlog_project_stages_data_task
 from rest_framework.authtoken.models import Token
 from project.tests.setup import TestData
 
@@ -19,6 +19,7 @@ class KPITestData(TestData):
     - 2 donors
     - Tokens for all users
     """
+
     def setUp(self):
         super(KPITestData, self).setUp()
         self.create_anchor_dates()
@@ -110,10 +111,20 @@ class KPITestData(TestData):
 class KPITestDataWithProjects(KPITestData):
     def setUp(self):
         super(KPITestDataWithProjects, self).setUp()
-
+        self.maxDiff = None
         self.projects = list()
         dates = [self.date_1.date(), self.date_2.date(), self.date_3.date(), self.date_4.date()]
-
+        stages = [
+            [
+                dict(id=1, date=str(self.date_1.date()), note="stage 1 note"),
+                dict(id=2, date=str(self.date_2.date()), note="stage 2 note")
+            ],
+            [
+                dict(id=3, date=str(self.date_2.date()), note="stage 3 note"),
+                dict(id=4, date=str(self.date_3.date()), note="stage 4 note")
+            ],
+            []
+        ]
         for i in range(1, 10):
             donors = list()
             if i % 3 == 0:
@@ -126,13 +137,8 @@ class KPITestDataWithProjects(KPITestData):
             else:
                 country = self.country2
 
-            project_data = self.generate_project_data(
-                project_name=f'project {i}',
-                organisation=self.org,
-                country=country,
-                donors=donors,
-                date=dates[i % 4])
-
+            project_data = self.generate_project_data(f'project {i}', self.org, country, donors, dates[i % 4],
+                                                      stages[i % 3])
             project = self.create_draft_project(project_data)
             if i % 2 == 0 and len(donors) > 0:
                 self.publish_project(project.id, project_data)
@@ -154,4 +160,5 @@ class KPITestDataWithProjects(KPITestData):
         generate_date = date.today() - timedelta(days=150)
         while generate_date <= date.today() + timedelta(days=1):
             update_auditlog_project_status_data_task(generate_date)
+            update_auditlog_project_stages_data_task(generate_date)
             generate_date = generate_date + timedelta(days=1)

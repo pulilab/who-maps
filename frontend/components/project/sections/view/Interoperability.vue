@@ -44,7 +44,6 @@ export default {
           interoperability_links,
           interoperability_standards
         } = this.project
-        console.log(interoperability_links)
         this.interoperability = this.handleInteroperability(
           interoperability_links
         )
@@ -60,8 +59,7 @@ export default {
   methods: {
     handleInteroperability (links) {
       let result = []
-      for (const [key, value] of Object.entries(links)) {
-        console.log(key)
+      for (const [value] of Object.entries(links)) {
         if (value.selected && value.link) {
           result = [
             ...result,

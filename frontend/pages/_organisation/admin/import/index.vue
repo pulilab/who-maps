@@ -4,25 +4,16 @@
       <translate>Import interface</translate>
     </template>
     <el-row type="flex" :gutter="17">
-      <el-col :span="13">
-        <panel v-if="queue && queue.length > 0">
+      <el-col :span="14">
+        <panel v-if="queue && queue.length > 0" :wideBody="true" alignTitle="left">
           <template #header>
             <translate>Previous imports</translate>
           </template>
-          <import-details
-            v-for="(item, index) in queue"
-            :key="index"
-            :item="item"
-            type="flex"
-          >
-            <el-button @click="select(item)">
-              <translate>
-                Select
-              </translate>
-            </el-button>
-          </import-details>
+          <div class="mb-4">
+            <import-queue :queue="queue" />
+          </div>
         </panel>
-        <panel v-else :empty="true">
+        <panel v-else :empty="true" alignTitle="left">
           <template #header>
             <translate>Previous imports (0)</translate>
           </template>
@@ -35,8 +26,8 @@
           </p>
         </panel>
       </el-col>
-      <el-col :span="11">
-        <panel>
+      <el-col :span="10">
+        <panel alignTitle="left">
           <template #header>
             <translate>New import</translate>
           </template>
@@ -52,18 +43,19 @@ import { mapGetters } from 'vuex'
 import PageLayout from '@/components/common/wrappers/PageLayout'
 import Panel from '@/components/common/Panel'
 import ImportFile from '@/components/admin/import/ImportFile'
-import ImportDetails from '@/components/admin/import/ImportDetails'
+import ImportQueue from '@/components/admin/import/ImportQueue'
 
 export default {
   components: {
     PageLayout,
     Panel,
     ImportFile,
-    ImportDetails
+    ImportQueue
   },
   async fetch ({ store }) {
     await Promise.all([
       store.dispatch('system/loadDonors'),
+      store.dispatch('system/loadUserCollections'),
       store.dispatch('countries/loadMapData'),
       store.dispatch('admin/import/loadQueue'),
       store.dispatch('projects/loadProjectStructure'),
@@ -78,7 +70,6 @@ export default {
       dhi: 'projects/getDigitalHealthInterventions'
     })
   },
-
   methods: {
     async select ({ id }) {
       this.$nuxt.$loading.start()
@@ -96,12 +87,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.ImportList {
-  .box-card {
-    margin: 12px;
-  }
-}
-
 .empty-message {
   margin: 30px 40px;
 }
