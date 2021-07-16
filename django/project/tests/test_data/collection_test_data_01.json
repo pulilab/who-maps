@@ -1,0 +1,194 @@
+{
+    "project_import":
+        {
+            "filename": "DHA_Import_template.xlsx",
+            "sheet_name": "Import Example",
+            "header_mapping": [
+                {
+                    "selected": null,
+                    "title": "Project Name"
+                },
+                {
+                    "selected": null,
+                    "title": "Country"
+                },
+                {
+                    "selected": null,
+                    "title": "Investor"
+                },
+                {
+                    "selected": null,
+                    "title": "Organisation"
+                },
+                {
+                    "selected": null,
+                    "title": "Geographic Scope"
+                },
+                {
+                    "selected": null,
+                    "title": "Narrative of the project"
+                },
+                {
+                    "selected": null,
+                    "title": "Start Date"
+                },
+                {
+                    "selected": null,
+                    "title": "End Date"
+                },
+                {
+                    "selected": null,
+                    "title": "Contact name"
+                },
+                {
+                    "selected": null,
+                    "title": "Contact email"
+                },
+                {
+                    "selected": null,
+                    "title": "Software"
+                },
+                {
+                    "selected": null,
+                    "title": "Digital Health Interventions (associated to the Software)"
+                },
+                {
+                    "selected": null,
+                    "title": "Health Focus Areas"
+                },
+                {
+                    "selected": null,
+                    "title": "Health System Challenges"
+                },
+                {
+                    "selected": null,
+                    "title": "Health Information Systems"
+                },
+                {
+                    "selected": null,
+                    "title": "Government Contribution"
+                },
+                {
+                    "selected": null,
+                    "title": "Partners"
+                },
+                {
+                    "selected": null,
+                    "title": "Team"
+                },
+                {
+                    "selected": null,
+                    "title": "Viewers"
+                },
+                {
+                    "selected": null,
+                    "title": "Technology Deployment Date"
+                },
+                {
+                    "selected": null,
+                    "title": "Licenses"
+                },
+                {
+                    "selected": null,
+                    "title": "Link to Code documentation"
+                },
+                {
+                    "selected": null,
+                    "title": "Link to Wiki"
+                },
+                {
+                    "selected": null,
+                    "title": "Link to application"
+                },
+                {
+                    "selected": null,
+                    "title": "Interoperability Standards"
+                },
+                {
+                    "selected": null,
+                    "title": "Coverage Type"
+                },
+                {
+                    "selected": null,
+                    "title": "Health Workers"
+                },
+                {
+                    "selected": null,
+                    "title": "Clients"
+                },
+                {
+                    "selected": null,
+                    "title": "Facilities"
+                }
+            ],
+            "draft": true,
+            "rows": [
+                {
+                    "data": [
+                        {
+                            "Project Name": "MyProject",
+                            "Country": "Sierra Leone",
+                            "Investor": "Global Investor",
+                            "Organisation": "West African Health Organisation",
+                            "Geographic Scope": "Gographipc Scope Free Text",
+                            "Narrative of the project": "Narrative free text",
+                            "Start Date": 43742,
+                            "End Date": 43875,
+                            "Contact name": "Nico",
+                            "Contact email": "nico@pulilab.com",
+                            "Software": "Bamboo",
+                            "Digital Health Interventions (associated to the Software)": "3.4.1 Notify birth event, 3.4.2 Register birth event",
+                            "Health Focus Areas": "Adolescents and communicable diseases, Other sexual and reproductive health",
+                            "Health System Challenges": "1.1 Lack of population denominator,\n1.2 Delayed reporting of events",
+                            "Health Information Systems": "A. Census, population information & data warehouse, B. Civil Registration and Vital Statistics",
+                            "Government Contribution": "no they have not yet contributed",
+                            "Partners": "Partner_one, Partner two",
+                            "Team": "nico@pulilab.com, nico@pulilab.com",
+                            "Viewers": "nico@pulilab.com, nico@pulilab.com",
+                            "Technology Deployment Date": 43742,
+                            "Licenses": "Proprietary, Fremium",
+                            "Link to Code documentation": "http://www.valid.link.org",
+                            "Link to Wiki": "http://www.valid.link.org",
+                            "Link to application": "http://www.valid.link.org",
+                            "Interoperability Standards": "ADX - Aggregate Data Exchange,\nCDA - Clinical Document Architecture",
+                            "Coverage Type": "National Level",
+                            "Health Workers": 1,
+                            "Clients": 2,
+                            "Facilities": 3
+                        },
+                        {
+                            "Project Name": "MyProject2",
+                            "Country": "Hungary",
+                            "Investor": "Pulilab",
+                            "Organisation": "Uni",
+                            "Geographic Scope": "Gographipc Scope Free Text",
+                            "Narrative of the project": "Narrative free text",
+                            "Start Date": 43742,
+                            "End Date": 43875,
+                            "Contact name": "Nico",
+                            "Contact email": "nico@pulilab.com",
+                            "Software": "Bamboo",
+                            "Digital Health Interventions (associated to the Software)": "3.4.1 Notify birth event, 3.4.2 Register birth event",
+                            "Health Focus Areas": "Adolescents and communicable diseases, Other sexual and reproductive health",
+                            "Health System Challenges": "1.1 Lack of population denominator,\n1.2 Delayed reporting of events",
+                            "Health Information Systems": "A. Census, population information & data warehouse, B. Civil Registration and Vital Statistics",
+                            "Government Contribution": "no they have not yet contributed",
+                            "Partners": "Partner_one, Partner two",
+                            "Team": "nico@pulilab.com, nico@pulilab.com",
+                            "Viewers": "nico@pulilab.com, nico@pulilab.com",
+                            "Technology Deployment Date": 43742,
+                            "Licenses": "Proprietary, Fremium",
+                            "Link to Code documentation": "http://www.valid.link.org",
+                            "Link to Wiki": "http://www.valid.link.org",
+                            "Link to application": "http://www.valid.link.org",
+                            "Interoperability Standards": "ADX - Aggregate Data Exchange,\nCDA - Clinical Document Architecture",
+                            "Coverage Type": "\"Selected Country Sub Level name\"",
+                            "Health Workers": 1,
+                            "Clients": 2,
+                            "Facilities": 3
+                        }
+                    ]
+                }
+            ]
+        }
+}

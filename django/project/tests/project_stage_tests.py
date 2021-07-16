@@ -22,7 +22,7 @@ class ProjectStageTests(SetupTests):
         del data['project']['stages']
 
         # create project
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
+        url = reverse("project-create", kwargs={"country_id": self.country1.id})
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
@@ -38,7 +38,7 @@ class ProjectStageTests(SetupTests):
             }
         ]
         data['project']['stages'] = stages
-        url = reverse("project-draft", kwargs={"project_id": project_id, "country_id": self.country_id})
+        url = reverse("project-draft", kwargs={"project_id": project_id, "country_id": self.country1.id})
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
         self.assertEqual(response.json(), {'project': {'stages': [{'date': ['This field may not be null.']}]}})
@@ -63,7 +63,7 @@ class ProjectStageTests(SetupTests):
         ]
         data['project']['stages'] = stages
 
-        url = reverse("project-draft", kwargs={"project_id": project_id, "country_id": self.country_id})
+        url = reverse("project-draft", kwargs={"project_id": project_id, "country_id": self.country1.id})
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         resp_data = response.json()
@@ -72,7 +72,7 @@ class ProjectStageTests(SetupTests):
 
         # try to publish without stages
         del data['project']['stages']
-        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
+        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country1.id})
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         resp_data = response.json()
@@ -81,7 +81,7 @@ class ProjectStageTests(SetupTests):
 
         # publish with stages
         data['project']['stages'] = stages
-        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
+        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country1.id})
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         resp_data = response.json()

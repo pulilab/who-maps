@@ -1,59 +1,61 @@
 <template>
-  <div class="ImportList">
-    <el-row type="flex">
-      <el-col
-        v-if="queue && queue.length > 0"
-        :span="16"
-      >
-        <el-card class="box-card">
-          <div
-            slot="header"
-            class="clearfix"
-          >
+  <page-layout>
+    <template #title>
+      <translate>Import interface</translate>
+    </template>
+    <el-row type="flex" :gutter="17">
+      <el-col :span="14">
+        <panel v-if="queue && queue.length > 0" :wideBody="true" alignTitle="left">
+          <template #header>
             <translate>Previous imports</translate>
+          </template>
+          <div class="mb-4">
+            <import-queue :queue="queue" />
           </div>
-          <import-details
-            v-for="(item, index) in queue"
-            :key="index"
-            :item="item"
-            type="flex"
-          >
-            <el-button @click="select(item)">
-              <translate>
-                Select
-              </translate>
-            </el-button>
-          </import-details>
-        </el-card>
+        </panel>
+        <panel v-else :empty="true" alignTitle="left">
+          <template #header>
+            <translate>Previous imports (0)</translate>
+          </template>
+
+          <p>
+            <translate>No previous import(s) to show.</translate>
+          </p>
+          <p>
+            <translate>To import new data / spreadsheet please use the form on the right aside.</translate>
+          </p>
+        </panel>
       </el-col>
-      <el-col :span="8">
-        <el-card class="box-card">
-          <div
-            slot="header"
-            class="clearfix"
-          >
-            <translate>New Import</translate>
-          </div>
+      <el-col :span="10">
+        <panel alignTitle="left">
+          <template #header>
+            <translate>New import</translate>
+          </template>
           <import-file />
-        </el-card>
+        </panel>
       </el-col>
     </el-row>
-  </div>
+  </page-layout>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import PageLayout from '@/components/common/wrappers/PageLayout'
+import Panel from '@/components/common/Panel'
 import ImportFile from '@/components/admin/import/ImportFile'
-import ImportDetails from '@/components/admin/import/ImportDetails'
+import ImportQueue from '@/components/admin/import/ImportQueue'
 
 export default {
   components: {
+    PageLayout,
+    Panel,
     ImportFile,
-    ImportDetails
+    ImportQueue
   },
   async fetch ({ store }) {
     await Promise.all([
       store.dispatch('system/loadDonors'),
+      store.dispatch('system/loadUserCollections'),
       store.dispatch('countries/loadMapData'),
       store.dispatch('admin/import/loadQueue'),
       store.dispatch('projects/loadProjectStructure'),
@@ -68,7 +70,6 @@ export default {
       dhi: 'projects/getDigitalHealthInterventions'
     })
   },
-
   methods: {
     async select ({ id }) {
       this.$nuxt.$loading.start()
@@ -85,10 +86,8 @@ export default {
 }
 </script>
 
-<style lang="less">
-.ImportList {
-  .box-card {
-    margin: 12px;
-  }
+<style lang="less" scoped>
+.empty-message {
+  margin: 30px 40px;
 }
 </style>

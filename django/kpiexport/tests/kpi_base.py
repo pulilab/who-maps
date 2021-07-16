@@ -1,22 +1,17 @@
-from rest_framework.test import APIClient
-from rest_framework.reverse import reverse
-
-from core.factories import OrganisationFactory, DonorFactory, UserProfileFactory
-from country.models import Country
-from user.models import UserProfile, Organisation
-from project.models import Project, ProjectVersion
+from core.factories import UserProfileFactory
+from user.models import UserProfile
+from project.models import ProjectVersion
 
 from datetime import datetime, date, timedelta
 
-from allauth.account.models import EmailConfirmation
 from django.utils.timezone import localtime
 from kpiexport.tasks import update_auditlog_user_data_task, update_auditlog_token_data_task, \
     update_auditlog_project_status_data_task, update_auditlog_project_stages_data_task
 from rest_framework.authtoken.models import Token
-from rest_framework import status
+from project.tests.setup import TestData
 
 
-class KPITestData:
+class KPITestData(TestData):
     """
     Base class for User KPI tests. In setUp, it creates:
     - 5 test user profiles with different countries and investors
@@ -24,9 +19,9 @@ class KPITestData:
     - 2 donors
     - Tokens for all users
     """
+
     def setUp(self):
-        self.create_base_info()
-        self.create_countries()
+        super(KPITestData, self).setUp()
         self.create_anchor_dates()
         self.create_users()
 
@@ -35,28 +30,6 @@ class KPITestData:
             update_auditlog_user_data_task(generate_date)
             update_auditlog_token_data_task(generate_date)
             generate_date = generate_date + timedelta(days=1)
-
-    def create_base_info(self):
-        """
-        Create organisation and donors
-        """
-        self.org = OrganisationFactory(name="org1")
-        self.d1 = DonorFactory(name="Donor1", code="donor1")
-        self.d2 = DonorFactory(name="Donor2", code="donor2")
-
-    def create_countries(self):
-        """
-        Create countries
-        """
-        self.country_global, _ = Country.objects.get_or_create(name="Global")
-        self.country1, _ = Country.objects.get_or_create(name="kpi_country_1",
-                                                         defaults={"code": "CTR1",
-                                                                   "project_approval": False,
-                                                                   "region": Country.REGIONS[0][0]})
-        self.country2, _ = Country.objects.get_or_create(name="kpi_country_2",
-                                                         defaults={"code": "CTR2",
-                                                                   "project_approval": True,
-                                                                   "region": Country.REGIONS[0][0]})
 
     def create_anchor_dates(self):
         self.date_1 = localtime() - timedelta(days=120)
@@ -76,7 +49,8 @@ class KPITestData:
         """
         Creates users, profiles, tokens
         """
-        self.userprofile_1, self.test_user_key, self.client = self.create_user(org=self.org, country=self.country1)
+        self.userprofile_1, self.test_user_key, self.test_user_client = self.create_user(org=self.org,
+                                                                                         country=self.country1)
         self.userprofile_1.donor = self.d1
         self.userprofile_1.save()
         self.userprofile_2 = UserProfileFactory(name="USER2", account_type=UserProfile.IMPLEMENTER,
@@ -133,59 +107,6 @@ class KPITestData:
         self.token_6.created = self.date_2
         self.token_6.save()
 
-    def create_user(self, user_email="test_user@gmail.com", user_password_1="123456hetNYOLC",
-                    user_password_2="123456hetNYOLC", org: Organisation = None, country: Country = None):
-        """
-        Create a test user with profile.
-        """
-        if org is None:  # pragma: no cover
-            org = self.org
-        if country is None:  # pragma: no cover
-            country = self.country
-
-        url = reverse("rest_register")
-        data = {
-            "email": user_email,
-            "password1": user_password_1,
-            "password2": user_password_2}
-
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 201, response.json())
-
-        # Validate the account.
-        key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
-        url = reverse("rest_verify_email")
-        data = {
-            "key": key,
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200, response.json())
-
-        # Log in the user.
-        url = reverse("api_token_auth")
-        data = {
-            "username": "test_user@gmail.com",
-            "password": "123456hetNYOLC"}
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200, response.json())
-        test_user_key = response.json().get("token")
-        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
-        user_profile_id = response.json().get('user_profile_id')
-
-        # Update profile
-        url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
-        data = {
-            "name": "Test Name",
-            "organisation": org.pk,
-            "country": country.pk}
-        response = test_user_client.put(url, data, format='json')
-        self.assertEqual(response.status_code, 200, response.json())
-
-        userprofile = UserProfile.objects.get(id=user_profile_id)
-        country.users.add(userprofile)
-
-        return userprofile, test_user_key, test_user_client
-
 
 class KPITestDataWithProjects(KPITestData):
     def setUp(self):
@@ -221,7 +142,6 @@ class KPITestDataWithProjects(KPITestData):
             project = self.create_draft_project(project_data)
             if i % 2 == 0 and len(donors) > 0:
                 self.publish_project(project.id, project_data)
-
         for project in self.projects:
             versions = ProjectVersion.objects.filter(project=project)
             if len(versions) == 2:
@@ -242,71 +162,3 @@ class KPITestDataWithProjects(KPITestData):
             update_auditlog_project_status_data_task(generate_date)
             update_auditlog_project_stages_data_task(generate_date)
             generate_date = generate_date + timedelta(days=1)
-
-    @staticmethod
-    def generate_project_data(project_name, organisation, country, donors, date=datetime.today().date(), stages=None):
-        if not stages:
-            stages = [
-                dict(id=1, date=str(date), note="stage 1 note"),
-                dict(id=2, date=str(date), note="stage 2 note")
-            ]
-        return dict(
-            project=dict(
-                date=date,
-                name=project_name,
-                organisation=organisation.id,
-                contact_name='name1',
-                contact_email='a@a.com',
-                implementation_overview='overview',
-                implementation_dates='2016',
-                health_focus_areas=[1, 2],
-                geographic_scope="somewhere",
-                country=country.id,
-                platforms=[dict(id=1, strategies=[1, 2]), dict(id=2, strategies=[1, 9])],
-                licenses=[1, 2],
-                coverage=[
-                    dict(district='dist1', clients=20, health_workers=5, facilities=4),
-                    dict(district='dist2', clients=10, health_workers=2, facilities=8)
-                ],
-                coverage_second_level=[
-                    dict(district='ward1', clients=209, health_workers=59, facilities=49),
-                    dict(district='ward2', clients=109, health_workers=29, facilities=89)
-                ],
-                national_level_deployment=dict(
-                    clients=20000, health_workers=0, facilities=0,
-                    facilities_list=['facility1', 'facility2', 'facility3']
-                ),
-                donors=donors,
-                his_bucket=[1, 2],
-                hsc_challenges=[1, 2],
-                government_investor=0,
-                implementing_partners=['partner1', 'partner2'],
-                repository='http://some.repo',
-                mobile_application='http://mobile.app.org',
-                wiki='http://wiki.org',
-                interoperability_link=[
-                    dict(id=1, selected=True, link='http://blabla.com'),
-                    dict(id=2, selected=True),
-                    dict(id=3, selected=True, link='http://example.org'),
-                ],
-                interoperability_standards=[1],
-                start_date=date,
-                end_date=date,
-                stages=stages,
-            )
-        )
-
-    def create_draft_project(self, project_data):
-        url = reverse("project-create", kwargs={"country_id": project_data['project']['country']})
-        response = self.client.post(url, project_data, format="json")
-        self.assertEqual(response.status_code, 201)
-        self.assertFalse(response.json()['public_id'])
-        project = Project.objects.get(id=response.json()['id'])
-        self.projects.append(project)
-        return project
-
-    def publish_project(self, project_id, project_data):
-        url = reverse("project-publish", kwargs={"project_id": project_id,
-                                                 "country_id": project_data['project']['country']})
-        response = self.client.put(url, project_data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())

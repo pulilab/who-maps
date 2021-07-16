@@ -1,12 +1,10 @@
 <template>
-  <div class="CountryAdmin">
-    <div class="PageTitle">
-      <h2>
-        <translate :parameters="{ name: country.name }">
-          Country admin for {name}
-        </translate>
-      </h2>
-    </div>
+  <page-layout class="CountryAdmin">
+    <template #title>
+      <translate :parameters="{ name: country.name }">
+        Country admin for {name}
+      </translate>
+    </template>
 
     <collapsible-card
       :title="$gettext('Country information') | translate"
@@ -531,11 +529,12 @@
         </el-button>
       </el-row>
     </div>
-  </div>
+  </page-layout>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import PageLayout from '@/components/common/wrappers/PageLayout'
 import CollapsibleCard from '../project/CollapsibleCard'
 import VueMapCustomizer from '../admin/VueMapCustomizer'
 import DhaQuestionaire from '../admin/DhaQuestionaire'
@@ -550,6 +549,7 @@ export default {
   name: 'CountryAdministrator',
 
   components: {
+    PageLayout,
     CollapsibleCard,
     VueMapCustomizer,
     DhaQuestionaire,
@@ -1022,13 +1022,11 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "~assets/style/variables.less";
 @import "~assets/style/mixins.less";
 
 .CountryAdmin {
-  margin-bottom: 60px;
-
   .RoadmapDocuments {
     .el-form .el-form-item {
       margin-bottom: 20px;

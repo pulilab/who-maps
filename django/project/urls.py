@@ -7,6 +7,7 @@ router = DefaultRouter()
 router.register('import', views.ProjectImportV2ViewSet)
 router.register('import-row', views.ImportRowViewSet)
 router.register('software', views.TechnologyPlatformRequestViewSet)
+router.register('collections', views.CollectionViewSet, basename='collection')
 
 urlpatterns = [
     path("projects/", include(router.urls)),
@@ -110,5 +111,8 @@ urlpatterns = [
          view=views.ProjectRetrieveViewSet.as_view({
              'get': 'retrieve',
          }),
-         name="project-retrieve")
+         name="project-retrieve"),
+    path("projects/collection/my-collections/",
+         view=views.CollectionListView.as_view(),
+         name='my-collections')
 ]

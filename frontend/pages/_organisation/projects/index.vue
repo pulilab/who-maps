@@ -1,5 +1,5 @@
 <template>
-  <project-layout>
+  <page-layout>
     <template #title>
       <translate>My Projects</translate>
     </template>
@@ -19,16 +19,16 @@
       &nbsp;<translate>of.</translate>
     </template>
     <user-project-list />
-  </project-layout>
+  </page-layout>
 </template>
 
 <script>
 import UserProjectList from '@/components/common/UserProjectsList'
-import ProjectLayout from '@/components/project/wrappers/ProjectLayout'
+import PageLayout from '@/components/common/wrappers/PageLayout'
 export default {
   components: {
     UserProjectList,
-    ProjectLayout
+    PageLayout
   },
   middleware: ['isLoggedIn'],
   async fetch ({ store }) {

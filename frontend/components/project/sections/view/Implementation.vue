@@ -138,44 +138,51 @@ export default {
   },
   methods: {
     handleDhiList (platforms, interventions) {
-      return platforms.map(platform => ({
-        name: this.getPlatforms.find(p => p.id === platform).name,
-        categories: interventions
-          .filter(i => i.platform === platform)
-          .map(i => this.getDhi(i.id))
-      }))
+      return platforms.map(platform => {
+        if (this.getPlatforms) {
+          return {
+            name: this.getPlatforms.find(p => p.id === platform)?.name,
+            categories: interventions
+              .filter(i => i.platform === platform)
+              .map(i => this.getDhi(i.id))
+          }
+        }
+        return []
+      })
     },
     handleRows (coverage, data, country = this.country) {
       let rows = []
-      for (const [key, value] of Object.entries(data)) {
-        if (coverage.includes(key)) {
-          rows = [
-            ...rows,
-            {
-              id: key,
-              name: country.districts.find(i => i.id === key).name,
-              cols: [
-                {
-                  id: 1,
-                  header: this.$gettext('# Health Workers'),
-                  content: value.health_workers,
-                  span: 8
-                },
-                {
-                  id: 2,
-                  header: this.$gettext('# Facilities'),
-                  content: value.facilities,
-                  span: 8
-                },
-                {
-                  id: 3,
-                  header: this.$gettext('# Clients'),
-                  content: value.clients,
-                  span: 8
-                }
-              ]
-            }
-          ]
+      if (!isEmpty(data) && data !== undefined) {
+        for (const [key, value] of Object.entries(data)) {
+          if (coverage.includes(key)) {
+            rows = [
+              ...rows,
+              {
+                id: key,
+                name: country.districts.find(i => i.id === key).name,
+                cols: [
+                  {
+                    id: 1,
+                    header: this.$gettext('# Health Workers'),
+                    content: value.health_workers,
+                    span: 8
+                  },
+                  {
+                    id: 2,
+                    header: this.$gettext('# Facilities'),
+                    content: value.facilities,
+                    span: 8
+                  },
+                  {
+                    id: 3,
+                    header: this.$gettext('# Clients'),
+                    content: value.clients,
+                    span: 8
+                  }
+                ]
+              }
+            ]
+          }
         }
       }
       return rows

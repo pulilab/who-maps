@@ -472,8 +472,9 @@ SWAGGER_SETTINGS = {
             'name': 'Authorization',
             'in': 'header',
             'description': 'authorization: Bearer XXXXXXXXXXXXXXXXXXX'
-        }
-    }
+        },
+    },
+    'SECURITY_REQUIREMENTS': [{'Bearer': []}]
 }
 
 """

@@ -131,7 +131,7 @@ class PermissionTests(SetupTests):
         data = {
             "name": "Test Name 2",
             "organisation": org.id,
-            "country": self.country_id}
+            "country": self.country1.id}
         response = test_user_client.put(url, data, format="json")
 
         user_profile_id = response.json()['id']
@@ -178,7 +178,7 @@ class PermissionTests(SetupTests):
         data = {
             "name": "Test Name 2",
             "organisation": org.id,
-            "country": self.country_id}
+            "country": self.country1.id}
         response = test_user_client.put(url, data, format="json")
         user_profile_id = response.json()['id']
 
@@ -258,14 +258,14 @@ class PermissionTests(SetupTests):
         data['project'].update({"name": "Test private"})
 
         # Create project draft
-        url = reverse("project-create", kwargs={"country_id": self.country_id})
+        url = reverse("project-create", kwargs={"country_id": self.country1.id})
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201, response.json())
 
         project_id = response.json().get("id")
 
         # Publish
-        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country_id})
+        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country1.id})
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
 

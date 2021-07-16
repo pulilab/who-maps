@@ -1,14 +1,19 @@
 <template>
-  <div class="ProfilePage">
+  <page-layout>
+    <template #title>
+      <translate>Edit my profile</translate>
+    </template>
     <edit-profile />
-  </div>
+  </page-layout>
 </template>
 
 <script>
+import PageLayout from '@/components/common/wrappers/PageLayout'
 import EditProfile from '../../components/EditProfile.vue'
 
 export default {
   components: {
+    PageLayout,
     EditProfile
   },
   async fetch ({ store, query, redirect }) {

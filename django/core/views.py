@@ -7,11 +7,10 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from project.permissions import InTeamOrReadOnly
+from project.permissions import InTeamOrReadOnly, InTeamOrCollectionOwnerOrReadOnly, CollectionOwnerOrReadOnly
 from project.models import Project
 from country.models import Country
 from user.authentication import BearerTokenAuthentication
-
 from .data.landing_page_defaults import LANDING_PAGE_DEFAULTS
 from .data.domains import AXIS, DOMAINS
 from .data.search_filters import SEARCH_FILTERS
@@ -33,6 +32,21 @@ class TokenAuthMixin(object):
 class TeamTokenAuthMixin(object):
     authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, InTeamOrReadOnly)
+
+
+class TeamCollectionTokenAuthMixin(object):
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    permission_classes = (IsAuthenticated, InTeamOrCollectionOwnerOrReadOnly)
+
+
+class CollectionTokenAuthMixin(object):
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    permission_classes = (CollectionOwnerOrReadOnly,)
+
+
+class CollectionAuthenticatedMixin(object):
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    permission_classes = (IsAuthenticated, CollectionOwnerOrReadOnly)
 
 
 class CheckProjectAccessMixin(object):

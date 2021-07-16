@@ -23,7 +23,7 @@ class ProjectNotificationTests(SetupTests):
         self.profile_2 = UserProfileFactory(user=self.user_2)
 
         self.published_pr_data = dict(
-            country=self.country.id,
+            country=self.country1.id,
             organisation=self.org.id, hsc_challenges=[1, 2], platforms=[{'id': 1, 'strategies': [1, 2]}],
             capability_categories=[], capability_levels=[], capability_subcategories=[])
 
@@ -31,8 +31,8 @@ class ProjectNotificationTests(SetupTests):
     def test_send_no_country_question_answers_reminder(self, send_mail_wrapper):
         Project.objects.all().delete()
 
-        ccq_1 = CountryCustomQuestionFactory(question="question 1", required=True, country=self.country)
-        ccq_2 = CountryCustomQuestionFactory(question="question 2", required=True, country=self.country)
+        ccq_1 = CountryCustomQuestionFactory(question="question 1", required=True, country=self.country1)
+        ccq_2 = CountryCustomQuestionFactory(question="question 2", required=True, country=self.country1)
 
         # task shouldn't pick up this because it is a draft
         draft_project = Project.objects.create(name='Draft project', public_id='')
@@ -45,7 +45,7 @@ class ProjectNotificationTests(SetupTests):
 
         # task shouldn't pick up this, because it belongs to another country which has no questions
         data = copy.deepcopy(self.published_pr_data)
-        data['country'] = Country.objects.exclude(id=self.country_id).first().id
+        data['country'] = Country.objects.exclude(id=self.country1.id).first().id
         published_pr_2 = Project.objects.create(
             name='Published project 2', data=data, public_id='2222')
         published_pr_2.team.add(self.profile_1)
@@ -108,8 +108,8 @@ class ProjectNotificationTests(SetupTests):
     def test_send_not_every_required_country_question_has_answer_reminder(self, send_mail_wrapper):
         Project.objects.all().delete()
 
-        ccq_1 = CountryCustomQuestionFactory(question="required question", required=True, country=self.country)
-        ccq_2 = CountryCustomQuestionFactory(question="optional question", required=False, country=self.country)
+        ccq_1 = CountryCustomQuestionFactory(question="required question", required=True, country=self.country1)
+        ccq_2 = CountryCustomQuestionFactory(question="optional question", required=False, country=self.country1)
 
         # task shouldn't pick up this because it is a draft
         draft_project = Project.objects.create(name='Draft project', public_id='')
@@ -117,7 +117,7 @@ class ProjectNotificationTests(SetupTests):
 
         # task shouldn't pick up this, because it belongs to another country which has no questions
         data = copy.deepcopy(self.published_pr_data)
-        data['country'] = Country.objects.exclude(id=self.country_id).first().id
+        data['country'] = Country.objects.exclude(id=self.country1.id).first().id
         published_pr_1 = Project.objects.create(
             name='Published project 1', data=data, public_id='1111')
         published_pr_1.team.add(self.profile_1)

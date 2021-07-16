@@ -118,8 +118,8 @@
                 ><translate>http://creativecommons.org/licenses/by/3.0/igo/legalcode</translate></a
               ><translate>
               , which permits unrestricted use, distribution and reproduction
-              in any medium, provided the original work is properly cited.</translate>
-            </translate>
+              in any medium, provided the original work is properly cited.
+              </translate>
           </p>
           <h4>
             <translate>4. Maps</translate>
@@ -430,8 +430,7 @@
             </translate>
           </p>
           <p>
-            <b><translate>Email:</translate></b
-            >&nbsp;<a href="mailto:digital-health-atlas@who.int">
+            <b><translate>Email:</translate></b>&nbsp;<a href="mailto:digital-health-atlas@who.int">
               digital-health-atlas@who.int
             </a>
           </p>
@@ -444,11 +443,11 @@
 <script>
 export default {
   methods: {
-    goBack() {
-      this.$router.go(-1);
+    goBack () {
+      this.$router.go(-1)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

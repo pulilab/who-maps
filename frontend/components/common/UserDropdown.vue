@@ -91,6 +91,21 @@
         </div>
 
         <div
+          v-if="isSuperUser"
+          class="DropdownLink"
+        >
+          <nuxt-link
+            :to="localePath({name: 'organisation-graphs', params: $route.params})"
+            @click.native="closePopover"
+          >
+            <span class="MenuIcon">
+              <fa icon="chart-bar" />
+            </span>
+            <translate>KPI Graphs</translate>
+          </nuxt-link>
+        </div>
+
+        <div
           class="DropdownLink"
         >
           <nuxt-link

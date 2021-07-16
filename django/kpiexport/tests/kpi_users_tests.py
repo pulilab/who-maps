@@ -7,7 +7,7 @@ class KPIUserTests(KPITestData, APITestCase):
 
     def test_user_kpi_nofilter(self):
         url = reverse("user-kpi")
-        response = self.client.get(url)
+        response = self.test_user_client.get(url)
         expected = \
             [{'active': 0,
               'data': {'total': {'G': {'active': 0, 'registered': 1},
@@ -37,7 +37,7 @@ class KPIUserTests(KPITestData, APITestCase):
     def test_user_kpi_country_filter(self):
         url = reverse("user-kpi")
         url += f'?country={self.country2.id}'
-        response = self.client.get(url)
+        response = self.test_user_client.get(url)
         expected = \
             [{'active': 0,
               'country': self.country2.id,
@@ -67,7 +67,7 @@ class KPIUserTests(KPITestData, APITestCase):
     def test_user_kpi_investor_filter(self):
         url = reverse("user-kpi")
         url += f'?investor={self.d1.id}'
-        response = self.client.get(url)
+        response = self.test_user_client.get(url)
         expected = \
             [{'active': 0,
               'country': None,
@@ -97,7 +97,7 @@ class KPIUserTests(KPITestData, APITestCase):
 
         url = reverse("user-kpi")
         url += f'?investor={self.d2.id}'
-        response = self.client.get(url)
+        response = self.test_user_client.get(url)
         expected = \
             [{'active': 0,
               'country': None,
@@ -145,7 +145,7 @@ class KPIUserTests(KPITestData, APITestCase):
     def test_user_kpi_time_filter(self):
         url = reverse("user-kpi")
         url += f'?from={self.date_2.year}-{self.date_2.month}&to={self.date_3.year}-{self.date_3.month}'
-        response = self.client.get(url)
+        response = self.test_user_client.get(url)
         expected = \
             [{'active': 0,
               'country': None,
@@ -164,7 +164,7 @@ class KPIUserTests(KPITestData, APITestCase):
         url = reverse("user-kpi")
         url += f'?from={self.date_2.year}-{self.date_2.month}&to={self.date_3.year}-{self.date_3.month}' \
                f'&country={self.country2.id}'
-        response = self.client.get(url)
+        response = self.test_user_client.get(url)
         expected = \
             [{'active': 0,
               'country': self.country2.id,
@@ -183,7 +183,7 @@ class KPIUserTests(KPITestData, APITestCase):
     def test_user_kpi_detailed(self):
         url = reverse("user-kpi")
         url += '?detailed=true'
-        response = self.client.get(url)
+        response = self.test_user_client.get(url)
         expected = \
             [{'active': 0,
               'country': None,
