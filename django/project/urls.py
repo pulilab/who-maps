@@ -120,5 +120,11 @@ urlpatterns = [
          name='is-collection-data-available'),
     path("projects/import/add-me/<str:collection_url>/<int:pk>/",
          view=views.ProjectGroupAddmeViewSet.as_view({'put': 'update'}),
-         name='add-me-as-editor')
+         name='add-me-as-editor'),
+    path("projects/collection/<str:collection_url>/project-list/",
+         view=views.ProjectsInCollectionViewSet.as_view({'get': 'list'}),
+         name='collection-project-list'),
+    path("projects/import/<int:pk>/project-list/",
+         view=views.ProjectsInProjectImportViewSet.as_view({'get': 'list'}),
+         name='projectimport-project-list'),
 ]
