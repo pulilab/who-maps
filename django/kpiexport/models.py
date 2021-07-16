@@ -138,3 +138,37 @@ class AuditLogProjectStatus(AuditLogBase):
     def __str__(self):  # pragma: no cover
         return f'{self.date.year}-{self.date.month}-{self.country} - P: {self.published}, ' \
                f'RP: {self.ready_to_publish}, U: {self.unpublished}, TD: {self.to_delete}, G:{self.growth}'
+
+
+class AuditLogProjectStages(AuditLogBase):
+    """
+    AuditLog model tracking the project stages KPI in the DB
+    Calculation for this KPI is "simple"; the number of projects which are currently IN the selected stage
+    is tracked.
+
+    `stages` are saved in a JSONField for the non-donor-dependend values too, as the number of stages is subject
+    to change.
+
+    data format:
+      {
+        "<investor_id_1>":
+          {
+            <stage_id>: {(int)},
+            <stage_id>: {(int)},
+          },
+        "<investor_id_2>":
+          {
+            <stage_id>: {(int)},
+            <stage_id>: {(int)},
+          },
+      }
+    """
+
+    stages = JSONField(blank=True, default=dict)  # JSONField containing data on a per-investor basis
+
+    class Meta:
+        verbose_name = "Project Stages KPI"
+        verbose_name_plural = "Project Stages KPIs"
+
+    def __str__(self):  # pragma: no cover
+        return f'{self.date.year}-{self.date.month}-{self.country} - Stages: {self.stages}, '
