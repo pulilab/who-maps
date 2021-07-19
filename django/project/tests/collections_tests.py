@@ -352,9 +352,20 @@ class CollectionsTests(SetupTests):
         url = reverse('collection-project-list', kwargs={'collection_url': collections[0].url})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), [{'id': project.id, 'public_id': '', 'published': {}, 'draft': {}}])
+        expected_response = {
+            'name': 'Projects about ponies',
+            'url': collections[0].url,
+            'projects': [{'id': project.id, 'team': [{'name': 'Test Name', 'email': 'test_user@gmail.com',
+                                                      'id': self.test_user.userprofile.id}],
+                          'published': False, 'data': {}}]
+        }
+        self.assertEqual(response.json(), expected_response)
         pimport = ProjectImportV2.objects.get(collection=collections[0])
         url = reverse('projectimport-project-list', kwargs={'pk': pimport.id})
         response = self.test_user_client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), [{'id': project.id, 'public_id': '', 'published': {}, 'draft': {}}])
+        expected_response = [{'id': project.id,
+                              'team': [{'name': 'Test Name', 'email': 'test_user@gmail.com',
+                                        'id': self.test_user.userprofile.id}],
+                              'published': False, 'data': {}}]
+        self.assertEqual(response.json(), expected_response)
