@@ -643,6 +643,11 @@ class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin,
 
     # TODO: NEEDS COVER
     def get_queryset(self):  # pragma: no cover
+        if getattr(self, "swagger_fake_view", False):
+            # queryset just for schema generation metadata
+            # as per https://github.com/axnsan12/drf-yasg/issues/333#issuecomment-474883875
+            return ProjectImportV2.objects.none()
+
         return ProjectImportV2.objects.filter(user=self.request.user)
 
 
@@ -652,6 +657,10 @@ class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, Gene
 
     # TODO: NEEDS COVER
     def get_queryset(self):  # pragma: no cover
+        if getattr(self, "swagger_fake_view", False):
+            # queryset just for schema generation metadata
+            # as per https://github.com/axnsan12/drf-yasg/issues/333#issuecomment-474883875
+            return ImportRow.objects.none()
         return ImportRow.objects.filter(parent__user=self.request.user)
 
 
@@ -706,13 +715,6 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
     def create(self, request, *args, **kwargs):
         """
         Create a collection object.
-        required parameters
-        - name: name of collection
-
-        - add_me_as_editor: specify if user should be added to imported projects as editor
-
-        - project_import: project import obj.
-
         """
         data = request.data
         self._check_parameters(data)
@@ -756,13 +758,10 @@ class CollectionListView(CollectionAuthenticatedMixin, APIView):
 
     * Requires authenticated user
     """
-    """
-    View to list all users in the system.
-
-    * Requires token authentication.
-    * Only admin users are able to access this view.
-    """
-
+    @swagger_auto_schema(
+        security=[{'Token': []}],
+        responses={201: CollectionInputSerializer(many=True), 403: "Unauthorized"}
+    )
     def get(self, request, format=None):
         """
         Return a list of the user's collections.

@@ -75,6 +75,13 @@ class TokenTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['user'], self.user_1_id)
         self.assertEqual(response.json()['key'], token_key)
+        # Validate the received token
+        key = response.json()['key']
+        client = APIClient(HTTP_AUTHORIZATION=f"Bearer {key}", format="json")
+        url = reverse('token-check')
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['key'], key)
         tokens = Token.objects.filter(user__id=self.user_1_id)
         self.assertEqual(tokens.count(), 1)  # Exactly one token per user
         self.assertEqual(tokens[0].key, token_key)

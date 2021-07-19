@@ -13,6 +13,10 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from who_maps.throttle import ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from user.authentication import BearerTokenAuthentication
 
 
 class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
@@ -23,6 +27,10 @@ class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, G
         """
         Custom function to update the user's last_login_date data
         """
+        if getattr(self, "swagger_fake_view", False):  # pragma: no cover
+            # object just for schema generation metadata (when there are no kwargs)
+            # as per https://github.com/axnsan12/drf-yasg/issues/333#issuecomment-474883875
+            return None
         if self.request.user and self.request.user.id:
             User.objects.filter(id=self.request.user.id).update(last_login=timezone.now())
         return super().get_object()
@@ -43,6 +51,11 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
         Retrieves Organisation objects, filtered by search term if present,
         for autocomplete of organisation fields.
         """
+        if getattr(self, "swagger_fake_view", False):  # pragma: no cover
+            # queryset just for schema generation metadata
+            # as per https://github.com/axnsan12/drf-yasg/issues/333#issuecomment-474883875
+            return Organisation.objects.none()
+
         search_term = self.request.query_params.get("name")
         if search_term:
             return Organisation.objects.filter(name__contains=search_term)
@@ -112,3 +125,22 @@ class TokenViewSet(JSONWebTokenAuthentication, ViewSet):
         instance = get_object_or_404(Token, user=request.user)
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TokenCheckView(APIView):
+    """
+    APIView to check if token information is valid
+    """
+    authentication_classes = (BearerTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = [ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle]
+
+    @swagger_auto_schema(
+        operation_id="token_validate",
+        security=[{'Bearer': []}],
+        responses={200: TokenSerializer, 403: "Unauthorized", 404: "Not found"}
+        )
+    def get(self, request, *args, **kwargs):
+        token = get_object_or_404(Token, user=request.user)
+        serializer = TokenSerializer(token)
+        return Response(serializer.data)

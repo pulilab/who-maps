@@ -92,6 +92,11 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
             return ListResultSerializer
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):  # pragma: no cover
+            # queryset just for schema generation metadata
+            # as per https://github.com/axnsan12/drf-yasg/issues/333#issuecomment-474883875
+            return ProjectSearch.objects.none()
+
         return ProjectSearch.objects.exclude(project__public_id='')\
             .select_related('project', 'project__approval', 'organisation', 'country', 'donor')
 
