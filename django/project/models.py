@@ -154,6 +154,12 @@ class Project(SoftDeleteModel, ExtendedModel):
     def to_response_dict(self, published, draft):
         return dict(id=self.pk, public_id=self.public_id, published=published, draft=draft)
 
+    def to_project_import_table_dict(self, published_data, draft_data):
+        published = True if self.public_id != "" else False
+        data = published_data if published else draft_data
+        team = [{'name': u.name, 'email': u.user.email, 'id': u.id} for u in self.team.all()]
+        return dict(id=self.pk, team=team, published=published, data=data)
+
     def generate_hash_id(self):
         hash_id = Hashids(min_length=8)
         return hash_id.encode(self.pk)
