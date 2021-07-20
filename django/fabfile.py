@@ -108,7 +108,8 @@ def deploy(tag=None):
             run('git checkout %s' % env.branch)
             run('git pull origin %s' % env.branch)
         time.sleep(10)
-        run('touch {}/.env'.format(env.project_root))
+        run('[ -f {}/.env ] || echo "DEPLOY_VERSION=0.0.0" > {}/.env'.format(env.project_root, env.project_root))
+        # UNHANDLED: if file exists but is incorrect
         version = run('git describe --tags --always')
         run('sed -i "s/DEPLOY_VERSION=.*/DEPLOY_VERSION={}/g" {}/.env'
             .format(version, env.project_root))
