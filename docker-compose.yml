@@ -5,7 +5,7 @@ services:
     restart: always
     build: ./django
     environment:
-      - DEPLOY_VERSION=${REPO_VERSION}
+      - DEPLOY_VERSION=${DEPLOY_VERSION}
     expose:
       - "8000"
     links:
