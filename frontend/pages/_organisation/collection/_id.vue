@@ -12,7 +12,6 @@ export default {
     Collection
   },
   async asyncData ({ params, store }) {
-    console.log('loading collection')
     await store.dispatch('admin/import/loadCollection', params.id)
   }
 }
