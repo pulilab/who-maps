@@ -25,61 +25,7 @@ export const getters = {
           organization: state.organizations.find(o => o.id === parseInt(p.data.organisation)),
           team: p.team
         }
-      }),
-      projectsExample: [
-        {
-          id: 1,
-          status: 'draft',
-          team: ['john.doe@unicef.org', 'zoltan@pulilab.com', 'ulrichj1980@organization.org'],
-          name: 'Project Title ABC 2020',
-          country: {
-            id: 33,
-            code: 'AF',
-            name: 'Afghanistan'
-          },
-          investor: 'Aga Khan Foundation Canada',
-          organization: 'ICT4HEALTH (HSDF)'
-        },
-        {
-          id: 2,
-          status: 'published',
-          team: ['rachel.powers@kncvtbc.org', 'noob@pulilab.com'],
-          name: '99DOTS as a platform for quality TB treatment by private providers in the Philippines',
-          country: {
-            id: 76,
-            code: 'VE',
-            name: 'Venezuela, Bolivarian Republic of'
-          },
-          investor: 'Innovationsausschusses beim Gemeinsamen Bundesausschuss (G-BA)',
-          organization: 'ICT4HEALTH (HSDF)'
-        },
-        {
-          id: 3,
-          status: 'draft',
-          team: ['zoltan@pulilab.com', 'noob@pulilab.com'],
-          name: 'Healthy Life Vaccination Registry',
-          country: {
-            id: 18,
-            code: 'SL',
-            name: 'Sierra Leone'
-          },
-          investor: 'Clinical Informatics Research Unit, University of Southampton',
-          organization: 'Vaccination Initiatives Global'
-        },
-        {
-          id: 4,
-          status: 'draft',
-          team: [],
-          name: 'Healthy Life Vaccination Registry',
-          country: {
-            id: 18,
-            code: 'SL',
-            name: 'Sierra Leone'
-          },
-          investor: 'Clinical Informatics Research Unit, University of Southampton',
-          organization: 'Vaccination Initiatives Global'
-        }
-      ]
+      })
     }
     return collection
   }
