@@ -1,16 +1,11 @@
 <template>
   <div>
-    <div
-      v-if="errors"
-      class="GlobalErrors"
-    >
-      <el-tag
-        v-for="error in errors"
-        :key="error"
-        type="danger"
-      >
+    <div v-if="errors" class="GlobalErrors">
+      <el-tag v-for="error in errors" :key="error" type="danger">
         <fa icon="exclamation" />
-        {{ error }}
+        <translate :parameters="{ column: error }">
+          Please select the "{column}" column
+        </translate>
       </el-tag>
     </div>
     <slot
@@ -54,9 +49,9 @@ export default {
       return {
         ...rules,
         team: undefined,
-        viewers: undefined,
-        country: undefined,
-        donors: undefined
+        viewers: undefined
+        // country: undefined,
+        // donors: undefined
       }
     },
     nameMapping () {
@@ -75,7 +70,8 @@ export default {
       draftRequireds.forEach(dr => {
         if (!this.headers.some(h => h.selected === dr)) {
           const name = this.nameMapping[dr] || dr
-          result.push(`Please select ${name} column`)
+          // result.push(`Please select ${name} column`)
+          result.push(name)
         }
       })
       return result
@@ -85,6 +81,16 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+  .GlobalErrors {
+    // padding: 20px;
 
+    .el-tag {
+      margin: 0 10px 10px 0px;
+
+      .svg-inline--fa {
+        margin-right: 3px;
+      }
+    }
+  }
 </style>

@@ -1,10 +1,16 @@
 <template>
   <table class="queue-table">
     <thead>
-      <th><translate>Sheet Name</translate></th>
-      <th><translate>File Name</translate></th>
       <th>
-        <div class="flex">
+        <div>
+          <translate>File Name</translate>
+        </div>
+        <div>
+          <translate>Sheet Name</translate>
+        </div>
+      </th>
+      <th colspan="2">
+        <div class="wrapper">
           <translate>Collection Name & URL</translate>
           <div class="search">
             <el-input clearable debounce prefix-icon="el-icon-search" placeholder="search" v-model="search" />
@@ -14,36 +20,64 @@
     </thead>
     <tbody>
       <tr v-for="importItem in filteredQueue" :key="importItem.id">
-        <td><strong>{{ importItem.sheet_name }}</strong></td>
         <td>
-          <div class="flex align-items-center">
+          <div class="file">
             <fa :icon="['far', 'file-excel']" class="excel" />
-            {{ importItem.filename }}
+            <div class="import-info">
+              <strong>{{ importItem.filename }}</strong>
+              {{ importItem.sheet_name }}
+            </div>
           </div>
         </td>
         <td>
-          <div class="flex">
-            <div v-if="importItem.collection" class="wrapper">
-              <div>{{ importItem.collection.name }}</div>
-              <nuxt-link :to="`http://whomaps.com/collections/${importItem.collection.url}`">
-                {{`http://whomaps.com/collections/${importItem.collection.url}`}}
-              </nuxt-link>
-              <!-- <div><a href="http://whomaps.com/collections/FGHtzu67">http://whomaps.com/collections/FGHtzu67</a></div> -->
-              <el-tooltip content="Copy shareable link" placement="top">
-                <div class="copy-btn">
-                  <fa :icon="['far', 'copy']" size="lg" />
-                </div>
-              </el-tooltip>
-            </div>
-            <div v-else class="wrapper na">
-              n/a
-            </div>
-            <div class="edit">
-              <el-button type="text" size="small" @click="select(importItem)">
-                <translate>Edit</translate>
-              </el-button>
-            </div>
+          <div v-if="importItem.collection" class="wrapper">
+            <div>{{ importItem.collection.name }}</div>
+            <a :href="collectionUrl(importItem.collection.url)" target="_blank">{{ collectionUrl(importItem.collection.url) }}</a>
+            <copy-to-clipboard-button
+              tool-tip="Copy shareable link"
+              :content="collectionUrl(importItem.collection.url)"
+              class="copy-btn"
+            />
           </div>
+          <div v-else class="wrapper na">
+            n/a
+          </div>
+        </td>
+        <td class="edit">
+          <div class="wrapper">
+            <el-button type="text" size="small" @click="select(importItem)">
+              <translate v-if="isDone(importItem)" key="editing">
+                Edit
+              </translate>
+              <translate v-else key="showing">
+                Show
+              </translate>
+            </el-button>
+            <div class="numbers">
+              <translate
+                v-if="isDone (importItem)"
+                key="progress"
+                :parameters="{ imported: importItem.imported }"
+              >
+                Imported {imported} of {{ importItem.rows.length }}
+              </translate>
+              <div v-else class="done">
+                <fa icon="check-circle" />
+                <translate key="done">Import done</translate>
+              </div>
+            </div>
+            <el-progress
+              v-if="isDone(importItem)"
+              :percentage="progressPercent(importItem)"
+              :stroke-width="3"
+              :show-text="false"
+              class="progress"
+            />
+          </div>
+          <!-- <div v-else class="wrapper done">
+            <fa icon="check-circle" />
+            <translate>Import done</translate>
+          </div> -->
         </td>
       </tr>
     </tbody>
@@ -51,7 +85,12 @@
 </template>
 
 <script>
+import CopyToClipboardButton from '@/components/common/CopyToClipboardButton'
+
 export default {
+  components: {
+    CopyToClipboardButton
+  },
   props: {
     queue: {
       type: Array,
@@ -84,6 +123,20 @@ export default {
         })
       )
     },
+    collectionUrl (url) {
+      return url && (typeof window !== 'undefined')
+        ? `${window.location.origin}${this.localePath({
+          name: 'organisation-collection-id',
+          params: { id: url }
+        })}`
+        : ''
+    },
+    isDone (importItem) {
+      return importItem.rows.length !== importItem.imported
+    },
+    progressPercent (importItem) {
+      return Math.floor((importItem.imported / importItem.rows.length) * 100)
+    }
   }
 }
 </script>
@@ -96,12 +149,6 @@ export default {
   border-collapse: collapse;
   font-size: @fontSizeSmall;
 
-  .flex {
-    display: flex;
-    align-items: center;
-    position: relative;
-  }
-
   thead {
     text-align: left;
     th {
@@ -113,6 +160,10 @@ export default {
       border-bottom: 2px solid #BDBDBD;
       span {
         flex-grow: 1;
+      }
+      .wrapper {
+        display: flex;
+        align-items: center;
       }
       .search {
         flex: 0 0 128px;
@@ -131,11 +182,26 @@ export default {
       border: 1px solid #DDE0E7;
       padding: 10px;
       vertical-align: top;
-      .excel {
-        margin-right: 4px;
-        color: green;
-        width: 16px;
-        height: 16px;
+      .file {
+        display: flex;
+        align-items: center;
+        position: relative;
+        gap: 4px;
+        .excel {
+          margin-right: 4px;
+          color: green;
+          width: 24px;
+          height: 24px;
+        }
+        .import-info {
+          display: flex;
+          flex-grow: 1;
+          gap: 4px;
+          flex-direction: column;
+        }
+      }
+      .sheet {
+        padding-left: 18px;
       }
       .wrapper {
         position: relative;
@@ -152,34 +218,42 @@ export default {
             text-decoration: underline;
           }
         }
-      }
-      .copy-btn {
-        position: absolute;
-        cursor: default;
-        right: 90px;
-        top: -4px;
-        padding: 4px;
-        color: @colorBrandPrimary;
-        cursor: pointer;
-        width: 16px;
-        height: 16px;
-        :hover {
-          color: @colorBrandPrimaryLight;
-        }
-        :active {
-          transform: scale(.92);
+        .copy-btn {
+          position: absolute;
+          top: -4px;
+          right: -2px;
+          text-align: center;
+          color: @colorBrandPrimary;
+          :hover {
+            color: @colorBrandPrimaryLight;
+          }
+          :active {
+            transform: scale(.92);
+          }
         }
       }
-      .edit {
-        position: absolute;
-        top: -10px;
-        bottom: -10px;
-        right: 0;
+      &.edit {
         width: 82px;
-        padding-top: 1px;
         text-align: center;
         border-left: 1px solid #DDE0E7;
-        color: @colorBrandPrimary;
+        button {
+          color: @colorBrandPrimary;
+          padding: 0;
+        }
+        .numbers {
+          margin-top: 10px;
+          font-size: @fontSizeExtraSmall;
+          .done {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            align-items: center;
+            color: green;
+          }
+        }
+        .progress {
+          margin-top: 4px;
+        }
       }
     }
   }

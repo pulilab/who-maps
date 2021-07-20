@@ -2,6 +2,7 @@
   <lazy-el-select
     :value="value"
     :placeholder="$gettext('Select investor') | translate"
+    filterable
     popper-class="DonorSelectorPopper"
     class="DonorSelector"
     @change="changeHandler"

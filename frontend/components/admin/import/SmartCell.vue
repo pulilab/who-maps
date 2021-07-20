@@ -1,14 +1,16 @@
 <template>
   <div
-    :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': errorMessage, 'ParsingError': parsingFailed}]"
+    :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': errorMessage, 'ParsingError': parsingFailed && !isRequired}]"
     @click="clickHandler"
   >
-    <div class="Content">
+    <div class="Content" :class="{'Country': isCountry}">
       <template v-if="column">
-        <div
-          v-if="active"
-          class="active"
-        >
+        <div v-if="active">
+          <el-input-number
+            v-if="isNumber"
+            v-model="internalValue"
+            :disabled="disabled"
+          />
           <date-field
             v-if="isDate"
             v-model="internalValue"
@@ -48,16 +50,22 @@
           </el-radio-group>
         </div>
 
-        <template v-else-if="isDate || isTextArea || isGovInvestor">
+        <template v-else-if="isDate">
+          {{ showDate }}
+        </template>
+
+        <template v-else-if="isCountry">
+          <country-flag :code="countryDetails.code" :small="true"/>
+          <span v-if="countryDetails.name">{{ countryDetails.name }}</span>
+        </template>
+
+        <template v-else-if="isTextArea || isGovInvestor">
           {{ internalValue }}
         </template>
 
-        <template v-else-if="parsedValue && parsedValue.names">
+        <template v-else-if="parsedValue && parsedValue.names && !isCountry">
           <ul class="ParsedList">
-            <li
-              v-for="(name, index) in parsedValue.names"
-              :key="index"
-            >
+            <li v-for="(name, index) in parsedValue.names" :key="index">
               {{ name }}
             </li>
           </ul>
@@ -70,10 +78,7 @@
         <span class="OriginalValue">{{ original }}</span>
       </template>
     </div>
-    <div
-      v-if="errorMessage || parsingFailed"
-      class="ErrorOverlay"
-    >
+    <div v-if="(errorMessage || parsingFailed) && !active" class="ErrorOverlay">
       <span v-if="errorMessage && !parsingFailed">
         {{ errorMessage }}
       </span>
@@ -87,13 +92,16 @@
 </template>
 
 <script>
+import { formatDate } from '@/utilities/projects'
 import DateField from '@/components/admin/import/DateField'
+import CountryFlag from '@/components/common/CountryFlag'
 import { Validator } from 'vee-validate'
 import { mapState } from 'vuex'
 
 export default {
   components: {
-    DateField
+    DateField,
+    CountryFlag
   },
   model: {
     prop: 'value',
@@ -174,22 +182,51 @@ export default {
         return 'custom_field'
       }
     },
+    isRequired () {
+      return !!this.rules?.required
+    },
+    isNumber () {
+      return ['health_workers', 'clients', 'facilities'].includes(this.column)
+    },
     isDate () {
       return ['start_date', 'end_date', 'implementation_dates'].includes(this.column)
+    },
+    showDate () {
+      return this.isDate ? formatDate(this.internalValue) : ''
+    },
+    isCountry () {
+      return this.column === 'country'
+    },
+    countryDetails () {
+      let country = null
+      if (this.isCountry && this.value) {
+        country = this.systemDicts.countries.find(c => c.id === this.parsedValue.ids[0])
+        if (!country) {
+          country = {
+            id: 0,
+            code: 'UC',
+            name: ''
+          }
+        }
+      } else {
+        country = {
+          id: 0,
+          code: 'UC',
+          name: ''
+        }
+      }
+      return country
     },
     isTextArea () {
       return ['geographic_scope', 'implementation_overview', 'name',
         'contact_name', 'contact_email', 'mobile_application',
-        'wiki', 'repository', 'health_workers', 'clients', 'facilities'].includes(this.column)
+        'wiki', 'repository'].includes(this.column)
     },
     isGovInvestor () {
       return this.column === 'government_investor'
     },
-    isForced () {
-      return ['country', 'donors'].includes(this.column)
-    },
     isDisabled () {
-      return this.isForced || this.disabled
+      return !this.column
     },
     parsedValue () {
       const result = { names: Array.isArray(this.value) ? this.value : [this.value], ids: Array.isArray(this.value) ? this.value : [this.value] }
@@ -197,6 +234,8 @@ export default {
         return result
       } else {
         const resolver = {
+          country: () => this.findSystemValue('countries'),
+          donors: () => this.findSystemValue('donors'),
           organisation: () => this.findSystemValue('organisations'),
           platforms: () => this.findProjectCollectionValue('technology_platforms', false),
           digitalHealthInterventions: () => this.findProjectCollectionValue('strategies', true, 'subGroups', 'strategies'),
@@ -254,6 +293,7 @@ export default {
     },
     parsingFailed () {
       return this.value && this.column && this.parsedValue.ids.length === 0
+      // return this.value && this.column && (this.parsedValue.ids.length === 0 || this.parsedValue?.ids[0] === 'Invalid Date')
     },
     errorMessage () {
       const e = this.errors.find(e => e.field === this.column)
@@ -281,7 +321,7 @@ export default {
       this.handleValidation(valid, errors[0], this.column)
     },
     clickHandler () {
-      if (this.isDate || this.isDisabled || this.isTextArea || this.isCoverage || this.isGovInvestor) {
+      if (this.isNumber || this.isDate || this.isDisabled || this.isTextArea || this.isCoverage || this.isGovInvestor) {
         this.active = true
         return
       }
@@ -365,13 +405,21 @@ export default {
 
   .SmartCell {
     position: relative;
+    cursor: pointer;
 
     .Content {
       width: 100%;
       height: 100%;
 
+      &.Country {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
       .ParsedList{
         list-style: none;
+        padding-left: 0;
       }
     }
 
@@ -388,13 +436,14 @@ export default {
     }
 
     &:hover {
-       .ErrorOverlay {
-         opacity: 1;
-       }
+      box-shadow: inset 0 0 1px 1px silver;
+      .ErrorOverlay {
+        opacity: 1;
+      }
     }
 
     &.Disabled {
-      cursor: not-allowed;
+      opacity: 0.5;
       pointer-events: none;
     }
 

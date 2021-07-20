@@ -5,6 +5,7 @@
     class="ImportDatePicker"
     align="center"
     size="small"
+    value-format="yyyy-MM-dd"
   />
 </template>
 
@@ -30,7 +31,7 @@ export default {
         return this.value instanceof Date ? this.value.toJSON() : this.value
       },
       set (value) {
-        this.$emit('change', value ? value.toJSON() : null)
+        this.$emit('change', value || null)
       }
     }
   }

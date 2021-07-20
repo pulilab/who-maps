@@ -2,16 +2,12 @@
   <el-dialog
     v-if="dialogVisible"
     :visible.sync="dialogVisible"
-    title="Select"
-    modal
+    :title="$gettext('Select') | translate"
     :top="dialogStyle.top"
     :width="dialogStyle.width"
     :custom-class="dialogStyle.className"
   >
-    <el-row
-      type="flex"
-      class="ImportDialogWrapper"
-    >
+    <el-row type="flex" class="ImportDialogWrapper flex-col">
       <el-col class="OriginalData">
         <h3>
           <translate>
@@ -26,6 +22,17 @@
             Edit
           </translate>
         </h3>
+        <country-select
+          v-if="dialogData.column === 'country'"
+          v-model="dialogData.value[0]"
+          :auto-save="true"
+          class="FullWidth"
+        />
+        <donor-select
+          v-if="dialogData.column === 'donors'"
+          v-model="dialogData.value[0]"
+          :auto-save="true"
+        />
         <organisation-select
           v-if="dialogData.column === 'organisation'"
           v-model="dialogData.value[0]"
@@ -168,9 +175,7 @@
         </div>
       </el-col>
     </el-row>
-    <div
-      slot="footer"
-    >
+    <template #footer>
       <el-button @click="dialogData = null">
         <translate>
           Cancel
@@ -182,11 +187,13 @@
           Save
         </translate>
       </el-button>
-    </div>
+    </template>
   </el-dialog>
 </template>
 
 <script>
+import CountrySelect from '@/components/common/CountrySelect'
+import DonorSelect from '@/components/common/DonorSelect'
 import OrganisationSelect from '@/components/common/OrganisationSelect'
 import PlatformSelector from '@/components/project/PlatformSelector'
 import HisBucketSelector from '@/components/project/HisBucketSelector'
@@ -198,6 +205,8 @@ import LicenseSelector from '@/components/project/LicenseSelector'
 
 export default {
   components: {
+    DonorSelect,
+    CountrySelect,
     OrganisationSelect,
     PlatformSelector,
     HisBucketSelector,
@@ -269,6 +278,14 @@ export default {
 
  .ImportDialog {
 
+   .FullWidth {
+     width: 100%;
+   }
+
+   .flex-col {
+     flex-direction: column;
+   }
+
     .OriginalData {
       max-width: 350px;
       min-width: 350px;
@@ -281,7 +298,7 @@ export default {
       margin-bottom: 0;
 
       .el-dialog__body {
-        padding: 0;
+        // padding: 0;
         height: calc(80vh - (@dialogHeaderFooterHeight*2));
       }
 
@@ -290,7 +307,7 @@ export default {
         .DigitalHealthInterventionsFilter {
           .el-col-6 {
             overflow: hidden;
-            height: calc(80vh - (@dialogHeaderFooterHeight * 2));
+            // height: calc(80vh - (@dialogHeaderFooterHeight * 2));
             border-right: 1px solid @colorGrayLight;
 
             .SelectorDialogColumn {

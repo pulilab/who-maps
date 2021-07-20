@@ -105,9 +105,9 @@ export default {
     position: relative;
     top: @dialogHeaderFooterHeight;
     box-sizing: border-box;
-    padding: 10px 20px 50px 30px;
+    padding: 10px 20px 30px 30px;
     height: calc(80vh - (@dialogHeaderFooterHeight * 3));
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   .toggle-expand {
     text-transform: none;

@@ -30,15 +30,8 @@
             class="MenuIcon api-input-copy"
           >
             <transition name="block">
-              <fa
-                v-if="copied"
-                icon="clipboard-check"
-              />
-              <fa
-                v-else
-                icon="copy"
-                @click="copyToClipboard"
-              />
+              <fa v-if="copied" icon="clipboard-check" />
+              <fa v-else @click="copyToClipboard" :icon="['far', 'copy']" />
             </transition>
           </span>
         </el-col>

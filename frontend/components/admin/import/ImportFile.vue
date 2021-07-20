@@ -30,12 +30,12 @@
           </xlsx-download>
         </xlsx-workbook>
       </p>
-      <warning>
+      <warning class="red">
         <translate>
           Your data should be organized to have data from only one country included in a spreadsheet. In addition, you can also only select one Investor for all of the data from within your spreadsheet. If you have more than one investor, we recommend that you go back to your projects once uploaded and add the correct investors.
         </translate>
       </warning>
-      <warning>
+      <warning class="red">
         <translate>
           For now the imported projects are loaded in draft and need to be manually published.
         </translate>
@@ -78,6 +78,7 @@
                   class="SheetSelector"
                   placeholder="Select sheet"
                   :disabled="!inputFile || !sheets || sheets.length === 0"
+                  @change="onSelectSheet"
                 >
                   <el-option
                     v-for="sheet in sheets"
@@ -87,8 +88,10 @@
                     {{ sheet }}
                   </el-option>
                 </el-select>
-                <alert v-if="uniqueImport" type="warning">
-                  <translate key="warning">Note that all import files need to have a unique name. Please re-name the file and upload it again.</translate>
+                <alert v-if="!uniqueImport" type="warning">
+                  <translate key="warning">
+                    Note that all import files need to have a unique name. Please re-name the file and upload it again.
+                  </translate>
                 </alert>
               </div>
             </template>
@@ -101,7 +104,7 @@
         </template>
       </xlsx-read>
     </el-form-item>
-    <el-form-item prop="country">
+    <!-- <el-form-item prop="country">
       <template #label>
         <form-hint>
           <translate>
@@ -140,8 +143,8 @@
       <input-group v-if="donorRadio === 2">
         <donor-select v-model="importForm.donor" />
       </input-group>
-    </el-form-item>
-    <el-form-item prop="newCollection">
+    </el-form-item> -->
+    <el-form-item prop="newCollection" class="flex-col">
       <template #label>
         <form-hint>
           <translate>Collections</translate>
@@ -160,8 +163,16 @@
       <input-group v-if="importToCollection">
         <el-radio-group v-model="toCollection" class="RadioGroup">
           <el-radio :label="1">Create a new collection</el-radio>
-          <el-input v-if="toCollection === 1" v-model="importForm.newCollection" type="text" placeholder="type the name of the new collection" class="Input" />
-          <el-radio :label="2">Add to existing collection retrospectively</el-radio>
+          <el-input
+            v-if="toCollection === 1"
+            v-model="importForm.newCollection"
+            type="text"
+            :placeholder="$gettext('type the name of the new collection')"
+            class="Input"
+          />
+          <el-radio :label="2">
+            <translate>Add to existing collection retrospectively</translate>
+          </el-radio>
           <collection-select v-if="toCollection === 2" v-model="importForm.collectionUrl" class="Select" />
         </el-radio-group>
       </input-group>
@@ -187,9 +198,9 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import InputGroup from '@/components/common/wrappers/InputGroup'
-import DonorSelect from '@/components/common/DonorSelect'
+// import DonorSelect from '@/components/common/DonorSelect'
 import CollectionSelect from '@/components/common/CollectionSelect'
-import CountrySelect from '@/components/common/CountrySelect'
+// import CountrySelect from '@/components/common/CountrySelect'
 import FormHint from '@/components/common/FormHint'
 import Warning from '@/components/common/Warning'
 import Alert from '@/components/common/Alert'
@@ -200,9 +211,9 @@ import { draftRules } from '@/utilities/projects'
 export default {
   components: {
     InputGroup,
-    DonorSelect,
+    // DonorSelect,
     CollectionSelect,
-    CountrySelect,
+    // CountrySelect,
     XlsxRead,
     XlsxSheets,
     XlsxJson,
@@ -223,11 +234,11 @@ export default {
       importForm: {
         country: null,
         donor: null,
-        projectEditor: false,
+        projectEditor: true,
         collectionUrl: null,
         newCollection: ''
       },
-      uniqueImport: false,
+      uniqueImport: true,
       countryRadio: 1,
       donorRadio: 1,
       importToCollection: false,
@@ -296,14 +307,12 @@ export default {
       ]
     },
     canImport () {
-      return this.inputFile && this.selectedSheet
+      return this.inputFile && this.selectedSheet && this.uniqueImport
     }
   },
   watch: {
     importToCollection: function (val) {
-      if (!val) {
-        this.importForm.projectEditor = false
-      }
+      this.importForm.projectEditor = !val
     }
   },
   methods: {
@@ -312,7 +321,8 @@ export default {
       addDataToQueue: 'admin/import/addDataToQueue',
       addDataToCollection: 'admin/import/addCollection',
       updateDataToCollection: 'admin/import/updateCollection',
-      loadQueue: 'admin/import/loadQueue'
+      loadQueue: 'admin/import/loadQueue',
+      checkAvailability: 'admin/import/checkAvailability'
     }),
     resetForm () {
       this.$refs.importFile.clearFiles()
@@ -324,18 +334,41 @@ export default {
       this.toCollection = 1
       this.$refs.importForm.resetFields()
     },
-    onChange (event) {
-      this.inputFile = event.target.files ? event.target.files[0] : null
-    },
+    // onChange (event) {
+    //   this.inputFile = event.target.files ? event.target.files[0] : null
+    // },
     onSelectFile (file) {
-      this.inputFile = file?.raw ? file?.raw : null
+      this.inputFile = file?.raw
     },
     onResetFile () {
       this.inputFile = null
       this.selectedSheet = null
+      this.uniqueImport = true
     },
+    async onSelectSheet () {
+      try {
+        const toCheck = {
+          filename: this.inputFile.name,
+          sheet_name: this.selectedSheet
+        }
+        const checkAvailability = await this.checkAvailability(toCheck)
+        this.uniqueImport = checkAvailability.available
+      } catch (error) {
+        this.uniqueImport = false
+        console.error('availabilityResult', error)
+      }
+    },
+    /* may be needed if single country is back on the table
+    parseCountry () {
+      const country = 'Argentina'
+      const rows = this.parsed.map((row) => {
+        return {
+          ...row,
+          Country: country
+        }
+      })
+    }, */
     async save () {
-      // simple validation?
       let endpoint = 0 // legacy 'import > create'
       const importData = {
         project_import: {
@@ -371,17 +404,16 @@ export default {
       try {
         this.alert = 0
         this.importing = true
-        let importItem
         switch (endpoint) {
         case 0:
-          importItem = await this.addDataToQueue(importData.project_import)
+          await this.addDataToQueue(importData.project_import)
           break
         case 1:
-          importItem = await this.addDataToCollection(importData)
+          await this.addDataToCollection(importData)
           this.loadUserCollections()
           break
         case 2:
-          importItem = await this.updateDataToCollection({
+          await this.updateDataToCollection({
             importData: importData,
             url: this.importForm.collectionUrl
           })
@@ -392,7 +424,6 @@ export default {
         this.importing = false
         this.resetForm()
         this.loadQueue()
-        console.log('🚀 ~ api result', importItem)
         // this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: importItem.id }, query: undefined }))
       } catch (err) {
         // this.$nuxt.$loading.finish('importXLSX')
@@ -424,11 +455,21 @@ export default {
     height: auto;
     margin-bottom: 25px;
   }
+  ::v-deep .flex-col .el-form-item__content {
+    display: flex;
+    flex-direction: column;
+  }
 
-::v-deep .el-form-item__label {
+  ::v-deep .el-form-item__label {
     padding: initial;
     line-height: normal;
     margin-bottom: 12px;
+  }
+
+  .red {
+    span {
+      color: red;
+    }
   }
 
   .wide {
