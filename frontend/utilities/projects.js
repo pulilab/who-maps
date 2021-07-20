@@ -47,11 +47,6 @@ export const newStages = draft => {
     })
 }
 
-// Gives back a random hash-like string.
-// Default length is 4, max is 10 because of the random() function result
-// The undelying algo can be called several times to make longer hashes
-export const hash = (length = 4) => Math.random().toString(36).substring(2, length + 2)
-
 export const formatDate = date =>
   format(date, 'YYYY-MM-DD') === 'Invalid Date'
     ? null
