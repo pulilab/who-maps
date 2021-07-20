@@ -339,14 +339,14 @@ for arg in sys.argv:
         DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
 
 if SITE_ID == 3:
-    ENVIRONMENT_NAME = "PRODUCTION"
+    ENVIRONMENT_NAME = f"PRODUCTION - ({os.environ.get('DEPLOY_VERSION', 'Unknown')})"
     ENVIRONMENT_COLOR = "red"
 elif SITE_ID == 4:
-    ENVIRONMENT_NAME = "QA / STAGING"
+    ENVIRONMENT_NAME = f"QA / STAGING - ({os.environ.get('DEPLOY_VERSION', 'Unknown')})"
     ENVIRONMENT_COLOR = "orange"
     DRAFT_ONLY_REMINDER_LIMITED = True
 else:
-    ENVIRONMENT_NAME = "DEVELOPMENT"
+    ENVIRONMENT_NAME = f"DEVELOPMENT - ({os.environ.get('DEPLOY_VERSION', 'Unknown')})"
     ENVIRONMENT_COLOR = "blue"
 
 
