@@ -5,7 +5,7 @@
     </template>
     <el-row type="flex" :gutter="17">
       <el-col :span="14">
-        <panel v-if="queue && queue.length > 0" :wideBody="true" alignTitle="left">
+        <panel v-if="queue && queue.length > 0" :wide-body="true" align-title="left">
           <template #header>
             <translate>Previous imports</translate>
           </template>
@@ -13,7 +13,7 @@
             <import-queue :queue="queue" />
           </div>
         </panel>
-        <panel v-else :empty="true" alignTitle="left">
+        <panel v-else :empty="true" align-title="left">
           <template #header>
             <translate>Previous imports (0)</translate>
           </template>
@@ -27,7 +27,7 @@
         </panel>
       </el-col>
       <el-col :span="10">
-        <panel alignTitle="left">
+        <panel align-title="left">
           <template #header>
             <translate>New import</translate>
           </template>

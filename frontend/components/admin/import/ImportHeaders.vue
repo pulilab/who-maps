@@ -1,33 +1,35 @@
 <template>
   <div class="Headers">
-    <div
-      v-if="internalValue.length > 0"
-      class="Row"
-    >
-      <div class="Column Thin Header">
-        <slot />
+    <div v-if="internalValue.length > 0" class="Row">
+      <div class="Column Thin Header Selected FlexCol">
+        <slot :columns="columnState" />
       </div>
 
       <div
         v-for="(header, index) in internalValue"
         :key="index"
         class="Column Header"
+        :class="{'Selected': header.selected}"
       >
         <div class="Title">
           {{ header.title }}
         </div>
-        <el-button
-          class="DeleteColumnButton"
-          size="mini"
-          type="danger"
-          @click="rmHeader(index)"
-        >
-          <fa icon="times" />
-        </el-button>
+        <el-tooltip effect="dark" content="Remove this column" placement="top">
+          <el-button
+            title="Remove column"
+            class="ColumnButton Delete"
+            size="mini"
+            type="text"
+            @click="rmHeader(index)"
+          >
+            <!-- <fa icon="times" /> -->
+            <fa :icon="['far', 'trash-alt']" />
+          </el-button>
+        </el-tooltip>
         <el-select
           v-model="header.selected"
           class="HeaderSelect"
-          size="small"
+          size="mini"
           filterable
           clearable
           @change="columnChange(header)"
@@ -70,7 +72,7 @@
 <script>
 import { projectFields } from '@/utilities/projects'
 
-const blackList = ['country', 'donors', 'coverage', 'national_level_deployment',
+const blackList = ['coverage', 'national_level_deployment',
   'coverageData', 'coverageType', 'coverage_second_level', 'interoperability_links', 'team', 'viewers']
 const addendumFields = ['clients', 'health_workers', 'facilities', 'sub_level']
 export default {
@@ -114,6 +116,12 @@ export default {
           value: f
         }
       }).sort((a, b) => a.label.localeCompare(b.label))
+    },
+    columnState () {
+      return {
+        selected: this.headers.filter(c => c.selected).length,
+        count: this.headers.length
+      }
     }
   },
   watch: {
@@ -181,33 +189,78 @@ export default {
   .Row {
     .Column {
       &.Header {
-        border-width: 1px 1px 1px 0;
+        border-width: 1px 1px 2px 0;
+        border-bottom: 2px solid #DDE0E7;
         position: relative;
-        background-color: #F5F5F5;
+        background-color: @colorBrandBlueLight;
+        filter: grayscale(1);
         z-index: 10;
         overflow: hidden;
+        /* &::before {
+          content: '';
+          z-index: -1;
+          position: absolute;
+          inset: 0;
+          background-color: white;
+          opacity: 1;
+        } */
+
+        &.Selected {
+          filter: none;
+        }
+        &.FlexCol {
+          flex-direction: column;
+          justify-content: center;
+        }
 
         &:first-child {
           border-width: 1px;
+        }
+        &:hover {
+          filter: none;
+          .ColumnButton {
+            display: initial;
+          }
         }
       }
     }
   }
 
-  .Title {
+  /* .Title {
     margin-right: 8px;
-  }
-  .DeleteColumnButton {
+  } */
+
+  .ColumnButton {
+    display: none;
     position: absolute;
-    top: 0;
-    right: 0;
-    padding: 2px 4px;
+    top: 8px;
+    padding: 2px 6px;
+    &.Reset {
+      right: 38px;
+      color: @colorTextPrimary;
+      &:hover {
+        background-color: @colorTextPrimary;
+        color: white;
+      }
+    }
+    &.Delete {
+      right: 12px;
+      color: @colorDanger;
+      &:hover {
+        background-color: @colorDanger;
+        color: white;
+      }
+    }
   }
+
   .HeaderSelect{
+    width: 100%;
+  }
+  /* .HeaderSelect{
     position: absolute;
     bottom: 4px;
     left: 3.5px;
     width: 192px;
-  }
+  } */
 }
 </style>

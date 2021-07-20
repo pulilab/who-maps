@@ -9,6 +9,7 @@ export const state = () => ({
   landing_page_defaults: {},
   toolkit_questions: [],
   sub_level_types: [],
+  countries: [],
   organisations: [],
   donors: [],
   regions: [],
@@ -109,7 +110,7 @@ export const actions = {
     try {
       if (!state.profiles || state.profiles.length === 0 || force) {
         const { data } = await this.$axios.get('/api/userprofiles/')
-        commit('SET_USER_PROFILES', data)
+        commit('setValue', { key: 'profiles', val: data })
       }
     } catch (e) {
       console.error('system/loadUserProfiles failed')
@@ -119,29 +120,37 @@ export const actions = {
   async loadStaticData ({ commit, dispatch }) {
     try {
       const { data } = await this.$axios.get('/api/static-data/')
-      commit('SET_AXIS', data.axis)
-      commit('SET_DOMAINS', data.domains)
-      commit('SET_LANDING_PAGE_DEFAULTS', data.landing_page_defaults)
-      commit('SET_LANGUAGES', data.languages)
-      commit('SET_THEMATIC_OVERVIEW', data.thematic_overview)
-      commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions)
-      commit('SET_SUB_LEVEL_TYPES', data.sub_level_types)
-      commit('SET_REGIONS', data.regions)
-      commit('SET_ROADMAP', data.roadmap)
+      commit('setValue', { key: 'axis', val: data.axis })
+      commit('setValue', { key: 'domains', val: data.domains })
+      commit('setValue', { key: 'landing_page_defaults', val: data.landing_page_defaults })
+      commit('setValue', { key: 'languages', val: data.languages })
+      commit('setValue', { key: 'thematic_overview', val: data.thematic_overview })
+      commit('setValue', { key: 'toolkit_questions', val: data.toolkit_questions })
+      commit('setValue', { key: 'sub_level_types', val: data.sub_level_types })
+      commit('setValue', { key: 'regions', val: data.regions })
+      commit('setValue', { key: 'roadmap', val: data.roadmap })
       dispatch('dashboard/setDashboardColumns', data.dashboard_columns, {
         root: true
       })
+      dispatch('loadCountries')
     } catch (e) {
       console.error('system/loadStaticData failed')
     }
   },
-
+  async loadCountries ({ commit }) {
+    try {
+      const { data } = await this.$axios.get('/api/landing-country/')
+      commit('setValue', { key: 'countries', val: data })
+    } catch (e) {
+      console.error('system/loadCountries failed')
+    }
+  },
   async loadOrganisations ({ commit, rootGetters }) {
     const profile = rootGetters['user/getProfile']
     if (profile) {
       try {
         const { data } = await this.$axios.get('/api/organisations/')
-        commit('SET_SYSTEM_ORGANISATIONS', data)
+        commit('setValue', { key: 'organisations', val: data })
       } catch (e) {
         console.error('system/loadOrganisations failed')
       }
@@ -150,7 +159,7 @@ export const actions = {
   async loadDonors ({ commit }) {
     try {
       const { data } = await this.$axios.get('/api/landing-donor/')
-      commit('SET_DONORS', data)
+      commit('setValue', { key: 'donors', val: data })
     } catch (e) {
       console.error('system/loadDonors failed')
     }
@@ -162,7 +171,7 @@ export const actions = {
       )
       commit('setValue', { key: 'collections', val: data })
     } catch (e) {
-      console.error('system/loadCollections failed')
+      console.error('system/loadUserCollections failed')
     }
   },
   async loadDonorDetails ({ commit, state }, id) {
@@ -199,51 +208,7 @@ export const mutations = {
   setValue (state, { key, val }) {
     state[key] = val
   },
-  SET_USER_PROFILES: (state, value) => {
-    state.profiles = value
-  },
-
-  SET_AXIS: (state, value) => {
-    state.axis = value
-  },
-
-  SET_DOMAINS: (state, value) => {
-    state.domains = value
-  },
-
-  SET_LANDING_PAGE_DEFAULTS: (state, value) => {
-    state.landing_page_defaults = value
-  },
-
-  SET_LANGUAGES: (state, value) => {
-    state.languages = value
-  },
-
-  SET_THEMATIC_OVERVIEW: (state, value) => {
-    state.thematic_overview = value
-  },
-
-  SET_TOOLKIT_QUESTIONS: (state, value) => {
-    state.toolkit_questions = value
-  },
-
-  SET_SUB_LEVEL_TYPES: (state, value) => {
-    state.sub_level_types = value
-  },
-
-  SET_SYSTEM_ORGANISATIONS: (state, value) => {
-    state.organisations = value
-  },
-  SET_DONORS: (state, donors) => {
-    state.donors = donors
-  },
   SET_DONOR_DETAILS: (state, { id, data }) => {
     state.donorsLibrary = { ...state.donorsLibrary, [id]: data }
-  },
-  SET_REGIONS: (state, regions) => {
-    state.regions = regions
-  },
-  SET_ROADMAP: (state, roadmap) => {
-    state.roadmap = roadmap
   }
 }

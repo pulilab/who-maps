@@ -1,6 +1,6 @@
 <template>
   <div class="Panel" :class="{'empty': empty}">
-    <div class="header shadow" :class="[alignTitle, {'empty': empty}]">
+    <div v-if="$slots.header" class="header shadow" :class="[alignTitle, {'empty': empty}]">
       <slot name="header" />
     </div>
     <div class="body" :class="{'wide' : wideBody}">
@@ -37,6 +37,7 @@ export default {
 
   .Panel {
     background-color: @colorWhite;
+    border: 1px solid @colorGrayLight;
     &.shadow {
       box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
     }
@@ -45,6 +46,7 @@ export default {
       background-color: @colorGrayLightest !important;
     }
     .header {
+      position: relative;
       padding: 0 40px;
       height: 58px;
       line-height: 58px;
