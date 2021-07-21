@@ -387,6 +387,7 @@ class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 class Collection(ExtendedNameOrderedSoftDeletedModel):
     user = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)  # should be hidden on UI
     url = models.CharField(max_length=256, blank=True)
+    add_me_as_editor = models.BooleanField(null=False, blank=False, default=False)
 
     def generate_hash_id(self):
         hash_id = Hashids(min_length=12)
