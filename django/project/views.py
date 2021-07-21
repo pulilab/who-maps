@@ -324,11 +324,11 @@ class ProjectDraftViewSet(TeamCollectionTokenAuthMixin, ViewSet):
             if 'import_row' in request.data['project']:
                 try:
                     collection = Collection.objects.get(project_imports__rows=request.data['project']['import_row'])
+                    if collection.add_me_as_editor:  # pragma: no cover
+                        instance.team.add(request.user.userprofile)
                 except Collection.DoesNotExist:  # pragma: no cover
-                    collection = None
+                    pass
                 instance.import_rows.set(ImportRow.objects.filter(id=request.data['project']['import_row']))
-                if collection.add_me_as_editor:  # pragma: no cover
-                    instance.team.add(request.user.userprofile)
             else:
                 instance.team.add(request.user.userprofile)
 
