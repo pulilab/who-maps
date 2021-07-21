@@ -47,7 +47,7 @@ class CollectionsTests(SetupTests):
         test_data.update({"name": "Collection Test"})
         response = self.test_user_client.post(url, test_data, format='json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), ["'add_me_as_editor' missing or invalid. Required: bool"])
+        self.assertEqual(response.json(), {'add_me_as_editor': ['This field is required.']})
 
     def test_collections_create_add_me(self):
         url = reverse("collection-list")
@@ -62,8 +62,6 @@ class CollectionsTests(SetupTests):
         pimport = ProjectImportV2.objects.get(collection=collections[0])
         self.assertEqual(pimport.user, self.test_user)
         importrows = ImportRow.objects.filter(parent=pimport)
-        for ir in importrows:
-            self.assertIn(self.test_user.email, ir.data['Team'])
         self.assertEqual(importrows.count(), 2)
 
     def test_collections_create_do_not_add(self):
@@ -80,8 +78,6 @@ class CollectionsTests(SetupTests):
         self.assertEqual(pimport.donor, None)
         importrows = ImportRow.objects.filter(parent=pimport)
         self.assertEqual(importrows.count(), 2)
-        for ir in importrows:
-            self.assertNotIn(self.test_user.email, ir.data['Team'])
 
     def test_collections_create_no_project_import(self):
         url = reverse("collection-list")
@@ -97,8 +93,6 @@ class CollectionsTests(SetupTests):
         self.assertEqual(pimport.donor, None)
         importrows = ImportRow.objects.filter(parent=pimport)
         self.assertEqual(importrows.count(), 2)
-        for ir in importrows:
-            self.assertNotIn(self.test_user.email, ir.data['Team'])
 
     def test_collections_create_set_country(self):
         url = reverse("collection-list")
@@ -116,8 +110,6 @@ class CollectionsTests(SetupTests):
 
         importrows = ImportRow.objects.filter(parent=pimport)
         self.assertEqual(importrows.count(), 2)
-        for ir in importrows:
-            self.assertEqual(ir.data['Country'], self.country1.name)
 
     def test_collections_create_set_donor(self):
         url = reverse("collection-list")
@@ -134,8 +126,6 @@ class CollectionsTests(SetupTests):
         self.assertEqual(pimport.donor, self.d1)
         importrows = ImportRow.objects.filter(parent=pimport)
         self.assertEqual(importrows.count(), 2)
-        for ir in importrows:
-            self.assertEqual(ir.data['Donor'], self.d1.name)
 
     def test_collections_create_double_fail(self):
         url = reverse("collection-list")
@@ -167,8 +157,6 @@ class CollectionsTests(SetupTests):
         pimport = ProjectImportV2.objects.get(collection=collections[0])
         self.assertEqual(pimport.user, self.test_user)
         importrows = ImportRow.objects.filter(parent=pimport)
-        for ir in importrows:
-            self.assertIn(self.test_user.email, ir.data['Team'])
         self.assertEqual(importrows.count(), 2)
         collection_url = response.json()['url']
         url_update = reverse("collection-detail", kwargs={'url': collection_url})
@@ -189,8 +177,6 @@ class CollectionsTests(SetupTests):
         pimport = ProjectImportV2.objects.get(collection=collections[0])
         self.assertEqual(pimport.user, self.test_user)
         importrows = ImportRow.objects.filter(parent=pimport)
-        for ir in importrows:
-            self.assertIn(self.test_user.email, ir.data['Team'])
         self.assertEqual(importrows.count(), 2)
         collection_url = response.json()['url']
         url_update = reverse("collection-detail", kwargs={'url': collection_url})
@@ -212,11 +198,10 @@ class CollectionsTests(SetupTests):
         self.assertNotEqual(response.json()['url'], "")
         collections = Collection.objects.filter(name='Projects about ponies')
         self.assertEqual(collections.count(), 1)
+        self.assertEqual(collections[0].add_me_as_editor, True)
         pimport = ProjectImportV2.objects.get(collection=collections[0])
         self.assertEqual(pimport.user, self.test_user)
         importrows = ImportRow.objects.filter(parent=pimport)
-        for ir in importrows:
-            self.assertIn(self.test_user.email, ir.data['Team'])
         self.assertEqual(importrows.count(), 2)
         collection_url = response.json()['url']
         url_update = reverse("collection-detail", kwargs={'url': collection_url})
@@ -292,8 +277,6 @@ class CollectionsTests(SetupTests):
         self.assertEqual(pimport.donor, None)
         importrows = ImportRow.objects.filter(parent=pimport)
         self.assertEqual(importrows.count(), 2)
-        for ir in importrows:
-            self.assertNotIn(self.test_user.email, ir.data['Team'])
         collection_url = response.json()['url']
         url_collection = reverse("collection-detail", kwargs={'url': collection_url})
         test_anon_client = APIClient(format="json")

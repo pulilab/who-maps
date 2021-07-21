@@ -327,10 +327,13 @@ class ProjectGroupSerializer(serializers.ModelSerializer):  # TODO handle orphan
 
     def update(self, instance, validated_data):
         self._send_notification(instance, validated_data)
-
         # don't allow empty team, so no orphan projects
         if 'team' in validated_data and isinstance(validated_data['team'], list):
-            instance.team.set(validated_data.get('team') or instance.team.all())
+            # we allow orphan projects IF there's a collection related to them and they're draft
+            if instance.import_rows.all().filter(parent__collection__isnull=False) and instance.public_id == '':
+                instance.team.set(validated_data['team'])
+            else:
+                instance.team.set(validated_data['team'] or instance.team.all())
 
         # a project however can exist without viewers
         if 'viewers' in validated_data and isinstance(validated_data['viewers'], list):
@@ -495,7 +498,7 @@ class CollectionBriefSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Collection
-        fields = ('id', 'name', 'user', 'url')
+        fields = ('id', 'name', 'user', 'url', 'add_me_as_editor')
 
 
 class ProjectImportV2Serializer(serializers.ModelSerializer):  # pragma: no cover
@@ -642,10 +645,6 @@ class ProjectImportV2CollectionInputSerializer(serializers.ModelSerializer):
         for row_data in rows[0].get('data', []):
             """
             Overrides"""
-            if self.context.get('add_as_editor'):
-                team_data = set(row_data['Team'].split(', '))
-                team_data.add(validated_data["user"].email)
-                row_data['Team'] = ', '.join(team_data)
             if self.context.get('country_override'):
                 row_data['Country'] = Country.objects.get(pk=self.context['country_override']).name
             if self.context.get('donor_override'):
@@ -679,14 +678,14 @@ class CollectionInputSerializer(serializers.ModelSerializer):
     """
     url = serializers.ReadOnlyField()
     project_imports = ProjectImportV2CollectionInputSerializer(required=False, many=True)
+    add_me_as_editor = serializers.BooleanField(required=True)
 
     class Meta:
         model = Collection
-        fields = ('id', 'url', 'name', 'user', 'project_imports')
+        fields = ('id', 'url', 'name', 'user', 'project_imports', 'add_me_as_editor')
 
     def _set_context(self):
         context = {
-            'add_as_editor': self.context['request'].data.get('add_me_as_editor', False),
             'country_override': self.context['request'].data.get('country', False),
             'donor_override': self.context['request'].data.get('donor', False),
         }
@@ -728,10 +727,11 @@ class CollectionOutputSerializer(serializers.ModelSerializer):
     """
     url = serializers.ReadOnlyField()
     project_imports = ProjectImportV2CollectionOutputSerializer(required=False, many=True)
+    add_me_as_editor = serializers.BooleanField(required=True)
 
     class Meta:
         model = Collection
-        fields = ('id', 'url', 'name', 'user', 'project_imports')
+        fields = ('id', 'url', 'name', 'user', 'project_imports', 'add_me_as_editor')
 
 
 class ExternalProjectPublishSerializer(serializers.Serializer):

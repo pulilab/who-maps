@@ -322,7 +322,13 @@ class ProjectDraftViewSet(TeamCollectionTokenAuthMixin, ViewSet):
             instance.save()
             # COLLECTIONS - draft project can have an empty team if they are part of a collection
             if 'import_row' in request.data['project']:
+                try:
+                    collection = Collection.objects.get(project_imports__rows=request.data['project']['import_row'])
+                except Collection.DoesNotExist:  # pragma: no cover
+                    collection = None
                 instance.import_rows.set(ImportRow.objects.filter(id=request.data['project']['import_row']))
+                if collection.add_me_as_editor:  # pragma: no cover
+                    instance.team.add(request.user.userprofile)
             else:
                 instance.team.add(request.user.userprofile)
 
@@ -690,11 +696,6 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
             return CollectionOutputSerializer
 
     @staticmethod
-    def _check_parameters(request_data):
-        if 'add_me_as_editor' not in request_data or not isinstance(request_data['add_me_as_editor'], bool):
-            raise ValidationError("'add_me_as_editor' missing or invalid. Required: bool")
-
-    @staticmethod
     def _prepare_data(request):
         data = copy.deepcopy(request.data)
         data['user'] = request.user.pk
@@ -717,7 +718,6 @@ class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveMode
         Create a collection object.
         """
         data = request.data
-        self._check_parameters(data)
         data = self._prepare_data(request)
         # Modify the data to make it processable by the serializers
         serializer = self.get_serializer(data=data)

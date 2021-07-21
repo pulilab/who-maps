@@ -215,8 +215,8 @@ def test_specific(specific_test=''):
 
 def cov():
     local(
-        "docker-compose exec django py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing"
-        " --cov-config .coveragerc -x"
+        "docker-compose exec django py.test -x --cov --cov-report html --cov-fail-under 100 --cov-report term-missing"
+        " --cov-config .coveragerc"
     )
 
 
