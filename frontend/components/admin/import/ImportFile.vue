@@ -279,6 +279,8 @@ export default {
         return a.concat(innerValue)
       }, [])
       const flatOrganisations = this.systemDicts.organisations.map(o => o.name)
+      const flatCountries = this.systemDicts.countries.map(c => c.name)
+      const flatInvestors = this.systemDicts.donors.map(d => d.name)
       return [
         [nameMapping.health_focus_areas, ...flatHFA],
         [nameMapping.hsc_challenges, ...flatHSC],
@@ -286,7 +288,9 @@ export default {
         [nameMapping.licenses, ...flatLicenses],
         [nameMapping.platforms, ...flatPlatforms],
         [nameMapping.digitalHealthInterventions, ...flathDHI],
-        [nameMapping.organisation, ...flatOrganisations]
+        [nameMapping.organisation, ...flatOrganisations],
+        [nameMapping.country, ...flatCountries],
+        [nameMapping.donors, ...flatInvestors]
       ]
     },
     draftRequiredFields () {
