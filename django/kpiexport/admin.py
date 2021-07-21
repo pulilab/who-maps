@@ -8,11 +8,13 @@ from country.models import Country
 from .models import AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages, AuditLogUsers
 
 from django.conf import settings
+from django.contrib.admin import DateFieldListFilter
+from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter
 
-class TechnologyPlatformAdmin(AllObjectsAdmin):
+
+@admin.register(AuditLogUsers)
+class AuditLogUsersAdmin(admin.ModelAdmin):
     list_display = [
-        'name', 'state', 'added_by'
+        'date', 'country', 'registered', 'active'
     ]
-    list_filter = [SoftwareStateFilter]
-    actions = (approve, decline)
-
+    list_filter = (('date', DateRangeFilter), 'country')
