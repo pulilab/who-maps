@@ -38,7 +38,8 @@ export default {
       userProfile: 'user/getProfile',
       dhi: 'projects/getDigitalHealthInterventions',
       team: 'project/getTeam',
-      viewers: 'project/getViewers'
+      viewers: 'project/getViewers',
+      rawImport: 'admin/import/getRawImport'
     }),
     firstDHI () {
       if (this.dhi && this.dhi[0].subGroups[0] && this.dhi[0].subGroups[0].strategies) {
@@ -89,7 +90,7 @@ export default {
         }
       }
     },
-    async save (country, donor, publish) {
+    async save (country, donor, publish, rowid) {
       const filled = this.$children.filter(sc => sc.column && !['custom_fields', 'sub_level'].includes(sc.column))
 
       const countryCustom = this.$children.filter(sc => sc.type && sc.type.startsWith('MOH')).map(c => ({
@@ -132,6 +133,7 @@ export default {
       result.country = country
       result.donors = [donor]
       const parsed = apiWriteParser(result, countryCustom, donorCustom)
+      parsed.project.import_row = rowid
       const { data } = await this.$axios.post(`api/projects/draft/${country}/`, parsed)
 
       if (publish) {
@@ -141,11 +143,27 @@ export default {
       dataRow.project = data.id
 
       // setting teams and viewers and saving it
-      this.setTeam([this.userProfile.id, ...result.implementing_team])
-      this.setViewers([...result.implementing_viewers])
-      await this.saveTeamViewers(data.id)
-      // setting teams and viewers and saving it
+      // do not add current user, as that is done in the backend and it would overwrite with nothing
+      if (result.implementing_team.length === 1 && result.implementing_team[0] === '') {
+        result.implementing_team.length = 0
+      }
+      if (result.implementing_viewers.length === 1 && result.implementing_viewers[0] === '') {
+        result.implementing_viewers.length = 0
+      }
+      if (result.implementing_team.length > 0 || result.implementing_viewers.length > 0) {
+        if (this.rawImport.collection && this.rawImport.collection?.add_me_as_editor) {
+          result.implementing_team.push(this.userProfile.id)
+        }
+      } else if (!this.rawImport.collection) {
+        result.implementing_team.push(this.userProfile.id)
+      }
 
+      if (result.implementing_team.length > 0 || result.implementing_viewers.length > 0) {
+        this.setTeam([...result.implementing_team])
+        this.setViewers([...result.implementing_viewers])
+        await this.saveTeamViewers(data.id)
+      }
+      // setting teams and viewers and saving it
       this.$emit('update:row', dataRow)
       return dataRow
     }

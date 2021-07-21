@@ -5,6 +5,9 @@
       <th><translate>Sheet Name</translate></th>
       <th><translate>Collection Name</translate></th>
       <th><translate>Collection URL</translate></th>
+      <th>
+        <translate>Editor status</translate>
+      </th>
     </thead>
     <tbody>
       <tr>
@@ -33,6 +36,14 @@
           <div v-else class="wrapper na">
             n/a
           </div>
+        </td>
+        <td>
+          <translate v-if="info.addMeAsEditor" key="added">
+            You are each project's editor
+          </translate>
+          <translate v-else key="orphan">
+            Projects may be orphans
+          </translate>
         </td>
       </tr>
     </tbody>
@@ -114,12 +125,12 @@ export default {
         width: 16px;
         height: 16px;
       }
+      .na {
+        color: #9D9D9D;
+      }
       .wrapper {
         position: relative;
         flex-grow: 1;
-        &.na {
-          color: #9D9D9D;
-        }
         a {
           display: inline-block;
           color: @colorBrandPrimary;

@@ -1,21 +1,9 @@
 <template>
-  <el-row
-    type="flex"
-    class="project-view"
-  >
-    <div
-      v-if="!published"
-      class="draft-banner"
-    >
-      <fa
-        icon="pen"
-        size="lg"
-      />
+  <el-row type="flex" class="project-view">
+    <div v-if="!published" class="draft-banner">
+      <fa icon="pen" size="lg" />
     </div>
-    <el-col
-      :span="6"
-      class="sidebar"
-    >
+    <el-col :span="6" class="sidebar">
       <navigation
         :items="sections"
         :selected="selected"
@@ -23,21 +11,12 @@
         @click="handleNavigation"
       >
         <template v-if="user">
-          <view-actions
-            :actions="actions"
-            @click="handleActions"
-          />
+          <view-actions :actions="actions" @click="handleActions" />
         </template>
       </navigation>
     </el-col>
-    <el-col
-      :span="18"
-      class="main"
-    >
-      <section
-        v-for="section in sections"
-        :key="section.id"
-      >
+    <el-col :span="18" class="main">
+      <section v-for="section in sections" :key="section.id">
         <observer
           :options="{ root: null, rootMargin: '0px', threshold: 0.5 }"
           :target="section.id"
@@ -47,10 +26,7 @@
             {{ `${section.prepend}.  ${section.title}` }}
           </h1>
         </observer>
-        <component
-          :is="section.component"
-          v-bind="{ ...section.properties, project }"
-        />
+        <component :is="section.component" v-bind="{ ...section.properties, project }" />
       </section>
     </el-col>
   </el-row>

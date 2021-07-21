@@ -38,6 +38,11 @@ export default {
   .Panel {
     background-color: @colorWhite;
     border: 1px solid @colorGrayLight;
+    &.fullscreen {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+    }
     &.shadow {
       box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
     }

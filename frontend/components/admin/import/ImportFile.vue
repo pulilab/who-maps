@@ -387,12 +387,16 @@ export default {
           ]
         }
       }
-      if (this.countryRadio === 2 && this.importForm.country) {
+      /*
+        May be removed after the Stub projects released and aproved
+
+        if (this.countryRadio === 2 && this.importForm.country) {
         importData.project_import.country = this.importForm.country
       }
       if (this.donorRadio === 2 && this.importForm.donor) {
         importData.project_import.donor = this.importForm.donor
       }
+      */
 
       if (this.importToCollection) {
         importData.add_me_as_editor = this.importForm.projectEditor
@@ -404,7 +408,6 @@ export default {
         }
       }
 
-      // this.$nuxt.$loading.start('importXLSX')
       try {
         this.alert = 0
         this.importing = true
@@ -428,19 +431,9 @@ export default {
         this.importing = false
         this.resetForm()
         this.loadQueue()
-        // this.$router.push(this.localePath({ name: 'organisation-admin-import-id', params: { ...this.$route.params, id: importItem.id }, query: undefined }))
       } catch (err) {
-        // this.$nuxt.$loading.finish('importXLSX')
         this.alert = 2
         this.importing = false
-        console.log('🚀 ~ importItem', err)
-        /* await this.$alert(
-          this.$gettext('Note that all import files need to have a unique name. Please re-name the file and upload it again.'),
-          this.$gettext('Error'),
-          {
-            confirmButtonText: 'OK',
-            type: 'warning'
-          }) */
       }
     }
   }
