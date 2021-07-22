@@ -1,7 +1,7 @@
 <template>
   <table class="queue-table">
     <thead>
-      <th><translate>Collection ame</translate></th>
+      <th><translate>Collection name</translate></th>
       <th><translate>Shareable URL</translate></th>
     </thead>
     <tbody>

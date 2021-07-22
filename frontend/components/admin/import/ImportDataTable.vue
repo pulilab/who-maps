@@ -254,7 +254,6 @@ export default {
       }
     },
     async singleRowSave (doSave, valid, scrollToError, row) {
-      console.log('🚀 ~ row for Donors', row)
       let newRow = null
       if (valid) {
         try {
@@ -308,7 +307,6 @@ export default {
       }
     },
     async doSingleRowSave (doSave, nested, row) {
-      console.log('🚀 ~ doSingleRowSave ~ row', row)
       const { Country: countryData, Investor: investor } = row.data
       try {
         let country = null
@@ -369,7 +367,7 @@ export default {
       )
       try {
         for (const p of toSave) {
-          await this.doSingleRowSave(p.save, true, p)
+          await this.doSingleRowSave(p.save, true, p.row)
         }
         await this.refreshProfile()
       } catch (e) {
