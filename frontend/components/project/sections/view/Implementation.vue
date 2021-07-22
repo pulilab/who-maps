@@ -182,7 +182,6 @@ export default {
                 ]
               }
             ]
-            console.log('🚀 ~ handleRows ~ rows', rows)
           }
         }
       }
