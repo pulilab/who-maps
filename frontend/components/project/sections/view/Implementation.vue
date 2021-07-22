@@ -151,12 +151,9 @@ export default {
       })
     },
     handleRows (coverage, data, country = this.country) {
-      console.log('🚀 ~ file: handleRows ~ coverage, data, country', coverage, data, country)
       let rows = []
       if (!isEmpty(data) && data !== undefined) {
         for (const [key, value] of Object.entries(data)) {
-          console.log('🚀 ~ handleRows ~ key', key)
-          console.log('🚀 ~ handleRows ~ value', value)
           if (coverage.includes(key)) {
             rows = [
               ...rows,
