@@ -5,12 +5,12 @@
     <country-filters />
     <div class="FilterSwitches">
       <filter-switch
-        v-model="governamentApproved"
+        v-model="governmentApproved"
         :label="$gettext('Only MOH Verified Projects') | translate"
         :tooltip="$gettext('Show only projects that have been verified by the country MOH') | translate"
       />
       <filter-switch
-        v-model="governamentFinanced"
+        v-model="governmentFinanced"
         :label="$gettext('Government financed') | translate"
         :tooltip="$gettext('Show only projects that have been received financial or in-kind government support') | translate"
       />
@@ -114,8 +114,8 @@ export default {
   },
   computed: {
     ...mapGettersActions({
-      governamentApproved: ['dashboard', 'getGovernmentApproved', 'setGovernmentApproved', 0],
-      governamentFinanced: ['dashboard', 'getGovernmentFinanced', 'setGovernmentFinanced', 0],
+      governmentApproved: ['dashboard', 'getGovernmentApproved', 'setGovernmentApproved', 0],
+      governmentFinanced: ['dashboard', 'getGovernmentFinanced', 'setGovernmentFinanced', 0],
       selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0],
       selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
       selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
