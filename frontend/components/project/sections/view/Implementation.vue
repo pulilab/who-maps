@@ -1,6 +1,6 @@
 <template>
   <div v-loading="loading">
-    <view-field
+    <ViewField
       v-for="field in fields"
       :key="field.id"
       v-bind="field"
@@ -151,15 +151,18 @@ export default {
       })
     },
     handleRows (coverage, data, country = this.country) {
+      console.log('🚀 ~ file: handleRows ~ coverage, data, country', coverage, data, country)
       let rows = []
       if (!isEmpty(data) && data !== undefined) {
         for (const [key, value] of Object.entries(data)) {
+          console.log('🚀 ~ handleRows ~ key', key)
+          console.log('🚀 ~ handleRows ~ value', value)
           if (coverage.includes(key)) {
             rows = [
               ...rows,
               {
                 id: key,
-                name: country.districts.find(i => i.id === key).name,
+                name: country.districts.find(i => i.id === key)?.name,
                 cols: [
                   {
                     id: 1,
@@ -182,6 +185,7 @@ export default {
                 ]
               }
             ]
+            console.log('🚀 ~ handleRows ~ rows', rows)
           }
         }
       }
