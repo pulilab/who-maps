@@ -16,6 +16,7 @@ class AuditLogBase(models.Model):
     date = models.DateField(blank=False, help_text='WARNING: Only use the year and month of this', null=False)
     country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.CASCADE)
     data = JSONField(blank=True, default=dict)  # JSONField containing data on a per-investor basis
+    modified = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     objects = GetObjectOrNoneQueryset.as_manager()
 
