@@ -5,6 +5,7 @@
     :title="$gettext('Select') | translate"
     :top="dialogStyle.top"
     :width="dialogStyle.width"
+    :modal-append-to-body="false"
     :custom-class="dialogStyle.className"
   >
     <el-row type="flex" class="ImportDialogWrapper flex-col">

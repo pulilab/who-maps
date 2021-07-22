@@ -1,9 +1,9 @@
 <template>
-  <page-layout>
+  <PageLayout>
     <template #title>
       <translate>Import interface</translate>
     </template>
-    <panel>
+    <Panel :class="{fullscreen: fullScreen}">
       <template #header>
         <nuxt-link
           :to="localePath({name: 'organisation-admin-import', params: $route.params})"
@@ -13,12 +13,16 @@
           <i class="el-icon-back" />
         </nuxt-link>
         <translate>Edit imported data</translate>
+        <button @click="toggleFullscreen" class="fullscreen-button">
+          <fa v-if="fullScreen" icon="compress" />
+          <fa v-else icon="expand" />
+        </button>
       </template>
 
-      <import-info :info="importInfo" />
-      <import-data-table />
-    </panel>
-  </page-layout>
+      <ImportInfo :info="importInfo" />
+      <ImportDataTable :fullscreen="fullScreen" />
+    </Panel>
+  </PageLayout>
 </template>
 
 <script>
@@ -44,7 +48,7 @@ export default {
   },
   data () {
     return {
-      showSaved: false
+      fullScreen: false
     }
   },
   async fetch ({ store }) {
@@ -71,8 +75,14 @@ export default {
         country: this.rawImport.country ? this.countries.find((c) => c.id === this.rawImport.country).name : null,
         donor: this.rawImport.donor ? this.donors.find((d) => d.id === this.rawImport.donor).name : null,
         collectionName: this.rawImport.collection?.name,
-        collectionUrl: this.rawImport.collection?.url
+        collectionUrl: this.rawImport.collection?.url,
+        addMeAsEditor: this.rawImport.collection?.add_me_as_editor
       }
+    }
+  },
+  methods: {
+    toggleFullscreen () {
+      this.fullScreen = !this.fullScreen
     }
   }
 }
@@ -92,6 +102,21 @@ export default {
   color: white;
   &:hover {
     text-shadow: 0px 0px 6px white;
+  }
+}
+
+.fullscreen-button {
+  position: absolute;
+  cursor: pointer;
+  top: 2px;
+  right: 20px;
+  padding: 0;
+  font-size: 24px;
+  color: white;
+  background-color: transparent;
+  border: none;
+  &:focus {
+    outline: none;
   }
 }
 </style>

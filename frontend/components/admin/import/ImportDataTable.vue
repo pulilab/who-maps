@@ -1,6 +1,6 @@
 <template>
   <div class="AdminImportPage">
-    <import-dialog
+    <ImportDialog
       ref="dialog"
       :custom-fields-lib="customFieldsLib"
       :imported="rows"
@@ -18,14 +18,14 @@
         <el-input v-model="search" clearable debounce prefix-icon="el-icon-search" placeholder="search" />
       </div>
     </div>
-    <import-validation
+    <ImportValidation
       :headers="rawImport.header_mapping"
       :publish="!rawImport.draft"
     >
       <template #default="{globalErrors, rules, nameMapping}">
         <div class="ExportDataTable">
           <div class="Container">
-            <import-headers
+            <ImportHeaders
               :id="rawImport.id"
               :headers.sync="rawImport.header_mapping"
               :custom-fields-lib="customFieldsLib"
@@ -44,50 +44,9 @@
                   {{ columns.selected }} of {{ columns.count }} columns selected
                 </div>
               </template>
-            </import-headers>
-            <div class="Rows">
-              <!-- <import-row
-                v-for="row in rows"
-                :key="row.id"
-                :row="row"
-                class="Row"
-              >
-                <template #default="{data}">
-                  <div class="Column Thin">
-                    <el-button-group>
-                      <a
-                        v-if="row.project"
-                        :href="
-                          localePath({
-                            name: 'organisation-projects-id-edit',
-                            params: {
-                              id: row.project,
-                              organisation: $route.params.organisation
-                            }
-                          })
-                        "
-                        target="_blank"
-                        class="goto-project"
-                      >
-                        <translate>Go to project</translate>
-                      </a>
-                    </el-button-group>
-                  </div>
-                  <template v-for="header in rawImport.header_mapping">
-                    <SmartCell
-                      :key="row.id + header.title"
-                      :value="data[header.title]"
-                      :type="header.selected"
-                      :rules="rules[header.selected]"
-                      class="Column"
-                      :sub-levels="subLevels"
-                      :custom-fields-lib="customFieldsLib"
-                      :name-mapping="nameMapping"
-                    />
-                  </template>
-                </template>
-              </import-row> -->
-              <import-row
+            </ImportHeaders>
+            <div class="Rows" :class="{'fullscreen': fullscreen}">
+              <ImportRow
                 v-for="(row, index) in rows"
                 :key="row.id"
                 ref="row"
@@ -100,18 +59,6 @@
                 >
                   <div class="Column Thin">
                     <div v-if="!row.project" class="ButtonList">
-                      <!-- <el-button
-                        :type="
-                          globalErrors.length > 0 || !valid
-                            ? 'warning'
-                            : 'success'
-                        "
-                        size="mini"
-                        class="SaveButton"
-                        @click="singleRowSave(rowSave, valid, scrollToError)"
-                      >
-                        <fa icon="save" />
-                      </el-button> -->
                       <button
                         :disabled="globalErrors.length > 0 || !valid"
                         type="text"
@@ -121,14 +68,6 @@
                       >
                         Save
                       </button>
-                      <!-- <el-button
-                        size="mini"
-                        class="DeleteButton"
-                        type="danger"
-                        @click="deleteRow(row, index)"
-                      >
-                        <fa icon="times" />
-                      </el-button> -->
                       <button
                         type="text"
                         size="mini"
@@ -157,6 +96,7 @@
                       :sub-levels="subLevels"
                       :custom-fields-lib="customFieldsLib"
                       :name-mapping="nameMapping"
+                      :disabled="!!row.project"
                       @change="
                         updateValue({
                           row: index,
@@ -169,12 +109,12 @@
                   </template>
                   <div class="Column" />
                 </template>
-              </import-row>
+              </ImportRow>
             </div>
           </div>
         </div>
       </template>
-    </import-validation>
+    </ImportValidation>
   </div>
 </template>
 
@@ -194,6 +134,12 @@ export default {
     ImportRow,
     SmartCell,
     ImportDialog
+  },
+  props: {
+    fullscreen: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
@@ -362,6 +308,7 @@ export default {
       }
     },
     async doSingleRowSave (doSave, nested, row) {
+      console.log('🚀 ~ doSingleRowSave ~ row', row)
       const { Country: countryData, Investor: investor } = row.data
       try {
         let country = null
@@ -376,7 +323,9 @@ export default {
         const newRow = await doSave(
           country.id,
           donor,
-          !this.rawImport.draft
+          !this.rawImport.draft,
+          row.id,
+          this.rawImport?.collection?.add_me_as_editor
         )
         await this.patchRow(newRow)
         return newRow
@@ -491,8 +440,12 @@ export default {
       flex-flow: column wrap;
 
       .Rows {
-        height: 50vh;
+        max-height: 76vh;
         flex-shrink: 0;
+
+        &.fullscreen {
+          max-height: calc(100vh - 380px);
+        }
 
         .Row {
           flex: 1 100%;

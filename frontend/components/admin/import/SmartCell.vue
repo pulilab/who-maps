@@ -226,7 +226,7 @@ export default {
       return this.column === 'government_investor'
     },
     isDisabled () {
-      return !this.column
+      return !this.column || this.disabled
     },
     parsedValue () {
       const result = { names: Array.isArray(this.value) ? this.value : [this.value], ids: Array.isArray(this.value) ? this.value : [this.value] }
