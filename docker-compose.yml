@@ -4,8 +4,8 @@ services:
   django:
     restart: always
     build: ./django
-    environment:
-      - DEPLOY_VERSION=${DEPLOY_VERSION}
+    env_file:
+      - ./django/.env
     expose:
       - "8000"
     links:

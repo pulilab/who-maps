@@ -108,10 +108,12 @@ def deploy(tag=None):
             run('git checkout %s' % env.branch)
             run('git pull origin %s' % env.branch)
         time.sleep(10)
-        run('[ -f {}/.env ] || echo "DEPLOY_VERSION=0.0.0" > {}/.env'.format(env.project_root, env.project_root))
-        # UNHANDLED: if file exists but is incorrect
+        run('[ -f {}/django/.env ] || echo "DEPLOY_VERSION=0.0.0" > {}/django/.env'.format(
+            env.project_root, env.project_root))
+        run('if [ -z $(grep "DEPLOY_VERSION=" "{}/django/.env") ]; '
+            'then echo "DEPLOY_VERSION=0.0.0" >> {}/django/.env; fi').format(env.project_root, env.project_root)
         version = run('git describe --tags --always')
-        run('sed -i "s/DEPLOY_VERSION=.*/DEPLOY_VERSION={}/g" {}/.env'
+        run('sed -i "s/DEPLOY_VERSION=.*/DEPLOY_VERSION={}/g" {}/django/.env'
             .format(version, env.project_root))
         if env.name == 'dev':
             options = "-f {}/docker-compose.yml -f {}/docker-compose.dev.yml ".format(
