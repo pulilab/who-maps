@@ -108,11 +108,11 @@ def deploy(tag=None):
             run('git checkout %s' % env.branch)
             run('git pull origin %s' % env.branch)
         time.sleep(10)
-        backend_env_file_path = '{}/{}/.env'.format(env.project_root, env.backend_root)
+        backend_env_file_path = "{}/{}/.env".format(env.project_root, env.backend_root)
         run('[ -f {} ] || echo "DEPLOY_VERSION=0.0.0" > {}'.format(
             backend_env_file_path, backend_env_file_path))
-        run('if [ -z $(grep "DEPLOY_VERSION=" "{}") ]; then echo "DEPLOY_VERSION=0.0.0" >> {}; fi').format(
-            backend_env_file_path, backend_env_file_path)
+        run('if [ -z $(grep "DEPLOY_VERSION=" "{}") ]; then echo "DEPLOY_VERSION=0.0.0" >> {}; fi'.format(
+            backend_env_file_path, backend_env_file_path))
         version = run('git describe --tags --always')
         run('sed -i "s/DEPLOY_VERSION=.*/DEPLOY_VERSION={}/g" {}'.format(version, backend_env_file_path))
         if env.name == 'dev':
