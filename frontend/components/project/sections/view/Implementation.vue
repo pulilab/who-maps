@@ -1,6 +1,6 @@
 <template>
   <div v-loading="loading">
-    <view-field
+    <ViewField
       v-for="field in fields"
       :key="field.id"
       v-bind="field"
@@ -159,7 +159,7 @@ export default {
               ...rows,
               {
                 id: key,
-                name: country.districts.find(i => i.id === key).name,
+                name: country.districts.find(i => i.id === key)?.name,
                 cols: [
                   {
                     id: 1,
