@@ -62,6 +62,7 @@ class ProjectStatusChangeDescriptor:
         Fills descriptor based on a single ProjectVersion only
         """
         self.published = version.published
+        self.draft = not self.published
         self.to_delete = self._check_for_obsolete_project_name(version.project.name)
         self.ready_to_publish = self._validate_project_version_for_publish(version, country)
         # unpublished is always false for new projects
@@ -74,6 +75,7 @@ class ProjectStatusChangeDescriptor:
             self._check_for_obsolete_project_name(version_new.project.name)
         self.unpublished = version_old.published and not version_new.published
         self.published = not version_old.published and version_new.published
+        self.draft = False  # "old" projects can't be moved to draft, they either stay a draft or get unpublished
         self.ready_to_publish = not self._validate_project_version_for_publish(version_old, country) and \
             not version_new.published and \
             self._validate_project_version_for_publish(version_new, country)
