@@ -54,7 +54,7 @@ def update_auditlog_user_data_task(current_date=None):
             logging.warning(f'Country with this ID does not exist: {entry["country"]}')
 
     qs_registered = UserProfile.objects.filter(user__date_joined__date=date). \
-        filter(country__isnull=False). \
+        filter(country__isnull=False).filter(user__last_login__date__isnull=False). \
         values('country', 'account_type', 'donor').annotate(Count("id")).order_by()
     for entry in qs_registered:
         try:

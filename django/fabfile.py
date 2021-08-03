@@ -212,7 +212,7 @@ def test(app=""):
 
 
 def test_specific(specific_test=''):
-    local(f"docker-compose exec django py.test -s -k {specific_test}")
+    local(f"docker-compose exec django py.test -x -s -k {specific_test}")
 
 
 def cov():

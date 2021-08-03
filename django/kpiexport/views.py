@@ -68,10 +68,7 @@ class UserKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     queryset = AuditLogUsers.objects.all()
 
     def get_serializer_class(self):
-        # TODO: investor filtering this can be made better, but it's currently not required
-        if (self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true') or \
-                self.request.query_params.get('investor'):
-
+        if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
             return AuditLogUserDetailedSerializer
         else:
             return AuditLogUserBasicSerializer
@@ -98,10 +95,7 @@ class TokenKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     queryset = AuditLogTokens.objects.all()
 
     def get_serializer_class(self):
-        # TODO: investor filtering this can be made better, but it's currently not required
-        if (self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true') or \
-                self.request.query_params.get('investor'):
-
+        if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
             return AuditLogTokenDetailedSerializer
         else:
             return AuditLogTokenBasicSerializer
@@ -128,10 +122,7 @@ class ProjectStatusKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     queryset = AuditLogProjectStatus.objects.all()
 
     def get_serializer_class(self):
-        # TODO: investor filtering this can be made better, but it's currently not required
-        if (self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true') or \
-                self.request.query_params.get('investor'):
-
+        if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
             return AuditLogProjectStatusDetailedSerializer
         else:
             return AuditLogProjectStatusBasicSerializer
@@ -152,16 +143,13 @@ class ProjectStagesKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     * `detailed`: if set to true, detailed donor-based data will be returned
 
     """
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogProjectStages.objects.all()
 
     def get_serializer_class(self):
-        # TODO: investor filtering this can be made better, but it's currently not required
-        if (self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true') or \
-                self.request.query_params.get('investor'):
-
+        if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
             return AuditLogProjectStagesDetailedSerializer
         else:
             return AuditLogProjectStagesBasicSerializer
