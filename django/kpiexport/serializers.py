@@ -2,53 +2,71 @@ from rest_framework import serializers
 from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages
 
 
-class AuditLogUserDetailedSerializer(serializers.ModelSerializer):
+class AuditLogUserBasicSerializer(serializers.ModelSerializer):
     date = serializers.CharField(read_only=True, max_length=10)
     country = serializers.PrimaryKeyRelatedField(read_only=True)
-    data = serializers.JSONField(read_only=True)
-    registered = serializers.IntegerField(read_only=True)
-    active = serializers.IntegerField(read_only=True)
+    registered = serializers.SerializerMethodField()
+    active = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AuditLogUsers
+        fields = ("date", "country", "registered", "active")
+
+    def get_registered(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return obj.data.get(donor)['total']['registered']
+        return obj.registered
+
+    def get_active(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return obj.data.get(donor)['total']['active']
+        return obj.active
+
+
+class AuditLogUserDetailedSerializer(AuditLogUserBasicSerializer):
+    data = serializers.SerializerMethodField()
 
     class Meta:
         model = AuditLogUsers
         fields = ("date", "country", "data", "registered", "active")
 
-
-class AuditLogUserBasicSerializer(serializers.ModelSerializer):
-    date = serializers.CharField(read_only=True, max_length=10)
-    country = serializers.PrimaryKeyRelatedField(read_only=True)
-    registered = serializers.IntegerField(read_only=True)
-    active = serializers.IntegerField(read_only=True)
-    data = serializers.SerializerMethodField()
-
-    class Meta:
-        model = AuditLogUsers
-        fields = ("date", "country", "registered", "data", "active")
-
-    @staticmethod
-    def get_data(audit_log):
-        return dict(total=audit_log.data.get('total'))
+    def get_data(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return obj.data.get(donor)
+        return obj.data
 
 
 class AuditLogTokenBasicSerializer(serializers.ModelSerializer):
     date = serializers.CharField(read_only=True, max_length=10)
     country = serializers.PrimaryKeyRelatedField(read_only=True)
-    tokens = serializers.IntegerField(read_only=True)
+    tokens = serializers.SerializerMethodField()
 
     class Meta:
         model = AuditLogTokens
         fields = ("date", "country", "tokens")
 
+    def get_tokens(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return obj.data.get(donor)['total']
+        return obj.tokens
 
-class AuditLogTokenDetailedSerializer(serializers.ModelSerializer):
-    date = serializers.CharField(read_only=True, max_length=10)
-    country = serializers.PrimaryKeyRelatedField(read_only=True)
-    data = serializers.JSONField(read_only=True)
-    tokens = serializers.IntegerField(read_only=True)
+
+class AuditLogTokenDetailedSerializer(AuditLogTokenBasicSerializer):
+    data = serializers.SerializerMethodField()
 
     class Meta:
         model = AuditLogTokens
         fields = ("date", "country", "data", "tokens")
+
+    def get_data(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return obj.data.get(donor)
+        return obj.data
 
 
 class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
@@ -58,23 +76,37 @@ class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
     unpublished = serializers.SerializerMethodField()
     ready_to_publish = serializers.SerializerMethodField()
     to_delete = serializers.SerializerMethodField()
-    growth = serializers.IntegerField(read_only=True)
+    growth = serializers.SerializerMethodField()
 
-    @staticmethod
-    def get_published(audit_log):
-        return len(audit_log.published)
+    def get_published(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return len(obj.data[donor]['published']) if donor in obj.data else 0
+        return len(obj.published)
 
-    @staticmethod
-    def get_unpublished(audit_log):
-        return len(audit_log.unpublished)
+    def get_unpublished(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return len(obj.data[donor]['unpublished']) if donor in obj.data else 0
+        return len(obj.unpublished)
 
-    @staticmethod
-    def get_ready_to_publish(audit_log):
-        return len(audit_log.ready_to_publish)
+    def get_ready_to_publish(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return len(obj.data[donor]['ready_to_publish']) if donor in obj.data else 0
+        return len(obj.ready_to_publish)
 
-    @staticmethod
-    def get_to_delete(audit_log):
-        return len(audit_log.to_delete)
+    def get_to_delete(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return len(obj.data[donor]['to_delete']) if donor in obj.data else 0
+        return len(obj.to_delete)
+
+    def get_growth(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return obj.data[donor]['growth'] if donor in obj.data else 0
+        return obj.growth
 
     class Meta:
         model = AuditLogProjectStatus
@@ -84,18 +116,25 @@ class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
 class AuditLogProjectStatusDetailedSerializer(AuditLogProjectStatusBasicSerializer):
     data = serializers.SerializerMethodField()
 
-    @staticmethod
-    def get_data(audit_log):
-        summary_dict = {}
-        for donor_id in audit_log.data:
-            summary_dict[donor_id] = {
-                'published': len(audit_log.data[donor_id]['published']),
-                'unpublished': len(audit_log.data[donor_id]['unpublished']),
-                'ready_to_publish': len(audit_log.data[donor_id]['ready_to_publish']),
-                'to_delete': len(audit_log.data[donor_id]['to_delete']),
-                'growth': audit_log.data[donor_id]['growth']
+    def get_data(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return {
+                'published': len(obj.data[donor]['published'])  if donor in obj.data else 0,
+                'unpublished': len(obj.data[donor]['unpublished']) if donor in obj.data else 0,
+                'ready_to_publish': len(obj.data[donor]['ready_to_publish']) if donor in obj.data else 0,
+                'to_delete': len(obj.data[donor]['to_delete']) if donor in obj.data else 0,
+                'growth': obj.data[donor]['growth'] if donor in obj.data else 0
             }
-
+        summary_dict = {}
+        for donor_id in obj.data:
+            summary_dict[donor_id] = {
+                'published': len(obj.data[donor_id]['published']),
+                'unpublished': len(obj.data[donor_id]['unpublished']),
+                'ready_to_publish': len(obj.data[donor_id]['ready_to_publish']),
+                'to_delete': len(obj.data[donor_id]['to_delete']),
+                'growth': obj.data[donor_id]['growth']
+            }
         return summary_dict
 
     class Meta:
@@ -108,9 +147,12 @@ class AuditLogProjectStagesBasicSerializer(serializers.ModelSerializer):
     country = serializers.PrimaryKeyRelatedField(read_only=True)
     stages = serializers.SerializerMethodField()
 
-    @staticmethod
-    def get_stages(audit_log):
-        return {stage: len(val) for stage, val in audit_log.stages.items()}
+    def get_stages(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        stages_dict = obj.stages
+        if donor:
+            stages_dict = obj.data.get(donor, {})
+        return {stage: len(val) for stage, val in stages_dict.items()}
 
     class Meta:
         model = AuditLogProjectStages
@@ -120,10 +162,12 @@ class AuditLogProjectStagesBasicSerializer(serializers.ModelSerializer):
 class AuditLogProjectStagesDetailedSerializer(AuditLogProjectStagesBasicSerializer):
     data = serializers.SerializerMethodField()
 
-    @staticmethod
-    def get_data(audit_log):
+    def get_data(self, obj):
         result_dict = {}
-        for donor_id, donor_dict in audit_log.data.items():
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return {stage: len(val) for stage, val in obj.data.get(donor, {}).items()}
+        for donor_id, donor_dict in obj.data.items():
             result_dict[donor_id] = {stage: len(val) for stage, val in donor_dict.items()}
         return result_dict
 
