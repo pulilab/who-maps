@@ -120,7 +120,7 @@ class AuditLogProjectStatusDetailedSerializer(AuditLogProjectStatusBasicSerializ
         donor = self.context['request'].query_params.get('investor')
         if donor:
             return {
-                'published': len(obj.data[donor]['published'])  if donor in obj.data else 0,
+                'published': len(obj.data[donor]['published']) if donor in obj.data else 0,
                 'unpublished': len(obj.data[donor]['unpublished']) if donor in obj.data else 0,
                 'ready_to_publish': len(obj.data[donor]['ready_to_publish']) if donor in obj.data else 0,
                 'to_delete': len(obj.data[donor]['to_delete']) if donor in obj.data else 0,
