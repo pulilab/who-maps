@@ -32,16 +32,24 @@ class KPITestData(TestData):
             generate_date = generate_date + timedelta(days=1)
 
     def create_anchor_dates(self):
-        self.date_1 = localtime() - timedelta(days=120)
-        self.date_1 = datetime(self.date_1.year, self.date_1.month, 1).astimezone()
+        def subtract_months_from_date(date, months):
+            year = date.year
+            month = date.month
+            if month <= months:  # pragma: no cover
+                year -= 1
+                month = 12 + month - months
+            else:
+                month -= months
+            return datetime(year, month, 1).astimezone()
+        current_date = localtime().date()
+
+        self.date_1 = subtract_months_from_date(current_date, 4)
         self.date_1_str = self.date_1.strftime("%Y-%m-%d")
-        self.date_2 = localtime() - timedelta(days=90)
-        self.date_2 = datetime(self.date_2.year, self.date_2.month, 1).astimezone()
+        self.date_2 = subtract_months_from_date(current_date, 3)
         self.date_2_str = self.date_2.strftime("%Y-%m-%d")
-        self.date_3 = localtime() - timedelta(days=60)
-        self.date_3 = datetime(self.date_3.year, self.date_3.month, 1).astimezone()
+        self.date_3 = subtract_months_from_date(current_date, 2)
         self.date_3_str = self.date_3.strftime("%Y-%m-%d")
-        self.date_4 = localtime() - timedelta(days=1)
+        self.date_4 = localtime() - timedelta(days=1)  # yesterday
         self.date_4 = datetime(self.date_4.year, self.date_4.month, 1).astimezone()
         self.date_4_str = self.date_4.strftime("%Y-%m-%d")
 
@@ -106,6 +114,15 @@ class KPITestData(TestData):
         self.token_6, _ = Token.objects.get_or_create(user=self.userprofile_6.user)
         self.token_6.created = self.date_2
         self.token_6.save()
+
+        # This user should not show up in any of the kpis, as they have never logged in
+        self.userprofile_7 = UserProfileFactory(name="USER7", account_type=UserProfile.IMPLEMENTER,
+                                                country=self.country2)
+        self.userprofile_7.user.date_joined = self.date_2
+        self.userprofile_7.user.last_login = None
+        self.userprofile_7.donor = self.d2
+        self.userprofile_7.user.save()
+        self.userprofile_7.save()
 
 
 class KPITestDataWithProjects(KPITestData):

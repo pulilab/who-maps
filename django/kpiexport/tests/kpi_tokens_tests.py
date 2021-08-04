@@ -31,11 +31,8 @@ class KPITokensTests(KPITestData, APITestCase):
         response = self.test_user_client.get(url)
         expected = \
             [{'country': None,
-              'data': {str(self.d1.id): {'I': 1, 'total': 1},
-                       str(self.d2.id): {'G': 1, 'I': 1, 'total': 2},
-                       'total': {'G': 1, 'I': 2}},
               'date': self.date_1_str,
-              'tokens': 3}]
+              'tokens': 1}]
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected)
 
@@ -44,13 +41,9 @@ class KPITokensTests(KPITestData, APITestCase):
         response = self.test_user_client.get(url)
         expected = \
             [{'country': None,
-              'data': {str(self.d1.id): {'I': 1, 'total': 1},
-                       str(self.d2.id): {'G': 1, 'I': 1, 'total': 2},
-                       'total': {'G': 1, 'I': 2}},
               'date': self.date_1_str,
-              'tokens': 3},
+              'tokens': 2},
              {'country': None,
-              'data': {str(self.d2.id): {'I': 2, 'total': 2}, 'total': {'I': 2}},
               'date': self.date_2_str,
               'tokens': 2}]
 
@@ -92,6 +85,21 @@ class KPITokensTests(KPITestData, APITestCase):
               'data': {str(self.d2.id): {'I': 2, 'total': 2}, 'total': {'I': 2}},
               'date': self.date_2_str,
               'tokens': 2}]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), expected)
+
+    def test_token_kpi_detailed_filters(self):
+        url = reverse("token-kpi")
+        url += f'?from={self.date_2.year}-{self.date_2.month}&to={self.date_3.year}-{self.date_3.month}' \
+               f'&country={self.country2.id}&investor={self.d2.id}&detailed=true'
+        response = self.test_user_client.get(url)
+        expected = \
+            [{
+                'date': self.date_2_str,
+                'country': self.country2.id,
+                'data': {'I': 2, 'total': 2},
+                'tokens': 2}]
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected)
