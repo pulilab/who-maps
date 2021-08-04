@@ -4,16 +4,6 @@ import django.contrib.postgres.fields.jsonb
 from django.db import migrations, models
 import django.db.models.deletion
 
-from datetime import date, timedelta
-from kpiexport.tasks import update_auditlog_user_data_task
-
-
-def pre_fill_data(apps, schema_editor):
-    generate_date = date.today() - timedelta(days=365)
-    while generate_date <= date.today():
-        update_auditlog_user_data_task(generate_date)
-        generate_date = generate_date + timedelta(days=1)
-
 
 class Migration(migrations.Migration):
 
@@ -41,5 +31,4 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'User KPIs',
             },
         ),
-        migrations.RunPython(pre_fill_data, migrations.RunPython.noop),
     ]
