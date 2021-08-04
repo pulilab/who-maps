@@ -15,6 +15,7 @@ class ProjectStatusChangeDescriptor:
         self.published = False
         self.unpublished = False
         self.ready_to_publish = False
+        self.draft = False
         self.to_delete = False
 
     @staticmethod
@@ -70,12 +71,12 @@ class ProjectStatusChangeDescriptor:
     def fill_from_version_diff(self, version_old: ProjectVersion, version_new: ProjectVersion, country: Country):
         """
         Fills descriptor based on two ProjectVersions
+        Note: "old" projects can't be moved to draft, they either stay a draft or get unpublished
         """
         self.to_delete = not self._check_for_obsolete_project_name(version_old.project.name) and \
             self._check_for_obsolete_project_name(version_new.project.name)
         self.unpublished = version_old.published and not version_new.published
         self.published = not version_old.published and version_new.published
-        self.draft = False  # "old" projects can't be moved to draft, they either stay a draft or get unpublished
         self.ready_to_publish = not self._validate_project_version_for_publish(version_old, country) and \
             not version_new.published and \
             self._validate_project_version_for_publish(version_new, country)

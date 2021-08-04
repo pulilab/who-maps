@@ -153,6 +153,8 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
             entry.data[donor_id]['ready_to_publish'].append(project_id)
         if status_change.to_delete and project_id not in set(entry.data[donor_id]['to_delete']):
             entry.data[donor_id]['to_delete'].append(project_id)
+        if status_change.draft and project_id not in set(entry.data[donor_id]['draft']):
+            entry.data[donor_id]['draft'].append(project_id)
 
     def add_growth_to_data(entry, donor_id):
         if not entry.data.get(donor_id):
