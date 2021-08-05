@@ -121,6 +121,7 @@ class AuditLogProjectStatus(AuditLogBase):
             "ready_to_publish": {(int)},
             "unpublished": {(int)},
             "to_delete": {(int)},
+            "draft": {(int)},
             "growth": (int)
           },
       }
@@ -130,6 +131,7 @@ class AuditLogProjectStatus(AuditLogBase):
     ready_to_publish = ArrayField(models.IntegerField(null=True, blank=True), blank=True, default=list)
     unpublished = ArrayField(models.IntegerField(null=True, blank=True), blank=True, default=list)
     to_delete = ArrayField(models.IntegerField(null=True, blank=True), blank=True, default=list)
+    draft = ArrayField(models.IntegerField(null=True, blank=True), blank=True, default=list)
     growth = models.IntegerField(default=0)  # Total number of new projects
 
     class Meta:

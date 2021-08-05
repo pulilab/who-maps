@@ -142,6 +142,7 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
                 unpublished=[],
                 ready_to_publish=[],
                 to_delete=[],
+                draft=[],
                 growth=0
             )
         if status_change.published and project_id not in set(entry.data[donor_id]['published']):
@@ -152,6 +153,8 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
             entry.data[donor_id]['ready_to_publish'].append(project_id)
         if status_change.to_delete and project_id not in set(entry.data[donor_id]['to_delete']):
             entry.data[donor_id]['to_delete'].append(project_id)
+        if status_change.draft and project_id not in set(entry.data[donor_id]['draft']):
+            entry.data[donor_id]['draft'].append(project_id)
 
     def add_growth_to_data(entry, donor_id):
         if not entry.data.get(donor_id):
@@ -160,6 +163,7 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
                 unpublished=[],
                 ready_to_publish=[],
                 to_delete=[],
+                draft=[],
                 growth=0
             )
         entry.data[donor_id]['growth'] += 1
@@ -206,6 +210,12 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
                 log_entry.to_delete.append(entry.project.id)
             if entry.project.id not in set(log_entry_global.to_delete):
                 log_entry_global.to_delete.append(entry.project.id)
+        if status_change.draft:
+            if entry.project.id not in set(log_entry.draft):
+                log_entry.draft.append(entry.project.id)
+            if entry.project.id not in set(log_entry_global.draft):
+                log_entry_global.draft.append(entry.project.id)
+
         for donor in donors:
             add_stats_to_data(log_entry, donor, status_change, entry.project.id)
             add_stats_to_data(log_entry_global, donor, status_change, entry.project.id)

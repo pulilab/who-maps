@@ -76,6 +76,7 @@ class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
     unpublished = serializers.SerializerMethodField()
     ready_to_publish = serializers.SerializerMethodField()
     to_delete = serializers.SerializerMethodField()
+    draft = serializers.SerializerMethodField()
     growth = serializers.SerializerMethodField()
 
     def get_published(self, obj):
@@ -102,6 +103,12 @@ class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
             return len(obj.data[donor]['to_delete']) if donor in obj.data else 0
         return len(obj.to_delete)
 
+    def get_draft(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return len(obj.data[donor]['draft']) if donor in obj.data else 0
+        return len(obj.draft)
+
     def get_growth(self, obj):
         donor = self.context['request'].query_params.get('investor')
         if donor:
@@ -110,7 +117,7 @@ class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AuditLogProjectStatus
-        fields = ("date", "country", "published", "unpublished", "ready_to_publish", "to_delete", "growth")
+        fields = ("date", "country", "published", "unpublished", "ready_to_publish", "to_delete", "draft", "growth")
 
 
 class AuditLogProjectStatusDetailedSerializer(AuditLogProjectStatusBasicSerializer):
@@ -124,6 +131,7 @@ class AuditLogProjectStatusDetailedSerializer(AuditLogProjectStatusBasicSerializ
                 'unpublished': len(obj.data[donor]['unpublished']) if donor in obj.data else 0,
                 'ready_to_publish': len(obj.data[donor]['ready_to_publish']) if donor in obj.data else 0,
                 'to_delete': len(obj.data[donor]['to_delete']) if donor in obj.data else 0,
+                'draft': len(obj.data[donor]['draft']) if donor in obj.data else 0,
                 'growth': obj.data[donor]['growth'] if donor in obj.data else 0
             }
         summary_dict = {}
@@ -133,13 +141,15 @@ class AuditLogProjectStatusDetailedSerializer(AuditLogProjectStatusBasicSerializ
                 'unpublished': len(obj.data[donor_id]['unpublished']),
                 'ready_to_publish': len(obj.data[donor_id]['ready_to_publish']),
                 'to_delete': len(obj.data[donor_id]['to_delete']),
+                'draft': len(obj.data[donor_id]['draft']),
                 'growth': obj.data[donor_id]['growth']
             }
         return summary_dict
 
     class Meta:
         model = AuditLogProjectStatus
-        fields = ("date", "country", "data", "published", "unpublished", "ready_to_publish", "to_delete", "growth")
+        fields = ("date", "country", "data", "published", "unpublished", "ready_to_publish", "to_delete",
+                  "draft", "growth")
 
 
 class AuditLogProjectStagesBasicSerializer(serializers.ModelSerializer):
