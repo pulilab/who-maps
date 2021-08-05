@@ -5,10 +5,6 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
-from datetime import date, timedelta
-from kpiexport.tasks import update_auditlog_token_data_task
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
