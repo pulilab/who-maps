@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('kpiexport', '0005_add_modified_and_move_data_generation'),
+        ('kpiexport', '0005_auto_20210723_1142'),
     ]
 
     operations = [
