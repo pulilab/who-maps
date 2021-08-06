@@ -193,16 +193,22 @@ const generalTooltipSettings = (tooltip, xTitle, type = 'line') => {
     xPadding: 10,
     yPadding: 8,
     callbacks: {
-      title (item) {
+      title (tooltipItems, data) {
+        let title = ''
         if (type === 'line') {
-          return `${item[0].yLabel} ${tooltip}`
+          if (tooltip) {
+            title = `${tooltipItems[0].yLabel} ${tooltip}`
+          } else {
+            title = `${tooltipItems[0].value} ${data.datasets[tooltipItems[0].datasetIndex].label}`
+          }
+        } else {
+          title = `${tooltip.title} ${tooltipItems[0].value}`
         }
-        return `${tooltip.title} ${item[0].value}`
+        return title
       },
-      label (item) {
+      label (tooltipItems, data) {
         if (type === 'line') {
-          // return `${item.label} ${xTitle}`
-          return `${item.label}`
+          return `${tooltipItems.label}`
         }
         return `${tooltip.subtitle}`
       }
@@ -270,6 +276,9 @@ const scaleLabelConfigLine = label => {
   }
 }
 const optionsLineBarConfig = ({ scales, tooltip, stacked }) => {
+  console.log('🚀 ~ file: charts.js ~ line 278 ~ optionsLineBarConfig ~ stacked', stacked)
+  console.log('🚀 ~ file: charts.js ~ line 278 ~ optionsLineBarConfig ~ tooltip', tooltip)
+  console.log('🚀 ~ file: charts.js ~ line 278 ~ optionsLineBarConfig ~ scales', scales)
   return {
     ...generalOptions,
     scales: {
@@ -456,6 +465,7 @@ const datasetGen = ({ type, colors, data, legendLabels, thickness }) => {
   )
 }
 export const settings = config => {
+  console.log('🚀 ~ file: charts.js ~ line 464 ~ config', config)
   const { type, colors, labels, data, tooltip, click } = config
   switch (type) {
   case 'line':
@@ -514,6 +524,13 @@ export const legendGenerator = (labels, colors, data = []) => {
 }
 
 export const extract = (obj, key) => obj.map(d => d[key])
+
+export const extractWithLabel = (obj, key, label) => {
+  return {
+    ...obj.map(d => d[key]),
+    label
+  }
+}
 
 export const objectToQueryString = queryParameters => {
   return queryParameters

@@ -74,6 +74,28 @@
     <p class="subtitle">
       <translate>Users</translate>
     </p>
+    <el-row
+      type="flex"
+      class="mb-80"
+    >
+      <graph-layout :span="24">
+        <translate>Monthly User Activity</translate>
+        <template #graph>
+          <chart
+            v-if="lineB.chartData"
+            :chart-data="lineB.chartData"
+            :options="lineB.options"
+            :height="300"
+          />
+        </template>
+        <template #legend>
+          <data-legend
+            :items="monthlyUserLegend"
+            horizontal
+          />
+        </template>
+      </graph-layout>
+    </el-row>
 
     <el-row
       type="flex"
@@ -119,7 +141,7 @@
       </graph-layout>
     </el-row>
 
-    <!-- <el-row
+    <el-row
       type="flex"
       :gutter="20"
       class="mb-80"
@@ -137,7 +159,7 @@
           />
         </template>
       </graph-layout>
-    </el-row> -->
+    </el-row>
 
     <!-- project status -->
     <p class="subtitle">
@@ -215,7 +237,7 @@
       class="mb-80"
     >
       <graph-layout
-        :span="24"
+        :span="16"
         horizontal
       >
         <translate>Distributions of projects’ stages</translate>
@@ -228,6 +250,244 @@
         </template>
         <template #legend>
           <data-legend :items="polarALegend" />
+        </template>
+      </graph-layout>
+      <graph-layout :span="8">
+        <translate>Blank template</translate>
+      </graph-layout>
+    </el-row>
+
+    <!-- not integrate -->
+    <p class="headline">
+      <translate>Random generated</translate>
+    </p>
+    <p class="subtitle">
+      <translate>Integration pending...</translate>
+    </p>
+
+    <!-- section A -->
+    <el-row
+      type="flex"
+      :gutter="30"
+      class="mb-80"
+    >
+      <div class="resume-group">
+        <el-col :span="5">
+          <resume>
+            <translate>Published Projects</translate>
+            <template #content>
+              <growth
+                :incoming="incoming"
+                large
+                absolute
+              />
+              <growth
+                :incoming="incoming"
+                :previous="previous"
+              />
+            </template>
+          </resume>
+        </el-col>
+        <el-col :span="5">
+          <resume>
+            <translate>Publishable Projects</translate>
+            <template #content>
+              <growth
+                :incoming="incoming"
+                large
+                absolute
+              />
+              <growth
+                :incoming="incoming"
+                :previous="previous"
+              />
+            </template>
+          </resume>
+        </el-col>
+        <el-col :span="5">
+          <resume>
+            <translate>Unpublished Projects</translate>
+            <template #content>
+              <growth
+                :incoming="incoming"
+                large
+                absolute
+              />
+            </template>
+          </resume>
+        </el-col>
+        <el-col :span="4">
+          <resume>
+            <translate>Deletable Projects</translate>
+            <template #content>
+              <growth
+                :incoming="incoming"
+                large
+                absolute
+              />
+              <growth
+                :incoming="incoming"
+                :previous="previous"
+              />
+            </template>
+          </resume>
+        </el-col>
+        <el-col :span="5">
+          <resume no-border>
+            <translate>Monthly growth of Projects</translate>
+            <template #content>
+              <growth
+                :incoming="incoming"
+                :previous="previous"
+                large
+              />
+              <chart
+                :chart-data="micro.chartData || {}"
+                :options="micro.options"
+                :width="72"
+                :height="26"
+              />
+            </template>
+          </resume>
+        </el-col>
+      </div>
+    </el-row>
+
+    <!-- section H -->
+    <el-row
+      type="flex"
+      :gutter="20"
+      class="mb-80"
+    >
+      <graph-layout :span="8">
+        <translate>Project approval per countries</translate>
+        <template #legend>
+          <country-legend :data="countryTable" />
+        </template>
+      </graph-layout>
+      <graph-layout :span="16">
+        <translate>Blank template</translate>
+        <!-- <translate>Monthly growth of API keys</translate>
+        <template #graph>
+          <chart
+            :chart-data="lineC.chartData || {}"
+            :options="lineC.options"
+            :height="320"
+          />
+        </template> -->
+      </graph-layout>
+    </el-row>
+
+    <!-- section I -->
+    <el-row
+      type="flex"
+      :gutter="20"
+      class="mb-80"
+    >
+      <graph-layout :span="8">
+        <translate>
+          Has the government contributed to the project, either financially or
+          in-kind?
+        </translate>
+        <template #graph>
+          <chart
+            type="doughnut"
+            :width="160"
+            :height="160"
+            :chart-data="doughnutB.chartData || {}"
+            :options="doughnutB.options"
+          />
+        </template>
+        <template #legend>
+          <data-legend
+            :items="doughnutBLegend"
+            percentage
+          />
+        </template>
+      </graph-layout>
+      <graph-layout :span="16">
+        <translate>Top 10 ‘Data standards’ (by occurrences)</translate>
+        <template #graph>
+          <chart
+            type="horizontal-bar"
+            :chart-data="horizontalBarA.chartData || {}"
+            :options="horizontalBarA.options"
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
+    <!-- section J -->
+    <el-row
+      type="flex"
+      :gutter="20"
+      class="mb-80"
+    >
+      <graph-layout
+        :span="16"
+        horizontal
+      >
+        <translate>Blank template</translate>
+      </graph-layout>
+      <graph-layout :span="8">
+        <translate>Distribution of projects’ statuses</translate>
+        <template #graph>
+          <chart
+            type="doughnut"
+            :width="160"
+            :height="160"
+            :chart-data="doughnutC.chartData || {}"
+            :options="doughnutC.options"
+          />
+        </template>
+        <template #legend>
+          <data-legend :items="doughnutCLegend" />
+        </template>
+      </graph-layout>
+    </el-row>
+
+    <!-- section K -->
+    <el-row
+      type="flex"
+      :gutter="20"
+      class="mb-80"
+    >
+      <graph-layout :span="8">
+        <translate>Coverage of Health Focus Areas</translate>
+        <template #graph>
+          <chart
+            type="doughnut"
+            :width="160"
+            :height="160"
+            :chart-data="doughnutD.chartData || {}"
+            :options="doughnutD.options"
+          />
+        </template>
+        <template #legend>
+          <tab-legend :legend="doughnutDLegend" />
+        </template>
+      </graph-layout>
+      <graph-layout :span="16">
+        <translate>Health Focus Areas (by occurrences)</translate>
+        <template #back>
+          <el-button
+            v-if="back.length > 0"
+            type="text"
+            icon="el-icon-arrow-left"
+            @click="handleBackClick"
+          >
+            <translate>Back</translate>
+          </el-button>
+        </template>
+        <template #subtitle>
+          <subtitle :item="subtitle" />
+        </template>
+        <template #graph>
+          <chart
+            type="horizontal-bar"
+            :chart-data="horizontalBarB.chartData || {}"
+            :options="horizontalBarB.options"
+          />
         </template>
       </graph-layout>
     </el-row>
