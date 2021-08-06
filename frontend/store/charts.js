@@ -312,10 +312,11 @@ export const actions = {
 
     // label sets (should be dynamic?)
     const projectsLabels = [
+      'Draft Projects',
       'Published Projects',
       'Publishable Projects',
       'Unpublished Projects',
-      'Deleteble Projects'
+      'Incoherent Projects'
     ]
     const govermentContributionLabels = [
       'No, they have not yet contributed',
@@ -369,12 +370,14 @@ export const actions = {
     ]
 
     // projects status data generation
+    const draft = extract(projectStatus, 'draft')
     const published = extract(projectStatus, 'published')
     const publishable = extract(projectStatus, 'ready_to_publish')
     const unpublished = extract(projectStatus, 'unpublished')
     const deletable = extract(projectStatus, 'to_delete')
 
     const projectStatusMonthly = [
+      draft,
       published,
       publishable,
       unpublished,
@@ -386,6 +389,7 @@ export const actions = {
     }
 
     const doughnutAData = [
+      projectSum(draft),
       projectSum(published),
       projectSum(publishable),
       projectSum(unpublished),
@@ -405,6 +409,7 @@ export const actions = {
         data: [randomData(10)]
       })
     )
+
     commit(
       'SET_POLARA_GRAPH',
       settings({
@@ -414,6 +419,7 @@ export const actions = {
         data: [polarAData]
       })
     )
+
     commit(
       'SET_LINEA_GRAPH',
       settings({
@@ -421,10 +427,11 @@ export const actions = {
         colors: colorSetA,
         scales: { x: 'Months', y: 'Growth of project' },
         labels: extract(projectStatus, 'date').map(d => format(d, 'YYYY-MMM')),
-        tooltip: 'Projects',
+        tooltip: 'New projects',
         data: [extract(projectStatus, 'growth')]
       })
     )
+
     commit(
       'SET_LINEB_GRAPH',
       settings({
@@ -436,6 +443,7 @@ export const actions = {
         data: monthlyUserActivity
       })
     )
+
     commit(
       'SET_LINEC_GRAPH',
       settings({
@@ -447,6 +455,7 @@ export const actions = {
         data: [extract(tokens, 'tokens')]
       })
     )
+
     commit(
       'SET_BARA_GRAPH',
       settings({
@@ -454,8 +463,8 @@ export const actions = {
         colors: colorSetB,
         scales: { x: 'Months', y: 'Growth of users' },
         labels: extract(users, 'date').map(d => format(d, 'YYYY-MMM')),
-        legendLabels: [],
-        tooltip: 'New users',
+        legendLabels: ['New users', 'Active users'],
+        tooltip: '',
         data: monthlyUserActivity
       })
     )
