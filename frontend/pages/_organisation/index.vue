@@ -1,10 +1,10 @@
 <template>
   <div class="LandingPage">
     <div class="MapBoxContainer">
-      <welcome-box />
+      <WelcomeBox />
       <template v-if="routeCheck">
-        <landing-map v-if="!showCoverImage" />
-        <country-projects-box />
+        <LandingMap v-if="!showCoverImage" />
+        <CountryProjectsBox />
         <div
           v-if="showCoverImage"
           :style="{ backgroundImage: `url(${landingData.cover_url})` }"
@@ -12,29 +12,36 @@
         />
       </template>
       <template v-else>
-        <landing-map />
-        <country-projects-box />
+        <LandingMap />
+        <CountryProjectsBox />
       </template>
     </div>
 
+    <div>
+      <el-row type="flex">
+        <el-col>
+          <IntroVideo />
+        </el-col>
+      </el-row>
+    </div>
     <div
       v-if="!landingData"
       class="InfoSignupContainer"
     >
       <el-row type="flex">
         <el-col class="InfoBoxWrapper">
-          <info-box />
+          <InfoBox />
         </el-col>
         <el-col class="CentralBoxWrapper">
-          <central-box />
+          <CentralBox />
         </el-col>
       </el-row>
     </div>
-    <layout-builder
+    <LayoutBuilder
       v-else
       :data="defaultsLandingData"
     />
-    <about-section />
+    <AboutSection />
   </div>
 </template>
 
@@ -42,6 +49,7 @@
 import LandingMap from '../../components/landing/LandingMap.vue'
 import WelcomeBox from '../../components/landing/WelcomeBox.vue'
 import CountryProjectsBox from '../../components/landing/CountryProjectsBox.vue'
+import IntroVideo from '../../components/landing/IntroVideo.vue'
 import InfoBox from '../../components/landing/InfoBox.vue'
 import CentralBox from '../../components/landing/CentralBox.vue'
 import AboutSection from '../../components/landing/AboutSection.vue'
@@ -53,6 +61,7 @@ export default {
   components: {
     LandingMap,
     WelcomeBox,
+    IntroVideo,
     InfoBox,
     CentralBox,
     AboutSection,
