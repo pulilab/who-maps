@@ -285,13 +285,14 @@ export const actions = {
       }
     })
 
-    console.log(projectStages)
+    // console.log(projectStages)
 
     // start of data that should come from somewhere
     // color sets (should be dynamic?)
     const colorSetA = ['#49BCE8']
     const colorSetB = ['#49BCE8', '#99CA67']
-    const colorSetC = ['#9ACB67', '#FFCF3F', '#BABABB', '#E84F48']
+    // const colorSetC = ['#9ACB67', '#FFCF3F', '#BABABB', '#E84F48']
+    const colorSetC = ['#BABABB', '#9ACB67', '#FFCF3F', '#49BCE8', '#E84F48']
     const colorSetD = ['#FFCF3F', '#FEAB7D', '#9ACB67', '#49BCE8']
     const colorSetE = ['#FFCF3F', '#EF8A85', '#9ACB67', '#5F72B5']
     const colorSetF = ['#9ACB67', '#E84F48']
