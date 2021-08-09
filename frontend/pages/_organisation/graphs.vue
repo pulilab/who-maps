@@ -119,26 +119,6 @@
       </graph-layout>
     </el-row>
 
-    <!-- <el-row
-      type="flex"
-      :gutter="20"
-      class="mb-80"
-    >
-      <graph-layout :span="8">
-        <translate>Blank template</translate>
-      </graph-layout>
-      <graph-layout :span="16">
-        <translate>Monthly growth of API keys</translate>
-        <template #graph>
-          <chart
-            :chart-data="lineC.chartData || {}"
-            :options="lineC.options"
-            :height="320"
-          />
-        </template>
-      </graph-layout>
-    </el-row> -->
-
     <!-- project status -->
     <p class="subtitle">
       <translate>Project status</translate>
@@ -163,11 +143,6 @@
             :items="doughnutALegend"
             large
           />
-          <!-- <data-legend
-            :items="doughnutALegend"
-            percentage
-            large
-          /> -->
         </template>
       </graph-layout>
       <graph-layout :span="16">
@@ -239,26 +214,15 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import { format } from 'date-fns'
 import debounce from 'lodash/debounce'
 
-import Growth from '@/components/common/charts/utilities/Growth'
-import Subtitle from '@/components/common/charts/utilities/Subtitle'
 import DataLegend from '@/components/common/charts/utilities/DataLegend'
-import TabLegend from '@/components/common/charts/utilities/TabLegend'
-import CountryLegend from '@/components/common/charts/utilities/CountryLegend'
-
 import Chart from '@/components/common/charts/Chart'
-import Resume from '@/components/common/charts/widgets/Resume'
 import GraphLayout from '@/components/common/charts/widgets/GraphLayout'
 
 export default {
   components: {
-    Growth,
-    Resume,
     Chart,
     GraphLayout,
-    DataLegend,
-    TabLegend,
-    Subtitle,
-    CountryLegend
+    DataLegend
   },
   data () {
     return {
@@ -298,29 +262,18 @@ export default {
   },
   computed: {
     ...mapState({
-      //
       incoming: state => state.charts.incoming,
       previous: state => state.charts.previous,
       // graphs
-      micro: state => state.charts.micro,
       polarA: state => state.charts.polarA,
       lineA: state => state.charts.lineA,
-      lineB: state => state.charts.lineB,
       lineC: state => state.charts.lineC,
       barA: state => state.charts.barA,
       barB: state => state.charts.barB,
-      horizontalBarA: state => state.charts.horizontalBarA,
-      horizontalBarB: state => state.charts.horizontalBarB,
       doughnutA: state => state.charts.doughnutA,
-      doughnutB: state => state.charts.doughnutB,
-      doughnutC: state => state.charts.doughnutC,
-      doughnutD: state => state.charts.doughnutD,
       // legends
       polarALegend: state => state.charts.polarALegend,
       doughnutALegend: state => state.charts.doughnutALegend,
-      doughnutBLegend: state => state.charts.doughnutBLegend,
-      doughnutCLegend: state => state.charts.doughnutCLegend,
-      doughnutDLegend: state => state.charts.doughnutDLegend,
       monthlyUserLegend: state => state.charts.monthlyUserLegend,
       projectStatusLegend: state => state.charts.projectStatusLegend,
       countryTable: state => state.charts.countryTable,

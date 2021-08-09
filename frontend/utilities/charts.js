@@ -276,9 +276,6 @@ const scaleLabelConfigLine = label => {
   }
 }
 const optionsLineBarConfig = ({ scales, tooltip, stacked }) => {
-  console.log('🚀 ~ file: charts.js ~ line 278 ~ optionsLineBarConfig ~ stacked', stacked)
-  console.log('🚀 ~ file: charts.js ~ line 278 ~ optionsLineBarConfig ~ tooltip', tooltip)
-  console.log('🚀 ~ file: charts.js ~ line 278 ~ optionsLineBarConfig ~ scales', scales)
   return {
     ...generalOptions,
     scales: {
@@ -465,7 +462,6 @@ const datasetGen = ({ type, colors, data, legendLabels, thickness }) => {
   )
 }
 export const settings = config => {
-  console.log('🚀 ~ file: charts.js ~ line 464 ~ config', config)
   const { type, colors, labels, data, tooltip, click } = config
   switch (type) {
   case 'line':
@@ -524,13 +520,6 @@ export const legendGenerator = (labels, colors, data = []) => {
 }
 
 export const extract = (obj, key) => obj.map(d => d[key])
-
-export const extractWithLabel = (obj, key, label) => {
-  return {
-    ...obj.map(d => d[key]),
-    label
-  }
-}
 
 export const objectToQueryString = queryParameters => {
   return queryParameters
