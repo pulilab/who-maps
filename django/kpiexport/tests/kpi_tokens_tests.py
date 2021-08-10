@@ -13,7 +13,7 @@ class KPITokensTests(KPITestData, APITestCase):
              {'country': None, 'date': self.date_2_str, 'tokens': 2}]
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
 
     def test_token_kpi_country_filter(self):
         url = reverse("token-kpi")
@@ -23,7 +23,7 @@ class KPITokensTests(KPITestData, APITestCase):
             [{'country': self.country2.id, 'date': self.date_1_str, 'tokens': 3},
              {'country': self.country2.id, 'date': self.date_2_str, 'tokens': 2}]
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
 
     def test_token_kpi_investor_filter(self):
         url = reverse("token-kpi")
@@ -34,7 +34,7 @@ class KPITokensTests(KPITestData, APITestCase):
               'date': self.date_1_str,
               'tokens': 1}]
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
 
         url = reverse("token-kpi")
         url += f'?investor={self.d2.id}'
@@ -48,7 +48,7 @@ class KPITokensTests(KPITestData, APITestCase):
               'tokens': 2}]
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
 
     def test_token_kpi_time_filter(self):
         url = reverse("token-kpi")
@@ -57,7 +57,7 @@ class KPITokensTests(KPITestData, APITestCase):
         expected = \
             [{'date': self.date_2_str, 'country': None, 'tokens': 2}]
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
 
     def test_token_kpi_multi_filter(self):
         url = reverse("token-kpi")
@@ -68,7 +68,7 @@ class KPITokensTests(KPITestData, APITestCase):
             [{'country': self.country2.id, 'date': self.date_2_str, 'tokens': 2}]
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
 
     def test_token_kpi_detailed(self):
         url = reverse("token-kpi")
@@ -76,18 +76,78 @@ class KPITokensTests(KPITestData, APITestCase):
         response = self.test_user_client.get(url)
         expected = \
             [{'country': None,
-              'data': {str(self.d1.id): {'I': 1, 'total': 1},
-                       str(self.d2.id): {'G': 1, 'I': 1, 'total': 2},
-                       'total': {'G': 1, 'I': 2}},
+              'data':
+                  {str(self.d1.id): {
+                      'CA': 0,
+                      'D': 0,
+                      'DA': 0,
+                      'G': 0,
+                      'I': 1,
+                      'SCA': 0,
+                      'SDA': 0,
+                      'Y': 0,
+                      'total': 1,
+                  },
+                      str(self.d2.id): {
+                          'CA': 0,
+                          'D': 0,
+                          'DA': 0,
+                          'G': 1,
+                          'I': 1,
+                          'SCA': 0,
+                          'SDA': 0,
+                          'Y': 0,
+                          'total': 2},
+                      'total': {
+                          'CA': 0,
+                          'D': 0,
+                          'DA': 0,
+                          'G': 1,
+                          'I': 2,
+                          'SCA': 0,
+                          'SDA': 0,
+                          'Y': 0,
+                      }
+                  },
               'date': self.date_1_str,
               'tokens': 3},
              {'country': None,
-              'data': {str(self.d2.id): {'I': 2, 'total': 2}, 'total': {'I': 2}},
+              'data': {
+                  str(self.d1.id): {
+                      'CA': 0,
+                      'D': 0,
+                      'DA': 0,
+                      'G': 0,
+                      'I': 0,
+                      'SCA': 0,
+                      'SDA': 0,
+                      'Y': 0,
+                      'total': 0},
+                  str(self.d2.id): {
+                      'CA': 0,
+                      'D': 0,
+                      'DA': 0,
+                      'G': 0,
+                      'I': 2,
+                      'SCA': 0,
+                      'SDA': 0,
+                      'Y': 0,
+                      'total': 2},
+                  'total': {'CA': 0,
+                            'D': 0,
+                            'DA': 0,
+                            'G': 0,
+                            'I': 2,
+                            'SCA': 0,
+                            'SDA': 0,
+                            'Y': 0,
+                            }
+              },
               'date': self.date_2_str,
               'tokens': 2}]
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
 
     def test_token_kpi_detailed_filters(self):
         url = reverse("token-kpi")
@@ -98,8 +158,16 @@ class KPITokensTests(KPITestData, APITestCase):
             [{
                 'date': self.date_2_str,
                 'country': self.country2.id,
-                'data': {'I': 2, 'total': 2},
+                'data': {'CA': 0,
+                         'D': 0,
+                         'DA': 0,
+                         'G': 0,
+                         'I': 2,
+                         'SCA': 0,
+                         'SDA': 0,
+                         'Y': 0,
+                         'total': 2},
                 'tokens': 2}]
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())

@@ -14,10 +14,40 @@ def update_auditlog_user_data_task(current_date=None):
     """
     from kpiexport.models import AuditLogUsers
     from user.models import UserProfile
-    from country.models import Country
+    from country.models import Country, Donor
 
     if current_date is None:  # pragma: no cover
         current_date = timezone.now().date()
+
+    def create_empty_log_entries(empty_gen_date):
+        """
+        Creates empty log entries for all countries and donors for all dates
+        """
+
+        def fill_data_for_donor(log_entry, donor_id):
+            choices = [x[0] for x in UserProfile.ACCOUNT_TYPE_CHOICES]
+            if donor_id != 'total':
+                choices.append('total')
+            if donor_id not in log_entry.data:
+                log_entry.data[donor_id] = {}
+            log_entry.data[donor_id] = {c: {"active": 0, "registered": 0} for c in choices}
+            log_entry.save()
+
+        log_global, created = AuditLogUsers.objects.get_or_create(date=empty_gen_date, country=None)
+        if created:
+            donors = Donor.objects.all()
+            # fill global entry
+            fill_data_for_donor(log_global, "total")
+            for donor in donors:
+                fill_data_for_donor(log_global, donor.id)
+            # fill country entries
+            countries = Country.objects.all()
+            for country in countries:
+                log, created = AuditLogUsers.objects.get_or_create(date=empty_gen_date, country=country)
+                if created:
+                    fill_data_for_donor(log, "total")
+                    for donor in donors:
+                        fill_data_for_donor(log, donor.id)
 
     def add_entry_to_data(entry, country, donor_id, log_date, attr_name):
         # get or create auditlog
@@ -25,14 +55,14 @@ def update_auditlog_user_data_task(current_date=None):
         new_value = log_entry.__getattribute__(attr_name) + entry['id__count']
         log_entry.__setattr__(attr_name, new_value)
         # generate total data
-        if not log_entry.data.get('total'):
+        if not log_entry.data.get('total'):  # pragma: no cover
             log_entry.data['total'] = dict()
-        if not log_entry.data['total'].get(entry['account_type']):
+        if not log_entry.data['total'].get(entry['account_type']):  # pragma: no cover
             log_entry.data['total'][entry['account_type']] = dict(active=0, registered=0)
         # Generate data structure if needed
-        if not log_entry.data.get(donor_id):
+        if not log_entry.data.get(donor_id):  # pragma: no cover
             log_entry.data[donor_id] = dict(total=dict(active=0, registered=0))
-        if not log_entry.data[donor_id].get(entry['account_type']):
+        if not log_entry.data[donor_id].get(entry['account_type']):  # pragma: no cover
             log_entry.data[donor_id][entry['account_type']] = dict(active=0, registered=0)
         log_entry.data[donor_id][entry['account_type']][attr_name] += entry['id__count']
         log_entry.data[donor_id]['total'][attr_name] += entry['id__count']
@@ -41,6 +71,8 @@ def update_auditlog_user_data_task(current_date=None):
 
     date = current_date - timedelta(days=1)
     log_date = datetime(date.year, date.month, 1).date()
+    # fill relevant logs with empty data if not existing
+    create_empty_log_entries(log_date)
     qs_visitors = UserProfile.objects.filter(user__last_login__date=date). \
         filter(country__isnull=False). \
         values('country', 'account_type', 'donor').annotate(Count("id")).order_by()
@@ -74,22 +106,54 @@ def update_auditlog_token_data_task(current_date=None):
     """
     from rest_framework.authtoken.models import Token
     from kpiexport.models import AuditLogTokens
-    from country.models import Country
+    from country.models import Country, Donor
+    from user.models import UserProfile
 
     if current_date is None:  # pragma: no cover
         current_date = timezone.now().date()
+
+    def create_empty_log_entries(empty_gen_date):
+        """
+        Creates empty log entries for all countries and donors for all dates
+        """
+
+        def fill_data_for_donor(log_entry, donor_id):
+            choices = [x[0] for x in UserProfile.ACCOUNT_TYPE_CHOICES]
+            if donor_id != 'total':
+                choices.append('total')
+
+            if donor_id not in log_entry.data:
+                log_entry.data[donor_id] = {}
+            log_entry.data[donor_id] = {c: 0 for c in choices}
+            log_entry.save()
+
+        log_global, created = AuditLogTokens.objects.get_or_create(date=empty_gen_date, country=None)
+        if created:
+            donors = Donor.objects.all()
+            # fill global entry
+            fill_data_for_donor(log_global, "total")
+            for donor in donors:
+                fill_data_for_donor(log_global, donor.id)
+            # fill country entries
+            countries = Country.objects.all()
+            for country in countries:
+                log, created = AuditLogTokens.objects.get_or_create(date=empty_gen_date, country=country)
+                if created:
+                    fill_data_for_donor(log, "total")
+                    for donor in donors:
+                        fill_data_for_donor(log, donor.id)
 
     def add_entry_to_data(entry, country, donor_id, log_date):
         # get or create auditlog
         log_entry, _ = AuditLogTokens.objects.get_or_create(date=log_date, country=country)
         log_entry.tokens += entry['user_id__count']
         # generate total data
-        if not log_entry.data.get('total'):
+        if not log_entry.data.get('total'):  # pragma: no cover
             log_entry.data['total'] = dict()
-        if not log_entry.data['total'].get(entry['account_type']):
+        if not log_entry.data['total'].get(entry['account_type']):  # pragma: no cover
             log_entry.data['total'][entry['account_type']] = 0
         # Generate data structure if needed
-        if not log_entry.data.get(donor_id):
+        if not log_entry.data.get(donor_id):  # pragma: no cover
             log_entry.data[donor_id] = dict(total=0)
         if not log_entry.data[donor_id].get(entry['account_type']):
             log_entry.data[donor_id][entry['account_type']] = 0
@@ -100,6 +164,7 @@ def update_auditlog_token_data_task(current_date=None):
 
     date = current_date - timedelta(days=1)
     log_date = datetime(date.year, date.month, 1).date()
+    create_empty_log_entries(log_date)
     qs = Token.objects.filter(created__date=date).filter(user__userprofile__isnull=False). \
         filter(user__userprofile__country__isnull=False). \
         annotate(country=F('user__userprofile__country')). \
