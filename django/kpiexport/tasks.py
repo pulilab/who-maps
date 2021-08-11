@@ -15,6 +15,7 @@ def update_auditlog_user_data_task(current_date=None):
     from kpiexport.models import AuditLogUsers
     from user.models import UserProfile
     from country.models import Country, Donor
+    from copy import deepcopy
 
     if current_date is None:  # pragma: no cover
         current_date = timezone.now().date()
@@ -24,30 +25,29 @@ def update_auditlog_user_data_task(current_date=None):
         Creates empty log entries for all countries and donors for all dates
         """
 
-        def fill_data_for_donor(log_entry, donor_id):
+        def fill_data_for_donors(log_entry, donor_ids):
             choices = [x[0] for x in UserProfile.ACCOUNT_TYPE_CHOICES]
-            if donor_id != 'total':
-                choices.append('total')
-            if donor_id not in log_entry.data:
-                log_entry.data[donor_id] = {}
-            log_entry.data[donor_id] = {c: {"active": 0, "registered": 0} for c in choices}
+            choices.append('total')
+            donor_ids = set(donor_ids)
+            donor_ids.add('total')
+            stat_dict = {c: {"active": 0, "registered": 0} for c in choices}
+            data_dict = {d_id: stat_dict for d_id in donor_ids}
+            data_dict['total'] = deepcopy(data_dict['total'])
+            data_dict['total'].pop('total')
+            log_entry.data = data_dict
             log_entry.save()
 
         log_global, created = AuditLogUsers.objects.get_or_create(date=empty_gen_date, country=None)
         if created:
-            donors = Donor.objects.all()
+            donors = list(Donor.objects.all().values_list('id', flat=True))
             # fill global entry
-            fill_data_for_donor(log_global, "total")
-            for donor in donors:
-                fill_data_for_donor(log_global, donor.id)
+            fill_data_for_donors(log_global, donors)
             # fill country entries
             countries = Country.objects.all()
             for country in countries:
                 log, created = AuditLogUsers.objects.get_or_create(date=empty_gen_date, country=country)
                 if created:
-                    fill_data_for_donor(log, "total")
-                    for donor in donors:
-                        fill_data_for_donor(log, donor.id)
+                    fill_data_for_donors(log, donors)
 
     def add_entry_to_data(entry, country, donor_id, log_date, attr_name):
         # get or create auditlog
@@ -108,6 +108,7 @@ def update_auditlog_token_data_task(current_date=None):
     from kpiexport.models import AuditLogTokens
     from country.models import Country, Donor
     from user.models import UserProfile
+    from copy import deepcopy
 
     if current_date is None:  # pragma: no cover
         current_date = timezone.now().date()
@@ -117,31 +118,29 @@ def update_auditlog_token_data_task(current_date=None):
         Creates empty log entries for all countries and donors for all dates
         """
 
-        def fill_data_for_donor(log_entry, donor_id):
+        def fill_data_for_donors(log_entry, donor_ids):
             choices = [x[0] for x in UserProfile.ACCOUNT_TYPE_CHOICES]
-            if donor_id != 'total':
-                choices.append('total')
-
-            if donor_id not in log_entry.data:
-                log_entry.data[donor_id] = {}
-            log_entry.data[donor_id] = {c: 0 for c in choices}
+            choices.append('total')
+            donor_ids = set(donor_ids)
+            donor_ids.add('total')
+            stat_dict = {c: 0 for c in choices}
+            data_dict = {d_id: stat_dict for d_id in donor_ids}
+            data_dict['total'] = deepcopy(data_dict['total'])
+            data_dict['total'].pop('total')
+            log_entry.data = data_dict
             log_entry.save()
 
         log_global, created = AuditLogTokens.objects.get_or_create(date=empty_gen_date, country=None)
         if created:
-            donors = Donor.objects.all()
+            donors = list(Donor.objects.all().values_list('id', flat=True))
             # fill global entry
-            fill_data_for_donor(log_global, "total")
-            for donor in donors:
-                fill_data_for_donor(log_global, donor.id)
+            fill_data_for_donors(log_global, donors)
             # fill country entries
             countries = Country.objects.all()
             for country in countries:
                 log, created = AuditLogTokens.objects.get_or_create(date=empty_gen_date, country=country)
                 if created:
-                    fill_data_for_donor(log, "total")
-                    for donor in donors:
-                        fill_data_for_donor(log, donor.id)
+                    fill_data_for_donors(log, donors)
 
     def add_entry_to_data(entry, country, donor_id, log_date):
         # get or create auditlog
@@ -191,17 +190,47 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
     from kpiexport.utils import project_status_change_sum
     from project.models import Project, ProjectVersion
     from django.db.models import IntegerField, CharField
-    from country.models import Country
+    from country.models import Country, Donor
 
     from django.contrib.postgres.fields.jsonb import KeyTextTransform
     from django.db.models.functions import Cast
     import json
 
+    def create_empty_log_entries(empty_gen_date):
+        """
+        Creates empty log entries for all countries and donors for all dates
+        """
+
+        def fill_data_for_donors(log_entry, donor_ids):
+            stats = \
+                {
+                    "draft": [],
+                    "growth": 0,
+                    "published": [],
+                    "to_delete": [],
+                    "unpublished": [],
+                    "ready_to_publish": []
+                }
+            stats_dict = {donor_id: stats for donor_id in donor_ids}
+            log_entry.data = stats_dict
+            log_entry.save()
+
+        log_global, created = AuditLogProjectStatus.objects.get_or_create(date=empty_gen_date, country=None)
+        if created:
+            donors = list(Donor.objects.all().values_list('id', flat=True))
+            fill_data_for_donors(log_global, donors)
+            # fill country entries
+            countries = Country.objects.all()
+            for country in countries:
+                log, created = AuditLogProjectStatus.objects.get_or_create(date=empty_gen_date, country=country)
+                if created:
+                    fill_data_for_donors(log, donors)
+
     if current_date is None:
         current_date = timezone.now().date()
 
     def add_stats_to_data(entry, donor_id, status_change, project_id):
-        if not entry.data.get(donor_id):
+        if not entry.data.get(donor_id):  # pragma: no cover
             entry.data[donor_id] = dict(
                 published=[],
                 unpublished=[],
@@ -235,6 +264,7 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
 
     date = current_date - timedelta(days=1)
     log_date = datetime(date.year, date.month, 1).date()
+    create_empty_log_entries(log_date)
     qs = ProjectVersion.objects.filter(created__date=date). \
         annotate(country=Cast(KeyTextTransform('country', 'data'),
                               output_field=IntegerField())). \
@@ -319,9 +349,33 @@ def update_auditlog_project_stages_data_task(current_date=None):
     Schedulable task to update project stages statistics
     Needs to run daily - overwrites this month's tasks
     """
-    from project.models import ProjectVersion
+    from project.models import ProjectVersion, Stage
     from kpiexport.models import AuditLogProjectStages
-    from country.models import Country
+    from country.models import Country, Donor
+
+    def create_empty_log_entries(empty_gen_date):
+        """
+        Creates empty log entries for all countries and donors for all dates
+        """
+
+        def fill_data_for_donors(log_entry, donor_ids):
+            stages_list = list(Stage.objects.all().values_list('id', flat=True))
+            stages_dict = {s_id: [] for s_id in stages_list}
+            data_dict = {d_id: stages_dict for d_id in donor_ids}
+            log_entry.data = data_dict
+            log_entry.stages = stages_dict
+            log_entry.save()
+
+        log_global, created = AuditLogProjectStages.objects.get_or_create(date=empty_gen_date, country=None)
+        if created:
+            donors = list(Donor.objects.all().values_list('id', flat=True))
+            fill_data_for_donors(log_global, donors)
+            # fill country entries
+            countries = Country.objects.all()
+            for country in countries:
+                log, created = AuditLogProjectStages.objects.get_or_create(date=empty_gen_date, country=country)
+                if created:
+                    fill_data_for_donors(log, donors)
 
     if current_date is None:  # pragma: no cover
         current_date = timezone.now().date()
@@ -339,7 +393,7 @@ def update_auditlog_project_stages_data_task(current_date=None):
         # get or create auditlog
         log_entry, _ = AuditLogProjectStages.objects.get_or_create(date=log_date, country=country)
         # generate total stages data - we track projects by ID
-        if stage_id_str not in log_entry.stages:
+        if stage_id_str not in log_entry.stages:  # pragma: no cover
             log_entry.stages[stage_id_str] = []
         stages_list = log_entry.stages[stage_id_str]
         stages_list.append(entry.project.id)
@@ -349,9 +403,9 @@ def update_auditlog_project_stages_data_task(current_date=None):
         # Generate data structure if needed
         for donor_id in donors:
             donor_str = str(donor_id)
-            if donor_str not in log_entry.data:
+            if donor_str not in log_entry.data:  # pragma: no cover
                 log_entry.data[donor_str] = {}
-            if stage_id_str not in log_entry.data[donor_str]:
+            if stage_id_str not in log_entry.data[donor_str]:  # pragma: no cover
                 log_entry.data[donor_str][stage_id_str] = []
             donor_stages = log_entry.data[donor_str][stage_id_str]
             donor_stages.append(entry.project.id)
@@ -360,6 +414,7 @@ def update_auditlog_project_stages_data_task(current_date=None):
 
     date = current_date - timedelta(days=1)
     log_date = datetime(date.year, date.month, 1).date()
+    create_empty_log_entries(log_date)
     qs = ProjectVersion.objects.filter(created__date=date)
 
     for entry in qs:

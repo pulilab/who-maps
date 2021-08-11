@@ -33,7 +33,7 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
               'to_delete': 0,
               'unpublished': 0}]
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
 
     def test_project_status_kpi_country_filter(self):
         url = reverse("project-status-kpi")
@@ -57,7 +57,7 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
               'to_delete': 0,
               'unpublished': 0}]
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
 
     def test_project_status_kpi_investor_filter(self):
         self.maxDiff = None
@@ -90,7 +90,7 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
               'to_delete': 0,
               'unpublished': 0}]
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
 
     def test_project_status_kpi_time_filter(self):
         url = reverse("project-status-kpi")
@@ -115,7 +115,7 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
               'unpublished': 0}]
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
 
     def test_project_status_kpi_multi_filter(self):
         url = reverse("project-status-kpi")
@@ -133,7 +133,7 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
               'unpublished': 0}]
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
 
     def test_project_status_kpi_detailed(self):
         url = reverse("project-status-kpi")
@@ -161,12 +161,22 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
               'to_delete': 0,
               'unpublished': 0},
              {'country': None,
-              'data': {str(self.d1.id): {'growth': 0,
-                                         'draft': 2,
-                                         'published': 0,
-                                         'ready_to_publish': 2,
-                                         'to_delete': 0,
-                                         'unpublished': 0}},
+              'data': {
+                  str(self.d1.id): {
+                      'growth': 0,
+                      'draft': 2,
+                      'published': 0,
+                      'ready_to_publish': 2,
+                      'to_delete': 0,
+                      'unpublished': 0},
+                  str(self.d2.id): {
+                      'growth': 0,
+                      'draft': 0,
+                      'published': 0,
+                      'ready_to_publish': 0,
+                      'to_delete': 0,
+                      'unpublished': 0}
+              },
               'date': self.date_2_str,
               'draft': 2,
               'growth': 0,
@@ -196,9 +206,9 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
               'unpublished': 0}]
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
 
-    def test_project_status_kpi_detailed_filters(self):
+    def test_project_status_kpi_filter_detailed(self):
         url = reverse("project-status-kpi")
         url += f'?from={self.date_2.year}-{self.date_2.month}&to={self.date_3.year}-{self.date_3.month}' \
                f'&country={self.country2.id}&investor={self.d1.id}&detailed=true'
@@ -219,4 +229,4 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
               'to_delete': 0,
               'unpublished': 0}]
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), expected)
+        self.validate_response(expected, response.json())
