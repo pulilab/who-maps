@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'systemmessages',
     'kpiexport',
     'rangefilter',
+    'nonrelated_inlines',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
