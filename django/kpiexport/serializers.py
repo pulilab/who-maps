@@ -177,9 +177,9 @@ class AuditLogProjectStagesDetailedSerializer(AuditLogProjectStagesBasicSerializ
         donor = self.context['request'].query_params.get('investor')
         if donor:
             return {stage: len(val) for stage, val in obj.data.get(donor, {}).items()}
-        for donor_id, donor_dict in obj.data.items():
+        for donor_id, donor_dict in obj.data.items():  # pragma: no cover
             result_dict[donor_id] = {stage: len(val) for stage, val in donor_dict.items()}
-        return result_dict
+        return result_dict  # pragma: no cover
 
     class Meta:
         model = AuditLogProjectStages

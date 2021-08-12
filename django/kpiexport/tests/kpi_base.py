@@ -124,6 +124,11 @@ class KPITestData(TestData):
         self.userprofile_7.user.save()
         self.userprofile_7.save()
 
+    def validate_response(self, expected, response):
+        expected_set = {x['date']: x for x in expected}.items()
+        response_set = {x['date']: x for x in response}.items()
+        self.assertTrue(expected_set <= response_set)
+
 
 class KPITestDataWithProjects(KPITestData):
     def setUp(self):
