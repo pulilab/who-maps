@@ -5,7 +5,9 @@ from gfklookupwidget.widgets import GfkLookupWidget
 
 from core.admin import AllObjectsAdmin
 from .models import Country, Donor, ArchitectureRoadMapDocument
-
+from project.models import Project
+from nonrelated_inlines.admin import NonrelatedStackedInline
+from django.db.models import Q
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery  # noqa
 
@@ -49,11 +51,42 @@ class DonorForm(ModelForm):
         }
 
 
+class ProjectDonorInline(NonrelatedStackedInline):  # pragma: no cover
+    model = Project
+    fields = [
+        'id',
+        'name',
+        'public_id'
+    ]
+    readonly_fields = fields
+    extra = 0
+    max_num = 0
+    can_delete = False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def get_form_queryset(self, obj):
+        return self.model.objects.filter(Q(data__donors__contains=obj.id) | Q(draft__donors__contains=obj.id))
+
+
 @admin.register(Donor)
 class DonorAdmin(admin.ModelAdmin):
     list_display = ('name', 'code', 'content_object')
 
     form = DonorForm
+    inlines = [ProjectDonorInline]
+
+    def get_inline_instances(self, request, obj=None):
+        if obj is not None:  # pragma: no cover
+            return [inline(self.model, self.admin_site) for inline in self.inlines]
+        return []
 
 
 @admin.register(ArchitectureRoadMapDocument)

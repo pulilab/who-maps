@@ -110,3 +110,4 @@ wcwidth==0.1.7
 wrapt==1.11.2
 hashids==1.2.0
 django-admin-rangefilter==0.8.1
+django-nonrelated-inlines==0.1.1
