@@ -131,6 +131,7 @@ class KPITestData(TestData):
 
 
 class KPITestDataWithProjects(KPITestData):
+    # TODO: update project data with published projects
     def setUp(self):
         super(KPITestDataWithProjects, self).setUp()
         self.maxDiff = None

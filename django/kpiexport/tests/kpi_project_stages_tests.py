@@ -70,6 +70,7 @@ class KPIProjectStagesTests(KPITestDataWithProjects, APITestCase):
                 'country': self.country2.id,
                 'date': self.date_2_str,
                 'stages': {
+                    'no_data': 0,
                     '1': 1,
                     '10': 0,
                     '2': 2,
@@ -84,6 +85,8 @@ class KPIProjectStagesTests(KPITestDataWithProjects, APITestCase):
             }]
 
         self.assertEqual(response.status_code, 200)
+        import ipdb
+        ipdb.set_trace()
         self.validate_response(expected, response.json())
 
     def test_project_stages_kpi_investor_filter(self):
@@ -95,6 +98,7 @@ class KPIProjectStagesTests(KPITestDataWithProjects, APITestCase):
                 'country': None,
                 'date': self.date_1_str,
                 'stages': {
+                    'no_data': 0,
                     '1': 0,
                     '10': 0,
                     '2': 1,

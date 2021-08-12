@@ -360,6 +360,8 @@ def update_auditlog_project_stages_data_task(current_date=None):
 
         def fill_data_for_donors(log_entry, donor_ids):
             stages_list = list(Stage.objects.all().values_list('id', flat=True))
+            stages_list = set(stages_list)
+            stages_list.add('no_data')
             stages_dict = {s_id: [] for s_id in stages_list}
             data_dict = {d_id: stages_dict for d_id in donor_ids}
             log_entry.data = data_dict
@@ -388,8 +390,9 @@ def update_auditlog_project_stages_data_task(current_date=None):
     def add_entry_to_data(entry: ProjectVersion, country: Country, log_date):
         project_stage = get_latest_stage(entry)
         if not project_stage:  # pragma: no cover
-            return
-        stage_id_str = str(project_stage['id'])
+            stage_id_str = 'no_data'
+        else:
+            stage_id_str = str(project_stage['id'])
         # get or create auditlog
         log_entry, _ = AuditLogProjectStages.objects.get_or_create(date=log_date, country=country)
         # generate total stages data - we track projects by ID
@@ -415,7 +418,7 @@ def update_auditlog_project_stages_data_task(current_date=None):
     date = current_date - timedelta(days=1)
     log_date = datetime(date.year, date.month, 1).date()
     create_empty_log_entries(log_date)
-    qs = ProjectVersion.objects.filter(created__date=date)
+    qs = ProjectVersion.objects.filter(created__date=date, published=True)
 
     for entry in qs:
         country_id = entry.data.get('country')
