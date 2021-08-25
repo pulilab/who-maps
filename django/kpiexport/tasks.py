@@ -188,7 +188,7 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
     """
     from kpiexport.models import AuditLogProjectStatus
     from kpiexport.utils import project_status_change_sum
-    from project.models import Project, ProjectVersion
+    from project.models import ProjectVersion
     from django.db.models import IntegerField, CharField
     from country.models import Country, Donor
 
