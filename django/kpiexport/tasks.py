@@ -270,40 +270,31 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
         status_change = project_status_change_sum(date=date, project=entry.project, country=country)
 
         donors = json.loads(entry.donors) if entry.donors else []
-        if status_change.published:
-            if entry.project.id not in set(log_entry.published):
-                log_entry.published.append(entry.project.id)
-            if entry.project.id not in set(log_entry_global.published):
-                log_entry_global.published.append(entry.project.id)
-        if status_change.unpublished:
-            if entry.project.id not in set(log_entry.unpublished):
-                log_entry.unpublished.append(entry.project.id)
-            if entry.project.id not in set(log_entry_global.unpublished):
-                log_entry_global.unpublished.append(entry.project.id)
-        if status_change.ready_to_publish:
-            if entry.project.id not in set(log_entry.ready_to_publish):
-                log_entry.ready_to_publish.append(entry.project.id)
-            if entry.project.id not in set(log_entry_global.ready_to_publish):
-                log_entry_global.ready_to_publish.append(entry.project.id)
-        if status_change.to_delete:
-            if entry.project.id not in set(log_entry.to_delete):
-                log_entry.to_delete.append(entry.project.id)
-            if entry.project.id not in set(log_entry_global.to_delete):
-                log_entry_global.to_delete.append(entry.project.id)
-        if status_change.draft:
-            if entry.project.id not in set(log_entry.draft):
-                log_entry.draft.append(entry.project.id)
-            if entry.project.id not in set(log_entry_global.draft):
-                log_entry_global.draft.append(entry.project.id)
-        if status_change.new:
-            log_entry.growth += 1
-            log_entry_global.growth += 1
+        log_entries = {log_entry, log_entry_global}  # if country is None, this will only have 1 item
 
-        for donor in donors:
-            add_stats_to_data(log_entry, donor, status_change, entry.project.id)
-            add_stats_to_data(log_entry_global, donor, status_change, entry.project.id)
-        log_entry.save()
-        log_entry_global.save()
+        for current_entry in log_entries:
+            if status_change.published:
+                if entry.project.id not in set(current_entry.published):
+                    current_entry.published.append(entry.project.id)
+            if status_change.unpublished:
+                if entry.project.id not in set(current_entry.unpublished):
+                    current_entry.unpublished.append(entry.project.id)
+            if status_change.ready_to_publish:
+                if entry.project.id not in set(current_entry.ready_to_publish):
+                    current_entry.ready_to_publish.append(entry.project.id)
+            if status_change.to_delete:
+                if entry.project.id not in set(current_entry.to_delete):
+                    current_entry.to_delete.append(entry.project.id)
+            if status_change.draft:
+                if entry.project.id not in set(current_entry.draft):
+                    current_entry.draft.append(entry.project.id)
+            if status_change.new:
+                current_entry.growth += 1
+
+            for donor in donors:
+                add_stats_to_data(current_entry, donor, status_change, entry.project.id)
+
+            current_entry.save()
 
 
 @app.task(name='auditlog_update_project_stages_data')
