@@ -17,6 +17,11 @@ class ProjectStatusChangeDescriptor:
         self.ready_to_publish = False
         self.draft = False
         self.to_delete = False
+        self.new = False
+
+    def __str__(self):  # pragma: no cover
+        return f'P: {self.published} U: {self.unpublished} R: {self.ready_to_publish} D: {self.draft} ' \
+               f'TD: {self.to_delete} N: {self.new}'
 
     @staticmethod
     def _check_for_obsolete_project_name(name: str) -> bool:
@@ -25,6 +30,8 @@ class ProjectStatusChangeDescriptor:
 
     @staticmethod
     def _validate_project_version_for_publish(version: ProjectVersion, country):  # pragma: no cover
+        if not country:
+            return False
         if version.published:
             return False
         data_serializer = ProjectPublishedSerializer(data=version.data)
@@ -66,6 +73,7 @@ class ProjectStatusChangeDescriptor:
         self.draft = not self.published
         self.to_delete = self._check_for_obsolete_project_name(version.project.name)
         self.ready_to_publish = self._validate_project_version_for_publish(version, country)
+        self.new = True
         # unpublished is always false for new projects
 
     def fill_from_version_diff(self, version_old: ProjectVersion, version_new: ProjectVersion, country: Country):
