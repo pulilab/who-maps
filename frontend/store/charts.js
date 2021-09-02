@@ -41,6 +41,7 @@ export const state = () => ({
   doughnutD: {},
   // legends
   polarALegend: [],
+  noStageDataSum: 0,
   doughnutALegend: [],
   doughnutBLegend: [],
   doughnutCLegend: [],
@@ -284,8 +285,10 @@ export const actions = {
         total: sumBy(kpi[3].data.map(i => i.stages), s.id)
       }
     })
-
-    // console.log(projectStages)
+    const noStageDataSum = kpi[3].data.reduce((sum, stage) => {
+      return stage.stages.no_data + sum
+    }, 0)
+    commit('setValue', { key: 'noStageDataSum', val: noStageDataSum })
 
     // start of data that should come from somewhere
     // color sets (should be dynamic?)
@@ -687,6 +690,9 @@ export const actions = {
 }
 
 export const mutations = {
+  setValue (state, { key, val }) {
+    state[key] = val
+  },
   SET_STAGES_CHART_DATA: (state, obj) => {
     state.stages.chartData = obj
   },
