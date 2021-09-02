@@ -307,7 +307,14 @@ export default {
       }
     },
     async doSingleRowSave (doSave, nested, row) {
-      const { Country: countryData, Investor: investor } = row.data
+      const countryFieldName = this.rawImport.header_mapping.find((h) => {
+        return h.selected === 'country'
+      }).title
+      const investorFieldName = this.rawImport.header_mapping.find((h) => {
+        return h.selected === 'donors'
+      }).title
+      const countryData = row.data[countryFieldName]
+      const investor = row.data[investorFieldName]
       try {
         let country = null
         if (Array.isArray(countryData)) {
