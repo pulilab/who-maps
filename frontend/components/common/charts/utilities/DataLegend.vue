@@ -14,6 +14,7 @@
         <span class="value">{{ labelValue(item.value) }}</span>
       </template>
     </div>
+    <slot />
   </section>
 </template>
 

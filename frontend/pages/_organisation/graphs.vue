@@ -172,10 +172,7 @@
           />
         </template>
         <template #legend>
-          <data-legend
-            :items="projectStatusLegend"
-            horizontal
-          />
+          <DataLegend :items="projectStatusLegend" horizontal />
         </template>
       </graph-layout>
     </el-row>
@@ -202,7 +199,13 @@
           />
         </template>
         <template #legend>
-          <data-legend :items="polarALegend" />
+          <DataLegend :items="polarALegend">
+            <div>
+              <span class="label">Projects with no stage data</span>
+              <span class="dots" />
+              <span class="value">{{ noStageDataSum }}</span>
+            </div>
+          </DataLegend>
         </template>
       </graph-layout>
     </el-row>
@@ -273,6 +276,7 @@ export default {
       doughnutA: state => state.charts.doughnutA,
       // legends
       polarALegend: state => state.charts.polarALegend,
+      noStageDataSum: state => state.charts.noStageDataSum,
       doughnutALegend: state => state.charts.doughnutALegend,
       monthlyUserLegend: state => state.charts.monthlyUserLegend,
       projectStatusLegend: state => state.charts.projectStatusLegend,
