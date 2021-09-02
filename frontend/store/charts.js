@@ -290,8 +290,6 @@ export const actions = {
     }, 0)
     commit('setValue', { key: 'noStageDataSum', val: noStageDataSum })
 
-    console.log('projectStages', projectStages)
-
     // start of data that should come from somewhere
     // color sets (should be dynamic?)
     const colorSetA = ['#49BCE8']
