@@ -6,7 +6,7 @@ from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatu
 from kpiexport.serializers import AuditLogUserDetailedSerializer, AuditLogUserBasicSerializer, \
     AuditLogTokenBasicSerializer, AuditLogTokenDetailedSerializer, AuditLogProjectStatusBasicSerializer, \
     AuditLogProjectStatusDetailedSerializer, AuditLogProjectStagesBasicSerializer, \
-    AuditLogProjectStagesDetailedSerializer
+    AuditLogProjectStagesDetailedSerializer, AuditLogStandardsBasicSerializer
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework import filters
@@ -153,3 +153,26 @@ class ProjectStagesKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
             return AuditLogProjectStagesDetailedSerializer
         else:
             return AuditLogProjectStagesBasicSerializer
+
+
+class DataStandardsKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    """
+    View to retrieve data standards KPIs
+
+    Requires token authentication.
+
+    Allowed filters:
+
+    * `country`: country ID, example: 01 (default: Global)
+    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
+    * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
+    * `to`: YYYY-MM format, ending of the sample (default: last month)
+    * `detailed`: if set to true, detailed donor-based data will be returned
+
+    """
+    permission_classes = (IsAuthenticated,)
+    filter_backends = [KPIFilterBackend]
+    filter_fields = ('country', 'investor', 'from', 'to')
+    queryset = AuditLogProjectStages.objects.all()
+    serializer_class = AuditLogStandardsBasicSerializer
+
