@@ -392,35 +392,9 @@ def update_auditlog_data_standards_task(current_date=None):
     Schedulable task to update project stages statistics
     Needs to run daily - overwrites this month's tasks
     """
-    from project.models import ProjectVersion, InteroperabilityStandard
+    from project.models import ProjectVersion
     from kpiexport.models import AuditLogDataStandards
-    from country.models import Country, Donor
-
-    def create_empty_log_entries(empty_gen_date):
-        """
-        Creates empty log entries for all countries and donors for all dates
-        """
-
-        def fill_data_for_donors(log_entry, donor_ids):
-            std_list = list(InteroperabilityStandard.objects.all().values_list('id', flat=True))
-            std_list = set(std_list)
-            std_list.add('no_data')
-            std_dict = {s_id: [] for s_id in std_list}
-            data_dict = {d_id: std_dict for d_id in donor_ids}
-            log_entry.data = data_dict
-            log_entry.stages = std_dict
-            log_entry.save()
-
-        log_global, created = AuditLogDataStandards.objects.get_or_create(date=empty_gen_date, country=None)
-        if created:
-            donors = list(Donor.objects.all().values_list('id', flat=True))
-            fill_data_for_donors(log_global, donors)
-            # fill country entries
-            countries = Country.objects.all()
-            for country in countries:
-                log, created = AuditLogDataStandards.objects.get_or_create(date=empty_gen_date, country=country)
-                if created:
-                    fill_data_for_donors(log, donors)
+    from country.models import Country
 
     def add_entry_to_data(entry: ProjectVersion, country: Country, log_date):
         standards_data = entry.data.get('interoperability_standards', ['no_data'])
@@ -448,7 +422,6 @@ def update_auditlog_data_standards_task(current_date=None):
 
     date = current_date - timedelta(days=1)
     log_date = datetime(date.year, date.month, 1).date()
-    create_empty_log_entries(log_date)
     qs = ProjectVersion.objects.filter(created__date=date, published=True)
 
     for entry in qs:
