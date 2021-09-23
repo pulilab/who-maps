@@ -513,7 +513,6 @@ export const actions = {
           subtitle: 'Click to see Heatlh Focus Areas'
         },
         click: true,
-        // need to insert real data
         data: [randomData(hfaLabels.length)]
       })
     )
