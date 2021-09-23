@@ -396,7 +396,6 @@ def update_auditlog_data_standards_task(current_date=None):
     from kpiexport.models import AuditLogDataStandards
     from country.models import Country, Donor
 
-
     def create_empty_log_entries(empty_gen_date):
         """
         Creates empty log entries for all countries and donors for all dates

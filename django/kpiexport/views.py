@@ -175,4 +175,3 @@ class DataStandardsKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogProjectStages.objects.all()
     serializer_class = AuditLogStandardsBasicSerializer
-
