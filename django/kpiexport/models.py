@@ -149,7 +149,7 @@ class AuditLogProjectStages(AuditLogBase):
     Calculation for this KPI is "simple"; the number of projects which are currently IN the selected stage
     is tracked.
 
-    `stages` are saved in a JSONField for the non-donor-dependend values too, as the number of stages is subject
+    `stages` are saved in a JSONField for the non-donor-dependent values too, as the number of stages is subject
     to change.
 
     data format:
@@ -167,7 +167,7 @@ class AuditLogProjectStages(AuditLogBase):
       }
     """
 
-    stages = JSONField(blank=True, default=dict)  # JSONField containing data on a per-investor basis
+    stages = JSONField(blank=True, default=dict)
 
     class Meta:
         verbose_name = "Project Stages KPI"
@@ -175,3 +175,35 @@ class AuditLogProjectStages(AuditLogBase):
 
     def __str__(self):  # pragma: no cover
         return f'{self.date.year}-{self.date.month}-{self.country} - Stages: {self.stages}, '
+
+
+class AuditLogDataStandards(AuditLogBase):
+    """
+    AuditLog model tracking the project data standards KPI in the DB
+    TOP 10 data standards
+
+    `standards` are saved in a JSONField for the non-donor-dependent values too.
+
+    data format:
+      {
+        "<investor_id_1>":
+          {
+            <standard_id>: {(int)},
+            <standard_id>: {(int)},
+          },
+        "<investor_id_2>":
+          {
+            <standard_id>: {(int)},
+            <standard_id>: {(int)},
+          },
+      }
+    """
+
+    standards = JSONField(blank=True, default=dict)
+
+    class Meta:
+        verbose_name = "Data Standards KPI"
+        verbose_name_plural = "Data Standards KPIs"
+
+    def __str__(self):  # pragma: no cover
+        return f'{self.date.year}-{self.date.month}-{self.country} - Standards: {self.standards}, '
