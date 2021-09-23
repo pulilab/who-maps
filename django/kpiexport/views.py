@@ -2,7 +2,8 @@ from country.models import Country
 from django.shortcuts import get_object_or_404
 from datetime import datetime, timedelta
 from core.views import TokenAuthMixin
-from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages
+from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages, \
+    AuditLogDataStandards
 from kpiexport.serializers import AuditLogUserDetailedSerializer, AuditLogUserBasicSerializer, \
     AuditLogTokenBasicSerializer, AuditLogTokenDetailedSerializer, AuditLogProjectStatusBasicSerializer, \
     AuditLogProjectStatusDetailedSerializer, AuditLogProjectStagesBasicSerializer, \
@@ -173,5 +174,5 @@ class DataStandardsKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     permission_classes = (IsAuthenticated,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
-    queryset = AuditLogProjectStages.objects.all()
+    queryset = AuditLogDataStandards.objects.all()
     serializer_class = AuditLogStandardsBasicSerializer
