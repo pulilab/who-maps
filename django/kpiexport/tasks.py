@@ -384,3 +384,81 @@ def update_auditlog_project_stages_data_task(current_date=None):
             add_entry_to_data(entry, None, log_date)
         except Country.DoesNotExist:  # pragma: no cover
             logging.warning(f'Country with this ID does not exist: {country_id}')
+
+
+@app.task(name='auditlog_update_data_standards')
+def update_auditlog_data_standards_task(current_date=None):
+    """
+    Schedulable task to update project stages statistics
+    Needs to run daily - overwrites this month's tasks
+    """
+    from project.models import ProjectVersion, InteroperabilityStandard
+    from kpiexport.models import AuditLogDataStandards
+    from country.models import Country, Donor
+
+
+    def create_empty_log_entries(empty_gen_date):
+        """
+        Creates empty log entries for all countries and donors for all dates
+        """
+
+        def fill_data_for_donors(log_entry, donor_ids):
+            std_list = list(InteroperabilityStandard.objects.all().values_list('id', flat=True))
+            std_list = set(std_list)
+            std_list.add('no_data')
+            std_dict = {s_id: [] for s_id in std_list}
+            data_dict = {d_id: std_dict for d_id in donor_ids}
+            log_entry.data = data_dict
+            log_entry.stages = std_dict
+            log_entry.save()
+
+        log_global, created = AuditLogDataStandards.objects.get_or_create(date=empty_gen_date, country=None)
+        if created:
+            donors = list(Donor.objects.all().values_list('id', flat=True))
+            fill_data_for_donors(log_global, donors)
+            # fill country entries
+            countries = Country.objects.all()
+            for country in countries:
+                log, created = AuditLogDataStandards.objects.get_or_create(date=empty_gen_date, country=country)
+                if created:
+                    fill_data_for_donors(log, donors)
+
+    def add_entry_to_data(entry: ProjectVersion, country: Country, log_date):
+        standards_data = entry.data.get('interoperability_standards', ['no_data'])
+        # get or create auditlog
+        log_entry, _ = AuditLogDataStandards.objects.get_or_create(date=log_date, country=country)
+        # generate total standards data - we track projects by ID
+        for std_id in standards_data:
+            std_list = log_entry.standards.get(str(std_id), [])
+            std_list.append(entry.project.id)
+            log_entry.standards[str(std_id)] = list(set(std_list))
+            # Generate by-donor data
+            donors = entry.data.get('donors')
+            # Generate data structure if needed
+            for donor_id in donors:
+                donor_str = str(donor_id)
+                if donor_str not in log_entry.data:  # pragma: no cover
+                    log_entry.data[donor_str] = {}
+                donor_stds = log_entry.data[donor_str].get(str(std_id), [])
+                donor_stds.append(entry.project.id)
+                log_entry.data[donor_str][str(std_id)] = list(set(donor_stds))
+        log_entry.save()
+
+    if current_date is None:  # pragma: no cover
+        current_date = timezone.now().date()
+
+    date = current_date - timedelta(days=1)
+    log_date = datetime(date.year, date.month, 1).date()
+    create_empty_log_entries(log_date)
+    qs = ProjectVersion.objects.filter(created__date=date, published=True)
+
+    for entry in qs:
+        country_id = entry.data.get('country')
+        if not country_id:  # pragma: no cover
+            continue
+        try:
+            country = Country.objects.get(pk=country_id)
+            add_entry_to_data(entry, country, log_date)
+            add_entry_to_data(entry, None, log_date)
+        except Country.DoesNotExist:  # pragma: no cover
+            logging.warning(f'Country with this ID does not exist: {country_id}')
