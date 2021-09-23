@@ -7,7 +7,7 @@ from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatu
 from kpiexport.serializers import AuditLogUserDetailedSerializer, AuditLogUserBasicSerializer, \
     AuditLogTokenBasicSerializer, AuditLogTokenDetailedSerializer, AuditLogProjectStatusBasicSerializer, \
     AuditLogProjectStatusDetailedSerializer, AuditLogProjectStagesBasicSerializer, \
-    AuditLogProjectStagesDetailedSerializer, AuditLogStandardsBasicSerializer
+    AuditLogProjectStagesDetailedSerializer, AuditLogStandardsBasicSerializer, AuditLogStandardsDetailedSerializer
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework import filters
@@ -175,4 +175,9 @@ class DataStandardsKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogDataStandards.objects.all()
-    serializer_class = AuditLogStandardsBasicSerializer
+
+    def get_serializer_class(self):
+        if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
+            return AuditLogStandardsDetailedSerializer
+        else:
+            return AuditLogStandardsBasicSerializer
