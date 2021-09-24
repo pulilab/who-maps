@@ -6,7 +6,8 @@ from datetime import datetime, date, timedelta
 
 from django.utils.timezone import localtime
 from kpiexport.tasks import update_auditlog_user_data_task, update_auditlog_token_data_task, \
-    update_auditlog_project_status_data_task, update_auditlog_project_stages_data_task
+    update_auditlog_project_status_data_task, update_auditlog_project_stages_data_task, \
+    update_auditlog_data_standards_task
 from rest_framework.authtoken.models import Token
 from project.tests.setup import TestData
 
@@ -148,6 +149,7 @@ class KPITestDataWithProjects(KPITestData):
             ],
             []
         ]
+        standards = [1, 2, 4]
         for i in range(1, 10):
             donors = list()
             if i % 3 == 0:
@@ -161,7 +163,7 @@ class KPITestDataWithProjects(KPITestData):
                 country = self.country2
 
             project_data = self.generate_project_data(f'project {i}', self.org, country, donors, dates[i % 4],
-                                                      stages[i % 3])
+                                                      stages[i % 3], standards=standards)
             project = self.create_draft_project(project_data)
             if i % 2 == 0 and len(donors) > 0:
                 self.publish_project(project.id, project_data)
@@ -184,4 +186,5 @@ class KPITestDataWithProjects(KPITestData):
         while generate_date <= date.today() + timedelta(days=1):
             update_auditlog_project_status_data_task(generate_date)
             update_auditlog_project_stages_data_task(generate_date)
+            update_auditlog_data_standards_task(generate_date)
             generate_date = generate_date + timedelta(days=1)

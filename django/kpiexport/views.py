@@ -2,11 +2,12 @@ from country.models import Country
 from django.shortcuts import get_object_or_404
 from datetime import datetime, timedelta
 from core.views import TokenAuthMixin
-from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages
+from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages, \
+    AuditLogDataStandards
 from kpiexport.serializers import AuditLogUserDetailedSerializer, AuditLogUserBasicSerializer, \
     AuditLogTokenBasicSerializer, AuditLogTokenDetailedSerializer, AuditLogProjectStatusBasicSerializer, \
     AuditLogProjectStatusDetailedSerializer, AuditLogProjectStagesBasicSerializer, \
-    AuditLogProjectStagesDetailedSerializer
+    AuditLogProjectStagesDetailedSerializer, AuditLogStandardsBasicSerializer, AuditLogStandardsDetailedSerializer
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework import filters
@@ -153,3 +154,30 @@ class ProjectStagesKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
             return AuditLogProjectStagesDetailedSerializer
         else:
             return AuditLogProjectStagesBasicSerializer
+
+
+class DataStandardsKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    """
+    View to retrieve data standards KPIs
+
+    Requires token authentication.
+
+    Allowed filters:
+
+    * `country`: country ID, example: 01 (default: Global)
+    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
+    * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
+    * `to`: YYYY-MM format, ending of the sample (default: last month)
+    * `detailed`: if set to true, detailed donor-based data will be returned
+
+    """
+    permission_classes = (IsAuthenticated,)
+    filter_backends = [KPIFilterBackend]
+    filter_fields = ('country', 'investor', 'from', 'to')
+    queryset = AuditLogDataStandards.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
+            return AuditLogStandardsDetailedSerializer
+        else:
+            return AuditLogStandardsBasicSerializer

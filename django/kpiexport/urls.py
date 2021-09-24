@@ -17,4 +17,7 @@ urlpatterns = [
     path('kpi/project-stages/',
          view=views.ProjectStagesKPIsViewSet.as_view({'get': 'list'}),
          name='project-stages-kpi'),
+    path('kpi/data-standards/',
+         view=views.DataStandardsKPIsViewSet.as_view({'get': 'list'}),
+         name='data-standards-kpi'),
 ]

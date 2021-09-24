@@ -21,6 +21,16 @@ module.exports = {
     indent: ['error', 2],
     'arrow-parens': 0,
     'one-var': 0,
-    'eol-last': ['error', 'always']
+    'eol-last': ['error', 'always'],
+    'vue/max-attributes-per-line': ['error', {
+      singleline: {
+        max: 10,
+        allowFirstLine: true
+      },
+      multiline: {
+        max: 1,
+        allowFirstLine: false
+      }
+    }]
   }
 }

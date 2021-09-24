@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages
+from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages, \
+    AuditLogDataStandards
 
 
 class AuditLogUserBasicSerializer(serializers.ModelSerializer):
@@ -184,3 +185,37 @@ class AuditLogProjectStagesDetailedSerializer(AuditLogProjectStagesBasicSerializ
     class Meta:
         model = AuditLogProjectStages
         fields = ("date", "country", "stages", "data")
+
+
+class AuditLogStandardsBasicSerializer(serializers.ModelSerializer):
+    date = serializers.CharField(read_only=True, max_length=10)
+    country = serializers.PrimaryKeyRelatedField(read_only=True)
+    standards = serializers.SerializerMethodField()
+
+    def get_standards(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        standards_dict = obj.standards
+        if donor:
+            standards_dict = obj.data.get(donor, {})
+        return {standard: len(val) for standard, val in standards_dict.items()}
+
+    class Meta:
+        model = AuditLogDataStandards
+        fields = ("date", "country", "standards")
+
+
+class AuditLogStandardsDetailedSerializer(AuditLogStandardsBasicSerializer):
+    data = serializers.SerializerMethodField()
+
+    def get_data(self, obj):
+        result_dict = {}
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return {standard: len(val) for standard, val in obj.data.get(donor, {}).items()}
+        for donor_id, donor_dict in obj.data.items():  # pragma: no cover
+            result_dict[donor_id] = {standard: len(val) for standard, val in donor_dict.items()}
+        return result_dict  # pragma: no cover
+
+    class Meta:
+        model = AuditLogDataStandards
+        fields = ("date", "country", "standards", "data")

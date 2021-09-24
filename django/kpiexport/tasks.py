@@ -384,3 +384,53 @@ def update_auditlog_project_stages_data_task(current_date=None):
             add_entry_to_data(entry, None, log_date)
         except Country.DoesNotExist:  # pragma: no cover
             logging.warning(f'Country with this ID does not exist: {country_id}')
+
+
+@app.task(name='auditlog_update_data_standards')
+def update_auditlog_data_standards_task(current_date=None):
+    """
+    Schedulable task to update project stages statistics
+    Needs to run daily - overwrites this month's tasks
+    """
+    from project.models import ProjectVersion
+    from kpiexport.models import AuditLogDataStandards
+    from country.models import Country
+
+    def add_entry_to_data(entry: ProjectVersion, country: Country, log_date):
+        standards_data = entry.data.get('interoperability_standards', ['no_data'])
+        # get or create auditlog
+        log_entry, _ = AuditLogDataStandards.objects.get_or_create(date=log_date, country=country)
+        # generate total standards data - we track projects by ID
+        for std_id in standards_data:
+            std_list = log_entry.standards.get(str(std_id), [])
+            std_list.append(entry.project.id)
+            log_entry.standards[str(std_id)] = list(set(std_list))
+            # Generate by-donor data
+            donors = entry.data.get('donors')
+            # Generate data structure if needed
+            for donor_id in donors:
+                donor_str = str(donor_id)
+                if donor_str not in log_entry.data:  # pragma: no cover
+                    log_entry.data[donor_str] = {}
+                donor_stds = log_entry.data[donor_str].get(str(std_id), [])
+                donor_stds.append(entry.project.id)
+                log_entry.data[donor_str][str(std_id)] = list(set(donor_stds))
+        log_entry.save()
+
+    if current_date is None:  # pragma: no cover
+        current_date = timezone.now().date()
+
+    date = current_date - timedelta(days=1)
+    log_date = datetime(date.year, date.month, 1).date()
+    qs = ProjectVersion.objects.filter(created__date=date, published=True)
+
+    for entry in qs:
+        country_id = entry.data.get('country')
+        if not country_id:  # pragma: no cover
+            continue
+        try:
+            country = Country.objects.get(pk=country_id)
+            add_entry_to_data(entry, country, log_date)
+            add_entry_to_data(entry, None, log_date)
+        except Country.DoesNotExist:  # pragma: no cover
+            logging.warning(f'Country with this ID does not exist: {country_id}')
