@@ -519,7 +519,7 @@ export const legendGenerator = (labels, colors, data = []) => {
   })
 }
 
-export const extract = (obj, key) => obj.map(d => d[key])
+export const extract = (obj, key, split = false) => obj.map(d => split ? splitLabel(d[key]) : d[key])
 
 export const objectToQueryString = queryParameters => {
   return queryParameters
