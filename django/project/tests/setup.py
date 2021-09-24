@@ -79,7 +79,8 @@ class TestData(APITestCase):
             date=datetime.today().date(),
             stages: List[Dict] = None,
             hfa: List[int] = None,
-            platforms: List[Dict] = None):
+            platforms: List[Dict] = None,
+            standards: List[int] = None):
         if not organisation:
             organisation = self.org
         if not country:
@@ -95,6 +96,8 @@ class TestData(APITestCase):
             hfa = [1, 2]
         if not platforms:
             platforms = [{'id': 1, 'strategies': [1, 2]}, {'id': 2, 'strategies': [1, 9]}]
+        if not standards:
+            standards = [1]
         return {
             'project': {
                 'date': date,
@@ -134,7 +137,7 @@ class TestData(APITestCase):
                     {'id': 2, 'selected': True},
                     {'id': 3, 'selected': True, 'link': 'http://example.org'},
                 ],
-                'interoperability_standards': [1],
+                'interoperability_standards': standards,
                 'start_date': date,
                 'end_date': date,
                 'stages': stages,
