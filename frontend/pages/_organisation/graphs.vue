@@ -1,10 +1,6 @@
 <template>
   <div class="wrapper">
-    <el-row
-      type="flex"
-      :gutter="30"
-      class="mb-80 sticky"
-    >
+    <el-row type="flex" :gutter="30" class="mb-80 sticky">
       <div class="resume-group border-bar">
         <el-row type="flex">
           <el-select
@@ -75,10 +71,7 @@
       <translate>Users</translate>
     </p>
 
-    <el-row
-      type="flex"
-      class="mb-80"
-    >
+    <el-row type="flex" class="mb-80">
       <graph-layout :span="24">
         <translate>Monthly User Activity</translate>
         <template #graph>
@@ -103,10 +96,7 @@
     <p class="subtitle">
       <translate>API keys</translate>
     </p>
-    <el-row
-      type="flex"
-      class="mb-80"
-    >
+    <el-row type="flex" class="mb-80">
       <graph-layout :span="24">
         <translate>Monthly growth of API keys</translate>
         <template #graph>
@@ -123,11 +113,7 @@
     <p class="subtitle">
       <translate>Project status</translate>
     </p>
-    <el-row
-      type="flex"
-      :gutter="20"
-      class="mb-80"
-    >
+    <el-row type="flex" :gutter="20" class="mb-80">
       <graph-layout :span="8">
         <template #graph>
           <chart
@@ -157,10 +143,7 @@
       </graph-layout>
     </el-row>
 
-    <el-row
-      type="flex"
-      class="mb-80"
-    >
+    <el-row type="flex" class="mb-80">
       <graph-layout :span="24">
         <translate>Project statuses per month</translate>
         <template #graph>
@@ -181,15 +164,8 @@
     <p class="subtitle">
       <translate>Project stages</translate>
     </p>
-    <el-row
-      type="flex"
-      :gutter="20"
-      class="mb-80"
-    >
-      <graph-layout
-        :span="24"
-        horizontal
-      >
+    <el-row type="flex" :gutter="20" class="mb-80">
+      <graph-layout :span="24" horizontal>
         <translate>Distributions of projects’ stages</translate>
         <template #graph>
           <chart
@@ -209,6 +185,21 @@
         </template>
       </graph-layout>
     </el-row>
+
+    <el-row type="flex" :gutter="20" class="mb-80">      
+      <graph-layout :span="24">
+        <translate>Top 20 ‘Data standards’ (by occurrences)</translate>
+        <template #graph>
+          <chart
+            type="horizontal-bar"
+            :chart-data="horizontalBarA.chartData || {}"
+            :options="horizontalBarA.options"
+            :height="dataStandardHeight"
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
   </div>
 </template>
 
@@ -273,6 +264,7 @@ export default {
       lineC: state => state.charts.lineC,
       barA: state => state.charts.barA,
       barB: state => state.charts.barB,
+      horizontalBarA: state => state.charts.horizontalBarA,
       doughnutA: state => state.charts.doughnutA,
       // legends
       polarALegend: state => state.charts.polarALegend,
@@ -291,7 +283,13 @@ export default {
     ...mapGetters({
       countries: 'countries/getCountries',
       donors: 'system/getDonors'
-    })
+    }),
+    dataStandardHeight() {
+      // should be dynamic, but data is not ready when rendering the height of the chart
+      // setting it to 20 * 40 = 800 for now
+      // return this.horizontalBarA.chartData?.datasets[0].data.length * 40
+      return 800
+    }
   },
   created () {
     this.handleSearch()

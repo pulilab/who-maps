@@ -15,6 +15,7 @@ import {
 import { formatDate } from '@/utilities/projects'
 import { isBefore, format } from 'date-fns'
 import sumBy from 'lodash/sumBy'
+import sortBy from 'lodash/sortBy'
 
 export const state = () => ({
   stages: {
@@ -266,15 +267,13 @@ export const actions = {
     const kpi = await Promise.all([
       this.$axios.get(`${base}/users/${objectToQueryString(state.filters)}`),
       this.$axios.get(`${base}/tokens/${objectToQueryString(state.filters)}`),
-      this.$axios.get(
-        `${base}/project-status/${objectToQueryString(state.filters)}`
-      ),
-      this.$axios.get(
-        `${base}/project-stages/${objectToQueryString(state.filters)}`
-      ),
-      this.$axios.get('/api/projects/structure/')
+      this.$axios.get(`${base}/project-status/${objectToQueryString(state.filters)}`),
+      this.$axios.get(`${base}/project-stages/${objectToQueryString(state.filters)}`),
+      this.$axios.get('/api/projects/structure/'),
+      this.$axios.get(`${base}/data-standards/${objectToQueryString(state.filters)}`)
     ])
 
+    const { interoperability_standards } = kpi[4].data
     const { stages } = kpi[4].data
     const users = kpi[0].data
     const tokens = kpi[1].data
@@ -284,7 +283,19 @@ export const actions = {
         ...s,
         total: sumBy(kpi[3].data.map(i => i.stages), s.id)
       }
+    })    
+    const monthsOfStandards = kpi[5].data
+    const dataStandards = interoperability_standards.map((standard) => {
+      return {
+        ...standard,
+        total: monthsOfStandards.reduce((total, m) => {
+          const amount =  Object.keys(m.standards).find(key => m.standards[key] == standard.id)
+          return amount ? total + parseInt(amount) : total
+        }, 0)
+      }
     })
+    const totalsOfStandardsSorted =  sortBy(dataStandards, ['total']).reverse().splice(0,20)
+
     const noStageDataSum = kpi[3].data.reduce((sum, stage) => {
       return stage.stages.no_data + sum
     }, 0)
@@ -335,18 +346,7 @@ export const actions = {
       'How many projects are discontinued?'
     ]
     const coverageLabels = ['Covered', 'Not covered']
-    const dataStandardsLabels = [
-      splitLabel('GML Geography Markup Language'),
-      splitLabel('SVS - Sharing Value Sets'),
-      splitLabel('SNOMED'),
-      splitLabel('ADX - Aggregate Data Exchange'),
-      splitLabel('CIEL'),
-      splitLabel('CPT'),
-      splitLabel('PIX or PIXm - (Mobile) Patient Identifier Cross Reference'),
-      splitLabel('ISO 3166'),
-      splitLabel('ISCO 08'),
-      splitLabel('mACM - Mobile Alert Communication Management')
-    ]
+    const dataStandardsLabels = extract(totalsOfStandardsSorted, 'name', true)
     const stageLabels = extract(projectStages, 'name')
     const hfaLabels = [
       'Adolescent and Youth Health',
@@ -498,7 +498,7 @@ export const actions = {
           title: 'Ocurrances:',
           subtitle: ''
         },
-        data: [randomData(12)]
+        data: [totalsOfStandardsSorted.map( t => t.total)]
       })
     )
     commit(
