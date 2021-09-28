@@ -884,9 +884,6 @@ export default {
     changingUserRole () {
       this.changeApprovedUserRole = true
     },
-    openHowTo(guide) {
-      this.$refs.howtoDialog.open(guide)
-    }
   }
 }
 </script>
