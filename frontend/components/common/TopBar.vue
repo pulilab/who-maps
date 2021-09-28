@@ -141,14 +141,8 @@
               <div>
                 <toolkit-dialog-wrapper />
               </div>
-              <div>
-                <a
-                  href="http://wiki.digitalhealthatlas.org/"
-                  target="_blank"
-                  class="HeaderBtn"
-                >
-                  <translate>Wiki</translate>
-                </a>
+              <div @click="openHowToDialog(0)">
+                <translate class="HeaderBtn">How-to</translate>
               </div>
               <div>
                 <nuxt-link
@@ -215,17 +209,19 @@
         </el-row>
       </el-col>
     </el-row>
+    <HowToDialog />
   </div>
 </template>
 
 <script>
 import VueScrollClass from 'vue-scroll-class'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import LanguageSelector from './LanguageSelector'
 import UserDropdown from './UserDropdown'
 import ToolkitDialogWrapper from './ToolkitDialogWrapper'
 import CountryChooser from './CountryChooser'
+import HowToDialog from '@/components/dialogs/HowToDialog'
 
 export default {
   directives: {
@@ -235,7 +231,8 @@ export default {
     LanguageSelector,
     UserDropdown,
     ToolkitDialogWrapper,
-    CountryChooser
+    CountryChooser,
+    HowToDialog
   },
   props: {
     errorPage: {
@@ -267,6 +264,11 @@ export default {
       }
       return null
     }
+  },
+  methods: {
+    ...mapActions({
+      openHowToDialog: 'layout/openHowToDialog'
+    })
   }
 }
 </script>
@@ -351,6 +353,7 @@ export default {
     ,.HeaderBtn.md-button
     //
  {
+    cursor: pointer;
     position: relative;
     height: 24px;
     margin: 0 3px;

@@ -4,7 +4,9 @@ export const state = () => ({
   saveFiltersDialogState: null,
   sendEmailDialogState: null,
   showEmptyProfileWarning: false,
-  editSubLevelDialogState: null
+  editSubLevelDialogState: null,
+  howToDialogState: false,
+  howToDialogGuide: 0, // overview
 })
 
 export const getters = {
@@ -13,7 +15,9 @@ export const getters = {
   getSaveFiltersDialogState: state => state.saveFiltersDialogState,
   getSendEmailDialogState: state => state.sendEmailDialogState,
   getShowEmptyProfileWarning: state => state.showEmptyProfileWarning,
-  getEditSubLevelDialogState: state => state.editSubLevelDialogState
+  getEditSubLevelDialogState: state => state.editSubLevelDialogState,
+  getHowToDialogState: state => state.howToDialogState,
+  getHowToDialogGuide: state => state.howToDialogGuide
 }
 
 export const actions = {
@@ -34,6 +38,16 @@ export const actions = {
   },
   setEditSubLevelDialogState ({ commit }, value) {
     commit('SET_DATA', { type: 'editSubLevelDialogState', value })
+  },
+  setHowToDialogState ({ commit }, value) {
+    commit('SET_DATA', { type: 'howToDialogState', value })
+  },
+  setHowToDialogGuide ({ commit }, value) {
+    commit('SET_DATA', { type: 'howToDialogGuide', value })
+  },
+  openHowToDialog({ dispatch }, guide) {
+    dispatch('setHowToDialogGuide', guide)
+    dispatch('setHowToDialogState', true)
   }
 }
 

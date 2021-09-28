@@ -202,6 +202,12 @@
                   profile page.
                 </translate>
               </p>
+              <p class="UserHowToText">
+                <span @click="openHowToDialog(1)">
+                  <translate>Learn more</translate>
+                  <fa icon="arrow-right" />
+                </span>
+              </p>
 
               <div class="Separator Or">
                 <span><translate>or</translate></span>
@@ -225,6 +231,12 @@
                     and a response will be sent via email for your
                     request.
                   </translate>
+                </p>
+                <p class="UserHowToText">
+                  <span @click="openHowToDialog(2)">
+                    <translate>Learn more</translate>
+                    <fa icon="arrow-right" />
+                  </span>
                 </p>
 
                 <el-collapse-transition>
@@ -287,6 +299,12 @@
                   below, send an email to digital-health-atlas@who.int to add
                   them to the list.
                 </translate>
+              </p>
+              <p class="UserHowToText">
+                <span @click="openHowToDialog(3)">
+                  <translate>Learn more</translate>
+                  <fa icon="arrow-right" />
+                </span>
               </p>
 
               <el-collapse-transition>
@@ -798,7 +816,8 @@ export default {
 
   methods: {
     ...mapActions({
-      updateUserProfile: 'user/updateUserProfile'
+      updateUserProfile: 'user/updateUserProfile',
+      openHowToDialog: 'layout/openHowToDialog'
     }),
 
     openFeedback () {
@@ -864,6 +883,9 @@ export default {
     },
     changingUserRole () {
       this.changeApprovedUserRole = true
+    },
+    openHowTo(guide) {
+      this.$refs.howtoDialog.open(guide)
     }
   }
 }
@@ -1014,7 +1036,21 @@ export default {
         color: @colorTextSecondary;
       }
 
-      .UserTypeTextList {
+      .UserHowToText {
+        text-align: right;
+        margin-top: 6px;
+        font-size: @fontSizeSmall;
+        line-height: 18px;
+        color: @colorBrandPrimary;
+        span {
+          cursor: pointer;
+        }
+        svg {
+          margin-left: 7px;
+        }
+      }
+
+.UserTypeTextList {
         margin-bottom: 10px;
 
         li {
