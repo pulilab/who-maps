@@ -883,7 +883,7 @@ export default {
     },
     changingUserRole () {
       this.changeApprovedUserRole = true
-    },
+    }
   }
 }
 </script>
