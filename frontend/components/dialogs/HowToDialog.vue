@@ -67,9 +67,8 @@
             <h1><translate>Overview</translate></h1>
             <p>
               <translate>
-              The DHA has additional features to support Ministries of Health and Investors to understand and organize their digital health implementations. If you plan to use the DHA to register projects only, select this option for your profile. Your access level can be updated at any time by returning to your profile page.
-                Paullum deliquit, ponderibus modulisque suis ratio utitur. Cum ceteris in veneratione tui montes, nascetur mus. Petierunt uti sibi concilium totius Galliae in diem certam indicere. A communi observantia non est recedendum.
-            </translate>
+                The DHA helps technical implementers to share details about their projects globally. This page will provide an overview of the key features available on the platform. Technical Implementers can use the DHA to register their projects globally.
+              </translate>
             </p>
             <h2><translate>See Digital Health Atlas in action</translate></h2>
             <p><translate>Get a feel for Digital Health Atlas features and let us walk you through some common use cases</translate></p>
@@ -83,34 +82,46 @@
             <h1><translate>Implementor</translate></h1>
             <p>
               <translate>
-              The DHA has additional features to support Ministries of Health and Investors to understand and organize their digital health implementations. If you plan to use the DHA to register projects only, select this option for your profile. Your access level can be updated at any time by returning to your profile page.
-                Paullum deliquit, ponderibus modulisque suis ratio utitur. Cum ceteris in veneratione tui montes, nascetur mus. Petierunt uti sibi concilium totius Galliae in diem certam indicere. A communi observantia non est recedendum.
-            </translate>
+                For technologists and health experts deploying digital health software, the DHA can help to gather insights regarding the technology landscape in a country. The DHA can be searched at national or sub-national level, and also by health focus area. You can understand the health priorities of a country by visiting the Country Pages If you or your team are considering deploying your project, these insights can help improve the success and strategic value of your work. Digital health projects increasingly require more advanced planning to align with government priorities, data collection and data format requirements and to reduce duplication of project activities.
+              </translate>
             </p>
             <h2><translate>See Digital Health Atlas in action</translate></h2>
             <p><translate>Get a feel for Digital Health Atlas features and let us walk you through some common use cases</translate></p>
+            <div class="video">
+              <div class="video_wrapper">
+                <iframe frameborder="0" width="100%" height="100%" src="https://www.youtube.com/embed/Paw1z2BHpI4" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+            </div>
           </div>
           <div v-if="selectedGuide === 2" :key="selectedGuide">
             <h1><translate>Government user</translate></h1>
             <p>
               <translate>
-              The DHA has additional features to support Ministries of Health and Investors to understand and organize their digital health implementations. If you plan to use the DHA to register projects only, select this option for your profile. Your access level can be updated at any time by returning to your profile page.
-                Paullum deliquit, ponderibus modulisque suis ratio utitur. Cum ceteris in veneratione tui montes, nascetur mus. Petierunt uti sibi concilium totius Galliae in diem certam indicere. A communi observantia non est recedendum.
-            </translate>
+                To help with this decision-making, planning and monitoring, the DHA provides Ministry of health ( MOH ) with a specifically-designed data set which gives the MOH a snapshot of each Digital Health program. This informs evaluation, planning and scale strategies. The following video provides an tutorial and overview form the perspective of a MOH Government user.
+              </translate>
             </p>
             <h2><translate>See Digital Health Atlas in action</translate></h2>
             <p><translate>Get a feel for Digital Health Atlas features and let us walk you through some common use cases</translate></p>
+            <div class="video">
+              <div class="video_wrapper">
+                <iframe frameborder="0" width="100%" height="100%" src="https://www.youtube.com/embed/FZ-VuaexX1E" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+            </div>
           </div>
           <div v-if="selectedGuide === 3" :key="selectedGuide">
             <h1><translate>Investor</translate></h1>
             <p>
               <translate>
-              The DHA has additional features to support Ministries of Health and Investors to understand and organize their digital health implementations. If you plan to use the DHA to register projects only, select this option for your profile. Your access level can be updated at any time by returning to your profile page.
-                Paullum deliquit, ponderibus modulisque suis ratio utitur. Cum ceteris in veneratione tui montes, nascetur mus. Petierunt uti sibi concilium totius Galliae in diem certam indicere. A communi observantia non est recedendum.
-            </translate>
+                The DHA allows investors and donors to understand the other financial investors within a country, the current scale and essential intervention focus of a digital health program, and, through the MAPS toolkit, the relative readiness of a specific digital health project for scale. The following video provides an tutorial and overview form the perspective of a W.H.O Donor/Investor.
+              </translate>
             </p>
             <h2><translate>See Digital Health Atlas in action</translate></h2>
             <p><translate>Get a feel for Digital Health Atlas features and let us walk you through some common use cases</translate></p>
+            <div class="video">
+              <div class="video_wrapper">
+                <iframe frameborder="0" width="100%" height="100%" src="https://www.youtube.com/embed/_PaLihQGJRw" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -272,6 +283,7 @@ export default {
       font-size: @fontSizeMedium;
       line-height: 24px;
       letter-spacing: 0.15px;  
+      word-break: normal;
     }
   }
 }
