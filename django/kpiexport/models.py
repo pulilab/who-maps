@@ -180,7 +180,6 @@ class AuditLogProjectStages(AuditLogBase):
 class AuditLogDataStandards(AuditLogBase):
     """
     AuditLog model tracking the project data standards KPI in the DB
-    TOP 10 data standards
 
     `standards` are saved in a JSONField for the non-donor-dependent values too.
 
@@ -207,3 +206,38 @@ class AuditLogDataStandards(AuditLogBase):
 
     def __str__(self):  # pragma: no cover
         return f'{self.date.year}-{self.date.month}-{self.country} - Standards: {self.standards}, '
+
+
+class AuditLogHealthCategories(AuditLogBase):
+    """
+    AuditLog model tracking the project Health Categories KPI in the DB
+
+    `categories` are saved in a JSONField for the non-donor-dependent values too.
+    {
+        <category_id>: [project_id, project_id],
+        <category_id>: [project_id, project_id],
+    }
+
+    `data` format:
+      {
+        "<investor_id_1>":
+          {
+            <category_id>: [project_id, project_id],
+            <category_id>: [project_id, project_id],
+          },
+        "<investor_id_2>":
+          {
+            <category_id>: [project_id, project_id],
+            <category_id>: [project_id, project_id],
+          },
+      }
+    """
+
+    categories = JSONField(blank=True, default=dict)
+
+    class Meta:
+        verbose_name = "Health Categories KPI"
+        verbose_name_plural = "Health Categories KPIs"
+
+    def __str__(self):  # pragma: no cover
+        return f'{self.date.year}-{self.date.month}-{self.country} - Categories: {self.categories}, '
