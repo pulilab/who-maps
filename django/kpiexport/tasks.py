@@ -499,3 +499,11 @@ def update_auditlog_hfa_task(current_date=None):
         log_entry, _ = AuditLogHFA.objects.get_or_create(date=log_date, country=country)
         cat_entry, _ = AuditLogHealthCategories.objects.get_or_create(date=log_date, country=country)
         # generate total standards data - we track projects by ID
+        for hfa_id in hfa_data:
+            try:
+                category_id = HealthFocusArea.objects.get(id=hfa_id).health_category.id
+            except HealthFocusArea.DoesNotExist:
+                continue
+            except ValueError:
+                continue
+
