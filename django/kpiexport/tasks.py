@@ -536,3 +536,23 @@ def update_auditlog_hfa_task(current_date=None):
                 log_entry.data[donor_str][str(category_id)][str(hfa_id)] = list(set(donor_hfa))
         cat_entry.save()
         log_entry.save()
+
+    if current_date is None:  # pragma: no cover
+        current_date = timezone.now().date()
+
+    date = current_date - timedelta(days=1)
+    log_date = datetime(date.year, date.month, 1).date()
+    create_empty_category_entries(log_date)
+    create_empty_hfa_entries(log_date)
+    qs = ProjectVersion.objects.filter(created__date=date, published=True)
+
+    for entry in qs:
+        country_id = entry.data.get('country')
+        if not country_id:  # pragma: no cover
+            continue
+        try:
+            country = Country.objects.get(pk=country_id)
+            add_entry_data(entry, country, log_date)
+            add_entry_data(entry, None, log_date)
+        except Country.DoesNotExist:  # pragma: no cover
+            logging.warning(f'Country with this ID does not exist: {country_id}')
