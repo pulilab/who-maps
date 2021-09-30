@@ -446,3 +446,23 @@ def update_auditlog_hfa_task(current_date=None):
     from kpiexport.models import AuditLogHFA, AuditLogHealthCategories
     from country.models import Country, Donor
 
+    def create_empty_category_entries(empty_gen_date):
+        """
+        Creates empty log entries for all countries and donors for all dates
+        """
+        def init_category_data(log_entry, donor_ids):
+            category_dict = {cat_id: [] for cat_id in HealthCategory.objects.all().values_list('id', flat=True)}
+            data_dict = {d_id: category_dict for d_id in donor_ids}
+            log_entry.data = data_dict
+            log_entry.categories = category_dict
+            log_entry.save()
+
+        log_global, created = AuditLogHealthCategories.objects.get_or_create(date=empty_gen_date, country=None)
+        if created:
+            donors = list(Donor.objects.all().values_list('id', flat=True))
+            init_category_data(log_global, donors)
+            # fill country entries
+            for country in Country.objects.all():
+                log, created = AuditLogHealthCategories.objects.get_or_create(date=empty_gen_date, country=country)
+                if created:
+                    init_category_data(log, donors)
