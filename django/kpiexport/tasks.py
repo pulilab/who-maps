@@ -434,3 +434,15 @@ def update_auditlog_data_standards_task(current_date=None):
             add_entry_to_data(entry, None, log_date)
         except Country.DoesNotExist:  # pragma: no cover
             logging.warning(f'Country with this ID does not exist: {country_id}')
+
+
+@app.task(name='auditlog_update_hfa')
+def update_auditlog_hfa_task(current_date=None):
+    """
+    Schedulable task to update project HFA statistics
+    Needs to run daily - overwrites this month's tasks
+    """
+    from project.models import ProjectVersion, HealthCategory, HealthFocusArea
+    from kpiexport.models import AuditLogHFA, AuditLogHealthCategories
+    from country.models import Country, Donor
+
