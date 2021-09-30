@@ -466,3 +466,28 @@ def update_auditlog_hfa_task(current_date=None):
                 log, created = AuditLogHealthCategories.objects.get_or_create(date=empty_gen_date, country=country)
                 if created:
                     init_category_data(log, donors)
+
+    def create_empty_hfa_entries(empty_gen_date):
+        """
+        Creates empty log entries for all countries and donors for all dates
+        """
+        def init_hfa_data(log_entry, donor_ids):
+            hfa_dict = {}
+            for cat_id in HealthCategory.objects.all().values_list('id', flat=True):
+                hfa_by_category = HealthFocusArea.objects.filter(health_category=cat_id).values_list('id', flat=True)
+                hfa_dict[cat_id] = {hfa_id: [] for hfa_id in hfa_by_category}
+
+            data_dict = {d_id: hfa_dict for d_id in donor_ids}
+            log_entry.data = data_dict
+            log_entry.hfa = hfa_dict
+            log_entry.save()
+
+        log_global, created = AuditLogHFA.objects.get_or_create(date=empty_gen_date, country=None)
+        if created:
+            donors = list(Donor.objects.all().values_list('id', flat=True))
+            init_hfa_data(log_global, donors)
+            # fill country entries
+            for country in Country.objects.all():
+                log, created = AuditLogHFA.objects.get_or_create(date=empty_gen_date, country=country)
+                if created:
+                    init_hfa_data(log, donors)
