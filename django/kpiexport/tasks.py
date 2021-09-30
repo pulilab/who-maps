@@ -519,3 +519,20 @@ def update_auditlog_hfa_task(current_date=None):
                 donor_cats = cat_entry.data[donor_str].get(str(category_id), [])
                 donor_cats.append(entry.project.id)
                 cat_entry.data[donor_str][str(category_id)] = list(set(donor_cats))
+
+            # Fill HFAs
+            hfa_dict = log_entry.hfa.get(str(category_id))
+            hfa_list = hfa_dict.get(str(hfa_id), [])
+            hfa_list.append(entry.project.id)
+            log_entry.hfa[str(category_id)][str(hfa_id)] = list(set(hfa_list))
+            # Generate data structure if needed
+            for donor_id in donors:
+                donor_str = str(donor_id)
+                if donor_str not in log_entry.data:  # pragma: no cover
+                    log_entry.data[donor_str] = {}
+                donor_cats = log_entry.data[donor_str].get(str(category_id))
+                donor_hfa = donor_cats.get(str(hfa_id), [])
+                donor_hfa.append(entry.project.id)
+                log_entry.data[donor_str][str(category_id)][str(hfa_id)] = list(set(donor_hfa))
+        cat_entry.save()
+        log_entry.save()
