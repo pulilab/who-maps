@@ -64,3 +64,10 @@ class AuditLogHealthCategoriesAdmin(TestingOnlyAdmin):
     ]
     list_filter = (('date', DateRangeFilter), 'country')
 
+
+@admin.register(AuditLogHFA)
+class AuditLogHFAAdmin(TestingOnlyAdmin):
+    list_display = [
+        'date', 'modified', 'country', 'hfa',
+    ]
+    list_filter = (('date', DateRangeFilter), 'country')
