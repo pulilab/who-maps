@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages, AuditLogUsers, AuditLogDataStandards
+from .models import AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages, AuditLogUsers, AuditLogDataStandards, \
+    AuditLogHFA, AuditLogHealthCategories
 
 from django.conf import settings
 from rangefilter.filters import DateRangeFilter
@@ -54,3 +55,12 @@ class AuditLogDataStandardsAdmin(TestingOnlyAdmin):
         'date', 'modified', 'country', 'standards',
     ]
     list_filter = (('date', DateRangeFilter), 'country')
+
+
+@admin.register(AuditLogHealthCategories)
+class AuditLogHealthCategoriesAdmin(TestingOnlyAdmin):
+    list_display = [
+        'date', 'modified', 'country', 'categories',
+    ]
+    list_filter = (('date', DateRangeFilter), 'country')
+
