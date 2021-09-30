@@ -491,3 +491,11 @@ def update_auditlog_hfa_task(current_date=None):
                 log, created = AuditLogHFA.objects.get_or_create(date=empty_gen_date, country=country)
                 if created:
                     init_hfa_data(log, donors)
+
+    def add_entry_data(entry: ProjectVersion, country: Country, log_date):
+        hfa_data = entry.data.get('health_focus_areas', [])
+        donors = entry.data.get('donors')
+        # get or create auditlog
+        log_entry, _ = AuditLogHFA.objects.get_or_create(date=log_date, country=country)
+        cat_entry, _ = AuditLogHealthCategories.objects.get_or_create(date=log_date, country=country)
+        # generate total standards data - we track projects by ID
