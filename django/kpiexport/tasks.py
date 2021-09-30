@@ -507,3 +507,15 @@ def update_auditlog_hfa_task(current_date=None):
             except ValueError:
                 continue
 
+            # Fill categories
+            cat_list = cat_entry.categories.get(str(category_id), [])
+            cat_list.append(entry.project.id)
+            cat_entry.categories[str(category_id)] = list(set(cat_list))
+            # Generate data structure if needed
+            for donor_id in donors:
+                donor_str = str(donor_id)
+                if donor_str not in cat_entry.data:  # pragma: no cover
+                    cat_entry.data[donor_str] = {}
+                donor_cats = cat_entry.data[donor_str].get(str(category_id), [])
+                donor_cats.append(entry.project.id)
+                cat_entry.data[donor_str][str(category_id)] = list(set(donor_cats))
