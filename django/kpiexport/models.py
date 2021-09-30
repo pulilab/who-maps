@@ -241,3 +241,52 @@ class AuditLogHealthCategories(AuditLogBase):
 
     def __str__(self):  # pragma: no cover
         return f'{self.date.year}-{self.date.month}-{self.country} - Categories: {self.categories}, '
+
+
+class AuditLogHFA(AuditLogBase):
+    """
+    AuditLog model tracking the project HFAs KPI in the DB
+
+    `hfa` are saved in a JSONField for the non-donor-dependent values too.
+    {
+        "<category_id>":
+            {
+                <hfa_id>: [project_id, project_id],
+                <hfa_id>: [project_id, project_id]
+            }
+    }
+
+    `data` format:
+      {
+        "<investor_id_1>":
+          {
+            <category_id>:
+                {
+                    <hfa_id>: [project_id, project_id],
+                    <hfa_id>: [project_id, project_id]
+                }
+            <category_id>:
+                {
+                    <hfa_id>: [project_id, project_id],
+                    <hfa_id>: [project_id, project_id]
+                }
+          },
+        "<investor_id_2>":
+          {
+            <category_id>:
+                {
+                    <hfa_id>: [project_id, project_id],
+                    <hfa_id>: [project_id, project_id]
+                }
+          },
+      }
+    """
+
+    hfa = JSONField(blank=True, default=dict)
+
+    class Meta:
+        verbose_name = "Health Focus Areas KPI"
+        verbose_name_plural = "Health Focus Areas KPIs"
+
+    def __str__(self):  # pragma: no cover
+        return f'{self.date.year}-{self.date.month}-{self.country} - Categories: {self.hfa}, '
