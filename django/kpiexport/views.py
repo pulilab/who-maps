@@ -199,7 +199,7 @@ class HealthCategoriesKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet
     * `detailed`: if set to true, detailed donor-based data will be returned
 
     """
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogHealthCategories.objects.all()
@@ -226,13 +226,19 @@ class HFAKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     * `detailed`: if set to true, detailed donor-based data will be returned
 
     """
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogHFA.objects.all()
+    serializer_class = AuditLogHFABasicSerializer
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context["category_id"] = self.kwargs.get('category_id')
         return context
 
+    # def get_serializer_class(self):
+    #     if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
+    #         return AuditLogHealthCategoriesDetailedSerializer
+    #     else:
+    #         return AuditLogHFABasicSerializer
