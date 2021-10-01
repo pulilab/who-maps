@@ -219,3 +219,20 @@ class AuditLogStandardsDetailedSerializer(AuditLogStandardsBasicSerializer):
     class Meta:
         model = AuditLogDataStandards
         fields = ("date", "country", "standards", "data")
+
+
+class AuditLogHealthCategoriesBasicSerializer(serializers.ModelSerializer):
+    date = serializers.CharField(read_only=True, max_length=10)
+    country = serializers.PrimaryKeyRelatedField(read_only=True)
+    categories = serializers.SerializerMethodField()
+
+    def get_categories(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        cat_dict = obj.categories
+        if donor:
+            cat_dict = obj.data.get(donor, {})
+        return {cat: len(val) for cat, val in cat_dict.items()}
+
+    class Meta:
+        model = AuditLogHealthCategories
+        fields = ("date", "country", "categories")
