@@ -230,3 +230,9 @@ class HFAKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogHFA.objects.all()
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["category_id"] = self.kwargs.get('category_id')
+        return context
+
