@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages, \
-    AuditLogDataStandards
+    AuditLogDataStandards, AuditLogHealthCategories, AuditLogHFA
 
 
 class AuditLogUserBasicSerializer(serializers.ModelSerializer):
@@ -236,3 +236,20 @@ class AuditLogHealthCategoriesBasicSerializer(serializers.ModelSerializer):
     class Meta:
         model = AuditLogHealthCategories
         fields = ("date", "country", "categories")
+
+
+class AuditLogHealthCategoriesDetailedSerializer(AuditLogHealthCategoriesBasicSerializer):
+    data = serializers.SerializerMethodField()
+
+    def get_data(self, obj):
+        result_dict = {}
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return {cat: len(val) for cat, val in obj.data.get(donor, {}).items()}
+        for donor_id, donor_dict in obj.data.items():  # pragma: no cover
+            result_dict[donor_id] = {cat: len(val) for cat, val in donor_dict.items()}
+        return result_dict  # pragma: no cover
+
+    class Meta:
+        model = AuditLogHealthCategories
+        fields = ("date", "country", "categories", "data")
