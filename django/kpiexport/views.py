@@ -209,3 +209,24 @@ class HealthCategoriesKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet
             return AuditLogHealthCategoriesDetailedSerializer
         else:
             return AuditLogHealthCategoriesBasicSerializer
+
+
+class HFAKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    """
+    View to retrieve HFA KPIs
+
+    Requires token authentication.
+
+    Allowed filters:
+
+    * `country`: country ID, example: 01 (default: Global)
+    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
+    * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
+    * `to`: YYYY-MM format, ending of the sample (default: last month)
+    * `detailed`: if set to true, detailed donor-based data will be returned
+
+    """
+    # permission_classes = (IsAuthenticated,)
+    filter_backends = [KPIFilterBackend]
+    filter_fields = ('country', 'investor', 'from', 'to')
+    queryset = AuditLogHFA.objects.all()
