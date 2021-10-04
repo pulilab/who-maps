@@ -340,7 +340,6 @@ export const actions = {
     commit('setValue', { key: 'noStageDataSum', val: noStageDataSum })
   
     // Prepare Health Focus Areas data
-    // const { hfaLabels, hfaOccurence } = await dispatch('getHealthFocusAreas')
     let hfaLabels = []
     let hfaOccurence = []
     const hfcMonths = kpi[7].data
@@ -738,7 +737,6 @@ export const actions = {
       }
     }
     commit('SET_HORIZONTALBARB_GRAPH', updatedBar)
-    // commit('UPDATE_HORIZONTALBARB_GRAPH', { hfaLabels, hfaOccurence })
   },
   async handleBackClick ({ state, commit, dispatch }, { func }) {
     commit('SET_BACK', state.back.slice(0, state.back.length - 1))
@@ -797,10 +795,6 @@ export const mutations = {
   },
   SET_HORIZONTALBARB_GRAPH: (state, obj) => {
     state.horizontalBarB = obj
-  },
-  UPDATE_HORIZONTALBARB_GRAPH: (state, obj) => {
-    state.horizontalBarB.chartData.datasets[0] = [obj.hfaOccurence]
-    state.horizontalBarB.chartData.labels = obj.hfaLabels
   },
   SET_LINEA_GRAPH: (state, obj) => {
     state.lineA = obj

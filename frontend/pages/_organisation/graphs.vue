@@ -369,7 +369,7 @@ export default {
       this.getDashboardData({ func: this.handleBarClick, refresh: true })
     },
     handleBarClick (point, event) {
-      if (this.back.length == 0) {
+      if (this.back.length === 0) {
         this.barClick({ func: this.handleBarClick, idx: event[0]._index })        
       }
     },
