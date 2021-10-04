@@ -150,6 +150,10 @@ class KPITestDataWithProjects(KPITestData):
             []
         ]
         standards = [1, 2, 4]
+        hc1 = HealthCategory.objects.get(id=1)
+        hc2 = HealthCategory.objects.get(id=2)
+        hfa1 = HealthFocusArea.objects.create(name='Health Focus Area 1', health_category=hc1)
+        hfa2 = HealthFocusArea.objects.create(name='Health Focus Area 2', health_category=hc2)
         for i in range(1, 10):
             donors = list()
             if i % 3 == 0:
