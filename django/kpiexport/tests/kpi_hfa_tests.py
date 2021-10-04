@@ -117,3 +117,12 @@ class KPIHFATests(KPITestDataWithProjects, APITestCase):
         self.assertTrue(data[0]['hfa'][str(hc1.id)][str(list(HealthFocusArea.objects.all().order_by('id'))[-2].id)])
         self.assertTrue(data[0]['hfa'][str(hc2.id)][str(list(HealthFocusArea.objects.all().order_by('id'))[-1].id)])
         self.assertEqual(response.status_code, 200)
+
+    def test_hfa_by_category_kpi_date_filter(self):
+        hc1 = HealthCategory.objects.get(id=1)
+        url = reverse("health-categories-hfa-kpi", args=(hc1.id, ))
+        url += f'?from={self.date_3.year}-{self.date_3.month}&to={self.date_3.year}-{self.date_3.month}'
+        response = self.test_user_client.get(url)
+        data = response.json()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data[0]['hfa'][str(list(HealthFocusArea.objects.all().order_by('id'))[-2].id)], 4)
