@@ -427,6 +427,10 @@ if SITE_ID in [3, 4]:
             "task": "auditlog_update_data_standards",
             "schedule": crontab(hour=1, minute=0, ),
         },
+        "auditlog_update_hfa": {
+            "task": "auditlog_update_hfa",
+            "schedule": crontab(hour=2, minute=0, ),
+        },
     }
     if ODK_SYNC_ENABLED:
         CELERYBEAT_SCHEDULE.update(
