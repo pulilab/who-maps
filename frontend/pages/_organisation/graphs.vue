@@ -186,12 +186,17 @@
       </graph-layout>
     </el-row>
 
+    <!-- Data standards -->
     <el-row type="flex" :gutter="20" class="mb-80">      
       <graph-layout :span="24">
-        <translate>Top 20 ‘Data standards’ (by occurrences)</translate>
+      <translate :parameters="{ top: dataStandardsCount }">
+        Top {top} ‘Data standards’ (by occurrences)
+      </translate>
+
+        <!-- <translate>Top 20 ‘Data standards’ (by occurrences)</translate> -->
         <template #graph>
-          <chart
-            type="horizontal-bar"
+          <horizontal-bar
+            v-if="horizontalBarA.chartData"
             :chart-data="horizontalBarA.chartData || {}"
             :options="horizontalBarA.options"
             :height="dataStandardHeight"
@@ -199,6 +204,53 @@
         </template>
       </graph-layout>
     </el-row>
+
+    <!-- Health Focus Areas -->
+    <p class="subtitle">
+      <translate>Health Focus Areas</translate>
+    </p>
+    <el-row type="flex" :gutter="20" class="mb-80">
+      <graph-layout :span="8">
+        <translate>Coverage of Health Focus Areas</translate>
+        <template #graph>
+          <chart
+            type="doughnut"
+            :width="160"
+            :height="160"
+            :chart-data="doughnutD.chartData || {}"
+            :options="doughnutD.options"
+          />
+        </template>
+        <template #legend>
+          <tab-legend :legend="doughnutDLegend" />
+        </template>
+      </graph-layout>
+      <graph-layout :span="16">
+        <translate>Health Focus Categories (by occurrences)</translate>
+        <template #back>
+          <el-button
+            v-if="back.length > 0"
+            type="text"
+            icon="el-icon-arrow-left"
+            @click="handleBackClick"
+          >
+            <translate>Back</translate>
+          </el-button>
+        </template>
+        <template #subtitle>
+          <Subtitle :item="subtitle" />
+        </template>
+        <template #graph>
+          <horizontal-bar
+            v-if="horizontalBarB.chartData"
+            :chart-data="horizontalBarB.chartData || {}"
+            :options="horizontalBarB.options"
+            :height="480"
+          />
+        </template>
+      </graph-layout>
+    </el-row>
+
 
   </div>
 </template>
@@ -208,7 +260,9 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import { format } from 'date-fns'
 import debounce from 'lodash/debounce'
 
+import Subtitle from '@/components/common/charts/utilities/Subtitle'
 import DataLegend from '@/components/common/charts/utilities/DataLegend'
+import TabLegend from '@/components/common/charts/utilities/TabLegend'
 import Chart from '@/components/common/charts/Chart'
 import GraphLayout from '@/components/common/charts/widgets/GraphLayout'
 
@@ -216,7 +270,9 @@ export default {
   components: {
     Chart,
     GraphLayout,
-    DataLegend
+    DataLegend,
+    Subtitle,
+    TabLegend
   },
   data () {
     return {
@@ -265,10 +321,13 @@ export default {
       barA: state => state.charts.barA,
       barB: state => state.charts.barB,
       horizontalBarA: state => state.charts.horizontalBarA,
+      horizontalBarB: state => state.charts.horizontalBarB,
       doughnutA: state => state.charts.doughnutA,
+      doughnutD: state => state.charts.doughnutD,
       // legends
       polarALegend: state => state.charts.polarALegend,
       noStageDataSum: state => state.charts.noStageDataSum,
+      doughnutDLegend: state => state.charts.doughnutDLegend,
       doughnutALegend: state => state.charts.doughnutALegend,
       monthlyUserLegend: state => state.charts.monthlyUserLegend,
       projectStatusLegend: state => state.charts.projectStatusLegend,
@@ -284,12 +343,16 @@ export default {
       countries: 'countries/getCountries',
       donors: 'system/getDonors'
     }),
+    dataStandardsCount() {
+      return this.horizontalBarA.chartData?.datasets[0].data.length > 0 
+              ? this.horizontalBarA.chartData.datasets[0].data.length
+              : 0
+    },
     dataStandardHeight() {
-      // should be dynamic, but data is not ready when rendering the height of the chart
-      // setting it to 20 * 40 = 800 for now
-      // return this.horizontalBarA.chartData?.datasets[0].data.length * 40
-      return 800
-    }
+      return this.dataStandardsCount > 0 
+                  ? this.dataStandardsCount * 40 
+                  : 800
+    },
   },
   created () {
     this.handleSearch()
@@ -306,7 +369,9 @@ export default {
       this.getDashboardData({ func: this.handleBarClick, refresh: true })
     },
     handleBarClick (point, event) {
-      this.barClick({ func: this.handleBarClick, idx: event[0]._index })
+      if (this.back.length == 0) {
+        this.barClick({ func: this.handleBarClick, idx: event[0]._index })        
+      }
     },
     handleBackClick () {
       this.backClick({ func: this.handleBarClick })

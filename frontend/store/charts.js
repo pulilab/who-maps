@@ -60,7 +60,8 @@ export const state = () => ({
     investor: undefined,
     from: undefined,
     to: undefined
-  }
+  },
+  projectStructure: {}
 })
 
 export const actions = {
@@ -257,10 +258,40 @@ export const actions = {
       }
     })
   },
-  async getDashboardData (
-    { state, commit, dispatch, rootGetters },
-    { func, refresh }
-  ) {
+  async getHealthFocusAreas ({ state, commit }, hfcID = 0) {
+    const loadState = state.loading
+    if (!state.loading) commit('SET_LOADING', true)    
+    let catParam = ''
+    let hfMode ='categories'
+    let healthFocusList = []
+    if (hfcID > 0) {
+      catParam = `/${hfcID}`
+      hfMode = 'hfa'
+      healthFocusList = state.projectStructure.health_focus_areas.find(hfc => hfc.id === hfcID).health_focus_areas
+    } else {
+      healthFocusList = state.projectStructure.health_focus_areas
+    }
+    const hfaKPI = await this.$axios.get(`/api/kpi/health-categories${catParam}/${objectToQueryString(state.filters)}`)   
+    let hfaLabels = []
+    let hfaOccurence = []
+    const hfcMonths = hfaKPI.data
+    if (hfcMonths.length > 0) {
+      Object.keys(hfcMonths[0][hfMode]).forEach(hfID => {
+        const hfa = healthFocusList.find(h => h.id == hfID)
+        if (hfa) {
+          hfaLabels.push(hfa.name)
+          let occurence = 0
+          hfcMonths.forEach(m => occurence += m[hfMode][hfID])
+          hfaOccurence.push(occurence)
+        }
+      })
+    }
+    if (!loadState) {
+      commit('SET_LOADING', false)
+    }
+    return { hfaLabels, hfaOccurence }
+  },
+  async getDashboardData ({ state, commit, dispatch, rootGetters }, { func, refresh }) {
     commit('SET_LOADING', true)
 
     const base = '/api/kpi'
@@ -270,14 +301,17 @@ export const actions = {
       this.$axios.get(`${base}/project-status/${objectToQueryString(state.filters)}`),
       this.$axios.get(`${base}/project-stages/${objectToQueryString(state.filters)}`),
       this.$axios.get('/api/projects/structure/'),
-      this.$axios.get(`${base}/data-standards/${objectToQueryString(state.filters)}`)
-    ])
-
-    const { interoperability_standards } = kpi[4].data
-    const { stages } = kpi[4].data
+      this.$axios.get(`${base}/data-standards/${objectToQueryString(state.filters)}`),
+      this.$axios.get(`${base}/hfa/${objectToQueryString(state.filters)}`),
+      this.$axios.get(`${base}/health-categories/${objectToQueryString(state.filters)}`)
+    ])    
+    commit('setValue', { key: 'projectStructure', val: kpi[4].data })
+    const { interoperability_standards, stages, health_focus_areas: healthcategory } = kpi[4].data
     const users = kpi[0].data
     const tokens = kpi[1].data
     const projectStatus = kpi[2].data
+    
+    // Prepare Data standards data
     const projectStages = stages.map(s => {
       return {
         ...s,
@@ -294,14 +328,90 @@ export const actions = {
         }, 0)
       }
     })
-    const totalsOfStandardsSorted =  sortBy(dataStandards, ['total']).reverse().splice(0,20)
+    let totalsOfStandardsSorted = sortBy(dataStandards, ['total']).reverse()
+    const indexOfFirstZero = totalsOfStandardsSorted.findIndex((d) => d.total === 0)
+    totalsOfStandardsSorted = indexOfFirstZero > 8
+      ? totalsOfStandardsSorted.splice(0, indexOfFirstZero-1)
+      : totalsOfStandardsSorted.splice(0, 20)
 
     const noStageDataSum = kpi[3].data.reduce((sum, stage) => {
       return stage.stages.no_data + sum
     }, 0)
     commit('setValue', { key: 'noStageDataSum', val: noStageDataSum })
+  
+    // Prepare Health Focus Areas data
+    // const { hfaLabels, hfaOccurence } = await dispatch('getHealthFocusAreas')
+    let hfaLabels = []
+    let hfaOccurence = []
+    const hfcMonths = kpi[7].data
+    if (hfcMonths.length > 0) {
+      Object.keys(hfcMonths[0].categories).forEach((cat,index) => {
+        const hc = healthcategory.find(h => h.id === index)
+        if (hc) {
+          hfaLabels.push(hc.name)
+          let occurence = 0
+          hfcMonths.forEach(m => occurence += m.categories[index])
+          hfaOccurence.push(occurence)
+        }
+      })
+    }
 
-    // start of data that should come from somewhere
+    const hfaMonths = kpi[6].data
+    let hfaCoveredAreasSum = 0
+    let hfaNotCoveredAreasSum = 0
+    let hfaCoveredAreas = []
+    let hfaNotCoveredAreas = []
+    let hfaCoveredSubAreas = []
+    let hfaNotCoveredSubAreas = []
+
+    healthcategory.forEach(hc => {
+      hc.health_focus_areas.forEach(ha => {
+        let covered = false
+        hfaMonths.forEach(m => {
+          if (!covered) covered = m.hfa[hc.id][ha.id]
+        })
+        if (covered) {
+          hfaCoveredSubAreas.push({
+            ...ha,
+            hfaCategory: hc
+          })
+          hfaCoveredAreasSum++
+        } else {
+          hfaNotCoveredSubAreas.push({
+            ...ha,
+            hfaCategory: hc
+          })
+          hfaNotCoveredAreasSum++
+        }
+      })
+    })
+
+    let lastHfaCategoryID = 0
+    hfaCoveredSubAreas.forEach(hfaSub => {
+      if (lastHfaCategoryID !== hfaSub.hfaCategory.id) {
+        hfaCoveredAreas.push({
+          name: hfaSub.hfaCategory.name,
+          subareas: [hfaSub.name]
+        })
+        lastHfaCategoryID = hfaSub.hfaCategory.id
+      } else {
+        hfaCoveredAreas[hfaCoveredAreas.length-1].subareas.push(hfaSub.name)
+      }
+    })
+
+    lastHfaCategoryID = 0
+    hfaNotCoveredSubAreas.forEach(hfaSub => {
+      if (lastHfaCategoryID !== hfaSub.hfaCategory.id) {
+        hfaNotCoveredAreas.push({
+          name: hfaSub.hfaCategory.name,
+          subareas: [hfaSub.name]
+        })
+        lastHfaCategoryID = hfaSub.hfaCategory.id
+      } else {
+        hfaNotCoveredAreas[hfaNotCoveredAreas.length-1].subareas.push(hfaSub.name)
+      }
+    })
+    
     // color sets (should be dynamic?)
     const colorSetA = ['#49BCE8']
     const colorSetB = ['#49BCE8', '#99CA67']
@@ -348,22 +458,6 @@ export const actions = {
     const coverageLabels = ['Covered', 'Not covered']
     const dataStandardsLabels = extract(totalsOfStandardsSorted, 'name', true)
     const stageLabels = extract(projectStages, 'name')
-    const hfaLabels = [
-      'Adolescent and Youth Health',
-      'Civil registration and vital statistics',
-      'Coronavirus',
-      'Cross cutting',
-      'Environmental health',
-      'Humanitarian health',
-      'Infectious diseases (non-vector borne)',
-      'Injury prevention and management',
-      'Maternal health',
-      'Newborn and Child Health',
-      'Non-communicable diseases',
-      'Nutrition and metabolic disorders',
-      'Sexual and reproductive health'
-    ]
-    // end of data that should come from somewhere
 
     // data generation
     // stages
@@ -401,7 +495,6 @@ export const actions = {
     ]
     const doughnutBData = randomData(govermentContributionLabels.length)
     const doughnutCData = randomData(distributionStatuesLabels.length)
-    const doughnutDData = randomData(coverageLabels.length)
 
     // initialization for graph
     commit(
@@ -513,7 +606,7 @@ export const actions = {
           subtitle: 'Click to see Heatlh Focus Areas'
         },
         click: true,
-        data: [randomData(hfaLabels.length)]
+        data: [hfaOccurence]
       })
     )
     commit(
@@ -549,7 +642,7 @@ export const actions = {
         type: 'doughnut',
         colors: colorSetF,
         labels: coverageLabels,
-        data: doughnutDData
+        data: [hfaCoveredAreasSum, hfaNotCoveredAreasSum]
       })
     )
     // legends
@@ -586,60 +679,13 @@ export const actions = {
           id: 1,
           icon: 'el-icon-check',
           color: 'green',
-          areas: [
-            {
-              name: 'Adolescent and Youth Health',
-              subareas: [
-                'Adolescents and communicable diseases',
-                'Adolescents and mental health',
-                'Adolescents and non-communicable diseases',
-                'Adolescents and sexual and reproductive health',
-                'Adolescents and violence',
-                'Child marriage'
-              ]
-            },
-            {
-              name: 'Civil registration and vital statistics',
-              subareas: [
-                'Birth events',
-                'Death events',
-                'Other civil registration and vital statistics'
-              ]
-            },
-            {
-              name: 'Civil registration and vital statistics',
-              subareas: [
-                'Birth events',
-                'Death events',
-                'Other civil registration and vital statistics'
-              ]
-            }
-          ]
+          areas: hfaCoveredAreas
         },
         {
           id: 2,
           icon: 'el-icon-close',
           color: 'red',
-          areas: [
-            {
-              name: 'Adolescent and Youth Health',
-              subareas: [
-                'Life-skills training',
-                'Other adolescent and youth health',
-                'School-based health programs',
-                'Youth friendly services'
-              ]
-            },
-            {
-              name: 'Cross cutting',
-              subareas: [
-                'Blood Safety',
-                'Emergency Medical Services',
-                'Immunizations',
-                'Surveillance'
-              ]
-            }
-          ]
+          areas: hfaNotCoveredAreas
         }
       ]
     })
@@ -667,22 +713,56 @@ export const actions = {
     commit('SET_BAR_CLICK', func)
     commit('SET_LOADING', false)
   },
-  handleBarClick ({ state, commit, dispatch }, { func, idx }) {
+  async handleBarClick ({ state, commit, dispatch }, { func, idx }) {
+    const hc = state.projectStructure.health_focus_areas.find(hc => hc.name === state.horizontalBarB.chartData.labels[idx])
     const newStack = {
       label: state.horizontalBarB.chartData.labels[idx],
       value: state.horizontalBarB.chartData.datasets[0].data[idx]
     }
     commit('SET_BACK', [...state.back, newStack])
     commit('SET_SUBTITLE', newStack)
-    dispatch('getDashboardData', { func, refresh: false })
+    const { hfaLabels, hfaOccurence } = await dispatch('getHealthFocusAreas', hc.id)
+    const newDataSets = [{
+      backgroundColor: '#49BCE8',
+      barThickness: 'flex',
+      data: hfaOccurence
+    }]
+    const updatedBar = {      
+      options: {
+        ...state.horizontalBarB.options,
+        click: false
+      },
+      chartData: {
+        datasets: newDataSets,
+        labels: hfaLabels
+      }
+    }
+    commit('SET_HORIZONTALBARB_GRAPH', updatedBar)
+    // commit('UPDATE_HORIZONTALBARB_GRAPH', { hfaLabels, hfaOccurence })
   },
-  handleBackClick ({ state, commit, dispatch }, { func }) {
+  async handleBackClick ({ state, commit, dispatch }, { func }) {
     commit('SET_BACK', state.back.slice(0, state.back.length - 1))
     commit(
       'SET_SUBTITLE',
       state.back.length > 0 ? state.back[state.back.length - 1] : {}
     )
-    dispatch('getDashboardData', { func, refresh: false })
+    const { hfaLabels, hfaOccurence } = await dispatch('getHealthFocusAreas')
+    const newDataSets = [{
+      backgroundColor: '#49BCE8',
+      barThickness: 'flex',
+      data: hfaOccurence
+    }]
+    const updatedBar = {
+      options: {
+        ...state.horizontalBarB.options,
+        click: true
+      },
+      chartData: {
+        datasets: newDataSets,
+        labels: hfaLabels
+      }
+    }
+    commit('SET_HORIZONTALBARB_GRAPH', updatedBar)
   },
   setFilters ({ state, commit }, filters) {
     commit('SET_FILTERS', filters)
@@ -717,6 +797,10 @@ export const mutations = {
   },
   SET_HORIZONTALBARB_GRAPH: (state, obj) => {
     state.horizontalBarB = obj
+  },
+  UPDATE_HORIZONTALBARB_GRAPH: (state, obj) => {
+    state.horizontalBarB.chartData.datasets[0] = [obj.hfaOccurence]
+    state.horizontalBarB.chartData.labels = obj.hfaLabels
   },
   SET_LINEA_GRAPH: (state, obj) => {
     state.lineA = obj
