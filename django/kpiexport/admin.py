@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages, AuditLogUsers, AuditLogDataStandards, \
-    AuditLogHFA, AuditLogHealthCategories
+from .models import AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages, AuditLogUsers, \
+    AuditLogDataStandards, AuditLogHFA, AuditLogHealthCategories
 
 from django.conf import settings
 from rangefilter.filters import DateRangeFilter
