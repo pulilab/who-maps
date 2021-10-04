@@ -1,9 +1,19 @@
+from datetime import date, timedelta
+
 from rest_framework.test import APITestCase
 from rest_framework.reverse import reverse
+
+from kpiexport.tasks import update_auditlog_user_data_task
 from kpiexport.tests.kpi_base import KPITestData
 
 
 class KPIUserTests(KPITestData, APITestCase):
+    def setUp(self):
+        super().setUp()
+        generate_date = date.today() - timedelta(days=150)
+        while generate_date <= date.today():
+            update_auditlog_user_data_task(generate_date)
+            generate_date = generate_date + timedelta(days=1)
 
     def test_user_kpi_nofilter(self):
         url = reverse("user-kpi")
