@@ -502,9 +502,9 @@ def update_auditlog_hfa_task(current_date=None):
         for hfa_id in hfa_data:
             try:
                 category_id = HealthFocusArea.objects.get(id=hfa_id).health_category.id
-            except HealthFocusArea.DoesNotExist:
+            except HealthFocusArea.DoesNotExist:  # pragma: no cover
                 continue
-            except ValueError:
+            except ValueError:  # pragma: no cover
                 continue
 
             # Fill categories
