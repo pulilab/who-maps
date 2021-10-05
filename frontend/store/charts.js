@@ -328,11 +328,7 @@ export const actions = {
         }, 0)
       }
     })
-    let totalsOfStandardsSorted = sortBy(dataStandards, ['total']).reverse()
-    const indexOfFirstZero = totalsOfStandardsSorted.findIndex((d) => d.total === 0)
-    totalsOfStandardsSorted = indexOfFirstZero > 8
-      ? totalsOfStandardsSorted.splice(0, indexOfFirstZero-1)
-      : totalsOfStandardsSorted.splice(0, 20)
+    let totalsOfStandardsSorted = sortBy(dataStandards, ['total']).reverse().splice(0, 20)
 
     const noStageDataSum = kpi[3].data.reduce((sum, stage) => {
       return stage.stages.no_data + sum
@@ -710,6 +706,9 @@ export const actions = {
     commit('SET_PREVIOUS', randomNumber())
     // click function link
     commit('SET_BAR_CLICK', func)
+
+    commit('SET_SUBTITLE', {})
+    commit('SET_BACK', [])
     commit('SET_LOADING', false)
   },
   async handleBarClick ({ state, commit, dispatch }, { func, idx }) {

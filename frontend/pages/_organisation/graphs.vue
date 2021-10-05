@@ -189,11 +189,9 @@
     <!-- Data standards -->
     <el-row type="flex" :gutter="20" class="mb-80">      
       <graph-layout :span="24">
-      <translate :parameters="{ top: dataStandardsCount }">
-        Top {top} ‘Data standards’ (by occurrences)
-      </translate>
-
-        <!-- <translate>Top 20 ‘Data standards’ (by occurrences)</translate> -->
+        <translate :parameters="{ top: dataStandardsCount }">
+          Top {top} ‘Data standards’ (by occurrences)
+        </translate>
         <template #graph>
           <horizontal-bar
             v-if="horizontalBarA.chartData"
@@ -226,7 +224,24 @@
         </template>
       </graph-layout>
       <graph-layout :span="16">
-        <translate>Health Focus Categories (by occurrences)</translate>
+        <translate v-if="back.length === 0" key="categories">Health Focus Categories (by occurrences)</translate>
+        <translate v-else key="areas">Health Focus Areas (by occurrences)</translate>
+        <el-popover
+          placement="bottom"
+          :title="$gettext('How to read the chart') | translate"
+          width="480"
+          :visible-arrow="true"
+          popper-class="hfa-info-popover"
+          class="hfa-info"
+          trigger="click">
+          <div>
+            <h2><translate>Health Focus Categories</translate></h2>
+            <p><translate>At first level in the Health Focus Categories every project can contain the a Health Focus Category only once.</translate></p>
+            <h2><translate>Health Focus Areas</translate></h2>
+            <p><translate>Health Focus Areas as sublevel of Health Focus Categories can contain multiple Health Focus Areas. Because of this, it may happen that the sum of the visible Health Focus Areas are more than the sum of Health Focus Categories, although the individual Health Focus Areas cannot exceed the number of Health Focus Categories displayed.</translate></p>
+          </div>
+          <fa slot="reference" icon="info-circle" />
+        </el-popover>
         <template #back>
           <el-button
             v-if="back.length > 0"
@@ -461,5 +476,24 @@ export default {
   margin: 0 0 18px 0;
   font-size: 1.125rem;
   line-height: 1.7;
+}
+::v-deep .hfa-info {
+  position: absolute;
+  right: 0;
+  svg {
+    cursor: pointer;
+    color: @colorBrandPrimary;
+    &:hover {
+      color: @colorBrandPrimaryLight;
+    }
+  }
+  .el-popover__title {
+    font-size: @fontSizeLarge;
+  }
+}
+.hfa-info-popover {
+  p {
+    word-break: normal;
+  }
 }
 </style>
