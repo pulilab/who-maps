@@ -1,13 +1,10 @@
 from core.factories import UserProfileFactory
 from user.models import UserProfile
-from project.models import ProjectVersion
+from project.models import ProjectVersion, HealthCategory, HealthFocusArea
 
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 
 from django.utils.timezone import localtime
-from kpiexport.tasks import update_auditlog_user_data_task, update_auditlog_token_data_task, \
-    update_auditlog_project_status_data_task, update_auditlog_project_stages_data_task, \
-    update_auditlog_data_standards_task
 from rest_framework.authtoken.models import Token
 from project.tests.setup import TestData
 
@@ -25,12 +22,6 @@ class KPITestData(TestData):
         super(KPITestData, self).setUp()
         self.create_anchor_dates()
         self.create_users()
-
-        generate_date = date.today() - timedelta(days=150)
-        while generate_date <= date.today():
-            update_auditlog_user_data_task(generate_date)
-            update_auditlog_token_data_task(generate_date)
-            generate_date = generate_date + timedelta(days=1)
 
     def create_anchor_dates(self):
         def subtract_months_from_date(date, months):
@@ -150,6 +141,10 @@ class KPITestDataWithProjects(KPITestData):
             []
         ]
         standards = [1, 2, 4]
+        hc1 = HealthCategory.objects.get(id=1)
+        hc2 = HealthCategory.objects.get(id=2)
+        hfa1 = HealthFocusArea.objects.create(name='Health Focus Area 1', health_category=hc1)
+        hfa2 = HealthFocusArea.objects.create(name='Health Focus Area 2', health_category=hc2)
         for i in range(1, 10):
             donors = list()
             if i % 3 == 0:
@@ -163,7 +158,7 @@ class KPITestDataWithProjects(KPITestData):
                 country = self.country2
 
             project_data = self.generate_project_data(f'project {i}', self.org, country, donors, dates[i % 4],
-                                                      stages[i % 3], standards=standards)
+                                                      stages[i % 3], hfa=[hfa1.id, hfa2.id], standards=standards)
             project = self.create_draft_project(project_data)
             if i % 2 == 0 and len(donors) > 0:
                 self.publish_project(project.id, project_data)
@@ -181,10 +176,3 @@ class KPITestDataWithProjects(KPITestData):
                 versions[0].project.save()
                 versions[0].created = self.date_2
                 versions[0].save()
-
-        generate_date = date.today() - timedelta(days=150)
-        while generate_date <= date.today() + timedelta(days=1):
-            update_auditlog_project_status_data_task(generate_date)
-            update_auditlog_project_stages_data_task(generate_date)
-            update_auditlog_data_standards_task(generate_date)
-            generate_date = generate_date + timedelta(days=1)

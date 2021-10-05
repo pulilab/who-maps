@@ -5,10 +5,7 @@
         <template v-if="$slots.back">
           <slot name="back" />
         </template>
-        <p
-          v-if="$slots.default"
-          class="title"
-        >
+        <p v-if="$slots.default" class="title">
           <slot />
         </p>
         <slot name="subtitle" />
@@ -25,10 +22,7 @@
           </el-row>
         </template>
         <template v-else>
-          <div
-            v-if="$slots.graph"
-            class="graph"
-          >
+          <div v-if="$slots.graph" class="graph">
             <slot name="graph" />
           </div>
           <slot name="legend" />
@@ -64,6 +58,7 @@ export default {
     ::v-deep .el-button--text {
       color: #404041;
       position: absolute;
+      z-index: 10;
       top: 30px;
       left: 40px;
       font-size: 14px;
@@ -73,11 +68,11 @@ export default {
       padding: 3px 0;
     }
     .title {
+      position: relative;
       color: #1cabe2;
       font-size: 18px;
       letter-spacing: -0.5px;
       line-height: 23px;
-      margin: 9px 0 11px 0;
       text-align: center;
       margin: 0 25px 0px;
     }

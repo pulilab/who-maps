@@ -434,3 +434,125 @@ def update_auditlog_data_standards_task(current_date=None):
             add_entry_to_data(entry, None, log_date)
         except Country.DoesNotExist:  # pragma: no cover
             logging.warning(f'Country with this ID does not exist: {country_id}')
+
+
+@app.task(name='auditlog_update_hfa')
+def update_auditlog_hfa_task(current_date=None):
+    """
+    Schedulable task to update project HFA statistics
+    Needs to run daily - overwrites this month's tasks
+    """
+    from project.models import ProjectVersion, HealthCategory, HealthFocusArea
+    from kpiexport.models import AuditLogHFA, AuditLogHealthCategories
+    from country.models import Country, Donor
+
+    def create_empty_category_entries(empty_gen_date):
+        """
+        Creates empty log entries for all countries and donors for all dates
+        """
+        def init_category_data(log_entry, donor_ids):
+            category_dict = {cat_id: [] for cat_id in HealthCategory.objects.all().values_list('id', flat=True)}
+            data_dict = {d_id: category_dict for d_id in donor_ids}
+            log_entry.data = data_dict
+            log_entry.categories = category_dict
+            log_entry.save()
+
+        log_global, created = AuditLogHealthCategories.objects.get_or_create(date=empty_gen_date, country=None)
+        if created:
+            donors = list(Donor.objects.all().values_list('id', flat=True))
+            init_category_data(log_global, donors)
+            # fill country entries
+            for country in Country.objects.all():
+                log, created = AuditLogHealthCategories.objects.get_or_create(date=empty_gen_date, country=country)
+                if created:
+                    init_category_data(log, donors)
+
+    def create_empty_hfa_entries(empty_gen_date):
+        """
+        Creates empty log entries for all countries and donors for all dates
+        """
+        def init_hfa_data(log_entry, donor_ids):
+            hfa_dict = {}
+            for cat_id in HealthCategory.objects.all().values_list('id', flat=True):
+                hfa_by_category = HealthFocusArea.objects.filter(health_category=cat_id).values_list('id', flat=True)
+                hfa_dict[cat_id] = {hfa_id: [] for hfa_id in hfa_by_category}
+
+            data_dict = {d_id: hfa_dict for d_id in donor_ids}
+            log_entry.data = data_dict
+            log_entry.hfa = hfa_dict
+            log_entry.save()
+
+        log_global, created = AuditLogHFA.objects.get_or_create(date=empty_gen_date, country=None)
+        if created:
+            donors = list(Donor.objects.all().values_list('id', flat=True))
+            init_hfa_data(log_global, donors)
+            # fill country entries
+            for country in Country.objects.all():
+                log, created = AuditLogHFA.objects.get_or_create(date=empty_gen_date, country=country)
+                if created:
+                    init_hfa_data(log, donors)
+
+    def add_entry_data(entry: ProjectVersion, country: Country, log_date):
+        hfa_data = entry.data.get('health_focus_areas', [])
+        donors = entry.data.get('donors')
+        # get or create auditlog
+        log_entry, _ = AuditLogHFA.objects.get_or_create(date=log_date, country=country)
+        cat_entry, _ = AuditLogHealthCategories.objects.get_or_create(date=log_date, country=country)
+        # generate total standards data - we track projects by ID
+        for hfa_id in hfa_data:
+            try:
+                category_id = HealthFocusArea.objects.get(id=hfa_id).health_category.id
+            except HealthFocusArea.DoesNotExist:  # pragma: no cover
+                continue
+            except ValueError:  # pragma: no cover
+                continue
+
+            # Fill categories
+            cat_list = cat_entry.categories.get(str(category_id), [])
+            cat_list.append(entry.project.id)
+            cat_entry.categories[str(category_id)] = list(set(cat_list))
+            # Generate data structure if needed
+            for donor_id in donors:
+                donor_str = str(donor_id)
+                if donor_str not in cat_entry.data:  # pragma: no cover
+                    cat_entry.data[donor_str] = {}
+                donor_cats = cat_entry.data[donor_str].get(str(category_id), [])
+                donor_cats.append(entry.project.id)
+                cat_entry.data[donor_str][str(category_id)] = list(set(donor_cats))
+
+            # Fill HFAs
+            hfa_dict = log_entry.hfa.get(str(category_id))
+            hfa_list = hfa_dict.get(str(hfa_id), [])
+            hfa_list.append(entry.project.id)
+            log_entry.hfa[str(category_id)][str(hfa_id)] = list(set(hfa_list))
+            # Generate data structure if needed
+            for donor_id in donors:
+                donor_str = str(donor_id)
+                if donor_str not in log_entry.data:  # pragma: no cover
+                    log_entry.data[donor_str] = {}
+                donor_cats = log_entry.data[donor_str].get(str(category_id))
+                donor_hfa = donor_cats.get(str(hfa_id), [])
+                donor_hfa.append(entry.project.id)
+                log_entry.data[donor_str][str(category_id)][str(hfa_id)] = list(set(donor_hfa))
+        cat_entry.save()
+        log_entry.save()
+
+    if current_date is None:  # pragma: no cover
+        current_date = timezone.now().date()
+
+    date = current_date - timedelta(days=1)
+    log_date = datetime(date.year, date.month, 1).date()
+    create_empty_category_entries(log_date)
+    create_empty_hfa_entries(log_date)
+    qs = ProjectVersion.objects.filter(created__date=date, published=True)
+
+    for entry in qs:
+        country_id = entry.data.get('country')
+        if not country_id:  # pragma: no cover
+            continue
+        try:
+            country = Country.objects.get(pk=country_id)
+            add_entry_data(entry, country, log_date)
+            add_entry_data(entry, None, log_date)
+        except Country.DoesNotExist:  # pragma: no cover
+            logging.warning(f'Country with this ID does not exist: {country_id}')

@@ -3,11 +3,12 @@ from django.shortcuts import get_object_or_404
 from datetime import datetime, timedelta
 from core.views import TokenAuthMixin
 from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages, \
-    AuditLogDataStandards
+    AuditLogDataStandards, AuditLogHealthCategories, AuditLogHFA
 from kpiexport.serializers import AuditLogUserDetailedSerializer, AuditLogUserBasicSerializer, \
     AuditLogTokenBasicSerializer, AuditLogTokenDetailedSerializer, AuditLogProjectStatusBasicSerializer, \
     AuditLogProjectStatusDetailedSerializer, AuditLogProjectStagesBasicSerializer, \
-    AuditLogProjectStagesDetailedSerializer, AuditLogStandardsBasicSerializer, AuditLogStandardsDetailedSerializer
+    AuditLogProjectStagesDetailedSerializer, AuditLogStandardsBasicSerializer, AuditLogStandardsDetailedSerializer, \
+    AuditLogHealthCategoriesDetailedSerializer, AuditLogHealthCategoriesBasicSerializer, AuditLogHFABasicSerializer
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework import filters
@@ -181,3 +182,63 @@ class DataStandardsKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
             return AuditLogStandardsDetailedSerializer
         else:
             return AuditLogStandardsBasicSerializer
+
+
+class HealthCategoriesKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    """
+    View to retrieve health categories KPIs
+
+    Requires token authentication.
+
+    Allowed filters:
+
+    * `country`: country ID, example: 01 (default: Global)
+    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
+    * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
+    * `to`: YYYY-MM format, ending of the sample (default: last month)
+    * `detailed`: if set to true, detailed donor-based data will be returned
+
+    """
+    permission_classes = (IsAuthenticated,)
+    filter_backends = [KPIFilterBackend]
+    filter_fields = ('country', 'investor', 'from', 'to')
+    queryset = AuditLogHealthCategories.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
+            return AuditLogHealthCategoriesDetailedSerializer
+        else:
+            return AuditLogHealthCategoriesBasicSerializer
+
+
+class HFAKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    """
+    View to retrieve HFA KPIs
+
+    Requires token authentication.
+
+    Allowed filters:
+
+    * `country`: country ID, example: 01 (default: Global)
+    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
+    * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
+    * `to`: YYYY-MM format, ending of the sample (default: last month)
+    * `detailed`: if set to true, detailed donor-based data will be returned
+
+    """
+    permission_classes = (IsAuthenticated,)
+    filter_backends = [KPIFilterBackend]
+    filter_fields = ('country', 'investor', 'from', 'to')
+    queryset = AuditLogHFA.objects.all()
+    serializer_class = AuditLogHFABasicSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["category_id"] = self.kwargs.get('category_id')
+        return context
+
+    # def get_serializer_class(self):
+    #     if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
+    #         return AuditLogHealthCategoriesDetailedSerializer
+    #     else:
+    #         return AuditLogHFABasicSerializer

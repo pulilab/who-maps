@@ -1,9 +1,19 @@
+from datetime import timedelta, date
+
 from rest_framework.test import APITestCase
 from rest_framework.reverse import reverse
+
+from kpiexport.tasks import update_auditlog_data_standards_task
 from kpiexport.tests.kpi_base import KPITestDataWithProjects
 
 
 class KPIDataStandardsTests(KPITestDataWithProjects, APITestCase):
+    def setUp(self):
+        super().setUp()
+        generate_date = date.today() - timedelta(days=150)
+        while generate_date <= date.today() + timedelta(days=1):
+            update_auditlog_data_standards_task(generate_date)
+            generate_date = generate_date + timedelta(days=1)
 
     def test_data_standards_kpi_nofilter(self):
         url = reverse("data-standards-kpi")

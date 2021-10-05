@@ -318,7 +318,10 @@ const optionsHorizontalBarConfig = (tooltip, click = false) => {
           gridLines: {
             drawTicks: false
           },
-          ticks
+          ticks: {
+            min: 0,
+            stepSize: 10
+          }
         }
       ],
       yAxes: [
