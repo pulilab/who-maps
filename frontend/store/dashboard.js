@@ -4,7 +4,7 @@ import { intArrayFromQs, customColumnsMapper, strArrayFromQs, parseCustomAnswers
 export const searchIn = () => ['name', 'org', 'overview', 'partner', 'donor', 'loc', 'uid']
 export const defaultSelectedColumns = () => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
 
-export const state = () => ({
+const DEFAULT_QUERY = {
   ...stateGenerator(),
   searchIn: searchIn(),
   columns: [],
@@ -33,7 +33,11 @@ export const state = () => ({
   dashboardType: 'user',
   dashboardId: null,
   dashboardSection: 'map'
-})
+}
+
+export const state = () => (DEFAULT_QUERY)
+
+
 export const getters = {
   ...gettersGenerator(),
   getSearched: (state, getters) => {
@@ -108,15 +112,15 @@ export const getters = {
     const country = getters.getFilteredCountries
     const donor = state.dashboardType === 'donor' ? [state.dashboardId] : null
     return {
-      page_size: state.pageSize,
-      page: state.page,
-      ordering: state.sorting,
+      page_size: state.pageSize === DEFAULT_QUERY.pageSize ? undefined : state.pageSize,
+      page: state.page  === DEFAULT_QUERY.page ? undefined : state.page,
+      ordering: state.sorting === DEFAULT_QUERY.sorting ? undefined : state.sorting,
       q,
-      in: q ? state.searchIn : undefined,
+      in: state.searchIn.filter(x => !DEFAULT_QUERY.searchIn.includes(x)).concat(DEFAULT_QUERY.searchIn.filter(x => !state.searchIn.includes(x))).length ? state.searchIn : undefined,
       country,
-      stage: state.filteredStages,
-      donor,
-      region: state.filteredRegion,
+      stage: (state.filteredStages === DEFAULT_QUERY.filteredStages || state.filteredStages === "") ? undefined : state.filteredStages,
+      donor: donor ?? undefined,
+      region: (state.filteredRegion === DEFAULT_QUERY.filteredRegion || state.filteredRegion === "") ? undefined : state.filteredRegion,
       gov: state.governmentFinanced ? [1, 2, 3] : undefined,
       approved: state.governmentApproved ? 1 : undefined,
       sw: state.selectedPlatforms,
@@ -125,7 +129,7 @@ export const getters = {
       hsc: state.selectedHSC,
       his: state.selectedHIS,
       view_as: state.dashboardType !== 'user' ? state.dashboardType : undefined,
-      sc: state.selectedColumns
+      sc: (() => {state.selectedColumns.every((el) => {return DEFAULT_QUERY.selectedColumns.contains(el)})}) ? undefined : state.selectedColumns
     }
   }
 }
