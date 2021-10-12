@@ -43,6 +43,8 @@ export const state = () => ({
   // legends
   polarALegend: [],
   noStageDataSum: 0,
+  totalProjects: 0,
+  sinceLastMonth: 0,
   doughnutALegend: [],
   doughnutBLegend: [],
   doughnutCLegend: [],
@@ -329,12 +331,17 @@ export const actions = {
       }
     })
     let totalsOfStandardsSorted = sortBy(dataStandards, ['total']).reverse().splice(0, 20)
-
     const noStageDataSum = kpi[3].data.reduce((sum, stage) => {
       return stage.stages.no_data + sum
     }, 0)
     commit('setValue', { key: 'noStageDataSum', val: noStageDataSum })
-  
+    
+    const totalProjects = kpi[2].data.map(x => x.published).reduce((partial_sum, a) => partial_sum + a,0);
+    commit('setValue', { key: 'totalProjects', val: totalProjects })
+    
+    const sinceLastMonth = kpi[2].data[kpi[2].data.length-1].published
+    commit('setValue', { key: 'sinceLastMonth', val: sinceLastMonth })
+    
     // Prepare Health Focus Areas data
     let hfaLabels = []
     let hfaOccurence = []
@@ -343,7 +350,7 @@ export const actions = {
       Object.keys(hfcMonths[0].categories).forEach((cat,index) => {
         const hc = healthcategory.find(h => h.id === index)
         if (hc) {
-          hfaLabels.push(hc.name)
+          hfaLabels.push(splitLabel(hc.name))
           let occurence = 0
           hfcMonths.forEach(m => occurence += m.categories[index])
           hfaOccurence.push(occurence)

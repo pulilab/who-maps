@@ -490,17 +490,22 @@ export const settings = config => {
 }
 
 // Data generation utilities
-const chunkString = (str, len) => {
-  const size = Math.ceil(str.length / len)
-  const r = Array(size)
-  let offset = 0
-
-  for (let i = 0; i < size; i++) {
-    r[i] = str.substr(offset, len)
-    offset += len
+function chunkString (str, n){
+  let arr = str?.split(' ');
+  let result=[]
+  let subStr=arr[0]
+  for(let i = 1; i < arr.length; i++){
+      let word = arr[i]
+      if(subStr.length + word.length + 1 <= n){
+          subStr = subStr + ' ' + word
+      }
+      else{
+          result.push(subStr);
+          subStr = word
+      }
   }
-
-  return r
+  if(subStr.length){result.push(subStr)}
+  return result
 }
 export const splitLabel = str => {
   if (str.length > 30) {
