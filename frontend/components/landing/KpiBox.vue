@@ -3,11 +3,22 @@
     <el-row class="border-bottom">
       <h2>
         Projects Statistics
-        <country-select
-          class="countrySelector"
+        <el-select
+          v-model="country"
+          filterable
+          placeholder="Select country"
+          class="countrySelector input-search"
+          clearable
+          :disabled="loading"
           @change="handleCountry"
-          :value="country"
-        />
+        >
+          <el-option
+            v-for="item in countries"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
       </h2>
     </el-row>
     <el-row class="border-bottom bg-white">
@@ -85,11 +96,8 @@
                 >
               </p>
             </div>
-            <fa slot="reference" icon="info-circle" /> </el-popover
-          ><span class="infoHint"
-            >Click on the bars to see health focus areas in specific
-            category</span
-          >
+            <fa slot="reference" icon="info-circle" />
+          </el-popover>
           <template #back>
             <el-button
               v-if="back.length > 0"
@@ -158,7 +166,7 @@ export default {
 
   data() {
     return {
-      country: 201
+      country: ""
     };
   },
   computed: {
@@ -171,7 +179,11 @@ export default {
       back: state => state.charts.back,
       subtitle: state => state.charts.subtitle,
       horizontalBarB: state => state.charts.horizontalBarB,
-      horizontalBarA: state => state.charts.horizontalBarA
+      horizontalBarA: state => state.charts.horizontalBarA,
+      loading: state => state.charts.loading || false
+    }),
+    ...mapGetters({
+      countries: "countries/getCountries"
     }),
     dataStandardsCount() {
       return this.horizontalBarA.chartData?.datasets[0].data.length > 0
@@ -261,15 +273,38 @@ export default {
     vertical-align: middle;
     margin-left: 5px;
   }
-  .hfa-info {
-    color: #c7c7c7;
-  }
+
   .graphMargin {
     margin-bottom: 40px;
   }
   .el-row {
     background: white;
   }
+}
+
+::v-deep .hfa-info {
+  vertical-align: middle;
+  position: absolute;
+  right: 0;
+  svg {
+    cursor: pointer;
+    color: @colorBrandPrimary;
+    &:hover {
+      color: @colorBrandPrimaryLight;
+    }
+  }
+  .el-popover__title {
+    font-size: @fontSizeLarge;
+  }
+}
+.hfa-info-popover {
+  p {
+    word-break: normal;
+  }
+}
+
+.hfa-info {
+  float: right;
 }
 
 .border-top {
@@ -307,7 +342,6 @@ export default {
 }
 
 .kpiHeader {
-  display: block;
   text-transform: uppercase;
   font-size: @fontSizeSmall;
   letter-spacing: 0.5px;
