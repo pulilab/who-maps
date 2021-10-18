@@ -7,9 +7,7 @@
         <CountryProjectsBox />
         <div
           v-if="showCoverImage"
-          :style="{
-            backgroundImage: `url(${landingData.cover_url})`
-          }"
+          :style="{backgroundImage: `url(${landingData.cover_url})`}"
           class="CoverImageBg"
         />
       </template>
@@ -18,7 +16,6 @@
         <CountryProjectsBox />
       </template>
     </div>
-
     <div>
       <el-row type="flex">
         <el-col>
@@ -37,9 +34,7 @@
       </el-row>
     </div>
     <LayoutBuilder v-else :data="defaultsLandingData" />
-
     <KpiBox />
-
     <AboutSection />
   </div>
 </template>

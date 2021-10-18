@@ -60,7 +60,6 @@
             placement="bottom"
             :title="$gettext('How to read the chart') | translate"
             width="480"
-            :visible-arrow="true"
             popper-class="hfa-info-popover"
             class="hfa-info"
             trigger="click"
@@ -85,7 +84,7 @@
                 >
               </p>
             </div>
-            <fa slot="reference" icon="info-circle" />
+            <fa slot="reference" icon="info-circle" class="info-ref" />
           </el-popover>
           <template #back>
             <el-button v-if="back.length > 0" type="text" icon="el-icon-arrow-left" @click="handleBackClick">
@@ -130,7 +129,7 @@
 import Chart from '@/components/common/charts/Chart'
 import DataLegend from '@/components/common/charts/utilities/DataLegend'
 import GraphLayout from '@/components/common/charts/widgets/GraphLayout'
-import CountrySelect from '../../components/common/CountrySelect'
+import CountrySelect from '@/components/common/CountrySelect'
 import Subtitle from '@/components/common/charts/utilities/Subtitle'
 
 import { mapGetters, mapState, mapActions } from 'vuex'
@@ -236,17 +235,6 @@ export default {
     margin: 0;
   }
 
-  .video_wrapper {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9, for an aspect ratio of 1:1 change to this value to 100% */
-  }
-  iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
   .countrySelector {
     float: right;
   }
@@ -264,84 +252,86 @@ export default {
   .el-row {
     background: white;
   }
-}
 
-::v-deep .hfa-info {
-  vertical-align: middle;
-  position: absolute;
-  right: 0;
-  svg {
+  ::v-deep .hfa-info {
+    vertical-align: middle;
+    position: absolute;
+    right: 0;
+    svg { 
+      cursor: pointer;
+      position: absolute;
+      top: 3px;
+      color: @colorBrandPrimary;
+      &:hover {
+        color: @colorBrandPrimaryLight;
+      }
+    }
+    .el-popover__title {
+      font-size: @fontSizeLarge;
+    }
+  }
+  .hfa-info-popover {
+    p {
+      word-break: normal;
+    }
+  }
+
+  .info-ref {
     cursor: pointer;
     color: @colorBrandPrimary;
+    margin-left: 0.5em;
     &:hover {
       color: @colorBrandPrimaryLight;
     }
   }
-  .el-popover__title {
-    font-size: @fontSizeLarge;
-  }
-}
-.hfa-info-popover {
-  p {
-    word-break: normal;
-  }
-}
 
-.hfa-info {
-  float: right;
-}
-
-.border-top {
-  border-top: 1px solid #dcdfe6;
-}
-.border-bottom {
-  border-bottom: 1px solid #dcdfe6;
-}
-.border-left {
-  border-left: 1px solid #dcdfe6;
-}
-.border-right {
-  border-right: 1px solid #dcdfe6;
-}
-
-.counterBox {
-  border: none;
-  background: rgb(246 246 246);
-  padding: 20px;
-  width: 50%;
-  margin-top: 0;
-  margin-bottom: 30px;
-  margin-left: auto;
-  margin-right: auto;
-  .number,
-  .title {
-    display: block;
-    text-align: center;
+  .border-bottom {
+    border-bottom: 1px solid #dcdfe6;
   }
-  .number {
-    padding-top: 20px;
-    font-size: @fontSizeHeading;
+  .border-right {
+    border-right: 1px solid #dcdfe6;
+  }
+
+  .counterBox {
+    border: none;
+    background: rgb(246 246 246);
+    padding: 20px;
+    width: 50%;
+    margin-top: 0;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    .number,
+    .title {
+      display: block;
+      text-align: center;
+    }
+    .number {
+      padding-top: 20px;
+      font-size: @fontSizeHeading;
+      font-weight: 600;
+    }
+  }
+
+  .kpiHeader {
+    text-transform: uppercase;
+    font-size: @fontSizeSmall;
+    letter-spacing: 0.5px;
     font-weight: 600;
+    text-align: center;
+    color: black;
+  }
+
+  .pt-30 {
+    padding-top: 30px;
+  }
+  .pb-30 {
+    padding-bottom: 30px;
+  }
+
+  .bg-white {
+    background-color: white;
   }
 }
 
-.kpiHeader {
-  text-transform: uppercase;
-  font-size: @fontSizeSmall;
-  letter-spacing: 0.5px;
-  font-weight: 600;
-  text-align: center;
-  color: black;
-}
-
-.pt-30 {
-  padding-top: 30px;
-}
-.pb-30 {
-  padding-bottom: 30px;
-}
-
-.bg-white {
-  background-color: white;
-}
 </style>

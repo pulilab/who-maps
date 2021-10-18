@@ -345,9 +345,7 @@ export const actions = {
       return {
         ...standard,
         total: monthsOfStandards.reduce((total, m) => {
-          const amount = Object.keys(m.standards).find(
-            key => m.standards[key] == standard.id
-          )
+          const amount = Object.keys(m.standards).find(key => m.standards[key] == standard.id)
           return amount ? total + parseInt(amount) : total
         }, 0)
       }
@@ -360,10 +358,7 @@ export const actions = {
     }, 0)
     commit('setValue', { key: 'noStageDataSum', val: noStageDataSum })
 
-    const totalProjects = projectStatus.reduce(
-      (partialSum, a) => partialSum + a.published,
-      0
-    )
+    const totalProjects = projectStatus.reduce((partialSum, status) => partialSum + status.published, 0)
     commit('setValue', { key: 'totalProjects', val: totalProjects })
 
     const sinceLastMonth = projectStatus[kpi[2].data.length - 1].published
