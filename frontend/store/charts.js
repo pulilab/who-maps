@@ -361,7 +361,7 @@ export const actions = {
     commit('setValue', { key: 'noStageDataSum', val: noStageDataSum })
 
     const totalProjects = projectStatus.reduce(
-      (partialSum, a) => partialSum + a,
+      (partialSum, a) => partialSum + a.published,
       0
     )
     commit('setValue', { key: 'totalProjects', val: totalProjects })
