@@ -99,7 +99,8 @@ const customTooltip = {
         let style = 'background:' + colors.backgroundColor
         style += '; border-color:' + colors.borderColor
         style += '; border-width: 2px'
-        const span = '<span class="chartjs-tooltip-key" style="' + style + '"></span>'
+        const span =
+          '<span class="chartjs-tooltip-key" style="' + style + '"></span>'
         innerHtml += span + '<p>' + body + '</p>'
       })
 
@@ -112,8 +113,10 @@ const customTooltip = {
     // Display, position, and set styles for font
     tooltipEl.style.opacity = 1
     tooltipEl.style.position = 'absolute'
-    tooltipEl.style.left = position.left + window.pageXOffset + tooltip.caretX + 'px'
-    tooltipEl.style.top = position.top + window.pageYOffset + tooltip.caretY + 'px'
+    tooltipEl.style.left =
+      position.left + window.pageXOffset + tooltip.caretX + 'px'
+    tooltipEl.style.top =
+      position.top + window.pageYOffset + tooltip.caretY + 'px'
     tooltipEl.style.fontFamily = tooltip._fontFamily
     tooltipEl.style.fontSize = tooltip.fontSize
     tooltipEl.style.fontStyle = tooltip._fontStyle
@@ -173,8 +176,10 @@ const customStackedTooltip = {
     // Display, position, and set styles for font
     tooltipEl.style.opacity = 1
     tooltipEl.style.position = 'absolute'
-    tooltipEl.style.left = position.left + window.pageXOffset + tooltip.caretX + 'px'
-    tooltipEl.style.top = position.top + window.pageYOffset + tooltip.caretY + 'px'
+    tooltipEl.style.left =
+      position.left + window.pageXOffset + tooltip.caretX + 'px'
+    tooltipEl.style.top =
+      position.top + window.pageYOffset + tooltip.caretY + 'px'
     tooltipEl.style.fontFamily = tooltip._fontFamily
     tooltipEl.style.fontSize = tooltip.fontSize
     tooltipEl.style.fontStyle = tooltip._fontStyle
@@ -194,7 +199,9 @@ const generalTooltipSettings = (tooltip, xTitle, type = 'line') => {
           if (tooltip) {
             title = `${tooltipItems[0].yLabel} ${tooltip}`
           } else {
-            title = `${tooltipItems[0].value} ${data.datasets[tooltipItems[0].datasetIndex].label}`
+            title = `${tooltipItems[0].value} ${
+              data.datasets[tooltipItems[0].datasetIndex].label
+            }`
           }
         } else {
           title = `${tooltip.title} ${tooltipItems[0].value}`
@@ -455,16 +462,26 @@ const datasetGen = ({ type, colors, data, legendLabels, thickness }) => {
   if (type === 'line') {
     return colors.map((color, i) => datasetConfigLine(color, data[i]))
   }
-  return colors.map((color, i) => datasetConfigBar(color, data[i], legendLabels[i], thickness))
+  return colors.map((color, i) =>
+    datasetConfigBar(color, data[i], legendLabels[i], thickness)
+  )
 }
 export const settings = config => {
   const { type, colors, labels, data, tooltip, click } = config
   switch (type) {
     case 'line':
     case 'bar':
-      return lineBarConfig(datasetGen(config), optionsLineBarConfig(config), labels)
+      return lineBarConfig(
+        datasetGen(config),
+        optionsLineBarConfig(config),
+        labels
+      )
     case 'horizontal-bar':
-      return lineBarConfig(datasetGen(config), optionsHorizontalBarConfig(tooltip, click), labels)
+      return lineBarConfig(
+        datasetGen(config),
+        optionsHorizontalBarConfig(tooltip, click),
+        labels
+      )
     case 'doughnut':
       return doughnutConfig(colors, labels, data)
     case 'micro':
@@ -504,7 +521,8 @@ export const randomData = (length, range = 100) => {
   return Array.from({ length }, () => Math.floor(Math.random() * range))
 }
 
-export const randomNumber = (max = 100) => Math.floor(Math.random() * Math.floor(max))
+export const randomNumber = (max = 100) =>
+  Math.floor(Math.random() * Math.floor(max))
 
 export const legendGenerator = (labels, colors, data = []) => {
   return labels.map((label, i) => {
@@ -512,14 +530,18 @@ export const legendGenerator = (labels, colors, data = []) => {
   })
 }
 
-export const extract = (obj, key, split = false) => obj.map(d => (split ? splitLabel(d[key]) : d[key]))
+export const extract = (obj, key, split = false) =>
+  obj.map(d => (split ? splitLabel(d[key]) : d[key]))
 
 export const objectToQueryString = queryParameters => {
   return queryParameters
-    ? Object.entries(queryParameters).reduce((queryString, [key, val], index) => {
-        const symbol = queryString.length === 0 ? '?' : '&'
-        queryString += typeof val === 'string' ? `${symbol}${key}=${val}` : ''
-        return queryString
-      }, '')
+    ? Object.entries(queryParameters).reduce(
+        (queryString, [key, val], index) => {
+          const symbol = queryString.length === 0 ? '?' : '&'
+          queryString += typeof val === 'string' ? `${symbol}${key}=${val}` : ''
+          return queryString
+        },
+        ''
+      )
     : ''
 }

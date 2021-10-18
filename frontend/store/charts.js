@@ -77,11 +77,15 @@ export const actions = {
     const end = formatDate(rootState.project.end_date)
     const today = formatDate(new Date())
 
-    const labels = [start].concat(stages.filter(i => i.checked).map(i => i.date))
+    const labels = [start].concat(
+      stages.filter(i => i.checked).map(i => i.date)
+    )
     // const lastLabel = labels[labels.length - 1];
 
     // data
-    const data = [0].concat(stages.filter(i => i.checked).map(i => phases.indexOf(i.name)))
+    const data = [0].concat(
+      stages.filter(i => i.checked).map(i => phases.indexOf(i.name))
+    )
     const lastDataPoint = data[data.length - 1]
 
     // today and end date data points, if needed
@@ -113,7 +117,8 @@ export const actions = {
           )
         : []
     // stages calc
-    const stagesData = todayIncludes.length > 0 ? data.slice(0, -checkLabels.length) : data
+    const stagesData =
+      todayIncludes.length > 0 ? data.slice(0, -checkLabels.length) : data
 
     const { color, rotation, dash, point } = phaseInfo(lastLabelType(labels))
 
@@ -198,7 +203,9 @@ export const actions = {
             if (xLabel.includes('Ended')) {
               return `Note: ${notes[notes.length - 1]}`.match(/.{1,38}/g)
             }
-            return notes[yLabel] ? `Note: ${notes[yLabel]}`.match(/.{1,38}/g) : null
+            return notes[yLabel]
+              ? `Note: ${notes[yLabel]}`.match(/.{1,38}/g)
+              : null
           }
         },
         backgroundColor: '#474747',
@@ -261,11 +268,17 @@ export const actions = {
     if (hfcID > 0) {
       catParam = `/${hfcID}`
       hfMode = 'hfa'
-      healthFocusList = state.projectStructure.health_focus_areas.find(hfc => hfc.id === hfcID).health_focus_areas
+      healthFocusList = state.projectStructure.health_focus_areas.find(
+        hfc => hfc.id === hfcID
+      ).health_focus_areas
     } else {
       healthFocusList = state.projectStructure.health_focus_areas
     }
-    const hfaKPI = await this.$axios.get(`/api/kpi/health-categories${catParam}/${objectToQueryString(state.filters)}`)
+    const hfaKPI = await this.$axios.get(
+      `/api/kpi/health-categories${catParam}/${objectToQueryString(
+        state.filters
+      )}`
+    )
     let hfaLabels = []
     let hfaOccurence = []
     const hfcMonths = hfaKPI.data
@@ -285,22 +298,37 @@ export const actions = {
     }
     return { hfaLabels, hfaOccurence }
   },
-  async getDashboardData({ state, commit, dispatch, rootGetters }, { func, refresh }) {
+  async getDashboardData(
+    { state, commit, dispatch, rootGetters },
+    { func, refresh }
+  ) {
     commit('SET_LOADING', true)
 
     const base = '/api/kpi'
     const kpi = await Promise.all([
       this.$axios.get(`${base}/users/${objectToQueryString(state.filters)}`),
       this.$axios.get(`${base}/tokens/${objectToQueryString(state.filters)}`),
-      this.$axios.get(`${base}/project-status/${objectToQueryString(state.filters)}`),
-      this.$axios.get(`${base}/project-stages/${objectToQueryString(state.filters)}`),
+      this.$axios.get(
+        `${base}/project-status/${objectToQueryString(state.filters)}`
+      ),
+      this.$axios.get(
+        `${base}/project-stages/${objectToQueryString(state.filters)}`
+      ),
       this.$axios.get('/api/projects/structure/'),
-      this.$axios.get(`${base}/data-standards/${objectToQueryString(state.filters)}`),
+      this.$axios.get(
+        `${base}/data-standards/${objectToQueryString(state.filters)}`
+      ),
       this.$axios.get(`${base}/hfa/${objectToQueryString(state.filters)}`),
-      this.$axios.get(`${base}/health-categories/${objectToQueryString(state.filters)}`)
+      this.$axios.get(
+        `${base}/health-categories/${objectToQueryString(state.filters)}`
+      )
     ])
     commit('setValue', { key: 'projectStructure', val: kpi[4].data })
-    const { interoperability_standards, stages, health_focus_areas: healthcategory } = kpi[4].data
+    const {
+      interoperability_standards,
+      stages,
+      health_focus_areas: healthcategory
+    } = kpi[4].data
     const users = kpi[0].data
     const tokens = kpi[1].data
     const projectStatus = kpi[2].data
@@ -317,7 +345,9 @@ export const actions = {
       return {
         ...standard,
         total: monthsOfStandards.reduce((total, m) => {
-          const amount = Object.keys(m.standards).find(key => m.standards[key] == standard.id)
+          const amount = Object.keys(m.standards).find(
+            key => m.standards[key] == standard.id
+          )
           return amount ? total + parseInt(amount) : total
         }, 0)
       }
@@ -330,7 +360,10 @@ export const actions = {
     }, 0)
     commit('setValue', { key: 'noStageDataSum', val: noStageDataSum })
 
-    const totalProjects = projectStatus.reduce((partialSum, a) => partialSum + a, 0)
+    const totalProjects = projectStatus.reduce(
+      (partialSum, a) => partialSum + a,
+      0
+    )
     commit('setValue', { key: 'totalProjects', val: totalProjects })
 
     const sinceLastMonth = projectStatus[kpi[2].data.length - 1].published
@@ -404,7 +437,9 @@ export const actions = {
         })
         lastHfaCategoryID = hfaSub.hfaCategory.id
       } else {
-        hfaNotCoveredAreas[hfaNotCoveredAreas.length - 1].subareas.push(hfaSub.name)
+        hfaNotCoveredAreas[hfaNotCoveredAreas.length - 1].subareas.push(
+          hfaSub.name
+        )
       }
     })
 
@@ -458,7 +493,10 @@ export const actions = {
     // data generation
     // stages
     const polarAData = extract(projectStages, 'total')
-    const monthlyUserActivity = [extract(users, 'registered'), extract(users, 'active')]
+    const monthlyUserActivity = [
+      extract(users, 'registered'),
+      extract(users, 'active')
+    ]
 
     // projects status data generation
     const draft = extract(projectStatus, 'draft')
@@ -467,7 +505,13 @@ export const actions = {
     const unpublished = extract(projectStatus, 'unpublished')
     const deletable = extract(projectStatus, 'to_delete')
 
-    const projectStatusMonthly = [draft, published, publishable, unpublished, deletable]
+    const projectStatusMonthly = [
+      draft,
+      published,
+      publishable,
+      unpublished,
+      deletable
+    ]
 
     const projectSum = arr => {
       return arr.reduce((acc, val) => acc + val, 0)
@@ -633,11 +677,26 @@ export const actions = {
       })
     )
     // legends
-    commit('SET_POLARA_LEGEND', legendGenerator(stageLabels, colorSetG, polarAData))
-    commit('SET_DOUGHNUTA_LEGEND', legendGenerator(projectsLabels, colorSetC, doughnutAData))
-    commit('SET_DOUGHNUTB_LEGEND', legendGenerator(govermentContributionLabels, colorSetD, doughnutBData))
-    commit('SET_DOUGHNUTC_LEGEND', legendGenerator(distributionStatuesLabels, colorSetE, doughnutCData))
-    commit('SET_MONTHLY_USER_LEGEND', legendGenerator(['Monthly User Growth', 'Monthly Active User'], colorSetB))
+    commit(
+      'SET_POLARA_LEGEND',
+      legendGenerator(stageLabels, colorSetG, polarAData)
+    )
+    commit(
+      'SET_DOUGHNUTA_LEGEND',
+      legendGenerator(projectsLabels, colorSetC, doughnutAData)
+    )
+    commit(
+      'SET_DOUGHNUTB_LEGEND',
+      legendGenerator(govermentContributionLabels, colorSetD, doughnutBData)
+    )
+    commit(
+      'SET_DOUGHNUTC_LEGEND',
+      legendGenerator(distributionStatuesLabels, colorSetE, doughnutCData)
+    )
+    commit(
+      'SET_MONTHLY_USER_LEGEND',
+      legendGenerator(['Monthly User Growth', 'Monthly Active User'], colorSetB)
+    )
     // a lot of doubts here, nested info incoming
     commit('SET_DOUGHNUTD_LEGEND', {
       tabs: [
@@ -661,7 +720,10 @@ export const actions = {
         }
       ]
     })
-    commit('SET_PROJECT_STATUS_LEGEND', legendGenerator(projectsLabels, colorSetC))
+    commit(
+      'SET_PROJECT_STATUS_LEGEND',
+      legendGenerator(projectsLabels, colorSetC)
+    )
     commit(
       'SET_COUNTRY_TABLE',
       rootGetters['countries/getCountries'].map(country => {
@@ -695,7 +757,10 @@ export const actions = {
     }
     commit('SET_BACK', [...state.back, newStack])
     commit('SET_SUBTITLE', newStack)
-    const { hfaLabels, hfaOccurence } = await dispatch('getHealthFocusAreas', hc.id)
+    const { hfaLabels, hfaOccurence } = await dispatch(
+      'getHealthFocusAreas',
+      hc.id
+    )
     const newDataSets = [
       {
         backgroundColor: '#49BCE8',
@@ -717,7 +782,10 @@ export const actions = {
   },
   async handleBackClick({ state, commit, dispatch }, { func }) {
     commit('SET_BACK', state.back.slice(0, state.back.length - 1))
-    commit('SET_SUBTITLE', state.back.length > 0 ? state.back[state.back.length - 1] : {})
+    commit(
+      'SET_SUBTITLE',
+      state.back.length > 0 ? state.back[state.back.length - 1] : {}
+    )
     const { hfaLabels, hfaOccurence } = await dispatch('getHealthFocusAreas')
     const newDataSets = [
       {
