@@ -5,7 +5,6 @@ import {
   phaseInfo,
   lastLabelType,
   settings,
-  splitLabel,
   randomData,
   randomNumber,
   legendGenerator,
@@ -43,6 +42,8 @@ export const state = () => ({
   // legends
   polarALegend: [],
   noStageDataSum: 0,
+  totalProjects: 0,
+  sinceLastMonth: 0,
   doughnutALegend: [],
   doughnutBLegend: [],
   doughnutCLegend: [],
@@ -65,7 +66,7 @@ export const state = () => ({
 })
 
 export const actions = {
-  getStageData ({ commit, rootState }, stages) {
+  getStageData({ commit, rootState }, stages) {
     // phases
     const phases = [''].concat(stages.map(i => i.name))
     // notes
@@ -112,8 +113,8 @@ export const actions = {
     const todayData =
       todayIncludes.length > 0
         ? fillArr(lLen - checkLabels.length - 1, NaN).concat(
-          checkLabels.length > 1 ? data.slice(-3, -1) : data.slice(-2)
-        )
+            checkLabels.length > 1 ? data.slice(-3, -1) : data.slice(-2)
+          )
         : []
     // stages calc
     const stagesData =
@@ -249,7 +250,7 @@ export const actions = {
               max: stages.length,
               fontColor: '#9E9E9E',
               padding: 12,
-              callback: function (value, index, values) {
+              callback: function(value, index, values) {
                 return value > 0 ? `${value}. ${phases[value]}` : phases[value]
               }
             }
@@ -258,20 +259,26 @@ export const actions = {
       }
     })
   },
-  async getHealthFocusAreas ({ state, commit }, hfcID = 0) {
+  async getHealthFocusAreas({ state, commit }, hfcID = 0) {
     const loadState = state.loading
-    if (!state.loading) commit('SET_LOADING', true)    
+    if (!state.loading) commit('SET_LOADING', true)
     let catParam = ''
-    let hfMode ='categories'
+    let hfMode = 'categories'
     let healthFocusList = []
     if (hfcID > 0) {
       catParam = `/${hfcID}`
       hfMode = 'hfa'
-      healthFocusList = state.projectStructure.health_focus_areas.find(hfc => hfc.id === hfcID).health_focus_areas
+      healthFocusList = state.projectStructure.health_focus_areas.find(
+        hfc => hfc.id === hfcID
+      ).health_focus_areas
     } else {
       healthFocusList = state.projectStructure.health_focus_areas
     }
-    const hfaKPI = await this.$axios.get(`/api/kpi/health-categories${catParam}/${objectToQueryString(state.filters)}`)   
+    const hfaKPI = await this.$axios.get(
+      `/api/kpi/health-categories${catParam}/${objectToQueryString(
+        state.filters
+      )}`
+    )
     let hfaLabels = []
     let hfaOccurence = []
     const hfcMonths = hfaKPI.data
@@ -281,7 +288,7 @@ export const actions = {
         if (hfa) {
           hfaLabels.push(hfa.name)
           let occurence = 0
-          hfcMonths.forEach(m => occurence += m[hfMode][hfID])
+          hfcMonths.forEach(m => (occurence += m[hfMode][hfID]))
           hfaOccurence.push(occurence)
         }
       })
@@ -291,61 +298,83 @@ export const actions = {
     }
     return { hfaLabels, hfaOccurence }
   },
-  async getDashboardData ({ state, commit, dispatch, rootGetters }, { func, refresh }) {
+  async getDashboardData(
+    { state, commit, dispatch, rootGetters },
+    { func, refresh }
+  ) {
     commit('SET_LOADING', true)
 
     const base = '/api/kpi'
     const kpi = await Promise.all([
       this.$axios.get(`${base}/users/${objectToQueryString(state.filters)}`),
       this.$axios.get(`${base}/tokens/${objectToQueryString(state.filters)}`),
-      this.$axios.get(`${base}/project-status/${objectToQueryString(state.filters)}`),
-      this.$axios.get(`${base}/project-stages/${objectToQueryString(state.filters)}`),
+      this.$axios.get(
+        `${base}/project-status/${objectToQueryString(state.filters)}`
+      ),
+      this.$axios.get(
+        `${base}/project-stages/${objectToQueryString(state.filters)}`
+      ),
       this.$axios.get('/api/projects/structure/'),
-      this.$axios.get(`${base}/data-standards/${objectToQueryString(state.filters)}`),
+      this.$axios.get(
+        `${base}/data-standards/${objectToQueryString(state.filters)}`
+      ),
       this.$axios.get(`${base}/hfa/${objectToQueryString(state.filters)}`),
-      this.$axios.get(`${base}/health-categories/${objectToQueryString(state.filters)}`)
-    ])    
+      this.$axios.get(
+        `${base}/health-categories/${objectToQueryString(state.filters)}`
+      )
+    ])
     commit('setValue', { key: 'projectStructure', val: kpi[4].data })
-    const { interoperability_standards, stages, health_focus_areas: healthcategory } = kpi[4].data
+    const {
+      interoperability_standards,
+      stages,
+      health_focus_areas: healthcategory
+    } = kpi[4].data
     const users = kpi[0].data
     const tokens = kpi[1].data
     const projectStatus = kpi[2].data
-    
+
     // Prepare Data standards data
     const projectStages = stages.map(s => {
       return {
         ...s,
         total: sumBy(kpi[3].data.map(i => i.stages), s.id)
       }
-    })    
+    })
     const monthsOfStandards = kpi[5].data
-    const dataStandards = interoperability_standards.map((standard) => {
+    const dataStandards = interoperability_standards.map(standard => {
       return {
         ...standard,
         total: monthsOfStandards.reduce((total, m) => {
-          const amount =  Object.keys(m.standards).find(key => m.standards[key] == standard.id)
+          const amount = Object.keys(m.standards).find(key => m.standards[key] == standard.id)
           return amount ? total + parseInt(amount) : total
         }, 0)
       }
     })
-    let totalsOfStandardsSorted = sortBy(dataStandards, ['total']).reverse().splice(0, 20)
-
+    let totalsOfStandardsSorted = sortBy(dataStandards, ['total'])
+      .reverse()
+      .splice(0, 20)
     const noStageDataSum = kpi[3].data.reduce((sum, stage) => {
       return stage.stages.no_data + sum
     }, 0)
     commit('setValue', { key: 'noStageDataSum', val: noStageDataSum })
-  
+
+    const totalProjects = projectStatus.reduce((partialSum, status) => partialSum + status.published, 0)
+    commit('setValue', { key: 'totalProjects', val: totalProjects })
+
+    const sinceLastMonth = projectStatus[kpi[2].data.length - 1].published
+    commit('setValue', { key: 'sinceLastMonth', val: sinceLastMonth })
+
     // Prepare Health Focus Areas data
     let hfaLabels = []
     let hfaOccurence = []
     const hfcMonths = kpi[7].data
     if (hfcMonths.length > 0) {
-      Object.keys(hfcMonths[0].categories).forEach((cat,index) => {
+      Object.keys(hfcMonths[0].categories).forEach((cat, index) => {
         const hc = healthcategory.find(h => h.id === index)
         if (hc) {
           hfaLabels.push(hc.name)
           let occurence = 0
-          hfcMonths.forEach(m => occurence += m.categories[index])
+          hfcMonths.forEach(m => (occurence += m.categories[index]))
           hfaOccurence.push(occurence)
         }
       })
@@ -390,7 +419,7 @@ export const actions = {
         })
         lastHfaCategoryID = hfaSub.hfaCategory.id
       } else {
-        hfaCoveredAreas[hfaCoveredAreas.length-1].subareas.push(hfaSub.name)
+        hfaCoveredAreas[hfaCoveredAreas.length - 1].subareas.push(hfaSub.name)
       }
     })
 
@@ -403,10 +432,12 @@ export const actions = {
         })
         lastHfaCategoryID = hfaSub.hfaCategory.id
       } else {
-        hfaNotCoveredAreas[hfaNotCoveredAreas.length-1].subareas.push(hfaSub.name)
+        hfaNotCoveredAreas[hfaNotCoveredAreas.length - 1].subareas.push(
+          hfaSub.name
+        )
       }
     })
-    
+
     // color sets (should be dynamic?)
     const colorSetA = ['#49BCE8']
     const colorSetB = ['#49BCE8', '#99CA67']
@@ -586,7 +617,7 @@ export const actions = {
           title: 'Ocurrances:',
           subtitle: ''
         },
-        data: [totalsOfStandardsSorted.map( t => t.total)]
+        data: [totalsOfStandardsSorted.map(t => t.total)]
       })
     )
     commit(
@@ -711,21 +742,28 @@ export const actions = {
     commit('SET_BACK', [])
     commit('SET_LOADING', false)
   },
-  async handleBarClick ({ state, commit, dispatch }, { func, idx }) {
-    const hc = state.projectStructure.health_focus_areas.find(hc => hc.name === state.horizontalBarB.chartData.labels[idx])
+  async handleBarClick({ state, commit, dispatch }, { func, idx }) {
+    const hc = state.projectStructure.health_focus_areas.find(
+      hc => hc.name === state.horizontalBarB.chartData.labels[idx]
+    )
     const newStack = {
       label: state.horizontalBarB.chartData.labels[idx],
       value: state.horizontalBarB.chartData.datasets[0].data[idx]
     }
     commit('SET_BACK', [...state.back, newStack])
     commit('SET_SUBTITLE', newStack)
-    const { hfaLabels, hfaOccurence } = await dispatch('getHealthFocusAreas', hc.id)
-    const newDataSets = [{
-      backgroundColor: '#49BCE8',
-      barThickness: 'flex',
-      data: hfaOccurence
-    }]
-    const updatedBar = {      
+    const { hfaLabels, hfaOccurence } = await dispatch(
+      'getHealthFocusAreas',
+      hc.id
+    )
+    const newDataSets = [
+      {
+        backgroundColor: '#49BCE8',
+        barThickness: 'flex',
+        data: hfaOccurence
+      }
+    ]
+    const updatedBar = {
       options: {
         ...state.horizontalBarB.options,
         click: false
@@ -737,18 +775,20 @@ export const actions = {
     }
     commit('SET_HORIZONTALBARB_GRAPH', updatedBar)
   },
-  async handleBackClick ({ state, commit, dispatch }, { func }) {
+  async handleBackClick({ state, commit, dispatch }, { func }) {
     commit('SET_BACK', state.back.slice(0, state.back.length - 1))
     commit(
       'SET_SUBTITLE',
       state.back.length > 0 ? state.back[state.back.length - 1] : {}
     )
     const { hfaLabels, hfaOccurence } = await dispatch('getHealthFocusAreas')
-    const newDataSets = [{
-      backgroundColor: '#49BCE8',
-      barThickness: 'flex',
-      data: hfaOccurence
-    }]
+    const newDataSets = [
+      {
+        backgroundColor: '#49BCE8',
+        barThickness: 'flex',
+        data: hfaOccurence
+      }
+    ]
     const updatedBar = {
       options: {
         ...state.horizontalBarB.options,
@@ -761,13 +801,13 @@ export const actions = {
     }
     commit('SET_HORIZONTALBARB_GRAPH', updatedBar)
   },
-  setFilters ({ state, commit }, filters) {
+  setFilters({ state, commit }, filters) {
     commit('SET_FILTERS', filters)
   }
 }
 
 export const mutations = {
-  setValue (state, { key, val }) {
+  setValue(state, { key, val }) {
     state[key] = val
   },
   SET_STAGES_CHART_DATA: (state, obj) => {

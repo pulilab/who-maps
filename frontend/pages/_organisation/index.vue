@@ -7,7 +7,7 @@
         <CountryProjectsBox />
         <div
           v-if="showCoverImage"
-          :style="{ backgroundImage: `url(${landingData.cover_url})` }"
+          :style="{backgroundImage: `url(${landingData.cover_url})`}"
           class="CoverImageBg"
         />
       </template>
@@ -16,7 +16,6 @@
         <CountryProjectsBox />
       </template>
     </div>
-
     <div>
       <el-row type="flex">
         <el-col>
@@ -24,10 +23,7 @@
         </el-col>
       </el-row>
     </div>
-    <div
-      v-if="!landingData"
-      class="InfoSignupContainer"
-    >
+    <div v-if="!landingData" class="InfoSignupContainer">
       <el-row type="flex">
         <el-col class="InfoBoxWrapper">
           <InfoBox />
@@ -37,25 +33,24 @@
         </el-col>
       </el-row>
     </div>
-    <LayoutBuilder
-      v-else
-      :data="defaultsLandingData"
-    />
+    <LayoutBuilder v-else :data="defaultsLandingData" />
+    <KpiBox />
     <AboutSection />
   </div>
 </template>
 
 <script>
-import LandingMap from '../../components/landing/LandingMap.vue'
-import WelcomeBox from '../../components/landing/WelcomeBox.vue'
-import CountryProjectsBox from '../../components/landing/CountryProjectsBox.vue'
-import IntroVideo from '../../components/landing/IntroVideo.vue'
-import InfoBox from '../../components/landing/InfoBox.vue'
-import CentralBox from '../../components/landing/CentralBox.vue'
-import AboutSection from '../../components/landing/AboutSection.vue'
+import LandingMap from '@/components/landing/LandingMap.vue'
+import WelcomeBox from '@/components/landing/WelcomeBox.vue'
+import CountryProjectsBox from '@/components/landing/CountryProjectsBox.vue'
+import IntroVideo from '@/components/landing/IntroVideo.vue'
+import InfoBox from '@/components/landing/InfoBox.vue'
+import CentralBox from '@/components/landing/CentralBox.vue'
+import AboutSection from '@/components/landing/AboutSection.vue'
+import KpiBox from '@/components/landing/KpiBox.vue'
 import LayoutBuilder from '@/components/country/LayoutBuilder'
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   components: {
@@ -66,25 +61,23 @@ export default {
     CentralBox,
     AboutSection,
     CountryProjectsBox,
-    LayoutBuilder
+    LayoutBuilder,
+    KpiBox
   },
-  fetch ({ store }) {
+  fetch({ store }) {
     store.dispatch('landing/resetSearch')
   },
   computed: {
     ...mapGetters({
       landingData: 'landing/getLandingPageData'
     }),
-    showCoverImage () {
+    showCoverImage() {
       return false
     },
-    routeCheck () {
-      return (
-        this.$route.path.split('/')[2].trim() === '-' ||
-        this.$route.path.split('/')[2].trim().length > 2
-      )
+    routeCheck() {
+      return this.$route.path.split('/')[2].trim() === '-' || this.$route.path.split('/')[2].trim().length > 2
     },
-    defaultsLandingData () {
+    defaultsLandingData() {
       return {
         gdhi_enabled: false,
         road_map_enabled: false,

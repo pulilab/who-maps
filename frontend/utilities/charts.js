@@ -2,31 +2,31 @@
 export const phaseInfo = type => {
   let info = {}
   switch (type) {
-  case 'Ended':
-    info = {
-      color: '#D86422',
-      rotation: 180,
-      dash: [],
-      point: 'triangle'
-    }
-    break
-  case 'Start':
-    info = {
-      color: '#76BF41',
-      rotation: 90,
-      dash: [10, 5],
-      point: 'triangle'
-    }
-    break
-  default:
-    // color = '#E0E0E0';
-    info = {
-      color: '#008DC9',
-      rotation: 0,
-      dash: [],
-      point: 'circle'
-    }
-    break
+    case 'Ended':
+      info = {
+        color: '#D86422',
+        rotation: 180,
+        dash: [],
+        point: 'triangle'
+      }
+      break
+    case 'Start':
+      info = {
+        color: '#76BF41',
+        rotation: 90,
+        dash: [10, 5],
+        point: 'triangle'
+      }
+      break
+    default:
+      // color = '#E0E0E0';
+      info = {
+        color: '#008DC9',
+        rotation: 0,
+        dash: [],
+        point: 'circle'
+      }
+      break
   }
   return info
 }
@@ -60,7 +60,7 @@ export const dataInfoFill = (len, fill, change = undefined, type = 'front') => {
 const customTooltip = {
   // Disable the on-canvas tooltip
   enabled: false,
-  custom (tooltip) {
+  custom(tooltip) {
     // Tooltip Element
     let tooltipEl = document.getElementById('chartjs-tooltip')
 
@@ -84,7 +84,7 @@ const customTooltip = {
       tooltipEl.classList.add('no-transform')
     }
 
-    function getBody (bodyItem) {
+    function getBody(bodyItem) {
       return bodyItem.lines
     }
 
@@ -94,7 +94,7 @@ const customTooltip = {
       const bodyLines = tooltip.body.map(getBody)
 
       let innerHtml = ''
-      bodyLines.forEach(function (body, i) {
+      bodyLines.forEach(function(body, i) {
         const colors = tooltip.labelColors[i]
         let style = 'background:' + colors.backgroundColor
         style += '; border-color:' + colors.borderColor
@@ -126,7 +126,7 @@ const customTooltip = {
 const customStackedTooltip = {
   // Disable the on-canvas tooltip
   enabled: false,
-  custom (tooltip) {
+  custom(tooltip) {
     // Tooltip Element
     let tooltipEl = document.getElementById('chartjs-tooltip')
 
@@ -150,7 +150,7 @@ const customStackedTooltip = {
       tooltipEl.classList.add('no-transform')
     }
 
-    function getBody (bodyItem) {
+    function getBody(bodyItem) {
       return bodyItem.lines
     }
 
@@ -160,7 +160,7 @@ const customStackedTooltip = {
       const bodyLines = tooltip.body.map(getBody)
 
       let innerHtml = ''
-      bodyLines.forEach(function (body, i) {
+      bodyLines.forEach(function(body, i) {
         const colors = tooltip.labelColors[i]
         const style = `background: ${colors.backgroundColor}`
         const span = `<span class="chartjs-tooltip-key" style="${style}"></span>`
@@ -193,20 +193,22 @@ const generalTooltipSettings = (tooltip, xTitle, type = 'line') => {
     xPadding: 10,
     yPadding: 8,
     callbacks: {
-      title (tooltipItems, data) {
+      title(tooltipItems, data) {
         let title = ''
         if (type === 'line') {
           if (tooltip) {
             title = `${tooltipItems[0].yLabel} ${tooltip}`
           } else {
-            title = `${tooltipItems[0].value} ${data.datasets[tooltipItems[0].datasetIndex].label}`
+            title = `${tooltipItems[0].value} ${
+              data.datasets[tooltipItems[0].datasetIndex].label
+            }`
           }
         } else {
           title = `${tooltip.title} ${tooltipItems[0].value}`
         }
         return title
       },
-      label (tooltipItems, data) {
+      label(tooltipItems, data) {
         if (type === 'line') {
           return `${tooltipItems.label}`
         }
@@ -467,40 +469,46 @@ const datasetGen = ({ type, colors, data, legendLabels, thickness }) => {
 export const settings = config => {
   const { type, colors, labels, data, tooltip, click } = config
   switch (type) {
-  case 'line':
-  case 'bar':
-    return lineBarConfig(
-      datasetGen(config),
-      optionsLineBarConfig(config),
-      labels
-    )
-  case 'horizontal-bar':
-    return lineBarConfig(
-      datasetGen(config),
-      optionsHorizontalBarConfig(tooltip, click),
-      labels
-    )
-  case 'doughnut':
-    return doughnutConfig(colors, labels, data)
-  case 'micro':
-    return micro(colors, labels, data)
-  case 'polar':
-    return polar(colors, labels, data)
+    case 'line':
+    case 'bar':
+      return lineBarConfig(
+        datasetGen(config),
+        optionsLineBarConfig(config),
+        labels
+      )
+    case 'horizontal-bar':
+      return lineBarConfig(
+        datasetGen(config),
+        optionsHorizontalBarConfig(tooltip, click),
+        labels
+      )
+    case 'doughnut':
+      return doughnutConfig(colors, labels, data)
+    case 'micro':
+      return micro(colors, labels, data)
+    case 'polar':
+      return polar(colors, labels, data)
   }
 }
 
 // Data generation utilities
-const chunkString = (str, len) => {
-  const size = Math.ceil(str.length / len)
-  const r = Array(size)
-  let offset = 0
-
-  for (let i = 0; i < size; i++) {
-    r[i] = str.substr(offset, len)
-    offset += len
+function chunkString(str, n) {
+  let arr = str?.split(' ')
+  let result = []
+  let subStr = arr[0]
+  for (let i = 1; i < arr.length; i++) {
+    let word = arr[i]
+    if (subStr.length + word.length + 1 <= n) {
+      subStr = subStr + ' ' + word
+    } else {
+      result.push(subStr)
+      subStr = word
+    }
   }
-
-  return r
+  if (subStr.length) {
+    result.push(subStr)
+  }
+  return result
 }
 export const splitLabel = str => {
   if (str.length > 30) {
@@ -522,17 +530,18 @@ export const legendGenerator = (labels, colors, data = []) => {
   })
 }
 
-export const extract = (obj, key, split = false) => obj.map(d => split ? splitLabel(d[key]) : d[key])
+export const extract = (obj, key, split = false) =>
+  obj.map(d => (split ? splitLabel(d[key]) : d[key]))
 
 export const objectToQueryString = queryParameters => {
   return queryParameters
     ? Object.entries(queryParameters).reduce(
-      (queryString, [key, val], index) => {
-        const symbol = queryString.length === 0 ? '?' : '&'
-        queryString += typeof val === 'string' ? `${symbol}${key}=${val}` : ''
-        return queryString
-      },
-      ''
-    )
+        (queryString, [key, val], index) => {
+          const symbol = queryString.length === 0 ? '?' : '&'
+          queryString += typeof val === 'string' ? `${symbol}${key}=${val}` : ''
+          return queryString
+        },
+        ''
+      )
     : ''
 }
