@@ -12,7 +12,7 @@ from kpiexport.serializers import AuditLogUserDetailedSerializer, AuditLogUserBa
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework import filters
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 class KPIFilterBackend(filters.BaseFilterBackend):
@@ -118,7 +118,7 @@ class ProjectStatusKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     * `detailed`: if set to true, detailed donor-based data will be returned
 
     """
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogProjectStatus.objects.all()
@@ -145,7 +145,7 @@ class ProjectStagesKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     * `detailed`: if set to true, detailed donor-based data will be returned
 
     """
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogProjectStages.objects.all()
@@ -172,7 +172,7 @@ class DataStandardsKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     * `detailed`: if set to true, detailed donor-based data will be returned
 
     """
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogDataStandards.objects.all()
@@ -199,7 +199,7 @@ class HealthCategoriesKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet
     * `detailed`: if set to true, detailed donor-based data will be returned
 
     """
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogHealthCategories.objects.all()
@@ -226,7 +226,7 @@ class HFAKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     * `detailed`: if set to true, detailed donor-based data will be returned
 
     """
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     filter_backends = [KPIFilterBackend]
     filter_fields = ('country', 'investor', 'from', 'to')
     queryset = AuditLogHFA.objects.all()
