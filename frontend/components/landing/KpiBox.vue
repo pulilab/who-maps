@@ -122,6 +122,13 @@
         </graph-layout>
       </el-col>
     </el-row>
+
+    <el-row>
+      <el-col class="graphMargin">
+        <TopDataStandards />
+      </el-col>
+    </el-row>
+
   </div>
 </template>
 
@@ -131,6 +138,7 @@ import DataLegend from '@/components/common/charts/utilities/DataLegend'
 import GraphLayout from '@/components/common/charts/widgets/GraphLayout'
 import CountrySelect from '@/components/common/CountrySelect'
 import Subtitle from '@/components/common/charts/utilities/Subtitle'
+import TopDataStandards from '@/components/kpi/components/TopDataStandards'
 
 import { mapGetters, mapState, mapActions } from 'vuex'
 import debounce from 'lodash/debounce'
@@ -141,7 +149,8 @@ export default {
     DataLegend,
     GraphLayout,
     CountrySelect,
-    Subtitle
+    Subtitle,
+    TopDataStandards
   },
 
   data() {
@@ -205,11 +214,12 @@ export default {
       return this.getDashboardData({
         func: this.handleBarClick,
         refresh: true,
-        state: {}
+        state: {},
+        permissionLayer: false,
       })
     },
     handleSearch() {
-      this.getDashboardData({ func: this.handleBarClick, refresh: true })
+      this.getDashboardData({ func: this.handleBarClick, refresh: true, permissionLayer: false })
     },
     debounceSearch: debounce(function() {
       this.handleSearch()
@@ -257,7 +267,7 @@ export default {
     vertical-align: middle;
     position: absolute;
     right: 0;
-    svg { 
+    svg {
       cursor: pointer;
       position: absolute;
       top: 3px;
