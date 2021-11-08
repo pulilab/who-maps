@@ -300,14 +300,18 @@ export const actions = {
   },
   async getDashboardData(
     { state, commit, dispatch, rootGetters },
-    { func, refresh }
+    { func, refresh, permissionLayer = true }
   ) {
     commit('SET_LOADING', true)
 
+
+
+
     const base = '/api/kpi'
     const kpi = await Promise.all([
-      this.$axios.get(`${base}/users/${objectToQueryString(state.filters)}`),
-      this.$axios.get(`${base}/tokens/${objectToQueryString(state.filters)}`),
+      //ternary for returning a blank object if permission layer is not requiered
+      permissionLayer ? this.$axios.get(`${base}/users/${objectToQueryString(state.filters)}`) : {},
+      permissionLayer ? this.$axios.get(`${base}/tokens/${objectToQueryString(state.filters)}`) : {},
       this.$axios.get(
         `${base}/project-status/${objectToQueryString(state.filters)}`
       ),
@@ -323,14 +327,116 @@ export const actions = {
         `${base}/health-categories/${objectToQueryString(state.filters)}`
       )
     ])
+
+    /*defining constants before separating permission layer*/
+
+
+    // color sets (should be dynamic?)
+    const colorSetA = ['#49BCE8']
+    const colorSetB = ['#49BCE8', '#99CA67']
+    // const colorSetC = ['#9ACB67', '#FFCF3F', '#BABABB', '#E84F48']
+    const colorSetC = ['#BABABB', '#9ACB67', '#FFCF3F', '#49BCE8', '#E84F48']
+    const colorSetD = ['#FFCF3F', '#FEAB7D', '#9ACB67', '#49BCE8']
+    const colorSetE = ['#FFCF3F', '#EF8A85', '#9ACB67', '#5F72B5']
+    const colorSetF = ['#9ACB67', '#E84F48']
+    const colorSetG = [
+      '#757575',
+      '#1A527B',
+      '#1577AC',
+      '#4897B3',
+      '#66C6D0',
+      '#87F7EF',
+      '#713ED2',
+      '#E2D83B',
+      '#1FA075',
+      '#BF2999',
+      '#D1632E',
+      '#E5A131'
+    ]
+
+    // label sets (should be dynamic?)
+    const projectsLabels = [
+      'Draft Projects',
+      'Published Projects',
+      'Publishable Projects',
+      'Unpublished Projects',
+      'Incoherent Projects'
+    ]
+    const govermentContributionLabels = [
+      'No, they have not yet contributed',
+      'Yes, they are contributing in-kind people or time',
+      'Yes, there is a financial contribution through MOH budget',
+      'Yes, MOH is fully funding the project'
+    ]
+    const distributionStatuesLabels = [
+      'How many active?',
+      'How many projects have ended?',
+      'How many projects are complete?',
+      'How many projects are discontinued?'
+    ]
+    const coverageLabels = ['Covered', 'Not covered']
+
+    /*defining constants before separating permission layer*/
+
+    /*separating permission layer activated functions*/
+
+    if(permissionLayer){
+
+      const users = kpi[0].data
+      const monthlyUserActivity = [
+        extract(users, 'registered'),
+        extract(users, 'active')
+      ]
+      commit(
+        'SET_LINEB_GRAPH',
+        settings({
+          type: 'line',
+          colors: colorSetB,
+          scales: { x: 'Months', y: '# of users' },
+          labels: extract(users, 'date').map(d => format(d, 'YYYY-MMM')),
+          tooltip: 'Users',
+          data: monthlyUserActivity
+        })
+      )
+      commit(
+        'SET_BARA_GRAPH',
+        settings({
+          type: 'bar',
+          colors: colorSetB,
+          scales: { x: 'Months', y: 'Growth of users' },
+          labels: extract(users, 'date').map(d => format(d, 'YYYY-MMM')),
+          legendLabels: ['New users', 'Active users'],
+          tooltip: '',
+          data: monthlyUserActivity
+        })
+      )
+
+      const tokens = kpi[1].data
+      commit(
+        'SET_LINEC_GRAPH',
+        settings({
+          type: 'line',
+          colors: colorSetA,
+          scales: { x: 'Months', y: '# of API keys' },
+          labels: extract(tokens, 'date').map(d => format(d, 'YYYY-MMM')),
+          tooltip: 'API keys',
+          data: [extract(tokens, 'tokens')]
+        })
+      )
+
+
+    }
+    /*separating permission layer activated functions*/
+
+
     commit('setValue', { key: 'projectStructure', val: kpi[4].data })
     const {
       interoperability_standards,
       stages,
       health_focus_areas: healthcategory
     } = kpi[4].data
-    const users = kpi[0].data
-    const tokens = kpi[1].data
+
+
     const projectStatus = kpi[2].data
 
     // Prepare Data standards data
@@ -438,60 +544,12 @@ export const actions = {
       }
     })
 
-    // color sets (should be dynamic?)
-    const colorSetA = ['#49BCE8']
-    const colorSetB = ['#49BCE8', '#99CA67']
-    // const colorSetC = ['#9ACB67', '#FFCF3F', '#BABABB', '#E84F48']
-    const colorSetC = ['#BABABB', '#9ACB67', '#FFCF3F', '#49BCE8', '#E84F48']
-    const colorSetD = ['#FFCF3F', '#FEAB7D', '#9ACB67', '#49BCE8']
-    const colorSetE = ['#FFCF3F', '#EF8A85', '#9ACB67', '#5F72B5']
-    const colorSetF = ['#9ACB67', '#E84F48']
-    const colorSetG = [
-      '#757575',
-      '#1A527B',
-      '#1577AC',
-      '#4897B3',
-      '#66C6D0',
-      '#87F7EF',
-      '#713ED2',
-      '#E2D83B',
-      '#1FA075',
-      '#BF2999',
-      '#D1632E',
-      '#E5A131'
-    ]
-
-    // label sets (should be dynamic?)
-    const projectsLabels = [
-      'Draft Projects',
-      'Published Projects',
-      'Publishable Projects',
-      'Unpublished Projects',
-      'Incoherent Projects'
-    ]
-    const govermentContributionLabels = [
-      'No, they have not yet contributed',
-      'Yes, they are contributing in-kind people or time',
-      'Yes, there is a financial contribution through MOH budget',
-      'Yes, MOH is fully funding the project'
-    ]
-    const distributionStatuesLabels = [
-      'How many active?',
-      'How many projects have ended?',
-      'How many projects are complete?',
-      'How many projects are discontinued?'
-    ]
-    const coverageLabels = ['Covered', 'Not covered']
     const dataStandardsLabels = extract(totalsOfStandardsSorted, 'name', true)
     const stageLabels = extract(projectStages, 'name')
 
     // data generation
     // stages
     const polarAData = extract(projectStages, 'total')
-    const monthlyUserActivity = [
-      extract(users, 'registered'),
-      extract(users, 'active')
-    ]
 
     // projects status data generation
     const draft = extract(projectStatus, 'draft')
@@ -552,43 +610,6 @@ export const actions = {
         labels: extract(projectStatus, 'date').map(d => format(d, 'YYYY-MMM')),
         tooltip: 'New projects',
         data: [extract(projectStatus, 'growth')]
-      })
-    )
-
-    commit(
-      'SET_LINEB_GRAPH',
-      settings({
-        type: 'line',
-        colors: colorSetB,
-        scales: { x: 'Months', y: '# of users' },
-        labels: extract(users, 'date').map(d => format(d, 'YYYY-MMM')),
-        tooltip: 'Users',
-        data: monthlyUserActivity
-      })
-    )
-
-    commit(
-      'SET_LINEC_GRAPH',
-      settings({
-        type: 'line',
-        colors: colorSetA,
-        scales: { x: 'Months', y: '# of API keys' },
-        labels: extract(tokens, 'date').map(d => format(d, 'YYYY-MMM')),
-        tooltip: 'API keys',
-        data: [extract(tokens, 'tokens')]
-      })
-    )
-
-    commit(
-      'SET_BARA_GRAPH',
-      settings({
-        type: 'bar',
-        colors: colorSetB,
-        scales: { x: 'Months', y: 'Growth of users' },
-        labels: extract(users, 'date').map(d => format(d, 'YYYY-MMM')),
-        legendLabels: ['New users', 'Active users'],
-        tooltip: '',
-        data: monthlyUserActivity
       })
     )
 
