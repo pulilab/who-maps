@@ -205,11 +205,12 @@ export default {
       return this.getDashboardData({
         func: this.handleBarClick,
         refresh: true,
-        state: {}
+        state: {},
+        permissionLayer: false
       })
     },
     handleSearch() {
-      this.getDashboardData({ func: this.handleBarClick, refresh: true })
+      this.getDashboardData({ func: this.handleBarClick, refresh: true, permissionLayer: false })
     },
     debounceSearch: debounce(function() {
       this.handleSearch()
@@ -257,7 +258,7 @@ export default {
     vertical-align: middle;
     position: absolute;
     right: 0;
-    svg { 
+    svg {
       cursor: pointer;
       position: absolute;
       top: 3px;
