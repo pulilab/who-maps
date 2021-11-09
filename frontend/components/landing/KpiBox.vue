@@ -37,7 +37,7 @@
         </div>
       </el-col>
       <el-col :span="6">
-        <span class="kpiHeader pt-30 pb-30">Projects Statistics</span>
+          <span class="kpiHeader pt-30 pb-30 d-block">Projects Statistics</span>
 
         <el-card shadow="never" class="counterBox">
           <span class="title">Totals amount</span>
@@ -315,13 +315,16 @@ export default {
   }
 
   .kpiHeader {
-    display: block;
     text-transform: uppercase;
     font-size: @fontSizeSmall;
     letter-spacing: 0.5px;
     font-weight: 600;
     text-align: center;
     color: black;
+  }
+
+  .d-block {
+    display: block;
   }
 
   .pt-30 {
