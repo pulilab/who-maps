@@ -37,7 +37,7 @@
         </div>
       </el-col>
       <el-col :span="6">
-        <span class="kpiHeader pt-30 pb-30">Projects Statistics</span>
+          <span class="kpiHeader pt-30 pb-30 d-block">Projects Statistics</span>
 
         <el-card shadow="never" class="counterBox">
           <span class="title">Totals amount</span>
@@ -205,11 +205,12 @@ export default {
       return this.getDashboardData({
         func: this.handleBarClick,
         refresh: true,
-        state: {}
+        state: {},
+        permissionLayer: false
       })
     },
     handleSearch() {
-      this.getDashboardData({ func: this.handleBarClick, refresh: true })
+      this.getDashboardData({ func: this.handleBarClick, refresh: true, permissionLayer: false })
     },
     debounceSearch: debounce(function() {
       this.handleSearch()
@@ -257,7 +258,7 @@ export default {
     vertical-align: middle;
     position: absolute;
     right: 0;
-    svg { 
+    svg {
       cursor: pointer;
       position: absolute;
       top: 3px;
@@ -320,6 +321,10 @@ export default {
     font-weight: 600;
     text-align: center;
     color: black;
+  }
+
+  .d-block {
+    display: block;
   }
 
   .pt-30 {
