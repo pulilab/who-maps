@@ -315,6 +315,7 @@ export default {
   }
 
   .kpiHeader {
+    display: block;
     text-transform: uppercase;
     font-size: @fontSizeSmall;
     letter-spacing: 0.5px;
