@@ -19,6 +19,11 @@
     <div>
       <el-row type="flex">
         <el-col>
+          <Banner />
+        </el-col>
+      </el-row>
+      <el-row type="flex">
+        <el-col>
           <IntroVideo />
         </el-col>
       </el-row>
@@ -43,6 +48,7 @@
 import LandingMap from '@/components/landing/LandingMap.vue'
 import WelcomeBox from '@/components/landing/WelcomeBox.vue'
 import CountryProjectsBox from '@/components/landing/CountryProjectsBox.vue'
+import Banner from '@/components/landing/Banner.vue'
 import IntroVideo from '@/components/landing/IntroVideo.vue'
 import InfoBox from '@/components/landing/InfoBox.vue'
 import CentralBox from '@/components/landing/CentralBox.vue'
@@ -56,6 +62,7 @@ export default {
   components: {
     LandingMap,
     WelcomeBox,
+    Banner,
     IntroVideo,
     InfoBox,
     CentralBox,

@@ -17,7 +17,7 @@ export default {
   @import "../../assets/style/variables.less";
 
   .IntroWrapper {
-    padding: 40px 40px 0 40px;
+    padding: 20px 40px 0 40px;
     h2 {
       background-color: white;
       color: @colorBrandPrimary;
