@@ -199,7 +199,6 @@ export const publishRules = () => {
       max: 128
     },
     organisation: {
-      required: true,
       max: 128
     },
     country: {
