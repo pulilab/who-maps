@@ -10,10 +10,80 @@
       show-legend
     >
       <custom-required-form-item
+        :error="errors.first('donors')"
+        :draft-rule="draftRules.donors"
+        :publish-rule="publishRules.donors"
+        prepend-label="10"
+      >
+        <template slot="label">
+          <translate key="donors">
+            Who are your investment partners?
+          </translate>
+          <tooltip
+            :text="
+              $gettext(
+                'Investment partners can include those contributing funds, human resources or in-kind support.'
+              ) | translate
+            "
+          />
+        </template>
+
+        <donor-selector
+          v-model="donors"
+          v-validate="rules.donors"
+          data-vv-name="donors"
+          data-vv-as="Investors"
+        />
+      </custom-required-form-item>
+
+      <custom-required-form-item
+        class="ImplementingPartners"
+        :draft-rule="draftRules.implementing_partners"
+        :publish-rule="publishRules.implementing_partners"
+        prepend-label="11"
+      >
+        <template slot="label">
+          <translate key="implementing-partners">
+            Who are your implementing partners?
+          </translate>
+        </template>
+        <el-row
+          v-for="(partner, index) in implementing_partners"
+          :key="index"
+        >
+          <el-col :span="17">
+            <custom-required-form-item
+              :error="errors.first('implementing_partners_' + index)"
+            >
+              <el-input
+                ref="implementingPartnersInput"
+                v-validate="rules.implementing_partners"
+                :maxlength="rules.implementing_partners.max"
+                :value="partner"
+                :data-vv-name="'implementing_partners_' + index"
+                data-vv-validate-on="change"
+                data-vv-as="Implementing partners"
+                @input="updateImplmeentingPartners($event, index)"
+                @keyup.enter.native="addImplementingPartners"
+              />
+            </custom-required-form-item>
+          </el-col>
+          <el-col :span="6">
+            <add-rm-buttons
+              :show-add="isLastAndExist(implementing_partners, index)"
+              :show-rm="implementing_partners.length > 1"
+              @add="addImplementingPartners"
+              @rm="rmImplementingPartners(index)"
+            />
+          </el-col>
+        </el-row>
+      </custom-required-form-item>
+
+      <custom-required-form-item
         :error="errors.first('health_focus_areas')"
         :draft-rule="draftRules.health_focus_areas"
         :publish-rule="publishRules.health_focus_areas"
-        prepend-label="10"
+        prepend-label="12"
       >
         <template slot="label">
           <translate key="health-focus-areas">
@@ -33,7 +103,7 @@
         :error="errors.first('hsc_challenges')"
         :draft-rule="draftRules.hsc_challenges"
         :publish-rule="publishRules.hsc_challenges"
-        prepend-label="11"
+        prepend-label="13"
       >
         <template slot="label">
           <translate key="hsc-challenges">
@@ -52,7 +122,7 @@
 
       <custom-required-form-item
         :error="errors.first('platforms')"
-        prepend-label="12"
+        prepend-label="14"
       >
         <template slot="label">
           <translate key="platforms">
@@ -143,7 +213,7 @@
         :error="errors.first('his_bucket')"
         :draft-rule="draftRules.his_bucket"
         :publish-rule="publishRules.his_bucket"
-        prepend-label="13"
+        prepend-label="15"
       >
         <template slot="label">
           <translate key="his-bucket">
@@ -163,7 +233,7 @@
       <div class="CoverageArea">
         <custom-required-form-item
           prop="coverageType"
-          prepend-label="14"
+          prepend-label="16"
         >
           <template slot="label">
             <translate key="coverage-type">
@@ -243,7 +313,7 @@
         :error="errors.first('government_investor')"
         :draft-rule="draftRules.government_investor"
         :publish-rule="publishRules.government_investor"
-        prepend-label="15"
+        prepend-label="17"
       >
         <template slot="label">
           <translate key="gobernment-investor">
@@ -277,75 +347,6 @@
             <translate>Yes, MOH is fully funding the project</translate>
           </el-radio>
         </el-radio-group>
-      </custom-required-form-item>
-
-      <custom-required-form-item
-        class="ImplementingPartners"
-        :draft-rule="draftRules.implementing_partners"
-        :publish-rule="publishRules.implementing_partners"
-        prepend-label="16"
-      >
-        <template slot="label">
-          <translate key="implementing-partners">
-            Who are your implementing partners?
-          </translate>
-        </template>
-        <el-row
-          v-for="(partner, index) in implementing_partners"
-          :key="index"
-        >
-          <el-col :span="17">
-            <custom-required-form-item
-              :error="errors.first('implementing_partners_' + index)"
-            >
-              <el-input
-                ref="implementingPartnersInput"
-                v-validate="rules.implementing_partners"
-                :maxlength="rules.implementing_partners.max"
-                :value="partner"
-                :data-vv-name="'implementing_partners_' + index"
-                data-vv-validate-on="change"
-                data-vv-as="Implementing partners"
-                @input="updateImplmeentingPartners($event, index)"
-                @keyup.enter.native="addImplementingPartners"
-              />
-            </custom-required-form-item>
-          </el-col>
-          <el-col :span="6">
-            <add-rm-buttons
-              :show-add="isLastAndExist(implementing_partners, index)"
-              :show-rm="implementing_partners.length > 1"
-              @add="addImplementingPartners"
-              @rm="rmImplementingPartners(index)"
-            />
-          </el-col>
-        </el-row>
-      </custom-required-form-item>
-      <custom-required-form-item
-        :error="errors.first('donors')"
-        :draft-rule="draftRules.donors"
-        :publish-rule="publishRules.donors"
-        prepend-label="17"
-      >
-        <template slot="label">
-          <translate key="donors">
-            Who are your investment partners?
-          </translate>
-          <tooltip
-            :text="
-              $gettext(
-                'Investment partners can include those contributing funds, human resources or in-kind support.'
-              ) | translate
-            "
-          />
-        </template>
-
-        <donor-selector
-          v-model="donors"
-          v-validate="rules.donors"
-          data-vv-name="donors"
-          data-vv-as="Investors"
-        />
       </custom-required-form-item>
     </collapsible-card>
   </div>
