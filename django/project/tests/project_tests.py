@@ -15,7 +15,7 @@ from django.core.cache import cache
 from rest_framework.test import APIClient
 
 from country.models import Country, Donor
-from user.models import UserProfile
+from user.models import UserProfile, Organisation
 from project.models import Project, DigitalStrategy, TechnologyPlatform, Licence, ProjectApproval
 from project.tasks import send_project_approval_digest, \
     send_project_updated_digest, notify_superusers_about_new_pending_software, notify_user_about_software_approval, \
@@ -1364,3 +1364,20 @@ class ProjectTests(SetupTests):
         # research can't be changed if it is already set
         self.assertEqual(response.json()['draft']['research'], True)
         self.assertEqual(response.json()['published']['research'], True)
+
+    def test_organisation_added_by_string(self):
+        url = reverse("project-create", kwargs={"country_id": self.country1.id})
+        data = copy.deepcopy(self.project_data)
+        new_org = "NEWEST OF ALL"
+        new_data = {
+            "name": "Test Project991",
+            "organisation": new_org
+        }
+        data['project'].update(new_data)
+
+        self.assertFalse(Organisation.objects.filter(name__iexact=new_org).exists())
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(Organisation.objects.filter(name__iexact=new_org).exists())
+        self.assertEqual(int(response.json()['draft']["organisation"]),
+                         Organisation.objects.get(name=new_org).id)
