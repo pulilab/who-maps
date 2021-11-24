@@ -27,6 +27,18 @@ class Organisation(ExtendedModel):
     def __str__(self):  # pragma: no cover
         return self.name
 
+    @classmethod
+    def get_or_create_insensitive(cls, project_org):
+        try:
+            org_id = int(project_org)
+        except ValueError:
+            try:
+                org = cls.objects.get(name__iexact=project_org)
+            except Organisation.DoesNotExist:
+                org = cls.objects.create(name=project_org)
+            org_id = org.id
+        return org_id
+
 
 class UserProfile(ExtendedModel):
     IMPLEMENTER = 'I'
