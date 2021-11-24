@@ -176,6 +176,12 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         if 'project' not in request.data:
             raise ValidationError({'project': 'Project data is missing'})
 
+        # if Organisation is coming as a string
+        if request.data['project'].get('organisation'):
+            project_org = request.data['project'].get('organisation')
+            org_id = Organisation.get_or_create_insensitive(project_org)
+            request.data['project']['organisation'] = str(org_id)
+
         data_serializer = ProjectPublishedSerializer(project, data=request.data['project'])
 
         data_serializer.fields.get('name').validators = \
@@ -273,6 +279,12 @@ class ProjectDraftViewSet(TeamCollectionTokenAuthMixin, ViewSet):
         if 'project' not in request.data:
             raise ValidationError({'project': 'Project data is missing'})
 
+        # if Organisation is coming as a string
+        if request.data['project'].get('organisation'):
+            project_org = request.data['project'].get('organisation')
+            org_id = Organisation.get_or_create_insensitive(project_org)
+            request.data['project']['organisation'] = str(org_id)
+
         data_serializer = ProjectDraftSerializer(data=request.data['project'])
         data_serializer.is_valid()
 
@@ -355,6 +367,12 @@ class ProjectDraftViewSet(TeamCollectionTokenAuthMixin, ViewSet):
 
         if 'project' not in request.data:
             raise ValidationError({'project': 'Project data is missing'})
+
+        # if Organisation is coming as a string
+        if request.data['project'].get('organisation'):
+            project_org = request.data['project'].get('organisation')
+            org_id = Organisation.get_or_create_insensitive(project_org)
+            request.data['project']['organisation'] = str(org_id)
 
         data_serializer = ProjectDraftSerializer(project, data=request.data['project'])
         self.check_object_permissions(self.request, project)
@@ -457,6 +475,12 @@ class ExternalDraftAPI(TeamTokenAuthMixin, ViewSet):
         if Project.objects.filter(name=project_name).exists():  # pragma: no cover
             request.data['project']['name'] = f"{project_name} {randint(1, 100)}"
 
+        # if Organisation is coming as a string
+        if request.data['project'].get('organisation'):
+            project_org = request.data['project'].get('organisation')
+            org_id = Organisation.get_or_create_insensitive(project_org)
+            request.data['project']['organisation'] = str(org_id)
+
         data_serializer = ProjectDraftSerializer(data=request.data['project'])
         data_serializer.is_valid(raise_exception=True)
         instance = data_serializer.save()
@@ -506,11 +530,11 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
 
         # DCH only
         if client_code == 'xNhlb4':
-            # Organisation is coming as a string (and is optional)
+            # if Organisation is coming as a string
             if request.data['project'].get('organisation'):
                 project_org = request.data['project'].get('organisation')
-                org, _ = Organisation.objects.get_or_create(name=project_org)
-                request.data['project']['organisation'] = str(org.id)
+                org_id = Organisation.get_or_create_insensitive(project_org)
+                request.data['project']['organisation'] = str(org_id)
             # Donor is required - set to "Other"
             donor, _ = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
             request.data['project']['donors'] = [donor.id]
