@@ -49,6 +49,23 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-row class="border-bottom bg-white">
+      <el-col :span="18" class="border-right">
+        <NewCharts :key="reloadPolarChart"/>
+      </el-col>
+      <el-col :span="6">
+          <span class="kpiHeader pt-30 pb-30 d-block">Projects Statistics</span>
+
+        <el-card shadow="never" class="counterBox">
+          <span class="title">Totals amount</span>
+          <span class="number">{{ totalProjects }}</span>
+        </el-card>
+        <el-card shadow="never" class="counterBox">
+          <span class="title">Since last month</span>
+          <span class="number">{{ sinceLastMonth }}</span>
+        </el-card>
+      </el-col>
+    </el-row>
     <el-row class="border-bottom">
       <el-col class="graphMargin">
         <graph-layout>
@@ -132,6 +149,8 @@ import GraphLayout from '@/components/common/charts/widgets/GraphLayout'
 import CountrySelect from '@/components/common/CountrySelect'
 import Subtitle from '@/components/common/charts/utilities/Subtitle'
 
+import NewCharts from '@/components/kpi/NewCharts'
+
 import { mapGetters, mapState, mapActions } from 'vuex'
 import debounce from 'lodash/debounce'
 
@@ -141,12 +160,14 @@ export default {
     DataLegend,
     GraphLayout,
     CountrySelect,
-    Subtitle
+    Subtitle,
+    NewCharts
   },
 
   data() {
     return {
-      country: ''
+      country: '',
+      reloadPolarChart: 0
     }
   },
   computed: {
@@ -160,7 +181,8 @@ export default {
       subtitle: state => state.charts.subtitle,
       horizontalBarB: state => state.charts.horizontalBarB,
       horizontalBarA: state => state.charts.horizontalBarA,
-      loading: state => state.charts.loading || false
+      loading: state => state.charts.loading || false,
+      state: state => state
     }),
     ...mapGetters({
       countries: 'countries/getCountries'
@@ -180,7 +202,10 @@ export default {
       handleBackClick: 'charts/handleBackClick',
       barClick: 'charts/handleBarClick',
       backClick: 'charts/handleBackClick',
-      setFilters: 'charts/setFilters'
+      setFilters: 'charts/setFilters',
+      // getProjectStatus: 'kpi/getDashboardData',
+      getProjectStructure: 'charts/getProjectStructure',
+      getStages: 'charts/getStages',
     }),
     handleBackClick() {
       this.backClick({ func: this.handleBarClick })
@@ -199,6 +224,7 @@ export default {
         ...this.filters,
         country: country ? `${country}` : undefined
       })
+      this.reloadPolarChart++
       this.debounceSearch()
     },
     allData() {
@@ -218,6 +244,10 @@ export default {
   },
   created() {
     this.handleSearch()
+      console.log("this is a state my mate can you believe in this")
+      console.log(this.state.charts)
+      // console.log("all the charts")
+      // console.log(this.charts)
   }
 }
 </script>
