@@ -32,7 +32,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django_extensions',
-    'raven.contrib.django.raven_compat',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -366,6 +365,28 @@ ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE = os.environ.get('ENABLE_GDHI_UPDATE_ON_COUNT
 
 # PRODUCTION SETTINGS
 if SITE_ID in [3, 4]:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+    sentry_sdk.init(
+        dsn=os.environ.get('SENTRY_DSN', ''),
+        integrations=[DjangoIntegration()],
+
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        # We recommend adjusting this value in production.
+        traces_sample_rate=0.5,
+
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True,
+
+        # By default the SDK will try to use the SENTRY_RELEASE
+        # environment variable, or infer a git commit
+        # SHA as release, however you may want to set
+        # something more human-readable.
+        release=os.environ.get('DEPLOY_VERSION', '0.0.0')
+    )
+
     CELERYBEAT_SCHEDULE = {
         "send_toolkit_digest": {
             "task": 'send_toolkit_digest',
@@ -440,10 +461,6 @@ if SITE_ID in [3, 4]:
                     "schedule": datetime.timedelta(hours=ODK_SYNC_PERIOD)
                 }
             })
-
-    RAVEN_CONFIG = {
-        'dsn': 'http://cea32567f8aa4eefa4d2051848d37dea:a884ff71e8ae444c8a40af705699a19c@sentry.vidzor.com/12',
-    }
 
     DEBUG = False
 
