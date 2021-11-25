@@ -132,6 +132,10 @@ export default {
       }
       result.country = country
       result.donors = [donor]
+      if (filled.some(c => c.column === 'organisation') && !result.organisation) {
+        const orgCell = filled.find(c => c.column === 'organisation')
+        result.organisation = orgCell.value
+      }
       const parsed = apiWriteParser(result, countryCustom, donorCustom)
       parsed.project.import_row = rowid
       const { data } = await this.$axios.post(`api/projects/draft/${country}/`, parsed)
