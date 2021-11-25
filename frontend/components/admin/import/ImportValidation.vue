@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     internalDraftRules () {
-      return { ...draftRules(), organisation: { required: true } }
+      return { ...draftRules() }
     },
     internalPublishRules () {
       const standardRules = publishRules()
@@ -70,7 +70,6 @@ export default {
       draftRequireds.forEach(dr => {
         if (!this.headers.some(h => h.selected === dr)) {
           const name = this.nameMapping[dr] || dr
-          // result.push(`Please select ${name} column`)
           result.push(name)
         }
       })
@@ -83,8 +82,6 @@ export default {
 
 <style lang="less" scoped>
   .GlobalErrors {
-    // padding: 20px;
-
     .el-tag {
       margin: 0 10px 10px 0px;
 

@@ -63,6 +63,10 @@
           {{ internalValue }}
         </template>
 
+        <template v-else-if="isOrganisation">
+          {{ organisationValue }}
+        </template>
+
         <template v-else-if="parsedValue && parsedValue.names && !isCountry">
           <ul class="ParsedList">
             <li v-for="(name, index) in parsedValue.names" :key="index">
@@ -74,7 +78,7 @@
       <template v-if="!column">
         {{ value }}
       </template>
-      <template v-if="parsingFailed">
+      <template v-if="parsingFailed && !isOrganisation">
         <span class="OriginalValue">{{ original }}</span>
       </template>
     </div>
@@ -197,6 +201,9 @@ export default {
     isCountry () {
       return this.column === 'country'
     },
+    isOrganisation () {
+      return this.column === 'organisation'
+    },
     countryDetails () {
       let country = null
       if (this.isCountry && this.value) {
@@ -292,12 +299,14 @@ export default {
       }
     },
     parsingFailed () {
-      return this.value && this.column && this.parsedValue.ids.length === 0
-      // return this.value && this.column && (this.parsedValue.ids.length === 0 || this.parsedValue?.ids[0] === 'Invalid Date')
+      return this.value && this.column && this.parsedValue.ids.length === 0 && !this.isOrganisation
     },
     errorMessage () {
       const e = this.errors.find(e => e.field === this.column)
       return e ? e.msg : null
+    },
+    organisationValue() {
+      return Array.isArray(this.internalValue) ? this.parsedValue.names[0] : this.internalValue
     }
   },
   watch: {
