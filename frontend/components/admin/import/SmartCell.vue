@@ -379,7 +379,6 @@ export default {
       return this.toInternalRepresentation(filtered)
     },
     findProjectCollectionValue (collection, isMultiple, ...subValues) {
-      // convert to array if it's not already
       const value = this.valueParser(isMultiple)
       let projectData = this.projectDicts[collection]
       if (subValues && Array.isArray(subValues)) {

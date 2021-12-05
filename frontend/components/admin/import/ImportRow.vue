@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { projectFields } from '@/utilities/projects'
 import { apiWriteParser } from '@/utilities/api'
 
@@ -34,9 +34,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('system', {
-      systemDicts: state => state
-    }),
     ...mapGetters({
       userProfile: 'user/getProfile',
       dhi: 'projects/getDigitalHealthInterventions',
@@ -111,7 +108,6 @@ export default {
         a[c.column] = c.apiValue()
         return a
       }, projectFields())
-      console.log('🚀 ~ file: ImportRow.vue ~ line 114 ~ result ~ result', result)
       const subLevel = this.$children.find(sc => sc.column === 'sub_level')
       const sublLevelValue = subLevel ? subLevel.apiValue() : null
       if (sublLevelValue && sublLevelValue.toLowerCase() === 'national level') {
