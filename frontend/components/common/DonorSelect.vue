@@ -2,6 +2,7 @@
   <lazy-el-select
     :value="value"
     :placeholder="$gettext('Select investor') | translate"
+    multiple
     filterable
     popper-class="DonorSelectorPopper"
     class="DonorSelector"
@@ -25,7 +26,7 @@ export default {
   },
   props: {
     value: {
-      type: Number,
+      type: Array,
       default: null
     }
   },

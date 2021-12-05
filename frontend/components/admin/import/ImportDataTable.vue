@@ -314,7 +314,7 @@ export default {
         return h.selected === 'donors'
       }).title
       const countryData = row.data[countryFieldName]
-      const investor = row.data[investorFieldName]
+      const donor = row.data[investorFieldName]
       try {
         let country = null
         if (Array.isArray(countryData)) {
@@ -324,7 +324,6 @@ export default {
         } else {
           throw new Error('Invalid country value!')
         }
-        const donor = Array.isArray(investor) ? investor[0] : ''
         const newRow = await doSave(
           country.id,
           donor,

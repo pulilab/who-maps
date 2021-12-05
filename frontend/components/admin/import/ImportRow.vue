@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { projectFields } from '@/utilities/projects'
 import { apiWriteParser } from '@/utilities/api'
 
@@ -34,6 +34,9 @@ export default {
     }
   },
   computed: {
+    ...mapState('system', {
+      systemDicts: state => state
+    }),
     ...mapGetters({
       userProfile: 'user/getProfile',
       dhi: 'projects/getDigitalHealthInterventions',
@@ -108,6 +111,7 @@ export default {
         a[c.column] = c.apiValue()
         return a
       }, projectFields())
+      console.log('🚀 ~ file: ImportRow.vue ~ line 114 ~ result ~ result', result)
       const subLevel = this.$children.find(sc => sc.column === 'sub_level')
       const sublLevelValue = subLevel ? subLevel.apiValue() : null
       if (sublLevelValue && sublLevelValue.toLowerCase() === 'national level') {
@@ -131,7 +135,6 @@ export default {
         result.digitalHealthInterventions = result.digitalHealthInterventions.map(id => ({ platform, id }))
       }
       result.country = country
-      result.donors = [donor]
       if (filled.some(c => c.column === 'organisation') && !result.organisation) {
         const orgCell = filled.find(c => c.column === 'organisation')
         result.organisation = orgCell.value
@@ -167,7 +170,6 @@ export default {
         this.setViewers([...result.implementing_viewers])
         await this.saveTeamViewers(data.id)
       }
-      // setting teams and viewers and saving it
       this.$emit('update:row', dataRow)
       return dataRow
     }
