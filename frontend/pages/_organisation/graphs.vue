@@ -187,7 +187,7 @@
     </el-row>
 
     <!-- Data standards -->
-    <el-row type="flex" :gutter="20" class="mb-80">      
+    <el-row type="flex" :gutter="20" class="mb-80">
       <graph-layout :span="24">
         <translate :parameters="{ top: dataStandardsCount }">
           Top {top} ‘Data standards’ (by occurrences)
@@ -359,13 +359,13 @@ export default {
       donors: 'system/getDonors'
     }),
     dataStandardsCount() {
-      return this.horizontalBarA.chartData?.datasets[0].data.length > 0 
+      return this.horizontalBarA.chartData?.datasets[0].data.length > 0
               ? this.horizontalBarA.chartData.datasets[0].data.length
               : 0
     },
     dataStandardHeight() {
-      return this.dataStandardsCount > 0 
-                  ? this.dataStandardsCount * 40 
+      return this.dataStandardsCount > 0
+                  ? this.dataStandardsCount * 40
                   : 800
     },
   },
@@ -385,7 +385,7 @@ export default {
     },
     handleBarClick (point, event) {
       if (this.back.length === 0) {
-        this.barClick({ func: this.handleBarClick, idx: event[0]._index })        
+        this.barClick({ func: this.handleBarClick, idx: event[0]._index })
       }
     },
     handleBackClick () {

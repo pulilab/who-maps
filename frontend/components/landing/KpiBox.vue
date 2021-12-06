@@ -17,6 +17,36 @@
       </h2>
     </el-row>
     <el-row class="border-bottom bg-white">
+      <el-col>
+        <ClickableHorizontalBarChart :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
+      </el-col>
+    </el-row>
+    <el-row class="border-bottom bg-white">
+      <el-col>
+        <HorizontalBarChart :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
+      </el-col>
+    </el-row>
+    <el-row class="border-bottom bg-white">
+      <el-col>
+        <DoughnutChart :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
+      </el-col>
+    </el-row>
+    <el-row class="border-bottom bg-white">
+      <el-col>
+        <BarChart :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
+      </el-col>
+    </el-row>
+    <el-row class="border-bottom bg-white">
+      <el-col>
+        <BarChart :filters="filters" :chartDataInput="testStackedData" :chartOptionsInput="testStackedOptions" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
+      </el-col>
+    </el-row>
+    <el-row class="border-bottom bg-white">
+      <el-col>
+        <LineChart :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
+      </el-col>
+    </el-row>
+    <el-row class="border-bottom bg-white">
       <el-col :span="18" class="border-right">
         <div>
           <graph-layout :span="24" horizontal>
@@ -51,7 +81,7 @@
     </el-row>
     <el-row class="border-bottom bg-white">
       <el-col :span="18" class="border-right">
-        <NewCharts :key="reloadPolarChart"/>
+        <ProjectStagesPolarChart :filters="filters"/>
       </el-col>
       <el-col :span="6">
           <span class="kpiHeader pt-30 pb-30 d-block">Projects Statistics</span>
@@ -149,7 +179,12 @@ import GraphLayout from '@/components/common/charts/widgets/GraphLayout'
 import CountrySelect from '@/components/common/CountrySelect'
 import Subtitle from '@/components/common/charts/utilities/Subtitle'
 
-import NewCharts from '@/components/kpi/NewCharts'
+import ProjectStagesPolarChart from '@/components/kpi/ProjectStagesPolarChart'
+import BarChart from '@/components/kpi/BarChart'
+import LineChart from '@/components/kpi/LineChart'
+import DoughnutChart from '@/components/kpi/DoughnutChart'
+import HorizontalBarChart from '@/components/kpi/HorizontalBarChart'
+import ClickableHorizontalBarChart from '@/components/kpi/ClickableHorizontalBarChart'
 
 import { mapGetters, mapState, mapActions } from 'vuex'
 import debounce from 'lodash/debounce'
@@ -161,13 +196,97 @@ export default {
     GraphLayout,
     CountrySelect,
     Subtitle,
-    NewCharts
+    ProjectStagesPolarChart,
+    BarChart,
+    LineChart,
+    DoughnutChart,
+    HorizontalBarChart,
+    ClickableHorizontalBarChart,
   },
 
   data() {
     return {
       country: '',
-      reloadPolarChart: 0
+      reloadPolarChart: 0,
+      monthlyUsersTestData: {
+        datasets: [
+          {
+          backgroundColor: '#49BCE8',
+          barThickness: 'flex',
+          data: [37, 42, 41, 101, 51, 44, 55, 29, 1, 0, 1, 1],
+          label: 'Registered Users'
+        },{
+          backgroundColor: '#99CA67',
+          barThickness: 'flex',
+          data: [37, 42, 41, 101, 51, 44, 55, 29, 1, 0, 1, 1],
+          label: 'Active Users'
+        }
+        ],
+        labels: ["2020-Dec","2021-Jan","2021-Feb","2021-Mar","2021-Apr","2021-May","2021-Jun","2021-Jul","2021-Aug","2021-Sep","2021-Oct","2021-Nov"]
+      },
+      testStackedOptions: {
+        legend: {
+          display: true
+        },
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [
+            {
+              offset: true,
+              gridLines: { drawOnChartArea: false, drawTicks: false },
+              stacked: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Months',
+                fontStyle: 'bold',
+                fontColor: '#485465',
+                lineHeight: 3
+              },
+              ticks: { fontSize: 10, padding: 15 }
+            }
+          ],
+          yAxes: [
+            {
+              gridLines: { drawTicks: false },
+              stacked: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Growth of users',
+                fontStyle: 'bold',
+                fontColor: '#485465',
+                lineHeight: 3
+              },
+              ticks: { fontSize: 10, padding: 15 }
+            }
+          ]
+        }
+      },
+      testStackedData: {
+        datasets: [
+          {
+            backgroundColor: "#BABABB",
+            barThickness: 40,
+            data: [0,0,0,1,0,734,0,41,5,3,0,13],
+            length: 12,
+            label: "Draft Projects"
+          },
+          {
+            backgroundColor: "#FFAA33",
+            barThickness: 40,
+            data: [0,0,0,1,0,734,0,41,5,3,0,13],
+            length: 12,
+            label: "GG Project1s"
+          },
+          {
+            backgroundColor: "#3398FF",
+            barThickness: 40,
+            data: [0,0,0,1,0,734,0,41,5,3,0,13],
+            length: 12,
+            label: "Draft Projects2"
+          }
+        ],
+        labels: ["2020-Dec","2021-Jan","2021-Feb","2021-Mar","2021-Apr","2021-May","2021-Jun","2021-Jul","2021-Aug","2021-Sep","2021-Oct","2021-Nov"]
+      }
     }
   },
   computed: {
@@ -182,6 +301,7 @@ export default {
       horizontalBarB: state => state.charts.horizontalBarB,
       horizontalBarA: state => state.charts.horizontalBarA,
       loading: state => state.charts.loading || false,
+      filters: state => state.charts.filters,
       state: state => state
     }),
     ...mapGetters({
@@ -244,10 +364,9 @@ export default {
   },
   created() {
     this.handleSearch()
-      console.log("this is a state my mate can you believe in this")
-      console.log(this.state.charts)
-      // console.log("all the charts")
-      // console.log(this.charts)
+
+    console.log("this.horizontalBarB")
+    console.log(this.state.charts)
   }
 }
 </script>

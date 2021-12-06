@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="chart-wrapper" v-bind:class="[currentlyLoading ? 'loading' : '']">
     <graph-layout :span="24" horizontal>
       <span class="kpiHeader">Distributions of projects’ stages 2</span>
       <template #graph>
@@ -11,14 +11,19 @@
         />
       </template>
       <template #legend>
-        <DataLegend :items="dataLegend.items"> </DataLegend>
+        <DataLegend :items="dataLegend.items">
+          <div>
+            <span class="label">Projects with no stage data</span>
+            <span class="dots" />
+            <span class="value">{{ noStageDataCount }}</span>
+          </div>
+        </DataLegend>
       </template>
     </graph-layout>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from 'vuex'
 import { objectToQueryString } from '@/utilities/charts'
 
 import Chart from '@/components/common/charts/Chart'
@@ -31,11 +36,28 @@ export default {
     DataLegend,
     GraphLayout
   },
-  name: 'NewCharts',
+  name: 'ProjectStagesPolarChart',
+  props: {
+    filters: {
+      required: true,
+      type: Object,
+      default: () => ({})
+    },
+    chartDataInput: {
+      type: Object,
+      default: () => ({})
+    },
+    chartOptionsInput: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       loadingChart: 0,
+      currentlyLoading: true,
       base: '/api/kpi',
+      noStageDataCount: 0,
       chartData: {
         labels: [],
         datasets: [
@@ -87,19 +109,14 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapState({
-      filters: state => state.charts.filters
-    })
-  },
   methods: {
-    async callForProjectStages() {
+    async getProjectStages() {
       let response = await this.$axios.get(
         `${this.base}/project-stages/${objectToQueryString(this.filters)}`
       )
       return response
     },
-    async callForProjectStructure() {
+    async getProjectStructure() {
       let response = await this.$axios.get('/api/projects/structure/')
       return response
     },
@@ -135,33 +152,77 @@ export default {
           value: stageCounts[index]
         }
       })
+    },
+    async loadChart() {
+      this.currentlyLoading = true
+      let projectStructure = await this.getProjectStructure()
+      let projectStages = await this.getProjectStages()
+
+      let stageNames = this.getStageNames(projectStructure)
+      const noStageData = 'Projects with no stage data'
+      this.chartData.datasets[0].backgroundColor[stageNames.length] = ''
+      stageNames.push(noStageData) //+we ad the 'projects with no stage data' label
+      let stageCounts = this.getStagesCount(projectStages)
+
+      this.noStageDataCount = stageCounts[stageCounts.length - 1]
+
+      //removing projects with no stage data as the list element
+      stageNames.pop()
+      stageCounts.pop()
+
+      this.dataLegend.items = this.makeDataLegend(
+        stageNames,
+        stageCounts,
+        this.chartData.datasets[0].backgroundColor
+      )
+
+      this.chartData.labels = stageNames
+      this.chartData.datasets[0].data = stageCounts
+
+      //preset if loading
+      if (Object.keys(this.chartDataInput).length) {
+        this.chartData = this.chartDataInput
+      }
+      if (Object.keys(this.chartOptionsInput).length) {
+        this.chartOptions = this.chartOptionsInput
+      }
+
+      //re-render chart
+      this.loadingChart++
+      this.currentlyLoading = false
     }
   },
   async mounted() {
-    let projectStructure = await this.callForProjectStructure()
-    let projectStages = await this.callForProjectStages()
-
-    let stageNames = this.getStageNames(projectStructure)
-    const noStageData = 'Projects with no stage data'
-    this.chartData.datasets[0].backgroundColor[stageNames.length] = ''
-    stageNames.push(noStageData) //+we ad the 'projects with no stage data' label
-    let stageCounts = this.getStagesCount(projectStages)
-
-    this.dataLegend.items = this.makeDataLegend(
-      stageNames,
-      stageCounts,
-      this.chartData.datasets[0].backgroundColor
-    )
-
-    //removing projects with no stage data as the list element
-    stageNames.pop()
-    stageCounts.pop()
-
-    this.chartData.labels = stageNames
-    this.chartData.datasets[0].data = stageCounts
-
-    //re-render chart
-    this.loadingChart++
+    await this.loadChart()
+  },
+  watch: {
+    filters: async function(newValue, oldValue) {
+      await this.loadChart()
+    }
   }
 }
 </script>
+
+<style lang="less" scoped>
+.chart-wrapper::before {
+  transition: 0.2s ease-out;
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: 0;
+  backdrop-filter: blur(0px);
+}
+.chart-wrapper.loading::before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.548);
+  z-index: 1;
+  backdrop-filter: blur(2px);
+}
+</style>
