@@ -35,7 +35,6 @@ export default {
       hscList: [],
       hsc: [],
       his: [],
-      donors: [],
       coverage: '',
       // sub level coverage
       coverageLevelName: {},
@@ -65,7 +64,6 @@ export default {
       getHfa: 'projects/getHealthFocusAreas',
       getHsc: 'projects/getHscChallenges',
       getHis: 'projects/getHisBucket',
-      getDonors: 'system/getDonors',
       country: 'project/getCountry',
       getCountrySubLevelNames: 'countries/getCountrySubLevelNames',
       getCountryFirstSubLevel: 'countries/getCountryFirstSubLevel',
@@ -97,7 +95,6 @@ export default {
           health_focus_areas,
           hsc_challenges,
           his_bucket,
-          donors,
           coverageType,
           coverage,
           coverageData,
@@ -110,8 +107,6 @@ export default {
         this.hscList = getNestedList(this.getHsc, 'challenges')
         this.hsc = getList(hsc_challenges, this.hscList, ['challenge'])
         this.his = getList(his_bucket, this.getHis)
-        this.donors = getList(donors, this.getDonors)
-
         this.coverage = this.isGlobalSelected
           ? this.$gettext('International')
           : this.coverageList[coverageType]
@@ -191,19 +186,19 @@ export default {
       return [
         {
           id: 1,
-          prepend: 10,
+          prepend: 12,
           header: this.$gettext('Health focus area (s)'),
           content: this.hfa
         },
         {
           id: 2,
-          prepend: 11,
+          prepend: 13,
           header: this.$gettext('Health System Challenges (HSC)'),
           content: this.hsc
         },
         {
           id: 3,
-          prepend: 12,
+          prepend: 14,
           header: this.$gettext(
             'Software and related Digital Health Interventions (DHI)'
           ),
@@ -214,13 +209,13 @@ export default {
         },
         {
           id: 4,
-          prepend: 13,
+          prepend: 15,
           header: this.$gettext('Health Information System (HIS)'),
           content: this.his
         },
         {
           id: 5,
-          prepend: 14,
+          prepend: 16,
           show: !!(
             this.isNationalLevelDeployment ||
             (this.project.coverage && this.project.coverage.length)
@@ -291,23 +286,11 @@ export default {
         // national coverage
         {
           id: 9,
-          prepend: 15,
+          prepend: 17,
           header: this.$gettext(
             'Has the government financially invested in the project?'
           ),
           content: this.investedList[this.project.government_investor]
-        },
-        {
-          id: 10,
-          prepend: 16,
-          header: this.$gettext('Implementing partner (s)'),
-          content: this.project.implementing_partners
-        },
-        {
-          id: 11,
-          prepend: 17,
-          header: this.$gettext('Investor (s)'),
-          content: this.donors
         }
       ]
     }

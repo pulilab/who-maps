@@ -38,10 +38,77 @@
       </custom-required-form-item>
 
       <custom-required-form-item
+        :error="errors.first('donors')"
+        :draft-rule="draftRules.donors"
+        :publish-rule="publishRules.donors"
+        prepend-label="2"
+      >
+        <template slot="label">
+          <translate key="donors">
+            Who are your investment partners?
+          </translate>
+          <tooltip
+            :text="
+              $gettext(
+                'Investment partners can include those contributing funds, human resources or in-kind support.'
+              ) | translate
+            "
+          />
+        </template>
+
+        <donor-selector
+          v-model="donors"
+          v-validate="rules.donors"
+          data-vv-name="donors"
+          data-vv-as="Investors"
+        />
+      </custom-required-form-item>
+
+      <custom-required-form-item
+        class="ImplementingPartners"
+        :draft-rule="draftRules.implementing_partners"
+        :publish-rule="publishRules.implementing_partners"
+        prepend-label="3"
+      >
+        <template slot="label">
+          <translate key="implementing-partners">
+            Who are your implementing partners?
+          </translate>
+        </template>
+        <el-row v-for="(partner, index) in implementing_partners" :key="index">
+          <el-col :span="17">
+            <custom-required-form-item
+              :error="errors.first('implementing_partners_' + index)"
+            >
+              <el-input
+                ref="implementingPartnersInput"
+                v-validate="rules.implementing_partners"
+                :maxlength="rules.implementing_partners.max"
+                :value="partner"
+                :data-vv-name="'implementing_partners_' + index"
+                data-vv-validate-on="change"
+                data-vv-as="Implementing partners"
+                @input="updateImplmeentingPartners($event, index)"
+                @keyup.enter.native="addImplementingPartners"
+              />
+            </custom-required-form-item>
+          </el-col>
+          <el-col :span="6">
+            <add-rm-buttons
+              :show-add="isLastAndExist(implementing_partners, index)"
+              :show-rm="implementing_partners.length > 1"
+              @add="addImplementingPartners"
+              @rm="rmImplementingPartners(index)"
+            />
+          </el-col>
+        </el-row>
+      </custom-required-form-item>
+
+      <custom-required-form-item
         :error="errors.first('organisation')"
         :draft-rule="draftRules.organisation"
         :publish-rule="publishRules.organisation"
-        prepend-label="2"
+        prepend-label="4"
       >
         <template slot="label">
           <translate key="organisation">
@@ -58,7 +125,7 @@
         :error="errors.first('country')"
         :draft-rule="draftRules.country"
         :publish-rule="publishRules.country"
-        prepend-label="3"
+        prepend-label="5"
       >
         <template slot="label">
           <translate key="country">
@@ -102,7 +169,7 @@
         :error="errors.first('geographic_scope')"
         :draft-rule="draftRules.geographic_scope"
         :publish-rule="publishRules.geographic_scope"
-        prepend-label="4"
+        prepend-label="6"
       >
         <template slot="label">
           <translate key="geographic-scope">
@@ -141,7 +208,7 @@
         :error="errors.first('implementation_overview')"
         :draft-rule="draftRules.implementation_overview"
         :publish-rule="publishRules.implementation_overview"
-        prepend-label="5"
+        prepend-label="7"
       >
         <template slot="label">
           <translate key="implementation-overview">
@@ -175,16 +242,13 @@
           </p>
         </span>
       </custom-required-form-item>
-      <el-row
-        :gutter="20"
-        type="flex"
-      >
+      <el-row :gutter="20" type="flex">
         <el-col :span="12">
           <custom-required-form-item
             :error="errors.first('contact_name')"
             :draft-rule="draftRules.contact_name"
             :publish-rule="publishRules.contact_name"
-            prepend-label="6"
+            prepend-label="8"
           >
             <template slot="label">
               <translate key="contact-name">
@@ -215,7 +279,7 @@
             :error="errors.first('contact_email')"
             :draft-rule="draftRules.contact_email"
             :publish-rule="publishRules.contact_email"
-            prepend-label="7"
+            prepend-label="9"
           >
             <template slot="label">
               <translate key="contact-email">
@@ -241,7 +305,7 @@
           :error="errors.first('team')"
           :draft-rule="draftRules.team"
           :publish-rule="publishRules.team"
-          prepend-label="8"
+          prepend-label="10"
         >
           <template slot="label">
             <translate key="team">
@@ -268,7 +332,7 @@
           :error="errors.first('viewers')"
           :draft-rule="draftRules.viewers"
           :publish-rule="publishRules.viewers"
-          prepend-label="9"
+          prepend-label="11"
         >
           <template slot="label">
             <translate key="viewers">
@@ -307,6 +371,8 @@ import { mapGettersActions } from '../../../utilities/form'
 import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem'
 import FilterSwitch from '@/components/dashboard/FilterSwitch'
 import Tooltip from '@/components/dashboard/Tooltip'
+import DonorSelector from '../DonorSelector'
+import AddRmButtons from '../AddRmButtons'
 
 export default {
   components: {
@@ -317,7 +383,9 @@ export default {
     FormHint,
     CustomRequiredFormTeamItem,
     FilterSwitch,
-    Tooltip
+    Tooltip,
+    DonorSelector,
+    AddRmButtons
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
@@ -325,7 +393,15 @@ export default {
       organisation: ['project', 'getOrganisation', 'setOrganisation', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
       team: ['project', 'getTeam', 'setTeam', 0],
-      viewers: ['project', 'getViewers', 'setViewers', 0]
+      viewers: ['project', 'getViewers', 'setViewers', 0],
+      implementing_partners: [
+        'project',
+        'getImplementingPartners',
+        'setImplementingPartners',
+        300,
+        true
+      ],    
+      donors: ['project', 'getDonors', 'setDonors', 0],
     }),
     isGlobal: {
       get () {
@@ -336,7 +412,45 @@ export default {
       }
     }
   },
+  watch: {
+    implementing_partners: {
+      immediate: false,
+      handler (ip, oldIp) {
+        if (oldIp && ip && ip.length > oldIp.length) {
+          this.$nextTick(() => {
+            if (
+              this.$refs.implementingPartnersInput &&
+              this.$refs.implementingPartnersInput.length > 0
+            ) {
+              this.$refs.implementingPartnersInput[
+                this.$refs.implementingPartnersInput.length - 1
+              ].focus()
+            }
+          })
+        }
+      }
+    }
+  },
   methods: {
+    isLastAndExist (collection, index) {
+      return !!(collection.length - 1 === index && collection[index])
+    },
+    updateImplmeentingPartners (value, index) {
+      const ip = [...this.implementing_partners]
+      ip[index] = value
+      this.implementing_partners = ip
+    },
+    addImplementingPartners () {
+      const index = this.implementing_partners.length - 1
+      if (this.isLastAndExist(this.implementing_partners, index)) {
+        this.implementing_partners = [...this.implementing_partners, null]
+      }
+    },
+    rmImplementingPartners (index) {
+      this.implementing_partners = this.implementing_partners.filter(
+        (ip, i) => i !== index
+      )
+    },
     async validate () {
       this.$refs.collapsible.expandCard()
       const validations = await Promise.all([this.$validator.validate()])
@@ -380,6 +494,15 @@ export default {
       letter-spacing: 0;
       line-height: 20px;
       text-align: center;
+    }
+  }
+  .ImplementingPartners {
+    .el-row {
+      margin-top: 20px;
+
+      &:first-child {
+        margin: 0;
+      }
     }
   }
 }

@@ -10,76 +10,6 @@
       show-legend
     >
       <custom-required-form-item
-        :error="errors.first('donors')"
-        :draft-rule="draftRules.donors"
-        :publish-rule="publishRules.donors"
-        prepend-label="10"
-      >
-        <template slot="label">
-          <translate key="donors">
-            Who are your investment partners?
-          </translate>
-          <tooltip
-            :text="
-              $gettext(
-                'Investment partners can include those contributing funds, human resources or in-kind support.'
-              ) | translate
-            "
-          />
-        </template>
-
-        <donor-selector
-          v-model="donors"
-          v-validate="rules.donors"
-          data-vv-name="donors"
-          data-vv-as="Investors"
-        />
-      </custom-required-form-item>
-
-      <custom-required-form-item
-        class="ImplementingPartners"
-        :draft-rule="draftRules.implementing_partners"
-        :publish-rule="publishRules.implementing_partners"
-        prepend-label="11"
-      >
-        <template slot="label">
-          <translate key="implementing-partners">
-            Who are your implementing partners?
-          </translate>
-        </template>
-        <el-row
-          v-for="(partner, index) in implementing_partners"
-          :key="index"
-        >
-          <el-col :span="17">
-            <custom-required-form-item
-              :error="errors.first('implementing_partners_' + index)"
-            >
-              <el-input
-                ref="implementingPartnersInput"
-                v-validate="rules.implementing_partners"
-                :maxlength="rules.implementing_partners.max"
-                :value="partner"
-                :data-vv-name="'implementing_partners_' + index"
-                data-vv-validate-on="change"
-                data-vv-as="Implementing partners"
-                @input="updateImplmeentingPartners($event, index)"
-                @keyup.enter.native="addImplementingPartners"
-              />
-            </custom-required-form-item>
-          </el-col>
-          <el-col :span="6">
-            <add-rm-buttons
-              :show-add="isLastAndExist(implementing_partners, index)"
-              :show-rm="implementing_partners.length > 1"
-              @add="addImplementingPartners"
-              @rm="rmImplementingPartners(index)"
-            />
-          </el-col>
-        </el-row>
-      </custom-required-form-item>
-
-      <custom-required-form-item
         :error="errors.first('health_focus_areas')"
         :draft-rule="draftRules.health_focus_areas"
         :publish-rule="publishRules.health_focus_areas"
@@ -363,7 +293,6 @@ import HisBucketSelector from '../HisBucketSelector'
 import PlatformSelector from '../PlatformSelector'
 import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector'
 import SubNationalLevelDeployment from '../SubNationalLevelDeployment'
-import AddRmButtons from '../AddRmButtons'
 import CoverageFieldset from '../CoverageFieldset'
 import DonorSelector from '../DonorSelector'
 import Tooltip from '@/components/dashboard/Tooltip'
@@ -379,7 +308,6 @@ export default {
     PlatformSelector,
     DigitalHealthInterventionsSelector,
     SubNationalLevelDeployment,
-    AddRmButtons,
     CoverageFieldset,
     DonorSelector,
     Tooltip
@@ -417,14 +345,6 @@ export default {
         'setGovernmentInvestor',
         0
       ],
-      implementing_partners: [
-        'project',
-        'getImplementingPartners',
-        'setImplementingPartners',
-        300,
-        true
-      ],
-      donors: ['project', 'getDonors', 'setDonors', 0],
       shadow_donors: ['project', 'getShadowDonors', 'setShadowDonors', 0]
     }),
     healthWorkers: {
@@ -507,22 +427,6 @@ export default {
         this.digitalHealthInterventions = filtered
       }
       this.platforms = this.platforms.filter((p, i) => i !== index)
-    },
-    updateImplmeentingPartners (value, index) {
-      const ip = [...this.implementing_partners]
-      ip[index] = value
-      this.implementing_partners = ip
-    },
-    addImplementingPartners () {
-      const index = this.implementing_partners.length - 1
-      if (this.isLastAndExist(this.implementing_partners, index)) {
-        this.implementing_partners = [...this.implementing_partners, null]
-      }
-    },
-    rmImplementingPartners (index) {
-      this.implementing_partners = this.implementing_partners.filter(
-        (ip, i) => i !== index
-      )
     },
     async validate () {
       this.$refs.collapsible.expandCard()
