@@ -131,7 +131,6 @@ export default {
         result.digitalHealthInterventions = result.digitalHealthInterventions.map(id => ({ platform, id }))
       }
       result.country = country
-      result.donors = [donor]
       if (filled.some(c => c.column === 'organisation') && !result.organisation) {
         const orgCell = filled.find(c => c.column === 'organisation')
         result.organisation = orgCell.value
@@ -167,7 +166,6 @@ export default {
         this.setViewers([...result.implementing_viewers])
         await this.saveTeamViewers(data.id)
       }
-      // setting teams and viewers and saving it
       this.$emit('update:row', dataRow)
       return dataRow
     }

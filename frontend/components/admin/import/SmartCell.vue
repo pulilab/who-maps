@@ -242,7 +242,7 @@ export default {
       } else {
         const resolver = {
           country: () => this.findSystemValue('countries'),
-          donors: () => this.findSystemValue('donors'),
+          donors: () => this.findSystemValue('donors', true),
           organisation: () => this.findSystemValue('organisations'),
           platforms: () => this.findProjectCollectionValue('technology_platforms', false),
           digitalHealthInterventions: () => this.findProjectCollectionValue('strategies', true, 'subGroups', 'strategies'),
@@ -350,13 +350,7 @@ export default {
         return value
       }
       if (typeof value === 'string') {
-        let splitted = []
-        if (value.includes(',')) {
-          splitted = value.split(',')
-        } else {
-          splitted = value.split(';')
-        }
-        return splitted.map(v => v.trim())
+        return value.split('|').map(v => v.trim())
       }
       return [value]
     },
@@ -399,8 +393,8 @@ export default {
       return this.toInternalRepresentation(filtered)
     },
     apiValue () {
-      const isMultiple = ['platforms', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards', 'custom_field', 'digitalHealthInterventions', 'implementing_team', 'implementing_viewers']
-      const isIds = [...isMultiple, 'donors', 'country', 'organisation', 'government_investor', 'sub_level']
+      const isMultiple = ['donors', 'platforms', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards', 'custom_field', 'digitalHealthInterventions', 'implementing_team', 'implementing_viewers']
+      const isIds = [...isMultiple, 'country', 'organisation', 'government_investor', 'sub_level']
       const idsOrNames = isIds.includes(this.column) ? this.parsedValue.ids : this.parsedValue.names
       return isMultiple.includes(this.column) ? idsOrNames : idsOrNames[0]
     }

@@ -31,7 +31,7 @@
         />
         <donor-select
           v-if="dialogData.column === 'donors'"
-          v-model="dialogData.value[0]"
+          v-model="dialogData.value"
           :auto-save="true"
         />
         <organisation-select
