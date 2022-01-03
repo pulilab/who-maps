@@ -63,10 +63,14 @@
             </div>
           </td>
           <td>
+            <template v-if="project.investor">
             {{ project.investor.name }}
+            </template>
           </td>
           <td>
-            {{ project.organization.name }}
+            <template v-if="project.organization">
+              {{ project.organization.name }}
+            </template>
           </td>
         </tr>
       </tbody>

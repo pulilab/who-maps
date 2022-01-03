@@ -310,11 +310,11 @@ export default {
       const countryFieldName = this.rawImport.header_mapping.find((h) => {
         return h.selected === 'country'
       }).title
-      const investorFieldName = this.rawImport.header_mapping.find((h) => {
+      const investorField = this.rawImport.header_mapping.find((h) => {
         return h.selected === 'donors'
-      }).title
+      })
       const countryData = row.data[countryFieldName]
-      const donor = row.data[investorFieldName]
+      const donor = investorField ? row.data[investorField.title] : ''
       try {
         let country = null
         if (Array.isArray(countryData)) {
@@ -421,12 +421,6 @@ export default {
     height: 36px;
     line-height: 36px;
     margin: 20px 0;
-    .label {
-
-    }
-    .search {
-
-    }
   }
 
   .ExportDataTable {
