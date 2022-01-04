@@ -31,7 +31,7 @@ class KPITestData(TestData):
                 year -= 1
                 month = 12 + month - months
             else:
-                month -= months
+                month -= months  # pragma: no cover
             return datetime(year, month, 1).astimezone()
         current_date = localtime().date()
 
