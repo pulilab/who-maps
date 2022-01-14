@@ -39,7 +39,6 @@ export default {
   name: 'ProjectStagesPolarChart',
   props: {
     filters: {
-      required: true,
       type: Object,
       default: () => ({})
     },

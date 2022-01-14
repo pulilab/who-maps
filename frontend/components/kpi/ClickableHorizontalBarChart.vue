@@ -76,7 +76,6 @@ export default {
   name: 'ClickableHorizontalBarChart',
   props: {
     filters: {
-      required: true,
       type: Object,
       default: () => ({})
     },
