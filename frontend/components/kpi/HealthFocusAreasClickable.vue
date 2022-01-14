@@ -206,12 +206,12 @@ export default {
       console.log('chartData resulting in')
       console.log(this.chartData)
 
-      //   if (Object.keys(this.chartDataInput).length) {
-      //     this.chartData = this.chartDataInput
-      //   }
-      //   if (Object.keys(this.chartOptionsInput).length) {
-      //     this.chartData = this.chartOptionsInput
-      //   }
+        if (Object.keys(this.chartDataInput).length) {
+          this.chartData = this.chartDataInput
+        }
+        if (Object.keys(this.chartOptionsInput).length) {
+          this.chartData = this.chartOptionsInput
+        }
 
       this.loadingChart++
       this.currentlyLoading = false
@@ -229,25 +229,25 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.chart-wrapper::before {
-  transition: 0.2s ease-out;
-  content: '';
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  z-index: 0;
-  backdrop-filter: blur(0px);
-}
-.chart-wrapper.loading::before {
-  content: '';
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.548);
-  z-index: 1;
-  backdrop-filter: blur(2px);
-}
+// .chart-wrapper::before {
+//   transition: 0.2s ease-out;
+//   content: '';
+//   display: block;
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   background-color: transparent;
+//   z-index: 0;
+//   backdrop-filter: blur(0px);
+// }
+// .chart-wrapper.loading::before {
+//   content: '';
+//   display: block;
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   background-color: rgba(255, 255, 255, 0.548);
+//   z-index: 1;
+//   backdrop-filter: blur(2px);
+// }
 </style>

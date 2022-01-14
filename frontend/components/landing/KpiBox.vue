@@ -18,32 +18,32 @@
     </el-row>
     <el-row class="border-bottom bg-white">
       <el-col>
-        <ClickableHorizontalBarChart :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
+        <HealthFocusAreasClickable :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
       </el-col>
     </el-row>
     <el-row class="border-bottom bg-white">
       <el-col>
-        <HorizontalBarChart :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
+        <TopDataStandards :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
       </el-col>
     </el-row>
     <el-row class="border-bottom bg-white">
       <el-col>
-        <DoughnutChart :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
+        <MonthlyGrowthOfProejctsDoughnut :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
       </el-col>
     </el-row>
     <el-row class="border-bottom bg-white">
       <el-col>
-        <BarChart :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
+        <MonthlyUserActivity :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
       </el-col>
     </el-row>
     <el-row class="border-bottom bg-white">
       <el-col>
-        <BarChart :filters="filters" :chartDataInput="testStackedData" :chartOptionsInput="testStackedOptions" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
+        <MonthlyUserActivity :filters="filters" :chartDataInput="testStackedData" :chartOptionsInput="testStackedOptions" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
       </el-col>
     </el-row>
     <el-row class="border-bottom bg-white">
       <el-col>
-        <LineChart :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
+        <MonthlyGrowthOfProjects :filters="filters" /><!-- testing forced data passed :chartDataInput="monthlyUsersTestData"-->
       </el-col>
     </el-row>
     <el-row class="border-bottom bg-white">
@@ -81,7 +81,7 @@
     </el-row>
     <el-row class="border-bottom bg-white">
       <el-col :span="18" class="border-right">
-        <ProjectStagesPolarChart :filters="filters"/>
+        <DistributionOfProjectStages2 :filters="filters"/>
       </el-col>
       <el-col :span="6">
           <span class="kpiHeader pt-30 pb-30 d-block">Projects Statistics</span>
@@ -179,12 +179,12 @@ import GraphLayout from '@/components/common/charts/widgets/GraphLayout'
 import CountrySelect from '@/components/common/CountrySelect'
 import Subtitle from '@/components/common/charts/utilities/Subtitle'
 
-import ProjectStagesPolarChart from '@/components/kpi/ProjectStagesPolarChart'
-import BarChart from '@/components/kpi/BarChart'
-import LineChart from '@/components/kpi/LineChart'
-import DoughnutChart from '@/components/kpi/DoughnutChart'
-import HorizontalBarChart from '@/components/kpi/HorizontalBarChart'
-import ClickableHorizontalBarChart from '@/components/kpi/ClickableHorizontalBarChart'
+import DistributionOfProjectStages2 from '@/components/kpi/DistributionOfProjectStages2'
+import MonthlyUserActivity from '@/components/kpi/MonthlyUserActivity'
+import MonthlyGrowthOfProjects from '@/components/kpi/MonthlyGrowthOfProjects'
+import MonthlyGrowthOfProejctsDoughnut from '@/components/kpi/MonthlyGrowthOfProejctsDoughnut'
+import TopDataStandards from '@/components/kpi/TopDataStandards'
+import HealthFocusAreasClickable from '@/components/kpi/HealthFocusAreasClickable'
 
 import { mapGetters, mapState, mapActions } from 'vuex'
 import debounce from 'lodash/debounce'
@@ -196,12 +196,12 @@ export default {
     GraphLayout,
     CountrySelect,
     Subtitle,
-    ProjectStagesPolarChart,
-    BarChart,
-    LineChart,
-    DoughnutChart,
-    HorizontalBarChart,
-    ClickableHorizontalBarChart,
+    DistributionOfProjectStages2,
+    MonthlyUserActivity,
+    MonthlyGrowthOfProjects,
+    MonthlyGrowthOfProejctsDoughnut,
+    TopDataStandards,
+    HealthFocusAreasClickable,
   },
 
   data() {

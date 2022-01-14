@@ -1,14 +1,18 @@
 <template>
   <div class="chart-wrapper" v-bind:class="[currentlyLoading ? 'loading' : '']">
     <graph-layout :span="24">
-      <translate>Monthly growth of Projects</translate>
+      <translate>Monthly User Activity</translate>
       <template #graph>
         <chart
           :key="loadingChart"
+          type="bar-chart"
           :chart-data="chartData"
           :options="chartOptions"
-          :height="360"
+          :height="300"
         />
+      </template>
+      <template #legend>
+        <data-legend :items="dataLegend.items" horizontal />
       </template>
     </graph-layout>
   </div>
@@ -27,7 +31,7 @@ export default {
     DataLegend,
     GraphLayout
   },
-  name: 'ProjectStagesPolarChart',
+  name: 'MonthlyUserActivity',
   props: {
     filters: {
       type: Object,
@@ -45,29 +49,15 @@ export default {
   data() {
     return {
       loadingChart: 0,
-      base: '/api/kpi',
       currentlyLoading: true,
-      datasetPreset: {
-        borderColor: '#49BCE8',
-        data: [],
-        fill: false,
-        lineTension: 0,
-        pointBackgroundColor: '#ffffff',
-        pointBorderColor: '#49BCE8',
-        pointBorderWidth: 4,
-        pointHoverBackgroundColor: '#49BCE8',
-        pointHoverBorderColor: '#49BCE8',
-        pointHoverBorderWidth: 3,
-        pointHoverRadius: 6,
-        pointRadius: 5
-      },
+      base: '/api/kpi',
       chartData: {
         labels: [],
         datasets: []
       },
       chartOptions: {
         legend: {
-          display: false
+          display: true
         },
         maintainAspectRatio: false,
         scales: {
@@ -106,55 +96,65 @@ export default {
     }
   },
   methods: {
-    async getProjectStatus() {
+    async getUsers() {
       let response = await this.$axios.get(
-        `${this.base}/project-status/${objectToQueryString(this.filters)}`
+        `${this.base}/users/${objectToQueryString(this.filters)}`
       )
       return response
     },
-    getGrowth(projectStatuses) {
-      let growthByMonth = projectStatuses.data.map(month => {
-        return month.growth
+    getRegisteredUsers(userData) {
+      let registeredUsers = userData.data.map(month => {
+        return month.registered
       })
-      return growthByMonth
+      return registeredUsers
     },
-    getLabels(projectStatuses) {
-      let labels = projectStatuses.data.map(month => {
+    getActiveUsers(userData) {
+      let activeUsers = userData.data.map(month => {
+        return month.active
+      })
+      return activeUsers
+    },
+    getLabels(userData) {
+      let activeUsers = userData.data.map(month => {
         return (
           new Date(month.date).getFullYear() +
           '-' +
           new Date(month.date).toLocaleString('en-us', { month: 'short' })
         )
       })
-      return labels
+      return activeUsers
     },
     async loadChart() {
-      //   console.log('User data response')
-      //   console.log(await this.getProjectStatus())
+      this.currentlyLoading = true
+      console.log('User data response')
+      let userDataResponse = await this.getUsers()
 
-      let apiProjectStatuses = await this.getProjectStatus()
-      let growthData = await this.getGrowth(apiProjectStatuses)
-      let labels = await this.getLabels(apiProjectStatuses)
+      let activeUsers = {
+        backgroundColor: '#99CA67',
+        barThickness: 'flex',
+        data: this.getActiveUsers(userDataResponse),
+        label: 'Active Users'
+      }
+      let registeredUsers = {
+        backgroundColor: '#49BCE8',
+        barThickness: 'flex',
+        data: this.getRegisteredUsers(userDataResponse),
+        label: 'Registered Users'
+      }
 
-      //   console.log('this.getLabels(apiProjectStatuses)')
-      //   console.log(this.getLabels(apiProjectStatuses))
+      let graphLabels = this.getLabels(userDataResponse)
 
-      //   console.log('this.getGrowth(apiProjectStatuses)')
-      //   console.log(this.getGrowth(apiProjectStatuses))
-
-      this.chartData.datasets = [{ ...this.datasetPreset, data: growthData }]
-      this.chartData.labels = labels
-
-      //   console.log("Result chart data")
-      //   console.log(this.chartData)
+      this.chartData.datasets = [registeredUsers, activeUsers]
+      this.chartData.labels = graphLabels
 
       if (Object.keys(this.chartDataInput).length) {
         this.chartData = this.chartDataInput
       }
       if (Object.keys(this.chartOptionsInput).length) {
-        this.chartData = this.chartOptionsInput
+        this.chartOptions = this.chartOptionsInput
       }
 
+      //re-render chart
       this.loadingChart++
       this.currentlyLoading = false
     }
@@ -171,25 +171,25 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.chart-wrapper::before {
-  transition: 0.2s ease-out;
-  content: '';
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  z-index: 0;
-  backdrop-filter: blur(0px);
-}
-.chart-wrapper.loading::before {
-  content: '';
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.548);
-  z-index: 1;
-  backdrop-filter: blur(2px);
-}
+// .chart-wrapper::before {
+//   transition: 0.2s ease-out;
+//   content: '';
+//   display: block;
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   background-color: transparent;
+//   z-index: 0;
+//   backdrop-filter: blur(0px);
+// }
+// .chart-wrapper.loading::before {
+//   content: '';
+//   display: block;
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   background-color: rgba(255, 255, 255, 0.548);
+//   z-index: 1;
+//   backdrop-filter: blur(2px);
+// }
 </style>

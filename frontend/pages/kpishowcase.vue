@@ -1,31 +1,31 @@
 <template>
   <div>
-    <BarChart />
-    <DoughnutChart />
-    <HorizontalBarChart />
-    <LineChart />
-    <ProjectStagesPolarChart />
-    <ClickableHorizontalBarChart />    
+    <MonthlyUserActivity />
+    <MonthlyGrowthOfProejctsDoughnut />
+    <TopDataStandards />
+    <MonthlyGrowthOfProjects />
+    <DistributionOfProjectStages2 />
+    <HealthFocusAreasClickable />
 
   </div>
 </template>
 
 <script>
-import BarChart from '@/components/kpi/BarChart.vue'
-import DoughnutChart from '@/components/kpi/DoughnutChart.vue'
-import HorizontalBarChart from '@/components/kpi/HorizontalBarChart.vue'
-import LineChart from '@/components/kpi/LineChart.vue'
-import ProjectStagesPolarChart from '@/components/kpi/ProjectStagesPolarChart.vue'
-import ClickableHorizontalBarChart from '@/components/kpi/ClickableHorizontalBarChart.vue'
+import MonthlyUserActivity from '~/components/kpi/MonthlyUserActivity.vue'
+import MonthlyGrowthOfProejctsDoughnut from '~/components/kpi/MonthlyGrowthOfProejctsDoughnut.vue'
+import TopDataStandards from '~/components/kpi/TopDataStandards.vue'
+import MonthlyGrowthOfProjects from '~/components/kpi/MonthlyGrowthOfProjects.vue'
+import DistributionOfProjectStages2 from '~/components/kpi/DistributionOfProjectStages2.vue'
+import HealthFocusAreasClickable from '~/components/kpi/HealthFocusAreasClickable.vue'
 
 export default {
   components: {
-    BarChart,
-    DoughnutChart,
-    HorizontalBarChart,
-    LineChart,
-    ProjectStagesPolarChart,
-    ClickableHorizontalBarChart
+    MonthlyUserActivity,
+    MonthlyGrowthOfProejctsDoughnut,
+    TopDataStandards,
+    MonthlyGrowthOfProjects,
+    DistributionOfProjectStages2,
+    HealthFocusAreasClickable
   }
 }
 </script>
