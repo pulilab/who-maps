@@ -148,7 +148,7 @@ export const draftRules = () => {
       max: 1024
     },
     implementing_partners: {
-      max: 64
+      max: 1024
     },
     implementing_team: {
       max: 64
@@ -299,7 +299,7 @@ export const publishRules = () => {
     },
     government_investor: {},
     implementing_partners: {
-      max: 64
+      max: 1024
     },
     implementing_team: {
       max: 64

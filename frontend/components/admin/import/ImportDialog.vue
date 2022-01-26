@@ -277,6 +277,26 @@ export default {
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
 
+  div .el-select .el-select__tags::-webkit-scrollbar {
+    // background-color: #fff;
+    // width: 16px;
+    display: none;
+  }
+
+  div .el-select .el-select__tags {
+    max-width: 545px !important; //important for overriding default element-ui style
+    // height: calc( 100% - 2px);
+    overflow-x: scroll !important;
+    margin-right: -20px;
+  }
+  .el-select .el-select__tags .el-tag__close {
+    top: -3px;
+    right: 5px;
+    margin-right: -5px;
+    margin-top: -4px;
+    position: sticky;
+  }
+
  .ImportDialog {
 
    .FullWidth {
