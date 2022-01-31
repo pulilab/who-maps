@@ -31,9 +31,9 @@ export default {
     loaded: false
   }),
   async created () {
-    await setTimeout(() => {
+    await this.$nextTick(() => {
       this.loaded = true
-    }, 250)
+    })
   },
   beforeDestroy () {
     this.loaded = false

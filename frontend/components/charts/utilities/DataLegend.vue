@@ -1,13 +1,7 @@
 <template>
   <section :class="classRoot">
-    <div
-      v-for="item in items"
-      :key="item.color"
-    >
-      <span
-        class="color"
-        :style="{ 'background-color': item.color }"
-      />
+    <div v-for="item in items" :key="item.color">
+      <span class="color" :style="{ 'background-color': item.color }" />
       <span class="label">{{ item.label }}</span>
       <template v-if="!horizontal">
         <span class="dots" />

@@ -1,5 +1,6 @@
 <template>
   <lazy-el-select
+    v-bind="{ ...$props, ...$attrs }"
     v-model="innerValue"
     :multiple="multiple"
     :disabled="disabled"

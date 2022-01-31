@@ -9,7 +9,7 @@
 
 <script>
 import { fetchProjectData } from '@/utilities/projects'
-import cStages from '@/components/common/charts/cStages'
+import cStages from '@/components/charts/common/cStages'
 import PageLayout from '@/components/common/wrappers/PageLayout'
 export default {
   components: {

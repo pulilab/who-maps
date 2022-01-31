@@ -57,7 +57,7 @@ export const dataInfoFill = (len, fill, change = undefined, type = 'front') => {
 
 // general setup for graph types
 // tooltips
-const customTooltip = {
+export const customTooltip = {
   // Disable the on-canvas tooltip
   enabled: false,
   custom(tooltip) {
@@ -123,7 +123,7 @@ const customTooltip = {
     tooltipEl.style.pointerEvents = 'none'
   }
 }
-const customStackedTooltip = {
+export const customStackedTooltip = {
   // Disable the on-canvas tooltip
   enabled: false,
   custom(tooltip) {
@@ -186,7 +186,7 @@ const customStackedTooltip = {
     tooltipEl.style.pointerEvents = 'none'
   }
 }
-const generalTooltipSettings = (tooltip, xTitle, type = 'line') => {
+export const generalTooltipSettings = (tooltip, xTitle, type = 'line') => {
   return {
     backgroundColor: '#474747',
     displayColors: false,
@@ -217,7 +217,7 @@ const generalTooltipSettings = (tooltip, xTitle, type = 'line') => {
     }
   }
 }
-const tooltipType = (stacked, tooltip, xTitle) => {
+export const tooltipType = (stacked, tooltip, xTitle) => {
   if (stacked) {
     return { tooltips: { mode: 'index', ...customStackedTooltip } }
   }
@@ -311,7 +311,7 @@ const optionsLineBarConfig = ({ scales, tooltip, stacked }) => {
     ...tooltipType(stacked, tooltip, scales.x)
   }
 }
-const optionsHorizontalBarConfig = (tooltip, click = false) => {
+export const optionsHorizontalBarConfig = (tooltip, click = false) => {
   return {
     ...generalOptions,
     scales: {
@@ -332,7 +332,11 @@ const optionsHorizontalBarConfig = (tooltip, click = false) => {
             drawOnChartArea: false,
             drawTicks: false
           },
-          ticks
+          ticks: {
+            min: 0,
+            stepSize: 10,
+            padding: 15
+          }
         }
       ]
     },
@@ -544,4 +548,8 @@ export const objectToQueryString = queryParameters => {
         ''
       )
     : ''
+}
+
+export const projectSum = arr => {
+  return arr.reduce((acc, val) => acc + val, 0)
 }

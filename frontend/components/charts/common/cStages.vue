@@ -45,7 +45,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import Chart from '@/components/common/charts/Chart'
+import Chart from '@/components/charts/common/Chart'
 
 export default {
   components: {

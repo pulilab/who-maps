@@ -1,6 +1,6 @@
 <template>
   <div class="LandingPage">
-    <div class="MapBoxContainer">
+   <!--  <div class="MapBoxContainer">
       <WelcomeBox />
       <template v-if="routeCheck">
         <LandingMap v-if="!showCoverImage" />
@@ -38,7 +38,7 @@
         </el-col>
       </el-row>
     </div>
-    <LayoutBuilder v-else :data="defaultsLandingData" />
+    <LayoutBuilder v-else :data="defaultsLandingData" /> -->
     <KpiBox />
     <AboutSection />
   </div>

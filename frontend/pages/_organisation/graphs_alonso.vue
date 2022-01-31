@@ -1,10 +1,6 @@
 <template>
   <div class="wrapper">
-    <el-row
-      type="flex"
-      :gutter="30"
-      class="mb-80 sticky"
-    >
+    <el-row type="flex" :gutter="30" class="mb-80 sticky">
       <div class="resume-group border-bar">
         <el-row type="flex">
           <el-select
@@ -74,33 +70,8 @@
     <p class="subtitle">
       <translate>Users</translate>
     </p>
-    <el-row
-      type="flex"
-      class="mb-80"
-    >
-      <graph-layout :span="24">
-        <translate>Monthly User Activity</translate>
-        <template #graph>
-          <chart
-            v-if="lineB.chartData"
-            :chart-data="lineB.chartData"
-            :options="lineB.options"
-            :height="300"
-          />
-        </template>
-        <template #legend>
-          <data-legend
-            :items="monthlyUserLegend"
-            horizontal
-          />
-        </template>
-      </graph-layout>
-    </el-row>
 
-    <el-row
-      type="flex"
-      class="mb-80"
-    >
+    <el-row type="flex" class="mb-80">
       <graph-layout :span="24">
         <translate>Monthly User Activity</translate>
         <template #graph>
@@ -125,10 +96,7 @@
     <p class="subtitle">
       <translate>API keys</translate>
     </p>
-    <el-row
-      type="flex"
-      class="mb-80"
-    >
+    <el-row type="flex" class="mb-80">
       <graph-layout :span="24">
         <translate>Monthly growth of API keys</translate>
         <template #graph>
@@ -141,35 +109,11 @@
       </graph-layout>
     </el-row>
 
-    <el-row
-      type="flex"
-      :gutter="20"
-      class="mb-80"
-    >
-      <graph-layout :span="8">
-        <translate>Blank template</translate>
-      </graph-layout>
-      <graph-layout :span="16">
-        <translate>Monthly growth of API keys</translate>
-        <template #graph>
-          <chart
-            :chart-data="lineC.chartData || {}"
-            :options="lineC.options"
-            :height="320"
-          />
-        </template>
-      </graph-layout>
-    </el-row>
-
     <!-- project status -->
     <p class="subtitle">
       <translate>Project status</translate>
     </p>
-    <el-row
-      type="flex"
-      :gutter="20"
-      class="mb-80"
-    >
+    <el-row type="flex" :gutter="20" class="mb-80">
       <graph-layout :span="8">
         <template #graph>
           <chart
@@ -185,11 +129,6 @@
             :items="doughnutALegend"
             large
           />
-          <!-- <data-legend
-            :items="doughnutALegend"
-            percentage
-            large
-          /> -->
         </template>
       </graph-layout>
       <graph-layout :span="16">
@@ -204,10 +143,7 @@
       </graph-layout>
     </el-row>
 
-    <el-row
-      type="flex"
-      class="mb-80"
-    >
+    <el-row type="flex" class="mb-80">
       <graph-layout :span="24">
         <translate>Project statuses per month</translate>
         <template #graph>
@@ -219,10 +155,7 @@
           />
         </template>
         <template #legend>
-          <data-legend
-            :items="projectStatusLegend"
-            horizontal
-          />
+          <DataLegend :items="projectStatusLegend" horizontal />
         </template>
       </graph-layout>
     </el-row>
@@ -231,15 +164,8 @@
     <p class="subtitle">
       <translate>Project stages</translate>
     </p>
-    <el-row
-      type="flex"
-      :gutter="20"
-      class="mb-80"
-    >
-      <graph-layout
-        :span="16"
-        horizontal
-      >
+    <el-row type="flex" :gutter="20" class="mb-80">
+      <graph-layout :span="24" horizontal>
         <translate>Distributions of projects’ stages</translate>
         <template #graph>
           <chart
@@ -249,209 +175,39 @@
           />
         </template>
         <template #legend>
-          <data-legend :items="polarALegend" />
+          <DataLegend :items="polarALegend">
+            <div>
+              <span class="label">Projects with no stage data</span>
+              <span class="dots" />
+              <span class="value">{{ noStageDataSum }}</span>
+            </div>
+          </DataLegend>
         </template>
       </graph-layout>
-      <graph-layout :span="8">
-        <translate>Blank template</translate>
-      </graph-layout>
     </el-row>
 
-    <!-- not integrate -->
-    <p class="headline">
-      <translate>Random generated</translate>
-    </p>
-    <p class="subtitle">
-      <translate>Integration pending...</translate>
-    </p>
-
-    <!-- section A -->
-    <el-row
-      type="flex"
-      :gutter="30"
-      class="mb-80"
-    >
-      <div class="resume-group">
-        <el-col :span="5">
-          <resume>
-            <translate>Published Projects</translate>
-            <template #content>
-              <growth
-                :incoming="incoming"
-                large
-                absolute
-              />
-              <growth
-                :incoming="incoming"
-                :previous="previous"
-              />
-            </template>
-          </resume>
-        </el-col>
-        <el-col :span="5">
-          <resume>
-            <translate>Publishable Projects</translate>
-            <template #content>
-              <growth
-                :incoming="incoming"
-                large
-                absolute
-              />
-              <growth
-                :incoming="incoming"
-                :previous="previous"
-              />
-            </template>
-          </resume>
-        </el-col>
-        <el-col :span="5">
-          <resume>
-            <translate>Unpublished Projects</translate>
-            <template #content>
-              <growth
-                :incoming="incoming"
-                large
-                absolute
-              />
-            </template>
-          </resume>
-        </el-col>
-        <el-col :span="4">
-          <resume>
-            <translate>Deletable Projects</translate>
-            <template #content>
-              <growth
-                :incoming="incoming"
-                large
-                absolute
-              />
-              <growth
-                :incoming="incoming"
-                :previous="previous"
-              />
-            </template>
-          </resume>
-        </el-col>
-        <el-col :span="5">
-          <resume no-border>
-            <translate>Monthly growth of Projects</translate>
-            <template #content>
-              <growth
-                :incoming="incoming"
-                :previous="previous"
-                large
-              />
-              <chart
-                :chart-data="micro.chartData || {}"
-                :options="micro.options"
-                :width="72"
-                :height="26"
-              />
-            </template>
-          </resume>
-        </el-col>
-      </div>
-    </el-row>
-
-    <!-- section H -->
-    <el-row
-      type="flex"
-      :gutter="20"
-      class="mb-80"
-    >
-      <graph-layout :span="8">
-        <translate>Project approval per countries</translate>
-        <template #legend>
-          <country-legend :data="countryTable" />
-        </template>
-      </graph-layout>
-      <graph-layout :span="16">
-        <translate>Blank template</translate>
-        <!-- <translate>Monthly growth of API keys</translate>
-        <template #graph>
-          <chart
-            :chart-data="lineC.chartData || {}"
-            :options="lineC.options"
-            :height="320"
-          />
-        </template> -->
-      </graph-layout>
-    </el-row>
-
-    <!-- section I -->
-    <el-row
-      type="flex"
-      :gutter="20"
-      class="mb-80"
-    >
-      <graph-layout :span="8">
-        <translate>
-          Has the government contributed to the project, either financially or
-          in-kind?
+    <!-- Data standards -->
+    <el-row type="flex" :gutter="20" class="mb-80">
+      <graph-layout :span="24">
+        <translate :parameters="{ top: dataStandardsCount }">
+          Top {top} ‘Data standards’ (by occurrences)
         </translate>
         <template #graph>
-          <chart
-            type="doughnut"
-            :width="160"
-            :height="160"
-            :chart-data="doughnutB.chartData || {}"
-            :options="doughnutB.options"
-          />
-        </template>
-        <template #legend>
-          <data-legend
-            :items="doughnutBLegend"
-            percentage
-          />
-        </template>
-      </graph-layout>
-      <graph-layout :span="16">
-        <translate>Top 10 ‘Data standards’ (by occurrences)</translate>
-        <template #graph>
-          <chart
-            type="horizontal-bar"
+          <horizontal-bar
+            v-if="horizontalBarA.chartData"
             :chart-data="horizontalBarA.chartData || {}"
             :options="horizontalBarA.options"
+            :height="dataStandardHeight"
           />
         </template>
       </graph-layout>
     </el-row>
 
-    <!-- section J -->
-    <el-row
-      type="flex"
-      :gutter="20"
-      class="mb-80"
-    >
-      <graph-layout
-        :span="16"
-        horizontal
-      >
-        <translate>Blank template</translate>
-      </graph-layout>
-      <graph-layout :span="8">
-        <translate>Distribution of projects’ statuses</translate>
-        <template #graph>
-          <chart
-            type="doughnut"
-            :width="160"
-            :height="160"
-            :chart-data="doughnutC.chartData || {}"
-            :options="doughnutC.options"
-          />
-        </template>
-        <template #legend>
-          <data-legend :items="doughnutCLegend" />
-        </template>
-      </graph-layout>
-    </el-row>
-
-    <!-- section K -->
-    <el-row
-      type="flex"
-      :gutter="20"
-      class="mb-80"
-    >
+    <!-- Health Focus Areas -->
+    <p class="subtitle">
+      <translate>Health Focus Areas</translate>
+    </p>
+    <el-row type="flex" :gutter="20" class="mb-80">
       <graph-layout :span="8">
         <translate>Coverage of Health Focus Areas</translate>
         <template #graph>
@@ -468,7 +224,24 @@
         </template>
       </graph-layout>
       <graph-layout :span="16">
-        <translate>Health Focus Areas (by occurrences)</translate>
+        <translate v-if="back.length === 0" key="categories">Health Focus Categories (by occurrences)</translate>
+        <translate v-else key="areas">Health Focus Areas (by occurrences)</translate>
+        <el-popover
+          placement="bottom"
+          :title="$gettext('How to read the chart') | translate"
+          width="480"
+          :visible-arrow="true"
+          popper-class="hfa-info-popover"
+          class="hfa-info"
+          trigger="click">
+          <div>
+            <h2><translate>Health Focus Categories</translate></h2>
+            <p><translate>At first level in the Health Focus Categories every project can contain the a Health Focus Category only once.</translate></p>
+            <h2><translate>Health Focus Areas</translate></h2>
+            <p><translate>Health Focus Areas as sublevel of Health Focus Categories can contain multiple Health Focus Areas. Because of this, it may happen that the sum of the visible Health Focus Areas are more than the sum of Health Focus Categories, although the individual Health Focus Areas cannot exceed the number of Health Focus Categories displayed.</translate></p>
+          </div>
+          <fa slot="reference" icon="info-circle" />
+        </el-popover>
         <template #back>
           <el-button
             v-if="back.length > 0"
@@ -480,17 +253,20 @@
           </el-button>
         </template>
         <template #subtitle>
-          <subtitle :item="subtitle" />
+          <Subtitle :item="subtitle" />
         </template>
         <template #graph>
-          <chart
-            type="horizontal-bar"
+          <horizontal-bar
+            v-if="horizontalBarB.chartData"
             :chart-data="horizontalBarB.chartData || {}"
             :options="horizontalBarB.options"
+            :height="480"
           />
         </template>
       </graph-layout>
     </el-row>
+
+
   </div>
 </template>
 
@@ -499,26 +275,19 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import { format } from 'date-fns'
 import debounce from 'lodash/debounce'
 
-import Growth from '@/components/common/charts/utilities/Growth'
-import Subtitle from '@/components/common/charts/utilities/Subtitle'
-import DataLegend from '@/components/common/charts/utilities/DataLegend'
-import TabLegend from '@/components/common/charts/utilities/TabLegend'
-import CountryLegend from '@/components/common/charts/utilities/CountryLegend'
-
-import Chart from '@/components/common/charts/Chart'
-import Resume from '@/components/common/charts/widgets/Resume'
-import GraphLayout from '@/components/common/charts/widgets/GraphLayout'
+import Subtitle from '@/components/charts/utilities/Subtitle'
+import DataLegend from '@/components/charts/utilities/DataLegend'
+import TabLegend from '@/components/charts/utilities/TabLegend'
+import Chart from '@/components/charts/common/Chart'
+import GraphLayout from '@/components/charts/common/GraphLayout'
 
 export default {
   components: {
-    Growth,
-    Resume,
     Chart,
     GraphLayout,
     DataLegend,
-    TabLegend,
     Subtitle,
-    CountryLegend
+    TabLegend
   },
   data () {
     return {
@@ -558,29 +327,23 @@ export default {
   },
   computed: {
     ...mapState({
-      //
       incoming: state => state.charts.incoming,
       previous: state => state.charts.previous,
       // graphs
-      micro: state => state.charts.micro,
       polarA: state => state.charts.polarA,
       lineA: state => state.charts.lineA,
-      lineB: state => state.charts.lineB,
       lineC: state => state.charts.lineC,
       barA: state => state.charts.barA,
       barB: state => state.charts.barB,
       horizontalBarA: state => state.charts.horizontalBarA,
       horizontalBarB: state => state.charts.horizontalBarB,
       doughnutA: state => state.charts.doughnutA,
-      doughnutB: state => state.charts.doughnutB,
-      doughnutC: state => state.charts.doughnutC,
       doughnutD: state => state.charts.doughnutD,
       // legends
       polarALegend: state => state.charts.polarALegend,
-      doughnutALegend: state => state.charts.doughnutALegend,
-      doughnutBLegend: state => state.charts.doughnutBLegend,
-      doughnutCLegend: state => state.charts.doughnutCLegend,
+      noStageDataSum: state => state.charts.noStageDataSum,
       doughnutDLegend: state => state.charts.doughnutDLegend,
+      doughnutALegend: state => state.charts.doughnutALegend,
       monthlyUserLegend: state => state.charts.monthlyUserLegend,
       projectStatusLegend: state => state.charts.projectStatusLegend,
       countryTable: state => state.charts.countryTable,
@@ -594,7 +357,17 @@ export default {
     ...mapGetters({
       countries: 'countries/getCountries',
       donors: 'system/getDonors'
-    })
+    }),
+    dataStandardsCount() {
+      return this.horizontalBarA.chartData?.datasets[0].data.length > 0
+              ? this.horizontalBarA.chartData.datasets[0].data.length
+              : 0
+    },
+    dataStandardHeight() {
+      return this.dataStandardsCount > 0
+                  ? this.dataStandardsCount * 40
+                  : 800
+    },
   },
   created () {
     this.handleSearch()
@@ -602,7 +375,7 @@ export default {
   methods: {
     ...mapActions({
       getDashboardData: 'charts/getDashboardData',
-      handleBackClick: 'charts/handleBackClick',
+      // handleBackClick: 'charts/handleBackClick',
       barClick: 'charts/handleBarClick',
       backClick: 'charts/handleBackClick',
       setFilters: 'charts/setFilters'
@@ -611,7 +384,9 @@ export default {
       this.getDashboardData({ func: this.handleBarClick, refresh: true })
     },
     handleBarClick (point, event) {
-      this.barClick({ func: this.handleBarClick, idx: event[0]._index })
+      if (this.back.length === 0) {
+        this.barClick({ func: this.handleBarClick, idx: event[0]._index })
+      }
     },
     handleBackClick () {
       this.backClick({ func: this.handleBarClick })
@@ -701,5 +476,24 @@ export default {
   margin: 0 0 18px 0;
   font-size: 1.125rem;
   line-height: 1.7;
+}
+::v-deep .hfa-info {
+  position: absolute;
+  right: 0;
+  svg {
+    cursor: pointer;
+    color: @colorBrandPrimary;
+    &:hover {
+      color: @colorBrandPrimaryLight;
+    }
+  }
+  .el-popover__title {
+    font-size: @fontSizeLarge;
+  }
+}
+.hfa-info-popover {
+  p {
+    word-break: normal;
+  }
 }
 </style>
