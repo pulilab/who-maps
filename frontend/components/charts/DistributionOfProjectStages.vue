@@ -1,3 +1,9 @@
+<!-- 
+  Every chart/graphs is modularized, which means, doesn't depend on any global variable.
+  It can be placed into the grid by specifing the col span.
+  Charts components has ony prop: filter that is an object and contains all the filter fields 
+  that can be expanded anytime later..
+-->
 <template>
   <GraphLayout v-bind="{ ...$props, ...$attrs }" horizontal >
     <translate class="kpiHeader">Distributions of projects’ stages</translate>

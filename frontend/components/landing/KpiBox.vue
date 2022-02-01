@@ -7,7 +7,7 @@
 
     <el-row class="border-bottom bg-white">
       <DistributionOfProjectStages :span="18" :filters="filter" />
-      <ProjectStatistics :span="6" :filters="filter" />      
+      <ProjectStatistics :span="6" :filters="filter" />
     </el-row>
     <el-row class="border-bottom bg-white">
       <HealthFocusAreas :span="24" :filters="filter" />

@@ -132,6 +132,11 @@ export default {
   async mounted() {
     await this.loadChart()
   },
+  watch: {
+    filters: async function(newValue, oldValue) {
+      await this.loadChart()
+    }
+  }
 }
 </script>
 
