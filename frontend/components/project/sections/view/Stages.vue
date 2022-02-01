@@ -15,7 +15,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import cStages from '@/components/common/charts/cStages'
+import cStages from '@/components/charts/common/cStages'
 
 export default {
   components: {

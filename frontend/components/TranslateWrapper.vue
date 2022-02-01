@@ -4,6 +4,10 @@ export default {
     parameters: {
       type: Object,
       default: () => {}
+    },
+    tag: {
+      type: String,
+      default: 'span'
     }
   },
   computed: {
@@ -21,7 +25,7 @@ export default {
     }
   },
   render (createElement) {
-    return createElement('span', this.translated)
+    return createElement(this.tag, this.translated)
   }
 }
 </script>
