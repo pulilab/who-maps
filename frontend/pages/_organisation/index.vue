@@ -19,7 +19,7 @@
     <div>
       <el-row type="flex">
         <el-col>
-          <Banner />
+          <Banner v-if="false"/> <!--hide banner temporarly-->
         </el-col>
       </el-row>
       <el-row type="flex">
