@@ -1,53 +1,27 @@
 <template>
-  <div
-    v-scroll-class:TopBarMin="180"
-    class="TopBar"
-  >
-    <el-row
-      type="flex"
-      justify="space-between"
-      class="TopBarInner"
-    >
+  <div v-scroll-class:TopBarMin="180" class="TopBar">
+    <el-row type="flex" justify="space-between" class="TopBarInner">
       <el-col class="LogoHolder">
         <!--<nuxt-link :to="localePath({name: 'organisation', params: $route.params})">-->
-        <nuxt-link
-          :to="
-            localePath({ name: 'organisation', params: { organisation: '-' } })
-          "
-        >
-          <el-row
-            type="flex"
-            align="middle"
-          >
+        <nuxt-link :to=" localePath({ name: 'organisation', params: { organisation: '-' } })">
+          <el-row type="flex" align="middle">
             <el-col class="LogoWHO">
-              <img
-                :src="
-                  customOrganisation ? organisationLogo : '/logo-who-blue.svg'
-                "
-                :alt="
-                  customOrganisation
-                    ? $gettext('Country logo')
-                    : $gettext('WHO logo')
-                "
+              <img 
+                :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'" 
+                :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')"
               >
             </el-col>
             <el-col class="Separator">
               <div />
             </el-col>
             <el-col class="LogoDHASmall">
-              <img
-                src="/logo-dha.svg"
-                alt="Digital Health Atlas logo"
-              >
+              <img src="/logo-dha.svg" alt="Digital Health Atlas logo">
             </el-col>
           </el-row>
         </nuxt-link>
       </el-col>
 
-      <el-col
-        v-if="!errorPage"
-        class="RightPart"
-      >
+      <el-col v-if="!errorPage" class="RightPart">
         <!-- ANON MODE -->
         <el-row
           :class="{ AnonView: !user, LoggedInView: user }"
@@ -65,12 +39,7 @@
               <div>
                 <nuxt-link
                   key="signupBtn"
-                  :to="
-                    localePath({
-                      name: 'organisation-signup',
-                      params: $route.params
-                    })
-                  "
+                  :to="localePath({ name: 'organisation-signup', params: $route.params })"
                   class="HeaderBtn HideOnActive"
                 >
                   <translate>Signup</translate>
@@ -79,12 +48,7 @@
               <div>
                 <nuxt-link
                   key="loginBtn"
-                  :to="
-                    localePath({
-                      name: 'organisation-login',
-                      params: $route.params
-                    })
-                  "
+                  :to="localePath({name: 'organisation-login', params: $route.params})"
                   class="HeaderBtn HideOnActive"
                 >
                   <translate>Login</translate>
@@ -92,58 +56,19 @@
               </div>
             </el-col>
           </template>
+
+          <NavigationMenu v-if="user" />
+
+          <el-col>
+            <el-row type="flex">
+              <el-col>
+                <div class="Separator" />
+              </el-col>
+            </el-row>
+          </el-col>
+
           <template v-if="user">
             <el-col class="AuthLinks">
-              <div>
-                <nuxt-link
-                  key="dashboardBtn"
-                  :to="
-                    localePath({
-                      name: 'organisation-dashboard',
-                      params: $route.params,
-                      query: {}
-                    })
-                  "
-                  class="HeaderBtn"
-                >
-                  <translate>Dashboard</translate>
-                </nuxt-link>
-              </div>
-              <div>
-                <nuxt-link
-                  key="myProjectsBtn"
-                  :to="
-                    localePath({
-                      name: 'organisation-projects',
-                      params: $route.params
-                    })
-                  "
-                  exact
-                  class="HeaderBtn"
-                >
-                  <translate>My Projects</translate>
-                </nuxt-link>
-              </div>
-              <div>
-                <nuxt-link
-                  key="planningAndGuidanceBtn"
-                  :to="
-                    localePath({
-                      name: 'organisation-cms',
-                      params: $route.params
-                    })
-                  "
-                  class="HeaderBtn"
-                >
-                  <translate>Planning and Guidance</translate>
-                </nuxt-link>
-              </div>
-              <div>
-                <toolkit-dialog-wrapper />
-              </div>
-              <div @click="openHowToDialog(0)">
-                <translate class="HeaderBtn">How-to</translate>
-              </div>
               <div>
                 <nuxt-link
                   key="newProjectBtn"
@@ -158,9 +83,9 @@
                   <fa icon="plus-circle" /><translate>New Project</translate>
                 </nuxt-link>
               </div>
-              <user-dropdown />
+              <UserDropdown />
             </el-col>
-          </template>
+          </template>          
 
           <el-col>
             <el-row type="flex">
@@ -172,12 +97,7 @@
           <template v-if="!customOrganisation || countrySpecific">
             <el-col>
               <nuxt-link
-                :to="
-                  localePath({
-                    name: 'organisation',
-                    params: { organisation: 'covid-19' }
-                  })
-                "
+                :to="localePath({name: 'organisation',params: { organisation: 'covid-19' }})"
                 class="HeaderBtn CovidLink"
               >
                 COVID-19
@@ -194,12 +114,7 @@
             <div>
               <nuxt-link
                 key="whoLandingBtn"
-                :to="
-                  localePath({
-                    name: 'organisation',
-                    params: { organisation: landingData.code }
-                  })
-                "
+                :to="localePath({name: 'organisation', params: { organisation: landingData.code }})"
                 class="HeaderBtn"
               >
                 {{ landingData.name }}
@@ -218,6 +133,7 @@ import VueScrollClass from 'vue-scroll-class'
 import { mapGetters, mapActions } from 'vuex'
 
 import LanguageSelector from './LanguageSelector'
+import NavigationMenu from './NavigationMenu'
 import UserDropdown from './UserDropdown'
 import ToolkitDialogWrapper from './ToolkitDialogWrapper'
 import CountryChooser from './CountryChooser'
@@ -229,6 +145,7 @@ export default {
   },
   components: {
     LanguageSelector,
+    NavigationMenu,
     UserDropdown,
     ToolkitDialogWrapper,
     CountryChooser,
@@ -347,12 +264,7 @@ export default {
     }
   }
 
-  .HeaderBtn
-    // TODO: Remove Angular Material
-    // hacking Toolkit md-button :(
-    ,.HeaderBtn.md-button
-    //
- {
+  .HeaderBtn {
     cursor: pointer;
     position: relative;
     height: 24px;
@@ -364,27 +276,6 @@ export default {
     color: @colorBrandPrimary;
     text-decoration: none;
     transition: @transitionAll;
-
-    // hacking Toolkit md-button :(
-    min-height: auto;
-    min-width: auto;
-    overflow: visible;
-    background-color: transparent !important;
-
-    &.md-ink-ripple {
-      > span {
-        letter-spacing: 0 !important;
-      }
-
-      &::before {
-        top: -17px !important;
-      }
-    }
-
-    > .md-ripple-container {
-      display: none;
-    }
-    //
 
     &::before {
       content: "";
@@ -414,6 +305,7 @@ export default {
       &::before {
         background-color: @colorBrandAccent;
         transform: translateY(0);
+        box-shadow: 0 0 12px 4px rgb(0 0 0 / 22%);
       }
     }
 
@@ -436,6 +328,24 @@ export default {
       float: left;
       height: 24px;
     }
+  }
+}
+
+.AngularHeaderButton {
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: @fontSizeBase !important;
+  font-weight: 700 !important;
+  line-height: 24px !important;
+  color: @colorBrandPrimary !important;
+  text-decoration: none !important;
+  transition: @transitionAll !important;
+  text-align: left !important;
+  min-height: auto !important;
+  height: auto !important;
+  width: 100% !important;
+  &:hover {
+    background-color: transparent !important;
   }
 }
 </style>
