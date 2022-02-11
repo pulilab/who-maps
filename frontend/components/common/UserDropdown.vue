@@ -1,5 +1,5 @@
 <template>
-  <div class="UserDropdown">
+  <div :class="`UserDropdown ${activeMenuStyle}`">
     <el-popover
       v-model="shown"
       placement="bottom-end"
@@ -9,7 +9,7 @@
       <el-button
         slot="reference"
         type="text"
-        class="ButtonPopper"
+        :class="`ButtonPopper ${activeMenuStyle}`"
       >
         <fa icon="user-circle" />{{ user.name }}<fa icon="caret-down" />
       </el-button>
@@ -161,7 +161,15 @@ export default {
   },
   data () {
     return {
-      shown: false
+      shown: false,
+      menuRoutes: [
+        '-/edit-profile',
+        '-/admin/country',
+        '-/admin/donor',
+        '-/admin/import',
+        '-/admin/api',
+        '-/graphs',
+      ]
     }
   },
   computed: {
@@ -187,8 +195,13 @@ export default {
         window.location.href = path
         this.shown = false
       }
-    }
-
+    },
+    insideRoute() {
+      return this.menuRoutes.find(route => this.$route.path.endsWith(route))
+    },
+    activeMenuStyle() {
+      return this.insideRoute ? 'nuxt-link-active' : ''
+    },
   },
   methods: {
     ...mapActions({
@@ -214,6 +227,30 @@ export default {
     transform: translate(10px, -30px);
   }
 
+  .UserDropdown {
+    position: relative;
+    &.nuxt-link-active {
+      color: @colorBrandAccent;
+      &::before {
+        background-color: @colorBrandAccent;
+        transform: translateY(0);
+        box-shadow: 0 0 12px 4px rgb(0 0 0 / 22%);
+      }
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      top: -17px;
+      left: 0;
+      display: inline-block;
+      width: 100%;
+      height: 4px;
+      background-color: @colorWhite;
+      transform: translateY(-4px);
+      transition: @transitionAll;
+    }
+  }
+
   .ButtonPopper {
     height: 24px;
     margin: 0 5px 0 5px;
@@ -224,6 +261,10 @@ export default {
     line-height: 24px;
     color: @colorBrandPrimary;
     text-decoration: none;
+
+    &.nuxt-link-active {
+      color: @colorBrandAccent;
+    }
 
     .svg-inline--fa {
       margin-right: 6px;
@@ -239,7 +280,7 @@ export default {
   }
 
   .DropdownContent {
-    padding: 0 0 10px 0;
+    // padding: 0 0 10px 0;
 
     .UserInfoSection {
       padding: 16px 20px 4px;
@@ -316,6 +357,11 @@ export default {
         height: 100%;
         text-align: left;
       }
+
+      .nuxt-link-exact-active {
+        color: @colorBrandAccent !important;
+      }
+
     }
   }
 </style>

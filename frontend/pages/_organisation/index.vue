@@ -24,6 +24,11 @@
       </el-row>
       <el-row type="flex">
         <el-col>
+          <StoryBox />
+        </el-col>
+      </el-row>
+      <el-row type="flex">
+        <el-col>
           <IntroVideo />
         </el-col>
       </el-row>
@@ -49,6 +54,7 @@ import LandingMap from '@/components/landing/LandingMap.vue'
 import WelcomeBox from '@/components/landing/WelcomeBox.vue'
 import CountryProjectsBox from '@/components/landing/CountryProjectsBox.vue'
 import Banner from '@/components/landing/Banner.vue'
+import StoryBox from '@/components/landing/StoryBox.vue'
 import IntroVideo from '@/components/landing/IntroVideo.vue'
 import InfoBox from '@/components/landing/InfoBox.vue'
 import CentralBox from '@/components/landing/CentralBox.vue'
@@ -63,6 +69,7 @@ export default {
     LandingMap,
     WelcomeBox,
     Banner,
+    StoryBox,
     IntroVideo,
     InfoBox,
     CentralBox,

@@ -2,10 +2,7 @@
   <div class="angularjs">
     <div id="thematicjs" />
     <!-- Following A is just a placeholder to avoid a flash of content -->
-    <a
-      v-if="!initialised"
-      class="HeaderBtn ToolkitBtn"
-    >
+    <a v-if="!initialised" class="HeaderBtn">
       <translate>Toolkit</translate>
     </a>
   </div>
@@ -21,7 +18,7 @@ export default {
   mounted () {
     this.$nextTick(() => {
       const factory = require('../../angular/Thematic/thematicFactory')
-      factory.factory(0, 0, this.$gettext('MAPS Toolkit'), 'HeaderBtn', this.$gettext('Toolkit'))
+      factory.factory(0, 0, this.$gettext('MAPS Toolkit'), 'AngularHeaderButton', this.$gettext('Toolkit'))
       this.initialised = true
     })
   }
@@ -31,8 +28,6 @@ export default {
 <style lang="less">
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
-
-  // .ToolkitBtn {}
 
   // TODO: Remove Angular Material
   body.md-dialog-is-showing {
