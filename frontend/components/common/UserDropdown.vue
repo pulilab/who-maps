@@ -234,7 +234,6 @@ export default {
       &::before {
         background-color: @colorBrandAccent;
         transform: translateY(0);
-        box-shadow: 0 0 12px 4px rgb(0 0 0 / 22%);
       }
     }
     &::before {
