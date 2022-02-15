@@ -166,7 +166,7 @@ export default {
         '-/edit-profile',
         '-/admin/country',
         '-/admin/donor',
-        '-/admin/import',
+        '-/admin/import/',
         '-/admin/api',
         '-/graphs',
       ]
