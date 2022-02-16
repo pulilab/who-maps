@@ -8,7 +8,52 @@
         </translate>
       </span>
       <div class="search">
-        <el-input clearable debounce prefix-icon="el-icon-search" placeholder="search" v-model="search" />
+        <el-input clearable debounce prefix-icon="el-icon-search" placeholder="Search name or team member" v-model="search" />
+      </div>
+      <div class="search">
+        <lazy-el-select
+          clearable
+          filterable
+          v-model="countryFilter"
+          :placeholder="$gettext('Select country') | translate"
+        >
+          <el-option
+            v-for="country in selectableCountries"
+            :key="country.code"
+            :label="country.name"
+            :value="country.code"
+          />
+        </lazy-el-select>
+      </div>
+      <div class="search">
+        <lazy-el-select
+            clearable
+            filterable
+            v-model="investorFilter"
+            :placeholder="$gettext('Select investor') | translate"
+          >
+            <el-option
+              v-for="investors in selectableInvestors"
+              :key="investors.name"
+              :label="investors.name"
+              :value="investors.name"
+            />
+          </lazy-el-select>
+      </div>
+      <div class="search">
+        <lazy-el-select
+            clearable
+            filterable
+            v-model="organizationFilter"
+            :placeholder="$gettext('Select organization') | translate"
+          >
+            <el-option
+              v-for="organization in selectableOrganizations"
+              :key="organization.name"
+              :label="organization.name"
+              :value="organization.name"
+            />
+          </lazy-el-select>
       </div>
     </div>
     <table class="projects-table">
@@ -83,6 +128,7 @@ import { mapGetters, mapActions } from 'vuex'
 import CountryFlag from '@/components/common/CountryFlag.vue'
 import AddEditorPopover from '@/components/project/collection/AddEditorPopover'
 import AddEditorDialog from '@/components/project/collection/AddEditorDialog'
+import { uniqBy } from 'lodash'
 
 export default {
   components: {
@@ -98,24 +144,43 @@ export default {
   },
   data () {
     return {
-      search: ''
+      search: '',
+      countryFilter: '',
+      investorFilter: '',
+      organizationFilter: ''
     }
   },
   computed: {
     ...mapGetters({
       user: 'user/getProfile'
     }),
+    selectableCountries () {
+      const allOptions = this.collection.projects.map( p => p.country )
+      return uniqBy(allOptions, 'code')
+    },
+    selectableOrganizations () {
+      const allOptions = this.collection.projects.map( p => p.organization )
+      return uniqBy(allOptions, 'name')
+    },
+    selectableInvestors () {
+      const allOptions = this.collection.projects.map( p => p.investor )
+      return uniqBy(allOptions, 'name')
+    },
     filteredProjects () {
-      return this.collection.projects.filter((item) => {
-        const members = item.team.reduce((members, m) => {
+      return this.collection.projects.filter((item) => {const members = item.team.reduce((members, m) => {
           const mbs = members += `${m.email} `
           return mbs
         }, '')
-        return members.toUpperCase().includes(this.search.toUpperCase()) ||
-               item?.name.toUpperCase().includes(this.search.toUpperCase()) ||
-               item.country?.name?.toUpperCase().includes(this.search.toUpperCase()) ||
-               item.investor?.name?.toUpperCase().includes(this.search.toUpperCase()) ||
-               item.organization?.name?.toUpperCase().includes(this.search.toUpperCase())
+        if ((this.countryFilter == '' ? item.country?.code : this.countryFilter) == item.country?.code &&
+            (this.investorFilter == '' ? item.investor?.name : this.investorFilter) == item.investor?.name &&
+            (this.search == '' ? true : (
+              members.toUpperCase().includes(this.search.toUpperCase()) ||
+              item?.name.toUpperCase().includes(this.search.toUpperCase())
+            ))) {
+            return true
+          }else{
+            return false
+          }
       })
     }
   },
