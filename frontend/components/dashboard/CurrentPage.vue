@@ -10,12 +10,35 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  props: {
+    totalProp: {
+      type: Number,
+      default: null
+    },
+    pageSizeProp: {
+      type: Number,
+      default: null
+    },
+    currentPageProp: {
+      type: Number,
+      default: null
+    }
+  },
   computed: {
     ...mapGetters({
-      total: 'dashboard/getTotal',
-      pageSize: 'dashboard/getPageSize',
-      currentPage: 'dashboard/getCurrentPage'
+      totalFromStore: 'dashboard/getTotal',
+      pageSizeFromStore: 'dashboard/getPageSize',
+      currentPageFromStore: 'dashboard/getCurrentPage'
     }),
+    total () {
+      return this.totalProp ?? this.totalFromStore
+    },
+    pageSize () {
+      return this.pageSizeProp ?? this.pageSizeFromStore
+    },
+    currentPage () {
+      return this.currentPageProp ?? this.currentPageFromStore
+    },
     min () {
       return 1 + this.pageSize * (this.currentPage - 1)
     },

@@ -10,7 +10,7 @@
       <div class="search">
         <el-input clearable debounce prefix-icon="el-icon-search" placeholder="Search name or team member" v-model="search" />
       </div>
-      <div class="search">
+      <div class="search"  v-if="selectableCountries">
         <lazy-el-select
           clearable
           filterable
@@ -25,7 +25,7 @@
           />
         </lazy-el-select>
       </div>
-      <div class="search">
+      <div class="search"  v-if="selectableInvestors">
         <lazy-el-select
             clearable
             filterable
@@ -40,7 +40,7 @@
             />
           </lazy-el-select>
       </div>
-      <div class="search">
+      <div class="search" v-if="selectableOrganizations">
         <lazy-el-select
             clearable
             filterable
@@ -67,7 +67,7 @@
         <th><translate>Organization</translate></th>
       </thead>
       <tbody>
-        <tr v-for="project in filteredProjects" :key="project.id">
+        <tr v-for="project in paginate(filteredProjects, pageSize, currentPage)" :key="project.id">
           <td class="status">
             <div class="tag" :class="project.status">{{ project.status }}</div>
           </td>
@@ -120,21 +120,38 @@
         </tr>
       </tbody>
     </table>
+    <div class="Pagination">
+      <el-pagination
+        :current-page.sync="currentPage"
+        :page-size.sync="pageSize"
+        :page-sizes="pageSizeOption"
+        :total="totalFilteredProjects"
+        :layout="paginationOrderStr"
+      >
+        <current-page 
+          :totalProp="totalFilteredProjects"
+          :pageSizeProp="pageSize"
+          :currentPageProp="currentPage"
+        />
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { uniqBy } from 'lodash'
 import CountryFlag from '@/components/common/CountryFlag.vue'
 import AddEditorPopover from '@/components/project/collection/AddEditorPopover'
 import AddEditorDialog from '@/components/project/collection/AddEditorDialog'
-import { uniqBy } from 'lodash'
+import CurrentPage from '@/components/dashboard/CurrentPage'
 
 export default {
   components: {
     CountryFlag,
     AddEditorPopover,
-    AddEditorDialog
+    AddEditorDialog,
+    CurrentPage
   },
   props: {
     collection: {
@@ -147,7 +164,10 @@ export default {
       search: '',
       countryFilter: '',
       investorFilter: '',
-      organizationFilter: ''
+      organizationFilter: '',
+      currentPage: 1,
+      pageSize: 10,
+      pageSizeOption: [10,20,50,100]
     }
   },
   computed: {
@@ -156,15 +176,25 @@ export default {
     }),
     selectableCountries () {
       const allOptions = this.collection.projects.map( p => p.country )
+      if (typeof allOptions == 'undefined' || !allOptions.length || allOptions[0] == '' || typeof allOptions[0] == 'undefined') return false
       return uniqBy(allOptions, 'code')
     },
     selectableOrganizations () {
       const allOptions = this.collection.projects.map( p => p.organization )
+      if (typeof allOptions == 'undefined' || !allOptions.length || allOptions[0] == '' || typeof allOptions[0] == 'undefined') return false
       return uniqBy(allOptions, 'name')
     },
     selectableInvestors () {
       const allOptions = this.collection.projects.map( p => p.investor )
+      if (typeof allOptions == 'undefined' || !allOptions.length || allOptions[0] == '' || typeof allOptions[0] == 'undefined') return false
       return uniqBy(allOptions, 'name')
+    },
+    totalFilteredProjects () {
+      return this.filteredProjects.length
+    },
+    paginationOrderStr () {
+      const loc = this.$i18n.locale
+      return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next'
     },
     filteredProjects () {
       return this.collection.projects.filter((item) => {const members = item.team.reduce((members, m) => {
@@ -188,6 +218,9 @@ export default {
     ...mapActions({
       loadCollection: 'admin/import/loadCollection'
     }),
+    paginate(array, page_size, page_number) {
+      return array.slice((page_number - 1) * page_size, page_number * page_size);
+    },
     canAddAsEditor (project) {
       return project.status === 'draft' && !project.team.some(t => t.email === this?.user?.email)
     },
@@ -208,7 +241,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
@@ -301,6 +334,50 @@ export default {
           display: inline-block;
           margin-top: 2px;
         }
+      }
+    }
+  }
+}
+.Pagination {
+  z-index: 5;
+  position: relative;
+  top: -1px;
+  width: 100%;
+  height: 53px;
+  box-sizing: border-box;
+  border: solid @colorGrayLight;
+  border-width: 1px 1px 2px;
+  background-color: @colorBrandBlueLight;
+  text-align: right;
+
+  .el-pagination {
+    padding: 11px 15px;
+    font-weight: 400;
+
+    .el-pagination__sizes {
+      float: left;
+      margin: 0;
+    }
+
+    .PageCounter {
+      display: inline-block;
+      margin: 0 10px;
+      font-size: @fontSizeSmall;
+      color: @colorTextSecondary;
+    }
+
+    button {
+      padding: 0;
+      background-color: transparent;
+      transition: @transitionAll;
+
+      &:hover {
+        background-color: lighten(@colorBrandBlueLight, 3%);
+      }
+
+      i {
+        font-size: @fontSizeLarge;
+        font-weight: 700;
       }
     }
   }
