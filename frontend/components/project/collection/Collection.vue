@@ -4,7 +4,7 @@
       {{ collection.name }}
     </template>
     <template #subtitle>
-      Cum ceteris in veneratione tui montes, nascetur muse unde extricat, amaras. Me non paenitet nullum festiviorem excogitasse ad hoc. Nihilne te nocturnum praesidium Palati, nihil urbis vigiliae. Nec dubitamus multa iter quae et nos invenerat. Magna pars studiorum, prodita quaerimus. Contra legem facit qui id facit quod lex prohibet.
+      Browse and search this collection to find projects you are associated with, and assign yourself as editor to be able to contribute it as your own.
       <a href="">Watch demo here</a>
     </template>
     <panel>

@@ -7,6 +7,11 @@
 </template>
 
 <script>
+/*
+This componenet can be used with the data from the store
+or by providing the props. The props will override the store.
+*/
+
 import { mapGetters } from 'vuex'
 
 export default {
