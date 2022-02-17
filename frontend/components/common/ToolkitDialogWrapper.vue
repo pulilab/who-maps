@@ -18,7 +18,7 @@ export default {
   mounted () {
     this.$nextTick(() => {
       const factory = require('../../angular/Thematic/thematicFactory')
-      factory.factory(0, 0, this.$gettext('MAPS Toolkit'), 'AngularHeaderButton', this.$gettext('Toolkit'))
+      factory.factory(0, 0, this.$gettext('MAPS Toolkit'), 'AngularHeaderButton HeaderBtn', this.$gettext('Toolkit'))
       this.initialised = true
     })
   }

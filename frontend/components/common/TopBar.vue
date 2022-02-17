@@ -2,7 +2,6 @@
   <div v-scroll-class:TopBarMin="180" class="TopBar">
     <el-row type="flex" justify="space-between" class="TopBarInner">
       <el-col class="LogoHolder">
-        <!--<nuxt-link :to="localePath({name: 'organisation', params: $route.params})">-->
         <nuxt-link :to=" localePath({ name: 'organisation', params: { organisation: '-' } })">
           <el-row type="flex" align="middle">
             <el-col class="LogoWHO">
@@ -30,8 +29,26 @@
           align="middle"
         >
           <template v-if="!user">
+            <div class="HeaderBtn">
+              <ToolkitDialogWrapper />
+            </div>
+            <div @click="openHowToDialog(0)">
+              <translate class="HeaderBtn">How-to</translate>
+            </div>
+            <div>
+              <a 
+                href="https://stories.digitalhealthatlas.org/"
+                target="_blank"
+                class="HeaderBtn"
+              >
+                <translate >Stories</translate>
+              </a>
+            </div>
             <el-col>
-              <language-selector />
+              <div class="Separator" />
+            </el-col>
+            <el-col>
+              <LanguageSelector />
             </el-col>
 
             <el-col class="AuthLinks">
@@ -59,15 +76,14 @@
 
           <NavigationMenu v-if="user" />
 
-          <el-col>
-            <el-row type="flex">
-              <el-col>
-                <div class="Separator" />
-              </el-col>
-            </el-row>
-          </el-col>
-
           <template v-if="user">
+            <el-col>
+              <el-row type="flex">
+                <el-col>
+                  <div class="Separator" />
+                </el-col>
+              </el-row>
+            </el-col>
             <el-col class="AuthLinks">
               <div>
                 <nuxt-link
@@ -330,7 +346,8 @@ export default {
   }
 }
 
-.AngularHeaderButton {
+.AngularHeaderButton,
+.AngularHeaderButton.md-button {
   padding: 0 !important;
   margin: 0 !important;
   font-size: @fontSizeBase !important;
@@ -343,6 +360,25 @@ export default {
   min-height: auto !important;
   height: auto !important;
   width: 100% !important;
+
+  // hacking Toolkit md-button :(
+  min-height: auto;
+  min-width: auto;
+  overflow: visible;
+  background-color: transparent !important;
+  &.md-ink-ripple {
+    > span {
+      letter-spacing: 0 !important;
+    }
+    &::before {
+      top: -17px !important;
+    }
+  }
+  > .md-ripple-container {
+    display: none;
+  }
+  //
+
   &:hover {
     background-color: transparent !important;
   }
