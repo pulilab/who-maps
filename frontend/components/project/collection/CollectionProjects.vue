@@ -140,7 +140,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { uniqBy } from 'lodash'
+import { uniqBy, difference } from 'lodash'
 import CountryFlag from '@/components/common/CountryFlag.vue'
 import AddEditorPopover from '@/components/project/collection/AddEditorPopover'
 import AddEditorDialog from '@/components/project/collection/AddEditorDialog'
@@ -176,15 +176,21 @@ export default {
     }),
     selectableCountries () {
       const allOptions = this.collection.projects.map( p => p.country )
-      return uniqBy(allOptions, 'code')
+      const options = uniqBy(difference(allOptions, ['', undefined, null]), 'code')
+      if(!options.length) return false
+      return options
     },
     selectableOrganizations () {
       const allOptions = this.collection.projects.map( p => p.organization )
-      return uniqBy(allOptions, 'name')
+      const options = uniqBy(difference(allOptions, ['', undefined, null]), 'name')
+      if(!options.length) return false
+      return options
     },
     selectableInvestors () {
       const allOptions = this.collection.projects.map( p => p.investor )
-      return uniqBy(allOptions, 'name')
+      const options = uniqBy(difference(allOptions, ['', undefined, null]), 'name')
+      if(!options.length) return false
+      return options
     },
     totalFilteredProjects () {
       return this.filteredProjects.length
@@ -204,7 +210,7 @@ export default {
             (this.search == '' ? true : (
               members.toUpperCase().includes(this.search.toUpperCase()) ||
               item?.name.toUpperCase().includes(this.search.toUpperCase()) ||
-              item?.narrative.toUpperCase().includes(this.search.toUpperCase())
+              item?.narrative?.toUpperCase().includes(this.search.toUpperCase())
             ))) {
             return true
           }else{
