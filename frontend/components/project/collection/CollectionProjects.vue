@@ -1,6 +1,6 @@
 <template>
   <div>
-    <add-editor-dialog ref="addEditorDialog" @addedAsEditor="refreshCollection" />
+    <AddEditorDialog ref="addEditorDialog" @addedAsEditor="refreshCollection" />
     <div class="ProjectToolbar">
       <span class="label">
         <translate :parameters="{ rows: collection.projects.length }">
@@ -84,7 +84,7 @@
                   Add me as editor
                 </translate>
               </el-button>
-              <add-editor-popover v-else />
+              <AddEditorPopover v-else />
             </div>
           </td>
           <td>
@@ -128,7 +128,7 @@
         :total="totalFilteredProjects"
         :layout="paginationOrderStr"
       >
-        <current-page 
+        <CurrentPage
           :totalProp="totalFilteredProjects"
           :pageSizeProp="pageSize"
           :currentPageProp="currentPage"
@@ -242,15 +242,18 @@ export default {
 
 <style lang="less">
 @import '~assets/style/variables.less';
-@import '~assets/style/mixins.less';
 
 .ProjectToolbar {
   display: flex;
-  align-items: space;
+  align-items: center;
   justify-content: space-between;
+  gap: 8px;
   height: 36px;
   line-height: 36px;
   margin: 20px 0;
+  .label {
+    flex: 1;
+  }
 }
 
 .projects-table {
