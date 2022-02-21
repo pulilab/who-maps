@@ -20,8 +20,12 @@ export const getters = {
           id: p.id,
           status: p.published ? 'published' : 'draft',
           name: p.data.name,
+          narrative: p.data.implementation_overview,
           country: state.countries.find(c => c.id === p.data.country),
           investor: p.data.donors.length > 0 ? state.donors.find(d => d.id === p.data.donors[0]) : '',
+          // investor field is wrong, it should include all the investors, not just the first one
+          // here's an implementation to show it in one string
+          // investor: p.data.donors.length > 0 ? state.donors.filter(d => p.data.donors.includes(d.id)).map(d => d.name).join(',') : '',
           organization: state.organizations.find(o => o.id === parseInt(p.data.organisation)),
           team: p.team
         }

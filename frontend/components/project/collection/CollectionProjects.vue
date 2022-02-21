@@ -1,6 +1,6 @@
 <template>
   <div>
-    <add-editor-dialog ref="addEditorDialog" @addedAsEditor="refreshCollection" />
+    <AddEditorDialog ref="addEditorDialog" @addedAsEditor="refreshCollection" />
     <div class="ProjectToolbar">
       <span class="label">
         <translate :parameters="{ rows: collection.projects.length }">
@@ -8,7 +8,52 @@
         </translate>
       </span>
       <div class="search">
-        <el-input clearable debounce prefix-icon="el-icon-search" placeholder="search" v-model="search" />
+        <el-input clearable debounce prefix-icon="el-icon-search" placeholder="Search name, narrative, team member" v-model="search" />
+      </div>
+      <div class="search"  v-if="selectableCountries">
+        <lazy-el-select
+          clearable
+          filterable
+          v-model="countryFilter"
+          :placeholder="$gettext('Select country') | translate"
+        >
+          <el-option
+            v-for="country in selectableCountries"
+            :key="country.code"
+            :label="country.name"
+            :value="country.code"
+          />
+        </lazy-el-select>
+      </div>
+      <div class="search"  v-if="selectableInvestors">
+        <lazy-el-select
+            clearable
+            filterable
+            v-model="investorFilter"
+            :placeholder="$gettext('Select investor') | translate"
+          >
+            <el-option
+              v-for="investors in selectableInvestors"
+              :key="investors.name"
+              :label="investors.name"
+              :value="investors.name"
+            />
+          </lazy-el-select>
+      </div>
+      <div class="search" v-if="selectableOrganizations">
+        <lazy-el-select
+            clearable
+            filterable
+            v-model="organizationFilter"
+            :placeholder="$gettext('Select organization') | translate"
+          >
+            <el-option
+              v-for="organization in selectableOrganizations"
+              :key="organization.name"
+              :label="organization.name"
+              :value="organization.name"
+            />
+          </lazy-el-select>
       </div>
     </div>
     <table class="projects-table">
@@ -22,7 +67,7 @@
         <th><translate>Organization</translate></th>
       </thead>
       <tbody>
-        <tr v-for="project in filteredProjects" :key="project.id">
+        <tr v-for="project in paginate(filteredProjects, pageSize, currentPage)" :key="project.id">
           <td class="status">
             <div class="tag" :class="project.status">{{ project.status }}</div>
           </td>
@@ -39,7 +84,7 @@
                   Add me as editor
                 </translate>
               </el-button>
-              <add-editor-popover v-else />
+              <AddEditorPopover v-else />
             </div>
           </td>
           <td>
@@ -75,20 +120,38 @@
         </tr>
       </tbody>
     </table>
+    <div class="Pagination">
+      <el-pagination
+        :current-page.sync="currentPage"
+        :page-size.sync="pageSize"
+        :page-sizes="pageSizeOption"
+        :total="totalFilteredProjects"
+        :layout="paginationOrderStr"
+      >
+        <CurrentPage
+          :totalProp="totalFilteredProjects"
+          :pageSizeProp="pageSize"
+          :currentPageProp="currentPage"
+        />
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { uniqBy } from 'lodash'
 import CountryFlag from '@/components/common/CountryFlag.vue'
 import AddEditorPopover from '@/components/project/collection/AddEditorPopover'
 import AddEditorDialog from '@/components/project/collection/AddEditorDialog'
+import CurrentPage from '@/components/dashboard/CurrentPage'
 
 export default {
   components: {
     CountryFlag,
     AddEditorPopover,
-    AddEditorDialog
+    AddEditorDialog,
+    CurrentPage
   },
   props: {
     collection: {
@@ -98,24 +161,55 @@ export default {
   },
   data () {
     return {
-      search: ''
+      search: '',
+      countryFilter: '',
+      investorFilter: '',
+      organizationFilter: '',
+      currentPage: 1,
+      pageSize: 10,
+      pageSizeOption: [10,20,50,100]
     }
   },
   computed: {
     ...mapGetters({
       user: 'user/getProfile'
     }),
+    selectableCountries () {
+      const allOptions = this.collection.projects.map( p => p.country )
+      return uniqBy(allOptions, 'code')
+    },
+    selectableOrganizations () {
+      const allOptions = this.collection.projects.map( p => p.organization )
+      return uniqBy(allOptions, 'name')
+    },
+    selectableInvestors () {
+      const allOptions = this.collection.projects.map( p => p.investor )
+      return uniqBy(allOptions, 'name')
+    },
+    totalFilteredProjects () {
+      return this.filteredProjects.length
+    },
+    paginationOrderStr () {
+      const loc = this.$i18n.locale
+      return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next'
+    },
     filteredProjects () {
-      return this.collection.projects.filter((item) => {
-        const members = item.team.reduce((members, m) => {
+      return this.collection.projects.filter((item) => {const members = item.team.reduce((members, m) => {
           const mbs = members += `${m.email} `
           return mbs
         }, '')
-        return members.toUpperCase().includes(this.search.toUpperCase()) ||
-               item?.name.toUpperCase().includes(this.search.toUpperCase()) ||
-               item.country?.name?.toUpperCase().includes(this.search.toUpperCase()) ||
-               item.investor?.name?.toUpperCase().includes(this.search.toUpperCase()) ||
-               item.organization?.name?.toUpperCase().includes(this.search.toUpperCase())
+        if ((this.countryFilter == '' ? item.country?.code : this.countryFilter) == item.country?.code &&
+            (this.investorFilter == '' ? item.investor?.name : this.investorFilter) == item.investor?.name &&
+            (this.organizationFilter == '' ? item.organization?.name : this.organizationFilter) == item.organization?.name &&
+            (this.search == '' ? true : (
+              members.toUpperCase().includes(this.search.toUpperCase()) ||
+              item?.name.toUpperCase().includes(this.search.toUpperCase()) ||
+              item?.narrative.toUpperCase().includes(this.search.toUpperCase())
+            ))) {
+            return true
+          }else{
+            return false
+          }
       })
     }
   },
@@ -123,6 +217,9 @@ export default {
     ...mapActions({
       loadCollection: 'admin/import/loadCollection'
     }),
+    paginate(array, page_size, page_number) {
+      return array.slice((page_number - 1) * page_size, page_number * page_size);
+    },
     canAddAsEditor (project) {
       return project.status === 'draft' && !project.team.some(t => t.email === this?.user?.email)
     },
@@ -143,17 +240,20 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import '~assets/style/variables.less';
-@import '~assets/style/mixins.less';
 
 .ProjectToolbar {
   display: flex;
-  align-items: space;
+  align-items: center;
   justify-content: space-between;
+  gap: 8px;
   height: 36px;
   line-height: 36px;
   margin: 20px 0;
+  .label {
+    flex: 1;
+  }
 }
 
 .projects-table {
@@ -236,6 +336,50 @@ export default {
           display: inline-block;
           margin-top: 2px;
         }
+      }
+    }
+  }
+}
+.Pagination {
+  z-index: 5;
+  position: relative;
+  top: -1px;
+  width: 100%;
+  height: 53px;
+  box-sizing: border-box;
+  border: solid @colorGrayLight;
+  border-width: 1px 1px 2px;
+  background-color: @colorBrandBlueLight;
+  text-align: right;
+
+  .el-pagination {
+    padding: 11px 15px;
+    font-weight: 400;
+
+    .el-pagination__sizes {
+      float: left;
+      margin: 0;
+    }
+
+    .PageCounter {
+      display: inline-block;
+      margin: 0 10px;
+      font-size: @fontSizeSmall;
+      color: @colorTextSecondary;
+    }
+
+    button {
+      padding: 0;
+      background-color: transparent;
+      transition: @transitionAll;
+
+      &:hover {
+        background-color: lighten(@colorBrandBlueLight, 3%);
+      }
+
+      i {
+        font-size: @fontSizeLarge;
+        font-weight: 700;
       }
     }
   }
