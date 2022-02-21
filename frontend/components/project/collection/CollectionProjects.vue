@@ -8,7 +8,7 @@
         </translate>
       </span>
       <div class="search">
-        <el-input clearable debounce prefix-icon="el-icon-search" placeholder="Search name or team member" v-model="search" />
+        <el-input clearable debounce prefix-icon="el-icon-search" placeholder="Search name, narrative, team member" v-model="search" />
       </div>
       <div class="search"  v-if="selectableCountries">
         <lazy-el-select
@@ -176,17 +176,14 @@ export default {
     }),
     selectableCountries () {
       const allOptions = this.collection.projects.map( p => p.country )
-      if (typeof allOptions == 'undefined' || !allOptions.length || allOptions[0] == '' || typeof allOptions[0] == 'undefined') return false
       return uniqBy(allOptions, 'code')
     },
     selectableOrganizations () {
       const allOptions = this.collection.projects.map( p => p.organization )
-      if (typeof allOptions == 'undefined' || !allOptions.length || allOptions[0] == '' || typeof allOptions[0] == 'undefined') return false
       return uniqBy(allOptions, 'name')
     },
     selectableInvestors () {
       const allOptions = this.collection.projects.map( p => p.investor )
-      if (typeof allOptions == 'undefined' || !allOptions.length || allOptions[0] == '' || typeof allOptions[0] == 'undefined') return false
       return uniqBy(allOptions, 'name')
     },
     totalFilteredProjects () {
@@ -203,9 +200,11 @@ export default {
         }, '')
         if ((this.countryFilter == '' ? item.country?.code : this.countryFilter) == item.country?.code &&
             (this.investorFilter == '' ? item.investor?.name : this.investorFilter) == item.investor?.name &&
+            (this.organizationFilter == '' ? item.organization?.name : this.organizationFilter) == item.organization?.name &&
             (this.search == '' ? true : (
               members.toUpperCase().includes(this.search.toUpperCase()) ||
-              item?.name.toUpperCase().includes(this.search.toUpperCase())
+              item?.name.toUpperCase().includes(this.search.toUpperCase()) ||
+              item?.narrative.toUpperCase().includes(this.search.toUpperCase())
             ))) {
             return true
           }else{

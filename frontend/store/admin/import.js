@@ -20,6 +20,7 @@ export const getters = {
           id: p.id,
           status: p.published ? 'published' : 'draft',
           name: p.data.name,
+          narrative: p.data.implementation_overview,
           country: state.countries.find(c => c.id === p.data.country),
           investor: p.data.donors.length > 0 ? state.donors.find(d => d.id === p.data.donors[0]) : '',
           organization: state.organizations.find(o => o.id === parseInt(p.data.organisation)),
