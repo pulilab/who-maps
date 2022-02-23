@@ -37,11 +37,11 @@
             </div>
             <div>
               <a 
-                href="https://stories.digitalhealthatlas.org/"
+                :href="storiesLink"
                 target="_blank"
                 class="HeaderBtn"
               >
-                <translate >Stories</translate>
+                <translate>Stories</translate>
               </a>
             </div>
             <el-col>
@@ -156,6 +156,11 @@ import CountryChooser from './CountryChooser'
 import HowToDialog from '@/components/dialogs/HowToDialog'
 
 export default {
+  data () {
+    return {
+      storiesLink: this.$gettext('https://stories.digitalhealthatlas.org/post/269ecc01-2c1a-4d71-af65-84e3882f2e36')
+    }
+  },
   directives: {
     'scroll-class': VueScrollClass
   },

@@ -59,12 +59,12 @@
         </div>
         <div class="DropdownLink">
           <a 
-            href="https://stories.digitalhealthatlas.org/"
+            :href="storiesLink"
             target="_blank"
             class="HeaderBtn"
             @click="closePopover"
           >
-            <translate >Stories</translate>
+            <translate>Stories</translate>
           </a>
         </div>
       </div>
@@ -84,6 +84,7 @@ components: {
   data () {
     return {
       shown: false,
+      storiesLink: this.$gettext('https://stories.digitalhealthatlas.org/post/269ecc01-2c1a-4d71-af65-84e3882f2e36'),
       menuRoutes: [
         {
           path: '-/',
