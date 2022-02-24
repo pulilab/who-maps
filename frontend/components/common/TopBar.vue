@@ -35,7 +35,8 @@
             <div @click="openHowToDialog(0)">
               <translate class="HeaderBtn">How-to</translate>
             </div>
-            <div>
+            <!--hide temporarly-->
+            <div v-if="false">
               <a 
                 :href="storiesLink"
                 target="_blank"
