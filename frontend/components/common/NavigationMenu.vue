@@ -57,7 +57,8 @@
         <div class="DropdownLink" @click="openHowTo">
           <translate tag="a" class="HeaderBtn">How-to</translate>
         </div>
-        <div class="DropdownLink">
+        <!--hide temporarly-->
+        <div class="DropdownLink" v-if="false">
           <a 
             :href="storiesLink"
             target="_blank"

@@ -16,10 +16,11 @@
         <CountryProjectsBox />
       </template>
     </div>
-    <div>
+    <!--hide temporarly-->
+    <div v-if="false">
       <el-row type="flex">
         <el-col>
-          <Banner v-if="false"/> <!--hide banner temporarly-->
+          <Banner /> 
         </el-col>
       </el-row>
       <el-row type="flex">
