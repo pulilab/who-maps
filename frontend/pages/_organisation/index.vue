@@ -16,9 +16,9 @@
         <CountryProjectsBox />
       </template>
     </div>
-    <!--hide temporarly-->
-    <div v-if="false">
-      <el-row type="flex">
+    <div>
+      <!--hide temporarly-->
+      <el-row type="flex" v-if="false">
         <el-col>
           <Banner /> 
         </el-col>
