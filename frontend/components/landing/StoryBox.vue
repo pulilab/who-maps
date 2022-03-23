@@ -2,7 +2,7 @@
   <div class="SectionWrapper">
     <div class="StoryWrapper">
       <iframe 
-        src='https://stories.digitalhealthatlas.org/embed/1ee36aca-4eaf-4eee-9347-ed29ea01671c?components=[%228APPWPCuo2%22]'
+        :src='storyUrl'
         width='100%'
         height='100%' />
     </div>
@@ -11,6 +11,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      storyUrl: this.$gettext('https://stories.digitalhealthatlas.org/embed/1ee36aca-4eaf-4eee-9347-ed29ea01671c?components=[%228APPWPCuo2%22]')
+    }
+  }
 }
 </script>
 
