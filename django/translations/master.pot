@@ -7,7 +7,7 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:112
 msgid ""
-", which permits unrestricted use, distribution and reproduction\n"
+", which permits unrestricted use, distribution and reproduction\r\n"
 "              in any medium, provided the original work is properly cited."
 msgstr ""
 
@@ -61,8 +61,8 @@ msgstr ""
 msgid "{name} fields"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:261
-#: components/project/sections/view/Implementation.vue:273
+#: components/project/sections/view/Implementation.vue:256
+#: components/project/sections/view/Implementation.vue:268
 msgid "{name} level deployment"
 msgstr ""
 
@@ -91,23 +91,31 @@ msgstr ""
 
 #: components/project/CoverageField.vue:10
 #: components/project/CoverageField.vue:35
-#: components/project/sections/view/Implementation.vue:167
-#: components/project/sections/view/Implementation.vue:248
+#: components/project/sections/view/Implementation.vue:162
+#: components/project/sections/view/Implementation.vue:243
 msgid "# Clients"
 msgstr ""
 
 #: components/project/CoverageField.vue:7
 #: components/project/CoverageField.vue:26
-#: components/project/sections/view/Implementation.vue:161
-#: components/project/sections/view/Implementation.vue:242
+#: components/project/sections/view/Implementation.vue:156
+#: components/project/sections/view/Implementation.vue:237
 msgid "# Facilities"
 msgstr ""
 
 #: components/project/CoverageField.vue:4
 #: components/project/CoverageField.vue:17
-#: components/project/sections/view/Implementation.vue:155
-#: components/project/sections/view/Implementation.vue:235
+#: components/project/sections/view/Implementation.vue:150
+#: components/project/sections/view/Implementation.vue:230
 msgid "# Health Workers"
+msgstr ""
+
+#: components/charts/MonthlyAPIKeys.vue:60
+msgid "# of API keys"
+msgstr ""
+
+#: components/charts/ProjectStatusesPerMonth.vue:72
+msgid "# of projects"
 msgstr ""
 
 #: pages/_organisation/terms.vue:36
@@ -144,39 +152,42 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:82
 msgid ""
-"3.1 You agree to only upload or submit material that you are\n"
-"              permitted to and that does not violate any rights, including\n"
+"3.1 You agree to only upload or submit material that you are\r\n"
+"              permitted to and that does not violate any rights, including"
+"\r\n"
 "              intellectual property rights. Where you are not the owner of "
-"the\n"
-"              material, you represent and warrant that you have the express\n"
+"the\r\n"
+"              material, you represent and warrant that you have the express"
+"\r\n"
 "              permission from the owner of the material to upload, use or "
-"submit\n"
+"submit\r\n"
 "              the material."
 msgstr ""
 
 #: pages/_organisation/terms.vue:92
 msgid ""
-"3.2 By uploading or submitting material to the DHA, you agree that\n"
+"3.2 By uploading or submitting material to the DHA, you agree that\r\n"
 "              such submission is non-confidential for all purposes. If you "
-"wish\n"
+"wish\r\n"
 "              to keep any information, ideas, concepts or inventions private "
-"or\n"
+"or\r\n"
 "              proprietary, do not submit or upload them to the DHA."
 msgstr ""
 
 #: pages/_organisation/terms.vue:100
 msgid ""
-"3.3 You are solely responsible for any damages resulting from any\n"
+"3.3 You are solely responsible for any damages resulting from any\r\n"
 "              infringements of copyrights, trademark rights, propriety "
-"rights,\n"
-"              or any other harm resulting from any material that you have\n"
+"rights,\r\n"
+"              or any other harm resulting from any material that you have\r\n"
 "              uploaded or submitted."
 msgstr ""
 
 #: pages/_organisation/terms.vue:108
 msgid ""
-"3.4 By uploading material to the DHA, you agree that the\n"
-"              information will be made available under the Creative Commons\n"
+"3.4 By uploading material to the DHA, you agree that the\r\n"
+"              information will be made available under the Creative Commons"
+"\r\n"
 "              Attribution 3.0 IGO licence (CC BY 3.0 IGO)"
 msgstr ""
 
@@ -194,23 +205,24 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:158
 msgid ""
-"6.1 The only personal information that we will collect about you\n"
-"              is the personal information that you provide to us when you\n"
-"              register with us or when you communicate with us through our\n"
+"6.1 The only personal information that we will collect about you\r\n"
+"              is the personal information that you provide to us when you\r\n"
+"              register with us or when you communicate with us through our"
+"\r\n"
 "              website. We will at any time, at your request, provide you "
-"with a\n"
+"with a\r\n"
 "              copy of any personal information that we are holding about you."
 msgstr ""
 
 #: pages/_organisation/terms.vue:167
 msgid ""
-"6.2 We may use your personal information for the following\n"
+"6.2 We may use your personal information for the following\r\n"
 "              purposes:"
 msgstr ""
 
 #: pages/_organisation/terms.vue:210
 msgid ""
-"6.3 Where you have provided personal information of another\n"
+"6.3 Where you have provided personal information of another\r\n"
 "              individual you represent and warrant that you have:"
 msgstr ""
 
@@ -220,44 +232,46 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:233
 msgid ""
-"7.1 Information or content about individual digital health\n"
+"7.1 Information or content about individual digital health\r\n"
 "              activities contained within the DHA is submitted by users. In "
-"no\n"
+"no\r\n"
 "              event shall WHO be responsible for the accuracy, completeness "
-"or\n"
+"or\r\n"
 "              usefulness of material uploaded by any user on the DHA."
 msgstr ""
 
 #: pages/_organisation/terms.vue:241
 msgid ""
-"7.2 The DHA, including any information contained within it, is\n"
-"              made available to you without any warranty of any kind, "
-"either\n"
+"7.2 The DHA, including any information contained within it, is\r\n"
+"              made available to you without any warranty of any kind, either"
+"\r\n"
 "              expressed or implied. You will be solely responsible for your "
-"use\n"
-"              of the DHA. In no event shall WHO be liable for any damages\n"
+"use\r\n"
+"              of the DHA. In no event shall WHO be liable for any damages\r\n"
 "              arising from such use."
 msgstr ""
 
 #: pages/_organisation/terms.vue:250
 msgid ""
-"7.3 The DHA may contain links to resources on external websites.\n"
+"7.3 The DHA may contain links to resources on external websites.\r\n"
 "              WHO is not responsible for the accuracy or content of any "
-"external\n"
-"              link. The presence of any resource or external link on the "
-"DHA\n"
-"              does not imply that the resource, or its author or entity, is\n"
+"external\r\n"
+"              link. The presence of any resource or external link on the DHA"
+"\r\n"
+"              does not imply that the resource, or its author or entity, is"
+"\r\n"
 "              endorsed or recommended by the WHO. These links are provided "
-"for\n"
+"for\r\n"
 "              convenience only."
 msgstr ""
 
 #: pages/_organisation/terms.vue:260
 msgid ""
-"7.4 The mention of specific companies or of certain manufacturers'\n"
+"7.4 The mention of specific companies or of certain manufacturers'\r\n"
 "              products does not imply that they are endorsed or recommended "
-"by\n"
-"              WHO in preference to others of a similar nature that are not\n"
+"by\r\n"
+"              WHO in preference to others of a similar nature that are not"
+"\r\n"
 "              mentioned."
 msgstr ""
 
@@ -267,52 +281,53 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:273
 msgid ""
-"8.1 Message boards, bulletin boards, blogs, and other services may\n"
+"8.1 Message boards, bulletin boards, blogs, and other services may\r\n"
 "              be available on or through the DHA. In addition to any other "
-"rules\n"
-"              or regulations that WHO may post in connection with these\n"
-"              particular services, you shall not upload, post, transmit,\n"
+"rules\r\n"
+"              or regulations that WHO may post in connection with these\r\n"
+"              particular services, you shall not upload, post, transmit,\r\n"
 "              distribute, or otherwise publish through the DHA or any "
-"service or\n"
+"service or\r\n"
 "              feature made available on or through the DHA any materials "
 "which:"
 msgstr ""
 
 #: pages/_organisation/terms.vue:328
 msgid ""
-"8.2 WHO reserves the right, but has no obligation, to monitor the\n"
+"8.2 WHO reserves the right, but has no obligation, to monitor the\r\n"
 "              content of the message boards, bulletin boards, blogs, and "
-"other\n"
-"              services available on the DHA to determine compliance with "
-"the\n"
-"              Terms of Use and any other operating rules we establish. We\n"
+"other\r\n"
+"              services available on the DHA to determine compliance with the"
+"\r\n"
+"              Terms of Use and any other operating rules we establish. We\r\n"
 "              reserve the exclusive right to edit, remove, or refuse to post "
-"any\n"
+"any\r\n"
 "              submitted materials or information. We are not responsible for "
-"and\n"
+"and\r\n"
 "              do not endorse any of the opinions, advice, or statements "
-"posted\n"
-"              in messages, bulletin boards, blogs, and other services. We "
-"are\n"
+"posted\r\n"
+"              in messages, bulletin boards, blogs, and other services. We are"
+"\r\n"
 "              not responsible for any offensive, defamatory, or obscene "
-"posting\n"
-"              made on the message boards or other features on the Website. "
-"We\n"
+"posting\r\n"
+"              made on the message boards or other features on the Website. We"
+"\r\n"
 "              reserve the right to refuse to post or to remove any "
-"information\n"
+"information\r\n"
 "              or materials, in whole or in part, that in our sole discretion "
-"are\n"
-"              inappropriate, objectionable or in violation of these Terms. "
-"We\n"
+"are\r\n"
+"              inappropriate, objectionable or in violation of these Terms. We"
+"\r\n"
 "              also reserve the right to deny access to the DHA any features "
-"of\n"
-"              the DHA to anyone who violates these Terms or who, in our\n"
-"              judgment, interferes with the ability of others to enjoy our\n"
-"              website or infringes the rights of others. WHO assumes no\n"
+"of\r\n"
+"              the DHA to anyone who violates these Terms or who, in our\r\n"
+"              judgment, interferes with the ability of others to enjoy our"
+"\r\n"
+"              website or infringes the rights of others. WHO assumes no\r\n"
 "              liability for any action or inaction with respect to any "
-"conduct,\n"
+"conduct,\r\n"
 "              communication, or posting on the message boards, bulletin "
-"boards,\n"
+"boards,\r\n"
 "              blogs, or other services on the DHA."
 msgstr ""
 
@@ -334,11 +349,11 @@ msgstr ""
 
 #: components/admin/CountryAdmin.vue:118
 msgid ""
-"About these documents: Upload your national or regional reference\n"
+"About these documents: Upload your national or regional reference\r\n"
 "            policies, architecture blueprints or strategy documents which "
-"could\n"
+"could\r\n"
 "            be helpful to investors and implementation partners working in "
-"your\n"
+"your\r\n"
 "            country."
 msgstr ""
 
@@ -371,7 +386,7 @@ msgstr ""
 msgid "Add Digital Health Interventions"
 msgstr ""
 
-#: components/project/collection/CollectionProjects.vue:16
+#: components/project/collection/CollectionProjects.vue:31
 msgid "Add editor"
 msgstr ""
 
@@ -383,7 +398,7 @@ msgstr ""
 #: components/project/collection/AddEditorDialog.vue:13
 #: components/project/collection/AddEditorDialog.vue:8
 #: components/project/collection/AddEditorPopover.vue:16
-#: components/project/collection/CollectionProjects.vue:31
+#: components/project/collection/CollectionProjects.vue:46
 msgid "Add me as editor"
 msgstr ""
 
@@ -410,17 +425,17 @@ msgstr ""
 msgid "Add note (optional)"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:130
+#: components/project/sections/GeneralOverview.vue:163
 #: components/project/sections/GeneralOverview.vue:1
 msgid ""
-"Add team members (editors)--can modify entry on Add New Project\n"
+"Add team members (editors)--can modify entry on Add New Project\r\n"
 "              page"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:144
+#: components/project/sections/GeneralOverview.vue:177
 #: components/project/sections/GeneralOverview.vue:1
 msgid ""
-"Add team members (viewers)--can receive notification that project\n"
+"Add team members (viewers)--can receive notification that project\r\n"
 "              has been added"
 msgstr ""
 
@@ -446,7 +461,7 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:217
 msgid ""
-"advised the individual the purpose(s) for which their personal\n"
+"advised the individual the purpose(s) for which their personal\r\n"
 "                information will be provided; and"
 msgstr ""
 
@@ -513,17 +528,17 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:377
 msgid ""
-"Any dispute relating to the interpretation or application of these\n"
-"              Terms of Use shall, unless amicably settled, be subject to\n"
+"Any dispute relating to the interpretation or application of these\r\n"
+"              Terms of Use shall, unless amicably settled, be subject to\r\n"
 "              conciliation. In the event of failure of the latter, the "
-"dispute\n"
-"              shall be settled by arbitration. The arbitration shall be\n"
+"dispute\r\n"
+"              shall be settled by arbitration. The arbitration shall be\r\n"
 "              conducted in accordance with the modalities to be agreed upon "
-"by\n"
-"              the parties or, in the absence of agreement, with the rules "
-"of\n"
+"by\r\n"
+"              the parties or, in the absence of agreement, with the rules of"
+"\r\n"
 "              arbitration of the International Chamber of Commerce. The "
-"parties\n"
+"parties\r\n"
 "              shall accept the arbitral award as final."
 msgstr ""
 
@@ -531,7 +546,9 @@ msgstr ""
 msgid "API key"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:42 pages/_organisation/graphsold.vue:53
+#: components/charts/MonthlyAPIKeys.vue:69 pages/_organisation/graphs.vue:30
+#: pages/_organisation/graphs_alonso.vue:42
+#: pages/_organisation/graphs_showcase.vue:53
 msgid "API keys"
 msgstr ""
 
@@ -561,7 +578,7 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:290
 msgid ""
-"are fraudulent, unlawful, threatening, abusive, harassing,\n"
+"are fraudulent, unlawful, threatening, abusive, harassing,\r\n"
 "                libellous, defamatory, or offensive;"
 msgstr ""
 
@@ -571,7 +588,7 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:72
 msgid ""
-"As an investor/country admin add on to the default\n"
+"As an investor/country admin add on to the default\r\n"
 "                questionnaire."
 msgstr ""
 
@@ -584,7 +601,13 @@ msgstr ""
 msgid "Assessment"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:140
+#: components/charts/HealthFocusAreas.vue:10
+msgid ""
+"At first level in the Health Focus Categories every project can\r\n"
+"            contain the a Health Focus Category only once."
+msgstr ""
+
+#: pages/_organisation/graphs_alonso.vue:140
 msgid ""
 "At first level in the Health Focus Categories every project can contain the "
 "a Health Focus Category only once."
@@ -601,8 +624,12 @@ msgstr ""
 msgid "Attention!"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:148 pages/_organisation/graphs.vue:2
-#: pages/_organisation/graphsold.vue:265 pages/_organisation/graphsold.vue:2
+#: components/charts/HealthFocusAreas.vue:27
+#: components/charts/HealthFocusAreas.vue:2
+#: pages/_organisation/graphs_alonso.vue:148
+#: pages/_organisation/graphs_alonso.vue:2
+#: pages/_organisation/graphs_showcase.vue:265
+#: pages/_organisation/graphs_showcase.vue:2
 msgid "Back"
 msgstr ""
 
@@ -615,8 +642,10 @@ msgstr ""
 msgid "Before adding another question please save the previous one"
 msgstr ""
 
-#: pages/_organisation/graphsold.vue:66 pages/_organisation/graphsold.vue:129
-#: pages/_organisation/graphsold.vue:200 pages/_organisation/graphsold.vue:237
+#: pages/_organisation/graphs_showcase.vue:66
+#: pages/_organisation/graphs_showcase.vue:129
+#: pages/_organisation/graphs_showcase.vue:200
+#: pages/_organisation/graphs_showcase.vue:237
 msgid "Blank template"
 msgstr ""
 
@@ -629,7 +658,7 @@ msgstr ""
 
 #: components/admin/CountryAdmin.vue:247 components/admin/CountryAdmin.vue:297
 msgid ""
-"Can approve projects if the project approval feature is\n"
+"Can approve projects if the project approval feature is\r\n"
 "                        active"
 msgstr ""
 
@@ -675,7 +704,7 @@ msgstr ""
 #: components/admin/CountryAdmin.vue:192 components/admin/CountryAdmin.vue:236
 #: components/admin/CountryAdmin.vue:286
 msgid ""
-"Can read/export responses to private Government\n"
+"Can read/export responses to private Government\r\n"
 "                        questions"
 msgstr ""
 
@@ -693,7 +722,7 @@ msgstr ""
 
 #: components/admin/DonorAdmin.vue:149
 msgid ""
-"Can read/export responses to private investor-specific\n"
+"Can read/export responses to private investor-specific\r\n"
 "                        questions"
 msgstr ""
 
@@ -743,7 +772,7 @@ msgstr ""
 #: components/admin/DhaQuestion.vue:78 components/admin/DhaQuestion.vue:116
 #: components/admin/import/ImportDataTable.vue:122
 #: components/admin/import/ImportDataTable.vue:146
-#: components/admin/import/ImportDataTable.vue:237
+#: components/admin/import/ImportDataTable.vue:236
 #: components/admin/import/ImportDialog.vue:81
 #: components/admin/import/ImportDialog.vue:2
 #: components/admin/import/ImportHeaders.vue:82
@@ -788,6 +817,7 @@ msgstr ""
 
 #: components/dashboard/FilterPresetsActions.vue:34
 #: components/dialogs/FilterItem.vue:18 components/dialogs/FilterItem.vue:7
+#: pages/_organisation/graphs.vue:13
 msgid "Clear"
 msgstr ""
 
@@ -802,8 +832,8 @@ msgid ""
 "improving the website"
 msgstr ""
 
-#: components/common/charts/utilities/Subtitle.vue:3
-#: components/common/charts/utilities/Subtitle.vue:1
+#: components/charts/utilities/Subtitle.vue:3
+#: components/charts/utilities/Subtitle.vue:1
 msgid "Click on the bars to see health focus areas in specific category."
 msgstr ""
 
@@ -811,8 +841,11 @@ msgstr ""
 msgid "Click on the map to view the digital health project information."
 msgstr ""
 
-#: components/project/CoverageFieldset.vue:41
-#: components/project/CoverageFieldset.vue:4
+#: components/charts/HealthFocusAreas.vue:29
+#: components/charts/HealthFocusAreas.vue:50
+msgid "Click to see Heatlh Focus Areas"
+msgstr ""
+
 #: components/project/CoverageFieldset.vue:129
 msgid ""
 "Client users refers to all care recipients who have direct access to the "
@@ -867,7 +900,7 @@ msgstr ""
 msgid "Completion of Project stages"
 msgstr ""
 
-#: components/common/charts/cStages.vue:24
+#: components/charts/common/cStages.vue:24
 msgid "Completion period"
 msgstr ""
 
@@ -896,15 +929,15 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:321
 msgid ""
-"constitute or contain false or misleading indications of origin,\n"
+"constitute or contain false or misleading indications of origin,\r\n"
 "                endorsements, or statements of fact."
 msgstr ""
 
 #: pages/_organisation/terms.vue:296
 msgid ""
-"constitute or encourage conduct that would constitute a criminal\n"
+"constitute or encourage conduct that would constitute a criminal\r\n"
 "                offense, give rise to civil liability or otherwise violate "
-"any\n"
+"any\r\n"
 "                local, state, federal, or international law;"
 msgstr ""
 
@@ -919,15 +952,15 @@ msgstr ""
 msgid "Contact {selected} selected"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:118
+#: components/project/sections/GeneralOverview.vue:151
 #: components/project/sections/GeneralOverview.vue:1
-#: components/project/sections/view/Overview.vue:112
+#: components/project/sections/view/Overview.vue:127
 msgid "Contact email"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:102
+#: components/project/sections/GeneralOverview.vue:135
 #: components/project/sections/GeneralOverview.vue:1
-#: components/project/sections/view/Overview.vue:105
+#: components/project/sections/view/Overview.vue:120
 msgid "Contact name"
 msgstr ""
 
@@ -964,7 +997,7 @@ msgstr ""
 #: components/EditProfile.vue:29 components/EditProfile.vue:236
 #: components/common/ProjectCard.vue:66 components/common/UserDropdown.vue:19
 #: components/dashboard/MainTable.vue:9 components/dashboard/MainTable.vue:86
-#: components/project/collection/CollectionProjects.vue:19
+#: components/project/collection/CollectionProjects.vue:34
 msgid "Country"
 msgstr ""
 
@@ -991,7 +1024,7 @@ msgstr ""
 msgid "Country information"
 msgstr ""
 
-#: components/common/TopBar.vue:62
+#: components/common/TopBar.vue:57
 msgid "Country logo"
 msgstr ""
 
@@ -1022,12 +1055,19 @@ msgstr ""
 msgid "Cover text"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:126 pages/_organisation/graphsold.vue:253
+#: components/charts/HealthFocusAreasCoverage.vue:2
+#: pages/_organisation/graphs_alonso.vue:126
+#: pages/_organisation/graphs_showcase.vue:253
 msgid "Coverage of Health Focus Areas"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:217
+#: components/project/sections/view/Implementation.vue:212
 msgid "Coverage type"
+msgstr ""
+
+#: components/charts/HealthFocusAreasCoverage.vue:46
+#: components/charts/HealthFocusAreasCoverage.vue:142
+msgid "Covered"
 msgstr ""
 
 #: components/admin/ApiAdmin.vue:28
@@ -1039,13 +1079,14 @@ msgstr ""
 msgid "Create your search here"
 msgstr ""
 
-#: components/common/charts/cStages.vue:28
+#: components/charts/common/cStages.vue:28
 msgid "Current period"
 msgstr ""
 
 #: components/BreadCrumb.vue:26 components/BreadCrumb.vue:27
-#: components/common/SearchComponent.vue:32 components/common/TopBar.vue:70
-#: components/common/TopBar.vue:10
+#: components/common/NavigationMenu.vue:16
+#: components/common/NavigationMenu.vue:19
+#: components/common/SearchComponent.vue:32
 msgid "Dashboard"
 msgstr ""
 
@@ -1066,7 +1107,7 @@ msgstr ""
 msgid "Date/Time"
 msgstr ""
 
-#: pages/_organisation/graphsold.vue:172
+#: pages/_organisation/graphs_showcase.vue:172
 msgid "Deletable Projects"
 msgstr ""
 
@@ -1079,23 +1120,22 @@ msgstr ""
 msgid "Delete canceled"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:59
-#: components/project/sections/GeneralOverview.vue:4
-#: components/project/sections/GeneralOverview.vue:193
+#: components/project/sections/GeneralOverview.vue:293
 msgid ""
 "Describe the user types, geographic coverage and other coverage details."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:92
+#: components/project/sections/GeneralOverview.vue:125
 msgid ""
-"Describe what the technology aims to achieve, detailing the\n"
-"              users, the reasons for deploying the system, and current and\n"
+"Describe what the technology aims to achieve, detailing the\r\n"
+"              users, the reasons for deploying the system, and current and"
+"\r\n"
 "              future phases of deployment."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:83
+#: components/project/sections/GeneralOverview.vue:116
 #: components/project/sections/GeneralOverview.vue:5
-#: components/project/sections/GeneralOverview.vue:240
+#: components/project/sections/GeneralOverview.vue:340
 msgid "Describe your overall digital health project design."
 msgstr ""
 
@@ -1128,7 +1168,7 @@ msgstr ""
 msgid "Digital Health Atlas How-to"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:202
+#: components/project/sections/view/Implementation.vue:197
 msgid "Digital Health Intervention"
 msgstr ""
 
@@ -1137,6 +1177,12 @@ msgstr ""
 #: components/dialogs/DashboardFiltersDialog.vue:4
 #: components/dialogs/DashboardFiltersDialog.vue:40
 msgid "Digital Health Interventions"
+msgstr ""
+
+#: components/landing/Banner.vue:6
+msgid ""
+"Digital Square has launched its sixth Call for Proposals, inviting digital "
+"health innovators to apply for grant funding. Check out the"
 msgstr ""
 
 #: components/project/ProjectForm.vue:134
@@ -1161,11 +1207,13 @@ msgstr ""
 msgid "Dismiss changes"
 msgstr ""
 
-#: pages/_organisation/graphsold.vue:240
+#: pages/_organisation/graphs_showcase.vue:240
 msgid "Distribution of projects’ statuses"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:92 pages/_organisation/graphsold.vue:120
+#: components/charts/DistributionOfProjectStages.vue:2
+#: pages/_organisation/graphs_alonso.vue:92
+#: pages/_organisation/graphs_showcase.vue:120
 msgid "Distributions of projects’ stages"
 msgstr ""
 
@@ -1189,7 +1237,7 @@ msgstr ""
 #: components/project/sections/InteroperabilityAndStandards.vue:5
 #: components/project/sections/InteroperabilityAndStandards.vue:1
 msgid ""
-"Does your project share information with one or more of these\n"
+"Does your project share information with one or more of these\r\n"
 "            digital Health Information System components?"
 msgstr ""
 
@@ -1368,7 +1416,7 @@ msgstr ""
 msgid "Facilities"
 msgstr ""
 
-#: components/admin/import/SmartCell.vue:65
+#: components/admin/import/SmartCell.vue:69
 msgid "Failed to parse your data, click to manually fix"
 msgstr ""
 
@@ -1462,7 +1510,7 @@ msgid "General"
 msgstr ""
 
 #: components/project/sections/GeneralOverview.vue:2
-#: components/project/sections/GeneralOverview.vue:56
+#: components/project/sections/GeneralOverview.vue:63
 msgid "General overview"
 msgstr ""
 
@@ -1470,7 +1518,7 @@ msgstr ""
 msgid "General Overview"
 msgstr ""
 
-#: components/project/sections/view/Overview.vue:85
+#: components/project/sections/view/Overview.vue:100
 msgid "Geographic scope"
 msgstr ""
 
@@ -1593,20 +1641,25 @@ msgstr ""
 msgid "growth of implementations, and reduce redundancy of investments."
 msgstr ""
 
+#: components/charts/MonthlyGrowthOfProjects.vue:72
+#: components/charts/MonthlyUserActivity.vue:63
+msgid "Growth of users"
+msgstr ""
+
 #: components/project/sections/ImplementationOverview.vue:119
 #: components/project/sections/ImplementationOverview.vue:1
 msgid ""
-"Has the government contributed to the project, either financially or\n"
+"Has the government contributed to the project, either financially or\r\n"
 "            in-kind?"
 msgstr ""
 
-#: pages/_organisation/graphsold.vue:215
+#: pages/_organisation/graphs_showcase.vue:215
 msgid ""
-"Has the government contributed to the project, either financially or\n"
+"Has the government contributed to the project, either financially or\r\n"
 "          in-kind?"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:284
+#: components/project/sections/view/Implementation.vue:279
 msgid "Has the government financially invested in the project?"
 msgstr ""
 
@@ -1619,8 +1672,6 @@ msgstr ""
 msgid "Has to be a valid url"
 msgstr ""
 
-#: components/project/CoverageFieldset.vue:25
-#: components/project/CoverageFieldset.vue:4
 #: components/project/CoverageFieldset.vue:86
 msgid ""
 "Health facilities using the system refers to all facilities that have direct "
@@ -1633,7 +1684,7 @@ msgstr ""
 msgid "Health Focus Area"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:184
+#: components/project/sections/view/Implementation.vue:179
 msgid "Health focus area (s)"
 msgstr ""
 
@@ -1646,15 +1697,31 @@ msgstr ""
 msgid "Health focus areas"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:122 pages/_organisation/graphs.vue:141
+#: components/charts/HealthFocusAreas.vue:13 pages/_organisation/graphs.vue:60
+#: pages/_organisation/graphs_alonso.vue:122
+#: pages/_organisation/graphs_alonso.vue:141
 msgid "Health Focus Areas"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:136 pages/_organisation/graphsold.vue:262
+#: components/charts/HealthFocusAreas.vue:3
+#: pages/_organisation/graphs_alonso.vue:136
+#: pages/_organisation/graphs_showcase.vue:262
 msgid "Health Focus Areas (by occurrences)"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:142
+#: components/charts/HealthFocusAreas.vue:15
+msgid ""
+"Health Focus Areas as sublevel of Health Focus Categories can\r\n"
+"            contain multiple Health Focus Areas. Because of this, it may\r\n"
+"            happen that the sum of the visible Health Focus Areas are more"
+"\r\n"
+"            than the sum of Health Focus Categories, although the individual"
+"\r\n"
+"            Health Focus Areas cannot exceed the number of Health Focus\r\n"
+"            Categories displayed."
+msgstr ""
+
+#: pages/_organisation/graphs_alonso.vue:142
 msgid ""
 "Health Focus Areas as sublevel of Health Focus Categories can contain "
 "multiple Health Focus Areas. Because of this, it may happen that the sum of "
@@ -1663,11 +1730,13 @@ msgid ""
 "number of Health Focus Categories displayed."
 msgstr ""
 
-#: pages/_organisation/graphs.vue:139
+#: components/charts/HealthFocusAreas.vue:7
+#: pages/_organisation/graphs_alonso.vue:139
 msgid "Health Focus Categories"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:135
+#: components/charts/HealthFocusAreas.vue:2
+#: pages/_organisation/graphs_alonso.vue:135
 msgid "Health Focus Categories (by occurrences)"
 msgstr ""
 
@@ -1678,7 +1747,7 @@ msgstr ""
 msgid "Health Information System"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:207
+#: components/project/sections/view/Implementation.vue:202
 msgid "Health Information System (HIS)"
 msgstr ""
 
@@ -1692,12 +1761,10 @@ msgstr ""
 msgid "Health System Challenges"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:190
+#: components/project/sections/view/Implementation.vue:185
 msgid "Health System Challenges (HSC)"
 msgstr ""
 
-#: components/project/CoverageFieldset.vue:9
-#: components/project/CoverageFieldset.vue:4
 #: components/project/CoverageFieldset.vue:43
 msgid ""
 "Health workers include all recognized health professionals directly "
@@ -1729,6 +1796,11 @@ msgstr ""
 msgid "History"
 msgstr ""
 
+#: components/common/NavigationMenu.vue:11
+#: components/common/NavigationMenu.vue:15
+msgid "Home"
+msgstr ""
+
 #: components/project/CoverageFieldset.vue:38
 #: components/project/CoverageFieldset.vue:1
 msgid "How many clients use the system?"
@@ -1744,11 +1816,13 @@ msgstr ""
 msgid "How many health workers use the system?"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:137 pages/_organisation/graphs.vue:492
+#: pages/_organisation/graphs_alonso.vue:137
+#: pages/_organisation/graphs_alonso.vue:492
 msgid "How to read the chart"
 msgstr ""
 
-#: components/common/TopBar.vue:97 components/common/TopBar.vue:37
+#: components/common/NavigationMenu.vue:34 components/common/TopBar.vue:27
+#: components/common/TopBar.vue:5
 msgid "How-to"
 msgstr ""
 
@@ -1760,6 +1834,18 @@ msgstr ""
 msgid "https://digitalhealthatlas.org/en/-/login"
 msgstr ""
 
+#: components/landing/StoryBox.vue:4
+msgid ""
+"https://stories.digitalhealthatlas.org/embed/1ee36aca-4eaf-4eee-9347-"
+"ed29ea01671c?components=[%228APPWPCuo2%22]"
+msgstr ""
+
+#: components/common/NavigationMenu.vue:11 components/common/TopBar.vue:14
+msgid ""
+"https://stories.digitalhealthatlas.org/post/269ecc01-2c1a-4d71-"
+"af65-84e3882f2e36"
+msgstr ""
+
 #: components/EditProfile.vue:80
 msgid "I request to be a:"
 msgstr ""
@@ -1768,7 +1854,7 @@ msgstr ""
 msgid "I request to join the investor group below:"
 msgstr ""
 
-#: components/EditProfile.vue:59 components/EditProfile.vue:328
+#: components/EditProfile.vue:328
 msgid ""
 "If a project you are part of completes the MAPS Assessment for a project, "
 "any changes in the assessment data will be noted in this email. You can "
@@ -1783,7 +1869,7 @@ msgstr ""
 #: components/project/sections/GeneralOverview.vue:9
 #: components/project/sections/GeneralOverview.vue:5
 msgid ""
-"If this is your first time uploading a project, a sample data form\n"
+"If this is your first time uploading a project, a sample data form\r\n"
 "              can be found here for reference."
 msgstr ""
 
@@ -1798,17 +1884,17 @@ msgstr ""
 
 #: components/EditProfile.vue:176
 msgid ""
-"If you are part of an investor group that is providing either\n"
-"                  financial or in-kind support to project activities, the "
-"DHA\n"
+"If you are part of an investor group that is providing either\r\n"
+"                  financial or in-kind support to project activities, the DHA"
+"\r\n"
 "                  can be used to help organize and connect all of your "
-"projects.\n"
+"projects.\r\n"
 "                  By joining your investor page, you will see information "
-"that\n"
+"that\r\n"
 "                  is private to your organization. If your group is not "
-"listed\n"
-"                  below, send an email to digital-health-atlas@who.int to "
-"add\n"
+"listed\r\n"
+"                  below, send an email to digital-health-atlas@who.int to add"
+"\r\n"
 "                  them to the list."
 msgstr ""
 
@@ -1818,7 +1904,7 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:420
 msgid ""
-"If you have further questions about the DHA, do not hesitate to\n"
+"If you have further questions about the DHA, do not hesitate to\r\n"
 "              get in touch using the details below:"
 msgstr ""
 
@@ -1830,8 +1916,6 @@ msgid ""
 "your profile at any time and update this selection."
 msgstr ""
 
-#: components/project/sections/InteroperabilityAndStandards.vue:18
-#: components/project/sections/InteroperabilityAndStandards.vue:4
 #: components/project/sections/InteroperabilityAndStandards.vue:73
 msgid ""
 "If your data standards are not available here, please email digital-health-"
@@ -1840,14 +1924,13 @@ msgstr ""
 
 #: components/project/sections/StageOverview.vue:17
 msgid ""
-"If your Digital Health project is focused on research\n"
+"If your Digital Health project is focused on research\r\n"
 "                  activities, please indicate here. The unique project ID "
-"can be\n"
+"can be\r\n"
 "                  shared as a reference during in your publication."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:37
-#: components/project/sections/GeneralOverview.vue:156
+#: components/project/sections/GeneralOverview.vue:256
 msgid ""
 "If your project is located in more than one country, or is part of a broader "
 "global initiative, your project is a Global Project. Indicated the countries "
@@ -1860,7 +1943,7 @@ msgid "Implementation"
 msgstr ""
 
 #: components/project/sections/ImplementationOverview.vue:2
-#: components/project/sections/ImplementationOverview.vue:74
+#: components/project/sections/ImplementationOverview.vue:67
 msgid "Implementation overview"
 msgstr ""
 
@@ -1869,8 +1952,8 @@ msgstr ""
 msgid "Implementation Overview"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:292
-msgid "Implementing partner (s)"
+#: components/project/sections/view/Overview.vue:82
+msgid "Implementing partner(s)"
 msgstr ""
 
 #: components/dashboard/SearchBox.vue:39
@@ -1915,21 +1998,21 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:139
 msgid ""
-"in connection with your use of the DHA, state or imply that WHO\n"
+"in connection with your use of the DHA, state or imply that WHO\r\n"
 "                endorses or is affiliated with you, or WHO endorses any "
-"entity,\n"
-"                organization, company, or product, or any particular "
-"digital\n"
+"entity,\r\n"
+"                organization, company, or product, or any particular digital"
+"\r\n"
 "                health activity; and"
 msgstr ""
 
 #: pages/_organisation/terms.vue:29
 msgid ""
-"In these Terms of Use “you”, “your” means: (i) the individual\n"
+"In these Terms of Use “you”, “your” means: (i) the individual\r\n"
 "              user; and (ii) the entity on whose behalf the individual user "
-"is\n"
+"is\r\n"
 "              accessing and using the DHA. The individual user and the "
-"relevant\n"
+"relevant\r\n"
 "              entity are joint and severally responsible for the use of the "
 "DHA."
 msgstr ""
@@ -1942,9 +2025,7 @@ msgstr ""
 msgid "Inactivate API key"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:34
-#: components/project/sections/ImplementationOverview.vue:4
-#: components/project/sections/ImplementationOverview.vue:164
+#: components/project/sections/ImplementationOverview.vue:157
 msgid ""
 "Include all software that is part of your project. If you cannot find your "
 "software listed in the options, you can add it by start typing the software "
@@ -1956,12 +2037,12 @@ msgstr ""
 msgid "Info"
 msgstr ""
 
-#: pages/_organisation/graphsold.vue:138
+#: pages/_organisation/graphs_showcase.vue:138
 msgid "Integration pending..."
 msgstr ""
 
 #: components/project/sections/ImplementationOverview.vue:98
-#: components/project/sections/view/Implementation.vue:105
+#: components/project/sections/view/Implementation.vue:100
 msgid "International"
 msgstr ""
 
@@ -1969,7 +2050,7 @@ msgstr ""
 msgid "International level deployment"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:225
+#: components/project/sections/view/Implementation.vue:220
 msgid "International Level Deployment"
 msgstr ""
 
@@ -1986,9 +2067,11 @@ msgstr ""
 msgid "Interoperability & Standards"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:168
-#: components/project/sections/ImplementationOverview.vue:4
-#: components/project/sections/ImplementationOverview.vue:538
+#: components/project/sections/view/Overview.vue:76
+msgid "Investment partner(s)"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:123
 msgid ""
 "Investment partners can include those contributing funds, human resources or "
 "in-kind support."
@@ -1998,12 +2081,8 @@ msgstr ""
 #: components/common/ProjectLegendContent.vue:22
 #: components/common/ProjectLegendContent.vue:4
 #: components/dialogs/HowToDialog.vue:39 components/dialogs/HowToDialog.vue:104
-#: components/project/collection/CollectionProjects.vue:20
+#: components/project/collection/CollectionProjects.vue:35
 msgid "Investor"
-msgstr ""
-
-#: components/project/sections/view/Implementation.vue:298
-msgid "Investor (s)"
 msgstr ""
 
 #: components/common/ActionBar.vue:26 components/common/UserDropdown.vue:58
@@ -2069,7 +2148,7 @@ msgid "Investors:"
 msgstr ""
 
 #: components/admin/import/ImportDataTable.vue:170
-#: components/admin/import/ImportDataTable.vue:271
+#: components/admin/import/ImportDataTable.vue:270
 msgid "Keep working"
 msgstr ""
 
@@ -2077,11 +2156,13 @@ msgstr ""
 msgid "KPI Graphs"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:21 pages/_organisation/graphsold.vue:21
+#: pages/_organisation/graphs.vue:19 pages/_organisation/graphs_alonso.vue:21
+#: pages/_organisation/graphs_showcase.vue:21
 msgid "Kpi's integration"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:42 pages/_organisation/graphsold.vue:49
+#: pages/_organisation/graphs.vue:47 pages/_organisation/graphs_alonso.vue:42
+#: pages/_organisation/graphs_showcase.vue:49
 msgid "Last 6 months"
 msgstr ""
 
@@ -2094,7 +2175,7 @@ msgstr ""
 msgid "Learn more"
 msgstr ""
 
-#: components/common/charts/cStages.vue:5
+#: components/charts/common/cStages.vue:5
 msgid "Legend:"
 msgstr ""
 
@@ -2154,7 +2235,7 @@ msgstr ""
 msgid "login"
 msgstr ""
 
-#: components/common/TopBar.vue:55 components/common/TopBar.vue:24
+#: components/common/TopBar.vue:50 components/common/TopBar.vue:28
 msgid "Login"
 msgstr ""
 
@@ -2224,19 +2305,43 @@ msgstr ""
 msgid "Ministry of Health {num}"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:46 pages/_organisation/graphsold.vue:57
-#: pages/_organisation/graphsold.vue:69 pages/_organisation/graphsold.vue:1
+#: components/charts/MonthlyUserActivity.vue:108
+msgid "Monthly Active User"
+msgstr ""
+
+#: components/charts/MonthlyAPIKeys.vue:2
+#: pages/_organisation/graphs_alonso.vue:46
+#: pages/_organisation/graphs_showcase.vue:57
+#: pages/_organisation/graphs_showcase.vue:69
+#: pages/_organisation/graphs_showcase.vue:1
 msgid "Monthly growth of API keys"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:67 pages/_organisation/graphsold.vue:95
-#: pages/_organisation/graphsold.vue:181
+#: components/charts/MonthlyGrowthOfProjects.vue:2
+#: pages/_organisation/graphs_alonso.vue:67
+#: pages/_organisation/graphs_showcase.vue:95
+#: pages/_organisation/graphs_showcase.vue:181
 msgid "Monthly growth of Projects"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:30 pages/_organisation/graphsold.vue:29
-#: pages/_organisation/graphsold.vue:41
+#: components/charts/MonthlyUserActivity.vue:2
+#: pages/_organisation/graphs_alonso.vue:30
+#: pages/_organisation/graphs_showcase.vue:29
+#: pages/_organisation/graphs_showcase.vue:41
 msgid "Monthly User Activity"
+msgstr ""
+
+#: components/charts/MonthlyUserActivity.vue:107
+msgid "Monthly User Growth"
+msgstr ""
+
+#: components/charts/MonthlyAPIKeys.vue:42
+#: components/charts/MonthlyGrowthOfProjects.vue:55
+#: components/charts/MonthlyGrowthOfProjects.vue:84
+#: components/charts/MonthlyUserActivity.vue:45
+#: components/charts/MonthlyUserActivity.vue:75
+#: components/charts/ProjectStatusesPerMonth.vue:53
+msgid "Months"
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:21 components/admin/DhaQuestion.vue:76
@@ -2280,8 +2385,9 @@ msgstr ""
 msgid "My profile"
 msgstr ""
 
-#: components/BreadCrumb.vue:28 components/common/TopBar.vue:80
-#: components/common/TopBar.vue:20 components/landing/MyProjectsBox.vue:4
+#: components/BreadCrumb.vue:28 components/common/NavigationMenu.vue:21
+#: components/common/NavigationMenu.vue:23
+#: components/landing/MyProjectsBox.vue:4
 #: pages/_organisation/projects/index.vue:3
 #: pages/_organisation/projects/index.vue:1
 msgid "My Projects"
@@ -2303,7 +2409,7 @@ msgstr ""
 #: components/common/map/TabbedCardProjectList.vue:9
 #: components/common/map/TabbedCardProjectList.vue:51
 #: components/project/sections/ImplementationOverview.vue:94
-#: components/project/sections/view/Implementation.vue:37
+#: components/project/sections/view/Implementation.vue:36
 msgid "National"
 msgstr ""
 
@@ -2317,7 +2423,7 @@ msgstr ""
 msgid "National level deployment"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:226
+#: components/project/sections/view/Implementation.vue:221
 msgid "National Level Deployment"
 msgstr ""
 
@@ -2330,16 +2436,20 @@ msgstr ""
 msgid "New order saved"
 msgstr ""
 
-#: components/BreadCrumb.vue:33 components/common/TopBar.vue:106
-#: components/common/TopBar.vue:46
+#: components/BreadCrumb.vue:33 components/common/TopBar.vue:74
+#: components/common/TopBar.vue:16
 msgid "New Project"
+msgstr ""
+
+#: components/charts/MonthlyGrowthOfProjects.vue:84
+msgid "New projects"
 msgstr ""
 
 #: components/admin/CountryAdmin.vue:285 components/admin/DonorAdmin.vue:183
 msgid "New requests"
 msgstr ""
 
-#: components/common/charts/cStages.vue:20
+#: components/charts/common/cStages.vue:20
 msgid "Next stage (incomplete)"
 msgstr ""
 
@@ -2401,12 +2511,20 @@ msgstr ""
 #: components/admin/import/SmartCell.vue:10
 #: components/admin/import/SmartCell.vue:7
 #: components/project/sections/ImplementationOverview.vue:127
-#: components/project/sections/view/Implementation.vue:40
+#: components/project/sections/view/Implementation.vue:39
 msgid "No, they have not yet contributed"
 msgstr ""
 
 #: components/dashboard/PersonaSelector.vue:17
 msgid "Normal View"
+msgstr ""
+
+#: components/charts/HealthFocusAreasCoverage.vue:143
+msgid "Not covered"
+msgstr ""
+
+#: components/charts/HealthFocusAreasCoverage.vue:47
+msgid "Not Covered"
 msgstr ""
 
 #: components/admin/CountryAdmin.vue:39
@@ -2425,7 +2543,7 @@ msgstr ""
 msgid "Note that once this column is deleted, you cannot recover the data."
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:231
+#: components/admin/import/ImportDataTable.vue:230
 msgid ""
 "Note that once you have saved these projects, they will be uploaded to the "
 "DHA. You can access all saved projects from your My Projects page."
@@ -2439,10 +2557,11 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:392
 msgid ""
-"Nothing in or relating to these Terms of Use shall be deemed a\n"
-"              waiver of any of the privileges and immunities enjoyed by WHO\n"
-"              under national or international law and/or as submitting WHO "
-"to\n"
+"Nothing in or relating to these Terms of Use shall be deemed a\r\n"
+"              waiver of any of the privileges and immunities enjoyed by WHO"
+"\r\n"
+"              under national or international law and/or as submitting WHO to"
+"\r\n"
 "              any national court jurisdiction."
 msgstr ""
 
@@ -2452,8 +2571,14 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:223
 msgid ""
-"obtained their express consent to provide their personal\n"
+"obtained their express consent to provide their personal\r\n"
 "                information for such purposes."
+msgstr ""
+
+#: components/charts/HealthFocusAreas.vue:28
+#: components/charts/HealthFocusAreas.vue:35
+#: components/charts/HealthFocusAreas.vue:49
+msgid "Ocurrances:"
 msgstr ""
 
 #: pages/_organisation/projects/index.vue:12
@@ -2471,7 +2596,7 @@ msgstr ""
 #: components/admin/DhaQuestion.vue:115
 #: components/admin/import/ImportDataTable.vue:121
 #: components/admin/import/ImportDataTable.vue:145
-#: components/admin/import/ImportDataTable.vue:236
+#: components/admin/import/ImportDataTable.vue:235
 #: components/admin/import/ImportHeaders.vue:81
 #: components/dashboard/FilterPresetsActions.vue:38
 #: components/project/ProjectForm.vue:69
@@ -2481,6 +2606,10 @@ msgstr ""
 #: components/dashboard/AdvancedSearch.vue:6
 #: components/dashboard/AdvancedSearch.vue:27
 msgid "Only MOH Verified Projects"
+msgstr ""
+
+#: components/landing/Banner.vue:7
+msgid "open solicitations"
 msgstr ""
 
 #: components/dashboard/FilterPresetsActions.vue:45
@@ -2497,7 +2626,7 @@ msgid "or technologist, sign up below."
 msgstr ""
 
 #: components/common/ProjectBar.vue:23 components/common/ProjectCard.vue:70
-#: components/project/sections/view/Overview.vue:73
+#: components/project/sections/view/Overview.vue:88
 msgid "Organisation"
 msgstr ""
 
@@ -2514,7 +2643,7 @@ msgstr ""
 msgid "Organisation name:"
 msgstr ""
 
-#: components/project/collection/CollectionProjects.vue:21
+#: components/project/collection/CollectionProjects.vue:36
 msgid "Organization"
 msgstr ""
 
@@ -2530,7 +2659,7 @@ msgstr ""
 msgid "Overview of digital health implementation:"
 msgstr ""
 
-#: components/project/sections/view/Overview.vue:91
+#: components/project/sections/view/Overview.vue:106
 msgid "Overview of the digital health implementation"
 msgstr ""
 
@@ -2580,8 +2709,8 @@ msgstr ""
 msgid "Planning & guidance {num}"
 msgstr ""
 
-#: components/BreadCrumb.vue:32 components/common/TopBar.vue:90
-#: components/common/TopBar.vue:30
+#: components/BreadCrumb.vue:32 components/common/NavigationMenu.vue:26
+#: components/common/NavigationMenu.vue:27
 #: angular/Cms/StaticInfoWidget/StaticInfoWidget.html:4
 msgid "Planning and Guidance"
 msgstr ""
@@ -2589,21 +2718,21 @@ msgstr ""
 #: pages/_organisation/projects/create.vue:6
 #: pages/_organisation/projects/create.vue:1
 msgid ""
-"Please complete the questions below to include your project information\n"
-"        in the Digital Health Atlas. These questions document your "
-"project's\n"
+"Please complete the questions below to include your project information\r\n"
+"        in the Digital Health Atlas. These questions document your project's"
+"\r\n"
 "        health focus area(s), software features and national scale."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:70
+#: components/project/sections/GeneralOverview.vue:103
 msgid ""
-"Please describe where your implementation is currently taking\n"
+"Please describe where your implementation is currently taking\r\n"
 "              place"
 msgstr ""
 
 #: components/admin/CountryAdmin.vue:53
 msgid ""
-"Please enable widgets you want to show on the landing\n"
+"Please enable widgets you want to show on the landing\r\n"
 "              page:"
 msgstr ""
 
@@ -2619,16 +2748,16 @@ msgstr ""
 msgid "Please fill your profile first"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:79
+#: components/project/sections/GeneralOverview.vue:112
 #: components/project/sections/GeneralOverview.vue:1
 msgid ""
-"Please provide a narrative summary of the digital health\n"
+"Please provide a narrative summary of the digital health\r\n"
 "            implementation."
 msgstr ""
 
 #: pages/_organisation/terms.vue:15
 msgid ""
-"Please read these Terms of Use carefully before installing,\n"
+"Please read these Terms of Use carefully before installing,\r\n"
 "              accessing and using the Digital Health Atlas (the “DHA”)."
 msgstr ""
 
@@ -2688,12 +2817,12 @@ msgstr ""
 
 #: components/EditProfile.vue:136
 msgid ""
-"Privileges for Government Users are detailed below. Select\n"
-"                    the user type that most matches your role within the "
-"DHA.\n"
+"Privileges for Government Users are detailed below. Select\r\n"
+"                    the user type that most matches your role within the DHA."
+"\r\n"
 "                    This request will be received by the Government Admin "
-"team\n"
-"                    and a response will be sent via email for your\n"
+"team\r\n"
+"                    and a response will be sent via email for your\r\n"
 "                    request."
 msgstr ""
 
@@ -2732,7 +2861,7 @@ msgstr ""
 msgid "Project Approval"
 msgstr ""
 
-#: pages/_organisation/graphsold.vue:194
+#: pages/_organisation/graphs_showcase.vue:194
 msgid "Project approval per countries"
 msgstr ""
 
@@ -2740,17 +2869,15 @@ msgstr ""
 msgid "Project approval process"
 msgstr ""
 
-#: components/project/sections/view/Overview.vue:79
+#: components/project/sections/view/Overview.vue:94
 msgid "Project country"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:134
-#: components/project/sections/GeneralOverview.vue:5
-#: components/project/sections/GeneralOverview.vue:371
+#: components/project/sections/GeneralOverview.vue:471
 msgid "Project editors can change and update all project information."
 msgstr ""
 
-#: components/common/charts/cStages.vue:12
+#: components/charts/common/cStages.vue:12
 msgid "Project end date"
 msgstr ""
 
@@ -2758,7 +2885,7 @@ msgstr ""
 msgid "Project has been unpublish"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:270
+#: components/admin/import/ImportDataTable.vue:269
 msgid "Project inbox"
 msgstr ""
 
@@ -2766,13 +2893,13 @@ msgstr ""
 msgid "Project List"
 msgstr ""
 
-#: components/project/collection/CollectionProjects.vue:18
+#: components/project/collection/CollectionProjects.vue:33
 msgid "Project name"
 msgstr ""
 
 #: components/dashboard/MainTable.vue:4 components/dashboard/MainTable.vue:64
 #: components/dashboard/SearchBox.vue:27
-#: components/project/sections/view/Overview.vue:67
+#: components/project/sections/view/Overview.vue:70
 msgid "Project Name"
 msgstr ""
 
@@ -2785,19 +2912,23 @@ msgstr ""
 msgid "project stages"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:88 pages/_organisation/graphsold.vue:116
+#: pages/_organisation/graphs.vue:49 pages/_organisation/graphs_alonso.vue:88
+#: pages/_organisation/graphs_showcase.vue:116
 msgid "Project stages"
 msgstr ""
 
-#: components/common/charts/cStages.vue:8
+#: components/charts/common/cStages.vue:8
 msgid "Project start date"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:55 pages/_organisation/graphsold.vue:78
+#: pages/_organisation/graphs.vue:37 pages/_organisation/graphs_alonso.vue:55
+#: pages/_organisation/graphs_showcase.vue:78
 msgid "Project status"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:76 pages/_organisation/graphsold.vue:104
+#: components/charts/ProjectStatusesPerMonth.vue:2
+#: pages/_organisation/graphs_alonso.vue:76
+#: pages/_organisation/graphs_showcase.vue:104
 msgid "Project statuses per month"
 msgstr ""
 
@@ -2806,9 +2937,7 @@ msgstr ""
 msgid "Project updates"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:148
-#: components/project/sections/GeneralOverview.vue:5
-#: components/project/sections/GeneralOverview.vue:406
+#: components/project/sections/GeneralOverview.vue:506
 msgid "Project viewers will be able to view the full project details."
 msgstr ""
 
@@ -2816,16 +2945,25 @@ msgstr ""
 msgid "Projects {num}"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:46
+#: components/project/sections/GeneralOverview.vue:79
 msgid ""
-"Projects in the DHA can be linked to a specific country, or for\n"
+"Projects in the DHA can be linked to a specific country, or for\r\n"
 "              projects which operate in multiple countries or across a "
-"region,\n"
+"region,\r\n"
 "              projects can be listed as global."
 msgstr ""
 
 #: components/admin/import/ImportInfo.vue:39
 msgid "Projects may be orphans"
+msgstr ""
+
+#: components/charts/ProjectStatistics.vue:2 components/landing/KpiBox.vue:3
+msgid "Projects Statistics"
+msgstr ""
+
+#: components/charts/DistributionOfProjectStages.vue:9
+#: components/charts/DistributionOfProjectStages.vue:3
+msgid "Projects with no stage data"
 msgstr ""
 
 #: components/project/ProjectNavigation.vue:86
@@ -2836,7 +2974,7 @@ msgstr ""
 msgid "Publish draft"
 msgstr ""
 
-#: pages/_organisation/graphsold.vue:155
+#: pages/_organisation/graphs_showcase.vue:155
 msgid "Publishable Projects"
 msgstr ""
 
@@ -2849,7 +2987,7 @@ msgstr ""
 msgid "Published Project"
 msgstr ""
 
-#: pages/_organisation/graphsold.vue:146
+#: pages/_organisation/graphs_showcase.vue:146
 msgid "Published Projects"
 msgstr ""
 
@@ -2873,7 +3011,7 @@ msgstr ""
 msgid "Question text"
 msgstr ""
 
-#: pages/_organisation/graphsold.vue:135
+#: pages/_organisation/graphs_showcase.vue:135
 msgid "Random generated"
 msgstr ""
 
@@ -2932,7 +3070,7 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:284
 msgid ""
-"restrict or inhibit any other user from using and enjoying the\n"
+"restrict or inhibit any other user from using and enjoying the\r\n"
 "                DHA;"
 msgstr ""
 
@@ -2959,7 +3097,7 @@ msgstr ""
 #: components/admin/import/ImportDataTable.vue:21
 #: components/admin/import/ImportDataTable.vue:6
 #: components/admin/import/ImportDataTable.vue:2
-#: components/admin/import/ImportDataTable.vue:234
+#: components/admin/import/ImportDataTable.vue:233
 msgid "Save all projects"
 msgstr ""
 
@@ -2984,7 +3122,7 @@ msgstr ""
 msgid "Save settings"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:245
+#: components/admin/import/ImportDataTable.vue:244
 msgid "Saving all projects has been cancelled"
 msgstr ""
 
@@ -2992,7 +3130,8 @@ msgstr ""
 msgid "Saving Cancelled"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:13 pages/_organisation/graphsold.vue:13
+#: pages/_organisation/graphs_alonso.vue:13
+#: pages/_organisation/graphs_showcase.vue:13
 #: angular/Cms/PlanningAndGuidance/PlanningAndGuidance.html:99
 msgid "Search"
 msgstr ""
@@ -3029,6 +3168,8 @@ msgid "Select collection"
 msgstr ""
 
 #: components/common/CountrySelect.vue:1 components/common/CountrySelect.vue:12
+#: components/project/collection/CollectionProjects.vue:13
+#: components/project/collection/CollectionProjects.vue:81
 msgid "Select country"
 msgstr ""
 
@@ -3082,6 +3223,8 @@ msgid "Select from list"
 msgstr ""
 
 #: components/common/DonorSelect.vue:1 components/common/DonorSelect.vue:9
+#: components/project/collection/CollectionProjects.vue:18
+#: components/project/collection/CollectionProjects.vue:103
 msgid "Select investor"
 msgstr ""
 
@@ -3092,6 +3235,11 @@ msgstr ""
 #: components/common/LanguageSelect.vue:1
 #: components/common/LanguageSelect.vue:10
 msgid "Select language"
+msgstr ""
+
+#: components/project/collection/CollectionProjects.vue:23
+#: components/project/collection/CollectionProjects.vue:125
+msgid "Select organization"
 msgstr ""
 
 #: components/common/RegionSelect.vue:1 components/common/RegionSelect.vue:11
@@ -3138,8 +3286,8 @@ msgstr ""
 msgid "Set Password"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:37
-#: components/project/sections/GeneralOverview.vue:154
+#: components/project/sections/GeneralOverview.vue:70
+#: components/project/sections/GeneralOverview.vue:254
 msgid "Set project as 'Global project'"
 msgstr ""
 
@@ -3226,8 +3374,12 @@ msgid "Sign up now"
 msgstr ""
 
 #: components/DhaLogin.vue:25 components/common/TopBar.vue:45
-#: components/common/TopBar.vue:14
+#: components/common/TopBar.vue:23
 msgid "Signup"
+msgstr ""
+
+#: components/charts/ProjectStatistics.vue:8
+msgid "Since last month"
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:20 components/admin/DhaQuestion.vue:72
@@ -3245,11 +3397,11 @@ msgstr ""
 #: components/dashboard/AdvancedSearch.vue:22
 #: components/dashboard/AdvancedSearch.vue:106
 #: components/dialogs/DashboardFiltersDialog.vue:68
-#: components/project/sections/view/Implementation.vue:201
+#: components/project/sections/view/Implementation.vue:196
 msgid "Software"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:196
+#: components/project/sections/view/Implementation.vue:191
 msgid "Software and related Digital Health Interventions (DHI)"
 msgstr ""
 
@@ -3262,7 +3414,7 @@ msgstr ""
 msgid "Specify URL"
 msgstr ""
 
-#: components/common/charts/cStages.vue:16
+#: components/charts/common/cStages.vue:16
 msgid "Stage completion date"
 msgstr ""
 
@@ -3284,11 +3436,16 @@ msgstr ""
 msgid "State of Digital Health in"
 msgstr ""
 
-#: components/project/collection/CollectionProjects.vue:15
+#: components/project/collection/CollectionProjects.vue:30
 msgid "Status"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:36
+#: components/common/NavigationMenu.vue:38 components/common/TopBar.vue:31
+#: components/common/TopBar.vue:9
+msgid "Stories"
+msgstr ""
+
+#: components/project/sections/view/Implementation.vue:35
 msgid "Sub National"
 msgstr ""
 
@@ -3304,14 +3461,12 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:82
-#: components/project/sections/ImplementationOverview.vue:5
-#: components/project/sections/ImplementationOverview.vue:285
+#: components/project/sections/ImplementationOverview.vue:278
 msgid "Subnational may include district, regional, provincial, county levels."
 msgstr ""
 
 #: components/admin/import/ImportDataTable.vue:167
-#: components/admin/import/ImportDataTable.vue:268
+#: components/admin/import/ImportDataTable.vue:267
 #: components/project/collection/AddEditorDialog.vue:8
 msgid "Success!"
 msgstr ""
@@ -3322,10 +3477,10 @@ msgstr ""
 
 #: components/admin/CountryAdmin.vue:127
 msgid ""
-"Supported file formats include: {list} The file size is limited to\n"
+"Supported file formats include: {list} The file size is limited to\r\n"
 "            {size}MB. You are able to upload a maximum of {max} reference "
-"files.\n"
-"            If you need to increase this number, email\n"
+"files.\r\n"
+"            If you need to increase this number, email\r\n"
 "            digital-health-atlas@who.int to add more documents."
 msgstr ""
 
@@ -3338,11 +3493,11 @@ msgstr ""
 msgid "Team Member"
 msgstr ""
 
-#: components/project/collection/CollectionProjects.vue:17
+#: components/project/collection/CollectionProjects.vue:32
 msgid "Team member(s)"
 msgstr ""
 
-#: components/project/sections/view/Overview.vue:123
+#: components/project/sections/view/Overview.vue:138
 msgid "Team members"
 msgstr ""
 
@@ -3376,16 +3531,16 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:121
 msgid ""
-"The boundaries and names shown and the designations used on the\n"
-"              maps used in the DHA do not imply the expression of any "
-"opinion\n"
+"The boundaries and names shown and the designations used on the\r\n"
+"              maps used in the DHA do not imply the expression of any opinion"
+"\r\n"
 "              whatsoever on the part of WHO concerning the legal status of "
-"any\n"
-"              country, territory, city or area or of its authorities, or\n"
+"any\r\n"
+"              country, territory, city or area or of its authorities, or\r\n"
 "              concerning the delimitation of its frontiers or boundaries. "
-"Dotted\n"
-"              and dashed lines on maps represent approximate border lines "
-"for\n"
+"Dotted\r\n"
+"              and dashed lines on maps represent approximate border lines for"
+"\r\n"
 "              which there may not yet be full agreement."
 msgstr ""
 
@@ -3398,9 +3553,9 @@ msgstr ""
 msgid "The current project will be unpublish"
 msgstr ""
 
-#: components/common/charts/cStages.vue:32
+#: components/charts/common/cStages.vue:32
 msgid ""
-"The date under a stage represents when that stage was\n"
+"The date under a stage represents when that stage was\r\n"
 "          completed."
 msgstr ""
 
@@ -3426,14 +3581,15 @@ msgstr ""
 
 #: components/EditProfile.vue:108
 msgid ""
-"The DHA has additional features to support Ministries of\n"
+"The DHA has additional features to support Ministries of\r\n"
 "                  Health and Investors to understand and organize their "
-"digital\n"
+"digital\r\n"
 "                  health implementations. If you plan to use the DHA to "
-"register\n"
-"                  projects only, select this option for your profile. Your\n"
+"register\r\n"
+"                  projects only, select this option for your profile. Your"
+"\r\n"
 "                  access level can be updated at any time by returning to "
-"your\n"
+"your\r\n"
 "                  profile page."
 msgstr ""
 
@@ -3453,12 +3609,13 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:38
 msgid ""
-"The DHA is an open-source web platform made available by WHO to\n"
+"The DHA is an open-source web platform made available by WHO to\r\n"
 "              support governments, product owners, implementers, investors "
-"and\n"
-"              donors to better coordinate digital health activities. It can\n"
+"and\r\n"
+"              donors to better coordinate digital health activities. It can"
+"\r\n"
 "              answer the question of which software applications are being "
-"used\n"
+"used\r\n"
 "              at which health facilities in any given country."
 msgstr ""
 
@@ -3480,10 +3637,10 @@ msgstr ""
 
 #: components/landing/WelcomeBox.vue:6
 msgid ""
-"The Digital Health Atlas is a WHO global technology registry\n"
+"The Digital Health Atlas is a WHO global technology registry\r\n"
 "            platform aiming to strengthen the value and impact of digital "
-"health\n"
-"            investments, improve coordination, and facilitate\n"
+"health\r\n"
+"            investments, improve coordination, and facilitate\r\n"
 "            institutionalization and scale."
 msgstr ""
 
@@ -3514,7 +3671,7 @@ msgstr ""
 
 #: components/DjangoFeedback.vue:21
 msgid ""
-"There was a problem processing your ticket,\n"
+"There was a problem processing your ticket,\r\n"
 "          please try again"
 msgstr ""
 
@@ -3528,7 +3685,7 @@ msgid ""
 "submitted"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:73 components/admin/CountryAdmin.vue:300
+#: components/admin/CountryAdmin.vue:300
 msgid ""
 "These documents may include a National Digital Health Vision, Action Plan,"
 "Implementation Plan, Digital Health Strategy, or Reference Architecture."
@@ -3536,30 +3693,31 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:403
 msgid ""
-"These Terms of Use constitute the entire agreement between you and\n"
-"              WHO with respect to its subject matter. WHO is not bound by "
-"any\n"
-"              additional terms that may appear in any communication from "
-"you.\n"
-"              Any amendment of these Terms of Use shall be subject to WHO’s\n"
+"These Terms of Use constitute the entire agreement between you and\r\n"
+"              WHO with respect to its subject matter. WHO is not bound by any"
+"\r\n"
+"              additional terms that may appear in any communication from you."
+"\r\n"
+"              Any amendment of these Terms of Use shall be subject to WHO’s"
+"\r\n"
 "              written agreement, it being agreed that WHO may amend these "
-"Terms\n"
+"Terms\r\n"
 "              and Conditions from time to time at its sole discretion, "
-"without\n"
+"without\r\n"
 "              prior notice."
 msgstr ""
 
 #: pages/_organisation/terms.vue:21
 msgid ""
-"These Terms of Use governs your use of the DHA. By installing,\n"
+"These Terms of Use governs your use of the DHA. By installing,\r\n"
 "              accessing and/or using the DHA, you enter into an agreement "
-"with\n"
-"              the World Health Organization (“WHO”) and you accept all "
-"terms,\n"
+"with\r\n"
+"              the World Health Organization (“WHO”) and you accept all terms,"
+"\r\n"
 "              conditions, and requirements of the Agreement."
 msgstr ""
 
-#: components/TranslateWrapper.vue:19
+#: components/TranslateWrapper.vue:23
 msgid "this"
 msgstr ""
 
@@ -3582,15 +3740,14 @@ msgstr ""
 msgid "This is required"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:105
-#: components/project/sections/GeneralOverview.vue:4
-#: components/project/sections/GeneralOverview.vue:294
+#: components/project/sections/GeneralOverview.vue:394
 msgid ""
 "This is the individual who will be the lead point of contact for any queries "
 "through the DHA."
 msgstr ""
 
-#: pages/_organisation/graphs.vue:28 pages/_organisation/graphsold.vue:35
+#: pages/_organisation/graphs.vue:33 pages/_organisation/graphs_alonso.vue:28
+#: pages/_organisation/graphs_showcase.vue:35
 msgid "This month"
 msgstr ""
 
@@ -3638,7 +3795,8 @@ msgid ""
 "This will save the question, type and options will not be editable anymore"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:34 pages/_organisation/graphsold.vue:41
+#: pages/_organisation/graphs.vue:39 pages/_organisation/graphs_alonso.vue:34
+#: pages/_organisation/graphs_showcase.vue:41
 msgid "This year"
 msgstr ""
 
@@ -3648,15 +3806,15 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:202
 msgid ""
-"To compile and disclose statistics about our users and their\n"
+"To compile and disclose statistics about our users and their\r\n"
 "                preferences. However, these statistics are anonymous and do "
-"not\n"
+"not\r\n"
 "                identify individual users."
 msgstr ""
 
 #: pages/_organisation/terms.vue:191
 msgid ""
-"To customize the content and /or layout of the website for each\n"
+"To customize the content and /or layout of the website for each\r\n"
 "                individual user."
 msgstr ""
 
@@ -3684,7 +3842,7 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:179
 msgid ""
-"To let you know about information and services in which you may\n"
+"To let you know about information and services in which you may\r\n"
 "                be interested."
 msgstr ""
 
@@ -3702,12 +3860,17 @@ msgstr ""
 msgid "Toolkit"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:111
+#: components/charts/TopDataStandards.vue:2
+#: pages/_organisation/graphs_alonso.vue:111
 msgid "Top {top} ‘Data standards’ (by occurrences)"
 msgstr ""
 
-#: pages/_organisation/graphsold.vue:227
+#: pages/_organisation/graphs_showcase.vue:227
 msgid "Top 10 ‘Data standards’ (by occurrences)"
+msgstr ""
+
+#: components/charts/ProjectStatistics.vue:4
+msgid "Totals amount"
 msgstr ""
 
 #: components/common/OrganisationSelect.vue:1
@@ -3767,7 +3930,7 @@ msgstr ""
 msgid "Unpublish"
 msgstr ""
 
-#: pages/_organisation/graphsold.vue:164
+#: pages/_organisation/graphs_showcase.vue:164
 msgid "Unpublished Projects"
 msgstr ""
 
@@ -3797,9 +3960,9 @@ msgstr ""
 
 #: pages/_organisation/terms.vue:147
 msgid ""
-"use the name or emblem of WHO in any way. All requests to use\n"
+"use the name or emblem of WHO in any way. All requests to use\r\n"
 "                the WHO name and/or emblem require advance written approval "
-"of\n"
+"of\r\n"
 "                WHO."
 msgstr ""
 
@@ -3830,7 +3993,8 @@ msgstr ""
 msgid "User role requests"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:25 pages/_organisation/graphsold.vue:25
+#: pages/_organisation/graphs.vue:23 pages/_organisation/graphs_alonso.vue:25
+#: pages/_organisation/graphs_showcase.vue:25
 msgid "Users"
 msgstr ""
 
@@ -3875,16 +4039,17 @@ msgstr ""
 msgid "Viewer"
 msgstr ""
 
-#: components/project/sections/view/Overview.vue:129
+#: components/project/sections/view/Overview.vue:144
 msgid "Viewers"
 msgstr ""
 
 #: pages/_organisation/terms.vue:303
 msgid ""
-"violate, plagiarize, or infringe the rights of third parties,\n"
-"                including, without limitation, copyright, trademark, trade\n"
+"violate, plagiarize, or infringe the rights of third parties,\r\n"
+"                including, without limitation, copyright, trademark, trade"
+"\r\n"
 "                secret, confidentiality, contract, patent, rights of "
-"privacy, or\n"
+"privacy, or\r\n"
 "                publicity or any other proprietary rights;"
 msgstr ""
 
@@ -3918,10 +4083,10 @@ msgstr ""
 
 #: components/EditProfile.vue:90
 msgid ""
-"We will notify you via email when your user access has been\n"
-"                  approved. If you would like to request a different type "
-"of\n"
-"                  access, you can resubmit the form below and saving your\n"
+"We will notify you via email when your user access has been\r\n"
+"                  approved. If you would like to request a different type of"
+"\r\n"
+"                  access, you can resubmit the form below and saving your\r\n"
 "                  changes."
 msgstr ""
 
@@ -3941,7 +4106,7 @@ msgstr ""
 #: components/project/sections/ImplementationOverview.vue:14
 #: components/project/sections/ImplementationOverview.vue:1
 msgid ""
-"What are the Health System Challenges addressed by the Digital\n"
+"What are the Health System Challenges addressed by the Digital\r\n"
 "            Health Intervention?"
 msgstr ""
 
@@ -3959,18 +4124,18 @@ msgstr ""
 #: components/project/sections/ImplementationOverview.vue:46
 #: components/project/sections/ImplementationOverview.vue:1
 msgid ""
-"What Digital Health Intervention(s) are included in this\n"
+"What Digital Health Intervention(s) are included in this\r\n"
 "                  software?"
 msgstr ""
 
 #: components/project/sections/ImplementationOverview.vue:67
 #: components/project/sections/ImplementationOverview.vue:1
 msgid ""
-"What health information system(s) in your country does this project\n"
+"What health information system(s) in your country does this project\r\n"
 "            support?"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:56
+#: components/project/sections/GeneralOverview.vue:89
 #: components/project/sections/GeneralOverview.vue:1
 msgid "What is the geographic scope of the project?"
 msgstr ""
@@ -3980,7 +4145,7 @@ msgstr ""
 msgid "What is the health focus area(s) addressed by the DHI?"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:20
+#: components/project/sections/GeneralOverview.vue:53
 #: components/project/sections/GeneralOverview.vue:1
 msgid "What is the name of the lead organization?"
 msgstr ""
@@ -3993,7 +4158,7 @@ msgstr ""
 #: components/project/sections/ImplementationOverview.vue:78
 #: components/project/sections/ImplementationOverview.vue:1
 msgid ""
-"What level of coverage does your project have (Sub-national,\n"
+"What level of coverage does your project have (Sub-national,\r\n"
 "              National)"
 msgstr ""
 
@@ -4001,8 +4166,6 @@ msgstr ""
 msgid "What other system do you interoperate with ?"
 msgstr ""
 
-#: components/project/sections/StageOverview.vue:34
-#: components/project/sections/StageOverview.vue:4
 #: components/project/sections/StageOverview.vue:120
 msgid ""
 "When did the overall project, not just the digital health component, start."
@@ -4016,9 +4179,9 @@ msgstr ""
 
 #: components/project/sections/StageOverview.vue:104
 msgid ""
-"When your project activities have completed, you can indicated\n"
+"When your project activities have completed, you can indicated\r\n"
 "                  by setting the end of the project. Note that the project "
-"will\n"
+"will\r\n"
 "                  still be visible on the global map as a completed project."
 msgstr ""
 
@@ -4026,32 +4189,32 @@ msgstr ""
 msgid "Whether you are an implementer, government, investor"
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:28
+#: components/project/sections/GeneralOverview.vue:61
 #: components/project/sections/GeneralOverview.vue:1
 msgid "Which country is the project located in?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:148
-#: components/project/sections/ImplementationOverview.vue:1
+#: components/project/sections/GeneralOverview.vue:35
+#: components/project/sections/GeneralOverview.vue:1
 msgid "Who are your implementing partners?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:165
-#: components/project/sections/ImplementationOverview.vue:1
+#: components/project/sections/GeneralOverview.vue:20
+#: components/project/sections/GeneralOverview.vue:1
 msgid "Who are your investment partners?"
 msgstr ""
 
-#: components/common/TopBar.vue:63
+#: components/common/TopBar.vue:57
 msgid "WHO logo"
 msgstr ""
 
 #: pages/_organisation/terms.vue:355
 msgid ""
-"WHO reserves the right at any time and from time to time to modify\n"
+"WHO reserves the right at any time and from time to time to modify\r\n"
 "              or discontinue, temporarily or permanently, the DHA, or any "
-"means\n"
+"means\r\n"
 "              of accessing or utilizing the DHA, with or without prior "
-"notice to\n"
+"notice to\r\n"
 "              you."
 msgstr ""
 
@@ -4097,36 +4260,36 @@ msgstr ""
 #: components/admin/import/SmartCell.vue:25
 #: components/admin/import/SmartCell.vue:22
 #: components/project/sections/ImplementationOverview.vue:141
-#: components/project/sections/view/Implementation.vue:45
+#: components/project/sections/view/Implementation.vue:44
 msgid "Yes, MOH is fully funding the project"
 msgstr ""
 
 #: components/project/sections/ImplementationOverview.vue:135
 msgid ""
-"Yes, there is a financial contribution through MOH\n"
+"Yes, there is a financial contribution through MOH\r\n"
 "              budget"
 msgstr ""
 
 #: components/admin/import/SmartCell.vue:20
 #: components/admin/import/SmartCell.vue:17
-#: components/project/sections/view/Implementation.vue:42
+#: components/project/sections/view/Implementation.vue:41
 msgid "Yes, there is a financial contribution through MOH budget"
 msgstr ""
 
 #: components/admin/import/SmartCell.vue:15
 #: components/admin/import/SmartCell.vue:12
 #: components/project/sections/ImplementationOverview.vue:130
-#: components/project/sections/view/Implementation.vue:41
+#: components/project/sections/view/Implementation.vue:40
 msgid "Yes, they are contributing in-kind people or time"
 msgstr ""
 
 #: pages/_organisation/terms.vue:366
 msgid ""
-"You agree to indemnify WHO for, and hold WHO harmless against, any\n"
+"You agree to indemnify WHO for, and hold WHO harmless against, any\r\n"
 "              claims and liabilities, including reasonable attorneys' fees "
-"and\n"
-"              costs, arising from your use of the DHA and/or breach of "
-"these\n"
+"and\r\n"
+"              costs, arising from your use of the DHA and/or breach of these"
+"\r\n"
 "              Terms of Use."
 msgstr ""
 
@@ -4160,8 +4323,6 @@ msgstr ""
 msgid "You are viewing the"
 msgstr ""
 
-#: components/common/SearchComponent.vue:38
-#: components/common/SearchComponent.vue:1
 #: components/common/SearchComponent.vue:153
 msgid ""
 "You can use filters to further refine your search. Note that these filters "
@@ -4196,7 +4357,7 @@ msgstr ""
 
 #: components/DjangoFeedback.vue:10
 msgid ""
-"Your message has been successfully sent!\n"
+"Your message has been successfully sent!\r\n"
 "          We will be back to you soon!"
 msgstr ""
 
@@ -4210,7 +4371,7 @@ msgid ""
 "project page or keep working on the import interface"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:265
+#: components/admin/import/ImportDataTable.vue:264
 msgid ""
 "Your projects have been successfully saved as a draft, you can go to your "
 "project inbox or keep working on the import interface"
@@ -4669,9 +4830,9 @@ msgstr ""
 #: angular/MapsToolkit/Scorecard/Scorecard.html:145
 msgid ""
 "After completing each axis scorecard, transfer the results for the axis "
-"percentages and domain percentages to\n"
+"percentages and domain percentages to\r\n"
 "        this sheet. This will allow you to compare your progress across the "
-"six axes, and to identify the domains\n"
+"six axes, and to identify the domains\r\n"
 "        that require greater attention and efforts."
 msgstr ""
 
@@ -5756,7 +5917,7 @@ msgstr ""
 
 #: angular/Thematic/static/5-0.html:10
 msgid ""
-"Individuals who derive benefit\n"
+"Individuals who derive benefit\r\n"
 "from end-users’ input into mHealth products, but do not themselves directly "
 "enter data (e.g. supervisors)."
 msgstr ""
