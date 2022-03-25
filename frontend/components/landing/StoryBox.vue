@@ -13,7 +13,7 @@
 export default {
   data() {
     return {
-      storyUrl: this.$gettext('https://stories.digitalhealthatlas.org/embed/1ee36aca-4eaf-4eee-9347-ed29ea01671c?components=[%228APPWPCuo2%22]')
+      storyUrl: this.$gettext('https://dha.akuko.io/embed/046f78c1-fd3a-4faf-ae59-1ce4b210930e?components=["XfYZ9d3lKr","v56rTWY0hX"]')
     }
   }
 }
