@@ -368,8 +368,8 @@ def sync_project_from_odk():  # pragma: no cover
 @app.task(name='notify_superusers_about_new_pending_software')
 def notify_superusers_about_new_pending_software(software_id):
     software = TechnologyPlatform.objects.get(id=software_id)
-    super_users = User.objects.filter(email=os.environ.get('DEFAULT_NOTIFICATION_EMAIL_EXPORT', 1))
-    if not len(super_users):
+    super_users = User.objects.filter(email=settings.NOTIFICATION_EMAIL)
+    if super_users:
         super_users = User.objects.filter(is_superuser=True)
 
     email_mapping = defaultdict(list)

@@ -168,6 +168,8 @@ FILE_UPLOAD_PERMISSIONS = 0o644
 SITE_ID = int(os.environ.get('SITE_ID', 1))
 CI_RUN = bool(os.environ.get('CI_RUN', False))
 
+NOTIFICATION_EMAIL = os.environ.get('DEFAULT_NOTIFICATION_EMAIL_EXPORT', 1)
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Rest framework settings
