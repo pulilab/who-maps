@@ -1,7 +1,7 @@
 <template>
   <div class="SectionWrapper">
     <div class="StoryWrapper">
-      <iframe 
+      <iframe
         :src='storyUrl'
         width='100%'
         height='100%' />
@@ -13,7 +13,7 @@
 export default {
   data() {
     return {
-      storyUrl: this.$gettext('https://dha.akuko.io/embed/046f78c1-fd3a-4faf-ae59-1ce4b210930e?components=["XfYZ9d3lKr","v56rTWY0hX"]')
+      storyUrl: this.$gettext('https://dha.akuko.io/embed/046f78c1-fd3a-4faf-ae59-1ce4b210930e?components=["RaHZG6UdtX"]')
     }
   }
 }
@@ -24,7 +24,7 @@ export default {
     padding: 20px 40px 0 40px;
     .StoryWrapper {
       position: relative;
-      padding-bottom: 40%; /* 16:4 aspect ratio */ 
+      padding-bottom: 40%; /* 16:4 aspect ratio */
       overflow: hidden;
       iframe {
         position: absolute;
