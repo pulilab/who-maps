@@ -9,10 +9,9 @@ output_file="../django/translations/master.pot"
 vue_translations=${workdir}/vue.pot
 angular_translations=${workdir}/angular.pot
 
-./node_modules/easygettext/src/extract-cli.js --startDelimiter '' --endDelimiter '' --output ${vue_translations} ${input_vue_files}
+./node_modules/easygettext/src/extract-cli.js --removeHTMLWhitespaces --startDelimiter '' --endDelimiter '' --output ${vue_translations} ${input_vue_files}
 
 ./node_modules/angular-gettext-cli/bin/gettext --files ${input_js_glob}  --dest ${angular_translations} --marker-name translate
-
 
 merged_pot=${workdir}/merged.pot
 msgcat ${vue_translations} ${angular_translations} > ${merged_pot}
