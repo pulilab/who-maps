@@ -286,6 +286,7 @@
 import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
 import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 
+import AddRmButtons from '@/components/project/AddRmButtons.vue'
 import CollapsibleCard from '../CollapsibleCard'
 import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector'
 import HealthFocusAreasSelector from '../HealthFocusAreasSelector'
@@ -301,6 +302,7 @@ import { mapGettersActions } from '../../../utilities/form'
 
 export default {
   components: {
+    AddRmButtons,
     CollapsibleCard,
     HealthSystemChallengesSelector,
     HisBucketSelector,
