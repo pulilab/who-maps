@@ -24,8 +24,8 @@ export default {
     padding: 20px 40px 0 40px;
     .StoryWrapper {
       position: relative;
-      padding-bottom: 40%; /* 16:4 aspect ratio */
       overflow: hidden;
+      height: 862px;
       iframe {
         position: absolute;
         top: 0;
