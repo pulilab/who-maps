@@ -126,7 +126,7 @@ export const draftRules = () => {
     name: {
       required: true,
       min: 1,
-      max: 128
+      max: 250
     },
     organisation: {
       max: 128
@@ -196,7 +196,7 @@ export const publishRules = () => {
     name: {
       required: true,
       min: 1,
-      max: 128
+      max: 250
     },
     organisation: {
       max: 128
