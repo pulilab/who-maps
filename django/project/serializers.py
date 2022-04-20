@@ -109,6 +109,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=64, min_length=1)
     hsc_challenges = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=1)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64, required=False)
     coverage = CoverageSerializer(many=True, required=False, allow_null=True)
     coverage_second_level = CoverageSerializer(many=True, required=False, allow_null=True)
