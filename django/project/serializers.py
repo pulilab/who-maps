@@ -260,6 +260,9 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     def validate_repository(value):
         return value
 
+    def validate(self, attrs):
+        return attrs
+
 
 class ProjectGroupSerializer(serializers.ModelSerializer):  # TODO handle orphan projects
     new_team_emails = serializers.ListField(
