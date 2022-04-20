@@ -203,8 +203,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     platforms = DraftPlatformSerializer(many=True, required=False)
     health_focus_areas = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
-    hsc_challenges = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     donors = serializers.ListField(child=serializers.IntegerField(), max_length=32, required=False)
 
     # SECTION 4
