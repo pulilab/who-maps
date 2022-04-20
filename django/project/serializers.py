@@ -181,6 +181,11 @@ class ProjectPublishedSerializer(serializers.Serializer):
     def validate_repository(value):
         return url_validator(value)
 
+    def validate(self, attrs):
+        if not attrs.get('hsc_challenges') and not attrs.get('hsc_challenges_other'):
+            raise ValidationError({'hsc_challenges': 'No challenges selected'})
+        return attrs
+
 
 class ProjectDraftSerializer(ProjectPublishedSerializer):
     """
