@@ -1,5 +1,6 @@
 import time
 from fabric.api import local, run, cd, env
+from fabric.context_managers import warn_only
 
 
 # ENVIRONMENTS #
@@ -146,6 +147,9 @@ def deploy(tag=None):
 
         time.sleep(5)
 
+        _update_translations_frontend()
+        _update_translations_backend()
+
         # handle backend
         with cd(env.backend_root):
 
@@ -158,15 +162,15 @@ def deploy(tag=None):
             run("docker-compose {}up -d".format(options))
 
             # drop & create DB
-            time.sleep(20)
-            _drop_db()
-            time.sleep(1)
-            _create_db()
-            # restore DB
-            time.sleep(1)
-            _restore_db()
+            # time.sleep(20)
+            # _drop_db()
+            # time.sleep(1)
+            # _create_db()
+            # # restore DB
+            # time.sleep(1)
+            # _restore_db()
             # migrate DB
-            time.sleep(1)
+            time.sleep(20)
             _migrate_db()
             time.sleep(1)
             # _import_geodata()
@@ -202,6 +206,17 @@ def _migrate_db():
 
 def _import_geodata():
     run('python geodata_import.py')
+
+
+def _update_translations_frontend():
+    with warn_only():
+        run("docker-compose exec django python manage.py update_translations master.pot")
+
+
+def _update_translations_backend():
+    with warn_only():
+        run("docker-compose exec django django-admin makemessages -a")
+        run("docker-compose exec django django-admin compilemessages")
 
 
 # LOCAL STUFF #
