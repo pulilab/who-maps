@@ -510,7 +510,8 @@ SWAGGER_SETTINGS = {
 EXTERNAL_API_CLIENTS = {
     "default": "Other",
     "xNhlb4": "DCH",
-    "6TAyaB": "DHIS2"
+    "6TAyaB": "DHIS2",
+    "9uX76C": "DHI"
 }
 """
 For checking which projects can be safely deleted
