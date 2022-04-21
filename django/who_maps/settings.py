@@ -273,7 +273,7 @@ CACHES = {
     #     }
 }
 
-if SITE_ID in [3]:
+if SITE_ID in [3, 4]:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
