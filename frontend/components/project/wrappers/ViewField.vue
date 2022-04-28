@@ -134,7 +134,7 @@ export default {
   },
   props: {
     prepend: {
-      type: Number,
+      type: [String, Number],
       default: 0
     },
     header: {

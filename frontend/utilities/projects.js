@@ -97,6 +97,7 @@ export const projectFields = () => ({
   digitalHealthInterventions: [],
   health_focus_areas: [],
   hsc_challenges: [],
+  hsc_challenges_other: [],
   his_bucket: [],
   coverageType: 1,
   coverage: [],
@@ -146,6 +147,9 @@ export const draftRules = () => {
     },
     geographic_scope: {
       max: 1024
+    },
+    hsc_challenges_other: {
+      max: 256
     },
     implementing_partners: {
       max: 1024
@@ -253,8 +257,10 @@ export const publishRules = () => {
       min: 1
     },
     hsc_challenges: {
-      required: true,
       min: 1
+    },
+    hsc_challenges_other: {
+      max: 256
     },
     his_bucket: {},
     coverage: {

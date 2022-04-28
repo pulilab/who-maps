@@ -33,7 +33,7 @@
         :error="errors.first('hsc_challenges')"
         :draft-rule="draftRules.hsc_challenges"
         :publish-rule="publishRules.hsc_challenges"
-        prepend-label="13"
+        prepend-label="13a"
       >
         <template slot="label">
           <translate key="hsc-challenges">
@@ -48,6 +48,49 @@
           data-vv-validate-on="change"
           data-vv-as="Health system challenges"
         />
+      </custom-required-form-item>
+      
+      
+      <custom-required-form-item
+        class="HSCOther"
+        :error="errors.first('hsc_challenges')"
+        :draft-rule="draftRules.hsc_challenges_other"
+        :publish-rule="publishRules.hsc_challenges_other"
+        prepend-label="13b"
+      >
+        <template slot="label">
+          <translate key="hsc-challenges">
+            Other challanges
+          </translate>
+        </template>
+        <el-row v-for="(other_challange, index) in hsc_challenges_other" :key="index">
+          <el-col :span="17">
+            <custom-required-form-item
+              :error="errors.first('hsc_challenges_other_' + index)"
+            >
+              <el-input
+                ref="HSCOtherInput"
+                v-validate="rules.hsc_challenges_other"
+                :maxlength="rules.hsc_challenges_other.max"
+                :value="other_challange"
+                :data-vv-name="'hsc_challenges_other_' + index"
+                data-vv-validate-on="change"
+                data-vv-as="Other challanges"
+                @input="updateHSCOther($event, index)"
+                @keyup.enter.native="addHSCOther"
+              />
+            </custom-required-form-item>
+          </el-col>
+          <el-col :span="6">
+            <add-rm-buttons
+              :show-add="isLastAndExist(hsc_challenges_other, index)"
+              :show-rm="hsc_challenges_other.length > 1"
+              @add="addHSCOther"
+              @rm="rmHSCOther(index)"
+            />
+          </el-col>
+          
+        </el-row>
       </custom-required-form-item>
 
       <custom-required-form-item
@@ -333,6 +376,13 @@ export default {
         0
       ],
       hsc_challenges: ['project', 'getHscChallenges', 'setHscChallenges', 0],
+      hsc_challenges_other: [
+        'project',
+        'getHscChallengesOther',
+        'setHscChallengesOther',
+        300,
+        true
+      ], 
       his_bucket: ['project', 'getHisBucket', 'setHisBucket', 0],
       coverageType: ['project', 'getCoverageType', 'setCoverageType', 0],
       national_level_deployment: [
@@ -392,21 +442,25 @@ export default {
       return this.country === process.env.GlobalCountryID
     }
   },
+  mounted () {
+    console.log(this.requiredAsterisk('hsc'))
+    console.log(this.requiredAsterisk('hsco'))
+  },
   watch: {
     isGlobalSelected () {
       this.coverageType = 2
     },
-    implementing_partners: {
+    hsc_challenges_other: {
       immediate: false,
-      handler (ip, oldIp) {
-        if (oldIp && ip && ip.length > oldIp.length) {
+      handler (oc, oldOc) {
+        if (oldOc && oc && oc.length > oldOc.length) {
           this.$nextTick(() => {
             if (
-              this.$refs.implementingPartnersInput &&
-              this.$refs.implementingPartnersInput.length > 0
+              this.$refs.HSCOtherInput &&
+              this.$refs.HSCOtherInput.length > 0
             ) {
-              this.$refs.implementingPartnersInput[
-                this.$refs.implementingPartnersInput.length - 1
+              this.$refs.HSCOtherInput[
+                this.$refs.HSCOtherInput.length - 1
               ].focus()
             }
           })
@@ -415,6 +469,22 @@ export default {
     }
   },
   methods: {
+    updateHSCOther (value, index) {
+      const oc = [...this.hsc_challenges_other]
+      oc[index] = value
+      this.hsc_challenges_other = oc
+    },
+    addHSCOther () {
+      const index = this.hsc_challenges_other.length - 1
+      if (this.isLastAndExist(this.hsc_challenges_other, index)) {
+        this.hsc_challenges_other = [...this.hsc_challenges_other, null]
+      }
+    },
+    rmHSCOther (index) {
+      this.hsc_challenges_other = this.hsc_challenges_other.filter(
+        (ip, i) => i !== index
+      )
+    },
     isLastAndExist (collection, index) {
       return !!(collection.length - 1 === index && collection[index])
     },
@@ -429,6 +499,25 @@ export default {
         this.digitalHealthInterventions = filtered
       }
       this.platforms = this.platforms.filter((p, i) => i !== index)
+    },
+    requiredAsterisk (field) {
+      const isListEmpty = (list) => { if ( list.length == 1 && (list[0] == '' || list[0] == null) ) { return true } else { return false } }
+      let returnRequired = false
+      if (isListEmpty(this.hsc_challenges) && isListEmpty(this.hsc_challenges_other)){
+        returnRequired = true
+      }
+      if (field == 'hsc'){
+        if (!isListEmpty(this.hsc_challenges) && isListEmpty(this.hsc_challenges_other)){
+          returnRequired = true
+        }
+      } else if (field == 'hsco') {
+        if (isListEmpty(this.hsc_challenges) && !isListEmpty(this.hsc_challenges_other)){
+          returnRequired = true
+        }
+      }
+      return {
+        required: returnRequired
+      }
     },
     async validate () {
       this.$refs.collapsible.expandCard()
@@ -485,7 +574,7 @@ export default {
     }
   }
 
-  .ImplementingPartners {
+  .HSCOther {
     .el-row {
       margin-top: 20px;
 
