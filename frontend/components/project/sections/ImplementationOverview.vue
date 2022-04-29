@@ -32,7 +32,7 @@
       <custom-required-form-item
         :error="errors.first('hsc_challenges')"
         :draft-rule="draftRules.hsc_challenges"
-        :publish-rule="publishRules.hsc_challenges"
+        :publish-rule="requiredAsterisk('hsc')"
         prepend-label="13a"
       >
         <template slot="label">
@@ -55,7 +55,7 @@
         class="HSCOther"
         :error="errors.first('hsc_challenges')"
         :draft-rule="draftRules.hsc_challenges_other"
-        :publish-rule="publishRules.hsc_challenges_other"
+        :publish-rule="requiredAsterisk('hsco')"
         prepend-label="13b"
       >
         <template slot="label">
@@ -500,8 +500,16 @@ export default {
       }
       this.platforms = this.platforms.filter((p, i) => i !== index)
     },
+    //the asterisk of requiredness will show up on both 13a and 13b if both empty
+    //if one is filled only that one marked as required
     requiredAsterisk (field) {
-      const isListEmpty = (list) => { if ( list.length == 1 && (list[0] == '' || list[0] == null) ) { return true } else { return false } }
+      const isListEmpty = (list) => { if (
+        list.length == 0 ||
+        ( list.length == 1 && (list[0] == '' || list[0] == null) ) ) {
+          return true
+        } else {
+          return false
+        } }
       let returnRequired = false
       if (isListEmpty(this.hsc_challenges) && isListEmpty(this.hsc_challenges_other)){
         returnRequired = true
