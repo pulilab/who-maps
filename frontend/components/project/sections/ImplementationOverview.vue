@@ -442,10 +442,6 @@ export default {
       return this.country === process.env.GlobalCountryID
     }
   },
-  mounted () {
-    console.log(this.requiredAsterisk('hsc'))
-    console.log(this.requiredAsterisk('hsco'))
-  },
   watch: {
     isGlobalSelected () {
       this.coverageType = 2
@@ -500,8 +496,8 @@ export default {
       }
       this.platforms = this.platforms.filter((p, i) => i !== index)
     },
-    //the asterisk of requiredness will show up on both 13a and 13b if both empty
-    //if one is filled only that one marked as required
+    // the asterisk of requiredness will show up on both 13a and 13b if both empty
+    // if one is filled only that one marked as required
     requiredAsterisk (field) {
       const isListEmpty = (list) => { if (
         list.length == 0 ||
