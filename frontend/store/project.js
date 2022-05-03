@@ -77,6 +77,10 @@ export const getters = {
   getDigitalHealthInterventions: state => [...state.digitalHealthInterventions],
   getHealthFocusAreas: state => state.health_focus_areas,
   getHscChallenges: state => state.hsc_challenges,
+  getHscChallengesOther: state =>
+  state.hsc_challenges_other.length === 0
+    ? [null]
+    : state.hsc_challenges_other,
   getHisBucket: state => state.his_bucket,
   getCoverageType: state => state.coverageType,
   getCoverage: state => (state.coverage.length === 0 ? [null] : state.coverage),
@@ -357,6 +361,9 @@ export const actions = {
   },
   setHscChallenges ({ commit }, value) {
     commit('SET_HSC_CHALLENGES', value)
+  },
+  setHscChallengesOther ({ commit }, value) {
+    commit('SET_HSC_CHALLENGES_OTHER', value)
   },
   setHisBucket ({ commit }, value) {
     commit('SET_HIS_BUCKET', value)
@@ -644,6 +651,9 @@ export const mutations = {
   SET_HSC_CHALLENGES: (state, hsc_challenges) => {
     Vue.set(state, 'hsc_challenges', [...hsc_challenges])
   },
+  SET_HSC_CHALLENGES_OTHER: (state, hsc_challenges_other) => {
+    Vue.set(state, 'hsc_challenges_other', [...hsc_challenges_other])
+  },
   SET_HIS_BUCKET: (state, his_bucket) => {
     Vue.set(state, 'his_bucket', [...his_bucket])
   },
@@ -749,6 +759,7 @@ export const mutations = {
     )
     state.health_focus_areas = get(project, 'health_focus_areas', [])
     state.hsc_challenges = get(project, 'hsc_challenges', [])
+    state.hsc_challenges_other = get(project, 'hsc_challenges_other', [])
     state.his_bucket = get(project, 'his_bucket', [])
     state.coverageType = get(project, 'coverageType', null)
     state.coverage = get(project, 'coverage', [])

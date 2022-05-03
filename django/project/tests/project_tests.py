@@ -1381,3 +1381,26 @@ class ProjectTests(SetupTests):
         self.assertTrue(Organisation.objects.filter(name__iexact=new_org).exists())
         self.assertEqual(int(response.json()['draft']["organisation"]),
                          Organisation.objects.get(name=new_org).id)
+
+    def test_hsc_challenge_other_field(self):
+        url = reverse("project-create", kwargs={"country_id": self.country1.id})
+        data = copy.deepcopy(self.project_data)
+        data['project']['name'] = 'Uniqu3 proj3ct nam3'
+        del data['project']['hsc_challenges']
+
+        response = self.test_user_client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        project_id = response.json()['id']
+
+        url = reverse("project-publish", kwargs={"project_id": project_id, "country_id": self.country1.id})
+        response = self.test_user_client.put(url, data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.json())
+        self.assertEqual(response.json(), {'project': {'hsc_challenges': ['No challenges selected']}})
+
+        data['project']['hsc_challenges_other'] = ['hsc_other1', 'hsc_other2']
+
+        response = self.test_user_client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        self.assertEqual(response.json()['published']['hsc_challenges_other'], data['project']['hsc_challenges_other'])

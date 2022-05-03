@@ -108,7 +108,9 @@ class ProjectPublishedSerializer(serializers.Serializer):
     health_focus_areas = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=1)
     hsc_challenges = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=1)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
+    hsc_challenges_other = serializers.ListField(
+        child=serializers.CharField(max_length=256), max_length=16, min_length=0, allow_empty=True, required=False)
     his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64, required=False)
     coverage = CoverageSerializer(many=True, required=False, allow_null=True)
     coverage_second_level = CoverageSerializer(many=True, required=False, allow_null=True)
@@ -179,6 +181,11 @@ class ProjectPublishedSerializer(serializers.Serializer):
     def validate_repository(value):
         return url_validator(value)
 
+    def validate(self, attrs):
+        if not attrs.get('hsc_challenges') and not attrs.get('hsc_challenges_other'):
+            raise ValidationError({'hsc_challenges': 'No challenges selected'})
+        return attrs
+
 
 class ProjectDraftSerializer(ProjectPublishedSerializer):
     """
@@ -196,8 +203,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     platforms = DraftPlatformSerializer(many=True, required=False)
     health_focus_areas = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
-    hsc_challenges = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     donors = serializers.ListField(child=serializers.IntegerField(), max_length=32, required=False)
 
     # SECTION 4
@@ -254,6 +259,9 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     @staticmethod
     def validate_repository(value):
         return value
+
+    def validate(self, attrs):
+        return attrs
 
 
 class ProjectGroupSerializer(serializers.ModelSerializer):  # TODO handle orphan projects

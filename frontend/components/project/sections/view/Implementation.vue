@@ -63,6 +63,7 @@ export default {
       getDhi: 'projects/getDigitalHealthInterventionDetails',
       getHfa: 'projects/getHealthFocusAreas',
       getHsc: 'projects/getHscChallenges',
+      // getHscOther: 'project/getHscChallengesOther',
       getHis: 'projects/getHisBucket',
       country: 'project/getCountry',
       getCountrySubLevelNames: 'countries/getCountrySubLevelNames',
@@ -94,6 +95,7 @@ export default {
           digitalHealthInterventions,
           health_focus_areas,
           hsc_challenges,
+          // hsc_challenges_other,
           his_bucket,
           coverageType,
           coverage,
@@ -105,6 +107,9 @@ export default {
         this.hfaList = getNestedList(this.getHfa, 'health_focus_areas')
         this.hfa = getList(health_focus_areas, this.hfaList)
         this.hscList = getNestedList(this.getHsc, 'challenges')
+        // console.log(this.getHscOther)
+        // this.hscOtherList = getNestedList(this.getHscOther, 'challenges')
+        // this.hscOther = getList(hsc_challenges_other, this.hscOtherList, ['challenge'])
         this.hsc = getList(hsc_challenges, this.hscList, ['challenge'])
         this.his = getList(his_bucket, this.getHis)
         this.coverage = this.isGlobalSelected
@@ -192,12 +197,18 @@ export default {
         },
         {
           id: 2,
-          prepend: 13,
+          prepend: '13a',
           header: this.$gettext('Health System Challenges (HSC)'),
           content: this.hsc
         },
         {
           id: 3,
+          prepend: '13b',
+          header: this.$gettext('Other Health System Challenges (HSC)'),
+          content: this.project.hsc_challenges_other
+        },
+        {
+          id: 4,
           prepend: 14,
           header: this.$gettext(
             'Software and related Digital Health Interventions (DHI)'
@@ -208,13 +219,13 @@ export default {
           subtitle: this.$gettext('Digital Health Intervention')
         },
         {
-          id: 4,
+          id: 5,
           prepend: 15,
           header: this.$gettext('Health Information System (HIS)'),
           content: this.his
         },
         {
-          id: 5,
+          id: 6,
           prepend: 16,
           show: !!(
             this.isNationalLevelDeployment ||
@@ -225,7 +236,7 @@ export default {
         },
         // national coverage
         {
-          id: 6,
+          id: 7,
           show: !!this.isNationalLevelDeployment,
           header: this.isGlobalSelected
             ? this.$gettext('International Level Deployment')
@@ -260,7 +271,7 @@ export default {
           ]
         },
         {
-          id: 7,
+          id: 8,
           show: !!(
             this.project.coverageType === 1 && this.coverageLevelName.first
           ),
@@ -272,7 +283,7 @@ export default {
           rows: this.coverageLevelFirst
         },
         {
-          id: 8,
+          id: 9,
           show: !!(
             this.project.coverageType === 1 && this.coverageLevelName.second
           ),
@@ -285,7 +296,7 @@ export default {
         },
         // national coverage
         {
-          id: 9,
+          id: 10,
           prepend: 17,
           header: this.$gettext(
             'Has the government financially invested in the project?'
