@@ -637,7 +637,16 @@ class TerminologySerializer(serializers.Serializer):
     strategies = StrategiesByGroupSerializer(many=True)
 
 
-class ProjectImportV2CollectionInputSerializer(serializers.ModelSerializer):
+class ProjectImportV2CollectionSerializer(serializers.ModelSerializer):
+    status = serializers.ReadOnlyField()
+
+    class Meta:
+        model = ProjectImportV2
+        fields = ('id', 'user', 'status', 'country', 'donor', 'filename', 'sheet_name',
+                  'draft', 'collection')
+
+
+class ProjectImportV2CollectionInputSerializer(ProjectImportV2CollectionSerializer):
     status = serializers.ReadOnlyField()
     rows = ImportRowSerializer(many=True)
 
@@ -677,6 +686,19 @@ class ProjectImportV2CollectionOutputSerializer(serializers.ModelSerializer):
         model = ProjectImportV2
         fields = ('id', 'user', 'status', 'header_mapping', 'rows', 'country', 'donor', 'filename', 'sheet_name',
                   'draft', 'collection')
+
+
+class CollectionListSerializer(serializers.ModelSerializer):
+    """
+    Collection serializer for listing collections
+    """
+    url = serializers.ReadOnlyField()
+    project_imports = ProjectImportV2CollectionSerializer(required=False, many=True)
+    add_me_as_editor = serializers.BooleanField(required=True)
+
+    class Meta:
+        model = Collection
+        fields = ('id', 'url', 'name', 'user', 'project_imports', 'add_me_as_editor')
 
 
 class CollectionInputSerializer(serializers.ModelSerializer):

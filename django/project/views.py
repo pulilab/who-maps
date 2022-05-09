@@ -26,7 +26,8 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer, \
     TerminologySerializer, CollectionInputSerializer, ExternalProjectPublishSerializer, \
-    ExternalProjectDraftSerializer, CollectionOutputSerializer, CollectionInputSwaggerSerializer
+    ExternalProjectDraftSerializer, CollectionOutputSerializer, CollectionInputSwaggerSerializer, \
+    CollectionListSerializer
 
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
@@ -791,7 +792,7 @@ class CollectionListView(CollectionAuthenticatedMixin, APIView):
         Return a list of the user's collections.
         """
         collections = Collection.objects.filter(user=request.user)
-        serializer = CollectionInputSerializer(collections, many=True)
+        serializer = CollectionListSerializer(collections, many=True)
         return Response(serializer.data)
 
 
