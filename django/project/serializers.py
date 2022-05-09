@@ -311,14 +311,14 @@ class ProjectGroupSerializer(serializers.ModelSerializer):  # TODO handle orphan
     def save(self, **kwargs):
         for email in self.validated_data.get('new_team_emails', []):
             try:
-                user = User.objects.get(email=email)
+                user = User.objects.get(email__iexact=email)
             except User.DoesNotExist:
                 user = self.perform_create(email)
             self.validated_data['team'].append(user.userprofile)
 
         for email in self.validated_data.get('new_viewer_emails', []):
             try:
-                user = User.objects.get(email=email)
+                user = User.objects.get(email__iexact=email)
             except User.DoesNotExist:
                 user = self.perform_create(email)
             self.validated_data['viewers'].append(user.userprofile)
