@@ -522,11 +522,11 @@ class ProjectImportV2ListSerializer(serializers.ModelSerializer):  # pragma: no 
 
     @staticmethod
     def get_rows_count(obj):
-        return obj.rows.objects.count()
+        return obj.rows.count()
 
     @staticmethod
     def get_rows_imported(obj):
-        return obj.rows.objects.filter(project__isnull=False).count()
+        return obj.rows.filter(project__isnull=False).count()
 
 
 class ProjectImportV2Serializer(serializers.ModelSerializer):  # pragma: no cover
