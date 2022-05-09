@@ -508,6 +508,27 @@ class CollectionBriefSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'user', 'url', 'add_me_as_editor')
 
 
+class ProjectImportV2ListSerializer(serializers.ModelSerializer):  # pragma: no cover
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    status = serializers.ReadOnlyField()
+    rows_count = serializers.SerializerMethodField()
+    rows_imported = serializers.SerializerMethodField()
+    collection = CollectionBriefSerializer(required=False)
+
+    class Meta:
+        model = ProjectImportV2
+        fields = ('id', 'user', 'status', 'country', 'donor', 'filename', 'sheet_name',
+                  'draft', 'collection', 'rows_count', 'rows_imported')
+
+    @staticmethod
+    def get_rows_count(obj):
+        return obj.rows.objects.count()
+
+    @staticmethod
+    def get_rows_imported(obj):
+        return obj.rows.objects.filter(project__isnull=False).count()
+
+
 class ProjectImportV2Serializer(serializers.ModelSerializer):  # pragma: no cover
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     status = serializers.ReadOnlyField()

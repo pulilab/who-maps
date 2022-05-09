@@ -27,7 +27,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer, \
     TerminologySerializer, CollectionInputSerializer, ExternalProjectPublishSerializer, \
     ExternalProjectDraftSerializer, CollectionOutputSerializer, CollectionInputSwaggerSerializer, \
-    CollectionListSerializer
+    CollectionListSerializer, ProjectImportV2ListSerializer
 
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
@@ -665,6 +665,20 @@ class ProjectApprovalViewSet(TokenAuthMixin, UpdateModelMixin, GenericViewSet):
         queryset = self.filter_queryset(self.get_queryset().filter(project__search__country=country_id))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class ProjectImportV2ListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    serializer_class = ProjectImportV2ListSerializer
+    queryset = ProjectImportV2.objects.all()
+
+    # TODO: NEEDS COVER
+    def get_queryset(self):  # pragma: no cover
+        if getattr(self, "swagger_fake_view", False):
+            # queryset just for schema generation metadata
+            # as per https://github.com/axnsan12/drf-yasg/issues/333#issuecomment-474883875
+            return ProjectImportV2.objects.none()
+
+        return ProjectImportV2.objects.filter(user=self.request.user)
 
 
 class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, ListModelMixin,
