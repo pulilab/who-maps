@@ -681,7 +681,7 @@ class ProjectImportV2ListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet)
         return ProjectImportV2.objects.filter(user=self.request.user)
 
 
-class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, ListModelMixin,
+class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin,
                              GenericViewSet):
     serializer_class = ProjectImportV2Serializer
     queryset = ProjectImportV2.objects.all()
