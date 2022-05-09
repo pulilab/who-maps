@@ -61,8 +61,8 @@ msgstr ""
 msgid "{name} fields"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:256
-#: components/project/sections/view/Implementation.vue:268
+#: components/project/sections/view/Implementation.vue:267
+#: components/project/sections/view/Implementation.vue:279
 msgid "{name} level deployment"
 msgstr ""
 
@@ -91,22 +91,22 @@ msgstr ""
 
 #: components/project/CoverageField.vue:10
 #: components/project/CoverageField.vue:35
-#: components/project/sections/view/Implementation.vue:162
-#: components/project/sections/view/Implementation.vue:243
+#: components/project/sections/view/Implementation.vue:167
+#: components/project/sections/view/Implementation.vue:254
 msgid "# Clients"
 msgstr ""
 
 #: components/project/CoverageField.vue:7
 #: components/project/CoverageField.vue:26
-#: components/project/sections/view/Implementation.vue:156
-#: components/project/sections/view/Implementation.vue:237
+#: components/project/sections/view/Implementation.vue:161
+#: components/project/sections/view/Implementation.vue:248
 msgid "# Facilities"
 msgstr ""
 
 #: components/project/CoverageField.vue:4
 #: components/project/CoverageField.vue:17
-#: components/project/sections/view/Implementation.vue:150
-#: components/project/sections/view/Implementation.vue:230
+#: components/project/sections/view/Implementation.vue:155
+#: components/project/sections/view/Implementation.vue:241
 msgid "# Health Workers"
 msgstr ""
 
@@ -339,7 +339,7 @@ msgstr ""
 msgid "Add editor"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:24
+#: components/project/sections/ImplementationOverview.vue:44
 #: components/project/sections/ImplementationOverview.vue:1
 msgid "Add information about your Digital Health program activies"
 msgstr ""
@@ -979,7 +979,7 @@ msgstr ""
 msgid "Coverage of Health Focus Areas"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:212
+#: components/project/sections/view/Implementation.vue:223
 msgid "Coverage type"
 msgstr ""
 
@@ -1085,7 +1085,7 @@ msgstr ""
 msgid "Digital Health Atlas How-to"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:197
+#: components/project/sections/view/Implementation.vue:208
 msgid "Digital Health Intervention"
 msgstr ""
 
@@ -1563,14 +1563,14 @@ msgstr ""
 msgid "Growth of users"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:119
+#: components/project/sections/ImplementationOverview.vue:139
 #: components/project/sections/ImplementationOverview.vue:1
 #: pages/_organisation/graphs_showcase.vue:215
 msgid ""
 "Has the government contributed to the project, either financially or in-kind?"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:279
+#: components/project/sections/view/Implementation.vue:290
 msgid "Has the government financially invested in the project?"
 msgstr ""
 
@@ -1595,7 +1595,7 @@ msgstr ""
 msgid "Health Focus Area"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:179
+#: components/project/sections/view/Implementation.vue:184
 msgid "Health focus area (s)"
 msgstr ""
 
@@ -1647,7 +1647,7 @@ msgstr ""
 msgid "Health Information System"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:202
+#: components/project/sections/view/Implementation.vue:213
 msgid "Health Information System (HIS)"
 msgstr ""
 
@@ -1661,7 +1661,7 @@ msgstr ""
 msgid "Health System Challenges"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:185
+#: components/project/sections/view/Implementation.vue:190
 msgid "Health System Challenges (HSC)"
 msgstr ""
 
@@ -1740,7 +1740,11 @@ msgstr ""
 msgid "https://digitalhealthatlas.org/en/-/login"
 msgstr ""
 
-#: components/common/NavigationMenu.vue:11 components/common/TopBar.vue:14
+#: components/common/TopBar.vue:14
+msgid "https://stories.digitalhealthatlas.org"
+msgstr ""
+
+#: components/common/NavigationMenu.vue:11
 msgid ""
 "https://stories.digitalhealthatlas.org/post/269ecc01-2c1a-4d71-"
 "af65-84e3882f2e36"
@@ -1836,7 +1840,7 @@ msgid "Implementation"
 msgstr ""
 
 #: components/project/sections/ImplementationOverview.vue:2
-#: components/project/sections/ImplementationOverview.vue:67
+#: components/project/sections/ImplementationOverview.vue:71
 msgid "Implementation overview"
 msgstr ""
 
@@ -1912,7 +1916,7 @@ msgstr ""
 msgid "Inactivate API key"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:157
+#: components/project/sections/ImplementationOverview.vue:222
 msgid ""
 "Include all software that is part of your project. If you cannot find your "
 "software listed in the options, you can add it by start typing the software "
@@ -1928,16 +1932,16 @@ msgstr ""
 msgid "Integration pending..."
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:98
-#: components/project/sections/view/Implementation.vue:100
+#: components/project/sections/ImplementationOverview.vue:118
+#: components/project/sections/view/Implementation.vue:105
 msgid "International"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:111
+#: components/project/sections/ImplementationOverview.vue:131
 msgid "International level deployment"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:220
+#: components/project/sections/view/Implementation.vue:231
 msgid "International Level Deployment"
 msgstr ""
 
@@ -2295,7 +2299,7 @@ msgstr ""
 #: components/common/map/SwitchViewBox.vue:13
 #: components/common/map/TabbedCardProjectList.vue:9
 #: components/common/map/TabbedCardProjectList.vue:51
-#: components/project/sections/ImplementationOverview.vue:94
+#: components/project/sections/ImplementationOverview.vue:114
 #: components/project/sections/view/Implementation.vue:36
 msgid "National"
 msgstr ""
@@ -2306,11 +2310,11 @@ msgstr ""
 msgid "National Digital Health Reference Documents"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:107
+#: components/project/sections/ImplementationOverview.vue:127
 msgid "National level deployment"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:221
+#: components/project/sections/view/Implementation.vue:232
 msgid "National Level Deployment"
 msgstr ""
 
@@ -2397,7 +2401,7 @@ msgstr ""
 
 #: components/admin/import/SmartCell.vue:10
 #: components/admin/import/SmartCell.vue:7
-#: components/project/sections/ImplementationOverview.vue:127
+#: components/project/sections/ImplementationOverview.vue:147
 #: components/project/sections/view/Implementation.vue:39
 msgid "No, they have not yet contributed"
 msgstr ""
@@ -2534,6 +2538,15 @@ msgstr ""
 
 #: components/admin/import/ImportDialog.vue:5
 msgid "Original Data"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:25
+#: components/project/sections/ImplementationOverview.vue:1
+msgid "Other challanges"
+msgstr ""
+
+#: components/project/sections/view/Implementation.vue:196
+msgid "Other Health System Challenges (HSC)"
 msgstr ""
 
 #: components/dialogs/HowToDialog.vue:12 components/dialogs/HowToDialog.vue:59
@@ -3270,11 +3283,11 @@ msgstr ""
 #: components/dashboard/AdvancedSearch.vue:22
 #: components/dashboard/AdvancedSearch.vue:106
 #: components/dialogs/DashboardFiltersDialog.vue:68
-#: components/project/sections/view/Implementation.vue:196
+#: components/project/sections/view/Implementation.vue:207
 msgid "Software"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:191
+#: components/project/sections/view/Implementation.vue:202
 msgid "Software and related Digital Health Interventions (DHI)"
 msgstr ""
 
@@ -3326,7 +3339,7 @@ msgstr ""
 #: components/common/map/SwitchViewBox.vue:14
 #: components/common/map/TabbedCardProjectList.vue:2
 #: components/common/map/TabbedCardProjectList.vue:21
-#: components/project/sections/ImplementationOverview.vue:91
+#: components/project/sections/ImplementationOverview.vue:111
 msgid "Sub-national"
 msgstr ""
 
@@ -3334,7 +3347,7 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:278
+#: components/project/sections/ImplementationOverview.vue:343
 msgid "Subnational may include district, regional, provincial, county levels."
 msgstr ""
 
@@ -3947,7 +3960,7 @@ msgid ""
 "Intervention?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:31
+#: components/project/sections/ImplementationOverview.vue:51
 #: components/project/sections/ImplementationOverview.vue:1
 msgid "What are the names of the software included in the deployment?"
 msgstr ""
@@ -3958,12 +3971,12 @@ msgstr ""
 msgid "What data standards does your digital health project use?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:46
+#: components/project/sections/ImplementationOverview.vue:66
 #: components/project/sections/ImplementationOverview.vue:1
 msgid "What Digital Health Intervention(s) are included in this software?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:67
+#: components/project/sections/ImplementationOverview.vue:87
 #: components/project/sections/ImplementationOverview.vue:1
 msgid ""
 "What health information system(s) in your country does this project support?"
@@ -3989,7 +4002,7 @@ msgstr ""
 msgid "What is the project name?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:78
+#: components/project/sections/ImplementationOverview.vue:98
 #: components/project/sections/ImplementationOverview.vue:1
 msgid "What level of coverage does your project have (Sub-national, National)"
 msgstr ""
@@ -4087,21 +4100,21 @@ msgstr ""
 
 #: components/admin/import/SmartCell.vue:25
 #: components/admin/import/SmartCell.vue:22
-#: components/project/sections/ImplementationOverview.vue:141
+#: components/project/sections/ImplementationOverview.vue:161
 #: components/project/sections/view/Implementation.vue:44
 msgid "Yes, MOH is fully funding the project"
 msgstr ""
 
 #: components/admin/import/SmartCell.vue:20
 #: components/admin/import/SmartCell.vue:17
-#: components/project/sections/ImplementationOverview.vue:135
+#: components/project/sections/ImplementationOverview.vue:155
 #: components/project/sections/view/Implementation.vue:41
 msgid "Yes, there is a financial contribution through MOH budget"
 msgstr ""
 
 #: components/admin/import/SmartCell.vue:15
 #: components/admin/import/SmartCell.vue:12
-#: components/project/sections/ImplementationOverview.vue:130
+#: components/project/sections/ImplementationOverview.vue:150
 #: components/project/sections/view/Implementation.vue:40
 msgid "Yes, they are contributing in-kind people or time"
 msgstr ""
