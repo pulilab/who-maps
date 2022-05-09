@@ -785,7 +785,7 @@ class CollectionListView(CollectionAuthenticatedMixin, APIView):
     """
     @swagger_auto_schema(
         security=[{'Token': []}],
-        responses={201: CollectionInputSerializer(many=True), 403: "Unauthorized"}
+        responses={201: CollectionListSerializer(many=True), 403: "Unauthorized"}
     )
     def get(self, request, format=None):
         """
