@@ -490,6 +490,7 @@ if SITE_ID in [3, 4]:
         # redirect all emails to the forced addresses
         EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
         TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "f@pulilab.com", "ta@pulilab.com"]
+        ALLOWED_HOSTS = ALLOWED_HOSTS + ['139.59.148.238']
 
 
 SWAGGER_SETTINGS = {
