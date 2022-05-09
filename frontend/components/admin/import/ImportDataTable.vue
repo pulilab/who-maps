@@ -14,14 +14,13 @@
           List of projects ({rows})
         </translate>
       </span>
-      <div class="search">
+      <el-switch v-model="showImportedRows" active-text="Show imported rows">
+      </el-switch>
+      <!-- <div class="search">
         <el-input v-model="search" clearable debounce prefix-icon="el-icon-search" placeholder="search" />
-      </div>
+      </div> -->
     </div>
-    <ImportValidation
-      :headers="rawImport.header_mapping"
-      :publish="!rawImport.draft"
-    >
+    <ImportValidation :headers="rawImport.header_mapping" :publish="!rawImport.draft">
       <template #default="{globalErrors, rules, nameMapping}">
         <div class="ExportDataTable">
           <div class="Container">
@@ -143,7 +142,8 @@ export default {
   },
   data () {
     return {
-      search: ''
+      search: '',
+      showImportedRows: false
     }
   },
   computed: {
@@ -201,7 +201,9 @@ export default {
       return [nationalLevel]
     },
     rows () {
-      return this.rawImport.rows.map(r => r)
+      return this.showImportedRows
+        ? this.rawImport.rows
+        : this.rawImport.rows.filter(r => r.project === null)
     }
   },
   methods: {
@@ -416,7 +418,7 @@ export default {
 
   .ProjectToolbar {
     display: flex;
-    align-items: space;
+    align-items: center;
     justify-content: space-between;
     height: 36px;
     line-height: 36px;

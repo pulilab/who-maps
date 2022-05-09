@@ -1,5 +1,5 @@
 <template>
-  <page-layout>
+  <PageLayout>
     <template #title>
       {{ collection.name }}
     </template>
@@ -7,14 +7,14 @@
       Browse and search this collection to find projects you are associated with, and assign yourself as editor to be able to contribute it as your own.
       <a href="">Watch demo here</a>
     </template>
-    <panel>
+    <Panel>
       <el-alert v-if="!user" type="error" class="alert">
         <translate>You are currently not logged in. If you wish to contribute, you need an active account. Please Signup or login before you use "Add me as editor" action. </translate>
       </el-alert>
-      <collection-info :info="collection" />
-      <collection-projects :collection="collection" />
-    </panel>
-  </page-layout>
+      <CollectionInfo :info="collection" />
+      <CollectionProjects :collection="collection" />
+    </Panel>
+  </PageLayout>
 </template>
 
 <script>

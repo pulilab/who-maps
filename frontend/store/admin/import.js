@@ -42,25 +42,10 @@ export const actions = {
   },
   async loadQueue ({ commit, state }) {
     const { data } = await this.$axios.get('/api/projects/import/')
-    const refinedQueue = data.map((i) => {
-      return {
-        ...i,
-        imported: i.rows.reduce((count, r) => {
-          if (r.project) { count += 1 }
-          return count
-        }, 0)
-      }
-    })
-
-    commit('setValue', { key: 'queue', val: refinedQueue })
+    commit('setValue', { key: 'queue', val: data })
   },
   async addDataToQueue ({ commit, state }, imported) {
     const { data } = await this.$axios.post('api/projects/import/', imported)
-    // const newQueue = [
-    //   ...state.queue,
-    //   data
-    // ]
-    // commit('SET_QUEUE', newQueue)
     return data
   },
   async addCollection ({ commit, state }, collection) {
@@ -72,6 +57,7 @@ export const actions = {
     return data
   },
   async loadCollection ({ commit }, url) {
+    // this is always an SSR page, because it's opened in a new tab/page
     const { data: organizations } = await this.$axios.get('/api/organisations/')
     const { data: countries } = await this.$axios.get('/api/landing-country/')
     const { data: donors } = await this.$axios.get('/api/landing-donor/')

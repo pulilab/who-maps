@@ -61,8 +61,8 @@ msgstr ""
 msgid "{name} fields"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:256
-#: components/project/sections/view/Implementation.vue:268
+#: components/project/sections/view/Implementation.vue:267
+#: components/project/sections/view/Implementation.vue:279
 msgid "{name} level deployment"
 msgstr ""
 
@@ -74,6 +74,10 @@ msgstr ""
 
 #: components/common/SearchComponent.vue:136
 msgid "{num} result(s)"
+msgstr ""
+
+#: components/admin/import/ImportQueue.vue:52
+msgid "{rowsImported} of {rowsCount}"
 msgstr ""
 
 #: components/dialogs/FilterItem.vue:13 components/dialogs/FilterItem.vue:2
@@ -91,22 +95,22 @@ msgstr ""
 
 #: components/project/CoverageField.vue:10
 #: components/project/CoverageField.vue:35
-#: components/project/sections/view/Implementation.vue:162
-#: components/project/sections/view/Implementation.vue:243
+#: components/project/sections/view/Implementation.vue:167
+#: components/project/sections/view/Implementation.vue:254
 msgid "# Clients"
 msgstr ""
 
 #: components/project/CoverageField.vue:7
 #: components/project/CoverageField.vue:26
-#: components/project/sections/view/Implementation.vue:156
-#: components/project/sections/view/Implementation.vue:237
+#: components/project/sections/view/Implementation.vue:161
+#: components/project/sections/view/Implementation.vue:248
 msgid "# Facilities"
 msgstr ""
 
 #: components/project/CoverageField.vue:4
 #: components/project/CoverageField.vue:17
-#: components/project/sections/view/Implementation.vue:150
-#: components/project/sections/view/Implementation.vue:230
+#: components/project/sections/view/Implementation.vue:155
+#: components/project/sections/view/Implementation.vue:241
 msgid "# Health Workers"
 msgstr ""
 
@@ -339,7 +343,7 @@ msgstr ""
 msgid "Add editor"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:24
+#: components/project/sections/ImplementationOverview.vue:44
 #: components/project/sections/ImplementationOverview.vue:1
 msgid "Add information about your Digital Health program activies"
 msgstr ""
@@ -412,7 +416,7 @@ msgid ""
 "will be provided; and"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:26
+#: components/admin/import/ImportDataTable.vue:28
 #: components/admin/import/ImportDataTable.vue:11
 #: components/admin/import/ImportDataTable.vue:7
 msgid "All columns are selected"
@@ -689,9 +693,9 @@ msgid "Can't find anything related to"
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:78 components/admin/DhaQuestion.vue:116
-#: components/admin/import/ImportDataTable.vue:122
-#: components/admin/import/ImportDataTable.vue:146
-#: components/admin/import/ImportDataTable.vue:236
+#: components/admin/import/ImportDataTable.vue:125
+#: components/admin/import/ImportDataTable.vue:149
+#: components/admin/import/ImportDataTable.vue:239
 #: components/admin/import/ImportDialog.vue:81
 #: components/admin/import/ImportDialog.vue:2
 #: components/admin/import/ImportHeaders.vue:82
@@ -979,7 +983,7 @@ msgstr ""
 msgid "Coverage of Health Focus Areas"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:212
+#: components/project/sections/view/Implementation.vue:223
 msgid "Coverage type"
 msgstr ""
 
@@ -1034,7 +1038,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:131
+#: components/admin/import/ImportDataTable.vue:134
 msgid "Delete canceled"
 msgstr ""
 
@@ -1085,7 +1089,7 @@ msgstr ""
 msgid "Digital Health Atlas How-to"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:197
+#: components/project/sections/view/Implementation.vue:208
 msgid "Digital Health Intervention"
 msgstr ""
 
@@ -1490,7 +1494,7 @@ msgstr ""
 msgid "Go to Dashboard"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:47
+#: components/admin/import/ImportDataTable.vue:49
 #: components/admin/import/ImportDataTable.vue:32
 #: components/admin/import/ImportDataTable.vue:12
 #: components/dashboard/PdfExport.vue:186
@@ -1563,14 +1567,14 @@ msgstr ""
 msgid "Growth of users"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:119
+#: components/project/sections/ImplementationOverview.vue:139
 #: components/project/sections/ImplementationOverview.vue:1
 #: pages/_organisation/graphs_showcase.vue:215
 msgid ""
 "Has the government contributed to the project, either financially or in-kind?"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:279
+#: components/project/sections/view/Implementation.vue:290
 msgid "Has the government financially invested in the project?"
 msgstr ""
 
@@ -1595,7 +1599,7 @@ msgstr ""
 msgid "Health Focus Area"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:179
+#: components/project/sections/view/Implementation.vue:184
 msgid "Health focus area (s)"
 msgstr ""
 
@@ -1647,7 +1651,7 @@ msgstr ""
 msgid "Health Information System"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:202
+#: components/project/sections/view/Implementation.vue:213
 msgid "Health Information System (HIS)"
 msgstr ""
 
@@ -1661,7 +1665,7 @@ msgstr ""
 msgid "Health System Challenges"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:185
+#: components/project/sections/view/Implementation.vue:190
 msgid "Health System Challenges (HSC)"
 msgstr ""
 
@@ -1836,7 +1840,7 @@ msgid "Implementation"
 msgstr ""
 
 #: components/project/sections/ImplementationOverview.vue:2
-#: components/project/sections/ImplementationOverview.vue:67
+#: components/project/sections/ImplementationOverview.vue:71
 msgid "Implementation overview"
 msgstr ""
 
@@ -1874,10 +1878,6 @@ msgstr ""
 msgid "Import now"
 msgstr ""
 
-#: components/admin/import/ImportQueue.vue:52
-msgid "Imported {imported} of {{ importItem.rows.length }}"
-msgstr ""
-
 #: components/admin/FacilityImport.vue:10 components/admin/FacilityImport.vue:3
 msgid "Imported Facilities ({num}):"
 msgstr ""
@@ -1912,7 +1912,7 @@ msgstr ""
 msgid "Inactivate API key"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:157
+#: components/project/sections/ImplementationOverview.vue:222
 msgid ""
 "Include all software that is part of your project. If you cannot find your "
 "software listed in the options, you can add it by start typing the software "
@@ -1928,16 +1928,16 @@ msgstr ""
 msgid "Integration pending..."
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:98
-#: components/project/sections/view/Implementation.vue:100
+#: components/project/sections/ImplementationOverview.vue:118
+#: components/project/sections/view/Implementation.vue:105
 msgid "International"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:111
+#: components/project/sections/ImplementationOverview.vue:131
 msgid "International level deployment"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:220
+#: components/project/sections/view/Implementation.vue:231
 msgid "International Level Deployment"
 msgstr ""
 
@@ -2034,8 +2034,8 @@ msgstr ""
 msgid "Investors:"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:170
-#: components/admin/import/ImportDataTable.vue:270
+#: components/admin/import/ImportDataTable.vue:173
+#: components/admin/import/ImportDataTable.vue:273
 msgid "Keep working"
 msgstr ""
 
@@ -2295,7 +2295,7 @@ msgstr ""
 #: components/common/map/SwitchViewBox.vue:13
 #: components/common/map/TabbedCardProjectList.vue:9
 #: components/common/map/TabbedCardProjectList.vue:51
-#: components/project/sections/ImplementationOverview.vue:94
+#: components/project/sections/ImplementationOverview.vue:114
 #: components/project/sections/view/Implementation.vue:36
 msgid "National"
 msgstr ""
@@ -2306,11 +2306,11 @@ msgstr ""
 msgid "National Digital Health Reference Documents"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:107
+#: components/project/sections/ImplementationOverview.vue:127
 msgid "National level deployment"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:221
+#: components/project/sections/view/Implementation.vue:232
 msgid "National Level Deployment"
 msgstr ""
 
@@ -2397,7 +2397,7 @@ msgstr ""
 
 #: components/admin/import/SmartCell.vue:10
 #: components/admin/import/SmartCell.vue:7
-#: components/project/sections/ImplementationOverview.vue:127
+#: components/project/sections/ImplementationOverview.vue:147
 #: components/project/sections/view/Implementation.vue:39
 msgid "No, they have not yet contributed"
 msgstr ""
@@ -2426,17 +2426,17 @@ msgid ""
 "file and upload it again."
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:116
+#: components/admin/import/ImportDataTable.vue:119
 msgid "Note that once this column is deleted, you cannot recover the data."
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:230
+#: components/admin/import/ImportDataTable.vue:233
 msgid ""
 "Note that once you have saved these projects, they will be uploaded to the "
 "DHA. You can access all saved projects from your My Projects page."
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:140
+#: components/admin/import/ImportDataTable.vue:143
 msgid ""
 "Note that once you have saved this project, it will be uploaded to the DHA. "
 "You can access all of your saved Projects from your My Projects page."
@@ -2479,9 +2479,9 @@ msgstr ""
 
 #: components/DhaLogin.vue:50 components/admin/DhaQuestion.vue:77
 #: components/admin/DhaQuestion.vue:115
-#: components/admin/import/ImportDataTable.vue:121
-#: components/admin/import/ImportDataTable.vue:145
-#: components/admin/import/ImportDataTable.vue:235
+#: components/admin/import/ImportDataTable.vue:124
+#: components/admin/import/ImportDataTable.vue:148
+#: components/admin/import/ImportDataTable.vue:238
 #: components/admin/import/ImportHeaders.vue:81
 #: components/dashboard/FilterPresetsActions.vue:38
 #: components/project/ProjectForm.vue:69
@@ -2534,6 +2534,15 @@ msgstr ""
 
 #: components/admin/import/ImportDialog.vue:5
 msgid "Original Data"
+msgstr ""
+
+#: components/project/sections/ImplementationOverview.vue:25
+#: components/project/sections/ImplementationOverview.vue:1
+msgid "Other challanges"
+msgstr ""
+
+#: components/project/sections/view/Implementation.vue:196
+msgid "Other Health System Challenges (HSC)"
 msgstr ""
 
 #: components/dialogs/HowToDialog.vue:12 components/dialogs/HowToDialog.vue:59
@@ -2761,7 +2770,7 @@ msgstr ""
 msgid "Project has been unpublish"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:269
+#: components/admin/import/ImportDataTable.vue:272
 msgid "Project inbox"
 msgstr ""
 
@@ -2779,7 +2788,7 @@ msgstr ""
 msgid "Project Name"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:169
+#: components/admin/import/ImportDataTable.vue:172
 msgid "Project page"
 msgstr ""
 
@@ -2951,7 +2960,7 @@ msgstr ""
 msgid "Return to the Dashboard"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:119
+#: components/admin/import/ImportDataTable.vue:122
 msgid "Row Delete"
 msgstr ""
 
@@ -2967,10 +2976,10 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:21
+#: components/admin/import/ImportDataTable.vue:23
 #: components/admin/import/ImportDataTable.vue:6
 #: components/admin/import/ImportDataTable.vue:2
-#: components/admin/import/ImportDataTable.vue:233
+#: components/admin/import/ImportDataTable.vue:236
 msgid "Save all projects"
 msgstr ""
 
@@ -2987,7 +2996,7 @@ msgstr ""
 msgid "Save filters"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:143
+#: components/admin/import/ImportDataTable.vue:146
 msgid "Save Project"
 msgstr ""
 
@@ -2995,11 +3004,11 @@ msgstr ""
 msgid "Save settings"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:244
+#: components/admin/import/ImportDataTable.vue:247
 msgid "Saving all projects has been cancelled"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:158
+#: components/admin/import/ImportDataTable.vue:161
 msgid "Saving Cancelled"
 msgstr ""
 
@@ -3270,11 +3279,11 @@ msgstr ""
 #: components/dashboard/AdvancedSearch.vue:22
 #: components/dashboard/AdvancedSearch.vue:106
 #: components/dialogs/DashboardFiltersDialog.vue:68
-#: components/project/sections/view/Implementation.vue:196
+#: components/project/sections/view/Implementation.vue:207
 msgid "Software"
 msgstr ""
 
-#: components/project/sections/view/Implementation.vue:191
+#: components/project/sections/view/Implementation.vue:202
 msgid "Software and related Digital Health Interventions (DHI)"
 msgstr ""
 
@@ -3326,7 +3335,7 @@ msgstr ""
 #: components/common/map/SwitchViewBox.vue:14
 #: components/common/map/TabbedCardProjectList.vue:2
 #: components/common/map/TabbedCardProjectList.vue:21
-#: components/project/sections/ImplementationOverview.vue:91
+#: components/project/sections/ImplementationOverview.vue:111
 msgid "Sub-national"
 msgstr ""
 
@@ -3334,12 +3343,12 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:278
+#: components/project/sections/ImplementationOverview.vue:343
 msgid "Subnational may include district, regional, provincial, county levels."
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:167
-#: components/admin/import/ImportDataTable.vue:267
+#: components/admin/import/ImportDataTable.vue:170
+#: components/admin/import/ImportDataTable.vue:270
 #: components/project/collection/AddEditorDialog.vue:8
 msgid "Success!"
 msgstr ""
@@ -3947,7 +3956,7 @@ msgid ""
 "Intervention?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:31
+#: components/project/sections/ImplementationOverview.vue:51
 #: components/project/sections/ImplementationOverview.vue:1
 msgid "What are the names of the software included in the deployment?"
 msgstr ""
@@ -3958,12 +3967,12 @@ msgstr ""
 msgid "What data standards does your digital health project use?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:46
+#: components/project/sections/ImplementationOverview.vue:66
 #: components/project/sections/ImplementationOverview.vue:1
 msgid "What Digital Health Intervention(s) are included in this software?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:67
+#: components/project/sections/ImplementationOverview.vue:87
 #: components/project/sections/ImplementationOverview.vue:1
 msgid ""
 "What health information system(s) in your country does this project support?"
@@ -3989,7 +3998,7 @@ msgstr ""
 msgid "What is the project name?"
 msgstr ""
 
-#: components/project/sections/ImplementationOverview.vue:78
+#: components/project/sections/ImplementationOverview.vue:98
 #: components/project/sections/ImplementationOverview.vue:1
 msgid "What level of coverage does your project have (Sub-national, National)"
 msgstr ""
@@ -4087,21 +4096,21 @@ msgstr ""
 
 #: components/admin/import/SmartCell.vue:25
 #: components/admin/import/SmartCell.vue:22
-#: components/project/sections/ImplementationOverview.vue:141
+#: components/project/sections/ImplementationOverview.vue:161
 #: components/project/sections/view/Implementation.vue:44
 msgid "Yes, MOH is fully funding the project"
 msgstr ""
 
 #: components/admin/import/SmartCell.vue:20
 #: components/admin/import/SmartCell.vue:17
-#: components/project/sections/ImplementationOverview.vue:135
+#: components/project/sections/ImplementationOverview.vue:155
 #: components/project/sections/view/Implementation.vue:41
 msgid "Yes, there is a financial contribution through MOH budget"
 msgstr ""
 
 #: components/admin/import/SmartCell.vue:15
 #: components/admin/import/SmartCell.vue:12
-#: components/project/sections/ImplementationOverview.vue:130
+#: components/project/sections/ImplementationOverview.vue:150
 #: components/project/sections/view/Implementation.vue:40
 msgid "Yes, they are contributing in-kind people or time"
 msgstr ""
@@ -4183,13 +4192,13 @@ msgstr ""
 msgid "Your password was reset successfully"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:164
+#: components/admin/import/ImportDataTable.vue:167
 msgid ""
 "Your project has been successfully saved as a draft, you can go to your "
 "project page or keep working on the import interface"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:264
+#: components/admin/import/ImportDataTable.vue:267
 msgid ""
 "Your projects have been successfully saved as a draft, you can go to your "
 "project inbox or keep working on the import interface"

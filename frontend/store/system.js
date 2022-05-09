@@ -117,7 +117,9 @@ export const actions = {
     }
   },
 
-  async loadStaticData ({ commit, dispatch }) {
+  async loadStaticData ({ state, commit, dispatch }) {
+    // if the `languages` is filled then all static data should be filled
+    if (state.languages.length > 0) return
     try {
       const { data } = await this.$axios.get('/api/static-data/')
       commit('setValue', { key: 'axis', val: data.axis })
@@ -145,9 +147,9 @@ export const actions = {
       console.error('system/loadCountries failed')
     }
   },
-  async loadOrganisations ({ commit, rootGetters }) {
+  async loadOrganisations ({ state, commit, rootGetters }) {
     const profile = rootGetters['user/getProfile']
-    if (profile) {
+    if (profile && state.organisations.length === 0) {
       try {
         const { data } = await this.$axios.get('/api/organisations/')
         commit('setValue', { key: 'organisations', val: data })
@@ -156,7 +158,8 @@ export const actions = {
       }
     }
   },
-  async loadDonors ({ commit }) {
+  async loadDonors ({ state, commit }) {
+    if (state.donors.length > 0) return
     try {
       const { data } = await this.$axios.get('/api/landing-donor/')
       commit('setValue', { key: 'donors', val: data })
@@ -166,9 +169,7 @@ export const actions = {
   },
   async loadUserCollections ({ commit }) {
     try {
-      const { data } = await this.$axios.get(
-        '/api/projects/collection/my-collections/'
-      )
+      const { data } = await this.$axios.get('/api/projects/collection/my-collections/')
       commit('setValue', { key: 'collections', val: data })
     } catch (e) {
       console.error('system/loadUserCollections failed')

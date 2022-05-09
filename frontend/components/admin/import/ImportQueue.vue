@@ -57,9 +57,9 @@
               <translate
                 v-if="isDone (importItem)"
                 key="progress"
-                :parameters="{ imported: importItem.imported }"
+                :parameters="{ rowsImported: importItem.rows_imported, rowsCount: importItem.rows_count }"
               >
-                Imported {imported} of {{ importItem.rows.length }}
+                {rowsImported} of {rowsCount}
               </translate>
               <div v-else class="done">
                 <fa icon="check-circle" />
@@ -132,10 +132,10 @@ export default {
         : ''
     },
     isDone (importItem) {
-      return importItem.rows.length !== importItem.imported
+      return importItem.rows_count !== importItem.rows_imported
     },
     progressPercent (importItem) {
-      return Math.floor((importItem.imported / importItem.rows.length) * 100)
+      return Math.floor((importItem.rows_imported / importItem.rows_count) * 100)
     }
   }
 }
