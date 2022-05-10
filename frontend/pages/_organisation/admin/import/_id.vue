@@ -19,14 +19,14 @@
         </button>
       </template>
 
-      <ImportInfo :info="importInfo" />
+      <ImportInfo v-if="importInfo" :info="importInfo" />
       <ImportDataTable :fullscreen="fullScreen" />
     </Panel>
   </PageLayout>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import PageLayout from '@/components/common/wrappers/PageLayout'
 import Panel from '@/components/common/Panel'
 import ImportInfo from '@/components/admin/import/ImportInfo'
@@ -41,10 +41,13 @@ export default {
     ImportDataTable
   },
   async asyncData ({ params, store }) {
-    const data = await store.dispatch('admin/import/loadImport', params.id)
-    return {
-      rawImport: data
-    }
+    await store.dispatch('admin/import/loadImport', params.id)
+  },
+  beforeRouteLeave (to, from, next) {
+    setTimeout(() => {
+      this.resetImport()      
+    }, 2000);
+    next()
   },
   data () {
     return {
@@ -63,24 +66,30 @@ export default {
   },
   computed: {
     ...mapGetters({
+      rawImport: 'admin/import/getRawImport',
       getCountryDetails: 'countries/getCountryDetails',
       getDonorDetails: 'system/getDonorDetails',
       countries: 'countries/getCountries',
       donors: 'system/getDonors'
     }),
     importInfo () {
-      return {
-        sheetName: this.rawImport.sheet_name,
-        fileName: this.rawImport.filename,
-        country: this.rawImport.country ? this.countries.find((c) => c.id === this.rawImport.country).name : null,
-        donor: this.rawImport.donor ? this.donors.find((d) => d.id === this.rawImport.donor).name : null,
-        collectionName: this.rawImport.collection?.name,
-        collectionUrl: this.rawImport.collection?.url,
-        addMeAsEditor: this.rawImport.collection?.add_me_as_editor
-      }
+      return this.rawImport 
+        ? {
+            sheetName: this.rawImport.sheet_name,
+            fileName: this.rawImport.filename,
+            country: this.rawImport.country ? this.countries.find((c) => c.id === this.rawImport.country).name : null,
+            donor: this.rawImport.donor ? this.donors.find((d) => d.id === this.rawImport.donor).name : null,
+            collectionName: this.rawImport.collection?.name,
+            collectionUrl: this.rawImport.collection?.url,
+            addMeAsEditor: this.rawImport.collection?.add_me_as_editor
+            }
+        : this.rawImport
     }
   },
   methods: {
+    ...mapActions({
+      resetImport: 'admin/import/resetImport'
+    }),
     toggleFullscreen () {
       this.fullScreen = !this.fullScreen
     }

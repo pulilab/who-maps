@@ -693,9 +693,9 @@ msgid "Can't find anything related to"
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:78 components/admin/DhaQuestion.vue:116
-#: components/admin/import/ImportDataTable.vue:125
-#: components/admin/import/ImportDataTable.vue:149
-#: components/admin/import/ImportDataTable.vue:239
+#: components/admin/import/ImportDataTable.vue:151
+#: components/admin/import/ImportDataTable.vue:175
+#: components/admin/import/ImportDataTable.vue:265
 #: components/admin/import/ImportDialog.vue:81
 #: components/admin/import/ImportDialog.vue:2
 #: components/admin/import/ImportHeaders.vue:82
@@ -1038,7 +1038,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:134
+#: components/admin/import/ImportDataTable.vue:160
 msgid "Delete canceled"
 msgstr ""
 
@@ -1337,7 +1337,7 @@ msgstr ""
 msgid "Facilities"
 msgstr ""
 
-#: components/admin/import/SmartCell.vue:69
+#: components/admin/import/SmartCell.vue:76
 msgid "Failed to parse your data, click to manually fix"
 msgstr ""
 
@@ -1695,6 +1695,10 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#: components/admin/import/ImportDataTable.vue:96
+msgid "Hide imported rows"
+msgstr ""
+
 #: components/dialogs/ProjectApprovalDialog.vue:25
 #: components/dialogs/ProjectApprovalDialog.vue:129
 msgid "History"
@@ -2034,8 +2038,8 @@ msgstr ""
 msgid "Investors:"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:173
-#: components/admin/import/ImportDataTable.vue:273
+#: components/admin/import/ImportDataTable.vue:199
+#: components/admin/import/ImportDataTable.vue:299
 msgid "Keep working"
 msgstr ""
 
@@ -2395,7 +2399,7 @@ msgstr ""
 msgid "No project to show..."
 msgstr ""
 
-#: components/admin/import/SmartCell.vue:10
+#: components/admin/import/SmartCell.vue:14
 #: components/admin/import/SmartCell.vue:7
 #: components/project/sections/ImplementationOverview.vue:147
 #: components/project/sections/view/Implementation.vue:39
@@ -2426,17 +2430,17 @@ msgid ""
 "file and upload it again."
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:119
+#: components/admin/import/ImportDataTable.vue:145
 msgid "Note that once this column is deleted, you cannot recover the data."
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:233
+#: components/admin/import/ImportDataTable.vue:259
 msgid ""
 "Note that once you have saved these projects, they will be uploaded to the "
 "DHA. You can access all saved projects from your My Projects page."
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:143
+#: components/admin/import/ImportDataTable.vue:169
 msgid ""
 "Note that once you have saved this project, it will be uploaded to the DHA. "
 "You can access all of your saved Projects from your My Projects page."
@@ -2479,9 +2483,9 @@ msgstr ""
 
 #: components/DhaLogin.vue:50 components/admin/DhaQuestion.vue:77
 #: components/admin/DhaQuestion.vue:115
-#: components/admin/import/ImportDataTable.vue:124
-#: components/admin/import/ImportDataTable.vue:148
-#: components/admin/import/ImportDataTable.vue:238
+#: components/admin/import/ImportDataTable.vue:150
+#: components/admin/import/ImportDataTable.vue:174
+#: components/admin/import/ImportDataTable.vue:264
 #: components/admin/import/ImportHeaders.vue:81
 #: components/dashboard/FilterPresetsActions.vue:38
 #: components/project/ProjectForm.vue:69
@@ -2770,7 +2774,7 @@ msgstr ""
 msgid "Project has been unpublish"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:272
+#: components/admin/import/ImportDataTable.vue:298
 msgid "Project inbox"
 msgstr ""
 
@@ -2788,7 +2792,7 @@ msgstr ""
 msgid "Project Name"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:172
+#: components/admin/import/ImportDataTable.vue:198
 msgid "Project page"
 msgstr ""
 
@@ -2960,7 +2964,7 @@ msgstr ""
 msgid "Return to the Dashboard"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:122
+#: components/admin/import/ImportDataTable.vue:148
 msgid "Row Delete"
 msgstr ""
 
@@ -2979,7 +2983,7 @@ msgstr ""
 #: components/admin/import/ImportDataTable.vue:23
 #: components/admin/import/ImportDataTable.vue:6
 #: components/admin/import/ImportDataTable.vue:2
-#: components/admin/import/ImportDataTable.vue:236
+#: components/admin/import/ImportDataTable.vue:262
 msgid "Save all projects"
 msgstr ""
 
@@ -2996,7 +3000,7 @@ msgstr ""
 msgid "Save filters"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:146
+#: components/admin/import/ImportDataTable.vue:172
 msgid "Save Project"
 msgstr ""
 
@@ -3004,11 +3008,11 @@ msgstr ""
 msgid "Save settings"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:247
+#: components/admin/import/ImportDataTable.vue:273
 msgid "Saving all projects has been cancelled"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:161
+#: components/admin/import/ImportDataTable.vue:187
 msgid "Saving Cancelled"
 msgstr ""
 
@@ -3231,6 +3235,10 @@ msgstr ""
 msgid "Show global projects only"
 msgstr ""
 
+#: components/admin/import/ImportDataTable.vue:97
+msgid "Show imported rows (+{importedRows})"
+msgstr ""
+
 #: components/common/ProjectLegend.vue:7
 msgid "Show legend"
 msgstr ""
@@ -3245,6 +3253,14 @@ msgstr ""
 #: components/dashboard/AdvancedSearch.vue:6
 #: components/dashboard/AdvancedSearch.vue:28
 msgid "Show only projects that have been verified by the country MOH"
+msgstr ""
+
+#: components/admin/import/ImportDataTable.vue:102
+msgid "Showing all rows"
+msgstr ""
+
+#: components/admin/import/ImportDataTable.vue:101
+msgid "Showing few rows"
 msgstr ""
 
 #: components/SignupComponent.vue:8 components/SignupComponent.vue:1
@@ -3347,8 +3363,8 @@ msgstr ""
 msgid "Subnational may include district, regional, provincial, county levels."
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:170
-#: components/admin/import/ImportDataTable.vue:270
+#: components/admin/import/ImportDataTable.vue:196
+#: components/admin/import/ImportDataTable.vue:296
 #: components/project/collection/AddEditorDialog.vue:8
 msgid "Success!"
 msgstr ""
@@ -4094,21 +4110,21 @@ msgstr ""
 msgid "Yes - no field"
 msgstr ""
 
-#: components/admin/import/SmartCell.vue:25
+#: components/admin/import/SmartCell.vue:29
 #: components/admin/import/SmartCell.vue:22
 #: components/project/sections/ImplementationOverview.vue:161
 #: components/project/sections/view/Implementation.vue:44
 msgid "Yes, MOH is fully funding the project"
 msgstr ""
 
-#: components/admin/import/SmartCell.vue:20
+#: components/admin/import/SmartCell.vue:24
 #: components/admin/import/SmartCell.vue:17
 #: components/project/sections/ImplementationOverview.vue:155
 #: components/project/sections/view/Implementation.vue:41
 msgid "Yes, there is a financial contribution through MOH budget"
 msgstr ""
 
-#: components/admin/import/SmartCell.vue:15
+#: components/admin/import/SmartCell.vue:19
 #: components/admin/import/SmartCell.vue:12
 #: components/project/sections/ImplementationOverview.vue:150
 #: components/project/sections/view/Implementation.vue:40
@@ -4192,13 +4208,13 @@ msgstr ""
 msgid "Your password was reset successfully"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:167
+#: components/admin/import/ImportDataTable.vue:193
 msgid ""
 "Your project has been successfully saved as a draft, you can go to your "
 "project page or keep working on the import interface"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:267
+#: components/admin/import/ImportDataTable.vue:293
 msgid ""
 "Your projects have been successfully saved as a draft, you can go to your "
 "project inbox or keep working on the import interface"

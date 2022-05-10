@@ -1,9 +1,13 @@
 <template>
-  <div
-    :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': errorMessage, 'ParsingError': parsingFailed && !isRequired}]"
+  <div    
+    :class="['SmartCell', {
+      'Disabled': isDisabled,
+      'ValidationError': errorMessage,
+      'ParsingError': parsingFailed && !isRequired
+    }]"
     @click="clickHandler"
   >
-    <div class="Content" :class="{'Country': isCountry}">
+    <div v-if="shown" class="Content" :class="{'Country': isCountry}">
       <template v-if="column">
         <div v-if="active">
           <el-input-number
@@ -82,6 +86,9 @@
         <span class="OriginalValue">{{ original }}</span>
       </template>
     </div>
+    <div v-else>
+      {{ value }}
+    </div>
     <div v-if="(errorMessage || parsingFailed) && !active" class="ErrorOverlay">
       <span v-if="errorMessage && !parsingFailed">
         {{ errorMessage }}
@@ -155,6 +162,7 @@ export default {
   },
   data () {
     return {
+      shown: true,
       active: false
     }
   },
@@ -330,6 +338,11 @@ export default {
       this.handleValidation(valid, errors[0], this.column)
     },
     clickHandler () {
+      if (!this.shown) {
+        this.shown = true
+        return
+      }
+      this.shown = true
       if (this.isNumber || this.isDate || this.isDisabled || this.isTextArea || this.isCoverage || this.isGovInvestor) {
         this.active = true
         return

@@ -14,8 +14,8 @@
           List of projects ({rows})
         </translate>
       </span>
-      <el-switch v-model="showImportedRows" active-text="Show imported rows">
-      </el-switch>
+      <el-switch v-model="showFirstRows" :active-text="activeFirstRowsText" />
+      <el-switch v-model="showImportedRows" :active-text="activeHiddenRowsText" />
       <!-- <div class="search">
         <el-input v-model="search" clearable debounce prefix-icon="el-icon-search" placeholder="search" />
       </div> -->
@@ -123,7 +123,6 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import ImportHeaders from '@/components/admin/import/ImportHeaders'
 import ImportValidation from '@/components/admin/import/ImportValidation'
 import ImportRow from '@/components/admin/import/ImportRow'
-import SmartCell from '@/components/admin/import/SmartCell'
 import ImportDialog from '@/components/admin/import/ImportDialog'
 
 export default {
@@ -131,7 +130,7 @@ export default {
     ImportValidation,
     ImportHeaders,
     ImportRow,
-    SmartCell,
+    SmartCell: () => import('@/components/admin/import/SmartCell'),
     ImportDialog
   },
   props: {
@@ -143,7 +142,9 @@ export default {
   data () {
     return {
       search: '',
-      showImportedRows: false
+      rows: [],
+      showImportedRows: false,
+      showFirstRows: true,
     }
   },
   computed: {
@@ -156,7 +157,7 @@ export default {
       rawImport: 'admin/import/getRawImport'
     }),
     allImported () {
-      return this.rawImport.rows.every((row) => {
+      return this.rawImport?.rows.every((row) => {
         return row.project
       })
     },
@@ -200,16 +201,41 @@ export default {
       }
       return [nationalLevel]
     },
-    rows () {
-      return this.showImportedRows
-        ? this.rawImport.rows
-        : this.rawImport.rows.filter(r => r.project === null)
+    rowsCalc () {
+      let rows = this.showImportedRows
+        ? this.rawImport?.rows
+        : this.rawImport?.rows.filter(r => r.project === null)      
+      rows = this.showFirstRows ? rows.slice(0,10) : rows
+      return rows
+    },
+    importedRows () {
+      return this.rawImport.rows.length - this.rows.length
+    },
+    activeHiddenRowsText () {
+      return this.showImportedRows 
+        ? this.$gettext('Hide imported rows')
+        : this.$gettext('Show imported rows (+{importedRows})', { importedRows: this.importedRows })
+    },
+    activeFirstRowsText () {
+      return this.showFirstRows 
+        ? this.$gettext('Showing few rows')
+        : this.$gettext('Showing all rows')
     }
+  },
+  mounted() {
+    this.getRows()
   },
   methods: {
     ...mapActions({
-      refreshProfile: 'user/refreshProfile'
+      refreshProfile: 'user/refreshProfile',
+      resetImport: 'admin/import/resetImport'
     }),
+    getRows () {
+      this.rows = this.showImportedRows
+        ? this.rawImport?.rows
+        : this.rawImport?.rows.filter(r => r.project === null)      
+      this.rows = this.showFirstRows ? this.rows.slice(0,10) : this.rows
+    },
     projectLink (row) {
       return this.localePath({
         name: 'organisation-projects-id-edit',
@@ -403,6 +429,14 @@ export default {
       } catch (e) {
         console.log('stay')
       }
+    },
+  },
+  watch: {
+    showFirstRows() {
+      this.getRows()
+    },
+    showImportedRows() {
+      this.getRows()
     }
   }
 }
@@ -420,9 +454,13 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1em;
     height: 36px;
     line-height: 36px;
     margin: 20px 0;
+    .label {
+      flex: 1;
+    }
   }
 
   .ExportDataTable {

@@ -69,8 +69,11 @@ export const actions = {
   },
   async loadImport ({ commit }, importId) {
     const { data } = await this.$axios.get(`/api/projects/import/${importId}/`)
+    Object.freeze(data)
     commit('setValue', { key: 'rawImport', val: data })
-    return data
+  },
+  resetImport ({ commit }) {
+    commit('setValue', { key: 'rawImport', val: null })
   },
   async deleteImportRow ({ commit }, rowId) {
     const { data } = await this.$axios.delete(`/api/projects/import-row/${rowId}/`)
