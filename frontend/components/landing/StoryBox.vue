@@ -25,7 +25,7 @@ export default {
     .StoryWrapper {
       position: relative;
       overflow: hidden;
-      height: 862px;
+      height: 870px;
       iframe {
         position: absolute;
         top: 0;
