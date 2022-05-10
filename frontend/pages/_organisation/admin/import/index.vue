@@ -1,19 +1,19 @@
 <template>
-  <page-layout>
+  <PageLayout>
     <template #title>
       <translate>Import interface</translate>
     </template>
     <el-row type="flex" :gutter="17">
       <el-col :span="14">
-        <panel v-if="queue && queue.length > 0" :wide-body="true" align-title="left">
+        <Panel v-if="queue && queue.length > 0" :wide-body="true" align-title="left">
           <template #header>
             <translate>Previous imports</translate>
           </template>
           <div class="mb-4">
-            <import-queue :queue="queue" />
+            <ImportQueue :queue="queue" />
           </div>
-        </panel>
-        <panel v-else :empty="true" align-title="left">
+        </Panel>
+        <Panel v-else :empty="true" align-title="left">
           <template #header>
             <translate>Previous imports (0)</translate>
           </template>
@@ -24,18 +24,18 @@
           <p>
             <translate>To import new data / spreadsheet please use the form on the right aside.</translate>
           </p>
-        </panel>
+        </Panel>
       </el-col>
       <el-col :span="10">
-        <panel align-title="left">
+        <Panel align-title="left">
           <template #header>
             <translate>New import</translate>
           </template>
-          <import-file />
-        </panel>
+          <ImportFile />
+        </Panel>
       </el-col>
     </el-row>
-  </page-layout>
+  </PageLayout>
 </template>
 
 <script>

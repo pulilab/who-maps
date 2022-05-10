@@ -1,5 +1,5 @@
 <template>
-  <div class="Headers">
+  <div v-if="headers.length > 0" class="Headers">
     <div v-if="internalValue.length > 0" class="Row">
       <div class="Column Thin Header Selected FlexCol">
         <slot :columns="columnState" />

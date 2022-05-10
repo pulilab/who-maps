@@ -80,14 +80,13 @@ export const getters = {
 
 export const actions = {
   async loadMapData ({ commit, state }) {
-    if (state.countries.length === 0) {
-      try {
-        const { data } = await this.$axios.get('/api/landing-country/')
-        data.sort((a, b) => a.name.localeCompare(b.name))
-        commit('SET_COUNTRY_LIST', data)
-      } catch (e) {
-        console.error('countries/loadMapData failed')
-      }
+    if (state.countries.length > 0) return
+    try {
+      const { data } = await this.$axios.get('/api/landing-country/')
+      data.sort((a, b) => a.name.localeCompare(b.name))
+      commit('SET_COUNTRY_LIST', data)
+    } catch (e) {
+      console.error('countries/loadMapData failed')
     }
   },
   async loadCountryDetails ({ commit, state }, id) {
