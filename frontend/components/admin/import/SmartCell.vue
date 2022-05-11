@@ -212,6 +212,9 @@ export default {
     isOrganisation () {
       return this.column === 'organisation'
     },
+    isTeam () {
+      return this.column === 'implementing_team'
+    },
     countryDetails () {
       let country = null
       if (this.isCountry && this.value) {
@@ -258,7 +261,7 @@ export default {
           hsc_challenges: () => this.findProjectCollectionValue('hsc_challenges', true, 'challenges'),
           his_bucket: () => this.findProjectCollectionValue('his_bucket', true),
           implementing_partners: this.stringArray,
-          implementing_team: this.stringArray,
+          implementing_team: () => this.parseTeamEmails(),
           implementing_viewers: this.stringArray,
           implementation_dates: () => this.parseDate(),
           start_date: () => this.parseDate(),
@@ -307,7 +310,7 @@ export default {
       }
     },
     parsingFailed () {
-      return this.value && this.column && this.parsedValue.ids.length === 0 && !this.isOrganisation
+      return this.value && this.column && this.parsedValue?.ids?.length === 0 && !this.isOrganisation && !this.isTeam
     },
     errorMessage () {
       const e = this.errors.find(e => e.field === this.column)
@@ -357,6 +360,10 @@ export default {
         ids: [result],
         names: [result]
       }
+    },
+    parseTeamEmails () {
+      const value = this.value !== '' ?  this.valueParser(true) : ''
+      return value ? this.stringArray(value) : {ids: [], names: []}
     },
     stringToArray (value) {
       if (Array.isArray(value)) {
