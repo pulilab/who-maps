@@ -91,7 +91,7 @@ INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
 
 class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 1 General Overview
-    name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
+    name = serializers.CharField(max_length=250, validators=[UniqueValidator(queryset=Project.objects.all())])
     organisation = serializers.CharField(max_length=128, required=False)
     country = serializers.IntegerField(min_value=0, max_value=100000)
     geographic_scope = serializers.CharField(max_length=1024, required=False)
@@ -192,7 +192,7 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     Override fields that are not required for draft project.
     """
     # SECTION 1 General Overview
-    name = serializers.CharField(max_length=128)
+    name = serializers.CharField(max_length=250)
     country = serializers.IntegerField(min_value=0, max_value=100000, required=False)
     implementation_overview = serializers.CharField(max_length=5000, required=False)
     contact_name = serializers.CharField(max_length=256, required=False)

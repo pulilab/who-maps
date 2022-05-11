@@ -701,10 +701,12 @@ class ProjectTests(SetupTests):
         data = copy.deepcopy(self.project_data)
         data['project'].update(
             name="toolongnamemorethan128charactersisaninvalidnameheretoolongnamemorethan128charactersisaninv"
+                 "toolongnamemorethan128charactersisaninvalidnameheretoolongnamemorethan128charactersisaninv"
+                 "toolongnamemorethan128charactersisaninvalidnameheretoolongnamemorethan128charactersisaninv"
                  "alidnameheretoolongnamemorethan128charactersisaninvalidnamehere")
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['project']["name"][0], 'Ensure this field has no more than 128 characters.')
+        self.assertEqual(response.json()['project']["name"][0], 'Ensure this field has no more than 250 characters.')
 
     def test_update_project_with_new_name_that_collides_with_a_different_project(self):
         url = reverse("project-create", kwargs={"country_id": self.country1.id})
