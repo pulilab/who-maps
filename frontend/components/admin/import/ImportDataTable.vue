@@ -142,7 +142,6 @@ export default {
   data () {
     return {
       search: '',
-      rows: [],
       showImportedRows: false,
       showFirstRows: true,
     }
@@ -201,15 +200,17 @@ export default {
       }
       return [nationalLevel]
     },
-    rowsCalc () {
-      let rows = this.showImportedRows
-        ? this.rawImport?.rows
-        : this.rawImport?.rows.filter(r => r.project === null)      
-      rows = this.showFirstRows ? rows.slice(0,10) : rows
-      return rows
+    rows () {
+      return this.showFirstRows
+        ? this.showImportedRows
+          ? this.rawImport?.rows.slice(0,50)
+          : this.rawImport?.rows.filter(r => r.project === null).slice(0,50)
+        : this.showImportedRows
+          ? this.rawImport?.rows
+          : this.rawImport?.rows.filter(r => r.project === null)
     },
     importedRows () {
-      return this.rawImport.rows.length - this.rows.length
+      return this.rawImport?.rows.filter(r => r.project !== null).length
     },
     activeHiddenRowsText () {
       return this.showImportedRows 
@@ -222,20 +223,11 @@ export default {
         : this.$gettext('Showing all rows')
     }
   },
-  mounted() {
-    this.getRows()
-  },
   methods: {
     ...mapActions({
       refreshProfile: 'user/refreshProfile',
       resetImport: 'admin/import/resetImport'
     }),
-    getRows () {
-      this.rows = this.showImportedRows
-        ? this.rawImport?.rows
-        : this.rawImport?.rows.filter(r => r.project === null)      
-      this.rows = this.showFirstRows ? this.rows.slice(0,10) : this.rows
-    },
     projectLink (row) {
       return this.localePath({
         name: 'organisation-projects-id-edit',
@@ -431,14 +423,6 @@ export default {
       }
     },
   },
-  watch: {
-    showFirstRows() {
-      this.getRows()
-    },
-    showImportedRows() {
-      this.getRows()
-    }
-  }
 }
 </script>
 

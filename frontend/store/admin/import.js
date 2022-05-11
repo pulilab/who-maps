@@ -69,7 +69,6 @@ export const actions = {
   },
   async loadImport ({ commit }, importId) {
     const { data } = await this.$axios.get(`/api/projects/import/${importId}/`)
-    Object.freeze(data)
     commit('setValue', { key: 'rawImport', val: data })
   },
   resetImport ({ commit }) {

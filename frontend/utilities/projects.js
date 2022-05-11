@@ -10,6 +10,18 @@ Validator.extend('isDate', {
     return !!(value instanceof Date && value.toJSON())
   }
 })
+
+Validator.extend('isArrayofEmails', {
+  getMessage (field) {
+    return `${field} should contain valid emails only`
+  },
+  validate (value) {
+    if (!Array.isArray(value) || value.length === 0) return true
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/    
+    return value.every(e => e.match(emailRegex)) 
+  }
+})
+
 export const fetchProjectData = async (store, params, error) => {
   try {
     await store.dispatch('projects/setCurrentProject', params.id)
