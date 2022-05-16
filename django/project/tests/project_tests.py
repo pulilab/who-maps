@@ -1071,6 +1071,41 @@ class ProjectTests(SetupTests):
         self.assertEqual(call_args_list[0][0][0][0], data['id'])
 
     @mock.patch('project.tasks.send_mail_wrapper')
+    def test_notify_default_notification_email_about_pending_software_success(self, send_email):
+        send_email.return_value = None
+
+        super_users = User.objects.filter(is_superuser=True)
+        # remove super user status from the current super users
+        for user in super_users:
+            user.is_superuser = False
+            user.save()
+
+        test_super_user_1 = UserFactory(username='bh_superuser_1', email='bh+1@pulilab.com', password='puli_1234',
+                                        is_staff=True, is_superuser=True)
+        test_super_user_2 = UserFactory(username='bh_superuser_2', email='bh+2@pulilab.com', password='puli_1234',
+                                        is_staff=True, is_superuser=True)
+        try:
+            software = TechnologyPlatformFactory(name='pending software')
+
+            with self.settings(NOTIFICATION_EMAIL='default@email.com'):
+                notify_superusers_about_new_pending_software.apply((software.id,))
+
+                call_args_list = send_email.call_args_list[0][1]
+                self.assertEqual(call_args_list['subject'], 'New software is pending for approval')
+                self.assertEqual(call_args_list['email_type'], 'new_pending_software')
+                self.assertIn('default@email.com', call_args_list['to'])
+                self.assertEqual(call_args_list['context']['software_name'], software.name)
+
+        finally:
+            test_super_user_1.delete()
+            test_super_user_2.delete()
+
+            # give back super user status
+            for user in super_users:
+                user.is_superuser = True
+                user.save()
+
+    @mock.patch('project.tasks.send_mail_wrapper')
     def test_notify_super_users_about_pending_software_success(self, send_email):
         send_email.return_value = None
 
@@ -1086,15 +1121,16 @@ class ProjectTests(SetupTests):
                                         is_staff=True, is_superuser=True)
         try:
             software = TechnologyPlatformFactory(name='pending software')
-            notify_superusers_about_new_pending_software.apply((software.id,))
 
-            call_args_list = send_email.call_args_list[0][1]
-            self.assertEqual(call_args_list['subject'], 'New software is pending for approval')
-            self.assertEqual(call_args_list['email_type'], 'new_pending_software')
-            self.assertIn(test_super_user_1.email, call_args_list['to'])
-            self.assertIn(test_super_user_2.email, call_args_list['to'])
-            self.assertEqual(call_args_list['context']['software_name'], software.name)
+            with self.settings(NOTIFICATION_EMAIL=''):
+                notify_superusers_about_new_pending_software.apply((software.id,))
 
+                call_args_list = send_email.call_args_list[0][1]
+                self.assertEqual(call_args_list['subject'], 'New software is pending for approval')
+                self.assertEqual(call_args_list['email_type'], 'new_pending_software')
+                self.assertIn(test_super_user_1.email, call_args_list['to'])
+                self.assertIn(test_super_user_2.email, call_args_list['to'])
+                self.assertEqual(call_args_list['context']['software_name'], software.name)
         finally:
             test_super_user_1.delete()
             test_super_user_2.delete()
