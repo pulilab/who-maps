@@ -370,7 +370,7 @@ def notify_superusers_about_new_pending_software(software_id):
     if not settings.NOTIFICATION_EMAIL:
         super_users = User.objects.filter(is_superuser=True)
     else:
-        super_users = User.objects.filter(email=settings.NOTIFICATION_EMAIL)
+        super_users = User.objects.filter(email=settings.NOTIFICATION_EMAIL)  # pragma: no cover
 
     email_mapping = defaultdict(list)
     for user in super_users:
