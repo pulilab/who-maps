@@ -98,9 +98,14 @@
               </li>
             </ul>
           </td>
-          <td>
-            <strong>{{ project.name }}</strong>
-          </td>
+          <el-tooltip :disabled="!project.narrative" :content="project.narrative" placement="top">
+            <td class="project-name-cell">
+              <strong>
+                {{ project.name }}
+              </strong>
+              <i v-if="project.narrative" class="el-icon-tickets" />
+            </td>
+          </el-tooltip>            
           <td>
             <div class="country">
               <country-flag :code="project.country.code" :small="true"/>
@@ -249,6 +254,11 @@ export default {
 <style lang="less">
 @import '~assets/style/variables.less';
 
+.el-tooltip__popper {
+  max-width: 400px;
+  line-height: 180%;
+}
+
 .ProjectToolbar {
   display: flex;
   align-items: center;
@@ -275,6 +285,15 @@ export default {
     &.editor {
       width: 126px;
       text-align: center;
+    }
+  }
+
+  .project-name-cell {
+    position: relative;
+    i {
+      position: absolute;
+      top: 4px;
+      right: 4px;
     }
   }
 
