@@ -77,17 +77,6 @@
             </el-form-item>
 
             <el-form-item
-              :label="$gettext('Phone number') | translate"
-              prop="phone"
-            >
-              <el-input
-                v-model="innerProfile.phone"
-                type="text"
-                data-vv-name="phone"
-              />
-            </el-form-item>
-
-            <el-form-item
               :label="$gettext('Designation / Title') | translate"
               prop="title"
             >
@@ -685,7 +674,6 @@ export default {
         project_updates_notification: true,
         project_approval_request_notification: true,
         role_request_notification: true,
-        phone: null,
         title: null,
         linkedin: null
       },
