@@ -222,3 +222,20 @@ class ExternalAPITests(APITestCase):
         self.assertEqual(Project.objects.filter(
             data__contact_email=project_data['project']['contact_email']).count(), 0)
 
+    def test_external_publish_makes_draft_first(self):
+        project_data = copy.deepcopy(self.project_data)
+        project_data['project']['contact_email'] = 'do.not.roll@this.back'
+
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
+        response = self.test_user_client.post(url, project_data, format="json")
+        self.assertEqual(response.status_code, 201)
+        data = response.json()
+        self.assertTrue(data['public_id'] != '')
+        self.assertEqual(data['draft'], data['published'])
+        self.assertEqual(data['published']['contact_email'], project_data['project']['contact_email'])
+
+        draft = Project.objects.get(draft__contact_email=project_data['project']['contact_email'])
+        published = Project.objects.get(data__contact_email=project_data['project']['contact_email'])
+
+        self.assertEqual(draft.id, published.id)
+        self.assertEqual(ProjectVersion.objects.filter(project=draft.id).count(), 2)
