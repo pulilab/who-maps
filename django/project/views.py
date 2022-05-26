@@ -272,14 +272,14 @@ class ProjectDraftViewSet(TeamCollectionTokenAuthMixin, ViewSet):
         """
         Creates a Draft project.
         """
-        country = get_object_or_400(Country, error_message="No such country", id=country_id)
-
         instance = country_answers = None
         all_donor_answers = []
         errors = {}
 
         if 'project' not in request.data:
             raise ValidationError({'project': 'Project data is missing'})
+
+        country = get_object_or_400(Country, error_message="No such country", id=country_id)
 
         # if Organisation is coming as a string
         if request.data['project'].get('organisation'):
