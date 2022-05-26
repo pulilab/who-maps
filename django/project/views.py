@@ -1,5 +1,4 @@
 import copy
-from random import randint
 
 from django.db import transaction
 from django.shortcuts import get_object_or_404
@@ -27,7 +26,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer, \
     TerminologySerializer, CollectionInputSerializer, ExternalProjectPublishSerializer, \
     ExternalProjectDraftSerializer, CollectionOutputSerializer, CollectionInputSwaggerSerializer, \
-    CollectionListSerializer, ProjectImportV2ListSerializer
+    CollectionListSerializer, ProjectImportV2ListSerializer, ExternalProjectResponseSerializer
 
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
@@ -190,7 +189,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         data_serializer.fields.get('name').validators \
             .append(UniqueValidator(queryset=project.__class__.objects.all().exclude(id=project.id)))
 
-        self.check_object_permissions(self.request, project)
+        self.check_object_permissions(request, project)
         data_serializer.is_valid()
         if data_serializer.errors:
             errors['project'] = data_serializer.errors
