@@ -179,7 +179,7 @@ class ExternalAPITests(APITestCase):
         response = self.test_user_client.post(url, project_data, format="json")
 
         self.assertEqual(response.status_code, 400, response.json())
-        self.assertEqual(response.json(), {'contact_email': ['Enter a valid email address.']})
+        self.assertEqual(response.json(), {'project': {'contact_email': ['Enter a valid email address.']}})
 
     @mock.patch('who_maps.throttle.ExternalAPIUserRateThrottle.get_rate', return_value='2/minute')
     @override_settings(CACHES={
