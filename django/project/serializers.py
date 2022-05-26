@@ -787,17 +787,29 @@ class CollectionOutputSerializer(serializers.ModelSerializer):
 class ExternalProjectPublishSerializer(serializers.Serializer):
     """
     Used to beautify swagger in public docs
-    TODO: May need to update the 'project' part
     """
     project = ProjectPublishedSerializer(required=True)
+    country_custom_answers = CountryCustomAnswerSerializer(many=True, required=False)
+    donor_custom_answers = DonorCustomAnswerSerializer(many=True, required=False)
 
 
 class ExternalProjectDraftSerializer(serializers.Serializer):
     """
     Used to beautify swagger in public docs
-    TODO: May need to update the 'project' part
     """
     project = ProjectDraftSerializer(required=True)
+    country_custom_answers = CountryCustomAnswerSerializer(many=True, required=False)
+    donor_custom_answers = DonorCustomAnswerSerializer(many=True, required=False)
+
+
+class ExternalProjectResponseSerializer(serializers.Serializer):
+    """
+    Used to beautify swagger in public docs
+    """
+    id = serializers.IntegerField(read_only=True)
+    public_id = serializers.CharField(allow_blank=True, required=False, read_only=True)
+    published = ProjectPublishedSerializer(required=False)
+    draft = ProjectDraftSerializer(required=False)
 
 
 class CollectionInputSwaggerSerializer(serializers.Serializer):
