@@ -207,3 +207,18 @@ class ExternalAPITests(APITestCase):
         self.assertEqual(response.status_code, 429, response.json())
         self.assertIn('Request was throttled. Expected available in', response.json()['detail'])
         cache.clear()
+
+    def test_transaction_rollbacks_on_external_draft_publish(self):
+        project_data = copy.deepcopy(self.project_data)
+        project_data['project']['contact_email'] = 'roll@this.back'
+        # only required for publish
+        del project_data['project']['implementation_overview']
+
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
+        response = self.test_user_client.post(url, project_data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Project.objects.filter(
+            draft__contact_email=project_data['project']['contact_email']).count(), 0)
+        self.assertEqual(Project.objects.filter(
+            data__contact_email=project_data['project']['contact_email']).count(), 0)
+
