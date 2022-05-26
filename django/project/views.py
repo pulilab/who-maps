@@ -238,6 +238,8 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                 donor_answers.context['donor_id'] = donor_id
                 instance = donor_answers.save()
 
+            if hasattr(request, 'client_code'):
+                instance.metadata = dict(from_external=request.client_code)
             instance.save()
             project.refresh_from_db()  # need to do this due to JSONfield
 
