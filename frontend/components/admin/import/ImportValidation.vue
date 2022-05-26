@@ -48,10 +48,11 @@ export default {
       const rules = this.publish ? this.internalPublishRules : this.internalDraftRules
       return {
         ...rules,
-        team: undefined,
+        implementing_team: {
+          isArrayofEmails: true          
+        },
+        team: undefined, // this is not the team we use for importing!
         viewers: undefined
-        // country: undefined,
-        // donors: undefined
       }
     },
     nameMapping () {

@@ -48,7 +48,7 @@
               <div class="Separator" />
             </el-col>
             <el-col>
-              <LanguageSelector />
+              <LanguageMenu />
             </el-col>
 
             <el-col class="AuthLinks">
@@ -148,7 +148,7 @@
 import VueScrollClass from 'vue-scroll-class'
 import { mapGetters, mapActions } from 'vuex'
 
-import LanguageSelector from './LanguageSelector'
+import LanguageMenu from './LanguageMenu'
 import NavigationMenu from './NavigationMenu'
 import UserDropdown from './UserDropdown'
 import ToolkitDialogWrapper from './ToolkitDialogWrapper'
@@ -165,7 +165,7 @@ export default {
     'scroll-class': VueScrollClass
   },
   components: {
-    LanguageSelector,
+    LanguageMenu,
     NavigationMenu,
     UserDropdown,
     ToolkitDialogWrapper,

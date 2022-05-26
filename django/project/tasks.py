@@ -367,17 +367,24 @@ def sync_project_from_odk():  # pragma: no cover
 @app.task(name='notify_superusers_about_new_pending_software')
 def notify_superusers_about_new_pending_software(software_id):
     software = TechnologyPlatform.objects.get(id=software_id)
-    super_users = User.objects.filter(is_superuser=True)
-
+    if not settings.NOTIFICATION_EMAIL:
+        super_users = User.objects.filter(is_superuser=True)
+    else:
+        super_users = User.objects.filter(email=settings.NOTIFICATION_EMAIL)
     email_mapping = defaultdict(list)
-    for user in super_users:
-        try:
-            email_mapping[user.userprofile.language].append(user.email)
-        except ObjectDoesNotExist:
-            email_mapping[settings.LANGUAGE_CODE].append(user.email)
+    super_users_list_raw = [()]
+    if not super_users:
+        super_users_list_raw = [('en', settings.NOTIFICATION_EMAIL)]
+    else:
+        for user in super_users:
+            try:
+                email_mapping[user.userprofile.language].append(user.email)
+            except ObjectDoesNotExist:
+                email_mapping[settings.LANGUAGE_CODE].append(user.email)
 
     change_url = reverse('admin:project_{}_change'.format(software._meta.model_name), args=(software.id,))
-    for language, email_list in email_mapping.items():
+    email_mapping_items = email_mapping.items() if super_users else super_users_list_raw
+    for language, email_list in email_mapping_items:
         send_mail_wrapper(subject=_('New software is pending for approval'),
                           email_type="new_pending_software",
                           to=email_list,
