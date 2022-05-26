@@ -540,10 +540,9 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
             pg_serializer.is_valid()
             pg_serializer.save()
 
-        # create changelog
-        ProjectVersion.objects.create(project=instance, user=request.user.userprofile, name=instance.name,
-                                      data=instance.data, research=instance.research, published=True)
-        return Response(instance.to_representation(draft_mode=True), status=status.HTTP_201_CREATED)
+        draft = instance.to_representation(draft_mode=True)
+        published = instance.to_representation()
+        return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_201_CREATED)
 
 
 class ProjectGroupViewSet(TeamCollectionTokenAuthMixin, RetrieveModelMixin, GenericViewSet):

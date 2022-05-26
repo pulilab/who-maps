@@ -12,7 +12,7 @@ from who_maps.throttle import ExternalAPIUserRateThrottle
 
 from core.factories import CountryFactory, OrganisationFactory
 from country.models import Country, Donor
-from project.models import Project
+from project.models import Project, ProjectVersion
 from user.models import UserProfile, Organisation
 
 
