@@ -515,40 +515,21 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
         draft_response = ProjectDraftViewSet().create(
             request, country_id=request.data.get('project', {}).get('country', 0))
 
-        if not request.data.get('project'):
-            raise ValidationError({'project': 'Project data is missing'})  # pragma: no cover
-        country = get_object_or_400(Country, error_message="No such country", id=request.data['project'].get('country'))
+        if draft_response.status_code != status.HTTP_201_CREATED:
+            return draft_response
+        else:
+            publish_response = ProjectPublishViewSet().update(request,
+                                                              project_id=draft_response.data['id'],
+                                                              country_id=draft_response.data['draft']['country'])
 
-        # Project name needs to be unique
-        project_name = request.data['project'].get('name')
-        if Project.objects.filter(name=project_name).exists():
-            request.data['project']['name'] = f"{project_name} {randint(1, 100)}"
+        if publish_response.status_code != status.HTTP_200_OK:
+            # As we saved a draft before, we need to roll it back
+            transaction.set_rollback(True)
+            return publish_response
+        else:
+            instance = Project.objects.get(id=draft_response.data['id'])
 
-        # DCH only
-        if client_code == 'xNhlb4':
-            # if Organisation is coming as a string
-            if request.data['project'].get('organisation'):
-                project_org = request.data['project'].get('organisation')
-                org_id = Organisation.get_or_create_insensitive(project_org)
-                request.data['project']['organisation'] = str(org_id)
-            # Donor is required - set to "Other"
-            donor, _ = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
-            request.data['project']['donors'] = [donor.id]
-
-            # Set national_level_deployment to 0, so it can be added later
-            request.data['project']['national_level_deployment'] = {"clients": 0, "health_workers": 0, "facilities": 0}
-
-        data_serializer = ProjectPublishedSerializer(data=request.data['project'])
-        data_serializer.is_valid(raise_exception=True)
-        instance = data_serializer.save()
-        instance.metadata = dict(from_external=client_code)
-        instance.save()  # REST FW does not call save for these serializers by default, so we have to do it here
-        instance.make_public_id(country.id)
-        instance.save(update_fields=['public_id'])
-        instance.team.add(request.user.userprofile)
-
-        # DCH only - Add contact_email as team member
-        if client_code == 'xNhlb4':
+        if client_code == 'xNhlb4':  # DCH only - Add contact_email as team member
             group_data = {
                 "team": [request.user.userprofile.id],
                 "viewers": [],
