@@ -189,18 +189,21 @@ class ExternalAPITests(APITestCase):
         }
     })
     def test_external_api_throttle_success(self, throttle_mock):
-        rate = ExternalAPIUserRateThrottle().get_rate()
+        project_data = copy.deepcopy(self.project_data)
 
+        rate = ExternalAPIUserRateThrottle().get_rate()
         split = rate.split('/')
 
         url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
         for i in range(0, int(split[0])):
-            response = self.test_user_client.post(url, self.project_data, format="json")
+            project_data['project']['name'] = f'test throttle {i}'
+            response = self.test_user_client.post(url, project_data, format="json")
             self.assertEqual(response.status_code, 201, response.json())
             self.assertTrue(response.json().get("id"))
 
         # next request should be throttled
-        response = self.test_user_client.post(url, self.project_data, format="json")
+        project_data['project']['name'] = 'test throttle no-go'
+        response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 429, response.json())
         self.assertIn('Request was throttled. Expected available in', response.json()['detail'])
         cache.clear()
