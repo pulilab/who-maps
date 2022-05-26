@@ -333,6 +333,9 @@ class ProjectDraftViewSet(TeamCollectionTokenAuthMixin, ViewSet):
                 donor_answers.context['project'] = instance
                 donor_answers.context['donor_id'] = donor_id
                 instance = donor_answers.save()
+
+            if hasattr(request, 'client_code'):
+                instance.metadata = dict(from_external=request.client_code)
             instance.save()
             # COLLECTIONS - draft project can have an empty team if they are part of a collection
             if 'import_row' in request.data['project']:
@@ -430,6 +433,10 @@ class ProjectDraftViewSet(TeamCollectionTokenAuthMixin, ViewSet):
                 donor_answers.context['project'] = instance
                 donor_answers.context['donor_id'] = donor_id
                 instance = donor_answers.save()
+
+            # TODO: enable this when we have external API updates
+            # if hasattr(request, 'client_code'):
+            #     instance.metadata = dict(from_external=request.client_code)
             instance.save()
 
         draft = instance.to_representation(draft_mode=True)
