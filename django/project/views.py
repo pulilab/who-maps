@@ -493,14 +493,27 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
         Clients are differentiated by custom endpoints. For most cases, the `/default/` endpoint needs to be used,
         but if the client requires custom handling of some attributes, they can request a custom endpoint via e-mail
         (feature in progress)
-
-        Alterations from internal API are:
-        - project names must be unique, so check if they are clashing and randomize to help
-        - required country questions are not checked
         """
-        # If client code is used, it needs to be correct
-        if client_code and not settings.EXTERNAL_API_CLIENTS.get(client_code):
+        if not settings.EXTERNAL_API_CLIENTS.get(client_code):
             raise ValidationError({'client_code': 'Client code is invalid'})
+        else:
+            request.client_code = client_code
+
+            if client_code == 'xNhlb4':  # DCH only
+                if 'project' not in request.data:  # pragma: no cover
+                    raise ValidationError({'project': 'Project data is missing'})
+                # Donor is required - set to "Other"
+                donor, _ = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
+                request.data['project']['donors'] = [donor.id]
+
+                # Set national_level_deployment to 0, so it can be added later
+                request.data['project']['national_level_deployment'] = {"clients": 0, "health_workers": 0,
+                                                                        "facilities": 0}
+
+        # To follow procedures, we first save a draft and then publish. This is how it's done on the UI and on the
+        # normal API, so we follow these two steps here as well. The original publish API only has an update method.
+        draft_response = ProjectDraftViewSet().create(
+            request, country_id=request.data.get('project', {}).get('country', 0))
 
         if not request.data.get('project'):
             raise ValidationError({'project': 'Project data is missing'})  # pragma: no cover
