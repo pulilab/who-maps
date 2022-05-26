@@ -468,39 +468,13 @@ class ExternalDraftAPI(TeamTokenAuthMixin, ViewSet):
         Clients are differentiated by custom endpoints. For most cases, the `/default/` endpoint needs to be used,
         but if the client requires custom handling of some attributes, they can request a custom endpoint via e-mail
         (feature in progress)
-        Alterations from internal API are:
-        - project names must be unique, so check if they are clashing and randomize to help
-        - required country questions are not checked
         """
-        # If client code is used, it needs to be correct
-        if client_code and not settings.EXTERNAL_API_CLIENTS.get(client_code):
+        if not settings.EXTERNAL_API_CLIENTS.get(client_code):
             raise ValidationError({'client_code': 'Client code is invalid'})
+        else:
+            request.client_code = client_code
 
-        if not request.data.get('project'):
-            raise ValidationError({'project': 'Project data is missing'})
-
-        # Project name needs to be unique
-        project_name = request.data['project'].get('name')
-        if Project.objects.filter(name=project_name).exists():  # pragma: no cover
-            request.data['project']['name'] = f"{project_name} {randint(1, 100)}"
-
-        # if Organisation is coming as a string
-        if request.data['project'].get('organisation'):
-            project_org = request.data['project'].get('organisation')
-            org_id = Organisation.get_or_create_insensitive(project_org)
-            request.data['project']['organisation'] = str(org_id)
-
-        data_serializer = ProjectDraftSerializer(data=request.data['project'])
-        data_serializer.is_valid(raise_exception=True)
-        instance = data_serializer.save()
-        instance.metadata = dict(from_external=client_code)
-        instance.save()  # REST FW does not call save for these serializers by default, so we have to do it here
-        instance.team.add(request.user.userprofile)
-
-        ProjectVersion.objects.create(project=instance, user=request.user.userprofile, name=instance.name,
-                                      data=instance.data, research=instance.research, published=True)
-
-        return Response(instance.to_representation(draft_mode=True), status=status.HTTP_201_CREATED)
+        return ProjectDraftViewSet().create(request, country_id=request.data.get('project', {}).get('country', 0))
 
 
 class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
