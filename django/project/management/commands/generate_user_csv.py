@@ -11,7 +11,7 @@ import csv
 class Command(BaseCommand):
     help = 'Converts the UserProfile DB into CSV format'
 
-    fieldnames = ['Name', 'Email', 'Country', 'Phone', 'Title', 'LinkedIn', 'Language', 'Role', 'Investor']
+    fieldnames = ['Name', 'Email', 'Country', 'Title', 'LinkedIn', 'Language', 'Role', 'Investor']
 
     def write_data_to_csv(self, data: list):
         timestamp = timezone.now().strftime("%Y-%m-%d_%H-%M")
@@ -35,7 +35,6 @@ class Command(BaseCommand):
                 'Name': profile.name,
                 'Email': profile.user.email,
                 'Country': profile.country.name if profile.country else None,
-                'Phone': profile.phone,
                 'Title': profile.title,
                 'LinkedIn': profile.linkedin,
                 'Language': lang_mapper[profile.language],

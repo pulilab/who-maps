@@ -73,7 +73,7 @@ class UserProfile(ExtendedModel):
                               on_delete=models.SET_NULL)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
-    phone = models.CharField(blank=True, null=True, max_length=50)
+    # phone = models.CharField(blank=True, null=True, max_length=50)
     title = models.CharField(blank=True, null=True, max_length=100)
     linkedin = models.URLField(blank=True, null=True)
 
