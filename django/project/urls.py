@@ -48,7 +48,7 @@ urlpatterns = [
          view=views.ProjectDraftViewSet.as_view({
              'post': 'create'
          }), name="project-create"),
-    path(r'projects/draft/<int:project_id>/<int:country_id>/',
+    path('projects/draft/<int:project_id>/<int:country_id>/',
          view=views.ProjectDraftViewSet.as_view({
              'put': 'update'
          }),

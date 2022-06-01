@@ -12,7 +12,7 @@ from who_maps.throttle import ExternalAPIUserRateThrottle
 
 from core.factories import CountryFactory, OrganisationFactory
 from country.models import Country, Donor
-from project.models import Project
+from project.models import Project, ProjectVersion
 from user.models import UserProfile, Organisation
 
 
@@ -170,27 +170,7 @@ class ExternalAPITests(APITestCase):
         response = self.test_user_client.post(url, project_data, format="json")
 
         self.assertEqual(response.status_code, 400, response.json())
-        self.assertEqual(response.json(), {'contact_email': ['Enter a valid email address.']})
-
-    def test_name_clash_resolved_automatically(self):
-        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
-        response = self.test_user_client.post(url, self.project_data, format="json")
-        self.assertEqual(response.status_code, 201, response.json())
-        self.assertTrue(response.json().get("id"))
-        project_1_id = response.json().get("id")
-
-        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
-        response = self.test_user_client.post(url, self.project_data, format="json")
-        self.assertEqual(response.status_code, 201, response.json())
-        self.assertTrue(response.json().get("id"))
-        project_2_id = response.json().get("id")
-
-        self.assertNotEqual(project_1_id, project_2_id)
-
-        project_1 = Project.objects.get(id=project_1_id)
-        project_2 = Project.objects.get(id=project_2_id)
-        self.assertNotEqual(project_1.name, project_2.name)
-        self.assertEqual(self.project_data['project']['name'], project_1.name)
+        self.assertEqual(response.json(), {'project': {'contact_email': ['Enter a valid email address.']}})
 
     def test_invalid_email_published(self):
         project_data = copy.deepcopy(self.project_data)
@@ -199,7 +179,7 @@ class ExternalAPITests(APITestCase):
         response = self.test_user_client.post(url, project_data, format="json")
 
         self.assertEqual(response.status_code, 400, response.json())
-        self.assertEqual(response.json(), {'contact_email': ['Enter a valid email address.']})
+        self.assertEqual(response.json(), {'project': {'contact_email': ['Enter a valid email address.']}})
 
     @mock.patch('who_maps.throttle.ExternalAPIUserRateThrottle.get_rate', return_value='2/minute')
     @override_settings(CACHES={
@@ -209,18 +189,53 @@ class ExternalAPITests(APITestCase):
         }
     })
     def test_external_api_throttle_success(self, throttle_mock):
-        rate = ExternalAPIUserRateThrottle().get_rate()
+        project_data = copy.deepcopy(self.project_data)
 
+        rate = ExternalAPIUserRateThrottle().get_rate()
         split = rate.split('/')
 
         url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
         for i in range(0, int(split[0])):
-            response = self.test_user_client.post(url, self.project_data, format="json")
+            project_data['project']['name'] = f'test throttle {i}'
+            response = self.test_user_client.post(url, project_data, format="json")
             self.assertEqual(response.status_code, 201, response.json())
             self.assertTrue(response.json().get("id"))
 
         # next request should be throttled
-        response = self.test_user_client.post(url, self.project_data, format="json")
+        project_data['project']['name'] = 'test throttle no-go'
+        response = self.test_user_client.post(url, project_data, format="json")
         self.assertEqual(response.status_code, 429, response.json())
         self.assertIn('Request was throttled. Expected available in', response.json()['detail'])
         cache.clear()
+
+    def test_transaction_rollbacks_on_external_draft_publish(self):
+        project_data = copy.deepcopy(self.project_data)
+        project_data['project']['contact_email'] = 'roll@this.back'
+        # only required for publish
+        del project_data['project']['implementation_overview']
+
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
+        response = self.test_user_client.post(url, project_data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Project.objects.filter(
+            draft__contact_email=project_data['project']['contact_email']).count(), 0)
+        self.assertEqual(Project.objects.filter(
+            data__contact_email=project_data['project']['contact_email']).count(), 0)
+
+    def test_external_publish_makes_draft_first(self):
+        project_data = copy.deepcopy(self.project_data)
+        project_data['project']['contact_email'] = 'do.not.roll@this.back'
+
+        url = reverse("project-external-publish", kwargs={'client_code': self.client_code})
+        response = self.test_user_client.post(url, project_data, format="json")
+        self.assertEqual(response.status_code, 201)
+        data = response.json()
+        self.assertTrue(data['public_id'] != '')
+        self.assertEqual(data['draft'], data['published'])
+        self.assertEqual(data['published']['contact_email'], project_data['project']['contact_email'])
+
+        draft = Project.objects.get(draft__contact_email=project_data['project']['contact_email'])
+        published = Project.objects.get(data__contact_email=project_data['project']['contact_email'])
+
+        self.assertEqual(draft.id, published.id)
+        self.assertEqual(ProjectVersion.objects.filter(project=draft.id).count(), 2)

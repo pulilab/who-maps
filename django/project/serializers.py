@@ -152,12 +152,13 @@ class ProjectPublishedSerializer(serializers.Serializer):
     #         return self.instance.draft['research']
     #     return value
 
-    def create(self, validated_data):
-        return self.Meta.model(
-            name=validated_data["name"],
-            data=validated_data,
-            draft=validated_data,
-        )
+    # TODO: might be re-enabled if we will allow straight publishing without draft
+    # def create(self, validated_data):
+    #     return self.Meta.model(
+    #         name=validated_data["name"],
+    #         data=validated_data,
+    #         draft=validated_data,
+    #     )
 
     def update(self, instance, validated_data):
         instance.name = validated_data["name"]
@@ -193,7 +194,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     """
     # SECTION 1 General Overview
     name = serializers.CharField(max_length=250)
-    country = serializers.IntegerField(min_value=0, max_value=100000, required=False)
     implementation_overview = serializers.CharField(max_length=5000, required=False)
     contact_name = serializers.CharField(max_length=256, required=False)
     contact_email = serializers.EmailField(required=False)
@@ -787,17 +787,29 @@ class CollectionOutputSerializer(serializers.ModelSerializer):
 class ExternalProjectPublishSerializer(serializers.Serializer):
     """
     Used to beautify swagger in public docs
-    TODO: May need to update the 'project' part
     """
     project = ProjectPublishedSerializer(required=True)
+    country_custom_answers = CountryCustomAnswerSerializer(many=True, required=False)
+    donor_custom_answers = DonorCustomAnswerSerializer(many=True, required=False)
 
 
 class ExternalProjectDraftSerializer(serializers.Serializer):
     """
     Used to beautify swagger in public docs
-    TODO: May need to update the 'project' part
     """
     project = ProjectDraftSerializer(required=True)
+    country_custom_answers = CountryCustomAnswerSerializer(many=True, required=False)
+    donor_custom_answers = DonorCustomAnswerSerializer(many=True, required=False)
+
+
+class ExternalProjectResponseSerializer(serializers.Serializer):
+    """
+    Used to beautify swagger in public docs
+    """
+    id = serializers.IntegerField(read_only=True)
+    public_id = serializers.CharField(allow_blank=True, required=False, read_only=True)
+    published = ProjectPublishedSerializer(required=False)
+    draft = ProjectDraftSerializer(required=False)
 
 
 class CollectionInputSwaggerSerializer(serializers.Serializer):
