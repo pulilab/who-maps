@@ -339,7 +339,7 @@ msgstr ""
 msgid "Add Digital Health Interventions"
 msgstr ""
 
-#: components/project/collection/CollectionProjects.vue:31
+#: components/project/collection/CollectionProjects.vue:38
 msgid "Add editor"
 msgstr ""
 
@@ -351,7 +351,8 @@ msgstr ""
 #: components/project/collection/AddEditorDialog.vue:13
 #: components/project/collection/AddEditorDialog.vue:8
 #: components/project/collection/AddEditorPopover.vue:16
-#: components/project/collection/CollectionProjects.vue:46
+#: components/project/collection/CollectionProjects.vue:53
+#: components/project/collection/CollectionProjects.vue:2
 msgid "Add me as editor"
 msgstr ""
 
@@ -693,9 +694,9 @@ msgid "Can't find anything related to"
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:78 components/admin/DhaQuestion.vue:116
-#: components/admin/import/ImportDataTable.vue:151
-#: components/admin/import/ImportDataTable.vue:175
-#: components/admin/import/ImportDataTable.vue:265
+#: components/admin/import/ImportDataTable.vue:143
+#: components/admin/import/ImportDataTable.vue:167
+#: components/admin/import/ImportDataTable.vue:257
 #: components/admin/import/ImportDialog.vue:81
 #: components/admin/import/ImportDialog.vue:2
 #: components/admin/import/ImportHeaders.vue:82
@@ -722,11 +723,11 @@ msgstr ""
 msgid "Change"
 msgstr ""
 
-#: components/EditProfile.vue:174
+#: components/EditProfile.vue:173
 msgid "Change email request"
 msgstr ""
 
-#: components/EditProfile.vue:175
+#: components/EditProfile.vue:174
 msgid "Change my email to:"
 msgstr ""
 
@@ -919,7 +920,7 @@ msgstr ""
 #: components/EditProfile.vue:29 components/EditProfile.vue:236
 #: components/common/ProjectCard.vue:66 components/common/UserDropdown.vue:19
 #: components/dashboard/MainTable.vue:9 components/dashboard/MainTable.vue:86
-#: components/project/collection/CollectionProjects.vue:34
+#: components/project/collection/CollectionProjects.vue:41
 msgid "Country"
 msgstr ""
 
@@ -1038,7 +1039,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:160
+#: components/admin/import/ImportDataTable.vue:152
 msgid "Delete canceled"
 msgstr ""
 
@@ -1064,7 +1065,7 @@ msgstr ""
 msgid "Deselect all {total} projects"
 msgstr ""
 
-#: components/EditProfile.vue:40 components/EditProfile.vue:266
+#: components/EditProfile.vue:36 components/EditProfile.vue:252
 msgid "Designation / Title"
 msgstr ""
 
@@ -1123,7 +1124,7 @@ msgstr ""
 msgid "Disclaimer: data above sourced from"
 msgstr ""
 
-#: components/EditProfile.vue:389 components/admin/CountryAdmin.vue:331
+#: components/EditProfile.vue:385 components/admin/CountryAdmin.vue:331
 #: components/admin/DonorAdmin.vue:194
 msgid "Dismiss changes"
 msgstr ""
@@ -1265,7 +1266,7 @@ msgstr ""
 msgid "Email Notifications (Providing updates related to your role)"
 msgstr ""
 
-#: components/EditProfile.vue:54
+#: components/EditProfile.vue:50
 msgid "Email notifications (standard)"
 msgstr ""
 
@@ -1363,8 +1364,8 @@ msgstr ""
 msgid "Filter preset name"
 msgstr ""
 
-#: components/EditProfile.vue:317 components/EditProfile.vue:340
-#: components/EditProfile.vue:363
+#: components/EditProfile.vue:313 components/EditProfile.vue:336
+#: components/EditProfile.vue:359
 msgid "Financial Investor"
 msgstr ""
 
@@ -1498,10 +1499,12 @@ msgstr ""
 #: components/admin/import/ImportDataTable.vue:32
 #: components/admin/import/ImportDataTable.vue:12
 #: components/dashboard/PdfExport.vue:186
+#: components/project/collection/CollectionProjects.vue:61
+#: components/project/collection/CollectionProjects.vue:2
 msgid "Go to project"
 msgstr ""
 
-#: components/EditProfile.vue:272
+#: components/EditProfile.vue:268
 msgid "Government Admin"
 msgstr ""
 
@@ -1522,7 +1525,7 @@ msgstr ""
 msgid "Government investor:"
 msgstr ""
 
-#: components/EditProfile.vue:295
+#: components/EditProfile.vue:291
 msgid "Government System Admin"
 msgstr ""
 
@@ -1530,21 +1533,21 @@ msgstr ""
 msgid "Government System Admins"
 msgstr ""
 
-#: components/EditProfile.vue:130 components/dialogs/HowToDialog.vue:30
+#: components/EditProfile.vue:126 components/dialogs/HowToDialog.vue:30
 #: components/dialogs/HowToDialog.vue:89
 msgid "Government user"
 msgstr ""
 
-#: components/EditProfile.vue:248 components/EditProfile.vue:271
-#: components/EditProfile.vue:294
+#: components/EditProfile.vue:244 components/EditProfile.vue:267
+#: components/EditProfile.vue:290
 msgid "Government User"
 msgstr ""
 
-#: components/EditProfile.vue:249
+#: components/EditProfile.vue:245
 msgid "Government Viewer"
 msgstr ""
 
-#: components/EditProfile.vue:154 components/admin/CountryAdmin.vue:146
+#: components/EditProfile.vue:150 components/admin/CountryAdmin.vue:146
 msgid "Government Viewers"
 msgstr ""
 
@@ -1583,7 +1586,7 @@ msgstr ""
 msgid "Has to be a valid email address"
 msgstr ""
 
-#: components/EditProfile.vue:112
+#: components/EditProfile.vue:111
 msgid "Has to be a valid url"
 msgstr ""
 
@@ -1695,7 +1698,7 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:96
+#: components/admin/import/ImportDataTable.vue:97
 msgid "Hide imported rows"
 msgstr ""
 
@@ -1758,15 +1761,15 @@ msgid ""
 "af65-84e3882f2e36"
 msgstr ""
 
-#: components/EditProfile.vue:80
+#: components/EditProfile.vue:76
 msgid "I request to be a:"
 msgstr ""
 
-#: components/EditProfile.vue:195 components/EditProfile.vue:590
+#: components/EditProfile.vue:191 components/EditProfile.vue:576
 msgid "I request to join the investor group below:"
 msgstr ""
 
-#: components/EditProfile.vue:328
+#: components/EditProfile.vue:314
 msgid ""
 "If a project you are part of completes the MAPS Assessment for a project, "
 "any changes in the assessment data will be noted in this email. You can "
@@ -1794,7 +1797,7 @@ msgid ""
 "publication."
 msgstr ""
 
-#: components/EditProfile.vue:176
+#: components/EditProfile.vue:172
 msgid ""
 "If you are part of an investor group that is providing either financial or "
 "in-kind support to project activities, the DHA can be used to help organize "
@@ -1972,11 +1975,10 @@ msgid ""
 "in-kind support."
 msgstr ""
 
-#: components/EditProfile.vue:170 components/common/ProjectCard.vue:67
+#: components/EditProfile.vue:166 components/common/ProjectCard.vue:67
 #: components/common/ProjectLegendContent.vue:22
 #: components/common/ProjectLegendContent.vue:4
 #: components/dialogs/HowToDialog.vue:39 components/dialogs/HowToDialog.vue:104
-#: components/project/collection/CollectionProjects.vue:35
 msgid "Investor"
 msgstr ""
 
@@ -1984,7 +1986,7 @@ msgstr ""
 msgid "Investor admin"
 msgstr ""
 
-#: components/EditProfile.vue:341
+#: components/EditProfile.vue:337
 msgid "Investor Admin"
 msgstr ""
 
@@ -1992,7 +1994,7 @@ msgstr ""
 msgid "Investor admin for {name}"
 msgstr ""
 
-#: components/EditProfile.vue:212 components/admin/DonorAdmin.vue:55
+#: components/EditProfile.vue:208 components/admin/DonorAdmin.vue:55
 msgid "Investor Admins"
 msgstr ""
 
@@ -2008,11 +2010,11 @@ msgstr ""
 msgid "Investor specific questionaire"
 msgstr ""
 
-#: components/EditProfile.vue:364
+#: components/EditProfile.vue:360
 msgid "Investor System Admin"
 msgstr ""
 
-#: components/EditProfile.vue:217 components/admin/DonorAdmin.vue:65
+#: components/EditProfile.vue:213 components/admin/DonorAdmin.vue:65
 msgid "Investor System Admins"
 msgstr ""
 
@@ -2021,15 +2023,16 @@ msgstr ""
 msgid "Investor View"
 msgstr ""
 
-#: components/EditProfile.vue:318
+#: components/EditProfile.vue:314
 msgid "Investor Viewer"
 msgstr ""
 
-#: components/EditProfile.vue:207 components/admin/DonorAdmin.vue:45
+#: components/EditProfile.vue:203 components/admin/DonorAdmin.vue:45
 msgid "Investor Viewers"
 msgstr ""
 
 #: components/common/ExtendedProjectCard.vue:29
+#: components/project/collection/CollectionProjects.vue:42
 msgid "Investor(s)"
 msgstr ""
 
@@ -2042,8 +2045,8 @@ msgstr ""
 msgid "Investors:"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:199
-#: components/admin/import/ImportDataTable.vue:299
+#: components/admin/import/ImportDataTable.vue:191
+#: components/admin/import/ImportDataTable.vue:291
 msgid "Keep working"
 msgstr ""
 
@@ -2065,8 +2068,8 @@ msgstr ""
 msgid "Last Updated"
 msgstr ""
 
-#: components/EditProfile.vue:119 components/EditProfile.vue:146
-#: components/EditProfile.vue:188
+#: components/EditProfile.vue:115 components/EditProfile.vue:142
+#: components/EditProfile.vue:184
 msgid "Learn more"
 msgstr ""
 
@@ -2087,7 +2090,7 @@ msgstr ""
 msgid "Link to wiki or project website"
 msgstr ""
 
-#: components/EditProfile.vue:44 components/EditProfile.vue:280
+#: components/EditProfile.vue:40 components/EditProfile.vue:266
 msgid "LinkedIn profile"
 msgstr ""
 
@@ -2106,6 +2109,10 @@ msgstr ""
 
 #: components/DhaLoader.vue:6
 msgid "Loading"
+msgstr ""
+
+#: components/project/collection/Collection.vue:26
+msgid "Loading project list..."
 msgstr ""
 
 #: components/common/SearchComponent.vue:53
@@ -2252,32 +2259,36 @@ msgstr ""
 msgid "My filters presets"
 msgstr ""
 
-#: components/EditProfile.vue:283
+#: components/EditProfile.vue:279
 msgid "My Government Admin access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:306
+#: components/EditProfile.vue:302
 msgid "My Government System Admin access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:260
+#: components/EditProfile.vue:256
 msgid "My Government Viewer access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:352
+#: components/EditProfile.vue:348
 msgid "My Investor Admin access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:375
+#: components/EditProfile.vue:371
 msgid "My Investor System Admin access includes:"
 msgstr ""
 
-#: components/EditProfile.vue:329
+#: components/EditProfile.vue:325
 msgid "My Investor Viewer access includes:"
 msgstr ""
 
 #: components/common/ActionBar.vue:12 components/common/UserDropdown.vue:40
 msgid "My profile"
+msgstr ""
+
+#: components/project/collection/CollectionProjects.vue:181
+msgid "My projects"
 msgstr ""
 
 #: components/BreadCrumb.vue:28 components/common/NavigationMenu.vue:21
@@ -2361,7 +2372,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: components/EditProfile.vue:104
+#: components/EditProfile.vue:100
 msgid "No additional access required"
 msgstr ""
 
@@ -2434,17 +2445,17 @@ msgid ""
 "file and upload it again."
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:145
+#: components/admin/import/ImportDataTable.vue:137
 msgid "Note that once this column is deleted, you cannot recover the data."
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:259
+#: components/admin/import/ImportDataTable.vue:251
 msgid ""
 "Note that once you have saved these projects, they will be uploaded to the "
 "DHA. You can access all saved projects from your My Projects page."
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:169
+#: components/admin/import/ImportDataTable.vue:161
 msgid ""
 "Note that once you have saved this project, it will be uploaded to the DHA. "
 "You can access all of your saved Projects from your My Projects page."
@@ -2487,9 +2498,9 @@ msgstr ""
 
 #: components/DhaLogin.vue:50 components/admin/DhaQuestion.vue:77
 #: components/admin/DhaQuestion.vue:115
-#: components/admin/import/ImportDataTable.vue:150
-#: components/admin/import/ImportDataTable.vue:174
-#: components/admin/import/ImportDataTable.vue:264
+#: components/admin/import/ImportDataTable.vue:142
+#: components/admin/import/ImportDataTable.vue:166
+#: components/admin/import/ImportDataTable.vue:256
 #: components/admin/import/ImportHeaders.vue:81
 #: components/dashboard/FilterPresetsActions.vue:38
 #: components/project/ProjectForm.vue:69
@@ -2509,7 +2520,7 @@ msgstr ""
 msgid "Operation successfully aborted"
 msgstr ""
 
-#: components/EditProfile.vue:125 pages/_organisation/projects/index.vue:9
+#: components/EditProfile.vue:121 pages/_organisation/projects/index.vue:9
 #: pages/_organisation/projects/index.vue:4
 msgid "or"
 msgstr ""
@@ -2519,6 +2530,7 @@ msgid "or technologist, sign up below."
 msgstr ""
 
 #: components/common/ProjectBar.vue:23 components/common/ProjectCard.vue:70
+#: components/project/collection/CollectionProjects.vue:43
 #: components/project/sections/view/Overview.vue:88
 msgid "Organisation"
 msgstr ""
@@ -2534,10 +2546,6 @@ msgstr ""
 
 #: components/dashboard/PdfExport.vue:199
 msgid "Organisation name:"
-msgstr ""
-
-#: components/project/collection/CollectionProjects.vue:36
-msgid "Organization"
 msgstr ""
 
 #: components/admin/import/ImportDialog.vue:5
@@ -2589,10 +2597,6 @@ msgstr ""
 
 #: components/country/commons/ProgressBar.vue:3
 msgid "Phase"
-msgstr ""
-
-#: components/EditProfile.vue:36 components/EditProfile.vue:252
-msgid "Phone number"
 msgstr ""
 
 #: components/project/sections/StageOverview.vue:113
@@ -2711,7 +2715,7 @@ msgstr ""
 msgid "Privileges for Government System Admins"
 msgstr ""
 
-#: components/EditProfile.vue:136
+#: components/EditProfile.vue:132
 msgid ""
 "Privileges for Government Users are detailed below. Select the user type "
 "that most matches your role within the DHA. This request will be received by "
@@ -2735,11 +2739,11 @@ msgstr ""
 msgid "Privileges for Investor Users"
 msgstr ""
 
-#: components/EditProfile.vue:195
+#: components/EditProfile.vue:194
 msgid "Profile succesfully updated"
 msgstr ""
 
-#: components/EditProfile.vue:209
+#: components/EditProfile.vue:208
 msgid "Profile update error"
 msgstr ""
 
@@ -2778,7 +2782,7 @@ msgstr ""
 msgid "Project has been unpublish"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:298
+#: components/admin/import/ImportDataTable.vue:290
 msgid "Project inbox"
 msgstr ""
 
@@ -2786,7 +2790,7 @@ msgstr ""
 msgid "Project List"
 msgstr ""
 
-#: components/project/collection/CollectionProjects.vue:33
+#: components/project/collection/CollectionProjects.vue:40
 msgid "Project name"
 msgstr ""
 
@@ -2796,7 +2800,7 @@ msgstr ""
 msgid "Project Name"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:198
+#: components/admin/import/ImportDataTable.vue:190
 msgid "Project page"
 msgstr ""
 
@@ -2968,7 +2972,7 @@ msgstr ""
 msgid "Return to the Dashboard"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:148
+#: components/admin/import/ImportDataTable.vue:140
 msgid "Row Delete"
 msgstr ""
 
@@ -2987,7 +2991,7 @@ msgstr ""
 #: components/admin/import/ImportDataTable.vue:23
 #: components/admin/import/ImportDataTable.vue:6
 #: components/admin/import/ImportDataTable.vue:2
-#: components/admin/import/ImportDataTable.vue:262
+#: components/admin/import/ImportDataTable.vue:254
 msgid "Save all projects"
 msgstr ""
 
@@ -3004,19 +3008,19 @@ msgstr ""
 msgid "Save filters"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:172
+#: components/admin/import/ImportDataTable.vue:164
 msgid "Save Project"
 msgstr ""
 
-#: components/EditProfile.vue:394
+#: components/EditProfile.vue:390
 msgid "Save settings"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:273
+#: components/admin/import/ImportDataTable.vue:265
 msgid "Saving all projects has been cancelled"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:187
+#: components/admin/import/ImportDataTable.vue:179
 msgid "Saving Cancelled"
 msgstr ""
 
@@ -3058,8 +3062,7 @@ msgid "Select collection"
 msgstr ""
 
 #: components/common/CountrySelect.vue:1 components/common/CountrySelect.vue:12
-#: components/project/collection/CollectionProjects.vue:13
-#: components/project/collection/CollectionProjects.vue:81
+#: components/project/collection/CollectionProjects.vue:117
 msgid "Select country"
 msgstr ""
 
@@ -3113,8 +3116,7 @@ msgid "Select from list"
 msgstr ""
 
 #: components/common/DonorSelect.vue:1 components/common/DonorSelect.vue:9
-#: components/project/collection/CollectionProjects.vue:18
-#: components/project/collection/CollectionProjects.vue:103
+#: components/project/collection/CollectionProjects.vue:139
 msgid "Select investor"
 msgstr ""
 
@@ -3127,8 +3129,7 @@ msgstr ""
 msgid "Select language"
 msgstr ""
 
-#: components/project/collection/CollectionProjects.vue:23
-#: components/project/collection/CollectionProjects.vue:125
+#: components/project/collection/CollectionProjects.vue:161
 msgid "Select organization"
 msgstr ""
 
@@ -3143,6 +3144,10 @@ msgstr ""
 
 #: components/common/StageSelect.vue:1 components/common/StageSelect.vue:12
 msgid "Select stage"
+msgstr ""
+
+#: components/project/collection/CollectionProjects.vue:93
+msgid "Select status"
 msgstr ""
 
 #: components/dialogs/SendEmailDialog.vue:1
@@ -3239,7 +3244,7 @@ msgstr ""
 msgid "Show global projects only"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:97
+#: components/admin/import/ImportDataTable.vue:98
 msgid "Show imported rows (+{importedRows})"
 msgstr ""
 
@@ -3259,11 +3264,11 @@ msgstr ""
 msgid "Show only projects that have been verified by the country MOH"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:102
+#: components/admin/import/ImportDataTable.vue:103
 msgid "Showing all rows"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:101
+#: components/admin/import/ImportDataTable.vue:102
 msgid "Showing few rows"
 msgstr ""
 
@@ -3288,7 +3293,7 @@ msgstr ""
 msgid "Single choice"
 msgstr ""
 
-#: components/EditProfile.vue:48 components/EditProfile.vue:294
+#: components/EditProfile.vue:44 components/EditProfile.vue:280
 msgid "Site language"
 msgstr ""
 
@@ -3338,7 +3343,7 @@ msgstr ""
 msgid "State of Digital Health in"
 msgstr ""
 
-#: components/project/collection/CollectionProjects.vue:30
+#: components/project/collection/CollectionProjects.vue:37
 msgid "Status"
 msgstr ""
 
@@ -3367,8 +3372,8 @@ msgstr ""
 msgid "Subnational may include district, regional, provincial, county levels."
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:196
-#: components/admin/import/ImportDataTable.vue:296
+#: components/admin/import/ImportDataTable.vue:188
+#: components/admin/import/ImportDataTable.vue:288
 #: components/project/collection/AddEditorDialog.vue:8
 msgid "Success!"
 msgstr ""
@@ -3394,7 +3399,7 @@ msgstr ""
 msgid "Team Member"
 msgstr ""
 
-#: components/project/collection/CollectionProjects.vue:32
+#: components/project/collection/CollectionProjects.vue:39
 msgid "Team member(s)"
 msgstr ""
 
@@ -3473,7 +3478,7 @@ msgid ""
 "technical institutions."
 msgstr ""
 
-#: components/EditProfile.vue:108
+#: components/EditProfile.vue:104
 msgid ""
 "The DHA has additional features to support Ministries of Health and "
 "Investors to understand and organize their digital health implementations. "
@@ -3553,6 +3558,12 @@ msgid ""
 "national planning goals and strategic context."
 msgstr ""
 
+#: components/project/collection/CollectionProjects.vue:99
+msgid ""
+"There is no project to be shown. Refine your filter or import projects into "
+"the collection."
+msgstr ""
+
 #: components/DjangoFeedback.vue:21
 msgid "There was a problem processing your ticket, please try again"
 msgstr ""
@@ -3596,9 +3607,9 @@ msgid "this"
 msgstr ""
 
 #: components/DhaLogin.vue:16 components/DhaLogin.vue:21
-#: components/DhaLogin.vue:27 components/EditProfile.vue:72
-#: components/EditProfile.vue:80 components/EditProfile.vue:88
-#: components/EditProfile.vue:96 components/EditProfile.vue:104
+#: components/DhaLogin.vue:27 components/EditProfile.vue:71
+#: components/EditProfile.vue:79 components/EditProfile.vue:87
+#: components/EditProfile.vue:95 components/EditProfile.vue:103
 #: components/SignupComponent.vue:41 components/SignupComponent.vue:55
 #: components/SignupComponent.vue:70
 msgid "This field is required"
@@ -3949,7 +3960,7 @@ msgid ""
 "traffic and personalize content. Read about how we use cookies by clicking"
 msgstr ""
 
-#: components/EditProfile.vue:90
+#: components/EditProfile.vue:86
 msgid ""
 "We will notify you via email when your user access has been approved. If you "
 "would like to request a different type of access, you can resubmit the form "
@@ -3961,7 +3972,7 @@ msgstr ""
 msgid "Weekly project approval status (Y/N)"
 msgstr ""
 
-#: components/EditProfile.vue:59 components/EditProfile.vue:325
+#: components/EditProfile.vue:55 components/EditProfile.vue:311
 msgid "Weekly Project Toolkit updates (Y/N)"
 msgstr ""
 
@@ -4212,23 +4223,23 @@ msgstr ""
 msgid "Your password was reset successfully"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:193
+#: components/admin/import/ImportDataTable.vue:185
 msgid ""
 "Your project has been successfully saved as a draft, you can go to your "
 "project page or keep working on the import interface"
 msgstr ""
 
-#: components/admin/import/ImportDataTable.vue:293
+#: components/admin/import/ImportDataTable.vue:285
 msgid ""
 "Your projects have been successfully saved as a draft, you can go to your "
 "project inbox or keep working on the import interface"
 msgstr ""
 
-#: components/EditProfile.vue:84
+#: components/EditProfile.vue:80
 msgid "Your user access has been submitted"
 msgstr ""
 
-#: components/EditProfile.vue:234
+#: components/EditProfile.vue:230
 msgid "Your user role request has been accepted!"
 msgstr ""
 
