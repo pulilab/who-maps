@@ -2,7 +2,7 @@ export const state = () => ({
   queue: [],
   rawImport: null,
   countries: [],
-  organizations: [],
+  organisations: [],
   donors: [],
   collection: null
 })
@@ -23,7 +23,7 @@ export const getters = {
             narrative: p.data.implementation_overview,
             country: state.countries.find(c => c.id === p.data.country),
             investors: p.data.donors.length > 0 ? state.donors.filter(d => p.data.donors.includes(d.id)) : [],
-            organization: state.organizations.find(o => o.id === parseInt(p.data.organisation)),
+            organisation: state.organisations.find(o => o.id === parseInt(p.data.organisation)),
             team: p.team
           }
         })
@@ -54,11 +54,11 @@ export const actions = {
     return data
   },
   async loadCollection ({ commit }, url) {
-    const { data: organizations } = await this.$axios.get('/api/organisations/')
+    const { data: organisations } = await this.$axios.get('/api/organisations/')
     const { data: countries } = await this.$axios.get('/api/landing-country/')
     const { data: donors } = await this.$axios.get('/api/landing-donor/')
     const { data } = await this.$axios.get(`/api/projects/collection/${url}/project-list/`)
-    commit('setValue', { key: 'organizations', val: organizations })
+    commit('setValue', { key: 'organisations', val: organisations })
     commit('setValue', { key: 'countries', val: countries })
     commit('setValue', { key: 'donors', val: donors })
     commit('setValue', { key: 'collection', val: data })

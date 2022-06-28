@@ -1173,6 +1173,7 @@ msgstr ""
 
 #: components/common/ExtendedProjectCard.vue:46
 #: components/project/ProjectNavigation.vue:10
+#: components/project/collection/CollectionProjects.vue:95
 #: angular/Assessment/Statistics/Statistics.html:16
 msgid "Draft"
 msgstr ""
@@ -2287,7 +2288,7 @@ msgstr ""
 msgid "My profile"
 msgstr ""
 
-#: components/project/collection/CollectionProjects.vue:181
+#: components/project/collection/CollectionProjects.vue:178
 msgid "My projects"
 msgstr ""
 
@@ -2876,6 +2877,7 @@ msgstr ""
 
 #: components/common/ExtendedProjectCard.vue:51
 #: components/project/ProjectNavigation.vue:16
+#: components/project/collection/CollectionProjects.vue:100
 msgid "Published"
 msgstr ""
 
@@ -3062,7 +3064,7 @@ msgid "Select collection"
 msgstr ""
 
 #: components/common/CountrySelect.vue:1 components/common/CountrySelect.vue:12
-#: components/project/collection/CollectionProjects.vue:117
+#: components/project/collection/CollectionProjects.vue:114
 msgid "Select country"
 msgstr ""
 
@@ -3116,7 +3118,7 @@ msgid "Select from list"
 msgstr ""
 
 #: components/common/DonorSelect.vue:1 components/common/DonorSelect.vue:9
-#: components/project/collection/CollectionProjects.vue:139
+#: components/project/collection/CollectionProjects.vue:136
 msgid "Select investor"
 msgstr ""
 
@@ -3129,8 +3131,8 @@ msgstr ""
 msgid "Select language"
 msgstr ""
 
-#: components/project/collection/CollectionProjects.vue:161
-msgid "Select organization"
+#: components/project/collection/CollectionProjects.vue:158
+msgid "Select organisation"
 msgstr ""
 
 #: components/common/RegionSelect.vue:1 components/common/RegionSelect.vue:11
@@ -3146,7 +3148,7 @@ msgstr ""
 msgid "Select stage"
 msgstr ""
 
-#: components/project/collection/CollectionProjects.vue:93
+#: components/project/collection/CollectionProjects.vue:90
 msgid "Select status"
 msgstr ""
 

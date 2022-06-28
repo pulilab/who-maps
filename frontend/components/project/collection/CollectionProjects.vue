@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AddEditorDialog ref="addEditorDialog" @addedAsEditor="refreshCollection" />
+    <AddEditorDialog ref="addEditorDialog" />
     <div class="ProjectToolbar">
       <span class="label">
         <translate :parameters="{ rows: projectCount }">
@@ -16,8 +16,8 @@
           v-model="statusFilter"
           :placeholder="$gettext('Select status')"
         >
-          <el-option key="1" label="Draft" value="draft" />
-          <el-option key="2" label="Published" value="published" />
+          <el-option key="1" :label="$gettext('Draft')" value="draft" />
+          <el-option key="2" :label="$gettext('Published')" value="published" />
         </el-select>
       </div>
       <div class="search"  v-if="selectableCountries">
@@ -50,18 +50,18 @@
             />
           </lazy-el-select>
       </div>
-      <div class="search" v-if="selectableOrganizations">
+      <div class="search" v-if="selectableOrganisations">
         <lazy-el-select
             clearable
             filterable
-            v-model="organizationFilter"
-            :placeholder="$gettext('Select organization')"
+            v-model="organisationFilter"
+            :placeholder="$gettext('Select organisation')"
           >
             <el-option
-              v-for="organization in selectableOrganizations"
-              :key="organization.name"
-              :label="organization.name"
-              :value="organization.name"
+              v-for="organisation in selectableOrganisations"
+              :key="organisation.name"
+              :label="organisation.name"
+              :value="organisation.name"
             />
           </lazy-el-select>
       </div>
@@ -98,7 +98,7 @@
               <AddEditorPopover v-else />
             </template>
             <template v-else>
-              <a :href="gotoProject(project.id)" target="_blank" class="goto">
+              <a :href="gotoProject(project)" target="_blank" class="goto">
                 <translate>Go to project</translate>
               </a>
             </template>
@@ -140,8 +140,8 @@
             </ul>
           </td>
           <td>
-            <template v-if="project.organization">
-              {{ project.organization.name }}
+            <template v-if="project.organisation">
+              {{ project.organisation.name }}
             </template>
           </td>
         </tr>
@@ -200,7 +200,7 @@ export default {
       statusFilter: '',
       countryFilter: '',
       investorFilter: '',
-      organizationFilter: '',
+      organisationFilter: '',
       currentPage: 1,
       pageSize: 10,
       pageSizeOption: [10,20,50,100]
@@ -216,8 +216,8 @@ export default {
       if(!options.length) return false
       return options
     },
-    selectableOrganizations () {
-      const allOptions = this.collection.projects.map(p => p.organization)
+    selectableOrganisations () {
+      const allOptions = this.collection.projects.map(p => p.organisation)
       const options = uniqBy(difference(allOptions, ['', undefined, null]), 'name').sort((a,b) => a.name.localeCompare(b.name))
       if(!options.length) return false
       return options
@@ -245,7 +245,7 @@ export default {
             (this.statusFilter == '' ? project.status : this.statusFilter) == project.status &&
             (this.ownedFilter ? members.toUpperCase().includes(this.user.email.toUpperCase()) : true) &&
             (this.investorFilter == '' ? true : project.investors.find(i => i.name === this.investorFilter)) &&
-            (this.organizationFilter == '' ? project.organization?.name : this.organizationFilter) == project.organization?.name &&
+            (this.organisationFilter == '' ? project.organisation?.name : this.organisationFilter) == project.organisation?.name &&
             (this.search == '' ? true : (
               members.toUpperCase().includes(this.search.toUpperCase()) ||
               project?.name.toUpperCase().includes(this.search.toUpperCase()) ||
@@ -280,17 +280,22 @@ export default {
         id: project.id
       })
     },
-    refreshCollection () {
-      // this.loadCollection(this.collection.url)
-    },
-    gotoProject(projectId) {
-      return this.localePath({
-        name: 'organisation-projects-id',
-        params: {
-          id: projectId,
-          organisation: this.$route.params.organisation
-        }
-      })
+    gotoProject(project) {
+      return project.status === 'draft' 
+        ? this.localePath({
+            name: 'organisation-projects-id',
+            params: {
+              id: project.id,
+              organisation: this.$route.params.organisation
+            }
+          })
+        : this.localePath({
+            name: 'organisation-projects-id-published',
+            params: {
+              id: project.id,
+              organisation: this.$route.params.organisation
+            }
+          })
     }
   }
 
@@ -343,7 +348,6 @@ export default {
       right: 4px;
     }
     &.active:hover {
-      // background-color: #dde0e738;
       box-shadow: inset 0px 0px 14px 0px #e9e9e9;
     }
   }
@@ -486,7 +490,6 @@ export default {
   }
 }
 
-
 // extract from https://github.com/ghosh/microtip
 
 [aria-label][role~="tooltip"] {
@@ -568,17 +571,17 @@ export default {
 
 [role~="tooltip"][data-microtip-size="small"]::after {
   white-space: initial;
-  max-width: 80px;
+  width: 80px;
 }
 
 [role~="tooltip"][data-microtip-size="medium"]::after {
   white-space: initial;
-  max-width: 150px;
+  width: 150px;
 }
 
 [role~="tooltip"][data-microtip-size="large"]::after {
   white-space: initial;
-  max-width: 480px;
+  width: 480px;
 }
 
 </style>
