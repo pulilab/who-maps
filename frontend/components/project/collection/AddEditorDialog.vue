@@ -68,7 +68,6 @@ export default {
       try {
         this.submitting = true
         await this.addMeAsEditor(this.projectData)
-        this.$emit('addedAsEditor')
         this.state = 'success'
         this.submitting = false
       } catch (error) {

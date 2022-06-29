@@ -1,21 +1,31 @@
 <template>
   <div>
-    <AddEditorDialog ref="addEditorDialog" @addedAsEditor="refreshCollection" />
+    <AddEditorDialog ref="addEditorDialog" />
     <div class="ProjectToolbar">
       <span class="label">
-        <translate :parameters="{ rows: collection.projects.length }">
+        <translate :parameters="{ rows: projectCount }">
           List of projects ({rows})
         </translate>
       </span>
       <div class="search">
         <el-input clearable debounce prefix-icon="el-icon-search" placeholder="Search name, narrative, team member" v-model="search" />
       </div>
+      <div class="search">
+        <el-select
+          clearable
+          v-model="statusFilter"
+          :placeholder="$gettext('Select status')"
+        >
+          <el-option key="1" :label="$gettext('Draft')" value="draft" />
+          <el-option key="2" :label="$gettext('Published')" value="published" />
+        </el-select>
+      </div>
       <div class="search"  v-if="selectableCountries">
         <lazy-el-select
           clearable
           filterable
           v-model="countryFilter"
-          :placeholder="$gettext('Select country') | translate"
+          :placeholder="$gettext('Select country')"
         >
           <el-option
             v-for="country in selectableCountries"
@@ -25,12 +35,12 @@
           />
         </lazy-el-select>
       </div>
-      <div class="search"  v-if="selectableInvestors">
+      <div class="search" v-if="selectableInvestors">
         <lazy-el-select
             clearable
             filterable
             v-model="investorFilter"
-            :placeholder="$gettext('Select investor') | translate"
+            :placeholder="$gettext('Select investor')"
           >
             <el-option
               v-for="investors in selectableInvestors"
@@ -40,21 +50,22 @@
             />
           </lazy-el-select>
       </div>
-      <div class="search" v-if="selectableOrganizations">
+      <div class="search" v-if="selectableOrganisations">
         <lazy-el-select
             clearable
             filterable
-            v-model="organizationFilter"
-            :placeholder="$gettext('Select organization') | translate"
+            v-model="organisationFilter"
+            :placeholder="$gettext('Select organisation')"
           >
             <el-option
-              v-for="organization in selectableOrganizations"
-              :key="organization.name"
-              :label="organization.name"
-              :value="organization.name"
+              v-for="organisation in selectableOrganisations"
+              :key="organisation.name"
+              :label="organisation.name"
+              :value="organisation.name"
             />
           </lazy-el-select>
       </div>
+      <el-switch v-if="user" v-model="ownedFilter" :active-text="$gettext('My projects')" />
     </div>
     <table class="projects-table">
       <thead>
@@ -63,8 +74,8 @@
         <th><translate>Team member(s)</translate></th>
         <th><translate>Project name</translate></th>
         <th><translate>Country</translate></th>
-        <th><translate>Investor</translate></th>
-        <th><translate>Organization</translate></th>
+        <th><translate>Investor(s)</translate></th>
+        <th><translate>Organisation</translate></th>
       </thead>
       <tbody>
         <tr v-for="project in paginate(filteredProjects, pageSize, currentPage)" :key="project.id">
@@ -72,7 +83,7 @@
             <div class="tag" :class="project.status">{{ project.status }}</div>
           </td>
           <td>
-            <div v-if="canAddAsEditor(project)">
+            <template v-if="canAddAsEditor(project)">
               <el-button
                 v-if="user"
                 type="primary"
@@ -85,7 +96,12 @@
                 </translate>
               </el-button>
               <AddEditorPopover v-else />
-            </div>
+            </template>
+            <template v-else>
+              <a :href="gotoProject(project)" target="_blank" class="goto">
+                <translate>Go to project</translate>
+              </a>
+            </template>
           </td>
           <td>
             <ul class="team">
@@ -98,14 +114,18 @@
               </li>
             </ul>
           </td>
-          <el-tooltip :disabled="!project.narrative" :content="project.narrative" placement="top">
-            <td class="project-name-cell">
-              <strong>
-                {{ project.name }}
-              </strong>
-              <i v-if="project.narrative" class="el-icon-tickets" />
-            </td>
-          </el-tooltip>            
+          <td 
+            :aria-label="project.narrative"
+            data-microtip-position="top"
+            role="tooltip"
+            data-microtip-size="large"
+            :class="['project-name-cell',{'active':project.narrative}]"
+          >
+            <strong>
+              {{ project.name }}
+            </strong>
+            <i v-if="project.narrative" class="el-icon-tickets" />
+          </td>
           <td>
             <div class="country">
               <country-flag :code="project.country.code" :small="true"/>
@@ -113,14 +133,23 @@
             </div>
           </td>
           <td>
-            <template v-if="project.investor">
-            {{ project.investor.name }}
-            </template>
+            <ul v-if="project.investors.length > 0" class="team">
+              <li v-for="investor in project.investors" :key="investor.id">
+                {{ investor.name }}
+              </li>
+            </ul>
           </td>
           <td>
-            <template v-if="project.organization">
-              {{ project.organization.name }}
+            <template v-if="project.organisation">
+              {{ project.organisation.name }}
             </template>
+          </td>
+        </tr>
+        <tr v-if="filteredProjects.length === 0">
+          <td colspan="7">
+            <translate tag="div" class="empty-list">
+              There is no project to be shown. Refine your filter or import projects into the collection.
+            </translate>
           </td>
         </tr>
       </tbody>
@@ -145,7 +174,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { uniqBy, difference } from 'lodash'
+import { uniqBy, difference, flatten } from 'lodash'
 import CountryFlag from '@/components/common/CountryFlag.vue'
 import AddEditorPopover from '@/components/project/collection/AddEditorPopover'
 import AddEditorDialog from '@/components/project/collection/AddEditorDialog'
@@ -167,9 +196,11 @@ export default {
   data () {
     return {
       search: '',
+      ownedFilter: false,
+      statusFilter: '',
       countryFilter: '',
       investorFilter: '',
-      organizationFilter: '',
+      organisationFilter: '',
       currentPage: 1,
       pageSize: 10,
       pageSizeOption: [10,20,50,100]
@@ -180,20 +211,20 @@ export default {
       user: 'user/getProfile'
     }),
     selectableCountries () {
-      const allOptions = this.collection.projects.map( p => p.country )
-      const options = uniqBy(difference(allOptions, ['', undefined, null]), 'code')
+      const allOptions = this.collection.projects.map(p => p.country)
+      const options = uniqBy(difference(allOptions, ['', undefined, null]), 'code').sort((a,b) => a.name.localeCompare(b.name))
       if(!options.length) return false
       return options
     },
-    selectableOrganizations () {
-      const allOptions = this.collection.projects.map( p => p.organization )
-      const options = uniqBy(difference(allOptions, ['', undefined, null]), 'name')
+    selectableOrganisations () {
+      const allOptions = this.collection.projects.map(p => p.organisation)
+      const options = uniqBy(difference(allOptions, ['', undefined, null]), 'name').sort((a,b) => a.name.localeCompare(b.name))
       if(!options.length) return false
       return options
     },
     selectableInvestors () {
-      const allOptions = this.collection.projects.map( p => p.investor )
-      const options = uniqBy(difference(allOptions, ['', undefined, null]), 'name')
+      const allOptions = flatten(this.collection.projects.filter(p => p.investors.length > 0).map(p => p.investors))
+      const options = uniqBy(difference(allOptions, ['', undefined, null]), 'name').sort((a,b) => a.name.localeCompare(b.name))
       if(!options.length) return false
       return options
     },
@@ -205,23 +236,29 @@ export default {
       return loc === 'ar' ? 'sizes, next, slot, prev' : 'sizes, prev, slot, next'
     },
     filteredProjects () {
-      return this.collection.projects.filter((item) => {const members = item.team.reduce((members, m) => {
+      return this.collection.projects.filter((project) => {
+        const members = project.team.reduce((members, m) => {
           const mbs = members += `${m.email} `
           return mbs
         }, '')
-        if ((this.countryFilter == '' ? item.country?.code : this.countryFilter) == item.country?.code &&
-            (this.investorFilter == '' ? item.investor?.name : this.investorFilter) == item.investor?.name &&
-            (this.organizationFilter == '' ? item.organization?.name : this.organizationFilter) == item.organization?.name &&
+        if ((this.countryFilter == '' ? project.country?.code : this.countryFilter) == project.country?.code &&
+            (this.statusFilter == '' ? project.status : this.statusFilter) == project.status &&
+            (this.ownedFilter ? members.toUpperCase().includes(this.user.email.toUpperCase()) : true) &&
+            (this.investorFilter == '' ? true : project.investors.find(i => i.name === this.investorFilter)) &&
+            (this.organisationFilter == '' ? project.organisation?.name : this.organisationFilter) == project.organisation?.name &&
             (this.search == '' ? true : (
               members.toUpperCase().includes(this.search.toUpperCase()) ||
-              item?.name.toUpperCase().includes(this.search.toUpperCase()) ||
-              item?.narrative?.toUpperCase().includes(this.search.toUpperCase())
+              project?.name.toUpperCase().includes(this.search.toUpperCase()) ||
+              project?.narrative?.toUpperCase().includes(this.search.toUpperCase())
             ))) {
             return true
-          }else{
+          } else {
             return false
           }
       })
+    },
+    projectCount() {
+      return this.collection?.projects?.length
     }
   },
   methods: {
@@ -243,8 +280,22 @@ export default {
         id: project.id
       })
     },
-    refreshCollection () {
-      this.loadCollection(this.collection.url)
+    gotoProject(project) {
+      return project.status === 'draft' 
+        ? this.localePath({
+            name: 'organisation-projects-id',
+            params: {
+              id: project.id,
+              organisation: this.$route.params.organisation
+            }
+          })
+        : this.localePath({
+            name: 'organisation-projects-id-published',
+            params: {
+              id: project.id,
+              organisation: this.$route.params.organisation
+            }
+          })
     }
   }
 
@@ -290,10 +341,14 @@ export default {
 
   .project-name-cell {
     position: relative;
+    transition: box-shadow .2s ease-in;
     i {
       position: absolute;
       top: 4px;
       right: 4px;
+    }
+    &.active:hover {
+      box-shadow: inset 0px 0px 14px 0px #e9e9e9;
     }
   }
 
@@ -352,15 +407,40 @@ export default {
         padding: 5px 10px;
         font-size: 11px;
         font-weight: normal;
+        min-width: 105px;
+        outline: 1px solid @colorBrandPrimary;
+        font-weight: bold;
+      }
+      .goto {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        padding: 6px 10px;
+        min-width: 85px;
+        text-decoration: none;
+        color: @colorBrandPrimary;
+        outline: 1px solid @colorBrandPrimary;
+        font-size: @fontSizeExtraSmall;
+        font-weight: bold;
+        &:hover {
+          color: @colorWhite;
+          background-color: @colorBrandPrimaryLight;
+        }
       }
       .country {
         display: flex;
-        align-items: start;
+        align-items: flex-start;
         gap: 8px;
         label {
           display: inline-block;
           margin-top: 2px;
         }
+      }
+      .empty-list {
+        padding: 2em;
+        display: flex;
+        justify-content: center;
+        font-size: @fontSizeMedium;
       }
     }
   }
@@ -409,4 +489,99 @@ export default {
     }
   }
 }
+
+// extract from https://github.com/ghosh/microtip
+
+[aria-label][role~="tooltip"] {
+  position: relative;
+}
+
+[aria-label][role~="tooltip"]::before,
+[aria-label][role~="tooltip"]::after {
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--microtip-transition-duration, .18s) var(--microtip-transition-easing, ease-in-out) var(--microtip-transition-delay, 0s);
+  position: absolute;
+  box-sizing: border-box;
+  z-index: 10;
+  transform-origin: top;
+}
+
+[aria-label][role~="tooltip"]::before {
+  background-size: 100% auto !important;
+  content: "";
+}
+
+[aria-label][role~="tooltip"]::after {
+  background: rgba(17, 17, 17, .9);
+  border-radius: 4px;
+  color: #ffffff;
+  content: attr(aria-label);
+  box-sizing: content-box;
+  font-size: var(--microtip-font-size, 13px);
+  font-weight: var(--microtip-font-weight, normal);
+  line-height: 17px;
+  text-transform: var(--microtip-text-transform, none);
+  padding: .8em 1em;
+  white-space: nowrap;
+}
+
+[aria-label][role~="tooltip"]:hover::before,
+[aria-label][role~="tooltip"]:hover::after,
+[aria-label][role~="tooltip"]:focus::before,
+[aria-label][role~="tooltip"]:focus::after {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+[role~="tooltip"][data-microtip-position|="top"]::before {
+  background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2236px%22%20height%3D%2212px%22%3E%3Cpath%20fill%3D%22rgba%2817,%2017,%2017,%200.9%29%22%20transform%3D%22rotate%280%29%22%20d%3D%22M2.658,0.000%20C-13.615,0.000%2050.938,0.000%2034.662,0.000%20C28.662,0.000%2023.035,12.002%2018.660,12.002%20C14.285,12.002%208.594,0.000%202.658,0.000%20Z%22/%3E%3C/svg%3E") no-repeat;
+  height: 6px;
+  width: 18px;
+  margin-bottom: 5px;
+}
+
+[role~="tooltip"][data-microtip-position|="top"]::after {
+  margin-bottom: 11px;
+}
+
+[role~="tooltip"][data-microtip-position|="top"]::before {
+  transform: translate3d(-50%, 0, 0);
+  bottom: 100%;
+  left: 50%;
+}
+
+[role~="tooltip"][data-microtip-position|="top"]:hover::before {
+  transform: translate3d(-50%, -5px, 0);
+}
+
+[role~="tooltip"][data-microtip-position|="top"]::after {
+  transform: translate3d(-50%, 0, 0);
+  bottom: 100%;
+  left: 50%;
+}
+
+[role~="tooltip"][data-microtip-position="top"]:hover::after {
+  transform: translate3d(-50%, -5px, 0);
+}
+
+[role~="tooltip"][data-microtip-size="small"]::after {
+  white-space: initial;
+  width: 80px;
+}
+
+[role~="tooltip"][data-microtip-size="medium"]::after {
+  white-space: initial;
+  width: 150px;
+}
+
+[role~="tooltip"][data-microtip-size="large"]::after {
+  white-space: initial;
+  width: 480px;
+}
+
 </style>
