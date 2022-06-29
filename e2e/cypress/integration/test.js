@@ -17,7 +17,6 @@ describe('End to end tests', function() {
     cy.wait(1000);  // it is necessary here to wait until the possibilities appear
     cy.get("@orgInput").type("{enter}");
     cy.get("div[data-vv-name=\"country\"]").click().type("{downarrow}{enter}");
-    cy.get("input[data-vv-name=\"phone\"]").type("1234567");
     cy.get("input[data-vv-name=\"title\"]").type("Cypress");
     cy.get("input[data-vv-name=\"linkedin\"]").type("http://linkedin.com/123456/");
     cy.contains("Save settings").click();
