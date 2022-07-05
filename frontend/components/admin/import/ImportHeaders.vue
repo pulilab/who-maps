@@ -3,7 +3,6 @@
     <div v-if="internalValue.length > 0" class="Row">
       <div class="Column Thin Header Selected FlexCol">
         <slot :columns="columnState" />
-        <el-button size="mini" @click="matchHeaders">Smart match</el-button>
       </div>
 
       <div
