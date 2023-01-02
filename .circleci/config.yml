@@ -30,7 +30,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v8-dependencies-b-{{ checksum "django/requirements.txt" }}
+            - v9-dependencies-b-{{ checksum "django/requirements.txt" }}
 
       - restore_cache:
           keys:
@@ -55,10 +55,10 @@ jobs:
 
       - save_cache:
           paths:
-            - "django/.venv"
             - "/usr/local/bin"
             - "/usr/local/lib/python3.7/site-packages"
-          key: v8-dependencies-b-{{ checksum "django/requirements.txt" }}
+            - "/home/circleci/who-maps/django/.venv"
+          key: v9-dependencies-b-{{ checksum "django/requirements.txt" }}
 
       - save_cache:
           paths:
