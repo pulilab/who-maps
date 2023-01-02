@@ -1,4 +1,4 @@
-FROM python:3.11.1-bullseye
+FROM python:3.7.6-stretch
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
