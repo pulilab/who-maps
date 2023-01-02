@@ -30,7 +30,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v7-dependencies-b-{{ checksum "django/requirements.txt" }}
+            - v8-dependencies-b-{{ checksum "django/requirements.txt" }}
 
       - restore_cache:
           keys:
@@ -41,9 +41,7 @@ jobs:
           working_directory: ~/who-maps/django
           command: |
             sudo pip install pipenv
-            pipenv install --skip-lock
-            pipenv run pip install -r requirements.txt
-            pipenv graph
+            pipenv install
 
       - run:
           name: install frontend reqs
@@ -60,7 +58,7 @@ jobs:
             - "django/.venv"
             - "/usr/local/bin"
             - "/usr/local/lib/python3.7/site-packages"
-          key: v7-dependencies-b-{{ checksum "django/requirements.txt" }}
+          key: v8-dependencies-b-{{ checksum "django/requirements.txt" }}
 
       - save_cache:
           paths:
