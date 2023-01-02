@@ -81,11 +81,11 @@ pyasn1==0.4.3
 pycodestyle==2.6.0
 pycountry==18.5.26
 pycparser==2.18
-pycrypto==2.6.1
+pycrypto
 pyflakes==2.2.0
 Pygments==2.2.0
 pylint==2.4.3
-PyNaCl==1.2.1
+PyNaCl
 pytest==3.6.3
 pytest-cov==2.5.1
 pytest-django==3.3.2
