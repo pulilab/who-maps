@@ -6,8 +6,6 @@ services:
     build: ./django
     env_file:
       - ./django/.env
-    expose:
-      - "8000"
     links:
       - postgres
       - celery
@@ -36,7 +34,7 @@ services:
 
   nginx:
     restart: always
-    image: nginx:1.15.6
+    image: nginx:1.23-alpine
     ports:
       - "80:80"
       - "443:443"
@@ -69,14 +67,10 @@ services:
       - POSTGRESQL_PASSWORD=postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    expose:
-      - "5432"
 
   redis:
     restart: always
-    image: redis:4.0.10
-    expose:
-      - "6379"
+    image: redis:6-alpine
 
 volumes:
   postgres_data:
