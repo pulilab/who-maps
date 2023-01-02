@@ -6,7 +6,7 @@ orbs:
 jobs:
   build-and-test:
     docker:
-      - image: cimg/python:3.11.1-node
+      - image: circleci/python:3.7.6-stretch-node
         environment:
           PIPENV_VENV_IN_PROJECT: true
           PGHOST: 127.0.0.1
@@ -19,14 +19,14 @@ jobs:
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: postgres
-      - image: circleci/redis:5-stretch
+      - image: circleci/redis:6-alpine
 
     working_directory: ~/who-maps
 
     steps:
       - checkout
       - run: sudo chown -R circleci:circleci /usr/local/bin
-      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.11/site-packages
+      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
 
       - restore_cache:
           keys:
@@ -58,7 +58,7 @@ jobs:
           paths:
             - "django/.venv"
             - "/usr/local/bin"
-            - "/usr/local/lib/python3.11/site-packages"
+            - "/usr/local/lib/python3.7/site-packages"
           key: v6-dependencies-b-{{ checksum "django/requirements.txt" }}
 
       - save_cache:
@@ -97,7 +97,7 @@ jobs:
 
   deploy-dev:
     docker:
-      - image: cimg/python:3.11.1-node
+      - image: circleci/python:3.7.6
     working_directory: ~/who-maps
     steps:
       - checkout
@@ -115,7 +115,7 @@ jobs:
 
   deploy-qa:
     docker:
-      - image: cimg/python:3.11.1-node
+      - image: circleci/python:3.7.6
     working_directory: ~/who-maps
     steps:
       - checkout
