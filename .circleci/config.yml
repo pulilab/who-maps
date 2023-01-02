@@ -41,8 +41,10 @@ jobs:
           working_directory: ~/who-maps/django
           command: |
             sudo pip install pipenv
-            pipenv install
-            pipenv run pip install -r requirements.txt
+            pipenv install --skip-lock
+#            pipenv install
+            pipenv run pip install -r requirements.txt --skip-lock
+            pipenv graph
 
       - run:
           name: install frontend reqs
