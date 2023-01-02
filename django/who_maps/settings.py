@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'search',
     'scheduler',
     'cms',
-    'simple-feedback',
+    'simple_feedback',
     'systemmessages',
     'kpiexport',
     'rangefilter',
