@@ -42,7 +42,6 @@ jobs:
           command: |
             sudo pip install pipenv
             pipenv install --skip-lock
-#            pipenv install
             pipenv run pip install -r requirements.txt --skip-lock
             pipenv graph
 
