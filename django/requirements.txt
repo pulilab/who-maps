@@ -35,7 +35,7 @@ django-redis==4.9.0
 django-rest-auth==0.9.5
 django-rosetta==0.9.8
 django-simplefeedback
-django-simple-history==2.4.0
+django-simple-history==2.12.0
 django-ordered-model==2.1.0
 drf-yasg==1.21.4
 djangorestframework==3.10.3
