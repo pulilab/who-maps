@@ -42,6 +42,7 @@ jobs:
           command: |
             sudo pip install pipenv
             pipenv install --skip-lock
+            pipenv graph
 
       - run:
           name: install frontend reqs
