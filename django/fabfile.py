@@ -192,7 +192,8 @@ def _create_db():
 
 
 def _backup_db():
-    run('docker-compose exec postgres pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
+    run('docker-compose exec postgres pg_dumpall -U postgres -c > ~/backup/dump`date +%Y-%m-%d`.sql')
+    run('gzip ~/backup/dump`date +%Y-%m-%d`.sql')
 
 
 def _restore_db():
