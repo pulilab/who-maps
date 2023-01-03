@@ -37,7 +37,7 @@ django-rosetta==0.9.8
 django-simplefeedback
 django-simple-history==2.12.0
 django-ordered-model==2.1.0
-drf-yasg==1.20.1
+drf-yasg==1.20.3
 djangorestframework==3.10.3
 djangorestframework-jwt==1.11.0
 docopt==0.6.2
