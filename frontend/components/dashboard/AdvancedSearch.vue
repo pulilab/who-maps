@@ -5,12 +5,12 @@
     <country-filters />
     <div class="FilterSwitches">
       <filter-switch
-        v-model="governamentApproved"
+        v-model="governmentApproved"
         :label="$gettext('Only MOH Verified Projects') | translate"
         :tooltip="$gettext('Show only projects that have been verified by the country MOH') | translate"
       />
       <filter-switch
-        v-model="governamentFinanced"
+        v-model="governmentFinanced"
         :label="$gettext('Government financed') | translate"
         :tooltip="$gettext('Show only projects that have been received financial or in-kind government support') | translate"
       />
@@ -39,6 +39,7 @@
           :value="selectedHFA"
           :limit="4"
           actions
+          value-is-child
           @delete="deleteHfaHandler"
         />
       </filter-item>
@@ -86,18 +87,18 @@
 </template>
 
 <script>
-import { mapGettersActions } from '../../utilities/form';
+import { mapGettersActions } from '../../utilities/form'
 
-import FilterPresetsActions from './FilterPresetsActions';
-import SearchBox from './SearchBox';
-import CountryFilters from './CountryFilters';
-import FilterSwitch from './FilterSwitch';
-import FilterItem from './FilterItem';
-import DhiCategoriesList from '../common/list/DhiCategoriesList';
-import HfaCategoriesList from '../common/list/HfaCategoriesList';
-import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList';
-import HisBucketList from '../common/list/HisBucketList';
-import SimplePlatformList from '../common/list/SimplePlatformList';
+import FilterPresetsActions from './FilterPresetsActions'
+import SearchBox from './SearchBox'
+import CountryFilters from './CountryFilters'
+import FilterSwitch from './FilterSwitch'
+import FilterItem from './FilterItem'
+import DhiCategoriesList from '../common/list/DhiCategoriesList'
+import HfaCategoriesList from '../common/list/HfaCategoriesList'
+import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList'
+import HisBucketList from '../common/list/HisBucketList'
+import SimplePlatformList from '../common/list/SimplePlatformList'
 export default {
   components: {
     FilterPresetsActions,
@@ -113,8 +114,8 @@ export default {
   },
   computed: {
     ...mapGettersActions({
-      governamentApproved: ['dashboard', 'getGovernmentApproved', 'setGovernmentApproved', 0],
-      governamentFinanced: ['dashboard', 'getGovernmentFinanced', 'setGovernmentFinanced', 0],
+      governmentApproved: ['dashboard', 'getGovernmentApproved', 'setGovernmentApproved', 0],
+      governmentFinanced: ['dashboard', 'getGovernmentFinanced', 'setGovernmentFinanced', 0],
       selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0],
       selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
       selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
@@ -124,22 +125,22 @@ export default {
   },
   methods: {
     deleteDhiHandler (id) {
-      this.selectedDHI = this.selectedDHI.filter(dhi => dhi !== id);
+      this.selectedDHI = this.selectedDHI.filter(dhi => dhi !== id)
     },
     deleteHfaHandler (id) {
-      this.selectedHFA = this.selectedHFA.filter(hfa => hfa !== id);
+      this.selectedHFA = this.selectedHFA.filter(hfa => hfa !== id)
     },
     deleteHscHandler (id) {
-      this.selectedHSC = this.selectedHSC.filter(hsc => hsc !== id);
+      this.selectedHSC = this.selectedHSC.filter(hsc => hsc !== id)
     },
     deleteHisHandler (id) {
-      this.selectedHIS = this.selectedHIS.filter(his => his !== id);
+      this.selectedHIS = this.selectedHIS.filter(his => his !== id)
     },
     deletePlatformsHandler (id) {
-      this.selectedPlatforms = this.selectedPlatforms.filter(p => p !== id);
+      this.selectedPlatforms = this.selectedPlatforms.filter(p => p !== id)
     }
   }
-};
+}
 
 </script>
 

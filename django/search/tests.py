@@ -14,18 +14,18 @@ class SearchTests(SetupTests):
     def setUp(self):
         super(SearchTests, self).setUp()
         # create draft
-        url = reverse("project-create", kwargs=dict(country_id=self.country_id))
+        url = reverse("project-create", kwargs=dict(country_id=self.country1.id))
         project_data2 = copy.deepcopy(self.project_data)
         project_data2['project'].update(name="phrase3 phrase5 overview")
-        project_data2['project'].update(country=self.country_id, government_investor=2)
+        project_data2['project'].update(country=self.country1.id, government_investor=2)
         project_data2['project'].update(platforms=[dict(id=1, strategies=[119, 118]),
                                                    dict(id=2, strategies=[119, 171])])
         self.d1cq = DonorCustomQuestionFactory(question="test 1", private=True, donor=self.d1)
         self.d2cq = DonorCustomQuestionFactory(question="test 2", private=True, donor=self.d2)
         project_data2['donor_custom_answers'] = {self.d1.id: [{"question_id": self.d1cq.id, "answer": ["answer1"]}],
                                                  self.d2.id: [{"question_id": self.d2cq.id, "answer": ["answer2"]}]}
-        self.ccq1 = CountryCustomQuestionFactory(question="ctest q 1", private=True, country=self.country)
-        self.ccq2 = CountryCustomQuestionFactory(question="ctest q 2", private=True, country=self.country)
+        self.ccq1 = CountryCustomQuestionFactory(question="ctest q 1", private=True, country=self.country1)
+        self.ccq2 = CountryCustomQuestionFactory(question="ctest q 2", private=True, country=self.country1)
         project_data2['country_custom_answers'] = [{"question_id": self.ccq1.id, "answer": ["answer country 1"]},
                                                    {"question_id": self.ccq2.id, "answer": ["answer country 2"]}]
         response = self.test_user_client.post(url, project_data2, format="json")
@@ -33,7 +33,7 @@ class SearchTests(SetupTests):
         project_id = response.json()['id']
 
         # publish it
-        url = reverse("project-publish", kwargs=dict(project_id=project_id, country_id=self.country_id))
+        url = reverse("project-publish", kwargs=dict(project_id=project_id, country_id=self.country1.id))
         response = self.test_user_client.put(url, project_data2, format="json")
         self.assertEqual(response.status_code, 200)
 
@@ -126,6 +126,11 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 0)
 
+        data = {"q": Project.objects.all()[1].public_id, "in": "uid"}  # UID
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
+
     def test_found_in(self):
         url = reverse("search-project-list")
         data = {"q": "overview", "found": ""}
@@ -137,6 +142,15 @@ class SearchTests(SetupTests):
         self.assertTrue(self.project2_id in response.json()['results']['found_in']['overview'])
         self.assertTrue(self.project_id in response.json()['results']['found_in']['overview'])
 
+        url = reverse("search-project-list")
+        project = Project.objects.all()[1]
+        data = {"q": project.public_id, "found": ""}
+        response = self.test_user_client.get(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['count'] >= 1)
+        self.assertTrue('found_in' in response.json()['results'])
+        self.assertTrue(project.id in response.json()['results']['found_in']['uid'])
+
     def test_query_length(self):
         url = reverse("search-project-list")
         data = {"q": "o"}
@@ -146,26 +160,26 @@ class SearchTests(SetupTests):
 
     def test_filter_country(self):
         url = reverse("search-project-list")
-        data = {"country": self.country_id}
+        data = {"country": self.country1.id}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
 
-        data = {"country": self.country_id + 999}
+        data = {"country": self.country1.id + 999}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 0)
 
     def test_filter_and_search(self):
         url = reverse("search-project-list")
-        data = {"q": "overview", "in": "name", "country": self.country_id}
+        data = {"q": "overview", "in": "name", "country": self.country1.id}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
 
     def test_filter_list_results(self):
         url = reverse("search-project-list")
-        data = {"country": self.country_id, "type": "list"}
+        data = {"country": self.country1.id, "type": "list"}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
@@ -198,7 +212,7 @@ class SearchTests(SetupTests):
 
     def test_filter_hfa(self):
         url = reverse("search-project-list")
-        data = {"hfa": HealthFocusArea.objects.get(id=1).health_category.id}
+        data = {"hfa": HealthFocusArea.objects.get(id=2).id}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
@@ -303,7 +317,7 @@ class SearchTests(SetupTests):
     def test_multi_filter_different_filter(self):
         # all the filters are AND relations, within the same filter there's an OR relation
         url = reverse("search-project-list")
-        data = {"country": self.country_id, "approved": 1}
+        data = {"country": self.country1.id, "approved": 1}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
@@ -313,10 +327,10 @@ class SearchTests(SetupTests):
         project_data = self.project_data.copy()
         project_data['project'].update(platforms=[dict(id=1, strategies=[206]),
                                        dict(id=2, strategies=[223])])
-        self.country.country_questions.all().delete()
+        self.country1.country_questions.all().delete()
         self.d1.donor_questions.all().delete()
         self.d2.donor_questions.all().delete()
-        url = reverse("project-publish", kwargs=dict(project_id=self.project_id, country_id=self.country_id))
+        url = reverse("project-publish", kwargs=dict(project_id=self.project_id, country_id=self.country1.id))
         response = self.test_user_client.put(url, project_data, format="json")
         self.assertEqual(response.status_code, 200)
 
@@ -375,10 +389,10 @@ class SearchTests(SetupTests):
 
     def test_filter_view_as_country_list_results_success(self):
         # add user to country access
-        self.country.admins.add(self.userprofile)
+        self.country1.admins.add(self.userprofile)
 
         url = reverse("search-project-list")
-        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": self.country_id}
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": self.country1.id}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 1)
@@ -429,8 +443,8 @@ class SearchTests(SetupTests):
     def test_search_view_as_country_unsuccessful_flow(self):
         url = reverse("search-project-list")
         data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country"}
-        self.country.admins.remove(self.userprofile)
-        self.country.users.remove(self.userprofile)
+        self.country1.admins.remove(self.userprofile)
+        self.country1.users.remove(self.userprofile)
 
         response = self.client.get(url, data, format="json")
         self.assertEqual(response.status_code, 400)
@@ -440,17 +454,17 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), ['No country selected for view as.'])
 
-        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": self.country.id}
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": self.country1.id}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), ['No access to country.'])
 
-        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country_lol", "country": self.country.id}
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country_lol", "country": self.country1.id}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), ['You can only view as country or donor.'])
 
-        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": [self.country.id, 999]}
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": [self.country1.id, 999]}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), ['View as can only work with one country selected.'])
@@ -465,8 +479,8 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), ['No such country.'])
 
-        self.country.admins.add(self.userprofile)
-        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": self.country.id}
+        self.country1.admins.add(self.userprofile)
+        data = {"in": "name", "q": "phrase5", "type": "list", "view_as": "country", "country": self.country1.id}
 
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)

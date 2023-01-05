@@ -6,12 +6,14 @@
     <collapsible-card
       ref="collapsible"
       :title="$gettext('General overview') | translate"
+      :prepend-title="prependTitle"
       show-legend
     >
       <custom-required-form-item
         :error="errors.first('name')"
         :draft-rule="draftRules.name"
         :publish-rule="publishRules.name"
+        prepend-label="1"
       >
         <template slot="label">
           <translate key="project-name">
@@ -19,23 +21,94 @@
           </translate>
           <form-hint>
             <translate key="project-name-hint">
-              If this is your first time uploading a project, a sample data form can be found here for reference.
+              If this is your first time uploading a project, a sample data form
+              can be found here for reference.
             </translate>
           </form-hint>
         </template>
-        <character-count-input
-          v-model="name"
+        <character-count-input-standalone
           v-validate="rules.name"
           :rules="rules.name"
-          data-as-name="Name"
           data-vv-name="name"
+          data-vv-as="Name"
+          get="getName"
+          set="setName"
+          namespace="project"
         />
+      </custom-required-form-item>
+
+      <custom-required-form-item
+        :error="errors.first('donors')"
+        :draft-rule="draftRules.donors"
+        :publish-rule="publishRules.donors"
+        prepend-label="2"
+      >
+        <template slot="label">
+          <translate key="donors">
+            Who are your investment partners?
+          </translate>
+          <tooltip
+            :text="
+              $gettext(
+                'Investment partners can include those contributing funds, human resources or in-kind support.'
+              ) | translate
+            "
+          />
+        </template>
+
+        <donor-selector
+          v-model="donors"
+          v-validate="rules.donors"
+          data-vv-name="donors"
+          data-vv-as="Investors"
+        />
+      </custom-required-form-item>
+
+      <custom-required-form-item
+        class="ImplementingPartners"
+        :draft-rule="draftRules.implementing_partners"
+        :publish-rule="publishRules.implementing_partners"
+        prepend-label="3"
+      >
+        <template slot="label">
+          <translate key="implementing-partners">
+            Who are your implementing partners?
+          </translate>
+        </template>
+        <el-row v-for="(partner, index) in implementing_partners" :key="index">
+          <el-col :span="17">
+            <custom-required-form-item
+              :error="errors.first('implementing_partners_' + index)"
+            >
+              <el-input
+                ref="implementingPartnersInput"
+                v-validate="rules.implementing_partners"
+                :maxlength="rules.implementing_partners.max"
+                :value="partner"
+                :data-vv-name="'implementing_partners_' + index"
+                data-vv-validate-on="change"
+                data-vv-as="Implementing partners"
+                @input="updateImplmeentingPartners($event, index)"
+                @keyup.enter.native="addImplementingPartners"
+              />
+            </custom-required-form-item>
+          </el-col>
+          <el-col :span="6">
+            <add-rm-buttons
+              :show-add="isLastAndExist(implementing_partners, index)"
+              :show-rm="implementing_partners.length > 1"
+              @add="addImplementingPartners"
+              @rm="rmImplementingPartners(index)"
+            />
+          </el-col>
+        </el-row>
       </custom-required-form-item>
 
       <custom-required-form-item
         :error="errors.first('organisation')"
         :draft-rule="draftRules.organisation"
         :publish-rule="publishRules.organisation"
+        prepend-label="4"
       >
         <template slot="label">
           <translate key="organisation">
@@ -52,6 +125,7 @@
         :error="errors.first('country')"
         :draft-rule="draftRules.country"
         :publish-rule="publishRules.country"
+        prepend-label="5"
       >
         <template slot="label">
           <translate key="country">
@@ -63,37 +137,69 @@
           v-validate="rules.country"
           data-vv-name="country"
           data-vv-as="Country"
+          :disabled="isGlobal"
         />
+        <div class="FilterContainer">
+          <div class="FilterLabel">
+            OR
+          </div>
+          <filter-switch
+            v-model="isGlobal"
+            :label="$gettext('Set project as \'Global project\'') | translate"
+            :tooltip="
+              $gettext(
+                'If your project is located in more than one country, or is part of a broader global initiative, your project is a Global Project. Indicated the countries covered and scope in the Narrative Summary Field.'
+              ) | translate
+            "
+            placement="top"
+          />
+        </div>
+        <span class="Hint">
+          <fa icon="info-circle" />
+          <p>
+            <translate>
+              Projects in the DHA can be linked to a specific country, or for
+              projects which operate in multiple countries or across a region,
+              projects can be listed as global.
+            </translate>
+          </p>
+        </span>
       </custom-required-form-item>
       <custom-required-form-item
         :error="errors.first('geographic_scope')"
         :draft-rule="draftRules.geographic_scope"
         :publish-rule="publishRules.geographic_scope"
+        prepend-label="6"
       >
         <template slot="label">
           <translate key="geographic-scope">
             What is the geographic scope of the project?
           </translate>
-          <form-hint>
-            <translate key="geographic-scope-hint">
-              Describe the user types, geographic coverage and other coverage details.
-            </translate>
-          </form-hint>
+          <tooltip
+            :text="
+              $gettext(
+                'Describe the user types, geographic coverage and other coverage details.'
+              ) | translate
+            "
+          />
         </template>
 
-        <character-count-input
-          v-model="geographic_scope"
+        <character-count-input-standalone
           v-validate="rules.geographic_scope"
           :rules="rules.geographic_scope"
           data-vv-name="geographic_scope"
           data-vv-as="Geographic scope"
+          get="getGeographicScope"
+          set="setGeographicScope"
+          namespace="project"
           type="textarea"
         />
         <span class="Hint">
           <fa icon="info-circle" />
           <p>
             <translate>
-              Please describe where your implementation is currently taking place
+              Please describe where your implementation is currently taking
+              place
             </translate>
           </p>
         </span>
@@ -102,120 +208,69 @@
         :error="errors.first('implementation_overview')"
         :draft-rule="draftRules.implementation_overview"
         :publish-rule="publishRules.implementation_overview"
+        prepend-label="7"
       >
         <template slot="label">
           <translate key="implementation-overview">
-            Please provide a narrative summary of the digital health implementation.
+            Please provide a narrative summary of the digital health
+            implementation.
           </translate>
-          <form-hint>
-            <translate key="implementation-overview-hint">
-              Describe your overall digital health project design.
-            </translate>
-          </form-hint>
+          <tooltip
+            :text="
+              $gettext('Describe your overall digital health project design.')
+                | translate
+            "
+          />
         </template>
-
-        <character-count-input
-          v-model="implementation_overview"
+        <character-count-input-standalone
           v-validate="rules.implementation_overview"
           :rules="rules.implementation_overview"
           data-vv-name="implementation_overview"
           data-vv-as="Implementation Overview"
+          get="getImplementationOverview"
+          set="setImplementationOverview"
+          namespace="project"
+          :autosize="{ minRows: 5, maxRows: 20 }"
           type="textarea"
         />
         <span class="Hint">
           <fa icon="info-circle" />
-          <p><translate>Describe what the technology aims to achieve, detailing the users, the reasons for deploying the system, and current and future phases of deployment.</translate></p>
+          <p>
+            <translate>Describe what the technology aims to achieve, detailing the
+              users, the reasons for deploying the system, and current and
+              future phases of deployment.</translate>
+          </p>
         </span>
       </custom-required-form-item>
-      <el-row
-        :gutter="20"
-        type="flex"
-      >
-        <el-col :span="12">
-          <custom-required-form-item
-            :error="errors.first('start_date')"
-            :draft-rule="draftRules.start_date"
-            :publish-rule="publishRules.start_date"
-          >
-            <template slot="label">
-              <translate key="start-date">
-                Project start date
-              </translate>
-              <form-hint>
-                <translate key="start-date-hint">
-                  When did the overall project, not just the digital health component, start.
-                </translate>
-              </form-hint>
-            </template>
-            <safe-date-picker
-              ref="Start date"
-              v-model="start_date"
-              v-validate="rules.start_date"
-              :placeholder="$gettext('Start date') | translate"
-              data-vv-name="start_date"
-              data-vv-as="Start date"
-              class="Date"
-              align="left"
-            />
-          </custom-required-form-item>
-        </el-col>
-
-        <el-col :span="12">
-          <custom-required-form-item
-            :error="errors.first('end_date') || endDateError"
-            :draft-rule="draftRules.end_date"
-            :publish-rule="publishRules.end_date"
-          >
-            <template slot="label">
-              <translate key="end-date">
-                Project end date
-              </translate>
-              <form-hint>
-                <translate key="end-date-hint">
-                  When will the overall project be completed. If your project is ongoing, leave this field blank.
-                </translate>
-              </form-hint>
-            </template>
-
-            <safe-date-picker
-              v-model="end_date"
-              v-validate="rules.end_date"
-              :placeholder="$gettext('End date') | translate"
-              data-vv-name="end_date"
-              data-vv-as="End date"
-              class="Date"
-              align="left"
-            />
-          </custom-required-form-item>
-        </el-col>
-      </el-row>
-      <el-row
-        :gutter="20"
-        type="flex"
-      >
+      <el-row :gutter="20" type="flex">
         <el-col :span="12">
           <custom-required-form-item
             :error="errors.first('contact_name')"
             :draft-rule="draftRules.contact_name"
             :publish-rule="publishRules.contact_name"
+            prepend-label="8"
           >
             <template slot="label">
               <translate key="contact-name">
                 Contact name
               </translate>
-              <form-hint>
-                <translate key="contact-name-hint">
-                  This is the individual who will be the lead point of contact for any queries through the DHA.
-                </translate>
-              </form-hint>
+              <tooltip
+                :text="
+                  $gettext(
+                    'This is the individual who will be the lead point of contact for any queries through the DHA.'
+                  ) | translate
+                "
+              />
             </template>
 
-            <character-count-input
-              v-model="contact_name"
+            <character-count-input-standalone
               v-validate="rules.contact_name"
               :rules="rules.contact_name"
               data-vv-name="contact_name"
               data-vv-as="Contact name"
+              get="getContactName"
+              set="setContactName"
+              namespace="project"
             />
           </custom-required-form-item>
         </el-col>
@@ -224,6 +279,7 @@
             :error="errors.first('contact_email')"
             :draft-rule="draftRules.contact_email"
             :publish-rule="publishRules.contact_email"
+            prepend-label="9"
           >
             <template slot="label">
               <translate key="contact-email">
@@ -231,12 +287,14 @@
               </translate>
             </template>
 
-            <character-count-input
-              v-model="contact_email"
+            <character-count-input-standalone
               v-validate="rules.contact_email"
               :rules="rules.contact_email"
               data-vv-name="contact_email"
               data-vv-as="Contact email"
+              get="getContactEmail"
+              set="setContactEmail"
+              namespace="project"
             />
           </custom-required-form-item>
         </el-col>
@@ -247,16 +305,20 @@
           :error="errors.first('team')"
           :draft-rule="draftRules.team"
           :publish-rule="publishRules.team"
+          prepend-label="10"
         >
           <template slot="label">
             <translate key="team">
-              Add team members (editors)--can modify entry on Add New Project page
+              Add team members (editors)--can modify entry on Add New Project
+              page
             </translate>
-            <form-hint>
-              <translate key="team-hint">
-                Project editors can change and update all project information.
-              </translate>
-            </form-hint>
+            <tooltip
+              :text="
+                $gettext(
+                  'Project editors can change and update all project information.'
+                ) | translate
+              "
+            />
           </template>
           <team-selector
             v-model="team"
@@ -270,16 +332,20 @@
           :error="errors.first('viewers')"
           :draft-rule="draftRules.viewers"
           :publish-rule="publishRules.viewers"
+          prepend-label="11"
         >
           <template slot="label">
             <translate key="viewers">
-              Add team members (viewers)--can receive notification that project has been added
+              Add team members (viewers)--can receive notification that project
+              has been added
             </translate>
-            <form-hint>
-              <translate key="viewers-hint">
-                Project viewers will be able to view the full project details.
-              </translate>
-            </form-hint>
+            <tooltip
+              :text="
+                $gettext(
+                  'Project viewers will be able to view the full project details.'
+                ) | translate
+              "
+            />
           </template>
           <team-selector
             v-model="viewers"
@@ -294,16 +360,19 @@
 </template>
 
 <script>
-import { isAfter } from 'date-fns';
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
-import CollapsibleCard from '../CollapsibleCard';
-import TeamSelector from '../TeamSelector';
-import CountrySelect from '../../common/CountrySelect';
-import OrganisationSelect from '../../common/OrganisationSelect';
-import FormHint from '../FormHint';
-import { mapGettersActions } from '../../../utilities/form';
-import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
+import CollapsibleCard from '../CollapsibleCard'
+import TeamSelector from '../TeamSelector'
+import CountrySelect from '../../common/CountrySelect'
+import OrganisationSelect from '../../common/OrganisationSelect'
+import FormHint from '../FormHint'
+import { mapGettersActions } from '../../../utilities/form'
+import CustomRequiredFormTeamItem from '@/components/proxy/CustomRequiredFormTeamItem'
+import FilterSwitch from '@/components/dashboard/FilterSwitch'
+import Tooltip from '@/components/dashboard/Tooltip'
+import DonorSelector from '../DonorSelector'
+import AddRmButtons from '../AddRmButtons'
 
 export default {
   components: {
@@ -312,69 +381,129 @@ export default {
     TeamSelector,
     OrganisationSelect,
     FormHint,
-    CustomRequiredFormTeamItem
+    CustomRequiredFormTeamItem,
+    FilterSwitch,
+    Tooltip,
+    DonorSelector,
+    AddRmButtons
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGettersActions({
-      name: ['project', 'getName', 'setName', 0],
       organisation: ['project', 'getOrganisation', 'setOrganisation', 0],
       country: ['project', 'getCountry', 'setCountry', 0],
-      geographic_scope: ['project', 'getGeographicScope', 'setGeographicScope', 0],
-      implementation_overview: ['project', 'getImplementationOverview', 'setImplementationOverview', 0],
-      start_date: ['project', 'getStartDate', 'setStartDate', 0],
-      end_date: ['project', 'getEndDate', 'setEndDate', 0],
-      contact_name: ['project', 'getContactName', 'setContactName', 0],
-      contact_email: ['project', 'getContactEmail', 'setContactEmail', 0],
       team: ['project', 'getTeam', 'setTeam', 0],
-      viewers: ['project', 'getViewers', 'setViewers', 0]
+      viewers: ['project', 'getViewers', 'setViewers', 0],
+      implementing_partners: [
+        'project',
+        'getImplementingPartners',
+        'setImplementingPartners',
+        300,
+        true
+      ],    
+      donors: ['project', 'getDonors', 'setDonors', 0],
     }),
-    endDateError () {
-      if (this.usePublishRules && this.start_date && this.end_date && isAfter(this.start_date, this.end_date)) {
-        return this.$gettext('End date must be after Start date');
+    isGlobal: {
+      get () {
+        return this.country === process.env.GlobalCountryID
+      },
+      set (val) {
+        this.country = val ? process.env.GlobalCountryID : null
       }
-      return '';
+    }
+  },
+  watch: {
+    implementing_partners: {
+      immediate: false,
+      handler (ip, oldIp) {
+        if (oldIp && ip && ip.length > oldIp.length) {
+          this.$nextTick(() => {
+            if (
+              this.$refs.implementingPartnersInput &&
+              this.$refs.implementingPartnersInput.length > 0
+            ) {
+              this.$refs.implementingPartnersInput[
+                this.$refs.implementingPartnersInput.length - 1
+              ].focus()
+            }
+          })
+        }
+      }
     }
   },
   methods: {
+    isLastAndExist (collection, index) {
+      return !!(collection.length - 1 === index && collection[index])
+    },
+    updateImplmeentingPartners (value, index) {
+      const ip = [...this.implementing_partners]
+      ip[index] = value
+      this.implementing_partners = ip
+    },
+    addImplementingPartners () {
+      const index = this.implementing_partners.length - 1
+      if (this.isLastAndExist(this.implementing_partners, index)) {
+        this.implementing_partners = [...this.implementing_partners, null]
+      }
+    },
+    rmImplementingPartners (index) {
+      this.implementing_partners = this.implementing_partners.filter(
+        (ip, i) => i !== index
+      )
+    },
     async validate () {
-      this.$refs.collapsible.expandCard();
-      const validations = await Promise.all([
-        this.$validator.validate(),
-        Promise.resolve(this.endDateError === '')
-      ]);
-      console.log('General overview published validation', validations);
-      return validations.reduce((a, c) => a && c, true);
+      this.$refs.collapsible.expandCard()
+      const validations = await Promise.all([this.$validator.validate()])
+      console.log('General overview published validation', validations)
+      return validations.reduce((a, c) => a && c, true)
     },
     async validateDraft () {
-      this.$refs.collapsible.expandCard();
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
         this.$validator.validate('name'),
         this.$validator.validate('country'),
         this.$validator.validate('contact_email'),
-        this.$validator.validate('team'),
-        this.$validator.validate('start_date'),
-        this.$validator.validate('end_date')
-
-      ]);
-      console.log('General overview draft validation', validations);
-      return validations.reduce((a, c) => a && c, true);
+        this.$validator.validate('team')
+      ])
+      console.log('General overview draft validation', validations)
+      return validations.reduce((a, c) => a && c, true)
     }
   }
-};
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
-  .GeneralOverview {
-    .CountrySelector {
-      width: 50%;
-    }
-
-    .Date {
-      width: 100% !important;
+.GeneralOverview {
+  .CountrySelector {
+    width: 50%;
+  }
+  .Date {
+    width: 100% !important;
+  }
+  .FilterContainer {
+    display: inline-flex;
+    .FilterLabel {
+      display: inline-block;
+      width: 78px;
+      color: #9d9d9d;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 0;
+      line-height: 20px;
+      text-align: center;
     }
   }
+  .ImplementingPartners {
+    .el-row {
+      margin-top: 20px;
+
+      &:first-child {
+        margin: 0;
+      }
+    }
+  }
+}
 </style>

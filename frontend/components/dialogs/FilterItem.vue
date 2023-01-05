@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from 'vuex'
 export default {
   props: {
     header: {
@@ -66,10 +66,10 @@ export default {
       setDashboardFiltersDialogState: 'layout/setDashboardFiltersDialogState'
     }),
     setActiveItem () {
-      this.setDashboardFiltersDialogState(this.item);
+      this.setDashboardFiltersDialogState(this.item)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

@@ -1,7 +1,7 @@
 <script>
-import { findRealParent, propsBinder } from 'vue2-leaflet';
-import { DomEvent } from 'leaflet';
-import { MarkerClusterGroup } from 'leaflet.markercluster';
+import { findRealParent, propsBinder } from 'vue2-leaflet'
+import { DomEvent } from 'leaflet'
+import { MarkerClusterGroup } from 'leaflet.markercluster'
 
 export default {
   props: {
@@ -17,47 +17,47 @@ export default {
   data () {
     return {
       ready: false
-    };
+    }
   },
   mounted () {
-    this.mapObject = new MarkerClusterGroup(this.options);
-    DomEvent.on(this.mapObject, this.$listeners);
-    propsBinder(this, this.mapObject, this.$options.props);
-    this.parentContainer = findRealParent(this.$parent);
-    this._layerAdded = 0;
-    this._appended = false;
-    this.ready = true;
+    this.mapObject = new MarkerClusterGroup(this.options)
+    DomEvent.on(this.mapObject, this.$listeners)
+    propsBinder(this, this.mapObject, this.$options.props)
+    this.parentContainer = findRealParent(this.$parent)
+    this._layerAdded = 0
+    this._appended = false
+    this.ready = true
   },
   beforeDestroy () {
     if (this._appended) {
-      this.parentContainer.removeLayer(this);
+      this.parentContainer.removeLayer(this)
     }
   },
   methods: {
     addLayer (layer, alreadyAdded) {
       if (!alreadyAdded) {
-        this.mapObject.addLayer(layer.mapObject);
-        this._layerAdded += 1;
-        this.appendToMap();
+        this.mapObject.addLayer(layer.mapObject)
+        this._layerAdded += 1
+        this.appendToMap()
       }
     },
     removeLayer (layer, alreadyRemoved) {
       if (!alreadyRemoved) {
-        this.mapObject.removeLayer(layer.mapObject);
+        this.mapObject.removeLayer(layer.mapObject)
       }
     },
     appendToMap () {
       if (this._layerAdded >= this.total && !this._appended) {
-        this.parentContainer.addLayer(this);
-        this._appended = true;
+        this.parentContainer.addLayer(this)
+        this._appended = true
       }
     }
   },
   render: function (h) {
     if (this.$slots.default && this.ready) {
-      return h('div', { style: { display: 'none' } }, this.$slots.default);
+      return h('div', { style: { display: 'none' } }, this.$slots.default)
     }
-    return null;
+    return null
   }
-};
+}
 </script>

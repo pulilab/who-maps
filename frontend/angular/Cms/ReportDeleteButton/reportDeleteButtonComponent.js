@@ -1,5 +1,5 @@
-import ReportDeleteButtonController from './ReportDeleteButtonController';
-import _template from './ReportDeleteButton.html';
+import ReportDeleteButtonController from './ReportDeleteButtonController'
+import _template from './ReportDeleteButton.html'
 
 const component = {
   template: _template,
@@ -10,6 +10,6 @@ const component = {
     item: '<',
     type: '@?'
   }
-};
+}
 
-export default component;
+export default component

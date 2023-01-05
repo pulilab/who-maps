@@ -35,11 +35,11 @@
         <div class="popover__diplay--blue">
           {{ uid }} <fa :icon="uidPopOver ? 'angle-up' : 'angle-down'" />
         </div>
-        <span><translate>Project UID</translate></span>
+        <span><translate>Unique Project ID (UID)</translate></span>
       </template>
       <template v-if="type === 'infoSection'">
         <div class="Label">
-          <translate>Project UID</translate>
+          <translate>Unique Project ID (UID)</translate>
         </div>
         <div class="popover__diplay--blue Info">
           {{ uid }} <fa :icon="uidPopOver ? 'angle-up' : 'angle-down'" />
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -70,29 +70,27 @@ export default {
       uidPopOver: false,
       copied: false,
       base: ''
-    };
+    }
   },
   computed: {
     ...mapGetters({
       landingData: 'landing/getLandingPageData'
     }),
     uidUrl () {
-      const lang = this.$i18n.defaultLocale.toLowerCase();
-      const country = this.landingData ? this.landingData.code.toLowerCase() : '-';
-      return `${this.base}/${lang}/${country}/projects/${this.uid}/published`;
+      return `${this.base}/p/${this.uid}`
     }
   },
   mounted () {
-    this.base = window.location.origin;
+    this.base = window.location.origin
   },
   methods: {
     async copyToClipboard () {
-      this.copied = true;
-      await navigator.clipboard.writeText(this.$refs.copyInput.value);
-      setTimeout(() => { this.copied = false; }, 2500);
+      this.copied = true
+      await navigator.clipboard.writeText(this.$refs.copyInput.value)
+      setTimeout(() => { this.copied = false }, 2500)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

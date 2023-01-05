@@ -44,9 +44,9 @@
 </template>
 
 <script>
-import DhaQuestion from './DhaQuestion';
-import { mapGetters, mapActions } from 'vuex';
-import draggable from 'vuedraggable';
+import DhaQuestion from './DhaQuestion'
+import { mapGetters, mapActions } from 'vuex'
+import draggable from 'vuedraggable'
 
 export default {
 
@@ -59,7 +59,7 @@ export default {
     return {
       from: null,
       to: null
-    };
+    }
   },
 
   computed: {
@@ -67,29 +67,29 @@ export default {
       getQuestions: 'admin/questions/getQuestions'
     }),
     allSaved () {
-      return !!this.questions.reduce((a, c) => a && c.id, true);
+      return !!this.questions.reduce((a, c) => a && c.id, true)
     },
     draggableOptions () {
       return {
         disabled: !this.allSaved,
         handle: '.DDHandler'
-      };
+      }
     },
     questions: {
       get () {
-        return this.getQuestions;
+        return this.getQuestions
       },
       async set (newOrder) {
-        this.$nuxt.$loading.start();
+        this.$nuxt.$loading.start()
         try {
-          await this.processReOrder({ from: this.from, to: this.to, newOrder });
-          this.$message({ message: this.$gettext('New order saved'), type: 'success' });
+          await this.processReOrder({ from: this.from, to: this.to, newOrder })
+          this.$message({ message: this.$gettext('New order saved'), type: 'success' })
         } catch (e) {
-          this.$message.error(this.$gettext('An error occured while processing your request'));
+          this.$message.error(this.$gettext('An error occured while processing your request'))
         }
         setTimeout(() => {
-          this.$nuxt.$loading.finish();
-        }, 500);
+          this.$nuxt.$loading.finish()
+        }, 500)
       }
     }
   },
@@ -100,12 +100,12 @@ export default {
       processReOrder: 'admin/questions/processReOrder'
     }),
     moveHandler (evt, originalEvt) {
-      this.from = evt.draggedContext.index;
-      this.to = evt.draggedContext.futureIndex;
-      return true;
+      this.from = evt.draggedContext.index
+      this.to = evt.draggedContext.futureIndex
+      return true
     }
   }
-};
+}
 </script>
 
 <style lang="less">

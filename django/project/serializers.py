@@ -20,10 +20,13 @@ from rest_framework.validators import UniqueValidator
 import scheduler.celery  # noqa
 
 from core.utils import send_mail_wrapper
-from country.models import CustomQuestion
+from country.models import CustomQuestion, Country, Donor
 from project.utils import remove_keys
 from user.models import UserProfile
-from .models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform
+from project.models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform, \
+    InteroperabilityLink, Licence, InteroperabilityStandard, HISBucket, Stage, HealthCategory, HealthFocusArea, \
+    HSCGroup, HSCChallenge, DigitalStrategy, Collection
+from country.serializers import CountrySerializer, DonorSerializer
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
 
@@ -54,8 +57,8 @@ class PlatformSerializer(serializers.Serializer):
 
 class StageSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=True)
-    date = serializers.CharField(required=False, max_length=10)
-    note = serializers.CharField(required=False, max_length=256)
+    date = serializers.CharField(required=True, max_length=10)
+    note = serializers.CharField(required=False, max_length=256, allow_null=True)
 
 
 class InteroperabilityLinksSerializer(serializers.Serializer):
@@ -88,13 +91,14 @@ INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
 
 class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 1 General Overview
-    name = serializers.CharField(max_length=128, validators=[UniqueValidator(queryset=Project.objects.all())])
-    organisation = serializers.CharField(max_length=128)
+    name = serializers.CharField(max_length=250, validators=[UniqueValidator(queryset=Project.objects.all())])
+    organisation = serializers.CharField(max_length=128, required=False)
     country = serializers.IntegerField(min_value=0, max_value=100000)
     geographic_scope = serializers.CharField(max_length=1024, required=False)
-    implementation_overview = serializers.CharField(max_length=1024)
+    implementation_overview = serializers.CharField(max_length=5000)
     start_date = serializers.CharField(max_length=256, required=True)
     end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
+    end_date_note = serializers.CharField(max_length=256, required=False, allow_blank=True)
     contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
     research = serializers.NullBooleanField(required=False)
@@ -104,14 +108,16 @@ class ProjectPublishedSerializer(serializers.Serializer):
     health_focus_areas = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=1)
     hsc_challenges = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=1)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
+    hsc_challenges_other = serializers.ListField(
+        child=serializers.CharField(max_length=256), max_length=16, min_length=0, allow_empty=True, required=False)
     his_bucket = serializers.ListField(child=serializers.IntegerField(), max_length=64, required=False)
     coverage = CoverageSerializer(many=True, required=False, allow_null=True)
     coverage_second_level = CoverageSerializer(many=True, required=False, allow_null=True)
     national_level_deployment = NDPSerializer(required=False, allow_null=True)
     government_investor = serializers.ChoiceField(choices=INVESTOR_CHOICES, required=False)
     implementing_partners = serializers.ListField(
-        child=serializers.CharField(max_length=128), max_length=50, min_length=0, required=False, allow_empty=True)
+        child=serializers.CharField(max_length=1024), max_length=50, min_length=0, required=False, allow_empty=True)
     donors = serializers.ListField(child=serializers.IntegerField(), max_length=32)
 
     # SECTION 3 Technology Overview
@@ -127,7 +133,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
         child=serializers.IntegerField(), required=False, max_length=50)
 
     # SECTION 5
-    stages = StageSerializer(many=True, required=True, allow_empty=False)
+    stages = StageSerializer(many=True, required=False, allow_empty=True)
 
     class Meta:
         model = Project
@@ -139,11 +145,20 @@ class ProjectPublishedSerializer(serializers.Serializer):
                 raise serializers.ValidationError('Country cannot be altered on published projects.')
         return value
 
-    def validate_research(self, value):
-        # research can't be changed once it is already set
-        if self.instance and self.instance.draft.get('research') is not None:
-            return self.instance.draft['research']
-        return value
+    # TODO: might be re-enabled later
+    # def validate_research(self, value):
+    #     # research can't be changed once it is already set
+    #     if self.instance and self.instance.draft.get('research') is not None:
+    #         return self.instance.draft['research']
+    #     return value
+
+    # TODO: might be re-enabled if we will allow straight publishing without draft
+    # def create(self, validated_data):
+    #     return self.Meta.model(
+    #         name=validated_data["name"],
+    #         data=validated_data,
+    #         draft=validated_data,
+    #     )
 
     def update(self, instance, validated_data):
         instance.name = validated_data["name"]
@@ -167,16 +182,19 @@ class ProjectPublishedSerializer(serializers.Serializer):
     def validate_repository(value):
         return url_validator(value)
 
+    def validate(self, attrs):
+        if not attrs.get('hsc_challenges') and not attrs.get('hsc_challenges_other'):
+            raise ValidationError({'hsc_challenges': 'No challenges selected'})
+        return attrs
+
 
 class ProjectDraftSerializer(ProjectPublishedSerializer):
     """
     Override fields that are not required for draft project.
     """
     # SECTION 1 General Overview
-    name = serializers.CharField(max_length=128)
-    organisation = serializers.CharField(max_length=128, required=False)
-    country = serializers.IntegerField(min_value=0, max_value=100000, required=False)
-    implementation_overview = serializers.CharField(max_length=1024, required=False)
+    name = serializers.CharField(max_length=250)
+    implementation_overview = serializers.CharField(max_length=5000, required=False)
     contact_name = serializers.CharField(max_length=256, required=False)
     contact_email = serializers.EmailField(required=False)
     start_date = serializers.CharField(max_length=256, required=False)
@@ -185,15 +203,10 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     platforms = DraftPlatformSerializer(many=True, required=False)
     health_focus_areas = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
-    hsc_challenges = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     donors = serializers.ListField(child=serializers.IntegerField(), max_length=32, required=False)
 
     # SECTION 4
     interoperability_links = DraftInteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
-
-    # SECTION 5
-    stages = StageSerializer(many=True, required=False, allow_empty=True)
 
     # ODK DATA
     odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
@@ -247,8 +260,11 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     def validate_repository(value):
         return value
 
+    def validate(self, attrs):
+        return attrs
 
-class ProjectGroupSerializer(serializers.ModelSerializer):
+
+class ProjectGroupSerializer(serializers.ModelSerializer):  # TODO handle orphan projects
     new_team_emails = serializers.ListField(
         child=serializers.EmailField(), max_length=64, min_length=0, allow_empty=True, required=False)
     new_viewer_emails = serializers.ListField(
@@ -264,7 +280,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
         context = {
             'email': user.email,
             'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': default_token_generator.make_token(user),
             'protocol': 'https' if not settings.DEBUG else 'http'
         }
@@ -295,14 +311,14 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
     def save(self, **kwargs):
         for email in self.validated_data.get('new_team_emails', []):
             try:
-                user = User.objects.get(email=email)
+                user = User.objects.get(email__iexact=email)
             except User.DoesNotExist:
                 user = self.perform_create(email)
             self.validated_data['team'].append(user.userprofile)
 
         for email in self.validated_data.get('new_viewer_emails', []):
             try:
-                user = User.objects.get(email=email)
+                user = User.objects.get(email__iexact=email)
             except User.DoesNotExist:
                 user = self.perform_create(email)
             self.validated_data['viewers'].append(user.userprofile)
@@ -318,10 +334,13 @@ class ProjectGroupSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         self._send_notification(instance, validated_data)
-
         # don't allow empty team, so no orphan projects
         if 'team' in validated_data and isinstance(validated_data['team'], list):
-            instance.team.set(validated_data.get('team') or instance.team.all())
+            # we allow orphan projects IF there's a collection related to them and they're draft
+            if instance.import_rows.all().filter(parent__collection__isnull=False) and instance.public_id == '':
+                instance.team.set(validated_data['team'])
+            else:
+                instance.team.set(validated_data['team'] or instance.team.all())
 
         # a project however can exist without viewers
         if 'viewers' in validated_data and isinstance(validated_data['viewers'], list):
@@ -480,26 +499,55 @@ class ImportRowSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ProjectImportV2Serializer(serializers.ModelSerializer):
+class CollectionBriefSerializer(serializers.ModelSerializer):
+    """
+    Serializer to show basic collection data inside ProjectImports
+    """
+    class Meta:
+        model = Collection
+        fields = ('id', 'name', 'user', 'url', 'add_me_as_editor')
+
+
+class ProjectImportV2ListSerializer(serializers.ModelSerializer):  # pragma: no cover
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     status = serializers.ReadOnlyField()
-    rows = ImportRowSerializer(many=True)
+    rows_count = serializers.SerializerMethodField()
+    rows_imported = serializers.SerializerMethodField()
+    collection = CollectionBriefSerializer(required=False)
 
     class Meta:
         model = ProjectImportV2
-        fields = ('id', 'user', 'status', 'header_mapping',
-                  'rows', 'country', 'donor', 'filename', 'sheet_name', 'draft')
+        fields = ('id', 'user', 'status', 'country', 'donor', 'filename', 'sheet_name',
+                  'draft', 'collection', 'rows_count', 'rows_imported')
 
-    # TODO: Need Coverage
-    def create(self, validated_data):  # pragma: no cover
+    @staticmethod
+    def get_rows_count(obj):
+        return obj.rows.count()
+
+    @staticmethod
+    def get_rows_imported(obj):
+        return obj.rows.filter(project__isnull=False).count()
+
+
+class ProjectImportV2Serializer(serializers.ModelSerializer):  # pragma: no cover
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    status = serializers.ReadOnlyField()
+    rows = ImportRowSerializer(many=True)
+    collection = CollectionBriefSerializer(required=False)
+
+    class Meta:
+        model = ProjectImportV2
+        fields = ('id', 'user', 'status', 'header_mapping', 'rows', 'country', 'donor', 'filename', 'sheet_name',
+                  'draft', 'collection')
+
+    def create(self, validated_data):
         rows = validated_data.pop('rows')
         instance = super().create(validated_data)
         for row_data in rows[0].get('data', []):
             ImportRow.objects.create(parent=instance, data=row_data, original_data=row_data)
         return instance
 
-    # TODO: Need Coverage
-    def update(self, instance, validated_data):  # pragma: no cover
+    def update(self, instance, validated_data):
         rows = validated_data.pop('rows', [])
         instance = super().update(instance, validated_data)
         for row in rows:
@@ -512,3 +560,262 @@ class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
         model = TechnologyPlatform
         fields = '__all__'
         read_only_fields = ('state', 'added_by')
+
+
+class StageModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stage
+        fields = ('id', 'name', 'tooltip', 'order')
+
+
+class HISBucketModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HISBucket
+        fields = ('id', 'name')
+
+
+class InteroperabilityStandardModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InteroperabilityStandard
+        fields = ('id', 'name')
+
+
+class LicenseModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Licence
+        fields = ('id', 'name')
+
+
+class TechnologyPlatformModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TechnologyPlatform
+        fields = ('id', 'name', 'state')
+
+
+class InteroperabilityLinkModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InteroperabilityLink
+        fields = ('id', 'name', 'pre')
+
+
+class HealthFocusAreaModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HealthFocusArea
+        fields = ('id', 'name', 'donors')
+
+
+class HFAWithCategoriesSerializer(serializers.ModelSerializer):
+    health_focus_areas = HealthFocusAreaModelReadSerializer(many=True)
+
+    class Meta:
+        model = HealthCategory
+        fields = ('id', 'name', 'health_focus_areas')
+
+
+class HSCChallengeModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HSCChallenge
+        fields = ('id', 'name')
+
+
+class HSCGroupWithChallengesSerializer(serializers.ModelSerializer):
+    challenges = HSCChallengeModelReadSerializer(many=True)
+
+    class Meta:
+        model = HSCGroup
+        fields = ('name', 'challenges')
+
+
+class DigitalStrategyModelReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DigitalStrategy
+        fields = ('id', 'name')
+
+
+class DigitalStrategyParentModelReadSerializer(serializers.ModelSerializer):
+    strategies = DigitalStrategyModelReadSerializer(many=True)
+
+    class Meta:
+        model = DigitalStrategy
+        fields = ('id', 'name', 'strategies')
+
+
+class StrategiesByGroupSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    subGroup = DigitalStrategyParentModelReadSerializer(many=True)
+
+
+class TerminologySerializer(serializers.Serializer):
+    interoperability_links = InteroperabilityLinkModelReadSerializer(many=True)
+    technology_platforms = TechnologyPlatformModelReadSerializer(many=True)
+    licenses = LicenseModelReadSerializer(many=True)
+    interoperability_standards = InteroperabilityStandardModelReadSerializer(many=True)
+    his_bucket = HISBucketModelReadSerializer(many=True)
+    stages = StageModelReadSerializer(many=True)
+
+    health_focus_areas = HFAWithCategoriesSerializer(many=True)
+    hsc_challenges = HSCGroupWithChallengesSerializer(many=True)
+    strategies = StrategiesByGroupSerializer(many=True)
+
+
+class ProjectImportV2CollectionSerializer(serializers.ModelSerializer):
+    status = serializers.ReadOnlyField()
+
+    class Meta:
+        model = ProjectImportV2
+        fields = ('id', 'user', 'status', 'country', 'donor', 'filename', 'sheet_name',
+                  'draft', 'collection')
+
+
+class ProjectImportV2CollectionInputSerializer(ProjectImportV2CollectionSerializer):
+    status = serializers.ReadOnlyField()
+    rows = ImportRowSerializer(many=True)
+
+    class Meta:
+        model = ProjectImportV2
+        fields = ('id', 'user', 'status', 'header_mapping', 'rows', 'country', 'donor', 'filename', 'sheet_name',
+                  'draft', 'collection')
+
+    def create(self, validated_data):
+        rows = validated_data.pop('rows')
+        instance = super().create(validated_data)
+        for row_data in rows[0].get('data', []):
+            """
+            Overrides"""
+            if self.context.get('country_override'):
+                row_data['Country'] = Country.objects.get(pk=self.context['country_override']).name
+            if self.context.get('donor_override'):
+                row_data['Donor'] = Donor.objects.get(pk=self.context['donor_override']).name
+            ImportRow.objects.create(parent=instance, data=row_data, original_data=row_data)
+        return instance
+
+    def update(self, instance, validated_data):  # pragma: no cover
+        rows = validated_data.pop('rows', [])
+        instance = super().update(instance, validated_data)
+        for row in rows:
+            ImportRow.objects.get(id=row['id']).update(data=row.get('data'))
+        return instance
+
+
+class ProjectImportV2CollectionOutputSerializer(serializers.ModelSerializer):
+    status = serializers.ReadOnlyField()
+    country = CountrySerializer(required=False, allow_null=True)
+    donor = DonorSerializer(required=False, allow_null=True)
+    rows = ImportRowSerializer(many=True)
+
+    class Meta:
+        model = ProjectImportV2
+        fields = ('id', 'user', 'status', 'header_mapping', 'rows', 'country', 'donor', 'filename', 'sheet_name',
+                  'draft', 'collection')
+
+
+class CollectionListSerializer(serializers.ModelSerializer):
+    """
+    Collection serializer for listing collections
+    """
+    url = serializers.ReadOnlyField()
+    project_imports = ProjectImportV2CollectionSerializer(required=False, many=True)
+    add_me_as_editor = serializers.BooleanField(required=True)
+
+    class Meta:
+        model = Collection
+        fields = ('id', 'url', 'name', 'user', 'project_imports', 'add_me_as_editor')
+
+
+class CollectionInputSerializer(serializers.ModelSerializer):
+    """
+    Collection serializer for creating and updating collections
+    """
+    url = serializers.ReadOnlyField()
+    project_imports = ProjectImportV2CollectionInputSerializer(required=False, many=True)
+    add_me_as_editor = serializers.BooleanField(required=True)
+
+    class Meta:
+        model = Collection
+        fields = ('id', 'url', 'name', 'user', 'project_imports', 'add_me_as_editor')
+
+    def _set_context(self):
+        context = {
+            'country_override': self.context['request'].data.get('country', False),
+            'donor_override': self.context['request'].data.get('donor', False),
+        }
+        return context
+
+    def _set_project_import_data(self, instance, project_import_data, sub_context):
+        for p_data in project_import_data:
+            p_data['collection'] = instance.pk
+            p_data['user'] = self.context['request'].user.pk
+            p_data['country'] = p_data['country'].pk if p_data['country'] is not None else None
+            p_data['donor'] = p_data['donor'].pk if p_data['donor'] is not None else None
+            project_import = ProjectImportV2CollectionInputSerializer(context=sub_context, data=p_data)
+            project_import.is_valid(raise_exception=True)
+            project_import.save()
+
+    def create(self, validated_data):
+        project_import_data = validated_data.pop('project_imports')
+        instance = super().create(validated_data)
+        sub_context = self._set_context()
+        self._set_project_import_data(instance, project_import_data, sub_context)
+        instance.make_url()
+        instance.save()
+        return instance
+
+    def update(self, instance, validated_data):
+        if 'project_imports' in validated_data:
+            project_import_data = validated_data.pop('project_imports')
+        instance = super().update(instance, validated_data)
+        if 'project_import_data' in locals():
+            sub_context = self._set_context()
+            self._set_project_import_data(instance, project_import_data, sub_context)
+        instance.save()
+        return instance
+
+
+class CollectionOutputSerializer(serializers.ModelSerializer):
+    """
+    Collection serializer to output detailed collection data
+    """
+    url = serializers.ReadOnlyField()
+    project_imports = ProjectImportV2CollectionOutputSerializer(required=False, many=True)
+    add_me_as_editor = serializers.BooleanField(required=True)
+
+    class Meta:
+        model = Collection
+        fields = ('id', 'url', 'name', 'user', 'project_imports', 'add_me_as_editor')
+
+
+class ExternalProjectPublishSerializer(serializers.Serializer):
+    """
+    Used to beautify swagger in public docs
+    """
+    project = ProjectPublishedSerializer(required=True)
+    country_custom_answers = CountryCustomAnswerSerializer(many=True, required=False)
+    donor_custom_answers = DonorCustomAnswerSerializer(many=True, required=False)
+
+
+class ExternalProjectDraftSerializer(serializers.Serializer):
+    """
+    Used to beautify swagger in public docs
+    """
+    project = ProjectDraftSerializer(required=True)
+    country_custom_answers = CountryCustomAnswerSerializer(many=True, required=False)
+    donor_custom_answers = DonorCustomAnswerSerializer(many=True, required=False)
+
+
+class ExternalProjectResponseSerializer(serializers.Serializer):
+    """
+    Used to beautify swagger in public docs
+    """
+    id = serializers.IntegerField(read_only=True)
+    public_id = serializers.CharField(allow_blank=True, required=False, read_only=True)
+    published = ProjectPublishedSerializer(required=False)
+    draft = ProjectDraftSerializer(required=False)
+
+
+class CollectionInputSwaggerSerializer(serializers.Serializer):
+    """
+    Used to beautify swagger in docs
+    """
+    name = serializers.CharField(required=True)
+    add_me_as_editor = serializers.BooleanField(required=True)
+    project_import = ProjectImportV2CollectionInputSerializer(required=True)

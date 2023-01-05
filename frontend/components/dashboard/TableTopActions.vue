@@ -13,13 +13,13 @@
         >
           <translate
             v-show="!allSelected"
-            :parameters="{total}"
+            :parameters="{ total }"
           >
             Select all {total} projects
           </translate>
           <translate
             v-show="allSelected"
-            :parameters="{total}"
+            :parameters="{ total }"
           >
             Deselect all {total} projects
           </translate>
@@ -36,7 +36,7 @@
                 />
                 <xlsx-download
                   disable-wrapper-click
-                  :options="{bookType: exportType.toLowerCase()}"
+                  :options="{ bookType: exportType.toLowerCase() }"
                   :filename="`export.${exportType.toLowerCase()}`"
                 >
                   <template #default="{download}">
@@ -52,7 +52,7 @@
                         <translate>Export selected</translate>
                       </span>
                       <span v-show="selected">
-                        <translate :parameters="{selected}">
+                        <translate :parameters="{ selected }">
                           Export {selected} selected
                         </translate>
                       </span>
@@ -97,7 +97,7 @@
                   </translate>
                   <translate
                     v-show="selected > 0"
-                    :parameters="{selected}"
+                    :parameters="{ selected }"
                   >
                     Contact {selected} selected
                   </translate>
@@ -115,7 +115,7 @@
         align="middle"
       >
         <project-legend
-          :compact-mode="viewportSize < 1440"
+          :compact-mode="viewportSize < 1560"
           force-star
           force-eye
           force-handshake
@@ -149,9 +149,13 @@
               <li
                 v-for="c in selectedColumns"
                 :key="c.id"
-                :class="['Item', {'Selected': c.selected}]"
+                :class="['Item', { Selected: c.selected }]"
                 @click="c.selected = !c.selected"
               >
+                <fa
+                  v-if="c.private"
+                  icon="lock"
+                />
                 <fa icon="check" />
                 {{ c.label }}
               </li>
@@ -191,12 +195,12 @@
 </template>
 
 <script>
-import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
-import ProjectLegend from '@/components/common/ProjectLegend';
-import PdfExport from '@/components/dashboard/PdfExport';
-import ListExport from '@/components/dashboard/ListExport';
+import { XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx'
+import ProjectLegend from '@/components/common/ProjectLegend'
+import PdfExport from '@/components/dashboard/PdfExport'
+import ListExport from '@/components/dashboard/ListExport'
 
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -213,7 +217,7 @@ export default {
       columnSelectorOpen: false,
       selectedColumns: [],
       viewportSize: 2000
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -228,31 +232,37 @@ export default {
       dashboardType: 'dashboard/getDashboardType'
     }),
     settingsTitle () {
-      return `${this.$gettext('main fields')} (${this.selectedCol.length}/${this.columns.length})`;
+      return `${this.$gettext('main fields')} (${this.selectedCol.length}/${
+        this.columns.length
+      })`
     },
     selected () {
-      return this.allSelected ? this.total : this.selectedRows.length;
+      return this.allSelected ? this.total : this.selectedRows.length
     },
     rowToExport () {
-      return this.allSelected ? this.projects : this.projects.filter(p => this.selectedRows.some(sr => sr === p.id));
+      return this.allSelected
+        ? this.projects
+        : this.projects.filter(p => this.selectedRows.some(sr => sr === p.id))
     },
     showEmailButton () {
-      const allowed = ['CA', 'SCA', 'D', 'DA', 'SDA'];
+      const allowed = ['CA', 'SCA', 'D', 'DA', 'SDA']
       if (this.user) {
-        return allowed.includes(this.user.account_type) || this.user.is_superuser;
+        return (
+          allowed.includes(this.user.account_type) || this.user.is_superuser
+        )
       }
-      return false;
+      return false
     }
   },
   mounted () {
     this.$nextTick(() => {
-      this.setViewport();
-      window.addEventListener('resize', this.setViewport);
-    });
+      this.setViewport()
+      window.addEventListener('resize', this.setViewport)
+    })
   },
   beforeDestroy () {
     if (process.client) {
-      window.removeEventListener('resize', this.setViewport);
+      window.removeEventListener('resize', this.setViewport)
     }
   },
   methods: {
@@ -265,159 +275,162 @@ export default {
     }),
     setViewport () {
       if (process.client && window) {
-        this.viewportSize = window.innerWidth;
+        this.viewportSize = window.innerWidth
       }
     },
     popperOpenHandler () {
-      this.selectedColumns = [...this.columns.map(s => ({ ...s }))];
+      this.selectedColumns = [...this.columns.map(s => ({ ...s }))]
     },
     updateColumns () {
-      this.setSelectedColumns(this.selectedColumns.filter(s => s.selected).map(s => s.id));
-      this.columnSelectorOpen = false;
+      this.setSelectedColumns(
+        this.selectedColumns.filter(s => s.selected).map(s => s.id)
+      )
+      this.columnSelectorOpen = false
     },
     async toggleSelectAll () {
       if (!this.allSelected) {
-        await this.loadProjectsBucket();
-        this.setSelectAll(true);
+        await this.loadProjectsBucket()
+        this.setSelectAll(true)
       } else {
-        this.setSelectAll(false);
-        this.setSelectedRows([]);
+        this.setSelectAll(false)
+        this.setSelectedRows([])
       }
     },
     exportRows (xlsxDownloadFunction) {
-      this.$nuxt.$loading.start('pdf');
+      this.$nuxt.$loading.start('pdf')
       window.setTimeout(async () => {
         if (this.exportType === 'PDF') {
-          this.$refs.pdfExport.printPdf();
+          this.$refs.pdfExport.printPdf()
         } else {
-          xlsxDownloadFunction();
+          xlsxDownloadFunction()
         }
-        this.$nuxt.$loading.finish('pdf');
-      }, 500);
+        this.$nuxt.$loading.finish('pdf')
+      }, 500)
     },
     async openMailDialog () {
       if (this.allSelected) {
-        await this.loadProjectsBucket();
+        await this.loadProjectsBucket()
       }
-      this.setSendEmailDialogState(true);
+      this.setSendEmailDialogState(true)
     }
   }
-};
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .TableTopActions {
-    width: calc(100vw - @advancedSearchWidth);
-    min-width: @appWidthMinLimit - @advancedSearchWidth;
-    max-width: @appWidthMaxLimit - @advancedSearchWidth;
-    height: @tableTopActionsHeight;
-    padding: 0 40px;
+.TableTopActions {
+  width: calc(100vw - @advancedSearchWidth);
+  min-width: @appWidthMinLimit - @advancedSearchWidth;
+  max-width: @appWidthMaxLimit - @advancedSearchWidth;
+  height: @tableTopActionsHeight;
+  padding: 0 40px;
 
-    .Separator {
-      .SeparatorStyle();
-      height: 32px;
-      margin: 0 20px;
-    }
+  .Separator {
+    .SeparatorStyle();
+    height: 32px;
+    margin: 0 20px;
+  }
 
-    .TableExportOptions {
+  .TableExportOptions {
+    width: 100%;
+
+    .TableExportContainer {
       width: 100%;
+      display: flex;
+    }
 
-      .TableExportContainer {
-        width: 100%;
-        display: flex;
-      }
-
-      .el-button {
-        &.is-disabled {
-          + .el-select {
-            display: none;
-          }
+    .el-button {
+      &.is-disabled {
+        + .el-select {
+          display: none;
         }
-      }
-
-      .el-select {
-        width: 100px;
-        margin-left: 10px;
       }
     }
 
-    .TableLegend {
-      width: auto;
-      height: 32px;
-
-      .ProjectLegend {
-        font-size: @fontSizeSmall;
-        color: @colorTextSecondary;
-        white-space: nowrap;
-
-        .svg-inline--fa {
-          position: relative;
-          vertical-align: middle;
-          height: 14px;
-          margin-left: 20px;
-          margin-right: 6px;
-          color: @colorTextSecondary;
-          font-size: 12px;
-
-          &.fa-star {
-            top: -1px;
-            font-size: 11px;
-          }
-        }
-      }
-
-      .ShowLegendButton {
-        color: @colorTextSecondary;
-
-        .svg-inline--fa {
-          height: 12px;
-          margin-left: 0;
-          color: @colorTextSecondary;
-        }
-      }
-
-      .TableSettingsButton {}
+    .el-select {
+      width: 100px;
+      margin-left: 10px;
     }
   }
 
-  .TableSettingsDropdown {
-    transform: translate(10px, -30px);
+  .TableLegend {
+    width: auto;
+    height: 32px;
+
+    .ProjectLegend {
+      font-size: @fontSizeSmall;
+      color: @colorTextSecondary;
+      white-space: nowrap;
+
+      .svg-inline--fa {
+        position: relative;
+        vertical-align: middle;
+        height: 14px;
+        margin-left: 20px;
+        margin-right: 6px;
+        color: @colorTextSecondary;
+        font-size: 12px;
+
+        &.fa-star {
+          top: -1px;
+          font-size: 11px;
+        }
+      }
+    }
+
+    .ShowLegendButton {
+      color: @colorTextSecondary;
+
+      .svg-inline--fa {
+        height: 12px;
+        margin-left: 0;
+        color: @colorTextSecondary;
+      }
+    }
+
+    .TableSettingsButton {
+    }
   }
+}
 
-  .TableLegendDropdown {
-    transform: translate(10px, -30px);
+.TableSettingsDropdown {
+  transform: translate(10px, -30px);
+}
 
-    .ProjectLegendContent {
-      padding: 8px 12px 12px;
+.TableLegendDropdown {
+  transform: translate(10px, -30px);
+
+  .ProjectLegendContent {
+    padding: 8px 12px 12px;
+
+    > span {
+      position: relative;
+      display: block;
+
+      .svg-inline--fa {
+        position: absolute;
+        top: 3px;
+        left: 0;
+        height: 14px;
+        margin-right: 6px;
+
+        &.fa-handshake {
+          left: -1px;
+        }
+      }
 
       > span {
-        position: relative;
-        display: block;
-
-        .svg-inline--fa {
-          position: absolute;
-          top: 3px;
-          left: 0;
-          height: 14px;
-          margin-right: 6px;
-
-          &.fa-handshake {
-            left: -1px;
-          }
-        }
-
-        > span {
-          margin-left: 20px;
-          font-size: @fontSizeSmall
-        }
+        margin-left: 20px;
+        font-size: @fontSizeSmall;
       }
     }
   }
-  .ColumnList {
-    max-height: 80vh;
-    overflow-y: auto;
-  }
+}
+.ColumnList {
+  max-height: 80vh;
+  overflow-y: auto;
+}
 </style>

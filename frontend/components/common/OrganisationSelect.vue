@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import LightSelectMixin from '../mixins/LightSelectMixin.js';
+import { mapGetters, mapActions } from 'vuex'
+import LightSelectMixin from '../mixins/LightSelectMixin.js'
 
 export default {
   components: {
@@ -48,13 +48,13 @@ export default {
     innerValue: {
       get () {
         if (isNaN(this.value)) {
-          return this.value;
+          return this.value
         }
-        return this.value ? +this.value : null;
+        return this.value ? +this.value : null
       },
       set (value) {
-        this.$emit('change', value);
-        this.save(value);
+        this.$emit('change', value)
+        this.save(value)
       }
     }
   },
@@ -64,13 +64,13 @@ export default {
     }),
     async save (value) {
       if (this.autoSave && !Number.isInteger(value)) {
-        this.$nuxt.$loading.start('organisation');
-        await this.addOrganisation(value);
-        this.$nuxt.$loading.finish('organisation');
+        this.$nuxt.$loading.start('organisation')
+        await this.addOrganisation(value)
+        this.$nuxt.$loading.finish('organisation')
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less">

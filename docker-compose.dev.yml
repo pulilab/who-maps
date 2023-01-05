@@ -13,6 +13,7 @@ services:
             - ./nginx/site:/usr/share/nginx/html:rw
             - ./nginx/conf.d_secure.dev:/etc/nginx/conf.d:ro
             - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./nginx/includes:/etc/nginx/includes:ro
             - ./django/media:/usr/share/nginx/html/media:rw
             - ./data/certbot/conf:/etc/letsencrypt
             - ./data/certbot/www:/var/www/certbot

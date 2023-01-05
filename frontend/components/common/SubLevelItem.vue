@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
   props: {
     id: {
@@ -21,10 +21,10 @@ export default {
       getSubLevelDetails: 'countries/getSubLevelDetails'
     }),
     subLevel () {
-      return this.getSubLevelDetails(this.id);
+      return this.getSubLevelDetails(this.id)
     }
   }
-};
+}
 </script>
 
 <style>

@@ -1,5 +1,6 @@
 import time
 from fabric.api import local, run, cd, env
+from fabric.context_managers import warn_only
 
 
 # ENVIRONMENTS #
@@ -24,7 +25,7 @@ def production():
     env.host_string = PROD_HOST_STRING
     env.name = 'production'
     env.port = 22
-    env.branch = "tags/3.5.24"
+    env.branch = "development"
     env.project_root = '/home/whomaps/who-maps'
     env.backend_root = 'django'
     env.frontend_root = 'frontend'
@@ -65,7 +66,7 @@ def clone_prod_to(server):
     # Load prod data and code
     globals()[server]()
     with cd(env.project_root):
-        # Deploy as usual, but from the production tag
+        # Deploy as usual, but from the production 
         # env.branch = 'tags/{}'.format(tag)
         env.branch = '{}'.format(tag)
         deploy()
@@ -95,16 +96,26 @@ def backup():
     backup_translation_local()
 
 
-def deploy():
+def deploy(tag=None):
     db_up = None
     """Updates the server and restarts the apps"""
     with cd(env.project_root):
         # get new stuff from git
         run('git fetch')
-        run('git checkout %s' % env.branch)
-        run('git pull origin %s' % env.branch)
+        if tag:
+            run('git fetch --all --tags')
+            run('git checkout tags/%s' % tag)
+        else:
+            run('git checkout %s' % env.branch)
+            run('git pull origin %s' % env.branch)
         time.sleep(10)
-
+        backend_env_file_path = "{}/{}/.env".format(env.project_root, env.backend_root)
+        run('[ -f {} ] || echo "DEPLOY_VERSION=0.0.0" > {}'.format(
+            backend_env_file_path, backend_env_file_path))
+        run('if [ -z $(grep "DEPLOY_VERSION=" "{}") ]; then echo "DEPLOY_VERSION=0.0.0" >> {}; fi'.format(
+            backend_env_file_path, backend_env_file_path))
+        version = run('git describe --tags --always')
+        run('sed -i "s/DEPLOY_VERSION=.*/DEPLOY_VERSION={}/g" {}'.format(version, backend_env_file_path))
         if env.name == 'dev':
             options = "-f {}/docker-compose.yml -f {}/docker-compose.dev.yml ".format(
                 env.project_root, env.project_root)
@@ -136,6 +147,9 @@ def deploy():
 
         time.sleep(5)
 
+        _update_translations_frontend()
+        _update_translations_backend()
+
         # handle backend
         with cd(env.backend_root):
 
@@ -148,19 +162,19 @@ def deploy():
             run("docker-compose {}up -d".format(options))
 
             # drop & create DB
-            time.sleep(20)
-            _drop_db()
-            time.sleep(1)
-            _create_db()
-            # restore DB
-            time.sleep(1)
-            _restore_db()
+            # time.sleep(20)
+            # _drop_db()
+            # time.sleep(1)
+            # _create_db()
+            # # restore DB
+            # time.sleep(1)
+            # _restore_db()
             # migrate DB
-            time.sleep(1)
+            time.sleep(20)
             _migrate_db()
             time.sleep(1)
             # _import_geodata()
-
+    time.sleep(20)
     tear_down()
 
 
@@ -178,7 +192,8 @@ def _create_db():
 
 
 def _backup_db():
-    run('docker-compose exec postgres pg_dumpall -U postgres -c > ~/backup/dump`date +%d-%m-%Y`.sql')
+    run('docker-compose exec postgres pg_dumpall -U postgres -c > ~/backup/dump`date +%Y-%m-%d`.sql')
+    run('gzip ~/backup/dump`date +%Y-%m-%d`.sql')
 
 
 def _restore_db():
@@ -194,6 +209,17 @@ def _import_geodata():
     run('python geodata_import.py')
 
 
+def _update_translations_frontend():
+    with warn_only():
+        run("docker-compose exec django python manage.py update_translations master.pot")
+
+
+def _update_translations_backend():
+    with warn_only():
+        run("docker-compose exec django django-admin makemessages -a")
+        run("docker-compose exec django django-admin compilemessages")
+
+
 # LOCAL STUFF #
 
 
@@ -202,12 +228,12 @@ def test(app=""):
 
 
 def test_specific(specific_test=''):
-    local(f"docker-compose exec django py.test -s -k {specific_test}")
+    local(f"docker-compose exec django py.test -x -s -k {specific_test}")
 
 
 def cov():
     local(
-        "docker-compose exec django py.test --cov --cov-report html --cov-fail-under 100 --cov-report term-missing"
+        "docker-compose exec django py.test -x --cov --cov-report html --cov-fail-under 100 --cov-report term-missing"
         " --cov-config .coveragerc"
     )
 

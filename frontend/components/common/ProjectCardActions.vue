@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import handleProjectUnpublish from '@/components/mixins/handleProjectUnpublish';
+import handleProjectUnpublish from '@/components/mixins/handleProjectUnpublish'
 
 export default {
   mixins: [handleProjectUnpublish],
@@ -71,16 +71,16 @@ export default {
   },
   computed: {
     showViewDraft () {
-      return this.forceShow || this.project.isViewer || this.project.isMember;
+      return this.forceShow || this.project.isViewer || this.project.isMember
     },
     showEditDraft () {
-      return this.forceShow || this.project.isMember;
+      return this.forceShow || this.project.isMember
     },
     showViewPublished () {
-      return this.forceShow || this.project.isPublished;
+      return this.forceShow || this.project.isPublished
     }
   }
-};
+}
 </script>
 
 <style lang="less">

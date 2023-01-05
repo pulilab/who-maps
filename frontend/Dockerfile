@@ -1,4 +1,4 @@
-FROM node:10.15.0-alpine
+FROM node:12.22.0-alpine
 # This is to allow yarn to install from github
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
@@ -16,4 +16,3 @@ RUN yarn build --quiet
 
 # start command
 CMD yarn start
-

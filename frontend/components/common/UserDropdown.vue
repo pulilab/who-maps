@@ -1,5 +1,5 @@
 <template>
-  <div class="UserDropdown">
+  <div :class="`UserDropdown ${activeMenuStyle}`">
     <el-popover
       v-model="shown"
       placement="bottom-end"
@@ -9,7 +9,7 @@
       <el-button
         slot="reference"
         type="text"
-        class="ButtonPopper"
+        :class="`ButtonPopper ${activeMenuStyle}`"
       >
         <fa icon="user-circle" />{{ user.name }}<fa icon="caret-down" />
       </el-button>
@@ -91,6 +91,21 @@
         </div>
 
         <div
+          v-if="isSuperUser"
+          class="DropdownLink"
+        >
+          <nuxt-link
+            :to="localePath({name: 'organisation-graphs', params: $route.params})"
+            @click.native="closePopover"
+          >
+            <span class="MenuIcon">
+              <fa icon="chart-bar" />
+            </span>
+            <translate>KPI Graphs</translate>
+          </nuxt-link>
+        </div>
+
+        <div
           class="DropdownLink"
         >
           <nuxt-link
@@ -101,6 +116,20 @@
               <fa icon="file-import" />
             </span>
             <translate>Import interface</translate>
+          </nuxt-link>
+        </div>
+
+        <div
+          class="DropdownLink"
+        >
+          <nuxt-link
+            :to="localePath({name: 'organisation-admin-api', params: $route.params})"
+            @click.native="closePopover"
+          >
+            <span class="MenuIcon">
+              <fa icon="code" />
+            </span>
+            <translate>API key</translate>
           </nuxt-link>
         </div>
 
@@ -121,9 +150,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import LanguageSelect from './LanguageSelect';
-import CountryItem from './CountryItem';
+import { mapGetters, mapActions } from 'vuex'
+import LanguageSelect from './LanguageSelect'
+import CountryItem from './CountryItem'
 
 export default {
   components: {
@@ -132,49 +161,62 @@ export default {
   },
   data () {
     return {
-      shown: false
-    };
+      shown: false,
+      menuRoutes: [
+        '-/edit-profile',
+        '-/admin/country',
+        '-/admin/donor',
+        '-/admin/import/',
+        '-/admin/api',
+        '-/graphs',
+      ]
+    }
   },
   computed: {
     ...mapGetters({
       user: 'user/getProfile'
     }),
     isSuperUser () {
-      return this.user && this.user.is_superuser;
+      return this.user && this.user.is_superuser
     },
     isUserCA () {
-      return (this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)) || this.isSuperUser;
+      return (this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)) || this.isSuperUser
     },
     isUserDA () {
-      return (this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)) || this.isSuperUser;
+      return (this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)) || this.isSuperUser
     },
     currentLanguage: {
       get () {
-        return this.$i18n.locale;
+        return this.$i18n.locale
       },
       set (value) {
         // for now on language switch we need a full page change
-        const path = this.switchLocalePath(value);
-        window.location.href = path;
-        this.shown = false;
+        const path = this.switchLocalePath(value)
+        window.location.href = path
+        this.shown = false
       }
-    }
-
+    },
+    insideRoute() {
+      return this.menuRoutes.find(route => this.$route.path.endsWith(route))
+    },
+    activeMenuStyle() {
+      return this.insideRoute ? 'nuxt-link-active' : ''
+    },
   },
   methods: {
     ...mapActions({
       doLogout: 'user/doLogout'
     }),
     closePopover () {
-      this.shown = false;
+      this.shown = false
     },
     logout () {
-      this.closePopover();
-      this.doLogout();
-      this.$router.push(this.localePath({ name: 'organisation', params: this.$route.params, query: undefined }));
+      this.closePopover()
+      this.doLogout()
+      this.$router.push(this.localePath({ name: 'organisation', params: this.$route.params, query: undefined }))
     }
   }
-};
+}
 </script>
 
 <style lang="less">
@@ -183,6 +225,29 @@ export default {
 
   .UserDropdownPopper {
     transform: translate(10px, -30px);
+  }
+
+  .UserDropdown {
+    position: relative;
+    &.nuxt-link-active {
+      color: @colorBrandAccent;
+      &::before {
+        background-color: @colorBrandAccent;
+        transform: translateY(0);
+      }
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      top: -17px;
+      left: 0;
+      display: inline-block;
+      width: 100%;
+      height: 4px;
+      background-color: @colorWhite;
+      transform: translateY(-4px);
+      transition: @transitionAll;
+    }
   }
 
   .ButtonPopper {
@@ -195,6 +260,10 @@ export default {
     line-height: 24px;
     color: @colorBrandPrimary;
     text-decoration: none;
+
+    &.nuxt-link-active {
+      color: @colorBrandAccent;
+    }
 
     .svg-inline--fa {
       margin-right: 6px;
@@ -210,7 +279,7 @@ export default {
   }
 
   .DropdownContent {
-    padding: 0 0 10px 0;
+    // padding: 0 0 10px 0;
 
     .UserInfoSection {
       padding: 16px 20px 4px;
@@ -287,6 +356,11 @@ export default {
         height: 100%;
         text-align: left;
       }
+
+      .nuxt-link-exact-active {
+        color: @colorBrandAccent !important;
+      }
+
     }
   }
 </style>

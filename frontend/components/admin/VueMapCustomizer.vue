@@ -303,14 +303,14 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { calculatePolyCenter } from '../../utilities/coords';
-import { blobDownloader, uuidv4 } from '../../utilities/dom';
-import iconCenterPic from '~/assets/img/pins/pin-without-counter-active.svg';
+import { mapGetters, mapActions } from 'vuex'
+import { calculatePolyCenter } from '../../utilities/coords'
+import { blobDownloader, uuidv4 } from '../../utilities/dom'
+import iconCenterPic from '~/assets/img/pins/pin-without-counter-active.svg'
 
-import FacilityImport from './FacilityImport';
-import NoSSR from 'vue-no-ssr';
-import { XlsxRead, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx';
+import FacilityImport from './FacilityImport'
+import NoSSR from 'vue-no-ssr'
+import { XlsxRead, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx'
 
 export default {
   name: 'VueMapCustomizer',
@@ -337,7 +337,7 @@ export default {
       mapReady: false,
       importFile: null,
       fileParsed: false
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -361,21 +361,21 @@ export default {
     uploadHeaders () {
       return {
         Authorization: `Token ${this.token}`
-      };
+      }
     },
     secondSubLevelSource: {
       get () {
-        return this.getSecondSubLevelSource;
+        return this.getSecondSubLevelSource
       },
       set (value) {
-        this.setSecondSubLevelSource(value);
+        this.setSecondSubLevelSource(value)
       }
     },
     firstSubLevelTypes () {
-      return this.subLevelTypes.filter(n => n.name !== this.secondSubLevelType);
+      return this.subLevelTypes.filter(n => n.name !== this.secondSubLevelType)
     },
     secondSubLevelTypes  () {
-      return this.subLevelTypes.filter(n => n.name !== this.firstSubLevelType);
+      return this.subLevelTypes.filter(n => n.name !== this.firstSubLevelType)
     },
     currentSecondSubLevelExport () {
       if (this.secondSubLevelList && this.secondSubLevelList.length > 0) {
@@ -386,57 +386,57 @@ export default {
           'name:pt': '',
           'name:es': '',
           'name:ar': ''
-        };
-        const existing = this.secondSubLevelList.map(sb => ({ ...template, id: sb.id, name: sb.name }));
-        return [...existing, ...[...Array(999).keys()].map(() => ({ ...template, id: uuidv4(), name: '' }))];
+        }
+        const existing = this.secondSubLevelList.map(sb => ({ ...template, id: sb.id, name: sb.name }))
+        return [...existing, ...[...Array(999).keys()].map(() => ({ ...template, id: uuidv4(), name: '' }))]
       }
-      return [{}];
+      return [{}]
     },
     firstSubLevel: {
       get () {
-        return this.getFirstSubLevel;
+        return this.getFirstSubLevel
       },
       set (value) {
-        this.setFirstSubLevel(value);
+        this.setFirstSubLevel(value)
       }
     },
     firstSubLevelType: {
       get () {
-        return this.getFirstSubLevelType;
+        return this.getFirstSubLevelType
       },
       set (value) {
-        this.setFirstSubLevelType(value);
+        this.setFirstSubLevelType(value)
       }
     },
     secondSubLevel: {
       get () {
-        return this.getSecondSubLevel;
+        return this.getSecondSubLevel
       },
       set (value) {
-        this.setSecondSubLevel(value);
+        this.setSecondSubLevel(value)
       }
     },
     secondSubLevelType: {
       get () {
-        return this.getSecondSubLevelType;
+        return this.getSecondSubLevelType
       },
       set (value) {
-        this.setSecondSubLevelType(value);
+        this.setSecondSubLevelType(value)
       }
     },
     availableSubLevels () {
-      return this.subLevels.filter(sb => sb !== this.firstSubLevel);
+      return this.subLevels.filter(sb => sb !== this.firstSubLevel)
     },
     showFirstSubLevelList () {
-      return (this.firstSubLevel && this.firstSubLevelType);
+      return (this.firstSubLevel && this.firstSubLevelType)
     },
     showSecondSubLevelList () {
-      return (this.secondSubLevel && this.secondSubLevelType);
+      return (this.secondSubLevel && this.secondSubLevelType)
     },
     places () {
       return this.secondSubLevel
         ? this.secondSubLevelList
-        : this.firstSubLevel ? this.firstSubLevelList : [];
+        : this.firstSubLevel ? this.firstSubLevelList : []
     }
   },
   methods: {
@@ -456,74 +456,74 @@ export default {
       setEditSubLevelDialogState: 'layout/setEditSubLevelDialogState'
     }),
     onFileChange (event) {
-      this.importFile = event.target.files ? event.target.files[0] : null;
+      this.importFile = event.target.files ? event.target.files[0] : null
     },
     subLevelParsed (value) {
-      const filtered = value.filter(v => v.name && v.id);
-      this.setSecondSubLevelList(filtered);
-      this.fileParsed = true;
-      this.$message(this.$gettext('File imported succesffully'));
+      const filtered = value.filter(v => v.name && v.id)
+      this.setSecondSubLevelList(filtered)
+      this.fileParsed = true
+      this.$message(this.$gettext('File imported succesffully'))
     },
     updateSecondSubLevelItem (updated) {
-      const newList = this.secondSubLevelList.map(i => i.id === updated.id ? updated : i);
-      this.setSecondSubLevelList(newList);
+      const newList = this.secondSubLevelList.map(i => i.id === updated.id ? updated : i)
+      this.setSecondSubLevelList(newList)
     },
     updateFirstSubLevelItem (updated) {
-      const newList = this.firstSubLevelList.map(i => i.id === updated.id ? updated : i);
-      this.setFirstSubLevelList(newList);
+      const newList = this.firstSubLevelList.map(i => i.id === updated.id ? updated : i)
+      this.setFirstSubLevelList(newList)
     },
     setMapReady () {
-      this.mapReady = true;
+      this.mapReady = true
     },
     async downloadMap () {
-      this.$nuxt.$loading.start();
+      this.$nuxt.$loading.start()
       try {
-        const { data } = await this.$axios.get(`/api/countries/map-download/${this.country.id}/`, { responseType: 'blob' });
-        blobDownloader(data, `${this.country.name}_boundaries.zip`, this.$nuxt.$loading.finish);
+        const { data } = await this.$axios.get(`/api/countries/map-download/${this.country.id}/`, { responseType: 'blob' })
+        blobDownloader(data, `${this.country.name}_boundaries.zip`, this.$nuxt.$loading.finish)
       } catch (e) {
-        this.$message.error(this.$gettext('Map donwload failed, please try again later'));
+        this.$message.error(this.$gettext('Map donwload failed, please try again later'))
       }
-      this.$nuxt.$loading.finish();
+      this.$nuxt.$loading.finish()
     },
 
     geoJsonLoadHandler () {
-      this.$refs.mainMap.mapObject.fitBounds(this.$refs.geoJsonLayer.mapObject.getBounds());
+      this.$refs.mainMap.mapObject.fitBounds(this.$refs.geoJsonLayer.mapObject.getBounds())
     },
 
     countryCenterMoveHandler (event) {
-      const newLatLng = event.target.getLatLng();
-      this.setCountryCenter(newLatLng);
+      const newLatLng = event.target.getLatLng()
+      this.setCountryCenter(newLatLng)
     },
 
     polycenterCalculation () {
-      const countryCenter = calculatePolyCenter(this.countryBorder.geometry);
-      this.setCountryCenter(countryCenter);
+      const countryCenter = calculatePolyCenter(this.countryBorder.geometry)
+      this.setCountryCenter(countryCenter)
       this.firstSubLevelMap.forEach(sb => {
-        const polyCenter = calculatePolyCenter(sb.geometry);
-        this.updateSubLevelPolyCenter({ id: sb.properties.id, polyCenter });
-      });
+        const polyCenter = calculatePolyCenter(sb.geometry)
+        this.updateSubLevelPolyCenter({ id: sb.properties.id, polyCenter })
+      })
     },
 
     subLevelsPinsMoveHandler (event, pin) {
-      const polyCenter = event.target.getLatLng();
-      this.updateSubLevelPolyCenter({ ...pin, polyCenter });
+      const polyCenter = event.target.getLatLng()
+      this.updateSubLevelPolyCenter({ ...pin, polyCenter })
     },
 
     beforeMapUpload () {
-      this.uploadMapFile = true;
+      this.uploadMapFile = true
     },
 
     mapFileChangeSuccessHandler (response) {
-      this.setCountryDataField({ field: 'map_files', data: [response] });
+      this.setCountryDataField({ field: 'map_files', data: [response] })
       setTimeout(async () => {
-        await this.loadGeoJSON();
-        this.forceMapFileChange = false;
-        this.uploadMapFile = false;
-        this.mapFileList = [];
-      });
+        await this.loadGeoJSON()
+        this.forceMapFileChange = false
+        this.uploadMapFile = false
+        this.mapFileList = []
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="less">

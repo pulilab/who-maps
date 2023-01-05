@@ -13,6 +13,7 @@ from core.admin import CustomUserAdmin
 from core.admin.widgets import AdminArrayFieldWidget, AdminArrayField, NoneReadOnlyAdminArrayFieldWidget
 from core.factories import UserFactory, UserProfileFactory
 from country.models import Country
+from project.tests.setup import MockRequest
 
 
 class AuthTest(TestCase):
@@ -42,6 +43,23 @@ class AuthTest(TestCase):
         self.assertEqual(ma.country(self.user), self.userprofile.country)
         self.assertEqual(ma.type(self.user), self.userprofile.get_account_type_display())
         self.assertIsNone(ma.organisation(self.user))
+
+    def test_get_readonly_fields_with_staff(self):
+        normal_staff = UserFactory(
+            username='staff', email='staff@example.com', password=self.password, is_staff=True, is_superuser=False)
+        model_admin = CustomUserAdmin(User, self.site)
+        request = MockRequest()
+        request.user = normal_staff
+        self.assertEqual(
+            model_admin.get_readonly_fields(request),
+            ('password', 'is_active', 'is_staff', 'is_superuser', 'groups', 'last_login', 'date_joined')
+        )
+
+    def test_get_readonly_fields_with_superuser(self):
+        model_admin = CustomUserAdmin(User, self.site)
+        request = MockRequest()
+        request.user = self.admin
+        self.assertEqual(len(model_admin.get_readonly_fields(request)), 0)
 
 
 class TestAdminWidgets(TestCase):

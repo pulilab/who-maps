@@ -93,12 +93,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { mapGettersActions } from '../../utilities/form';
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import { mapGetters } from 'vuex'
+import { mapGettersActions } from '../../utilities/form'
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js'
 
-import SubNationalLevelDeploymentItem from './SubNationalLevelDeploymentItem';
-import AddRmButtons from './AddRmButtons';
+import SubNationalLevelDeploymentItem from './SubNationalLevelDeploymentItem'
+import AddRmButtons from './AddRmButtons'
 
 export default {
   components: {
@@ -129,53 +129,53 @@ export default {
       coverageSecondLevel: ['project', 'getCoverageSecondLevel', 'setCoverageSecondLevel', 0]
     }),
     countrySubLevelNames () {
-      return this.getCountrySubLevelNames(this.country);
+      return this.getCountrySubLevelNames(this.country)
     },
     countryFirstSubLevel () {
-      const result = this.getCountryFirstSubLevel(this.country);
-      return result || [];
+      const result = this.getCountryFirstSubLevel(this.country)
+      return result || []
     },
     countrySecondSubLevel () {
-      const result = this.getCountrySecondSubLevel(this.country);
-      return result || [];
+      const result = this.getCountrySecondSubLevel(this.country)
+      return result || []
     }
   },
   methods: {
     async validate () {
-      const validators = await Promise.all(this.$refs.firstSubLevel.map(s => s.validate()));
+      const validators = await Promise.all(this.$refs.firstSubLevel.map(s => s.validate()))
       if (this.countrySubLevelNames.second) {
-        validators.push(...await Promise.all(this.$refs.secondSubLevel.map(s => s.validate())));
+        validators.push(...await Promise.all(this.$refs.secondSubLevel.map(s => s.validate())))
       }
-      console.log('sub natioal level deployment', validators);
-      return validators.reduce((a, c) => a && c, true);
+      console.log('sub natioal level deployment', validators)
+      return validators.reduce((a, c) => a && c, true)
     },
     clear () {
-      this.errors.clear();
-      this.$refs.firstSubLevel.clear();
+      this.errors.clear()
+      this.$refs.firstSubLevel.clear()
       if (this.countrySubLevelNames.second) {
-        this.$refs.secondSubLeve.clear();
+        this.$refs.secondSubLeve.clear()
       }
     },
     addCoverage () {
-      this.coverage = [...this.coverage, null];
+      this.coverage = [...this.coverage, null]
     },
     rmCoverage (index, id) {
-      this.coverage = this.coverage.filter((c, i) => i !== index);
+      this.coverage = this.coverage.filter((c, i) => i !== index)
       if (id) {
-        this.coverageData = { subLevel: id, coverage: undefined };
+        this.coverageData = { subLevel: id, coverage: undefined }
       }
     },
     addCoverageSecondLevel () {
-      this.coverageSecondLevel = [...this.coverageSecondLevel, null];
+      this.coverageSecondLevel = [...this.coverageSecondLevel, null]
     },
     rmCoverageSecondLevel (index, id) {
-      this.coverageSecondLevel = this.coverageSecondLevel.filter((c, i) => i !== index);
+      this.coverageSecondLevel = this.coverageSecondLevel.filter((c, i) => i !== index)
       if (id) {
-        this.coverageData = { subLevel: id, coverage: undefined };
+        this.coverageData = { subLevel: id, coverage: undefined }
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less">

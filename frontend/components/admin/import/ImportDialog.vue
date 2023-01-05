@@ -2,16 +2,13 @@
   <el-dialog
     v-if="dialogVisible"
     :visible.sync="dialogVisible"
-    title="Select"
-    modal
+    :title="$gettext('Select') | translate"
     :top="dialogStyle.top"
     :width="dialogStyle.width"
+    :modal-append-to-body="false"
     :custom-class="dialogStyle.className"
   >
-    <el-row
-      type="flex"
-      class="ImportDialogWrapper"
-    >
+    <el-row type="flex" class="ImportDialogWrapper flex-col">
       <el-col class="OriginalData">
         <h3>
           <translate>
@@ -26,6 +23,17 @@
             Edit
           </translate>
         </h3>
+        <country-select
+          v-if="dialogData.column === 'country'"
+          v-model="dialogData.value[0]"
+          :auto-save="true"
+          class="FullWidth"
+        />
+        <donor-select
+          v-if="dialogData.column === 'donors'"
+          v-model="dialogData.value"
+          :auto-save="true"
+        />
         <organisation-select
           v-if="dialogData.column === 'organisation'"
           v-model="dialogData.value[0]"
@@ -168,9 +176,7 @@
         </div>
       </el-col>
     </el-row>
-    <div
-      slot="footer"
-    >
+    <template #footer>
       <el-button @click="dialogData = null">
         <translate>
           Cancel
@@ -182,22 +188,26 @@
           Save
         </translate>
       </el-button>
-    </div>
+    </template>
   </el-dialog>
 </template>
 
 <script>
-import OrganisationSelect from '@/components/common/OrganisationSelect';
-import PlatformSelector from '@/components/project/PlatformSelector';
-import HisBucketSelector from '@/components/project/HisBucketSelector';
-import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector';
-import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector';
-import DigitalHealthInterventionsFilter from '@/components/dialogs/filters/DigitalHealthInterventionsFilter';
-import StandardsSelector from '@/components/project/StandardsSelector';
-import LicenseSelector from '@/components/project/LicenseSelector';
+import CountrySelect from '@/components/common/CountrySelect'
+import DonorSelect from '@/components/common/DonorSelect'
+import OrganisationSelect from '@/components/common/OrganisationSelect'
+import PlatformSelector from '@/components/project/PlatformSelector'
+import HisBucketSelector from '@/components/project/HisBucketSelector'
+import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector'
+import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector'
+import DigitalHealthInterventionsFilter from '@/components/dialogs/filters/DigitalHealthInterventionsFilter'
+import StandardsSelector from '@/components/project/StandardsSelector'
+import LicenseSelector from '@/components/project/LicenseSelector'
 
 export default {
   components: {
+    DonorSelect,
+    CountrySelect,
     OrganisationSelect,
     PlatformSelector,
     HisBucketSelector,
@@ -224,15 +234,15 @@ export default {
   data () {
     return {
       dialogData: null
-    };
+    }
   },
   computed: {
     dialogVisible: {
       get () {
-        return !!this.dialogData;
+        return !!this.dialogData
       },
       set () {
-        this.dialogData = null;
+        this.dialogData = null
       }
     },
     dialogStyle () {
@@ -240,12 +250,12 @@ export default {
         top: this.dialogData.column === 'digitalHealthInterventions' ? '10vh' : undefined,
         width: this.dialogData.column === 'digitalHealthInterventions' ? '90vw' : '50%',
         className: ['ImportDialog', this.dialogData.column].join(' ')
-      };
+      }
     }
   },
   methods: {
     openDialog (row, key, { column, value, type }) {
-      const stringified = JSON.stringify(value);
+      const stringified = JSON.stringify(value)
       this.dialogData = {
         row,
         key,
@@ -253,21 +263,49 @@ export default {
         value: value ? JSON.parse(stringified) : null,
         original: this.imported[row].original_data[key],
         customField: this.customFieldsLib[type]
-      };
+      }
     },
     save () {
-      this.$emit('update', { row: this.dialogData.row, key: this.dialogData.key, value: this.dialogData.value });
-      this.dialogData = null;
+      this.$emit('update', { row: this.dialogData.row, key: this.dialogData.key, value: this.dialogData.value })
+      this.dialogData = null
     }
   }
-};
+}
 </script>
 
 <style lang="less">
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
 
+  div .el-select .el-select__tags::-webkit-scrollbar {
+    // background-color: #fff;
+    // width: 16px;
+    display: none;
+  }
+
+  div .el-select .el-select__tags {
+    max-width: 545px !important; //important for overriding default element-ui style
+    // height: calc( 100% - 2px);
+    overflow-x: scroll !important;
+    margin-right: -20px;
+  }
+  .el-select .el-select__tags .el-tag__close {
+    top: -3px;
+    right: 5px;
+    margin-right: -5px;
+    margin-top: -4px;
+    position: sticky;
+  }
+
  .ImportDialog {
+
+   .FullWidth {
+     width: 100%;
+   }
+
+   .flex-col {
+     flex-direction: column;
+   }
 
     .OriginalData {
       max-width: 350px;
@@ -281,7 +319,7 @@ export default {
       margin-bottom: 0;
 
       .el-dialog__body {
-        padding: 0;
+        // padding: 0;
         height: calc(80vh - (@dialogHeaderFooterHeight*2));
       }
 
@@ -290,7 +328,7 @@ export default {
         .DigitalHealthInterventionsFilter {
           .el-col-6 {
             overflow: hidden;
-            height: calc(80vh - (@dialogHeaderFooterHeight * 2));
+            // height: calc(80vh - (@dialogHeaderFooterHeight * 2));
             border-right: 1px solid @colorGrayLight;
 
             .SelectorDialogColumn {

@@ -14,7 +14,7 @@
       :label="group.name"
     >
       <el-option
-        v-for="hfa in group.health_focus_areas"
+        v-for="hfa in uniq(group.health_focus_areas)"
         :key="hfa.id"
         :label="hfa.name"
         :value="hfa.id"
@@ -24,7 +24,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import uniqBy from 'lodash/uniqBy'
+import { mapGetters } from 'vuex'
 
 export default {
   model: {
@@ -40,7 +41,7 @@ export default {
   data () {
     return {
       open: false
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -48,16 +49,19 @@ export default {
     })
   },
   methods: {
+    uniq (obj) {
+      return uniqBy(obj, 'id')
+    },
     changeHandler (value) {
-      this.$emit('change', value);
+      this.$emit('change', value)
     },
     toggleHandler (value) {
       if (value) {
-        this.open = value;
+        this.open = value
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less">

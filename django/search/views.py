@@ -87,7 +87,16 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
     ordering = ('project_id',)
     pagination_class = ResultsSetPagination
 
+    def get_serializer_class(self):
+        if getattr(self, 'swagger_fake_view', False):  # pragma: no cover
+            return ListResultSerializer
+
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):  # pragma: no cover
+            # queryset just for schema generation metadata
+            # as per https://github.com/axnsan12/drf-yasg/issues/333#issuecomment-474883875
+            return ProjectSearch.objects.none()
+
         return ProjectSearch.objects.exclude(project__public_id='')\
             .select_related('project', 'project__approval', 'organisation', 'country', 'donor')
 
@@ -96,37 +105,45 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         Search in projects, works by the following query params:
 
         ** SEARCH PARAMETERS **
-        q: search term
-        in: search in [optional, defaults to all: in=name&in=org&in=country&in=overview&in=loc&in=partner&in=donor]
+
+        `q` search term eg: q=test  
+        `in` search in [optional, defaults to all: in=name&in=org&in=country&in=overview&in=loc&in=partner&in=donor]  
 
         ** FILTER PARAMETERS **
-        country: eg: country=1&country=2
-        sw: eg: sw=1&sw=2
-        dhi: eg: dhi=1&dhi=2
-        hfa: eg: hfa=1&hfa=2
-        hsc: eg: hsc=1&hsc=2
-        his: eg: his=1&his=2
-        region: eg: region=3
-        gov: gov=0 (for false), gov=1&gov=2 (for true values, since there's two types of true)
-        donor: eg: donor=1&donor=2
-        approved: approved=0 (for not approved), approved=1 (for approved)
-        stage: eg: stage=1&stage=2
+
+        `country` eg: country=1&country=2  
+        `sw` eg: sw=1&sw=2  
+        `dhi` eg: dhi=1&dhi=2  
+        `hfa` eg: hfa=1&hfa=2  
+        `hsc` eg: hsc=1&hsc=2  
+        `his` eg: his=1&his=2  
+        `region` eg: region=3  
+        `gov` gov=0 (for false), gov=1&gov=2 (for true values, since there's two types of true)  
+        `donor` eg: donor=1&donor=2  
+        `approved` eg: approved=0 (for not approved), approved=1 (for approved)  
+        `stage` eg: stage=1&stage=2
 
         ** FOUND IN FEATURE **
-        found: include if present (defaults to exclude)
+
+        `found` include if present (defaults to exclude)  
 
         ** TYPE AND ORDERING **
-        type: map | list (defaults to map)
-        ordering: project__name | organisation__name | country__name |
-                  project__data__government_investor | country__region
+
+        `type` map | list (defaults to map) [eg: type=map]  
+        `ordering` project__name | organisation__name | country__name | 
+                   project__data__government_investor | country__region | 
+                   project__modified  
 
         ** PAGINATION **
-        page: 1...n | last (will show the last page no matter the number)
-        page_size: eg: 20
+
+        `page` 1...n | last (will show the last page no matter the number)  
+        `page_size` eg: 20  
 
         ** VIEW AS **
-        view_as: donor | country
+
+        `view_as` donor | country  
         """
+
         results = {}
         search_fields = set()
         donor = country = None

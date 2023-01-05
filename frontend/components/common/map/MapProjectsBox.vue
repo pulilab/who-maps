@@ -28,7 +28,12 @@
         </span>
         <div v-if="showNational">
           <span class="SubLevelItem">
-            <translate>National</translate>
+            <span v-show="!isGlobal">
+              <translate>National</translate>
+            </span>
+            <span v-show="isGlobal">
+              <translate>Project List</translate>
+            </span>
           </span>
           <span class="SubLevelCounter">
             <translate :parameters="{count: nationalProjects.length} ">
@@ -108,11 +113,11 @@
 </template>
 
 <script>
-import CountryItem from '../CountryItem';
-import ProjectCard from '../ProjectCard';
+import CountryItem from '../CountryItem'
+import ProjectCard from '../ProjectCard'
 
-import TabbedCardProjectList from './TabbedCardProjectList';
-import SubLevelItem from '../SubLevelItem';
+import TabbedCardProjectList from './TabbedCardProjectList'
+import SubLevelItem from '../SubLevelItem'
 
 export default {
   components: {
@@ -153,36 +158,38 @@ export default {
   },
   computed: {
     showTabbedView () {
-      return this.activeCountry && !this.selectedCountry;
+      return !this.isGlobal && this.activeCountry && !this.selectedCountry
     },
     showSubNational () {
       return !this.showTabbedView &&
       this.activeTab === 'subNational' &&
-      this.activeSubLevel;
+      this.activeSubLevel
     },
     showNational () {
-      return !this.showTabbedView &&
-      this.activeTab === 'national';
+      return this.isGlobal || (!this.showTabbedView && this.activeTab === 'national')
+    },
+    isGlobal () {
+      return this.activeCountry === process.env.GlobalCountryID
     },
     showSubLevelHint () {
-      return this.selectedCountry && !this.activeSubLevel && this.activeTab === 'subNational';
+      return this.selectedCountry && !this.activeSubLevel && this.activeTab === 'subNational' && !this.isGlobal
     },
     showMapProjectBox () {
-      return this.activeCountry;
+      return this.activeCountry
     },
     showNoProjectToShow () {
-      return (this.showNational && this.nationalProjects.length === 0) || (this.showSubNational && this.currentSubLevelProjects.length === 0);
+      return (this.showNational && this.nationalProjects.length === 0) || (this.showSubNational && this.currentSubLevelProjects.length === 0)
     }
   },
   methods: {
     closeCountryProjextBox () {
-      this.$emit('update:activeCountry', null);
+      this.$emit('update:activeCountry', null)
     },
     tabChangeHandler (tab) {
-      this.$emit('update:activeTab', tab.name);
+      this.$emit('update:activeTab', tab.name)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

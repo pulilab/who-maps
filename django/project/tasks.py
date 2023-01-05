@@ -13,6 +13,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.translation import ugettext
 from django.utils import timezone
@@ -170,9 +171,9 @@ def sync_project_from_odk():  # pragma: no cover
         elif column_type == 'country':
             project['country'] = escaped_int_converter(value)
         elif 'platforms' in column_type:
-                platforms = project.get('platforms', [])
-                value = escaped_int_converter(value)
-                project['platforms'] = platforms + [{'id': value}]
+            platforms = project.get('platforms', [])
+            value = escaped_int_converter(value)
+            project['platforms'] = platforms + [{'id': value}]
         elif column_type == 'clients':
             nld = project.get('national_level_deployment', dict(default_nld))
             nld['clients'] = escaped_int_converter(value)
@@ -366,17 +367,24 @@ def sync_project_from_odk():  # pragma: no cover
 @app.task(name='notify_superusers_about_new_pending_software')
 def notify_superusers_about_new_pending_software(software_id):
     software = TechnologyPlatform.objects.get(id=software_id)
-    super_users = User.objects.filter(is_superuser=True)
-
+    if not settings.NOTIFICATION_EMAIL:
+        super_users = User.objects.filter(is_superuser=True)
+    else:
+        super_users = User.objects.filter(email=settings.NOTIFICATION_EMAIL)
     email_mapping = defaultdict(list)
-    for user in super_users:
-        try:
-            email_mapping[user.userprofile.language].append(user.email)
-        except ObjectDoesNotExist:
-            email_mapping[settings.LANGUAGE_CODE].append(user.email)
+    super_users_list_raw = [()]
+    if not super_users:
+        super_users_list_raw = [('en', settings.NOTIFICATION_EMAIL)]
+    else:
+        for user in super_users:
+            try:
+                email_mapping[user.userprofile.language].append(user.email)
+            except ObjectDoesNotExist:
+                email_mapping[settings.LANGUAGE_CODE].append(user.email)
 
     change_url = reverse('admin:project_{}_change'.format(software._meta.model_name), args=(software.id,))
-    for language, email_list in email_mapping.items():
+    email_mapping_items = email_mapping.items() if super_users else super_users_list_raw
+    for language, email_list in email_mapping_items:
         send_mail_wrapper(subject=_('New software is pending for approval'),
                           email_type="new_pending_software",
                           to=email_list,
@@ -425,8 +433,191 @@ def send_draft_only_reminders():
             email_mapping[profile.language].append(profile.user.email)
 
         for language, email_list in email_mapping.items():
-            send_mail_wrapper(subject=_(f"'{p.name}' is only a draft. Please consider publishing it."),
+            send_mail_wrapper(subject=_(f"Complete your project in the Digital Health Atlas '{p.name}'"),
                               email_type='draft_reminder',
                               to=email_list,
                               language=language,
                               context={'project_id': p.id})
+
+
+@app.task(name="send_no_country_question_answers_reminder")
+def send_no_country_question_answers_reminder():
+    """
+    Sends reminder to projects that has no country question answers.
+    """
+    from project.models import Project
+    from user.models import UserProfile
+    from country.models import CountryCustomQuestion
+
+    country_ids = CountryCustomQuestion.objects.filter(required=True).order_by('country').distinct().\
+        values_list('country', flat=True)
+    projects = Project.objects.published_only().filter(search__country__in=country_ids).\
+        filter(Q(data__country_custom_answers__isnull=True) |
+               Q(data__country_custom_answers={}) |
+               Q(data__country_custom_answers=[]))
+
+    project_team_members = set(projects.values_list('team', flat=True))
+
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects.filter(team=member)]
+            subject = _("Your country has asked question(s) you haven't answered yet")
+            details = _('The following project(s) have not answered all the required question(s) asked by the country:')
+            send_mail_wrapper(
+                subject=subject,
+                email_type='missing_data_common_template',
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                    'details': details,
+                }
+            )
+
+
+@app.task(name="send_not_every_country_question_has_answer_reminder")
+def send_not_every_required_country_question_has_answer_reminder():
+    """
+    Sends reminder to projects that has no answer for every required country question.
+    """
+    from project.models import Project
+    from user.models import UserProfile
+    from country.models import CountryCustomQuestion
+
+    required_questions = CountryCustomQuestion.objects.filter(required=True)
+    country_ids = required_questions.order_by('country').distinct().values_list('country', flat=True)
+    projects = Project.objects.published_only().filter(search__country__in=country_ids).\
+        filter(data__country_custom_answers__isnull=False)
+
+    projects_require_reminder_ids = []
+    for project in projects:
+        answered_question_ids = [item['question_id'] for item in project.data['country_custom_answers']]
+        for question in required_questions.filter(country=project.search.country):
+            if question.id not in answered_question_ids:
+                projects_require_reminder_ids.append(project.id)
+                break
+
+    projects_require_reminder = projects.filter(id__in=projects_require_reminder_ids)
+
+    project_team_members = set(projects_require_reminder.values_list('team', flat=True))
+
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects_require_reminder.filter(team=member)]
+            subject = _("Your country has asked question(s) you haven't answered yet")
+            details = _('The following project(s) have not answered all the required question(s) asked by the country:')
+            send_mail_wrapper(
+                subject=subject,
+                email_type='missing_data_common_template',
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                    'details': details,
+                }
+            )
+
+
+@app.task(name="send_empty_stages_reminder")
+def send_empty_stages_reminder():
+    """
+    Sends reminder to projects that has no stages.
+    """
+    from project.models import Project
+    from user.models import UserProfile
+
+    projects = Project.objects.published_only().filter(
+        Q(data__stages__isnull=True) |
+        Q(data__stages=[]) |
+        Q(data__stages={})
+    )
+
+    project_team_members = set(projects.values_list('team', flat=True))
+
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects.filter(team=member)]
+            subject = _("Digital Health Atlas introduces project stages")
+            details = _('Please take a look at the new stages section and set them for the following project(s):')
+            send_mail_wrapper(
+                subject=subject,
+                email_type='missing_data_common_template',
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                    'details': details,
+                }
+            )
+
+
+@app.task(name="send_coverage_reminder")
+def send_coverage_reminder():
+    """
+    Sends reminder to projects where coverage data is missing or not complete
+    """
+    from project.models import Project
+    from user.models import UserProfile
+
+    keys_to_check = ['clients', 'facilities', 'health_workers']
+
+    projects_need_reminder = []
+
+    # check where national level deployment is filled
+    projects = Project.objects.published_only().national_level_deployment_not_empty()
+    for project in projects:
+        deployment = project.data['national_level_deployment']
+        if all(deployment[key] == 0 for key in keys_to_check):
+            projects_need_reminder.append(project.id)
+
+    # check where coverage is filled
+    projects = Project.objects.published_only().coverage_not_empty()
+    for project in projects:
+        coverage = project.data['coverage']
+        for district_data in coverage:
+            if all(district_data[key] == 0 for key in keys_to_check):
+                projects_need_reminder.append(project.id)
+                break
+
+    projects_to_remind = Project.objects.filter(id__in=projects_need_reminder)
+
+    # where both keys are missing
+    projects_to_remind |= Project.objects.published_only().coverage_empty().national_level_deployment_empty()
+
+    project_team_members = set(projects_to_remind.values_list('team', flat=True))
+
+    for member in project_team_members:
+        try:
+            profile = UserProfile.objects.get(id=member)
+        except UserProfile.DoesNotExist:  # pragma: no cover
+            pass
+        else:
+            member_projects = [project for project in projects_to_remind.filter(team=member)]
+            subject = _("Please set your project's coverage on the Digital Health Atlas")
+            details = _('Coverage data is missing or is incomplete for the following project(s):')
+            send_mail_wrapper(
+                subject=subject,
+                email_type='missing_data_common_template',
+                to=profile.user.email,
+                language=profile.language or settings.LANGUAGE_CODE,
+                context={
+                    'projects': member_projects,
+                    'name': profile.name,
+                    'details': details,
+                }
+            )

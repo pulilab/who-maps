@@ -21,14 +21,14 @@ export default {
   data () {
     return {
       open: false
-    };
+    }
   },
   computed: {
     propsAndAttrs () {
-      return { ...this.$props, ...this.$attrs };
+      return { ...this.$props, ...this.$attrs }
     },
     listeners () {
-      return { ...this.$listeners, 'visible-change': this.onVisibleChange };
+      return { ...this.$listeners, 'visible-change': this.onVisibleChange }
     }
   },
   watch: {
@@ -36,7 +36,7 @@ export default {
       immediate: false,
       handler (value) {
         if (!this.open && value) {
-          this.open = true;
+          this.open = true
         }
       }
     }
@@ -44,18 +44,18 @@ export default {
   mounted () {
     if (this.value) {
       window.requestAnimationFrame(() => {
-        this.open = true;
-      });
+        this.open = true
+      })
     }
   },
   methods: {
     onVisibleChange (value) {
       if (value && !this.open) {
-        this.open = true;
+        this.open = true
       }
     }
   }
-};
+}
 </script>
 
 <style>

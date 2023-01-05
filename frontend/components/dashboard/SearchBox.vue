@@ -108,14 +108,14 @@
 </template>
 
 <script>
-import { mapGettersActions } from '../../utilities/form.js';
+import { mapGettersActions } from '../../utilities/form.js'
 
 export default {
   data () {
     return {
       optionsVisible: false,
       showSearchBoxTooltip: false
-    };
+    }
   },
   computed: {
     ...mapGettersActions({
@@ -125,10 +125,10 @@ export default {
   },
   methods: {
     toggleOptionsVisibility () {
-      this.optionsVisible = !this.optionsVisible;
+      this.optionsVisible = !this.optionsVisible
     }
   }
-};
+}
 </script>
 
 <style lang="less">

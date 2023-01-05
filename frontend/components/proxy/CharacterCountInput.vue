@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import get from 'lodash/get';
+import get from 'lodash/get'
 
 export default {
   name: 'CharacterCountInput',
@@ -30,26 +30,26 @@ export default {
   },
   computed: {
     propsAndAttrs () {
-      return { ...this.$props, ...this.$attrs };
+      return { ...this.$props, ...this.$attrs }
     },
     listeners () {
-      return { ...this.$listeners };
+      return { ...this.$listeners }
     },
     count () {
       if (this.value) {
-        return this.value.length;
+        return this.value.length
       }
-      return 0;
+      return 0
     },
     max () {
-      return get(this, 'rules.max', null);
+      return get(this, 'rules.max', null)
     },
     error () {
-      return this.count && this.max && this.count > this.max;
+      return this.count && this.max && this.count > this.max
     }
   }
 
-};
+}
 </script>
 
 <style lang="less">

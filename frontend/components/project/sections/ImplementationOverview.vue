@@ -6,19 +6,20 @@
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Implementation overview') | translate"
+      :prepend-title="prependTitle"
       show-legend
     >
       <custom-required-form-item
         :error="errors.first('health_focus_areas')"
         :draft-rule="draftRules.health_focus_areas"
         :publish-rule="publishRules.health_focus_areas"
+        prepend-label="12"
       >
         <template slot="label">
           <translate key="health-focus-areas">
             What is the health focus area(s) addressed by the DHI?
           </translate>
         </template>
-
         <health-focus-areas-selector
           v-model="health_focus_areas"
           v-validate="rules.health_focus_areas"
@@ -31,13 +32,13 @@
       <custom-required-form-item
         :error="errors.first('hsc_challenges')"
         :draft-rule="draftRules.hsc_challenges"
-        :publish-rule="publishRules.hsc_challenges"
+        :publish-rule="requiredAsterisk('hsc')"
+        prepend-label="13a"
       >
         <template slot="label">
-          <translate
-            key="hsc-challenges"
-          >
-            What are the Health System Challenges addressed by the Digital Health Intervention?
+          <translate key="hsc-challenges">
+            What are the Health System Challenges addressed by the Digital
+            Health Intervention?
           </translate>
         </template>
         <health-system-challenges-selector
@@ -48,19 +49,58 @@
           data-vv-as="Health system challenges"
         />
       </custom-required-form-item>
+      
+      
+      <custom-required-form-item
+        class="HSCOther"
+        :error="errors.first('hsc_challenges')"
+        :draft-rule="draftRules.hsc_challenges_other"
+        :publish-rule="requiredAsterisk('hsco')"
+        prepend-label="13b"
+      >
+        <template slot="label">
+          <translate key="hsc-challenges">
+            Other challanges
+          </translate>
+        </template>
+        <el-row v-for="(other_challange, index) in hsc_challenges_other" :key="index">
+          <el-col :span="17">
+            <custom-required-form-item
+              :error="errors.first('hsc_challenges_other_' + index)"
+            >
+              <el-input
+                ref="HSCOtherInput"
+                v-validate="rules.hsc_challenges_other"
+                :maxlength="rules.hsc_challenges_other.max"
+                :value="other_challange"
+                :data-vv-name="'hsc_challenges_other_' + index"
+                data-vv-validate-on="change"
+                data-vv-as="Other challanges"
+                @input="updateHSCOther($event, index)"
+                @keyup.enter.native="addHSCOther"
+              />
+            </custom-required-form-item>
+          </el-col>
+          <el-col :span="6">
+            <add-rm-buttons
+              :show-add="isLastAndExist(hsc_challenges_other, index)"
+              :show-rm="hsc_challenges_other.length > 1"
+              @add="addHSCOther"
+              @rm="rmHSCOther(index)"
+            />
+          </el-col>
+          
+        </el-row>
+      </custom-required-form-item>
 
-      <custom-required-form-item :error="errors.first('platforms')">
+      <custom-required-form-item
+        :error="errors.first('platforms')"
+        prepend-label="14"
+      >
         <template slot="label">
           <translate key="platforms">
             Add information about your Digital Health program activies
           </translate>
-          <form-hint>
-            <translate
-              key="platforms-hint"
-            >
-              Include all software that is part of your project. If you cannot find your software listed in the options, send an email to digitalhealthatlas@gmail.com with the software name.
-            </translate>
-          </form-hint>
         </template>
 
         <custom-required-form-item
@@ -72,20 +112,25 @@
           class="ItemIndent"
         >
           <template slot="label">
-            <translate
-              key="platform-label"
-            >
+            <translate key="platform-label">
               What are the names of the software included in the deployment?
             </translate>
+            <tooltip
+              :text="
+                $gettext(
+                  'Include all software that is part of your project. If you cannot find your software listed in the options, you can add it by start typing the software name in the field, and then select ‘Add as new’.  which will add the software to the inventory.'
+                ) | translate
+              "
+            />
           </template>
 
           <el-col :span="16">
+            <!--v-validate="rules.platforms"-->
             <platform-selector
               :key="platform"
               v-model="platforms"
-              v-validate="rules.platforms"
-              :data-vv-scope="'platform_' + index"
               :index="index"
+              :data-vv-scope="'platform_' + index"
               data-vv-name="id"
               data-vv-as="Software"
             />
@@ -97,14 +142,17 @@
               class="DigitalHealthIntervention"
             >
               <template slot="label">
-                <translate
-                  key="strategies"
-                >
-                  What Digital Health Intervention(s) are included in this software?
+                <translate key="strategies">
+                  What Digital Health Intervention(s) are included in this
+                  software?
                 </translate>
-                <form-hint>
-                  <!-- This is going to be a link to a pdf / webpage -->
-                </form-hint>
+                <a
+                  class="TooltipLink"
+                  target="_blank"
+                  href="https://apps.who.int/iris/bitstream/handle/10665/260480/WHO-RHR-18.06-eng.pdf;jsessionid=50B83CAF6ACF46453B7D6BAB9672EB77?sequence=1)"
+                >
+                  <fa icon="question-circle" />
+                </a>
               </template>
               <digital-health-interventions-selector
                 v-validate="rules.strategies"
@@ -124,18 +172,26 @@
             />
           </el-col>
         </custom-required-form-item>
+
+        <input
+          v-model="platforms"
+          v-validate="rules.platforms"
+          name="platforms"
+          type="hidden"
+          class="HiddenPlatform"
+        >
       </custom-required-form-item>
 
       <custom-required-form-item
         :error="errors.first('his_bucket')"
         :draft-rule="draftRules.his_bucket"
         :publish-rule="publishRules.his_bucket"
+        prepend-label="15"
       >
         <template slot="label">
-          <translate
-            key="his-bucket"
-          >
-            What health information system(s) in your country does this project support?
+          <translate key="his-bucket">
+            What health information system(s) in your country does this project
+            support?
           </translate>
         </template>
         <his-bucket-selector
@@ -148,23 +204,29 @@
       </custom-required-form-item>
 
       <div class="CoverageArea">
-        <custom-required-form-item prop="coverageType">
+        <custom-required-form-item
+          prop="coverageType"
+          prepend-label="16"
+        >
           <template slot="label">
-            <translate
-              key="coverage-type"
-            >
-              What level of coverage does your project have (Sub-national, National)
+            <translate key="coverage-type">
+              What level of coverage does your project have (Sub-national,
+              National)
             </translate>
-            <form-hint>
-              <translate
-                key="coverage-type-hint"
-              >
-                Subnational may include district, regional, provincial, county levels.
-              </translate>
-            </form-hint>
+            <tooltip
+              :text="
+                $gettext(
+                  'Subnational may include district, regional, provincial, county levels.'
+                ) | translate
+              "
+            />
           </template>
 
-          <el-radio-group v-model="coverageType">
+          <el-radio-group
+            v-show="!isGlobalSelected"
+            v-model="coverageType"
+            :disabled="isGlobalSelected"
+          >
             <el-radio :label="1">
               <translate>Sub-national</translate>
             </el-radio>
@@ -172,6 +234,9 @@
               <translate>National</translate>
             </el-radio>
           </el-radio-group>
+          <label v-show="isGlobalSelected">
+            <translate>International</translate>
+          </label>
         </custom-required-form-item>
 
         <sub-national-level-deployment
@@ -187,9 +252,19 @@
           v-if="coverageType == 2"
           class="NationalLevelDeployment ItemIndent"
         >
-          <div class="CoverageSubtitle">
+          <div
+            v-show="!isGlobalSelected"
+            class="CoverageSubtitle"
+          >
             <fa icon="flag" />
             <translate>National level deployment</translate>
+          </div>
+          <div
+            v-show="isGlobalSelected"
+            class="CoverageSubtitle"
+          >
+            <fa icon="globe" />
+            <translate>International level deployment</translate>
           </div>
           <coverage-fieldset
             ref="nationalLevelDeployment"
@@ -206,16 +281,17 @@
           />
         </div>
       </div>
+
       <custom-required-form-item
         :error="errors.first('government_investor')"
         :draft-rule="draftRules.government_investor"
         :publish-rule="publishRules.government_investor"
+        prepend-label="17"
       >
         <template slot="label">
-          <translate
-            key="gobernment-investor"
-          >
-            Has the government contributed to the project, either financially or in-kind?
+          <translate key="gobernment-investor">
+            Has the government contributed to the project, either financially or
+            in-kind?
           </translate>
         </template>
 
@@ -230,106 +306,46 @@
             <translate>No, they have not yet contributed</translate>
           </el-radio>
           <el-radio :label="1">
-            <translate>Yes, they are contributing in-kind people or time</translate>
+            <translate>
+              Yes, they are contributing in-kind people or time
+            </translate>
           </el-radio>
           <el-radio :label="2">
-            <translate>Yes, there is a financial contribution through MOH budget</translate>
+            <translate>
+              Yes, there is a financial contribution through MOH
+              budget
+            </translate>
           </el-radio>
           <el-radio :label="3">
             <translate>Yes, MOH is fully funding the project</translate>
           </el-radio>
         </el-radio-group>
       </custom-required-form-item>
-
-      <custom-required-form-item
-        class="ImplementingPartners"
-        :draft-rule="draftRules.implementing_partners"
-        :publish-rule="publishRules.implementing_partners"
-      >
-        <template slot="label">
-          <translate key="implementing-partners">
-            Who are your implementing partners?
-          </translate>
-        </template>
-
-        <el-row
-          v-for="(partner, index) in implementing_partners"
-          :key="index"
-        >
-          <el-col :span="18">
-            <custom-required-form-item :error="errors.first('implementing_partners_' + index)">
-              <el-input
-                ref="implementingPartnersInput"
-                v-validate="rules.implementing_partners"
-                :maxlength="rules.implementing_partners.max"
-                :value="partner"
-                :data-vv-name="'implementing_partners_' + index"
-                data-vv-validate-on="change"
-                data-vv-as="Implementing partners"
-                @input="updateImplmeentingPartners($event, index)"
-                @keyup.enter.native="addImplementingPartners"
-              />
-            </custom-required-form-item>
-          </el-col>
-          <el-col :span="6">
-            <add-rm-buttons
-              :show-add="isLastAndExist(implementing_partners, index)"
-              :show-rm="implementing_partners.length > 1"
-              @add="addImplementingPartners"
-              @rm="rmImplementingPartners(index)"
-            />
-          </el-col>
-        </el-row>
-      </custom-required-form-item>
-      <custom-required-form-item
-        :error="errors.first('donors')"
-        :draft-rule="draftRules.donors"
-        :publish-rule="publishRules.donors"
-      >
-        <template slot="label">
-          <translate key="donors">
-            Who are your investment partners?
-          </translate>
-          <form-hint>
-            <translate
-              key="donors-hint"
-            >
-              Investment partners can include those contributing funds, human resources or in-kind support.
-            </translate>
-          </form-hint>
-        </template>
-
-        <donor-selector
-          v-model="donors"
-          v-validate="rules.donors"
-          data-vv-name="donors"
-          data-vv-as="Investors"
-        />
-      </custom-required-form-item>
     </collapsible-card>
   </div>
 </template>
 
 <script>
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 
-import CollapsibleCard from '../CollapsibleCard';
-import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector';
-import HealthFocusAreasSelector from '../HealthFocusAreasSelector';
-import HisBucketSelector from '../HisBucketSelector';
-import PlatformSelector from '../PlatformSelector';
-import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector';
-import SubNationalLevelDeployment from '../SubNationalLevelDeployment';
-import AddRmButtons from '../AddRmButtons';
-import CoverageFieldset from '../CoverageFieldset';
-import DonorSelector from '../DonorSelector';
-import FormHint from '../FormHint';
+import AddRmButtons from '@/components/project/AddRmButtons.vue'
+import CollapsibleCard from '../CollapsibleCard'
+import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector'
+import HealthFocusAreasSelector from '../HealthFocusAreasSelector'
+import HisBucketSelector from '../HisBucketSelector'
+import PlatformSelector from '../PlatformSelector'
+import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector'
+import SubNationalLevelDeployment from '../SubNationalLevelDeployment'
+import CoverageFieldset from '../CoverageFieldset'
+import DonorSelector from '../DonorSelector'
+import Tooltip from '@/components/dashboard/Tooltip'
 
-import { mapGettersActions } from '../../../utilities/form';
+import { mapGettersActions } from '../../../utilities/form'
 
 export default {
   components: {
+    AddRmButtons,
     CollapsibleCard,
     HealthSystemChallengesSelector,
     HisBucketSelector,
@@ -337,15 +353,15 @@ export default {
     PlatformSelector,
     DigitalHealthInterventionsSelector,
     SubNationalLevelDeployment,
-    AddRmButtons,
     CoverageFieldset,
     DonorSelector,
-    FormHint
+    Tooltip
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
 
   computed: {
     ...mapGettersActions({
+      country: ['project', 'getCountry', 'setCountry', 0],
       platforms: ['project', 'getPlatforms', 'setPlatforms', 0],
       digitalHealthInterventions: [
         'project',
@@ -360,6 +376,13 @@ export default {
         0
       ],
       hsc_challenges: ['project', 'getHscChallenges', 'setHscChallenges', 0],
+      hsc_challenges_other: [
+        'project',
+        'getHscChallengesOther',
+        'setHscChallengesOther',
+        300,
+        true
+      ], 
       his_bucket: ['project', 'getHisBucket', 'setHisBucket', 0],
       coverageType: ['project', 'getCoverageType', 'setCoverageType', 0],
       national_level_deployment: [
@@ -374,119 +397,145 @@ export default {
         'setGovernmentInvestor',
         0
       ],
-      implementing_partners: [
-        'project',
-        'getImplementingPartners',
-        'setImplementingPartners',
-        300,
-        true
-      ],
-      donors: ['project', 'getDonors', 'setDonors', 0]
+      shadow_donors: ['project', 'getShadowDonors', 'setShadowDonors', 0]
     }),
     healthWorkers: {
       get () {
         return this.national_level_deployment
           ? this.national_level_deployment.health_workers
-          : null;
+          : null
       },
       set (value) {
         const coverage = {
           ...this.national_level_deployment,
           health_workers: value
-        };
-        this.national_level_deployment = coverage;
+        }
+        this.national_level_deployment = coverage
       }
     },
     clients: {
       get () {
         return this.national_level_deployment
           ? this.national_level_deployment.clients
-          : null;
+          : null
       },
       set (value) {
-        const coverage = { ...this.national_level_deployment, clients: value };
-        this.national_level_deployment = coverage;
+        const coverage = { ...this.national_level_deployment, clients: value }
+        this.national_level_deployment = coverage
       }
     },
     facilities: {
       get () {
         return this.national_level_deployment
           ? this.national_level_deployment.facilities
-          : null;
+          : null
       },
       set (value) {
         const coverage = {
           ...this.national_level_deployment,
           facilities: value
-        };
-        this.national_level_deployment = coverage;
+        }
+        this.national_level_deployment = coverage
       }
+    },
+    isGlobalSelected () {
+      return this.country === process.env.GlobalCountryID
     }
   },
   watch: {
-    implementing_partners: {
+    isGlobalSelected () {
+      this.coverageType = 2
+    },
+    hsc_challenges_other: {
       immediate: false,
-      handler (ip, oldIp) {
-        if (oldIp && ip && ip.length > oldIp.length) {
+      handler (oc, oldOc) {
+        if (oldOc && oc && oc.length > oldOc.length) {
           this.$nextTick(() => {
             if (
-              this.$refs.implementingPartnersInput &&
-              this.$refs.implementingPartnersInput.length > 0
+              this.$refs.HSCOtherInput &&
+              this.$refs.HSCOtherInput.length > 0
             ) {
-              this.$refs.implementingPartnersInput[
-                this.$refs.implementingPartnersInput.length - 1
-              ].focus();
+              this.$refs.HSCOtherInput[
+                this.$refs.HSCOtherInput.length - 1
+              ].focus()
             }
-          });
+          })
         }
       }
     }
   },
   methods: {
+    updateHSCOther (value, index) {
+      const oc = [...this.hsc_challenges_other]
+      oc[index] = value
+      this.hsc_challenges_other = oc
+    },
+    addHSCOther () {
+      const index = this.hsc_challenges_other.length - 1
+      if (this.isLastAndExist(this.hsc_challenges_other, index)) {
+        this.hsc_challenges_other = [...this.hsc_challenges_other, null]
+      }
+    },
+    rmHSCOther (index) {
+      this.hsc_challenges_other = this.hsc_challenges_other.filter(
+        (ip, i) => i !== index
+      )
+    },
     isLastAndExist (collection, index) {
-      return !!(collection.length - 1 === index && collection[index]);
+      return !!(collection.length - 1 === index && collection[index])
     },
     addDhi () {
-      this.platforms = [...this.platforms, null];
+      this.platforms = [...this.platforms, null]
     },
     rmDhi (index, platformId) {
       if (platformId) {
         const filtered = this.digitalHealthInterventions.filter(
           dhi => dhi.platform !== platformId
-        );
-        this.digitalHealthInterventions = filtered;
+        )
+        this.digitalHealthInterventions = filtered
       }
-      this.platforms = this.platforms.filter((p, i) => i !== index);
+      this.platforms = this.platforms.filter((p, i) => i !== index)
     },
-    updateImplmeentingPartners (value, index) {
-      const ip = [...this.implementing_partners];
-      ip[index] = value;
-      this.implementing_partners = ip;
-    },
-    addImplementingPartners () {
-      const index = this.implementing_partners.length - 1;
-      if (this.isLastAndExist(this.implementing_partners, index)) {
-        this.implementing_partners = [...this.implementing_partners, null];
+    // the asterisk of requiredness will show up on both 13a and 13b if both empty
+    // if one is filled only that one marked as required
+    requiredAsterisk (field) {
+      const isListEmpty = (list) => { if (
+        list.length == 0 ||
+        ( list.length == 1 && (list[0] == '' || list[0] == null) ) ) {
+          return true
+        } else {
+          return false
+        } }
+      let returnRequired = false
+      if (isListEmpty(this.hsc_challenges) && isListEmpty(this.hsc_challenges_other)){
+        returnRequired = true
       }
-    },
-    rmImplementingPartners (index) {
-      this.implementing_partners = this.implementing_partners.filter(
-        (ip, i) => i !== index
-      );
+      if (field == 'hsc'){
+        if (!isListEmpty(this.hsc_challenges) && isListEmpty(this.hsc_challenges_other)){
+          returnRequired = true
+        }
+      } else if (field == 'hsco') {
+        if (isListEmpty(this.hsc_challenges) && !isListEmpty(this.hsc_challenges_other)){
+          returnRequired = true
+        }
+      }
+      return {
+        required: returnRequired
+      }
     },
     async validate () {
-      this.$refs.collapsible.expandCard();
+      this.$refs.collapsible.expandCard()
       const validations = await Promise.all([
         this.$validator.validate(),
         this.coverageType === 2
           ? this.$refs.nationalLevelDeployment.validate()
           : this.$refs.subNationalLevelDeployment.validate()
-      ]);
-      console.log('Implementation overview validations', validations);
-      return validations.reduce((a, c) => a && c, true);
+      ])
+      console.log('Implementation overview validations', validations)
+      return validations.reduce((a, c) => a && c, true)
     }
   }
-};
+}
 </script>
 
 <style lang="less">
@@ -494,6 +543,18 @@ export default {
 @import "~assets/style/mixins.less";
 
 .ImplementationOverview {
+  .HiddenPlatform + .el-form-item__error {
+    box-sizing: border-box;
+    margin: 0 0 30px 2px;
+    padding: 10px 0 10px 30px;
+    border-left: 5px solid #D6D6D6;
+  }
+  .TooltipLink {
+    color: #9b9b9b;
+    &:hover {
+      color: #b4b4b4;
+    }
+  }
   .DigitalHealthIntervention {
     margin-top: 30px;
   }
@@ -517,7 +578,7 @@ export default {
     }
   }
 
-  .ImplementingPartners {
+  .HSCOther {
     .el-row {
       margin-top: 20px;
 

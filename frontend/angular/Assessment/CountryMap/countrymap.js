@@ -1,5 +1,5 @@
-import _template from './Countrymap.html';
-import CountrymapController from './CountryMapController';
+import _template from './Countrymap.html'
+import CountrymapController from './CountryMapController'
 
 const coutrymap = {
   controller: CountrymapController.countrymapFactory(),
@@ -12,6 +12,6 @@ const coutrymap = {
     nationalLevelCoverage: '<',
     mapData: '<'
   }
-};
+}
 
-export default coutrymap;
+export default coutrymap

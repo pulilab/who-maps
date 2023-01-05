@@ -1,8 +1,8 @@
 <template>
   <div class="grid-content">
-    <h3><translate>Government technical and governance documents</translate></h3>
+    <h3><translate>National Digital Health Reference Documents</translate></h3>
     <p>
-      <translate>Government documents can be found below that ensure adequate governance, technical oversight, architecture, coordinated planning and financing that drive effective investment and use of digital and data systems within the country. document examples: national digital health strategy, investment roadmap, architecture; HIS, interoperability, and digital maturity assessments; prior country inventories and assessments, etc.</translate>
+      <translate>The WHO recognizes the importance of government-led planning as a key component to sucessful, scaled digital health implementations. Leadership from within the national MOH team have uploaded the reference documents below, and these represent a point-in time understanding of the specific national planning goals and strategic context.</translate>
     </p>
 
     <div
@@ -31,17 +31,17 @@ export default {
   name: 'WDocuments',
   filters: {
     extension (filename) {
-      return filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename;
+      return filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename
     },
     size (bytes) {
-      if (bytes === 0) return '0 Bytes';
+      if (bytes === 0) return '0 Bytes'
 
-      const k = 1024;
+      const k = 1024
       // const dm = decimals < 0 ? 0 : decimals;
-      const dm = 0;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+      const dm = 0
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+      const i = Math.floor(Math.log(bytes) / Math.log(k))
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
     }
   },
   props: {
@@ -50,7 +50,7 @@ export default {
       required: true
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

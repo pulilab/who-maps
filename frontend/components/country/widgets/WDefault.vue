@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import DefaultText from '@/components/country/commons/DefaultText';
-import DefaultTextVertical from '@/components/country/commons/DefaultTextVertical';
+import DefaultText from '@/components/country/commons/DefaultText'
+import DefaultTextVertical from '@/components/country/commons/DefaultTextVertical'
 
 export default {
   name: 'WDeafult',
@@ -33,5 +33,5 @@ export default {
       default: ''
     }
   }
-};
+}
 </script>

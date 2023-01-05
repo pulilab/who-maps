@@ -1,5 +1,5 @@
-import _template from './Thematic.html';
-import ThematicController from './ThematicController';
+import _template from './Thematic.html'
+import ThematicController from './ThematicController'
 
 const thematicComponent = {
   controller: ThematicController.thematicFactory(),
@@ -14,6 +14,6 @@ const thematicComponent = {
     buttontitle: '@',
     buttonicon: '@'
   }
-};
+}
 
-export default thematicComponent;
+export default thematicComponent

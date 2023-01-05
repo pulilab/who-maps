@@ -44,14 +44,39 @@ class ProjectManager(models.Manager):
     def draft_only(self):
         return self.filter(public_id='')
 
+    def coverage_empty(self):
+        return self.filter(
+            Q(data__coverage__isnull=True) | Q(data__coverage=[]) | Q(data__coverage={}) | Q(data__coverage=None)
+        )
+
+    def coverage_not_empty(self):
+        return self.exclude(
+            Q(data__coverage__isnull=True) | Q(data__coverage=[]) | Q(data__coverage={}) | Q(data__coverage=None)
+        )
+
+    def national_level_deployment_empty(self):
+        return self.filter(
+            Q(data__national_level_deployment__isnull=True) |
+            Q(data__national_level_deployment=[]) |
+            Q(data__national_level_deployment={}) |
+            Q(data__national_level_deployment=None)
+        )
+
+    def national_level_deployment_not_empty(self):
+        return self.exclude(
+            Q(data__national_level_deployment__isnull=True) |
+            Q(data__national_level_deployment=[]) |
+            Q(data__national_level_deployment={}) |
+            Q(data__national_level_deployment=None)
+        )
+
 
 class ProjectQuerySet(ActiveQuerySet, ProjectManager):
     pass
 
 
 class Project(SoftDeleteModel, ExtendedModel):
-    FIELDS_FOR_MEMBERS_ONLY = ("country_custom_answers_private",
-                               "last_version", "last_version_date", "start_date", "end_date")
+    FIELDS_FOR_MEMBERS_ONLY = ("country_custom_answers_private", "last_version", "last_version_date")
     FIELDS_FOR_LOGGED_IN = ("coverage", "contact_email", "contact_name")
 
     name = models.CharField(max_length=255)
@@ -66,12 +91,17 @@ class Project(SoftDeleteModel, ExtendedModel):
     odk_extra_data = JSONField(default=dict)
 
     research = models.NullBooleanField(blank=True, null=True)
+    metadata = JSONField(default=dict)
 
     projects = ProjectManager  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
 
     def __str__(self):  # pragma: no cover
         return self.name
+
+    @property
+    def from_external(self):
+        return self.metadata and 'from_external' in self.metadata
 
     def get_country_id(self, draft_mode=False):
         return self.draft.get('country') if draft_mode else self.data.get('country')
@@ -123,6 +153,12 @@ class Project(SoftDeleteModel, ExtendedModel):
 
     def to_response_dict(self, published, draft):
         return dict(id=self.pk, public_id=self.public_id, published=published, draft=draft)
+
+    def to_project_import_table_dict(self, published_data, draft_data):
+        published = True if self.public_id != "" else False
+        data = published_data if published else draft_data
+        team = [{'name': u.name, 'email': u.user.email, 'id': u.id} for u in self.team.all()]
+        return dict(id=self.pk, team=team, published=published, data=data)
 
     def generate_hash_id(self):
         hash_id = Hashids(min_length=8)
@@ -197,11 +233,13 @@ class ProjectApproval(ExtendedModel):
         return "Approval for {}".format(self.project.name)
 
 
-class Stage(ExtendedModel):
+class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     name = models.CharField(max_length=128)
+    order = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
+    tooltip = models.CharField(max_length=256, blank=True, null=True)
 
     class Meta:
-        ordering = ['name']
+        ordering = ['order', 'name']
 
     def __str__(self):  # pragma: no cover
         return self.name
@@ -346,6 +384,24 @@ class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
+class Collection(ExtendedNameOrderedSoftDeletedModel):
+    user = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)  # should be hidden on UI
+    url = models.CharField(max_length=256, blank=True)
+    add_me_as_editor = models.BooleanField(null=False, blank=False, default=False)
+
+    def generate_hash_id(self):
+        hash_id = Hashids(min_length=12)
+        return hash_id.encode(self.pk)
+
+    def make_url(self):
+        if self.url:  # pragma: no cover
+            return
+        self.url = f"{self.user.pk}{self.generate_hash_id()}"
+
+    class Meta:
+        unique_together = ('user', 'name')
+
+
 class ProjectImportV2(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     status = models.NullBooleanField(null=True, blank=True)  # TODO: maybe remove this
@@ -355,6 +411,8 @@ class ProjectImportV2(ExtendedModel):
     filename = models.CharField(max_length=256, null=True, blank=True)
     sheet_name = models.CharField(max_length=256, null=True, blank=True)
     draft = models.BooleanField(default=True)
+    collection = models.ForeignKey(Collection, null=True, blank=True, related_name="project_imports",
+                                   on_delete=models.SET_NULL)
 
     class Meta:
         unique_together = ('user', 'filename', 'sheet_name')
@@ -363,5 +421,29 @@ class ProjectImportV2(ExtendedModel):
 class ImportRow(models.Model):
     data = JSONField(default=dict)
     original_data = JSONField(default=dict)
-    project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL)
+    project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL, related_name='import_rows')
     parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)
+
+
+class ProjectVersion(ExtendedModel):
+    version = models.IntegerField(default=1)
+    project = models.ForeignKey(Project, blank=False, null=True, on_delete=models.CASCADE, related_name='versions')
+    name = models.CharField(max_length=255)
+    data = JSONField(default=dict)
+    research = models.NullBooleanField(blank=True, null=True)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='project_versions', blank=True,
+                             null=True)
+    published = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('project', 'version')
+        ordering = ['modified']
+
+    def save(self, *args, **kwargs):
+        """
+        Custom save method to auto-increment the version field
+        """
+        if not self.id:
+            qs = ProjectVersion.objects.filter(project=self.project)
+            self.version = qs.count() + 1
+        super().save(*args, **kwargs)

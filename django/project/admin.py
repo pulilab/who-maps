@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.db.models import Q
@@ -6,10 +7,13 @@ from core.admin import AllObjectsAdmin
 from country.models import Country
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Project, HSCGroup, \
-    ProjectImportV2, ImportRow, Stage
+    ProjectImportV2, ImportRow, Stage, ProjectVersion, Collection
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
+
+from django.conf import settings
+from kpiexport.utils import project_status_change, project_status_change_str
 
 
 def approve(modeladmin, request, queryset):
@@ -111,9 +115,16 @@ class HSCChallengeAdmin(AllObjectsAdmin):
 
 
 class ProjectAdmin(AllObjectsAdmin):
-    list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active']
-    readonly_fields = ['name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data']
-    fields = ['is_active', 'name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data']
+    if settings.ENVIRONMENT_NAME == 'PRODUCTION':  # pragma: no cover
+        list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active']
+        readonly_fields = ['name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'data']
+        fields = ['is_active', 'name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'data']
+    else:  # on DEV and QA, we add some debug fields to help checking the project changelog's functionality
+        list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active', 'versions']
+        readonly_fields = ['name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'data', 'draft',
+                           'versions_detailed']
+        fields = ['is_active', 'name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'data',
+                  'draft', 'versions_detailed']
     search_fields = ['name']
 
     def get_country(self, obj):
@@ -147,6 +158,22 @@ class ProjectAdmin(AllObjectsAdmin):
     def has_add_permission(self, request):
         return False
 
+    def versions(self, obj):
+        return ProjectVersion.objects.filter(project=obj).count()
+
+    def versions_detailed(self, obj):
+        results_list = list()
+        prev_version = None
+        for version in ProjectVersion.objects.filter(project=obj):
+            if prev_version is None:
+                results_list.append(f'{version.version} - {version.created} - Initial version')
+            else:
+                status_change = project_status_change(prev_version, version)
+                results_list.append(
+                    f'{version.version} - {version.created} - {project_status_change_str(status_change)}')
+            prev_version = version
+        return '\n'.join(results_list)
+
 
 class ImportRowInline(admin.StackedInline):
     model = ImportRow
@@ -157,8 +184,41 @@ class ProjectImportV2Admin(admin.ModelAdmin):
     inlines = (ImportRowInline,)
 
 
-class StageAdmin(admin.ModelAdmin):
+class StageAdmin(SortableAdminMixin, admin.ModelAdmin):
     pass
+
+
+class ProjectVersionAdmin(admin.ModelAdmin):
+    model = ProjectVersion
+    fields = ['modified', 'project', 'user', 'version', 'data']
+    readonly_fields = fields
+    search_fields = ['project__name']
+
+    list_display = ['modified', 'project', 'version']
+
+    def get_project_name(self, obj):  # pragma: no cover
+        return obj.project.name
+
+    def has_add_permission(self, request):
+        return False
+
+
+class CollectionAdmin(admin.ModelAdmin):  # pragma: no cover
+    model = Collection
+    fields = ['url', 'name', 'user', 'project_imports']
+    readonly_fields = fields
+    search_fields = ['name', 'user', 'url']
+
+    list_display = ['modified', 'name', 'user', 'url']
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
 
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)
@@ -174,3 +234,5 @@ admin.site.register(HSCChallenge, HSCChallengeAdmin)
 admin.site.register(ProjectImportV2, ProjectImportV2Admin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Stage, StageAdmin)
+admin.site.register(ProjectVersion, ProjectVersionAdmin)
+admin.site.register(Collection, CollectionAdmin)

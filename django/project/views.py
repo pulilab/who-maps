@@ -1,33 +1,49 @@
-from collections import OrderedDict
+import copy
 
 from django.db import transaction
-from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
-from core.views import TokenAuthMixin, TeamTokenAuthMixin, get_object_or_400
+from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAuthMixin, CollectionTokenAuthMixin, \
+    get_object_or_400, CollectionAuthenticatedMixin
 from project.cache import cache_structure
-from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow
-from project.permissions import InCountryAdminForApproval
+from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion
+from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
 from .tasks import notify_superusers_about_new_pending_software
+from user.models import Organisation
 
 from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, ProjectPublishedSerializer, \
     MapProjectCountrySerializer, CountryCustomAnswerSerializer, DonorCustomAnswerSerializer, \
-    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer
+    ProjectApprovalSerializer, ProjectImportV2Serializer, ImportRowSerializer, TechnologyPlatformCreateSerializer, \
+    TerminologySerializer, CollectionInputSerializer, ExternalProjectPublishSerializer, \
+    ExternalProjectDraftSerializer, CollectionOutputSerializer, CollectionInputSwaggerSerializer, \
+    CollectionListSerializer, ProjectImportV2ListSerializer, ExternalProjectResponseSerializer
+
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge
+    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
+
+from .mixins import CheckRequiredMixin
+from django.conf import settings
+
+from who_maps.throttle import ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle
+from rest_framework.views import APIView
+
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from user.authentication import BearerTokenAuthentication
 
 
 class ProjectPublicViewSet(ViewSet):
+    @swagger_auto_schema(operation_id="project-structure", responses={200: TerminologySerializer})
     def project_structure(self, request):
         return Response(self._get_project_structure())
 
@@ -65,14 +81,15 @@ class ProjectPublicViewSet(ViewSet):
 
         return dict(
             interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
-            technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED)
-                                                   .values('id', 'name', 'state'),
+            technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED).values(
+                'id', 'name', 'state'),
             licenses=Licence.objects.values('id', 'name'),
             interoperability_standards=InteroperabilityStandard.objects.values('id', 'name'),
             his_bucket=HISBucket.objects.values('id', 'name'),
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
-            strategies=strategies
+            strategies=strategies,
+            stages=Stage.objects.values('id', 'name', 'tooltip', 'order'),
         )
 
     @staticmethod
@@ -142,15 +159,6 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         return Response(self._get_permission_based_data(project))
 
 
-class CheckRequiredMixin:
-    def check_required(self, queryset: QuerySet, answers: OrderedDict):
-        required_ids = set(queryset.filter(required=True).values_list('id', flat=True))
-        present_ids = {answer['question_id'] for answer in answers}
-        missing_ids = required_ids - present_ids
-        if missing_ids:
-            return {i: ['This field is required'] for i in missing_ids}
-
-
 class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
     def update(self, request, project_id, country_id):
@@ -168,6 +176,12 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         if 'project' not in request.data:
             raise ValidationError({'project': 'Project data is missing'})
 
+        # if Organisation is coming as a string
+        if request.data['project'].get('organisation'):
+            project_org = request.data['project'].get('organisation')
+            org_id = Organisation.get_or_create_insensitive(project_org)
+            request.data['project']['organisation'] = str(org_id)
+
         data_serializer = ProjectPublishedSerializer(project, data=request.data['project'])
 
         data_serializer.fields.get('name').validators = \
@@ -175,55 +189,46 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         data_serializer.fields.get('name').validators \
             .append(UniqueValidator(queryset=project.__class__.objects.all().exclude(id=project.id)))
 
-        self.check_object_permissions(self.request, project)
+        self.check_object_permissions(request, project)
         data_serializer.is_valid()
         if data_serializer.errors:
             errors['project'] = data_serializer.errors
 
-        if country.country_questions.exists():
-            if 'country_custom_answers' not in request.data:
-                raise ValidationError({'non_field_errors': 'Country answers are missing'})
-            else:
-                country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
-                                                                context=dict(
-                                                                    question_queryset=country.country_questions,
-                                                                    is_draft=False))
+        if country.country_questions.exists() and 'country_custom_answers' in request.data:
+            country_answers = CountryCustomAnswerSerializer(data=request.data['country_custom_answers'], many=True,
+                                                            context=dict(
+                                                                question_queryset=country.country_questions,
+                                                                is_draft=False))
 
-                if country_answers.is_valid():
-                    required_errors = self.check_required(country.country_questions, country_answers.validated_data)
-                    if required_errors:
-                        errors['country_custom_answers'] = required_errors
-                else:
-                    errors['country_custom_answers'] = country_answers.errors
+            if not country_answers.is_valid():
+                errors['country_custom_answers'] = country_answers.errors
 
         for donor_id in data_serializer.validated_data.get('donors', []):
             donor = Donor.objects.get(id=donor_id)
-            if donor and donor.donor_questions.exists():
-                if 'donor_custom_answers' not in request.data:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
-                if str(donor_id) not in request.data['donor_custom_answers']:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+            if donor and donor.donor_questions.exists() and 'donor_custom_answers' in request.data and \
+                    str(donor_id) in request.data['donor_custom_answers']:
+                """
+                Donor answers are no longer mandatory but if they exist, they need to be correct"""
                 donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
                                                             many=True,
                                                             context=dict(question_queryset=donor.donor_questions,
                                                                          is_draft=False))
-
-                if not donor_answers.is_valid():
+                if donor_answers.is_valid():
+                    all_donor_answers.append((donor_id, donor_answers))
+                else:
                     errors.setdefault('donor_custom_answers', {})
                     errors['donor_custom_answers'].setdefault(donor_id, {})
                     errors['donor_custom_answers'][donor_id] = donor_answers.errors
-                else:
-                    required_errors = self.check_required(donor.donor_questions, donor_answers.validated_data)
-                    if required_errors:
-                        errors.setdefault('donor_custom_answers', {})
-                        errors['donor_custom_answers'].setdefault(donor_id, {})
-                        errors['donor_custom_answers'][donor_id] = required_errors
-                    else:
-                        all_donor_answers.append((donor_id, donor_answers))
 
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         else:
+            original_data = {
+                'name': project.name,
+                'data': copy.deepcopy(project.data),
+                'research': project.research
+            }
+
             instance = data_serializer.save()
             if country_answers:
                 country_answers.context['project'] = instance
@@ -232,7 +237,16 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
                 donor_answers.context['project'] = instance
                 donor_answers.context['donor_id'] = donor_id
                 instance = donor_answers.save()
+
+            if hasattr(request, 'client_code'):
+                instance.metadata = dict(from_external=request.client_code)
             instance.save()
+            project.refresh_from_db()  # need to do this due to JSONfield
+
+            if project.name != original_data['name'] or project.research != original_data['research'] or \
+                    project.data != original_data['data']:
+                ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
+                                              data=project.data, research=project.research, published=True)
 
         project.reset_approval()
 
@@ -247,22 +261,31 @@ class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
         project.unpublish()
         data = project.to_representation(draft_mode=True)
+
+        ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
+                                      data=project.data, research=project.research, published=False)
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
 
 
-class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
+class ProjectDraftViewSet(TeamCollectionTokenAuthMixin, ViewSet):
     def create(self, request, country_id):
         """
         Creates a Draft project.
         """
-        country = get_object_or_400(Country, error_message="No such country", id=country_id)
-
         instance = country_answers = None
         all_donor_answers = []
         errors = {}
 
         if 'project' not in request.data:
             raise ValidationError({'project': 'Project data is missing'})
+
+        country = get_object_or_400(Country, error_message="No such country", id=country_id)
+
+        # if Organisation is coming as a string
+        if request.data['project'].get('organisation'):
+            project_org = request.data['project'].get('organisation')
+            org_id = Organisation.get_or_create_insensitive(project_org)
+            request.data['project']['organisation'] = str(org_id)
 
         data_serializer = ProjectDraftSerializer(data=request.data['project'])
         data_serializer.is_valid()
@@ -286,11 +309,8 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
         for donor_id in data_serializer.validated_data.get('donors', []):
             donor = Donor.objects.filter(id=donor_id).first()
-            if donor and donor.donor_questions.exists():
-                if 'donor_custom_answers' not in request.data:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
-                if str(donor_id) not in request.data['donor_custom_answers']:
-                    raise ValidationError({'non_field_errors': 'Donor answers are missing'})
+            if donor and donor.donor_questions.exists() and 'donor_custom_answers' in request.data and \
+                    str(donor_id) in request.data['donor_custom_answers']:
                 donor_answers = DonorCustomAnswerSerializer(data=request.data['donor_custom_answers'][str(donor_id)],
                                                             many=True,
                                                             context=dict(question_queryset=donor.donor_questions,
@@ -313,10 +333,29 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                 donor_answers.context['project'] = instance
                 donor_answers.context['donor_id'] = donor_id
                 instance = donor_answers.save()
+
+            if hasattr(request, 'client_code'):
+                instance.metadata = dict(from_external=request.client_code)
             instance.save()
-            instance.team.add(request.user.userprofile)
+            # COLLECTIONS - draft project can have an empty team if they are part of a collection
+            if 'import_row' in request.data['project']:
+                try:
+                    collection = Collection.objects.get(project_imports__rows=request.data['project']['import_row'])
+                    if collection.add_me_as_editor:  # pragma: no cover
+                        instance.team.add(request.user.userprofile)
+                except Collection.DoesNotExist:  # pragma: no cover
+                    pass
+                instance.import_rows.set(ImportRow.objects.filter(id=request.data['project']['import_row']))
+            else:
+                instance.team.add(request.user.userprofile)
 
         data = instance.to_representation(draft_mode=True)
+
+        instance.refresh_from_db()
+
+        ProjectVersion.objects.create(project=instance, user=request.user.userprofile, name=instance.name,
+                                      data=instance.draft, research=instance.research, published=False)
+
         return Response(instance.to_response_dict(published={}, draft=data), status=status.HTTP_201_CREATED)
 
     @transaction.atomic
@@ -333,6 +372,12 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
 
         if 'project' not in request.data:
             raise ValidationError({'project': 'Project data is missing'})
+
+        # if Organisation is coming as a string
+        if request.data['project'].get('organisation'):
+            project_org = request.data['project'].get('organisation')
+            org_id = Organisation.get_or_create_insensitive(project_org)
+            request.data['project']['organisation'] = str(org_id)
 
         data_serializer = ProjectDraftSerializer(project, data=request.data['project'])
         self.check_object_permissions(self.request, project)
@@ -375,6 +420,11 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         else:
+            original_data = {
+                'name': project.name,
+                'data': copy.deepcopy(project.draft),
+                'research': project.research
+            }
             instance = data_serializer.save()
             if country_answers:
                 country_answers.context['project'] = instance
@@ -383,14 +433,119 @@ class ProjectDraftViewSet(TeamTokenAuthMixin, ViewSet):
                 donor_answers.context['project'] = instance
                 donor_answers.context['donor_id'] = donor_id
                 instance = donor_answers.save()
+
+            # TODO: enable this when we have external API updates
+            # if hasattr(request, 'client_code'):
+            #     instance.metadata = dict(from_external=request.client_code)
             instance.save()
 
         draft = instance.to_representation(draft_mode=True)
         published = instance.to_representation()
+
+        instance.refresh_from_db()
+
+        if instance.name != original_data['name'] or instance.research != original_data['research'] or \
+                instance.draft != original_data['data']:
+            ProjectVersion.objects.create(project=instance, user=request.user.userprofile, name=instance.name,
+                                          data=instance.draft, research=instance.research, published=False)
+
         return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_200_OK)
 
 
-class ProjectGroupViewSet(TeamTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
+class ExternalDraftAPI(TeamTokenAuthMixin, ViewSet):
+    throttle_classes = [ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle]
+
+    @transaction.atomic
+    @swagger_auto_schema(
+        operation_id="project-draft-external",
+        request_body=ExternalProjectDraftSerializer,
+        security=[{'Bearer': []}],
+        responses={201: ExternalProjectResponseSerializer()}
+    )
+    def create(self, request, client_code):
+        """
+        Create *draft* projects from external sources.
+        Clients are differentiated by custom endpoints. For most cases, the `/default/` endpoint needs to be used,
+        but if the client requires custom handling of some attributes, they can request a custom endpoint via e-mail
+        (feature in progress)
+        """
+        if not settings.EXTERNAL_API_CLIENTS.get(client_code):
+            raise ValidationError({'client_code': 'Client code is invalid'})
+        else:
+            request.client_code = client_code
+
+        return ProjectDraftViewSet().create(request, country_id=request.data.get('project', {}).get('country', 0))
+
+
+class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
+    throttle_classes = [ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle]
+
+    @transaction.atomic
+    @swagger_auto_schema(
+        operation_id="project-publish-external",
+        request_body=ExternalProjectPublishSerializer,
+        security=[{'Bearer': []}],
+        responses={201: ExternalProjectResponseSerializer()}
+    )
+    def create(self, request, client_code):
+        """
+        Create *Published* projects from external sources.
+        Clients are differentiated by custom endpoints. For most cases, the `/default/` endpoint needs to be used,
+        but if the client requires custom handling of some attributes, they can request a custom endpoint via e-mail
+        (feature in progress)
+        """
+        if not settings.EXTERNAL_API_CLIENTS.get(client_code):
+            raise ValidationError({'client_code': 'Client code is invalid'})
+        else:
+            request.client_code = client_code
+
+            if client_code == 'xNhlb4':  # DCH only
+                if 'project' not in request.data:  # pragma: no cover
+                    raise ValidationError({'project': 'Project data is missing'})
+                # Donor is required - set to "Other"
+                donor, _ = Donor.objects.get_or_create(name='Other', defaults=dict(code="other"))
+                request.data['project']['donors'] = [donor.id]
+
+                # Set national_level_deployment to 0, so it can be added later
+                request.data['project']['national_level_deployment'] = {"clients": 0, "health_workers": 0,
+                                                                        "facilities": 0}
+
+        # To follow procedures, we first save a draft and then publish. This is how it's done on the UI and on the
+        # normal API, so we follow these two steps here as well. The original publish API only has an update method.
+        draft_response = ProjectDraftViewSet().create(
+            request, country_id=request.data.get('project', {}).get('country', 0))
+
+        if draft_response.status_code != status.HTTP_201_CREATED:
+            return draft_response
+        else:
+            publish_response = ProjectPublishViewSet().update(request,
+                                                              project_id=draft_response.data['id'],
+                                                              country_id=draft_response.data['draft']['country'])
+
+        if publish_response.status_code != status.HTTP_200_OK:
+            # As we saved a draft before, we need to roll it back
+            transaction.set_rollback(True)
+            return publish_response
+        else:
+            instance = Project.objects.get(id=draft_response.data['id'])
+
+        if client_code == 'xNhlb4':  # DCH only - Add contact_email as team member
+            group_data = {
+                "team": [request.user.userprofile.id],
+                "viewers": [],
+                "new_team_emails": [instance.data['contact_email']],
+                "new_viewer_emails": []
+            }
+            pg_serializer = ProjectGroupSerializer(instance=instance, data=group_data, context=dict(request=request))
+            pg_serializer.is_valid()
+            pg_serializer.save()
+
+        draft = instance.to_representation(draft_mode=True)
+        published = instance.to_representation()
+        return Response(instance.to_response_dict(published=published, draft=draft), status=status.HTTP_201_CREATED)
+
+
+class ProjectGroupViewSet(TeamCollectionTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
 
@@ -487,13 +642,32 @@ class ProjectApprovalViewSet(TokenAuthMixin, UpdateModelMixin, GenericViewSet):
         return Response(serializer.data)
 
 
-class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, ListModelMixin,
+class ProjectImportV2ListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    serializer_class = ProjectImportV2ListSerializer
+    queryset = ProjectImportV2.objects.all()
+
+    # TODO: NEEDS COVER
+    def get_queryset(self):  # pragma: no cover
+        if getattr(self, "swagger_fake_view", False):
+            # queryset just for schema generation metadata
+            # as per https://github.com/axnsan12/drf-yasg/issues/333#issuecomment-474883875
+            return ProjectImportV2.objects.none()
+
+        return ProjectImportV2.objects.filter(user=self.request.user)
+
+
+class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin,
                              GenericViewSet):
     serializer_class = ProjectImportV2Serializer
     queryset = ProjectImportV2.objects.all()
 
     # TODO: NEEDS COVER
     def get_queryset(self):  # pragma: no cover
+        if getattr(self, "swagger_fake_view", False):
+            # queryset just for schema generation metadata
+            # as per https://github.com/axnsan12/drf-yasg/issues/333#issuecomment-474883875
+            return ProjectImportV2.objects.none()
+
         return ProjectImportV2.objects.filter(user=self.request.user)
 
 
@@ -503,6 +677,10 @@ class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, Gene
 
     # TODO: NEEDS COVER
     def get_queryset(self):  # pragma: no cover
+        if getattr(self, "swagger_fake_view", False):
+            # queryset just for schema generation metadata
+            # as per https://github.com/axnsan12/drf-yasg/issues/333#issuecomment-474883875
+            return ImportRow.objects.none()
         return ImportRow.objects.filter(parent__user=self.request.user)
 
 
@@ -518,3 +696,174 @@ class TechnologyPlatformRequestViewSet(CreateModelMixin, GenericViewSet):
         serializer.validated_data['added_by'] = self.request.user.userprofile
         super().perform_create(serializer)
         notify_superusers_about_new_pending_software.apply_async((serializer.instance.id,))
+
+
+class CollectionViewSet(CollectionTokenAuthMixin, CreateModelMixin, RetrieveModelMixin, GenericViewSet):
+    lookup_field = 'url'
+    queryset = Collection.objects.all()
+
+    def get_serializer_class(self):
+        if self.request and self.action in ['update', 'create', 'partial_update'] and \
+                self.request.user.is_authenticated:
+            return CollectionInputSerializer
+        else:
+            return CollectionOutputSerializer
+
+    @staticmethod
+    def _prepare_data(request):
+        data = copy.deepcopy(request.data)
+        data['user'] = request.user.pk
+        if 'project_import' in data:
+            data['project_import']['user'] = request.user.pk
+            data['project_import']['country'] = data.get('country', data['project_import'].get('country', None))
+            data['project_import']['donor'] = data.get('donor', data['project_import'].get('donor', None))
+            data['project_imports'] = [data.pop('project_import')]
+        else:
+            data['project_imports'] = []
+        return data
+
+    @swagger_auto_schema(
+        request_body=CollectionInputSwaggerSerializer,
+        security=[{'Bearer': []}],
+        responses={201: CollectionOutputSerializer, 400: "Bad Request", 403: "Unauthorized"}
+    )
+    def create(self, request, *args, **kwargs):
+        """
+        Create a collection object.
+        """
+        data = request.data
+        data = self._prepare_data(request)
+        # Modify the data to make it processable by the serializers
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        output_serializer = CollectionOutputSerializer(instance=serializer.instance)
+        return Response(output_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        # Modify the data to make it processable by the serializers
+        if 'project_import' in request.data:
+            # We do not allow uploading the same xls file
+            if instance.project_imports.filter(filename=request.data['project_import']['filename']).count() > 0:
+                raise ValidationError(f'Uploading the same file multiple times is not allowed: '
+                                      f'"{request.data["project_import"]["filename"]}"')
+        data = self._prepare_data(request)
+
+        serializer = self.get_serializer(instance, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):  # pragma: no cover
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+
+class CollectionListView(CollectionAuthenticatedMixin, APIView):
+    """
+    View to list all of an user's Collections.
+
+    * Requires authenticated user
+    """
+    @swagger_auto_schema(
+        security=[{'Token': []}],
+        responses={201: CollectionListSerializer(many=True), 403: "Unauthorized"}
+    )
+    def get(self, request, format=None):
+        """
+        Return a list of the user's collections.
+        """
+        collections = Collection.objects.filter(user=request.user)
+        serializer = CollectionListSerializer(collections, many=True)
+        return Response(serializer.data)
+
+
+class ProjectImportCheckAvailabilityView(TokenAuthMixin, APIView):
+    """
+    View to check if name and sheet info is available for the user to import
+
+    _(as a QoL early-warning system)_
+    """
+
+    def _check_required(self, request):  # pragma: no cover
+        if 'filename' not in request.data:
+            raise ValidationError('`filename` is required. Expected: <str>')
+        if 'sheet_name' not in request.data:
+            raise ValidationError('`sheet_name` is required. Expected: <str>')
+
+    def post(self, request, format=None):
+        """
+        Returns with the status of availability for the sheet_name, import_name
+        """
+        self._check_required(request)
+
+        imports = ProjectImportV2.objects.filter(user=request.user)
+
+        result_dict = {
+            'available': imports.filter(filename=request.data['filename'],
+                                        sheet_name=request.data['sheet_name']).count() == 0
+        }
+
+        return Response(result_dict, content_type="application/json")
+
+
+class ProjectGroupAddmeViewSet(GenericViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectGroupSerializer
+    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    permission_classes = (IsAuthenticated, IsOwnerShipModifiable)
+
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        instance = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=kwargs["pk"])
+        self.check_object_permissions(self.request, instance)
+        team = list(instance.team.all().values_list('id', flat=True))
+        team.append(request.user.userprofile.id)
+        data = {'team': team, 'viewers': list(instance.viewers.all().values_list('id', flat=True))}
+        serializer = ProjectGroupSerializer(instance, data=data, context=self.get_serializer_context())
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
+class ProjectsInCollectionViewSet(TokenAuthMixin, ViewSet):  # pragma: no cover
+    def list(self, request, *args, **kwargs):
+        """
+        Retrieves list of projects related to a collection
+        """
+        collection = get_object_or_400(Collection, url=kwargs.get('collection_url'))
+        data = {
+            'name': collection.name,
+            'url': collection.url,
+            'projects': []
+        }
+        project_import_ids = list(collection.project_imports.all().values_list('id', flat=True))
+        import_rows = ImportRow.objects.filter(parent__in=project_import_ids)
+        for project in Project.objects.filter(import_rows__in=import_rows):
+            published = project.to_representation()
+            draft = project.to_representation(draft_mode=True)
+            project_data = project.to_project_import_table_dict(published_data=published, draft_data=draft)
+            data['projects'].append(project_data)
+        return Response(data)
+
+
+class ProjectsInProjectImportViewSet(TokenAuthMixin, ViewSet):  # pragma: no cover
+
+    def list(self, request, *args, **kwargs):
+        """
+        Retrieves list of projects related to a collection
+        """
+        data = []
+        import_rows = ImportRow.objects.filter(parent__id=kwargs.get('pk'))
+        for project in Project.objects.filter(import_rows__in=import_rows):
+            published = project.to_representation()
+            draft = project.to_representation(draft_mode=True)
+            data.append(project.to_project_import_table_dict(published_data=published, draft_data=draft))
+        return Response(data)

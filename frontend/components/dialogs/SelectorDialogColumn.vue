@@ -2,19 +2,21 @@
   <div class="SelectorDialogColumn">
     <div class="Header">
       <span v-show="!headerSelectable">{{ header }}</span>
-      <span
-        class="toggle-expand primary"
-        @click="handleToggleExpand(false)"
-      >
-        <small><translate>Collapse</translate></small>
-      </span>
-      <span class="toggle-expand divider">/</span>
-      <span
-        class="toggle-expand primary"
-        @click="handleToggleExpand(true)"
-      >
-        <small><translate>Expand</translate></small>
-      </span>
+      <template v-if="expandCollapse">
+        <span
+          class="toggle-expand primary"
+          @click="handleToggleExpand(false)"
+        >
+          <small><translate>Collapse</translate></small>
+        </span>
+        <span class="toggle-expand divider">/</span>
+        <span
+          class="toggle-expand primary"
+          @click="handleToggleExpand(true)"
+        >
+          <small><translate>Expand</translate></small>
+        </span>
+      </template>
       <el-checkbox
         v-show="headerSelectable"
         :value="selected"
@@ -39,7 +41,13 @@ export default {
     },
     headerSelectable: {
       type: Boolean,
-      default: false
+      default: false,
+      required: false
+    },
+    expandCollapse: {
+      type: Boolean,
+      default: false,
+      required: false
     },
     selected: {
       type: Boolean,
@@ -49,19 +57,19 @@ export default {
   data () {
     return {
       expand: false
-    };
+    }
   },
   computed: {},
   methods: {
     headerSelected (value) {
-      this.$emit('headerSelected', value);
+      this.$emit('headerSelected', value)
     },
     handleToggleExpand (val) {
-      this.expand = val;
-      this.$emit('handleToggleExpand', this.header, val);
+      this.expand = val
+      this.$emit('handleToggleExpand', this.header, val)
     }
   }
-};
+}
 </script>
 
 <style lang="less">
@@ -97,9 +105,9 @@ export default {
     position: relative;
     top: @dialogHeaderFooterHeight;
     box-sizing: border-box;
-    padding: 10px 20px 50px 30px;
+    padding: 10px 20px 30px 30px;
     height: calc(80vh - (@dialogHeaderFooterHeight * 3));
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   .toggle-expand {
     text-transform: none;

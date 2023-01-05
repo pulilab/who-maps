@@ -4,8 +4,8 @@ services:
   django:
     restart: always
     build: ./django
-    expose:
-      - "8000"
+    env_file:
+      - ./django/.env
     links:
       - postgres
       - celery
@@ -34,7 +34,7 @@ services:
 
   nginx:
     restart: always
-    image: nginx:1.15.6
+    image: nginx:1.23-alpine
     ports:
       - "80:80"
       - "443:443"
@@ -42,6 +42,7 @@ services:
       - ./nginx/site:/usr/share/nginx/html:rw
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/includes:/etc/nginx/includes:ro
       - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./django/media:/usr/share/nginx/html/media:rw
       - ./nginx/certs:/etc/letsencrypt:rw
@@ -66,14 +67,10 @@ services:
       - POSTGRESQL_PASSWORD=postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    expose:
-      - "5432"
 
   redis:
     restart: always
-    image: redis:4.0.10
-    expose:
-      - "6379"
+    image: redis:6-alpine
 
 volumes:
   postgres_data:

@@ -1,7 +1,7 @@
 <template>
   <div>
     <l-marker
-      v-if="icon"
+      v-if="show"
       ref="countryMarker"
       :options="options"
       :lat-lng="pin.latlng"
@@ -73,33 +73,39 @@ export default {
     return {
       popUpHover: false,
       popupOptions: {
-        className: `CountryViewPopup`,
+        className: 'CountryViewPopup',
         closeButton: false
-      }
-    };
+      },
+      show: false
+    }
+  },
+  mounted () {
+    setTimeout(() => {
+      this.show = true
+    }, 500)
   },
   methods: {
     markerClickHandler () {
-      this.$emit('update:activeCountry', this.pin.id);
+      this.$emit('update:activeCountry', this.pin.id)
     },
     safeMapObjectFunctionCall (ref, functionName) {
       if (this.$refs[ref] && this.$refs[ref].mapObject) {
-        this.$refs[ref].mapObject[functionName]();
+        this.$refs[ref].mapObject[functionName]()
       }
     },
 
     openCountryView () {
-      this.$emit('update:selectedCountry', this.pin.id);
-      this.safeMapObjectFunctionCall('countryMarker', 'closePopup');
+      this.$emit('update:selectedCountry', this.pin.id)
+      this.safeMapObjectFunctionCall('countryMarker', 'closePopup')
     },
     mouseEnterHandler (event) {
-      this.popUpHover = true;
+      this.popUpHover = true
     },
     mouseLeaveHandler (event) {
-      this.popUpHover = false;
+      this.popUpHover = false
     }
   }
-};
+}
 </script>
 
 <style lang="less">

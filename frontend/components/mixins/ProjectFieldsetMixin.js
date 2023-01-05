@@ -11,6 +11,10 @@ export default {
     publishRules: {
       type: Object,
       required: true
+    },
+    prependTitle: {
+      type: Number,
+      default: 0
     }
   }
-};
+}

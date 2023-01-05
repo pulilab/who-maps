@@ -18,7 +18,7 @@
             class="IconRight"
           >
             <translate v-show="!activePreseet">
-              Load filters
+              My filters
             </translate>
             <span v-if="activePreseet">
               {{ activePreseet.name }}
@@ -71,9 +71,9 @@
 </template>
 
 <script>
-import isEqual from 'lodash/isEqual';
-import { mapActions, mapGetters } from 'vuex';
-import { queryStringComparisonParser } from '../../utilities/api.js';
+import isEqual from 'lodash/isEqual'
+import { mapActions, mapGetters } from 'vuex'
+import { queryStringComparisonParser } from '../../utilities/api.js'
 
 export default {
   computed: {
@@ -82,7 +82,7 @@ export default {
       savedFilters: 'dashboard/getSavedFilters'
     }),
     activePreseet () {
-      return this.savedFilters.find(f => this.isActive(f.query));
+      return this.savedFilters.find(f => this.isActive(f.query))
     }
   },
   methods: {
@@ -92,18 +92,18 @@ export default {
       setSavedFilters: 'dashboard/setSavedFilters'
     }),
     clear () {
-      this.setSearchOptions({});
+      this.setSearchOptions({})
     },
     openSaveFilter () {
-      this.setSaveFiltersDialogState(this.dashboardType);
+      this.setSaveFiltersDialogState(this.dashboardType)
     },
     isActive (query) {
-      const fromRoute = queryStringComparisonParser(this.$route.query);
-      const fromItem = queryStringComparisonParser(query);
-      return isEqual(fromRoute, fromItem);
+      const fromRoute = queryStringComparisonParser(this.$route.query)
+      const fromItem = queryStringComparisonParser(query)
+      return isEqual(fromRoute, fromItem)
     },
     applyPreset (query) {
-      this.setSearchOptions(query);
+      this.setSearchOptions(query)
     },
     async deleteFilter (filter) {
       try {
@@ -111,15 +111,15 @@ export default {
           confirmButtonText: this.$gettext('OK'),
           cancelButtonText: this.$gettext('Cancel'),
           type: 'warning'
-        });
-        const filtered = this.savedFilters.filter(f => !(f.name === filter.name && f.category === filter.category));
-        this.setSavedFilters(filtered);
+        })
+        const filtered = this.savedFilters.filter(f => !(f.name === filter.name && f.category === filter.category))
+        this.setSavedFilters(filtered)
       } catch (e) {
-        this.$message(this.$gettext('Operation successfully aborted'));
+        this.$message(this.$gettext('Operation successfully aborted'))
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less">

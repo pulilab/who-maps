@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import { mapGetters } from 'vuex'
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js'
 
 export default {
   components: {},
@@ -69,7 +69,7 @@ export default {
     return {
       loading: false,
       result: []
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -77,30 +77,30 @@ export default {
       getFacilities: 'countries/getCountryFacilityList'
     }),
     facilities () {
-      return this.getFacilities(this.country);
+      return this.getFacilities(this.country)
     },
     innerValue: {
       get () {
-        return this.value;
+        return this.value
       },
       set (value) {
-        this.$emit('change', value);
+        this.$emit('change', value)
       }
     }
   },
   methods: {
     search (query) {
       if (query) {
-        this.loading = true;
-        this.result = this.facilities.filter(f => f.name.toLowerCase().startsWith(query.toLowerCase())).slice(0, 100);
-        this.loading = false;
+        this.loading = true
+        this.result = this.facilities.filter(f => f.name.toLowerCase().startsWith(query.toLowerCase())).slice(0, 100)
+        this.loading = false
       }
     },
     async validate () {
-      return this.$validator.validate();
+      return this.$validator.validate()
     }
   }
-};
+}
 </script>
 
 <style lang="less">

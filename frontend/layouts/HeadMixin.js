@@ -1,6 +1,6 @@
 export default {
   head () {
-    const i18nSeo = this.$nuxtI18nSeo();
+    const i18nSeo = this.$nuxtI18nSeo()
     return {
       htmlAttrs: {
         ...i18nSeo.htmlAttrs,
@@ -12,14 +12,14 @@ export default {
       link: [
         ...i18nSeo.link
       ]
-    };
+    }
   },
   computed: {
     $_headMixin_lngDirection () {
       if (this.$i18n.locale === 'ar') {
-        return 'rtl';
+        return 'rtl'
       }
-      return 'ltr';
+      return 'ltr'
     }
   }
-};
+}

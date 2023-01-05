@@ -6,7 +6,7 @@
         class="CollapsibleHeader"
       >
         <span class="CardTitle">
-          {{ title }}
+          {{ `${prependFormat}${title}` }}
         </span>
         <el-button
           type="text"
@@ -36,11 +36,7 @@
             class="Legend"
           >
             <div>
-              <span class="Required Draft">
-                <span>
-                  *
-                </span>
-              </span>
+              <span class="Required Draft" />
               <span class="Text">
                 <translate ref="draft_required">
                   Required to save draft
@@ -48,11 +44,7 @@
               </span>
             </div>
             <div>
-              <span class="Required Publish">
-                <span>
-                  *
-                </span>
-              </span>
+              <span class="Required Publish" />
               <span class="Text">
                 <translate ref="publish_required">
                   Required to publish
@@ -77,22 +69,31 @@ export default {
     showLegend: {
       type: Boolean,
       default: false
+    },
+    prependTitle: {
+      type: Number,
+      default: 0
     }
   },
   data () {
     return {
       open: true
-    };
+    }
+  },
+  computed: {
+    prependFormat () {
+      return this.prependTitle ? `${this.prependTitle}. ` : ''
+    }
   },
   methods: {
     toggleCard () {
-      this.open = !this.open;
+      this.open = !this.open
     },
     expandCard () {
-      this.open = true;
+      this.open = true
     }
   }
-};
+}
 </script>
 
 <style lang="less">
@@ -101,9 +102,14 @@ export default {
 
   .CollapsibleCard {
     margin: 0 0 20px;
-
     .Legend {
-      text-align: right;
+      display: flex;
+      justify-content: flex-end;
+      margin-top: -28px;
+      margin-bottom: 16px;
+      div {
+        margin-left: 12px;
+      }
 
       .Text {
         font-size: @fontSizeSmall
@@ -111,8 +117,8 @@ export default {
 
       .Required{
         display: inline-block;
-        width: 12px;
-        height: 12px;
+        width: 10px;
+        height: 10px;
         font-size: 16px;
         line-height: 12px;
         font-weight: 900;
@@ -172,7 +178,9 @@ export default {
     }
 
     .ContentContainer {
-      padding: 40px 80px 60px 40px;
+      position: relative;
+      // padding: 22px 74px 60px 40px;
+      padding: 50px 74px 60px 40px;
     }
 
     .slide-fade-enter-active {

@@ -230,7 +230,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   name: 'VueDjangoFeedback',
@@ -291,7 +291,6 @@ export default {
   },
   data () {
     return {
-      opened: false,
       submitted: false,
       apiError: false,
       processing: false,
@@ -306,21 +305,32 @@ export default {
         subjectLimit: 120,
         messageLimit: 999
       }
-    };
+    }
   },
   computed: {
+    storeForm () {
+      return this.$store.state.user.feedbackForm
+    },
+    opened: {
+      get () {
+        return this.$store.state.user.feedbackOn
+      },
+      set (val) {
+        this.$store.commit('user/SET_FEEDBACK', { feedbackOn: val })
+      }
+    },
     showUserBlock () {
-      return !!(this.name && this.email);
+      return !!(this.name && this.email)
     },
     showAvatarPlaceholder () {
-      return !this.avatarUrl;
+      return !this.avatarUrl
     },
     parsedMeta () {
-      let result = {};
+      let result = {}
       try {
-        result = JSON.parse(this.meta);
+        result = JSON.parse(this.meta)
       } catch (e) {
-        console.warn('unable to parse the meta field', e);
+        console.warn('unable to parse the meta field', e)
       }
       return {
         ...result,
@@ -331,32 +341,38 @@ export default {
           product: window.navigator.product,
           vendor: window.navigator.vendor
         }
-      };
+      }
     },
     showHintContainer () {
-      return this.buttonHover && !this.opened;
+      return this.buttonHover && !this.opened
+    }
+  },
+  watch: {
+    storeForm (newData) {
+      this.form.subject = newData.subject
+      this.form.message = newData.message
     }
   },
   beforeCreate () {
-    this.axios = axios.create();
+    this.axios = axios.create()
   },
   methods: {
     togglePopUp () {
-      this.opened = !this.opened;
+      this.opened = !this.opened
       if (!this.opened) {
-        this.form.name = '';
-        this.form.email = '';
-        this.form.subject = '';
-        this.form.message = '';
-        this.submitted = false;
-        this.apiError = false;
+        this.form.name = ''
+        this.form.email = ''
+        this.form.subject = ''
+        this.form.message = ''
+        this.submitted = false
+        this.apiError = false
       }
-      this.errors.clear();
+      this.errors.clear()
     },
     async submit () {
-      await this.$validator.validateAll();
+      await this.$validator.validateAll()
       if (!this.errors.any()) {
-        this.processing = true;
+        this.processing = true
         try {
           const data = {
             email: this.email ? this.email : this.form.email,
@@ -366,29 +382,29 @@ export default {
               ...this.parsedMeta,
               name: this.name ? this.name : this.form.name
             }
-          };
-          const headers = {};
+          }
+          const headers = {}
           if (this.authToken) {
-            headers.Authorization = this.authToken;
+            headers.Authorization = this.authToken
           }
           if (this.csrfToken) {
-            headers['x-csrftoken'] = this.csrfToken;
+            headers['x-csrftoken'] = this.csrfToken
           }
-          await this.axios.post(this.apiUrl, data, { headers });
-          this.submitted = true;
-          this.apiError = false;
+          await this.axios.post(this.apiUrl, data, { headers })
+          this.submitted = true
+          this.apiError = false
         } catch (e) {
-          this.apiError = true;
-          console.warn(e);
+          this.apiError = true
+          console.warn(e)
         }
-        this.processing = false;
+        this.processing = false
       }
     },
     handleMouseOver (status) {
-      this.buttonHover = status;
+      this.buttonHover = status
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

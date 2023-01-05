@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import DigitalHealthInterventionItem from '../common/DigitalHealthInterventionItem';
+import { mapActions, mapGetters } from 'vuex'
+import DigitalHealthInterventionItem from '../common/DigitalHealthInterventionItem'
 
 export default {
   components: {
@@ -51,7 +51,7 @@ export default {
   },
   $_veeValidate: {
     value () {
-      return this.dhi;
+      return this.dhi
     },
     events: 'change'
   },
@@ -60,7 +60,7 @@ export default {
       selectedDHI: 'project/getDigitalHealthInterventions'
     }),
     dhi () {
-      return this.selectedDHI.filter(dhi => dhi.platform === this.platformId);
+      return this.selectedDHI.filter(dhi => dhi.platform === this.platformId)
     }
   },
   watch: {
@@ -68,7 +68,7 @@ export default {
       immediate: true,
       deep: true,
       handler () {
-        this.$emit('change');
+        this.$emit('change')
       }
     }
   },
@@ -77,10 +77,10 @@ export default {
       setDigitalHealthInterventionsDialogState: 'layout/setDigitalHealthInterventionsDialogState'
     }),
     openDialog () {
-      this.setDigitalHealthInterventionsDialogState(this.platformId);
+      this.setDigitalHealthInterventionsDialogState(this.platformId)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

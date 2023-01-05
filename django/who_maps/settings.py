@@ -1,6 +1,7 @@
 import os
 import datetime
 import sys
+from celery.schedules import crontab
 from django.utils.translation import ugettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,13 +32,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django_extensions',
-    'raven.contrib.django.raven_compat',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
     'rest_auth.registration',
+    'drf_yasg',
     'ordered_model',
     'rosetta',
+    'adminsortable2',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -52,8 +54,11 @@ INSTALLED_APPS = [
     'search',
     'scheduler',
     'cms',
-    'simple-feedback',
+    'simple_feedback',
     'systemmessages',
+    'kpiexport',
+    'rangefilter',
+    'nonrelated_inlines',
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -103,6 +108,7 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'HOST': os.environ.get("DATABASE_URL", 'postgres'),
+        'PASSWORD': os.environ.get("POSTGRESQL_PASSWORD", 'postgres'),
         'PORT': 5432,
     }
 }
@@ -163,13 +169,21 @@ FILE_UPLOAD_PERMISSIONS = 0o644
 SITE_ID = int(os.environ.get('SITE_ID', 1))
 CI_RUN = bool(os.environ.get('CI_RUN', False))
 
+NOTIFICATION_EMAIL = os.environ.get('DEFAULT_NOTIFICATION_EMAIL_EXPORT')
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'user.authentication.BearerTokenAuthentication'
     ),
+    'DEFAULT_THROTTLE_RATES': {
+        'ext_anon': '200/hour',
+        'ext_user': '200/hour'
+    },
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 
@@ -244,6 +258,10 @@ PROJECT_UPDATE_DIGEST_PERIOD = 7 * 24  # 1 week
 APPROVAL_DIGEST_PERIOD = 7 * 24  # 1 week
 NEW_QUESTION_DIGEST_PERIOD = 7 * 24  # 1 week
 DRAFT_ONLY_REMINDER_PERIOD = 7 * 24  # 1 week
+NO_COUNTRY_QUESTION_ANSWER_REMINDER_PERIOD = 7 * 24  # 1 week
+NOT_EVERY_REQUIRED_COUNTRY_QUESTION_HAS_ANSWER_REMINDER_PERIOD = 7 * 24  # 1 week
+EMPTY_STAGES_REMINDER_PERIOD = 3 * 4 * 7 * 24  # - 3 month (12 weeks)
+NO_COVERAGE_REMINDER = 4 * 7 * 24  # 4 weeks
 
 CACHES = {
     "default": {
@@ -258,7 +276,7 @@ CACHES = {
     #     }
 }
 
-if SITE_ID in [3]:
+if SITE_ID in [3, 4]:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
@@ -325,18 +343,14 @@ for arg in sys.argv:
         DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
 
 if SITE_ID == 3:
-    ENVIRONMENT_NAME = "PRODUCTION"
+    ENVIRONMENT_NAME = f"PRODUCTION - ({os.environ.get('DEPLOY_VERSION', 'Unknown')})"
     ENVIRONMENT_COLOR = "red"
 elif SITE_ID == 4:
-    ENVIRONMENT_NAME = "QA / STAGING"
+    ENVIRONMENT_NAME = f"QA / STAGING - ({os.environ.get('DEPLOY_VERSION', 'Unknown')})"
     ENVIRONMENT_COLOR = "orange"
-    TOOLKIT_DIGEST_PERIOD = 1  # hour
-    PROJECT_UPDATE_DIGEST_PERIOD = 1  # hour
-    NEW_QUESTION_DIGEST_PERIOD = 1  # hour
-    DRAFT_ONLY_REMINDER_PERIOD = 1  # hour
     DRAFT_ONLY_REMINDER_LIMITED = True
 else:
-    ENVIRONMENT_NAME = "DEVELOPMENT"
+    ENVIRONMENT_NAME = f"DEVELOPMENT - ({os.environ.get('DEPLOY_VERSION', 'Unknown')})"
     ENVIRONMENT_COLOR = "blue"
 
 
@@ -354,6 +368,28 @@ ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE = os.environ.get('ENABLE_GDHI_UPDATE_ON_COUNT
 
 # PRODUCTION SETTINGS
 if SITE_ID in [3, 4]:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+    sentry_sdk.init(
+        dsn=os.environ.get('SENTRY_DSN', ''),
+        integrations=[DjangoIntegration()],
+
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        # We recommend adjusting this value in production.
+        traces_sample_rate=0.5,
+
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True,
+
+        # By default the SDK will try to use the SENTRY_RELEASE
+        # environment variable, or infer a git commit
+        # SHA as release, however you may want to set
+        # something more human-readable.
+        release=os.environ.get('DEPLOY_VERSION', '0.0.0')
+    )
+
     CELERYBEAT_SCHEDULE = {
         "send_toolkit_digest": {
             "task": 'send_toolkit_digest',
@@ -378,7 +414,47 @@ if SITE_ID in [3, 4]:
         "send_draft_only_reminders": {
             "task": 'send_draft_only_reminders',
             "schedule": datetime.timedelta(hours=DRAFT_ONLY_REMINDER_PERIOD),
-        }
+        },
+        "send_no_country_question_answers_reminder": {
+            "task": 'send_no_country_question_answers_reminder',
+            "schedule": datetime.timedelta(hours=NO_COUNTRY_QUESTION_ANSWER_REMINDER_PERIOD),
+        },
+        "send_not_every_required_country_question_has_answer_reminder": {
+            "task": 'send_not_every_required_country_question_has_answer_reminder',
+            "schedule": datetime.timedelta(hours=NOT_EVERY_REQUIRED_COUNTRY_QUESTION_HAS_ANSWER_REMINDER_PERIOD),
+        },
+        "send_empty_stages_reminder": {
+            "task": 'send_empty_stages_reminder',
+            "schedule": datetime.timedelta(hours=EMPTY_STAGES_REMINDER_PERIOD),
+        },
+        "send_coverage_reminder": {
+            "task": 'send_coverage_reminder',
+            "schedule": datetime.timedelta(hours=NO_COVERAGE_REMINDER),
+        },
+        "auditlog_update_user_data": {
+            "task": "auditlog_update_user_data",
+            "schedule": crontab(hour=1, minute=0, ),
+        },
+        "auditlog_update_token_data": {
+            "task": "auditlog_update_token_data",
+            "schedule": crontab(hour=1, minute=0, ),
+        },
+        "auditlog_update_project_status_data": {
+            "task": "auditlog_update_project_status_data",
+            "schedule": crontab(hour=1, minute=0, ),
+        },
+        "auditlog_update_project_stages_data": {
+            "task": "auditlog_update_project_stages_data",
+            "schedule": crontab(hour=1, minute=0, ),
+        },
+        "auditlog_update_data_standards": {
+            "task": "auditlog_update_data_standards",
+            "schedule": crontab(hour=1, minute=0, ),
+        },
+        "auditlog_update_hfa": {
+            "task": "auditlog_update_hfa",
+            "schedule": crontab(hour=2, minute=0, ),
+        },
     }
     if ODK_SYNC_ENABLED:
         CELERYBEAT_SCHEDULE.update(
@@ -389,15 +465,12 @@ if SITE_ID in [3, 4]:
                 }
             })
 
-    RAVEN_CONFIG = {
-        'dsn': 'http://cea32567f8aa4eefa4d2051848d37dea:a884ff71e8ae444c8a40af705699a19c@sentry.vidzor.com/12',
-    }
-
     DEBUG = False
 
     ALLOWED_HOSTS = ['.digitalhealthatlas.org', '.prod.whomaps.pulilab.com',
                      '.qa.whomaps.pulilab.com', '.dhatlas.org',
-                     '.digitalhealthatlas.com', 'nginx:9010', 'nginx']
+                     '.digitalhealthatlas.com', 'nginx:9010', 'nginx',
+                     'digitalatlas.who.int', 'digitalhealthatlas.who.int', 'atlas.who.int']
 
     EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
@@ -407,10 +480,48 @@ if SITE_ID in [3, 4]:
         ),
         'DEFAULT_RENDERER_CLASSES': (
             'rest_framework.renderers.JSONRenderer',
-        )
+        ),
+        'DEFAULT_THROTTLE_RATES': {
+            'ext_anon': '200/hour',
+            'ext_user': '200/hour'
+        }
     }
-
+    # TODO: refactor these into .env settings
+    if SITE_ID == 3:
+        EMAIL_SENDING_PRODUCTION = True
     if SITE_ID == 4:
         # redirect all emails to the forced addresses
         EMAIL_BACKEND = 'core.middleware.TestCeleryEmailBackend'
-        TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "f@pulilab.com"]
+        TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "f@pulilab.com", "ta@pulilab.com"]
+        ALLOWED_HOSTS = ALLOWED_HOSTS + ['139.59.148.238']
+
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'authorization: Bearer XXXXXXXXXXXXXXXXXXX'
+        },
+    },
+    'SECURITY_REQUIREMENTS': [{'Bearer': []}]
+}
+
+"""
+'hash' : 'name'
+"""
+EXTERNAL_API_CLIENTS = {
+    "default": "Other",
+    "xNhlb4": "DCH",
+    "6TAyaB": "DHIS2",
+    "9uX76C": "DHI"
+}
+"""
+For checking which projects can be safely deleted
+"""
+OBSOLETE_PROJECT_MARKERS = {
+    'test',
+    'demo',
+    'delete'
+}

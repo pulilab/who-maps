@@ -9,66 +9,72 @@ export const state = () => ({
   landing_page_defaults: {},
   toolkit_questions: [],
   sub_level_types: [],
+  countries: [],
   organisations: [],
   donors: [],
   regions: [],
+  collections: [],
   donorsLibrary: {},
   roadmap: {}
-});
+})
 
 export const getters = {
   getUserProfiles: state => {
-    return state.profiles ? [...state.profiles.filter(p => p.name)] : [];
+    return state.profiles ? [...state.profiles.filter(p => p.name)] : []
   },
   getUserProfilesNoFilter: state => {
-    return state.profiles;
+    return state.profiles
   },
-  getUserProfileDetails: (state, getters) => id => getters.getUserProfiles.find(u => u.id === id),
+  getUserProfileDetails: (state, getters) => id =>
+    getters.getUserProfiles.find(u => u.id === id),
   getSearchResult: state => {
-    const search = state.projectSearch ? state.projectSearch : [];
+    const search = state.projectSearch ? state.projectSearch : []
     return search.map(s => {
       return {
         ...s
-      };
-    });
+      }
+    })
   },
   getLanguages: state => {
     return state.languages
       .map(l => ({ ...l, flag: `/static/flags/${l.flag}` }))
-      .filter(l => l.code !== 'ar');
+      .filter(l => l.code !== 'ar')
   },
 
   getLanguageDetails: (state, getters) => code => {
-    return getters.getLanguages.find(l => l.code === code);
+    return getters.getLanguages.find(l => l.code === code)
   },
   getSearchFilters: state => {
-    return [...state.search_filters];
+    return [...state.search_filters]
   },
   getLandingPageDefaults: state => {
-    return { ...state.landing_page_defaults };
+    return { ...state.landing_page_defaults }
   },
   getAxis: state => {
-    return [...state.axis];
+    return [...state.axis]
   },
   getDomains: state => {
-    return [...state.domains];
+    return [...state.domains]
   },
   getRoadmap: state => {
-    return state.roadmap;
+    return state.roadmap
   },
   getQuestions: state => {
-    return [...state.toolkit_questions];
+    return [...state.toolkit_questions]
   },
   getThematicOverview: state => {
-    const th = state.thematic_overview;
+    const th = state.thematic_overview
     return th.categories
-      ? th.categories.map(cat => ({ ...cat, domains: th.sub_categories.filter(sb => sb.category === cat.id) }))
-      : [];
+      ? th.categories.map(cat => ({
+        ...cat,
+        domains: th.sub_categories.filter(sb => sb.category === cat.id)
+      }))
+      : []
   },
   getDomainsForThematic: (state, getters) => {
-    const axis = getters.getAxis;
-    const domains = getters.getDomains;
-    const thematic_specific = getters.getThematicOverview;
+    const axis = getters.getAxis
+    const domains = getters.getDomains
+    const thematic_specific = getters.getThematicOverview
     return [
       ...thematic_specific.map(t => ({ name: t.name, domains: t.domains })),
       ...axis.map(a => ({
@@ -76,148 +82,134 @@ export const getters = {
         domains: domains
           .filter(d => d.axis === a.id)
           .map(df => ({ name: df.name }))
-      }))];
+      }))
+    ]
   },
   getSubLevelTypes: state => {
-    return [...state.sub_level_types.map(t => ({ ...t }))];
+    return [...state.sub_level_types.map(t => ({ ...t }))]
   },
   getOrganisations: state => {
-    return [...state.organisations.map(o => ({ ...o }))];
+    return [...state.organisations.map(o => ({ ...o }))]
   },
   getOrganisationDetails: (state, getters) => id => {
-    const o = getters.getOrganisations.find(org => org.id === id);
-    return o ? { ...o } : undefined;
+    const o = getters.getOrganisations.find(org => org.id === id)
+    return o ? { ...o } : undefined
   },
   getDonors: state => state.donors,
-  getDonorDetails: state => id => ({ ...state.donors.find(d => d.id === id), ...state.donorsLibrary[id] }),
+  getUserCollections: state => state.collections,
+  getDonorDetails: state => id => ({
+    ...state.donors.find(d => d.id === id),
+    ...state.donorsLibrary[id]
+  }),
   getRegions: state => state.regions,
   getRegionDetails: state => id => ({ ...state.regions.find(r => r.id === id) })
-};
+}
 
 export const actions = {
-
   async loadUserProfiles ({ commit, state }, force = false) {
     try {
       if (!state.profiles || state.profiles.length === 0 || force) {
-        const { data } = await this.$axios.get('/api/userprofiles/');
-        commit('SET_USER_PROFILES', data);
+        const { data } = await this.$axios.get('/api/userprofiles/')
+        commit('setValue', { key: 'profiles', val: data })
       }
     } catch (e) {
-      console.error('system/loadUserProfiles failed');
+      console.error('system/loadUserProfiles failed')
     }
   },
 
-  async loadStaticData ({ commit, dispatch }) {
+  async loadStaticData ({ state, commit, dispatch }) {
+    // if the `languages` is filled then all static data should be filled
+    if (state.languages.length > 0) return
     try {
-      const { data } = await this.$axios.get('/api/static-data/');
-      commit('SET_AXIS', data.axis);
-      commit('SET_DOMAINS', data.domains);
-      commit('SET_LANDING_PAGE_DEFAULTS', data.landing_page_defaults);
-      commit('SET_LANGUAGES', data.languages);
-      commit('SET_THEMATIC_OVERVIEW', data.thematic_overview);
-      commit('SET_TOOLKIT_QUESTIONS', data.toolkit_questions);
-      commit('SET_SUB_LEVEL_TYPES', data.sub_level_types);
-      commit('SET_REGIONS', data.regions);
-      commit('SET_ROADMAP', data.roadmap);
-      dispatch('dashboard/setDashboardColumns', data.dashboard_columns, { root: true });
+      const { data } = await this.$axios.get('/api/static-data/')
+      commit('setValue', { key: 'axis', val: data.axis })
+      commit('setValue', { key: 'domains', val: data.domains })
+      commit('setValue', { key: 'landing_page_defaults', val: data.landing_page_defaults })
+      commit('setValue', { key: 'languages', val: data.languages })
+      commit('setValue', { key: 'thematic_overview', val: data.thematic_overview })
+      commit('setValue', { key: 'toolkit_questions', val: data.toolkit_questions })
+      commit('setValue', { key: 'sub_level_types', val: data.sub_level_types })
+      commit('setValue', { key: 'regions', val: data.regions })
+      commit('setValue', { key: 'roadmap', val: data.roadmap })
+      dispatch('dashboard/setDashboardColumns', data.dashboard_columns, {
+        root: true
+      })
+      dispatch('loadCountries')
     } catch (e) {
-      console.error('system/loadStaticData failed');
+      console.error('system/loadStaticData failed')
     }
   },
-
-  async loadOrganisations ({ commit, rootGetters }) {
-    const profile = rootGetters['user/getProfile'];
-    if (profile) {
+  async loadCountries ({ commit }) {
+    try {
+      const { data } = await this.$axios.get('/api/landing-country/')
+      commit('setValue', { key: 'countries', val: data })
+    } catch (e) {
+      console.error('system/loadCountries failed')
+    }
+  },
+  async loadOrganisations ({ state, commit, rootGetters }) {
+    const profile = rootGetters['user/getProfile']
+    if (profile && state.organisations.length === 0) {
       try {
-        const { data } = await this.$axios.get(`/api/organisations/`);
-        commit('SET_SYSTEM_ORGANISATIONS', data);
+        const { data } = await this.$axios.get('/api/organisations/')
+        commit('setValue', { key: 'organisations', val: data })
       } catch (e) {
-        console.error('system/loadOrganisations failed');
+        console.error('system/loadOrganisations failed')
       }
     }
   },
-  async loadDonors ({ commit }) {
+  async loadDonors ({ state, commit }) {
+    if (state.donors.length > 0) return
     try {
-      const { data } = await this.$axios.get(`/api/landing-donor/`);
-      commit('SET_DONORS', data);
+      const { data } = await this.$axios.get('/api/landing-donor/')
+      commit('setValue', { key: 'donors', val: data })
     } catch (e) {
-      console.error('system/loadDonors failed');
+      console.error('system/loadDonors failed')
+    }
+  },
+  async loadUserCollections ({ commit }) {
+    try {
+      const { data } = await this.$axios.get('/api/projects/collection/my-collections/')
+      commit('setValue', { key: 'collections', val: data })
+    } catch (e) {
+      console.error('system/loadUserCollections failed')
     }
   },
   async loadDonorDetails ({ commit, state }, id) {
     if (id && !state.donorsLibrary[id]) {
       try {
-        const { data } = await this.$axios.get(`/api/landing-donor/${id}/`);
-        commit('SET_DONOR_DETAILS', { id, data });
+        const { data } = await this.$axios.get(`/api/landing-donor/${id}/`)
+        commit('SET_DONOR_DETAILS', { id, data })
       } catch (e) {
-        console.error('system/loadDonorDetails failed');
+        console.error('system/loadDonorDetails failed')
       }
     }
   },
   async addOrganisation ({ dispatch, getters }, name) {
     try {
-      await this.$axios.post('/api/organisations/', { name });
+      await this.$axios.post('/api/organisations/', { name })
     } catch (e) {
-      console.error('system/addOrganisation failed');
+      console.error('system/addOrganisation failed')
     } finally {
-      await dispatch('loadOrganisations');
+      await dispatch('loadOrganisations')
     }
-    const org = getters.getOrganisations.find(o => o.name === name);
+    const org = getters.getOrganisations.find(o => o.name === name)
     if (org) {
-      return Promise.resolve(org);
+      return Promise.resolve(org)
     } else {
-      const error = new Error('Organisation saving / fetching failed, could not find the organisation');
-      return Promise.reject(error);
+      const error = new Error(
+        'Organisation saving / fetching failed, could not find the organisation'
+      )
+      return Promise.reject(error)
     }
   }
-};
+}
 
 export const mutations = {
-  SET_USER_PROFILES: (state, value) => {
-    state.profiles = value;
-  },
-
-  SET_AXIS: (state, value) => {
-    state.axis = value;
-  },
-
-  SET_DOMAINS: (state, value) => {
-    state.domains = value;
-  },
-
-  SET_LANDING_PAGE_DEFAULTS: (state, value) => {
-    state.landing_page_defaults = value;
-  },
-
-  SET_LANGUAGES: (state, value) => {
-    state.languages = value;
-  },
-
-  SET_THEMATIC_OVERVIEW: (state, value) => {
-    state.thematic_overview = value;
-  },
-
-  SET_TOOLKIT_QUESTIONS: (state, value) => {
-    state.toolkit_questions = value;
-  },
-
-  SET_SUB_LEVEL_TYPES: (state, value) => {
-    state.sub_level_types = value;
-  },
-
-  SET_SYSTEM_ORGANISATIONS: (state, value) => {
-    state.organisations = value;
-  },
-  SET_DONORS: (state, donors) => {
-    state.donors = donors;
+  setValue (state, { key, val }) {
+    state[key] = val
   },
   SET_DONOR_DETAILS: (state, { id, data }) => {
-    state.donorsLibrary = { ...state.donorsLibrary, [id]: data };
-  },
-  SET_REGIONS: (state, regions) => {
-    state.regions = regions;
-  },
-  SET_ROADMAP: (state, roadmap) => {
-    state.roadmap = roadmap;
+    state.donorsLibrary = { ...state.donorsLibrary, [id]: data }
   }
-};
+}

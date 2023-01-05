@@ -27,6 +27,18 @@ class Organisation(ExtendedModel):
     def __str__(self):  # pragma: no cover
         return self.name
 
+    @classmethod
+    def get_or_create_insensitive(cls, project_org):
+        try:
+            org_id = int(project_org)
+        except ValueError:
+            try:
+                org = cls.objects.get(name__iexact=project_org)
+            except Organisation.DoesNotExist:
+                org = cls.objects.create(name=project_org)
+            org_id = org.id
+        return org_id
+
 
 class UserProfile(ExtendedModel):
     IMPLEMENTER = 'I'
@@ -56,11 +68,12 @@ class UserProfile(ExtendedModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True, null=True)
     organisation = models.ForeignKey(Organisation, blank=True, null=True, on_delete=models.SET_NULL)
-    country = models.ForeignKey('country.Country', null=True, on_delete=models.SET_NULL)
-    donor = models.ForeignKey('country.Donor', related_name='userprofiles', null=True, on_delete=models.SET_NULL)
+    country = models.ForeignKey('country.Country', null=True,  blank=True, on_delete=models.SET_NULL)
+    donor = models.ForeignKey('country.Donor', related_name='userprofiles', null=True,  blank=True, 
+                              on_delete=models.SET_NULL)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
-    phone = models.CharField(blank=True, null=True, max_length=50)
+    # phone = models.CharField(blank=True, null=True, max_length=50)
     title = models.CharField(blank=True, null=True, max_length=100)
     linkedin = models.URLField(blank=True, null=True)
 

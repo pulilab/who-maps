@@ -10,7 +10,7 @@
         :code="country.code"
       />
     </el-col>
-    <el-col class="CountryName">
+    <el-col :class="`CountryName ${active ? 'Active': ''}`">
       <div @click="selectCountry(country)">
         {{ country.name }}
       </div>
@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import CountryFlag from './CountryFlag';
+import { mapGetters, mapActions } from 'vuex'
+import CountryFlag from './CountryFlag'
 
 export default {
   components: {
@@ -34,6 +34,10 @@ export default {
     showFlag: {
       type: Boolean,
       default: true
+    },
+    active: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -42,19 +46,29 @@ export default {
     }),
     country () {
       if (this.id) {
-        return this.getCountryDetails(this.id);
+        return this.getCountryDetails(this.id)
       }
-      return null;
+      return null
     }
   },
   methods: {
+    ...mapActions({
+      setProjectBoxActiveGlobalTab: 'landing/setProjectBoxActiveGlobalTab'
+    }),
     selectCountry (country) {
-      const organisation = country ? country.code.toLowerCase() : '-';
-      const localised = this.localePath({ name: 'organisation', params: { organisation } });
-      this.$router.push(localised);
+      if (!this.active) {
+        return
+      }
+      if (country && country.id === process.env.GlobalCountryID) {
+        country = null
+        this.setProjectBoxActiveGlobalTab(true)
+      }
+      const organisation = country ? country.code.toLowerCase() : '-'
+      const localised = this.localePath({ name: 'organisation', params: { organisation } }, this.locale)
+      this.$router.push(localised)
     }
   }
-};
+}
 </script>
 
 <style lang="less">
@@ -78,14 +92,18 @@ export default {
       font-size: @fontSizeMedium;
       font-weight: 700;
       line-height: 16px;
-      color: @colorBrandPrimary;
 
       div {
         display: inline-block;
-        cursor: pointer;
         white-space: nowrap;
-        &:hover {
-          color: @colorBrandPrimaryLight;
+      }
+      &.Active {
+        color: @colorBrandPrimary;
+        div {
+          cursor: pointer;
+          &:hover {
+            color: @colorBrandPrimaryLight;
+          }
         }
       }
     }

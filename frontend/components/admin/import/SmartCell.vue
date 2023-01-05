@@ -1,14 +1,20 @@
 <template>
-  <div
-    :class="['SmartCell', {'Disabled': isDisabled, 'ValidationError': errorMessage, 'ParsingError': parsingFailed}]"
+  <div    
+    :class="['SmartCell', {
+      'Disabled': isDisabled,
+      'ValidationError': errorMessage,
+      'ParsingError': parsingFailed && !isRequired
+    }]"
     @click="clickHandler"
   >
-    <div class="Content">
+    <div v-if="shown" class="Content" :class="{'Country': isCountry}">
       <template v-if="column">
-        <div
-          v-if="active"
-          class="active"
-        >
+        <div v-if="active">
+          <el-input-number
+            v-if="isNumber"
+            v-model="internalValue"
+            :disabled="disabled"
+          />
           <date-field
             v-if="isDate"
             v-model="internalValue"
@@ -48,16 +54,26 @@
           </el-radio-group>
         </div>
 
-        <template v-else-if="isDate || isTextArea || isGovInvestor">
+        <template v-else-if="isDate">
+          {{ showDate }}
+        </template>
+
+        <template v-else-if="isCountry">
+          <country-flag :code="countryDetails.code" :small="true"/>
+          <span v-if="countryDetails.name">{{ countryDetails.name }}</span>
+        </template>
+
+        <template v-else-if="isTextArea || isGovInvestor">
           {{ internalValue }}
         </template>
 
-        <template v-else-if="parsedValue && parsedValue.names">
+        <template v-else-if="isOrganisation">
+          {{ organisationValue }}
+        </template>
+
+        <template v-else-if="parsedValue && parsedValue.names && !isCountry">
           <ul class="ParsedList">
-            <li
-              v-for="(name, index) in parsedValue.names"
-              :key="index"
-            >
+            <li v-for="(name, index) in parsedValue.names" :key="index">
               {{ name }}
             </li>
           </ul>
@@ -66,14 +82,14 @@
       <template v-if="!column">
         {{ value }}
       </template>
-      <template v-if="parsingFailed">
+      <template v-if="parsingFailed && !isOrganisation">
         <span class="OriginalValue">{{ original }}</span>
       </template>
     </div>
-    <div
-      v-if="errorMessage || parsingFailed"
-      class="ErrorOverlay"
-    >
+    <div v-else>
+      {{ value }}
+    </div>
+    <div v-if="(errorMessage || parsingFailed) && !active" class="ErrorOverlay">
       <span v-if="errorMessage && !parsingFailed">
         {{ errorMessage }}
       </span>
@@ -87,13 +103,16 @@
 </template>
 
 <script>
-import DateField from '@/components/admin/import/DateField';
-import { Validator } from 'vee-validate';
-import { mapState } from 'vuex';
+import { formatDate } from '@/utilities/projects'
+import DateField from '@/components/admin/import/DateField'
+import CountryFlag from '@/components/common/CountryFlag'
+import { Validator } from 'vee-validate'
+import { mapState } from 'vuex'
 
 export default {
   components: {
-    DateField
+    DateField,
+    CountryFlag
   },
   model: {
     prop: 'value',
@@ -143,8 +162,9 @@ export default {
   },
   data () {
     return {
+      shown: true,
       active: false
-    };
+    }
   },
   computed: {
     ...mapState('system', {
@@ -154,49 +174,86 @@ export default {
       projectDicts: state => state.projectStructure
     }),
     validator () {
-      return new Validator();
+      return new Validator()
     },
     internalValue: {
       get () {
         if (this.isDate) {
-          return new Date(this.value);
+          return new Date(this.value)
         }
-        return this.value;
+        return this.value
       },
       set (value) {
-        this.$emit('change', value);
+        this.$emit('change', value)
       }
     },
     column () {
       if (this.type === null || (!this.type.startsWith('MOH') && !this.type.startsWith('INV'))) {
-        return this.type;
+        return this.type
       } else {
-        return 'custom_field';
+        return 'custom_field'
       }
     },
+    isRequired () {
+      return !!this.rules?.required
+    },
+    isNumber () {
+      return ['health_workers', 'clients', 'facilities'].includes(this.column)
+    },
     isDate () {
-      return ['start_date', 'end_date', 'implementation_dates'].includes(this.column);
+      return ['start_date', 'end_date', 'implementation_dates'].includes(this.column)
+    },
+    showDate () {
+      return this.isDate ? formatDate(this.internalValue) : ''
+    },
+    isCountry () {
+      return this.column === 'country'
+    },
+    isOrganisation () {
+      return this.column === 'organisation'
+    },
+    isTeam () {
+      return this.column === 'implementing_team'
+    },
+    countryDetails () {
+      let country = null
+      if (this.isCountry && this.value) {
+        country = this.systemDicts.countries.find(c => c.id === this.parsedValue.ids[0])
+        if (!country) {
+          country = {
+            id: 0,
+            code: 'UC',
+            name: ''
+          }
+        }
+      } else {
+        country = {
+          id: 0,
+          code: 'UC',
+          name: ''
+        }
+      }
+      return country
     },
     isTextArea () {
       return ['geographic_scope', 'implementation_overview', 'name',
         'contact_name', 'contact_email', 'mobile_application',
-        'wiki', 'repository', 'health_workers', 'clients', 'facilities'].includes(this.column);
+        'wiki', 'repository'].includes(this.column)
     },
     isGovInvestor () {
-      return this.column === 'government_investor';
-    },
-    isForced () {
-      return ['country', 'donors'].includes(this.column);
+      return this.column === 'government_investor'
     },
     isDisabled () {
-      return this.isForced || this.disabled;
+      return !this.column || this.disabled
     },
     parsedValue () {
-      const result = { names: Array.isArray(this.value) ? this.value : [this.value], ids: Array.isArray(this.value) ? this.value : [this.value] };
+      const result = { names: Array.isArray(this.value) ? this.value : [this.value], ids: Array.isArray(this.value) ? this.value : [this.value] }
       if (!this.column) {
-        return result;
+        return result
       } else {
         const resolver = {
+          country: () => this.findSystemValue('countries'),
+          donors: () => this.findSystemValue('donors', true),
           organisation: () => this.findSystemValue('organisations'),
           platforms: () => this.findProjectCollectionValue('technology_platforms', false),
           digitalHealthInterventions: () => this.findProjectCollectionValue('strategies', true, 'subGroups', 'strategies'),
@@ -204,7 +261,7 @@ export default {
           hsc_challenges: () => this.findProjectCollectionValue('hsc_challenges', true, 'challenges'),
           his_bucket: () => this.findProjectCollectionValue('his_bucket', true),
           implementing_partners: this.stringArray,
-          implementing_team: this.stringArray,
+          implementing_team: () => this.parseTeamEmails(),
           implementing_viewers: this.stringArray,
           implementation_dates: () => this.parseDate(),
           start_date: () => this.parseDate(),
@@ -214,149 +271,155 @@ export default {
               'no they have not yet contributed': 0,
               'yes they are contributing inkind people or time': 1,
               'yes there is a financial contribution through moh budget': 2
-            };
-            const cleaned = ('' + this.value).replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase();
-            const value = Number.isInteger(this.value) ? this.value : labelLib[cleaned];
-            const label = !Number.isInteger(this.value) ? this.value : Object.keys(labelLib).find(k => labelLib[k] === cleaned);
+            }
+            const cleaned = ('' + this.value).replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase()
+            const value = Number.isInteger(this.value) ? this.value : labelLib[cleaned]
+            const label = !Number.isInteger(this.value) ? this.value : Object.keys(labelLib).find(k => labelLib[k] === cleaned)
             return {
               ids: [value],
               names: [label]
-            };
+            }
           },
           licenses: () => this.findProjectCollectionValue('licenses', true),
           interoperability_links: () => this.findProjectCollectionValue('interoperability_links'),
           interoperability_standards: () => this.findProjectCollectionValue('interoperability_standards', true),
           sub_level: () => {
-            const value = Array.isArray(this.value) ? this.value[0] : this.value;
-            const level = this.subLevels.find(cf => cf.id === value || cf.name === value);
+            const value = Array.isArray(this.value) ? this.value[0] : this.value
+            const level = this.subLevels.find(cf => cf.id === value || cf.name === value)
             if (level) {
-              return { names: [level.name], ids: [level.id] };
+              return { names: [level.name], ids: [level.id] }
             }
-            return { names: [], ids: [] };
+            return { names: [], ids: [] }
           },
           custom_field: () => {
-            const q = this.customFieldsLib[this.type];
+            const q = this.customFieldsLib[this.type]
             if (!q) {
-              return { ids: [], names: [] };
+              return { ids: [], names: [] }
             }
             if (q.type < 4) {
-              return result;
+              return result
             } else if (q.type >= 4) {
-              const options = this.stringToArray(this.value);
-              const filtered = options.filter(o => q.options.includes(o));
-              return { ids: [...filtered], names: [...filtered] };
+              const options = this.stringToArray(this.value)
+              const filtered = options.filter(o => q.options.includes(o))
+              return { ids: [...filtered], names: [...filtered] }
             }
           }
-        };
-        const res = resolver[this.column];
-        return res ? res() : result;
+        }
+        const res = resolver[this.column]
+        return res ? res() : result
       }
     },
     parsingFailed () {
-      return this.value && this.column && this.parsedValue.ids.length === 0;
+      return this.value && this.column && this.parsedValue?.ids?.length === 0 && !this.isOrganisation && !this.isTeam
     },
     errorMessage () {
-      const e = this.errors.find(e => e.field === this.column);
-      return e ? e.msg : null;
+      const e = this.errors.find(e => e.field === this.column)
+      return e ? e.msg : null
+    },
+    organisationValue() {
+      return Array.isArray(this.internalValue) ? this.parsedValue.names[0] : this.internalValue
     }
   },
   watch: {
     column: {
       immediate: true,
       handler (column) {
-        this.validate();
+        this.validate()
       }
     },
     value: {
       immediate: true,
       handler (value) {
-        this.validate();
+        this.validate()
       }
     }
   },
   methods: {
     async validate () {
-      const name = this.nameMapping[this.column] || this.column;
-      const { valid, errors } = await this.validator.verify(this.apiValue(), this.rules, { name });
-      this.handleValidation(valid, errors[0], this.column);
+      const name = this.nameMapping[this.column] || this.column
+      const { valid, errors } = await this.validator.verify(this.apiValue(), this.rules, { name })
+      this.handleValidation(valid, errors[0], this.column)
     },
     clickHandler () {
-      if (this.isDate || this.isDisabled || this.isTextArea || this.isCoverage || this.isGovInvestor) {
-        this.active = true;
-        return;
+      if (!this.shown) {
+        this.shown = true
+        return
+      }
+      this.shown = true
+      if (this.isNumber || this.isDate || this.isDisabled || this.isTextArea || this.isCoverage || this.isGovInvestor) {
+        this.active = true
+        return
       }
       if (this.column) {
-        this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column, type: this.type });
+        this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column, type: this.type })
       }
     },
     parseDate () {
-      const result = this.value ? new Date(this.value) : null;
+      const result = this.value ? new Date(this.value) : null
       return {
         ids: [result],
         names: [result]
-      };
+      }
+    },
+    parseTeamEmails () {
+      const value = this.value !== '' ?  this.valueParser(true) : ''
+      return value ? this.stringArray(value) : {ids: [], names: []}
     },
     stringToArray (value) {
       if (Array.isArray(value)) {
-        return value;
+        return value
       }
       if (typeof value === 'string') {
-        let splitted = [];
-        if (value.includes(',')) {
-          splitted = value.split(',');
-        } else {
-          splitted = value.split(';');
-        }
-        return splitted.map(v => v.trim());
+        return value.split('|').map(v => v.trim())
       }
-      return [value];
+      return [value]
     },
     toInternalRepresentation (filtered) {
       return filtered.reduce((a, c) => {
-        a.ids.push(c.id);
-        a.names.push(c.challenge || c.name);
-        return a;
-      }, { names: [], ids: [] });
+        a.ids.push(c.id)
+        a.names.push(c.challenge || c.name)
+        return a
+      }, { names: [], ids: [] })
     },
     stringArray () {
       const filtered = this.stringToArray(this.value)
-        .map(st => ({ id: st, name: st }));
-      return this.toInternalRepresentation(filtered);
+        .map(st => ({ id: st, name: st }))
+      return this.toInternalRepresentation(filtered)
     },
     valueParser (isMultiple) {
       if (!Array.isArray(this.value)) {
-        return isMultiple ? this.stringToArray(this.value) : [this.value];
+        return isMultiple ? this.stringToArray(this.value) : [this.value]
       } else {
-        return this.value;
+        return this.value
       }
     },
     findSystemValue (collection, isMultiple) {
-      const value = this.valueParser(isMultiple);
-      const filtered = this.systemDicts[collection].filter(c => value.some(d => d === c.id || d === c.name));
-      return this.toInternalRepresentation(filtered);
+      const value = this.valueParser(isMultiple)
+      const filtered = this.systemDicts[collection].filter(c => value.some(d => d === c.id || d === c.name))
+      return this.toInternalRepresentation(filtered)
     },
     findProjectCollectionValue (collection, isMultiple, ...subValues) {
-      const value = this.valueParser(isMultiple);
-      let projectData = this.projectDicts[collection];
+      const value = this.valueParser(isMultiple)
+      let projectData = this.projectDicts[collection]
       if (subValues && Array.isArray(subValues)) {
         subValues.forEach(subKey => {
           projectData = projectData.reduce((a, c) => {
-            a.push(...c[subKey]);
-            return a;
-          }, []);
-        });
+            a.push(...c[subKey])
+            return a
+          }, [])
+        })
       }
-      const filtered = projectData.filter(c => value.some(d => d === c.id || d === c.name || d === c.challenge));
-      return this.toInternalRepresentation(filtered);
+      const filtered = projectData.filter(c => value.some(d => d === c.id || d === c.name || d === c.challenge))
+      return this.toInternalRepresentation(filtered)
     },
     apiValue () {
-      const isMultiple = ['platforms', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards', 'custom_field', 'digitalHealthInterventions', 'implementing_team', 'implementing_viewers'];
-      const isIds = [...isMultiple, 'donors', 'country', 'organisation', 'government_investor', 'sub_level'];
-      const idsOrNames = isIds.includes(this.column) ? this.parsedValue.ids : this.parsedValue.names;
-      return isMultiple.includes(this.column) ? idsOrNames : idsOrNames[0];
+      const isMultiple = ['donors', 'platforms', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards', 'custom_field', 'digitalHealthInterventions', 'implementing_team', 'implementing_viewers']
+      const isIds = [...isMultiple, 'country', 'organisation', 'government_investor', 'sub_level']
+      const idsOrNames = isIds.includes(this.column) ? this.parsedValue.ids : this.parsedValue.names
+      return isMultiple.includes(this.column) ? idsOrNames : idsOrNames[0]
     }
   }
-};
+}
 </script>
 
 <style lang="less">
@@ -365,13 +428,21 @@ export default {
 
   .SmartCell {
     position: relative;
+    cursor: pointer;
 
     .Content {
       width: 100%;
       height: 100%;
 
+      &.Country {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
       .ParsedList{
         list-style: none;
+        padding-left: 0;
       }
     }
 
@@ -388,13 +459,14 @@ export default {
     }
 
     &:hover {
-       .ErrorOverlay {
-         opacity: 1;
-       }
+      box-shadow: inset 0 0 1px 1px silver;
+      .ErrorOverlay {
+        opacity: 1;
+      }
     }
 
     &.Disabled {
-      cursor: not-allowed;
+      opacity: 0.5;
       pointer-events: none;
     }
 

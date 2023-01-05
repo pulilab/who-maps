@@ -1,16 +1,11 @@
 <template>
   <div>
-    <div
-      v-if="errors"
-      class="GlobalErrors"
-    >
-      <el-tag
-        v-for="error in errors"
-        :key="error"
-        type="danger"
-      >
+    <div v-if="errors" class="GlobalErrors">
+      <el-tag v-for="error in errors" :key="error" type="danger">
         <fa icon="exclamation" />
-        {{ error }}
+        <translate :parameters="{ column: error }">
+          Please select the "{column}" column
+        </translate>
       </el-tag>
     </div>
     <slot
@@ -22,8 +17,8 @@
 </template>
 
 <script>
-import { draftRules, publishRules } from '@/utilities/projects';
-import { nameMapping } from '@/utilities/import';
+import { draftRules, publishRules } from '@/utilities/projects'
+import { nameMapping } from '@/utilities/import'
 
 export default {
   props: {
@@ -38,53 +33,62 @@ export default {
   },
   computed: {
     internalDraftRules () {
-      return { ...draftRules(), organisation: { required: true } };
+      return { ...draftRules() }
     },
     internalPublishRules () {
-      const standardRules = publishRules();
+      const standardRules = publishRules()
       return {
         ...standardRules,
         strategies: undefined,
         digitalHealthInterventions: standardRules.strategies,
         ...standardRules.national_level_deployment
-      };
+      }
     },
     validationRules () {
-      const rules = this.publish ? this.internalPublishRules : this.internalDraftRules;
+      const rules = this.publish ? this.internalPublishRules : this.internalDraftRules
       return {
         ...rules,
-        team: undefined,
-        viewers: undefined,
-        country: undefined,
-        donors: undefined
-      };
+        implementing_team: {
+          isArrayofEmails: true          
+        },
+        team: undefined, // this is not the team we use for importing!
+        viewers: undefined
+      }
     },
     nameMapping () {
       return {
         ...nameMapping
-      };
+      }
     },
     errors () {
-      const result = [];
-      const draftRequireds = [];
+      const result = []
+      const draftRequireds = []
       for (const key in this.validationRules) {
         if (this.validationRules[key] && this.validationRules[key].required) {
-          draftRequireds.push(key);
+          draftRequireds.push(key)
         }
       }
       draftRequireds.forEach(dr => {
         if (!this.headers.some(h => h.selected === dr)) {
-          const name = this.nameMapping[dr] || dr;
-          result.push(`Please select ${name} column`);
+          const name = this.nameMapping[dr] || dr
+          result.push(name)
         }
-      });
-      return result;
+      })
+      return result
     }
   }
 
-};
+}
 </script>
 
-<style>
+<style lang="less" scoped>
+  .GlobalErrors {
+    .el-tag {
+      margin: 0 10px 10px 0px;
 
+      .svg-inline--fa {
+        margin-right: 3px;
+      }
+    }
+  }
 </style>

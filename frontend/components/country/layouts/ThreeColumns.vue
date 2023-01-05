@@ -48,5 +48,5 @@ export default {
   name: 'ThreeColumns',
   props: {
   }
-};
+}
 </script>

@@ -32,7 +32,11 @@ class SystemMessageTests(APITestCase):
                                       region=Country.REGIONS[0][0], name_en='Hungary', name_fr='Hongrie')
         self.org = OrganisationFactory(name="Test org 1")
 
-        data = dict(country=self.country.id, organisation=self.org.id, hsc_challenges=[1, 2], his_bucket=[1, 2])
+        data = dict(country=self.country.id,
+                    organisation=self.org.id,
+                    hsc_challenges=[1, 2],
+                    his_bucket=[1, 2],
+                    health_focus_areas=[1, 2])
         self.published_project = ProjectFactory(name='published project', data=data, team=[self.profile_3])
         # 'publish' the project
         self.published_project.public_id = '1234'
@@ -173,32 +177,21 @@ class SystemMessageTests(APITestCase):
 
             system_message.refresh_from_db()
             self.assertEqual(system_message.receivers_number, 4)
+            expected_call_args = {
+                'bh+1@pulilab.com': {
+                    'subject': 'subject', 'email_type': 'system_message',
+                    'to': ['bh+1@pulilab.com'], 'language': 'en', 'context': {'message': 'Message to everyone'}
+                },
+                'bh+2@pulilab.com': {
+                    'subject': 'matière', 'email_type': 'system_message',
+                    'to': ['bh+2@pulilab.com'], 'language': 'fr', 'context': {'message': 'message à tout le monde'}},
+                'bh+3@pulilab.com': {
+                    'subject': 'Sujeto(', 'email_type': 'system_message',
+                    'to': ['bh+3@pulilab.com'], 'language': 'es', 'context': {'message': 'Mensaje a todos'}},
+                'bh+4@pulilab.com': {
+                    'subject': 'subject', 'email_type': 'system_message',
+                    'to': ['bh+4@pulilab.com'], 'language': 'pt', 'context': {'message': 'Message to everyone'}}
+            }
 
-            call_args_1 = send_mail_wrapper.call_args_list[0][1]
-            self.assertEqual(call_args_1['subject'], system_message.subject_en)
-            self.assertEqual(call_args_1['email_type'], 'system_message')
-            self.assertEqual(call_args_1['to'], [self.user_1.email])
-            self.assertEqual(call_args_1['context']['message'], system_message.message_en)
-            self.assertEqual(call_args_1['language'], 'en')
-
-            call_args_2 = send_mail_wrapper.call_args_list[1][1]
-            self.assertEqual(call_args_2['subject'], system_message.subject_fr)
-            self.assertEqual(call_args_2['email_type'], 'system_message')
-            self.assertEqual(call_args_2['to'], [self.user_2.email])
-            self.assertEqual(call_args_2['context']['message'], system_message.message_fr)
-            self.assertEqual(call_args_2['language'], 'fr')
-
-            call_args_3 = send_mail_wrapper.call_args_list[2][1]
-            self.assertEqual(call_args_3['subject'], system_message.subject_es)
-            self.assertEqual(call_args_3['email_type'], 'system_message')
-            self.assertEqual(call_args_3['to'], [self.user_3.email])
-            self.assertEqual(call_args_3['context']['message'], system_message.message_es)
-            self.assertEqual(call_args_3['language'], 'es')
-
-            # user with portugal language should get english translation
-            call_args_1 = send_mail_wrapper.call_args_list[3][1]
-            self.assertEqual(call_args_1['subject'], system_message.subject_en)
-            self.assertEqual(call_args_1['email_type'], 'system_message')
-            self.assertEqual(call_args_1['to'], [user_4.email])
-            self.assertEqual(call_args_1['context']['message'], system_message.message_en)
-            self.assertEqual(call_args_1['language'], 'pt')
+            actual_call_args = {x[1]['to'][0]: x[1] for x in send_mail_wrapper.call_args_list}
+            self.assertEqual(expected_call_args, actual_call_args)

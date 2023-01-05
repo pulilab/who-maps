@@ -1,14 +1,15 @@
 <template>
   <div
-    v-if="donors && donors.length >0"
+    v-if="donors && donors.length > 0"
     id="donorcustom"
     class="DonorCustom"
   >
     <collapsible-card
-      v-for="(donor) in donors"
+      v-for="(donor, idx) in donors"
       ref="collapsible"
       :key="donor.id"
       :title="customFieldsName(donor.name)"
+      :prepend-title="prependTitle + idx"
     >
       <custom-field
         v-for="(field, index) in donor.donor_questions"
@@ -30,11 +31,11 @@
 </template>
 
 <script>
-import VeeValidationMixin from '../../mixins/VeeValidationMixin.js';
-import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js';
-import { mapGetters } from 'vuex';
-import CollapsibleCard from '../CollapsibleCard';
-import CustomField from '../CustomField';
+import VeeValidationMixin from '../../mixins/VeeValidationMixin.js'
+import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
+import { mapGetters } from 'vuex'
+import CollapsibleCard from '../CollapsibleCard'
+import CustomField from '../CustomField'
 
 export default {
   components: {
@@ -45,38 +46,49 @@ export default {
   computed: {
     ...mapGetters({
       getDonorDetails: 'system/getDonorDetails',
-      projectDonors: 'project/getDonors'
+      projectDonors: 'project/getDonors',
+      projectShadowDonors: 'project/getShadowDonors'
     }),
     donors () {
-      if (this.projectDonors) {
-        return this.projectDonors.map(d => this.getDonorDetails(d)).filter(d => d.donor_questions && d.donor_questions.length > 0);
+      const allDonors = [
+        ...new Set([...this.projectDonors, ...this.projectShadowDonors])
+      ]
+      if (allDonors) {
+        allDonors.forEach(d =>
+          this.$store.dispatch('system/loadDonorDetails', d, { root: true })
+        )
+        return allDonors
+          .map(d => this.getDonorDetails(d))
+          .filter(d => d.donor_questions && d.donor_questions.length > 0)
       }
-      return null;
+      return null
     }
   },
   methods: {
     customFieldsName (name) {
-      return this.$gettext('{name} custom fields', { name });
+      return this.$gettext('{name} custom fields', { name })
     },
     async validate () {
       if (this.$refs.collapsible) {
-        this.$refs.collapsible.forEach(c => c.expandCard());
+        this.$refs.collapsible.forEach(c => c.expandCard())
       }
       if (this.$refs.customQuestion) {
-        const validations = await Promise.all(this.$refs.customQuestion.map(r => r.validate()));
-        console.log('Custom donoros validators', validations);
-        return validations.reduce((a, c) => a && c, true);
+        const validations = await Promise.all(
+          this.$refs.customQuestion.map(r => r.validate())
+        )
+        console.log('Custom donoros validators', validations)
+        return validations.reduce((a, c) => a && c, true)
       }
-      return true;
+      return true
     }
   }
-};
+}
 </script>
 
 <style lang="less">
- @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .DonorCustom {}
-
+.DonorCustom {
+}
 </style>

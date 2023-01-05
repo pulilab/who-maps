@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import SimpleField from './SimpleField';
+import SimpleField from './SimpleField'
 export default {
   components: {
     SimpleField
@@ -37,10 +37,10 @@ export default {
   },
   computed: {
     cov () {
-      return this.coverage || {};
+      return this.coverage || {}
     }
   }
-};
+}
 </script>
 
 <style lang="less">

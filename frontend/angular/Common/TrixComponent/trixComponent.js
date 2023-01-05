@@ -1,5 +1,5 @@
-import TrixComponentController from './TrixComponentController';
-import _template from './TrixComponent.html';
+import TrixComponentController from './TrixComponentController'
+import _template from './TrixComponent.html'
 
 const component = {
   template: _template,
@@ -13,6 +13,6 @@ const component = {
     valid: '=',
     showError: '<?'
   }
-};
+}
 
-export default component;
+export default component

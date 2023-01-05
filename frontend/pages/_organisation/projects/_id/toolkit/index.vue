@@ -10,10 +10,10 @@ export default {
   components: {
   },
   mounted () {
-    const mapsToolkitFactory = require('../../../../../angular/MapsToolkit/mapsToolkitFactory');
-    mapsToolkitFactory.factory();
+    const mapsToolkitFactory = require('../../../../../angular/MapsToolkit/mapsToolkitFactory')
+    mapsToolkitFactory.factory()
   }
-};
+}
 </script>
 
 <style>

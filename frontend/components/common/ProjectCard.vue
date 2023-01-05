@@ -25,7 +25,10 @@
               v-show="showCountry"
               class="Country"
             >
-              <country-item :id="project.country" />
+              <country-item
+                :id="project.country"
+                :active="linkActive"
+              />
             </el-col>
             <el-col
               v-show="showOrganisation"
@@ -80,9 +83,9 @@
 </template>
 
 <script>
-import ProjectLegend from './ProjectLegend';
-import CountryItem from './CountryItem';
-import OrganisationItem from './OrganisationItem';
+import ProjectLegend from './ProjectLegend'
+import CountryItem from './CountryItem'
+import OrganisationItem from './OrganisationItem'
 
 export default {
   components: {
@@ -122,22 +125,26 @@ export default {
     showArrowOnOver: {
       type: Boolean,
       default: false
+    },
+    linkActive: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
     return {
       hovered: false
-    };
+    }
   },
   computed: {
     cardShadow () {
-      return this.hideBorders ? 'never' : 'always';
+      return this.hideBorders ? 'never' : 'always'
     },
     showArrow () {
-      return this.hovered && this.showArrowOnOver;
+      return this.hovered && this.showArrowOnOver
     },
     verified () {
-      return this.showVerified && this.project.approved;
+      return this.showVerified && this.project.approved
     },
     found () {
       const nameMApping = {
@@ -149,26 +156,27 @@ export default {
         overview: this.$gettext('Implementation Overview'),
         partner: this.$gettext('Partners'),
         region: this.$gettext('Region')
-      };
-      if (this.foundIn && this.showFoundIn) {
-        return this.foundIn.map(f => nameMApping[f]).join(',');
       }
-      return '';
+      if (this.foundIn && this.showFoundIn) {
+        return this.foundIn.map(f => nameMApping[f]).join(',')
+      }
+      return ''
     }
   },
   methods: {
     goToProject () {
-      const path = this.localePath({ name: 'organisation-projects-id-published', params: { ...this.$route.params, id: this.project.id } });
-      this.$router.push(path);
+      const path = this.localePath({ name: 'organisation-projects-id-published', params: { ...this.$route.params, id: this.project.id } })
+      this.$emit('redirect')
+      this.$router.push(path)
     },
     mouseEnterHandler () {
-      this.hovered = true;
+      this.hovered = true
     },
     mouseLeaveHandler () {
-      this.hovered = false;
+      this.hovered = false
     }
   }
-};
+}
 </script>
 
 <style lang="less">

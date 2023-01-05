@@ -5,6 +5,7 @@
     class="ImportDatePicker"
     align="center"
     size="small"
+    value-format="yyyy-MM-dd"
   />
 </template>
 
@@ -27,14 +28,14 @@ export default {
   computed: {
     internalValue: {
       get () {
-        return this.value instanceof Date ? this.value.toJSON() : this.value;
+        return this.value instanceof Date ? this.value.toJSON() : this.value
       },
       set (value) {
-        this.$emit('change', value ? value.toJSON() : null);
+        this.$emit('change', value || null)
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less">

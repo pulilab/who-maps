@@ -14,11 +14,13 @@
             <translate key="health-workers">
               How many health workers use the system?
             </translate>
-            <form-hint>
-              <translate key="health-workers-hint">
-                Health workers include all recognized health professionals directly accessing the software. If there are no users of this type, put 0.
-              </translate>
-            </form-hint>
+            <tooltip
+              :text="
+                $gettext(
+                  'Health workers include all recognized health professionals directly accessing the software. If there are no users of this type, put 0.'
+                ) | translate
+              "
+            />
           </template>
 
           <el-input
@@ -45,11 +47,13 @@
             <translate key="facilities">
               How many facilities use the system?
             </translate>
-            <form-hint>
-              <translate key="facilities-hint">
-                Health facilities using the system refers to all facilities that have direct access to the software. If there are no users of this type, put 0.
-              </translate>
-            </form-hint>
+            <tooltip
+              :text="
+                $gettext(
+                  'Health facilities using the system refers to all facilities that have direct access to the software. If there are no users of this type, put 0.'
+                ) | translate
+              "
+            />
           </template>
 
           <el-input
@@ -76,11 +80,13 @@
             <translate key="facilities">
               How many clients use the system?
             </translate>
-            <form-hint>
-              <translate key="facilities-hint">
-                Client users refers to all care recipients who have direct access to the software.  If there are no users of this type, put 0.
-              </translate>
-            </form-hint>
+            <tooltip
+              :text="
+                $gettext(
+                  'Client users refers to all care recipients who have direct access to the software.  If there are no users of this type, put 0.'
+                ) | translate
+              "
+            />
           </template>
           <el-input
             v-model="localClients"
@@ -101,13 +107,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import FormHint from './FormHint';
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import { mapGetters } from 'vuex'
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js'
+import Tooltip from '@/components/dashboard/Tooltip'
 
 export default {
   components: {
-    FormHint
+    Tooltip
   },
   mixins: [VeeValidationMixin],
   props: {
@@ -150,55 +156,55 @@ export default {
       getFacilities: 'countries/getCountryFacilityList'
     }),
     hasFacilityList () {
-      return !!this.getFacilities(this.country).length;
+      return !!this.getFacilities(this.country).length
     },
     disableFacilities () {
       if (this.isNlc) {
-        return false;
+        return false
       }
-      return !!(this.disabled || this.hasFacilityList);
+      return !!(this.disabled || this.hasFacilityList)
     },
     localHealthWorkers: {
       get () {
-        return this.healthWorkers;
+        return this.healthWorkers
       },
       set (value) {
-        this.$emit('update:healthWorkers', value);
+        this.$emit('update:healthWorkers', value)
       }
     },
     localClients: {
       get () {
-        return this.clients;
+        return this.clients
       },
       set (value) {
-        this.$emit('update:clients', value);
+        this.$emit('update:clients', value)
       }
     },
     localFacilities: {
       get () {
-        return this.facilities;
+        return this.facilities
       },
       set (value) {
-        this.$emit('update:facilities', value);
+        this.$emit('update:facilities', value)
       }
     }
   },
   methods: {
     async validate () {
-      return this.$validator.validate();
+      return this.$validator.validate()
     }
   }
-};
+}
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import "../../assets/style/variables.less";
+@import "../../assets/style/mixins.less";
 
-  .CoverageFieldset {
-    .el-form-item__label {
-      line-height: 20px;
-      height: 50px;
-    }
+.CoverageFieldset {
+  .el-form-item__label {
+    line-height: 20px;
+    height: 50px;
   }
+}
 </style>

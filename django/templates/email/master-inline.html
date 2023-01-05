@@ -485,7 +485,7 @@
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you did not request this password reset, please ignore this message." %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
                           {% trans "Please do not reply to this email. For support or additional questions, email" %}
-                          <a href="mailto:digitalhealthatlas@gmail.com" style="color:#008DC9;text-decoration:underline;" >digitalhealthatlas@gmail.com</a>
+                          <a href="mailto:digital-health-atlas@who.int" style="color:#008DC9;text-decoration:underline;" >digital-health-atlas@who.int</a>
                         </p>
                         <!-- /TEMPLATE: PASSWORD RESET -->
 
@@ -498,10 +498,42 @@
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
                         <a href="{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited" target="_blank" style="color:#008DC9;text-decoration:underline;" >{{ protocol }}://{{ domain }}/{{ language }}/-/reset?uid={{ uid }}&token={{ token }}&type=invited</a>
                         </p>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digital-health-atlas@who.int." %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: PASSWORD INVITED -->
+
+
+                        <!-- MISSING DATA COMMON TEMPLATE -->
+                        {% elif type == "missing_data_common_template" %}
+                        <h2 style="font-family:arial, sans-serif;font-weight:400;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:16px;" >{% trans "Dear" %} {{ name }}</h2>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{{ details }}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;" >
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
+                                <b style="text-transform:uppercase;" >{% trans "Project Name" %}</b>
+                              </td>
+                              <td align="right" style="font-family:arial, sans-serif;vertical-align:top;padding-top:5px;padding-bottom:5px;padding-right:10px;padding-left:10px;background-color:#9B9B9B;font-size:12px;color:#FFFFFF;" >
+                                {% trans "Date of Submission" %}
+                              </td>
+                            </tr>
+                            {% for project in projects %}
+                            <tr class="list-content">
+                              <td align="left" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
+                                <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/published" target="_blank" style="color:#008DC9;text-decoration:underline;" ><b>{{ project.name }}</b></a>
+                              </td>
+                              <td align="right" style="font-family:arial, sans-serif;font-size:14px;vertical-align:top;padding-top:20px;" >
+                                <b>{{ project.modified }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table><br><br>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digital-health-atlas@who.int." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
+                        <!-- /MISSING DATA COMMON TEMPLATE -->
 
 
                         <!-- NEW PENDING SOFTWARE -->
@@ -518,7 +550,7 @@
                         <!-- SOFTWARE DECLINED -->
                         {% elif type == "software_declined" %}
                         <h1 style="font-family:arial, sans-serif;line-height:1.4;margin-top:10px;margin-bottom:20px;margin-right:0;margin-left:0;font-size:20px;font-weight:700;" >{% trans "Software declined: " %}{{ software_name }}</h1>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{{ software_name }}{% trans " has not been approved for inclusion in the Digital Health Atlas. Please get in touch with the Digital Health Atlas team if you believe this decision has been taken in error via digitalhealthatlas@gmail.com" %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{{ software_name }}{% trans " has not been approved for inclusion in the Digital Health Atlas. Please get in touch with the Digital Health Atlas team if you believe this decision has been taken in error via digital-health-atlas@who.int" %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /SOFTWARE DECLINED -->
@@ -542,7 +574,7 @@
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
                           <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment" target="_blank" style="color:#008DC9;text-decoration:underline;" >{% site_url %}/{{ language }}/-/projects/{{ project_id }}/assessment</a>
                         </p>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digital-health-atlas@who.int." %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: TOOLKIT DIGEST -->
@@ -556,7 +588,7 @@
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
                           <a href="{% site_url %}/{{ language }}/-/projects/{{ project_id }}" target="_blank" style="color:#008DC9;text-decoration:underline;" >{% site_url %}/{{ language }}/-/projects/{{ project_id }}</a>
                         </p>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digital-health-atlas@who.int." %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: DRAFT REMINDER -->
@@ -630,7 +662,7 @@
                             {% endfor %}
                           </tbody>
                         </table><br><br>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digital-health-atlas@who.int." %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: COUNTRY PUBLISHED NEW QUESTION DIGEST -->
@@ -675,7 +707,7 @@
                             {% endfor %}
                           </tbody>
                         </table><br><br>
-                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digitalhealthatlas@gmail.com." %}</p>
+                        <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "If you have any questions or feedback, you can always reach the Digital Health Atlas team via email on digital-health-atlas@who.int." %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "Sincerely," %}</p>
                         <p style="font-family:arial, sans-serif;font-size:14px;font-weight:normal;margin-top:0;margin-bottom:20px;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >{% trans "The Digital Health Atlas Team" %}</p>
                         <!-- /TEMPLATE: DONOR PUBLISHED NEW QUESTION DIGEST -->
@@ -791,7 +823,7 @@
                       <span style="color:#9B9B9B;font-size:12px;text-align:center;" >&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                       <a href="{% site_url %}/{{ language }}/-/terms" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Terms of use" %}</a>
                       <span style="color:#9B9B9B;font-size:12px;text-align:center;" >&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                      <a href="mailto:digitalhealthatlas@gmail.com" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Contact us" %}</a>
+                      <a href="mailto:digital-health-atlas@who.int" style="text-decoration:underline;color:#9B9B9B;font-size:12px;text-align:center;" >{% trans "Contact us" %}</a>
                     </td>
                   </tr>
                   <td class="content-block" style="font-family:arial, sans-serif;vertical-align:top;padding-bottom:10px;padding-top:10px;color:#9B9B9B;font-size:12px;text-align:center;" >

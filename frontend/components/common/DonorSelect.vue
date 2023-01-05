@@ -2,6 +2,8 @@
   <lazy-el-select
     :value="value"
     :placeholder="$gettext('Select investor') | translate"
+    multiple
+    filterable
     popper-class="DonorSelectorPopper"
     class="DonorSelector"
     @change="changeHandler"
@@ -16,7 +18,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
   model: {
     prop: 'value',
@@ -24,7 +26,7 @@ export default {
   },
   props: {
     value: {
-      type: Number,
+      type: Array,
       default: null
     }
   },
@@ -35,10 +37,10 @@ export default {
   },
   methods: {
     changeHandler (value) {
-      this.$emit('change', value);
+      this.$emit('change', value)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

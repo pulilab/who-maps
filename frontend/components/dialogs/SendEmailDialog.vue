@@ -1,6 +1,5 @@
 <template>
   <el-dialog
-    v-if="visible"
     :visible.sync="visible"
     :title="$gettext('Send email to contact person(s)') | translate"
     modal
@@ -51,9 +50,9 @@
 </template>
 
 <script>
-import { mapGettersActions } from '../../utilities/form.js';
-import { mapGetters } from 'vuex';
-import uniqBy from 'lodash/uniqBy';
+import { mapGettersActions } from '../../utilities/form.js'
+import { mapGetters } from 'vuex'
+import uniqBy from 'lodash/uniqBy'
 
 export default {
   computed: {
@@ -67,38 +66,38 @@ export default {
       visible: ['layout', 'getSendEmailDialogState', 'setSendEmailDialogState', 0]
     }),
     addresses () {
-      let projects = this.projects;
+      let projects = this.projects
       if (this.selectedRows && !this.selectAll) {
-        projects = this.projects.filter(p => this.selectedRows.some(sr => sr === p.id));
+        projects = this.projects.filter(p => this.selectedRows.some(sr => sr === p.id))
       }
-      return uniqBy(projects, 'contact_email');
+      return uniqBy(projects, 'contact_email')
     },
     rows () {
-      return this.addresses ? this.addresses.length : 1;
+      return this.addresses ? this.addresses.length : 1
     },
     selectable () {
-      return this.addresses ? this.addresses.map(a => `${a.contact_name} <${a.contact_email}>`).join('\n') : null;
+      return this.addresses ? this.addresses.map(a => `${a.contact_name} <${a.contact_email}>`).join('\n') : null
     }
   },
   methods: {
     emailAddressString (rows) {
-      return this.$gettext('Email addresses ({rows})', { rows });
+      return this.$gettext('Email addresses ({rows})', { rows })
     },
     copy () {
-      const area = this.$refs.emailArea.$el.querySelectorAll('textarea')[0];
-      area.select();
-      document.execCommand('copy');
+      const area = this.$refs.emailArea.$el.querySelectorAll('textarea')[0]
+      area.select()
+      document.execCommand('copy')
       this.$message({
         message: this.$gettext('Email address(es) successfully copied in your clipboard'),
         type: 'success'
-      });
+      })
     },
     send () {
-      const mailto = `mailto:${this.profile.email}?bcc=${this.addresses.map(a => a.contact_email).join(',')}`;
-      window.open(mailto);
+      const mailto = `mailto:${this.profile.email}?bcc=${this.addresses.map(a => a.contact_email).join(',')}`
+      window.open(mailto)
     }
   }
-};
+}
 </script>
 
 <style>

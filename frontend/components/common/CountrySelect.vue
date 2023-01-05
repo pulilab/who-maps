@@ -1,5 +1,6 @@
 <template>
   <lazy-el-select
+    v-bind="{ ...$props, ...$attrs }"
     v-model="innerValue"
     :multiple="multiple"
     :disabled="disabled"
@@ -18,7 +19,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
   model: {
     prop: 'value',
@@ -26,7 +27,7 @@ export default {
   },
   props: {
     value: {
-      type: [Number, Array],
+      type: [Number, Array, String],
       default: null
     },
     disabled: {
@@ -40,17 +41,17 @@ export default {
     }),
     innerValue: {
       get () {
-        return this.value;
+        return this.value
       },
       set (value) {
-        this.$emit('change', value);
+        this.$emit('change', value)
       }
     },
     multiple () {
-      return Array.isArray(this.value);
+      return Array.isArray(this.value)
     }
   }
-};
+}
 </script>
 
 <style lang="less">

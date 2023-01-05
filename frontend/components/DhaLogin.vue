@@ -23,7 +23,6 @@
             prop="username"
           >
             <el-input
-              id="userName"
               v-model="username"
               type="text"
             />
@@ -79,7 +78,6 @@
               class="PrimaryAction"
             >
               <el-button
-                id="logIn"
                 type="primary"
                 size="medium"
                 native-type="submit"
@@ -205,8 +203,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import FormAPIErrorsMixin from './mixins/FormAPIErrorsMixin.js';
+import { mapActions, mapGetters } from 'vuex'
+import FormAPIErrorsMixin from './mixins/FormAPIErrorsMixin.js'
 
 export default {
   mixins: [FormAPIErrorsMixin],
@@ -236,7 +234,7 @@ export default {
           { validator: this.validatorGenerator('email') }
         ]
       }
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -256,74 +254,76 @@ export default {
         {
           confirmButtonText: this.$gettext('OK')
         }
-      );
+      )
       if (this.$sentry) {
         this.$sentry.captureMessage('Un-caught validation error in project page', {
           level: 'warning',
           extra: {
             e
           }
-        });
+        })
       }
     },
     async loginLocal () {
-      this.$nuxt.$loading.start('loginLoader');
-      this.deleteFormAPIErrors();
+      this.$nuxt.$loading.start('loginLoader')
+      this.deleteFormAPIErrors()
       try {
-        await this.$refs.loginForm.validate();
+        await this.$refs.loginForm.validate()
         await this.login({
           username: this.username,
           password: this.password
-        });
+        })
       } catch (e) {
         if (e) {
-          this.setFormAPIErrors(e);
-          this.$refs.loginForm.validate(() => {});
+          this.setFormAPIErrors(e)
+          this.$refs.loginForm.validate(() => {})
         }
-        this.$nuxt.$loading.finish('loginLoader');
-        return;
+        this.$nuxt.$loading.finish('loginLoader')
+        return
       }
       try {
+        this.$store.commit('user/SET_COOKIE', false)
+        this.$track()
         if (this.profile.country) {
-          this.setSelectedCountry(this.profile.country);
+          this.setSelectedCountry(this.profile.country)
         }
         if (this.$route.query && this.$route.query.next) {
-          const path = this.$route.query.next;
-          const query = { ...this.$route.query, next: undefined };
-          this.$router.push({ path, query });
+          const path = this.$route.query.next
+          const query = { ...this.$route.query, next: undefined }
+          this.$router.push({ path, query })
         } else {
-          this.$router.push(this.localePath({ name: 'organisation-dashboard', params: this.$route.params, query: { country: [this.profile.country] } }));
+          this.$router.push(this.localePath({ name: 'organisation-dashboard', params: this.$route.params, query: { country: [this.profile.country] } }))
         }
       } catch (e) {
-        this.handleRoutingErrors(e);
+        this.handleRoutingErrors(e)
       }
-      this.$nuxt.$loading.finish('loginLoader');
+      this.$nuxt.$loading.finish('loginLoader')
     },
 
     toForgotten () {
-      this.email = this.username;
-      this.showForgotten = true;
+      this.email = this.username
+      this.showForgotten = true
     },
 
     forgotEmail () {
-      this.deleteFormAPIErrors();
+      this.deleteFormAPIErrors()
       this.$refs.forgotForm.validate(async valid => {
         if (valid) {
           try {
             await this.resetPassword({
               email: this.email
-            });
-            this.showForgotten = false;
-            this.successfulReset = true;
+            })
+            this.showForgotten = false
+            this.successfulReset = true
           } catch (err) {
-            this.setFormAPIErrors(err);
-            this.$refs.loginForm.validate(() => {});
+            this.setFormAPIErrors(err)
+            this.$refs.loginForm.validate(() => {})
           }
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="less">

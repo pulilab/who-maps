@@ -1,6 +1,5 @@
 <template>
   <el-dialog
-    v-if="visible"
     :visible.sync="visible"
     :title="$gettext('Applying specific filter to map/list') | translate"
     modal
@@ -19,35 +18,35 @@
           :selected="dhi"
           :header="$gettext('Digital Health Interventions') | translate"
           item="dhi"
-          @clear="dhi=[]"
+          @clear="dhi = []"
         />
         <filter-item
           :active="selectedFilter === 'hfa'"
           :selected="hfa"
           :header="$gettext('Health focus areas') | translate"
           item="hfa"
-          @clear="hfa=[]"
+          @clear="hfa = []"
         />
         <filter-item
           :active="selectedFilter === 'hsc'"
           :selected="hsc"
           :header="$gettext('Health system challenges') | translate"
           item="hsc"
-          @clear="hsc=[]"
+          @clear="hsc = []"
         />
         <filter-item
           :active="selectedFilter === 'his'"
           :selected="his"
           :header="$gettext('Health Information System') | translate"
           item="his"
-          @clear="his=[]"
+          @clear="his = []"
         />
         <filter-item
           :active="selectedFilter === 'platform'"
           :selected="platforms"
           :header="$gettext('Software')"
           item="platform"
-          @clear="platforms=[]"
+          @clear="platforms = []"
         />
       </el-col>
       <el-col class="FilterArea">
@@ -107,14 +106,14 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { mapGettersActions } from '../../utilities/form.js';
-import FilterItem from './FilterItem';
-import HealthFocusAreasFilter from './filters/HealthFocusAreaFilter';
-import DigitalHealthInterventionsFilter from './filters/DigitalHealthInterventionsFilter';
-import HealthInformationSystemFilter from './filters/HealthInformationSystemFilter';
-import HealthSystemChallengesFilter from './filters/HealthSystemChallengesFilter';
-import PlatformFilter from './filters/PlatformFilter';
+import { mapGetters, mapActions } from 'vuex'
+import { mapGettersActions } from '../../utilities/form.js'
+import FilterItem from './FilterItem'
+import HealthFocusAreasFilter from './filters/HealthFocusAreaFilter'
+import DigitalHealthInterventionsFilter from './filters/DigitalHealthInterventionsFilter'
+import HealthInformationSystemFilter from './filters/HealthInformationSystemFilter'
+import HealthSystemChallengesFilter from './filters/HealthSystemChallengesFilter'
+import PlatformFilter from './filters/PlatformFilter'
 
 export default {
   components: {
@@ -132,25 +131,31 @@ export default {
       hsc: [],
       his: [],
       platforms: []
-    };
+    }
   },
   computed: {
     ...mapGetters({
-      selectedFilter: 'layout/getDashboardFiltersDialogState'
+      selectedFilter: 'layout/getDashboardFiltersDialogState',
+      getSearchParameters: 'dashboard/getSearchParameters'
     }),
     ...mapGettersActions({
       selectedDHI: ['dashboard', 'getSelectedDHI', 'setSelectedDHI', 0],
       selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
       selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
       selectedHIS: ['dashboard', 'getSelectedHIS', 'setSelectedHIS', 0],
-      selectedPlatforms: ['dashboard', 'getSelectedPlatforms', 'setSelectedPlatforms', 0]
+      selectedPlatforms: [
+        'dashboard',
+        'getSelectedPlatforms',
+        'setSelectedPlatforms',
+        0
+      ]
     }),
     visible: {
       get () {
-        return this.selectedFilter !== null;
+        return this.selectedFilter !== null
       },
       set () {
-        this.setDashboardFiltersDialogState(null);
+        this.setDashboardFiltersDialogState(null)
       }
     }
   },
@@ -159,130 +164,140 @@ export default {
       setDashboardFiltersDialogState: 'layout/setDashboardFiltersDialogState'
     }),
     loadCurrentSelection () {
-      this.dhi = [...this.selectedDHI];
-      this.hfa = [...this.selectedHFA];
-      this.hsc = [...this.selectedHSC];
-      this.his = [...this.selectedHIS];
-      this.platforms = [...this.selectedPlatforms];
+      this.dhi = [...this.selectedDHI]
+      this.hfa = [...this.selectedHFA]
+      this.hsc = [...this.selectedHSC]
+      this.his = [...this.selectedHIS]
+      this.platforms = [...this.selectedPlatforms]
     },
     clearAll () {
-      this.dhi = [];
-      this.hfa = [];
-      this.hsc = [];
-      this.his = [];
-      this.platforms = [];
+      this.dhi = []
+      this.hfa = []
+      this.hsc = []
+      this.his = []
+      this.platforms = []
     },
     cancel () {
-      this.setDashboardFiltersDialogState(null);
+      this.setDashboardFiltersDialogState(null)
     },
     apply () {
-      this.selectedDHI = this.dhi;
-      this.selectedHFA = this.hfa;
-      this.selectedHSC = this.hsc;
-      this.selectedHIS = this.his;
-      this.selectedPlatforms = this.platforms;
+      this.selectedDHI = this.dhi
+      this.selectedHFA = this.hfa
+      this.selectedHSC = this.hsc
+      this.selectedHIS = this.his
+      this.selectedPlatforms = this.platforms
       this.$nextTick(() => {
-        this.setDashboardFiltersDialogState(null);
-      });
+        this.setDashboardFiltersDialogState(null)
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="less">
-  @import "~assets/style/variables.less";
-  @import "~assets/style/mixins.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
-  .FilterDialog {
-    max-width: @appWidthMaxLimit * 0.9;
-    height: 80vh;
-    margin-top: 0;
-    margin-bottom: 0;
+.FilterDialog {
+  max-width: @appWidthMaxLimit * 0.9;
+  height: 80vh;
+  margin-top: 0;
+  margin-bottom: 0;
 
-    .el-dialog__body {
-      padding: 0;
-      height: calc(80vh - (@dialogHeaderFooterHeight*2));
+  .el-dialog__body {
+    padding: 0;
+    height: calc(80vh - (@dialogHeaderFooterHeight*2));
+  }
+
+  .FilterDialogWrapper {
+    height: calc(80vh - (@dialogHeaderFooterHeight*2));
+
+    .FilterSelector {
+      position: relative;
+      z-index: 2002;
+      box-sizing: border-box;
+      min-width: @filterSelectorWidth;
+      max-width: @filterSelectorWidth;
+      background-color: @colorWhite;
+      border-right: 2px solid @colorGrayLight;
     }
 
-    .FilterDialogWrapper {
-      height: calc(80vh - (@dialogHeaderFooterHeight*2));
+    .FilterArea {
+      width: 100%;
 
-      .FilterSelector {
-        position: relative;
-        z-index: 2002;
-        box-sizing: border-box;
-        min-width: @filterSelectorWidth;
-        max-width: @filterSelectorWidth;
-        background-color: @colorWhite;
-        border-right: 2px solid @colorGrayLight;
-      }
+      .Main {
+        .SelectorDialogCategory {
+          .Items {
+            padding-left: 0;
+          }
 
-      .FilterArea {
-        width: 100%;
-
-        .Main {
-          .SelectorDialogCategory {
-            .Items {
-              padding-left: 0;
+          &.NoParent {
+            .OnePerRow {
+              margin-left: 24px !important;
             }
           }
         }
       }
+    }
 
-      // Special case for DHI items
-      // OMG, this is a real mess!! :(
-      .DigitalHealthInterventionsFilter {
-        .el-col-6 {
-          overflow: hidden;
-          height: calc(80vh - (@dialogHeaderFooterHeight * 2));
-          border-right: 1px solid @colorGrayLight;
+    // Special case for DHI items
+    // OMG, this is a real mess!! :(
+    .DigitalHealthInterventionsFilter {
+      .el-col-6 {
+        overflow: hidden;
+        height: calc(80vh - (@dialogHeaderFooterHeight * 2));
+        border-right: 1px solid @colorGrayLight;
+
+        .SelectorDialogColumn {
+          .Header {
+            width: calc((90vw - @filterSelectorWidth) / 4 - 1px);
+            max-width: calc(
+              ((@appWidthMaxLimit * 0.9) - @filterSelectorWidth) / 4 - 1px
+            );
+          }
+
+          .Main {
+            .Item {
+              .el-checkbox__label {
+                font-size: @fontSizeSmall;
+                line-height: 16px;
+              }
+            }
+          }
+        }
+
+        &:last-child {
+          border: 0;
 
           .SelectorDialogColumn {
             .Header {
-              width: calc((90vw - @filterSelectorWidth) / 4 - 1px);
-              max-width: calc(((@appWidthMaxLimit * 0.9) - @filterSelectorWidth) / 4 - 1px);
-            }
-
-            .Main {
-              .Item {
-                .el-checkbox__label {
-                  font-size: @fontSizeSmall;
-                  line-height: 16px;
-                }
-              }
-            }
-          }
-
-          &:last-child {
-            border: 0;
-
-            .SelectorDialogColumn {
-              .Header {
-                width: calc((90vw - @filterSelectorWidth) / 4);
-                max-width: calc(((@appWidthMaxLimit * 0.9) - @filterSelectorWidth) / 4);
-              }
+              width: calc((90vw - @filterSelectorWidth) / 4);
+              max-width: calc(
+                ((@appWidthMaxLimit * 0.9) - @filterSelectorWidth) / 4
+              );
             }
           }
         }
       }
+    }
 
-      .HealthFocusAreaFilter,
-      .HealthSystemChallengesFilter,
-      .HealthInformationSystem,
-      .PlatformFilter {
-        .SelectorDialogColumn {
-          .Header {
-            width: calc(90vw - @filterSelectorWidth);
-            max-width: calc((@appWidthMaxLimit * 0.9) - @filterSelectorWidth);
-          }
+    .HealthFocusAreaFilter,
+    .HealthSystemChallengesFilter,
+    .HealthInformationSystem,
+    .PlatformFilter {
+      .SelectorDialogColumn {
+        .Header {
+          width: calc(90vw - @filterSelectorWidth);
+          max-width: calc((@appWidthMaxLimit * 0.9) - @filterSelectorWidth);
         }
+      }
 
-        .Main {
-          .Items {
-            margin: 0;
-          }
+      .Main {
+        .Items {
+          margin: 0;
         }
       }
     }
   }
+}
 </style>

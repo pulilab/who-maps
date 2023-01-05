@@ -5,11 +5,13 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import PasswordResetSerializer, JWTSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import Field as Field
+from rest_framework.authtoken.models import Token
 
 from country.models import Country
 from project.models import Project
 from user.forms import PasswordHTMLEmailResetForm
 from .models import UserProfile, Organisation
+from django.contrib.auth.models import AnonymousUser
 
 
 class ProfileJWTSerializer(JWTSerializer):
@@ -69,6 +71,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
             return fields
 
         user = self.context['request'].user
+
+        if isinstance(user, AnonymousUser):  # pragma: no cover
+            return fields
 
         account_type = user.userprofile.account_type
         ac_enabled = user.userprofile.account_type_approved
@@ -141,3 +146,10 @@ class RegisterWithProfileSerializer(RegisterSerializer):
 
 class PasswordResetHTMLEmailSerializer(PasswordResetSerializer):
     password_reset_form_class = PasswordHTMLEmailResetForm
+
+
+class TokenSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Token
+        fields = '__all__'

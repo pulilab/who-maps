@@ -6,7 +6,7 @@
     <el-popover
       v-model="visible"
       placement="bottom-end"
-      popper-class="CustomPopover PersonaSelectorPopover"
+      popper-class="CustomPopover"
       trigger="click"
     >
       <el-button
@@ -76,13 +76,13 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data () {
     return {
       visible: false
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -92,51 +92,51 @@ export default {
       dashBoardType: 'dashboard/getDashboardType'
     }),
     meActive () {
-      return this.dashBoardType === 'user';
+      return this.dashBoardType === 'user'
     },
     donorActive () {
-      return this.dashBoardType === 'donor';
+      return this.dashBoardType === 'donor'
     },
     countryActive () {
-      return this.dashBoardType === 'country';
+      return this.dashBoardType === 'country'
     },
     persona () {
-      const me = this.$gettext('Me');
-      return this.meActive ? me : this.countryActive ? this.country : this.donor;
+      const me = this.$gettext('Me')
+      return this.meActive ? me : this.countryActive ? this.country : this.donor
     },
     personaClass () {
-      return this.meActive ? 'Me' : this.countryActive ? 'Country' : 'Donor';
+      return this.meActive ? 'Me' : this.countryActive ? 'Country' : 'Donor'
     },
     personaIcon () {
-      return this.meActive ? 'user-circle' : this.countryActive ? 'globe-africa' : 'handshake';
+      return this.meActive ? 'user-circle' : this.countryActive ? 'globe-africa' : 'handshake'
     },
     donor () {
       if (this.user && this.user.donor) {
-        const donor = this.getDonorDetails(this.user.donor);
-        return donor ? donor.name : null;
+        const donor = this.getDonorDetails(this.user.donor)
+        return donor ? donor.name : null
       }
-      return null;
+      return null
     },
     country () {
       if (this.user && this.user.country) {
-        const country = this.getCountryDetails(this.user.country);
-        return country ? country.name : null;
+        const country = this.getCountryDetails(this.user.country)
+        return country ? country.name : null
       }
-      return null;
+      return null
     },
     showDonor () {
-      const donorTypes = ['D', 'DA', 'SDA'];
+      const donorTypes = ['D', 'DA', 'SDA']
       if (this.user) {
-        return donorTypes.includes(this.user.account_type) || this.user.is_superuser;
+        return donorTypes.includes(this.user.account_type) || this.user.is_superuser
       }
-      return null;
+      return null
     },
     showCountry () {
-      const countryTypes = ['G', 'CA', 'SCA'];
+      const countryTypes = ['G', 'CA', 'SCA']
       if (this.user) {
-        return countryTypes.includes(this.user.account_type) || this.user.is_superuser;
+        return countryTypes.includes(this.user.account_type) || this.user.is_superuser
       }
-      return null;
+      return null
     }
   },
   methods: {
@@ -144,12 +144,12 @@ export default {
       setDashboardType: 'dashboard/setDashboardType'
     }),
     setPersona (type) {
-      const id = type === 'user' ? null : type === 'country' ? this.user.country : this.user.donor;
-      this.setDashboardType({ type, id });
-      this.visible = false;
+      const id = type === 'user' ? null : type === 'country' ? this.user.country : this.user.donor
+      this.setDashboardType({ type, id })
+      this.visible = false
     }
   }
-};
+}
 </script>
 
 <style lang="less">

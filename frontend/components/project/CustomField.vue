@@ -1,9 +1,17 @@
 <template>
   <el-form-item
     :error="errors.first('answer', 'custom_question_' + id)"
-    :label="question"
     class="CustomField"
   >
+    <template slot="label">
+      <span
+        v-if="!!prependFormat"
+        class="pre-number"
+      >
+        {{ prependFormat }}
+      </span>
+      {{ question }}
+    </template>
     <div
       v-show="isPrivate"
       class="PrivateBadge"
@@ -71,8 +79,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import VeeValidationMixin from '../mixins/VeeValidationMixin.js';
+import { mapGetters, mapActions } from 'vuex'
+import VeeValidationMixin from '../mixins/VeeValidationMixin.js'
 
 export default {
   mixins: [VeeValidationMixin],
@@ -112,6 +120,10 @@ export default {
     index: {
       type: Number,
       required: true
+    },
+    prependLabel: {
+      type: Number,
+      default: 0
     }
   },
   computed: {
@@ -120,28 +132,32 @@ export default {
       getDonorsAnswerDetails: 'project/getDonorsAnswerDetails'
     }),
     answer () {
-      const saved = !this.donorId ? this.getCountryAnswerDetails(this.id) : this.getDonorsAnswerDetails(this.id);
-      return saved || {
-        question_id: this.id,
-        answer: null
-      };
+      const saved = !this.donorId
+        ? this.getCountryAnswerDetails(this.id)
+        : this.getDonorsAnswerDetails(this.id)
+      return (
+        saved || {
+          question_id: this.id,
+          answer: null
+        }
+      )
     },
     value () {
-      return this.answer.answer;
+      return this.answer.answer
     },
     innerValue: {
       get () {
         if (this.value && Array.isArray(this.value) && this.value.length > 0) {
-          return this.type === 5 ? this.value : this.value[0];
+          return this.type === 5 ? this.value : this.value[0]
         }
-        return this.type === 5 ? [] : null;
+        return this.type === 5 ? [] : null
       },
       set (answer) {
-        answer = Array.isArray(answer) ? answer : [answer];
+        answer = Array.isArray(answer) ? answer : [answer]
         if (!this.donorId) {
-          this.setCountryAnswer({ ...this.answer, answer });
+          this.setCountryAnswer({ ...this.answer, answer })
         } else {
-          this.setDonorAnswer({ ...this.answer, answer });
+          this.setDonorAnswer({ ...this.answer, answer })
         }
       }
     },
@@ -149,7 +165,10 @@ export default {
       return {
         required: this.isRequired && this.doValidation,
         numeric: this.type === 2 && this.doValidation
-      };
+      }
+    },
+    prependFormat () {
+      return this.prependLabel ? `${this.prependLabel}. ` : ''
     }
   },
   watch: {
@@ -157,7 +176,7 @@ export default {
       immediate: true,
       handler (errors) {
         if (!this.donorId) {
-          this.findCountryError(errors);
+          this.findCountryError(errors)
         }
       }
     },
@@ -165,7 +184,7 @@ export default {
       immediate: true,
       handler (errors) {
         if (this.donorId) {
-          this.findDonorError(errors);
+          this.findDonorError(errors)
         }
       }
     }
@@ -176,40 +195,49 @@ export default {
       setDonorAnswer: 'project/setDonorAnswer'
     }),
     addErrorToBag (error) {
-      const firsElement = error[Object.keys(error)[0]];
-      const msg = firsElement ? firsElement[0] : null;
+      const firsElement = error[Object.keys(error)[0]]
+      const msg = firsElement ? firsElement[0] : null
       if (msg) {
         this.errors.add({
           field: 'answer',
           scope: 'custom_question_' + this.id,
           msg
-        });
+        })
       }
     },
     findCountryError (errors) {
       if (errors && errors.length > this.index - 1) {
-        const error = errors[this.index];
+        const error = errors[this.index]
         if (error) {
-          this.addErrorToBag(error);
+          this.addErrorToBag(error)
         }
       }
     },
     findDonorError (errors) {
-      const error = errors.find(e => e.index === this.index && e.donor_id === this.donorId);
+      const error = errors.find(
+        e => e.index === this.index && e.donor_id === this.donorId
+      )
       if (error) {
-        this.addErrorToBag(error.error);
+        this.addErrorToBag(error.error)
       }
     },
     validate () {
-      return this.$validator.validate();
+      return this.$validator.validate()
     }
   }
-};
+}
 </script>
 
 <style lang="less">
+@import "~assets/style/variables.less";
+
 .CustomField {
   position: relative;
+
+  .pre-number {
+    border-left: 5px solid @colorGrayLight;
+    padding: 2px 15px 2px 10px;
+  }
 
   .el-form-item__label {
     line-height: 20px;
@@ -227,5 +255,4 @@ export default {
     width: 100%;
   }
 }
-
 </style>

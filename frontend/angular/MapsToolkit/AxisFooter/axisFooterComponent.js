@@ -1,5 +1,5 @@
-import _template from './AxisFooter.html';
-import AxisFooterController from './AxisFooterController';
+import _template from './AxisFooter.html'
+import AxisFooterController from './AxisFooterController'
 
 const axisFooterComponent = {
   controller: AxisFooterController.axisFooterFactory(),
@@ -9,6 +9,6 @@ const axisFooterComponent = {
     axes: '<'
   },
   name: 'axisFooter'
-};
+}
 
-export default axisFooterComponent;
+export default axisFooterComponent

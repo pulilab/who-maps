@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import ListAction from './ListAction';
+import { mapGetters } from 'vuex'
+import ListAction from './ListAction'
 export default {
   components: {
     ListAction
@@ -41,11 +41,11 @@ export default {
       hisBucket: 'projects/getHisBucket'
     }),
     selected () {
-      const result = this.hisBucket.filter(his => this.value.includes(his.id));
-      return this.limit ? result.slice(0, this.limit) : result;
+      const result = this.hisBucket.filter(his => this.value.includes(his.id))
+      return this.limit ? result.slice(0, this.limit) : result
     }
   }
-};
+}
 </script>
 
 <style lang="less">

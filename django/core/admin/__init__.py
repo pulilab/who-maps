@@ -9,7 +9,6 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.postgres.fields.array import ArrayField
 from django.forms.widgets import MediaDefiningClass
 from modeltranslation.translator import translator
-from rest_framework.authtoken.models import Token
 
 from user.models import UserProfile
 from .widgets import AdminArrayField
@@ -51,6 +50,11 @@ class CustomUserAdmin(UserAdmin):
         self.fieldsets[2][1]["fields"] = ('is_active', 'is_staff', 'is_superuser', 'groups')
         form = super(CustomUserAdmin, self).get_form(request, obj, **kwargs)
         return form
+
+    def get_readonly_fields(self, request, obj=None):
+        if request and request.user and not request.user.is_superuser:
+            return 'password', 'is_active', 'is_staff', 'is_superuser', 'groups', 'last_login', 'date_joined'
+        return super().get_readonly_fields(request, obj)
 
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -116,4 +120,3 @@ admin.site.unregister(EmailConfirmation)
 admin.site.unregister(SocialAccount)
 admin.site.unregister(SocialToken)
 admin.site.unregister(SocialApp)
-admin.site.unregister(Token)
