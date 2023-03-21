@@ -1,6 +1,7 @@
 <template>
   <div :class="`UserDropdown ${activeMenuStyle}`">
     <el-popover
+      ref="usermenu"
       v-model="shown"
       placement="bottom-end"
       visible-arrow="false"
@@ -163,12 +164,12 @@ export default {
     return {
       shown: false,
       menuRoutes: [
-        '-/edit-profile',
-        '-/admin/country',
-        '-/admin/donor',
-        '-/admin/import/',
-        '-/admin/api',
-        '-/graphs',
+        '/edit-profile',
+        '/admin/country',
+        '/admin/donor',
+        '/admin/import/',
+        '/admin/api',
+        '/graphs',
       ]
     }
   },
@@ -202,6 +203,15 @@ export default {
     activeMenuStyle() {
       return this.insideRoute ? 'nuxt-link-active' : ''
     },
+  },
+  watch: {
+    shown(val) {
+      if (val) {
+        setTimeout(() => {
+          this.$refs.usermenu.$refs.popper.style.display = 'block'
+        }, 100)
+      }
+    }
   },
   methods: {
     ...mapActions({
@@ -362,5 +372,19 @@ export default {
       }
 
     }
+  }
+
+  .el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
+  .demonstration {
+    display: block;
+    color: #8492a6;
+    font-size: 14px;
+    margin-bottom: 20px;
   }
 </style>
