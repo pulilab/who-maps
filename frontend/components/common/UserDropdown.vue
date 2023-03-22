@@ -207,6 +207,16 @@ export default {
   watch: {
     shown(val) {
       if (val) {
+        const els = document.querySelectorAll(`#${this.$refs.usermenu.$refs.popper.id}`)
+        if (els.length > 1) {
+          for (let el of els) {
+            el.remove()
+          }
+          this.shown = false
+          this.$nextTick(() => {
+            this.shown = true
+          })
+        }
         setTimeout(() => {
           this.$refs.usermenu.$refs.popper.style.display = 'block'
         }, 100)
