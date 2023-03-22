@@ -58,7 +58,7 @@
           <translate tag="a" class="HeaderBtn">How-to</translate>
         </div>
         <div class="DropdownLink">
-          <a 
+          <a
             :href="storiesLink"
             target="_blank"
             class="HeaderBtn"
@@ -80,7 +80,7 @@ import ToolkitDialogWrapper from './ToolkitDialogWrapper'
 export default {
 components: {
   ToolkitDialogWrapper
-},  
+},
   data () {
     return {
       shown: false,
@@ -91,15 +91,15 @@ components: {
           name: this.$gettext('Home')
         },
         {
-          path: '-/dashboard/',
+          path: '/dashboard/',
           name: this.$gettext('Dashboard')
         },
         {
-          path: '-/projects',
+          path: '/projects',
           name: this.$gettext('My Projects')
         },
         {
-          path: '-/cms',
+          path: '/cms',
           name: this.$gettext('Planning and Guidance')
         },
       ]
@@ -132,7 +132,7 @@ components: {
     openHowTo() {
       this.closePopover()
       this.openHowToDialog(0)
-    }    
+    }
   }
 }
 </script>
