@@ -32,6 +32,10 @@ services:
             - ./django/media:/usr/share/nginx/html/media:rw
             - ./data/certbot/conf:/etc/letsencrypt
             - ./data/certbot/www:/var/www/certbot
+        links:
+            - django:django
+            - nuxt:nuxt
+        command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
     certbot:
         image: certbot/certbot
