@@ -58,7 +58,7 @@ var google, django, gettext;
                  *      id_news-data2-content_type-object_id-0-1-name'
                  */
                 // TODO: We should be able to simplify this, the modeltranslation specific
-                // field classes are already build to be easily splitable, so we could use them
+                // field classes are already build to be easily splittable, so we could use them
                 // to slice off the language code.
                 var idBits = this.id.split('-'),
                     idPrefix = 'id_' + this.origFieldname;
@@ -146,6 +146,8 @@ var google, django, gettext;
         function createTabs(groupedTranslations) {
             var tabs = [];
             $.each(groupedTranslations, function (groupId, lang) {
+                if (groupId.includes("__prefix__"))
+                    return;
                 var tabsContainer = $('<div></div>'),
                     tabsList = $('<ul></ul>'),
                     insertionPoint;
@@ -302,6 +304,8 @@ var google, django, gettext;
             var tabs = [];
 
             $.each(groupedTranslations, function (groupId, lang) {
+                if (groupId.includes("__prefix__"))
+                    return;
                 var tabsContainer = $('<td></td>'),
                     tabsList = $('<ul></ul>'),
                     insertionPoint;
@@ -326,6 +330,7 @@ var google, django, gettext;
                     $.each($container[0].attributes, function(idx, attr) {
                         attrs[attr.nodeName] = attr.nodeValue;
                     });
+
                     $container.replaceWith(function () {
                         return $('<div />', attrs).append($(this).contents());
                     });
@@ -395,14 +400,14 @@ var google, django, gettext;
             // Group normal fields and fields in (existing) stacked inlines
             var grouper = new TranslationFieldGrouper({
                 $fields: $('.mt').filter(
-                    'input, textarea, select, iframe, div').filter(':parents(.tabular)')
+                    'input, textarea, select, iframe, div').filter(':parents(.tabular)').filter(':parents(.empty-form)')
             });
             MainSwitch.init(grouper.groupedTranslations, createTabs(grouper.groupedTranslations));
 
             // Note: The add another functionality in admin is injected through inline javascript,
             // here we have to run after that (and after all other ready events just to be sure).
             $(document).ready(function() {
-                $(window).load(function() {
+                $(window).on('load', function() {
                     handleAddAnotherInline();
                 });
             });
@@ -416,7 +421,7 @@ var google, django, gettext;
                     createTabularTabs(tabularInlineGroup.getAllGroupedTranslations()));
 
                 $(document).ready(function() {
-                    $(window).load(function() {
+                    $(window).on('load', function() {
                         handleTabularAddAnotherInline(tabularInlineGroup);
                     });
                 });
