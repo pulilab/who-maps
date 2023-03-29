@@ -101,7 +101,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
     end_date_note = serializers.CharField(max_length=256, required=False, allow_blank=True)
     contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
-    research = serializers.NullBooleanField(required=False)
+    research = serializers.BooleanField(required=False, allow_null=True)
 
     # SECTION 2 Implementation Overview
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
