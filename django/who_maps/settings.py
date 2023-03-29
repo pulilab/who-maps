@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'kpiexport',
     'rangefilter',
     'nonrelated_inlines',
+    'import_export'
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
