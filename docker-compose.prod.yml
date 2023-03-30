@@ -26,7 +26,7 @@ services:
         volumes:
             - ./nginx/site:/usr/share/nginx/html:rw
             - ./nginx/conf.d_secure.prod:/etc/nginx/conf.d:ro
-#            - ./nginx/ssl:/etc/nginx/ssl:ro
+            - ./nginx/ssl:/etc/nginx/ssl:ro
             - ./nginx/includes:/etc/nginx/includes:ro
             - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf:ro
             - ./django/media:/usr/share/nginx/html/media:rw
@@ -38,10 +38,11 @@ services:
         command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
     certbot:
-        image: certbot/dns-digitalocean
+        image: certbot/dns-cloudflare
         volumes:
             - ./data/certbot/conf:/etc/letsencrypt
             - ./data/certbot/www:/var/www/certbot
+            - ./nginx/ssl:/etc/nginx/ssl:ro
         entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:

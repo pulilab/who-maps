@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'search',
     'scheduler',
     'cms',
-    'simple_feedback',
+    'simple-feedback',
     'systemmessages',
     'kpiexport',
     'rangefilter',
@@ -526,3 +526,5 @@ OBSOLETE_PROJECT_MARKERS = {
     'demo',
     'delete'
 }
+
+SIMPLE_FEEDBACK_SEND_TO = 'dhasupport@pulilab.com'
