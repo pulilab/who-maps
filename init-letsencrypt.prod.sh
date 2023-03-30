@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose -f docker-compose.yml -f docker-compose.p
   exit 1
 fi
 
-domains=(digitalhealthatlas.org *.digitalhealthatlas.org)
+domains=(digitalhealthatlas.org "*.digitalhealthatlas.org")
 rsa_key_size=4096
 data_path="./data/certbot"
 email="f@pulilab.com" # Adding a valid address is strongly recommended
@@ -71,6 +71,8 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml run --rm --entry
     $staging_arg \
     $email_arg \
     $domain_args \
+    --dns-digitalocean \
+    --dns-digitalocean-credentials /etc/nginx/ssl/certbot-creds.ini
     --rsa-key-size $rsa_key_size \
     --agree-tos \
     --force-renewal" certbot
