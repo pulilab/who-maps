@@ -71,8 +71,8 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml run --rm --entry
     $staging_arg \
     $email_arg \
     $domain_args \
-    --dns-digitalocean \
-    --dns-digitalocean-credentials /etc/nginx/ssl/certbot-creds.ini
+    --dns-cloudflare \
+    --dns-cloudflare-credentials /etc/nginx/ssl/certbot-creds.ini \
     --rsa-key-size $rsa_key_size \
     --agree-tos \
     --force-renewal" certbot
