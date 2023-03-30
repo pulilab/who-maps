@@ -525,3 +525,5 @@ OBSOLETE_PROJECT_MARKERS = {
     'demo',
     'delete'
 }
+
+SIMPLE_FEEDBACK_SEND_TO = 'dhasupport@pulilab.com'
