@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.management import call_command
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from core.utils import send_mail_wrapper
 from scheduler.celery import app

@@ -15,10 +15,10 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.urls import reverse
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 from django.utils import timezone
 from django.template import loader
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from celery.utils.log import get_task_logger
 from rest_framework.exceptions import ValidationError
@@ -119,7 +119,7 @@ def sync_project_from_odk():  # pragma: no cover
     import_url = urljoin(base_url, form_url)
 
     email_html_template = loader.get_template('email/odk_import_email.html')
-    email_subject = ugettext('Project imported from ODK')
+    email_subject = gettext('Project imported from ODK')
 
     s = requests.Session()
     login_response = s.post(login_url, data=settings.ODK_CREDENTIALS)
