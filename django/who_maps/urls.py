@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import url, include
+from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
 from django.views.i18n import JSONCatalog
@@ -18,18 +18,18 @@ API_TITLE = 'Digital Health Atlas API'
 API_DESCRIPTION = 'Private API'
 
 urlpatterns = [
-    url(r"^admin/", admin.site.urls),
-    url(r"^api/", include("core.urls")),
-    url(r"^api/", include("user.urls")),
-    url(r"^api/", include("project.urls")),
-    url(r"^api/", include("toolkit.urls")),
-    url(r"^api/", include("country.urls")),
-    url(r"^api/", include("search.urls")),
-    url(r"^api/", include("cms.urls")),
-    url(r"^api/", include("simple-feedback.urls")),
-    url(r"^api/", include("kpiexport.urls")),
-    url(r'^translation/json/$', JSONCatalog.as_view(), name='json-catalog'),
-    url(r'^translation/', include('rosetta.urls'))
+    path("admin/", admin.site.urls),
+    path("api/", include("core.urls")),
+    path("api/", include("user.urls")),
+    path("api/", include("project.urls")),
+    path("api/", include("toolkit.urls")),
+    path("api/", include("country.urls")),
+    path("api/", include("search.urls")),
+    path("api/", include("cms.urls")),
+    path("api/", include("simple_feedback.urls")),
+    path("api/", include("kpiexport.urls")),
+    path('translation/json/$', JSONCatalog.as_view(), name='json-catalog'),
+    path('translation/', include('rosetta.urls'))
 ]
 
 if settings.DEBUG:  # pragma: no cover
@@ -60,33 +60,33 @@ api_info = openapi.Info(
 )
 
 api_info_router = SimpleRouter()
-api_info_router.register('api/landing-country', CountryLandingPageViewSet, base_name='landing-country'),
-api_info_router.register('api/landing-country', CountryLandingListPageViewSet, base_name='landing-country'),
-api_info_router.register('api/organisations', OrganisationViewSet, base_name='organisation')
-api_info_router.register('api/landing-donor', DonorLandingPageViewSet, base_name='landing-donor')
-api_info_router.register('api/landing-donor', DonorLandingListPageViewSet, base_name='landing-donor')
+api_info_router.register('api/landing-country', CountryLandingPageViewSet, basename='landing-country'),
+api_info_router.register('api/landing-country', CountryLandingListPageViewSet, basename='landing-country'),
+api_info_router.register('api/organisations', OrganisationViewSet, basename='organisation')
+api_info_router.register('api/landing-donor', DonorLandingPageViewSet, basename='landing-donor')
+api_info_router.register('api/landing-donor', DonorLandingListPageViewSet, basename='landing-donor')
 # These API urls miss their trailing slashes due to an apparent bug in redoc
 # adding extra trailing slashes. Since these are only used for generating the public docs,
 # this should cause no issue.
 api_info_router.register('api/projects/external/draft/<str:client_code>', ExternalDraftAPI,
-                         base_name='project-external-draft')
+                         basename='project-external-draft')
 api_info_router.register('api/projects/external/publish/<str:client_code>', ExternalPublishAPI,
-                         base_name='project-external-publish')
+                         basename='project-external-publish')
 
 api_info_urlpatterns = [
-    url(r"^api/", include("search.urls")),
-    url(r"^api/projects/structure/",
-        view=ProjectPublicViewSet.as_view({'get': 'project_structure'}),
-        name="get-project-structure"),
-    url(r"^api/token/validate/",
-        view=TokenCheckView.as_view())
+    path("api/", include("search.urls")),
+    path("api/projects/structure/",
+         view=ProjectPublicViewSet.as_view({'get': 'project_structure'}),
+         name="get-project-structure"),
+    path("api/token/validate/",
+         view=TokenCheckView.as_view())
 ]
 api_info_urlpatterns += api_info_router.urls
 
 api_schema_view_public = get_schema_view(
     api_info,
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=[permissions.AllowAny],
     patterns=api_info_urlpatterns,
 )
 
