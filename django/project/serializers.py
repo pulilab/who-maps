@@ -162,7 +162,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
         instance.name = validated_data["name"]
         instance.data = validated_data
         instance.draft = validated_data
-        instance.odk_etag = None
         instance.make_public_id(validated_data['country'])
         instance.save()
 
@@ -206,11 +205,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     # SECTION 4
     interoperability_links = DraftInteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
 
-    # ODK DATA
-    odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
-    odk_id = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
-    odk_extra_data = serializers.JSONField(required=False)
-
     def validate_country(self, value):
         if self.instance:
             project = Project.objects.get(id=self.instance.id)
@@ -219,29 +213,14 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
         return value
 
     def create(self, validated_data):
-        odk_etag = validated_data.pop('odk_etag', None)
-        odk_id = validated_data.pop('odk_id', None)
-        odk_extra_data = validated_data.pop('odk_extra_data', dict())
         return self.Meta.model(
             name=validated_data["name"],
             draft=validated_data,
-            odk_etag=odk_etag,
-            odk_id=odk_id,
-            odk_extra_data=odk_extra_data
         )
 
     def update(self, instance, validated_data):
-        odk_etag = validated_data.pop('odk_etag', None)
-        validated_data.pop('odk_id', None)
-        odk_extra_data = validated_data.pop('odk_extra_data', None)
-
         if not instance.public_id:
             instance.name = validated_data["name"]
-
-        instance.odk_etag = odk_etag if self.context.get('preserve_etag') else None
-
-        if odk_extra_data:
-            instance.odk_extra_data = odk_extra_data
 
         instance.draft = validated_data
         return instance
