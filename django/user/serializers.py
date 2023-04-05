@@ -1,8 +1,8 @@
 from typing import Dict
 
 from rest_framework import serializers
-from rest_auth.registration.serializers import RegisterSerializer
-from rest_auth.serializers import PasswordResetSerializer, JWTSerializer
+from dj_rest_auth.registration.serializers import RegisterSerializer
+from dj_rest_auth.serializers import PasswordResetSerializer, JWTSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import Field as Field
 from rest_framework.authtoken.models import Token
