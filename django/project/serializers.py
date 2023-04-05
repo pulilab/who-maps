@@ -8,9 +8,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
-from rest_auth.app_settings import create_token
-from rest_auth.models import TokenModel
-from rest_auth.utils import jwt_encode
+from dj_rest_auth.utils import jwt_encode
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import ReadOnlyField
@@ -294,11 +292,7 @@ class ProjectGroupSerializer(serializers.ModelSerializer):  # TODO handle orphan
         user = User.objects.create_user(username=email[:150], email=email)
         UserProfile.objects.create(user=user, account_type=UserProfile.IMPLEMENTER)
 
-        if getattr(settings, 'REST_USE_JWT', False):
-            self.token = jwt_encode(user)
-        else:  # pragma: no cover
-            # Backwards compatibility for use without JWT
-            create_token(TokenModel, user, None)
+        self.token = jwt_encode(user)
 
         complete_signup(self.context['request']._request, user,
                         allauth_settings.EMAIL_VERIFICATION,
