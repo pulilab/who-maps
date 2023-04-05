@@ -105,11 +105,11 @@ WSGI_APPLICATION = 'who_maps.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
         'HOST': os.environ.get("DATABASE_URL", 'postgres'),
-        'PASSWORD': os.environ.get("POSTGRESQL_PASSWORD", 'postgres'),
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'postgres'),
         'PORT': 5432,
     }
 }
