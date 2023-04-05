@@ -264,17 +264,6 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
-ODK_SYNC_PERIOD = 1  # hours
-ODK_CREDENTIALS = {
-    'username': 'f1987_final@pulilab.com',
-    'password': 'secret'
-}
-ODK_SERVER_PROTOCOL = "https"
-ODK_SERVER_HOST = "odk.digitalhealthatlas.org"
-ODK_SERVER_USER = "odk"
-ODK_TABLE_NAME = 'dha_form'
-ODK_SYNC_ENABLED = bool(os.environ.get('ODK_SYNC_ENABLED', False))
-
 # SCHEDULES
 TOOLKIT_DIGEST_PERIOD = 7 * 24  # 1 week
 PROJECT_UPDATE_DIGEST_PERIOD = 7 * 24  # 1 week
@@ -479,14 +468,6 @@ if SITE_ID in [3, 4]:
             "schedule": crontab(hour=2, minute=0, ),
         },
     }
-    if ODK_SYNC_ENABLED:
-        CELERYBEAT_SCHEDULE.update(
-            {
-                "sync_project_from_odk": {
-                    "task": 'sync_project_from_odk',
-                    "schedule": datetime.timedelta(hours=ODK_SYNC_PERIOD)
-                }
-            })
 
     DEBUG = False
 
