@@ -4,6 +4,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from core.views import TokenAuthMixin
 from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileListSerializer, TokenSerializer
@@ -12,7 +13,6 @@ from django.contrib.auth.models import User
 
 from django.utils import timezone
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from who_maps.throttle import ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -63,7 +63,7 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
             return Organisation.objects.all()
 
 
-class TokenViewSet(JSONWebTokenAuthentication, ViewSet):
+class TokenViewSet(JWTAuthentication, ViewSet):
     """
     Viewset providing functions for authenticated users for creating, retrieving, refreshing and deleting their tokens
 
