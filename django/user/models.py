@@ -123,19 +123,3 @@ def admin_request_on_change(sender, instance, **kwargs):
 def admin_request_on_create(sender, instance, created, **kwargs):
     if created and instance.account_type != UserProfile.IMPLEMENTER or getattr(instance, '__trigger_send', False):
         send_user_request_to_admins.apply_async(args=(instance.pk,))
-
-
-@receiver(post_save, sender=UserProfile)
-def odk_sync_on_created(sender, instance, created, **kwargs):
-    if settings.ODK_SYNC_ENABLED:  # pragma: no cover
-        if created:
-            transaction.on_commit(lambda: sync_user_to_odk.apply_async(args=(instance.user.pk, False)))
-
-
-@receiver(post_save, sender=User)
-def odk_sync_on_pass_update(sender, instance, created, **kwargs):
-    if settings.ODK_SYNC_ENABLED:  # pragma: no cover
-        if created:
-            instance._set_password = False
-        elif getattr(instance, '_set_password', False):
-            transaction.on_commit(lambda: sync_user_to_odk.apply_async(args=(instance.pk, True)))
