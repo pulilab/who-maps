@@ -60,17 +60,13 @@ services:
 
   postgres:
     restart: always
-    image: postgres:10.4
-    environment:
-      - POSTGRESQL_DB=postgres
-      - POSTGRESQL_USER=postgres
-      - POSTGRESQL_PASSWORD=postgres
+    image: postgres:15.2-bullseye
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   redis:
     restart: always
-    image: redis:6-alpine
+    image: redis:7-bullseye
 
 volumes:
   postgres_data:
