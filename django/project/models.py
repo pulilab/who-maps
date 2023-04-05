@@ -86,6 +86,8 @@ class Project(SoftDeleteModel, ExtendedModel):
     viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
     public_id = models.CharField(
         max_length=64, default="", help_text="<CountryCode><HashID> eg: HU9fa42491")
+
+    # DEPRECATED ODK FIELDS
     odk_etag = models.CharField(null=True, blank=True, max_length=64)
     odk_id = models.CharField(null=True, blank=True, max_length=64)
     odk_extra_data = JSONField(default=dict)
