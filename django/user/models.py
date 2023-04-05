@@ -1,24 +1,13 @@
-from django.db import models, transaction
+from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password, PBKDF2PasswordHasher
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 from core.models import ExtendedModel
-from .tasks import sync_user_to_odk, send_user_request_to_admins
-
-
-def set_password(self, raw_password):  # pragma: no cover
-    self.password = make_password(raw_password)
-    self._password = raw_password
-    self._set_password = True  # inject this to detect password change
-
-
-User.set_password = set_password
-PBKDF2PasswordHasher.iterations = 30000
+from .tasks import send_user_request_to_admins
 
 
 class Organisation(ExtendedModel):
@@ -72,7 +61,6 @@ class UserProfile(ExtendedModel):
     donor = models.ForeignKey('country.Donor', related_name='userprofiles', null=True,  blank=True, 
                               on_delete=models.SET_NULL)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
-    odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
     # phone = models.CharField(blank=True, null=True, max_length=50)
     title = models.CharField(blank=True, null=True, max_length=100)
     linkedin = models.URLField(blank=True, null=True)
