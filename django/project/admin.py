@@ -117,13 +117,13 @@ class HSCChallengeAdmin(AllObjectsAdmin):
 class ProjectAdmin(AllObjectsAdmin):
     if settings.ENVIRONMENT_NAME == 'PRODUCTION':  # pragma: no cover
         list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active']
-        readonly_fields = ['name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'data']
-        fields = ['is_active', 'name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'data']
+        readonly_fields = ['name', 'team', 'viewers', 'link', 'data']
+        fields = ['is_active', 'name', 'team', 'viewers', 'link', 'data']
     else:  # on DEV and QA, we add some debug fields to help checking the project changelog's functionality
         list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active', 'versions']
-        readonly_fields = ['name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'data', 'draft',
+        readonly_fields = ['name', 'team', 'viewers', 'link', 'data', 'draft',
                            'versions_detailed']
-        fields = ['is_active', 'name', 'team', 'viewers', 'link', 'odk_etag', 'odk_id', 'odk_extra_data', 'data',
+        fields = ['is_active', 'name', 'team', 'viewers', 'link', 'data',
                   'draft', 'versions_detailed']
     search_fields = ['name']
 
