@@ -1,7 +1,6 @@
 from statistics import mean
 
 from django.db import models
-from django.contrib.postgres.fields import JSONField
 
 from core.models import ExtendedModel
 from project.models import Project
@@ -9,7 +8,7 @@ from project.models import Project
 
 class Toolkit(ExtendedModel):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    data = JSONField()
+    data = models.JSONField()
 
     def update_score(self, axis, domain, question, answer, value):
         """
@@ -94,4 +93,4 @@ class Toolkit(ExtendedModel):
 class ToolkitVersion(ExtendedModel):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     version = models.IntegerField()
-    data = JSONField()
+    data = models.JSONField()
