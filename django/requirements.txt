@@ -31,7 +31,7 @@ django-admin-rangefilter
 django-nonrelated-inlines
 django-import-export
 django-ordered-model
-django-simplefeedback==1.1
+django-simplefeedback==1.1.2
 django-simple-history
 coreapi
 drf-yasg
