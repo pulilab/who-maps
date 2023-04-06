@@ -1,7 +1,8 @@
 import pycountry
 from django.contrib.auth.models import User
 from django.utils import timezone
-from factory import LazyAttribute, post_generation, PostGenerationMethodCall, SubFactory
+from factory import LazyAttribute, PostGenerationMethodCall, SubFactory
+from factory.helpers import post_generation
 from factory.faker import faker
 from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyDateTime, FuzzyChoice
