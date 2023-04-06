@@ -1,14 +1,13 @@
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinLengthValidator
-from ordered_model.models import OrderedModel
+from ordered_model.models import OrderedModel, OrderedModelManager
 
 from country.tasks import update_gdhi_data_task
 from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
@@ -108,7 +107,7 @@ class Country(UserManagement, LandingPageCommon, GDHI, ArchitectureRoadMap):
 
     code = models.CharField(max_length=4, default="NULL", help_text="ISO3166-1 country code", unique=True)
     region = models.IntegerField(choices=REGIONS, null=True, blank=True)
-    map_data = JSONField(default=dict, blank=True)
+    map_data = models.JSONField(default=dict, blank=True)
     map_activated_on = models.DateTimeField(blank=True, null=True,
                                             help_text="WARNING: this field is for developers only")
     project_approval = models.BooleanField(default=False)
@@ -216,6 +215,8 @@ class DonorCustomQuestion(CustomQuestion):
     donor = models.ForeignKey(Donor, related_name='donor_questions', on_delete=models.CASCADE)
     order_with_respect_to = 'donor'
 
+    objects = OrderedModelManager()
+
     class Meta(OrderedModel.Meta):
         pass
 
@@ -226,6 +227,8 @@ class DonorCustomQuestion(CustomQuestion):
 class CountryCustomQuestion(CustomQuestion):
     country = models.ForeignKey(Country, related_name='country_questions', on_delete=models.CASCADE)
     order_with_respect_to = 'country'
+
+    objects = OrderedModelManager()
 
     class Meta(OrderedModel.Meta):
         pass
