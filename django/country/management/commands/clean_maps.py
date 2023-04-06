@@ -12,7 +12,7 @@ from pathlib import Path
 from datetime import datetime
 
 
-class Command(BaseCommand):
+class Command(BaseCommand):  # pragma: no cover
     help = "Remove unused features from geojson."
 
     def add_arguments(self, parser):
