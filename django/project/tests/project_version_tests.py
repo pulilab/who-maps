@@ -28,6 +28,7 @@ class ProjectVersionTests(APITestCase):
             "password2": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
+        self.user_profile_id = response.json().get('user_profile_id')
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
@@ -39,15 +40,14 @@ class ProjectVersionTests(APITestCase):
         self.assertEqual(response.status_code, 200, response.json())
 
         # Log in the user.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {
             "username": "test_user@gmail.com",
             "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200, response.json())
-        self.test_user_key = response.json().get("token")
+        self.test_user_key = response.json().get("access")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
-        self.user_profile_id = response.json().get('user_profile_id')
 
         # Update profile.
         self.org = OrganisationFactory(name="org1")
