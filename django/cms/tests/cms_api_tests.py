@@ -15,7 +15,8 @@ class CmsApiTest(APITestCase):
         # Create a test user with profile.
         url = reverse("rest_register")
         data = {"email": "test_user@gmail.com", "password1": "123456hetNYOLC", "password2": "123456hetNYOLC"}
-        self.client.post(url, data)
+        response = self.client.post(url, data)
+        self.user_profile_id = response.json().get('user_profile_id')
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
@@ -26,12 +27,11 @@ class CmsApiTest(APITestCase):
         self.client.post(url, data)
 
         # Log in the user.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {"username": "test_user@gmail.com", "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
-        self.test_user_key = response.json().get("token")
+        self.test_user_key = response.json().get("access")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
-        self.user_profile_id = response.json().get('user_profile_id')
 
         # Update profile.
         self.org = OrganisationFactory(name="org1")
@@ -42,7 +42,7 @@ class CmsApiTest(APITestCase):
         response = self.test_user_client.put(url, data)
         self.user_profile_id = response.json().get('id')
 
-    def test_create(self):
+    def test_create_cms_post(self):
         self.post_data = {
             "name": "Test Post 1",
             "body": "<strong>TEST</strong>",
@@ -66,8 +66,8 @@ class CmsApiTest(APITestCase):
         self.assertTrue(response.json()['modified'])
         self.assertEqual(response.json()['comments'], [])
 
-    def test_retrieve(self):
-        self.test_create()
+    def test_retrieve_cms_post(self):
+        self.test_create_cms_post()
         url = reverse("post-detail", kwargs={"pk": self.post_id})
         response = self.test_user_client.get(url)
 
@@ -82,8 +82,8 @@ class CmsApiTest(APITestCase):
         self.assertTrue(response.json()['modified'])
         self.assertEqual(response.json()['comments'], [])
 
-    def test_update(self):
-        self.test_create()
+    def test_update_cms_post(self):
+        self.test_create_cms_post()
 
         self.post_data = {
             "name": "Test Post Updated",
@@ -106,8 +106,8 @@ class CmsApiTest(APITestCase):
         self.assertTrue(response.json()['modified'])
         self.assertEqual(response.json()['comments'], [])
 
-    def test_destroy(self):
-        self.test_create()
+    def test_destroy_cms_post(self):
+        self.test_create_cms_post()
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
         response = self.test_user_client.delete(url)
@@ -116,7 +116,7 @@ class CmsApiTest(APITestCase):
         self.assertEqual(Post.objects.filter(id=self.post_id).count(), 0)
 
     def test_flag_post(self):
-        self.test_create()
+        self.test_create_cms_post()
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
         response = self.test_user_client.patch(url)
@@ -124,8 +124,8 @@ class CmsApiTest(APITestCase):
         self.assertEqual(response.status_code, 202)
         self.assertEqual(response.json()['detail'], "Content flagged.")
 
-    def test_list(self):
-        self.test_create()
+    def test_list_cms_posts(self):
+        self.test_create_cms_post()
 
         self.post_data = {
             "name": "Test Post 2",
@@ -223,7 +223,7 @@ class CmsApiTest(APITestCase):
         self.assertEqual(response.json()['detail'], 'Method "GET" not allowed.')
 
     def test_add_comment(self):
-        self.test_create()
+        self.test_create_cms_post()
 
         self.comment_data = {"text": "Comment 1", "user": self.user_profile_id, "post": self.post_id}
 
@@ -348,7 +348,7 @@ class CmsApiTest(APITestCase):
         self.assertIn(cover.name, response.json()['cover'])
 
     def test_two_posts_with_same_name(self):
-        self.test_create()
+        self.test_create_cms_post()
 
         self.post_data = {
             "name": "Test Post 1",
@@ -380,7 +380,7 @@ class CmsApiTest(APITestCase):
         self.assertEqual(Post.objects.all().last().slug, 'test-post-1--1')
 
     def test_flag_post_sends_email(self):
-        self.test_create()
+        self.test_create_cms_post()
         self.password = 'mypassword'
         self.admin = UserFactory(username='myuser', email='f@pulilab.com', password=self.password,
                                  is_staff=True, is_superuser=True)
