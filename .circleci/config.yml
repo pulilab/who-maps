@@ -86,7 +86,7 @@ jobs:
           working_directory: ~/who-maps/django
           command: |
             . ../venv/bin/activate 
-            pipenv run py.test --full-trace --timeout=180 --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
+            py.test --full-trace --timeout=180 --cov --cov-report html --cov-fail-under 100 --cov-report term-missing --cov-config .coveragerc
 
       - run:
           name: backend check for commited migrations
