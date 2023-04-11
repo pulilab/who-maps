@@ -40,14 +40,9 @@ class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, G
 
     @action(methods=['get'], detail=False)
     def me(self, request: Request) -> Response:
-        if hasattr(request.user, 'userprofile'):
-            profile = request.user.userprofile
-            serializer = UserProfileSerializer(profile, context=dict(request=request))
-            data = dict(serializer.data)
-
-            return Response(data=data, status=status.HTTP_200_OK)
-        else:
-            raise ValidationError({"user_profile": "UserProfile doesn't exist"})
+        profile = self.get_object()
+        serializer = UserProfileSerializer(profile, context=dict(request=request))
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 class UserProfileListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
