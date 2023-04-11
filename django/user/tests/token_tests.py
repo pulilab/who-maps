@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.urls import reverse
 
 from rest_framework.test import APIClient
@@ -8,54 +9,52 @@ import base64
 
 
 class TokenTests(APITestCase):
-
-    def create_user(self,
-                    email="test_user1@gmail.com",
-                    password1="123456hetNYOLC",
-                    password2="123456hetNYOLC",
-                    validate=True):
-        data = dict(
-            email=email,
-            password1=password1,
-            password2=password2
-        )
-        url = reverse("rest_register")
-
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 201, response.json())
-        test_user_key = response.json().get("key")
-        user_id = response.json()['user']['pk']
-        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
-
-        if validate:
-            key = EmailConfirmation.objects.get(email_address__email="test_user1@gmail.com").key
-            url = reverse("rest_verify_email")
-            data = {
-                "key": key,
-            }
-            response = self.client.post(url, data)
-            self.assertEqual(response.status_code, 200, response.json())
-
-        return test_user_key, test_user_client, user_id
-
-    def login_user(self, user_name="test_user1@gmail.com", password="123456hetNYOLC"):
-        url = reverse("api_token_auth")
-        data = {"username": user_name, "password": password}
-        response = self.client.post(url, data)
-        test_user_key = response.json().get("token")
-        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
-        self.user_profile_id = response.json().get('user_profile_id')
-        return test_user_key, test_user_client
-
     def setUp(self):
         self.username = "test_user1"
         self.user_email = "test_user1@gmail.com"
         self.user_password = "123456hetNYOLC"
+
+        def create_user(email="test_user1@gmail.com",
+                        password1="123456hetNYOLC",
+                        password2="123456hetNYOLC",
+                        validate=True):
+            data = dict(
+                email=email,
+                password1=password1,
+                password2=password2
+            )
+            url = reverse("rest_register")
+
+            response = self.client.post(url, data)
+            self.assertEqual(response.status_code, 201, response.json())
+            self.user_profile_id = response.json().get('user_profile_id')
+
+            if validate:
+                key = EmailConfirmation.objects.get(email_address__email="test_user1@gmail.com").key
+                url = reverse("rest_verify_email")
+                data = {
+                    "key": key,
+                }
+                response = self.client.post(url, data)
+                self.assertEqual(response.status_code, 200, response.json())
+
+            return self.user_profile_id
+
+        def login_user(user_name="test_user1@gmail.com", password="123456hetNYOLC"):
+            url = reverse("token_obtain_pair")
+            data = {"username": user_name, "password": password}
+            response = self.client.post(url, data)
+            test_user_key = response.json().get("access")
+            test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+
+            return test_user_key, test_user_client
+
         # Create a test user.
-        self.user_1_key, self.user_1_client, self.user_1_id = self.create_user()
+        self.user_profile_1_id = create_user()
+        self.user_1_id = User.objects.get(userprofile__id=self.user_profile_1_id).id
         tokens = Token.objects.filter(user__id=self.user_1_id)
         self.assertEqual(tokens.count(), 0)  # user should not have token at this stage
-        self.user_1_key, self.user_1_client = self.login_user()
+        self.user_1_key, self.user_1_client = login_user()
 
     def test_token_scenarios(self):
         # Create the token
