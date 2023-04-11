@@ -6,7 +6,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.postgres.fields.array import ArrayField
 from django.forms.widgets import MediaDefiningClass
 from modeltranslation.translator import translator
 from import_export.fields import Field
@@ -15,7 +14,6 @@ from import_export.admin import ExportActionMixin
 
 from project.models import Project
 from user.models import UserProfile
-from .widgets import AdminArrayField
 
 
 class UserResource(resources.ModelResource):  # pragma: no cover
@@ -171,13 +169,6 @@ class AllObjectsAdmin(admin.ModelAdmin, metaclass=MultiLevelAdminMeta):
 
         language_fields = ['is_translated_{}'.format(l[0]) for l in settings.LANGUAGES]
         return list_display + ['is_active'] + language_fields
-
-
-class ArrayFieldMixin(object):
-    formfield_overrides = {ArrayField: {'form_class': AdminArrayField}}
-
-    class Media:
-        js = ('arrayfield.js',)
 
 
 admin.site.login_form = CustomAuthenticationForm
