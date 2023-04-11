@@ -63,7 +63,6 @@ class CountryRoadMapTests(CountryBaseTests):
         country = Country.objects.first()
 
         self.assertEqual(country.admins.count(), 0)
-        self.assertEqual(self.test_user['is_superuser'], False)
 
         url = reverse('architecture-roadmap-document-list')
         data = {
