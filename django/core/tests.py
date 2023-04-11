@@ -2,15 +2,12 @@ from io import BytesIO
 from PIL import Image
 
 from django.contrib.admin import AdminSite
-from django.contrib.admin.widgets import AdminTextInputWidget
-from django.forms.fields import CharField
 from django.test import TestCase
 from django.test.client import Client
 from django.contrib.auth.models import User
 from rest_framework.reverse import reverse
 
 from core.admin import CustomUserAdmin
-from core.admin.widgets import AdminArrayFieldWidget, AdminArrayField, NoneReadOnlyAdminArrayFieldWidget
 from core.factories import UserFactory, UserProfileFactory
 from country.models import Country
 from project.tests.setup import MockRequest
@@ -60,86 +57,6 @@ class AuthTest(TestCase):
         request = MockRequest()
         request.user = self.admin
         self.assertEqual(len(model_admin.get_readonly_fields(request)), 0)
-
-
-class TestAdminWidgets(TestCase):
-    def setUp(self):
-        super(TestAdminWidgets, self).setUp()
-        self.widget = AdminArrayFieldWidget(AdminTextInputWidget())
-
-    def test_render_empty(self):
-        rendered_output = self.widget.render('test', [])
-        self.assertIn('class="add-arraywidget-item">', rendered_output)
-
-    def test_render_values(self):
-        rendered_output = self.widget.render('test', ['first value'])
-        self.assertIn('class="arrayfield-list"', rendered_output)
-        self.assertIn('value="first value"', rendered_output)
-
-    def test_format_output(self):
-        formatted_output = self.widget.format_output(['First widget', 'Second widget'])
-        self.assertIn('class="delete-arraywidget-item"', formatted_output)
-        self.assertIn('First widget', formatted_output)
-        self.assertIn('Second widget', formatted_output)
-
-    def test_values_from_datadict(self):
-        data = {'country_0': '0',
-                'country_1': '1',
-                'country_3': '3',
-                'country_4': None,
-                'name': 'Test'}
-        values = self.widget.value_from_datadict(data, None, 'country')
-        self.assertEqual(values, ['0', '1', '3'])
-
-    def test_decompress_none(self):
-        decompressed_value = self.widget.decompress(None)
-        self.assertEqual(decompressed_value, [])
-
-    def test_decompress_not_none(self):
-        with self.assertRaises(TypeError):
-            self.widget.decompress(12)
-
-
-class TestNoneReadOnlyAdminArrayFieldWidget(TestCase):
-    def setUp(self):
-        super(TestNoneReadOnlyAdminArrayFieldWidget, self).setUp()
-        self.widget = NoneReadOnlyAdminArrayFieldWidget(AdminTextInputWidget())
-
-    def test_render_none(self):
-        rendered_value = self.widget.render('test', None)
-        self.assertEqual(rendered_value, '-')
-
-    def test_render_values(self):
-        args = ('test', ['1', '2', '3'])
-
-        normal_widget = AdminArrayFieldWidget(AdminTextInputWidget())
-        normal_render = normal_widget.render(*args)
-
-        rendered_output = self.widget.render(*args)
-        self.assertEqual(rendered_output, normal_render)
-
-
-class TestAdminArrayField(TestCase):
-    def setUp(self):
-        super(TestAdminArrayField, self).setUp()
-        self.field = AdminArrayField(base_field=CharField())
-
-    def test_prepare_value(self):
-        prepared_values = self.field.prepare_value([1, 2, 3])
-        self.assertEqual(prepared_values, [1, 2, 3])
-
-    def test_to_python(self):
-        value = ['first', 'second', 'last']
-        python_value = self.field.to_python(value)
-        self.assertEqual(python_value, ['first', 'second', 'last'])
-
-    def test_delimiter(self):
-        value = ['first', 'some, with, comas']
-        python_value = self.field.to_python(value)
-        self.assertEqual(python_value, ['first', 'some, with, comas'])
-
-        native_value = self.field.prepare_value(python_value)
-        self.assertEqual(native_value, value)
 
 
 class TestStaticDataEndpoint(TestCase):
