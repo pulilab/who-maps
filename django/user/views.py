@@ -1,4 +1,7 @@
+from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin
+from rest_framework.request import Request
 from rest_framework.viewsets import GenericViewSet, ViewSet
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -34,6 +37,17 @@ class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, G
         if self.request.user and self.request.user.id:
             User.objects.filter(id=self.request.user.id).update(last_login=timezone.now())
         return super().get_object()
+
+    @action(methods=['get'], detail=False)
+    def me(self, request: Request) -> Response:
+        if hasattr(request.user, 'userprofile'):
+            profile = request.user.userprofile
+            serializer = UserProfileSerializer(profile)
+            data = dict(serializer.data)
+
+            return Response(data=data, status=status.HTTP_200_OK)
+        else:
+            raise ValidationError({"user_profile": "UserProfile doesn't exist"})
 
 
 class UserProfileListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
