@@ -42,7 +42,7 @@ class UserProfileViewSet(TokenAuthMixin, RetrieveModelMixin, UpdateModelMixin, G
     def me(self, request: Request) -> Response:
         if hasattr(request.user, 'userprofile'):
             profile = request.user.userprofile
-            serializer = UserProfileSerializer(profile)
+            serializer = UserProfileSerializer(profile, context=dict(request=request))
             data = dict(serializer.data)
 
             return Response(data=data, status=status.HTTP_200_OK)
