@@ -12,7 +12,8 @@ class CountryBaseTests(APITestCase):
         # Create a test user with profile.
         url = reverse("rest_register")
         data = {"email": "test_user@gmail.com", "password1": "123456hetNYOLC", "password2": "123456hetNYOLC"}
-        self.client.post(url, data)
+        response = self.client.post(url, data)
+        self.test_user = response.json()
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
@@ -23,13 +24,11 @@ class CountryBaseTests(APITestCase):
         self.client.post(url, data)
 
         # Log in the user.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {"username": "test_user@gmail.com", "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
-        self.test_user = response.json()
-        self.test_user_key = response.json().get("token")
+        self.test_user_key = response.json().get("access")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
-
         self.country = CountryFactory(name="country1", code="CC", map_activated_on=timezone.now(), name_en='Hungary',
                                       name_fr='Hongrie')
         PartnerLogo.objects.create(country=self.country)
@@ -40,7 +39,8 @@ class DonorBaseTests(APITestCase):
         # Create a test user with profile.
         url = reverse("rest_register")
         data = {"email": "test_user@gmail.com", "password1": "123456hetNYOLC", "password2": "123456hetNYOLC"}
-        self.client.post(url, data)
+        response = self.client.post(url, data)
+        self.test_user = response.json()
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email="test_user@gmail.com").key
@@ -51,12 +51,10 @@ class DonorBaseTests(APITestCase):
         self.client.post(url, data)
 
         # Log in the user.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {"username": "test_user@gmail.com", "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
-        self.test_user = response.json()
-        self.test_user_key = response.json().get("token")
+        self.test_user_key = response.json().get("access")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key))
-
         self.donor = DonorFactory(name="donor1", code="donor1", name_en='Donor Group', name_fr='Doner Grup')
         DonorPartnerLogo.objects.create(donor=self.donor)
