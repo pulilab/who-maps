@@ -33,13 +33,11 @@ class PermissionTest(APITestCase):
         self.post2 = PostFactory(**self.post_data)
 
         # Log in user 1.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {"username": "test@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
-        self.test_user_key = response.json().get("token")
+        self.test_user_key = response.json().get("access")
         self.test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(self.test_user_key), format="json")
-
-        self.assertEqual(self.user_profile_id, response.json()['user_profile_id'])
 
     def test_create_without_login(self):
         self.post_data = {
@@ -78,10 +76,10 @@ class PermissionTest(APITestCase):
         self.test_create_with_login()
 
         # Log in user 2.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {"username": "test2@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
-        test_user_key = response.json().get("token")
+        test_user_key = response.json().get("access")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
 
         self.post_data.update(name="Test Post 2")
@@ -97,10 +95,10 @@ class PermissionTest(APITestCase):
         self.test_create_with_login()
 
         # Log in user 2.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {"username": "test2@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
-        test_user_key = response.json().get("token")
+        test_user_key = response.json().get("access")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
@@ -114,10 +112,10 @@ class PermissionTest(APITestCase):
         self.test_create_with_login()
 
         # Log in user 2.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {"username": "test2@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
-        test_user_key = response.json().get("token")
+        test_user_key = response.json().get("access")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
 
         url = reverse("post-detail", kwargs={"pk": self.post_id})
@@ -160,10 +158,10 @@ class PermissionTest(APITestCase):
         self.comment_data = {"text": "Comment 1", "user": self.user_profile_id_2, "post": self.post.id}
 
         # Log in user 2.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {"username": "test2@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
-        test_user_key = response.json().get("token")
+        test_user_key = response.json().get("access")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
 
         url = reverse("comment-list")
@@ -214,10 +212,10 @@ class PermissionTest(APITestCase):
         self.assertTrue(response.json()['modified'])
 
         # Log in user 2.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {"username": "test2@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
-        test_user_key = response.json().get("token")
+        test_user_key = response.json().get("access")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
 
         self.comment_data = {"text": "Comment Updated", "user": self.user_profile_id_2, "post": self.post.id}
@@ -260,10 +258,10 @@ class PermissionTest(APITestCase):
         self.assertTrue(response.json()['modified'])
 
         # Log in user 2.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {"username": "test2@who.who", "password": "secure1234"}
         response = self.client.post(url, data)
-        test_user_key = response.json().get("token")
+        test_user_key = response.json().get("access")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
 
         url = reverse("comment-detail", kwargs={"pk": self.comment_id})
