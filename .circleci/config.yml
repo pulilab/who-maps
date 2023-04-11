@@ -47,7 +47,7 @@ jobs:
       - run:
           name: install frontend reqs
           working_directory: ~/who-maps/frontend
-          command: npm install
+          command: yarn install
 
       - save_cache:
           key: *deps1-cache
