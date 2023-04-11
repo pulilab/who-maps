@@ -310,9 +310,10 @@ class UserProfileTests(APITestCase):
         me_url = reverse("userprofile-me")
         response = self.client.get(me_url)
         data = response.json()
+        random_profile = UserProfile.objects.exclude(id=data['id']).first()
         updated_country = Country.objects.all()[2].id
         data.update(country=updated_country)
-        url = reverse("userprofile-detail", kwargs={"pk": 1})
+        url = reverse("userprofile-detail", kwargs={"pk": random_profile.id})
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, 401)
 
