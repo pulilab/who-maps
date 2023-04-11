@@ -187,22 +187,6 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
-
-def jwt_response_payload_handler(token, user=None, request=None):
-    return {
-        'token': token,
-        'user_profile_id': user.userprofile.id if user.userprofile else None,
-        'account_type': user.userprofile.account_type if user.userprofile else None,
-        'is_superuser': user.is_superuser
-    }
-
-
-JWT_AUTH = {
-    'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
-    'JWT_AUTH_HEADER_PREFIX': 'Token',
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7)
-}
-
 # django-allauth and rest-auth settings
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -217,21 +201,7 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": True,
-
     "AUTH_HEADER_TYPES": ("Token",),
-    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
-    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
-
-    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
-    "TOKEN_TYPE_CLAIM": "token_type",
-    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
-
-    "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
-    "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
-    "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
-    "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
-    "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
-    "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
 REST_AUTH = {
@@ -337,6 +307,9 @@ LOGIN_REDIRECT_URL = '/admin/login/'
 ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
 ROSETTA_WSGI_AUTO_RELOAD = True
 ROSETTA_MESSAGES_PER_PAGE = 25
+ROSETTA_SHOW_AT_ADMIN_PANEL = True
+ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS = True
+DEEPL_AUTH_KEY = "bbc11135-e01f-d2b7-6b74-c33c68f1cfa7"
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'translations'),  # don't move this, update_translations mgmt cmd is using it
