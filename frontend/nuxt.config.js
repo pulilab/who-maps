@@ -158,7 +158,7 @@ const config = {
   },
   buildModules: ['@nuxtjs/google-analytics'],
   googleAnalytics: {
-    id: process.env.GA_TRACKING_ID || 'UA-163761727-1',
+    id: process.env.GA_TRACKING_ID,
     disabled: true,
     set: [{ field: 'anonymizeIp', value: true }]
   },
