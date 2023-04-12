@@ -205,7 +205,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      doLogout: 'user/doLogout'
+      doLogout: 'user/logout'
     }),
     closePopover () {
       this.shown = false
