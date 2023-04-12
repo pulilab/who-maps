@@ -1,7 +1,7 @@
 import itertools
 from django.db import models
 from django.template.defaultfilters import slugify
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from core.models import ExtendedModel
 from user.models import UserProfile

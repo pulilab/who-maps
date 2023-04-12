@@ -6,24 +6,90 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.postgres.fields.array import ArrayField
 from django.forms.widgets import MediaDefiningClass
 from modeltranslation.translator import translator
+from import_export.fields import Field
+from import_export import resources
+from import_export.admin import ExportActionMixin
 
+from project.models import Project
 from user.models import UserProfile
-from .widgets import AdminArrayField
+
+
+class UserResource(resources.ModelResource):  # pragma: no cover
+    title = Field(column_name='Title')
+    name = Field(column_name='Name')
+    account_type = Field(column_name='Account type')
+    organization = Field(column_name='Organization')
+    country = Field(column_name='Country')
+    donor = Field(column_name='Donor')
+    language = Field(column_name='Language')
+    last_login = Field(column_name='Last login date')
+    date_joined = Field(column_name='Date joined')
+    projects_where_team_member = Field(column_name='Projects where team member')
+    projects_where_viewer = Field(column_name='Projects where viewer')
+
+    class Meta:
+        model = User
+        fields = export_order = ('id', 'title', 'name', 'email', 'account_type', 'organization', 'country', 'donor',
+                                 'language', 'last_login', 'date_joined', 'is_active', 'is_staff', 'is_superuser',
+                                 'projects_where_team_member', 'projects_where_viewer')
+
+    def dehydrate_projects_where_viewer(self, user: User):
+        return Project.objects.filter(viewers=user.userprofile).count() if hasattr(user, 'userprofile') else 0
+
+    def dehydrate_projects_where_team_member(self, user: User):
+        return Project.objects.filter(team=user.userprofile).count() if hasattr(user, 'userprofile') else 0
+
+    def dehydrate_last_login(self, user: User):
+        if user.last_login == user.date_joined:
+            return 'Never'
+        return user.last_login.date() if user.last_login else '-'
+
+    def dehydrate_date_joined(self, user: User):
+        return user.date_joined.date() if user.date_joined else '-'
+
+    def dehydrate_name(self, user: User):
+        return user.userprofile.name if hasattr(user, 'userprofile') else '-'
+
+    def dehydrate_title(self, user: User):
+        return user.userprofile.title if hasattr(user, 'userprofile') else '-'
+
+    def dehydrate_account_type(self, user: User):
+        account_types = {x[0]: x[1] for x in UserProfile.ACCOUNT_TYPE_CHOICES}
+        return account_types[user.userprofile.account_type] if hasattr(user, 'userprofile') else '-'
+
+    def dehydrate_organization(self, user: User):
+        return user.userprofile.organisation.name \
+            if hasattr(user, 'userprofile') and user.userprofile.organisation else '-'
+
+    def dehydrate_country(self, user: User):
+        return user.userprofile.country.name if hasattr(user, 'userprofile') and user.userprofile.country else '-'
+
+    def dehydrate_donor(self, user: User):
+        return user.userprofile.donor.name if hasattr(user, 'userprofile') and user.userprofile.donor else '-'
+
+    def dehydrate_language(self, user: User):
+        return user.userprofile.language if hasattr(user, 'userprofile') else '-'
 
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
-    readonly_fields = ('odk_sync',)
     can_delete = False
 
 
-class CustomUserAdmin(UserAdmin):
-    list_display = ('userprofile', 'country', 'type', 'organisation', 'is_staff', 'is_superuser')
+class CustomUserAdmin(ExportActionMixin, UserAdmin):
+    list_display = ('userprofile', 'email', 'name', 'country', 'type', 'organisation', 'is_staff', 'is_superuser',
+                    'last_login', 'date_joined')
     search_fields = ('userprofile__name', 'email', 'userprofile__country__name', 'userprofile__organisation__name')
     inlines = (UserProfileInline,)
+    resource_class = UserResource
+
+    def name(self, obj):
+        return obj.userprofile.name
+
+    name.allow_tags = True
+    name.admin_order_field = 'userprofile__name'
 
     def country(self, obj):
         return obj.userprofile.country
@@ -42,7 +108,7 @@ class CustomUserAdmin(UserAdmin):
     organisation.allow_tags = True
 
     def get_list_filter(self, request):
-        return super(CustomUserAdmin, self).get_list_filter(request) + (('userprofile__account_type'),)
+        return super(CustomUserAdmin, self).get_list_filter(request) + ('userprofile__account_type',)
 
     def get_form(self, request, obj=None, **kwargs):
         self.fieldsets[0][1]["fields"] = ('password',)
@@ -103,13 +169,6 @@ class AllObjectsAdmin(admin.ModelAdmin, metaclass=MultiLevelAdminMeta):
 
         language_fields = ['is_translated_{}'.format(l[0]) for l in settings.LANGUAGES]
         return list_display + ['is_active'] + language_fields
-
-
-class ArrayFieldMixin(object):
-    formfield_overrides = {ArrayField: {'form_class': AdminArrayField}}
-
-    class Media:
-        js = ('arrayfield.js',)
 
 
 admin.site.login_form = CustomAuthenticationForm

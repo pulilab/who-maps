@@ -1,24 +1,13 @@
-from django.db import models, transaction
+from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password, PBKDF2PasswordHasher
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from core.models import ExtendedModel
-from .tasks import sync_user_to_odk, send_user_request_to_admins
-
-
-def set_password(self, raw_password):  # pragma: no cover
-    self.password = make_password(raw_password)
-    self._password = raw_password
-    self._set_password = True  # inject this to detect password change
-
-
-User.set_password = set_password
-PBKDF2PasswordHasher.iterations = 30000
+from .tasks import send_user_request_to_admins
 
 
 class Organisation(ExtendedModel):
@@ -72,10 +61,10 @@ class UserProfile(ExtendedModel):
     donor = models.ForeignKey('country.Donor', related_name='userprofiles', null=True,  blank=True, 
                               on_delete=models.SET_NULL)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
-    odk_sync = models.BooleanField(default=False, verbose_name="User has been synced with ODK")
     # phone = models.CharField(blank=True, null=True, max_length=50)
     title = models.CharField(blank=True, null=True, max_length=100)
     linkedin = models.URLField(blank=True, null=True)
+    invited = models.BooleanField(default=False)
 
     project_updates_notification = models.BooleanField(default=True)
     daily_toolkit_digest_notification = models.BooleanField(default=True)
@@ -83,7 +72,7 @@ class UserProfile(ExtendedModel):
     role_request_notification = models.BooleanField(default=True)
 
     def __str__(self):
-        return "{} <{}>".format(self.name, self.user.email) if self.name else ""
+        return "{} <{}>".format(self.name, self.user.email) if self.name else "-"
 
     @staticmethod
     def get_sentinel_user():
@@ -123,19 +112,3 @@ def admin_request_on_change(sender, instance, **kwargs):
 def admin_request_on_create(sender, instance, created, **kwargs):
     if created and instance.account_type != UserProfile.IMPLEMENTER or getattr(instance, '__trigger_send', False):
         send_user_request_to_admins.apply_async(args=(instance.pk,))
-
-
-@receiver(post_save, sender=UserProfile)
-def odk_sync_on_created(sender, instance, created, **kwargs):
-    if settings.ODK_SYNC_ENABLED:  # pragma: no cover
-        if created:
-            transaction.on_commit(lambda: sync_user_to_odk.apply_async(args=(instance.user.pk, False)))
-
-
-@receiver(post_save, sender=User)
-def odk_sync_on_pass_update(sender, instance, created, **kwargs):
-    if settings.ODK_SYNC_ENABLED:  # pragma: no cover
-        if created:
-            instance._set_password = False
-        elif getattr(instance, '_set_password', False):
-            transaction.on_commit(lambda: sync_user_to_odk.apply_async(args=(instance.pk, True)))

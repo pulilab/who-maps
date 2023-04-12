@@ -11,6 +11,8 @@ from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import UniqueValidator
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAuthMixin, CollectionTokenAuthMixin, \
     get_object_or_400, CollectionAuthenticatedMixin
 from project.cache import cache_structure
@@ -33,13 +35,11 @@ from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPl
 
 from .mixins import CheckRequiredMixin
 from django.conf import settings
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from user.authentication import BearerTokenAuthentication
 
 from who_maps.throttle import ExternalAPIUserRateThrottle, ExternalAPIAnonRateThrottle
-from rest_framework.views import APIView
-
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from user.authentication import BearerTokenAuthentication
 
 
 class ProjectPublicViewSet(ViewSet):
@@ -817,7 +817,7 @@ class ProjectImportCheckAvailabilityView(TokenAuthMixin, APIView):
 class ProjectGroupAddmeViewSet(GenericViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, IsOwnerShipModifiable)
 
     @transaction.atomic

@@ -5,12 +5,11 @@ from allauth.account.utils import complete_signup
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
+from django.utils.crypto import get_random_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
-from rest_auth.app_settings import create_token
-from rest_auth.models import TokenModel
-from rest_auth.utils import jwt_encode
+from dj_rest_auth.utils import jwt_encode
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import ReadOnlyField
@@ -101,7 +100,7 @@ class ProjectPublishedSerializer(serializers.Serializer):
     end_date_note = serializers.CharField(max_length=256, required=False, allow_blank=True)
     contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
-    research = serializers.NullBooleanField(required=False)
+    research = serializers.BooleanField(required=False, allow_null=True)
 
     # SECTION 2 Implementation Overview
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
@@ -164,7 +163,6 @@ class ProjectPublishedSerializer(serializers.Serializer):
         instance.name = validated_data["name"]
         instance.data = validated_data
         instance.draft = validated_data
-        instance.odk_etag = None
         instance.make_public_id(validated_data['country'])
         instance.save()
 
@@ -208,11 +206,6 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     # SECTION 4
     interoperability_links = DraftInteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
 
-    # ODK DATA
-    odk_etag = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
-    odk_id = serializers.CharField(allow_blank=True, allow_null=True, max_length=64, required=False)
-    odk_extra_data = serializers.JSONField(required=False)
-
     def validate_country(self, value):
         if self.instance:
             project = Project.objects.get(id=self.instance.id)
@@ -221,29 +214,14 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
         return value
 
     def create(self, validated_data):
-        odk_etag = validated_data.pop('odk_etag', None)
-        odk_id = validated_data.pop('odk_id', None)
-        odk_extra_data = validated_data.pop('odk_extra_data', dict())
         return self.Meta.model(
             name=validated_data["name"],
             draft=validated_data,
-            odk_etag=odk_etag,
-            odk_id=odk_id,
-            odk_extra_data=odk_extra_data
         )
 
     def update(self, instance, validated_data):
-        odk_etag = validated_data.pop('odk_etag', None)
-        validated_data.pop('odk_id', None)
-        odk_extra_data = validated_data.pop('odk_extra_data', None)
-
         if not instance.public_id:
             instance.name = validated_data["name"]
-
-        instance.odk_etag = odk_etag if self.context.get('preserve_etag') else None
-
-        if odk_extra_data:
-            instance.odk_extra_data = odk_extra_data
 
         instance.draft = validated_data
         return instance
@@ -291,14 +269,10 @@ class ProjectGroupSerializer(serializers.ModelSerializer):  # TODO handle orphan
                           context=context)
 
     def perform_create(self, email):
-        user = User.objects.create_user(username=email[:150], email=email)
-        UserProfile.objects.create(user=user, account_type=UserProfile.IMPLEMENTER)
+        user = User.objects.create_user(username=email[:150], email=email, password=get_random_string(length=10))
+        UserProfile.objects.create(user=user, account_type=UserProfile.IMPLEMENTER, invited=True)
 
-        if getattr(settings, 'REST_USE_JWT', False):
-            self.token = jwt_encode(user)
-        else:  # pragma: no cover
-            # Backwards compatibility for use without JWT
-            create_token(TokenModel, user, None)
+        self.token = jwt_encode(user)
 
         complete_signup(self.context['request']._request, user,
                         allauth_settings.EMAIL_VERIFICATION,

@@ -6,10 +6,9 @@ from hashids import Hashids
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
-from django.contrib.postgres.fields import JSONField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from simple_history.models import HistoricalRecords
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
@@ -80,18 +79,20 @@ class Project(SoftDeleteModel, ExtendedModel):
     FIELDS_FOR_LOGGED_IN = ("coverage", "contact_email", "contact_name")
 
     name = models.CharField(max_length=255)
-    data = JSONField(default=dict)
-    draft = JSONField(default=dict)
+    data = models.JSONField(default=dict)
+    draft = models.JSONField(default=dict)
     team = models.ManyToManyField(UserProfile, related_name="team", blank=True)
     viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
     public_id = models.CharField(
         max_length=64, default="", help_text="<CountryCode><HashID> eg: HU9fa42491")
+
+    # DEPRECATED ODK FIELDS
     odk_etag = models.CharField(null=True, blank=True, max_length=64)
     odk_id = models.CharField(null=True, blank=True, max_length=64)
-    odk_extra_data = JSONField(default=dict)
+    odk_extra_data = models.JSONField(default=dict)
 
-    research = models.NullBooleanField(blank=True, null=True)
-    metadata = JSONField(default=dict)
+    research = models.BooleanField(blank=True, null=True)
+    metadata = models.JSONField(default=dict)
 
     projects = ProjectManager  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
@@ -225,7 +226,7 @@ class ProjectApproval(ExtendedModel):
     project = models.OneToOneField('Project', related_name='approval', on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, blank=True, null=True,
                              help_text="Administrator who approved the project", on_delete=models.CASCADE)
-    approved = models.NullBooleanField(blank=True, null=True)
+    approved = models.BooleanField(blank=True, null=True)
     reason = models.TextField(blank=True, null=True)
     history = HistoricalRecords(excluded_fields=['project', 'created'])
 
@@ -248,7 +249,7 @@ class Stage(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 class CoverageVersion(ExtendedModel):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     version = models.IntegerField()
-    data = JSONField()
+    data = models.JSONField()
 
 
 class File(ExtendedModel):
@@ -404,8 +405,8 @@ class Collection(ExtendedNameOrderedSoftDeletedModel):
 
 class ProjectImportV2(ExtendedModel):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    status = models.NullBooleanField(null=True, blank=True)  # TODO: maybe remove this
-    header_mapping = JSONField(default=dict, blank=True)
+    status = models.BooleanField(null=True, blank=True)  # TODO: maybe remove this
+    header_mapping = models.JSONField(default=dict, blank=True)
     country = models.ForeignKey(Country, null=True, blank=True, on_delete=models.SET_NULL)
     donor = models.ForeignKey(Donor, null=True, blank=True, on_delete=models.SET_NULL)
     filename = models.CharField(max_length=256, null=True, blank=True)
@@ -419,8 +420,8 @@ class ProjectImportV2(ExtendedModel):
 
 
 class ImportRow(models.Model):
-    data = JSONField(default=dict)
-    original_data = JSONField(default=dict)
+    data = models.JSONField(default=dict)
+    original_data = models.JSONField(default=dict)
     project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL, related_name='import_rows')
     parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)
 
@@ -429,8 +430,8 @@ class ProjectVersion(ExtendedModel):
     version = models.IntegerField(default=1)
     project = models.ForeignKey(Project, blank=False, null=True, on_delete=models.CASCADE, related_name='versions')
     name = models.CharField(max_length=255)
-    data = JSONField(default=dict)
-    research = models.NullBooleanField(blank=True, null=True)
+    data = models.JSONField(default=dict)
+    research = models.BooleanField(blank=True, null=True)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='project_versions', blank=True,
                              null=True)
     published = models.BooleanField(default=False)

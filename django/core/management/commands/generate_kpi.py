@@ -16,7 +16,7 @@ from user.models import User, UserProfile
 from django.db.models import Q, F, IntegerField
 from search.models import ProjectSearch
 
-from django.contrib.postgres.fields.jsonb import KeyTextTransform
+from django.db.models.fields.json import KeyTextTransform
 from django.db.models.functions import Cast
 import pprint
 

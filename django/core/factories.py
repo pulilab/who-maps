@@ -1,8 +1,10 @@
-import factory
 import pycountry
 from django.contrib.auth.models import User
 from django.utils import timezone
+from factory import LazyAttribute, PostGenerationMethodCall, SubFactory
+from factory.helpers import post_generation
 from factory.faker import faker
+from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyDateTime, FuzzyChoice
 
 from cms.models import Post, Comment
@@ -18,199 +20,199 @@ POST_TYPES = [item[0] for item in Post.TYPE_CHOICES]
 POST_DOMAINS = [item[0] for item in Post.DOMAIN_CHOICES]
 
 
-class UserFactory(factory.DjangoModelFactory):
+class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
         django_get_or_create = ('username',)
 
-    username = factory.LazyAttribute(
+    username = LazyAttribute(
         lambda a: '{}'.format(faker.Faker().profile()['name'].lower().replace(' ', '_')))
-    email = factory.LazyAttribute(lambda a: f'{a.username}@example.com')
-    password = factory.PostGenerationMethodCall('set_password', 'test')
+    email = LazyAttribute(lambda a: f'{a.username}@example.com')
+    password = PostGenerationMethodCall('set_password', 'test')
     is_active = True
     date_joined = FuzzyDateTime(
         start_dt=timezone.now() - timezone.timedelta(days=10),
         end_dt=timezone.now()
     )
 
-    @factory.post_generation
+    @post_generation
     def password(self, create, extracted, **kwargs):
         if extracted:
             self.set_password(extracted)
 
 
-class UserProfileFactory(factory.DjangoModelFactory):
+class UserProfileFactory(DjangoModelFactory):
     class Meta:
         model = UserProfile
         django_get_or_create = ('name',)
 
-    user = factory.SubFactory(UserFactory)
-    name = factory.LazyAttribute(lambda a: f'{a.user.username}')
+    user = SubFactory(UserFactory)
+    name = LazyAttribute(lambda a: f'{a.user.username}')
 
 
-class OrganisationFactory(factory.DjangoModelFactory):
+class OrganisationFactory(DjangoModelFactory):
     class Meta:
         model = Organisation
         django_get_or_create = ('name',)
 
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().profile()['company']))
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().profile()['company']))
 
 
-class DonorFactory(factory.DjangoModelFactory):
+class DonorFactory(DjangoModelFactory):
     class Meta:
         model = Donor
         django_get_or_create = ('name',)
 
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().profile()['company']))
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().profile()['company']))
 
 
-class TechnologyPlatformFactory(factory.DjangoModelFactory):
+class TechnologyPlatformFactory(DjangoModelFactory):
     class Meta:
         model = TechnologyPlatform
         django_get_or_create = ('name',)
 
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
 
 
-class DonorCustomQuestionFactory(factory.DjangoModelFactory):
+class DonorCustomQuestionFactory(DjangoModelFactory):
     class Meta:
         model = DonorCustomQuestion
         django_get_or_create = ('question', 'donor')
 
-    donor = factory.SubFactory(DonorFactory)
-    question = factory.LazyAttribute(
+    donor = SubFactory(DonorFactory)
+    question = LazyAttribute(
         lambda s: '{}'.format(faker.Faker().sentence().replace('.', '?'))
     )
 
 
-class DigitalStrategyFactory(factory.DjangoModelFactory):
+class DigitalStrategyFactory(DjangoModelFactory):
     class Meta:
         model = DigitalStrategy
         django_get_or_create = ('name',)
 
     group = FuzzyChoice(DIGITAL_STRATEGY_GROUP_CHOICES)
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().sentence()))
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().sentence()))
 
 
-class CountryFactory(factory.DjangoModelFactory):
+class CountryFactory(DjangoModelFactory):
     class Meta:
         model = Country
         django_get_or_create = ('name',)
 
     name = FuzzyChoice(COUNTRY_NAMES)
-    code = factory.LazyAttribute(
+    code = LazyAttribute(
         lambda s: '{}'.format(pycountry.countries.get(name=s.name).alpha_2)
     )
 
 
-class CountryCustomQuestionFactory(factory.DjangoModelFactory):
+class CountryCustomQuestionFactory(DjangoModelFactory):
     class Meta:
         model = CountryCustomQuestion
         django_get_or_create = ('question', 'country')
 
-    country = factory.SubFactory(CountryFactory)
-    question = factory.LazyAttribute(
+    country = SubFactory(CountryFactory)
+    question = LazyAttribute(
         lambda s: '{}'.format(faker.Faker().sentence().replace('.', '?'))
     )
 
 
-class HSCGroupFactory(factory.DjangoModelFactory):
+class HSCGroupFactory(DjangoModelFactory):
     class Meta:
         model = HSCGroup
         django_get_or_create = ('name',)
 
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().profile()['company']))
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().profile()['company']))
 
 
-class HSCChallengeFactory(factory.DjangoModelFactory):
+class HSCChallengeFactory(DjangoModelFactory):
     class Meta:
         model = HSCChallenge
         django_get_or_create = ('name', 'group')
 
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
-    group = factory.SubFactory(HSCGroupFactory)
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    group = SubFactory(HSCGroupFactory)
 
 
-class HealthCategoryFactory(factory.DjangoModelFactory):
+class HealthCategoryFactory(DjangoModelFactory):
     class Meta:
         model = HealthCategory
         django_get_or_create = ('name',)
 
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
 
 
-class HealthFocusAreaFactory(factory.DjangoModelFactory):
+class HealthFocusAreaFactory(DjangoModelFactory):
     class Meta:
         model = HealthFocusArea
         django_get_or_create = ('name',)
 
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
-    health_category = factory.SubFactory(HealthCategoryFactory)
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    health_category = SubFactory(HealthCategoryFactory)
 
 
-class PostFactory(factory.DjangoModelFactory):
+class PostFactory(DjangoModelFactory):
     class Meta:
         model = Post
 
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
-    body = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().sentence()))
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    body = LazyAttribute(lambda s: '{}'.format(faker.Faker().sentence()))
     type = FuzzyChoice(POST_TYPES)
     domain = FuzzyChoice(POST_DOMAINS)
-    author = factory.SubFactory(UserProfileFactory)
+    author = SubFactory(UserProfileFactory)
 
 
-class ProjectFactory(factory.DjangoModelFactory):
+class ProjectFactory(DjangoModelFactory):
     class Meta:
         model = Project
         django_get_or_create = ('name',)
 
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
 
-    @factory.post_generation
+    @post_generation
     def team(self, create, extracted, **kwargs):
         if extracted:
             for user_profile in extracted:
                 self.team.add(user_profile)
 
 
-class CommentFactory(factory.DjangoModelFactory):
+class CommentFactory(DjangoModelFactory):
     class Meta:
         model = Comment
         django_get_or_create = ('text', 'user')
 
-    text = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().sentence()))
-    user = factory.SubFactory(UserProfileFactory)
-    post = factory.SubFactory(PostFactory)
+    text = LazyAttribute(lambda s: '{}'.format(faker.Faker().sentence()))
+    user = SubFactory(UserProfileFactory)
+    post = SubFactory(PostFactory)
 
 
-class LicenceFactory(factory.DjangoModelFactory):
+class LicenceFactory(DjangoModelFactory):
     class Meta:
         model = Licence
         django_get_or_create = ('name',)
 
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
 
 
-class InteroperabilityStandardFactory(factory.DjangoModelFactory):
+class InteroperabilityStandardFactory(DjangoModelFactory):
     class Meta:
         model = InteroperabilityStandard
         django_get_or_create = ('name',)
 
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
 
 
-class HISBucketFactory(factory.DjangoModelFactory):
+class HISBucketFactory(DjangoModelFactory):
     class Meta:
         model = HISBucket
         django_get_or_create = ('name',)
 
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
 
 
-class InteroperabilityLinkFactory(factory.DjangoModelFactory):
+class InteroperabilityLinkFactory(DjangoModelFactory):
     class Meta:
         model = InteroperabilityLink
         django_get_or_create = ('name', 'pre')
 
-    name = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
-    pre = factory.LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    name = LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))
+    pre = LazyAttribute(lambda s: '{}'.format(faker.Faker().word().title()))

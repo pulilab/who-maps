@@ -1,11 +1,11 @@
 from django.conf import settings
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from project.permissions import InTeamOrReadOnly, InTeamOrCollectionOwnerOrReadOnly, CollectionOwnerOrReadOnly
 from project.models import Project
@@ -25,27 +25,27 @@ class TokenAuthMixin(object):
     Mixin class for defining general permission and authentication settings on
     REST Framework Class Based Views.
     """
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 class TeamTokenAuthMixin(object):
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, InTeamOrReadOnly)
 
 
 class TeamCollectionTokenAuthMixin(object):
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, InTeamOrCollectionOwnerOrReadOnly)
 
 
 class CollectionTokenAuthMixin(object):
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (CollectionOwnerOrReadOnly,)
 
 
 class CollectionAuthenticatedMixin(object):
-    authentication_classes = (JSONWebTokenAuthentication, BearerTokenAuthentication)
+    authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, CollectionOwnerOrReadOnly)
 
 
@@ -116,7 +116,7 @@ class StaticDataView(GenericAPIView):
         languages = []
         for code, name in settings.LANGUAGES:
             languages.append({'code': code,
-                              'name': ugettext(name),
+                              'name': gettext(name),
                               'flag': self.flag_mapping.get(code, '')})
         return languages
 

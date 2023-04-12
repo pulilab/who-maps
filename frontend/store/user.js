@@ -1,9 +1,7 @@
 import union from 'lodash/union'
-import { saveToken, deleteToken } from '../utilities/auth'
 
 export const state = () => ({
-  token: null,
-  user: null,
+  tokens: null,
   profile: null,
   apiKey: null,
   emailVerifyResult: null,
@@ -16,7 +14,7 @@ export const state = () => ({
 })
 
 export const getters = {
-  getToken: state => state.token,
+  getToken: state => state.tokens?.access,
   getUser: state => state.user,
   emailVerifiedRecently: state => state.emailVerifyResult,
 
@@ -31,17 +29,19 @@ export const getters = {
 
 export const actions = {
 
-  async doLogin ({ commit, dispatch }, { username, password }) {
-    const { data } = await this.$axios.post('/api/api-token-auth/', { username, password })
-    commit('SET_USER', data)
-    commit('SET_TOKEN', data.token)
-    saveToken(data.token, data.user_profile_id)
-    await dispatch('loadProfile', data.user_profile_id)
-    await Promise.all([
-      dispatch('system/loadOrganisations', {}, { root: true }),
-      dispatch('projects/loadUserProjects', {}, { root: true }),
-      dispatch('system/loadUserProfiles', {}, { root: true })
-    ])
+  async login ({ commit, dispatch }, { username, password }) {
+    try {
+      const { data: tokens } = await this.$axios.post('/api/jwt/', { username, password })
+      commit('SET_TOKENS', tokens)
+      await dispatch('loadProfile')
+      await Promise.all([
+        dispatch('system/loadOrganisations', {}, { root: true }),
+        dispatch('projects/loadUserProjects', {}, { root: true }),
+        dispatch('system/loadUserProfiles', {}, { root: true })
+      ])
+    } catch (error) {
+      console.error('user/login failed')
+    }
   },
 
   async resetPassword (ctx, { email }) {
@@ -49,13 +49,13 @@ export const actions = {
     return data
   },
 
-  async doSignup ({ commit, dispatch }, { account_type, password1, password2, email }) {
-    const { data } = await this.$axios.post('/api/rest-auth/registration/',
-      { account_type, password1, password2, email })
-    commit('SET_USER', data)
-    commit('SET_TOKEN', data.token)
-    saveToken(data.token, data.user_profile_id)
-    await dispatch('loadProfile', data.user_profile_id)
+  async signup ({ commit, dispatch }, { account_type, password1, password2, email }) {
+    const { data } = await this.$axios.post('/api/rest-auth/registration/', { account_type, password1, password2, email })
+    commit('SET_TOKENS', {
+      access: data.access_token,
+      refresh: data.refresh_token
+    })
+    await dispatch('loadProfile')
     await dispatch('system/loadOrganisations', {}, { root: true })
   },
 
@@ -81,18 +81,16 @@ export const actions = {
     }
   },
 
-  doLogout ({ commit, dispatch }) {
-    commit('SET_USER', null)
+  logout ({ commit, dispatch }) {
+    commit('SET_TOKENS', null)
     commit('SET_PROFILE', null)
-    commit('SET_TOKEN', null)
     commit('SET_APIKEY', null)
     dispatch('dashboard/resetUserInput', null, { root: true })
     dispatch('landing/resetUserInput', null, { root: true })
     dispatch('projects/resetProjectsData', null, { root: true })
-    deleteToken()
   },
 
-  async loadProfile ({ commit, getters, dispatch }, profileId) {
+  async loadProfile ({ commit, getters, dispatch }, profileId = 'me') {
     try {
       if (getters.getToken && !getters.getProfile) {
         const { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`)
@@ -125,9 +123,21 @@ export const actions = {
     commit('SET_PROFILE', data)
   },
 
-  async setToken ({ commit, dispatch }, tokens) {
-    commit('SET_TOKEN', tokens.jwt)
-    await dispatch('loadProfile', tokens.profileId)
+  async refreshToken ({ commit, state }) {
+    if (state.tokens?.refresh) {
+      try {
+          const { data } = await this.$axios.post('/api/jwt/refresh/', {
+            refresh: state.tokens.refresh
+          })
+          commit('SET_TOKENS', {
+            access: data.access,
+            refresh: state.tokens.refresh
+          })
+      } catch (e) {
+        console.error('user/refreshToken failed', e)
+        console.error('user/refreshToken failed', e.response)
+      }
+    }
   },
 
   updateTeamViewers ({ commit, getters }, { team, viewers, id }) {
@@ -187,13 +197,8 @@ export const actions = {
 }
 
 export const mutations = {
-
-  SET_TOKEN: (state, token) => {
-    state.token = token
-  },
-
-  SET_USER: (state, user) => {
-    state.user = user
+  SET_TOKENS: (state, tokens) => {
+    state.tokens = tokens
   },
 
   SET_COOKIE: (state, cookieOn) => {

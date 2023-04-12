@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core import management
 from django.utils.dateformat import format
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 from django.db.transaction import atomic
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -111,17 +111,17 @@ class UpdateAdminMixin:
         if new_users:
             instance.admins.remove(*new_users)
             instance.super_admins.remove(*new_users)
-            self.notify_users(new_users, instance, ugettext('Viewer'))
+            self.notify_users(new_users, instance, gettext('Viewer'))
 
         if new_admins:
             instance.users.remove(*new_admins)
             instance.super_admins.remove(*new_admins)
-            self.notify_users(new_admins, instance, ugettext('Admin'))
+            self.notify_users(new_admins, instance, gettext('Admin'))
 
         if new_super_admins:
             instance.users.remove(*new_super_admins)
             instance.admins.remove(*new_super_admins)
-            self.notify_users(new_super_admins, instance, ugettext('System Admin'))
+            self.notify_users(new_super_admins, instance, gettext('System Admin'))
 
         return instance
 

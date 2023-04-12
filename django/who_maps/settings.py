@@ -2,7 +2,8 @@ import os
 import datetime
 import sys
 from celery.schedules import crontab
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
+from sentry_sdk.integrations.celery import CeleryIntegration
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -34,8 +35,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth',
-    'rest_auth.registration',
     'drf_yasg',
     'ordered_model',
     'rosetta',
@@ -43,6 +42,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
     'corsheaders',
     'djcelery_email',
     'simple_history',
@@ -54,11 +55,12 @@ INSTALLED_APPS = [
     'search',
     'scheduler',
     'cms',
-    'simple-feedback',
+    'simple_feedback',
     'systemmessages',
     'kpiexport',
     'rangefilter',
     'nonrelated_inlines',
+    'import_export'
 ]
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -104,11 +106,11 @@ WSGI_APPLICATION = 'who_maps.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
         'HOST': os.environ.get("DATABASE_URL", 'postgres'),
-        'PASSWORD': os.environ.get("POSTGRESQL_PASSWORD", 'postgres'),
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'postgres'),
         'PORT': 5432,
     }
 }
@@ -176,7 +178,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'user.authentication.BearerTokenAuthentication'
     ),
     'DEFAULT_THROTTLE_RATES': {
@@ -184,22 +186,6 @@ REST_FRAMEWORK = {
         'ext_user': '200/hour'
     },
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
-}
-
-
-def jwt_response_payload_handler(token, user=None, request=None):
-    return {
-        'token': token,
-        'user_profile_id': user.userprofile.id if user.userprofile else None,
-        'account_type': user.userprofile.account_type if user.userprofile else None,
-        'is_superuser': user.is_superuser
-    }
-
-
-JWT_AUTH = {
-    'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
-    'JWT_AUTH_HEADER_PREFIX': 'Token',
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7)
 }
 
 # django-allauth and rest-auth settings
@@ -210,12 +196,20 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-REST_USE_JWT = True
-REST_AUTH_SERIALIZERS = {
-    'JWT_SERIALIZER': 'user.serializers.ProfileJWTSerializer',
-    'PASSWORD_RESET_SERIALIZER': 'user.serializers.PasswordResetHTMLEmailSerializer'
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": True,
+    "AUTH_HEADER_TYPES": ("Token",),
 }
-REST_AUTH_REGISTER_SERIALIZERS = {
+
+REST_AUTH = {
+    'USE_JWT': True,
+    # 'JWT_AUTH_COOKIE': 'jwt-auth',
+    'JWT_SERIALIZER': 'user.serializers.ProfileJWTSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'user.serializers.PasswordResetHTMLEmailSerializer',
     'REGISTER_SERIALIZER': 'user.serializers.RegisterWithProfileSerializer'
 }
 
@@ -240,17 +234,6 @@ BROKER_URL = 'redis://{}:6379/0'.format(REDIS_URL)
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-
-ODK_SYNC_PERIOD = 1  # hours
-ODK_CREDENTIALS = {
-    'username': 'f1987_final@pulilab.com',
-    'password': 'secret'
-}
-ODK_SERVER_PROTOCOL = "https"
-ODK_SERVER_HOST = "odk.digitalhealthatlas.org"
-ODK_SERVER_USER = "odk"
-ODK_TABLE_NAME = 'dha_form'
-ODK_SYNC_ENABLED = bool(os.environ.get('ODK_SYNC_ENABLED', False))
 
 # SCHEDULES
 TOOLKIT_DIGEST_PERIOD = 7 * 24  # 1 week
@@ -325,6 +308,9 @@ LOGIN_REDIRECT_URL = '/admin/login/'
 ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
 ROSETTA_WSGI_AUTO_RELOAD = True
 ROSETTA_MESSAGES_PER_PAGE = 25
+ROSETTA_SHOW_AT_ADMIN_PANEL = True
+ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS = True
+DEEPL_AUTH_KEY = os.environ.get('DEEPL_KEY', '')
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'translations'),  # don't move this, update_translations mgmt cmd is using it
@@ -372,12 +358,12 @@ if SITE_ID in [3, 4]:
     from sentry_sdk.integrations.django import DjangoIntegration
     sentry_sdk.init(
         dsn=os.environ.get('SENTRY_DSN', ''),
-        integrations=[DjangoIntegration()],
+        integrations=[DjangoIntegration(), CeleryIntegration()],
 
         # Set traces_sample_rate to 1.0 to capture 100%
         # of transactions for performance monitoring.
         # We recommend adjusting this value in production.
-        traces_sample_rate=0.5,
+        traces_sample_rate=0.2,
 
         # If you wish to associate users to errors (assuming you are using
         # django.contrib.auth) you may enable sending PII data.
@@ -456,14 +442,6 @@ if SITE_ID in [3, 4]:
             "schedule": crontab(hour=2, minute=0, ),
         },
     }
-    if ODK_SYNC_ENABLED:
-        CELERYBEAT_SCHEDULE.update(
-            {
-                "sync_project_from_odk": {
-                    "task": 'sync_project_from_odk',
-                    "schedule": datetime.timedelta(hours=ODK_SYNC_PERIOD)
-                }
-            })
 
     DEBUG = False
 

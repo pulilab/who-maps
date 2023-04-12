@@ -56,6 +56,7 @@ const config = {
     { src: '~plugins/hotjar.js', ssr: false },
     { src: '~plugins/extends.js', ssr: false },
     { src: '~plugins/axios.js', ssr: true },
+    { src: '~plugins/token.js', ssr: true },
     { src: '~plugins/vee-validate.js', ssr: true },
     { src: '~plugins/vue-leaflet.js', ssr: false },
     { src: '~plugins/element.js', ssr: true },
@@ -144,13 +145,11 @@ const config = {
   proxy: {},
   axios: {
     baseURL: 'http://nginx:9010/',
-    // baseURL: '',
     browserBaseURL: '/',
     credentials: true,
     retry: false
   },
   router: {
-    middleware: ['auth'],
     base: '/'
   },
   loading: '~/components/DhaLoader.vue',
@@ -159,7 +158,7 @@ const config = {
   },
   buildModules: ['@nuxtjs/google-analytics'],
   googleAnalytics: {
-    id: process.env.GA_TRACKING_ID || 'UA-163761727-1',
+    id: process.env.GA_TRACKING_ID,
     disabled: true,
     set: [{ field: 'anonymizeIp', value: true }]
   },

@@ -1,8 +1,8 @@
 from typing import Dict
 
 from rest_framework import serializers
-from rest_auth.registration.serializers import RegisterSerializer
-from rest_auth.serializers import PasswordResetSerializer, JWTSerializer
+from dj_rest_auth.registration.serializers import RegisterSerializer
+from dj_rest_auth.serializers import PasswordResetSerializer, JWTSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import Field as Field
 from rest_framework.authtoken.models import Token
@@ -18,8 +18,6 @@ class ProfileJWTSerializer(JWTSerializer):
     """
     Retrieves the token and userprofile of a given user after log in.
     """
-    token = serializers.CharField()
-    user = serializers.SerializerMethodField()
     user_profile_id = serializers.SerializerMethodField()
     account_type = serializers.SerializerMethodField()
 

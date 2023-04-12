@@ -501,9 +501,9 @@ class CountryTests(CountryBaseTests):
         self.assertEqual(response.json()[-1], {'country': country.name, 'country_code': country.code,
                                                'platforms': {
                                                    str(p1.id): {'strategies': [s_parent.id],
-                                                                'projects': [project2_id, project1_id]},
+                                                                'projects': [project1_id, project2_id]},
                                                    str(p2.id): {'strategies': [s_parent.id],
-                                                                'projects': [project2_id, project1_id]}}})
+                                                                'projects': [project1_id, project2_id]}}})
 
     def test_create_retrieve_update_mapfile_noperm_fail(self):
         url = reverse('map-file-list')

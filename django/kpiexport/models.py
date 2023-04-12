@@ -1,7 +1,7 @@
 from django.db import models
 from core.models import GetObjectOrNoneQueryset
 from country.models import Country
-from django.contrib.postgres.fields import JSONField, ArrayField
+from django.contrib.postgres.fields import ArrayField
 
 
 class AuditLogBase(models.Model):
@@ -15,7 +15,7 @@ class AuditLogBase(models.Model):
     """
     date = models.DateField(blank=False, help_text='WARNING: Only use the year and month of this', null=False)
     country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.CASCADE)
-    data = JSONField(blank=True, default=dict)  # JSONField containing data on a per-investor basis
+    data = models.JSONField(blank=True, default=dict)  # JSONField containing data on a per-investor basis
     modified = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     objects = GetObjectOrNoneQueryset.as_manager()
@@ -167,7 +167,7 @@ class AuditLogProjectStages(AuditLogBase):
       }
     """
 
-    stages = JSONField(blank=True, default=dict)
+    stages = models.JSONField(blank=True, default=dict)
 
     class Meta:
         verbose_name = "Project Stages KPI"
@@ -198,7 +198,7 @@ class AuditLogDataStandards(AuditLogBase):
       }
     """
 
-    standards = JSONField(blank=True, default=dict)
+    standards = models.JSONField(blank=True, default=dict)
 
     class Meta:
         verbose_name = "Data Standards KPI"
@@ -233,7 +233,7 @@ class AuditLogHealthCategories(AuditLogBase):
       }
     """
 
-    categories = JSONField(blank=True, default=dict)
+    categories = models.JSONField(blank=True, default=dict)
 
     class Meta:
         verbose_name = "Health Categories KPI"
@@ -282,7 +282,7 @@ class AuditLogHFA(AuditLogBase):
       }
     """
 
-    hfa = JSONField(blank=True, default=dict)
+    hfa = models.JSONField(blank=True, default=dict)
 
     class Meta:
         verbose_name = "Health Focus Areas KPI"

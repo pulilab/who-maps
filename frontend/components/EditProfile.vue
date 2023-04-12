@@ -687,7 +687,6 @@ export default {
   computed: {
     ...mapGetters({
       profile: 'user/getProfile',
-      user: 'user/getUser',
       donors: 'system/getDonors'
     }),
 
