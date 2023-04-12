@@ -31,7 +31,7 @@ export const actions = {
 
   async login ({ commit, dispatch }, { username, password }) {
     try {
-      const { data: tokens } = await this.$axios.post('/api/token/', { username, password })
+      const { data: tokens } = await this.$axios.post('/api/jwt/', { username, password })
       commit('SET_TOKENS', tokens)
       await dispatch('loadProfile')
       await Promise.all([
@@ -123,20 +123,20 @@ export const actions = {
     commit('SET_PROFILE', data)
   },
 
-  async refreshToken ({ commit, state, dispatch }) {
-    try {
-      if (state.tokens?.refresh) {
-        const { data } = await this.$axios.post('/api/token/refresh', {
-          refresh: state.tokens.refresh
-        })
-        console.log('🚀 ~ file: user.js:132 ~ refreshToken ~ data:', data)
+  async refreshToken ({ commit, state }) {
+    if (state.tokens?.refresh) {
+      try {
+          const { data } = await this.$axios.post('/api/jwt/refresh/', {
+            refresh: state.tokens.refresh
+          })
+          commit('SET_TOKENS', {
+            access: data.access,
+            refresh: state.tokens.refresh
+          })
+      } catch (e) {
+        console.error('user/refreshToken failed', e)
+        console.error('user/refreshToken failed', e.response)
       }
-      commit('SET_TOKENS', {
-        access: data.access,
-        refresh: state.tokens.refresh
-      })
-    } catch (e) {
-      console.error('user/refreshToken failed', e)
     }
   },
 
