@@ -49,14 +49,13 @@ export const actions = {
     return data
   },
 
-  async doSignup ({ commit, dispatch }, { account_type, password1, password2, email }) {
-    const { data } = await this.$axios.post('/api/rest-auth/registration/',
-      { account_type, password1, password2, email })
-    // commit('SET_USER', data)
-    commit('SET_TOKENS', data.token)
-    // shouldn't be here at all
-    // saveToken(data.token, data.user_profile_id)
-    await dispatch('loadProfile', data.user_profile_id)
+  async signup ({ commit, dispatch }, { account_type, password1, password2, email }) {
+    const { data } = await this.$axios.post('/api/rest-auth/registration/', { account_type, password1, password2, email })
+    commit('SET_TOKENS', {
+      access: data.access_token,
+      refresh: data.refresh_token
+    })
+    await dispatch('loadProfile')
     await dispatch('system/loadOrganisations', {}, { root: true })
   },
 
@@ -96,7 +95,7 @@ export const actions = {
       if (getters.getToken && !getters.getProfile) {
         const { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`)
         commit('SET_PROFILE', data)
-        // dispatch('loadApiKey')
+        dispatch('loadApiKey')
       }
     } catch (e) {
       console.error('user/loadProfile failed')

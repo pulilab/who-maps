@@ -190,7 +190,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      doSignup: 'user/doSignup',
+      doSignup: 'user/signup',
       dorResetPassword: 'user/dorResetPassword'
     }),
     passwordMatching (rule, value, callback) {
