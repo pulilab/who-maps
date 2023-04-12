@@ -18,8 +18,6 @@ class ProfileJWTSerializer(JWTSerializer):
     """
     Retrieves the token and userprofile of a given user after log in.
     """
-    token = serializers.CharField()
-    user = serializers.SerializerMethodField()
     user_profile_id = serializers.SerializerMethodField()
     account_type = serializers.SerializerMethodField()
 

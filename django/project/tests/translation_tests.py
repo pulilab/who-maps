@@ -21,6 +21,8 @@ class TestModelTranslations(TestCase):
             'password2': '123456hetNYOLC'}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201)
+        user_profile = UserProfile.objects.get(id=response.json().get('user_profile_id'))
+        self.user = user_profile.user
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email='test_user@gmail.com').key
@@ -43,13 +45,10 @@ class TestModelTranslations(TestCase):
         data = {
             'username': 'test_user@gmail.com',
             'password': '123456hetNYOLC'}
-        response = self.client.post(reverse('api_token_auth'), data)
+        response = self.client.post(reverse('token_obtain_pair'), data)
         self.assertEqual(response.status_code, 200)
-        self.test_user_key = response.json().get('token')
+        self.test_user_key = response.json().get('access')
         self.test_user_client = APIClient(HTTP_AUTHORIZATION='Token {}'.format(self.test_user_key), format='json')
-        user_profile = UserProfile.objects.get(id=response.json().get('user_profile_id'))
-        self.user = user_profile.user
-
         self.platform = TechnologyPlatformFactory(name='Test platform', name_en='English name', name_fr='French name')
 
     def test_model_translations(self):

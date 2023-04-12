@@ -203,21 +203,20 @@ class ProjectVersionAdmin(admin.ModelAdmin):
         return False
 
 
+class ProjectImportV2Inline(admin.StackedInline):
+    model = ProjectImportV2
+    extra = 0
+
+
 class CollectionAdmin(admin.ModelAdmin):  # pragma: no cover
     model = Collection
-    fields = ['url', 'name', 'user', 'project_imports']
+    fields = ['url', 'name', 'user']
     readonly_fields = fields
     search_fields = ['name', 'user', 'url']
-
     list_display = ['modified', 'name', 'user', 'url']
+    inlines = [ProjectImportV2Inline]
 
     def has_add_permission(self, request, obj=None):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
-
-    def has_change_permission(self, request, obj=None):
         return False
 
 

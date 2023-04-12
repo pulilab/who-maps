@@ -192,7 +192,7 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
     from django.db.models import IntegerField, CharField
     from country.models import Country, Donor
 
-    from django.contrib.postgres.fields.jsonb import KeyTextTransform
+    from django.db.models.fields.json import KeyTextTransform
     from django.db.models.functions import Cast
     import json
 

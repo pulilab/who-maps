@@ -509,17 +509,17 @@ class ProjectTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
-        self.client.post(url, data, format="json")
+        response = self.client.post(url, data, format="json")
+        user_profile_id = response.json().get("user_profile_id")
 
         # Log in the user.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {
             "username": "test_user2@gmail.com",
             "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
-        test_user_key = response.json().get("token")
+        test_user_key = response.json().get("access")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
-        user_profile_id = response.json().get("user_profile_id")
 
         # update profile.
         org = OrganisationFactory(name="org2")
@@ -561,17 +561,17 @@ class ProjectTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
-        self.client.post(url, data, format="json")
+        response = self.client.post(url, data, format="json")
+        user_profile_id = response.json().get('user_profile_id')
 
         # Log in the user.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {
             "username": "test_user2@gmail.com",
             "password": "123456hetNYOLC"}
         response = self.client.post(url, data)
-        test_user_key = response.json().get("token")
+        test_user_key = response.json().get("access")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
-        user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
         org = OrganisationFactory(name="org2")
@@ -858,17 +858,17 @@ class ProjectTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
-        self.client.post(url, data, format="json")
+        response = self.client.post(url, data, format="json")
+        user_profile_id = response.json().get('user_profile_id')
 
         # Log in the user.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {
             "username": "test_user2@gmail.com",
             "password": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
-        test_user_key = response.json().get("token")
+        test_user_key = response.json().get("access")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
-        user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
         org = OrganisationFactory(name="org2")
@@ -926,17 +926,17 @@ class ProjectTests(SetupTests):
             "email": "test_user2@gmail.com",
             "password1": "123456hetNYOLC",
             "password2": "123456hetNYOLC"}
-        self.client.post(url, data, format="json")
+        response = self.client.post(url, data, format="json")
+        user_profile_id = response.json().get('user_profile_id')
 
         # Log in the user.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {
             "username": "test_user2@gmail.com",
             "password": "123456hetNYOLC"}
         response = self.client.post(url, data, format="json")
-        test_user_key = response.json().get("token")
+        test_user_key = response.json().get("access")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
-        user_profile_id = response.json().get('user_profile_id')
 
         # update profile.
         org = OrganisationFactory(name="org2")

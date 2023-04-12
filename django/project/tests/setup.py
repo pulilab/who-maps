@@ -156,9 +156,9 @@ class TestData(APITestCase):
 
         url = reverse("rest_register")
         data = {"email": user_email, "password1": user_password_1, "password2": user_password_2}
-
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 201, response.json())
+        user_profile_id = response.json().get('user_profile_id')
 
         # Validate the account.
         key = EmailConfirmation.objects.get(email_address__email=user_email).key
@@ -170,15 +170,14 @@ class TestData(APITestCase):
         self.assertEqual(response.status_code, 200, response.json())
 
         # Log in the user.
-        url = reverse("api_token_auth")
+        url = reverse("token_obtain_pair")
         data = {
             "username": user_email,
             "password": user_password_1}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200, response.json())
-        test_user_key = response.json().get("token")
+        test_user_key = response.json().get("access")
         test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
-        user_profile_id = response.json().get('user_profile_id')
 
         # Update profile
         url = reverse("userprofile-detail", kwargs={"pk": user_profile_id})
