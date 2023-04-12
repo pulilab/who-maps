@@ -1,13 +1,10 @@
 <template>
   <div :class="`UserDropdown ${activeMenuStyle}`">
     <el-popover
-      ref="usermenu"
       v-model="shown"
       placement="bottom-end"
       visible-arrow="false"
       popper-class="CustomPopover UserDropdownPopper"
-      @after-enter="enterPopper"
-      @after-leave="leavePopper"
     >
       <el-button
         slot="reference"
@@ -208,7 +205,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      doLogout: 'user/doLogout'
+      doLogout: 'user/logout'
     }),
     closePopover () {
       this.shown = false
@@ -218,28 +215,6 @@ export default {
       this.doLogout()
       this.$router.push(this.localePath({ name: 'organisation', params: this.$route.params, query: undefined }))
     },
-    enterPopper() {
-      console.log('🚀 ~ file: UserDropdown.vue:223 ~ enterPopper ~ this.$refs.usermenu.$refs.popper.style.top:', this.$refs.usermenu.$refs.popper.style.top)
-      if (this.$refs.usermenu.$refs.popper.style.top) {
-        this.$refs.usermenu.$refs.popper.style.display = 'block'
-      } else {
-        console.log('🚀 ~ enterPopper ~ has to switch off and on again')
-        this.shown = false
-        setTimeout(() => {
-          this.shown = true
-        }, 100)
-      }
-    },
-    leavePopper() {
-      const els = document.querySelectorAll(`#${this.$refs.usermenu.$refs.popper.id}`)
-      console.log('🚀 ~ file: UserDropdown.vue:235 ~ leavePopper ~ els:', els)
-      if (els.length !== 1 || !this.$refs.usermenu.$refs.popper.style.top) {
-        for (let el of els) {
-          el.remove()
-          console.log('🚀 ~ leavePopper ~ els removed')
-        }
-      }
-    }
   }
 }
 </script>
