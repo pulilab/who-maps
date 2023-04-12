@@ -310,7 +310,7 @@ ROSETTA_WSGI_AUTO_RELOAD = True
 ROSETTA_MESSAGES_PER_PAGE = 25
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS = True
-DEEPL_AUTH_KEY = "bbc11135-e01f-d2b7-6b74-c33c68f1cfa7"
+DEEPL_AUTH_KEY = os.environ.get('DEEPL_KEY', '')
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'translations'),  # don't move this, update_translations mgmt cmd is using it
