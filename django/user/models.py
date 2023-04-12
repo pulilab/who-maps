@@ -64,6 +64,7 @@ class UserProfile(ExtendedModel):
     # phone = models.CharField(blank=True, null=True, max_length=50)
     title = models.CharField(blank=True, null=True, max_length=100)
     linkedin = models.URLField(blank=True, null=True)
+    invited = models.BooleanField(default=False)
 
     project_updates_notification = models.BooleanField(default=True)
     daily_toolkit_digest_notification = models.BooleanField(default=True)
@@ -71,7 +72,7 @@ class UserProfile(ExtendedModel):
     role_request_notification = models.BooleanField(default=True)
 
     def __str__(self):
-        return "{} <{}>".format(self.name, self.user.email) if self.name else ""
+        return "{} <{}>".format(self.name, self.user.email) if self.name else "-"
 
     @staticmethod
     def get_sentinel_user():
