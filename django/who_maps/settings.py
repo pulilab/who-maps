@@ -454,7 +454,8 @@ if SITE_ID in [3, 4]:
 
     REST_FRAMEWORK = {
         'DEFAULT_AUTHENTICATION_CLASSES': (
-            'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+            'rest_framework_simplejwt.authentication.JWTAuthentication',
+            'user.authentication.BearerTokenAuthentication'
         ),
         'DEFAULT_RENDERER_CLASSES': (
             'rest_framework.renderers.JSONRenderer',
