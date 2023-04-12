@@ -3,6 +3,7 @@ import datetime
 import sys
 from celery.schedules import crontab
 from django.utils.translation import gettext_lazy as _
+from sentry_sdk.integrations.celery import CeleryIntegration
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -34,8 +35,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
     'drf_yasg',
     'ordered_model',
     'rosetta',
@@ -43,6 +42,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
     'corsheaders',
     'djcelery_email',
     'simple_history',
@@ -309,7 +310,7 @@ ROSETTA_WSGI_AUTO_RELOAD = True
 ROSETTA_MESSAGES_PER_PAGE = 25
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS = True
-DEEPL_AUTH_KEY = "bbc11135-e01f-d2b7-6b74-c33c68f1cfa7"
+DEEPL_AUTH_KEY = os.environ.get('DEEPL_KEY', '')
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'translations'),  # don't move this, update_translations mgmt cmd is using it
@@ -357,12 +358,12 @@ if SITE_ID in [3, 4]:
     from sentry_sdk.integrations.django import DjangoIntegration
     sentry_sdk.init(
         dsn=os.environ.get('SENTRY_DSN', ''),
-        integrations=[DjangoIntegration()],
+        integrations=[DjangoIntegration(), CeleryIntegration()],
 
         # Set traces_sample_rate to 1.0 to capture 100%
         # of transactions for performance monitoring.
         # We recommend adjusting this value in production.
-        traces_sample_rate=0.5,
+        traces_sample_rate=0.2,
 
         # If you wish to associate users to errors (assuming you are using
         # django.contrib.auth) you may enable sending PII data.

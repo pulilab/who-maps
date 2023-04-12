@@ -5,6 +5,7 @@ from allauth.account.utils import complete_signup
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
+from django.utils.crypto import get_random_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
@@ -268,8 +269,8 @@ class ProjectGroupSerializer(serializers.ModelSerializer):  # TODO handle orphan
                           context=context)
 
     def perform_create(self, email):
-        user = User.objects.create_user(username=email[:150], email=email)
-        UserProfile.objects.create(user=user, account_type=UserProfile.IMPLEMENTER)
+        user = User.objects.create_user(username=email[:150], email=email, password=get_random_string(length=10))
+        UserProfile.objects.create(user=user, account_type=UserProfile.IMPLEMENTER, invited=True)
 
         self.token = jwt_encode(user)
 

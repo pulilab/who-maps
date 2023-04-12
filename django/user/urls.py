@@ -27,6 +27,6 @@ urlpatterns = [
     path("token/delete/", view=views.TokenViewSet.as_view({'delete': 'delete'}), name="token-delete"),
     path("token/validate/", view=views.TokenCheckView.as_view(), name="token-check"),
 
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('jwt/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('jwt/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
