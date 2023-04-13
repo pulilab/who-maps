@@ -281,9 +281,7 @@
               <translate>Government Viewers</translate>
             </div>
             <div class="RequestCount">
-              <translate
-                :parameters="{ num: userSelection.length - users.length }"
-              >
+              <translate :parameters="{ num: userSelection.length - users.length }">
                 {num} new request(s)
               </translate>
             </div>
@@ -297,9 +295,7 @@
               <translate>Government Admins</translate>
             </div>
             <div class="RequestCount">
-              <translate
-                :parameters="{ num: adminSelection.length - admins.length }"
-              >
+              <translate :parameters="{ num: adminSelection.length - admins.length }">
                 {num} new request(s)
               </translate>
             </div>
@@ -313,11 +309,7 @@
               <translate>Government System Admins</translate>
             </div>
             <div class="RequestCount">
-              <translate
-                :parameters="{
-                  num: superadminSelection.length - superAdmins.length
-                }"
-              >
+              <translate :parameters="{ num: superadminSelection.length - superAdmins.length }">
                 {num} new request(s)
               </translate>
             </div>
@@ -359,16 +351,11 @@
             v-model="users"
             :titles="transferTitles"
             :data="userSelection"
-            :filter-placeholder="
-              $gettext('Type to filter users...') | translate
-            "
+            :filter-placeholder="$gettext('Type to filter users...') | translate"
             filterable
           />
 
-          <div
-            v-if="selectedPersona === 'CA'"
-            class="PersonaPrivileges"
-          >
+          <div v-if="selectedPersona === 'CA'" class="PersonaPrivileges">
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -419,16 +406,11 @@
             v-model="admins"
             :titles="transferTitles"
             :data="adminSelection"
-            :filter-placeholder="
-              $gettext('Type to filter users...') | translate
-            "
+            :filter-placeholder="$gettext('Type to filter users...') | translate"
             filterable
           />
 
-          <div
-            v-if="selectedPersona === 'SCA'"
-            class="PersonaPrivileges"
-          >
+          <div v-if="selectedPersona === 'SCA'" class="PersonaPrivileges">
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -484,9 +466,7 @@
             v-model="superAdmins"
             :titles="transferTitles"
             :data="superadminSelection"
-            :filter-placeholder="
-              $gettext('Type to filter users...') | translate
-            "
+            :filter-placeholder="$gettext('Type to filter users...') | translate"
             filterable
           />
         </el-col>
@@ -1199,7 +1179,7 @@ export default {
     }
 
     .UserTransfers {
-      padding: 20px 40px;
+      padding: 20px 0px 20px  40px;
 
       .PersonaPrivileges {
         margin: 0 0 20px;
@@ -1223,13 +1203,27 @@ export default {
         align-items: center;
         margin: 0 0 20px;
 
-        .el-transfer-panel {
+        ::v-deep .el-transfer-panel {
           width: 100%;
 
           .el-transfer-panel__body {
             min-height: 250px;
             max-height: 40vh;
             overflow-y: auto;
+
+            .el-transfer-panel__list.is-filterable {
+              height: 188px;
+            }
+
+            .el-transfer-panel__item {
+              margin-bottom: 8px;
+
+              .el-checkbox__label {
+                white-space: pre;
+                line-height: 15px;
+                font-size: 13px;
+              }
+            }
           }
 
           // &:first-child {
@@ -1245,7 +1239,9 @@ export default {
           // }
         }
 
-        .el-transfer__buttons {
+        ::v-deep .el-transfer__buttons {
+          display: flex;
+          flex-direction: column;
           text-align: center;
 
           .el-button + .el-button {
