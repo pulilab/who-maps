@@ -77,7 +77,7 @@ export const actions = () => ({
       if (typeof val !== 'object') {
         // In case of `id`
         const profile = profiles.find(prof => prof.id === val)
-        const label = `${profile.name} <${profile.email}>`
+        const label = `${profile.name}\n${profile.email}`
         return {
           key: val,
           label,
@@ -87,7 +87,7 @@ export const actions = () => ({
         // In case of { id, name, email }
         return {
           key: val.id,
-          label: `${val.name} <${val.email}>`,
+          label: `${val.name}\n${val.email}`,
           disabled: defaultDisable || val.id === userId
         }
       }
