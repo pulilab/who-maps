@@ -1,5 +1,5 @@
 export default function ({ $axios, store, redirect, app: { i18n } }) {
-  const ignoredPaths = ['/login', '/logout', '/api/jwt/refresh']
+  const ignoredPaths = ['/login', '/logout', '/api/jwt']
 
   $axios.onRequest(config => {
     const isIgnored = ignoredPaths.some(path => config.url.includes(path))
