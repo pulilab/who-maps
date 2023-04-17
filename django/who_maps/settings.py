@@ -259,7 +259,7 @@ CACHES = {
     #     }
 }
 
-if SITE_ID in [3, 4]:
+if SITE_ID in [2, 3, 4]:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
@@ -474,6 +474,9 @@ if SITE_ID in [3, 4]:
         TEST_FORCED_TO_ADDRESS = ["t@pulilab.com", "f@pulilab.com", "ta@pulilab.com"]
         ALLOWED_HOSTS = ALLOWED_HOSTS + ['139.59.148.238']
 
+if SITE_ID == 2:
+    DEBUG = False
+    ALLOWED_HOSTS = ['.dev.whomaps.pulilab.com', 'nginx:9010', 'nginx']
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
