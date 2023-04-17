@@ -60,6 +60,9 @@ const formAPIErrorsMixin = {
       } else {
         return ''
       }
+    },
+    noActiveAccount() {
+      return this.formAPIErrors.detail || ''
     }
   }
 }

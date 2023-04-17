@@ -39,8 +39,10 @@ export const actions = {
         dispatch('projects/loadUserProjects', {}, { root: true }),
         dispatch('system/loadUserProfiles', {}, { root: true })
       ])
+      return 200
     } catch (error) {
       console.error('user/login failed')
+      return error
     }
   },
 
@@ -123,7 +125,7 @@ export const actions = {
     commit('SET_PROFILE', data)
   },
 
-  async refreshToken ({ commit, state }) {
+  async refreshToken ({ commit, state, dispatch }) {
     if (state.tokens?.refresh) {
       try {
           const { data } = await this.$axios.post('/api/jwt/refresh/', {
@@ -134,9 +136,11 @@ export const actions = {
             refresh: state.tokens.refresh
           })
       } catch (e) {
-        console.error('user/refreshToken failed', e)
-        console.error('user/refreshToken failed', e.response)
+        console.error('user/refreshToken failed')
+        dispatch('logout')
       }
+    } else {
+      dispatch('logout')
     }
   },
 

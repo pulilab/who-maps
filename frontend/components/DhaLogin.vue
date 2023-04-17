@@ -24,8 +24,8 @@
 
           <el-form-item :label="$gettext('Password') | translate" prop="password">
             <el-input v-model="password" type="password" />
-            <div v-if="nonFieldErrors" class="el-form-item__error ModifiedFormError">
-              {{ nonFieldErrors }}
+            <div v-if="noActiveAccount" class="el-form-item__error ModifiedFormError">
+              {{ noActiveAccount }}
             </div>
           </el-form-item>
         </fieldset>
@@ -252,39 +252,40 @@ export default {
       this.deleteFormAPIErrors()
       try {
         await this.$refs.loginForm.validate()
-        await this.login({
+        const loginPayload = {
           username: this.username,
           password: this.password
-        })
+        }
+        const res =  await this.login(loginPayload)
+        if (res === 200) {
+          this.$store.commit('user/SET_COOKIE', false)
+          this.$track()
+          if (this.profile?.country) {
+            this.setSelectedCountry(this.profile.country)
+          }
+          if (this.$route.query && this.$route.query.next) {
+            const path = this.$route.query.next
+            const query = { ...this.$route.query, next: undefined }
+            this.$router.push({ path, query })
+          } else {
+            this.$router.push(
+              this.localePath({
+                name: 'organisation-dashboard',
+                params: this.$route.params,
+                query: { country: [this.profile.country] }
+              })
+            )
+          }
+        } else {
+          this.setFormAPIErrors(res)
+          this.$refs.loginForm.validate(() => {})
+        }
       } catch (e) {
         if (e) {
           this.setFormAPIErrors(e)
           this.$refs.loginForm.validate(() => {})
         }
         this.$nuxt.$loading.finish('loginLoader')
-        return
-      }
-      try {
-        this.$store.commit('user/SET_COOKIE', false)
-        this.$track()
-        if (this.profile.country) {
-          this.setSelectedCountry(this.profile.country)
-        }
-        if (this.$route.query && this.$route.query.next) {
-          const path = this.$route.query.next
-          const query = { ...this.$route.query, next: undefined }
-          this.$router.push({ path, query })
-        } else {
-          this.$router.push(
-            this.localePath({
-              name: 'organisation-dashboard',
-              params: this.$route.params,
-              query: { country: [this.profile.country] }
-            })
-          )
-        }
-      } catch (e) {
-        this.handleRoutingErrors(e)
       }
       this.$nuxt.$loading.finish('loginLoader')
     },
