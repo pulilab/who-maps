@@ -69,6 +69,7 @@ const config = {
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
     'nuxt-fontawesome',
+    '@nuxtjs/gtm',
     '@nuxtjs/sentry',
     [
       'nuxt-i18n',
@@ -129,6 +130,9 @@ const config = {
       }
     ]
   ],
+  gtm: {
+    id: process.env.GTM_ID
+  },
   fontawesome: {
     component: 'fa',
     imports: [
