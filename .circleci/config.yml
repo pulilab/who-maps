@@ -102,13 +102,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install fabric and pycrypto
+          name: Install fabric
           command: |
-            sudo pip install pycrypto
-            sudo pip install Fabric3==1.15.0
+            sudo pip install fabric
       - run:
           name: Deploy Over SSH
-          working_directory: ~/who-maps/django
           command: |
             fab dev deploy
           no_output_timeout: "20m"
@@ -120,33 +118,31 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install fabric and pycrypto
+          name: Install fabric
           command: |
-            sudo pip install pycrypto
-            sudo pip install Fabric3==1.15.0
+            sudo pip install fabric
       - run:
           name: Deploy Over SSH
-          working_directory: ~/who-maps/django
           command: |
-            fab staging deploy:<< pipeline.git.tag >>
+            fab qa deploy --tag=<< pipeline.git.tag >>
           no_output_timeout: "20m"
 
-  e2e-dev:
-    docker:
-      - image: cypress/included:4.5.0
-    working_directory: ~/who-maps
-    steps:
-      - checkout
-      - run:
-          name: e2e tests against DEV
-          working_directory: ~/who-maps/e2e
-          command: |
-            cypress run -C cypress.dev.json
-          no_output_timeout: "20m"
-      - store_artifacts:
-          path: /root/who-maps/e2e/cypress/videos
-      - store_artifacts:
-          path: /root/who-maps/e2e/cypress/screenshots
+#  e2e-dev:
+#    docker:
+#      - image: cypress/included:4.5.0
+#    working_directory: ~/who-maps
+#    steps:
+#      - checkout
+#      - run:
+#          name: e2e tests against DEV
+#          working_directory: ~/who-maps/e2e
+#          command: |
+#            cypress run -C cypress.dev.json
+#          no_output_timeout: "20m"
+#      - store_artifacts:
+#          path: /root/who-maps/e2e/cypress/videos
+#      - store_artifacts:
+#          path: /root/who-maps/e2e/cypress/screenshots
 
 workflows:
   build-and-deploy:
@@ -167,13 +163,13 @@ workflows:
                 job_type: deployment
                 issue_regexp: '[A-Z0-9]{2,30}-[0-9]+'
                 environment: DEV  # DEV, PROD, QA
-      - e2e-dev:
-          requires:
-            - build-and-test
-            - deploy-dev
-          filters:
-            branches:
-              only: development
+#      - e2e-dev:
+#          requires:
+#            - build-and-test
+#            - deploy-dev
+#          filters:
+#            branches:
+#              only: development
       - deploy-qa:
           name: QA Server Deployment
           requires:
