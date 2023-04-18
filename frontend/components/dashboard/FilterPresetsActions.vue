@@ -6,6 +6,8 @@
     >
       <el-col :span="12">
         <el-popover
+          v-model="showFilterList"
+          v-if="hasFilters"
           :title="$gettext('My filters presets') | translate"
           placement="bottom-center"
           popper-class="CustomPopover AdvancedSearchPresetsDropdown"
@@ -46,6 +48,9 @@
             </ul>
           </div>
         </el-popover>
+        <Translate v-else class="info-text">
+          You can save filter presets
+        </Translate>
       </el-col>
       <el-col :span="6">
         <el-button
@@ -76,6 +81,11 @@ import { mapActions, mapGetters } from 'vuex'
 import { queryStringComparisonParser } from '../../utilities/api.js'
 
 export default {
+  data() {
+    return {
+      showFilterList: false
+    }
+  },
   computed: {
     ...mapGetters({
       dashboardType: 'dashboard/getDashboardType',
@@ -83,6 +93,9 @@ export default {
     }),
     activePreseet () {
       return this.savedFilters.find(f => this.isActive(f.query))
+    },
+    hasFilters() {
+      return this.savedFilters.length > 0
     }
   },
   methods: {
@@ -92,6 +105,7 @@ export default {
       setSavedFilters: 'dashboard/setSavedFilters'
     }),
     clear () {
+      this.showFilterList = false
       this.setSearchOptions({})
     },
     openSaveFilter () {
@@ -103,6 +117,7 @@ export default {
       return isEqual(fromRoute, fromItem)
     },
     applyPreset (query) {
+      this.showFilterList = false
       this.setSearchOptions(query)
     },
     async deleteFilter (filter) {
@@ -147,6 +162,11 @@ export default {
         width: auto;
         padding-left: 15px;
       }
+    }
+
+    .info-text {
+      color: @colorGray;
+      font-size: @fontSizeSmall;
     }
 
     .el-button--text {
