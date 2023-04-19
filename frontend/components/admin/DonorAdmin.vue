@@ -22,17 +22,10 @@
           v-if="userProfile.is_superuser"
           :label="$gettext('Choose investor') | translate"
         >
-          <!-- <donor-select
-            :value="donorId"
-            @change="setDonorId"
-          /> -->
-          {{ donorId }}
+          <donor-select :value="donorId" @change="setDonorId" />
         </el-form-item>
 
-        <el-form-item
-          :label="$gettext('Logo')"
-          prop="logo"
-        >
+        <el-form-item :label="$gettext('Logo')" prop="logo">
           <file-upload
             :disabled="notSDA"
             :auto-upload="false"
