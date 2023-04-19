@@ -178,10 +178,18 @@ class ProjectAdmin(AllObjectsAdmin):
 class ImportRowInline(admin.StackedInline):
     model = ImportRow
     readonly_fields = ('data',)
+    raw_id_fields = ['project']
+    extra = 0
 
 
 class ProjectImportV2Admin(admin.ModelAdmin):
     inlines = (ImportRowInline,)
+    list_display = ['filename', 'sheet_name', 'get_profile', 'draft', 'collection']
+    raw_id_fields = ['donor', 'country', 'user']
+
+    def get_profile(self, obj):  # pragma: no cover
+        return obj.user.userprofile
+    get_profile.short_description = "User"
 
 
 class StageAdmin(SortableAdminMixin, admin.ModelAdmin):
@@ -195,9 +203,6 @@ class ProjectVersionAdmin(admin.ModelAdmin):
     search_fields = ['project__name']
 
     list_display = ['modified', 'project', 'version']
-
-    def get_project_name(self, obj):  # pragma: no cover
-        return obj.project.name
 
     def has_add_permission(self, request):
         return False
