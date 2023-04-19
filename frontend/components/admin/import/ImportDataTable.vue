@@ -213,19 +213,19 @@ export default {
       return this.rawImport?.rows.filter(r => r.project !== null).length
     },
     activeHiddenRowsText () {
-      return this.showImportedRows 
+      return this.showImportedRows
         ? this.$gettext('Hide imported rows')
         : this.$gettext('Show imported rows (+{importedRows})', { importedRows: this.importedRows })
     },
     activeFirstRowsText () {
-      return this.showFirstRows 
+      return this.showFirstRows
         ? this.$gettext('Showing few rows')
         : this.$gettext('Showing all rows')
     }
   },
   methods: {
     ...mapActions({
-      refreshProfile: 'user/refreshProfile',
+      refreshProfile: 'user/loadProfile',
       resetImport: 'admin/import/resetImport'
     }),
     projectLink (row) {

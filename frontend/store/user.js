@@ -34,6 +34,7 @@ export const actions = {
       const { data: tokens } = await this.$axios.post('/api/jwt/', { username, password })
       commit('SET_TOKENS', tokens)
       await dispatch('loadProfile')
+      await dispatch('loadApiKey')
       await Promise.all([
         dispatch('system/loadOrganisations', {}, { root: true }),
         dispatch('projects/loadUserProjects', {}, { root: true }),
@@ -92,26 +93,12 @@ export const actions = {
     dispatch('projects/resetProjectsData', null, { root: true })
   },
 
-  async loadProfile ({ commit, getters, dispatch }, profileId = 'me') {
+  async loadProfile ({ commit }, profileId = 'me') {
     try {
-      if (getters.getToken && !getters.getProfile) {
-        const { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`)
-        commit('SET_PROFILE', data)
-        dispatch('loadApiKey')
-      }
+      const { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`)
+      commit('SET_PROFILE', data)
     } catch (e) {
       console.error('user/loadProfile failed')
-    }
-  },
-
-  async refreshProfile ({ commit, getters }) {
-    try {
-      if (getters.getToken && getters.getProfile && getters.getProfile.id) {
-        const { data } = await this.$axios.get(`/api/userprofiles/${getters.getProfile.id}/`)
-        commit('SET_PROFILE', data)
-      }
-    } catch (e) {
-      console.error('user/loadProfile failed', e)
     }
   },
 
