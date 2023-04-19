@@ -103,7 +103,7 @@ class ProjectPublicViewSet(ViewSet):
         ))
 
 
-class ProjectListViewSet(TokenAuthMixin, ViewSet):
+class ProjectListViewSet(TeamTokenAuthMixin, ViewSet):
     def list(self, request, *args, **kwargs):
         """
         Retrieves list of projects user's projects.
