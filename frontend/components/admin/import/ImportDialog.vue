@@ -29,10 +29,9 @@
           :auto-save="true"
           class="FullWidth"
         />
-        <donor-select
+        <donor-selector
           v-if="dialogData.column === 'donors'"
           v-model="dialogData.value"
-          :auto-save="true"
         />
         <organisation-select
           v-if="dialogData.column === 'organisation'"
@@ -194,7 +193,7 @@
 
 <script>
 import CountrySelect from '@/components/common/CountrySelect'
-import DonorSelect from '@/components/common/DonorSelect'
+import DonorSelector from '@/components/project/DonorSelector.vue'
 import OrganisationSelect from '@/components/common/OrganisationSelect'
 import PlatformSelector from '@/components/project/PlatformSelector'
 import HisBucketSelector from '@/components/project/HisBucketSelector'
@@ -206,7 +205,7 @@ import LicenseSelector from '@/components/project/LicenseSelector'
 
 export default {
   components: {
-    DonorSelect,
+    DonorSelector,
     CountrySelect,
     OrganisationSelect,
     PlatformSelector,
