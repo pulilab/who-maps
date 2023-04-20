@@ -1,11 +1,12 @@
-export default function ({ $axios, store, redirect, app: { i18n } }) {
+import { TokenCookieKey, getAccessToken, getRefreshToken } from '~/utilities/auth'
+
+export default function ({ $axios, store, app, redirect }) {
   const ignoredPaths = ['/login', '/logout', '/api/jwt']
 
   $axios.onRequest(config => {
-    const isIgnored = ignoredPaths.some(path => config.url.includes(path))
-    const token = store.getters['user/getToken']
-    const lng = i18n.locale
-    if (token && !isIgnored) {
+    const token = getAccessToken(app.$cookies.get(TokenCookieKey))
+    const lng = app.i18n.locale
+    if (token) {
       config.headers.Authorization = `Token ${token}`
     }
     if (lng) {
@@ -21,7 +22,7 @@ export default function ({ $axios, store, redirect, app: { i18n } }) {
 
       if ((statusCode === 401 || statusCode === 422) && !isIgnored) {
         const { code } = error.response.data || {}
-        const refreshToken = store.state.user.tokens?.refresh
+        const refreshToken = getRefreshToken(app.$cookies.get(TokenCookieKey))
 
         if (code === 'token_not_valid' && refreshToken) {
           if (error.config.hasOwnProperty('retryAttempts')) {

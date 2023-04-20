@@ -1,7 +1,7 @@
 import union from 'lodash/union'
+import { TokenCookieKey, getRefreshToken, TokenCookieExpiration } from '~/utilities/auth'
 
 export const state = () => ({
-  tokens: null,
   profile: null,
   apiKey: null,
   emailVerifyResult: null,
@@ -32,7 +32,7 @@ export const actions = {
   async login ({ commit, dispatch }, { username, password }) {
     try {
       const { data: tokens } = await this.$axios.post('/api/jwt/', { username, password })
-      commit('SET_TOKENS', tokens)
+      this.$cookies.set(TokenCookieKey, tokens, { maxAge: TokenCookieExpiration })
       await dispatch('loadProfile')
       await dispatch('loadApiKey')
       await Promise.all([
@@ -54,10 +54,8 @@ export const actions = {
 
   async signup ({ commit, dispatch }, { account_type, password1, password2, email }) {
     const { data } = await this.$axios.post('/api/rest-auth/registration/', { account_type, password1, password2, email })
-    commit('SET_TOKENS', {
-      access: data.access_token,
-      refresh: data.refresh_token
-    })
+    this.$cookies.set(TokenCookieKey, data, { maxAge: TokenCookieExpiration })
+
     await dispatch('loadProfile')
     await dispatch('system/loadOrganisations', {}, { root: true })
   },
@@ -85,7 +83,7 @@ export const actions = {
   },
 
   logout ({ commit, dispatch }) {
-    commit('SET_TOKENS', null)
+    this.$cookies.remove(TokenCookieKey)
     commit('SET_PROFILE', null)
     commit('SET_APIKEY', null)
     dispatch('dashboard/resetUserInput', null, { root: true })
@@ -93,10 +91,11 @@ export const actions = {
     dispatch('projects/resetProjectsData', null, { root: true })
   },
 
-  async loadProfile ({ commit }, profileId = 'me') {
+  async loadProfile ({ commit, dispatch }, apiKey = true) {
     try {
-      const { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`)
+      const { data } = await this.$axios.get(`/api/userprofiles/me/`)
       commit('SET_PROFILE', data)
+      if (apiKey) dispatch('loadApiKey')
     } catch (e) {
       console.error('user/loadProfile failed')
     }
@@ -112,16 +111,19 @@ export const actions = {
     commit('SET_PROFILE', data)
   },
 
-  async refreshToken ({ commit, state, dispatch }) {
-    if (state.tokens?.refresh) {
+  async refreshToken ({ dispatch }) {
+    const token = getRefreshToken(this.$cookies.get(TokenCookieKey))
+    if (token) {
       try {
           const { data } = await this.$axios.post('/api/jwt/refresh/', {
-            refresh: state.tokens.refresh
+            refresh: token
           })
-          commit('SET_TOKENS', {
+          const tokens = {
             access: data.access,
-            refresh: state.tokens.refresh
-          })
+            refresh: token
+          }
+          console.log('🚀 ~ file: user.js:132 ~ refreshToken ~ tokens.data.access:', tokens.data.access)
+          this.$cookies.set(TokenCookieKey, tokens, { maxAge: TokenCookieExpiration })
       } catch (e) {
         console.error('user/refreshToken failed')
         dispatch('logout')
@@ -188,10 +190,6 @@ export const actions = {
 }
 
 export const mutations = {
-  SET_TOKENS: (state, tokens) => {
-    state.tokens = tokens
-  },
-
   SET_COOKIE: (state, cookieOn) => {
     if (!process.server && cookieOn === false) {
       window.localStorage.setItem('cookie:accepted', 'true')
