@@ -45,7 +45,7 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     setTimeout(() => {
-      this.resetImport()      
+      this.resetImport()
     }, 2000);
     next()
   },
@@ -59,6 +59,7 @@ export default {
       store.dispatch('system/loadUserProfiles'),
       store.dispatch('system/loadDonors'),
       store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('system/loadCountries'),
       store.dispatch('system/loadStaticData'),
       store.dispatch('system/loadOrganisations'),
       store.dispatch('countries/loadMapData')
@@ -73,7 +74,7 @@ export default {
       donors: 'system/getDonors'
     }),
     importInfo () {
-      return this.rawImport 
+      return this.rawImport
         ? {
             sheetName: this.rawImport.sheet_name,
             fileName: this.rawImport.filename,
