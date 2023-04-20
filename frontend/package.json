@@ -74,7 +74,6 @@
     "vue2-leaflet": "2.2.1",
     "vuedraggable": "^2.16.0",
     "vuex-geolocation": "^1.1.0",
-    "vuex-persistedstate": "^4.1.0",
     "xlsx": "^0.15.0"
   },
   "devDependencies": {
