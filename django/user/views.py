@@ -91,12 +91,14 @@ class OrganisationViewSet(TokenAuthMixin, CreateModelMixin, ListModelMixin, Retr
             return Organisation.objects.all()
 
 
-class TokenViewSet(JWTAuthentication, ViewSet):
+class TokenViewSet(ViewSet):
     """
     Viewset providing functions for authenticated users for creating, retrieving, refreshing and deleting their tokens
 
     For this menu, both Basic and Token-based authorization works.
     """
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = Token.objects.all()
     serializer_class = TokenSerializer
 
