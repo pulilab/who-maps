@@ -59,6 +59,7 @@ export default {
       store.dispatch('countries/loadMapData'),
       store.dispatch('admin/import/loadQueue'),
       store.dispatch('projects/loadProjectStructure'),
+      store.dispatch('system/loadCountries'),
       store.dispatch('system/loadStaticData')
     ])
   },
