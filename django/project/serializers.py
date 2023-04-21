@@ -48,12 +48,6 @@ class CoverageSerializer(NDPSerializer):
     district = serializers.CharField(max_length=128)
 
 
-class PlatformSerializer(serializers.Serializer):
-    id = serializers.IntegerField(required=True)
-    strategies = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=1)
-
-
 class StageSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=True)
     date = serializers.CharField(required=True, max_length=10)
@@ -74,12 +68,6 @@ class DraftInteroperabilityLinksSerializer(InteroperabilityLinksSerializer):
     @staticmethod
     def validate_link(value):
         return value
-
-
-class DraftPlatformSerializer(serializers.Serializer):
-    id = serializers.IntegerField(required=True)
-    strategies = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
 
 
 INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
