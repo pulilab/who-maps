@@ -94,7 +94,10 @@ class ProjectPublishedSerializer(serializers.Serializer):
     # platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
 
     # SECTION 2 Implementation Overview
-    platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
+    software = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=1)
+    dhis = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=1)
     health_focus_areas = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=1)
     hsc_challenges = serializers.ListField(
