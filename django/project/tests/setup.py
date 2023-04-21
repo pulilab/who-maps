@@ -79,7 +79,6 @@ class TestData(APITestCase):
             date=datetime.today().date(),
             stages: List[Dict] = None,
             hfa: List[int] = None,
-            platforms: List[Dict] = None,
             standards: List[int] = None):
         if not organisation:
             organisation = self.org
@@ -94,8 +93,6 @@ class TestData(APITestCase):
             ]
         if not hfa:
             hfa = [1, 2]
-        if not platforms:
-            platforms = [{'id': 1, 'strategies': [1, 2]}, {'id': 2, 'strategies': [1, 9]}]
         if not standards:
             standards = [1]
         return {
@@ -110,7 +107,8 @@ class TestData(APITestCase):
                 'health_focus_areas': hfa,
                 'geographic_scope': "somewhere",
                 'country': country.id,
-                'platforms': platforms,
+                'software': [1, 2],
+                'dhis': [1, 2],
                 'licenses': [1, 2],
                 'coverage': [
                     {'district': 'dist1', 'clients': 20, 'health_workers': 5, 'facilities': 4},
