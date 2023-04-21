@@ -192,7 +192,10 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     start_date = serializers.CharField(max_length=256, required=False)
 
     # SECTION 2 Implementation Overview
-    platforms = DraftPlatformSerializer(many=True, required=False)
+    software = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
+    dhis = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     health_focus_areas = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
     donors = serializers.ListField(child=serializers.IntegerField(), max_length=32, required=False)
