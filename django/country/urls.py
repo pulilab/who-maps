@@ -25,9 +25,6 @@ router.register(r'architecture-roadmap-document', ArchitectureRoadMapDocumentVie
 router.register(r'document-search', DocumentSearchViewSet, basename='document-search')
 
 urlpatterns = [
-                  path('countries/export/',
-                       view=views.CountryExportView.as_view(),
-                       name='country-export'),
                   path('countries/map-download/<country_id>/',
                        view=views.MapDownloadViewSet.as_view({'get': 'map_download'}),
                        name="country-map-download"),
