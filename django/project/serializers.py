@@ -90,6 +90,9 @@ class ProjectPublishedSerializer(serializers.Serializer):
     contact_email = serializers.EmailField()
     research = serializers.BooleanField(required=False, allow_null=True)
 
+    # DEPRECATED: `platforms` decoupled into `software` and `dhis`
+    # platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
+
     # SECTION 2 Implementation Overview
     platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
     health_focus_areas = serializers.ListField(
