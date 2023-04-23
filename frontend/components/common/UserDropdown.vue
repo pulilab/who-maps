@@ -150,7 +150,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import LanguageSelect from './LanguageSelect'
 import CountryItem from './CountryItem'
 
@@ -204,16 +204,13 @@ export default {
     },
   },
   methods: {
-    ...mapActions({
-      doLogout: 'user/logout'
-    }),
     closePopover () {
       this.shown = false
     },
     logout () {
       this.closePopover()
-      this.doLogout()
-      this.$router.push(this.localePath({ name: 'organisation', params: this.$route.params, query: undefined }))
+      this.$auth.logout()
+      this.$router.push(this.localePath({ name: 'organisation-login', params: undefined, query: undefined }))
     },
   }
 }
