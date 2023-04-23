@@ -43,9 +43,18 @@ export default {
   computed: {
     ...mapGetters({
       userProfile: 'user/getProfile'
-    })
+    }),
+    authUser() {
+      return this.$auth.$state.user
+    }
   },
   watch: {
+    authUser: {
+      immediate: true,
+      handler(profile) {
+        this.$store.commit('user/SET_PROFILE', profile)
+      }
+    },
     userProfile: {
       immediate: true,
       handler (profile) {
