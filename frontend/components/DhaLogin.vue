@@ -221,7 +221,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      login: 'user/login',
+      doLogin: 'user/login',
       resetPassword: 'user/resetPassword',
       setSelectedCountry: 'dashboard/setSelectedCountry'
     }),
@@ -256,8 +256,8 @@ export default {
           username: this.username,
           password: this.password
         }
-        const { status } =  await this.$auth.loginWith('local', { data: loginPayload})
-        if (status === 200) {
+        const res = await this.doLogin(loginPayload)
+        if (res === 200) {
           this.$store.commit('user/SET_COOKIE', false)
           this.$track()
           if (this.profile?.country) {
