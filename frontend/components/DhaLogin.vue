@@ -256,8 +256,8 @@ export default {
           username: this.username,
           password: this.password
         }
-        const res =  await this.login(loginPayload)
-        if (res === 200) {
+        const { status } =  await this.$auth.loginWith('local', { data: loginPayload})
+        if (status === 200) {
           this.$store.commit('user/SET_COOKIE', false)
           this.$track()
           if (this.profile?.country) {
