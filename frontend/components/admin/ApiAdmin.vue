@@ -74,16 +74,19 @@ export default {
   },
   computed: {
     ...mapGetters({
+      userProfile: 'user/getProfile',
       apiKey: 'user/getApiKey'
     })
   },
   mounted () {
     this.canCopy = navigator.clipboard
+    this.loadApiKey()
   },
   methods: {
     ...mapActions({
       createAPIKey: 'user/createApiKey',
-      deleteApiKey: 'user/deleteApiKey'
+      deleteApiKey: 'user/deleteApiKey',
+      loadApiKey: 'user/loadApiKey'
     }),
     async copyToClipboard () {
       this.copied = true
