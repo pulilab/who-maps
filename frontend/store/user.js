@@ -1,5 +1,4 @@
 import union from 'lodash/union'
-import { TokenCookieKey, getRefreshToken, TokenCookieExpiration } from '~/utilities/auth'
 
 export const state = () => ({
   profile: null,
@@ -29,13 +28,11 @@ export const getters = {
 
 export const actions = {
 
-  async login ({ commit, dispatch }, { username, password }) {
+  async login ({ dispatch }, loginPayload) {
     try {
-      const { data: tokens } = await this.$axios.post('/api/jwt/', { username, password })
-      this.$cookies.set(TokenCookieKey, tokens, { maxAge: TokenCookieExpiration })
-      await dispatch('loadProfile')
-      await dispatch('loadApiKey')
+      await this.$auth.loginWith('local', { data: loginPayload})
       await Promise.all([
+        dispatch('loadApiKey'),
         dispatch('system/loadOrganisations', {}, { root: true }),
         dispatch('projects/loadUserProjects', {}, { root: true }),
         dispatch('system/loadUserProfiles', {}, { root: true })
@@ -43,7 +40,7 @@ export const actions = {
       return 200
     } catch (error) {
       console.error('user/login failed')
-      return error
+      return error.response
     }
   },
 
@@ -53,11 +50,12 @@ export const actions = {
   },
 
   async signup ({ commit, dispatch }, { account_type, password1, password2, email }) {
-    const { data } = await this.$axios.post('/api/rest-auth/registration/', { account_type, password1, password2, email })
-    this.$cookies.set(TokenCookieKey, data, { maxAge: TokenCookieExpiration })
-
-    await dispatch('loadProfile')
-    await dispatch('system/loadOrganisations', {}, { root: true })
+    await this.$axios.post('/api/rest-auth/registration/', { account_type, password1, password2, email })
+    const loginPayload = {
+      username: email,
+      password: password1
+    }
+    await dispatch('login', loginPayload)
   },
 
   async dorResetPassword ({ commit, dispatch }, { uid, token, new_password1, new_password2, errMessage = '' }) {
@@ -83,8 +81,7 @@ export const actions = {
   },
 
   logout ({ commit, dispatch }) {
-    this.$cookies.remove(TokenCookieKey)
-    commit('SET_PROFILE', null)
+    this.$auth.logout()
     commit('SET_APIKEY', null)
     dispatch('dashboard/resetUserInput', null, { root: true })
     dispatch('landing/resetUserInput', null, { root: true })
@@ -109,28 +106,6 @@ export const actions = {
     const { data } = await this.$axios.put(`/api/userprofiles/${profile.id}/`, profile)
     data.email = data.email || data.user_email
     commit('SET_PROFILE', data)
-  },
-
-  async refreshToken ({ dispatch }) {
-    const token = getRefreshToken(this.$cookies.get(TokenCookieKey))
-    if (token) {
-      try {
-          const { data } = await this.$axios.post('/api/jwt/refresh/', {
-            refresh: token
-          })
-          const tokens = {
-            access: data.access,
-            refresh: token
-          }
-          console.log('🚀 ~ file: user.js:132 ~ refreshToken ~ tokens.data.access:', tokens.data.access)
-          this.$cookies.set(TokenCookieKey, tokens, { maxAge: TokenCookieExpiration })
-      } catch (e) {
-        console.error('user/refreshToken failed')
-        dispatch('logout')
-      }
-    } else {
-      dispatch('logout')
-    }
   },
 
   updateTeamViewers ({ commit, getters }, { team, viewers, id }) {
