@@ -56,7 +56,6 @@ const config = {
     { src: '~plugins/hotjar.js', ssr: false },
     { src: '~plugins/extends.js', ssr: false },
     { src: '~plugins/axios.js', ssr: true },
-    { src: '~plugins/auth.js', ssr: true },
     { src: '~plugins/vee-validate.js', ssr: true },
     { src: '~plugins/vue-leaflet.js', ssr: false },
     { src: '~plugins/element.js', ssr: true },
@@ -143,20 +142,20 @@ const config = {
     strategies: {
       local: {
         scheme: 'refresh',
-        autoLogout: true, // log out if both tokens expire
+        autoLogout: false, // log out if both tokens expire
         user: {
           property: false, // adds the whole response data to user
         },
         token: {
           property: 'access',
-          // maxAge: 1800,
-          // global: true,
+          maxAge: 1800,
+          global: true,
           type: 'Token'
         },
         refreshToken: {
           property: 'refresh',
           data: 'refresh',
-          // maxAge: 60 * 60 * 24 * 30
+          maxAge: 60 * 60 * 24 * 30
         },
         endpoints: {
           login: { url: '/api/jwt/', method: 'post' },
@@ -187,10 +186,10 @@ const config = {
     credentials: true,
     retry: false
   },
-  /* router: {s
-    middleware: ['auth'],
+  router: {
+    // middleware: ['auth'],
     base: '/'
-  }, */
+  },
   loading: '~/components/DhaLoader.vue',
   render: {
     resourceHints: false
