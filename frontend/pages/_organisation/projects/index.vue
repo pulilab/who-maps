@@ -26,6 +26,7 @@
 import UserProjectList from '@/components/common/UserProjectsList'
 import PageLayout from '@/components/common/wrappers/PageLayout'
 export default {
+  name: 'Projects',
   components: {
     UserProjectList,
     PageLayout

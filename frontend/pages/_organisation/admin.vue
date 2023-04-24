@@ -6,14 +6,10 @@
 
 <script>
 export default {
-  components: {
-  },
+  name: 'Admin',
   middleware: ['isLoggedIn'],
   async fetch ({ store }) {
     store.dispatch('landing/resetSearch')
   }
 }
 </script>
-
-<style lang="less">
-</style>

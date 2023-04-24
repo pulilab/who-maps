@@ -1,13 +1,15 @@
 <template>
-  <country-admin />
+  <CountryAdmin />
 </template>
 
 <script>
-import CountryAdmin from '../../../components/admin/CountryAdmin'
+import CountryAdmin from '@/components/admin/CountryAdmin'
+
 export default {
-
-  components: { CountryAdmin },
-
+  name: 'Country',
+  components: {
+    CountryAdmin
+  },
   async fetch ({ store }) {
     await Promise.all([
       store.dispatch('system/loadUserProfiles')

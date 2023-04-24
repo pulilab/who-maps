@@ -3,18 +3,18 @@
     <template #title>
       <translate>Edit my profile</translate>
     </template>
-    <edit-profile />
+    <ProfileEditor />
   </page-layout>
 </template>
 
 <script>
 import PageLayout from '@/components/common/wrappers/PageLayout'
-import EditProfile from '../../components/EditProfile.vue'
+import ProfileEditor from '../../components/ProfileEditor.vue'
 
 export default {
   components: {
     PageLayout,
-    EditProfile
+    ProfileEditor
   },
   async fetch ({ store, query, redirect }) {
     if (query && query.missingProfile) {

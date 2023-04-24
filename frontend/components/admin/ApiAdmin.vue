@@ -63,6 +63,7 @@ import { mapGetters, mapActions } from 'vuex'
 import PageLayout from '@/components/common/wrappers/PageLayout'
 
 export default {
+  name: 'ApiAdmin',
   components: {
     PageLayout
   },
