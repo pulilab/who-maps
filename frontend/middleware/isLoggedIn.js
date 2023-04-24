@@ -1,5 +1,5 @@
-export default async function ({ redirect, app, route }) {
-  if (!app.$auth.$state.loggedIn) {
+export default async function ({ redirect, $auth, app, route }) {
+  if (!$auth.$state.loggedIn) {
     const routeParams = {
       name: 'organisation-login',
       params: route.params,

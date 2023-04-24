@@ -9,7 +9,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  components: {},
+  name: 'Organisation',
   beforeRouteUpdate (to, from, next) {
     if (to.params.organisation.length > 2) {
       this.$store.dispatch('landing/setSelectedCountry')
@@ -18,8 +18,11 @@ export default {
   },
   middleware: ['profile'],
   async fetch ({ store, params }) {
-    await store.dispatch('system/loadDonors')
     await Promise.all([
+      store.dispatch('system/loadUserProfiles'),
+      store.dispatch('system/loadDonors'),
+      store.dispatch('system/loadOrganisations'),
+      store.dispatch('system/loadCountries'),
       store.dispatch('system/loadStaticData'),
       store.dispatch('countries/loadMapData'),
       store.dispatch(
@@ -32,12 +35,8 @@ export default {
     } else {
       store.dispatch('landing/clearCustomLandingPage')
     }
-    if (store.getters['user/getProfile']) {
-      await Promise.all([
-        store.dispatch('projects/loadUserProjects'),
-        store.dispatch('system/loadOrganisations'),
-        store.dispatch('system/loadUserProfiles')
-      ])
+    if (this.userProfile) {
+      await store.dispatch('projects/loadUserProjects')
     }
   },
   computed: {
