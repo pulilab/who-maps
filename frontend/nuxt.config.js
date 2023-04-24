@@ -148,14 +148,14 @@ const config = {
         },
         token: {
           property: 'access',
-          maxAge: 1800,
+          // maxAge: 1800,
           global: true,
           type: 'Token'
         },
         refreshToken: {
           property: 'refresh',
           data: 'refresh',
-          maxAge: 60 * 60 * 24 * 30
+          // maxAge: 60 * 60 * 24 * 30
         },
         endpoints: {
           login: { url: '/api/jwt/', method: 'post' },
