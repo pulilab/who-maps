@@ -151,9 +151,8 @@ export const actions = {
       console.error('system/loadCountries failed')
     }
   },
-  async loadOrganisations ({ state, commit, rootGetters }) {
-    const profile = rootGetters['user/getProfile']
-    if (profile && state.organisations.length === 0) {
+  async loadOrganisations ({ state, commit }) {
+    if (state.organisations.length === 0) {
       try {
         const { data } = await this.$axios.get('/api/organisations/')
         commit('setValue', { key: 'organisations', val: data })

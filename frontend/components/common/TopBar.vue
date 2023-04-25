@@ -5,8 +5,8 @@
         <nuxt-link :to=" localePath({ name: 'organisation', params: { organisation: '-' } })">
           <el-row type="flex" align="middle">
             <el-col class="LogoWHO">
-              <img 
-                :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'" 
+              <img
+                :src="customOrganisation ? organisationLogo : '/logo-who-blue.svg'"
                 :alt="customOrganisation ? $gettext('Country logo') : $gettext('WHO logo')"
               >
             </el-col>
@@ -23,12 +23,12 @@
       <el-col v-if="!errorPage" class="RightPart">
         <!-- ANON MODE -->
         <el-row
-          :class="{ AnonView: !user, LoggedInView: user }"
+          :class="{ AnonView: !loggedIn, LoggedInView: loggedIn }"
           type="flex"
           justify="end"
           align="middle"
         >
-          <template v-if="!user">
+          <template v-if="!loggedIn">
             <div class="HeaderBtn">
               <ToolkitDialogWrapper />
             </div>
@@ -36,7 +36,7 @@
               <translate class="HeaderBtn">How-to</translate>
             </div>
             <div>
-              <a 
+              <a
                 :href="storiesLink"
                 target="_blank"
                 class="HeaderBtn"
@@ -74,9 +74,9 @@
             </el-col>
           </template>
 
-          <NavigationMenu v-if="user" />
+          <NavigationMenu v-if="loggedIn" />
 
-          <template v-if="user">
+          <template v-if="loggedIn">
             <el-col>
               <el-row type="flex">
                 <el-col>
@@ -101,7 +101,7 @@
               </div>
               <UserDropdown />
             </el-col>
-          </template>          
+          </template>
 
           <el-col>
             <el-row type="flex">
@@ -180,7 +180,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: 'user/getProfile',
       landingData: 'landing/getLandingPageData',
       isCountry: 'landing/getIsCountry'
     }),
@@ -201,6 +200,9 @@ export default {
         return `/static/flags/${this.landingData.code.toLowerCase()}.png`
       }
       return null
+    },
+    loggedIn() {
+      return this.$auth.$state.loggedIn
     }
   },
   methods: {

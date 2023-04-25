@@ -33,9 +33,10 @@ export const actions = () => ({
 
   async fetchData ({ state, commit, rootGetters, dispatch }) {
     const type = state.type === 'country' ? 'countries' : 'donors'
+    const profile = rootGetters['user/getProfile']
 
     const superUserSpecifiedId = state.id
-    const idFromProfile = rootGetters['user/getProfile'][state.type]
+    const idFromProfile = profile[state.type]
     const firstDonorId = rootGetters['system/getDonors'].length && rootGetters['system/getDonors'][0].id // fallback for superuser w/o donor
 
     const id = superUserSpecifiedId || idFromProfile || firstDonorId

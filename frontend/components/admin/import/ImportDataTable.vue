@@ -290,7 +290,7 @@ export default {
           )
           this.$nuxt.$loading.start('save')
           newRow = await this.doSingleRowSave(doSave, true, row)
-          await this.refreshProfile()
+          await this.refreshProfile(false)
           this.$nuxt.$loading.finish('save')
         } catch (e) {
           this.$nuxt.$loading.finish('save')

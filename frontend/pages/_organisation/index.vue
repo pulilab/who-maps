@@ -20,7 +20,7 @@
       <!--hide temporarly-->
       <el-row type="flex" v-if="false">
         <el-col>
-          <Banner /> 
+          <Banner />
         </el-col>
       </el-row>
       <el-row type="flex">
@@ -66,6 +66,7 @@ import LayoutBuilder from '@/components/country/LayoutBuilder'
 import { mapGetters, mapState } from 'vuex'
 
 export default {
+  name: 'Organisation',
   components: {
     LandingMap,
     WelcomeBox,

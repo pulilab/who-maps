@@ -276,7 +276,7 @@ import DonorSelect from '../common/DonorSelect'
 import { mapGettersActions } from '../../utilities/form'
 
 export default {
-  name: 'CountryAdministrator',
+  name: 'DonorAdmin',
 
   components: {
     PageLayout,

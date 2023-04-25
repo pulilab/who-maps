@@ -15,6 +15,7 @@ import AdvancedSearch from '../../components/dashboard/AdvancedSearch'
 import { mapActions } from 'vuex'
 
 export default {
+  name: 'Dashboard',
   components: {
     AdvancedSearch
   },

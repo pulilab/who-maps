@@ -526,7 +526,7 @@ import FilterSwitch from '~/components/dashboard/FilterSwitch'
 import { mapGettersActions } from '../../utilities/form'
 
 export default {
-  name: 'CountryAdministrator',
+  name: 'CountryAdmin',
 
   components: {
     PageLayout,

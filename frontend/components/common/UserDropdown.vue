@@ -174,8 +174,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: 'user/getProfile'
+      userSt: 'user/getProfile'
     }),
+    user() {
+      return this.$auth.user
+    },
     isSuperUser () {
       return this.user && this.user.is_superuser
     },
@@ -213,7 +216,7 @@ export default {
     logout () {
       this.closePopover()
       this.doLogout()
-      this.$router.push(this.localePath({ name: 'organisation', params: this.$route.params, query: undefined }))
+      this.$router.push(this.localePath({ name: 'organisation-login', params: undefined, query: undefined }))
     },
   }
 }

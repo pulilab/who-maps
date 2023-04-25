@@ -6,11 +6,6 @@
 
 <script>
 export default {
-  components: {},
-  middleware: []
+  name: 'Import'
 }
 </script>
-
-<style>
-
-</style>

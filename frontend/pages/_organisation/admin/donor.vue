@@ -1,13 +1,12 @@
 <template>
-  <donor-admin />
+  <DonorAdmin />
 </template>
 
 <script>
-import DonorAdmin from '../../../components/admin/DonorAdmin'
+import DonorAdmin from '@/components/admin/DonorAdmin'
 
 export default {
   name: 'Donor',
-
   components: {
     DonorAdmin
   },

@@ -1,7 +1,6 @@
 import union from 'lodash/union'
 
 export const state = () => ({
-  tokens: null,
   profile: null,
   apiKey: null,
   emailVerifyResult: null,
@@ -29,13 +28,11 @@ export const getters = {
 
 export const actions = {
 
-  async login ({ commit, dispatch }, { username, password }) {
+  async login ({ dispatch }, loginPayload) {
     try {
-      const { data: tokens } = await this.$axios.post('/api/jwt/', { username, password })
-      commit('SET_TOKENS', tokens)
-      await dispatch('loadProfile')
-      await dispatch('loadApiKey')
+      await this.$auth.loginWith('local', { data: loginPayload})
       await Promise.all([
+        dispatch('loadApiKey'),
         dispatch('system/loadOrganisations', {}, { root: true }),
         dispatch('projects/loadUserProjects', {}, { root: true }),
         dispatch('system/loadUserProfiles', {}, { root: true })
@@ -43,7 +40,7 @@ export const actions = {
       return 200
     } catch (error) {
       console.error('user/login failed')
-      return error
+      return error.response
     }
   },
 
@@ -53,13 +50,12 @@ export const actions = {
   },
 
   async signup ({ commit, dispatch }, { account_type, password1, password2, email }) {
-    const { data } = await this.$axios.post('/api/rest-auth/registration/', { account_type, password1, password2, email })
-    commit('SET_TOKENS', {
-      access: data.access_token,
-      refresh: data.refresh_token
-    })
-    await dispatch('loadProfile')
-    await dispatch('system/loadOrganisations', {}, { root: true })
+    await this.$axios.post('/api/rest-auth/registration/', { account_type, password1, password2, email })
+    const loginPayload = {
+      username: email,
+      password: password1
+    }
+    await dispatch('login', loginPayload)
   },
 
   async dorResetPassword ({ commit, dispatch }, { uid, token, new_password1, new_password2, errMessage = '' }) {
@@ -85,18 +81,18 @@ export const actions = {
   },
 
   logout ({ commit, dispatch }) {
-    commit('SET_TOKENS', null)
-    commit('SET_PROFILE', null)
+    this.$auth.logout()
     commit('SET_APIKEY', null)
     dispatch('dashboard/resetUserInput', null, { root: true })
     dispatch('landing/resetUserInput', null, { root: true })
     dispatch('projects/resetProjectsData', null, { root: true })
   },
 
-  async loadProfile ({ commit }, profileId = 'me') {
+  async loadProfile ({ commit, dispatch }, apiKey = true) {
     try {
-      const { data } = await this.$axios.get(`/api/userprofiles/${profileId}/`)
+      const { data } = await this.$axios.get(`/api/userprofiles/me/`)
       commit('SET_PROFILE', data)
+      if (apiKey) dispatch('loadApiKey')
     } catch (e) {
       console.error('user/loadProfile failed')
     }
@@ -110,25 +106,6 @@ export const actions = {
     const { data } = await this.$axios.put(`/api/userprofiles/${profile.id}/`, profile)
     data.email = data.email || data.user_email
     commit('SET_PROFILE', data)
-  },
-
-  async refreshToken ({ commit, state, dispatch }) {
-    if (state.tokens?.refresh) {
-      try {
-          const { data } = await this.$axios.post('/api/jwt/refresh/', {
-            refresh: state.tokens.refresh
-          })
-          commit('SET_TOKENS', {
-            access: data.access,
-            refresh: state.tokens.refresh
-          })
-      } catch (e) {
-        console.error('user/refreshToken failed')
-        dispatch('logout')
-      }
-    } else {
-      dispatch('logout')
-    }
   },
 
   updateTeamViewers ({ commit, getters }, { team, viewers, id }) {
@@ -188,10 +165,6 @@ export const actions = {
 }
 
 export const mutations = {
-  SET_TOKENS: (state, tokens) => {
-    state.tokens = tokens
-  },
-
   SET_COOKIE: (state, cookieOn) => {
     if (!process.server && cookieOn === false) {
       window.localStorage.setItem('cookie:accepted', 'true')
