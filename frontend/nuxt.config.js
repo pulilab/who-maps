@@ -142,7 +142,7 @@ const config = {
     strategies: {
       local: {
         scheme: 'refresh',
-        autoLogout: false, // log out if both tokens expire
+        autoLogout: true, // log out if both tokens expire
         user: {
           property: false, // adds the whole response data to user
         },
