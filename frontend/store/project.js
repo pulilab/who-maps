@@ -752,6 +752,8 @@ export const mutations = {
     state.team = get(project, 'team', [])
     state.viewers = get(project, 'viewers', [])
     state.platforms = get(project, 'platforms', [])
+    state.software = get(project, 'software', [])
+    state.dhis = get(project, 'dhis', [])
     state.digitalHealthInterventions = get(
       project,
       'digitalHealthInterventions',
