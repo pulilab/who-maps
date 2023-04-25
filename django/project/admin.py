@@ -219,14 +219,18 @@ class ProjectImportV2Inline(admin.StackedInline):
 
 class CollectionAdmin(admin.ModelAdmin):  # pragma: no cover
     model = Collection
-    fields = ['url', 'name', 'user']
+    fields = ['get_url', 'name', 'user']
     readonly_fields = fields
     search_fields = ['name', 'user', 'url']
-    list_display = ['modified', 'name', 'user', 'url']
+    list_display = ['modified', 'name', 'user', 'get_url']
     inlines = [ProjectImportV2Inline]
 
     def has_add_permission(self, request, obj=None):
         return False
+
+    def get_url(self, obj):  # pragma: no cover
+        return mark_safe(f'<a href="/en/-/collection/{obj.url}">{obj.url}</a>')
+    get_url.short_description = "URL"
 
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)

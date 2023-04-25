@@ -208,9 +208,14 @@ export const getters = {
 export const actions = {
   async loadUserProjects ({ commit }) {
     try {
-      const { data } = await this.$axios.get('/api/projects/member-of/')
-      data.sort((a, b) => b.id - a.id)
-      commit('SET_USER_PROJECT_LIST', data)
+      const res = await this.$axios.get('/api/projects/member-of/')
+      if (res) {
+        const { data } = res
+        data.sort((a, b) => b.id - a.id)
+        commit('SET_USER_PROJECT_LIST', data)
+      } else {
+        commit('SET_USER_PROJECT_LIST', [])
+      }
     } catch (error) {
       console.error('projects/loadUserProjects failed')
       return Promise.reject(error)

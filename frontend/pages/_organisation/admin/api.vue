@@ -1,10 +1,13 @@
 <template>
-  <api-admin />
+  <ApiAdmin />
 </template>
 
 <script>
 import ApiAdmin from '@/components/admin/ApiAdmin'
 export default {
-  components: { ApiAdmin }
+  namne: 'Api',
+  components: {
+    ApiAdmin
+  }
 }
 </script>
