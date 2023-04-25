@@ -143,7 +143,11 @@ export default {
   },
   methods: {
     getDhiList (dhis) {
-      return dhis ? dhis.map(dhi => this.getDhi(dhi).name) : []
+      return dhis
+        ? dhis
+          .map(dhi => this.getDhi(dhi).name)
+          .sort((a, b) => a.localeCompare(b))
+        : []
     },
     handleRows (coverage, data, country = this.country) {
       let rows = []
