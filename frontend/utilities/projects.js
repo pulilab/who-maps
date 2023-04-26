@@ -105,7 +105,6 @@ export const projectFields = () => ({
   contact_email: null,
   team: [],
   viewers: [],
-  platforms: [],
   software: [],
   dhis: [],
   digitalHealthInterventions: [],
@@ -257,9 +256,6 @@ export const publishRules = () => {
       required: true
     },
     team: {
-      required: true
-    },
-    platforms: {
       required: true
     },
     software: {

@@ -74,7 +74,6 @@ export const getters = {
   getViewers: state => state.viewers,
   getSoftware: state => state.software,
   getDHIs: state => state.dhis,
-  getPlatforms: state => state.platforms.length === 0 ? [null] : state.platforms,
   getDigitalHealthInterventions: state => [...state.digitalHealthInterventions],
   getHealthFocusAreas: state => state.health_focus_areas,
   getHscChallenges: state => state.hsc_challenges,
@@ -757,7 +756,6 @@ export const mutations = {
     state.contact_email = get(project, 'contact_email', '')
     state.team = get(project, 'team', [])
     state.viewers = get(project, 'viewers', [])
-    state.platforms = get(project, 'platforms', [])
     state.software = get(project, 'software', [])
     state.dhis = get(project, 'dhis', [])
     state.digitalHealthInterventions = get(

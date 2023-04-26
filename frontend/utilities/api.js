@@ -204,7 +204,6 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
     result[key] = isEmpty(value) ? undefined : value
   }
   const interoperability_links = interoperabilityLinkWriteParser(p.interoperability_links)
-  const platforms = platformsWriteParser(p.platforms, p.digitalHealthInterventions)
   let coverage = []
   let coverage_second_level = []
   let national_level_deployment = null
@@ -227,7 +226,6 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
     project: {
       ...result,
       interoperability_links,
-      platforms,
       coverage,
       coverage_second_level,
       national_level_deployment,
