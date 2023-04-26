@@ -6,8 +6,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 import SignupBox from './SignupBox'
 import MyProjectsBox from './MyProjectsBox'
 
@@ -17,11 +15,8 @@ export default {
     MyProjectsBox
   },
   computed: {
-    ...mapGetters({
-      userProfile: 'user/getProfile'
-    }),
     isLoggedIn () {
-      return !!this.userProfile
+      return this.$auth.loggedIn
     }
   }
 }

@@ -4,7 +4,6 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 router = DefaultRouter()
-router.register('import', views.ProjectImportV2ListViewSet)
 router.register('import', views.ProjectImportV2ViewSet)
 router.register('import-row', views.ImportRowViewSet)
 router.register('software', views.TechnologyPlatformRequestViewSet)

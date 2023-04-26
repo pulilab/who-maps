@@ -22,16 +22,10 @@
           v-if="userProfile.is_superuser"
           :label="$gettext('Choose investor') | translate"
         >
-          <donor-select
-            :value="donorId"
-            @change="setDonorId"
-          />
+          <donor-select :value="donorId" @change="setDonorId" />
         </el-form-item>
 
-        <el-form-item
-          :label="$gettext('Logo')"
-          prop="logo"
-        >
+        <el-form-item :label="$gettext('Logo')" prop="logo">
           <file-upload
             :disabled="notSDA"
             :auto-upload="false"
@@ -89,38 +83,25 @@
       </el-form>
     </collapsible-card>
 
-    <collapsible-card
-      :title="$gettext('User management') | translate"
-      class="UserManagement"
-    >
+    <collapsible-card :title="$gettext('User management') | translate" class="UserManagement">
       <el-row type="flex">
         <el-col class="AdminPersonaChooser">
-          <div
-            :class="['Persona', { active: selectedPersona === 'D' }]"
-            @click="selectPersona('D')"
-          >
+          <div :class="['Persona', { active: selectedPersona === 'D' }]" @click="selectPersona('D')">
             <div class="PersonaName">
               <translate>Investor Viewers</translate>
             </div>
             <div class="RequestCount">
-              <translate
-                :parameters="{ num: userSelection.length - users.length }"
-              >
+              <translate :parameters="{ num: userSelection.length - users.length }">
                 {num} new request(s)
               </translate>
             </div>
           </div>
-          <div
-            :class="['Persona', { active: selectedPersona === 'DA' }]"
-            @click="selectPersona('DA')"
-          >
+          <div :class="['Persona', { active: selectedPersona === 'DA' }]" @click="selectPersona('DA')">
             <div class="PersonaName">
               <translate>Investor Admins</translate>
             </div>
             <div class="RequestCount">
-              <translate
-                :parameters="{ num: adminSelection.length - admins.length }"
-              >
+              <translate :parameters="{ num: adminSelection.length - admins.length }">
                 {num} new request(s)
               </translate>
             </div>
@@ -133,11 +114,7 @@
               <translate>Investor System Admins</translate>
             </div>
             <div class="RequestCount">
-              <translate
-                :parameters="{
-                  num: superadminSelection.length - superAdmins.length
-                }"
-              >
+              <translate :parameters="{ num: superadminSelection.length - superAdmins.length }">
                 {num} new request(s)
               </translate>
             </div>
@@ -145,10 +122,7 @@
         </el-col>
 
         <el-col class="UserTransfers">
-          <div
-            v-if="selectedPersona === 'D'"
-            class="PersonaPrivileges"
-          >
+          <div v-if="selectedPersona === 'D'" class="PersonaPrivileges">
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -172,16 +146,11 @@
             v-model="users"
             :titles="transferTitles"
             :data="userSelection"
-            :filter-placeholder="
-              $gettext('Type to filter users...') | translate
-            "
+            :filter-placeholder="$gettext('Type to filter users...') | translate"
             filterable
           />
 
-          <div
-            v-if="selectedPersona === 'DA'"
-            class="PersonaPrivileges"
-          >
+          <div v-if="selectedPersona === 'DA'" class="PersonaPrivileges">
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -220,16 +189,11 @@
             v-model="admins"
             :titles="transferTitles"
             :data="adminSelection"
-            :filter-placeholder="
-              $gettext('Type to filter users...') | translate
-            "
+            :filter-placeholder="$gettext('Type to filter users...') | translate"
             filterable
           />
 
-          <div
-            v-if="selectedPersona === 'SDA'"
-            class="PersonaPrivileges"
-          >
+          <div v-if="selectedPersona === 'SDA'" class="PersonaPrivileges">
             <el-collapse accordion>
               <el-collapse-item>
                 <template slot="title">
@@ -274,9 +238,7 @@
             v-model="superAdmins"
             :titles="transferTitles"
             :data="superadminSelection"
-            :filter-placeholder="
-              $gettext('Type to filter users...') | translate
-            "
+            :filter-placeholder="$gettext('Type to filter users...') | translate"
             filterable
           />
         </el-col>
@@ -291,22 +253,12 @@
     </collapsible-card>
 
     <div class="AdminActionBarBottom">
-      <el-row
-        type="flex"
-        justify="space-between"
-      >
-        <el-button
-          type="text"
-          class="CancelButton IconLeft"
-        >
+      <el-row type="flex" justify="space-between">
+        <el-button type="text" class="CancelButton IconLeft">
           <fa icon="reply" />
           <translate>Dismiss changes</translate>
         </el-button>
-        <el-button
-          type="primary"
-          size="medium"
-          @click="save"
-        >
+        <el-button type="primary" size="medium" @click="save">
           <translate>Save changes</translate>
         </el-button>
       </el-row>
@@ -324,7 +276,7 @@ import DonorSelect from '../common/DonorSelect'
 import { mapGettersActions } from '../../utilities/form'
 
 export default {
-  name: 'CountryAdministrator',
+  name: 'DonorAdmin',
 
   components: {
     PageLayout,
@@ -393,7 +345,6 @@ export default {
       superadminSelection: 'admin/donor/getSuperadminSelection',
       userProfile: 'user/getProfile'
     }),
-
     notSDA () {
       return (
         this.userProfile.account_type === 'DA' && !this.userProfile.is_superuser
@@ -738,13 +689,27 @@ export default {
         margin: 0 0 20px;
       }
 
-      .el-transfer-panel {
+      ::v-deep .el-transfer-panel {
         width: 100%;
 
         .el-transfer-panel__body {
           min-height: 250px;
           max-height: 40vh;
           overflow-y: auto;
+
+          .el-transfer-panel__list.is-filterable {
+            height: 188px;
+          }
+
+          .el-transfer-panel__item {
+            margin-bottom: 8px;
+
+            .el-checkbox__label {
+              white-space: pre;
+              line-height: 15px;
+              font-size: 13px;
+            }
+          }
         }
 
         // &:first-child {
@@ -760,7 +725,15 @@ export default {
         // }
       }
 
-      // .el-transfer-buttons {}
+      ::v-deep .el-transfer__buttons {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+
+        .el-button + .el-button {
+          margin-left: 0;
+        }
+      }
     }
   }
 

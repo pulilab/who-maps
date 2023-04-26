@@ -103,7 +103,7 @@ class ProjectPublicViewSet(ViewSet):
         ))
 
 
-class ProjectListViewSet(TokenAuthMixin, ViewSet):
+class ProjectListViewSet(TeamTokenAuthMixin, ViewSet):
     def list(self, request, *args, **kwargs):
         """
         Retrieves list of projects user's projects.
@@ -642,21 +642,7 @@ class ProjectApprovalViewSet(TokenAuthMixin, UpdateModelMixin, GenericViewSet):
         return Response(serializer.data)
 
 
-class ProjectImportV2ListViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
-    serializer_class = ProjectImportV2ListSerializer
-    queryset = ProjectImportV2.objects.all()
-
-    # TODO: NEEDS COVER
-    def get_queryset(self):  # pragma: no cover
-        if getattr(self, "swagger_fake_view", False):
-            # queryset just for schema generation metadata
-            # as per https://github.com/axnsan12/drf-yasg/issues/333#issuecomment-474883875
-            return ProjectImportV2.objects.none()
-
-        return ProjectImportV2.objects.filter(user=self.request.user)
-
-
-class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin,
+class ProjectImportV2ViewSet(TokenAuthMixin, ListModelMixin, CreateModelMixin, UpdateModelMixin, RetrieveModelMixin,
                              GenericViewSet):
     serializer_class = ProjectImportV2Serializer
     queryset = ProjectImportV2.objects.all()
@@ -669,6 +655,11 @@ class ProjectImportV2ViewSet(TokenAuthMixin, CreateModelMixin, UpdateModelMixin,
             return ProjectImportV2.objects.none()
 
         return ProjectImportV2.objects.filter(user=self.request.user)
+
+    def get_serializer_class(self):  # pragma: no cover
+        if self.action == 'list':
+            return ProjectImportV2ListSerializer
+        return super().get_serializer_class()
 
 
 class ImportRowViewSet(TokenAuthMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):

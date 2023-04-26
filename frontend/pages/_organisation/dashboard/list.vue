@@ -59,7 +59,7 @@ export default {
       immediate: false,
       handler (query) {
         if (this.dashboardSection === 'list') {
-          this.$router.replace({ ...this.$route, query })
+          this.$router.push({ ...this.$route, query }, () => {})
           this.load()
         }
       }

@@ -56,7 +56,6 @@ const config = {
     { src: '~plugins/hotjar.js', ssr: false },
     { src: '~plugins/extends.js', ssr: false },
     { src: '~plugins/axios.js', ssr: true },
-    { src: '~plugins/token.js', ssr: true },
     { src: '~plugins/vee-validate.js', ssr: true },
     { src: '~plugins/vue-leaflet.js', ssr: false },
     { src: '~plugins/element.js', ssr: true },
@@ -67,7 +66,9 @@ const config = {
   ],
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
     '@nuxtjs/proxy',
+    'cookie-universal-nuxt',
     'nuxt-fontawesome',
     '@nuxtjs/gtm',
     '@nuxtjs/sentry',
@@ -133,6 +134,42 @@ const config = {
   gtm: {
     id: process.env.GTM_ID
   },
+  auth: {
+    localStorage: false,
+    cookie: {
+      prefix: 'auth.',
+      options: {
+        path: '/',
+        expires: 365,
+      },
+    },
+    strategies: {
+      local: {
+        scheme: 'refresh',
+        autoLogout: true, // log out if both tokens expire
+        user: {
+          property: false, // adds the whole response data to user
+        },
+        token: {
+          property: 'access',
+          // maxAge: 1800,
+          global: true,
+          type: 'Token'
+        },
+        refreshToken: {
+          property: 'refresh',
+          data: 'refresh',
+          // maxAge: 60 * 60 * 24 * 30
+        },
+        endpoints: {
+          login: { url: '/api/jwt/', method: 'post' },
+          refresh: { url: '/api/jwt/refresh/', method: 'post' },
+          user: { url: '/api/userprofiles/me/', method: 'get' },
+          logout: false
+        }
+      }
+    }
+  },
   fontawesome: {
     component: 'fa',
     imports: [
@@ -154,6 +191,7 @@ const config = {
     retry: false
   },
   router: {
+    // middleware: ['auth'],
     base: '/'
   },
   loading: '~/components/DhaLoader.vue',

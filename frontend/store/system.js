@@ -134,22 +134,25 @@ export const actions = {
       dispatch('dashboard/setDashboardColumns', data.dashboard_columns, {
         root: true
       })
-      dispatch('loadCountries')
+      if (!state.countries) {
+        dispatch('loadCountries')
+      }
     } catch (e) {
       console.error('system/loadStaticData failed')
     }
   },
-  async loadCountries ({ commit }) {
+  async loadCountries ({ state, commit }) {
     try {
-      const { data } = await this.$axios.get('/api/landing-country/')
-      commit('setValue', { key: 'countries', val: data })
+      if (state.countries.length === 0) {
+        const { data } = await this.$axios.get('/api/landing-country/')
+        commit('setValue', { key: 'countries', val: data })
+      }
     } catch (e) {
       console.error('system/loadCountries failed')
     }
   },
-  async loadOrganisations ({ state, commit, rootGetters }) {
-    const profile = rootGetters['user/getProfile']
-    if (profile && state.organisations.length === 0) {
+  async loadOrganisations ({ state, commit }) {
+    if (state.organisations.length === 0) {
       try {
         const { data } = await this.$axios.get('/api/organisations/')
         commit('setValue', { key: 'organisations', val: data })

@@ -33,9 +33,10 @@ export const actions = () => ({
 
   async fetchData ({ state, commit, rootGetters, dispatch }) {
     const type = state.type === 'country' ? 'countries' : 'donors'
+    const profile = rootGetters['user/getProfile']
 
     const superUserSpecifiedId = state.id
-    const idFromProfile = rootGetters['user/getProfile'][state.type]
+    const idFromProfile = profile[state.type]
     const firstDonorId = rootGetters['system/getDonors'].length && rootGetters['system/getDonors'][0].id // fallback for superuser w/o donor
 
     const id = superUserSpecifiedId || idFromProfile || firstDonorId
@@ -77,7 +78,7 @@ export const actions = () => ({
       if (typeof val !== 'object') {
         // In case of `id`
         const profile = profiles.find(prof => prof.id === val)
-        const label = `${profile.name} <${profile.email}>`
+        const label = `${profile.name}\n${profile.email}`
         return {
           key: val,
           label,
@@ -87,7 +88,7 @@ export const actions = () => ({
         // In case of { id, name, email }
         return {
           key: val.id,
-          label: `${val.name} <${val.email}>`,
+          label: `${val.name}\n${val.email}`,
           disabled: defaultDisable || val.id === userId
         }
       }

@@ -178,10 +178,22 @@ class ProjectAdmin(AllObjectsAdmin):
 class ImportRowInline(admin.StackedInline):
     model = ImportRow
     readonly_fields = ('data',)
+    raw_id_fields = ['project']
+    extra = 0
 
 
 class ProjectImportV2Admin(admin.ModelAdmin):
     inlines = (ImportRowInline,)
+    list_display = ['filename', 'sheet_name', 'get_profile', 'projects', 'collection']
+    raw_id_fields = ['donor', 'country', 'user']
+
+    def get_profile(self, obj):  # pragma: no cover
+        return obj.user.userprofile
+    get_profile.short_description = "User"
+
+    def projects(self, obj):  # pragma: no cover
+        return obj.rows.count()
+    projects.short_description = "No. projects imported"
 
 
 class StageAdmin(SortableAdminMixin, admin.ModelAdmin):
@@ -196,9 +208,6 @@ class ProjectVersionAdmin(admin.ModelAdmin):
 
     list_display = ['modified', 'project', 'version']
 
-    def get_project_name(self, obj):  # pragma: no cover
-        return obj.project.name
-
     def has_add_permission(self, request):
         return False
 
@@ -210,14 +219,18 @@ class ProjectImportV2Inline(admin.StackedInline):
 
 class CollectionAdmin(admin.ModelAdmin):  # pragma: no cover
     model = Collection
-    fields = ['url', 'name', 'user']
+    fields = ['get_url', 'name', 'user']
     readonly_fields = fields
     search_fields = ['name', 'user', 'url']
-    list_display = ['modified', 'name', 'user', 'url']
+    list_display = ['modified', 'name', 'user', 'get_url']
     inlines = [ProjectImportV2Inline]
 
     def has_add_permission(self, request, obj=None):
         return False
+
+    def get_url(self, obj):  # pragma: no cover
+        return mark_safe(f'<a href="/en/-/collection/{obj.url}">{obj.url}</a>')
+    get_url.short_description = "URL"
 
 
 admin.site.register(TechnologyPlatform, TechnologyPlatformAdmin)

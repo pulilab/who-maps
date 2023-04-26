@@ -139,6 +139,7 @@ export const actions = {
       if (url) {
         const mediaIndex = url.indexOf('/media/')
         const proper = url.slice(mediaIndex)
+        console.log('🚀 ~ file: map.js:142 ~ loadGeoJSON ~ proper:', proper)
         const { data } = await this.$axios.get(proper)
         Object.freeze(data)
         commit('SET_DATA', { type: 'geoJson', value: data })
@@ -147,7 +148,6 @@ export const actions = {
       }
     } catch (e) {
       console.error('Map failed to load')
-      // console.error(e);
     }
   },
   setCountryCenter ({ commit }, value) {
