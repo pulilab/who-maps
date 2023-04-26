@@ -83,11 +83,8 @@
             :placeholder="$gettext('Add viewers') | translate"
           />
         </template>
-        <template v-if="dialogData.column === 'platforms'">
-          <platform-selector
-            v-model="dialogData.value"
-            :index="0"
-          />
+        <template v-if="dialogData.column === 'software'">
+          <SoftwareSelector v-model="dialogData.value" :index="0" />
         </template>
 
         <template v-if="dialogData.column === 'sub_level'">
@@ -195,7 +192,7 @@
 import CountrySelect from '@/components/common/CountrySelect'
 import DonorSelector from '@/components/project/DonorSelector.vue'
 import OrganisationSelect from '@/components/common/OrganisationSelect'
-import PlatformSelector from '@/components/project/PlatformSelector'
+import SoftwareSelector from '@/components/project/SoftwareSelector'
 import HisBucketSelector from '@/components/project/HisBucketSelector'
 import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector'
 import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector'
@@ -208,7 +205,7 @@ export default {
     DonorSelector,
     CountrySelect,
     OrganisationSelect,
-    PlatformSelector,
+    SoftwareSelector,
     HisBucketSelector,
     HealthSystemChallengesSelector,
     HealthFocusAreasSelector,

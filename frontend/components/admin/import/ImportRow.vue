@@ -126,10 +126,7 @@ export default {
           }
         }
       }
-      if (result.platforms && result.platforms[0] && result.digitalHealthInterventions) {
-        const platform = result.platforms[0]
-        result.digitalHealthInterventions = result.digitalHealthInterventions.map(id => ({ platform, id }))
-      }
+      result.dhis = result.digitalHealthInterventions
       result.country = country
       if (filled.some(c => c.column === 'organisation') && !result.organisation) {
         const orgCell = filled.find(c => c.column === 'organisation')

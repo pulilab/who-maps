@@ -21,7 +21,7 @@ export default {
       donorColumns: 'dashboard/getDonorColumns',
       regions: 'system/getRegions',
       stages: 'project/getStagesList',
-      platforms: 'projects/getTechnologyPlatforms',
+      softwares: 'projects/getTechnologyPlatforms',
       hscChallenges: 'projects/getHscChallenges',
       hisBucket: 'projects/getHisBucket',
       licenses: 'projects/getLicenses',

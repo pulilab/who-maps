@@ -271,7 +271,7 @@ export default {
         return a
       }, [])
       const flatLicenses = this.projectDicts.licenses.map(l => l.name)
-      const flatPlatforms = this.projectDicts.technology_platforms.map(p => p.name)
+      const flatSoftware = this.projectDicts.technology_platforms.map(p => p.name)
       const flathDHI = this.projectDicts.strategies.reduce((a, c) => {
         const innerValue = c.subGroups.reduce((innerA, innerC) => {
           return innerA.concat(innerC.strategies.map(s => s.name))
@@ -286,7 +286,7 @@ export default {
         [nameMapping.hsc_challenges, ...flatHSC],
         [nameMapping.his_bucket, ...flatsHIS],
         [nameMapping.licenses, ...flatLicenses],
-        [nameMapping.platforms, ...flatPlatforms],
+        [nameMapping.software, ...flatSoftware],
         [nameMapping.digitalHealthInterventions, ...flathDHI],
         [nameMapping.organisation, ...flatOrganisations],
         [nameMapping.country, ...flatCountries],
