@@ -70,6 +70,7 @@ const config = {
     '@nuxtjs/proxy',
     'cookie-universal-nuxt',
     'nuxt-fontawesome',
+    '@nuxtjs/gtm',
     '@nuxtjs/sentry',
     [
       'nuxt-i18n',
@@ -130,6 +131,9 @@ const config = {
       }
     ]
   ],
+  gtm: {
+    id: process.env.GTM_ID
+  },
   auth: {
     localStorage: false,
     cookie: {
