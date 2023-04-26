@@ -60,7 +60,7 @@ export default {
   computed: {
     ...mapGetters({
       getCountry: 'countries/getCountryDetails',
-      getPlatforms: 'projects/getTechnologyPlatforms',
+      getSoftware: 'projects/getTechnologyPlatforms',
       getDhi: 'projects/getDigitalHealthInterventionDetails',
       getHfa: 'projects/getHealthFocusAreas',
       getHsc: 'projects/getHscChallenges',
@@ -92,10 +92,8 @@ export default {
     fields () {
       if (!isEmpty(this.project)) {
         const {
-          platforms,
           software,
           dhis,
-          digitalHealthInterventions,
           health_focus_areas,
           hsc_challenges,
           // hsc_challenges_other,
@@ -108,8 +106,7 @@ export default {
 
         this.hfaList = getNestedList(this.getHfa, 'health_focus_areas')
         this.hfa = getList(health_focus_areas, this.hfaList)
-        this.platforms = getList(platforms, this.getPlatforms)
-        this.software = getList(software, this.getPlatforms)
+        this.software = getList(software, this.getSoftware)
         this.dhis = this.getDhiList(dhis),
         this.hscList = getNestedList(this.getHsc, 'challenges')
         // console.log(this.getHscOther)

@@ -1,33 +1,17 @@
 <template>
   <div class="DigitalHealthInterventionsSelector">
-    <el-button
-      v-show="dhi.length === 0"
-      class="IconLeft"
-      @click="openDialog"
-    >
+    <el-button v-show="dhis.length === 0" class="IconLeft" @click="openDialog">
       <fa icon="plus" />
       <translate>Add Digital Health Interventions</translate>
     </el-button>
-    <div
-      v-show="dhi.length > 0"
-      class="HasSelectedItems"
-    >
+    <div v-show="dhis.length > 0" class="HasSelectedItems">
       <ul class="SelectedDigitalHealthInterventions">
-        <li
-          v-for="item in dhi"
-          :key="item.id"
-        >
-          <fa
-            icon="check"
-            size="xs"
-          />
-          <digital-health-intervention-item :id="item.id" />
+        <li v-for="(dhi,i) in selectedDHIs" :key="i">
+          <fa icon="check" size="xs" />
+          <span>{{ dhi }}</span>
         </li>
       </ul>
-      <el-button
-        class="IconLeft"
-        @click="openDialog"
-      >
+      <el-button class="IconLeft" @click="openDialog">
         <fa icon="edit" />
         <translate>Edit selection</translate>
       </el-button>
@@ -37,37 +21,37 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import DigitalHealthInterventionItem from '../common/DigitalHealthInterventionItem'
 
 export default {
-  components: {
-    DigitalHealthInterventionItem
-  },
   props: {
-    platformId: {
-      type: [Number, String],
-      default: null
+    dhis: {
+      type: Array,
+      default: () => []
     }
   },
   $_veeValidate: {
-    value () {
-      return this.dhi
+    value() {
+      return this.dhis
     },
     events: 'change'
   },
   computed: {
     ...mapGetters({
-      selectedDHI: 'project/getDigitalHealthInterventions'
+      getDhi: 'projects/getDigitalHealthInterventionDetails',
     }),
-    dhi () {
-      return this.selectedDHI.filter(dhi => dhi.platform === this.platformId)
+    selectedDHIs() {
+      return this.dhis
+        ? this.dhis
+            .map((dhi) => this.getDhi(dhi).name)
+            .sort((a, b) => a.localeCompare(b))
+        : []
     }
   },
   watch: {
-    dhi: {
+    dhis: {
       immediate: true,
       deep: true,
-      handler () {
+      handler() {
         this.$emit('change')
       }
     }
@@ -76,41 +60,41 @@ export default {
     ...mapActions({
       setDigitalHealthInterventionsDialogState: 'layout/setDigitalHealthInterventionsDialogState'
     }),
-    openDialog () {
-      this.setDigitalHealthInterventionsDialogState(this.platformId)
+    openDialog() {
+      this.setDigitalHealthInterventionsDialogState(true)
     }
   }
 }
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
-  .DigitalHealthInterventionsSelector {
-    .el-button {
-      margin-bottom: 10px;
-    }
+.DigitalHealthInterventionsSelector {
+  .el-button {
+    margin-bottom: 10px;
+  }
 
-    ul.SelectedDigitalHealthInterventions {
-      list-style-type: none;
-      display: block;
-      margin: 0 0 30px;
-      padding: 0;
+  ul.SelectedDigitalHealthInterventions {
+    list-style-type: none;
+    display: block;
+    margin: 0 0 30px;
+    padding: 0;
 
-      li {
-        position: relative;
-        margin-bottom: 20px;
-        padding-left: 22px;
-        line-height: 19px;
-        color: @colorBrandPrimary;
+    li {
+      position: relative;
+      margin-bottom: 20px;
+      padding-left: 22px;
+      line-height: 19px;
+      color: @colorBrandPrimary;
 
-        .svg-inline--fa {
-          position: absolute;
-          top: 4px;
-          left: 0;
-        }
+      .svg-inline--fa {
+        position: absolute;
+        top: 4px;
+        left: 0;
       }
     }
   }
+}
 </style>

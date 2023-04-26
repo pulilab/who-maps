@@ -49,8 +49,7 @@
           data-vv-as="Health system challenges"
         />
       </custom-required-form-item>
-      
-      
+
       <custom-required-form-item
         class="HSCOther"
         :error="errors.first('hsc_challenges')"
@@ -89,97 +88,53 @@
               @rm="rmHSCOther(index)"
             />
           </el-col>
-          
         </el-row>
       </custom-required-form-item>
 
       <custom-required-form-item
-        :error="errors.first('platforms')"
-        prepend-label="14"
+        :error="errors.first('software')"
+        :publish-rule="publishRules.software"
+        prepend-label="14a"
       >
         <template slot="label">
-          <translate key="platforms">
-            Add information about your Digital Health program activies
+          <translate key="software">
+            What are the names of the software included in the deployment?
           </translate>
         </template>
+        <SoftwareSelector
+          v-model="software"
+          v-validate="rules.software"
+          data-vv-name="software"
+          data-vv-validate-on="change"
+          data-vv-as="Software"
+        />
+      </custom-required-form-item>
 
-        <custom-required-form-item
-          v-for="(platform, index) in platforms"
-          :key="platform"
-          :error="errors.first('id', 'platform_' + index)"
-          :draft-rule="draftRules.platforms"
-          :publish-rule="publishRules.platforms"
-          class="ItemIndent"
-        >
-          <template slot="label">
-            <translate key="platform-label">
-              What are the names of the software included in the deployment?
-            </translate>
-            <tooltip
-              :text="
-                $gettext(
-                  'Include all software that is part of your project. If you cannot find your software listed in the options, you can add it by start typing the software name in the field, and then select ‘Add as new’.  which will add the software to the inventory.'
-                ) | translate
-              "
-            />
-          </template>
-
-          <el-col :span="16">
-            <!--v-validate="rules.platforms"-->
-            <platform-selector
-              :key="platform"
-              v-model="platforms"
-              :index="index"
-              :data-vv-scope="'platform_' + index"
-              data-vv-name="id"
-              data-vv-as="Software"
-            />
-            <custom-required-form-item
-              v-show="platform"
-              :error="errors.first('strategies', 'platform_' + index)"
-              :draft-rule="draftRules.strategies"
-              :publish-rule="publishRules.strategies"
-              class="DigitalHealthIntervention"
-            >
-              <template slot="label">
-                <translate key="strategies">
-                  What Digital Health Intervention(s) are included in this
-                  software?
-                </translate>
-                <a
-                  class="TooltipLink"
-                  target="_blank"
-                  href="https://apps.who.int/iris/bitstream/handle/10665/260480/WHO-RHR-18.06-eng.pdf;jsessionid=50B83CAF6ACF46453B7D6BAB9672EB77?sequence=1)"
-                >
-                  <fa icon="question-circle" />
-                </a>
-              </template>
-              <digital-health-interventions-selector
-                v-validate="rules.strategies"
-                :platform-id="platform"
-                :data-vv-scope="'platform_' + index"
-                data-vv-name="strategies"
-                data-vv-as="Digital health interventions"
-              />
-            </custom-required-form-item>
-          </el-col>
-          <el-col :span="8">
-            <add-rm-buttons
-              :show-add="isLastAndExist(platforms, index)"
-              :show-rm="platforms.length > 1"
-              @add="addDhi"
-              @rm="rmDhi(index, platform)"
-            />
-          </el-col>
-        </custom-required-form-item>
-
-        <input
-          v-model="platforms"
-          v-validate="rules.platforms"
-          name="platforms"
-          type="hidden"
-          class="HiddenPlatform"
-        >
+      <custom-required-form-item
+        :error="errors.first('strategies')"
+        :draft-rule="draftRules.strategies"
+        :publish-rule="publishRules.strategies"
+        prepend-label="14b"
+        class="DigitalHealthIntervention"
+      >
+        <template slot="label">
+          <translate key="strategies">
+            What Digital Health Intervention(s) are included in the deployment?
+          </translate>
+          <a
+            class="TooltipLink"
+            target="_blank"
+            href="https://apps.who.int/iris/bitstream/handle/10665/260480/WHO-RHR-18.06-eng.pdf;jsessionid=50B83CAF6ACF46453B7D6BAB9672EB77?sequence=1)"
+          >
+            <fa icon="question-circle" />
+          </a>
+        </template>
+        <DigitalHealthInterventionsSelector
+          v-validate="rules.strategies"
+          :dhis="dhis"
+          data-vv-name="strategies"
+          data-vv-as="Digital health interventions"
+        />
       </custom-required-form-item>
 
       <custom-required-form-item
@@ -334,7 +289,7 @@ import CollapsibleCard from '../CollapsibleCard'
 import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector'
 import HealthFocusAreasSelector from '../HealthFocusAreasSelector'
 import HisBucketSelector from '../HisBucketSelector'
-import PlatformSelector from '../PlatformSelector'
+import SoftwareSelector from '../SoftwareSelector'
 import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector'
 import SubNationalLevelDeployment from '../SubNationalLevelDeployment'
 import CoverageFieldset from '../CoverageFieldset'
@@ -350,7 +305,7 @@ export default {
     HealthSystemChallengesSelector,
     HisBucketSelector,
     HealthFocusAreasSelector,
-    PlatformSelector,
+    SoftwareSelector,
     DigitalHealthInterventionsSelector,
     SubNationalLevelDeployment,
     CoverageFieldset,
@@ -362,13 +317,8 @@ export default {
   computed: {
     ...mapGettersActions({
       country: ['project', 'getCountry', 'setCountry', 0],
-      platforms: ['project', 'getPlatforms', 'setPlatforms', 0],
-      digitalHealthInterventions: [
-        'project',
-        'getDigitalHealthInterventions',
-        'setDigitalHealthInterventions',
-        0
-      ],
+      software: ['project', 'getSoftware', 'setSoftware', 0],
+      dhis: ['project', 'getDHIs', 'setDHIs', 0],
       health_focus_areas: [
         'project',
         'getHealthFocusAreas',
@@ -382,7 +332,7 @@ export default {
         'setHscChallengesOther',
         300,
         true
-      ], 
+      ],
       his_bucket: ['project', 'getHisBucket', 'setHisBucket', 0],
       coverageType: ['project', 'getCoverageType', 'setCoverageType', 0],
       national_level_deployment: [
@@ -483,18 +433,6 @@ export default {
     },
     isLastAndExist (collection, index) {
       return !!(collection.length - 1 === index && collection[index])
-    },
-    addDhi () {
-      this.platforms = [...this.platforms, null]
-    },
-    rmDhi (index, platformId) {
-      if (platformId) {
-        const filtered = this.digitalHealthInterventions.filter(
-          dhi => dhi.platform !== platformId
-        )
-        this.digitalHealthInterventions = filtered
-      }
-      this.platforms = this.platforms.filter((p, i) => i !== index)
     },
     // the asterisk of requiredness will show up on both 13a and 13b if both empty
     // if one is filled only that one marked as required
