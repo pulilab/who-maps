@@ -262,6 +262,12 @@ export const publishRules = () => {
     platforms: {
       required: true
     },
+    software: {
+      required: true
+    },
+    dhis: {
+      required: true
+    },
     strategies: {
       required: true,
       min: 1
