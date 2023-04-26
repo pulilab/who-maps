@@ -151,8 +151,8 @@ export const actions = {
       console.error('system/loadCountries failed')
     }
   },
-  async loadOrganisations ({ state, commit }) {
-    if (state.organisations.length === 0) {
+  async loadOrganisations ({ state, commit }, force = false) {
+    if (state.organisations.length === 0 || force) {
       try {
         const { data } = await this.$axios.get('/api/organisations/')
         commit('setValue', { key: 'organisations', val: data })
@@ -194,7 +194,7 @@ export const actions = {
     } catch (e) {
       console.error('system/addOrganisation failed')
     } finally {
-      await dispatch('loadOrganisations')
+      await dispatch('loadOrganisations', true)
     }
     const org = getters.getOrganisations.find(o => o.name === name)
     if (org) {
