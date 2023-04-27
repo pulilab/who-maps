@@ -236,13 +236,13 @@ export default {
         if (valid) {
           try {
             // locale needs to be saved in this place due to i18n being unavailable right after the signup call
-            const locale = this.$i18n.locale
             this.$nuxt.$loading.start()
             await apiCall()
-            const path = this.localePath(
-              { ...this.$route, name: pathName },
-              locale
-            )
+            const locale = this.$i18n.locale
+            const query = { ...this.$route.query }
+            const path = query?.type === 'reset'
+              ? this.localePath({ name: 'organisation-login', }, locale)
+              : this.localePath({ ...this.$route, name: pathName }, locale)
             this.$router.push(path)
             this.$message({
               message,
