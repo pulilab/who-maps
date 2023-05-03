@@ -45,8 +45,15 @@ export default {
     details () {
       return get(this, 'response.data.details', null)
     }
+  },
+  mounted() {
+    console.log('🚀 ~ file: error.vue:53 ~ mounted ~ this.error:', this.error)
+    const expiredToken = this.error?.name === 'ExpiredAuthSessionError'
+    if (expiredToken) {
+      const path = this.localePath({ name: 'organisation-login' })
+      this.$router.push(path)
+    }
   }
-
 }
 </script>
 
