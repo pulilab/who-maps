@@ -22,6 +22,8 @@ services:
   celery:
     restart: always
     build: ./django
+    env_file:
+      - ./django/.env
     environment:
       - C_FORCE_ROOT=true
     links:
