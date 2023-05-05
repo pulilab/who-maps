@@ -1,5 +1,4 @@
 import copy
-import itertools
 
 from django.urls import reverse
 from rest_framework import status
@@ -18,8 +17,7 @@ class SearchTests(SetupTests):
         project_data2 = copy.deepcopy(self.project_data)
         project_data2['project'].update(name="phrase3 phrase5 overview")
         project_data2['project'].update(country=self.country1.id, government_investor=2)
-        project_data2['project'].update(platforms=[dict(id=1, strategies=[119, 118]),
-                                                   dict(id=2, strategies=[119, 171])])
+        project_data2['project'].update(software=[1, 2], dhis=[119, 118, 171])
         self.d1cq = DonorCustomQuestionFactory(question="test 1", private=True, donor=self.d1)
         self.d2cq = DonorCustomQuestionFactory(question="test 2", private=True, donor=self.d2)
         project_data2['donor_custom_answers'] = {self.d1.id: [{"question_id": self.d1cq.id, "answer": ["answer1"]}],
@@ -325,8 +323,7 @@ class SearchTests(SetupTests):
     def test_multi_filter_same_filter(self):
         # all the filters are AND relations, within the same filter there's an OR relation
         project_data = self.project_data.copy()
-        project_data['project'].update(platforms=[dict(id=1, strategies=[206]),
-                                       dict(id=2, strategies=[223])])
+        project_data['project'].update(software=[1, 2], dhis=[206, 223])
         self.country1.country_questions.all().delete()
         self.d1.donor_questions.all().delete()
         self.d2.donor_questions.all().delete()
@@ -337,8 +334,8 @@ class SearchTests(SetupTests):
         p1 = Project.objects.first()
         p2 = Project.objects.last()
 
-        p1_dhis = list(itertools.chain(*[platform['strategies'] for platform in p1.data.get('platforms')]))
-        p2_dhis = list(itertools.chain(*[platform['strategies'] for platform in p2.data.get('platforms')]))
+        p1_dhis = p1.data.get('dhis')
+        p2_dhis = p2.data.get('dhis')
 
         dhi1 = p1_dhis[0]
         dhi2 = p2_dhis[0]

@@ -7,14 +7,11 @@ from django.http import HttpResponse
 from rest_framework import mixins, viewsets, status, filters
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from search.models import ProjectSearch
 from user.models import UserProfile
-from project.models import TechnologyPlatform
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
@@ -115,29 +112,6 @@ class DonorPartnerLogoViewSet(DonorSuperAdminPermissionMixin, mixins.CreateModel
     queryset = DonorPartnerLogo.objects.all()
     serializer_class = DonorPartnerLogoSerializer
     parser_classes = (MultiPartParser, FormParser)
-
-
-class CountryExportView(APIView):
-    def get(self, request, *args, **kwargs):
-        data = []
-        for country in Country.objects.all():
-            country_data = {'country': country.name, 'country_code': country.code, 'platforms': {}}
-
-            for platform in TechnologyPlatform.objects.all():
-                strategies_set = set()
-                project_searches = ProjectSearch.objects.filter(country_id=country.id, software__contains=[platform.id])
-
-                for ps in project_searches:
-                    strategies_set.update(ps.dhi_categories)
-
-                if project_searches:
-                    country_data['platforms'][platform.id] = {
-                        'strategies': list(strategies_set),
-                        'projects': list(project_searches.values_list('project_id', flat=True))
-                    }
-            data.append(country_data)
-
-        return Response(data)
 
 
 class MapFileViewSet(CountryAdminPermissionMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,

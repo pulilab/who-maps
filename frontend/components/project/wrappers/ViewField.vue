@@ -1,34 +1,19 @@
 <template>
-  <div
-    v-show="show"
-    :class="`${noMargin ? 'flex no-margin' : 'flex'}`"
-  >
-    <div
-      v-if="prepend"
-      class="prepend"
-    >
+  <div v-show="show" :class="`${noMargin ? 'flex no-margin' : 'flex'}`">
+    <div v-if="prepend" class="prepend">
       <h2>{{ prepend }}.</h2>
     </div>
     <div :class="`${layout && 'full-width'}`">
       <h2 v-if="header">
-        <i
-          v-if="icon"
-          :class="icon"
-        />{{ header }}
+        <i v-if="icon" :class="icon" />
+        {{ header }}
       </h2>
       <template v-if="content">
         <template v-if="typeof contents === 'string'">
-          <a
-            v-if="link"
-            :href="content"
-            target="_blank"
-          >
+          <a v-if="link" :href="content" target="_blank">
             {{ contents }}
           </a>
-          <span
-            v-else
-            :class="{ 'no-data': contents === noData }"
-          >
+          <span v-else :class="{ 'no-data': contents === noData }">
             {{ contents }}
           </span>
         </template>
@@ -39,10 +24,7 @@
           <ul>
             <template v-if="dhi || interoperability">
               <template v-if="dhi">
-                <li
-                  v-for="item in contents"
-                  :key="item.name"
-                >
+                <li v-for="item in contents" :key="item.name">
                   <p>
                     <b>{{ title }}</b>
                   </p>
@@ -66,27 +48,18 @@
                 </li>
               </template>
               <template v-if="interoperability">
-                <li
-                  v-for="item in contents"
-                  :key="item.id"
-                >
+                <li v-for="item in contents" :key="item.id">
                   <p>
                     <b>{{ item.label }}</b>
                   </p>
-                  <a
-                    :href="item.link"
-                    target="_blank"
-                  >
+                  <a :href="item.link" target="_blank">
                     {{ item.link }}
                   </a>
                 </li>
               </template>
             </template>
             <template v-else>
-              <li
-                v-for="item in contents"
-                :key="item"
-              >
+              <li v-for="item in contents" :key="item">
                 {{ item }}
               </li>
             </template>
@@ -96,22 +69,12 @@
       <template v-else>
         <!-- row format-->
         <template v-if="layout">
-          <el-row
-            v-for="row in rows"
-            :key="row.id"
-          >
+          <el-row v-for="row in rows" :key="row.id">
             <p v-if="row.name">
               <b>{{ row.name }}</b>
             </p>
-            <el-col
-              v-for="col in row.cols"
-              :key="col.id"
-              :span="col.span"
-            >
-              <view-field
-                v-bind="col"
-                no-margin
-              />
+            <el-col v-for="col in row.cols" :key="col.id" :span="col.span">
+              <view-field v-bind="col" no-margin />
             </el-col>
           </el-row>
         </template>
@@ -186,28 +149,29 @@ export default {
       default: () => []
     }
   },
-  data () {
+  data() {
     return {
       noData: this.$gettext('No data')
     }
   },
   computed: {
-    contents () {
+    contents() {
       switch (typeof this.content) {
-      case 'number':
-        return this.content
-      case 'string':
-        return this.content ? this.content : this.noData
-      case 'object':
-        return this.content.length > 0 ? this.content : this.noData
-      default:
-        return this.noData
+        case 'number':
+          return this.content
+        case 'string':
+          return this.content ? this.content : this.noData
+        case 'object':
+          return this.content.length > 0 ? this.content : this.noData
+        default:
+          return this.noData
       }
     }
   },
   methods: {
-    checkCategories (items) {
-      const filterItems = items.filter(i => i !== undefined)
+    checkCategories(items) {
+      if (!items) return false
+      const filterItems = items.filter((i) => i !== undefined)
       return filterItems.length > 0
     }
   }

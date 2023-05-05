@@ -72,8 +72,8 @@ export const getters = {
   getContactEmail: state => state.contact_email,
   getTeam: state => state.team,
   getViewers: state => state.viewers,
-  getPlatforms: state =>
-    state.platforms.length === 0 ? [null] : state.platforms,
+  getSoftware: state => state.software,
+  getDHIs: state => state.dhis,
   getDigitalHealthInterventions: state => [...state.digitalHealthInterventions],
   getHealthFocusAreas: state => state.health_focus_areas,
   getHscChallenges: state => state.hsc_challenges,
@@ -345,9 +345,11 @@ export const actions = {
   setViewers ({ commit }, value) {
     commit('SET_VIEWERS', value)
   },
-  setPlatforms ({ commit }, value) {
-    // Here we set the platform, AKA software
-    commit('SET_PLATFORMS', value)
+  setSoftware ({ commit }, value) {
+    commit('SET_SOFTWARE', value)
+  },
+  setDHIs ({ commit }, value) {
+    commit('SET_DHIS', value)
   },
   setDigitalHealthInterventions ({ commit }, value) {
     commit('SET_DIGITAL_HEALTH_INTERVENTIONS', value)
@@ -639,8 +641,11 @@ export const mutations = {
       typeof viewer === 'string' ? state.viewers.concat([viewer]) : viewer
     Vue.set(state, 'viewers', [...items])
   },
-  SET_PLATFORMS: (state, platforms) => {
-    Vue.set(state, 'platforms', [...platforms])
+  SET_SOFTWARE: (state, software) => {
+    Vue.set(state, 'software', [...software])
+  },
+  SET_DHIS: (state, dhis) => {
+    Vue.set(state, 'dhis', [...dhis])
   },
   SET_DIGITAL_HEALTH_INTERVENTIONS: (state, dhi) => {
     Vue.set(state, 'digitalHealthInterventions', [...dhi])
@@ -751,7 +756,8 @@ export const mutations = {
     state.contact_email = get(project, 'contact_email', '')
     state.team = get(project, 'team', [])
     state.viewers = get(project, 'viewers', [])
-    state.platforms = get(project, 'platforms', [])
+    state.software = get(project, 'software', [])
+    state.dhis = get(project, 'dhis', [])
     state.digitalHealthInterventions = get(
       project,
       'digitalHealthInterventions',

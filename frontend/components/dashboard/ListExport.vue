@@ -21,7 +21,7 @@ export default {
       donorColumns: 'dashboard/getDonorColumns',
       regions: 'system/getRegions',
       stages: 'project/getStagesList',
-      platforms: 'projects/getTechnologyPlatforms',
+      softwares: 'projects/getTechnologyPlatforms',
       hscChallenges: 'projects/getHscChallenges',
       hisBucket: 'projects/getHisBucket',
       licenses: 'projects/getLicenses',
@@ -50,7 +50,7 @@ export default {
           his_bucket: this.parseFlatList(s.hsc_challenges, 'hisBucket'),
           region: this.parseSingleSelection(s.region, 'regions'),
           stages: this.parseStages(s.stages),
-          software: this.parsePlatforms(s.platforms),
+          software: this.parseFlatList(s.software, 'softwares'),
           national_level_deployment: this.parseCoverageItem(s.national_level_deployment),
           coverage: this.parseCoverage(s.coverage),
           coverage_second_level: this.parseCoverage(s.coverage_second_level),
@@ -134,11 +134,6 @@ export default {
     parseBoolean (value) {
       return this.safeReturn(() =>
         value ? this.$gettext('yes') : this.$gettext('no')
-      )
-    },
-    parsePlatforms (platforms) {
-      return this.safeReturn(() =>
-        this.parseFlatList(platforms.map(p => p.id), 'platforms')
       )
     },
     parseFlatList (flatList, type) {

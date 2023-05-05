@@ -1,5 +1,5 @@
 <template>
-  <div    
+  <div
     :class="['SmartCell', {
       'Disabled': isDisabled,
       'ValidationError': errorMessage,
@@ -255,7 +255,7 @@ export default {
           country: () => this.findSystemValue('countries'),
           donors: () => this.findSystemValue('donors', true),
           organisation: () => this.findSystemValue('organisations'),
-          platforms: () => this.findProjectCollectionValue('technology_platforms', false),
+          software: () => this.findProjectCollectionValue('technology_platforms', true),
           digitalHealthInterventions: () => this.findProjectCollectionValue('strategies', true, 'subGroups', 'strategies'),
           health_focus_areas: () => this.findProjectCollectionValue('health_focus_areas', true, 'health_focus_areas'),
           hsc_challenges: () => this.findProjectCollectionValue('hsc_challenges', true, 'challenges'),
@@ -413,7 +413,7 @@ export default {
       return this.toInternalRepresentation(filtered)
     },
     apiValue () {
-      const isMultiple = ['donors', 'platforms', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards', 'custom_field', 'digitalHealthInterventions', 'implementing_team', 'implementing_viewers']
+      const isMultiple = ['donors', 'software', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards', 'custom_field', 'digitalHealthInterventions', 'implementing_team', 'implementing_viewers']
       const isIds = [...isMultiple, 'country', 'organisation', 'government_investor', 'sub_level']
       const idsOrNames = isIds.includes(this.column) ? this.parsedValue.ids : this.parsedValue.names
       return isMultiple.includes(this.column) ? idsOrNames : idsOrNames[0]

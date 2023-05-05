@@ -48,12 +48,6 @@ class CoverageSerializer(NDPSerializer):
     district = serializers.CharField(max_length=128)
 
 
-class PlatformSerializer(serializers.Serializer):
-    id = serializers.IntegerField(required=True)
-    strategies = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=1)
-
-
 class StageSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=True)
     date = serializers.CharField(required=True, max_length=10)
@@ -76,12 +70,6 @@ class DraftInteroperabilityLinksSerializer(InteroperabilityLinksSerializer):
         return value
 
 
-class DraftPlatformSerializer(serializers.Serializer):
-    id = serializers.IntegerField(required=True)
-    strategies = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
-
-
 INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
                     (1, 'Yes, they are contributing in-kind people or time'),
                     (2, 'Yes, there is a financial contribution through MOH budget'),
@@ -102,8 +90,14 @@ class ProjectPublishedSerializer(serializers.Serializer):
     contact_email = serializers.EmailField()
     research = serializers.BooleanField(required=False, allow_null=True)
 
+    # DEPRECATED: `platforms` decoupled into `software` and `dhis`
+    # platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
+
     # SECTION 2 Implementation Overview
-    platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
+    software = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=1)
+    dhis = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=1)
     health_focus_areas = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=1)
     hsc_challenges = serializers.ListField(
@@ -198,7 +192,10 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     start_date = serializers.CharField(max_length=256, required=False)
 
     # SECTION 2 Implementation Overview
-    platforms = DraftPlatformSerializer(many=True, required=False)
+    software = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
+    dhis = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     health_focus_areas = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
     donors = serializers.ListField(child=serializers.IntegerField(), max_length=32, required=False)

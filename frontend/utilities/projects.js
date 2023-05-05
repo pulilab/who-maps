@@ -17,8 +17,8 @@ Validator.extend('isArrayofEmails', {
   },
   validate (value) {
     if (!Array.isArray(value) || value.length === 0) return true
-    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/    
-    return value.every(e => e.match(emailRegex)) 
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return value.every(e => e.match(emailRegex))
   }
 })
 
@@ -105,7 +105,8 @@ export const projectFields = () => ({
   contact_email: null,
   team: [],
   viewers: [],
-  platforms: [],
+  software: [],
+  dhis: [],
   digitalHealthInterventions: [],
   health_focus_areas: [],
   hsc_challenges: [],
@@ -257,7 +258,10 @@ export const publishRules = () => {
     team: {
       required: true
     },
-    platforms: {
+    software: {
+      required: true
+    },
+    dhis: {
       required: true
     },
     strategies: {

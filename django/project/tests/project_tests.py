@@ -209,79 +209,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['project']['interoperability_standards']['0'],
                          ['A valid integer is required.'])
 
-    def test_create_new_project_with_platform_name_missing(self):
-        url = reverse("project-create", kwargs={"country_id": self.country1.id})
-        data = copy.deepcopy(self.project_data)
-        new_data = {
-            "name": "Test Project91",
-            "platforms": [{
-                "strategies": []
-            }]
-        }
-        data['project'].update(new_data)
-        response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, 400)
-        self.assertIn("platforms", response.json()['project'])
-        self.assertEqual(response.json()['project']['platforms'][0]['id'][0], 'This field is required.')
-
-    def test_create_new_project_with_platform_empty_array(self):
-        url = reverse("project-create", kwargs={"country_id": self.country1.id})
-        data = copy.deepcopy(self.project_data)
-        new_data = {
-            "name": "Test Project91",
-            "platforms": []
-        }
-        data['project'].update(new_data)
-        response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, 201)
-
-    def test_create_new_project_with_platform_strategies_missing(self):
-        url = reverse("project-create", kwargs={"country_id": self.country1.id})
-        data = copy.deepcopy(self.project_data)
-        new_data = {
-            "name": "Test Project92",
-            "platforms": [{
-                "name": "strat1"
-            }]
-        }
-        data['project'].update(new_data)
-        response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, 400)
-        self.assertIn("platforms", response.json()['project'])
-        self.assertEqual(response.json()['project']['platforms'][0]['strategies'][0], 'This field is required.')
-
-    def test_create_new_project_with_platform_strategies_empty(self):
-        url = reverse("project-create", kwargs={"country_id": self.country1.id})
-        data = copy.deepcopy(self.project_data)
-        new_data = {
-            "name": "Test Project93",
-            "platforms": [{
-                "id": 1,
-                "strategies": []
-            }]
-        }
-        data['project'].update(new_data)
-        response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json()['draft']['platforms'][0]['strategies'], list())
-
-    def test_create_new_project_with_platform_extra_data(self):
-        url = reverse("project-create", kwargs={"country_id": self.country1.id})
-        data = copy.deepcopy(self.project_data)
-        new_data = {
-            "name": "Test Project93",
-            "platforms": [{
-                "id": 1,
-                "strategies": [],
-                "extra": "lol"
-            }]
-        }
-        data['project'].update(new_data)
-        response = self.test_user_client.post(url, data, format="json")
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json()['draft']['platforms'][0]['strategies'], list())
-        self.assertNotIn("extra", response.json()['draft']['platforms'][0])
-
     def test_publish_project_makes_public_id(self):
         url = reverse("project-create", kwargs={"country_id": self.country1.id})
         data = copy.deepcopy(self.project_data)
@@ -310,20 +237,10 @@ class ProjectTests(SetupTests):
     def test_update_project(self):
         url = reverse("project-publish", kwargs={"project_id": self.project_id, "country_id": self.country1.id})
         data = copy.deepcopy(self.project_data)
-        data['project'].update(name="TestProject98",
-                               platforms=[{"id": 999, "strategies": [998]}])
+        data['project'].update(name="TestProject98")
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['published']["platforms"][0]["id"], 999)
-        self.assertEqual(response.json()['published']["platforms"][0]["strategies"][0], 998)
-
-    def test_update_project_errors(self):
-        url = reverse("project-publish", kwargs={"project_id": self.project_id, "country_id": self.country1.id})
-        data = copy.deepcopy(self.project_data)
-        data['project'].update(name="TestProject93", platforms=[{"name": "updated platform"}])
-        response = self.test_user_client.put(url, data, format="json")
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['project']['platforms'][0]['strategies'][0], 'This field is required.')
+        self.assertEqual(response.json()['published']["name"], "TestProject98")
 
     def test_project_data_missing(self):
         data = copy.deepcopy(self.project_data)
@@ -363,8 +280,6 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['published'].get("name"), "Test Project1")
         self.assertEqual(response.json()['published'].get("national_level_deployment")["clients"], 20000)
-        self.assertEqual(response.json()['published'].get("platforms")[0]["id"],
-                         self.project_data['project'].get("platforms")[0]["id"])
         self.assertEqual(response.json()['published'].get("country"), self.country1.id)
 
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
@@ -746,13 +661,8 @@ class ProjectTests(SetupTests):
             "health_focus_areas": [1, 2],
             "geographic_scope": "somewhere",
             "country": country.id,
-            "platforms": [{
-                "id": 1,
-                "strategies": [1, 2]
-            }, {
-                "id": 2,
-                "strategies": [1, 9]
-            }],
+            "software": [1, 2],
+            "dhis": [1, 2, 9],
             "licenses": [1, 2],
             "coverage": [
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
@@ -1191,15 +1101,8 @@ class ProjectTests(SetupTests):
             "implementation_dates": "2019",
             "health_focus_areas": [1, 2],
             "country": country.id,
-            "platforms": [
-                {
-                    "id": software_1.id,
-                    "strategies": [s1.id]
-                }, {
-                    "id": software_2.id,
-                    "strategies": [s1.id]
-                }
-            ],
+            "software": [software_1.id, software_2.id],
+            "dhis": [s1.id],
             "his_bucket": [1, 2],
             "donors": [self.d1.id],
             "hsc_challenges": [1, 2],
@@ -1216,25 +1119,25 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
         project = Project.objects.get(pk=response.json()['id'])
-        self.assertEqual(len(project.draft['platforms']), 2)
+        self.assertEqual(len(project.draft['software']), 2)
 
         url = reverse("project-publish", kwargs=dict(project_id=project.id, country_id=country.id))
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
 
         project.refresh_from_db()
-        self.assertEqual(len(project.draft['platforms']), 2)
-        self.assertEqual(len(project.data['platforms']), 2)
+        self.assertEqual(len(project.draft['software']), 2)
+        self.assertEqual(len(project.data['software']), 2)
 
         # decline software
         software_2.state = TechnologyPlatform.DECLINED
         software_2.save()
 
         project.refresh_from_db()
-        self.assertEqual(len(project.draft['platforms']), 1)
-        self.assertEqual(project.draft['platforms'][0]['id'], software_1.id)
-        self.assertEqual(len(project.data['platforms']), 1)
-        self.assertEqual(project.data['platforms'][0]['id'], software_1.id)
+        self.assertEqual(len(project.draft['software']), 1)
+        self.assertEqual(project.draft['software'][0], software_1.id)
+        self.assertEqual(len(project.data['software']), 1)
+        self.assertEqual(project.data['software'][0], software_1.id)
 
         notify_user_about_software_approval.assert_called_once_with(args=('decline', software_2.pk,))
 

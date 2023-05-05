@@ -355,18 +355,18 @@ def remove_declined_software_from_projects(sender, instance, created, **kwargs):
         from project.tasks import notify_user_about_software_approval
 
         if instance.state == TechnologyPlatform.DECLINED:
-            # remove software from data platforms and from draft platforms
+            # remove software from data software and from draft software
             projects = Project.objects.filter(
-                Q(data__platforms__contains=[{'id': instance.id}]) | Q(draft__platforms__contains=[{'id': instance.id}])
+                Q(data__software__contains=[instance.id]) | Q(draft__software__contains=[instance.id])
             )
             for project in projects:
-                if project.public_id and 'platforms' in project.data:
-                    project.data['platforms'] = \
-                        [item for item in project.data['platforms'] if item['id'] != instance.id]
-                if 'platforms' in project.draft:
-                    project.draft['platforms'] = \
-                        [item for item in project.draft['platforms'] if item['id'] != instance.id]
-                project.save()
+                if project.public_id and 'software' in project.data:
+                    project.data['software'] = \
+                        [software_id for software_id in project.data['software'] if software_id != instance.id]
+                if 'software' in project.draft:
+                    project.draft['software'] = \
+                        [software_id for software_id in project.draft['software'] if software_id != instance.id]
+                project.save(update_fields=['data', 'draft'])
 
             notify_user_about_software_approval.apply_async(args=('decline', instance.pk,))
         elif instance.state == TechnologyPlatform.APPROVED:

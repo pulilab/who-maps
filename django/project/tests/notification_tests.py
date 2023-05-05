@@ -21,7 +21,7 @@ class ProjectNotificationTests(SetupTests):
 
         self.published_pr_data = dict(
             country=self.country1.id,
-            organisation=self.org.id, hsc_challenges=[1, 2], platforms=[{'id': 1, 'strategies': [1, 2]}],
+            organisation=self.org.id, hsc_challenges=[1, 2], software=[1], dhis=[1, 2],
             capability_categories=[], capability_levels=[], capability_subcategories=[])
 
     @mock.patch('project.tasks.send_mail_wrapper', return_value=None)

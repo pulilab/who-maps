@@ -46,6 +46,7 @@ import ImportFile from '@/components/admin/import/ImportFile'
 import ImportQueue from '@/components/admin/import/ImportQueue'
 
 export default {
+  nane: 'Import',
   components: {
     PageLayout,
     Panel,

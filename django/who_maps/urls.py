@@ -53,9 +53,15 @@ if settings.DEBUG:  # pragma: no cover
 
 api_info = openapi.Info(
     title='Digital Health Atlas Public API',
-    default_version='v1 BETA',
-    description='Digital Health Atlas Public API for Developers, '
-                'only BETA (subject to breaking changes and deprecations)',
+    default_version='v1.1 BETA',
+    description="""Digital Health Atlas Public API for Developers, only BETA 
+(subject to breaking changes and deprecations)
+# v1.1
+DEPRECATED: Project `platforms` decoupled into `software` and `dhis` and is no longer available or used
+# v1.0
+Bearer token implemented for External API that needs authentication 
+`project-draft-external`, `project-publish-external`
+""",
     contact=openapi.Contact(email="f@pulilab.com"),
 )
 

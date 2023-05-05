@@ -149,7 +149,7 @@ export default {
           title: 'Contact email',
           check: (words) => isSubset(['contact','email'], words)
         },
-        platforms: {
+        software: {
           title: 'Software',
           check: (words) => words.includes('software')
         },
@@ -226,7 +226,7 @@ export default {
           check: (words) => words.includes('coverage')
         },
         digitalHealthInterventions: {
-          title: 'Digital Health Interventions (associated to the Software)',
+          title: 'Digital Health Interventions',
           check: (words) => isSubset(['health','interventions'], words)
         },
         hsc_challenges_other: {
@@ -335,7 +335,7 @@ export default {
           column.selected = fieldMatch.value
           hasMapped = true
         }
-      })      
+      })
       if (hasMapped) this.columnChange()
     }
   }

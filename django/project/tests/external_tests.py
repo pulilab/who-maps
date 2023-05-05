@@ -73,10 +73,8 @@ class ExternalAPITests(APITestCase):
                 contact_email="team_member@added.com", implementation_overview="overview", health_focus_areas=[1, 2],
                 country=self.country_id,
                 donors=[self.donor.id],
-                platforms=[{
-                    "id": 1,
-                    "strategies": [1, 2]
-                }],
+                software=[1],
+                dhis=[1, 2],
                 hsc_challenges=[1, 2], start_date=str(datetime.today().date()))}
 
     def test_post_to_publish_from_external_source(self):
