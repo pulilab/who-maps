@@ -15,7 +15,7 @@
                 <path d="M0 0h20v20H0z"/>
                 <path fill="currentColor" fill-rule="nonzero" d="m10 2.5-9.167 7 1.009 1.325 1.491-1.142V17.5h13.334V9.683l1.491 1.134L19.167 9.5 10 2.5Zm-3.333 10a.836.836 0 0 1-.834-.833c0-.459.375-.834.834-.834.458 0 .833.375.833.834a.836.836 0 0 1-.833.833Zm3.333 0a.836.836 0 0 1-.833-.833c0-.459.375-.834.833-.834.458 0 .833.375.833.834A.836.836 0 0 1 10 12.5Zm3.333 0a.836.836 0 0 1-.833-.833c0-.459.375-.834.833-.834.459 0 .834.375.834.834a.836.836 0 0 1-.834.833Z"/>
               </g>
-            </svg>            
+            </svg>
             <div class="PersonaName">
               <translate>Overview</translate>
             </div>
@@ -56,87 +56,64 @@
               <translate>We are available via email on</translate>
               <a href="mailto:digital-health-atlas@who.int">digital-health-atlas@who.int</a>
             </p>
-            <p>              
+            <p>
               <translate>For more info please visit</translate>:
               <a href="http://wiki.digitalhealthatlas.org" target="_blank">http://wiki.digitalhealthatlas.org</a>
             </p>
           </div>
         </div>
-        <div class="Guide">
-          <div v-if="selectedGuide === 0" :key="selectedGuide">
-            <h1><translate>Overview</translate></h1>
-            <p>
-              <translate>
-                The DHA helps technical implementers to share details about their projects globally. This page will provide an overview of the key features available on the platform. Technical Implementers can use the DHA to register their projects globally.
-              </translate>
-            </p>
-            <h2><translate>See Digital Health Atlas in action</translate></h2>
-            <p><translate>Get a feel for Digital Health Atlas features and let us walk you through some common use cases</translate></p>
-            <div class="video">
-              <div class="video_wrapper">
-                <iframe frameborder="0" width="100%" height="100%" src="https://www.youtube.com/embed/97wIGZ_YdeM" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-              </div>
-            </div>
-          </div>
-          <div v-if="selectedGuide === 1" :key="selectedGuide">
-            <h1><translate>Implementor</translate></h1>
-            <p>
-              <translate>
-                For technologists and health experts deploying digital health software, the DHA can help to gather insights regarding the technology landscape in a country. The DHA can be searched at national or sub-national level, and also by health focus area. You can understand the health priorities of a country by visiting the Country Pages If you or your team are considering deploying your project, these insights can help improve the success and strategic value of your work. Digital health projects increasingly require more advanced planning to align with government priorities, data collection and data format requirements and to reduce duplication of project activities.
-              </translate>
-            </p>
-            <h2><translate>See Digital Health Atlas in action</translate></h2>
-            <p><translate>Get a feel for Digital Health Atlas features and let us walk you through some common use cases</translate></p>
-            <div class="video">
-              <div class="video_wrapper">
-                <iframe frameborder="0" width="100%" height="100%" src="https://www.youtube.com/embed/Paw1z2BHpI4" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-              </div>
-            </div>
-          </div>
-          <div v-if="selectedGuide === 2" :key="selectedGuide">
-            <h1><translate>Government user</translate></h1>
-            <p>
-              <translate>
-                To help with this decision-making, planning and monitoring, the DHA provides Ministry of health ( MOH ) with a specifically-designed data set which gives the MOH a snapshot of each Digital Health program. This informs evaluation, planning and scale strategies. The following video provides an tutorial and overview form the perspective of a MOH Government user.
-              </translate>
-            </p>
-            <h2><translate>See Digital Health Atlas in action</translate></h2>
-            <p><translate>Get a feel for Digital Health Atlas features and let us walk you through some common use cases</translate></p>
-            <div class="video">
-              <div class="video_wrapper">
-                <iframe frameborder="0" width="100%" height="100%" src="https://www.youtube.com/embed/FZ-VuaexX1E" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-              </div>
-            </div>
-          </div>
-          <div v-if="selectedGuide === 3" :key="selectedGuide">
-            <h1><translate>Investor</translate></h1>
-            <p>
-              <translate>
-                The DHA allows investors and donors to understand the other financial investors within a country, the current scale and essential intervention focus of a digital health program, and, through the MAPS toolkit, the relative readiness of a specific digital health project for scale. The following video provides an tutorial and overview form the perspective of a W.H.O Donor/Investor.
-              </translate>
-            </p>
-            <h2><translate>See Digital Health Atlas in action</translate></h2>
-            <p><translate>Get a feel for Digital Health Atlas features and let us walk you through some common use cases</translate></p>
-            <div class="video">
-              <div class="video_wrapper">
-                <iframe frameborder="0" width="100%" height="100%" src="https://www.youtube.com/embed/_PaLihQGJRw" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-              </div>
-            </div>
-          </div>
-        </div>
+        <HowtoGuide :guide="guides[selectedGuide]" />
       </div>
   </el-dialog>
 </template>
 
 <script>
 import { mapGettersActions } from '../../utilities/form'
+import HowtoGuide from '@/components/common/HowtoGuide'
 
 export default {
+  components: {
+    HowtoGuide
+  },
+  data() {
+    return {
+      guides: [
+        {
+          title: this.$gettext('Overview'),
+          description: this.$gettext('The DHA helps technical implementers to share details about their projects globally. This page will provide an overview of the key features available on the platform. Technical Implementers can use the DHA to register their projects globally.'),
+          subTitle: this.$gettext('See Digital Health Atlas in action'),
+          subDescription: this.$gettext('Get a feel for Digital Health Atlas features and let us walk you through some common use cases'),
+          videoId: this.$gettext('overview_video_id') === 'overview_video_id' ? 'qEFzi0OtJMQ' : this.$gettext('overview_video_id'),
+        },
+        {
+          title: this.$gettext('Implementor'),
+          description: this.$gettext('For technologists and health experts deploying digital health software, the DHA can help to gather insights regarding the technology landscape in a country. The DHA can be searched at national or sub-national level, and also by health focus area. You can understand the health priorities of a country by visiting the Country Pages If you or your team are considering deploying your project, these insights can help improve the success and strategic value of your work. Digital health projects increasingly require more advanced planning to align with government priorities, data collection and data format requirements and to reduce duplication of project activities.'),
+          subTitle: this.$gettext('See Digital Health Atlas in action'),
+          subDescription: this.$gettext('Get a feel for Digital Health Atlas features and let us walk you through some common use cases'),
+          videoId: this.$gettext('implementor_video_id') === 'implementor_video_id' ? 'J90lz-tKTrI' : this.$gettext('implementor_video_id'),
+        },
+        {
+          title: this.$gettext('Government user'),
+          description: this.$gettext('To help with this decision-making, planning and monitoring, the DHA provides Ministry of health ( MOH ) with a specifically-designed data set which gives the MOH a snapshot of each Digital Health program. This informs evaluation, planning and scale strategies. The following video provides an tutorial and overview form the perspective of a MOH Government user.'),
+          subTitle: this.$gettext('See Digital Health Atlas in action'),
+          subDescription: this.$gettext('Get a feel for Digital Health Atlas features and let us walk you through some common use cases'),
+          videoId: this.$gettext('government_video_id') === 'government_video_id' ? 'MCQsBxVU2qk' : this.$gettext('government_video_id'),
+        },
+        {
+          title: this.$gettext('Investor'),
+          description: this.$gettext('The DHA allows investors and donors to understand the other financial investors within a country, the current scale and essential intervention focus of a digital health program, and, through the MAPS toolkit, the relative readiness of a specific digital health project for scale. The following video provides an tutorial and overview form the perspective of a W.H.O Donor/Investor.'),
+          subTitle: this.$gettext('See Digital Health Atlas in action'),
+          subDescription: this.$gettext('Get a feel for Digital Health Atlas features and let us walk you through some common use cases'),
+          videoId: this.$gettext('investor_video_id') === 'investor_video_id' ? 'oPflbsrvDWo' : this.$gettext('investor_video_id'),
+        },
+      ]
+    }
+  },
   computed: {
     ...mapGettersActions({
       dialog: ['layout', 'getHowToDialogState', 'setHowToDialogState', 0],
       selectedGuide: ['layout', 'getHowToDialogGuide', 'setHowToDialogGuide']
-    })    
+    })
   },
   methods: {
     selectGuide(guide) {
@@ -169,10 +146,10 @@ export default {
     flex-direction: column;
     width: 232px;
     border-right: 2px solid @colorGrayLighter;
-  
+
     .Persona {
       position: relative;
-      display: flex;    
+      display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
@@ -180,47 +157,47 @@ export default {
       border-bottom: 1px solid @colorGrayLighter;
       cursor: pointer;
       transition: @transitionAll;
-  
+
       .PersonaName {
         flex: 1;
         color: @colorTextSecondary;
         font-size: @fontSizeBase;
         line-height: 16px;
       }
-  
+
       .icon {
         width: 20px;
-  
+
       }
-  
-      .chevron  {     
+
+      .chevron  {
         height: 14px;
         opacity: 0;
         transition: @transitionAll;
       }
-  
+
       &:hover {
         background-color: @colorGrayLightest;
-  
+
         .PersonaName {
           color: @colorTextPrimary;
         }
-  
+
         .chevron {
           opacity: 0.5;
         }
       }
-  
+
       &.active {
         background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
         border-color: mix(@colorWhite, @colorBrandPrimary, 70%);
         color: @colorBrandPrimary;
-  
+
         .PersonaName {
           font-weight: 700;
           color: @colorBrandPrimary;
         }
-  
+
         .chevron {
           color: @colorBrandPrimary;
           opacity: 1;
@@ -240,50 +217,6 @@ export default {
       a {
         color: @colorBrandPrimaryLight;
       }
-    }
-  }
-  
-  .Guide {
-    flex: 1;
-    overflow: auto;
-    padding: 40px 60px;
-  
-    .video {
-      max-width: 1280px;
-      margin: auto;
-      .video_wrapper {
-        position: relative;
-        padding-bottom: 56.25%; /* 16:9, for an aspect ratio of 1:1 change to this value to 100% */ 
-        iframe {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-        }
-      }
-    }
-
-    h1 {
-      color: @colorBrandPrimary;
-      font-size: @fontSizeTitle;
-    }
-
-    h2 {
-      color: @colorBrandPrimary;
-      font-size: @fontSizeMedium;
-      font-weight: bold;
-      letter-spacing: 0.15px;
-      line-height: 24px;
-      text-transform: uppercase;
-    }
-  
-    p {
-      color: @colorTextPrimary;
-      font-size: @fontSizeMedium;
-      line-height: 24px;
-      letter-spacing: 0.15px;  
-      word-break: normal;
     }
   }
 }
