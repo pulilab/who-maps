@@ -14,6 +14,8 @@ export default function ({ $axios, app, store, redirect }) {
       await store.dispatch('user/logout')
       const path = app.localePath({ name: 'organisation-login' })
       redirect(path)
+    } else {
+      throw error
     }
   })
 }
