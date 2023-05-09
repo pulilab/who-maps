@@ -49,15 +49,6 @@ export const actions = {
     return data
   },
 
-  async signup ({ commit, dispatch }, { account_type, password1, password2, email }) {
-    await this.$axios.post('/api/rest-auth/registration/', { account_type, password1, password2, email })
-    const loginPayload = {
-      username: email,
-      password: password1
-    }
-    await dispatch('login', loginPayload)
-  },
-
   async dorResetPassword ({ commit, dispatch }, { uid, token, new_password1, new_password2, errMessage = '' }) {
     try {
       await this.$axios.post('/api/rest-auth/password/reset/confirm/', { uid, token, new_password1, new_password2 })
