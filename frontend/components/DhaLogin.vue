@@ -24,8 +24,8 @@
 
           <el-form-item :label="$gettext('Password') | translate" prop="password">
             <el-input v-model="password" type="password" />
-            <div v-if="noActiveAccount" class="el-form-item__error ModifiedFormError">
-              {{ noActiveAccount }}
+            <div v-if="invalidLogin" class="el-form-item__error ModifiedFormError">
+              {{ invalidLoginMessage }}
             </div>
           </el-form-item>
         </fieldset>
@@ -174,6 +174,8 @@ export default {
       email: '',
       showForgotten: false,
       successfulReset: false,
+      invalidLogin: false,
+      invalidLoginMessage: this.$gettext('Please enter a correct e-mail and password.'),
       rules: {
         username: [
           {
@@ -249,6 +251,7 @@ export default {
     },
     async loginLocal() {
       this.$nuxt.$loading.start('loginLoader')
+      this.invalidLogin = false
       this.deleteFormAPIErrors()
       try {
         await this.$refs.loginForm.validate()
@@ -277,12 +280,12 @@ export default {
             )
           }
         } else {
-          this.setFormAPIErrors(res)
+          this.invalidLogin = true
           this.$refs.loginForm.validate(() => {})
         }
       } catch (e) {
         if (e) {
-          this.setFormAPIErrors(e)
+          this.invalidLogin = true
           this.$refs.loginForm.validate(() => {})
         }
         this.$nuxt.$loading.finish('loginLoader')
