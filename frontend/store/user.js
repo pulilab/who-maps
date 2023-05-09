@@ -94,9 +94,7 @@ export const actions = {
       const organisation = await dispatch('system/addOrganisation', profile.organisation, { root: true })
       profile.organisation = organisation.id
     }
-    const { data } = await this.$axios.put(`/api/userprofiles/${profile.id}/`, profile)
-    data.email = data.email || data.user_email
-    commit('SET_PROFILE', data)
+    await this.$axios.put(`/api/userprofiles/${profile.id}/`, profile)
   },
 
   updateTeamViewers ({ commit, getters }, { team, viewers, id }) {
