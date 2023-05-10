@@ -10,10 +10,6 @@ export default function ({ $axios, app, store, redirect }) {
     }
   })
 
-  $axios.onResponse(response => {
-    console.log(`[${response.status}] ${response.config.url}`)
-  })
-
   $axios.onResponseError(async error => {
     const errorName = error?.name
     const responseCode = error.response ? error.response.status : undefined

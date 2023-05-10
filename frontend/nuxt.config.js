@@ -150,10 +150,10 @@ const config = {
       logout: '/',
       callback: '/-/login',
       home: '/'
-    }, */
+    },
     plugins: [
       { src: '~plugins/auth.js', ssr: true }
-    ],
+    ], */
     strategies: {
       local: {
         scheme: 'refresh',
