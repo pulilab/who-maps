@@ -135,6 +135,8 @@ const config = {
     id: process.env.GTM_ID
   },
   auth: {
+    resetOnError: true,
+    ignoreExceptions: true,
     localStorage: false,
     cookie: {
       prefix: 'auth.',
@@ -143,10 +145,19 @@ const config = {
         expires: 365,
       },
     },
+    /* redirect: {
+      login: '/-/login',
+      logout: '/',
+      callback: '/-/login',
+      home: '/'
+    },
+    plugins: [
+      { src: '~plugins/auth.js', ssr: true }
+    ], */
     strategies: {
       local: {
         scheme: 'refresh',
-        autoLogout: true, // log out if both tokens expire
+        // autoLogout: true, // if turned on, during SSR it logs out session if access token expired, even if refresh still valid
         user: {
           property: false, // adds the whole response data to user
         },
