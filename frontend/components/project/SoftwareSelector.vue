@@ -2,8 +2,10 @@
   <lazy-el-select
     :value="value"
     :placeholder="$gettext('Select from list')"
+    :no-data-text="$gettext('Type to filter softwares')"
     multiple
     filterable
+    value-key="id"
     popper-class="PlatformSelectorDropdown"
     class="SoftwareBucketSelector"
     :filter-method="filter"
@@ -33,7 +35,7 @@
       </span>
     </el-option>
     <el-option
-      v-for="software in availablePlatforms"
+      v-for="software in availableSoftware"
       :key="software.id"
       :label="software.name"
       :value="software.id"
@@ -73,7 +75,7 @@ export default {
   data () {
     return {
       newPlatform: null,
-      availablePlatforms: []
+      availableSoftware: [],
     }
   },
   computed: {
@@ -81,23 +83,30 @@ export default {
       softwares: 'projects/getTechnologyPlatforms'
     })
   },
+  mounted () {
+    this.syncAvailableSoftware(this.value)
+  },
   methods: {
     ...mapActions({
       setNewSoftware: 'projects/setNewSoftware'
     }),
-    async changeHandler (value) {
-      console.log('🚀 ~ file: SoftwareSelector.vue:86 ~ changeHandler ~ value:', value)
-      let id = value
-      if (typeof id === 'string') {
-        const newSoftware = await this.setNewSoftware(value)
-        id = typeof newSoftware === 'number' ? newSoftware : 0
+    async syncAvailableSoftware(ids) {
+      this.availableSoftware = this.softwares
+        .filter(s => ids.some(id => id === s.id))
+        .sort((a, b) => a.name.localeCompare(b.name))
+    },
+    async changeHandler(value) {
+      const lastItem = value[value.length - 1]
+      if (typeof lastItem === 'string') {
+        const newSoftware = await this.setNewSoftware(lastItem)
+        value[value.length - 1] = newSoftware
+        await this.$nextTick()
+        await this.syncAvailableSoftware(value)
       }
-      const p = [...this.platforms]
-      p[this.index] = id
-      this.$emit('change', p)
+      this.$emit('change', value)
     },
     filter(value) {
-      this.availablePlatforms = this.softwares.filter(platform =>
+      this.availableSoftware = this.softwares.filter(platform =>
         platform.name.toLowerCase().includes(value.toLowerCase())
       )
       if (value) {
