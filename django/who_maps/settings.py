@@ -3,7 +3,6 @@ import datetime
 import sys
 from celery.schedules import crontab
 from django.utils.translation import gettext_lazy as _
-from sentry_sdk.integrations.celery import CeleryIntegration
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -197,8 +196,9 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=10),  # TODO: datetime.timedelta(minutes=5) when FE fixes auth
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=10),
+    "LEEWAY": datetime.timedelta(minutes=2),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,
@@ -354,6 +354,7 @@ ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE = os.environ.get('ENABLE_GDHI_UPDATE_ON_COUNT
 if SITE_ID in [3, 4]:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
+    from sentry_sdk.integrations.celery import CeleryIntegration
     sentry_sdk.init(
         dsn=os.environ.get('SENTRY_DSN', ''),
         integrations=[DjangoIntegration(), CeleryIntegration()],
