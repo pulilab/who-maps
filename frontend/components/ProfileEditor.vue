@@ -830,6 +830,7 @@ export default {
           try {
             const isFirstSave = !this.profile.country
             await this.updateUserProfile(this.innerProfile)
+            await this.$auth.fetchUser()
             window.scrollTo(0, 0)
             this.$message({
               message: this.$gettext('Profile succesfully updated'),

@@ -49,15 +49,6 @@ export const actions = {
     return data
   },
 
-  async signup ({ commit, dispatch }, { account_type, password1, password2, email }) {
-    await this.$axios.post('/api/rest-auth/registration/', { account_type, password1, password2, email })
-    const loginPayload = {
-      username: email,
-      password: password1
-    }
-    await dispatch('login', loginPayload)
-  },
-
   async dorResetPassword ({ commit, dispatch }, { uid, token, new_password1, new_password2, errMessage = '' }) {
     try {
       await this.$axios.post('/api/rest-auth/password/reset/confirm/', { uid, token, new_password1, new_password2 })
@@ -103,9 +94,7 @@ export const actions = {
       const organisation = await dispatch('system/addOrganisation', profile.organisation, { root: true })
       profile.organisation = organisation.id
     }
-    const { data } = await this.$axios.put(`/api/userprofiles/${profile.id}/`, profile)
-    data.email = data.email || data.user_email
-    commit('SET_PROFILE', data)
+    await this.$axios.put(`/api/userprofiles/${profile.id}/`, profile)
   },
 
   updateTeamViewers ({ commit, getters }, { team, viewers, id }) {

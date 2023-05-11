@@ -20,7 +20,7 @@ django-filter
 django-modeltranslation
 django-admin-sortable2
 django-gfklookupwidget
-dj-rest-auth[with_social]
+dj-rest-auth[with_social]==4.0.0
 django-celery-email
 django-redis
 django-rosetta

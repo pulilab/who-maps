@@ -190,7 +190,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      doSignup: 'user/signup',
+      login: 'user/login',
       dorResetPassword: 'user/dorResetPassword'
     }),
     passwordMatching (rule, value, callback) {
@@ -200,6 +200,18 @@ export default {
     },
     submitForm () {
       this.token ? this.resetPassword() : this.signup()
+    },
+    async doSignup({ account_type, password1, password2, email }) {
+      try {
+        await this.$axios.post('/api/rest-auth/registration/', { account_type, password1, password2, email })
+        const loginPayload = {
+          username: email,
+          password: password1
+        }
+        await this.login(loginPayload)
+      } catch (error) {
+        throw error
+      }
     },
     signup () {
       return this.setForm({

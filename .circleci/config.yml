@@ -107,6 +107,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install fabric
+            pip install invoke==2.0.0
       - run:
           name: Deploy Over SSH
           command: |
@@ -126,6 +127,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install fabric
+            pip install invoke==2.0.0
       - run:
           name: Deploy Over SSH
           command: |

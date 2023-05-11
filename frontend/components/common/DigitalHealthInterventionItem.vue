@@ -1,8 +1,7 @@
 <template>
-  <span
-    v-if="dhi"
-    class="DhiItem"
-  >{{ dhi.name }}</span>
+  <span v-if="dhi" class="DhiItem">
+    {{ dhi.name }}
+  </span>
 </template>
 
 <script>
@@ -20,18 +19,9 @@ export default {
       getDigitalHealthInterventionDetails:
         'projects/getDigitalHealthInterventionDetails'
     }),
-    dhi () {
+    dhi() {
       return this.getDigitalHealthInterventionDetails(this.id)
     }
   }
 }
 </script>
-
-<style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
-
-.DhiItem {
-  display: inline;
-}
-</style>

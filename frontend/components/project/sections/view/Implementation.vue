@@ -29,7 +29,8 @@ export default {
   data () {
     return {
       loading: true,
-      dhi: [],
+      software: [],
+      dhis: [],
       hfaList: [],
       hfa: [],
       hscList: [],
@@ -59,7 +60,7 @@ export default {
   computed: {
     ...mapGetters({
       getCountry: 'countries/getCountryDetails',
-      getPlatforms: 'projects/getTechnologyPlatforms',
+      getSoftware: 'projects/getTechnologyPlatforms',
       getDhi: 'projects/getDigitalHealthInterventionDetails',
       getHfa: 'projects/getHealthFocusAreas',
       getHsc: 'projects/getHscChallenges',
@@ -91,8 +92,8 @@ export default {
     fields () {
       if (!isEmpty(this.project)) {
         const {
-          platforms,
-          digitalHealthInterventions,
+          software,
+          dhis,
           health_focus_areas,
           hsc_challenges,
           // hsc_challenges_other,
@@ -103,9 +104,10 @@ export default {
           coverageSecondLevel
         } = this.project
 
-        this.dhi = this.handleDhiList(platforms, digitalHealthInterventions)
         this.hfaList = getNestedList(this.getHfa, 'health_focus_areas')
         this.hfa = getList(health_focus_areas, this.hfaList)
+        this.software = getList(software, this.getSoftware)
+        this.dhis = this.getDhiList(dhis),
         this.hscList = getNestedList(this.getHsc, 'challenges')
         // console.log(this.getHscOther)
         // this.hscOtherList = getNestedList(this.getHscOther, 'challenges')
@@ -137,18 +139,12 @@ export default {
     }
   },
   methods: {
-    handleDhiList (platforms, interventions) {
-      return platforms.map(platform => {
-        if (this.getPlatforms) {
-          return {
-            name: this.getPlatforms.find(p => p.id === platform)?.name,
-            categories: interventions
-              .filter(i => i.platform === platform)
-              .map(i => this.getDhi(i.id))
-          }
-        }
-        return []
-      })
+    getDhiList (dhis) {
+      return dhis
+        ? dhis
+          .map(dhi => this.getDhi(dhi).name)
+          .sort((a, b) => a.localeCompare(b))
+        : []
     },
     handleRows (coverage, data, country = this.country) {
       let rows = []
@@ -209,23 +205,28 @@ export default {
         },
         {
           id: 4,
-          prepend: 14,
-          header: this.$gettext(
-            'Software and related Digital Health Interventions (DHI)'
-          ),
-          content: this.dhi,
-          dhi: true,
+          prepend: '14a',
+          header: this.$gettext('Software related to Digital Health Interventions (DHI)'),
+          content: this.software,
           title: this.$gettext('Software'),
           subtitle: this.$gettext('Digital Health Intervention')
         },
         {
           id: 5,
+          prepend: '14b',
+          header: this.$gettext('Digital Health Interventions (DHI)'),
+          content: this.dhis,
+          title: this.$gettext('Software'),
+          subtitle: this.$gettext('Digital Health Intervention')
+        },
+        {
+          id: 6,
           prepend: 15,
           header: this.$gettext('Health Information System (HIS)'),
           content: this.his
         },
         {
-          id: 6,
+          id: 7,
           prepend: 16,
           show: !!(
             this.isNationalLevelDeployment ||
@@ -236,7 +237,7 @@ export default {
         },
         // national coverage
         {
-          id: 7,
+          id: 8,
           show: !!this.isNationalLevelDeployment,
           header: this.isGlobalSelected
             ? this.$gettext('International Level Deployment')
@@ -271,7 +272,7 @@ export default {
           ]
         },
         {
-          id: 8,
+          id: 9,
           show: !!(
             this.project.coverageType === 1 && this.coverageLevelName.first
           ),
@@ -283,7 +284,7 @@ export default {
           rows: this.coverageLevelFirst
         },
         {
-          id: 9,
+          id: 10,
           show: !!(
             this.project.coverageType === 1 && this.coverageLevelName.second
           ),
@@ -296,7 +297,7 @@ export default {
         },
         // national coverage
         {
-          id: 10,
+          id: 11,
           prepend: 17,
           header: this.$gettext(
             'Has the government financially invested in the project?'

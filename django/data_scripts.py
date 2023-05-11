@@ -20,7 +20,7 @@ def list_duplicate_donors():
         for x in Donor.objects.exclude(id=s.id).filter(name__icontains=s.name):
             print(f'{x.name} [{x.code}] -- dupe of --> {s.name} [{s.code}]')
 
-
+# DEPRECATED: `platforms` decoupled into `software` and `dhis`
 def sub_software(from_this_id, to_this_id):
     projects = Project.objects.filter(
         Q(data__platforms__contains=[{'id': from_this_id}]) | Q(draft__platforms__contains=[{'id': from_this_id}])

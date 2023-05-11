@@ -1,5 +1,5 @@
 export const state = () => ({
-  digitalHealthInterventionsDialogState: null,
+  digitalHealthInterventionsDialogState: false,
   dashboardFiltersDialogState: null,
   saveFiltersDialogState: null,
   sendEmailDialogState: null,

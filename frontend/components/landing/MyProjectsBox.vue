@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import UserProjectsList from '../common/UserProjectsList'
 export default {
@@ -46,7 +46,15 @@ export default {
   computed: {
     ...mapGetters({
       userProjecList: 'projects/getUserProjectList'
-    })
+    }),
+  },
+  mounted() {
+    if (this.userProjecList.length === 0) this.loadProjects()
+  },
+  methods: {
+    ...mapActions({
+      loadProjects: 'projects/loadUserProjects'
+    }),
   }
 }
 </script>

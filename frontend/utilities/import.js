@@ -10,7 +10,7 @@ export const nameMapping = {
   end_date_note: 'End Date Note',
   contact_name: 'Contact name',
   contact_email: 'Contact email',
-  platforms: 'Software',
+  software: 'Software',
   health_focus_areas: 'Health Focus Areas',
   hsc_challenges: 'Health System Challenges',
   his_bucket: 'Health Information Systems',
@@ -29,7 +29,7 @@ export const nameMapping = {
   clients: 'Clients',
   facilities: 'Facilities',
   sub_level: 'Coverage Type',
-  digitalHealthInterventions: 'Digital Health Interventions (associated to the Software)'
+  digitalHealthInterventions: 'Digital Health Interventions'
 }
 
 export const importTemplate = [
@@ -45,7 +45,7 @@ export const importTemplate = [
     'Contact name': 'Nico',
     'Contact email': 'nico@pulilab.com',
     Software: 'Bamboo',
-    'Digital Health Interventions (associated to the Software)': '3.4.1 Notify birth event|\n3.4.2 Register birth event',
+    'Digital Health Interventions': '3.4.1 Notify birth event|\n3.4.2 Register birth event',
     'Health Focus Areas': 'Adolescents and communicable diseases|\nOther sexual and reproductive health',
     'Health System Challenges': '1.1 Lack of population denominator|\n1.2 Delayed reporting of events',
     'Health Information Systems': 'A. Census, population information & data warehouse|\nB. Civil Registration and Vital Statistics',
@@ -75,8 +75,8 @@ export const importTemplate = [
     'End Date': '2020-02-14',
     'Contact name': 'Nico',
     'Contact email': 'nico@pulilab.com',
-    Software: 'Bamboo',
-    'Digital Health Interventions (associated to the Software)': '3.4.1 Notify birth event|\n3.4.2 Register birth event',
+    Software: 'Bamboo|\nOpenHIM',
+    'Digital Health Interventions': '3.4.1 Notify birth event|\n3.4.2 Register birth event',
     'Health Focus Areas': 'Adolescents and communicable diseases|\nOther sexual and reproductive health',
     'Health System Challenges': '1.1 Lack of population denominator|\n1.2 Delayed reporting of events',
     'Health Information Systems': 'A. Census, population information & data warehouse|\nB. Civil Registration and Vital Statistics',

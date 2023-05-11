@@ -81,13 +81,8 @@ class ProjectVersionTests(APITestCase):
             "health_focus_areas": [1, 2],
             "geographic_scope": "somewhere",
             "country": self.country_id,
-            "platforms": [{
-                "id": 1,
-                "strategies": [1, 2]
-            }, {
-                "id": 2,
-                "strategies": [1, 9]
-            }],
+            "software": [1, 2],
+            "dhis": [1, 2, 9],
             "licenses": [1, 2],
             "coverage": [
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},

@@ -102,14 +102,11 @@ class ProjectDraftTests(SetupTests):
     def test_update_draft_project(self):
         url = reverse("project-draft", kwargs={"project_id": self.project_draft_id, "country_id": self.country1.id})
         data = copy.deepcopy(self.project_draft_data)
-        data['project'].update(name="TestProject98",
-                               platforms=[{"id": 999, "strategies": [999]}])
+        data['project'].update(name="TestProject98")
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
-        self.assertNotEqual(response.json()['draft']["platforms"][0]["id"],
-                            self.project_data['project']['platforms'][0]['id'])
-        self.assertNotEqual(response.json()['draft']["platforms"][0]["strategies"][0],
-                            self.project_data['project']['platforms'][0]['strategies'][0])
+        self.assertNotEqual(response.json()['draft']["name"],
+                            self.project_data['project']['name'])
 
     def test_project_draft_merged_list(self):
         url = reverse("project-list")
