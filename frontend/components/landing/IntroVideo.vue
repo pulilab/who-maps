@@ -2,13 +2,19 @@
   <div class="SectionWrapper">
     <h2>Digital Health Atlas Instructional Video</h2>
     <div class="video_wrapper">
-      <iframe frameborder="0" width="100%" height="100%" src="https://www.youtube.com/embed/97wIGZ_YdeM" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe frameborder="0" width="100%" height="100%" :src="`https://www.youtube.com/embed/${introVideoId}`" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  computed: {
+    introVideoId() {
+      const translatedId = this.$gettext('overview_video_id')
+      return translatedId === 'overview_video_id' ? 'qEFzi0OtJMQ' : translatedId
+    }
+  }
 
 }
 </script>
@@ -27,7 +33,7 @@ export default {
 
     .video_wrapper {
       position: relative;
-      padding-bottom: 56.25%; /* 16:9 aspect ratio */ 
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
     }
     iframe {
       position: absolute;
