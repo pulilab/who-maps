@@ -187,7 +187,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         data_serializer.fields.get('name').validators = \
             [v for v in data_serializer.fields.get('name').validators if not isinstance(v, UniqueValidator)]
         data_serializer.fields.get('name').validators \
-            .append(UniqueValidator(queryset=project.__class__.objects.all().exclude(id=project.id)))
+            .append(UniqueValidator(queryset=project.__class__.objects.all().exclude(id=project.id), lookup='iexact'))
 
         self.check_object_permissions(request, project)
         data_serializer.is_valid()
