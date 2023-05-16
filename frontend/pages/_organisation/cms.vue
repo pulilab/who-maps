@@ -8,7 +8,7 @@
 export default {
   components: {
   },
-  middleware: ['isLoggedIn'],
+  middleware: ['authGuard'],
   fetch ({ store }) {
     store.dispatch('landing/resetSearch')
   },
