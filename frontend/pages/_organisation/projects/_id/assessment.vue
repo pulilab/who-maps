@@ -9,7 +9,7 @@ import { fetchProjectData } from '@/utilities/projects'
 export default {
   components: {
   },
-  middleware: ['isLoggedIn'],
+  middleware: ['authGuard'],
   async fetch ({ store, params, error }) {
     store.dispatch('landing/resetSearch')
     try {

@@ -4,7 +4,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, NotAuthenticated, PermissionDenied
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
 from rest_framework.serializers import BaseSerializer
@@ -130,15 +130,20 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         draft = None
 
         if not self.request.user.is_authenticated:  # ANON
-            data = project.get_anon_data()
+            if project.is_published:
+                data = project.get_anon_data()
+            else:
+                raise NotAuthenticated()
         else:  # LOGGED IN
             is_member = project.is_member(self.request.user)
             is_country_user_or_admin = project.is_country_user_or_admin(self.request.user)
             if is_member or is_country_user_or_admin or self.request.user.is_superuser:
                 data = project.get_member_data()
                 draft = project.get_member_draft()
-            else:
+            elif project.is_published:
                 data = project.get_non_member_data()
+            else:
+                raise PermissionDenied()
 
         if draft:
             draft = project.to_representation(data=draft, draft_mode=True)

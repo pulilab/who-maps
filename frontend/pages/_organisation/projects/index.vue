@@ -31,7 +31,7 @@ export default {
     UserProjectList,
     PageLayout
   },
-  middleware: ['isLoggedIn'],
+  middleware: ['authGuard'],
   async fetch ({ store }) {
     await store.dispatch('projects/loadUserProjects')
   }

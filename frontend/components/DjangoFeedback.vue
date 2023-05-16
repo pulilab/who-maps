@@ -1,14 +1,12 @@
 <template>
   <div class="vue-django-feedback">
     <vue-django-feedback
-      v-if="token"
       :name="name"
       :name-label="$gettext('Name') | translate"
       :email-label="$gettext('Email') | translate"
       :subject-label="$gettext('Subject') | translate"
       :message-label="$gettext('Message') | translate"
       :email="email"
-      :csrf-token="token"
     >
       <span slot="header-text">
         <translate> Ask our experts </translate>
@@ -54,7 +52,6 @@ export default {
   computed: {
     ...mapGetters({
       profile: 'user/getProfile',
-      token: 'user/getToken'
     }),
     name () {
       if (this.profile) {

@@ -104,6 +104,10 @@ class Project(SoftDeleteModel, ExtendedModel):
     def from_external(self):
         return self.metadata and 'from_external' in self.metadata
 
+    @property
+    def is_published(self):
+        return self.public_id != ''
+
     def get_country_id(self, draft_mode=False):
         return self.draft.get('country') if draft_mode else self.data.get('country')
 

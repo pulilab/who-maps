@@ -1,0 +1,7 @@
+New ticket has been submitted.
+
+From: {% if ticket.user %}{{ ticket.user.email }}{% else %}{{ ticket.email }}{% endif %}
+
+{{ ticket.subject }}
+
+{{ ticket.text }}

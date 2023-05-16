@@ -46,13 +46,6 @@ export default {
       return get(this, 'response.data.details', null)
     }
   },
-  created() {
-    const expiredToken = this.error?.name === 'ExpiredAuthSessionError'
-    if (expiredToken) {
-      const path = this.localePath({ name: 'organisation-login' })
-      this.$router.replace(path)
-    }
-  },
 }
 </script>
 

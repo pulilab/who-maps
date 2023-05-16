@@ -230,7 +230,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 
 export default {
   name: 'VueDjangoFeedback',
@@ -353,25 +352,33 @@ export default {
       this.form.message = newData.message
     }
   },
-  beforeCreate () {
-    this.axios = axios.create()
-  },
   methods: {
     togglePopUp () {
       this.opened = !this.opened
+      if (this.$auth.strategy.refreshToken.status().expired()) {
+        this.$auth.logout()
+      }
       if (!this.opened) {
-        this.form.name = ''
-        this.form.email = ''
-        this.form.subject = ''
-        this.form.message = ''
+        this.clearForm()
         this.submitted = false
         this.apiError = false
       }
       this.errors.clear()
     },
+    clearForm() {
+      this.form.name = ''
+      this.form.email = ''
+      this.form.subject = ''
+      this.form.message = ''
+    },
     async submit () {
       await this.$validator.validateAll()
       if (!this.errors.any()) {
+        if (this.$auth.loggedIn && this.$auth.strategy.refreshToken.status().expired()) {
+          this.form.name = this.name
+          this.form.email = this.email
+          this.$auth.logout()
+        }
         this.processing = true
         try {
           const data = {
@@ -383,14 +390,8 @@ export default {
               name: this.name ? this.name : this.form.name
             }
           }
-          const headers = {}
-          if (this.authToken) {
-            headers.Authorization = this.authToken
-          }
-          if (this.csrfToken) {
-            headers['x-csrftoken'] = this.csrfToken
-          }
-          await this.axios.post(this.apiUrl, data, { headers })
+          await this.$axios.post(this.apiUrl, data)
+          this.clearForm()
           this.submitted = true
           this.apiError = false
         } catch (e) {
