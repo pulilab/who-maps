@@ -1241,7 +1241,7 @@ msgstr ""
 msgid "Editor status"
 msgstr ""
 
-#: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:27
+#: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:25
 #: components/common/UserDropdown.vue:12
 msgid "Email"
 msgstr ""
@@ -2199,7 +2199,7 @@ msgstr ""
 msgid "Member"
 msgstr ""
 
-#: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:29
+#: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:27
 msgid "Message"
 msgstr ""
 
@@ -2309,7 +2309,7 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:26
+#: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:24
 #: components/common/ProjectCard.vue:69
 msgid "Name"
 msgstr ""
@@ -3122,7 +3122,7 @@ msgstr ""
 #: components/project/HealthSystemChallengesSelector.vue:1
 #: components/project/HealthSystemChallengesSelector.vue:10
 #: components/project/HisBucketSelector.vue:9
-#: components/project/SoftwareSelector.vue:20
+#: components/project/SoftwareSelector.vue:22
 #: components/project/SubNationalLevelDeploymentItem.vue:7
 #: components/project/SubNationalLevelDeploymentItem.vue:27
 msgid "Select from list"
@@ -3322,6 +3322,12 @@ msgstr ""
 msgid "Software"
 msgstr ""
 
+#: components/project/SoftwareSelector.vue:7
+msgid ""
+"Software is already in the system. Please select from the list or type in a "
+"unique software name."
+msgstr ""
+
 #: components/project/sections/view/Implementation.vue:198
 msgid "Software related to Digital Health Interventions (DHI)"
 msgstr ""
@@ -3378,7 +3384,7 @@ msgstr ""
 msgid "Sub-national"
 msgstr ""
 
-#: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:28
+#: components/DjangoFeedback.vue:2 components/DjangoFeedback.vue:26
 msgid "Subject"
 msgstr ""
 
@@ -3793,7 +3799,7 @@ msgstr ""
 msgid "type the name of the new collection"
 msgstr ""
 
-#: components/project/SoftwareSelector.vue:21
+#: components/project/SoftwareSelector.vue:23
 msgid "Type to filter softwares"
 msgstr ""
 
