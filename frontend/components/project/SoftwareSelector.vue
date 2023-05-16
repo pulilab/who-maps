@@ -23,12 +23,12 @@
         <b>{{ newPlatform.name }}</b>
       </span>
       <span class="left">
-        <small>
-          <translate>DHA Admin will update the Software list to include your new software name</translate>
-        </small>
+        <translate v-if="setNewSoftwareError" key="invalidNew" class="invalid">Software is already in the system. Please select from the list or type in a unique software name.</translate>
+        <translate v-else key="addNew">DHA Admin will update the Software list to include your new software name</translate>
       </span>
       <span class="right">
-        <b>
+        <fa v-if="setNewSoftwareError" key="invalidNew" icon="exclamation-circle" class="invalid" />
+        <b v-else key="addNew">
           <fa icon="plus-circle" />
           <translate>Add as new</translate>
         </b>
@@ -76,6 +76,7 @@ export default {
     return {
       newPlatform: null,
       availableSoftware: [],
+      setNewSoftwareError: false
     }
   },
   computed: {
@@ -98,14 +99,20 @@ export default {
     async changeHandler(value) {
       const lastItem = value[value.length - 1]
       if (typeof lastItem === 'string') {
-        const newSoftware = await this.setNewSoftware(lastItem)
-        value[value.length - 1] = newSoftware
-        await this.$nextTick()
-        await this.syncAvailableSoftware(value)
+        try {
+          const newSoftware = await this.setNewSoftware(lastItem)
+          value[value.length - 1] = newSoftware
+          await this.$nextTick()
+          await this.syncAvailableSoftware(value)
+        } catch (error) {
+          this.setNewSoftwareError = true
+          return
+        }
       }
       this.$emit('change', value)
     },
     filter(value) {
+      this.setNewSoftwareError = false
       this.availableSoftware = this.softwares.filter(platform =>
         platform.name.toLowerCase().includes(value.toLowerCase())
       )
@@ -142,6 +149,8 @@ export default {
       color: @colorTextMuted;
       font-size: 10px;
       margin-top: 0px;
+      margin-right: 24px;
+      font-weight: bold;
       svg {
         color: #f8a72a;
         margin-right: 6px;
@@ -156,15 +165,23 @@ export default {
       float: left;
       width: 70%;
       height: 16px;
+      .invalid {
+        font-weight: bold;
+        color: @colorBrandPrimary;
+      }
     }
     .right {
       float: right;
-      // width: 25%;
       color: @colorBrandPrimary;
       font-size: 13px;
       margin-top: -7px;
       svg {
         margin-right: 10px;
+        &.invalid {
+          color: red;
+          height: 28px;
+          width: 28px;
+        }
       }
     }
   }
