@@ -339,3 +339,33 @@ class PermissionTests(SetupTests):
 
         self.assertEqual(len(response.data['technology_platforms']), 48)
         self.assertEqual(len(response.data['digital_strategies']), 28)
+
+    def test_anon_cant_see_draft_projects(self):
+        project = self.create_draft_project(self.project_data)
+        url = reverse("project-retrieve", kwargs={"pk": project.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_logged_in_cant_see_draft_projects(self):
+        project = self.create_draft_project(self.project_data)
+
+        # Create a test user with profile.
+        url = reverse("rest_register")
+        data = {
+            "email": "test_user3@gmail.com",
+            "password1": "123456hetNYOLC",
+            "password2": "123456hetNYOLC"}
+        self.client.post(url, data, format="json")
+
+        # Log in the user.
+        url = reverse("token_obtain_pair")
+        data = {
+            "username": "test_user3@gmail.com",
+            "password": "123456hetNYOLC"}
+        response = self.client.post(url, data, format="json")
+        test_user_key = response.json().get("access")
+        test_user_client = APIClient(HTTP_AUTHORIZATION="Token {}".format(test_user_key), format="json")
+
+        url = reverse("project-retrieve", kwargs={"pk": project.id})
+        response = test_user_client.get(url)
+        self.assertEqual(response.status_code, 403)
