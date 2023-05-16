@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'Admin',
-  middleware: ['isLoggedIn'],
+  middleware: ['authGuard'],
   async fetch ({ store }) {
     store.dispatch('landing/resetSearch')
   }

@@ -16,7 +16,7 @@ export default {
     cStages,
     PageLayout
   },
-  middleware: ['isLoggedIn'],
+  middleware: ['authGuard'],
   fetch ({ store, params, error }) {
     return fetchProjectData(store, params, error)
   }

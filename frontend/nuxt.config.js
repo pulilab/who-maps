@@ -145,13 +145,13 @@ const config = {
         expires: 365,
       },
     },
-    /* redirect: {
+    redirect: {
       login: '/-/login',
-      logout: '/',
-      callback: '/-/login',
-      home: '/'
+      logout: false,
+      callback: false,
+      home: false
     },
-    plugins: [
+    /* plugins: [
       { src: '~plugins/auth.js', ssr: true }
     ], */
     strategies: {
@@ -176,7 +176,8 @@ const config = {
           login: { url: '/api/jwt/', method: 'post' },
           refresh: { url: '/api/jwt/refresh/', method: 'post' },
           user: { url: '/api/userprofiles/me/', method: 'get' },
-          logout: false
+          logout: false,
+          home: false
         }
       }
     }
@@ -202,7 +203,6 @@ const config = {
     retry: false
   },
   router: {
-    // middleware: ['auth'],
     base: '/'
   },
   loading: '~/components/DhaLoader.vue',

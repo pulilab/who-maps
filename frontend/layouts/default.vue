@@ -37,7 +37,7 @@ export default {
       return null
     },
     showActionBar () {
-      const hiddenOn = ['index-login', 'index-signup']
+      const hiddenOn = ['organisation-login', 'organisation-signup', 'organisation-reset']
       if (this.$route && this.$route.name) {
         return !hiddenOn.includes(this.pureRoute)
       }

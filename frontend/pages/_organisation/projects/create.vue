@@ -22,7 +22,7 @@ export default {
     ProjectForm,
     PageLayout
   },
-  middleware: ['isLoggedIn'],
+  middleware: ['authGuard'],
   async fetch ({ store }) {
     await Promise.all([
       store.dispatch('project/resetProjectState'),
