@@ -1,7 +1,5 @@
 export default async function ({ store, redirect, app, route, $auth }) {
   const profile = $auth.$state.user
-  store.commit('user/SET_PROFILE', profile)
-
   const donorTypes = ['D', 'DA', 'SDA']
   const routeName = route.name.split('___')[0]
   if (

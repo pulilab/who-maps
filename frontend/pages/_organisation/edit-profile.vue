@@ -12,6 +12,7 @@ import PageLayout from '@/components/common/wrappers/PageLayout'
 import ProfileEditor from '../../components/ProfileEditor.vue'
 
 export default {
+  middleware: ['authGuard'],
   components: {
     PageLayout,
     ProfileEditor

@@ -8,11 +8,9 @@
 import DhaLogin from '../../components/DhaLogin'
 
 export default {
+  middleware: ['loginGuard'],
   components: {
     DhaLogin
   }
 }
 </script>
-
-<style lang="less">
-</style>

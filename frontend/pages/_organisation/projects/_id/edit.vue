@@ -26,7 +26,7 @@ export default {
     PageLayout,
     Tag
   },
-  middleware: ['isLoggedIn'],
+  middleware: ['authGuard'],
   fetch ({ store, params, error }) {
     return fetchProjectData(store, params, error)
   }

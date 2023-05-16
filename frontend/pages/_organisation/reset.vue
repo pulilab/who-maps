@@ -12,11 +12,9 @@
 import SignupComponent from '~/components/SignupComponent'
 
 export default {
+  middleware: ['loginGuard'],
   components: {
     SignupComponent
   }
 }
 </script>
-
-<style lang="less">
-</style>
