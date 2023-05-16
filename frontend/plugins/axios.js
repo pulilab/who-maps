@@ -1,4 +1,4 @@
-export default function ({ $axios, app, store, redirect }) {
+export default function ({ $axios, app, redirect }) {
 
   $axios.onRequest(async config => {
     if (config) {
@@ -12,11 +12,10 @@ export default function ({ $axios, app, store, redirect }) {
 
   $axios.onResponseError(async error => {
     const errorName = error?.name
-    const responseCode = error.response ? error.response.status : undefined
-    if (errorName === 'ExpiredAuthSessionError' || responseCode === 401) {
-      await store.dispatch('user/logout')
+    // const responseCode = error.response ? error.response.status : undefined
+    if (errorName === 'ExpiredAuthSessionError') {
       const path = app.localePath({ name: 'organisation-login' })
-      if (!process.client) redirect(path)
+      redirect(path)
     } else {
       throw error
     }
