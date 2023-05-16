@@ -1141,6 +1141,20 @@ class ProjectTests(SetupTests):
 
         notify_user_about_software_approval.assert_called_once_with(args=('decline', software_2.pk,))
 
+    @mock.patch('project.tasks.send_mail_wrapper')
+    def test_duplicate_software_add(self, send_email):
+        send_email.return_value = None
+
+        url = reverse("technologyplatform-list")
+        response = self.test_user_client.post(url, {'name': "test software"}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
+
+        response = self.test_user_client.post(url, {'name': "test software"}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, {'name': ['This field must be unique.']})
+
+        response = self.test_user_client.post(url, {'name': "Test Software"}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, {'name': ['This field must be unique.']})
+
     def test_send_project_updated_digest(self):
         project = Project.objects.last()
 

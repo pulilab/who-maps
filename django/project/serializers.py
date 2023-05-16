@@ -78,7 +78,8 @@ INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
 
 class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 1 General Overview
-    name = serializers.CharField(max_length=250, validators=[UniqueValidator(queryset=Project.objects.all())])
+    name = serializers.CharField(max_length=250, validators=[UniqueValidator(queryset=Project.objects.all(),
+                                                                             lookup='iexact')])
     organisation = serializers.CharField(max_length=128, required=False)
     country = serializers.IntegerField(min_value=0, max_value=100000)
     geographic_scope = serializers.CharField(max_length=1024, required=False)
@@ -527,6 +528,10 @@ class ProjectImportV2Serializer(serializers.ModelSerializer):  # pragma: no cove
 
 
 class TechnologyPlatformCreateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=512,
+                                 validators=[UniqueValidator(queryset=TechnologyPlatform.objects.all(),
+                                                             lookup='iexact')])
+
     class Meta:
         model = TechnologyPlatform
         fields = '__all__'
