@@ -285,15 +285,9 @@ export const actions = {
     commit('RESET_PROJECTS_DATA')
   },
   async setNewSoftware ({ commit, dispatch }, name) {
-    try {
-      const { data } = await this.$axios.post('/api/projects/software/', {
-        name
-      })
-      await dispatch('loadProjectStructure', true)
-      return data.id
-    } catch (e) {
-      return e
-    }
+    const { data } = await this.$axios.post('/api/projects/software/', { name })
+    await dispatch('loadProjectStructure', true)
+    return data.id
   }
 }
 
