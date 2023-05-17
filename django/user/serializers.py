@@ -56,6 +56,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
                                                       allow_null=False)
     member = serializers.SerializerMethodField()
     viewer = serializers.SerializerMethodField()
+    archive = serializers.SerializerMethodField()
     is_superuser = serializers.SerializerMethodField()
     account_type_approved = serializers.SerializerMethodField()
 
@@ -100,6 +101,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_viewer(obj):
         return Project.objects.viewer_of(obj.user).values_list('id', flat=True)
+
+    @staticmethod
+    def get_archive(obj):
+        data = []
+        for project in Project.objects.member_of(obj.user).filter(archived=True):
+            draft = project.to_representation(draft_mode=True)
+            data.append(project.to_response_dict(published=None, draft=draft))
+
+        return data
 
     @staticmethod
     def get_is_superuser(obj):
