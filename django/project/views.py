@@ -272,6 +272,17 @@ class ProjectUnPublishViewSet(TeamTokenAuthMixin, ViewSet):
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
 
 
+class ProjectArchiveViewSet(TeamTokenAuthMixin, ViewSet):
+    @transaction.atomic
+    def update(self, request, project_id):
+        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
+        project.archive()
+
+        ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
+                                      data=project.data, research=project.research, published=False, archived=True)
+        return Response(status=status.HTTP_200_OK)
+
+
 class ProjectDraftViewSet(TeamCollectionTokenAuthMixin, ViewSet):
     def create(self, request, country_id):
         """
