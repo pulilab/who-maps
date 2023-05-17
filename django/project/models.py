@@ -218,6 +218,13 @@ class Project(SoftDeleteModel, ExtendedModel):
         self.save()
         self.search.reset()
 
+    def archive(self):
+        self.public_id = ''
+        self.data = {}
+        self.archived = True
+        self.save()
+        self.search.reset()
+
 
 @receiver(post_save, sender=Project)
 def on_create_init(sender, instance, created, **kwargs):
