@@ -1,8 +1,5 @@
 <template>
   <page-layout>
-    <template #title>
-      <translate>My Projects</translate>
-    </template>
     <template #subtitle>
       <translate>Here are all of the projects you are a</translate>
       <fa
