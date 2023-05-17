@@ -85,6 +85,7 @@ class Project(SoftDeleteModel, ExtendedModel):
     viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
     public_id = models.CharField(
         max_length=64, default="", help_text="<CountryCode><HashID> eg: HU9fa42491")
+    archived = models.BooleanField(default=False)
 
     # DEPRECATED ODK FIELDS
     odk_etag = models.CharField(null=True, blank=True, max_length=64)
@@ -439,6 +440,7 @@ class ProjectVersion(ExtendedModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='project_versions', blank=True,
                              null=True)
     published = models.BooleanField(default=False)
+    archived = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('project', 'version')
