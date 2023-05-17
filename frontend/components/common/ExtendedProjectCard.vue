@@ -75,30 +75,7 @@
         class="SecondRow"
       >
         <el-col>
-          <div
-            v-if="!project.isPublished"
-            class="ProjectStatus Draft"
-          >
-            <translate key="draft">
-              Draft
-            </translate>
-          </div>
-          <div
-            v-if="project.isPublished"
-            class="ProjectStatus Published"
-          >
-            <translate key="published">
-              Published
-            </translate>
-          </div>
-          <div
-            v-if="projectData.approved"
-            class="ProjectStatus ApprovedByCountry"
-          >
-            <translate key="approved">
-              Approved by MOH
-            </translate>
-          </div>
+          <ProjectStatusBadge :status="projectStatus" />
         </el-col>
         <el-col>
           <project-card-actions
@@ -118,6 +95,7 @@ import { format } from 'date-fns'
 import CountryItem from './CountryItem'
 import OrganisationItem from './OrganisationItem'
 import ProjectCardActions from './ProjectCardActions'
+import ProjectStatusBadge from '@/components/project/ProjectStatusBadge'
 import ProjectLegend from './ProjectLegend'
 import UidPopOver from '@/components/common/UidPopOver'
 
@@ -126,6 +104,7 @@ export default {
     CountryItem,
     OrganisationItem,
     ProjectCardActions,
+    ProjectStatusBadge,
     ProjectLegend,
     UidPopOver
   },
@@ -150,6 +129,12 @@ export default {
     },
     lastChange () {
       return format(this.projectData.modified, 'DD/MM/YYYY')
+    },
+    projectStatus() {
+      if (!this.project.isPublished) return 'draft'
+      if (this.project.isPublished) return 'published'
+      if (this.project.approved) return 'approved'
+      if (this.project.archived) return 'archived'
     }
   }
 }
@@ -273,32 +258,6 @@ export default {
   .SecondRow {
     padding: 16px 30px;
     background-color: @colorBrandBlueLight;
-
-    .ProjectStatus {
-      display: inline-block;
-      height: 24px;
-      margin-right: 10px;
-      padding: 0 10px;
-      font-size: @fontSizeSmall - 1;
-      font-weight: 700;
-      line-height: 24px;
-      text-transform: uppercase;
-      color: @colorWhite;
-      border-radius: 12px;
-
-      &.Draft {
-        background-color: @colorDraft;
-        color: @colorTextPrimary;
-      }
-
-      &.Published {
-        background-color: @colorPublished;
-      }
-
-      &.ApprovedByCountry {
-        background-color: @colorApproved;
-      }
-    }
   }
 }
 
