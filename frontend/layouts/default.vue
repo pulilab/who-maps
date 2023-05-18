@@ -1,5 +1,5 @@
 <template>
-  <div :class="layoutClass">
+  <div :class="`default ${layoutClass}`">
     <dialogs-container />
     <top-bar />
     <action-bar v-if="showActionBar" />
@@ -59,6 +59,11 @@ export default {
 <style lang="less">
   @import "~assets/style/variables.less";
   @import "~assets/style/mixins.less";
+
+  .default {
+    position: relative;
+    min-height: 100vh;
+  }
 
   .LandingPage {}
 
