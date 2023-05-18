@@ -51,10 +51,12 @@ export default {
 
   &.approved {
     background-color: @colorApproved;
+    color: @colorWhite;
   }
 
   &.archived {
-    background-color: @colorApproved;
+    background-color: @colorBrandGrayDark;
+    color: @colorGrayLightest;
   }
 }
 </style>
