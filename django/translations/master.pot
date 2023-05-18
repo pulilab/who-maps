@@ -51,13 +51,13 @@ msgstr ""
 msgid "{name} (me)"
 msgstr ""
 
-#: components/project/ProjectData.vue:252
+#: components/project/ProjectData.vue:253
 #: components/project/sections/CountryCustom.vue:33
 #: components/project/sections/DonorCustom.vue:36
 msgid "{name} custom fields"
 msgstr ""
 
-#: components/project/ProjectData.vue:251
+#: components/project/ProjectData.vue:252
 msgid "{name} fields"
 msgstr ""
 
@@ -310,8 +310,8 @@ msgid ""
 "investors and implementation partners working in your country."
 msgstr ""
 
-#: components/project/ProjectData.vue:138
-#: components/project/ProjectForm.vue:256
+#: components/project/ProjectData.vue:139
+#: components/project/ProjectForm.vue:255
 msgid "Action cancelled"
 msgstr ""
 
@@ -548,9 +548,9 @@ msgid ""
 "a Health Focus Category only once."
 msgstr ""
 
-#: components/project/ProjectData.vue:152
-#: components/project/ProjectData.vue:199
-#: components/project/ProjectForm.vue:240
+#: components/project/ProjectData.vue:153
+#: components/project/ProjectData.vue:200
+#: components/project/ProjectForm.vue:239
 #: angular/Assessment/CountryMap/CountryMapController.js:42
 msgid "Attention"
 msgstr ""
@@ -702,8 +702,8 @@ msgstr ""
 #: components/dialogs/EditSubLevelDialog.vue:11
 #: components/dialogs/ProjectApprovalDialog.vue:47
 #: components/dialogs/SaveFilterDialog.vue:12
-#: components/project/ProjectData.vue:323
-#: components/project/ProjectForm.vue:243
+#: components/project/ProjectData.vue:325
+#: components/project/ProjectForm.vue:242
 #: components/project/ProjectNavigation.vue:109
 #: components/project/collection/AddEditorDialog.vue:7
 #: components/project/collection/AddEditorDialog.vue:2
@@ -771,8 +771,8 @@ msgid ""
 "software.  If there are no users of this type, put 0."
 msgstr ""
 
-#: components/project/ProjectForm.vue:218
-#: components/project/ProjectForm.vue:277
+#: components/project/ProjectForm.vue:217
+#: components/project/ProjectForm.vue:276
 #: angular/Assessment/CountryMap/CountryMapController.js:44
 msgid "Close"
 msgstr ""
@@ -827,14 +827,14 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
-#: components/project/ProjectForm.vue:216
-#: components/project/ProjectForm.vue:275
+#: components/project/ProjectForm.vue:215
+#: components/project/ProjectForm.vue:274
 msgid "Congratulation"
 msgstr ""
 
-#: components/project/ProjectData.vue:162
-#: components/project/ProjectData.vue:182
-#: components/project/ProjectData.vue:205
+#: components/project/ProjectData.vue:163
+#: components/project/ProjectData.vue:183
+#: components/project/ProjectData.vue:206
 msgid "Congratulations"
 msgstr ""
 
@@ -1111,7 +1111,7 @@ msgstr ""
 msgid "Discard changes"
 msgstr ""
 
-#: components/project/ProjectData.vue:196
+#: components/project/ProjectData.vue:197
 #: components/project/ProjectNavigation.vue:96
 msgid "Discard draft"
 msgstr ""
@@ -1178,11 +1178,11 @@ msgstr ""
 msgid "Draft"
 msgstr ""
 
-#: components/project/ProjectData.vue:206
-msgid "Draft has been discard"
+#: components/project/ProjectData.vue:207
+msgid "Draft has been discarded"
 msgstr ""
 
-#: components/project/ProjectForm.vue:250
+#: components/project/ProjectForm.vue:249
 msgid "Draft overriden with published version"
 msgstr ""
 
@@ -1284,7 +1284,7 @@ msgid ""
 "Enter your email address and follow the instructions you will get by email."
 msgstr ""
 
-#: components/project/ProjectData.vue:186
+#: components/project/ProjectData.vue:187
 msgid "Error"
 msgstr ""
 
@@ -1932,7 +1932,7 @@ msgstr ""
 msgid "Inactivate API key"
 msgstr ""
 
-#: components/project/ProjectData.vue:137
+#: components/project/ProjectData.vue:138
 msgid "Info"
 msgstr ""
 
@@ -2496,8 +2496,8 @@ msgid "of."
 msgstr ""
 
 #: components/dialogs/ProjectApprovalDialog.vue:107
-#: components/project/ProjectData.vue:322
-#: components/project/ProjectForm.vue:242
+#: components/project/ProjectData.vue:324
+#: components/project/ProjectForm.vue:241
 msgid "Ok"
 msgstr ""
 
@@ -2791,7 +2791,7 @@ msgstr ""
 msgid "Project end date"
 msgstr ""
 
-#: components/project/ProjectData.vue:163
+#: components/project/ProjectData.vue:164
 msgid "Project has been unpublish"
 msgstr ""
 
@@ -2879,7 +2879,7 @@ msgstr ""
 msgid "Publish"
 msgstr ""
 
-#: components/project/ProjectData.vue:175
+#: components/project/ProjectData.vue:176
 msgid "Publish draft"
 msgstr ""
 
@@ -3465,12 +3465,12 @@ msgid ""
 "lines for which there may not yet be full agreement."
 msgstr ""
 
-#: components/project/ProjectData.vue:200
-#: components/project/ProjectForm.vue:237
+#: components/project/ProjectData.vue:201
+#: components/project/ProjectForm.vue:236
 msgid "The current draft will be overwritten by the published version"
 msgstr ""
 
-#: components/project/ProjectData.vue:153
+#: components/project/ProjectData.vue:154
 msgid "The current project will be unpublish"
 msgstr ""
 
@@ -3832,7 +3832,7 @@ msgid "Unique Project ID (UID)"
 msgstr ""
 
 #: components/common/ProjectCardActions.vue:30
-#: components/project/ProjectData.vue:149
+#: components/project/ProjectData.vue:150
 #: components/project/ProjectNavigation.vue:101
 msgid "Unpublish"
 msgstr ""
@@ -3974,8 +3974,10 @@ msgstr ""
 msgid "We are available via email on"
 msgstr ""
 
-#: components/project/ProjectData.vue:187
-msgid "We could not publish. Try again"
+#: components/project/ProjectData.vue:188
+msgid ""
+"We could not publish. Check required publish fields in edit mode and try "
+"again!"
 msgstr ""
 
 #: components/common/CookieConsent.vue:7
@@ -4227,15 +4229,15 @@ msgid ""
 "correct investors."
 msgstr ""
 
-#: components/project/ProjectData.vue:183
+#: components/project/ProjectData.vue:184
 msgid "Your draft has been published"
 msgstr ""
 
-#: components/project/ProjectForm.vue:274
+#: components/project/ProjectForm.vue:273
 msgid "Your draft has been published successfully"
 msgstr ""
 
-#: components/project/ProjectForm.vue:215
+#: components/project/ProjectForm.vue:214
 msgid "Your draft has been saved successfully"
 msgstr ""
 
