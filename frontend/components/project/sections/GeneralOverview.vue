@@ -400,7 +400,7 @@ export default {
         'setImplementingPartners',
         300,
         true
-      ],    
+      ],
       donors: ['project', 'getDonors', 'setDonors', 0],
     }),
     isGlobal: {
@@ -454,7 +454,6 @@ export default {
     async validate () {
       this.$refs.collapsible.expandCard()
       const validations = await Promise.all([this.$validator.validate()])
-      console.log('General overview published validation', validations)
       return validations.reduce((a, c) => a && c, true)
     },
     async validateDraft () {
@@ -465,7 +464,6 @@ export default {
         this.$validator.validate('contact_email'),
         this.$validator.validate('team')
       ])
-      console.log('General overview draft validation', validations)
       return validations.reduce((a, c) => a && c, true)
     }
   }

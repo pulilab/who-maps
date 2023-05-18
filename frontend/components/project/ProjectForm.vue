@@ -277,7 +277,6 @@ export default {
         this.$refs.countryCustom.validate(),
         this.$refs.donorCustom.validate()
       ])
-      console.log('root validations', validations)
       return validations.reduce((a, c) => a && c, true)
     },
     async validateDraft () {
