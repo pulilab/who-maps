@@ -134,7 +134,8 @@ export default {
     ...mapActions({
       publishProject: 'project/publishProject',
       discardDraft: 'project/discardDraft',
-      unpublishProject: 'project/unpublishProject'
+      unpublishProject: 'project/unpublishProject',
+      setLoading: 'project/setLoading'
     }),
     handleInit () {
       this.handleProject()
@@ -219,7 +220,7 @@ export default {
               },
               error: {
                 title: this.$gettext('Error'),
-                message: this.$gettext('We could not publish. Try again'),
+                message: this.$gettext('We could not publish. Check required publish fields in edit mode and try again!'),
                 type: 'error'
               }
             },
@@ -238,7 +239,7 @@ export default {
               },
               success: {
                 title: this.$gettext('Congratulations'),
-                message: this.$gettext('Draft has been discard')
+                message: this.$gettext('Draft has been discarded')
               },
               error: info
             }
@@ -343,6 +344,7 @@ export default {
       this.$router.push(this.localePath(obj))
     },
     handleNotification (obj) {
+      this.setLoading(false)
       this.$notify({
         type: 'success',
         position: 'top-left',
