@@ -1,33 +1,16 @@
 <template>
-  <el-card
-    :body-style="{ padding: '0px' }"
-    class="ExtendedProjectCard rounded"
-  >
+  <el-card :body-style="{ padding: '0px' }" :class="`ExtendedProjectCard rounded ${archiveStyle}`">
     <div>
-      <el-row
-        type="flex"
-        align="center"
-        class="FirstRow"
-      >
-        <el-col
-          :span="15"
-          class="ProjectName"
-        >
+      <el-row type="flex" align="center" :class="`FirstRow ${archiveStyle}`">
+        <el-col :span="15" class="ProjectName">
           <el-row class="FirstSubRow">
             <el-col>
               {{ projectData.name }}
             </el-col>
           </el-row>
-          <el-row
-            type="flex"
-            justify="start"
-            class="SecondSubRow"
-          >
+          <el-row type="flex" justify="start" class="SecondSubRow">
             <el-col>
-              <country-item
-                :id="projectData.country"
-                :show-flag="true"
-              />
+              <country-item :id="projectData.country" :show-flag="true" />
             </el-col>
             <el-col>
               <organisation-item :id="projectData.organisation" />
@@ -43,10 +26,7 @@
           <UidPopOver :uid="project.public_id" />
         </el-col>
 
-        <el-col
-          :span="4"
-          class="ProjectMeta"
-        >
+        <el-col :span="4" class="ProjectMeta">
           <div class="Donors">
             <div>
               {{ donors }}
@@ -54,17 +34,14 @@
             <span><translate>Investor(s)</translate></span>
           </div>
         </el-col>
-        <el-col
-          :span="4"
-          class="ProjectMeta"
-        >
+        <el-col :span="4" class="ProjectMeta">
           <div class="LastChange">
             <div>
               {{ lastChange }}
             </div>
             <span><translate>Updated on</translate></span>
           </div>
-          <project-legend :id="id" />
+          <project-legend :id="projectBase.id" />
         </el-col>
       </el-row>
 
@@ -72,16 +49,17 @@
         type="flex"
         justify="space-between"
         align="center"
-        class="SecondRow"
+        :class="`SecondRow ${archiveStyle}`"
       >
         <el-col>
           <ProjectStatusBadge :status="projectStatus" />
         </el-col>
-        <el-col>
-          <project-card-actions
-            :project="project"
-            :force-show="false"
-          />
+        <el-col class="flex">
+          <el-row v-if="project.isArchived" type="flex" justify="end" class="RestoreAction" @click.native="openFeedback">
+            <i class="el-icon-upload2"></i>
+            <translate>Restore</translate>
+          </el-row>
+          <ProjectCardActions v-else :project="project" :force-show="false" />
         </el-col>
       </el-row>
     </div>
@@ -109,8 +87,8 @@ export default {
     UidPopOver
   },
   props: {
-    id: {
-      type: Number,
+    projectBase: {
+      type: Object,
       required: true
     }
   },
@@ -118,39 +96,72 @@ export default {
     ...mapGetters({
       getUserProjectDetails: 'projects/getUserProjectDetails'
     }),
-    project () {
-      return this.getUserProjectDetails(this.id)
+    project() {
+      const projectDetails = this.getUserProjectDetails(this.projectBase.id)
+      return {
+        ...projectDetails,
+        isArchived: this.projectBase.archived
+      }
     },
-    projectData () {
-      return this.project.isPublished ? this.project.published : this.project.draft
+    projectData() {
+      return this.project.isPublished
+        ? this.project.published
+        : this.project.draft
     },
-    donors () {
-      return this.projectData && this.projectData.donors ? this.projectData.donors.length : 0
+    donors() {
+      return this.projectData && this.projectData.donors
+        ? this.projectData.donors.length
+        : 0
     },
-    lastChange () {
+    lastChange() {
       return format(this.projectData.modified, 'DD/MM/YYYY')
     },
+    archiveStyle() {
+      return this.projectStatus === 'archived' ? 'archived' : ''
+    },
     projectStatus() {
+      if (this.project.isArchived) return 'archived'
       if (!this.project.isPublished) return 'draft'
       if (this.project.isPublished) return 'published'
-      if (this.project.approved) return 'approved'
-      if (this.project.archived) return 'archived'
+      if (this.projectData.approved) return 'approved'
     }
+  },
+  methods: {
+    openFeedback() {
+      const textRequest = this.$gettext('Please restore the following project:')
+      const textProjectName = this.$gettext('Project name: {name}', { name: this.projectData.name })
+      const textProjectID = this.$gettext('Project ID: {id}', { id: this.project.id })
+      this.$store.commit('user/SET_FEEDBACK', {
+        feedbackOn: true,
+        feedbackForm: {
+          subject: this.$gettext('Project restore request ({id})', { id: this.project.id }),
+          message: `${textRequest}\r\n${textProjectName}\r\n${textProjectID}`
+        }
+      })
+    },
   }
 }
 </script>
 
 <style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .ExtendedProjectCard {
   max-width: @cardSizeMedium;
   margin: 0 auto 20px;
 
-  .FirstRow {
+  &.archived {
+    border-color: @colorTextMuted !important;
+  }
+
+.FirstRow {
     position: relative;
     padding: 20px 50px 20px 30px;
+
+    &.archived {
+      background-color: @colorGrayLightest;
+    }
 
     .FirstSubRow {
       margin-bottom: 16px;
@@ -196,7 +207,7 @@ export default {
         font-weight: 400;
 
         &::before {
-          content: "";
+          content: '';
           position: absolute;
           top: 50%;
           left: 10px;
@@ -258,7 +269,27 @@ export default {
   .SecondRow {
     padding: 16px 30px;
     background-color: @colorBrandBlueLight;
+
+    &.archived {
+      background-color: @colorGrayLighter;
+    }
+
+    .RestoreAction {
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #008DC9;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 200ms cubic-bezier(0.645, 0.045, 0.355, 1);
+      i {
+        font-size: 18px;
+        font-weight: bold;
+        margin-right: 6px;
+      }
+    }
   }
 }
-
 </style>
