@@ -33,7 +33,6 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
 
-from .mixins import CheckRequiredMixin
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -164,7 +163,7 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         return Response(self._get_permission_based_data(project))
 
 
-class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
+class ProjectPublishViewSet(TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
     def update(self, request, project_id, country_id):
         """
