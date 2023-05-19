@@ -1379,7 +1379,7 @@ class ProjectTests(SetupTests):
         url = reverse("project-archive", kwargs={"project_id": archived_project.id})
         response = self.test_user_client.put(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.json(), {'details': 'No such project'})
+        self.assertEqual(response.json(), {'detail': 'No such project'})
 
         url = reverse("userprofile-me")
         response = self.test_user_client.get(url, format='json')
