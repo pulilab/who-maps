@@ -105,7 +105,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_archive(obj):
         data = []
-        for project in Project.objects.member_of(obj.user).filter(archived=True):
+        for project in Project.projects.member_of(obj.user).filter(archived=True):
             draft = project.to_representation(draft_mode=True)
             data.append(project.to_response_dict(published=None, draft=draft))
 
