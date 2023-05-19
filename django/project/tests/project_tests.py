@@ -1359,3 +1359,34 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(response.json()['published']['hsc_challenges_other'], data['project']['hsc_challenges_other'])
+
+    def test_archived_projects(self):
+        project_data = self.generate_project_data(project_name="Test Project Archived")
+        archived_project = self.create_draft_project(project_data)
+        self.publish_project(archived_project.id, project_data)
+
+        count_before_archiving = Project.objects.all().count()
+
+        # archive it through API
+        url = reverse("project-archive", kwargs={"project_id": archived_project.id})
+        response = self.test_user_client.put(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        count_after_archiving = Project.objects.all().count()
+        self.assertEqual(count_before_archiving, count_after_archiving + 1)
+
+        # try to archive it again, should fail
+        url = reverse("project-archive", kwargs={"project_id": archived_project.id})
+        response = self.test_user_client.put(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.json(), {'details': 'No such project'})
+
+        url = reverse("userprofile-me")
+        response = self.test_user_client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+        archive = response.json()['archive']
+        self.assertEqual(len(archive), 2)
+        self.assertTrue(archive[1]['archived'])
+        self.assertIsNone(archive[1]['published'])
+        self.assertEqual(archive[1]['public_id'], '')
+        self.assertEqual(archive[1]['draft']['name'], archived_project.name)
