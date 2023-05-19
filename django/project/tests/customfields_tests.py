@@ -24,7 +24,7 @@ class CustomFieldTests(SetupTests):
 
         response = self.test_user_client.post(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'details': 'No such country'})
+        self.assertEqual(response.json(), {'detail': 'No such country'})
 
     def test_country_answer_wrong_country_and_project(self):
         url = reverse("project-draft",
@@ -37,7 +37,7 @@ class CustomFieldTests(SetupTests):
 
         response = self.test_user_client.put(url, data=data, format='json')
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'details': 'No such project'})
+        self.assertEqual(response.json(), {'detail': 'No such project'})
 
     def test_country_answers_are_ignored_if_no_questions(self):
         url = reverse("project-create",
