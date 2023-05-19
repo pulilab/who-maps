@@ -200,14 +200,17 @@ class StageAdmin(SortableAdminMixin, admin.ModelAdmin):
 
 class ProjectVersionAdmin(admin.ModelAdmin):
     model = ProjectVersion
-    fields = ['modified', 'project', 'user', 'version', 'data']
+    fields = ['modified', 'project', 'user', 'version', 'data', 'published', 'archived']
     readonly_fields = fields
     search_fields = ['project__name']
 
-    list_display = ['modified', 'project', 'version']
+    list_display = ['modified', 'project', 'version', 'published', 'archived']
 
     def has_add_permission(self, request):
         return False
+
+    def get_queryset(self, request):  # pragma: no cover
+        return super().get_queryset(request).order_by('-modified')
 
 
 class ProjectImportV2Inline(admin.StackedInline):
