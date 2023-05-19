@@ -5,7 +5,7 @@ from django.db import migrations
 
 def update_search_objects(apps, schema_editor):
     Project = apps.get_model("project", "Project")
-    for project in Project.objects.exclude(public_id=""):
+    for project in Project.projects.exclude(public_id=""):
         project.search.update(project)
 
 
