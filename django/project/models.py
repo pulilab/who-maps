@@ -71,7 +71,9 @@ class ProjectManager(models.Manager):
 
 
 class ProjectQuerySet(ActiveQuerySet, ProjectManager):
-    pass
+    def add_initial_q(self):
+        self.query.add_q(Q(is_active=True))
+        self.query.add_q(Q(archived=False))
 
 
 class Project(SoftDeleteModel, ExtendedModel):
