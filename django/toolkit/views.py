@@ -29,7 +29,7 @@ class ToolkitViewSet(TeamTokenAuthMixin, CheckProjectAccessMixin, GenericViewSet
                 toolkit.update_score(**serializer.validated_data)
             except IndexError:
                 # Wrong index somewhere in the chain.
-                return Response({"details": "No such answer."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"detail": "No such answer."}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response(serializer.data)
         else:
