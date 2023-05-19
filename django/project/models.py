@@ -97,7 +97,7 @@ class Project(SoftDeleteModel, ExtendedModel):
     research = models.BooleanField(blank=True, null=True)
     metadata = models.JSONField(default=dict)
 
-    projects = ProjectManager  # deprecated, use objects instead
+    projects = ProjectManager()  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
 
     def __str__(self):  # pragma: no cover
@@ -160,7 +160,7 @@ class Project(SoftDeleteModel, ExtendedModel):
         return data
 
     def to_response_dict(self, published, draft):
-        return dict(id=self.pk, public_id=self.public_id, published=published, draft=draft)
+        return dict(id=self.pk, public_id=self.public_id, archived=self.archived, published=published, draft=draft)
 
     def to_project_import_table_dict(self, published_data, draft_data):
         published = True if self.public_id != "" else False
