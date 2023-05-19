@@ -22,7 +22,7 @@ from .data.sub_level_types import SUB_LEVEL_TYPES
 from .data.dashboard_columns import DASHBOARD_COLUMNS
 
 
-class TokenAuthMixin(object):
+class TokenAuthMixin:
     """
     Mixin class for defining general permission and authentication settings on
     REST Framework Class Based Views.
@@ -31,27 +31,27 @@ class TokenAuthMixin(object):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
-class TeamTokenAuthMixin(object):
+class TeamTokenAuthMixin:
     authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, InTeamOrReadOnly)
 
 
-class TeamCollectionTokenAuthMixin(object):
+class TeamCollectionTokenAuthMixin:
     authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, InTeamOrCollectionOwnerOrReadOnly)
 
 
-class CollectionTokenAuthMixin(object):
+class CollectionTokenAuthMixin:
     authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (CollectionOwnerOrReadOnly,)
 
 
-class CollectionAuthenticatedMixin(object):
+class CollectionAuthenticatedMixin:
     authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, CollectionOwnerOrReadOnly)
 
 
-class CheckProjectAccessMixin(object):
+class CheckProjectAccessMixin:
     """
     This method needs to be used with an APIView (or ViewSet) that implements `check_object_permissions`
     """
