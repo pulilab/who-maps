@@ -218,6 +218,13 @@ class SetupTests(TestData):
         self.project_id = project.id
         self.publish_project(self.project_id, self.project_data)
 
+        # Make an archived project as well, see if it generates any confusion down the line
+        archived_project_data = self.generate_project_data(project_name="Test Project Archived")
+        archived_project = self.create_draft_project(archived_project_data)
+        archived_project_id = archived_project.id
+        self.publish_project(archived_project_id, archived_project_data)
+        archived_project.archive()
+
     def check_project_search_init_state(self, project):
         obj = project.search
         self.assertEqual(obj.project_id, project.id)
