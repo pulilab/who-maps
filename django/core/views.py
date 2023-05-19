@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
+from rest_framework import status
 
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -63,12 +65,9 @@ class Http400(APIException):
     """
     Represents 400 error to be raised inside APIs for immediate error response.
     """
-    status_code = 400
-    detail = {"details": "No such object."}
-
-    def __init__(self, detail=None):
-        if detail:
-            self.detail = {"details": detail}
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = _('No such object.')
+    default_code = 'bad_request'
 
 
 def get_object_or_400(cls, error_message="No such object.", select_for_update=False, **kwargs):
