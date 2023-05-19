@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-input_vue_files="$(find ./components ./pages ./layouts -type f -name '*.vue')"
+input_vue_files="$(find ./components ./pages ./layouts ./utilities ./store -type f -regex '.*\.\(vue\|js\)$')"
 input_js_glob="./angular/**/*.+(js|html)"
 workdir=$(mktemp -d "${TMPDIR:-/tmp/}$(basename $0).XXXXXXXXXXXX") || exit 1
 
