@@ -143,9 +143,7 @@ class ProjectAdmin(AllObjectsAdmin):
     def link(self, obj):
         if obj.id is None:
             return '-'
-        version = 'publish' if obj.public_id else 'draft'
-        return mark_safe("<a target='_blank' href='/app/{}/edit-project/{}/'>See project</a>"
-                         .format(obj.id, version))
+        return mark_safe(f"<a target='_blank' href='/en/-/projects/{obj.id}/edit'>See project</a>")
 
     def get_queryset(self, request):
         qs = super(ProjectAdmin, self).get_queryset(request)
