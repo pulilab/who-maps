@@ -6,8 +6,12 @@ from django.db import migrations
 def regenerate_search_objects(apps, schema_editor):
     PS = apps.get_model("search", "ProjectSearch")
     Project = apps.get_model("project", "Project")
-    for project in Project.projects.all():
-        PS.objects.get_or_create(project_id=project.id)
+    try:
+        for project in Project.projects.exclude(public_id=""):
+            PS.objects.get_or_create(project_id=project.id)
+    except AttributeError:
+        for project in Project.objects.exclude(public_id=""):
+            PS.objects.get_or_create(project_id=project.id)
 
 
 class Migration(migrations.Migration):
