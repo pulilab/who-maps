@@ -55,7 +55,7 @@
           <ProjectStatusBadge :status="projectStatus" />
         </el-col>
         <el-col class="flex">
-          <el-row v-if="project.isArchived" type="flex" justify="end" class="RestoreAction" @click.native="openFeedback">
+          <el-row v-if="project.archived" type="flex" justify="end" class="RestoreAction" @click.native="openFeedback">
             <i class="el-icon-upload2"></i>
             <translate>Restore</translate>
           </el-row>
@@ -94,19 +94,17 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getUserProjectDetails: 'projects/getUserProjectDetails'
+      getProjectDetails: 'projects/getProjectDetails'
     }),
     project() {
-      const projectDetails = this.getUserProjectDetails(this.projectBase.id)
-      return {
-        ...projectDetails,
-        isArchived: this.projectBase.archived
-      }
+      return this.getProjectDetails(this.projectBase)
     },
     projectData() {
-      return this.project.isPublished
-        ? this.project.published
-        : this.project.draft
+      return this.project.archived
+        ? this.project.draft
+        : this.project.isPublished
+          ? this.project.published
+          : this.project.draft
     },
     donors() {
       return this.projectData && this.projectData.donors
@@ -120,7 +118,7 @@ export default {
       return this.projectStatus === 'archived' ? 'archived' : ''
     },
     projectStatus() {
-      if (this.project.isArchived) return 'archived'
+      if (this.project.archived) return 'archived'
       if (!this.project.isPublished) return 'draft'
       if (this.project.isPublished) return 'published'
       if (this.projectData.approved) return 'approved'
