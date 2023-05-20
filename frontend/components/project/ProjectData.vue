@@ -246,26 +246,26 @@ export default {
             // print,
           ]
         }
+        this.actions.push({
+          id: 'archive',
+          type: 'danger',
+          icon: 'el-icon-takeaway-box',
+          plain: true,
+          label: this.$gettext('Archive project'),
+          handle: 'handleArchiveProject',
+          confirm: {
+            title: this.$gettext('Attention'),
+            description: this.$gettext(
+              'The current project will be archived. You will find it on "My projects" page where you can initiate to restore it if needed.'
+            )
+          },
+          success: {
+            title: this.$gettext('Congratulations'),
+            message: this.$gettext('Project has been archived.')
+          },
+          error: info
+        })
       }
-      this.actions.push({
-        id: 'archive',
-        type: 'danger',
-        icon: 'el-icon-takeaway-box',
-        plain: true,
-        label: this.$gettext('Archive project'),
-        handle: 'handleArchiveProject',
-        confirm: {
-          title: this.$gettext('Attention'),
-          description: this.$gettext(
-            'The current project will be archived. You will find it on "My projects" page where you can initiate to restore it if needed.'
-          )
-        },
-        success: {
-          title: this.$gettext('Congratulations'),
-          message: this.$gettext('Project has been archived.')
-        },
-        error: info
-      })
     },
     async handleArchiveProject(id) {
       await this.archiveProject(id)
