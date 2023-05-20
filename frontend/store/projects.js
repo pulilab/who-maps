@@ -73,8 +73,7 @@ export const getters = {
         ...p,
         isMember: user ? user.member.includes(p.id) : undefined,
         isViewer: user ? user.viewer.includes(p.id) : undefined,
-        isPublished: !!(p.published && p.published.name),
-        isArchived: false // should get the archived flag somehow
+        isPublished: !!(p.published && p.published.name)
       }
     }
     return {}
