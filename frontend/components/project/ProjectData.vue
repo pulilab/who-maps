@@ -251,7 +251,7 @@ export default {
               label: this.$gettext('Discard draft'),
               handle: 'discardDraft',
               confirm: {
-                title: this.$gettext('Attention'),
+                title: this.$gettext('Warning'),
                 description: this.$gettext(
                   'The current draft will be overwritten by the published version'
                 )

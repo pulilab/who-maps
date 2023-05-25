@@ -94,6 +94,7 @@
           <project-navigation
             @saveDraft="doSaveDraft"
             @discardDraft="doDiscardDraft"
+            @archiveProject="doArchiveProject"
             @publishProject="doPublishProject"
           />
         </el-col>
@@ -142,6 +143,9 @@ export default {
       countryAnswers: 'project/getCountryAnswers',
       donorAnswers: 'project/getDonorsAnswers'
     }),
+    projectId() {
+      return this.$route.params.id
+    },
     isDraft () {
       return this.$route.name.includes('organisation-projects-id-edit')
     },
@@ -188,7 +192,8 @@ export default {
       discardDraft: 'project/discardDraft',
       publishProject: 'project/publishProject',
       setLoading: 'project/setLoading',
-      initProjectState: 'project/initProjectState'
+      initProjectState: 'project/initProjectState',
+      archiveProject: 'project/archiveProject'
     }),
     digitalHealthInterventionsValidator (rule, value, callback) {
       const ownDhi = this.project.digitalHealthInterventions.filter(
@@ -360,6 +365,27 @@ export default {
           type: 'info',
           message: this.$gettext('Action cancelled')
         })
+      }
+    },
+    async doArchiveProject() {
+      try {
+        await this.$confirm(
+          this.$gettext('The current project will be archived. You will find it on "My projects" page where you can initiate to restore it if needed.'),
+          this.$gettext('Warning'),
+          {
+            confirmButtonText: this.$gettext('OK'),
+            cancelButtonText: this.$gettext('Cancel')
+          }
+        )
+
+        await this.archiveProject(this.projectId)
+        await this.$auth.fetchUser()
+        const path = this.localePath({ name: 'organisation-projects', query: { list: 'archive'} })
+        this.$router.push(path)
+      } catch (e) {
+        if (e !== 'cancel') {
+          console.log('🚀 ~ file: ProjectForm.vue:380 ~ doArchiveProject ~ e:', e)
+        }
       }
     },
     async doPublishProject () {

@@ -122,6 +122,19 @@
         <el-button
           v-if="isDraft"
           :disabled="!!loading"
+          :plain="true"
+          type="danger"
+          icon="el-icon-takeaway-box"
+          class="DiscardDraft DeleteButton"
+          @click="$emit('archiveProject')"
+        >
+          <fa v-show="loading === 'discard'" icon="spinner" spin />
+          <translate>Archive project</translate>
+        </el-button>
+
+        <el-button
+          v-if="isDraft"
+          :disabled="!!loading"
           type="success"
           size="medium"
           icon="el-icon-upload"
