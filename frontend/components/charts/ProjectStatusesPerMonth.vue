@@ -13,7 +13,7 @@
     <template #legend>
       <DataLegend :items="chartLegend" horizontal />
     </template>
-  </GraphLayout>  
+  </GraphLayout>
 </template>
 
 <script>
@@ -24,15 +24,8 @@ import GraphLayout from '@/components/charts/common/GraphLayout'
 import DataLegend from '@/components/charts/utilities/DataLegend.vue'
 
 const base = '/api/kpi'
-const chartColors = ['#BABABB', '#9ACB67', '#FFCF3F', '#49BCE8', '#E84F48']
-const projectsLabels = [
-  'Draft Projects',
-  'Published Projects',
-  'Publishable Projects',
-  'Unpublished Projects',
-  'Incoherent Projects'
-]
-    
+const chartColors = ['#BABABB', '#9ACB67', '#FFCF3F', '#49BCE8', '#E84F48', '#000']
+
 export default {
   name: 'ProjectStatusesPerMonth',
   components: {
@@ -51,8 +44,16 @@ export default {
       firstLoad: true,
       loadingChart: 0,
       currentlyLoading: true,
+      projectsLabels: [
+        this.$gettext('Draft Projects'),
+        this.$gettext('Published Projects'),
+        this.$gettext('Publishable Projects'),
+        this.$gettext('Unpublished Projects'),
+        this.$gettext('Incoherent Projects'),
+        this.$gettext('Archived Projects'),
+      ],
       chartData: {
-        labels: projectsLabels,
+        labels: [],
         datasets: []
       },
       chartOptions: {
@@ -101,7 +102,7 @@ export default {
             }
           ]
         },
-        maintainAspectRatio: false,        
+        maintainAspectRatio: false,
         tooltips: {
           enabled: false,
           mode: 'index',
@@ -137,11 +138,12 @@ export default {
         extract(projectStatus, 'published'),
         extract(projectStatus, 'ready_to_publish'),
         extract(projectStatus, 'unpublished'),
-        extract(projectStatus, 'to_delete')
+        extract(projectStatus, 'to_delete'),
+        extract(projectStatus, 'archived')
       ]
-      
-      this.chartData.datasets = this.generateDataset(chartColors,projectStatusMonthly,projectsLabels)
-      this.chartLegend = legendGenerator(projectsLabels,chartColors)
+
+      this.chartData.datasets = this.generateDataset(chartColors,projectStatusMonthly,this.projectsLabels)
+      this.chartLegend = legendGenerator(this.projectsLabels,chartColors)
 
       //re-render chart
       this.loadingChart++
@@ -156,7 +158,7 @@ export default {
     filters: async function(newValue, oldValue) {
       await this.loadChart()
     }
-  }  
+  }
 }
 </script>
 
