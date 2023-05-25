@@ -96,7 +96,7 @@ class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
     def get_archived(self, obj):
         donor = self.context['request'].query_params.get('investor')
         if donor:
-            return len(obj.data[donor]['archived']) if donor in obj.data else 0
+            return len(obj.data[donor]['archived']) if donor in obj.data and 'archived' in obj.data[donor] else 0
         return len(obj.archived)
 
     def get_ready_to_publish(self, obj):
