@@ -206,6 +206,11 @@ class TestData(APITestCase):
         response = self.test_user_client.put(url, project_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
 
+    def archive_project(self, project_id):
+        url = reverse("project-archive", kwargs={"project_id": project_id})
+        response = self.test_user_client.put(url, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 class SetupTests(TestData):
     def setUp(self):
