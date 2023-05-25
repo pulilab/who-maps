@@ -145,7 +145,7 @@ class KPITestDataWithProjects(KPITestData):
         hc2 = HealthCategory.objects.get(id=2)
         hfa1 = HealthFocusArea.objects.create(name='Health Focus Area 1', health_category=hc1)
         hfa2 = HealthFocusArea.objects.create(name='Health Focus Area 2', health_category=hc2)
-        for i in range(1, 10):
+        for i in range(1, 11):
             donors = list()
             if i % 3 == 0:
                 donors.append(self.d1.id)
@@ -160,8 +160,10 @@ class KPITestDataWithProjects(KPITestData):
             project_data = self.generate_project_data(f'project {i}', self.org, country, donors, dates[i % 4],
                                                       stages[i % 3], hfa=[hfa1.id, hfa2.id], standards=standards)
             project = self.create_draft_project(project_data)
-            if i % 2 == 0 and len(donors) > 0:
+            if i % 2 == 0 and len(donors) > 0 and not i == 10:
                 self.publish_project(project.id, project_data)
+            if i == 10:
+                self.archive_project(project.id)
         for project in self.projects:
             versions = ProjectVersion.objects.filter(project=project)
             if len(versions) == 2:
