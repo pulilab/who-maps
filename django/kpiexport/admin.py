@@ -36,7 +36,8 @@ class AuditLogTokensAdmin(TestingOnlyAdmin):
 @admin.register(AuditLogProjectStatus)
 class AuditLogProjectStatusAdmin(TestingOnlyAdmin):
     list_display = [
-        'date', 'modified', 'country', 'published', 'ready_to_publish', 'unpublished', 'to_delete', 'draft', 'growth'
+        'date', 'modified', 'country', 'published', 'ready_to_publish', 'unpublished', 'archived',
+        'to_delete', 'draft', 'growth'
     ]
     list_filter = (('date', DateRangeFilter), 'country')
 
