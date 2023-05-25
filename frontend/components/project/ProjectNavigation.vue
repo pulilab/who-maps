@@ -1,21 +1,9 @@
 <template>
-  <div
-    v-scroll-class:FixedNavigation="266"
-    class="ProjectNavigation"
-  >
+  <div v-scroll-class:FixedNavigation="266" class="ProjectNavigation">
     <el-card :body-style="{ padding: '0px' }">
-      <div
-        v-if="!isNewProject"
-        class="SwitchProjectStatus"
-      >
-        <el-row
-          type="flex"
-          justify="space-between"
-          align="middle"
-        >
-          <div class="SwitchLabel">
-            Switch view:
-          </div>
+      <div v-if="!isNewProject" class="SwitchProjectStatus">
+        <el-row type="flex" justify="space-between" align="middle">
+          <div class="SwitchLabel">Switch view:</div>
           <el-button-group class="SwitchButtons">
             <el-button
               :class="['DraftButton', { Active: isDraft || isReadOnlyDraft }]"
@@ -27,7 +15,7 @@
             <el-button
               :class="[
                 'PublishedButton',
-                { Active: isPublished && published.name },
+                { Active: isPublished && published.name }
               ]"
               :disabled="isPublished || !published.name"
               @click="goToPublished"
@@ -41,10 +29,7 @@
       <div class="Stepper">
         <ul>
           <li :class="{ active: active === 'general' }">
-            <el-button
-              type="text"
-              @click="scrollTo('general')"
-            >
+            <el-button type="text" @click="scrollTo('general')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -52,10 +37,7 @@
             </el-button>
           </li>
           <li :class="{ active: active === 'implementation' }">
-            <el-button
-              type="text"
-              @click="scrollTo('implementation')"
-            >
+            <el-button type="text" @click="scrollTo('implementation')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -63,10 +45,7 @@
             </el-button>
           </li>
           <li :class="{ active: active === 'stages' }">
-            <el-button
-              type="text"
-              @click="scrollTo('stages')"
-            >
+            <el-button type="text" @click="scrollTo('stages')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -74,10 +53,7 @@
             </el-button>
           </li>
           <li :class="{ active: active === 'technology' }">
-            <el-button
-              type="text"
-              @click="scrollTo('technology')"
-            >
+            <el-button type="text" @click="scrollTo('technology')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -85,10 +61,7 @@
             </el-button>
           </li>
           <li :class="{ active: active === 'interoperability' }">
-            <el-button
-              type="text"
-              @click="scrollTo('interoperability')"
-            >
+            <el-button type="text" @click="scrollTo('interoperability')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -99,10 +72,7 @@
             v-show="showCountryFieldsLink"
             :class="{ active: active === 'countrycustom' }"
           >
-            <el-button
-              type="text"
-              @click="scrollTo('countrycustom')"
-            >
+            <el-button type="text" @click="scrollTo('countrycustom')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -113,10 +83,7 @@
             v-show="showDonorFieldsLink"
             :class="{ active: active === 'donorcustom' }"
           >
-            <el-button
-              type="text"
-              @click="scrollTo('donorcustom')"
-            >
+            <el-button type="text" @click="scrollTo('donorcustom')">
               <span class="Step">
                 <fa icon="arrow-right" />
               </span>
@@ -126,54 +93,42 @@
         </ul>
       </div>
 
-      <div
-        v-if="isTeam || isNewProject"
-        class="NavigationActions"
-      >
-        <el-button
-          v-if="isDraft"
-          :disabled="!!loading"
-          type="primary"
-          size="medium"
-          @click="$emit('publishProject')"
-        >
-          <fa
-            v-show="loading === 'publish'"
-            icon="spinner"
-            spin
-          />
-          <translate>Publish</translate>
-        </el-button>
-
+      <div v-if="isTeam || isNewProject" class="NavigationActions">
         <el-button
           v-if="isNewProject || isDraft"
-          :type="isNewProject ? 'primary' : 'text'"
-          :size="isNewProject ? 'medium' : ''"
+          type="primary"
+          size="medium"
           :class="['SaveDraft', { NewProject: isNewProject, Draft: isDraft }]"
           :disabled="!!loading"
           @click="$emit('saveDraft')"
         >
-          <fa
-            v-show="loading === 'draft'"
-            icon="spinner"
-            spin
-          />
+          <fa v-show="loading === 'draft'" icon="spinner" spin />
           <translate>Save draft</translate>
         </el-button>
 
         <el-button
           v-if="isDraft"
           :disabled="!!loading"
-          type="text"
+          :plain="true"
+          type="danger"
+          icon="el-icon-delete"
           class="DiscardDraft DeleteButton"
           @click="$emit('discardDraft')"
         >
-          <fa
-            v-show="loading === 'discard'"
-            icon="spinner"
-            spin
-          />
+          <fa v-show="loading === 'discard'" icon="spinner" spin />
           <translate>Discard draft</translate>
+        </el-button>
+
+        <el-button
+          v-if="isDraft"
+          :disabled="!!loading"
+          type="success"
+          size="medium"
+          icon="el-icon-upload"
+          @click="$emit('publishProject')"
+        >
+          <fa v-show="loading === 'publish'" icon="spinner" spin />
+          <translate>Publish</translate>
         </el-button>
 
         <el-button
@@ -181,13 +136,10 @@
           :disabled="!!loading"
           type="danger"
           size="medium"
+          icon="el-icon-download"
           @click="$emit('handleClickUnPublish')"
         >
-          <fa
-            v-show="loading === 'unpublish'"
-            icon="spinner"
-            spin
-          />
+          <fa v-show="loading === 'unpublish'" icon="spinner" spin />
           <translate>Unpublish</translate>
         </el-button>
 
@@ -234,26 +186,26 @@ export default {
       published: 'project/getPublished',
       getShadowDonors: 'project/getShadowDonors'
     }),
-    active () {
+    active() {
       const hash = this.$route.hash
       return hash ? hash.replace('#', '') : 'general'
     },
-    route () {
+    route() {
       return this.$route.name.split('__')[0]
     },
-    isNewProject () {
+    isNewProject() {
       return this.route === 'organisation-projects-create'
     },
-    isPublished () {
+    isPublished() {
       return this.route === 'organisation-projects-id-published'
     },
-    isDraft () {
+    isDraft() {
       return this.route === 'organisation-projects-id-edit'
     },
-    isReadOnlyDraft () {
+    isReadOnlyDraft() {
       return this.route === 'organisation-projects-id'
     },
-    anon () {
+    anon() {
       if (this.user) {
         return (
           !this.user.is_superuser &&
@@ -264,7 +216,7 @@ export default {
       }
       return true
     },
-    isTeam () {
+    isTeam() {
       if (this.user) {
         return (
           this.user.is_superuser ||
@@ -273,21 +225,19 @@ export default {
       }
       return false
     },
-    project () {
+    project() {
       return this.isDraft || this.isReadOnlyDraft || this.isNewProject
         ? this.draft
         : this.published
     },
-    showCountryFieldsLink () {
+    showCountryFieldsLink() {
       const country = this.getCountryDetails(this.project.country)
       if (country) {
-        return (
-          country.country_questions && country.country_questions.length > 0
-        )
+        return country.country_questions && country.country_questions.length > 0
       }
       return false
     },
-    showDonorFieldsLink () {
+    showDonorFieldsLink() {
       const donors = [
         ...new Set([...this.project.donors, ...this.getShadowDonors])
       ]
@@ -306,22 +256,22 @@ export default {
       return false
     }
   },
-  mounted () {
+  mounted() {
     window.addEventListener('resize', this.setNavigationBoxLeftStyle)
     window.addEventListener('scroll', this.setNavigationBoxLeftStyle)
   },
-  beforeDestroy () {
+  beforeDestroy() {
     window.removeEventListener('resize', this.setNavigationBoxLeftStyle)
     window.removeEventListener('scroll', this.setNavigationBoxLeftStyle)
   },
   methods: {
-    scrollTo (where) {
+    scrollTo(where) {
       window.location.hash = ''
       this.$nextTick(() => {
         this.$router.replace(`#${where}`)
       })
     },
-    goToDraft () {
+    goToDraft() {
       const name = this.isTeam
         ? 'organisation-projects-id-edit'
         : 'organisation-projects-id'
@@ -331,21 +281,21 @@ export default {
       })
       this.$router.push(localised)
     },
-    goToPublished () {
+    goToPublished() {
       const localised = this.localePath({
         name: 'organisation-projects-id-published',
         params: { ...this.$route.params }
       })
       this.$router.push(localised)
     },
-    goToDashboard () {
+    goToDashboard() {
       const localised = this.localePath({
         name: 'organisation-dashboard',
         params: { ...this.$route.params }
       })
       this.$router.push(localised)
     },
-    setNavigationBoxLeftStyle () {
+    setNavigationBoxLeftStyle() {
       const leftSide = document.querySelector('#general')
       const lang = this.$nuxt.$i18n.locale
       const rtl = lang === 'ar'
@@ -369,8 +319,8 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~/assets/style/mixins.less';
 
 .ProjectNavigation {
   width: @projectAsideNavWidth;
@@ -446,7 +396,7 @@ export default {
 
       &::after {
         z-index: 1;
-        content: "";
+        content: '';
         position: absolute;
         top: 15px;
         left: 45px;
@@ -462,7 +412,6 @@ export default {
       position: relative;
       cursor: pointer;
 
-      &.active,
       &:hover,
       &:active {
         .el-button {
@@ -546,13 +495,45 @@ export default {
     background-color: @colorBrandBlueLight;
     text-align: center;
 
-    .el-button--primary,
-    .el-button--danger {
+    .button-plain(@color; @bg; @border; @percentage: 5%) {
+      background-color: @bg;
+      color: @color;
+      border: 1px solid @color!important;
+      &:hover,
+      &:active {
+        background-color: lighten(@bg, @percentage);
+        border: 1px solid lighten(@color, @percentage) !important;
+      }
+    }
+
+
+    .el-button {
       width: 100%;
       margin: 0 0 20px;
     }
 
-    .el-button--text {
+    .el-button--success {
+      .button-plain(@colorWhite, @colorPublished, "transparent");
+    }
+
+    .el-button--primary {
+      .button-plain(@colorWhite, @colorBrandPrimary, "transparent");
+    }
+
+    .el-button--danger {
+      .button-plain(@colorWarning, @colorWhite, @colorWarning);
+    }
+
+    .el-button--error {
+      .button-plain(@colorWhite, @colorDanger, "transparent");
+    }
+
+    i {
+      margin-right: 4px;
+      font-size: @fontSizeLarge;
+    }
+
+    .el-button--text, span {
       width: 100%;
       margin: 0;
       font-size: @fontSizeMedium;
