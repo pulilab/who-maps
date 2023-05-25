@@ -264,7 +264,7 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
                               output_field=IntegerField())). \
         annotate(donors=Cast(KeyTextTransform('donors', 'data'),
                              output_field=CharField())). \
-        order_by('project'). \
+        order_by('project', '-modified'). \
         distinct('project')
 
     log_entry_global, _ = AuditLogProjectStatus.objects.get_or_create(date=log_date, country=None)
