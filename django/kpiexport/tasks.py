@@ -209,6 +209,7 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
                     "published": [],
                     "to_delete": [],
                     "unpublished": [],
+                    "archived": [],
                     "ready_to_publish": []
                 }
             stats_dict = {donor_id: stats for donor_id in donor_ids}
@@ -234,6 +235,7 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
             entry.data[donor_id] = dict(
                 published=[],
                 unpublished=[],
+                archived=[],
                 ready_to_publish=[],
                 to_delete=[],
                 draft=[],
@@ -243,6 +245,8 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
             entry.data[donor_id]['published'].append(project_id)
         if status_change.unpublished and project_id not in set(entry.data[donor_id]['unpublished']):
             entry.data[donor_id]['unpublished'].append(project_id)
+        if status_change.archived and project_id not in set(entry.data[donor_id]['archived']):
+            entry.data[donor_id]['archived'].append(project_id)
         if status_change.ready_to_publish and project_id not in set(entry.data[donor_id]['ready_to_publish']):
             entry.data[donor_id]['ready_to_publish'].append(project_id)
         if status_change.to_delete and project_id not in set(entry.data[donor_id]['to_delete']):
@@ -279,6 +283,9 @@ def update_auditlog_project_status_data_task(current_date=None):  # pragma: no c
             if status_change.unpublished:
                 if entry.project.id not in set(current_entry.unpublished):
                     current_entry.unpublished.append(entry.project.id)
+            if status_change.archived:
+                if entry.project.id not in set(current_entry.archived):
+                    current_entry.archived.append(entry.project.id)
             if status_change.ready_to_publish:
                 if entry.project.id not in set(current_entry.ready_to_publish):
                     current_entry.ready_to_publish.append(entry.project.id)
