@@ -112,6 +112,7 @@ class AuditLogProjectStatus(AuditLogBase):
             "published": {(int)},
             "ready_to_publish": {(int)},
             "unpublished": {(int)},
+            "archived": {(int)},
             "to_delete": {(int)},
             "growth": (int)
           },
@@ -120,6 +121,7 @@ class AuditLogProjectStatus(AuditLogBase):
             "published": {(int)},
             "ready_to_publish": {(int)},
             "unpublished": {(int)},
+            "archived": {(int)},
             "to_delete": {(int)},
             "draft": {(int)},
             "growth": (int)
@@ -132,6 +134,7 @@ class AuditLogProjectStatus(AuditLogBase):
     unpublished = ArrayField(models.IntegerField(null=True, blank=True), blank=True, default=list)
     to_delete = ArrayField(models.IntegerField(null=True, blank=True), blank=True, default=list)
     draft = ArrayField(models.IntegerField(null=True, blank=True), blank=True, default=list)
+    archived = ArrayField(models.IntegerField(null=True, blank=True), blank=True, default=list)
     growth = models.IntegerField(default=0)  # Total number of new projects
 
     class Meta:
@@ -140,7 +143,8 @@ class AuditLogProjectStatus(AuditLogBase):
 
     def __str__(self):  # pragma: no cover
         return f'{self.date.year}-{self.date.month}-{self.country} - P: {self.published}, ' \
-               f'RP: {self.ready_to_publish}, U: {self.unpublished}, TD: {self.to_delete}, G:{self.growth}'
+               f'RP: {self.ready_to_publish}, U: {self.unpublished}, A: {self.archived}, ' \
+               f'TD: {self.to_delete}, G:{self.growth}'
 
 
 class AuditLogProjectStages(AuditLogBase):
