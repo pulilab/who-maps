@@ -62,9 +62,9 @@ export default {
           xAxes: [
             {
               offset: true,
-              gridLines: { 
-                drawOnChartArea: false, 
-                drawTicks: false 
+              gridLines: {
+                drawOnChartArea: false,
+                drawTicks: false
               },
               scaleLabel: {
                 display: true,
@@ -73,26 +73,26 @@ export default {
                 fontColor: '#485465',
                 lineHeight: 3
               },
-              ticks: { 
-                fontSize: 10, padding: 15 
+              ticks: {
+                fontSize: 10, padding: 15
               }
             }
           ],
           yAxes: [
             {
-              gridLines: { 
-                drawTicks: false 
+              gridLines: {
+                drawTicks: false
               },
               scaleLabel: {
                 display: true,
-                labelString: this.$gettext('Growth of users'),
+                labelString: this.$gettext('Growth of projects'),
                 fontStyle: 'bold',
                 fontColor: '#485465',
                 lineHeight: 3
               },
-              ticks: { 
-                fontSize: 10, 
-                padding: 15 
+              ticks: {
+                fontSize: 10,
+                padding: 15
               }
             }
           ]
