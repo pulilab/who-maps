@@ -75,6 +75,7 @@ class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
     country = serializers.PrimaryKeyRelatedField(read_only=True)
     published = serializers.SerializerMethodField()
     unpublished = serializers.SerializerMethodField()
+    archived = serializers.SerializerMethodField()
     ready_to_publish = serializers.SerializerMethodField()
     to_delete = serializers.SerializerMethodField()
     draft = serializers.SerializerMethodField()
@@ -91,6 +92,12 @@ class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
         if donor:
             return len(obj.data[donor]['unpublished']) if donor in obj.data else 0
         return len(obj.unpublished)
+
+    def get_archived(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return len(obj.data[donor]['archived']) if donor in obj.data else 0
+        return len(obj.archived)
 
     def get_ready_to_publish(self, obj):
         donor = self.context['request'].query_params.get('investor')
