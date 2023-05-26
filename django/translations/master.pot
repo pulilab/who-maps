@@ -310,6 +310,7 @@ msgid ""
 "investors and implementation partners working in your country."
 msgstr ""
 
+#: components/mixins/handleProjectUnpublish.js:27
 #: components/project/ProjectData.vue:138
 #: components/project/ProjectForm.vue:256
 msgid "Action cancelled"
@@ -548,6 +549,7 @@ msgid ""
 "a Health Focus Category only once."
 msgstr ""
 
+#: components/mixins/handleProjectUnpublish.js:11
 #: components/project/ProjectData.vue:152
 #: components/project/ProjectData.vue:199
 #: components/project/ProjectForm.vue:240
@@ -702,6 +704,7 @@ msgstr ""
 #: components/dialogs/EditSubLevelDialog.vue:11
 #: components/dialogs/ProjectApprovalDialog.vue:47
 #: components/dialogs/SaveFilterDialog.vue:12
+#: components/mixins/handleProjectUnpublish.js:13
 #: components/project/ProjectData.vue:323
 #: components/project/ProjectForm.vue:243
 #: components/project/ProjectNavigation.vue:109
@@ -1286,6 +1289,10 @@ msgstr ""
 
 #: components/project/ProjectData.vue:186
 msgid "Error"
+msgstr ""
+
+#: utilities/projects.js:42
+msgid "Error loading page, please try again later"
 msgstr ""
 
 #: components/project/collection/AddEditorDialog.vue:9
@@ -2496,6 +2503,7 @@ msgid "of."
 msgstr ""
 
 #: components/dialogs/ProjectApprovalDialog.vue:107
+#: components/mixins/handleProjectUnpublish.js:12
 #: components/project/ProjectData.vue:322
 #: components/project/ProjectForm.vue:242
 msgid "Ok"
@@ -3474,6 +3482,10 @@ msgstr ""
 msgid "The current project will be unpublish"
 msgstr ""
 
+#: components/mixins/handleProjectUnpublish.js:11
+msgid "The current project will be unpublished"
+msgstr ""
+
 #: components/charts/common/cStages.vue:32
 msgid "The date under a stage represents when that stage was completed."
 msgstr ""
@@ -3567,6 +3579,10 @@ msgstr ""
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used. Please request a new password reset."
+msgstr ""
+
+#: components/mixins/handleProjectUnpublish.js:21
+msgid "The project has been unpublished"
 msgstr ""
 
 #: components/country/widgets/WDocuments.vue:4
