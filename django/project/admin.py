@@ -205,7 +205,7 @@ class ProjectVersionAdmin(admin.ModelAdmin):
     fields = ['modified', 'project', 'user', 'version', 'data', 'published', 'archived']
     readonly_fields = fields
     search_fields = ['project__name']
-
+    list_filter = ['published', 'archived']
     list_display = ['modified', 'project', 'version', 'published', 'archived']
 
     def has_add_permission(self, request):
