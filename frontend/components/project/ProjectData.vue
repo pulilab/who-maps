@@ -207,7 +207,7 @@ export default {
               label: this.$gettext('Unpublish'),
               handle: 'unpublishProject',
               confirm: {
-                title: this.$gettext('Attention'),
+                title: this.$gettext('Warning'),
                 description: this.$gettext(
                   'The current project will be unpublished'
                 )
@@ -276,7 +276,7 @@ export default {
           label: this.$gettext('Archive project'),
           handle: 'handleArchiveProject',
           confirm: {
-            title: this.$gettext('Attention'),
+            title: this.$gettext('Warning'),
             description: this.$gettext(
               'The current project will be archived. You will find it on "My projects" page where you can initiate to restore it if needed.'
             )
