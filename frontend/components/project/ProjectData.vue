@@ -129,6 +129,9 @@ export default {
       getDonorDetails: 'system/getDonorDetails',
       user: 'user/getProfile'
     }),
+    projectId() {
+      return this.$route.params.id
+    },
     isTeam () {
       if (this.user) {
         return this.user.member.includes(+this.$route.params.id)
@@ -291,6 +294,12 @@ export default {
         name: 'organisation-projects-id-edit',
         params: { id: this.$route.params.id, organisation: this.$route.params.organisation }
       })
+      this.$router.push(path)
+    },
+    async handleArchiveProject() {
+      await this.archiveProject(this.projectId)
+      await this.$auth.fetchUser()
+      const path = this.localePath({ name: 'organisation-projects', query: { list: 'archive'} })
       this.$router.push(path)
     },
     // handle custom fields
