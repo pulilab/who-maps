@@ -18,6 +18,7 @@ import ProjectForm from '@/components/project/ProjectForm'
 import PageLayout from '@/components/common/wrappers/PageLayout'
 import ProjectStatusBadge from '@/components/project/ProjectStatusBadge'
 export default {
+  name: 'Edit',
   components: {
     ProjectForm,
     PageLayout,
