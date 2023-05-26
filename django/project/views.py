@@ -267,7 +267,7 @@ class ProjectUnPublishViewSet(TeamTokenAuthMixin, ViewSet):
         data = project.to_representation(draft_mode=True)
 
         ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
-                                      data=project.data, research=project.research, published=False)
+                                      data=project.draft, research=project.research, published=False)
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
 
 
@@ -278,7 +278,7 @@ class ProjectArchiveViewSet(TeamTokenAuthMixin, ViewSet):
         project.archive()
 
         ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
-                                      data=project.data, research=project.research, published=False, archived=True)
+                                      data=project.draft, research=project.research, published=False, archived=True)
         return Response(status=status.HTTP_200_OK)
 
 
