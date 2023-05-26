@@ -105,14 +105,13 @@ def project_status_change(version_1: ProjectVersion, version_2: ProjectVersion) 
 
 def project_status_change_sum(date, project, country) -> ProjectStatusChangeDescriptor:
     status_desc = ProjectStatusChangeDescriptor()
-    # get the newest "old version"
-    old_versions = ProjectVersion.objects.filter(created__date__lt=date, project=project).order_by('-created')
-    old_version = old_versions[0] if old_versions.count() > 0 else None
-    # get the newest "new version"
-    new_versions = ProjectVersion.objects.filter(created__date=date, project=project).order_by('-created')
-    new_version = new_versions[0] if new_versions.count() > 0 else None
-    if new_version is None:  # pragma: no cover
-        raise DataError(f"Could not find project version log for: {project}")
+
+    # Old version we look from yesterday only
+    old_version = ProjectVersion.objects.filter(created__date__lt=date, project=project).order_by('-created').first()
+
+    # New version we look for today only that can have multiple versions, eg. you make a draft, publish and archive
+    new_version = ProjectVersion.objects.filter(created__date=date, project=project).order_by('-created').first()
+
     if not old_version:
         status_desc.fill_from_new_version(new_version, country)
     else:
