@@ -68,6 +68,7 @@ export default {
       try {
         this.submitting = true
         await this.addMeAsEditor(this.projectData)
+        await this.$auth.fetchUser()
         this.state = 'success'
         this.submitting = false
       } catch (error) {

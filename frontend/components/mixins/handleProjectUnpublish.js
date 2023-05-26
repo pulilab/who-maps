@@ -8,7 +8,7 @@ const handleProjectUnpublish = {
     }),
     async handleClickUnPublish (destination, id) {
       try {
-        await this.$confirm(this.$gettext('The current project will be unpublish'), this.$gettext('Attention'), {
+        await this.$confirm(this.$gettext('The current project will be unpublished'), this.$gettext('Attention'), {
           confirmButtonText: this.$gettext('Ok'),
           cancelButtonText: this.$gettext('Cancel'),
           type: 'warning'
@@ -18,7 +18,7 @@ const handleProjectUnpublish = {
         this.$router.push(localised)
         this.$message({
           type: 'success',
-          message: this.$gettext('The project has been unpublish')
+          message: this.$gettext('The project has been unpublished')
         })
       } catch (e) {
         this.setLoading(false)

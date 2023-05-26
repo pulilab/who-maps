@@ -306,8 +306,9 @@ msgid ""
 "investors and implementation partners working in your country."
 msgstr ""
 
-#: components/project/ProjectData.vue:148
-#: components/project/ProjectForm.vue:260
+#: components/mixins/handleProjectUnpublish.js:27
+#: components/project/ProjectData.vue:138
+#: components/project/ProjectForm.vue:256
 msgid "Action cancelled"
 msgstr ""
 
@@ -562,9 +563,10 @@ msgid ""
 "a Health Focus Category only once."
 msgstr ""
 
-#: components/project/ProjectData.vue:162
-#: components/project/ProjectData.vue:231
-#: components/project/ProjectForm.vue:244
+#: components/mixins/handleProjectUnpublish.js:11
+#: components/project/ProjectData.vue:152
+#: components/project/ProjectData.vue:199
+#: components/project/ProjectForm.vue:240
 #: angular/Assessment/CountryMap/CountryMapController.js:42
 msgid "Attention"
 msgstr ""
@@ -716,10 +718,10 @@ msgstr ""
 #: components/dialogs/EditSubLevelDialog.vue:11
 #: components/dialogs/ProjectApprovalDialog.vue:47
 #: components/dialogs/SaveFilterDialog.vue:12
-#: components/project/ProjectData.vue:359
-#: components/project/ProjectForm.vue:247
-#: components/project/ProjectForm.vue:271
-#: components/project/ProjectNavigation.vue:112
+#: components/mixins/handleProjectUnpublish.js:13
+#: components/project/ProjectData.vue:323
+#: components/project/ProjectForm.vue:243
+#: components/project/ProjectNavigation.vue:109
 #: components/project/collection/AddEditorDialog.vue:7
 #: components/project/collection/AddEditorDialog.vue:2
 #: angular/Cms/AddNewContent/AddNewContentDialog.html:100
@@ -2525,8 +2527,9 @@ msgid "of."
 msgstr ""
 
 #: components/dialogs/ProjectApprovalDialog.vue:107
-#: components/project/ProjectData.vue:358
-#: components/project/ProjectForm.vue:246
+#: components/mixins/handleProjectUnpublish.js:12
+#: components/project/ProjectData.vue:322
+#: components/project/ProjectForm.vue:242
 msgid "Ok"
 msgstr ""
 
@@ -3537,6 +3540,10 @@ msgstr ""
 msgid "The current project will be unpublished"
 msgstr ""
 
+#: components/mixins/handleProjectUnpublish.js:11
+msgid "The current project will be unpublished"
+msgstr ""
+
 #: components/charts/common/cStages.vue:32
 msgid "The date under a stage represents when that stage was completed."
 msgstr ""
@@ -3630,6 +3637,10 @@ msgstr ""
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used. Please request a new password reset."
+msgstr ""
+
+#: components/mixins/handleProjectUnpublish.js:21
+msgid "The project has been unpublished"
 msgstr ""
 
 #: components/country/widgets/WDocuments.vue:4
