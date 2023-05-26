@@ -4,20 +4,30 @@
       <fa icon="pen" size="lg" />
     </div>
     <el-col :span="6" class="sidebar">
-      <navigation
+      <Navigation
         :items="sections"
         :selected="selected"
         sticky
         @click="handleNavigation"
       >
         <template v-if="user">
-          <view-actions :actions="actions" @click="handleActions" />
+          <el-button
+            v-if="showPublishLink"
+            type="primary"
+            :plain="true"
+            class="link-button"
+            @click="toEdit"
+          >
+            <translate>Review and publish</translate>
+            <i class="el-icon-arrow-right el-icon-right"></i>
+          </el-button>
+          <ViewActions :actions="actions" @click="handleActions" />
         </template>
-      </navigation>
+      </Navigation>
     </el-col>
     <el-col :span="18" class="main">
       <section v-for="section in sections" :key="section.id">
-        <observer
+        <Observer
           :options="{ root: null, rootMargin: '0px', threshold: 0.5 }"
           :target="section.id"
           @intersect="intersected"
@@ -25,7 +35,7 @@
           <h1 :ref="section.id">
             {{ `${section.prepend}.  ${section.title}` }}
           </h1>
-        </observer>
+        </Observer>
         <component :is="section.component" v-bind="{ ...section.properties, project }" />
       </section>
     </el-col>
@@ -124,6 +134,15 @@ export default {
         return this.user.member.includes(+this.$route.params.id)
       }
       return false
+    },
+    showPublishLink() {
+      return this.isTeam && !this.published
+    },
+    editLink() {
+      return this.localePath({
+        name: 'organisation-projects-id-edit',
+        params: { id: this.$route.params.id, organisation: this.$route.params.organisation }
+      })
     }
   },
   mounted () {
@@ -186,7 +205,7 @@ export default {
               confirm: {
                 title: this.$gettext('Attention'),
                 description: this.$gettext(
-                  'The current project will be unpublish'
+                  'The current project will be unpublished'
                 )
               },
               route: {
@@ -195,7 +214,7 @@ export default {
               },
               success: {
                 title: this.$gettext('Congratulations'),
-                message: this.$gettext('Project has been unpublish')
+                message: this.$gettext('Project has been unpublished')
               },
               error: info
             }
@@ -203,7 +222,7 @@ export default {
           ]
         } else {
           this.actions = [
-            {
+            /* {
               id: 'draft',
               type: 'warning',
               icon: 'el-icon-upload2',
@@ -222,7 +241,7 @@ export default {
                 message: this.$gettext('We could not publish. Try again'),
                 type: 'error'
               }
-            },
+            }, */
             {
               id: 'discard',
               type: 'danger',
@@ -238,7 +257,7 @@ export default {
               },
               success: {
                 title: this.$gettext('Congratulations'),
-                message: this.$gettext('Draft has been discard')
+                message: this.$gettext('Draft has been discarded')
               },
               error: info
             }
@@ -246,6 +265,13 @@ export default {
           ]
         }
       }
+    },
+    toEdit() {
+      const path = this.localePath({
+        name: 'organisation-projects-id-edit',
+        params: { id: this.$route.params.id, organisation: this.$route.params.organisation }
+      })
+      this.$router.push(path)
     },
     // handle custom fields
     handleCustomFields () {
@@ -374,6 +400,7 @@ export default {
 
 <style lang="less" scoped>
 @import '~assets/style/variables.less';
+
 .project-view {
   .sidebar,
   .main {
@@ -408,6 +435,23 @@ export default {
       right: 3px;
       top: -58px;
     }
+  }
+  .button-plain(@color; @percentage: 5%) {
+    background-color: white;
+
+    color: @color;
+    border: 1px solid @color!important;
+    &:hover {
+      color: lighten(@color, @percentage);
+      border: 1px solid lighten(@color, @percentage) !important;
+    }
+  }
+
+  .link-button {
+    width: 100%;
+    font-size: 18px;
+    margin-bottom: 20px;
+    .button-plain(@colorBrandPrimary);
   }
 }
 </style>
