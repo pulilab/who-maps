@@ -347,7 +347,7 @@ export default {
           this.$gettext(
             'The current draft will be overwritten by the published version'
           ),
-          this.$gettext('Attention'),
+          this.$gettext('Warning'),
           {
             confirmButtonText: this.$gettext('Ok'),
             cancelButtonText: this.$gettext('Cancel'),
