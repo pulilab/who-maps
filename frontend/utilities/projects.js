@@ -29,17 +29,19 @@ export const fetchProjectData = async (store, params, error) => {
       store.dispatch('project/loadProject', params.id),
       store.dispatch('projects/loadProjectStructure')
     ])
-  } catch (err) {
+  } catch (e) {
     console.warn('loadProjectData failed')
-    const errorParams = {
-      statusCode: 404,
-      message: 'This project does not exist'
+    if (e.response) {
+      error({
+        statusCode: e.response.status,
+        message: e.response.data.detail,
+      })
+    } else {
+      error({
+        statusCode: 400,
+        message: this.$gettext('Error loading page, please try again later')
+      })
     }
-    if (err.response) {
-      errorParams.statusCode = err.response.status
-      errorParams.message = err.response.data.detail
-    }
-    error(errorParams)
   }
 }
 
