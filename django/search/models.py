@@ -132,7 +132,7 @@ class ProjectSearch(ExtendedModel):
         """
         if project.public_id and project.is_active:
             self.country_id = int(project.data["country"])
-            self.organisation_id = int(project.data["organisation"])
+            self.organisation_id = int(project.data["organisation"]) if project.data.get('organisation') else None
 
             self.donors = [int(x) for x in project.data.get("donors", [])]
             self.donor_names = [Donor.objects.get(id=int(x)).name for x in project.data.get("donors", [])]
