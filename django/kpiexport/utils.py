@@ -1,5 +1,4 @@
 from project.models import ProjectVersion
-from django.db import DataError
 from django.conf import settings
 from project.serializers import ProjectPublishedSerializer, DonorCustomAnswerSerializer, CountryCustomAnswerSerializer
 from rest_framework.validators import UniqueValidator
