@@ -213,7 +213,7 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
                        str(self.d2.id): {'growth': 0,
                                          'draft': 0,
                                          'published': 3,
-                                         'archived': 0,
+                                         'archived': 1,
                                          'ready_to_publish': 0,
                                          'to_delete': 0,
                                          'unpublished': 0}},
