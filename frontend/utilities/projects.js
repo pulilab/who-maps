@@ -39,7 +39,7 @@ export const fetchProjectData = async (store, params, error) => {
     } else {
       error({
         statusCode: 400,
-        message: this.$gettext('Error loading page, please try again later')
+        message: 'Error loading page, please try again later'
       })
     }
   }
