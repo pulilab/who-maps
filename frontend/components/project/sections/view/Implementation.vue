@@ -78,7 +78,7 @@ export default {
       return null
     },
     isGlobalSelected () {
-      return this.country.id === process.env.GlobalCountryID
+      return this.country?.id === process.env.GlobalCountryID
     },
     isNationalLevelDeployment () {
       return (
@@ -119,7 +119,7 @@ export default {
           : this.coverageList[coverageType]
 
         // sub levels, if there's any
-        this.coverageLevelName = this.getCountrySubLevelNames(this.country.id)
+        this.coverageLevelName = this.getCountrySubLevelNames(this.country?.id)
         if (this.coverageLevelName.first) {
           this.coverageLevelFirst = this.handleRows(coverage, coverageData)
         }
