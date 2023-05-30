@@ -18,7 +18,7 @@ Vue.mixin({
       }
       const trimmedWord = word.replace(/\s+\n/g, '\n').replace(/\n\s+/g, '\n').replace(/\t/g, ' ').replace(/\n/g, ' ').replace(/ +/g, ' ')
       let translated = this.$t(trimmedWord, parameters)
-      if (!this.$te(trimmedWord)) {
+      if (!this.$te(trimmedWord) && this.$i18n.locale !== 'en') {
         if (!word || trimmedWord.includes('_')) {
           this.$sentry.captureMessage('Translation string invalid', {
             level: 'warning',

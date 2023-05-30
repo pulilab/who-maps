@@ -23,14 +23,7 @@ import GraphLayout from '@/components/charts/common/GraphLayout'
 import DataLegend from '@/components/charts/utilities/DataLegend.vue'
 
 const base = '/api/kpi'
-const chartColors = ['#BABABB', '#9ACB67', '#FFCF3F', '#49BCE8', '#E84F48']
-const projectsLabels = [
-  'Draft Projects',
-  'Published Projects',
-  'Publishable Projects',
-  'Unpublished Projects',
-  'Incoherent Projects'
-]
+const chartColors = ['#BABABB', '#9ACB67', '#FFCF3F', '#49BCE8', '#E84F48', '#000']
 
 export default {
   name: 'ProjectStatus',
@@ -50,7 +43,14 @@ export default {
       loadingChart: 0,
       currentlyLoading: true,
       chartData: {
-        labels: projectsLabels,
+        labels: [
+          this.$gettext('Draft Projects'),
+          this.$gettext('Published Projects'),
+          this.$gettext('Publishable Projects'),
+          this.$gettext('Unpublished Projects'),
+          this.$gettext('Incoherent Projects'),
+          this.$gettext('Archived Projects'),
+        ],
         datasets: [{
           data: [],
           backgroundColor: chartColors,
@@ -62,7 +62,7 @@ export default {
         legend: {
           display: false
         },
-        maintainAspectRatio: false,        
+        maintainAspectRatio: false,
         tooltips: { ...customTooltip }
       },
       chartLegend: []
@@ -87,17 +87,19 @@ export default {
       const publishable = extract(projectStatus, 'ready_to_publish')
       const unpublished = extract(projectStatus, 'unpublished')
       const deletable = extract(projectStatus, 'to_delete')
+      const archived = extract(projectStatus, 'archived')
 
       this.chartData.datasets[0].data = [
         this.projectSum(draft),
         this.projectSum(published),
         this.projectSum(publishable),
         this.projectSum(unpublished),
-        this.projectSum(deletable)
+        this.projectSum(deletable),
+        this.projectSum(archived),
       ]
 
       this.chartLegend = legendGenerator(
-        projectsLabels,
+        this.chartData.labels,
         chartColors,
         this.chartData.datasets[0].data
       )

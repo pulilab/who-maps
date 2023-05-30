@@ -116,16 +116,18 @@ class HSCChallengeAdmin(AllObjectsAdmin):
 
 class ProjectAdmin(AllObjectsAdmin):
     if settings.ENVIRONMENT_NAME == 'PRODUCTION':  # pragma: no cover
-        list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active']
-        readonly_fields = ['name', 'team', 'viewers', 'link', 'data']
-        fields = ['is_active', 'name', 'team', 'viewers', 'link', 'data']
+        list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'archived', 'is_active']
+        readonly_fields = ['archived', 'name', 'team', 'viewers', 'link', 'data']
+        fields = ['is_active', 'archived', 'name', 'team', 'viewers', 'link', 'data']
     else:  # on DEV and QA, we add some debug fields to help checking the project changelog's functionality
-        list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'is_active', 'versions']
-        readonly_fields = ['name', 'team', 'viewers', 'link', 'data', 'draft',
+        list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'archived', 'is_active',
+                        'versions']
+        readonly_fields = ['archived', 'name', 'team', 'viewers', 'link', 'data', 'draft',
                            'versions_detailed']
-        fields = ['is_active', 'name', 'team', 'viewers', 'link', 'data',
+        fields = ['is_active', 'archived', 'name', 'team', 'viewers', 'link', 'data',
                   'draft', 'versions_detailed']
     search_fields = ['name']
+    list_filter = ['archived']
 
     def get_country(self, obj):
         return obj.get_country() if obj.public_id else obj.get_country(draft_mode=True)
@@ -143,9 +145,7 @@ class ProjectAdmin(AllObjectsAdmin):
     def link(self, obj):
         if obj.id is None:
             return '-'
-        version = 'publish' if obj.public_id else 'draft'
-        return mark_safe("<a target='_blank' href='/app/{}/edit-project/{}/'>See project</a>"
-                         .format(obj.id, version))
+        return mark_safe(f"<a target='_blank' href='/en/-/projects/{obj.id}/edit'>See project</a>")
 
     def get_queryset(self, request):
         qs = super(ProjectAdmin, self).get_queryset(request)
@@ -202,14 +202,17 @@ class StageAdmin(SortableAdminMixin, admin.ModelAdmin):
 
 class ProjectVersionAdmin(admin.ModelAdmin):
     model = ProjectVersion
-    fields = ['modified', 'project', 'user', 'version', 'data']
+    fields = ['modified', 'project', 'user', 'version', 'data', 'published', 'archived']
     readonly_fields = fields
     search_fields = ['project__name']
-
-    list_display = ['modified', 'project', 'version']
+    list_filter = ['published', 'archived']
+    list_display = ['modified', 'project', 'version', 'published', 'archived']
 
     def has_add_permission(self, request):
         return False
+
+    def get_queryset(self, request):  # pragma: no cover
+        return super().get_queryset(request).order_by('-modified')
 
 
 class ProjectImportV2Inline(admin.StackedInline):

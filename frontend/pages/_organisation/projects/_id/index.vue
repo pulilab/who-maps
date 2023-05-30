@@ -5,10 +5,7 @@
     </template>
     <template #subtitle>
       <translate>You are viewing the</translate>
-      <tag
-        type="draft"
-        label="draft"
-      />
+      <ProjectStatusBadge status="draft" />
       <translate>version of the project.</translate>
     </template>
     <project-data />
@@ -19,12 +16,12 @@
 import { fetchProjectData } from '@/utilities/projects'
 import ProjectData from '@/components/project/ProjectData'
 import PageLayout from '@/components/common/wrappers/PageLayout'
-import Tag from '@/components/common/Tag'
+import ProjectStatusBadge from '@/components/project/ProjectStatusBadge'
 export default {
   components: {
     ProjectData,
     PageLayout,
-    Tag
+    ProjectStatusBadge
   },
   middleware: ['authGuard'],
   fetch ({ store, params, error }) {

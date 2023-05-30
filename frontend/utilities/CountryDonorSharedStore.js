@@ -33,6 +33,7 @@ export const actions = () => ({
 
   async fetchData ({ state, commit, rootGetters, dispatch }) {
     const type = state.type === 'country' ? 'countries' : 'donors'
+    if (!rootGetters['user/getProfile']) await dispatch('user/loadProfile', false, { root: true })
     const profile = rootGetters['user/getProfile']
 
     const superUserSpecifiedId = state.id

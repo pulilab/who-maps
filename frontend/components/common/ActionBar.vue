@@ -108,11 +108,8 @@
         </el-row>
       </el-col>
 
-      <el-col
-        v-if="!isDashboard"
-        class="SearchComponentWrapper"
-      >
-        <search-component />
+      <el-col v-if="!isDashboard && !isProjects" class="SearchComponentWrapper">
+        <SearchComponent />
       </el-col>
       <template v-if="isDashboard">
         <el-col class="PersonaSelectorWrapper">
@@ -161,6 +158,9 @@ export default {
     },
     isDashboard () {
       return this.$route.path.includes('/dashboard')
+    },
+    isProjects () {
+      return this.$route.path.includes('/projects')
     },
     isMapSubRoute () {
       return this.$route.name.includes('organisation-dashboard___')

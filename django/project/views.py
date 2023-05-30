@@ -33,7 +33,6 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
 
-from .mixins import CheckRequiredMixin
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -164,7 +163,7 @@ class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
         return Response(self._get_permission_based_data(project))
 
 
-class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
+class ProjectPublishViewSet(TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
     def update(self, request, project_id, country_id):
         """
@@ -260,7 +259,7 @@ class ProjectPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         return Response(instance.to_response_dict(published=published, draft=draft))
 
 
-class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
+class ProjectUnPublishViewSet(TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
     def update(self, request, project_id):
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
@@ -268,8 +267,19 @@ class ProjectUnPublishViewSet(CheckRequiredMixin, TeamTokenAuthMixin, ViewSet):
         data = project.to_representation(draft_mode=True)
 
         ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
-                                      data=project.data, research=project.research, published=False)
+                                      data=project.draft, research=project.research, published=False)
         return Response(project.to_response_dict(published={}, draft=data), status=status.HTTP_200_OK)
+
+
+class ProjectArchiveViewSet(TeamTokenAuthMixin, ViewSet):
+    @transaction.atomic
+    def update(self, request, project_id):
+        project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
+        project.archive()
+
+        ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
+                                      data=project.draft, research=project.research, published=False, archived=True)
+        return Response(status=status.HTTP_200_OK)
 
 
 class ProjectDraftViewSet(TeamCollectionTokenAuthMixin, ViewSet):

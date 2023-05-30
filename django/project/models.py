@@ -1,4 +1,5 @@
 from collections import namedtuple
+from copy import deepcopy
 
 from django.contrib.contenttypes.fields import GenericRelation
 from hashids import Hashids
@@ -71,7 +72,9 @@ class ProjectManager(models.Manager):
 
 
 class ProjectQuerySet(ActiveQuerySet, ProjectManager):
-    pass
+    def add_initial_q(self):
+        self.query.add_q(Q(is_active=True))
+        self.query.add_q(Q(archived=False))
 
 
 class Project(SoftDeleteModel, ExtendedModel):
@@ -85,6 +88,7 @@ class Project(SoftDeleteModel, ExtendedModel):
     viewers = models.ManyToManyField(UserProfile, related_name="viewers", blank=True)
     public_id = models.CharField(
         max_length=64, default="", help_text="<CountryCode><HashID> eg: HU9fa42491")
+    archived = models.BooleanField(default=False)
 
     # DEPRECATED ODK FIELDS
     odk_etag = models.CharField(null=True, blank=True, max_length=64)
@@ -94,7 +98,7 @@ class Project(SoftDeleteModel, ExtendedModel):
     research = models.BooleanField(blank=True, null=True)
     metadata = models.JSONField(default=dict)
 
-    projects = ProjectManager  # deprecated, use objects instead
+    projects = ProjectManager()  # deprecated, use objects instead
     objects = ProjectQuerySet.as_manager()
 
     def __str__(self):  # pragma: no cover
@@ -122,10 +126,10 @@ class Project(SoftDeleteModel, ExtendedModel):
         return self.get_country().user_in_groups(user.userprofile) if self.get_country() else False
 
     def get_member_data(self):
-        return self.data
+        return deepcopy(self.data)
 
     def get_member_draft(self):
-        return self.draft
+        return deepcopy(self.draft)
 
     def get_non_member_data(self):
         return remove_keys(data_dict=self.data, keys=self.FIELDS_FOR_MEMBERS_ONLY)
@@ -157,7 +161,7 @@ class Project(SoftDeleteModel, ExtendedModel):
         return data
 
     def to_response_dict(self, published, draft):
-        return dict(id=self.pk, public_id=self.public_id, published=published, draft=draft)
+        return dict(id=self.pk, public_id=self.public_id, archived=self.archived, published=published, draft=draft)
 
     def to_project_import_table_dict(self, published_data, draft_data):
         published = True if self.public_id != "" else False
@@ -214,6 +218,13 @@ class Project(SoftDeleteModel, ExtendedModel):
     def unpublish(self):
         self.public_id = ''
         self.data = {}
+        self.save()
+        self.search.reset()
+
+    def archive(self):
+        self.public_id = ''
+        self.data = {}
+        self.archived = True
         self.save()
         self.search.reset()
 
@@ -439,6 +450,7 @@ class ProjectVersion(ExtendedModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='project_versions', blank=True,
                              null=True)
     published = models.BooleanField(default=False)
+    archived = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('project', 'version')

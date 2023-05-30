@@ -111,7 +111,8 @@
           :disabled="!!loading"
           :plain="true"
           type="danger"
-          icon="el-icon-delete"
+          key="discardBtn"
+          :icon="`${loading === 'discard' ? '' : 'el-icon-delete'}`"
           class="DiscardDraft DeleteButton"
           @click="$emit('discardDraft')"
         >
@@ -122,9 +123,24 @@
         <el-button
           v-if="isDraft"
           :disabled="!!loading"
+          :plain="true"
+          type="danger"
+          key="archiveBtn"
+          :icon="`${loading === 'archive' ? '' : 'el-icon-takeaway-box'}`"
+          class="DiscardDraft DeleteButton"
+          @click="$emit('archiveProject')"
+        >
+          <fa v-show="loading === 'archive'" icon="spinner" spin />
+          <translate>Archive project</translate>
+        </el-button>
+
+        <el-button
+          v-if="isDraft"
+          :disabled="!!loading"
           type="success"
+          key="publishBtn"
           size="medium"
-          icon="el-icon-upload"
+          :icon="`${loading === 'publish' ? '' : 'el-icon-upload'}`"
           @click="$emit('publishProject')"
         >
           <fa v-show="loading === 'publish'" icon="spinner" spin />
@@ -135,8 +151,9 @@
           v-if="isPublished && parseInt($route.params.id, 10)"
           :disabled="!!loading"
           type="danger"
+          key="unPublishBtn"
           size="medium"
-          icon="el-icon-download"
+          :icon="`${loading === 'unpublish' ? '' : 'el-icon-download'}`"
           @click="$emit('handleClickUnPublish')"
         >
           <fa v-show="loading === 'unpublish'" icon="spinner" spin />

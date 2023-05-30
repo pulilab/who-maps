@@ -65,12 +65,12 @@ class ActiveQuerySet(GetObjectOrNoneMixin, QuerySet):
         super(ActiveQuerySet, self).__init__(*args, **kwargs)
 
         if self.model:
-            self.add_intial_q()
+            self.add_initial_q()
 
     def delete(self):
         self.update(is_active=False)
 
-    def add_intial_q(self):
+    def add_initial_q(self):
         self.query.add_q(Q(is_active=True))
 
 

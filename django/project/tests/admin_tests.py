@@ -256,7 +256,7 @@ class TestAdmin(TestCase):
         p = ProjectFactory(name="test link")
         link = pa.link(p)
 
-        expected_link = "<a target='_blank' href='/app/{}/edit-project/draft/'>See project</a>".format(p.id)
+        expected_link = f"<a target='_blank' href='/en/-/projects/{p.id}/edit'>See project</a>"
         self.assertEqual(link, expected_link)
 
     def test_project_admin_version(self):

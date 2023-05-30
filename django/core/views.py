@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
+from rest_framework import status
 
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -20,7 +22,7 @@ from .data.sub_level_types import SUB_LEVEL_TYPES
 from .data.dashboard_columns import DASHBOARD_COLUMNS
 
 
-class TokenAuthMixin(object):
+class TokenAuthMixin:
     """
     Mixin class for defining general permission and authentication settings on
     REST Framework Class Based Views.
@@ -29,27 +31,27 @@ class TokenAuthMixin(object):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
-class TeamTokenAuthMixin(object):
+class TeamTokenAuthMixin:
     authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, InTeamOrReadOnly)
 
 
-class TeamCollectionTokenAuthMixin(object):
+class TeamCollectionTokenAuthMixin:
     authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, InTeamOrCollectionOwnerOrReadOnly)
 
 
-class CollectionTokenAuthMixin(object):
+class CollectionTokenAuthMixin:
     authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (CollectionOwnerOrReadOnly,)
 
 
-class CollectionAuthenticatedMixin(object):
+class CollectionAuthenticatedMixin:
     authentication_classes = (JWTAuthentication, BearerTokenAuthentication)
     permission_classes = (IsAuthenticated, CollectionOwnerOrReadOnly)
 
 
-class CheckProjectAccessMixin(object):
+class CheckProjectAccessMixin:
     """
     This method needs to be used with an APIView (or ViewSet) that implements `check_object_permissions`
     """
@@ -63,12 +65,9 @@ class Http400(APIException):
     """
     Represents 400 error to be raised inside APIs for immediate error response.
     """
-    status_code = 400
-    detail = {"details": "No such object."}
-
-    def __init__(self, detail=None):
-        if detail:
-            self.detail = {"details": detail}
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = _('No such object.')
+    default_code = 'bad_request'
 
 
 def get_object_or_400(cls, error_message="No such object.", select_for_update=False, **kwargs):

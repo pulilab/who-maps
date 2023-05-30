@@ -562,6 +562,11 @@ export const actions = {
     await dispatch('setProject', { data, id })
     dispatch('setLoading', false)
   },
+  async archiveProject ({ dispatch }, id) {
+    dispatch('setLoading', 'archive')
+    await this.$axios.put(`/api/projects/archive/${id}/`)
+    dispatch('setLoading', false)
+  },
   async setProject ({ dispatch }, { data, id }) {
     const isUserProject = await dispatch('saveTeamViewers', id)
     if (isUserProject) {

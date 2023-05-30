@@ -129,6 +129,9 @@ export default {
       getDonorDetails: 'system/getDonorDetails',
       user: 'user/getProfile'
     }),
+    projectId() {
+      return this.$route.params.id
+    },
     isTeam () {
       if (this.user) {
         return this.user.member.includes(+this.$route.params.id)
@@ -153,7 +156,8 @@ export default {
     ...mapActions({
       publishProject: 'project/publishProject',
       discardDraft: 'project/discardDraft',
-      unpublishProject: 'project/unpublishProject'
+      unpublishProject: 'project/unpublishProject',
+      archiveProject: 'project/archiveProject'
     }),
     handleInit () {
       this.handleProject()
@@ -203,7 +207,7 @@ export default {
               label: this.$gettext('Unpublish'),
               handle: 'unpublishProject',
               confirm: {
-                title: this.$gettext('Attention'),
+                title: this.$gettext('Warning'),
                 description: this.$gettext(
                   'The current project will be unpublished'
                 )
@@ -224,7 +228,7 @@ export default {
           this.actions = [
             /* {
               id: 'draft',
-              type: 'warning',
+              type: 'success',
               icon: 'el-icon-upload2',
               label: this.$gettext('Publish draft'),
               handle: 'publishProject',
@@ -250,7 +254,7 @@ export default {
               label: this.$gettext('Discard draft'),
               handle: 'discardDraft',
               confirm: {
-                title: this.$gettext('Attention'),
+                title: this.$gettext('Warning'),
                 description: this.$gettext(
                   'The current draft will be overwritten by the published version'
                 )
@@ -264,6 +268,25 @@ export default {
             // print,
           ]
         }
+        this.actions.push({
+          id: 'archive',
+          type: 'danger',
+          icon: 'el-icon-takeaway-box',
+          plain: true,
+          label: this.$gettext('Archive project'),
+          handle: 'handleArchiveProject',
+          confirm: {
+            title: this.$gettext('Warning'),
+            description: this.$gettext(
+              'The current project will be archived. You will find it on "My projects" page where you can initiate to restore it if needed.'
+            )
+          },
+          success: {
+            title: this.$gettext('Congratulations'),
+            message: this.$gettext('Project has been archived.')
+          },
+          error: info
+        })
       }
     },
     toEdit() {
@@ -271,6 +294,12 @@ export default {
         name: 'organisation-projects-id-edit',
         params: { id: this.$route.params.id, organisation: this.$route.params.organisation }
       })
+      this.$router.push(path)
+    },
+    async handleArchiveProject() {
+      await this.archiveProject(this.projectId)
+      await this.$auth.fetchUser()
+      const path = this.localePath({ name: 'organisation-projects', query: { list: 'archive'} })
       this.$router.push(path)
     },
     // handle custom fields

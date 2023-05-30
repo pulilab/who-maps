@@ -40,7 +40,7 @@ export default {
   data () {
     return {
       dialogTypes: {
-        attention: this.$gettext('Attention!'),
+        attention: this.$gettext('Warning!'),
         success: this.$gettext('Success!'),
         error: this.$gettext('Error!')
       },

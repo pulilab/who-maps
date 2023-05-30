@@ -206,6 +206,11 @@ class TestData(APITestCase):
         response = self.test_user_client.put(url, project_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
 
+    def archive_project(self, project_id):
+        url = reverse("project-archive", kwargs={"project_id": project_id})
+        response = self.test_user_client.put(url, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 class SetupTests(TestData):
     def setUp(self):
@@ -217,6 +222,13 @@ class SetupTests(TestData):
         project = self.create_draft_project(self.project_data)
         self.project_id = project.id
         self.publish_project(self.project_id, self.project_data)
+
+        # Make an archived project as well, see if it generates any confusion down the line
+        archived_project_data = self.generate_project_data(project_name="Test Project Archived")
+        archived_project = self.create_draft_project(archived_project_data)
+        archived_project_id = archived_project.id
+        self.publish_project(archived_project_id, archived_project_data)
+        archived_project.archive()
 
     def check_project_search_init_state(self, project):
         obj = project.search

@@ -75,6 +75,7 @@ class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
     country = serializers.PrimaryKeyRelatedField(read_only=True)
     published = serializers.SerializerMethodField()
     unpublished = serializers.SerializerMethodField()
+    archived = serializers.SerializerMethodField()
     ready_to_publish = serializers.SerializerMethodField()
     to_delete = serializers.SerializerMethodField()
     draft = serializers.SerializerMethodField()
@@ -91,6 +92,12 @@ class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
         if donor:
             return len(obj.data[donor]['unpublished']) if donor in obj.data else 0
         return len(obj.unpublished)
+
+    def get_archived(self, obj):
+        donor = self.context['request'].query_params.get('investor')
+        if donor:
+            return len(obj.data[donor]['archived']) if donor in obj.data and 'archived' in obj.data[donor] else 0
+        return len(obj.archived)
 
     def get_ready_to_publish(self, obj):
         donor = self.context['request'].query_params.get('investor')
@@ -118,7 +125,8 @@ class AuditLogProjectStatusBasicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AuditLogProjectStatus
-        fields = ("date", "country", "published", "unpublished", "ready_to_publish", "to_delete", "draft", "growth")
+        fields = ("date", "country", "published", "unpublished", "archived",
+                  "ready_to_publish", "to_delete", "draft", "growth")
 
 
 class AuditLogProjectStatusDetailedSerializer(AuditLogProjectStatusBasicSerializer):
@@ -130,6 +138,7 @@ class AuditLogProjectStatusDetailedSerializer(AuditLogProjectStatusBasicSerializ
             return {
                 'published': len(obj.data[donor]['published']) if donor in obj.data else 0,
                 'unpublished': len(obj.data[donor]['unpublished']) if donor in obj.data else 0,
+                'archived': len(obj.data[donor]['archived']) if donor in obj.data else 0,
                 'ready_to_publish': len(obj.data[donor]['ready_to_publish']) if donor in obj.data else 0,
                 'to_delete': len(obj.data[donor]['to_delete']) if donor in obj.data else 0,
                 'draft': len(obj.data[donor]['draft']) if donor in obj.data else 0,
@@ -140,6 +149,7 @@ class AuditLogProjectStatusDetailedSerializer(AuditLogProjectStatusBasicSerializ
             summary_dict[donor_id] = {
                 'published': len(obj.data[donor_id]['published']),
                 'unpublished': len(obj.data[donor_id]['unpublished']),
+                'archived': len(obj.data[donor_id]['archived']),
                 'ready_to_publish': len(obj.data[donor_id]['ready_to_publish']),
                 'to_delete': len(obj.data[donor_id]['to_delete']),
                 'draft': len(obj.data[donor_id]['draft']),
@@ -149,7 +159,7 @@ class AuditLogProjectStatusDetailedSerializer(AuditLogProjectStatusBasicSerializ
 
     class Meta:
         model = AuditLogProjectStatus
-        fields = ("date", "country", "data", "published", "unpublished", "ready_to_publish", "to_delete",
+        fields = ("date", "country", "data", "published", "unpublished", "archived", "ready_to_publish", "to_delete",
                   "draft", "growth")
 
 

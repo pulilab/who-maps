@@ -1,56 +1,68 @@
 <template>
-  <page-layout>
-    <template #title>
-      <translate>My Projects</translate>
-    </template>
-    <template #subtitle>
-      <translate>Here are all of the projects you are a</translate>
-      <fa
-        icon="star"
-        class="owner"
-      />
-      <b><translate>Member</translate></b>
-      &nbsp;<translate>or</translate>
-      <fa
-        icon="eye"
-        class="viewer"
-      />
-      <b><translate>Viewer</translate></b>
-      &nbsp;<translate>of.</translate>
-    </template>
-    <user-project-list />
-  </page-layout>
+  <div class="pb-80">
+    <UserProjectsTabs
+      :active-tab="activeTab"
+      :counters="counters"
+      @change="changeActiveTab"
+    >
+      <UserProjectsList :project-list="displayedProjectList" :is-archive="activeTab === 1" />
+    </UserProjectsTabs>
+  </div>
 </template>
 
 <script>
-import UserProjectList from '@/components/common/UserProjectsList'
-import PageLayout from '@/components/common/wrappers/PageLayout'
+import { mapGetters } from 'vuex'
+
+import UserProjectsList from '@/components/common/UserProjectsList'
+import UserProjectsTabs from '@/components/common/UserProjectsTabs'
+
 export default {
   name: 'Projects',
   components: {
-    UserProjectList,
-    PageLayout
+    UserProjectsList,
+    UserProjectsTabs
   },
   middleware: ['authGuard'],
-  async fetch ({ store }) {
+  data() {
+    return {
+      activeTab: 0
+    }
+  },
+  async asyncData({ store, route }) {  
     await store.dispatch('projects/loadUserProjects')
     store.dispatch('project/resetProjectState')
+    const activeTab = route.query?.list === 'archive' ? 1 : 0
+    return {
+      activeTab
+    }
+  },
+  computed: {
+    ...mapGetters({
+      userProfile: 'user/getProfile',
+      userProjecList: 'projects/getUserProjectList'
+    }),
+    displayedProjectList() {
+      return this.activeTab === 0
+        ? this.userProjecList
+        : this.userProfile.archive.map(p => ({...p, archived: true }))
+    },
+    counters() {
+      return {
+        myprojects: this.userProjecList.length,
+        archive: this.userProfile.archive.length
+      }
+    }
+  },
+  methods: {
+    changeActiveTab(tab) {
+      this.activeTab = tab
+    }
   }
 }
 </script>
 
-<style lang="less" scoped>
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
-.svg-inline--fa {
-  margin: 0 6px 0 10px;
-  width: 16px;
-  height: 16px;
-}
-.owner {
-  color: @colorOwner;
-}
-.viewer {
-  color: @colorViewer;
+<style>
+.pb-80 {
+  padding-bottom: 80px;
 }
 </style>

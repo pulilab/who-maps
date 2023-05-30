@@ -1,10 +1,6 @@
 <template>
   <div class="MyProjectsBox">
-    <el-row
-      type="flex"
-      align="middle"
-      class="ProjectsBoxHeadline"
-    >
+    <el-row type="flex" align="middle" class="ProjectsBoxHeadline">
       <el-col>
         <h2><translate>My Projects</translate></h2>
         <h6>
@@ -13,7 +9,7 @@
       </el-col>
     </el-row>
 
-    <user-projects-list :limit="3" />
+    <UserProjectsList :project-list="userProjecList" :limit="3" />
 
     <el-row
       v-if="userProjecList.length > 0"
@@ -22,9 +18,7 @@
     >
       <el-col>
         <nuxt-link
-          :to="
-            localePath({ name: 'organisation-projects', params: $route.params })
-          "
+          :to="localePath({ name: 'organisation-projects', params: $route.params })"
           tag="button"
           class="el-button el-button--accent el-button--medium"
         >
@@ -46,7 +40,7 @@ export default {
   computed: {
     ...mapGetters({
       userProjecList: 'projects/getUserProjectList'
-    }),
+    })
   },
   mounted() {
     if (this.userProjecList.length === 0) this.loadProjects()
@@ -54,14 +48,14 @@ export default {
   methods: {
     ...mapActions({
       loadProjects: 'projects/loadUserProjects'
-    }),
+    })
   }
 }
 </script>
 
 <style lang="less">
-@import "../../assets/style/variables.less";
-@import "../../assets/style/mixins.less";
+@import '../../assets/style/variables.less';
+@import '../../assets/style/mixins.less';
 
 .MyProjectsBox {
   height: 100%;
@@ -74,7 +68,7 @@ export default {
     background-color: @colorBrandPrimary;
 
     &::after {
-      content: "";
+      content: '';
       z-index: 100;
       position: absolute;
       top: 100%;

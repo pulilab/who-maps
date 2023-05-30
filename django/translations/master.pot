@@ -21,10 +21,6 @@ msgstr ""
 msgid "{{ group.title }}"
 msgstr ""
 
-#: components/common/Tag.vue:2
-msgid "{{ label }}"
-msgstr ""
-
 #: components/country/widgets/WStats.vue:17
 msgid "{{ metric.measure }}"
 msgstr ""
@@ -51,13 +47,13 @@ msgstr ""
 msgid "{name} (me)"
 msgstr ""
 
-#: components/project/ProjectData.vue:252
+#: components/project/ProjectData.vue:288
 #: components/project/sections/CountryCustom.vue:33
 #: components/project/sections/DonorCustom.vue:36
 msgid "{name} custom fields"
 msgstr ""
 
-#: components/project/ProjectData.vue:251
+#: components/project/ProjectData.vue:287
 msgid "{name} fields"
 msgstr ""
 
@@ -118,7 +114,7 @@ msgstr ""
 msgid "# of API keys"
 msgstr ""
 
-#: components/charts/ProjectStatusesPerMonth.vue:72
+#: components/charts/ProjectStatusesPerMonth.vue:73
 msgid "# of projects"
 msgstr ""
 
@@ -514,9 +510,27 @@ msgstr ""
 msgid "Approved"
 msgstr ""
 
-#: components/common/ExtendedProjectCard.vue:56
 #: components/common/ProjectCard.vue:20
+#: components/project/ProjectStatusBadge.vue:14
 msgid "Approved by MOH"
+msgstr ""
+
+#: components/project/ProjectData.vue:228
+#: components/project/ProjectNavigation.vue:94
+msgid "Archive project"
+msgstr ""
+
+#: components/project/ProjectStatusBadge.vue:15
+msgid "Archived"
+msgstr ""
+
+#: components/charts/ProjectStatus.vue:33
+#: components/charts/ProjectStatusesPerMonth.vue:34
+msgid "Archived Projects"
+msgstr ""
+
+#: components/common/UserProjectsTabs.vue:12
+msgid "Archived projects ({count})"
 msgstr ""
 
 #: pages/_organisation/terms.vue:290
@@ -774,8 +788,8 @@ msgid ""
 "software.  If there are no users of this type, put 0."
 msgstr ""
 
-#: components/project/ProjectForm.vue:218
-#: components/project/ProjectForm.vue:277
+#: components/project/ProjectForm.vue:222
+#: components/project/ProjectForm.vue:302
 #: angular/Assessment/CountryMap/CountryMapController.js:44
 msgid "Close"
 msgstr ""
@@ -830,14 +844,14 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
-#: components/project/ProjectForm.vue:216
-#: components/project/ProjectForm.vue:275
+#: components/project/ProjectForm.vue:220
+#: components/project/ProjectForm.vue:300
 msgid "Congratulation"
 msgstr ""
 
-#: components/project/ProjectData.vue:162
-#: components/project/ProjectData.vue:182
-#: components/project/ProjectData.vue:205
+#: components/project/ProjectData.vue:172
+#: components/project/ProjectData.vue:215
+#: components/project/ProjectData.vue:237
 msgid "Congratulations"
 msgstr ""
 
@@ -937,7 +951,7 @@ msgstr ""
 msgid "Country center pin"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:69
+#: components/project/ProjectNavigation.vue:67
 msgid "Country fields"
 msgstr ""
 
@@ -1110,12 +1124,12 @@ msgid ""
 "health innovators to apply for grant funding. Check out the"
 msgstr ""
 
-#: components/project/ProjectForm.vue:134
+#: components/project/ProjectForm.vue:138
 msgid "Discard changes"
 msgstr ""
 
-#: components/project/ProjectData.vue:196
-#: components/project/ProjectNavigation.vue:96
+#: components/project/ProjectData.vue:206
+#: components/project/ProjectNavigation.vue:89
 msgid "Discard draft"
 msgstr ""
 
@@ -1174,19 +1188,24 @@ msgstr ""
 msgid "Download Reference File"
 msgstr ""
 
-#: components/common/ExtendedProjectCard.vue:46
-#: components/project/ProjectNavigation.vue:10
+#: components/project/ProjectNavigation.vue:8
+#: components/project/ProjectStatusBadge.vue:12
 #: components/project/collection/CollectionProjects.vue:95
 #: angular/Assessment/Statistics/Statistics.html:16
 msgid "Draft"
 msgstr ""
 
-#: components/project/ProjectData.vue:206
-msgid "Draft has been discard"
+#: components/project/ProjectData.vue:216
+msgid "Draft has been discarded"
 msgstr ""
 
-#: components/project/ProjectForm.vue:250
+#: components/project/ProjectForm.vue:254
 msgid "Draft overriden with published version"
+msgstr ""
+
+#: components/charts/ProjectStatus.vue:28
+#: components/charts/ProjectStatusesPerMonth.vue:29
+msgid "Draft Projects"
 msgstr ""
 
 #: components/BreadCrumb.vue:31
@@ -1287,14 +1306,6 @@ msgid ""
 "Enter your email address and follow the instructions you will get by email."
 msgstr ""
 
-#: components/project/ProjectData.vue:186
-msgid "Error"
-msgstr ""
-
-#: utilities/projects.js:42
-msgid "Error loading page, please try again later"
-msgstr ""
-
 #: components/project/collection/AddEditorDialog.vue:9
 msgid "Error!"
 msgstr ""
@@ -1350,7 +1361,7 @@ msgstr ""
 msgid "Failed to parse your data, click to manually fix"
 msgstr ""
 
-#: components/project/ProjectForm.vue:66
+#: components/project/ProjectForm.vue:69
 msgid "Failed to restore auto-saved project"
 msgstr ""
 
@@ -1435,7 +1446,7 @@ msgid "Found in \"Planning & Guidance\""
 msgstr ""
 
 #: components/project/ProjectData.vue:40
-#: components/project/ProjectNavigation.vue:29
+#: components/project/ProjectNavigation.vue:27
 msgid "General"
 msgstr ""
 
@@ -1499,7 +1510,7 @@ msgstr ""
 msgid "GO TO COUNTRY PAGE"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:105
+#: components/project/ProjectNavigation.vue:108
 msgid "Go to Dashboard"
 msgstr ""
 
@@ -1578,6 +1589,9 @@ msgid "growth of implementations, and reduce redundancy of investments."
 msgstr ""
 
 #: components/charts/MonthlyGrowthOfProjects.vue:72
+msgid "Growth of projects"
+msgstr ""
+
 #: components/charts/MonthlyUserActivity.vue:63
 msgid "Growth of users"
 msgstr ""
@@ -1694,9 +1708,14 @@ msgstr ""
 msgid "here"
 msgstr ""
 
-#: pages/_organisation/projects/index.vue:6
-#: pages/_organisation/projects/index.vue:1
+#: components/common/UserProjectsTabs.vue:20
 msgid "Here are all of the projects you are a"
+msgstr ""
+
+#: components/common/UserProjectsTabs.vue:29
+msgid ""
+"Here are all your archived projects. You can restore individual projects by "
+"submitting a restore request."
 msgstr ""
 
 #: components/landing/MyProjectsBox.vue:6
@@ -1858,7 +1877,7 @@ msgid ""
 msgstr ""
 
 #: components/project/ProjectData.vue:47
-#: components/project/ProjectNavigation.vue:37
+#: components/project/ProjectNavigation.vue:35
 msgid "Implementation"
 msgstr ""
 
@@ -1939,7 +1958,12 @@ msgstr ""
 msgid "Inactivate API key"
 msgstr ""
 
-#: components/project/ProjectData.vue:137
+#: components/charts/ProjectStatus.vue:32
+#: components/charts/ProjectStatusesPerMonth.vue:33
+msgid "Incoherent Projects"
+msgstr ""
+
+#: components/project/ProjectData.vue:147
 msgid "Info"
 msgstr ""
 
@@ -1961,7 +1985,7 @@ msgid "International Level Deployment"
 msgstr ""
 
 #: components/project/ProjectData.vue:68
-#: components/project/ProjectNavigation.vue:61
+#: components/project/ProjectNavigation.vue:59
 msgid "Interoperability"
 msgstr ""
 
@@ -2006,7 +2030,7 @@ msgstr ""
 msgid "Investor Admins"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:77
+#: components/project/ProjectNavigation.vue:75
 msgid "Investor fields"
 msgstr ""
 
@@ -2201,8 +2225,7 @@ msgstr ""
 msgid "Me"
 msgstr ""
 
-#: pages/_organisation/projects/index.vue:8
-#: pages/_organisation/projects/index.vue:3
+#: components/common/UserProjectsTabs.vue:22
 msgid "Member"
 msgstr ""
 
@@ -2254,7 +2277,7 @@ msgstr ""
 #: components/charts/MonthlyGrowthOfProjects.vue:84
 #: components/charts/MonthlyUserActivity.vue:45
 #: components/charts/MonthlyUserActivity.vue:75
-#: components/charts/ProjectStatusesPerMonth.vue:53
+#: components/charts/ProjectStatusesPerMonth.vue:54
 msgid "Months"
 msgstr ""
 
@@ -2306,9 +2329,11 @@ msgstr ""
 #: components/BreadCrumb.vue:28 components/common/NavigationMenu.vue:21
 #: components/common/NavigationMenu.vue:23
 #: components/landing/MyProjectsBox.vue:4
-#: pages/_organisation/projects/index.vue:3
-#: pages/_organisation/projects/index.vue:1
 msgid "My Projects"
+msgstr ""
+
+#: components/common/UserProjectsTabs.vue:6
+msgid "My projects ({count})"
 msgstr ""
 
 #: components/common/OrganisationItem.vue:6
@@ -2497,8 +2522,7 @@ msgstr ""
 msgid "Ocurrances:"
 msgstr ""
 
-#: pages/_organisation/projects/index.vue:12
-#: pages/_organisation/projects/index.vue:7
+#: components/common/UserProjectsTabs.vue:26
 msgid "of."
 msgstr ""
 
@@ -2516,7 +2540,7 @@ msgstr ""
 #: components/admin/import/ImportDataTable.vue:256
 #: components/admin/import/ImportHeaders.vue:224
 #: components/dashboard/FilterPresetsActions.vue:48
-#: components/project/ProjectForm.vue:69
+#: components/project/ProjectForm.vue:72 components/project/ProjectForm.vue:270
 msgid "OK"
 msgstr ""
 
@@ -2533,8 +2557,7 @@ msgstr ""
 msgid "Operation successfully aborted"
 msgstr ""
 
-#: components/ProfileEditor.vue:121 pages/_organisation/projects/index.vue:9
-#: pages/_organisation/projects/index.vue:4
+#: components/ProfileEditor.vue:121 components/common/UserProjectsTabs.vue:23
 msgid "or"
 msgstr ""
 
@@ -2682,7 +2705,11 @@ msgid ""
 "using the Digital Health Atlas (the “DHA”)."
 msgstr ""
 
-#: components/project/ProjectForm.vue:94
+#: components/common/ExtendedProjectCard.vue:60
+msgid "Please restore the following project:"
+msgstr ""
+
+#: components/project/ProjectForm.vue:98
 msgid "Please select one or more Digital Health Intervetions for this Software"
 msgstr ""
 
@@ -2799,8 +2826,16 @@ msgstr ""
 msgid "Project end date"
 msgstr ""
 
-#: components/project/ProjectData.vue:163
-msgid "Project has been unpublish"
+#: components/project/ProjectData.vue:238
+msgid "Project has been archived."
+msgstr ""
+
+#: components/project/ProjectData.vue:173
+msgid "Project has been unpublished"
+msgstr ""
+
+#: components/common/ExtendedProjectCard.vue:62
+msgid "Project ID: {id}"
 msgstr ""
 
 #: components/admin/import/ImportDataTable.vue:290
@@ -2821,8 +2856,16 @@ msgstr ""
 msgid "Project Name"
 msgstr ""
 
+#: components/common/ExtendedProjectCard.vue:61
+msgid "Project name: {name}"
+msgstr ""
+
 #: components/admin/import/ImportDataTable.vue:190
 msgid "Project page"
+msgstr ""
+
+#: components/common/ExtendedProjectCard.vue:66
+msgid "Project restore request ({id})"
 msgstr ""
 
 #: pages/_organisation/projects/_id/stages.vue:3
@@ -2883,20 +2926,18 @@ msgstr ""
 msgid "Projects with no stage data"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:86
+#: components/project/ProjectNavigation.vue:99
 msgid "Publish"
 msgstr ""
 
-#: components/project/ProjectData.vue:175
-msgid "Publish draft"
-msgstr ""
-
+#: components/charts/ProjectStatus.vue:30
+#: components/charts/ProjectStatusesPerMonth.vue:31
 #: pages/_organisation/graphs_showcase.vue:155
 msgid "Publishable Projects"
 msgstr ""
 
-#: components/common/ExtendedProjectCard.vue:51
-#: components/project/ProjectNavigation.vue:16
+#: components/project/ProjectNavigation.vue:14
+#: components/project/ProjectStatusBadge.vue:13
 #: components/project/collection/CollectionProjects.vue:100
 msgid "Published"
 msgstr ""
@@ -2905,6 +2946,8 @@ msgstr ""
 msgid "Published Project"
 msgstr ""
 
+#: components/charts/ProjectStatus.vue:29
+#: components/charts/ProjectStatusesPerMonth.vue:30
 #: pages/_organisation/graphs_showcase.vue:146
 msgid "Published Projects"
 msgstr ""
@@ -2939,7 +2982,7 @@ msgstr ""
 msgid "Reason"
 msgstr ""
 
-#: components/project/ProjectForm.vue:133
+#: components/project/ProjectForm.vue:137
 msgid "Recover & Reload"
 msgstr ""
 
@@ -2986,12 +3029,20 @@ msgstr ""
 msgid "Reset forgotten password"
 msgstr ""
 
+#: components/common/ExtendedProjectCard.vue:50
+msgid "Restore"
+msgstr ""
+
 #: pages/_organisation/terms.vue:284
 msgid "restrict or inhibit any other user from using and enjoying the DHA;"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:111
+#: components/project/ProjectNavigation.vue:114
 msgid "Return to the Dashboard"
+msgstr ""
+
+#: components/project/ProjectData.vue:9 components/project/ProjectData.vue:2
+msgid "Review and publish"
 msgstr ""
 
 #: components/admin/import/ImportDataTable.vue:140
@@ -3021,7 +3072,7 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: components/project/ProjectNavigation.vue:91
+#: components/project/ProjectNavigation.vue:84
 msgid "Save draft"
 msgstr ""
 
@@ -3052,7 +3103,7 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: components/landing/MyProjectsBox.vue:18
+#: components/landing/MyProjectsBox.vue:16
 msgid "See all my projects"
 msgstr ""
 
@@ -3359,7 +3410,7 @@ msgstr ""
 
 #: components/common/ProjectBar.vue:81 components/dashboard/MainTable.vue:29
 #: components/dashboard/MainTable.vue:161 components/project/ProjectData.vue:54
-#: components/project/ProjectNavigation.vue:45
+#: components/project/ProjectNavigation.vue:43
 msgid "Stages"
 msgstr ""
 
@@ -3436,7 +3487,7 @@ msgid "Team members"
 msgstr ""
 
 #: components/project/ProjectData.vue:61
-#: components/project/ProjectNavigation.vue:53
+#: components/project/ProjectNavigation.vue:51
 msgid "Technology"
 msgstr ""
 
@@ -3473,13 +3524,20 @@ msgid ""
 "lines for which there may not yet be full agreement."
 msgstr ""
 
-#: components/project/ProjectData.vue:200
-#: components/project/ProjectForm.vue:237
+#: components/project/ProjectData.vue:210
+#: components/project/ProjectForm.vue:241
 msgid "The current draft will be overwritten by the published version"
 msgstr ""
 
-#: components/project/ProjectData.vue:153
-msgid "The current project will be unpublish"
+#: components/project/ProjectData.vue:232
+#: components/project/ProjectForm.vue:267
+msgid ""
+"The current project will be archived. You will find it on \"My projects\" "
+"page where you can initiate to restore it if needed."
+msgstr ""
+
+#: components/project/ProjectData.vue:163
+msgid "The current project will be unpublished"
 msgstr ""
 
 #: components/mixins/handleProjectUnpublish.js:11
@@ -3608,7 +3666,7 @@ msgstr ""
 msgid "There was an error while importing the file! Maybe try again."
 msgstr ""
 
-#: components/project/ProjectForm.vue:128
+#: components/project/ProjectForm.vue:132
 msgid ""
 "There was an un-caught validation error an automatic report has been "
 "submitted"
@@ -3848,11 +3906,13 @@ msgid "Unique Project ID (UID)"
 msgstr ""
 
 #: components/common/ProjectCardActions.vue:30
-#: components/project/ProjectData.vue:149
-#: components/project/ProjectNavigation.vue:101
+#: components/project/ProjectData.vue:159
+#: components/project/ProjectNavigation.vue:104
 msgid "Unpublish"
 msgstr ""
 
+#: components/charts/ProjectStatus.vue:31
+#: components/charts/ProjectStatusesPerMonth.vue:32
 #: pages/_organisation/graphs_showcase.vue:164
 msgid "Unpublished Projects"
 msgstr ""
@@ -3955,8 +4015,7 @@ msgstr ""
 
 #: components/common/ProjectLegendContent.vue:14
 #: components/common/ProjectLegendContent.vue:4
-#: pages/_organisation/projects/index.vue:11
-#: pages/_organisation/projects/index.vue:6
+#: components/common/UserProjectsTabs.vue:25
 msgid "Viewer"
 msgstr ""
 
@@ -3981,17 +4040,15 @@ msgstr ""
 #: components/dashboard/FilterPresetsActions.vue:47
 #: components/dialogs/DialogsContainer.vue:30
 #: components/dialogs/ProjectApprovalDialog.vue:105
-#: components/project/ProjectForm.vue:67 components/project/ProjectForm.vue:131
+#: components/project/ProjectData.vue:209 components/project/ProjectForm.vue:70
+#: components/project/ProjectForm.vue:135
+#: components/project/ProjectForm.vue:268
 #: pages/_organisation/projects/_id.vue:31
 msgid "Warning"
 msgstr ""
 
 #: components/dialogs/HowToDialog.vue:48
 msgid "We are available via email on"
-msgstr ""
-
-#: components/project/ProjectData.vue:187
-msgid "We could not publish. Try again"
 msgstr ""
 
 #: components/common/CookieConsent.vue:7
@@ -4230,6 +4287,12 @@ msgid ""
 "viewed at a later time after you log in."
 msgstr ""
 
+#: components/common/EmptyArchive.vue:11
+msgid ""
+"You have no archived projects. When you archive projects, they will appear "
+"here."
+msgstr ""
+
 #: pages/_organisation/terms.vue:135
 msgid "You shall not:"
 msgstr ""
@@ -4243,15 +4306,11 @@ msgid ""
 "correct investors."
 msgstr ""
 
-#: components/project/ProjectData.vue:183
-msgid "Your draft has been published"
-msgstr ""
-
-#: components/project/ProjectForm.vue:274
+#: components/project/ProjectForm.vue:299
 msgid "Your draft has been published successfully"
 msgstr ""
 
-#: components/project/ProjectForm.vue:215
+#: components/project/ProjectForm.vue:219
 msgid "Your draft has been saved successfully"
 msgstr ""
 

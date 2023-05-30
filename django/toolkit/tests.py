@@ -62,7 +62,7 @@ class ToolkitTests(SetupTests):
             }
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual("No such answer.", response.json()["details"])
+        self.assertEqual("No such answer.", response.json()["detail"])
 
     def test_set_score_wrong_project_id(self):
         url = reverse("toolkit-scores", kwargs={"project_id": 999})
@@ -75,7 +75,7 @@ class ToolkitTests(SetupTests):
             }
         response = self.test_user_client.post(url, data, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual("No such project.", response.json()["details"])
+        self.assertEqual("No such project.", response.json()["detail"])
 
     def test_get_toolkit_data(self):
         url = reverse("toolkit-scores", kwargs={"project_id": self.project_id})
@@ -96,7 +96,7 @@ class ToolkitTests(SetupTests):
         url = reverse("toolkit-data", kwargs={"project_id": 999})
         response = self.test_user_client.get(url, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual("No such project.", response.json()["details"])
+        self.assertEqual("No such project.", response.json()["detail"])
 
     def test_get_toolkit_data_statistics(self):
         url = reverse("toolkit-scores", kwargs={"project_id": self.project_id})
