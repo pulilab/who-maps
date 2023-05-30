@@ -9,6 +9,16 @@
 import ProjectBar from '@/components/common/ProjectBar'
 import { mapGetters } from 'vuex'
 
+const routes = {
+  'organisation-projects-id': 'view',
+  'organisation-projects-id-edit': 'edit',
+  'organisation-projects-id-published': 'published',
+  'organisation-projects-id-stages': 'stages',
+  'organisation-projects-id-assessment': 'assessment',
+  'organisation-projects-id-toolkit': 'toolkit',
+  'organisation-projects-id-toolkit-scorecard': 'scorecard'
+}
+
 export default {
   components: {
     ProjectBar
@@ -28,14 +38,14 @@ export default {
       return this.getProjectDetails(+this.$route.params.id)
     },
     route () {
-      return this.$route.name.split('__')[0]
+      return routes[this.$route.name.split('__')[0]]
     }
   },
   watch: {
     currentProject: {
       immediate: true,
-      handler (project) {
-        if ((!project.draft || !project.draft.name) && this.profile && !this.profile.is_superuser && this.route !== 'organisation-projects-id-published') {
+      handler(project) {
+        if ((!project.draft || !project.draft.name) && this.profile && !this.profile.is_superuser && this.route !== 'published') {
           this.$alert(this.$gettext('You are not authorized to access this view'), this.$gettext('Warning'), {
             confirmButtonText: 'OK',
             callback: () => {

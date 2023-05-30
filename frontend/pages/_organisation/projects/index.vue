@@ -28,8 +28,9 @@ export default {
       activeTab: 0
     }
   },
-  async asyncData({ store, route }) {
+  async asyncData({ store, route }) {  
     await store.dispatch('projects/loadUserProjects')
+    store.dispatch('project/resetProjectState')
     const activeTab = route.query?.list === 'archive' ? 1 : 0
     return {
       activeTab

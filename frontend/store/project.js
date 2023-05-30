@@ -222,7 +222,7 @@ export const actions = {
       p => p.id === id || p.public_id === id
     )
     const { data } =
-    userProject && userProject.id
+    userProject && userProject?.id
       ? { data: userProject }
       : await this.$axios.get(`/api/projects/${id}/`)
     commit('SET_ORIGINAL', Object.freeze(data))
