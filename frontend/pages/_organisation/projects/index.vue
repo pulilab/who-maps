@@ -34,6 +34,7 @@ export default {
   middleware: ['authGuard'],
   async fetch ({ store }) {
     await store.dispatch('projects/loadUserProjects')
+    store.dispatch('project/resetProjectState')
   }
 }
 </script>

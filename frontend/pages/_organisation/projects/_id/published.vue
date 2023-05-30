@@ -28,15 +28,6 @@ export default {
   },
   async fetch ({ store, params, error }) {
     await fetchProjectData(store, params, error)
-    if (
-      !store.state.project.published ||
-      store.state.project.published.name === null
-    ) {
-      error({
-        statusCode: 404,
-        message: 'Project is not published'
-      })
-    }
   }
 }
 </script>
