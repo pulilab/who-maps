@@ -47,13 +47,13 @@ msgstr ""
 msgid "{name} (me)"
 msgstr ""
 
-#: components/project/ProjectData.vue:288
+#: components/project/ProjectData.vue:297
 #: components/project/sections/CountryCustom.vue:33
 #: components/project/sections/DonorCustom.vue:36
 msgid "{name} custom fields"
 msgstr ""
 
-#: components/project/ProjectData.vue:287
+#: components/project/ProjectData.vue:296
 msgid "{name} fields"
 msgstr ""
 
@@ -307,8 +307,8 @@ msgid ""
 msgstr ""
 
 #: components/mixins/handleProjectUnpublish.js:27
-#: components/project/ProjectData.vue:138
-#: components/project/ProjectForm.vue:256
+#: components/project/ProjectData.vue:151
+#: components/project/ProjectForm.vue:262
 msgid "Action cancelled"
 msgstr ""
 
@@ -515,7 +515,7 @@ msgstr ""
 msgid "Approved by MOH"
 msgstr ""
 
-#: components/project/ProjectData.vue:228
+#: components/project/ProjectData.vue:231
 #: components/project/ProjectNavigation.vue:94
 msgid "Archive project"
 msgstr ""
@@ -564,15 +564,8 @@ msgid ""
 msgstr ""
 
 #: components/mixins/handleProjectUnpublish.js:11
-#: components/project/ProjectData.vue:152
-#: components/project/ProjectData.vue:199
-#: components/project/ProjectForm.vue:240
 #: angular/Assessment/CountryMap/CountryMapController.js:42
 msgid "Attention"
-msgstr ""
-
-#: components/project/collection/AddEditorDialog.vue:7
-msgid "Attention!"
 msgstr ""
 
 #: components/charts/HealthFocusAreas.vue:27
@@ -719,9 +712,10 @@ msgstr ""
 #: components/dialogs/ProjectApprovalDialog.vue:47
 #: components/dialogs/SaveFilterDialog.vue:12
 #: components/mixins/handleProjectUnpublish.js:13
-#: components/project/ProjectData.vue:323
-#: components/project/ProjectForm.vue:243
-#: components/project/ProjectNavigation.vue:109
+#: components/project/ProjectData.vue:368
+#: components/project/ProjectForm.vue:249
+#: components/project/ProjectForm.vue:273
+#: components/project/ProjectNavigation.vue:112
 #: components/project/collection/AddEditorDialog.vue:7
 #: components/project/collection/AddEditorDialog.vue:2
 #: angular/Cms/AddNewContent/AddNewContentDialog.html:100
@@ -788,8 +782,8 @@ msgid ""
 "software.  If there are no users of this type, put 0."
 msgstr ""
 
-#: components/project/ProjectForm.vue:222
-#: components/project/ProjectForm.vue:302
+#: components/project/ProjectForm.vue:224
+#: components/project/ProjectForm.vue:304
 #: angular/Assessment/CountryMap/CountryMapController.js:44
 msgid "Close"
 msgstr ""
@@ -844,14 +838,14 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
-#: components/project/ProjectForm.vue:220
-#: components/project/ProjectForm.vue:300
+#: components/project/ProjectForm.vue:222
+#: components/project/ProjectForm.vue:302
 msgid "Congratulation"
 msgstr ""
 
-#: components/project/ProjectData.vue:172
-#: components/project/ProjectData.vue:215
-#: components/project/ProjectData.vue:237
+#: components/project/ProjectData.vue:175
+#: components/project/ProjectData.vue:218
+#: components/project/ProjectData.vue:240
 msgid "Congratulations"
 msgstr ""
 
@@ -1124,11 +1118,11 @@ msgid ""
 "health innovators to apply for grant funding. Check out the"
 msgstr ""
 
-#: components/project/ProjectForm.vue:138
+#: components/project/ProjectForm.vue:145
 msgid "Discard changes"
 msgstr ""
 
-#: components/project/ProjectData.vue:206
+#: components/project/ProjectData.vue:209
 #: components/project/ProjectNavigation.vue:89
 msgid "Discard draft"
 msgstr ""
@@ -1195,11 +1189,11 @@ msgstr ""
 msgid "Draft"
 msgstr ""
 
-#: components/project/ProjectData.vue:216
+#: components/project/ProjectData.vue:219
 msgid "Draft has been discarded"
 msgstr ""
 
-#: components/project/ProjectForm.vue:254
+#: components/project/ProjectForm.vue:256
 msgid "Draft overriden with published version"
 msgstr ""
 
@@ -1963,7 +1957,7 @@ msgstr ""
 msgid "Incoherent Projects"
 msgstr ""
 
-#: components/project/ProjectData.vue:147
+#: components/project/ProjectData.vue:150
 msgid "Info"
 msgstr ""
 
@@ -2528,8 +2522,8 @@ msgstr ""
 
 #: components/dialogs/ProjectApprovalDialog.vue:107
 #: components/mixins/handleProjectUnpublish.js:12
-#: components/project/ProjectData.vue:322
-#: components/project/ProjectForm.vue:242
+#: components/project/ProjectData.vue:367
+#: components/project/ProjectForm.vue:248
 msgid "Ok"
 msgstr ""
 
@@ -2540,7 +2534,7 @@ msgstr ""
 #: components/admin/import/ImportDataTable.vue:256
 #: components/admin/import/ImportHeaders.vue:224
 #: components/dashboard/FilterPresetsActions.vue:48
-#: components/project/ProjectForm.vue:72 components/project/ProjectForm.vue:270
+#: components/project/ProjectForm.vue:72 components/project/ProjectForm.vue:272
 msgid "OK"
 msgstr ""
 
@@ -2826,11 +2820,11 @@ msgstr ""
 msgid "Project end date"
 msgstr ""
 
-#: components/project/ProjectData.vue:238
+#: components/project/ProjectData.vue:241
 msgid "Project has been archived."
 msgstr ""
 
-#: components/project/ProjectData.vue:173
+#: components/project/ProjectData.vue:176
 msgid "Project has been unpublished"
 msgstr ""
 
@@ -2982,7 +2976,7 @@ msgstr ""
 msgid "Reason"
 msgstr ""
 
-#: components/project/ProjectForm.vue:137
+#: components/project/ProjectForm.vue:144
 msgid "Recover & Reload"
 msgstr ""
 
@@ -3524,23 +3518,20 @@ msgid ""
 "lines for which there may not yet be full agreement."
 msgstr ""
 
-#: components/project/ProjectData.vue:210
-#: components/project/ProjectForm.vue:241
+#: components/project/ProjectData.vue:213
+#: components/project/ProjectForm.vue:243
 msgid "The current draft will be overwritten by the published version"
 msgstr ""
 
-#: components/project/ProjectData.vue:232
-#: components/project/ProjectForm.vue:267
+#: components/project/ProjectData.vue:235
+#: components/project/ProjectForm.vue:269
 msgid ""
 "The current project will be archived. You will find it on \"My projects\" "
 "page where you can initiate to restore it if needed."
 msgstr ""
 
-#: components/project/ProjectData.vue:163
-msgid "The current project will be unpublished"
-msgstr ""
-
 #: components/mixins/handleProjectUnpublish.js:11
+#: components/project/ProjectData.vue:166
 msgid "The current project will be unpublished"
 msgstr ""
 
@@ -3666,7 +3657,7 @@ msgstr ""
 msgid "There was an error while importing the file! Maybe try again."
 msgstr ""
 
-#: components/project/ProjectForm.vue:132
+#: components/project/ProjectForm.vue:139
 msgid ""
 "There was an un-caught validation error an automatic report has been "
 "submitted"
@@ -3906,7 +3897,7 @@ msgid "Unique Project ID (UID)"
 msgstr ""
 
 #: components/common/ProjectCardActions.vue:30
-#: components/project/ProjectData.vue:159
+#: components/project/ProjectData.vue:162
 #: components/project/ProjectNavigation.vue:104
 msgid "Unpublish"
 msgstr ""
@@ -4040,11 +4031,18 @@ msgstr ""
 #: components/dashboard/FilterPresetsActions.vue:47
 #: components/dialogs/DialogsContainer.vue:30
 #: components/dialogs/ProjectApprovalDialog.vue:105
-#: components/project/ProjectData.vue:209 components/project/ProjectForm.vue:70
-#: components/project/ProjectForm.vue:135
-#: components/project/ProjectForm.vue:268
-#: pages/_organisation/projects/_id.vue:31
+#: components/project/ProjectData.vue:165
+#: components/project/ProjectData.vue:212
+#: components/project/ProjectData.vue:234 components/project/ProjectForm.vue:70
+#: components/project/ProjectForm.vue:142
+#: components/project/ProjectForm.vue:246
+#: components/project/ProjectForm.vue:270
+#: pages/_organisation/projects/_id.vue:41
 msgid "Warning"
+msgstr ""
+
+#: components/project/collection/AddEditorDialog.vue:7
+msgid "Warning!"
 msgstr ""
 
 #: components/dialogs/HowToDialog.vue:48
@@ -4267,7 +4265,7 @@ msgstr ""
 msgid "You are each project's editor"
 msgstr ""
 
-#: pages/_organisation/projects/_id.vue:31
+#: pages/_organisation/projects/_id.vue:41
 msgid "You are not authorized to access this view"
 msgstr ""
 
@@ -4306,11 +4304,11 @@ msgid ""
 "correct investors."
 msgstr ""
 
-#: components/project/ProjectForm.vue:299
+#: components/project/ProjectForm.vue:301
 msgid "Your draft has been published successfully"
 msgstr ""
 
-#: components/project/ProjectForm.vue:219
+#: components/project/ProjectForm.vue:221
 msgid "Your draft has been saved successfully"
 msgstr ""
 
