@@ -499,4 +499,4 @@ OBSOLETE_PROJECT_MARKERS = {
     'delete'
 }
 
-SIMPLE_FEEDBACK_SEND_TO = 'dhasupport@pulilab.com'
+SIMPLE_FEEDBACK_SEND_TO = os.environ.get('SIMPLE_FEEDBACK_SEND_TO', 'dhasupport@pulilab.com')
