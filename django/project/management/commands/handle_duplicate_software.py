@@ -57,7 +57,7 @@ class Command(BaseCommand):
                 else:
                     print("No projects listed this duplicate")
 
-                print(f"Deleting duplicate: {duplicate.name} (id: {software.id}) \n")
+                print(f"Deleting duplicate: {duplicate.name} (id: {duplicate.id}) \n")
                 duplicate.delete()
                 deleted.append(duplicate)
 
