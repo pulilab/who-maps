@@ -70,7 +70,11 @@ class TechnologyPlatformAdmin(AllObjectsAdmin):
         'name', 'state', 'added_by'
     ]
     list_filter = [SoftwareStateFilter]
+    search_fields = ['name']
     actions = (approve, decline)
+
+    def get_queryset(self, request):  # pragma: no cover
+        return self.model.objects.all()
 
 
 class InteroperabilityLinkAdmin(AllObjectsAdmin):
