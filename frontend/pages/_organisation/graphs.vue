@@ -17,6 +17,7 @@
             popper-class="date-popper"
             :picker-options="pickerOptions"
           />
+          <el-divider direction="vertical" class="divider"></el-divider>
           <el-select
             v-model="region"
             filterable
@@ -62,7 +63,7 @@
             />
           </el-select>
           <el-button
-            v-if="filterString"
+            v-if="canClear"
             type="primary"
             icon="el-icon-close"
             class="btn-search"
@@ -217,6 +218,9 @@ export default {
     filterString() {
       return objectToQueryString(this.filter)
     },
+    canClear() {
+      return this.region !== '' || this.country !== '' || this.investor !== ''
+    },
     disabledRegion() {
       return this.country !== ''
     },
@@ -306,5 +310,9 @@ export default {
   p {
     word-break: normal;
   }
+}
+.divider {
+  margin-right: 23px;
+  height: 40px;
 }
 </style>
