@@ -54,6 +54,43 @@ class GeneralKPIViewSet(ListModelMixin, GenericViewSet):
             object_counter = {key: Sum(value) for (key, value) in object_counter.items()}
 
         return JSONObject(**object_counter)
+
+    def _generate_bool_values(self, queryset, field, sum_by_date, investor_id=None):
+        if investor_id:
+            func_arguments = [F("data"), Value(investor_id)]
+        else:
+            func_arguments = [F(field['field_name'])]
+
+        object_keys = self._get_object_keys(queryset, func_arguments)
+        object_bool_values = {}
+
+        for key in object_keys:
+            selector_func = Func(*(func_arguments + [Value(str(key))]), function='jsonb_extract_path',
+                                 output_field=models.JSONField())
+            inner_object_keys_queryset = queryset.annotate(
+                keys=Func(selector_func, function='jsonb_object_keys')).values('keys')
+            inner_object_keys = set(object_key['keys'] for object_key in inner_object_keys_queryset)
+            inner_dict = {}
+            for inner_key in inner_object_keys:
+                length_of_values = \
+                    Func(
+                        Func(*(func_arguments + [Value(str(key)), Value(str(inner_key))]),
+                             function='jsonb_extract_path',
+                             output_field=models.JSONField()),
+                        function='jsonb_array_length')
+                if sum_by_date:
+                    length_of_values = Sum(length_of_values)
+
+                inner_dict[str(inner_key)] = Case(
+                    When(GreaterThan(length_of_values, 0), then=Value(True)),
+                    default=Value(False),
+                    output_field=models.BooleanField()
+                )
+
+            object_bool_values[str(key)] = JSONObject(**inner_dict)
+
+        return JSONObject(**object_bool_values)
+
 class KPIFilterBackend(filters.BaseFilterBackend):
     @staticmethod
     def _parse_date_str(date_str: str) -> datetime.date:
