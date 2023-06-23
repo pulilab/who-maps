@@ -91,6 +91,88 @@ class GeneralKPIViewSet(ListModelMixin, GenericViewSet):
 
         return JSONObject(**object_bool_values)
 
+    def prepare_queryset(self, request, queryset, fields: list):
+        """
+        fields<List>:
+            {
+                field_name: <field_name>
+                field_data_name: <field_data_name>
+                count_list_values: <bool>
+                count_dict_values: <bool>
+                nested_key: <key>
+            }
+        """
+        region_enabled = int(request.query_params.get('region')) in [reg[0] for reg in Country.REGIONS] \
+            if request.query_params.get('region') else False
+
+        if investor_id := request.query_params.get('investor'):
+            queryset = queryset.values('date')  # GROUP BY DATE
+            query_kwargs = {}
+            for field in fields:
+                if region_enabled:
+                    if field.get('count_list_values'):
+                        query_kwargs[field["field_name"]] = Sum(Func(F(
+                            f'data__{investor_id}__{field["field_data_name"]}'),
+                            function='jsonb_array_length', output_field=models.IntegerField()))
+                    elif field.get('count_dict_values'):
+                        query_kwargs[field["field_name"]] = self._count_dict_values(
+                            queryset, field, region_enabled, investor_id)
+                    elif field.get('bool_values'):
+                        query_kwargs[field["field_name"]] = self._generate_bool_values(
+                            queryset, field, region_enabled, investor_id)
+                    else:
+                        query_kwargs[field["field_name"]] = Sum(Cast(KT(
+                            f'data__{investor_id}__{field["field_data_name"]}'), models.IntegerField()))
+                else:
+                    if field.get('count_list_values'):
+                        query_kwargs[field["field_name"]] = Func(F(
+                            f'data__{investor_id}__{field["field_data_name"]}'),
+                            function='jsonb_array_length', output_field=models.IntegerField())
+                    elif field.get('count_dict_values'):
+                        query_kwargs[field["field_name"]] = self._count_dict_values(
+                            queryset, field, region_enabled, investor_id)
+                    elif field.get('bool_values'):
+                        query_kwargs[field["field_name"]] = self._generate_bool_values(
+                            queryset, field, region_enabled, investor_id)
+                    else:
+                        query_kwargs[field["field_name"]] = Cast(KT(
+                            f'data__{investor_id}__{field["field_data_name"]}'), models.IntegerField())
+            queryset = queryset.annotate(**query_kwargs)
+        else:
+            query_kwargs = {}
+            values_fields = ['date']
+            for field in fields:
+                if region_enabled:
+                    if field.get('count_list_values'):
+                        query_kwargs[field["field_name"]] = Sum(Func(F(field["field_name"]), function='CARDINALITY'))
+                    elif field.get('count_dict_values'):
+                        query_kwargs[field["field_name"]] = self._count_dict_values(queryset, field, region_enabled)
+                    elif field.get('bool_values'):
+                        query_kwargs[field["field_name"]] = self._generate_bool_values(queryset, field, region_enabled)
+                    else:
+                        query_kwargs[field["field_name"]] = Sum(field["field_name"])
+                else:
+                    if field.get('count_list_values'):
+                        query_kwargs[field["field_name"]] = Func(F(field["field_name"]), function='CARDINALITY')
+                    elif field.get('count_dict_values'):
+                        query_kwargs[field["field_name"]] = self._count_dict_values(queryset, field, region_enabled)
+                    elif field.get('bool_values'):
+                        query_kwargs[field["field_name"]] = self._generate_bool_values(queryset, field, region_enabled)
+                    else:
+                        values_fields.append(field["field_name"])
+            queryset = queryset.defer('data').values(*values_fields).annotate(**query_kwargs)
+
+        return queryset
+
+    def get_fields(self):
+        return self.fields
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.prepare_queryset(request, queryset, self.get_fields())
+        return Response(queryset)
+
+
 class KPIFilterBackend(filters.BaseFilterBackend):
     @staticmethod
     def _parse_date_str(date_str: str) -> datetime.date:
