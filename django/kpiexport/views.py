@@ -11,11 +11,6 @@ from datetime import datetime, timedelta
 from core.views import TokenAuthMixin
 from kpiexport.models import AuditLogUsers, AuditLogTokens, AuditLogProjectStatus, AuditLogProjectStages, \
     AuditLogDataStandards, AuditLogHealthCategories, AuditLogHFA
-from kpiexport.serializers import AuditLogUserDetailedSerializer, AuditLogUserBasicSerializer, \
-    AuditLogTokenBasicSerializer, AuditLogTokenDetailedSerializer, AuditLogProjectStatusBasicSerializer, \
-    AuditLogProjectStatusDetailedSerializer, AuditLogProjectStagesBasicSerializer, \
-    AuditLogProjectStagesDetailedSerializer, AuditLogStandardsBasicSerializer, AuditLogStandardsDetailedSerializer, \
-    AuditLogHealthCategoriesDetailedSerializer, AuditLogHealthCategoriesBasicSerializer, AuditLogHFABasicSerializer
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework import filters
