@@ -17,6 +17,9 @@ from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
+class GeneralKPIViewSet(ListModelMixin, GenericViewSet):
+    fields = []
+
 class KPIFilterBackend(filters.BaseFilterBackend):
     @staticmethod
     def _parse_date_str(date_str: str) -> datetime.date:
