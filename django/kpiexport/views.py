@@ -244,8 +244,9 @@ class TokenKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
 
     Allowed filters:
 
-    * `country`: country ID, example: 01 (default: Global)
-    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
+    * `region`: country ID, example: 0
+    * `country`: country ID, example: 1 (default: Global)
+    * `investor`: investor ID, example: 2 (default: None). If set, response will be detailed
     * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
     * `to`: YYYY-MM format, ending of the sample (default: last month)
     * `detailed`: if set to true, detailed donor-based data will be returned
@@ -253,14 +254,11 @@ class TokenKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
     """
     permission_classes = (IsAuthenticated,)
     filter_backends = [KPIFilterBackend]
-    filter_fields = ('country', 'investor', 'from', 'to')
+    filter_fields = ('region', 'country', 'investor', 'from', 'to')
     queryset = AuditLogTokens.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
-            return AuditLogTokenDetailedSerializer
-        else:
-            return AuditLogTokenBasicSerializer
+    fields = [
+        dict(field_name='tokens', field_data_name='total')
+    ]
 
 
 class ProjectStatusKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
