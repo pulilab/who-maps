@@ -20,6 +20,14 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 class GeneralKPIViewSet(ListModelMixin, GenericViewSet):
     fields = []
 
+    @staticmethod
+    def _get_object_keys(queryset, func_arguments):
+        if len(func_arguments) == 1:
+            selector_func = func_arguments[0]
+        else:
+            selector_func = Func(*func_arguments, function='jsonb_extract_path', output_field=models.JSONField())
+        object_keys_queryset = queryset.annotate(keys=Func(selector_func, function='jsonb_object_keys')).values('keys')
+        return set(object_key['keys'] for object_key in object_keys_queryset)
 class KPIFilterBackend(filters.BaseFilterBackend):
     @staticmethod
     def _parse_date_str(date_str: str) -> datetime.date:
