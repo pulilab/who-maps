@@ -342,7 +342,7 @@ class DataStandardsKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
     ]
 
 
-class HealthCategoriesKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+class HealthCategoriesKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
     """
     View to retrieve health categories KPIs
 
@@ -350,8 +350,9 @@ class HealthCategoriesKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet
 
     Allowed filters:
 
-    * `country`: country ID, example: 01 (default: Global)
-    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
+    * `region`: country ID, example: 0
+    * `country`: country ID, example: 1 (default: Global)
+    * `investor`: investor ID, example: 2 (default: None). If set, response will be detailed
     * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
     * `to`: YYYY-MM format, ending of the sample (default: last month)
     * `detailed`: if set to true, detailed donor-based data will be returned
@@ -359,14 +360,12 @@ class HealthCategoriesKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet
     """
     permission_classes = (AllowAny,)
     filter_backends = [KPIFilterBackend]
-    filter_fields = ('country', 'investor', 'from', 'to')
+    filter_fields = ('region', 'country', 'investor', 'from', 'to')
     queryset = AuditLogHealthCategories.objects.all()
+    fields = [
+        dict(field_name='categories', field_data_name='', count_dict_values=True),
+    ]
 
-    def get_serializer_class(self):
-        if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
-            return AuditLogHealthCategoriesDetailedSerializer
-        else:
-            return AuditLogHealthCategoriesBasicSerializer
 
 
 class HFAKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
