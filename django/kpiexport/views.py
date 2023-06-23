@@ -261,7 +261,7 @@ class TokenKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
     ]
 
 
-class ProjectStatusKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+class ProjectStatusKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
     """
     View to retrieve project status KPIs
 
@@ -269,8 +269,9 @@ class ProjectStatusKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
 
     Allowed filters:
 
-    * `country`: country ID, example: 01 (default: Global)
-    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
+    * `region`: country ID, example: 0
+    * `country`: country ID, example: 1 (default: Global)
+    * `investor`: investor ID, example: 2 (default: None). If set, response will be detailed
     * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
     * `to`: YYYY-MM format, ending of the sample (default: last month)
     * `detailed`: if set to true, detailed donor-based data will be returned
@@ -278,14 +279,17 @@ class ProjectStatusKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     """
     permission_classes = (AllowAny,)
     filter_backends = [KPIFilterBackend]
-    filter_fields = ('country', 'investor', 'from', 'to')
+    filter_fields = ('region', 'country', 'investor', 'from', 'to')
     queryset = AuditLogProjectStatus.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
-            return AuditLogProjectStatusDetailedSerializer
-        else:
-            return AuditLogProjectStatusBasicSerializer
+    fields = [
+        dict(field_name='published', field_data_name='published', count_list_values=True),
+        dict(field_name='unpublished', field_data_name='unpublished', count_list_values=True),
+        dict(field_name='archived', field_data_name='archived', count_list_values=True),
+        dict(field_name='ready_to_publish', field_data_name='ready_to_publish', count_list_values=True),
+        dict(field_name='to_delete', field_data_name='to_delete', count_list_values=True),
+        dict(field_name='draft', field_data_name='draft', count_list_values=True),
+        dict(field_name='growth', field_data_name='growth'),
+    ]
 
 
 class ProjectStagesKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
