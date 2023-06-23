@@ -396,6 +396,7 @@ class HFAByCategoryKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
         ]
 
 
+class HFAKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
     """
     View to retrieve HFA KPIs
 
@@ -403,8 +404,9 @@ class HFAByCategoryKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
 
     Allowed filters:
 
-    * `country`: country ID, example: 01 (default: Global)
-    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
+    * `region`: country ID, example: 0
+    * `country`: country ID, example: 1 (default: Global)
+    * `investor`: investor ID, example: 2 (default: None). If set, response will be detailed
     * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
     * `to`: YYYY-MM format, ending of the sample (default: last month)
     * `detailed`: if set to true, detailed donor-based data will be returned
@@ -412,17 +414,8 @@ class HFAByCategoryKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
     """
     permission_classes = (AllowAny,)
     filter_backends = [KPIFilterBackend]
-    filter_fields = ('country', 'investor', 'from', 'to')
+    filter_fields = ('region', 'country', 'investor', 'from', 'to')
     queryset = AuditLogHFA.objects.all()
-    serializer_class = AuditLogHFABasicSerializer
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context["category_id"] = self.kwargs.get('category_id')
-        return context
-
-    # def get_serializer_class(self):
-    #     if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
-    #         return AuditLogHealthCategoriesDetailedSerializer
-    #     else:
-    #         return AuditLogHFABasicSerializer
+    fields = [
+        dict(field_name='hfa', field_data_name='', bool_values=True),
+    ]
