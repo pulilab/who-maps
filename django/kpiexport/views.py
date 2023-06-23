@@ -183,6 +183,7 @@ class KPIFilterBackend(filters.BaseFilterBackend):
         """
         Does general filtering for all KPI APIs
         """
+        region_id = request.query_params.get('region')
         country_id = request.query_params.get('country')
         investor_id = request.query_params.get('investor')
         date_from_str = request.query_params.get('from')
@@ -191,6 +192,8 @@ class KPIFilterBackend(filters.BaseFilterBackend):
         if country_id:
             country = get_object_or_404(Country, pk=int(country_id))
             queryset = queryset.filter(country=country)
+        elif region_id:
+            queryset = queryset.filter(country__region=region_id)
         else:  # If there's no country filter, return with global data by default
             queryset = queryset.filter(country=None)
         if investor_id:
