@@ -367,8 +367,35 @@ class HealthCategoriesKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
     ]
 
 
+class HFAByCategoryKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
+    """
+    View to retrieve HFAs by a health category KPIs
 
-class HFAKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+    Requires token authentication.
+
+    Allowed filters:
+
+    * `region`: country ID, example: 0
+    * `country`: country ID, example: 1 (default: Global)
+    * `investor`: investor ID, example: 2 (default: None). If set, response will be detailed
+    * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
+    * `to`: YYYY-MM format, ending of the sample (default: last month)
+    * `detailed`: if set to true, detailed donor-based data will be returned
+
+    """
+    permission_classes = (AllowAny,)
+    filter_backends = [KPIFilterBackend]
+    filter_fields = ('region', 'country', 'investor', 'from', 'to')
+    queryset = AuditLogHFA.objects.all()
+
+    def get_fields(self):
+        return [
+            dict(field_name='hfa', field_data_name='',
+                 count_dict_values=True,
+                 nested_key=self.kwargs.get('category_id')),
+        ]
+
+
     """
     View to retrieve HFA KPIs
 
