@@ -210,7 +210,7 @@ class KPIFilterBackend(filters.BaseFilterBackend):
         return queryset
 
 
-class UserKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+class UserKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
     """
     View to retrieve user KPIs
 
@@ -218,8 +218,9 @@ class UserKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
 
     Allowed filters:
 
-    * `country`: country ID, example: 01 (default: Global)
-    * `investor`: investor ID, example: 01 (default: None). If set, response will be detailed
+    * `region`: country ID, example: 0
+    * `country`: country ID, example: 1 (default: Global)
+    * `investor`: investor ID, example: 2 (default: None). If set, response will be detailed
     * `from`: YYYY-MM format, beginning of the sample (default: 1 year ago)
     * `to`: YYYY-MM format, ending of the sample (default: last month)
     * `detailed`: if set to true, detailed donor-based data will be returned
@@ -227,17 +228,15 @@ class UserKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
     """
     permission_classes = (IsAuthenticated,)
     filter_backends = [KPIFilterBackend]
-    filter_fields = ('country', 'investor', 'from', 'to')
+    filter_fields = ('region', 'country', 'investor', 'from', 'to')
     queryset = AuditLogUsers.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.query_params.get('detailed') and self.request.query_params.get('detailed') == 'true':
-            return AuditLogUserDetailedSerializer
-        else:
-            return AuditLogUserBasicSerializer
+    fields = [
+        dict(field_name='active', field_data_name='total__active'),
+        dict(field_name='registered', field_data_name='total__registered'),
+    ]
 
 
-class TokenKPIsViewSet(TokenAuthMixin, ListModelMixin, GenericViewSet):
+class TokenKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
     """
     View to retrieve user KPIs
 
