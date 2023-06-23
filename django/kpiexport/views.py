@@ -28,6 +28,32 @@ class GeneralKPIViewSet(ListModelMixin, GenericViewSet):
             selector_func = Func(*func_arguments, function='jsonb_extract_path', output_field=models.JSONField())
         object_keys_queryset = queryset.annotate(keys=Func(selector_func, function='jsonb_object_keys')).values('keys')
         return set(object_key['keys'] for object_key in object_keys_queryset)
+
+    def _count_dict_values(self, queryset, field, sum_by_date, investor_id=None):
+        if investor_id:
+            func_arguments = [F("data"), Value(investor_id)]
+        else:
+            func_arguments = [F(field['field_name'])]
+
+        if nested_key := field.get('nested_key'):
+            func_arguments.append(Value(str(nested_key)))
+
+        object_keys = self._get_object_keys(queryset, func_arguments)
+        object_counter = {}
+
+        for key in object_keys:
+            object_counter[str(key)] = \
+                Func(
+                    Func(*(func_arguments + [Value(str(key))]),
+                         function='jsonb_extract_path',
+                         output_field=models.JSONField()),
+                    function='jsonb_array_length',
+                    output_field=models.IntegerField())
+
+        if sum_by_date:
+            object_counter = {key: Sum(value) for (key, value) in object_counter.items()}
+
+        return JSONObject(**object_counter)
 class KPIFilterBackend(filters.BaseFilterBackend):
     @staticmethod
     def _parse_date_str(date_str: str) -> datetime.date:
