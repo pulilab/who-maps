@@ -1,6 +1,3 @@
-# from rest_framework import serializers
-# from kpiexport.models import AuditLogHFA
-
 # DEPRECATED: replaced by new JSON ORM functions
 
 # class AuditLogHFABasicSerializer(serializers.ModelSerializer):
