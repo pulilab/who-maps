@@ -99,6 +99,7 @@ class GeneralKPIViewSet(ListModelMixin, GenericViewSet):
                 field_data_name: <field_data_name>
                 count_list_values: <bool>
                 count_dict_values: <bool>
+                bool_values: <bool>
                 nested_key: <key>
             }
         """
@@ -390,8 +391,7 @@ class HFAByCategoryKPIsViewSet(TokenAuthMixin, GeneralKPIViewSet):
 
     def get_fields(self):
         return [
-            dict(field_name='hfa', field_data_name='',
-                 count_dict_values=True,
+            dict(field_name='hfa', field_data_name='', count_dict_values=True,
                  nested_key=self.kwargs.get('category_id')),
         ]
 
