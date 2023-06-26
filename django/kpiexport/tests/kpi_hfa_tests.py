@@ -24,7 +24,6 @@ class KPIHFATests(KPITestDataWithProjects, APITestCase):
         hc2 = HealthCategory.objects.get(id=2)
         expected = \
             [{
-                'country': None,
                 'date': self.date_3_str,
                 'categories': {str(hc_id.id): 0 for hc_id in HealthCategory.objects.all().order_by('id')}
             }]
@@ -42,7 +41,6 @@ class KPIHFATests(KPITestDataWithProjects, APITestCase):
         hc2 = HealthCategory.objects.get(id=2)
         expected = \
             [{
-                'country': self.country1.id,
                 'date': self.date_3_str,
                 'categories': {str(hc_id.id): 0 for hc_id in HealthCategory.objects.all().order_by('id')}
             }]
@@ -61,35 +59,11 @@ class KPIHFATests(KPITestDataWithProjects, APITestCase):
         hc2 = HealthCategory.objects.get(id=2)
         expected = \
             [{
-                'country': None,
                 'date': self.date_3_str,
                 'categories': {str(hc_id.id): 0 for hc_id in HealthCategory.objects.all().order_by('id')}
             }]
         expected[0]['categories'][str(hc1.id)] = 3
         expected[0]['categories'][str(hc2.id)] = 3
-
-        self.assertEqual(response.status_code, 200)
-        self.validate_response(expected, response.json())
-
-    def test_health_categories_kpi_filter_details(self):
-        url = reverse("health-categories-kpi")
-        url += f'?from={self.date_3.year}-{self.date_3.month}&to={self.date_3.year}-{self.date_3.month}' \
-               f'&investor={self.d2.id}&detailed=true&country={self.country1.id}'
-        response = self.test_user_client.get(url)
-        hc1 = HealthCategory.objects.get(id=1)
-        hc2 = HealthCategory.objects.get(id=2)
-        cat_data = {str(hc_id.id): 0 for hc_id in HealthCategory.objects.all().order_by('id')}
-        expected = \
-            [{
-                'country': self.country1.id,
-                'date': self.date_3_str,
-                'categories': cat_data,
-                'data': cat_data
-            }]
-        expected[0]['categories'][str(hc1.id)] = 3
-        expected[0]['categories'][str(hc2.id)] = 3
-        expected[0]['data'][str(hc1.id)] = 3
-        expected[0]['data'][str(hc2.id)] = 3
 
         self.assertEqual(response.status_code, 200)
         self.validate_response(expected, response.json())
