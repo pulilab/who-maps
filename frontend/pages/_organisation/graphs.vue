@@ -159,12 +159,6 @@ export default {
       pickerOptions: {
         shortcuts: [
           {
-            text: this.$gettext('This month'),
-            onClick (picker) {
-              picker.$emit('pick', [new Date(), new Date()])
-            }
-          },
-          {
             text: this.$gettext('Last 6 months'),
             onClick (picker) {
               const end = new Date()
@@ -204,8 +198,14 @@ export default {
     ...mapGetters({
       countries: 'countries/getCountries',
       donors: 'system/getDonors',
-      regions: 'system/getRegions'
+      regionsRaw: 'system/getRegions'
     }),
+    regions() {
+      return this.regionsRaw.map(r => ({
+        ...r,
+        id: r.id.toString()
+      }))
+    },
     filter() {
       return {
         region: this.region ? `${this.region}` : undefined,
