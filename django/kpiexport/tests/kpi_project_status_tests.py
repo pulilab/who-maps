@@ -136,3 +136,36 @@ class KPIProjectStatusTests(KPITestDataWithProjects):
 
         self.assertEqual(response.status_code, 200)
         self.validate_response(expected, response.json())
+
+    def test_project_status_kpi_region_filter(self):
+        url = reverse("project-status-kpi")
+        url += f'?from={self.date_2.year}-{self.date_2.month}&to={self.date_3.year}-{self.date_3.month}&region=0'
+        response = self.test_user_client.get(url)
+        expected = \
+            [{'date': self.date_3_str,
+              'draft': 0,
+              'growth': 0,
+              'published': 4,
+              'archived': 1,
+              'ready_to_publish': 0,
+              'to_delete': 0,
+              'unpublished': 0}]
+        self.assertEqual(response.status_code, 200)
+        self.validate_response(expected, response.json())
+
+    def test_project_status_kpi_region_with_investor_filter(self):
+        url = reverse("project-status-kpi")
+        url += f'?from={self.date_2.year}-{self.date_2.month}&to={self.date_3.year}-{self.date_3.month}' \
+               f'&region=0&investor={self.d1.id}'
+        response = self.test_user_client.get(url)
+        expected = \
+            [{'date': self.date_3_str,
+              'draft': 0,
+              'growth': 0,
+              'published': 1,
+              'archived': 0,
+              'ready_to_publish': 0,
+              'to_delete': 0,
+              'unpublished': 0}]
+        self.assertEqual(response.status_code, 200)
+        self.validate_response(expected, response.json())
