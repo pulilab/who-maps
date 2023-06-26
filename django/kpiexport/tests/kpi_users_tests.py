@@ -41,14 +41,14 @@ class KPIUserTests(KPITestData, APITestCase):
         expected = \
             [{'active': 0,
               'date': self.date_1_str,
-              'registered': 3},
+              'registered': 1},
              {'active': 0,
               'date': self.date_2_str,
               'registered': 2},
              {'active': 2,
               'date': self.date_3_str,
               'registered': 0},
-             {'active': 3,
+             {'active': 1,
               'date': self.date_4_str,
               'registered': 0}]
         self.assertEqual(response.status_code, 200)
@@ -133,6 +133,20 @@ class KPIUserTests(KPITestData, APITestCase):
               'date': self.date_3_str,
               'registered': 0},
              {'active': 2,
+              'date': self.date_4_str,
+              'registered': 0}]
+        self.assertEqual(response.status_code, 200)
+        self.validate_response(expected, response.json())
+
+    def test_user_kpi_investor__with_region_filter(self):
+        url = reverse("user-kpi")
+        url += f'?investor={self.d1.id}&region=0'
+        response = self.test_user_client.get(url)
+        expected = \
+            [{'active': 0,
+              'date': self.date_1_str,
+              'registered': 1},
+             {'active': 1,
               'date': self.date_4_str,
               'registered': 0}]
         self.assertEqual(response.status_code, 200)
