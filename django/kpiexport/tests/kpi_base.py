@@ -54,7 +54,7 @@ class KPITestData(TestData):
         self.userprofile_1.donor = self.d1
         self.userprofile_1.save()
         self.userprofile_2 = UserProfileFactory(name="USER2", account_type=UserProfile.IMPLEMENTER,
-                                                country=self.country2)
+                                                country=self.country1)
         self.userprofile_2.user.date_joined = self.date_1
         self.userprofile_2.user.last_login = self.date_4  # yesterday
         self.userprofile_2.donor = self.d1
@@ -64,7 +64,7 @@ class KPITestData(TestData):
         self.token_2.created = self.date_1
         self.token_2.save()
         self.userprofile_3 = UserProfileFactory(name="USER3", account_type=UserProfile.GOVERNMENT,
-                                                country=self.country2)
+                                                country=self.country1)
         self.userprofile_3.user.date_joined = self.date_1
         self.userprofile_3.user.last_login = self.date_4
         self.userprofile_3.donor = self.d2

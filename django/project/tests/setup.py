@@ -56,7 +56,7 @@ class TestData(APITestCase):
                  'region': Country.REGIONS[0][0],
                  'name_en': 'Hungary',
                  'name_fr': 'Hongrie'},
-                {'name': 'country_2', 'code': 'CTR2', 'project_approval': False, 'region': Country.REGIONS[0][0]},
+                {'name': 'country_2', 'code': 'CTR2', 'project_approval': False, 'region': Country.REGIONS[1][0]},
             ]
         self.countries = []
 

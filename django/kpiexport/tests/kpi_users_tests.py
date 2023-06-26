@@ -117,3 +117,23 @@ class KPIUserTests(KPITestData, APITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.validate_response(expected, response.json())
+
+    def test_user_kpi_region_filter(self):
+        url = reverse("user-kpi")
+        url += f'?region=0'
+        response = self.test_user_client.get(url)
+        expected = \
+            [{'active': 0,
+              'date': self.date_1_str,
+              'registered': 2},
+             {'active': 0,
+              'date': self.date_2_str,
+              'registered': 0},
+             {'active': 0,
+              'date': self.date_3_str,
+              'registered': 0},
+             {'active': 2,
+              'date': self.date_4_str,
+              'registered': 0}]
+        self.assertEqual(response.status_code, 200)
+        self.validate_response(expected, response.json())
