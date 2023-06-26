@@ -79,7 +79,20 @@ class KPIHFATests(KPITestDataWithProjects, APITestCase):
         self.assertTrue(data[0]['hfa'][str(hc1.id)][str(list(HealthFocusArea.objects.all().order_by('id'))[-2].id)])
         self.assertTrue(data[0]['hfa'][str(hc2.id)][str(list(HealthFocusArea.objects.all().order_by('id'))[-1].id)])
 
-    def test_hfa_bool_kpi_filter(self):
+    def test_hfa_bool_kpi_with_investor_and_region_filter(self):
+        url = reverse("hfa-kpi")
+        url += f'?investor={self.d2.id}&region=0'
+        url += f'&from={self.date_3.year}-{self.date_3.month}&to={self.date_3.year}-{self.date_3.month}'
+        response = self.test_user_client.get(url)
+        hc1 = HealthCategory.objects.get(id=1)
+        hc2 = HealthCategory.objects.get(id=2)
+        data = response.json()
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(data[0]['hfa'][str(hc1.id)][str(list(HealthFocusArea.objects.all().order_by('id'))[-2].id)])
+        self.assertTrue(data[0]['hfa'][str(hc2.id)][str(list(HealthFocusArea.objects.all().order_by('id'))[-1].id)])
+        self.assertEqual(response.status_code, 200)
+
+    def test_hfa_bool_kpi_with_investor_filter(self):
         url = reverse("hfa-kpi")
         url += f'?investor={self.d2.id}'
         url += f'&from={self.date_3.year}-{self.date_3.month}&to={self.date_3.year}-{self.date_3.month}'
