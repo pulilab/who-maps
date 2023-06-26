@@ -82,3 +82,25 @@ class KPIProjectStagesTests(KPITestDataWithProjects, APITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.validate_response(expected, response.json())
+
+    def test_project_stages_kpi_investor_and_region_filter(self):
+        url = reverse("project-stages-kpi")
+        url += f'?investor={self.d2.id}&region=0'
+        response = self.test_user_client.get(url)
+        expected = \
+            [{'date': self.date_3_str,
+              'stages': {'1': 2,
+                         '10': 0,
+                         '2': 0,
+                         '3': 0,
+                         '4': 1,
+                         '5': 0,
+                         '6': 0,
+                         '7': 0,
+                         '8': 0,
+                         '9': 0,
+                         'no_data': 0}},
+             ]
+
+        self.assertEqual(response.status_code, 200)
+        self.validate_response(expected, response.json())
