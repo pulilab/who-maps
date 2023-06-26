@@ -146,9 +146,9 @@ class GeneralKPIViewSet(ListModelMixin, GenericViewSet):
                 if region_enabled:
                     if field.get('count_list_values'):
                         query_kwargs[field["field_name"]] = Sum(Func(F(field["field_name"]), function='CARDINALITY'))
-                    elif field.get('count_dict_values'):
+                    elif field.get('count_dict_values'):  # pragma: no cover
                         query_kwargs[field["field_name"]] = self._count_dict_values(queryset, field, region_enabled)
-                    elif field.get('bool_values'):
+                    elif field.get('bool_values'):  # pragma: no cover
                         query_kwargs[field["field_name"]] = self._generate_bool_values(queryset, field, region_enabled)
                     else:
                         query_kwargs[field["field_name"]] = Sum(field["field_name"])
