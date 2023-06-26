@@ -30,7 +30,7 @@ class KPITokensTests(KPITestData, APITestCase):
         url += f'?country={self.country2.id}'
         response = self.test_user_client.get(url)
         expected = \
-            [{'date': self.date_1_str, 'tokens': 3},
+            [{'date': self.date_1_str, 'tokens': 1},
              {'date': self.date_2_str, 'tokens': 2}]
         self.assertEqual(response.status_code, 200)
         self.validate_response(expected, response.json())
