@@ -120,7 +120,7 @@ class KPIUserTests(KPITestData, APITestCase):
 
     def test_user_kpi_region_filter(self):
         url = reverse("user-kpi")
-        url += f'?region=0'
+        url += '?region=0'
         response = self.test_user_client.get(url)
         expected = \
             [{'active': 0,
