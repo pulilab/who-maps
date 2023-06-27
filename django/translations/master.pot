@@ -485,8 +485,7 @@ msgstr ""
 msgid "API key"
 msgstr ""
 
-#: components/charts/MonthlyAPIKeys.vue:69 pages/_organisation/graphs.vue:30
-#: pages/_organisation/graphs_alonso.vue:42
+#: components/charts/MonthlyAPIKeys.vue:69 pages/_organisation/graphs.vue:34
 #: pages/_organisation/graphs_showcase.vue:53
 msgid "API keys"
 msgstr ""
@@ -557,7 +556,6 @@ msgid "Assessment"
 msgstr ""
 
 #: components/charts/HealthFocusAreas.vue:10
-#: pages/_organisation/graphs_alonso.vue:140
 msgid ""
 "At first level in the Health Focus Categories every project can contain the "
 "a Health Focus Category only once."
@@ -570,8 +568,6 @@ msgstr ""
 
 #: components/charts/HealthFocusAreas.vue:27
 #: components/charts/HealthFocusAreas.vue:2
-#: pages/_organisation/graphs_alonso.vue:148
-#: pages/_organisation/graphs_alonso.vue:2
 #: pages/_organisation/graphs_showcase.vue:265
 #: pages/_organisation/graphs_showcase.vue:2
 msgid "Back"
@@ -747,7 +743,7 @@ msgstr ""
 
 #: components/dashboard/FilterPresetsActions.vue:37
 #: components/dialogs/FilterItem.vue:18 components/dialogs/FilterItem.vue:7
-#: pages/_organisation/graphs.vue:13
+#: pages/_organisation/graphs.vue:17
 msgid "Clear"
 msgstr ""
 
@@ -985,7 +981,6 @@ msgid "Cover text"
 msgstr ""
 
 #: components/charts/HealthFocusAreasCoverage.vue:2
-#: pages/_organisation/graphs_alonso.vue:126
 #: pages/_organisation/graphs_showcase.vue:253
 msgid "Coverage of Health Focus Areas"
 msgstr ""
@@ -1145,7 +1140,6 @@ msgid "Distribution of projects’ statuses"
 msgstr ""
 
 #: components/charts/DistributionOfProjectStages.vue:2
-#: pages/_organisation/graphs_alonso.vue:92
 #: pages/_organisation/graphs_showcase.vue:120
 msgid "Distributions of projects’ stages"
 msgstr ""
@@ -1635,20 +1629,16 @@ msgstr ""
 msgid "Health focus areas"
 msgstr ""
 
-#: components/charts/HealthFocusAreas.vue:13 pages/_organisation/graphs.vue:60
-#: pages/_organisation/graphs_alonso.vue:122
-#: pages/_organisation/graphs_alonso.vue:141
+#: components/charts/HealthFocusAreas.vue:13 pages/_organisation/graphs.vue:64
 msgid "Health Focus Areas"
 msgstr ""
 
 #: components/charts/HealthFocusAreas.vue:3
-#: pages/_organisation/graphs_alonso.vue:136
 #: pages/_organisation/graphs_showcase.vue:262
 msgid "Health Focus Areas (by occurrences)"
 msgstr ""
 
 #: components/charts/HealthFocusAreas.vue:15
-#: pages/_organisation/graphs_alonso.vue:142
 msgid ""
 "Health Focus Areas as sublevel of Health Focus Categories can contain "
 "multiple Health Focus Areas. Because of this, it may happen that the sum of "
@@ -1658,12 +1648,10 @@ msgid ""
 msgstr ""
 
 #: components/charts/HealthFocusAreas.vue:7
-#: pages/_organisation/graphs_alonso.vue:139
 msgid "Health Focus Categories"
 msgstr ""
 
 #: components/charts/HealthFocusAreas.vue:2
-#: pages/_organisation/graphs_alonso.vue:135
 msgid "Health Focus Categories (by occurrences)"
 msgstr ""
 
@@ -1750,11 +1738,6 @@ msgstr ""
 #: components/project/CoverageFieldset.vue:6
 #: components/project/CoverageFieldset.vue:1
 msgid "How many health workers use the system?"
-msgstr ""
-
-#: pages/_organisation/graphs_alonso.vue:137
-#: pages/_organisation/graphs_alonso.vue:492
-msgid "How to read the chart"
 msgstr ""
 
 #: components/common/NavigationMenu.vue:34 components/common/TopBar.vue:27
@@ -2084,13 +2067,11 @@ msgstr ""
 msgid "KPI Graphs"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:19 pages/_organisation/graphs_alonso.vue:21
-#: pages/_organisation/graphs_showcase.vue:21
+#: pages/_organisation/graphs.vue:23 pages/_organisation/graphs_showcase.vue:21
 msgid "Kpi's integration"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:47 pages/_organisation/graphs_alonso.vue:42
-#: pages/_organisation/graphs_showcase.vue:49
+#: pages/_organisation/graphs.vue:34 pages/_organisation/graphs_showcase.vue:49
 msgid "Last 6 months"
 msgstr ""
 
@@ -2241,7 +2222,6 @@ msgid "Monthly Active User"
 msgstr ""
 
 #: components/charts/MonthlyAPIKeys.vue:2
-#: pages/_organisation/graphs_alonso.vue:46
 #: pages/_organisation/graphs_showcase.vue:57
 #: pages/_organisation/graphs_showcase.vue:69
 #: pages/_organisation/graphs_showcase.vue:1
@@ -2249,14 +2229,12 @@ msgid "Monthly growth of API keys"
 msgstr ""
 
 #: components/charts/MonthlyGrowthOfProjects.vue:2
-#: pages/_organisation/graphs_alonso.vue:67
 #: pages/_organisation/graphs_showcase.vue:95
 #: pages/_organisation/graphs_showcase.vue:181
 msgid "Monthly growth of Projects"
 msgstr ""
 
 #: components/charts/MonthlyUserActivity.vue:2
-#: pages/_organisation/graphs_alonso.vue:30
 #: pages/_organisation/graphs_showcase.vue:29
 #: pages/_organisation/graphs_showcase.vue:41
 msgid "Monthly User Activity"
@@ -2867,7 +2845,7 @@ msgstr ""
 msgid "project stages"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:49 pages/_organisation/graphs_alonso.vue:88
+#: pages/_organisation/graphs.vue:53
 #: pages/_organisation/graphs_showcase.vue:116
 msgid "Project stages"
 msgstr ""
@@ -2876,13 +2854,11 @@ msgstr ""
 msgid "Project start date"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:37 pages/_organisation/graphs_alonso.vue:55
-#: pages/_organisation/graphs_showcase.vue:78
+#: pages/_organisation/graphs.vue:41 pages/_organisation/graphs_showcase.vue:78
 msgid "Project status"
 msgstr ""
 
 #: components/charts/ProjectStatusesPerMonth.vue:2
-#: pages/_organisation/graphs_alonso.vue:76
 #: pages/_organisation/graphs_showcase.vue:104
 msgid "Project statuses per month"
 msgstr ""
@@ -3091,7 +3067,6 @@ msgstr ""
 msgid "Saving Cancelled"
 msgstr ""
 
-#: pages/_organisation/graphs_alonso.vue:13
 #: pages/_organisation/graphs_showcase.vue:13
 #: angular/Cms/PlanningAndGuidance/PlanningAndGuidance.html:99
 msgid "Search"
@@ -3716,7 +3691,6 @@ msgid ""
 "through the DHA."
 msgstr ""
 
-#: pages/_organisation/graphs.vue:33 pages/_organisation/graphs_alonso.vue:28
 #: pages/_organisation/graphs_showcase.vue:35
 msgid "This month"
 msgstr ""
@@ -3765,7 +3739,6 @@ msgid ""
 "This will save the question, type and options will not be editable anymore"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:39 pages/_organisation/graphs_alonso.vue:34
 #: pages/_organisation/graphs_showcase.vue:41
 msgid "This year"
 msgstr ""
@@ -3829,7 +3802,6 @@ msgid "Toolkit"
 msgstr ""
 
 #: components/charts/TopDataStandards.vue:2
-#: pages/_organisation/graphs_alonso.vue:111
 msgid "Top {top} ‘Data standards’ (by occurrences)"
 msgstr ""
 
@@ -3965,8 +3937,7 @@ msgstr ""
 msgid "User role requests"
 msgstr ""
 
-#: pages/_organisation/graphs.vue:23 pages/_organisation/graphs_alonso.vue:25
-#: pages/_organisation/graphs_showcase.vue:25
+#: pages/_organisation/graphs.vue:27 pages/_organisation/graphs_showcase.vue:25
 msgid "Users"
 msgstr ""
 
@@ -4202,6 +4173,14 @@ msgstr ""
 #: components/admin/CountryAdmin.vue:341 components/admin/CountryAdmin.vue:369
 #: components/admin/CountryAdmin.vue:393
 msgid "Wrong image format, you can only upload .jpg and .png files"
+msgstr ""
+
+#: pages/_organisation/graphs.vue:51
+msgid "Year back from date"
+msgstr ""
+
+#: pages/_organisation/graphs.vue:43
+msgid "Year to date"
 msgstr ""
 
 #: components/dashboard/ListExport.vue:135

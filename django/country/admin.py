@@ -17,6 +17,7 @@ class CountryAdmin(AllObjectsAdmin):
     list_display = ('name', 'code', 'region', 'project_approval')
     ordering = ('name',)
     readonly_fields = ('code', 'name')
+    list_filter = ('region',)
 
     def get_queryset(self, request):
         return self.model.objects.all()

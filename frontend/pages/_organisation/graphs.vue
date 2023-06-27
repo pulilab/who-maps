@@ -3,11 +3,42 @@
     <el-row type="flex" :gutter="30" class="mb-80 sticky">
       <div class="resume-group border-bar">
         <el-row type="flex">
+          <el-date-picker
+            v-model="dateRange"
+            type="monthrange"
+            align="center"
+            unlink-panels
+            range-separator="To"
+            start-placeholder="Start month"
+            end-placeholder="End month"
+            format="yyyy-MM"
+            :clearable="false"
+            class="input-search period"
+            popper-class="date-popper"
+            :picker-options="pickerOptions"
+          />
+          <el-divider direction="vertical" class="divider"></el-divider>
+          <el-select
+            v-model="region"
+            filterable
+            placeholder="Select region"
+            clearable
+            :disabled="disabledRegion"
+            class="input-search"
+          >
+            <el-option
+              v-for="item in regions"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
           <el-select
             v-model="country"
             filterable
             placeholder="Select country"
             clearable
+            :disabled="disabledCountry"
             class="input-search"
           >
             <el-option
@@ -31,20 +62,8 @@
               :value="item.id"
             />
           </el-select>
-          <el-date-picker
-            v-model="dateRange"
-            type="monthrange"
-            align="center"
-            unlink-panels
-            range-separator="To"
-            start-placeholder="Start month"
-            end-placeholder="End month"
-            format="yyyy-MM"
-            class="input-search"
-            :picker-options="pickerOptions"
-          />
           <el-button
-            v-if="filterString"
+            v-if="canClear"
             type="primary"
             icon="el-icon-close"
             class="btn-search"
@@ -79,11 +98,11 @@
     <el-row type="flex" :gutter="20" class="mb-80 gap-20">
       <ProjectStatus :span="8" :filters="filter" />
       <MonthlyGrowthOfProjects :span="16" :filters="filter" />
-    </el-row> 
+    </el-row>
 
     <el-row type="flex" :gutter="20" class="mb-80">
       <ProjectStatusesPerMonth :span="24" :filters="filter" />
-    </el-row> 
+    </el-row>
 
     <p class="subtitle">
       <translate>Project stages</translate>
@@ -113,7 +132,7 @@ import { objectToQueryString } from '@/utilities/charts'
 import MonthlyUserActivity from '~/components/charts/MonthlyUserActivity.vue'
 import MonthlyAPIKeys from '~/components/charts/MonthlyAPIKeys.vue'
 import ProjectStatus from '~/components/charts/ProjectStatus.vue'
-import MonthlyGrowthOfProjects from '~/components/charts/MonthlyGrowthOfProjects.vue' 
+import MonthlyGrowthOfProjects from '~/components/charts/MonthlyGrowthOfProjects.vue'
 import ProjectStatusesPerMonth from '~/components/charts/ProjectStatusesPerMonth.vue'
 import DistributionOfProjectStages from '~/components/charts/DistributionOfProjectStages.vue'
 import TopDataStandards from '~/components/charts/TopDataStandards.vue'
@@ -124,8 +143,8 @@ export default {
   components: {
     MonthlyUserActivity,
     MonthlyAPIKeys,
-    ProjectStatus, 
-    MonthlyGrowthOfProjects, 
+    ProjectStatus,
+    MonthlyGrowthOfProjects,
     ProjectStatusesPerMonth,
     DistributionOfProjectStages,
     TopDataStandards,
@@ -134,24 +153,11 @@ export default {
   },
   data() {
     return {
+      region: '',
       country: '',
       investor: '',
       pickerOptions: {
         shortcuts: [
-          {
-            text: this.$gettext('This month'),
-            onClick (picker) {
-              picker.$emit('pick', [new Date(), new Date()])
-            }
-          },
-          {
-            text: this.$gettext('This year'),
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date(new Date().getFullYear(), 0)
-              picker.$emit('pick', [start, end])
-            }
-          },
           {
             text: this.$gettext('Last 6 months'),
             onClick (picker) {
@@ -160,34 +166,73 @@ export default {
               start.setMonth(start.getMonth() - 6)
               picker.$emit('pick', [start, end])
             }
-          }
+          },
+          {
+            text: this.$gettext('Year to date'),
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date(new Date().getFullYear(), 0)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: this.$gettext('Year back from date'),
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date(new Date().setFullYear(new Date().getFullYear() - 1))
+              picker.$emit('pick', [start, end])
+            }
+          },
         ]
       },
       dateRange: null
     }
   },
+  created() {
+    this.dateRange = [
+      new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+      new Date()
+    ]
+  },
   computed: {
     ...mapGetters({
       countries: 'countries/getCountries',
-      donors: 'system/getDonors'
+      donors: 'system/getDonors',
+      regionsRaw: 'system/getRegions'
     }),
+    regions() {
+      return this.regionsRaw.map(r => ({
+        ...r,
+        id: r.id.toString()
+      }))
+    },
     filter() {
       return {
+        region: this.region ? `${this.region}` : undefined,
         country: this.country ? `${this.country}` : undefined,
         investor: this.investor ? `${this.investor}` : undefined,
         from: this.dateRange ? format(this.dateRange[0], 'YYYY-MM') : undefined,
         to: this.dateRange ? format(this.dateRange[1], 'YYYY-MM') : undefined,
-      } 
+      }
     },
     filterString() {
       return objectToQueryString(this.filter)
+    },
+    canClear() {
+      return this.region !== '' || this.country !== '' || this.investor !== ''
+    },
+    disabledRegion() {
+      return this.country !== ''
+    },
+    disabledCountry() {
+      return this.region !== ''
     }
   },
   methods: {
     clearFilter() {
+      this.region = ''
       this.country = ''
       this.investor = ''
-      this.dateRange = null
     }
   }
 }
@@ -195,9 +240,6 @@ export default {
 
 <style lang="less" scoped>
 @import '~assets/style/variables.less';
-.debug {
-  outline: 1px solid red;
-}
 .gap-20 {
   gap: 20px;
 }
@@ -207,7 +249,7 @@ export default {
 .wrapper {
   padding: 80px 60px;
   background-color: #f2f2f2;
-  position: relative;  
+  position: relative;
 
   .resume-group {
     background-color: white;
@@ -269,5 +311,8 @@ export default {
     word-break: normal;
   }
 }
-
+.divider {
+  margin-right: 23px;
+  height: 40px;
+}
 </style>

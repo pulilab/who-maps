@@ -33,8 +33,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      regions: 'system/getRegions'
+      regionsRaw: 'system/getRegions'
     }),
+    regions() {
+      return this.regionsRaw.map(r => ({
+        ...r,
+        id: r.id.toString()
+      }))
+    },
     innerValue: {
       get () {
         return this.value
