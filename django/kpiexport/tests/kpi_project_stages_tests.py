@@ -20,7 +20,6 @@ class KPIProjectStagesTests(KPITestDataWithProjects, APITestCase):
         response = self.test_user_client.get(url)
         expected = \
             [{
-                'country': None,
                 'date': self.date_3_str,
                 'stages': {'1': 2,
                            '10': 0,
@@ -45,7 +44,6 @@ class KPIProjectStagesTests(KPITestDataWithProjects, APITestCase):
         response = self.test_user_client.get(url)
         expected = \
             [{
-                'country': self.country1.id,
                 'date': self.date_3_str,
                 'stages': {'1': 2,
                            '10': 0,
@@ -68,8 +66,7 @@ class KPIProjectStagesTests(KPITestDataWithProjects, APITestCase):
         url += f'?investor={self.d2.id}'
         response = self.test_user_client.get(url)
         expected = \
-            [{'country': None,
-              'date': self.date_3_str,
+            [{'date': self.date_3_str,
               'stages': {'1': 2,
                          '10': 0,
                          '2': 0,
@@ -86,25 +83,12 @@ class KPIProjectStagesTests(KPITestDataWithProjects, APITestCase):
         self.assertEqual(response.status_code, 200)
         self.validate_response(expected, response.json())
 
-    def test_project_stages_kpi_filter_details(self):
+    def test_project_stages_kpi_investor_and_region_filter(self):
         url = reverse("project-stages-kpi")
-        url += f'?from={self.date_2.year}-{self.date_2.month}&to={self.date_3.year}-{self.date_3.month}' \
-               f'&investor={self.d2.id}&detailed=true&country={self.country1.id}'
+        url += f'?investor={self.d2.id}&region=0'
         response = self.test_user_client.get(url)
         expected = \
-            [{'country': self.country1.id,
-              'data': {'1': 2,
-                       '10': 0,
-                       '2': 0,
-                       '3': 0,
-                       '4': 1,
-                       '5': 0,
-                       '6': 0,
-                       '7': 0,
-                       '8': 0,
-                       '9': 0,
-                       'no_data': 0},
-              'date': self.date_3_str,
+            [{'date': self.date_3_str,
               'stages': {'1': 2,
                          '10': 0,
                          '2': 0,
@@ -115,6 +99,8 @@ class KPIProjectStagesTests(KPITestDataWithProjects, APITestCase):
                          '7': 0,
                          '8': 0,
                          '9': 0,
-                         'no_data': 0}}]
+                         'no_data': 0}},
+             ]
+
         self.assertEqual(response.status_code, 200)
         self.validate_response(expected, response.json())
