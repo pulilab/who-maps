@@ -48,7 +48,6 @@ const config = {
     hotjarId: process.env.HOTJAR_TRACKING_ID || null
   },
   plugins: [
-    { src: '~plugins/tracking.js' },
     { src: '~plugins/eventfix.js', ssr: false },
     { src: '~plugins/extends.js', ssr: false },
     { src: '~plugins/axios.js', ssr: true },
@@ -200,7 +199,6 @@ const config = {
   render: {
     resourceHints: false
   },
-  buildModules: ['@nuxtjs/google-analytics'],
   build: {
     babel: {
       presets ({ isServer }) {
