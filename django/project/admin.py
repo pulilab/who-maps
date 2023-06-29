@@ -67,10 +67,19 @@ class SoftwareStateFilter(SimpleListFilter):
 
 class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = [
-        'name', 'state', 'added_by'
+        'name', 'state', 'added_by', 'number_of_projects'
     ]
     list_filter = [SoftwareStateFilter]
+    search_fields = ['name']
     actions = (approve, decline)
+
+    def get_queryset(self, request):  # pragma: no cover
+        return self.model.objects.all()
+
+    def number_of_projects(self, obj):  # pragma: no cover
+        return Project.objects.filter(Q(data__software__contains=[obj.id]) | Q(draft__software__contains=[obj.id]))\
+            .count()
+    number_of_projects.short_description = "Number of projects"
 
 
 class InteroperabilityLinkAdmin(AllObjectsAdmin):

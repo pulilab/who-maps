@@ -30,10 +30,10 @@ jobs:
 
       - restore_cache:
           keys:
-            - v9-dependencies-b-{{ checksum "django/requirements.txt" }}
+            - v4-dependencies-f-{{ checksum "frontend/package.json" }}
 
       - restore_cache:
-          key: &deps1-cache deps1-{{ .Branch }}-{{ checksum "django/requirements.txt" }}
+          key: &deps2-cache deps2-{{ .Branch }}-{{ checksum "django/requirements.txt" }}
 
       - run:
           name: install Python packages
@@ -48,14 +48,14 @@ jobs:
           command: yarn install
 
       - save_cache:
-          key: *deps1-cache
+          key: *deps2-cache
           paths:
             - "venv"
 
       - save_cache:
           paths:
             - frontend/node_modules
-          key: v3-dependencies-f-{{ checksum "frontend/package.json" }}
+          key: v4-dependencies-f-{{ checksum "frontend/package.json" }}
 
       - run:
           name: backend flake8

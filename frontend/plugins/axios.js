@@ -12,7 +12,6 @@ export default function ({ $axios, app, redirect }) {
 
   $axios.onResponseError(async error => {
     const errorName = error?.name
-    // const responseCode = error.response ? error.response.status : undefined
     if (errorName === 'ExpiredAuthSessionError') {
       const path = app.localePath({ name: 'organisation-login' })
       redirect(path)

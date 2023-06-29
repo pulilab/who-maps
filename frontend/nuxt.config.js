@@ -1,9 +1,6 @@
 import dotenv from 'dotenv'
 import path from 'path'
-// import webpack from 'webpack';
 const result = dotenv.config()
-
-// const bundlebuddy = require('bundle-buddy-webpack-plugin');
 
 const features = [
   'default',
@@ -51,9 +48,7 @@ const config = {
     hotjarId: process.env.HOTJAR_TRACKING_ID || null
   },
   plugins: [
-    { src: '~plugins/tracking.js' },
     { src: '~plugins/eventfix.js', ssr: false },
-    { src: '~plugins/hotjar.js', ssr: false },
     { src: '~plugins/extends.js', ssr: false },
     { src: '~plugins/axios.js', ssr: true },
     { src: '~plugins/vee-validate.js', ssr: true },
@@ -151,9 +146,6 @@ const config = {
       callback: false,
       home: false
     },
-    /* plugins: [
-      { src: '~plugins/auth.js', ssr: true }
-    ], */
     strategies: {
       local: {
         scheme: 'refresh',
@@ -163,14 +155,12 @@ const config = {
         },
         token: {
           property: 'access',
-          // maxAge: 1800,
           global: true,
           type: 'Token'
         },
         refreshToken: {
           property: 'refresh',
           data: 'refresh',
-          // maxAge: 60 * 60 * 24 * 30
         },
         endpoints: {
           login: { url: '/api/jwt/', method: 'post' },
@@ -209,12 +199,6 @@ const config = {
   render: {
     resourceHints: false
   },
-  buildModules: ['@nuxtjs/google-analytics'],
-  googleAnalytics: {
-    id: process.env.GA_TRACKING_ID,
-    disabled: true,
-    set: [{ field: 'anonymizeIp', value: true }]
-  },
   build: {
     babel: {
       presets ({ isServer }) {
@@ -251,7 +235,6 @@ const config = {
         __dirname,
         'node_modules/leaflet'
       )
-      // config.plugins.push(new bundlebuddy());
     }
   }
 }
