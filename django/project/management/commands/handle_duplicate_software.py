@@ -8,7 +8,6 @@ class Command(BaseCommand):
     help = """
     Remove duplicate software by removing duplicates while making sure the project 
     will reference the one that stays active.
-    usage: rebuild_search
     """
 
     def handle(self, *args, **options):
