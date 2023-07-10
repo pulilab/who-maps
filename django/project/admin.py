@@ -1,6 +1,8 @@
 from adminsortable2.admin import SortableAdminMixin
+from import_export.admin import ExportActionMixin
 from django.contrib import admin
-from django.contrib.admin import SimpleListFilter
+from django.contrib.admin import SimpleListFilter, EmptyFieldListFilter
+from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 from django.utils.html import mark_safe
 from core.admin import AllObjectsAdmin
@@ -14,6 +16,7 @@ import scheduler.celery # noqa
 
 from django.conf import settings
 from kpiexport.utils import project_status_change, project_status_change_str
+from .resources import ProjectResource
 
 
 def approve(modeladmin, request, queryset):
@@ -123,7 +126,23 @@ class HSCChallengeAdmin(AllObjectsAdmin):
     pass
 
 
-class ProjectAdmin(AllObjectsAdmin):
+class DraftFilter(EmptyFieldListFilter):
+    def choices(self, changelist):  # pragma: no cover
+        for lookup, title in (
+            (None, _("All")),
+            ("1", _("Draft only")),
+            ("0", _("Published only")),
+        ):
+            yield {
+                "selected": self.lookup_val == lookup,
+                "query_string": changelist.get_query_string(
+                    {self.lookup_kwarg: lookup}
+                ),
+                "display": title,
+            }
+
+
+class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
     if settings.ENVIRONMENT_NAME == 'PRODUCTION':  # pragma: no cover
         list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'archived', 'is_active']
         readonly_fields = ['archived', 'name', 'team', 'viewers', 'link', 'data']
@@ -136,7 +155,8 @@ class ProjectAdmin(AllObjectsAdmin):
         fields = ['is_active', 'archived', 'name', 'team', 'viewers', 'link', 'data',
                   'draft', 'versions_detailed']
     search_fields = ['name']
-    list_filter = ['archived']
+    list_filter = ['archived', ("public_id", DraftFilter)]
+    resource_class = ProjectResource
 
     def get_country(self, obj):
         return obj.get_country() if obj.public_id else obj.get_country(draft_mode=True)
