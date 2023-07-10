@@ -1,6 +1,8 @@
 from adminsortable2.admin import SortableAdminMixin
+from import_export.admin import ExportActionMixin
 from django.contrib import admin
-from django.contrib.admin import SimpleListFilter
+from django.contrib.admin import SimpleListFilter, EmptyFieldListFilter
+from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 from django.utils.html import mark_safe
 from core.admin import AllObjectsAdmin
@@ -14,6 +16,7 @@ import scheduler.celery # noqa
 
 from django.conf import settings
 from kpiexport.utils import project_status_change, project_status_change_str
+from .resources import ProjectResource
 
 
 def approve(modeladmin, request, queryset):
@@ -152,7 +155,8 @@ class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
         fields = ['is_active', 'archived', 'name', 'team', 'viewers', 'link', 'data',
                   'draft', 'versions_detailed']
     search_fields = ['name']
-    list_filter = ['archived']
+    list_filter = ['archived', ("public_id", DraftFilter)]
+    resource_class = ProjectResource
 
     def get_country(self, obj):
         return obj.get_country() if obj.public_id else obj.get_country(draft_mode=True)
