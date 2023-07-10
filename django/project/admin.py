@@ -123,7 +123,23 @@ class HSCChallengeAdmin(AllObjectsAdmin):
     pass
 
 
-class ProjectAdmin(AllObjectsAdmin):
+class DraftFilter(EmptyFieldListFilter):
+    def choices(self, changelist):
+        for lookup, title in (
+            (None, _("All")),
+            ("1", _("Draft only")),
+            ("0", _("Published only")),
+        ):
+            yield {
+                "selected": self.lookup_val == lookup,
+                "query_string": changelist.get_query_string(
+                    {self.lookup_kwarg: lookup}
+                ),
+                "display": title,
+            }
+
+
+class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
     if settings.ENVIRONMENT_NAME == 'PRODUCTION':  # pragma: no cover
         list_display = ['__str__', 'created', 'get_country', 'get_team', 'get_published', 'archived', 'is_active']
         readonly_fields = ['archived', 'name', 'team', 'viewers', 'link', 'data']
