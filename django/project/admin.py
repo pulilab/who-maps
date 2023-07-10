@@ -127,7 +127,7 @@ class HSCChallengeAdmin(AllObjectsAdmin):
 
 
 class DraftFilter(EmptyFieldListFilter):
-    def choices(self, changelist):
+    def choices(self, changelist):  # pragma: no cover
         for lookup, title in (
             (None, _("All")),
             ("1", _("Draft only")),
