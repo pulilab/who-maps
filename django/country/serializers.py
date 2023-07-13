@@ -5,12 +5,13 @@ from django.utils.translation import gettext
 from django.db.transaction import atomic
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-
+from taggit.serializers import (TagListSerializerField,
+                                TaggitSerializer)
 from core.utils import send_mail_wrapper
 
 from user.models import UserProfile
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
-    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion, ArchitectureRoadMapDocument
+    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion, ReferenceDocument
 
 
 class OptionsValidatorMixin:
@@ -157,13 +158,14 @@ COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests
 READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos", "project_approval",)
 
 
-class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
+class ReferenceDocumentSerializer(TaggitSerializer, serializers.ModelSerializer):
     document = serializers.FileField(use_url=False)
     size = serializers.SerializerMethodField()
+    tags = TagListSerializerField()
 
     class Meta:
-        model = ArchitectureRoadMapDocument
-        exclude = ('is_active',)
+        model = ReferenceDocument
+        fields = '__all__'
 
     @staticmethod
     def get_size(obj):
@@ -179,14 +181,6 @@ class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
             msg = ", ".join(settings.VALID_ROAD_MAP_DOCUMENT_FILE_TYPES)
             raise ValidationError(f'Invalid file type. Allowed formats: {msg}')
         return value
-
-    def validate(self, attrs):
-        if self.instance is None:
-            country = attrs.get('country')
-            if country and country.documents.count() >= settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY:
-                raise ValidationError(
-                    f'The country already has {settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY} related road map documents')
-        return attrs
 
 
 class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer):
@@ -240,8 +234,8 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
 
     @staticmethod
     def get_documents(obj):
-        queryset = ArchitectureRoadMapDocument.objects.filter(country_id=obj.id)
-        return ArchitectureRoadMapDocumentSerializer(queryset, many=True, read_only=True).data
+        queryset = ReferenceDocument.objects.filter(country_id=obj.id)
+        return ReferenceDocumentSerializer(queryset, many=True, read_only=True).data
 
 
 class AdminCountrySerializer(SuperAdminCountrySerializer):
