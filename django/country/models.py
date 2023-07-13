@@ -137,7 +137,16 @@ def update_gdhi_data(sender, instance, created, **kwargs):
         update_gdhi_data_task.apply_async((instance.code, True))
 
 
-class ArchitectureRoadMapDocument(SoftDeleteModel):
+class MultiArrayField(ArrayField):
+    def formfield(self, **kwargs):  # pragma: no cover
+        defaults = {
+            "form_class": MultipleChoiceField,
+            "choices": self.base_field.choices,
+            "widget": forms.CheckboxSelectMultiple,
+            **kwargs
+        }
+        return super(ArrayField, self).formfield(**defaults)
+
     country = models.ForeignKey(Country, related_name='documents', on_delete=models.CASCADE)
     title = models.CharField(max_length=128)
     document = models.FileField(null=True, upload_to='documents/')
