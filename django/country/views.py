@@ -15,12 +15,12 @@ from user.models import UserProfile
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
-    CountryCustomQuestion, DonorCustomQuestion, ArchitectureRoadMapDocument
+    CountryCustomQuestion, DonorCustomQuestion, ReferenceDocument
 from .serializers import CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, \
     PartnerLogoSerializer, DonorSerializer, SuperAdminDonorSerializer, AdminDonorSerializer, \
     DonorPartnerLogoSerializer, MapFileSerializer, CountryImageSerializer, DonorImageSerializer, \
     DonorCustomQuestionSerializer, CountryCustomQuestionSerializer, CountryListSerializer, DonorListSerializer, \
-    ArchitectureRoadMapDocumentSerializer, CountryLandingSerializer
+    CountryLandingSerializer, ReferenceDocumentSerializer
 from core.views import TokenAuthMixin
 
 
@@ -181,16 +181,16 @@ class DonorCustomQuestionViewSet(SetOrderToMixin, mixins.CreateModelMixin, mixin
     serializer_class = DonorCustomQuestionSerializer
 
 
-class ArchitectureRoadMapDocumentViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
-                                         viewsets.GenericViewSet):
-    queryset = ArchitectureRoadMapDocument.objects.all()
-    serializer_class = ArchitectureRoadMapDocumentSerializer
-    permission_classes = (InCountrySuperAdmin,)
+class ReferenceDocumentViewSet(TokenAuthMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
+                               mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    queryset = ReferenceDocument.objects.all()
+    serializer_class = ReferenceDocumentSerializer
+    permission_classes = (IsAuthenticated, InCountrySuperAdmin)
 
 
 class DocumentSearchViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = ArchitectureRoadMapDocument.objects.all()
-    serializer_class = ArchitectureRoadMapDocumentSerializer
+    queryset = ReferenceDocument.objects.all()
+    serializer_class = ReferenceDocumentSerializer
     filter_backends = [filters.SearchFilter]
     permission_classes = (AllowAny,)
     search_fields = ['title', 'document']
