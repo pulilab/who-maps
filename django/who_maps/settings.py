@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'ordered_model',
     'rosetta',
     'adminsortable2',
+    "taggit",
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
