@@ -158,6 +158,7 @@ export default {
         file: [],
         title: '',
         language: null,
+        country: null,
         types: [],
         tags: [],
         featured: false,
