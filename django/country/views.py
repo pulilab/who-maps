@@ -192,6 +192,9 @@ class ReferenceDocumentViewSet(TokenAuthMixin, mixins.CreateModelMixin, mixins.U
     serializer_class = ReferenceDocumentSerializer
     permission_classes = (IsAuthenticated, InCountrySuperAdmin)
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user.userprofile)
+
 
 class DocumentFilter(django_filters.FilterSet):
     types = django_filters.BaseInFilter(field_name='types', lookup_expr='overlap')
