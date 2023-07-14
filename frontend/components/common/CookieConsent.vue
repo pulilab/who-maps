@@ -46,7 +46,6 @@ export default {
   methods: {
     close () {
       this.cookieOn = false
-      this.$track()
     }
   }
 }
