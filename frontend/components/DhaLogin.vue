@@ -262,7 +262,6 @@ export default {
         const res = await this.doLogin(loginPayload)
         if (res === 200) {
           this.$store.commit('user/SET_COOKIE', false)
-          this.$track()
           if (this.profile?.country) {
             this.setSelectedCountry(this.profile.country)
           }
