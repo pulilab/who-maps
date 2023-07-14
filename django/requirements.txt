@@ -28,6 +28,7 @@ django-cors-headers
 djangorestframework
 djangorestframework-simplejwt
 django-admin-rangefilter
+django-filter
 django-nonrelated-inlines
 django-import-export
 django-ordered-model
