@@ -162,7 +162,7 @@ class ReferenceDocumentSerializer(TaggitSerializer, serializers.ModelSerializer)
     document = serializers.FileField(use_url=False)
     size = serializers.SerializerMethodField()
     tags = TagListSerializerField()
-    author = UserProfileSerializer(many=False, read_only=True)
+    author = UserProfileSerializer(many=False, read_only=True, required=False)
 
     class Meta:
         model = ReferenceDocument
