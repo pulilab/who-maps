@@ -52,7 +52,6 @@ export default {
         'organisation-admin-registry': this.$gettext('Admin'),
         'organisation-admin-country': this.$gettext('Admin'),
         'organisation-admin-api': this.$gettext('Admin'),
-        // 'organisation-graphsold': this.$gettext('KPI Graphs'),
         'organisation-graphs': this.$gettext('KPI Graphs'),
         'organisation-admin-donor': this.$gettext('Admin'),
         'organisation-admin-import': this.$gettext('Admin'),
@@ -114,13 +113,5 @@ export default {
     font-weight: 700;
     white-space: nowrap;
   }
-
-  // h3 {
-  //   display: inline-block;
-  //   margin: 0;
-  //   font-size: @fontSizeLarge;
-  //   color: @colorWhite;
-  //   white-space: nowrap;
-  // }
 }
 </style>
