@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
 from django.forms import ModelForm
+from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 from gfklookupwidget.widgets import GfkLookupWidget
 
 from core.admin import AllObjectsAdmin
@@ -93,7 +94,7 @@ class DonorAdmin(admin.ModelAdmin):
 @admin.register(ReferenceDocument)
 class ReferenceDocumentAdmin(admin.ModelAdmin):
     search_fields = ('title', 'document', 'author__user__email', 'purpose', 'tags__name')
-    list_filter = ('language', 'country')
+    list_filter = ('language', ('country', RelatedDropdownFilter),)
     list_display = ('title', 'featured', 'created', 'country', 'document',
                     'author', 'valid_from', 'valid_until', 'tag_list')
     ordering = ('-created',)
