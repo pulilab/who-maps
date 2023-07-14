@@ -183,6 +183,15 @@ class ReferenceDocumentSerializer(TaggitSerializer, serializers.ModelSerializer)
             raise ValidationError(f'Invalid file type. Allowed formats: {msg}')
         return value
 
+    def validate(self, attrs):
+        if self.instance is None:
+            valid_until = attrs.get('valid_until')
+            if valid_until:
+                valid_from = attrs.get('valid_from')
+                if valid_from >= valid_until:
+                    raise ValidationError("Valid from can't be greater than valid until")
+        return attrs
+
 
 class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer):
     partner_logos = PartnerLogoSerializer(many=True, read_only=True)
