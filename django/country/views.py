@@ -1,5 +1,10 @@
+import django_filters
 import pycountry
 import requests
+from datetime import date
+
+from django.db.models import Q
+from django_filters.rest_framework import DjangoFilterBackend
 
 from requests import RequestException
 from django.conf import settings
@@ -188,9 +193,28 @@ class ReferenceDocumentViewSet(TokenAuthMixin, mixins.CreateModelMixin, mixins.U
     permission_classes = (IsAuthenticated, InCountrySuperAdmin)
 
 
+class DocumentFilter(django_filters.FilterSet):
+    types = django_filters.BaseInFilter(field_name='types', lookup_expr='overlap')
+    valid = django_filters.BooleanFilter(label='Valid', method='filter_valid')
+
+    class Meta:
+        model = ReferenceDocument
+        fields = ['featured', 'country', 'types', 'language', 'valid']
+
+    @staticmethod
+    def filter_valid(qs, field_name, value):
+        today = date.today()
+        if value:
+            return qs.filter((Q(valid_from__lte=today) & Q(valid_until__isnull=True))
+                             | (Q(valid_from__lte=today) & Q(valid_until__gte=today)))
+        else:
+            return qs.filter(Q(valid_from__gt=today) | Q(valid_until__lt=today))
+
+
 class DocumentSearchViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = ReferenceDocument.objects.all()
     serializer_class = ReferenceDocumentSerializer
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_class = DocumentFilter
     permission_classes = (AllowAny,)
-    search_fields = ['title', 'document']
+    search_fields = ['title', 'purpose', 'author__user__email', 'author__name', 'document', 'tags__name']
