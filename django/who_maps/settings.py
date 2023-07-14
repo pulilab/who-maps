@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth',
     'dj_rest_auth.registration',
+    'django_filters',
+    'django_admin_listfilter_dropdown',
     'corsheaders',
     'djcelery_email',
     'simple_history',
