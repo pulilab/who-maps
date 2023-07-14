@@ -162,6 +162,7 @@ class ReferenceDocumentSerializer(TaggitSerializer, serializers.ModelSerializer)
     document = serializers.FileField(use_url=False)
     size = serializers.SerializerMethodField()
     tags = TagListSerializerField()
+    author = UserProfileSerializer(many=False, read_only=True, required=False)
 
     class Meta:
         model = ReferenceDocument
@@ -181,6 +182,15 @@ class ReferenceDocumentSerializer(TaggitSerializer, serializers.ModelSerializer)
             msg = ", ".join(settings.VALID_ROAD_MAP_DOCUMENT_FILE_TYPES)
             raise ValidationError(f'Invalid file type. Allowed formats: {msg}')
         return value
+
+    def validate(self, attrs):
+        if self.instance is None:
+            valid_until = attrs.get('valid_until')
+            if valid_until:
+                valid_from = attrs.get('valid_from')
+                if valid_from >= valid_until:
+                    raise ValidationError("Valid from can't be greater than valid until")
+        return attrs
 
 
 class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer):
