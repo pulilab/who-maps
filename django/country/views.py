@@ -13,7 +13,7 @@ from rest_framework import mixins, viewsets, status, filters
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from user.models import UserProfile
@@ -191,6 +191,7 @@ class ReferenceDocumentViewSet(TokenAuthMixin, mixins.CreateModelMixin, mixins.U
     queryset = ReferenceDocument.objects.all()
     serializer_class = ReferenceDocumentSerializer
     permission_classes = (IsAuthenticated, InCountrySuperAdmin)
+    parser_classes = [MultiPartParser, JSONParser]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user.userprofile)
