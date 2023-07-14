@@ -232,8 +232,8 @@ export default {
     },
     logout () {
       this.closePopover()
-      this.doLogout()
       this.$router.push(this.localePath({ name: 'organisation-login', params: undefined, query: undefined }))
+      this.doLogout()
     },
   }
 }
