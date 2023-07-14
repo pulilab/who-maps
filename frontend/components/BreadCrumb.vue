@@ -49,6 +49,7 @@ export default {
       }
       const pages = {
         'organisation-edit-profile': this.$gettext('Admin'),
+        'organisation-admin-registry': this.$gettext('Admin'),
         'organisation-admin-country': this.$gettext('Admin'),
         'organisation-admin-api': this.$gettext('Admin'),
         // 'organisation-graphsold': this.$gettext('KPI Graphs'),
