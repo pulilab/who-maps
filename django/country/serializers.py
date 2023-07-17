@@ -189,7 +189,7 @@ class ReferenceDocumentSerializer(TaggitSerializer, serializers.ModelSerializer)
             if valid_until:
                 valid_from = attrs.get('valid_from')
                 if valid_from >= valid_until:
-                    raise ValidationError("Valid from can't be greater than valid until")
+                    raise ValidationError({"valid_from": "Valid from can't be greater than valid until"})
         return attrs
 
 
