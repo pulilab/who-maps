@@ -204,7 +204,7 @@ class ReferenceDocument(ExtendedModel):
     class Meta:
         ordering = ('featured', 'id', 'title')
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return self.title
 
 

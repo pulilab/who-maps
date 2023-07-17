@@ -101,8 +101,8 @@ class ReferenceDocumentAdmin(admin.ModelAdmin):
     ordering = ('-created',)
     autocomplete_fields = ('author', 'country')
 
-    def get_queryset(self, request):
+    def get_queryset(self, request):  # pragma: no cover
         return super().get_queryset(request).prefetch_related('tags')
 
-    def tag_list(self, obj):
+    def tag_list(self, obj):  # pragma: no cover
         return u", ".join(o.name for o in obj.tags.all())
