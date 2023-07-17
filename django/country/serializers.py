@@ -161,7 +161,7 @@ READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "
 class ReferenceDocumentSerializer(TaggitSerializer, serializers.ModelSerializer):
     document = serializers.FileField(use_url=False)
     size = serializers.SerializerMethodField()
-    tags = TagListSerializerField()
+    tags = TagListSerializerField(required=False)
     author = UserProfileSerializer(many=False, read_only=True, required=False)
 
     class Meta:
