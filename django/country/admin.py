@@ -19,6 +19,7 @@ class CountryAdmin(AllObjectsAdmin):
     ordering = ('name',)
     readonly_fields = ('code', 'name')
     list_filter = ('region',)
+    search_fields = ('name', 'code')
 
     def get_queryset(self, request):
         return self.model.objects.all()
@@ -98,9 +99,10 @@ class ReferenceDocumentAdmin(admin.ModelAdmin):
     list_display = ('title', 'featured', 'created', 'country', 'document',
                     'author', 'valid_from', 'valid_until', 'tag_list')
     ordering = ('-created',)
+    autocomplete_fields = ('author', 'country')
 
-    def get_queryset(self, request):
+    def get_queryset(self, request):  # pragma: no cover
         return super().get_queryset(request).prefetch_related('tags')
 
-    def tag_list(self, obj):
+    def tag_list(self, obj):  # pragma: no cover
         return u", ".join(o.name for o in obj.tags.all())

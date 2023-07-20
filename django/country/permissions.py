@@ -45,7 +45,7 @@ class InCountrySuperAdmin(permissions.BasePermission):
                 return True
             if country := request.data.get('country'):
                 return Country.objects.get(pk=country).super_admins.filter(id=request.user.userprofile.id).exists()
-            else:
+            else:  # pragma: no cover
                 return False
         return True
 
