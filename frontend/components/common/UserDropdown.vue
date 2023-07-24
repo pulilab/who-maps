@@ -61,7 +61,7 @@
         </div>
 
         <div
-          v-if="isUserCA"
+          v-if="isUserSCA"
           class="DropdownLink"
         >
           <nuxt-link
@@ -201,6 +201,9 @@ export default {
     },
     isUserCA () {
       return (this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)) || this.isSuperUser
+    },
+    isUserSCA () {
+      return (this.user.account_type_approved && this.user.account_type === 'SCA') || this.isSuperUser
     },
     isUserDA () {
       return (this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)) || this.isSuperUser

@@ -12,15 +12,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
-import PageLayout from '@/components/common/wrappers/PageLayout'
 import UserProjectsList from '@/components/common/UserProjectsList'
 import UserProjectsTabs from '@/components/common/UserProjectsTabs'
 
 export default {
   name: 'Projects',
   components: {
-    PageLayout,
     UserProjectsList,
     UserProjectsTabs
   },

@@ -162,6 +162,12 @@ export default {
       }
       return false
     },
+    allowSuperCountryAdmin () {
+      if (this.userProfile) {
+        return (this.userProfile.account_type === 'SCA' && this.userProfile.account_type_approved) || this.userProfile.is_superuser
+      }
+      return false
+    },
     allowDonorAdmin () {
       if (this.userProfile) {
         return (['DA', 'SDA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved) || this.userProfile.is_superuser
