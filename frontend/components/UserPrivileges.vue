@@ -80,6 +80,11 @@
           Can customize and update Government home page
         </translate>
       </li>
+      <li>
+        <translate key="sca-list-item-8">
+          Can upload and manage Health Policy Registry documents
+        </translate>
+      </li>
     </template>
     <template v-if="type === 'D'">
       <li>
