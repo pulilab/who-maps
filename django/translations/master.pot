@@ -84,6 +84,10 @@ msgstr ""
 msgid "{total} project(s) to show"
 msgstr ""
 
+#: components/common/NavigationMenu.vue:12 components/common/TopBar.vue:15
+msgid "/download/Data_Quality_Guidebook.pdf"
+msgstr ""
+
 #: components/common/map/MapProjectsBox.vue:12
 #: components/common/map/MapProjectsBox.vue:27
 msgid "&nbsp; {count} project(s)"
@@ -949,7 +953,7 @@ msgstr ""
 msgid "Country information"
 msgstr ""
 
-#: components/common/TopBar.vue:57
+#: components/common/TopBar.vue:58
 msgid "Country logo"
 msgstr ""
 
@@ -1009,7 +1013,7 @@ msgstr ""
 
 #: components/BreadCrumb.vue:26 components/BreadCrumb.vue:27
 #: components/common/NavigationMenu.vue:16
-#: components/common/NavigationMenu.vue:19
+#: components/common/NavigationMenu.vue:20
 #: components/common/SearchComponent.vue:32
 msgid "Dashboard"
 msgstr ""
@@ -1024,6 +1028,11 @@ msgstr ""
 msgid ""
 "Data can only be uploaded for one investor at a time. You can update each "
 "project once they are saved in your My Projects page before publication."
+msgstr ""
+
+#: components/common/NavigationMenu.vue:43 components/common/TopBar.vue:36
+#: components/common/TopBar.vue:14
+msgid "Data Quality Guideline"
 msgstr ""
 
 #: components/dialogs/ProjectApprovalDialog.vue:27
@@ -1303,6 +1312,10 @@ msgstr ""
 msgid "Expand"
 msgstr ""
 
+#: components/common/PolicyPeriod.vue:10
+msgid "Expired"
+msgstr ""
+
 #: components/admin/import/ImportFile.vue:116
 #: components/admin/import/ImportFile.vue:4
 #: components/admin/import/ImportFile.vue:1
@@ -1521,6 +1534,8 @@ msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:7
 #: components/dashboard/AdvancedSearch.vue:33
+#: components/dashboard/PolicySearch.vue:6
+#: components/dashboard/PolicySearch.vue:31
 msgid "Government financed"
 msgstr ""
 
@@ -1721,7 +1736,7 @@ msgid "History"
 msgstr ""
 
 #: components/common/NavigationMenu.vue:11
-#: components/common/NavigationMenu.vue:15
+#: components/common/NavigationMenu.vue:16
 msgid "Home"
 msgstr ""
 
@@ -1759,14 +1774,8 @@ msgstr ""
 msgid "https://digitalhealthatlas.org/en/-/login"
 msgstr ""
 
-#: components/common/TopBar.vue:14
+#: components/common/NavigationMenu.vue:11 components/common/TopBar.vue:14
 msgid "https://stories.digitalhealthatlas.org"
-msgstr ""
-
-#: components/common/NavigationMenu.vue:11
-msgid ""
-"https://stories.digitalhealthatlas.org/post/269ecc01-2c1a-4d71-"
-"af65-84e3882f2e36"
 msgstr ""
 
 #: components/ProfileEditor.vue:76
@@ -2148,7 +2157,7 @@ msgstr ""
 msgid "login"
 msgstr ""
 
-#: components/common/TopBar.vue:50 components/common/TopBar.vue:28
+#: components/common/TopBar.vue:55 components/common/TopBar.vue:33
 msgid "Login"
 msgstr ""
 
@@ -2299,7 +2308,7 @@ msgid "My projects"
 msgstr ""
 
 #: components/BreadCrumb.vue:28 components/common/NavigationMenu.vue:21
-#: components/common/NavigationMenu.vue:23
+#: components/common/NavigationMenu.vue:24
 #: components/landing/MyProjectsBox.vue:4
 msgid "My Projects"
 msgstr ""
@@ -2351,7 +2360,7 @@ msgstr ""
 msgid "New order saved"
 msgstr ""
 
-#: components/BreadCrumb.vue:33 components/common/TopBar.vue:74
+#: components/BreadCrumb.vue:33 components/common/TopBar.vue:79
 #: components/common/TopBar.vue:16
 msgid "New Project"
 msgstr ""
@@ -2518,6 +2527,8 @@ msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:6
 #: components/dashboard/AdvancedSearch.vue:27
+#: components/dashboard/PolicySearch.vue:5
+#: components/dashboard/PolicySearch.vue:25
 msgid "Only MOH Verified Projects"
 msgstr ""
 
@@ -2628,7 +2639,7 @@ msgid "Planning & guidance {num}"
 msgstr ""
 
 #: components/BreadCrumb.vue:32 components/common/NavigationMenu.vue:26
-#: components/common/NavigationMenu.vue:27
+#: components/common/NavigationMenu.vue:28
 #: angular/Cms/StaticInfoWidget/StaticInfoWidget.html:4
 msgid "Planning and Guidance"
 msgstr ""
@@ -3295,6 +3306,8 @@ msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:7
 #: components/dashboard/AdvancedSearch.vue:34
+#: components/dashboard/PolicySearch.vue:6
+#: components/dashboard/PolicySearch.vue:32
 msgid ""
 "Show only projects that have been received financial or in-kind government "
 "support"
@@ -3302,6 +3315,8 @@ msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:6
 #: components/dashboard/AdvancedSearch.vue:28
+#: components/dashboard/PolicySearch.vue:5
+#: components/dashboard/PolicySearch.vue:26
 msgid "Show only projects that have been verified by the country MOH"
 msgstr ""
 
@@ -3321,8 +3336,8 @@ msgstr ""
 msgid "Sign up now"
 msgstr ""
 
-#: components/DhaLogin.vue:30 components/common/TopBar.vue:45
-#: components/common/TopBar.vue:23
+#: components/DhaLogin.vue:30 components/common/TopBar.vue:50
+#: components/common/TopBar.vue:28
 msgid "Signup"
 msgstr ""
 
@@ -3344,6 +3359,8 @@ msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:22
 #: components/dashboard/AdvancedSearch.vue:106
+#: components/dashboard/PolicySearch.vue:11
+#: components/dashboard/PolicySearch.vue:43
 #: components/dialogs/DashboardFiltersDialog.vue:68
 #: components/project/sections/view/Implementation.vue:200
 #: components/project/sections/view/Implementation.vue:208
@@ -4141,7 +4158,7 @@ msgstr ""
 msgid "Who are your investment partners?"
 msgstr ""
 
-#: components/common/TopBar.vue:57
+#: components/common/TopBar.vue:58
 msgid "WHO logo"
 msgstr ""
 
