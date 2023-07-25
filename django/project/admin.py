@@ -156,7 +156,7 @@ class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
                            'versions_detailed']
         fields = ['is_active', 'archived', 'name', 'team', 'viewers', 'link', 'data',
                   'draft', 'versions_detailed']
-    search_fields = ['name']
+    search_fields = ['name', 'country_name']
     list_filter = ['archived', ("public_id", DraftFilter)]
     resource_class = ProjectResource
 
@@ -180,10 +180,11 @@ class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
 
     def get_queryset(self, request):
         qs = super(ProjectAdmin, self).get_queryset(request)
-        if not request.user.is_superuser:
-            country_id_qs = Country.objects.filter(users=request.user.userprofile).values_list('id', flat=True)
-            qs = qs.filter(Q(data__country__contained_by=list(country_id_qs)) |
-                           Q(draft__country__contained_by=list(country_id_qs)))
+        countries = Country.objects.filter(Q(id=OuterRef('country_published_id')) | Q(id=OuterRef('country_draft_id')))
+        qs = qs.annotate(
+            country_published_id=Cast(KeyTextTransform('country', 'data'), output_field=IntegerField())).annotate(
+            country_draft_id=Cast(KeyTextTransform('country', 'draft'), output_field=IntegerField())).annotate(
+            country_name=Subquery(countries.values('name')[:1]))
         return qs
 
     def has_add_permission(self, request):
