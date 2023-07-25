@@ -31,6 +31,18 @@
           <el-col class="ActionBarTab">
             <nuxt-link
               v-if="allowCountryAdmin"
+              :to="localePath({name: 'organisation-admin-registry', params: $route.params})"
+              class="ActionBarLink"
+              tag="div"
+            >
+              <translate key="registry-admin">
+                Policy Registry Admin
+              </translate>
+            </nuxt-link>
+          </el-col>
+          <el-col class="ActionBarTab">
+            <nuxt-link
+              v-if="allowCountryAdmin"
               :to="localePath({name: 'organisation-admin-country', params: $route.params})"
               class="ActionBarLink"
               tag="div"
