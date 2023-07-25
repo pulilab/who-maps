@@ -59,6 +59,7 @@ export default {
         'organisation-collection-id': this.$gettext('Collection data'),
         'organisation-dashboard': this.$gettext('Dashboard'),
         'organisation-dashboard-list': this.$gettext('Dashboard'),
+        'organisation-policy-registry': this.$gettext('Health Policy Registry'),
         'organisation-projects': this.$gettext('My Projects'),
         'organisation-projects-id-published': this.$gettext('Published Project'),
         'organisation-projects-id-edit': this.$gettext('Edit Project'),

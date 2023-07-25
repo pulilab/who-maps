@@ -120,7 +120,7 @@
         </el-row>
       </el-col>
 
-      <el-col v-if="!isDashboard && !isProjects && !isAdmin" class="SearchComponentWrapper">
+      <el-col v-if="!isDashboard && !isProjects && !isAdmin && !isRegistry" class="SearchComponentWrapper">
         <SearchComponent />
       </el-col>
       <template v-if="isDashboard">
@@ -176,6 +176,9 @@ export default {
     },
     isAdmin () {
       return this.$route.path.includes('/admin')
+    },
+    isRegistry () {
+      return this.$route.path.includes('/policy-registry')
     },
     isDashboard () {
       return this.$route.path.includes('/dashboard')
