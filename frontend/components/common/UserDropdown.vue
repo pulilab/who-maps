@@ -65,23 +65,6 @@
           class="DropdownLink"
         >
           <nuxt-link
-            :to="localePath({name: 'organisation-admin-registry', params: $route.params})"
-            @click.native="closePopover"
-          >
-            <span class="MenuIcon">
-              <svg viewBox="0 0 24 24" class="registry">
-                <path fill="currentColor" d="M14,8H10V6H14V8M20,4V20C20,21.11 19.11,22 18,22H6C4.89,22 4,21.11 4,20V4A2,2 0 0,1 6,2H18C19.11,2 20,2.9 20,4M18,13H6V20H18V13M18,4H6V11H18V4M14,15H10V17H14V15Z" />
-              </svg>
-            </span>
-            <translate>Policy Registry Admin</translate>
-          </nuxt-link>
-        </div>
-
-        <div
-          v-if="isUserCA"
-          class="DropdownLink"
-        >
-          <nuxt-link
             :to="localePath({name: 'organisation-admin-country', params: $route.params})"
             @click.native="closePopover"
           >
@@ -232,8 +215,8 @@ export default {
     },
     logout () {
       this.closePopover()
-      this.$router.push(this.localePath({ name: 'organisation-login', params: undefined, query: undefined }))
       this.doLogout()
+      this.$router.push(this.localePath({ name: 'organisation-login', params: undefined, query: undefined }))
     },
   }
 }
@@ -370,25 +353,19 @@ export default {
         width: 100%;
       }
 
-  .MenuIcon {
-    display: inline-block;
-    width: 32px;
-    height: 100%;
-    text-align: left;
+      .MenuIcon {
+        display: inline-block;
+        width: 32px;
+        height: 100%;
+        text-align: left;
+      }
 
-    .registry {
-      position: relative;
-      top: 3px;
-      height: 16px;
+      .nuxt-link-exact-active {
+        color: @colorBrandAccent !important;
+      }
+
     }
   }
-
-  .nuxt-link-exact-active {
-    color: @colorBrandAccent !important;
-  }
-
-}
-}
 
   .el-dropdown-link {
     cursor: pointer;

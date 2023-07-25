@@ -5,13 +5,12 @@ from django.utils.translation import gettext
 from django.db.transaction import atomic
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from taggit.serializers import (TagListSerializerField,
-                                TaggitSerializer)
+
 from core.utils import send_mail_wrapper
 
 from user.models import UserProfile
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
-    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion, ReferenceDocument
+    DonorCustomQuestion, CountryCustomQuestion, CustomQuestion, ArchitectureRoadMapDocument
 
 
 class OptionsValidatorMixin:
@@ -158,15 +157,13 @@ COUNTRY_ADMIN_FIELDS = ('user_requests', 'admin_requests', 'super_admin_requests
 READ_ONLY_COUNTRY_ADMIN_FIELDS = ("cover_text", "footer_title", "footer_text", "partner_logos", "project_approval",)
 
 
-class ReferenceDocumentSerializer(TaggitSerializer, serializers.ModelSerializer):
+class ArchitectureRoadMapDocumentSerializer(serializers.ModelSerializer):
     document = serializers.FileField(use_url=False)
     size = serializers.SerializerMethodField()
-    tags = TagListSerializerField(required=False)
-    author = UserProfileSerializer(many=False, read_only=True, required=False)
 
     class Meta:
-        model = ReferenceDocument
-        fields = '__all__'
+        model = ArchitectureRoadMapDocument
+        exclude = ('is_active',)
 
     @staticmethod
     def get_size(obj):
@@ -185,11 +182,10 @@ class ReferenceDocumentSerializer(TaggitSerializer, serializers.ModelSerializer)
 
     def validate(self, attrs):
         if self.instance is None:
-            valid_until = attrs.get('valid_until')
-            if valid_until:
-                valid_from = attrs.get('valid_from')
-                if valid_from >= valid_until:
-                    raise ValidationError({"valid_from": "Valid from can't be greater than valid until"})
+            country = attrs.get('country')
+            if country and country.documents.count() >= settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY:
+                raise ValidationError(
+                    f'The country already has {settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY} related road map documents')
         return attrs
 
 
@@ -244,8 +240,8 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
 
     @staticmethod
     def get_documents(obj):
-        queryset = ReferenceDocument.objects.filter(country_id=obj.id)
-        return ReferenceDocumentSerializer(queryset, many=True, read_only=True).data
+        queryset = ArchitectureRoadMapDocument.objects.filter(country_id=obj.id)
+        return ArchitectureRoadMapDocumentSerializer(queryset, many=True, read_only=True).data
 
 
 class AdminCountrySerializer(SuperAdminCountrySerializer):

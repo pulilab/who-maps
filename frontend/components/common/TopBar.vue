@@ -36,13 +36,12 @@
               <translate class="HeaderBtn">How-to</translate>
             </div>
             <div>
-              <a :href="storiesLink" target="_blank" class="HeaderBtn">
+              <a
+                :href="storiesLink"
+                target="_blank"
+                class="HeaderBtn"
+              >
                 <translate>Stories</translate>
-              </a>
-            </div>
-            <div>
-              <a :href="dataQualityLink" target="_blank" class="HeaderBtn">
-                <translate>Data Quality Guideline</translate>
               </a>
             </div>
             <el-col>
@@ -159,8 +158,7 @@ import HowToDialog from '@/components/dialogs/HowToDialog'
 export default {
   data () {
     return {
-      storiesLink: this.$gettext('https://stories.digitalhealthatlas.org'),
-      dataQualityLink: this.$gettext('/download/Data Quality Guidebook.pdf'),
+      storiesLink: this.$gettext('https://stories.digitalhealthatlas.org')
     }
   },
   directives: {

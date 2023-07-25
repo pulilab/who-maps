@@ -32,15 +32,6 @@
         </div>
         <div class="DropdownLink">
           <nuxt-link
-            key="policyRegistryBtn"
-            :to="localePath({name: 'organisation-policy-registry',params: $route.params})"
-            @click.native="closePopover"
-          >
-            <translate>Health Policy Registry</translate>
-          </nuxt-link>
-        </div>
-        <div class="DropdownLink">
-          <nuxt-link
             key="myProjectsBtn"
             :to="localePath({name: 'organisation-projects',params: $route.params})"
             exact
@@ -76,16 +67,6 @@
             <translate>Stories</translate>
           </a>
         </div>
-        <div class="DropdownLink">
-          <a
-            :href="dataQualityLink"
-            target="_blank"
-            class="HeaderBtn"
-            @click="closePopover"
-          >
-            <translate>Data Quality Guideline</translate>
-          </a>
-        </div>
       </div>
     </el-popover>
 
@@ -103,8 +84,7 @@ components: {
   data () {
     return {
       shown: false,
-      storiesLink: this.$gettext('https://stories.digitalhealthatlas.org'),
-      dataQualityLink: this.$gettext('/download/Data Quality Guidebook.pdf'),
+      storiesLink: this.$gettext('https://stories.digitalhealthatlas.org/post/269ecc01-2c1a-4d71-af65-84e3882f2e36'),
       menuRoutes: [
         {
           path: '-/',

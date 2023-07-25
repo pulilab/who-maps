@@ -10,7 +10,7 @@ export default {
   props: {
     code: {
       type: String,
-      default: ''
+      default: null
     },
     small: {
       type: Boolean,
@@ -25,7 +25,7 @@ export default {
       if (this.code) {
         return `/static/flags/${this.code.toLowerCase()}.png`
       }
-      return ''
+      return null
     },
     isGlobal () {
       return this.code === '00'

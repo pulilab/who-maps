@@ -43,10 +43,8 @@ class InCountrySuperAdmin(permissions.BasePermission):
         if request.method == 'POST':
             if request.user.is_superuser:
                 return True
-            if country := request.data.get('country'):
-                return Country.objects.get(pk=country).super_admins.filter(id=request.user.userprofile.id).exists()
-            else:  # pragma: no cover
-                return False
+            country = request.data.get('country')
+            return Country.objects.get(pk=country).super_admins.filter(id=request.user.userprofile.id).exists()
         return True
 
     def has_object_permission(self, request, view, obj):
