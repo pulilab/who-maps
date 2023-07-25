@@ -28,6 +28,10 @@ export const getters = {
     state.projectStructure.health_focus_areas
       ? [...state.projectStructure.health_focus_areas]
       : [],
+  getHealthPolicyTags: state =>
+    state.projectStructure.tags
+      ? [...state.projectStructure.tags]
+      : [],
   getHisBucket: state =>
     state.projectStructure.his_bucket
       ? [...state.projectStructure.his_bucket]
@@ -261,10 +265,9 @@ export const actions = {
     await this.$axios.post(`/api/projects/${id}/version/`)
     return dispatch('loadProjectDetails', id)
   },
-  async loadProjectStructure ({ state, commit }, force) {
+  async loadProjectStructure ({ state, commit }, force = false ) {
     try {
-      const structure = state.projectStructure
-      if (isEmpty(structure) || force) {
+      if (isEmpty(state.projectStructure) || force) {
         const { data } = await this.$axios.get('/api/projects/structure/')
         commit('SET_PROJECT_STRUCTURE', data)
       }
