@@ -67,6 +67,16 @@
             <translate>Stories</translate>
           </a>
         </div>
+        <div class="DropdownLink">
+          <a
+            :href="dataQualityLink"
+            target="_blank"
+            class="HeaderBtn"
+            @click="closePopover"
+          >
+            <translate>Data Quality Guideline</translate>
+          </a>
+        </div>
       </div>
     </el-popover>
 
@@ -84,7 +94,8 @@ components: {
   data () {
     return {
       shown: false,
-      storiesLink: this.$gettext('https://stories.digitalhealthatlas.org/post/269ecc01-2c1a-4d71-af65-84e3882f2e36'),
+      storiesLink: this.$gettext('https://stories.digitalhealthatlas.org'),
+      dataQualityLink: this.$gettext('/download/Data_Quality_Guidebook.pdf'),
       menuRoutes: [
         {
           path: '-/',
