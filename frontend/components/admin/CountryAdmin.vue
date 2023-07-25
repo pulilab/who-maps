@@ -227,7 +227,7 @@
           </el-form-item>
         </div>
         <el-form-item prop="documents" />
-        <div>
+       <!--  <div>
           <el-button
             :disabled="documents.length === roadmap.max_documents || notSCA"
             type="text"
@@ -237,7 +237,7 @@
             <fa icon="plus" />
             <translate>Add new document</translate>
           </el-button>
-        </div>
+        </div> -->
       </el-form>
       <div class="Footer">
         <p>
@@ -249,7 +249,7 @@
             country.
           </translate>
         </p>
-        <p>
+        <!-- <p>
           <fa icon="info-circle" />
           <translate
             :parameters="{
@@ -263,7 +263,7 @@
             If you need to increase this number, email
             digital-health-atlas@who.int to add more documents.
           </translate>
-        </p>
+        </p> -->
       </div>
     </collapsible-card>
 
@@ -636,10 +636,10 @@ export default {
       superadminSelection: 'admin/country/getSuperadminSelection',
       userProfile: 'user/getProfile',
       roadmap: 'system/getRoadmap'
-    }),
+    }),/*
     extensionList () {
       return this.roadmap.valid_types.join(', ')
-    },
+    }, */
     documentList () {
       return this.documents.map(document => document.document)
     },
@@ -802,7 +802,7 @@ export default {
   },
 
   watch: {
-    documentList (newDocs, oldDocs) {
+    /* documentList (newDocs, oldDocs) {
       const formats = this.roadmap.valid_types.map(extension =>
         extension.substr(extension.length - 4)
       )
@@ -833,7 +833,7 @@ export default {
         this.documentsError = ''
       }
       this.$refs.documentsUpload.validate(() => {})
-    },
+    }, */
     logo (newArr, oldArr) {
       // Handles error message placing for wrong image formats
       if (!newArr.length) {
