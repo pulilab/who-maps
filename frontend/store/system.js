@@ -15,8 +15,7 @@ export const state = () => ({
   regions: [],
   collections: [],
   donorsLibrary: {},
-  roadmap: {},
-  policy_registry: {}
+  roadmap: {}
 })
 
 export const getters = {
@@ -103,8 +102,7 @@ export const getters = {
     ...state.donorsLibrary[id]
   }),
   getRegions: state => state.regions,
-  getRegionDetails: state => id => ({ ...state.regions.find(r => r.id === id) }),
-  getPolicyRegistry: state => state.policy_registry,
+  getRegionDetails: state => id => ({ ...state.regions.find(r => r.id === id) })
 }
 
 export const actions = {
@@ -133,7 +131,6 @@ export const actions = {
       commit('setValue', { key: 'sub_level_types', val: data.sub_level_types })
       commit('setValue', { key: 'regions', val: data.regions })
       commit('setValue', { key: 'roadmap', val: data.roadmap })
-      commit('setValue', { key: 'policy_registry', val: data.policy_registry })
       dispatch('dashboard/setDashboardColumns', data.dashboard_columns, {
         root: true
       })

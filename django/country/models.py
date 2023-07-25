@@ -5,16 +5,12 @@ from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
-from django.forms import MultipleChoiceField
-from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinLengthValidator
 from ordered_model.models import OrderedModel, OrderedModelManager
-from taggit.managers import TaggableManager
 
 from country.tasks import update_gdhi_data_task
 from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
-from country.validators import file_size
 from user.models import UserProfile
 
 
@@ -141,71 +137,13 @@ def update_gdhi_data(sender, instance, created, **kwargs):
         update_gdhi_data_task.apply_async((instance.code, True))
 
 
-class MultiArrayField(ArrayField):
-    def formfield(self, **kwargs):  # pragma: no cover
-        defaults = {
-            "form_class": MultipleChoiceField,
-            "choices": self.base_field.choices,
-            "widget": forms.CheckboxSelectMultiple,
-            **kwargs
-        }
-        return super(ArrayField, self).formfield(**defaults)
-
-
-class ReferenceDocument(ExtendedModel):
-    class Type(models.TextChoices):
-        """
-        betterehealth types
-        <option value="412">Framework</option>
-        <option value="55">Guideline</option>
-        <option value="333">Laws and regulations</option>
-        <option value="1179">Monitoring and Evaluation (M&E)</option>
-        <option value="563">Operational plan</option>
-        <option value="56">Policy</option>
-        <option value="411">Report</option>
-        <option value="1167">Roadmap</option>
-        <option value="1166">Standard</option>
-        <option value="57">Strategy</option>
-        """
-        FRAMEWORK = '412', _("Framework")
-        GUIDELINE = '55', _("Guideline")
-        LAWS = '333', _("Laws and regulations")
-        ME = '1179', _("Monitoring and Evaluation (M&E)")
-        OPERATIONAL = '563', _("Operational plan")
-        POLICY = '56', _("Policy")
-        REPORT = '411', _("Report")
-        ROADMAP = '1167', _("Roadmap")
-        STANDARD = '1166', _("Standard")
-        STRATEGY = '57', _("Strategy")
-
-    class Language(models.TextChoices):
-        ENGLISH = "en", _("English")
-        FRENCH = "fr", _("French")
-        SPANISH = "es", _("Spanish")
-        PORTUGUESE = "pt", _("Portuguese")
-        ARABIC = "ar", _("Arabic")
-        CHINESE = "cn", _("Chinese")
-        RUSSIAN = "ru", _("Russian")
-        OTHER = "xx", _("Other")
-
+class ArchitectureRoadMapDocument(SoftDeleteModel):
     country = models.ForeignKey(Country, related_name='documents', on_delete=models.CASCADE)
-    document = models.FileField(null=True, upload_to='documents/', validators=[file_size])
-    author = models.ForeignKey(UserProfile, related_name='documents', on_delete=models.CASCADE)
-    language = models.CharField(choices=Language.choices)
-
     title = models.CharField(max_length=128)
-    purpose = models.TextField()
-    types = MultiArrayField(models.CharField(choices=Type.choices))
-    valid_from = models.DateField()
-    valid_until = models.DateField(blank=True, null=True)
-    featured = models.BooleanField(default=False)
-    tags = TaggableManager(blank=True)
+    document = models.FileField(null=True, upload_to='documents/')
 
     class Meta:
-        ordering = ('featured', 'id', 'title')
-
-    def __str__(self):  # pragma: no cover
-        return self.title
+        ordering = ('id',)
 
 
 class Donor(UserManagement, LandingPageCommon):

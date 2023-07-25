@@ -1,10 +1,5 @@
-import django_filters
 import pycountry
 import requests
-from datetime import date
-
-from django.db.models import Q
-from django_filters.rest_framework import DjangoFilterBackend
 
 from requests import RequestException
 from django.conf import settings
@@ -13,19 +8,19 @@ from rest_framework import mixins, viewsets, status, filters
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from user.models import UserProfile
 from .permissions import InAdminOrReadOnly, InSuperAdmin, InCountryAdminOrReadOnly, \
     InCountrySuperAdmin, InDonorSuperAdmin
 from .models import Country, Donor, PartnerLogo, DonorPartnerLogo, MapFile, \
-    CountryCustomQuestion, DonorCustomQuestion, ReferenceDocument
+    CountryCustomQuestion, DonorCustomQuestion, ArchitectureRoadMapDocument
 from .serializers import CountrySerializer, SuperAdminCountrySerializer, AdminCountrySerializer, \
     PartnerLogoSerializer, DonorSerializer, SuperAdminDonorSerializer, AdminDonorSerializer, \
     DonorPartnerLogoSerializer, MapFileSerializer, CountryImageSerializer, DonorImageSerializer, \
     DonorCustomQuestionSerializer, CountryCustomQuestionSerializer, CountryListSerializer, DonorListSerializer, \
-    CountryLandingSerializer, ReferenceDocumentSerializer
+    ArchitectureRoadMapDocumentSerializer, CountryLandingSerializer
 from core.views import TokenAuthMixin
 
 
@@ -186,39 +181,16 @@ class DonorCustomQuestionViewSet(SetOrderToMixin, mixins.CreateModelMixin, mixin
     serializer_class = DonorCustomQuestionSerializer
 
 
-class ReferenceDocumentViewSet(TokenAuthMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
-                               mixins.DestroyModelMixin, viewsets.GenericViewSet):
-    queryset = ReferenceDocument.objects.all()
-    serializer_class = ReferenceDocumentSerializer
-    permission_classes = (IsAuthenticated, InCountrySuperAdmin)
-    parser_classes = [MultiPartParser, JSONParser]
-
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user.userprofile)
-
-
-class DocumentFilter(django_filters.FilterSet):
-    types = django_filters.BaseInFilter(field_name='types', lookup_expr='overlap')
-    valid = django_filters.BooleanFilter(label='Valid', method='filter_valid')
-
-    class Meta:
-        model = ReferenceDocument
-        fields = ['featured', 'country', 'types', 'language', 'valid']
-
-    @staticmethod
-    def filter_valid(qs, field_name, value):
-        today = date.today()
-        if value:
-            return qs.filter((Q(valid_from__lte=today) & Q(valid_until__isnull=True))
-                             | (Q(valid_from__lte=today) & Q(valid_until__gte=today)))
-        else:
-            return qs.filter(Q(valid_from__gt=today) | Q(valid_until__lt=today))
+class ArchitectureRoadMapDocumentViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                                         viewsets.GenericViewSet):
+    queryset = ArchitectureRoadMapDocument.objects.all()
+    serializer_class = ArchitectureRoadMapDocumentSerializer
+    permission_classes = (InCountrySuperAdmin,)
 
 
 class DocumentSearchViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = ReferenceDocument.objects.all()
-    serializer_class = ReferenceDocumentSerializer
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    filterset_class = DocumentFilter
+    queryset = ArchitectureRoadMapDocument.objects.all()
+    serializer_class = ArchitectureRoadMapDocumentSerializer
+    filter_backends = [filters.SearchFilter]
     permission_classes = (AllowAny,)
-    search_fields = ['title', 'purpose', 'author__user__email', 'author__name', 'document', 'tags__name']
+    search_fields = ['title', 'document']

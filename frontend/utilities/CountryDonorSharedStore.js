@@ -31,7 +31,7 @@ export const actions = () => ({
     commit('SET_ID', id)
   },
 
-  async fetchData ({ state, commit, rootGetters, dispatch }, needMap = true) {
+  async fetchData ({ state, commit, rootGetters, dispatch }) {
     const type = state.type === 'country' ? 'countries' : 'donors'
     if (!rootGetters['user/getProfile']) await dispatch('user/loadProfile', false, { root: true })
     const profile = rootGetters['user/getProfile']
@@ -60,7 +60,7 @@ export const actions = () => ({
       dispatch('admin/map/setSecondSubLevelSource', data.map_data.second_sub_level_source, { root: true })
     }
 
-    if (state.type === 'country' && needMap) {
+    if (state.type === 'country') {
       await dispatch('admin/map/loadGeoJSON', null, { root: true })
       await dispatch('admin/approval/loadList', null, { root: true })
     }
