@@ -28,13 +28,11 @@ django-cors-headers
 djangorestframework
 djangorestframework-simplejwt
 django-admin-rangefilter
-django-filter
 django-nonrelated-inlines
 django-import-export
 django-ordered-model
 django-simplefeedback==1.1.2
 django-simple-history
-django-taggit
 coreapi
 drf-yasg
 hashids

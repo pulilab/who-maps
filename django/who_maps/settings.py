@@ -38,14 +38,11 @@ INSTALLED_APPS = [
     'ordered_model',
     'rosetta',
     'adminsortable2',
-    "taggit",
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth',
     'dj_rest_auth.registration',
-    'django_filters',
-    'django_admin_listfilter_dropdown',
     'corsheaders',
     'djcelery_email',
     'simple_history',
@@ -348,8 +345,9 @@ if CI_RUN:
 OSM_MAP_CLI_KEY = 'a9ea45b5-ab37-4323-8263-767aa5896113'
 
 
-MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE = 25 * 1024 * 1024  # 25 MB
-VALID_ROAD_MAP_DOCUMENT_FILE_TYPES = ('.pdf', '.xls', '.xlsx', '.doc', '.docx')
+MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE = 15728640  # 15 MB, 1024 * 1024 * 15
+MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY = 5
+VALID_ROAD_MAP_DOCUMENT_FILE_TYPES = ('.pdf', '.xls', '.xlsx')
 ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE = os.environ.get('ENABLE_GDHI_UPDATE_ON_COUNTRY_SAVE', False)
 
 # PRODUCTION SETTINGS
@@ -502,4 +500,3 @@ OBSOLETE_PROJECT_MARKERS = {
 }
 
 SIMPLE_FEEDBACK_SEND_TO = os.environ.get('SIMPLE_FEEDBACK_SEND_TO', 'dhasupport@pulilab.com')
-TAGGIT_CASE_INSENSITIVE = True

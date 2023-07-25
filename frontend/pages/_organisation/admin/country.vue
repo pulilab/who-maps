@@ -11,7 +11,9 @@ export default {
     CountryAdmin
   },
   async fetch ({ store }) {
-    await store.dispatch('system/loadUserProfiles')
+    await Promise.all([
+      store.dispatch('system/loadUserProfiles')
+    ])
     store.dispatch('admin/questions/setQuestionnaireType', 'country')
     await store.dispatch('admin/country/fetchData')
     await store.dispatch('admin/map/loadGeoJSON')

@@ -98,6 +98,14 @@ class TestStaticDataEndpoint(TestCase):
         name_list = [l['name'] for l in response.json()['languages']]
         self.assertEqual(name_list, ['Anglais', 'Français', 'Espagnol', 'Portugais', 'Arabe'])
 
+    def test_roadmap_limits(self):
+        response = self.client.get(reverse('static-data'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('roadmap', response.json())
+        self.assertTrue('valid_types', response.json()['roadmap'])
+        self.assertTrue('max_size_in_MB', response.json()['roadmap'])
+        self.assertTrue('max_documents', response.json()['roadmap'])
+
 
 def get_temp_image(name='test', ext='png'):
     cover = BytesIO()
