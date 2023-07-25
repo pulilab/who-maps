@@ -60,10 +60,7 @@
           </nuxt-link>
         </div>
 
-        <div
-          v-if="isUserCA"
-          class="DropdownLink"
-        >
+        <div v-if="isUserSCA" class="DropdownLink">
           <nuxt-link
             :to="localePath({name: 'organisation-admin-registry', params: $route.params})"
             @click.native="closePopover"
@@ -77,10 +74,7 @@
           </nuxt-link>
         </div>
 
-        <div
-          v-if="isUserCA"
-          class="DropdownLink"
-        >
+        <div v-if="isUserCA" class="DropdownLink">
           <nuxt-link
             :to="localePath({name: 'organisation-admin-country', params: $route.params})"
             @click.native="closePopover"
@@ -92,10 +86,7 @@
           </nuxt-link>
         </div>
 
-        <div
-          v-if="isUserDA"
-          class="DropdownLink"
-        >
+        <div v-if="isUserDA" class="DropdownLink">
           <nuxt-link
             :to="localePath({name: 'organisation-admin-donor', params: $route.params})"
             @click.native="closePopover"
@@ -107,10 +98,7 @@
           </nuxt-link>
         </div>
 
-        <div
-          v-if="isSuperUser"
-          class="DropdownLink"
-        >
+        <div v-if="isSuperUser" class="DropdownLink">
           <nuxt-link
             :to="localePath({name: 'organisation-graphs', params: $route.params})"
             @click.native="closePopover"
@@ -122,9 +110,7 @@
           </nuxt-link>
         </div>
 
-        <div
-          class="DropdownLink"
-        >
+        <div class="DropdownLink">
           <nuxt-link
             :to="localePath({name: 'organisation-admin-import', params: $route.params})"
             @click.native="closePopover"
@@ -136,9 +122,7 @@
           </nuxt-link>
         </div>
 
-        <div
-          class="DropdownLink"
-        >
+        <div class="DropdownLink">
           <nuxt-link
             :to="localePath({name: 'organisation-admin-api', params: $route.params})"
             @click.native="closePopover"
@@ -150,10 +134,7 @@
           </nuxt-link>
         </div>
 
-        <div
-          class="DropdownLink"
-          @click="logout"
-        >
+        <div class="DropdownLink" @click="logout">
           <el-button type="text">
             <span class="MenuIcon">
               <fa icon="power-off" />
@@ -201,6 +182,9 @@ export default {
     },
     isUserCA () {
       return (this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)) || this.isSuperUser
+    },
+    isUserSCA () {
+      return (this.user.account_type_approved && this.user.account_type === 'SCA') || this.isSuperUser
     },
     isUserDA () {
       return (this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)) || this.isSuperUser
