@@ -49,13 +49,11 @@ export const actions = {
       console.log("🚀 ~ file: PolicyRegistryAdmin.vue:241 ~ loadDocuments ~ error:", error)
       commit('setValue', { type: 'loading', value: false})
     }
-
   },
   setDialog({ commit }, value) {
     commit('setValue', { type: 'dialog', value})
   },
   openPolicyDocumentDialog({ commit }, document) {
-    console.log("🚀 ~ file: registry.js:55 ~ openPolicyDocumentDialog ~ document:", document)
     commit('setValue', { type: 'document', value: document})
     commit('setValue', { type: 'dialog', value: true})
   },
