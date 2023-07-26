@@ -4,6 +4,19 @@
       <translate :parameters="{ name: country.name }">
         Policy Registry admin for {name}
       </translate>
+      <lazy-el-select
+        v-if="isSuperUser"
+        v-model="editCountry"
+        filterable
+        :placeholder="$gettext('Select country') | translate"
+      >
+        <el-option
+          v-for="country in countries"
+          :key="country.id"
+          :label="country.name"
+          :value="country.id"
+        />
+      </lazy-el-select>
     </template>
     <Panel v-if="showForm" key="registryForm">
       <template #header>
@@ -11,17 +24,18 @@
       </template>
       <div class="RegistryForm">
         <el-form
-          ref="registryForm"
+          ref="policyForm"
+          :model="document"
           :rules="documentRules"
           label-width="220px"
           label-position="left"
           @submit.native.prevent
         >
-          <el-form-item :label="$gettext('Document')">
+          <el-form-item :label="$gettext('Document')" name="file" class="with-help" prop="file">
             <div v-if="editing" class="selectedDocument">
-              <translate>If you need to change the uploaded file of this policy, please delete this policy and create a new where you can upload the new file.</translate>
-              <a :href="document.document" target="_blank">
-                <translate>Download file</translate>
+              <translate>If you need to change the uploaded file of this policy, please delete this policy and create a new one where you can upload the new file.</translate>
+              <a :href="`/media/${document.document}`" download>
+                <translate>Download document</translate>
               </a>
             </div>
             <file-upload
@@ -32,18 +46,24 @@
               list-type="text"
               @update:files="selectDocumentFile"
             />
+            <p class="help">
+              <fa icon="info-circle" />
+              <translate :parameters="{list: extensionList, size: documentMmaxSize}">
+                Supported file formats include: {list} The file size is limited to {size}MB.
+              </translate>
+            </p>
           </el-form-item>
-          <el-form-item :label="$gettext('Title')">
+          <el-form-item :label="$gettext('Title')" prop="title">
             <el-input v-model="document.title" :maxlength="128" type="text" />
           </el-form-item>
-          <el-form-item :label="$gettext('Purpose')">
+          <el-form-item :label="$gettext('Purpose')" prop="purpose">
             <el-input
               v-model="document.purpose"
               type="textarea"
               rows="5"
             />
           </el-form-item>
-          <el-form-item :label="$gettext('Language')">
+          <el-form-item :label="$gettext('Language')" prop="language">
             <el-select
               v-model="document.language"
               :placeholder="$gettext('Select language')"
@@ -57,7 +77,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item :label="$gettext('Types')">
+          <el-form-item :label="$gettext('Types')" prop="types">
             <el-select
               v-model="document.types"
               multiple
@@ -72,15 +92,23 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item :label="$gettext('Tags')">
+          <el-form-item :label="$gettext('Keywords')">
             <el-select
               v-model="document.tags"
               multiple
               allow-create
               filterable
-              :placeholder="$gettext('Select or create tags')"
+              default-first-option
+              :placeholder="$gettext('Select or create keywords')"
               class="w-full"
-            />
+            >
+              <el-option
+                v-for="tag in tags"
+                :key="tag.id"
+                :label="tag.name"
+                :value="tag.name"
+              />
+            </el-select>
           </el-form-item>
           <el-form-item :label="$gettext('Featured')">
             <el-switch
@@ -88,25 +116,43 @@
               :active-text="$gettext('Featured')"
             />
           </el-form-item>
-          <el-form-item :label="$gettext('Valid from')">
+          <el-form-item :label="$gettext('Valid from')" prop="valid_from">
             <el-date-picker
-              v-model="document.validFrom"
+              v-model="document.valid_from"
               value-format="yyyy-MM-dd"
               :placeholder="$gettext('Pick a date')"
             />
           </el-form-item>
           <el-form-item :label="$gettext('Valid until')">
             <el-date-picker
-              v-model="document.validUntil"
+              v-model="document.valid_until"
               value-format="yyyy-MM-dd"
               :placeholder="$gettext('Pick a date')"
             />
           </el-form-item>
         </el-form>
 
+        <div v-if="submitError" class="error-wrapper">
+          <translate tag="h1">
+            Could not save the uploaded document. Please correct the following errors and try again:
+          </translate>
+          <ul class="fields">
+            <li v-for="(error,i) in Object.keys(errors)" :key="i">
+              <div>
+                {{ error }}
+              </div>
+              <ul class="errors">
+                <li v-for="(message,j) in errors[error]" :key="j">
+                  {{ message }}
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
         <div class="AdminActionBarBottom">
           <el-row type="flex" align="middle" justify="space-between">
-            <el-button type="text" class="CancelButton IconLeft" @click="showForm = false">
+            <el-button type="text" class="CancelButton IconLeft" @click="discardForm">
               <fa icon="reply" />
               <translate>Dismiss changes</translate>
             </el-button>
@@ -117,76 +163,34 @@
         </div>
       </div>
     </Panel>
-    <Panel v-else key="registryList">
-      <template #header>
-        <translate>Policy registry</translate>
-        <el-button class="add-btn" @click="showForm = true">
-          <i class="el-icon-upload2" />
-          <translate>Upload new policy document</translate>
-        </el-button>
-      </template>
-      <div>
-        <table class="PolicyList">
-          <thead>
-            <tr>
-              <th>Country</th>
-              <th>Title</th>
-              <th>Period</th>
-              <th>Type</th>
-              <th>Language</th>
-              <th>Keywords</th>
-              <th>Featured</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="doc in documents" :key="doc.id" @click="showDocumentDetails(doc)">
-              <td class="country">
-                <CountryFlag :code="doc.country.code" small />
-                <span>{{ doc.country.name }}</span>
-              </td>
-              <td>
-                {{ doc.title }}
-              </td>
-              <td>
-                {{ doc.valid_from }} - {{ doc.valid_until }}
-              </td>
-              <td class="tags">
-                <span v-for="type in doc.types" :key="type.id">
-                  {{ type.name }}
-                </span>
-              </td>
-              <td>
-                {{ doc.language.name }}
-              </td>
-              <td class="tags">
-                <span v-for="(tag,i) in doc.tags" :key="i">
-                  {{ tag }}
-                </span>
-              </td>
-              <td class="featured">
-                <i :class="`${doc.featured ? 'el-icon-star-on' : 'el-icon-star-off'}`" />
-              </td>
-              <td class="actions">
-                <el-button icon="el-icon-edit" circle @click.stop="editPolicyDocument(doc)" />
-                <el-button icon="el-icon-delete" circle class="delete" @click.stop="deletePolicyDocument(doc)" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </Panel>
-    <PolicyDocumentDialog ref="documentDialog" />
+    <template v-else>
+      <Panel key="registryList">
+        <template #header>
+          <translate>Policy registry</translate>
+          <el-button class="add-btn" @click="showForm = true">
+            <i class="el-icon-upload2" />
+            <translate>Upload new policy document</translate>
+          </el-button>
+        </template>
+        <PolicyRegistryList
+          :documents="documents"
+          @details="showDocumentDetails"
+          @edit="editPolicyDocument"
+          @delete="confirmDeletePolicyDocument"
+        />
+      </Panel>
+    </template>
   </PageLayout>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import PageLayout from '@/components/common/wrappers/PageLayout'
 import Panel from '@/components/common/Panel'
 import FileUpload from '@/components/common/FileUpload'
 import CountryFlag from '@/components/common/CountryFlag'
-import PolicyDocumentDialog from '@/components/dialogs/PolicyDocumentDialog'
+import PolicyRegistryList from '@/components/registry/PolicyRegistryList'
+import PolicyPeriod from '@/components/common/PolicyPeriod'
 
 const newDocument = {
   file: [],
@@ -207,15 +211,17 @@ export default {
     Panel,
     FileUpload,
     CountryFlag,
-    PolicyDocumentDialog,
+    PolicyRegistryList,
+    PolicyPeriod,
   },
   data() {
     return {
       loading: false,
       showForm: false,
       editing: false,
-      documents: [],
-      documentsError: '',
+      editCountry: 0,
+      submitError: false,
+      errors: [],
       document: {
         file: [],
         title: '',
@@ -228,44 +234,72 @@ export default {
         valid_until: null,
       },
       documentRules: {
-        documents: [
-          {
-            validator: (rule, value, callback) => {
-              if (this.documentsError) {
-                callback(new Error(this.documentsError))
-              } else {
-                callback()
-              }
-            }
-          }
-        ]
-      },
+        file: [
+          { required: true, message: this.$gettext('Please select a file')},
+        ],
+        title: [
+          { required: true, message: this.$gettext('Please input policy title')},
+        ],
+        purpose: [
+          { required: true, message: this.$gettext('Please provide policy purpose')},
+        ],
+        language: [
+          { required: true, message: this.$gettext('Please select language')},
+        ],
+        types: [
+          { required: true, message: this.$gettext('Please select at least one type')},
+        ],
+        valid_from: [
+          { required: true, message: this.$gettext('Please select the start date of the policy')},
+        ],
+      }
     }
   },
   computed: {
     ...mapGetters({
       country: 'admin/country/getData',
       countries: 'countries/getCountries',
+      tags: 'projects/getHealthPolicyTags',
       policyRegistry: 'system/getPolicyRegistry',
+      documents: 'registry/getDocuments'
     }),
+    user() {
+      return this.$auth.user
+    },
+    isSuperUser () {
+      return this.user && this.user.is_superuser
+    },
+    extensionList () {
+      return this.policyRegistry.valid_formats.join(', ')
+    },
+    documentMmaxSize() {
+      return this.policyRegistry.max_size_in_MB
+    },
   },
   mounted() {
     this.loadDocuments()
   },
   watch: {
     showForm(val) {
-      if (val && !this.editing) this.document = {...newDocument}
-      if (!val) this.loadDocuments()
+      if (val && !this.editing) {
+        this.documentRules.file = { required: true, message: this.$gettext('Please select a file')}
+        this.document = {...newDocument}
+      } else if (val && this.editing) {
+        this.documentRules.file = null
+      }
     }
   },
   methods: {
+    ...mapActions({
+      refreshTags: 'projects/loadProjectStructure',
+      loadDocuments: 'registry/loadRegistry',
+      openDocumentDialog: 'registry/openPolicyDocumentDialog',
+    }),
     selectDocumentFile (document) {
-  console.log("🚀 ~ file: PolicyRegistryAdmin.vue:100 ~ selectDocumentFile ~ document:", document)
-    },
-    changeDocumentTitle (title) {
-      console.log("🚀 ~ file: PolicyRegistryAdmin.vue:104 ~ changeDocumentTitle ~ title:", title)
+      console.log("🚀 ~ selectDocumentFile ~ might need to check extension:", document)
     },
     async uploadPolicyDocument() {
+      await this.$nextTick()
       try {
         if (this.document.file.length === 0) return
         const formData = new FormData()
@@ -274,10 +308,18 @@ export default {
         formData.append('title', this.document.title)
         formData.append('purpose', this.document.purpose)
         formData.append('language', this.document.language)
-        this.document.types.forEach((type,i) => formData.append(`types[${i}]`, type))
-        formData.append('tags', this.document.tags.join(','))
+        if (this.document.types.length > 0) {
+          this.document.types.forEach((type,i) => formData.append(`types[${i}]`, type))
+        } else {
+          formData.append('types[0]', null)
+        }
+        if (this.document.tags.length > 0) {
+          this.document.tags.forEach((tag,i) => formData.append(`tags[${i}]`, tag))
+        } else {
+          formData.append('tags[0]', null)
+        }
         formData.append('valid_from', this.document.valid_from)
-        formData.append('valid_until', this.document.valid_until)
+        if (this.document.valid_until) formData.append('valid_until', this.document.valid_until)
         formData.append('featured', this.document.featured)
         await this.$axios.post('/api/document/', formData, {
           headers: {
@@ -285,36 +327,43 @@ export default {
           }
         })
         this.showForm = false
+        return true
       } catch (error) {
-        console.log("🚀 ~ file: PolicyRegistryAdmin.vue:263 ~ postPolicyDocument ~ error:", error)
+        this.submitError = true
+        if (error.response && error.response.status === 400) {
+          this.errors = error.response.data
+        } else {
+          this.errors = {
+            general: [this.$gettext('Network error. Please try again or report the error.')]
+          }
+          console.log("🚀 ~ file: PolicyRegistryAdmin.vue:263 ~ postPolicyDocument ~ error:", error)
+        }
+        return false
       }
     },
     async updatePolicyDocument () {
       try {
-        if (this.document.file.length === 0) return
-        const formData = new FormData()
-        formData.append('country', this.country.id)
-        formData.append('document', this.document.file[0].raw)
-        formData.append('title', this.document.title)
-        formData.append('purpose', this.document.purpose)
-        formData.append('language', this.document.language)
-        this.document.types.forEach((type,i) => formData.append(`types[${i}]`, type))
-        formData.append('tags', this.document.tags.join(','))
-        formData.append('valid_from', this.document.valid_from)
-        formData.append('valid_until', this.document.valid_until)
-        formData.append('featured', this.document.featured)
-        await this.$axios.post('/api/document/', formData, {
-          headers: {
-            'content-type': 'multipart/form-data'
-          }
-        })
+        const policyDoc = {
+          title: this.document.title,
+          purpose: this.document.purpose,
+          language: this.document.language.id,
+          types: this.document.types,
+          tags: this.document.tags,
+          featured: this.document.featured,
+          valid_from: this.document.valid_from,
+          valid_until: this.document.valid_until,
+        }
+        await this.$axios.patch(`/api/document/${this.document.id}/`, policyDoc)
         this.showForm = false
+        return true
       } catch (error) {
         console.log("🚀 ~ file: PolicyRegistryAdmin.vue:263 ~ postPolicyDocument ~ error:", error)
+        return false
       }
     },
     editPolicyDocument(doc) {
       this.document = {
+        id: doc.id,
         file: [],
         document: doc.document,
         title: doc.title,
@@ -329,29 +378,41 @@ export default {
       this.showForm = true
       this.editing = true
     },
-    async loadDocuments() {
-      try {
-        const { data } = await this.$axios.get('/api/document-search/')
-        this.documents = data.map(doc => ({
-          ...doc,
-          country: this.countries.find(c => c.id == doc.country),
-          language: this.policyRegistry.languages.find(l => l.id == doc.language),
-          types: doc.types.map(typeId => this.policyRegistry.types.find(t => t.id == typeId)),
-        }))
-      } catch (error) {
-        console.log("🚀 ~ file: PolicyRegistryAdmin.vue:241 ~ loadDocuments ~ error:", error)
-
+    async submitForm() {
+      let res = false
+      if (this.editing) {
+        res = await this.updatePolicyDocument()
+      } else {
+        res = await this.uploadPolicyDocument()
       }
-
+      if (res) {
+        this.loadDocuments(),
+        this.refreshTags(true)
+      }
+      this.editing = false
     },
     saveForm() {
-      if (this.editing) {
-        this.updatePolicyDocument()
-      } else {
-        this.uploadPolicyDocument()
+      this.$refs.policyForm.validate(valid => {
+        if (valid) {
+          this.submitForm()
+        } else {
+          console.log('error submit!!');
+          return false
+        }
+      })
+    },
+    discardForm() {
+      this.showForm = false
+      this.editing = false
+    },
+    async deletePolicyDocument(id) {
+      try {
+        await this.$axios.delete(`/api/document/${id}/`)
+      } catch (error) {
+        console.log("🚀 ~ file: PolicyRegistryAdmin.vue:392 ~ deletePolicyDocument ~ error:", error)
       }
     },
-    deletePolicyDocument(doc) {
+    confirmDeletePolicyDocument(doc) {
       this.$confirm(
         this.$gettext('This will permanently delete the selected policy. Continue?'),
         this.$gettext('Warning'),
@@ -361,15 +422,16 @@ export default {
           type: 'warning'
         }
       ).then(async () => {
-        this.submitDeletePolicy(doc)
+        await this.deletePolicyDocument(doc.id)
         this.$message({
           type: 'success',
           message: this.$gettext('Delete completed')
         })
+        this.loadDocuments()
       })
     },
     showDocumentDetails(doc) {
-      this.$refs.documentDialog.open(doc)
+      this.openDocumentDialog(doc)
     },
   }
 }
@@ -381,7 +443,21 @@ export default {
 
 .RegistryForm {
   .el-form .el-form-item {
-    margin-bottom: 20px;
+    margin-bottom: 36px;
+    &.with-help {
+      .el-form-item__content {
+        display: flex;
+        flex-direction: column;
+        .help {
+          margin: 4px 0 0 0;
+          color: @colorTextSecondary;
+          font-size: 12px;
+          span {
+            margin-left: 4px;
+          }
+        }
+      }
+    }
   }
   .el-upload-list__item {
     background-color: white;
@@ -425,6 +501,34 @@ export default {
     background-color: #fef0cd;
 
   }
+
+  .error-wrapper {
+    background-color: mix(@colorWhite, @colorDanger, 92%);
+    color: @colorDanger;
+    padding: 1em;
+    border: 1px @colorDanger solid;
+    h1 {
+      font-size: 18px;
+    }
+    .fields {
+      color: @colorDanger;
+      text-transform: capitalize;
+      list-style-type: none;
+      li {
+        font-weight: bold;
+        margin-bottom: 1em;
+        .errors {
+          margin-top: 6px;
+          list-style-type: disc;
+          li {
+            font-size: 14px;
+            font-weight: normal;
+            text-transform: none;
+          }
+        }
+      }
+    }
+  }
 }
 
 .add-btn {
@@ -445,70 +549,6 @@ export default {
 }
 .w-full {
   width: 100%;
-}
-
-
-.PolicyList {
-  margin: auto;
-  font-size: 14px;
-
-  tr {
-    &:hover {
-      cursor: pointer;
-      background-color: #eee;
-    }
-  }
-
-  th {
-    padding-bottom: 16px;
-    border-bottom: 1px solid #eee;
-  }
-
-  td {
-    vertical-align: top;
-    padding: 8px 16px;
-
-    &.country {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    &.featured {
-      color: @colorOwner;
-      text-align: center;
-      font-size: 1.2rem;
-      i {
-        display: inline-block;
-        padding-top: 4px;
-        &.el-icon-star-on {
-          font-size: 1.5rem;
-        }
-      }
-    }
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    span {
-      background-color: #eee;
-      padding: 2px 4px;
-      border-radius: 3px;
-    }
-  }
-
-  .actions {
-    display: flex;
-    gap: 8px;
-    .delete {
-      &:hover {
-        background-color: red;
-        color: white;
-      }
-    }
-  }
 }
 
 </style>
