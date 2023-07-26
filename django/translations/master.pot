@@ -1042,7 +1042,7 @@ msgid ""
 "project once they are saved in your My Projects page before publication."
 msgstr ""
 
-#: components/common/NavigationMenu.vue:43 components/common/TopBar.vue:36
+#: components/common/NavigationMenu.vue:48 components/common/TopBar.vue:36
 #: components/common/TopBar.vue:14
 msgid "Data Quality Guideline"
 msgstr ""
@@ -1583,8 +1583,6 @@ msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:7
 #: components/dashboard/AdvancedSearch.vue:33
-#: components/dashboard/PolicySearch.vue:6
-#: components/dashboard/PolicySearch.vue:31
 msgid "Government financed"
 msgstr ""
 
@@ -2614,8 +2612,6 @@ msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:6
 #: components/dashboard/AdvancedSearch.vue:27
-#: components/dashboard/PolicySearch.vue:5
-#: components/dashboard/PolicySearch.vue:25
 msgid "Only MOH Verified Projects"
 msgstr ""
 
@@ -2736,7 +2732,6 @@ msgid "Planning & guidance {num}"
 msgstr ""
 
 #: components/BreadCrumb.vue:33 components/common/NavigationMenu.vue:31
-#: components/BreadCrumb.vue:32 components/common/NavigationMenu.vue:26
 #: components/common/NavigationMenu.vue:28
 #: angular/Cms/StaticInfoWidget/StaticInfoWidget.html:4
 msgid "Planning and Guidance"
@@ -3486,8 +3481,6 @@ msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:7
 #: components/dashboard/AdvancedSearch.vue:34
-#: components/dashboard/PolicySearch.vue:6
-#: components/dashboard/PolicySearch.vue:32
 msgid ""
 "Show only projects that have been received financial or in-kind government "
 "support"
@@ -3495,8 +3488,6 @@ msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:6
 #: components/dashboard/AdvancedSearch.vue:28
-#: components/dashboard/PolicySearch.vue:5
-#: components/dashboard/PolicySearch.vue:26
 msgid "Show only projects that have been verified by the country MOH"
 msgstr ""
 
@@ -3539,8 +3530,6 @@ msgstr ""
 
 #: components/dashboard/AdvancedSearch.vue:22
 #: components/dashboard/AdvancedSearch.vue:106
-#: components/dashboard/PolicySearch.vue:11
-#: components/dashboard/PolicySearch.vue:43
 #: components/dialogs/DashboardFiltersDialog.vue:68
 #: components/project/sections/view/Implementation.vue:200
 #: components/project/sections/view/Implementation.vue:208
