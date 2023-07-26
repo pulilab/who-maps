@@ -98,7 +98,8 @@ export default {
 
     .title {
       margin-bottom: 6px;
-      font-size: 16px;
+      font-size: 14px;
+      line-height: 21px;
       color: @colorBrandPrimary;
       font-weight: 700;
     }
