@@ -5,7 +5,7 @@
 <script>
 import ApiAdmin from '@/components/admin/ApiAdmin'
 export default {
-  namne: 'Api',
+  namne: 'api',
   components: {
     ApiAdmin
   }

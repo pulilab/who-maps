@@ -19,7 +19,6 @@ export const getters = () => ({
   getFooterText: state => state.editableData && state.editableData.footer_text,
   getProjectApproval: state => state.editableData && state.editableData.project_approval,
   getGDHIEnabled: state => state.editableData && state.editableData.gdhi_enabled,
-  getRoadmapEnabled: state => state.editableData && state.editableData.road_map_enabled,
 
   getUserSelection: state => state.userSelection,
   getAdminSelection: state => state.adminSelection,
@@ -31,7 +30,7 @@ export const actions = () => ({
     commit('SET_ID', id)
   },
 
-  async fetchData ({ state, commit, rootGetters, dispatch }) {
+  async fetchData ({ state, commit, rootGetters, dispatch }, needMap = true) {
     const type = state.type === 'country' ? 'countries' : 'donors'
     if (!rootGetters['user/getProfile']) await dispatch('user/loadProfile', false, { root: true })
     const profile = rootGetters['user/getProfile']
@@ -60,7 +59,7 @@ export const actions = () => ({
       dispatch('admin/map/setSecondSubLevelSource', data.map_data.second_sub_level_source, { root: true })
     }
 
-    if (state.type === 'country') {
+    if (state.type === 'country' && needMap) {
       await dispatch('admin/map/loadGeoJSON', null, { root: true })
       await dispatch('admin/approval/loadList', null, { root: true })
     }
@@ -108,7 +107,6 @@ export const actions = () => ({
         dispatch('patchInfoAndArrays'),
         dispatch('patchImages'),
         dispatch('synchPartnerLogos'),
-        state.type === 'country' ? dispatch('synchRoadmapDocuments') : Promise.resolve(),
         state.type === 'country' ? dispatch('synchMapFile') : Promise.resolve(),
         state.type === 'country' ? dispatch('admin/map/saveMapData', {}, { root: true }) : Promise.resolve()
       ])
@@ -209,68 +207,6 @@ export const actions = () => ({
     await this.$axios.delete(`/api/${state.type}-partner-logos/${id}/`)
   },
 
-  async synchRoadmapDocuments ({ getters, dispatch }) {
-    const promArr = [];
-
-    (getters.getData.documents || []).forEach(document => {
-      if (document.document.raw) {
-        promArr.push({
-          action: 'postRoadmapDocument',
-          data: {
-            document: document.document.raw,
-            title: document.title
-          }
-        })
-      }
-    });
-
-    (getters.getStableData.documents || []).forEach(document => {
-      const stillThere = getters.getData.documents.find(newDocument => newDocument.id === document.id)
-      if (!stillThere) {
-        promArr.push({ action: 'delRoadmapDocument', data: { id: document.id } })
-        return
-      }
-      if (stillThere.title !== document.title) {
-        promArr.push({ action: 'updateRoadmapDocument', data: { id: document.id, title: stillThere.title } })
-      }
-    })
-
-    return Promise.all(promArr.map(promObj => dispatch(promObj.action, promObj.data)))
-  },
-
-  async postRoadmapDocument ({ state, rootGetters }, { document, title, id }) {
-    const countryId = state.id || rootGetters['user/getProfile'].country
-    const formData = new FormData()
-    formData.append('country', countryId)
-    formData.append('document', document)
-    formData.append('title', title)
-    await this.$axios.post('/api/architecture-roadmap-document/', formData, {
-      headers: {
-        'content-type': 'multipart/form-data'
-      }
-    })
-  },
-
-  async delRoadmapDocument ({ state }, { id }) {
-    await this.$axios.delete(`/api/architecture-roadmap-document/${id}/`)
-  },
-
-  async updateRoadmapDocument ({ state }, { id, document, title }) {
-    const formData = new FormData()
-    formData.append('id', id)
-    if (document) {
-      formData.append('document', document)
-    }
-    if (title) {
-      formData.append('title', title)
-    }
-    await this.$axios.patch(`/api/architecture-roadmap-document/${id}/`, formData, {
-      headers: {
-        'content-type': 'multipart/form-data'
-      }
-    })
-  },
-
   setDataField ({ commit }, { field, data }) {
     commit('SET_DATA_FIELD', { field, data })
   },
@@ -292,9 +228,6 @@ export const actions = () => ({
   setGDHIEnabled ({ commit }, data) {
     commit('SET_DATA_FIELD', { field: 'gdhi_enabled', data })
   },
-  setRoadmapEnabled ({ commit }, data) {
-    commit('SET_DATA_FIELD', { field: 'road_map_enabled', data })
-  }
 })
 
 export const mutations = () => ({

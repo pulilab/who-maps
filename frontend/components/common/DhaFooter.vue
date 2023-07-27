@@ -40,8 +40,6 @@ export default {
   @import "../../assets/style/mixins.less";
 
   .FooterBg {
-    position: absolute;
-    bottom: 0;
     display: flex;
     align-items: center;
     height: @appFooterHeight;

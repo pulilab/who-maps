@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-80">
+  <page-layout class="p-0 pb-80">
     <UserProjectsTabs
       :active-tab="activeTab"
       :counters="counters"
@@ -7,18 +7,20 @@
     >
       <UserProjectsList :project-list="displayedProjectList" :is-archive="activeTab === 1" />
     </UserProjectsTabs>
-  </div>
+  </page-layout>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 
+import PageLayout from '@/components/common/wrappers/PageLayout'
 import UserProjectsList from '@/components/common/UserProjectsList'
 import UserProjectsTabs from '@/components/common/UserProjectsTabs'
 
 export default {
   name: 'Projects',
   components: {
+    PageLayout,
     UserProjectsList,
     UserProjectsTabs
   },
@@ -28,7 +30,7 @@ export default {
       activeTab: 0
     }
   },
-  async asyncData({ store, route }) {  
+  async asyncData({ store, route }) {
     await store.dispatch('projects/loadUserProjects')
     store.dispatch('project/resetProjectState')
     const activeTab = route.query?.list === 'archive' ? 1 : 0
@@ -62,7 +64,11 @@ export default {
 </script>
 
 <style>
+.p-0 {
+  padding: 0 !important;
+}
+
 .pb-80 {
-  padding-bottom: 80px;
+  padding-bottom: 80px !important;
 }
 </style>
