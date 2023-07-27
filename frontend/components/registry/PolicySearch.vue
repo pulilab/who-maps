@@ -120,6 +120,12 @@ export default {
       countries: 'countries/getCountries',
       policyRegistry: 'system/getPolicyRegistry',
     }),
+    user() {
+      return this.$auth.user
+    },
+  },
+  mounted() {
+    this.filter.country = this.user.country
   },
   watch: {
     filter: {
@@ -171,9 +177,6 @@ export default {
     &:last-child {
       border: 0;
     }
-  }
-
-  .FilterSwitches {
   }
 }
 </style>
