@@ -30,6 +30,7 @@ class PolicyRegistryTests(CountryBaseTests):
                 author_id=self.test_user['user_profile_id'],
                 language=ReferenceDocument.Language.ENGLISH,
                 purpose=f'{i} test purpose',
+                featured=True,
                 types=[ReferenceDocument.Type.FRAMEWORK, ReferenceDocument.Type.STRATEGY],
                 valid_from=date.today(),
                 valid_until=date.today(),
