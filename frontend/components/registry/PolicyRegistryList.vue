@@ -148,7 +148,7 @@ export default {
   td {
     display: table-cell;
     vertical-align: top;
-    padding: 16px;
+    padding: 16px 8px;
 
     &.title {
       min-width: 320px;
@@ -163,6 +163,7 @@ export default {
       display: flex;
       align-items: center;
       gap: 8px;
+      min-width: 82px;
     }
 
     &.featured {
