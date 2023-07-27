@@ -184,7 +184,7 @@ export default {
       return (this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)) || this.isSuperUser
     },
     isUserSCA () {
-      return (this.user.account_type_approved && this.user.account_type === 'SCA') || this.isSuperUser
+      return (this.user.account_type_approved && this.user.account_type === 'SCA')
     },
     isUserDA () {
       return (this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)) || this.isSuperUser
