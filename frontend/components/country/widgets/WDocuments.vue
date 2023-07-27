@@ -5,28 +5,26 @@
       <translate>The WHO recognizes the importance of government-led planning as a key component to sucessful, scaled digital health implementations. Leadership from within the national MOH team have uploaded the reference documents below, and these represent a point-in time understanding of the specific national planning goals and strategic context.</translate>
     </p>
 
-    <div
-      v-for="(doc, i) in documents"
-      :key="i"
-      class="doc"
-    >
-      <p class="title">
-        <a
-          :href="'media/' + doc.document"
-          download
-          target="_blank"
-        >
-          {{ doc.title }} <fa icon="download" />
+    <div v-for="doc in detailedDocuments" :key="doc.id" class="doc" @click="showDocumentDetails(doc)">
+      <div class="title">
+        {{ doc.title }}
+      </div>
+      <div class="details">
+        <div class="meta">
+          {{ doc.document | extension }} — {{ doc.size | size }}
+        </div>
+        <a :href="`/media/${doc.document}`" download @click.stop>
+          <fa icon="download" />
         </a>
-      </p>
-      <p class="details">
-        {{ doc.document | extension }} — {{ doc.size | size }}
-      </p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { format, differenceInCalendarDays } from 'date-fns'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'WDocuments',
   filters: {
@@ -49,39 +47,77 @@ export default {
       type: Array,
       required: true
     }
+  },
+  computed: {
+    ...mapGetters({
+      countries: 'countries/getCountries',
+      policyRegistry: 'system/getPolicyRegistry',
+    }),
+    detailedDocuments() {
+      const now = new Date()
+      return this.documents.map(doc => {
+        const until = doc.valid_until ? new Date(doc.valid_until) : new Date()
+        return {
+          ...doc,
+          country: this.countries.find(c => c.id == doc.country),
+          language: this.policyRegistry.languages.find(l => l.id == doc.language),
+          types: doc.types.map(typeId => this.policyRegistry.types.find(t => t.id == typeId)),
+          validFromDisplay: format(doc.valid_from, 'DD/MM/YYYY'),
+          validUntilDisplay: doc.valid_until ? format(doc.valid_until, 'DD/MM/YYYY') : '',
+          expired: differenceInCalendarDays(until, now) < 0,
+        }
+      })
+    }
+  },
+  methods: {
+    ...mapActions({
+      openDocumentDialog: 'registry/openPolicyDocumentDialog',
+    }),
+    showDocumentDetails(doc) {
+      this.openDocumentDialog(doc)
+    },
   }
+
 }
 </script>
 
 <style lang="less" scoped>
-  @import "../../../assets/style/variables.less";
+@import "~assets/style/variables.less";
+@import "~assets/style/mixins.less";
 
   .doc {
+    cursor: pointer;
     border-bottom: 1px solid #E0E0E0;
     padding: 20px 0;
     &:last-child {
       border-bottom: none;
     }
-    p {
-      margin-bottom: 6px!important;
-      text-transform: capitalize;
-      &:last-child {
-        margin-bottom: 0!important;
-      }
-      svg {
-        float: right;
-      }
+    &:hover {
+      background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
     }
+
     .title {
-      font-size: 16px;
+      margin-bottom: 6px;
+      font-size: 14px;
+      line-height: 21px;
       color: @colorBrandPrimary;
       font-weight: 700;
-      cursor: pointer;
     }
     .details {
-      font-size: 12px;
-      text-transform: uppercase;
-      color: #9E9E9E;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1em;
+      // outline: 1px dotted blue;
+      .meta {
+        font-size: 12px;
+        text-transform: uppercase;
+        color: #9E9E9E;
+      }
+      svg {
+        margin-right: 1em;
+      }
+
     }
   }
   a {

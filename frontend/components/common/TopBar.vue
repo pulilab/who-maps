@@ -36,20 +36,12 @@
               <translate class="HeaderBtn">How-to</translate>
             </div>
             <div>
-              <a
-                :href="storiesLink"
-                target="_blank"
-                class="HeaderBtn"
-              >
+              <a :href="storiesLink" target="_blank" class="HeaderBtn">
                 <translate>Stories</translate>
               </a>
             </div>
             <div>
-              <a
-                :href="dataQualityLink"
-                target="_blank"
-                class="HeaderBtn"
-              >
+              <a :href="dataQualityLink" target="_blank" class="HeaderBtn">
                 <translate>Data Quality Guideline</translate>
               </a>
             </div>

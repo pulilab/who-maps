@@ -32,6 +32,15 @@
         </div>
         <div class="DropdownLink">
           <nuxt-link
+            key="policyRegistryBtn"
+            :to="localePath({name: 'organisation-policy-registry',params: $route.params})"
+            @click.native="closePopover"
+          >
+            <translate>Health Policy Registry</translate>
+          </nuxt-link>
+        </div>
+        <div class="DropdownLink">
+          <nuxt-link
             key="myProjectsBtn"
             :to="localePath({name: 'organisation-projects',params: $route.params})"
             exact

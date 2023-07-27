@@ -1,10 +1,11 @@
 from django.conf import settings
 from django.contrib import admin
 from django.forms import ModelForm
+from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 from gfklookupwidget.widgets import GfkLookupWidget
 
 from core.admin import AllObjectsAdmin
-from .models import Country, Donor, ArchitectureRoadMapDocument
+from .models import Country, Donor, ReferenceDocument
 from project.models import Project
 from nonrelated_inlines.admin import NonrelatedStackedInline
 from django.db.models import Q
@@ -18,6 +19,7 @@ class CountryAdmin(AllObjectsAdmin):
     ordering = ('name',)
     readonly_fields = ('code', 'name')
     list_filter = ('region',)
+    search_fields = ('name', 'code')
 
     def get_queryset(self, request):
         return self.model.objects.all()
@@ -90,15 +92,17 @@ class DonorAdmin(admin.ModelAdmin):
         return []
 
 
-@admin.register(ArchitectureRoadMapDocument)
-class ArchitectureRoadMapDocumentAdmin(admin.ModelAdmin):
-    search_fields = ('title', 'document')
-    list_display = ('id', 'country', 'title', 'document', 'is_active')
-    readonly_fields = ('country', 'title', 'document', 'is_active')
-    list_filter = ('is_active', 'country')
+@admin.register(ReferenceDocument)
+class ReferenceDocumentAdmin(admin.ModelAdmin):
+    search_fields = ('title', 'document', 'author__user__email', 'purpose', 'tags__name')
+    list_filter = ('language', ('country', RelatedDropdownFilter),)
+    list_display = ('title', 'featured', 'created', 'country', 'document',
+                    'author', 'valid_from', 'valid_until', 'tag_list')
+    ordering = ('-created',)
+    autocomplete_fields = ('author', 'country')
 
-    def has_add_permission(self, request):  # pragma: no cover
-        return False
+    def get_queryset(self, request):  # pragma: no cover
+        return super().get_queryset(request).prefetch_related('tags')
 
-    def has_delete_permission(self, request, obj=None):  # pragma: no cover
-        return False
+    def tag_list(self, obj):  # pragma: no cover
+        return u", ".join(o.name for o in obj.tags.all())

@@ -11,7 +11,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from project.permissions import InTeamOrReadOnly, InTeamOrCollectionOwnerOrReadOnly, CollectionOwnerOrReadOnly
 from project.models import Project
-from country.models import Country
+from country.models import Country, ReferenceDocument
 from user.authentication import BearerTokenAuthentication
 from .data.landing_page_defaults import LANDING_PAGE_DEFAULTS
 from .data.domains import AXIS, DOMAINS
@@ -94,6 +94,23 @@ class StaticDataView(GenericAPIView):
                     'pt': 'pt.png',
                     'ar': 'sa.png'}
 
+    @staticmethod
+    def get_policy_registry_limits():
+        return {
+            'languages': [{'id': lang[0], 'name': lang[1]} for lang in ReferenceDocument.Language.choices],
+            'types': [{'id': type[0], 'name': type[1]} for type in ReferenceDocument.Type.choices],
+            'valid_formats': settings.VALID_ROAD_MAP_DOCUMENT_FILE_TYPES,
+            'max_size_in_MB': int(settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE / 1024 ** 2)
+        }
+
+    def get_language_data(self):
+        languages = []
+        for code, name in settings.LANGUAGES:
+            languages.append({'code': code,
+                              'name': gettext(name),
+                              'flag': self.flag_mapping.get(code, '')})
+        return languages
+
     def get(self, request):
         data = {}
         language_data = self.get_language_data()
@@ -107,21 +124,6 @@ class StaticDataView(GenericAPIView):
         data['sub_level_types'] = SUB_LEVEL_TYPES
         data['regions'] = [{'id': reg[0], 'name': reg[1]} for reg in Country.REGIONS]
         data['dashboard_columns'] = DASHBOARD_COLUMNS
-        data['roadmap'] = self.get_roadmap_limits()
+        data['policy_registry'] = self.get_policy_registry_limits()
 
         return Response(data)
-
-    def get_language_data(self):
-        languages = []
-        for code, name in settings.LANGUAGES:
-            languages.append({'code': code,
-                              'name': gettext(name),
-                              'flag': self.flag_mapping.get(code, '')})
-        return languages
-
-    def get_roadmap_limits(self):
-        return {
-            'valid_types': settings.VALID_ROAD_MAP_DOCUMENT_FILE_TYPES,
-            'max_size_in_MB': int(settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE / 1024 ** 2),
-            'max_documents': settings.MAX_ROAD_MAP_DOCUMENT_PER_COUNTRY
-        }
