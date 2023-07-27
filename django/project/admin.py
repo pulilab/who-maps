@@ -5,11 +5,14 @@ from django.contrib.admin import SimpleListFilter, EmptyFieldListFilter
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 from django.utils.html import mark_safe
+from modeltranslation.admin import TabbedDjangoJqueryTranslationAdmin
+
 from core.admin import AllObjectsAdmin
 from country.models import Country
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Project, HSCGroup, \
-    ProjectImportV2, ImportRow, Stage, ProjectVersion, Collection
+    ProjectImportV2, ImportRow, Stage, ProjectVersion, Collection, ServicesAndApplicationsCategory, \
+    ServicesAndApplications
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
@@ -103,6 +106,14 @@ class HealthFocusAreaAdmin(AllObjectsAdmin):
 
 
 class HealthCategoryAdmin(AllObjectsAdmin):
+    pass
+
+
+class ServicesAndApplicationsCategoryAdmin(TabbedDjangoJqueryTranslationAdmin, AllObjectsAdmin):
+    pass
+
+
+class ServicesAndApplicationsAdmin(TabbedDjangoJqueryTranslationAdmin, AllObjectsAdmin):
     pass
 
 
@@ -270,6 +281,8 @@ admin.site.register(InteroperabilityLink, InteroperabilityLinkAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
 admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)
 admin.site.register(HealthCategory, HealthCategoryAdmin)
+admin.site.register(ServicesAndApplicationsCategory, ServicesAndApplicationsCategoryAdmin)
+admin.site.register(ServicesAndApplications, ServicesAndApplicationsAdmin)
 admin.site.register(Licence, LicenceAdmin)
 admin.site.register(InteroperabilityStandard, InteroperabilityStandardAdmin)
 admin.site.register(HISBucket, HISBucketAdmin)
