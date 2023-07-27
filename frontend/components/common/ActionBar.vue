@@ -174,9 +174,6 @@ export default {
       }
       return false
     },
-    isAdmin () {
-      return this.$route.path.includes('/admin')
-    },
     isRegistry () {
       return this.$route.path.includes('/policy-registry')
     },
