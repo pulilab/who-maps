@@ -4,19 +4,6 @@
       <translate :parameters="{ name: country.name }">
         Policy Registry admin for {name}
       </translate>
-      <lazy-el-select
-        v-if="isSuperUser"
-        v-model="editCountry"
-        filterable
-        :placeholder="$gettext('Select country') | translate"
-      >
-        <el-option
-          v-for="country in countries"
-          :key="country.id"
-          :label="country.name"
-          :value="country.id"
-        />
-      </lazy-el-select>
     </template>
     <Panel v-if="showForm" key="registryForm">
       <template #header>
@@ -34,7 +21,7 @@
           <el-form-item :label="$gettext('Document')" name="file" class="with-help" prop="file">
             <div v-if="editing" class="selectedDocument">
               <translate>If you need to change the uploaded file of this policy, please delete this policy and create a new one where you can upload the new file.</translate>
-              <a :href="`/media/${document.document}`" download>
+              <a :href="`/media/${document.document}`" download class="ml">
                 <translate>Download document</translate>
               </a>
             </div>
@@ -48,7 +35,7 @@
             />
             <p class="help">
               <fa icon="info-circle" />
-              <translate :parameters="{list: extensionList, size: documentMmaxSize}">
+              <translate :parameters="{list: extensionList, size: documentMaxSize}">
                 Supported file formats include: {list} The file size is limited to {size}MB.
               </translate>
             </p>
@@ -219,7 +206,6 @@ export default {
       loading: false,
       showForm: false,
       editing: false,
-      editCountry: 0,
       submitError: false,
       errors: [],
       document: {
@@ -272,7 +258,7 @@ export default {
     extensionList () {
       return this.policyRegistry.valid_formats.join(', ')
     },
-    documentMmaxSize() {
+    documentMaxSize() {
       return this.policyRegistry.max_size_in_MB
     },
   },
@@ -301,7 +287,14 @@ export default {
     async uploadPolicyDocument() {
       await this.$nextTick()
       try {
-        if (this.document.file.length === 0) return
+        if (this.document.file.length === 0) return false
+        if (this.document.file[0].size > this.documentMaxSize * 1000000) {
+          this.errors = {
+            file: [this.$gettext('The file size exceeds the upload limit of {size}MB.',{size: this.documentMaxSize})]
+          }
+          this.submitError = true
+          return false
+        }
         const formData = new FormData()
         formData.append('country', this.country.id)
         formData.append('document', this.document.file[0].raw)
@@ -396,7 +389,6 @@ export default {
         if (valid) {
           this.submitForm()
         } else {
-          console.log('error submit!!');
           return false
         }
       })
@@ -442,6 +434,10 @@ export default {
 @import "~assets/style/mixins.less";
 
 .RegistryForm {
+  .ml {
+    margin-left: 4px;
+  }
+
   .el-form .el-form-item {
     margin-bottom: 36px;
     &.with-help {
