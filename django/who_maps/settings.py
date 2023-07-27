@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'ordered_model',
     'rosetta',
     'adminsortable2',
+    'ckeditor',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -309,6 +310,16 @@ ROSETTA_MESSAGES_PER_PAGE = 25
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS = True
 DEEPL_AUTH_KEY = os.environ.get('DEEPL_KEY', '')
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar_DHA': [
+            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'NumberedList', 'BulletedList', '-',
+             'Outdent', 'Indent', '-', 'Undo', 'Redo', '-', 'Source']
+        ],
+        'toolbar': 'DHA',
+        'width': 800,
+    }
+}
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'translations'),  # don't move this, update_translations mgmt cmd is using it
