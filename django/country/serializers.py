@@ -244,7 +244,7 @@ class SuperAdminCountrySerializer(UpdateAdminMixin, serializers.ModelSerializer)
 
     @staticmethod
     def get_documents(obj):
-        queryset = ReferenceDocument.objects.filter(country_id=obj.id)
+        queryset = ReferenceDocument.objects.filter(country_id=obj.id, featured=True)
         return ReferenceDocumentSerializer(queryset, many=True, read_only=True).data
 
 
