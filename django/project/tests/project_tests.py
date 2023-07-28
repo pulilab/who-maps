@@ -34,9 +34,9 @@ class ProjectTests(SetupTests):
         self.assertContains(response, "licenses")
         self.assertContains(response, "interoperability_links")
         self.assertContains(response, "interoperability_standards")
-        self.assertContains(response, "his_bucket")
+        self.assertContains(response, "services_and_application_types")
         self.assertContains(response, "hsc_challenges")
-        self.assertEqual(len(response.json().keys()), 9)
+        self.assertEqual(len(response.json().keys()), 10)
 
     def test_retrieve_project_structure_cache(self):
         with self.settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}):
@@ -191,7 +191,7 @@ class ProjectTests(SetupTests):
             health_focus_areas=[{"object": "not good"}],
             licenses=[{"object": "not good"}],
             donors=[{"object": "not good"}],
-            his_bucket=[{"object": "not good"}],
+            services_and_application_types=[{"object": "not good"}],
             hsc_challenges=[{"object": "not good"}],
             interoperability_links=[{"object": "not good"}],
             interoperability_standards=[{"object": "not good"}],
@@ -203,7 +203,8 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.json()['project']['health_focus_areas']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['project']['licenses']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['project']['donors']['0'], ['A valid integer is required.'])
-        self.assertEqual(response.json()['project']['his_bucket']['0'], ['A valid integer is required.'])
+        self.assertEqual(response.json()['project']['services_and_application_types']['0'],
+                         ['A valid integer is required.'])
         self.assertEqual(response.json()['project']['hsc_challenges']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['project']['interoperability_links'], [{'id': ['This field is required.']}])
         self.assertEqual(response.json()['project']['interoperability_standards']['0'],
@@ -676,7 +677,7 @@ class ProjectTests(SetupTests):
                 {"clients": 20000, "health_workers": 0, "facilities": 0,
                  "facilities_list": ['facility1', 'facility2', 'facility3']},
             "donors": [self.d1.id, self.d2.id],
-            "his_bucket": [1, 2],
+            "services_and_application_types": [1, 2],
             "hsc_challenges": [1, 2],
             "government_investor": 0,
             "implementing_partners": ["partner1", "partner2"],
@@ -1103,7 +1104,7 @@ class ProjectTests(SetupTests):
             "country": country.id,
             "software": [software_1.id, software_2.id],
             "dhis": [s1.id],
-            "his_bucket": [1, 2],
+            "services_and_application_types": [1, 2],
             "donors": [self.d1.id],
             "hsc_challenges": [1, 2],
             "start_date": str(datetime.today().date()),

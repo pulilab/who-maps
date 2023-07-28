@@ -71,6 +71,7 @@ class ExternalAPITests(APITestCase):
             "project": dict(
                 name="Test Project1", organisation="test organisation", contact_name="name1",
                 contact_email="team_member@added.com", implementation_overview="overview", health_focus_areas=[1, 2],
+                services_and_application_types=[1, 2],
                 country=self.country_id,
                 donors=[self.donor.id],
                 software=[1],
