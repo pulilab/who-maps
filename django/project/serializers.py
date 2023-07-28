@@ -204,7 +204,9 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     dhis = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     health_focus_areas = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
+    services_and_application_types = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     donors = serializers.ListField(child=serializers.IntegerField(), max_length=32, required=False)
 
     # SECTION 4
