@@ -648,7 +648,6 @@ class TerminologySerializer(serializers.Serializer):
     technology_platforms = TechnologyPlatformModelReadSerializer(many=True)
     licenses = LicenseModelReadSerializer(many=True)
     interoperability_standards = InteroperabilityStandardModelReadSerializer(many=True)
-    his_bucket = HISBucketModelReadSerializer(many=True)
     stages = StageModelReadSerializer(many=True)
 
     health_focus_areas = HFAWithCategoriesSerializer(many=True)
