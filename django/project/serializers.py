@@ -177,6 +177,10 @@ class ProjectPublishedSerializer(serializers.Serializer):
     def validate_repository(value):
         return url_validator(value)
 
+    @staticmethod
+    def validate_his_bucket(value):
+        raise ValidationError("This field has been discontinued, please remove it from the payload")
+
     def validate(self, attrs):
         if not attrs.get('hsc_challenges') and not attrs.get('hsc_challenges_other'):
             raise ValidationError({'hsc_challenges': 'No challenges selected'})
