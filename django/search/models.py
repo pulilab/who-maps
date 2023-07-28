@@ -8,7 +8,7 @@ from django.dispatch import receiver
 from django.http import QueryDict
 
 from core.models import ExtendedModel
-from project.models import Project, HealthFocusArea, DigitalStrategy
+from project.models import Project, DigitalStrategy
 from country.models import Country, Donor
 from user.models import Organisation
 
@@ -35,6 +35,7 @@ class ProjectSearch(ExtendedModel):
         "hfa": "hfa",  # eg: hfa=1&hfa=2
         "hsc": "hsc",  # eg: hsc=1&hsc=2
         "his": "his",  # eg: his=1&his=2
+        "sapp": "sapp",  # eg: sapp=1&sapp=2
         "region": "country__region",  # eg: region=3
         "gov": "project__data__government_investor",  # false=> gov=0 ; true=> gov=1&gov=2
         "donor": "donors",
@@ -54,8 +55,8 @@ class ProjectSearch(ExtendedModel):
     dhi_categories = ArrayField(models.IntegerField(), default=list)
     hsc = ArrayField(models.IntegerField(), default=list)
     hfa = ArrayField(models.IntegerField(), default=list)
-    hfa_categories = ArrayField(models.IntegerField(), default=list)
-    his = ArrayField(models.IntegerField(), default=list)
+    sapp = ArrayField(models.IntegerField(), default=list)
+    his = ArrayField(models.IntegerField(), default=list)  # TODO: marked for deprecation
     stages = ArrayField(models.IntegerField(), default=list)
 
     @classmethod
@@ -98,7 +99,7 @@ class ProjectSearch(ExtendedModel):
                     if field in ["country", "region", "gov"]:
                         lookup_param = "in"
                         lookup = lookup_cleanup(query_params.getlist(field))
-                    elif field in ["donor", "sw", "dhi", "hfa", "hsc", "his", "stage"]:
+                    elif field in ["donor", "sw", "dhi", "hfa", "hsc", "his", "sapp", "stage"]:
                         lookup_param = "overlap"  # This is the OR clause here
                         lookup = lookup_cleanup(query_params.getlist(field))
                     elif field == "approved":
@@ -142,13 +143,11 @@ class ProjectSearch(ExtendedModel):
             self.software = project.data.get('software', [])
             self.hsc = project.data.get('hsc_challenges', [])
             self.hfa = project.data.get('health_focus_areas', [])
+            self.sapp = project.data.get('services_and_application_types', [])
             self.dhi_categories = list(set(filter(None.__ne__,
                                                   [DigitalStrategy.get_parent_id(int(id), 'parent') for
                                                    id in project.data.get("dhis", [])])))
-            self.hfa_categories = list(set(filter(None.__ne__,
-                                                  [HealthFocusArea.get_parent_id(int(id), 'health_category') for
-                                                   id in project.data.get("health_focus_areas", [])])))
-            self.his = project.data.get('his_bucket', [])
+            self.his = project.data.get('his_bucket', [])  # TODO: marked for deprecation
 
             self.save()
 

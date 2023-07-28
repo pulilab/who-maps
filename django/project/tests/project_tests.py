@@ -1227,7 +1227,6 @@ class ProjectTests(SetupTests):
         self.assertNotEqual(project.search.software, [])
         self.assertNotEqual(project.search.coverage, [])
         self.assertNotEqual(project.search.hsc, [])
-        self.assertNotEqual(project.search.hfa_categories, [])
 
         # unpublish project
         url = reverse('project-unpublish', kwargs={'project_id': resp_data['id']})
