@@ -610,6 +610,20 @@ class HSCGroupWithChallengesSerializer(serializers.ModelSerializer):
         fields = ('name', 'challenges')
 
 
+class ServicesAndApplicationsReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServicesAndApplications
+        fields = ('id', 'name', 'description')
+
+
+class ServicesAndApplicationsWithCategoriesSerializer(serializers.ModelSerializer):
+    services = ServicesAndApplicationsReadSerializer(many=True)
+
+    class Meta:
+        model = ServicesAndApplicationsCategory
+        fields = ('id', 'name', 'description', 'services')
+
+
 class DigitalStrategyModelReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = DigitalStrategy
@@ -640,6 +654,7 @@ class TerminologySerializer(serializers.Serializer):
     health_focus_areas = HFAWithCategoriesSerializer(many=True)
     hsc_challenges = HSCGroupWithChallengesSerializer(many=True)
     strategies = StrategiesByGroupSerializer(many=True)
+    services_and_application_types = ServicesAndApplicationsWithCategoriesSerializer(many=True)
 
 
 class ProjectImportV2CollectionSerializer(serializers.ModelSerializer):
