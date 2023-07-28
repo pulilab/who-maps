@@ -16,7 +16,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAuthMixin, CollectionTokenAuthMixin, \
     get_object_or_400, CollectionAuthenticatedMixin
 from project.cache import cache_structure
-from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion
+from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion, \
+    ServicesAndApplicationsCategory
 from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor
@@ -78,6 +79,16 @@ class ProjectPublicViewSet(ViewSet):
                             for c in HSCChallenge.objects.filter(group__id=group['id']).values('id', 'name')]
             ))
 
+        services_and_application_types = []
+        for category in ServicesAndApplicationsCategory.objects.all():
+            services_and_application_types.append(dict(
+                id=category.id,
+                name=category.name,
+                description=category.description,
+                services=category.services_and_application_types.filter(
+                    is_active=True).values('id', 'name', 'description')
+            ))
+
         return dict(
             interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
             technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED).values(
@@ -88,6 +99,7 @@ class ProjectPublicViewSet(ViewSet):
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
             strategies=strategies,
+            services_and_application_types=services_and_application_types,
             stages=Stage.objects.values('id', 'name', 'tooltip', 'order'),
         )
 
