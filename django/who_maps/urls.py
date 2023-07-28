@@ -53,9 +53,12 @@ if settings.DEBUG:  # pragma: no cover
 
 api_info = openapi.Info(
     title='Digital Health Atlas Public API',
-    default_version='v1.1 BETA',
+    default_version='v1.2 BETA',
     description="""Digital Health Atlas Public API for Developers, only BETA 
 (subject to breaking changes and deprecations)
+# v1.2
+DEPRECATED: `his_buckets` are no longer a valid field, we have `services_and_application_types` instead.
+NEW: `services_and_application_types` new field in project data, projects/structure endpoint lists all options
 # v1.1
 DEPRECATED: Project `platforms` decoupled into `software` and `dhis` and is no longer available or used
 # v1.0
