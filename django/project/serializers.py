@@ -24,7 +24,7 @@ from project.utils import remove_keys
 from user.models import UserProfile
 from project.models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform, \
     InteroperabilityLink, Licence, InteroperabilityStandard, HISBucket, Stage, HealthCategory, HealthFocusArea, \
-    HSCGroup, HSCChallenge, DigitalStrategy, Collection
+    HSCGroup, HSCChallenge, DigitalStrategy, Collection, ServicesAndApplications, ServicesAndApplicationsCategory
 from country.serializers import CountrySerializer, DonorSerializer
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
@@ -100,6 +100,8 @@ class ProjectPublishedSerializer(serializers.Serializer):
     dhis = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=1)
     health_focus_areas = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=1)
+    services_and_application_types = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=1)
     hsc_challenges = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
