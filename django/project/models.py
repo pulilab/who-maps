@@ -348,7 +348,7 @@ class ServicesAndApplications(ParentByIDMixin, InvalidateCacheMixin, ExtendedNam
                                  on_delete=models.CASCADE)
     description = RichTextField()
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '[{}] {}'.format(self.category.name, self.name)
 
     class Meta:

@@ -178,7 +178,8 @@ class ProjectPublishedSerializer(serializers.Serializer):
         return url_validator(value)
 
     @staticmethod
-    def validate_his_bucket(value):
+    def validate_his_bucket(value):  # pragma: no cover
+        # TODO: remove this and the field after no projects have this data anymore
         raise ValidationError("This field has been discontinued, please remove it from the payload")
 
     def validate(self, attrs):
