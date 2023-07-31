@@ -35,8 +35,8 @@
 export default {
   props: {
     files: {
-      required: true,
-      type: Array
+      type: Array,
+      required: true
     },
     limit: {
       type: Number,

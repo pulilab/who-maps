@@ -6,17 +6,19 @@
     <SendEmailDialog />
     <ProjectApprovalDialog />
     <EditSubLevelDialog />
+    <PolicyDocumentDialog />
   </div>
 </template>
 
 <script>
+import { mapGettersActions } from '../..//utilities/form'
 import DigitalHealthInterventionsDialog from './DigitalHealthInterventionsDialog'
 import DashboardFiltersDialog from './DashboardFiltersDialog'
 import SaveFilterDialog from './SaveFilterDialog'
 import SendEmailDialog from './SendEmailDialog'
 import ProjectApprovalDialog from './ProjectApprovalDialog'
 import EditSubLevelDialog from './EditSubLevelDialog'
-import { mapGettersActions } from '../..//utilities/form'
+import PolicyDocumentDialog from './PolicyDocumentDialog'
 
 export default {
   components: {
@@ -25,7 +27,8 @@ export default {
     SaveFilterDialog,
     SendEmailDialog,
     ProjectApprovalDialog,
-    EditSubLevelDialog
+    EditSubLevelDialog,
+    PolicyDocumentDialog,
   },
   computed: {
     ...mapGettersActions({
@@ -58,5 +61,7 @@ export default {
   @import "../../assets/style/variables.less";
   @import "../../assets/style/mixins.less";
 
-  .DialogsContainer {}
+  .DialogsContainer {
+
+  }
 </style>

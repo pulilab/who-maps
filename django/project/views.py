@@ -3,6 +3,8 @@ import copy
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
+from taggit.models import Tag
+
 from rest_framework import status
 from rest_framework.exceptions import ValidationError, NotAuthenticated, PermissionDenied
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
@@ -101,6 +103,7 @@ class ProjectPublicViewSet(ViewSet):
             strategies=strategies,
             services_and_application_types=services_and_application_types,
             stages=Stage.objects.values('id', 'name', 'tooltip', 'order'),
+            tags=Tag.objects.values('id', 'name')  # TODO: invalidate on new Tag
         )
 
     @staticmethod

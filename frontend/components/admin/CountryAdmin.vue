@@ -139,30 +139,6 @@
             </label>
           </div>
         </el-form-item>
-        <el-form-item>
-          <div class="Switch-container">
-            <filter-switch
-              v-model="roadmapEnabled"
-              :label="
-                $gettext('National Digital Health Reference Documents')
-                  | translate
-              "
-              :tooltip="
-                $gettext(
-                  'These documents may include a National Digital Health Vision, Action Plan,Implementation Plan, Digital Health Strategy, or Reference Architecture.'
-                ) | translate
-              "
-            />
-            <label
-              v-if="roadmapEnabled"
-              class="Right-label"
-              @click="focuseRoadmapDocuments"
-            >
-              <fa icon="pen" />
-              <translate>Upload documents</translate>
-            </label>
-          </div>
-        </el-form-item>
       </el-form>
     </collapsible-card>
 
@@ -172,99 +148,6 @@
       class="ProjectApproval"
     >
       <project-approval />
-    </collapsible-card>
-
-    <collapsible-card
-      v-if="roadmapEnabled"
-      ref="roadmapdocs"
-      :title="
-        $gettext('National Digital Health Reference Documents') | translate
-      "
-      class="RoadmapDocuments"
-    >
-      <el-form
-        ref="documentsUpload"
-        :rules="documentRules"
-        :model="{ documents }"
-        label-width="220px"
-        label-position="left"
-        @submit.native.prevent
-      >
-        <div
-          v-for="(document, index) in documents"
-          :key="index"
-          class="FileUploadContainer"
-        >
-          <el-form-item
-            :label="$gettext('Document') | translate"
-            :prop="`documents.${index}.document`"
-          >
-            <div
-              class="Remove-icon"
-              @click="removeDocument(index)"
-            />
-            <file-upload
-              :files="document.document"
-              :limit="1"
-              :auto-upload="false"
-              :disabled="notSCA"
-              list-type="text"
-              @update:files="selectDocumentFile($event, index)"
-            />
-          </el-form-item>
-          <el-form-item
-            :label="$gettext('Title') | translate"
-            :prop="`documents.${index}.title`"
-            :rules="titleRules"
-          >
-            <el-input
-              :value="document.title"
-              :maxlength="128"
-              :disabled="notSCA"
-              type="text"
-              @input="changeDocumentTitle($event, index)"
-            />
-          </el-form-item>
-        </div>
-        <el-form-item prop="documents" />
-        <div>
-          <el-button
-            :disabled="documents.length === roadmap.max_documents || notSCA"
-            type="text"
-            class="IconLeft"
-            @click="addDocument"
-          >
-            <fa icon="plus" />
-            <translate>Add new document</translate>
-          </el-button>
-        </div>
-      </el-form>
-      <div class="Footer">
-        <p>
-          <fa icon="info-circle" />
-          <translate>
-            About these documents: Upload your national or regional reference
-            policies, architecture blueprints or strategy documents which could
-            be helpful to investors and implementation partners working in your
-            country.
-          </translate>
-        </p>
-        <p>
-          <fa icon="info-circle" />
-          <translate
-            :parameters="{
-              list: extensionList,
-              size: roadmap.max_size_in_MB,
-              max: roadmap.max_documents
-            }"
-          >
-            Supported file formats include: {list} The file size is limited to
-            {size}MB. You are able to upload a maximum of {max} reference files.
-            If you need to increase this number, email
-            digital-health-atlas@who.int to add more documents.
-          </translate>
-        </p>
-      </div>
     </collapsible-card>
 
     <collapsible-card
@@ -456,6 +339,11 @@
                         Can customize and update Government home page
                       </translate>
                     </li>
+                    <li>
+                      <translate key="sca-list-item-8">
+                        Can upload and manage Health Policy Registry documents
+                      </translate>
+                    </li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -544,10 +432,8 @@ export default {
       selectedPersona: 'G',
       logoError: '',
       coverError: '',
-      flagForKeepingdocumentsError: false,
       flagForKeepingPartnerLogosError: false,
       partnerLogosError: '',
-      documentsError: '',
       titleRules: [
         {
           trigger: ['blur', 'change'],
@@ -560,19 +446,6 @@ export default {
           }
         }
       ],
-      documentRules: {
-        documents: [
-          {
-            validator: (rule, value, callback) => {
-              if (this.documentsError) {
-                callback(new Error(this.documentsError))
-              } else {
-                callback()
-              }
-            }
-          }
-        ]
-      },
       rules: {
         logo: [
           {
@@ -622,11 +495,6 @@ export default {
         'setProjectApproval'
       ],
       GDHIEnabled: ['admin/country', 'getGDHIEnabled', 'setGDHIEnabled'],
-      roadmapEnabled: [
-        'admin/country',
-        'getRoadmapEnabled',
-        'setRoadmapEnabled'
-      ]
     }),
 
     ...mapGetters({
@@ -635,14 +503,7 @@ export default {
       adminSelection: 'admin/country/getAdminSelection',
       superadminSelection: 'admin/country/getSuperadminSelection',
       userProfile: 'user/getProfile',
-      roadmap: 'system/getRoadmap'
     }),
-    extensionList () {
-      return this.roadmap.valid_types.join(', ')
-    },
-    documentList () {
-      return this.documents.map(document => document.document)
-    },
 
     notSCA () {
       return (
@@ -712,53 +573,6 @@ export default {
       }
     },
 
-    documents: {
-      get () {
-        return this.country.documents.map(data => {
-          if (typeof data.document === 'string') {
-            return {
-              title: data.title,
-              id: data.id,
-              document: [
-                {
-                  url: data.document,
-                  name: ('' + data.document).split('/').pop()
-                }
-              ]
-            }
-          }
-          if (Array.isArray(data.document)) {
-            return data
-          }
-          const document = data.document ? [data.document] : []
-          const res = {
-            title: data.title,
-            document
-          }
-          if (data.id) {
-            res.id = data.id
-          }
-          return res
-        })
-      },
-      set (documents) {
-        const data = documents.map(data => {
-          if (Array.isArray(data.document)) {
-            const result = {
-              title: data.title,
-              document: data.document[0]
-            }
-            if (data.id) {
-              result.id = data.id
-            }
-            return result
-          }
-          return data
-        })
-        this.setDataField({ field: 'documents', data })
-      }
-    },
-
     users: {
       get () {
         return this.country.users || []
@@ -802,38 +616,6 @@ export default {
   },
 
   watch: {
-    documentList (newDocs, oldDocs) {
-      const formats = this.roadmap.valid_types.map(extension =>
-        extension.substr(extension.length - 4)
-      )
-      const incorrectDoc = this.documents.find(documentData => {
-        const document = documentData.document[0] || {}
-        return (
-          document.raw &&
-          !formats.includes(
-            document.raw.name.substr(document.raw.name.length - 4)
-          )
-        )
-      })
-      if (incorrectDoc) {
-        const newDocuments = [...this.documents]
-        const replacementDoc = { ...this.documents.indexOf(incorrectDoc) }
-        replacementDoc.document = []
-        newDocuments[this.documents.indexOf(incorrectDoc)] = replacementDoc
-        this.documents = newDocuments
-        this.documentsError = this.$gettext(
-          'Wrong file format, you can only upload {list} files',
-          { list: this.extensionList }
-        )
-        this.flagForKeepingdocumentsError = true
-      } else if (this.flagForKeepingdocumentsError) {
-        this.flagForKeepingdocumentsError = false
-        return
-      } else {
-        this.documentsError = ''
-      }
-      this.$refs.documentsUpload.validate(() => {})
-    },
     logo (newArr, oldArr) {
       // Handles error message placing for wrong image formats
       if (!newArr.length) {
@@ -918,7 +700,6 @@ export default {
       this.$refs.countryInfo.validate(() => {})
     }
   },
-
   methods: {
     ...mapActions({
       setDataField: 'admin/country/setDataField',
@@ -927,11 +708,6 @@ export default {
       fetchData: 'admin/country/fetchData',
       loadGeoJSON: 'admin/map/loadGeoJSON'
     }),
-
-    focuseRoadmapDocuments () {
-      this.$refs.roadmapdocs.$el.scrollIntoView()
-    },
-
     addDocument () {
       this.documents = [
         ...this.documents,
@@ -941,52 +717,13 @@ export default {
         }
       ]
     },
-
-    selectDocumentFile (document, index) {
-      const newDocuments = [...this.documents]
-      if (document && !document.length) {
-        newDocuments.splice(index, 1)
-      } else {
-        newDocuments[index] = { ...newDocuments[index], document }
-      }
-      this.documents = newDocuments
-    },
-
-    changeDocumentTitle (title, index) {
-      const newDocuments = [...this.documents]
-      const doc = { ...newDocuments[index] }
-      doc.title = title
-      newDocuments[index] = doc
-      this.documents = newDocuments
-    },
-
-    removeDocument (index) {
-      const newDocuments = [...this.documents]
-      newDocuments.splice(index, 1)
-      this.documents = newDocuments
-    },
-
     selectPersona (selected) {
       this.selectedPersona = selected
     },
-
     setCountryId (selected) {
       this.countryId = selected
     },
     save () {
-      if (this.documentList.find(doc => doc.length === 0)) {
-        this.documentsError = this.$gettext(
-          'A document is missing or too many were added'
-        )
-        this.$refs.documentsUpload.validate(() => {})
-        this.$alert('A roadmap document is missing', 'Warning', {
-          confirmButtonText: 'Ok',
-          callback: () => {
-            this.$refs.documentsUpload.$el.scrollIntoView()
-          }
-        })
-        return
-      }
       if (this.$refs.customQuestions.allSaved) {
         this.saveChanges()
       } else {

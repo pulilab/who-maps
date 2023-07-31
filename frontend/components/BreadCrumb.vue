@@ -1,29 +1,16 @@
 <template>
   <el-col class="Breadcrumb">
-    <el-row
-      type="flex"
-      align="middle"
-    >
+    <el-row type="flex" align="middle">
       <el-col class="Home">
-        <nuxt-link
-          :to="localePath({name: 'organisation', params: $route.params})"
-        >
-          <fa
-            icon="home"
-            size="lg"
-          />
+        <nuxt-link :to="localePath({ name: 'organisation', params: $route.params })">
+          <fa icon="home" size="lg" />
         </nuxt-link>
       </el-col>
-      <template
-        v-if="subPageName"
-      >
+      <template v-if="subPageName">
         <el-col class="Sep">
           <fa icon="angle-right" />
         </el-col>
-        <el-col
-          :key="subPageName"
-          class="Page"
-        >
+        <el-col :key="subPageName" class="Page">
           {{ subPageName }}
         </el-col>
       </template>
@@ -34,13 +21,13 @@
 <script>
 export default {
   computed: {
-    pureRoute () {
+    pureRoute() {
       if (this.$route && this.$route.name) {
         return this.$route.name.split('___')[0]
       }
       return null
     },
-    subPageName () {
+    subPageName() {
       const noSubPage = {
         organisation: true,
         'organisation-login': true,
@@ -49,9 +36,9 @@ export default {
       }
       const pages = {
         'organisation-edit-profile': this.$gettext('Admin'),
+        'organisation-admin-registry': this.$gettext('Admin'),
         'organisation-admin-country': this.$gettext('Admin'),
         'organisation-admin-api': this.$gettext('Admin'),
-        // 'organisation-graphsold': this.$gettext('KPI Graphs'),
         'organisation-graphs': this.$gettext('KPI Graphs'),
         'organisation-admin-donor': this.$gettext('Admin'),
         'organisation-admin-import': this.$gettext('Admin'),
@@ -59,6 +46,7 @@ export default {
         'organisation-collection-id': this.$gettext('Collection data'),
         'organisation-dashboard': this.$gettext('Dashboard'),
         'organisation-dashboard-list': this.$gettext('Dashboard'),
+        'organisation-policy-registry': this.$gettext('Health Policy Registry'),
         'organisation-projects': this.$gettext('My Projects'),
         'organisation-projects-id-published': this.$gettext('Published Project'),
         'organisation-projects-id-edit': this.$gettext('Edit Project'),
@@ -71,7 +59,9 @@ export default {
       }
       const match = pages[this.pureRoute]
       if (this.pureRoute && !match && !noSubPage[this.pureRoute]) {
-        console.warn(`Potential missing subpage key for breadcrumb ${this.pureRoute}`)
+        console.warn(
+          `Potential missing subpage key for breadcrumb ${this.pureRoute}`
+        )
       }
       return match
     }
@@ -80,15 +70,14 @@ export default {
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 .Breadcrumb {
   width: auto;
   height: @actionBarHeight;
   color: @colorWhite;
 
   .Home {
-
     a {
       line-height: @actionBarHeight;
       text-decoration: none;
@@ -96,7 +85,7 @@ export default {
       transition: @transitionFade;
 
       &:hover {
-        opacity: .7;
+        opacity: 0.7;
       }
     }
   }
@@ -113,13 +102,5 @@ export default {
     font-weight: 700;
     white-space: nowrap;
   }
-
-  // h3 {
-  //   display: inline-block;
-  //   margin: 0;
-  //   font-size: @fontSizeLarge;
-  //   color: @colorWhite;
-  //   white-space: nowrap;
-  // }
 }
 </style>
