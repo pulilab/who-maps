@@ -130,6 +130,7 @@ export default {
                   prepend: 8,
                   header: this.$gettext('Contact name'),
                   content: this.project.contact_name,
+                  needAuth: true,
                   span: 11
                 },
                 {
@@ -137,6 +138,7 @@ export default {
                   prepend: 9,
                   header: this.$gettext('Contact email'),
                   content: this.project.contact_email,
+                  needAuth: true,
                   span: 13
                 }
               ]
@@ -147,13 +149,15 @@ export default {
           id: 10,
           prepend: 10,
           header: this.$gettext('Team members'),
-          content: this.members
+          content: this.members,
+          needAuth: true,
         },
         {
           id: 11,
           prepend: 11,
           header: this.$gettext('Viewers'),
-          content: this.viewers
+          content: this.viewers,
+          needAuth: true,
         }
       ]
     }

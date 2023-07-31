@@ -45,7 +45,6 @@ const config = {
   css: ['~assets/style/main.scss', '~assets/style/main.less'],
   env: {
     GlobalCountryID: process.env.GLOBAL_COUNTRY_ID || 201,
-    hotjarId: process.env.HOTJAR_TRACKING_ID || null
   },
   plugins: [
     { src: '~plugins/eventfix.js', ssr: false },

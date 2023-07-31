@@ -13,7 +13,10 @@
           <a v-if="link" :href="content" target="_blank">
             {{ contents }}
           </a>
-          <span v-else :class="{ 'no-data': contents === noData }">
+          <span v-else-if="showNeedAuth" :class="`${showNeedAuth ? 'need-auth' : 'no-data'}`">
+            {{ showNeedAuth ? needAuthText : noDataText }}
+          </span>
+          <span v-else :class="{ 'no-data': contents === noDataText }">
             {{ contents }}
           </span>
         </template>
@@ -43,7 +46,7 @@
                     </ul>
                   </template>
                   <template v-else>
-                    <span class="no-data">{{ noData }}</span>
+                    <span class="no-data">{{ noDataText }}</span>
                   </template>
                 </li>
               </template>
@@ -80,7 +83,7 @@
         </template>
         <!-- no content at all-->
         <template v-else>
-          <span class="no-data">{{ noData }}</span>
+          <span :class="`${showNeedAuth ? 'need-auth' : 'no-data'}`">{{ showNeedAuth ? needAuthText : noDataText }}</span>
         </template>
       </template>
     </div>
@@ -107,6 +110,10 @@ export default {
     content: {
       type: [Array, String, Number],
       default: undefined
+    },
+    needAuth: {
+      type: Boolean,
+      default: false
     },
     dhi: {
       type: Boolean,
@@ -151,7 +158,8 @@ export default {
   },
   data() {
     return {
-      noData: this.$gettext('No data')
+      noDataText: this.$gettext('No data'),
+      needAuthText: this.$gettext('Please authenticate to view content')
     }
   },
   computed: {
@@ -160,12 +168,24 @@ export default {
         case 'number':
           return this.content
         case 'string':
-          return this.content ? this.content : this.noData
+          return this.content ? this.content : this.noDataText
         case 'object':
-          return this.content.length > 0 ? this.content : this.noData
+          return this.content !== null && this.content.length > 0 ? this.content : this.noDataText
         default:
-          return this.noData
+          return this.noDataText
       }
+    },
+    contentType() {
+      return typeof this.content
+    },
+    contentsType() {
+      return typeof this.contents
+    },
+    isAuth() {
+      return this.$auth.loggedIn
+    },
+    showNeedAuth() {
+      return this.needAuth && !this.isAuth
     }
   },
   methods: {
@@ -235,6 +255,9 @@ export default {
   }
   .no-data {
     color: @colorTextMuted;
+  }
+  .need-auth {
+    color: #f08188cc;
   }
   .prepend {
     margin-right: 25px;
