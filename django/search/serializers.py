@@ -28,6 +28,7 @@ class ListResultSerializer(serializers.Serializer):
     software = serializers.ReadOnlyField(source="project__data__software")
     dhis = serializers.ReadOnlyField(source="project__data__dhis")
     health_focus_areas = serializers.ReadOnlyField(source="project__data__health_focus_areas")
+    services_and_application_types = serializers.ReadOnlyField(source="project__data__services_and_application_types")
     hsc_challenges = serializers.ReadOnlyField(source="project__data__hsc_challenges")
     his_bucket = serializers.ReadOnlyField(source="project__data__his_bucket")
     region = serializers.ReadOnlyField(source="country__region")
