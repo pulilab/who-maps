@@ -7,4 +7,4 @@ exclude=
     *settings/*,
     .venv/*,
     data_scripts.py
-extend-ignore=W291,E741
+extend-ignore=W291,E741,F811
