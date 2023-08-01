@@ -28,5 +28,5 @@ def send_mail_wrapper(subject: str, email_type: str,
             subject=subject,
             message="",
             from_email=settings.FROM_EMAIL,
-            recipient_list=[to] if type(to) == str else to,
+            recipient_list=[to] if isinstance(to, str) else to,
             html_message=html_message)
