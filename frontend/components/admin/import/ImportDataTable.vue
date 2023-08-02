@@ -96,13 +96,7 @@
                       :custom-fields-lib="customFieldsLib"
                       :name-mapping="nameMapping"
                       :disabled="!!row.project"
-                      @change="
-                        updateValue({
-                          row: index,
-                          key: header.title,
-                          value: $event
-                        })
-                      "
+                      @change="updateValue({row: index, key: header.title, value: $event})"
                       @openDialog="$refs.dialog.openDialog(index, header.title, $event)"
                     />
                   </template>
