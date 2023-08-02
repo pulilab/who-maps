@@ -2,12 +2,12 @@
   <table class="PolicyList">
     <tbody v-if="isEmpty && loading">
       <tr>
-        <translate tag="td" class="state">Loading documents...</translate>
+        <td class="state">Loading documents...</td>
       </tr>
     </tbody>
     <tbody v-else-if="isEmpty && !loading">
       <tr>
-        <translate tag="td" class="state">{{ emptyMessage }}</translate>
+        <td class="state">{{ emptyMessage }}</td>
       </tr>
     </tbody>
     <template v-else-if="!isEmpty">
