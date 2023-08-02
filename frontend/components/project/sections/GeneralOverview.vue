@@ -400,7 +400,7 @@ export default {
         'setImplementingPartners',
         300,
         true
-      ],    
+      ],
       donors: ['project', 'getDonors', 'setDonors', 0],
     }),
     isGlobal: {
@@ -465,7 +465,6 @@ export default {
         this.$validator.validate('contact_email'),
         this.$validator.validate('team')
       ])
-      console.log('General overview draft validation', validations)
       return validations.reduce((a, c) => a && c, true)
     }
   }
