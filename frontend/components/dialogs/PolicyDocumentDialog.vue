@@ -25,7 +25,7 @@
                 </span>
               </div>
             </div>
-            <div>
+            <div v-if="hasKeywords">
               <translate tag="div" class="label">
                 Keywords
               </translate>
@@ -115,6 +115,9 @@ export default {
     },
     author() {
       return this.document?.author || false
+    },
+    hasKeywords() {
+      return this.document?.tags ? this.document?.tags.length > 0 : false
     }
   },
   methods: {
